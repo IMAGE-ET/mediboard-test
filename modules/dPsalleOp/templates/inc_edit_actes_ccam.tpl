@@ -115,7 +115,7 @@ function setToNow(element) {
             <!-- Execution -->
             <tr {{if !$can->edit}}style="display: none;"{{/if}}>
               <th>{{mb_label object=$acte field=execution}}</th>
-              <td class="date" colspan="10">
+              <td colspan="10">
         	      {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
               </td>
             </tr>

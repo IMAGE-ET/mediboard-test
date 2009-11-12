@@ -23,7 +23,7 @@ Main.add(function(){
 <table class="main form">
   <tr>
     <th>{{mb_label object=$filter field="_date_min_stat"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_min_stat" form="hospitalisation" canNull="false" register=true}} </td>
 
     <th>{{mb_label object=$filter field="_service"}}</th>
     <td>
@@ -40,7 +40,7 @@ Main.add(function(){
 
   <tr>
     <th>{{mb_label object=$filter field="_date_max_stat"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_max_stat" form="hospitalisation" canNull="false" register=true}} </td>
 
     <th>{{mb_label object=$filter field="praticien_id"}}</th>
     <td>

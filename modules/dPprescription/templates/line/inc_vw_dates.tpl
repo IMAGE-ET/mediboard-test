@@ -55,7 +55,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	         {{mb_label object=$line field=debut}}
 	       </td>    
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-	       <td class="date" style="border:none; {{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
+	       <td style="border:none; {{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
 	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
 		           <select name="debut_date" onchange="getForm('editDates-{{$typeDate}}-{{$line->_id}}').debut_da.value = new String;
 					 				                                  this.form.debut.value = '';
@@ -131,7 +131,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	         {{mb_label object=$line field=_fin}} 
 	       </td>
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-	       <td class="date" style="border:none;">
+	       <td style="border:none;">
 	         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	       </td>
@@ -158,7 +158,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	         Fin
 	      </td>       
 	     {{if $line->_can_modify_dates}}
-	       <td class="date" style="border:none;">
+	       <td style="border:none;">
 	         {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 	       </td>

@@ -183,7 +183,7 @@ Main.add(function () {
   
   <tr>
     <th>{{mb_label object=$rpu field="_entree"}}</th>
-    <td class="date">{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
+    <td>{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
     
 	  <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
 	  <td>

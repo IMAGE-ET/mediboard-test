@@ -149,7 +149,7 @@ Main.add(function(){
           </select>
         </td>
         <th>{{mb_label object=$plagesel field="date"}}</th>
-        <td class="date">
+        <td>
           {{if $plagesel->plageop_id}}
           <input type="hidden" name="date" value="{{$plagesel->date}}" />
           {{else}}

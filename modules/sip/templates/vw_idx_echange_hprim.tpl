@@ -51,11 +51,11 @@ function changePage(page) {
 	        </tr>
 	        <tr>
 	          <th>{{mb_label object=$echange_hprim field="_date_min"}}</th>
-	          <td class="date">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true}} </td>
+	          <td>{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true}} </td>
 	        </tr>
 	        <tr>
 	           <th>{{mb_label object=$echange_hprim field="_date_max"}}</th>
-	           <td class="date">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true}} </td>
+	           <td>{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true}} </td>
 	        </tr>
 	        <tr>
 	          <th class="category" colspan="2">Critères de filtres</th>

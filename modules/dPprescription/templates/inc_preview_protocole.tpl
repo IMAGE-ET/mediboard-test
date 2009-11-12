@@ -21,17 +21,17 @@
   </tr>
   <tr>
     <td>Début séjour</td>
-    <td class="date">
+    <td>
       {{mb_field object=$sejour field=_entree register=true form=preview_protocole}}
     </td>
     <td>Fin séjour</td>
-    <td class="date">
+    <td>
       {{mb_field object=$sejour field=_sortie register=true form=preview_protocole}}
     </td>
   </tr>
   <tr>
     <td>Date de l'operation</td>
-    <td class="date">
+    <td>
       {{mb_field object=$operation field=_datetime register=true form=preview_protocole}}
     </td>
     <td colspan="2">

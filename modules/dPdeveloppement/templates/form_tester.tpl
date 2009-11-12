@@ -14,15 +14,15 @@ Main.add(function () {
   
   Calendar.regProgressiveField(form.progressive, {container: document.body});
   
-  new AideSaisie.AutoComplete(form.elements.rques, {
+  /*new AideSaisie.AutoComplete(form.elements.rques, {
     dependField1: form.elements.type, 
     dependField2: form.elements.appareil, 
     objectClass: "CAntecedent", 
     userId: 25
-  });
+  });*/
   
   var url = new Url("dPdeveloppement", "ajax_autocomplete_test");
-  url.autoComplete(form.autocomplete_1, $("autocomplete_list"), {dropdown: true});
+  url.autoComplete(form.autocomplete_1, $("autocomplete_list"), {dropdown: true, valueElement: $(form.autocomplete_value)});
   
   Control.Tabs.create("mb_field_test", true);
 });
@@ -112,6 +112,7 @@ Main.add(function () {
       <th></th>
       <td>
         <input type="hidden" name="progressive" value="2009-0-0" />
+        <input type="text" name="autocomplete_value" value="" disabled="disabled" readonly="readonly" />
         <input type="text" name="autocomplete_1" />
         <div id="autocomplete_list" class="autocomplete"></div>
       </td>

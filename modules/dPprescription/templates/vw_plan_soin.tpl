@@ -73,7 +73,7 @@ ul {
 	    <th>
 	      Date d'affichage
 	    </th>
-	    <td class="date">
+	    <td>
 	      {{mb_field object=$prescription field=_date_plan_soin form="selChapitre" register=true}}
 	    </td>
 		</tr>

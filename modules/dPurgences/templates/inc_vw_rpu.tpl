@@ -214,7 +214,7 @@ function printDossier(id) {
 				  <!-- Sortie réelle uniquement pour les administrateurs -->
 				  <tr>
 				    <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
-				    <td class="date">
+				    <td>
 				    	{{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="submitSejour();" register=true}}
 				    </td> 
 				  </tr>

@@ -33,15 +33,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th><label for="debutact" title="Date de début">Début:</label></th>
-          <td class="date">
-            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
-         </td>
+          <td><input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" /></td>
         </tr>
         <tr>
           <th><label for="finact" title="Date de fin">Fin:</label></th>
-          <td class="date">
-            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
-          </td>
+          <td><input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" /></td>
         </tr>
         <tr>
           <td colspan="2" class="button"><button class="search" type="submit">Go</button></td>
@@ -62,15 +58,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th><label for="debutact" title="Date de début">Début:</label></th>
-          <td class="date">
-            <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
-         </td>
+          <td><input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" /></td>
         </tr>
         <tr>
           <th><label for="finact" title="Date de fin">Fin:</label></th>
-          <td class="date">
-            <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
-          </td>
+          <td><input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" /></td>
         </tr>
         <tr>
           <td colspan="2" class="button"><button class="search" type="submit">Go</button></td>

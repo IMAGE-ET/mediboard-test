@@ -350,8 +350,8 @@ class CModule extends CMbObject {
    * get CanDo object for given installed module, 
    * @return CanDo with no permission if module not installed 
    */
-  function getCanDo($moduleName) {
-    $module = CModule::getInstalled($moduleName);
+  static function getCanDo($moduleName) {
+    $module = self::getInstalled($moduleName);
     return $module ? $module->canDo() : new CCanDo;
   }
   

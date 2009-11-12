@@ -31,7 +31,7 @@
           {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
           {{foreachelse}}
-          <option value="">{{tr}}None{{/tr}}</option>
+          <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
           {{/foreach}}
         </optgroup>
         {{/foreach}}

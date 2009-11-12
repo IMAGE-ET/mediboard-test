@@ -309,7 +309,7 @@ Main.add(function() {
         {{if !$fiche->qualite_date_verification && !$fiche->qualite_date_controle}}
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
-          <td class="date">
+          <td>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
             <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
               {{tr}}button-CFicheEi-classer{{/tr}}

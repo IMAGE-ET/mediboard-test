@@ -44,7 +44,7 @@ function printRapport() {
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="date"}}</th>
-          <td class="date">{{mb_field object=$gestioncab field="date" form="editFrm" register=true}}</td>
+          <td>{{mb_field object=$gestioncab field="date" form="editFrm" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$gestioncab field="rubrique_id"}}</th>
@@ -126,14 +126,14 @@ function printRapport() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="selectFrm" canNull="false" register=true}}</td>
+          <td>{{mb_field object=$filter field="_date_min" form="selectFrm" canNull="false" register=true}}</td>
           <td class="button" colspan="3">
             <button type="submit" class="print" onclick="printRapport()">Imprimer</button>
           </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date" >{{mb_field object=$filter field="_date_max" form="selectFrm"  canNull="false" register=true}}</td>
+          <td>{{mb_field object=$filter field="_date_max" form="selectFrm"  canNull="false" register=true}}</td>
           <td class="button" colspan="3">
             <button type="submit" class="search">Afficher</button>
           </td>

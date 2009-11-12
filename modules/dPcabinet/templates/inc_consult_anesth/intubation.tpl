@@ -12,8 +12,7 @@ function verifIntubDifficileAndSave(oForm){
   
   submitFormAjax(oForm, 'systemMsg');
   
-  var i = null;
-  for (i = 0; i < 4; i++) {
+  for (var i = 0; i < 4; i++) {
     var o = oForm.mallampati[i];
     var bg = $('mallampati_bg_classe'+(i+1));
     
@@ -64,7 +63,7 @@ var SchemaDentaire = {
 				
     oSchema.addClassName('schema-dentaire');
     
-    if (Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
+    if (true || Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
     // Clone the image's size to the container
     var img = new Image();
     img.src = oImage.src;
@@ -76,30 +75,30 @@ var SchemaDentaire = {
     }
     
     // Menu initialization
-    var oMenu = new Element('div', {id: this.sId+'-menu', className: 'dent-menu'}),
-		    oLegend = new Element('div', {id: this.sId+'-legend', className: 'dent-legend'});
+    var oMenu = new Element('div', {id: this.sId+'-menu'}).addClassName('dent-menu'),
+		    oLegend = new Element('div', {id: this.sId+'-legend'}).addClassName('dent-legend');
     
     // Buttons initialization
-    var oActions = new Element('div', {className: 'dent-buttons'}),
-		    oButton = new Element('a', {className: 'button cancel', href: '#1'}).update("Réinitialiser").observe('click', this.reset.bind(this));
+    var oActions = new Element('div').addClassName('dent-buttons'),
+		    oButton = new Element('a', {href: '#1'}).addClassName('button cancel').update("Réinitialiser").observe('click', this.reset.bindAsEventListener(this));
     oActions.insert({top: oButton});
     
     // For each possible state, we add a link in the menu and an item in the legend
-    var oClose = new Element('a', {className: 'cancel'}).update('x').observe('click', this.closeMenu.bind(this));
+    var oClose = new Element('a').addClassName('cancel').update('x').observe('click', this.closeMenu.bindAsEventListener(this));
     oMenu.insert({bottom: oClose});
     
     // Options and legend items
     states.each (function (o) {
       var oOption = new Element('a');
       
-			var className = o ? o : 'none',
+			var className = o || 'none',
 			    label = o ? o.capitalize() : 'Aucun';
-			var oItem = new Element('a', {className: className, href: '#1', style: 'display: block;'}).update(label).observe('click', (function(){this.setPaint(className)}).bind(this));
+			var oItem = new Element('a', {href: '#1', style: 'display: block;'}).addClassName(className).update(label).observe('click', (function(){this.setPaint(className)}).bindAsEventListener(this));
       oLegend.insert({bottom: oItem});
 
       oOption.addClassName(className).update(label);
 				
-      oOption.observe('click', this.onSelectState.bind(this));
+      oOption.observe('click', this.onSelectState.bindAsEventListener(this));
       oMenu.insert({bottom: oOption});
     }, this);
     
@@ -129,7 +128,7 @@ var SchemaDentaire = {
         });
         oSchema.insert({top: oDent});
         
-        var id = parseInt(o.id.substr(5));
+        var id = parseInt(o.id.substr(5)), etat;
         oDent.id = this.sId+'-dent-'+id;
         oDent.dentId = id;
         this.aDentsId[id] = oDent.id;
@@ -139,9 +138,9 @@ var SchemaDentaire = {
         }
         
         // Callbacks on the tooth
-        oDent.observe('mouseover', this.onMouseOver.bind(this))
-				     .observe('mouseout', this.onMouseOut.bind(this))
-						 .observe('click', this.onClick.bind(this));
+        oDent.observe('mouseover', this.onMouseOver.bindAsEventListener(this))
+				     .observe('mouseout', this.onMouseOut.bindAsEventListener(this))
+						 .observe('click', this.onClick.bindAsEventListener(this));
       }
     , this);
     } else {
@@ -150,7 +149,7 @@ var SchemaDentaire = {
   },
 	
 	setPaint: function(state) {
-		$('dents-schema-legend').childElements().each(function(e){e.removeClassName('active')});
+		$('dents-schema-legend').childElements().invoke('removeClassName', 'active');
 		if (this.sPaint != state) {
 			this.sPaint = state;
 			$('dents-schema-legend').select('.'+state).first().addClassName('active');
@@ -188,38 +187,28 @@ var SchemaDentaire = {
   },
   
   onMouseOver: function (e) {
-    var el = e.element(), 
+    var el = e.element().addClassName('hover'), 
 		style = {
-      top: parseInt(el.getStyle('top')), 
-      left: parseInt(el.getStyle('teft')), 
-      width: parseInt(el.getStyle('width')), 
-      height: parseInt(el.getStyle('height'))
+      width: parseInt(el.getStyle('width'))-1, 
+      height: parseInt(el.getStyle('height'))-1
     };
 
-    el.addClassName('hover')
-		  .setStyle({
-      top: style.top-1+'px',
-      left: style.left-1+'px',
-      width: style.width-1+'px',
-      height: style.height-1+'px'
+    el.setStyle({
+      width: style.width+'px',
+      height: style.height+'px'
     });
   },
   
   onMouseOut: function (e) {
-    var el = e.element(),
+    var el = e.element().removeClassName('hover'),
 		style = {
-      top: parseInt(el.getStyle('top')), 
-      left: parseInt(el.getStyle('left')), 
-      width: parseInt(el.getStyle('width')), 
-      height: parseInt(el.getStyle('height'))
+      width: parseInt(el.getStyle('width'))+1, 
+      height: parseInt(el.getStyle('height'))+1
     };
     
-    el.removeClassName('hover')
-		  .setStyle({
-      top: style.top+1+'px',
-      left: style.left+'px',
-      width: style.width+1+'px',
-      height: style.height+1+'px'
+    el.setStyle({
+      width: style.width+'px',
+      height: style.height+'px'
     });
   },
   
@@ -236,8 +225,7 @@ var SchemaDentaire = {
 	    menu.setStyle({
 	     top: dent.getStyle('top'),
 	     left: (parseInt(dent.getStyle('left')) + dent.getWidth() + 4) + 'px'
-	    });
-	    menu.show();
+	    }).show();
 	    
 	    this.iSelectedDent = dent.dentId;
 		}

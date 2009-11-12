@@ -21,11 +21,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="deb_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="deb_amo" form="editFrm" register=true}}</td>
+    <td>{{mb_field object=$patient field="deb_amo" form="editFrm" register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="fin_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="fin_amo" form="editFrm" register=true}}</td>
+    <td>{{mb_field object=$patient field="fin_amo" form="editFrm" register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="code_exo"}}</th>
@@ -67,7 +67,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="fin_validite_vitale"}}</th>
-    <td class="date">{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" register=true}}</td>
+    <td>{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="notes_amo"}}</th>

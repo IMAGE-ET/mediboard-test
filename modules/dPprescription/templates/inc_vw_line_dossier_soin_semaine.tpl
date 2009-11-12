@@ -200,7 +200,7 @@
      {{if $line->debut == $date || $line->_fin == $date}}
 	     <table>
 	       <tr>
-	         <td class="date"  style="border: none;">
+	         <td style="border: none;">
 			      <form name="modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}" action="?" method="post" style="display: block; white-space: nowrap; height :0.1%;">
 			        <input type="hidden" name="m" value="dPprescription" />
 			        <input type="hidden" name="del" value="0" />

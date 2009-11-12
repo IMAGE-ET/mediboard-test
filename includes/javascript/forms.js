@@ -244,11 +244,21 @@ Element.addMethods({
 });
 
 function prepareForm(oForm, bForcePrepare) {
+  var sFormName;
+  
   if (typeof oForm == "string") {
+    sFormName = oForm;
     oForm = document.forms[oForm];
   }
+  
+  if (!Object.isElement(oForm)) {
+    try {
+      console.error((sFormName || oForm.name)+" is not an element or is a node list (forms with the same name ?)");
+    } catch(e) {}
+    return;
+  }
+  
   oForm = $(oForm);
-  var sFormName;
   
   if (oForm) {
     // If this form hasn't been prepared yet

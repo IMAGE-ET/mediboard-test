@@ -34,7 +34,7 @@ Main.add( function(){
 	    </th>
 	  </tr>
 	  <tr>
-	    <td class="date">
+	    <td>
 			  {{if $perfusion->date_pose}}
 			    {{mb_label object=$perfusion field=date_pose}}
 			    {{mb_field object=$perfusion field=date_pose form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}
@@ -48,7 +48,7 @@ Main.add( function(){
 			</td>
 	  </tr>
 	  <tr>
-	    <td class="date">
+	    <td>
 			  {{if $perfusion->date_retrait}}
 			    {{mb_label object=$perfusion field=date_retrait}}
 			    {{mb_field object=$perfusion field=date_retrait form="editPerf$perfusion_id" onchange="submitTiming();" register=true canNull=false}}

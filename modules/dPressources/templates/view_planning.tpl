@@ -27,22 +27,22 @@ Main.add(function () {
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table width="100%" id="weeklyPlanning">
         <tr>
           <th></th>
           {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
-          <th>{{$curr_day|date_format:"%A %d"}}</th>
+          <th scope="col" style="width: {{math equation="x/y" x=100 y=$plages|@count}}%">{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>
         {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         <tr>
-          <th>{{$curr_hour}}h</th>
+          <th scope="row">{{$curr_hour}}h</th>
           {{foreach from=$plages key=curr_day item=plagesPerDay}}
             {{assign var="isNotIn" value=1}}
             {{foreach from=$plagesPerDay item=curr_plage}}
               {{if $curr_plage->_hour_deb == $curr_hour}}
                 {{if ($curr_plage->_state == $curr_plage|const:'PAYED') && ($curr_plage->prat_id != $app->user_id)}}
-                <td align="center" bgcolor="{{$curr_plage|const:'OUT'}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
+                <td style="background-color: {{$curr_plage|const:'OUT'}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
                 {{else}}
                 <td style="vertical-align:middle; text-align:center; background-color:{{$curr_plage->_state}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
                 {{/if}}
@@ -85,7 +85,7 @@ Main.add(function () {
               {{/if}}
             {{/foreach}}
             {{if $isNotIn}}
-              <td bgcolor="#ffffff"></td>
+              <td class="empty hour_start"></td>
             {{/if}}
           {{/foreach}}
         </tr>

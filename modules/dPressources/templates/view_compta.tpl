@@ -77,11 +77,11 @@ Main.add(function () {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" register=true}} </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_max"}}</td>
-          <td class="date" >{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" register=true}}</td>
+          <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" register=true}}</td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="paye"}}</td>

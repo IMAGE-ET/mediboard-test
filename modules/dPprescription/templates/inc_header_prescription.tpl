@@ -352,7 +352,7 @@ Main.add( function(){
   </tr>
   <tr>
   {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
-   <td class="date" id="div_protocoles" colspan="3">
+   <td id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
 	      <input type="hidden" name="m" value="dPprescription" />
@@ -396,7 +396,7 @@ Main.add( function(){
   {{/if}}
   
   {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
-      <td class="date" id="div_ajout_lignes" colspan="3" style="display: none;">
+      <td id="div_ajout_lignes" colspan="3" style="display: none;">
 		    <form name="selDateLine" action="?" method="get"> 
         {{if $prescription->type != "externe"}} 
 	        <select name="debut_date" onchange="changeManualDate();">

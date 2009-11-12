@@ -64,7 +64,7 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
     <table>
       <tr>
         <td style="border: none;">Date d'arrêt</td>
-        <td class="date" style="border:none;">
+        <td style="border:none;">
           
           {{assign var=line_id value=$line->_id}}
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}

@@ -48,7 +48,7 @@ function changeDateCal(){
         <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
           <td>{{mb_label object=$filter field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
@@ -62,7 +62,7 @@ function changeDateCal(){
         </tr>
         <tr>
            <td>{{mb_label object=$filter field="_date_max"}}</td>
-           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
         </tr>
       </table>
 

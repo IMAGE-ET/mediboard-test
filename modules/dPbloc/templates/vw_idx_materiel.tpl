@@ -29,9 +29,9 @@ function checkFormPrint() {
 <table class="form">
   <tr>
     <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="PrintFilter" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_min" form="PrintFilter" canNull="false" register=true}} </td>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td class="date" >{{mb_field object=$filter field="_date_max" form="PrintFilter" canNull="false" register=true}}</td>
+    <td>{{mb_field object=$filter field="_date_max" form="PrintFilter" canNull="false" register=true}}</td>
     <td class="button">
       <button type="button" onclick="checkFormPrint()" class="search">Afficher l'historique</button>
     </td>

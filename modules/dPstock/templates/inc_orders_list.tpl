@@ -135,7 +135,7 @@
       </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
-      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <button type="button" class="tick" onclick="popupOrder({{$curr_order->_id}});">{{tr}}CProductOrder-_receive{{/tr}}</button>
@@ -180,8 +180,8 @@
       </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
-      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
+      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td>{{mb_value object=$curr_order field=_date_received}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <button type="button" class="print" onclick="printBarcodeGrid('{{$curr_order->_id}}')">Imprimer les codes barres</button>
@@ -226,8 +226,8 @@
       </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
-      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
+      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td>{{mb_value object=$curr_order field=_date_received}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">

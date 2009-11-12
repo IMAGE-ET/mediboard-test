@@ -20,16 +20,16 @@ Main.add(function () {
   </tr>
   <tr>
     <td>
-      <table width="100%">
+      <table width="100%" id="weeklyPlanning">
         <tr>
           <th></th>
           {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
-          <th>{{$curr_day|date_format:"%A %d"}}</th>
+          <th scope="col" style="width: {{math equation="x/y" x=100 y=$plages|@count}}%">{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>
         {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         <tr>
-          <th>{{$curr_hour}}h</th>
+          <th scope="row">{{$curr_hour}}h</th>
           {{foreach from=$plages key=curr_day item=plagesPerDay}}
             {{assign var="isNotIn" value=1}}
             {{foreach from=$plagesPerDay item=curr_plage}}
@@ -55,7 +55,7 @@ Main.add(function () {
               {{/if}}
             {{/foreach}}
             {{if $isNotIn}}
-              <td bgcolor="#ffffff"></td>
+              <td class="empty hour_start"></td>
             {{/if}}
           {{/foreach}}
         </tr>
@@ -85,7 +85,7 @@ Main.add(function () {
         {{/if}}
         <tr>
           <th>{{mb_label object=$plage field="date"}}</th>
-          <td class="date">
+          <td>
             {{if $plage->plageressource_id}}
             <input type="hidden" name="date" value="{{$plage->date}}" class="{{$plage->_props.date}}" />
             {{else}}

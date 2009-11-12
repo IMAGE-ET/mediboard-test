@@ -227,7 +227,7 @@ Main.add( function(){
 						    à I {{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h
 						  </td>
 						{{else}}  
-	        		<td class="date" style="border:none;">
+	        		<td style="border:none;">
 	        		  {{mb_label object=$_perfusion field="date_debut"}}
 	        		  {{if $_perfusion->_can_modify_perfusion}}
 			            {{mb_field object=$_perfusion field=date_debut form="editPerf-$perfusion_id" onchange="changeColorPerf($perfusion_id,this.form); return onSubmitFormAjax(this.form);" register=true}}

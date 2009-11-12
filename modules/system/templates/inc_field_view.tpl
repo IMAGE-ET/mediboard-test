@@ -17,7 +17,7 @@
   <strong>{{mb_label object=$object field=$prop}}</strong> :
 
   {{if $spec instanceof CRefSpec}}
-    <span onmouseover="ObjectTooltip.createEx(this,'{{$spec->class}}-{{$value}}');">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$spec->class}}-{{$value}}');">
     {{mb_value object=$object field=$prop}}
     </span>
 
@@ -25,7 +25,7 @@
     {{$value|count_words}} mots
 
   {{elseif $spec instanceof CTextSpec}}
-    {{$value|truncate|nl2br}}
+    {{mb_value object=$object field=$prop truncate=true}}
 	
   {{else}}
     {{mb_value object=$object field=$prop}}

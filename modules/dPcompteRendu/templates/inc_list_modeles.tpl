@@ -1,6 +1,6 @@
 <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  {{mb_key object=$pack}}
   <input type="hidden" name="dosql" value="do_pack_aed" />
-  {{mb_field object=$pack field="pack_id" hidden=1 prop=""}}
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
   <label for="_new" title="Veuillez choisir un modèle" />
@@ -13,6 +13,11 @@
     </optgroup>
     <optgroup label="Modèles de la fonction">
       {{foreach from=$modeles.func item=_modele}}
+      <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
+      {{/foreach}}
+    </optgroup>
+    <optgroup label="Modèles de l'etablissement">
+      {{foreach from=$modeles.etab item=_modele}}
       <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
       {{/foreach}}
     </optgroup>

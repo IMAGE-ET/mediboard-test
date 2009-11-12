@@ -75,7 +75,7 @@ function viewActes(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false" register=true}}</td>
+          <td>{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false" register=true}}</td>
           <td rowspan="2">
             <table>
               <tr>
@@ -113,7 +113,7 @@ function viewActes(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_max"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false" register=true}} </td>
         </tr> 
         
         <tr>

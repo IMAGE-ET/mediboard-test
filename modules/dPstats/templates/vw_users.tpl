@@ -32,7 +32,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th><label for="debutlog" title="Date de début">Début:</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="debutlog" class="notNull date" value="{{$debutlog}}" />
           </td>
           <th><label for="user_id" title="Utilisateur">Utilisateur</label></th>
@@ -48,7 +48,7 @@ Main.add(function () {
         </tr>
         <tr>
           <th><label for="finlog" title="Date de fin">Fin:</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="finlog" class="notNull date moreEquals|debutlog" value="{{$finlog}}" />
           </td>
           <td colspan="2" />
@@ -73,13 +73,13 @@ Main.add(function () {
         </tr>
         <tr>
           <th><label for="debutact" title="Date de début">Début:</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="debutact" class="notNull date" value="{{$debutact}}" />
           </td>
         </tr>
         <tr>
           <th><label for="finact" title="Date de fin">Fin:</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="finact" class="notNull date moreEquals|debutact" value="{{$finact}}" />
           </td>
         </tr>

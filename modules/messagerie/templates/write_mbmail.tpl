@@ -43,7 +43,7 @@
 	{{if $mbmail->date_sent}}
   <tr>
 	  <th>{{mb_label object=$mbmail field=date_sent}}</th>
-	  <td class="date">{{mb_value object=$mbmail field=date_sent}} ({{mb_value object=$mbmail field=date_sent format=relative}})</td>
+	  <td>{{mb_value object=$mbmail field=date_sent}} ({{mb_value object=$mbmail field=date_sent format=relative}})</td>
 	</tr>
 	{{/if}}
 
@@ -75,7 +75,7 @@
 	{{if $mbmail->date_read}}
   <tr>
 	  <th>{{mb_label object=$mbmail field=date_read}}</th>
-	  <td class="date">{{mb_value object=$mbmail field=date_read}} ({{mb_value object=$mbmail field=date_read format=relative}})</td>
+	  <td>{{mb_value object=$mbmail field=date_read}} ({{mb_value object=$mbmail field=date_read format=relative}})</td>
 	</tr>
 	{{/if}}
 

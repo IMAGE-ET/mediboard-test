@@ -54,8 +54,8 @@ function drawGraphs(showLegend){
     <th colspan="6" class="category">Activité du bloc opératoire</th>
   </tr>
   <tr>
-     <td>{{mb_label object=$filter field="_date_min"}}</td>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}} </td>
+    <td>{{mb_label object=$filter field="_date_min"}}</td>
+    <td>{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}} </td>
     <td>{{mb_label class=CSalle field="bloc_id"}}</td>
     <td>
       <select name="bloc_id">
@@ -87,7 +87,7 @@ function drawGraphs(showLegend){
   </tr>
   <tr>
     <td>{{mb_label object=$filter field="_date_max"}}</td>
-    <td class="date">{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
+    <td>{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
     <td>{{mb_label object=$filter field="_prat_id"}}</td>
     <td colspan="3">
       <select name="prat_id">

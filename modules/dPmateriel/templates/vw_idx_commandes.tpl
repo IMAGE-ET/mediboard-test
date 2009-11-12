@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <th>{{mb_label object=$commande field="date"}}</th>
-          <td class="date">{{mb_field object=$commande field="date" form="editcommande" register=true}}</td>
+          <td>{{mb_field object=$commande field="date" form="editcommande" register=true}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$commande field="reference_id"}}</th>

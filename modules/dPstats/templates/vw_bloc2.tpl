@@ -42,7 +42,7 @@ Main.add(function () {
             <img src="images/pictures/spreadsheet.png" onclick="getSpreadSheet()" />
           </td>
           <th><label for="deblistbloc" title="Date de début">Date</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="deblistbloc" class="notNull date" value="{{$deblist}}" />
           </td>
         </tr>
@@ -62,7 +62,7 @@ Main.add(function () {
         <tr>
           <!--
           <th><label for="finlistbloc" title="Date de fin">Fin</label></th>
-          <td class="date">
+          <td>
             <input type="hidden" name="finlistbloc" class="notNull date" value="{{$finlist}}" />
           </td>
           -->

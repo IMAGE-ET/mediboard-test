@@ -26,9 +26,9 @@
 
         <tr>
           <td>{{mb_label object=$filterConsultation field="_date_min"}}</td>
-          <td class="date">{{mb_field object=$filterConsultation field="_date_min" form="filters" register=true canNull="false"}} </td>
+          <td>{{mb_field object=$filterConsultation field="_date_min" form="filters" register=true canNull="false"}} </td>
           <td>{{mb_label object=$filterConsultation field="_date_max"}}</td>
-          <td class="date">{{mb_field object=$filterConsultation field="_date_max" form="filters" register=true canNull="false"}} </td>
+          <td>{{mb_field object=$filterConsultation field="_date_max" form="filters" register=true canNull="false"}} </td>
         </tr>
 
         <tr>

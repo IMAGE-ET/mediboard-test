@@ -66,7 +66,7 @@
   {{elseif $prescription->_status >= $prescription|const:"VEROUILLEE"}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="date"}}</th>
-    <td class="date">{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
+    <td>{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
   </tr>
 
   {{if !$examen->_external}}

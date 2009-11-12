@@ -29,9 +29,9 @@ function refreshDestockagesList() {
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-destockage register=1}}</td>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter-destockage register=1}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-destockage register=1}}</td>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter-destockage register=1}}</td>
       <td>
         <select name="service_id">
         {{foreach from=$list_services item=curr_service}}

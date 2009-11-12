@@ -61,7 +61,7 @@
         </tr>
         <tr>
           <th>{{mb_label object=$facture field="date"}}</th>
-          <td class="date">{{mb_field object=$facture field="date" form="editfacture" register=true}}</td>
+          <td>{{mb_field object=$facture field="date" form="editfacture" register=true}}</td>
         </tr>
         <tr>	
           	<th>{{mb_label object=$facture field="sejour_id"}}</th>

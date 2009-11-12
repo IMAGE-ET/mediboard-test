@@ -48,7 +48,7 @@
   </tr>
   <tr>
     <th><label for="date" title="Veuillez sélectionner une date">Date</label></th>
-    <td class="date">
+    <td>
       <input type="hidden" name="date" class="notNull date" value="" />
     </td>
   </tr>

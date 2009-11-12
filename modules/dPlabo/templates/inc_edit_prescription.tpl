@@ -30,7 +30,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$prescription field="date"}}</th>
-    <td class="date">{{mb_field object=$prescription field="date" form="addEditPrescription" register=true}}</td>
+    <td>{{mb_field object=$prescription field="date" form="addEditPrescription" register=true}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$prescription field="praticien_id"}}</th>

@@ -72,7 +72,7 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
               <label for="select_days_day">Jour courant</label>
@@ -86,7 +86,7 @@ function changeDateCal(){
         </tr>
         <tr>
            <th>{{mb_label object=$filter field="_date_max"}}</th>
-           <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
         </tr>
         <tr>
           <th class="category" colspan="3">Types d'intervention</th>

@@ -388,7 +388,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="_date_entree_prevue"}}</th>
-  <td class="date">
+  <td>
     {{mb_field object=$sejour form=editSejour field=_date_entree_prevue canNull=false onchange="modifSejour(); updateSortiePrevue();"}}
   </td>
   <td colspan="2">
@@ -418,7 +418,7 @@ Main.add( function(){
 
 <tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
-  <td class="date">
+  <td>
     {{mb_field object=$sejour form=editSejour field=_date_sortie_prevue canNull=false onchange="updateDureePrevue(); modifSejour()"}}
   </td>
   <td colspan="2">
@@ -480,7 +480,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field=entree_reelle}}</th>
-  <td class="date" colspan="3">
+  <td colspan="3">
     {{if $can->edit}}
     {{mb_field object=$sejour field=entree_reelle form=editSejour}}
     {{else}}
@@ -491,7 +491,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
-  <td class="date" colspan="3">
+  <td colspan="3">
     {{if $can->edit}}
     {{mb_field object=$sejour field=sortie_reelle form=editSejour}}
     {{else}}

@@ -73,7 +73,7 @@
       </tr>
       <tr>
         <th>{{mb_label object=$menu field="debut"}}</th>
-        <td class="date">{{mb_field object=$menu field="debut" form="editMenu" register=true}}</td>
+        <td>{{mb_field object=$menu field="debut" form="editMenu" register=true}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$menu field="repetition"}}</th>

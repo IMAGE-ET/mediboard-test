@@ -133,7 +133,7 @@
   <table class="form">
     <tr>
       <th>{{mb_label object=$consult_anesth field="date_interv"}}</th>
-      <td class="date"> {{mb_field object=$consult_anesth form="opInfoFrm" field="date_interv" register=true onchange="this.form.onsubmit()"}}</td>
+      <td>{{mb_field object=$consult_anesth field="date_interv" form="opInfoFrm" register=true onchange="this.form.onsubmit()"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>

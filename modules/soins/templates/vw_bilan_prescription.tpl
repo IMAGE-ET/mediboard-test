@@ -69,11 +69,11 @@ Main.add(function () {
 				        {{/foreach}}
 				      </select>
 	          </td>
-	          <td class="date">
+	          <td>
 	            A partir du
 	            {{mb_field object=$sejour field="_date_min" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>
-	          <td class="date">
+	          <td>
 	            jusqu'au
 	            {{mb_field object=$sejour field="_date_max" form="bilanPrescriptions" register="true" canNull=false}}
 	          </td>

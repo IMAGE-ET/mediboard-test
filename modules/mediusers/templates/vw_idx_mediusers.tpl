@@ -200,16 +200,12 @@ function changeRemote(o) {
         
         <tr>
           <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
-          <td class="date">
-            {{mb_field object=$mediuserSel field="deb_activite" form="mediuser" register=true}}
-          </td>
+          <td>{{mb_field object=$mediuserSel field="deb_activite" form="mediuser" register=true}}</td>
         </tr>
     
         <tr>
           <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
-          <td class="date">
-            {{mb_field object=$mediuserSel field="fin_activite" form="mediuser" register=true}}
-          </td>
+          <td>{{mb_field object=$mediuserSel field="fin_activite" form="mediuser" register=true}}</td>
         </tr>
         
         <tr>

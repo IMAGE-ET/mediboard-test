@@ -109,6 +109,13 @@ class CFile extends CDocumentItem {
     return $objectPerm;
   }
   
+  function fillFields(){
+    if (!$this->_id) {
+      if (!$this->file_date)          $this->file_date = mbDateTime();
+      if (!$this->file_real_filename) $this->file_real_filename = uniqid(rand());
+    }
+  }
+  
   function store() {
     if ($this->_id && ($this->fieldModified("object_id") || $this->fieldModified("object_class"))) {
       $this->_old->updateFormFields();
@@ -240,7 +247,6 @@ class CFile extends CDocumentItem {
             }
           }
         }
-        
       }
       elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count == 1){
         // Fichier PDF 1.3 ou 1 seule occurence

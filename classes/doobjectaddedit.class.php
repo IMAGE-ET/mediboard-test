@@ -14,7 +14,7 @@ class CDoObjectAddEdit {
   var $createMsg           = null;
   var $modifyMsg           = null;
   var $deleteMsg           = null;
-  var $refTab              = null;
+  var $request             = null;
   var $redirect            = null;
   var $redirectStore       = null;
   var $redirectError       = null;
@@ -41,7 +41,7 @@ class CDoObjectAddEdit {
     $this->modifyMsg           = CAppUI::tr("$className-msg-modify");
     $this->deleteMsg           = CAppUI::tr("$className-msg-delete");
     
-    $this->refTab              =& $_POST;
+    $this->request             =& $_POST;
 
     $this->_logIt              = true;
     $this->_obj                = new $this->className();
@@ -51,16 +51,16 @@ class CDoObjectAddEdit {
   }
 
   function doBind() {
-    $this->ajax            = CMbArray::extract($this->refTab, "ajax");
-    $this->suppressHeaders = CMbArray::extract($this->refTab, "suppressHeaders");
-    $this->callBack        = CMbArray::extract($this->refTab, "callback");
-    $this->postRedirect    = CMbArray::extract($this->refTab, "postRedirect");
+    $this->ajax            = CMbArray::extract($this->request, "ajax");
+    $this->suppressHeaders = CMbArray::extract($this->request, "suppressHeaders");
+    $this->callBack        = CMbArray::extract($this->request, "callback");
+    $this->postRedirect    = CMbArray::extract($this->request, "postRedirect");
     if($this->postRedirect) {
       $this->redirect = $this->postRedirect;
     }
     
     // Object binding
-    $this->_obj->bind($this->refTab);
+    $this->_obj->bind($this->request);
     
     $this->_objBefore->load($this->_obj->_id);
   }
@@ -109,7 +109,7 @@ class CDoObjectAddEdit {
     else {
       $id = $this->objectKeyGetVarName;
       CValue::setSession($id, $this->_obj->$id);
-      $this->isNotNew = @$this->refTab[$this->objectKeyGetVarName];
+      $this->isNotNew = CValue::read($this->request, $this->objectKeyGetVarName);
       CAppUI::setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
@@ -129,19 +129,18 @@ class CDoObjectAddEdit {
       $callBack = $this->callBack;
       echo CAppUI::getMsg();
       if ($callBack) {
-        echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
+        echo "\n<script type=\"text/javascript\">$callBack($idValue);</script>";
       }
       CApp::rip();
     }
 
     // Cas normal
     CAppUI::redirect($this->redirect);
-    
   }
 
   function doIt() {
     $this->doBind();
-    if (intval(CValue::read($this->refTab, 'del'))) {
+    if (intval(CValue::read($this->request, 'del'))) {
       $this->doDelete();
     } else {
       $this->doStore();
