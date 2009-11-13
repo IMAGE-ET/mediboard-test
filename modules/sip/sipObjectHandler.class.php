@@ -140,7 +140,9 @@ class CSipObjectHandler extends CMbObjectHandler {
       $mbObject->loadRefPraticien();
       $mbObject->loadRefPatient();
       $mbObject->_ref_patient->loadIPP();
-      $mbObject->loadRefsPrescripteurs();
+      if ($mbObject->_ref_prescripteurs) {
+        $mbObject->loadRefsPrescripteurs();
+      }
       $mbObject->loadRefAdresseParPraticien();
       $mbObject->_ref_patient->loadRefsFwd();
       $mbObject->loadRefsActes();
