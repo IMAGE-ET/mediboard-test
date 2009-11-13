@@ -74,8 +74,8 @@ Document.refreshList = function(){
   </tr>
 
   <tr>
-    <td rowspan="5" style="width: 0.1%; vertical-align: middle; text-align: center;">
-		  {{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="80"}}
+    <td rowspan="3" style="width: 0.1%; vertical-align: middle; text-align: center;">
+		  {{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}
 		</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
@@ -98,14 +98,14 @@ Document.refreshList = function(){
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="naissance"}}</th>
+    <th colspan="2">{{mb_label object=$patient field="naissance"}}</th>
     <td>{{mb_value object=$patient field="naissance"}}</td>
     <th>{{mb_label object=$patient field="tel"}}</th>
     <td>{{mb_value object=$patient field="tel"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
+    <th colspan="2">{{mb_label object=$patient field="nom_jeune_fille"}}</th>
     <td>{{mb_value object=$patient field="nom_jeune_fille"}}</td>
     <th>{{mb_label object=$patient field="tel2"}}</th>
     <td>{{mb_value object=$patient field="tel2"}}</td>
