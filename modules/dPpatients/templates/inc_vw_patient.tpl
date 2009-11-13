@@ -294,43 +294,43 @@ Document.refreshList = function(){
   <tr>
     <th colspan="2" class="category">Séjours</th>
   </tr>
-  {{foreach from=$patient->_ref_sejours item=curr_sejour}}
+  {{foreach from=$patient->_ref_sejours item=_sejour}}
   <tr>
     <td class="text">
-      {{if $curr_sejour->group_id == $g && $curr_sejour->_canEdit}}
-      <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+      {{if $_sejour->group_id == $g && $_sejour->_canEdit}}
+      <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
       <a class="tooltip-trigger"
          {{if $canAdmissions->view}}
-         href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}"
+         href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$_sejour->_date_entree_prevue}}#adm{{$_sejour->_id}}"
          {{else}}
          href="#nothing"
          {{/if}}
-         onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')"
+         onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')"
       >
       {{else}}
       <a href="#nothing">
       {{/if}}
-        {{if $curr_sejour->_num_dossier && $curr_sejour->group_id == $g}}[{{$curr_sejour->_num_dossier}}]{{/if}}
-        {{$curr_sejour->_shortview}}
-        {{if $curr_sejour->_nb_files_docs}}
-          - ({{$curr_sejour->_nb_files_docs}} Doc.)
+        {{if $_sejour->_num_dossier && $_sejour->group_id == $g}}[{{$_sejour->_num_dossier}}]{{/if}}
+        {{$_sejour->_shortview}}
+        {{if $_sejour->_nb_files_docs}}
+          - ({{$_sejour->_nb_files_docs}} Doc.)
         {{/if}}
       </a>
     </td>
-    {{if $curr_sejour->group_id == $g}}
-    <td {{if $curr_sejour->annule}}class="cancelled"{{/if}}>
-      Dr {{$curr_sejour->_ref_praticien->_view}}
+    {{if $_sejour->group_id == $g}}
+    <td {{if $_sejour->annule}}class="cancelled"{{/if}}>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
     </td>
     {{else}}
     <td style="background-color:#afa">
-      {{$curr_sejour->_ref_group->text|upper}}
+      {{$_sejour->_ref_group->text|upper}}
     </td>
     {{/if}}
   </tr>
   
-  {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+  {{foreach from=$_sejour->_ref_operations item=curr_op}}
   <tr>
     <td class="text">
       <ul>
@@ -338,7 +338,7 @@ Document.refreshList = function(){
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'intervention" />
       </a>
-      {{if $curr_sejour->group_id == $g && $curr_op->_canEdit}}
+      {{if $_sejour->group_id == $g && $curr_op->_canEdit}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
         <img src="images/icons/planning.png" alt="modifier"/>
       </a>
@@ -357,13 +357,13 @@ Document.refreshList = function(){
       </li>
       </ul>
     </td>
-    {{if $curr_sejour->group_id == $g}}
+    {{if $_sejour->group_id == $g}}
     <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
-      Dr {{$curr_op->_ref_chir->_view}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}
     </td>
     {{else}}
     <td style="background-color:#afa">
-      {{$curr_sejour->_ref_group->_view|upper}}
+      {{$_sejour->_ref_group->_view|upper}}
     </td>
     {{/if}}
   </tr>
@@ -392,7 +392,7 @@ Document.refreshList = function(){
     </td>
 
     <td {{if $curr_consult->annule}}class="cancelled"{{/if}}>
-      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_chir}}
     </td>
   </tr>
 

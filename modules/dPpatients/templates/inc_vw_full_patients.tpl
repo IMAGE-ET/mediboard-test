@@ -100,9 +100,7 @@ function popEtatSejour(sejour_id) {
 	{{else}}
 		{{if $curr_sejour->group_id == $g}}
 		<td>
-		 <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-		   {{$praticien->_view}}
-		 </div>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 		</td>
 		{{else}}
 		<td style="background-color:#afa">
@@ -186,9 +184,7 @@ function popEtatSejour(sejour_id) {
   <td class="cancelled">[Consult annulée]</td>
   {{else}}
   <td>
-     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-       {{$praticien->_view}}
-     </div>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	</td>
   {{/if}}
 
@@ -236,9 +232,7 @@ function popEtatSejour(sejour_id) {
 	  </td>
 	  {{else}}
 	  <td>
-     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-       {{$praticien->_view}}
-     </div>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	  </td>
 	  {{/if}}
   {{/if}}
@@ -284,9 +278,7 @@ function popEtatSejour(sejour_id) {
   <td class="cancelled">[Consult annulée]</td>
   {{else}}
   <td>
-     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-       {{$praticien->_view}}
-     </div>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	</td>
   {{/if}}
   
@@ -352,9 +344,7 @@ function popEtatSejour(sejour_id) {
   <td class="cancelled">[Consult annulée]</td>
   {{else}}
   <td>
-     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
-       {{$praticien->_view}}
-     </div>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	</td>
   {{/if}}
 
