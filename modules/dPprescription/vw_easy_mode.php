@@ -14,7 +14,7 @@ global $AppUI;
 $chapitres = CCategoryPrescription::loadCategoriesByChap(null, "current");
 foreach($chapitres as &$categories){
 	foreach($categories as &$category){
-		$category->loadElementsPrescription();
+		$category->loadElementsPrescription(false);
 	}
 }
 

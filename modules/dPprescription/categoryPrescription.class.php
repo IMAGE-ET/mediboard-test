@@ -61,9 +61,15 @@ class CCategoryPrescription extends CMbObject {
     $this->_ref_group = $group->getCached($this->group_id);
   }
   
-  function loadElementsPrescription() {
-    $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription","libelle");
-  }
+  function loadElementsPrescription($with_cancelled = true) {
+    //$this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription","libelle");
+    $element = new CElementPrescription();
+		if(!$with_cancelled){
+		  $element->cancelled = '0';
+		}
+		$element->category_prescription_id = $this->_id;
+		$this->_ref_elements_prescription = $element->loadMatchingList();
+	}
   
 	function countElementsPrescription() {
     $this->_count_elements_prescription = $this->countBackRefs("elements_prescription","libelle");
