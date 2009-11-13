@@ -541,6 +541,7 @@ var Calendar = {
     
     if (options.noView) {
       datepicker.element.setStyle({width: 0, height: 0, border: 'none'});
+      datepicker.element.up().setStyle({width: 0});
       if (datepicker.icon) datepicker.icon.style.position = 'relative';
     }
     else {
