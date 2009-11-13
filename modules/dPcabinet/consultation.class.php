@@ -720,12 +720,12 @@ class CConsultation extends CCodable {
   }
   
   function loadRefPatient($cache = 0) {
-    $this->_ref_patient = $this->loadFwdRef("patient_id");
+    $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
   function loadRefSejour($cache = 0){
-    $this->_ref_sejour = $this->loadFwdRef("sejour_id");
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
   }
   
