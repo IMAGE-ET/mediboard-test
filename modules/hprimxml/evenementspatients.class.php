@@ -329,55 +329,64 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return true;
   }  
   
-  function getMedecins($node, $mbVenue) {    
+  static function getMedecins($node, $mbVenue) {    
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
       foreach ($medecin as $_med) {
-     	  $code = $xpath->queryTextNode("hprim:identification/hprim:code", $_med);
-     	  $mediuser = new CMediusers();
-     	  $id400 = new CIdSante400();
-     	  //Paramétrage de l'id 400
-        $id400->object_class = "CMediusers";
-        $id400->tag = $this->destinataire;
-     	  $id400->id400 = $code;
-     	  $id400->loadMatchingObject();
-     	  if ($id400->_id) {
-     	  	$mediuser->_id = $id400->object_id;
-     	  } else {
-     	  	$functions = new CFunctions();
-  	      $functions->text = CAppUI::conf("hprimxml functionPratImport");
-  	      $functions->loadMatchingObject();
-          if (!$functions->loadMatchingObject()) {
-            $functions->group_id = CGroups::loadCurrent()->_id;
-            $functions->type = "cabinet";
-            $functions->compta_partagee = 0;
-            $functions->store();
-          }
-  	      $mediuser->function_id = $functions->_id;
-          // Récupération du typePersonne
-          $personne =  $xpath->queryUniqueNode("hprim:personne", $_med);
-          $mediuser = self::getPersonne($personne, $mediuser);
-          $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
-          $mediuser->_user_type = 13; // Medecin
-          $mediuser->actif = 0; // Non actif	
-          if (!$mediuser->loadMatchingObject()) {
-            $mediuser->store();
-          }
-          $id400->object_id = $mediuser->_id;
-          $id400->last_update = mbDateTime();
-          $id400->store(); 
-     	  }
+     	  $mediuser_id = $this->getMedecin($_med);
+                
         $lien = $xpath->getValueAttributNode($_med, "lien");
         if ($lien == "rsp") {
-          $mbVenue->praticien_id = $mediuser->_id;
+          $mbVenue->praticien_id = $mediuser_id;
         }
       } 
     }
     
     return $mbVenue;
+  }
+  
+  function getMedecin($node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
+    $mediuser = new CMediusers();
+    $id400 = new CIdSante400();
+    //Paramétrage de l'id 400
+    $id400->object_class = "CMediusers";
+    $id400->tag = $this->destinataire;
+    $id400->id400 = $code;
+    $id400->loadMatchingObject();
+    if ($id400->_id) {
+      $mediuser->_id = $id400->object_id;
+    } else {
+      $functions = new CFunctions();
+      $functions->text = CAppUI::conf("hprimxml functionPratImport");
+      $functions->loadMatchingObject();
+      if (!$functions->loadMatchingObject()) {
+        $functions->group_id = CGroups::loadCurrent()->_id;
+        $functions->type = "cabinet";
+        $functions->compta_partagee = 0;
+        $functions->store();
+      }
+      $mediuser->function_id = $functions->_id;
+      // Récupération du typePersonne
+      $personne =  $xpath->queryUniqueNode("hprim:personne", $node);
+      $mediuser = self::getPersonne($personne, $mediuser);
+      $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
+      $mediuser->_user_type = 13; // Medecin
+      $mediuser->actif = 0; // Non actif  
+      if (!$mediuser->loadMatchingObject()) {
+        $mediuser->store();
+      }
+      $id400->object_id = $mediuser->_id;
+      $id400->last_update = mbDateTime();
+      $id400->store(); 
+    }
+    
+    return $mediuser->_id;
   }
 
   static function getPlacement($node, $mbVenue) {
@@ -408,9 +417,27 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbVenue;
   }
   
-  function mappingMouvements($node, $mbVenue) {  
-
+  function mappingMouvements($node, $mbVenue) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    // Penser a parcourir tous les mouvements par la suite
+    $mouvement = $xpath->queryTextNode("hprim:mouvement", $node);
+     
+    if (!CAppUI::conf("hprimxml mvt_comptet")) {
+      $mbVenue = self::getMedecinResponsable($mouvement, $mbVenue);
+    }
+    
     return $mbVenue;
   } 
+  
+  static function getMedecinResponsable($node, $mbVenue) {
+    $xpath = new CMbXPath($node->ownerDocument, true);    
+    
+    $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
+    
+    $mbVenue->praticien_id = $this->getMedecin($medecinResponsable);
+    
+    return $mbVenue;
+  }
 }
 ?>

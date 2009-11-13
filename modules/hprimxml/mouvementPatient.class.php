@@ -33,9 +33,9 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
     $evenementPatient = $xpath->queryUniqueNode($query);
-    $mouvementPatient = $xpath->queryUniqueNode("hprim:mouvementPatient", $evenementPatient);
+    $mouvementPatient = $xpath->queryUniqueNode("hprim:mouvementPatient"  , $evenementPatient);
 
-    $data['action']  = $this->getActionEvenement("hprim:mouvementPatient", $evenementPatient);
+    $data['action']   = $this->getActionEvenement("hprim:mouvementPatient", $evenementPatient);
   
     $data['patient']  = $xpath->queryUniqueNode("hprim:patient", $mouvementPatient);
     $data['idSource'] = $this->getIdSource($data['patient']);
@@ -46,8 +46,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
     $data['priseEnCharge'] = $xpath->queryUniqueNode("hprim:priseEnCharge", $mouvementPatient);
-    $data['mouvements']    = $xpath->queryUniqueNode("hprim:mouvements", $mouvementPatient);
-    $data['voletMedical']  = $xpath->queryUniqueNode("hprim:voletMedical", $mouvementPatient);
+    $data['mouvements']    = $xpath->queryUniqueNode("hprim:mouvements"   , $mouvementPatient);
+    $data['voletMedical']  = $xpath->queryUniqueNode("hprim:voletMedical" , $mouvementPatient);
     $data['dossierResume'] = $xpath->queryUniqueNode("hprim:dossierResume", $mouvementPatient);
         
     return $data;
@@ -74,9 +74,9 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       return $messageAcquittement;
     }
     
-    // Traitement du patient
-    $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
-    $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    // Traitement de la venue
+    $domVenuePatient = new CHPrimXMLVenuePatient();
+    $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data);
     if ($echange_hprim->statut_acquittement != "OK") {
       return $messageAcquittement;
     }
@@ -89,32 +89,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
      // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbVenue = new CSejour();
-      
-      $etatVenue = CHPrimXMLEvenementsPatients::getEtatVenue($data['venue']);
-       
-      $id400Venue = new CIdSante400();
-      //Paramétrage de l'id 400
-      $id400Venue->object_class = "CSejour";
-      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'] : $data['idClient'];
-      $id400Venue->id400 = $data['idSourceVenue'];
-      $id400Venue->loadMatchingObject();
-      if ($mbVenue->load($data['idCibleVenue'])) {
-        if ($mbVenue->_id != $id400Venue->object_id) {
-          $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
-          $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-    
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();
-          return $messageAcquittement;
-        }
-      }
-   		
-      // Mapping de la venue 
-      $mbVenue = $this->mappingVenue($data['venue'], $mbVenue);
-      
+
+      // Mapping des mouvements
       $mbVenue = $this->mappingMouvements($data['mouvements'], $mbVenue);
     }
   } 

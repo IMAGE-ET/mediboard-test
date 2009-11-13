@@ -127,6 +127,10 @@ foreach($listEchangeHprim as $_echange_hprim) {
     $id400->object_class = "CSejour";
     $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
   }
+  if ($_echange_hprim->sous_type == "fusionVenue") {
+    $id400->object_class = "CSejour";
+    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:fusionVenue", "hprim:venue");
+  }
 	
 	$id400->tag = $_echange_hprim->emetteur;
 	$id400->id400 = $_echange_hprim->_object_id_permanent;

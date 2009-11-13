@@ -31,13 +31,15 @@ if (CAppUI::conf('sip server')) {
     $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
   }
 	
-	$id400->tag = CAppUI::conf("mb_id");
-	
-	$id400->id400 = $echange_hprim->_patient_ipp;
-	$id400->loadMatchingObject();
-	
-  $_echange_hprim->_object_class = $id400->object_class;
-	$echange_hprim->_object_id = $id400->object_id;
+  $id400->tag = $echange_hprim->emetteur;
+  $id400->id400 = $echange_hprim->_object_id_permanent;
+  $id400->loadMatchingObject();
+  
+  if (CAppUI::conf('sip server')) {
+    $echange_hprim->_object_id_permanent = $id400->object_id;
+  }
+  $echange_hprim->_object_class = $id400->object_class;
+  $echange_hprim->_object_id = ($id400->object_id) ? $id400->object_id : $echange_hprim->_object_id_permanent;  
 }
 
 // Création du template
