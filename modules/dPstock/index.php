@@ -10,16 +10,16 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab('vw_idx_order_manager', null, TAB_EDIT);
-$module->registerTab('vw_idx_stock_group',   null, TAB_ADMIN);
-$module->registerTab('vw_idx_stock_service', null, TAB_EDIT);
-$module->registerTab('vw_idx_discrepancy',   null, TAB_EDIT);
-$module->registerTab('vw_idx_reference',     null, TAB_ADMIN);
-$module->registerTab('vw_idx_product',       null, TAB_ADMIN);
-$module->registerTab('vw_idx_category',      null, TAB_ADMIN);
-$module->registerTab('vw_idx_societe',       null, TAB_ADMIN);
-$module->registerTab('vw_idx_stock_location',null, TAB_ADMIN);
-$module->registerTab('vw_idx_report',        null, TAB_READ);
-$module->registerTab('vw_traceability',      null, TAB_READ);
+$module->registerTab('vw_idx_order_manager', TAB_EDIT);
+$module->registerTab('vw_idx_stock_group',  TAB_ADMIN);
+$module->registerTab('vw_idx_stock_service', TAB_EDIT);
+$module->registerTab('vw_idx_discrepancy',   TAB_EDIT);
+$module->registerTab('vw_idx_reference',     TAB_ADMIN);
+$module->registerTab('vw_idx_product',       TAB_ADMIN);
+$module->registerTab('vw_idx_category',     TAB_ADMIN);
+$module->registerTab('vw_idx_societe',      TAB_ADMIN);
+$module->registerTab('vw_idx_stock_location',TAB_ADMIN);
+$module->registerTab('vw_idx_report',        TAB_READ);
+$module->registerTab('vw_traceability',      TAB_READ);
 
 ?>

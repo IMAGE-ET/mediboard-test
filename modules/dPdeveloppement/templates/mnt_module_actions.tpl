@@ -29,7 +29,7 @@ Documentation = {
     <th colspan="2">Documentation</th>
   </tr>
 
-	{{foreach from=$modules item=module}}
+  {{foreach from=$modules item=module}}
   <tr>
     <th class="category" colspan="2">mod-{{$module->mod_name}}</th>
 	  <td class="page" id="mod-{{$module->mod_name}}" />
@@ -41,14 +41,15 @@ Documentation = {
   </tr>
 
 	  {{foreach from=$module->_tabs item=tab}}
+	  {{assign var=_tabs_info value=$tabs.$tab}}
 		<tr>
-		  <td>{{$tab.0}}</td>
-		  <td class="{{mb_ternary test=$tab.locale value=ok other=warning}}">
-		    {{$tab.locale|default:$tab.name}}
+		  <td>{{$tab}}</td>
+		  <td class="{{mb_ternary test=$_tabs_info.locale value=ok other=warning}}">
+		    {{$_tabs_info.locale|default:$_tabs_info.name}}
 		  </td>
-		  <td class="page" id="{{$tab.name}}" />
+		  <td class="page" id="{{$_tabs_info.name}}" />
 		  <td style="width: 1%">
-		  	<a class="button search notext" href="http://www.mediboard.org/public/{{$tab.name}}">
+		  	<a class="button search notext" href="http://www.mediboard.org/public/{{$_tabs_info.name}}">
 		  		{{tr}}Link{{/tr}}
 		  	</a>
 		  </td>

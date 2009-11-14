@@ -10,7 +10,7 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_groups"  , null, TAB_READ);
-$module->registerTab("vw_etab_externe", null, TAB_READ);
+$module->registerTab("vw_idx_groups"  , TAB_READ);
+$module->registerTab("vw_etab_externe", TAB_READ);
 
 ?>

@@ -10,13 +10,13 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_edit_protocole"           , null, TAB_EDIT);
-$module->registerTab("vw_edit_pack_protocole"      , null, TAB_EDIT);
-$module->registerTab("vw_edit_liaison_admission"   , null, TAB_EDIT);
-$module->registerTab("vw_edit_category"            , null, TAB_ADMIN);
-$module->registerTab("vw_edit_categories_group"    , null, TAB_ADMIN);
-$module->registerTab("vw_edit_executant"           , null, TAB_ADMIN);
-$module->registerTab("vw_edit_associations_moments", null, TAB_ADMIN);
-$module->registerTab("vw_edit_moments_unitaires"   , null, TAB_ADMIN);
-$module->registerTab("vw_edit_config_service"      , null, TAB_ADMIN);
+$module->registerTab("vw_edit_protocole"           , TAB_EDIT);
+$module->registerTab("vw_edit_pack_protocole"      , TAB_EDIT);
+$module->registerTab("vw_edit_liaison_admission"   , TAB_EDIT);
+$module->registerTab("vw_edit_category"            , TAB_ADMIN);
+$module->registerTab("vw_edit_categories_group"    , TAB_ADMIN);
+$module->registerTab("vw_edit_executant"           , TAB_ADMIN);
+$module->registerTab("vw_edit_associations_moments", TAB_ADMIN);
+$module->registerTab("vw_edit_moments_unitaires"   , TAB_ADMIN);
+$module->registerTab("vw_edit_config_service"      , TAB_ADMIN);
 ?>

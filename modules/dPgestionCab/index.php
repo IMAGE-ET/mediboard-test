@@ -9,9 +9,9 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("edit_compta"			  , null, TAB_READ);
-$module->registerTab("edit_paie"  			  , null, TAB_READ);
-$module->registerTab("edit_params"			  , null, TAB_READ);
-$module->registerTab("edit_mode_paiement"	, null, TAB_READ);
-$module->registerTab("edit_rubrique"		  , null, TAB_READ);
+$module->registerTab("edit_compta"			, TAB_READ);
+$module->registerTab("edit_paie"  			, TAB_READ);
+$module->registerTab("edit_params"			, TAB_READ);
+$module->registerTab("edit_mode_paiement"	, TAB_READ);
+$module->registerTab("edit_rubrique"		, TAB_READ);
 ?>

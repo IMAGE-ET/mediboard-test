@@ -10,9 +10,9 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_idx_sejour", null, TAB_READ);
-$module->registerTab("vw_bilan_prescription", null, TAB_READ);
-$module->registerTab("vw_pancarte_service", null, TAB_READ);
-$module->registerTab("vw_stocks_service", null, TAB_EDIT);
+$module->registerTab("vw_idx_sejour"        , TAB_READ);
+$module->registerTab("vw_bilan_prescription", TAB_READ);
+$module->registerTab("vw_pancarte_service"  , TAB_READ);
+$module->registerTab("vw_stocks_service"    , TAB_EDIT);
 
 ?>

@@ -10,12 +10,15 @@
 global $can, $locales;
 $can->needsRead();
 
+$tabs = array();
 foreach ($modules = CModule::getInstalled() as $module) {
   CAppUI::requireModuleFile($module->mod_name, "index");
-  foreach ($module->_tabs as &$tab) {
-    $tab["name"] = "mod-$module->mod_name-tab-" . $tab[0];
-    $tab["locale"] = isset($locales[$tab["name"]]) ? 
-      $locales[$tab["name"]] : null; 
+  if (is_array($module->_tabs)) {
+    foreach ($module->_tabs as $tab) {
+      $tabs[$tab]["name"] = "mod-$module->mod_name-tab-" . $tab;
+	    $tabs[$tab]["locale"] = isset($locales[$tabs[$tab]["name"]]) ? 
+	    	$locales[$tabs[$tab]["name"]] : null; 
+    }
   }
 }
 
@@ -23,6 +26,7 @@ foreach ($modules = CModule::getInstalled() as $module) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("module", $modules);
+$smarty->assign("tabs"  , $tabs);
 
 $smarty->display("mnt_module_actions.tpl");
 ?>

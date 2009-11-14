@@ -9,17 +9,17 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("view_metrique"       		, null, TAB_READ);
-$module->registerTab("view_logs"           		, null, TAB_READ);
-$module->registerTab("mnt_module_actions"  		, null, TAB_READ);
-$module->registerTab("mnt_table_classes"   		, null, TAB_READ);
-$module->registerTab("mnt_backref_classes" 		, null, TAB_READ);
-$module->registerTab("mnt_traduction_classes" , null, TAB_READ);
-//$module->registerTab("launch_tests"        		, null, TAB_READ);
-$module->registerTab("css_test"           		, null, TAB_READ);
-$module->registerTab("form_tester"            , null, TAB_READ);
-$module->registerTab("mutex_tester"           , null, TAB_READ);
-$module->registerTab("check_zombie_objects"   , null, TAB_READ);
-$module->registerTab("benchmark"              , null, TAB_READ);
+$module->registerTab("view_metrique"       	  , TAB_READ);
+$module->registerTab("view_logs"           	  , TAB_READ);
+$module->registerTab("mnt_module_actions"  	  , TAB_READ);
+$module->registerTab("mnt_table_classes"   	  , TAB_READ);
+$module->registerTab("mnt_backref_classes"    , TAB_READ);
+$module->registerTab("mnt_traduction_classes" , TAB_READ);
+//$module->registerTab("launch_tests"         , TAB_READ);
+$module->registerTab("css_test"               , TAB_READ);
+$module->registerTab("form_tester"            , TAB_READ);
+$module->registerTab("mutex_tester"           , TAB_READ);
+$module->registerTab("check_zombie_objects"   , TAB_READ);
+$module->registerTab("benchmark"              , TAB_READ);
 
 ?>

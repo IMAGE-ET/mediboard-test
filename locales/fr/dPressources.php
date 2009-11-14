@@ -53,4 +53,7 @@ $locales['CPlageressource-title-create'] = '';
 $locales['CPlageressource-title-modify'] = '';
 $locales['CPlageressource.all'] = '';
 $locales['CPlageressource.select'] = '';
+$locales['mod-dPressources-tab-edit_planning'] = 'Administration des plages';
+$locales['mod-dPressources-tab-view_compta'] = 'Comptabilité';
+$locales['mod-dPressources-tab-view_planning'] = 'Planning réservations';
 ?>

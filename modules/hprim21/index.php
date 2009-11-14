@@ -9,9 +9,9 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_patients"               , null, TAB_READ);
-$module->registerTab("pat_hprim_selector"        , null, TAB_READ);
-$module->registerTab("httpreq_read_hprim_files"  , null, TAB_READ);
-$module->registerTab("httpreq_link_hprim_objects", null, TAB_READ);
+$module->registerTab("vw_patients"               , TAB_READ);
+$module->registerTab("pat_hprim_selector"        , TAB_READ);
+$module->registerTab("httpreq_read_hprim_files"  , TAB_READ);
+$module->registerTab("httpreq_link_hprim_objects", TAB_READ);
 
 ?>

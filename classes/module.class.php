@@ -198,21 +198,21 @@ class CModule extends CMbObject {
     }
   }
   
-  function registerTab($file, $name, $permType) {
+  function registerTab($file, $permType) {
     switch($permType) {
       case TAB_READ:
         if($this->canRead()) {
-          $this->_tabs[] = array($file, $name);
+          $this->_tabs[] = $file;
         }
         break;
       case TAB_EDIT:
         if($this->canEdit()) {
-          $this->_tabs[] = array($file, $name);
+          $this->_tabs[] = $file;
         }
         break;
       case TAB_ADMIN:
         if($this->canAdmin()) {
-          $this->_tabs[] = array($file, $name);
+          $this->_tabs[] = $file;
         }
         break;
     }
@@ -226,9 +226,9 @@ class CModule extends CMbObject {
     // Try to access wanted tab
     $tabPath = "./modules/$this->mod_name/$tab.php";
     if (!is_file($tabPath)) {
-      return $this->_tabs[0][0];
+      return $this->_tabs[0];
     }
-    
+
     return $tab;
   }
   
@@ -236,7 +236,7 @@ class CModule extends CMbObject {
     // Add configure tab if exist
     $configPath = "./modules/$this->mod_name/configure.php";
     if (is_file($configPath) && (CAppUI::$instance->user_type == 1)){
-      $this->registerTab("configure", "Configure", TAB_ADMIN);
+      $this->registerTab("configure", TAB_ADMIN);
     }
   }
   

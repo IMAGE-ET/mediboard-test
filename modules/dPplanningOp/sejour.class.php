@@ -917,7 +917,7 @@ class CSejour extends CCodable {
       return;
     }  
     
-    // Objet inexistatn
+    // Objet inexistant
     if (!$this->_id) {
       return "-";
     }
@@ -935,7 +935,7 @@ class CSejour extends CCodable {
     $this->_ref_numdos  = $id400;
     $this->_num_dossier = $id400->id400;
     
-    // Si pas d'id400 correspondant, on stocke "_"
+    // Si pas d'id400 correspondant, on stocke "-"
     if(!$this->_num_dossier){
       $this->_num_dossier = "-";
     }

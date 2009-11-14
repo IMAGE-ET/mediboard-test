@@ -268,4 +268,5 @@ $locales['CValidationRepas-validationrepas_id-desc'] = '';
 $locales['CValidationRepas.all'] = '';
 $locales['CValidationRepas.select'] = '';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';
+$locales['mod-dPrepas-tab-vw_create_archive'] = 'Archive Zip';
 ?>

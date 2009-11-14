@@ -9,22 +9,22 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_operations"  , null, TAB_READ);
-$module->registerTab("vw_reveil"      , null, TAB_READ);
-$module->registerTab("vw_soins_reveil", null, TAB_READ);
+$module->registerTab("vw_operations"  , TAB_READ);
+$module->registerTab("vw_reveil"      , TAB_READ);
+$module->registerTab("vw_soins_reveil", TAB_READ);
 
-//$module->registerTab("vw_brancardage", "Brancardage"       , TAB_READ);
+//$module->registerTab("vw_brancardage", TAB_READ);
 
-$module->registerTab("vw_urgences"    , null, TAB_READ);
-$module->registerTab("vw_suivi_salles", null, TAB_READ);
+$module->registerTab("vw_urgences"    , TAB_READ);
+$module->registerTab("vw_suivi_salles", TAB_READ);
 
-//$module->registerTab("vw_anesthesie" , "Anesthésie"        , TAB_READ);
+//$module->registerTab("vw_anesthesie"     , TAB_READ);
 
 if(CAppUI::conf('dPsalleOp CActeCCAM signature')){
-  $module->registerTab("vw_signature_actes", null, TAB_READ);
+  $module->registerTab("vw_signature_actes", TAB_READ);
 }
 
-$module->registerTab("vw_daily_check_traceability", null, TAB_READ);
-$module->registerTab("vw_daily_check_item_type"   , null, TAB_ADMIN);
+$module->registerTab("vw_daily_check_traceability", TAB_READ);
+$module->registerTab("vw_daily_check_item_type"   , TAB_ADMIN);
 
 ?>

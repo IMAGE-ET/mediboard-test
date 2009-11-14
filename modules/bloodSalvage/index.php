@@ -16,13 +16,13 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 /**
  * Puis on crée l'index avec les vues du module vw_*
  */
-$module->registerTab("vw_bloodSalvage",      null, TAB_READ);
-$module->registerTab("vw_bloodSalvage_sspi", null, TAB_READ);
-$module->registerTab("vw_stats",             null, TAB_READ);
-$module->registerTab("vw_cellSaver",         null, TAB_EDIT);
+$module->registerTab("vw_bloodSalvage",      TAB_READ);
+$module->registerTab("vw_bloodSalvage_sspi", TAB_READ);
+$module->registerTab("vw_stats",             TAB_READ);
+$module->registerTab("vw_cellSaver",         TAB_EDIT);
 
 if(CModule::getActive("dPqualite")) {
-	$module->registerTab("vw_typeEi_manager",  null, TAB_EDIT);	
+	$module->registerTab("vw_typeEi_manager", TAB_EDIT);	
 }
 
 ?>
