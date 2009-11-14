@@ -56,9 +56,8 @@ $errors = 0;
 $patients = $patient->loadList($where, $patient->_spec->key, "0, $max");
 
 foreach ($patients as $patient) {
-	$patient->_ref_last_log->type = "create";
-	
-	$dest_hprim = new CDestinataireHprim();
+  $patient->_ref_last_log->type = "create";
+  $dest_hprim = new CDestinataireHprim();
 	
   $dest_hprim->type = "sip";
   $dest_hprim->loadMatchingObject();
@@ -77,7 +76,7 @@ foreach ($patients as $patient) {
   $domEvenement = new CHPrimXMLEnregistrementPatient();
   $domEvenement->emetteur = CAppUI::conf('mb_id');
   $domEvenement->destinataire = $dest_hprim->destinataire;
-  $messageEvtPatient = $domEvenement->generateEvenementsPatients($patient);
+  $messageEvtPatient = $domEvenement->generateTypeEvenement($patient);
   
   if (!$messageEvtPatient) {
   	trigger_error("Création de l'événement patient impossible.", E_USER_WARNING);
