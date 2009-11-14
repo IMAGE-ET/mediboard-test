@@ -200,4 +200,7 @@ $locales['sip-hprim-error-I122'] = 'Numéro dossier non connu, IC non fourni. Ass
 $locales['sip-hprim-error-I123'] = 'Numéro dossier connu, IC non fourni.';
 $locales['sip-hprim-error-I124'] = 'Numéro dossier connu, IC connu.';
 $locales['mod-sip-tab-vw_test_ws'] = 'Test WS';
+$locales['config-sip-pat_no_ipp'] = 'Patient n\'ayant pas d\'IPP';
+$locales['config-sip-pat_no_ipp-desc'] = 'Patient n\'ayant pas d\'IPP';
+$locales['mod-sip-tab-v'] = '';
 ?>

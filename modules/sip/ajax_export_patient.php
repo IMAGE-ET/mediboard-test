@@ -72,6 +72,10 @@ foreach ($patients as $patient) {
 
     $patient->_IPP = $IPP->id400;
   }
+  
+  if (CAppUI::conf("sip pat_no_ipp") && $patient->_IPP) {
+  	continue;
+  }
 	
   $domEvenement = new CHPrimXMLEnregistrementPatient();
   $domEvenement->emetteur = CAppUI::conf('mb_id');

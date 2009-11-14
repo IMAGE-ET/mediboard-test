@@ -32,4 +32,6 @@ $locales['config-hprimxml-tagDossierPA'] = 'Tag dossier PA';
 $locales['config-hprimxml-tagDossierPA-desc'] = 'Tag du dossier de pré-admission';
 $locales['config-hprimxml-mvt_comptet'] = 'Traiter mouvement patient complet';
 $locales['config-hprimxml-mvt_comptet-desc'] = 'Traiter mouvement patient complet';
+$locales['config-hprimxml-medecinIndetermine'] = 'Nom medecin responsable indeterminé';
+$locales['config-hprimxml-medecinIndetermine-desc'] = 'Nom medecin responsable indeterminé pour une venue';
 ?>

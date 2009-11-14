@@ -329,20 +329,32 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return true;
   }  
   
-  static function getMedecins($node, $mbVenue) {    
+  function getMedecins($node, $mbVenue) {    
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
       foreach ($medecin as $_med) {
-     	  $mediuser_id = $this->getMedecin($_med);
+     	$mediuser_id = $this->getMedecin($_med);
                 
         $lien = $xpath->getValueAttributNode($_med, "lien");
         if ($lien == "rsp") {
           $mbVenue->praticien_id = $mediuser_id;
         }
       } 
+    }
+    
+    // Dans le cas ou la venue ne contient pas de medecin responsable
+    // Attribution d'un medecin indeterminé
+    if (!$mbVenue->praticien_id) {
+      $mediuser = new CMediusers();
+      $medisuer->_user_last_name = CAppUI::conf("hprimxml medecinIndetermine");
+      if (!$mediuser->loadMatchingObject()) {
+        $mediuser->_id = $this->createPraticien($mediuser);
+      }
+      
+      $mbVenue->praticien_id = $mediuser->_id;
     }
     
     return $mbVenue;
@@ -362,31 +374,39 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     if ($id400->_id) {
       $mediuser->_id = $id400->object_id;
     } else {
-      $functions = new CFunctions();
-      $functions->text = CAppUI::conf("hprimxml functionPratImport");
-      $functions->loadMatchingObject();
-      if (!$functions->loadMatchingObject()) {
-        $functions->group_id = CGroups::loadCurrent()->_id;
-        $functions->type = "cabinet";
-        $functions->compta_partagee = 0;
-        $functions->store();
-      }
-      $mediuser->function_id = $functions->_id;
       // Récupération du typePersonne
       $personne =  $xpath->queryUniqueNode("hprim:personne", $node);
       $mediuser = self::getPersonne($personne, $mediuser);
-      $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
-      $mediuser->_user_type = 13; // Medecin
-      $mediuser->actif = 0; // Non actif  
-      if (!$mediuser->loadMatchingObject()) {
-        $mediuser->store();
-      }
+      
+      $mediuser->_id = $this->createPraticien($mediuser);
+      
       $id400->object_id = $mediuser->_id;
       $id400->last_update = mbDateTime();
       $id400->store(); 
     }
     
     return $mediuser->_id;
+  }
+  
+  function createPraticien($mediuser) {
+    $functions = new CFunctions();
+    $functions->text = CAppUI::conf("hprimxml functionPratImport");
+    $functions->loadMatchingObject();
+    if (!$functions->loadMatchingObject()) {
+      $functions->group_id = CGroups::loadCurrent()->_id;
+      $functions->type = "cabinet";
+      $functions->compta_partagee = 0;
+      $functions->store();
+    }
+    $mediuser->function_id = $functions->_id;
+    $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
+    $mediuser->_user_type = 13; // Medecin
+    $mediuser->actif = 0; // Non actif  
+    if (!$mediuser->loadMatchingObject()) {
+      $mediuser->store();
+    }
+  	
+  	return $mediuser->_id;
   }
 
   static function getPlacement($node, $mbVenue) {

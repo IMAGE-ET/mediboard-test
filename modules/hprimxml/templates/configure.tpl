@@ -99,6 +99,18 @@
       </td>
     </tr>
     
+    {{assign var="var" value="medecinIndetermine"}}
+    <tr>
+      <th>
+        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+        </label>  
+      </th>
+      <td>
+        <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+      </td>
+    </tr>
+    
     {{mb_include module=system template=inc_config_bool var=mvt_comptet}}
    
     <tr>

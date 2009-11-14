@@ -164,6 +164,8 @@ Main.add(function () {
         <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
       </td>
     </tr>
+  	
+  	{{mb_include module=system template=inc_config_bool var=pat_no_ipp}}
   	  		    
     <tr>
       <td class="button" colspan="10">

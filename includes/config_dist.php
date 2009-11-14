@@ -612,6 +612,7 @@ $dPconfig["sip"] = array (
   "fileprefix" => "",
   "fileextension" => "XML",
   "filenbroll" => "2",
+  "pat_no_ipp" => 0,
 );
 
 $dPconfig["webservices"] = array (
@@ -637,6 +638,7 @@ $dPconfig["hprimxml"] = array (
     "version" => "1.01",
   ),
   "functionPratImport" => "Import",
+  "medecinIndetermine" => "Medecin Indeterminé",
   "mvt_comptet" => "0"
 );
 
