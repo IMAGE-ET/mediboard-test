@@ -77,7 +77,7 @@ if (!$echange_hprim_id) {
 	  $AppUI->setMsg("Evenement patient impossible", UI_MSG_ERROR);
 	}
 
-	$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
   $domGetAcquittement->loadXML(utf8_decode($acquittement));
   $doc_valid = $domGetAcquittement->schemaValidate();
   if ($doc_valid) {

@@ -24,11 +24,11 @@ if (CAppUI::conf('sip server')) {
   $id400 = new CIdSante400();
 	if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
     $id400->object_class = "CPatient";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+    $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
   }
   if ($_echange_hprim->sous_type == "venuePatient" ) {
     $id400->object_class = "CSejour";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
+    $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
   }
 	
   $id400->tag = $echange_hprim->emetteur;
