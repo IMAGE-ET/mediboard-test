@@ -18,15 +18,15 @@ $echange_hprim = new $echange_hprim_classname;
 $echange_hprim->load($echange_hprim_id);
 
 if (CAppUI::conf('sip server')) {
-	$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
-	$domGetIdSourceObject->loadXML(utf8_decode($echange_hprim->message));
+  $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
+  $domGetIdSourceObject->loadXML(utf8_decode($echange_hprim->message));
 	
   $id400 = new CIdSante400();
-	if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
+  if ($echange_hprim->sous_type == "enregistrementPatient") {
     $id400->object_class = "CPatient";
     $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
   }
-  if ($_echange_hprim->sous_type == "venuePatient" ) {
+  if ($echange_hprim->sous_type == "venuePatient") {
     $id400->object_class = "CSejour";
     $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
   }
