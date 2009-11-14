@@ -289,7 +289,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $lieuNaissance = $this->addElement($personnePhysique, "lieuNaissance");
     $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
-    $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
+    if ($mbPatient->pays_naissance_insee)
+    	$this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
   
@@ -376,7 +377,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $adresse = $this->addElement($adresses, "adresse");
     $this->addTexte($adresse, "ligne", substr($personne['ligne'], 0, 35));
     $this->addTexte($adresse, "ville", $personne['ville']);
-    $this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
+    if ($personne['pays'])
+    	$this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $personne['codePostal']);
 
     $telephones = $this->addElement($elParent, "telephones");
