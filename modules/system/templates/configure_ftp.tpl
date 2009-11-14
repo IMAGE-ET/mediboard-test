@@ -133,7 +133,6 @@
         </table>
       </form>
     </td>
-    </td>
     <td class="greedyPane">
       <script type="text/javascript">
         var FTPSN = {

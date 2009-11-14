@@ -164,12 +164,14 @@ Main.add(function () {
         <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
       </td>
     </tr>
+  	
+  	{{mb_include module=system template=inc_config_bool var=pat_no_ipp}}	   
   		    
-	  <tr>
-	    <td class="button" colspan="10">
-	      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-	    </td>
-	  </tr>
+    <tr>
+      <td class="button" colspan="10">
+        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      </td>
+    </tr>
   </table>
 </form>
 
@@ -203,13 +205,13 @@ var Action = {
     {{tr}}sip-export-class{{/tr}} '{{tr}}CPatient{{/tr}}'
   </td>
   <td>
-    <button class="new" onclick="Action.import('start')">
+    <button type="button" class="new" onclick="Action.import('start')">
       {{tr}}Start{{/tr}}      
     </button>
-    <button class="change" onclick="Action.import('retry')">
+    <button type="button" class="change" onclick="Action.import('retry')">
       {{tr}}Retry{{/tr}}      
     </button>
-    <button class="tick" onclick="Action.import('continue')">
+    <button type="button" class="tick" onclick="Action.import('continue')">
       {{tr}}Continue{{/tr}}      
     </button>
   </td>
