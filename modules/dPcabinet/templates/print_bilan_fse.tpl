@@ -35,7 +35,7 @@
       <table class="form">
         <tr><th class="category" colspan="2">Récapitulatif</th></tr>
         <tr><th>Nombre FSE :</th><td>{{$total.count}}</td></tr>
-        <tr><th>Total facturé :</th><td>{{$total.S_FSE_TOTAL_FACTURE|string_format:"%.2f"}}{{$dPconfig.currency_symbol}}</td></tr>
+        <tr><th>Total facturé :</th><td>{{$total.S_FSE_TOTAL_FACTURE|currency}}</td></tr>
       </table>
     </td>
   </tr>
@@ -108,7 +108,7 @@
 				
         <tr>
           <td colspan="5" style="font-weight:bold; text-align:right">Total pour {{$cumuls.$_day.count}} FSE</td>
-          <td style="font-weight:bold;">{{$cumuls.$_day.S_FSE_TOTAL_FACTURE|string_format:"%.2f"}}{{$dPconfig.currency_symbol}}</td>
+          <td style="font-weight:bold;">{{$cumuls.$_day.S_FSE_TOTAL_FACTURE|currency}}</td>
         </tr>
       </table>
     </td>

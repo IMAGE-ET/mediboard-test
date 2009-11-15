@@ -22,9 +22,9 @@ function checkRapport(){
   url.addElement(oForm._type_affichage);
   url.addParam("cs", $V(oForm.cs));
   if(compta == 1){
-    url.popup(700, 550, "Rapport Comptabilité");
+    url.popup(950, 600, "Rapport Comptabilité");
   } else {
-    url.popup(700, 550, "Rapport");
+    url.popup(950, 600, "Rapport");
   }
   return false;
 }

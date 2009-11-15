@@ -7,24 +7,26 @@
         <tr>
           <th>
             <a href="#" onclick="window.print()">
-              Rapport du {{$filter->_date_min|date_format:"%d/%m/%Y"}}
-              {{if $filter->_date_max != $filter->_date_min}}
-              au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
-              {{/if}}
+              Rapport 
+							{{mb_include module=system template=inc_interval_date from=$filter->_date_min to=$filter->_date_max}}
             </a>
           </th>
         </tr>
-        {{if $chirSel->user_id}}
+				
+        <!-- Praticiens concernés -->
+        {{if $chirSel->_id}}
+        {{assign var=prat_id value=$chirSel->_id}}
         <tr>
-          <th>Dr {{$chirSel->_view}}</th>
+          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}</td>
         </tr>
         {{else}}
-        {{foreach from=$listPrat item=curr_prat}}
+        {{foreach from=$listPrat item=_prat}}
         <tr>
-          <th>Dr {{$curr_prat->_view}}</th>
+          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_prat}}</td>
         </tr>
         {{/foreach}}
         {{/if}}
+
         <tr>
           <td>Paiments pris en compte : {{if $filter->_mode_reglement}}{{$filter->_mode_reglement}}{{else}}tous{{/if}}</td>
         </tr>
@@ -57,12 +59,12 @@
         </tr>
         <tr>
           <th class="category">Total réglement patient</th>
-          <td>{{$recapReglement.total.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.cheque.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.CB.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.especes.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.virement.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.autre.du_patient|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.total.du_patient|currency}}</td>
+          <td>{{$recapReglement.cheque.du_patient|currency}}</td>
+          <td>{{$recapReglement.CB.du_patient|currency}}</td>
+          <td>{{$recapReglement.especes.du_patient|currency}}</td>
+          <td>{{$recapReglement.virement.du_patient|currency}}</td>
+          <td>{{$recapReglement.autre.du_patient|currency}}</td>
         </tr>
         <tr>
           <th class="category" colspan="7">Réglement Tiers</th>
@@ -87,12 +89,12 @@
         </tr>
         <tr>
           <th class="category">Total réglement Tiers</th>
-          <td>{{$recapReglement.total.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.cheque.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.CB.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.especes.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.virement.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$recapReglement.autre.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td>{{$recapReglement.total.du_tiers|currency}}</td>
+          <td>{{$recapReglement.cheque.du_tiers|currency}}</td>
+          <td>{{$recapReglement.CB.du_tiers|currency}}</td>
+          <td>{{$recapReglement.especes.du_tiers|currency}}</td>
+          <td>{{$recapReglement.virement.du_tiers|currency}}</td>
+          <td>{{$recapReglement.autre.du_tiers|currency}}</td>
         </tr>
         <tr>
           <th class="category" colspan="7">Récapitulatif des consultations concernées</th>
@@ -103,25 +105,25 @@
         </tr>
         <tr>
           <th class="category">Total secteur 1</th>
-          <td colspan="6">{{$recapReglement.total.secteur1|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td colspan="6">{{$recapReglement.total.secteur1|currency}}</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td colspan="6">{{$recapReglement.total.secteur2|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td colspan="6">{{$recapReglement.total.secteur2|currency}}</td>
         </tr>
         <tr>
           <th class="category">Total facturé</th>
-          <td colspan="6">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td colspan="6">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}</td>
         </tr>
         <tr>
           <th class="category">Total réglé</th>
-          <td colspan="6">{{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+          <td colspan="6">{{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|currency}}</td>
         </tr>
       </table>
     </td>
   </tr>
   {{if $filter->_type_affichage}}
-  {{foreach from=$listReglements key=key_date item=curr_date}}
+  {{foreach from=$listReglements key=key_date item=_date}}
   <tr>
     <td colspan="2"><strong>Règlements du {{$key_date|date_format:$dPconfig.longdate}}</strong></td>
   </tr>
@@ -129,46 +131,62 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th>Praticien</th>
-          <th>Patient</th>
-          <th>Type</th>
-          <th>Code</th>
-          <th>Secteur 1</th>
-          <th>Secteur 2</th>
-          <th>Total<br />facturé</th>
-          <th>Réglement<br />patient</th>
-          <th>Réglement<br />tiers</th>
+          <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
+          <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
+          <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=tarif}}</th>
+          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=secteur2}}</th>
+          <th rowspan="2" style="width:  1%;">{{mb_title class=CConsultation field=_somme}}</th>
+          <th rowspan="2" style="width:  1%;">{{mb_label class=CReglement field=mode}}</th>
+          <th colspan="2" style="width:  1%;">{{mb_title class=CReglement field=emetteur}}</th>
+				</tr>
+				
+				<tr>
+          <th style="width:  1%;">{{tr}}CReglement.emetteur.patient{{/tr}}</th>
+          <th style="width:  1%;">{{tr}}CReglement.emetteur.tiers{{/tr}}</th>
         </tr>
-        {{foreach from=$curr_date.reglements item=curr_reglement}}
+        
+				{{foreach from=$_date.reglements item=_reglement}}
+				{{assign var=consultation value=$_reglement->_ref_consultation}}
         <tr>
-          <td class="text">Dr {{$curr_reglement->_ref_consultation->_ref_chir->_view}}</td>
-          <td class="text">{{$curr_reglement->_ref_consultation->_ref_patient->_view}}</td>
-          <td>{{$curr_reglement->mode}}</td>
-          <td class="text">{{$curr_reglement->_ref_consultation->tarif}}</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur1}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur2}} {{$dPconfig.currency_symbol}}</td>
-          <td>{{$curr_reglement->_ref_consultation->secteur1+$curr_reglement->_ref_consultation->secteur2}} {{$dPconfig.currency_symbol}}</td>
+          <td class="text">
+            {{assign var=prat_id value=$consultation->_ref_chir->_id}}
+          	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
+					</td>
+
+          <td class="text">
+          	{{assign var=patient value=$consultation->_ref_patient}}
+          	<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</span>
+					</td>
+
+          <td class="text">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$consultation->_guid}}')">
+              {{mb_value object=$consultation field=tarif}}
+						</span>
+					</td>
+					
+          <td>{{mb_value object=$consultation field=secteur1}}</td>
+          <td>{{mb_value object=$consultation field=secteur2}}</td>
+          <td>{{mb_value object=$consultation field=_somme}}</td>
+
+          <td>{{$_reglement->mode}}</td>
           <td>
-            {{if $curr_reglement->emetteur == "patient"}}
-              {{$curr_reglement->montant}} {{$dPconfig.currency_symbol}}
-            {{else}}
-              0  {{$dPconfig.currency_symbol}}
+            {{if $_reglement->emetteur == "patient"}}
+						  {{mb_value object=$_reglement field=montant}}
             {{/if}}
           </td>
           <td>
-            {{if $curr_reglement->emetteur == "tiers"}}
-              {{$curr_reglement->montant}}
-            {{else}}
-              0  {{$dPconfig.currency_symbol}}
+            {{if $_reglement->emetteur == "tiers"}}
+              {{mb_value object=$_reglement field=montant}}
             {{/if}}
           </td>
         </tr>
         {{/foreach}}
         <tr>
           <td colspan="6" />
-          <th>Total</th>
-          <td><strong>{{$curr_date.total.patient}} {{$dPconfig.currency_symbol}}</strong></td>
-          <td><strong>{{$curr_date.total.tiers}} {{$dPconfig.currency_symbol}}</strong></td>
+          <td><strong>{{tr}}Total{{/tr}}</strong></td>
+          <td><strong>{{$_date.total.patient|currency}} </strong></td>
+          <td><strong>{{$_date.total.tiers|currency}}</strong></td>
         </tr>
       </table>
     </td>

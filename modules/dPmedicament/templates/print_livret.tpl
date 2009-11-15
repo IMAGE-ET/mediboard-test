@@ -61,13 +61,13 @@
           <td>{{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}</td>
 			    <td>
 			      {{if $produit_livret->prix_hopital}}
-			        {{$produit_livret->prix_hopital}}{{$dPconfig.currency_symbol}}
+			        {{$produit_livret->prix_hopital|currency}}
 			      {{/if}}
 			    </td>
           <td>{{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}</td>
 			    <td>
 			      {{if $produit_livret->prix_ville}}
-			        {{$produit_livret->prix_ville}}{{$dPconfig.currency_symbol}}
+			        {{$produit_livret->prix_ville|currency}}
 			      {{/if}}
 			    </td>
 			    <td>{{$produit_livret->code_interne}}</td>

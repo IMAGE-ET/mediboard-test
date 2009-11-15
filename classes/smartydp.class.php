@@ -79,12 +79,23 @@ function smarty_modifier_pad($string, $length, $pad_string = ' ', $pad_type = 'l
 /**
  * @abstract JSON encode an object for Javascript use
  *
- * Example:  {$value|json}
+ * Example:  {$object|json}
  * @param any $object The object to ge encoded
  */
 function smarty_modifier_json($object) {
   return json_encode($object);
 }
+
+/**
+ * @abstract Currency format modifier
+ *
+ * Example:  {$value|currency}
+ * @param float $value The value to format
+ */
+function smarty_modifier_currency($value) {
+  return number_format($value, 2, ",", " ") . " " . CAppUI::conf("currency_symbol");
+}
+
 
 function smarty_modifier_const($object, $name) {
 	// If the first arg is an instance, we get its class name
@@ -434,6 +445,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");
     $this->register_modifier("ternary"           , "smarty_modifier_ternary");
+    $this->register_modifier("currency"          , "smarty_modifier_currency");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();

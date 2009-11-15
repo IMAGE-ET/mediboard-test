@@ -124,7 +124,8 @@
             {{if $GHM->_CM}}
             <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
             <br />
-            <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} {{$dPconfig.currency_symbol}})
+            <strong>GHM</strong> : 
+						{{$GHM->_GHM}} ({{$GHM->_tarif_2006|currency}})
             <br />
             {{$GHM->_GHM_nom}}
             <br />

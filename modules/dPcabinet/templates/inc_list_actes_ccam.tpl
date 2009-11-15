@@ -97,7 +97,7 @@ viewCode = function(code, object_class){
 	    <!-- Tarifs des activités (phase 0) -->
 	    <em>(
 			{{foreach from=$_code->activites item=_actvite name=tarif}}
-    	Activité {{$_actvite->numero}} : {{$_actvite->phases.0->tarif}}{{$dPconfig.currency_symbol}}
+    	Activité {{$_actvite->numero}} : {{$_actvite->phases.0->tarif|currency}}
     	{{if !$smarty.foreach.tarif.last}}&mdash;{{/if}}
     	{{/foreach}}
 	    )</em>

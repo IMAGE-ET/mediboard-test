@@ -17,36 +17,43 @@
   <tr><th class="title" colspan="2"><a href="#" onclick="window.print()">Supplément d'honoraire</a></th></tr>
 
   <tr>
-    <th>Nom / Prénom du patient :</th>
-    <td>{{$admission->_ref_sejour->_ref_patient->_view}}</td>
+  	{{assign var=sejour value=$admission->_ref_sejour}}
+    <th>{{mb_label object=$sejour field=patient_id}}</th>
+    <td>{{mb_value object=$sejour field=patient_id}}</td>
   </tr>
 
   <tr>
-    <th>Date d'intervention :</th>
-    <td>{{$admission->_ref_plageop->_day}}/{{$admission->_ref_plageop->_month}}/{{$admission->_ref_plageop->_year}}</td>
+    <th>{{mb_label object=$admission field=_datetime}}</th>
+    <td>{{mb_value object=$admission field=_datetime}}</td>
   </tr>
   
   {{if $admission->libelle}}
   <tr>
-    <th>Libellé :</th>
-    <td class="text">{{$admission->libelle}}</td>
+    <th>{{mb_label object=$admission field=libelle}}</th>
+    <td>{{mb_value object=$admission field=libelle}}</td>
   </tr>
   {{/if}}
   
-  {{foreach from=$admission->_ext_codes_ccam item=curr_acte}}
+  {{foreach from=$admission->_ext_codes_ccam item=_acte}}
   <tr>
-    <th>Acte médical :</th>
-    <td class="text">{{$curr_acte->libelleLong}} <i>({{$curr_acte->code}})</i></td>
+    <th>{{tr}}CActeCCAM{{/tr}}</th>
+    <td class="text"><strong>[{{$_acte->code}}]</strong> {{$_acte->libelleLong}}</td>
   </tr>
   {{/foreach}}
 
   <tr>
-    <th>Côté: </th>
-    <td>{{tr}}COperation.cote.{{$admission->cote}}{{/tr}}</td>
+    <th>{{mb_label object=$admission field=cote}}</th>
+    <td>{{mb_value object=$admission field=cote}}</td>
   </tr>
   
   <tr>
-    <th>Dépassement d'honoraires: </th><td>{{$admission->depassement}} {{$dPconfig.currency_symbol}}</td>
+    <th>{{mb_label object=$admission field=depassement}}</th>
+    <td>{{mb_value object=$admission field=depassement}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$admission field=depassement_anesth}}</th>
+    <td>{{mb_value object=$admission field=depassement_anesth}}</td>
   </tr>
 
   <tr>

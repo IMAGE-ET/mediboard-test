@@ -180,7 +180,7 @@ function setToNow(element) {
               <td>
                 {{mb_field object=$acte field=charges_sup typeEnum="checkbox"}}
                 {{mb_label object=$acte field=charges_sup}}
-                ({{$_phase->charges}}{{$dPconfig.currency_symbol}})
+                ({{$_phase->charges|currency}})
               </td>
               {{/if}}
             {{/if}}
@@ -262,7 +262,7 @@ function setToNow(element) {
               
               <strong>
               {{if $confCCAM.tarif || $subject->_class_name == "CConsultation"}}
-                &mdash; {{$acte->_tarif|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
+                &mdash; {{$acte->_tarif|currency}}
               {{/if}}
               </strong>
       

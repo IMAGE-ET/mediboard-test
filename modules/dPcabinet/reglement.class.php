@@ -43,16 +43,16 @@ class CReglement extends CMbObject {
     return $specs;
   }
 	
-  function loadRefConsultation($cache = 0) {
-    $this->_ref_consultation = $this->loadFwdRef("consultation_id");
+  function loadRefConsultation() {
+    $this->_ref_consultation = $this->loadFwdRef("consultation_id", "1");
   }
   
-  function loadRefBanque($cache = 0) {
+  function loadRefBanque() {
     $this->_ref_banque = $this->loadFwdRef("banque_id", 1);
   }
   
-  function loadRefsFwd($cache = 0) {
-    $this->loadRefConsultation($cache);
+  function loadRefsFwd() {
+    $this->loadRefConsultation();
 		$this->loadRefBanque();
   }
   

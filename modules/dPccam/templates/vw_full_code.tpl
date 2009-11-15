@@ -140,9 +140,9 @@ Main.add(function () {
                     <ul>
                       {{foreach from=$_act->phases item=_phase}}
                       <li>
-                      	Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif}}{{$dPconfig.currency_symbol}}
+                      	Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif|currency}}
                       	{{if $_phase->charges}}
-                      		<br />Charges supplémentaires de cabinets possibles : {{$_phase->charges}}{{$dPconfig.currency_symbol}}
+                      		<br />Charges supplémentaires de cabinets possibles : {{$_phase->charges|currency}}
                       	{{/if}}
                       </li>
                       {{/foreach}}

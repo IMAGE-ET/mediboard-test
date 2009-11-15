@@ -8,7 +8,8 @@
   </tr>
   <tr>
     <td colspan="2" class="text">
-      <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} {{$dPconfig.currency_symbol}})
+      <strong>GHM</strong> : 
+			{{$GHM->_GHM}} ({{$GHM->_tarif_2006|currency}})
     </td>
   </tr>
   <tr>

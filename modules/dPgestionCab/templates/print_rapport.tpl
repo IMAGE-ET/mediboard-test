@@ -32,7 +32,7 @@
     {{foreach from=$listRubriques item=rubrique}}
     <td>
       {{if $rubrique->rubrique_id == $fiche->rubrique_id}}
-      {{$fiche->montant|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}
+      {{$fiche->montant|currency}}
       {{/if}}
     </td>
     {{/foreach}}
@@ -46,7 +46,7 @@
     {{assign var="noTotal" value=1}}
       {{foreach from=$totaux item=curr_total}}
       {{if $rubrique->rubrique_id == $curr_total.rubrique_id}}
-      <td>{{$curr_total.value|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</td>
+      <td>{{$curr_total.value|currency}}</td>
       {{assign var="noTotal" value=0}}
       {{/if}}
       {{/foreach}}
@@ -54,5 +54,5 @@
       <td>-</td>
       {{/if}}
     {{/foreach}}
-    <th colspan="2">{{$total|string_format:"%.2f"}} {{$dPconfig.currency_symbol}}</th>
+    <th colspan="2">{{$total|currency}}</th>
 </table>

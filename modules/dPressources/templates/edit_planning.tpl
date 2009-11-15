@@ -40,7 +40,7 @@ Main.add(function () {
                     {{$curr_plage->libelle}}
                     <br />
                     {{/if}}
-                    {{$curr_plage->tarif}} {{$dPconfig.currency_symbol}}
+                    {{$curr_plage->tarif|currency}}
                     <br />
                     {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
                     {{if $curr_plage->prat_id}}
