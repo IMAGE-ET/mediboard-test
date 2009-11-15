@@ -11,9 +11,11 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
+      {{if $dPconfig.sip.server}}
       <a class="button new" href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
         Créer un nouveau destinataire HPRIM
       </a>
+      {{/if}}
       <table class="tbl">
         <tr>
           <th class="title" colspan="6">DESTINATAIRES HPRIM</th>
@@ -26,21 +28,28 @@
           <th>{{mb_title object=$dest_hprim field="username"}}</th>
           <th>{{mb_title object=$dest_hprim field="password"}}</th>
         </tr>
-        {{foreach from=$listDestHprim item=curr_dest_hprim}}
-        <tr {{if $curr_dest_hprim->_id == $dest_hprim->_id}}class="selected"{{/if}}>
+        {{foreach from=$listDestHprim item=_dest_hprim}}
+        <tr {{if $_dest_hprim->_id == $dest_hprim->_id}}class="selected"{{/if}}>
           <td>
-            <a href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id={{$curr_dest_hprim->_id}}" title="Modifier le destinataire HPRIM">
-              {{mb_value object=$curr_dest_hprim field="destinataire"}}
+            <a href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id={{$_dest_hprim->_id}}" title="Modifier le destinataire HPRIM">
+              {{mb_value object=$_dest_hprim field="destinataire"}}
             </a>
           </td>
-          <td>{{mb_value object=$curr_dest_hprim field="type"}}</td>
-          <td>{{mb_value object=$curr_dest_hprim field="actif"}}</td>
-          <td class="text">{{mb_value object=$curr_dest_hprim field="url"}}</td>
-          <td>{{mb_value object=$curr_dest_hprim field="username"}}</td>
-          <td>{{if $curr_dest_hprim->password}}Oui{{else}}Non{{/if}}</td>
+          <td>{{mb_value object=$_dest_hprim field="type"}}</td>
+          <td>{{mb_value object=$_dest_hprim field="actif"}}</td>
+          <td class="text">{{mb_value object=$_dest_hprim field="url"}}</td>
+          <td>{{mb_value object=$_dest_hprim field="username"}}</td>
+          <td>{{if $_dest_hprim->password}}Oui{{else}}Non{{/if}}</td>
         </tr>
         {{/foreach}}
       </table>
+      <div class="small-info">
+        {{if !$dPconfig.sip.server}}
+          Vous êtes en mode CIP vous pouvez ajouter qu'un destinataire H'XML (SIP).
+        {{else}}
+          Vous êtes en mode SIP vous pouvez ajouter plusieurs destinataires H'XML (CIP).
+        {{/if}}
+      </div>
     </td>
     <td class="halfPane">
       {{if $can->edit}}
@@ -67,7 +76,9 @@
         </tr>
         <tr>  
           <th>{{mb_label object=$dest_hprim field="type"}}</th>
-          <td>{{mb_field object=$dest_hprim field="type"}}</td>
+          <td>
+          	<input type="text" name="type" size="20" value="{{if $dPconfig.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
+          </td>
         </tr>
         <tr>  
           <th>{{mb_label object=$dest_hprim field="url"}}</th>
@@ -89,9 +100,13 @@
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
-            {{if $dest_hprim->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le destinataire HPRIM',objName:'{{$dest_hprim->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+          	{{if $dest_hprim->_id}}
+              <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+              <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$dest_hprim->_view|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{else}}
+              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>        
