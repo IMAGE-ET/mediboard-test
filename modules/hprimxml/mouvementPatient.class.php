@@ -12,7 +12,7 @@ CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients { 
   function __construct() {    
-    $this->sous_type = "fusionVenue";
+    $this->sous_type = "mouvementPatient";
             
     parent::__construct();
   }
@@ -62,7 +62,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-  	 if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
+  	if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
@@ -92,7 +92,38 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       
       // Mapping des mouvements
       $mbVenue = $this->mappingMouvements($data['mouvements'], $mbVenue);
+      
+      // Evite de passer dans le sip handler
+      $mbVenue->_coms_from_hprim = 1;
+      $msgVenue = $mbVenue->store();
+      
+      $newVenue->loadLogs();
+      $modified_fields = "";
+      if (is_array($mbVenue->_ref_last_log->_fields)) {
+        foreach ($mbVenue->_ref_last_log->_fields as $field) {
+          $modified_fields .= "$field \n";
+        }
+      }
+      $codes = array ($msgVenue ? "A103" : "I102");
+      
+      if ($msgVenue) {
+        $avertissement = $msgVenue." ";
+      } else {
+        $commentaire = "Séjour modifiée : $mbVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+      }
+      
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
+    
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
+
+    return $messageAcquittement;
   } 
 }
 ?>

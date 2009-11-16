@@ -421,7 +421,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $query = "/hprim:evenementsPatients/hprim:evenementPatient/*";
     
     $evenementPatient = $xpath->queryUniqueNode($query);
-    
+
     return $evenementPatient->tagName;
   }
   

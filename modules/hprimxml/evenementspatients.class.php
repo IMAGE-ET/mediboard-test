@@ -15,6 +15,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $hprimxmldoc->loadXML(utf8_decode($messagePatient));
     
     $type = $hprimxmldoc->getTypeEvenementPatient();
+
     // Un événement concernant un patient appartient à l'une des six catégories suivantes
     switch ($type) {
       case "enregistrementPatient" :
@@ -460,16 +461,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     // Penser a parcourir tous les mouvements par la suite
-    $mouvement = $xpath->queryTextNode("hprim:mouvement", $node);
-     
+    $mouvement = $xpath->queryUniqueNode("hprim:mouvement", $node);
+
     if (!CAppUI::conf("hprimxml mvt_comptet")) {
-      $mbVenue = self::getMedecinResponsable($mouvement, $mbVenue);
+      $mbVenue = $this->getMedecinResponsable($mouvement, $mbVenue);
     }
     
     return $mbVenue;
   } 
   
-  static function getMedecinResponsable($node, $mbVenue) {
+  function getMedecinResponsable($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);    
     
     $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
