@@ -134,8 +134,10 @@ function reloadPrescription(prescription_id){
 Main.add(function () {
   headerPrescriptionTabs = Control.Tabs.create('tabs_reveil', false);
 
+  {{if $operation->_id}}
   loadPatient('{{$sejour->patient_id}}');
   loadSejour('{{$sejour->_id}}');
+	{{/if}}
 	
 	if($('Imeds_tab')){
     var url = new Url;
