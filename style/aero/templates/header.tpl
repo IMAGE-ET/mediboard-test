@@ -100,11 +100,11 @@
 </table>
 {{/if}}
 
-<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
+<table id="main" class="{{if $dialog}}dialog {{/if}}{{$m}}">
   <tr>
+    <td class="tabox">
   
 {{if $dialog}}
-    <td class="tabox">
 	  <!-- System messages -->
 	  <div id="systemMsg">
 	    {{$errorMessage|nl2br|smarty:nodefaults}}
