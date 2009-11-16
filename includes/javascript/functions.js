@@ -432,6 +432,10 @@ var Console = {
     this.trace("Error: " + sMsg, "error");
   },
   
+  warn: function (sMsg) {
+    this.trace("Warning: " + sMsg, "warning");
+  },
+  
   start: function() {
     this.dStart = new Date;
   },

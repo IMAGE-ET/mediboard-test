@@ -12,10 +12,12 @@
 global $rootName;
 
 // Manage the session variable(s)
-session_name("$rootName-session");
+session_name(preg_replace("/[^a-z0-9]/i", "", $rootName));
+
 if (get_cfg_var("session.auto_start") > 0) {
   session_write_close();
 }
+
 session_start();
 session_register("AppUI");
   
@@ -25,7 +27,7 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
 }
 
 CAppUI::$instance =& $_SESSION["AppUI"];
-$AppUI =& CAppUI::$instance; 
+$AppUI =& CAppUI::$instance; //@todo: $AppUI shouldn't be used anymore
 
 if (!isset($_SESSION["locked"])) $_SESSION["locked"] = false; 
 

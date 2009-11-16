@@ -13,6 +13,11 @@ $performance["autoload"] = 0;
 
 // Load class paths in shared memory
 if (null == $classPaths = SHM::get("class-paths")) {
+  updateClassPathCache();
+}
+
+/** Updates the PHP classes paths cache */
+function updateClassPathCache(){
   CAppUI::getAllClasses();
   $classNames = getChildClasses(null);
   foreach ($classNames as $className) {
@@ -25,15 +30,12 @@ if (null == $classPaths = SHM::get("class-paths")) {
 
 function __autoload($className) {
   global $classPaths, $performance;
-    
-  // Recherche dans les classes de mediboard
+
   if (isset($classPaths[$className])) {
     $performance["autoload"]++;
     return require($classPaths[$className]);
-  } 
-  
-  // Recherche dans les classes de ezComponent
-  if (@include "ezc/Base/base.php") {
-    ezcBase::autoload( $className );
+  }
+  else {
+    updateClassPathCache();
   }
 }
