@@ -18,11 +18,6 @@ $consultation_id = CValue::get("consultation_id", 0);
 $sejour_id       = CValue::get("sejour_id", 0);
 $operation_id    = CValue::get("operation_id", 0);
 
-if(!$patient_id) {
-  $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPpatients&tab=0");
-}
-
 // Liste des Praticiens
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
@@ -30,6 +25,10 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
+if(!$patient->_id) {
+  $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
+  $AppUI->redirect("m=dPpatients&tab=0");
+}
 $patient->loadDossierComplet(PERM_READ);
 
 //Chargement de l'IPP

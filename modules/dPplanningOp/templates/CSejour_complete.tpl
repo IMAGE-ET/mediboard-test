@@ -292,8 +292,8 @@
 </table>
 
 {{if !$rpu || !$rpu->_id}}
-  {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
   {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
+  {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
 {{/if}}
 
 <table class="tbl">
