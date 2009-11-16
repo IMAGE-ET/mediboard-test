@@ -8,7 +8,7 @@
     {{assign var=prescription_sejour value=$prescriptions.sejour}}
     {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
-    <a class="text" href="#1" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
+    <a class="text" href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_ref_patient->_guid}}');" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},{{$curr_sejour->patient_id}},'{{$date}}')">
       <span class="{{if !$curr_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_sejour->septique}}septique{{/if}}">{{$curr_sejour->_ref_patient->_view}}</span>
     </a>
     <script type="text/javascript">

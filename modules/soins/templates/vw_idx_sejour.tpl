@@ -436,7 +436,7 @@ viewBilanService = function(service_id, date){
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
                   {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
-                  <a class="text" href="#1" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_affectation->_ref_sejour->_id}}'); loadViewSejour('{{$curr_affectation->_ref_sejour->_id}}', {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
+                  <a class="text" href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$curr_affectation->_ref_sejour->_ref_patient->_guid}}');" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_affectation->_ref_sejour->_id}}'); loadViewSejour('{{$curr_affectation->_ref_sejour->_id}}', {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
                     <span class="{{if !$curr_affectation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_affectation->_ref_sejour->septique}}septique{{/if}}">
                       {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                     </span>
