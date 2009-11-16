@@ -39,7 +39,7 @@ $plages = $plages->loadList($where, $order);
 foreach($plages as &$_plage) {
   $_plage->loadRefsOperations(0);
   foreach($_plage->_ref_operations as $_operation) {
-    $_operation->loadRefChir();
+    $_operation->loadRefChir(1);
     $_operation->_ref_chir->loadRefFunction();
     $_operation->loadRefSejour();
     $_operation->_ref_sejour->loadNumDossier();
@@ -64,17 +64,18 @@ $where["annulee"]  = "= '0'";
 $order = "chir_id";
 $urgences = $operation->loadList($where, $order);
 $totalOp += count($urgences);
-foreach($urgences as $_operation) {
-  $_operation->loadRefChir();
-  $_operation->loadRefSejour();
-  $_operation->_ref_sejour->loadNumDossier();
-  $_operation->_ref_sejour->loadRefPatient();
-  $_operation->_ref_sejour->_ref_patient->loadIPP();
-  $_operation->loadExtCodesCCAM();
-  $_operation->loadHprimFiles();
+foreach($urgences as $_urgence) {
+  $_urgence->loadRefChir(1);
+  $_urgence->_ref_chir->loadRefFunction();
+  $_urgence->loadRefSejour();
+  $_urgence->_ref_sejour->loadNumDossier();
+  $_urgence->_ref_sejour->loadRefPatient();
+  $_urgence->_ref_sejour->_ref_patient->loadIPP();
+  $_urgence->loadExtCodesCCAM();
+  $_urgence->loadHprimFiles();
 	
   $counts["urgences"]["total"]++; 
-  if (count($_operation->_ref_hprim_files)) {
+  if (count($_urgence->_ref_hprim_files)) {
     $counts["urgences"]["facturees"]++; 
   }
 }
