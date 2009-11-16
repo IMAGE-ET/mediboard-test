@@ -119,5 +119,33 @@ function refreshTabsReveil() {
 		</table>
 	{{/if}}
 {{else}}
+
+<script type="text/javascript">
+
+	Main.add(function () {
+	  Calendar.regField(getForm("selection").date, null, {noView: true});
+	});
+
+</script>
+
+  <div style="text-align: center">
+    <form action="?" name="selection" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="vw_reveil" />
+      <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
+      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+      <select name="bloc_id" onchange="this.form.submit();">
+        <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+        {{foreach from=$blocs_list item=curr_bloc}}
+          <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
+            {{$curr_bloc->nom}}
+          </option>
+        {{foreachelse}}
+          <option value="" disabled="disabled">{{tr}}CBlocOperatoire.none{{/tr}}</option>
+        {{/foreach}}
+      </select>
+    </form>
+		</div>
+		
   {{include file=inc_edit_check_list.tpl personnel=$personnels}}
 {{/if}}
