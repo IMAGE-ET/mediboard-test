@@ -75,14 +75,8 @@ function popEtatSejour(sejour_id) {
 {{foreach from=$patient->_ref_sejours item=curr_sejour}}
 <tr id="CSejour-{{$curr_sejour->_id}}">
   <td>
-  	<a href="#" onclick="popEtatSejour({{$curr_sejour->_id}});">
-    	<img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
-    </a>
-    <a title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
-      <img src="images/icons/edit.png" alt="Planifier"/>
-    </a>
-
-<!--  onmouseover="ObjectTooltip.createEx(this,'{{$curr_sejour->_guid}}');"  -->
+  	<button class="lookup notext" onclick="popEtatSejour({{$curr_sejour->_id}});">
+    <a title="Modifier le séjour" class="button edit notext" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}" />
     <span class="tooltip-trigger"
       onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$curr_sejour->_id}}');{{else}}viewCompleteItem('{{$curr_sejour->_class_name}}','{{$curr_sejour->_id}}');{{/if}} ViewFullPatient.select(this)">
       {{$curr_sejour->_shortview}} 

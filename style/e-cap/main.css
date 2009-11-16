@@ -371,6 +371,16 @@ a.button.search:hover {
   background-image: url(../tonkin/images/buttons/searchover.png);
 }
 
+button.lookup, 
+a.button.lookup {
+  background-image: url(../tonkin/images/buttons/lookup.png);
+}
+
+button.lookup:hover, 
+a.button.lookup:hover {
+  background-image: url(../tonkin/images/buttons/lookupover.png);
+}
+
 button.lock, 
 a.button.lock {
   background-image: url(../tonkin/images/buttons/lock.png);

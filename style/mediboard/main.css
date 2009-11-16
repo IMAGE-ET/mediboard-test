@@ -333,6 +333,11 @@ button.search, a.button.search {
   padding-left: 18px;
 }
 
+button.lookup, a.button.lookup {
+  background-image: url(images/buttons/lookup.png);
+  padding-left: 18px;
+}
+
 button.lock, a.button.lock {
   background-image: url(images/buttons/lock.png);
   padding-left: 18px;

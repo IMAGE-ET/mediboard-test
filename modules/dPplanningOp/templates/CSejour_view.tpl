@@ -16,7 +16,7 @@
       <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}" class="button edit">{{tr}}Modify{{/tr}}</a>
       {{/if}}
       {{if $modules.dPadmissions->_can->edit}} 
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$sejour->_date_entree_prevue}}#adm{{$sejour->_id}}" class="button tick">{{tr}}Admission{{/tr}}</a>
+      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$sejour->_date_entree_prevue}}#adm{{$sejour->_id}}" class="button search">{{tr}}Admission{{/tr}}</a>
       {{/if}}
     </td>
   </tr>

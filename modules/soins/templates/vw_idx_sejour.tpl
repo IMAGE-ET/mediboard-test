@@ -429,9 +429,7 @@ viewBilanService = function(service_id, date){
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected"{{/if}}>
                 <td>
-                  <a href="#1" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
-                    <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
-                  </a>
+                  <button class="lookup notext" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});" />
                 </td>
                 <td class="text">
                   {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
@@ -448,14 +446,10 @@ viewBilanService = function(service_id, date){
                   </script>
                 </td>
                 <td>
-                  <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
-                    <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
-                  </a>
+                  <a class="button edit notext" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}" />
                 </td>
                 <td>
-                  <a href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
-                    <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
-                  </a>                             
+                  <a class="button search notext" href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}" />
                 </td>
                 <td>
                   <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
