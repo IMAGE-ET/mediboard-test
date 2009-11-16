@@ -130,8 +130,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);    
     
     if ($mbPersonne instanceof CPatient) {
-      if ($civilite)
-        $mbPersonne->civilite = $civiliteHprimConversion[$civilite];    
+      if ($civilite) {
+        $mbPersonne->civilite = $civiliteHprimConversion[$civilite]; 
+      } else {
+        $mbPersonne->civilite = "guess";
+      }
       $mbPersonne->nom = $nom;
       $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
       $mbPersonne->prenom = $prenoms[0];
