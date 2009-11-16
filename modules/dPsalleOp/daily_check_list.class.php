@@ -116,18 +116,19 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $todays_list->date = $date ? $date : mbDate();
     $todays_list->object_class = $object_class;
     $todays_list->object_id = $object_id;
+    $todays_list->loadRefsFwd();
     $todays_list->loadMatchingObject();
 		return $todays_list;
 	}
 	
 	function loadItemTypes() {
-      $where = array(
-        'active' => "= '1'",
-        'daily_check_item_category.target_class' => "= '$this->object_class'"
-      );
-      $ljoin = array(
-        'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
-      );
+    $where = array(
+      'active' => "= '1'",
+      'daily_check_item_category.target_class' => "= '$this->object_class'"
+    );
+    $ljoin = array(
+      'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
+    );
     
 		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, 'daily_check_item_category.title, title', null, null, $ljoin);
 		foreach($this->_ref_item_types as $type) {

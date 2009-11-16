@@ -18,7 +18,7 @@ Main.add(function(){
   <input type="hidden" name="del" value="0" />
 
   {{if !$check_list->_id}}
-    <div class="small-info">Veuillez effectuer la vérification journalière de la salle grâce au formulaire suivant.</div>
+    <div class="small-info">Veuillez effectuer la vérification journalière pour <strong>{{$check_list->_ref_object}}</strong> grâce au formulaire suivant.</div>
 	{{else}}
     <div class="small-info">Veuillez signer la vérification avec un mot de passe correct.</div>
 	{{/if}}
