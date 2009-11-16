@@ -44,7 +44,11 @@ $limit2 = $date." 23:59:59";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 $where["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
-$where["type"] = " = '$mode'";
+if($mode) {
+  $where["type"] = " = '$mode'";
+} else {
+  $where[] = "(type != 'comp' AND type != 'ambu')";
+}
 $where["annule"] = " = '0'";
 
 // Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
@@ -56,15 +60,17 @@ if($order_col != "_nomPatient" && $order_col != "sortie_prevue" && $order_col !=
 	$order_col = "_nomPatient";	
 }
 
+$order = "sejour.type,";
+
 
 if($order_col == "_nomPatient"){
-  $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+  $order .= "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
 if($order_col == "sortie_prevue"){
-  $order = "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
+  $order .= "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
 }
 if($order_col == "_nomPraticien"){
-  $order = "users.user_last_name $order_way, users.user_first_name";
+  $order .= "users.user_last_name $order_way, users.user_first_name";
 }
 
 $listSejour = $listSejour->loadGroupList($where, $order, null, null, $ljoin);

@@ -13,17 +13,24 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $date = CValue::get("date", mbDate());
+$type = CValue::get("type", "ambu_comp");
 
 $sejour = new CSejour;
 $where = array();
 $where[] = "DATE(sejour.sortie_prevue) = '". $date ."'";
 $where["sejour.annule"] = "= '0'";
-$where[] = "sejour.type = 'ambu' OR type = 'comp'";
+if($type == "ambu_comp") {
+  $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
+} else {
+  $where[] = "sejour.type != 'ambu' AND sejour.type != 'comp'";
+}
 $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
 $order = "users.user_last_name, users.user_first_name, sejour.sortie_prevue";
 
 $sejours = $sejour->loadGroupList($where, $order, null, null, $ljoin);
+
+$listByPrat = array();
 
 foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefPraticien();
@@ -41,6 +48,7 @@ foreach ($sejours as $key => &$sejour) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"      , $date);
+$smarty->assign("type"      , $type);
 $smarty->assign("listByPrat", $listByPrat);
 $smarty->assign("total"     , count($sejours));
 

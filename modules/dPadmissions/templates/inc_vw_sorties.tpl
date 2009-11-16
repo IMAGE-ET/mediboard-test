@@ -10,30 +10,34 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="5">
+    <th class="title" colspan="6">
       {{if $mode == "ambu"}}
       <span style="float: right"><button type="button" class="search" onclick="printAmbu();">Impression Ambu</button></span>
       {{/if}}
+      {{if $mode}}
       Sortie {{tr}}CSejour.type.{{$mode}}{{/tr}}
+      {{else}}
+      Autres sorties
+      {{/if}}
     </th>
   </tr>
   <tr>
     <th>Effectuer la sortie</th>
-    
+    {{if !$mode}}
+    <th>Type hospi</th>
+    {{/if}}
     <th>
-    {{mb_colonne class="CSejour" field="_nomPatient" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="_nomPatient" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
     </th>
-    
     <th>
-    {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
     </th>
-    
     <th>
-    {{mb_colonne class="CSejour" field="_nomPraticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+      {{mb_colonne class="CSejour" field="_nomPraticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
     </th>
-
     <th>Chambre</th>
   </tr>
+  
   {{foreach from=$listSejour item=curr_sortie}}
   <tr>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
@@ -81,18 +85,24 @@
     
       </form>
     </td>
+    
+    {{if !$mode}}
+    <td>
+      {{tr}}CSejour.type.{{$mode}}{{/tr}}
+    </td>
+    {{/if}}
+    
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-	  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
+      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
         <img src="images/icons/edit.png" alt="modifier" />
- 	  </a>
-      {{if $canPlanningOp->read}}
-        <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_id}}">
-        <img src="images/icons/planning.png" alt="modifier" />
-        </a>
+     </a>
+     {{if $canPlanningOp->read}}
+       <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_id}}">
+         <img src="images/icons/planning.png" alt="modifier" />
+       </a>
       {{/if}}
-	  {{if $curr_sortie->_num_dossier}}[{{$curr_sortie->_num_dossier}}]{{/if}}
+    {{if $curr_sortie->_num_dossier}}[{{$curr_sortie->_num_dossier}}]{{/if}}
       <b>{{$curr_sortie->_ref_patient->_view}}</b>
-
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
