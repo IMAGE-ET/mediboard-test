@@ -9,7 +9,6 @@
  */
 
 class CCellSaver extends CMbObject {
-	
 	 //DB Table Key
 	var $cell_saver_id = null;
 	
@@ -25,7 +24,7 @@ class CCellSaver extends CMbObject {
   }
 
   function getProps() {
-    $specs= parent::getProps();
+    $specs = parent::getProps();
     $specs["marque"] = "str notNull maxLength|50";
     $specs["modele"] = "str notNull maxLength|50";
     return $specs;
@@ -41,6 +40,5 @@ class CCellSaver extends CMbObject {
     parent::updateFormFields();
     $this->_view = "$this->marque $this->modele" ;
   }
-
 }
 ?>

@@ -22,14 +22,14 @@ else {
   $user->load($AppUI->user_id);
   
   if (!$password) {
-    $AppUI->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+    CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
   }
   
   else if ($user->user_password != md5($password)) {
-    $AppUI->setMsg("Auth-failed-combination", UI_MSG_ERROR);
+    CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
   }
   
-  if ($msg = $AppUI->getMsg()) {
+  if ($msg = CAppUI::getMsg()) {
     echo $msg;
     CApp::rip();
   }

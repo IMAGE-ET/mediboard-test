@@ -27,9 +27,9 @@ if($del == 1){
   // Suppression du produit
   if($livret->distObj->Delete($g, $code_cip) < 0){
     // Affichage de l'erreur
-    $AppUI->setMsg("Produit supprimé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
+    CAppUI::setMsg("Produit supprimé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
   } else {
-    $AppUI->setMsg("Produit supprimé", UI_MSG_OK );
+    CAppUI::setMsg("Produit supprimé", UI_MSG_OK );
   }  
 } else {
   $produitLivret = new CBcbProduitLivretTherapeutique();
@@ -48,9 +48,9 @@ if($del == 1){
 
 	  if($livret->distObj->Update() < 0){
       // Affichage de l'erreur
-      $AppUI->setMsg("Produit modifié".$livret->distObj->GetLastError(), UI_MSG_ERROR );
+      CAppUI::setMsg("Produit modifié".$livret->distObj->GetLastError(), UI_MSG_ERROR );
     } else {
-      $AppUI->setMsg("Produit modifié", UI_MSG_OK );
+      CAppUI::setMsg("Produit modifié", UI_MSG_OK );
     }    
   } else {
     // on crée le produit
@@ -58,13 +58,13 @@ if($del == 1){
 		$livret->distObj->CIP = $code_cip;
     if($livret->distObj->Insert() < 0){
       // Affichage de l'erreur
-      $AppUI->setMsg("Produit créé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
+      CAppUI::setMsg("Produit créé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
     } else {
-      $AppUI->setMsg("Produit créé", UI_MSG_OK );
+      CAppUI::setMsg("Produit créé", UI_MSG_OK );
     }
   }
 }
  
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

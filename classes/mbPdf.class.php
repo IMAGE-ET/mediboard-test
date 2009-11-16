@@ -10,10 +10,8 @@
 
 define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
 
-global $dPconfig;
-
-define ("K_PATH_MAIN", $dPconfig['root_dir']."/lib/tcpdf/");
-define ("K_PATH_URL", "http://".$dPconfig['site_domain']);
+define ("K_PATH_MAIN", CAppUI::conf('root_dir')."/lib/tcpdf/");
+define ("K_PATH_URL", "http://".CAppUI::conf('site_domain'));
 
 define ("FPDF_FONTPATH", K_PATH_MAIN."fonts/");
 define ("K_PATH_CACHE", K_PATH_MAIN."cache/");

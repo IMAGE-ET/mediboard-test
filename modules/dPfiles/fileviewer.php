@@ -36,8 +36,8 @@ if ($file_path) {
     readfile($file_path);
     return;
   } else {
-    $AppUI->setMsg("Permissions administrateur obligatoire", UI_MSG_ERROR);
-    $AppUI->redirect();
+    CAppUI::setMsg("Permissions administrateur obligatoire", UI_MSG_ERROR);
+    CAppUI::redirect();
   }
 }
 
@@ -129,7 +129,7 @@ if($file_id = CValue::get("file_id")) {
     
   }
 } else {
-  $AppUI->setMsg("fileIdError", UI_MSG_ERROR);
-  $AppUI->redirect();
+  CAppUI::setMsg("fileIdError", UI_MSG_ERROR);
+  CAppUI::redirect();
 }
 ?>

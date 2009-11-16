@@ -21,10 +21,10 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
 
     
     if ($msg = $this->_obj->store()) {
-    	$AppUI->setMsg($msg, UI_MSG_ERROR);
+    	CAppUI::setMsg($msg, UI_MSG_ERROR);
     	if ($this->redirectError) {
-      	//$AppUI->setMsg($msg, UI_MSG_ERROR);
-        $AppUI->redirect($this->redirectError);
+      	//CAppUI::setMsg($msg, UI_MSG_ERROR);
+        CAppUI::redirect($this->redirectError);
       }
     } 
     else {
@@ -41,9 +41,9 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       }
       
       $isNotNew = @$_POST[$this->objectKeyGetVarName];
-      $AppUI->setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
+      CAppUI::setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
-        $AppUI->redirect($this->redirectStore);
+        CAppUI::redirect($this->redirectStore);
       }
     }
   }

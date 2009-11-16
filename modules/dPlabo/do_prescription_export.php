@@ -8,11 +8,10 @@
 */
 
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
 function redirect() {
-  global $AppUI;
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 
@@ -27,7 +26,7 @@ $doc = new CMbXMLDocument();
 
 $doc->setSchema("modules/dPlabo/remote/prescription.xsd");
 if (!$doc->checkSchema()) {
-  $AppUI->setMsg("Schema manquant", UI_MSG_ERROR );
+  CAppUI::setMsg("Schema manquant", UI_MSG_ERROR );
   redirect();
 }
 
@@ -36,7 +35,7 @@ $mbPrescription = new CPrescriptionLabo();
 // Chargement de la prescription
 $mb_prescription_id = CValue::post("prescription_labo_id", null);
 if(!$mb_prescription_id) {
-  $AppUI->setMsg("Veuillez spécifier une prescription", UI_MSG_ERROR );
+  CAppUI::setMsg("Veuillez spécifier une prescription", UI_MSG_ERROR );
   redirect();
 }
 if ($mbPrescription->load($mb_prescription_id)) {
@@ -56,11 +55,11 @@ $idSantePratCode9->loadLatestFor($prat, $tagCode9);
 
 // Si le praticien n'a pas d'id400, il ne peut pas envoyer la prescription
 if (!$idSantePratCode4->_id || !$idSantePratCode9->_id){
-  $AppUI->setMsg("Le praticien n'a pas d'id400 pour le catalogue LABO", UI_MSG_ERROR );
+  CAppUI::setMsg("Le praticien n'a pas d'id400 pour le catalogue LABO", UI_MSG_ERROR );
   redirect();
 }
 
-$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+$tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
 
 // Chargement de la valeur de l'id externe de la prescription ==> retourne uniquement l'id400
 $id400Presc = $mbPrescription->loadIdPresc();
@@ -187,14 +186,14 @@ $doc->load($tmpPath);
 
 // Validation du document
 if (!$doc->schemaValidate()) {
-  $AppUI->setMsg("Document de prescription non valide", UI_MSG_ERROR );
+  CAppUI::setMsg("Document de prescription non valide", UI_MSG_ERROR );
   redirect();
 }
 
 
 // Envoi de la prescription par sur un seveurFTP
 // Config du FTP
-$FTPConfig = $dPconfig["dPlabo"]["CPrescriptionLabo"];
+$FTPConfig = CAppUI::conf("dPlabo CPrescriptionLabo");
 
 // Creation du FTP
 $ftp = new CFTP;
@@ -212,7 +211,7 @@ if($ftp->hostname){
   if(!$ftp->connect()) {
     if($ftp->logs) {
       foreach($ftp->logs as $log) {
-        $AppUI->setMsg($log, UI_MSG_ERROR );
+        CAppUI::setMsg($log, UI_MSG_ERROR );
       }
     }
     redirect();
@@ -221,24 +220,24 @@ if($ftp->hostname){
     $ftp->close();
     if($ftp->logs) {
       foreach($ftp->logs as $log) {
-        $AppUI->setMsg($log, UI_MSG_ERROR );
+        CAppUI::setMsg($log, UI_MSG_ERROR );
       }
     }
     redirect();
   }
   $ftp->close();
-  $AppUI->setMsg("Document envoyé", UI_MSG_OK );
+  CAppUI::setMsg("Document envoyé", UI_MSG_OK );
   
   // Créer le document joint
   if ($msg = $doc->addFile($mbPrescription)) {  
-    $AppUI->setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
+    CAppUI::setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
     //redirect();
   }
   redirect();
 }
 
 if(!$ftp->hostname){
-  $AppUI->setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
+  CAppUI::setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
   redirect();
 }
 

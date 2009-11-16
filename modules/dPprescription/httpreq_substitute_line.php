@@ -37,11 +37,11 @@ foreach($line->_ref_substitution_lines as $subst_lines){
   foreach($subst_lines as $_subst_line){
     $_subst_line->substitute_for_id = $line->_id;
     $msg = $_subst_line->store();
-    $AppUI->displayMsg($msg, "$_subst_line->_class_name-msg-store");
+    CAppUI::displayMsg($msg, "$_subst_line->_class_name-msg-store");
   }
 }
 
-$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     
 // Sauvegarde de l'ancienne ligne
 $old_line = new CPrescriptionLineMedicament();
@@ -50,10 +50,10 @@ $old_line->substitution_line_id = $line->_id;
 $old_line->date_arret = mbDate();
 $old_line->time_arret = mbTime();
 $msg = $old_line->store();
-$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-store");
+CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-store");
 
 // Le passage de la ligne au reload permet de realiser le testPharma (pre-cochage de la case "Accord du praticien")
 echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', 'medicament', '$mode_protocole', '$mode_pharma','$line->_id')</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

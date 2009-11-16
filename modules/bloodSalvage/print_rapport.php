@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $m;
-$AppUI->requireModuleFile("bloodSalvage", "inc_personnel");
+global $m;
+CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $anticoag ="";
 $blood_salvage_id = CValue::get("blood_salvage_id");
@@ -45,14 +45,11 @@ if($blood_salvage_id) {
   $timingAffect = array(); 
 	loadAffected($blood_salvage->_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 	$version_patient = CModule::getActive("dPpatients");
-  $isInDM = 0;//($version_patient->mod_version >= 0.71);
-	 
 }
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage",$blood_salvage);
-$smarty->assign("isInDM",$isInDM);
 $smarty->assign("tabAffected",$tabAffected);
 $smarty->assign("anticoagulant",CModule::getActive("dPmedicament") ? $anticoag->libelle : $anticoag);
 $smarty->display("print_rapport.tpl");

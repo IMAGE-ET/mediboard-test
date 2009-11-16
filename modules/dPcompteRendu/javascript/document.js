@@ -69,42 +69,50 @@ var Document = {
   /**
    * Mode normal|collapse Defaults to normal
    */
-  register: function(object_id, object_class, praticien_id, container, mode, userOptions) {
-  	var options = {
+  register: function(object_id, object_class, praticien_id, container, mode, options) {   
+    if (!object_id || !object_class) return;
+    
+  	options = Object.extend({
   	  mode: "normal",
   	  categories: "hide"
-  	};
+  	}, options);
   	
-  	Object.extend(options, userOptions);
-  	
-  	if (!mode) mode = "normal";
-    var div = document.createElement("div");
-    div.style.minWidth = "260px";
-    if (mode != "hide") div.style.minHeight = "50px";
+  	mode = mode || "normal";
     
+  	var element = $(container);
+  	
+  	if (!element) {
+      console.warn(container+" doesn't exist");
+      return;
+  	}
+  	
+    var div = new Element("div", {style: "min-width:260px;"+((mode != "hide") ? "min-height:50px;" : "")});
     div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
-    $(container).insert(div);
-    Main.add( function() {
-      Document.refresh(div);
-    } );
+    $(element).insert(div);
+    Document.refresh(div);
   },
   
-  refresh: function(div, oOptions) {
+  refresh: function(container, oOptions) {
+    var matches = container.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
+
+    if (!matches) {
+      console.warn(printf("'%s' is not a valid document container", container.className));
+      return;
+    }
     
-    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d*) mode-(\w+)/);
-    var oDefaultOptions = {
+    oOptions = Object.extend({
       object_class: matches[1],
-	    object_id   : matches[2],
-	    praticien_id: matches[3],
-	    mode        : matches[4]
-    };
-    Object.extend(oDefaultOptions, oOptions);
-	  var url = new Url("dPcompteRendu", "httpreq_widget_documents");
-	  url.addParam("object_class", oDefaultOptions.object_class);
-	  url.addParam("object_id"   , oDefaultOptions.object_id);
-	  url.addParam("praticien_id", oDefaultOptions.praticien_id);
-	  url.addParam("mode"        , oDefaultOptions.mode);
-	  url.requestUpdate(div, { waitingText : null } );
+      object_id   : matches[2],
+      praticien_id: matches[3],
+      mode        : matches[4]
+    }, oOptions);
+    
+    var url = new Url("dPcompteRendu", "httpreq_widget_documents");
+    url.addParam("object_class", oOptions.object_class);
+    url.addParam("object_id"   , oOptions.object_id);
+    url.addParam("praticien_id", oOptions.praticien_id);
+    url.addParam("mode"        , oOptions.mode);
+    url.requestUpdate(container, { waitingText : null } );
   }
 };
 

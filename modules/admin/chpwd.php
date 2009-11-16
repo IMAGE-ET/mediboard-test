@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $AppUI, $m;
 
 $user = new CUser;
 $user->load($AppUI->user_id);

@@ -159,7 +159,7 @@ if ($body_msg) {
 if( $otherm = CValue::post("otherm", 0) )
   $m = $otherm;
 
-$AppUI->setMsg($complete_msg, $msgNo);
-$AppUI->redirect("m=$m");
+CAppUI::setMsg($complete_msg, $msgNo);
+CAppUI::redirect("m=$m");
 
 ?>

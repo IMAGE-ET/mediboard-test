@@ -38,7 +38,7 @@ if(!$perfusion_id){
     $perfusion->substitution_active = 0;
   }
   $msg = $perfusion->store();
-  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
   $perfusion_id = $perfusion->_id;
 } else {
   // Chargement de la perfusion
@@ -75,8 +75,8 @@ if(($perfusion->voie == "Voie parentérale" || $line_med->voie == "Voie parentéra
 
 
 if($error){
-  $AppUI->setMsg("Attention, la voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_WARNING);
-  echo $AppUI->getMsg();
+  CAppUI::setMsg("Attention, la voie de la ligne ne correspond pas à la voie de la perfusion", UI_MSG_WARNING);
+  echo CAppUI::getMsg();
 //  CApp::rip(); 
 }
 
@@ -85,7 +85,7 @@ if($perfusion->signature_prat || $perfusion->signature_pharma){
   $perfusion->signature_prat = "0";
   $perfusion->signature_pharma = "0";
   $msg = $perfusion->store();
-  $AppUI->displayMsg($msg, "CPerfusion-msg-modify");
+  CAppUI::displayMsg($msg, "CPerfusion-msg-modify");
 }
 
 // Creation de la ligne de perfusion 
@@ -98,15 +98,15 @@ if($line_med->unite_duree == "heure"){
   $perfusion_line->duree = $line_med->duree;
 }
 $msg = $perfusion_line->store();
-$AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
 
 // Suppression de la ligne de medicament
 if($perfusion_line->_id){
   $msg = $line_med->delete();
-  $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-delete");
+  CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-delete");
 }
 
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 
 ?>

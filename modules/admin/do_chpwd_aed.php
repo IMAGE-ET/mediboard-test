@@ -28,20 +28,20 @@ if($user->_id){
   if ($new_pwd1 == $new_pwd2){
     $user->_user_password = $new_pwd1;
     if ($msg = $user->store()) {
-      return $AppUI->setMsg($msg);
+      return CAppUI::setMsg($msg);
     }
 
-    $AppUI->setMsg("CUser-msg-password-updated", UI_MSG_OK);
+    CAppUI::setMsg("CUser-msg-password-updated", UI_MSG_OK);
     $AppUI->weak_password = false;
     
   }
   else{
     // Nouveaux mot de passe différents
-    $AppUI->setMsg("CUser-user_password-nomatch", UI_MSG_ERROR);
+    CAppUI::setMsg("CUser-user_password-nomatch", UI_MSG_ERROR);
   }
 }
 else{
   // Mauvais mot de passe actuel
-  $AppUI->setMsg("CUser-user_password-nomatch", UI_MSG_ERROR);
+  CAppUI::setMsg("CUser-user_password-nomatch", UI_MSG_ERROR);
 }
 ?>

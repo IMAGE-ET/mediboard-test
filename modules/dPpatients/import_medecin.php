@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
 
-global $AppUI, $m;
+global $m;
 
 set_time_limit(150);
 
@@ -17,12 +17,12 @@ if (!class_exists("DOMDocument")) {
 }
 
 if (null == $pass = CValue::get("pass")) {
-  $AppUI->stepAjax("Fonctionnalité désactivée car trop instable.", UI_MSG_WARNING);
+  CAppUI::stepAjax("Fonctionnalité désactivée car trop instable.", UI_MSG_WARNING);
   return;
 }
 
 if (md5($pass) != "aa450aff6d0f4974711ff4c5536ed4cb") {
-  $AppUI->stepAjax("Mot de passe incorrect.\nAttention, fonctionnalité à utiliser avec une extrême prudence", UI_MSG_ERROR);
+  CAppUI::stepAjax("Mot de passe incorrect.\nAttention, fonctionnalité à utiliser avec une extrême prudence", UI_MSG_ERROR);
 }
 
 // Chrono start
@@ -44,7 +44,7 @@ $mode = CValue::get("mode");
 
 // Step 1: Emulates an HTTP request
 if ($mode == "get") {
-  $cookiepath = $AppUI->getTmpPath("cookie.txt");
+  $cookiepath = CAppUI::getTmpPath("cookie.txt");
   $baseurl = "http://www.conseil-national.medecin.fr/";
   $fileurl = $step > 1 ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
   $url = $baseurl . $fileurl;
@@ -83,7 +83,7 @@ if (in_array($mode, array("get", "xml"))) {
   
 	// Purge HTML
 	if (null == $html = file_get_contents($htmpath)) {
-	  $AppUI->stepAjax("Fichier '$htmpath' non disponible", UI_MSG_ERROR);
+	  CAppUI::stepAjax("Fichier '$htmpath' non disponible", UI_MSG_ERROR);
 	}
 	
 	// Small adjustments for line delimitation:  <br/> to \n
@@ -224,7 +224,7 @@ while ($line = fgetcsv($csvfile)) {
 
 $chrono->stop();
 
-$AppUI->stepAjax("Etape $step \n$errors erreurs d'enregistrements", $errors ? UI_MSG_OK : UI_MSG_ALERT);
+CAppUI::stepAjax("Etape $step \n$errors erreurs d'enregistrements", $errors ? UI_MSG_OK : UI_MSG_ALERT);
 
 // Création du template
 $smarty = new CSmartyDP();

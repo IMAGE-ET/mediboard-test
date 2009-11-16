@@ -7,15 +7,17 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
-$extension = CValue::get("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
+$hprim_config = CAppUI::conf("hprim21 CHprim21Reader");
+
+$extension = CValue::get("fileextension", $hprim_config["fileextension"]);
 
 $list = array();
 $ftp = new CFTP();
-$ftp->hostname = $dPconfig["hprim21"]["CHprim21Reader"]["hostname"];
-$ftp->username = $dPconfig["hprim21"]["CHprim21Reader"]["username"];
-$ftp->userpass = $dPconfig["hprim21"]["CHprim21Reader"]["userpass"];
+$ftp->hostname = $hprim_config["hostname"];
+$ftp->username = $hprim_config["username"];
+$ftp->userpass = $hprim_config["userpass"];
 $ftp->mode     = "FTP_ASCII";
 $ftp->passif_mode = "0";
 $ftp->timeout  = "90";

@@ -16,22 +16,22 @@ mbTrace($docItem->getValues(), "Doc Item");
 
 // Simulating Export
 $doc_ecap_id = rand(time());
-$AppUI->setMsg("Simulating export with returned id : '$doc_ecap_id'");
+CAppUI::setMsg("Simulating export with returned id : '$doc_ecap_id'");
 
 $idExt = new CIdSante400;
 $idExt->loadLatestFor($docItem, CMedicap::getTag("DO"));
 $idExt->id400 = $doc_ecap_id;
 if ($msg = $idExt->store()) {
-  $AppUI->setMsg("Erreur sauvegarde de l'identifiant externe : '$msg'", UI_MSG_ERROR);
+  CAppUI::setMsg("Erreur sauvegarde de l'identifiant externe : '$msg'", UI_MSG_ERROR);
 }
 else {
-  $AppUI->setMsg("Identifiant externe sauvegardé", UI_MSG_ERROR);
+  CAppUI::setMsg("Identifiant externe sauvegardé", UI_MSG_ERROR);
 }
 
 mbTrace($idExt->getValues(), "Id e-Cap");
 
 if (null == $ajax = CValue::post("ajax")) {
-//  $AppUI->redirect();
+//  CAppUI::redirect();
 }
 
 ?>

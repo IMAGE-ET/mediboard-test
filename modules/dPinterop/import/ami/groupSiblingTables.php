@@ -9,7 +9,6 @@
 
 set_time_limit(30);
 
-global $AppUI;
 $ds = CSQLDataSource::get("Transit");
 
 $tableCount = 0;
@@ -50,12 +49,12 @@ foreach ($groups as $subgroups) {
 
       $dataTokenKey = $difference[0];
 
-      $AppUI->stepAjax("Group with $tableCount tables with table name '$tableName' and data key '$dataTokenKey':\n$tableNames", UI_MSG_WARNING);
+      CAppUI::stepAjax("Group with $tableCount tables with table name '$tableName' and data key '$dataTokenKey':\n$tableNames", UI_MSG_WARNING);
 
     }
   }
 }
 
-$AppUI->stepAjax("$groupCount tables groups to be marged", UI_MSG_WARNING);
+CAppUI::stepAjax("$groupCount tables groups to be marged", UI_MSG_WARNING);
 
 ?>

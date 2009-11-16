@@ -27,7 +27,7 @@ $admin = $userCourant->isFromType(array("Administrator"));
 
 // Redirect
 if(!$userCourant->isPraticien() && !$secretaire && !$admin) {
-  $AppUI->redirect("m=system&a=access_denied");
+  CAppUI::redirect("m=system&a=access_denied");
 }
 
 $listPraticiens = array();

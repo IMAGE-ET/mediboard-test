@@ -23,8 +23,8 @@ $repas       = new CRepas;
 if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
   // Pas d'affectation
   CValue::setSession("affectation_id", null);
-  $AppUI->setMsg("Veuillez sélectionner une affectation", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPrepas&tab=vw_planning_repas");
+  CAppUI::setMsg("Veuillez sélectionner une affectation", UI_MSG_ALERT);
+  CAppUI::redirect("m=dPrepas&tab=vw_planning_repas");
 }else{
   $affectation->loadRefSejour();
   $affectation->loadRefLit();
@@ -40,8 +40,8 @@ if (!$affectation->load($affectation_id) || !$typeRepas->load($typerepas_id)){
     }else{
       $msg = "Vous ne pouvez pas plannifier de repas pour cette affectation";
     }
-    $AppUI->setMsg($msg, UI_MSG_ALERT);
-    $AppUI->redirect("m=dPrepas&tab=vw_planning_repas");
+    CAppUI::setMsg($msg, UI_MSG_ALERT);
+    CAppUI::redirect("m=dPrepas&tab=vw_planning_repas");
   }
 
   // Chargement des Repas

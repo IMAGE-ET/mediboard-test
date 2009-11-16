@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
 $patient_id    = CValue::get("patient_id");
 $patient = new CPatient;

@@ -122,11 +122,11 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
 $modules = CPermModule::getVisibleModules();
 
 // Chargement des languages
-$locales = $AppUI->readDirs("locales");
+$locales = CAppUI::readDirs("locales");
 CMbArray::removeValue(".svn", $locales);
 
 // Chargement des styles
-$styles = $AppUI->readDirs("style");
+$styles = CAppUI::readDirs("style");
 CMbArray::removeValue(".svn", $styles);
 
 // Création du template

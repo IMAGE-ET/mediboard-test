@@ -28,6 +28,6 @@ $prescriptionLine->load($prescription_line_id);
 $prescriptionLine->duplicateLine($praticien_id, $prescription_id);
 
 echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','','$mode_pharma')</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

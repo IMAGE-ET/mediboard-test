@@ -9,7 +9,6 @@
 
 set_time_limit(30);
 
-global $AppUI;
 $ds = CSQLDataSource::get("Transit");
 
 $tableCount = 0;
@@ -20,6 +19,6 @@ foreach ($ds->loadColumn("SHOW TABLE STATUS", null) as $table) {
   }
 }
 
-$AppUI->stepAjax("$tableCount empty tables have to be removed", UI_MSG_WARNING);
+CAppUI::stepAjax("$tableCount empty tables have to be removed", UI_MSG_WARNING);
 
 ?>

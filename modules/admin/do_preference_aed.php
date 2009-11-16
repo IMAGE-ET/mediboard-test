@@ -24,32 +24,32 @@ foreach ($_POST["pref_name"] as $name => $value) {
 	// prepare (and translate) the module name ready for the suffix
 	if ($del) {
 		if ($msg = $obj->delete()) {
-			$AppUI->setMsg($msg, UI_MSG_ERROR);
+			CAppUI::setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$AppUI->setMsg("CPreferences-msg-delete", UI_MSG_ALERT);
+			CAppUI::setMsg("CPreferences-msg-delete", UI_MSG_ALERT);
 		}
 	} else {
 		if ($msg = $obj->store()) {
-			$AppUI->setMsg($msg, UI_MSG_ERROR);
+			CAppUI::setMsg($msg, UI_MSG_ERROR);
 		} else {
-			$AppUI->setMsg("CPreferences-msg-modify", UI_MSG_OK);
+			CAppUI::setMsg("CPreferences-msg-modify", UI_MSG_OK);
 		}
 	}
 }
 
 // Reload user preferences
 if ($obj->pref_user) {
-  $AppUI->loadPrefs($AppUI->user_id);
+  CAppUI::loadPrefs($AppUI->user_id);
 }
 
 // Redirect
 if ($a){
   $AppUI->defaultRedirect = "m=$m&a=$a&user_id=".$_POST["pref_user"];
   $AppUI->state["SAVEDPLACE"] = null;
-  $AppUI->redirect();
+  CAppUI::redirect();
 }
 else {
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 

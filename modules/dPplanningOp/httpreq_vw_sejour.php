@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab;
 
 $mode_operation = CValue::get("mode_operation", 0);
 $sejour_id      = CValue::get("sejour_id"     , 0);
@@ -64,7 +64,7 @@ $mediuser->load($AppUI->user_id);
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 
 // Configuration
-$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$config = CAppUI::conf("dPplanningOp CSejour");
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
 $heure_sortie_ambu   = $config["heure_sortie_ambu"];
@@ -72,7 +72,7 @@ $heure_sortie_autre  = $config["heure_sortie_autre"];
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
-$config =& $dPconfig["dPplanningOp"]["COperation"];
+$config = CAppUI::conf("dPplanningOp COperation");
 $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);

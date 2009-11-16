@@ -37,7 +37,7 @@ if ($prescription_id) {
   $prescription->object_id = $operation->sejour_id;
   $prescription->type = 'sejour';
   if ($msg = $prescription->store()) {
-	  $AppUI->setMsg($msg, UI_MSG_ERROR);
+	  CAppUI::setMsg($msg, UI_MSG_ERROR);
 	}
 }
 
@@ -48,7 +48,7 @@ $lite = CAppUI::pref('mode_readonly') ? 0 : 1;
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite, null, '$pratSel_id', null, '$praticien_id')</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 
 ?>

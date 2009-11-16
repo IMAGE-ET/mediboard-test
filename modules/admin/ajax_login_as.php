@@ -14,17 +14,17 @@ $username = trim(CValue::post('username'));
 $password = trim(CValue::post('password'));
 
 if (!$username) {
-  $AppUI->setMsg("Auth-failed-nousername", UI_MSG_ERROR);
+  CAppUI::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
 }
 
 // If admin: no need to  give a password
 else if ($AppUI->user_type == 1) {
   $_REQUEST['loginas'] = $username;
-  $AppUI->login();
+  CAppUI::login();
 }
 
 else if (!$password) {
-  $AppUI->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+  CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
 }
 
 // @Todo: pass the username as a $AppUI->login argument
@@ -36,12 +36,12 @@ else {
   $user->loadMatchingObject();
 	
   if (md5($password) != $user->user_password) {
-    $AppUI->setMsg("Auth-failed-combination", UI_MSG_ERROR);
+    CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
   }
-  else $AppUI->login(true);
+  else CAppUI::login(true);
 }
 
-if ($msg = $AppUI->getMsg()) {
+if ($msg = CAppUI::getMsg()) {
   echo $msg;
   CApp::rip();
 }

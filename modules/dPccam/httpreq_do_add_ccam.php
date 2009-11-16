@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 
@@ -22,26 +22,26 @@ $targetBaseDatas = "tmp/ccam/basedata.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
 } 
 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
 $ds = CSQLDataSource::get("ccamV2");
 
 // Création des tables
 if (null == $lineCount = $ds->queryDump($targetTables, true)) {
   $msg = $ds->error();
-  $AppUI->stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
-$AppUI->stepAjax("Création de $lineCount tables", UI_MSG_OK);
+CAppUI::stepAjax("Création de $lineCount tables", UI_MSG_OK);
 
 // Ajout des données de base
 if (null == $lineCount = $ds->queryDump($targetBaseDatas, true)) {
   $msg = $ds->error();
-  $AppUI->stepAjax("Import des données de base - erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("Import des données de base - erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
-$AppUI->stepAjax("Import des données de base effectué avec succès ($lineCount lignes)", UI_MSG_OK);
+CAppUI::stepAjax("Import des données de base effectué avec succès ($lineCount lignes)", UI_MSG_OK);
 
 // Ajout des fichiers NX dans les tables
 $listTables = array(
@@ -67,7 +67,6 @@ $listTables = array(
 );
 
 function addFileIntoDB($file, $table) {
-  global $AppUI;
   $reussi = 0;
   $echoue = 0;
   $ds = CSQLDataSource::get("ccamV2");
@@ -86,7 +85,7 @@ function addFileIntoDB($file, $table) {
       $reussi++;
     }
   }
-  $AppUI->stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échoué(s)", UI_MSG_OK);
+  CAppUI::stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échoué(s)", UI_MSG_OK);
   fclose($handle);
 }
 

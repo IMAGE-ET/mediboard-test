@@ -41,7 +41,7 @@ if ($in_module) {
   }
 }
 else {
-  $localesDirs = $AppUI->readDirs("locales");
+  $localesDirs = CAppUI::readDirs("locales");
   CMbArray::removeValue(".svn",$localesDirs);
 }
 

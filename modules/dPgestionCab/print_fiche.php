@@ -16,8 +16,8 @@ $fiche_paie_id = CValue::getOrSession("fiche_paie_id", null);
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);
 if(!$fichePaie->fiche_paie_id) {
-  $AppUI->setMsg("Vous n'avez pas choisi de fiche de paie", MSG_ERROR);
-  $AppUI->redirect( "m=dPgestionCab&tab=edit_paie" );
+  CAppUI::setMsg("Vous n'avez pas choisi de fiche de paie", MSG_ERROR);
+  CAppUI::redirect( "m=dPgestionCab&tab=edit_paie" );
 }
 
 if($fichePaie->final_file) {

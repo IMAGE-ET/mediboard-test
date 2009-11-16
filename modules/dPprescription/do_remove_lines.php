@@ -42,11 +42,11 @@ $lines["perfusion"] = $perfusion->loadMatchingList();
 foreach($lines as $lines_by_type){
   foreach($lines_by_type as $_line){
     $msg = $_line->delete();
-    $AppUI->displayMsg($msg, "$_line->_class_name-msg-delete");
+    CAppUI::displayMsg($msg, "$_line->_class_name-msg-delete");
   }
 }
 
-echo $AppUI->getMsg();  
+echo CAppUI::getMsg();  
 CApp::rip();
 
 ?>

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $m, $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
+global $m, $debutact, $finact, $prat_id;
 
 $debutact      = CValue::get("debut", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $debutact, "%d")-1;

@@ -27,7 +27,7 @@ foreach($traitements as &$line) {
 	if($actionType == "stop" && !$line->date_arret && $line->signee) {
 		$line->date_arret = $date;
 		$line->time_arret = $time;
-    $AppUI->displayMsg($line->store(), "CPrescriptionLineMedicament-msg-store");
+    CAppUI::displayMsg($line->store(), "CPrescriptionLineMedicament-msg-store");
 	}
 	if($actionType == "go" && $line->date_arret) {
 		$line->duplicateLine($praticien_id, $prescription_id, $date, $time);
@@ -35,6 +35,6 @@ foreach($traitements as &$line) {
 }
 
 echo "<script type='text/javascript'>Prescription.reload($prescription_id, '', 'medicament', '0', $mode_pharma)</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 $sourcePath = "modules/dPpatients/INSEE/insee.tar.gz";
@@ -16,17 +16,17 @@ $targetPath = "tmp/insee/insee.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
 } 
 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
 $ds = CSQLDataSource::get("INSEE");
 if (null == $lineCount = $ds->queryDump($targetPath, true)) {
   $msg = $ds->error();
-  $AppUI->stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("import effectué avec succès de $lineCount lignes", UI_MSG_OK);
+CAppUI::stepAjax("import effectué avec succès de $lineCount lignes", UI_MSG_OK);
 
 ?>

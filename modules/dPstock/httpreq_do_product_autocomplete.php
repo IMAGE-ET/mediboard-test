@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $AppUI;
-
 $keywords = CValue::post("_view");
 $category_id = CValue::post("category_id");
 

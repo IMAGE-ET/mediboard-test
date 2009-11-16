@@ -78,9 +78,7 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function loadIdPresc(){
-  	global $dPconfig;
-  	
-  	$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+  	$tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
   
   	$this->loadRefsFwd();
   	$prat =& $this->_ref_praticien;
@@ -98,13 +96,12 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function getIdExterne() {
-    global $dPconfig;
     $idExterne = new CIdSante400();
     // Chargement de l'id externe de la prescription (tag: Imeds)
     $idExterne->loadLatestFor($this, "iMeds");
     if(!$idExterne->_id) {
       // Afactoriser : assez complexe (concatenation du code 4 praticien et du code 4 prescription)
-      $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+      $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
       $this->loadRefsFwd();
       $prat =& $this->_ref_praticien;
 
@@ -119,8 +116,8 @@ class CPrescriptionLabo extends CMbObject {
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
 
       // Fin de la partie à factoriser
-      $client = new SoapClient($dPconfig["dPlabo"]["CPrescriptionLabo"]["url_ws_id_prescription"], array('exceptions' => 0));
-      $result = $client->NDOSLAB(array("NumMedi" => $numprovisoire, "pwd" => $dPconfig["dPlabo"]["CPrescriptionLabo"]["pass_ws_id_prescription"]));
+      $client = new SoapClient(CAppUI::conf("dPlabo CPrescriptionLabo url_ws_id_prescription"), array('exceptions' => 0));
+      $result = $client->NDOSLAB(array("NumMedi" => $numprovisoire, "pwd" =>CAppUI::conf("dPlabo CPrescriptionLabo pass_ws_id_prescription")));
       if (is_soap_fault($result)) {
         trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
       }

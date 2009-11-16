@@ -15,7 +15,7 @@ $code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
 
 if(!$code->code){
   $tarif = 0;
-  $AppUI->stepAjax("$codeacte: code inconnu", UI_MSG_ERROR);
+  CAppUI::stepAjax("$codeacte: code inconnu", UI_MSG_ERROR);
 }
 
 // si le code CCAM est complet (activite + phase), on selectionne le tarif correspondant
@@ -25,8 +25,8 @@ if($code->_activite != "" && $code->_phase != ""){
 // sinon, on prend le tarif par default
   $tarif = $code->_default;
 }
-$AppUI->callbackAjax($callback,$tarif);
-$AppUI->stepAjax("$codeacte: $tarif");
+CAppUI::callbackAjax($callback,$tarif);
+CAppUI::stepAjax("$codeacte: $tarif");
 
 
 

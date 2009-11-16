@@ -85,14 +85,14 @@ if ($op->_id){
   
 //  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
 //  if(!$op->canEdit() || !$sejour->canEdit()) {
-//    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-//    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
+//    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+//    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
 //  }
   
   // Ancienne methode
   if (!array_key_exists($op->chir_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
+    CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+    CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
   }
 }
 

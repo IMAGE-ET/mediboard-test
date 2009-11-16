@@ -102,7 +102,7 @@ if($do->ajax){
   $idName   = $do->objectKeyGetVarName;
   $callBack = $do->callBack;
   $idValue  = $do->_obj->$idName;
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   if ($callBack) {
     echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
   }

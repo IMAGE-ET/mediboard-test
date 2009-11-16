@@ -14,8 +14,8 @@ $can->needsEdit();
 $sejour_id  = CValue::getOrSession("sejour_id");
 
 if(!$sejour_id) {
-  $AppUI->setMsg("Vous devez selectionner un séjour", UI_MSG_ERROR);
-  $AppUI->redirect("m=dPpmsi&tab=vw_dossier");
+  CAppUI::setMsg("Vous devez selectionner un séjour", UI_MSG_ERROR);
+  CAppUI::redirect("m=dPpmsi&tab=vw_dossier");
 }
 
 $sejour = new CSejour();

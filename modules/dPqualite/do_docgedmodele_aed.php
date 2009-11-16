@@ -47,7 +47,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     $file_upload_ok = false;
     
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -61,7 +61,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $objFile->doBind();
         $objFile->_obj->object_id = $doc_ged_id;
         $objFile->dostore();
-        if($AppUI->isMsgOK()){
+        if(CAppUI::isMsgOK()){
           $file_upload_ok = true;
           $file_id = $objFile->_obj->file_id;
         }else{
@@ -112,7 +112,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
       $this->_obj->doc_ged_suivi_id = null;
     }
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -132,6 +132,6 @@ if($file_id){
   $do2->doIt();
 }elseif($_firstModeleGed){
   $do1->dodelete();
-  $AppUI->setMsg("CDocGed-msg-error_file", UI_MSG_ERROR );
+  CAppUI::setMsg("CDocGed-msg-error_file", UI_MSG_ERROR );
 }
 ?>

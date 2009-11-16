@@ -33,10 +33,10 @@ $prescription->_id = "";
 $prescription->type = $type;
 
 $msg = $prescription->store();
-$AppUI->displayMsg($msg, "CPrescription-msg-create");
+CAppUI::displayMsg($msg, "CPrescription-msg-create");
 if($msg){
 	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
-	echo $AppUI->getMsg();
+	echo CAppUI::getMsg();
   CApp::rip();
 }
 
@@ -106,14 +106,14 @@ foreach($lines as $cat => $lines_by_type){
 	  	}
 	  }
 	  $msg = $line->store();
-	  $AppUI->displayMsg($msg, "$line->_class_name-msg-create");
+	  CAppUI::displayMsg($msg, "$line->_class_name-msg-create");
 		
 	  // Parcours des prises et creation des nouvelles prises
 		foreach($line->_ref_prises as $prise){
 			$prise->_id = "";
 			$prise->object_id = $line->_id;
 			$msg = $prise->store();
-		  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+		  CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 		}
 	}
 }
@@ -121,6 +121,6 @@ foreach($lines as $cat => $lines_by_type){
 $lite = CAppUI::pref('mode_readonly') ? 0 : 1;
 
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, $prescription->object_id, null, null, null, null, null, true, $lite,'');</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

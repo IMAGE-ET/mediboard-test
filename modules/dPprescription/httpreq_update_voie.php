@@ -9,7 +9,7 @@
  */
 
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 
@@ -39,6 +39,6 @@ foreach($codeCip_voie as $code_cip => $libelle_voie){
   $nb_lines += $ds_std->affectedRows();
 }
  
-$AppUI->stepAjax("$nb_lines lignes modifiées", UI_MSG_OK);
+CAppUI::stepAjax("$nb_lines lignes modifiées", UI_MSG_OK);
 
 ?>

@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");

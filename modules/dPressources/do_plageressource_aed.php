@@ -111,6 +111,6 @@ if ($body_msg) {
 // Uncomment for more verbose
   $complete_msg .= $body_msg; 
 }
-$AppUI->setMsg($complete_msg, $msgNo);
-$AppUI->redirect("m=$m");
+CAppUI::setMsg($complete_msg, $msgNo);
+CAppUI::redirect("m=$m");
 ?>

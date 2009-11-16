@@ -40,7 +40,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
       if($this->synchro){
         $del          = CValue::post("del", 0);
         $tmp_repas_id = CValue::post("_tmp_repas_id", 0);
-        $msgSystem    = $AppUI->getMsg();
+        $msgSystem    = CAppUI::getMsg();
 
         $smarty       = new CSmartyDP("modules/dPrepas");
 
@@ -58,7 +58,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     }
 
     if ($this->redirect !== null) {
-      $AppUI->redirect($this->redirect);
+      CAppUI::redirect($this->redirect);
     }
   }
 
@@ -69,7 +69,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     if($this->synchro){
        if(!$this->_objBefore->_id && $this->_obj->repas_id){
          // Repas supprimé depuis la derniere synchro
-         $AppUI->setMsg("Le repas a été supprimé depuis la dernière synchronisation.", UI_MSG_ERROR );
+         CAppUI::setMsg("Le repas a été supprimé depuis la dernière synchronisation.", UI_MSG_ERROR );
          $this->doRedirect();
        }
        //Test suppression de ref
@@ -80,16 +80,16 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
        $object->loadRefAffectation();
        $object->loadRefMenu();
        if(!$object->_ref_affectation->affectation_id){
-         $AppUI->setMsg("L'affectation n'existe pas.", UI_MSG_ERROR );
+         CAppUI::setMsg("L'affectation n'existe pas.", UI_MSG_ERROR );
          $error_ref = true;
        }
        if($object->menu_id && !$object->_ref_menu->menu_id){
-         $AppUI->setMsg("Le menu n'existe pas.", UI_MSG_ERROR );
+         CAppUI::setMsg("Le menu n'existe pas.", UI_MSG_ERROR );
          $error_ref = true;
        }
        foreach($plats->_specs["type"]->_list as $curr_typePlat){
          if($object->$curr_typePlat && !$object->{"_ref_".$curr_typePlat}){
-           $AppUI->setMsg("Le Plat de remplacement ".$curr_typePlat." n'existe pas.", UI_MSG_ERROR );
+           CAppUI::setMsg("Le Plat de remplacement ".$curr_typePlat." n'existe pas.", UI_MSG_ERROR );
            $error_ref = true;
          }
        }
@@ -114,7 +114,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
          $nbLogs = $this->ds->loadResult($sql->getRequest());
          
          if($nbLogs){
-           $AppUI->setMsg("Le repas a été modifié depuis la dernière synchronisation. Voulez-vous tout de même l'enregistrer ?", UI_MSG_WARNING);
+           CAppUI::setMsg("Le repas a été modifié depuis la dernière synchronisation. Voulez-vous tout de même l'enregistrer ?", UI_MSG_WARNING);
            $this->doRedirect(true);
          }
        }

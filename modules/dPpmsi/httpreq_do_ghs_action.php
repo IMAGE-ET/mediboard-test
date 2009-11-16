@@ -7,8 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
+global $can;
 $can->needsAdmin();
+
 $ds = CSQLDataSource::get("std");
 global $sourcePath, $targetDir, $regCim10, $regCCAM, $alnum, $alpha;
 
@@ -46,11 +47,11 @@ switch($type) {
  * valide pour la version 1010
  **/
 function extractFiles() {
-  global $sourcePath, $targetDir, $AppUI;
+  global $sourcePath, $targetDir;
   if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-    $AppUI->stepAjax("Impossible d'extraire l'archive", UI_MSG_ERROR);
+    CAppUI::stepAjax("Impossible d'extraire l'archive", UI_MSG_ERROR);
   }
-  $AppUI->stepAjax("Extraction de $nbFiles fichiers", UI_MSG_OK);
+  CAppUI::stepAjax("Extraction de $nbFiles fichiers", UI_MSG_OK);
 }
 
 /**
@@ -59,7 +60,7 @@ function extractFiles() {
  * Ligne sous la forme "XX Nom du CM" 
  **/
 function addcm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
 
   $fileName = "$targetDir/CM.txt";
@@ -113,7 +114,7 @@ function addcm() {
 /** Ajout des diagnostics d'entrée dans les CM, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/diagCM.txt */
 function adddiagcm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   $fileName = "$targetDir/diagCM.txt";
   $sql = "DROP TABLE IF EXISTS `diagcm`;";
@@ -169,7 +170,7 @@ function adddiagcm() {
  * "Liste AouD-XXX : nom"
  * "CCAMXXX/Phase Libelle" */
 function addactes() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   $fileName = "$targetDir/Listes.txt";
 
@@ -311,7 +312,7 @@ function addactes() {
 /** Ajout des GHM, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/GHM.txt */
 function addghm() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   
   // Table des GHM
@@ -432,7 +433,7 @@ function addghm() {
  * ./modules/dPpmsi/ghm/cmas.txt
  * ./modules/dPpmsi/ghm/cmasnt.txt */
 function addcma() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   
   // Table des Complications et Morbidités Associées, CMA Sévères et CMAS Non Traumatiques
@@ -486,7 +487,7 @@ function addcma() {
 /** Ajout des incompatibilités entre DP - CMA, valide pour la version 1010
  * Fichier texte : ./modules/dPpmsi/ghm/incomp.txt */
 function addincomp() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   
   // Table des incompatibilités
@@ -578,7 +579,7 @@ function addincomp() {
  */
 
 function addarbre() {
-  global $AppUI, $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
+  global $regCim10, $regCCAM, $alnum, $alpha, $targetDir;
   $ds = CSQLDataSource::get("GHS1010");
   
   // Table des incompatibilités

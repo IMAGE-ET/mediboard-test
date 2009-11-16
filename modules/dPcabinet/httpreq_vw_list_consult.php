@@ -49,9 +49,9 @@ $userSel->load($prat_id);
 $canUserSel = $userSel->canDo();
 
 if (!$userSel->isPraticien()) {
-  $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
+  CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
   if($current_m != "dPurgences"){
-    $AppUI->redirect("m=dPcabinet&tab=0");
+    CAppUI::redirect("m=dPcabinet&tab=0");
   }
 }
 

@@ -77,14 +77,14 @@ function insertMedElts($lines, $prescription, $sejour){
 	      $line->valide_pharma = 0;
 	    }
 	    $msg = $line->store();
-	    $AppUI->displayMsg($msg, "msg-$line->_class_name-create");  
+	    CAppUI::displayMsg($msg, "msg-$line->_class_name-create");  
 	  
 		  // Parcours des prises et creation des nouvelles prises
 		  foreach($line->_ref_prises as $prise){
 			  $prise->_id = "";
 			  $prise->object_id = $line->_id;
 			  $msg = $prise->store();
-		    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  	
+		    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  	
 		  }
   	}
   }
@@ -126,13 +126,13 @@ if(!$mode_pharma){
 	
 		if(!$password){
 			if(!$user->_id){
-			  $AppUI->displayMsg("Veuillez saisir un mot de passe", "Signature des lignes");
+			  CAppUI::displayMsg("Veuillez saisir un mot de passe", "Signature des lignes");
 	      return;
 		  }
 		}
 		$user->loadMatchingObject();
 		if(!$user->_id){
-		  $AppUI->displayMsg("Login incorrect","Signature des lignes");
+		  CAppUI::displayMsg("Login incorrect","Signature des lignes");
 	    return;
 		}	
 	}
@@ -244,7 +244,7 @@ foreach($medicaments as $key => $lineMedicament){
 	  $lineMedicament->signee = $new_value;
 	}
 	$msg = $lineMedicament->store();
-	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
+	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
 }
 
 // Parcours des perfusions et passage de valide a 1
@@ -255,7 +255,7 @@ foreach($perfusions as &$_perfusion){
     $_perfusion->signature_prat = $new_value;
   }
   $msg = $_perfusion->store();
-  $AppUI->displayMsg($msg, "CPerfusion-msg-store");
+  CAppUI::displayMsg($msg, "CPerfusion-msg-store");
 }
 
 // Parcours des medicaments et passage de valide à 1
@@ -263,7 +263,7 @@ if(!$mode_pharma){
 	foreach($elements as $key => $lineElement){
 		$lineElement->signee = $new_value;
 		$msg = $lineElement->store();
-		$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-modify");	
+		CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-modify");	
 	}
 }
 
@@ -272,7 +272,7 @@ if(!$mode_pharma){
 	foreach($comments as $key => $lineComment){
 		$lineComment->signee = $new_value;
 		$msg = $lineComment->store();
-		$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-modify");	
+		CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-modify");	
 	}
 }
 
@@ -330,7 +330,7 @@ if($chapitre == "all"){
   if($mediuser->_is_praticien){
      // Dans le cas de la signature directement dans la prescription 
      echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id, null, null, null, null, null, null, true, $lite);</script>";  
-     echo $AppUI->getMsg();
+     echo CAppUI::getMsg();
      CApp::rip();
   } else {
     // Dans le cas de la signature dans la popup (le user courant n'est pas un praticien)
@@ -339,7 +339,7 @@ if($chapitre == "all"){
 } else {
   // Dans le cas de la validation d'un chapitre ou d'une ligne de la prescription
   echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 

@@ -7,14 +7,14 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab;
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
 // Si ni praticien ni admin, redirect
 if(!$user->isPraticien() && $can->needsAdmin()){
-  $AppUI->redirect();
+  CAppUI::redirect();
 }
  
 // Gestion des bouton radio des dates

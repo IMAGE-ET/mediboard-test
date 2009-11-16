@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig, $g;
+global $AppUI, $can, $m, $g;
 
 $showCount = 30;
 

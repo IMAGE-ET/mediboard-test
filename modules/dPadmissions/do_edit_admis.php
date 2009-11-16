@@ -9,7 +9,7 @@
  * @todo REMPLACER PAR UN DO_MULTI_SEJOUR_AED CAR ON PERD LES LOGS
  */
 
-global $AppUI, $m;
+global $m;
 $ds = CSQLDataSource::get("std");
  
 $ajax  = CValue::post("ajax", 0);
@@ -37,6 +37,6 @@ if ($ajax) {
   CApp::rip();
 }
 
-$AppUI->redirect("m=$m#adm$id");
+CAppUI::redirect("m=$m#adm$id");
 
 ?>

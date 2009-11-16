@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $can, $m, $uistyle, $messages, $dPconfig, $version;
+global $can, $m, $uistyle, $messages, $version;
 
 $can->needsRead();
 
@@ -37,7 +37,7 @@ if($indexFile){
   // Création du fichier index.html
   $plats     = new CPlat;  
   
-  $configOffline = array("urlMediboard" => $dPconfig["base_url"]."/",
+  $configOffline = array("urlMediboard" => CAppUI::conf("base_url")."/",
                          "etatOffline"  => 0);
   
   $smarty = new CSmartyDP();

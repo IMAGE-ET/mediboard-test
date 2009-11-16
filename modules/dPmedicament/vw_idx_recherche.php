@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g, $dPconfig, $dialog;
+global $AppUI, $can, $m, $g, $dialog;
 
 $search_by_cis = CValue::get("search_by_cis", 1);
 $gestion_produits = CValue::get("gestion_produits", 0);

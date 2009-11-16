@@ -13,8 +13,8 @@ $can->needsEdit();
 
 $operation_id = CValue::getOrSession("operation_id", 0);
 if(!$operation_id) {
-  $AppUI->setMsg("Vous devez selectionner une intervention", UI_MSG_ERROR);
-  $AppUI->redirect("m=dPpmsi&tab=vw_dossier");
+  CAppUI::setMsg("Vous devez selectionner une intervention", UI_MSG_ERROR);
+  CAppUI::redirect("m=dPpmsi&tab=vw_dossier");
 }
 $selOp = new COperation;
 $selOp->load($operation_id);

@@ -15,14 +15,14 @@ $can->needsRead();
 $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 
 if(!$user_id) {
-  $AppUI->setMsg("Vous devez selectionner un utilisateur");
-  $AppUI->redirect("m=$m&tab=vw_edit_users");
+  CAppUI::setMsg("Vous devez selectionner un utilisateur");
+  CAppUI::redirect("m=$m&tab=vw_edit_users");
 }
 
 $modulesInstalled = CModule::getInstalled();
 $isAdminPermSet   = false;
 
-$AppUI->getAllClasses();
+CAppUI::getAllClasses();
 $listClasses = getChildClasses("CMbObject");
 
 // Récuperation de l'utilisateur sélectionné

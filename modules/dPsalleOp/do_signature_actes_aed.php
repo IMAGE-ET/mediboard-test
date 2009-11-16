@@ -12,11 +12,11 @@ function viewMsg($msg, $action, $redirect = "", $txt = ""){
   global $AppUI, $m, $tab;
   $action = CAppUI::tr($action);
   if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-    $AppUI->redirect($redirect);
+    CAppUI::setMsg("$action: $msg", UI_MSG_ERROR );
+    CAppUI::redirect($redirect);
     return;
   }
-  $AppUI->setMsg("$action $txt", UI_MSG_OK );
+  CAppUI::setMsg("$action $txt", UI_MSG_OK );
 }
 
 
@@ -69,6 +69,6 @@ foreach($actes_ccam as $key => $_acte_ccam){
   viewMsg($msg, "CActeCCAM-title-modify", $redirectUrl);
 }
 
-$AppUI->redirect($redirectUrl);
+CAppUI::redirect($redirectUrl);
 
 ?>

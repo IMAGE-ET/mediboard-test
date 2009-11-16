@@ -21,15 +21,15 @@ if ($del) {
 
   while ($repeat-- > 0) {
     if (!$obj->_id) {
-      $AppUI->setMsg("Plage non trouvée", UI_MSG_ERROR);
+      CAppUI::setMsg("Plage non trouvée", UI_MSG_ERROR);
     }
     else {
       if ($msg = $obj->delete()) {
-        $AppUI->setMsg("Plage non supprimée", UI_MSG_ERROR);
-        $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+        CAppUI::setMsg("Plage non supprimée", UI_MSG_ERROR);
+        CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
       } 
       else {
-        $AppUI->setMsg("Plage supprimée", UI_MSG_OK);
+        CAppUI::setMsg("Plage supprimée", UI_MSG_OK);
       }
     }
     $obj->becomeNext();
@@ -43,11 +43,11 @@ if ($del) {
 	  while ($repeat-- > 0) {    
 	    if ($obj->_id) {
 	      if ($msg = $obj->store()) {
-	        $AppUI->setMsg("Plage non mise à jour", UI_MSG_ERROR);
-	        $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+	        CAppUI::setMsg("Plage non mise à jour", UI_MSG_ERROR);
+	        CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
 	      } 
 	      else {
-	        $AppUI->setMsg("Plage mise à jour", UI_MSG_OK);
+	        CAppUI::setMsg("Plage mise à jour", UI_MSG_OK);
 	      }      
 	    } 
 	    for ($i=1; $i <= $type_repeat; $i++) {
@@ -59,11 +59,11 @@ if ($del) {
   else {
     while ($repeat-- > 0) {     
 	    if ($msg = $obj->store()) {
-	      $AppUI->setMsg("Plage non créée", UI_MSG_ERROR);
-	      $AppUI->setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
+	      CAppUI::setMsg("Plage non créée", UI_MSG_ERROR);
+	      CAppUI::setMsg("Plage du $obj->date: $msg", UI_MSG_ERROR);
 	    } 
 	    else {
-	      $AppUI->setMsg("Plage créée", UI_MSG_OK);
+	      CAppUI::setMsg("Plage créée", UI_MSG_OK);
 	    }
 	    for ($i=1; $i <= $type_repeat; $i++) {
 	      $obj->becomeNext();
@@ -72,6 +72,6 @@ if ($del) {
   }
 }
 
-$AppUI->redirect("m=$m");
+CAppUI::redirect("m=$m");
 
 ?>

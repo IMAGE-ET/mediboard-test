@@ -11,7 +11,7 @@
 // Script à lancer entre minuit et 6h du matin
 // pour que les dates limites soient respectées
 
-global $AppUI, $can;
+global $can;
 
 $mode_real = CValue::get("mode_real", 1);
 
@@ -31,9 +31,9 @@ $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
 if($mode_real) {
-  $AppUI->getMsg("Lancement à : ".mbDateTime()." en mode réel");
+  CAppUI::getMsg("Lancement à : ".mbDateTime()." en mode réel");
 } else {
-  $AppUI->setMsg("Lancement à : ".mbDateTime()." en mode test");
+  CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode test");
 }
 foreach($listPlages as $curr_plage) {
   if($mode_real) {
@@ -48,9 +48,9 @@ foreach($listPlages as $curr_plage) {
     $curr_plage->spec_id      = $curr_plage->spec_repl_id;
     $curr_plage->chir_id   = "";
     if($msg = $curr_plage->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR);
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
     } else {
-      $AppUI->setMsg("Plage $curr_plage->_id mise à jour", UI_MSG_OK);
+      CAppUI::setMsg("Plage $curr_plage->_id mise à jour", UI_MSG_OK);
     }
   } else {
     $curr_plage->loadRefsFwd(1);
@@ -61,10 +61,10 @@ foreach($listPlages as $curr_plage) {
       $from = $curr_plage->_ref_spec->_view;
     }
     $msg = "plage du $curr_plage->date de $curr_plage->debut à $curr_plage->fin : $from vers ".$curr_plage->_ref_spec_repl->_view;
-    $AppUI->setMsg($msg, UI_MSG_OK);
+    CAppUI::setMsg($msg, UI_MSG_OK);
   }
 }
 
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 
 ?>

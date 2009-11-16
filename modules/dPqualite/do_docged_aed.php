@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
+global $can, $m, $g;
 
 $doc_ged_id = 0;
 $file_id = null;
@@ -34,7 +33,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
   }
   
   function doStore() {
-    global $AppUI, $doc_ged_id, $file_id, $_validation;
+    global $doc_ged_id, $file_id, $_validation;
     
     if($this->_obj->doc_ged_id){
       // Procédure Existante --> Verification
@@ -45,7 +44,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
         $objFile->doIt();
-        if(!$AppUI->isMsgOK()){
+        if(!CAppUI::isMsgOK()){
           // Erreur sur le fichier !
           if ($this->redirectError) {
             $this->redirect =& $this->redirectError;
@@ -97,7 +96,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     }
     
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR);
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
@@ -128,14 +127,15 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   }
 
   function doStore() {
-    global $AppUI,$doc_ged_id,$file_id,$_validation;
+    global $doc_ged_id, $file_id, $_validation;
+	
     $this->_obj->date       = mbDateTime();
     $this->_obj->doc_ged_id = $doc_ged_id;
     if($file_id !== null){
       $this->_obj->file_id  = $file_id;
     }
     if ($msg = $this->_obj->store()) {
-      $AppUI->setMsg($msg, UI_MSG_ERROR);
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;
       }

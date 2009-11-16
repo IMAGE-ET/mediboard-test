@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
+global $m;
 
 // Permissions ?
 //$module = CModule::getInstalled($m);
@@ -27,8 +27,8 @@ if ($sejour_id) {
   // prévenir les multiples RPU
   $sejour->loadRefRPU();
   if ($sejour->_ref_rpu->_count_consultations) {
-    $AppUI->setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
-    $AppUI->redirect();
+    CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
+    CAppUI::redirect();
   }
   
   // Changement de praticien pour le sejour
@@ -40,8 +40,8 @@ if ($sejour_id) {
 $chir = new CMediusers;
 $chir->load($prat_id);
 if(!$chir->_id) {
-  $AppUI->setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_WARNING);
-  $AppUI->redirect();
+  CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_WARNING);
+  CAppUI::redirect();
 }
 
 $day_now = strftime("%Y-%m-%d");
@@ -138,13 +138,13 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
 
 // Redirect final
 if($ajax) {
-  echo $AppUI->getMsg();
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 if($current_m = CValue::post("_m_redirect")) {
-  $AppUI->redirect("m=$current_m");
+  CAppUI::redirect("m=$current_m");
 } else {
   $current_m = $sejour_id ? "dPurgences" : "dPcabinet";
-  $AppUI->redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
+  CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }
 ?>

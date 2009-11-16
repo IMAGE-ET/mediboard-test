@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $m;
+global $m;
 
 $plageop_id = CValue::post("plageop_id");
 
@@ -65,5 +65,5 @@ $plageop->updateFormFields();
 $plageop->store();
 $plageop->reorderOp();
 
-$AppUI->redirect("m=$m");
+CAppUI::redirect("m=$m");
 ?>

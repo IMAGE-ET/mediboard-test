@@ -7,7 +7,7 @@
  *  @author Thomas Despoix
  */
  
-global $can, $m, $AppUI, $remote_name;
+global $can, $m, $remote_name;
 
 $can->needsAdmin();
 
@@ -15,7 +15,7 @@ $can->needsAdmin();
  * Catalogue import
  */
 function importCatalogue($cat, $parent_id = null) { 
-  global $AppUI, $remote_name;
+  global $remote_name;
  
   set_time_limit(180);
   
@@ -69,7 +69,7 @@ function importCatalogue($cat, $parent_id = null) {
   
   $catal->obsolete = 0;
   $idCat->bindObject($catal);
-  //$AppUI->stepAjax("Catalogue '$catal->libelle' importé", UI_MSG_OK);
+  //CAppUI::stepAjax("Catalogue '$catal->libelle' importé", UI_MSG_OK);
   
   $path = $remote_name;
   // on met a jour $catalogues
@@ -101,7 +101,7 @@ function importCatalogue($cat, $parent_id = null) {
       $catChapitre->obsolete = 0;
       $idCatChapitre->bindObject($catChapitre);
 
-      //$AppUI->stepAjax("Catalogue '$catChapitre->libelle' importé", UI_MSG_OK);
+      //CAppUI::stepAjax("Catalogue '$catChapitre->libelle' importé", UI_MSG_OK);
       $compteur["chapitres"]++;
       // on met a jour $catalogues
       $catalogues[$path] = $catChapitre;
@@ -134,7 +134,7 @@ function importCatalogue($cat, $parent_id = null) {
         $catssChapitre->obsolete = 0;
         $idCatssChapitre->bindObject($catssChapitre);
         
-        //$AppUI->stepAjax("Sous Catalogue '$catssChapitre->libelle' importé", UI_MSG_OK);
+        //CAppUI::stepAjax("Sous Catalogue '$catssChapitre->libelle' importé", UI_MSG_OK);
         $compteur["sousChapitre"]++; 
         //on met à jour les catalogues
         $catalogues[$path] = $catssChapitre;
@@ -188,25 +188,25 @@ function importCatalogue($cat, $parent_id = null) {
   	
     $analyse->obsolete = 0;
     $idAnalyse->bindObject($analyse);
-    //$AppUI->stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
+    //CAppUI::stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
     $compteur["analyses"]++;
   }// fin du foreach
-  $AppUI->stepAjax("Analyses Importées: ".$compteur["analyses"].", Chapitres Importés: ".$compteur["chapitres"].", Sous chapitres Importés: ".$compteur["sousChapitre"], UI_MSG_OK);
+  CAppUI::stepAjax("Analyses Importées: ".$compteur["analyses"].", Chapitres Importés: ".$compteur["chapitres"].", Sous chapitres Importés: ".$compteur["sousChapitre"], UI_MSG_OK);
 }
 
 // Check import configuration
 $clCconfig = CAppUI::conf("$m CCatalogueLabo");
 
 if (null == $remote_name = $clCconfig["remote_name"]) {
-  $AppUI->stepAjax("Remote name not configured", UI_MSG_ERROR);
+  CAppUI::stepAjax("Remote name not configured", UI_MSG_ERROR);
 }
 
 if (null == $remote_url = $clCconfig["remote_url"]) {
-  $AppUI->stepAjax("Remote URL not configured", UI_MSG_ERROR);
+  CAppUI::stepAjax("Remote URL not configured", UI_MSG_ERROR);
 }
 
 if (false === $content = file_get_contents($remote_url)) {
-  $AppUI->stepAjax("Couldn't connect to remote url", UI_MSG_ERROR);
+  CAppUI::stepAjax("Couldn't connect to remote url", UI_MSG_ERROR);
 }
 
 
@@ -214,7 +214,7 @@ if (false === $content = file_get_contents($remote_url)) {
 $doc = new CMbXMLDocument;
 
 if (!$doc->loadXML($content)) {
-  $AppUI->stepAjax("Document is not well formed", UI_MSG_ERROR);
+  CAppUI::stepAjax("Document is not well formed", UI_MSG_ERROR);
 }
 
 $tmpPath = "tmp/dPlabo/import_catalogue.xml";
@@ -223,15 +223,15 @@ $doc->save($tmpPath);
 $doc->load($tmpPath);
 
 if (!$doc->schemaValidate("modules/$m/remote/catalogue.xsd")) {
-  $AppUI->stepAjax("Document is not valid", UI_MSG_ERROR);
+  CAppUI::stepAjax("Document is not valid", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Document is valid", UI_MSG_OK);
+CAppUI::stepAjax("Document is valid", UI_MSG_OK);
 
 // Check access to idSante400
 $canSante400 = CModule::getCanDo("dPsante400");
 if (!$canSante400->edit) {
-  $AppUI->stepAjax("No permission for module 'dPsante400' or module not installed", UI_MSG_ERROR);
+  CAppUI::stepAjax("No permission for module 'dPsante400' or module not installed", UI_MSG_ERROR);
 }
 
 // Import catalogue
@@ -241,7 +241,7 @@ try {
 } 
 catch (Exception $e) {
   mbTrace($e);
-  $AppUI->stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
+  CAppUI::stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
 }
 
 ?>

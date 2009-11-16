@@ -8,13 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
 $can->needsRead();
 
 if(!($plageop_id = CValue::getOrSession("plageop_id"))) {
-  $AppUI->setMsg("Vous devez choisir une plage opératoire", UI_MSG_WARNING);
-  $AppUI->redirect("m=dPbloc&tab=vw_edit_planning");
+  CAppUI::setMsg("Vous devez choisir une plage opératoire", UI_MSG_WARNING);
+  CAppUI::redirect("m=dPbloc&tab=vw_edit_planning");
 }
 
 $anesth = new CTypeAnesth;

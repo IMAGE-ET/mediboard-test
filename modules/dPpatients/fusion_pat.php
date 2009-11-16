@@ -12,8 +12,8 @@ global $AppUI, $m;
 $patients_id = CValue::get('patients_id');
 
 if(count($patients_id) < 2) {
-  $AppUI->setMsg("Veuillez selectionner deux patients", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPpatients");
+  CAppUI::setMsg("Veuillez selectionner deux patients", UI_MSG_ALERT);
+  CAppUI::redirect("m=dPpatients");
 }
 
 $patients = array();
@@ -25,8 +25,8 @@ foreach ($patients_id as $patient_id) {
   
   if (!$patient->load($patient_id)){
     // Erreur sur les ID du patient
-    $AppUI->setMsg("Fusion impossible, patient inexistant", UI_MSG_ERROR);
-    $AppUI->redirect("m=dPpatients");
+    CAppUI::setMsg("Fusion impossible, patient inexistant", UI_MSG_ERROR);
+    CAppUI::redirect("m=dPpatients");
   }
   
   if (!$finalPatient) {

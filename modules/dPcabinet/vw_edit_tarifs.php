@@ -15,7 +15,7 @@ $tarif_id = CValue::getOrSession("tarif_id");
 $tarif = new CTarif;
 $tarif->load($tarif_id);
 if (!$tarif->getPerm(PERM_EDIT)) {
-  $AppUI->setMsg("Vous n'avez pas le droit de modifier ce tarif");
+  CAppUI::setMsg("Vous n'avez pas le droit de modifier ce tarif");
   $tarif = new CTarif;
 }
 

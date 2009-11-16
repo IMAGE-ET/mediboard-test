@@ -42,7 +42,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
           $identifiants[] = $_produit["CODE_CIP"];
         }
         if(count($identifiants) == 0){
-          $AppUI->setMsg("Aucun produit ne correspond au code UCD [$identifiant]", UI_MSG_WARNING);
+          CAppUI::setMsg("Aucun produit ne correspond au code UCD [$identifiant]", UI_MSG_WARNING);
         }
       }
       // Parcours de tous les codes
@@ -64,7 +64,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
 	      if($livretLoad->load($_identifiant)) {
 	    	  $livret->updateDBFields();
 	    	  if($livret->distObj->Update() >= 0){
-	          $AppUI->setMsg("Element mis à jour");
+	          CAppUI::setMsg("Element mis à jour");
 	        }
 	      }
 	      else {
@@ -72,19 +72,19 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
 	        $produit->load($_identifiant);
 	        if($produit->code_cip){
 		        if($livret->distObj->Insert() >= 0){
-		          $AppUI->setMsg("Element inséré");
+		          CAppUI::setMsg("Element inséré");
 		        }
 	        }
 	      }
       }
     }
     else {
-      $AppUI->setMsg("Code [$data[0]] invalide à la ligne $line", UI_MSG_WARNING);
+      CAppUI::setMsg("Code [$data[0]] invalide à la ligne $line", UI_MSG_WARNING);
     }
     $line++;
   }  
   fclose($csv);
 }
 
-$AppUI->redirect('m=dPmedicament&a=vw_bcb_import&dialog=1');
+CAppUI::redirect('m=dPmedicament&a=vw_bcb_import&dialog=1');
 ?>

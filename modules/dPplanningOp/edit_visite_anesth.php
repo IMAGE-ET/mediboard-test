@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global $AppUI, $can, $m, $g;
 
 $operation_id= CValue::get("operation_id");
 

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab;
 
 $can->needsRead();
 
@@ -58,13 +58,13 @@ if ($sejour_id) {
   
   // On vérifie que l'utilisateur a les droits sur le sejour
   if (!$sejour->canRead()) {
-    $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
+    CAppUI::setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
+    CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }
   // Ancienne methode
   /*if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accés aux séjours du Dr {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
+    CAppUI::setMsg("Vous n'avez pas accés aux séjours du Dr {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
+    CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
   }*/
 
   
@@ -107,7 +107,8 @@ if ($sejour->adresse_par_prat_id && ($sejour->adresse_par_prat_id != $patient->_
 $sejours =& $patient->_ref_sejours;
 
 // Heures & minutes
-$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$config = CAppUI::conf("dPplanningOp CSejour");
+
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
 $heure_sortie_ambu   = $config["heure_sortie_ambu"];

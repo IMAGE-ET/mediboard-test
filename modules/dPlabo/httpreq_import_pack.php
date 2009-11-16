@@ -7,7 +7,7 @@
  *  @author Alexis Granger
  */
  
-global $can, $m, $AppUI, $dPconfig, $remote_name;
+global $can, $m, $remote_name;
 
 $can->needsAdmin();
 
@@ -15,7 +15,7 @@ $can->needsAdmin();
  * Packs import
  */
 function importPacks($packs){
-	global $AppUI, $m, $dPconfig, $remote_name;
+	global $m, $remote_name;
 	
 	// Chargement des identifiants externes des packs
   $idPackExamen = new CIdSante400();
@@ -111,12 +111,12 @@ function importPacks($packs){
 	}
 	
 	// Recapitulatif des importations
-	$AppUI->stepAjax("Packs Importés: ".$nb["packs"], UI_MSG_OK);	
-	$AppUI->stepAjax("Analyses Importées: ".$nb["analysesOK"], UI_MSG_OK);	
-  $AppUI->stepAjax("Analyses non importées: ".$nb["analysesKO"], UI_MSG_WARNING);	
+	CAppUI::stepAjax("Packs Importés: ".$nb["packs"], UI_MSG_OK);	
+	CAppUI::stepAjax("Analyses Importées: ".$nb["analysesOK"], UI_MSG_OK);	
+  CAppUI::stepAjax("Analyses non importées: ".$nb["analysesKO"], UI_MSG_WARNING);	
 	foreach($erreurs as $key=>$erreur){
 	  foreach($erreur as $_key=>$_erreur){
-	    $AppUI->stepAjax("Analyse non trouvée: ".$_erreur." dans le pack ".utf8_decode($_key), UI_MSG_WARNING);
+	    CAppUI::stepAjax("Analyse non trouvée: ".$_erreur." dans le pack ".utf8_decode($_key), UI_MSG_WARNING);
 	  }
 	}
 }
@@ -124,15 +124,15 @@ function importPacks($packs){
 
 // Check import configuration
 if (null == $remote_name =  CAppUI::conf("$m CCatalogueLabo remote_name")) {
-  $AppUI->stepAjax("Remote name not configured", UI_MSG_ERROR);
+  CAppUI::stepAjax("Remote name not configured", UI_MSG_ERROR);
 }
 
 if (null == $remote_url = CAppUI::conf("$m CPackExamensLabo remote_url")) {
-  $AppUI->stepAjax("Remote URL not configured", UI_MSG_ERROR);
+  CAppUI::stepAjax("Remote URL not configured", UI_MSG_ERROR);
 }
 
 if (false === $content = file_get_contents($remote_url)) {
-  $AppUI->stepAjax("Couldn't connect to remote url", UI_MSG_ERROR);
+  CAppUI::stepAjax("Couldn't connect to remote url", UI_MSG_ERROR);
 }
 
 
@@ -140,7 +140,7 @@ if (false === $content = file_get_contents($remote_url)) {
 $doc = new CMbXMLDocument;
 
 if (!$doc->loadXML($content)) {
-  $AppUI->stepAjax("Document is not well formed", UI_MSG_ERROR);
+  CAppUI::stepAjax("Document is not well formed", UI_MSG_ERROR);
 }
 
 $tmpPath = "tmp/dPlabo/import_packs.xml";
@@ -149,15 +149,15 @@ $doc->save($tmpPath);
 $doc->load($tmpPath);
 
 if (!$doc->schemaValidate("modules/$m/remote/packs.xsd")) {
-  $AppUI->stepAjax("Document is not valid", UI_MSG_ERROR);
+  CAppUI::stepAjax("Document is not valid", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Document is valid", UI_MSG_OK);
+CAppUI::stepAjax("Document is valid", UI_MSG_OK);
 
 // Check access to idSante400
 $canSante400 = CModule::getCanDo("dPsante400");
 if (!$canSante400->edit) {
-  $AppUI->stepAjax("No permission for module 'dPsante400' or module not installed", UI_MSG_ERROR);
+  CAppUI::stepAjax("No permission for module 'dPsante400' or module not installed", UI_MSG_ERROR);
 }
 
 // Import packs
@@ -167,7 +167,7 @@ try {
 } 
 catch (Exception $e) {
   mbTrace($e);
-  $AppUI->stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
+  CAppUI::stepAjax("Couldn't import catalogue for the  reason stated above", UI_MSG_ERROR);
 }
 
 

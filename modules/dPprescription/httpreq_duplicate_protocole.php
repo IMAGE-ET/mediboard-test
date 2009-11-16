@@ -25,7 +25,7 @@ $protocole->loadRefsPerfusions();
 $protocole->_id = "";
 $protocole->libelle = "Copie de $protocole->libelle";
 $msg = $protocole->store();
-$AppUI->displayMsg($msg, "CPrescription-msg-create");
+CAppUI::displayMsg($msg, "CPrescription-msg-create");
 
 // Parcours des medicaments
 foreach($protocole->_ref_prescription_lines as $line){
@@ -34,14 +34,14 @@ foreach($protocole->_ref_prescription_lines as $line){
 	$line->prescription_id = $protocole->_id;
 	$line->_id = "";
 	$msg = $line->store();
-	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 	
 	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
 	  $prise->_id = "";
 		$prise->object_id = $line->_id;
 		$msg = $prise->store();
-	  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+	  CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 	}
 	
   //Parcours des lignes de substitution
@@ -56,14 +56,14 @@ foreach($protocole->_ref_prescription_lines as $line){
 	
 		    $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-		  	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+		  	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 		  
 		  	// Parcours des prises des lignes de substitutions
 		    foreach($_line_subst->_ref_prises as $_prise_line_subst){
 		      $_prise_line_subst->_id = "";
 				  $_prise_line_subst->object_id = $_line_subst->_id;
 				  $msg = $_prise_line_subst->store();
-			    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+			    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 		    }
       } 
       // Perfusions
@@ -72,12 +72,12 @@ foreach($protocole->_ref_prescription_lines as $line){
 				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+			  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
         foreach($_line_subst->_ref_lines as $_perf_subst_line){
           $_perf_subst_line->_id = "";
           $_perf_subst_line->perfusion_id = $_line_subst->_id;
           $msg = $_perf_subst_line->store();
-          $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+          CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
         }
       }
     }
@@ -92,7 +92,7 @@ foreach($protocole->_ref_perfusions as $_perfusion){
   $_perfusion->prescription_id = $protocole->_id;
   $_perfusion->_id = "";
   $msg = $_perfusion->store();
-  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
   
   //Parcours des lignes de substitution
   foreach($_perfusion->_ref_substitution_lines as $_lines_subst_by_type){
@@ -106,14 +106,14 @@ foreach($protocole->_ref_perfusions as $_perfusion){
 	
 		    $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-		  	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+		  	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 		  
 		  	// Parcours des prises des lignes de substitutions
 		    foreach($_line_subst->_ref_prises as $_prise_line_subst){
 		      $_prise_line_subst->_id = "";
 				  $_prise_line_subst->object_id = $_line_subst->_id;
 				  $msg = $_prise_line_subst->store();
-			    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+			    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 		    }
       } 
       // Perfusions
@@ -122,12 +122,12 @@ foreach($protocole->_ref_perfusions as $_perfusion){
 				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-			  $AppUI->displayMsg($msg, "CPerfusion-msg-create");
+			  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
         foreach($_line_subst->_ref_lines as $_perf_subst_line){
           $_perf_subst_line->_id = "";
           $_perf_subst_line->perfusion_id = $_line_subst->_id;
           $msg = $_perf_subst_line->store();
-          $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+          CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
         }
       }
     }
@@ -138,7 +138,7 @@ foreach($protocole->_ref_perfusions as $_perfusion){
     $_perf_line->_id = "";
     $_perf_line->perfusion_id = $_perfusion->_id;
     $msg = $_perf_line->store();
-	  $AppUI->displayMsg($msg, "CPerfusionLine-msg-create");
+	  CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
   }
 }
 
@@ -148,14 +148,14 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
 	$line_element->prescription_id = $protocole->_id;
 	$line_element->_id = "";
 	$line_element->store();
-	$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-create");
+	CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-create");
 	
   // Parcours des prises
 	foreach($line_element->_ref_prises as $prise){
 	  $prise->_id = "";
 		$prise->object_id = $line_element->_id;
 		$msg = $prise->store();
-	  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+	  CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 	}
 }
 
@@ -164,12 +164,12 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$line_comment->prescription_id = $protocole->_id;
 	$line_comment->_id = "";
 	$line_comment->store();
-	$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
+	CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-create");
 }
 
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Protocole.edit($protocole->_id); Protocole.refreshList($protocole->_id);</script>";
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 ?>

@@ -23,8 +23,8 @@ $canUserSel = $userSel->canDo();
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
 
 if (!$userSel->isPraticien()) {
-  $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
+  CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
+  CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
 $canUserSel->needsEdit();

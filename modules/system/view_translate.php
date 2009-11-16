@@ -17,7 +17,12 @@ $can->needsEdit();
 $module = CValue::getOrSession("module" , "admin");
 
 // liste des dossiers modules + common et styles
-$modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
+$modules = array_merge(array(
+  "common" => "common",
+  "styles" => "styles"), 
+  CAppUI::readDirs("modules")
+);
+
 CMbArray::removeValue(".svn", $modules);
 ksort($modules);
 
@@ -34,7 +39,7 @@ if ($in_module) {
   }
 }
 else {
-  $localesDirs = $AppUI->readDirs("locales");
+  $localesDirs = CAppUI::readDirs("locales");
   CMbArray::removeValue(".svn",$localesDirs);
 }
 

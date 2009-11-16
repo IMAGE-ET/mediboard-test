@@ -15,28 +15,28 @@ $del = CValue::post('del', 0 );
 if ($del) {
 	// check canDelete
 	if ($msg = $obj->canDeleteEx()) {	
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
-		$AppUI->redirect();
+		CAppUI::setMsg( $msg, UI_MSG_ERROR );
+		CAppUI::redirect();
 	}
 
 	// delete object
 	if ($msg = $obj->delete()) {
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
-		$AppUI->redirect();
+		CAppUI::setMsg( $msg, UI_MSG_ERROR );
+		CAppUI::redirect();
 	} else {
     CValue::setSession("pack_id");
-		$AppUI->setMsg( "Pack supprimée", UI_MSG_ALERT);
-		$AppUI->redirect( "m=$m" );
+		CAppUI::setMsg( "Pack supprimée", UI_MSG_ALERT);
+		CAppUI::redirect( "m=$m" );
 	}
   
 } else {
   // Store object
 	if ($msg = $obj->store()) {
-		$AppUI->setMsg( $msg, UI_MSG_ERROR );
+		CAppUI::setMsg( $msg, UI_MSG_ERROR );
 	} else {
 		$isNotNew = @$_POST['pack_id'];
-		$AppUI->setMsg( $isNotNew ? 'Pack mis à jour' : 'Pack ajouté', UI_MSG_OK);
+		CAppUI::setMsg( $isNotNew ? 'Pack mis à jour' : 'Pack ajouté', UI_MSG_OK);
 	}
-	$AppUI->redirect();
+	CAppUI::redirect();
 }
 ?>

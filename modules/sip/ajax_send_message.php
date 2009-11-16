@@ -68,13 +68,13 @@ if (!$echange_hprim_id) {
 
 	if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
 	  trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-	  $AppUI->setMsg("Impossible de joindre le destinataire", UI_MSG_ERROR);
+	  CAppUI::setMsg("Impossible de joindre le destinataire", UI_MSG_ERROR);
 	}
 	
 	// Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
 	if (null == $acquittement = $client->evenementPatient($echange_hprim->message)) {
 	  trigger_error("Evenement patient impossible : ".$dest_hprim->url);
-	  $AppUI->setMsg("Evenement patient impossible", UI_MSG_ERROR);
+	  CAppUI::setMsg("Evenement patient impossible", UI_MSG_ERROR);
 	}
 
   $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
@@ -90,9 +90,9 @@ if (!$echange_hprim_id) {
 
 	$echange_hprim->store();
 	
-	$AppUI->setMsg("Message HPRIM envoyé", UI_MSG_OK);
+	CAppUI::setMsg("Message HPRIM envoyé", UI_MSG_OK);
 	
-	echo $AppUI->getMsg();
+	echo CAppUI::getMsg();
 }
 
 ?>

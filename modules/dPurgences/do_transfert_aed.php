@@ -9,18 +9,15 @@
  */
 
 function viewMsg($msg, $action, $txt = ""){
-  global $AppUI, $m, $tab;
+  global $m, $tab;
   $action = CAppUI::tr($action);
   if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-    $AppUI->redirect("m=$m&tab=$tab");
+    CAppUI::setMsg("$action: $msg", UI_MSG_ERROR );
+    CAppUI::redirect("m=$m&tab=$tab");
     return;
   }
-  $AppUI->setMsg("$action $txt", UI_MSG_OK );
+  CAppUI::setMsg("$action $txt", UI_MSG_OK );
 }
-
-
-global $AppUI;
 
 // Récupération du rpu
 $rpu_id = CValue::post("rpu_id");
@@ -113,6 +110,6 @@ foreach($rpu->_ref_sejour->_ref_suivi_medical as $_suivi){
 	viewMsg($msg, "$_suivi->_class_name-msg-modify");  
 }
 
-$AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
+CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
 
 ?>

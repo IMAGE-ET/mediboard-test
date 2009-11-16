@@ -8,17 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 
 // Check params
 if (null == $dsn = CValue::get("dsn")) {
-  $AppUI->stepAjax("Aucun DSN spécifié", UI_MSG_ERROR);
+  CAppUI::stepAjax("Aucun DSN spécifié", UI_MSG_ERROR);
 }
 
 if (!CSQLDataSource::get($dsn)) {
-  $AppUI->stepAjax("Connexion vers la DSN '$dsn' échouée", UI_MSG_ERROR);
+  CAppUI::stepAjax("Connexion vers la DSN '$dsn' échouée", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Connexion vers la DSN '$dsn' réussie");
+CAppUI::stepAjax("Connexion vers la DSN '$dsn' réussie");

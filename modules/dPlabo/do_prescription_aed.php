@@ -7,14 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $dPconfig;
-
 $verouillee = CValue::post("verouillee");
 
 // Si la prescription est verouillée, un id externe est créé pour identifier la prescription 
 if($verouillee){
-	
-  $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+  $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
   
   $prescription_labo_id = CValue::post("prescription_labo_id");
   $prescription = new CPrescriptionLabo();

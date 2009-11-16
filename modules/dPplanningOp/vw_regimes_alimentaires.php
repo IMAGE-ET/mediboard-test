@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dialog;
-
 $sejour = new CSejour;
 
 $sejour->hormone_croissance = CValue::get("hormone_croissance", 0);

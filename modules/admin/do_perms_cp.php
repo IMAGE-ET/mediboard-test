@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 $tempUserName    = CValue::post("temp_user_name", "");
 $permission_user = CValue::post("permission_user", "");
 $delPermissions  = CValue::post("delPerms", false);
@@ -24,8 +22,8 @@ $user = new CUser;
 $user->user_id = $permission_user;
 $msg = $user->copyPermissionsFrom($tempUser->user_id, $delPermissions);
 
-$AppUI->setMsg("Permissions");
-$AppUI->setMsg($msg ? $msg : "copied from template", $msg ? UI_MSG_ERROR : UI_MSG_OK, true);
-$AppUI->redirect();
+CAppUI::setMsg("Permissions");
+CAppUI::setMsg($msg ? $msg : "copied from template", $msg ? UI_MSG_ERROR : UI_MSG_OK, true);
+CAppUI::redirect();
 
 ?>

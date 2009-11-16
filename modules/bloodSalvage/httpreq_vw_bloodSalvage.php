@@ -10,43 +10,29 @@
 
 global $can, $m;
 $can->needsRead();
-/*
- * Récupération des variables en session et ou issues des formulaires.
- */
+
 $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
 $date             = CValue::getOrSession("date", mbDate());
 
-
-$blood_salvage = new CBloodSalvage();
-$totaltime = "00:00:00";
-$modif_operation    = $date>=mbDate();
+$modif_operation  = $date >= mbDate();
 $timing = array();
 
 $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");
 
 if(CModule::getActive("dPmedicament")) {
-	
-	if($inLivretTherapeutique) {
-		$anticoagulant = new CBcbClasseATC(); 
+  $anticoagulant = new CBcbClasseATC(); 
+	if ($inLivretTherapeutique) {
 		$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
 	}
-	
-	if(!$inLivretTherapeutique) {
-	  $anticoagulant = new CBcbClasseATC(); 
+	else {
 	  $anticoagulant->loadRefsProduits("B01AB");
 	  $anticoagulant_list = $anticoagulant->_ref_produits;
 	}
-	
 } else {
-	
 	$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
-	$anticoagulant_list = explode("|",$list);
-	
+	$anticoagulant_list = explode("|", $list);
 }
-
-$version_patient = CModule::getActive("dPpatients");
-$isInDM = 0; //($version_patient->mod_version >= 0.71);
 
 $selOp = new COperation();
 
@@ -61,9 +47,10 @@ if ($op) {
   $selOp->_ref_sejour->_ref_patient->loadRefsfwd(); 
   $selOp->_ref_sejour->_ref_patient->loadRefDossierMedical(); 
   $selOp->_ref_sejour->_ref_patient->loadRefConstantesMedicales();  
-  $where = array();
-  $where["operation_id"] = "='$selOp->_id'";  
-  $blood_salvage->loadObject($where);
+  
+  $blood_salvage = new CBloodSalvage();
+  $blood_salvage->operation_id = $op;
+  $blood_salvage->loadMatchingObject();
   $blood_salvage->loadRefs();
   $timing["_recuperation_start"] = array();
   foreach($timing as $key => $value) {
@@ -72,7 +59,6 @@ if ($op) {
     }
   }
 }
-
 
 /*
  * Liste des cell saver.
@@ -87,8 +73,7 @@ $smarty->assign("salle", $salle);
 $smarty->assign("selOp", $selOp);
 $smarty->assign("date", $date);
 $smarty->assign("modif_operation", $modif_operation);
-$smarty->assign("isInDM", $isInDM);
-$smarty->assign("totaltime", $totaltime);
+$smarty->assign("totaltime", "00:00:00");
 $smarty->assign("anticoagulant_list", $anticoagulant_list);
 $smarty->assign("timing", $timing);
 $smarty->assign("list_cell_saver", $list_cell_saver);

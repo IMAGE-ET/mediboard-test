@@ -403,9 +403,9 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($rootDir = null) {
-    global $version, $dPconfig, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
+    global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
     
-    $root = $dPconfig["root_dir"];
+    $root = CAppUI::conf("root_dir");
 
     if (!$rootDir) {
       $rootDir = "$root/modules/$m"; 
@@ -455,7 +455,7 @@ class CSmartyDP extends Smarty {
     
     // Standard data assignment
     $this->assign("app", CAppUI::$instance);
-    $this->assign("dPconfig", $dPconfig);
+    $this->assign("dPconfig", CAppUI::conf());
     $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary
     $this->assign("version", $version); 
     $this->assign("suppressHeaders", $suppressHeaders);

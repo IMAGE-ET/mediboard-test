@@ -23,7 +23,7 @@ foreach($elements as $element){
   $element->_id = '';
   $element->category_prescription_id = $category_dest_id;
   $msg = $element->store();
-  $AppUI->displayMsg($msg, "CElementPrescription-msg-create");
+  CAppUI::displayMsg($msg, "CElementPrescription-msg-create");
 }
 
 ?>

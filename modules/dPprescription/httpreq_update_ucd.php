@@ -12,8 +12,6 @@ global $can;
 $can->needsAdmin();
 
 function updateFieldMed($table, $mb_field, $bcb_field){
-  global $AppUI;
-  
   $ds_std = CSQLDataSource::get("std");
   $ds_bcb = CBcbObject::getDataSource();
 
@@ -39,7 +37,7 @@ function updateFieldMed($table, $mb_field, $bcb_field){
 	  $ds_std->exec($sql);
 	  $nb_modif += $ds_std->affectedRows();
 	}
-	$AppUI->stepAjax("$nb_modif codes $mb_field mis à jour dans la table $table", UI_MSG_OK);
+	CAppUI::stepAjax("$nb_modif codes $mb_field mis à jour dans la table $table", UI_MSG_OK);
 }
 
 // Remplissage des codes UCD et CIS

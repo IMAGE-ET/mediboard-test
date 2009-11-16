@@ -59,7 +59,6 @@ class CSetupdPbloc extends CSetup {
     function setup_swapPratIds() {
       $ds = CSQLDataSource::get("std");
  
-      global $AppUI;
       set_time_limit(1800);
       ignore_user_abort(1);
       $user = new CUser;

@@ -61,20 +61,11 @@
         <tr>
           <td colspan="2">
             <table>
-              {{if $isInDM}}
-	              {{if $patient->_ref_dossier_medical->groupe_sanguin!="?" || $patient->_ref_dossier_medical->rhesus!="?"}}
-	              <tr>
-	                <th>Groupe sanguin</th>
-	                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$patient->_ref_dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}{{$patient->_ref_dossier_medical->rhesus}}{{/tr}}</b></td>
-	              </tr>
-	              {{/if}}
-              {{else}}
-	              {{if $consult_anesth->groupe!="?" || $consult_anesth->rhesus!="?"}}
-	              <tr>
-	                <th>Groupe sanguin</th>
-	                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}{{$consult_anesth->rhesus}}{{/tr}}</b></td>
-	              </tr>
-	              {{/if}}
+              {{if $consult_anesth->groupe!="?" || $consult_anesth->rhesus!="?"}}
+              <tr>
+                <th>Groupe sanguin</th>
+                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}{{$consult_anesth->rhesus}}{{/tr}}</b></td>
+              </tr>
               {{/if}}
               {{if $consult_anesth->rai && $consult_anesth->rai!="?"}}
               <tr>

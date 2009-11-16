@@ -13,24 +13,27 @@
 		<th class="category" colspan="6">Infos patient</th>
 	</tr>
 	{{assign var=consult_anesth value=$selOp->_ref_consult_anesth}}
-	{{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+	{{assign var=constantes value=$patient->_ref_constantes_medicales}}
  	<tr>
- 	  {{if $isInDM}}
-  	<th style="width: 16%"><strong> {{mb_label object=$dossier_medical field=groupe_sanguin}} : </strong></th><td style="width: 16%">{{$dossier_medical->groupe_sanguin}} {{$dossier_medical->rhesus}}</td>
-  	{{else}}
-  	<th style="width: 16%"><strong> {{mb_label object=$consult_anesth field=groupe}} : </strong></th><td style="width: 16%">{{$consult_anesth->groupe}} {{$consult_anesth->rhesus}}</td>
-    {{/if}}
-    <th style="width: 16%"><strong> {{mb_label object=$consult_anesth field=rai}} : </strong></th><td style="width: 16%">{{$consult_anesth->rai}} </td>
-    <th style="width: 16%"><strong> {{mb_label object=$consult_anesth field=ASA}} : </strong></th><td style="width: 16%">{{$consult_anesth->ASA}}</td>
+  	<th style="width: 16%; font-weight: bold;">{{mb_label object=$consult_anesth field=groupe}}</th>
+    <td style="width: 16%">{{$consult_anesth->groupe}} {{$consult_anesth->rhesus}}</td>
+    <th style="width: 16%; font-weight: bold;">{{mb_label object=$consult_anesth field=rai}}</th>
+    <td style="width: 16%">{{$consult_anesth->rai}} </td>
+    <th style="width: 16%; font-weight: bold;">{{mb_label object=$consult_anesth field=ASA}}</th>
+    <td style="width: 16%">{{$consult_anesth->ASA}}</td>
  	</tr>
  	<tr>
-	  <th><strong> {{mb_label object=$patient->_ref_constantes_medicales field=poids}} : </strong></th><td>{{$patient->_ref_constantes_medicales->poids}} kg</td>
-	  <th><strong> {{mb_label object=$patient->_ref_constantes_medicales field=taille}}: </strong></th><td>{{$patient->_ref_constantes_medicales->taille}} cm</td>
-	  <th><strong> {{mb_label object=$patient->_ref_constantes_medicales field=_imc}}: </strong></th><td>{{$patient->_ref_constantes_medicales->_imc}}</td>
+	  <th style="font-weight: bold">{{mb_label object=$constantes field=poids}}</th>
+    <td>{{mb_value object=$constantes field=poids}} kg</td>
+	  <th style="font-weight: bold">{{mb_label object=$constantes field=taille}}</th>
+    <td>{{mb_value object=$constantes field=taille}} cm</td>
+	  <th style="font-weight: bold">{{mb_label object=$constantes field=_imc}}</th>
+    <td>{{mb_value object=$constantes field=_imc}}</td>
 	</tr>
   <tr>
-    <th><strong>{{mb_label object=$consult_anesth field="_psa"}} : </strong></th><td> {{mb_value object=$consult_anesth field="_psa"}} ml/GR</td>
-    <th><strong>{{mb_label object=$patient->_ref_constantes_medicales field="_vst"}} : </strong></th><td colspan="3"> {{mb_value object=$patient->_ref_constantes_medicales field="_vst"}} ml</td>
-    
+    <th style="font-weight: bold">{{mb_label object=$consult_anesth field="_psa"}}</th>
+    <td> {{mb_value object=$consult_anesth field="_psa"}} ml/GR</td>
+    <th style="font-weight: bold">{{mb_label object=$constantes field="_vst"}}</th>
+    <td colspan="3">{{mb_value object=$constantes field="_vst"}} ml</td>
   </tr>
 </table>

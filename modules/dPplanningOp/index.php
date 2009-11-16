@@ -7,7 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $dPconfig;
+global $AppUI;
+
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
@@ -22,7 +23,7 @@ $module->registerTab("vw_edit_protocole" , TAB_EDIT);
 $module->registerTab("vw_edit_typeanesth", TAB_ADMIN);
 
 // Droit d'acces a l'onglet seulement si on est praticien ou admin
-if(($user->isPraticien() || $user->isFromType(array("Administrator"))) && $dPconfig["dPsalleOp"]["CActeCCAM"]["tarif"]) {
+if(($user->isPraticien() || $user->isFromType(array("Administrator"))) && CAppUI::conf("dPsalleOp CActeCCAM tarif")) {
   $module->registerTab("vw_edit_compta", TAB_EDIT);
 }
 

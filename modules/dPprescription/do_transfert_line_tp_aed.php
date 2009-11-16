@@ -29,7 +29,7 @@ if(!$sejour->_ref_prescriptions["sejour"]->_id){
 	  $prescription_preadm->object_class = $sejour->_class_name;
 	  $prescription_preadm->type = "pre_admission";
 	  $msg = $prescription_preadm->store();
-	  $AppUI->displayMsg($msg, "CPrescription-msg-create");
+	  CAppUI::displayMsg($msg, "CPrescription-msg-create");
   }
   $prescription_sejour = new CPrescription();
   $prescription_sejour->object_id = $sejour->_id;
@@ -37,7 +37,7 @@ if(!$sejour->_ref_prescriptions["sejour"]->_id){
   $prescription_sejour->type = "sejour";
   $msg = $prescription_sejour->store();
   
-  $AppUI->displayMsg($msg, "CPrescription-msg-create");
+  CAppUI::displayMsg($msg, "CPrescription-msg-create");
 } else {
   $prescription_sejour = $sejour->_ref_prescriptions["sejour"];
 }
@@ -55,7 +55,7 @@ $line->prescription_id = $prescription_sejour->_id;
 $line->praticien_id = $can->admin ? $sejour->praticien_id : $AppUI->user_id;
 $line->debut = mbDate($sejour->_entree);
 $msg = $line->store();
-$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
+CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 
 // Sauvegarde des prises
 foreach($line->_ref_prises as $_prise){
@@ -63,10 +63,10 @@ foreach($line->_ref_prises as $_prise){
   $_prise->object_id = $line->_id;
   $_prise->object_class = $line->_class_name;
   $msg = $_prise->store();
-  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
+  CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");
 }
 
-echo $AppUI->getMsg();
+echo CAppUI::getMsg();
 CApp::rip();
 
 ?>

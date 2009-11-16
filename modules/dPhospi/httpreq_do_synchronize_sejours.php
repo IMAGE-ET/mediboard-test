@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 
 $affectation = new CAffectation;
 $dateMin = CValue::get("dateMin", "YYYY-MM-JJ");
@@ -43,13 +43,13 @@ foreach($listAffectations as &$curr_aff) {
   }
   if($changeSejour) {
     if($msg = $curr_aff->store()) {
-      $AppUI->stepAjax("Erreur avec l'affectation $curr_aff->_id : $msg", UI_MSG_ERROR);
+      CAppUI::stepAjax("Erreur avec l'affectation $curr_aff->_id : $msg", UI_MSG_ERROR);
     }
   }
 }
 
 $result = $entrees + $sorties;
 
-$AppUI->stepAjax("$result sejour(s) modifiés : $entrees entrée(s) et $sorties sortie(s)", UI_MSG_OK);
+CAppUI::stepAjax("$result sejour(s) modifiés : $entrees entrée(s) et $sorties sortie(s)", UI_MSG_OK);
 
 ?>

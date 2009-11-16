@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 
@@ -21,18 +21,18 @@ $targetTables = "tmp/bcbges/bcbges.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
 $ds = CSQLDataSource::get("bcbges");
 
 // Création de la table
 if (null == $lineCount = $ds->queryDump($targetTables, true)) {
   $msg = $ds->error();
-  $AppUI->stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
-$AppUI->stepAjax("Table importée", UI_MSG_OK);
+CAppUI::stepAjax("Table importée", UI_MSG_OK);
 
 ?>

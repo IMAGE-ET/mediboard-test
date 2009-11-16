@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m;
 
 $date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;

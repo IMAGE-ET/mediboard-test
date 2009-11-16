@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsRead();
 
@@ -15,8 +15,8 @@ $intermax = CValue::postOrSessionAbs("intermax", array());
 
 $fonction = @$intermax["FONCTION"]["NOM"];
 
-$AppUI->stepAjax("Fonction Intermax '$fonction' reçue", UI_MSG_OK);
-$AppUI->callbackAjax("Intermax.handleResult", $fonction);
+CAppUI::stepAjax("Fonction Intermax '$fonction' reçue", UI_MSG_OK);
+CAppUI::callbackAjax("Intermax.handleResult", $fonction);
 
 CApp::rip();
 

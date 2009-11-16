@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global $AppUI, $can, $m, $g;
 
 $can->needsEdit();
 

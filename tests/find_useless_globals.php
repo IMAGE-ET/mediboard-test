@@ -23,6 +23,7 @@ function toggle(element) {
 On repère chaque variable déclarée en global, et si elle n'est pas répetée dans le fichier, alors elle est jugée inutile.
 Il peut y avoir des variables inutiles non reperées, mais il ne peut pas y avoir de variables jugées inutiles alors qu'elle ne le sont pas.</p> 
 
+<table>
 <?php
 $list = array_merge(
   glob ("../*.php"),
@@ -74,10 +75,11 @@ foreach ($list as $file) {
   if (count($unused_vars)) {
     //display ($file .' >> '. implode(', ', $unused_vars), highlight_file($file, true), true);
     $count += count($unused_vars);
-    echo '<b>'.$file.'</b><br />&nbsp;&nbsp;&nbsp; >> '. implode(', ', $unused_vars);
-    echo '<br />';
+    echo '<tr><td>'.$file.'</td><td>'. implode(', ', $unused_vars).'</td></tr>';
   }
 }
+echo '</table>';
+
 echo 'Au moins '.$count.' variables globales susceptibles d\'etre inutiles';
 ?>
 </body>

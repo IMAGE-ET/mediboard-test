@@ -17,7 +17,7 @@ $user = new CMediusers;
 $user->load($AppUI->user_id);
 
 if (!$user->isPraticien() && !$user->isSecretaire()) {
-  $AppUI->redirect("m=system&a=access_denied");
+  CAppUI::redirect("m=system&a=access_denied");
 }
 
 $praticiens = null;

@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
-
 // If it is a return to the group stock
 if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   $stock_service = CProductStockService::getFromCode($_POST['_code']);
@@ -32,7 +30,7 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   	}
   	$delivery->quantity += $_POST['quantity'];
   	$delivery->date_dispensation = MbDateTime();
-  	if ($msg = $delivery->store()) $AppUI->setMsg($msg, UI_MSG_ERROR);
+  	if ($msg = $delivery->store()) CAppUI::setMsg($msg, UI_MSG_ERROR);
   	$_POST['delivery_id'] = $delivery->_id;
   }
 }

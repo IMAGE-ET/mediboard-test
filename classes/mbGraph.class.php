@@ -207,10 +207,9 @@ class CMbGraph {
 	}
 	
 	function eZgraphRender($render,$options) {
-		global $dPconfig;
-		if($dPconfig['graph_svg'] == "non") {
+		if(CAppUI::conf('graph_svg') == "non") {
 			$this->graph->driver = new ezcGraphGdDriver();
-		} else if($dPconfig['graph_svg'] == "oui") {
+		} else if(CAppUI::conf('graph_svg') == "oui") {
 			$this->graph->renderer->options->moveOut = .2;
  			$this->graph->renderer->options->pieChartOffset = 1;
  			$this->graph->renderer->options->pieChartGleam = .3;

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 $can->needsAdmin();
 
 set_time_limit(360);
@@ -21,7 +21,7 @@ $ds = $cim->_spec->ds;
 if ($do_delete) {
   $ds->exec("DELETE FROM `master` WHERE `author` = 'atih'");
   $ds->exec("DELETE FROM `libelle` WHERE `author` = 'atih';");
-  $AppUI->stepAjax("Code supplémentaires de l'ATIH supprimés", UI_MSG_OK);
+  CAppUI::stepAjax("Code supplémentaires de l'ATIH supprimés", UI_MSG_OK);
   CApp::rip();
 }
 
@@ -30,9 +30,9 @@ $targetDir = "tmp/cim10";
 $sourcePath = "modules/dPcim10/base/cim_atih.tar.gz";
 $targetPath = "tmp/cim10/cim_atih.csv";
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive CIM_ATIH.csv", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive CIM_ATIH.csv", UI_MSG_ERROR);
 } 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s) [CIM10 ATIH]", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $nbFiles fichier(s) [CIM10 ATIH]", UI_MSG_OK);
 
 // Vérification des différences entre la norme internationale et les ajouts de l'ATIH
 $list_diff = array();
@@ -51,9 +51,9 @@ while($line = fgetcsv($fp, null, '|')) {
 fclose($fp);
 
 if (count($list_diff))
-  $AppUI->stepAjax("Il existe ".count($list_diff)." codes supplémentaires dans la CIM v.11", UI_MSG_WARNING);
+  CAppUI::stepAjax("Il existe ".count($list_diff)." codes supplémentaires dans la CIM v.11", UI_MSG_WARNING);
 else
-  $AppUI->stepAjax("Il n'y a pas de code supplémentaires dans la CIM v.11", UI_MSG_OK);
+  CAppUI::stepAjax("Il n'y a pas de code supplémentaires dans la CIM v.11", UI_MSG_OK);
 
 foreach($list_diff as $diff) {
   $abbrev = $diff[0];
@@ -114,6 +114,6 @@ foreach($list_diff as $diff) {
   $ds->exec($query);*/
 }
 
-$AppUI->stepAjax(count($list_diff)." codes supplémentaires ont été ajoutés dans la CIM10", UI_MSG_OK);
+CAppUI::stepAjax(count($list_diff)." codes supplémentaires ont été ajoutés dans la CIM10", UI_MSG_OK);
 
 ?>

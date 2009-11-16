@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab;
 
 $can->needsEdit();
 
@@ -37,8 +37,8 @@ if($protocole_id) {
 
   // On vérifie que l'utilisateur a les droits sur l'operation
   if (!array_key_exists($protocole->chir_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accès à ce protocole", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&protocole_id=0"); 
+    CAppUI::setMsg("Vous n'avez pas accès à ce protocole", UI_MSG_WARNING);
+    CAppUI::redirect("m=$m&tab=$tab&protocole_id=0"); 
   }
   $chir =& $protocole->_ref_chir;
 }

@@ -662,6 +662,10 @@ table.tbl a {
   margin: 0 1px;
 }
 
+table.tbl a.button {
+  display: inline-block;
+}
+
 a.text {
 	white-space: normal;
 }

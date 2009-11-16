@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
 $ds = CSQLDataSource::get("std");
 
 $do = new CDoObjectAddEdit("CUser", "user_id");
@@ -24,7 +23,7 @@ if (intval(CValue::post("del"))) {
   $where["user_id"]       = $ds->prepare("!= %", $do->_obj->user_id);
   $otherUser->loadObject($where);
   if($otherUser->user_id) {
-    $AppUI->setMsg("Login déjà existant dans la base", UI_MSG_ERROR);
+    CAppUI::setMsg("Login déjà existant dans la base", UI_MSG_ERROR);
   } else {
     $do->doStore();
   }

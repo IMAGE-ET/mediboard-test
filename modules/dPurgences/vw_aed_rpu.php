@@ -32,8 +32,8 @@ if ($sejour_id = CValue::get("sejour_id")) {
 }
 
 if ($rpu_id && !$rpu->load($rpu_id)) {
-  $AppUI->setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
-  $AppUI->redirect("m=$m&tab=$tab&rpu_id=0");
+  CAppUI::setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
+  CAppUI::redirect("m=$m&tab=$tab&rpu_id=0");
 }
 
 

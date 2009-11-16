@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can;
+global $can;
 
 $can->needsAdmin();
 
@@ -20,17 +20,17 @@ $targetPath = "tmp/cim10/cim10.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  $AppUI->stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
 } 
 
-$AppUI->stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
 
 $ds = CSQLDataSource::get("cim10");
 if (null == $lineCount = $ds->queryDump($targetPath)) {
   $msg = $ds->error();
-  $AppUI->stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("Erreur de requête SQL: $msg", UI_MSG_ERROR);
 }
 
-$AppUI->stepAjax("Import effectué avec succès de $lineCount lignes", UI_MSG_OK);
+CAppUI::stepAjax("Import effectué avec succès de $lineCount lignes", UI_MSG_OK);
 
 ?>

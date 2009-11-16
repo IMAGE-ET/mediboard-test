@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $g;
+global $g;
 
 $do = new CDoObjectAddEdit('CProductOrder', 'order_id');
 
@@ -21,13 +21,13 @@ if (CValue::post('order_id') == 0) {
 	$order->locked       = 0;
 	$order->cancelled    = 0;
 	if ($msg = $order->store()) {
-		$AppUI->setMsg($msg);
+		CAppUI::setMsg($msg);
 	} else {
 	  if (CValue::post('_autofill') == 1) {
 	    $order->autofill();
 	  }
-		$AppUI->setMsg($do->createMsg);
-		$AppUI->redirect('m=dPstock&a=vw_aed_order&dialog=1&order_id='.$order->order_id);
+		CAppUI::setMsg($do->createMsg);
+		CAppUI::redirect('m=dPstock&a=vw_aed_order&dialog=1&order_id='.$order->order_id);
 	}
 }
 

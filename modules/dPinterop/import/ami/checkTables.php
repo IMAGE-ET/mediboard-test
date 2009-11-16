@@ -9,13 +9,12 @@
 
 set_time_limit(300);
 
-global $AppUI;
 $ds = CSQLDataSource::get("Transit");
 $dsn = "AMI";
 
 // DSN Connection
 if (null == $link = odbc_connect($dsn, "", "")) {
-  $AppUI->stepAjax("Couldn't connect to '$dsn' ODBC DSN'", UI_MSG_ERROR);
+  CAppUI::stepAjax("Couldn't connect to '$dsn' ODBC DSN'", UI_MSG_ERROR);
 }
 
 // DSN Table analysis
@@ -29,7 +28,7 @@ while ($column = odbc_fetch_object($res)) {
   $tables[$column->TABLE_NAME][$column->ORDINAL] = $column->COLUMN_NAME;
 }
 
-$AppUI->stepAjax("Tables count: " . count($tables));
+CAppUI::stepAjax("Tables count: " . count($tables));
 
 
 // Check table conrrespondance 
@@ -46,38 +45,38 @@ foreach ($tables as $table => $columns) {
   
     $rowCountCopy = $ds->loadResult("SELECT COUNT(*) FROM `$table`");
     if ($rowCount != $rowCountCopy) {
-      $AppUI->stepAjax("Rows count for table '$table' differ, $rowCountCopy instead of $rowCount", UI_MSG_WARNING);
+      CAppUI::stepAjax("Rows count for table '$table' differ, $rowCountCopy instead of $rowCount", UI_MSG_WARNING);
       $tableMissing++;
     }
 
     // Column count
     $columnsCopy = $ds->loadColumn("SHOW COLUMNS FROM `$table`", null);
     if (array_values($columns) != array_values($columnsCopy)) {
-      $AppUI->stepAjax("Columns names for table '$table' differ", UI_MSG_WARNING);
+      CAppUI::stepAjax("Columns names for table '$table' differ", UI_MSG_WARNING);
       $columnsError++;
     }
   } else {
-      $AppUI->stepAjax("table '$table' does not exist", UI_MSG_WARNING);
+      CAppUI::stepAjax("table '$table' does not exist", UI_MSG_WARNING);
       $rowCountError++;
   }
 }
 
 if ($tableMissing) {
-  $AppUI->stepAjax("$tableMissing tables are missing", UI_MSG_WARNING);
+  CAppUI::stepAjax("$tableMissing tables are missing", UI_MSG_WARNING);
 } else {
-  $AppUI->stepAjax("No tables are missing out of $i tables");
+  CAppUI::stepAjax("No tables are missing out of $i tables");
 }
 
 if ($rowCountError) {
-  $AppUI->stepAjax("Rows count errors on $rowCountError tables", UI_MSG_WARNING);
+  CAppUI::stepAjax("Rows count errors on $rowCountError tables", UI_MSG_WARNING);
 } else {
-  $AppUI->stepAjax("Rows count checked with no errors");
+  CAppUI::stepAjax("Rows count checked with no errors");
 }
 
 if ($columnsError) {
-  $AppUI->stepAjax("Column name errors on  count errors on $columnsError tables", UI_MSG_WARNING);
+  CAppUI::stepAjax("Column name errors on  count errors on $columnsError tables", UI_MSG_WARNING);
 } else {
-  $AppUI->stepAjax("Column names checked with no errors");
+  CAppUI::stepAjax("Column names checked with no errors");
 }
 
 ?>
