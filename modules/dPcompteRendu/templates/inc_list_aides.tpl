@@ -1,9 +1,10 @@
 {{if $can->admin}}
-  <a href="?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}" 
-     target="_blank"
-     class="button hslip">Exporter au format CSV</a>
+  <button class="hslip"
+          onclick="window.open('?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}')">
+       Exporter au format CSV
+  </button>
   
-  <a href="#1" onclick="return popupImport('{{$owner->_guid}}');" class="button hslip">Importer un fichier CSV</a>
+  <button onclick="return popupImport('{{$owner->_guid}}');" class="hslip">Importer un fichier CSV</button>
 {{/if}}
 
 <table class="tbl">
