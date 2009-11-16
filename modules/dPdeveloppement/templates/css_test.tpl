@@ -1,6 +1,6 @@
 <script type="text/javascript">
 Main.add(function(){
-  var buttonClasses = $w("edit hslip trash submit new print cancel modify search lookup lock tick down "+
+  var buttonClasses = $w("none edit hslip trash submit new print cancel modify search lookup lock tick down "+
                       "up change add remove stop send send-cancel send-again send-problem send-auto");
                       
   var buttonsContainers = $$("#buttons td");

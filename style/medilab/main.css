@@ -278,31 +278,17 @@ table.tabmenu td.selected.right {
 
 /* Inputs */
 button, a.button {
-  color: #000;
-  text-decoration: none;
-  cursor: default;
-  border: 1px black solid;
-  font-size: 11px;
-  background-color: #ddd;
-  margin: 0 2px;
-  padding: 0 2px;
   padding-left: 18px;
   padding-bottom: 1px;
+  padding-top: 1px;
   background-image: url(../tonkin/images/buttons/button.png);
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   background-position: left bottom;
-  height: 18px;
 }
 
 button:hover, a.button:hover {
   background-image: url(../tonkin/images/buttons/buttonover.png);
   background-position: left bottom;
-}
-
-button.notext,
-a.notext {
-  background-position: -1px bottom;
-  width: 20px;
 }
 
 button.trash, 
@@ -373,6 +359,16 @@ a.button.search {
 button.search:hover, 
 a.button.search:hover {
   background-image: url(../tonkin/images/buttons/searchover.png);
+}
+
+button.lookup, 
+a.button.lookup {
+  background-image: url(../tonkin/images/buttons/lookup.png);
+}
+
+button.lookup:hover, 
+a.button.lookup:hover {
+  background-image: url(../tonkin/images/buttons/lookupover.png);
 }
 
 button.lock, 
@@ -466,22 +462,21 @@ a.button.stop:hover {
 }
 
 button.notext, 
-button.notext:hover{
-  padding : 0px 0px 0px 14px;
-}
-
-a.notext, a.notext:hover{
-  padding : 0px 0px 1px 18px;
-}
-
-select {
-  border: 1px #a5acb2 solid;
+button.notext:hover,
+a.notext, 
+a.notext:hover{
+  background-position: -2px bottom;
 }
 
 input,
 select,
 textarea {
   border: 1px #a5acb2 solid;
+}
+
+input,
+select,
+textarea {
   background: #fff;
 }
 

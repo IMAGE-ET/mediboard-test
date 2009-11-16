@@ -262,6 +262,18 @@ button.search, a.button.search {
 button.search:hover, a.button.search:hover {
   background-image: url(./images/buttons/searchover.png);
 }
+button.lookup, a.button.lookup {
+  background-image: url(./images/buttons/lookup.png);
+}
+button.lookup:hover, a.button.lookup:hover {
+  background-image: url(./images/buttons/lookup.png);
+}
+button.lock, a.button.lock {
+  background-image: url(./images/buttons/lock.png);
+}
+button.lock:hover, a.button.lock:hover {
+  background-image: url(./images/buttons/lock.png);
+}
 button.tick, a.button.tick {
   background-image: url(./images/buttons/tick.png);
 }

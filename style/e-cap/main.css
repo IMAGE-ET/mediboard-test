@@ -652,7 +652,9 @@ tr.catalogue-3 th {
 .touchscreen a.button.notext,
 .touchscreen a:hover.button.notext {
   background-position: 3px 140%;
+  background-color: #A9C8CD;
   background-repeat: repeat-x;
+  padding-top: 0px;
 }
 
 .touchscreen button.notext,

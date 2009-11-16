@@ -57,23 +57,23 @@ var Menu = {
       <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
         <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
       </a>
-      <a href="javascript:popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
+      <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
       </a>
       <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
       </a>
-      <a href="javascript:UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
+      <a href="#1" onclick="UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
         <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
       </a>
-      <a href="javascript:Session.lock()" title="{{tr}}menu-lockSession{{/tr}}">
+      <a href="#1" onclick="Session.lock()" title="{{tr}}menu-lockSession{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
       </a>
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
       
-      <a id="toggleIcons" href="javascript:Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" />
+      <a id="toggleIcons" href="#1" onclick="Menu.toggle()" title="{{tr}}menu-toggleIcons{{/tr}}" />
     </div>
 
     <hr />

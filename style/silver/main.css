@@ -88,7 +88,7 @@ table.tabview td.tabox {
 button, 
 a.button {
   background-image: url(../tonkin/images/buttons/button.png);
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   background-position: left bottom;
 }
 
@@ -160,6 +160,11 @@ a.button.modify:hover {
 button.search, 
 a.button.search {
   background-image: url(../tonkin/images/buttons/search.png);
+}
+
+button.lookup, 
+a.button.lookup {
+  background-image: url(../tonkin/images/buttons/lookup.png);
 }
 
 button.search:hover, 

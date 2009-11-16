@@ -3,12 +3,12 @@
 /* Body */
 
 * {
-  font-family: "Lucida Console", "Courier New", Courier, mono;
+  font-family: "Courier New", "Lucida Console", Courier, mono;
 }
 
 body {
   color: #0f0;
-  font-size: 9px;
+  font-size: 11px;
   background: #000;
   margin: 0px;
 }
@@ -74,7 +74,6 @@ table.form th {
 
 table.form th.title {
   color: #fff;
-  font-size: 12px;
   background-color: #000;
   border: #0f0 1px dashed;
 }
@@ -121,10 +120,7 @@ label.notNullOK {
   background: url(./images/icons/greenbox.jpg) no-repeat center right;
 }
 
-table.form td {
-  background-color: #000;
-}
-
+table.form td,
 table.form td.dark {
   background-color: #000;
 }
@@ -156,7 +152,6 @@ td#mainHeader td.logo {
 
 td#mainHeader td.welcome {
   text-align: right;
-  font-size: 12px;
   font-style: italic;
 }
 
@@ -204,11 +199,7 @@ table.tabmenu td a {
   color: #ff0;
 }
 
-table.tabmenu td.left {
-  width: 5px;
-  background: #000;
-}
-
+table.tabmenu td.left,
 table.tabmenu td.right {
   width: 5px;
   background: #000;
@@ -221,15 +212,10 @@ table.tabmenu td.selected {
 table.tabmenu td.selected a {
   color: #fff;
   text-decoration: underline;
-  background: #000;
   background: #333;
 }
 
-table.tabmenu td.selected.left {
-  width: 5px;
-  background: #000;
-}
-
+table.tabmenu td.selected.left,
 table.tabmenu td.selected.right {
   width: 5px;
   background: #000;
@@ -238,45 +224,21 @@ table.tabmenu td.selected.right {
 /* Inputs */
 
 button, a.button {
-  color: #fff;
+  color: #000;
   background-color: #0f0;
 }
 
 button:hover, a.button:hover {
-  color: #000;
   background-color: #ff0;
 }
 
-button.edit, a.button.edit, 
-button.trash, a.button.trash, 
-button.submit, a.button.submit, 
-button.new, a.button.new, 
-button.print, a.button.print, 
-button.cancel, a.button.cancel,
-button.modify, a.button.modify, 
-button.search, a.button.search, 
-button.tick, a.button.tick,
-button.change, a.button.change {
-  background-image: none;
-  padding: 1px;
-}
-
-input {
+input, select {
   border: 1px #0f0 dashed;
 }
 
-select {
-  border: 1px #0f0 dashed;
-}
-
-optgroup {
+optgroup, option {
   color: #fff;
-  background: #000;
-}
-
-option {
-  color: #fff;
-  background: #000;
+  background-color: #000;
 }
 
 input,
@@ -284,7 +246,7 @@ select,
 textarea {
   color: #fff;
   border: 1px #0f0 solid;
-  background: #000;
+  background-color: #000;
 }
 
 input:focus,
@@ -292,7 +254,11 @@ select:focus,
 textarea:focus {
   color: #fff;
   outline: 1px #0f0 solid;
-  background: #000;
+  background-color: #000;
+}
+
+input[readonly] {
+  border: 1px dotted #0f0;
 }
 
 /* Standard table */
@@ -317,8 +283,7 @@ table.tbl th {
 }
 
 table.tbl th.title {
-  font-size: 12px;
-  background: #000;
+  background-color: #000;
   border: #0f0 1px dashed;
 }
 
@@ -333,14 +298,13 @@ table.tbl tr.clear a {
 }
 
 table.titleblock td.titlecell {
-  font-size: 16px; 
+  font-size: 1.3em; 
   color: #0f0;
   padding-bottom: 5px;
 }
 
 /* Main table */
 th.title {
-  font-size: 12px;
   color: #0f0;
   background: #000;
   border: #0f0 1px dashed;

@@ -188,83 +188,14 @@ table.tabmenu td.selected.right {
 a.button, button {
   color: #fff;
   background-color: #638cc9;
+  padding-left: 18px; 
 }
 
 a.button:hover, button:hover {
   background-color: #8ae;
 }
 
-button.edit, a.button.edit {
-  background-image: url(images/buttons/edit.gif);
-  padding-left: 16px;
-}
-
-button.trash, a.button.trash {
-  background-image: url(images/buttons/trash.gif);
-  padding-left: 18px; 
-}
-
-button.submit, a.button.submit {
-  background-image: url(images/buttons/save.gif);
-  padding-left: 18px;
-}
-
-button.new, a.button.new {
-  background-image: url(images/buttons/new.gif);
-  padding-left: 18px;
-}
-
-button.print, a.button.print {
-  background-image: url(images/buttons/print.gif);
-  padding-left: 18px;
-}
-
-button.cancel, a.button.cancel {
-  background-image: url(images/buttons/cancel.gif);
-  padding-left: 18px;
-}
-
-button.modify, a.button.modify {
-  background-image: url(images/buttons/save.gif);
-  padding-left: 18px;
-}
-
-button.search, a.button.search {
-  background-image: url(images/buttons/search.gif);
-  padding-left: 18px;
-}
-
-button.tick, a.button.tick {
-  background-image: url(images/buttons/tick.gif);
-  padding-left: 18px;
-}
-
-button.down, a.button.down {
-  background-image: url(images/buttons/down.gif);
-  padding-left: 18px;
-}
-
-button.change, a.button.change {
-  background-image: url(images/buttons/change.gif);
-  padding-left: 18px;
-}
-
-button.notext{
-  padding : 0px 0px 0px 0px;
-  margin  : 1px 1px;
-  width: 19px;
-}
-a.notext{
-  padding : 0px 0px 0px 16px;
-  margin  : 1px 1px;
-  height: 16px;
-}
-
-input {
-  border: 1px #a5acb2 solid;
-}
-
-select {
+input, select {
   border: 1px #a5acb2 solid;
 }
 

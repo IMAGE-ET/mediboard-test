@@ -37,7 +37,7 @@
           </a>
         </div>
         <div class="menuItem">
-          <a href="javascript:popChgPwd()">
+          <a href="#1" onclick="popChgPwd()">
             <img src="style/aero/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" border="0" height="16" width="16" />
             {{tr}}menu-changePassword{{/tr}}
           </a>
@@ -49,13 +49,13 @@
           </a>
         </div>
         <div class="menuItem">
-          <a href="javascript:Session.lock()">
+          <a href="#1" onclick="Session.lock()">
             <img src="style/aero/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" border="0" height="16" width="16" />
             {{tr}}menu-lockSession{{/tr}}
           </a>
         </div>
         <div class="menuItem">
-          <a href="javascript:UserSwitch.popup()">
+          <a href="#1" onclick="UserSwitch.popup()">
             <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" border="0" height="16" width="16" />
             {{tr}}menu-switchUser{{/tr}}
           </a>

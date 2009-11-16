@@ -50,10 +50,10 @@
             </select>
             <a href="{{$portal.help}}" target="_blank">{{tr}}portal-help{{/tr}}</a> |
             <a href="{{$portal.tracker}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
-            <a href="javascript:popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> |
+            <a href="#1" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="javascript:Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> | 
-            <a href="javascript:UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
+            <a href="#1" onclick="Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> | 
+            <a href="#1" onclick="UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
             <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a> |
             </form>
             {{/if}}
