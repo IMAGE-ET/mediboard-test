@@ -147,87 +147,93 @@ Main.add(function () {
 
 </script>
 
-{{assign var=patient value=$sejour->_ref_patient}}
-<table class="tbl">
-  <tr>
-    <th class="title text">
-      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
-      </a>
-      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
-       </a>
-      {{$patient->_view}}
-      ({{$patient->_age}} ans
-      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
-      &mdash; Dr {{$operation->_ref_chir->_view}}
-      <br />
-      {{if $operation->libelle}}{{$operation->libelle}} &mdash;{{/if}}
-      {{mb_label object=$operation field=cote}} : {{mb_value object=$operation field=cote}}
-    </th>
-  </tr>
-</table>
-
-<ul id="tabs_reveil" class="control_tabs">
-	<li><a href="#viewPatient">Patient</a></li>
-  <li><a href="#viewSejourHospi">Séjour</a></li>
-	  <li onclick="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
+{{if $operation->_id}}
+	{{assign var=patient value=$sejour->_ref_patient}}
+	<table class="tbl">
+	  <tr>
+	    <th class="title text">
+	      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
+	        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+	      </a>
+	      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+	        <img src="images/icons/edit.png" alt="modifier" />
+	       </a>
+	      {{$patient->_view}}
+	      ({{$patient->_age}} ans
+	      {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
+	      &mdash; Dr {{$operation->_ref_chir->_view}}
+	      <br />
+	      {{if $operation->libelle}}{{$operation->libelle}} &mdash;{{/if}}
+	      {{mb_label object=$operation field=cote}} : {{mb_value object=$operation field=cote}}
+	    </th>
+	  </tr>
+	</table>
+	
+	<ul id="tabs_reveil" class="control_tabs">
+		<li><a href="#viewPatient">Patient</a></li>
+	  <li><a href="#viewSejourHospi">Séjour</a></li>
+		  <li onclick="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
+		{{if $isPrescriptionInstalled}}
+	    <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+		  <li onclick="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null, true, Preferences.mode_readonly == 0);"><a href="#prescription_sejour">Prescription</a></li>
+	  {{/if}}  
+		<li><a href="#dossier_tab">Documents</a></li>
+		{{if $isImedsInstalled}}
+	    <li><a href="#Imeds_tab">Labo</a></li>
+	  {{/if}}
+	</ul>
+	<hr class="control_tabs" />
+	
+	<div id="viewPatient"></div>
+	<div id="viewSejourHospi" style="display: none;"></div>
+	<div id="constantes" style="display: none;"></div>
 	{{if $isPrescriptionInstalled}}
-    <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
-	  <li onclick="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null, true, Preferences.mode_readonly == 0);"><a href="#prescription_sejour">Prescription</a></li>
-  {{/if}}  
-	<li><a href="#dossier_tab">Documents</a></li>
+		<div id="soins" style="display: none;"></div>
+		<div id="prescription_sejour" style="display: none;"></div>
+	{{/if}}
+	
+	<!-- Dossier Medical et documents-->
+	{{assign var="dossier_medical" value=$sejour->_ref_dossier_medical}}
+	<div id="dossier_tab" style="display:none">
+	  <table class="form">
+	    <tr>
+	      <th class="title">Documents</th>
+	    </tr>
+	    <tr>
+	      <td>
+	        <div id="documents">
+	          {{mb_include_script module="dPcompteRendu" script="document"}}
+	          {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+	          {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl}}
+	        </div>
+	      </td>
+	    </tr>
+	    <tr>
+	      <td>
+	        {{if !$dossier_medical->_id}}
+	        <div class="big-info">
+	          Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
+	          <ul>
+	            <li>{{tr}}CAntecedent{{/tr}}</li>
+	            <li>Diagnostics associés</li>
+	          </ul>
+	          Ces informations doivent être renseignés pendant la consultation de pré-anesthésie
+	        </div>
+	        {{else}}
+	        <div class="text">
+	          {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
+	        </div>
+	        {{/if}}
+	      </td>
+	    </tr>
+	  </table>
+	</div>
 	{{if $isImedsInstalled}}
-    <li><a href="#Imeds_tab">Labo</a></li>
-  {{/if}}
-</ul>
-<hr class="control_tabs" />
+		<div id="Imeds_tab" style="display:none"></div>
+	{{/if}}
 
-<div id="viewPatient"></div>
-<div id="viewSejourHospi" style="display: none;"></div>
-<div id="constantes" style="display: none;"></div>
-{{if $isPrescriptionInstalled}}
-	<div id="soins" style="display: none;"></div>
-	<div id="prescription_sejour" style="display: none;"></div>
-{{/if}}
-
-<!-- Dossier Medical et documents-->
-{{assign var="dossier_medical" value=$sejour->_ref_dossier_medical}}
-<div id="dossier_tab" style="display:none">
-  <table class="form">
-    <tr>
-      <th class="title">Documents</th>
-    </tr>
-    <tr>
-      <td>
-        <div id="documents">
-          {{mb_include_script module="dPcompteRendu" script="document"}}
-          {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-          {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl}}
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {{if !$dossier_medical->_id}}
-        <div class="big-info">
-          Le dossier médical pour ce séjour n'est pas créé, ou ne contient pas d'éléments parmi :
-          <ul>
-            <li>{{tr}}CAntecedent{{/tr}}</li>
-            <li>Diagnostics associés</li>
-          </ul>
-          Ces informations doivent être renseignés pendant la consultation de pré-anesthésie
-        </div>
-        {{else}}
-        <div class="text">
-          {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
-        </div>
-        {{/if}}
-      </td>
-    </tr>
-  </table>
-</div>
-
-{{if $isImedsInstalled}}
-	<div id="Imeds_tab" style="display:none"></div>
+{{else}}
+	<div class="small-info">
+		Veuillez sélectionner un patient dans l'onglet <strong>Salle de réveil</strong> pour accéder à ces soins.
+	</div>
 {{/if}}
