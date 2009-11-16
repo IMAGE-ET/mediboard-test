@@ -172,7 +172,6 @@ if($object_id && $object_class){
     $line->calculQuantiteTotal();
     // Calcul des prises prevues
     $line->calculPrisesPrevues();
-    //mbTrace($_perfusion->_prises_prevues);
     $line->calculAdministrations();
     // Chargement des transmissions de la perfusion
   	$transmission = new CTransmissionMedicale();

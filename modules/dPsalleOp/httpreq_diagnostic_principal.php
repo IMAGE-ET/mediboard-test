@@ -17,8 +17,6 @@ $sejour->load($sejour_id);
 $sejour->loadExtDiagnostics();
 $sejour->loadRefDossierMedical();
 
-//mbTrace($sejour->_ref_dossier_medical->_)
-
 // Création du template
 $smarty = new CSmartyDP();
 

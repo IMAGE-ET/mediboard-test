@@ -107,6 +107,7 @@ $locales['CActeCCAM-msg-create'] = 'Acte CCAM créé';
 $locales['CActeCCAM-msg-delete'] = 'Acte CCAM supprimé';
 $locales['CActeCCAM-msg-modify'] = 'Acte CCAM modifié';
 $locales['mod-dPsalleOp-tab-vw_suivi_salles'] = 'Programme';
+$locales['SSPI.Encours'] = 'En cours d\'intervention';
 $locales['SSPI.Attente'] = 'Attente';
 $locales['SSPI.Reveil'] = 'Réveil';
 $locales['SSPI.Sortie'] = 'Sortie';

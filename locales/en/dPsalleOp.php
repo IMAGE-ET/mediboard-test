@@ -107,6 +107,7 @@ $locales['CCodable-back-actes_ccam'] = '';
 $locales['CActeCCAM-msg-create'] = '';
 $locales['CActeCCAM-msg-delete'] = '';
 $locales['CActeCCAM-msg-modify'] = '';
+$locales['SSPI.Encours'] = '';
 $locales['SSPI.Attente'] = '';
 $locales['SSPI.Reveil'] = '';
 $locales['SSPI.Sortie'] = '';

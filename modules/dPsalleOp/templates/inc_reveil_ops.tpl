@@ -13,30 +13,10 @@ checkPersonnel = function(oFormAffectation, oFormOperation){
   }
 }
 submitOperationForm = function(oFormOperation) {
-  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshOpsPanels() }});
-}
-
-refreshOpsPanels = function() {
-  var url = new Url;
-  
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("ops", {waitingText : null});
-
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("reveil", {waitingText : null});
-	    
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("out", {waitingText : null});
+  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
 }
 
 </script>
-
-{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|date_format:"%Y-%m-%d" || 
-     $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>
@@ -50,11 +30,15 @@ refreshOpsPanels = function() {
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr>    
-  {{foreach from=$listOps item=curr_op}}
+  {{foreach from=$listOperations item=curr_op}}
   <tr>
     <td>{{$curr_op->_ref_salle->nom}}</td>
     <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
-    <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
+    <td class="text">
+    	<a href="?m={{$m}}&amp;tab=vw_soins_reveil&amp;operation_id={{$curr_op->_id}}" title="Soins">
+    		{{$curr_op->_ref_sejour->_ref_patient->_view}}
+		  </a>
+		</td>
     {{if $isbloodSalvageInstalled}}
       <td>
         {{if $curr_op->blood_salvage->_id}}
@@ -82,11 +66,12 @@ refreshOpsPanels = function() {
     <td>
       {{if $can->edit}}
       <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
+      	{{assign var=operation_id value=$curr_op->_id}}
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$curr_op field="sortie_salle"}}
+        {{mb_field object=$curr_op field="sortie_salle" register=true form="editSortieBlocFrm$operation_id"}}
         <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
@@ -130,7 +115,7 @@ refreshOpsPanels = function() {
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affect_id" value="{{$curr_affectation->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshOpsPanels(); }})">
+          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
             {{tr}}Delete{{/tr}}
           </button>
         </form>
@@ -161,10 +146,6 @@ refreshOpsPanels = function() {
 </table>
 
 <script type="text/javascript">
-  $('liops').innerHTML = {{$listOps|@count}};
+  $('liops').innerHTML = {{$listOperations|@count}};
   $('heure').innerHTML = "{{$hour|date_format:$dPconfig.time}}";
 </script>
-
-{{else}}
-  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
-{{/if}}

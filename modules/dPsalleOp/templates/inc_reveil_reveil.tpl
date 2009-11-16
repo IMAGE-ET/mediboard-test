@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 
 codageCCAM = function(operation_id){
@@ -8,36 +7,16 @@ codageCCAM = function(operation_id){
   url.popup(700,500,"Actes CCAM");
 }
 
-
 cancelReveil = function(oFormOperation){
   oFormOperation.entree_reveil.value = '';
   submitReveilForm(oFormOperation);
 }
 
 submitReveilForm = function(oFormOperation) {
-  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshReveilPanels()}});
+  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
 }
 
-refreshReveilPanels = function() {
-  var url = new Url;
-
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("ops", {waitingText : null});
-  
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("reveil", {waitingText : null});
-	    
-  url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
-  url.addParam('date',"{{$date}}");
-  url.requestUpdate("out", {waitingText : null});
-}
 </script> 
-
-{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|date_format:"%Y-%m-%d" || 
-     $check_list->_id && $check_list->validator_id}}
 
 <table class="tbl">
   <tr>
@@ -56,13 +35,16 @@ refreshReveilPanels = function() {
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
 
   </tr>    
-  {{foreach from=$listReveil key=key item=curr_op}}
-  <tr>
+  {{foreach from=$listOperations key=key item=curr_op}}
+	  {{assign var=operation_id value=$curr_op->_id}}
+	<tr>
     <td>{{$curr_op->_ref_salle->nom}}</td>
     <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">
       <div style="float: left; display: inline">
-      {{$curr_op->_ref_sejour->_ref_patient->_view}}
+			  <a href="?m={{$m}}&amp;tab=vw_soins_reveil&amp;operation_id={{$curr_op->_id}}" title="Soins">
+          {{$curr_op->_ref_sejour->_ref_patient->_view}}
+			  </a>
       </div>
       <div style="float: right; display: inline">
         <a href="#" onclick="codageCCAM('{{$curr_op->_id}}');">
@@ -110,7 +92,7 @@ refreshReveilPanels = function() {
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
           <input type="hidden" name="del" value="0" />
-          {{mb_field object=$curr_op field="sortie_salle"}}
+          {{mb_field object=$curr_op field="sortie_salle" register=true form="editSortieBlocFrm$operation_id"}}
           <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
         </form>
       {{else}}
@@ -133,7 +115,7 @@ refreshReveilPanels = function() {
         <option value="{{$personnel->_id}}">{{$personnel->_ref_user->_view}}</option>
         {{/foreach}}
         </select>
-        <button type="button" class="add notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshReveilPanels(); }})">
+        <button type="button" class="add notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
           {{tr}}Add{{/tr}}
         </button>
       </form>
@@ -144,7 +126,7 @@ refreshReveilPanels = function() {
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affect_id" value="{{$curr_affectation->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshReveilPanels(); }})">
+          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function() { refreshTabsReveil(); }})">
             {{tr}}Delete{{/tr}}
           </button>
         </form>
@@ -153,7 +135,7 @@ refreshReveilPanels = function() {
     </td>
     {{/if}}
     <td>
-      <form name="editSortieBlocFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
@@ -161,7 +143,7 @@ refreshReveilPanels = function() {
         {{if $curr_op->_ref_sejour->type=="exte"}}
         -
         {{elseif $can->edit}}
-        {{mb_field object=$curr_op field="entree_reveil"}}
+        {{mb_field object=$curr_op field="entree_reveil" register=true form="editEntreeReveilFrm$operation_id"}}
         <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="cancelReveil(this.form);">{{tr}}Cancel{{/tr}}</button>
         {{elseif $modif_operation}}
@@ -181,7 +163,7 @@ refreshReveilPanels = function() {
     </td>
     <td class="button">
       {{if $can->edit || $modif_operation}}
-      <form name="editEntreeReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
@@ -198,9 +180,5 @@ refreshReveilPanels = function() {
 </table>
 
 <script type="text/javascript">
-  $('lireveil').innerHTML = {{$listReveil|@count}};
+  $('lireveil').innerHTML = {{$listOperations|@count}};
 </script>
-
-{{else}}
-  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
-{{/if}}
