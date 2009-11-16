@@ -1058,13 +1058,13 @@ table.dialog #systemMsg,
   right: 5px;
 }
 
-div#systemMsg {
+#systemMsg {
   cursor: pointer;
   position: absolute;
   right: 10px;
 }
 
-#login div#systemMsg {
+#login #systemMsg {
   cursor: pointer;
   position: relative;
   right: 0;

@@ -1,7 +1,4 @@
-@CHARSET "ISO-8859-1";
-
 body {
-  font-family: arial, sans-serif;
   background: #fff;
 }
 
@@ -30,8 +27,7 @@ body {
 #headerMenu td.titlecell {
   height: 0%;
   vertical-align: middle;
-  font-family: arial, sans-serif;
-  font-size: 14px;
+  font-size: 1.2em;
   font-weight: bold;
   color: #000;
   white-space: nowrap;
@@ -42,7 +38,6 @@ body {
 
 #headerMenu td.menuTitle {
   background: url(./images/icons/menu.png) no-repeat top right;
-  font-size: 12px;
   padding: 1px 15px 1px 2px;
   border-right: 1px inset #000;
 }
@@ -51,39 +46,39 @@ body {
   background: url(./images/icons/menuHover.png) no-repeat top right;
 }
 
-#headerMenu #toolMenuList,
-#headerMenu #modMenuList {
-  border: 1px solid #000;
+#headerMenu .dropdown {
+  border: 1px solid #666;
 }
 
-#headerMenu #toolMenuList img,
-#headerMenu #modMenuList img {
+#headerMenu .dropdown img {
   padding-right: 4px;
+  width: 16px;
+  height: 16px;
+  border: none;
 }
 
-#headerMenu div.menuItem {
+#headerMenu a {
   background: #eee url(./images/icons/menuItem.png) repeat-y left;
   display: block;
-  font-size: 12px;
   padding: 1px 4px;
+  vertical-align: middle;
 }
 
-#headerMenu div.menuItem:hover {
-  background-color: #aaf;
-}
-
-#headerMenu div.menuItem a,
-#headerMenu div.menuItem a:hover,
-#headerMenu div.menuItem a:visited {
+#headerMenu a,
+#headerMenu a:hover,
+#headerMenu a:visited {
   text-decoration: none;
 }
 
-#headerMenu div.selected {
+#headerMenu a:hover {
+  background-color: #aaf;
+}
+
+#headerMenu a.selected {
   background-color: #faa;
 }
 
 /* Onglets de module */
-
 td.tabview {
   vertical-align: bottom;
 }
@@ -155,7 +150,8 @@ table.main {
 
 /* System message */
 #systemMsg {
-  float: left;
+  float: right;
   height: 12px;
   white-space: nowrap;
+  position: relative;
 }

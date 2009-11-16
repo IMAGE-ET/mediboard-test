@@ -625,12 +625,7 @@ td.tabox {
   border-radius: 4px;
   padding: 5px;
   opacity: 0.8;
-}
-
-div#systemMsg {
   cursor: pointer;
-  position: absolute;
-  right: 5px;
 }
 
 div.warning, div.error, div.message {

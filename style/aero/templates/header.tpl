@@ -6,66 +6,50 @@
 
 <table id="headerMenu">
   <tr>
-    <td class="menuTitle" id="modMenu" onmouseover="$('modMenuList').show()" onmouseout="$('modMenuList').hide()">
+    <td class="menuTitle" id="modMenu" onmouseover="$(this).down().show()" onmouseout="$(this).down().hide()">
       Modules
-      <div id="modMenuList" style="display: none; position: absolute;">
+      <div class="dropdown" style="display: none; position: absolute;">
 		    {{foreach from=$modules key=mod_name item=currModule}}
 		    {{if $currModule->mod_ui_active && $currModule->_can->view}}
-        <div class="menuItem {{if $mod_name == $m}}selected{{/if}}">
-          <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
+          <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}" class="{{if $mod_name == $m}}selected{{/if}}">
             {{thumb src="modules/$mod_name/images/icon.png" h="16" w="16" f="png"}}
             {{tr}}module-{{$mod_name}}-court{{/tr}}
           </a>
-        </div>
         {{/if}}
         {{/foreach}}
       </div>
     </td>
-    <td class="menuTitle" id="toolMenu" onmouseover="$('toolMenuList').show()" onmouseout="$('toolMenuList').hide()">
+    <td class="menuTitle" id="toolMenu" onmouseover="$(this).down().show()" onmouseout="$(this).down().hide()">
       Outils
-      <div id="toolMenuList" style="display: none; position: absolute;">
-        <div class="menuItem">
-          <a href="{{$portal.help}}" target="_blank">
-            <img src="style/aero/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}portal-help{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="{{$portal.tracker}}" target="_blank">
-            <img src="style/aero/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}portal-tracker{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="#1" onclick="popChgPwd()">
-            <img src="style/aero/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}menu-changePassword{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="?m=mediusers&amp;a=edit_infos">
-            <img src="style/aero/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}menu-myInfo{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="#1" onclick="Session.lock()">
-            <img src="style/aero/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}menu-lockSession{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="#1" onclick="UserSwitch.popup()">
-            <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}menu-switchUser{{/tr}}
-          </a>
-        </div>
-        <div class="menuItem">
-          <a href="?logout=-1">
-            <img src="style/aero/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" border="0" height="16" width="16" />
-            {{tr}}menu-logout{{/tr}}
-          </a>
-        </div>
+      <div class="dropdown" style="display: none; position: absolute;">
+        <a href="{{$portal.help}}" target="_blank">
+          <img src="style/aero/images/icons/help.png" title="{{tr}}portal-help{{/tr}}" />
+          {{tr}}portal-help{{/tr}}
+        </a>
+        <a href="{{$portal.tracker}}" target="_blank">
+          <img src="style/aero/images/icons/modif.png" title="{{tr}}portal-tracker{{/tr}}" />
+          {{tr}}portal-tracker{{/tr}}
+        </a>
+        <a href="#1" onclick="popChgPwd()">
+          <img src="style/aero/images/icons/passwd.png" title="{{tr}}menu-changePassword{{/tr}}" />
+          {{tr}}menu-changePassword{{/tr}}
+        </a>
+        <a href="?m=mediusers&amp;a=edit_infos">
+          <img src="style/aero/images/icons/myinfos.png" title="{{tr}}menu-myInfo{{/tr}}" />
+          {{tr}}menu-myInfo{{/tr}}
+        </a>
+        <a href="#1" onclick="Session.lock()">
+          <img src="style/aero/images/icons/lock.png" title="{{tr}}menu-lockSession{{/tr}}" />
+          {{tr}}menu-lockSession{{/tr}}
+        </a>
+        <a href="#1" onclick="UserSwitch.popup()">
+          <img src="./images/icons/switch.png" title="{{tr}}menu-switchUser{{/tr}}" />
+          {{tr}}menu-switchUser{{/tr}}
+        </a>
+        <a href="?logout=-1">
+          <img src="style/aero/images/icons/logout.png" title="{{tr}}menu-logout{{/tr}}" />
+          {{tr}}menu-logout{{/tr}}
+        </a>
       </div>
     </td>
     <td class="titlecell">
