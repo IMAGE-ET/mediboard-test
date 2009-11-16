@@ -283,6 +283,28 @@
     </td> 
   </tr>
   
+  {{assign var="class" value="CSejour"}}
+  {{assign var="var"   value="sortie_prevue"}}
+  <tr>
+    <th class="category" colspan="6">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+  </tr>
+    
+  {{foreach from=$dPconfig.$m.$class.$var key=type item=value}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}
+      </label>     
+    </th>
+    <td colspan="3">
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
+        <option value="4"  {{if "4" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 4h</option>
+        <option value="24" {{if "24" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
+      </select>
+    </td>
+  </tr>
+  {{/foreach}}
+  
   <tr>
     <th class="category" colspan="6">Blocage des objets</th>
   </tr>

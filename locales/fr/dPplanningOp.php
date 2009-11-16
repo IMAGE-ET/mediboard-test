@@ -907,4 +907,15 @@ $locales['config-dPplanningOp-CSejour-tag_dossier_cancel'] = 'Tag numéro de doss
 $locales['config-dPplanningOp-CSejour-tag_dossier_cancel-desc'] = 'Tag numéro de dossier annulé';
 $locales['config-dPplanningOp-CSejour-tag_dossier_pa'] = 'Tag dossier pré-admission';
 $locales['config-dPplanningOp-CSejour-tag_dossier_pa-desc'] = 'Tag dossier pré-admission';
+$locales['CMedecin-back-'] = '';
+$locales['config-dPplanningOp-CSejour-sortie_prevue'] = 'Sortie prévue pour les types de séjour';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-desc'] = 'Sortie prévue pour les types de séjour';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-comp'] = 'Sortie prévue admission complète';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-ambu'] = 'Sortie prévue admission ambulatoire';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-exte'] = 'Sortie prévue admission externe';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-seances'] = 'Sortie prévue admission séance(s)';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-ssr'] = 'Sortie prévue admission SSR';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-psy'] = 'Sortie prévue admission psychiatrie';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-urg'] = 'Sortie prévue admission urgences';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-consult'] = 'Sortie prévue admission consultation';
 ?>

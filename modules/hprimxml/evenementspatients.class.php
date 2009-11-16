@@ -282,11 +282,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $attrNatureVenueHprim = array (
       "hsp"  => "comp",
       "cslt" => "consult",
-      "sc" => "seances",
+      "sc"   => "seances",
     );
-    if ($nature)
+    if ($nature) {
       $mbVenue->type =  $attrNatureVenueHprim[$nature];
-    
+    } else {
+      $mbVenue->type = "seances";
+    }
+      
     return $mbVenue;
   }
   
@@ -296,14 +299,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $entree = $xpath->queryUniqueNode("hprim:entree", $node);
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $entree);
-    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree);
+    $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree), null , "%H:%M:%S");
     $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
+    
+    $entree_prevue = "$date $heure";
     
     $etat = self::getEtatVenue($node);
     if ($etat == "préadmission") {
-      $mbVenue->entree_prevue = "$date $heure";
+      $mbVenue->entree_prevue = $entree_prevue;
     } else if (($etat == "encours") || ($etat == "clôturée")) {
-      $mbVenue->entree_reelle = "$date $heure";
+      $mbVenue->entree_reelle = $entree_prevue;
     }
        
     return $mbVenue;
@@ -348,12 +353,16 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     // Dans le cas ou la venue ne contient pas de medecin responsable
     // Attribution d'un medecin indeterminé
     if (!$mbVenue->praticien_id) {
+      $user = new CUser();
       $mediuser = new CMediusers();
-      $medisuer->_user_last_name = CAppUI::conf("hprimxml medecinIndetermine");
-      if (!$mediuser->loadMatchingObject()) {
+      $user->user_last_name = CAppUI::conf("hprimxml medecinIndetermine");
+      if (!$user->loadMatchingObject()) {
+        $mediuser->_user_last_name = $user->user_last_name;
         $mediuser->_id = $this->createPraticien($mediuser);
+      } else {
+        $user->loadRefMediuser();
+        $mediuser = $user->_ref_mediuser;
       }
-      
       $mbVenue->praticien_id = $mediuser->_id;
     }
     
@@ -402,7 +411,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
     $mediuser->_user_type = 13; // Medecin
     $mediuser->actif = 0; // Non actif  
-    if (!$mediuser->loadMatchingObject()) {
+    
+    $user = new CUser();
+    $user->user_last_name = $mediuser->_user_last_name;
+    $user->user_username  = $mediuser->_user_username;
+    if (!$user->loadMatchingObject()) {
       $mediuser->store();
     }
   	
@@ -425,13 +438,19 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
-    $heure = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie);
+    $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
+    
+    $sortie_prevue = "$date $heure";
+    
+    if (!$date) {
+      $sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type), $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
+    }
     
     $etat = self::getEtatVenue($node);
     if (($etat == "préadmission") || ($etat == "encours")) {
-      $mbVenue->sortie_prevue = "$date $heure";
+      $mbVenue->sortie_prevue = $sortie_prevue;
     } else if ($etat == "clôturée") {
-      $mbVenue->sortie_reelle = "$date $heure";
+      $mbVenue->sortie_reelle = $sortie_prevue;
     }
     
     return $mbVenue;

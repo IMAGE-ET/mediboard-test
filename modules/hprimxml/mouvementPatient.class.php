@@ -62,7 +62,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-  	 if (($data['action'] != "création") && ($data['action'] != "modification")) {
+  	 if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
@@ -89,7 +89,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
      // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbVenue = new CSejour();
-
+      
       // Mapping des mouvements
       $mbVenue = $this->mappingMouvements($data['mouvements'], $mbVenue);
     }

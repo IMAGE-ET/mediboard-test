@@ -199,6 +199,16 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "tag_dossier_pa"      => "pa_",
   "tag_dossier_cancel"  => "cancel_",
   "service_id_notNull"  => "0",
+  "sortie_prevue" => array(
+    "comp"    => "24",
+    "ambu"    => "4",
+    "exte"    => "4",
+    "seances" => "4",
+    "ssr"     => "24",
+    "psy"     => "24",
+    "urg"     => "24",
+    "consult" => "4",
+  )
 );
 
 $dPconfig["dPsalleOp"] = array(

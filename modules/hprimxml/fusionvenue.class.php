@@ -162,6 +162,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       }
       
       $messages = array();
+      $avertissement = null;
       
       $newVenue = new CSejour();
       // Cas 0 : Aucun séjour
@@ -199,12 +200,12 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       
-      $codes = array  ($messages['msgVenue'] ? "I101" : "A102");
+      $codes = array($messages['msgVenue'] ? "A102" : "I101");
         
       if ($messages['msgVenue']) {
         $avertissement = $messages['msgVenue'];
       } else {
-        $commentaire = "Séjour enregistré : $mbVenue->_id. Numéro dossier associé : $id400Venue->id400. Le séjour $id400VenueEliminee->id400 a été éliminé.";
+        $commentaire = "Séjour enregistré : $newVenue->_id. Numéro dossier associé : $id400Venue->id400. Le séjour $id400VenueEliminee->id400 a été éliminé.";
       }
         
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
@@ -229,13 +230,9 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     
      // Evite de passer dans le sip handler
     $newVenue->_coms_from_hprim = 1;
-  
-    // Cas de praticien dans la venue  
-    if (!$newVenue->praticien_id) {
-      
-    }
+
     $messages['msgVenue'] = $newVenue->store();
-    
+
     $id400Venue->object_id = $newVenue->_id;
     $id400Venue->last_update = mbDateTime();
     $messages['msgNumDosVenue'] = $id400Venue->store();
