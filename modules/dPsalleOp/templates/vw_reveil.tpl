@@ -1,60 +1,48 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
-
 {{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
      $date < $smarty.now|date_format:"%Y-%m-%d" || 
      $check_list->_id && $check_list->validator_id}}
 		 
 <script type="text/javascript">
-	
-var updater_encours = null;
-var updater_ops = null;
-	
+
 Main.add(function () {
   new Control.Tabs('reveil_tabs');
+  Calendar.regField(getForm("selection").date, null, {noView: true});
 	
-  var url = new Url;
+  var url = new Url("dPsalleOp", "httpreq_reveil");
+  
   url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
 	
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "encours");
-  updater_encours = url.periodicalUpdate("encours", { frequency: 90 });  // Laisser la variable updater_encours, utile dans inc_edit_check_list.tpl
+  url.periodicalUpdate("encours", { frequency: 90 });  // Laisser la variable updater_encours, utile dans inc_edit_check_list.tpl
 
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "ops");
-  updater_ops = url.periodicalUpdate("ops", { frequency: 90 });  // Laisser la variable updater_ops, utile dans inc_edit_check_list.tpl
+  url.periodicalUpdate("ops", { frequency: 90 });
 
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "reveil");
   url.requestUpdate("reveil", {waitingText: null});
 
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "out");
   url.requestUpdate("out", {waitingText: null});
-  
-  Calendar.regField(getForm("selection").date, null, {noView: true});
 });
 
 function refreshTabsReveil() {
-  var url = new Url;
+  var url = new Url("dPsalleOp", "httpreq_reveil");
 	
 	url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
 	
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "encours");
   url.requestUpdate("encours", {waitingText : null});
 	
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "ops");
   url.requestUpdate("ops", {waitingText : null});
 	
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
 	url.addParam("type", "reveil");
   url.requestUpdate("reveil", {waitingText : null});
 	
-  url.setModuleAction("dPsalleOp", "httpreq_reveil");
   url.addParam("type", "out");
   url.requestUpdate("out", {waitingText : null});
 }
@@ -78,7 +66,7 @@ function refreshTabsReveil() {
 		    <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 	      <select name="bloc_id" onchange="this.form.submit();">
-	        <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+	        <option value="" disabled="disabled">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
 	        {{foreach from=$blocs_list item=curr_bloc}}
 	          <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
 	            {{$curr_bloc->nom}}
@@ -135,7 +123,7 @@ function refreshTabsReveil() {
       <span id="heure">{{$hour|date_format:$dPconfig.time}}</span> - {{$date|date_format:$dPconfig.longdate}}
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       <select name="bloc_id" onchange="this.form.submit();">
-        <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
+        <option value="" disabled="disabled">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
         {{foreach from=$blocs_list item=curr_bloc}}
           <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
             {{$curr_bloc->nom}}
