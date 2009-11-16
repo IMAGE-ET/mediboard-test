@@ -132,19 +132,19 @@ function reloadPrescription(prescription_id){
 {{/if}}
 
 Main.add(function () {
-  headerPrescriptionTabs = Control.Tabs.create('tabs_reveil', false);
-
+  if($('tabs_reveil')){
+    headerPrescriptionTabs = Control.Tabs.create('tabs_reveil', false);
+  }
   {{if $operation->_id}}
   loadPatient('{{$sejour->patient_id}}');
   loadSejour('{{$sejour->_id}}');
-	{{/if}}
-	
 	if($('Imeds_tab')){
     var url = new Url;
     url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", '{{$sejour->_id}}');
     url.requestUpdate('Imeds_tab', { waitingText : null });
   }
+	{{/if}}
 });
 
 </script>
