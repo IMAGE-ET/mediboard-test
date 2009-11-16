@@ -1,5 +1,10 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
+
+{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
+     $date < $smarty.now|date_format:"%Y-%m-%d" || 
+     $check_list->_id && $check_list->validator_id}}
+		 
 <script type="text/javascript">
 	
 var updater_encours = null;
@@ -7,7 +12,7 @@ var updater_ops = null;
 	
 Main.add(function () {
   new Control.Tabs('reveil_tabs');
-
+	
   var url = new Url;
   url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
@@ -56,9 +61,6 @@ function refreshTabsReveil() {
 
 </script>
 
-{{if $dPconfig.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|date_format:"%Y-%m-%d" || 
-     $check_list->_id && $check_list->validator_id}}
 		 
 	<ul id="reveil_tabs" class="control_tabs">
 	  {{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
