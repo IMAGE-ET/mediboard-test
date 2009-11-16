@@ -428,6 +428,7 @@ $dPconfig["dPprescription"] = array (
       "IPC" => "2",
       "hors_livret" => "1"
     ),
+		"preselect_livret" => "1",
   ),
   
   "CCategoryPrescription" => array (

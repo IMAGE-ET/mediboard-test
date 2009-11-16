@@ -37,7 +37,7 @@ var MedSelector = {
       this.oUrl.addParam(this.sOnglet, this.sSearch);
     }
     this.oUrl.addParam("onglet_recherche", this.sOnglet);
-    this.oUrl.addParam("_recherche_livret", this.sRechercheLivret);
+    this.oUrl.addParam("_recherche_livret", this.sRechercheLivret?1:0);
     if(this.sSearchByCIS){
       this.oUrl.addParam("search_by_cis", this.sSearchByCIS);
     }

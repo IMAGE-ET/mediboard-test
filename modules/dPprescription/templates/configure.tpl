@@ -79,6 +79,22 @@ function updateUCD(){
 	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
 	    </td>             
 	  </tr>
+		{{assign var="var" value="preselect_livret"}}
+    <tr>
+     <th class="category" colspan="2">
+        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+        </label>    
+     </th>
+    </tr>
+    <tr>  
+      <td colspan="2" style="text-align: center">
+        <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
 	  {{assign var="var" value="time_alerte_modification"}}
 	  <tr>
 	    <th colspan="2" class="category">

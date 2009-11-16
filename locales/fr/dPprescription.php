@@ -1584,5 +1584,10 @@ $locales['CPrescriptionCategoryGroupItem.type_produit.'] = 'Aucun type de produi
 $locales['CPrescriptionCategoryGroupItem.type_produit.inj'] = 'Injection';
 $locales['CPrescriptionCategoryGroupItem.type_produit.med'] = 'Médicament';
 $locales['CPrescriptionCategoryGroupItem.type_produit.perf'] = 'Perfusion';
-$locales['mod-dPprescription-tab-vw_edit_categories_group'] = 'Groupes de catégories'; 
+$locales['mod-dPprescription-tab-vw_edit_categories_group'] = 'Groupes de catégories';
+$locales['CElementPrescription-cancelled'] = '';
+$locales['CElementPrescription-cancelled-court'] = '';
+$locales['CElementPrescription-cancelled-desc'] = '';
+$locales['config-dPprescription-CPrescription-preselect_livret'] = 'Présélection du livret Therapeutique';
+$locales['config-dPprescription-CPrescription-preselect_livret-desc'] = 'Présélection du livret Therapeutique';
 ?>

@@ -182,7 +182,7 @@ transfertLineTP = function(line_id, sejour_id){
 			    <br />
 			    <input type="text" name="produit" value="" size="20" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			    <label>
-			      <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
+			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			      Livret Thérap.
 			    </label>
 			    
@@ -195,7 +195,7 @@ transfertLineTP = function(line_id, sejour_id){
 			        this.sForm = "searchProd";
 			        this.sView = "produit";
 			        this.sCode = "code_cip";
-			        this.sRechercheLivret = document.searchProd._recherche_livret.value;
+			        this.sRechercheLivret = document.searchProd._recherche_livret.checked;
 			        this.sSearch = document.searchProd.produit.value;
 			        this.sOnglet = onglet;
 			        this.selfClose = false;
