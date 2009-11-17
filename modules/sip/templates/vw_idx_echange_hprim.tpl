@@ -91,6 +91,12 @@ function changePage(page) {
                 <option value="venuePatient" {{if $type_evenement == "venuePatient"}}selected="selected"{{/if}}>
                   Venue Patient
                 </option>
+                <option value="fusionVenue" {{if $type_evenement == "fusionVenue"}}selected="selected"{{/if}}>
+                  Fusion Venue
+                </option>
+                <option value="mouvementPatient" {{if $type_evenement == "mouvementPatient"}}selected="selected"{{/if}}>
+                  Mouvement Patient
+                </option>
               </select>
             </td>
           </tr>
