@@ -160,11 +160,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPersonne->_user_first_name = $prenoms[0];
       $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : "";
       $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : "";
-      $mbPersonne->_user_adresse    = $ligne[0];
-      if (isset($ligne[1]))
-        $mbPersonne->_user_adresse  .= " $ligne[1]";
-      if (isset($ligne[2]))
-        $mbPersonne->_user_adresse  .= " $ligne[2]";
+      if (is_array($ligne)) {
+        $mbPersonne->_user_adresse    = $ligne[0];
+        if (isset($ligne[1]))
+          $mbPersonne->_user_adresse  .= " $ligne[1]";
+        if (isset($ligne[2]))
+          $mbPersonne->_user_adresse  .= " $ligne[2]";
+      }
       $mbPersonne->_user_cp         = $cp;
       $mbPersonne->_user_ville      = $ville;
     }

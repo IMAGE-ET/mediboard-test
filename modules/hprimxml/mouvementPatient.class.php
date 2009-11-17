@@ -97,7 +97,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       $mbVenue->_coms_from_hprim = 1;
       $msgVenue = $mbVenue->store();
       
-      $newVenue->loadLogs();
+      $mbVenue->loadLogs();
       $modified_fields = "";
       if (is_array($mbVenue->_ref_last_log->_fields)) {
         foreach ($mbVenue->_ref_last_log->_fields as $field) {
