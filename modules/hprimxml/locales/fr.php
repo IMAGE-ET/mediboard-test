@@ -34,4 +34,6 @@ $locales['config-hprimxml-mvt_comptet'] = 'Traiter mouvement patient complet';
 $locales['config-hprimxml-mvt_comptet-desc'] = 'Traiter mouvement patient complet';
 $locales['config-hprimxml-medecinIndetermine'] = 'Nom medecin responsable indeterminé';
 $locales['config-hprimxml-medecinIndetermine-desc'] = 'Nom medecin responsable indeterminé pour une venue';
+$locales['config-hprimxml-medecinActif'] = 'Medecin importé actif';
+$locales['config-hprimxml-medecinActif-desc'] = 'Medecin importé actif';
 ?>

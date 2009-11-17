@@ -91,7 +91,7 @@ class CHprimSoapHandler extends CSoapHandler {
     $newPatient = new CPatient();
     $newPatient->_hprim_initiator_id = $echange_hprim->_id;
 	  
-    // Un événement concernant un patient appartient à l'une des six catégories suivantes
+    // Un événement concernant un patient appartient à l'une des six catégories suivantes :
 
     // Enregistrement d'un patient avec son identifiant (ipp) dans le système
     if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {

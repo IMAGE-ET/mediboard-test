@@ -139,15 +139,18 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
           $echange_hprim->store();
           return $messageAcquittement;
         }
+      } 
+      if (!$mbVenue->_id) {
+        $mbVenue->_id = $id400Venue->object_id;
       }
       
       $id400VenueEliminee = new CIdSante400();
       //Paramétrage de l'id 400
       $id400VenueEliminee->object_class = "CSejour";
       $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'] : $data['idClient'];
-      $id400VenueEliminee->id400 = $data['idSourceVenue'];
+      $id400VenueEliminee->id400 = $data['idSourceVenueEliminee'];
       $id400VenueEliminee->loadMatchingObject();
-      if ($mbVenueEliminee->load($data['idCibleVenue'])) {
+      if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
         if ($mbVenueEliminee->_id != $id400VenueEliminee->object_id) {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E141", $commentaire);
@@ -159,6 +162,9 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
           $echange_hprim->store();
           return $messageAcquittement;
         }
+      }
+      if (!$mbVenueEliminee->_id) {
+        $mbVenueEliminee->_id = $id400VenueEliminee->object_id;
       }
       
       $messages = array();
@@ -175,12 +181,11 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       else if ($mbVenue->_id || $mbVenueEliminee->_id) {
         // Suppression de l'identifiant du séjour trouvé
         if ($mbVenue->_id) {
+          $newVenue->load($mbVenue->_id);
           $messages['msgNumDosVenue'] = $id400Venue->delete();
-          
         } else if ($mbVenueEliminee->_id) {
           $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->delete();
         }
-        
         // Cas 0
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
@@ -191,24 +196,25 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
         $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->delete();
         
         // Transfert des backsref
-         $mbVenueEliminee->transferBackRefsFrom($mbVenue);
+        $mbVenueEliminee->transferBackRefsFrom($mbVenue);
          
         // Suppression de la venue a éliminer
         $msgDelete = $mbVenueEliminee->delete();
         
         // Cas 0
+        $newVenue->load($mbVenue->_id);
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       
-      $codes = array($messages['msgVenue'] ? "A102" : "I101");
-        
+      $codes = array ($messages['msgVenue'] ? (($messages['_code_Venue'] == "store") ? "A103" : "A102") : 
+                                              (($messages['_code_Venue'] == "store") ? "I102" : "I101"), 
+                      $messages['msgNumDosVenue'] ? "A105" : $messages['_code_NumDos']);
+
       if ($messages['msgVenue']) {
         $avertissement = $messages['msgVenue'];
-      } else {
-        $commentaire = "Séjour enregistré : $newVenue->_id. Numéro dossier associé : $id400Venue->id400. Le séjour $id400VenueEliminee->id400 a été éliminé.";
       }
         
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($messages['commentaire'], 0, 4000)); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -231,7 +237,26 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
      // Evite de passer dans le sip handler
     $newVenue->_coms_from_hprim = 1;
 
-    $messages['msgVenue'] = $newVenue->store();
+    // Séjour retrouvé
+    if ($newVenue->loadMatchingSejour() || $newVenue->_id) {
+      $messages['msgVenue'] = $newVenue->store();
+
+      $newVenue->loadLogs();
+      $modified_fields = "";
+      if (is_array($newVenue->_ref_last_log->_fields)) {
+        foreach ($newVenue->_ref_last_log->_fields as $field) {
+          $modified_fields .= "$field \n";
+        }
+      }
+      $messages['_code_NumDos'] = "A121";
+      $messages['_code_Venue'] = "store";
+      $messages['commentaire'] = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+    } else {
+      $messages['_code_NumDos'] = "I122";
+      $messages['_code_Venue']  = "create";
+      $messages['msgVenue'] = $newVenue->store();
+      $messages['commentaire'] = "Séjour créé : $newVenue->_id. ";
+    }
 
     $id400Venue->object_id = $newVenue->_id;
     $id400Venue->last_update = mbDateTime();

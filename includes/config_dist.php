@@ -650,7 +650,8 @@ $dPconfig["hprimxml"] = array (
   ),
   "functionPratImport" => "Import",
   "medecinIndetermine" => "Medecin Indeterminé",
-  "mvt_comptet" => "0"
+  "medecinActif" => "0",
+  "mvt_comptet"  => "0",
 );
 
 // you can add as much ftp as you want by using

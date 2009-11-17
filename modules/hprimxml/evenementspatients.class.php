@@ -415,7 +415,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mediuser->function_id = $functions->_id;
     $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
     $mediuser->_user_type = 13; // Medecin
-    $mediuser->actif = 0; // Non actif  
+    $mediuser->actif = CAppUI::conf("hprimxml medecinActif") ? 1 : 0; 
     
     $user = new CUser();
     $user->user_last_name = $mediuser->_user_last_name;

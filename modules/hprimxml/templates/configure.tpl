@@ -111,6 +111,8 @@
       </td>
     </tr>
     
+    {{mb_include module=system template=inc_config_bool var=medecinActif}}
+    
     {{mb_include module=system template=inc_config_bool var=mvt_comptet}}
    
     <tr>
