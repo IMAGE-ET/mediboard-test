@@ -171,9 +171,17 @@ Main.add( function(){
 		        <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 		        <input type="hidden" name="user_id" value="{{$app->user_id}}" />
 		        <input type="hidden" name="date" value="now" />
-		        {{mb_label object=$transmission field="degre"}}
-		        {{mb_field object=$transmission field="degre"}}<br />
-		        {{mb_field object=$transmission field="text"}}
+						<div style="float: right">
+              <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
+                <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$transmission->_aides.text.no_enum}}
+              </select>
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
+            </div>
+            {{mb_field object=$transmission field="degre"}}
+            {{mb_field object=$transmission field="type" typeEnum=radio}}
+            <br />
+            {{mb_field object=$transmission field="text"}}
 		      </form>
 		    </td>
 		  </tr>
