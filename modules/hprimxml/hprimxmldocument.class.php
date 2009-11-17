@@ -417,12 +417,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function getTypeEvenementPatient() {
     $xpath = new CMbXPath($this);
     $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    
-    $query = "/hprim:evenementsPatients/hprim:evenementPatient/*";
-    
-    $evenementPatient = $xpath->queryUniqueNode($query);
+        
+    $evenementPatient = $xpath->query("/hprim:evenementsPatients/hprim:evenementPatient/*");
+    $type = null;
+    $evenements = CHPrimXMLEvenementsPatients::$evenements;
+    foreach ($evenementPatient as $_evenementPatient) {
+      if (array_key_exists($_evenementPatient->tagName, $evenements)) {
+        $type = $_evenementPatient->tagName;
+      }
+    }
 
-    return $evenementPatient->tagName;
+    return $type;
   }
   
   function addMedecin($elParent, $praticien, $lien) {

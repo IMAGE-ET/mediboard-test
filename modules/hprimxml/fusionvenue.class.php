@@ -128,16 +128,19 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400Venue->id400 = $data['idSourceVenue'];
       $id400Venue->loadMatchingObject();
       if ($mbVenue->load($data['idCibleVenue'])) {
-        if ($mbVenue->_id != $id400Venue->object_id) {
-          $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
-          $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-    
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();
-          return $messageAcquittement;
+        // Pas de test dans le cas ou la fusion correspond à un changement de numéro de dossier
+        if (($etatVenue == "préadmission") || ($etatVenueEliminee != "préadmission")) {
+          if ($mbVenue->_id != $id400Venue->object_id) {
+            $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
+            $doc_valid = $domAcquittement->schemaValidate();
+            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+      
+            $echange_hprim->acquittement = $messageAcquittement;
+            $echange_hprim->statut_acquittement = "erreur";
+            $echange_hprim->store();
+            return $messageAcquittement;
+          }
         }
       } 
       if (!$mbVenue->_id) {

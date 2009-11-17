@@ -9,6 +9,14 @@
  */
 
 class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
+  static $evenements = array(
+    'enregistrementPatient' => "CHPrimXMLEnregistrementPatient",
+    'fusionPatient'         => "CHPrimXMLFusionPatient",
+    'venuePatient'          => "CHPrimXMLVenuePatient",
+    'fusionVenue'           => "CHPrimXMLFusionVenue",
+    'mouvementPatient'      => "CHPrimXMLMouvementPatient"
+  );
+  
   static function getHPrimXMLEvenementsPatients($messagePatient) {
     $hprimxmldoc = new CHPrimXMLDocument("patient", "msgEvenementsPatients105");
     // Récupération des informations du message XML
@@ -16,28 +24,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $type = $hprimxmldoc->getTypeEvenementPatient();
 
-    // Un événement concernant un patient appartient à l'une des six catégories suivantes
-    switch ($type) {
-      case "enregistrementPatient" :
-        return new CHPrimXMLEnregistrementPatient();
-        break;
-      case "fusionPatient" :
-        return new CHPrimXMLFusionPatient();
-        break;
-      case "venuePatient" :
-        return new CHPrimXMLVenuePatient();
-        break;
-      case "fusionVenue" :
-        return new CHPrimXMLFusionVenue();
-        break;
-      case "mouvementPatient" :
-        return new CHPrimXMLMouvementPatient();
-        break;
-      default;
-        return new CHPrimXMLEvenementsPatients();
+    if ($type) {
+      return new self::$evenements[$type];
+    } else {
+      return new CHPrimXMLEvenementsPatients();
     }
   }
-  
+    
   function __construct() {
     $this->evenement = "evt_patients";
     $this->destinataire_libelle = "";
