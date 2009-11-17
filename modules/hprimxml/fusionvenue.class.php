@@ -175,6 +175,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if (!$mbVenue->_id && !$mbVenueEliminee->_id) {
         $newVenue->patient_id = $newPatient->_id; 
         $newVenue->group_id   = CGroups::loadCurrent()->_id;
+        mbTrace($newVenue, "venue", true);
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       // Cas 1 : 1 séjour
@@ -233,7 +234,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $newVenue = $this->mappingVenue($data['venueEliminee'], $newVenue);
     // Mapping de la venue a garder
     $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-    
+
      // Evite de passer dans le sip handler
     $newVenue->_coms_from_hprim = 1;
 
