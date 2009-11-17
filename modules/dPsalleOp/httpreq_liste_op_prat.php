@@ -14,6 +14,15 @@ $can->needsRead();
 $date  = CValue::getOrSession("date", mbDate());
 $operation_id = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
+$praticien_id = CValue::getOrSession("praticien_id");
+
+// Chargement de l'utilisateur courant
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+
+if(!$praticien_id && $user->isPraticien() && !$user->isAnesth()){
+	$praticien_id = $AppUI->user_id;
+}
 
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
@@ -48,7 +57,7 @@ asort($listPrats);
 
 // Selection des plages opératoires de la journée
 $praticien = new CMediusers;
-if ($praticien->load(CValue::getOrSession("praticien_id"))) {
+if ($praticien->load($praticien_id)) {
   $praticien->loadRefsForDay($date); 
 }
 

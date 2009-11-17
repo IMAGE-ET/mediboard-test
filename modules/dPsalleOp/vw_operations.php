@@ -38,6 +38,7 @@ $timingAffect = array();
 $currUser = new CMediusers();
 $currUser->load($AppUI->user_id);
 $currUser->isAnesth();
+$currUser->isPraticien();
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;

@@ -236,12 +236,16 @@ var Url = Class.create({
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
       var container = new Element("div", {style: "border:none;margin:0;padding:0;position:relative;display:inline-block"}).addClassName("dropdown"),
-          height = input.getHeight()-2,
+          height = (input.getHeight() || 18)-2,
           margin = parseInt(input.getStyle("marginTop"));
       
       container.setStyle({paddingRight: (height+3)+'px'}).
                 clonePosition(input, {setLeft: false, setTop: false});
-                
+      
+			if (!container.getWidth()) {
+        container.style.width = null;
+        input.style.marginRight = "-1px";
+      }          
       input.wrap(container);
       container.insert(populate);
       

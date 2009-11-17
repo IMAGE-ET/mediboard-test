@@ -80,7 +80,7 @@ function confirmeCloture() {
 
 Main.add(function () {
   var url = new Url;
-  {{if $dPconfig.dPsalleOp.COperation.mode}}
+  {{if $dPconfig.dPsalleOp.COperation.mode || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_op_prat");
   {{else}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_plages");
@@ -88,6 +88,7 @@ Main.add(function () {
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("hide_finished", "{{$hide_finished}}");
+	
   url.periodicalUpdate('listplages', { frequency: 90 });
   
   {{if $selOp->_id}}
@@ -114,7 +115,8 @@ Main.add(function () {
     {{if $selOp->_id}}
 		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || 
            $date < $smarty.now|date_format:"%Y-%m-%d" || 
-           $check_list->_id && $check_list->validator_id}}
+           $check_list->_id && $check_list->validator_id || 
+					 $currUser->_is_praticien}}
         {{include file=inc_operation.tpl}}
 			{{else}}
         {{include file=inc_edit_check_list.tpl personnel=$listValidateurs}}
