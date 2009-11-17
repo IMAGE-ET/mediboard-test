@@ -385,8 +385,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $id400->object_class = "CMediusers";
     $id400->tag = $this->destinataire;
     $id400->id400 = $code;
-    $id400->loadMatchingObject();
-    if ($id400->_id) {
+    if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;
     } else {
       // Récupération du typePersonne

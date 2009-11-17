@@ -430,7 +430,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($medecin, "lien", $lien);
     $this->addElement($medecin, "numeroAdeli", $praticien->adeli);
     $identification = $this->addElement($medecin, "identification");
-    $this->addElement($identification, "code", $praticien->_id);
+    $id400 = new CIdSante400();
+    $id400->object_class = "CMediusers";
+    $id400->object_id    = $praticien->_id;
+    $id400->tag          = $this->destinataire;
+    if ($id400->loadMatchingObject()) {
+      $this->addElement($identification, "code", $id400->id400);
+    } else {
+      $this->addElement($identification, "code", $praticien->_id);
+    }
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addPersonne($personne, $praticien);
