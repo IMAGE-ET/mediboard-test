@@ -175,7 +175,6 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if (!$mbVenue->_id && !$mbVenueEliminee->_id) {
         $newVenue->patient_id = $newPatient->_id; 
         $newVenue->group_id   = CGroups::loadCurrent()->_id;
-        mbTrace($newVenue, "venue", true);
         $messages = $this->mapAndStoreVenue($newVenue, $data, $etatVenueEliminee, $id400Venue, $id400VenueEliminee);
       }
       // Cas 1 : 1 séjour
@@ -185,6 +184,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
           $newVenue->load($mbVenue->_id);
           $messages['msgNumDosVenue'] = $id400Venue->delete();
         } else if ($mbVenueEliminee->_id) {
+          $newVenue->load($mbVenueEliminee->_id);
           $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->delete();
         }
         // Cas 0

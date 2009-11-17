@@ -820,7 +820,7 @@ class CMediusers extends CMbObject {
   
   function makeUsernamePassword($first_name, $last_name, $id = null) {
     $length = 20 - strlen($id);
-    $lp = substr(preg_replace("/[^a-z]/i", "", CMbString::removeDiacritics(strtolower(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
+    $lp = substr(preg_replace("/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
     $this->_user_username = $lp;
     $this->_user_password = $lp;
   }
