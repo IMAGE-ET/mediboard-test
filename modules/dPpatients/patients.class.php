@@ -582,6 +582,7 @@ class CPatient extends CMbObject {
    */
   function evalAge($date = null) {
   	$achieved = CMbDate::achievedDurations($this->naissance, $date);
+		mbTrace($achieved);
 		return $this->_age = $achieved["year"];
   }
   
