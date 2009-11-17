@@ -16,10 +16,14 @@
     </script>
   </td>
   <td>
-    <a class="button notext edit" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}" />
+    <a class="button notext edit" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+      {{tr}}Edit{{/tr}}
+    </a>
   </td>
   <td>
-    <a class="button notext search" href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}" />
+    <a class="button notext search" href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+      {{tr}}Search{{/tr}}
+    </a>
   </td>
   <td>
     <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
