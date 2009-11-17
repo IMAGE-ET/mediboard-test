@@ -721,6 +721,11 @@ class CMediusers extends CMbObject {
     return in_array($this->_user_type, array(1, 3, 4, 7, 13));
   }
 
+  function isAdmin() {
+    return in_array($this->_user_type, array(1));
+  }
+
+
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);

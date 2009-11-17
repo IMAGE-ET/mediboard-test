@@ -173,6 +173,7 @@ class CConsultation extends CCodable {
     $specs["du_patient"]                = "currency";
     $specs["du_tiers"  ]                = "currency";
     $specs["_du_patient_restant"]       = "currency";
+    $specs["_du_tiers_restant"]         = "currency";
     $specs["_reglements_total_patient"] = "currency";
     $specs["_reglements_total_tiers"  ] = "currency";
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";

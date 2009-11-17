@@ -1,5 +1,32 @@
 <!-- $Id$ -->
 
+{{if !$ajax}} 
+
+<script type="text/javascript">	
+PlageConsult = {
+  refresh: function(plage_id) {
+    var url = new Url("dPcabinet", "print_rapport");
+    url.addParam("plage_id", plage_id);
+    url.requestUpdate("CPlageconsult-" + plage_id, { waitingText : null } );
+  },
+  onSubmit: function(form, plage_id) {
+    return onSubmitFormAjax(form, { 
+      onComplete: function() {
+        PlageConsult.showObsolete();
+        PlageConsult.refresh(plage_id);
+      }
+    } );
+  },
+  showObsolete: function() {
+	  var oStyle = {
+      opacity: 0.9,
+      position: 'absolute',
+    }
+    $("obsolete-totals").setStyle(oStyle).clonePosition("totals").show();
+  }
+}
+</script>
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -14,18 +41,11 @@
         </tr>
 
         <!-- Praticiens concernés -->
-        {{if $chirSel->_id}}
-        {{assign var=prat_id value=$chirSel->_id}}
-        <tr>
-          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}</td>
-        </tr>
-        {{else}}
         {{foreach from=$listPrat item=_prat}}
         <tr>
           <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_prat}}</td>
         </tr>
         {{/foreach}}
-        {{/if}}
 
         <tr>
           <td>Règlements pris en compte : {{if $filter->_mode_reglement}}{{$filter->_mode_reglement}}{{else}}tous{{/if}}</td>
@@ -50,8 +70,14 @@
     </td>
     
     <td class="halfPane">
-     
-      <table class="tbl">
+    	<div id="obsolete-totals" style="background-color: #888; display: none">
+	      <div class="big-warning">
+	        <p>Les totaux sont obsolètes suite à la saisie de règlements</p>
+	        <a class="button change" onclick="location.reload()">{{tr}}Refresh{{/tr}} {{tr}}Now{{/tr}}</a>
+	      </div>
+    	</div>
+			
+      <table id="totals" class="tbl">
       	{{foreach from=$reglement->_specs.emetteur->_list item=emetteur}}
         <tr>
           <th class="category" colspan="8">Réglement {{tr}}CReglement.emetteur.{{$emetteur}}{{/tr}}</th>
@@ -92,23 +118,30 @@
           <th class="category" colspan="8">Récapitulatif des consultations concernées</th>
         </tr>
         <tr>
-          <th class="category">Nb de consultations</th>
+          <th class="category">Nb de {{tr}}CConsultation{{/tr}}</th>
           <td colspan="7">{{$recapReglement.total.nb_consultations}}</td>
         </tr>
         <tr>
-          <th class="category">Total secteur 1</th>
+          <th class="category">
+          	{{tr}}Total{{/tr}}
+						{{mb_label class=CConsultation field=secteur1}}
+					</th>
           <td colspan="3">{{$recapReglement.total.secteur1|currency}}</td>
-          <th colspan="4">Total facturé</th>
+          <th colspan="4">{{mb_label class=CConsultation field=_somme}}</th>
         </tr>
         <tr>
-          <th class="category">Total secteur 2</th>
+          <th class="category">
+            {{tr}}Total{{/tr}}
+            {{mb_label class=CConsultation field=secteur1}}
+  				</th>
           <td colspan="3">{{$recapReglement.total.secteur2|currency}}</td>
           <td colspan="4" class="button">
             {{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}
           </td>
         </tr>
         <tr>
-          <th class="category">Total réglé patient</th>
+          <th class="category">
+          	Total réglé patient</th>
           <td colspan="3">{{$recapReglement.total.du_patient|currency}}</td>
           <th colspan="4">Total réglé</th>
         </tr>
@@ -134,107 +167,126 @@
       </table>
     </td>
   </tr>
+{{/if}}
+	
   {{if $filter->_type_affichage}}
-  {{foreach from=$listPlages item=curr_plage}}
+  {{foreach from=$listPlages item=_plage}}
+	{{if !$ajax}} 
+  <tbody id="{{$_plage.plage->_guid}}">
+  {{/if}}
+		
   <tr>
     <td colspan="2">
-      <strong>
-        {{$curr_plage.plage->date|date_format:$dPconfig.longdate}}
-        de {{$curr_plage.plage->debut|date_format:$dPconfig.time}} à {{$curr_plage.plage->fin|date_format:$dPconfig.time}}
-        - Dr {{$curr_plage.plage->_ref_chir->_view}}
+      <strong onclick="PlageConsult.refresh('{{$_plage.plage->_id}}')">
+          {{$_plage.plage->_ref_chir}}
+        &mdash;
+
+        {{$_plage.plage->date|date_format:$dPconfig.longdate}}
+        de {{$_plage.plage->debut|date_format:$dPconfig.time}} 
+				à  {{$_plage.plage->fin|date_format:$dPconfig.time}} 
+
+				{{if $_plage.plage->libelle}} 
+        : {{mb_value object=$_plage.plage field=libelle}}	   
+				{{/if}}
+
       </strong>
     </td>
   </tr>
-  <tr>
+  
+	<tr>
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th>Praticien</th>
-          <th>Patient</th>
-          <th>Code</th>
-          <th>Secteur 1</th>
-          <th>Secteur 2</th>
-          <th>Total<br />facturé</th>
-          <th>Réglement<br />patient</th>
-          <th>Réglement<br />tiers</th>
+          <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
+          <th style="width: 20%;">{{mb_label class=CConsultation field=tarif}}</th>
+          <th style="width: 01%;">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th style="width: 01%;">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th style="width: 01%;">{{mb_title class=CConsultation field=_somme}}</th>
+          <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
+          <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
         </tr>
-        {{foreach from=$curr_plage.consultations item=curr_consultation}}
+        {{foreach from=$_plage.consultations item=_consultation}}
         <tr>
-          <td class="text"><a name="consult-{{$curr_consultation->_id}}">Dr {{$curr_consultation->_ref_chir->_view}}</a></td>
-          <td class="text">{{$curr_consultation->_ref_patient->_view}}</td>
-          <td class="text">{{$curr_consultation->tarif}}</td>
-          <td>{{mb_value object=$curr_consultation field=secteur1}}</td>
-          <td>{{mb_value object=$curr_consultation field=secteur2}}</td>
-          <td>{{mb_value object=$curr_consultation field=_somme}}</td>
+          <td class="text">
+          	<a name="consult-{{$_consultation->_id}}">
+          		{{assign var=patient value=$_consultation->_ref_patient}}
+							<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+                {{$patient}}
+							</span>
+						</a>
+					</td>
+          <td class="text">
+          	{{if $_consultation->tarif}} 
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}')">
+              {{$_consultation->tarif}}
+            </span>
+          	{{/if}}
+          </td>
+          <td>{{mb_value object=$_consultation field=secteur1}}</td>
+          <td>{{mb_value object=$_consultation field=secteur2}}</td>
+          <td>{{mb_value object=$_consultation field=_somme}}</td>
           <td>
-            {{foreach from=$curr_consultation->_ref_reglements_patient item=curr_reglement}}
-              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+            {{foreach from=$_consultation->_ref_reglements_patient item=curr_reglement}}
+              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
-              <input type="hidden" name="_dialog" value="print_rapport" />
-              <input type="hidden" name="_href" value="consult-{{$curr_consultation->_id}}" />
-              {{mb_field object=$curr_reglement field="reglement_id" hidden=1}}
-              <button class="remove notext" type="submit">-</button>
-              {{mb_value object=$curr_reglement field=montant}} - {{$curr_reglement->mode}} - {{$curr_reglement->date|date_format:"%d/%m/%Y"}}
+              {{mb_key object=$curr_reglement}}
+              <button class="remove" type="submit">{{mb_value object=$curr_reglement field=montant}}</button>
+							<span style="min-width: 60px; display: inline-block;">{{mb_value object=$curr_reglement field=mode}}</span>
+							{{$curr_reglement->date|date_format:$dPconfig.date}}
               </form>
               <br />
             {{/foreach}}
-            {{if $curr_consultation->_du_patient_restant > 0}}
-            <form name="reglement-add-patient-{{$curr_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+						
+            {{if $_consultation->_du_patient_restant > 0}}
+            <form name="reglement-add-patient-{{$_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_reglement_aed" />
-            <input type="hidden" name="_dialog" value="print_rapport" />
-            <input type="hidden" name="_href" value="consult-{{$curr_consultation->_id}}" />
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="patient" />
-            {{mb_field object=$curr_consultation field="consultation_id" hidden=1 prop=""}}
+            {{mb_field object=$_consultation field="consultation_id" hidden=1 prop=""}}
             <button class="add notext" type="submit">+</button>
-            {{mb_field object=$curr_consultation->_new_patient_reglement field="montant"}}
-            {{mb_field object=$curr_consultation->_new_patient_reglement field="mode"}}
-            <br />
-            <select name="banque_id">
-              <option value="">&mdash;{{tr}}CReglement-banque_id{{/tr}}&mdash;</option> 
+            {{mb_field object=$_consultation->_new_patient_reglement field="montant"}}
+            {{mb_field object=$_consultation->_new_patient_reglement field="mode"}}
+            <select name="banque_id" style="width: 70px;">
+              <option value="">&mdash; {{tr}}CReglement-banque_id{{/tr}}</option> 
                {{foreach from=$banques item=banque}}
-                 <option value="{{$banque->_id}}">{{$banque->_view}}</option>
+               <option value="{{$banque->_id}}">{{$banque}}</option>
                {{/foreach}}
             </select>
             </form>
             {{/if}}
           </td>
+					
           <td>
-            {{foreach from=$curr_consultation->_ref_reglements_tiers item=curr_reglement}}
-              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+            {{foreach from=$_consultation->_ref_reglements_tiers item=curr_reglement}}
+              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
-              <input type="hidden" name="_dialog" value="print_rapport" />
-              <input type="hidden" name="_href" value="consult-{{$curr_consultation->_id}}" />
-              {{mb_field object=$curr_reglement field="reglement_id" hidden=1}}
-              <button class="remove notext" type="submit">-</button>
-              {{mb_value object=$curr_reglement field=montant}} - {{$curr_reglement->mode}} - {{$curr_reglement->date|date_format:"%d/%m/%Y"}}
+              {{mb_key object=$curr_reglement}}
+              <button class="remove" type="submit">{{mb_value object=$curr_reglement field=montant}}</button>
+              <span style="min-width: 60px; display: inline-block;">{{mb_value object=$curr_reglement field=mode}}</span>
+              {{$curr_reglement->date|date_format:$dPconfig.date}}
               </form>
-              <br />
             {{/foreach}}
-            {{if $curr_consultation->_du_tiers_restant > 0}}
-            <form name="reglement-add-tiers-{{$curr_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+            {{if $_consultation->_du_tiers_restant > 0}}
+            <form name="reglement-add-tiers-{{$_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_reglement_aed" />
-            <input type="hidden" name="_dialog" value="print_rapport" />
-            <input type="hidden" name="_href" value="consult-{{$curr_consultation->_id}}" />
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="tiers" />
-            {{mb_field object=$curr_consultation field="consultation_id" hidden=1 prop=""}}
+            {{mb_field object=$_consultation field="consultation_id" hidden=1 prop=""}}
             <button class="add notext" type="submit">+</button>
-            {{mb_field object=$curr_consultation->_new_tiers_reglement field="montant"}}
-            {{mb_field object=$curr_consultation->_new_tiers_reglement field="mode"}}
-            <br />
-            <select name="banque_id">
-              <option value="">&mdash;{{tr}}CReglement-banque_id{{/tr}}&mdash;</option> 
+            {{mb_field object=$_consultation->_new_tiers_reglement field="montant"}}
+            {{mb_field object=$_consultation->_new_tiers_reglement field="mode"}}
+            <select name="banque_id" style="width: 70px;">
+              <option value="">&mdash; {{tr}}CReglement-banque_id{{/tr}}</option> 
                {{foreach from=$banques item=banque}}
-                 <option value="{{$banque->_id}}">{{$banque->_view}}</option>
+               <option value="{{$banque->_id}}">{{$banque}}</option>
                {{/foreach}}
             </select>
             </form>
@@ -243,18 +295,26 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="2" />
-          <th>Total</th>
-          <td><strong>{{$curr_plage.total.secteur1|currency}}</strong></td>
-          <td><strong>{{$curr_plage.total.secteur2|currency}}</strong></td>
-          <td><strong>{{$curr_plage.total.total|currency}}</strong></td>
-          <td><strong>{{$curr_plage.total.patient|currency}}</strong></td>
-          <td><strong>{{$curr_plage.total.tiers|currency}}</strong></td>
+          <td colspan="2" style="text-align: right" >
+					  <strong>{{tr}}Total{{/tr}}</strong>
+					</td>
+          <td><strong>{{$_plage.total.secteur1|currency}}</strong></td>
+          <td><strong>{{$_plage.total.secteur2|currency}}</strong></td>
+          <td><strong>{{$_plage.total.total|currency}}</strong></td>
+          <td><strong>{{$_plage.total.patient|currency}}</strong></td>
+          <td><strong>{{$_plage.total.tiers|currency}}</strong></td>
         </tr>
       </table>
     </td>
   </tr>
+	
+	{{if !$ajax}} 
+  </tbody>
+	{{/if}}
   {{/foreach}}
   {{/if}}
+	
+	
+{{if !$ajax}} 
 </table>
-      
+{{/if}}

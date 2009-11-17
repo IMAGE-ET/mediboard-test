@@ -15,13 +15,6 @@ $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", mbDate());
 $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 
-$chir_id = CValue::getOrSession("chir", null);
-$chirSel = new CMediusers;
-$chirSel->load($chir_id);
-$listPrat = $chirSel->loadPraticiens(PERM_EDIT);
-
-$listConsults = array();
-
 $consult = new CConsultation();
 
 $where = array();
@@ -29,7 +22,24 @@ $ljoin["plageconsult"]                      = "consultation.plageconsult_id = pl
 $where["consultation.du_tiers"]             = "> 0";
 $where["consultation.tiers_date_reglement"] = "IS NULL";
 $where["plageconsult.date"]                 = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-$where["plageconsult.chir_id"]              = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
+
+// Tri sur les praticiens
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$mediuser->loadRefFunction();
+
+$prat = new CMediusers;
+$prat->load(CValue::getOrSession("chir"));
+$prat->loadRefFunction();
+if ($prat->_id) {
+  $listPrat = array($prat);
+}
+else {
+  $listPrat = $prat->loadPraticiens(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
+}
+
+$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
+
 $order = "plageconsult.date";
 
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);
@@ -60,7 +70,6 @@ $smarty->assign("listConsults", $listConsults);
 $smarty->assign("total"       , $total);
 $smarty->assign("_date_min"   , $filter->_date_min);
 $smarty->assign("_date_max"   , $filter->_date_max);
-$smarty->assign("chirSel"     , $chirSel);
 $smarty->assign("listPrat"    , $listPrat);
 
 $smarty->display("print_noemie.tpl");

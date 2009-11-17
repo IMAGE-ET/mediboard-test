@@ -14,18 +14,11 @@
         </tr>
 				
         <!-- Praticiens concernés -->
-        {{if $chirSel->_id}}
-        {{assign var=prat_id value=$chirSel->_id}}
-        <tr>
-          <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}</td>
-        </tr>
-        {{else}}
         {{foreach from=$listPrat item=_prat}}
         <tr>
           <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_prat}}</td>
         </tr>
         {{/foreach}}
-        {{/if}}
 
         <tr>
           <td>Paiments pris en compte : {{if $filter->_mode_reglement}}{{$filter->_mode_reglement}}{{else}}tous{{/if}}</td>

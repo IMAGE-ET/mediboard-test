@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+ <?php /* $Id$ */
 
 /**
 * @package Mediboard
@@ -20,29 +20,21 @@ $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient");
 $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers");
 
-$filter->_mode_reglement = CValue::getOrSession("mode", 0);
-if($filter->_mode_reglement == null) {
+$filter->_mode_reglement = CValue::getOrSession("mode");
+if ($filter->_mode_reglement == null) {
 	$filter->_mode_reglement = 0;
 }
 $filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
 
 //Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
-if($filter->_type_affichage == "complete") {
+if ($filter->_type_affichage == "complete") {
 	$filter->_type_affichage = 1;
-} elseif ($filter->_type_affichage == "totaux"){
+} 
+elseif ($filter->_type_affichage == "totaux"){
 	$filter->_type_affichage = 0;
 }
 
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
-$mediuser->loadRefFunction();
-
-$chir = CValue::getOrSession("chir");
-$chirSel = new CMediusers;
-$chirSel->load($chir);
-
 // Requète sur les consultations selon les critères
-
 $consultation = new CConsultation();
 $where = array();
 $ljoin = array();
@@ -70,31 +62,43 @@ if ($filter->_etat_reglement_tiers) {
   }
 }
 
+// Consultations gratuites
+if (!CValue::getOrSession("cs")) {
+  $where[] = "consultation.secteur1 + consultation.secteur2 > 0";
+}
+
 $where["consultation.patient_id"] = "IS NOT NULL";
 
+// Plage ciblée
+if ($plage_id = CValue::get("plage_id")) {
+  $where[] = "plageconsult.plageconsult_id = '$plage_id'";
+}
 // Tri sur les dates
-$where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
+else {
+  $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
+}
 
 // Tri sur les praticiens
-$listPrat = new CMediusers();
-$is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
-if($is_admin) {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-} else {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $mediuser->function_id);
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$mediuser->loadRefFunction();
+
+$prat = new CMediusers;
+$prat->load(CValue::getOrSession("chir"));
+$prat->loadRefFunction();
+if ($prat->_id) {
+	$listPrat = array($prat);
 }
-$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
+else {
+  $listPrat = $prat->loadPraticiens(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
+}
+
+$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 
 $order = "plageconsult.date, plageconsult.debut, plageconsult.chir_id";
 
-$reglement = new CReglement();
-
-// Chargement des banques
-$orderBanque = "nom ASC";
-$banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
-
 // Initialisation du tableau de reglements
+$reglement = new CReglement();
 $recapReglement["total"]      = array(
   "nb_consultations"     => "0",
   "du_patient"           => "0",
@@ -180,13 +184,16 @@ foreach($listConsults as $consult) {
   $listPlages[$consult->plageconsult_id]["consultations"][$consult->_id] = $consult;
 }
 
+// Chargement des banques
+$orderBanque = "nom ASC";
+$banque = new CBanque();
+$banques = $banque->loadList(null,$orderBanque);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("today"         , $today);
 $smarty->assign("filter"        , $filter);
-$smarty->assign("chirSel"       , $chirSel);
 $smarty->assign("listPrat"      , $listPrat);
 $smarty->assign("listPlages"    , $listPlages);
 $smarty->assign("recapReglement", $recapReglement);

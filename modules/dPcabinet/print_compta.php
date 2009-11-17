@@ -28,14 +28,6 @@ if($filter->_type_affichage == "complete") {
 	$filter->_type_affichage = 0;
 }
 
-$mediuser = new CMediusers();
-$mediuser->load($AppUI->user_id);
-$mediuser->loadRefFunction();
-
-$chir = CValue::getOrSession("chir");
-$chirSel = new CMediusers;
-$chirSel->load($chir);
-
 // On recherche tous les règlements effectués selon les critères
 $ljoin = array();
 $ljoin["consultation"] = "reglement.consultation_id = consultation.consultation_id";
@@ -50,14 +42,22 @@ if ($filter->_mode_reglement) {
 }
 
 // Tri sur les praticiens
-$listPrat = new CMediusers();
-$is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
-if($is_admin) {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-} else {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $mediuser->function_id);
+// Tri sur les praticiens
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$mediuser->loadRefFunction();
+
+$prat = new CMediusers;
+$prat->load(CValue::getOrSession("chir"));
+$prat->loadRefFunction();
+if ($prat->_id) {
+  $listPrat = array($prat);
 }
-$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
+else {
+  $listPrat = $prat->loadPraticiens(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
+}
+
+$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
 
 // Chargement
 $reglement = new CReglement();
@@ -124,7 +124,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("today"              , $today);
 $smarty->assign("filter"             , $filter);
-$smarty->assign("chirSel"            , $chirSel);
 $smarty->assign("listPrat"           , $listPrat);
 $smarty->assign("listReglements"     , $listReglements);
 $smarty->assign("listConsults"       , $listConsults);
