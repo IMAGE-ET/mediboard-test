@@ -17,7 +17,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     parent::__construct();
   }
   
-  function generateFromOperation($mbVenue, $referent) {  
+  function generateFromOperation($newVenue, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -76,11 +76,13 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     
     // Traitement de la venue
     $domVenuePatient = new CHPrimXMLVenuePatient();
-    $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    $newVenue = new CSejour();
+    
+    $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, $newVenue);
     if ($echange_hprim->statut_acquittement != "OK") {
       return $messageAcquittement;
     }
-    
+
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domAcquittement->identifiant = $data['identifiantMessage'];
     $domAcquittement->destinataire = $data['idClient'];
@@ -88,19 +90,19 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     
      // Si CIP
     if (!CAppUI::conf('sip server')) {
-      $mbVenue = new CSejour();
+      $avertissement = null;
       
       // Mapping des mouvements
-      $mbVenue = $this->mappingMouvements($data['mouvements'], $mbVenue);
-      
+      $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
+
       // Evite de passer dans le sip handler
-      $mbVenue->_coms_from_hprim = 1;
-      $msgVenue = $mbVenue->store();
+      $newVenue->_coms_from_hprim = 1;
+      $msgVenue = $newVenue->store();
       
-      $mbVenue->loadLogs();
+      $newVenue->loadLogs();
       $modified_fields = "";
-      if (is_array($mbVenue->_ref_last_log->_fields)) {
-        foreach ($mbVenue->_ref_last_log->_fields as $field) {
+      if (is_array($newVenue->_ref_last_log->_fields)) {
+        foreach ($newVenue->_ref_last_log->_fields as $field) {
           $modified_fields .= "$field \n";
         }
       }
@@ -109,7 +111,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       if ($msgVenue) {
         $avertissement = $msgVenue." ";
       } else {
-        $commentaire = "Séjour modifiée : $mbVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+        $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
       
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
