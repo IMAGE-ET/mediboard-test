@@ -110,8 +110,10 @@ class CSalle extends CMbObject {
 		  $plage->loadRefs(0);
 		  $plage->_unordered_operations = array();
 		  foreach ($plage->_ref_operations as &$operation) {
+		    $operation->loadRefChir();
 		    $operation->loadRefPatient();
 		    $operation->loadExtCodesCCAM();
+		    $operation->loadRefPlageOp();
 		    $operation->updateSalle();
 
 		    if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
@@ -141,6 +143,7 @@ class CSalle extends CMbObject {
 		  $deplacee->loadRefChir();
 		  $deplacee->loadRefPatient();
 		  $deplacee->loadExtCodesCCAM();
+		  $deplacee->loadRefPlageOp();
 		}
 
 		// Urgences
@@ -154,6 +157,7 @@ class CSalle extends CMbObject {
 	    $urgence->loadRefChir();
 	    $urgence->loadRefPatient();
 	    $urgence->loadExtCodesCCAM();
+		  $urgence->loadRefPlageOp();
 	  }
   }
 }

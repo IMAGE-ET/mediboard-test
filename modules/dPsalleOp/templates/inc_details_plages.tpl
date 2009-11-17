@@ -15,9 +15,13 @@
 
 <table class="form">
   <tr>
-    <th class="category{{if $vueReduite}} text{{/if}}" colspan="2">
+    <th class="category text" colspan="2">
       <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
+        {{if $_plage->chir_id}}
         Chir : Dr {{$_plage->_ref_chir->_view}}
+        {{else}}
+        {{$_plage->_ref_spec->_view}}
+        {{/if}}
         {{if $vueReduite}}
           <br />
         {{else}}

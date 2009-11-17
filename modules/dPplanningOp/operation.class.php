@@ -453,7 +453,7 @@ class COperation extends CCodable {
     if($this->plageop_id) {
       $plageTmp = new CPlageOp;
       $plageTmp->load($this->plageop_id);
-      if($plageTmp->spec_id) {
+      if($plageTmp->spec_id && $plageTmp->unique_chir) {
         $plageTmp->spec_id = null;
         $chirTmp = new CMediusers;
         $chirTmp->load($this->chir_id);
@@ -461,7 +461,6 @@ class COperation extends CCodable {
         $plageTmp->spec_id = "";
         $plageTmp->store();
       } elseif($reorder) {
-        $plageTmp->spec_id = "";
         $plageTmp->store();
       }
     }

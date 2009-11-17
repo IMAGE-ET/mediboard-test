@@ -29,6 +29,7 @@ class CPlageOp extends CMbObject {
   var $date             = null;
   var $debut            = null;
   var $fin              = null;
+  var $unique_chir      = null;
   var $temps_inter_op   = null;
   var $max_intervention = null;
   var $delay_repl       = null;
@@ -80,6 +81,7 @@ class CPlageOp extends CMbObject {
     $specs["date"]             = "date notNull";
     $specs["debut"]            = "time notNull";
     $specs["fin"]              = "time notNull moreThan|debut";
+    $specs["unique_chir"]      = "bool default|1";
     $specs["temps_inter_op"]   = "time notNull";
     $specs["max_intervention"] = "num min|0";
     $specs["delay_repl"]       = "num min|0";
@@ -256,6 +258,14 @@ class CPlageOp extends CMbObject {
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
     }
+    // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
+    if (null !== $this->chir_id && $this->_id) {
+      if(count($oldPlage->_ref_operations) && $oldPlage->spec_id && $this->chir_id) {
+        $msg = "Impossible de selectionner un praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes dans une plage multi-praticiens";
+        return $msg;
+      }
+    }
+    
     // Erreur si on change de praticien alors qu'il y a déjà des interventions
     if (null !== $this->chir_id && $this->_id) {
       if(count($oldPlage->_ref_operations) && $oldPlage->chir_id && ($oldPlage->chir_id != $this->chir_id)) {

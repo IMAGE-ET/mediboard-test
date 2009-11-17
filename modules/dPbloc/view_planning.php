@@ -52,25 +52,55 @@ if($praticien->isFromType(array("Anesthésiste"))) {
   $filter->_prat_id = null;
 }
 
-// Liste des praticiens accessibles
-if(!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
-  $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($user->loadPraticiens()));
+// Filtre sur les praticiens ou les spécialités
+$function = new CFunctions();
+$functions = array();
+$praticiens = array();
+// Aucun filtre de séléctionné : tous les éléments auxquels on a le droit
+if(!$filter->_specialite && !$filter->_prat_id) {
+  if(!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
+    $functions  = $function->loadListWithPerms(PERM_READ);
+    $praticiens = $user->loadPraticiens();
+  } else {
+    $functions = $function->loadList();
+    $praticiens = $praticien->loadList();
+  }
+// Filtre sur la specialité : la spec et ses chirs primaires et secondaires
+} elseif($filter->_specialite) {
+  $function->load($filter->_specialite);
+  $function->loadBackRefs("users");
+  $function->loadBackRefs("secondary_functions");
+  $functions[$function->_id] = $function;
+  $praticiens = $function->_back["users"];
+  foreach($function->_back["secondary_functions"] as $sec_func) {
+    if(!isset($praticiens[$sec_func->user_id])) {
+      $sec_func->loadRefUser();
+      $praticiens[$sec_func->user_id] = $sec_func->_ref_user;
+    }
+  }
+// Filtre sur le chir : le chir et ses specs primaires et secondaires
+} elseif($filter->_prat_id) {
+  $praticien->loadRefFunction();
+  $praticien->loadBackRefs("secondary_functions");
+  $praticiens[$praticien->_id] = $praticien;
+  $functions[$praticien->function_id] = $praticien->_ref_function;
+  foreach($praticien->_back["secondary_functions"] as $sec_func) {
+    if(!isset($functions[$sec_func->user_id])) {
+      $sec_func->loadRefFunction();
+      $functions[$sec_func] = $sec_func->_ref_function;
+    }
+  }
 }
 
-// Filtre par specialite
-if ($filter->_specialite or $filter->_prat_id) {
-  $chir = new CMediusers;
-  // Chargement de la liste des chirs qui ont la specialite selectionnee
-  $chirs = $chir->loadList(array ("function_id" => "= '$filter->_specialite '"));
-  $where[] = "chir_id ".CSQLDataSource::prepareIn(array_keys($chirs), $filter->_prat_id);
-}
+// Liste des praticiens et fonctions à charger
+$where[] = "plagesop.chir_id ".CSQLDataSource::prepareIn(array_keys($praticiens))." OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($functions));
 
 // En fonction de la salle
 $salle = new CSalle();
 $whereSalle = array();
-$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)), $filter->_bloc_id);
+$whereSalle["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)), $filter->_bloc_id);
 if($filter->salle_id) {
-  $whereSalle["salle_id"] = "= $filter->salle_id";
+  $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
 }
 $where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
@@ -83,10 +113,11 @@ foreach($plagesop as &$plage) {
   $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
   
   $where = array();
-  $where["plageop_id"] = "= '$plage->_id'";
+  $where["operations.plageop_id"] = "= '$plage->_id'";
+  $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
   switch ($filter->_intervention) {
-    case "1" : $where["rank"] = "!= '0'"; break;
-    case "2" : $where["rank"] = "= '0'"; break;
+    case "1" : $where["operations.rank"] = "!= '0'"; break;
+    case "2" : $where["operations.rank"] = "= '0'"; break;
   }
   
   if ($filter->_codes_ccam) {

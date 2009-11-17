@@ -52,14 +52,14 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $sHtml        = "";
-    $field        = htmlspecialchars($this->fieldName);
-    $typeEnum     = CMbArray::extract($params, "typeEnum", "radio");
-    $separator    = CMbArray::extract($params, "separator");
-    $disabled     = CMbArray::extract($params, "disabled");
-    $default      = CMbArray::extract($params, "default", $this->default);
+    $sHtml         = "";
+    $field         = htmlspecialchars($this->fieldName);
+    $typeEnum      = CMbArray::extract($params, "typeEnum", "radio");
+    $separator     = CMbArray::extract($params, "separator");
+    $disabled      = CMbArray::extract($params, "disabled");
+    $default       = CMbArray::extract($params, "default", $this->default);
     $defaultOption = CMbArray::extract($params, "defaultOption");
-    $extra        = CMbArray::makeXmlAttributes($params);
+    $extra         = CMbArray::makeXmlAttributes($params);
     
     if ($typeEnum === "radio") {
 	    // Attributes for all inputs

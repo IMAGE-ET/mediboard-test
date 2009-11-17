@@ -175,25 +175,17 @@ Main.add(function(){
       </tr>
       
       <tr>
-        <th>
-          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
-        </th>
-        <td>
-          <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
-        </td>
+        <th>{{mb_label object=$plagesel field="unique_chir"}}</th>
+        <td>{{mb_field object=$plagesel field="unique_chir"}}</td>
     	  <th>{{mb_label object=$plagesel field="fin"}}</th>
         <td>{{mb_field object=$plagesel field="fin" hidden=true}}</td>
       </tr>
       <tr>
         <th>
-          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
+          <label for="_repeat" title="Nombre de plages à créer">Nombre de plages</label>
         </th>
         <td>
-          <select name="_type_repeat">
-            <option value="1">Normale</option>
-            <option value="2">Une semaine sur deux</option>
-            <option value="3">Une semaine sur trois</option>
-          </select>
+          <input type="text" class="notNull num min|1" name="_repeat" size="1" value="1" />
         </td>
         <th>{{mb_label object=$plagesel field="_min_inter_op"}}</th>
         <td>
@@ -206,13 +198,22 @@ Main.add(function(){
         </td>
       </tr>
       <tr>
-        <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
-        <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
+        <th>
+          <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
+        </th>
+        <td>
+          <select name="_type_repeat">
+            <option value="1">Normale</option>
+            <option value="2">Une semaine sur deux</option>
+            <option value="3">Une semaine sur trois</option>
+          </select>
+        </td>
         <th>{{mb_label object=$plagesel field="delay_repl"}}</th>
         <td>{{mb_field object=$plagesel field="delay_repl" size=1 increment=true form="editFrm" min=0}} jours</td>
       </tr>
       <tr>
-        <td colspan="2" />
+        <th>{{mb_label object=$plagesel field="max_intervention"}}</th>
+        <td>{{mb_field object=$plagesel field="max_intervention" size=1 increment=true form="editFrm" min=0}}</td>
         <th>{{mb_label object=$plagesel field="spec_repl_id"}}</th>
         <td>
           <select name="spec_repl_id" class="{{$plagesel->_props.spec_repl_id}}" style="max-width: 170px;">

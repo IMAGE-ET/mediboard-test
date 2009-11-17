@@ -17,6 +17,10 @@
 		    <td>NP</td>
 		  {{/if}}
 		  <td class="text">
+		    {{if $curr_plageop->spec_id}}
+		      <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
+		      <br />
+		    {{/if}}
         {{if $curr_op->libelle}}
           <em>[{{$curr_op->libelle}}]</em>
           <br />

@@ -49,6 +49,9 @@
 	      {{else}}
 	        NP
 	      {{/if}}
+		    {{if $_operation->_ref_plageop->spec_id}}
+		    - {{$_operation->_ref_chir->_view}}
+		    {{/if}}
 	    {{/if}}
     </a>
   </td>

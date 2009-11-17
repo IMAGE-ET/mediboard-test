@@ -19,11 +19,15 @@
         <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="1" />
+        {{if $plage->chir_id}}
         Dr {{$plage->_ref_chir->_view}}
         {{if @$modules.messagerie}}
         <a class="action" href="#nothing" onclick="MbMail.create({{$plage->chir_id}})">
           <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
         </a>
+        {{/if}}
+        {{else}}
+        {{$plage->_ref_spec->_view}}
         {{/if}}
         <br />
         {{$plage->date|date_format:$dPconfig.longdate}}<br />
@@ -213,11 +217,13 @@
       <td style="width: 40%; white-space: nowrap;">
         {{mb_include module=system template=inc_object_history object=$curr_op}}
 
-        <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+        <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
           {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
         </a>
 				<br />
-        Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+				<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
+          Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+        </span>
         <br />
         Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
         {{if $curr_op->horaire_voulu}}
@@ -244,7 +250,9 @@
         {{/if}}
       </td>
       <td class="text">
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
+          Dr {{$curr_op->_ref_chir->_view}}
+          <br />
           {{if $curr_op->libelle}}
             <em>[{{$curr_op->libelle}}]</em>
             <br />
@@ -301,11 +309,13 @@
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-          <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+          <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
             {{$curr_op->rank}} - {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
           </a>
           <br />
-          Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
+            Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+          </span>
           <br />
           Horaire : {{$curr_op->time_operation|date_format:$dPconfig.time}} - Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
           {{if $curr_op->horaire_voulu}}
@@ -335,7 +345,9 @@
       
       </td>
       <td class="text">
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
+          Dr {{$curr_op->_ref_chir->_view}}
+          <br />
           {{if $curr_op->libelle}}
             <em>[{{$curr_op->libelle}}]</em><br />
           {{/if}}
