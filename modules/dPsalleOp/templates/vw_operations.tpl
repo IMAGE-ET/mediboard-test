@@ -1,3 +1,4 @@
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{if $op}}
 {{assign var="chir_id" value=$selOp->_ref_chir->_id}}
 {{/if}}
