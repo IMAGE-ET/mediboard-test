@@ -74,29 +74,34 @@ Document.refreshList = function(){
   </tr>
 
   <tr>
-    <td rowspan="3" style="width: 0.1%; vertical-align: middle; text-align: center;">
+    <td rowspan="4" style="width: 0.1%; vertical-align: middle; text-align: center;">
 		  {{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}
 		</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
-    <th>{{mb_label object=$patient field="adresse"}}</th>
-    <td class="text">{{mb_value object=$patient field="adresse"}}</td>
+    <th rowspan="2">{{mb_label object=$patient field="adresse"}}</th>
+    <td rowspan="2" class="text">{{mb_value object=$patient field="adresse"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="prenom"}}</th>
     <td>{{mb_value object=$patient field="prenom"}}</td>
-    <th>{{mb_label object=$patient field="cp"}}</th>
-    <td>{{mb_value object=$patient field="cp"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="sexe"}}</th>
     <td>{{mb_value object=$patient field="sexe"}}</td>
+    <th>{{mb_label object=$patient field="cp"}}</th>
+    <td>{{mb_value object=$patient field="cp"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$patient field="_age"}}</th>
+    <td>{{mb_value object=$patient field="_age"}} ans</td>
     <th>{{mb_label object=$patient field="ville"}}</th>
     <td>{{mb_value object=$patient field="ville"}}</td>
   </tr>
-  
+
   <tr>
     <th colspan="2">{{mb_label object=$patient field="naissance"}}</th>
     <td>{{mb_value object=$patient field="naissance"}}</td>
