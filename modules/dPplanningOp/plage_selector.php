@@ -42,23 +42,37 @@ foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
   $secondary_functions[] = $curr_sec_func->function_id;
 }
 
-// Chargement des plages pour le chir ou sa spécialité
+// Chargement de la list des blocx opératoires
+$bloc = new CBlocOperatoire();
+$blocs = $bloc->loadGroupList(null, "nom");
+foreach($blocs as $_bloc) {
+  $_bloc->loadRefsSalles();
+}
 
-$listPlages = new CPlageOp;
+// Chargement des plages pour le chir ou sa spécialité par bloc
 $where = array();
 $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
 $where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
 $where["date"] = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
 $order = "date, debut";
-$listPlages = $listPlages->loadList($where, $order);
-
+$plage = new CPlageOp;
+$listPlages = array();
+foreach($blocs as $_bloc) {
+  $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($_bloc->_ref_salles));
+  $listPlages[$_bloc->_id] = $plage->loadList($where, $order);
+  if(!count($listPlages[$_bloc->_id])) {
+    unset($listPlages[$_bloc->_id]);
+  }
+}
 
 $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 
-foreach ($listPlages as $keyPlage=>&$plageop){
-  $plageop->loadRefSalle();
-  $plageop->getNbOperations($nb_secondes, false);
-  $plageop->loadRefsBack(0);
+foreach ($listPlages as &$_bloc) {
+  foreach($_bloc as &$_plage){
+    $_plage->loadRefSalle();
+    $_plage->getNbOperations($nb_secondes, false);
+    $_plage->loadRefsBack(0);
+  }
 }
 
 // Heures d'admission
@@ -80,6 +94,7 @@ $smarty->assign("chir"        , $chir);
 $smarty->assign("group_id"    , $group_id);
 $smarty->assign("curr_op_hour", $curr_op_hour);
 $smarty->assign("curr_op_min" , $curr_op_min);
+$smarty->assign("blocs"       , $blocs);
 $smarty->assign("listPlages"  , $listPlages);
 
 $smarty->assign("hours"              , $hours);

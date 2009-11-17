@@ -39,6 +39,7 @@ Main.add(function () {
   if (!oFormSejour.sejour_id.value) {
     $V(form.admission, ["ambu", "exte"].include(oFormSejour.type.value) ? "jour" : "veille");
   }
+  Control.Tabs.create('main_tab_group', true);
 });
 </script>
 
@@ -82,17 +83,27 @@ Main.add(function () {
 
 <table class="main">  
   <tr>
-    <td class="halfPane">
+    <td class="greedyPane">
+      <ul id="main_tab_group" class="control_tabs">
+        {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
+        {{assign var=_bloc value=$blocs.$_key_bloc}}
+        <li><a href="#bloc-{{$_bloc->_id}}">{{$_bloc->_view}} ({{$_blocplage|@count}})</a></li>
+        {{/foreach}}
+      </ul>
+      <hr class="control_tabs" />
+      {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
+      {{assign var=_bloc value=$blocs.$_key_bloc}}
+      <div id="bloc-{{$_bloc->_id}}" style="display:none">
       <table class="tbl">
         <tr>
           <th class="category" colspan="2">
             Choisir une date
           </th>
         </tr>
-        {{foreach from=$listPlages item=curr_plage}}
+        {{foreach from=$_blocplage item=_plage}}
         <tr>
           <td>
-            {{assign var="pct" value=$curr_plage->_fill_rate}}
+            {{assign var="pct" value=$_plage->_fill_rate}}
             {{if $pct > 100}}
               {{assign var="over" value=1}}
               {{assign var="pct" value=100}}
@@ -100,7 +111,7 @@ Main.add(function () {
               {{assign var="over" value=0}}              
             {{/if}}
             
-            {{if $curr_plage->spec_id}}
+            {{if $_plage->spec_id}}
               {{assign var="pct" value="100"}}
               {{assign var="backgroundClass" value="empty"}}
             {{elseif $pct < 100}}
@@ -114,25 +125,25 @@ Main.add(function () {
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text" style="text-align: left">
                 <label 
-                  for="list_{{$curr_plage->_id}}"
-                  onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$curr_plage->_id}}')" 
-                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"{{/if}}
+                  for="list_{{$_plage->_id}}"
+                  onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$_plage->_id}}')" 
+                  {{if !$over}}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
                 >
-                  {{$curr_plage->date|date_format:"%a %d"}} -
-                  {{$curr_plage->debut|date_format:"%Hh%M"}} -
-                  {{$curr_plage->fin|date_format:"%Hh%M"}} 
-                  &mdash; {{$curr_plage->_ref_salle->_view}} 
+                  {{$_plage->date|date_format:"%a %d"}} -
+                  {{$_plage->debut|date_format:"%Hh%M"}} -
+                  {{$_plage->fin|date_format:"%Hh%M"}} 
+                  &mdash; {{$_plage->_ref_salle->_shortview}}
                 </label>
               </div>
             </div>
-            <div id="plage-{{$curr_plage->_id}}" style="display: none; width: 200px;">
+            <div id="plage-{{$_plage->_id}}" style="display: none; width: 200px;">
               <table class="tbl">
               	<tr>
               		<th class="category">
-              			Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}
+              			Plage de {{$_plage->debut|date_format:'%Hh%M'}}-{{$_plage->fin|date_format:'%Hh%M'}}
               		</th>
               	</tr>
-                {{foreach from=$curr_plage->_ref_operations item=curr_op}}
+                {{foreach from=$_plage->_ref_operations item=curr_op}}
                 <tr>
                   <td class="text">
                     {{if $curr_op->libelle}}
@@ -154,20 +165,22 @@ Main.add(function () {
             {{if $resp_bloc ||
               (
                (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
-               && ($curr_plage->date >= $date_min)
-               && (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))
+               && ($_plage->date >= $date_min)
+               && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
               )
             }}
-            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}"
-               ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"
-               onclick="document.frmSelector._date.value='{{$curr_plage->date}}'; document.frmSelector._salle_id.value='{{$curr_plage->salle_id}}';"/>
+            <input type="radio" name="list" value="{{$_plage->plageop_id}}"
+               ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
+               onclick="document.frmSelector._date.value='{{$_plage->date}}'; document.frmSelector._salle_id.value='{{$_plage->salle_id}}';"/>
             {{/if}}
           </td>
         </tr>
         {{/foreach}}
       </table>
+      </div>
+      {{/foreach}}
     </td>
-    <td class="halfPane">
+    <td>
       <table class="form">
         <tr>
           <th colspan="3" class="category">

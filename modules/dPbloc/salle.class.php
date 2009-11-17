@@ -63,6 +63,7 @@ class CSalle extends CMbObject {
     	$this->_view = $bloc->nom.' - ';
     }
     $this->_view .= $this->nom;
+    $this->_shortview = $this->nom;
   }
   
   /**
