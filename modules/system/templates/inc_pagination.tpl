@@ -29,11 +29,12 @@
              <select onchange="{{$change_page}}($V(this))">
               <option selected="selected" disabled="disabled">{{$current/$step+1}}</option>
           {{/if}}
-            {{if $page+1 % $jumper == 0}}
-            <option {{if $page*$step == $current}}selected="selected"{{/if}} value="{{$page*$step}}">{{$page+1}}</option>
+            {{* The test vs 0 is to avoid a warning "division by zero" *}}
+            {{if $jumper == 0 || $page+1 % $jumper == 0}}
+              <option {{if $page*$step == $current}}selected="selected"{{/if}} value="{{$page*$step}}">{{$page+1}}</option>
             {{/if}}
-            {{if $page+1 % ($jumper*10) == 0}}
-            {{assign var=jumper value=$jumper*10}}
+            {{if $jumper == 0 || $page+1 % ($jumper*10) == 0}}
+              {{assign var=jumper value=$jumper*10}}
             {{/if}}
           {{if $page == $pagination|@count-6}}
             </select> ...
