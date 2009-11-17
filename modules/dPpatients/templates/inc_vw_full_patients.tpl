@@ -87,21 +87,15 @@ function popEtatSejour(sejour_id) {
   </td>
 
 	{{assign var=praticien value=$curr_sejour->_ref_praticien}}
-	{{if $curr_sejour->annule}}
-	<td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
-	  <strong>SEJOUR ANNULE</strong>
-	</td>
-	{{else}}
-		{{if $curr_sejour->group_id == $g}}
-		<td>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
-		</td>
-		{{else}}
-		<td style="background-color:#afa">
-		  {{$curr_sejour->_ref_group->text|upper}}
-		</td>
-		{{/if}}
-	{{/if}}
+	{{if $curr_sejour->group_id == $g}}
+  <td {{if $curr_sejour->annule}}class="cancelled"{{/if}}>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
+  </td>
+  {{else}}
+  <td style="background-color:#afa">
+    {{$curr_sejour->_ref_group->text|upper}}
+  </td>
+  {{/if}}
   
   <td style="text-align:right;">
   {{if $curr_sejour->_canRead}}
@@ -156,7 +150,7 @@ function popEtatSejour(sejour_id) {
 {{if $curr_sejour->_ref_rpu && $curr_sejour->_ref_rpu->_id && $curr_sejour->_ref_rpu->_ref_consult->_id}}
 {{assign var="curr_consult" value=$curr_sejour->_ref_rpu->_ref_consult}}
 <tr>
-  <td>
+  <td style="padding-left: 20px;">
     <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
       <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
     </a>
@@ -174,13 +168,14 @@ function popEtatSejour(sejour_id) {
   </td>
   
   {{assign var=praticien value=$curr_consult->_ref_chir}}
+  
   {{if $curr_consult->annule}}
-  <td class="cancelled">[Consult annulée]</td>
+  <td class="cancelled">
   {{else}}
   <td>
+  {{/if}}
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	</td>
-  {{/if}}
 
   <td style="text-align: right;">
  
@@ -215,20 +210,14 @@ function popEtatSejour(sejour_id) {
   </td>
 
   {{assign var=praticien value=$curr_op->_ref_chir}}
-  {{if $curr_op->annulee}}
-  <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
-    <strong>OPERATION ANNULEE</strong>
+	{{if $curr_sejour->group_id == $g}}
+  <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
   </td>
   {{else}}
-	  {{if $curr_sejour->group_id != $g}}
-	  <td style="background-color:#afa">
-	    {{$curr_sejour->_ref_group->_view|upper}}
-	  </td>
-	  {{else}}
-	  <td>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
-	  </td>
-	  {{/if}}
+  <td style="background-color:#afa">
+    {{$curr_sejour->_ref_group->text|upper}}
+  </td>
   {{/if}}
 
   <td style="text-align:right;">
@@ -335,12 +324,12 @@ function popEtatSejour(sejour_id) {
   
   {{assign var=praticien value=$curr_consult->_ref_chir}}
   {{if $curr_consult->annule}}
-  <td class="cancelled">[Consult annulée]</td>
+  <td class="cancelled">
   {{else}}
   <td>
+  {{/if}}
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
 	</td>
-  {{/if}}
 
   <td style="text-align:right;">
   {{if $curr_consult->_canRead}}
