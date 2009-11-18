@@ -425,7 +425,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $placement = $xpath->queryUniqueNode("hprim:Placement", $node);
     
-    $mbVenue->modalite = $xpath->queryAttributNode("hprim:modePlacement", $placement, "modaliteHospitalisation");
+    if ($placement) {
+      $mbVenue->modalite = $xpath->queryAttributNode("hprim:modePlacement", $placement, "modaliteHospitalisation");
+    }
     
     return $mbVenue;
   }
