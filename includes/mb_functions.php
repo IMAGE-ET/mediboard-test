@@ -515,7 +515,7 @@ class CMbDate {
     list($yt, $mt, $dt) = explode("-", $to);
 
     $achieved["month"] = 12*($yt-$yf) + ($mt-$mf);
-    if ($mt == $mf && $dt > $df) {
+    if ($mt == $mf && $dt < $df) {
       $achieved["month"]--;
     }
 		
