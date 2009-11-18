@@ -29,7 +29,10 @@ Main.add(function () {
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
+        
     {{mb_include module=system template=inc_config_bool var=server}}
+    
+    {{mb_include module=system template=inc_config_bool var=send_all_patients}}
     
     {{assign var="var" value="transport_layer"}}
     <tr>

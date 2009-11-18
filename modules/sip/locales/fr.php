@@ -203,4 +203,6 @@ $locales['mod-sip-tab-vw_test_ws'] = 'Test WS';
 $locales['config-sip-pat_no_ipp'] = 'Patient n\'ayant pas d\'IPP';
 $locales['config-sip-pat_no_ipp-desc'] = 'Patient n\'ayant pas d\'IPP';
 $locales['mod-sip-tab-v'] = '';
+$locales['config-sip-send_all_patients'] = 'Envoi tous les patients';
+$locales['config-sip-send_all_patients-desc'] = 'Envoi tous les patients ou seulement ceux des séjours';
 ?>

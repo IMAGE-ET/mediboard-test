@@ -105,6 +105,11 @@ class CSipObjectHandler extends CMbObjectHandler {
   
           $mbObject->_IPP = $IPP->id400;
         }
+        
+        // Envoi pas les patients qui n'ont pas d'IPP
+        if (!CAppUI::conf("sip send_all_patients") && !$mbObject->_IPP) {
+          return;
+        }
   
         $domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
         $domEvenement->emetteur = CAppUI::conf('mb_id');

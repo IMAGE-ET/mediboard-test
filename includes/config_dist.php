@@ -624,6 +624,7 @@ $dPconfig["sip"] = array (
   "fileextension" => "XML",
   "filenbroll" => "2",
   "pat_no_ipp" => 0,
+  "send_all_patients" => 1,
 );
 
 $dPconfig["webservices"] = array (
