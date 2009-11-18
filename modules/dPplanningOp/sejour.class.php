@@ -543,6 +543,18 @@ class CSejour extends CCodable {
     if ($this->_modifier_sortie === '0'){
       $this->sortie_reelle = "";
     }    
+    
+    $this->completeField('entree_prevue');
+    // Affectation de la date d'entrée prévue si on a la date d'entrée réelle
+    if ($this->entree_reelle !== null && !$this->entree_prevue) {
+      $this->entree_prevue = $this->entree_reelle;
+    }
+    
+    $this->completeField('sortie_prevue');
+    // Affectation de la date de sortie prévue si on a la date de sortie réelle
+    if ($this->sortie_reelle !== null && !$this->sortie_prevue) {
+      $this->sortie_prevue = $this->sortie_reelle;
+    }
   }
 
   function getTemplateClasses(){

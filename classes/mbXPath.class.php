@@ -27,6 +27,9 @@ class CMbXPath extends DOMXPath {
       trigger_error("queried node is not unique, found $nodeList->length occurence(s) for '$query'", E_USER_WARNING);
       return null;
     }
+    if ($nodeList->length == 0) {
+      return null;
+    }
     return $nodeList->item(0);
   } 
   

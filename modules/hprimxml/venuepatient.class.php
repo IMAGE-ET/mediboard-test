@@ -266,7 +266,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
       $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
     $echange_hprim->acquittement = $messageAcquittement;

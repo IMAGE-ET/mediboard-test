@@ -472,7 +472,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
     
-    $mbVenue->praticien_id = $this->getMedecin($medecinResponsable);
+    if ($medecinResponsable) {
+      $mbVenue->praticien_id = $this->getMedecin($medecinResponsable);
+    }
     
     return $mbVenue;
   }
