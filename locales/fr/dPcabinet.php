@@ -1777,4 +1777,7 @@ $locales['CLmFichier-_resend_fixable-desc'] = '';
 $locales['CConsultation-facture'] = 'Facturée';
 $locales['CConsultation-facture-court'] = 'Facturée';
 $locales['CConsultation-facture-desc'] = 'Consultation facturée';
+$locales['CConsultation-_du_tiers_restant'] = 'Restant tiers';
+$locales['CConsultation-_du_tiers_restant-court'] = 'Restant tiers';
+$locales['CConsultation-_du_tiers_restant-desc'] = 'Reste à régler par le tiers payant';
 ?>
