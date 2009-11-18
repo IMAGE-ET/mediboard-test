@@ -625,6 +625,10 @@ table.main td.text {
   white-space: normal;
 }
 
+table.main td.top {
+  vertical-align: top;
+}
+
 table.main tbody.viewported td.viewport {
   border: 1px solid #000;
 }
@@ -3217,22 +3221,25 @@ ul li a.chapitre_signe.active{
   color: #000;
 }
 
-ul li.user {
+ul li.user, td.user {
 	background-image: url(../../images/icons/user.png);
 	background-repeat: no-repeat;
 	background-position: right;
+  padding-right: 16px !important;
 }
 
-ul li.function {
+ul li.function, td.function {
   background-image: url(../../images/icons/user-function.png);
   background-repeat: no-repeat;
   background-position: right;
+  padding-right: 16px !important;
 }
 
-ul li.group {
+ul li.group, td.group {
   background-image: url(../../images/icons/group.png);
   background-repeat: no-repeat;
   background-position: right;
+  padding-right: 16px !important;
 }
 
 table.active {

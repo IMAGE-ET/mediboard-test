@@ -11,7 +11,6 @@
   <input type="hidden" name="tab" value="vw_idx_planning" />
   <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 </form>
-
 {{/if}}
 
 <table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
@@ -41,31 +40,24 @@
   
   {{foreach from=$curr_plage->_ref_operations item=_operation}}
   <tbody class="hoverable">
-  
   <tr>
     {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
-    <td class="text" {{if !$board}}rowspan="2"{{/if}}>
-    
-      <a href="{{$patient->_dossier_cabinet_url}}"
-        class="tooltip-trigger"
-        onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        {{$patient->_view}}
+    <td class="text top" {{if !$board}}rowspan="2"{{/if}}>
+      <a href="{{$patient->_dossier_cabinet_url}}">
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
       </a>
     </td>
-    
-    <td class="text">
+    <td class="text top">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
-        {{mb_include template=inc_vw_operation}}   
+        {{mb_include template=inc_vw_operation}}
       </a>
     </td>
-
     {{if $_operation->annulee}}
-    <td class="cancelled" colspan="2">
+    <td class="cancelled top" colspan="2">
       [ANNULEE]
     </td>
-
     {{else}}
-    <td style="text-align: center;">
+    <td class="top" style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
         {{if $_operation->time_operation != "00:00:00"}}
           Validé pour 
@@ -82,7 +74,7 @@
         {{/if}}
       </a>
     </td>
-    <td style="text-align: center;">
+    <td class="top" style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
         {{$_operation->temp_operation|date_format:$dPconfig.time}}
       </a>
@@ -93,13 +85,12 @@
   {{if !$board}}
   {{if !$_operation->annulee}}
 	<tr>
-    <td colspan="10">
+    <td class="top" colspan="10">
       {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
     </td>
   </tr>
   {{/if}}
   {{/if}}
-  
   </tbody>
   {{/foreach}}
   {{/foreach}}
@@ -112,25 +103,22 @@
   
   {{foreach from=$listUrgences item=_operation}}
   <tbody class="hoverable">
-
   <tr>
     {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
-    <td class="text" {{if !$board}}rowspan="2"{{/if}}>
+    <td class="text" class="top" {{if !$board}}rowspan="2"{{/if}}>
       <a href="{{$patient->_dossier_cabinet_url}}"
         class="tooltip-trigger"
         onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
         {{$patient->_view}}
       </a>
     </td>
-    
-    <td class="text">
+    <td class="text top">
       <a href="?m={{$m}}&amp;tab=w_edit_urgence&amp;operation_id={{$_operation->_id}}">
       	{{if $_operation->salle_id}}Déplacé en salle {{$_operation->_ref_salle}}{{/if}}
         {{mb_include template=inc_vw_operation}}   
       </a>
     </td>
-
-    <td style="text-align: center;" {{if $_operation->annulee}}class="cancelled"{{/if}}>
+    <td class="top" style="text-align: center;" {{if $_operation->annulee}}class="cancelled"{{/if}}>
       {{if $_operation->annulee}}
         [ANNULEE]
       {{else}}
@@ -139,7 +127,7 @@
       </a>
       {{/if}}
     </td>
-    <td style="text-align: center;">
+    <td class="top" style="text-align: center;">
       <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
         {{$_operation->temp_operation|date_format:$dPconfig.time}}
       </a>
@@ -148,7 +136,7 @@
 
   {{if !$board}}
 	<tr>
-    <td colspan="10">
+    <td class="top" colspan="10">
       {{include file=inc_documents_operation.tpl operation=$_operation preloaded=true}}
     </td>
   </tr>

@@ -10,7 +10,6 @@
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
-
 $date = CValue::getOrSession("date", mbDate());
 $pratSel = CValue::getOrSession("pratSel", $AppUI->user_id);
 $userSel = new CMediusers;

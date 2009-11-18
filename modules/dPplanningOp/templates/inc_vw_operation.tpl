@@ -1,6 +1,6 @@
 <!-- $Id: inc_infos_hospitalisation.tpl 6136 2009-04-21 12:31:36Z phenxdesign $ -->
 
-<div onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+<span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
 	
 {{if $_operation->libelle}}
   <strong>[{{$_operation->libelle}}]<br /></strong>
@@ -23,4 +23,4 @@
  <br />
   {{/foreach}}
 {{/if}}
-</div>
+</span>
