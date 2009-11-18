@@ -212,12 +212,13 @@ Main.add(window.print);
      {{/if}}
      <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
      <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
-     {{if $elements.ald|@count}}
+     {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
      <h3>
 	     Prescriptions relatives au traitement de l'affection de longue durée 
 		 </h3>
 	   {{/if}}
 
+     {{if array_key_exists("ald", $elements)}}
      <ul>
 	     <!-- Affichage des ALD -->
 	     {{foreach from=$elements.ald key=name_cat item=_elements_ald name="foreach_elts_ald"}}  
@@ -229,7 +230,7 @@ Main.add(window.print);
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 		           {{else}}
-							   <strong>Injections</strong>
+							   <strong>Injections par IDE à domicile</strong>
 							 {{/if}}
 						 {{/if}}
 
@@ -246,8 +247,9 @@ Main.add(window.print);
 	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
+			 {{/if}}
 	     
-	    {{if $elements.ald|@count}}
+	    {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
 	    <div class="middle"></div>
 		  	 <h3>
 	         Prescriptions SANS RAPPORT avec l'affection de longue durée 
@@ -264,7 +266,7 @@ Main.add(window.print);
 			         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 			         {{else}}
-							   <strong>Injections</strong>
+							   <strong>Injections par IDE à domicile</strong>
 							 {{/if}}
 						 {{/if}}
 		
