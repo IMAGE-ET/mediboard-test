@@ -7,17 +7,18 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
+global $AppUI, $can;
 
 // Chargement de l'utilisateur courant
 $user = new CMediusers;
 $user->load($AppUI->user_id);
+$user->isPraticien();
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_operations"  , TAB_READ);
 
-if (!$user->isPraticien()){
+if (!$user->_is_praticien || ($user->_is_praticien && $can->edit)){
 	$module->registerTab("vw_reveil"      , TAB_READ);
 	$module->registerTab("vw_soins_reveil", TAB_READ);
 	//$module->registerTab("vw_brancardage", TAB_READ);
