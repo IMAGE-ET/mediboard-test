@@ -185,8 +185,13 @@ class CPrescriptionLineElement extends CPrescriptionLine {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
+    	$current_user = new CMediusers();
+      $current_user->load($AppUI->user_id);
+			
+			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+			
       $perm_edit = $can->admin || ((!$this->signee) && 
-                 ($this->praticien_id == $AppUI->user_id || $operation_id || $is_praticien));
+                 ($this->praticien_id == $AppUI->user_id || $operation_id || $is_praticien || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));
     }
     
     $this->_perm_edit = $perm_edit;

@@ -68,20 +68,7 @@ $packs = $pack->loadList($where, "libelle");
 
 // Chargement du nombre d'element par chapitre dans les packs
 foreach($packs as $_pack){
-	$_pack->loadRefsPackItems();
-	foreach($_pack->_ref_protocole_pack_items as $_pack_item){
-		$_pack_item->loadRefPrescription();
-		$_prescription =& $_pack_item->_ref_prescription; 
-		$_prescription->countLinesMedsElements();
-	  foreach($_prescription->_counts_by_chapitre as $chapitre => $_count_chapitre){
-	    if($_count_chapitre){
-	      if(!isset($_pack->_counts_by_chapitre[$chapitre])){
-	      	$_pack->_counts_by_chapitre[$chapitre] = 0;
-	      }
-				$_pack->_counts_by_chapitre[$chapitre] += $_count_chapitre;
-	    }
-	  }
-	}
+	$_pack->countElementsByChapitre();
 }
 
 $list["pack"] = $packs; 

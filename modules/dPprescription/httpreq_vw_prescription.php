@@ -65,12 +65,12 @@ $executants           = array();
 $dossier_medical      = new CDossierMedical();
 
 // Chargement de l'utilisateur courant
-$user = new CMediusers();
-$user->load($AppUI->user_id);
-$is_praticien = $user->isPraticien();
+$current_user = new CMediusers();
+$current_user->load($AppUI->user_id);
+$is_praticien = $current_user->isPraticien();
 
 // Liste des praticiens disponibles
-$listPrats = $is_praticien ? null : $user->loadPraticiens(PERM_EDIT);
+$listPrats = $is_praticien ? null : $current_user->loadPraticiens(PERM_EDIT);
 
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
@@ -451,10 +451,13 @@ if(isset($prescription->_ref_lines_med_comments["med"])){
   usort($prescription->_ref_lines_med_comments["med"], "compareMed");
 }
 
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
 // Mode permettant de supprimer qq elements de la ligne en salle d'op (Anesthesie)
+$smarty->assign("current_user", $current_user);
 $smarty->assign("mode_induction_perop", false);
 $smarty->assign("aides_prescription", $aides_prescription);
 $smarty->assign("full_line_guid", $full_line_guid);

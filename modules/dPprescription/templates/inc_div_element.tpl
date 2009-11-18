@@ -53,14 +53,22 @@ Main.add( function(){
 </script>
 
 <table class="form">
+	{{assign var=variable_droits value="droits_infirmiers_$element"}}
+
+	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.$variable_droits))}}
+	  {{assign var=perm_add_line value=1}}
+	{{else}}
+    {{assign var=perm_add_line value=0}}  
+	{{/if}}
+
   <tr>
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+    {{if $perm_add_line}}
       <th class="category">Nouvelle ligne</th>
     {{/if}}
     <th class="category" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
-  	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+    {{if $perm_add_line}}
     <td>
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
@@ -120,7 +128,7 @@ Main.add( function(){
 		  {{/if}}
     </td>
   </tr>
-  {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}} 
+  {{if $perm_add_line}}
   <tbody id="add_{{$element}}" style="display: none">
     <tr>
       <th colspan="2" class="category">

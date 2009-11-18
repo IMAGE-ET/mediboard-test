@@ -231,7 +231,7 @@ Main.add( function(){
     <th class="title text" colspan="3">
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
-        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma)}}
+        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 						<optgroup label="Responsables">
@@ -296,10 +296,10 @@ Main.add( function(){
   <tr>
   	<td colspan="3">
 			<ul id="header_prescription" class="control_tabs small">
-				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
+				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
 				<li><a href="#div_protocoles">Protocoles</a></li>
 				{{/if}}
-				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
+				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
 				<li><a href="#div_ajout_lignes">Paramètres d'ajout de lignes</a></li>
 				{{/if}}
 				<li><a href="#div_outils">Outils</a></li>
@@ -351,7 +351,7 @@ Main.add( function(){
 		</td>
   </tr>
   <tr>
-  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin)}}
+  {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
    <td id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
@@ -395,7 +395,7 @@ Main.add( function(){
     </td>  
   {{/if}}
   
-  {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin)}}
+  {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
       <td id="div_ajout_lignes" colspan="3" style="display: none;">
 		    <form name="selDateLine" action="?" method="get"> 
         {{if $prescription->type != "externe"}} 

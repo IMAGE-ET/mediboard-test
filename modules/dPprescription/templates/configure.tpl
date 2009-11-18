@@ -47,54 +47,30 @@ function updateUCD(){
 
 	<table class="form">
 	  {{assign var="class" value="CPrescription"}}
-	  {{assign var="var" value="show_unsigned_lines"}}
-	  <tr>
-	   <th class="category" colspan="2">
-	      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-	      </label>    
-	   </th>
-	  </tr>
-	  <tr>  
-	    <td colspan="2" style="text-align: center">
-	      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-	      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-	    </td>             
-	  </tr>
-	  {{assign var="var" value="add_element_category"}}
-	  <tr>
-	   <th class="category" colspan="2">
-	      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-	      </label>    
-	   </th>
-	  </tr>
-	  <tr>  
-	    <td colspan="2" style="text-align: center">
-	      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-	      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-	    </td>             
-	  </tr>
-		{{assign var="var" value="preselect_livret"}}
     <tr>
-     <th class="category" colspan="2">
-        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      <th class="category" colspan="2">
+        <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}{{/tr}}
         </label>    
-     </th>
+      </th>
     </tr>
-    <tr>  
-      <td colspan="2" style="text-align: center">
-        <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-        <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-      </td>             
+		{{mb_include module=system template=inc_config_bool var=show_unsigned_lines}}
+		{{mb_include module=system template=inc_config_bool var=add_element_category}}
+    {{mb_include module=system template=inc_config_bool var=preselect_livret}}
+		<tr>
+      <th class="category" colspan="2">
+        Droits infirmiers sur la prescription
+      </th>
     </tr>
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_med}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_anapath}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_biologie}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_imagerie}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_consult}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_kine}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_soin}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_dm}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_dmi}}
 	  {{assign var="var" value="time_alerte_modification"}}
 	  <tr>
 	    <th colspan="2" class="category">

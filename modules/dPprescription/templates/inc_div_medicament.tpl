@@ -156,13 +156,13 @@ transfertLineTP = function(line_id, sejour_id){
   </tr>
   {{/if}}
   <tr>
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}}  
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
       <th class="category">Nouvelle ligne</th>
     {{/if}}
     <th class="category" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma)}} 
+    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
     <td>
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">

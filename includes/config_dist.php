@@ -428,6 +428,15 @@ $dPconfig["dPprescription"] = array (
       "IPC" => "2",
       "hors_livret" => "1"
     ),
+	  "droits_infirmiers_med" => "0",
+		"droits_infirmiers_anapath" => "0",
+		"droits_infirmiers_biologie" => "0",
+		"droits_infirmiers_imagerie" => "0",
+		"droits_infirmiers_consult" => "0",
+		"droits_infirmiers_kine" => "0",
+		"droits_infirmiers_soin" => "0",
+		"droits_infirmiers_dm" => "0",
+		"droits_infirmiers_dmi" => "0",
 		"preselect_livret" => "1",
   ),
   

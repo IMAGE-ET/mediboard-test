@@ -84,8 +84,13 @@ class CPrescriptionLineComment extends CPrescriptionLine {
    */
   function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
 		global $AppUI, $can;
-		               
-		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id));             
+		       
+	  $current_user = new CMediusers();
+    $current_user->load($AppUI->user_id);
+			
+		$chapitre = $this->_ref_category_prescription->chapitre;
+      
+		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id  || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));             
     $this->_perm_edit = $perm_edit;
     
     // Executant

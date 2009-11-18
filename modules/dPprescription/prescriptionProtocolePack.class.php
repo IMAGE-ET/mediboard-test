@@ -24,6 +24,8 @@ class CPrescriptionProtocolePack extends CMbObject {
   
   // BackRefs
   var $_ref_protocole_pack_items = null;
+	
+	var $_counts_by_chapitre = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -80,6 +82,23 @@ class CPrescriptionProtocolePack extends CMbObject {
     $this->loadRefPraticien();
     $this->loadRefFunction();
   }
+	
+	function countElementsByChapitre(){
+		$this->loadRefsPackItems();
+	  foreach($this->_ref_protocole_pack_items as $_pack_item){
+	    $_pack_item->loadRefPrescription();
+	    $_prescription =& $_pack_item->_ref_prescription; 
+	    $_prescription->countLinesMedsElements();
+	    foreach($_prescription->_counts_by_chapitre as $chapitre => $_count_chapitre){
+	      if($_count_chapitre){
+	        if(!isset($_pack->_counts_by_chapitre[$chapitre])){
+	          $this->_counts_by_chapitre[$chapitre] = 0;
+	        }
+	        $this->_counts_by_chapitre[$chapitre] += $_count_chapitre;
+	      }
+	    }
+	  }
+	}
 }
 
 ?>
