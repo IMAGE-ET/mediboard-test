@@ -266,12 +266,13 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $id400Venue->last_update = mbDateTime();
     $messages['msgNumDosVenue'] = $id400Venue->store();
     
-    if ($etatVenueEliminee != "préadmission") {
-      $id400VenueEliminee->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$data['idClient'];
-      $id400VenueEliminee->object_id = $newVenue->_id;
-      $id400VenueEliminee->last_update = mbDateTime();
-      $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->store();
-    }
+    $id400VenueEliminee->tag = ($etatVenueEliminee != "préadmission") ? 
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$data['idClient'] :
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'];
+        
+    $id400VenueEliminee->object_id = $newVenue->_id;
+    $id400VenueEliminee->last_update = mbDateTime();
+    $messages['msgNumDosVenueEliminee'] = $id400VenueEliminee->store();
     
     return $messages;
   }
