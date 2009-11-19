@@ -27,7 +27,7 @@
 {{/if}}
 <tbody class="hoverable">
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
-  {{if $_operation->_deplacee}}
+  {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
   <td class="text" rowspan="{{$rowspan}}" style="background-color:#ccf">
   {{elseif $_operation->entree_salle && $_operation->sortie_salle}}
   <td class="text" rowspan="{{$rowspan}}" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
