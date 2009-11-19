@@ -483,11 +483,6 @@
               {{foreach from=$list_exams item=curr_examcomp}}
               <li>
                 {{$curr_examcomp->examen}}
-                {{if $curr_examcomp->fait}}
-                  (Fait)
-                {{else}}
-                  (A Faire)
-                {{/if}}
               </li>
               {{/foreach}}
             </ul>
