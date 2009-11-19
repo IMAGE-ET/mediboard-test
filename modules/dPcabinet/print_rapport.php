@@ -87,7 +87,7 @@ $prat = new CMediusers;
 $prat->load(CValue::getOrSession("chir"));
 $prat->loadRefFunction();
 if ($prat->_id) {
-	$listPrat = array($prat);
+  $listPrat = array($prat->_id => $prat);
 }
 else {
   $listPrat = $prat->loadPraticiens(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
