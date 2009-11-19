@@ -21,9 +21,18 @@ viewListPrescription = function(){
   url.requestUpdate("list_prescriptions", { waitingText: null } );
 }
 	
+loadSejour = function(sejour_id) {
+  var url = new Url("system", "httpreq_vw_complete_object");
+  url.addParam("object_class","CSejour");
+  url.addParam("object_id",sejour_id);
+  url.requestUpdate('bilan_sejour', {
+   onComplete: initNotes
+  } );
+}
 
 Main.add(function () {
   viewListPrescription();
+  bilanTabs = Control.Tabs.create('bilanTabs', false);
 });
 
 </script>
@@ -87,10 +96,22 @@ Main.add(function () {
   </tr>
   <tr>
     <td style="width: 150px" id="list_prescriptions"></td>
-    <td id="prescription_sejour">
-      <div class="big-info">
-        Selectionnez une prescription sur la gauche pour la visualiser 
-      </div>
+    <td>
+			<ul id="bilanTabs" class="control_tabs">
+				<li><a href="#prescription_sejour">Prescription</a></li>
+				<li><a href="#bilan_sejour">Séjour</a></li>
+      </ul>
+			<hr class="control_tabs" />
+			<div id="prescription_sejour" style="display: none;">
+				<div class="small-info">
+	          Veuillez sélectionner un patient pour visualiser sa prescription de séjour.
+	      </div>
+			</div>
+      <div id="bilan_sejour" style="display: none;">
+			  <div class="small-info">
+          Veuillez sélectionner un patient pour visualiser les informations sur son séjour.
+        </div>
+			</div>
     </td>
   </tr>
 </table>

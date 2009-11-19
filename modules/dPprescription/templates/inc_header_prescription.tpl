@@ -283,7 +283,7 @@ Main.add( function(){
         {{if $prescription->type == "externe"}}
           {{$prescription->_ref_patient->_view}}   
         {{else}}
-          {{$prescription->_ref_object->_view}}
+           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">{{$prescription->_ref_object->_view}}</a>
         {{/if}}
         {{if $prescription->_ref_patient->_age}}
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
