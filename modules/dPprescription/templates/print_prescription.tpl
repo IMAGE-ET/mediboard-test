@@ -230,7 +230,7 @@ Main.add(window.print);
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 		           {{else}}
-							   <strong>Injections par IDE à domicile</strong>
+							   <strong>Injections par IDE à domicile (férié et dimanche)</strong>
 							 {{/if}}
 						 {{/if}}
 
@@ -266,7 +266,7 @@ Main.add(window.print);
 			         	 {{if $dPconfig.dPprescription.CCategoryPrescription.show_header && $category->header}}, {{$category->header}}{{/if}}
 				         {{if $dPconfig.dPprescription.CCategoryPrescription.show_description && $category->description}}, {{$category->description}}{{/if}}
 			         {{else}}
-							   <strong>Injections par IDE à domicile</strong>
+							   <strong>Injections par IDE à domicile (férié et dimanche)</strong>
 							 {{/if}}
 						 {{/if}}
 		

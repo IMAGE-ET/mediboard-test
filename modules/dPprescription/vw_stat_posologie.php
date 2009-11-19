@@ -21,15 +21,15 @@ $produit->load($code_cip);
 $line = new CPrescriptionLineMedicament();
 $prescription = new CPrescription();
 
-foreach($prescription->_specs['type']->_list as $_presc){
+foreach($prescription->_specs['type']->_list as $type_prescription){
   // Chargement des poso pour le praticien
   if($praticien->_id){
-	  $line->loadMostUsedPoso($produit->code_cis, $praticien_id, $_presc);
-	  $stats["praticien"][$_presc] = $line->_most_used_poso;
+	  $line->loadMostUsedPoso($produit->code_cis, $praticien_id, $type_prescription);
+	  $stats["praticien"][$type_prescription] = $line->_most_used_poso;
   }
   // Chargement des poso global de l'etalissement
-	$line->loadMostUsedPoso($produit->code_cis, "global", $_presc);
-	$stats["global"][$_presc] = $line->_most_used_poso;
+	$line->loadMostUsedPoso($produit->code_cis, "global", $type_prescription);
+	$stats["global"][$type_prescription] = $line->_most_used_poso;
 }
 
 // Création du template

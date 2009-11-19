@@ -36,8 +36,8 @@ foreach($search_by_dci as $key => $_produit){
   $produits[$key] = $_produit;
 }
 
-
 // Classement des lignes par ordre alphabetique
+/*
 function compareMed($produit1, $produit2){
   return strcmp($produit1->Libelle, $produit2->Libelle);
 }
@@ -45,6 +45,7 @@ function compareMed($produit1, $produit2){
 if (isset($produits)){
   usort($produits, "compareMed");
 }
+*/
 
 // Création du template
 $smarty = new CSmartyDP();

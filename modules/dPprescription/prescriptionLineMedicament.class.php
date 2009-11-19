@@ -396,7 +396,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	        if($_prise->_id != $last_prise->_id){
 	          $view .= ", ";
 	        }
-	      }
+				}
+				$view .= " ($line->voie)"; 
+				
 	      if(!isset($temp_view[$view])){
 	        $temp_view[$view] = array("occ" => "", "line_id" => "");
 	      }
@@ -442,8 +444,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $ds->exec($sql);
 
 		$sql = "CREATE TEMPORARY TABLE signatures AS
-							SELECT prescription_line_medicament_id, CONVERT(GROUP_CONCAT(CONCAT_WS('-', quantite, nb_fois, unite_fois, nb_tous_les, unite_tous_les, decalage_prise, unite_prise, decalage_intervention, heure_prise, moment_unitaire_id ) SEPARATOR '|') USING latin1) as signature
+							SELECT posos.prescription_line_medicament_id, CONVERT(GROUP_CONCAT(CONCAT_WS('-', prescription_line_medicament.voie, quantite, nb_fois, unite_fois, nb_tous_les, unite_tous_les, decalage_prise, unite_prise, decalage_intervention, heure_prise, moment_unitaire_id ) SEPARATOR '|') USING latin1) as signature
 	          	FROM posos
+							LEFT JOIN prescription_line_medicament ON prescription_line_medicament.prescription_line_medicament_id = posos.prescription_line_medicament_id
 							GROUP BY prescription_line_medicament_id";
 	  $ds->exec($sql);
    
@@ -455,7 +458,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 						ORDER BY count_signature DESC
 						LIMIT 5;";
 	  $signatures = $ds->loadList($sql);
-    
+		
 	  $sql = "SELECT count(*) FROM signatures";
 	  $signatures["total"] = $ds->loadResult($sql);
 	  
@@ -470,9 +473,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   
   function applyPoso($poso){ 
-    $line_medicament = new CPrescriptionLineMedicament();
+    // Chargement d'une ligne possedant la poso la plus utilisée
+		$line_medicament = new CPrescriptionLineMedicament();
     $line_medicament->load($poso['prescription_line_medicament_id']);
-    $line_medicament->loadRefsPrises();
+		$line_medicament->loadRefsPrises();
+		
+		// Pre-remplissage des prises les plus utilisées
     foreach($line_medicament->_ref_prises as $_prise){
       if(!$_prise->urgence_datetime){
 	      $_prise->_id = '';
@@ -480,6 +486,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	      $_prise->object_class = $this->_class_name;
 	      $_prise->store();
       }
+    }
+		
+    // Pre-remplissage de la voie la plus utilisée
+    if($line_medicament->voie){
+      $this->voie = $line_medicament->voie;
+      $this->store();
     }
   }
   
@@ -577,12 +589,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
   
       if($unite){
+				$unite_escape = preg_quote($unite);
+        $unite_escape = str_replace("/", "\\/", $unite_escape);
+				
 	      $coef_adm = @$this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
 	      if($_poso->p_kg) {
 	        // On ajoute la poso avec les /kg
 	          $_presentation = "";
 	          if($coef_adm){
-			        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+			        if (!preg_match("/$unite_escape/i", $libelle_unite_presentation_pluriel)){
 			          $_presentation = " ($coef_adm $libelle_unite_presentation/kg)";
 			        }
 	          }
@@ -590,7 +605,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	      }
         $_presentation = "";
         if($coef_adm){
-	        if (!preg_match("/$unite/i", $libelle_unite_presentation_pluriel)){
+	        if (!preg_match("/$unite_escape/i", $libelle_unite_presentation_pluriel)){
 	          $_presentation = " ($coef_adm $libelle_unite_presentation)";
 	        }
         }
