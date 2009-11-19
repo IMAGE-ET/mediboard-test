@@ -56,7 +56,7 @@
     </a>
   </td>
  
-  {{if $_operation->_deplacee}}
+  {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
   <td class="text" colspan="5">
     <div class="warning">
       <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
@@ -115,7 +115,7 @@
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
+{{if $dPconfig.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
