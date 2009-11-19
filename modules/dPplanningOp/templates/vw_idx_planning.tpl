@@ -72,13 +72,15 @@ Main.add(function () {
             </a>
           </td>
           {{foreach from=$curr_day item=curr_plage}}
+          {{if $curr_plage.plageop_id}}
           <td {{if $curr_plage.unique_chir}}class="user"{{else}}class="function"{{/if}}>
-            {{if $curr_plage.plageop_id}}
-              {{$curr_plage.debut|date_format:$dPconfig.time}} à {{$curr_plage.fin|date_format:$dPconfig.time}}
-            {{else}}
-              Hors plage
-            {{/if}}
+            {{$curr_plage.debut|date_format:$dPconfig.time}} à {{$curr_plage.fin|date_format:$dPconfig.time}}
           </td>
+          {{else}}
+          <td>
+            Hors plage
+          </td>
+          {{/if}}
           <td align="center">{{$curr_plage.total}}</td>
           <td align="center" {{if $curr_plage.plageop_id && $curr_plage.spec_id}} style="background-color: #{{$curr_plage.color_function}}"{{/if}}>
             {{if $curr_plage.plageop_id && $curr_plage.spec_id}}
