@@ -44,9 +44,9 @@ class CHprimSoapHandler extends CSoapHandler {
     
     // Acquittement d'erreur d'un document XML recu non valide
     if ($doc_errors !== true) {
-      $domAcquittement->_identifiant = "inconnu";
-      $domAcquittement->_destinataire = "inconnu";
-      $domAcquittement->_destinataire_libelle = "inconnu document xml non valide";
+      $domAcquittement->identifiant = "inconnu";
+      $domAcquittement->destinataire = "inconnu";
+      $domAcquittement->destinataire_libelle = "inconnu document xml non valide";
 
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E02", $doc_errors);
       $doc_valid = $domAcquittement->schemaValidate();
@@ -55,6 +55,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->emetteur = "inconnu";
       $echange_hprim->destinataire = CAppUI::conf('mb_id');
       $echange_hprim->type = "patients";
+      $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
       $echange_hprim->message = $messagePatient;
       $echange_hprim->acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";

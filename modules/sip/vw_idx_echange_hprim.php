@@ -119,6 +119,7 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	$domGetIdSourceObject->loadXML(utf8_decode($_echange_hprim->message));
   
   $id400 = new CIdSante400();
+  $_echange_hprim->_object_id_permanent = null;
   if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
     $id400->object_class = "CPatient";
     $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");

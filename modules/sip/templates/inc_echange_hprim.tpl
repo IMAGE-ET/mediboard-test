@@ -68,7 +68,7 @@
        {{mb_value object=$object field="destinataire"}}
      {{/if}}
   </td>
-	<td>{{mb_value object=$object field="sous_type"}}</td>
+	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}}>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
 	  {{if $object->initiateur_id}}
 	    {{if $dPconfig.sip.server == "1"}}
