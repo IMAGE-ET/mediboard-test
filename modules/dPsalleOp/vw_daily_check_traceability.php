@@ -19,7 +19,9 @@ $check_list_id = CValue::getOrSession('check_list_id');
 $check_list = new CDailyCheckList;
 $check_list->load($check_list_id);
 $check_list->loadBackRefs('items');
-$check_list->_ref_object->loadRefsFwd();
+if ($check_list->_ref_object) {
+  $check_list->_ref_object->loadRefsFwd();
+}
 
 if ($check_list->_back['items']) {
 	foreach($check_list->_back['items'] as $id => $item) {
