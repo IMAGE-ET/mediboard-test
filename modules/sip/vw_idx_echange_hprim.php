@@ -25,7 +25,7 @@ $_date_max           = CValue::getOrSession('_date_max');
 $observations = array();
 
 // Types filtres qu'on peut prendre en compte
-$filtre_types = array('emetteur', 'destinataire', 'message_valide', 'acquittement_valide');
+$filtre_types = array('no_date_echange', 'emetteur', 'destinataire', 'message_invalide', 'acquittement_invalide');
 
 $types = array();
 foreach ($filtre_types as $type) {
@@ -77,11 +77,14 @@ if ($type_evenement) {
 } else {
   $where["sous_type"] = "IS NOT NULL";
 }
-if (isset($t["message_valide"])) {
-  $where["message_valide"] = " = '1'";
+if (isset($t["message_invalide"])) {
+  $where["message_valide"] = " = '0'";
 }
-if (isset($t["acquittement_valide"])) {
-  $where["message_valide"] = " = '1'";
+if (isset($t["acquittement_invalide"])) {
+  $where["acquittement_valide"] = " = '0'";
+}
+if (isset($t["no_date_echange"])) {
+  $where["date_production"] = "IS NULL";
 }
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);

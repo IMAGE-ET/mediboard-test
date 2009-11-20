@@ -83,22 +83,22 @@ function changePage(page) {
               <select class="str" name="type_evenement">
                 <option value="">&mdash; Liste des événements </option>
                 <option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
-                  Inconnu
+                  {{tr}}hprimxml-evt_patients-none{{/tr}}
                 </option>
                 <option value="enregistrementPatient" {{if $type_evenement == "enregistrementPatient"}}selected="selected"{{/if}}>
-                  Enregistrement Patient
+                  {{tr}}hprimxml-evt_patients-enregistrementPat{{/tr}}
                 </option>
                 <option value="fusionPatient" {{if $type_evenement == "fusionPatient"}}selected="selected"{{/if}}>
-                  Fusion Patient
+                  {{tr}}hprimxml-evt_patients-fusionPat{{/tr}}
                 </option>
                 <option value="venuePatient" {{if $type_evenement == "venuePatient"}}selected="selected"{{/if}}>
-                  Venue Patient
+                  {{tr}}hprimxml-evt_patients-venuePat{{/tr}}
                 </option>
                 <option value="fusionVenue" {{if $type_evenement == "fusionVenue"}}selected="selected"{{/if}}>
-                  Fusion Venue
+                  {{tr}}hprimxml-evt_patients-fusionVen{{/tr}}
                 </option>
                 <option value="mouvementPatient" {{if $type_evenement == "mouvementPatient"}}selected="selected"{{/if}}>
-                  Mouvement Patient
+                  {{tr}}hprimxml-evt_patients-mvtPat{{/tr}}
                 </option>
               </select>
             </td>
@@ -117,7 +117,7 @@ function changePage(page) {
           <tr>
             <td colspan="2" style="text-align: center">
               {{foreach from=$types key=type item=value}}
-			          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{$type}}
+			          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
 			        {{/foreach}}
             </td>
           </tr>

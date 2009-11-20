@@ -364,8 +364,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addTexte($elParent, "nomUsuel", $personne['nom']);
     $this->addTexte($elParent, "nomNaissance", $personne['nomNaissance']);
     $prenoms = $this->addElement($elParent, "prenoms");
-    foreach ($personne['prenoms'] as $prenom) {
-      $this->addTexte($prenoms, "prenom", $prenom ? $prenom : $personne['nom']);
+    foreach ($personne['prenoms'] as $key => $prenom) {
+      if ($key == 0) {
+        $this->addTexte($prenoms, "prenom", $prenom ? $prenom : $personne['nom']);
+      } else {
+        $this->addTexte($prenoms, "prenom", $prenom);
+      }
     }
     if (!$light) {
       if ($personne['civilite']) {
