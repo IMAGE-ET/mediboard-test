@@ -181,7 +181,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{/foreach}}
       </table>
     </td>
-    <td class="pane" id="vwPatient">
+    <td id="vwPatient">
     {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
     </td>
   </tr>

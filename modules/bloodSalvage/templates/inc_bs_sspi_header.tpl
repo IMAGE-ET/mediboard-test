@@ -13,7 +13,7 @@
   <tr>
     <th class="title text" colspan="2">
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
+        <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
       </a>
       {{$patient->_view}}
       ({{$patient->_age}} ans

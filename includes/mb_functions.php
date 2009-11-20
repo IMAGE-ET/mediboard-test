@@ -679,50 +679,38 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
  * Loads a javascript with build version postfix to prevent nasty cache effects
  * while updating the system.
  */
-function mbLoadScript($filepath, $modeReturn = 0, $conditionnalComments = '') {
+function mbLoadScript($filepath, $conditionnalComments = "") {
   global $version;
   $build = $version["build"];
   $tag = "\n<script type=\"text/javascript\" src=\"$filepath?build=$build\"></script>";
   if ($conditionnalComments) {
     $tag = "\n<!--[if $conditionnalComments]>$tag\n<![endif]-->";
   }
-  if ($modeReturn) {
-    return $tag;
-  }
+  return $tag;
 }
 
 /**
  * Links a style sheet with build version postfix to prevent nasty cache effects
  * Only to be called while in the HTML header.  */
-function mbLinkStylesheet($filepath, $media = "all", $modeReturn = 0) {
+function mbLinkStylesheet($filepath, $media = "all") {
   global $version;
   $build = $version["build"];
-  $tag = "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"$filepath?build=$build\" media=\"$media\" />";
-  if ($modeReturn) { 
-    return $tag;
-  }
-  
-  echo $tag;
+  return "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"$filepath?build=$build\" media=\"$media\" />";
 }
 
 /**
  * Links a shotcut icon version postfix to prevent nasty cache effects 
  * Only to be called while in the HTML header.  */
-function mbLinkShortcutIcon($filepath, $modeReturn = 0) {
+function mbLinkShortcutIcon($filepath = 0) {
   global $version;
   $build = $version["build"];
-  $tag = "\n<link rel=\"shortcut icon\" type=\"image/ico\" href=\"$filepath?build=$build\" />";
-  if ($modeReturn) { 
-    return $tag;
-  }
-  
-  echo $tag;
+  return "\n<link rel=\"shortcut icon\" type=\"image/ico\" href=\"$filepath?build=$build\" />";
 }
 
 /**
  * URL to the mediboard.org documentation page 
  * @return string: the link to mediboard.org  */
-function mbPortalURL( $page="Accueil", $tab = null) {
+function mbPortalURL($page = "Accueil", $tab = null) {
   $url = "http://www.mediboard.org/public/";
   
   $url .= $page == "tracker" ?
@@ -770,7 +758,7 @@ function mbWriteJSLocalesFile($language = null) {
   $locales = $current_locales;
 }
 
-function mbLoadJSLocales($modeReturn = false) {
+function mbLoadJSLocales() {
   global $version, $locales;
   
   $language = CAppUI::pref("LOCALE");
@@ -781,79 +769,77 @@ function mbLoadJSLocales($modeReturn = false) {
     mbWriteJSLocalesFile($language);
   }
   
-  return mbLoadScript($path, $modeReturn);
+  return mbLoadScript($path);
 }
 
 /**
  * Loads all scripts
  */
-function mbLoadScripts($modeReturn = false) {
+function mbLoadScripts() {
   $affichageScript = '';
   
   // Locales
-  $affichageScript .= mbLoadJSLocales($modeReturn);
+  $affichageScript .= mbLoadJSLocales();
   
   // Prototype JS & Scriptaculous
-  $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js");
+  
   // We force the download of the dependencies 
-  // TODO: remove the autoloader in the scriptaculous patch
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/builder.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/effects.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/dragdrop.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/controls.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/slider.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/sound.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/builder.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/effects.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/dragdrop.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/controls.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/slider.js");
+  $affichageScript .= mbLoadScript("lib/scriptaculous/src/sound.js");
+  
+  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js");
   
   // Datepicker
-  $affichageScript .= mbLoadScript("includes/javascript/date.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/datepicker/datepicker.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/datepicker/datepicker-locale-fr_FR.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/date.js");
+  $affichageScript .= mbLoadScript("lib/datepicker/datepicker.js");
+  $affichageScript .= mbLoadScript("lib/datepicker/datepicker-locale-fr_FR.js");
   
   // Livepipe UI
-  $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/livepipe/tabs.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/livepipe/window.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js");
+  $affichageScript .= mbLoadScript("lib/livepipe/tabs.js");
+  $affichageScript .= mbLoadScript("lib/livepipe/window.js");
   
   // Flotr
-  $affichageScript .= mbLoadScript("lib/flotr/flotr.js", $modeReturn);
-  $affichageScript .= mbLoadScript("lib/flotr/lib/excanvas.js", $modeReturn, 'IE'); // for IE
-  $affichageScript .= mbLoadScript("lib/flotr/lib/base64.js", $modeReturn);
-  $affichageScript .= mbLoadScript("lib/flotr/lib/canvas2image.js", $modeReturn);
-  $affichageScript .= mbLoadScript("lib/flotr/lib/canvastext.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr/flotr.js");
+  $affichageScript .= mbLoadScript("lib/flotr/lib/excanvas.js", "IE"); // for IE
+  $affichageScript .= mbLoadScript("lib/flotr/lib/base64.js");
+  $affichageScript .= mbLoadScript("lib/flotr/lib/canvas2image.js");
+  $affichageScript .= mbLoadScript("lib/flotr/lib/canvastext.js");
   
-  $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/tooltip.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/controls.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/aideSaisie.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/functions.js");
+  $affichageScript .= mbLoadScript("includes/javascript/tooltip.js");
+  $affichageScript .= mbLoadScript("includes/javascript/controls.js");
+  $affichageScript .= mbLoadScript("includes/javascript/cookies.js");
+  $affichageScript .= mbLoadScript("includes/javascript/url.js");
+  $affichageScript .= mbLoadScript("includes/javascript/forms.js");
+  $affichageScript .= mbLoadScript("includes/javascript/checkForms.js");
+  $affichageScript .= mbLoadScript("includes/javascript/aideSaisie.js");
   //@todo: ASAP supprimer toutes les réferences à l'ancien fichier
   
-  $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/mbmail.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/printf.js");
+  $affichageScript .= mbLoadScript("includes/javascript/mbmail.js");
   
   if (CAppUI::conf('debug')) {
-    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js", $modeReturn, 'IE');
+    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js", "IE");
   }
   
-  if($modeReturn)
-    return $affichageScript;
+  return $affichageScript;
 }
 
-function mbLoadScriptsStorage($modeReturn){
+function mbLoadScriptsStorage(){
   $affichageScript = '';
-  
-  $affichageScript .= mbLoadScript("lib/dojo/dojo.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/dojo/src/io/__package__.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/dojo/src/html/__package__.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/dojo/src/lfx/__package__.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/storage.js",$modeReturn);
-  if($modeReturn)
-    return $affichageScript;
+  $affichageScript .= mbLoadScript("lib/dojo/dojo.js");
+  $affichageScript .= mbLoadScript("lib/dojo/src/io/__package__.js");
+  $affichageScript .= mbLoadScript("lib/dojo/src/html/__package__.js");
+  $affichageScript .= mbLoadScript("lib/dojo/src/lfx/__package__.js");
+  $affichageScript .= mbLoadScript("includes/javascript/storage.js");
+  return $affichageScript;
 }
 
 /** Must be like "64M" */ 

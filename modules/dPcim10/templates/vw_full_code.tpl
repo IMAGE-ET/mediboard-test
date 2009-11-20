@@ -82,7 +82,7 @@ function selectCode() {
 
   {{if $cim10->_isInfo}}
   <tr>
-    <td class="pane" colspan="2">
+    <td colspan="2">
       <strong>Informations sur ce code:</strong>
       <ul>
         {{if $cim10->descr|@count}}
@@ -152,7 +152,7 @@ function selectCode() {
 
   <tr>
     {{if $cim10->_levelsSup|@count}}
-    <td class="pane">
+    <td>
       <strong>Codes de niveau supérieur:</strong>
       <ul>
         {{foreach from=$cim10->_levelsSup item=curr_level}}
@@ -164,7 +164,7 @@ function selectCode() {
     </td>
     {{/if}}
     {{if $cim10->_levelsInf|@count}}
-    <td class="pane">
+    <td>
       <strong>Codes de niveau inferieur :</strong>
       <ul>
         {{foreach from=$cim10->_levelsInf item=curr_level}}

@@ -91,7 +91,7 @@ class CRefSpec extends CMbFieldSpec {
 /*  function getFormHtmlElement($object, $params, $value, $className) {
     $formName = CMbArray::extract($params, "form");
     
-    $html = mbLoadScript('modules/system/javascript/object_selector.js', true);
+    $html = mbLoadScript('modules/system/javascript/object_selector.js');
     $ref = $object->loadFwdRef($this->fieldName);
     if (!$ref) $ref = new $this->class;
     $id = $this->fieldName.'-'.$ref->_guid;

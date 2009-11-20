@@ -190,7 +190,116 @@ class CSetupdPsalleOp extends CSetup {
             ADD `regle_dh` ENUM('0','1') DEFAULT 0 AFTER `regle`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $sql = "ALTER TABLE `daily_check_item_category` 
+              ADD `type` ENUM ('preanesth','preop','postop');";
+    $this->addQuery($sql);
+   
+    $sql = "ALTER TABLE `daily_check_item` 
+              CHANGE `checked` `checked` ENUM ('0','1');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `daily_check_item_type` 
+              ADD `attribute` ENUM ('normal','notrecommended','notapplicable'),
+              CHANGE `group_id` `group_id` INT(11) UNSIGNED NULL";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `daily_check_list` 
+              ADD `type` ENUM ('preanesth','preop','postop'),
+              CHANGE `object_class` `object_class` ENUM ('CSalle','CBlocOperatoire','COperation') NOT NULL";
+    $this->addQuery($sql);
+    
+    
+    
+    // Liste des points de check liste spécifiés par la HAS
+    $categories = array(
+      '01' => array('preanesth', 'Identité du patient', 
+        array(
+          array('le patient a décliné son nom, sinon, par défaut, autre moyen de vérification de son identité', 'normal'),
+        ),
+      ),
+      
+      '02' => array('preanesth', 'L\'intervention et site opératoire sont confirmés', 
+        array(
+          array('idéalement par le patient et dans tous les cas, par le dossier ou procédure spécifique', 'normal'),
+          array('la documentation clinique et para clinique nécessaire est disponible en salle', 'normal'),
+        ),
+      ),
+      
+      '03' => array('preanesth', null, 
+        array(
+          array('Le mode d\'installation est connu de l\'équipe en salle, cohérent avec le site/intervention et non dangereuse pour le patient', 'notapplicable'),
+        ),
+      ),
+      
+      '04' => array('preanesth', 'Le matériel nécessaire pour l\'intervention est vérifié', 
+        array(
+          array('pour la partie chirurgicale', 'normal'),
+          array('pour la partie anesthésique', 'normal'),
+        ),
+      ),
+      
+      '05' => array('preanesth', 'Vérification croisée par l\'équipe de points critiques et des mesures adéquates à prendre', 
+        array(
+          array('allergie du patient', 'normal'),
+          array('risque d\'inhalation, de difficulté d\'intubation ou de ventilation au masque', 'normal'),
+          array('risque de saignement important', 'normal'),
+        ),
+      ),
+      
+      '06' => array('preop', 'Vérification « ultime » croisée au sein de l\'équipe', 
+        array(
+          array('identité patient correcte', 'normal'),
+          array('intervention prévue confirmée', 'normal'),
+          array('site opératoire correct', 'normal'),
+          array('installation correcte', 'normal'),
+          array('documents nécessaires disponibles', 'notapplicable'),
+        ),
+      ),
+      
+      '07' => array('preop', 'Partage des informations essentielles dans l\'équipe sur des éléments à risque / points critiques de l\'intervention', 
+        array(
+          array('sur le plan chirurgical (temps opératoire difficile, points spécifiques de l\'intervention, etc.)', 'normal'),
+          array('sur le plan anesthésique (risques potentiels liés au terrain ou à des traitements éventuellement maintenus)', 'normal'),
+        ),
+      ),
+      
+      '08' => array('preop', null, 
+        array(
+          array('Antibioprophylaxie effectuée', 'notrecommended'),
+        ),
+      ),
+      
+      '09' => array('postop', 'Confirmation orale par le personnel auprès de l\'équipe', 
+        array(
+          array('de l\'intervention enregistrée', 'normal'),
+          array('du compte final correct des compresses, aiguilles, instruments, etc.', 'notapplicable'),
+          array('de l\'étiquetage des prélèvements, pièces opératoires, etc.', 'notapplicable'),
+          array('du signalement de dysfonctionnements matériels et des événements indésirables', 'normal'),
+        ),
+      ),
+      
+      '10' => array('postop', null, 
+        array(
+          array('Les prescriptions pour les suites opératoires immédiates sont faites de manière conjointe', 'notrecommended'),
+        ),
+      ),
+    );
+    
+    foreach($categories as $title => $cat) {
+      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
+                               (%1, %2, 'COperation', %3)", $title, $cat[1], $cat[0]);
+      $this->addQuery($query);
+      
+      foreach($cat[2] as $type) {
+        $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES
+                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = 'COperation'))", 
+                     $type[0], $type[1], $title);
+        $this->addQuery($query);
+      }
+    }
+
+    $this->mod_version = "0.32";
   }
 }
 ?>

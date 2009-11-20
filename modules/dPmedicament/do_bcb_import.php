@@ -27,7 +27,7 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
       $data[$c] = trim($data[$c]);
     }
     
-    $identifiant = ereg_replace('[\s\.\\'.chr(160).'A-z.-]', '', $data[0]); // 160: espace insécable
+    $identifiant = preg_replace('/[\s\.\\'.chr(160).'A-z.-]/', '', $data[0]); // 160: espace insécable
 
     // if there is more than 1 column and the first isn't empty
     if ($num > 0 && ($identifiant != '') && is_numeric($identifiant) && (strlen($identifiant) == 7)) {

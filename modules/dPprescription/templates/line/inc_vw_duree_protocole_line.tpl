@@ -8,13 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-Main.add( function(){
-  prepareForm('editDuree-{{$typeDate}}-{{$line->_id}}'); 
-});
-
-</script>
 {{assign var=line_id value=$line->_id}}
 
 {{if $typeDate != "mode_grille"}}

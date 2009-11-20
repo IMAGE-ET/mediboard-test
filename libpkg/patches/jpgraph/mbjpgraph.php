@@ -6170,8 +6170,8 @@ class Image {
       }
   }
   else {
-      if( ereg("\n",$txt) ) { 
-    $tmp = split("\n",$txt);
+      if( strpos("\n",$txt) !== false ) { 
+    $tmp = explode("\n",$txt);
     for($i=0; $i < count($tmp); ++$i) {
         $w1 = $this->GetTextWidth($tmp[$i]);
         if( $paragraph_align=="left" ) {

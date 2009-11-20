@@ -28,7 +28,9 @@ if ($check_list->_back['items']) {
 
 @list($object_class, $object_id) = explode('-', $object_guid);
 
-$where = array();
+$where = array(
+  "validator_id" => "IS NOT NULL"
+);
 if ($object_class) {
 	$where['object_class'] = "= '$object_class'";
   if ($object_id)
@@ -49,7 +51,6 @@ $check_list_filter->_date_min = $date_min;
 $check_list_filter->_date_max = $date_max;
 $check_list_filter->loadRefsFwd();
 
-
 $list_rooms = array(
   "CSalle" => array(),
   "CBlocOperatoire" => array()
@@ -63,11 +64,16 @@ foreach($list_rooms as $class => &$list) {
   array_unshift($list, $empty);
 }
 
+$empty = new COperation;
+$empty->updateFormFields();
+$list_rooms["COperation"] = array($empty);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("list_check_lists", $list_check_lists);
 $smarty->assign("list_rooms", $list_rooms);
 $smarty->assign("check_list", $check_list);
+$smarty->assign("object_guid", $object_guid);
 $smarty->assign("check_list_filter", $check_list_filter);
 $smarty->display("vw_daily_check_traceability.tpl");
 

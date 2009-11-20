@@ -94,11 +94,11 @@
     
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
+        <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
      </a>
      {{if $canPlanningOp->read}}
        <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_id}}">
-         <img src="images/icons/planning.png" alt="modifier" />
+         <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
        </a>
       {{/if}}
     {{if $curr_sortie->_num_dossier}}[{{$curr_sortie->_num_dossier}}]{{/if}}
@@ -107,7 +107,7 @@
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
       {{if $curr_sortie->_ref_last_affectation->confirme}}
-        <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
+        <img src="images/icons/tick.png" title="Sortie confirmée par le praticien" />
       {{/if}}
         
     </td>

@@ -23,7 +23,7 @@ function selectCode(code,tarif) {
 
 function updateFields(selected) {
   Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
+  var dn = selected.childNodes;
   $('selection_codeacte').value = dn[0].firstChild.nodeValue;
 }
 
@@ -45,7 +45,7 @@ Main.add(function () {
 
 <table class="fullCode">
   <tr>
-      <td class="pane">
+      <td>
 
         <table>
         <tr>
@@ -191,7 +191,7 @@ Main.add(function () {
       </table>
 
     </td>
-    <td class="pane">
+    <td>
 
       <table>
         <tr>
@@ -224,7 +224,7 @@ Main.add(function () {
     </td>
   </tr>
   <tr>
-    <td class="pane">
+    <td>
 
       <table>
         <tr>
@@ -240,7 +240,7 @@ Main.add(function () {
       </table>
 
     </td>
-    <td class="pane">
+    <td>
 
       <table>
         <tr>

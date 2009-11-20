@@ -23,7 +23,7 @@
         Dr {{$plage->_ref_chir->_view}}
         {{if @$modules.messagerie}}
         <a class="action" href="#nothing" onclick="MbMail.create({{$plage->chir_id}})">
-          <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+          <img src="images/icons/mbmail.png" title="Envoyer un message" />
         </a>
         {{/if}}
         {{else}}
@@ -283,7 +283,7 @@
       </td>
       <td>
         {{if $curr_op->annulee}}
-        <img src="images/icons/cross.png" width="12" height="12" alt="annulée" border="0" />
+        <img src="images/icons/cross.png" width="12" height="12" border="0" />
         {{else}}
         <form name="edit-insert-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />

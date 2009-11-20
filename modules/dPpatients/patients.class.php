@@ -320,7 +320,7 @@ class CPatient extends CMbObject {
     return null;
   }
   
-  function merge($objects = array()/*<CPatient>*/) {
+  function merge($objects = array/*<CPatient>*/()) {
   	// Load the matching CDossierMedical objects 
   	$where = array(
   	  'object_class' => "='$this->_class_name'",
@@ -331,12 +331,13 @@ class CPatient extends CMbObject {
   	
   	if ($msg = parent::merge($objects)) return $msg;
     
-  	// Merge them
-  	if ($msg = $dossier_medical->mergeDBFields($list)) return $msg;
-  	
-  	$dossier_medical->object_class = $this->_class_name;
-  	$dossier_medical->object_id = $this->_id;
-  	return $dossier_medical->merge($list);
+    // Merge them
+    if (count($list) > 1) {
+    	if ($msg = $dossier_medical->mergeDBFields($list)) return $msg;
+    	$dossier_medical->object_class = $this->_class_name;
+    	$dossier_medical->object_id = $this->_id;
+    	return $dossier_medical->merge($list);
+    }
   }
   
   function store() {

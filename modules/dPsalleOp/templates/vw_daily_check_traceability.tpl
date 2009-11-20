@@ -19,7 +19,7 @@
                 {{foreach from=$list_rooms item=list key=class}}
                   <optgroup label="{{if $class == "CBlocOperatoire"}}Salle de réveil{{else}}{{tr}}{{$class}}{{/tr}}{{/if}}">
                     {{foreach from=$list item=room}}
-                      <option value="{{$room->_guid}}">{{if $room->_id}}{{$room}}{{else}}Toutes{{/if}}</option>
+                      <option value="{{$room->_guid}}" {{if $object_guid == $room->_guid}}selected="selected"{{/if}}>{{if $room->_id}}{{$room}}{{else}}Toutes{{/if}}</option>
                     {{/foreach}}
                   </optgroup>
                 {{/foreach}}
@@ -40,6 +40,7 @@
           <th>{{mb_title class=CDailyCheckList field=date}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_class}}</th>
           <th>{{mb_title class=CDailyCheckList field=object_id}}</th>
+          <th>{{mb_title class=CDailyCheckList field=type}}</th>
           <th>{{mb_title class=CDailyCheckList field=comments}}</th>
           <th>{{mb_title class=CDailyCheckList field=validator_id}}</th>
 				</tr>
@@ -47,6 +48,7 @@
 				<tr>
           <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">{{mb_value object=$curr_list field=date}}</a></td>
           <td>{{mb_value object=$curr_list field=object_class}}</td>
+          <td>{{mb_value object=$curr_list field=type}}</td>
           <td>{{$curr_list->_ref_object}}</td>
           <td>{{mb_value object=$curr_list field=comments}}</td>
           <td>{{mb_value object=$curr_list field=validator_id}}</td>
@@ -61,38 +63,64 @@
 		{{if $check_list->_id}}
 		<td>
 			<table class="main form">
+			  <col style="width: 1%;" />
+        <col />
+        <col style="width: 1%;" />
+        
 				<tr>
-					<th class="title" colspan="2">{{$check_list->_view}}</th>
+					<th class="title" colspan="3">{{$check_list}}</th>
 				</tr>
         <tr>
           <th>{{mb_label object=$check_list field=date}}</th>
-          <td>{{mb_value object=$check_list field=date}}</td>
+          <td colspan="2">{{mb_value object=$check_list field=date}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=object_id}}</th>
-          <td>{{$check_list->_ref_object}}</td>
+          <td colspan="2">{{$check_list->_ref_object}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$check_list field=comments}}</th>
-          <td>{{mb_value object=$check_list field=comments}}</td>
+          <th>{{mb_label object=$check_list field=type}}</th>
+          <td colspan="2">{{mb_value object=$check_list field=type}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=validator_id}}</th>
-          <td>{{mb_value object=$check_list field=validator_id}}</td>
+          <td colspan="2">{{mb_value object=$check_list field=validator_id}}</td>
         </tr>
-				<tr>
-          <th colspan="2" class="category">{{tr}}CDailyCheckList-back-items{{/tr}}</th>
+        
+        {{assign var=category_id value=0}}
+        {{foreach from=$check_list->_back.items item=_item}}
+          {{assign var=curr_type value=$_item->_ref_item_type}}
+          {{if $curr_type->category_id != $category_id}}
+            <tr>
+              <th colspan="3" class="text category" style="text-align: left;">
+                <strong>{{$curr_type->_ref_category->title}}</strong>
+                {{if $curr_type->_ref_category->desc}}
+                  &ndash; {{$curr_type->_ref_category->desc}}
+                {{/if}}
+              </th>
+            </tr>
+          {{/if}}
+          <tr>
+            <td style="padding-left: 1em; width: 100%;" class="text" colspan="2">
+              {{mb_value object=$curr_type field=title}}
+              <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+            </td>
+            <td class="text" {{if $_item->checked == 0 && $_item->checked !== null}}style="color: red; font-weight: bold;"{{/if}}>
+              {{$_item->getAnswer()}}
+            </td>
+          </tr>
+          {{assign var=category_id value=$curr_type->category_id}}
+        {{foreachelse}}
+          <tr>
+            <td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+          </tr>
+        {{/foreach}}
+        <tr>
+          <td colspan="3">
+            <strong>Commentaires:</strong><br />
+            {{mb_value object=$check_list field=comments}}
+          </td>
         </tr>
-				{{foreach from=$check_list->_back.items item=curr_item}}
-				<tr>
-          <td title="{{$curr_item->_ref_item_type->desc}}" style="font-weight: bold;">{{mb_value object=$curr_item->_ref_item_type field=title}}</td>
-          <td>{{mb_value object=$curr_item field=checked}}</td>
-        </tr>
-				{{foreachelse}}
-				<tr>
-          <td colspan="2">{{tr}}CDailyCheckItem.none{{/tr}}</td>
-        </tr>
-				{{/foreach}}
 			</table>
 		</td>
 		{{/if}}

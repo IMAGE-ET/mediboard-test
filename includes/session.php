@@ -19,10 +19,9 @@ if (get_cfg_var("session.auto_start") > 0) {
 }
 
 session_start();
-session_register("AppUI");
   
 // Check if session has previously been initialised
-if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
+if(empty($_SESSION["AppUI"]) || isset($_GET["logout"])) {
   $_SESSION["AppUI"] = CAppUI::init();
 }
 

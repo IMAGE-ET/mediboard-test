@@ -116,11 +116,14 @@ Main.add(function () {
     {{if $selOp->_id}}
 		  {{if $dPconfig.dPsalleOp.CDailyCheckList.active != '1' || 
            $date < $smarty.now|date_format:"%Y-%m-%d" || 
-           $check_list->_id && $check_list->validator_id || 
-					 $currUser->_is_praticien}}
+           $daily_check_list->_id && $daily_check_list->validator_id || 
+           $currUser->_is_praticien}}
         {{include file=inc_operation.tpl}}
 			{{else}}
-        {{include file=inc_edit_check_list.tpl personnel=$listValidateurs}}
+        {{include file=inc_edit_check_list.tpl 
+                  check_list=$daily_check_list 
+                  check_item_categories=$daily_check_item_categories
+                  personnel=$listValidateurs}}
       {{/if}}
     {{else}}
       <div class="big-info">

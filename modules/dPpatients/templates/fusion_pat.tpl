@@ -20,6 +20,12 @@ function setField (field, value, form) {
     field.fire('mask:check');
   }
 }
+
+function toggleAltMode(check) {
+  $(check.form).select("input[name='_base_object_id']").each(function(e){
+    e.disabled = !e.disabled;
+  });
+}
 </script>
 
 {{assign var=object1 value=$patient1}}
@@ -53,11 +59,40 @@ function setField (field, value, form) {
     <li><a href="#assure">Assuré social</a></li>
   </ul>
   <hr class="control_tabs" />
-  <div id="identite" style="display: none;">{{include file="inc_acc/inc_acc_fusion_identite.tpl"}}</div>
-  <div id="medical" style="display: none;">{{include file="inc_acc/inc_acc_fusion_medical.tpl"}}</div>
-  <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_fusion_corresp.tpl"}}</div>
-  <div id="assure" style="display: none;">{{include file="inc_acc/inc_acc_fusion_assure.tpl"}}</div>
   
+  <table class="form">
+    <tr>
+      <th class="category">
+        {{if !$alternative_mode}}
+        <label style="font-weight: normal;">
+          <input type="checkbox" name="_keep_object" value="1" onclick="toggleAltMode(this)" /> Mode de fusion alternatif
+        </label>
+        {{/if}}
+      </th>
+      <th width="30%" class="category">
+        1er patient
+        <br />
+        <label style="font-weight: normal;">
+          <input type="radio" name="_base_object_id" value="{{$patient1->_id}}" checked="checked" {{if !$alternative_mode}}disabled="disabled"{{/if}} />
+          Utiliser comme base [#{{$patient1->_id}}]
+        </label>
+      </th>
+      <th width="30%" class="category">
+        2ème patient
+        <br />
+        <label style="font-weight: normal;">
+          <input type="radio" name="_base_object_id" value="{{$patient2->_id}}" {{if !$alternative_mode}}disabled="disabled"{{/if}} />
+          Utiliser comme base [#{{$patient2->_id}}]
+        </label>
+      </th>
+      <th width="30%" class="category">Résultat</th>
+    </tr>
+    <tbody id="identite" style="display: none;">{{include file="inc_acc/inc_acc_fusion_identite.tpl"}}</tbody>
+    <tbody id="medical" style="display: none;">{{include file="inc_acc/inc_acc_fusion_medical.tpl"}}</tbody>
+    <tbody id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_fusion_corresp.tpl"}}</tbody>
+    <tbody id="assure" style="display: none;">{{include file="inc_acc/inc_acc_fusion_assure.tpl"}}</tbody>
+  </table>
+
   <div class="button">
     <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$patient1->_class_name}}', ['{{$patient1->_id}}', '{{$patient2->_id}}']);">
       {{tr}}CMbObject-merge-moreinfo{{/tr}}

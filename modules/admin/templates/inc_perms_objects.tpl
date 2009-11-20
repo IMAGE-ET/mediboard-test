@@ -133,7 +133,7 @@ Main.add(function(){
           {{/foreach}}
         </select>
         {{if $key == "profil" && $object|@count == "2"}}
-          <img src="images/icons/no.png" alt="Profil desactivé" />
+          <img src="images/icons/no.png" title="Profil desactivé" />
         {{/if}}
         {{if $key == "user"}}
           <button class="modify" type="submit">Valider</button>

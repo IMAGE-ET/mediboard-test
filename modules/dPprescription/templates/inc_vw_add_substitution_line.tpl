@@ -78,7 +78,6 @@ changeModeBolus = function(oForm){
 
 	submitEditPerfCommentaireSubst = function (object_id, commentaire) {
 	  var oForm = getForm("editCommentairePerf");
-	  prepareForm(oForm);
 	  oForm.dosql.value = "do_perfusion_aed";
 	  oForm.perfusion_id.value = object_id;
 	  oForm.commentaire.value = commentaire;
@@ -88,7 +87,6 @@ changeModeBolus = function(oForm){
 
 	submitEditCommentaireSubst = function (object_id, commentaire) {
 	  var oForm = getForm("editCommentaire");
-	  prepareForm(oForm);
 	  oForm.dosql.value = "do_prescription_line_medicament_aed";
 	  oForm.prescription_line_medicament_id.value = object_id;
 	  oForm.commentaire.value = commentaire;
@@ -97,7 +95,6 @@ changeModeBolus = function(oForm){
 	
 	submitEditEmplacementSubst = function (object_id, emplacement) {
 	  var oForm = getForm("editEmplacement");
-	  prepareForm(oForm);
 	  oForm.dosql.value = "do_prescription_line_medicament_aed";
 	  oForm.prescription_line_medicament_id.value = object_id;
 	  oForm.emplacement.value = emplacement;
@@ -106,7 +103,6 @@ changeModeBolus = function(oForm){
 	
 	submitVoie = function(object_id, voie){
 	  var oForm = getForm("editVoie");
-	  prepareForm(oForm);
 	  oForm.dosql.value = "do_prescription_line_medicament_aed";
 	  oForm.prescription_line_medicament_id.value = object_id;
 	  oForm.voie.value = voie;
@@ -115,7 +111,6 @@ changeModeBolus = function(oForm){
 	
 	submitALD = function(object_class, object_id, ald){
 	  var oForm = getForm("editALD");
-	  prepareForm(oForm);
 	  oForm.dosql.value = "do_prescription_line_medicament_aed";
 	  oForm.prescription_line_medicament_id.value = object_id;
 	  oForm.ald.value = ald ? "1" : "0";
@@ -124,7 +119,6 @@ changeModeBolus = function(oForm){
 
 	submitConditionnel = function(object_class, object_id, conditionnel){
 	  var oForm = getForm("editConditionnel");
-	  prepareForm(oForm);
     oForm.prescription_line_medicament_id.value = object_id;
 		oForm.conditionnel.value = conditionnel ? "1" : "0";
 	  return onSubmitFormAjax(oForm);
@@ -358,9 +352,6 @@ if(document.addLine && document.searchProd){
   
   var oFormProduit = document.searchProd;
   var oFormAddLine = document.addLine;
-  
-  prepareForm(oFormAddLine);
-  prepareForm(oFormProduit);
   
   // Autocomplete des medicaments
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");

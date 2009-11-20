@@ -57,6 +57,8 @@ if (class_exists($objects_class) && count($objects_id)) {
   }
 }
 
+$alternative_mode = CModule::getActive("sip") && CAppUI::conf("object_handlers CSipObjectHandler");
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -66,6 +68,7 @@ $smarty->assign("result",  $result);
 $smarty->assign("unequal", $unequal);
 $smarty->assign("checkMerge", $checkMerge);
 $smarty->assign("list_classes", getInstalledClasses());
+$smarty->assign("alternative_mode", $alternative_mode);
 $smarty->assign("readonly_class", $readonly_class);
 
 $merger_template = $result ? "../../{$result->_ref_module->mod_name}/templates/{$result->_class_name}_merger.tpl" : '';

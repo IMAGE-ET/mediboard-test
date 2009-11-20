@@ -8,13 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-Main.add( function(){
-  prepareForm("editPerf{{$perfusion->_id}}");
-} );
-
-</script>
 {{assign var=perfusion_id value=$perfusion->_id}}
 <form name="editPerf{{$perfusion->_id}}" method="post" action="?">
   <input type="hidden" name="dosql" value="do_perfusion_aed" />

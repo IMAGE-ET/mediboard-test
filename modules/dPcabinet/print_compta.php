@@ -101,7 +101,7 @@ foreach ($reglements as $_reglement) {
     $recapReglement[$_reglement->mode]["nb_reglement_tiers"]++;
   }
 	
-  if(!key_exists($_reglement->_ref_consultation->_id, $listConsults)) {
+  if(!array_key_exists($_reglement->_ref_consultation->_id, $listConsults)) {
     $recapReglement["total"]["secteur1"] += $_reglement->_ref_consultation->secteur1;
     $recapReglement["total"]["secteur2"] += $_reglement->_ref_consultation->secteur2;
     $listConsults[$_reglement->_ref_consultation->_id] = $_reglement->_ref_consultation;

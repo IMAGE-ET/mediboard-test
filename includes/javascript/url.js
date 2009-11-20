@@ -27,56 +27,61 @@ var Url = Class.create({
   },
   
   setModuleAction: function(sModule, sAction) {
-    this.addParam("m", sModule);
-    this.addParam("a", sAction);
+    return this.addParam("m", sModule)
+               .addParam("a", sAction);
   },
   
   setModuleTab: function(sModule, sTab) {
-    this.addParam("m", sModule);
-    this.addParam("tab", sTab);
+    return this.addParam("m", sModule)
+               .addParam("tab", sTab);
   },
   
   setModuleDosql: function(sModule, sDosql) {
-    this.addParam("m", sModule);
-    this.addParam("dosql", sDosql);
+    return this.addParam("m", sModule)
+               .addParam("dosql", sDosql);
   },
   
   setFragment: function(sFragment) {
     this.sFragment = sFragment;
+    return this;
   },
   
   addParam: function(sName, sValue) {
     this.oParams[sName] = sValue;
+    return this;
   },
   
   addObjectParam: function(sName, oObject) {
     if (typeof oObject != "object") {
-      this.addParam(sName, oObject);
-      return;
+      return this.addParam(sName, oObject);
     }
     
     // Recursive call
     $H(oObject).each( function(pair) {
       this.addObjectParam(printf("%s[%s]", sName, pair.key), pair.value);
     }, this);
+    
+    return this;
   },
   
   addFormData: function(oForm) {
     Object.extend(this.oParams, getForm(oForm).serialize(true));
+    return this;
   },
   
   mergeParams: function(oObject) {
     Object.extend(this.oParams, oObject);
+    return this;
   },
   
   addElement: function(oElement, sParamName) {
-    if (!oElement) return;
+    if (!oElement) return this;
   
     if (!sParamName) {
       sParamName = oElement.name;
     }
   
-    this.addParam(sParamName, oElement.value);
+    return this.addParam(sParamName, oElement.value);
   },
   
   make: function() {
@@ -91,6 +96,8 @@ var Url = Class.create({
       this.oWindow.location.href = uri;
     else
       window.location.href = uri;
+    
+    return this;
   },
   
   redirectOpener: function() {
@@ -133,6 +140,8 @@ var Url = Class.create({
       }
       this.oPrefixed[sPrefix].push(this.oWindow);
     }
+    
+    return this;
   },
   
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
@@ -150,12 +159,16 @@ var Url = Class.create({
     
     if (!this.oWindow)
       this.showPopupBlockerAlert(sWindowName);
+    
+    return this;
   },
   
   popunder: function(iWidth, iHeight, sWindowName) {
     this.pop(iWidth, iHeight, sWindowName);
     this.oWindow.blur();
     window.focus();
+    
+    return this;
   },
   
   popup: function(iWidth, iHeight, sWindowName, sPrefix) {
@@ -172,10 +185,13 @@ var Url = Class.create({
       this.oWindow.focus();
     else 
       this.showPopupBlockerAlert(sWindowName);
+      
+    return this;
   },
   
   showPopupBlockerAlert: function(popupName){
     Modal.alert($T("Popup blocker alert", popupName));
+    return this;
   },
   
   autoComplete: function(input, populate, oOptions) {
@@ -242,10 +258,11 @@ var Url = Class.create({
       container.setStyle({paddingRight: (height+3)+'px'}).
                 clonePosition(input, {setLeft: false, setTop: false});
       
-			if (!container.getWidth()) {
+      if (!container.getWidth()) {
         container.style.width = null;
         input.style.marginRight = "-1px";
-      }          
+      }
+      
       input.wrap(container);
       container.insert(populate);
       
@@ -289,16 +306,20 @@ var Url = Class.create({
   },
   
   close: function() {
-    if(this.oWindow) {
-      this.oWindow.close();
-    } 
+    if(this.oWindow) this.oWindow.close();
+    return this;
   },
   
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
-    ioTarget = $(ioTarget);
-  
+    
+    var element = $(ioTarget);
+    
+    if (!element) {
+      console.warn(ioTarget+" doesn't exist");
+    }
+    
     oOptions = Object.extend({
       waitingText: "Chargement",
       urlBase: "",
@@ -307,19 +328,27 @@ var Url = Class.create({
       asynchronous: true,
       evalScripts: true,
       getParameters: null,
-      onFailure: function(){ioTarget.update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
+      onComplete: Prototype.emptyFunction,
+      onFailure: function(){element.update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
     }, oOptions);
     
+    oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
+      prepareForms(element);
+      onComplete();
+    });
+    
     if (oOptions.waitingText) {
-      ioTarget.update("<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>");
-	    if (ioTarget.id == SystemMessage.id) {
+      element.update('<div class="loading">' + oOptions.waitingText + '...<br />Merci de patienter.</div>');
+	    if (element.id == SystemMessage.id) {
 		    SystemMessage.doEffect();
 	    }
     }
-    else WaitingMessage.cover(ioTarget);
+    else WaitingMessage.cover(element);
   	
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
-    new Ajax.Updater(ioTarget, oOptions.urlBase + "index.php" + getParams, oOptions);
+    new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
+    
+    return this;
   },
   
   requestJSON: function(fCallback, oOptions) {
@@ -341,6 +370,8 @@ var Url = Class.create({
   	
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Request(oOptions.urlBase + "index.php" + getParams, oOptions);
+    
+    return this;
   },
   
   requestUpdateOffline: function(ioTarget, oOptions) {
@@ -358,26 +389,36 @@ var Url = Class.create({
     }, oOptions);
 
     this.requestUpdate(ioTarget, oOptions);
+    
+    return this;
   },
   
   periodicalUpdate: function(ioTarget, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", 1);
-    ioTarget = $(ioTarget);
+    
+    var element = $(ioTarget);
+    
+    if (!element) {
+      console.warn(ioTarget+" doesn't exist");
+    }
 
     oOptions = Object.extend({
-			onCreate: function() { WaitingMessage.cover(ioTarget); },
+      onCreate: WaitingMessage.cover.curry(element),
       waitingText: "Chargement",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
       asynchronous: true,
-      evalScripts: true
+      evalScripts: true,
+      onComplete: Prototype.emptyFunction
     }, oOptions);
     
-    if(oOptions.waitingText)
-      ioTarget.update("<div class='loading'>" + oOptions.waitingText + "...<br>Merci de patienter.</div>");
-    
-    return new Ajax.PeriodicalUpdater(ioTarget, "index.php", oOptions);
+    oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
+      prepareForms(element);
+      onComplete();
+    });
+      
+    return new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
   },
   
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){

@@ -183,4 +183,5 @@ $locales['Export'] = 'Export';
 $locales['Popup blocker alert'] = '';
 $locales['Import'] = 'Import';
 $locales['Close'] = 'Close';
+$locales['Unknown'] = '';
 ?>

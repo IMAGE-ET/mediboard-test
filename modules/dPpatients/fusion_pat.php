@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
-
 $patients_id = CValue::get('patients_id');
 
 if(count($patients_id) < 2) {
-  CAppUI::setMsg("Veuillez selectionner deux patients", UI_MSG_ALERT);
+  CAppUI::setMsg("Veuillez sélectionner deux patients", UI_MSG_ALERT);
   CAppUI::redirect("m=dPpatients");
 }
 
@@ -35,7 +33,7 @@ foreach ($patients_id as $patient_id) {
     $finalPatient->load($patient_id);
     $finalPatient->loadRefsFwd();
     $finalPatient->updateNomPaysInsee();
-    $finalPatient->patient_id = null;
+    $finalPatient->_id = null;
   }
   
   $patient->loadRefsFwd();
@@ -44,6 +42,7 @@ foreach ($patients_id as $patient_id) {
 }
   
 $checkMerge = $patient->checkMerge($patients);
+$alternative_mode = CModule::getActive("sip") && CAppUI::conf("object_handlers CSipObjectHandler");
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -52,6 +51,7 @@ $smarty->assign("patient1"    , $patients[0]);
 $smarty->assign("patient2"    , $patients[1]);
 $smarty->assign("finalPatient", $finalPatient);
 $smarty->assign("testMerge"   , $checkMerge);
+$smarty->assign("alternative_mode", $alternative_mode);
 
 $smarty->display("fusion_pat.tpl");
 ?>

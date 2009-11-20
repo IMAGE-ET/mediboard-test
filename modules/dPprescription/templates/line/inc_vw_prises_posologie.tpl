@@ -39,9 +39,6 @@ if(oButton){
 {{/if}}
 
 Main.add(function () {
-	{{foreach from=$line->_ref_prises item=prise}}
-	  prepareForm('addPrise-{{$prise->_id}}');
-	{{/foreach}}
 	{{if $line->_protocole}}
 	 modifFormDate('{{$line->_nb_prises_interv}}','editDuree-{{$typeDate}}-{{$line->_id}}','1','{{$line->_id}}');
 	{{else}}

@@ -9,6 +9,7 @@
  */
 
 $do = new CDoObjectAddEdit("CDailyCheckItemCategory");
+$do->redirect = "m=dPsalleOp&a=vw_daily_check_item_category";
 $do->doIt();
 
 ?>

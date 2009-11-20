@@ -101,9 +101,6 @@
 	          <td colspan="2" style="text-align: center"><button type="button" class="submit" onclick="this.form.onsubmit()">Créer</button></td>
 	        </tr>
 		  </form>
-		  <script type="text/javascript">
-	      prepareForm("createPack");
-	     </script>
 		   </td>
 		  </tr>
 		</table>	 

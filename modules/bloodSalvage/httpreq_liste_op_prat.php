@@ -29,7 +29,7 @@ $where["date"] = "= '$date'";
 $groupby = "chir_id";
 $plagesJour = $plagesJour->loadList($where, null, null, $groupby);
 foreach($plagesJour as $curr_plage) {
-  if(key_exists($curr_plage->chir_id, $listPermPrats)) {
+  if(array_key_exists($curr_plage->chir_id, $listPermPrats)) {
     $listPrats[$curr_plage->chir_id] = $listPermPrats[$curr_plage->chir_id];
   }
 }
@@ -39,7 +39,7 @@ $where["date"] = "= '$date'";
 $groupby = "chir_id";
 $opsJour = $opsJour->loadList($where, null, null, $groupby);
 foreach($opsJour as $curr_op) {
-  if(key_exists($curr_op->chir_id, $listPermPrats)) {
+  if(array_key_exists($curr_op->chir_id, $listPermPrats)) {
     $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];
   }
 }

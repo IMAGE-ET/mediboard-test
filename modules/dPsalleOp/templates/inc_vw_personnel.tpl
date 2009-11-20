@@ -1,7 +1,9 @@
 <script type="text/javascript">
 
 function submitPersonnel(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() {reloadPersonnel(document.forms["affectationPers-aideop"].object_id.value)} });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() {
+    reloadPersonnel(document.forms["affectationPers-aideop"].object_id.value);
+  } });
 }
 
 </script>
@@ -13,8 +15,8 @@ function submitPersonnel(oForm){
   </th>
 </tr>
 <tr>
-  <th class="category">Personnel prévu</th>
-  <th class="category">Personnel ajouté<br />
+  <th class="category" style="width: 50%;">Personnel prévu</th>
+  <th class="category" style="width: 50%;">Personnel ajouté<br />
     <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -32,7 +34,6 @@ function submitPersonnel(oForm){
         {{/foreach}}
       </select>
     </form>
-    <br />
     <form name="affectationPers-penseuse" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -95,15 +96,13 @@ function submitPersonnel(oForm){
     {{foreach from=$tabPersonnel.operation item=affectation}}
 
     {{if $can->edit || $modif_operation}}
-    <div style="float: right">
-    <form name="cancelAffectation-{{$affectation->_id}}" action="?m={{$m}}" method="post">
+    <form name="cancelAffectation-{{$affectation->_id}}" action="?m={{$m}}" method="post" style="float: right">
       <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="1" />
       <button type="button" class="cancel notext" onclick="submitPersonnel(this.form)">{{tr}}Cancel{{/tr}}</button>
     </form>
-    </div>
     {{/if}}
 
     <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">

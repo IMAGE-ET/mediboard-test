@@ -15,10 +15,11 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $date         = null;
   var $object_class = null;
   var $object_id    = null;
+  var $type         = null;
   var $comments     = null;
   var $validator_id = null;
 	
-	// Refs
+  // Refs
   var $_ref_validator = null;
   var $_ref_object    = null;
 	
@@ -26,8 +27,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $_ref_item_types = null;
   var $_items          = null;
   var $_validator_password = null;
-  var $_date_min = null;
-  var $_date_max = null;
+  var $_readonly       = null;
+  var $_date_min       = null;
+  var $_date_max       = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,8 +41,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   function getProps() {
     $specs = parent::getProps();
     $specs['date']         = 'date notNull';
-    $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire notNull default|CSalle';
+    $specs['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
     $specs['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
+    $specs['type']         = 'enum list|preanesth|preop|postop';
     $specs['validator_id'] = 'ref class|CMediusers';
     $specs['comments']     = 'text';
     $specs['_validator_passord'] = 'password notNull';
@@ -61,36 +64,36 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $this->_view = "$this->_ref_object le $this->date ($this->_ref_validator)";
   }
   
+  function isReadonly() {
+    $this->completeField("validator_id");
+    $this->completeField("date");
+    return $this->_readonly = ($this->_id && $this->validator_id && $this->date);
+  }
+  
   function loadRefsFwd() {
-    if ($this->object_class) {
-      $this->_ref_object = new $this->object_class;
-      $this->_ref_object->load($this->object_id); 
-    }
-    
-    $this->_ref_validator = new CMediusers();
-    $this->_ref_validator = $this->_ref_validator->getCached($this->validator_id); 
+    if ($this->object_class)
+      $this->_ref_object = $this->loadFwdRef("object_id", true);
+
+    $this->_ref_validator = $this->loadFwdRef("validator_id", true); 
   }
 	
 	function store() {
-		// Suppression du validateur, donc impossible de le changer
-		$validator_id = $this->validator_id;
-		$this->validator_id = null;
-		
 		// Est-ce un nouvel objet
 		$is_new = !$this->_id;
 		
 		if ($msg = parent::store()) return $msg;
 
-		if ($is_new || $validator_id) {
+		if ($is_new || $this->validator_id) {
 			// Sauvegarde des items cochés
 	    $items = $this->_items ? $this->_items : array();
+      
 			$this->loadItemTypes();
 		  foreach($this->_ref_item_types as $type) {
 				$check_item = new CDailyCheckItem;
 				$check_item->list_id = $this->_id;
 				$check_item->item_type_id = $type->_id;
 				$check_item->loadMatchingObject();
-				$check_item->checked = (in_array($type->_id, $items) ? 1 : 0);
+				$check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
 				if ($msg = $check_item->store()) return $msg;
 			}
 			
@@ -98,27 +101,30 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       if (!$this->_validator_password) {
         return 'Veuillez taper votre mot de passe';
       }
-			$this->validator_id = $validator_id;
       $this->loadRefsFwd();
       $user = new CUser;
       $user->user_username = $this->_ref_validator->_user_username;
       $user->_user_password = $this->_validator_password;
+      
       if (!$user->loadMatchingObject()) {
-        return 'Le mot de passe entré n\'est pas correct';
+        $this->validator_id = "";
+        $msg = 'Le mot de passe entré n\'est pas correct';
       }
 			
-			return parent::store();
+			return $msg . parent::store();
 		}
 	}
 	
-	static function getTodaysList($object_class, $object_id, $date = null){
-    $todays_list = new self;
-    $todays_list->date = $date ? $date : mbDate();
-    $todays_list->object_class = $object_class;
-    $todays_list->object_id = $object_id;
-    $todays_list->loadRefsFwd();
-    $todays_list->loadMatchingObject();
-		return $todays_list;
+	static function getList($object, $date = null, $type = null){
+    $list = new self;
+    $list->object_class = $object->_class_name;
+    $list->object_id = $object->_id;
+    $list->date = $date;
+    $list->type = $type;
+    $list->loadRefsFwd();
+    $list->loadMatchingObject();
+    $list->isReadonly();
+		return $list;
 	}
 	
 	function loadItemTypes() {
@@ -126,19 +132,33 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       'active' => "= '1'",
       'daily_check_item_category.target_class' => "= '$this->object_class'"
     );
+    if ($this->type) {
+      $where['daily_check_item_category.type'] = "= '$this->type'";
+    }
     $ljoin = array(
       'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
     );
     
-		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, 'daily_check_item_category.title, title', null, null, $ljoin);
+    $orderby = 'daily_check_item_category.title, ';
+    // Si liste des points de la HAS
+    if ($this->object_class == "COperation") {
+      $orderby .= "daily_check_item_type_id";
+    }
+    else {
+      $orderby .= "title";
+    }
+    
+		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, $orderby, null, null, $ljoin);
 		foreach($this->_ref_item_types as $type) {
 			$type->loadRefsFwd();
 		}
 		$this->loadBackRefs('items');
 		if ($this->_back['items']) {
 			foreach($this->_back['items'] as $item) {
-			  if (isset($this->_ref_item_types[$item->item_type_id]))
+			  if (isset($this->_ref_item_types[$item->item_type_id])) {
 	        $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
+          $this->_ref_item_types[$item->item_type_id]->_answer = $item->getAnswer();
+        }
 	    }
 		}
 	}

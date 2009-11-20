@@ -58,12 +58,11 @@
                 ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
                 </strong>
                 <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$curr_day}}">
-                  <img src="images/icons/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
+                  <img src="images/icons/edit.png" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 {{if ($plage->_ref_affectations_personnel.op|@count) || ($plage->_ref_affectations_personnel.op_panseuse|@count)}}
                   <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
                   <img src="images/icons/personnel.png" border="0" height="16" width="16"
-                    alt="personnel"
                     onmouseover="$('plage-{{$plage->_id}}').show();"
                     onmouseout="$('plage-{{$plage->_id}}').hide();" />
                   </a>

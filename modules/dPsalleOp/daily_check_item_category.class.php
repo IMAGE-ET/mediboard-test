@@ -13,8 +13,9 @@ class CDailyCheckItemCategory extends CMbObject {
 
   // DB Fields
   var $title    = null;
-	var $desc     = null;
+  var $desc     = null;
   var $target_class = null;
+  var $type     = null;
 	
 	// Refs
   var $_ref_item_types = null;
@@ -29,7 +30,8 @@ class CDailyCheckItemCategory extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['title'] = 'str notNull';
-    $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire notNull default|CSalle';
+    $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
+    $specs['type']  = 'enum list|preanesth|preop|postop';
     $specs['desc']  = 'text';
     return $specs;
   }

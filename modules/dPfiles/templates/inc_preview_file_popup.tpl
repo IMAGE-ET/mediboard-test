@@ -59,7 +59,7 @@ window.onbeforeunload= function () {
             </a>
             {{/if}}
             {{if $fileSel->_nb_pages && $fileSel->_nb_pages>=2}}
-              <select name="_num_page" onchange="javascript:goToPage(this.value);">
+              <select name="_num_page" onchange="goToPage(this.value);">
               {{foreach from=$arrNumPages|smarty:nodefaults item=currPage}}
               <option value="{{$currPage-1}}" {{if $currPage-1==$sfn}}selected="selected" {{/if}}>
                 Page {{$currPage}} / {{$fileSel->_nb_pages}}

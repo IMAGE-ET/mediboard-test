@@ -70,7 +70,7 @@ Main.add(function () {
         </tr>
       </table>
     </td>
-    <td class="pane">
+    <td>
       <div id="calendar-container"></div>
       {{if $can->edit}}
       

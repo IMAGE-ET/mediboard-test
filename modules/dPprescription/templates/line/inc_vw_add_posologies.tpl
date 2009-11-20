@@ -8,14 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-Main.add( function(){
-  prepareForm('addPrise{{$type}}{{$line->_id}}');
-} );
-
-</script>
-
 {{assign var=line_id value=$line->_id}}
 <div style="margin-top: 5px; margin-bottom: -14px;">
   <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
@@ -98,9 +90,6 @@ Main.add( function(){
 </form>
 
 <script type="text/javascript">
-  var oFormChoixPrise = document.forms['ChoixPrise-{{$line->_id}}']
-  prepareForm(oFormChoixPrise);
-  
   // Affichage du type de posologie Moment par defaut
   $('ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}').onclick();
 </script>

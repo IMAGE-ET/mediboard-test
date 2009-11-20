@@ -255,7 +255,10 @@ function reloadPrescription(prescription_id){
 <!-- Timings + Personnel -->
 {{if !$dPconfig.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
 <div id="timing_tab" style="display:none">
- 	<div id="timing">
+  <div id="check_lists">
+    {{include file="inc_vw_operation_check_lists.tpl"}}
+  </div>
+  <div id="timing">
     {{include file="inc_vw_timing.tpl"}}
   </div>
   <div id="listPersonnel">

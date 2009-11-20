@@ -13,8 +13,8 @@ class CDailyCheckItem extends CMbObject {
 
   // DB Fields
   var $list_id      = null;
-	var $item_type_id = null;
-	var $checked = null;
+  var $item_type_id = null;
+  var $checked = null;
   
   // Refs
   var $_ref_list = null;
@@ -31,22 +31,29 @@ class CDailyCheckItem extends CMbObject {
     $specs = parent::getProps();
     $specs['list_id']      = 'ref notNull class|CDailyCheckList';
     $specs['item_type_id'] = 'ref notNull class|CDailyCheckItemType';
-    $specs['checked']      = 'bool notNull';
+    $specs['checked']      = 'bool';
     return $specs;
+  }
+  
+  function getAnswer(){
+    $this->loadRefsFwd();
+    
+    switch ($this->_ref_item_type->attribute) {
+      default:
+      case "normal":         return CAppUI::tr($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'No'));
+      case "notrecommended": return CAppUI::tr($this->checked === null ? 'N/R' : ($this->checked != 0 ? 'Yes' : 'No'));
+      case "notapplicable":  return CAppUI::tr($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'N/A'));
+    }
   }
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
-    $this->_view = $this->_ref_item_type.' ('.($this->checked != 0 ? '' : 'non').' validé)';
+    $this->_view = "$this->_ref_item_type (".$this->getAnswer().")";
   }
   
   function loadRefsFwd() {
-    $this->_ref_list = new CDailyCheckList();
-    $this->_ref_list = $this->_ref_list->getCached($this->list_id);
-		
-    $this->_ref_item_type = new CDailyCheckItemType();
-    $this->_ref_item_type = $this->_ref_item_type->getCached($this->item_type_id);
+    $this->_ref_list = $this->loadFwdRef("list_id", true);
+    $this->_ref_item_type = $this->loadFwdRef("item_type_id", true);
   }
 }
 ?>

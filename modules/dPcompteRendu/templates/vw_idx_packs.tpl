@@ -75,7 +75,7 @@ Main.add(function () {
 
   </td>
   
-  <td class="pane">
+  <td>
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 

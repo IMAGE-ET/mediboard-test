@@ -742,8 +742,8 @@ class CMbObject {
    * @param CMbObject $mbObject object to extend with 
    */
   function extendsWith($mbObject) {
-    $targetClass = get_class($mbObject);
-    $thisClass = get_class($this);
+    $targetClass = $mbObject->_class_name;
+    $thisClass = $this->_class_name;
     if ($targetClass !== $thisClass) {
       trigger_error(printf("Target object has not the same class (%s) as this (%s)", $targetClass, $thisClass), E_USER_WARNING);
       return;
@@ -932,7 +932,7 @@ class CMbObject {
     $this->loadOldObject();
     
     if ($msg = $this->check()) {
-      return CAppUI::tr(get_class($this)) . 
+      return CAppUI::tr($this->_class_name) . 
         CAppUI::tr("CMbObject-msg-check-failed") .
         CAppUI::tr($msg);
     }
@@ -949,8 +949,8 @@ class CMbObject {
     
 
     if (!$ret) {
-      return get_class($this)."::store failed <br />" . $spec->ds->error();
-    } 
+      return "$this->_class_name::store failed <br />" . $spec->ds->error();
+    }
     
 
     // Load the object to get all properties
@@ -985,9 +985,17 @@ class CMbObject {
    * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    * @return CMbObject
    */
-  function merge($objects = array()/*<CMbObject>*/ , $fast = false) {
-    if (count($objects) < 2) return;
+  function merge($objects = array/*<CMbObject>*/(), $fast = false) {
+    $alternative_mode = ($this->_id != null);
     
+    // If alternative mode and too many objects
+    if ($alternative_mode) {
+      if (count($objects) > 1) return "mergeAlternativeTooManyObjects";
+    }
+    else {
+      if (count($objects) < 2) return "mergeTooFewObjects";
+    }
+  
     if ($msg = $this->checkMerge($objects)) return $msg;
     
     if (!$this->_id && $msg = $this->store()) return $msg;
@@ -1007,9 +1015,9 @@ class CMbObject {
     return $this->store();
   }
   
-  function checkMerge($objects = array()/*<CMbObject>*/) {
+  function checkMerge($objects = array/*<CMbObject>*/()) {
     $object_class = null;
-    foreach ($objects as &$object) {
+    foreach ($objects as $object) {
       if (!$object instanceof CMbObject) {
         return 'mergeNotCMbObject';
       }

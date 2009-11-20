@@ -97,22 +97,22 @@
   <tr>
     <td colspan="2" class="button">
       {{if $user->_ref_mediuser->_id}}
-        <div class="big-success">
+        <div class="small-success">
 	        Cet utilisateur est bien intégré à l'organigramme.
-	        <br /><br />
+	        <br />
 	        <a class="button edit" href="?m=mediusers&tab=vw_idx_mediusers&user_id={{$user->_id}}">
 	          Gérer cet utilisateur dans l'organigramme
 	        </a>
         </div>
       {{else}}
         {{if $user->template}}
-        <div class="big-info">
+        <div class="small-info">
 	        Cet utilisateur n'est pas dans l'organigramme.
 	        <br />
 	        C'est <strong>normal pour un Profil</strong>.
         </div>
 				{{else}}
-        <div class="big-warning">
+        <div class="small-warning">
 	        Cet utilisateur n'est pas dans l'organigramme, 
 	        <br />
 	        C'est <strong>anormal pour un utilisateur réel</strong>.

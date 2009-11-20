@@ -18,9 +18,9 @@
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-      {{include file="inc_edit_user.tpl"}}
+        {{include file="inc_edit_user.tpl"}}
       {{else}}
-      {{include file="inc_vw_user.tpl"}}
+        {{include file="inc_vw_user.tpl"}}
       {{/if}}
     </td>
   </tr>

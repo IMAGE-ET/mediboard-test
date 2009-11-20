@@ -34,14 +34,9 @@ Main.add( function(){
   
   if(document.forms.addLine && document.forms.searchProd){
     var oFormProduit = document.forms.searchProd;
-  
-    // Preparation des formulaire
-    prepareForm(document.forms.addLine);
-    prepareForm(oFormProduit);
     
     // Autocomplete des medicaments
-    var urlAuto = new Url();
-    urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+    var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
     window.ac = urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
       minChars: 3,
@@ -254,12 +249,7 @@ transfertLineTP = function(line_id, sejour_id){
 	      <button class="submit" type="button" onclick="this.form.onsubmit();"">Ajouter ce commentaire</button>
 	    </form>
 	    </div>
-	    <script type="text/javascript">
-	      Main.add(function () {
-				  prepareForm('addLineCommentMed');
-				});
-	    </script>
-		</td>
+	</td>
   </tr>
   </tbody>
 </table>

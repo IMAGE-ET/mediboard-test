@@ -12,14 +12,18 @@ class CDailyCheckItemType extends CMbObject {
   var $daily_check_item_type_id  = null;
 
   // DB Fields
-  var $title    = null;
-	var $desc     = null;
-  var $active   = null;
-	var $group_id = null;
-	var $category_id = null;
+  var $title       = null;
+  var $desc        = null;
+  var $active      = null;
+  var $attribute   = null;
+  var $group_id    = null;
+  var $category_id = null;
 	
-	// Refs
-  var $_ref_group = null;
+  var $_checked    = null;
+  var $_answer     = null;
+  
+  // Refs
+  var $_ref_group  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,10 +34,11 @@ class CDailyCheckItemType extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['title']    = 'str notNull';
-    $specs['desc']     = 'text';
-    $specs['active']   = 'bool notNull';
-    $specs['group_id'] = 'ref notNull class|CGroups';
+    $specs['title']       = 'str notNull';
+    $specs['desc']        = 'text';
+    $specs['active']      = 'bool notNull';
+    $specs['attribute']   = 'enum list|normal|notrecommended|notapplicable default|normal';
+    $specs['group_id']    = 'ref class|CGroups';
     $specs['category_id'] = 'ref notNull class|CDailyCheckItemCategory autocomplete|title';
     return $specs;
   }
@@ -48,22 +53,19 @@ class CDailyCheckItemType extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->title;
-		if ($this->active == 0) {
-			$this->_view = ' (Désactivé)';
-		}
+    if ($this->active == 0) {
+      $this->_view = ' (Désactivé)';
+    }
   }
   
   function loadRefsFwd() {
-    $this->_ref_group = new CGroups();
-    $this->_ref_group = $this->_ref_group->getCached($this->group_id);
-		
-    $this->_ref_category = new CDailyCheckItemCategory();
-    $this->_ref_category = $this->_ref_category->getCached($this->category_id);
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
+    $this->_ref_category = $this->loadFwdRef("category_id", true);
   }
 	
   static function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
   	$item_type = new self;
-		$where['group_id'] = "= '".CGroups::loadCurrent()->_id."'";
+    $where['group_id'] = "= '".CGroups::loadCurrent()->_id."' OR group_id IS NULL";
     return $item_type->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 }

@@ -50,7 +50,7 @@ function thumb($params, &$smarty) {
     }
   }
   
-  return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" alt=\"thumb\" />";
+  return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" />";
 }
 
 /**
@@ -204,7 +204,7 @@ function smarty_function_mb_field($params, &$smarty) {
   
   if ($canNull === "true" || $canNull === true) {
     $spec->notNull = 0;
-    $tabSpec = split(" ",$spec->prop);
+    $tabSpec = explode(" ",$spec->prop);
     CMbArray::removeValue("notNull", $tabSpec);
     $spec->prop = implode(" ", $tabSpec);
   }
@@ -468,8 +468,7 @@ class CSmartyDP extends Smarty {
     $this->assign("g", $g);
     $this->assign("dialog", $dialog);
     $this->assign("ajax", $ajax);
-    $this->assign("modules",$modules);
-
+    $this->assign("modules", $modules);
   }
   
   /**
@@ -582,4 +581,3 @@ class CSmartyDP extends Smarty {
     echo "\n<!-- Stop display: $resource_name -->\n";
   }
 }
-?>

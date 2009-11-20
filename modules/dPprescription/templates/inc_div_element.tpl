@@ -23,9 +23,6 @@ Main.add( function(){
   }
   Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$element}}{{else}}0{{/if}}');
   if(document.search{{$element}}){
-    // Autocomplete
-    prepareForm(document.search{{$element}});
-      
     var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
     url.addParam("category", "{{$element}}");
     url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
@@ -205,11 +202,6 @@ Main.add( function(){
 					                       this.form.onsubmit();">Ajouter</button>
 				      </div>
 				    </form>
-				    <script type="text/javascript">
-					    Main.add(function () {
-						    prepareForm('addLineComment{{$element}}');
-						  });
-					  </script>
 				  {{/if}}
 				</div>
       </td>

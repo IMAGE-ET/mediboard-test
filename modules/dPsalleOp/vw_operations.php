@@ -189,16 +189,36 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-// Vérification de la check list journalière
-$check_list = CDailyCheckList::getTodaysList('CSalle', $salle_id, $date);
-$check_list->loadItemTypes();
-$check_list->loadBackRefs('items');
-
-$where = array('target_class' => "= 'CSalle'");
-$check_item_category = new CDailyCheckItemCategory;
-$check_item_categories = $check_item_category->loadList($where);
-
 $selOp->loadAides($anesth_id);
+
+// Vérification de la check list journalière
+$daily_check_list = CDailyCheckList::getList($salle, $date);
+$daily_check_list->loadItemTypes();
+$daily_check_list->loadBackRefs('items');
+
+$cat = new CDailyCheckItemCategory;
+$cat->target_class = "CSalle";
+$daily_check_item_categories = $cat->loadMatchingList();
+
+// Chargement des 3 check lists de l'OMS
+$operation_check_lists = array();
+$operation_check_item_categories = array();
+
+$operation_check_list = new CDailyCheckList;
+$cat = new CDailyCheckItemCategory;
+$cat->target_class = "COperation";
+
+foreach($operation_check_list->_specs["type"]->_list as $type) {
+  $list = CDailyCheckList::getList($selOp, null, $type);
+  $list->loadItemTypes();
+  $list->loadRefsFwd();
+  $list->loadBackRefs('items');
+  $list->isReadonly();
+  $operation_check_lists[$type] = $list;
+  
+  $cat->type = $type;
+  $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -231,9 +251,14 @@ $smarty->assign("timingAffect"           , $timingAffect);
 $smarty->assign("prescription"           , $prescription);
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);
-$smarty->assign("check_list"             , $check_list);
-$smarty->assign("check_item_categories"  , $check_item_categories);
 $smarty->assign("hide_finished"          , $hide_finished);
+
+// Check lists
+$smarty->assign("daily_check_list"               , $daily_check_list);
+$smarty->assign("daily_check_item_categories"    , $daily_check_item_categories);
+$smarty->assign("operation_check_lists"          , $operation_check_lists);
+$smarty->assign("operation_check_item_categories", $operation_check_item_categories);
+
 $smarty->display("vw_operations.tpl");
 
 ?>

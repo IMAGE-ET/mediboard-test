@@ -243,7 +243,7 @@ Element.addMethods({
   }
 });
 
-function prepareForm(oForm, bForcePrepare) {
+function prepareForm(oForm) {
   var sFormName;
   
   if (typeof oForm == "string") {
@@ -253,172 +253,167 @@ function prepareForm(oForm, bForcePrepare) {
   
   if (!Object.isElement(oForm)) {
     try {
-      console.error((sFormName || oForm.name)+" is not an element or is a node list (forms with the same name ?)");
+      console.warn((sFormName || oForm.name)+" is not an element or is a node list (forms with the same name ?)");
     } catch(e) {}
     return;
   }
   
   oForm = $(oForm);
   
-  if (oForm) {
-    // If this form hasn't been prepared yet
-    if (!oForm.hasClassName("prepared") || bForcePrepare) {
-      // Event Observer
-      if(oForm.hasClassName("watched")) {
-        new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
-      }
+  if (!oForm || oForm.hasClassName("prepared")) return;
+  
+  // Event Observer
+  if(oForm.hasClassName("watched")) {
+    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
+  }
+  
+  // Form preparation
+  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
+    sFormName = oForm.cloneNode(false).getAttribute("name");
+  else
+    sFormName = oForm.getAttribute("name");
+
+  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
+
+  // Build label targets
+  var aLabels = oForm.select("label"),
+      oLabel, sFor, i = 0;
       
-      // Form preparation
-      if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
-        sFormName = oForm.cloneNode(false).getAttribute("name");
-      else
-        sFormName = oForm.getAttribute("name");
-
-      oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
-    
-      // Build label targets
-      var aLabels = oForm.select("label"),
-          oLabel, sFor, i = 0;
-          
-      while (oLabel = aLabels[i++]) {
-        if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
-          oLabel.htmlFor = sFormName + "_" + sFor;
-        }
-      }
+  while (oLabel = aLabels[i++]) {
+    if ((sFor = oLabel.htmlFor) && (sFor.indexOf(sFormName) !== 0)) {
+      oLabel.htmlFor = sFormName + "_" + sFor;
+    }
+  }
+  
+  // XOR modifications
+  var xorFields, re = /xor(?:\|(\S+))+/g;
+  while (xorFields = re.exec(oForm.className)) {
+    xorFields = xorFields[1].split("|");
+    xorFields.each(function(xorField){
+      var element = $(oForm.elements[xorField]);
+      if (!element) return;
       
-      // XOR modifications
-      var xorFields, re = /xor(?:\|(\S+))+/g;
-      while (xorFields = re.exec(oForm.className)) {
-        xorFields = xorFields[1].split("|");
-        xorFields.each(function(xorField){
-          var element = $(oForm.elements[xorField]);
-          if (!element) return;
-          
-          element.xorElementNames = xorFields.without(xorField);
-          
-          var checkXOR = (function(){
-            if ($V(this)) {
-              this.xorElementNames.each(function(e){
-                $V(this.form.elements[e], '');
-              }, this);
-            }
-          }).bindAsEventListener(element);
-          
-          element.observe("change", checkXOR)
-                 .observe("keyup", checkXOR)
-                 .observe("ui:change", checkXOR);
-        });
-      }
-    
-      // For each element
-      var i = 0, oElement;
-      while (oElement = $(oForm.elements[i++])) {
-        var sElementName = oElement.getAttribute("name");
-        var props = oElement.getProperties();
-    
-        // Locked object
-        if (oForm.lockAllFields) {
-          oElement.disabled = true;
+      element.xorElementNames = xorFields.without(xorField);
+      
+      var checkXOR = (function(){
+        if ($V(this)) {
+          this.xorElementNames.each(function(e){
+            $V(this.form.elements[e], '');
+          }, this);
         }
-        
-        // Create id for each element if id is null
-        if (!oElement.id && sElementName) {
-          oElement.id = sFormName + "_" + sElementName;
-          if (oElement.type === "radio") {
-            oElement.id += "_" + oElement.value;
-          }
-        }
-    
-        // If the element has a mask and other properties, they may conflict
-        if (Preferences.INFOSYSTEM && props.mask) {
-          Assert.that(!(
-            props.min || props.max || props.bool || props.ref || props.pct || props.num
-          ), "'"+oElement.id+"' mask may conflit with other props");
-        }
-        
-        // Can null
-        if (props.canNull) {
-          oElement.observe("change", canNullOK)
-                  .observe("keyup",  canNullOK)
-                  .observe("ui:change", canNullOK);
-        }
-    
-        // Not null
-        if (props.notNull) {
-          oElement.observe("change", notNullOK)
-                  .observe("keyup",  notNullOK)
-                  .observe("ui:change", notNullOK);
-        }
-        
-        // ui:change is a custom event fired on the native onchange throwed by $V, 
-        // because fire doesn't work with native events 
-        oElement.fire("ui:change");
+      }).bindAsEventListener(element);
+      
+      element.observe("change", checkXOR)
+             .observe("keyup", checkXOR)
+             .observe("ui:change", checkXOR);
+    });
+  }
 
-        // Select tree
-        if (props["select-tree"] && Prototype.Browser.Gecko) {
-          oElement.buildTree();
-        }
-    
-        if (mask = props.mask) {
-          mask = mask.gsub('S', ' ').gsub('P', '|');
-          oElement.mask(mask);
-        }
-        
-        // Default autocomplete deactivation
-        if (oElement.type === "text") {
-          oElement.writeAttribute("autocomplete", "off");
-        }
-        
-        // Won't make it resizable on IE
-        if ((Prototype.Browser.Gecko || Prototype.Browser.Opera) && 
-            oElement.type === "textarea" && 
-            oElement.id !== "htmlarea") {
-          oElement.setResizable({autoSave: true, step: 'font-size'});
-        }
-        
-        // Focus on first text input
-        if (bGiveFormFocus && oElement.clientWidth > 0 && 
-            !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
-            oElement.type === "text") {
-          
-          var i, applets = document.applets;
-          if (applets.length) {
-            window._focusElement = oElement;
-            var inactiveApplets = applets.length,
-                tries = 50;
-                
-            function waitForApplet() {
-              inactiveApplets = applets.length;
-              for(i = 0; i < applets.length; i++) {
-                if (Prototype.Browser.IE || applets[i].isActive && applets[i].isActive()) inactiveApplets--;
-                else break;
-              }
-              if (inactiveApplets == 0) {
-                window._focusElement.focus();
-                return;
-              }
-              else if (tries--) setTimeout(waitForApplet, 100);
-            }
+  // For each element
+  var i = 0, oElement;
+  while (oElement = $(oForm.elements[i++])) {
+    var sElementName = oElement.getAttribute("name");
+    var props = oElement.getProperties();
 
-            waitForApplet();
-          }
-          else oElement.focus();
-          bGiveFormFocus = false;
-        }
-        
-        // We mark this form as prepared
-        oForm.addClassName("prepared");
+    // Locked object
+    if (oForm.lockAllFields) {
+      oElement.disabled = true;
+    }
+    
+    // Create id for each element if id is null
+    if (!oElement.id && sElementName) {
+      oElement.id = sFormName + "_" + sElementName;
+      if (oElement.type === "radio") {
+        oElement.id += "_" + oElement.value;
       }
     }
+
+    // If the element has a mask and other properties, they may conflict
+    if (Preferences.INFOSYSTEM && props.mask) {
+      Assert.that(!(
+        props.min || props.max || props.bool || props.ref || props.pct || props.num
+      ), "'"+oElement.id+"' mask may conflit with other props");
+    }
+    
+    // Can null
+    if (props.canNull) {
+      oElement.observe("change", canNullOK)
+              .observe("keyup",  canNullOK)
+              .observe("ui:change", canNullOK);
+    }
+
+    // Not null
+    if (props.notNull) {
+      oElement.observe("change", notNullOK)
+              .observe("keyup",  notNullOK)
+              .observe("ui:change", notNullOK);
+    }
+    
+    // ui:change is a custom event fired on the native onchange throwed by $V, 
+    // because fire doesn't work with native events 
+    oElement.fire("ui:change");
+
+    // Select tree
+    if (props["select-tree"] && Prototype.Browser.Gecko) {
+      oElement.buildTree();
+    }
+
+    if (mask = props.mask) {
+      mask = mask.gsub('S', ' ').gsub('P', '|');
+      oElement.mask(mask);
+    }
+    
+    // Default autocomplete deactivation
+    if (oElement.type === "text") {
+      oElement.writeAttribute("autocomplete", "off");
+    }
+    
+    // Won't make it resizable on IE
+    if ((Prototype.Browser.Gecko || Prototype.Browser.Opera) && 
+        oElement.type === "textarea" && 
+        oElement.id !== "htmlarea") {
+      oElement.setResizable({autoSave: true, step: 'font-size'});
+    }
+    
+    // Focus on first text input
+    if (bGiveFormFocus && oElement.clientWidth > 0 && 
+        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
+        oElement.type === "text") {
+      
+      var i, applets = document.applets;
+      if (applets.length) {
+        window._focusElement = oElement;
+        var inactiveApplets = applets.length,
+            tries = 50;
+            
+        function waitForApplet() {
+          inactiveApplets = applets.length;
+          for(i = 0; i < applets.length; i++) {
+            if (Prototype.Browser.IE || applets[i].isActive && applets[i].isActive()) inactiveApplets--;
+            else break;
+          }
+          if (inactiveApplets == 0) {
+            window._focusElement.focus();
+            return;
+          }
+          else if (tries--) setTimeout(waitForApplet, 100);
+        }
+
+        waitForApplet();
+      }
+      else oElement.focus();
+      bGiveFormFocus = false;
+    }
+    
+    // We mark this form as prepared
+    oForm.addClassName("prepared");
   }
 }
 
-function prepareForms() {
-  // For each form
-  var i = 0, form;
-  while (form = document.forms[i++]) {
-    prepareForm(form);
-  }
+function prepareForms(root) {
+  try {
+    $(root || document.documentElement).select("form:not(.prepared)").each(prepareForm);
+  } catch (e) {}
 }
 
 function submitFormAjax(oForm, ioTarget, oOptions) {

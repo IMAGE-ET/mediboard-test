@@ -149,10 +149,10 @@ if (!CAppUI::$instance->user_id) {
   else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeInfo"           , $locale_info);
-    $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
-    $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
-    $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
-    $smartyLogin->assign("mediboardScript"      , mbLoadScripts(true));
+    $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
+    $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
+    $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
+    $smartyLogin->assign("mediboardScript"      , mbLoadScripts());
     $smartyLogin->assign("errorMessage"         , CAppUI::getMsg());
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
@@ -284,10 +284,10 @@ if (!$suppressHeaders) {
   $smartyHeader->assign("nodebug"              , true);
   $smartyHeader->assign("configOffline"        , null);
   $smartyHeader->assign("localeInfo"           , $locale_info);
-  $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico", true));
-  $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all", true));
-  $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all", true));
-  $smartyHeader->assign("mediboardScript"      , mbLoadScripts(true));
+  $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
+  $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
+  $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
+  $smartyHeader->assign("mediboardScript"      , mbLoadScripts());
   $smartyHeader->assign("dialog"               , $dialog);
   $smartyHeader->assign("messages"             , $messages);
   $smartyHeader->assign("mails"                , $mails);

@@ -37,7 +37,7 @@
 
         <tr>
           <td colspan="4" class="button">
-            <img alt="Nombre de consultations" src='?m=dPstats&amp;a=graph_consultations&amp;suppressHeaders=1&amp;debut={{$filterConsultation->_date_min}}&amp;fin={{$filterConsultation->_date_max}}&amp;prat_id={{$filterConsultation->praticien_id}}' />
+            <img title="Nombre de consultations" src='?m=dPstats&amp;a=graph_consultations&amp;suppressHeaders=1&amp;debut={{$filterConsultation->_date_min}}&amp;fin={{$filterConsultation->_date_max}}&amp;prat_id={{$filterConsultation->praticien_id}}' />
           </td>
         </tr>
         

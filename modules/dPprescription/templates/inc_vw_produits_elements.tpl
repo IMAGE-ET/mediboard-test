@@ -148,7 +148,6 @@ setPrimaryKeyDosql = function (form, object_class, object_id) {
 
 submitALD = function(object_class, object_id, ald){
   var oForm = getForm("editLineALD-"+object_class);
-  prepareForm(oForm);
   
   setPrimaryKeyDosql(oForm, object_class, object_id);
   
@@ -158,7 +157,6 @@ submitALD = function(object_class, object_id, ald){
 
 submitConditionnel = function(object_class, object_id, conditionnel){
   var oForm = getForm("editLineConditionnel-"+object_class);
-  prepareForm(oForm);
   
   setPrimaryKeyDosql(oForm, object_class, object_id);
   
@@ -168,7 +166,6 @@ submitConditionnel = function(object_class, object_id, conditionnel){
 
 submitValidationInfirmiere = function(object_class, object_id, prescription_id, div_refresh, mode_pharma) {
   var oForm = getForm("validation_infirmiere-"+object_class);
-  prepareForm(oForm);
   
   setPrimaryKeyDosql(oForm, object_class, object_id);
   
@@ -181,7 +178,6 @@ submitValidationInfirmiere = function(object_class, object_id, prescription_id, 
 
 submitValidationPharmacien = function(prescription_id, object_id, valide_pharma, mode_pharma) {
   var oForm = getForm("validation_pharma");
-  prepareForm(oForm);
   oForm.valide_pharma.value = valide_pharma;
   oForm.prescription_line_medicament_id.value = object_id;
   onSubmitFormAjax(oForm, { onComplete: function() {
@@ -191,7 +187,6 @@ submitValidationPharmacien = function(prescription_id, object_id, valide_pharma,
 
 submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
   var oForm = getForm("valideAllLines");
-  prepareForm(oForm);
   oForm.prescription_id.value = prescription_id;
   oForm.chapitre.value = chapitre;
   if (mode_pharma) {
@@ -202,7 +197,6 @@ submitValideAllLines = function (prescription_id, chapitre, mode_pharma) {
 
 submitAddComment = function (object_class, object_id, commentaire) {
   var oForm = getForm("addComment-"+object_class);
-  prepareForm(oForm);
   setPrimaryKeyDosql(oForm, object_class, object_id);
   oForm.commentaire.value = commentaire;
   return onSubmitFormAjax(oForm);
@@ -211,7 +205,6 @@ submitAddComment = function (object_class, object_id, commentaire) {
 
 submitEmplacement = function(object_class, object_id, emplacement){
   var oForm = getForm("emplacement-"+object_class);
-  prepareForm(oForm);
   setPrimaryKeyDosql(oForm, object_class, object_id);  
   oForm.emplacement.value = emplacement;
   return onSubmitFormAjax(oForm);
@@ -219,7 +212,6 @@ submitEmplacement = function(object_class, object_id, emplacement){
 
 submitVoie = function(line_medicament_id, libelle_voie){
   var oForm = getForm("voie");
-  prepareForm(oForm);
   oForm.prescription_line_medicament_id.value = line_medicament_id;
   oForm.voie.value = libelle_voie;
   return onSubmitFormAjax(oForm);
@@ -228,7 +220,6 @@ submitVoie = function(line_medicament_id, libelle_voie){
 
 submitSignaturePraticien = function(perfusion_id, prescription_id, signature_praticien){
   var oForm = getForm("perf_signature_prat");
-  prepareForm(oForm);
   oForm.perfusion_id.value = perfusion_id;
   oForm.signature_prat.value = signature_praticien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
@@ -238,7 +229,6 @@ submitSignaturePraticien = function(perfusion_id, prescription_id, signature_pra
 
 submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_pharmacien){
   var oForm = getForm("perf_signature_pharma");
-  prepareForm(oForm);
   oForm.perfusion_id.value = perfusion_id;
   oForm.signature_pharma.value = signature_pharmacien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
@@ -248,7 +238,6 @@ submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_ph
 
 submitValidationInfir = function(perfusion_id, prescription_id, validation_infir){
   var oForm = getForm("perf_validation_infir");
-  prepareForm(oForm);
   oForm.perfusion_id.value = perfusion_id;
   oForm.validation_infir.value = validation_infir;
   return onSubmitFormAjax(oForm, { onComplete: function(){

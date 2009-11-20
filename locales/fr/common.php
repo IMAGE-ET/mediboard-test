@@ -183,4 +183,5 @@ $locales['Popup blocker alert'] = 'Il semblerait que votre navigateur ait bloqué
 $locales['Export'] = 'Exporter';
 $locales['Import'] = 'Importer';
 $locales['Close'] = 'Fermer';
+$locales['Unknown'] = 'Inconnu';
 ?>

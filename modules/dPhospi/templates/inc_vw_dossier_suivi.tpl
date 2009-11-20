@@ -24,9 +24,6 @@ function updateFieldsCible(selected) {
 }
 
 Main.add(function () {
-  prepareForm("editObs");
-  prepareForm("editTrans");
-
   var url = new Url("dPprescription", "httpreq_cible_autocomplete");
   url.autoComplete("editTrans_cible", "cible_auto_complete", {
     minChars: 3,

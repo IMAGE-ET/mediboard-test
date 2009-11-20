@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 
 $can->needsRead();
 
@@ -26,8 +26,8 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 $patient = new CPatient;
 $patient->load($patient_id);
 if(!$patient->_id) {
-  $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPpatients&tab=0");
+  CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
+  CAppUI::redirect("m=dPpatients&tab=0");
 }
 $patient->loadDossierComplet(PERM_READ);
 

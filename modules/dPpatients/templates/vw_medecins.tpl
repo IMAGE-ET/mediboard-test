@@ -195,7 +195,7 @@ function addCorrespondant() {
     </td>
     
     {{if !$dialog}}
-    <td class="pane">
+    <td>
       {{mb_include_script module="dPpatients" script="autocomplete"}}
     	<script type="text/javascript">
 			Main.add(function () {

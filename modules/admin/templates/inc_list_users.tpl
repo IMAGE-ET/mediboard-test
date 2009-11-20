@@ -90,15 +90,21 @@
     </td>
     
     <td class="button" style="white-space: nowrap; text-align: left;">
-      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
+      <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$_user->_id}}'">
       	Droits
       </button>
-      <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
+      <button class="search" onclick="location.href='?m={{$m}}&amp;tab=edit_prefs&amp;user_id={{$_user->_id}}'">
       	Préférences
       </button>
       {{assign var="loginas_user" value=$_user}}
       {{include file="loginas.tpl"}}
       {{include file="unlock.tpl"}}
+    </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="10">
+      {{tr}}CUser.none{{/tr}}
     </td>
   </tr>
   {{/foreach}}

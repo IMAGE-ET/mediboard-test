@@ -237,6 +237,16 @@ a.button {
   -moz-user-select: none;
 }
 
+button[disabled], a.button[disabled] {
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button[disabled]:hover, a.button[disabled]:hover {
+  outline: none;
+}
+
 a.button {
   display: inline-block;
   height: 14px;

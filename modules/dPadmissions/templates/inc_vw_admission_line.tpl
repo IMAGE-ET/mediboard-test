@@ -21,11 +21,11 @@
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}">
-    <img src="images/icons/edit.png" alt="modifier" />
+    <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
   </a>
   {{if $canPlanningOp->read}}
-  <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
-    <img src="images/icons/planning.png" alt="modifier" />
+  <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
+    <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
   </a>
   {{/if}}
   
@@ -213,7 +213,7 @@
   </button>
   {{/if}}
   {{if ($curr_adm->modif_SHS == 1) && ($dPconfig.dPplanningOp.CSejour.modif_SHS == 1)}}
-    <img src="images/icons/warning.png" alt="warning" title="Le dossier a été modifié, il faut le répréparer" />
+    <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
   {{/if}}
   </form>
 </td>
@@ -230,7 +230,7 @@
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" class="button">
   {{if $curr_adm->_couvert_cmu}}
-    <img src="images/icons/tick.png" alt="Droits CMU en cours" />
+    <img src="images/icons/tick.png" title="Droits CMU en cours" />
   {{else}}
     -
   {{/if}}

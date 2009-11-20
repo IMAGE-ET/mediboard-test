@@ -147,7 +147,7 @@ class CTemplateManager {
   }
   
   function initHTMLArea () {
-    // Don't use mbSetValue which uses $m
+    // Don't use CValue::setSession which uses $m
     $_SESSION["dPcompteRendu"]["templateManager"] = serialize($this);
    
     $smarty = new CSmartyDP("modules/dPcompteRendu");
@@ -188,7 +188,7 @@ class CTemplateManager {
       )";
     }
     
-    $where[] = CSQLDataSource::get("std")->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
+    $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
     $order = "nom ASC";
     $lists = new CListeChoix();
     $lists = $lists->loadList($where, $order);
