@@ -48,7 +48,7 @@ switch ($evenement) {
     echo "<div class='error'>Action '$evenement' inconnue</div>";
 }
 
-function extractFiles($schemaDir, $schemaFile, $delOldDir) {
+function extractFiles($schemaDir, $schemaFile, $delOldDir = false) {
   $baseDir = "modules/hprimxml/xsd";
   $destinationDir = "$baseDir/$schemaDir";
   $archivePath = "$baseDir/$schemaFile";
