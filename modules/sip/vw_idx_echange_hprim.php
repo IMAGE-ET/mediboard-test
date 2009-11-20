@@ -84,7 +84,7 @@ if (isset($t["acquittement_invalide"])) {
   $where["acquittement_valide"] = " = '0'";
 }
 if (isset($t["no_date_echange"])) {
-  $where["date_production"] = "IS NULL";
+  $where["date_echange"] = "IS NULL";
 }
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
