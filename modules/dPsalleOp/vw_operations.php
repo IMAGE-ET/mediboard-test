@@ -208,6 +208,7 @@ $operation_check_list = new CDailyCheckList;
 $cat = new CDailyCheckItemCategory;
 $cat->target_class = "COperation";
 
+// Pre-anesth, pre-op, post-op
 foreach($operation_check_list->_specs["type"]->_list as $type) {
   $list = CDailyCheckList::getList($selOp, null, $type);
   $list->loadItemTypes();

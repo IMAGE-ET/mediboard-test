@@ -48,8 +48,12 @@
 				<tr>
           <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">{{mb_value object=$curr_list field=date}}</a></td>
           <td>{{mb_value object=$curr_list field=object_class}}</td>
+          <td>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_list->_ref_object->_guid}}')">
+              {{$curr_list->_ref_object}}
+            </span>
+          </td>
           <td>{{mb_value object=$curr_list field=type}}</td>
-          <td>{{$curr_list->_ref_object}}</td>
           <td>{{mb_value object=$curr_list field=comments}}</td>
           <td>{{mb_value object=$curr_list field=validator_id}}</td>
         </tr>
@@ -63,62 +67,69 @@
 		{{if $check_list->_id}}
 		<td>
 			<table class="main form">
-			  <col style="width: 1%;" />
-        <col />
-        <col style="width: 1%;" />
         
 				<tr>
-					<th class="title" colspan="3">{{$check_list}}</th>
+					<th class="title" colspan="2">{{$check_list}}</th>
 				</tr>
         <tr>
           <th>{{mb_label object=$check_list field=date}}</th>
-          <td colspan="2">{{mb_value object=$check_list field=date}}</td>
+          <td>{{mb_value object=$check_list field=date}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=object_id}}</th>
-          <td colspan="2">{{$check_list->_ref_object}}</td>
+          <td>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$check_list->_ref_object->_guid}}')">
+              {{$check_list->_ref_object}}
+            </span>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=type}}</th>
-          <td colspan="2">{{mb_value object=$check_list field=type}}</td>
+          <td>{{mb_value object=$check_list field=type}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$check_list field=validator_id}}</th>
-          <td colspan="2">{{mb_value object=$check_list field=validator_id}}</td>
+          <td>{{mb_value object=$check_list field=validator_id}}</td>
         </tr>
         
-        {{assign var=category_id value=0}}
-        {{foreach from=$check_list->_back.items item=_item}}
-          {{assign var=curr_type value=$_item->_ref_item_type}}
-          {{if $curr_type->category_id != $category_id}}
-            <tr>
-              <th colspan="3" class="text category" style="text-align: left;">
-                <strong>{{$curr_type->_ref_category->title}}</strong>
-                {{if $curr_type->_ref_category->desc}}
-                  &ndash; {{$curr_type->_ref_category->desc}}
-                {{/if}}
-              </th>
-            </tr>
-          {{/if}}
-          <tr>
-            <td style="padding-left: 1em; width: 100%;" class="text" colspan="2">
-              {{mb_value object=$curr_type field=title}}
-              <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
-            </td>
-            <td class="text" {{if $_item->checked == 0 && $_item->checked !== null}}style="color: red; font-weight: bold;"{{/if}}>
-              {{$_item->getAnswer()}}
-            </td>
-          </tr>
-          {{assign var=category_id value=$curr_type->category_id}}
-        {{foreachelse}}
-          <tr>
-            <td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
-          </tr>
-        {{/foreach}}
         <tr>
-          <td colspan="3">
-            <strong>Commentaires:</strong><br />
-            {{mb_value object=$check_list field=comments}}
+          <td colspan="2" style="padding: 0;">
+            <table class="main">
+              {{assign var=category_id value=0}}
+              {{foreach from=$check_list->_back.items item=_item}}
+                {{assign var=curr_type value=$_item->_ref_item_type}}
+                {{if $curr_type->category_id != $category_id}}
+                  <tr>
+                    <th colspan="3" class="text category" style="text-align: left;">
+                      <strong>{{$curr_type->_ref_category->title}}</strong>
+                      {{if $curr_type->_ref_category->desc}}
+                        &ndash; {{$curr_type->_ref_category->desc}}
+                      {{/if}}
+                    </th>
+                  </tr>
+                {{/if}}
+                <tr>
+                  <td style="padding-left: 1em; width: 100%;" class="text" colspan="2">
+                    {{mb_value object=$curr_type field=title}}
+                    <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+                  </td>
+                  <td class="text" {{if $_item->checked == 0 && $_item->checked !== null}}style="color: red; font-weight: bold;"{{/if}}>
+                    {{$_item->getAnswer()}}
+                  </td>
+                </tr>
+                {{assign var=category_id value=$curr_type->category_id}}
+              {{foreachelse}}
+                <tr>
+                  <td colspan="3">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+                </tr>
+              {{/foreach}}
+              <tr>
+                <td colspan="3">
+                  <strong>Commentaires:</strong><br />
+                  {{mb_value object=$check_list field=comments}}
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
 			</table>

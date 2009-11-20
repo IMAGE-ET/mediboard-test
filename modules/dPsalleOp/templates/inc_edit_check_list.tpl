@@ -69,6 +69,12 @@ refreshCheckList{{$check_list->type}} = function(id){
     url.addParam("check_list_id", id);
     url.requestUpdate("{{$check_list->type}}");
   }
+  else {
+    var form =  getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
+    if (!$V(form.daily_check_list_id)) {
+      $V(form.daily_check_list_id, id);
+    }
+  }
 }
 
 Main.add(function(){

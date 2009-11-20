@@ -19,6 +19,7 @@ $check_list_id = CValue::getOrSession('check_list_id');
 $check_list = new CDailyCheckList;
 $check_list->load($check_list_id);
 $check_list->loadBackRefs('items');
+$check_list->_ref_object->loadRefsFwd();
 
 if ($check_list->_back['items']) {
 	foreach($check_list->_back['items'] as $id => $item) {
@@ -42,7 +43,7 @@ if ($date_min) {
 if ($date_max) {
 	$where[] = "date <= '$date_max'";
 }
-$list_check_lists = $check_list->loadList($where, 'date DESC, object_class' , 30);
+$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , 30);
 
 $check_list_filter = new CDailyCheckList;
 $check_list_filter->object_class = $object_class;
