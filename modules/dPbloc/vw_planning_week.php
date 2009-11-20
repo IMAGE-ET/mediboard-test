@@ -61,6 +61,7 @@ foreach($listDays as $keyDate => $valDate){
   // Récupération des plages par jour
   $listPlage = new CPlageOp();
   $where = array();
+  $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
   $where["date"] = "= '$keyDate'";
   $order = "debut";
   $listPlages[$keyDate] = $listPlage->loadList($where,$order);
