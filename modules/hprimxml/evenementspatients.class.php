@@ -17,8 +17,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     'mouvementPatient'      => "CHPrimXMLMouvementPatient"
   );
   
+  static function getVersionEvenementsPatients() {
+    $version = CAppUI::conf('hprimxml evt_patients version');
+
+    return ($version == "1.051") ? "msgEvenementsPatients1051" : "msgEvenementsPatients105";
+  } 
+  
   static function getHPrimXMLEvenementsPatients($messagePatient) {
-    $hprimxmldoc = new CHPrimXMLDocument("patient", "msgEvenementsPatients105");
+    $hprimxmldoc = new CHPrimXMLDocument("patient", self::getVersionEvenementsPatients());
     // Récupération des informations du message XML
     $hprimxmldoc->loadXML(utf8_decode($messagePatient));
     
@@ -29,14 +35,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     } else {
       return new CHPrimXMLEvenementsPatients();
     }
-  }
-    
+  }  
+   
   function __construct() {
     $this->evenement = "evt_patients";
     $this->destinataire_libelle = "";
     $this->type = "patients";
+    
                 
-    parent::__construct("patients", "msgEvenementsPatients105");
+    parent::__construct("patients", self::getVersionEvenementsPatients());
   }
 
   function generateEnteteMessageEvenementsPatients() {
@@ -51,8 +58,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
-    $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant);
-    $referentEmetteur = $xpath->queryAttributNode("hprim:emetteur", $node, "referent");
+    // Obligatoire pour MB
+    $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false);
+
     return $xpath->queryTextNode("hprim:valeur", $emetteur);
   }
   
@@ -61,7 +69,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
     $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
-    $referentRecepteur = $xpath->queryAttributNode("hprim:recepteur", $node, "referent");
+    
     return $xpath->queryTextNode("hprim:valeur", $recepteur);
   }
   
@@ -233,7 +241,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
 
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
     $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     
@@ -277,7 +285,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   static function getNatureVenue($node, $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur");
+    // Obligatoire pour MB
+    $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur", "", false);
     $attrNatureVenueHprim = array (
       "hsp"  => "comp",
       "cslt" => "consult",
@@ -382,7 +391,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mediuser->_id = $id400->object_id;
     } else {
       // Récupération du typePersonne
-      $personne =  $xpath->queryUniqueNode("hprim:personne", $node);
+      // Obligatoire pour MB
+      $personne =  $xpath->queryUniqueNode("hprim:personne", $node, false);
       $mediuser = self::getPersonne($personne, $mediuser);
       
       $mediuser->_id = $this->createPraticien($mediuser);

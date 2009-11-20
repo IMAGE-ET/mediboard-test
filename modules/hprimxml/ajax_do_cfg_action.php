@@ -32,7 +32,9 @@ switch ($evenement) {
     
   case "evt_patients":
   	if ($version == "1.05") {
-      extractFiles("patients" , "schemaEvenementPatient_v105.zip");
+      extractFiles("patients" , "schemaEvenementPatient_v105.zip", true);
+    } else if ($version == "1.051") {
+      extractFiles("patients" , "schemaEvenementPatient_v1051.zip", true);
     }
     break;
     
@@ -46,10 +48,17 @@ switch ($evenement) {
     echo "<div class='error'>Action '$evenement' inconnue</div>";
 }
 
-function extractFiles($schemaDir, $schemaFile) {
+function extractFiles($schemaDir, $schemaFile, $delOldDir) {
   $baseDir = "modules/hprimxml/xsd";
   $destinationDir = "$baseDir/$schemaDir";
   $archivePath = "$baseDir/$schemaFile";
+  if ($delOldDir && file_exists($destinationDir)) {
+    if (CMbPath::remove($destinationDir)) {
+      echo "<div class='message'>Suppression de $destinationDir</div>";
+    } else {
+      echo "<div class='error'>Impossible de supprimer le dossier $destinationDir</div>";
+    }
+  }
   if (false != $nbFiles = CMbPath::extract($archivePath, $destinationDir)) {
     echo "<div class='message'>Extraction de $nbFiles fichiers pour $schemaDir</div>";
   } else {

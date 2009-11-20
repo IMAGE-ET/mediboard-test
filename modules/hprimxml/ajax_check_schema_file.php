@@ -34,6 +34,8 @@ if ($evenement == "evt_pmsi") {
 if ($evenement == "evt_patients") {
   if ($version == "1.05") {
    $file = $racine."patients/msgEvenementsPatients105.xsd";
+  } else if ($version == "1.051") {
+    $file = $racine."patients/msgEvenementsPatients1051.xsd";
   }
 }
 

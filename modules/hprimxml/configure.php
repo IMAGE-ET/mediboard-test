@@ -15,7 +15,7 @@ $status = 0;
 $evenements = array(
   'evt_serveuractes' => array("1.01", "1.05"),
   'evt_pmsi'         => array("1.01", "1.05"),
-  'evt_patients'     => array("1.05"),
+  'evt_patients'     => array("1.05", "1.051"),
   'evt_mvtStock'     => array("1.01"),
 );
 

@@ -15,7 +15,7 @@ $can->needsRead();
 $echange_hprim_id    = CValue::get("echange_hprim_id");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
-$msg_evenement       = CValue::getOrSession("msg_evenement");
+$msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
 $type_evenement      = CValue::getOrSession("type_evenement");
 $page                = CValue::get('page', 0);
 $now                 = mbDate();
@@ -99,11 +99,15 @@ foreach($listEchangeHprim as $_echange_hprim) {
       $id400 = new CIdSante400();
       if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
         $id400->object_class = "CPatient";
-        $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+        try {
+          $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+        } catch(Exception $e) {}
       }
       if ($_echange_hprim->sous_type == "venuePatient" ) {
         $id400->object_class = "CSejour";
-        $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
+        try {
+          $_ref_notification->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
+        } catch(Exception $e) {}
       }
 	   
 	    $id400->tag = $_ref_notification->emetteur;
@@ -114,29 +118,31 @@ foreach($listEchangeHprim as $_echange_hprim) {
       $_ref_notification->_object_class = $id400->object_class;
 	    $_ref_notification->_object_id = ($id400->object_id) ? $id400->object_id : $_ref_notification->_object_id_permanent;
 		}
-	} 
-	$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
-	$domGetIdSourceObject->loadXML(utf8_decode($_echange_hprim->message));
+	}
+  
+  $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
+  $domGetIdSourceObject->loadXML(utf8_decode($_echange_hprim->message));
   
   $id400 = new CIdSante400();
   $_echange_hprim->_object_id_permanent = null;
-  if ($_echange_hprim->sous_type == "enregistrementPatient" ) {
-    $id400->object_class = "CPatient";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+  
+  switch($_echange_hprim->sous_type) {
+    case "enregistrementPatient" :
+    	defineObjectIdClass($domGetIdSourceObject, $id400, $_echange_hprim, "CPatient", "hprim:enregistrementPatient", "hprim:patient");
+    	break;
+    case "venuePatient" :
+      defineObjectIdClass($domGetIdSourceObject, $id400, $_echange_hprim, "CSejour", "hprim:venuePatient", "hprim:venue");
+      break;
+    case "mouvementPatient" :
+      defineObjectIdClass($domGetIdSourceObject, $id400, $_echange_hprim, "CSejour", "hprim:mouvementPatient", "hprim:venue");
+      break;
+    case "fusionVenue" :
+      defineObjectIdClass($domGetIdSourceObject, $id400, $_echange_hprim, "CSejour", "hprim:fusionVenue", "hprim:venue");
+      break;
+    default :
+      defineObjectIdClass($domGetIdSourceObject, $id400 ,$_echange_hprim);
   }
-  if ($_echange_hprim->sous_type == "venuePatient") {
-    $id400->object_class = "CSejour";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
-  }
-  if ($_echange_hprim->sous_type == "fusionVenue") {
-    $id400->object_class = "CSejour";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:fusionVenue", "hprim:venue");
-  }
-  if ($_echange_hprim->sous_type == "mouvementPatient") {
-    $id400->object_class = "CSejour";
-    $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:mouvementPatient", "hprim:venue");
-  }
-	
+  
 	$id400->tag = $_echange_hprim->emetteur;
 	$id400->id400 = $_echange_hprim->_object_id_permanent;
 	$id400->loadMatchingObject();
@@ -146,6 +152,15 @@ foreach($listEchangeHprim as $_echange_hprim) {
 	}
   $_echange_hprim->_object_class = $id400->object_class;
 	$_echange_hprim->_object_id = ($id400->object_id) ? $id400->object_id : $_echange_hprim->_object_id_permanent;	
+}
+
+function defineObjectIdClass($domGetIdSourceObject, &$id400, &$_echange_hprim, $class = null, $node = null, $type = null) {
+  $id400->object_class = $class;
+  if ($node && ($_echange_hprim->statut_acquittement == "OK")) {
+    try {
+      $_echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject($node, $type);
+    } catch(Exception $e) {}
+  }
 }
 
 // Création du template

@@ -20,16 +20,31 @@ class CMbXPath extends DOMXPath {
     }
   }
 
-  function queryUniqueNode($query, DOMNode $contextNode = null) {
+  function nodePath(DOMNode $node) {    
+    $name = "hprim:$node->nodeName";
+    while(($node = $node->parentNode) && ($node->nodeName != "#document")) {
+      $name = "hprim:$node->nodeName/$name";
+    }
+    
+    return "'/$name'";
+  }
+  
+  function queryUniqueNode($query, DOMNode $contextNode = null, $optional = true) {
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
+    
+    $erreur = null;
     if ($nodeList->length > 1) {
-      trigger_error("queried node is not unique, found $nodeList->length occurence(s) for '$query'", E_USER_WARNING);
-      return null;
+      throw new Exception("Queried node is not unique, found $nodeList->length occurence(s) for '$query'");
     }
-    if ($nodeList->length == 0) {
-      return null;
+
+    if (!$optional && $nodeList->length == 0) {
+      $erreur  = "Impossible de trouver l'élément '$query'";
+      if ($contextNode)
+        $erreur .= " dans le contexte : ".$this->nodePath($contextNode);
+      throw new Exception($erreur);
     }
+    
     return $nodeList->item(0);
   } 
   
@@ -69,9 +84,9 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
-  function queryAttributNode($query, DOMNode $contextNode, $attName, $purgeChars = "") {
+  function queryAttributNode($query, DOMNode $contextNode, $attName, $purgeChars = "", $optional = true) {
     $text = "";
-    if ($node = $this->queryUniqueNode($query, $contextNode)) {
+    if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
       $text = utf8_decode($node->getAttribute($attName));
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);

@@ -82,6 +82,9 @@ function changePage(page) {
             <td>
               <select class="str" name="type_evenement">
                 <option value="">&mdash; Liste des événements </option>
+                <option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
+                  Inconnu
+                </option>
                 <option value="enregistrementPatient" {{if $type_evenement == "enregistrementPatient"}}selected="selected"{{/if}}>
                   Enregistrement Patient
                 </option>
