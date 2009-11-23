@@ -634,7 +634,7 @@ $dPconfig["sip"] = array (
   "filenbroll" => "2",
   "pat_no_ipp" => 0,
   "send_all_patients" => 1,
-  "sej_no_numdos" => 1
+  "sej_no_numdos" => 0
 );
 
 $dPconfig["webservices"] = array (
