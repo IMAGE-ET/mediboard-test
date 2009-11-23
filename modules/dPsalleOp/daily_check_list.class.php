@@ -46,7 +46,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $specs['type']         = 'enum list|preanesth|preop|postop';
     $specs['validator_id'] = 'ref class|CMediusers';
     $specs['comments']     = 'text';
-    $specs['_validator_passord'] = 'password notNull';
+    $specs['_validator_password'] = 'password notNull';
     $specs['_date_min'] = 'date';
     $specs['_date_max'] = 'date';
     return $specs;
