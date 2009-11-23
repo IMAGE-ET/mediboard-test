@@ -538,7 +538,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_sortie)); 
     
     if ($mbVenue->mode_sortie) {
-      $typeModeSortieEtablissementHprim = $this->addElement($sortie, "typeModeSortieEtablissementHprim");
+      $modeSortieHprim = $this->addElement($sortie, "modeSortieHprim");
       //retour au domicile
       if ($mbVenue->mode_sortie == "normal") {
         $modeSortieEtablissementHprim = "04";
@@ -555,7 +555,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
           $this->addElement($destination, "libelle", $mbVenue->etablissement_transfert_id);
         }
       }
-      $this->addAttribute($typeModeSortieEtablissementHprim, "valeur", $modeSortieEtablissementHprim);
+      $this->addElement($modeSortieHprim, "code", $modeSortieEtablissementHprim);
+      $this->addElement($modeSortieHprim, "libelle", $mbVenue->mode_sortie);
+      
+      $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
     }
     
     $placement = $this->addElement($elParent, "Placement");
