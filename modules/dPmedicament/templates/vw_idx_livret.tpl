@@ -16,11 +16,13 @@
 // UpdateFields de l'autocomplete
 function updateFieldsProduitLivret(selected) {
   Element.cleanWhitespace(selected);
-  var dn = selected.childElements();
+  var dn = selected.childElements();	
   var code_cip = dn[0].innerHTML;
-  Livret.reloadAlpha('', code_cip);
-  Livret.reloadATC('', code_cip);
-  $('searchProdLivret_produit').value = "";
+  if(dn[1]){
+	  Livret.reloadAlpha('', code_cip);
+    Livret.reloadATC('', code_cip);
+  }
+	$('searchProdLivret_produit').value = "";
 }
 
 Main.add(function () {
