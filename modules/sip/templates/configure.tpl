@@ -169,6 +169,8 @@ Main.add(function () {
     </tr>
   	
   	{{mb_include module=system template=inc_config_bool var=pat_no_ipp}}
+    
+    {{mb_include module=system template=inc_config_bool var=sej_no_numdos}}
   	  		    
     <tr>
       <td class="button" colspan="10">
@@ -185,13 +187,12 @@ Main.add(function () {
 
 var Action = {
   module: "sip",
-  action: "ajax_export_patient",
   
-  import: function (sAction) {
+  import: function (sAction, type) {
     var url = new Url;
-    url.setModuleAction(this.module, this.action);
+    url.setModuleAction(this.module, "ajax_export_"+type);
     url.addParam("action", sAction);
-    url.requestUpdate("import-patient");
+    url.requestUpdate("export-"+type);
   },
 }
 
@@ -208,17 +209,35 @@ var Action = {
     {{tr}}sip-export-class{{/tr}} '{{tr}}CPatient{{/tr}}'
   </td>
   <td>
-    <button type="button" class="new" onclick="Action.import('start')">
+    <button type="button" class="new" onclick="Action.import('start', 'patient')">
       {{tr}}Start{{/tr}}      
     </button>
-    <button type="button" class="change" onclick="Action.import('retry')">
+    <button type="button" class="change" onclick="Action.import('retry', 'patient')">
       {{tr}}Retry{{/tr}}      
     </button>
-    <button type="button" class="tick" onclick="Action.import('continue')">
+    <button type="button" class="tick" onclick="Action.import('continue', 'patient')">
       {{tr}}Continue{{/tr}}      
     </button>
   </td>
-  <td id="import-patient"></td>
+  <td id="export-patient"></td>
+</tr>
+
+<tr>
+  <td>
+    {{tr}}sip-export-class{{/tr}} '{{tr}}CSejour{{/tr}}'
+  </td>
+  <td>
+    <button type="button" class="new" onclick="Action.import('start', 'sejour')">
+      {{tr}}Start{{/tr}}      
+    </button>
+    <button type="button" class="change" onclick="Action.import('retry', 'sejour')">
+      {{tr}}Retry{{/tr}}      
+    </button>
+    <button type="button" class="tick" onclick="Action.import('continue', 'sejour')">
+      {{tr}}Continue{{/tr}}      
+    </button>
+  </td>
+  <td id="export-sejour"></td>
 </tr>
 
 </table>

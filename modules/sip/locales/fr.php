@@ -210,4 +210,6 @@ $locales['config-sip-pat_no_ipp'] = 'Patient n\'ayant pas d\'IPP';
 $locales['config-sip-pat_no_ipp-desc'] = 'Patient n\'ayant pas d\'IPP';
 $locales['config-sip-send_all_patients'] = 'Envoi tous les patients';
 $locales['config-sip-send_all_patients-desc'] = 'Envoi tous les patients ou seulement ceux des séjours';
+$locales['config-sip-sej_no_numdos'] = 'Séjour n\'ayant pas de numéro de dossier';
+$locales['config-sip-sej_no_numdos-desc'] = 'Séjour n\'ayant pas de numéro de dossier';
 ?>

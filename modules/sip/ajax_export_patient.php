@@ -12,8 +12,6 @@ global $can, $g;
 
 $can->needsAdmin();
 
-$class = CValue::get("class");
-
 // Filtre sur les enregistrements
 $patient = new CPatient();
 $action = CValue::get("action", "start");
@@ -58,6 +56,7 @@ $errors = 0;
 $patients = $patient->loadList($where, $patient->_spec->key, "0, $max");
 
 foreach ($patients as $patient) {
+  $patient->loadIPP();
   $patient->_ref_last_log->type = "create";
   $dest_hprim = new CDestinataireHprim();
 	

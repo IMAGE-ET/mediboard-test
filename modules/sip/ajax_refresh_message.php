@@ -17,29 +17,45 @@ $echange_hprim_classname  = CValue::get("echange_hprim_classname");
 $echange_hprim = new $echange_hprim_classname;
 $echange_hprim->load($echange_hprim_id);
 
+$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
+$domGetIdSourceObject->loadXML(utf8_decode($echange_hprim->message));
+$id400 = new CIdSante400();
+
+switch($echange_hprim->sous_type) {
+  case "enregistrementPatient" :
+    defineObjectIdClass($domGetIdSourceObject, $id400, $echange_hprim, "CPatient", "hprim:enregistrementPatient", "hprim:patient");
+    break;
+  case "venuePatient" :
+    defineObjectIdClass($domGetIdSourceObject, $id400, $echange_hprim, "CSejour", "hprim:venuePatient", "hprim:venue");
+    break;
+  case "mouvementPatient" :
+    defineObjectIdClass($domGetIdSourceObject, $id400, $echange_hprim, "CSejour", "hprim:mouvementPatient", "hprim:venue");
+    break;
+  case "fusionVenue" :
+    defineObjectIdClass($domGetIdSourceObject, $id400, $echange_hprim, "CSejour", "hprim:fusionVenue", "hprim:venue");
+    break;
+  default :
+    defineObjectIdClass($domGetIdSourceObject, $id400 ,$echange_hprim);
+}
+
+$id400->tag = $echange_hprim->emetteur;
+$id400->id400 = $echange_hprim->_object_id_permanent;
+$id400->loadMatchingObject();
+
 if (CAppUI::conf('sip server')) {
-  $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
-  $domGetIdSourceObject->loadXML(utf8_decode($echange_hprim->message));
-	
-  $id400 = new CIdSante400();
-  if ($echange_hprim->sous_type == "enregistrementPatient") {
-    $id400->object_class = "CPatient";
-    $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:enregistrementPatient", "hprim:patient");
+  $_echange_hprim->_object_id_permanent = $id400->object_id;
+}
+
+$echange_hprim->_object_class = $id400->object_class;
+$echange_hprim->_object_id = ($id400->object_id) ? $id400->object_id : $echange_hprim->_object_id_permanent;  
+
+function defineObjectIdClass($domGetIdSourceObject, &$id400, &$echange_hprim, $class = null, $node = null, $type = null) {
+  $id400->object_class = $class;
+  if ($node && ($echange_hprim->statut_acquittement == "OK")) {
+    try {
+      $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject($node, $type);
+    } catch(Exception $e) {}
   }
-  if ($echange_hprim->sous_type == "venuePatient") {
-    $id400->object_class = "CSejour";
-    $echange_hprim->_object_id_permanent = $domGetIdSourceObject->getIdSourceObject("hprim:venuePatient", "hprim:venue");
-  }
-	
-  $id400->tag = $echange_hprim->emetteur;
-  $id400->id400 = $echange_hprim->_object_id_permanent;
-  $id400->loadMatchingObject();
-  
-  if (CAppUI::conf('sip server')) {
-    $echange_hprim->_object_id_permanent = $id400->object_id;
-  }
-  $echange_hprim->_object_class = $id400->object_class;
-  $echange_hprim->_object_id = ($id400->object_id) ? $id400->object_id : $echange_hprim->_object_id_permanent;  
 }
 
 // Création du template
