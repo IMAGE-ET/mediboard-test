@@ -9,7 +9,7 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard replace base"
 
-if [ "$#" -lt 6 ]
+if [ "$#" -lt 5 ]
 then 
   echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> (<with_restart>) (<safe>) (<port>)"
   echo " <source_location>  is the remote location, ie root@oxmytto.homelinux.com"
