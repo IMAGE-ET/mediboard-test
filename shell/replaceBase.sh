@@ -48,6 +48,7 @@ else
 fi
 
 if [ $with_restart ]
+then
 echo "Warning !!!!!!!!!!!! This will restart the MySQL server"
 fi
 
@@ -72,6 +73,7 @@ check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
 if [ $with_restart ]
+then
 "$mysql_path" stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
 fi
