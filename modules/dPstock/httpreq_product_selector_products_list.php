@@ -17,6 +17,7 @@ $category = new CProductCategory();
 $total = null;
 $count = null;
 $where_or = array();
+$order = 'name, code';
 
 if ($keywords) {
 	foreach ($product->getSeekables() as $field => $spec) {
@@ -26,17 +27,16 @@ if ($keywords) {
 	$where[] = implode(' OR ', $where_or);
   $where[] = "cancelled IS NULL OR cancelled = '0'";
 	
-  $list_products = $product->loadList($where, 'name', 20);
+  $list_products = $product->loadList($where, $order, 20);
   $total = $product->countList($where);
 } else {
 	if ($category_id == 0) {
-	  $list_products = $product->loadList(null, 'name');
+	  $list_products = $product->loadList(null, $order);
 	} else if ($category_id == -1) {
 	  $list_products = array();
 	} else {
 	  $category->load($category_id);
-	  $category->loadRefsBack();
-	  $list_products = $category->_ref_products;
+	  $list_products = $category->loadBackRefs("products", $order);;
 	  $total = count($list_products);
 	}
 }

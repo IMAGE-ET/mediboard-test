@@ -28,7 +28,7 @@ if ($keywords) {
               `name` LIKE '%$keywords%' OR 
               `description` LIKE '%$keywords%'";
 }
-$orderby = '`name` ASC';
+$orderby = 'name, code';
 
 $product = new CProduct();
 $list_products_count = $product->countList($where, $orderby);
