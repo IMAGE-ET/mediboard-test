@@ -56,6 +56,7 @@ if($file_id = CValue::get("file_id")) {
   if(CValue::get("phpThumb")) {
     $w  = CValue::get("w" , "");
     $h  = CValue::get("h" , "");
+    $zc = CValue::get("zc" , "");
     $hp = CValue::get("hp", "");
     $wl = CValue::get("wl", "");
     $f  = CValue::get("f" , "jpg");
@@ -72,6 +73,7 @@ if($file_id = CValue::get("file_id")) {
       if($wl){$finUrl.="&wl=$wl";}
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
+      if($zc){$finUrl.="&zc=$zc";}
       //trigger_error("Source is $file->_file_path$finUrl");
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
     } elseif(strpos($file->file_type, "pdf") !== false) {
