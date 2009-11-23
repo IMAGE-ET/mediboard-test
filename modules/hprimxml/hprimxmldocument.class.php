@@ -538,7 +538,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_sortie)); 
     
     if ($mbVenue->mode_sortie) {
-      $typeModeSortieEtablissementHprim = $this->addElement($elParent, "typeModeSortieEtablissementHprim");
+      $typeModeSortieEtablissementHprim = $this->addElement($sortie, "typeModeSortieEtablissementHprim");
       //retour au domicile
       if ($mbVenue->mode_sortie == "normal") {
         $modeSortieEtablissementHprim = "04";
