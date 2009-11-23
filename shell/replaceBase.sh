@@ -110,6 +110,7 @@ check_errs $? "Failed to change owner and group" "Succesfully changed owner and 
 
 # Start mysql
 if [ $with_restart ]
+then
 "$mysql_path" start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
 fi
