@@ -228,6 +228,7 @@
                 {{foreach from=$currTypeAnt item=currAnt}}
                 <ul>
                   <li> 
+									  {{if $currAnt->appareil}}<strong>{{tr}}CAntecedent.appareil.{{$currAnt->appareil}}{{/tr}}</strong>{{/if}} 
                     {{if $currAnt->date}}
                       {{mb_value object=$currAnt field=date}} :
                     {{/if}}
