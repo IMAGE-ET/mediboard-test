@@ -56,8 +56,24 @@ $errors = 0;
 $sejours = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
 
 foreach ($sejours as $sejour) {
-  $sejour->loadNumDossier();
+  $sejour->loadRefPraticien();
   $sejour->loadRefPatient();
+  $sejour->_ref_patient->loadIPP();
+  if ($sejour->_ref_prescripteurs) {
+    $sejour->loadRefsPrescripteurs();
+  }
+  $sejour->loadRefAdresseParPraticien();
+  $sejour->_ref_patient->loadRefsFwd();
+  $sejour->loadRefsActes();
+  foreach ($sejour->_ref_actes_ccam as $actes_ccam) {
+    $actes_ccam->loadRefPraticien();
+  }
+  $sejour->loadRefsAffectations();
+  $sejour->loadNumDossier();
+  $sejour->loadLogs();
+  $sejour->loadRefsConsultations();
+  $sejour->loadRefsConsultAnesth();
+      
   $sejour->_ref_last_log->type = "create";
   $dest_hprim = new CDestinataireHprim();
   

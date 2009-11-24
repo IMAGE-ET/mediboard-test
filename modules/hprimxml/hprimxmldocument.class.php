@@ -470,6 +470,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $natureVenueHprim = $this->addElement($elParent, "natureVenueHprim");
     $attrNatureVenueHprim = array (
       "comp" => "hsp",
+      "ambu" => "hsp",
       "consult" => "cslt",
       "seances" => "sc"
     );
