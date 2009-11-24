@@ -258,7 +258,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if(!$referent) {
       $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->patient_id, $referent);
-      if($mbPatient->_IPP)
+      if($mbPatient->_IPP && $mbPatient->_IPP != "-")
         $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP, $referent);
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbPatient->_IPP, $referent);
