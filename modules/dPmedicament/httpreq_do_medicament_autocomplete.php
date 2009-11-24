@@ -18,7 +18,7 @@ $search_by_cis       = CValue::post("search_by_cis", "1");
 $mbProduit = new CBcbProduit();
 
 // Recherche dans la bcb
-$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, $produit_max, $inLivret, $search_libelle_long, $hors_specialite, $search_by_cis);
+$search_by_name = $mbProduit->searchProduitAutocomplete($tokens, "50", $inLivret, $search_libelle_long, $hors_specialite, $search_by_cis);
 
 // Recherche des produits en se basant sur les DCI
 $dci = new CBcbDCI();
@@ -26,14 +26,19 @@ $dci = new CBcbDCI();
 if($inLivret){
 	$dci->distObj->LivretTherapeutique = CGroups::loadCurrent()->_id;
 }
+
 $search_by_dci = $dci->searchProduits($tokens, 100, $search_by_cis);
+
 
 $produits = array();
 foreach($search_by_name as $key => $_produit){
 	$produits[$key] = $_produit;
 }
+
 foreach($search_by_dci as $key => $_produit){
-  $produits[$key] = $_produit;
+  if(!array_key_exists($key, $produits)){
+    $produits[$key] = $_produit;
+	}
 }
 
 // Classement des lignes par ordre alphabetique

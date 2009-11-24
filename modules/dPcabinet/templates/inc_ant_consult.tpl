@@ -517,7 +517,7 @@ Main.add(function () {
     updateElement: updateFieldsMedicamentTP, 
     callback: 
       function(input, queryString){
-        return (queryString + "&produit_max=25"); 
+        return (queryString + "&produit_max=40"); 
       }
   } );
   
