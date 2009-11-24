@@ -11,8 +11,7 @@
 <script type="text/javascript">
 
 function printAdmission(id) {
-  var url = new Url;
-  url.setModuleAction("dPadmissions", "print_admission");
+  var url = new Url("dPadmissions", "print_admission");
   url.addParam("id", id);
   url.popup(700, 550, "Patient");
 }

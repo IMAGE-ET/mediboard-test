@@ -11,10 +11,8 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
-function checkFormPrint() {
-  var form = document.paramFrm;
-    
-  if(!(checkForm(form))){
+function checkFormPrint(form) {
+  if(!checkForm(form)){
     return false;
   }
   
@@ -23,9 +21,8 @@ function checkFormPrint() {
 
   
 function popPlanning() {
-  form = document.paramFrm;
-  var url = new Url;
-  url.setModuleAction("dPbloc", "view_planning");
+  var form = getForm("paramFrm");
+  var url = new Url("dPbloc", "view_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addParam("_plage", $V(form._plage));
@@ -42,25 +39,41 @@ function popPlanning() {
 }
 
 function changeDate(sDebut, sFin){
-  var oForm = document.paramFrm;
+  var oForm = getForm("paramFrm");
   oForm._date_min.value = sDebut;
   oForm._date_max.value = sFin;
   oForm._date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
   oForm._date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
 }
 
-function changeDateCal(){
-  var oForm = document.paramFrm;
+function changeDateCal(minChanged){
+  var oForm = getForm("paramFrm");
   oForm.select_days[0].checked = false;
   oForm.select_days[1].checked = false;
   oForm.select_days[2].checked = false;
   oForm.select_days[3].checked = false;
+  
+  var minElement = oForm._date_min,
+      maxElement = oForm._date_max,
+      minView = oForm._date_min_da,
+      maxView = oForm._date_max_da;
+      
+  if (minElement.value > maxElement.value) {
+    if (minChanged) {
+      $V(maxElement, minElement.value);
+      $V(maxView, Date.fromDATE(maxElement.value).toLocaleDate());
+    }
+    else {
+      $V(minElement, maxElement.value);
+      $V(minView, Date.fromDATE(minElement.value).toLocaleDate());
+    }
+  }
 }
 
 </script>
 
 
-<form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
+<form name="paramFrm" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint(this)">
 <input type="hidden" name="_class_name" value="COperation" />
 <input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
@@ -72,21 +85,32 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal(true)" register=true}} </td>
           <td rowspan="2">
-            <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
-              <label for="select_days_day">Jour courant</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$tomorrow}}','{{$tomorrow}}');" value="tomorrow" /> 
-              <label for="select_days_tomorrow">Lendemain</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
-              <label for="select_days_week">Semaine courante</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
-              <label for="select_days_month">Mois courant</label>
+            <label>
+              <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+              Jour courant
+            </label>
+            <br />
+            <label>
+              <input type="radio" name="select_days" onclick="changeDate('{{$tomorrow}}','{{$tomorrow}}');" value="tomorrow" /> 
+              Lendemain
+            </label>
+            <br />
+            <label>
+              <input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
+              Semaine courante
+            </label>
+            <br />
+            <label>
+              <input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
+              Mois courant
+            </label>
           </td>
         </tr>
         <tr>
            <th>{{mb_label object=$filter field="_date_max"}}</th>
-           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal(false)" register=true}} </td>
         </tr>
         <tr>
           <th class="category" colspan="3">Types d'intervention</th>
@@ -175,7 +199,7 @@ function changeDateCal(){
         <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" size="10" value="" />
-          <button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
+          <button type="button" class="search" onclick="CCAMSelector.init()">Chercher un code</button>
           <script type="text/javascript">
           CCAMSelector.init = function(){
             this.sForm  = "paramFrm";
@@ -231,12 +255,12 @@ function changeDateCal(){
             <input type="radio" name="_ccam_libelle" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <button class="print" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
+          </td>
+        </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
-      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkFormPrint()">Afficher</button></td></tr></table>
     </td>
   </tr>
 </table>
