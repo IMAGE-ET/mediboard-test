@@ -83,21 +83,30 @@ img {
   border: none;
 }
 
-ul {
-  padding-left: 20px;
+ul, ol {
+  padding-left: 2em;
+}
+
+li {
+  margin: 0.2em;
 }
 
 dl {
-  padding-left: 1px;
+  margin: 0.5em;
 }
 
 dt {
-  margin-top: 5px;
   font-weight: bold;
+  font-size: 1.2em;
+  color:#620;
+  width: auto;
+  background-color: #FFE49F;
+  padding: 0.2em 0.5em;
+  -moz-border-radius: 4px;
 }
 
 dd {
-  margin-left: 20px;
+  margin: 0.4em 0 1em 1.5em;
 }
 
 a {
@@ -109,26 +118,34 @@ a:hover {
   text-decoration: underline;
 }
 
-h1,h2,h3,h4 {
+em {
+  background-color: #FFECCD;
+}
+
+h1, h2, h3, h4 {
   font-weight: bold;
 }
 
 h1 {
   font-size: 1.5em;
   color: #555;
-  margin: 10px 0px;
+  margin: 1em 0;
 }
 
 h2 {
   font-size: 1.4em;
   color: #494;
-  margin: 5px 10px;
+  margin: 0.5em 1em;
 }
 
 h3 {
   font-size: 1.3em;
   color: #449;
-  margin: 10px 20px;
+  margin: 1em 2em;
+}
+
+p {
+  margin: 0.3em 0;
 }
 
 table.tbl td.text {
@@ -186,8 +203,8 @@ span.smarty-include {
   color: #fff;
   opacity: 0.7;
   text-indent: 8px;    
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
   overflow: hidden;
   font-family: monospace;
   font-size: 11px;
