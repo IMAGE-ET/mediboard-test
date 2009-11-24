@@ -304,7 +304,7 @@ Main.add( function(){
 				{{/if}}
 				<li><a href="#div_outils">Outils</a></li>
 				<li style="float: right; button">		
-					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin)}}
+					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $current_user->_is_infirmiere)}}
 		        {{if !$mode_pharma}}
 		          {{if $is_praticien}}
 		            <form name="signaturePrescription" method="post" action="">
@@ -341,7 +341,21 @@ Main.add( function(){
 		            <button type="button" class="tick" onclick="Prescription.valideAllLines('{{$prescription->_id}}');" style="margin:0px">
 		              Tout signer
 		            </button>
-		            <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')" style="margin:0px">Annuler signatures</button>
+		            <button type="button" class="cancel" onclick="Prescription.valideAllLines('{{$prescription->_id}}','1')" style="margin:0px">
+		            	Annuler signatures
+								</button>
+								
+								{{if $current_user->_is_infirmiere}}
+									<form name="removeLines" method="post" action="">
+		                  <input type="hidden" name="dosql" value="do_remove_lines" />
+		                  <input type="hidden" name="m" value="dPprescription" />
+		                  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+		                  <input type="hidden" name="praticien_id" value="" />
+		                  <button type="button" class="trash" style="margin:0px" onclick="$V(this.form.praticien_id, $V(getForm('selPraticienLine').praticien_id)); if(confirm('Etes vous sur de vouloir supprimer les lignes non signées du praticien selectionné ?')){
+		                    submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
+		                  }">Supprimer</button>
+		               </form>
+								 {{/if}}
 		          {{/if}}
 		        {{/if}}
 		      {{/if}}			

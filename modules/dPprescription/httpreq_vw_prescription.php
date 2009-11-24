@@ -68,6 +68,7 @@ $dossier_medical      = new CDossierMedical();
 $current_user = new CMediusers();
 $current_user->load($AppUI->user_id);
 $is_praticien = $current_user->isPraticien();
+$current_user->isInfirmiere();
 
 // Liste des praticiens disponibles
 $listPrats = $is_praticien ? null : $current_user->loadPraticiens(PERM_EDIT);

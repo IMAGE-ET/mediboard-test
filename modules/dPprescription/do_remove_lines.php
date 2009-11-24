@@ -39,11 +39,18 @@ $perfusion->praticien_id = $praticien_id;
 $perfusion->prescription_id = $prescription_id;
 $lines["perfusion"] = $perfusion->loadMatchingList();
 
+$current_user = new CMediusers();
+$current_user->load($AppUI->user_id);
+$current_user->isPraticien();
+
 foreach($lines as $lines_by_type){
   foreach($lines_by_type as $_line){
-    $msg = $_line->delete();
-    CAppUI::displayMsg($msg, "$_line->_class_name-msg-delete");
-  }
+  	$_line->getAdvancedPerms($current_user->_is_praticien);
+		if($_line->_perm_edit){
+	    $msg = $_line->delete();
+	    CAppUI::displayMsg($msg, "$_line->_class_name-msg-delete");
+		}
+	}
 }
 
 echo CAppUI::getMsg();  
