@@ -21,7 +21,7 @@
 
 <script type="text/javascript">
 
-function checkPraticien(oForm){
+checkPraticien = function(oForm){
   var prat = oForm.prat_id.value;
   if(prat == ""){
     alert("Veuillez sélectionner un praticien");
