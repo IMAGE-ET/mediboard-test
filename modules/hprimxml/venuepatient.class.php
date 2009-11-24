@@ -41,13 +41,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $this->addAttribute($venue, "confidentiel", "non");
     
     // Etat d'une venue : encours, clôturée ou préadmission
-    if (!$mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
-      $etat = "préadmission";
-    }
-    else if ($mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
+    $etat = "préadmission";
+    if ($mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
       $etat = "encours";
     }
-    else if ($mbVenue->entree_reelle && $mbVenue->sortie_reelle) {
+    else if ($mbVenue->sortie_reelle) {
       $etat = "clôturée";
     }
     $this->addAttribute($venue, "etat", $etat);
