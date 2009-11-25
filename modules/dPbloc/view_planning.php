@@ -85,9 +85,9 @@ if(!$filter->_specialite && !$filter->_prat_id) {
   $praticiens[$praticien->_id] = $praticien;
   $functions[$praticien->function_id] = $praticien->_ref_function;
   foreach($praticien->_back["secondary_functions"] as $sec_func) {
-    if(!isset($functions[$sec_func->user_id])) {
+    if(!isset($functions[$sec_func->function_id])) {
       $sec_func->loadRefFunction();
-      $functions[$sec_func->user_id] = $sec_func->_ref_function;
+      $functions[$sec_func->function_id] = $sec_func->_ref_function;
     }
   }
 }
