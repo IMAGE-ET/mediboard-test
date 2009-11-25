@@ -34,8 +34,13 @@ class CSetupdPccam extends CSetup {
     $query = "ALTER TABLE `ccamfavoris`
 			ADD `object_class` VARCHAR(25) NOT NULL DEFAULT 'COperation';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.12");
+    $query = "ALTER TABLE `ccamfavoris` 
+                ADD INDEX (`favoris_user`);";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.12";    
+    $this->mod_version = "0.13";    
 
     // Data source query
     $query = "SELECT *

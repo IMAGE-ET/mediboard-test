@@ -822,14 +822,28 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("0.99");
     $sql = "ALTER TABLE `operations` 
               ADD `facture` ENUM ('0','1') DEFAULT '0';";
-    $this->addQuery($sql);  
+    $this->addQuery($sql);
     
      $this->makeRevision("1.00");
     $sql = "ALTER TABLE `sejour` 
               CHANGE `type` `type` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult') NOT NULL;";
-    $this->addQuery($sql);  
-
-    $this->mod_version = "1.01";
+    $this->addQuery($sql);
+    
+     $this->makeRevision("1.01");
+    $sql = "ALTER TABLE `naissance` 
+              ADD INDEX (`date_prevue`),
+              ADD INDEX (`date_reelle`),
+              ADD INDEX (`debut_grossesse`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `operations` 
+              ADD INDEX (`type_anesth`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `sejour` 
+              ADD INDEX (`adresse_par_prat_id`),
+              ADD INDEX (`adresse_par_etab_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.02";
   }
 }
 ?>

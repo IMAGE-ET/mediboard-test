@@ -1078,8 +1078,25 @@ class CSetupdPpatients extends CSetup {
 		$query = "ALTER TABLE `patients` 
       ADD `notes_amc` TEXT;";
     $this->addQuery($query);
+
+    $this->makeRevision("0.92");
+    $query = "ALTER TABLE `antecedent` 
+                ADD INDEX (`date`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `etat_dent` 
+                ADD INDEX (`dossier_medical_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `traitement` 
+                ADD INDEX (`debut`),
+                ADD INDEX (`fin`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `patients` 
+                ADD INDEX (`deb_amo`),
+                ADD INDEX (`fin_amo`),
+                ADD INDEX (`fin_validite_vitale`);";
+    $this->addQuery($query);
 		
-    $this->mod_version = "0.92";
+    $this->mod_version = "0.93";
   }
 }
 

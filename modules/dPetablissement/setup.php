@@ -90,7 +90,12 @@ class CSetupdPetablissement extends CSetup {
             CHANGE `ape` `ape` VARCHAR(6);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.19";
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `groups_mediboard` 
+              ADD INDEX (`service_urgences_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.20";
     
   } 
   

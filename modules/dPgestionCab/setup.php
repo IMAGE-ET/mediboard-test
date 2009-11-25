@@ -233,7 +233,16 @@ class CSetupdPgestionCab extends CSetup {
             ADD `csgnis` FLOAT NOT NULL AFTER `smic`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.19";
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `fiche_paie` 
+              ADD INDEX (`debut`),
+              ADD INDEX (`fin`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `gestioncab` 
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.20";
   }
 }
 ?>

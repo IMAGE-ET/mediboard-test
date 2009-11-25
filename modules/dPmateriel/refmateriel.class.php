@@ -30,7 +30,7 @@ class CRefMateriel extends CMbObject {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'ref_materiel';
-    $spec->key   = 'ref_materiel_id';
+    $spec->key   = 'reference_id';
     return $spec;
   }
  

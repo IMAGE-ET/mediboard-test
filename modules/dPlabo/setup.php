@@ -200,7 +200,25 @@ class CSetupdPlabo extends CSetup {
             ADD `obsolete` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $sql = "ALTER TABLE `catalogue_labo` 
+              ADD INDEX (`function_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `examen_labo` 
+              ADD INDEX (`deb_application`),
+              ADD INDEX (`fin_application`),
+              ADD INDEX (`realisateur`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_labo` 
+              ADD INDEX (`date`),
+              ADD INDEX (`praticien_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_labo_examen` 
+              ADD INDEX (`pack_examens_labo_id`),
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.29";
   }
 }
 ?>

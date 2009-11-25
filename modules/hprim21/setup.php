@@ -179,7 +179,22 @@ class CSetuphprim21 extends CSetup {
             ADD INDEX ( `external_id` );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.11";
+
+    $this->makeRevision("0.11");
+    $sql = "ALTER TABLE `hprim21_patient` 
+              ADD INDEX (`date_derniere_modif`),
+              ADD INDEX (`date_deces`),
+              ADD INDEX (`debut_validite`),
+              ADD INDEX (`fin_validite`),
+              ADD INDEX (`fin_droits`),
+              ADD INDEX (`date_accident`),
+              ADD INDEX (`date_debut_grossesse`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `hprim21_complementaire` 
+              ADD INDEX (`debut_droits`),
+              ADD INDEX (`fin_droits`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.12";
   }
 }
-    

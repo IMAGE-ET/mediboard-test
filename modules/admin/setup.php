@@ -213,7 +213,14 @@ class CSetupadmin extends CSetup {
     $sql = "ALTER TABLE `user_preferences` CHANGE `pref_value` `pref_value` VARCHAR( 255 ) NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.15";
+    $this->makeRevision("1.0.15");
+    $sql = "ALTER TABLE `users` 
+              ADD INDEX (`user_birthday`),
+              ADD INDEX (`user_last_login`),
+              ADD INDEX (`profile_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.16";
   }
 }
 ?>

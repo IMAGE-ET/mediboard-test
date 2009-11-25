@@ -1231,8 +1231,49 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.16");
     $this->addPrefQuery("dPcabinet_show_program", "1");
-
-    $this->mod_version = "1.17";
+    
+    
+    $this->makeRevision("1.17");
+    $sql = "ALTER TABLE `acte_ngap` 
+              ADD INDEX (`object_id`),
+              ADD INDEX (`object_class`);";
+    $this->addQuery($sql);
+              
+    $sql = "ALTER TABLE `consultation` 
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`tiers_date_reglement`),
+              ADD INDEX (`arrivee`),
+              ADD INDEX (`categorie_id`),
+              ADD INDEX (`accident_travail`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `consultation_anesth` 
+              ADD INDEX (`date_analyse`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `consultation_cat` 
+              ADD INDEX (`function_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `examigs` 
+              ADD INDEX (`consultation_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `exams_comp` 
+              ADD INDEX (`consultation_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `reglement` 
+              ADD INDEX (`consultation_id`),
+              ADD INDEX (`banque_id`),
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `techniques_anesth` 
+              ADD INDEX (`consultation_anesth_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.18";
   }
 }
 ?>

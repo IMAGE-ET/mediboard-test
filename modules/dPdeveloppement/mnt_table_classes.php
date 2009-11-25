@@ -116,7 +116,7 @@ foreach ($list_selected_classes as $curr_class_name) {
       $db_spec['index'] = (isset($spec->class) || 
                            $spec instanceof CDateTimeSpec || 
                            $spec instanceof CDateSpec || 
-                           $spec instanceof CTimeSpec || 
+                           //$spec instanceof CTimeSpec || 
                            $k == $class['key']);
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
       if ($is_key) {
@@ -303,15 +303,15 @@ function get_query_for_class($class, $errors = array()) {
     }
   }
   
-  $glue = ",\n\t";
+  $glue = ",\n              ";
   
   // creation / modification de la table
   if (count($change) > 0) {
     if ($add_table) {
-      $ret = "CREATE TABLE `{$class['table']}` (\n\t" . implode($glue, $change) . "\n) TYPE=MYISAM;";
+      $ret = "CREATE TABLE `{$class['table']}` (\n              " . implode($glue, $change) . "\n) TYPE=MYISAM;";
     }
     else {
-      $ret = "ALTER TABLE `{$class['table']}` \n\t" . implode($glue, $change) . "\n;";
+      $ret = "ALTER TABLE `{$class['table']}` \n              " . implode($glue, $change) . ";";
     }
   }
   
@@ -324,7 +324,7 @@ function get_query_for_class($class, $errors = array()) {
       if (count($drop_index) > 0) {
         $q[] = implode($glue, $drop_index);
       }
-      $ret .= "\nALTER TABLE `{$class['table']}` \n\t" . implode($glue, $q) . "\n;";
+      $ret .= "\nALTER TABLE `{$class['table']}` \n              " . implode($glue, $q) . ";";
   }
   
   if (count($class['duplicates']) > 0) {

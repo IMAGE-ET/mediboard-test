@@ -353,6 +353,14 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_stock_service` ADD `common` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.01";
+    $this->makeRevision('1.01');
+    $sql = "ALTER TABLE `product_delivery` 
+              ADD INDEX (`patient_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_order_item_reception` 
+              ADD INDEX (`lapsing_date`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.02";
   }
 }

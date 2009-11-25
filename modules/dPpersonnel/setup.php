@@ -89,7 +89,17 @@ class CSetupdPpersonnel extends CSetup {
             ADD `actif` ENUM('0','1') DEFAULT '1' NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `affectation_personnel` 
+              ADD INDEX (`debut`),
+              ADD INDEX (`fin`),
+              ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `personnel` 
+              ADD INDEX (`user_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   }
 }
     

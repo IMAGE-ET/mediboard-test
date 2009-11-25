@@ -44,7 +44,12 @@ class CSetupdPressources extends CSetup {
     $sql = "UPDATE `plageressource` SET prat_id = NULL WHERE prat_id='0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `plageressource` 
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
     
   }
 }

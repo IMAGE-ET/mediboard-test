@@ -170,7 +170,13 @@ class CSetupdPfiles extends CSetup {
 			CHANGE `validation_auto` `send_auto` ENUM( '0', '1' ) NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `files_mediboard` 
+              ADD INDEX (`file_owner`),
+              ADD INDEX (`file_date`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.23";
   }
 }
 ?>

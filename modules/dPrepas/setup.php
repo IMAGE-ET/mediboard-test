@@ -114,7 +114,39 @@ class CSetupdPrepas extends CSetup {
     $sql = "ALTER TABLE `validationrepas` ADD `modif` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `menu` 
+              ADD INDEX (`group_id`),
+              ADD INDEX (`typerepas`),
+              ADD INDEX (`debut`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `plats` 
+              ADD INDEX (`group_id`),
+              ADD INDEX (`typerepas`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `repas` 
+              ADD INDEX (`affectation_id`),
+              ADD INDEX (`menu_id`),
+              ADD INDEX (`plat1`),
+              ADD INDEX (`plat2`),
+              ADD INDEX (`plat3`),
+              ADD INDEX (`plat4`),
+              ADD INDEX (`plat5`),
+              ADD INDEX (`boisson`),
+              ADD INDEX (`pain`),
+              ADD INDEX (`date`),
+              ADD INDEX (`typerepas_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `repas_type` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `validationrepas` 
+              ADD INDEX (`service_id`),
+              ADD INDEX (`date`),
+              ADD INDEX (`typerepas_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }
 }
 ?>

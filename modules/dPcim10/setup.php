@@ -29,8 +29,13 @@ class CSetupdPcim10 extends CSetup {
 			CHANGE `favoris_id` `favoris_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
       CHANGE `favoris_user` `favoris_user` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.11");
+    $sql = "ALTER TABLE `cim10favoris` 
+              ADD INDEX (`favoris_user`);";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.11";
+    $this->mod_version = "0.12";
 
     // Data source query
     $query = "SELECT * 

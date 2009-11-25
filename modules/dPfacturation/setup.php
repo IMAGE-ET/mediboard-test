@@ -33,11 +33,19 @@ class CSetupdPfacturation extends CSetup {
      $this->addQuery($sql);   
      
      $this->makeRevision("0.10");
-    
      $sql = "ALTER TABLE `facture` ADD `prix` FLOAT NOT NULL";
      $this->addQuery($sql);
+     
+     $this->makeRevision("0.11");
+     $sql = "ALTER TABLE `facture` 
+              ADD INDEX (`date`),
+              ADD INDEX (`sejour_id`);";
+     $this->addQuery($sql);
+     $sql = "ALTER TABLE `factureitem` 
+              ADD INDEX (`facture_id`);";
+     $this->addQuery($sql);
   
-     $this->mod_version = "0.11";
+     $this->mod_version = "0.12";
   }
 }
 ?>

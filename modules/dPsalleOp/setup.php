@@ -298,8 +298,13 @@ class CSetupdPsalleOp extends CSetup {
         $this->addQuery($query);
       }
     }
+    
+    $this->makeRevision("0.32");
+    $sql = "ALTER TABLE `acte_ccam` 
+              ADD INDEX (`execution`);";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.32";
+    $this->mod_version = "0.33";
   }
 }
 ?>

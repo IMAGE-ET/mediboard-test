@@ -113,7 +113,6 @@ class CSetupdPmateriel extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.13");
-
     $sql = "CREATE TABLE `commande_materiel` (
         \n`commande_materiel_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
         \n`reference_id` int(11) UNSIGNED NOT NULL,
@@ -125,7 +124,20 @@ class CSetupdPmateriel extends CSetup {
         \n) TYPE=MyISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `commande_materiel` 
+              ADD INDEX (`reference_id`),
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `materiel` 
+              ADD INDEX (`category_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ref_materiel` 
+              ADD INDEX (`materiel_id`),
+              ADD INDEX (`fournisseur_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   }  
 }
 

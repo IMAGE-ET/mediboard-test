@@ -232,9 +232,46 @@ class CSetupdPqualite extends CSetup {
     $this->makeRevision("0.19");
     $sql = "ALTER TABLE `fiches_ei` CHANGE `elem_concerne` `elem_concerne` ENUM ('pat','vis','pers','med','mat','autre') NOT NULL";
     $this->addQuery($sql);
-
-    $this->mod_version = "0.20";
     
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `fiches_ei` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`valid_user_id`),
+              ADD INDEX (`date_fiche`),
+              ADD INDEX (`date_incident`),
+              ADD INDEX (`date_validation`),
+              ADD INDEX (`service_valid_user_id`),
+              ADD INDEX (`service_date_validation`),
+              ADD INDEX (`qualite_user_id`),
+              ADD INDEX (`qualite_date_validation`),
+              ADD INDEX (`qualite_date_verification`),
+              ADD INDEX (`qualite_date_controle`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `doc_ged` 
+              ADD INDEX (`group_id`),
+              ADD INDEX (`doc_chapitre_id`),
+              ADD INDEX (`doc_theme_id`),
+              ADD INDEX (`doc_categorie_id`),
+              ADD INDEX (`user_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `doc_ged_suivi` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`doc_ged_id`),
+              ADD INDEX (`file_id`),
+              ADD INDEX (`date`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `doc_chapitres` 
+              ADD INDEX (`pere_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `ei_item` 
+              ADD INDEX (`ei_categorie_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `doc_themes` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.21";
   }
 }
 ?>

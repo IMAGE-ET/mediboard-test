@@ -239,8 +239,16 @@ class CSetupdPhospi extends CSetup {
     $sql = "ALTER TABLE `transmission_medicale` 
 						ADD `libelle_ATC` TEXT;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.33");
+    $sql = "ALTER TABLE `operations` 
+              ADD INDEX (`type_anesth`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prestation` 
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
  
-    $this->mod_version = "0.33";
+    $this->mod_version = "0.34";
   }
 }
 ?>

@@ -1379,8 +1379,41 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `element_prescription` 
             ADD `cancelled` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("0.91");
+    $sql = "ALTER TABLE `prescription_line_comment` 
+              ADD `operation_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `administration` 
+              ADD INDEX (`original_dateTime`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `association_moment` 
+              ADD INDEX (`moment_unitaire_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `element_prescription` 
+              ADD INDEX (`category_prescription_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `executant_prescription_line` 
+              ADD INDEX (`category_prescription_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `perfusion` 
+              ADD INDEX (`date_pose`),
+              ADD INDEX (`date_retrait`),
+              ADD INDEX (`substitute_for_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_comment` 
+              ADD INDEX (`user_executant_id`),
+              ADD INDEX (`operation_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_element` 
+              ADD INDEX (`user_executant_id`),
+              ADD INDEX (`operation_id`);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prise_posologie` 
+              ADD INDEX (`urgence_datetime`);";
+    $this->addQuery($sql);
 		
-		$this->mod_version = "0.91";
+		$this->mod_version = "0.92";
   }  
 }
 
