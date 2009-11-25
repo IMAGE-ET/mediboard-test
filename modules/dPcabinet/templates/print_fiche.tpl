@@ -6,7 +6,9 @@
 
 
 {{assign var="patient" value=$consult->_ref_patient}}
-{{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}
+{{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}  
+{{assign var="operation" value=$consult_anesth->_ref_operation}}
+
     </td>
   </tr>
 </table>
@@ -600,6 +602,49 @@
       {{/if}}
     </td>
   </tr>
+
+	<tr>
+		<th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$dPconfig.datetime}}{{/if}}</th>
+	</tr>
+	{{if $operation->date_visite_anesth}}
+	<tr>
+		<td>
+			<table>
+				<tr>
+			    <th>{{mb_label object=$operation field="prat_visite_anesth_id"}}</th>
+			    <td>{{mb_value object=$operation field="prat_visite_anesth_id"}}</td>
+			  </tr>
+				<tr>
+			    <th>{{mb_label object=$operation field="rques_visite_anesth"}}</th>
+			    <td>{{mb_value object=$operation field="rques_visite_anesth"}}</td>
+			  </tr>
+			  <tr>
+			    <th>{{mb_label object=$operation field="autorisation_anesth"}}</th>
+			    <td>{{mb_value object=$operation field="autorisation_anesth"}}</td>
+			  </tr>
+		  </table>
+	  </td>
+	</tr>
+	{{else}}
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <th>{{mb_label object=$operation field="prat_visite_anesth_id"}}</th>
+          <td></td>
+        </tr>
+        <tr style="height: 4em;">
+          <th>{{mb_label object=$operation field="rques_visite_anesth"}}</th>
+          <td></td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$operation field="autorisation_anesth"}}</th>
+          <td>Oui - Non</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+	{{/if}}
 </table>
 
 <table class="main">
