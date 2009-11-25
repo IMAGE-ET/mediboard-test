@@ -99,27 +99,6 @@ class CDossierMedical extends CMbMetaObject {
 
   function updateDBFields() {
     parent::updateDBFields();
-    if(!$listCodesCim = $this->codes_cim) {
-      $oldDossier = new CDossierMedical();
-      $oldDossier->load($this->_id);
-      $listCodesCim = $oldDossier->codes_cim;
-    }
-    if($this->_added_code_cim) {
-      $da = new CCodeCIM10($this->_added_code_cim, 1);
-      if(!$da->exist){
-        CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
-      }
-      if($listCodesCim && $da->exist) {
-        $this->codes_cim = "$listCodesCim|$this->_added_code_cim";
-      } elseif($da->exist) {
-        $this->codes_cim = $this->_added_code_cim;
-      }
-    }
-    if($this->_deleted_code_cim) {
-      $arrayCodesCim = explode("|", $listCodesCim);
-      CMbArray::removeValue($this->_deleted_code_cim, $arrayCodesCim);
-      $this->codes_cim = implode("|", $arrayCodesCim);
-    }
   }
   
   function mergeDBFields ($objects = array()/*<CMbObject>*/) {
@@ -241,6 +220,29 @@ class CDossierMedical extends CMbMetaObject {
     return $dossier->_id;
   }
 
+  function store() {
+    $this->completeField("codes_cim");
+    $this->_codes_cim = $this->codes_cim ? explode("|", $this->codes_cim) : array();
+
+    if ($this->_added_code_cim) {
+      $da = new CCodeCIM10($this->_added_code_cim, 1);
+      if (!$da->exist){
+        CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
+        return;
+      }
+      
+      $this->_codes_cim[] = $this->_added_code_cim;
+    }
+
+
+    if ($this->_deleted_code_cim) {
+      CMbArray::removeValue($this->_deleted_code_cim, $this->_codes_cim);
+    }
+
+    $this->codes_cim = implode("|", array_unique($this->_codes_cim));
+
+		parent::store();
+  }
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
     $this->loadRefsAntecedents();
