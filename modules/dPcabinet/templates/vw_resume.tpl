@@ -91,7 +91,8 @@ function newExam(sAction, consultation_id) {
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
     <td class="text" valign="top">
-      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
+			
       &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
         {{if $curr_consult->motif}}
 	      <br />

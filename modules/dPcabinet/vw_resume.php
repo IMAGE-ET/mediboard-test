@@ -39,6 +39,7 @@ foreach ($consultations as &$consultation) {
   $consultation->loadRefsBack();
   $consultation->loadRefsReglements();
   $consultation->loadRefPlageConsult();
+	$consultation->_ref_plageconsult->_ref_chir->loadRefFunction();
 }
 
 // Sejours
