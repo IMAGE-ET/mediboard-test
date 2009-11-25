@@ -51,7 +51,9 @@
     	<strong>Consultations:</strong>
 			<ul>
 	    	{{foreach from=$patient->_ref_consultations item=curr_consult}}
-		      <li class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}} avec le Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</li>
+		      <li class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">
+		        {{$curr_consult->_view}}
+		      </li>
 				{{foreachelse}}
 				  <li>Aucune</li>
 				{{/foreach}}
