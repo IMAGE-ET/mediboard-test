@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $curr_adm->annule == 1}} {{assign var=background value="#f33"}}
+{{if $curr_adm->annule == 1}} {{assign var=background value="#f00"}}
 {{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
@@ -20,9 +20,11 @@
 {{assign var="patient" value=$curr_adm->_ref_patient}}
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $canPatients->edit}}
   <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}">
     <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
   </a>
+  {{/if}}
   {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
     <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
@@ -85,23 +87,28 @@
   {{/if}}
   {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
   <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient->_view}}
+    </span>
   </a>
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  Dr {{$curr_adm->_ref_praticien->_view}}
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
   </a>
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} ({{$curr_adm->type|truncate:1:"":true}})
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
+    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} ({{$curr_adm->type|truncate:1:"":true}})
+    </span>
   </a>
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $canAdmissions->edit}}
   <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
   
   <input type="hidden" name="m" value="dPplanningOp" />
@@ -136,21 +143,35 @@
   </select>
   </form>
   {{/if}}
+  {{else}}
+  {{if $curr_adm->chambre_seule}}
+    Chambre simple
+  {{else}}
+    Chambre double
+  {{/if}}
+  {{if $curr_adm->prestation_id && $prestations}}
+  {{assign var=_prestation_id value=$curr_adm->prestation_id}}
+  <br />
+  Prest. {{$prestations.$_prestation_id->_view}}
+  {{/if}}
+  {{/if}}
   <br />
   {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
   {{if $affectation->affectation_id}}
   {{$affectation->_ref_lit->_view}}
   {{else}}
-  Pas de chambre
+  Non placé
   {{/if}}
   
 </td>
 
 {{if $curr_adm->annule == 1}}
-<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" align="center" colspan="5">
-  <strong>ANNULE</strong></td>
+<td colspan="5" class="cancelled" {{if !$curr_adm->facturable}}style="background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"{{/if}}>
+  <strong>ANNULE</strong>
+</td>
 {{else}}
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $canAdmissions->edit}}
   {{if $dPconfig.dPplanningOp.COperation.verif_cote}}
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
     {{if $curr_op->cote == "droit" || $curr_op->cote == "gauche"}}
@@ -192,9 +213,20 @@
 	  {{/if}}
   {{/if}}
   </form>
+  {{elseif $curr_adm->entree_reelle}}
+    {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
+	    {{$curr_adm->entree_reelle|date_format:$dPconfig.datetime}}
+	    <br>
+	  {{else}}
+	    {{$curr_adm->entree_reelle|date_format:$dPconfig.time}}
+	  {{/if}}
+  {{else}}
+    -
+  {{/if}}
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $canAdmissions->edit}}
   <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
 
   <input type="hidden" name="m" value="dPplanningOp" />
@@ -216,6 +248,9 @@
     <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
   {{/if}}
   </form>
+  {{else}}
+  {{mb_value object=$curr_adm field="saisi_SHS"}}
+  {{/if}}
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">

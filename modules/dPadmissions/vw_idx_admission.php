@@ -16,7 +16,6 @@ $can->needsRead();
 
 $selAdmis = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
-$selTri = CValue::getOrSession("selTri", "nom");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_nomPatient");
 $date = CValue::getOrSession("date", mbDate());
@@ -34,17 +33,16 @@ $sejour->_type_admission = $type;
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour", $sejour);
-$smarty->assign("date_demain", $date_demain);
+$smarty->assign("sejour"       , $sejour);
+$smarty->assign("date_demain"  , $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
-$smarty->assign("date"     , $date);
-$smarty->assign("selAdmis" , $selAdmis);
-$smarty->assign("selSaisis", $selSaisis);
-$smarty->assign("selTri"   , $selTri);
-$smarty->assign("order_way"   , $order_way);
-$smarty->assign("order_col"   , $order_col);
-$smarty->assign("hier", $hier);
-$smarty->assign("demain", $demain);
+$smarty->assign("date"         , $date);
+$smarty->assign("selAdmis"     , $selAdmis);
+$smarty->assign("selSaisis"    , $selSaisis);
+$smarty->assign("order_way"    , $order_way);
+$smarty->assign("order_col"    , $order_col);
+$smarty->assign("hier"         , $hier);
+$smarty->assign("demain"       , $demain);
 
 $smarty->display("vw_idx_admission.tpl");
 

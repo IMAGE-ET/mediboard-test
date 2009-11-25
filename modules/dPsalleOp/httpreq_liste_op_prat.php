@@ -27,26 +27,17 @@ if(!$praticien_id && $user->isPraticien() && !$user->isAnesth()){
 // Selection des salles
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
 
-// Chargement des chirurgiens
-$listPermPrats = new CMediusers;
-$listPermPrats = $listPermPrats->loadPraticiens(PERM_READ);
+// Chargement des chirurgiens ayant une intervention ce jour
+$listPermPrats = $user->loadPraticiens(PERM_READ);
 $listPrats  = array();
-$plagesJour = new CPlageOp();
+$operation = new COperation();
+$ljoin = array();
+$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
-$where["date"] = "= '$date'";
-$groupby = "chir_id";
-$plagesJour = $plagesJour->loadList($where, null, null, $groupby);
-foreach($plagesJour as $curr_plage) {
-  if(array_key_exists($curr_plage->chir_id, $listPermPrats)) {
-    $listPrats[$curr_plage->chir_id] = $listPermPrats[$curr_plage->chir_id];
-  }
-}
-$opsJour = new COperation();
-$where = array();
-$where["date"] = "= '$date'";
+$where[] = "operations.date = '$date' OR plagesop.date = '$date'";
 $where["annulee"] = "= '0'";
-$groupby = "chir_id";
-$opsJour = $opsJour->loadList($where, null, null, $groupby);
+$groupby = "operations.chir_id";
+$opsJour = $operation->loadList($where, null, null, $groupby, $ljoin);
 foreach($opsJour as $curr_op) {
   if(array_key_exists($curr_op->chir_id, $listPermPrats)) {
     $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];

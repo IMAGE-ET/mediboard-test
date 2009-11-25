@@ -20,7 +20,7 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
-$listChir = $userSel->loadPraticiens(PERM_EDIT);
+$listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 
 if (!$userSel->isPraticien()) {
   CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);

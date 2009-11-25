@@ -3,7 +3,7 @@
 <button class="edit notext" type="button" onclick="window.location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}'">
   {{tr}}Modify{{/tr}}
 </button>
-{{$patient->_view}}
+<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient->_view}}</span>
 <br />
 Age : {{$patient->_age}} ans
 <br />

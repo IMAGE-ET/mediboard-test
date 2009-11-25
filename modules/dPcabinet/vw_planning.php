@@ -89,7 +89,7 @@ CValue::setSession("plageconsult_id", $plageconsult_id);
 
 // Liste des chirurgiens
 $mediusers = new CMediusers();
-$listChirs = $mediusers->loadPraticiens(PERM_EDIT);
+$listChirs = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
 
 
 

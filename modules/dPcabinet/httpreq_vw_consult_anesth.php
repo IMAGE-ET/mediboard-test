@@ -20,10 +20,10 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
-$listChir = $userSel->loadPraticiens(PERM_EDIT);
+$listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 
-if (!$userSel->isPraticien()) {
-  CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
+if (!$userSel->isMedical()) {
+  CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
   CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
@@ -68,7 +68,7 @@ $consult_anesth =& $consult->_ref_consult_anesth;
 $nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
+$listChirs = $listChirs->loadProfessionnelDeSante();
 
 // Création du template
 $smarty = new CSmartyDP();

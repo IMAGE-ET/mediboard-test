@@ -28,7 +28,7 @@ $where = array();
 
 // Praticiens sélectionnés
 $praticien = new CMediusers;
-$listPrat = $praticien->loadPraticiens(PERM_EDIT);
+$listPrat = $praticien->loadProfessionnelDeSante(PERM_EDIT);
 
 $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
 

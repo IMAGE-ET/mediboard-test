@@ -34,9 +34,14 @@ if ($chir->isPraticien() and !$chir_id) {
 // Chargement du praticien
 $chir = new CMediusers;
 if ($chir_id) {
-  $chir->load($chir_id);
+  $testChir = new CMediusers();
+  $testChir->load($chir_id);
+  if($testChir->isPraticien()) {
+    $chir = $testChir;
+  }
 }
 $prat = $chir;
+$prat->loadRefFunction();
 
 // Chargement du patient
 $patient = new CPatient;
@@ -71,6 +76,8 @@ $op = new COperation;
 $op->load($operation_id);
 if ($op->_id){
   $op->loadRefs();
+  $op->_ref_chir->loadRefFunction();
+  
   foreach($op->_ref_actes_ccam as $acte) {
     $acte->loadRefExecutant();
   }

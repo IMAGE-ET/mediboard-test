@@ -611,6 +611,25 @@ class CMbObject {
     return $ds->loadResult($request->getCountRequest($this));
   }
   
+  /*
+   * Object count of a multiple list by a request constructor
+   */
+  function countMultipleList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $fields = array()) {
+    if (!$this->_ref_module) {
+      return null;
+    }
+    
+  	$request = new CRequest();
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+
+    $ds = $this->_spec->ds;
+    return $ds->loadList($request->getCountRequest($this, $fields));
+  }
+  
   function loadListByReq($request) {
   	return $this->loadQueryList($request->getRequest($this));
   }

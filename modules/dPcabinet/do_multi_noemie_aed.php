@@ -16,7 +16,7 @@ $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 $chir_id = CValue::getOrSession("chir", null);
 $chirSel = new CMediusers;
 $chirSel->load($chir_id);
-$listPrat = $chirSel->loadPraticiens(PERM_EDIT);
+$listPrat = $chirSel->loadProfessionnelDeSante(PERM_EDIT);
 
 $listConsults = array();
 

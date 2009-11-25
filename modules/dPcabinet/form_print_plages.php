@@ -30,7 +30,7 @@ $month_fin  = mbDate("-1 day", $month_fin);
 
 // Liste des praticiens
 $mediusers = new CMediusers();
-$listChir = $mediusers->loadPraticiens(PERM_EDIT);
+$listChir = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();

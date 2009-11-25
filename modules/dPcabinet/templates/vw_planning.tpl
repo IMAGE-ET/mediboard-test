@@ -380,13 +380,13 @@ Main.add(function () {
             {{if !$patient->_id}}
             [PAUSE]
             {{else}}
-            <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+            <a style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
               <img src="images/icons/edit.png" alt="modifier" />
             </a>
-            <a href="{{$href_consult}}"
-              class="tooltip-trigger"
-              onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+            <a href="{{$href_consult}}">
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
               {{$patient}}
+              </span>
             </a>
             {{/if}}
           </td>

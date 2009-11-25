@@ -47,7 +47,7 @@ function reloadFinishBanner() {
         Imprimer les documents
       </button> 
       {{/if}}
-      {{$consult->_ref_patient->_view}} - Dr {{$consult->_ref_plageconsult->_ref_chir->_view}}
+      {{$consult->_ref_patient}} - {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
       <br />
       Consultation
       (Etat : {{$consult->_etat}}

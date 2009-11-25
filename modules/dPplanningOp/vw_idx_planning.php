@@ -132,6 +132,7 @@ if($selPraticien->isAnesth()) {
       "\nLEFT JOIN operations" .
       "\nON plagesop.plageop_id = operations.plageop_id" .
       "\nAND operations.annulee = '0'" .
+      "\nAND operations.chir_id = '$selPratLogin'" .
       "\nLEFT JOIN functions_mediboard" .
       "\nON functions_mediboard.function_id = plagesop.spec_id" .
       "\nWHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs)).")" .

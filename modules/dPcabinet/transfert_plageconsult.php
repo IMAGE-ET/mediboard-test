@@ -12,7 +12,7 @@ $can->needsAdmin();
 
 // Vérification des droits sur les praticiens
 $mediuser = new CMediusers();
-$praticiens = $mediuser->loadPraticiens(PERM_EDIT);
+$praticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 
 // Filtre
 $filter = new CPlageconsult();

@@ -83,7 +83,7 @@ $mediuser->loadRefFunction();
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 $prats = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
-  $mediuser->loadPraticiens(PERM_READ) :
+  $mediuser->loadProfessionnelDeSante(PERM_READ) :
   array($mediuser->_id => $mediuser);
 foreach($prats as $_prat) {
   $_prat->loadIdCPS();

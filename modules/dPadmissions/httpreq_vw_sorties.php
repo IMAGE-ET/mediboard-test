@@ -44,7 +44,7 @@ $limit2 = $date." 23:59:59";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 $where["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
-if($mode) {
+if($mode != "autre") {
   $where["type"] = " = '$mode'";
 } else {
   $where[] = "(type != 'comp' AND type != 'ambu')";
@@ -103,6 +103,8 @@ $smarty->assign("date_max"      , $date_max);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("selTri"        , $selTri);
+$smarty->assign("canAdmissions" , CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("date_demain"   , $date_demain);
 $smarty->assign("date_actuelle" , $date_actuelle);

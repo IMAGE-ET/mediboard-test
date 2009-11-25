@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage mediusers
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage mediusers
+ *  @version $Revision$
  *  @author Romain Ollivier
  */
 
@@ -109,7 +109,7 @@ class CMediusers extends CMbObject {
     $specs["banque_id"]        = "ref class|CBanque";
     
     $specs["_group_id"]        = "ref notNull class|CGroups";
-		
+    
     $specs["_user_username"]   = "str notNull minLength|4 reported";
     $specs["_user_password2"]  = "password sameAs|_user_password reported";
     $specs["_user_first_name"] = "str reported";
@@ -134,11 +134,11 @@ class CMediusers extends CMbObject {
   
   /** Update the object's specs */
   function updateSpecs() {
-  	$oldSpec = $this->_specs['_user_password'];
-  	
-  	$strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($this->remote == 0));
-  	
-  	// If the global strong password config is set to TRUE and the user can connect remotely
+    $oldSpec = $this->_specs['_user_password'];
+    
+    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($this->remote == 0));
+    
+    // If the global strong password config is set to TRUE and the user can connect remotely
     $this->_specs['_user_password'] = $strongPassword?
       $this->_specs['_user_password_strong']:
       $this->_specs['_user_password_weak'];
@@ -152,60 +152,60 @@ class CMediusers extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-	  $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
-	  $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
-	  $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
-	  $backProps["administrations"]                 = "CAdministration administrateur_id";
-	  $backProps["aides_saisie"]                    = "CAideSaisie user_id";
-	  $backProps["modeles"]                         = "CCompteRendu chir_id";
-	  $backProps["documents_ged"]                   = "CDocGed user_id";
-	  $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";
-	  $backProps["examens"]                         = "CExamenLabo realisateur";
-	  $backProps["users"]                           = "CFicheEi user_id";
-	  $backProps["valid_users"]                     = "CFicheEi valid_user_id";
-	  $backProps["service_valid_users"]             = "CFicheEi service_valid_user_id";
-	  $backProps["qualite_users"]                   = "CFicheEi qualite_user_id";
-	  $backProps["owned_files"]                     = "CFile file_owner";
-	  $backProps["forum_messages"]                  = "CForumMessage user_id";
-	  $backProps["forum_threads"]                   = "CForumThread user_id";
-	  $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
-	  $backProps["listes_choix"]                    = "CListeChoix chir_id";
-	  $backProps["mails_sent"]                      = "CMbMail from";
-	  $backProps["mails_received"]                  = "CMbMail to";
-	  $backProps["owned_notes"]                     = "CNote user_id";
-	  $backProps["observations"]                    = "CObservationMedicale user_id";
-	  $backProps["operations_chir"]                 = "COperation chir_id";
-	  $backProps["operations_anesth"]               = "COperation anesth_id";
-	  $backProps["packs"]                           = "CPack chir_id";
-	  $backProps["perfusions"]                      = "CPerfusion praticien_id";
-	  $backProps["perfusions_0"]                    = "CPerfusion creator_id";
-	  $backProps["personnels"]                      = "CPersonnel user_id";
-	  $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
-	  $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
-	  $backProps["plages_consult"]                  = "CPlageconsult chir_id";
-	  $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
-	  $backProps["plages_ressource"]                = "CPlageressource prat_id";
-	  $backProps["prescriptions"]                   = "CPrescription praticien_id";
-	  $backProps["prescriptions_labo"]              = "CPrescriptionLabo praticien_id";
-	  $backProps["prescription_comments"]           = "CPrescriptionLineComment praticien_id";
-	  $backProps["prescription_comments_crees"]     = "CPrescriptionLineComment creator_id";
-	  $backProps["prescription_comments_executes"]  = "CPrescriptionLineComment user_executant_id";
-	  $backProps["prescription_elements"]           = "CPrescriptionLineElement praticien_id";
-	  $backProps["prescription_elements_crees"]     = "CPrescriptionLineElement creator_id";
-	  $backProps["prescription_elements_executes"]  = "CPrescriptionLineElement user_executant_id";
-	  $backProps["prescription_medicaments"]        = "CPrescriptionLineMedicament praticien_id";
-	  $backProps["prescription_medicaments_crees"]  = "CPrescriptionLineMedicament creator_id";
-	  $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
-	  $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
-	  $backProps["protocoles"]                      = "CProtocole chir_id";
-	  $backProps["sejours"]                         = "CSejour praticien_id";
-	  $backProps["tarifs"]                          = "CTarif chir_id";
-	  $backProps["temps_hospi"]                     = "CTempsHospi praticien_id";
-	  $backProps["temps_chir"]                      = "CTempsOp chir_id";
-	  $backProps["temps_prepa"]                     = "CTempsPrepa chir_id";
-	  $backProps["transmissions"]                   = "CTransmissionMedicale user_id";
+    $backProps["secondary_functions"]             = "CSecondaryFunction user_id";
+    $backProps["actes_ccam_executes"]             = "CActeCCAM executant_id";
+    $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
+    $backProps["administrations"]                 = "CAdministration administrateur_id";
+    $backProps["aides_saisie"]                    = "CAideSaisie user_id";
+    $backProps["modeles"]                         = "CCompteRendu chir_id";
+    $backProps["documents_ged"]                   = "CDocGed user_id";
+    $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";
+    $backProps["examens"]                         = "CExamenLabo realisateur";
+    $backProps["users"]                           = "CFicheEi user_id";
+    $backProps["valid_users"]                     = "CFicheEi valid_user_id";
+    $backProps["service_valid_users"]             = "CFicheEi service_valid_user_id";
+    $backProps["qualite_users"]                   = "CFicheEi qualite_user_id";
+    $backProps["owned_files"]                     = "CFile file_owner";
+    $backProps["forum_messages"]                  = "CForumMessage user_id";
+    $backProps["forum_threads"]                   = "CForumThread user_id";
+    $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
+    $backProps["listes_choix"]                    = "CListeChoix chir_id";
+    $backProps["mails_sent"]                      = "CMbMail from";
+    $backProps["mails_received"]                  = "CMbMail to";
+    $backProps["owned_notes"]                     = "CNote user_id";
+    $backProps["observations"]                    = "CObservationMedicale user_id";
+    $backProps["operations_chir"]                 = "COperation chir_id";
+    $backProps["operations_anesth"]               = "COperation anesth_id";
+    $backProps["packs"]                           = "CPack chir_id";
+    $backProps["perfusions"]                      = "CPerfusion praticien_id";
+    $backProps["perfusions_0"]                    = "CPerfusion creator_id";
+    $backProps["personnels"]                      = "CPersonnel user_id";
+    $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
+    $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
+    $backProps["plages_consult"]                  = "CPlageconsult chir_id";
+    $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
+    $backProps["plages_ressource"]                = "CPlageressource prat_id";
+    $backProps["prescriptions"]                   = "CPrescription praticien_id";
+    $backProps["prescriptions_labo"]              = "CPrescriptionLabo praticien_id";
+    $backProps["prescription_comments"]           = "CPrescriptionLineComment praticien_id";
+    $backProps["prescription_comments_crees"]     = "CPrescriptionLineComment creator_id";
+    $backProps["prescription_comments_executes"]  = "CPrescriptionLineComment user_executant_id";
+    $backProps["prescription_elements"]           = "CPrescriptionLineElement praticien_id";
+    $backProps["prescription_elements_crees"]     = "CPrescriptionLineElement creator_id";
+    $backProps["prescription_elements_executes"]  = "CPrescriptionLineElement user_executant_id";
+    $backProps["prescription_medicaments"]        = "CPrescriptionLineMedicament praticien_id";
+    $backProps["prescription_medicaments_crees"]  = "CPrescriptionLineMedicament creator_id";
+    $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
+    $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
+    $backProps["protocoles"]                      = "CProtocole chir_id";
+    $backProps["sejours"]                         = "CSejour praticien_id";
+    $backProps["tarifs"]                          = "CTarif chir_id";
+    $backProps["temps_hospi"]                     = "CTempsHospi praticien_id";
+    $backProps["temps_chir"]                      = "CTempsOp chir_id";
+    $backProps["temps_prepa"]                     = "CTempsPrepa chir_id";
+    $backProps["transmissions"]                   = "CTransmissionMedicale user_id";
     $backProps["checked_lists"]                   = "CDailyCheckList validator_id";
-	  
+    
     return $backProps;
   }
    
@@ -270,7 +270,7 @@ class CMediusers extends CMbObject {
       // Initiales du prénom      
       foreach (explode("-", $this->_user_first_name) as $value) {
         if ($value != '') {
-	        $this->_shortview .=  strtoupper($value[0]);
+          $this->_shortview .=  strtoupper($value[0]);
         }
       }
       
@@ -414,7 +414,7 @@ class CMediusers extends CMbObject {
 
   function check() {
     // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
-    // Chargement des specs des attributs du mediuser	
+    // Chargement des specs des attributs du mediuser  
     $this->updateSpecs();
     
     $specs = $this->getSpecs();
@@ -439,12 +439,12 @@ class CMediusers extends CMbObject {
           return "Le mot de passe ne doit pas contenir '$field'";
       } } }
       
-	    // notNear
-	    if($target = $pwdSpecs->notNear) {
-	    	if ($field = $this->$target) {
-		      if (levenshtein($pwd, $field) < 3) {
-		        return "Le mot de passe ressemble trop à '$field'";
-		  } } }
+      // notNear
+      if($target = $pwdSpecs->notNear) {
+        if ($field = $this->$target) {
+          if (levenshtein($pwd, $field) < 3) {
+            return "Le mot de passe ressemble trop à '$field'";
+      } } }
        
       // alphaAndNum
       if($pwdSpecs->alphaAndNum) {
@@ -611,10 +611,10 @@ class CMediusers extends CMbObject {
    * Load list overlay for current group
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
-		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["functions_mediboard.group_id"] = "= '$g->_id'";
+    $g = CGroups::loadCurrent();
+    $where["functions_mediboard.group_id"] = "= '$g->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
@@ -668,8 +668,8 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name);
   }
 
-  function loadPraticiensInfirmieres($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière"), $permType, $function_id, $name);
+  function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme"), $permType, $function_id, $name);
   }
   
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
@@ -718,11 +718,11 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isMedical() {
-    return in_array($this->_user_type, array(1, 3, 4, 7, 13));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme"));
   }
 
   function isAdmin() {
-    return in_array($this->_user_type, array(1));
+    return $this->isFromType(array("Administrator"));
   }
 
 
@@ -738,66 +738,78 @@ class CMediusers extends CMbObject {
   }
   
   /**
-   * Charge la liste de plages et opérations pour un jour donné
+   * Charge la liste de plages et interventions pour un jour donné
    * Analogue à CSalle::loadRefsForDay
    * @param $date date Date to look for
    */
   function loadRefsForDay($date) {
-    // Plages d'opérations
-	  $plages = new CPlageOp;
-	  $where = array();
-	  $where["date"] = "= '$date'";
-  	$where["chir_id"] = "= '$this->_id'";
-	  $order = "debut";
-		$this->_ref_plages = $plages->loadList($where, $order);
-		foreach ($this->_ref_plages as &$plage) {
-		  $plage->loadRefs(0);
-		  $plage->_unordered_operations = array();
-		  foreach ($plage->_ref_operations as &$operation) {
-		    $operation->loadRefPatient();
-		    $operation->loadExtCodesCCAM();
-		    $operation->updateSalle();
-		    
-		    // Extraire les interventions non placées
-		    if ($operation->rank == 0) {
-		      $plage->_unordered_operations[$operation->_id] = $operation;
-		      unset($plage->_ref_operations[$operation->_id]);
-		    }
-		  }
-		}
-		
-		// Interventions déplacés
-		$deplacees = new COperation;
-		$ljoin = array();
-		$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-		$where = array();
-		$where["operations.plageop_id"] = "IS NOT NULL";
-		$where["operations.annulee"]    = "= '0'";
-		$where["plagesop.salle_id"]     = "!= operations.salle_id";
-		$where["plagesop.date"]         = "= '$date'";
-	  $where["plagesop.chir_id"]      = "= '$this->_id'";
-		$order = "operations.time_operation";
-		$this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
-		foreach ($this->_ref_deplacees as &$deplacee) {
-		  $deplacee->loadRefChir();
-		  $deplacee->loadRefPatient();
-		  $deplacee->loadExtCodesCCAM();
-		}
+    $this->loadBackRefs("secondary_functions");
+    $secondary_specs = array();
+    foreach($this->_back["secondary_functions"] as  $curr_sec_spec) {
+      $curr_sec_spec->loadRefsFwd();
+      $curr_function = $curr_sec_spec->_ref_function;
+      $secondary_specs[$curr_function->_id] = $curr_function;
+    }
+    // Plages d'intervention
+    $plages = new CPlageOp;
+    $where = array();
+    $where["date"] = "= '$date'";
+    $where[] = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
+    $order = "debut";
+    $this->_ref_plages = $plages->loadList($where, $order);
+    foreach ($this->_ref_plages as &$plage) {
+      $plage->loadRefs(0);
+      $plage->_unordered_operations = array();
+      foreach ($plage->_ref_operations as $key_op => &$operation) {
+        if($operation->chir_id != $this->_id) {
+          unset($plage->_ref_operations[$key_op]);
+        } else {
+          $operation->_ref_chir = $this;
+          $operation->loadRefPatient();
+          $operation->loadExtCodesCCAM();
+          $operation->updateSalle();
+        
+          // Extraire les interventions non placées
+          if ($operation->rank == 0) {
+            $plage->_unordered_operations[$operation->_id] = $operation;
+            unset($plage->_ref_operations[$operation->_id]);
+          }
+        }
+      }
+    }
+    
+    // Interventions déplacés
+    $deplacees = new COperation;
+    $ljoin = array();
+    $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+    $where = array();
+    $where["operations.plageop_id"] = "IS NOT NULL";
+    $where["operations.annulee"]    = "= '0'";
+    $where["plagesop.salle_id"]     = "!= operations.salle_id";
+    $where["plagesop.date"]         = "= '$date'";
+    $where["plagesop.chir_id"]      = "= '$this->_id'";
+    $order = "operations.time_operation";
+    $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
+    foreach ($this->_ref_deplacees as &$deplacee) {
+      $deplacee->loadRefChir();
+      $deplacee->loadRefPatient();
+      $deplacee->loadExtCodesCCAM();
+    }
 
-		// Urgences
-	  $urgences = new COperation;
-	  $where = array();
-	  $where["plageop_id"] = "IS NULL";
-	  $where["date"]       = "= '$date'";
-		$where["chir_id"]    = "= '$this->_id'";
-		$where["annulee"]    = "= '0'";
-	  $order = "chir_id";
-	  $this->_ref_urgences = $urgences->loadList($where);
-	  foreach($this->_ref_urgences as &$urgence) {
-	    $urgence->loadRefChir();
-	    $urgence->loadRefPatient();
-	    $urgence->loadExtCodesCCAM();
-	  }
+    // Urgences
+    $urgences = new COperation;
+    $where = array();
+    $where["plageop_id"] = "IS NULL";
+    $where["date"]       = "= '$date'";
+    $where["chir_id"]    = "= '$this->_id'";
+    $where["annulee"]    = "= '0'";
+    $order = "chir_id";
+    $this->_ref_urgences = $urgences->loadList($where);
+    foreach($this->_ref_urgences as &$urgence) {
+      $urgence->loadRefChir();
+      $urgence->loadRefPatient();
+      $urgence->loadExtCodesCCAM();
+    }
   }
   
   function getBasicInfo(){

@@ -74,7 +74,7 @@ foreach ($listeTarifsSpe as $_tarif) {
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 $listPrat = $user->_is_secretaire ?
-  $user->loadPraticiens(PERM_READ) :
+  $user->loadProfessionnelDeSante(PERM_READ) :
   array($user->_id => $user);
   
 // Création du template

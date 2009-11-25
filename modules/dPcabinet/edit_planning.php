@@ -25,12 +25,12 @@ $consult->loadAides($AppUI->user_id);
 // L'utilisateur est-il praticien?
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
-if ($mediuser->isPraticien()) {
+if ($mediuser->isMedical()) {
   $chir = $mediuser;
 }
 
 // Vérification des droits sur les praticiens et les fonctions
-$listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
+$listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 $function       = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 

@@ -43,7 +43,7 @@ if($plagesel->_id){
 
 if(!$plagesel->_id) {
   $plagesel->debut = CPlageOp::$hours_start.":00:00";
-  $plagesel->fin = CPlageOp::$hours_start.":00:00";
+  $plagesel->fin   = CPlageOp::$hours_start.":00:00";
 }
 
 // Liste des Specialités
@@ -60,6 +60,7 @@ $anesths = $mediuser->loadAnesthesistes();
 // Récupération des plages pour le jour demandé
 $listPlage = new CPlageOp();
 $where = array();
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $where["date"] = "= '$date'";
 $order = "debut";
 $listPlages[$date] = $listPlage->loadList($where,$order);

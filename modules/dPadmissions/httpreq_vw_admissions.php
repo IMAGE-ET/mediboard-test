@@ -21,14 +21,13 @@ $selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
 $order_col = CValue::getOrSession("order_col", "_nomPatient");
 $order_way = CValue::getOrSession("order_way", "ASC");
-$selTri    = CValue::getOrSession("selTri", "nom");
 $date      = CValue::getOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
 $date_actuelle = mbDateTime("00:00:00");
-$date_demain = mbDateTime("00:00:00","+ 1 day");
+$date_demain   = mbDateTime("00:00:00","+ 1 day");
 
-$hier = mbDate("- 1 day", $date);
+$hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
@@ -103,9 +102,9 @@ foreach ($today as $keySejour => $valueSejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("hier", $hier);
-$smarty->assign("demain", $demain);
 
+$smarty->assign("hier"         , $hier);
+$smarty->assign("demain"       , $demain);
 $smarty->assign("date_min"     , $date_min);
 $smarty->assign("date_max"     , $date_max);
 $smarty->assign("date_demain"  , $date_demain);
@@ -113,12 +112,14 @@ $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"         , $date        );
 $smarty->assign("selAdmis"     , $selAdmis    );
 $smarty->assign("selSaisis"    , $selSaisis   );
-$smarty->assign("selTri"       , $selTri      );
 $smarty->assign("order_col"    , $order_col   );
 $smarty->assign("order_way"    , $order_way   );
 $smarty->assign("today"        , $today       );
 $smarty->assign("prestations"  , $prestations );
+$smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
+$smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
+
 $smarty->display("inc_vw_admissions.tpl");
 
 ?>

@@ -29,8 +29,9 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       {{elseif $selSaisis == "n"}}Dossiers non préparés
       {{else}}Toutes les admissions
       {{/if}}
-      {{if $selTri == "nom"}}triées par nom
-      {{elseif $selTri == "heure"}}triées par heure
+      {{if $order_col == "_nomPatient"}}triées par patient
+      {{elseif $order_col == "_nomPraticien"}}triées par praticien
+      {{elseif $order_col == "entree_prevue"}}triées par heure d'entrée
       {{/if}}
       </em>
     </th>
@@ -51,6 +52,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     <th>Chambre</th>
     <th>Admis</th>
     <th>
+      {{if $canAdmissions->edit}}
       <form name="editAllAdmFrm" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_edit_admis" />
@@ -61,6 +63,9 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
         {{tr}}CSejour-saisi_SHS-tous{{/tr}}
       </button>
       </form>
+      {{else}}
+        {{tr}}CSejour-saisi_SHS-tous{{/tr}}
+      {{/if}}
     </th>
     <th>Anesth</th>
     <th>CMU</th>

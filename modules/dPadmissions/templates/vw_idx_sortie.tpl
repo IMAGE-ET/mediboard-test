@@ -38,6 +38,15 @@ function loadTransfert(oForm){
   }
 }
 
+changeEtablissementId = function(oForm) {
+  oForm._modifier_sortie.value = '0';
+  type = $V(oForm.type);
+  if(type != 'ambu' && type != 'comp') {
+    type = 'autre';
+  }
+  submitSortie(oForm, type);
+}
+
 function reload(mode) {
   var url = new Url("dPadmissions", "httpreq_vw_sorties");
   url.addParam("date", "{{$date}}");
@@ -89,7 +98,7 @@ Main.add(function () {
   var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue" , "{{$vue}}");
-  compUpdater.addParam("mode", "");
+  compUpdater.addParam("mode", "autre");
   compUpdater.periodicalUpdate('sortiesautre', { frequency: 90 });
   
   Control.Tabs.create("main_tab_group", true);

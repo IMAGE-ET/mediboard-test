@@ -35,7 +35,7 @@ if($mode_urgence){
 // Récupération de la liste des praticiens
 $praticiens = array();
 if ($cabinet_id) {
-  $praticiens = $mediuser->loadPraticiens(PERM_READ, $cabinet_id);
+  $praticiens = $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
 }
 
 if ($consult->_id) {

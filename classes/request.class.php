@@ -210,9 +210,12 @@ class CRequest {
    * returns the SQL string that count the number of rows
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getCountRequest($obj = null) {
+  function getCountRequest($obj = null, $fields = array()) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
+    if(is_array($fields) && count($fields)) {
+      $sql .= ", ".implode(", ", $fields);
+    }
     $arrayTable = array();
     if ($obj) {
       if (count($this->table)) {

@@ -217,8 +217,10 @@
       <td style="width: 40%; white-space: nowrap;">
         {{mb_include module=system template=inc_object_history object=$curr_op}}
 
-        <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
+        <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
           {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
+          </span>
         </a>
 				<br />
 				<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
@@ -250,7 +252,8 @@
         {{/if}}
       </td>
       <td class="text">
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
           Dr {{$curr_op->_ref_chir->_view}}
           <br />
           {{if $curr_op->libelle}}
@@ -260,6 +263,7 @@
           {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
             <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
           {{/foreach}}
+          </span>
         </a>
         {{if $curr_op->rques}}
           Remarques: {{$curr_op->rques|nl2br}}
@@ -309,8 +313,10 @@
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-          <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
+          <a style="font-weight: bold;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_ref_patient->_guid}}');">
             {{$curr_op->rank}} - {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
+            </span>
           </a>
           <br />
           <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
@@ -345,7 +351,8 @@
       
       </td>
       <td class="text">
-        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
+        <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
           Dr {{$curr_op->_ref_chir->_view}}
           <br />
           {{if $curr_op->libelle}}
@@ -354,6 +361,7 @@
           {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
             <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
           {{/foreach}}
+          </span>
         </a>
         {{if $curr_op->rques}}
           Remarques: {{$curr_op->rques|nl2br}}<br />

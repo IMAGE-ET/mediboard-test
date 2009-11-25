@@ -15,7 +15,7 @@ $pat_id = CValue::getOrSession("patSel");
 
 // Liste des Praticiens
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$listPrat = $listPrat->loadProfessionnelDeSante(PERM_READ);
 
 
 $patient = new CPatient;

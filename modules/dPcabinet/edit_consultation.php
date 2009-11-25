@@ -27,7 +27,7 @@ $prat_id      = CValue::getOrSession("chirSel", $AppUI->user_id);
 $selConsult   = CValue::getOrSession("selConsult", null);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens(null);
+$listChirs = $listChirs->loadProfessionnelDeSante(null);
 
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
@@ -82,10 +82,10 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
-$listChir = $userSel->loadPraticiens(PERM_EDIT);
+$listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 
-if ((!$userSel->isPraticien()) && ($current_m != "dPurgences")) {
-  CAppUI::setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
+if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
+  CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
   CAppUI::redirect("m=dPcabinet&tab=0");
 }
 
@@ -170,6 +170,7 @@ $examComp->loadAides($userSel->user_id);
 $consult->loadExtCodesCCAM();
 $consult->getAssociationCodesActes();
 $consult->loadPossibleActes();
+$consult->_ref_chir->loadRefFunction();
 
 // Chargement du dossier medical du patient de la consultation
 if ($consult->patient_id) {

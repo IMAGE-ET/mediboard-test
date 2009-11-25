@@ -53,7 +53,7 @@ if ($prat->_id) {
   $listPrat = array($prat->_id => $prat);
 }
 else {
-  $listPrat = $prat->loadPraticiens(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
+  $listPrat = $prat->loadProfessionnelDeSante(PERM_EDIT, $mediuser->isAdmin() ? null : $mediuser->function_id);
 }
 
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));

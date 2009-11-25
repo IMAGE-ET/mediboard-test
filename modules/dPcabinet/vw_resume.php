@@ -17,7 +17,7 @@ $patient->load($patient_id);
 
 $user = new CMediusers;
 $user->load($AppUI->user_id);
-$listPrat = $user->loadPraticiens(PERM_EDIT);
+$listPrat = $user->loadProfessionnelDeSante(PERM_EDIT);
 
 $patient->loadRefsFiles();
 $patient->loadRefsDocs();
