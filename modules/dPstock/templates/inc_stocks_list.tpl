@@ -15,6 +15,7 @@
     <th>{{tr}}{{$stock->_class_name}}-product_id{{/tr}}</th>
     {{if $stock->_class_name == 'CProductStockService'}}
       <th>{{tr}}CProductStockService-service_id{{/tr}}</th>
+      <th>{{tr}}CProductStockService-common{{/tr}}</th>
     {{/if}}
     <th>{{tr}}{{$stock->_class_name}}-quantity{{/tr}}</th>
     <th>{{tr}}{{$stock->_class_name}}-_package_quantity-court{{/tr}}</th>
@@ -33,6 +34,7 @@
     </td>
     {{if $stock->_class_name == 'CProductStockService'}}
       <td>{{$curr_stock->_ref_service->_view}}</td>
+      <td>{{tr}}{{$curr_stock->common|ternary:'Yes':''}}{{/tr}}</td>
     {{/if}}
     <td>{{$curr_stock->quantity}}</td>
     <td>

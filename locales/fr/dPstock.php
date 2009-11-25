@@ -770,4 +770,7 @@ $locales['CProductDelivery.order.none'] = 'Aucune commande';
 $locales['CProduct-cancelled'] = 'Annulé';
 $locales['CProduct-cancelled-court'] = 'Annulé';
 $locales['CProduct-cancelled-desc'] = 'Ce produit est marqué comme supprimé';
+$locales['CProductStockService-common'] = 'Stock couramment utilisé';
+$locales['CProductStockService-common-court'] = 'Stock courant';
+$locales['CProductStockService-common-desc'] = 'Stock couramment utilisé';
 ?>

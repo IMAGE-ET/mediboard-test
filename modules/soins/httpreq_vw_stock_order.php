@@ -11,9 +11,10 @@
 global $can;
 $can->needsRead();
 
-$service_id = CValue::getOrSession('service_id');
+$service_id = CValue::get('service_id');
 $start = intval(CValue::getOrSession('start', 0));
-$only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
+$only_service_stocks = CValue::get('only_service_stocks');
+$only_common = CValue::get('only_common');
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -21,14 +22,19 @@ $date_max = CValue::getOrSession('_date_max');
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 
-if ($only_service_stocks == 1) {
+if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
     'product' => 'product.product_id = product_stock_service.product_id'
   );
-  $service = new CService;
-  $service->load($service_id);
-  $stocks_service = $service->loadBackRefs('product_stock_services', 'product.name', "$start,20", null, $ljoin);
-  $count_stocks   = $service->countBackRefs('product_stock_services', null, null, null, $ljoin);
+  $where = array(
+    'product_stock_service.service_id' => "= '$service_id'"
+  );
+  if ($only_common) {
+    $where['product_stock_service.common'] = "= '1'";
+  }
+  $stock = new CProductStockService;
+  $stocks_service = $stock->loadList($where, 'product.name', "$start,20", null, $ljoin);
+  $count_stocks   = $stock->countList($where, null, null, null, $ljoin);
   
   $stocks = array();
   if ($stocks_service) {
@@ -92,5 +98,6 @@ $smarty->assign('date_min', $date_min);
 $smarty->assign('date_max', $date_max);
 $smarty->assign('service', $service);
 $smarty->assign('only_service_stocks', $only_service_stocks);
+$smarty->assign('only_common', $only_common);
 
 $smarty->display('inc_stock_order.tpl');

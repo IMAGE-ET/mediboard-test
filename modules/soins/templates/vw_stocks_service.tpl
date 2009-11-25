@@ -60,6 +60,7 @@ Main.add(function () {
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="start" value="{{$start}}" />
   <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
+  <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>

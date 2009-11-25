@@ -29,7 +29,7 @@ ProductSelector.init = function(){
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="3">
+    <td rowspan="3">
       <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="category_id" onchange="stocksFilter.submit();">
@@ -53,7 +53,7 @@ ProductSelector.init = function(){
       <div id="list-stocks-service"></div>
     </td>
 
-    <td class="halfPane">
+    <td style="width: 1%;">
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
@@ -80,8 +80,12 @@ ProductSelector.init = function(){
             <td>
               {{mb_field object=$stock field="product_id" hidden=true}}
               <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
-              <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+              <button class="search notext" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
             </td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$stock field="common"}}</th>
+            <td>{{mb_field object=$stock field="common"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$stock field="service_id"}}</th>

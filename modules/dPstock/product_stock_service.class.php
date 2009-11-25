@@ -10,7 +10,8 @@
 
 class CProductStockService extends CProductStock {
   // DB Fields
-  var $service_id   = null;
+  var $service_id = null;
+  var $common     = null;
 
   // Object References
   //    Single
@@ -26,6 +27,7 @@ class CProductStockService extends CProductStock {
   function getProps() {
     $specs = parent::getProps();
     $specs['service_id'] = 'ref notNull class|CService';
+    $specs['common'] = 'bool notNull';
     return $specs;
   }
   
@@ -51,8 +53,7 @@ class CProductStockService extends CProductStock {
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
-    $this->_ref_service = new CService();
-    $this->_ref_service = $this->_ref_service->getCached($this->service_id);
+    $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
   
   function getPerm($permType) {

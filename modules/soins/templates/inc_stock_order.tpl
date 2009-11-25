@@ -50,6 +50,11 @@ Main.add(function(){
     <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
     Seulement les stocks du service 
   </label>
+  
+  <label style="float: left; font-weight: normal; margin-left: 1em;">
+    <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
+    Seulement les stocks courants
+  </label>
 
 {{assign var=step value=$count_stocks|min:20}}
 {{foreach from=0|range:$count_stocks:$step item=page}}

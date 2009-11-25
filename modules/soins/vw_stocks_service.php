@@ -14,6 +14,7 @@ $can->needsEdit();
 $service_id = CValue::getOrSession('service_id');
 $start = CValue::getOrSession('start', 0);
 $only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
+$only_common = CValue::getOrSession('only_common', 1);
 
 // Services list
 $service = new CService();
@@ -38,5 +39,6 @@ $smarty->assign('list_services', $list_services);
 $smarty->assign('delivrance',    $delivrance);
 $smarty->assign('start',         $start);
 $smarty->assign('only_service_stocks', $only_service_stocks);
+$smarty->assign('only_common', $only_common);
 
 $smarty->display('vw_stocks_service.tpl');
