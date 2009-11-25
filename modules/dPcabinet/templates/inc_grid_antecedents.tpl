@@ -25,7 +25,9 @@ Main.add(function () {
 	var oFormAnt = window.opener.document.editAntFrm;
 	oFormAntFrmGrid = document.editAntFrmGrid;
 	$V(oFormAntFrmGrid._patient_id,  oFormAnt._patient_id.value);
-  $V(oFormAntFrmGrid._sejour_id,  oFormAnt._sejour_id.value);
+	if(oFormAnt._sejour_id){
+    $V(oFormAntFrmGrid._sejour_id,  oFormAnt._sejour_id.value);
+	}
 });
 
 </script>
