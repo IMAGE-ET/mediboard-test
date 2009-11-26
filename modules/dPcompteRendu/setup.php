@@ -362,6 +362,10 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`function_id`),
               ADD INDEX (`group_id`);";
     $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `pack` 
+              CHANGE `chir_id` `chir_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
 
     $this->mod_version = "0.49";
   }

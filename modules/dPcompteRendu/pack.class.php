@@ -172,7 +172,6 @@ class CPack extends CMbObject {
         $where["chir_id"]     = "IS NULL";
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = " = '$etab_id'";
-        mbTrace($where);
         $packs["etab"] = $pack->loadlist($where, $order);
     }
     
