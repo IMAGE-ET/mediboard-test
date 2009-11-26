@@ -108,7 +108,7 @@ class CPack extends CMbObject {
    */
   static function loadAllPacksFor($id, $owner = 'user', $object_class = null) {
     $packs = array(
-      "user" => array(), // warning: it not prat like in CCompteRendu
+      "user" => array(), // warning: it's not prat like in CCompteRendu
       "func" => array(),
       "etab" => array(),
     );

@@ -45,7 +45,7 @@ $praticien->canDo();
 
 // Modèles du praticien
 $modelesByOwner = array();
-$packs = array();
+$packsByOwner = array();
 if ($praticien->_can->edit) {
   $modelesByOwner = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
   $packsByOwner = CPack::loadAllPacksFor($praticien->_id, 'user', $object_class);
