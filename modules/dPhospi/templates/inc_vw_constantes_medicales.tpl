@@ -16,8 +16,7 @@ submitConstantesMedicales = function(oForm) {
 }
 
 editConstantes = function (const_id, context_guid){
-  var url = new Url;
-  url.setModuleAction('dPhospi', 'httpreq_vw_form_constantes_medicales');
+  var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam('const_id', const_id);
   url.addParam('context_guid', context_guid);
   url.addParam('readonly', '{{$readonly}}');
@@ -54,7 +53,9 @@ tickFormatterSpreadsheet = function (n) {
 };
 
 trackFormatter = function (obj) {
-  return dates[parseInt(obj.x)] + ' : ' + obj.series.data[obj.index][1];
+  return dates[parseInt(obj.x)] + ' : ' + 
+         obj.series.data[obj.index][1] + '<br />' + 
+         obj.series.data[obj.index][2];
 };
 
 initializeGraph = function (src, data) {

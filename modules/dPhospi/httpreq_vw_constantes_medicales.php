@@ -137,15 +137,23 @@ if ($list_constantes) {
     $dates[$i] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
     $hours[$i] = mbTransformTime($cst->datetime, null, '%Hh%M');
     $const_ids[$i] = $cst->_id;
+    $cst->loadLogs();
     
     foreach ($data as $name => &$field) {
+      $log = $cst->loadLastLogForField($name);
+      if (!$log->_id) {
+        $log = $cst->_ref_last_log;
+        $log->loadRefsFwd();
+      }
+      $user_view = $log->_ref_user ? $log->_ref_user->_view : "";
+      
     	if ($name == 'ta') {
-    		$field['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole));
-    		$field['series'][1]['data'][$i] = array($i, getValue($cst->_ta_diastole));
+    		$field['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole), $user_view);
+    		$field['series'][1]['data'][$i] = array($i, getValue($cst->_ta_diastole), $user_view);
     		continue;
     	}
     	foreach ($field['series'] as &$serie) {
-    		$serie['data'][$i] = array($i, getValue($cst->$name));
+    		$serie['data'][$i] = array($i, getValue($cst->$name), $user_view);
     	}
     }
     $i++;
