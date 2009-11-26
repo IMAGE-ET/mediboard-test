@@ -42,6 +42,7 @@ $dest_hprim = new CDestinataireHprim();
 $dest_hprim->nom = $echange_hprim->emetteur;
 $dest_hprim->loadMatchingObject();
 
+$id400->tag = $dest_hprim->_tag;
 $id400->id400 = $echange_hprim->_object_id_permanent;
 $id400->loadMatchingObject();
 
