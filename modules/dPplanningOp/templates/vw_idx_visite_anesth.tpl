@@ -113,7 +113,7 @@ Main.add(function(){
               Visite non effectuée
             {{/if}}
           </td>
-          <td class="button">
+          <td>
             <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
             {{if $_operation->_ref_consult_anesth->_id}}
               <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">{{tr}}Print{{/tr}}</button>
