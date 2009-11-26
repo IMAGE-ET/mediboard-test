@@ -338,6 +338,8 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 
 <script type="text/javascript">
 
+
+	
 if(document.addLine && document.searchProd){
   // UpdateFields de l'autocomplete de medicaments
   updateFieldsMedicament = function(selected) {
@@ -350,9 +352,9 @@ if(document.addLine && document.searchProd){
 		$('searchProd_produit').value = "";
   }
   
-  var oFormProduit = document.searchProd;
-  var oFormAddLine = document.addLine;
-  
+  var oFormProduit = getForm("searchProd");
+  var oFormAddLine = getForm("addLine");
+
   // Autocomplete des medicaments
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
   url.addParam("produit_max", 40);
