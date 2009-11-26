@@ -76,15 +76,15 @@
       </div>
 
       <a href="{{$rpu_link}}">
-        <strong>
-        {{$patient}} 
-        {{if $dPconfig.dPurgences.age_patient_rpu_view}}<br /> {{$patient->_age}} ans{{/if}}
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
+          <big>{{$patient}}</big> 
         </strong>
       </a>
       
       {{if $patient->_IPP}}
       [{{$patient->_IPP}}]
       {{/if}}
+      {{if $dPconfig.dPurgences.age_patient_rpu_view}}{{$patient->_age}} ans{{/if}}
       
     </td>
 

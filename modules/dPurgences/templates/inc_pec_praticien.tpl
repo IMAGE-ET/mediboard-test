@@ -60,10 +60,10 @@ checkPraticien = function(oForm){
 {{/if}}
 
 {{else}}
-	par {{$consult->_ref_praticien->_view}}
+  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_praticien}}
 	{{if $can->edit}}
 	<br />
-	<a class="action" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+	<a class="button search" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
 	  Voir prise en charge
 	</a>
 	{{/if}}
