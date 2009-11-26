@@ -97,7 +97,7 @@ foreach ($sejours as $sejour) {
   
   $domEvenement = new CHPrimXMLVenuePatient();
   $domEvenement->emetteur = CAppUI::conf('mb_id');
-  $domEvenement->destinataire = $dest_hprim->destinataire;
+  $domEvenement->destinataire = $dest_hprim->nom;
   $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
   
   if (!$messageEvtPatient) {
