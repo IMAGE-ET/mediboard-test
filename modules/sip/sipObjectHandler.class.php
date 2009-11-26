@@ -113,7 +113,7 @@ class CSipObjectHandler extends CMbObjectHandler {
   
         $domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
         $domEvenement->emetteur = CAppUI::conf('mb_id');
-        $domEvenement->destinataire = $dest_hprim->destinataire;
+        $domEvenement->destinataire = $dest_hprim->nom;
         
         $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
            
@@ -222,7 +222,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         
         $domEvenement = new CHPrimXMLVenuePatient();
         $domEvenement->emetteur = CAppUI::conf('mb_id');
-        $domEvenement->destinataire = $dest_hprim->destinataire;
+        $domEvenement->destinataire = $dest_hprim->nom;
         
         $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
 
