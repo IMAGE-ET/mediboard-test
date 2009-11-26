@@ -15,7 +15,7 @@ $can->needsRead();
 // Initialisation de variables
 
 $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
-$order_col_pre = CValue::getOrSession("order_col_pre", "patient_id");
+$order_col_pre = CValue::getOrSession("order_col_pre", "heure");
 $date          = CValue::getOrSession("date", mbDate());
 
 $date_actuelle = mbDateTime("00:00:00");

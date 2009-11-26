@@ -316,12 +316,13 @@ function smarty_function_mb_ternary($params, &$smarty) {
 }
 
 function smarty_function_mb_colonne($params, &$smarty) {
-  $class     = CMbArray::extract($params, "class"     , null, true);
-  $field     = CMbArray::extract($params, "field"     , null, true);
-  $order_col = CMbArray::extract($params, "order_col" , null, true);
-  $order_way = CMbArray::extract($params, "order_way" , null, true);
-  $url       = CMbArray::extract($params, "url"       , null, false);
-  $function  = CMbArray::extract($params, "function"  , null, false);
+  $class         = CMbArray::extract($params, "class"        , null, true);
+  $field         = CMbArray::extract($params, "field"        , null, true);
+  $order_col     = CMbArray::extract($params, "order_col"    , null, true);
+  $order_way     = CMbArray::extract($params, "order_way"    , null, true);
+  $order_suffixe = CMbArray::extract($params, "order_suffixe", ""  , false);
+  $url           = CMbArray::extract($params, "url"          , null, false);
+  $function      = CMbArray::extract($params, "function"     , null, false);
   
   $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr($class."-".$field."-desc")."\">";
   $sHtml .= CAppUI::tr($class."-".$field);
@@ -332,10 +333,10 @@ function smarty_function_mb_colonne($params, &$smarty) {
   
   if($url){
 	  if($css_class == "sorted"){
-	  	return "<a class='$css_class $order_way' href='$url&amp;order_col=$order_col&amp;order_way=$order_way_inv'>$sHtml</a>";
+	  	return "<a class='$css_class $order_way' href='$url&amp;order_col$order_suffixe=$order_col&amp;order_way$order_suffixe=$order_way_inv'>$sHtml</a>";
 	  }
 	  if($css_class == "sortable"){
-	  	return "<a class='$css_class' href='$url&amp;order_col=$field&amp;order_way=ASC'>$sHtml</a>";
+	  	return "<a class='$css_class' href='$url&amp;order_col$order_suffixe=$field&amp;order_way$order_suffixe=ASC'>$sHtml</a>";
 	  }
   }
   
