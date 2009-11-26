@@ -88,7 +88,7 @@
 					        ondblclick='addAdministration({{$line_id}}, "{{$quantite}}", "{{$unite_prise}}", "{{$line_class}}","{{$_date}}","{{$_hour}}","{{$list_administrations}}","{{$planification_id}}");'
 						    {{/if}}
 						  
-						     class="{{if $quantite!="-" && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 4}}draggablePlanif{{/if}} tooltip-trigger administration
+						     class="{{if $quantite!="-" && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 4}}draggablePlanif{{/if}} administration
 									      {{if $quantite > 0}}
 											    {{if @array_key_exists($_hour, $line->_administrations.$unite_prise.$_date) && @$line->_administrations.$unite_prise.$_date.$_hour.quantite != ''}}
 												    {{if @$line->_administrations.$unite_prise.$_date.$_hour.quantite == $quantite}} administre 

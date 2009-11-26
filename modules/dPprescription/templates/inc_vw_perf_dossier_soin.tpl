@@ -178,7 +178,7 @@
 	               <div {{if $smarty.foreach.foreach_perf_line.last}}style="margin-bottom: 15px;"{{else}}style="margin-bottom: 5px;"{{/if}} 
 	                    onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}');"
 	                    ondblclick='addAdministrationPerf("{{$_perfusion->_id}}","{{$_date}}","{{$_hour}}","{{$hour_prevue}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
-											class="administration tooltip-trigger
+											class="administration
 											       {{if $nb_prevue && $_perfusion->_active && ($nb_adm || $nb_adm == 0)}}
 											         {{if $nb_prevue == $nb_adm}}administre
 											         {{elseif $nb_adm == '0'}}administration_annulee
