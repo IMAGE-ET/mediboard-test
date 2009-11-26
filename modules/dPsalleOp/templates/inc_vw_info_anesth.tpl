@@ -13,7 +13,7 @@ refreshAidesPreAnesth = function(user_id) {
   url.addParam('field', 'rques_visite_anesth');
   url.addParam('user_id', user_id);
   url.addParam('no_enum', 1);
-  url.requestUpdate('select_aides_pre_anesth');
+  url.requestUpdate('select_aides_pre_anesth', { waitingText: null });
 }
 
 reloadDocumentsAnesth = function () {
@@ -249,12 +249,7 @@ Main.add(function(){
       
       {{if !$selOp->date_visite_anesth}}
       <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
-      <div id="select_aides_pre_anesth">
-  			<select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this);">
-  			  <option value="">&mdash; Choisir</option>
-  			  {{html_options options=$selOp->_aides.rques_visite_anesth.no_enum}}
-  			</select>
-			</div>
+      <div id="select_aides_pre_anesth"></div>
 			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
 			  {{tr}}New{{/tr}}
 			</button>
