@@ -85,7 +85,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
 
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire = $echange_hprim->emetteur;;
     $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
      // Si CIP

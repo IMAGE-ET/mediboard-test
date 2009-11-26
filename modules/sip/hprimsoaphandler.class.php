@@ -47,7 +47,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
       $data = $domGetEvenement->getEvenementPatientXML();
       $domAcquittement->identifiant = $data['identifiantMessage'];
-      $domAcquittement->destinataire = $data['idClient'];
+      $domAcquittement->destinataire = $domGetEvenement->destinataire;
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
       
       // Acquittement d'erreur d'un document XML recu non valide
@@ -77,7 +77,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->loadMatchingObject();
       }
       if (!$echange_hprim->_id) {
-        $echange_hprim->emetteur       = $data['idClient'];
+        $echange_hprim->emetteur       = $domGetEvenement->destinataire;
         $echange_hprim->destinataire   = CAppUI::conf('mb_id');
         $echange_hprim->group_id       = CGroups::loadCurrent()->_id;
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
@@ -128,7 +128,7 @@ class CHprimSoapHandler extends CSoapHandler {
     } catch (Exception $e) {
       $domAcquittement = new CHPrimXMLAcquittementsPatients();
       $domAcquittement->identifiant = $data['identifiantMessage'];
-      $domAcquittement->destinataire = $data['idClient'];
+      $domAcquittement->destinataire = $domGetEvenement->destinataire;
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E09", $e->getMessage());
