@@ -79,14 +79,21 @@ class CSetupsip extends CSetup {
               ADD INDEX (`group_id`);";
      $this->addQuery($sql);
      
-      $this->makeRevision("0.16");
+     $this->makeRevision("0.16");
      
      $sql = "ALTER TABLE `echange_hprim` 
               ADD `group_id` INT (11) UNSIGNED NOT NULL ,
               ADD INDEX (`group_id`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.17";
+     $this->makeRevision("0.17");
+     
+     $sql = "ALTER TABLE `destinataire_hprim` 
+              CHANGE `destinataire` `nom` VARCHAR (255) NOT NULL;";
+              
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.18";
   }
 }
 ?>

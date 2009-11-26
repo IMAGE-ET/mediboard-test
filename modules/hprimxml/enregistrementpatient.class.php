@@ -403,10 +403,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
       $IPP = new CIdSante400();
       //Paramétrage de l'id 400
       $IPP->object_class = "CPatient";
-      $IPP->tag = $data['idClient'];
+      $IPP->tag = $dest_hprim->_tag;
       $IPP->id400 = $data['idSource'];
       
       // idSource non connu

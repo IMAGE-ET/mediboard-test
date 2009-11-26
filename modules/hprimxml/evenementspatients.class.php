@@ -66,9 +66,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
     $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
-    $code = $xpath->queryTextNode("hprim:code", $systeme);
-    $this->destinataire = $code;
-    $data['idClient'] = "$code group:".CGroups::loadCurrent()->_id;
+    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     
     return $data;

@@ -38,7 +38,10 @@ switch($echange_hprim->sous_type) {
     defineObjectIdClass($domGetIdSourceObject, $id400 ,$echange_hprim);
 }
 
-$id400->tag = $echange_hprim->emetteur." group:$echange_hprim->group_id";
+$dest_hprim = new CDestinataireHprim();
+$dest_hprim->nom = $echange_hprim->emetteur;
+$dest_hprim->loadMatchingObject();
+
 $id400->id400 = $echange_hprim->_object_id_permanent;
 $id400->loadMatchingObject();
 

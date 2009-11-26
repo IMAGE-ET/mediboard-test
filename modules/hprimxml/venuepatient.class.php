@@ -110,7 +110,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $echange_hprim->emetteur;;
+    $domAcquittement->destinataire = $data['libelleClient'];
     $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
     // Traitement de la venue
@@ -125,7 +125,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $newVenue = new CSejour();
       $newVenue->patient_id = $newPatient->_id; 
       $newVenue->group_id = CGroups::loadCurrent()->_id;
-
+       
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+    
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
@@ -142,7 +146,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $num_dossier = new CIdSante400();
       //Paramétrage de l'id 400
       $num_dossier->object_class = "CSejour";
-      $num_dossier->tag = $data['idClient'];
+      $num_dossier->tag = $dest_hprim->_tag;
       $num_dossier->id400 = $data['idSourceVenue'];
       
       // idSource non connu

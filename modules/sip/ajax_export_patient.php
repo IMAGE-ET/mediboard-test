@@ -68,7 +68,7 @@ foreach ($patients as $patient) {
     //Paramétrage de l'id 400
     $IPP->object_class = "CPatient";
     $IPP->object_id = $patient->_id;
-    $IPP->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
+    $IPP->tag = $dest_hprim->_tag;
     $IPP->loadMatchingObject();
 
     $patient->_IPP = $IPP->id400;
@@ -80,7 +80,7 @@ foreach ($patients as $patient) {
 	
   $domEvenement = new CHPrimXMLEnregistrementPatient();
   $domEvenement->emetteur = CAppUI::conf('mb_id');
-  $domEvenement->destinataire = $dest_hprim->destinataire;
+  $domEvenement->destinataire = $dest_hprim->nom;
   $messageEvtPatient = $domEvenement->generateTypeEvenement($patient);
   
   if (!$messageEvtPatient) {

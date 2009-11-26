@@ -21,7 +21,7 @@
           <th class="title" colspan="7">DESTINATAIRES HPRIM</th>
         </tr>
         <tr>
-          <th>{{mb_title object=$dest_hprim field="destinataire"}}</th>
+          <th>{{mb_title object=$dest_hprim field="nom"}}</th>
           <th>{{mb_title object=$dest_hprim field="group_id"}}</th>
           <th>{{mb_title object=$dest_hprim field="type"}}</th>
           <th>{{mb_title object=$dest_hprim field="actif"}}</th>
@@ -33,7 +33,7 @@
         <tr {{if $_dest_hprim->_id == $dest_hprim->_id}}class="selected"{{/if}}>
           <td>
             <a href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id={{$_dest_hprim->_id}}" title="Modifier le destinataire HPRIM">
-              {{mb_value object=$_dest_hprim field="destinataire"}}
+              {{mb_value object=$_dest_hprim field="nom"}}
             </a>
           </td>
           <td>{{$_dest_hprim->_ref_group->_view}}</td>
@@ -73,8 +73,8 @@
           {{/if}}
         </tr>
         <tr>
-          <th>{{mb_label object=$dest_hprim field="destinataire"}}</th>
-          <td>{{mb_field object=$dest_hprim field="destinataire"}}</td>
+          <th>{{mb_label object=$dest_hprim field="nom"}}</th>
+          <td>{{mb_field object=$dest_hprim field="nom"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$dest_hprim field="group_id"}}</th>

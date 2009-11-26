@@ -96,15 +96,18 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $echange_hprim->emetteur;
+    $domAcquittement->destinataire = $data['idClient'];
     $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
      // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbVenueEliminee = new CSejour();
-      
       $mbVenue = new CSejour();
      
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
       // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
@@ -124,7 +127,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400Venue = new CIdSante400();
       //Paramétrage de l'id 400
       $id400Venue->object_class = "CSejour";
-      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'] : $data['idClient'];
+      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag : $dest_hprim->_tag;
       $id400Venue->id400 = $data['idSourceVenue'];
       $id400Venue->loadMatchingObject();
       if ($mbVenue->load($data['idCibleVenue'])) {
@@ -150,7 +153,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400VenueEliminee = new CIdSante400();
       //Paramétrage de l'id 400
       $id400VenueEliminee->object_class = "CSejour";
-      $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'] : $data['idClient'];
+      $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag : $dest_hprim->_tag;
       $id400VenueEliminee->id400 = $data['idSourceVenueEliminee'];
       $id400VenueEliminee->loadMatchingObject();
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
@@ -232,6 +235,10 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
   }
   
   private function mapAndStoreVenue(&$newVenue, $data, $etatVenueEliminee, &$id400Venue, &$id400VenueEliminee) {
+    $dest_hprim = new CDestinataireHprim();
+    $dest_hprim->nom = $data['idClient'];
+    $dest_hprim->loadMatchingObject();
+    
     $messages = array();
     // Mapping de la venue a éliminer
     $newVenue = $this->mappingVenue($data['venueEliminee'], $newVenue);
@@ -267,8 +274,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $messages['msgNumDosVenue'] = $id400Venue->store();
     
     $id400VenueEliminee->tag = ($etatVenueEliminee != "préadmission") ? 
-      CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$data['idClient'] :
-      CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$data['idClient'];
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$dest_hprim->_tag :
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag;
         
     $id400VenueEliminee->object_id = $newVenue->_id;
     $id400VenueEliminee->last_update = mbDateTime();
