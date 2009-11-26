@@ -8,6 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+Main.add(function(){
+  // Affichage du type de posologie Moment par defaut
+  getForm("ChoixPrise-{{$line->_id}}").typePrise[0].onclick();
+});
+</script>
+
+
+
 {{assign var=line_id value=$line->_id}}
 <div style="margin-top: 5px; margin-bottom: -14px;">
   <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
@@ -88,8 +97,3 @@
   
   <span id="moment_{{$type}}_{{$line->_id}}"></span>
 </form>
-
-<script type="text/javascript">
-  // Affichage du type de posologie Moment par defaut
-  $('ChoixPrise-{{$line->_id}}_typePrise_moment{{$type}}').onclick();
-</script>
