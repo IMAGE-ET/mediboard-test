@@ -137,7 +137,7 @@ if (!$suppressHeaders || $ajax) {
 
 // check if we are logged in
 if (!CAppUI::$instance->user_id) {
-  $redirect = CValue::get("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
+  $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
   $_SESSION["locked"] = null;
   
   // Ajax login alert
@@ -145,7 +145,7 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax = new CSmartyDP("modules/system");
     $tplAjax->assign("performance", $performance);
     $tplAjax->display("ajax_errors.tpl");
-  } 
+  }
   else {
     $smartyLogin = new CSmartyDP("style/$uistyle");
     $smartyLogin->assign("localeInfo"           , $locale_info);
@@ -165,7 +165,7 @@ if (!CAppUI::$instance->user_id) {
   
   // Destroy the current session and output login page
   session_unset();
-  session_destroy();
+  @session_destroy(); // Escaped because of an unknown error
   CApp::rip();
 }
 
