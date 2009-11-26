@@ -50,10 +50,10 @@ function setClose(modele_id, object_id) {
 	
 	<ul id="tabs-modeles" class="control_tabs">
 	{{foreach from=$modelesCompat key=class item=modeles}}
-	  <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
+	  <li><a href="#{{$class}}" {{if !$modeles.prat|@count && !$modeles.func|@count && !$modeles.etab|@count}}class="empty"{{/if}}>{{tr}}{{$class}}{{/tr}}</a></li>
 	{{/foreach}}
 	{{foreach from=$modelesNonCompat key=class item=modeles}}
-	  <li><a href="#{{$class}}" class="wrong">{{tr}}{{$class}}{{/tr}}</a></li>
+	  <li><a href="#{{$class}}" class="{{if !$modeles.prat|@count && !$modeles.func|@count && !$modeles.etab|@count}}empty{{else}}wrong{{/if}}">{{tr}}{{$class}}{{/tr}}</a></li>
 	{{/foreach}}
 	</ul>
 	<hr class="control_tabs" />
@@ -67,9 +67,10 @@ function setClose(modele_id, object_id) {
 	{{/foreach}}
 	
 	<div class="small-info">
-	  Cliquez sur un modèle pour l'utiliser !
-	  <br />
-	  Les sections grisées contiennent des champs potentiellement incompatibles avec le contexte courant.
+    Cliquez sur un modèle pour l'utiliser !
+		<br />
+	  <span class="wrong" style="width: 50px; display: inline-block; margin-bottom: 1px;">&nbsp;</span> Sections potentiellement incompatibles avec le contexte courant.<br />
+		<span class="empty" style="width: 50px; display: inline-block;">&nbsp;</span> Sections vides.
 	</div>
 {{else}}
 	<div class="big-info">

@@ -1877,7 +1877,8 @@ ul.control_tabs_vertical li a.active {
 }
 
 ul.control_tabs li a.empty, 
-ul.control_tabs_vertical li a.empty {
+ul.control_tabs_vertical li a.empty,
+span.empty {
   background-color: #bbb;
 }
 
@@ -1892,7 +1893,8 @@ ul.control_tabs_vertical li a.empty.active {
 }
 
 ul.control_tabs li a.wrong, 
-ul.control_tabs_vertical li a.wrong {
+ul.control_tabs_vertical li a.wrong,
+span.wrong {
   background-color: #fb0;
 }
 
