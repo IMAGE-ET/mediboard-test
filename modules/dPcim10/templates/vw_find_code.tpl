@@ -52,7 +52,7 @@
     <td><input type="text" class="str" name="code" value="{{$code}}" onchange="clearChapter();" /></td>
     <th><label for="level1" title="Chapitre">Chapitre</label></th>
     <td>
-      <select name="level1" onchange="clearCodeAndKeys(); clearChapter2(); this.form.submit();">
+      <select name="level1" onchange="clearCodeAndKeys(); clearChapter2(); this.form.submit();" style="width: 20em;">
         <option value="">&mdash; Recherche par chapitres</option>
         {{foreach from=$listLevel1 item=curr_chap}}
         <option value="{{$curr_chap.code}}" {{if $level1 == $curr_chap.code}}selected="selected"{{/if}}>
@@ -67,7 +67,7 @@
     <td><input type="text" class="str" name="keys" value="{{$keys|stripslashes}}" onchange="clearChapter();" /></td>
     <th><label for="level2" title="Sous-chapitres">Sous-chapitre</label></th>
     <td>
-      <select name="level2" onchange="clearCodeAndKeys(); this.form.submit();">
+      <select name="level2" onchange="clearCodeAndKeys(); this.form.submit();" style="width: 20em;">
         <option value="">&mdash; Recherche par sous-chapitres</option>
         {{foreach from=$listLevel2 item=curr_chap}}
         <option value="{{$curr_chap.code}}" {{if $level2 == $curr_chap.code}}selected="selected"{{/if}}>
