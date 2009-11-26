@@ -104,8 +104,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $enteteMessageAcquittement);
     $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
-    $code = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['idClient'] = "$code ".CGroups::loadCurrent()->_id;
+    $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     
     $data['identifiantMessageAcquitte'] = $xpath->queryTextNode("hprim:identifiantMessageAcquitte", $enteteMessageAcquittement);
