@@ -114,7 +114,11 @@ foreach($listEchangeHprim as $_echange_hprim) {
         } catch(Exception $e) {}
       }
 	   
-	    $id400->tag = $_ref_notification->emetteur;
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $_ref_notification->emetteur;
+      $dest_hprim->loadMatchingObject();
+  
+      $id400->tag = $dest_hprim->_tag;
 	  
 	    $id400->id400 = $_ref_notification->_object_id_permanent;
 	    $id400->loadMatchingObject();
@@ -147,7 +151,11 @@ foreach($listEchangeHprim as $_echange_hprim) {
       defineObjectIdClass($domGetIdSourceObject, $id400 ,$_echange_hprim);
   }
   
-	$id400->tag = $_echange_hprim->emetteur;
+  $dest_hprim = new CDestinataireHprim();
+  $dest_hprim->nom = $_echange_hprim->emetteur;
+  $dest_hprim->loadMatchingObject();
+  
+  $id400->tag = $dest_hprim->_tag;
 	$id400->id400 = $_echange_hprim->_object_id_permanent;
 	$id400->loadMatchingObject();
   
