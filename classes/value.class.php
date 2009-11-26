@@ -76,7 +76,8 @@ abstract class CValue {
  * @return mixed The value associated to $name in the Session
  **/
   static function session($name, $default = null) {
-    return isset($_SESSION[$name]) ? $_SESSION[$name] : $default;
+    global $m;
+    return self::read($_SESSION[$m], $name, $default);
   }
   
 /**
