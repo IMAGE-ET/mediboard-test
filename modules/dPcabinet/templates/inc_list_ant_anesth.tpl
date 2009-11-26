@@ -72,7 +72,7 @@ toggleCancelledAnesth = function(list) {
       {{/if}}
     </form>
 
-    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}')">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}')">
 	    <strong>
 	    	{{if $curr_antecedent->type    }} {{mb_value object=$curr_antecedent field=type    }} {{/if}}
 	    	{{if $curr_antecedent->appareil}} {{mb_value object=$curr_antecedent field=appareil}} {{/if}}
@@ -110,7 +110,7 @@ toggleCancelledAnesth = function(list) {
     {{elseif $curr_trmt->debut}}
       Depuis {{mb_value object=$curr_trmt field=debut}} :
     {{/if}}
-     <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
+     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
        {{$curr_trmt->traitement}}
      </span>
     </form>
@@ -135,7 +135,7 @@ toggleCancelledAnesth = function(list) {
       <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierSejour)">
         {{tr}}delete{{/tr}}
       </button>
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
 		    <a href=#1 onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
 		      {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})</a>
 		  </span>

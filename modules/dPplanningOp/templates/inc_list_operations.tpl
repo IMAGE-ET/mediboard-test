@@ -106,10 +106,10 @@
   <tr>
     {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
     <td class="text" class="top" {{if !$board}}rowspan="2"{{/if}}>
-      <a href="{{$patient->_dossier_cabinet_url}}"
-        class="tooltip-trigger"
-        onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+      <a href="{{$patient->_dossier_cabinet_url}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
         {{$patient->_view}}
+        </span>
       </a>
     </td>
     <td class="text top">

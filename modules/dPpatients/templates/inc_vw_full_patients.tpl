@@ -76,9 +76,11 @@ function popEtatSejour(sejour_id) {
 <tr id="CSejour-{{$curr_sejour->_id}}">
   <td>
   	<button class="lookup notext" onclick="popEtatSejour({{$curr_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
-    <a title="Modifier le séjour" class="button edit notext" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">{{tr}}Edit{{/tr}}</a>
-    <span class="tooltip-trigger"
-      onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$curr_sejour->_id}}');{{else}}viewCompleteItem('{{$curr_sejour->_class_name}}','{{$curr_sejour->_id}}');{{/if}} ViewFullPatient.select(this)">
+    <a title="Modifier le séjour" class="button edit notext" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+      {{tr}}Edit{{/tr}}
+    </a>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}');"
+          onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$curr_sejour->_id}}');{{else}}viewCompleteItem('{{$curr_sejour->_class_name}}','{{$curr_sejour->_id}}');{{/if}} ViewFullPatient.select(this)">
       {{$curr_sejour->_shortview}} 
     </span>
     <script type="text/javascript">
@@ -201,10 +203,8 @@ function popEtatSejour(sejour_id) {
     <a title="Modifier l'intervention" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
-  
-<!--  onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')" -->
-    <span class="tooltip-trigger"
-      onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
+          onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
       Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>
@@ -248,9 +248,8 @@ function popEtatSejour(sejour_id) {
     </a>
 
     <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
-<!--  onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')" -->
-    <span class="tooltip-trigger"
-      onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
+          onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>
@@ -316,8 +315,8 @@ function popEtatSejour(sejour_id) {
     {{/if}}
     
 <!--  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')" -->
-    <span class="tooltip-trigger"
-      onclick="viewCompleteItem('{{$object->_class_name}}', {{$object->_id}}); ViewFullPatient.select(this)">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');"
+          onclick="viewCompleteItem('{{$object->_class_name}}', {{$object->_id}}); ViewFullPatient.select(this)">
       Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>

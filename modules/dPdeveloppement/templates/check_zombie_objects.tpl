@@ -29,9 +29,10 @@
 		<tr id="zombie-{{$name}}-toggle">
 			<td colspan="3">
 				{{foreach from=$zombie.objects item=curr_object}}
-				  <div class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_object->_guid}}')">
+				  <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_object->_guid}}')">
 				  	{{$curr_object}}
-					</div>
+					</span>
+					<br />
 				{{foreachelse}}
 				  {{tr}}None{{/tr}}
 				{{/foreach}}

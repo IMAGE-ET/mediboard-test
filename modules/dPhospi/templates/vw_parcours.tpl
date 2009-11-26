@@ -70,7 +70,7 @@ function editIntervention(op_id) {
           <span>
         {{/if}}
         <br/>
-        <span class="tooltip-trigger"
+        <span
           onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
           Affectations du {{$curr_aff->entree|date_format:"%d/%m/%Y"}}
                         au {{$curr_aff->sortie|date_format:"%d/%m/%Y"}}
@@ -92,28 +92,25 @@ function editIntervention(op_id) {
     {{if ($diagramme.bloc.sortieSalleReveil) != ""}}
       <td class="space"> </td>
       <td class="only done ray" colspan=3> AU BLOC <br/> 
-        <span class="tooltip-trigger"
-          onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
             {{$diagramme.bloc.vue}}
-          </span>
+        </span>
       </td>
       <td class="space"> </td>
     {{elseif ($diagramme.bloc.salle != "") && ($diagramme.bloc.sortieSalleReveil == "")}}
       <td class="space"> </td>
       <td class="only current" colspan=3> AU BLOC <br/> 
-        <span class="tooltip-trigger"
-          onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
             {{$diagramme.bloc.vue}}
-          </span>
+        </span>
        </td>
        <td class="space"> </td>
     {{else}}
       <td class="space"> </td>
       <td class="only expect ray" colspan=3> AU BLOC <br/> 
-        <span class="tooltip-trigger"
-          onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
-            {{$diagramme.bloc.vue}}
-          </span>
+        <span onmouseover="ObjectTooltip.createEx(this, 'COperation-{{$diagramme.bloc.id}}')">
+          {{$diagramme.bloc.vue}}
+        </span>
        </td>
        <td class="space"> </td>
     {{/if}}

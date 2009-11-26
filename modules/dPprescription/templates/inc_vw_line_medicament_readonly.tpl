@@ -29,7 +29,6 @@
           {{if $line->_ref_parent_line->_id}}
             {{assign var=parent_line value=$line->_ref_parent_line}}
             <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
-                 class="tooltip-trigger" 
                  onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
           {{/if}}
           {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}

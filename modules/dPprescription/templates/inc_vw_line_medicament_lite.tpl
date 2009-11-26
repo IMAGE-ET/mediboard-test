@@ -51,7 +51,6 @@
       {{if $line->_ref_parent_line->_id}}
         {{assign var=parent_line value=$line->_ref_parent_line}}
         <img style="float: right" src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
-             class="tooltip-trigger" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
       {{/if}}
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');" style="font-weight: bold;">

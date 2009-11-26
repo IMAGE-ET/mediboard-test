@@ -267,7 +267,7 @@ function setToNow(element) {
               </strong>
       
               {{if $acte->code_association != $acte->_guess_association}}
-              <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
+              <span onmouseover="ObjectTooltip.createDOM(this, 'association-{{$acte->_guid}}')">
                 <strong>
                   {{if $acte->_guess_association}}
                     ({{$acte->_guess_association}}

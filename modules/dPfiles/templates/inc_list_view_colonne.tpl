@@ -53,7 +53,7 @@ Main.add(function () {
 			    
 					<!-- Tooltip -->
 					<td class="text" style="height: 35px; overflow: auto">
-			      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">
+			      <span onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">
 			        {{$_doc_item->_view|truncate:60}}
 			      </span>
 					</td>

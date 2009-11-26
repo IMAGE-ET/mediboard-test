@@ -35,7 +35,7 @@
 {{foreach from=$objects item=_object}}
   <td>
 	{{foreach from=$_object->_back.$backName item=backRef}}
-    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$backRef->_guid}}')">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$backRef->_guid}}')">
       {{$backRef->_view}}
     </span>
     <br />

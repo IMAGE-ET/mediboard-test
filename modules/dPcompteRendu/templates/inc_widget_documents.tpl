@@ -98,9 +98,9 @@
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-	    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
+	    <span onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
 	      {{$document}}
-	    </a>
+	    </span>
 	  </td>
 	  
 	  <td class="button" style="width: 1px">

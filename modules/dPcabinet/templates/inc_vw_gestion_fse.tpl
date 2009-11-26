@@ -119,7 +119,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         {{foreach from=$consult->_ext_fses key=_id_fse item=_ext_fse}}
         <tr>
           <td>
-            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_ext_fse->_guid}}')">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_ext_fse->_guid}}')">
               {{$_ext_fse}}
             </span>
           </td>

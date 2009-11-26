@@ -195,18 +195,19 @@
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
       {{assign var=medecin value=$patient->_ref_medecin_traitant}}
       {{if $medecin->_id}}
-        <div class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
           {{$medecin}}
-        </div>
+        </span>
       {{/if}}
     </td>
     <td class="text">
       <strong>Correspondants médicaux</strong>
       {{foreach from=$object->_ref_medecins_correspondants item=curr_corresp}}
 	      {{assign var=medecin value=$curr_corresp->_ref_medecin}}
-        <div class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
           {{$medecin}}
-        </div>
+        </span>
+        <br />
       {{foreachelse}}
         <div>{{tr}}CCorrespondant.none{{/tr}}</div>
       {{/foreach}}

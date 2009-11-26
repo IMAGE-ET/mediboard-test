@@ -67,7 +67,7 @@ Main.add(function () {
             <label for="_view" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label>
           </th>
           <td>
-            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
             <input type="text" readonly="readonly" name="_view" value="{{$patient->_view}}" />
             </span>
             <button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>

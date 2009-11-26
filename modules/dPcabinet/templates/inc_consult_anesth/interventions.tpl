@@ -86,7 +86,7 @@
 
   {{assign var=sejour value=$consult_anesth->_ref_sejour}}
   {{if $sejour->_id}}
-	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
   <strong>Séjour :</strong>
 	  Dr {{$sejour->_ref_praticien->_view}} -
 	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) -{{/if}}
@@ -96,7 +96,7 @@
   {{/if}}
   
   {{if $operation->_id}}
-	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
+	<span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}', null, { view_tarif: true })">
 	  <strong>Intervention :</strong>
 	  le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
 	  par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>

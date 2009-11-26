@@ -59,7 +59,7 @@
         {{foreach from=$_fses item=_fse}}
         <tr>
           <td>
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_fse->_guid}}')">
+				  	<span onmouseover="ObjectTooltip.createEx(this, '{{$_fse->_guid}}')">
 				  	  {{$_fse->_id}}
 				  	</span>
 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
@@ -73,7 +73,7 @@
 			    <td>
 			      {{assign var=lot value=$_fse->_ref_lot}}
 			      {{if $lot->_id}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$lot->_guid}}')">
+				  	<span onmouseover="ObjectTooltip.createEx(this, '{{$lot->_guid}}')">
 			      {{$lot->_id|pad:6:'0':'left'}}
 				  	</span>
 						{{/if}}
@@ -82,7 +82,7 @@
 			    
 			    <td>
 			      {{if $lot->S_LOT_FIC}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, 'CLmFichier-{{$lot->S_LOT_FIC}}')">
+				  	<span onmouseover="ObjectTooltip.createEx(this, 'CLmFichier-{{$lot->S_LOT_FIC}}')">
 			      {{$lot->S_LOT_FIC|pad:6:'0':'left'}}
 				  	</span>
 						{{/if}}
@@ -90,7 +90,7 @@
 			    
           <td>
             {{if $_fse->_consult_id}}
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, 'CConsultation-{{$_fse->_consult_id}}')">
+				  	<span onmouseover="ObjectTooltip.createEx(this, 'CConsultation-{{$_fse->_consult_id}}')">
 				  	  <a href="#CConsultation-{{$_fse->_consult_id}}" onclick="Consultation.show('{{$_fse->_consult_id}}')">
 				  	  	{{tr}}CConsultation{{/tr}} #{{$_fse->_consult_id}}
 				  	  </a>

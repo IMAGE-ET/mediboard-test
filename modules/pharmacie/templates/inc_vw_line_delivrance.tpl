@@ -18,10 +18,9 @@
   </td>
   <td>
     <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
-    <div class="tooltip-trigger" 
-         onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
+    <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
       {{$curr_delivery->_ref_stock->_view}}
-    </div>
+    </span>
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
   {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}

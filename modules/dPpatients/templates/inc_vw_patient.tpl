@@ -125,13 +125,13 @@ Document.refreshList = function(){
     <td colspan="5" class="text">
       {{assign var=medecin value=$patient->_ref_medecin_traitant}}
       {{if $medecin->_id}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
         <strong>{{$medecin}}</strong> ;
       </span>
       {{/if}}
       {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
 	      {{assign var=medecin value=$curr_corresp->_ref_medecin}}
-	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+	      <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
           {{$medecin}} ;
         </span>
       {{/foreach}}
@@ -306,22 +306,23 @@ Document.refreshList = function(){
       <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
-      <a class="tooltip-trigger"
+      <a
          {{if $canAdmissions->view}}
          href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$_sejour->_date_entree_prevue}}#adm{{$_sejour->_id}}"
          {{else}}
          href="#nothing"
          {{/if}}
-         onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')"
       >
       {{else}}
       <a href="#nothing">
       {{/if}}
-        {{if $_sejour->_num_dossier && $_sejour->group_id == $g}}[{{$_sejour->_num_dossier}}]{{/if}}
-        {{$_sejour->_shortview}}
-        {{if $_sejour->_nb_files_docs}}
-          - ({{$_sejour->_nb_files_docs}} Doc.)
-        {{/if}}
+      {{if $_sejour->_num_dossier && $_sejour->group_id == $g}}[{{$_sejour->_num_dossier}}]{{/if}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+      {{$_sejour->_shortview}}
+      {{if $_sejour->_nb_files_docs}}
+        - ({{$_sejour->_nb_files_docs}} Doc.)
+      {{/if}}
+      </span>
       </a>
     </td>
     {{if $_sejour->group_id == $g}}
@@ -347,17 +348,16 @@ Document.refreshList = function(){
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
         <img src="images/icons/planning.png" alt="modifier"/>
       </a>
-      <a class="tooltip-trigger"
-         href="{{$curr_op->_link_editor}}"
-         onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
-      >
+      <a href="{{$curr_op->_link_editor}}">
       {{else}}
-      <a class="tooltip-trigger" title="Modification d'intervention non autorisée" href="#nothing">
+      <a title="Modification d'intervention non autorisée" href="#nothing">
       {{/if}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
         Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
         {{if $curr_op->_nb_files_docs}}
           - ({{$curr_op->_nb_files_docs}} Doc.)
         {{/if}}
+        </span>
       </a>
       </li>
       </ul>
@@ -384,15 +384,14 @@ Document.refreshList = function(){
       <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
-        {{if $curr_consult->_canEdit}}
-          <a class="tooltip-trigger"
-             href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
-             onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')"
-           >
-        {{else}}
-          <a href="#nothing">
-        {{/if}}
-        Le {{$curr_consult->_datetime|date_format:$dPconfig.datetime}} - {{$curr_consult->_etat}}
+      {{if $curr_consult->_canEdit}}
+      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}">
+      {{else}}
+      <a href="#nothing">
+      {{/if}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">
+      Le {{$curr_consult->_datetime|date_format:$dPconfig.datetime}} - {{$curr_consult->_etat}}
+      </span>
       </a>
     </td>
 

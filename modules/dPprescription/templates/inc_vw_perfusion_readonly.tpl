@@ -18,7 +18,6 @@
       <div style="float: left">
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
-             class="tooltip-trigger" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
       </div>
       {{/if}}

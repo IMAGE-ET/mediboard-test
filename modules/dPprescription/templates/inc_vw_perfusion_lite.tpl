@@ -30,8 +30,7 @@
 			{{if $_perfusion->_ref_parent_line->_id}}
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
-             class="tooltip-trigger" 
-             onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
+             onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')" />
       {{/if}}
       <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');" style="display: inline;">
         {{mb_value object=$_perfusion field=type}}

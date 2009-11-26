@@ -75,7 +75,7 @@
                     {{if $curr_antecedent->date}}
                       {{mb_value object=$curr_antecedent field=date}} :
                     {{/if}}
-                    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}', 'objectViewHistory')">
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_antecedent->_guid}}', 'objectViewHistory')">
                       {{$curr_antecedent->rques}}
                     </span>
                   </li>
@@ -98,7 +98,7 @@
                 {{elseif $curr_trmt->debut}}
                   Depuis {{mb_value object=$curr_trmt field=debut}} :
                 {{/if}}
-                <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_trmt->_guid}}', 'objectViewHistory')">
                   {{$curr_trmt->traitement}}
                 </span>
               </li>

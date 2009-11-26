@@ -30,7 +30,7 @@
           <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
           <td>
             {{foreach from=$curr_stock->_orders item=curr_order}}
-		        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+		        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
               {{mb_value object=$curr_order field=date_ordered}}
             </span><br />
             {{/foreach}}

@@ -33,7 +33,7 @@
       {{assign var="object" value=$_idSante400->_ref_object}}
       {{if $object->_id}}
       <a href="{{$href}}&amp;object_class={{$object->_class_name}}&amp;object_id={{$object->_id}}">
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
         {{$object}}
       </span>
       </a>

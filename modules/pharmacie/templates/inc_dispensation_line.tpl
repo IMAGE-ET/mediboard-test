@@ -28,14 +28,16 @@
     <tr>
       <!-- Quantite à administrer -->
       <td style="text-align: center;" class="text">
-        <div onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-poso-{{$code_cis}}')" class="tooltip-trigger">
-          <a href="#1">{{$quantite_administration}} 
-					{{if $line_med->_ref_produit_prescription->_id}}
-					  {{$line_med->_ref_produit_prescription->unite_prise}}
-					{{else}}
-					  {{$produit->_unite_administration}}
-					{{/if}}</a>
-        </div>
+        <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-poso-{{$code_cis}}')">
+          <a href="#1">
+            {{$quantite_administration}} 
+					  {{if $line_med->_ref_produit_prescription->_id}}
+					    {{$line_med->_ref_produit_prescription->unite_prise}}
+					  {{else}}
+					    {{$produit->_unite_administration}}
+					  {{/if}}
+					</a>
+        </span>
         <table id="tooltip-content-poso-{{$code_cis}}" style="display: none;" class="tbl">
         {{if $mode_nominatif}}
           {{if $_lines.$code_cis->_class_name == "CPrescriptionLineMedicament"}}
@@ -93,9 +95,9 @@
 	     <!-- Affichage des stocks du service -->
 	     <td style="text-align: center;">
 		     {{if array_key_exists($code_cis, $stocks_pharmacie) && $stocks_pharmacie.$code_cis.total}}
-		       <a href="#" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-stock-pharma{{$code_cis}}')" class="tooltip-trigger">
+		       <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-stock-pharma{{$code_cis}}')">
 		         {{$stocks_pharmacie.$code_cis.total}}
-		       </a>
+		       </span>
 		       <div id="tooltip-content-stock-pharma{{$code_cis}}" style="display: none">
 			       <ul>
 				       {{foreach from=$stocks_pharmacie.$code_cis key=_cip item=stock_pharma}}
@@ -251,11 +253,10 @@
 	         {{assign var=_produit_cip value=$produits_cip.$done_key}}
        	   {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
 	             <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">{{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
-	             <div class="tooltip-trigger" 
-	                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')">
+	             <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done->_id}}')">
 	               {{$curr_done->quantity}}  {{$curr_done->_ref_stock->_ref_product->_unit_title}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 	               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
-	             </div>
+	             </span>
 	             {{foreachelse}}
 	               <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() { refreshLists('{{$code_cis}}'); } })">
 	                 <input type="hidden" name="m" value="dPstock" />
@@ -282,11 +283,10 @@
 		           {{foreach from=$curr_done_nom->_ref_delivery_traces item=trace}}
 		             <div id="tooltip-content-{{$curr_done_nom->_id}}" style="display: none;">
 		             {{$trace->quantity}}  {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
-		             <div class="tooltip-trigger" 
-		                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_nom->_id}}')">
+		             <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_nom->_id}}')">
 		               {{$curr_done_nom->quantity}}  {{$curr_done_nom->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$trace->_ref_delivery->_ref_patient->_view}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
-		             </div>
+		             </span>
 		             {{foreachelse}}
 		               {{$curr_done_nom->quantity}}  {{$curr_done_nom->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_nom->date_dispensation|@date_format:"%d/%m/%Y"}} à {{$curr_done_nom->_ref_patient->_view}}
 		               [{{$_produit_cip.LIBELLE_PRODUIT}}]
@@ -308,11 +308,10 @@
 		           {{foreach from=$curr_done_glob->_ref_delivery_traces item=trace}}
 		             <div id="tooltip-content-{{$curr_done_glob->_id}}" style="display: none;">
 		                {{$trace->quantity}} {{$trace->_ref_delivery->_ref_stock->_ref_product->_unit_title}} délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]</div>
-		             <div class="tooltip-trigger" 
-		                  onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
+		             <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_done_glob->_id}}')">
 		               {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
-		             </div>
+		             </span>
 		             {{foreachelse}}
 		               {{$curr_done_glob->quantity}} {{$curr_done_glob->_ref_stock->_ref_product->_unit_title}} le {{$curr_done_glob->date_dispensation|@date_format:"%d/%m/%Y"}} (Global) [{{$_produit_cip.LIBELLE_PRODUIT}}]
 		               <br />
@@ -328,9 +327,9 @@
      <!-- Affichage des stocks du service -->
      <td style="text-align: center;">
 	     {{if array_key_exists($code_cis, $stocks_service) && $stocks_service.$code_cis.total}}
-	     	 <a href="#" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-stock-service{{$code_cis}}')" class="tooltip-trigger">
+	     	 <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-stock-service{{$code_cis}}')">
 	     		  {{$stocks_service.$code_cis.total}}
-	     	 </a>
+	     	 </span>
 	     	 <div id="tooltip-content-stock-service{{$code_cis}}" style="display: none;">       
 		       <ul>
 			       {{foreach from=$stocks_service.$code_cis key=_cip item=stock}}

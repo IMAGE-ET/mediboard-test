@@ -27,10 +27,9 @@
         {{mb_value object=$log field=date}} par <b>{{$log->_ref_user->_view}}</b><br />
       {{/foreach}}
       </div>
-      <div class="tooltip-trigger" 
-           {{if $stock->_ref_logs|@count>0}}onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$stock->_id}}')"{{/if}}>
+      <span {{if $stock->_ref_logs|@count>0}}onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$stock->_id}}')"{{/if}}>
         {{$stock->_ref_product->_view}}
-      </div>
+      </span>
     </td>
     <td>{{$stock->_ref_product->_unit_title}}</td>
     <td style="text-align: center;">{{$stock->quantity+$curr_destockage.nb_produit}}</td>

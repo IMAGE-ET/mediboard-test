@@ -270,7 +270,7 @@ Main.add(function () {
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()"/>
             <input type="hidden" name="prescription_labo_id" value="" />
-            <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this,'{{$patient->_guid}}')">
+            <span onmouseover="ObjectTooltip.createEx(this,'{{$patient->_guid}}')">
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
             </span>
             <button class="search" type="button" onclick="PatSelector.pop();">Chercher</button>

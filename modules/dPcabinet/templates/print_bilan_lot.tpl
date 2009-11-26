@@ -71,7 +71,7 @@
 					
         <tr style="font-weight: bold;">
         	<td>
-        	  <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_fichier->_guid}}')">
+        	  <span onmouseover="ObjectTooltip.createEx(this, '{{$_fichier->_guid}}')">
         	  	{{$_fichier}}
 						</span>
 					</td>
@@ -101,7 +101,7 @@
         {{foreach from=$_fichier->_back.lots item=_lot}}
         <tr>
           <td style="padding-left: 2em;">
-				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$_lot->_guid}}')">
+				  	<span onmouseover="ObjectTooltip.createEx(this, '{{$_lot->_guid}}')">
 				  	  {{$_lot}}
 				  	</span>
 			    </td>

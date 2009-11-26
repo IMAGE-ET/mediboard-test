@@ -25,7 +25,7 @@
   <tr>
     <td>
       {{assign var=medecin value=$medecins.$medecin_id}}
-	    <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}')">
+	    <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}')">
 	    {{$medecin}}
 	    </span>
     </td>

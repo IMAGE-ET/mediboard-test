@@ -38,9 +38,11 @@ Main.add(function () {
         {{foreach from=$_sejours item=_sejour}}
         <tr>
           <td>
-            <a class="tooltip-trigger" onclick="window.opener.location.href='?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$_sejour->_id}}'" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              <div class="{{if ($_sejour->_ref_consult_atu->_ref_chir->_id)}}message{{else}}error{{/if}}">[{{$_sejour->_num_dossier}}] - {{$_sejour}} ({{$_sejour->_ref_consult_atu->_ref_chir}})</div>
-            </a>
+            <div class="{{if ($_sejour->_ref_consult_atu->_ref_chir->_id)}}message{{else}}error{{/if}}">
+              <span onclick="window.opener.location.href='?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$_sejour->_id}}'" onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+              [{{$_sejour->_num_dossier}}] - {{$_sejour}} ({{$_sejour->_ref_consult_atu->_ref_chir}})
+              </span>
+            </div>
           </td>
         </tr>
         {{/foreach}}

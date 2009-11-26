@@ -21,10 +21,10 @@
           rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}"
           onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
 
-	      <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
-            <a href="#1">{{$libelle_ATC}}</a>
-          </div>
-          <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
+	      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+            {{$libelle_ATC}}
+        </span>
+        <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
   		      <ul>
   			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
@@ -42,9 +42,9 @@
         <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <div class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
-            <a href="#1">{{$categorie->nom}}</a>
-          </div>
+          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
+            {{$categorie->nom}}
+          </span>
           <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
   		      <ul>

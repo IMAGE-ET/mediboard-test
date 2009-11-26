@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<span class="tooltip-trigger" style="float: {{$float|default:'left'}};"
+<span style="float: {{$float|default:'left'}};"
   onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}', 'objectNotes')"
 	{{if $mode == "edit"}}
 	  onclick="new Note('{{$object->_guid}}')"

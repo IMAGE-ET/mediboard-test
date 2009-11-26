@@ -27,19 +27,19 @@
       <!-- Cas d'une ligne de medicament -->
       <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
           onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
-	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
-            <a href="#1">{{$libelle_ATC|smarty:nodefaults}}</a>
-          </span>
-          <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
+	      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+          {{$libelle_ATC|smarty:nodefaults}}
+        </span>
+        <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
   		      <ul>
   			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
   			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
   			  {{/foreach}}
   		      </ul>
-  			{{else}}
-  			  Aucune transmission
-  			{{/if}}
+  			  {{else}}
+  			    Aucune transmission
+  			  {{/if}}
 		    </div>
 		  
 	      {{if $line->_ref_produit->_ref_fiches_ATC}}
@@ -60,8 +60,8 @@
         <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <span class="tooltip-trigger" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
-            <a href="#1">{{$categorie->nom}}</a>
+          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
+            {{$categorie->nom}}
           </span>
           <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
        		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}

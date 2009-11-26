@@ -43,7 +43,7 @@
        [SELF]
      </label>
      {{else}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
          {{mb_value object=$object field="destinataire"}}
        </span>
      {{/if}}

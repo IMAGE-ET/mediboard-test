@@ -33,8 +33,9 @@ Main.add(function(){
     {{foreach from=$salle item=op}}
       <tr>
         <td>
-          <a href="#1" class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
             {{mb_value object=$op->_ref_plageop field=date}}
+          </span>
           </a>
         </td>
         <td>{{$op->_ref_chir}}</td>

@@ -43,7 +43,7 @@
 	    	{{mb_value object=$_element field=in_livret}}
 	    </td>
 	    <td>
-	      <span class="tooltip-trigger" {{if $_element->_ext_product->_id}}onmouseover="ObjectTooltip.createEx(this, '{{$_element->_ext_product->_guid}}')"{{/if}}> 
+	      <span {{if $_element->_ext_product->_id}}onmouseover="ObjectTooltip.createEx(this, '{{$_element->_ext_product->_guid}}')"{{/if}}> 
         {{if $_element->_produit_existant}}
           <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_element->_ext_product->_id}}">
           {{mb_value object=$_element field=_produit_existant}}

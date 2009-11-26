@@ -22,7 +22,7 @@
 	{{foreach from=$orders item=curr_order}}
 	  <tr>
 	    <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -72,7 +72,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -129,7 +129,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -174,7 +174,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}
         </span>
       </td>
@@ -220,7 +220,7 @@
   {{foreach from=$orders item=curr_order}}
     <tr>
       <td>
-         <span class="tooltip-trigger" onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
+         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
          {{$curr_order->order_number}}
         </span>
       </td>
