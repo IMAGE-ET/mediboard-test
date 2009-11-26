@@ -59,8 +59,9 @@
   {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
   <td class="text" colspan="5">
     <div class="warning">
-      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
-    	{{$_operation->_ref_patient->_view}}
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+    	  {{$_operation->_ref_patient->_view}}
     	</span>
     	<br />
 	    Intervention déplacée vers {{$_operation->_ref_salle->_view}}
@@ -72,9 +73,10 @@
   	{{if $vueReduite}}
   	  <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
   	{{/if}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-    <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}">
-    {{$_operation->_ref_patient->_view}}
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
+    <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+          onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+      {{$_operation->_ref_patient->_view}}
     </span>
     {{if $_operation->_ref_affectation && $_operation->_ref_affectation->_ref_lit->_id && $dPconfig.dPbloc.CPlageOp.chambre_operation == 1}}
       <div style="text-align: center; font-size: 0.8em; width: 1%; white-space: nowrap; border: none;">
@@ -88,7 +90,8 @@
 	{{if !$vueReduite}}
   <td class="text">
 		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
-    <a href="?m=dPplanningOp&amp;tab={{$direction}}&amp;operation_id={{$_operation->_id}}" title="Modifier l'intervention">
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
       {{if $_operation->libelle}}
         {{$_operation->libelle}}
       {{else}}
@@ -96,6 +99,7 @@
           {{$curr_code->code}}
         {{/foreach}}
       {{/if}}
+      </span>
     </a>
   </td>
   <td>

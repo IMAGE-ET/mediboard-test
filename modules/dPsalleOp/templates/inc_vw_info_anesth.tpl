@@ -58,10 +58,18 @@ Main.add(function(){
         Consulter la fiche
       </button>
       {{if $dialog}}
-      Par le Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}} le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult_anesth->_ref_consultation->_ref_chir}}
+        -
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')">
+        le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
+      </span>
       {{else}}
-      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_ref_consultation->_id}}" title="Voir ou modifier la consultation d'anesthésie">
-        Par le Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}} le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
+      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_ref_consultation->_id}}">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult_anesth->_ref_consultation->_ref_chir}}
+        -
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')">
+        le {{mb_value object=$consult_anesth->_ref_consultation field="_date"}}
+        </span>
       </a>
       {{/if}}
     </td>
