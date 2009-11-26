@@ -168,10 +168,24 @@ Main.add(function(){
       <td colspan="10" class="button">
         <select name="validator_id" class="notNull ref" style="width: 10em;">
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
+          
+          {{if $check_list->object_class == "COperation"}}
+          <optgroup label="Praticiens">
+            {{assign var=_obj value=$check_list->_ref_object}}
+            <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
+            {{if $_obj->anesth_id}}
+            <option value="{{$_obj->_ref_anesth->user_id}}">{{$_obj->_ref_anesth}}</option>
+            {{/if}}
+          </optgroup>
+          {{/if}}
+          
+          <optgroup label="Personnel">
           {{foreach from=$personnel item=curr_personnel}}
             {{assign var=curr_user value=$curr_personnel->_ref_user}}
             <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
           {{/foreach}}
+          </optgroup>
+          
         </select>
         <input type="password" class="notNull str" size="10" maxlength="32" name="_validator_password" />
         <button type="button" class="tick" onclick="this.form.onsubmit()">Signer</button>
