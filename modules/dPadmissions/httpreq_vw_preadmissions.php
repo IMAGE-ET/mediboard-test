@@ -38,6 +38,8 @@ $consult = new CConsultation();
 $ljoin = array();
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
 $where = array();
+$where["consultation.patient_id"] = "IS NOT NULL";
+$where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
 $where["plageconsult.date"] = "= '$date'";
 $order = "consultation.".$order_col_pre." ".$order_way_pre;
