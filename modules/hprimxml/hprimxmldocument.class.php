@@ -121,6 +121,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim = new CEchangeHprim();
     $this->date_production    = $echg_hprim->date_production = mbDateTime();
     $echg_hprim->emetteur     = $this->emetteur;
+    $echg_hprim->group_id     = CGroups::loadCurrent()->_id;
     $echg_hprim->destinataire = $this->destinataire;
     $echg_hprim->type         = $this->type;
     $echg_hprim->sous_type    = $this->sous_type;
@@ -140,12 +141,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();
-    $msgPatient = utf8_encode($this->saveXML()); 
+    $msg = utf8_encode($this->saveXML()); 
     
-    $echg_hprim->message = $msgPatient;
+    $echg_hprim->message = $msg;
     $echg_hprim->store();
     
-    return $msgPatient;
+    return $msg;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {

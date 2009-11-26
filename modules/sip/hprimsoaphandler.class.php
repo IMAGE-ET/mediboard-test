@@ -58,6 +58,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->date_production = mbDateTime();
         $echange_hprim->emetteur = "inconnu";
         $echange_hprim->destinataire = CAppUI::conf('mb_id');
+        $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "patients";
         $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
         $echange_hprim->message = $messagePatient;
@@ -78,6 +79,7 @@ class CHprimSoapHandler extends CSoapHandler {
       if (!$echange_hprim->_id) {
         $echange_hprim->emetteur       = $data['idClient'];
         $echange_hprim->destinataire   = CAppUI::conf('mb_id');
+        $echange_hprim->group_id       = CGroups::loadCurrent()->_id;
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "patients";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;

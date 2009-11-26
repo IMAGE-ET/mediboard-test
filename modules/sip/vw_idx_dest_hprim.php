@@ -12,24 +12,32 @@ global $can;
 
 $can->needsRead();
 
-$dest_hprim_id = CValue::getOrSession("dest_hprim_id");
+$dest_hprim_id = CValue::get("dest_hprim_id");
+
+$listEtab = CGroups::loadGroups();
 
 // Chargement du destinataire HPRIM demandé
 $dest_hprim = new CDestinataireHprim();
 $dest_hprim->load($dest_hprim_id);
-if($dest_hprim->load($dest_hprim_id))
-  $dest_hprim->loadRefs();
+if($dest_hprim->load($dest_hprim_id)) {
+  $dest_hprim->loadRefsFwd();
+}
 
 // Récupération de la liste des destinataires HPRIM
 $itemDestHprim = new CDestinataireHprim;
-$listDestHprim = $itemDestHprim->loadList(null);
-foreach($listDestHprim as &$curr_dest_hprim) 
-  $curr_dest_hprim->loadRefs();
+
+$where = array();
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$listDestHprim = $itemDestHprim->loadList($where);
+foreach($listDestHprim as &$_dest_hprim) {
+  $_dest_hprim->loadRefsFwd();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("dest_hprim"    , $dest_hprim);
+$smarty->assign("listEtab"      , $listEtab);
 $smarty->assign("listDestHprim" , $listDestHprim);
 $smarty->display("vw_idx_dest_hprim.tpl");
 ?>

@@ -18,10 +18,11 @@
       {{/if}}
       <table class="tbl">
         <tr>
-          <th class="title" colspan="6">DESTINATAIRES HPRIM</th>
+          <th class="title" colspan="7">DESTINATAIRES HPRIM</th>
         </tr>
         <tr>
           <th>{{mb_title object=$dest_hprim field="destinataire"}}</th>
+          <th>{{mb_title object=$dest_hprim field="group_id"}}</th>
           <th>{{mb_title object=$dest_hprim field="type"}}</th>
           <th>{{mb_title object=$dest_hprim field="actif"}}</th>
           <th>{{mb_title object=$dest_hprim field="url"}}</th>
@@ -35,6 +36,7 @@
               {{mb_value object=$_dest_hprim field="destinataire"}}
             </a>
           </td>
+          <td>{{$_dest_hprim->_ref_group->_view}}</td>
           <td>{{mb_value object=$_dest_hprim field="type"}}</td>
           <td>{{mb_value object=$_dest_hprim field="actif"}}</td>
           <td class="text">{{mb_value object=$_dest_hprim field="url"}}</td>
@@ -74,6 +76,19 @@
           <th>{{mb_label object=$dest_hprim field="destinataire"}}</th>
           <td>{{mb_field object=$dest_hprim field="destinataire"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$dest_hprim field="group_id"}}</th>
+          <td>
+            <select name="group_id" class="{{$dest_hprim->_props.group_id}}" style="width: 17em;">
+              <option value="">&mdash; Associer à un établissement</option>
+              {{foreach from=$listEtab item=_etab}}
+                <option value="{{$_etab->_id}}" {{if $_etab->_id == $dest_hprim->group_id}} selected="selected" {{/if}}>
+                  {{$_etab->_view}}
+                </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
         <tr>  
           <th>{{mb_label object=$dest_hprim field="type"}}</th>
           <td>
@@ -105,7 +120,8 @@
               <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$dest_hprim->_view|smarty:nodefaults|JSAttribute}}'})">
                 {{tr}}Delete{{/tr}}
               </button>
-            {{else}}
+            {{/if}}
+            {{if !$dPconfig.sip.server && ($listDestHprim|@count < 1)}}
               <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>

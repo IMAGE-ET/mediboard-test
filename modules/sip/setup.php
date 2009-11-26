@@ -71,7 +71,22 @@ class CSetupsip extends CSetup {
 							  ADD `acquittement_valide` ENUM ('0','1');";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.15";
+     $this->makeRevision("0.15");
+     
+     $sql = "ALTER TABLE `destinataire_hprim` 
+              ADD `group_id` INT (11) UNSIGNED NOT NULL ,
+              CHANGE `password` `password` VARCHAR (50) , 
+              ADD INDEX (`group_id`);";
+     $this->addQuery($sql);
+     
+      $this->makeRevision("0.16");
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+              ADD `group_id` INT (11) UNSIGNED NOT NULL ,
+              ADD INDEX (`group_id`);";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.17";
   }
 }
 ?>

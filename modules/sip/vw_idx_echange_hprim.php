@@ -86,6 +86,7 @@ if (isset($t["acquittement_invalide"])) {
 if (isset($t["no_date_echange"])) {
   $where["date_echange"] = "IS NULL";
 }
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);
 

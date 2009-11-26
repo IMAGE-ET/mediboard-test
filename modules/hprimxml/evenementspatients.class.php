@@ -54,6 +54,32 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $this->addEnteteMessage($evenementsPatients);
   }
   
+  function getEvenementPatientXML() { 
+    $xpath = new CMbXPath($this, true);
+    
+    $data = array();
+    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
+
+    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
+    $entete = $xpath->queryUniqueNode($query);
+
+    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
+    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
+    $code = $xpath->queryTextNode("hprim:code", $systeme);
+    $this->destinataire = $code;
+    $data['idClient'] = "$code group:".CGroups::loadCurrent()->_id;
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
+    
+    return $data;
+  }
+  
+  static function getActionEvenement($query, $node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    return $xpath->queryAttributNode($query, $node, "action");    
+  }
+  
   function getIdSource($node) {
     $xpath = new CMbXPath($this, true);
     
@@ -228,30 +254,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $object = $xpath->queryUniqueNode($query_type, $typeEvenement);
 
     return $this->getIdSource($object);
-  }
-  
-  function getEvenementPatientXML() { 
-    $xpath = new CMbXPath($this, true);
-    
-    $data = array();
-    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
-
-    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
-    $entete = $xpath->queryUniqueNode($query);
-
-    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
-    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
-    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
-    
-    return $data;
-  }
-  
-  static function getActionEvenement($query, $node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
-    
-    return $xpath->queryAttributNode($query, $node, "action");    
   }
   
   function mappingVenue($node, $mbVenue) {  

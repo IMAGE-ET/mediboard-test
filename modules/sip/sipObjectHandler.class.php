@@ -57,7 +57,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           //Paramétrage de l'id 400
           $id400->object_id = $mbObject->_id;
           $id400->object_class = "CPatient";
-          $id400->tag = $_dest->destinataire;
+          $id400->tag = "$_dest->destinataire :$_dest->group_id";
   
           if($id400->loadMatchingObject())
             $mbObject->_id400 = $id400->id400;
@@ -100,7 +100,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           //Paramétrage de l'id 400
           $IPP->object_class = "CPatient";
           $IPP->object_id = $mbObject->_id;
-          $IPP->tag = $dest_hprim->destinataire;
+          $IPP->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
           $IPP->loadMatchingObject();
   
           $mbObject->_IPP = $IPP->id400;
@@ -213,7 +213,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           //Paramétrage de l'id 400
           $num_dossier->object_class = "CSejour";
           $num_dossier->object_id = $mbObject->_id;
-          $num_dossier->tag = $dest_hprim->destinataire;
+          $num_dossier->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
           $num_dossier->loadMatchingObject();
   
           $mbObject->_num_dossier = $num_dossier->id400;
@@ -273,7 +273,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       //Paramétrage de l'id 400
       $IPP->object_class = "CPatient";
       $IPP->object_id = $patient1_id;
-      $IPP->tag = $dest_hprim->destinataire;
+      $IPP->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
       $IPP->loadMatchingObject();
       $patient1_ipp = $IPP->id400;
       

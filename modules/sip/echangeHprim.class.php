@@ -13,6 +13,7 @@ class CEchangeHprim extends CMbObject {
   var $echange_hprim_id     = null;
   
   // DB Fields
+  var $group_id             = null;
   var $date_production      = null;
   var $emetteur             = null;
   var $identifiant_emetteur = null;
@@ -37,6 +38,9 @@ class CEchangeHprim extends CMbObject {
   var $_date_min            = null;
   var $_date_max            = null;
   
+  // Forward references
+  var $_ref_group = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'echange_hprim';
@@ -47,6 +51,7 @@ class CEchangeHprim extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["date_production"]       = "dateTime notNull";
+    $specs["group_id"]              = "ref notNull class|CGroups";
     $specs["emetteur"]              = "str";
     $specs["identifiant_emetteur"]  = "str";
     $specs["destinataire"]          = "str notNull";
@@ -75,6 +80,11 @@ class CEchangeHprim extends CMbObject {
   
   function loadRefNotifications(){
     $this->_ref_notifications = $this->loadBackRefs("notifications");
+  }
+  
+  function loadRefsFwd() {
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
   }
   
   function updateFormFields() {

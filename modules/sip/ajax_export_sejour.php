@@ -85,7 +85,7 @@ foreach ($sejours as $sejour) {
     //Paramétrage de l'id 400
     $num_dossier->object_class = "CSejour";
     $num_dossier->object_id = $num_dossier->_id;
-    $num_dossier->tag = $dest_hprim->destinataire;
+    $num_dossier->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
     $num_dossier->loadMatchingObject();
 
     $num_dossier->$num_dossier = $num_dossier->id400;
