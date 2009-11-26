@@ -119,11 +119,11 @@ Main.add(function () {
 
 <tr>
   <td class="greedyPane">
-
-    <form name="filterFrm" action="?" method="get">
     
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
+    
+    <form name="filterFrm" action="?" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="button new"><strong>Créer une aide à la saisie</strong></a>
     <table class="form">
       <tr>
         <th class="category" colspan="10">Filtrer les aides</th>
@@ -158,22 +158,22 @@ Main.add(function () {
     </form>
 
 <ul id="tabs-owner" class="control_tabs">
-  <li><a href="#aides-user">Aides de '{{$userSel}}' <small>({{$aidesPrat|@count}})</small></a></li>
-  <li><a href="#aides-func">Aides de '{{$userSel->_ref_function}}' <small>({{$aidesFunc|@count}})</small></a></li>
-  <li><a href="#aides-etab">Aides de '{{$userSel->_ref_function->_ref_group}}' <small>({{$aidesEtab|@count}})</small></a></li>
+  <li><a href="#owner-user">{{$userSel}} <small>({{$aidesPrat|@count}})</small></a></li>
+  <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$aidesFunc|@count}})</small></a></li>
+  <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$aidesEtab|@count}})</small></a></li>
 </ul>
 
 <hr class="control_tabs" />
 
-<div id="aides-user" style="display: none;">
+<div id="owner-user" style="display: none;">
   {{include file=inc_list_aides.tpl owner=$userSel aides=$aidesPrat}}
 </div>
 
-<div id="aides-func" style="display: none;">
+<div id="owner-func" style="display: none;">
   {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aidesFunc}}
 </div>
 
-<div id="aides-etab" style="display: none;">
+<div id="owner-etab" style="display: none;">
   {{include file=inc_list_aides.tpl owner=$userSel->_ref_function->_ref_group aides=$aidesEtab}}
 </div>
     

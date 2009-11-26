@@ -47,6 +47,7 @@ class CFunctions extends CMbObject {
 	  $backProps["aides"]                          = "CAideSaisie function_id";
 	  $backProps["catalogues_labo"]                = "CCatalogueLabo function_id";
 	  $backProps["compte_rendu"]                   = "CCompteRendu function_id";
+    $backProps["packs"]                          = "CPack function_id";
 	  $backProps["consultation_cats"]              = "CConsultationCategorie function_id";
 	  $backProps["employes"]                       = "CEmployeCab function_id";
 	  $backProps["executants_prescription"]        = "CFunctionCategoryPrescription function_id";

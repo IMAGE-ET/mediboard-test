@@ -23,7 +23,7 @@
 	    <input type="hidden" name="m" value="{{$m}}" />
 	    <input type="hidden" name="del" value="1" />
 	    <input type="hidden" name="dosql" value="do_modele_aed" />
-	    {{mb_field object=$_modele field="compte_rendu_id" hidden=1 prop=""}}
+	    {{mb_key object=$_modele}}
 	    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$_modele->nom|smarty:nodefaults|JSAttribute}}'})">
 	      {{tr}}Delete{{/tr}}
 	    </button>

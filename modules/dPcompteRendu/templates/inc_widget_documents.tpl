@@ -27,7 +27,7 @@
         {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
         {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
         {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
-        <optgroup label="{{tr}}CCompteRendu-_owner{{/tr}} {{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
+        <optgroup label="{{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
           {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
           {{foreachelse}}
@@ -39,10 +39,17 @@
       
       <select name="_choix_pack" style="width: 70px;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Pack</option>
-        {{foreach from=$packs item=_pack}}
-          <option value="{{$_pack->_id}}">{{$_pack->_view}}</option>
-        {{foreachelse}}
-          <option value="">{{tr}}None{{/tr}}</option>
+        {{foreach from=$packsByOwner key=owner item=_packs}}
+        {{if $owner == "user"}}{{assign var=ref_owner value=$praticien}}{{/if}}
+        {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
+        {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
+        <optgroup label="{{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
+          {{foreach from=$_packs item=_pack}}
+          <option value="{{$_pack->_id}}">{{$_pack->nom}}</option>
+          {{foreachelse}}
+          <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
+          {{/foreach}}
+        </optgroup>
         {{/foreach}}
       </select>
 

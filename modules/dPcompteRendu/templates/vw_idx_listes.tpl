@@ -5,7 +5,7 @@ Main.add(function () {
   if(oForm = document.addFrm)
     document.addFrm._new.focus();
   
-  Control.Tabs.create("tabs-CListeChoix");
+  Control.Tabs.create("tabs-owner", true);
 });
 </script>
 
@@ -13,14 +13,17 @@ Main.add(function () {
 
 <tr>
   <td class="greedyPane">
+    
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new">{{tr}}CListeChoix-title-create{{/tr}}</a> 
 
     <form name="filterFrm" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
-    
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new"><strong>Créer une liste de choix</strong></a>        
       <table class="form">
         <tr>
-          <th><label for="filter_user_id" title="Filtrer les listes pour cet utilisateur">Utilisateur</label></th>
+          <th class="category" colspan="10">Filtrer les listes</th>
+        </tr>
+        <tr>
+          <th><label for="filter_user_id">Utilisateur</label></th>
           <td>
             <select name="filter_user_id" onchange="this.form.submit()">
               <option value="0">&mdash; Choisir un utilisateur</option>
@@ -35,28 +38,26 @@ Main.add(function () {
       </table>
     </form>
     
-    <ul id="tabs-CListeChoix" class="control_tabs">
-      <li><a href="#listes-user">Listes personnelles <small>({{$listesUser|@count}})</small></a></li>
-      <li><a href="#listes-func">Listes de la fonction <small>({{$listesFunc|@count}})</small></a></li>
-      <li><a href="#listes-etab">Listes d'établissement <small>({{$listesEtab|@count}})</small></a></li>
+    <ul id="tabs-owner" class="control_tabs">
+      <li><a href="#owner-user">{{$userSel}} <small>({{$listesUser|@count}})</small></a></li>
+      <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$listesFunc|@count}})</small></a></li>
+      <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$listesEtab|@count}})</small></a></li>
     </ul>
     <hr class="control_tabs" />
     
     <table class="tbl">
     
     <tr>
-      <th>Propriétaire</th>
       <th>Nom</th>
       <th>Valeurs</th>
       <th>Compte-rendu associé</th>
     </tr>
     
-    <tbody id="listes-user" style="display: none;">
+    <tbody id="owner-user" style="display: none;">
       {{foreach from=$listesUser item=curr_liste}}
       <tr>
         {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
         {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_chir}}</a></td>
         <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
         <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
         {{if $curr_liste->_ref_modele->compte_rendu_id}}
@@ -72,12 +73,11 @@ Main.add(function () {
       {{/foreach}}
     </tbody>
     
-    <tbody id="listes-func" style="display: none;">
+    <tbody id="owner-func" style="display: none;">
       {{foreach from=$listesFunc item=curr_liste}}
       <tr>
         {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
         {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_function}}</a></td>
         <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
         <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
         {{if $curr_liste->_ref_modele->compte_rendu_id}}
@@ -93,13 +93,11 @@ Main.add(function () {
       {{/foreach}}    
     </tbody>
     
-    
-    <tbody id="listes-etab" style="display: none;">
+    <tbody id="owner-etab" style="display: none;">
       {{foreach from=$listesEtab item=curr_liste}}
       <tr>
         {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
         {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_group}}</a></td>
         <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
         <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
         {{if $curr_liste->_ref_modele->compte_rendu_id}}
@@ -123,7 +121,7 @@ Main.add(function () {
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$liste->_spec}}">
 
     <input type="hidden" name="dosql" value="do_liste_aed" />
-    {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
+    {{mb_key object=$liste}}
     <input type="hidden" name="del" value="0" />
 
     <table class="form">

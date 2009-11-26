@@ -234,6 +234,7 @@ class COperation extends CCodable {
 	  $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
 	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
 	  $backProps["perfusion"]                = "CPerfusion operation_id";
+    $backProps["check_lists"]              = "CDailyCheckList object_id";
 	  return $backProps;
 	}
 

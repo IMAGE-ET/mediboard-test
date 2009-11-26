@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Liste des utilisateurs accessibles
-$user = new CMediusers();
-$listUser = $user->loadUsers(PERM_EDIT);
+$userSel = new CMediusers();
+$listUser = $userSel->loadUsers(PERM_EDIT);
 
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
@@ -27,8 +27,9 @@ if(!$user_id){
   $user_id = $AppUI->user_id;
 }
 
-$user->load($user_id);
-$user->loadRefFunction();
+$userSel->load($user_id);
+$userSel->loadRefFunction();
+$userSel->_ref_function->loadRefGroup();
 
 $listCrUser = array();
 $listCrFunc = array();
@@ -51,7 +52,7 @@ if($user_id){
   
   // Liste des comptes-rendus de cabinet
   $where = array();
-  $where["function_id"] = "= '$user->function_id'"; 
+  $where["function_id"] = "= '$userSel->function_id'"; 
   $order = "function_id ASC, nom ASC";
   
   $listesFunc = new CListeChoix();
@@ -62,7 +63,7 @@ if($user_id){
   
   // Liste des comptes-rendus d'etablissement
   $where = array();
-  $where["group_id"] = "= '{$user->_ref_function->group_id}'"; 
+  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'"; 
   $order = "group_id ASC, nom ASC";
   
   $listesEtab = new CListeChoix();
@@ -81,14 +82,14 @@ if($user_id){
   
     // Cabinet
   $where = array();
-  $where["function_id"] = "= '$user->function_id'";
+  $where["function_id"] = "= '$userSel->function_id'";
   $order = "object_class, nom";
   $listCrFunc = new CCompteRendu;
   $listCrFunc = $listCrFunc->loadList($where, $order);
   
     // Etablissement
   $where = array();
-  $where["group_id"] = "= '{$user->_ref_function->group_id}'";
+  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
   $order = "object_class, nom";
   $listCrEtab = new CCompteRendu;
   $listCrEtab = $listCrEtab->loadList($where, $order);
@@ -109,6 +110,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("users"     , $listUser  );
 $smarty->assign("user_id"   , $user_id   );
+$smarty->assign("userSel"   , $userSel   );
 
 $smarty->assign("listPrat"  , $listUser  );
 $smarty->assign("listFunc"  , $listFunc  );

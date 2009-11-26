@@ -48,19 +48,14 @@ $modelesByOwner = array();
 $packs = array();
 if ($praticien->_can->edit) {
   $modelesByOwner = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
-  
-  // Chargement des packs
-  $pack = new CPack();
-  $pack->object_class = $object_class;
-  $pack->chir_id = $praticien->_id;
-  $packs = $pack->loadMatchingList("nom");
+  $packsByOwner = CPack::loadAllPacksFor($praticien->_id, 'user', $object_class);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("packs"         , $packs);
+$smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("object"        , $object);
 $smarty->assign("mode"          , CValue::get("mode"));

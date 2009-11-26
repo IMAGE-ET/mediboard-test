@@ -147,9 +147,8 @@ class CModule extends CMbObject {
   }
   
   function loadByName($name) {
-    $where = array();
-    $where["mod_name"] = "= '$name'";
-    return $this->loadObject($where);
+    $this->mod_name = $name;
+    return $this->loadMatchingObject();
   }
   
   function getPerm($permType) {
