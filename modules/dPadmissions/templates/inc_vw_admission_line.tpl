@@ -162,7 +162,6 @@
   {{else}}
   Non placé
   {{/if}}
-  
 </td>
 
 {{if $curr_adm->annule == 1}}

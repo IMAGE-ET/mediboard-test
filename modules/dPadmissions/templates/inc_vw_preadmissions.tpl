@@ -33,13 +33,22 @@ Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true})
     </th>
   </tr>
   <tr>
+    <th colspan="2">Consultation d'anesthésie</th>
+    <th colspan="6">Hospitalisation</th>
+  </tr>
+  <tr>
     <th>
       {{mb_colonne class="CConsultation" field="patient_id" order_col=$order_col_pre order_way=$order_way_pre order_suffixe="_pre" url="?m=$m&tab=vw_idx_preadmission"}}
     </th>
-    
     <th>
       {{mb_colonne class="CConsultation" field="heure" order_col=$order_col_pre order_way=$order_way_pre order_suffixe="_pre" url="?m=$m&tab=vw_idx_preadmission"}}
     </th>
+    <th>Praticien</th>
+    <th>Admission</th>
+    <th>Chambre</th>
+    <th>Préparé</th>
+    <th>CMU</th>
+    <th>DH</th>
   </tr>
   {{foreach from=$listConsultations item=curr_consult}}
   <tr id="consultation{{$curr_consult->consultation_id}}">

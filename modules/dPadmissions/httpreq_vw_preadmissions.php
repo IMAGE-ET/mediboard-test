@@ -46,8 +46,20 @@ $order = "consultation.".$order_col_pre." ".$order_way_pre;
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 foreach($listConsultations as &$curr_consult) {
   $curr_consult->loadRefPatient();
+  $curr_consult->loadRefConsultAnesth();
+  $curr_consult->_ref_consult_anesth->loadRefOperation();
+  $curr_sejour = $curr_consult->_ref_consult_anesth->_ref_sejour;
+  if($curr_sejour->_id) {
+    $curr_sejour->loadRefPatient();
+    $curr_sejour->loadRefPraticien();
+    $curr_sejour->loadNumDossier();
+    $curr_sejour->loadRefsAffectations();
+    $curr_sejour->getDroitsCMU();
+  }
 }
 
+// Chargement des prestations
+$prestations = CPrestation::loadCurrentList();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -62,6 +74,7 @@ $smarty->assign("date"             , $date);
 $smarty->assign("order_col_pre"    , $order_col_pre);
 $smarty->assign("order_way_pre"    , $order_way_pre);
 $smarty->assign("listConsultations", $listConsultations);
+$smarty->assign("prestations"      , $prestations);
 $smarty->assign("canAdmissions"    , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"      , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp"    , CModule::getCanDo("dPplanningOp"));
