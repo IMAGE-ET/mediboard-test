@@ -82,44 +82,64 @@ Main.add(function () {
     <td>
       {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
       {{if $count}}
-	      <table class="main tbl" id="antecedents_{{$type}}" style="display: none;">
-	        {{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
-	        <tr>
-	          <th colspan="1000">
-	          	 <button style="float: right" class="add notext" onclick="$('textarea-ant-{{$type}}-{{$appareil}}').toggle(); this.toggleClassName('remove').toggleClassName('add')">Ajouter</button>
-							{{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}}
-						</th>
-	        </tr>
-					<tr id="textarea-ant-{{$type}}-{{$appareil}}" style="display: none;">
-					  <td colspan="1000">
-					  	<form name="addAnt-{{$type}}-{{$appareil}}" action="">
-						  	<input name="antecedent" size="60"/>
-								<button class="submit" type="button" onclick="$V(oFormAntFrmGrid.type, '{{$type}}'); $V(oFormAntFrmGrid.appareil, '{{$appareil}}'); $V(oFormAntFrmGrid.rques, this.form.antecedent.value); $V(this.form.antecedent, '');">Ajouter l'antécédent</button>
-							</form>
-					  </td>	
-				  </tr>
-	        <tr>
-	        {{foreach from=$_aides item=curr_aide name=aides}}
-	          {{assign var=i value=$smarty.foreach.aides.index}}
-            {{assign var=text value=$curr_aide->text}}
-            {{if isset($applied_antecedents.$type.$text|smarty:nodefaults)}}
-              {{assign var=checked value=1}}
-            {{else}}
-              {{assign var=checked value=0}}
-            {{/if}}
-	          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
-	              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}" 
-	              >
-	            <label>
-	            	<input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} 
-							         onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
-								{{$curr_aide->name}}
-							</label>
-	          </td>
-	          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
+				
+	      <table class="main tbl" id="antecedents_{{$type}}" style="display: none; border: none;">
+			    <tr>
+				    <td colspan="1000" style="background-color:transparent; border: none;">   	
+			        <script type="text/javascript">
+			        	Main.add(function(){
+								    Control.Tabs.create('tab-{{$type}}', false);
+								});
+							</script>	
+							
+							<ul id="tab-{{$type}}" class="control_tabs">
+			          {{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
+			            <li><a href="#{{$type}}-{{$appareil}}">{{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}} <small>({{$_aides|@count}})</small></a></li>
+			          {{/foreach}}
+			        </ul>
+				    </td>	
+				  </tr>	 
+
+					
+					{{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
+						<tbody id="{{$type}}-{{$appareil}}">
+			        <tr>
+			          <th colspan="1000" class="title">
+			          	 <button style="float: right" class="add notext" onclick="$('textarea-ant-{{$type}}-{{$appareil}}').toggle(); this.toggleClassName('remove').toggleClassName('add')">Ajouter</button>
+									{{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}}
+								</th>
+			        </tr>
+							<tr id="textarea-ant-{{$type}}-{{$appareil}}" style="display: none;">
+							  <td colspan="1000">
+							  	<form name="addAnt-{{$type}}-{{$appareil}}" action="">
+								  	<input name="antecedent" size="60"/>
+										<button class="submit" type="button" onclick="$V(oFormAntFrmGrid.type, '{{$type}}'); $V(oFormAntFrmGrid.appareil, '{{$appareil}}'); $V(oFormAntFrmGrid.rques, this.form.antecedent.value); $V(this.form.antecedent, '');">Ajouter l'antécédent</button>
+									</form>
+							  </td>	
+						  </tr>
+			        <tr>
+			        {{foreach from=$_aides item=curr_aide name=aides}}
+			          {{assign var=i value=$smarty.foreach.aides.index}}
+		            {{assign var=text value=$curr_aide->text}}
+		            {{if isset($applied_antecedents.$type.$text|smarty:nodefaults)}}
+		              {{assign var=checked value=1}}
+		            {{else}}
+		              {{assign var=checked value=0}}
+		            {{/if}}
+			          <td class="text" style="cursor: pointer; width: {{$width}}%; {{if $checked}}opacity: 0.3; cursor: default;{{/if}}" 
+			              title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}">
+			            <label>
+			            	<input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} 
+									         onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
+										{{$curr_aide->name}}
+									</label>
+			          </td>
+			          {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
+			        {{/foreach}}
+			        </tr>
+						</tbody>
 	        {{/foreach}}
-	        </tr>
-	        {{/foreach}}
+					
 	      </table>
 			{{else}}
 	      <div class="small-info" id="antecedents_{{$type}}" style="display: none;">
