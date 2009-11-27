@@ -9,7 +9,10 @@
 *}}
 
 {{assign var="patient" value=$curr_consult->_ref_patient}}
-{{assign var="curr_adm"  value=$curr_consult->_ref_consult_anesth->_ref_sejour}}
+{{assign var="curr_adm" value=$curr_consult->_ref_consult_anesth->_ref_sejour}}
+{{if !$curr_adm->_id}}
+{{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
+{{/if}}
 
 <td class="text">
   {{if $canPatients->edit}}
@@ -22,12 +25,17 @@
   </span>
   </a>
 </td>
-<td class="text">{{$curr_consult->heure|date_format:$dPconfig.time}}</td>
+<td class="text">
+  <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
+  {{$curr_consult->heure|date_format:$dPconfig.time}}
+  -
+  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_plageconsult->_ref_chir}}
+  </div>
+</td>
 
 {{if $curr_adm->_id}}
 
-{{if $curr_adm->annule == 1}} {{assign var=background value="#f00"}}
-{{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
+{{if $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
 {{elseif $curr_adm->type == 'urg'}} {{assign var=background value="#ff6"}}
@@ -44,6 +52,7 @@
   le {{$curr_adm->_entree|date_format:$dPconfig.date}}
   </span>
 </td>
+{{if !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
 {{if $canAdmissions->edit}}
   <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
@@ -149,8 +158,36 @@
   -
   {{/foreach}}
 </td>
+{{elseif $curr_adm->annule}}
+<td colspan="4" class="cancelled">
+  Annulé
+</td>
+{{else}}
+<td colspan="4" class="button" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  Séjour non associé à la consultation
+  {{if $canAdmissions->edit}}
+  :
+  <form name="addOpFrm-{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+  <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="m" value="dPcabinet" />
+  {{mb_key object=$curr_consult->_ref_consult_anesth}}
+  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
+  <button type="submit" class="tick">
+    Associer le séjour
+  </button>
+  </form>
+  {{/if}}
+</td>
+{{/if}}
 {{else}}
 <td colspan="6" class="button">
-  Pas de séjour associé à la consultation
+  DHE non trouvée
+  {{if $canPlanningOp->edit}}
+  :
+  <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$curr_consult->patient_id}}&amp;operation_id=0&amp;sejour_id=0" class="button new">
+    Créer une demande d'hospitalisation
+  </a>
+  {{/if}}
 </td>
 {{/if}}

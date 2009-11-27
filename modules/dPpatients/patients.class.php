@@ -734,6 +734,7 @@ class CPatient extends CMbObject {
           $curr_sejour->loadRefsOperations(array("annulee" => "= '0'"));
         }
         foreach($curr_sejour->_ref_operations as $curr_op) {
+          $curr_op->loadRefPlageOp();
           if($curr_op->_datetime >= $date) {
             if(!$op->_id) {
               $op = $curr_op;

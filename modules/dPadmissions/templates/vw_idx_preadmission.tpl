@@ -10,6 +10,11 @@
 
 <script type="text/javascript">
 
+function showLegend() {
+  var url = new Url("dPadmissions", "vw_legende");
+  url.popup(300, 170, "Legende");
+}
+
 function submitPreAdmission(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadPreAdmission });
 }
@@ -33,6 +38,11 @@ Main.add(function () {
 </script>
 
 <table class="main">
+  <tr>
+    <td colspan="2">
+      <a href="#" onclick="showLegend()" class="button search">Légende</a>
+    </td>
+  </tr>
   <tr>
     <td id="allPreAdmissions">
     </td>

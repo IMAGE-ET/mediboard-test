@@ -46,6 +46,8 @@ $order = "consultation.".$order_col_pre." ".$order_way_pre;
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 foreach($listConsultations as &$curr_consult) {
   $curr_consult->loadRefPatient();
+  $curr_consult->loadRefPlageconsult();
+  $curr_consult->_ref_chir->loadRefFunction();
   $curr_consult->loadRefConsultAnesth();
   $curr_consult->_ref_consult_anesth->loadRefOperation();
   $curr_sejour = $curr_consult->_ref_consult_anesth->_ref_sejour;
@@ -55,6 +57,14 @@ foreach($listConsultations as &$curr_consult) {
     $curr_sejour->loadNumDossier();
     $curr_sejour->loadRefsAffectations();
     $curr_sejour->getDroitsCMU();
+  } else {
+    $curr_consult->_next_sejour_and_operation = $curr_consult->_ref_patient->getNextSejourAndOperation($curr_consult->_ref_plageconsult->date);
+    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPatient();
+    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefPraticien();
+    $curr_consult->_next_sejour_and_operation["CSejour"]->loadNumDossier();
+    $curr_consult->_next_sejour_and_operation["CSejour"]->loadRefsAffectations();
+    $curr_consult->_next_sejour_and_operation["CSejour"]->getDroitsCMU();
+    
   }
 }
 
