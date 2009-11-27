@@ -80,19 +80,14 @@ $modelesByOwner = array(
   'COperation' => array(),
   'CSejour' => array()
 );
-$packs = array(
+$packsByOwner = array(
   'COperation' => array(),
   'CSejour' => array()
 );
 if ($praticien->_can->edit) {
-  foreach($modelesByOwner as $object_class => &$modeles) {
-    $modeles = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
-
-    // Chargement des packs
-    $pack = new CPack();
-    $pack->object_class = $object_class;
-    $pack->chir_id = $praticien->_id;
-    $packs[$object_class] = $pack->loadMatchingList("nom");
+  foreach($modelesByOwner as $object_class => $modeles) {
+    $modelesByOwner[$object_class] = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
+    $packsByOwner[$object_class] = CPack::loadAllPacksFor($praticien->_id, 'user', $object_class);
   }
 }
 
@@ -100,7 +95,7 @@ if ($praticien->_can->edit) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("packs"         , $packs);
+$smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("boardItem"   , $boardItem);
 $smarty->assign("date"        , $date);

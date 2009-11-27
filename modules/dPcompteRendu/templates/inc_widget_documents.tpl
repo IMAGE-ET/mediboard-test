@@ -21,7 +21,7 @@
 
       <!-- Création via select classique -->
 
-      <select name="_choix_modele" style="width: 85px;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
+      <select name="_choix_modele" style="width: 7em;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Modèle</option>
         {{foreach from=$modelesByOwner key=owner item=_modeles}}
         {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
@@ -37,7 +37,7 @@
         {{/foreach}}
       </select>
       
-      <select name="_choix_pack" style="width: 70px;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
+      <select name="_choix_pack" style="width: 7em;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Pack</option>
         {{foreach from=$packsByOwner key=owner item=_packs}}
         {{if $owner == "user"}}{{assign var=ref_owner value=$praticien}}{{/if}}
