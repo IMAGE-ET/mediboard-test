@@ -21,6 +21,7 @@
 	   {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	  </a>
 	</td>
+  {{if $dPconfig.sip.server}}
 	<td>
 	  {{if $object->initiateur_id}}
 	    <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->initiateur_id}}" class="button search">
@@ -28,6 +29,7 @@
 	    </a>
     {{/if}}
 	</td>
+  {{/if}}
   <td>
     {{$object->_object_class}}
   </td>

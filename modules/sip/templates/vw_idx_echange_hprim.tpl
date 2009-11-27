@@ -47,22 +47,24 @@ function changePage(page) {
         
         <table class="form">
 	        <tr>
-	          <th class="category" colspan="2">Choix de la date d'échange</th>
+	          <th class="category" colspan="4">Choix de la date d'échange</th>
 	        </tr>
 	        <tr>
-	          <th>{{mb_label object=$echange_hprim field="_date_min"}}</th>
-	          <td>{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true}} </td>
+	          <th style="width:50%">{{mb_label object=$echange_hprim field="_date_min"}}</th>
+	          <td style="width:0.1%">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true}} </td>
+	          <th style="width:0.1%">{{mb_label object=$echange_hprim field="_date_max"}}</th>
+	          <td style="width:50%">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true}} </td>
 	        </tr>
 	        <tr>
-	           <th>{{mb_label object=$echange_hprim field="_date_max"}}</th>
-	           <td>{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true}} </td>
-	        </tr>
-	        <tr>
-	          <th class="category" colspan="2">Critères de filtres</th>
+	          <th class="category" colspan="4">Critères de filtres</th>
 	        </tr>
           <tr>
-            <th>Type de message d'événement</th>
-            <td>
+            <th colspan="2">{{mb_label object=$echange_hprim field="echange_hprim_id"}}</th>
+            <td colspan="2">{{mb_field object=$echange_hprim field="echange_hprim_id"}}</td>
+          </tr>
+          <tr>
+            <th colspan="2">Type de message d'événement</th>
+            <td colspan="2">
               <select class="str" name="msg_evenement">
                 <option value="">&mdash; Liste des messages </option>
                 <option value="patients" {{if $msg_evenement == "patients"}}selected="selected"{{/if}}>
@@ -78,8 +80,8 @@ function changePage(page) {
             </td>
           </tr> 
 	        <tr>
-            <th>Types d'événements</th>
-            <td>
+            <th colspan="2">Types d'événements</th>
+            <td colspan="2">
               <select class="str" name="type_evenement">
                 <option value="">&mdash; Liste des événements </option>
                 <option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
@@ -104,8 +106,8 @@ function changePage(page) {
             </td>
           </tr>
 	        <tr>
-	          <th>Choix du statut d'acquittement</th>
-	          <td>
+	          <th colspan="2">Choix du statut d'acquittement</th>
+	          <td colspan="2">
 	            <select class="str" name="statut_acquittement">
 			          <option value="">&mdash; Liste des statuts </option>
 			          <option value="OK" {{if $statut_acquittement == "OK"}}selected="selected"{{/if}}>Ok</option>
@@ -115,14 +117,14 @@ function changePage(page) {
 	          </td>
 	        </tr>
           <tr>
-            <td colspan="2" style="text-align: center">
+            <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
 			          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
 			        {{/foreach}}
             </td>
           </tr>
           <tr>
-            <td colspan="2" style="text-align: center">
+            <td colspan="4" style="text-align: center">
               <button type="submit" class="search">Filtrer</button>
             </td>
           </tr>
@@ -142,9 +144,11 @@ function changePage(page) {
         <tr>
           <th></th>
           <th>{{mb_title object=$echange_hprim field="echange_hprim_id"}}</th>
+          {{if $dPconfig.sip.server}}
           <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>
-          <th>Object Class</th>
-          <th>Object Id</th>
+          {{/if}}
+          <th>{{mb_title object=$echange_hprim field="_object_class"}}</th>
+          <th>{{mb_title object=$echange_hprim field="_object_id"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>

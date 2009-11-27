@@ -33,6 +33,8 @@ class CEchangeHprim extends CMbObject {
   // Form fields
   var $_self_emetteur       = null;
   var $_self_destinataire   = null;
+  var $_object_class        = null;
+  var $_object_id           = null;
   
   // Filter fields
   var $_date_min            = null;
@@ -64,8 +66,12 @@ class CEchangeHprim extends CMbObject {
     $specs["statut_acquittement"]   = "str";
     $specs["message_valide"]        = "bool";
     $specs["acquittement_valide"]   = "bool";
+    
+    $specs["_object_class"]         = "enum class";
+    $specs["_object_id"]            = "ref class|CMbObject meta|_object_class";
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";
+    
     $specs["_date_min"]             = "dateTime";
     $specs["_date_max"]             = "dateTime";
     return $specs;
