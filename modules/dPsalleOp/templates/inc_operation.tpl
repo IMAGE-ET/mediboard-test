@@ -343,7 +343,7 @@ function reloadPrescription(prescription_id){
 {{/if}}
 
 
-{{*if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)*}}
+{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
 <!-- Anesthesie -->
 <div id="anesth_tab" style="display:none">
   <div id="anesth">
@@ -353,7 +353,7 @@ function reloadPrescription(prescription_id){
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
 </div>
-{{*/if*}}
+{{/if}}
 
 {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
 <!-- Dossier Medical et documents-->
