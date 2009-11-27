@@ -215,7 +215,7 @@ foreach($operation_check_list->_specs["type"]->_list as $type) {
   $list->loadRefsFwd();
   $list->loadBackRefs('items');
   $list->isReadonly();
-  $list->_ref_object->loadRefsFwd();
+  //$list->_ref_object->loadRefPraticien();
   $operation_check_lists[$type] = $list;
   
   $cat->type = $type;
