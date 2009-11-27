@@ -27,7 +27,7 @@ if($lettre == "hors_T2A"){
 	// Chargement de l'etablissement courant
 	$etablissement = CGroups::loadCurrent();
 	// Chargement des produits du livret therapeutique
-  $etablissement->loadRefLivretTherapeutique($lettre);
+  $etablissement->loadRefLivretTherapeutique($lettre, 200);
   $produits_livret = $etablissement->_ref_produits_livret;
 }
 
