@@ -95,6 +95,7 @@ class CReglement extends CMbObject {
       $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
     }
       
+	  
     return $consult->store();
   }
   

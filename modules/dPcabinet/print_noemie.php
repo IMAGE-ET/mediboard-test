@@ -39,7 +39,6 @@ else {
 }
 
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
-
 $order = "plageconsult.date";
 
 $listConsults = $consult->loadList($where, $order, null, null, $ljoin);

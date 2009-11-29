@@ -226,15 +226,15 @@ PlageConsult = {
           <td>{{mb_value object=$_consultation field=secteur2}}</td>
           <td>{{mb_value object=$_consultation field=_somme}}</td>
           <td>
-            {{foreach from=$_consultation->_ref_reglements_patient item=curr_reglement}}
-              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+            {{foreach from=$_consultation->_ref_reglements_patient item=_reglement}}
+              <form name="reglement-del-{{$_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
-              {{mb_key object=$curr_reglement}}
-              <button class="remove" type="submit">{{mb_value object=$curr_reglement field=montant}}</button>
-							<span style="min-width: 60px; display: inline-block;">{{mb_value object=$curr_reglement field=mode}}</span>
-							{{$curr_reglement->date|date_format:$dPconfig.date}}
+              {{mb_key object=$_reglement}}
+              <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
+							<span style="min-width: 60px; display: inline-block;">{{mb_value object=$_reglement field=mode}}</span>
+							{{$_reglement->date|date_format:$dPconfig.date}}
               </form>
               <br />
             {{/foreach}}
@@ -247,7 +247,6 @@ PlageConsult = {
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="patient" />
             {{mb_field object=$_consultation field="consultation_id" hidden=1 prop=""}}
-            <button class="add notext" type="submit">+</button>
             {{mb_field object=$_consultation->_new_patient_reglement field="montant"}}
             {{mb_field object=$_consultation->_new_patient_reglement field="mode"}}
             <select name="banque_id" style="width: 70px;">
@@ -256,22 +255,25 @@ PlageConsult = {
                <option value="{{$banque->_id}}">{{$banque}}</option>
                {{/foreach}}
             </select>
+            <button class="add notext" type="submit">+</button>
             </form>
             {{/if}}
           </td>
 					
           <td>
-            {{foreach from=$_consultation->_ref_reglements_tiers item=curr_reglement}}
-              <form name="reglement-del-{{$curr_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+            {{foreach from=$_consultation->_ref_reglements_tiers item=_reglement}}
+              <form name="reglement-del-{{$_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
-              {{mb_key object=$curr_reglement}}
-              <button class="remove" type="submit">{{mb_value object=$curr_reglement field=montant}}</button>
-              <span style="min-width: 60px; display: inline-block;">{{mb_value object=$curr_reglement field=mode}}</span>
-              {{$curr_reglement->date|date_format:$dPconfig.date}}
+              {{mb_key object=$_reglement}}
+              <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
+              <span style="min-width: 60px; display: inline-block;">{{mb_value object=$_reglement field=mode}}</span>
+              {{$_reglement->date|date_format:$dPconfig.date}}
               </form>
+              <br />
             {{/foreach}}
+						
             {{if $_consultation->_du_tiers_restant > 0}}
             <form name="reglement-add-tiers-{{$_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
             <input type="hidden" name="m" value="dPcabinet" />
@@ -280,7 +282,6 @@ PlageConsult = {
             <input type="hidden" name="date" value="now" />
             <input type="hidden" name="emetteur" value="tiers" />
             {{mb_field object=$_consultation field="consultation_id" hidden=1 prop=""}}
-            <button class="add notext" type="submit">+</button>
             {{mb_field object=$_consultation->_new_tiers_reglement field="montant"}}
             {{mb_field object=$_consultation->_new_tiers_reglement field="mode"}}
             <select name="banque_id" style="width: 70px;">
@@ -289,6 +290,7 @@ PlageConsult = {
                <option value="{{$banque->_id}}">{{$banque}}</option>
                {{/foreach}}
             </select>
+            <button class="add notext" type="submit">+</button>
             </form>
             {{/if}}
           </td>
