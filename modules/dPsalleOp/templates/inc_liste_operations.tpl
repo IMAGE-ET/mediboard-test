@@ -71,7 +71,7 @@
   {{else}}
   <td class="text">
   	{{if $vueReduite}}
-  	  <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
+  	  <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
   	{{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
@@ -119,7 +119,7 @@
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
+{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && @$allow_moves|default:1}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

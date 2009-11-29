@@ -1,1 +1,1 @@
-{{include file="../../dPbloc/templates/vw_suivi_salles.tpl"}}
+{{mb_include module=dPbloc template=vw_suivi_salles allow_moves=0}}
