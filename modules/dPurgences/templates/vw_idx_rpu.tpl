@@ -15,24 +15,17 @@ function showLegend() {
   url.popup(300, 320, "Legende");
 }
 
-// Fonction de refresh du temps d'attente
-function updateAttente(sejour_id) {
-  var url = new Url("dPurgences", "httpreq_vw_attente");
-  url.addParam("sejour_id", sejour_id);
-  url.periodicalUpdate('attente-'+sejour_id, { frequency: 60, waitingText: null } );
-}
-
 // fonction de refresh periodique de la main courante
 function updateMainCourante(){
   var url = new Url("dPurgences", "httpreq_vw_main_courante");
-  url.periodicalUpdate('main_courante', { frequency: 60, waitingText: null } );
+  url.periodicalUpdate('main_courante', { frequency: 60 } );
 }
  
 function updateConsultations(){
   var url = new Url("dPcabinet", "vw_journee");
   url.addParam("date", "{{$date}}");
   url.addParam("mode_urgence", true);
-  url.periodicalUpdate('consultations', { frequency: 60, waitingText: null } );
+  url.periodicalUpdate('consultations', { frequency: 60 } );
 } 
  
 function printMainCourante() {
@@ -90,7 +83,7 @@ Main.add(function () {
 	    </td>
 	  </tr>
 	</table>
-	<div id="main_courante"></div>
+	<div id="main_courante" />
 </div>
 
 <div id="consultations">

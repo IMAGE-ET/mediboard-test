@@ -140,7 +140,7 @@ Main.add(function () {
 	      <img src="images/icons/edit.png" alt="modifier" />
 	    </a>
 
-	    Modification de du RPU {{$rpu}}
+	    Modification du {{$rpu}}
 	    {{if $sejour->_num_dossier}}
 	      [{{$sejour->_num_dossier}}]
 	    {{/if}}

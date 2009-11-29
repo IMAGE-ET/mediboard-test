@@ -41,7 +41,7 @@ checkPraticien = function(oForm){
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />   
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
   <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
-  <select name="prat_id" class="ref notNull">
+  <select name="prat_id" class="ref notNull" style="width: 12em;">
     <option value="">&mdash; Choisir un praticien</option>
     {{foreach from=$listPrats item=_prat}}
     <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"

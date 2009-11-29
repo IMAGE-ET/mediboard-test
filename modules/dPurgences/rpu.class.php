@@ -162,7 +162,7 @@ class CRPU extends CMbObject {
     $this->_cp         = $patient->cp;
     $this->_ville      = $patient->ville;
     $this->_naissance  = $patient->naissance;
-    $this->_view       = $patient->_view;
+    $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
     
     
     // Calcul des valeurs de _mode_sortie

@@ -50,7 +50,7 @@
     <td class="ccmu-{{$rpu->ccmu}}">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;{{$rpu_link_param}}">
         {{if $rpu->ccmu}}
-          {{tr}}CRPU.ccmu.{{$rpu->ccmu}}{{/tr}}
+				  {{mb_value object=$rpu field=ccmu}}
         {{/if}}
       </a>
       {{if $rpu->box_id}}
@@ -66,15 +66,6 @@
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
     {{/if}}
-    	<div style="float: right">
-		    <a title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
-		      <img src="images/icons/search.png" alt="Dossier patient"/>
-		    </a>
-		    <a title="{{tr}}CPatient.modify{{/tr}}" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-		      <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient">
-		    </a>
-      </div>
-
       <a href="{{$rpu_link}}">
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
           <big>{{$patient}}</big> 
