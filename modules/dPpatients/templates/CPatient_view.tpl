@@ -2,7 +2,7 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="2">
+    <th colspan="2" class="title text">
       {{$patient->_view}}
     </th>
   </tr>
@@ -52,4 +52,15 @@
       {{mb_value object=$patient field="rques"}}
     </td>
   </tr>
+	
+	<tr>
+		<td colspan="10" class="button">
+        <a class="action button search" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
+        	Dossier Complet
+        </a>
+        <a class="action button edit" title="{{tr}}CPatient.modify{{/tr}}" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+          {{tr}}Modify{{/tr}}
+        </a>
+		</td>
+	</tr>
 </table>

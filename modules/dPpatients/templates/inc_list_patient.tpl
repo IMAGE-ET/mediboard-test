@@ -195,7 +195,9 @@ var Patient = {
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
-        {{mb_value object=$curr_patient field="naissance"}}
+      	<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_patient->_guid}}')">
+          {{mb_value object=$curr_patient field="naissance"}}
+      	</span>
       </a>
     </td>
     <td class="text">

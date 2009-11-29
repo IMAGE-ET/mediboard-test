@@ -50,11 +50,10 @@ Document.refreshList = function(){
 
 <table class="form">
   <tr>
-    <th class="category" colspan="3">
-      
-			{{if $patient->_id_vitale}}
+    <th class="title text" colspan="10">
+      {{if $patient->_id_vitale}}
       <div style="float:right;">
-	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
+        <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
       </div>
       {{/if}}
 
@@ -68,6 +67,13 @@ Document.refreshList = function(){
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 
+    	{{$patient}}
+		</th>
+  </tr>
+
+  <tr>
+    <th class="category" colspan="3">
+      
       Identité {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
     </th>
     <th class="category" colspan="2">Coordonnées</th>
@@ -208,35 +214,28 @@ Document.refreshList = function(){
     <th class="category" colspan="4">Planifier</th>
   </tr>
   <tr>
-    {{if !$app->user_prefs.simpleCabinet}}
-    {{if $canPlanningOp->edit}}
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Intervention
-      </a>
-    </td>
-    {{/if}}
-    {{if $canPlanningOp->read}}
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Interv. hors plage
-      </a>
-    </td>
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
-        Séjour
-      </a>
-    </td>
-    {{/if}}
-    <td class="button">
-    {{else}}
-    <td colspan="4" class="button">
-    {{/if}}
-      {{if $canCabinet->edit}}
-      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
-        Consultation
-      </a>
-      {{/if}}
+    <td class="button" colspan="10">
+	    {{if !$app->user_prefs.simpleCabinet}}
+		    {{if $canPlanningOp->edit}}
+		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+		        {{tr}}COperation{{/tr}}
+		      </a>
+		    {{/if}}
+		    {{if $canPlanningOp->read}}
+		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+		        Interv. hors plage
+		      </a>
+		      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
+            {{tr}}CSejour{{/tr}}
+		      </a>
+		    {{/if}}
+	    {{/if}}
+	
+	    {{if $canCabinet->edit}}
+		    <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
+		      {{tr}}CConsultation{{/tr}}
+		    </a>
+	    {{/if}}
     </td>
   </tr>
   {{if $listPrat|@count && $canCabinet->edit}}
@@ -338,12 +337,7 @@ Document.refreshList = function(){
   
   {{foreach from=$_sejour->_ref_operations item=curr_op}}
   <tr>
-    <td class="text">
-      <ul>
-      <li>
-      <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->_id}})">
-        <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'intervention" />
-      </a>
+    <td class="text" style="text-indent: 1em;">
       {{if $_sejour->group_id == $g && $curr_op->_canEdit}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
         <img src="images/icons/planning.png" alt="modifier"/>
@@ -359,15 +353,13 @@ Document.refreshList = function(){
         {{/if}}
         </span>
       </a>
-      </li>
-      </ul>
     </td>
     {{if $_sejour->group_id == $g}}
     <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}
     </td>
     {{else}}
-    <td style="background-color:#afa">
+    <td style="background-color: #afa">
       {{$_sejour->_ref_group->_view|upper}}
     </td>
     {{/if}}
