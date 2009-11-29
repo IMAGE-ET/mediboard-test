@@ -106,7 +106,7 @@ class COperation extends CCodable {
   var $_link_editor = null;
   var $_link_viewer = null;
 
-  // DB References
+  // References
   var $_ref_chir           = null;
   var $_ref_plageop        = null;
   var $_ref_salle          = null;
@@ -494,13 +494,7 @@ class COperation extends CCodable {
   }
   
   function loadRefChir($cache = 0) {
-    $this->_ref_chir = new CMediusers;
-    if($cache) {
-      $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
-    } else {
-      $this->_ref_chir->load($this->chir_id);
-    }
-    
+    $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
     $this->_praticien_id = $this->_ref_chir->_id;
   }
   
@@ -514,7 +508,7 @@ class COperation extends CCodable {
   }
   
   function loadRefAffectation() {
-  $this->loadRefPlageOp();
+    $this->loadRefPlageOp();
     $where = array();
     $where["sejour_id"] = "= $this->sejour_id";
     $where["entree"] = " <= '$this->_datetime'";
