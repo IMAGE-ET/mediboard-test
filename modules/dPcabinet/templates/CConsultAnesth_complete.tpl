@@ -14,12 +14,10 @@ newExam = function(sAction, consultation_id) {
   <tr>
     <th class="title" colspan="4">
       {{mb_include module=system template=inc_object_idsante400 object=$consult}}
-      {{mb_include module=system template=inc_object_history object=$consult}}
+      {{mb_include module=system template=inc_object_history    object=$consult}}
+      {{mb_include module=system template=inc_object_notes      object=$consult}}
 			
-      <div style="float:left;" class="noteDiv {{$consult->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
-      {{$consult->_view}}
+      {{$consult}}
     </th>
   </tr>
   <tr>
