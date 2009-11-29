@@ -337,13 +337,20 @@ var Url = Class.create({
       onComplete();
     });
     
-    if (oOptions.waitingText) {
-      element.update('<div class="loading">' + oOptions.waitingText + '...<br />Merci de patienter.</div>');
-	    if (element.id == SystemMessage.id) {
-		    SystemMessage.doEffect();
-	    }
+    // Empty holder gets a div for load notifying
+    if (element.innerHTML.trim().empty()) {
+      element.update("<div style='height: 3em' />");
     }
-    else WaitingMessage.cover(element);
+
+    if (oOptions.waitingText) {
+			element.update('<div class="loading">' + oOptions.waitingText + '...<br />Merci de patienter.</div>');
+			if (element.id == SystemMessage.id) {
+				SystemMessage.doEffect();
+			}
+		}
+		else {
+			WaitingMessage.cover(element);
+		}
   	
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
@@ -398,10 +405,14 @@ var Url = Class.create({
     this.addParam("ajax", 1);
     
     var element = $(ioTarget);
-    
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
     }
+
+    // Empty holder gets a div for load notifying
+    if (element.innerHTML.trim().empty()) {
+			element.update("<div style='height: 3em' />");
+		}
 
     oOptions = Object.extend({
       onCreate: WaitingMessage.cover.curry(element),
@@ -417,7 +428,7 @@ var Url = Class.create({
       prepareForms(element);
       onComplete();
     });
-      
+		
     return new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
   },
   
