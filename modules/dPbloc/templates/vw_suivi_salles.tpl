@@ -62,7 +62,7 @@ function printSuivi(){
           <th class="category">{{$_salle->nom}}</th>
         </tr>
       </table>
-      {{include file="../../dPsalleOp/templates/inc_details_plages.tpl" salle=$_salle}}
+      {{mb_include module=dPsalleOp template=inc_details_plages salle=$_salle}}
     </td>
     {{foreachelse}}
     <td>{{tr}}CSalle.none{{/tr}}</td>
