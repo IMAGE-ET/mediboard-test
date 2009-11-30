@@ -19,46 +19,45 @@ Main.add(function () {
   <tr>
     <th>{{mb_title class=CSejour field=facture}}</th>
     <th>{{mb_title class=CSejour field=_num_dossier}}</th>
-    <th>{{mb_title class=CSejour field=praticien_id}}</th>
-    <th>{{mb_title class=CSejour field=patient_id}}</th>
-    <th>{{mb_title class=CSejour field=_entree}}</th>
-    <th>{{mb_title class=CSejour field=_sortie}}</th>
+    <th>{{mb_label class=CSejour field=praticien_id}}</th>
+    <th>{{mb_label class=CSejour field=patient_id}}</th>
+    <th>
+    	{{mb_title class=CSejour field=_entree}} / 
+			{{mb_title class=CSejour field=_sortie}}
+		</th>
     <th>GHM</th>
     <th>Bornes</th>
   </tr>
-  {{foreach from=$listSejours item=curr_sejour}}
-  {{assign var="GHM" value=$curr_sejour->_ref_GHM}}
+  {{foreach from=$listSejours item=_sejour}}
+  {{assign var="GHM" value=$_sejour->_ref_GHM}}
   <tr>
     <td>
-      {{if $curr_sejour->_ref_hprim_files|@count}}
+      {{if $_sejour->_ref_hprim_files|@count}}
        <img src="images/icons/tick.png" alt="ok" />
       {{else}}
       <img src="images/icons/cross.png" alt="alerte" />
       {{/if}}
     </td>
     <td>
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}')">
-        [{{$curr_sejour->_num_dossier}}]
-      </span>
-    </td>
-    <td class="text">
-      Dr {{$curr_sejour->_ref_praticien->_view}}
+      <strong onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+        [{{$_sejour->_num_dossier}}]
+      </strong>
     </td>
 
     <td class="text">
-      {{assign var=patient value=$curr_sejour->_ref_patient}}
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+    </td>
+
+    <td class="text">
+      {{assign var=patient value=$_sejour->_ref_patient}}
       <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        {{$patient}}
         [{{$patient->_IPP}}]
+        {{$patient}}
       </a>
     </td>
 
-    <td class="text">
-      {{$curr_sejour->_entree|date_format:$dPconfig.datetime}}
-    </td>
-
-    <td class="text">
-      {{$curr_sejour->_sortie|date_format:$dPconfig.datetime}}
+    <td>
+    	{{mb_include module=system template=inc_interval_datetime from=$_sejour->_entree to=$_sejour->_sortie}}
     </td>
     
     <td class="text" {{if !$GHM->_CM}}style="background-color:#fdd"{{/if}}>
@@ -69,9 +68,11 @@ Main.add(function () {
     <td class="text">
       {{if $GHM->_DP}}
         {{if $GHM->_borne_basse > $GHM->_duree}}
-          <img src="images/icons/cross.png" alt="alerte" /> Séjour trop court
+          <img src="images/icons/cross.png" alt="alerte" /> 
+					Séjour trop court
         {{elseif $GHM->_borne_haute < $GHM->_duree}}
-          <img src="images/icons/cross.png" alt="alerte" /> Séjour trop long
+          <img src="images/icons/cross.png" alt="alerte" /> 
+					Séjour trop long
         {{else}}
           <img src="images/icons/tick.png" alt="ok" />
         {{/if}}

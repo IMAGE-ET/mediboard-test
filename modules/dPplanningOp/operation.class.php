@@ -156,7 +156,7 @@ class COperation extends CCodable {
     $specs["date"]               = "date";
     $specs["code_uf"]            = "str length|3";
     $specs["libelle_uf"]         = "str maxLength|35";
-    $specs["libelle"]            = "str seekable show|0";
+    $specs["libelle"]            = "str seekable";
     $specs["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
     $specs["temp_operation"]     = "time show|0";
     $specs["entree_salle"]       = "time show|0";

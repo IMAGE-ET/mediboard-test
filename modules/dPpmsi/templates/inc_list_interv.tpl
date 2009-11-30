@@ -1,9 +1,9 @@
 <tr>
   <td>
     {{if $_operation->_ref_hprim_files|@count}}
-     <img src="images/icons/tick.png" alt="ok" />
+      <img src="images/icons/tick.png" alt="ok" />
     {{else}}
-    <img src="images/icons/cross.png" alt="alerte" />
+      <img src="images/icons/cross.png" alt="alerte" />
     {{/if}}
   </td>
   
@@ -20,9 +20,11 @@
 	
   <td class="text">
     {{assign var=patient value=$sejour->_ref_patient}}
-    <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')"> 
-			[{{$patient->_IPP}}]
-      {{$patient}}
+    <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$sejour->patient_id}}">
+    	<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+	      [{{$patient->_IPP}}]
+	      {{$patient}}
+    	</span> 
     </a>
   </td>
 
