@@ -57,6 +57,7 @@ $patients = $patient->loadList($where, $patient->_spec->key, "0, $max");
 
 foreach ($patients as $patient) {
   $patient->loadIPP();
+  $patient->loadRefsSejours();
   $patient->_ref_last_log->type = "create";
   $dest_hprim = new CDestinataireHprim();
 	
@@ -73,11 +74,12 @@ foreach ($patients as $patient) {
 
     $patient->_IPP = $IPP->id400;
   }
-  
-  if (CAppUI::conf("sip pat_no_ipp") && $patient->_IPP) {
+
+  if ((CAppUI::conf("sip pat_no_ipp") && $patient->_IPP) || 
+      (!CAppUI::conf("sip send_all_patients") && empty($patient->_ref_sejours))) {
   	continue;
   }
-	
+
   $domEvenement = new CHPrimXMLEnregistrementPatient();
   $domEvenement->emetteur = CAppUI::conf('mb_id');
   $domEvenement->destinataire = $dest_hprim->nom;
