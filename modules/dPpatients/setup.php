@@ -1096,7 +1096,13 @@ class CSetupdPpatients extends CSetup {
                 ADD INDEX (`fin_validite_vitale`);";
     $this->addQuery($query);
 		
-    $this->mod_version = "0.93";
+		$this->makeRevision("0.93");
+		$sql = "ALTER TABLE `antecedent` 
+              CHANGE `type` `type` VARCHAR (80),
+              CHANGE `appareil` `appareil` VARCHAR (80);";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.94";
   }
 }
 

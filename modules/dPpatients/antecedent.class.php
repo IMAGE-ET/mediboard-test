@@ -33,7 +33,7 @@ class CAntecedent extends CMbObject {
 	  'stomie', 'uro', 'ortho', 'traumato', 'amput',
 	  'neurochir', 'greffe', 'thrombo', 'cutane',
 	  'hemato', 'rhumato', 'neuropsy', 'infect',
-	  'endocrino', 'carcino', 'orl', 'addiction', 'habitus'
+	  'endocrino', 'carcino', 'orl', 'addiction', 'habitus', 'coag'
 	);
 	  
 	static $appareils = array(
