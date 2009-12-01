@@ -92,6 +92,8 @@ function addSejourIdToSession(sejour_id){
 }
 
 function loadViewSejour(sejour_id, praticien_id, patient_id, date){
+  document.form_prescription.sejour_id.value = sejour_id;
+
   // Affichage de la prescription
   {{if $isPrescriptionInstalled}}
     if($('prescription_sejour') && $('prescription_sejour').visible()){
@@ -116,7 +118,6 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
     reloadDiagnostic(sejour_id, '1');
   }
   if($('dossier_soins')){
-    document.form_prescription.sejour_id.value = sejour_id;
     if($('dossier_soins').visible()) {
       loadTraitement(sejour_id, date,'','administration');
     }
