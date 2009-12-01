@@ -100,7 +100,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="_reset" value="1" />
-          <button type="button" class="reset" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Reset{{/tr}}</button>
+          <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">Dévalider</button>
         </form>
      </td>
     </tr>

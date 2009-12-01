@@ -56,9 +56,9 @@
 	<tr>
 		<td colspan="10" class="button">
         <a class="action button search" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        	Dossier Complet
+        	Dossier complet
         </a>
-        <a class="action button edit" title="{{tr}}CPatient.modify{{/tr}}" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+        <a class="action button edit" title="{{tr}}CPatient-title-modify{{/tr}}" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
           {{tr}}Modify{{/tr}}
         </a>
 		</td>

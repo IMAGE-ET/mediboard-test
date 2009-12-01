@@ -22,6 +22,7 @@ Main.add(function () {
   {{if $order->_id && !$order->date_ordered}}
   filterFields = ["category_id", "keywords", "order_id", "societe_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
+  referencesFilter.submit();
   {{/if}}
 
   {{if $order->_id}}

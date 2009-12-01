@@ -26,7 +26,8 @@ if ($societe_id) {
   $where['product_reference.societe_id'] = " = $societe_id";
 }
 if ($keywords) {
-  $where[] = "product.code LIKE '%$keywords%' OR 
+  $where[] = "product_reference.code LIKE '%$keywords%' OR 
+              product.code LIKE '%$keywords%' OR 
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }

@@ -12,15 +12,14 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductReference-product_id{{/tr}}</th>
+    <th>{{mb_title class=CProductReference field=product_id}}</th>
     {{if !$hide_societes}}
-      <th>{{tr}}CProductReference-societe_id{{/tr}}</th>
+      <th>{{mb_title class=CProductReference field=societe_id}}</th>
     {{/if}}
-    <th>{{tr}}CProductReference-code{{/tr}}</th>
-    <th>{{tr}}CProductReference-quantity{{/tr}}</th>
-    <th>{{tr}}CProduct-_quantity{{/tr}}</th>
-    <th>{{tr}}CProductReference-price{{/tr}}</th>
-    <th>{{tr}}CProductReference-_unit_price{{/tr}}</th>
+    <th>{{mb_title class=CProductReference field=code}}</th>
+    <th>{{mb_title class=CProductReference field=quantity}}</th>
+    <th>{{mb_title class=CProductReference field=price}}</th>
+    <th>{{mb_title class=CProductReference field=_unit_price}}</th>
     {{if $order_id}}<th style="width: 1%;"></th>{{/if}}
   </tr>
   
@@ -28,18 +27,19 @@
   {{foreach from=$list_references item=curr_reference}}
   <tr>
     <td>
-    {{if !$order_id}}
-      <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="{{tr}}CProductReference.modify{{/tr}}">{{$curr_reference->_ref_product->_view}}</a>
-    {{else}}
-      {{$curr_reference->_ref_product->_view}}
-    {{/if}}
+      {{if !$order_id}}
+        <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="{{tr}}CProductReference.modify{{/tr}}">
+      {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_product->_guid}}')">{{$curr_reference->_ref_product->_view}}</span>
+      {{if !$order_id}}
+        </a>
+      {{/if}}
     </td>
     {{if !$hide_societes}}
       <td>{{$curr_reference->_ref_societe->_view}}</td>
     {{/if}}
     <td>{{mb_value object=$curr_reference field=code}}</td>
     <td>{{mb_value object=$curr_reference field=quantity}} {{mb_value object=$curr_reference->_ref_product field=packaging}}</td>
-    <td>{{$curr_reference->_ref_product->_quantity}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=price decimals=5}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=_unit_price decimals=5}}</td>
     {{if $order_id}}

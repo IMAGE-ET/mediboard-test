@@ -184,4 +184,5 @@ $locales['Export'] = 'Exporter';
 $locales['Import'] = 'Importer';
 $locales['Close'] = 'Fermer';
 $locales['Unknown'] = 'Inconnu';
+$locales['Reset'] = 'Remise à zéro';
 ?>

@@ -13,7 +13,7 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab('vw_idx_order_manager', TAB_EDIT);
 $module->registerTab('vw_idx_stock_group',  TAB_ADMIN);
 $module->registerTab('vw_idx_stock_service', TAB_EDIT);
-$module->registerTab('vw_idx_discrepancy',   TAB_EDIT);
+//$module->registerTab('vw_idx_discrepancy',   TAB_EDIT);
 $module->registerTab('vw_idx_reference',     TAB_ADMIN);
 $module->registerTab('vw_idx_product',       TAB_ADMIN);
 $module->registerTab('vw_idx_category',     TAB_ADMIN);

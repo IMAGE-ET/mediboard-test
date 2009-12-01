@@ -259,6 +259,13 @@ function printPatient(patient_id) {
   url.popup(700, 550, "Patient");
 }
 
+function updatePatientsListHeight() {
+  var vpd = document.viewport.getDimensions(),
+      scroller = $("left-column").down(".scroller"),
+      pos = scroller.cumulativeOffset();
+  scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
+}
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
@@ -280,6 +287,8 @@ Main.add(function () {
   {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
   {{/if}}
+  
+  updatePatientsListHeight();
 });
 
 function markAsSelected(element) {
@@ -306,7 +315,7 @@ viewBilanService = function(service_id, date){
       </form>
       
       
-      <table class="form" id="left-column" style="min-width:200px;">
+      <table class="form" id="left-column" style="min-width:240px;">
         <tr>
           <th class="category">
             {{$date|date_format:$dPconfig.longdate}}
@@ -326,7 +335,6 @@ viewBilanService = function(service_id, date){
             <form name="selService" action="?m={{$m}}" method="get">
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
-              
 
               <select name="service_id" onchange="this.form.submit()">
                 <option value="">&mdash; Service</option>
@@ -406,13 +414,14 @@ viewBilanService = function(service_id, date){
 							</tr>
 							{{/if}}
 							
-            </table>          
+            </table>
           </td>
         </tr>
         {{/if}}
         <tr>
-          <td>
-            <table class="tbl">    
+          <td style="padding: 0;">
+            <div style="overflow: auto; height: 500px;" class="scroller">
+            <table class="tbl">
             {{foreach from=$sejoursParService key=_service_id item=service}}
               {{if array_key_exists($_service_id, $services)}}
               <tr>
@@ -422,73 +431,73 @@ viewBilanService = function(service_id, date){
               {{foreach from=$service->_ref_chambres item=curr_chambre}}
               {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
               <tr>
-                <th class="category" colspan="6">
-                  {{$curr_chambre->_view}} - {{$curr_lit->nom}}
+                <th class="category" colspan="6" style="font-size: 0.9em; {{if !$curr_lit->_ref_affectations|@count}}opacity: 0.5;{{/if}}">
+                  <span style="float: left;">{{$curr_chambre}}</span>
+                  <span style="float: right;">{{$curr_lit->nom}}</span>
                 </th>
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected"{{/if}}>
-                <td>
+                <td style="padding: 0;">
                   <button class="lookup notext" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
                     {{tr}}Lookup{{/tr}}
                   </button>
                 </td>
+                
                 <td class="text">
-                  {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
+                  {{assign var=sejour value=$curr_affectation->_ref_sejour}}
+                  {{assign var=prescriptions value=$sejour->_ref_prescriptions}}
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
                   {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
-                  <a class="text" href="#1" onmouseover="ObjectTooltip.createEx(this, '{{$curr_affectation->_ref_sejour->_ref_patient->_guid}}');" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_affectation->_ref_sejour->_id}}'); loadViewSejour('{{$curr_affectation->_ref_sejour->_id}}', {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
-                    <span class="{{if !$curr_affectation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $curr_affectation->_ref_sejour->septique}}septique{{/if}}">
-                      {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
+                  <a class="text" href="#1" 
+                     onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}');">
+                    <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
+                          onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}');" >
+                      {{$sejour->_ref_patient->_view}}
                     </span>
                   </a>
                   <script type="text/javascript">
-                    ImedsResultsWatcher.addSejour('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->_num_dossier}}');
+                    ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_num_dossier}}');
                   </script>
                 </td>
-                <td>
-                  <a class="button edit notext" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">>
-                    {{tr}}Edit{{/tr}}
-                  </a>
-                </td>
-                <td>
-                  <a class="button search notext" href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">>
-                    {{tr}}Search{{/tr}}
-                  </a>
-                </td>
-                <td>
-                  <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+
+                <td style="padding: 1px;">
+                  <div id="labo_for_{{$sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo.png" title="Résultats de laboratoire disponibles" />
                   </div>
-                  <div id="labo_hot_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+                  <div id="labo_hot_for_{{$sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo_hot.png" title="Résultats de laboratoire disponibles" />
                   </div>
                 </td>
-                <td class="action">
-                  <div class="mediuser" style="border-color:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
-	                  <label title="{{$curr_affectation->_ref_sejour->_ref_praticien->_view}}">
-	                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}          
+                
+                <td class="action" style="padding: 1px;">
+                  <div class="mediuser" style="border-color:#{{$sejour->_ref_praticien->_ref_function->color}}">
+	                  <label title="{{$sejour->_ref_praticien->_view}}">
+	                  {{$sejour->_ref_praticien->_shortview}}          
                     </label>
-                    {{if $isPrescriptionInstalled}}         
-                      {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
-                        <img src="images/icons/warning.png" alt="" title="" 
-                           onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-{{$curr_affectation->_ref_sejour->_guid}}")'/>
-                      {{/if}}
-                      
-                      <div id="tooltip-content-alertes-{{$curr_affectation->_ref_sejour->_guid}}" style="display: none;">
-                        <ul>
-                         {{if !$prescription_sortie->_id}}
-                           <li>Ce séjour ne possède pas de prescription de sortie</li>
-                         {{/if}}
-                         {{if $prescription_sejour->_counts_no_valide}}
-                           <li>Lignes non validées dans la prescription de séjour</li>
-                         {{/if}}
-                      </div>
-                    {{/if}}
                   </div>
                 </td>
+                
+                {{if $isPrescriptionInstalled}}
+                <td style="padding: 1px;">
+                  {{if $prescription_sejour->_id && (!$prescription_sortie->_id || $prescription_sejour->_counts_no_valide)}}
+                    <img src="images/icons/warning.png" width="12"
+                       onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-alertes-{{$sejour->_guid}}')" />
+                  {{/if}}
+                  
+                  <div id="tooltip-content-alertes-{{$sejour->_guid}}" style="display: none;">
+                    <ul>
+                     {{if !$prescription_sortie->_id}}
+                       <li>Ce séjour ne possède pas de prescription de sortie</li>
+                     {{/if}}
+                     {{if $prescription_sejour->_counts_no_valide}}
+                       <li>Lignes non validées dans la prescription de séjour</li>
+                     {{/if}}
+                  </div>
+                </td>
+                {{/if}}
               </tr>
             {{/if}}
             {{/foreach}}
@@ -522,10 +531,11 @@ viewBilanService = function(service_id, date){
 	              {{/foreach}}
 	            {{/foreach}}
             {{/if}}
-            </table>    
+            </table>
           </td>
         </tr> 
-      </table>
+      </table>    
+      </div>
     </td>
     <td>
       <!-- Tab titles -->

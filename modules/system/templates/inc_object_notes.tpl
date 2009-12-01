@@ -9,5 +9,5 @@
 *}}
 
 <div style="float:left;" class="noteDiv {{$object->_guid}}">
-  <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+  <img title="{{tr}}CNote-title-create{{/tr}}" src="images/icons/note_grey.png" width="16" height="16" />
 </div>

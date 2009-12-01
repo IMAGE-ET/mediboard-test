@@ -594,7 +594,7 @@ Object.extend(Date, {
     return re.match(sDate);
   },
   isDATETIME: function(sDateTime) {
-    var re = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    var re = /^\d{4}-\d{2}-\d{2}[ \+T]\d{2}:\d{2}:\d{2}$/;
     return re.match(sDateTime);
   },
   
@@ -610,9 +610,9 @@ Object.extend(Date, {
 
   // sDateTime must be: YYYY-MM-DD HH:MM:SS
   fromDATETIME : function(sDateTime) {
-    var match, re = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+    var match, re = /^(\d{4})-(\d{2})-(\d{2})[ \+T](\d{2}):(\d{2}):(\d{2})$/;
         
-    if (/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/.exec(sDateTime))
+    if (/^(\d{4})-(\d{2})-(\d{2})[ \+T](\d{2}):(\d{2})$/.exec(sDateTime))
       sDateTime += '-00';
     
     if (!(match = re.exec(sDateTime)))

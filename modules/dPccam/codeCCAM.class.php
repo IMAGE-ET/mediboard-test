@@ -97,7 +97,6 @@ class CCodeCCAM {
 		  $codeCCAM->load($niv);
 		  return $codeCCAM;
 		}
-
 	  
 		// Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
 		if (!isset(self::$loadedCodes[$code])) {
@@ -128,7 +127,6 @@ class CCodeCCAM {
 	  $obj = unserialize(serialize($this));
 	  $obj->_spec = self::$spec;
 	  return $obj;
-	  
 	}
 	
 	function load($niv) {

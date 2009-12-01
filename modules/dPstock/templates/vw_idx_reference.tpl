@@ -41,14 +41,14 @@ ProductSelector.init = function(){
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <select name="societe_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -77,7 +77,7 @@ ProductSelector.init = function(){
       <table class="form">
         <tr>
           {{if $reference->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductReference.modify{{/tr}} {{$reference->_view}}</th>
+          <th class="title modify" colspan="2">{{$reference->_view}}</th>
           {{else}}
           <th class="title" colspan="2">{{tr}}CProductReference.create{{/tr}}</th>
           {{/if}}
@@ -106,7 +106,7 @@ ProductSelector.init = function(){
           <th>{{mb_label object=$reference field="quantity"}}</th>
           <td>
             {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min="1" size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
-            <input type="text" name="packaging" readonly="readonly" disabled="disabled" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
+            <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
             <span id="equivalent_quantity"></span>
           </td>
         </tr>

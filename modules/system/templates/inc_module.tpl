@@ -21,7 +21,7 @@
     {{assign var=cmd value="?m=system&a=domodsql&mod_name=$module_name&cmd"}}
     <tr>
       <td>
-        <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height:18px; width:18px; float: right;" alt="?" />
+        <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height:18px; width:18px; float: right;" />
         <strong>{{$mbmodule->mod_name}}</strong>
       </td>
   
@@ -55,7 +55,7 @@
 
       {{else}}
       <td>
-        <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height: 18px; width: 18px; float: right;" alt="?" />
+        <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height: 18px; width: 18px; float: right;" />
         <strong>{{$mbmodule->mod_name}}</strong>
       </td>
   
@@ -123,7 +123,7 @@
         
         <td style="text-align: right; width: 1%;">
           {{$mbmodule->mod_ui_order}}
-          <img alt="updown" src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
+          <img src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
           {{if $can->edit}}
           <map name="map-{{$mbmodule->_id}}">
             <area coords="0,0,10,7"  href="{{$cmd}}=moveup" />

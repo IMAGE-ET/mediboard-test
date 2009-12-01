@@ -106,6 +106,10 @@ Main.add(function () {
           <th>{{mb_label object=$product field="code_lpp"}}</th>
           <td>{{mb_field object=$product field="code_lpp"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$product field="cancelled"}}</th>
+          <td>{{mb_field object=$product field="cancelled"}}</td>
+        </tr>
         <tr><th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th></tr>
         <tr>
           <th>{{mb_label object=$product field="quantity"}}</th>
@@ -126,10 +130,6 @@ Main.add(function () {
         <tr>
           <th>{{mb_label object=$product field="packaging"}}</th>
           <td>{{mb_field object=$product field="packaging"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$product field="cancelled"}}</th>
-          <td>{{mb_field object=$product field="cancelled"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
