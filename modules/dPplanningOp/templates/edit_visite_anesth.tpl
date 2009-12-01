@@ -41,6 +41,21 @@ reloadAnesth = function(operation_id){
   } );	
 }
 
+var constantesMedicalesDrawn = false;
+refreshConstantesHack = function(sejour_id) {
+  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+    refreshConstantesMedicales('CSejour-'+sejour_id);
+    constantesMedicalesDrawn = true;
+  }
+}
+
+refreshConstantesMedicales = function(context_guid) {
+  if(context_guid) {
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("context_guid", context_guid);
+    url.requestUpdate("constantes-medicales", { waitingText: null } );
+  }
+}
 Main.add(function () {
   // Initialisation des onglets
 	if ($('main_tab_group')){
@@ -51,6 +66,11 @@ Main.add(function () {
     var url = new Url("dPcabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$operation->sejour_id}}");
     url.requestUpdate("antecedents", {waitingText: null});
+  }
+
+  if($('constantes-medicales')){
+    constantesMedicalesDrawn = false;
+    refreshConstantesHack('{{$operation->sejour_id}}');
   }
 
 	{{if $isPrescriptionInstalled}}
@@ -81,11 +101,10 @@ Main.add(function () {
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#anesth_tab">Anesth.</a></li>
   <li><a href="#antecedents">Atcd.</a></li>
-
+  <li onclick="refreshConstantesHack('{{$operation->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
   {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
 	{{/if}}
-  
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
@@ -94,18 +113,21 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 <!-- Anesthesie -->
-<div id="anesth_tab" style="display:none">
+<div id="anesth_tab" style="display:none;">
   <div id="info_anesth">
   {{include file="../../dPsalleOp/templates/inc_vw_info_anesth.tpl"}}
   </div>
 </div>
 
 <!-- Antécédents -->
-<div id="antecedents" style="display:none"></div>
+<div id="antecedents" style="display:none;"></div>
+
+<!-- Constantes -->
+<div id="constantes-medicales" style="display: none;"></div>
 
 <!-- Prescription -->
 {{if $isPrescriptionInstalled}}
-  <div id="prescription_sejour_tab" style="display:none">
+  <div id="prescription_sejour_tab" style="display:none;">
     <div id="prescription_sejour"></div>
   </div>
 {{/if}}

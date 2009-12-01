@@ -26,6 +26,11 @@ Main.add(function () {
     url.addParam("sejour_id","{{$selOp->sejour_id}}");
     url.requestUpdate("antecedents", {waitingText: null});
   }
+	
+	if($('constantes-medicales')){
+    constantesMedicalesDrawn = false;
+    refreshConstantesHack('{{$selOp->sejour_id}}');
+  }
   
   if($('bloodSalvage_tab')){
     var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
@@ -40,6 +45,22 @@ Main.add(function () {
   }
 });
 
+
+var constantesMedicalesDrawn = false;
+refreshConstantesHack = function(sejour_id) {
+  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+    refreshConstantesMedicales('CSejour-'+sejour_id);
+    constantesMedicalesDrawn = true;
+  }
+}
+
+refreshConstantesMedicales = function(context_guid) {
+  if(context_guid) {
+    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("context_guid", context_guid);
+    url.requestUpdate("constantes-medicales", { waitingText: null } );
+  }
+}
 
 function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
   var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
@@ -237,6 +258,8 @@ function reloadPrescription(prescription_id){
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       <li><a href="#dossier_tab">Chir.</a></li>
     {{/if}}
+		
+    <li onclick="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
 		<li><a href="#antecedents">Atcd.</a></li>
 
 	  {{if $isPrescriptionInstalled}}
@@ -376,7 +399,10 @@ function reloadPrescription(prescription_id){
 </div>
 {{/if}}
 
+
+<div id="constantes-medicales" style="display: none;"></div>
 <div id="antecedents" style="display:none"></div>	
+
 {{if $isPrescriptionInstalled}}
 	<!-- Affichage de la prescription -->
 	<div id="prescription_sejour_tab" style="display:none">

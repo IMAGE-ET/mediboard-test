@@ -74,6 +74,24 @@ Main.add(function () {
       <th class="category" colspan="2">Dernières</th>
     </tr>
     <tr>
+      <th>{{mb_label object=$constantes field=poids}} (Kg)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=poids size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
+      <td style="text-align: center" title="{{$dates.poids|date_format:$dPconfig.datetime}}">{{if $const->poids}}{{mb_value object=$const field=poids size="4"}}{{/if}}</td>
+      <td style="width: 0.1%;"><input type="checkbox" name="checkbox-constantes-medicales-poids" onchange="toggleGraph('constantes-medicales-poids');" tabIndex="100" /></td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$constantes field=taille}} (cm)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=taille size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
+      <td style="text-align: center" title="{{$dates.taille|date_format:$dPconfig.datetime}}">{{if $const->taille}}{{mb_value object=$const field=taille size="4"}}{{/if}}</td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-taille" onchange="toggleGraph('constantes-medicales-taille');" tabIndex="100" /></td>
+    </tr>
+		<tr>
+      <th>{{mb_label object=$constantes field=pouls}} (/min)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=pouls size="4"}}</td>{{/if}}
+      <td style="text-align: center" title="{{$dates.pouls|date_format:$dPconfig.datetime}}">{{if $const->pouls}}{{mb_value object=$const field=pouls size="4"}}{{/if}}</td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-pouls"  onchange="toggleGraph('constantes-medicales-pouls');" tabIndex="100" /></td>
+    </tr>
+		<tr>
       <th>{{mb_label object=$constantes field=ta}} (cm Hg)</th>
       {{if $real_context}}
       <td>
@@ -90,18 +108,6 @@ Main.add(function () {
       <td><input type="checkbox" name="checkbox-constantes-medicales-ta"  onchange="toggleGraph('constantes-medicales-ta');" tabIndex="100" /></td>
     </tr>
     <tr>
-      <th>{{mb_label object=$constantes field=poids}} (Kg)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=poids size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.poids|date_format:$dPconfig.datetime}}">{{if $const->poids}}{{mb_value object=$const field=poids size="4"}}{{/if}}</td>
-      <td style="width: 0.1%;"><input type="checkbox" name="checkbox-constantes-medicales-poids" onchange="toggleGraph('constantes-medicales-poids');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$constantes field=taille}} (cm)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=taille size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.taille|date_format:$dPconfig.datetime}}">{{if $const->taille}}{{mb_value object=$const field=taille size="4"}}{{/if}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-taille" onchange="toggleGraph('constantes-medicales-taille');" tabIndex="100" /></td>
-    </tr>
-    <tr>
       <th>{{mb_label object=$constantes field=_vst}} (ml)</th>
       {{if $real_context}}<td>{{mb_field object=$const field=_vst size="4" readonly="readonly" tabIndex="100"}}</td>{{/if}}
       <td>{{mb_value object=$const field=_vst}}{{if $const->_vst}}{{/if}}</td>
@@ -115,12 +121,6 @@ Main.add(function () {
     </tr>
     <tr>
       <td colspan="4" id="constantes_medicales_imc" style="color:#F00; text-align: center;"></td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$constantes field=pouls}} (/min)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=pouls size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.pouls|date_format:$dPconfig.datetime}}">{{if $const->pouls}}{{mb_value object=$const field=pouls size="4"}}{{/if}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-pouls"  onchange="toggleGraph('constantes-medicales-pouls');" tabIndex="100" /></td>
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=temperature}} (°C)</th>

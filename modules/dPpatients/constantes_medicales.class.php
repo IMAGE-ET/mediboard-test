@@ -43,12 +43,12 @@ class CConstantesMedicales extends CMbObject {
   var $_new_constantes_medicales = null;
   
   static $list_constantes = array (
-    'ta', 
     'poids', 
     'taille', 
     'pouls', 
+    'ta',
     'temperature', 
-    'spo2', 
+		'spo2', 
     'score_sensibilite',
     'score_motricite',
     'score_sedation',
