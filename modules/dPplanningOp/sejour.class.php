@@ -902,18 +902,15 @@ class CSejour extends CCodable {
       $where["sejour_id"] = " != '$this->_id'";
     } 
 		$where["patient_id"] = " = '$this->patient_id'";
-		if($this->praticien_id){
-		  $where["praticien_id"] = " = '$this->praticien_id'";
-		}
 		
 		$this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
 		
-		if($this->_entree){
+		if ($this->_entree){
 			$date_entree = mbDate($this->_entree); 
 		  $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
-    if($this->_sortie){
+    if ($this->_sortie){
       $date_sortie = mbDate($this->_sortie); 
       $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
     }
