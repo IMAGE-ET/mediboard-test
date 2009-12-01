@@ -329,7 +329,7 @@ var Url = Class.create({
       evalScripts: true,
       getParameters: null,
       onComplete: Prototype.emptyFunction,
-      onFailure: function(){element.update("<div class='error'>Le serveur rencontre quelques problemes.</div>");}
+      onFailure: function(){element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
     
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
@@ -338,8 +338,8 @@ var Url = Class.create({
     });
     
     // Empty holder gets a div for load notifying
-    if (element.innerHTML.trim().empty()) {
-      element.update("<div style='height: 3em' />");
+    if (!/\S/.test(element.innerHTML)) {
+      element.update('<div style="height: 3em" />');
     }
 
     if (oOptions.waitingText) {
@@ -410,8 +410,8 @@ var Url = Class.create({
     }
 
     // Empty holder gets a div for load notifying
-    if (element.innerHTML.trim().empty()) {
-			element.update("<div style='height: 3em' />");
+    if (!/\S/.test(element.innerHTML)) {
+			element.update('<div style="height: 3em" />');
 		}
 
     oOptions = Object.extend({
