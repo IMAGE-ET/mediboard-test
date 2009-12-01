@@ -19,6 +19,15 @@ sendMessage = function(echange_hprim_id, echange_hprim_classname){
 		 refreshEchange(echange_hprim_id, echange_hprim_classname) }});
 }
 
+reprocessing = function(echange_hprim_id, echange_hprim_classname){
+  var url = new Url;
+  url.setModuleAction("sip", "ajax_reprocessing_message");
+  url.addParam("echange_hprim_id", echange_hprim_id);
+  url.addParam("echange_hprim_classname", echange_hprim_classname);
+  url.requestUpdate("systemMsg", { onComplete:function() { 
+     refreshEchange(echange_hprim_id, echange_hprim_classname) }});
+}
+
 refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
   url.setModuleAction("sip", "ajax_refresh_message");
@@ -154,6 +163,7 @@ function changePage(page) {
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>
           <th>{{mb_title object=$echange_hprim field="sous_type"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_echange"}}</th>
+          <th>Retraitement</th>
           <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>

@@ -16,7 +16,7 @@
 	   <img src="images/icons/next.png" alt="&gt;" />
 	 {{/if}}
 	</td>
-	<td>
+	<td style="width:0.1%">
 	  <a href="?m=sip&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="button search">
 	   {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	  </a>
@@ -30,7 +30,7 @@
     {{/if}}
 	</td>
   {{/if}}
-  <td>
+  <td style="width:0.1%">
     {{$object->_object_class}}
   </td>
 	<td>
@@ -70,7 +70,7 @@
        {{mb_value object=$object field="destinataire"}}
      {{/if}}
   </td>
-	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}}>{{mb_value object=$object field="sous_type"}}</td>
+	<td style="width:0.1%" {{if $object->sous_type == "inconnu"}}class="error"{{/if}}>{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
 	  {{if $object->initiateur_id}}
 	    {{if $dPconfig.sip.server == "1"}}
@@ -89,6 +89,9 @@
       </label>
 	  </span>
 	</td>
+  <td style="width:0.1%">
+    <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">Retraiter</button>
+  </td>
 	<td class="{{if ($object->date_echange && !$object->acquittement)}}error{{/if}}">
 	  {{if $object->acquittement}}Oui{{else}}Non{{/if}}
 	</td>
