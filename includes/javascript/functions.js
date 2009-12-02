@@ -148,18 +148,17 @@ var WaitingMessage = {
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).hide(),
         cover = new Element("div").addClassName("ajax-loading"),
-		    descendant = element.down(),
-        position;
+        descendant = element.down();
     
     coverContainer.insert(cover);
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant && /^tr$/i.test(descendant.tagName))
-			descendant.insert({top: coverContainer});
-	  else
-	    element.insert({top: coverContainer});
+      descendant.insert({top: coverContainer});
+    else
+      element.insert({top: coverContainer});
     
-		cover.setStyle({
+    cover.setStyle({
       opacity: 0.4,
       position: 'absolute',
       top: 0,
