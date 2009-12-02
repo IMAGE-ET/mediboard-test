@@ -169,8 +169,7 @@ function loadServices(){
   $('divPlanningRepas').hide();
   $('divRepas').hide();
   $('vwServices').hide();
-  var url = new Url;
-  url.setModuleAction("dPhospi" , "httpreq_get_services_offline");
+  var url = new Url("dPhospi" , "httpreq_get_services_offline");
   url.addParam("dialog"         , "1");
   url.requestUpdateOffline("systemMsg");
 }
@@ -198,8 +197,7 @@ function getDatadPrepas(){
   if(!checkForm(oForm)){
     return false;
   }
-  var url   = new Url;
-  url.setModuleAction("dPrepas" , "httpreq_get_infos_offline");
+  var url   = new Url("dPrepas" , "httpreq_get_infos_offline");
   url.addParam("dialog"         , "1");
   url.addParam("service_id"     , oForm.service_id.value)
   url.addParam("date"           , oForm.date.value)
@@ -234,15 +232,14 @@ function checkInRepas(){
     alert("Veuillez terminer le repas en cours avant de synchroniser les données.");
     return false;
   }
-  AjaxResponse.onPerformances = _submitRepas;
-  var url   = new Url;
-  url.setModuleAction("system" , "empty");
+  AjaxResponse.onLoaded = _submitRepas;
+  var url   = new Url("system" , "empty");
   url.addParam("dialog"         , "1");
   url.requestUpdateOffline("systemMsg");
 }
 
 function _submitRepas(){
-  AjaxResponse.onPerformances = Prototype.emptyFunction;
+  AjaxResponse.onLoaded = Prototype.emptyFunction;
   var iEtatActuel = parseInt(odPrepas["config"]["etatOffline"]);
   if(iEtatActuel >= ETAT_SYNCH || !verifEtatRequis(ETAT_REPAS_MODIF)){
     return false;

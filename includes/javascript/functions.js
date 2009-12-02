@@ -146,21 +146,28 @@ var WaitingMessage = {
   cover: function(element) {
     element = $(element);
     
-    var cover = new Element("div").addClassName('ajax-loading').hide(),
-		    descendant = element.down();
+    var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).hide(),
+        cover = new Element("div").addClassName("ajax-loading"),
+		    descendant = element.down(),
+        position;
+    
+    coverContainer.insert(cover);
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
-    if (descendant && descendant.tagName.match(/^tr$/i)) {
-			descendant.insert({bottom: cover});
-		}
-	  else {
-	    element.insert({bottom: cover});
-	  }
-		
+    if (descendant && /^tr$/i.test(descendant.tagName))
+			descendant.insert({top: coverContainer});
+	  else
+	    element.insert({top: coverContainer});
+    
 		cover.setStyle({
       opacity: 0.4,
-      position: 'absolute'
-    }).clonePosition(element).show();
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: 500
+    }).clonePosition(element, {setLeft: false, setTop: false});
+    
+    coverContainer.show();
   }
 };
 
@@ -193,7 +200,13 @@ var AjaxResponse = {
     }
   },
   
-  onPerformances: Prototype.emptyFunction
+  onLoaded: function(get, performance) {
+    try {
+      if (console.firebug) {
+        console.log(get, " ", performance);
+      }
+    } catch (e) {}
+  }
 };
 
 

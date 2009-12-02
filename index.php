@@ -10,7 +10,26 @@
 
 require("./includes/magic_quotes_gpc.php");
 
-$performance = array();
+/* 
+ * The order of the keys is important (only the first keys 
+ * are displayed in the short view of the Firebug console).
+ */
+$performance = array(
+  // Performance
+  "genere" => null,
+  "memoire" => null,
+  "size" => null,
+  "objets" => 0,
+  
+  // Errors
+  "error" => 0,
+  "warning" => 0,
+  "notice" => 0,
+  
+  // Cache
+  "cachableCount" => null,
+  "cachableCounts" => null,
+);
 
 if (!is_file("./includes/config.php")) {
   header("Location: install/");

@@ -8,10 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $performance, $dPconfig;
-$performance["error"] = 0;
-$performance["warning"] = 0;
-$performance["notice"] = 0;
+global $dPconfig;
 define('LOG_PATH', $dPconfig["root_dir"]."/tmp/mb-log.html");
 define('E_JS_ERROR', 0);
 
@@ -236,7 +233,7 @@ set_error_handler("errorHandler");
  * @return null
  */
 function exceptionHandler($exception) {
-  global $divClasses, $errorTypes, $errorCategories, $AppUI, $performance;
+  global $divClasses, $errorTypes, $errorCategories, $AppUI;
   
   $divClass = "big-warning";
   
