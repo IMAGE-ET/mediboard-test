@@ -39,7 +39,6 @@ class CCodeCCAM {
 	const MEDIUM = 2;
 	const FULL   = 3;
   
-  
   // table de chargement
 	static $loadLevel = array();
 	static $loadedCodes = array();
@@ -130,27 +129,27 @@ class CCodeCCAM {
 	}
 	
 	function load($niv) {
-		if ($this->getLibelles()) {
-		  if ($niv == self::LITE) {
-				$this->getActivite7();
-			}
-
-			if ($niv >= self::LITE) {
-				$this->getTarification();
-			}
-
-			if ($niv >= self::MEDIUM) {
-				$this->getChaps();
-				$this->getRemarques();
-				$this->getActivites();
-			}
-
-			if ($niv == self::FULL) {
-				$this->getActesAsso();
-				$this->getActesIncomp();
-				$this->getProcedure();
-			}
+		if (!$this->getLibelles()) return;
+    
+	  if ($niv == self::LITE) {
+			$this->getActivite7();
 		}
+
+		if ($niv >= self::LITE) {
+			$this->getTarification();
+		}
+
+		if ($niv >= self::MEDIUM) {
+			$this->getChaps();
+			$this->getRemarques();
+			$this->getActivites();
+		}
+
+		if ($niv == self::FULL) {
+			$this->getActesAsso();
+			$this->getActesIncomp();
+			$this->getProcedure();
+    }
 	}
   
   function getLibelles() {

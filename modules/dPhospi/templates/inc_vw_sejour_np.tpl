@@ -52,7 +52,8 @@
       {{/if}}
       {{if $prescription_sejour->_counts_no_valide}}
         <li>Lignes non validées dans la prescription de séjour</li>
-      {{/if}}    
+      {{/if}}
+      </ul> 
 	  </div>
   </td>
   {{/if}}

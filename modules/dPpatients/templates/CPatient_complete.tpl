@@ -17,10 +17,8 @@
         <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient" />
       </a>
       {{/if}}
-      
-      <div style="float:left;" class="noteDiv {{$object->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
+
+      {{mb_include module=system template=inc_object_notes object=$object}}
 
       <form name="actionPat" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />

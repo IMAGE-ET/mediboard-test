@@ -34,10 +34,8 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 <table class="form">
   <tr>
     <th class="category">
-      <div style="float:left;" class="noteDiv {{$patient->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
-			{{if $patient->_id_vitale}}
+      {{mb_include module=system template=inc_object_notes object=$patient}}
+      {{if $patient->_id_vitale}}
       <div style="float:right;">
 	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
       </div>

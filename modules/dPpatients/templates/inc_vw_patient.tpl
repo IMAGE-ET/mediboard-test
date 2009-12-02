@@ -63,9 +63,7 @@ Document.refreshList = function(){
         <img src="images/icons/history.gif" alt="historique" />
       </a>
 
-      <div style="float:left;" class="noteDiv {{$patient->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
+      {{mb_include module=system template=inc_object_notes object=$patient}}
 
     	{{$patient}}
 		</th>

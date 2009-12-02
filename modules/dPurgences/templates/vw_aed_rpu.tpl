@@ -129,12 +129,9 @@ Main.add(function () {
   <tr>
     {{if $rpu->_id}}
     <th class="title modify" colspan="4">
-      <div style="float: left;" class="noteDiv {{$sejour->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
-    
+      {{mb_include module=system template=inc_object_notes      object=$sejour}}
       {{mb_include module=system template=inc_object_idsante400 object=$rpu}}
-      {{mb_include module=system template=inc_object_history object=$rpu}}
+      {{mb_include module=system template=inc_object_history    object=$rpu}}
 
 	    <a class="action" style="float: right;" title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
 	      <img src="images/icons/edit.png" alt="modifier" />

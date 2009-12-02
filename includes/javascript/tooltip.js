@@ -17,6 +17,7 @@ var ObjectTooltip = Class.create({
   // Constructor
   initialize: function(eTrigger, oOptions) {
     eTrigger = $(eTrigger);
+    
     this.sTrigger = eTrigger.identify();
     this.sDiv = null;
     this.sTarget = null;
@@ -63,7 +64,6 @@ var ObjectTooltip = Class.create({
   },
   
   show: function() {
-    var eDiv    = $(this.sDiv);
     var eTarget = $(this.sTarget);
     
     if (this.oOptions.popup || !eTarget.innerHTML) {
@@ -89,12 +89,18 @@ var ObjectTooltip = Class.create({
     
     eDiv.show()
         .setStyle({marginTop: 0, marginLeft: 0})
-        .clonePosition(eTrigger, {offsetTop: dim.height, offsetLeft: Math.min(dim.width, 20), setWidth: false, setHeight: false})
+        .clonePosition(eTrigger, {
+          offsetTop: dim.height, 
+          offsetLeft: Math.min(dim.width, 20), 
+          setWidth: false, 
+          setHeight: false}
+        )
         .unoverflow();
   },
   
   load: function() {
     var eTarget = $(this.sTarget);
+    
     if (this.oOptions.mode != 'dom') {
       var url = new Url(this.mode.module, this.mode.action);
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
@@ -105,8 +111,7 @@ var ObjectTooltip = Class.create({
         url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       }
     } else {
-      var elt = $(this.oOptions.params.element);
-      eTarget.update(elt.remove().show());
+      eTarget.update($(this.oOptions.params.element).show());
       this.reposition();
     }
   },
@@ -115,7 +120,8 @@ var ObjectTooltip = Class.create({
     $(this.sTrigger)
         .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
-        .observe("mouseover", this.cancelHide.bind(this));
+        .observe("mouseover", this.cancelHide.bind(this))
+        .observe("mousedown", this.cancelShow.bind(this));
         
     $(this.sDiv)
         .observe("mouseout", this.cancelShow.bind(this))
@@ -124,9 +130,9 @@ var ObjectTooltip = Class.create({
   },
   
   createDiv: function() {
-    var eTrigger = $(this.sTrigger);
-    
-    var eDiv  = $("tooltipTpl").clone(true);
+    var eTrigger = $(this.sTrigger),
+        eDiv  = $("tooltipTpl").clone(true);
+        
     eDiv.hide()
         .addClassName(this.mode.sClass)
         .removeAttribute("_extended");
@@ -134,7 +140,7 @@ var ObjectTooltip = Class.create({
     this.sDiv = eDiv.identify();
     $(document.body).insert(eDiv);
 
-    var eTarget = eDiv.select(".content")[0];
+    var eTarget = eDiv.down(".content");
     eTarget.removeAttribute("_extended");
     eTarget.setStyle( {
       minWidth : this.mode.width+"px",

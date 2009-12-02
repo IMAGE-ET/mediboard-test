@@ -309,13 +309,13 @@ viewBilanService = function(service_id, date){
 
 <table class="main">
   <tr>
-    <td rowspan="3" style="width:0.1%;">
+    <td rowspan="3" style="width:240px;">
       <form name="form_prescription" action="">
         <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
       
       
-      <table class="form" id="left-column" style="min-width:240px;">
+      <table class="form" id="left-column" style="width:240px;">
         <tr>
           <th class="category">
             {{$date|date_format:$dPconfig.longdate}}
@@ -420,7 +420,7 @@ viewBilanService = function(service_id, date){
         {{/if}}
         <tr>
           <td style="padding: 0;">
-            <div style="overflow: auto; height: 500px;" class="scroller">
+            <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
             <table class="tbl">
             {{foreach from=$sejoursParService key=_service_id item=service}}
               {{if array_key_exists($_service_id, $services)}}
@@ -495,6 +495,7 @@ viewBilanService = function(service_id, date){
                      {{if $prescription_sejour->_counts_no_valide}}
                        <li>Lignes non validées dans la prescription de séjour</li>
                      {{/if}}
+                    </ul>
                   </div>
                 </td>
                 {{/if}}
@@ -532,10 +533,10 @@ viewBilanService = function(service_id, date){
 	            {{/foreach}}
             {{/if}}
             </table>
+            </div>
           </td>
         </tr> 
       </table>    
-      </div>
     </td>
     <td>
       <!-- Tab titles -->

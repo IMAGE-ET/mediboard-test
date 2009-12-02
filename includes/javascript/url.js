@@ -318,6 +318,7 @@ var Url = Class.create({
     
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
+      return;
     }
     
     oOptions = Object.extend({
@@ -407,6 +408,7 @@ var Url = Class.create({
     var element = $(ioTarget);
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
+      return;
     }
 
     // Empty holder gets a div for load notifying

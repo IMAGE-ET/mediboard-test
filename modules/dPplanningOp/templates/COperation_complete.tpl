@@ -5,11 +5,8 @@
   <tr>
     <th class="title" colspan="2">
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
-      {{mb_include module=system template=inc_object_history object=$object}}
-    
-      <div style="float:left;" class="noteDiv {{$object->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
+      {{mb_include module=system template=inc_object_history    object=$object}}
+      {{mb_include module=system template=inc_object_notes      object=$object}}
       {{$operation->_view}}
     </th>
   </tr>

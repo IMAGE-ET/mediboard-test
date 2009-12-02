@@ -11,9 +11,7 @@
 <table class="tbl">
 	<tr>
 	  <th class="title" colspan="100">
-      	<div style="float:left;" class="noteDiv CFacture-{{$facture->_id}}">
-    		<img alt="Ecrire une note" src="images/icons/note_grey.png" />
- 	 	</div>
+	    {{mb_include module=system template=inc_object_notes object=$facture}}
 	    Elements(s) correspondant(s)
 	  </th>
 	</tr>
