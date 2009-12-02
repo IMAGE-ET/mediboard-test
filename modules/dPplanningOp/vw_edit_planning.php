@@ -40,8 +40,8 @@ if ($chir_id) {
     $chir = $testChir;
   }
 }
+$chir->loadRefFunction();
 $prat = $chir;
-$prat->loadRefFunction();
 
 // Chargement du patient
 $patient = new CPatient;
