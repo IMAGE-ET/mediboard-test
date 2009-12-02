@@ -158,7 +158,7 @@ ProtocoleSelector.init = function(){
       </button>
       {{mb_ternary var=message test=$op->_id value=modify other=create}}
       {{tr}}COperation-title-{{$message}}{{if $modurgence}}-urgence{{/if}}{{/tr}} 
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient->_view}}</span> 
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</span> 
       {{if $chir->_id}}
       - {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$chir}}
       {{/if}}
