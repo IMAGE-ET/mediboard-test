@@ -309,7 +309,7 @@ viewBilanService = function(service_id, date){
 
 <table class="main">
   <tr>
-    <td rowspan="3" style="width:240px;">
+    <td rowspan="3">
       <form name="form_prescription" action="">
         <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
@@ -538,7 +538,7 @@ viewBilanService = function(service_id, date){
         </tr> 
       </table>    
     </td>
-    <td>
+    <td style="width:100%;">
       <!-- Tab titles -->
       <ul id="tab-sejour" class="control_tabs">
         <li><button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
