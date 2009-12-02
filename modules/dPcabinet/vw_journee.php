@@ -35,7 +35,11 @@ if($mode_urgence){
 // Récupération de la liste des praticiens
 $praticiens = array();
 if ($cabinet_id) {
-  $praticiens = $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
+  if(CAppUI::pref("pratOnlyForConsult", 1)) {
+    $praticiens = $mediuser->loadPraticiens(PERM_READ, $cabinet_id);
+  } else {
+    $praticiens = $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
+  }
 }
 
 if ($consult->_id) {

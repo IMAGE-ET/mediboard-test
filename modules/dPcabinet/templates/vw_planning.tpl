@@ -69,16 +69,15 @@ Main.add(function () {
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        <label for="chirSel" title="Praticien dont on observe le planning de consultation">Praticien</label>
-        <select name="chirSel" onchange="this.form.submit()">
-          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un praticien &mdash;</option>
+        <select name="chirSel" style="width: 16em;" onchange="this.form.submit()">
+          <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
           {{foreach from=$listChirs item=curr_chir}}
           <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
             {{$curr_chir->_view}}
           </option>
           {{/foreach}}
         </select>
-    
+        
         <label for="vue1" title="Type de vue du planning de consultation">Type de vue</label>
         <select name="vue1" onchange="this.form.submit()">
           <option value="0"{{if !$vue}}selected="selected"{{/if}}>Tout afficher</option>

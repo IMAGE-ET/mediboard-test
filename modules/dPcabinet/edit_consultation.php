@@ -27,7 +27,11 @@ $prat_id      = CValue::getOrSession("chirSel", $AppUI->user_id);
 $selConsult   = CValue::getOrSession("selConsult", null);
 
 $listChirs = new CMediusers;
-$listChirs = $listChirs->loadProfessionnelDeSante(null);
+if(CAppUI::pref("pratOnlyForConsult", 1)) {
+  $listChirs = $listChirs->loadPraticiens(null);
+} else {
+  $listChirs = $listChirs->loadProfessionnelDeSante(null);
+}
 
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
@@ -80,9 +84,6 @@ $userSel = new CMediusers;
 $userSel->load($prat_id);
 $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
-
-// Vérification des droits sur les praticiens
-$listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 
 if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);

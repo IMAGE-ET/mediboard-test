@@ -16,7 +16,11 @@ $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 $chir_id = CValue::getOrSession("chir", null);
 $chirSel = new CMediusers;
 $chirSel->load($chir_id);
-$listPrat = $chirSel->loadProfessionnelDeSante(PERM_EDIT);
+if(CAppUI::pref("pratOnlyForConsult", 1)) {
+  $listPrat = $chirSel->loadPraticiens(PERM_EDIT);
+} else {
+  $listPrat = $chirSel->loadProfessionnelDeSante(PERM_EDIT);
+}
 
 $listConsults = array();
 

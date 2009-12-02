@@ -45,9 +45,17 @@ $is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {
   if($is_admin) {
-    $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
+    if(CAppUI::pref("pratOnlyForConsult", 1)) {
+      $listPrat = $mediuser->loadPraticiens(PERM_EDIT);
+    } else {
+      $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
+    }
   } else {
-    $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT, $mediuser->function_id);
+    if(CAppUI::pref("pratOnlyForConsult", 1)) {
+      $listPrat = $mediuser->loadPraticiens(PERM_EDIT, $mediuser->function_id);
+    } else {
+      $listPrat = $mediuser->loadProfessionnelDeSante(PERM_EDIT, $mediuser->function_id);
+    }
   }
 } else {
   $listPrat = array($mediuser->_id => $mediuser);
@@ -63,7 +71,7 @@ $smarty->assign("is_praticien"          , $is_praticien);
 $smarty->assign("is_admin_or_secretaire", $is_admin_or_secretaire);
 $smarty->assign("listPrat"              , $listPrat);
 $smarty->assign("now"                   , $now);
-$smarty->assign("yesterday"                   , $yesterday);
+$smarty->assign("yesterday"             , $yesterday);
 $smarty->assign("week_deb"              , $week_deb);
 $smarty->assign("week_fin"              , $week_fin);
 $smarty->assign("month_deb"             , $month_deb);

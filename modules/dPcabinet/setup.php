@@ -1273,7 +1273,10 @@ class CSetupdPcabinet extends CSetup {
               ADD INDEX (`consultation_anesth_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.18";
+    $this->makeRevision("1.18");
+    $this->addPrefQuery("pratOnlyForConsult", "1");
+    
+    $this->mod_version = "1.19";
   }
 }
 ?>

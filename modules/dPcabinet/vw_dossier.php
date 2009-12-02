@@ -15,7 +15,11 @@ $pat_id = CValue::getOrSession("patSel");
 
 // Liste des Praticiens
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadProfessionnelDeSante(PERM_READ);
+if(CAppUI::pref("pratOnlyForConsult", 1)) {
+  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+} else {
+  $listPrat = $listPrat->loadProfessionnelDeSante(PERM_READ);
+}
 
 
 $patient = new CPatient;

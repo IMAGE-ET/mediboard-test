@@ -82,9 +82,15 @@ $mediuser->load($AppUI->user_id);
 $mediuser->loadRefFunction();
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$prats = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
-  $mediuser->loadProfessionnelDeSante(PERM_READ) :
-  array($mediuser->_id => $mediuser);
+if(in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"))) {
+  if(CAppUI::pref("pratOnlyForConsult", 1)) {
+    $prats = $mediuser->loadPraticiens(PERM_READ);
+  } else {
+    $prats = $mediuser->loadProfessionnelDeSante(PERM_READ);
+  }
+} else {
+  $prats = array($mediuser->_id => $mediuser);
+}
 foreach($prats as $_prat) {
   $_prat->loadIdCPS();
 }

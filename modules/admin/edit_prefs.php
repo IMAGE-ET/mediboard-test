@@ -85,7 +85,8 @@ $array_list_module_pref = array (
     "autoCloseConsult",
     "resumeCompta",
     "showDatesAntecedents",
-		"dPcabinet_show_program"
+		"dPcabinet_show_program",
+		"pratOnlyForConsult"
   ),
   "dPplanningOp" => array (
     "mode_dhe",
