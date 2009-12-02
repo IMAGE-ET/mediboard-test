@@ -133,19 +133,21 @@ var ObjectTooltip = Class.create({
     var eTrigger = $(this.sTrigger),
         eDiv  = $("tooltipTpl").clone(true);
         
-    eDiv.hide()
-        .addClassName(this.mode.sClass)
+    eDiv.addClassName(this.mode.sClass)
         .removeAttribute("_extended");
         
     this.sDiv = eDiv.identify();
-    $(document.body).insert(eDiv);
-
+    $(document.body).insert(eDiv.hide());
+    
     var eTarget = eDiv.down(".content");
     eTarget.removeAttribute("_extended");
-    eTarget.setStyle( {
-      minWidth : this.mode.width+"px",
-      minHeight: this.mode.height+"px"
-    } );
+    
+    if (!Prototype.Browser.IE) {
+      eTarget.setStyle( {
+        minWidth : this.mode.width+"px",
+        minHeight: this.mode.height+"px"
+      } );
+    }
     
     this.sTarget = eTarget.identify();
   }
