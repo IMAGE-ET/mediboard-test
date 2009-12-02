@@ -163,8 +163,6 @@ $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 
-$chir->loadRefFunction();
-
 // Création du template
 $smarty = new CSmartyDP();
 

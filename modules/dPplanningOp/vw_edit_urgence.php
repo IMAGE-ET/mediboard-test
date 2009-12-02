@@ -67,7 +67,8 @@ if($sejour_id && !$operation_id) {
 $op = new COperation;
 $op->load($operation_id);
 if ($op->_id) {
-  $op->load($operation_id);
+  $op->loadRefs();
+  $op->_ref_chir->loadRefFunction();
 
   // On vérifie que l'utilisateur a les droits sur l'operation
   if (!array_key_exists($op->chir_id, $listPraticiens)) {
