@@ -145,7 +145,7 @@ if ($list_constantes) {
         $log = $cst->_ref_last_log;
         $log->loadRefsFwd();
       }
-      $user_view = $log->_ref_user ? $log->_ref_user->_view : "";
+      $user_view = $log->_ref_user ? utf8_encode($log->_ref_user->_view) : "";
       
     	if ($name == 'ta') {
     		$field['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole), $user_view);
