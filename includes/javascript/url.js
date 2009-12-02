@@ -340,7 +340,7 @@ var Url = Class.create({
     
     // Empty holder gets a div for load notifying
     if (!/\S/.test(element.innerHTML)) {
-      element.update('<div style="height: 3em" />');
+      element.update('<div style="height: 2em" />');
     }
 
     if (oOptions.waitingText) {
@@ -413,7 +413,7 @@ var Url = Class.create({
 
     // Empty holder gets a div for load notifying
     if (!/\S/.test(element.innerHTML)) {
-			element.update('<div style="height: 3em" />');
+			element.update('<div style="height: 2em" />');
 		}
 
     oOptions = Object.extend({
