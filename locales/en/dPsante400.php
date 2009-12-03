@@ -60,7 +60,6 @@ $locales['CIdSante400-id_sante400_id-desc'] = '';
 $locales['CIdSante400.all'] = '';
 $locales['CIdSante400.select'] = '';
 $locales['config-interop-mode_compat'] = '';
-$locales['CMouvSejourEcap'] = '';
 $locales['CTriggerMark'] = '';
 $locales['CTriggerMark-done'] = '';
 $locales['CTriggerMark-done-court'] = '';
@@ -100,5 +99,4 @@ $locales['mod-dPsante400-tab-stats_identifiants'] = '';
 $locales['mod-dPsante400-tab-synchro_sante400'] = '';
 $locales['mod-dPsante400-tab-view_identifiants'] = '';
 $locales['mod-dPsante400-tab-view_marks'] = '';
-$locales['CMouvInterventionECap'] = '';
 ?>

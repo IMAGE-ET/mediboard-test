@@ -99,6 +99,4 @@ $locales['CTriggerMark-trigger_number'] = 'Identifiant du mouvement';
 $locales['CTriggerMark-trigger_number-court'] = 'Mouvement';
 $locales['CTriggerMark-trigger_number-desc'] = 'Identifiant du mouvement marqué';
 $locales['mod-dPsante400-tab-view_marks'] = 'Marques';
-$locales['CMouvSejourEcap'] = 'Séjour e-Cap';
-$locales['CMouvInterventionECap'] = 'Internvention e-Cap';
 ?>

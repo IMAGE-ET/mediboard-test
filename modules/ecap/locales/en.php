@@ -16,4 +16,6 @@ $locales['mod-ecap-tab-export_documents'] = '';
 $locales['mod-ecap-tab-manage_categories'] = '';
 $locales['CEcDocumentSender'] = '';
 $locales['CMedinetSender'] = '';
+$locales['CMouvSejourEcap'] = '';
+$locales['CMouvInterventionECap'] = '';
 ?>

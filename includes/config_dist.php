@@ -595,17 +595,6 @@ $dPconfig["bloodSalvage"] = array (
     "AntiCoagulantList" => "",
 );
 
-$dPconfig["ecap"] = array (
-  "dhe" => array (
-    "rooturl" => "",
-  ),
-  "soap" => array (
-    "rooturl" => "",
-    "user" => "",
-    "pass" => "",
-  ),
-);
-
 $dPconfig["pharmacie"] = array (
   "dispensation_schedule" => "024"
 );

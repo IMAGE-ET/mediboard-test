@@ -1,7 +1,6 @@
 var DHE = {
   refresh: function(patient_id, praticien_id) {
-    var url = new Url;
-    url.setModuleAction("ecap", "httpreq_new_dhe");
+    var url = new Url("ecap", "httpreq_new_dhe");
     url.addParam("patient_id", patient_id);
     url.addParam("praticien_id", praticien_id);
     url.requestUpdate("dhe-form", { waitingText: null } );
