@@ -413,8 +413,8 @@ var Url = Class.create({
 
     // Empty holder gets a div for load notifying
     if (!/\S/.test(element.innerHTML)) {
-			element.update('<div style="height: 2em" />');
-		}
+      element.update('<div style="height: 2em" />');
+    }
 
     oOptions = Object.extend({
       onCreate: WaitingMessage.cover.curry(element),

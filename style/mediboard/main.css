@@ -476,6 +476,10 @@ label:hover,
   cursor: help;
 }
 
+a *[onmouseover] {
+  cursor: pointer;
+}
+
 /**
  * Debug console
  */
