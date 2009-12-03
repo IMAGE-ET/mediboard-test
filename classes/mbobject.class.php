@@ -363,17 +363,31 @@ class CMbObject {
   }
   
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $list = $this->loadList($where, $order, $limit, $group, $leftjoin);
-    
     // Filter with permission
-    if ($permType) {
-      foreach ($list as $key=>$element){
-        if(!$element->getPerm($permType)){
-          unset($list[$key]);
-        }
+    if (!$permType) {
+      $this->_totalWithPerms = $this->countList($where, null, null, $group, $leftjoin);
+      return $this->loadList($where, $order, $limit, $group, $leftjoin);
+    }
+    else {
+      $list = $this->loadList($where, $order, null, $group, $leftjoin);
+    }
+    
+    foreach ($list as $key => $element) {
+      if (!$element->getPerm($permType)) {
+        unset($list[$key]);
       }
     }
-
+    
+    $this->_totalWithPerms = count($list);
+    
+    // We simulate the MySQL LIMIT
+    if ($limit) {
+      preg_match("/(?:(\d+),)?(\d+)/", $limit, $matches);
+      $offset = intval($matches[1]);
+      $length = intval($matches[2]);
+      $list = array_slice($list, $offset, $length, true);
+    }
+    
     return $list;
   }
   

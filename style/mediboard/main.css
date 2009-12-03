@@ -476,6 +476,7 @@ label:hover,
   cursor: help;
 }
 
+a[onmouseover],
 a *[onmouseover] {
   cursor: pointer;
 }
