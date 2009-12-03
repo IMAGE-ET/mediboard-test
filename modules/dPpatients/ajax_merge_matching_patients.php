@@ -30,9 +30,17 @@ $res = $ds->query("SELECT COUNT(*) AS total,
   GROUP BY hash
   HAVING total > 1");
 
-CAppUI::stepAjax(intval($ds->numRows($res))." patients identiques");
+CAppUI::stepAjax(intval($ds->numRows($res))." patients identiques :");
 
-if ($do_merge) {
+if (!$do_merge) {
+  $patient = new CPatient();
+  while($l = $ds->fetchAssoc($res)){
+    $patient_ids = explode("|", $l["ids"]);
+    $patient->load(reset($patient_ids));
+    CAppUI::stepAjax("$patient->_view (x".count($patient_ids).")");
+  }
+}
+else {
   while($l = $ds->fetchAssoc($res)){
     $patient_ids = explode("|", $l["ids"]);
     
