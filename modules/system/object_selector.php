@@ -23,7 +23,7 @@ foreach (getInstalledClasses() as $class) {
 $list = array();
 if ($selClass) {
   if (!array_key_exists($selClass, $classes)) {
-    trigger_error("Uninstalled class '$selClass'", E_USER_ERROR);
+    trigger_error("The class '$selClass' is not installed", E_USER_ERROR);
     return;
   }
 
@@ -31,9 +31,7 @@ if ($selClass) {
   
   // Search with keywords
   if ($keywords) {
-		$keywords_search = explode(" ", trim($keywords));
-		$keywords_search = array_filter($keywords_search);
-    $list = $object->seek($keywords_search);
+    $list = $object->seek($keywords);
 	  foreach ($list as $key => $value) {
 	    $list[$key]->loadRefsFwd();
 	    if(!$list[$key]->canRead()) {
