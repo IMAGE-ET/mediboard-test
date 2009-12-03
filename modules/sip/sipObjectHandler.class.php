@@ -93,8 +93,13 @@ class CSipObjectHandler extends CMbObjectHandler {
       // Si Client
       else {
         $dest_hprim->type = "sip";
+        $dest_hprim->group_id = CGroups::loadCurrent()->_id;
         $dest_hprim->loadMatchingObject();
-  
+        
+        if (!$dest_hprim->_id) {
+          return;
+        }
+        
         if (!$mbObject->_IPP) {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
@@ -206,8 +211,13 @@ class CSipObjectHandler extends CMbObjectHandler {
        // Si Client
       else {
         $dest_hprim->type = "sip";
+        $dest_hprim->group_id = CGroups::loadCurrent()->_id;
         $dest_hprim->loadMatchingObject();
-  
+        
+        if (!$dest_hprim->_id) {
+          return;
+        }
+        
         if (!$mbObject->_num_dossier) {
           $num_dossier = new CIdSante400();
           //Paramétrage de l'id 400
