@@ -60,9 +60,9 @@ function changePage(page) {
 	        </tr>
 	        <tr>
 	          <th style="width:50%">{{mb_label object=$echange_hprim field="_date_min"}}</th>
-	          <td style="width:0.1%">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true}} </td>
+	          <td style="width:0.1%">{{mb_field object=$echange_hprim field="_date_min" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
 	          <th style="width:0.1%">{{mb_label object=$echange_hprim field="_date_max"}}</th>
-	          <td style="width:50%">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true}} </td>
+	          <td style="width:50%">{{mb_field object=$echange_hprim field="_date_max" form="filterEchange" register=true onchange="\$V(this.form.page, 0)"}} </td>
 	        </tr>
 	        <tr>
 	          <th class="category" colspan="4">Critères de filtres</th>
@@ -74,7 +74,7 @@ function changePage(page) {
           <tr>
             <th colspan="2">Type de message d'événement</th>
             <td colspan="2">
-              <select class="str" name="msg_evenement">
+              <select class="str" name="msg_evenement" onchange="$V(this.form.page, 0)">
                 <option value="">&mdash; Liste des messages </option>
                 <option value="patients" {{if $msg_evenement == "patients"}}selected="selected"{{/if}}>
                   Message patients
@@ -91,7 +91,7 @@ function changePage(page) {
 	        <tr>
             <th colspan="2">Types d'événements</th>
             <td colspan="2">
-              <select class="str" name="type_evenement">
+              <select class="str" name="type_evenement" onchange="$V(this.form.page, 0)">
                 <option value="">&mdash; Liste des événements </option>
                 <option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
                   {{tr}}hprimxml-evt_patients-none{{/tr}}
@@ -117,7 +117,7 @@ function changePage(page) {
 	        <tr>
 	          <th colspan="2">Choix du statut d'acquittement</th>
 	          <td colspan="2">
-	            <select class="str" name="statut_acquittement">
+	            <select class="str" name="statut_acquittement" onchange="$V(this.form.page, 0)">
 			          <option value="">&mdash; Liste des statuts </option>
 			          <option value="OK" {{if $statut_acquittement == "OK"}}selected="selected"{{/if}}>Ok</option>
 			          <option value="avertissement" {{if $statut_acquittement == "avertissement"}}selected="selected"{{/if}}>Avertissement </option>
@@ -128,7 +128,7 @@ function changePage(page) {
           <tr>
             <td colspan="4" style="text-align: center">
               {{foreach from=$types key=type item=value}}
-			          <input type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
+			          <input onclick="$V(this.form.page, 0)" type="checkbox" name="types[{{$type}}]" {{if array_key_exists($type, $selected_types)}}checked="checked"{{/if}} />{{tr}}CEchangeHprim-type-{{$type}}{{/tr}}
 			        {{/foreach}}
             </td>
           </tr>
@@ -181,7 +181,7 @@ function changePage(page) {
           {{/foreach}}
         {{foreachelse}}
           <tr>
-            <td colspan="14">
+            <td colspan="15">
               {{tr}}CEchangeHprim.none{{/tr}}
             </td>
           </tr>
