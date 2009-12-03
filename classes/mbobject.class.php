@@ -1520,7 +1520,7 @@ class CMbObject {
     $query = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
 		
     if (!is_array($keywords)) {
-      $keywords = explode(' ', $keywords);
+      $keywords = array_filter(explode(' ', $keywords));
     }
 		
     $seekables = $this->getSeekables();
