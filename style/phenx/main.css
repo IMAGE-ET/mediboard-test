@@ -118,10 +118,6 @@ a:hover {
   text-decoration: underline;
 }
 
-em {
-  background-color: #FFECCD;
-}
-
 h1, h2, h3, h4 {
   font-weight: bold;
 }
@@ -146,6 +142,10 @@ h3 {
 
 p {
   margin: 0.3em 0;
+}
+
+p em {
+  background-color: #FFECCD;
 }
 
 table.tbl td.text {
@@ -1368,7 +1368,8 @@ ul.control_tabs_vertical {
   padding: 0;
 }
 
-ul.control_tabs li, ul.control_tabs_vertical li {
+ul.control_tabs li, 
+ul.control_tabs_vertical li {
 	/*float: left;*/
   display: inline-block;
   text-align: center;
@@ -1377,7 +1378,8 @@ ul.control_tabs li, ul.control_tabs_vertical li {
   margin-top: 2px;
 }
 
-ul.control_tabs li a, ul.control_tabs_vertical li a {
+ul.control_tabs li a, 
+ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #AAA;
   border-bottom: none;
@@ -1392,32 +1394,56 @@ ul.control_tabs li a, ul.control_tabs_vertical li a {
   font-weight: bold;
 }
 
-ul.control_tabs li a:hover, ul.control_tabs_vertical li a:hover {
+ul.control_tabs li a:hover, 
+ul.control_tabs_vertical li a:hover {
   background-color: #FFF1E8;
   text-decoration: none;
   color: #333;
 }
 
-ul.control_tabs li a.active, ul.control_tabs_vertical li a.active {
+ul.control_tabs li a.active, 
+ul.control_tabs_vertical li a.active {
   background-color: #FFF;
   color: #000;
   border: 1px solid #F60;
   border-bottom: #FFF 1px solid;
 }
 
-ul.control_tabs li a.minor, ul.control_tabs_vertical li a.minor {
-  background-color: #CCCCCC;
+ul.control_tabs li a.empty, 
+ul.control_tabs_vertical li a.empty,
+span.empty {
+  background-color: #ccc;
   color: #333333;
 }
 
-ul.control_tabs li a.minor:hover, ul.control_tabs_vertical li a.minor:hover {
-  background-color: #BBBBBB;
+ul.control_tabs li a.empty:hover, 
+ul.control_tabs_vertical li a.empty:hover {
+  background-color: #bbb;
   color: #000000;
 }
 
-ul.control_tabs li a.minor.active, ul.control_tabs_vertical li a.minor.active {
-  background-color: #999999;
+ul.control_tabs li a.empty.active, 
+ul.control_tabs_vertical li a.empty.active {
+  background-color: #999;
   color: #000000;
+}
+
+ul.control_tabs li a.wrong, 
+ul.control_tabs_vertical li a.wrong,
+span.wrong {
+  background-color: #FFC99B;
+}
+
+ul.control_tabs li a.wrong:hover, 
+ul.control_tabs_vertical li a.wrong:hover {
+  background-color: #FF9F51;
+}
+
+ul.control_tabs li a.wrong.active, 
+ul.control_tabs_vertical li a.wrong.active {
+  background-color: #FFAA5B;
+  color: #000000;
+  border-bottom: #FFAA5B 1px solid;
 }
 
 ul.control_tabs .separator, ul.control_tabs_vertical .separator {

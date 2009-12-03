@@ -98,9 +98,14 @@ option[value=""] {
   font-style: italic;
 }
 
-label:hover {
+label:hover,
+*[onmouseover] {
   border-bottom: 1px dotted #888;
   cursor: help;
+}
+
+a *[onmouseover] {
+  cursor: pointer;
 }
 
 textarea {
