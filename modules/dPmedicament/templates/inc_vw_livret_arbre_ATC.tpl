@@ -18,7 +18,7 @@ if(Livret.urlEditProd) {
 </script>
 
 {{if !$codeATC}}
-<div class="big-info">
+<div class="small-info">
   Veuillez sélectionner la classe ATC dans laquelle vous désirez rechercher des produits
 </div>
 {{/if}}

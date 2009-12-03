@@ -116,7 +116,7 @@
   {{/foreach}}
 </table>
 {{else}}
-	<div class="big-info">
+	<div class="small-info">
 	Veuillez sélectionner la première lettre du produit recherché
 	</div>
 {{/if}}

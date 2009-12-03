@@ -32,7 +32,7 @@
         <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')" />
       {{/if}}
-      <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');" style="display: inline;">
+      <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');" style="display: inline; font-weight: bold;">
         {{mb_value object=$_perfusion field=type}}
       </a>
 
