@@ -42,10 +42,14 @@ $locales['config-hprimxml-functionPratImport'] = 'Fonction praticien d\'import';
 $locales['config-hprimxml-functionPratImport-desc'] = 'Nom de la fonction du praticien d\'import';
 $locales['config-hprimxml-tagDossierPA'] = 'Tag dossier PA';
 $locales['config-hprimxml-tagDossierPA-desc'] = 'Tag du dossier de pré-admission';
-$locales['config-hprimxml-mvt_comptet'] = 'Traiter mouvement patient complet';
-$locales['config-hprimxml-mvt_comptet-desc'] = 'Traiter mouvement patient complet';
+$locales['config-hprimxml-mvtComplet'] = 'Traiter mouvement patient complet';
+$locales['config-hprimxml-mvtComplet-desc'] = 'Traiter mouvement patient complet';
 $locales['config-hprimxml-medecinIndetermine'] = 'Nom medecin responsable indeterminé';
 $locales['config-hprimxml-medecinIndetermine-desc'] = 'Nom medecin responsable indeterminé pour une venue';
 $locales['config-hprimxml-medecinActif'] = 'Medecin importé actif';
 $locales['config-hprimxml-medecinActif-desc'] = 'Medecin importé actif';
+$locales['config-hprimxml-strictSejourMatch'] = 'Recherche des séjours stricts';
+$locales['config-hprimxml-strictSejourMatch-desc'] = 'Recherche des séjours stricts';
+$locales['config-hprimxml-mvt_comptet'] = '';
+$locales['config-hprimxml-mvt_comptet-desc'] = '';
 ?>

@@ -88,6 +88,7 @@ class CSejour extends CCodable {
   var $_adresse_par        = null;
   var $_adresse_par_prat   = null;
   var $_adresse_par_etab   = null;
+  var $_etat               = null;
   
   // Behaviour fields
   var $_check_bounds = true;
@@ -241,6 +242,7 @@ class CSejour extends CCodable {
     $specs["_adresse_par"]    = "bool";
     $specs["_adresse_par_prat"] = "str";
     $specs["_adresse_par_etab"] = "str";
+    $specs["_etat"]             = "enum list|preadmission|encours|cloture";
     
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";
@@ -509,6 +511,15 @@ class CSejour extends CCodable {
 	    $etab = new CEtabExterne();
 	    $etab->load($this->adresse_par_etab_id);
 	    $this->_adresse_par_etab = $etab->_view;
+    }
+    
+    // Etat d'un sejour : encours, clôturé ou preadmission
+    $this->_etat = "preadmission";
+    if ($this->entree_reelle) {
+      $this->_etat = "encours";
+    }
+    if ($this->sortie_reelle) {
+      $this->_etat = "cloture";
     }
   }
   

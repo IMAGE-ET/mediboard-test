@@ -918,4 +918,13 @@ $locales['config-dPplanningOp-CSejour-sortie_prevue-ssr'] = 'Sortie prévue admis
 $locales['config-dPplanningOp-CSejour-sortie_prevue-psy'] = 'Sortie prévue admission psychiatrie';
 $locales['config-dPplanningOp-CSejour-sortie_prevue-urg'] = 'Sortie prévue admission urgences';
 $locales['config-dPplanningOp-CSejour-sortie_prevue-consult'] = 'Sortie prévue admission consultation';
+$locales['CSejour-_etat'] = 'Etat du séjour';
+$locales['CSejour-_etat-court'] = 'Etat du séjour';
+$locales['CSejour-_etat-desc'] = 'Etat du séjour';
+$locales['CSejour._etat.'] = '';
+$locales['CSejour-_etat.preadmission'] = 'Pré-admission';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-ambu '] = '';
+$locales['config-dPplanningOp-CSejour-sortie_prevue-exte '] = '';
+$locales['CSejour-_etat.encours'] = 'En cours';
+$locales['CSejour-_etat.cloture'] = 'Clôturé';
 ?>

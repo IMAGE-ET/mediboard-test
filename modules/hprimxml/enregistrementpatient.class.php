@@ -67,7 +67,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $messageAcquittement = null;
         
     if (($data['action'] != "fusion") && ($data['action'] != "création") && ($data['action'] != "modification")  && ($data['action'] != "remplacement")) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -128,7 +128,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             }
           } 
           
-          $codes = array ($msgPatient ? "A03" : "I02", "I03");
+          $codes = array ($msgPatient ? "A003" : "I002", "I003");
           if ($msgPatient) {
             $avertissement = $msgPatient." ";
           } else {
@@ -152,7 +152,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $newPatient->_no_ipp = 0;
             $msgPatient = $newPatient->store();
                       
-            $codes = array ($msgPatient ? "A02" : "I01", $msgIPP ? "A05" : "A01");
+            $codes = array ($msgPatient ? "A002" : "I01", $msgIPP ? "A005" : "A001");
             if ($msgPatient) {
               $avertissement = $msgPatient." ";
             } else {
@@ -221,7 +221,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               }
             }
              
-            $codes = array ($msgPatient ? "A03" : "I02", $msgIPP ? "A05" : $_IPP_create ? "I06" : "I08");
+            $codes = array ($msgPatient ? "A003" : "I002", $msgIPP ? "A005" : $_IPP_create ? "I006" : "I008");
             if ($msgPatient || $msgIPP) {
               $avertissement = $msgPatient." ".$msgIPP;
             } else {
@@ -248,7 +248,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idPatientSIP != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible au patient : $IPP->object_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E04", $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -286,7 +286,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           // Id cible non connu
           else {
             $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible n'est pas connu.";
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E03", $commentaire);
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E003", $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
             $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -334,7 +334,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
            
           // idCible fourni non connu
           if (!$IPP->loadMatchingObject() && is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
-            $_code_IPP = "A01";
+            $_code_IPP = "A001";
           }
           // idCible fourni connu
           else {
@@ -346,7 +346,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
             $IPP->_id = null;
              
-            $_code_IPP = "I09";
+            $_code_IPP = "I009";
           }
         } else {
           $mutex->acquire();
@@ -360,7 +360,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
           $IPP->_id = null;
            
-          $_code_IPP = "I06";
+          $_code_IPP = "I006";
         }
 
         $IPP->object_id = $newPatient->_id;
@@ -374,7 +374,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient->_no_ipp = 0;
         $msgPatient = $newPatient->store();
 
-        $codes = array ($msgPatient ? "A02" : "I01", $msgID400 ? "A04" : "I04", $msgIPP ? "A05" : $_code_IPP);
+        $codes = array ($msgPatient ? "A002" : "I001", $msgID400 ? "A004" : "I004", $msgIPP ? "A005" : $_code_IPP);
         if ($msgPatient || $msgID400 || $msgIPP) {
           $avertissement = $msgPatient." ".$msgID400." ".$msgIPP;
         } else {
@@ -391,7 +391,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     else {
       // Acquittement d'erreur : identifiants source et cible non fournis
       if (!$data['idCible'] && !$data['idSource']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -432,14 +432,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
                 $modified_fields .= "$field \n";
               }
             }
-            $_code_IPP = "I21";
+            $_code_IPP = "I021";
             $_code_Patient = true; 
             $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
           } else {
-            $_code_IPP = "I20";
+            $_code_IPP = "I020";
           }
         } else {
-          $_code_IPP = "I22";  
+          $_code_IPP = "I022";  
         }
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
@@ -458,7 +458,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
                 $modified_fields .= "$field \n";
               }
             }
-            $_code_IPP = "A21";
+            $_code_IPP = "A021";
             $_code_Patient = true; 
             $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
           } else {
@@ -472,7 +472,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP->last_update = mbDateTime();
         $msgIPP = $IPP->store();
         
-        $codes = array ($msgPatient ? ($_code_Patient ? "A03" : "A02") : ($_code_Patient ? "I02" : "I01"), $msgIPP ? "A05" : $_code_IPP);
+        $codes = array ($msgPatient ? ($_code_Patient ? "A003" : "A002") : ($_code_Patient ? "I002" : "I001"), $msgIPP ? "A005" : $_code_IPP);
         
         if ($msgPatient || $msgIPP) {
           $avertissement = $msgPatient." ".$msgIPP;
@@ -488,14 +488,14 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
                         
         // idCible non fourni
         if (!$data['idCible']) {
-          $_code_IPP = "I23"; 
+          $_code_IPP = "I023"; 
         } else {
           $tmpPatient = new CPatient();
           // idCible connu
           if ($tmpPatient->load($data['idCible'])) {
             if ($tmpPatient->_id != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E04", $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -504,11 +504,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $echange_hprim->store();
               return $messageAcquittement;
             }
-            $_code_IPP = "I24"; 
+            $_code_IPP = "I024"; 
           }
           // idCible non connu
           else {
-            $_code_IPP = "A20";
+            $_code_IPP = "A020";
           }
         }
         // Evite de passer dans le sip handler
@@ -522,7 +522,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $modified_fields .= "$field \n";
           }
         }
-        $codes = array ($msgPatient ? "A03" : "I02", $_code_IPP);
+        $codes = array ($msgPatient ? "A003" : "I002", $_code_IPP);
         
         if ($msgPatient) {
           $avertissement = $msgPatient." ";

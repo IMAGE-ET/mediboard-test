@@ -113,7 +113,9 @@
     
     {{mb_include module=system template=inc_config_bool var=medecinActif}}
     
-    {{mb_include module=system template=inc_config_bool var=mvt_comptet}}
+    {{mb_include module=system template=inc_config_bool var=mvtComplet}}
+    
+    {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
    
     <tr>
       <td class="button" colspan="10">

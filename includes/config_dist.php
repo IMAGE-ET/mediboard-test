@@ -634,7 +634,8 @@ $dPconfig["sip"] = array (
   "filenbroll" => "2",
   "pat_no_ipp" => 0,
   "send_all_patients" => 1,
-  "sej_no_numdos" => 0
+  "sej_no_numdos" => 0,
+  "send_sej_pa" => 1,
 );
 
 $dPconfig["webservices"] = array (
@@ -662,7 +663,8 @@ $dPconfig["hprimxml"] = array (
   "functionPratImport" => "Import",
   "medecinIndetermine" => "Medecin Indeterminé",
   "medecinActif" => "0",
-  "mvt_comptet"  => "0",
+  "mvtComplet"  => "0",
+  "strictSejourMatch"  => "1",
 );
 
 // you can add as much ftp as you want by using

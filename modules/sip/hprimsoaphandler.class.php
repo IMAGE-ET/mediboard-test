@@ -52,7 +52,7 @@ class CHprimSoapHandler extends CSoapHandler {
       
       // Acquittement d'erreur d'un document XML recu non valide
       if ($doc_errors !== true) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E02", $doc_errors);
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->date_production = mbDateTime();
@@ -121,7 +121,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }
       // Aucun des six événements retour d'erreur
       else {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E07"); 
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E007"); 
       }
       return $messageAcquittement;
       
@@ -131,7 +131,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E09", $e->getMessage());
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
       $echange_hprim->acquittement = $messageAcquittement;

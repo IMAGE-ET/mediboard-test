@@ -41,14 +41,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $this->addAttribute($venue, "confidentiel", "non");
     
     // Etat d'une venue : encours, clôturée ou préadmission
-    $etat = "préadmission";
-    if ($mbVenue->entree_reelle && !$mbVenue->sortie_reelle) {
-      $etat = "encours";
-    }
-    else if ($mbVenue->sortie_reelle) {
-      $etat = "clôturée";
-    }
-    $this->addAttribute($venue, "etat", $etat);
+    $etatConversion = array (
+      "preadmission" => "préadmission",
+      "encours"  => "encours",
+      "cloture" => "clôturée"
+    );
+
+    $this->addAttribute($venue, "etat", $etatConversion[$mbVenue->_etat]);
     
     $this->addAttribute($venue, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
     $this->addAttribute($venue, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
@@ -90,7 +89,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    **/
   function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
     if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
@@ -178,26 +177,48 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {
-          // Mapping du séjour
-          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
           // Evite de passer dans le sip handler
           $newVenue->_coms_from_hprim = 1;
-          
+          // Mapping du séjour
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+            
           // Séjour retrouvé
-          if ($newVenue->loadMatchingSejour()) {
-            $msgVenue = $newVenue->store();
+          if (CAppUI::conf("hprimxml strictSejourMatch")) {
+            if ($newVenue->loadMatchingSejour()) {
+              $msgVenue = $newVenue->store();
 
-            $newVenue->loadLogs();
-            $modified_fields = "";
-            if (is_array($newVenue->_ref_last_log->_fields)) {
-              foreach ($newVenue->_ref_last_log->_fields as $field) {
-                $modified_fields .= "$field \n";
+              $newVenue->loadLogs();
+              $modified_fields = "";
+              if (is_array($newVenue->_ref_last_log->_fields)) {
+                foreach ($newVenue->_ref_last_log->_fields as $field) {
+                  $modified_fields .= "$field \n";
+                }
               }
+              $_code_NumDos = "A121";
+              $_code_Venue = true;
+              $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields."; 
             }
-            $_code_NumDos = "A121";
-            $_code_Venue = true;
-            $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
           } else {
+            $collision = $newVenue->getCollisions();
+            if (count($collision) == 1) {
+              $newVenue = reset($collision);
+              // Mapping du séjour
+              $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+              $msgVenue = $newVenue->store();
+
+              $newVenue->loadLogs();
+              $modified_fields = "";
+              if (is_array($newVenue->_ref_last_log->_fields)) {
+                foreach ($newVenue->_ref_last_log->_fields as $field) {
+                  $modified_fields .= "$field \n";
+                }
+              }
+              $_code_NumDos = "A122";
+              $_code_Venue = true;
+              $commentaire = "Séjour modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";
+            }
+          }
+          if (!$newVenue->_id) {
             $msgVenue = $newVenue->store();
             $commentaire = "Séjour créé : $newVenue->_id. ";
           }

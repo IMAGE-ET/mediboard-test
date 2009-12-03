@@ -126,7 +126,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
       $observations[] = &$d;
         
       $observation = $xpath->queryUniqueNode("hprim:observation", $enteteMessageAcquittement);
-      $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
+      $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 4, ' ');
       $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
       $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
     } else {
@@ -137,7 +137,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
         $d = array();
 
         $observation = $xpath->queryUniqueNode("hprim:observations/hprim:observation", $erreurAvertissement);
-        $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 3, ' ');
+        $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 4, ' ');
         $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
         $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
         $observations[] = $d;

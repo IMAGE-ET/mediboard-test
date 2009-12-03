@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage system
+ * @subpackage webservices
  * @version $Revision: 6069 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html

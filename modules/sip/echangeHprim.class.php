@@ -35,6 +35,7 @@ class CEchangeHprim extends CMbObject {
   var $_self_destinataire   = null;
   var $_object_class        = null;
   var $_object_id           = null;
+  var $_observations        = null;
   
   // Filter fields
   var $_date_min            = null;
@@ -60,17 +61,18 @@ class CEchangeHprim extends CMbObject {
     $specs["type"]                  = "str";
     $specs["sous_type"]             = "str";
     $specs["date_echange"]          = "dateTime";
-    $specs["message"]               = "xml notNull";
-    $specs["acquittement"]          = "xml";
+    $specs["message"]               = "xml notNull show|0";
+    $specs["acquittement"]          = "xml show|0";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
-    $specs["statut_acquittement"]   = "str";
-    $specs["message_valide"]        = "bool";
-    $specs["acquittement_valide"]   = "bool";
+    $specs["statut_acquittement"]   = "str show|0";
+    $specs["message_valide"]        = "bool show|0";
+    $specs["acquittement_valide"]   = "bool show|0";
     
     $specs["_object_class"]         = "enum class";
     $specs["_object_id"]            = "ref class|CMbObject meta|_object_class";
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";
+    $specs["_observations"]         = "str";
     
     $specs["_date_min"]             = "dateTime";
     $specs["_date_max"]             = "dateTime";
@@ -98,6 +100,16 @@ class CEchangeHprim extends CMbObject {
   	
   	$this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
     $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
+    
+    if ($this->acquittement) {
+      $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domGetAcquittement->loadXML(utf8_decode($this->acquittement));
+      $doc_valid = $domGetAcquittement->schemaValidate();
+      if ($doc_valid) {      
+        $observations = $domGetAcquittement->getAcquittementObservation();
+        $this->_observations = $observations;
+      } 
+    }
   }
 }
 ?>

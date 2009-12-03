@@ -63,7 +63,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    **/
   function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
   	if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E08");
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         

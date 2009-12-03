@@ -148,7 +148,7 @@ function changePage(page) {
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="14">ECHANGES HPRIM - {{$msg_evenement}}</th>
+          <th class="title" colspan="15">ECHANGES HPRIM - {{$msg_evenement}}</th>
         </tr>
         <tr>
           <th></th>
@@ -166,6 +166,7 @@ function changePage(page) {
           <th>Retraitement</th>
           <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
+          <th>{{mb_title object=$echange_hprim field="_observations"}}</th>
           <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>
           <th>{{mb_title object=$echange_hprim field="acquittement_valide"}}</th>
         </tr>

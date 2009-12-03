@@ -88,7 +88,11 @@ foreach ($sejours as $sejour) {
     $num_dossier->tag = $dest_hprim->_tag;
     $num_dossier->loadMatchingObject();
 
-    $num_dossier->$num_dossier = $num_dossier->id400;
+    $sejour->_num_dossier = $num_dossier->id400;
+  }
+
+  if (CAppUI::conf("sip send_sej_pa") && ($sejour->_etat != "preadmission")) {
+    continue;
   }
   
   if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier) {

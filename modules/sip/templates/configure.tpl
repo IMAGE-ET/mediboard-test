@@ -171,6 +171,8 @@ Main.add(function () {
   	{{mb_include module=system template=inc_config_bool var=pat_no_ipp}}
     
     {{mb_include module=system template=inc_config_bool var=sej_no_numdos}}
+    
+    {{mb_include module=system template=inc_config_bool var=send_sej_pa}}
   	  		    
     <tr>
       <td class="button" colspan="10">

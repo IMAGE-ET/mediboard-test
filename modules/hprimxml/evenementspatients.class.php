@@ -472,7 +472,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     // Penser a parcourir tous les mouvements par la suite
     $mouvement = $xpath->queryUniqueNode("hprim:mouvement", $node);
 
-    if (!CAppUI::conf("hprimxml mvt_comptet")) {
+    if (!CAppUI::conf("hprimxml mvtComplet")) {
       $mbVenue = $this->getMedecinResponsable($mouvement, $mbVenue);
     }
     
