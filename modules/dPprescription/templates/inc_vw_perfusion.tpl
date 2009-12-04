@@ -9,12 +9,12 @@
 *}}
 
 {{if $_perfusion->type == "PCA"}}
-<script type="text/javascript">
-Main.add( function(){
-  $("bolus-{{$_perfusion->_id}}").show();
-  changeModeBolus(document.forms['editPerf-{{$_perfusion->_id}}']);
-} );
-</script>
+	<script type="text/javascript">
+		Main.add( function(){
+		  $("bolus-{{$_perfusion->_id}}").show();
+		  changeModeBolus(document.forms['editPerf-{{$_perfusion->_id}}']);
+		} );
+	</script>
 {{/if}}
 
 <table class="tbl {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}active{{/if}}" id="perfusion-{{$_perfusion->_id}}"> 
@@ -264,42 +264,6 @@ Main.add( function(){
         </table>
       </form>
     </td>
-    <td>
-	  {{if !$_perfusion->date_pose && $_perfusion->_ref_prescription->object_id}} 
-	  	 {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count) || ($_perfusion->_ref_substitution_lines.CPerfusion|@count)}}
-			    <form name="changeLine-{{$_perfusion->_guid}}" action="?" method="post">
-			      <input type="hidden" name="m" value="dPprescription" />
-			      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-			      <select name="object_guid" style="width: 75px;" 
-			              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-			                           Prescription.reload('{{$_perfusion->_ref_prescription->_id}}', '', 'medicament');} } )">
-			        <option value="">Subst.</option>
-				      {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
-				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
-				        {{/foreach}}
-				      {{/foreach}}
-			      </select>
-			    </form>
-			    <br />
-			
-			    {{if $_perfusion->_ref_substitute_for->_class_name == "CPrescriptionLineMedicament"}}
-					  {{assign var=dosql value="do_prescription_line_medicament_aed"}}
-					{{else}}
-					  {{assign var=dosql value="do_perfusion_aed"}}
-					{{/if}}
-					{{if $prescription->type == "sejour"}}
-			       Modif. infirmière
-			      <form name="editLine" action="?" method="post">
-						  <input type="hidden" name="m" value="dPprescription" />
-						  <input type="hidden" name="dosql" value="{{$dosql}}" />
-							<input type="hidden" name="{{$_perfusion->_ref_substitute_for->_spec->key}}" value="{{$_perfusion->_ref_substitute_for->_id}}" />
-							{{mb_field object=$_perfusion->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-						</form>
-					{{/if}}
-	    {{/if}}
-	  {{/if}}
-    </td>
   </tr>
   <tr>
     <td colspan="9">
@@ -380,7 +344,10 @@ Main.add( function(){
   {{if $_perfusion->_perm_edit || $_perfusion->commentaire}}
   <tr>
     <td colspan="9">
-      <form name="commentaire-{{$_perfusion->_guid}}">
+    	{{if $_perfusion->_perm_edit}}
+    	<button class="search" type="button" onclick="$('subst-{{$_perfusion->_guid}}').toggle();" style="float: right;">Substitutions</button>
+      {{/if}}
+			<form name="commentaire-{{$_perfusion->_guid}}">
         {{mb_label object=$_perfusion field="commentaire" size=60}}: 
 	      	{{if $_perfusion->_protocole}}
 	      	  {{assign var=_line_praticien_id value=$app->user_id}}
@@ -405,5 +372,49 @@ Main.add( function(){
     </td>
   </tr>
   {{/if}}
+	 
+	<tr id="subst-{{$_perfusion->_guid}}" style="display: none;">
+	  <td />
+    <td>
+      {{if !$_perfusion->date_pose && $_perfusion->_ref_prescription->object_id}} 
+        {{if ($_perfusion->_ref_substitution_lines.CPrescriptionLineMedicament|@count) || ($_perfusion->_ref_substitution_lines.CPerfusion|@count)}}
+				  <form name="changeLine-{{$_perfusion->_guid}}" action="?" method="post">
+            <input type="hidden" name="m" value="dPprescription" />
+            <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+            <select name="object_guid" style="width: 150px;" 
+                    onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+                                 Prescription.reload('{{$_perfusion->_ref_prescription->_id}}', '', 'medicament');} } )">
+              <option value="">Lignes de substitutions</option>
+              {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
+                  {{foreach from=$lines_subst_by_chap item=_line_subst}}
+                  <option value="{{$_line_subst->_guid}}">
+                  	 {{if $_line_subst->_class_name == "CPerfusion"}}
+										   {{$_line_subst->_short_view}}
+                     {{else}}
+										   {{$_line_subst->_view}}
+										 {{/if}}
+										 {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+                {{/foreach}}
+              {{/foreach}}
+            </select>
+          </form>
+          {{if $_perfusion->_ref_substitute_for->_class_name == "CPrescriptionLineMedicament"}}
+            {{assign var=dosql value="do_prescription_line_medicament_aed"}}
+          {{else}}
+            {{assign var=dosql value="do_perfusion_aed"}}
+          {{/if}}
+          {{if $prescription->type == "sejour"}}
+             Modification par les infirmières
+            <form name="editLine" action="?" method="post">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="{{$dosql}}" />
+              <input type="hidden" name="{{$_perfusion->_ref_substitute_for->_spec->key}}" value="{{$_perfusion->_ref_substitute_for->_id}}" />
+              {{mb_field object=$_perfusion->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+            </form>
+          {{/if}}
+      {{/if}}
+    {{/if}}
+    </td>
+  </tr> 
 </tbody>
 </table>
