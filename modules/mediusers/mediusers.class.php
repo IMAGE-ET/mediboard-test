@@ -322,8 +322,11 @@ class CMediusers extends CMbObject {
   function getPerm($permType) {
     global $AppUI;
     $this->loadRefFunction();
-    if($this->user_id == $AppUI->user_id)
-    return $this->_ref_function->getPerm($permType);
+    if($this->user_id == $AppUI->user_id) {
+      return true;
+    } else {
+      return $this->_ref_function->getPerm($permType);
+    }
   }
 
   function loadProtocoles() {
