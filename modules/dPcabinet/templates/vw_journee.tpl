@@ -7,7 +7,7 @@ Main.add(function () {
   // Mise à jour du compteur de patients arrivés
 	if($('tab_main_courante')){
 		link = $('tab_main_courante').select("a[href=#consultations]")[0];
-	  link.update('Reconvocations ('+{{$nb_attente}}+')');
+	  link.update('Reconvocations <small>({{$nb_attente}} / {{$nb_a_venir}})</small>');
 	  {{if $nb_attente == '0'}}
 	    link.addClassName('empty');
 	  {{else}}

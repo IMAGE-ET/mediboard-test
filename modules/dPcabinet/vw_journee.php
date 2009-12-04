@@ -67,6 +67,7 @@ foreach($praticiens as $prat) {
 }
 
 $nb_attente = 0;
+$nb_a_venir = 0;
 foreach ($listPlages as &$infos_by_prat) {
   foreach ($infos_by_prat["plages"] as $plage) {
     $plage->_ref_chir =& $infos_by_prat["prat"];
@@ -81,7 +82,10 @@ foreach ($listPlages as &$infos_by_prat) {
         }
       }
       
-      if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
+      if ($consultation->chrono < CConsultation::TERMINE) {
+        $nb_a_venir++;
+      }
+			if ($consultation->chrono == CConsultation::PATIENT_ARRIVE) {
         $nb_attente++;
       }
       $consultation->loadRefSejour();
@@ -118,6 +122,7 @@ $smarty->assign("boardItem"     , $boardItem);
 $smarty->assign("canCabinet"    , CModule::getCanDo("dPcabinet"));
 $smarty->assign("mode_urgence"  , $mode_urgence);
 $smarty->assign("nb_attente"    , $nb_attente);
+$smarty->assign("nb_a_venir"   , $nb_a_venir);
 $smarty->display("vw_journee.tpl");
 
 
