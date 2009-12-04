@@ -583,8 +583,8 @@ class CMediusers extends CMbObject {
     $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
 
     // Associate already loaded function
-    foreach ($mediusers as $keyUser => $mediuser) {
-      $mediuser->_ref_function =& $functions[$mediuser->function_id];
+    foreach ($mediusers as $_mediuser) {
+      $_mediuser->loadRefFunction();
     }
 
     return $mediusers;
