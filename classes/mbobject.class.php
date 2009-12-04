@@ -248,20 +248,12 @@ class CMbObject {
   function countDocItemsWithPerm($permType = PERM_READ){
     $this->loadRefsFiles();
     if ($this->_ref_files) {
-      foreach ($this->_ref_files as $file_id => &$file){
-        if(!$file->getPerm($permType)){
-          unset($this->_ref_files[$file_id]);
-        }
-      }
+      self::filterByPerm($this->_ref_files, $permType);
     }
     
     $this->loadRefsDocs();
     if ($this->_ref_documents) {
-      foreach ($this->_ref_documents as $doc_id=>&$doc){
-        if(!$doc->getPerm($permType)){
-          unset($this->_ref_documents[$doc_id]);
-        }
-      }
+      self::filterByPerm($this->_ref_documents, $permType);
     }
     
     return count($this->_ref_files) + count($this->_ref_documents);
@@ -372,11 +364,7 @@ class CMbObject {
       $list = $this->loadList($where, $order, null, $group, $leftjoin);
     }
     
-    foreach ($list as $key => $element) {
-      if (!$element->getPerm($permType)) {
-        unset($list[$key]);
-      }
-    }
+    self::filterByPerm($list, $permType);
     
     $this->_totalWithPerms = count($list);
     
@@ -389,6 +377,16 @@ class CMbObject {
     }
     
     return $list;
+  }
+  
+  static function filterByPerm(&$objects = array/*<CMbObject>*/(), $permType = PERM_READ) {
+    $total = count($objects);
+    foreach ($objects as $id => $object) {
+      if (!$object->getPerm($permType)) {
+        unset($objects[$id]);
+      }
+    }
+    return $total - count($objects);
   }
   
   /**
@@ -1162,13 +1160,11 @@ class CMbObject {
     $backField = $backSpec->field;
     $fwdSpec =& $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
-
     
     // Empty object
     if (!$this->_id) {
       return array();
     }
-    
 
     // Vérification de la possibilité de supprimer chaque backref
     $backObject->$backField = $this->_id;

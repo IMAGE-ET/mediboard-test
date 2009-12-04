@@ -25,7 +25,19 @@ $ds = $object->_spec->ds;
 if ($spec instanceof CRefSpec) {
 	$target_object = new $spec->class;
 	$where = "`$view_field` ".$ds->prepareLike($search);
-	$matches = $target_object->loadList($where, $view_field, $limit);
+  
+  if ($spec->perm) {
+    $permsTable = array(
+      "deny" => PERM_DENY,
+      "read" => PERM_READ,
+      "edit" => PERM_EDIT,
+    );
+    $perm = $permsTable[$spec->perm] ? $permsTable[$spec->perm] : null;
+    $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit);
+  }
+  else {
+    $matches = $target_object->loadList($where, $view_field, $limit);
+  }
 }
 else {
 	$where = "`$field` ".$ds->prepareLike($search);

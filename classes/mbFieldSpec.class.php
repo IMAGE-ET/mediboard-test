@@ -27,6 +27,7 @@ class CMbFieldSpec {
   var $mask           = null;
   var $format         = null;
   var $autocomplete   = null;
+  var $perm           = null; // Used by autocomplete
   var $helped         = null;
   var $seekable       = null;
   var $show           = null;
@@ -87,6 +88,7 @@ class CMbFieldSpec {
       'mask'          => 'str',
       'format'        => 'str',
       'autocomplete'  => 'bool',
+      'perm'          => 'str',
       'helped'        => 'bool',
       'seekable'      => 'bool',
       'reported'      => 'bool',

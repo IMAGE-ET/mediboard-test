@@ -159,17 +159,10 @@ class CGroups extends CMbObject {
    * Load groups with given permission
    */
   static function loadGroups($permType = PERM_READ) {
-    $order = "text";
     $group = new CGroups;
-    $groups = $group->loadList(null, $order);
-
-    foreach ($groups as $_id => $group) {
-      if (!$group->getPerm($permType)) {
-        unset($groups[$_id]);
-      }
-    }
-    
-    return $groups;    
+    $groups = $group->loadList(null, "text");
+    self::filterByPerm($groups, $permType);
+    return $groups;
   }
   
   function fillLimitedTemplate(&$template) {

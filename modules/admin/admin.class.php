@@ -231,7 +231,7 @@ class CUser extends CMbObject {
   }
   
   function merge($objects) {
-     foreach ($objects as $object) {
+    foreach ($objects as $object) {
       $object->removePerms();
     }
     return parent::merge($objects);
