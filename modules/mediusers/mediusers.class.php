@@ -120,7 +120,7 @@ class CMediusers extends CMbObject {
     $specs["_user_last_login"] = "dateTime reported";
     $specs["_user_cp"]         = "num length|5 confidential reported";
     $specs["_user_ville"]      = "str confidential reported";
-    $specs["_profile_id"]      = "num reported";
+    $specs["_profile_id"]      = "ref reported class|CUser";
     $specs["_user_type"]       = "num notNull min|0 max|20 reported";
     
     // The different levels of security are stored to be usable in JS
@@ -286,29 +286,24 @@ class CMediusers extends CMbObject {
   }
 
   function loadRefBanque(){
-    $this->_ref_banque = new CBanque();
-    $this->_ref_banque = $this->_ref_banque->getCached($this->banque_id);
+    $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
 
   function loadRefProfile(){
-    $this->_ref_profile = new CUser();
-    $this->_ref_profile = $this->_ref_profile->getCached($this->_profile_id);
+    $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
   }
   
   function loadRefFunction() {
-    $this->_ref_function = new CFunctions;
-    $this->_ref_function = $this->_ref_function->getCached($this->function_id);
+    $this->_ref_function = $this->loadFwdRef("function_id", true);
     $this->_group_id     = $this->_ref_function->group_id;
   }
 
   function loadRefDiscipline() {
-    $this->_ref_discipline = new CDiscipline;
-    $this->_ref_discipline = $this->_ref_discipline->getCached($this->discipline_id);
+    $this->_ref_discipline = $this->loadFwdRef("discipline_id", true);
   }
   
   function loadRefSpecCPAM(){
-    $this->_ref_spec_cpam = new CSpecCPAM();
-    $this->_ref_spec_cpam = $this->_ref_spec_cpam->getCached($this->spec_cpam_id);
+    $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
   }
   
   function loadRefsFwd() {
@@ -325,9 +320,9 @@ class CMediusers extends CMbObject {
   }
 
   function getPerm($permType) {
-    if (!$this->_ref_function) {
-      $this->loadRefFunction();
-    }
+    global $AppUI;
+    $this->loadRefFunction();
+    if($this->user_id == $AppUI->user_id)
     return $this->_ref_function->getPerm($permType);
   }
 
@@ -547,6 +542,7 @@ class CMediusers extends CMbObject {
   }
 
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
+    global $AppUI;
     $functions = $this->loadFonctions($permType);
 
     // Filter on a single function
@@ -557,9 +553,9 @@ class CMediusers extends CMbObject {
     }
 
     $where = array();
-    $where["users_mediboard.function_id"] = CSQLDataSource::prepareIn(array_keys($functions));
+    $where[] = "users_mediboard.function_id ".CSQLDataSource::prepareIn(array_keys($functions))." OR users_mediboard.user_id = '$AppUI->user_id'";
     $where["users_mediboard.actif"] = "= '1'";
-
+    
     // Filters on users values
     $ljoin = array();
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
