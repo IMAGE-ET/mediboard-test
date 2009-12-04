@@ -86,6 +86,6 @@ Main.add(function () {
 	<div id="main_courante"></div>
 </div>
 
-<div id="consultations">
+<div id="consultations" style="display: none;">
 
 </div>
