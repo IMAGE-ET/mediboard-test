@@ -1774,4 +1774,12 @@ $locales['CTarif-_precode_ready-court'] = '';
 $locales['CTarif-_precode_ready-desc'] = '';
 $locales['mod-dPcabinet-tab-offline_programme_consult'] = '';
 $locales['mod-dPcabinet-tab-vw_banques'] = '';
+$locales['pref-pratOnlyForConsult'] = '';
+$locales['CConsultation-facture'] = '';
+$locales['CConsultation-facture-court'] = '';
+$locales['CConsultation-facture-desc'] = '';
+$locales['CConsultation-_du_tiers_restant'] = '';
+$locales['CConsultation-_du_tiers_restant-court'] = '';
+$locales['CConsultation-_du_tiers_restant-desc'] = '';
+$locales['pref-pratOnlyForConsult-desc'] = '';
 ?>
