@@ -46,12 +46,12 @@ Main.add(function () {
 
 
 <ul id="tab_main_courante" class="control_tabs">
-  <li><a href="#_main_courante">Main courante</a></li>
+  <li><a href="#holder_main_courante">Main courante</a></li>
   <li><a class="empty" href="#consultations">Reconvocations</a></li>
 </ul>
 <hr class="control_tabs" />
 
-<div id="_main_courante">
+<div id="holder_main_courante">
 	<table style="width:100%">
 	  <tr>
 	    <td>
@@ -83,7 +83,7 @@ Main.add(function () {
 	    </td>
 	  </tr>
 	</table>
-	<div id="main_courante" />
+	<div id="main_courante"></div>
 </div>
 
 <div id="consultations">
