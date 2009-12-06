@@ -108,19 +108,19 @@ class CHprimSoapHandler extends CSoapHandler {
       // Venue d'un patient dans l'établissement avec son numéro de venue
       else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
         $data = array_merge($data, $domGetEvenement->getVenuePatientXML());
-        $echange_hprim->id_permanent = $data['idSource'];
+        $echange_hprim->id_permanent = $data['idSourceVenue'];
         $messageAcquittement = $domGetEvenement->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data);
       } 
       // Fusion de deux venues
       else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
         $data = array_merge($data, $domGetEvenement->getFusionVenueXML());
-        $echange_hprim->id_permanent = $data['idSource'];
+        $echange_hprim->id_permanent = $data['idSourceVenue'];
         $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
       }
       // Mouvement du patient dans une unité fonctionnelle ou médicale
       else if($domGetEvenement instanceof CHPrimXMLMouvementPatient) {
         $data = array_merge($data, $domGetEvenement->getMouvementPatientXML());
-        $echange_hprim->id_permanent = $data['idSource'];
+        $echange_hprim->id_permanent = $data['idSourceVenue'];
         $messageAcquittement = $domGetEvenement->mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
       }
       // Aucun des six événements retour d'erreur

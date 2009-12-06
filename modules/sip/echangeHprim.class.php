@@ -144,31 +144,35 @@ class CEchangeHprim extends CMbObject {
   function loadObjectId($evtNode = null , $objectNode = null) {
   	if ($this->_self_emetteur) {
   		$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
-  	  $domGetIdSourceObject->loadXML(utf8_decode($this->message));
+  	  @$domGetIdSourceObject->loadXML(utf8_decode($this->message));
   	  $id_source = null;
   	  try {
   	  	$id_source = $domGetIdSourceObject->getIdSourceObject($evtNode, $objectNode);
   	  } catch (Exception $e) {}
-  		return $this->_object_id = $id_source;
+  		$this->_object_id = $id_source;
+  		return;
   	}
   	
   	$dest_hprim = new CDestinataireHprim();
   	$dest_hprim->nom = $this->emetteur;
 		$dest_hprim->loadMatchingObject();
- 
-  	// Recuperation de la valeur de l'id400
+
+		// Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
     $id400->tag = $dest_hprim->_tag;
 		$id400->object_class = $this->_object_class;
-		$id400->id400 = $this->id_permanent;
-		$id400->loadMatchingObject();
-
+		if ($this->id_permanent) {
+			$id400->id400 = $this->id_permanent;
+			$id400->loadMatchingObject();
+		}
+		
 		// Si pas d'id400
     if(!$id400->_id){
       $this->_object_id = null;
     }
 		
-    return $this->_object_id = $id400->object_id;    
+    $this->_object_id = $id400->object_id;   
+    
   }
 }
 ?>
