@@ -148,7 +148,7 @@ function changePage(page) {
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="15">ECHANGES HPRIM - {{$msg_evenement}}</th>
+          <th class="title" colspan="17">ECHANGES HPRIM - {{$msg_evenement}}</th>
         </tr>
         <tr>
           <th></th>
@@ -158,6 +158,7 @@ function changePage(page) {
           {{/if}}
           <th>{{mb_title object=$echange_hprim field="_object_class"}}</th>
           <th>{{mb_title object=$echange_hprim field="_object_id"}}</th>
+          <th>{{mb_title object=$echange_hprim field="id_permanent"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>
           <th>{{mb_title object=$echange_hprim field="destinataire"}}</th>
@@ -181,7 +182,7 @@ function changePage(page) {
           {{/foreach}}
         {{foreachelse}}
           <tr>
-            <td colspan="15">
+            <td colspan="17">
               {{tr}}CEchangeHprim.none{{/tr}}
             </td>
           </tr>

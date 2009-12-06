@@ -234,6 +234,9 @@ $locales['CMbObject-back-'] = 'Objects id';
 $locales['CEchangeHprim-_observations'] = 'Codes de l\'acquittement';
 $locales['CEchangeHprim-_observations-court'] = 'Codes';
 $locales['CEchangeHprim-_observations-desc'] = 'Codes de l\'acquittement';
+$locales['CEchangeHprim-id_permanent'] = 'Identifiant permanent';
+$locales['CEchangeHprim-id_permanent-desc'] = 'Identifiant permanent (IPP/NumDos)';
+$locales['CEchangeHprim-id_permanent-court'] = 'IPP/NumDos';
 $locales['config-sip-send_sej_pa'] = 'Envoi que les séjours de pré-admission';
 $locales['config-sip-send_sej_pa-desc'] = 'Envoi que les séjours de pré-admission';
 ?>

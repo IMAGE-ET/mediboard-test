@@ -34,15 +34,24 @@
     {{$object->_object_class}}
   </td>
 	<td style="width:0.1%">
-	  {{if @$object->_object_id_permanent}}
       {{if $object->_object_class == "CPatient"}}
        <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$object->_object_id}}" class="button search">
       {{elseif $object->_object_class == "CSejour"}}
        <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$object->_object_id}}" class="button search">
       {{/if}}
-	      {{$object->_object_id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+	      {{$object->_object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	    </a>
-    {{/if}}
+	</td>
+	<td>
+		{{if $object->id_permanent != null}}
+		  {{if $object->_object_class == "CPatient"}}
+       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$object->_object_id}}" class="button search">
+      {{elseif $object->_object_class == "CSejour"}}
+       <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$object->_object_id}}" class="button search">
+      {{/if}}
+	      {{$object->id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+	    </a>
+	  {{/if}}
 	</td>
 	<td>
 	  <label title='{{mb_value object=$object field="date_production"}}'>

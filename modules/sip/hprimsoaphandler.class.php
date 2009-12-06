@@ -80,6 +80,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->emetteur       = $data['idClient'];
         $echange_hprim->destinataire   = CAppUI::conf('mb_id');
         $echange_hprim->group_id       = CGroups::loadCurrent()->_id;
+        $echange_hprim->id_permanent   = $data['idSource'];
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "patients";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;
