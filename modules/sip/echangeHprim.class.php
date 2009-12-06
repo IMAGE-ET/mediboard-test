@@ -145,8 +145,10 @@ class CEchangeHprim extends CMbObject {
   	if ($this->_self_emetteur) {
   		$domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
   	  $domGetIdSourceObject->loadXML(utf8_decode($this->message));
-  	  $id_source = $domGetIdSourceObject->getIdSourceObject($evtNode, $objectNode);
-  	
+  	  $id_source = null;
+  	  try {
+  	  	$id_source = $domGetIdSourceObject->getIdSourceObject($evtNode, $objectNode);
+  	  } catch (Exception $e) {}
   		return $this->_object_id = $id_source;
   	}
   	
