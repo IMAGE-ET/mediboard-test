@@ -96,7 +96,7 @@ class CSetupsip extends CSetup {
      $this->makeRevision("0.18");
      
      $sql = "ALTER TABLE `echange_hprim` 
-              ADD `id_permanent` INT (11);";
+              ADD `id_permanent` INT (11) UNSIGNED;";
               
      $this->addQuery($sql);
               
