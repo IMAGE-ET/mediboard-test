@@ -50,8 +50,7 @@ Main.add( function () {
 </form>
 {{/if}}
 
-<table class="tbl" style="font-size: 9px;">
-
+<table class="tbl" style="font-size: 9px; {{if @$fixed_width|default:0}}width: 250px{{/if}}">
   <tr>
     <th class="title" colspan="3">Consultations</th>
   </tr>

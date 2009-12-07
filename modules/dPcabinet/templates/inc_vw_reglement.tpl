@@ -220,16 +220,18 @@ Main.add( function(){
                   {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
                   <input type="hidden" name="patient_date_reglement" value="" />
                   {{if $consult->valide}}
+                    {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
+										<br />
         	          {{mb_value object=$consult field="secteur1"}} (S1) +
-        	          {{mb_value object=$consult field="secteur2"}} (S2) =
-         			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
+        	          {{mb_value object=$consult field="secteur2"}} (S2)
                   {{else}}
+                    <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> 
+                    {{$dPconfig.currency_symbol}}
+										<br />
                     {{mb_label object=$consult field="secteur1"}}
         	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
         	          {{mb_label object=$consult field="secteur2"}}
-        	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
-       			        <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> 
-										{{$dPconfig.currency_symbol}}
+        	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
                   {{/if}}
                   {{if $consult->patient_date_reglement}}
                     {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}

@@ -100,6 +100,7 @@ $smarty->assign("listPlage", $listPlage);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("canCabinet"  , CModule::getCanDo("dPcabinet"));
 $smarty->assign("current_m", $current_m);
+$smarty->assign("fixed_width", CValue::get("fixed_width", "0"));
 $smarty->assign("mode_urgence", false);
 
 $smarty->display("inc_list_consult.tpl");

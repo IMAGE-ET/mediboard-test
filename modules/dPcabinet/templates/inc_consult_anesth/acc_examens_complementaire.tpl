@@ -73,10 +73,15 @@ function reloadListExamComp() {
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
-      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+      {{mb_field object=$consult field="consultation_id" hidden=1}}
       <table class="form">
         <tr>
-          <td><strong>Ajouter un examen complémentaire</strong></td>
+          <td>
+            {{mb_label object=$examComp field=realisation}}
+            {{mb_field object=$examComp field=realisation}}
+          </td>
+        </tr>
+        <tr>
           <td>
             {{mb_label object=$examComp field="examen"}}
             <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this)">
@@ -86,18 +91,15 @@ function reloadListExamComp() {
               <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')">{{tr}}New{{/tr}}</button>
           </td>
         </tr>
-        <tr>
-          <td>
-            {{mb_field object=$examComp field=realisation}}
-          </td>
+				<tr>
           <td>
             <input type="hidden" name="_hidden_examen" value="" />
             <textarea name="examen" onblur="if(!$(this).emptyValue()){submitExamComp(this.form);}"></textarea>
           </td>
-        </tr>
+			  </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button">{{tr}}Add{{/tr}}</button>
+            <button class="add" type="button">{{tr}}CExamComp-title-create{{/tr}}</button>
           </td>
         </tr>
       </table>      
