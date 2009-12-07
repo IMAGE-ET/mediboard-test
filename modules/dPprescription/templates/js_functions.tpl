@@ -333,11 +333,13 @@ moveTbodyElt = function(oTbody, cat_id){
 }
 
 changePraticienMed = function(praticien_id){
-  var oFormAddLine = document.addLine;
-  var oFormAddLineCommentMed = document.addLineCommentMed;
-  
-  oFormAddLine.praticien_id.value = praticien_id;
-  oFormAddLineCommentMed.praticien_id.value = praticien_id;
+  var oFormAddLine = document.forms.addLine;
+  var oFormAddLineCommentMed = document.forms.addLineCommentMed;
+	var oFormTransfert = document.forms.transfert_line_TP;
+
+  $V(oFormAddLine.praticien_id, praticien_id);
+	$V(oFormTransfert.praticien_id, praticien_id);
+  $V(oFormAddLineCommentMed, praticien_id);
 }
 
 // Test permettant de pré-selectionner la case à cocher 

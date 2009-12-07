@@ -8,52 +8,39 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
 global $AppUI, $can;
 
 $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
-$sejour_id = CValue::post("sejour_id");
+$prescription_id = CValue::post("prescription_id");
+$jour_decalage = CValue::post("jour_decalage");
+$decalage_line = CValue::post("decalage_line");
+$unite_decalage = CValue::post("unite_decalage");
+$operation_id = CValue::post("operation_id");
+$debut = CValue::post("debut");
+$time_debut = CValue::post("time_debut");
+$praticien_id = CValue::post("praticien_id");
 
-$sejour = new CSejour();
-$sejour->load($sejour_id);
-
-// Chargement des prescriptions du sejour
 $prescription = new CPrescription();
-$sejour->loadRefsPrescriptions();
+$prescription->load($prescription_id);
 
-if(!$sejour->_ref_prescriptions["sejour"]->_id){
-  // Si la prescription de pre-admission n'existe pas, on la crée
-  if(!$sejour->_ref_prescriptions["pre_admission"]->_id){
-    $prescription_preadm = new CPrescription();
-	  $prescription_preadm->object_id = $sejour->_id;
-	  $prescription_preadm->object_class = $sejour->_class_name;
-	  $prescription_preadm->type = "pre_admission";
-	  $msg = $prescription_preadm->store();
-	  CAppUI::displayMsg($msg, "CPrescription-msg-create");
-  }
-  $prescription_sejour = new CPrescription();
-  $prescription_sejour->object_id = $sejour->_id;
-  $prescription_sejour->object_class = $sejour->_class_name;
-  $prescription_sejour->type = "sejour";
-  $msg = $prescription_sejour->store();
-  
-  CAppUI::displayMsg($msg, "CPrescription-msg-create");
-} else {
-  $prescription_sejour = $sejour->_ref_prescriptions["sejour"];
-}
-
-
+// Chargement de la ligne
 $line = new CPrescriptionLineMedicament();
 $line->load($prescription_line_medicament_id);
-
 $line->loadRefsPrises();
 
 // Sauvegarde de la ligne de traitement personnel
 $line->_id = "";
 $line->traitement_personnel = 1;
-$line->prescription_id = $prescription_sejour->_id;
-$line->praticien_id = $can->admin ? $sejour->praticien_id : $AppUI->user_id;
-$line->debut = mbDate($sejour->_entree);
+$line->prescription_id = $prescription->_id;
+$line->praticien_id = $praticien_id;
+$line->creator_id = $AppUI->user_id;
+$line->debut = $debut;
+$line->time_debut = $time_debut;
+$line->jour_decalage = $jour_decalage;
+$line->decalage_line = $decalage_line;
+$line->unite_decalage = $unite_decalage;
+$line->operation_id = $operation_id;
+
 $msg = $line->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 

@@ -68,10 +68,33 @@ Main.add( function(){
 
 transfertLineTP = function(line_id, sejour_id){
   var oForm = getForm("transfert_line_TP");
-  $V(oForm.prescription_line_medicament_id, line_id);
-  $V(oForm.sejour_id, sejour_id);
+  var oFormDate = document.forms.selDateLine;
+  
+	$V(oForm.prescription_line_medicament_id, line_id);
+  
+  if(oFormDate){
+    if(oFormDate.debut && oFormDate.debut.value){
+      $V(oForm.debut, oFormDate.debut.value);  
+    }
+    if(oFormDate.time_debut && oFormDate.time_debut.value){
+      $V(oForm.time_debut, oFormDate.time_debut.value);
+    }
+    if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
+      $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
+    }
+    if(oFormDate.decalage_line && oFormDate.decalage_line.value){
+      $V(oForm.decalage_line, oFormDate.decalage_line.value);
+    }
+    if(oFormDate.unite_decalage && oFormDate.unite_decalage.value){
+      $V(oForm.unite_decalage, oFormDate.unite_decalage.value);
+    }
+    if(oFormDate.operation_id && oFormDate.operation_id.value){
+      $V(oForm.operation_id, oFormDate.operation_id.value);
+    }
+  }
+		
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-    Prescription.reloadPrescSejour('{{$prescription->_id}}','{{$prescription->_ref_object->_id}}', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
+    Prescription.reload('{{$prescription->_id}}', '', 'medicament','',null, null);
   } } );
 }
 
@@ -80,8 +103,16 @@ transfertLineTP = function(line_id, sejour_id){
 <form name="transfert_line_TP" action="?" method="post">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_transfert_line_tp_aed" />
+	<input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
-  <input type="hidden" name="sejour_id" value="" />
+	<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	<!-- Champs permettant de gerer les elements relatifs -->
+  <input type="hidden" name="debut" value="" />
+  <input type="hidden" name="time_debut" value="" />
+  <input type="hidden" name="jour_decalage" value="" />
+  <input type="hidden" name="decalage_line" value="" />
+  <input type="hidden" name="unite_decalage" value="" />
+  <input type="hidden" name="operation_id" value="" />
 </form>
 
 <!-- Cas normal -->
@@ -108,6 +139,7 @@ transfertLineTP = function(line_id, sejour_id){
   <input type="hidden" name="_most_used_poso" value="1" />
   {{/if}}
 	<input type="hidden" name="traitement_personnel" value="0" />
+	
 	<!-- Champs permettant de gerer les elements relatifs -->
 	<input type="hidden" name="jour_decalage" value="" />
   <input type="hidden" name="decalage_line" value="" />
