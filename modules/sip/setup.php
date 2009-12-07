@@ -99,6 +99,13 @@ class CSetupsip extends CSetup {
               ADD `id_permanent` INT (11) UNSIGNED zerofill;";
               
      $this->addQuery($sql);
+     
+     $this->makeRevision("0.18");
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+              CHANGE `id_permanent` `id_permanent` VARCHAR (25);";
+              
+     $this->addQuery($sql);
               
      $this->mod_version = "0.19";
   }

@@ -36,7 +36,6 @@ class CEchangeHprim extends CMbObject {
   var $_self_destinataire   = null;
   var $_object_class        = null;
   var $_object_id           = null;
-  var $_id_permanent				= null;
   var $_observations        = null;
   
   // Filter fields
@@ -69,7 +68,7 @@ class CEchangeHprim extends CMbObject {
     $specs["statut_acquittement"]   = "str show|0";
     $specs["message_valide"]        = "bool show|0";
     $specs["acquittement_valide"]   = "bool show|0";
-    $specs["id_permanent"]          = "num";
+    $specs["id_permanent"]          = "str";
     
     $specs["_object_class"]         = "enum class";
     $specs["_object_id"]            = "ref class|CMbObject meta|_object_class";
