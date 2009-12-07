@@ -499,5 +499,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     return $mbVenue;
   }
+  
+  function mappingDebiteurs($node, $mbVenue) {
+    
+    
+  }
 }
 ?>

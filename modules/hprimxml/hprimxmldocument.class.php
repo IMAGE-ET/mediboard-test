@@ -599,7 +599,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($dates, "dateDebutDroit", mbDate($mbPatient->deb_amo));
     $this->addElement($dates, "dateFinDroit", mbDate($mbPatient->fin_amo));
     
-    
     $obligatoire = $this->addElement($elParent, "obligatoire");
     $this->addElement($obligatoire, "grandRegime", $mbPatient->code_regime);
     $this->addElement($obligatoire, "caisseAffiliation", $mbPatient->caisse_gest);

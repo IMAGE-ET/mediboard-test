@@ -79,7 +79,29 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function debiteursVenue($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
+    if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->statut_acquittement = "erreur";
+      $echange_hprim->store();
+      
+      return $messageAcquittement;
+    }
     
+    // Traitement du patient
+    $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
+    if ($echange_hprim->statut_acquittement != "OK") {
+      return $messageAcquittement;
+    }
+    
+    $domAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domAcquittement->identifiant = $data['identifiantMessage'];
+    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire_libelle = $data['libelleClient'];
   }
 }
 
