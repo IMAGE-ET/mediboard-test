@@ -14,7 +14,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     'fusionPatient'         => "CHPrimXMLFusionPatient",
     'venuePatient'          => "CHPrimXMLVenuePatient",
     'fusionVenue'           => "CHPrimXMLFusionVenue",
-    'mouvementPatient'      => "CHPrimXMLMouvementPatient"
+    'mouvementPatient'      => "CHPrimXMLMouvementPatient",
+    'debiteursVenue'        => "CHPrimXMLDebiteursVenue"
   );
   
   static function getVersionEvenementsPatients() {

@@ -592,7 +592,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "nom", $mbPatient->regime_sante);
     
-    
     $assure = $this->addElement($elParent, "assure");
     $this->addAssure($assure, $mbPatient);
     
