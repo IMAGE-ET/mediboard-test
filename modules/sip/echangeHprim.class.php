@@ -134,6 +134,10 @@ class CEchangeHprim extends CMbObject {
 	    	$this->_object_class = "CSejour";
 	      $this->loadObjectId("hprim:fusionVenue", "hprim:venue");
 	      break;
+      case "debiteursVenue" :
+        $this->_object_class = "CSejour";
+        $this->loadObjectId("hprim:debiteursVenue", "hprim:venue");
+        break;
 	    default :	    	
 	    	$this->_object_class = null;
 	    	$this->_object_id = null;

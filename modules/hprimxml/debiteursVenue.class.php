@@ -21,41 +21,25 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
-    $venuePatient = $this->addElement($evenementPatient, "debiteursVenue");
+    $debiteursVenue = $this->addElement($evenementPatient, "debiteursVenue");
     $actionConversion = array (
       "create" => "création",
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $this->addAttribute($venuePatient, "action", $actionConversion[$mbVenue->_ref_last_log->type]);
+    $this->addAttribute($debiteursVenue, "action", $actionConversion[$mbVenue->_ref_last_log->type]);
     
-    $patient = $this->addElement($venuePatient, "patient");
+    $patient = $this->addElement($debiteursVenue, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $mbVenue->_ref_patient, null, $referent);
+    $this->addPatient($patient, $mbVenue->_ref_patient, null, $referent, true);
     
-    $venue = $this->addElement($venuePatient, "venue"); 
+    $venue = $this->addElement($debiteursVenue, "venue"); 
     // Ajout de la venue   
-    $this->addVenue($venue, $mbVenue, $referent);
-    
-    // Ajout des attributs du séjour
-    $this->addAttribute($venue, "confidentiel", "non");
-    
-    // Etat d'une venue : encours, clôturée ou préadmission
-    $etatConversion = array (
-      "preadmission" => "préadmission",
-      "encours"  => "encours",
-      "cloture" => "clôturée"
-    );
+    $this->addVenue($venue, $mbVenue, $referent, true);
 
-    $this->addAttribute($venue, "etat", $etatConversion[$mbVenue->_etat]);
-    
-    $this->addAttribute($venue, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
-    $this->addAttribute($venue, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
-    
-    // Ajout des employeurs
-    
     // Ajout des débiteurs
-    
+    $debiteurs = $this->addElement($debiteursVenue, "debiteurs");
+    $this->addDebiteurs($debiteurs, $mbVenue->_ref_patient, $referent);
     
     // Traitement final
     $this->purgeEmptyElements();
@@ -67,14 +51,14 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
     $evenementPatient = $xpath->queryUniqueNode($query);
-    $venuePatient= $xpath->queryUniqueNode("hprim:venuePatient", $evenementPatient);
+    $debiteursVenue = $xpath->queryUniqueNode("hprim:debiteursVenue", $evenementPatient);
 
-    $data['action'] = $this->getActionEvenement("hprim:venuePatient", $evenementPatient);
+    $data['action'] = $this->getActionEvenement("hprim:debiteursVenue", $evenementPatient);
 
-    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $venuePatient);
-    $data['venue'] = $xpath->queryUniqueNode("hprim:venue", $venuePatient);
-    $data['employeurs'] = $xpath->queryUniqueNode("hprim:employeurs", $venuePatient);
-    $data['debiteurs'] = $xpath->queryUniqueNode("hprim:debiteurs", $venuePatient);
+    $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $debiteursVenue);
+    $data['venue'] = $xpath->queryUniqueNode("hprim:venue", $debiteursVenue);
+    $data['employeurs'] = $xpath->queryUniqueNode("hprim:employeurs", $debiteursVenue);
+    $data['debiteurs'] = $xpath->queryUniqueNode("hprim:debiteurs", $debiteursVenue);
 
     $data['idSource'] = $this->getIdSource($data['patient']);
     $data['idCible'] = $this->getIdCible($data['patient']);

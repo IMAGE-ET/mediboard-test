@@ -136,7 +136,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
             
     $this->generateEnteteMessageEvenementsPatients();
     $this->generateFromOperation($mbObject, $referent);
-    
+
     $doc_valid = $this->schemaValidate();
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
@@ -454,7 +454,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addPersonne($personne, $praticien);
   }
   
-  function addVenue($elParent, $mbVenue, $referent = null) {
+  function addVenue($elParent, $mbVenue, $referent = null, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     if(!$referent) {
@@ -500,41 +500,43 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
     
-    $medecins = $this->addElement($elParent, "medecins");
+    if (!$light) {
+      $medecins = $this->addElement($elParent, "medecins");
     
-    // Traitement du medecin traitant du patient
-    $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
-    if ($_ref_medecin_traitant->_id) {
-      if ($_ref_medecin_traitant->adeli) {
-        $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
+      // Traitement du medecin traitant du patient
+      $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
+      if ($_ref_medecin_traitant->_id) {
+        if ($_ref_medecin_traitant->adeli) {
+          $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
+        }
       }
-    }
-    
-    // Traitement du medecin adressant
-    $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
-    if ($mbVenue->_adresse_par_prat) {
-      if ($_ref_adresse_par_prat->adeli) {
-        $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
+      
+      // Traitement du medecin adressant
+      $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
+      if ($mbVenue->_adresse_par_prat) {
+        if ($_ref_adresse_par_prat->adeli) {
+          $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
+        }
       }
-    }
-    
-    // Traitement du responsable du séjour
-    $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
-    
-    // Traitement des prescripteurs
-    $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
-    if (is_array($_ref_prescripteurs)) {
-      foreach ($_ref_prescripteurs as $prescripteur) {
-        $this->addMedecin($medecins, $prescripteur, "prsc");
+      
+      // Traitement du responsable du séjour
+      $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
+      
+      // Traitement des prescripteurs
+      $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
+      if (is_array($_ref_prescripteurs)) {
+        foreach ($_ref_prescripteurs as $prescripteur) {
+          $this->addMedecin($medecins, $prescripteur, "prsc");
+        }
       }
-    }
-    
-    // Traitement des intervenant (ayant effectués des actes)
-    $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
-    if (is_array($_ref_actes_ccam)) {
-      foreach ($_ref_actes_ccam as $acte_ccam) {
-        $intervenant = $acte_ccam->_ref_praticien;
-        $this->addMedecin($medecins, $intervenant, "intv");
+      
+      // Traitement des intervenant (ayant effectués des actes)
+      $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
+      if (is_array($_ref_actes_ccam)) {
+        foreach ($_ref_actes_ccam as $acte_ccam) {
+          $intervenant = $acte_ccam->_ref_praticien;
+          $this->addMedecin($medecins, $intervenant, "intv");
+        }
       }
     }
     
@@ -567,13 +569,71 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
     }
     
-    $placement = $this->addElement($elParent, "Placement");
-    $modePlacement = $this->addElement($placement, "modePlacement");
-    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbVenue->modalite);
-    $this->addElement($modePlacement, "libelle", substr($mbVenue->_view, 0, 80));   
+    if (!$light) {
+      $placement = $this->addElement($elParent, "Placement");
+      $modePlacement = $this->addElement($placement, "modePlacement");
+      $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbVenue->modalite);
+      $this->addElement($modePlacement, "libelle", substr($mbVenue->_view, 0, 80));   
+      
+      $datePlacement = $this->addElement($placement, "datePlacement");
+      $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
+    }
+  }
+  
+  function addDebiteurs($elParent, $mbPatient, $referent = null) {
+    $debiteur = $this->addElement($elParent, "debiteur");
     
-    $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
+    $assurance = $this->addElement($debiteur, "assurance");
+    $this->addAssurance($assurance, $mbPatient, $referent);
+  }
+  
+  function addAssurance($elParent, $mbPatient, $referent = null) {
+    $identifiant = $this->addElement($elParent, "identifiant");
+    
+    $this->addElement($elParent, "nom", $mbPatient->regime_sante);
+    
+    
+    $assure = $this->addElement($elParent, "assure");
+    $this->addAssure($assure, $mbPatient);
+    
+    $dates = $this->addElement($elParent, "dates");
+    $this->addElement($dates, "dateDebutDroit", mbDate($mbPatient->deb_amo));
+    $this->addElement($dates, "dateFinDroit", mbDate($mbPatient->fin_amo));
+    
+    
+    $obligatoire = $this->addElement($elParent, "obligatoire");
+    $this->addElement($obligatoire, "grandRegime", $mbPatient->code_regime);
+    $this->addElement($obligatoire, "caisseAffiliation", $mbPatient->caisse_gest);
+    $this->addElement($obligatoire, "centrePaiement", $mbPatient->centre_gest);
+  }
+  
+  function addAssure($elParent, $mbPatient) {
+    $this->addElement($elParent, "immatriculation", $mbPatient->matricule);     
+    
+    $personne = $this->addElement($elParent, "personne");
+    $sexeConversion = array (
+      "m" => "M",
+      "f" => "F",
+    );
+    $this->addAttribute($personne, "sexe", $sexeConversion[$mbPatient->assure_sexe]);  
+    $this->addTexte($personne, "nomUsuel", $mbPatient->assure_nom);
+    $this->addTexte($personne, "nomNaissance", $mbPatient->assure_nom_jeune_fille);
+    $prenoms = $this->addElement($personne, "prenoms");
+    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom);
+    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_2);
+    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_3);
+    $this->addTexte($prenoms, "prenom", $mbPatient->assure_prenom_4);
+    $adresses = $this->addElement($personne, "adresses");
+    $adresse = $this->addElement($adresses, "adresse");
+    $this->addTexte($adresse, "ligne", substr($mbPatient->assure_adresse, 0, 35));
+    $this->addTexte($adresse, "ville", $mbPatient->assure_ville);
+    if ($mbPatient->assure_pays_insee)
+      $this->addElement($adresse, "pays", str_pad($mbPatient->assure_pays_insee, 3, '0', STR_PAD_LEFT));
+    $this->addElement($adresse, "codePostal", $mbPatient->assure_cp);
+    $dateNaissance = $this->addElement($personne, "dateNaissance");
+    $this->addElement($dateNaissance, "date", $mbPatient->assure_naissance);
+    
+    $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }
 }
 

@@ -123,6 +123,12 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->id_permanent = $data['idSourceVenue'];
         $messageAcquittement = $domGetEvenement->mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
       }
+      // Gestion des débiteurs d'une venue de patient
+      else if($domGetEvenement instanceof CHPrimXMLDebiteursVenue) {
+        $data = array_merge($data, $domGetEvenement->getDebiteursVenueXML());
+        $echange_hprim->id_permanent = $data['idSourceVenue'];
+        $messageAcquittement = $domGetEvenement->debiteursVenue($domAcquittement, $echange_hprim, $newPatient, $data);
+      }
       // Aucun des six événements retour d'erreur
       else {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E007"); 

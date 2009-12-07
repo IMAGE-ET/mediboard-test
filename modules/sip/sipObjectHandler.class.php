@@ -115,35 +115,9 @@ class CSipObjectHandler extends CMbObjectHandler {
         if (!CAppUI::conf("sip send_all_patients") && !$mbObject->_IPP) {
           return;
         }
-  
+        
         $domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
-        $domEvenement->emetteur = CAppUI::conf('mb_id');
-        $domEvenement->destinataire = $dest_hprim->nom;
-        
-        $msgEvtPatient = $domEvenement->generateTypeEvenement($mbObject);
-           
-        if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
-          trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-        }
-  
-        // Récupère le message d'acquittement après l'execution la methode evenementPatient
-        if (null == $acquittement = $client->evenementPatient($msgEvtPatient)) {
-          trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
-        }
-        
-        $echange_hprim = new CEchangeHprim();
-        $echange_hprim->load($domEvenement->identifiant);
-        $echange_hprim->date_echange = mbDateTime();
-        
-        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
-        $doc_valid = $domGetAcquittement->schemaValidate();
-        
-        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        $echange_hprim->acquittement = $acquittement;
-  
-        $echange_hprim->store();
+        $this->sendEvenement($domEvenement, $dest_hprim, $mbObject);
       }
     // Traitement Sejour
     } else if ($mbObject instanceof CSejour) {
@@ -230,34 +204,11 @@ class CSipObjectHandler extends CMbObjectHandler {
           $mbObject->_num_dossier = $num_dossier->id400;
         }
         
-        $domEvenement = new CHPrimXMLVenuePatient();
-        $domEvenement->emetteur = CAppUI::conf('mb_id');
-        $domEvenement->destinataire = $dest_hprim->nom;
+        $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
+        $this->sendEvenement($domEvenementVenuePatient, $dest_hprim, $mbObject);
         
-        $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
-
-        if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
-          trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-        }
-  
-        // Récupère le message d'acquittement après l'execution la methode evenementPatient
-        if (null == $acquittement = $client->evenementPatient($msgEvtVenuePatient)) {
-          trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
-        }
-        
-        $echange_hprim = new CEchangeHprim();
-        $echange_hprim->load($domEvenement->identifiant);
-        $echange_hprim->date_echange = mbDateTime();
-        
-        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
-        $doc_valid = $domGetAcquittement->schemaValidate();
-        
-        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        $echange_hprim->acquittement = $acquittement;
-  
-        $echange_hprim->store();
+        $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
+        $this->sendEvenement($domEvenementDebiteursVenue, $dest_hprim, $mbObject);
       }
     }
   }
@@ -302,6 +253,36 @@ class CSipObjectHandler extends CMbObjectHandler {
   }
 
   function onDelete(CMbObject &$mbObject) {
+  }
+  
+  function sendEvenement ($domEvenement, $dest_hprim, $mbObject) {
+    $domEvenement->emetteur = CAppUI::conf('mb_id');
+    $domEvenement->destinataire = $dest_hprim->nom;
+    
+    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
+
+    if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
+      trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+    }
+
+    // Récupère le message d'acquittement après l'execution la methode evenementPatient
+    if (null == $acquittement = $client->evenementPatient($msgEvtVenuePatient)) {
+      trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
+    }
+    
+    $echange_hprim = new CEchangeHprim();
+    $echange_hprim->load($domEvenement->identifiant);
+    $echange_hprim->date_echange = mbDateTime();
+    
+    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domGetAcquittement->loadXML(utf8_decode($acquittement));        
+    $doc_valid = $domGetAcquittement->schemaValidate();
+    
+    $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+    $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+    $echange_hprim->acquittement = $acquittement;
+
+    $echange_hprim->store();
   }
 }
 ?>

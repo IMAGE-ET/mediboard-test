@@ -907,10 +907,13 @@ class CMbObject {
     
     $type = "store";
     if ($this->_old->_id == null) {
-      $type = $this->_merging ? "merge" : "create";
+      $type = "create";
       $fields = array();
     }
-    
+    if ($this->_merging) {
+      $type = "merge" ;
+    }
+      
     if ($this->_id == null) {
       $type = "delete";
       $object_id = $this->_old->_id;
