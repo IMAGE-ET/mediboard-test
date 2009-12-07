@@ -15,7 +15,7 @@ $groupmod = CValue::getOrSession("groupmod", 2);
 $interval = CValue::getOrSession("interval", "day");
 
 $left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, errors
-$left_sampling  = CValue::getOrSession("left_sampling", "total"); // total, mean
+$left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
 
 $right_mode     = CValue::getOrSession("right_mode", "hits"); // hits, size
 $right_sampling = CValue::getOrSession("right_sampling", "total"); // total, mean
