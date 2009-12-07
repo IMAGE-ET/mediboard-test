@@ -207,8 +207,10 @@ class CSipObjectHandler extends CMbObjectHandler {
         $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
         $this->sendEvenement($domEvenementVenuePatient, $dest_hprim, $mbObject);
         
-        $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
-        $this->sendEvenement($domEvenementDebiteursVenue, $dest_hprim, $mbObject);
+        if ($mbObject->_ref_patient->code_regime) {
+          $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
+          $this->sendEvenement($domEvenementDebiteursVenue, $dest_hprim, $mbObject);
+        }
       }
     }
   }
@@ -260,7 +262,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     $domEvenement->destinataire = $dest_hprim->nom;
     
     $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
-
+mbTrace($msgEvtVenuePatient, "evt", true);
     if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
       trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
     }
