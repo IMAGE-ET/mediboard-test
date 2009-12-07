@@ -53,7 +53,6 @@ Main.add(function () {
        
 			  {{mb_label object=$antecedent field=_search}}
 			  {{mb_field object=$antecedent field=_search size=25 class="autocomplete"}}
-			  {{mb_include_script module=dPcompteRendu script=aideSaisie}}
 			  <script type="text/javascript">
 			    Main.add(function() {
 			      prepareForm(document.editAntFrmGrid);
