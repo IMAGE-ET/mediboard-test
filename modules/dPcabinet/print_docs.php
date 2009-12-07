@@ -21,7 +21,7 @@ $can->edit &= $consult->canEdit();
 $can->needsEdit();
 $can->needsObject($consult);
 
-$header = $footer = null;
+$headerFound = $footerFound = false;
 
 $consult->loadRefsDocs();
 $docs_ids = array_keys($consult->_ref_documents);
@@ -31,17 +31,32 @@ foreach($nbDoc as $compte_rendu_id => $nb_print){
       $doc = $consult->_ref_documents[$compte_rendu_id];
       
       // Suppression des headers et footers en trop (tous sauf le premier)
-      if (!$header || !$footer) {
-        $xml = new DOMDocument;
-        $xml->loadHTML($doc->source);
-        if ($header = $xml->getElementById("header")) {
+      $xml = new DOMDocument;
+      $source = utf8_encode("<div>$doc->source</div>");
+      $source = preg_replace("/&\w+;/i", "", $source);
+      
+      @$xml->loadXML($source);
+      $xpath = new DOMXPath($xml);
+      
+      $nodeList = $xpath->query("//*[@id='header']");
+      if ($nodeList->length) {
+        if ($headerFound) {
+          $header = $nodeList->item(0);
           $header->parentNode->removeChild($header);
         }
-        if ($footer = $xml->getElementById("footer")) {
+        $headerFound = true;
+      }
+      
+      $nodeList = $xpath->query("//*[@id='footer']");
+      if ($nodeList->length) {
+        if ($footerFound) {
+          $footer = $nodeList->item(0);
           $footer->parentNode->removeChild($footer);
         }
-        $doc->source = $xml->saveHTML();
+        $footerFound = true;
       }
+      
+      $doc->source = $xml->saveHTML();
       
       $documents[] = $doc;
     }
@@ -49,13 +64,9 @@ foreach($nbDoc as $compte_rendu_id => $nb_print){
 }
 
 $source = "";
-foreach($documents as $doc) {
+foreach($documents as $key => $doc) {
   $source .= $doc->source . '<br style="page-break-after: always;" />';
 }
-
-// @fixme: hackish way of making a semi-valid HTML doc
-$source = str_replace('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">', "", $source);
-$source = str_replace(array("<html>", "</html>", "<body>", "</body>"), "", $source);
 
 // Initialisation de FCKEditor
 $templateManager = new CTemplateManager;
