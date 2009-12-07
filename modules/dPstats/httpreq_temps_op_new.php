@@ -136,6 +136,19 @@ $queryWhere .= "\nAND operations.debut_op < operations.fin_op";
 
 buildPartialTables($tableName, $tableFields, $queryFields, $querySelect, $queryWhere);
 
+// Durée en salle de reveil
+$tableName   = "op_reveil";
+$tableFields = "\n`reveil_moy` time NOT NULL default '00:00:00',";
+$tableFields.= "\n`reveil_ecart` time NOT NULL default '00:00:00',";
+$queryFields = array("reveil_moy", "reveil_ecart");
+$querySelect = "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil))) as reveil_moy,";
+$querySelect.= "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil))) as reveil_ecart,";
+$queryWhere  = "\nAND operations.entree_reveil IS NOT NULL";
+$queryWhere .= "\nAND operations.sortie_reveil IS NOT NULL";
+$queryWhere .= "\nAND operations.entree_reveil < operations.sortie_reveil";
+
+buildPartialTables($tableName, $tableFields, $queryFields, $querySelect, $queryWhere);
+
   
 //echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";
 

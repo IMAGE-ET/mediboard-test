@@ -16,8 +16,11 @@
     <th rowspan="2">Estimation de durée</th>
     <th colspan="2">Occupation de salle</th>
     <th colspan="2">Durée d'intervention</th>
+    <th colspan="2">Durée salle de reveil</th>
   </tr>
   <tr>
+    <th>Moyenne</th>
+    <th>Ecart-type</th>
     <th>Moyenne</th>
     <th>Ecart-type</th>
     <th>Moyenne</th>
@@ -26,7 +29,7 @@
   {{foreach from=$listTemps item=curr_temps}}
   <tr>
     <td>Dr {{$curr_temps->_ref_praticien->_view}}</td>
-    <td>{{$curr_temps->ccam}}</td>
+    <td class="text">{{$curr_temps->ccam}}</td>
     <td>{{$curr_temps->nb_intervention}}</td>
     {{if $curr_temps->estimation > $curr_temps->occup_moy}}
     <td style="background-color: #aaf;">
@@ -41,6 +44,8 @@
     <td><i>{{if $curr_temps->occup_ecart != "-"}}{{$curr_temps->occup_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
     <td>{{$curr_temps->duree_moy|date_format:$dPconfig.time}}</td>
     <td><i>{{if $curr_temps->duree_ecart != "-"}}{{$curr_temps->duree_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
+    <td>{{$curr_temps->reveil_moy|date_format:$dPconfig.time}}</td>
+    <td><i>{{if $curr_temps->reveil_ecart != "-"}}{{$curr_temps->reveil_ecart|date_format:$dPconfig.time}}{{else}}-{{/if}}</i></td>
   </tr>
   {{/foreach}}
   
@@ -59,6 +64,8 @@
     <td>{{$total.occup_moy|date_format:$dPconfig.time}}</td>
     <td>-</td>
     <td>{{$total.duree_moy|date_format:$dPconfig.time}}</td>
+    <td>-</td>
+    <td>{{$total.reveil_moy|date_format:$dPconfig.time}}</td>
     <td>-</td>
   </tr>
 </table>

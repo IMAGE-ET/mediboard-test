@@ -14,7 +14,8 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$typeVue = CValue::getOrSession("typeVue", 2);
+$typeVue        = CValue::getOrSession("typeVue"       , 2);
+$nb_sejour_mini = CValue::getOrSession("nb_sejour_mini", 3);
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
@@ -50,10 +51,11 @@ if ($typeVue == 2) {
   $smarty->assign("type"      , $type);
 }
 
-$smarty->assign("user_id", $AppUI->user_id);
-$smarty->assign("listTemps", $listTemps);
-$smarty->assign("total", $total);
-$smarty->assign("typeVue", $typeVue);
+$smarty->assign("user_id"       , $AppUI->user_id);
+$smarty->assign("listTemps"     , $listTemps);
+$smarty->assign("total"         , $total);
+$smarty->assign("typeVue"       , $typeVue);
+$smarty->assign("nb_sejour_mini", $nb_sejour_mini);
 
 $smarty->display("vw_time_op.tpl");
 

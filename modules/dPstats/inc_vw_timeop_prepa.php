@@ -16,7 +16,8 @@ $total["moyenne"] = 0;
 $listTemps = new CTempsPrepa;
 
 $where = array();
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrats));
+$where["nb_intervention"] = ">= $nb_sejour_mini";
+$where["chir_id"]         = CSQLDataSource::prepareIn(array_keys($listPrats));
 
 $ljoin = array();
 $ljoin["users"] = "users.user_id = temps_prepa.chir_id";

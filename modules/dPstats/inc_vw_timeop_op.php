@@ -12,18 +12,21 @@ $codeCCAM   = strtoupper(CValue::getOrSession("codeCCAM", ""));
 $prat_id    = CValue::getOrSession("prat_id", 0);
 
 $total["nbInterventions"] = 0;
-$total["estim_moy"] = 0;
-$total["estim_somme"] = 0;
-$total["occup_moy"] = 0;
-$total["occup_somme"] = 0;
-$total["duree_moy"] = 0;
-$total["duree_somme"] = 0;
+$total["estim_moy"]       = 0;
+$total["estim_somme"]     = 0;
+$total["occup_moy"]       = 0;
+$total["occup_somme"]     = 0;
+$total["duree_moy"]       = 0;
+$total["duree_somme"]     = 0;
+$total["reveil_moy"]      = 0;
+$total["reveil_somme"]    = 0;
 
 
 $listTemps = new CTempsOp;
 
 $where = array();
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
+$where["nb_intervention"] = ">= $nb_sejour_mini";
+$where["chir_id"]         = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
 
 if($codeCCAM) {
   $codeCCAM = trim($codeCCAM);
@@ -51,43 +54,47 @@ if($codeCCAM) {
     if($old_chir != $temps->chir_id) {
       // Si on change de chirurgien, alors on initialise la variable
       $old_temps_id = $temps->temps_op_id;
-      $TempsOperatoire[$temps->chir_id] = new CTempsOp();
-      $TempsOperatoire[$temps->chir_id]->chir_id = $temps->chir_id;
+      $TempsOperatoire[$temps->chir_id]                  = new CTempsOp();
+      $TempsOperatoire[$temps->chir_id]->chir_id         = $temps->chir_id;
       $TempsOperatoire[$temps->chir_id]->nb_intervention = 0;
-      $TempsOperatoire[$temps->chir_id]->occup_moy = 0;
-      $TempsOperatoire[$temps->chir_id]->duree_moy = 0;
-      $TempsOperatoire[$temps->chir_id]->estimation = 0;
-      $TempsOperatoire[$temps->chir_id]->duree_ecart = "-";
-      $TempsOperatoire[$temps->chir_id]->occup_ecart = "-";
-      $TempsOperatoire[$temps->chir_id]->ccam= $codeCCAM;
+      $TempsOperatoire[$temps->chir_id]->estimation      = 0;
+      $TempsOperatoire[$temps->chir_id]->occup_moy       = 0;
+      $TempsOperatoire[$temps->chir_id]->duree_moy       = 0;
+      $TempsOperatoire[$temps->chir_id]->duree_ecart     = "-";
+      $TempsOperatoire[$temps->chir_id]->occup_ecart     = "-";
     }
-    
+    $TempsOperatoire[$temps->chir_id]->ccam            = str_replace("|", ", ", $codeCCAM);
     $TempsOperatoire[$temps->chir_id]->nb_intervention += $temps->nb_intervention;
-    $TempsOperatoire[$temps->chir_id]->occup_moy += $temps->nb_intervention * strtotime($temps->occup_moy);
-    $TempsOperatoire[$temps->chir_id]->duree_moy += $temps->nb_intervention * strtotime($temps->duree_moy);
-    $TempsOperatoire[$temps->chir_id]->estimation += $temps->nb_intervention * strtotime($temps->estimation);
+    $TempsOperatoire[$temps->chir_id]->estimation      += $temps->nb_intervention * strtotime($temps->estimation);
+    $TempsOperatoire[$temps->chir_id]->occup_moy       += $temps->nb_intervention * strtotime($temps->occup_moy);
+    $TempsOperatoire[$temps->chir_id]->duree_moy       += $temps->nb_intervention * strtotime($temps->duree_moy);
+    $TempsOperatoire[$temps->chir_id]->reveil_moy      += $temps->nb_intervention * strtotime($temps->reveil_moy);
 
     $old_chir = $temps->chir_id;    
   }
-  $listTemps=$TempsOperatoire;
+  $listTemps = $TempsOperatoire;
 }
 
 
 foreach($listTemps as $keyTemps => $temps) {
   if($codeCCAM) {
-    $temps->occup_moy = strftime("%H:%M:%S",$temps->occup_moy / $temps->nb_intervention);
-    $temps->estimation = strftime("%H:%M:%S",$temps->estimation / $temps->nb_intervention);
-    $temps->duree_moy = strftime("%H:%M:%S",$temps->duree_moy / $temps->nb_intervention); 
+    $temps->estimation  = strftime("%H:%M:%S",$temps->estimation / $temps->nb_intervention);
+    $temps->occup_moy   = strftime("%H:%M:%S",$temps->occup_moy  / $temps->nb_intervention);
+    $temps->duree_moy   = strftime("%H:%M:%S",$temps->duree_moy  / $temps->nb_intervention);
+    $temps->reveil_moy  = strftime("%H:%M:%S",$temps->reveil_moy / $temps->nb_intervention); 
   }
   $listTemps[$keyTemps]->loadRefsFwd();
   $total["nbInterventions"] += $temps->nb_intervention;
-  $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
-  $total["duree_somme"] += $temps->nb_intervention * strtotime($temps->duree_moy);
-  $total["estim_somme"] += $temps->nb_intervention * strtotime($temps->estimation);
+  $total["estim_somme"]     += $temps->nb_intervention * strtotime($temps->estimation);
+  $total["occup_somme"]     += $temps->nb_intervention * strtotime($temps->occup_moy);
+  $total["duree_somme"]     += $temps->nb_intervention * strtotime($temps->duree_moy);
+  $total["reveil_somme"]    += $temps->nb_intervention * strtotime($temps->reveil_moy);
 }
-if($total["nbInterventions"]!=0){
-  $total["occup_moy"] = $total["occup_somme"] / $total["nbInterventions"];
-  $total["duree_moy"] = $total["duree_somme"] / $total["nbInterventions"];
-  $total["estim_moy"] = $total["estim_somme"] / $total["nbInterventions"];
+if($total["nbInterventions"] != 0){
+  $total["estim_moy"]  = $total["estim_somme"]  / $total["nbInterventions"];
+  $total["occup_moy"]  = $total["occup_somme"]  / $total["nbInterventions"];
+  $total["duree_moy"]  = $total["duree_somme"]  / $total["nbInterventions"];
+  $total["reveil_moy"] = $total["reveil_somme"] / $total["nbInterventions"];
 }
+
 ?>

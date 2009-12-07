@@ -33,10 +33,33 @@
             </select>
           </th>
         </tr>
-
-        {{if $typeVue == 0 || $typeVue == 2}}
+        
         <tr>
-          <th><label for="codeCCAM" title="Acte CCAM">Acte CCAM</label></th>
+          <th>
+            <label for="nb_sejour_mini" title="Occurence mini">Nombre de séjours mini</label>
+          </th>
+          <td>
+            <select name="nb_sejour_mini">
+              <option value="1"   {{if $nb_sejour_mini == 1}}  selected="selected"{{/if}}>1</option>
+              <option value="2"   {{if $nb_sejour_mini == 2}}  selected="selected"{{/if}}>2</option>
+              <option value="3"   {{if $nb_sejour_mini == 3}}  selected="selected"{{/if}}>3</option>
+              <option value="4"   {{if $nb_sejour_mini == 4}}  selected="selected"{{/if}}>4</option>
+              <option value="5"   {{if $nb_sejour_mini == 5}}  selected="selected"{{/if}}>5</option>
+              <option value="10"  {{if $nb_sejour_mini == 10}} selected="selected"{{/if}}>10</option>
+              <option value="20"  {{if $nb_sejour_mini == 20}} selected="selected"{{/if}}>20</option>
+              <option value="30"  {{if $nb_sejour_mini == 30}} selected="selected"{{/if}}>30</option>
+              <option value="40"  {{if $nb_sejour_mini == 40}} selected="selected"{{/if}}>40</option>
+              <option value="50"  {{if $nb_sejour_mini == 50}} selected="selected"{{/if}}>50</option>
+              <option value="100" {{if $nb_sejour_mini == 100}}selected="selected"{{/if}}>100</option>
+            </select>
+          </td>
+        </tr>
+
+        {{if $typeVue == 0 || $typeVue == 2 || $typeVue == 3}}
+        <tr>
+          <th>
+            <label for="codeCCAM" title="Acte CCAM">Acte CCAM</label>
+          </th>
           <td>
             <input type="text" name="codeCCAM" value="{{$codeCCAM|stripslashes}}" />
             <button type="button" class="search" onclick="CCAMSelector.init()">Sélectionner un code</button>
@@ -93,8 +116,10 @@
         {{include file="inc_vw_timeop_op.tpl"}}
       {{elseif $typeVue == 1}}
         {{include file="inc_vw_timeop_prepa.tpl"}}
-      {{else}}
+      {{elseif $typeVue == 2}}
         {{include file="inc_vw_timehospi.tpl"}}
+      {{else}}
+        {{include file="inc_vw_timeop_reveil.tpl"}}
       {{/if}}
     </td>
   </tr>

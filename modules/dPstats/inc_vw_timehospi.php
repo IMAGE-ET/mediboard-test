@@ -24,6 +24,7 @@ $ds = CSQLDataSource::get("std");
 if($type) {
   $where["type"] = $ds->prepare("= %", $type);
 }
+$where["nb_sejour"]    = ">= $nb_sejour_mini";
 $where["praticien_id"] = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
 
 if($codeCCAM) {

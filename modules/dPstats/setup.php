@@ -86,7 +86,13 @@ class CSetupdPstats extends CSetup {
            "\nCHANGE `type` `type` enum('comp','ambu','seances','ssr','psy') NOT NULL DEFAULT 'ambu';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `temps_op`
+               ADD `reveil_moy` TIME NOT NULL ,
+               ADD `reveil_ecart` TIME NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
   }
 }
 ?>

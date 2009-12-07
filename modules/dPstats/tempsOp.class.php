@@ -21,6 +21,8 @@ class CTempsOp extends CMbObject {
   var $occup_ecart     = null;
   var $duree_moy       = null;
   var $duree_ecart     = null;
+  var $reveil_moy       = null;
+  var $reveil_ecart     = null;
   
   // Object References
   var $_ref_praticien = null;
@@ -41,6 +43,8 @@ class CTempsOp extends CMbObject {
     $specs["occup_ecart"]     = "time";
     $specs["duree_moy"]       = "time";
     $specs["duree_ecart"]     = "time";
+    $specs["reveil_moy"]       = "time";
+    $specs["reveil_ecart"]     = "time";
     $specs["ccam"]            = "str";
     return $specs;
   }	
