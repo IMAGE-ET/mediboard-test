@@ -147,7 +147,10 @@ class CSetupsystem extends CSetup {
               DROP `mod_description`";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.17";
+    $this->makeRevision("1.0.17");
+    $this->addPrefQuery("showTemplateSpans", "0");
+
+    $this->mod_version = "1.0.18";
   }
 }
 ?>

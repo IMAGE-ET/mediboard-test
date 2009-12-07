@@ -100,6 +100,7 @@ $array_list_module_pref = array (
   ),
   "system" => array (
     "INFOSYSTEM",
+		"showTemplateSpans"
   ),
   "dPprescription" => array (
     "mode_readonly",

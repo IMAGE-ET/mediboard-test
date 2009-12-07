@@ -88,14 +88,14 @@ Main.add( function () {
   {{elseif $_consult->premiere}} 
     {{assign var="style" value="background: #faa;"}}
 	{{elseif $_consult->_ref_sejour->_id}} 
-    {{assign var="style" value="background: #CFFFAD;"}}
+    {{assign var="style" value="background: #cfa;"}}
   {{else}} 
     {{assign var="style" value=""}}
   {{/if}}
   <tbody class="hoverable">
 
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="{{if $_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
+    <td style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
@@ -134,7 +134,7 @@ Main.add( function () {
         {{/if}}
       {{/if}}
     </td>
-    <td class="text" style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
+    <td class="text" style="{{$style}}{{$font|smarty:nodefaults}}">
       {{if $patient->_id}}
       {{if $canCabinet->view}}
       <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
@@ -160,7 +160,7 @@ Main.add( function () {
     </td>
   </tr>
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td class="text" style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
+    <td class="text" style="{{$style}}{{$font|smarty:nodefaults}}">
       {{if $patient->_id}}
       {{if $canCabinet->view}}
         <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">

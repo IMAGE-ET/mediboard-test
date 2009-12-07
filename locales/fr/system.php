@@ -465,4 +465,6 @@ $locales['config-show_all_tasks'] = '';
 $locales['config-show_all_tasks-desc'] = '';
 $locales['config-system-type_telephone'] = '';
 $locales['config-system-type_telephone-desc'] = '';
+$locales['pref-showTemplateSpans'] = 'Puces de templates';
+$locales['pref-showTemplateSpans-desc'] = 'Afficher les puces de templates';
 ?>
