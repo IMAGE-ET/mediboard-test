@@ -1,26 +1,21 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var opsUpdater = new Url;
-  opsUpdater.setModuleAction("dPsalleOp", "httpreq_liste_plages");
+  var opsUpdater = new Url("dPsalleOp", "httpreq_liste_plages");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
 });
 
 function printFiche() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_fiche"); 
+  var url = new Url("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printFiche");
-  return;
 }
 
 function printAllDocs() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_docs"); 
+  var url = new Url("dPcabinet", "print_docs"); 
   url.addElement(document.editFrmFinish.consultation_id);
-  url.popup(700, 500, "printDocuments");
-  return;
+  url.popup(700, 600, "printDocuments");
 }
 </script>
 

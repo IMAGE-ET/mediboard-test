@@ -876,10 +876,14 @@ Element.addMethods('select', {
       width: '100px'
     }, options);
     
-    var textInput = new Element('input', {type: 'text', className: 'autocomplete', style:'width:'+options.width}).writeAttribute('autocomplete', false),
-        list = new Element('div', {className: 'autocomplete'}),
+    var selectedOption = element.options[element.selectedIndex],
+        textInput = new Element('input', {type: 'text', style:'width:'+options.width})
+                                 .addClassName('autocomplete')
+                                 .writeAttribute('autocomplete', false),
+        list = new Element('div').addClassName('autocomplete'),
         views = [], viewToValue = {};
-        
+
+    textInput.value = selectedOption.disabled ? "" : selectedOption.text;
     element.insert({after: textInput}).insert({after: list}).hide();
     
     $A(element.options).each(function(e){

@@ -7,10 +7,10 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $consultation_id = CValue::get("consultation_id");
-$sejour_id = CValue::get("sejour_id");
+$sejour_id       = CValue::get("sejour_id");
 
 // Chargement de la prescription de pre-admission
 $prescription_preadm = new CPrescription();
@@ -18,6 +18,7 @@ $prescription_sortie = new CPrescription();
 if($sejour_id){
 	$prescription_sortie->object_id = $prescription_preadm->object_id = $sejour_id;
 	$prescription_sortie->object_class = $prescription_preadm->object_class = "CSejour";
+  
 	$prescription_preadm->type = "pre_admission";
 	$prescription_preadm->loadMatchingObject();
 	

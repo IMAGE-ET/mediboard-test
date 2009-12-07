@@ -31,20 +31,23 @@
 	</table>
 	{{/if}}
 	{{if $documents|@count}}
-  <form name="selectDocsFrm" action="?m={{$m}}&amp;dialog=1&amp;a=print_docs" method="post">
+  <form name="selectDocsFrm" action="?" method="get">
 	  <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-	  <table class="form">
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="dialog" value="1" />
+    <input type="hidden" name="a" value="print_docs" />
+	  <table class="main form">
 	    <tr>
-	      <th class="title" colspan="2">
+	      <th class="category" colspan="2">
 	        Veuillez choisir le nombre de documents à imprimer
 	      </th>
 	    </tr>
 	    {{foreach from=$documents item=curr_doc}}
 	    <tr>
-	      <th class="text">
+	      <th>
 	        {{$curr_doc->nom}}
 	      </th>
-	      <td class="button">
+	      <td>
 	        <input name="nbDoc[{{$curr_doc->compte_rendu_id}}]" type="text" size="2" value="1" readonly="readonly" />
 	        <script type="text/javascript">
 	          $(getForm("selectDocsFrm").elements['nbDoc[{{$curr_doc->compte_rendu_id}}]']).addSpinner({min:0});

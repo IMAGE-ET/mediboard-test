@@ -42,7 +42,6 @@ class CApp {
 /**
  * The Application UI weird Class
  * @TODO Is being split into CApp et CUI classes
- * @TODO Should be more like the singleton pattern described here : http://en.wikipedia.org/wiki/Singleton_pattern#PHP
  */
 class CAppUI {
   static $instance = null;
