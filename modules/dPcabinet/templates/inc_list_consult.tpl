@@ -50,16 +50,7 @@ Main.add( function () {
 </form>
 {{/if}}
 
-{{if $boardItem}}
-{{assign var="font" value="font-size: 9px;"}} 
-<table class="tbl">
-{{elseif $board}}
-{{assign var="font" value="font-size: 100%;"}} 
-<table class="tbl">
-{{else}}
-{{assign var="font" value="font-size: 9px;"}} 
-<table class="tbl" style="width: 250px">
-{{/if}}
+<table class="tbl" style="font-size: 9px;">
 
   <tr>
     <th class="title" colspan="3">Consultations</th>
@@ -95,7 +86,7 @@ Main.add( function () {
   <tbody class="hoverable">
 
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2" class="text">
+    <td style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
@@ -110,7 +101,9 @@ Main.add( function () {
       {{else}}
         <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
            {{$_consult->heure|truncate:5:"":true}}
+          </span>
         </a>
       {{else}}
         {{$_consult->heure|truncate:5:"":true}}
@@ -134,25 +127,25 @@ Main.add( function () {
         {{/if}}
       {{/if}}
     </td>
-    <td class="text" style="{{$style}}{{$font|smarty:nodefaults}}">
+    <td class="text" style="{{$style}}">
       {{if $patient->_id}}
-      {{if $canCabinet->view}}
-      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
-      {{else}}
-      <a href=#nowhere title="Impossible de modifier le RDV">
-      {{/if}}
-			  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-	        {{$patient->_view|truncate:30:"...":true}}
-	        {{if $patient->_age != "??"}}
-	          ({{$patient->_age}}&nbsp;ans)
-			  </span>
-      </a>
-      {{/if}}
+	      {{if $canCabinet->view}}
+	      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
+	      {{else}}
+	      <a href=#nowhere title="Impossible de modifier le RDV">
+	      {{/if}}
+				  <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+		        {{$patient->_view|truncate:30:"...":true}}
+		        {{if $patient->_age != "??"}}
+		          ({{$patient->_age}}&nbsp;ans)
+	          {{/if}}
+				  </span>
+	      </a>
       {{else}}
         [PAUSE]
       {{/if}}
     </td>
-    <td rowspan="2">
+    <td rowspan="2" style="{{$style}}">
     	{{assign var=categorie value=$_consult->_ref_categorie}}
       {{if $categorie && $categorie->nom_icone}}
         <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}"/>
@@ -160,27 +153,11 @@ Main.add( function () {
     </td>
   </tr>
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td class="text" style="{{$style}}{{$font|smarty:nodefaults}}">
-      {{if $patient->_id}}
-      {{if $canCabinet->view}}
-        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
-      {{else}}
-        <a href="#nowhere" title="Impossible de modifier le RDV">
-      {{/if}}
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-          {{$_consult->motif|truncate:40:"...":true}}
-					</span>
-        </a>
-      {{else}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-        {{$_consult->motif|truncate:40:"...":true}}
-        </span>
-      {{/if}}
-            
+    <td class="text" style="{{$style}}">
       {{assign var=prat_id value=$_plage->chir_id}}
       
       {{if @count($listPlages.$prat_id.destinations) && $canCabinet->edit}}
-      <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post">
+      <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post" style="float: right">
       
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       <input type="hidden" name="m" value="dPcabinet" />
@@ -188,21 +165,35 @@ Main.add( function () {
       
       {{mb_key object=$_consult}}
       
-      <select name="plageconsult_id" onchange="this.form.submit();" style="font-size: 9px; width: 150px">
-        <option value="" style="font-size: 9px;">
-          &mdash; Changer de praticien
+      <select name="plageconsult_id" onchange="this.form.submit();" style="font-size: 9px; width: 80px">
+        <option value="">
+          &mdash; Transférer
         </option>
         {{foreach from=$listPlages.$prat_id.destinations item=destination}}
-        <option value={{$destination->_id}} style="font-size: 9px;">
+        <option value={{$destination->_id}}>
           {{$destination->_ref_chir->_view}}
-		    	: {{$destination->debut|date_format:$dPconfig.time}} 
-		    	- {{$destination->fin|date_format:$dPconfig.time}}
-		    	{{if $destination->libelle}} - {{$destination->libelle}}{{/if}}
+          : {{$destination->debut|date_format:$dPconfig.time}} 
+          - {{$destination->fin|date_format:$dPconfig.time}}
+          {{if $destination->libelle}} - {{$destination->libelle}}{{/if}}
         </option>
         {{/foreach}}
       </select>
 
       </form>
+      {{/if}}
+
+      {{if $patient->_id}}
+      {{if $canCabinet->view}}
+        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
+      {{else}}
+        <a href="#nowhere" title="Impossible de modifier le RDV">
+      {{/if}}
+          {{$_consult->motif|truncate:40:"...":true}}
+        </a>
+      {{else}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+        {{$_consult->motif|truncate:40:"...":true}}
+        </span>
       {{/if}}
     </td>
   </tr>
