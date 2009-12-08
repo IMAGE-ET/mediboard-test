@@ -19,13 +19,15 @@
     <th>Moyenne</th>
     <th>Ecart-type</th>
   </tr>
-  {{foreach from=$listTemps item=curr_temps}}
+  {{foreach from=$listTemps item=_temps}}
   <tr>
-    <td>Dr {{$curr_temps->_ref_praticien->_view}}</td>
-    <td>{{$curr_temps->nb_prepa}}</td>
-    <td>{{$curr_temps->nb_plages}}</td>
-    <td>{{$curr_temps->duree_moy|date_format:"%Mmin %Ss"}}</td>
-    <td>{{$curr_temps->duree_ecart|date_format:"%Mmin %Ss"}}</td>
+    <td>
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_temps->_ref_praticien}}
+		</td>
+    <td>{{$_temps->nb_prepa}}</td>
+    <td>{{$_temps->nb_plages}}</td>
+    <td>{{$_temps->duree_moy|date_format:"%Mmin %Ss"}}</td>
+    <td>{{$_temps->duree_ecart|date_format:"%Mmin %Ss"}}</td>
   </tr>
   {{/foreach}}
   <tr>

@@ -22,7 +22,15 @@ class CTempsHospi extends CMbObject {
   
   // Object References
   var $_ref_praticien = null;
+	
+  // Derived Fields
+  var $_codes = null;
 
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_codes = explode("|", strtoupper($this->ccam));
+  }
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'temps_hospi';
@@ -41,9 +49,9 @@ class CTempsHospi extends CMbObject {
     return $specs;
   } 
 
-  function loadRefsFwd(){
-    $this->_ref_praticien = new CMediusers;
-    $this->_ref_praticien->load($this->praticien_id);
+  function loadRefsFwd() { 
+    $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
+    $this->_ref_praticien->loadRefFunction();
   }
   
   static function getTime($praticien_id = 0, $ccam = null, $type = null){

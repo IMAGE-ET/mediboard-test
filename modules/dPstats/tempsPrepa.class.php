@@ -39,9 +39,9 @@ class CTempsPrepa extends CMbObject {
     return $specs;
   }
   
-  function loadRefsFwd(){ 
-    $this->_ref_praticien = new CMediusers;
-    $this->_ref_praticien->load($this->chir_id);
+  function loadRefsFwd() { 
+    $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
+		$this->_ref_praticien->loadRefFunction();
   }
 }
 ?>

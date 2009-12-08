@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=dPccam script=code_ccam}}
+
 <table class="tbl">
   <tr>
     <th rowspan="2">Praticien</th>
@@ -20,14 +22,22 @@
     <th>Moyenne</th>
     <th>Ecart-type</th>
   </tr>
-  {{foreach from=$listTemps item=curr_temps}}
+  {{foreach from=$listTemps item=_temps}}
   <tr>
-    <td>Dr {{$curr_temps->_ref_praticien->_view}}</td>
-    <td>{{tr}}CSejour.type.{{$curr_temps->type}}{{/tr}}</td>
-    <td>{{$curr_temps->ccam}}</td>
-    <td>{{$curr_temps->nb_sejour}}</td>
-    <td>{{$curr_temps->duree_moy|string_format:"%.2f"}} jours</td>
-    <td><i>{{if $curr_temps->duree_ecart}}{{$curr_temps->duree_ecart|string_format:"%.2f"}} jours{{else}}-{{/if}}</i></td>
+    <td>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_temps->_ref_praticien}}
+    </td>
+    <td>{{tr}}CSejour.type.{{$_temps->type}}{{/tr}}</td>
+    <td>
+      {{foreach from=$_temps->_codes item=_code}}
+        <a class="action" href="#CodeCCAM-show-{{$_code}}" onclick="CodeCCAM.show('{{$_code}}')">
+        	{{$_code}}
+				</a>
+      {{/foreach}}
+    </td>
+    <td>{{$_temps->nb_sejour}}</td>
+    <td>{{$_temps->duree_moy|string_format:"%.2f"}} jours</td>
+    <td><i>{{if $_temps->duree_ecart}}{{$_temps->duree_ecart|string_format:"%.2f"}} jours{{else}}-{{/if}}</i></td>
   </tr>
   {{/foreach}}
   

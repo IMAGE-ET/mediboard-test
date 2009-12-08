@@ -26,6 +26,9 @@ class CTempsOp extends CMbObject {
   
   // Object References
   var $_ref_praticien = null;
+	
+	// Derived Fields
+	var $_codes = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -49,10 +52,14 @@ class CTempsOp extends CMbObject {
     return $specs;
   }	
   
-  
-  function loadRefsFwd(){
-    $this->_ref_praticien = new CMediusers;
-    $this->_ref_praticien->load($this->chir_id);
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_codes = explode("|", strtoupper($this->ccam));
+	}
+	
+  function loadRefsFwd() { 
+    $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
+    $this->_ref_praticien->loadRefFunction();
   }
   
   static function getTime($chir_id = 0, $ccam = null){
