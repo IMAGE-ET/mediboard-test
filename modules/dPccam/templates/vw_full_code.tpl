@@ -45,11 +45,10 @@ Main.add(function () {
 
 <table class="fullCode">
   <tr>
-      <td>
-
-        <table>
+    <td class="pane">
+      <table>
         <tr>
-           <td colspan="2">
+          <td colspan="2">
             <form action="?" name="selection" method="get" >
 
             <input type="hidden" name="m" value="{{$m}}" />
@@ -191,7 +190,7 @@ Main.add(function () {
       </table>
 
     </td>
-    <td>
+    <td class="pane">
 
       <table>
         <tr>
@@ -224,7 +223,7 @@ Main.add(function () {
     </td>
   </tr>
   <tr>
-    <td>
+    <td class="pane">
 
       <table>
         <tr>
@@ -240,7 +239,7 @@ Main.add(function () {
       </table>
 
     </td>
-    <td>
+    <td class="pane">
 
       <table>
         <tr>
