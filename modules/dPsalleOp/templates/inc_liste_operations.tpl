@@ -119,7 +119,7 @@
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && @$allow_moves|default:1}}
+{{if $dPconfig.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
