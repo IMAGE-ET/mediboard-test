@@ -262,7 +262,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     $domEvenement->destinataire = $dest_hprim->nom;
     
     $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
-mbTrace($msgEvtVenuePatient, "evt", true);
+
     if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
       trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
     }

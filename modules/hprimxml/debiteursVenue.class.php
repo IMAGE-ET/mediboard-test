@@ -135,7 +135,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
         
       $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    mbTrace($newPatient, "patient", true);
+
     $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
     $echange_hprim->store();
