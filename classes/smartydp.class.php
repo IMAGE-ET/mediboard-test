@@ -361,6 +361,7 @@ function smarty_function_mb_colonne($params, &$smarty) {
 function smarty_function_mb_include_script($params, &$smarty) {
   // Path provided
   $path = CMbArray::extract($params, "path");
+  $ajax = CMbArray::extract($params, "ajax");
 	
 	// Script name providied
   if ($script = CMbArray::extract($params, "script")) {
@@ -370,9 +371,15 @@ function smarty_function_mb_include_script($params, &$smarty) {
 	}
 	
 	// Render HTML with build version
-  global $version;
-  $version_build = $version['build'];
-  return "<script type='text/javascript' src='$path?build=$version_build'></script>";
+  if ($ajax && !empty($smarty->_tpl_vars["ajax"])) {
+    $script = file_get_contents($path);
+    return "<script type=\"text/javascript\">$script</script>";
+  }
+  else {
+    global $version;
+    $version_build = $version['build'];
+    return "<script type=\"text/javascript\" src=\"$path?build=$version_build\"></script>";
+  }
 }
 
 function smarty_function_mb_include($params, &$smarty) {
