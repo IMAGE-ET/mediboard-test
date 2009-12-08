@@ -10,11 +10,9 @@
 global $can;
 $can->needsAdmin();
 
-$listNbFiles = range(1,5);
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("listNbFiles"  , $listNbFiles);
+$smarty->assign("listNbFiles"  , range(1,10));
 $smarty->display("configure.tpl");
 
 ?>
