@@ -544,6 +544,7 @@ function mbWriteJSLocalesFile($language = null) {
     $path = "./tmp/locales.$language.js";
   
     if ($fp = fopen($path, 'w')) {
+      $locales = array_filter($locales);
       // TODO: change the inavlid keys (with accents) of the locales to simplify this
       $keys = array_map('utf8_encode', array_keys($locales));
       $values = array_map('utf8_encode', $locales);
