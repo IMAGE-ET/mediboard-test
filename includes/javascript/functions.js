@@ -104,7 +104,7 @@ var References = {
 };
 
 window.onunload = function () {
-  if (Url.activePostRequests)
+  if (Url.activeRequests.post > 0)
     alert($T("WaitingForAjaxRequestReturn"));
 };
 
