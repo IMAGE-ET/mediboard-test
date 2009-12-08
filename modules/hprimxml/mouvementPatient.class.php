@@ -88,7 +88,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $domAcquittement->destinataire = $data['idClient'];
     $domAcquittement->destinataire_libelle = $data['libelleClient'];
     
-     // Si CIP
+    // Si CIP
     if (!CAppUI::conf('sip server')) { 
       $avertissement = null;
       

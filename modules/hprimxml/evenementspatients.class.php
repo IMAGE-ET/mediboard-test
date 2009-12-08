@@ -256,11 +256,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function mappingVenue($node, $mbVenue) {  
-    $mbVenue = $this->getNatureVenue($node, $mbVenue);
-    $mbVenue = $this->getEntree($node, $mbVenue);
+    $mbVenue = self::getNatureVenue($node, $mbVenue);
+    $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
-    $mbVenue = $this->getPlacement($node, $mbVenue);
-    $mbVenue = $this->getSortie($node, $mbVenue);
+    $mbVenue = self::getPlacement($node, $mbVenue);
+    $mbVenue = self::getSortie($node, $mbVenue);
 
     return $mbVenue;
   }
@@ -500,9 +500,64 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $mbVenue;
   }
   
-  function mappingDebiteurs($node, $mbVenue) {
+  function mappingDebiteurs($node, $mbPatient) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
     
+    // Penser a parcourir tous les debiteurs par la suite
+    $debiteur = $xpath->queryUniqueNode("hprim:debiteur", $node);
+
+    $mbPatient = $this->getAssurance($debiteur, $mbPatient);
+     
+    return $mbPatient;
+  }
+  
+  static function getAssurance($node, $mbPatient) {
+    $xpath = new CMbXPath($node->ownerDocument, true);  
     
+    $assurance = $xpath->queryUniqueNode("hprim:assurance", $node);
+    
+    // Obligatoire pour MB
+    $assure = $xpath->queryUniqueNode("hprim:assure", $assurance, false);
+    $mbPatient = self::getAssure($assure, $mbPatient);
+    
+    $dates = $xpath->queryUniqueNode("hprim:dates", $assurance);
+    $mbPatient->deb_amo = $xpath->queryTextNode("hprim:dateDebutDroit", $dates);
+    $mbPatient->fin_amo = $xpath->queryTextNode("hprim:dateFinDroit", $dates);
+    
+    $obligatoire = $xpath->queryUniqueNode("hprim:obligatoire", $assurance);
+    $mbPatient->code_regime = $xpath->queryTextNode("hprim:grandRegime", $obligatoire);
+    $mbPatient->caisse_gest = $xpath->queryTextNode("hprim:caisseAffiliation", $obligatoire);
+    $mbPatient->centre_gest = $xpath->queryTextNode("hprim:centrePaiement", $obligatoire);
+    
+    return $mbPatient;
+  }
+  
+  static function getAssure($node, $mbPatient) {
+    $xpath = new CMbXPath($node->ownerDocument, true);  
+    
+    $mbPatient->matricule = $xpath->queryTextNode("hprim:immatriculation", $node);
+    
+    // Obligatoire pour MB    
+    $personne = $xpath->queryUniqueNode("hprim:personne", $node, false);
+    
+    $sexe = $xpath->queryAttributNode("hprim:personne", $node, "sexe");
+    $sexeConversion = array (
+        "M" => "m",
+        "F" => "f",
+    );
+    $mbPatient->assure_sexe = $sexeConversion[$sexe];
+    $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
+    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
+    $mbPatient->assure_prenom = $prenoms[0];
+    $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
+    $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
+    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
+    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
+    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
+    
+    $mbPatient->rang_beneficiaire = $xpath->queryTextNode("hprim:lienAssure", $node);
+    
+    return $mbPatient;
   }
 }
 ?>

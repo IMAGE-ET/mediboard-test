@@ -102,6 +102,45 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $domAcquittement->identifiant = $data['identifiantMessage'];
     $domAcquittement->destinataire = $data['idClient'];
     $domAcquittement->destinataire_libelle = $data['libelleClient'];
+    
+    // Si CIP
+    if (!CAppUI::conf('sip server')) { 
+      $avertissement = null;
+      
+      // Mapping des mouvements
+      $newPatient = $this->mappingDebiteurs($data['debiteurs'], $newPatient);
+
+      // Evite de passer dans le sip handler
+      $newPatient->_coms_from_hprim = 1;
+      $msgPatient = $newPatient->store();
+      
+      $newPatient->loadLogs();
+      $modified_fields = "";
+      if (is_array($newPatient->_ref_last_log->_fields)) {
+        foreach ($newPatient->_ref_last_log->_fields as $field) {
+          $modified_fields .= "$field \n";
+        }
+      }
+      $codes = array ($msgPatient ? "A003" : "I002");
+      
+      if ($msgPatient) {
+        $avertissement = $msgPatient." ";
+      } else {
+        $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+      }
+      
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $doc_valid = $domAcquittement->schemaValidate();
+      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+      $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+    }
+    mbTrace($newPatient, "patient", true);
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->store();
+
+    return $messageAcquittement;
   }
 }
 
