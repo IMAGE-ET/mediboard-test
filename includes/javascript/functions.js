@@ -103,6 +103,11 @@ var References = {
   }
 };
 
+window.onunload = function () {
+  if (Url.activePostRequests)
+    alert($T("WaitingForAjaxRequestReturn"));
+};
+
 var WaitingMessage = {
   init: function() {
     window.onbeforeunload = function () {

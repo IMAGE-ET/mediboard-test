@@ -15,6 +15,15 @@
 
 window.children = {};
 
+Ajax.Responders.register({
+  onCreate: function(e) {
+    Url.activeRequests[e.method]++;
+  },
+  onComplete: function(e) {
+    Url.activeRequests[e.method]--;
+  }
+});
+
 var Url = Class.create({
   initialize: function(sModule, sAction) {
     this.oParams = {};
@@ -447,6 +456,11 @@ var Url = Class.create({
     this.popup(750, 550, "Fichier");
   }
 } );
+
+Url.activeRequests = {
+  post: 0,
+  get: 0
+};
 
 Url.buildPopupFeatures = function(features) {
   features = Object.extend({
