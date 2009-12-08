@@ -265,7 +265,7 @@ Main.add( function(){
         </div>
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_guid}}">
-          <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+          <img title="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
       {{if !$mode_protocole}}

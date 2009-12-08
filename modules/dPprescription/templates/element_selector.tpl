@@ -47,7 +47,7 @@ function setClose(element_id) {
   {{foreach from=$catElement item=element}}
   <tr>
     <td>
-      <button type="button" class="add notext" onclick="setClose('{{$element->_id}}')" alt="Ajouter cet élément à la prescription" title="Ajouter à la prescription">Ajouter</button>
+      <button type="button" class="add notext" onclick="setClose('{{$element->_id}}')" title="Ajouter cet élément à la prescription">Ajouter</button>
       {{$element->_view}}
     </td>
   </tr>

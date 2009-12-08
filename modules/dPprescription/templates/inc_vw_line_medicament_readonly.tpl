@@ -28,7 +28,7 @@
       <div style="float: left;">
           {{if $line->_ref_parent_line->_id}}
             {{assign var=parent_line value=$line->_ref_parent_line}}
-            <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+            <img src="images/icons/history.gif" title="Ligne possédant un historique" 
                  onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
           {{/if}}
           {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
@@ -43,9 +43,9 @@
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
           {{if $prescription_reelle->type != "externe"}}
           {{if $line->valide_pharma}}
-				    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+				    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 				  {{else}}
-					  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+					  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
 			  	{{/if}}
 			  	{{/if}}
         {{else if !$line->traitement_personnel && !$line->_protocole}}
@@ -72,23 +72,23 @@
         </button>
       {{/if}}
       {{if $line->_can_vw_livret_therapeutique}}
-      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+      <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
       <br />
       {{/if}}  
       {{if !$line->_ref_produit->inT2A}}
-        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+        <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
         <br />
       {{/if}}
       {{if $line->_can_vw_hospi}}
-      <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      <img src="images/icons/hopital.gif" title="Produit Hospitalier" />
       <br />
       {{/if}}
       {{if $line->_can_vw_generique}}
-      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
+      <img src="images/icons/generiques.gif" title="Produit générique" />
       <br />
       {{/if}}
       {{if $line->_ref_produit->_supprime}}
-      <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+      <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
       {{/if}}
     </td>
     <td colspan="2" class="text">

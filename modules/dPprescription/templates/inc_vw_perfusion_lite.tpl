@@ -29,7 +29,7 @@
 							
 			{{if $_perfusion->_ref_parent_line->_id}}
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
-        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+        <img src="images/icons/history.gif" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')" />
       {{/if}}
       <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}');" style="display: inline; font-weight: bold;">
@@ -60,16 +60,16 @@
      {{if !$_perfusion->_protocole}}
      <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}};">
        <label title="{{$_perfusion->_ref_praticien->_view}}">{{$_perfusion->_ref_praticien->_shortview}}</label>
-       {{if $_perfusion->signature_prat}}
-	  		 <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
+        {{if $_perfusion->signature_prat}}
+	  		  <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
 		  	{{else}}
-			  	 <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
+			    <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
 			  {{/if}}
 			  {{if $prescription_reelle->type != "externe"}}
 				  {{if $_perfusion->signature_pharma}}
-				    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+				    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 				  {{else}}
-					  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+					  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
 			  	{{/if}}	
 		  	{{/if}}
      </div>

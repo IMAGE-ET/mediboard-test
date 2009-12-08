@@ -86,7 +86,7 @@
 			      {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Soin"}}
 			    </td>
 			    <td style="border:none">
-			      <img src="images/icons/a_right.png" title="" alt="" />
+			      <img src="images/icons/a_right.png" />
 			    </td>
 				  <td style="border:none; text-align: left;" id="prises-{{$typeDate}}{{$line->_id}}">
 			        <!-- Parcours des prises -->

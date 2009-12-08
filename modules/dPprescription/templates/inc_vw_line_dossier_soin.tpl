@@ -85,11 +85,11 @@
 	       style="background-color: #BDB"
 	       {{/if}}>
     {{if $line->_recent_modification}}
-      <img style="float: right" src="images/icons/ampoule.png" alt="Ligne recemment modifiée" title="Ligne recemment modifiée"/>
+      <img style="float: right" src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
     {{/if}}
     
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
-          <img style="float: right" src="images/icons/ampoule_urgence.png" alt="Urgence" title="Urgence"/>
+          <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
     
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
@@ -203,7 +203,7 @@
   
   {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
   <th class="before" style="cursor: pointer" onclick="showBefore();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutBefore);">
-   <img src="images/icons/a_left.png" title="" alt="" />
+   <img src="images/icons/a_left.png" />
   </th>
   {{/if}}
   
@@ -218,25 +218,25 @@
  
  {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
    <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">
-     <img src="images/icons/a_right.png" title="" alt="" />
+     <img src="images/icons/a_right.png" />
    </th>
  {{/if}}
  
  <!-- Signature du praticien -->
  <td style="text-align: center">
    {{if $line->signee}}
-   <img src="images/icons/tick.png" alt="" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
+   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
    {{else}}
-   <img src="images/icons/cross.png" alt="" title="Non signée par le praticien" />
+   <img src="images/icons/cross.png" title="Non signée par le praticien" />
    {{/if}}
  </td>
  <!-- Signature du pharmacien -->
  <td style="text-align: center">
 	  {{if $line_class == "CPrescriptionLineMedicament"}}
 	    {{if $line->valide_pharma}}
-	    <img src="images/icons/tick.png" alt="" title="Signée par le pharmacien" />
+	    <img src="images/icons/tick.png" title="Signée par le pharmacien" />
 	    {{else}}
-	    <img src="images/icons/cross.png" alt="" title="Non signée par le pharmacien" />
+	    <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
 	    {{/if}}
 	  {{else}}
 	    - 

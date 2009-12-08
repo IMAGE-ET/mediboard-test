@@ -42,13 +42,13 @@
     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}};">
 				{{if @$modules.messagerie}}
 				<a class="action" href="#nothing" onclick="MbMail.create({{$line->_ref_praticien->_id}}, '{{$line->_view}}')">
-				  <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+				  <img src="images/icons/mbmail.png" title="Envoyer un message" />
 				</a>
 				{{/if}}
 				{{if $line->signee}}
-				 <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
+				  <img src="images/icons/tick.png" title="Ligne signée par le praticien" />
 				{{else}}
-					 <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
+				  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
 				{{/if}}
 			  <label title="{{$line->_ref_praticien->_view}}">{{$line->_ref_praticien->_shortview}}</label>
 		</div>

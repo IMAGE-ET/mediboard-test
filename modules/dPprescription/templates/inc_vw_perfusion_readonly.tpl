@@ -17,7 +17,7 @@
 		{{if $_perfusion->_ref_parent_line->_id}}
       <div style="float: left">
         {{assign var=parent_perf value=$_perfusion->_ref_parent_line}}
-        <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique" 
+        <img src="images/icons/history.gif" title="Ligne possédant un historique" 
              onmouseover="ObjectTooltip.createEx(this, '{{$parent_perf->_guid}}')"/>
       </div>
       {{/if}}
@@ -28,15 +28,15 @@
         {{if $_perfusion->_can_vw_signature_praticien}}
           {{$_perfusion->_ref_praticien->_view}}
 					{{if $_perfusion->signature_prat}}
-					   <img src="images/icons/tick.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" /> 
+					  <img src="images/icons/tick.png" title="Ligne signée par le praticien" /> 
 					{{else}}
-					   <img src="images/icons/cross.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" /> 
+					  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" /> 
 					{{/if}}
           {{if $prescription_reelle->type != "externe"}}
 						{{if $_perfusion->signature_pharma}}
-					    <img src="images/icons/signature_pharma.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+					    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 					  {{else}}
-						  <img src="images/icons/signature_pharma_barre.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+						  <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
 				  	{{/if}}
 			  	{{/if}}
         {{/if}}
@@ -132,16 +132,16 @@
 	          <td style="border: none; width:30%" class="text">
 	            {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 	            {{if $line->_can_vw_livret_therapeutique}}
-					      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+					      <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
 					    {{/if}}
 					    {{if !$line->_ref_produit->inT2A}}
-				        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+				        <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
 				      {{/if}}
 					    {{if $line->_can_vw_generique}}
-					      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
+					      <img src="images/icons/generiques.gif" title="Produit générique" />
 					    {{/if}}
               {{if $line->_ref_produit->_supprime}}
-                <img src="images/icons/medicament_barre.gif" alt="Produit supprimé" title="Produit supprimé" />
+                <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
               {{/if}}
 		          <strong>{{$line->_ucd_view}}</strong>
 		          <span style="font-size:0.8em; opacity:0.7">

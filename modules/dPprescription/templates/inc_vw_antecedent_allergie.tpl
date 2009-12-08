@@ -12,7 +12,7 @@
 {{if array_key_exists('alle', $antecedents)}}
   {{assign var=allergies value=$antecedents.alle}}
   {{if $allergies|@count}}
-   <img src="images/icons/warning.png" title="" alt="Allergies" onmouseover="ObjectTooltip.createDOM(this, 'allergies{{$sejour_id}}')" />
+   <img src="images/icons/warning.png" title="Allergies" onmouseover="ObjectTooltip.createDOM(this, 'allergies{{$sejour_id}}')" />
  
    <div id="allergies{{$sejour_id}}" style="text-align:left; display: none;">
      <strong>Allergies</strong>
@@ -32,7 +32,7 @@
 
 <!-- Affichage des autres antecedents -->
  {{if $dossier_medical->_count_antecedents && ($dossier_medical->_count_antecedents > $dossier_medical->_count_allergies)}}
-  <img src="images/icons/antecedents.gif" title="" alt="Antécédents" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
+  <img src="images/icons/antecedents.gif" title="Antécédents" onmouseover="ObjectTooltip.createDOM(this, 'antecedents{{$sejour_id}}')" />
   
    <div id="antecedents{{$sejour_id}}" style="text-align:left;  display: none;">
      <ul>

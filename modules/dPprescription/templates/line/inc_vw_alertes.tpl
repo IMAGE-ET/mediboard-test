@@ -122,7 +122,7 @@
 {{/if}}
 
 {{if $image && $color}}
-	<img src="images/icons/{{$image}}" title="" alt="" 
+	<img src="images/icons/{{$image}}"
 			 onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-alertes-line-{{$line->_guid}}")' />
 	
 	<div id="tooltip-content-alertes-line-{{$line->_guid}}" style="display: none; background-color: {{$color}};">
