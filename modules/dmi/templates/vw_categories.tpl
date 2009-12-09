@@ -21,7 +21,7 @@ viewListCat = function(category_class, cat_id){
   var url = new Url;
   url.setModuleAction("dmi", "httpreq_vw_list_categories");
   url.addParam("category_class", category_class);
-  url.requestUpdate("list_cat_"+category_class, { waitingText: null , onComplete: function(){ $('cat-'+cat_id).addClassName("selected"); } } );
+  url.requestUpdate("list_cat_"+category_class, { onComplete: function(){ $('cat-'+cat_id).addClassName("selected"); } } );
 }
 
 viewCat = function(category_class, category_id){
@@ -29,7 +29,7 @@ viewCat = function(category_class, category_id){
   url.setModuleAction("dmi", "httpreq_edit_category");
   url.addParam("category_class", category_class);
   url.addParam("category_id", category_id);
-  url.requestUpdate("cat_"+category_class, { waitingText: null } );
+  url.requestUpdate("cat_"+category_class);
 }
 
 function markAsSelected(element) {

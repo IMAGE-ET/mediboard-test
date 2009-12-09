@@ -23,7 +23,7 @@ Main.add(function () {
 	  // Effet sur le programme
 	  new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
 	  url.setModuleAction("bloodSalvage","httpreq_vw_bloodSalvage");
-	  url.requestUpdate('bloodSalvage', { waitingText: null });
+	  url.requestUpdate('bloodSalvage');
   {{/if}}  
 });
 </script>

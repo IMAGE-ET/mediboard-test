@@ -34,7 +34,7 @@ refreshElement = function(element_id){
 	  url.addParam("nom", oForm.nom.value);
   	url.addParam("description", oForm.description.value);
 	  url.addParam("in_livret", $V(oForm.in_livret));
-	  url.requestUpdate("edit_CDM", { waitingText: null } );
+	  url.requestUpdate("edit_CDM");
 	}
 {{/if}}
 

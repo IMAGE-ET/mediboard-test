@@ -21,7 +21,7 @@ viewListElement = function(category_class, element_id){
   var url = new Url;
   url.setModuleAction("dmi", "httpreq_vw_list_elements");
   url.addParam("category_class", category_class);
-  url.requestUpdate("elements_"+category_class, { waitingText: null, onComplete: function(){ $('element-'+element_id).addClassName("selected"); }  } );
+  url.requestUpdate("elements_"+category_class, { onComplete: function(){ $('element-'+element_id).addClassName("selected"); }  } );
 }
 
 viewElement = function(element_class, element_id){
@@ -29,7 +29,7 @@ viewElement = function(element_class, element_id){
   url.setModuleAction("dmi", "httpreq_edit_element");
   url.addParam("element_id", element_id);
   url.addParam("element_class", element_class);
-  url.requestUpdate("edit_"+element_class, { waitingText: null } ); 
+  url.requestUpdate("edit_"+element_class); 
 }
 
 removeSelectedTr = function(){

@@ -20,7 +20,7 @@ Main.add(function () {
   {{if $selOp->_id}}
     url.setModuleAction("bloodSalvage","httpreq_vw_sspi_bs");
     url.addParam("date","{{$date}}");
-    url.requestUpdate("bloodSalvageSSPI", {waitingText: null});
+    url.requestUpdate("bloodSalvageSSPI");
   {{/if}}  
 });
 </script>
