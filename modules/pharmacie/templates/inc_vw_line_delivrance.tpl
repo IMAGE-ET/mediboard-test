@@ -58,7 +58,7 @@
     {{/if}}
     <br />
   {{foreachelse}}
-  Aucune délivrance effectuée pour cette dispensation<br />
+  Aucune délivrance pour cette dispensation<br />
   {{/foreach}}
     <script type="text/javascript">
       prepareForm("delivery-trace-{{$curr_delivery->_id}}-new");
@@ -71,7 +71,7 @@
       <input type="hidden" name="date_delivery" value="now" />
       {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
       <input type="text" name="code" value="" />
-      <button type="submit" class="tick">Délivrer</button>
+      <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
     </form>
   </td>
 </tr>

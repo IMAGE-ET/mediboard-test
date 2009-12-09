@@ -359,8 +359,12 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `product_order_item_reception` 
               ADD INDEX (`lapsing_date`)";
+    $this->addQuery($sql); 
+       
+    $this->makeRevision('1.02');
+    $sql = "UPDATE `product_stock_service` SET `common` = '1' WHERE `common` IS NULL OR `common` = ''";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.02";
+    $this->mod_version = "1.03";
   }
 }

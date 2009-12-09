@@ -30,10 +30,8 @@ function refreshLists() {
 }
 
 function printPreparePlan(nominatif) {
-  var form = getForm("filter");
-  var url = new Url;
-  url.setModuleAction("pharmacie", "print_prepare_plan");
-  url.addObjectParam(form.serialize());
+  var url = new Url("pharmacie", "print_prepare_plan");
+  url.addObjectParam(getForm("filter").serialize());
   url.addParam("nominatif", nominatif);
   url.pop(800, 600, 'Plan de cueillette');
 }
@@ -69,15 +67,20 @@ Main.add(function () {
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1}}</td>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1}}</td>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <td>
-        <select name="service_id" onchange="this.form.onsubmit();">
+        <select name="service_id" onchange="this.form.onsubmit()">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
         </select>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="display_delivered" onclick="this.form.onsubmit()" /> Afficher les délivrances effectuées
+        </label>
       </td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>

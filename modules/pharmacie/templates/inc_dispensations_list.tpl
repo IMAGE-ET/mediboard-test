@@ -15,25 +15,32 @@
 {{/if}}
 
 <script type="text/javascript">
-  $$('a[href=#list-dispensations] small').first().update('({{$dispensations|@count}})');
-  
-  loadSuivi = function(sejour_id, user_id) {
-    var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
-    url.addParam("sejour_id", sejour_id);
-    url.addParam("user_id", user_id);
-    url.requestUpdate("list-transmissions", { waitingText: null } );
-  }
- 
-	submitSuivi = function(oForm) {
-	  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
-	    loadSuivi(oForm.sejour_id.value);
-	  } });
-	}
+$$('a[href=#list-dispensations] small')[0].update('({{$dispensations|@count}})');
 
+loadSuivi = function(sejour_id, user_id) {
+  var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("user_id", user_id);
+  url.requestUpdate("list-transmissions", { waitingText: null } );
+}
+
+submitSuivi = function(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
+    loadSuivi(oForm.sejour_id.value);
+  } });
+}
+
+toggleDoneDispensations = function(){
+  $$("tbody.done").invoke("toggle");
+}
 </script>
 
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+
+<label>
+  <input type="checkbox" onclick="toggleDoneDispensations()" /> Afficher les dispensations réalisées
+</label>
 
 <table class="tbl">
   {{if $mode_nominatif}}

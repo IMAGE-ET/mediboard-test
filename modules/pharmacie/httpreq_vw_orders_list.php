@@ -27,7 +27,7 @@ $where = array (
 //$where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, 20);
+$deliveries = $delivery->loadList($where, $order_by, 100);
 
 $stocks_service = array();
 foreach($deliveries as $_delivery) {

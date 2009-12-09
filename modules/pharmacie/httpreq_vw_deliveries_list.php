@@ -13,7 +13,7 @@ $can->needsRead();
 
 $service_id = CValue::getOrSession('service_id');
 $mode       = CValue::getOrSession('mode');
-$delivered  = CValue::getOrSession('delivered') == 'true';
+$display_delivered  = CValue::getOrSession('display_delivered', 'false') == 'true';
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -30,7 +30,7 @@ $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:
 $where['quantity'] = " > 0";
 $where[] = "`order` != '1' OR `order` IS NULL";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, 20);
+$deliveries = $delivery->loadList($where, $order_by, 100);
 
 $deliveries_nominatif = array();
 $deliveries_global = array();
@@ -40,7 +40,7 @@ $stocks_service = array();
 $patients = array();
 if (count($deliveries)) {
   foreach($deliveries as $_delivery){
-  	if (!$delivered || ($delivered && $_delivery->isDelivered())) {
+  	if (!$_delivery->isDelivered() || $display_delivered) {
 	    $_delivery->loadRefsFwd();
 	    $_delivery->loadRefsBack();
 	    $_delivery->_ref_stock->loadRefsFwd();

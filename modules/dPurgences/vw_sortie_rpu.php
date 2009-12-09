@@ -23,13 +23,12 @@ $order_col = CValue::getOrSession("order_col", "_pec_transport");
 $date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
 
-
 // Chargement des urgences prises en charge
-$sejour = new CSejour;
-$where = array();
+$ljoin = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
-  
+
+$where = array();
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 $where["consultation.consultation_id"] = "IS NOT NULL";
@@ -38,16 +37,10 @@ if($selAffichage == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
 }
 
-if($order_col != "_pec_transport"){
-  $order_col = "_pec_transport";
-}
+$order_col = "_pec_transport";
+$order = "consultation.heure $order_way";
 
-if($order_col == "_pec_transport"){
-  $order = "consultation.heure $order_way";
-} else {
-  $order = null;
-}
-
+$sejour = new CSejour;
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 foreach($listSejours as &$curr_sejour) {
@@ -63,9 +56,8 @@ foreach($listSejours as &$curr_sejour) {
 }
 
 // Chargement des etablissements externes
-$order = "nom";
 $etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, $order);
+$listEtab = $etab->loadList(null, "nom");
 
 // Contraintes sur le mode de sortie / destination
 $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);

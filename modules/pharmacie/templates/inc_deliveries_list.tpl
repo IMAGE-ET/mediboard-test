@@ -13,15 +13,15 @@
 <table class="tbl">
   <!-- Affichage des delivrances globales -->
   <tr>
-    <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
+    <th>{{mb_title class=CProductDelivery field=service_id}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>{{mb_title class=CProductDelivery field=date_dispensation}}</th>
     {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
       <th>Stock pharmacie</th>
     {{/if}}
-    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    <th>{{mb_title class=CProductDelivery field=quantity}}</th>
     <th>Stock service</th>
-    <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
+    <th>{{mb_title class=CProduct field=_unit_title}}</th>
     <th><button type="button" onclick="deliverAll('list-globales')" class="tick">Tout délivrer</button></th>
   </tr>
   {{foreach from=$deliveries_global item=curr_delivery_global}}
