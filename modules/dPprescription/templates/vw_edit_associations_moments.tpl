@@ -15,7 +15,7 @@ function viewMomentsUnitaires(code_moment_id){
   var url = new Url;
   url.setModuleAction("dPprescription","httpreq_vw_moments_unitaires");
   url.addParam("code_moment_id", code_moment_id);
-  url.requestUpdate("moments_unitaires", { waitingText: null } );
+  url.requestUpdate("moments_unitaires");
 }
 
 
@@ -40,7 +40,7 @@ function reloadMomentsUnitaires(code_moment_id){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_moments_unitaires");
   url.addParam("code_momet_id", code_moment_id);
-  url.requestUpdate("moments_unitaires", { waitingText: null });
+  url.requestUpdate("moments_unitaires");
 }
 
 </script>

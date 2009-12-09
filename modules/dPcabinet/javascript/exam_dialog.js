@@ -18,7 +18,7 @@ var ExamDialog = {
   reload: function(consultation_id){
     var url = new Url("dPcabinet", "httpreq_vw_examens_comp");
     url.addParam("consultation_id", consultation_id);
-    url.requestUpdate("examDialog-"+consultation_id, { waitingText: null } );
+    url.requestUpdate("examDialog-"+consultation_id);
   },
   register: function(object_id){
     document.write('<div id="examDialog-'+object_id+'"></div>');

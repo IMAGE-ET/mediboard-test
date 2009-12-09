@@ -19,7 +19,7 @@ function loadSuivi(sejour_id, user_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("suivisoins", { waitingText: null } );
+    urlSuivi.requestUpdate("suivisoins");
   }
 }
 

@@ -62,7 +62,7 @@ function reloadListExamComp() {
   var UrllistExamComp= new Url;
   UrllistExamComp.setModuleAction("dPcabinet", "httpreq_vw_list_exam_comp");
   UrllistExamComp.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  UrllistExamComp.requestUpdate('listExamComp', { waitingText : null});
+  UrllistExamComp.requestUpdate('listExamComp');
 }
 </script>
 

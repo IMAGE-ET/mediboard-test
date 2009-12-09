@@ -18,7 +18,7 @@ var PlageConsult = {
   refreshPlage: function() {
     var url = new Url("dPcabinet", "httpreq_list_places");
     url.addParam("plageconsult_id", this.currPlage);
-    url.requestUpdate("listPlaces", { waitingText: null });
+    url.requestUpdate("listPlaces");
   },
   addPlaceBefore: function(plage_id) {
     alert("Veuillez choisir une plage");

@@ -5,7 +5,7 @@ refreshConstantesMedicales = function(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.addParam("readonly", true);
-    url.requestUpdate("constantes", { waitingText: null } );
+    url.requestUpdate("constantes");
   }
 }
 
@@ -20,7 +20,7 @@ refreshConstantesHack = function(sejour_id) {
 loadResultLabo = function(sejour_id) {
   var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('result_labo', { waitingText : null });
+  url.requestUpdate('result_labo');
 }
 
 

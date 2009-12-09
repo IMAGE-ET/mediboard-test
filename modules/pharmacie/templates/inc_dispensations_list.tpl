@@ -21,7 +21,7 @@ loadSuivi = function(sejour_id, user_id) {
   var url = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   url.addParam("sejour_id", sejour_id);
   url.addParam("user_id", user_id);
-  url.requestUpdate("list-transmissions", { waitingText: null } );
+  url.requestUpdate("list-transmissions");
 }
 
 submitSuivi = function(oForm) {

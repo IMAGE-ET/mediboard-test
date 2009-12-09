@@ -7,7 +7,7 @@ PlageConsult = {
   refresh: function(plage_id) {
     var url = new Url("dPcabinet", "print_rapport");
     url.addParam("plage_id", plage_id);
-    url.requestUpdate("CPlageconsult-" + plage_id, { waitingText : null } );
+    url.requestUpdate("CPlageconsult-" + plage_id);
   },
   onSubmit: function(form, plage_id) {
     return onSubmitFormAjax(form, { 

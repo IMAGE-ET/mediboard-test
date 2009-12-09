@@ -19,7 +19,7 @@ Main.add(function () {
 
 function refreshDestockagesList() {
   var url = new Url("pharmacie", "httpreq_vw_destockages_service_list");
-  url.requestUpdate("list-destockages", { waitingText: null } );
+  url.requestUpdate("list-destockages");
 }
 </script>
 

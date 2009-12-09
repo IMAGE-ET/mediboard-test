@@ -143,7 +143,7 @@ document.observe('keydown', function(e){
 	  	  var url = new Url("dPfiles", "ajax_send_button");
 	  	  url.addParam("item_guid", "{{$compte_rendu->_guid}}");
 	  	  url.addParam("onComplete", "refreshSendButton()");
-	  	  url.requestUpdate("sendbutton", { waitingText: null } );
+	  	  url.requestUpdate("sendbutton");
 	  	  refreshList();
 	  	}
 	  	</script>

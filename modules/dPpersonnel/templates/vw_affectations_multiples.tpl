@@ -23,7 +23,7 @@ function deleteAffectation(affectation_id, object_guid, personnel_id, klass) {
 		  var url = new Url("dPpersonnel", "ajax_affectations_multiple");
 		  url.addParam("object_guid", object_guid);
 		  url.addParam("personnel_id", personnel_id);
-		  url.requestUpdate(object_guid+"-"+personnel_id, { waitingText : null } );
+		  url.requestUpdate(object_guid+"-"+personnel_id);
     }
   }
 

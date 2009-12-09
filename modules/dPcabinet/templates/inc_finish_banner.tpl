@@ -14,7 +14,7 @@ function reloadFinishBanner() {
   mainUrl.setModuleAction("dPcabinet", "httpreq_vw_finish_banner");
   mainUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   mainUrl.addParam("_is_anesth", "{{$_is_anesth}}");
-  mainUrl.requestUpdate('finishBanner', { waitingText : null });
+  mainUrl.requestUpdate('finishBanner');
 }
 </script>
 

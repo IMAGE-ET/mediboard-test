@@ -10,7 +10,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim", { waitingText : null } );
+  url.requestUpdate("cim");
 }
 
 var tabSejour = {{$tabSejour|@json}};
@@ -72,12 +72,12 @@ function reloadConsultAnesth() {
   // Reload Intervention
   var consultUrl = new Url("dPcabinet", "httpreq_vw_consult_anesth");
   consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  consultUrl.requestUpdate('consultAnesth', { waitingText: null } );
+  consultUrl.requestUpdate('consultAnesth');
   
   // Reload Infos Anesth
   var infosAnesthUrl = new Url("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
+  infosAnesthUrl.requestUpdate('InfoAnesth');
  
   Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, !Preferences.mode_readonly,'', null, false);
 }

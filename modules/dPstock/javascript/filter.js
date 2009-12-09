@@ -101,7 +101,7 @@ var Filter = Class.create({
         url.addParam("hidden_column", this.sHiddenColumn);
       }
       
-      url.requestUpdate(list, { waitingText: null, onComplete: makeRangeSelector } );
+      url.requestUpdate(list, { onComplete: makeRangeSelector } );
     }, this);
 
     return false;

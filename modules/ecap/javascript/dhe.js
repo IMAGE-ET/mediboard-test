@@ -3,7 +3,7 @@ var DHE = {
     var url = new Url("ecap", "httpreq_new_dhe");
     url.addParam("patient_id", patient_id);
     url.addParam("praticien_id", praticien_id);
-    url.requestUpdate("dhe-form", { waitingText: null } );
+    url.requestUpdate("dhe-form");
   },
   
   register: function(patient_id, praticien_id, container) {

@@ -4,7 +4,7 @@ function reloadPatient(oForm) {
   var url_patient = new Url("dPhospi", "httpreq_pathologies");
   url_patient.addParam("affichage_patho", "{{$affichage_patho}}");
   url_patient.addParam("sejour_id", oForm.sejour_id.value);
-  url_patient.requestUpdate('sejour-'+oForm.sejour_id.value, { waitingText : null });
+  url_patient.requestUpdate('sejour-'+oForm.sejour_id.value);
 }
 
 Main.add(function () {

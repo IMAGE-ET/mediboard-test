@@ -38,7 +38,7 @@ updateFavoris = function (praticien_id, chapitre, select){
   url.addParam("praticien_id", praticien_id);
   url.addParam("chapitre", chapitre);
 	url.addParam("prescription_id", '{{$prescription->_id}}');
-  url.requestUpdate(select, { waitingText: null });
+  url.requestUpdate(select);
 }
 
 updateSelectTP = function(patient_id, select){
@@ -46,7 +46,7 @@ updateSelectTP = function(patient_id, select){
   select.onclick="";
   var url = new Url("dPprescription", "httpreq_vw_select_tp_patient");
   url.addParam("patient_id", patient_id);
-  url.requestUpdate(select, { waitingText: null });
+  url.requestUpdate(select);
 }
 
 // Si la perfusion n'est pas de type PCA, on vide toutes les catarteristiques specifiques

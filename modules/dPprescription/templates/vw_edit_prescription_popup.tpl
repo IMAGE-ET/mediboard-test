@@ -24,7 +24,7 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
     url.addParam("praticien_id", praticien_id);
     url.addParam("selected_id", selected_id);
-    url.requestUpdate(list, { waitingText: null} );
+    url.requestUpdate(list);
   }
 }
 			          

@@ -47,6 +47,6 @@ var Correspondants = Correspondants || Class.create({
     var url = new Url(this.module, this.action);
     url.addParam("patient_id", this.patient_id);
     url.addParam("widget_id", this.widget_id);
-    url.requestUpdate(this.widget_id, { waitingText : null });
+    url.requestUpdate(this.widget_id);
   }
 });

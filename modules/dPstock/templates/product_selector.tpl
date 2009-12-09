@@ -39,7 +39,7 @@ function refreshProductsList(category_id, keywords, selected_product) {
     url.addParam("category_id", category_id);
     url.addParam("keywords", keywords);
     url.addParam("selected_product", selected_product);
-    url.requestUpdate("products", { waitingText: null } );
+    url.requestUpdate("products");
   }
 }
 
@@ -48,14 +48,14 @@ function refreshCategoriesList(keywords, selected_category) {
     var url = new Url("dPstock","httpreq_product_selector_categories_list");
     url.addParam("keywords", keywords);
     url.addParam("selected_category", selected_category);
-    url.requestUpdate("categories", { waitingText: null } );
+    url.requestUpdate("categories");
   }
 }
 
 function refreshProductInfo(product_id) {
   var url = new Url("dPstock","httpreq_product_selector_product_info");
   url.addParam("product_id", product_id);
-  url.requestUpdate("product_info", { waitingText: null } );
+  url.requestUpdate("product_info");
 }
 </script>
 

@@ -34,7 +34,7 @@ var PrescriptionEditor = {
 	    url.addParam("suffixe", suffixe);
 	    url.make();
 	    if($('prescription-'+object_class+'-'+suffixe)){
-	      url.requestUpdate("prescription-"+object_class+"-"+suffixe, { waitingText : null } );
+	      url.requestUpdate("prescription-"+object_class+"-"+suffixe);
       }
     } );
   },

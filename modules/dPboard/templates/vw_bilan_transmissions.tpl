@@ -15,7 +15,7 @@ viewTransmissions = function(sejour_id, praticien_id){
   url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
   url.addParam("sejour_id", sejour_id);
   url.addParam("praticien_id", document.selPraticien.praticien_id.value);
-  url.requestUpdate("view_transmissions", { waitingText: null } );
+  url.requestUpdate("view_transmissions");
 }
 
 tri_transmissions = function(order_col, order_way){
@@ -24,7 +24,7 @@ tri_transmissions = function(order_col, order_way){
   url.addParam("praticien_id", document.selPraticien.praticien_id.value);
   url.addParam("order_col", order_col);
   url.addParam("order_way", order_way);
-  url.requestUpdate("view_transmissions", { waitingText: null } );
+  url.requestUpdate("view_transmissions");
 }
 
 function markAsSelected(element) {

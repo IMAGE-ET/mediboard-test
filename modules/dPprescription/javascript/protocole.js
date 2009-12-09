@@ -35,7 +35,7 @@ var Protocole = {
     url.addParam("function_id", oForm.function_id.value);
     url.addParam("group_id", oForm.group_id.value);
     url.addParam("protocoleSel_id", protocoleSel_id);
-    url.requestUpdate("protocoles", { waitingText: null } );
+    url.requestUpdate("protocoles");
   },
   refreshListProt: function(){
     Protocole.refreshList();
@@ -49,7 +49,7 @@ var Protocole = {
   duplicate: function(protocole_id){
     var url = new Url("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
-    url.requestUpdate("systemMsg", { waitingText : null });
+    url.requestUpdate("systemMsg");
   },
   preview: function(protocole_id){
     var url = new Url("dPprescription", "httpreq_preview_protocole");
@@ -77,7 +77,7 @@ var Protocole = {
   viewPack: function(pack_id){
    var url = new Url("dPprescription", "httpreq_vw_pack");
    url.addParam("pack_id", pack_id);
-   url.requestUpdate("view_pack", { waitingText: null , onComplete: function(){ Protocole.refreshListPack(pack_id); } } );
+   url.requestUpdate("view_pack", { onComplete: function(){ Protocole.refreshListPack(pack_id); } } );
   },
   refreshListPack: function(pack_id){
     var oFormPrat = document.selPrat;
@@ -85,7 +85,7 @@ var Protocole = {
     url.addParam("praticien_id", oFormPrat.praticien_id.value);
     url.addParam("function_id", oFormPrat.function_id.value);
     url.addParam("pack_id", pack_id);
-    url.requestUpdate("view_list_pack", { waitingText: null });
+    url.requestUpdate("view_list_pack");
   },
   reloadAfterAddPack: function(pack_id) {
     var oFormPrat = document.selPrat;

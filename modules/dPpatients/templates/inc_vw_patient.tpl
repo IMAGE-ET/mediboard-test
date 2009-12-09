@@ -40,7 +40,7 @@ function printIntervention(id) {
 function reloadVwPatient(){
   var mainUrl = new Url("dPpatients", "httpreq_vw_patient");
   mainUrl.addParam("patient_id", document.actionPat.patient_id.value);
-  mainUrl.requestUpdate('vwPatient', { waitingText : null } );
+  mainUrl.requestUpdate('vwPatient');
 }
 
 Document.refreshList = function(){

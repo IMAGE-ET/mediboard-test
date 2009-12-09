@@ -16,11 +16,11 @@ function refreshLists() {
   
   url = new Url("soins", "httpreq_vw_stock_reception");
   url.addFormData(form);
-  url.requestUpdate("list-reception", { waitingText: null } );
+  url.requestUpdate("list-reception");
   
   url = new Url("soins", "httpreq_vw_stock_inventory");
   url.addFormData(form);
-  url.requestUpdate("list-inventory", { waitingText: null } );
+  url.requestUpdate("list-inventory");
   
   return false;
 }
@@ -28,7 +28,7 @@ function refreshLists() {
 function refreshOrders(){
   var url = new Url("soins", "httpreq_vw_stock_order");
   url.addFormData(getForm("filter"));
-  url.requestUpdate("list-order", { waitingText: null } );
+  url.requestUpdate("list-order");
 }
 
 function receiveLine(form, dontRefresh) {

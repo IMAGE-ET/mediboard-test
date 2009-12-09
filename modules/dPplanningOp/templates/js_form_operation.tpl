@@ -44,13 +44,13 @@ function updateTime() {
     timeUrl.setModuleAction("dPplanningOp", "httpreq_get_op_time");
     timeUrl.addElement(oForm.chir_id, "chir_id");
     timeUrl.addElement(oForm.codes_ccam, "codes");
-    timeUrl.requestUpdate('timeEst', { waitingText : null });
+    timeUrl.requestUpdate('timeEst');
     
     var dureeUrl = new Url;
     timeUrl.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
     timeUrl.addElement(oForm.chir_id, "chir_id");
     timeUrl.addElement(oForm.codes_ccam, "codes");
-    timeUrl.requestUpdate('dureeEst', { waitingText : null });
+    timeUrl.requestUpdate('dureeEst');
   }
 }
 

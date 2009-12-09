@@ -28,11 +28,11 @@ function refreshListProtocolesPrescription(praticien_id, selected_id) {
   url.addParam("praticien_id", praticien_id);
   url.addParam("without_pack", true);
   //url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
-  //url.requestUpdate(document.editFrm.protocole_prescription_anesth_id, { waitingText: null } );
+  //url.requestUpdate(document.editFrm.protocole_prescription_anesth_id);
 
   url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_chir_id}}");
   if (document.editFrm.protocole_prescription_chir_id) {
-    url.requestUpdate(document.editFrm.protocole_prescription_chir_id, { waitingText: null } );
+    url.requestUpdate(document.editFrm.protocole_prescription_chir_id);
   }
 }
 

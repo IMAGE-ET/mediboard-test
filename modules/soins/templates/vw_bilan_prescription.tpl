@@ -18,7 +18,7 @@ viewListPrescription = function(){
   url.addParam('praticien_id', $V(oFilterForm.praticien_id));
   url.addParam('_date_min', $V(oFilterForm._date_min));
   url.addParam('_date_max', $V(oFilterForm._date_max));
-  url.requestUpdate("list_prescriptions", { waitingText: null } );
+  url.requestUpdate("list_prescriptions");
 }
 	
 loadSejour = function(sejour_id) {

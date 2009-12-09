@@ -79,7 +79,7 @@ var ExtRefManager = {
     var url = new Url();
     url.setModuleAction("dPpmsi", "httpreq_ipp_form");
     url.addParam("pat_id", '{{$patient->_id}}');
-    url.requestUpdate("IPP", {waitingText: null });
+    url.requestUpdate("IPP");
   },
   
   submitNumdosForm: function(sejour_id) {
@@ -92,7 +92,7 @@ var ExtRefManager = {
     var url = new Url();
     url.setModuleAction("dPpmsi", "httpreq_numdos_form");
     url.addParam("sejour_id", ExtRefManager.sejour_id);
-    url.requestUpdate("Numdos" + ExtRefManager.sejour_id, {waitingText: null });
+    url.requestUpdate("Numdos" + ExtRefManager.sejour_id);
   }
 }
 
@@ -118,28 +118,24 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlDiag.setModuleAction("dPpmsi", "httpreq_diagnostic");
   urlDiag.addParam("sejour_id", sejour_id);
   urlDiag.addParam("modeDAS", modeDAS);
-  urlDiag.requestUpdate("cim-"+sejour_id, { waitingText : null } );
+  urlDiag.requestUpdate("cim-"+sejour_id);
+	
   var urlListDiag = new Url();
   urlListDiag.setModuleAction("dPpmsi", "httpreq_list_diags");
   urlListDiag.addParam("sejour_id", sejour_id);
-  urlListDiag.requestUpdate("cim-list-"+sejour_id, { 
-		waitingText : null
-  } );
+  urlListDiag.requestUpdate("cim-list-"+sejour_id);
+	
   var urlGHM = new Url();
   urlGHM.setModuleAction("dPpmsi", "httpreq_vw_GHM");
   urlGHM.addParam("sejour_id", sejour_id);
-  urlGHM.requestUpdate("GHM-"+sejour_id, { 
-		waitingText : null
-  } );
+  urlGHM.requestUpdate("GHM-"+sejour_id);
 }
 
 function reloadListActes(operation_id) {
   var urlActes = new Url();
   urlActes.setModuleAction("dPpmsi", "httpreq_list_actes");
   urlActes.addParam("operation_id", operation_id);
-  urlActes.requestUpdate("modifActes-"+operation_id, { 
-		waitingText : null
-  } );
+  urlActes.requestUpdate("modifActes-"+operation_id);
 }
 
 SejourHprimSelector.doSet = function(){

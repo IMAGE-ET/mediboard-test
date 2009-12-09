@@ -22,7 +22,7 @@ Horodatage = {
 	reload: function(oForm) {
 	  var url = new Url("dPurgences", "httpreq_vw_radio");
 	  url.addParam("rpu_id", oForm.rpu_id.value);
-	  url.requestUpdate('radio', { waitingText: null } );
+	  url.requestUpdate('radio');
 	}
 }
 

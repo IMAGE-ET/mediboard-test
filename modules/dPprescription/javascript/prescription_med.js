@@ -12,7 +12,7 @@ var prescriptionMed = {
  refresh: function(sejour_id) {
    var url = new Url("dPprescription", "httpreq_vw_prescription_meds");
    url.addParam("sejour_id", sejour_id);
-   url.requestUpdate("vw-prescription-meds", { waitingText: null } );
+   url.requestUpdate("vw-prescription-meds");
  },
  
  register: function(sejour_id, container) {

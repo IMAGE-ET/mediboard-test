@@ -19,7 +19,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : null});
+  url.requestUpdate('bigView');
 }
 
 function setObject(oObject){
@@ -76,7 +76,7 @@ function reloadListFile(sAction){
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.requestUpdate('listView', { waitingText : null });
+  url.requestUpdate('listView');
 }
 
 function submitFileChangt(oForm){

@@ -112,7 +112,7 @@ var Document = {
     url.addParam("object_id"   , oOptions.object_id);
     url.addParam("praticien_id", oOptions.praticien_id);
     url.addParam("mode"        , oOptions.mode);
-    url.requestUpdate(container, { waitingText : null } );
+    url.requestUpdate(container);
   }
 };
 

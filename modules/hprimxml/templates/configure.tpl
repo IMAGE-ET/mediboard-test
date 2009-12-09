@@ -1,4 +1,4 @@
-{{* $Id: configure.tpl 6341 2009-05-21 11:52:48Z mytto $ *}}
+{* $Id: configure.tpl 6341 2009-05-21 11:52:48Z mytto $ *}}
 
 {{*
  * @package Mediboard
@@ -15,7 +15,7 @@
     var url = new Url;
     url.setModuleAction("hprimxml", "ajax_do_cfg_action");
     url.addParam("evenement", evenement);
-    url.requestUpdate('install_'+evenement, {waitingText: null, onComplete: function(){checkSchemaFile(evenement);}});
+    url.requestUpdate('install_'+evenement, { onComplete: function(){checkSchemaFile(evenement);}});
   }
   
   function checkSchemaFile(evt) {

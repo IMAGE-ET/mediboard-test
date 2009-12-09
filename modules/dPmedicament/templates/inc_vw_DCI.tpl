@@ -18,7 +18,7 @@ loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   url.addParam("forme", forme);
   url.addParam("dosage", dosage);
   url.addParam("rechercheLivretDCI",$V(oForm.rechercheLivretDCI));
-  url.requestUpdate("DCI", { waitingText: null } );
+  url.requestUpdate("DCI");
 }
 </script>
 

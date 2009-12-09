@@ -19,7 +19,7 @@ loadComposants = function(composant, code, libelle, dialog){
   url.addParam("libelle", libelle);
   url.addParam("dialog", dialog);
   url.addParam("rechercheLivretComposant", $V(oForm.rechercheLivretComposant));
-  url.requestUpdate("composants", { waitingText: null } );
+  url.requestUpdate("composants");
 }
 </script>
 

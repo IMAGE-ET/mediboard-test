@@ -13,7 +13,7 @@ refreshAidesPreAnesth = function(user_id) {
   url.addParam('field', 'rques_visite_anesth');
   url.addParam('user_id', user_id);
   url.addParam('no_enum', 1);
-  url.requestUpdate('select_aides_pre_anesth', { waitingText: null });
+  url.requestUpdate('select_aides_pre_anesth');
 }
 
 reloadDocumentsAnesth = function () {

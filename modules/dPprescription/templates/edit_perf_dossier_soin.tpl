@@ -36,7 +36,7 @@ refreshPerfTiming = function(){
   url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
   url.addParam("perfusion_id", "{{$perfusion_id}}");
   url.addParam("mode_refresh", "timing");
-  url.requestUpdate("perf_timing", { waitingText: null } );
+  url.requestUpdate("perf_timing");
 }
 
 refreshPerfTransmissions = function(){
@@ -44,7 +44,7 @@ refreshPerfTransmissions = function(){
   url.setModuleAction("dPprescription", "edit_perf_dossier_soin");
   url.addParam("perfusion_id", "{{$perfusion_id}}");
   url.addParam("mode_refresh", "trans");
-  url.requestUpdate("perf_trans", { waitingText: null } );
+  url.requestUpdate("perf_trans");
 }
 
 Main.add( function(){

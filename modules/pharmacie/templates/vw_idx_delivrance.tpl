@@ -21,10 +21,10 @@ function refreshLists() {
 
   // To choose wether we want global or nominative deliveries
   urlGlobales.addParam("mode", "global");
-  urlGlobales.requestUpdate("list-globales", { waitingText: null } );
+  urlGlobales.requestUpdate("list-globales");
 
   urlNominatives.addParam("mode", "nominatif");
-  urlNominatives.requestUpdate("list-nominatives", { waitingText: null } );
+  urlNominatives.requestUpdate("list-nominatives");
 
   return false;
 }

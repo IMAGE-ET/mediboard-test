@@ -22,7 +22,7 @@ function refreshPatient(){
   url.addParam("date_min", form._date_min.value);
   url.addParam("date_max", form._date_max.value);
   url.addParam("service_id", form.service_id.value);
-  url.requestUpdate("patients", { waitingText: null } );
+  url.requestUpdate("patients");
 }
 </script>
 

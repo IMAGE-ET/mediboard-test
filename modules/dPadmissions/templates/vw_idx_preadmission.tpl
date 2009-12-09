@@ -22,7 +22,7 @@ function submitPreAdmission(oForm) {
 function reloadPreAdmission() {
   var admUrl = new Url("dPadmissions", "httpreq_vw_preadmissions");
   admUrl.addParam("date", "{{$date}}");
-  admUrl.requestUpdate('listPreAdmissions', { waitingText : null });
+  admUrl.requestUpdate('listPreAdmissions');
 }
 
 Main.add(function () {

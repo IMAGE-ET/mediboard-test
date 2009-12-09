@@ -29,7 +29,7 @@ function reloadTiming(operation_id){
   {{if $object->_id}}
   var url = new Url("dPsalleOp", "httpreq_vw_timing");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("timing", { waitingText: null, onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});} } );
+  url.requestUpdate("timing", { onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});} } );
   {{/if}}
 }
 
@@ -52,7 +52,6 @@ function reloadAnesth(operation_id){
   var url = new Url("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", { 
-  	waitingText: null,
   	onComplete: function() { 
       if(reloadDocumentsAnesth) {
         reloadDocumentsAnesth();
@@ -66,13 +65,13 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim", { waitingText : null } );
+  url.requestUpdate("cim");
 }
 
 function reloadPersonnel(operation_id){
   var url = new Url("dPsalleOp", "httpreq_vw_personnel");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("listPersonnel", {waitingText: null} );
+  url.requestUpdate("listPersonnel");
 }
 
 function confirmeCloture() {

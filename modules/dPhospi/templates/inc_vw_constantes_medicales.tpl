@@ -21,7 +21,6 @@ editConstantes = function (const_id, context_guid){
   url.addParam('context_guid', context_guid);
   url.addParam('readonly', '{{$readonly}}');
   url.requestUpdate('constantes-medicales-form', { 
-    waitingText: null,
     onComplete: function () {
       prepareForm('edit-constantes-medicales');
     }
@@ -199,7 +198,7 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("patient_id", '{{$patient->_id}}');
   url.addParam("readonly", '{{$readonly}}');
   url.addParam("selected_context_guid", context_guid);
-  url.requestUpdate(container, { waitingText: null } );
+  url.requestUpdate(container);
 };
 </script>
 

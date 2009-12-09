@@ -20,7 +20,7 @@ function checkSHM(name, action){
   url.setModuleAction("dPprescription", "httpreq_check_conf");
   url.addParam("name", name);
   url.addParam("action", action);
-  url.requestUpdate("shm", { waitingText: null } );
+  url.requestUpdate("shm");
 }
 
 Main.add(function () {

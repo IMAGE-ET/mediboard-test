@@ -10,9 +10,7 @@
 function refreshListCategorie(praticien_id){
   var url = new Url("dPcabinet", "httpreq_view_list_categorie");
   url.addParam("praticien_id", praticien_id);
-  url.requestUpdate("listCategorie", {
-    waitingText: null
-  });
+  url.requestUpdate("listCategorie");
 }
 
 function changePause(){
@@ -36,9 +34,7 @@ function requestInfoPat() {
   var url = new Url("dPpatients", "httpreq_get_last_refs");
   url.addElement(oForm.patient_id);
   url.addElement(oForm.consultation_id);
-  url.requestUpdate("infoPat", {
-    waitingText: "Chargement des antécédents du patient"
-  });
+  url.requestUpdate("infoPat");
 }
 
 function ClearRDV(){

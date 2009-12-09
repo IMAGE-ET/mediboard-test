@@ -21,7 +21,7 @@ var Process = {
 	  url.addElement(form.step);	  
 	  url.addParam("mode", $V(form.mode));
 	  url.addParam("pass", this.pass);
-	  url.requestUpdate("process", { waitingText : null } );
+	  url.requestUpdate("process");
 	},
 	
 	updateScrewed: function(medecins, time, updates, errors) {

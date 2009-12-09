@@ -24,7 +24,7 @@ function loadSuivi(sejour_id, user_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("suivisoins", { waitingText: null } );
+    urlSuivi.requestUpdate("suivisoins");
   }
 }
 
@@ -37,7 +37,7 @@ function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes", { waitingText: null } );
+    url.requestUpdate("constantes");
   }
 }
 
@@ -80,7 +80,7 @@ function loadTransfert(mode_sortie, sejour_id){
   if(mode_sortie=="transfert"){
     var url = new Url();
     url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
-    url.requestUpdate('listEtabs-'+sejour_id, { waitingText: null } );
+    url.requestUpdate('listEtabs-'+sejour_id);
   } else {
     // sinon, on vide le contenu de la div et l'etablissement de transfert du sejour
     $('listEtabs-'+sejour_id).innerHTML = "";

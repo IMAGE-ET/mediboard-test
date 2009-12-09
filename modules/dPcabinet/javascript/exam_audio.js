@@ -286,7 +286,7 @@ function reloadBilan(){
   var oForm = document.editFrm;
   var url = new Url("dPcabinet", "httpreq_vw_examaudio_bilan");
   url.addParam("examaudio_id", oForm.examaudio_id.value);
-  url.requestUpdate('td_bilan', { waitingText : null });
+  url.requestUpdate('td_bilan');
 }
 
 function reloadGraphTonale(sCote){
@@ -295,7 +295,7 @@ function reloadGraphTonale(sCote){
     var url = new Url("dPcabinet", "httpreq_vw_examaudio_tonal");
     url.addParam("side", sCote);
     url.addParam("examaudio_id", oForm.examaudio_id.value);
-    url.requestUpdate('td_graph_tonal_'+sCote, { waitingText : null });
+    url.requestUpdate('td_graph_tonal_'+sCote);
   }else{
     reloadGraphTonale('gauche');
     reloadGraphTonale('droite');
@@ -317,7 +317,7 @@ function reloadGraphTympan(sCote){
     var url = new Url("dPcabinet", "httpreq_vw_examaudio_tympan");
     url.addParam("side", sCote);
     url.addParam("examaudio_id", oForm.examaudio_id.value);
-    url.requestUpdate('td_graph_tympan_'+sCote, { waitingText : null });
+    url.requestUpdate('td_graph_tympan_'+sCote);
   }else{
     reloadGraphVocale();
     reloadGraphTympan('droite');
@@ -335,5 +335,5 @@ function reloadGraphVocale(){
   var oForm = document.editFrm;
   var url = new Url("dPcabinet", "httpreq_vw_examaudio_vocale");
   url.addParam("examaudio_id", oForm.examaudio_id.value);
-  url.requestUpdate('td_graph_vocal', { waitingText : null });
+  url.requestUpdate('td_graph_vocal');
 }

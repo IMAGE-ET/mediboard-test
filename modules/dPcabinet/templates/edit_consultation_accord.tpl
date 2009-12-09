@@ -14,7 +14,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim", { 	waitingText : null } );
+  url.requestUpdate("cim");
 }
 
 function printAllDocs() {

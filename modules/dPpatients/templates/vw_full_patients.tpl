@@ -32,15 +32,12 @@ function reloadListFile(sAction){
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
-  url.requestUpdate('listView', { 
-    waitingText : null 
-  } );
+  url.requestUpdate('listView');
   
   if(sAction == "add" || sAction == "delete"){
     url = new Url("dPpatients", "httpreq_vw_full_patient");
     url.addParam("patient_id", "{{$patient->_id}}");
     url.requestUpdate('listInfosPat', { 
-      waitingText: null, 
       onComplete: ViewFullPatient.main
     } );
   }
@@ -50,19 +47,19 @@ function saveObjectInfos(oObject){
   var url = new Url("dPpatients", "httpreq_save_classKey");
   url.addParam("selClass", oObject.objClass);
   url.addParam("selKey", oObject.id);
-  url.requestUpdate('systemMsg', { waitingText : null });
+  url.requestUpdate('systemMsg');
 }
 
 function view_labo_patient() {
   var url = new Url("dPImeds", "httpreq_vw_patient_results");
   url.addParam("patient_id", "{{$patient->_id}}");
-  url.requestUpdate('listView', { waitingText : null });
+  url.requestUpdate('listView');
 }
 
 function view_labo_sejour(sejour_id) {
   var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('listView', { waitingText : null });
+  url.requestUpdate('listView');
 }
 
 function view_history_patient(id){

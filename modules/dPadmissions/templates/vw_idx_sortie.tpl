@@ -31,7 +31,7 @@ function loadTransfert(oForm){
     //Chargement de la liste des etablissement externes
     var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
     url.addParam("sejour_id", sejour_id);
-    url.requestUpdate('listEtabExterne-'+oForm.name, { waitingText : null });
+    url.requestUpdate('listEtabExterne-'+oForm.name);
   } else {
     // sinon, on vide le contenu de la div
     $("listEtabExterne-" + oForm.name).innerHTML = "";
@@ -52,7 +52,7 @@ function reload(mode) {
   url.addParam("date", "{{$date}}");
   url.addParam("vue", "{{$vue}}");
   url.addParam("mode", mode);
-  url.requestUpdate('sorties'+mode, { waitingText : null });
+  url.requestUpdate('sorties'+mode);
 }
 
 function submitSortie(oForm, mode) {

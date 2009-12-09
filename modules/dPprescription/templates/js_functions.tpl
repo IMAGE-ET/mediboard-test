@@ -136,7 +136,7 @@ reloadPrises = function(prescription_line_id, chapitre){
   var url = new Url("dPprescription", "httpreq_vw_prises");
   url.addParam("prescription_line_id", prescription_line_id);
   url.addParam("chapitre", chapitre);
-  url.requestUpdate('prises-'+chapitre+prescription_line_id, { waitingText: null });
+  url.requestUpdate('prises-'+chapitre+prescription_line_id);
 }
 
 onSubmitPrise = function(oForm, chapitre){
@@ -300,7 +300,7 @@ submitPoso = function(oForm, curr_line_id){
       if(oForm._line_id_for_poso){
         url.addParam("line_id_for_poso", oForm._line_id_for_poso.value);
       }
-      url.requestUpdate('prises-Med'+curr_line_id, { waitingText: null });
+      url.requestUpdate('prises-Med'+curr_line_id);
     } 
    }
   );

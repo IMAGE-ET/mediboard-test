@@ -17,8 +17,8 @@ var Catalogue = {
       urlCat.addParam("catalogue_labo_id", iCatalogue);
       urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
-    urlCat.requestUpdate('CataloguesView', { waitingText : null });
-    urlExam.requestUpdate('CataloguesExamensView', { waitingText : null });
+    urlCat.requestUpdate('CataloguesView');
+    urlExam.requestUpdate('CataloguesExamensView');
   }
 }
 
@@ -39,8 +39,8 @@ var Pack = {
       urlPack.addParam("pack_examens_labo_id", pack_id);
       urlExam.addParam("pack_examens_labo_id", pack_id);
     }
-    urlPack.requestUpdate('PacksView', { waitingText : null });
-    urlExam.requestUpdate('PacksExamensView', { waitingText : null });
+    urlPack.requestUpdate('PacksView');
+    urlExam.requestUpdate('PacksExamensView');
   },
   dropExamenCat: function(sExamen_id, pack_id) {
     oFormBase = document.editPackItem;
@@ -120,7 +120,7 @@ function search(){
   var url = new Url();
   url.setModuleAction("dPlabo", "httpreq_search_exam");
   url.addParam("recherche", oForm.search.value);
-  url.requestUpdate("CataloguesExamensView", { waitingText: null });
+  url.requestUpdate("CataloguesExamensView");
 } 
 
 

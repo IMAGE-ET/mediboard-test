@@ -27,7 +27,7 @@ refreshTransmission = function(){
   url.addParam("sejour_id", '{{$sejour_id}}');
   url.addParam("addTrans", true);
   url.addParam("with_filter", '{{$with_filter}}');
-  url.requestUpdate("transmissions", { waitingText: null } );
+  url.requestUpdate("transmissions");
 }
 
 delCibleTransmission = function() {

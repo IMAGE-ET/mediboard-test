@@ -20,13 +20,13 @@ Main.add(function () {
 
 function refreshDeliveriesList() {
   var url = new Url("dPstock","httpreq_vw_deliveries_list");
-  url.requestUpdate("deliveries", { waitingText: null } );
+  url.requestUpdate("deliveries");
 }
 
 function refreshStock(stock_id) {
   var url = new Url("dPstock","httpreq_vw_delivery_stock_item");
   url.addParam("stock_id", stock_id);
-  url.requestUpdate("delivery-"+stock_id, { waitingText: null } );
+  url.requestUpdate("delivery-"+stock_id);
 }
 
 function deliver(oForm, sign) {

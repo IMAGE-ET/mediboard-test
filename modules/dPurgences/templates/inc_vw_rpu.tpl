@@ -21,7 +21,7 @@ function reloadSortiePrevue() {
 	url.setModuleAction("dPurgences", "ajax_sortie_prevue");
 	url.addParam("sejour_id", getForm('editSortiePrevue').elements.sejour_id.value);
 	url.addParam("consult_id", getForm('formValidCotation').elements.consultation_id.value);
-	url.requestUpdate('div_sortie_prevue', { waitingText: null } );
+	url.requestUpdate('div_sortie_prevue');
 }
 
 function submitSejour(){
@@ -71,7 +71,7 @@ function loadTransfert(mode_sortie){
 	  if(mode_sortie=="transfert"){
 	    var url = new Url();
 	    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
-	    url.requestUpdate('listEtabs', { waitingText: null } );
+	    url.requestUpdate('listEtabs');
 	  } else {
 	    // sinon, on vide le contenu de la div
 	    $("listEtabs").innerHTML = "";

@@ -278,7 +278,7 @@ calculSoinSemaine = function(date, prescription_id){
   var url = new Url("dPprescription", "httpreq_vw_dossier_soin_semaine");
   url.addParam("date", date);
   url.addParam("prescription_id", prescription_id);
-  url.requestUpdate("semaine", { waitingText: null } );
+  url.requestUpdate("semaine");
 }
 
 // Initialisation

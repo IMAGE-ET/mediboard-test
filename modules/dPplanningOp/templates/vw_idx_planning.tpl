@@ -11,7 +11,7 @@ function updateListOperations(date) {
   url.addParam("pratSel" , "{{$selPrat}}");
   url.addParam("date"    , date);
 
-  url.requestUpdate('operations', { waitingText: null } );
+  url.requestUpdate('operations');
 }
 
 Main.add(function () {

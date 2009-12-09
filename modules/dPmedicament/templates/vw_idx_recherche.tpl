@@ -17,7 +17,7 @@ function loadArbreATC(codeATC, dialog){
   url.setModuleAction("dPmedicament", "httpreq_vw_arbre_ATC");
   url.addParam("codeATC", codeATC);
   url.addParam("dialog", dialog);
-  url.requestUpdate("ATC", { waitingText: null } );
+  url.requestUpdate("ATC");
 }
 
 function loadArbreBCB(codeBCB, dialog){
@@ -25,7 +25,7 @@ function loadArbreBCB(codeBCB, dialog){
   url.setModuleAction("dPmedicament", "httpreq_vw_arbre_BCB");
   url.addParam("codeBCB", codeBCB);
   url.addParam("dialog", dialog);
-  url.requestUpdate("BCB", { waitingText: null } );
+  url.requestUpdate("BCB");
 }
 
 function viewATC(){

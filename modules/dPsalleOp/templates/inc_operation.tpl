@@ -24,7 +24,7 @@ Main.add(function () {
   if($('antecedents')){
     var url = new Url("dPcabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$selOp->sejour_id}}");
-    url.requestUpdate("antecedents", {waitingText: null});
+    url.requestUpdate("antecedents");
   }
 	
 	if($('constantes-medicales')){
@@ -35,13 +35,13 @@ Main.add(function () {
   if($('bloodSalvage_tab')){
     var url = new Url("bloodSalvage", "httpreq_vw_bloodSalvage");
     url.addParam("op","{{$selOp->_id}}");
-    url.requestUpdate("bloodSalvage_tab", { waitingText: null});
+    url.requestUpdate("bloodSalvage_tab");
   }
   
   if($('Imeds_tab')){
     var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", {{$sejour->_id}});
-    url.requestUpdate('Imeds_tab', { waitingText : null });
+    url.requestUpdate('Imeds_tab');
   }
 });
 
@@ -58,7 +58,7 @@ refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes-medicales", { waitingText: null } );
+    url.requestUpdate("constantes-medicales");
   }
 }
 
@@ -79,7 +79,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     
     if(object_id && object_class){
       if(object_class == 'CPerfusion'){
-			  url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
+			  url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
 			    $("line_"+object_class+"-"+object_id).hide();
 				  moveDossierSoin($("line_"+object_class+"-"+object_id));
 			  } } );
@@ -104,13 +104,12 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 	      //unite_prise = unite_prise.replace(/\(/g, '_').replace(/\)/g, '_').replace(/\//g, '_').replace(/ /g, '');
 	      	      
 				url.requestUpdate(first_td, {
-				                  waitingText: null, 
-													insertion: Insertion.After,
-													onComplete: function(){
-													  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
-														first_td.hide().colSpan = 0;
-													}
-													} );
+					insertion: Insertion.After,
+					onComplete: function(){
+					  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+						first_td.hide().colSpan = 0;
+					}
+				} );
 			}
     } else {
       if(chapitre){
@@ -121,7 +120,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
       	}
       	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
       } else {
-        url.requestUpdate("soins", { waitingText: null } );
+        url.requestUpdate("soins");
       }
     }
 }
@@ -131,7 +130,7 @@ function loadSuivi(sejour_id, user_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+    urlSuivi.requestUpdate("dossier_suivi");
   }
 }
 

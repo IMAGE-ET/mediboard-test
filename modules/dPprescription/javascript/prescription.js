@@ -17,7 +17,7 @@ Prescription = {
     url.addParam("line_id", line_id);
     url.addParam("mode_pharma", mode_pharma);
     url.addParam("mode_protocole", mode_protocole);
-    url.requestUpdate("systemMsg", { waitingText : null });
+    url.requestUpdate("systemMsg");
   },
   addLine: function(code) {
     var oForm     = document.forms.addLine;
@@ -187,7 +187,7 @@ Prescription = {
       url.addParam("time_debut", $V(document.selDateLine.time_debut));
     }
     url.addParam("mode_pharma", mode_pharma);
-    url.requestUpdate("systemMsg", { waitingText : null });
+    url.requestUpdate("systemMsg");
   },
   goTraitementPerso: function(oSelect, prescription_id, mode_pharma) {
     $V(oSelect, "");
@@ -202,7 +202,7 @@ Prescription = {
       url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));
     }
     url.addParam("mode_pharma", mode_pharma);
-    url.requestUpdate("systemMsg", { waitingText : null });
+    url.requestUpdate("systemMsg");
   },
   reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly, lite, full_line_guid) {
       // Select de choix du praticien
@@ -234,14 +234,14 @@ Prescription = {
         urlPrescription.addParam("full_line_guid", full_line_guid);
       }
       if(mode_pharma == "1"){
-          urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      
+          urlPrescription.requestUpdate("div_medicament", { onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
 	      if(mode_protocole == "1"){
-	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
+	        urlPrescription.requestUpdate("vw_protocole");
 	      } else {
 	        if(chapitre){
 	          if (window[chapitre+'Loaded'] || chapitre == "medicament") {
-	            urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null , onComplete: function(){
+	            urlPrescription.requestUpdate("div_"+chapitre, { onComplete: function(){
 							  if(window.viewListPrescription){
 						      viewListPrescription();
 						    }
@@ -251,7 +251,7 @@ Prescription = {
 	          }
 	        } else {
 	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
-	         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
+	         urlPrescription.requestUpdate("produits_elements");
 	        }
 	      }
       }
@@ -306,7 +306,7 @@ Prescription = {
     url.addParam("mode_sejour", mode_sejour);
     url.addParam("pratSel_id", pratSel_id);
     url.addParam("praticien_for_prot_id", praticien_for_prot_id);
-    url.requestUpdate("prescription_sejour", { waitingText: null, onComplete: function(){
+    url.requestUpdate("prescription_sejour", { onComplete: function(){
 		  if(window.viewListPrescription){
 				viewListPrescription();
 			}
@@ -320,7 +320,7 @@ Prescription = {
     url.addParam("mode_protocole", "0");
     url.addParam("readonly", readonly?1:0);
     url.addParam("lite", lite?1:0);
-    url.requestUpdate("prescription_pharma", { waitingText: null } );
+    url.requestUpdate("prescription_pharma");
   },
   reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
 	  Prescription.reload(prescription_id,'','medicament',mode_protocole,mode_pharma);
@@ -336,7 +336,7 @@ Prescription = {
     if(prescription_id){
       var urlAlertes = new Url("dPprescription", "httpreq_alertes_icons");
       urlAlertes.addParam("prescription_id", prescription_id);
-      urlAlertes.requestUpdate("alertes", { waitingText : null });
+      urlAlertes.requestUpdate("alertes");
     } else {
       alert('Pas de prescription en cours');
     }
@@ -404,7 +404,7 @@ Prescription = {
       var url = new Url("dPprescription", "httpreq_vw_stop_line");
       url.addParam("object_id", object_id);
       url.addParam("object_class", object_class)
-      url.requestUpdate("stop-"+object_class+"-"+object_id,  { waitingText: null } );
+      url.requestUpdate("stop-"+object_class+"-"+object_id);
     } } );
   },
   viewAllergies: function(prescription_id){

@@ -18,7 +18,7 @@ function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes", { waitingText: null } );
+    url.requestUpdate("constantes");
   }
 }
 
@@ -59,7 +59,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     
     if(object_id && object_class){
       if(object_class == 'CPerfusion'){
-        url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
+        url.requestUpdate("line_"+object_class+"-"+object_id, { , onComplete: function() { 
           $("line_"+object_class+"-"+object_id).hide();
           moveDossierSoin($("line_"+object_class+"-"+object_id));
         } } );
@@ -83,13 +83,12 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
         unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
                 
         url.requestUpdate(first_td, {
-                          waitingText: null, 
-                          insertion: Insertion.After,
-                          onComplete: function(){
-                            moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
-                            first_td.hide().colSpan = 0;
-                          }
-                          } );
+          insertion: Insertion.After,
+          onComplete: function(){
+            moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+            first_td.hide().colSpan = 0;
+          }
+        } );
       }
     } else {
       if(chapitre){
@@ -100,7 +99,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
         }
         url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
       } else {
-        url.requestUpdate("soins", { waitingText: null } );
+        url.requestUpdate("soins");
       }
     }
 }
@@ -110,7 +109,7 @@ function loadSuivi(sejour_id, user_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+    urlSuivi.requestUpdate("dossier_suivi");
   }
 }
 
@@ -142,7 +141,7 @@ Main.add(function () {
     var url = new Url;
     url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", '{{$sejour->_id}}');
-    url.requestUpdate('Imeds_tab', { waitingText : null });
+    url.requestUpdate('Imeds_tab');
   }
 	{{/if}}
 });

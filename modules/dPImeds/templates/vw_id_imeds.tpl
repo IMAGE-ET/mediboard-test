@@ -10,7 +10,7 @@ function reloadUserImeds(user_id, tag, type){
   url.addParam("user_id", user_id);
   url.addParam("tag"    , tag);
   url.addParam("type"   , type);
-  url.requestUpdate('user-'+user_id+'-'+tag, { waitingText: null } );
+  url.requestUpdate('user-'+user_id+'-'+tag);
 }
 
 </script>

@@ -8,7 +8,7 @@ refreshTarif = function(){
   url.addParam("demi", oForm.demi.value);
   url.addParam("code", oForm.code.value);
   url.addParam("complement", oForm.complement.value);
-  url.requestUpdate('tarifActe', { waitingText: null } );
+  url.requestUpdate('tarifActe');
 }
   
 ActesNGAP = {
@@ -16,9 +16,7 @@ ActesNGAP = {
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("object_id", "{{$object->_id}}");
 	  url.addParam("object_class", "{{$object->_class_name}}");
-	  url.requestUpdate('listActesNGAP', {
-	    waitingText: null
-	  } );
+	  url.requestUpdate('listActesNGAP');
 	},
 
 	remove: function(acte_ngap_id){

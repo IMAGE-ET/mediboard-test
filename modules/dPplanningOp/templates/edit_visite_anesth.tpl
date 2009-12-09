@@ -34,7 +34,6 @@ reloadAnesth = function(operation_id){
   var url = new Url("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", { 
-  	waitingText: null,
   	onComplete: function() { 
   		ActesCCAM.refreshList(operation_id,"{{$operation->chir_id}}"); 
   	}
@@ -53,7 +52,7 @@ refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes-medicales", { waitingText: null } );
+    url.requestUpdate("constantes-medicales");
   }
 }
 Main.add(function () {
@@ -65,7 +64,7 @@ Main.add(function () {
   if($('antecedents')){
     var url = new Url("dPcabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$operation->sejour_id}}");
-    url.requestUpdate("antecedents", {waitingText: null});
+    url.requestUpdate("antecedents");
   }
 
   if($('constantes-medicales')){
@@ -82,7 +81,7 @@ Main.add(function () {
   if($('Imeds_tab')){
     var url = new Url("dPImeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", {{$operation->_ref_sejour->_id}});
-    url.requestUpdate('Imeds_tab', { waitingText : null });
+    url.requestUpdate('Imeds_tab');
   }
 });
 

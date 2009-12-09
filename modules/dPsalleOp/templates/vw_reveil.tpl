@@ -15,17 +15,18 @@ Main.add(function () {
   url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
 	
+	// Laisser la variable updater_encours, utile dans inc_edit_check_list.tpl
   url.addParam("type", "encours");
-  url.periodicalUpdate("encours", { frequency: 90 });  // Laisser la variable updater_encours, utile dans inc_edit_check_list.tpl
+  url.periodicalUpdate("encours", { frequency: 90 });  
 
   url.addParam("type", "ops");
   url.periodicalUpdate("ops", { frequency: 90 });
 
   url.addParam("type", "reveil");
-  url.requestUpdate("reveil", {waitingText: null});
+  url.requestUpdate("reveil");
 
   url.addParam("type", "out");
-  url.requestUpdate("out", {waitingText: null});
+  url.requestUpdate("out");
 });
 
 function refreshTabsReveil() {
@@ -35,16 +36,16 @@ function refreshTabsReveil() {
   url.addParam("date", "{{$date}}");
 	
   url.addParam("type", "encours");
-  url.requestUpdate("encours", {waitingText : null});
+  url.requestUpdate("encours");
 	
   url.addParam("type", "ops");
-  url.requestUpdate("ops", {waitingText : null});
+  url.requestUpdate("ops");
 	
 	url.addParam("type", "reveil");
-  url.requestUpdate("reveil", {waitingText : null});
+  url.requestUpdate("reveil");
 	
   url.addParam("type", "out");
-  url.requestUpdate("out", {waitingText : null});
+  url.requestUpdate("out");
 }
 
 </script>

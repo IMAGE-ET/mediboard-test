@@ -28,7 +28,7 @@ function loadActesNGAP(sejour_id){
   var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
   url.addParam("object_id", sejour_id);
   url.addParam("object_class", "CSejour");
-  url.requestUpdate('listActesNGAP', { waitingText: null } );
+  url.requestUpdate('listActesNGAP');
 }
 
 function loadPatient(patient_id) {
@@ -52,7 +52,7 @@ function loadSejour(sejour_id) {
 function loadDocuments(sejour_id) {
   var url = new Url("dPhospi", "httpreq_documents_sejour");
   url.addParam("sejour_id" , sejour_id);
-  url.requestUpdate("documents", { waitingText: null } );
+  url.requestUpdate("documents");
 }
 
 
@@ -66,7 +66,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim", {   waitingText : null } );
+  url.requestUpdate("cim");
 }
 
 {{if $isPrescriptionInstalled}}
@@ -79,7 +79,7 @@ function reloadAntAllergie(sejour_id){
   if($('antecedent_allergie')){
   var url = new Url("dPprescription", "httpreq_vw_antecedent_allergie");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("antecedent_allergie", { waitingText: null } );
+  url.requestUpdate("antecedent_allergie");
   }
 }
 
@@ -138,14 +138,14 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
 function loadAntecedents(sejour_id){
   var url = new Url("dPcabinet","httpreq_vw_antecedents");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('antecedents', { waitingText: null } )
+  url.requestUpdate('antecedents')
 }
 {{/if}}
 
 function loadResultLabo(sejour_id) {
   var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('Imeds', { waitingText : null });
+  url.requestUpdate('Imeds');
 }
 
 function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
@@ -165,7 +165,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     
     if(object_id && object_class){
       if(object_class == 'CPerfusion'){
-				url.requestUpdate("line_"+object_class+"-"+object_id, { waitingText: null , onComplete: function() { 
+				url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
 				  $("line_"+object_class+"-"+object_id).hide();
 				  moveDossierSoin($("line_"+object_class+"-"+object_id));
 				} } );
@@ -188,7 +188,6 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
 	      unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
 
 	      url.requestUpdate(first_td, {
-				                  waitingText: null, 
 													insertion: Insertion.After,
 													onComplete: function(){
 													  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
@@ -205,7 +204,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
       	}
       	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
       } else {
-        url.requestUpdate("dossier_traitement", { waitingText: null } );
+        url.requestUpdate("dossier_traitement");
       }
     }
   }
@@ -216,7 +215,7 @@ function loadSuivi(sejour_id, user_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+    urlSuivi.requestUpdate("dossier_suivi");
   }
 }
 
@@ -249,7 +248,7 @@ function refreshConstantesMedicales(context_guid) {
   if(context_guid) {
     var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
-    url.requestUpdate("constantes-medicales", { waitingText: null } );
+    url.requestUpdate("constantes-medicales");
   }
 }
 
@@ -374,7 +373,7 @@ viewBilanService = function(service_id, date){
 							var sejours = {{$visites.non_effectuee|@json}};
 						  var url = new Url("soins", "httpreq_notifications_visite");
 						  url.addParam("sejours[]", sejours);
-						  url.requestUpdate("systemMsg", { waitingText: null , onComplete: function() { 
+						  url.requestUpdate("systemMsg", { onComplete: function() { 
 						    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
 						  } } );
 						}

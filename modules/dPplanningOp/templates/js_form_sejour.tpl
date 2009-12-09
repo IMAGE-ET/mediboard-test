@@ -21,7 +21,7 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
     url.addParam("praticien_id", praticien_id);
     url.addParam("selected_id", selected_id);
-    url.requestUpdate(list, { waitingText: null} );
+    url.requestUpdate(list);
   }
 }
 
@@ -30,7 +30,7 @@ function refreshViewProtocoleAnesth(prescription_id) {
     var url = new Url;
     url.setModuleAction("dPplanningOp", "httpreq_vw_protocole_anesth");
     url.addParam("prescription_id", prescription_id);
-    url.requestUpdate("prot_anesth_view", { waitingText: null} );
+    url.requestUpdate("prot_anesth_view");
   }
 }
 
@@ -224,7 +224,7 @@ function reloadListSejours() {
   var iPatient_id = oForm.patient_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
   sejoursUrl.addParam("patient_id", iPatient_id);
-  sejoursUrl.requestUpdate("selectSejours", { waitingText : null });
+  sejoursUrl.requestUpdate("selectSejours");
   
   // La liste des prescriptions doit etre rechargée
   if (PrescriptionEditor) {
@@ -243,9 +243,7 @@ function reloadSejour(sejour_id) {
   if(document.editOp) {
     sejoursUrl.addParam("mode_operation", 1);
   }
-  sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null ,
-	onComplete: initNotes
-  } );
+  sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: initNotes } );
 }
 
 function changePat() {

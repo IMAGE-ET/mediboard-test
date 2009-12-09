@@ -36,9 +36,9 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
 	  url.addParam("order_way", order_way);
   }
   if(user_id || degre || refresh){
-    url.requestUpdate("_transmissions", { waitingText: null } );
+    url.requestUpdate("_transmissions");
   } else {
-    url.requestUpdate("viewTransmissions", { waitingText: null } );
+    url.requestUpdate("viewTransmissions");
   }
 }       
 

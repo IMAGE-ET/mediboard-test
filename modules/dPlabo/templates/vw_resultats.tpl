@@ -29,14 +29,14 @@ var IMeds = {
     var url = new Url;
     url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
     url.addParam("patient_id", patient_id);
-    url.requestUpdate(div, { waitingText : null });
+    url.requestUpdate(div);
   },
   
   viewPrescription: function(prescription_id, div) {
     var url = new Url;
     url.setModuleAction("dPImeds", "httpreq_vw_prescription_results");
     url.addParam("prescription_id", prescription_id);
-    url.requestUpdate(div, { waitingText : null });
+    url.requestUpdate(div);
   }
 }
 

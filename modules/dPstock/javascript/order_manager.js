@@ -14,7 +14,7 @@ function refreshValue(element, klass, id, field) {
     url.addParam("class", klass);
     url.addParam("id", id);
     url.addParam("field", field);
-    url.requestUpdate(element, {waitingText: null});
+    url.requestUpdate(element);
   }
 }
 
@@ -76,20 +76,20 @@ function refreshOrder(order_id, options) {
   }
   var url = new Url("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
-  url.requestUpdate("order-"+order_id, { waitingText: null } );
+  url.requestUpdate("order-"+order_id);
 }
 
 function refreshOrderItem(order_item_id) {
   var url = new Url("dPstock", "httpreq_vw_order_item");
   url.addParam("order_item_id", order_item_id);
-  url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
+  url.requestUpdate("order-item-"+order_item_id);
 }
 
 function refreshListOrders(type, keywords) {
   var url = new Url("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
   url.addParam("keywords", keywords);
-  url.requestUpdate("list-orders-"+type, { waitingText: null } );
+  url.requestUpdate("list-orders-"+type);
   
   return false;
 }

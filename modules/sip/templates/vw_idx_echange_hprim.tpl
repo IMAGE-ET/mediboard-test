@@ -33,7 +33,7 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   url.setModuleAction("sip", "ajax_refresh_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
-  url.requestUpdate("echange_"+echange_hprim_id , { waitingText: null });
+  url.requestUpdate("echange_"+echange_hprim_id);
 }
 
 function changePage(page) {

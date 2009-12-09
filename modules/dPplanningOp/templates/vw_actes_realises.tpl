@@ -14,7 +14,7 @@ var reloadActeCCAM = function(acte_ccam_id) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_reglement_ccam");
   url.addParam("acte_ccam_id", acte_ccam_id);
-  url.requestUpdate('divreglement-'+acte_ccam_id, { waitingText: null } );
+  url.requestUpdate('divreglement-'+acte_ccam_id);
 }
 
 var viewCCAM = function(codeacte) {

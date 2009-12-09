@@ -27,7 +27,7 @@ function updateListConsults() {
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
-  url.requestUpdate("consultations", { waitingText: null } );
+  url.requestUpdate("consultations");
 }
 
 function updateListOperations() {
@@ -36,7 +36,7 @@ function updateListOperations() {
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
-  url.requestUpdate("operations", { waitingText: null } );
+  url.requestUpdate("operations");
 }
 
 function updateListPatients() {
@@ -54,7 +54,7 @@ function updateListPatients() {
     url.addParam("patient_ipp", $V(oForm.patient_ipp));
   }
   url.addParam("board"   , "1");
-  url.requestUpdate("patients", { waitingText: null } );
+  url.requestUpdate("patients");
 }
 
 function updateListHospi() {
@@ -62,7 +62,7 @@ function updateListHospi() {
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
-  url.requestUpdate("hospi", { waitingText: null } );
+  url.requestUpdate("hospi");
 }
 
 function updateSemainier() {
@@ -70,7 +70,7 @@ function updateSemainier() {
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
-  url.requestUpdate("semainier", { waitingText: null } );
+  url.requestUpdate("semainier");
 }
 
 Main.add(function () {

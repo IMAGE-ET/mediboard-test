@@ -31,7 +31,7 @@ var File = {
     var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    url.requestUpdate("files-"+object_id+"-"+object_class, { waitingText: null } );
+    url.requestUpdate("files-"+object_id+"-"+object_class);
   },
   
   register: function(object_id, object_class, container) {

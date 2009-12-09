@@ -96,12 +96,12 @@ DossierMedical = {
 	  {{if $_is_anesth}}
 	    antUrl.addParam("sejour_id", DossierMedical.sejour_id);
 	  {{/if}}
-	  antUrl.requestUpdate('listAnt', { waitingText : null } );
+	  antUrl.requestUpdate('listAnt');
 	},
 	reloadDossierSejour: function(){
       var antUrl = new Url("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
 	  antUrl.addParam("sejour_id", DossierMedical.sejour_id);
-	  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
+	  antUrl.requestUpdate('listAntCAnesth');
 	},
 	reloadDossiersMedicaux: function(){
 	  DossierMedical.reloadDossierPatient();
@@ -119,13 +119,13 @@ refreshAidesAntecedents = function(){
   url.addParam("depend_value_2", oForm.appareil.value);
   url.addParam("user_id", "{{$userSel->_id}}")
   url.addParam("field", "rques");
-  url.requestUpdate('div_helpers_rques', { waitingText: null } );
+  url.requestUpdate('div_helpers_rques');
 }
  
 refreshAddPoso = function(code_cip){
   var url = new Url("dPprescription", "httpreq_vw_select_poso");
   url.addParam("code_cip", code_cip);
-  url.requestUpdate("addPosoLine", { waitingText: null } );
+  url.requestUpdate("addPosoLine");
 }
 
 Main.add(function () {

@@ -7,7 +7,7 @@ function reloadListModele(object_class){
   url.addParam("object_class", object_class);
   url.addParam("user_id", "{{$user_id}}");
   url.addParam("pack_id", "{{$pack->_id}}");
-  url.requestUpdate("listModeles", { waitingText: null } );
+  url.requestUpdate("listModeles");
 }
 
 Main.add(function () {

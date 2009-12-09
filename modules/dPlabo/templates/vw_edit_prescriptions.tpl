@@ -18,8 +18,8 @@ var Catalogue = {
       urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
     urlCat.addParam("typeListe", $V(document.typeListeFrm.typeListe));
-    urlCat.requestUpdate('topRightDiv', { waitingText : null });
-    urlExam.requestUpdate('bottomRightDiv', { waitingText : null });
+    urlCat.requestUpdate('topRightDiv');
+    urlExam.requestUpdate('bottomRightDiv');
   }
 }
 
@@ -40,8 +40,8 @@ var Pack = {
     }
     urlPack.addParam("dragPacks", 1);
     urlPack.addParam("typeListe", $V(document.typeListeFrm.typeListe));
-    urlPack.requestUpdate("topRightDiv", { waitingText: null });
-    urlExam.requestUpdate("bottomRightDiv", { waitingText: null });
+    urlPack.requestUpdate("topRightDiv");
+    urlExam.requestUpdate("bottomRightDiv");
   },
   dropExamenCat: function(sExamen_id, pack_id) {
     return false;
@@ -74,8 +74,8 @@ var Prescription = {
       urlExam.addParam("prescription_labo_id", prescription_id);
     }
     urlPresc.addParam("patient_id", iPatient_id    );
-    urlPresc.requestUpdate("listPrescriptions", { waitingText: null });
-    urlExam.requestUpdate("listExamens", { waitingText: null });
+    urlPresc.requestUpdate("listPrescriptions");
+    urlExam.requestUpdate("listExamens");
     this.Examen.init(0);
   },
   
@@ -83,7 +83,7 @@ var Prescription = {
     var url = new Url("dPlabo", "httpreq_edit_prescription");
     url.addParam("prescription_labo_id", prescription_id);
     url.addParam("patient_id", document.patFrm.patient_id.value);
-    url.requestUpdate("listExamens", { waitingText: null });
+    url.requestUpdate("listExamens");
   },
   
   create : function() {
@@ -170,8 +170,8 @@ var Prescription = {
         urlResult.addParam("prescription_labo_examen_id", iPrescriptionItem);
         urlGraph.addParam("prescription_labo_examen_id", iPrescriptionItem);
       }
-      urlResult.requestUpdate("topRightDiv", { waitingText: null });
-      urlGraph.requestUpdate("bottomRightDiv", { waitingText: null });
+      urlResult.requestUpdate("topRightDiv");
+      urlGraph.requestUpdate("bottomRightDiv");
     },
 
     del: function(oForm) {
@@ -231,7 +231,7 @@ var oDragOptions = {
 function search(){
   var url = new Url("dPlabo", "httpreq_search_exam");
   url.addParam("recherche", document.frmRecherche.search.value);
-  url.requestUpdate("bottomRightDiv", { waitingText: null });
+  url.requestUpdate("bottomRightDiv");
 } 
     
     

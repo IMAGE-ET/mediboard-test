@@ -42,9 +42,9 @@ function refreshLists(code_cis) {
     
   if(code_cis){
     url.addParam("_selected_cis", code_cis);
-    url.requestUpdate("dispensation_line_"+code_cis, { waitingText: null } );    
+    url.requestUpdate("dispensation_line_"+code_cis);    
   } else {
-    url.requestUpdate("list-dispensations", { waitingText: null } );
+    url.requestUpdate("list-dispensations");
   }
   refreshStocks.defer();
   refreshOrders.defer();
@@ -55,14 +55,14 @@ function refreshStocks() {
   var formFilter = getForm("filter");
   var url = new Url("pharmacie", "httpreq_vw_stocks_service_list");
   url.addParam("service_id", $V(formFilter.service_id));
-  url.requestUpdate("list-stocks", { waitingText: null } );
+  url.requestUpdate("list-stocks");
 }
 
 function refreshOrders() {
   var formFilter = getForm("filter");
   var url = new Url("pharmacie", "httpreq_vw_orders_list");
   url.addParam("service_id", $V(formFilter.service_id));
-  url.requestUpdate("list-orders", { waitingText: null } );
+  url.requestUpdate("list-orders");
 }
 
 function dispenseAll(container, callback) {

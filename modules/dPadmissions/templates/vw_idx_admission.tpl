@@ -44,7 +44,7 @@ function reloadAdmission(type) {
   admUrl.addParam("selSaisis", "{{$selSaisis}}");
   admUrl.addParam("date", "{{$date}}");
   admUrl.addParam("type", type);
-  admUrl.requestUpdate('listAdmissions', { waitingText : null });
+  admUrl.requestUpdate('listAdmissions');
 }
 
 function confirmation(oForm){

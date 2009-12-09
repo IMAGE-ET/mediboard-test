@@ -51,7 +51,7 @@ function loadLivretArbreATC(codeATC){
   if (codeATC !== '') {
     url.addParam("codeATC", codeATC);
   }
-  url.requestUpdate("ATC", { waitingText: null } );
+  url.requestUpdate("ATC");
 }
 
 var nb_produits = 0;
@@ -102,7 +102,7 @@ var Livret = {
     var url = new Url("dPmedicament", "httpreq_vw_livret");
     url.addParam("lettre", lettre);
     url.addParam("code_cip", codeCIP);
-    url.requestUpdate("livret", { waitingText : null });
+    url.requestUpdate("livret");
   },
   
   // Refresh de la liste des produits dans le livret
@@ -112,7 +112,7 @@ var Livret = {
     url.addParam("codeATC", codeATC);
     // code permet de selectionner le bon code dans le cas d'un ajout de produit
     url.addParam("code_cip", codeCIP);
-    url.requestUpdate("ATC", { waitingText : null });
+    url.requestUpdate("ATC");
   }
 };
 

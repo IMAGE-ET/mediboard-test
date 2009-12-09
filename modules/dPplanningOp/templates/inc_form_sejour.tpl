@@ -27,7 +27,7 @@ function loadTransfert(form, mode_sortie){
   if(mode_sortie=="transfert"){
     //Chargement de la liste des etablissement externes
     var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
-    url.requestUpdate('listEtabExterne', { waitingText : null });
+    url.requestUpdate('listEtabExterne');
   } else {
     // sinon, on vide le contenu de la div
     $("listEtabExterne").innerHTML = "";
@@ -109,7 +109,7 @@ checkCorrespondantMedical = function(form){
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
   url.addParam("sejour_id" , $V(form.sejour_id));
-  url.requestUpdate("correspondant_medical" , { waitingText: null });
+  url.requestUpdate("correspondant_medical");
 }
 
 CIM10Selector.init = function(){

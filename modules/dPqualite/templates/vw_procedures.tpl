@@ -15,7 +15,7 @@ function refreshProceduresList() {
   $(form).getElements().each(function(e) {
     url.addParam(e.name, $V(e));
   });
-  url.requestUpdate('list_procedures', { waitingText : null });
+  url.requestUpdate('list_procedures');
   return false;
 }
 
