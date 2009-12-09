@@ -342,7 +342,7 @@ Document.refreshList = function(){
       </a>
       <a href="{{$curr_op->_link_editor}}">
       {{else}}
-      <a title="Modification d'intervention non autorisée" href="#nothing">
+      <a href="#nothing">
       {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
         Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
