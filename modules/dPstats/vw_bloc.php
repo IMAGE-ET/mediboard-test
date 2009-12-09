@@ -82,13 +82,13 @@ $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"       			  		, $filter         );
-$smarty->assign("listPrats"      		  		, $listPrats      );
-$smarty->assign("listBlocs"               , $listBlocs      );
+$smarty->assign("filter"       			  		, $filter            );
+$smarty->assign("listPrats"      		  		, $listPrats         );
+$smarty->assign("listBlocs"               , $listBlocs         );
 $smarty->assign("listBlocsForSalles"      , $listBlocsForSalles);
-$smarty->assign("bloc"                    , $bloc           );
-$smarty->assign("listDisciplines"		  		, $listDisciplines);
-$smarty->assign("graphs"		  	        	, $graphs);
+$smarty->assign("bloc"                    , $bloc              );
+$smarty->assign("listDisciplines"		  		, $listDisciplines   );
+$smarty->assign("graphs"		  	        	, $graphs            );
 
 $smarty->display("vw_bloc.tpl");
 
