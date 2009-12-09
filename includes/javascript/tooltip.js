@@ -106,7 +106,10 @@ var ObjectTooltip = Class.create({
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
       
       if(!this.oOptions.popup) {
-        url.requestUpdate(eTarget, {onComplete: this.reposition.bind(this)});
+        url.requestUpdate(eTarget, { 
+				  waitingText: "Chargement infobulle",
+				  onComplete: this.reposition.bind(this)
+				} );
       } else {
         url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       }
@@ -240,6 +243,6 @@ function initNotes(refresh){
     element.addClassName("initialized");
     var url = new Url("system", "httpreq_get_notes_image");
     url.addParam("object_guid", element.className.split(" ")[1]);
-    url.requestUpdate(element, { waitingText : null });
+    url.requestUpdate(element);
   });
 }

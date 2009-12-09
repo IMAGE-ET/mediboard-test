@@ -330,8 +330,8 @@ var Url = Class.create({
       return;
     }
     
-    oOptions = Object.extend({
-      waitingText: "Chargement",
+    oOptions = Object.extend( {
+      waitingText: null,
       urlBase: "",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
@@ -339,7 +339,7 @@ var Url = Class.create({
       evalScripts: true,
       getParameters: null,
       onComplete: Prototype.emptyFunction,
-      onFailure: function(){element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
+      onFailure: function(){ element.update('<div class="error">Le serveur rencontre quelques problèmes.</div>');}
     }, oOptions);
     
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
@@ -349,19 +349,23 @@ var Url = Class.create({
     
     // Empty holder gets a div for load notifying
     if (!/\S/.test(element.innerHTML)) {
-      element.update('<div style="height: 2em" />');
+      element.update('<div style="height: 2em;" />');
     }
 
-    if (oOptions.waitingText) {
-			element.update('<div class="loading">' + oOptions.waitingText + '...<br />Merci de patienter.</div>');
-			if (element.id == SystemMessage.id) {
-				SystemMessage.doEffect();
-			}
-		}
+    // Animate system message
+    if (element.id == SystemMessage.id) {
+			oOptions.waitingText = "Mise à jour";
+      SystemMessage.doEffect();
+    }
+		// Cover div
 		else {
 			WaitingMessage.cover(element);
 		}
   	
+    if (oOptions.waitingText) {
+      element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
+		}
+
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);
     
@@ -373,7 +377,6 @@ var Url = Class.create({
     this.addParam("ajax", "");
   
     oOptions = Object.extend({
-      waitingText: null,
       urlBase: "",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
@@ -427,7 +430,6 @@ var Url = Class.create({
 
     oOptions = Object.extend({
       onCreate: WaitingMessage.cover.curry(element),
-      waitingText: "Chargement",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
       asynchronous: true,
