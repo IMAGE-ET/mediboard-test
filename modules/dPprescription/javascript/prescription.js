@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
  
-var Prescription = {
+Prescription = {
 	// Multiples occurences de la même widget
   suffixes: [],
   addEquivalent: function(code, line_id, mode_pharma, mode_protocole){
