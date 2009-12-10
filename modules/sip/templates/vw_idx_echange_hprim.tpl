@@ -111,6 +111,9 @@ function changePage(page) {
                 <option value="mouvementPatient" {{if $type_evenement == "mouvementPatient"}}selected="selected"{{/if}}>
                   {{tr}}hprimxml-evt_patients-mvtPat{{/tr}}
                 </option>
+                <option value="debiteursVenue" {{if $type_evenement == "debiteursVenue"}}selected="selected"{{/if}}>
+                  {{tr}}hprimxml-evt_patients-debiteursVenue{{/tr}}
+                </option>
               </select>
             </td>
           </tr>

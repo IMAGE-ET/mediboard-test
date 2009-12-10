@@ -15,6 +15,8 @@ $locales['hprimxml-evt_patients-fusionVen'] = 'Fusion Venue';
 $locales['hprimxml-evt_patients-fusionVen-desc'] = 'Fusion Venue';
 $locales['hprimxml-evt_patients-mvtPat'] = 'Mouvement Patient';
 $locales['hprimxml-evt_patients-mvtPat-desc'] = 'Mouvement Patient';
+$locales['hprimxml-evt_patients-debiteursVenue'] = 'Debiteurs Venue';
+$locales['hprimxml-evt_patients-debiteursVenue-desc'] = 'Debiteurs Venue';
 $locales['config-hprimxml-evt_pmsi'] = 'H\'XML Evénements PMSI';
 $locales['config-hprimxml-evt_pmsi-desc'] = 'H\'XML Evénements PMSI';
 $locales['config-hprimxml-evt_serveuractes'] = 'H\'XML Evénements Serveurs Actes';
@@ -50,6 +52,4 @@ $locales['config-hprimxml-medecinActif'] = 'Medecin importé actif';
 $locales['config-hprimxml-medecinActif-desc'] = 'Medecin importé actif';
 $locales['config-hprimxml-strictSejourMatch'] = 'Recherche des séjours stricts';
 $locales['config-hprimxml-strictSejourMatch-desc'] = 'Recherche des séjours stricts';
-$locales['config-hprimxml-mvt_comptet'] = '';
-$locales['config-hprimxml-mvt_comptet-desc'] = '';
 ?>

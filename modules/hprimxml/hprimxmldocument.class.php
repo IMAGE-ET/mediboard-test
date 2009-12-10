@@ -46,7 +46,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function checkSchema() {
     if (!is_dir($this->schemapath)) {
-      trigger_error("ServeurActe schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
+      trigger_error("HPRIMXML schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
       return false;
     }
     
