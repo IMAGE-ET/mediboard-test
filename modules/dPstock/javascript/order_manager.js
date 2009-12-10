@@ -108,8 +108,8 @@ function refreshLists(keywords) {
 }
 
 function popupOrder(iOrderId, width, height, bAutofill) {
-  width = width || 800;
-  height = height || 600;
+  width = width || 900;
+  height = height || 700;
 
   var url = new Url("dPstock", "vw_aed_order");
   url.addParam("order_id", iOrderId);
@@ -121,8 +121,8 @@ function popupOrder(iOrderId, width, height, bAutofill) {
 }
 
 function popupOrderForm(iOrderId, width, height) {
-  width = width || 500;
-  height = height || 500;
+  width = width || 900;
+  height = height || 700;
 
   var url = new Url("dPstock", "vw_order_form");
   url.addParam("order_id", iOrderId);
@@ -135,5 +135,5 @@ function printBarcodeGrid(order_id, receptions_list, force_print) {
   url.addParam("receptions_list", receptions_list);
   url.addParam("force_print", force_print);
   url.addParam("suppressHeaders", true);
-  url.popup(600, 600, "Codes barres");
+  url.popup(800, 700, "Codes barres");
 }

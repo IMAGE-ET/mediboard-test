@@ -12,11 +12,6 @@
   <td>{{$stock->_view}}</td>
   <td id="stock-{{$stock->_id}}-bargraph">{{include file="inc_bargraph.tpl"}}</td>
   <td>
-    {{if $ajax}}
-    <script type="text/javascript">
-      prepareForm(document.forms['form-delivery-stock-{{$stock->_id}}']);
-    </script>
-    {{/if}}
     <form name="form-delivery-stock-{{$stock->_id}}" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />

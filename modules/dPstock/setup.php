@@ -364,7 +364,11 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision('1.02');
     $sql = "UPDATE `product_stock_service` SET `common` = '1' WHERE `common` IS NULL OR `common` = ''";
     $this->addQuery($sql);
+       
+    $this->makeRevision('1.03');
+    $sql = "ALTER TABLE `product_order_item` CHANGE `order_id` `order_id` INT (11) UNSIGNED";
+    $this->addQuery($sql);
     
-    $this->mod_version = "1.03";
+    $this->mod_version = "1.04";
   }
 }

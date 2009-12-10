@@ -28,11 +28,6 @@
     {{if !$order->date_ordered}}
     <!-- Order item quantity change -->
     <form name="form-item-quantity-{{$curr_item->_id}}" action="?" method="post">
-      {{if $ajax}}
-      <script type="text/javascript">
-          prepareForm('form-item-quantity-{{$curr_item->_id}}');
-      </script>
-      {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
@@ -44,7 +39,7 @@
           refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
         form=form-item-quantity-$id 
         min=0
-        size="3"
+        size=3
         increment=true}}
     </form>
     {{else}}
@@ -58,25 +53,20 @@
   <td style="width: 1%; white-space: nowrap;">{{$curr_item->_quantity_received}}</td>
   
   <!-- Receive item -->
-  <td style="width: 1%; white-space: nowrap;">
+  <td style="width: 1%; white-space: nowrap; padding: 0;">
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return makeReception(this, '{{$order->_id}}')">
-      {{if $ajax}}
-      <script type="text/javascript">
-          prepareForm('form-item-receive-{{$curr_item->_id}}');
-      </script>
-      {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       <input type="hidden" name="date" value="now" />
       
-      <table>
+      <table style="border-collapse: collapse; border-spacing: 0;">
         <tr>
           <th>{{tr}}CProductOrderItemReception-code{{/tr}}</th>
           <th>{{tr}}CProductOrderItemReception-lapsing_date-court{{/tr}}</th>
-          <th>{{tr}}CProductOrderItemReception-quantity{{/tr}}</th>
+          <th>{{tr}}CProductOrderItemReception-quantity-court{{/tr}}</th>
           <th></th>
-          <th>{{tr}}CProductOrderItemReception-barcode_printed-court{{/tr}}</th>
+          <th></th>
         </tr>
         {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
         <tr>
@@ -88,7 +78,9 @@
             <button type="button" class="cancel notext" onclick="cancelReception({{$curr_reception->_id}}, function() {refreshOrder({{$order->_id}})})">{{tr}}Cancel{{/tr}}</button>
           </td>
           <td>
-            <input type="checkbox" name="barcode_printed" {{if $curr_reception->barcode_printed == 1}}checked="checked"{{/if}} onclick="barcodePrintedReception({{$curr_reception->_id}},this.checked)" />
+            <input type="checkbox" name="barcode_printed" {{if $curr_reception->barcode_printed == 1}}checked="checked"{{/if}} 
+                   onclick="barcodePrintedReception({{$curr_reception->_id}},this.checked)" 
+                   title="{{tr}}CProductOrderItemReception-barcode_printed-court{{/tr}}" />
           </td>
         </tr>
         {{/foreach}}
@@ -105,13 +97,12 @@
               field=quantity
               form=form-item-receive-$id 
               increment=true
-              size="3"
-              max=$curr_item->quantity
+              size=3
               min=0
               value=$curr_item->quantity-$curr_item->_quantity_received
             }}
           </td>
-          <td>
+          <td colspan="2">
             <button type="submit" class="tick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
           </td>
          </tr>

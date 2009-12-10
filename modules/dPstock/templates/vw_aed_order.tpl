@@ -13,11 +13,12 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  window.onbeforeunload = function () {
+  window.onbeforeunload = window.onbeforeunload.wrap(function(old){
+    old();
     if (window.opener) {
       refreshLists();
     }
-  }
+  });
 
   {{if $order->_id && !$order->date_ordered}}
   filterFields = ["category_id", "keywords", "order_id", "societe_id"];
