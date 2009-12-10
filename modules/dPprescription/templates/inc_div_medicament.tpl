@@ -98,6 +98,15 @@ transfertLineTP = function(line_id, sejour_id){
   } } );
 }
 
+togglePerfDecalage = function(oForm){
+  if($V(oForm.jour_decalage) == 'N'){
+    $V(oForm.decalage_interv, '0');
+    $('decalage_interv-'+$V(oForm.perfusion_id)).hide();
+  } else {
+    $('decalage_interv-'+$V(oForm.perfusion_id)).show();
+  }
+}
+
 </script>
 
 <form name="transfert_line_TP" action="?" method="post">

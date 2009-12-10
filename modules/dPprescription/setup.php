@@ -1413,7 +1413,12 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`urgence_datetime`);";
     $this->addQuery($sql);
 		
-		$this->mod_version = "0.92";
+		$this->makeRevision("0.92");
+		$sql = "ALTER TABLE `perfusion` 
+              ADD `jour_decalage` ENUM ('I','N') DEFAULT 'I';";
+		$this->addQuery($sql);
+
+		$this->mod_version = "0.93";
   }  
 }
 

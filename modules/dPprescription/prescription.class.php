@@ -260,11 +260,17 @@ class CPrescription extends CMbObject {
   	      $time_debut = $hour_operation;
 	  	  }
   	  }
-  	  $signe = ($_line->decalage_interv >= 0) ? "+" : "";
-      $date_time_debut = mbDateTime("$signe $_line->decalage_interv HOURS", "$date_debut $time_debut");
-  	  $_line->date_debut = mbDate($date_time_debut);
-  	  $_line->time_debut = mbTime($date_time_debut);
-    
+			
+			if($_line->jour_decalage == "I"){
+	  	  $signe = ($_line->decalage_interv >= 0) ? "+" : "";
+	      $date_time_debut = mbDateTime("$signe $_line->decalage_interv HOURS", "$date_debut $time_debut");
+	  	  $_line->date_debut = mbDate($date_time_debut);
+	  	  $_line->time_debut = mbTime($date_time_debut);
+			} else {
+				$_line->date_debut = mbDate();
+				$_line->time_debut = mbTime();
+			}
+			
 	    if(!$mode_preview){
 	      $msg = $_line->store();
 	      CAppUI::displayMsg($msg, "CPerfusion-msg-create");

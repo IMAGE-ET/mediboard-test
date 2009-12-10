@@ -279,7 +279,7 @@
       {{/if}}
     </td>
     <td colspan="4">
-     {{if $line->_perm_edit}}
+     {{if $line->_perm_edit && !$line->_protocole}}
        <button class="search" type="button" onclick="$('subst-{{$line->_guid}}').toggle();" style="float: right;">Substitutions</button>
 		 {{/if}}
 		 {{if $prescription->type == "sortie"}}
@@ -411,9 +411,6 @@
             {{mb_field object=$line->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
           </form>
         {{/if}}
-				
-				
-				
       {{/if}}
     {{/if}}
 		</td>

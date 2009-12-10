@@ -1611,4 +1611,10 @@ $locales['config-dPprescription-CPrescription-droits_infirmiers_med'] = 'Médicam
 $locales['config-dPprescription-CPrescription-droits_infirmiers_med-desc'] = 'Médicaments';
 $locales['config-dPprescription-CPrescription-droits_infirmiers_soin'] = 'Soin';
 $locales['config-dPprescription-CPrescription-droits_infirmiers_soin-desc'] = 'Soin';
+$locales['CPerfusion-jour_decalage'] = '';
+$locales['CPerfusion-jour_decalage-court'] = '';
+$locales['CPerfusion-jour_decalage-desc'] = '';
+$locales['CPerfusion.jour_decalage.'] = '';
+$locales['CPerfusion.jour_decalage.I'] = 'I';
+$locales['CPerfusion.jour_decalage.N'] = 'N';
 ?>

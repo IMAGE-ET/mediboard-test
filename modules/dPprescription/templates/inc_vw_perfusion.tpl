@@ -222,10 +222,19 @@
 					  <td style="border: none" />
             {{if $_perfusion->_protocole}}
 						  <td style="border:none;">
+							<script type="text/javascript">
+														
+						    Main.add( function(){
+						      var oForm = document.forms["editPerf-{{$_perfusion->_id}}"];
+									togglePerfDecalage(oForm);
+						    } );
+								
+							</script>
 						  {{mb_label object=$_perfusion field="date_debut"}}
-						    à I {{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h
+						    à {{mb_field object=$_perfusion field="jour_decalage" onchange="togglePerfDecalage(this.form); return onSubmitFormAjax(this.form);"}} 
+								<span id="decalage_interv-{{$_perfusion->_id}}">{{mb_field object=$_perfusion field=decalage_interv showPlus="1" increment=1 size="2" form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form);"}} h</span>
 						  </td>
-						{{else}}  
+						{{else}}
 	        		<td style="border:none;">
 	        		  {{mb_label object=$_perfusion field="date_debut"}}
 	        		  {{if $_perfusion->_can_modify_perfusion}}
@@ -344,7 +353,7 @@
   {{if $_perfusion->_perm_edit || $_perfusion->commentaire}}
   <tr>
     <td colspan="9">
-    	{{if $_perfusion->_perm_edit}}
+    	{{if $_perfusion->_perm_edit && !$_perfusion->_protocole}}
     	<button class="search" type="button" onclick="$('subst-{{$_perfusion->_guid}}').toggle();" style="float: right;">Substitutions</button>
       {{/if}}
 			<form name="commentaire-{{$_perfusion->_guid}}">

@@ -161,6 +161,9 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     }
     if($type == "perf"){
       foreach($lines_by_type as $_perfusion){
+      	if($_perfusion->jour_decalage == "N"){
+      		continue;
+      	}
 	      if($_perfusion->operation_id){
 	        $operation = new COperation();
 	        $operation->load($_perfusion->operation_id);

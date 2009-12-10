@@ -56,6 +56,8 @@ class CPerfusion extends CMbObject {
 	var $conditionnel = null;
 	var $condition_active = null;
 	
+	var $jour_decalage = null;
+	
 	// Fwd Refs
   var $_ref_prescription = null;
   var $_ref_praticien    = null;
@@ -148,6 +150,7 @@ class CPerfusion extends CMbObject {
     $specs["commentaire"]            = "str helped";
 		$specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
+    $specs["jour_decalage"]          = "enum list|I|N default|I"; // Permet de noter N comme jour de decalage
     return $specs;
   }
 

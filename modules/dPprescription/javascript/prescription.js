@@ -106,7 +106,6 @@ Prescription = {
     oForm.unite_duree.value = "";
     oForm.callback.value = "";
   },
-
   submitPriseElement: function(element_id){
     var oFormElement = document.forms.addLineElement;
     var oForm        = document.forms.addPriseElement;
@@ -117,16 +116,12 @@ Prescription = {
       } 
     });
   },
-  
   submitPriseElementWithoutRefresh: function(element_id){
     var oFormElement = document.forms.addLineElement;
     var oForm        = document.forms.addPriseElement;
     oForm.object_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg');
   },
-  
-
-
   addLineElementWithoutRefresh: function(element_id, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
     var oForm = document.forms.addLineElement;
@@ -148,8 +143,6 @@ Prescription = {
     oForm.duree.value = "";
     oForm.unite_duree.value = "";
   },
-  
-  
   delLineWithoutRefresh: function(line_id) {
     var oForm = document.forms.addLine;
     oForm.prescription_line_medicament_id.value = line_id;
