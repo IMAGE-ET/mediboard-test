@@ -69,12 +69,23 @@ $listPlages[$date] = $listPlage->loadList($where,$order);
 $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
 $max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
 
+// Nombre d'interventions hors plage pour la journée
+$operation = new COperation();
+$ljoin = array();
+$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$where = array();
+$where["operations.date"] = "= '$date'";
+$where[]                  = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$nbIntervHorsPlage = $operation->countList($where, null, null, null, $ljoin);
 
+$nbIntervNonPlacees = 0;
 // Détermination des bornes de chaque plage
 foreach($listPlages[$date] as &$plage){
   $plage->loadRefsFwd();
   $plage->_ref_chir->loadRefsFwd();
   $plage->getNbOperations();
+  $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
   $plage->loadAffectationsPersonnel();
   
   $plage->fin = min($plage->fin, $max);
@@ -113,19 +124,21 @@ foreach($listPlages[$date] as &$plage){
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listPlages"     , $listPlages        );
-$smarty->assign("bloc"           , $bloc              );
-$smarty->assign("listBlocs"      , $listBlocs         );
-$smarty->assign("listSalles"     , $listSalles        );
-$smarty->assign("bloc"           , $bloc              );
-$smarty->assign("listHours"      , CPlageOp::$hours   );
-$smarty->assign("listMins"       , CPlageOp::$minutes );
-$smarty->assign("affichages"     , $affichages        );
-$smarty->assign("date"           , $date              );
-$smarty->assign("listSpec"       , $specs             );
-$smarty->assign("plagesel"       , $plagesel          );
-$smarty->assign("specs"          , $specs             );
-$smarty->assign("anesths"        , $anesths           );
+$smarty->assign("listPlages"        , $listPlages        );
+$smarty->assign("bloc"              , $bloc              );
+$smarty->assign("listBlocs"         , $listBlocs         );
+$smarty->assign("listSalles"        , $listSalles        );
+$smarty->assign("bloc"              , $bloc              );
+$smarty->assign("listHours"         , CPlageOp::$hours   );
+$smarty->assign("listMins"          , CPlageOp::$minutes );
+$smarty->assign("affichages"        , $affichages        );
+$smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
+$smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
+$smarty->assign("date"              , $date              );
+$smarty->assign("listSpec"          , $specs             );
+$smarty->assign("plagesel"          , $plagesel          );
+$smarty->assign("specs"             , $specs             );
+$smarty->assign("anesths"           , $anesths           );
 
 $smarty->display("vw_edit_planning.tpl");
 ?>

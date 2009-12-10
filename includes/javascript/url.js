@@ -25,13 +25,18 @@ Ajax.Responders.register({
 });
 
 var Url = Class.create({
-  initialize: function(sModule, sAction) {
+  initialize: function(sModule, sAction, sType) {
+    if(!sType) sType = "action";
     this.oParams = {};
     this.oWindow = null;
     this.sFragment = null;
   	this.oPrefixed = {};
   	if(sModule && sAction) {
-  	  this.setModuleAction(sModule, sAction);
+  	  if(sType == "action") {
+   	    this.setModuleAction(sModule, sAction);
+   	  } else {
+   	    this.setModuleTab(sModule, sAction);
+   	  }
   	}
   },
   
@@ -110,7 +115,11 @@ var Url = Class.create({
   },
   
   redirectOpener: function() {
-    window.opener.location.href = this.make();
+    if(window.opener) {
+      window.opener.location.href = this.make();
+    } else {
+      this.redirect();
+    }
   },
   
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {

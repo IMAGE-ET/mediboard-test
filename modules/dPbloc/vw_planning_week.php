@@ -51,19 +51,31 @@ foreach($listDays as $keyDate=>$valDate){
   }
 }
 
-$listPlages = array();
-
+$listPlages         = array();
+$operation          = new COperation();
+$nbIntervHorsPlage  = 0;
+$listPlage          = new CPlageOp();
 $nbIntervNonPlacees = 0;
 
+// Nombre d'interventions hors plage pour la semaine
+$ljoin = array();
+$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$where = array();
+$where["date"]            = "BETWEEN '$date' AND '$fin'";
+$where[]                  = "salle_id IS NULL OR salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$nbIntervHorsPlage = $operation->countList($where, null, null, null, $ljoin);
+
 // Extraction des plagesOp par date
+$where = array();
+$where["date"]     = "BETWEEN '$date' AND '$fin'";
+$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+$order             = "debut";
+
 foreach($listDays as $keyDate => $valDate){
   
   // Récupération des plages par jour
-  $listPlage = new CPlageOp();
-  $where = array();
-  $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
   $where["date"] = "= '$keyDate'";
-  $order = "debut";
   $listPlages[$keyDate] = $listPlage->loadList($where,$order);
   
   // Détermination des bornes du semainier
@@ -76,7 +88,6 @@ foreach($listDays as $keyDate => $valDate){
     $plage->_ref_chir->loadRefsFwd();
     $plage->getNbOperations();
     $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
-    //$plage->loadAffectationsPersonnel();
   
     $plage->fin = min($plage->fin, $max);
     $plage->debut = max($plage->debut, $min);
@@ -117,6 +128,7 @@ $smarty->assign("listHours"         , CPlageOp::$hours   );
 $smarty->assign("listMins"          , CPlageOp::$minutes );
 $smarty->assign("affichages"        , $affichages        );
 $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
+$smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
 $smarty->assign("date"              , $date              );
 $smarty->assign("listSpec"          , $listSpec          );
 

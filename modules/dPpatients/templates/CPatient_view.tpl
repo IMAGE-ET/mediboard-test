@@ -55,12 +55,24 @@
 	
 	<tr>
 		<td colspan="10" class="button">
-        <a class="action button search" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        	Dossier complet
-        </a>
-        <a class="action button edit" title="{{tr}}CPatient-title-modify{{/tr}}" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-          {{tr}}Modify{{/tr}}
-        </a>
+      <script type="text/javascript">
+      viewDossierPatient = function(id) {
+        var url = new Url("dPpatients", "vw_full_patients", "tab");
+			  url.addParam("patient_id", id);
+			  url.redirectOpener();
+      }
+    	modifyPatient = function(id) {
+			  var url = new Url("dPpatients", "vw_edit_patients", "tab");
+			  url.addParam("patient_id", id);
+			  url.redirectOpener();
+			}
+      </script>
+			<button type="button" class="search" onclick="viewDossierPatient({{$patient->_id}});">
+				Dossier complet
+			</button>
+			<button type="button" class="print" onclick="modifyPatient({{$patient->_id}});">
+				{{tr}}Modify{{/tr}}
+			</button>
 		</td>
 	</tr>
 </table>

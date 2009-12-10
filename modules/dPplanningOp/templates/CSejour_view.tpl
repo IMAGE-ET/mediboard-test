@@ -12,12 +12,28 @@
   
   <tr>
     <td class="button">
-    	{{if $can->edit}}
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}" class="button edit">{{tr}}Modify{{/tr}}</a>
+      <script type="text/javascript">
+      modifySejour = function(id) {
+        var url = new Url("dPplanningOp", "vw_edit_sejour", "tab");
+			  url.addParam("sejour_id", id);
+			  url.redirectOpener();
+      }
+    	viewAdmissionSejour = function(date) {
+			  var url = new Url("dPadmissions", "vw_idx_admission", "tab");
+			  url.addParam("date", date);
+			  url.redirectOpener();
+			}
+      </script>
+      {{if $can->edit}}
+			<button type="button" class="edit" onclick="modifySejour({{$sejour->_id}});">
+				{{tr}}Modify{{/tr}}
+			</button>
       {{/if}}
-      {{if $modules.dPadmissions->_can->edit}} 
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$sejour->_date_entree_prevue}}#adm{{$sejour->_id}}" class="button search">{{tr}}Admission{{/tr}}</a>
-      {{/if}}
+      {{if $modules.dPadmissions->_can->read}}
+			<button type="button" class="search" onclick="viewAdmissionSejour('{{$sejour->_date_entree_prevue}}');">
+				{{tr}}Admission{{/tr}}
+			</button>
+			{{/if}}
     </td>
   </tr>
 </table>

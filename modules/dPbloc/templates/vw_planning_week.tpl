@@ -11,10 +11,11 @@
 <script type="text/javascript">
 
 function showAlerte() {
-  var url = new Url("dPbloc", "vw_alertes_semaine");
+  var url = new Url("dPbloc", "vw_alertes");
   url.addParam("date", "{{$date}}");
+  url.addParam("type", "semaine");
   url.addParam("bloc_id", "{{$bloc->_id}}");
-  url.popup(500, 250, "Alerte");
+  url.popup(600, 500, "Alerte");
 }
 
 </script>
@@ -22,11 +23,18 @@ function showAlerte() {
 <table class="main">
   <tr>
     <td>
-      {{if $nbIntervNonPlacees}}
+      {{if $nbIntervNonPlacees || $nbIntervHorsPlage}}
         <div class="warning" style="float: right;">
+          {{if $nbIntervNonPlacees}}
           <a href="#nothing" onclick="showAlerte()">
-            {{$nbIntervNonPlacees}} interventions non validées cette semaine
+            {{$nbIntervNonPlacees}} interventions non validées<br />
           </a>
+          {{/if}}
+          {{if $nbIntervHorsPlage}}
+          <a href="#nothing" onclick="showAlerte()">
+            {{$nbIntervHorsPlage}} interventions hors plage
+          </a>
+          {{/if}}
         </div>
       {{/if}}
       <form action="?" name="selection" method="get">

@@ -9,7 +9,17 @@
 *}}
 
 <script type="text/javascript">
+
 {{if $can->edit}}
+
+function showAlerte() {
+  var url = new Url("dPbloc", "vw_alertes");
+  url.addParam("date", "{{$date}}");
+  url.addParam("type", "jour");
+  url.addParam("bloc_id", "{{$bloc->_id}}");
+  url.popup(600, 500, "Alerte");
+}
+
 function checkPlage() {
   var form = getForm('editFrm');
   
@@ -52,6 +62,20 @@ Main.add(function(){
   <tr>
     <td class="greedyPane" style="text-align:center;">
       {{if $can->edit}}
+      {{if $nbIntervNonPlacees || $nbIntervHorsPlage}}
+        <div class="warning" style="float: right;">
+          {{if $nbIntervNonPlacees}}
+          <a href="#nothing" onclick="showAlerte()">
+            {{$nbIntervNonPlacees}} interventions non validées<br />
+          </a>
+          {{/if}}
+          {{if $nbIntervHorsPlage}}
+          <a href="#nothing" onclick="showAlerte()">
+            {{$nbIntervHorsPlage}} interventions hors plage
+          </a>
+          {{/if}}
+        </div>
+      {{/if}}
       <button class="print" onclick="popPlanning('{{$date}}');" style="font-weight: bold;">
         {{$date|date_format:"%A %d %B"}}
       </button>
