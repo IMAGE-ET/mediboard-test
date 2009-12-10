@@ -1,4 +1,4 @@
-{* $Id: configure.tpl 6341 2009-05-21 11:52:48Z mytto $ *}}
+{{* $Id: configure.tpl 6341 2009-05-21 11:52:48Z mytto $ *}}
 
 {{*
  * @package Mediboard
