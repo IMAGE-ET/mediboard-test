@@ -106,7 +106,11 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
     if($this->urgence_datetime){
-      $this->_view .= " le ".mbTransformTime(null, $this->urgence_datetime, "%d/%m/%Y à %Hh%M")." (Urgence)";
+    	if(!$this->_ref_object->_protocole){
+        $this->_view .= " le ".mbTransformTime(null, $this->urgence_datetime, "%d/%m/%Y à %Hh%M")." (Urgence)";
+    	} else {
+    	  $this->_view .= " (Urgence)";
+      }
     }
     
     if($this->moment_unitaire_id){

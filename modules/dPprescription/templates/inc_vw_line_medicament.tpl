@@ -371,8 +371,6 @@
 	  <td colspan="3">
     {{if !$line->_count.administration && $line->_ref_prescription->object_id}}
       {{if $line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count}}
-        
-				
 				{{if $line->_perm_edit}}
 				  <form action="?" method="post" name="changeLine-{{$line->_guid}}">
             <input type="hidden" name="m" value="dPprescription" />

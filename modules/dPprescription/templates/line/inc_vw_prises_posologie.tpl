@@ -81,7 +81,9 @@ Main.add(function () {
 		{{/if}}
 		
 		{{if $prise->urgence_datetime}}
-		  le {{$prise->urgence_datetime|date_format:$dPconfig.datetime}} (Urgence)
+		  {{if !$line->_protocole}}
+		  le {{$prise->urgence_datetime|date_format:$dPconfig.datetime}} 
+			{{/if}} (Urgence)
 		{{/if}}
 		
 	  <!-- Cas d'un moment unitaire_id -->

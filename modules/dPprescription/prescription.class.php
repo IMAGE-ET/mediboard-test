@@ -419,6 +419,9 @@ class CPrescription extends CMbObject {
 					    $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);
 						}
 					}
+					if($prise->urgence_datetime){
+						$prise->urgence_datetime = mbDateTime();
+					}
 				  if(!$mode_preview){
 					  $msg = $prise->store();
 				    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  
