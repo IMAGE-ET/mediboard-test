@@ -25,6 +25,7 @@
 {{else}}
   {{assign var="rowspan" value=1}}
 {{/if}}
+{{if !$_operation->annulee}}
 <tbody class="hoverable">
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
   {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
@@ -146,4 +147,5 @@
 </tr>
 {{/if}}
 </tbody>
+{{/if}}
 {{/foreach}}
