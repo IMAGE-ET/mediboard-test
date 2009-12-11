@@ -67,7 +67,7 @@ if (isset($t["destinataire"])) {
   $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
 }
 if ($_date_min && $_date_max) {
-  $where['date_echange'] = " = ' BETWEEN ".$_date_min." AND ".$_date_max."' "; 
+  $where['date_echange'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
 }
 if ($statut_acquittement) {
   $where["statut_acquittement"] = " = '".$statut_acquittement."'";

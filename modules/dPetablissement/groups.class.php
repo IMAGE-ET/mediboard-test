@@ -28,6 +28,7 @@ class CGroups extends CMbObject {
   var $ape                 = null;
   var $tel_anesth          = null;
   var $service_urgences_id = null;
+  var $finess              = null;
 
   // Object References
   var $_ref_functions = null;
@@ -95,6 +96,8 @@ class CGroups extends CMbObject {
     $specs["ape"]                 = "str maxLength|6 confidential";
     $specs["mail"]                = "email";
     $specs["web"]                 = "str";
+    $specs["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
+    
     return $specs;
   }
   

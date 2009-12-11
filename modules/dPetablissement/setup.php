@@ -95,7 +95,12 @@ class CSetupdPetablissement extends CSetup {
               ADD INDEX (`service_urgences_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `groups_mediboard` 
+              ADD `finess` INT (9) UNSIGNED ZEROFILL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.21";
     
   } 
   

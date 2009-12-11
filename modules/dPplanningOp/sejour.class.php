@@ -128,6 +128,7 @@ class CSejour extends CCodable {
   var $_list_constantes_medicales = null;
   var $_cancel_alerts             = null;
   var $_ref_suivi_medical         = null;
+  var $_diagnostics_associes      = null;
   
   // Filter Fields
   var $_date_min	 			= null;
@@ -719,6 +720,21 @@ class CSejour extends CCodable {
   function loadExtDiagnostics() {
     $this->_ext_diagnostic_principal = $this->DP ? new CCodeCIM10($this->DP, 1) : null;
     $this->_ext_diagnostic_relie     = $this->DR ? new CCodeCIM10($this->DR, 1) : null;
+  }
+  
+  function loadDiagnosticsAssocies($split = true) {
+    $this->_diagnostics_associes = array();
+    if ($this->_ref_dossier_medical->_id){
+      foreach($this->_ref_dossier_medical->_codes_cim as $code) {
+        if ($split && strlen($code) >= 4) {
+          $this->_diagnostics_associes[] = substr($code, 0, 3).".".substr($code, 3);
+        } else {
+          $this->_diagnostics_associes[] = $code;
+        }
+      }
+    }
+    
+    return $this->_diagnostics_associes;
   }
   
   function loadRefPrestation($cache = 0) {

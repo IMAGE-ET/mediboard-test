@@ -114,17 +114,8 @@ class CGHM extends CMbObject {
   function bindInfos() {
     // Diagnostics
     $this->_ref_sejour->loadRefDossierMedical();
-    $this->_DASs = array(); 
-    if ($this->_ref_sejour->_ref_dossier_medical->_id){
-      foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
-        if(strlen($code) < 4) {
-          $this->_DASs[] = $code;
-        } else {
-          $this->_DASs[] = substr($code, 0, 3).".".substr($code, 3);
-        }
-      }
-    }
-    
+    $this->_DASs = $this->_ref_sejour->loadDiagnosticsAssocies(); 
+
     // Actes CCAM
     $this->_ref_sejour->loadRefsActesCCAM();
     $this->_ref_actes_ccam = $this->_ref_sejour->_ref_actes_ccam;

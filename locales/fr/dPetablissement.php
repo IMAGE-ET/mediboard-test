@@ -108,4 +108,8 @@ $locales['CGroups-title-create'] = '';
 $locales['CGroups-title-modify'] = '';
 $locales['CGroups.all'] = 'Tous les établissements';
 $locales['CGroups.select'] = 'Choisir un établissement';
+$locales['CFunctions-back-services_urgence_pour'] = '';
+$locales['CGroups-finess'] = 'N° FINESS';
+$locales['CGroups-finess-court'] = '';
+$locales['CGroups-finess-desc'] = 'Numéro FINESS de l\'établissement';
 ?>

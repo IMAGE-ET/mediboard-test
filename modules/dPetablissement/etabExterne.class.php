@@ -48,7 +48,7 @@ class CEtabExterne extends CMbObject {
     $specs["ville"]          = "str maxLength|50 confidential";
     $specs["tel"]            = "numchar length|10 mask|$phone_number_format";
     $specs["fax"]            = "numchar length|10 mask|$phone_number_format";
-    $specs["finess"]         = "numchar length|9";
+    $specs["finess"]         = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $specs["siret"]          = "str length|14";
     $specs["ape"]            = "str maxLength|6 confidential";
     return $specs;

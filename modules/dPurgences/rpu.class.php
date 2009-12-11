@@ -58,13 +58,13 @@ class CRPU extends CMbObject {
   var $_cp         = null;
   var $_ville      = null;
   var $_naissance  = null;
+  var $_sexe       = null;
   
   // Sejour
   var $_responsable_id = null;
   var $_annule         = null;
   var $_entree         = null;
   var $_DP             = null;
-  var $_DAS            = null;
   var $_ref_actes_ccam = null;
   var $_service_id     = null;
   var $_etablissement_entree_transfert_id = null;
@@ -162,6 +162,7 @@ class CRPU extends CMbObject {
     $this->_cp         = $patient->cp;
     $this->_ville      = $patient->ville;
     $this->_naissance  = $patient->naissance;
+    $this->_sexe       = $patient->sexe;
     $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
     
     

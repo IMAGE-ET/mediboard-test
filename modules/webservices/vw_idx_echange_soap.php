@@ -41,7 +41,7 @@ $itemEchangeSoap = new CEchangeSOAP;
 
 $where = array();
 if ($_date_min && $_date_max) {
-	$where['date_echange'] = " = ' BETWEEN ".$_date_min." AND ".$_date_max."' "; 
+	$where['date_echange'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
 }
 if ($fonction) {
 	$where['function_name'] = " = '".$fonction."'";

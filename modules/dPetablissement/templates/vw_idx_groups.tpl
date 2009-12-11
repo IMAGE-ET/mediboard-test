@@ -114,9 +114,14 @@
           <td>{{mb_field object=$usergroup field="siret"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$usergroup field="finess"}}</th>
+          <td>{{mb_field object=$usergroup field="finess"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$usergroup field="ape"}}</th>
           <td>{{mb_field object=$usergroup field="ape"}}</td>
      		</tr>
+        
 
         {{if $usergroup->_id}}
         <tr>
