@@ -427,8 +427,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $user = new CUser();
     $user->user_last_name = $mediuser->_user_last_name;
-    $user->user_username  = $mediuser->_user_username;
-    if (!$user->loadMatchingObject()) {
+    $user->user_first_name  = $mediuser->_user_first_name;
+    $listPrat = $user->seek("$user->user_last_name $user->user_first_name");
+    if (count($listPrat) == 1) {
+      $user = reset($listPrat);
+      $user->loadRefMediuser();
+      $mediuser = $user->_ref_mediuser;
+    } else {
       $mediuser->store();
     }
   	
