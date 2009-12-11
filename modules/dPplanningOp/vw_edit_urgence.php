@@ -34,8 +34,14 @@ if ($chir->isPraticien() and !$chir_id) {
 // Chargement du praticien
 $chir = new CMediusers;
 if ($chir_id) {
-  $chir->load($chir_id);
+  $testChir = new CMediusers();
+  $testChir->load($chir_id);
+  if($testChir->isPraticien()) {
+    $chir = $testChir;
+  }
 }
+$chir->loadRefFunction();
+$prat = $chir;
 
 // Chargement du patient
 $patient = new CPatient;
