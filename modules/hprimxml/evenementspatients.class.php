@@ -507,7 +507,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   function mappingDebiteurs($node, $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);
-    
+    mbTrace($this->saveXML(), "personne", true);
     // Penser a parcourir tous les debiteurs par la suite
     $debiteur = $xpath->queryUniqueNode("hprim:debiteur", $node);
 
@@ -542,25 +542,26 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $mbPatient->matricule = $xpath->queryTextNode("hprim:immatriculation", $node);
     
-    // Obligatoire pour MB    
-    $personne = $xpath->queryUniqueNode("hprim:personne", $node, false);
+    $personne = $xpath->queryUniqueNode("hprim:personne", $node);
+    if ($personne) {
+      $sexe = $xpath->queryAttributNode("hprim:personne", $node, "sexe");
+      $sexeConversion = array (
+          "M" => "m",
+          "F" => "f",
+      );
+      
+      $mbPatient->assure_sexe = $sexeConversion[$sexe];
+      $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
+      $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
+      $mbPatient->assure_prenom = $prenoms[0];
+      $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
+      $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
+      $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
+      $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
+      $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
+      $mbPatient->rang_beneficiaire = $xpath->queryTextNode("hprim:lienAssure", $node);
+    }
     
-    $sexe = $xpath->queryAttributNode("hprim:personne", $node, "sexe");
-    $sexeConversion = array (
-        "M" => "m",
-        "F" => "f",
-    );
-    $mbPatient->assure_sexe = $sexeConversion[$sexe];
-    $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
-    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
-    $mbPatient->assure_prenom = $prenoms[0];
-    $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
-    $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
-    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
-    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
-    $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
-    
-    $mbPatient->rang_beneficiaire = $xpath->queryTextNode("hprim:lienAssure", $node);
     
     return $mbPatient;
   }

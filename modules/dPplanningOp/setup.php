@@ -829,7 +829,7 @@ class CSetupdPplanningOp extends CSetup {
               CHANGE `type` `type` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult') NOT NULL;";
     $this->addQuery($sql);
     
-     $this->makeRevision("1.01");
+    $this->makeRevision("1.01");
     $sql = "ALTER TABLE `naissance` 
               ADD INDEX (`date_prevue`),
               ADD INDEX (`date_reelle`),
@@ -843,7 +843,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`adresse_par_etab_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.02";
+    $this->makeRevision("1.02");
+    $sql = "ALTER TABLE `sejour` 
+              CHANGE `chambre_seule` `chambre_seule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.03";
   }
 }
 ?>
