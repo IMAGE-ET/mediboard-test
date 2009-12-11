@@ -103,10 +103,26 @@ foreach ($sejours as $sejour) {
   $domEvenement->emetteur = CAppUI::conf('mb_id');
   $domEvenement->destinataire = $dest_hprim->nom;
   $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
+  $doc_valid = $domEvenement->schemaValidate();
   
-  if (!$messageEvtPatient) {
-    trigger_error("Création de l'événement patient impossible.", E_USER_WARNING);
+  if (!$doc_valid) {
+    $errors++;
+    trigger_error("Création de l'événement séjour impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
+  }
+  
+  if ($mbObject->_ref_patient->code_regime) {
+    $domEvenement = new CHPrimXMLDebiteursVenue();
+    $domEvenement->emetteur = CAppUI::conf('mb_id');
+    $domEvenement->destinataire = $dest_hprim->nom;
+    $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
+    $doc_valid = $domEvenement->schemaValidate();
+    
+    if (!$doc_valid) {
+      $errors++;
+      trigger_error("Création de l'événement debiteurs impossible.", E_USER_WARNING);
+      CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
+    }
   }
 }
 

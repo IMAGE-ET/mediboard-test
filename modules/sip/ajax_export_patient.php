@@ -84,8 +84,10 @@ foreach ($patients as $patient) {
   $domEvenement->emetteur = CAppUI::conf('mb_id');
   $domEvenement->destinataire = $dest_hprim->nom;
   $messageEvtPatient = $domEvenement->generateTypeEvenement($patient);
+  $doc_valid = $domEvenement->schemaValidate();
   
-  if (!$messageEvtPatient) {
+  if (!$doc_valid) {
+    $errors++;
   	trigger_error("Création de l'événement patient impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$patient->_view' échoué", UI_MSG_WARNING);
   }
