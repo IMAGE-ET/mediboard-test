@@ -58,11 +58,8 @@
     {{/if}}
     <br />
   {{foreachelse}}
-  Aucune délivrance pour cette dispensation<br />
+    Aucune délivrance pour cette dispensation<br />
   {{/foreach}}
-    <script type="text/javascript">
-      prepareForm("delivery-trace-{{$curr_delivery->_id}}-new");
-    </script>
     <form {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}} name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return deliverLine(this)">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />

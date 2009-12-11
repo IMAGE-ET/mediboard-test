@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include module=system template=inc_pagination change_page=refreshOrders current=$start step=30}}
+
 <table class="tbl">
   <!-- Affichage des delivrances globales -->
   <tr>
@@ -17,14 +19,16 @@
       <th>Stock pharmacie</th>
     {{/if}}
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    {{* 
     {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
       <th>Stock service</th>
     {{/if}}
+    *}}
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th><button type="button" onclick="dispenseAll('list-orders', refreshOrders)" class="tick">Tout dispenser</button></th>
+    <th><button type="button" onclick="dispenseAll('list-orders', refreshOrders)" class="tick">Dispenser les {{$deliveries|@count}} visibles</button></th>
   </tr>
   {{foreach from=$deliveries item=curr_delivery}}
-    {{include file="inc_vw_line_order.tpl" curr_delivery=$curr_delivery}}
+    {{include file="inc_vw_line_order.tpl" curr_delivery=$curr_delivery nodebug=true}}
   {{foreachelse}}
   <tr>
     <td colspan="10">{{tr}}CProductDelivery.order.none{{/tr}}</td>
@@ -32,5 +36,5 @@
   {{/foreach}}
 </table>
 <script type="text/javascript">
-  $$('a[href=#list-orders] small').first().update('({{$deliveries|@count}})');
+  $$('a[href=#list-orders] small')[0].update('({{$deliveries|@count}})');
 </script>

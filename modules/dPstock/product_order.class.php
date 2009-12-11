@@ -218,10 +218,11 @@ class CProductOrder extends CMbObject {
   function getUniqueNumber() {
   	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
-  	if (!preg_match('#\%id#', $format)) {
-  		CAppUI::setMsg('format de numéro de serie incorrect');
-  		return;
-  	}
+    if (strpos('%id', $format) === false) {
+      CAppUI::setMsg('Format de numéro de serie incorrect');
+      return;
+    }
+    
   	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
   	return mbTransformTime(null, null, $format);
   }
@@ -282,7 +283,8 @@ class CProductOrder extends CMbObject {
 	}
 	
 	function store () {
-	  parent::store();
+	  if ($msg = parent::store()) return $msg;
+    
 	  if (empty($this->order_number)) {
       $this->order_number = $this->getUniqueNumber();
     }
@@ -294,11 +296,8 @@ class CProductOrder extends CMbObject {
 	}
 
 	function loadRefsFwd(){
-		$this->_ref_societe = new CSociete();
-		$this->_ref_societe = $this->_ref_societe->getCached($this->societe_id);
-		
-		$this->_ref_group = new CGroups();
-    $this->_ref_group = $this->_ref_group->getCached($this->group_id);
+    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
 	}
 	
 	function delete() {

@@ -51,12 +51,12 @@ toggleDoneDispensations = function(){
   </tr>
   {{/if}}
   <tr>
-    <th>Quantité<br /> à administrer</th>
-    <th>Quantité<br /> à dispenser</th>
+    <th>Quantité<br />à administrer</th>
+    <th>Quantité<br />à dispenser</th>
     {{if !$infinite}}
       <th>Stock<br />pharmacie</th>
     {{/if}}
-    <th>Unité de dispensation</th>
+    <th>Unité de<br />dispensation</th>
     <th style="width: 30%">
       <!-- <button style="float: right" type="button" onclick="dispenseAll('list-dispensations', refreshLists)" class="tick">Tout dispenser</button> -->
       Dispensation

@@ -34,12 +34,14 @@ function refreshLists(code_cis) {
     tabs.setActiveTab("list-dispensations");
   }
   
-  $$('a[href=#list-dispensations] small').first().update('(0)');
+  $$('a[href=#list-dispensations] small')[0].update('(0)');
   
   $A(form.elements).each (function (e) {
     url.addParam(e.name, $V(e));
   });
-    
+  
+  refreshOrders();
+  
   if(code_cis){
     url.addParam("_selected_cis", code_cis);
     url.requestUpdate("dispensation_line_"+code_cis);    
@@ -47,7 +49,6 @@ function refreshLists(code_cis) {
     url.requestUpdate("list-dispensations");
   }
   refreshStocks.defer();
-  refreshOrders.defer();
   return false;
 }
 
@@ -58,10 +59,11 @@ function refreshStocks() {
   url.requestUpdate("list-stocks");
 }
 
-function refreshOrders() {
+function refreshOrders(start) {
   var formFilter = getForm("filter");
   var url = new Url("pharmacie", "httpreq_vw_orders_list");
   url.addParam("service_id", $V(formFilter.service_id));
+  url.addParam("start", start);
   url.requestUpdate("list-orders");
 }
 

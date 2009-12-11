@@ -78,9 +78,9 @@
        <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
      </form>
      {{else}}
-       <img src="images/icons/tick.png" alt="Dispensé" title="Dispensé" />
+       <img src="images/icons/tick.png" title="Dispensé" />
      {{/if}}
-     {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}}
+     {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}} ({{$dispensation->_ref_service}})
      <br />
   {{/foreach}}
   </td>

@@ -32,21 +32,21 @@
   </td>
   {{/if}}
   <td style="text-align: center;">{{mb_value object=$curr_delivery field=quantity}}</td>
+  
+  {{* 
   {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
     <td style="text-align: center;">
       {{assign var=stock value=$curr_delivery->_ref_stock}}
-      <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
+      <a href="?m=dPstock&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
         {{$stock->quantity}}
       </a>
     </td>
   {{/if}}
+  *}}
   <td style="text-align: center;">
     {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>
   <td>
-    <script type="text/javascript">
-      prepareForm("dispensation-validate-{{$curr_delivery->_id}}");
-    </script>
     <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}}>
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
@@ -55,8 +55,8 @@
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="order" value="0" />
       {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-validate-$id size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
-      <button type="submit" class="tick" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})">Dispenser</button>
-      <button type="submit" class="cancel" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})">Refuser</button>
+      <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
+      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
     </form>
   </td>
 </tr>

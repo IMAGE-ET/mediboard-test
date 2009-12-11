@@ -11,7 +11,9 @@
 global $can;
 $can->needsRead();
 
-$service_id = CValue::getOrSession('service_id');
+$service_id = CValue::get('service_id');
+$hide_done  = CValue::get('hide_done');
+$start      = CValue::get('start', 0);
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -27,7 +29,8 @@ $where = array (
 //$where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, 100);
+$deliveries = $delivery->loadList($where, $order_by, intval($start).",30");
+$total = $delivery->countList($where);
 
 $stocks_service = array();
 foreach($deliveries as $_delivery) {
@@ -38,6 +41,8 @@ foreach($deliveries as $_delivery) {
 $smarty = new CSmartyDP();
 $smarty->assign('deliveries', $deliveries);
 $smarty->assign('stocks_service', $stocks_service);
+$smarty->assign('total', $total);
+$smarty->assign('start', $start);
 $smarty->display('inc_orders_list.tpl');
 
 ?>

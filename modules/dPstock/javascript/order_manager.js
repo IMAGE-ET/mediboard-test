@@ -56,7 +56,7 @@ function submitOrderItem (oForm, options) {
   if (options && options.noAjax) {
     oForm.submit();
   } else {
-    submitFormAjax(oForm, 'systemMsg',{
+    onSubmitFormAjax(oForm, {
       onComplete: function() {
         refreshOrder(oForm.order_id.value, options);
         if (!options.noRefresh) {

@@ -28,6 +28,7 @@ function refreshPatient(){
 
 <form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="start" value="0" />
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
