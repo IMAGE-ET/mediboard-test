@@ -107,9 +107,9 @@ var ObjectTooltip = Class.create({
       
       if(!this.oOptions.popup) {
         url.requestUpdate(eTarget, { 
-				  waitingText: "Chargement infobulle",
-				  onComplete: this.reposition.bind(this)
-				} );
+          waitingText: $T("Loading tooltip"),
+          onComplete: this.reposition.bind(this)
+        });
       } else {
         url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       }

@@ -363,17 +363,17 @@ var Url = Class.create({
 
     // Animate system message
     if (element.id == SystemMessage.id) {
-			oOptions.waitingText = "Mise à jour";
+      oOptions.waitingText = $T("Loading in progress");
       SystemMessage.doEffect();
     }
-		// Cover div
-		else {
-			WaitingMessage.cover(element);
-		}
+    // Cover div
+    else {
+      WaitingMessage.cover(element);
+    }
   	
     if (oOptions.waitingText) {
       element.update('<div class="loading">' + oOptions.waitingText + '...</div>');
-		}
+    }
 
     var getParams = oOptions.getParameters ? "?" + $H(oOptions.getParameters).toQueryString() : '';
     new Ajax.Updater(element, oOptions.urlBase + "index.php" + getParams, oOptions);

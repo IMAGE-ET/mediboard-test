@@ -519,6 +519,10 @@ function mbPortalURL($page = "Accueil", $tab = null) {
   return $url;
 }
 
+function stringNotEmpty($s){
+  return $s !== "";
+}
+
 function mbWriteJSLocalesFile($language = null) {
   global $version, $locales;
   
@@ -544,8 +548,9 @@ function mbWriteJSLocalesFile($language = null) {
     $path = "./tmp/locales.$language.js";
   
     if ($fp = fopen($path, 'w')) {
-      $locales = array_filter($locales);
-      // TODO: change the inavlid keys (with accents) of the locales to simplify this
+      // The callback will filter on empty strings (without it, "0" will be removed too).
+      $locales = array_filter($locales, "stringNotEmpty");
+      // TODO: change the invalid keys (with accents) of the locales to simplify this
       $keys = array_map('utf8_encode', array_keys($locales));
       $values = array_map('utf8_encode', $locales);
       $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_combine($keys, $values)).";";

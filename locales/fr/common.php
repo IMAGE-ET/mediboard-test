@@ -186,4 +186,5 @@ $locales['Close'] = 'Fermer';
 $locales['Unknown'] = 'Inconnu';
 $locales['Reset'] = 'Remise à zéro';
 $locales['WaitingForAjaxRequestReturn'] = 'Un ou plusieurs formulaires n\'ont pas été soumis entèrement.\nCliquez sur OK pour terminer ce traitement et continuer.';
+$locales['Loading tooltip'] = 'Chargement infobulle';
 ?>
