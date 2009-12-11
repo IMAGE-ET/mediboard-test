@@ -29,6 +29,7 @@ CValue::setSession("idRetry", $idMin);
 // Requêtes
 $where = array();
 $where[$sejour->_spec->key] = "> '$idMin'";
+$where['annule'] = " = '0'";
 
 $sip_config = CAppUI::conf("sip");
 
