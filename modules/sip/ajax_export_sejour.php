@@ -111,7 +111,7 @@ foreach ($sejours as $sejour) {
     CAppUI::stepAjax("Import de '$sejour->_view' échoué", UI_MSG_WARNING);
   }
   
-  if ($mbObject->_ref_patient->code_regime) {
+  if ($sejour->_ref_patient->code_regime) {
     $domEvenement = new CHPrimXMLDebiteursVenue();
     $domEvenement->emetteur = CAppUI::conf('mb_id');
     $domEvenement->destinataire = $dest_hprim->nom;
