@@ -476,11 +476,7 @@ Main.add(function () {
     </td>
   </tr>
   
-  </tbody>
-  {{/if}}
-  
   {{assign var="var" value="showTemplateSpans"}}
-  {{if $prefsUser.$module}}  
   <tr>
     <th>
       <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
@@ -492,10 +488,10 @@ Main.add(function () {
       </select>
     </td>
   </tr>
-  
+    
   </tbody>
   {{/if}}
-    
+  
   {{assign var="module" value="dPplanningOp"}}
   
   {{if $prefsUser.$module}}
