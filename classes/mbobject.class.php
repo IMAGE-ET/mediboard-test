@@ -721,7 +721,7 @@ class CMbObject {
    */
   
   function loadView() {
-    $this->loadRefsFwd();
+    $this->loadAllFwdRefs();
   }
   
   /**
@@ -1330,7 +1330,7 @@ class CMbObject {
    */
   function loadAllFwdRefs() {
     foreach ($this->_specs as $field => $spec) {
-      $this->loadFwdRef($field);
+    	$this->loadFwdRef($field);
     }
   }
     
