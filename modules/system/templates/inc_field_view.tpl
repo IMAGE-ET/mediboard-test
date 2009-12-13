@@ -17,16 +17,17 @@
   <strong>{{mb_label object=$object field=$prop}}</strong> :
 
   {{if $spec instanceof CRefSpec}}
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$spec->class}}-{{$value}}');">
-    {{mb_value object=$object field=$prop}}
+	  {{assign var=ref value=$object->_fwd.$prop}}
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$ref->_guid}}');">
+    {{$ref}}
     </span>
 
   {{elseif $spec instanceof CHtmlSpec}}
     {{$value|count_words}} mots
 
   {{elseif $spec instanceof CTextSpec}}
-    {{mb_value object=$object field=$prop truncate=true}}
-	
+	  {{$value|truncate:40}}
+		
   {{else}}
     {{mb_value object=$object field=$prop}}
 

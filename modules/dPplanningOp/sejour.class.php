@@ -879,11 +879,6 @@ class CSejour extends CCodable {
     $this->loadExtCodesCCAM();
   }
   
-  function loadView() {
-    $this->loadRefsFwd();
-    $this->loadRefsActesCCAM();
-  }
-  
   function loadComplete() {
     parent::loadComplete();
     foreach ($this->_ref_operations as &$operation) {

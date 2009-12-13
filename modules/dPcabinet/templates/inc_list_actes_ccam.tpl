@@ -1,15 +1,4 @@
-<script type="text/javascript">     
-
-viewCode = function(code, object_class){
-  var url = new Url;
-  url.setModuleAction("dPccam", "vw_full_code");
-  url.addParam("codeacte", code);
-  url.addParam("object_class", object_class);
-  url.addParam("hideSelect", "1");
-  url.popup(700, 550, "Code CCAM");
-}
-
-</script>
+{{mb_include_script module="dPccam" script="code_ccam" ajax="true"}}
    
 <!-- S'il y a deja des actes codés, affichage seulement des actes codes -->
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}
@@ -50,7 +39,7 @@ viewCode = function(code, object_class){
 	{{/if}}
 	<tr>
 	  <td> 
-	    <a href="#" onclick="viewCode('{{$code}}','CSejour')">
+	    <a href="#" onclick="CodeCCAM.show('{{$code}}','CSejour')">
 	      {{mb_value object=$_acte field=code_acte}}
 	    </a>
 	  </td>  
@@ -90,7 +79,9 @@ viewCode = function(code, object_class){
 	{{foreach from=$subject->_ext_codes_ccam item=_code}}
 	<tr>
 	  <td class="text" colspan="2">
-	    <strong>{{$_code->code}}</strong> :
+	    <a class="button search" href="#CodeCCAM-Show-{{$_code->code}}" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class_name}}')">
+	    	{{$_code->code}}
+			</a>
 	    {{$_code->libelleLong}}
 
 	    {{if @$view_tarif}}

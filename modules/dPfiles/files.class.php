@@ -49,15 +49,16 @@ class CFile extends CDocumentItem {
   	$specs = parent::getProps();
     $specs["file_date"]          = "dateTime notNull";
     $specs["file_size"]          = "num pos";
-    $specs["file_real_filename"] = "str notNull";
+    $specs["file_real_filename"] = "str notNull show|0";
     $specs["file_owner"]         = "ref notNull class|CMediusers";
     $specs["file_type"]          = "str";
-    $specs["file_name"]          = "str notNull";
+    $specs["file_name"]          = "str notNull show|0";
 
     // Form Fields
     $specs["_sub_dir"]      = "str";
     $specs["_absolute_dir"] = "str";
     $specs["_file_path"]    = "str";
+    $specs["_file_size"]    = "str show|1";
 		
     return $specs;
   }
@@ -72,10 +73,6 @@ class CFile extends CDocumentItem {
     $this->_ref_file_owner->load($this->file_owner);
   }
   
-  function loadView() {
-    $this->loadRefsFwd();
-  }
-
   function updateFormFields() {
     parent::updateFormFields();
     

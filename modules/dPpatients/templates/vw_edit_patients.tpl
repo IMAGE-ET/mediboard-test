@@ -2,6 +2,7 @@
 
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 {{mb_include_script module="dPpatients" script="siblings_checker"}}
+{{mb_include_script module="dPpatients" script="patient"}}
 
 {{if $app->user_prefs.VitaleVision}}
   {{include file="../../dPpatients/templates/inc_vitalevision.tpl"}}
@@ -54,12 +55,6 @@ function confirmCreation(oForm){
   
   SiblingsChecker.request(oForm);
   return false;
-}
-
-function printPatient(id) {
-  var url = new Url("dPpatients", "print_patient");
-  url.addParam("patient_id", id);
-  url.popup(700, 550, "Patient");
 }
 
 var tabs;
@@ -216,7 +211,7 @@ Main.add(function () {
           {{/if}}
         </button>
         
-        <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
+        <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
           {{tr}}Print{{/tr}}
         </button>
         

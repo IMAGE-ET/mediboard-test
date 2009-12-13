@@ -92,41 +92,43 @@ class CConsultAnesth extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
 
-    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade seekable";
+    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade seekable show|0";
     $specs["operation_id"]     = "ref class|COperation seekable";
     $specs["sejour_id"]        = "ref class|CSejour seekable";
     $specs["chir_id"]          = "ref class|CMediusers";
 
     $specs["date_interv"]      = "date";
     $specs["libelle_interv"]   = "str";
-    $specs["groupe"]           = "enum list|?|O|A|B|AB default|?";
-    $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
-    $specs["antecedents"]      = "text confidential";
+    $specs["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
+    $specs["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
+    
+		// @todo: Supprimer ces quatre champs
+		$specs["antecedents"]      = "text confidential";
     $specs["traitements"]      = "text confidential";
     $specs["tabac"]            = "text helped";
     $specs["oenolisme"]        = "text helped";
-    $specs["intubation"]       = "enum list|?|dents|bouche|cou";
-    $specs["biologie"]         = "enum list|?|NF|COAG|IONO";
-    $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue";
+		
+    $specs["biologie"]         = "enum list|?|NF|COAG|IONO show|0";
+    $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue show|0";
     $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
 
     // Données examens complementaires
-    $specs["rai"]              = "enum list|?|NEG|POS default|?";
-    $specs["hb"]               = "float min|0";
-    $specs["tp"]               = "float min|0 max|100";
-    $specs["tca"]              = "numchar maxLength|2";
-    $specs["tca_temoin"]       = "numchar maxLength|2";
-    $specs["creatinine"]       = "float";
-    $specs["na"]               = "float min|0";
-    $specs["k"]                = "float min|0";
-    $specs["tsivy"]            = "time";
-    $specs["plaquettes"]       = "numchar maxLength|4 pos";
-    $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
-    $specs["ht"]               = "float min|0 max|100";
-    $specs["ht_final"]         = "float min|0 max|100";
+    $specs["rai"]              = "enum list|?|NEG|POS default|? show|0";
+    $specs["hb"]               = "float min|0 show|0";
+    $specs["tp"]               = "float min|0 max|100 show|0";
+    $specs["tca"]              = "numchar maxLength|2 show|0";
+    $specs["tca_temoin"]       = "numchar maxLength|2 show|0";
+    $specs["creatinine"]       = "float show|0";
+    $specs["na"]               = "float min|0 show|0";
+    $specs["k"]                = "float min|0 show|0";
+    $specs["tsivy"]            = "time show|0";
+    $specs["plaquettes"]       = "numchar maxLength|4 pos show|0";
+    $specs["ecbu"]             = "enum list|?|NEG|POS default|? show|0";
+    $specs["ht"]               = "float min|0 max|100 show|0";
+    $specs["ht_final"]         = "float min|0 max|100 show|0";
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
-		$specs["date_analyse"]     = "date";
+		$specs["date_analyse"]     = "date show|0";
 
     // Champs pour les conditions d'intubation
     $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
@@ -213,8 +215,9 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadView() {
-    $this->loadRefsFwd();
-    $this->_ref_consultation->loadRefsActesCCAM();
+  	parent::loadView();
+    $this->_ref_consultation = $this->_fwd["consultation_id"];
+		$this->_ref_consultation->loadView();
   }
    
   function loadComplete(){

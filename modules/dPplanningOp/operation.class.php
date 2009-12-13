@@ -480,12 +480,6 @@ class COperation extends CCodable {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
-  function loadView() {
-    $this->loadRefsFwd();
-    $this->loadRefsActesCCAM();
-    $this->loadExtCodesCCAM(1);
-  }
-  
   function loadComplete() {
     parent::loadComplete();
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {

@@ -1,15 +1,14 @@
 {{assign var="document" value=$object}}
 
-<table class="tbl tooltip">
+{{if !$document->object_id}}
+<table class="tbl">
   <tr>
-    <th>
-      {{if !$document->object_id}}
-			Modèle : 
-			{{/if}}
-      {{$document}}
-    </th>
+    <th class="title">Modèle</th>
   </tr>
+</table>
+{{/if}}
   
+<table class="tbl">
   <tr>
     <td>
       <strong>{{mb_label object=$document field=compte_rendu_id}}:</strong>
@@ -49,3 +48,7 @@
 -->
 
 </table>
+
+<hr />
+
+{{include file=CMbObject_view.tpl}}

@@ -318,6 +318,7 @@ class CPerfusion extends CMbObject {
 	}
 	
   function loadView() {
+  	parent::loadView();
     $this->loadRefsLines();
     $this->loadRefsTransmissions();
   }

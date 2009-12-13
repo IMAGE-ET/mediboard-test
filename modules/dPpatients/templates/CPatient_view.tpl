@@ -55,24 +55,21 @@
 	
 	<tr>
 		<td colspan="10" class="button">
-      <script type="text/javascript">
-      viewDossierPatient = function(id) {
-        var url = new Url("dPpatients", "vw_full_patients", "tab");
-			  url.addParam("patient_id", id);
-			  url.redirectOpener();
-      }
-    	modifyPatient = function(id) {
-			  var url = new Url("dPpatients", "vw_edit_patients", "tab");
-			  url.addParam("patient_id", id);
-			  url.redirectOpener();
-			}
-      </script>
-			<button type="button" class="search" onclick="viewDossierPatient({{$patient->_id}});">
-				Dossier complet
-			</button>
-			<button type="button" class="print" onclick="modifyPatient({{$patient->_id}});">
-				{{tr}}Modify{{/tr}}
-			</button>
+			{{mb_include_script module="dPpatients" script="patient" ajax="true"}}
+
+      {{if $can->edit}}
+      <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}')">
+        {{tr}}Modify{{/tr}}
+      </button>
+      {{/if}}
+
+      <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
+        Dossier Complet
+      </button>
+      
+      <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
+        {{tr}}Print{{/tr}}
+      </button>
 		</td>
 	</tr>
 </table>

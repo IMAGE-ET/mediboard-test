@@ -103,6 +103,12 @@ class CCodable extends CMbObject {
   function loadRefPraticien() {
   }
   
+  function loadView() {
+    parent::loadView();
+    $this->loadRefsActesCCAM();
+    $this->loadExtCodesCCAM(1);
+  }
+	
   function getActeExecution() {
     $this->_acte_execution = mbDateTime();
   }

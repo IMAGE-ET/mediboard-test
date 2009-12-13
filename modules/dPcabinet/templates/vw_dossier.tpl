@@ -182,7 +182,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       </table>
     </td>
     <td id="vwPatient">
-    {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
+    {{mb_include module=dPpatients template=inc_vw_patient}}
     </td>
   </tr>
   {{/if}}

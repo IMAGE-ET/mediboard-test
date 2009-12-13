@@ -1,19 +1,5 @@
 <!-- $Id$ -->
 
-<script type="text/javascript">
-function view_history_patient(id){
-  var url = new Url("dPpatients", "vw_history");
-  url.addParam("patient_id", id);
-  url.popup(600, 500, "history");
-}
-
-function editPatient() {
-  var oForm = document.actionPat;
-  oForm.elements.tab.value = "vw_edit_patients";
-  oForm.submit();
-}
-</script>
-
 <table class="form">
   <tr>
     <th class="category" colspan="2">

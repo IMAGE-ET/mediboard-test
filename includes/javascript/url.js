@@ -115,13 +115,14 @@ var Url = Class.create({
   },
   
   redirectOpener: function() {
-    if(window.opener) {
+    if (window.opener) {
       window.opener.location.href = this.make();
-    } else {
+    } 
+		else {
       this.redirect();
     }
   },
-  
+	
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {
     this.addParam("dialog", 1);
   

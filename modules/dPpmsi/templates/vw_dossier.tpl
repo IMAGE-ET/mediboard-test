@@ -189,13 +189,13 @@ Main.add(function () {
         </tr>
       </table>
       </form>
-      {{if $patient->patient_id}}
+      {{if $patient->_id}}
       <div id="vwPatient">
       {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
       </div>
       {{/if}}
     </td>
-    {{if $patient->patient_id}}
+    {{if $patient->_id}}
     <td>
       <table class="form">
       {{if $patient->_ref_IPP}}

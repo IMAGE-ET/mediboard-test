@@ -144,14 +144,17 @@ class CConsultation extends CCodable {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable";
-    $specs["patient_id"]        = "ref class|CPatient purgeable seekable";
-    $specs["heure"]             = "time notNull";
-    $specs["duree"]             = "numchar maxLength|1";
-    $specs["secteur1"]          = "currency min|0";
-    $specs["secteur2"]          = "currency";
-    $specs["chrono"]            = "enum notNull list|16|32|48|64";
-    $specs["annule"]            = "bool";
+    $specs["sejour_id"]         = "ref class|CSejour";
+    $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|0";
+    $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|0";
+    $specs["categorie_id"]      = "ref class|CConsultationCategorie";
+		
+    $specs["heure"]             = "time notNull show|0";
+    $specs["duree"]             = "numchar maxLength|1 show|0";
+    $specs["secteur1"]          = "currency min|0 show|0";
+    $specs["secteur2"]          = "currency show|0";
+    $specs["chrono"]            = "enum notNull list|16|32|48|64 show|0";
+    $specs["annule"]            = "bool show|0";
     
     $specs["motif"]             = "text helped seekable";
     $specs["rques"]             = "text helped seekable";
@@ -160,18 +163,27 @@ class CConsultation extends CCodable {
     $specs["histoire_maladie"]  = "text helped seekable";
     $specs["conclusion"]        = "text helped seekable";
     
-    $specs["facture"]           = "bool default|0";
+    $specs["facture"]           = "bool default|0 show|0";
     
-    $specs["premiere"]          = "bool";
-    $specs["adresse"]           = "bool";
-    $specs["tarif"]             = "str";
-    $specs["arrivee"]           = "dateTime";
+    $specs["premiere"]          = "bool show|0";
+    $specs["adresse"]           = "bool show|0";
+    $specs["tarif"]             = "str show|0";
+    $specs["arrivee"]           = "dateTime show|0";
     $specs["concerne_ALD"]      = "bool";
 		
-    $specs["patient_date_reglement"]    = "date";
-    $specs["tiers_date_reglement"]      = "date";
-    $specs["du_patient"]                = "currency";
-    $specs["du_tiers"  ]                = "currency";
+    $specs["patient_date_reglement"]    = "date show|0";
+    $specs["tiers_date_reglement"]      = "date show|0";
+    $specs["du_patient"]                = "currency show|0";
+    $specs["du_tiers"  ]                = "currency show|0";
+		
+    $specs["accident_travail"]  = "date";
+
+    $specs["total_amo"]         = "currency show|0";
+    $specs["total_amc"]         = "currency show|0";
+    $specs["total_assure"]      = "currency show|0";
+
+    $specs["valide"]            = "bool show|0";
+
     $specs["_du_patient_restant"]       = "currency";
     $specs["_du_tiers_restant"]         = "currency";
     $specs["_reglements_total_patient"] = "currency";
@@ -179,9 +191,8 @@ class CConsultation extends CCodable {
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
     $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
     
-    $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date"]             = "date";
-    $specs["_datetime"]         = "dateTime";
+    $specs["_datetime"]         = "dateTime show|1";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
@@ -190,14 +201,8 @@ class CConsultation extends CCodable {
     $specs["_prat_id"]          = "";
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
-    $specs["_somme"]            = "currency";
-    $specs["valide"]            = "bool";
-    $specs["total_amo"]         = "currency";
-    $specs["total_amc"]         = "currency";
-    $specs["total_assure"]      = "currency";
+    $specs["_somme"]            = "currency";		
     
-    $specs["sejour_id"]         = "ref class|CSejour";
-    $specs["accident_travail"]  = "date";
     return $specs;
   }
   
@@ -323,10 +328,8 @@ class CConsultation extends CCodable {
   }
   
   function loadView() {
-  	$this->loadRefPlageConsult(1);
+  	parent::loadView();
     $this->loadRefsFichesExamen(); 
-    $this->loadRefsFwd(1);
-    $this->loadRefsActesCCAM();
   }
 
   /**

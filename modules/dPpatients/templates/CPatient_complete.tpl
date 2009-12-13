@@ -1,19 +1,21 @@
+{{mb_include_script module="dPpatients" script="patient" ajax=true}}
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">
     
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
      
-      <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->_id}})">
+      <a style="float:right;" href="#history-{{$object->_guid}}" onclick="Patient.history('{{$object->_id}}')">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
       
-      <a style="float:right;" href="#nothing" onclick="printPatient({{$object->_id}})">
+      <a style="float:right;" href="#print-{{$object->_guid}}" onclick="Patient.print('{{$object->_id}}')">
         <img src="images/icons/print.png" alt="imprimer" title="Imprimer la fiche patient" />
       </a>
       
       {{if $can->edit}}
-      <a style="float:right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$object->_id}}">
+      <a style="float:right;" href="#edit-{{$object->_guid}}" onclick="Patient.edit('{{$object->_id}}')">
         <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient" />
       </a>
       {{/if}}

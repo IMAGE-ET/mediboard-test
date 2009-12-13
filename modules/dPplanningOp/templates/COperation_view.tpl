@@ -13,24 +13,15 @@
   
   <tr>
     <td class="button">
-      <script type="text/javascript">
-      modifyIntervention = function(id) {
-        var url = new Url("dPplanningOp", "vw_edit_planning", "tab");
-			  url.addParam("operation_id", id);
-			  url.redirectOpener();
-      }
-    	printIntervention = function(id) {
-			  var url = new Url("dPplanningOp", "view_planning", "tab");
-			  url.addParam("operation_id", id);
-			  url.popup(700, 550, "Admission");
-			}
-      </script>
+      {{mb_include_script module="dPplanningOp" script="operation" ajax="true"}}
+    	
       {{if $can->edit}}
-			<button type="button" class="edit" onclick="modifyIntervention({{$operation->_id}});">
+			<button type="button" class="edit" onclick="Operation.edit('{{$operation->_id}}', '{{$operation->plageop_id}}');">
 				{{tr}}Modify{{/tr}}
 			</button>
       {{/if}}
-			<button type="button" class="print" onclick="printIntervention({{$operation->_id}});">
+
+			<button type="button" class="print" onclick="Operation.print('{{$operation->_id}}');">
 				{{tr}}Print{{/tr}}
 			</button>
     </td>
