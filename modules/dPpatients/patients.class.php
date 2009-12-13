@@ -284,7 +284,7 @@ class CPatient extends CMbObject {
     $specs["_pays_naissance_insee"]       = "str";
     $specs["_assure_pays_naissance_insee"]= "str";
     $specs["_art115"]                     = "bool";
-    $specs["_age"]                        = "num";
+    $specs["_age"]                        = "num show|1";
     $specs["_age_assure"]                 = "num";
     return $specs;
   }

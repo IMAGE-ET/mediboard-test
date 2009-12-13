@@ -3,7 +3,7 @@
 <table class="tbl">
   <tr>
     <th colspan="2" class="title text">
-      {{$patient->_view}}
+      {{$patient}}
     </th>
   </tr>
   <tr>
@@ -12,44 +12,26 @@
   </tr>
   <tr>
     <td>
-      <strong>{{mb_label object=$patient field="nom"}} :</strong>
-      {{mb_value object=$patient field="nom"}}
-      <br />
-      <strong>{{mb_label object=$patient field="prenom"}} :</strong>
-      {{mb_value object=$patient field="prenom"}}{{if $patient->prenom_2}}, 
-      {{mb_value object=$patient field="prenom_2"}}{{/if}}{{if $patient->prenom_3}}, 
-      {{mb_value object=$patient field="prenom_3"}}{{/if}}{{if $patient->prenom_4}}, 
-      {{mb_value object=$patient field="prenom_4"}} {{/if}}
-      <br />
-      <strong>{{mb_label object=$patient field="sexe"}} :</strong>
-      {{mb_value object=$patient field="sexe"}}
-      <br />
-      <strong>{{mb_label object=$patient field="naissance"}} :</strong>
-      {{mb_value object=$patient field="naissance"}}
-      <br />
-      <strong>{{mb_label object=$patient field="profession"}} :</strong>
-      {{mb_value object=$patient field="profession"}}
-      <br />
-      <strong>{{mb_label object=$patient field="matricule"}} :</strong>
-      {{mb_value object=$patient field="matricule"}}
+      {{mb_include module=system template=inc_field_view prop=nom}}
+      {{mb_include module=system template=inc_field_view prop=nom_jeune_fille}}
+      {{mb_include module=system template=inc_field_view prop=prenom}}
+      {{mb_include module=system template=inc_field_view prop=prenom_2}}
+      {{mb_include module=system template=inc_field_view prop=prenom_3}}
+      {{mb_include module=system template=inc_field_view prop=prenom_4}}
+
+      {{mb_include module=system template=inc_field_view prop=sexe}}
+      {{mb_include module=system template=inc_field_view prop=naissance}}
+      {{mb_include module=system template=inc_field_view prop=_age}}
+      {{mb_include module=system template=inc_field_view prop=profession}}
+      {{mb_include module=system template=inc_field_view prop=matricule}}
     </td>
     <td>
-      <strong>{{mb_label object=$patient field="adresse"}} :</strong>
-      {{mb_value object=$patient field="adresse"}}
-      <strong>{{mb_label object=$patient field="cp"}} :</strong>
-      {{mb_value object=$patient field="cp"}}
-      <br />
-      <strong>{{mb_label object=$patient field="ville"}} :</strong>
-      {{mb_value object=$patient field="ville"}}
-      <br />
-      <strong>{{mb_label object=$patient field="tel"}} :</strong>
-      {{mb_value object=$patient field="tel"}}
-      <br />
-      <strong>{{mb_label object=$patient field="tel2"}} :</strong>
-      {{mb_value object=$patient field="tel2"}}
-      <br />
-      <strong>{{mb_label object=$patient field="rques"}} :</strong>
-      {{mb_value object=$patient field="rques"}}
+      {{mb_include module=system template=inc_field_view prop=adresse}}
+      {{mb_include module=system template=inc_field_view prop=cp}}
+      {{mb_include module=system template=inc_field_view prop=ville}}
+      {{mb_include module=system template=inc_field_view prop=tel}}
+      {{mb_include module=system template=inc_field_view prop=tel2}}
+      {{mb_include module=system template=inc_field_view prop=rques}}
     </td>
   </tr>
 	
