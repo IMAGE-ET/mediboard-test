@@ -5,11 +5,14 @@
 
 var ViewFullPatient = {
   select: function(eLink) {
-    // Select current row
-    if (this.eCurrent) {
-      this.eCurrent.removeClassName("selected");
+    // Unselect previous row
+    if (this.idCurrent) {
+      $(this.idCurrent).removeClassName("selected");
     }
-    this.eCurrent = $(eLink).up(2).addClassName("selected");
+		
+    // Select current row
+    this.idCurrent = $(eLink).up(1).identify();
+		$(this.idCurrent).addClassName("selected");
   },
   
   main: function() {
@@ -36,7 +39,7 @@ function popEtatSejour(sejour_id) {
 
 <tr>
   <th class="title" colspan="2">
-    <a href="#" onclick="viewCompleteItem('CPatient', {{$patient->_id}}); ViewFullPatient.select(this)">
+    <a href="#" onclick="viewCompleteItem('{{$patient->_guid}}'); ViewFullPatient.select(this)">
       {{$patient->_view}} ({{$patient->_age}} ans)
     </a>
   </th>
@@ -56,7 +59,7 @@ function popEtatSejour(sejour_id) {
           view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })"
         title="{{$patient->_nb_files_docs}} doc(s)">
         {{$patient->_nb_files_docs}}
-        <img align="top" src="images/icons/{{if !$patient->_nb_files_docs}}next_red.png{{else}}next.png{{/if}}" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
+        <img align="top" src="images/icons/{{if !$patient->_nb_files_docs}}next_gray.png{{else}}next.png{{/if}}" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
       </a>
     </div>
     {{/if}} 
@@ -72,43 +75,41 @@ function popEtatSejour(sejour_id) {
 
 <tbody class="patientEffect" style="display: none" id="sejours">
 
-{{foreach from=$patient->_ref_sejours item=curr_sejour}}
-<tr id="CSejour-{{$curr_sejour->_id}}">
+{{foreach from=$patient->_ref_sejours item=_sejour}}
+<tr id="CSejour-{{$_sejour->_id}}">
   <td>
-  	<button class="lookup notext" onclick="popEtatSejour({{$curr_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
-    <a title="Modifier le séjour" class="button edit notext" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
-      {{tr}}Edit{{/tr}}
-    </a>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sejour->_guid}}');"
-          onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$curr_sejour->_id}}');{{else}}viewCompleteItem('{{$curr_sejour->_class_name}}','{{$curr_sejour->_id}}');{{/if}} ViewFullPatient.select(this)">
-      {{$curr_sejour->_shortview}} 
+  	<button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
+
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');"
+          onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
+      {{$_sejour->_shortview}} 
     </span>
     <script type="text/javascript">
-      ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
+      ImedsResultsWatcher.addSejour('{{$_sejour->_id}}', '{{$_sejour->_num_dossier}}');
     </script>
   </td>
 
-	{{assign var=praticien value=$curr_sejour->_ref_praticien}}
-	{{if $curr_sejour->group_id == $g}}
-  <td {{if $curr_sejour->annule}}class="cancelled"{{/if}}>
+	{{assign var=praticien value=$_sejour->_ref_praticien}}
+	{{if $_sejour->group_id == $g}}
+  <td {{if $_sejour->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
   </td>
   {{else}}
   <td style="background-color:#afa">
-    {{$curr_sejour->_ref_group->text|upper}}
+    {{$_sejour->_ref_group->text|upper}}
   </td>
   {{/if}}
   
   <td style="text-align:right;">
-  {{if $curr_sejour->_canRead}}
+  {{if $_sejour->_canRead}}
     {{if $isImedsInstalled}}
-    <div id="labo_for_{{$curr_sejour->_id}}" style="display: none; float: left;">
-    <a href="#" onclick="view_labo_sejour({{$curr_sejour->_id}})">
+    <div id="labo_for_{{$_sejour->_id}}" style="display: none; float: left;">
+    <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
       <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
     </a>
     </div>
-    <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none; float: left;">
-    <a href="#" onclick="view_labo_sejour({{$curr_sejour->_id}})">
+    <div id="labo_hot_for_{{$_sejour->_id}}" style="display: none; float: left;">
+    <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
       <img align="top" src="images/icons/labo_hot.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
     </a>
     </div>
@@ -116,18 +117,18 @@ function popEtatSejour(sejour_id) {
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 
       keywords: '', 
-      id: {{$curr_sejour->_id}}, 
-      view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
-      title="{{$curr_sejour->_nb_files_docs}} doc(s)">
-      {{$curr_sejour->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$curr_sejour->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+      id: {{$_sejour->_id}}, 
+      view:'{{$_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
+      title="{{$_sejour->_nb_files_docs}} doc(s)">
+      {{$_sejour->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$_sejour->_nb_files_docs}}_gray{{/if}}.png" title="{{$_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
     {{/if}}         
   </td>
 </tr>
 
-{{if $curr_sejour->_ref_rpu && $curr_sejour->_ref_rpu->_id}}
-{{assign var=rpu value=$curr_sejour->_ref_rpu}}
+{{if $_sejour->_ref_rpu && $_sejour->_ref_rpu->_id}}
+{{assign var=rpu value=$_sejour->_ref_rpu}}
 <tr>
   <td style="padding-left: 20px;" colspan="2">
     Passage aux urgences
@@ -141,7 +142,7 @@ function popEtatSejour(sejour_id) {
       view:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'} )"
       title="{{$rpu->_nb_files_docs}} doc(s)">
       {{$rpu->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$rpu->_nb_files_docs}}_red{{/if}}.png" title="{{$rpu->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+      <img align="top" src="images/icons/next{{if !$rpu->_nb_files_docs}}_gray{{/if}}.png" title="{{$rpu->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
     {{/if}} 
   </td>
@@ -149,29 +150,20 @@ function popEtatSejour(sejour_id) {
 {{/if}}
 
 <!-- Si le sejour a un RPU et une consultation associée-->
-{{if $curr_sejour->_ref_rpu && $curr_sejour->_ref_rpu->_id && $curr_sejour->_ref_rpu->_ref_consult->_id}}
-{{assign var="curr_consult" value=$curr_sejour->_ref_rpu->_ref_consult}}
+{{if $_sejour->_ref_rpu && $_sejour->_ref_rpu->_id && $_sejour->_ref_rpu->_ref_consult->_id}}
+{{assign var="_consult" value=$_sejour->_ref_rpu->_ref_consult}}
 <tr>
   <td style="padding-left: 20px;">
-    <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-      <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
-    </a>
-    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-      <img src="images/icons/edit.png" alt="modifier" title="modifier" />
-    </a>
-
-    {{assign var="object_id" value=$curr_consult->_id}}    
-    {{assign var="object_class" value="CConsultation"}}
     <a href="#"
-      onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}');"
-      onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
-      Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
+      onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');"
+      onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
+      Le {{$_consult->_datetime|date_format:$dPconfig.date}}
     </a>
   </td>
   
-  {{assign var=praticien value=$curr_consult->_ref_chir}}
+  {{assign var=praticien value=$_consult->_ref_chir}}
   
-  {{if $curr_consult->annule}}
+  {{if $_consult->annule}}
   <td class="cancelled">
   {{else}}
   <td>
@@ -181,15 +173,15 @@ function popEtatSejour(sejour_id) {
 
   <td style="text-align: right;">
  
-  {{if $curr_sejour->_canRead}}
-    <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+  {{if $_sejour->_canRead}}
+    <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
       onclick="setObject( {
         objClass: 'CConsultation', 
         keywords: '', 
-        id: {{$curr_consult->consultation_id}}, 
-        view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-      {{$curr_consult->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+        id: {{$_consult->consultation_id}}, 
+        view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
+      {{$_consult->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
    {{/if}}
   </td>
@@ -197,66 +189,57 @@ function popEtatSejour(sejour_id) {
 
 {{/if}}
 
-{{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+{{foreach from=$_sejour->_ref_operations item=_op}}
 <tr>
   <td style="padding-left: 20px;">
-    <a title="Modifier l'intervention" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
-      <img src="images/icons/edit.png" alt="Planifier"/>
-    </a>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')"
-          onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
-      Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')"
+          onclick="viewCompleteItem('{{$_op->_guid}}'); ViewFullPatient.select(this)">
+      Interv. le {{$_op->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>
 
-  {{assign var=praticien value=$curr_op->_ref_chir}}
-	{{if $curr_sejour->group_id == $g}}
-  <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
+  {{assign var=praticien value=$_op->_ref_chir}}
+	{{if $_sejour->group_id == $g}}
+  <td {{if $_op->annulee}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
   </td>
   {{else}}
   <td style="background-color:#afa">
-    {{$curr_sejour->_ref_group->text|upper}}
+    {{$_sejour->_ref_group->text|upper}}
   </td>
   {{/if}}
 
   <td style="text-align:right;">
-  {{if $curr_op->_canRead}}
+  {{if $_op->_canRead}}
     <a href="#" onclick="setObject( {
       objClass: 'COperation', 
       keywords: '', 
-      id: {{$curr_op->operation_id}}, 
-      view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )"
-      title="{{$curr_op->_nb_files_docs}} doc(s)">
-      {{$curr_op->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$curr_op->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+      id: {{$_op->operation_id}}, 
+      view:'{{$_op->_view|smarty:nodefaults|JSAttribute}}'} )"
+      title="{{$_op->_nb_files_docs}} doc(s)">
+      {{$_op->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$_op->_nb_files_docs}}_gray{{/if}}.png" title="{{$_op->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
     {{/if}} 
   </td>
 </tr>
 
-{{assign var="consult_anesth" value=$curr_op->_ref_consult_anesth}}
+{{assign var="consult_anesth" value=$_op->_ref_consult_anesth}}
 {{if $consult_anesth->_id}}
-{{assign var="curr_consult" value=$consult_anesth->_ref_consultation}}
+{{assign var="_consult" value=$consult_anesth->_ref_consultation}}
 <tr>
   <td style="padding-left: 20px;">
-    <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-      <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
-    </a>
-    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-      <img src="images/icons/edit.png" alt="modifier" title="modifier" />
-    </a>
-
-    <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
-          onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
-      Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
+    <span
+      {{if $consult_anesth->_id}}style="padding-left: 20px; background: url(images/icons/anesth.png) no-repeat center left;"{{/if}} 
+		  onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
+      onclick="viewCompleteItem('{{$consult_anesth->_guid}}'); ViewFullPatient.select(this)">
+      Le {{$_consult->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>
 
-  {{assign var=praticien value=$curr_consult->_ref_chir}}
-  {{assign var=praticien value=$curr_consult->_ref_chir}}
-  {{if $curr_consult->annule}}
+  {{assign var=praticien value=$_consult->_ref_chir}}
+  {{assign var=praticien value=$_consult->_ref_chir}}
+  {{if $_consult->annule}}
   <td class="cancelled">[Consult annulée]</td>
   {{else}}
   <td>
@@ -265,15 +248,15 @@ function popEtatSejour(sejour_id) {
   {{/if}}
   
   <td style="text-align:right;">
-  {{if $curr_consult->_canRead}}
-    <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+  {{if $_consult->_canRead}}
+    <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
       onclick="setObject( {
         objClass: 'CConsultation', 
         keywords: '', 
-        id: {{$curr_consult->consultation_id}}, 
-        view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-      {{$curr_consult->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+        id: {{$_consult->consultation_id}}, 
+        view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
+      {{$_consult->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
     {{/if}}
   </td>
@@ -296,33 +279,25 @@ function popEtatSejour(sejour_id) {
 
 <tbody class="patientEffect" style="display: none" id="consultations">
 
-{{foreach from=$patient->_ref_consultations item=curr_consult}}
+{{foreach from=$patient->_ref_consultations item=_consult}}
 <tr>
   <td>
-    <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
-      <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
-    </a>
-    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
-      <img src="images/icons/edit.png" alt="modifier" title="modifier" />
-    </a>
-    
-    {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
+    {{assign var=consult_anesth value=$_consult->_ref_consult_anesth}}
     {{if $consult_anesth->_id}}
       {{assign var=object value=$consult_anesth}}
-      <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
     {{else}}
-      {{assign var=object value=$curr_consult}}
+      {{assign var=object value=$_consult}}
     {{/if}}
-    
-<!--  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')" -->
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');"
-          onclick="viewCompleteItem('{{$object->_class_name}}', {{$object->_id}}); ViewFullPatient.select(this)">
-      Le {{$curr_consult->_datetime|date_format:$dPconfig.date}}
+    <span
+		  {{if $consult_anesth->_id}}style="padding-left: 20px; background: url(images/icons/anesth.png) no-repeat center left;"{{/if}} 
+		  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');"
+      onclick="viewCompleteItem('{{$object->_guid}}'); ViewFullPatient.select(this)">
+      Le {{$_consult->_datetime|date_format:$dPconfig.date}}
     </span>
   </td>
   
-  {{assign var=praticien value=$curr_consult->_ref_chir}}
-  {{if $curr_consult->annule}}
+  {{assign var=praticien value=$_consult->_ref_chir}}
+  {{if $_consult->annule}}
   <td class="cancelled">
   {{else}}
   <td>
@@ -331,15 +306,15 @@ function popEtatSejour(sejour_id) {
 	</td>
 
   <td style="text-align:right;">
-  {{if $curr_consult->_canRead}}
-    <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+  {{if $_consult->_canRead}}
+    <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
       onclick="setObject( {
         objClass: 'CConsultation', 
         keywords: '', 
-        id: {{$curr_consult->consultation_id}}, 
-        view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-      {{$curr_consult->_nb_files_docs}}
-      <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+        id: {{$_consult->consultation_id}}, 
+        view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
+      {{$_consult->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
     {{/if}}
   </td>
@@ -417,11 +392,11 @@ function popEtatSejour(sejour_id) {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->patient_id}}" />
       <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
-      <select name="prat_id" class="notNull ref">
-        <option value="">&mdash; Choisir un praticien</option>
-        {{foreach from=$listPrat item=curr_prat}}
-          <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
-            {{$curr_prat->_view}}
+      <select name="prat_id" class="notNull ref"  style="width: 140px;">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$listPrat item=_prat}}
+          <option value="{{$_prat->user_id}}" {{if $_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
+            {{$_prat->_view}}
           </option>
         {{/foreach}}
       </select>

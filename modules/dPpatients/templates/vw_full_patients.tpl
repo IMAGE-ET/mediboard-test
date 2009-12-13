@@ -6,10 +6,9 @@
 
 <script type="text/javascript">
 
-function viewCompleteItem(sClassName, id) {
+function viewCompleteItem(object_guid) {
   var url = new Url("system", "httpreq_vw_complete_object");
-  url.addParam("object_class", sClassName);
-  url.addParam("object_id", id);
+  url.addParam("object_guid", object_guid);
   url.requestUpdate("listView", { 
     onComplete: initNotes
   } );
@@ -62,39 +61,20 @@ function view_labo_sejour(sejour_id) {
   url.requestUpdate('listView');
 }
 
-function view_history_patient(id){
-  var url = new Url("dPpatients", "vw_history");
-  url.addParam("patient_id", id);
-  url.popup(600, 500, "history");
-}
-
-function editPatient() {
-  var oForm = document.actionPat;
-  var oTabField = oForm.tab;
-  oTabField.value = "vw_edit_patients";
-  oForm.submit();
-}
-
-function printPatient(id) {
-  var url = new Url("dPpatients", "print_patient");
-  url.addParam("patient_id", id);
-  url.popup(700, 550, "Patient");
-}
-
 Main.add(function () {
   
   ViewFullPatient.main();
   
   {{if $consultation_id}}
-  viewCompleteItem('CConsultation', "{{$consultation_id}}");
+  viewCompleteItem('CConsultation-{{$consultation_id}}');
   {{/if}}
   
   {{if $operation_id}}
-  viewCompleteItem('COperation', "{{$operation_id}}");
+  viewCompleteItem('COperation-{{$operation_id}}');
   {{/if}}
   
   {{if $sejour_id}}
-  //viewCompleteItem('CSejour', "{{$sejour_id}}");
+  //viewCompleteItem('CSejour-{{$sejour_id}}');
   viewDossierSejour('{{$sejour_id}}');
   {{/if}}
   

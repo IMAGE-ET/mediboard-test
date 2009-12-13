@@ -1,50 +1,13 @@
 <!-- $Id$ -->
 {{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPpatients" script="patient"}}
 
 <script type="text/javascript">
-function view_history_patient(id){
-  var url = new Url("dPpatients", "vw_history");
-  url.addParam("patient_id", id);
-  url.popup(600, 500, "patient history");
-}
 
-function viewPatient(form) {
-  form = form || document.forms.actionPat;
-  $V(form.tab, "vw_full_patients");
-  form.submit();
-}
-
-function editPatient(form) {
-	form = form || document.forms.actionPat;
-  $V(form.tab, "vw_edit_patients");
-  form.submit();
-}
-
-function printPatient(id) {
-  var url = new Url("dPpatients", "print_patient");
-  url.addParam("patient_id", id);
-  url.popup(700, 550, "Patient");
-}
-
-function popFile(objectClass, objectId, elementClass, elementId){
-  var url = new Url;
-  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
-}
-
-function printIntervention(id) {
-  var url = new Url("dPplanningOp", "view_planning");
-  url.addParam("operation_id", id);
-  url.popup(700, 550, "Admission");
-}
-
-function reloadVwPatient(){
-  var mainUrl = new Url("dPpatients", "httpreq_vw_patient");
-  mainUrl.addParam("patient_id", document.actionPat.patient_id.value);
-  mainUrl.requestUpdate('vwPatient');
-}
-
-Document.refreshList = function(){
-  reloadVwPatient();
+Document.refreshList = function() {
+  new Url("dPpatients", "httpreq_vw_patient").
+    addParam("patient_id", document.actionPat.patient_id.value).
+    requestUpdate('vwPatient');
 }
 </script>
 
@@ -59,7 +22,7 @@ Document.refreshList = function(){
 
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
 
-      <a style="float:right;" href="#" onclick="view_history_patient({{$patient->_id}})">
+      <a style="float:right;" href="#History-{{$patient->_guid}}" onclick="Patient.history('{{$patient->_id}}')">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
 
@@ -71,7 +34,6 @@ Document.refreshList = function(){
 
   <tr>
     <th class="category" colspan="3">
-      
       Identité {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
     </th>
     <th class="category" colspan="2">Coordonnées</th>
@@ -79,7 +41,7 @@ Document.refreshList = function(){
 
   <tr>
     <td rowspan="4" style="width: 0.1%; vertical-align: middle; text-align: center;">
-		  {{include file=../../dPpatients/templates/inc_vw_photo_identite.tpl mode="read" size="64"}}
+		  {{mb_include module=dPpatients template=inc_vw_photo_identite mode="read" size="64"}}
 		</td>
     <th>{{mb_label object=$patient field="nom"}}</th>
     <td>{{mb_value object=$patient field="nom"}}</td>
@@ -155,30 +117,26 @@ Document.refreshList = function(){
   
   <tr>
     <td class="button" colspan="10">
-      <form name="actionPat" action="?" method="get">
-      <input type="hidden" name="m" value="dPpatients" />
-      <input type="hidden" name="tab" value="vw_idx_patients" />
-      <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
-      {{if @$useVitale}}
-      <input type="hidden" name="useVitale" value="1" />
-      {{/if}}
-      
-      <button type="button" class="search" onclick="viewPatient()">
+      <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
         Dossier Complet
       </button>
-      <button type="button" class="print" onclick="printPatient({{$patient->_id}})">
+			
+      <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
         {{tr}}Print{{/tr}}
       </button>
+			
       {{if $canPatients->edit}}
-      <button type="button" class="edit" onclick="editPatient()">
+      {{if !@$useVitale}}
+      {{assign var=useVitale value=0}}
+      {{/if}}
+      <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}', '{{$useVitale}}')">
         {{tr}}Modify{{/tr}}
-        {{if @$useVitale}}avec Vitale{{/if}}
+        {{if $useVitale}}avec Vitale{{/if}}
       </button>
       {{/if}}
-      </form>
 			
       {{if $can->admin}} 
-      <form name="editPatientPurge" action="?m={{$m}}&amp;tab=vw_idx_patients" method="post" onsubmit="return confirmCreation(this)">
+      <form name="Purge-{{$patient->_guid}}" action="?m={{$m}}&amp;tab=vw_idx_patients" method="post" onsubmit="return confirmCreation(this)">
       <input type="hidden" name="dosql" value="do_patients_aed" />
 			<input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="del" value="0" />
@@ -186,18 +144,17 @@ Document.refreshList = function(){
       <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
               
        <script type="text/javascript">
-         function confirmPurge() {
-           var oForm = document.editPatientPurge;
-           if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier de ce patient")) {
-             oForm._purge.value = "1";
-             confirmDeletion(oForm,  {
+         function confirmPurge(form) {
+           if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier d'un patient !")) {
+             form._purge.value = "1";
+             confirmDeletion(form,  {
                typeName:'le patient',
                objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'
              } );
            }
          }
        </script>
-       <button type="button" class="cancel" onclick="confirmPurge();">
+       <button type="button" class="cancel" onclick="confirmPurge(this.form);">
          {{tr}}Purge{{/tr}}
        </button>
       </form>

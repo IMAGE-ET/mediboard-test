@@ -4,7 +4,7 @@
     var url = new Url("dPpatients", "httpreq_vw_photo_identite");
     url.addParam("patient_id", "{{$patient->_id}}");
     url.addParam("mode", "edit");
-    url.requestUpdate("{{$patient->_guid}}-identity"});
+    url.requestUpdate("{{$patient->_guid}}-identity");
   }
 
   deletePhoto = function(file_id){
