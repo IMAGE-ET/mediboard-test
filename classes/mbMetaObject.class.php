@@ -26,7 +26,7 @@ class CMbMetaObject extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class";
-    $specs["object_class"] = "str notNull";
+    $specs["object_class"] = "str notNull show|0";
     return $specs;
   }
     
