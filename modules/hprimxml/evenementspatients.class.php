@@ -507,7 +507,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   function mappingDebiteurs($node, $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);
-    mbTrace($this->saveXML(), "personne", true);
     // Penser a parcourir tous les debiteurs par la suite
     $debiteur = $xpath->queryUniqueNode("hprim:debiteur", $node);
 
