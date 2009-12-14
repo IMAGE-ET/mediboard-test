@@ -4,6 +4,25 @@
 <input type="hidden" name="m" value="system" />
 
 <table class="form">
+  <tr>
+    <th class="category" colspan="6">Option de la DHE simplifiée</th>
+  </tr>
+  
+  {{assign var="class" value="CSejour"}}
+  {{assign var="var"   value="easy_service"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  {{assign var="var"   value="easy_chambre_simple"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  
+  {{assign var="class" value="COperation"}}
+  {{assign var="var"   value="easy_horaire_voulu"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  {{assign var="var"   value="easy_materiel"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  {{assign var="var"   value="easy_remarques"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  {{assign var="var"   value="easy_regime"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
 
   {{assign var="class" value="COperation"}}
   <tr>
@@ -15,14 +34,14 @@
     <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
+      </label>
     </th>
     <td colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
+    </td>           
   </tr>
   
   {{assign var="var" value="horaire_voulu"}}

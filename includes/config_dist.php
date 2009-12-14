@@ -174,17 +174,23 @@ $dPconfig["dPadmissions"] = array (
 );
 
 $dPconfig["dPplanningOp"]["COperation"] = array (
-  "duree_deb"        => "0",
-  "duree_fin"        => "10",
-  "hour_urgence_deb" => "0",
-  "hour_urgence_fin" => "23",
-  "min_intervalle"   => "15",
-  "locked"           => "0",
-  "horaire_voulu"    => "0",
-  "verif_cote"       => "0",
+  "easy_horaire_voulu" => "1",
+  "easy_materiel"      => "0",
+  "easy_remarques"     => "0",
+  "easy_regime" => "1",
+  "duree_deb"          => "0",
+  "duree_fin"          => "10",
+  "hour_urgence_deb"   => "0",
+  "hour_urgence_fin"   => "23",
+  "min_intervalle"     => "15",
+  "locked"             => "0",
+  "horaire_voulu"      => "0",
+  "verif_cote"         => "0",
 );
   
 $dPconfig["dPplanningOp"]["CSejour"] = array (
+  "easy_service"        => "0",
+  "easy_chambre_simple" => "1",
   "patient_id"          => "1",
   "modif_SHS"           => "1",
   "heure_deb"           => "0",

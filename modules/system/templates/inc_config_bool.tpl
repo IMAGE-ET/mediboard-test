@@ -19,13 +19,13 @@
 {{/if}}
 	
 <tr>
-  <th>
+  <th {{if @$thcolspan}}colspan="{{$thcolspan}}"{{/if}}>
     <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
       {{tr}}{{$locale}}{{/tr}}
     </label>  
   </th>
 
-  <td>
+  <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
     <label for="{{$field}}_1">{{tr}}bool.1{{/tr}}</label>
     <input type="radio" name="{{$field}}" value="1" {{if $value == "1"}}checked="checked"{{/if}}/>
     <label for="{{$field}}_0">{{tr}}bool.0{{/tr}}</label>
