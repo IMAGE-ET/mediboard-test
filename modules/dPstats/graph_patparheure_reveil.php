@@ -113,8 +113,8 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   $serie_moyenne["label"] = "moyenne";
   $serie_max["label"]     = "max";
   
-  $series[] = $serie_max;
   $series[] = $serie_moyenne;
+  $series[] = $serie_max;
   
   // Set up the title for the graph
   $title = "Patients moyens et max / heure du jour";
