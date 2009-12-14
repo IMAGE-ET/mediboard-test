@@ -13,17 +13,12 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
   }
   
   function doStore () {
-    global $AppUI;
-
-    // Get older function permission
-    $old = new CMediusers();
-    $old->load($this->_obj->user_id);
-
-    
+  	// keep track of former values for fieldModified below
+		$this->_obj->loadOldObject();
+		
     if ($msg = $this->_obj->store()) {
     	CAppUI::setMsg($msg, UI_MSG_ERROR);
     	if ($this->redirectError) {
-      	//CAppUI::setMsg($msg, UI_MSG_ERROR);
         CAppUI::redirect($this->redirectError);
       }
     } 
@@ -31,16 +26,14 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       // Keep trace for redirections
       CValue::setSession($this->objectKeyGetVarName, $this->_obj->_id);
       
-      // si modifDroit = 0, pas le droit de les modifier
-      $modifDroit = CValue::postOrSessionAbs("modifDroit", "1");
+      $isNotNew = @$_POST[$this->objectKeyGetVarName];
       
       // Insert new group and function permission
-      if($modifDroit){
+      if ($this->_obj->fieldModified("function_id") || !$isNotNew) {
         $this->_obj->insFunctionPermission(); 
         $this->_obj->insGroupPermission();
       }
       
-      $isNotNew = @$_POST[$this->objectKeyGetVarName];
       CAppUI::setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         CAppUI::redirect($this->redirectStore);

@@ -25,7 +25,6 @@ Main.add(function () {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="user_id" value="{{$user->user_id}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="modifDroit" value="0" />
       <table class="form">
         <tr>
           <th class="category" colspan="2">
