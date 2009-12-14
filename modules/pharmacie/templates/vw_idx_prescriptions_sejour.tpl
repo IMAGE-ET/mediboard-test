@@ -88,7 +88,7 @@ Main.add(function () {
 		  <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
       <table class="tbl" id="prescriptions-list" style="width:240px;">  
         <tr>
-          <th>Prescriptions</th>
+          <th>Prescriptions ({{$prescriptions|@count}})</th>
         </tr>
 				{{foreach from=$prescriptions item=_prescription}}
 				<tr>
