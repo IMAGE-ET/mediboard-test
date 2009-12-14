@@ -22,7 +22,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   $prat->load($prat_id);
 
   $ticks = array();
-  for($i = "8"; $i <= "21"; $i = $i + 1) {
+  for($i = "7"; $i <= "21"; $i = $i + 1) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", "$i:00:00", "%Hh%M"));
   }
   
@@ -107,7 +107,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   } else {
     $serie_moyenne["data"][] = array(count($ticks), 0);
   }
-  $serie_max["data"][] = array(count($ticks), 0);
+  //$serie_max["data"][] = array(count($ticks), 0);
   $ticks[] = array(count($ticks), "Erreurs");
   
   $serie_moyenne["label"] = "moyenne";
