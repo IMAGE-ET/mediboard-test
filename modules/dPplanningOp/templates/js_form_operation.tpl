@@ -177,13 +177,10 @@ function synchroPrat() {
   updateTime();
 }
 
-function synchroService() {
-  var oOpForm = document.editOpEasy;
-  var oSejourForm = document.editSejour;
-  if (!oSejourForm.sejour_id.value) {
-    $V(oSejourForm.service_id, oOpForm.service_id.value);
-  }
-  updateTime();
+
+function synchroService(element) {
+  var oOtherForm = element.form.name == "editSejour" ? document.editOpEasy : document.editSejour;
+  $V(oOtherForm[element.name], element.value);
 }
 
 function updateEntreePrevue() {
