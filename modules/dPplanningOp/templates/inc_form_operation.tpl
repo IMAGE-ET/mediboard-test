@@ -233,8 +233,8 @@ CCAMSelector.init = function(){
 
   <tr>
     <td style="width: 33%;">{{mb_field object=$op field="examen"}}</td>
-    <td style="width: 33%;">{{mb_field object=$op field="materiel"}}</td>
-    <td style="width: 33%;">{{mb_field object=$op field="rques"}}</td>
+    <td style="width: 33%;">{{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}</td>
+    <td style="width: 33%;">{{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}</td>
   </tr>
   
   {{if $op->_count_actes}}

@@ -29,6 +29,7 @@
     </td>
   </tr>
   
+	{{if $dPconfig.dPplanningOp.CSejour.easy_service}}
   <!-- Selection du service -->
   <tr>
 	  <th>
@@ -45,7 +46,9 @@
 	    </select>
 	  </td>
 	</tr>
-  
+  {{/if}}
+	
+	
   <!-- Affichage du libelle -->
   <tr>
     <th>{{mb_label object=$op field="libelle"}}</th>
@@ -160,18 +163,30 @@
     </td>
   </tr>
   
-  <!-- Selection du type de chambre -->
-  <tr>
-    <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-    <td>
-      {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
-    </td>
-    <td class="button">
-      <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
-    </td>
-  </tr>
   
-  {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+	{{if $dPconfig.dPplanningOp.CSejour.easy_chambre_simple || $dPconfig.dPplanningOp.COperation.easy_regime}}
+  <tr>
+  	{{if $dPconfig.dPplanningOp.CSejour.easy_chambre_simple}}
+      <!-- Selection du type de chambre -->
+	    <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
+	    <td>
+	      {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
+	    </td>
+			{{else}}
+			<td colspan="2" />
+		{{/if}}
+   
+	  {{if $dPconfig.dPplanningOp.COperation.easy_regime}}
+			<td class="button">
+	      <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
+	    </td>
+			{{else}}
+			<td />
+		{{/if}}
+	</tr>
+	{{/if}}
+	
+  {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu && $dPconfig.dPplanningOp.COperation.easy_horaire_voulu}}
   <tr>
     <th>Horaire souhaité</th>
     <td colspan="2">
@@ -190,6 +205,26 @@
     </td>
   </tr>
   {{/if}}
-   
+  
+	{{if $dPconfig.dPplanningOp.COperation.easy_materiel || $dPconfig.dPplanningOp.COperation.easy_remarques}}
+	<tr>
+		<td />
+		{{if $dPconfig.dPplanningOp.COperation.easy_materiel}}
+    <td class="text" {{if !$dPconfig.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_label object=$op field="materiel"}}</td>
+		{{/if}}
+		{{if $dPconfig.dPplanningOp.COperation.easy_remarques}}
+    <td class="text" {{if !$dPconfig.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
+		{{/if}}
+  </tr>
+  <tr>
+  <td />
+  	{{if $dPconfig.dPplanningOp.COperation.easy_materiel}}
+    <td style="width: 33%;" {{if !$dPconfig.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_field object=$op field="materiel" onchange="Value.synchronize(this);"}}</td>
+		{{/if}}
+		{{if $dPconfig.dPplanningOp.COperation.easy_remarques}}
+    <td style="width: 33%;" {{if !$dPconfig.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_field object=$op field="rques" onchange="Value.synchronize(this);"}}</td>
+		{{/if}}
+  </tr>
+	{{/if}}
 </table>
 </form>
