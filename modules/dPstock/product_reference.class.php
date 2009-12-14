@@ -62,21 +62,20 @@ class CProductReference extends CMbObject {
   }
 
   function loadRefsFwd(){
-    $this->_ref_product = new CProduct();
-    $this->_ref_product->load($this->product_id);
-    
-    $this->_ref_societe = new CSociete();
-    $this->_ref_societe->load($this->societe_id);
+    $this->_ref_product = $this->loadFwdRef("product_id", true);
+    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
   
   function check() {
   	// checks if the product reference doesn't exist yet :
   	// no other reference can have the same product_id AND societe_id
     if($this->product_id && $this->societe_id) {
-      $where['product_id'] = "= '$this->product_id'";
-      $where['societe_id'] = "= '$this->societe_id'";
-      $where['quantity']   = "= '$this->quantity'";
-      $where['reference_id'] = "!= '$this->reference_id'";
+      $where = array(
+        'product_id' => "= '$this->product_id'",
+        'societe_id' => "= '$this->societe_id'",
+        'quantity'   => "= '$this->quantity'",
+        'reference_id' => "!= '$this->reference_id'"
+      );
       
       $VerifDuplicateKey = new CProductReference();
       $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);

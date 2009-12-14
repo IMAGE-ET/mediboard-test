@@ -88,7 +88,6 @@ class CProductOrderItemReception extends CMbObject {
       $stock->group_id = $g;
       $stock->quantity = $qty;
       $stock->order_threshold_min = $qty;
-      $stock->order_threshold_max = $qty * 2;
       CAppUI::setMsg('Un nouveau stock pour ['.$product->_view.'] a été créé', UI_MSG_OK);
     }
     if ($msg = $stock->store()) {

@@ -369,6 +369,27 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_order_item` CHANGE `order_id` `order_id` INT (11) UNSIGNED";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.04";
+    $this->makeRevision('1.04');
+    $sql = "CREATE TABLE `product_reception` (
+              `reception_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `date` DATETIME,
+              `societe_id` INT (11) UNSIGNED NOT NULL,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `reference` VARCHAR (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_reception` 
+              ADD INDEX (`date`),
+              ADD INDEX (`societe_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    
+    $this->makeRevision('1.05');
+    $sql = "ALTER TABLE `product_stock_group` CHANGE `order_threshold_max` `order_threshold_max` INT(11) UNSIGNED";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_stock_service` CHANGE `order_threshold_max` `order_threshold_max` INT(11) UNSIGNED";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.06";
   }
 }

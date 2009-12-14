@@ -26,5 +26,7 @@
     <div><div class="color {{$colors.2}}"></div>{{tr}}CProductStockGroup-order_threshold_optimum{{/tr}} : {{$object->order_threshold_optimum}}</div>
   {{/if}}
   
-  <div><div class="color {{$colors.3}}"></div>{{tr}}CProductStockGroup-order_threshold_max{{/tr}} : {{$object->order_threshold_max}}</div>
+  {{if $object->order_threshold_max}}
+    <div><div class="color {{$colors.3}}"></div>{{tr}}CProductStockGroup-order_threshold_max{{/tr}} : {{$object->order_threshold_max}}</div>
+  {{/if}}
 </div>

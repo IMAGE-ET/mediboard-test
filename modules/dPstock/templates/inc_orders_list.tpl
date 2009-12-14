@@ -26,7 +26,11 @@
           {{$curr_order->order_number}}
         </span>
       </td>
-	    <td>{{$curr_order->_ref_societe->_view}}</td>
+	    <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
+          {{$curr_order->_ref_societe->_view}}
+        </span>
+      </td>
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
 	    <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
 	    <td>
@@ -76,7 +80,11 @@
           {{$curr_order->order_number}}
         </span>
       </td>
-      <td>{{$curr_order->_ref_societe->_view}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
+          {{$curr_order->_ref_societe->_view}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
@@ -133,7 +141,11 @@
           {{$curr_order->order_number}}
         </span>
       </td>
-      <td>{{$curr_order->_ref_societe->_view}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
+          {{$curr_order->_ref_societe->_view}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
@@ -178,7 +190,11 @@
           {{$curr_order->order_number}}
         </span>
       </td>
-      <td>{{$curr_order->_ref_societe->_view}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
+          {{$curr_order->_ref_societe->_view}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>
@@ -224,7 +240,11 @@
          {{$curr_order->order_number}}
         </span>
       </td>
-      <td>{{$curr_order->_ref_societe->_view}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
+          {{$curr_order->_ref_societe->_view}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>

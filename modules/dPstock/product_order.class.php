@@ -143,9 +143,7 @@ class CProductOrder extends CMbObject {
     	if ($stock->_zone_future < 2) {
     		$current_stock = $stock->quantity;
     		
-    		$expected_stock = $stock->order_threshold_optimum ? 
-    		  $stock->order_threshold_optimum :
-    		  ($stock->order_threshold_max-$stock->order_threshold_min) / 2;
+    		$expected_stock = $stock->getOptimumQuantity();
     		
     		// we get the best reference for this product
     		$where = array(
@@ -186,8 +184,10 @@ class CProductOrder extends CMbObject {
   	$order->group_id     = $this->group_id;
   	$order->locked       = 0;
   	$order->cancelled    = 0;
-  	$order->store();
-  	$order->order_number = $order->getUniqueNumber();
+  	$order->order_number = uniqid(rand());
+    $order->store();
+    $order->order_number = $order->getUniqueNumber();
+    $order->store();
   	
   	$this->loadRefsBack();
   	foreach ($this->_ref_order_items as $item) {
@@ -218,9 +218,8 @@ class CProductOrder extends CMbObject {
   function getUniqueNumber() {
   	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
-    if (strpos('%id', $format) === false) {
-      CAppUI::setMsg('Format de numéro de serie incorrect');
-      return;
+    if (strpos($format, '%id') === false) {
+      $format .= '%id';
     }
     
   	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);

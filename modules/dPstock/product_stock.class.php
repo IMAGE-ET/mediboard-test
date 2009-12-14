@@ -24,7 +24,7 @@ class CProductStock extends CMbObject {
   var $_quantity                = null;
   var $_critical                = null;
   var $_min                     = null;
-  var $_optmimum                = null;
+  var $_optimum                 = null;
   var $_max                     = null;
   // In which part of the graph the quantity is
   var $_zone                    = null;
@@ -43,7 +43,7 @@ class CProductStock extends CMbObject {
     $specs['order_threshold_critical'] = 'num min|0';
     $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
     $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
-    $specs['order_threshold_max']      = 'num min|0 notNull moreEquals|order_threshold_optimum';
+    $specs['order_threshold_max']      = 'num min|0 moreEquals|order_threshold_optimum';
     $specs['_quantity']                = 'pct';
     $specs['_critical']                = 'pct';
     $specs['_min']                     = 'pct';
@@ -60,6 +60,24 @@ class CProductStock extends CMbObject {
 	  $backProps["discrepancies"] = "CProductDiscrepancy object_id";
 	  return $backProps;
 	}
+  
+  function getOptimumQuantity(){
+    $this->completeFields(array(
+      "order_threshold_optimum",
+      "order_threshold_min",
+      "order_threshold_max",
+    ));
+    
+    if ($this->order_threshold_optimum) {
+      return $this->order_threshold_optimum;
+    }
+    else if ($this->order_threshold_max) {
+      return ($this->order_threshold_min + $this->order_threshold_max) / 2;
+    }
+    else {
+      return $this->order_threshold_min * 2;
+    }
+  }
 
 	function updateFormFields() {
     parent::updateFormFields();
@@ -71,7 +89,13 @@ class CProductStock extends CMbObject {
     $this->_package_mod      = $this->quantity % $units;
 
     // Calculation of the levels for the bargraph
-    $max = max(array($this->quantity, $this->order_threshold_max)) / 100;
+    $max = max(
+      $this->quantity, 
+      $this->order_threshold_min, 
+      $this->order_threshold_optimum, 
+      $this->order_threshold_max
+    ) / 100;
+    
     if ($max > 0) {
 	    $this->_quantity = $this->quantity                 / $max;
 	    $this->_critical = $this->order_threshold_critical / $max;
@@ -95,8 +119,7 @@ class CProductStock extends CMbObject {
   }
 
   function loadRefsFwd(){
-    $this->_ref_product = new CProduct;
-    $this->_ref_product = $this->_ref_product->getCached($this->product_id);
+    $this->_ref_product = $this->loadFwdRef("product_id", true);
   }
   
   function getPerm($permType) {

@@ -89,8 +89,7 @@ class CProductStockLocation extends CMbObject {
 	}
 
   function loadRefsFwd(){
-    $this->_ref_group = new CGroups;
-    $this->_ref_group = $this->_ref_group->getCached($this->group_id);
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 }
 ?>

@@ -60,7 +60,7 @@ class CProductOrderItem extends CMbObject {
       $reception->code = $code;
       return $reception->store();
     } else {
-      return $this->_spec->class.'::receive failed : order_item must be stored before';
+      return $this->_class_name.'::receive failed : order_item must be stored before';
     }
   }
   
@@ -74,11 +74,9 @@ class CProductOrderItem extends CMbObject {
       $this->loadRefsFwd();
     }
     $stock = new CProductStockGroup();
-    $where = array();
-    $where['group_id']   = "= '{$this->_ref_order->group_id}'";
-    $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
-    $stock->loadObject($where);
-    
+    $stock->group_id = $this->_ref_order->group_id;
+    $stock->product_id = $this->_ref_reference->product_id;
+    $stock->loadMatchingObject();
     return $stock;
   }
   
@@ -101,13 +99,11 @@ class CProductOrderItem extends CMbObject {
   }
   
   function loadReference() {
-    $this->_ref_reference = new CProductReference();
-    $this->_ref_reference = $this->_ref_reference->getCached($this->reference_id);
+    $this->_ref_reference = $this->loadFwdRef("reference_id", true);
   }
   
   function loadOrder() {
-    $this->_ref_order = new CProductOrder();
-    $this->_ref_order = $this->_ref_order->getCached($this->order_id);
+    $this->_ref_order = $this->loadFwdRef("order_id", true);
   }
 
   function loadRefsFwd() {

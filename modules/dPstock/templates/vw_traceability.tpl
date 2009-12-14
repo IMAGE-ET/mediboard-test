@@ -110,12 +110,12 @@
       </tr>
     {{foreachelse}}
       <tr>
-        <td colspan="10">Aucun évenement</td>
+        <td colspan="20">Aucun évenement</td>
       </tr>
     {{/foreach}}
   {{foreachelse}}
     <tr>
-      <td colspan="10">Aucun code correspondant</td>
+      <td colspan="20">Aucun code correspondant</td>
     </tr>
   {{/foreach}}
 </table>

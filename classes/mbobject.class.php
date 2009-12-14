@@ -317,6 +317,15 @@ class CMbObject {
     $this->$field = $this->_old->$field;
   }
   
+  /**
+   * Complete fields with base value if missing
+   * @param fields array Field names
+   */
+  function completeFields($fields) {
+    foreach($fields as $field) {
+      $this->completeField($field);
+    }
+  }
   
   /**
    * Chargement du dernier identifiant id400
@@ -934,6 +943,7 @@ class CMbObject {
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
+    // $log->ip_address = inet_pton(CValue::read($_SERVER, "REMOTE_ADDR"));
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
