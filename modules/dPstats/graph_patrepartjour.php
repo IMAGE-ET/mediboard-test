@@ -69,6 +69,8 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
     }
     if($f) $serie["data"][] = array(count($serie["data"]), 0);
   }
+  
+  $serie["label"] = "moyenne";
 
   $series[] = $serie;
   
