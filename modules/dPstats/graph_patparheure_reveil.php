@@ -9,6 +9,7 @@
  */
 
 function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $codeCCAM = '') {
+  $ds = CSQLDataSource::get("std");
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
 
@@ -40,16 +41,20 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
 
   // Nombre de patients par heure
   foreach($ticks as $i => $tick) {
-    $query = "SELECT COUNT(operations.operation_id) AS total,
-      '".$tick[1]."' AS heure
-      FROM operations
-      INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
-      LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
-      WHERE 
-        sallesbloc.stats = '1' AND 
-        plagesop.date BETWEEN '$debut' AND '$fin' AND 
-        '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
-        operations.annulee = '0'";
+    $query = "DROP TEMPORARY TABLE IF EXISTS pat_par_heure";
+    $ds->exec($query);
+    $query = "CREATE TEMPORARY TABLE pat_par_heure
+                SELECT COUNT(operations.operation_id) AS total_by_day,
+                       '".$tick[1]."' AS heure,
+                       plagesop.date AS date
+                FROM operations
+                INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
+                LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+                WHERE 
+                  sallesbloc.stats = '1' AND 
+                  plagesop.date BETWEEN '$debut' AND '$fin' AND 
+                  '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
+                  operations.annulee = '0'";
       
     if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
     if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
@@ -58,12 +63,20 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
-    $query .= "\nGROUP BY heure";
-    $result = $prat->_spec->ds->loadlist($query);
+    $query .= "\nGROUP BY plagesop.date";
+    $result = $ds->exec($query);
+    
+    
+    $query = "SELECT SUM(total_by_day) AS total, MAX(total_by_day) AS max,heure
+                FROM pat_par_heure
+                GROUP BY heure";
+    $result = $ds->loadlist($query);
     if(count($result)) {
-      $serie["data"][] = array($i, $result[0]["total"] / $totalWorkDays);
+      $serie_moyenne["data"][] = array($i, $result[0]["total"] / $totalWorkDays);
+      $serie_max["data"][]     = array($i, $result[0]["max"]);
     } else {
-      $serie["data"][] = array($i, 0);
+      $serie_moyenne["data"][] = array($i, 0);
+      $serie_max["data"][]     = array($i, 0);
     }
   }
   
@@ -88,19 +101,23 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   }
   
   $query .= "\nGROUP BY heure";
-  $result = $prat->_spec->ds->loadlist($query);
+  $result = $ds->loadlist($query);
   if(count($result)) {
-    $serie["data"][] = array(count($ticks), $result[0]["total"] / $totalWorkDays);
+    $serie_moyenne["data"][] = array(count($ticks), $result[0]["total"] / $totalWorkDays);
   } else {
-    $serie["data"][] = array(count($ticks), 0);
+    $serie_moyenne["data"][] = array(count($ticks), 0);
   }
+  $serie_max["data"][] = array(count($ticks), 0);
   $ticks[] = array(count($ticks), "Erreurs");
   
-
-  $series[] = $serie;
+  $serie_moyenne["label"] = "moyenne";
+  $serie_max["label"]     = "max";
+  
+  $series[] = $serie_max;
+  $series[] = $serie_moyenne;
   
   // Set up the title for the graph
-  $title = "Patients moyens / heure du jour";
+  $title = "Patients moyens et max / heure du jour";
   $subtitle = "Uniquement les jours ouvrables";
   if($prat_id)  $subtitle .= " - Dr $prat->_view";
   if($bloc_id) $subtitle .= " - $bloc->_view";
