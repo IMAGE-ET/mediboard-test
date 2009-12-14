@@ -118,7 +118,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   
   // Set up the title for the graph
   $title = "Patients moyens et max / heure du jour";
-  $subtitle = "Uniquement les jours ouvrables";
+  $subtitle = "Moyenne sur tous les jours ouvrables";
   if($prat_id)  $subtitle .= " - Dr $prat->_view";
   if($bloc_id) $subtitle .= " - $bloc->_view";
   if($codeCCAM) $subtitle .= " - CCAM : $codeCCAM";
