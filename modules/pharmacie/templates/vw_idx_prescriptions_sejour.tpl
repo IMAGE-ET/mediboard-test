@@ -18,6 +18,18 @@ function markAsSelected(element) {
   $("prescriptions-list").select('.selected').each(function (e) {e.removeClassName('selected')});
   $(element).up(1).addClassName('selected');
 }
+function updatePatientsListHeight() {
+  var vpd = document.viewport.getDimensions(),
+      scroller = $("left-column").down(".scroller"),
+      pos = scroller.cumulativeOffset();
+  scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
+}
+
+Main.add(function () {
+  updatePatientsListHeight();
+});
+
+
 </script>
 
 <table class="main">
@@ -72,8 +84,9 @@ function markAsSelected(element) {
     </td>
   </tr>
   <tr>
-    <td style="width: 150px;">
-      <table class="tbl" id="prescriptions-list">  
+    <td style="width: 250px;" id="left-column">
+		  <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
+      <table class="tbl" id="prescriptions-list" style="width:240px;">  
         <tr>
           <th>Prescriptions</th>
         </tr>
@@ -92,6 +105,7 @@ function markAsSelected(element) {
 				</tr>
 				{{/foreach}}
       </table>
+			</div>
     </td>
     <td>
       <div id="prescription_pharma">

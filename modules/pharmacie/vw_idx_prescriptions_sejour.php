@@ -76,7 +76,7 @@ if($service_id){
 }
 
 $prescriptions = new CPrescription();
-$prescriptions = $prescriptions->loadList($where, null, 100, null, $ljoin);
+$prescriptions = $prescriptions->loadList($where, null, null, "prescription_id", $ljoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
