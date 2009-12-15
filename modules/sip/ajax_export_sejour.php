@@ -56,6 +56,12 @@ set_time_limit($seconds);
 $errors = 0;
 $sejours = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
 
+// Si pas de tag patient et séjour
+if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
+  CAppUI::stepAjax("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
+  return;
+}
+
 foreach ($sejours as $sejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefPatient();

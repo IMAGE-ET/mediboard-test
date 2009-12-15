@@ -23,7 +23,12 @@ class CSipObjectHandler extends CMbObjectHandler {
     if (!$mbObject->_ref_last_log) {
       return;
     }
-
+    // Si pas de tag patient et séjour
+    if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
+      CAppUI::setMsg("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
+      return;
+    }
+    
     // Si client et traitement HPRIM
     if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
       return;
