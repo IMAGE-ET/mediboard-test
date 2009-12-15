@@ -517,8 +517,7 @@ Element.addMethods('input', {
       step: null,
       decimals: null,
       showPlus: false,
-      fraction: false,
-      spinnerElement: null
+      fraction: false
     }, options);
     
     element.spinner = {
@@ -546,6 +545,8 @@ Element.addMethods('input', {
      
       // Increment function
       inc: function () {
+        if (element.disabled || element.readOnly) return;
+        
         var step = Number(element.spinner.getStep(0.1));
         var result = (parseInt(Number(element.value) / step) + 1) * step;
         if (options.max != null) {
@@ -562,6 +563,8 @@ Element.addMethods('input', {
     
       // Decrement function
       dec: function () {
+        if (element.disabled || element.readOnly) return;
+        
         var step = Number(element.spinner.getStep(-0.1));
         var result = (parseInt(Number(element.value) / step) - 1) * step;
         if (options.min != null) {
@@ -577,7 +580,7 @@ Element.addMethods('input', {
       }
     }
     
-    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;" /><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></tr>';
+    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;" /><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></table>';
     element.insert({before: table});
     table = element.previous();
     table.select('td')[0].update(element);
@@ -585,10 +588,6 @@ Element.addMethods('input', {
     var arrows = table.select('.arrows div');
     arrows[0].observe('click', element.spinner.inc);
     arrows[1].observe('click', element.spinner.dec);
-  
-    if (element.disabled && options.spinnerElement) {
-      arrows.invoke('hide');
-    }
   }
 });
 
