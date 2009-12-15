@@ -59,7 +59,7 @@ function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, o
     
     if(object_id && object_class){
       if(object_class == 'CPerfusion'){
-        url.requestUpdate("line_"+object_class+"-"+object_id, { , onComplete: function() { 
+        url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
           $("line_"+object_class+"-"+object_id).hide();
           moveDossierSoin($("line_"+object_class+"-"+object_id));
         } } );
