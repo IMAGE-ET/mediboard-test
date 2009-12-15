@@ -32,7 +32,7 @@
 	
   {{foreachelse}}
 	<tr>
-		<td><em>{{tr}}CFile.none{{/tr}}</em></td>
+		<td colspan="10">{{tr}}CFile.none{{/tr}}</td>
 	</tr>
 	{{/foreach}}
 

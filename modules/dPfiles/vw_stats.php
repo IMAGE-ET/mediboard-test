@@ -28,7 +28,7 @@ foreach($stats as &$_stat) {
   $total["files_weight"] += $_stat["files_weight"];
   $total["files_count"]  += $_stat["files_count"];
 
-	$_stat["_file_average_weight"] = $_stat["files_weight"] / $_stat["files_count"];
+	$_stat["_file_average_weight"] = $_stat["files_count"] ? ($_stat["files_weight"] / $_stat["files_count"]) : 0;
   $_stat["_file_average_weight"] = CMbString::toDecaBinary($_stat["_file_average_weight"]);
   $_stat["_files_weight"]        = CMbString::toDecaBinary($_stat["files_weight"]);
 	if (CModule::getActive("mediusers")) {
@@ -39,7 +39,7 @@ foreach($stats as &$_stat) {
 	}
 }
 
-$total["_file_average_weight"] = $total["files_weight"] / $total["files_count"];
+$total["_file_average_weight"] = $total["files_count"] ? ($total["files_weight"] / $total["files_count"]) : 0;
 $total["_file_average_weight"] = CMbString::toDecaBinary($total["_file_average_weight"]);
 $total["_files_weight"]        = CMbString::toDecaBinary($total["files_weight"]);
 
