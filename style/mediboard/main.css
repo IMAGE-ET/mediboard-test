@@ -880,14 +880,28 @@ table.form th.category label {
 
 label.notNull,
 label.canNull,
-label.notNullOK {
-  padding-right: 5px;
+label.notNullOK,
+label.checkNull {
+  padding-right: 7px;
   font-weight: bold;
+  background-position: center right;
+  background-repeat: no-repeat;
 }
 
-label.notNull,
+label.notNull {
+  background-image: url(../mediboard/images/icons/notNull.png);
+}
+
 label.canNull {
-  background: url(./images/icons/redbox.jpg) no-repeat center right;
+  background-image: url(../mediboard/images/icons/canNull.png);
+}
+
+label.notNullOK {
+  background-image: url(../mediboard/images/icons/notNullOK.png);
+}
+
+label.checkNull {
+  background-image: url(../mediboard/images/icons/checkNull.png);
 }
 
 label.error,

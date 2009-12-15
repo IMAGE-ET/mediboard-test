@@ -450,7 +450,7 @@ class CMbFieldSpec {
   function getLabelElement($object, $params) {
     $defaultFor = CMbArray::extract($params, "defaultFor");
     $forName = $defaultFor ? $defaultFor : $this->getLabelForElement($object, $params);
-    $className = $object->_specs[$this->fieldName]->notNull ? "notNull" : "";
+    $className = $object->_specs[$this->fieldName]->notNull ? "checkNull" : "";
     
     $extra  = CMbArray::makeXmlAttributes($params);
 

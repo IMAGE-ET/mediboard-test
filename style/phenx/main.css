@@ -536,15 +536,28 @@ table.form th.category label {
   vertical-align: middle;
 }
 
-label.notNull {
-  padding-right: 5px;
-  background: url(./images/icons/redbox.jpg) no-repeat center right;
+label.notNull,
+label.canNull,
+label.notNullOK,
+label.checkNull {
+  padding-right: 7px;
   font-weight: bold;
 }
 
+label.notNull {
+  background: url(../mediboard/images/icons/notNull.png) no-repeat center right;
+}
+
+label.canNull {
+  background: url(../mediboard/images/icons/canNull.png) no-repeat center right;
+}
+
 label.notNullOK {
-  padding-right: 5px;
-  font-weight: bold;
+  background: url(../mediboard/images/icons/notNullOK.png) no-repeat center right;
+}
+
+label.checkNull {
+  background: url(../mediboard/images/icons/checkNull.png) no-repeat center right;
 }
 
 table.form th.text {

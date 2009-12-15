@@ -57,20 +57,6 @@ table.form th.category label {
   font-style: normal;
 }
 
-label.notNull,
-label.canNull {
-  padding-right: 13px;
-  font-weight: bold;
-}
-
-label.notNull {
-  background: url(./images/icons/redbox.jpg) no-repeat center right;
-}
-
-label.canNull {
-  background: url(./images/icons/orangebox.jpg) no-repeat center right;
-}
-
 table.form th a:link {
   color: #eee;
 }

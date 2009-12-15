@@ -54,25 +54,6 @@ table.form th.category label {
   font-style: italic;
 }
 
-
-label.notNull,
-label.canNull,
-label.notNullOK {
-  padding-right: 13px;
-}
-
-label.notNull {
-  background: url(./images/icons/redbox.jpg) no-repeat center right;
-}
-
-label.canNull {
-  background: url(./images/icons/orangebox.jpg) no-repeat center right;
-}
-
-label.notNullOK {
-  background: url(./images/icons/greenbox.jpg) no-repeat center right;
-}
-
 table.form td {
   background-color: #ffd;
 }
