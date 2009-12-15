@@ -68,15 +68,15 @@ foreach ($array_list_pref_common as $namePref){
 $array_list_module_pref = array (
   "dPpatients" => array (
     "DEPARTEMENT",
+    "GestionFSE", 
+    "InterMaxDir",
+    "VitaleVisionDir", 
+    "VitaleVision",
   ),
   "dPcabinet" => array (
     "AFFCONSULT",
     "MODCONSULT",
     "AUTOADDSIGN",
-    "GestionFSE", 
-    "InterMaxDir",
-    "VitaleVisionDir", 
-    "VitaleVision",
     "DefaultPeriod",
     "DossierCabinet",
     "simpleCabinet",

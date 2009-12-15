@@ -182,6 +182,58 @@ Main.add(function () {
     </td>
   </tr>
 
+  {{assign var="var" value="GestionFSE"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  {{assign var="var" value="InterMaxDir"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
+        {{tr}}pref-{{$var}}{{/tr}}
+      </label>
+    </th>
+    <td>
+      <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
+    </td>
+  </tr>
+  
+  {{assign var="var" value="VitaleVisionDir"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="VitaleVision">
+        Répertoire du fichier généré par Vitale Vision
+      </label>
+    </th>
+    <td>
+    <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
+    </td>
+  </tr>
+  
+  {{assign var="var" value="VitaleVision"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="VitaleVision">
+        Préferer l'utilisation de Vitale Vision à LogicMax
+      </label>
+    </th>
+    <td>
+      <select name="pref_name[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
 	</tbody>
   {{/if}}
 	  
@@ -233,58 +285,6 @@ Main.add(function () {
   <tr>
     <th>
       <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="GestionFSE"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref_name[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="InterMaxDir"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
-        {{tr}}pref-{{$var}}{{/tr}}
-      </label>
-    </th>
-    <td>
-      <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
-    </td>
-  </tr>
-  
-  {{assign var="var" value="VitaleVisionDir"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="VitaleVision">
-        Répertoire du fichier généré par Vitale Vision
-      </label>
-    </th>
-    <td>
-		<input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
-    </td>
-  </tr>
-  
-  {{assign var="var" value="VitaleVision"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="VitaleVision">
-        Préferer l'utilisation de Vitale Vision à LogicMax
-      </label>
     </th>
     <td>
       <select name="pref_name[{{$var}}]">
