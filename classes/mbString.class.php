@@ -120,7 +120,7 @@ abstract class CMbString {
     }
     
     // Value with 3 significant digits
-    $value = round($value, $value > 99 ? 0 : $value >  9 ? 1 : 2);
+    $value = round($value, 2 - intval(log10($value)));
     return "$value$suffix$unit";
   }
 	
