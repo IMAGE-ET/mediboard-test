@@ -22,7 +22,7 @@ function do_translation($params, $content, &$smarty, &$repeat) {
     foreach ($params as $_key => $_val) {
       switch ($_key) {
         case "escape":
-        if ($_val=="JSAttribute"){
+        if ($_val === "JSAttribute"){
           $content = JSAttribute($content);
           break;
         }
@@ -43,7 +43,7 @@ function do_translation($params, $content, &$smarty, &$repeat) {
 function thumb($params, &$smarty) {
   $finUrl = "";
   foreach ($params as $_key => $_val) {
-    if($_key == "src") {
+    if($_key === "src") {
       $src = urlencode(CAppUI::conf("root_dir")."/".$_val);
     } else {
       $finUrl .= ("&amp;$_key=$_val");
