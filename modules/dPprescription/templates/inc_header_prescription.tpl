@@ -149,7 +149,7 @@ Main.add( function(){
 	  <tr>
 	    <th class="title" colspan="2">
 		    <span style="float: right">
-		    	<button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
+		    	<button type="button" class="add" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
 		      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
 		    </span>
 		    Modification du protocole

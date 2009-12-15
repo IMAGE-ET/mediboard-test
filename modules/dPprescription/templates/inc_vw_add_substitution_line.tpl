@@ -169,12 +169,20 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
     oForm.time_fin.disabled = false;
      
     // The time pickers
-    $(oForm.time_debut).previousSiblings().first().select('img,div').invoke('show');
-    $(oForm.time_fin).previousSiblings().first().select('img,div').invoke('show'); 
+    $(oForm.time_debut).previous().select('img,div').invoke('show');
+    $(oForm.time_fin).previous().select('img,div').invoke('show'); 
   }
 }
 
-	
+togglePerfDecalage = function(oForm){
+  if($V(oForm.jour_decalage) == 'N'){
+    $V(oForm.decalage_interv, '0');
+    $('decalage_interv-'+$V(oForm.perfusion_id)).hide();
+  } else {
+    $('decalage_interv-'+$V(oForm.perfusion_id)).show();
+  }
+}
+
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}

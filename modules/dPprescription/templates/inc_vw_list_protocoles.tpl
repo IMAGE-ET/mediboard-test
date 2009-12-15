@@ -19,14 +19,22 @@ removeSelectedTr = function(){
   $("all_protocoles").select('.selected').each(function (e) {e.removeClassName('selected')});
 }
 
+Main.add(function(){
+  Control.Tabs.create('list_protocoles_prescription');
+});
 </script>
+
+<ul id="list_protocoles_prescription" class="control_tabs">
+	{{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+	<li><a href="#list_prot_{{$owner}}" {{if !$_protocoles_by_owner|@count}}class="empty"{{/if}}>{{tr}}CPrescription._owner.{{$owner}}{{/tr}}</a></li>
+	{{/foreach}}
+</ul>
+<hr class="control_tabs" />
 
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
+	<tbody id="list_prot_{{$owner}}" style="display: none;">
   {{if $_protocoles_by_owner|@count}}
-  <tr>
-    <th class="title">Liste des protocoles {{tr}}CPrescription._owner.{{$owner}}{{/tr}}</th>
-  </tr>
   {{foreach from=$_protocoles_by_owner item=_protocoles_by_type key=class_protocole}}
   <tr>
     <th class="title">Contexte: {{tr}}CPrescription.object_class.{{$class_protocole}}{{/tr}}</th>
@@ -56,6 +64,11 @@ removeSelectedTr = function(){
   {{/foreach}}
   {{/foreach}}
   {{/foreach}}
-  {{/if}}
+  {{else}}
+	<tr>
+		<td>Aucun protocole</td>
+	</tr>
+	{{/if}}
+	</tbody>
   {{/foreach}}
 </table>
