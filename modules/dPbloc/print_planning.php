@@ -45,7 +45,10 @@ $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ);
 
 $bloc = new CBlocOperatoire();
-$listBlocs = $bloc->loadListWithPerms(PERM_READ, null, "nom");
+$g = CGroups::loadCurrent();
+$where = array();
+$where["group_id"] = "= '$g->_id'";
+$listBlocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 foreach($listBlocs as &$bloc) {
   $bloc->loadRefsSalles();
 }
