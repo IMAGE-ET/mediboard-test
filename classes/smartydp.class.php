@@ -96,6 +96,15 @@ function smarty_modifier_currency($value) {
   return number_format($value, 2, ",", " ") . " " . CAppUI::conf("currency_symbol");
 }
 
+/**
+ * @abstract Percentage 2-digit format modifier
+ *
+ * Example:  {$value|percent}
+ * @param float $value The value to format
+ */
+function smarty_modifier_percent($value) {
+  return number_format($value*100, 2) . "%";
+}
 
 function smarty_modifier_const($object, $name) {
 	// If the first arg is an instance, we get its class name
@@ -454,6 +463,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("emphasize"         , "smarty_modifier_emphasize");
     $this->register_modifier("ternary"           , "smarty_modifier_ternary");
     $this->register_modifier("currency"          , "smarty_modifier_currency");
+    $this->register_modifier("percent"           , "smarty_modifier_percent");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();
