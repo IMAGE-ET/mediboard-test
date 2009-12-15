@@ -331,5 +331,5 @@ input[readonly].time {
 }
 
 input[readonly].dateTime {
-  width: 130px;
+  width: 120px;
 }
