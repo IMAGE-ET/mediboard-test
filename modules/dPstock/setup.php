@@ -390,6 +390,10 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_stock_service` CHANGE `order_threshold_max` `order_threshold_max` INT(11) UNSIGNED";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.06";
+    $this->makeRevision('1.06');
+    $sql = "ALTER TABLE `product_delivery` ADD `comments` TEXT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.07";
   }
 }

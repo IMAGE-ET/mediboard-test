@@ -23,7 +23,11 @@
   {{/if}}
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
-  <td>{{$curr_item->_view}}</td>
+  <td>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
+      {{$curr_item->_view}}
+    </span>
+  </td>
   <td>
     {{if !$order->date_ordered}}
     <!-- Order item quantity change -->
@@ -39,7 +43,7 @@
           refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
         form=form-item-quantity-$id 
         min=0
-        size=3
+        size=2
         increment=true}}
     </form>
     {{else}}
@@ -97,7 +101,7 @@
               field=quantity
               form=form-item-receive-$id 
               increment=true
-              size=3
+              size=2
               min=0
               value=$curr_item->quantity-$curr_item->_quantity_received
             }}

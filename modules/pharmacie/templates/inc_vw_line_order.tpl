@@ -19,11 +19,11 @@
     {{/if}}
   </td>
   <td>
-    <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
-    <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
       {{$curr_delivery->_ref_stock->_view}}
     </span>
   </td>
+  <td class="text">{{$curr_delivery->comments}}</td>
   {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
   <td>
     <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
@@ -43,6 +43,7 @@
     </td>
   {{/if}}
   *}}
+  
   <td style="text-align: center;">
     {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>

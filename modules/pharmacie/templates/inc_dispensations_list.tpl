@@ -68,8 +68,8 @@ toggleDoneDispensations = function(){
   </tr>
   {{foreach from=$dispensations key=code_cis item=quantites}}
     <tbody id="dispensation_line_{{$code_cis}}" style="width: 100%">
-    <!-- Affichage d'une ligne de dispensation -->
-    {{include file="inc_dispensation_line.tpl" nodebug=true}}
+      <!-- Affichage d'une ligne de dispensation -->
+      {{include file="inc_dispensation_line.tpl" nodebug=true}}
     </tbody>
   {{foreachelse}}
     <tr>

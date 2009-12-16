@@ -151,7 +151,7 @@ function barcodePrintedReception(reception_id, value) {
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="cancelled" value="1" />
-        <button class="trash" type="button" onclick="submitOrder(this.form, {close: true})">Annuler la commande</button>
+        <button class="cancel" type="button" onclick="submitOrder(this.form, {close: true})">Annuler la commande</button>
       </form>
       
       <table class="form">

@@ -27,7 +27,7 @@ class CProductStockService extends CProductStock {
   function getProps() {
     $specs = parent::getProps();
     $specs['service_id'] = 'ref notNull class|CService';
-    $specs['common'] = 'bool notNull';
+    $specs['common'] = 'bool';
     return $specs;
   }
   

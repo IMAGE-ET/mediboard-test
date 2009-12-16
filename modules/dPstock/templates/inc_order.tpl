@@ -11,11 +11,14 @@
 <table class="tbl">
   <tr>
     {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
-    <th>{{tr}}CProductOrderItem-reference_id{{/tr}}</th>
-    <th>{{tr}}CProductOrderItem-quantity{{/tr}}</th>
-    <th>{{tr}}CProductOrderItem-unit_price{{/tr}}</th>
-    <th>{{tr}}CProductOrderItem-_price{{/tr}}</th>
-    {{if $order->date_ordered}}<th>Déjà reçu</th><th></th>{{/if}}
+    <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
+    <th>{{mb_title class=CProductOrderItem field=quantity}}</th>
+    <th>{{mb_title class=CProductOrderItem field=unit_price}}</th>
+    <th>{{mb_title class=CProductOrderItem field=_price}}</th>
+    {{if $order->date_ordered}}
+      <th>Déjà reçu</th>
+      <th></th>
+    {{/if}}
   </tr>
   {{foreach from=$order->_ref_order_items item=curr_item}}
     <tbody id="order-item-{{$curr_item->_id}}">
@@ -24,9 +27,11 @@
   {{/foreach}}
   <tr>
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">{{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span></span>
+      <span style="float: right;">
+        {{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span>
+      </span>
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
-      <button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Imprimer les codes barres</button>
+      <button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Codes barres</button>
       
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}
        <form name="order-lock-{{$order->_id}}" action="?" method="post">

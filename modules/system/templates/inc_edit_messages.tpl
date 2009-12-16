@@ -43,12 +43,25 @@
 <tr>
   <th>{{mb_label object=$message field="module_id"}}</th>
   <td>
-  <select name="module_id">
-     <option value="">&mdash; {{tr}}All{{/tr}}</option>
-     {{foreach from=$modules item=mod}}
-     <option value="{{$mod->_id}}" {{if $mod->_id == $message->module_id}}selected="selected"{{/if}}>{{$mod->_view}}</option>
-     {{/foreach}}
-  </select>
+    <select name="module_id">
+      <option value="">&mdash; {{tr}}All{{/tr}}</option>
+      {{foreach from=$modules item=mod}}
+        <option value="{{$mod->_id}}" {{if $mod->_id == $message->module_id}}selected="selected"{{/if}}>{{$mod}}</option>
+      {{/foreach}}
+    </select>
+  </td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$message field="group_id"}}</th>
+  <td>
+    <select name="group_id">
+      <option value="">&mdash; {{tr}}All{{/tr}}</option>
+      {{foreach from=$groups item=_group}}
+        <option value="{{$_group->_id}}" {{if $_group->_id == $message->group_id}}selected="selected"{{/if}}>{{$_group}}</option>
+      {{/foreach}}
+    </select>
+  </td>
 </tr>
 
 <tr>

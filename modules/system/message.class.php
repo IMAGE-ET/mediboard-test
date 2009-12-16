@@ -18,6 +18,7 @@ class CMessage extends CMbObject {
   
   // DB fields
   var $module_id = null;
+  var $group_id  = null;
   
   var $deb     = null;
   var $fin     = null;
@@ -30,6 +31,7 @@ class CMessage extends CMbObject {
   
   // Object references
   var $_ref_module;
+  var $_ref_group;
   
   static $status = array (
     "all"     => "Tous les messages",
@@ -50,9 +52,10 @@ class CMessage extends CMbObject {
     $specs["deb"]       = "dateTime notNull";
     $specs["fin"]       = "dateTime notNull";
     $specs["titre"]     = "str notNull maxLength|40";
-    $specs["module_id"] = "ref class|CModule";
-    $specs["corps"]     = "text";
+    $specs["corps"]     = "text notNull";
     $specs["urgence"]   = "enum notNull list|normal|urgent default|normal";
+    $specs["module_id"] = "ref class|CModule";
+    $specs["group_id"]   = "ref class|CGroups";
 
     $specs["_status"]   = "enum list|past|present|future";
     return $specs;
@@ -63,7 +66,7 @@ class CMessage extends CMbObject {
    * @param string status Wanted status, null for all
    * @param string module Module name restriction, null for all
    */ 
-  function loadPublications($status = null, $module = null) {
+  function loadPublications($status = null, $module = null, $group_id = null) {
     $now = mbDateTime();
     $where = array();
     
@@ -80,9 +83,11 @@ class CMessage extends CMbObject {
         break;
     }
     
-    $order = "deb DESC";
+    if ($group_id) {
+      $where[] = "group_id = '$group_id' OR group_id IS NULL";
+    }
     
-    $messages = $this->loadList($where, $order);
+    $messages = $this->loadList($where, "deb DESC");
     
     // Module name restriction
     if ($module) {
@@ -101,15 +106,12 @@ class CMessage extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = (($this->module_id)?'['.$this->_ref_module->_view.'] - ':''). $this->titre;
+    $this->_view = ($this->module_id ? "[$this->_ref_module] - " : "") . $this->titre;
   }
   
   function loadRefsFwd() {
     parent::loadRefsFwd();
-    if ($this->module_id) {
-      $this->_ref_module = new CModule();
-        $this->_ref_module->load($this->module_id);
-    }
+    $this->_ref_module = $this->loadFwdRef("module_id", true);
   }
 }
 

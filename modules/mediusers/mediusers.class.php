@@ -233,8 +233,8 @@ class CMediusers extends CMbObject {
     $msg = null;
     // Delete corresponding dP user first
     if (!$msg = $this->canDeleteEx()) {
-      $dPuser = $this->createUser();
-      if ($msg = $dPuser->delete()) {
+      $user = $this->createUser();
+      if ($msg = $user->delete()) {
         return $msg;
       }
     }
@@ -243,7 +243,6 @@ class CMediusers extends CMbObject {
   }
 
   function updateFormFields() {
-     
     parent::updateFormFields();
 
     $user = new CUser();
@@ -251,8 +250,8 @@ class CMediusers extends CMbObject {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
-      $this->_user_first_name = ucwords(strtolower($user->user_first_name));
-      $this->_user_last_name  = strtoupper($user->user_last_name) ;
+      $this->_user_first_name = ucwords(mb_strtolower($user->user_first_name));
+      $this->_user_last_name  = mb_strtoupper($user->user_last_name) ;
       $this->_user_email      = $user->user_email;
       $this->_user_phone      = $user->user_phone;
       $this->_user_adresse    = $user->user_address1;
@@ -264,21 +263,22 @@ class CMediusers extends CMbObject {
 
       // Encrypt this datas
       $this->checkConfidential();
-      $this->_view            = $this->_user_last_name." ".$this->_user_first_name;
+      $this->_view            = "$this->_user_last_name $this->_user_first_name";
       $this->_shortview       = "";
 
       // Initiales du prénom      
       foreach (explode("-", $this->_user_first_name) as $value) {
-        if ($value != '') {
-          $this->_shortview .=  strtoupper($value[0]);
-        }
+        if ($value != '') 
+          $this->_shortview .= $value[0];
       }
       
       // Initiales du nom
       foreach (explode(" ", $this->_user_last_name) as $value) {
-        if($value != '')
-        $this->_shortview .=  strtoupper($value[0]);
-      }
+        if ($value != '')
+          $this->_shortview .= $value[0];
+      } 
+      
+      $this->_shortview = strtoupper($this->_shortview);
     }
     
     $this->_ref_user = $user;
@@ -313,10 +313,9 @@ class CMediusers extends CMbObject {
   }
 
   function loadRefsBack() {
-    $where = array(
-      "chir_id" => "= '$this->user_id'");
-    $this->_ref_packs = new CPack;
-    $this->_ref_packs = $this->_ref_packs->loadList($where);
+    $where = array("chir_id" => "= '$this->user_id'");
+    $packs = new CPack;
+    $this->_ref_packs = $packs->loadList($where);
   }
 
   function getPerm($permType) {
@@ -330,10 +329,9 @@ class CMediusers extends CMbObject {
   }
 
   function loadProtocoles() {
-    $where["chir_id"] = "= '$this->user_id'";
-    $order = "codes_ccam";
+    $where = array("chir_id" => "= '$this->user_id'");
     $protocoles = new CProtocole;
-    $this->_ref_protocoles = $protocoles->loadList($where, $order);
+    $this->_ref_protocoles = $protocoles->loadList($where, "codes_ccam");
   }
 
   /**
@@ -462,19 +460,19 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
 
     if ($msg = $this->check()) {
-      return CAppUI::tr(get_class( $this )) .
+      return CAppUI::tr($this->_class_name) .
       CAppUI::tr("CMbObject-msg-check-failed") .
       CAppUI::tr($msg);
     }
 
     // Store corresponding dP user first
-    $dPuser = $this->createUser();
-    if ($msg = $dPuser->store()) {
+    $user = $this->createUser();
+    if ($msg = $user->store()) {
       return $msg;
     }
 
     // User might have been re-created
-    if ($this->user_id != $dPuser->user_id) {
+    if ($this->user_id != $user->user_id) {
       $this->user_id = null;
     }
 
@@ -482,7 +480,7 @@ class CMediusers extends CMbObject {
     if ($this->user_id) {
       $ret = $this->_spec->ds->updateObject($this->_spec->table, $this, $this->_spec->key);
     } else {
-      $this->user_id = $dPuser->user_id;
+      $this->user_id = $user->user_id;
       $ret = $this->_spec->ds->insertObject($this->_spec->table, $this, $this->_spec->key);
     }
 

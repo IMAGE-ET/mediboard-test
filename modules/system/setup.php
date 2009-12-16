@@ -150,7 +150,17 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.17");
     $this->addPrefQuery("showTemplateSpans", "0");
 
-    $this->mod_version = "1.0.18";
+    $this->makeRevision("1.0.18");
+    $sql = "ALTER TABLE `message` 
+              ADD `group_id` INT (11) UNSIGNED,
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    
+    /*$this->setTimeLimit(300);
+    $sql = "ALTER TABLE `user_log` ADD `ip_address` VARBINARY( 16 ) NULL DEFAULT NULL,
+              ADD INDEX (`ip_address`)";*/
+    
+    $this->mod_version = "1.0.19";
   }
 }
 ?>

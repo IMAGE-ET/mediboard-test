@@ -88,7 +88,9 @@ class CProduct extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = ($this->code ? "[$this->code] " : '') . $this->name . ($this->packaging ? " ($this->packaging)" : '');
+    $this->_view = $this->name;
+    //$this->_view = ($this->code ? "[$this->code] " : '') . $this->name . ($this->packaging ? " ($this->packaging)" : '');
+    
     if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
 	    $this->unit_quantity = round($this->unit_quantity);
 	  }

@@ -74,6 +74,7 @@ class CGroups extends CMbObject {
     $backProps["config_service"]          = "CConfigService group_id";
     $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
     $backProps["product_stock_locations"] = "CProductStockLocation group_id";
+    $backProps["messages"]                = "CMessage group_id";
     return $backProps;
   }
   

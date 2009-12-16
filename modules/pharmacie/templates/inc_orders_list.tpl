@@ -15,15 +15,18 @@
   <tr>
     <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-comments{{/tr}}</th>
     {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
       <th>Stock pharmacie</th>
     {{/if}}
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    
     {{* 
     {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
       <th>Stock service</th>
     {{/if}}
     *}}
+    
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th><button type="button" onclick="dispenseAll('list-orders', refreshOrders)" class="tick">Dispenser les {{$deliveries|@count}} visibles</button></th>
   </tr>

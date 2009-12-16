@@ -40,6 +40,7 @@
   <th>{{mb_title class=CMessage field=module_id}}</th>
   <th style="width: 1%">{{mb_title class=CMessage field=deb}}</th>
   <th style="width: 1%">{{mb_title class=CMessage field=fin}}</th>
+  <th style="width: 1%">{{mb_title class=CMessage field=group_id}}</th>
 </tr>
 
 {{foreach from=$messages item=_message}}
@@ -62,10 +63,18 @@
   
   <td>{{mb_value object=$_message field=deb}}</td>
   <td>{{mb_value object=$_message field=fin}}</td>
+  
+  <td>
+  {{if $_message->group_id}}
+    {{$_message->_ref_group}}
+  {{else}}
+    {{tr}}All{{/tr}}
+  {{/if}}
+  </td>
 </tr>
 
 <tr {{if $_message->_id == $message->_id}}class="selected"{{/if}}>
-  <td class="text" style="padding: 0 40px;" colspan="10">
+  <td class="text" style="padding: 0 2em;" colspan="10">
   	{{mb_value object=$_message field=corps}}
   </td>
 </tr>

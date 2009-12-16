@@ -272,7 +272,7 @@ if (!$suppressHeaders) {
 
   // Messages
   $messages = new CMessage();
-  $messages = $messages->loadPublications("present", $m);
+  $messages = $messages->loadPublications("present", $m, $g);
   
   // Mails
   $mail = new CMbMail();

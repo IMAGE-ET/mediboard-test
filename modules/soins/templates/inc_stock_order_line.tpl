@@ -63,6 +63,9 @@
       {{else}}
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=0 style=$style}}
       {{/if}}
+      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next(1).show().focus()"></button>
+      <br />
+      <input type="text" name="comments" style="display: none; width: 100%;" />
     </form>
   </td>
   
@@ -70,17 +73,19 @@
   <td style="text-align: left" class="text">  
   {{foreach from=$stock->_ref_deliveries item=dispensation}}
      {{if $dispensation->order == 1}}
-     <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:refreshLists})">
-       <input type="hidden" name="m" value="dPstock" />
-       <input type="hidden" name="dosql" value="do_delivery_aed" />
-       <input type="hidden" name="del" value="1" />
-       <input type="hidden" name="delivery_id" value="{{$dispensation->_id}}" />
-       <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
-     </form>
+       <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:refreshLists})">
+         <input type="hidden" name="m" value="dPstock" />
+         <input type="hidden" name="dosql" value="do_delivery_aed" />
+         <input type="hidden" name="del" value="1" />
+         <input type="hidden" name="delivery_id" value="{{$dispensation->_id}}" />
+         <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
+       </form>
      {{else}}
        <img src="images/icons/tick.png" title="Dispensé" />
      {{/if}}
-     {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}} ({{$dispensation->_ref_service}})
+     <span onmouseover="ObjectTooltip.createEx(this, '{{$dispensation->_guid}}');">
+       {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}} ({{$dispensation->_ref_service}})
+     </span>
      <br />
   {{/foreach}}
   </td>

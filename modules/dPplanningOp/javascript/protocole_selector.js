@@ -34,8 +34,7 @@ var ProtocoleSelector = {
     var oForm     = (this.sForm && getForm(this.sForm)) || document.editOp;
     var oFormEasy = document.editOpEasy;
     var oSejourForm = document.editSejour;
-    var url = new Url();
-    url.setModuleAction("dPplanningOp", "vw_protocoles");
+    var url = new Url("dPplanningOp", "vw_protocoles");
     url.addParam("chir_id", oForm[this.sChir_id].value);
     url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
     url.popup(this.options.width, this.options.height, "Protocole");

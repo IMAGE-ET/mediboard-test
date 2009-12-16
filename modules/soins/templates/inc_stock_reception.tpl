@@ -55,8 +55,8 @@ printReceptionReport = function(service_id){
             <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
             <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
             {{if !$trace->date_reception}}
-              {{mb_field object=$trace field=quantity increment=1 form=delivery-trace-$id-receive size=3}}
-              {{mb_field object=$trace field=code}}
+              {{mb_field object=$trace field=quantity increment=1 form=delivery-trace-$id-receive size=2}}
+              {{mb_field object=$trace field=code size=10 title="Code"}}
               <input type="hidden" name="date_reception" value="now" />
               <button type="submit" class="tick">Recevoir</button>
             {{else}}
