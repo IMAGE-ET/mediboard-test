@@ -60,7 +60,8 @@ if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatien
   CAppUI::stepAjax("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
   return;
 }
-    
+
+$echange = 0;
 foreach ($patients as $patient) {
   $patient->loadIPP();
   $patient->loadRefsSejours();
@@ -81,7 +82,7 @@ foreach ($patients as $patient) {
     $patient->_IPP = $IPP->id400;
   }
 
-  if ((CAppUI::conf("sip pat_no_ipp") && $patient->_IPP) || 
+  if ((CAppUI::conf("sip pat_no_ipp") && $patient->_IPP  && ($patient->_IPP != "-")) || 
       (!CAppUI::conf("sip send_all_patients") && empty($patient->_ref_sejours))) {
   	continue;
   }
@@ -97,12 +98,14 @@ foreach ($patients as $patient) {
   	trigger_error("Création de l'événement patient impossible.", E_USER_WARNING);
     CAppUI::stepAjax("Import de '$patient->_view' échoué", UI_MSG_WARNING);
   }
+  $echange++;
 }
 
 // Enregistrement du dernier identifiant dans la session
 if (@$patient->_id) {
   CValue::setSession("idContinue", $patient->_id);
   CAppUI::stepAjax("Dernier ID traité : '$patient->_id'", UI_MSG_OK);
+  CAppUI::stepAjax("$echange de créés", UI_MSG_OK);
 }
 
 CAppUI::stepAjax("Import terminé avec  '$errors' erreurs", $errors ? UI_MSG_WARNING : UI_MSG_OK);

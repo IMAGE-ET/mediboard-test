@@ -65,10 +65,10 @@ $errors = 0;
 $sejours = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
 
 // Si pas de tag patient et séjour
-/*if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
+if (!CAppUI::conf("dPplanningOp CSejour tag_dossier") || !CAppUI::conf("dPpatients CPatient tag_ipp")) {
   CAppUI::stepAjax("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
   return;
-}*/
+}
 
 $echange = 0;
 foreach ($sejours as $sejour) {
@@ -111,7 +111,7 @@ foreach ($sejours as $sejour) {
     continue;
   }
 
-  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier) {
+  if (CAppUI::conf("sip sej_no_numdos") && $sejour->_num_dossier && ($sejour->_num_dossier != "-")) {
     continue;
   }
   
