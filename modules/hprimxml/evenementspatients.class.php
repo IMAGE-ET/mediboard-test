@@ -256,7 +256,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function mappingVenue($node, $mbVenue) {  
-    $mbVenue = self::getNatureVenue($node, $mbVenue);
+    //$mbVenue = self::getNatureVenue($node, $mbVenue);
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = self::getPlacement($node, $mbVenue);
