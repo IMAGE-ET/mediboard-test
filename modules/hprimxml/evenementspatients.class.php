@@ -539,7 +539,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   static function getAssure($node, $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);  
     
-    $mbPatient->matricule = $xpath->queryTextNode("hprim:immatriculation", $node);
+    $immatriculation = $xpath->queryTextNode("hprim:immatriculation", $node);
+    $mbPatient->matricule = $immatriculation;
+    $mbPatient->assure_matricule = $immatriculation;
     
     $personne = $xpath->queryUniqueNode("hprim:personne", $node);
     if ($personne) {
