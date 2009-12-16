@@ -256,7 +256,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
   
   function mappingVenue($node, $mbVenue) {  
-    //$mbVenue = self::getNatureVenue($node, $mbVenue);
+    $mbVenue = self::getNatureVenue($node, $mbVenue);
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = self::getPlacement($node, $mbVenue);
@@ -293,12 +293,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       "cslt" => "consult",
       "sc"   => "seances",
     );
-    if ($nature) {
-      $mbVenue->type =  $attrNatureVenueHprim[$nature];
-    } else {
-      $mbVenue->type = "seances";
-    }
-      
+    if (!$mbVenue->type) {
+	    if ($nature) {
+	      $mbVenue->type =  $attrNatureVenueHprim[$nature];
+	    } else {
+	      $mbVenue->type = "hsp";
+	    }
+    }  
+    
     return $mbVenue;
   }
   
@@ -461,7 +463,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
     
     $dateHeure = "$date $heure";
-    
+
     if (!$date) {
       $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
     }
