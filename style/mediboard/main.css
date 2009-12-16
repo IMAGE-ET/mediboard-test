@@ -873,33 +873,33 @@ table.form th.category label {
   vertical-align: middle;
 }
 
-label.notNull,
-label.canNull,
-label.notNullOK,
-label.checkNull {
+form label.notNull,
+form label.canNull,
+form label.notNullOK,
+form label.checkNull {
   padding-right: 7px;
   font-weight: bold;
   background-position: center right;
   background-repeat: no-repeat;
 }
 
-label.notNull {
+form label.notNull {
   background-image: url(../mediboard/images/icons/notNull.png);
 }
 
-label.canNull {
+form label.canNull {
   background-image: url(../mediboard/images/icons/canNull.png);
 }
 
-label.notNullOK {
+form label.notNullOK {
   background-image: url(../mediboard/images/icons/notNullOK.png);
 }
 
-label.checkNull {
+form label.checkNull {
   background-image: url(../mediboard/images/icons/checkNull.png);
 }
 
-label.error,
+form label.error,
 table.form th.category label.error {
   color: #f00;
 }
