@@ -317,7 +317,7 @@
     </th>
     <td colspan="3">
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
-        <option value="4"  {{if "4" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 4h</option>
+        <option value="04"  {{if "04" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
         <option value="24" {{if "24" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
       </select>
     </td>

@@ -463,7 +463,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $dateHeure = "$date $heure";
     
     if (!$date) {
-      $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type), $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
+      $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
     }
     
     $etat = self::getEtatVenue($node);

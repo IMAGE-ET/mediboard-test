@@ -207,13 +207,13 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "service_id_notNull"  => "0",
   "sortie_prevue" => array(
     "comp"    => "24",
-    "ambu"    => "4",
-    "exte"    => "4",
-    "seances" => "4",
+    "ambu"    => "04",
+    "exte"    => "04",
+    "seances" => "04",
     "ssr"     => "24",
     "psy"     => "24",
     "urg"     => "24",
-    "consult" => "4",
+    "consult" => "04",
   )
 );
 
