@@ -20,7 +20,7 @@ removeSelectedTr = function(){
 }
 
 Main.add(function(){
-  Control.Tabs.create('list_protocoles_prescription');
+  Control.Tabs.create('list_protocoles_prescription', true);
 });
 </script>
 
