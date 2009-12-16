@@ -19,7 +19,8 @@ if (!$echange_hprim_id) {
     return;
   }
 	$echange_hprim = new CEchangeHprim();
-	$where['date_echange'] = "IS NULL";
+  $where['date_echange'] = "IS NULL";
+	$where['emetteur'] = CAppUI::conf("mb_id");
 	$where['message_valide'] = " = '1'";
 	
   $notifications = $echange_hprim->loadList($where, null, $limit);
