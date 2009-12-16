@@ -14,6 +14,7 @@ class CSociete extends CMbObject {
 
   // DB Fields
   var $name            = null;
+  var $code            = null;
   var $address         = null;
   var $postal_code     = null;
   var $city            = null;
@@ -22,7 +23,8 @@ class CSociete extends CMbObject {
   var $siret           = null;
   var $email           = null;
   var $contact_name    = null;
-  var $contact_surname = null;
+  var $carriage_paid   = null;
+  var $delivery_time   = null;
 
   // Object References
   //     Multiple
@@ -47,15 +49,17 @@ class CSociete extends CMbObject {
 	function getProps() {
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
-    $specs['address']         = 'str';
-    $specs['postal_code']     = 'numchar minLength|4 maxLength|5';
+    $specs['code']            = 'str maxLength|80';
+    $specs['address']         = 'text';
+    $specs['postal_code']     = 'str minLength|4 maxLength|5';
     $specs['city']            = 'str seekable';
     $specs['phone']           = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs['fax']             = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs['siret']           = 'code siret';
     $specs['email']           = 'email';
-    $specs['contact_name']    = 'str maxLength|50 seekable';
-    $specs['contact_surname'] = 'str maxLength|50 seekable';
+    $specs['contact_name']    = 'str seekable';
+    $specs['carriage_paid']   = 'str';
+    $specs['delivery_time']   = 'str';
     return $specs;
   }
 
@@ -68,6 +72,5 @@ class CSociete extends CMbObject {
     $this->_ref_product_references = $this->loadBackRefs('product_references');
     $this->_ref_products = $this->loadBackRefs('products');
   }
-
 }
 ?>

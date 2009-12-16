@@ -16,7 +16,6 @@
         <tr>
           <th>{{tr}}CSociete-name{{/tr}}</th>
           <th>{{tr}}CSociete-contact_name{{/tr}}</th>
-          <th>{{tr}}CSociete-address{{/tr}}</th>
           <th>{{tr}}CSociete-phone{{/tr}}</th>
           <th>{{tr}}CSociete-email{{/tr}}</th>
         </tr>
@@ -27,14 +26,11 @@
               {{$curr_societe->_view}}
             </a>
           </td>
-          <td class="text">{{mb_value object=$curr_societe field=contact_name}} {{mb_value object=$curr_societe field=contact_surname}}</td>
-          <td class="text">
-            {{$curr_societe->address|nl2br}}<br />{{mb_value object=$curr_societe field=postal_code}} {{mb_value object=$curr_societe field=city}}
-          </td>
+          <td class="text">{{mb_value object=$curr_societe field=contact_name}}</td>
           <td>{{mb_value object=$curr_societe field=phone}}</td>
           <td><a href="mailto:{{$curr_societe->email}}">{{$curr_societe->email}}</a></td>
         </tr>
-        {{/foreach}}       
+        {{/foreach}}
         
       </table>
     </td>
@@ -63,6 +59,10 @@
         <tr>
           <th>{{mb_label object=$societe field="name"}}</th>
           <td>{{mb_field object=$societe field="name"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$societe field="code"}}</th>
+          <td>{{mb_field object=$societe field="code"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="address"}}</th>
@@ -97,8 +97,12 @@
           <td>{{mb_field object=$societe field="contact_name"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$societe field="contact_surname"}}</th>
-          <td>{{mb_field object=$societe field="contact_surname"}}</td>
+          <th>{{mb_label object=$societe field="carriage_paid"}}</th>
+          <td>{{mb_field object=$societe field="carriage_paid"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$societe field="delivery_time"}}</th>
+          <td>{{mb_field object=$societe field="delivery_time"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="4">
