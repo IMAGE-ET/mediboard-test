@@ -54,7 +54,7 @@ class CConsultAnesth extends CMbObject {
   var $ht_final       = null;
   var $premedication  = null;
   var $prepa_preop    = null;
-	var $date_analyse   = null;
+  var $date_analyse   = null;
 
   // Form fields
   var $_date_consult    = null;
@@ -102,12 +102,13 @@ class CConsultAnesth extends CMbObject {
     $specs["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
     $specs["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
     
-		// @todo: Supprimer ces quatre champs
-		$specs["antecedents"]      = "text confidential";
+    // @todo: Supprimer ces quatre champs
+    $specs["antecedents"]      = "text confidential";
     $specs["traitements"]      = "text confidential";
     $specs["tabac"]            = "text helped";
     $specs["oenolisme"]        = "text helped";
-		
+    
+    $specs["intubation"]       = "enum list|?|dents|bouche|cou";
     $specs["biologie"]         = "enum list|?|NF|COAG|IONO show|0";
     $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue show|0";
     $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
@@ -128,7 +129,7 @@ class CConsultAnesth extends CMbObject {
     $specs["ht_final"]         = "float min|0 max|100 show|0";
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
-		$specs["date_analyse"]     = "date show|0";
+    $specs["date_analyse"]     = "date show|0";
 
     // Champs pour les conditions d'intubation
     $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
@@ -150,14 +151,12 @@ class CConsultAnesth extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
+    
     // Vérification si intubation difficile
-    if(
-    ($this->mallampati && ($this->mallampati=="classe3" || $this->mallampati=="classe4"))
-    || ($this->bouche && ($this->bouche=="m20" || $this->bouche=="m35"))
-    || ($this->distThyro && $this->distThyro=="m65")
-    ){
-      $this->_intub_difficile = true;
-    }
+    $this->_intub_difficile = 
+       $this->mallampati === "classe3" || $this->mallampati === "classe4" || 
+       $this->bouche === "m20" || $this->bouche === "m35" || 
+       $this->distThyro === "m65";
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
@@ -180,8 +179,7 @@ class CConsultAnesth extends CMbObject {
   }
   
   function loadRefChir() {
-    $this->_ref_chir = new CMediusers();
-    $this->_ref_chir = $this->_ref_chir->getCached($this->chir_id);
+    $this->_ref_chir = $this->loadFwdRef("chir_id", true);
   }
 
   function loadRefOperation() {
@@ -197,13 +195,11 @@ class CConsultAnesth extends CMbObject {
     else {
       $this->loadRefSejour();
     }
-    
   }
 
   function loadRefSejour() {
-    $this->_ref_sejour = new CSejour;
-    $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
-    $this->_ref_sejour->loadRefsFwd(1);
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
+    $this->_ref_sejour->loadRefsFwd(true);
   }
 
   function loadRefsFiles(){
@@ -217,7 +213,7 @@ class CConsultAnesth extends CMbObject {
   function loadView() {
   	parent::loadView();
     $this->_ref_consultation = $this->_fwd["consultation_id"];
-		$this->_ref_consultation->loadView();
+    $this->_ref_consultation->loadView();
   }
    
   function loadComplete(){
@@ -273,11 +269,11 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefsTechniques() {
-    $this->_ref_techniques = new CTechniqueComp;
+    $techniques = new CTechniqueComp;
     $where = array(
       "consultation_anesth_id" => "= '$this->consultation_anesth_id'"
     );
-    return $this->_ref_techniques = $this->_ref_techniques->loadList($where,"technique");
+    return $this->_ref_techniques = $techniques->loadList($where, "technique");
   }
 
   function loadRefsBack() {
@@ -322,7 +318,7 @@ class CConsultAnesth extends CMbObject {
     }else{
       $canSej = false;
     }
-    return $this->_ref_consultation->getPerm($permType) || $canOper || $canSej;
+    return $canOper || $canSej || $this->_ref_consultation->getPerm($permType);
   }
 
   function fillTemplate(&$template) {
