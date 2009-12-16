@@ -112,6 +112,7 @@ class CMessage extends CMbObject {
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->_ref_module = $this->loadFwdRef("module_id", true);
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 }
 
