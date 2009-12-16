@@ -239,4 +239,8 @@ $locales['CEchangeHprim-id_permanent-desc'] = 'Identifiant permanent (IPP/NumDos
 $locales['CEchangeHprim-id_permanent-court'] = 'IPP/NumDos';
 $locales['config-sip-send_sej_pa'] = 'Envoi que les séjours de pré-admission';
 $locales['config-sip-send_sej_pa-desc'] = 'Envoi que les séjours de pré-admission';
+$locales['config-sip-export_date_min'] = 'Date minimum d\'export (%Y-%m-%d)';
+$locales['config-sip-export_date_min-desc'] = 'Date minimum d\'export';
+$locales['config-sip-export_date_max'] = 'Date maximum d\'export (%Y-%m-%d)';
+$locales['config-sip-export_date_max-desc'] = 'Date maximum d\'export';
 ?>

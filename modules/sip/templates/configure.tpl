@@ -157,6 +157,30 @@ Main.add(function () {
 	  </tr>
 	  
 	  <tr>
+	    {{assign var="var" value="export_date_min"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	    </td>
+	  </tr>
+	
+	  <tr>
+	    {{assign var="var" value="export_date_max"}}
+	    <th>
+	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	      </label>  
+	    </th>
+	    <td>
+	      <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	    </td>
+	  </tr>
+	  
+	  <tr>
       {{assign var="var" value="batch_count"}}
       <th>
         <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
