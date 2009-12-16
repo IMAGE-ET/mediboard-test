@@ -50,19 +50,25 @@ Main.add(function () {
 
     <td class="text">
       {{assign var=patient value=$_sejour->_ref_patient}}
-      <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-        [{{$patient->_IPP}}]
-        {{$patient}}
+      <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+          [{{$patient->_IPP}}]
+          {{$patient}}
+        </span>
       </a>
     </td>
 
     <td>
-    	{{mb_include module=system template=inc_interval_datetime from=$_sejour->_entree to=$_sejour->_sortie}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+    	  {{mb_include module=system template=inc_interval_datetime from=$_sejour->_entree to=$_sejour->_sortie}}
+    	</span>
     </td>
     
-    <td class="text" {{if !$GHM->_CM}}style="background-color:#fdd"{{/if}}>
-      {{$GHM->_GHM}}
-      {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
+    <td class="text">
+      <div class="{{if !$GHM->_CM}}small-error{{else}}small-success{{/if}}" style="margin: 0px;">
+        {{$GHM->_GHM}}
+        {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
+      </div>
     </td>
   
     <td class="text">
