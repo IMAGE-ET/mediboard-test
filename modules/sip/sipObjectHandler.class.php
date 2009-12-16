@@ -225,7 +225,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
-    $patient1_id = $mbObject->_merging[0]; 
+   /* $patient1_id = $mbObject->_merging[0]; 
     $patient2_id = $mbObject->_merging[1]; 
 
     // Si Serveur
@@ -256,7 +256,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       }
 
       $mbObject->_merging = $min_ipp ? ($patient1_ipp ? $patient1_id : $patient2_id) : (min($patient1_id,$patient2_id));
-    }
+    }*/
   }
 
   function onDelete(CMbObject &$mbObject) {
