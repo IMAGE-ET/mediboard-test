@@ -23,6 +23,7 @@ legend {
 
 input, select, textarea, button {
   margin: 1px;
+  font-family: inherit;
 }
 
 .control {
