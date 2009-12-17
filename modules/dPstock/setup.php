@@ -404,7 +404,11 @@ class CSetupdPstock extends CSetup {
               ADD `carriage_paid` VARCHAR (255),
               ADD `delivery_time` VARCHAR (255);";
     $this->addQuery($sql);
+       
+    $this->makeRevision('1.08');
+    $sql = "ALTER TABLE `product_order` CHANGE `societe_id` `societe_id` INT( 11 ) UNSIGNED NULL";
+    $this->addQuery($sql);
     
-    $this->mod_version = "1.08";
+    $this->mod_version = "1.09";
   }
 }

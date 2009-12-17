@@ -24,6 +24,10 @@
     <tbody id="order-item-{{$curr_item->_id}}">
     {{include file="inc_order_item.tpl"}}
     </tbody>
+  {{foreachelse}}
+    <tr>
+      <td colspan="10">{{tr}}CProductOrderItem.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
   <tr>
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">

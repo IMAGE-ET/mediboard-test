@@ -88,13 +88,6 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
-        <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
-          <input type="hidden" name="m" value="{{$m}}" />
-          <input type="hidden" name="dosql" value="do_order_aed" />
-          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
-          <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
-        </form>
         <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de commande</button>
         <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -109,6 +102,13 @@
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="_reset" value="1" />
           <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">Dévalider</button>
+        </form>
+        <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="cancelled" value="1" />
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
      </td>
     </tr>

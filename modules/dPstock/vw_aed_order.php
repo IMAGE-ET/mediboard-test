@@ -18,13 +18,18 @@ $_autofill   = CValue::get('_autofill');
 
 // Loads the expected Order
 $order = new CProductOrder();
-
-if ($order_id) {
-  $order->load($order_id);
-  $order->updateFormFields();
-  if ($_autofill) {
-    $order->autofill();
+if (!$order->load($order_id)) {
+  $order->group_id = CGroups::loadCurrent()->_id;
+  if ($msg = $order->store()) {
+    CAppUI::setMsg($msg);
   }
+  
+  CAppUI::redirect(CValue::read($_SERVER, "QUERY_STRING")."&order_id=$order->_id");
+  return;
+}
+$order->updateFormFields();
+if ($_autofill) {
+  $order->autofill();
 }
 
 // Categories list
@@ -34,7 +39,6 @@ $list_categories = $category->loadList(null, 'name');
 // Suppliers list
 $societe = new CSociete();
 $list_societes = $societe->loadList(null, 'name');
-
 
 // Smarty template
 $smarty = new CSmartyDP();

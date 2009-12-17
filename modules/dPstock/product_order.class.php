@@ -59,7 +59,7 @@ class CProductOrder extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
-    $specs['societe_id']      = 'ref notNull class|CSociete';
+    $specs['societe_id']      = 'ref class|CSociete';
 	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
 	  $specs['cancelled']       = 'bool';
@@ -222,7 +222,7 @@ class CProductOrder extends CMbObject {
       $format .= '%id';
     }
     
-  	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
+  	$format = str_replace('%id', str_pad($this->_id ? $this->_id : 0, 6, '0', STR_PAD_LEFT), $format);
   	return mbTransformTime(null, null, $format);
   }
 
@@ -245,8 +245,8 @@ class CProductOrder extends CMbObject {
 		$this->_partial = !$this->_received && ($this->_count_received > 0);
 
 		$count = count($this->_ref_order_items);
-		$this->_view  = ($this->_ref_societe)?($this->_ref_societe->_view.' - '):'';
-		$this->_view .= $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
+		$this->_view  = $this->_ref_societe ? "$this->_ref_societe - " : "";
+		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total";
 	}
 	
 	function updateDBFields() {
@@ -282,12 +282,13 @@ class CProductOrder extends CMbObject {
 	}
 	
 	function store () {
-	  if ($msg = parent::store()) return $msg;
-    
-	  if (empty($this->order_number)) {
+	  if (!$this->_id && empty($this->order_number)) {
+	    $this->order_number = uniqid(rand());
+      if ($msg = parent::store()) return $msg;
       $this->order_number = $this->getUniqueNumber();
-    }
-    parent::store();
+	  }
+    
+    return parent::store();
 	}
 
 	function loadRefsBack(){

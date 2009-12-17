@@ -17,6 +17,7 @@ class CProductReception extends CMbObject {
 	var $societe_id       = null;
   var $group_id         = null;
   var $reference        = null;
+  //var $reception_number = null;
 
 	// Object References
 	//    Multiple
@@ -55,7 +56,7 @@ class CProductReception extends CMbObject {
       $format .= '%id';
     }
     
-  	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
+  	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 6, '0', STR_PAD_LEFT), $format);
   	return mbTransformTime(null, null, $format);
   }
 
@@ -66,15 +67,16 @@ class CProductReception extends CMbObject {
 		$this->_view  = $this->_ref_societe ? "{$this->_ref_societe->_view} - " : "";
 		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total";
 	}
-	
-	function store () {
-	  if ($msg = parent::store()) return $msg;
-    
-	  if (empty($this->order_number)) {
-      $this->order_number = $this->getUniqueNumber();
+  
+  /*function store () {
+    if (!$this->_id && empty($this->reception_number)) {
+      $this->reception_number = uniqid(rand());
+      if ($msg = parent::store()) return $msg;
+      $this->reception_number = $this->getUniqueNumber();
     }
-    parent::store();
-	}
+    
+    return parent::store();
+  }*/
 
 	function loadRefsBack(){
 		$this->_ref_reception_items = $this->loadBackRefs('reception_items');
