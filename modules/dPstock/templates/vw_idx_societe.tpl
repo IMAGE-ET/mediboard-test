@@ -8,33 +8,33 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+function refreshSocietesList(){
+  var url = new Url("dPstock", "httpreq_vw_societes_list");
+  url.addFormData("filterSociete");
+  url.requestUpdate("list-societe");
+  return false;
+}
+
+function changePage(page){
+  $V(getForm("filterSociete").start, page);
+}
+
+Main.add(refreshSocietesList);
+</script>
+
 <table class="main">
   <tr>
+    <td>
+      <form name="filterSociete" method="get" action="" onsubmit="return refreshSocietesList()">
+        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td class="halfPane" id="list-societe"></td>
     <td class="halfPane" rowspan="2">
       <a class="button new" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete.create{{/tr}}</a>
-      <table class="tbl">
-        <tr>
-          <th>{{tr}}CSociete-name{{/tr}}</th>
-          <th>{{tr}}CSociete-contact_name{{/tr}}</th>
-          <th>{{tr}}CSociete-phone{{/tr}}</th>
-          <th>{{tr}}CSociete-email{{/tr}}</th>
-        </tr>
-        {{foreach from=$list_societes item=curr_societe}}
-        <tr {{if $curr_societe->_id == $societe->_id}}class="selected"{{/if}}>
-          <td class="text">
-            <a href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id={{$curr_societe->_id}}" title="{{tr}}CSociete.modify{{/tr}}">
-              {{$curr_societe->_view}}
-            </a>
-          </td>
-          <td class="text">{{mb_value object=$curr_societe field=contact_name}}</td>
-          <td>{{mb_value object=$curr_societe field=phone}}</td>
-          <td><a href="mailto:{{$curr_societe->email}}">{{$curr_societe->email}}</a></td>
-        </tr>
-        {{/foreach}}
-        
-      </table>
-    </td>
-    <td class="halfPane">
       {{if $can->edit}}
 			{{mb_include_script module="dPpatients" script="autocomplete"}}
 			<script type="text/javascript">

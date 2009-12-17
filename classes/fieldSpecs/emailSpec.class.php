@@ -11,9 +11,8 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CEmailSpec extends CMbFieldSpec {
-  
   function getSpecType() {
-    return("email");
+    return "email";
   }
   
   function getDBSpec(){
@@ -24,15 +23,14 @@ class CEmailSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
     
     return ($propValue !== null && $propValue !== "") ? 
-      "<a href='mailto:$propValue'>$propValue</a>" : 
-      '';
+      "<a href=\"mailto:$propValue\">$propValue</a>" : 
+      "";
   }
   
   function checkProperty($object){
     if (!preg_match("/^[-a-z0-9\._]+@[-a-z0-9\.]+\.[a-z]{2,4}$/i", $object->{$this->fieldName})) {
       return "Le format de l'email n'est pas valide";
     }
-    return null;
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

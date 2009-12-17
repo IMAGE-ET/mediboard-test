@@ -105,8 +105,7 @@ changeModeBolus = function(oForm){
 
 // Lancement du mode de saisie popup
 viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
-  var url = new Url();
-  url.setModuleAction("dPprescription","vw_easy_mode");
+  var url = new Url("dPprescription","vw_easy_mode");
   url.addParam("prescription_id", '{{$prescription->_id}}');
   url.addParam("mode_protocole", mode_protocole);
   url.addParam("mode_pharma", mode_pharma);
@@ -116,8 +115,8 @@ viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
 
 refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma, readonly, lite) {
   if (!window[chapitre+'Loaded']) {
-    WaitingMessage.cover("div_"+chapitre);
     Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null, readonly, lite);
+    WaitingMessage.cover("div_"+chapitre);
     window[chapitre+'Loaded'] = true;
   }
 }

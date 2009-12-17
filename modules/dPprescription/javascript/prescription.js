@@ -442,8 +442,7 @@ Prescription = {
     }
   }, 
 	popupDossierMedPatient: function(prescription_id){
-	  var url = new Url;
-	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_medical_patient");
+	  var url = new Url("dPprescription", "httpreq_vw_dossier_medical_patient");
 	  url.addParam("prescription_id", prescription_id);
 	  url.popup(700, 500, "Traitements du patient");
   },
