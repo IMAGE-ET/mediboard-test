@@ -127,12 +127,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->sous_type    = $this->sous_type;
     $echg_hprim->message      = utf8_encode($this->saveXML());
     if ($mbObject instanceof CPatient) {
-      if ($mbObject->_IPP) {
+      if ($mbObject->_IPP && $mbObject->_IPP != "-") {
         $echg_hprim->id_permanent = $mbObject->_IPP;
       }
     }
     if ($mbObject instanceof CSejour) {
-      if ($mbObject->_num_dossier) {
+      if ($mbObject->_num_dossier && $mbObject->_num_dossier != "-") {
         $echg_hprim->id_permanent = $mbObject->_num_dossier;
       }
     }
