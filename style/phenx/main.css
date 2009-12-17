@@ -2080,14 +2080,14 @@ div.about div.nav {
 	cursor: pointer;
 }
 
-.chargementMask {
+#waitingMsgMask {
   width: 100%;
   position: absolute;
   background-color: #000;
   z-index: 100;
 }
 
-.chargementText {
+#waitingMsgText {
   width: 20%;
   min-width: 150px;
   position: fixed;
@@ -2103,7 +2103,7 @@ div.about div.nav {
   text-align: center;
 }
 
-.chargementText .loading {
+#waitingMsgText .loading {
   display: inline;
 }
 

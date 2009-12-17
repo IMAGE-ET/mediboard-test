@@ -149,12 +149,6 @@ if (@$_POST["adminhost"]) {
 
 <h3>Tests de connexion</h3>
 
-<div class="big-info">
-  Désormais, seule la source de données principale <tt>std</tt> est créée et testée dans l'assistant d'installation.
-  <br />
-  L'administration des bases de données secondaires est déléguée à <strong>la configuration de chacun des modules correspondant.</strong>.
-</div>
-
 <table class="tbl">
   <tr>
     <th>Configuration</th>

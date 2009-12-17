@@ -75,7 +75,7 @@ function showHeader() {
   </ol>
 </div>
 
-<h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?>  </h1>
+<h1>Installation de Mediboard <?php echo $version["string"]; ?> &mdash; Etape <?php echo $currentStepKey+1; ?>/<?php echo count($steps); ?></h1>
 <?php 
 }
 
@@ -83,8 +83,8 @@ function showFooter() {
   global $stepsText, $currentStepKey, $currentStep, $steps, $chrono;
   $chrono->stop();
   
-  $prevStep = $currentStepKey != 0 ? $steps[$currentStepKey-1] : null;
-  $nextStep = $currentStepKey+1 != count($steps) ? $steps[$currentStepKey+1] : null;
+  $prevStep = $currentStepKey > 0 ? $steps[$currentStepKey-1] : null;
+  $nextStep = $currentStepKey+1 < count($steps) ? $steps[$currentStepKey+1] : null;
 ?>
 <hr />
 <div class="navigation">

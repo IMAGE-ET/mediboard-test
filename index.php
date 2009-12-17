@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+require("./includes/compat.php");
 require("./includes/magic_quotes_gpc.php");
 
 /* 
@@ -42,7 +43,6 @@ require("./includes/config.php");
 $rootName = basename($dPconfig["root_dir"]);
 
 require("./includes/version.php");
-require("./includes/compat.php");
 require("./classes/sharedmemory.class.php");
 
 // PHP Configuration

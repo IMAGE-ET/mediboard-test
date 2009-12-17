@@ -9,6 +9,7 @@
  */
 
 require_once("checkauth.php");
+require_once($mbpath."includes/compat.php");
 require_once($mbpath."classes/mbconfig.class.php");
 require_once($mbpath."classes/mbarray.class.php");
 
@@ -103,20 +104,6 @@ showHeader();
   <tr>
     <th><label for="db[std][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
     <td><input type="text" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
-  </tr>
-
-  <tr>
-    <th class="category" colspan="2">Paramètres d'IHM</th>
-  </tr>
-
-  <tr>
-    <td colspan="10" class="text">
-    	<div class="small-info">
-    	  Ces paramètres sont désormais gérés dans la 
-    	  <strong>configuration du module Administration</strong>,
-    	  disponible après la fin de la première installation.
-    	</div>
-    </td>
   </tr>
 
   <tr>

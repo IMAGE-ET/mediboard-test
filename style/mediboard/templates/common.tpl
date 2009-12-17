@@ -44,9 +44,9 @@
 {{/if}}
 
 <!-- Loading divs -->
-<div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
+<div id="waitingMsgMask" style="display: none;"></div>
 
-<div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
+<div id="waitingMsgText" style="top: -1500px;"><!-- This trick is to preload the background image -->
   <div class="loading">{{tr}}Loading in progress{{/tr}}</div>
 </div>
 

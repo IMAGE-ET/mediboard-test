@@ -890,20 +890,52 @@ function is_intranet_ip($ip) {
     ($ip[0] == 192 && $ip[1] == 168);
 }
 
+function get_server_var($var_name) {
+  if (isset($_SERVER[$var_name]))
+    return $_SERVER[$var_name];
+  elseif (isset($_ENV[$var_name]))
+    return $_ENV[$var_name];
+  elseif (getenv($var_name))
+    return getenv($var_name);
+  elseif (function_exists('apache_getenv') && apache_getenv($var_name, true))
+    return apache_getenv($var_name, true);
+  return null;
+}
+
 function get_remote_address(){
-  $ip = array(
+  $address = array(
     "proxy" => null, 
     "client" => null
   );
   
-  $ip["client"] = isset($_SERVER["HTTP_CLIENT_IP"]) ? $_SERVER["HTTP_CLIENT_IP"] : $_SERVER["REMOTE_ADDR"];
+  $address["client"] = ($client = get_server_var("HTTP_CLIENT_IP")) ? $client : get_server_var("REMOTE_ADDR");
   
-  if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-    $ip["proxy"]  = $client;
-    $ip["client"] = $_SERVER["HTTP_X_FORWARDED_FOR"];
+  $forwarded = array(
+    "HTTP_X_FORWARDED_FOR",
+    "HTTP_FORWARDED_FOR",
+    "HTTP_X_FORWARDED",
+    "HTTP_FORWARDED",
+    "HTTP_FORWARDED_FOR_IP",
+    "X_FORWARDED_FOR",
+    "FORWARDED_FOR",
+    "X_FORWARDED",
+    "FORWARDED",
+    "FORWARDED_FOR_IP",
+  );
+  
+  $client = null;
+  
+  foreach($forwarded as $name) {
+    if ($client = get_server_var($name))
+      break;
   }
   
-  return $ip;
+  if ($client) {
+    $address["proxy"]  = $address["client"];
+    $address["client"] = $client;
+  }
+  
+  return $address;
 }
 
 /**

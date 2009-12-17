@@ -3,15 +3,15 @@
 /* XHTML elements */
 
 html, body {
-/*  height: 100%;*/
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: arial, helvetica, sans-serif;
   font-size: 11px;  
   background: #ddf;
-  margin: 0px;
 }
 
 iframe {
@@ -90,19 +90,19 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-size: 18px;
+  font-size: 1.6em;
   color: #444;
   margin: 10px 0px;
 }
 
 h2 {
-  font-size: 16px;
+  font-size: 1.4em;
   color: #444;
   margin: 5px 10px;
 }
 
 h3 {
-  font-size: 16px;
+  font-size: 1.4em;
   color: #666;
   margin: 5px 20px;
 }
@@ -193,7 +193,7 @@ span.smarty-include {
   position: absolute;
   color: #fff;
   opacity: 0.7;
-  text-indent: 8px;    
+  text-indent: 0.9em;    
   width: 5px;
   height: 5px;
   overflow: hidden;
@@ -419,7 +419,7 @@ input, select, textarea {
   padding: 1px;
   padding-top: 2px;
   border: 1px black solid;
-  font-size: 11px;
+  font-size: 1em;
   background-color: #efe;
 }
 
@@ -482,6 +482,7 @@ a *[onmouseover] {
 
 div#console {
   font-family: "lucida console", "courier new", courier, monospace;
+  font-size: 10px;
   margin: 5px;
   max-height: 300px;
   width: 50%;
@@ -513,24 +514,17 @@ div#console div#console-hide {
   position: fixed;
 }
 
-div#console div.label {
-  font-size: 8pt;
-}
-
 div#console div.key {
   color: #afa;
-  font-size: 8pt;
   float: left;
 }
 
 div#console div.error {
   color: #faa;
-  font-size: 8pt;
 }
 
 div#console div.value {
   color: #fff;
-  font-size: 8pt;
 }
 
 /* classes Mediboard */
@@ -560,7 +554,7 @@ table.titleblock td {
 
 table.titleblock td.titlecell {
   font-family: Georgia, serif;
-  font-size: 20px; 
+  font-size: 1.8em; 
   color: #620;
   width: 100%;
   padding-bottom: 10px;
@@ -653,7 +647,7 @@ th.greedyPane {
 }
 
 th.title {
-  font-size: 14px;
+  font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
   background: #bbb;
@@ -709,7 +703,7 @@ table.tbl th {
 }
 
 table.tbl th.title {
-  font-size: 14px;
+  font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
   background: #bbb;
@@ -851,7 +845,7 @@ table.form th {
 }
 
 table.form th.title {
-  font-size: 14px;
+  font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
   background-color: #bbb;
@@ -1357,7 +1351,7 @@ table.note {
   background: transparent;
   border-spacing: 0px;
   padding: 0px;
-  font-size: 10px;
+  font-size: 0.9em;
   color: #000;
   font-weight: normal;
 }
@@ -1398,7 +1392,7 @@ table.note th.low {
 #login table td.logo {
   width: 33%;
   text-align: center;
-  font-size: 9px;
+  font-size: 0.9em;
   white-space: normal;
 }
 
@@ -1434,7 +1428,7 @@ table.Offline option,
 table.Offline input,
 table.Offline button  {
   height: 20px;
-  font-size: 15px;
+  font-size: 1.2em;
   font-weight: bold;
   margin : 2px 2px;
 }
@@ -1469,7 +1463,7 @@ table.Offline button  {
   text-align: center;
   font-weight: bold;
   font-variant: small-caps;
-  font-size: 10pt;
+  font-size: 1em;
   padding: 3px 4px;
 }
 
@@ -1791,7 +1785,7 @@ table.print th.title {
   background: #68f;
   border: #aaa 2px solid;
   padding: 2px;
-  font-size: 16pt;
+  font-size: 1.4em;
   color: #006;
 }
 
@@ -2396,20 +2390,19 @@ td.listeChoixCR select {
 
 /* Installation wizard */
 .wizard {
-  padding: 40px; 
-  width: auto;
-  margin: 80px; 
-  background: #eee; 
-  border: 2px solid #8c8; 
+  padding: 20px;
+  width: 900px;
+  margin: 20px auto; 
+  border: 2px solid #666;
+  background: #eee;
 }
 
 .wizard .toc {
   position: fixed;
-  right: 15px;
-  top: 15px;
+  right: 20px;
+  top: 20px;
   background: #fff;
-  border: 2px solid #000;
-  margin: 5px;
+  border: 2px solid #666;
   padding: 10px;
   opacity: .7;
 }
@@ -2635,14 +2628,14 @@ div.about div.nav {
 	cursor: pointer;
 }
 
-.chargementMask{
+#waitingMsgMask {
   width: 100%;
   position: absolute;
-  background-color:#000 ;
+  background-color:#000;
   z-index: 100;
 }
 
-.chargementText{
+#waitingMsgText {
   width: 20%;
   min-width: 150px;
   position: fixed;
@@ -2655,7 +2648,7 @@ div.about div.nav {
   text-align: center;
 }
 
-.chargementText .loading{
+#waitingMsgText .loading{
   display: inline;
 }
 

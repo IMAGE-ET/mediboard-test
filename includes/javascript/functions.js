@@ -141,10 +141,11 @@ var WaitingMessage = {
     mask.setStyle({
       top: 0,
       left: 0,
-      height: doc.scrollHeight + "px",
-      width: doc.scrollWidth + "px",
+      height: doc.clientHeight + "px",
+      width: doc.clientWidth + "px",
       zIndex: 100,
-      opacity: 0.3
+      opacity: 0.3,
+      position: "fixed"
     }).show();
   },
   

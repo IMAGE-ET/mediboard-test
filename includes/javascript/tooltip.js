@@ -93,8 +93,8 @@ var ObjectTooltip = Class.create({
           offsetTop: dim.height, 
           offsetLeft: Math.min(dim.width, 20), 
           setWidth: false, 
-          setHeight: false}
-        )
+          setHeight: false
+        })
         .unoverflow();
   },
   

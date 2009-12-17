@@ -590,19 +590,17 @@ Object.extend(Date, {
   year: 365.2425 * 24 * 60 * 60 * 1000,
 
   isDATE: function(sDate) {
-    var re = /^\d{4}-\d{2}-\d{2}$/;
-    return re.match(sDate);
+    return /^\d{4}-\d{2}-\d{2}$/.test(sDate);
   },
   isDATETIME: function(sDateTime) {
-    var re = /^\d{4}-\d{2}-\d{2}[ \+T]\d{2}:\d{2}:\d{2}$/;
-    return re.match(sDateTime);
+    return /^\d{4}-\d{2}-\d{2}[ \+T]\d{2}:\d{2}:\d{2}$/.test(sDateTime);
   },
   
   // sDate must be: YYYY-MM-DD
   fromDATE: function(sDate) {
-    var match, re = /^(\d{4})-(\d{2})-(\d{2})$/;
+    var match;
 
-    if (!(match = re.exec(sDate)))
+    if (!(match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(sDate)))
       Assert.that(match, "'%s' is not a valid DATE", sDate);
 
     return new Date(match[1], match[2] - 1, match[3]); // Js months are 0-11!!
@@ -634,22 +632,21 @@ Object.extend(Date, {
 
 Class.extend(Date, {
   toDATE: function() {
-    var y = this.getFullYear();
-    var m = this.getMonth()+1; // Js months are 0-11!!
-    var d = this.getDate();
-    
+    var y = this.getFullYear(),
+        m = this.getMonth()+1, // Js months are 0-11!!
+        d = this.getDate();
     return printf("%04d-%02d-%02d", y, m, d);
   },
 	toTIME: function(){
-    var h = this.getHours();
-    var m = this.getMinutes();
-    var s = this.getSeconds();
+    var h = this.getHours(),
+        m = this.getMinutes(),
+        s = this.getSeconds();
 		return printf("%02d:%02d:%02d", h, m, s);		
 	},
   toDATETIME: function(useSpace) {
-    var h = this.getHours();
-    var m = this.getMinutes();
-    var s = this.getSeconds();
+    var h = this.getHours(),
+        m = this.getMinutes(),
+        s = this.getSeconds();
     
     if(useSpace)
       return this.toDATE() + printf(" %02d:%02d:%02d", h, m, s);
@@ -658,17 +655,15 @@ Class.extend(Date, {
   },
   
   toLocaleDate: function() {
-    var y = this.getFullYear();
-    var m = this.getMonth()+1; // Js months are 0-11!!
-    var d = this.getDate();
-    
+    var y = this.getFullYear(),
+        m = this.getMonth()+1, // Js months are 0-11!!
+        d = this.getDate();
     return printf("%02d/%02d/%04d", d, m, y);
   },
   
   toLocaleDateTime: function () {
-    var h = this.getHours();
-    var m = this.getMinutes();
-    
+    var h = this.getHours(),
+        m = this.getMinutes();
     return this.toLocaleDate() + printf(" %02d:%02d", h, m);
   },
   

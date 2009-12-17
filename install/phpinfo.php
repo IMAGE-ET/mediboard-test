@@ -8,4 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+require_once("header.php");
+
+showHeader();
+
 phpinfo(); 
+
+showFooter();

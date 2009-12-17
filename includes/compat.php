@@ -35,6 +35,17 @@ if (!function_exists('array_diff_key')) {
   }
 }
 
+/**
+ * Recursively applies a function to values of an array
+ */
+function array_map_recursive($function, $array) {
+  foreach ($array as $key => $value ) {
+    $array[$key] = is_array($value) ? 
+      array_map_recursive($function, $value) : 
+      $function($value);
+  }
+  return $array;
+}
 
 /**
  * (PHP 5 >= 5.1.0)
