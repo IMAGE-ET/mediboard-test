@@ -127,7 +127,13 @@ Main.add(function () {
                 <label 
                   for="list_{{$_plage->_id}}"
                   onmouseover="ObjectTooltip.createDOM(this, 'plage-{{$_plage->_id}}')" 
-                  {{if !$over}}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
+                  {{if $resp_bloc ||
+                    (
+                     (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
+                     && ($_plage->date >= $date_min)
+                     && (($_plage->_nb_operations < $_plage->max_intervention) || ($_plage->max_intervention == 0) || ($_plage->max_intervention == ""))
+                    )
+                  }}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
                 >
                   {{$_plage->date|date_format:"%a %d"}} -
                   {{$_plage->debut|date_format:"%Hh%M"}} -
