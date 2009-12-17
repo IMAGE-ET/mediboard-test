@@ -13,6 +13,7 @@ global $can;
 $can->needsRead();
 
 $echange_hprim_id    = CValue::get("echange_hprim_id");
+$id_permanent        = CValue::getOrSession("id_permanent");
 $t                   = CValue::getOrSession('types', array());
 $statut_acquittement = CValue::getOrSession("statut_acquittement");
 $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
@@ -36,6 +37,7 @@ $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange HPRIM demandé
 $echange_hprim = new CEchangeHprim();
+$echange_hprim->id_permanent = $id_permanent;
 $echange_hprim->_date_min = $_date_min;
 $echange_hprim->_date_max = $_date_max;
 
@@ -86,6 +88,10 @@ if (isset($t["acquittement_invalide"])) {
 if (isset($t["no_date_echange"])) {
   $where["date_echange"] = "IS NULL";
 }
+if ($id_permanent) {
+  $where["id_permanent"] = " = '$id_permanent'";
+}
+
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $total_echange_hprim = $itemEchangeHprim->countList($where);

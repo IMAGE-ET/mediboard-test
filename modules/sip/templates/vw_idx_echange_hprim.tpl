@@ -72,6 +72,10 @@ function changePage(page) {
             <td colspan="2">{{mb_field object=$echange_hprim field="echange_hprim_id"}}</td>
           </tr>
           <tr>
+            <th colspan="2">{{mb_label object=$echange_hprim field="id_permanent"}}</th>
+            <td colspan="2">{{mb_field object=$echange_hprim field="id_permanent"}}</td>
+          </tr>
+          <tr>
             <th colspan="2">Type de message d'événement</th>
             <td colspan="2">
               <select class="str" name="msg_evenement" onchange="$V(this.form.page, 0)">
