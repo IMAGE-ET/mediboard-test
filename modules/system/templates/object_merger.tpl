@@ -98,7 +98,12 @@ Main.add(function() {
     </tr>
     <tr>
       <td />
-      <td><button type="submit" class="submit">{{tr}}Submit{{/tr}}</button></td>
+      <td>
+        <button type="submit" class="submit">{{tr}}Submit{{/tr}}</button>
+        <label>
+          <input type="checkbox" onclick="$$('tr.equal').invoke('setVisible', $V(this));" /> Afficher les champs vides ou identiques
+        </label>
+      </td>
       <th />
       <td><button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button></td>
     </tr>
@@ -107,12 +112,7 @@ Main.add(function() {
 
 {{if $result}}
 
-<h2>
-  Fusion de {{tr}}{{$result->_class_name}}{{/tr}}
-  <label>
-    <input type="checkbox" onclick="$$('tr.equal').invoke('setVisible', $V(this));" /> Afficher les champs vides ou identiques
-  </label>
-</h2>
+<h2>Fusion de {{tr}}{{$result->_class_name}}{{/tr}}</h2>
 
 {{if $checkMerge}}
 <div class="small-warning">
