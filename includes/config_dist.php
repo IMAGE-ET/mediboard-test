@@ -633,6 +633,7 @@ $dPconfig["sip"] = array (
   "send_all_patients" => 1,
   "sej_no_numdos" => 0,
   "send_sej_pa" => 1,
+  "enable_send" => 1
 );
 
 $dPconfig["webservices"] = array (

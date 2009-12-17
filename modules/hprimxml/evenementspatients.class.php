@@ -17,7 +17,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     'mouvementPatient'      => "CHPrimXMLMouvementPatient",
     'debiteursVenue'        => "CHPrimXMLDebiteursVenue"
   );
-  
+    
   static function getVersionEvenementsPatients() {
     $version = CAppUI::conf('hprimxml evt_patients version');
 
@@ -96,6 +96,24 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
     
     return $xpath->queryTextNode("hprim:valeur", $recepteur);
+  }
+  
+  function isActionValide($action, $domAcquittement, $echange_hprim) {
+    $messageAcquittement = null;
+    
+    if (array_key_exists($data['action'], $this->actions)) {
+      return $messageAcquittement;
+    }
+    
+    $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
+    $doc_valid = $domAcquittement->schemaValidate();
+    $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+      
+    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->statut_acquittement = "erreur";
+    $echange_hprim->store();
+    
+    return $messageAcquittement;
   }
   
   function mappingPatient($node, CPatient $mbPatient) {    
@@ -255,7 +273,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     return $this->getIdSource($object);
   }
   
-  function mappingVenue($node, $mbVenue) {  
+  function mappingVenue($node, $mbVenue, $cancel = false) { 
+    // Si annulation
+    if ($cancel) {
+      $mbVenue->annule = 1;
+      
+      return $mbVenue;
+    } 
     $mbVenue = self::getNatureVenue($node, $mbVenue);
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);

@@ -11,6 +11,12 @@
 CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients { 
+  var $actions = array(
+    'création' => "création",
+    'remplacement' => "remplacement",
+    'modification' => "modification",
+  );
+  
   function __construct() {    
     $this->sous_type = "debiteursVenue";
             
@@ -79,18 +85,6 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function debiteursVenue($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
-    if (($data['action'] != "création") && ($data['action'] != "modification") && ($data['action'] != "remplacement")) {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echange_hprim->acquittement = $messageAcquittement;
-      $echange_hprim->statut_acquittement = "erreur";
-      $echange_hprim->store();
-      
-      return $messageAcquittement;
-    }
-    
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);

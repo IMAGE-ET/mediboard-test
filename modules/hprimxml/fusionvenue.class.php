@@ -11,6 +11,10 @@
 CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients { 
+  var $actions = array(
+    'fusion' => "fusion"
+  );
+  
   function __construct() {    
     $this->sous_type = "fusionVenue";
             
@@ -75,15 +79,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
    **/
   function fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data) {
     // Seulement le cas d'une fusion
-    if ($data['action'] != "fusion") {
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E008");
-      $doc_valid = $domAcquittement->schemaValidate();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-      $echange_hprim->acquittement = $messageAcquittement;
-      $echange_hprim->statut_acquittement = "erreur";
-      $echange_hprim->store();
-      
+    if ($messageAcquittement = $this->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+
       return $messageAcquittement;
     }
     

@@ -184,6 +184,7 @@ $locales['sip-hprim-error-A105'] = 'Création du numéro dossier a échoué.';
 $locales['sip-hprim-error-A120'] = 'Numéro dossier connu, IC non connu. Mauvais IC sur le SIP.';
 $locales['sip-hprim-error-A121'] = 'Numéro dossier non connu, IC non fourni. Séjour retrouvé. Association Numéro dossier.';
 $locales['sip-hprim-error-A122'] = 'Numéro dossier non connu, IC non fourni. Séjour retrouvé par collision. Association Numéro dossier.';
+$locales['sip-hprim-error-A130'] = 'Séjour annulé.';
 $locales['sip-hprim-error-I001'] = 'L\'enregistrement du patient est terminé.';
 $locales['sip-hprim-error-I002'] = 'Modification du patient terminée.';
 $locales['sip-hprim-error-I003'] = 'IC non fourni.';
@@ -243,4 +244,6 @@ $locales['config-sip-export_date_min'] = 'Date minimum d\'export (%Y-%m-%d)';
 $locales['config-sip-export_date_min-desc'] = 'Date minimum d\'export';
 $locales['config-sip-export_date_max'] = 'Date maximum d\'export (%Y-%m-%d)';
 $locales['config-sip-export_date_max-desc'] = 'Date maximum d\'export';
+$locales['config-sip-enable_send'] = 'Activer l\'envoi';
+$locales['config-sip-enable_send-desc'] = 'Activer l\'envoi des échanges';
 ?>

@@ -29,6 +29,7 @@ Main.add(function () {
     <tr>
       <th class="category" colspan="10">{{tr}}config-{{$mod}}{{/tr}}</th>
     </tr>
+    {{mb_include module=system template=inc_config_bool var=enable_send}}
         
     {{mb_include module=system template=inc_config_bool var=server}}
     
