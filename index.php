@@ -356,11 +356,13 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
 
 // Inclusion du footer
 if (!$suppressHeaders) {
+  $address = get_remote_address();
+  
   $smartyFooter = new CSmartyDP("style/$uistyle");
   $smartyFooter->assign("offline"       , false);
   $smartyFooter->assign("debugMode"     , CAppUI::pref("INFOSYSTEM"));
   $smartyFooter->assign("performance"   , $performance);
-  $smartyFooter->assign("userIP"        , $_SERVER["REMOTE_ADDR"]);
+  $smartyFooter->assign("userIP"        , $address["client"]);
   $smartyFooter->assign("errorMessage"  , CAppUI::getMsg());
   $smartyFooter->display("footer.tpl");
 }

@@ -939,11 +939,13 @@ class CMbObject {
       return;	
     }
     
+    //$address = get_remote_address();
+    
     $log = new CUserLog;
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
-    // $log->ip_address = inet_pton(CValue::read($_SERVER, "REMOTE_ADDR"));
+    //$log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
@@ -1083,7 +1085,7 @@ class CMbObject {
    * @param $objects An array of CMbObject
    * @return $this or an error
    */
-  function mergeDBFields ($objects = array()/*<CMbObject>*/) {
+  function mergeDBFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
 		if ($msg = $this->checkMerge($objects)) return $msg;
 		
     $db_fields = $this->getDBFields();
@@ -1091,15 +1093,22 @@ class CMbObject {
     foreach ($diffs as &$diff) $diff = false;
     
     foreach ($objects as &$object) {
-	    foreach ($db_fields as $propName => $propValue) {
-	      if ($this->$propName === null && !$diffs[$propName]) {
-	        $this->$propName = $object->$propName;
-	      }
-	      else if ($this->$propName != $object->$propName) {
-	      	$diffs[$propName] = true;
-	      	$this->$propName = null;
-	      }
-	    }
+      foreach ($db_fields as $propName => $propValue) {
+        if ($getFirstValue) {
+          if ($this->$propName === null) {
+            $this->$propName = $object->$propName;
+          }
+        }
+        else {
+          if ($this->$propName === null && !$diffs[$propName]) {
+            $this->$propName = $object->$propName;
+          }
+          else if ($this->$propName != $object->$propName) {
+            $diffs[$propName] = true;
+            $this->$propName = null;
+          }
+        }
+      }
     }
   }
   

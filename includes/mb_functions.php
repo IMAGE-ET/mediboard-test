@@ -890,7 +890,7 @@ function is_intranet_ip($ip) {
     ($ip[0] == 192 && $ip[1] == 168);
 }
 
-function get_ip(){
+function get_remote_address(){
   $ip = array(
     "proxy" => null, 
     "client" => null

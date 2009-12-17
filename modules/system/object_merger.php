@@ -39,18 +39,20 @@ if (class_exists($objects_class) && count($objects_id)) {
     }
   }
   
-  if ($result && $result->_id) {
-    // checkMerge
-    $checkMerge = $result->checkMerge($objects);
-    
-    // find unequal fields
-    $db_fields = $result->getDBFields();
-    foreach ($db_fields as $field => $value) {
-      foreach ($objects as $key1 => $object1) {
-        foreach ($objects as $key2 => $object2) {
-          if ($object1->$field != $object2->$field) {
-            $unequal[$field] = true;
-          }
+  // checkMerge
+  $checkMerge = $result->checkMerge($objects);
+  $result->mergeDBFields($objects, true);
+  $result->_fwd = array();
+  $result->loadAllFwdRefs();
+  $result->updateFormFields();
+  
+  // find unequal fields
+  $db_fields = $result->getDBFields();
+  foreach ($db_fields as $field => $value) {
+    foreach ($objects as $key1 => $object1) {
+      foreach ($objects as $key2 => $object2) {
+        if ($object1->$field != $object2->$field) {
+          $unequal[$field] = true;
         }
       }
     }

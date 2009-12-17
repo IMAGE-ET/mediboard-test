@@ -107,7 +107,12 @@ Main.add(function() {
 
 {{if $result}}
 
-<h2>Fusion de {{tr}}{{$result->_class_name}}{{/tr}}</h2>
+<h2>
+  Fusion de {{tr}}{{$result->_class_name}}{{/tr}}
+  <label>
+    <input type="checkbox" onclick="$$('tr.equal').invoke('setVisible', $V(this));" /> Afficher les champs vides ou identiques
+  </label>
+</h2>
 
 {{if $checkMerge}}
 <div class="small-warning">
@@ -156,6 +161,7 @@ Main.add(function() {
       {{/foreach}}
       <th class="category" style="width: {{$width}}%;">Résultat</th>
     </tr>
+    
     {{foreach from=$result->_specs item=spec name=spec}}
       {{if $spec->fieldName != $result->_spec->key && ($spec->fieldName|substr:0:1 != '_' || $spec->reported)}}
         {{if $spec instanceof CRefSpec}}
