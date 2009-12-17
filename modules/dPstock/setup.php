@@ -408,6 +408,8 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision('1.08');
     $sql = "ALTER TABLE `product_order` CHANGE `societe_id` `societe_id` INT( 11 ) UNSIGNED NULL";
     $this->addQuery($sql);
+    $sql = "ALTER TABLE `product` CHANGE `name` `name` VARCHAR( 255 ) NOT NULL";
+    $this->addQuery($sql);
     
     $this->mod_version = "1.09";
   }
