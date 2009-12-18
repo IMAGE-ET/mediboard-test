@@ -651,6 +651,7 @@ $dPconfig["hprimxml"] = array (
   "medecinActif" => "0",
   "mvtComplet"  => "0",
   "strictSejourMatch"  => "1",
+  "notifier_sortie_reelle" => 1
 );
 
 // you can add as much ftp as you want by using

@@ -116,6 +116,8 @@
     {{mb_include module=system template=inc_config_bool var=mvtComplet}}
     
     {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
+    
+    {{mb_include module=system template=inc_config_bool var=notifier_sortie_reelle}}
    
     <tr>
       <td class="button" colspan="10">

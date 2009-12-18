@@ -1092,6 +1092,26 @@ class CPatient extends CMbObject {
     }
   }
   
+  function loadFromIPP() {
+    if (!$this->_IPP) {
+      return;
+    }
+    
+    // Pas de tag IPP => pas d'affichage d'IPP
+    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+      return;
+    }
+    
+    // Recuperation de la valeur de l'id400
+    $id400 = new CIdSante400();
+    $id400->object_class= 'CPatient';
+    $id400->tag = $tag_ipp;
+    $id400->id400 = $this->_IPP;
+    $id400->loadMatchingObject();
+    mbTrace($id400);    
+    $this->load($id400->object_id);
+  }
+  
   function checkSimilar($nom, $prenom) {
     $soundex2 = new soundex2;
     $testNom    = $this->nom_soundex2    == $soundex2->build($nom);

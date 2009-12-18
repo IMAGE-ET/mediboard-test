@@ -101,7 +101,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   function isActionValide($action, $domAcquittement, $echange_hprim) {
     $messageAcquittement = null;
     
-    if (array_key_exists($data['action'], $this->actions)) {
+    if (array_key_exists($action, $this->actions)) {
       return $messageAcquittement;
     }
     
@@ -497,10 +497,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbVenue->sortie_prevue = $dateHeure;
     }
     if ($etat == "clôturée") {
-      if (!$mbVenue->_id) {
-        $mbVenue->sortie_prevue = $dateHeure;
+      if (CAppUI::conf("hprimxml notifier_sortie_reelle")) {
+        if (!$mbVenue->_id) {
+          $mbVenue->sortie_prevue = $dateHeure;
+        }
+        $mbVenue->sortie_reelle = $dateHeure;
       }
-      $mbVenue->sortie_reelle = $dateHeure;
     } 
 
     return $mbVenue;

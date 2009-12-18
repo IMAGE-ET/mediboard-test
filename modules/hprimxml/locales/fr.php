@@ -52,4 +52,6 @@ $locales['config-hprimxml-medecinActif'] = 'Medecin importé actif';
 $locales['config-hprimxml-medecinActif-desc'] = 'Medecin importé actif';
 $locales['config-hprimxml-strictSejourMatch'] = 'Recherche des séjours stricts';
 $locales['config-hprimxml-strictSejourMatch-desc'] = 'Recherche des séjours stricts';
+$locales['config-hprimxml-notifier_sortie_reelle'] = 'Notifier la date de sortie réelle';
+$locales['config-hprimxml-notifier_sortie_reelle-desc'] = 'Notifier la date de sortie réelle lorsque la venue est clôturée';
 ?>
