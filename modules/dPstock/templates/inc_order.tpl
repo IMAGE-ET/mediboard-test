@@ -8,9 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
+<button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Codes barres</button>
+
 <table class="tbl">
   <tr>
-    {{if !$order->date_ordered}}<th style="width: 1%;" rowspan="2"></th>{{/if}}
+    {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
     <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
     <th>{{mb_title class=CProductOrderItem field=quantity}}</th>
     <th>{{mb_title class=CProductOrderItem field=unit_price}}</th>
@@ -34,8 +37,6 @@
       <span style="float: right;">
         {{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span>
       </span>
-      <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
-      <button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Codes barres</button>
       
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}
        <form name="order-lock-{{$order->_id}}" action="?" method="post">

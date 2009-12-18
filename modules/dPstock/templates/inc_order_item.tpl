@@ -66,23 +66,19 @@
       <input type="hidden" name="date" value="now" />
       
       <table style="border-collapse: collapse; border-spacing: 0;">
-        <tr>
+        {{* <tr>
+          <th>{{tr}}CProductOrderItemReception-quantity-court{{/tr}}</th>
           <th>{{tr}}CProductOrderItemReception-code{{/tr}}</th>
           <th>{{tr}}CProductOrderItemReception-lapsing_date-court{{/tr}}</th>
-          <th>{{tr}}CProductOrderItemReception-quantity-court{{/tr}}</th>
           <th></th>
-          <th></th>
-        </tr>
+        </tr> *}}
         {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
-        <tr>
+        <tr title="{{mb_value object=$curr_reception field=date}}">
+          <td>{{mb_value object=$curr_reception field=quantity}}</td>
           <td>{{$curr_reception->code}}</td>
           <td>{{mb_value object=$curr_reception field=lapsing_date}}</td>
-          <td>{{mb_value object=$curr_reception field=quantity}}</td>
           <td>
-            {{mb_value object=$curr_reception field=date}} 
             <button type="button" class="cancel notext" onclick="cancelReception({{$curr_reception->_id}}, function() {refreshOrder({{$order->_id}})})">{{tr}}Cancel{{/tr}}</button>
-          </td>
-          <td>
             <input type="checkbox" name="barcode_printed" {{if $curr_reception->barcode_printed == 1}}checked="checked"{{/if}} 
                    onclick="barcodePrintedReception({{$curr_reception->_id}},this.checked)" 
                    title="{{tr}}CProductOrderItemReception-barcode_printed-court{{/tr}}" />
@@ -90,12 +86,6 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td>
-            <input type="text" name="code" value="" size="6" />
-          </td>
-          <td>
-            <input type="text" name="lapsing_date" value="" size="6" class="date mask|99/99/9999 format|$3-$2-$1" />
-          </td>
           <td>
             {{mb_field 
               object=$curr_item 
@@ -108,8 +98,14 @@
               value=$curr_item->quantity-$curr_item->_quantity_received
             }}
           </td>
-          <td colspan="2">
-            <button type="submit" class="tick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+          <td>
+            <input type="text" name="code" value="" size="6" title="{{tr}}CProductOrderItemReception-code{{/tr}}" />
+          </td>
+          <td>
+            <input type="text" name="lapsing_date" value="" size="10" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
+          </td>
+          <td>
+            <button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
           </td>
          </tr>
        </table>

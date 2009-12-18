@@ -809,4 +809,7 @@ $locales['CSociete-code-desc'] = 'Code';
 $locales['CSociete-delivery_time'] = 'Délai de livraison';
 $locales['CSociete-delivery_time-court'] = 'Délai de liv.';
 $locales['CSociete-delivery_time-desc'] = 'Délai de livraison';
+$locales['CSociete-department'] = 'Département';
+$locales['CSociete-department-court'] = 'Dépt';
+$locales['CSociete-department-desc'] = 'Département';
 ?>

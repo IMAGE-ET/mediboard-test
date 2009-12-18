@@ -419,7 +419,6 @@ input, select, textarea, button {
 
 input, select, textarea {
   padding: 1px;
-  padding-top: 2px;
   border: 1px black solid;
   font-size: 1em;
   background-color: #efe;
@@ -437,13 +436,9 @@ optgroup, option {
   font-style: normal;
   font-weight: normal;
   font-size: 1em;
-  padding: 0 3px;
+  padding: 0;
   margin: 0;
   background: #fff;
-}
-
-option {
-  padding-top: 1px;
 }
 
 optgroup {
@@ -1600,9 +1595,6 @@ span.hilite {
 
 .touchscreen input[type="text"],
 .touchscreen input[type="password"] {
-  padding: 2px;
-  padding-bottom: 0px;
-  padding-left: 1px;
   height: 20px;
   font-size: 15px;
 }

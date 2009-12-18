@@ -97,6 +97,10 @@ Main.add(refreshSocietesList);
           <td>{{mb_field object=$societe field="contact_name"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$societe field="department"}}</th>
+          <td>{{mb_field object=$societe field="department"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$societe field="carriage_paid"}}</th>
           <td>{{mb_field object=$societe field="carriage_paid"}}</td>
         </tr>

@@ -1,9 +1,9 @@
-{{* $Id$ *}}
+{{* $Id: vw_aed_order.tpl 7662 2009-12-18 13:35:39Z phenxdesign $ *}}
 
 {{*
  * @package Mediboard
  * @subpackage dPstock
- * @version $Revision$
+ * @version $Revision: 7662 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
@@ -13,13 +13,6 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  window.onbeforeunload = window.onbeforeunload.wrap(function(old){
-    old();
-    if (window.opener) {
-      refreshLists();
-    }
-  });
-
   {{if $order->_id && !$order->date_ordered}}
   filterFields = ["category_id", "keywords", "order_id", "societe_id", "limit"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
@@ -74,8 +67,15 @@ function barcodePrintedReception(reception_id, value) {
     <input type="hidden" name="dosql" value="do_order_aed" />
     <input type="hidden" name="order_id" value="{{$order->_id}}" />
     <input type="hidden" name="del" value="0" />
+    
+  {{if $order->date_ordered}}
+    <input type="hidden" name="_receive" value="1" />
+    <button type="button" class="tick" onclick="submitOrder(this.form, {close: true})">{{tr}}CProductOrder-_receive{{/tr}}</button>
+    
+  {{else if !$order->_received}}
     <input type="hidden" name="_autofill" value="1" />
     <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}CProductOrder-_autofill{{/tr}}</button>
+  {{/if}}
   </form>
   
   <form name="order-cancel-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
@@ -90,31 +90,4 @@ function barcodePrintedReception(reception_id, value) {
 
 <h3>{{tr}}CProductOrder{{/tr}} {{$order->order_number}}</h3>
 
-<table class="main">
-  <tr>
-    <td class="halfPane">
-      <form action="?" name="filter-references" method="post" onsubmit="return referencesFilter.submit();">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="order_id" value="{{$order->_id}}" />
-        <input type="hidden" name="societe_id" value="{{$order->societe_id}}" />
-        
-        <select name="category_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
-          {{foreach from=$list_categories item=curr_category}} 
-            <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
-          {{/foreach}}
-        </select>
-        
-        <input type="text" name="keywords" value="" />
-        <input type="hidden" name="limit" value="" />
-        
-        <button type="button" class="search notext" name="search" onclick="referencesFilter.submit();">{{tr}}Search{{/tr}}</button>
-      </form>
-      <div id="list-references"></div>
-    </td>
-
-    <td class="halfPane" id="order-{{$order->_id}}">
-      {{include file="inc_order.tpl"}}
-    </td>
-  </tr>
-</table>
+{{include file="inc_order.tpl"}}

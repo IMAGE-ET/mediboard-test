@@ -25,6 +25,7 @@ class CSociete extends CMbObject {
   var $contact_name    = null;
   var $carriage_paid   = null;
   var $delivery_time   = null;
+  var $department      = null;
 
   // Object References
   //     Multiple
@@ -60,12 +61,16 @@ class CSociete extends CMbObject {
     $specs['contact_name']    = 'str seekable';
     $specs['carriage_paid']   = 'str';
     $specs['delivery_time']   = 'str';
+    $specs['department']      = 'num min|0';
     return $specs;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
+    if ($this->department) {
+      $this->_view .= " ($this->department)";
+    }
   }
 
   function loadRefsBack() {
