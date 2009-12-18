@@ -497,10 +497,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbVenue->sortie_prevue = $dateHeure;
     }
     if ($etat == "clôturée") {
+      if (!$mbVenue->_id) {
+        $mbVenue->sortie_prevue = $dateHeure;
+      }
       if (CAppUI::conf("hprimxml notifier_sortie_reelle")) {
-        if (!$mbVenue->_id) {
-          $mbVenue->sortie_prevue = $dateHeure;
-        }
         $mbVenue->sortie_reelle = $dateHeure;
       }
     } 
