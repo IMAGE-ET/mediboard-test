@@ -20,9 +20,14 @@
   <td>
   	{{assign var=object value=$_log->_ref_object}}
   	{{if $object->_id}} 
-      <label onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">{{$object}}</label>
+      <label onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
+        {{$object}}
+      </label>
   	{{else}}
 		  {{$object}}
+      {{if $_log->extra}}
+        - {{$_log->extra}}
+      {{/if}}
   	{{/if}}
   </td>
   {{/if}}
@@ -35,6 +40,7 @@
     <label title="{{$curr_field}}">{{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}</label>{{if !$smarty.foreach.field.last}}, {{/if}}
     {{/foreach}}
   </td>
+  <td>{{mb_value object=$_log field=ip_address}}</td>
 </tr>
 {{foreachelse}}
 <tr>

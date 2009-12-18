@@ -949,6 +949,9 @@ class CMbObject {
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
+    if ($type === "delete") {
+      $log->extra = $this->_old->_view;
+    }
     
     $this->_ref_last_log = $log;
   }

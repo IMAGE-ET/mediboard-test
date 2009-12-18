@@ -21,7 +21,7 @@ Main.add(function () {
   });
 
   {{if $order->_id && !$order->date_ordered}}
-  filterFields = ["category_id", "keywords", "order_id", "societe_id"];
+  filterFields = ["category_id", "keywords", "order_id", "societe_id", "limit"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
   referencesFilter.submit();
   {{/if}}
@@ -105,13 +105,17 @@ function barcodePrintedReception(reception_id, value) {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="societe_id" value="{{$order->societe_id}}" />
+        
         <select name="category_id" onchange="referencesFilter.submit();">
           <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
+        
         <input type="text" name="keywords" value="" />
+        <input type="hidden" name="limit" value="" />
+        
         <button type="button" class="search notext" name="search" onclick="referencesFilter.submit();">{{tr}}Search{{/tr}}</button>
       </form>
       <div id="list-references"></div>

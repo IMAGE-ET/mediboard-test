@@ -155,12 +155,16 @@ class CSetupsystem extends CSetup {
               ADD `group_id` INT (11) UNSIGNED,
               ADD INDEX (`group_id`);";
     $this->addQuery($sql);
+
+    $this->makeRevision("1.0.19");
+    $this->setTimeLimit(300);
+    $sql = "ALTER TABLE `user_log` 
+              ADD `ip_address` VARBINARY (16) NULL DEFAULT NULL,
+              ADD `extra` TEXT,
+              ADD INDEX (`ip_address`);";
+    $this->addQuery($sql);
     
-    /*$this->setTimeLimit(300);
-    $sql = "ALTER TABLE `user_log` ADD `ip_address` VARBINARY( 16 ) NULL DEFAULT NULL,
-              ADD INDEX (`ip_address`)";*/
-    
-    $this->mod_version = "1.0.19";
+    $this->mod_version = "1.0.20";
   }
 }
 ?>

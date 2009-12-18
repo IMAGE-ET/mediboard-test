@@ -10,7 +10,7 @@
 
 <table class="tbl">
   <tr>
-    {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
+    {{if !$order->date_ordered}}<th style="width: 1%;" rowspan="2"></th>{{/if}}
     <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
     <th>{{mb_title class=CProductOrderItem field=quantity}}</th>
     <th>{{mb_title class=CProductOrderItem field=unit_price}}</th>

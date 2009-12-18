@@ -20,16 +20,18 @@ class CUserLog extends CMbMetaObject {
   var $date         = null;
   var $type         = null;
   var $fields       = null;
+  var $ip_address   = null;
+  var $extra        = null;
   
   // Filter Fields
-  var $_date_min	 			= null;
-  var $_date_max 				= null;
+  var $_date_min    = null;
+  var $_date_max    = null;
   
   // Object References
   var $_fields = null;
   var $_ref_user = null;
   
-  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnï¿½s
+  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,6 +49,8 @@ class CUserLog extends CMbMetaObject {
     $specs["date"]         = "dateTime notNull";
     $specs["type"]         = "enum notNull list|create|store|merge|delete";
     $specs["fields"]       = "text";
+    $specs["ip_address"]   = "ipAddress";
+    $specs["extra"]        = "text";
 
     $specs["_date_min"]    = "dateTime";
     $specs["_date_max"]    = "dateTime moreEquals|_date_min";
@@ -74,14 +78,14 @@ class CUserLog extends CMbMetaObject {
   }
   
   function loadMergedIds(){
-    if($this->type == "merge"){
+    if ($this->type === "merge") {
       $date_max = mbDateTime("+3 seconds", $this->date);
-      $log = new CUserLog();
-      $where = array();
-      $where["user_id"] = "= '$this->user_id'";
-      $where["type"] = " = 'delete'";
-      $where["date"] = "BETWEEN '$this->date' AND '$date_max'";
-      $logs = $log->loadList($where);
+      $where = array(
+        "user_id" => "= '$this->user_id'",
+        "type" => " = 'delete'",
+        "date" => "BETWEEN '$this->date' AND '$date_max'"
+      );
+      $logs = $this->loadList($where);
       
       foreach($logs as $_log){
         $this->_merged_ids[] = $_log->object_id;
