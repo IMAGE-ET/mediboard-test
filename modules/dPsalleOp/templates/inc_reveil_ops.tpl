@@ -5,13 +5,14 @@ checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
   // si affectation renseignée, on submit les deux formulaires
   if(oFormAffectation && oFormAffectation.personnel_id.value != ""){
-    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitOperationForm(oFormOperation,1)} );
+    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitOperationForm.curry(oFormOperation,1)} );
   }
   else {
   // sinon, on ne submit que l'operation
     submitOperationForm(oFormOperation,1);
   }
 }
+
 submitOperationForm = function(oFormOperation) {
   submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){ refreshTabsReveil() }});
 }
