@@ -164,8 +164,6 @@ var WaitingMessage = {
     receiver.insert({top: coverContainer});
     
     cover.setStyle({
-      minHeight: "2em",
-      minWidth: "2em",
       opacity: 0.4,
       position: 'absolute',
       top: -parseInt(receiver.getStyle("padding-top"))+"px",

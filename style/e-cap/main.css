@@ -4,7 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #fff;
+  background-color: #fff;
 }
 
 #login {
@@ -580,18 +580,6 @@ table.main th.urgence.modify {
 
 table.dialog #systemMsg {
   float: right;
-}
-
-div.loading{
-  background-image: url(images/icons/loading.gif);
-}
-
-.ajax-loading {
-  background-image: url(images/icons/ajax-loading.gif);
-}
-
-div.message, div.loading, div.error, div.warning {
-   white-space: normal;
 }
 
 /* Tooltips */

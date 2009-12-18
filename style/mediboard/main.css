@@ -10,8 +10,8 @@ html, body {
 
 body {
   font-family: arial, helvetica, sans-serif;
-  font-size: 11px;  
-  background: #ddf;
+  font-size: 11px;
+  background-color: #ddf;
 }
 
 iframe {
@@ -39,7 +39,8 @@ th {
   vertical-align: top;
 }
 
-td p, th p {
+td p, 
+th p {
   white-space: normal;
   margin: 0;
 }
@@ -1101,6 +1102,7 @@ div.warning, div.error, div.message, div.loading {
   background: no-repeat center left;
   padding: 2px;
   padding-left: 20px;
+  white-space: nowrap;
 }
 
 div.warning {
@@ -1120,12 +1122,13 @@ div.message {
 
 div.loading {
   background-image: url(images/icons/loading.gif);
-  white-space: nowrap;
 }
 
 .ajax-loading {
   background: #666 url(images/icons/ajax-loading.gif) no-repeat center;
   border: none;
+  min-height: 16px;
+  min-width: 16px;
 }
 
 div.small-success ,
@@ -1859,6 +1862,7 @@ ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #458;
   -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
   background-color: #6688CC;
   font-size: 1.1em;
   padding: 3px 8px;
@@ -1941,6 +1945,7 @@ ul.control_tabs_vertical li {
 
 ul.control_tabs_vertical li a {
   -moz-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
   padding: 3px 8px;
   margin-bottom: 2px;
 }
@@ -2393,7 +2398,7 @@ td.listeChoixCR select {
 .wizard {
   padding: 20px;
   width: 900px;
-  margin: 20px auto; 
+  margin: 40px auto; 
   border: 2px solid #666;
   background: #eee;
 }
@@ -2869,12 +2874,14 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .numericField .arrows div.up {
   -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
   top: -1px;
   background-image: url(../../images/buttons/up-small.gif);
 }
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 3px 3px;
+  border-radius: 0 0 3px 3px;
   bottom: -1px;
   background-image: url(../../images/buttons/down-small.gif);
 }
@@ -3283,7 +3290,7 @@ table.active {
   text-align: center;
   font-size: inherit;
   background: #ccc; 
-  radius: 5px; 
+  border-radius: 5px; 
   -moz-border-radius: 5px; 
   -webkit-border-radius: 5px; 
   font-weight: bold; 
