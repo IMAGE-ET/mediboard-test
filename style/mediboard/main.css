@@ -2907,9 +2907,12 @@ table.main td.step {
 	border: 1px dotted #55A;
 }
 
-table.main td.step.selected {
+table.main td.step.selected  {
 	border: 2px solid;
-	font-size: 170%
+}
+
+table.main td.step.selected a {
+  font-size: 1.5em;
 }
 
 .grippie-h {
