@@ -31,7 +31,7 @@
         <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" >
       {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_product->_guid}}')">
-        {{$curr_reference->_ref_product->_view}}
+        {{$curr_reference->_ref_product->_view|truncate:60}}
       </span>
       {{if !$order_id}}
         </a>
@@ -53,7 +53,14 @@
         <input type="hidden" name="dosql" value="do_order_item_aed" />
         <input type="hidden" name="order_id" value="{{$order_id}}" />
         <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
-        {{mb_field object=$curr_reference field=quantity size=2 form="product-reference-$id" increment=true value=1}}
+        {{mb_field object=$curr_reference 
+          field=quantity 
+          size=2 
+          form="product-reference-$id" 
+          increment=true 
+          value=1
+          style="width: 1em;"
+        }}
         <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
       </form>
     </td>

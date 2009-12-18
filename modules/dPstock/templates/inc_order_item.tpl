@@ -25,7 +25,7 @@
   {{assign var=id value=$curr_item->_id}}
   <td>
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
-      {{$curr_item->_view}}
+      {{$curr_item->_view|truncate:60}}
     </span>
   </td>
   <td>
@@ -44,6 +44,7 @@
         form=form-item-quantity-$id 
         min=0
         size=2
+        style="width: 2em;"
         increment=true}}
     </form>
     {{else}}
@@ -103,6 +104,7 @@
               increment=true
               size=2
               min=0
+              style="width: 2em;"
               value=$curr_item->quantity-$curr_item->_quantity_received
             }}
           </td>
