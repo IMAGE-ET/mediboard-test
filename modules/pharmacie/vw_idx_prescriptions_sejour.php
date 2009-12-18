@@ -43,8 +43,10 @@ $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
 	
 $where["prescription.object_class"] = " = 'CSejour'";
 $where["prescription.type"] = " = 'sejour'";
-$where["prescription_line_medicament.substitution_active"] = " = '1'";
 
+$where["prescription_line_medicament.substitution_active"] = " = '1'";
+$where["perfusion.substitution_active"] = " = '1'";
+    
 if($valide_pharma == 0){
   $where[] = "prescription_line_medicament.valide_pharma != '1' OR perfusion.signature_pharma != '1'";
 }
