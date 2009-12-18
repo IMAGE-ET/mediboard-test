@@ -15,6 +15,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     'création' => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
+    'fusion' => "fusion"
   );
   
   function __construct() {   
