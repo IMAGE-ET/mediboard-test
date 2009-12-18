@@ -22,21 +22,21 @@
   
   <tr>
     <td class="button" id="preanesth-title">
-      <h3>
+      <h3 style="margin: 4px;">
         <img src="images/icons/{{$operation_check_lists.preanesth->_readonly|ternary:"tick":"cross"}}.png" />
         Avant induction anesthésique
       </h3>
       Temps de pause avant anesthésie
     </td>
     <td class="button" id="preop-title">
-      <h3>
+      <h3 style="margin: 4px;">
         <img src="images/icons/{{$operation_check_lists.preop->_readonly|ternary:"tick":"cross"}}.png" />
         Avant intervention chirurgicale
       </h3>
       Temps de pause avant incision
     </td>
     <td class="button" id="postop-title">
-      <h3>
+      <h3 style="margin: 4px;">
         <img src="images/icons/{{$operation_check_lists.postop->_readonly|ternary:"tick":"cross"}}.png" />
         Après intervention
       </h3>

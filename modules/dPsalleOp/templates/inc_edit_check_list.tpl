@@ -157,7 +157,7 @@ Main.add(function(){
     
     {{if $check_list->object_class != "COperation" || $check_list->type == "postop"}}
     <tr>
-      <td colspan="10">
+      <td colspan="10" style="white-space: normal;">
         {{mb_label object=$check_list field=comments}}<br />
         {{mb_field object=$check_list field=comments}}
       </td>
