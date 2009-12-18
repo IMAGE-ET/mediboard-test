@@ -1092,7 +1092,7 @@ class CPatient extends CMbObject {
     }
   }
   
-  function loadFromIPP() {
+  function loadFromIPP($group_id = null) {
     if (!$this->_IPP) {
       return;
     }
@@ -1102,13 +1102,21 @@ class CPatient extends CMbObject {
       return;
     }
     
+    // Permettre des IPP en fonction de l'établissement
+    if (!$group_id) {
+      global $g;
+      $group_id = $g;
+    }
+    
+    $tag_ipp = str_replace('$g',$group_id, $tag_ipp);
+    
     // Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
     $id400->object_class= 'CPatient';
     $id400->tag = $tag_ipp;
     $id400->id400 = $this->_IPP;
     $id400->loadMatchingObject();
-    mbTrace($id400);    
+
     $this->load($id400->object_id);
   }
   
