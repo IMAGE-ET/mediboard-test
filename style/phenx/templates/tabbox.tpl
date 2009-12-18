@@ -7,7 +7,7 @@
       {{else}}
         {{assign var="sel" value="normal"}}
       {{/if}}
-	    <td class="{{$sel}}Left" />
+	    <td class="{{$sel}}Left"></td>
 	    <td class="{{$sel}}"><a href="?m={{$m}}&amp;tab={{$currTabBox}}">
 	      {{if $currTabBox==="configure"}}
           {{tr}}{{$currTabBox}}{{/tr}}
@@ -15,7 +15,7 @@
           {{tr}}mod-{{$m}}-tab-{{$currTabBox}}{{/tr}}        
         {{/if}}
 	    </a></td>
-	    <td class="{{$sel}}Right" />
+	    <td class="{{$sel}}Right"></td>
     {{/foreach}}
   </tr>
 </table>

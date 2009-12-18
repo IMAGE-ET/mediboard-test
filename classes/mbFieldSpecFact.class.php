@@ -35,6 +35,7 @@ class CMbFieldSpecFact {
     "html"         => "CHtmlSpec",
     "xml"          => "CXmlSpec",
     "php"          => "CPhpSpec", /** @todo: Make a sourceCode spec */
+    "ipAddress"    => "CIpAddressSpec",
   );
    
   /**

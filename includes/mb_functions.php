@@ -526,11 +526,12 @@ function stringNotEmpty($s){
 function mbWriteJSLocalesFile($language = null) {
   global $version, $locales;
   
+  $root_dir = CAppUI::conf("root_dir");
   $current_locales = $locales;
   
   if (!$language) {
     $languages = array();
-    foreach (glob("locales/*", GLOB_ONLYDIR) as $lng)
+    foreach (glob("$root_dir/locales/*", GLOB_ONLYDIR) as $lng)
       $languages[] = basename($lng);
   }
   else {
@@ -538,14 +539,14 @@ function mbWriteJSLocalesFile($language = null) {
   }
   
   foreach($languages as $language) {
-    $localeFiles = array_merge(glob("locales/$language/*.php"), glob("modules/*/locales/$language.php"));
+    $localeFiles = array_merge(glob("$root_dir/locales/$language/*.php"), glob("$root_dir/modules/*/locales/$language.php"));
     foreach ($localeFiles as $localeFile) {
       if (basename($localeFile) != "meta.php") {
         require $localeFile;
       }
     }
     
-    $path = "./tmp/locales.$language.js";
+    $path = "$root_dir/tmp/locales.$language.js";
   
     if ($fp = fopen($path, 'w')) {
       // The callback will filter on empty strings (without it, "0" will be removed too).
@@ -567,7 +568,7 @@ function mbLoadJSLocales() {
   
   $language = CAppUI::pref("LOCALE");
   
-  $path = "./tmp/locales.$language.js";
+  $path = "tmp/locales.$language.js";
 
   if (!is_file($path)) {
     mbWriteJSLocalesFile($language);

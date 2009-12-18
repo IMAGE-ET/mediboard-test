@@ -12,18 +12,30 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProduct-name{{/tr}}</th>
-    <th>{{tr}}CProduct-societe_id{{/tr}}</th>
-    <th>{{tr}}CProduct-code{{/tr}}</th>
-    <th>{{tr}}CProduct-_quantity{{/tr}}</th>
-    <th>{{tr}}CProduct-packaging{{/tr}}</th>
+    <th>{{mb_title class=CProduct field=name}}</th>
+    <th>{{mb_title class=CProduct field=societe_id}}</th>
+    <th>{{mb_title class=CProduct field=code}}</th>
+    <th>{{mb_title class=CProduct field=_quantity}}</th>
+    <th>{{mb_title class=CProduct field=packaging}}</th>
   </tr>
   {{foreach from=$list_products item=curr_product}}
     <tr>
-      <td title="{{$curr_product->name}}"><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">{{$curr_product->name|truncate:25}}</a></td>
-      <td>{{$curr_product->_ref_societe->_view}}</td>
+      <td>
+        <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
+            {{$curr_product->name|truncate:25}}
+          </span>
+        </a>
+      </td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_ref_societe->_guid}}')">
+          {{$curr_product->_ref_societe}}
+        </span>
+      </td>
       <td>{{$curr_product->code}}</td>
-      <td title="{{$curr_product->_quantity}}">{{$curr_product->_quantity|truncate:35}}</td>
+      <td title="{{$curr_product->_quantity}}">
+        {{$curr_product->_quantity|truncate:35}}
+      </td>
       <td>{{$curr_product->packaging}}</td>
     </tr>
   {{foreachelse}}

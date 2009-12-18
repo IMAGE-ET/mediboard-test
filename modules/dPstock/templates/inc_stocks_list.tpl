@@ -26,11 +26,11 @@
 {{foreach from=$list_stocks item=curr_stock}}
   <tr>
     <td>
-      {{if $stock->_class_name == 'CProductStockService'}}
-        <a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$curr_stock->_id}}" title="{{tr}}{{$stock->_class_name}}.modify{{/tr}}">{{$curr_stock->_ref_product->_view}}</a>
-      {{else}}
-        <a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="{{tr}}{{$stock->_class_name}}.modify{{/tr}}">{{$curr_stock->_ref_product->_view}}</a>
-      {{/if}}
+      <a href="?m={{$m}}&amp;tab={{if $stock->_class_name == 'CProductStockService'}}vw_idx_stock_service&amp;stock_service_id{{else}}vw_idx_stock_group&amp;stock_id{{/if}}={{$curr_stock->_id}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_stock->_ref_product->_guid}}')">
+          {{$curr_stock->_ref_product|truncate:60}}
+        </span>
+      </a>
     </td>
     {{if $stock->_class_name == 'CProductStockService'}}
       <td>{{$curr_stock->_ref_service->_view}}</td>

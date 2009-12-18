@@ -43,22 +43,21 @@ function confirmDeletionOffline(oForm, oFct, oOptions) {
   }
 }
 
-function getLabelFor(oElement) {
-  if (!oElement.form) return null;
-  
-  var aLabels = $(oElement.form).select("label"),
-      oLabel, i = 0;
-  while (oLabel = aLabels[i++]) {
-    if (oElement.id == oLabel.htmlFor) {
-      return oLabel;
-    }
-  }
-  return null; 
-}
-
 Element.addMethods({
   getLabel: function (element) {
-    return getLabelFor(element);
+    /*if (!element.form) return null;
+  
+    var labels = $(element.form).select("label"),
+        label, i = 0;
+    while (label = labels[i++]) {
+      if (element.id == label.htmlFor) {
+        return label;
+      }
+    }
+    return null; */
+    
+    if (!element || !element.form || !element.id) return;
+    return $(element.form).down("label[for='"+element.id+"'], label[htmlFor='"+element.id+"']");
   }
 });
 
@@ -76,8 +75,8 @@ function $V (element, value, fire) {
   fire = Object.isUndefined(fire) ? true : fire;
   
   // We get the tag and the type
-  var tag  = element.tagName || '';
-  var type = element.type    || '';
+  var tag  = element.tagName || '',
+      type = element.type || '';
 
   // If it is a form element
   if (Object.isElement(element) && tag.match(/^(input|select|textarea)$/i)) {
@@ -131,14 +130,14 @@ function $V (element, value, fire) {
 
 function notNullOK(oEvent) {
   var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
-  if (oLabel = oElement.getLabel()) {
+  if (oLabel = Element.getLabel(oElement)) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "notNull");
   }
 }
 
 function canNullOK(oEvent) {
   var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
-  if (oLabel = oElement.getLabel()) {
+  if (oLabel = Element.getLabel(oElement)) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "canNull");
   } 
 }
@@ -347,6 +346,12 @@ function prepareForm(oForm) {
       oElement.observe("change", notNullOK)
               .observe("keyup",  notNullOK)
               .observe("ui:change", notNullOK);
+    }
+    else {
+      var oLabel = Element.getLabel(oElement);
+      if (oLabel) {
+        oLabel.removeClassName("checkNull");
+      }
     }
     
     // ui:change is a custom event fired on the native onchange throwed by $V, 

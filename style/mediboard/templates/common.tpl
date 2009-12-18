@@ -93,19 +93,19 @@
 <div id="tooltipTpl" style="display: none;">
   <table class="decoration" cellspacing="0">
     <tr>
-      <td class="deco top-left" />
-      <td class="deco top" />
-	    <td class="deco top-right" />
+      <td class="deco top-left"></td>
+      <td class="deco top"></td>
+	    <td class="deco top-right"></td>
 	  </tr>
 	  <tr>
-	    <td class="deco left" />
+	    <td class="deco left"></td>
 	    <td class="content"></td>
-	    <td class="deco right" />
+	    <td class="deco right"></td>
 	  </tr>
 	  <tr>
-	    <td class="deco bottom-left" />
-	    <td class="deco bottom" />
-	    <td class="deco bottom-right" />
+	    <td class="deco bottom-left"></td>
+	    <td class="deco bottom"></td>
+	    <td class="deco bottom-right"></td>
 	  </tr>
 	</table>
 </div>

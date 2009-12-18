@@ -30,7 +30,7 @@ var ElementChecker = {
     this.oForm = oElement.form;
     this.oProperties = oElement.getProperties();
     
-    this.oLabel = oElement.getLabel();
+    this.oLabel = Element.getLabel(oElement);
     this.sLabel = this.oLabel ? this.oLabel.innerHTML : oElement.name;
     
     if (this.oProperties.mask) {
@@ -160,7 +160,7 @@ Object.extend(ElementChecker, {
       this.addError("sameAs", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
-        var oTargetLabel = getLabelFor(this.oTargetElement);
+        var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oTargetElement.name;
         this.addError("sameAs", printf("Doit être identique à [%s]", sTargetLabel.strip()));
       }
@@ -172,7 +172,7 @@ Object.extend(ElementChecker, {
       this.addError("notContaining", this.castCompareValues(sTargetElement));
 
       if (this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
-        var oTargetLabel = getLabelFor(this.oTargetElement);
+        var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
         this.addError("notContaining", printf("Ne doit pas contenir [%s]", sTargetLabel.strip()));
       }
@@ -184,7 +184,7 @@ Object.extend(ElementChecker, {
       this.addError("notNear", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
-        var oTargetLabel = getLabelFor(this.oTargetElement);
+        var oTargetLabel = Element.getLabel(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
         this.addError("notNear", printf("Ressemble trop à [%s]", sTargetLabel.strip()));
       }
@@ -507,7 +507,7 @@ function checkForm(oForm) {
     ElementChecker.prepare(oElement);
     var sMsgFailed = ElementChecker.sLabel || printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
     var oErrors = ElementChecker.checkElement();
-    var oLabel = oFirstElement.getLabel();
+    var oLabel = Element.getLabel(oFirstElement);
     
     // If errors, we append them to the error object
     if (oErrors.length) {
@@ -534,7 +534,7 @@ function checkForm(oForm) {
       var element = $(oForm.elements[xorField]);
       if (!element) return;
       xorFieldsInForm++;
-      var label = element.getLabel();
+      var label = Element.getLabel(element);
       listLabels.push(label ? label.innerHTML : xorField);
       if ($V(element)) n++;
     });

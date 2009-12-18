@@ -61,7 +61,7 @@ ProductSelector.init = function(){
         <table class="form">
           <tr>
             {{if $stock->_id}}
-            <th class="title modify" colspan="2">{{tr}}CProductStockGroup.modify{{/tr}} {{$stock->_view}}</th>
+            <th class="title modify" colspan="2">{{$stock|truncate:60}}</th>
             {{else}}
             <th class="title" colspan="2">{{tr}}CProductStockGroup.create{{/tr}}</th>
             {{/if}}
