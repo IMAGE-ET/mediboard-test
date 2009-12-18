@@ -116,7 +116,8 @@ class COperation extends CCodable {
   var $_ref_anesth_visite  = null;
   var $_ref_actes_ccam     = array();
   var $_ref_hprim_files    = null;
-
+  var $_ref_anesth_perops = null;
+	
   // External references
   var $_ext_codes_ccam = null;
 
@@ -235,6 +236,7 @@ class COperation extends CCodable {
 	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
 	  $backProps["perfusion"]                = "CPerfusion operation_id";
     $backProps["check_lists"]              = "CDailyCheckList object_id";
+		$backProps["anesth_perops"]            = "CAnesthPerop operation_id";
 	  return $backProps;
 	}
 
@@ -625,6 +627,14 @@ class COperation extends CCodable {
     }
   }
   
+	 /*
+   * Chargement des gestes perop
+   */
+  function loadRefsAnesthPerops(){
+    $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
+  }
+  
+	
   function loadRefPatient($cache = 0) {
     $this->loadRefSejour($cache);
     $this->_ref_sejour->loadRefPatient($cache);

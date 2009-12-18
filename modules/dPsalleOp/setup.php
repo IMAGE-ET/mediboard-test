@@ -304,7 +304,21 @@ class CSetupdPsalleOp extends CSetup {
               ADD INDEX (`execution`);";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+		$sql = "CREATE TABLE `anesth_perop` (
+              `anesth_perop_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `operation_id` INT (11) UNSIGNED NOT NULL,
+              `libelle` VARCHAR (255) NOT NULL,
+              `datetime` DATETIME NOT NULL
+             ) TYPE=MYISAM;";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `anesth_perop` 
+              ADD INDEX (`operation_id`),
+              ADD INDEX (`datetime`);";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.34";
   }
 }
 ?>

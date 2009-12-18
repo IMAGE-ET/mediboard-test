@@ -66,6 +66,7 @@ if ($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
+	$selOp->_ref_consult_anesth->loadRefsTechniques();
   $modif_operation = $modif_operation || (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && !$selOp->_ref_plageop->actes_locked);
   
 //  $actesup = $selOp->_ref_actes_ccam->_ref_exec
@@ -222,6 +223,9 @@ foreach($operation_check_list->_specs["type"]->_list as $type) {
   $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
 }
 
+$anesth_perop = new CAnesthPerop();
+$anesth_perop->loadAides($AppUI->user_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -229,6 +233,7 @@ if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
 }
 
+$smarty->assign("anesth_perop", $anesth_perop);
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
 $smarty->assign("op"                     , $op);

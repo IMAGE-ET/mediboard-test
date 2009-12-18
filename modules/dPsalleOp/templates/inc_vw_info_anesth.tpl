@@ -27,6 +27,13 @@ reloadDocumentsAnesth = function () {
   });    
 }
 
+refreshAnesthPerops = function(operation_id){
+  var url = new Url;
+	url.setModuleAction("dPsalleOp", "httpreq_vw_anesth_perop");
+	url.addParam("operation_id", operation_id);
+	url.requestUpdate("list_perops_"+operation_id);
+}
+
 {{if $dialog}}
 reloadAnesth = function() {
   window.opener.location.reload(true);
@@ -36,6 +43,7 @@ reloadAnesth = function() {
 
 Main.add(function(){
   refreshAidesPreAnesth($V(getForm('visiteAnesth').prat_visite_anesth_id));
+	refreshAnesthPerops('{{$selOp->_id}}');
 });
 </script>
 
@@ -47,6 +55,51 @@ Main.add(function(){
 
 {{if $consult_anesth->_id}}
 
+<table class="form">
+	<tr>
+    <th class="title" colspan="2">Per-operatoire</th>
+  </tr>
+	<tr>
+		<td style="width: 50%">
+			<!-- Affichage et gestion des gestes perop -->
+		  <form name="addAnesthPerop" action="?" method="post" 
+			      onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshAnesthPerops('{{$selOp->_id}}'); $V(this.libelle, ''); }.bind(this)  } )">
+
+	      <input type="hidden" name="m" value="dPsalleOp" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="dosql" value="do_anesth_perop_aed" />
+        <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+				<input type="hidden" name="datetime" value="now" />
+        
+				{{mb_key object=$anesth_perop}}
+	      {{mb_label object=$anesth_perop field="libelle"}}
+	      <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)">
+	        <option value="">&mdash; Choisir une aide</option>
+	        {{html_options options=$anesth_perop->_aides.libelle.no_enum}}
+	      </select>
+	      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAnesthPerop', this.form._hidden_libelle, 'libelle')">{{tr}}New{{/tr}}</button><br />
+	      <input type="hidden" name="_hidden_libelle" value="" />
+	      <textarea name="libelle" onblur="if(!$(this).emptyValue()){this.form.onsubmit();}"></textarea>
+	      <button class="submit" type="button">Ajouter</button>
+      </form>
+		</td>
+		<td id="list_perops_{{$selOp->_id}}"></td>
+	</tr>
+	{{if $selOp->_ref_consult_anesth->_ref_techniques|@count}}
+  <tr>
+    <th colspan="2" class="title">Techniques complémentaires</th>
+  </tr>
+  <tr>
+    <td colspan="2">
+			<ul>
+      {{foreach from=$selOp->_ref_consult_anesth->_ref_techniques item=_technique}}
+			  <li>{{$_technique->technique}}</li>
+			{{/foreach}}
+			</ul>
+    </td>
+  </tr>
+	{{/if}}
+</table>
 <table class="tbl">
   <!-- Affichage d'information complementaire pour l'anestesie -->
   <tr>
