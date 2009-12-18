@@ -12,10 +12,9 @@ CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients { 
   var $actions = array(
-    'création' => "création",
+    'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    'suppression' => "suppression",
   );
   
   function __construct() {    
