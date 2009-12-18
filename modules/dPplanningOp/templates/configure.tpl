@@ -145,7 +145,10 @@
     
     <td colspan="2" />
   </tr>
-
+	
+  {{assign var="var" value="delete_only_admin"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+	
   {{assign var="class" value="CSejour"}}
   <tr>
     <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
@@ -245,6 +248,10 @@
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
+	
+	{{assign var="var" value="delete_only_admin"}}
+  {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
+	
   
   <tr>
     <th class="category" colspan="6">Heure par defaut du séjour</th>

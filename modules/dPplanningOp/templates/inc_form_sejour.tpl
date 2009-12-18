@@ -669,10 +669,12 @@ Main.add( function(){
   <td class="button" colspan="4">
   {{if $sejour->sejour_id}}
     <button class="modify" type="submit">Modifier</button>
-    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
-      Supprimer
-    </button>
-    {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
+		{{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
+	    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
+	      Supprimer
+	    </button>
+    {{/if}}
+		{{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
     {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{$annule_text}}

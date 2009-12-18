@@ -193,7 +193,9 @@ ProtocoleSelector.init = function(){
     <td colspan="2" style="text-align: center;">
     {{if $op->_id}}
       <button class="modify" type="button" onclick="submitForms();">{{tr}}Modify{{/tr}}</button>
+			{{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
+			{{/if}}
       {{if $op->annulee}}
       <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
       {{else}}

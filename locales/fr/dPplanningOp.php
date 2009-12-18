@@ -942,4 +942,8 @@ $locales['config-dPplanningOp-CSejour-easy_chambre_simple'] = 'Chambre simple';
 $locales['config-dPplanningOp-CSejour-easy_chambre_simple-desc'] = 'Chambre simple dans le mode simplifié';
 $locales['config-dPplanningOp-CSejour-easy_service'] = 'Service';
 $locales['config-dPplanningOp-CSejour-easy_service-desc'] = 'Service dans le mode simplifié';
+$locales['config-dPplanningOp-COperation-delete_only_admin'] = 'Suppression seulement pour les admins';
+$locales['config-dPplanningOp-COperation-delete_only_admin-desc'] = 'Suppression seulement pour les admins';
+$locales['config-dPplanningOp-CSejour-delete_only_admin'] = 'Suppression seulement pour les admins';
+$locales['config-dPplanningOp-CSejour-delete_only_admin-desc'] = 'Suppression seulement pour les admins';
 ?>
