@@ -27,7 +27,6 @@ class CConsultAnesth extends CMbObject {
   var $traitements    = null;
   var $tabac          = null;
   var $oenolisme      = null;
-  var $intubation     = null;
   var $biologie       = null;
   var $commande_sang  = null;
   var $ASA            = null;
@@ -108,7 +107,6 @@ class CConsultAnesth extends CMbObject {
     $specs["tabac"]            = "text helped";
     $specs["oenolisme"]        = "text helped";
     
-    $specs["intubation"]       = "enum list|?|dents|bouche|cou";
     $specs["biologie"]         = "enum list|?|NF|COAG|IONO show|0";
     $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue show|0";
     $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
