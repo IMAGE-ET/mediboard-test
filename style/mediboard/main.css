@@ -3408,6 +3408,10 @@ span.highlight {
   right: 0;
 }
 
+.merge-selected {
+	outline: 3px solid #8f8;
+}
+
 @media print {
   body { 
     background: transparent;

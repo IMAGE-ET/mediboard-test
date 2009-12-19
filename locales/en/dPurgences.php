@@ -298,4 +298,11 @@ $locales['config-dPurgences-sortie_prevue-desc'] = '';
 $locales['config-dPurgences-sortie_prevue-h24'] = '';
 $locales['config-dPurgences-reponsable_id_notNull'] = '';
 $locales['config-dPurgences-reponsable_id_notNull-desc'] = '';
+$locales['CRPU-msg-absent'] = '';
+$locales['config-dPurgences-only_prat_responsable'] = '';
+$locales['config-dPurgences-only_prat_responsable-desc'] = '';
+$locales['config-dPurgences-programme_rpu_view'] = '';
+$locales['config-dPurgences-programme_rpu_view-desc'] = '';
+$locales['config-dPurgences-responsable_rpu_view'] = '';
+$locales['config-dPurgences-responsable_rpu_view-desc'] = '';
 ?>

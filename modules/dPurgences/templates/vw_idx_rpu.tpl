@@ -16,12 +16,17 @@ function showLegend() {
 }
 
 // fonction de refresh periodique de la main courante
-function updateMainCourante(){
+function updateMainCourante() {
   var url = new Url("dPurgences", "httpreq_vw_main_courante");
   url.periodicalUpdate('main_courante', { frequency: 60 } );
 }
+
+function updateIdentitoVigilance() {
+  var url = new Url("dPurgences", "ajax_identito_vigilance");
+  url.periodicalUpdate('identito_vigilance', { frequency: 60 } );
+}
  
-function updateConsultations(){
+function updateConsultations() {
   var url = new Url("dPcabinet", "vw_journee");
   url.addParam("date", "{{$date}}");
   url.addParam("mode_urgence", true);
@@ -37,6 +42,8 @@ function printMainCourante() {
 Main.add(function () {
   updateMainCourante();
   updateConsultations();
+//  updateIdentitoVigilance();
+	
   Calendar.regField(getForm("changeDate").date, null, { noView: true } );
   
   var tabs = Control.Tabs.create('tab_main_courante', true);
@@ -47,7 +54,8 @@ Main.add(function () {
 
 <ul id="tab_main_courante" class="control_tabs">
   <li><a href="#holder_main_courante">Main courante</a></li>
-  <li><a class="empty" href="#consultations">Reconvocations</a></li>
+  <li><a href="#consultations" class="empty">Reconvocations</a></li>
+  <li><a href="#identito_vigilance" class="empty">Identito-vigilance</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -87,5 +95,8 @@ Main.add(function () {
 </div>
 
 <div id="consultations" style="display: none;">
+</div>
 
+<div class="small-info" id="identito_vigilance" style="display: none;">
+  Fonctionnalité en cours de développement
 </div>

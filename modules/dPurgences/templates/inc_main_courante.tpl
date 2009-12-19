@@ -173,13 +173,11 @@
 		{{else}}
 			<!-- Pas de RPU pour ce séjour d'urgence -->
 			<td colspan="5">
-			  <div class="big-warning">
+			  <div class="small-warning">
 			  	Ce séjour d'urgence n'est pas associé à un RPU.
 			  	<br />
-			  	Merci de créer un RPU en <strong>cliquant sur le lien suivant</strong> :
-			  	<ul>
-			  		<li><a href="{{$rpu_link}}">Création d'un RPU pour ce séjour</a></li>
-			  	</ul>
+			  	Merci de <strong>cliquer sur le lien suivant</strong> :
+			  	<a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
 			  </div>
 			</td>
 		{{/if}}

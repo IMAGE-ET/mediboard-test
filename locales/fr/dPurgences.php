@@ -304,4 +304,5 @@ $locales['config-dPurgences-programme_rpu_view'] = '';
 $locales['config-dPurgences-programme_rpu_view-desc'] = '';
 $locales['config-dPurgences-reponsable_id_notNull'] = '';
 $locales['config-dPurgences-reponsable_id_notNull-desc'] = '';
+$locales['CRPU-msg-absent'] = 'RPU absent';
 ?>

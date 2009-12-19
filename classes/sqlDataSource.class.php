@@ -222,7 +222,7 @@ abstract class CSQLDataSource {
    **/
   function exec($query) {
     if (CSQLDataSource::$trace) {
-      trigger_error("Exécution SQL sur DataSource '$this->dsn' : $query", E_USER_NOTICE);
+      mbTrace($query, "Exécution SQL sur DataSource '$this->dsn'");
     }
     
     $this->chrono->start();
@@ -581,6 +581,17 @@ abstract class CSQLDataSource {
     
     $str = implode(", ", $values);
     return "IN ($str)";
+  }
+
+  /**
+   * Prepares an LIKE where clause with a given name-like value
+   * tread all non non-caracters as % wildcards
+   * @param string $name
+   * @param string $alternate
+   * @return string The prepared where clause
+   **/
+  function prepareLikeName($name) {
+    return $this->prepare("LIKE %", preg_replace("/[\W]+/", "_", $name));
   }
 
   /**
