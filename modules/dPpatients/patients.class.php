@@ -286,6 +286,7 @@ class CPatient extends CMbObject {
     $specs["_art115"]                     = "bool";
     $specs["_age"]                        = "num show|1";
     $specs["_age_assure"]                 = "num";
+    $specs["_IPP"]                        = "str";
     return $specs;
   }
   
@@ -777,40 +778,76 @@ class CPatient extends CMbObject {
    * - Strictement la même date de naissance
    * @return Nombre d'occurences trouvées 
    */
-  function loadMatchingPatient($strict = null) {
+  function loadMatchingPatient($other = false) {
     $ds = $this->_spec->ds;
     
-    if ($strict && $this->_id) {
+    if ($other && $this->_id) {
    	  $where["patient_id"] = " != '$this->_id'";
     }
         
-    $whereOr = array();
+    $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom);
+    $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom);
+
     if ($this->nom_jeune_fille) {
-    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom));
-    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
-    	$whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom));
-      $whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom_jeune_fille));
-    } else {
-    	$whereOr[] = $ds->prepare("nom LIKE %", preg_replace("/\W/", "%", $this->nom));
-      $whereOr[] = $ds->prepare("nom_jeune_fille LIKE %", preg_replace("/\W/", "%", $this->nom));
-    }
+	    $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom_jeune_fille);
+	    $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom_jeune_fille);
+    } 
+
     $where[] = implode(" OR ", $whereOr);
-    
-    $where["prenom"]          = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
-    if ($this->prenom_2) {
-    	$where["prenom_2"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_2));
-    }
-    if ($this->prenom_3) {
-      $where["prenom_3"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_3));
-    }
-    if ($this->prenom_4) {
-      $where["prenom_4"]      = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom_4));
-    }
-    $where["naissance"]       = $ds->prepare("= %", $this->naissance);
+    $where["prenom"]          = $ds->prepareLikeName($this->prenom);
+
+    if ($this->prenom_2) $where["prenom_2"] = $ds->prepareLikeName($this->prenom_2);
+    if ($this->prenom_3) $where["prenom_3"] = $ds->prepareLikeName($this->prenom_3);
+    if ($this->prenom_4) $where["prenom_4"] = $ds->prepareLikeName($this->prenom_4);
+
+    $where["naissance"] = $ds->prepare("= %", $this->naissance);
     
     $this->loadObject($where);
 
     return $this->countList($where);
+  }
+	
+  /**
+   * Finds patient siblings with at least two exact matching traits out of 
+   * nom, prenom, naissance
+   * Optimized version with split queries for index usage forcing
+   * @return array[CPatient] Array of siblings
+   */
+  function getSiblings() {
+    $ds =& $this->_spec->ds;
+
+    $where = array (
+      "nom"    => $ds->prepareLikeName($this->nom),
+      "prenom" => $ds->prepareLikeName($this->prenom),
+      "patient_id" => "!= '$this->_id'",
+    );
+		
+    $siblings = $this->loadList($where);
+    
+    if ($this->naissance !== "0000-00-00") {
+      $where = array (
+        "nom"       => $ds->prepareLikeName($this->nom),
+        "naissance" => $ds->prepare(" = %", $this->naissance),
+        "patient_id" => "!= '$this->_id'",
+      );
+      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+
+      $where = array (
+        "prenom"    => $ds->prepareLikeName($this->prenom),
+        "naissance" => $ds->prepare(" = %", $this->naissance),
+        "patient_id" => "!= '$this->_id'",
+      );
+      $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+    }
+    
+    return $siblings;
+  }
+	  
+  function checkSimilar($nom, $prenom) {
+    $soundex2 = new soundex2;
+    $testNom    = $this->nom_soundex2    == $soundex2->build($nom);
+    $testPrenom = $this->prenom_soundex2 == $soundex2->build($prenom);
+    return($testNom && $testPrenom);
   }
   
   function loadRefsConsultations($where = null) {
@@ -1091,7 +1128,7 @@ class CPatient extends CMbObject {
     	$this->_IPP = "-";
     }
   }
-  
+
   function loadFromIPP($group_id = null) {
     if (!$this->_IPP) {
       return;
@@ -1118,48 +1155,6 @@ class CPatient extends CMbObject {
     $id400->loadMatchingObject();
 
     $this->load($id400->object_id);
-  }
-  
-  function checkSimilar($nom, $prenom) {
-    $soundex2 = new soundex2;
-    $testNom    = $this->nom_soundex2    == $soundex2->build($nom);
-    $testPrenom = $this->prenom_soundex2 == $soundex2->build($prenom);
-    return($testNom && $testPrenom);
-  }
-  
-  /**
-   * Finds patient siblings with at least two exact matching traits out of 
-   * nom, prenom, naissance
-   * Optimized version with split queries for index usage forcing
-   * @return array[CPatient] Array of siblings
-   */
-  function getSiblings() {
-    $ds =& $this->_spec->ds;
-
-    $where = array (
-      "nom"    => $ds->prepare(" = %", $this->nom),
-      "prenom" => $ds->prepare(" = %", $this->prenom),
-      "patient_id" => "!= '$this->_id'",
-    );
-	  $siblings = $this->loadList($where);
-    
-    if ($this->naissance !== "0000-00-00") {
-	    $where = array (
-	      "nom"       => $ds->prepare(" = %", $this->nom),
-	      "naissance" => $ds->prepare(" = %", $this->naissance),
-        "patient_id" => "!= '$this->_id'",
-      );
-	    $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
-
-	    $where = array (
-	      "prenom"    => $ds->prepare(" = %", $this->prenom),
-	      "naissance" => $ds->prepare(" = %", $this->naissance),
-        "patient_id" => "!= '$this->_id'",
-	    );
-	    $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
-    }
-    
-    return $siblings;
   }
   
   function loadRefPhotoIdentite() {

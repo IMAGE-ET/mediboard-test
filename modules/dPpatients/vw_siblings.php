@@ -37,7 +37,7 @@ $patient->loadIdVitale();
 
 // Liste des siblings
 $listSiblings = $patient->getSiblings();
-foreach($listSiblings as &$curr_sib) {
+foreach ($listSiblings as &$curr_sib) {
   $curr_sib->loadDossierComplet();
   $curr_sib->loadIPP();
   $curr_sib->loadIdVitale();
