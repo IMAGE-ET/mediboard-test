@@ -31,6 +31,11 @@ class CDateTimeSpec extends CMbFieldSpec {
       return $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : ""));
     }
     
+    $date = CMbArray::extract($params, "date");
+    if ($date && mbDate($propValue) == $date) {
+    	$format = CAppUI::conf("time");
+    }
+    
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
       smarty_modifier_date_format($propValue, $format) :
       "";
