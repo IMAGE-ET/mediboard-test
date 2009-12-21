@@ -109,7 +109,7 @@ class CHprimSoapHandler extends CSoapHandler {
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
         }
-        $messageAcquittement = $domGetEvenement->fusionPatient();
+        $messageAcquittement = $domGetEvenement->fusionPatient($domAcquittement, $echange_hprim, $newPatient, $data);
       } 
       // Venue d'un patient dans l'établissement avec son numéro de venue
       else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
