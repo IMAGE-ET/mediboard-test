@@ -82,4 +82,5 @@ $locales['CPersonnel.select'] = 'Choisir';
 $locales['CMediusers-back-personnels'] = 'Rôles de personnel';
 $locales['mod-dPpersonnel-tab-vw_affectations_multiples'] = 'Affectations multiples';
 $locales['CAffectationPersonnel-failed-unique'] = 'Le personnel ne peut pas être affecté plusieurs fois à la même cible';
+$locales['CPersonnel.emplacement.iade'] = 'IADE';
 ?>

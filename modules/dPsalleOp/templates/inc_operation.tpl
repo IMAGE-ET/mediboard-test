@@ -10,7 +10,9 @@
 
 <script type="text/javascript">
 Main.add(function () {
-	
+  // Chargement de la gestion du personnel pour l'intervention
+  reloadPersonnel('{{$selOp->_id}}');
+
 	{{if $isPrescriptionInstalled}}
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}', null, null, '{{$selOp->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
@@ -284,7 +286,7 @@ function reloadPrescription(prescription_id){
     {{include file="inc_vw_timing.tpl"}}
   </div>
   <div id="listPersonnel">
-    {{include file="inc_vw_personnel.tpl"}}
+    {{* include file="inc_vw_personnel.tpl" *}}
   </div>
 </div>
 {{/if}}

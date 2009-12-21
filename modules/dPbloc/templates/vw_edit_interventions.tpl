@@ -94,10 +94,30 @@
             </select>
             <button class="tick" type="submit">Modifier</button>
             </form>
-            
           </td>
         </tr>
-
+        {{if $listPersIADE}}
+        <tr>
+          <td>
+            <form name="editAffectationIADE" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPpersonnel" />
+            <input type="hidden" name="dosql" value="do_affectation_aed" />
+            
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="object_id" value="{{$plage->_id}}" />
+            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="realise" value="0" />
+            <select name="personnel_id">
+              <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
+              {{foreach from=$listPersIADE item=_personnelBloc}}
+              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
+              {{/foreach}}
+            </select>
+            <button class="submit" type="submit">Ajouter personnel en salle</button>
+            </form>
+          </td>
+        </tr>
+        {{/if}}
         {{if $listPersAideOp}}
         <tr>
           <td>
@@ -131,7 +151,7 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id">
-              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_penseuse{{/tr}}</option>
+              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
               {{foreach from=$listPersPanseuse item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
@@ -141,7 +161,6 @@
           </td>
         </tr>
         {{/if}}
-        
       </table>   
     </td>
     
@@ -155,10 +174,26 @@
             <td>Aucun anesthésiste</td>
           {{/if}}
         </tr>
-        
+        {{if $affectations_plage.iade}}
+        <tr>
+          <th>{{tr}}CPersonnel.emplacement.iade{{/tr}}</th>
+          <td class="text">
+            <!-- div qui affiche le personnel de bloc -->
+            {{foreach from=$affectations_plage.iade item=_affectation}}
+              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
+                <input type="hidden" name="m" value="dPpersonnel" />
+                <input type="hidden" name="dosql" value="do_affectation_aed" />
+                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
+                <input type="hidden" name="del" value="1" />
+                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+              </form>
+            {{/foreach}}
+          </td>
+        </tr>
+        {{/if}}
         {{if $affectations_plage.op}}
         <tr>
-          <th>Aide operatoire(s)</th>
+          <th>{{tr}}CPersonnel.emplacement.op{{/tr}}</th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
             {{foreach from=$affectations_plage.op item=_affectation}}
@@ -175,7 +210,7 @@
         {{/if}}
         {{if $affectations_plage.op_panseuse}}
         <tr>
-          <th>Panseuse(s)</th>
+          <th>{{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
             {{foreach from=$affectations_plage.op_panseuse item=_affectation}}
@@ -190,11 +225,9 @@
           </td>
         </tr>
         {{/if}}
-
       </table>
     </td> 
   </tr>
-
   <tr>
     <td class="halfPane">
     <table class="tbl">

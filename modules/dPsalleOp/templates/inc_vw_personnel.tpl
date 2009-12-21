@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-function submitPersonnel(oForm){
+submitPersonnel = function(oForm){
   submitFormAjax(oForm, 'systemMsg', { onComplete : function() {
     reloadPersonnel(document.forms["affectationPers-aideop"].object_id.value);
   } });
@@ -17,6 +17,23 @@ function submitPersonnel(oForm){
 <tr>
   <th class="category" style="width: 50%;">Personnel prévu</th>
   <th class="category" style="width: 50%;">Personnel ajouté<br />
+	  <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="" />
+    
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
+    
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
+        <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
+        {{foreach from=$listPersIADE item="pers"}}
+        <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+    </form>
     <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -27,10 +44,10 @@ function submitPersonnel(oForm){
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
     
-      <select name="personnel_id" onchange="submitPersonnel(this.form)">
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
         {{foreach from=$listPersAideOp item="pers"}}
-        <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
+        <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
@@ -44,18 +61,18 @@ function submitPersonnel(oForm){
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
     
-      <select name="personnel_id" onchange="submitPersonnel(this.form)">
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
         {{foreach from=$listPersPanseuse item="pers"}}
-        <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
+        <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
         {{/foreach}}
       </select>
     </form>
-    
   </th>
 </tr>
 
 {{assign var=submit value=submitPersonnel}}
+{{assign var=width value=30}} <!-- largeur en % pris par les td inc_field_timing -->
 
 <tr>
   <!-- Personnel prévu dans la plage op -->
@@ -74,37 +91,24 @@ function submitPersonnel(oForm){
     {{assign var="affectation_id" value=$affectation->_id}}
     {{assign var="timing" value=$timingAffect.$affectation_id}}
     {{assign var="form" value="affectationPersonnel-$affectation_id"}}
-    
-    {{$affectation->_ref_personnel->_ref_user->_view}} /
-    {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
-
-    <table class="form">
+		<table class="form">
       <tr>
-		    {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
-		    {{include file=inc_field_timing.tpl object=$affectation field=_fin  }}
-      </tr>
+      	<td style="width: 40%;" class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
+				<br />
+				<span style="opacity: 0.6">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
+				</td>
+			  {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
+			  {{include file=inc_field_timing.tpl object=$affectation field=_fin}}
+			</tr>
     </table>
-
    </form>
-
-  <hr />
+   <hr style="margin-top: 0px;"/>
   {{/foreach}}
   </td>
   
   <!-- Personnel ajouté pour l'intervention -->
   <td>
     {{foreach from=$tabPersonnel.operation item=affectation}}
-
-    {{if $can->edit || $modif_operation}}
-    <form name="cancelAffectation-{{$affectation->_id}}" action="?m={{$m}}" method="post" style="float: right">
-      <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
-      <input type="hidden" name="m" value="dPpersonnel" />
-      <input type="hidden" name="dosql" value="do_affectation_aed" />
-      <input type="hidden" name="del" value="1" />
-      <button type="button" class="cancel notext" onclick="submitPersonnel(this.form)">{{tr}}Cancel{{/tr}}</button>
-    </form>
-    {{/if}}
-
     <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="m" value="dPpersonnel" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -119,21 +123,27 @@ function submitPersonnel(oForm){
     {{assign var="timing" value=$timingAffect.$affectation_id}}
     {{assign var="form" value="affectationPersonnel-$affectation_id"}}
 
-    {{$affectation->_ref_personnel->_ref_user->_view}} / 
-    {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
     <table class="form">
       <tr>
+      	<td style="width: 40%;" class="text">
+					{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
+					<br />
+					<span style="opacity: 0.6">
+            {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
+          </span>
+      	</td>
 		    {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
-		    {{include file=inc_field_timing.tpl object=$affectation field=_fin  }}
-      </tr>
+		    {{include file=inc_field_timing.tpl object=$affectation field=_fin}}
+				<td>
+					{{if $can->edit || $modif_operation}}
+            <button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); submitPersonnel(this.form)">{{tr}}Cancel{{/tr}}</button>
+          {{/if}}
+				</td>
+	    </tr>
     </table>
    </form>
-
- <hr />   
+ <hr style="margin-top: 0px;"/>   
 {{/foreach}}
 </td>
 </tr>
-
-
 </table>
-

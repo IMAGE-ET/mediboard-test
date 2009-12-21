@@ -4,9 +4,10 @@
   $field : Real field name 
   $submit : Ajax submit callback name
   $timing : +10/-10 minutes array for selector
+	$width : %
 *}}
 
-<td class="button">
+<td class="button" {{if @$width}}style="width: {{$width}}%"{{/if}}>
   {{if $object->$field}}
     {{mb_label object=$object field=$field}}
     {{if $can->edit}}

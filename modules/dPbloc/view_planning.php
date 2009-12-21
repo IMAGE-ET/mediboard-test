@@ -153,10 +153,12 @@ foreach($plagesop as &$plage) {
   $plage->loadAffectationsPersonnel();
   
   // Initialisation des tableaux de stockage des affectation pour les op et les panseuses
-  $affectations_plage[$plage->_id]["op"] = array();
+  $affectations_plage[$plage->_id]["iade"] = array();
+	$affectations_plage[$plage->_id]["op"] = array();
   $affectations_plage[$plage->_id]["op_panseuse"] = array();
   
   if (null !== $plage->_ref_affectations_personnel) {
+  	$affectations_plage[$plage->_id]["iade"] = $plage->_ref_affectations_personnel["iade"];
     $affectations_plage[$plage->_id]["op"] = $plage->_ref_affectations_personnel["op"];
     $affectations_plage[$plage->_id]["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
   }

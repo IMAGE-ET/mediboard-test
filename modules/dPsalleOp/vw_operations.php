@@ -10,12 +10,7 @@
 
 global $AppUI, $can, $m, $g;
 
-CAppUI::requireModuleFile("dPsalleOp", "inc_personnel");
-
 $can->needsRead();
-
-$listPersAideOp = array();
-$listPersPanseuse = array();
 
 // Ne pas supprimer, utilisé pour mettre le particien en session
 $praticien_id    = CValue::getOrSession("praticien_id");
@@ -27,12 +22,6 @@ $date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
 $modif_operation = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
                    ((CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday") && ($date >= $date_now));
-
-// Tableau d'affectations
-$tabPersonnel = array();
-
-// Creation du tableau de timing pour les affectations  
-$timingAffect = array();
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
@@ -46,9 +35,6 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
-
-// Creation du tableau de timing pour les affectations  
-$timingAffect = array();
 
 // Sauvegarde en session du bloc (pour preselectionner dans la salle de reveil)
 $salle = new CSalle;
@@ -145,9 +131,6 @@ if ($op) {
 	}
 
 	$selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
-
-	// Chargement des affectations de personnel pour la plageop et l'intervention
-  loadAffectations($selOp, $tabPersonnel, $listPersAideOp, $listPersPanseuse, $timingAffect);
   
   // Chargement de la prescription de sejour
   $prescription->object_id = $selOp->sejour_id;
@@ -247,14 +230,10 @@ $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
 $smarty->assign("modif_operation"        , $modif_operation);
-$smarty->assign("tabPersonnel"           , $tabPersonnel);
-$smarty->assign("listPersAideOp"         , $listPersAideOp);
-$smarty->assign("listPersPanseuse"       , $listPersPanseuse);
 $smarty->assign("listValidateurs"        , CPersonnel::loadListPers("op"));
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
-$smarty->assign("timingAffect"           , $timingAffect);
 $smarty->assign("prescription"           , $prescription);
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);

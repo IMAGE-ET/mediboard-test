@@ -70,15 +70,18 @@ $listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
 // Chargement des affectation du personnel dans la plage
 $plage->loadAffectationsPersonnel();
 
-// Chargement du personnel "aide_operatoire"
+// Chargement du personnel
+$listPersIADE = CPersonnel::loadListPers("iade");
 $listPersAideOp = CPersonnel::loadListPers("op");
-
-// Chargement du personnel "op_panseuse"
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
 
+$affectations_plage["iade"] = $plage->_ref_affectations_personnel["iade"];
 $affectations_plage["op"] = $plage->_ref_affectations_personnel["op"];
 $affectations_plage["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
 
+if (!$affectations_plage["iade"]){
+  $affectations_plage["iade"] = array();
+}
 if (!$affectations_plage["op"]){
   $affectations_plage["op"] = array();
 }
@@ -86,28 +89,26 @@ if (!$affectations_plage["op_panseuse"]){
   $affectations_plage["op_panseuse"] = array();
 }
 
-// Suppression du personnel deja dans la plage
-foreach($affectations_plage["op"] as $key => $affectation){
-  if(array_key_exists($affectation->_ref_personnel->_id,$listPersAideOp)){
-    unset($listPersAideOp[$affectation->_ref_personnel->_id]);
+foreach($affectations_plage["iade"] as $key => $affectation){
+  if(array_key_exists($affectation->personnel_id, $listPersIADE)){
+    unset($listPersIADE[$affectation->personnel_id]);
   }
-  if(array_key_exists($affectation->_ref_personnel->_id,$listPersPanseuse)){
-    unset($listPersPanseuse[$affectation->_ref_personnel->_id]);
+}
+foreach($affectations_plage["op"] as $key => $affectation){
+  if(array_key_exists($affectation->personnel_id, $listPersAideOp)){
+    unset($listPersAideOp[$affectation->personnel_id]);
+  }
+}
+foreach($affectations_plage["op_panseuse"] as $key => $affectation){
+  if(array_key_exists($affectation->personnel_id, $listPersPanseuse)){
+    unset($listPersPanseuse[$affectation->personnel_id]);
   }
 }
 
-foreach($affectations_plage["op_panseuse"] as $key => $affectation){
-  if(array_key_exists($affectation->_ref_personnel->_id,$listPersAideOp)){
-    unset($listPersAideOp[$affectation->_ref_personnel->_id]);
-  }
-  if(array_key_exists($affectation->_ref_personnel->_id,$listPersPanseuse)){
-    unset($listPersPanseuse[$affectation->_ref_personnel->_id]);
-  }
-}
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("affectations_plage", $affectations_plage);
+$smarty->assign("listPersIADE"      , $listPersIADE      );
 $smarty->assign("listPersAideOp"    , $listPersAideOp    );
 $smarty->assign("listPersPanseuse"  , $listPersPanseuse  );
 $smarty->assign("listAnesth"        , $listAnesth        );
@@ -119,7 +120,6 @@ $smarty->assign("anesth"            , $anesth            );
 $smarty->assign("list1"             , $list1             );
 $smarty->assign("list2"             , $list2             );
 $smarty->assign("max"               , sizeof($list2)     );
-
 $smarty->display("vw_edit_interventions.tpl");
 
 ?>

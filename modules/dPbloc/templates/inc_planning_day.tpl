@@ -60,42 +60,31 @@
                 <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$curr_day}}">
                   <img src="images/icons/edit.png" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
-                {{if ($plage->_ref_affectations_personnel.op|@count) || ($plage->_ref_affectations_personnel.op_panseuse|@count)}}
+                {{if ($plage->_ref_affectations_personnel.op|@count) || ($plage->_ref_affectations_personnel.op_panseuse|@count) || ($plage->_ref_affectations_personnel.iade|@count)}}
                   <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
-                  <img src="images/icons/personnel.png" border="0" height="16" width="16"
-                    onmouseover="$('plage-{{$plage->_id}}').show();"
-                    onmouseout="$('plage-{{$plage->_id}}').hide();" />
+                  <img src="images/icons/personnel.png" border="0" height="16" width="16" 
+									     onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-plage-{{$plage->_id}}")' />
                   </a>
-                  <div id="plage-{{$plage->_id}}" class="tooltip" style="display: none; width: 200px;">
+                  <div id="tooltip-content-plage-{{$plage->_id}}" style="display: none; width: 200px;">
                     <table class="tbl">
-                      <tr>
-                        <th>{{tr}}CPersonnel.emplacement.op{{/tr}}</th>
-                      </tr>
-                      {{foreach from=$plage->_ref_affectations_personnel.op item=curr_aff}}
-                      <tr>
-                        <td class="text">
-                          {{$curr_aff->_ref_personnel->_ref_user->_view}}
-                        </td>
-                      </tr>
-                      {{foreachelse}}
-                      <tr>
-                        <td><em>{{tr}}None{{/tr}}</em></td>
-                      </tr>
-                      {{/foreach}}
-                      <tr>
-                        <th>{{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</th>
-                      </tr>
-                      {{foreach from=$plage->_ref_affectations_personnel.op_panseuse item=curr_aff}}
-                      <tr>
-                        <td class="text">
-                          {{$curr_aff->_ref_personnel->_ref_user->_view}}
-                        </td>
-                      </tr>
-                      {{foreachelse}}
-                      <tr>
-                        <td><em>{{tr}}None{{/tr}}</em></td>
-                      </tr>
-                      {{/foreach}}
+											{{foreach from=$plage->_ref_affectations_personnel key=type_personnel item=_affectations}}
+											  {{if $type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade"}} 
+											  <tr>
+	                        <th>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</th>
+	                      </tr>
+	                      {{foreach from=$_affectations item=curr_aff}}
+	                      <tr>
+	                        <td class="text">
+	                        	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_aff->_ref_personnel->_ref_user}}
+	                        </td>
+	                      </tr>
+	                      {{foreachelse}}
+	                      <tr>
+	                        <td><em>{{tr}}None{{/tr}}</em></td>
+	                      </tr>
+	                      {{/foreach}} 
+												{{/if}}
+											{{/foreach}}
                     </table>
                   </div>
                 {{/if}}
