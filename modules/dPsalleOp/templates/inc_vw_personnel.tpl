@@ -103,7 +103,9 @@ submitPersonnel = function(oForm){
     </table>
    </form>
    <hr style="margin-top: 0px;"/>
-  {{/foreach}}
+   {{foreachelse}}
+     <div class="small-info">Aucun personnel prévu</div>
+   {{/foreach}}
   </td>
   
   <!-- Personnel ajouté pour l'intervention -->
@@ -142,8 +144,10 @@ submitPersonnel = function(oForm){
 	    </tr>
     </table>
    </form>
- <hr style="margin-top: 0px;"/>   
-{{/foreach}}
-</td>
+   <hr style="margin-top: 0px;"/>   
+	 {{foreachelse}}
+	   <div class="small-info">Aucun personnel ajouté</div>
+	 {{/foreach}}
+	</td>
 </tr>
 </table>
