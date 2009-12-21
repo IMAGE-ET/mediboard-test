@@ -51,7 +51,7 @@
      
 {{if $file->_id}}     
 <div id="tooltip-content-patient-{{$patient->_id}}" style="display: none;">
-  <img src="{{$_src}}" style="border: 2px solid #777" alt="Identité">
+  <img src="{{$_src}}" style="border: 2px solid #777" alt="Identité" />
 </div>
 {{/if}}
 
