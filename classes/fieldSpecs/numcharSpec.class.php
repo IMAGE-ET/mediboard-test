@@ -15,7 +15,7 @@ class CNumcharSpec extends CNumSpec {
   var $control = null;
   
   function getSpecType() {
-    return("numchar");
+    return "numchar";
   }
 
   function getDBSpec(){
@@ -57,8 +57,6 @@ class CNumcharSpec extends CNumSpec {
 	      }
     	}
     }
-    
-    return null;
   }
   
   //Returns true if it's a valid Luhn number.

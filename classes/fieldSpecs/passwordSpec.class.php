@@ -11,11 +11,10 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CPasswordSpec extends CMbFieldSpec {
-  
-  var $minLength     = null;
+  var $minLength = null;
   
   function getSpecType() {
-    return('password');
+    return "password";
   }
   
   function getDBSpec(){
@@ -71,7 +70,6 @@ class CPasswordSpec extends CMbFieldSpec {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
     }
-    return null;
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

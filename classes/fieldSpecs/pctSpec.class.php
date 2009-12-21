@@ -11,9 +11,8 @@
 CAppUI::requireSystemClass("fieldSpecs/floatSpec");
 
 class CPctSpec extends CFloatSpec {
-  
   function getSpecType() {
-    return("pct");
+    return "pct";
   }
   
   function getDBSpec(){
@@ -29,7 +28,6 @@ class CPctSpec extends CFloatSpec {
     if (!preg_match ("/^([0-9]+)(\.[0-9]{0,4}){0,1}$/", $propValue)) {
       return "N'est pas un pourcentage";
     }
-    return null;
   }
   
   function getValue($object, $smarty = null, $params = array()) {

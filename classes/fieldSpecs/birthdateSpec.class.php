@@ -18,7 +18,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
  */
 class CBirthDateSpec extends CMbFieldSpec {
   function getSpecType() {
-    return("birthdate");
+    return "birthdate";
   }
   
   function getDBSpec(){
@@ -46,8 +46,6 @@ class CBirthDateSpec extends CMbFieldSpec {
     if ($object->{$this->fieldName} > mbDate()) {
       return "La date de naissance ne doit pas être dans le futur";
     }
-    
-    return null;
   }
   
   function sample(&$object, $consistent = true){

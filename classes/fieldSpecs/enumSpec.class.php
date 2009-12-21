@@ -37,7 +37,7 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getSpecType() {
-    return("enum");
+    return "enum";
   }
   
   function getDBSpec() {
@@ -50,7 +50,7 @@ class CEnumSpec extends CMbFieldSpec {
   function getOptions(){
     return parent::getOptions() + array(
       'list' => 'list',
-        'class' => 'class',
+      'class' => 'class',
     );
   }
   
@@ -174,6 +174,5 @@ class CEnumSpec extends CMbFieldSpec {
     }
     
     trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
-    return null;
   }
 }

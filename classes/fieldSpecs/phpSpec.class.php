@@ -13,7 +13,7 @@ CAppUI::requireLibraryFile("geshi/geshi");
 
 class CPhpSpec extends CMbFieldSpec {
   function getSpecType() {
-    return("php");
+    return "php";
   }
   
   function getDBSpec() {

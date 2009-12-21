@@ -14,7 +14,7 @@ class CDateSpec extends CMbFieldSpec {
   var $progressive = null;
   
   function getSpecType() {
-    return("date");
+    return "date";
   } 
   
   function getDBSpec(){
@@ -66,8 +66,6 @@ class CDateSpec extends CMbFieldSpec {
     if (!in_range($jour, $this->progressive ? 0 : 1, 31)) {
       return "Jour '$jour' non compris entre 1 et 31 ('$propValue')";
     }
-
-    return null;
   }
   
   function sample(&$object, $consistent = true){

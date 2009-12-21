@@ -13,7 +13,7 @@ abstract class CMbString {
 	const UPPERCASE = 2;
   const BOTHCASES = 3;
 	
-	static $gliphs = array (
+	static $glyphs = array (
     "a" => "אבגדהו",
     "c" => "ח",
     "e" => "טיךכ",
@@ -48,15 +48,11 @@ abstract class CMbString {
       $to   = strtoupper($to);
 			break;
 			
+      default:
       case self::BOTHCASES:
       $from .= strtoupper($from);
       $to   .= strtoupper($to);
       break;
-
-			default:
-        trigger_error("Illegal filter '$filter'", E_USER_WARNING);
-				return null;
-			break;
 		}
 			  
 	  return strtr($string, $from, $to);
@@ -69,11 +65,11 @@ abstract class CMbString {
    **/
 	static function allowDiacriticsInRegexp($regexp) {
 		$regexp = self::removeDiacritics(strtolower($regexp));
-		foreach(self::$gliphs as $gliph => $allographs) {
-			$fromto[$gliph] = "[$gliph$allographs]";
+		$fromto = array();
+		foreach(self::$glyphs as $glyph => $allographs) {
+			$fromto[$glyph] = "[$glyph$allographs]";
 		}
-		$regexp = strtr($regexp, $fromto);
-		return $regexp;
+		return strtr($regexp, $fromto);
 	}
 	
 	/**
@@ -95,27 +91,25 @@ abstract class CMbString {
    * @param integer $number
    * @return string Deca-binary equivalent
    */
-  static function toDecaBinary($number) {
-    $bytes = $number;
-    $value = $number;
+  static function toDecaBinary($number, $unit = "o") {
+    $bytes = $value = $number;
     $suffix = "";
-    $unit = "o";
   
-    $kbytes = $bytes / 1024;
-    if ($kbytes >= 1) {
-      $value = $kbytes;
+    $bytes = $bytes / 1024;
+    if ($bytes >= 1) {
+      $value = $bytes;
       $suffix = "Ki";
     }
   
-    $mbytes = $kbytes / 1024;
-    if ($mbytes >= 1) {
-      $value = $mbytes;
+    $bytes = $bytes / 1024;
+    if ($bytes >= 1) {
+      $value = $bytes;
       $suffix = "Mi";
     }
   
-    $gbytes = $mbytes / 1024;
-    if ($gbytes >= 1) {
-      $value = $gbytes;
+    $bytes = $bytes / 1024;
+    if ($bytes >= 1) {
+      $value = $bytes;
       $suffix = "Gi";
     }
     
@@ -129,13 +123,11 @@ abstract class CMbString {
    * @param string $string Deca-binary string
    * @return integer Integer equivalent
    */
-	function fromDecaBinary($string) {
-    $unit = "o";
+	static function fromDecaBinary($string, $unit = "o") {
 	  $string = strtolower(trim($string));
-		$matches = array();
 	  if (!preg_match("/(.*)([kmgt])[$unit]?/", $string, $matches)) {
       return intval($string);
-	  };
+	  }
 		
 		list($string, $value, $suffix) = $matches;
 	  switch($suffix) {
@@ -146,6 +138,5 @@ abstract class CMbString {
 	  }
 	  return intval($value);
 	}
-	
 }
 ?>

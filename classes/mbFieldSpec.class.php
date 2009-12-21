@@ -388,8 +388,6 @@ class CMbFieldSpec {
     if($msg = $this->checkProperty($object)){
       return $msg;
     }
-
-    return null;
   }
 
   static function randomString($array, $length) {
@@ -596,7 +594,7 @@ class CMbFieldSpec {
   }
 
   function getSpecType() {
-    return("mbField");
+    return "mbField";
   }
 
   /**

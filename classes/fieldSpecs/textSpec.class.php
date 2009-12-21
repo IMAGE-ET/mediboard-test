@@ -12,7 +12,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CTextSpec extends CMbFieldSpec {
   function getSpecType() {
-    return("text");
+    return "text";
   }
   
   function getDBSpec(){

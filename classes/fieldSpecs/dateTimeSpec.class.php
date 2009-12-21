@@ -13,7 +13,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CDateTimeSpec extends CMbFieldSpec {
   
   function getSpecType() {
-    return("dateTime");
+    return "dateTime";
   }
   
   function getDBSpec(){
@@ -51,7 +51,6 @@ class CDateTimeSpec extends CMbFieldSpec {
       } 
     	return "format de dateTime invalide : '$propValue'";
     }
-    return null;
   }
   
   function sample(&$object, $consistent = true){

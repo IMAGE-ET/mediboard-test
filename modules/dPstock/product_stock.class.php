@@ -62,11 +62,11 @@ class CProductStock extends CMbObject {
 	}
   
   function getOptimumQuantity(){
-    $this->completeFields(array(
+    $this->completeField(
       "order_threshold_optimum",
       "order_threshold_min",
-      "order_threshold_max",
-    ));
+      "order_threshold_max"
+    );
     
     if ($this->order_threshold_optimum) {
       return $this->order_threshold_optimum;

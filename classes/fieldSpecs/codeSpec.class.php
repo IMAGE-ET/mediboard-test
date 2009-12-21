@@ -21,7 +21,7 @@ class CCodeSpec extends CMbFieldSpec {
   var $order_number = null;
   
   function getSpecType() {
-    return("code");
+    return "code";
   }
   
   function getDBSpec(){
@@ -148,8 +148,6 @@ class CCodeSpec extends CMbFieldSpec {
     else {
       return "Spécification de code invalide";
     }
-    
-    return null;
   }
 
   function getFormHtmlElement($object, $params, $value, $className){

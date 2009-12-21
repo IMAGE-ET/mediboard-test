@@ -11,13 +11,12 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CStrSpec extends CMbFieldSpec {
-  
   var $length    = null;
   var $minLength = null;
   var $maxLength = null;
   
   function getSpecType() {
-    return("str");
+    return "str";
   }
   
   function getDBSpec(){
@@ -77,32 +76,28 @@ class CStrSpec extends CMbFieldSpec {
         return "N'a pas la bonne longueur '$propValue' (longueur maximale souhaitée : $length)'";
       }
     }
-    
-    return null;
   }
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     $propValue =& $object->{$this->fieldName};
     
-    if($this->length){
+    if($this->length) {
       $propValue = self::randomString(CMbFieldSpec::$chars, $this->length);
-    
-    }elseif($this->minLength){
-      if($this->_defaultLength < $this->minLength){
+    }
+    elseif($this->minLength) {
+      if($this->_defaultLength < $this->minLength)
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->minLength);
-      }else{
+      else
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
-      }
-    
-    }elseif($this->maxLength){
-      if($this->_defaultLength > $this->maxLength){
+    }
+    elseif($this->maxLength) {
+      if($this->_defaultLength > $this->maxLength)
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->maxLength);
-      }else{
+      else
         $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
-      }
-
-    }else{
+    }
+    else {
       $propValue = self::randomString(CMbFieldSpec::$chars, $this->_defaultLength);
     }
   }

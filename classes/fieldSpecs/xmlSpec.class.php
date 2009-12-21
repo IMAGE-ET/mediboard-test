@@ -13,7 +13,7 @@ CAppUI::requireLibraryFile("geshi/geshi");
 
 class CXmlSpec extends CMbFieldSpec {
   function getSpecType() {
-    return("xml");
+    return "xml";
   }  
   
   function getDBSpec() {

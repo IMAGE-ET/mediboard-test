@@ -13,7 +13,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CTimeSpec extends CMbFieldSpec {
   
   function getSpecType() {
-    return("time");
+    return "time";
   }
   
   function getDBSpec(){
@@ -30,7 +30,6 @@ class CTimeSpec extends CMbFieldSpec {
       }
       return "Format d'heure invalide";
     }
-    return null;
   }
   
   function getValue($object, $smarty = null, $params = array()) {

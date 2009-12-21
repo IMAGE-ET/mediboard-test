@@ -11,13 +11,12 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CFloatSpec extends CMbFieldSpec {
-  
   var $min    = null;
   var $max    = null;
   var $pos    = null;
   
   function getSpecType() {
-    return("float");
+    return "float";
   }
   
   function getDBSpec(){
@@ -65,8 +64,6 @@ class CFloatSpec extends CMbFieldSpec {
         return "Doit avoir une valeur maximale de $max";
       }
     }
-    
-    return null;
   }
   
   function sample(&$object, $consistent = true){

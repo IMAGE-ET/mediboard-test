@@ -151,33 +151,16 @@ abstract class CMbArray {
 	 * @return array The merge result
 	 */
 	static function mergeRecursive($paArray1, $paArray2) {
-	  if (!is_array($paArray1) or !is_array($paArray2)) { 
-	     return $paArray2;
+	  if (!is_array($paArray1) || !is_array($paArray2)) { 
+      return $paArray2;
 	  }
 	
-	  foreach ($paArray2 AS $sKey2 => $sValue2) {
+	  foreach ($paArray2 as $sKey2 => $sValue2) {
 	    $paArray1[$sKey2] = CMbArray::mergeRecursive(@$paArray1[$sKey2], $sValue2);
 	  }
-	   
+	  
 	  return $paArray1;
 	}
-	
-	/**
-	 * Recursively applies a function to values of an array
-	 * @param string $function Function name
-	 * @param array $array Array to map
-	 * @return array The mapped array
-	 */
-	static function mapRecursive($function, $array) {
-  foreach ($array as $key => $value ) {
-    $array[$key] = is_array($value) ? 
-      self::mapRecursive($function, $value) : 
-      $function($value);
-  }
-  
-  return $array;
-}
-	
 
 	/**
 	 * Alternative to array_merge that always preserves keys
@@ -228,6 +211,19 @@ abstract class CMbArray {
    */
   static function get($array, $key, $default = null) {
     return isset($array[$key]) ? $array[$key] : $default;
+  }
+  
+  /**
+   * Returns the first value of the array that isset, from keys
+   * @param array $array The array to explore
+   * @param array $keys The keys to read
+   * @param mixed $default The default value no value is found
+   */
+  static function first($array, $keys, $default = null) {
+  	foreach($keys as $key)
+      if (isset($array[$key])) return $array[$key];
+      
+    return $default;
   }
   
   /**

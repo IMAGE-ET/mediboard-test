@@ -22,7 +22,7 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function getSpecType() {
-    return("bool");
+    return "bool";
   }
   
   function getDBSpec(){
@@ -48,7 +48,6 @@ class CBoolSpec extends CMbFieldSpec {
     if($propValue != 0 && $propValue != 1){
       return "Ne peut être différent de 0 ou 1";
     }
-    return null;
   }
   
   function getFormHtmlElement($object, $params, $value, $className){

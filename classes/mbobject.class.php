@@ -214,8 +214,7 @@ class CMbObject {
     if ($document->_ref_module && $this->_id) {
       $document->object_class = $this->_class_name;
       $document->object_id    = $this->_id;
-      $order = "nom";
-      $this->_ref_documents = $document->loadMatchingList($order);
+      $this->_ref_documents = $document->loadMatchingList("nom");
       return count($this->_ref_documents);
     }
   }
@@ -304,27 +303,28 @@ class CMbObject {
   }
   
   /**
-   * Complete field with base value if missing
-   * @param field string Field name
-   */
-  function completeField($field) {
-    // Field is valued or Nothing in base
-    if ($this->$field !== null || !$this->_id) {
-      return;
-    }
-    
-    $this->loadOldObject();
-    $this->$field = $this->_old->$field;
-  }
-  
-  /**
    * Complete fields with base value if missing
-   * @param fields array Field names
+   * @param [...] string Field names or an array of field names
    */
-  function completeFields($fields) {
-    foreach($fields as $field) {
-      $this->completeField($field);
-    }
+  function completeField() {
+  	if (!$this->_id) return;
+  	
+  	$fields = func_get_args();
+  	
+  	if (isset($fields[0]) && is_array($fields[0])) {
+  		$fields = $fields[0];
+  	}
+  	
+    $this->loadOldObject();
+    
+  	foreach($fields as $field) {
+	    // Field is valued
+	    if ($this->$field !== null) {
+	      continue;
+	    }
+	    
+	    $this->$field = $this->_old->$field;
+  	}
   }
   
   /**
@@ -356,7 +356,7 @@ class CMbObject {
     return $this->_canEdit = $this->getPerm(PERM_EDIT);
   }
 
-  function canDo(){
+  function canDo() {
     $canDo = new CCanDo;
     $canDo->read  = $this->canRead();
     $canDo->edit  = $this->canEdit();

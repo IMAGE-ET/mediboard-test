@@ -11,7 +11,6 @@
 CAppUI::requireSystemClass("mbFieldSpec");
 
 class CRefSpec extends CMbFieldSpec {
-  
   var $class     = null;
   var $cascade   = null;
   var $unlink    = null;
@@ -19,7 +18,7 @@ class CRefSpec extends CMbFieldSpec {
   var $purgeable = null;
   
   function getSpecType() {
-    return("ref");
+    return "ref";
   }
   
   function getDBSpec(){
@@ -79,8 +78,6 @@ class CRefSpec extends CMbFieldSpec {
     if (!$this->unlink && !$ref->load($propValue)) {
       return "Objet référencé de type '$class' introuvable";      
     }
-
-    return null;
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
