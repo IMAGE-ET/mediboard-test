@@ -315,14 +315,13 @@ class CMbObject {
   		$fields = $fields[0];
   	}
   	
-    $this->loadOldObject();
-    
-  	foreach($fields as $field) {
+  	foreach ($fields as $field) {
 	    // Field is valued
 	    if ($this->$field !== null) {
 	      continue;
 	    }
 	    
+      $this->loadOldObject();
 	    $this->$field = $this->_old->$field;
   	}
   }

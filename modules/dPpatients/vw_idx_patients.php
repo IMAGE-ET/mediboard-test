@@ -164,7 +164,7 @@ if ($patient->_id) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
   $patient->loadDossierComplet();
-  foreach($patient->_ref_sejours as $key=>$sejour){
+  foreach($patient->_ref_sejours as $sejour){
   	$sejour->loadNumDossier();
   }
 }

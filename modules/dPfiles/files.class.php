@@ -94,16 +94,11 @@ class CFile extends CDocumentItem {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_file_owner){
-      $this->loadRefsFwd();
-    }
-
     // Delegate on target object
-    $objectPerm = $this->_ref_object->_id ?
+		$this->loadTargetObject();
+    return $this->_ref_object->_id ?
       $this->_ref_object->getPerm($permType) :
       false;
-
-    return $objectPerm;
   }
   
   function fillFields(){
