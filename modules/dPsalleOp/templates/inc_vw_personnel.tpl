@@ -27,7 +27,7 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
     
-      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
         {{foreach from=$listPersIADE item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
@@ -44,7 +44,7 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
     
-      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
         {{foreach from=$listPersAideOp item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
@@ -61,7 +61,7 @@ submitPersonnel = function(oForm){
       <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
       <input type="hidden" name="realise" value="0" />
     
-      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 120px;">
+      <select name="personnel_id" onchange="submitPersonnel(this.form)" style="width: 10em;">
         <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
         {{foreach from=$listPersPanseuse item="pers"}}
         <option value="{{$pers->_id}}" class="mediuser" style="border-color: #{{$pers->_ref_user->_ref_function->color}};">{{$pers->_ref_user->_view}}</option>
