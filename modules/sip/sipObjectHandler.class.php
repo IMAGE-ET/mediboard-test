@@ -225,38 +225,43 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
-   /* $patient1_id = $mbObject->_merging[0]; 
-    $patient2_id = $mbObject->_merging[1]; 
-
-    // Si Serveur
-    if (CAppUI::conf('sip server')) {
-      
-    }
-    // Si CIP
-    else {
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->type = "sip";
-      $dest_hprim->loadMatchingObject();
+    // Traitement Patient
+    if ($mbObject instanceof CPatient) {
+      $patient1_id = $mbObject->_merging[0]; 
+      $patient2_id = $mbObject->_merging[1]; 
   
-      $IPP = new CIdSante400();
-      //Paramétrage de l'id 400
-      $IPP->object_class = "CPatient";
-      $IPP->object_id = $patient1_id;
-      $IPP->tag = $dest_hprim->_tag;
-      $IPP->loadMatchingObject();
-      $patient1_ipp = $IPP->id400;
-      
-      $IPP->object_id = $patient2_id;
-      $IPP->loadMatchingObject();
-      $patient2_ipp = $IPP->id400;
-      
-      $min_ipp = "";
-      if ($patient1_ipp || $patient2_ipp) {
-        $min_ipp = min($patient1_ipp, $patient2_ipp);
+      // Si Client
+      if (!CAppUI::conf('sip server')) {
+        $dest_hprim = new CDestinataireHprim();
+        $dest_hprim->type = "sip";
+        $dest_hprim->loadMatchingObject();
+        
+        // Patient 1
+        $IPP_pat1 = new CIdSante400();
+        //Paramétrage de l'id 400
+        $IPP_pat1->object_class = "CPatient";
+        $IPP_pat1->object_id = $patient1_id;
+        $IPP_pat1->tag = $dest_hprim->_tag;
+        $IPP_pat1->loadMatchingObject();
+        $patient1_ipp = $IPP_pat1->id400;
+        
+        // Patient 2
+        $IPP_pat2 = new CIdSante400();
+        //Paramétrage de l'id 400
+        $IPP_pat2->object_class = "CPatient";
+        $IPP_pat2->object_id = $patient2_id;
+        $IPP_pat2->tag = $dest_hprim->_tag;
+        $IPP_pat2->loadMatchingObject();
+        $patient2_ipp = $IPP_pat2->id400;
+       
+        $min_ipp = "";
+        if ($patient1_ipp || $patient2_ipp) {
+          $min_ipp = min($patient1_ipp, $patient2_ipp);
+        }
+  
+        $mbObject->_merging = $min_ipp ? ($patient1_ipp ? $patient1_id : $patient2_id) : (min($patient1_id,$patient2_id));
       }
-
-      $mbObject->_merging = $min_ipp ? ($patient1_ipp ? $patient1_id : $patient2_id) : (min($patient1_id,$patient2_id));
-    }*/
+    }
   }
 
   function onDelete(CMbObject &$mbObject) {
