@@ -68,11 +68,6 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-  	if ($messageAcquittement = $this->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
-
-      return $messageAcquittement;
-    }
-    
     // Traitement de la venue
     $domVenuePatient = new CHPrimXMLVenuePatient();
     $newVenue = new CSejour();

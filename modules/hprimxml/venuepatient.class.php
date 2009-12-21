@@ -99,10 +99,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
   function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
-    if ($messageAcquittement = $this->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
-      return $messageAcquittement;
-    }
-    
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);

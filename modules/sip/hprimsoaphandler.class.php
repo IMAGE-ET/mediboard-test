@@ -98,35 +98,53 @@ class CHprimSoapHandler extends CSoapHandler {
       if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
         $data = array_merge($data, $domGetEvenement->getEnregistrementPatientXML());
         $echange_hprim->id_permanent = $data['idSource'];
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
       } 
       // Fusion de deux ipp
       else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
         $data = array_merge($data, $domGetEvenement->getFusionPatientXML());
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->fusionPatient();
       } 
       // Venue d'un patient dans l'établissement avec son numéro de venue
       else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
         $data = array_merge($data, $domGetEvenement->getVenuePatientXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data);
       } 
       // Fusion de deux venues
       else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
         $data = array_merge($data, $domGetEvenement->getFusionVenueXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data);
       }
       // Mouvement du patient dans une unité fonctionnelle ou médicale
       else if($domGetEvenement instanceof CHPrimXMLMouvementPatient) {
         $data = array_merge($data, $domGetEvenement->getMouvementPatientXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
       }
       // Gestion des débiteurs d'une venue de patient
       else if($domGetEvenement instanceof CHPrimXMLDebiteursVenue) {
         $data = array_merge($data, $domGetEvenement->getDebiteursVenueXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
+        if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
+          return $messageAcquittement;
+        }
         $messageAcquittement = $domGetEvenement->debiteursVenue($domAcquittement, $echange_hprim, $newPatient, $data);
       }
       // Aucun des six événements retour d'erreur

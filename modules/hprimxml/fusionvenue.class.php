@@ -78,12 +78,6 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data) {
-    // Seulement le cas d'une fusion
-    if ($messageAcquittement = $this->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
-
-      return $messageAcquittement;
-    }
-    
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);

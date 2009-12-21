@@ -73,13 +73,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function fusionPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-    // Seulement le cas d'une fusion
-    if ($messageAcquittement = $this->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
-
-      return $messageAcquittement;
-    }
-    
-     // Si CIP
+    // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbPatientEliminee = new CPatient();
       $mbPatient = new CPatient();
