@@ -86,7 +86,7 @@
             <input type="hidden" name="_repeat" value="1" />
             <input type="hidden" name="_type_repeat" value="1" />
           
-            <select name="anesth_id">
+            <select name="anesth_id" style="width: 10em;">
             <option value="">&mdash; Anesthésiste</option>
             {{foreach from=$listAnesth item=_anesth}}
             <option value="{{$_anesth->_id}}" {{if $plage->anesth_id == $_anesth->_id}} selected="selected" {{/if}}>{{$_anesth->_view}}</option>
@@ -107,7 +107,7 @@
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id">
+            <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
               {{foreach from=$listPersIADE item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
@@ -129,7 +129,7 @@
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id">
+            <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
               {{foreach from=$listPersAideOp item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
@@ -150,7 +150,7 @@
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id">
+            <select name="personnel_id" style="width: 10em;">
               <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
               {{foreach from=$listPersPanseuse item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
