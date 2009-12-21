@@ -17,7 +17,7 @@ $owner = null;
 
 $owner = CMbObject::loadFromGuid($owner_guid);
 if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
-  $user_id = $function_id = $group_id = '';
+  $user_id = $function_id = $group_id = null;
   
   switch($owner->_class_name) {
     case 'CMediusers': $user_id = $owner->_id; break;
@@ -32,24 +32,29 @@ if ($file && $owner && $owner->_id && ($fp = fopen($file['tmp_name'], 'r'))) {
   while($line = fgetcsv($fp)) {
     $aide = new CAideSaisie;
     foreach($cols as $index => $field) {
-      $aide->$field = $line[$index];
+      $aide->$field = $line[$index] === "" ? null : $line[$index];
     }
     
     $aide->user_id     = $user_id;
     $aide->function_id = $function_id;
     $aide->group_id    = $group_id;
     
+    $alreadyExists = $aide->loadMatchingObject();
+    
     if ($msg = $aide->store()) {
       CAppUI::setMsg($msg);
     }
     else {
-      CAppUI::setMsg(CAppUI::tr("CAideSaisie-msg-create"));
+      if ($alreadyExists)
+        CAppUI::setMsg("Aide à la saisie déjà présente");
+      else
+        CAppUI::setMsg(CAppUI::tr("CAideSaisie-msg-create"));
     }
   }
   fclose($fp);
   
   // Window refresh
-  echo '<script type="text/javascript">window.opener.location.href = window.opener.location.href;</script>';
+  echo '<script type="text/javascript">window.opener.location.reload();</script>';
 }
 
 // Création du template
