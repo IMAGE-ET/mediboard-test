@@ -1,11 +1,10 @@
 // $Id: $
 
-{{$_code->code}} = {
-	
+Consultation = {
   edit: function(consult_id) {
     new Url().
       setModuleTab("dPcabinet", "edit_consultation").
-      addParam("consult_id", consult_id).
+      addParam("selConsult", consult_id).
       redirectOpener();
   },
 	
