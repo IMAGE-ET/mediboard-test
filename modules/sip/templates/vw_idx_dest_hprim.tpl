@@ -11,11 +11,9 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{if $dPconfig.sip.server}}
       <a class="button new" href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
         Créer un nouveau destinataire HPRIM
       </a>
-      {{/if}}
       <table class="tbl">
         <tr>
           <th class="title" colspan="7">DESTINATAIRES HPRIM</th>
@@ -45,13 +43,6 @@
         </tr>
         {{/foreach}}
       </table>
-      <div class="small-info">
-        {{if !$dPconfig.sip.server}}
-          Vous êtes en mode CIP vous pouvez ajouter qu'un destinataire H'XML (SIP).
-        {{else}}
-          Vous êtes en mode SIP vous pouvez ajouter plusieurs destinataires H'XML (CIP).
-        {{/if}}
-      </div>
     </td>
     <td class="halfPane">
       {{if $can->edit}}
@@ -121,9 +112,7 @@
                 {{tr}}Delete{{/tr}}
               </button>
             {{/if}}
-            {{if !$dPconfig.sip.server && ($listDestHprim|@count < 1)}}
-              <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-            {{/if}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           </td>
         </tr>        
       </table>
