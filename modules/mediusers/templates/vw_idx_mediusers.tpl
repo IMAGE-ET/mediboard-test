@@ -17,27 +17,10 @@ function showPratInfo(type) {
 	$('show_prat_info').setVisible(type == 3 || type == 4 || type == 13);
 }
 
-var Functions = {
-  collapse: function() {
-  	$$("tbody.functionEffect").each(Element.hide);
-  },
-  
-  expand: function() {
-  	$$("tbody.functionEffect").each(Element.show);
-  },
-  
-  initEffect: function(function_id) {
-    new PairEffect("CFunctions-" + function_id, { 
-      bStoreInCookie: false,
-      bStartVisible: function_id == "{{$mediuserSel->function_id}}"
-    } );
-  }
-}
-
-{{if $mediuserSel->_id}}
+{{if $object->_id}}
 Main.add(function () {
-	showPratInfo("{{$mediuserSel->_user_type}}");
-  loadProfil("{{$mediuserSel->_user_type}}");
+	showPratInfo("{{$object->_user_type}}");
+  loadProfil("{{$object->_user_type}}");
 });
 {{/if}}
 
@@ -49,10 +32,10 @@ function changeRemote(o) {
   
   // we change the form element's spec 
   oPassword.className = canRemote?
-  '{{$mediuserSel->_props._user_password_strong}}':
-  '{{$mediuserSel->_props._user_password_weak}}';
+  '{{$object->_props._user_password_strong}}':
+  '{{$object->_props._user_password_weak}}';
   
-  {{if !$mediuserSel->user_id}}oPassword.addClassName('notNull');{{/if}}
+  {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
   
   // we check the field
   checkFormElement(oPassword);
@@ -66,242 +49,16 @@ function changeRemote(o) {
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="button new">
         {{tr}}CMediusers-title-create{{/tr}}
       </a>
-      
-      <table class="tbl">
-        <tr>
-          <th style="width: 32px;">
-            <img src="images/icons/collapse.gif" onclick="Functions.collapse()" alt="réduire" />
-            <img src="images/icons/expand.gif"  onclick="Functions.expand()" alt="agrandir" />
-          </th>
-          <th>{{mb_title class=CUser field=user_username}}</th>
-          <th>{{mb_title class=CUser field=user_last_name}}</th>
-          <th>{{mb_title class=CUser field=user_first_name}}</th>
-          <th>{{mb_title class=CUser field=user_type}}</th>
-          <th>{{mb_title class=CUser field=profile_id}}</th>
-          <th>{{mb_title class=CUser field=user_last_login}}</th>
-        </tr>
-        {{foreach from=$groups item=curr_group}}
-        <tr>
-          <th class="title" colspan="10">
-            {{$curr_group->text}}
-          </th>
-        </tr>
-        {{foreach from=$curr_group->_ref_functions item=_function}}
-        <tr id="{{$_function->_guid}}-trigger">
-          <td style="background-color: #{{$_function->color}}" />
-          <td colspan="10">
-            <strong>{{$_function->text}}</strong>
-            ({{$_function->_ref_users|@count}})
-          </td>
-        </tr>
-        
-        <tbody class="functionEffect" id="{{$_function->_guid}}">
-        
-        <tr class="script">
-        	<td>
-        		<script type="text/javascript">Functions.initEffect({{$_function->_id}});</script>
-        	</td>
-        </tr>
-        
-        {{foreach from=$_function->_ref_users item=curr_user}}
-        <tr {{if $curr_user->_id == $mediuserSel->_id}}class="selected"{{/if}}>
-          <td style="background-color: #{{$_function->color}}" />
-
-          {{assign var=user_id value=$curr_user->_id}}
-          {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
-        	{{if $curr_user->_ref_user->_id}}
-	
-	          <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
-	          <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
-	          <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
-	
-	          <td>
-	          	{{assign var=type value=$curr_user->_user_type}}
-	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
-	          </td>
-	          
-	          <td>{{$curr_user->_ref_profile->user_username}}</td>
-	          
-	          <td{{if !$curr_user->actif}} class="cancelled"{{/if}}>
-	            {{if $curr_user->_user_last_login}}
-	            <label title="{{mb_value object=$curr_user field=_user_last_login}}">
-	              {{mb_value object=$curr_user field=_user_last_login format=relative}}
-	            </label>
-	          	{{/if}}
-	          </td>
-
-					{{else}}
-					  <td colspan="10">
-					  	<div class="small-warning">
-					  	  Pas d'utilisateur <em>core</em> pour 
-					  	  <a class="action" href="{{$href}}">ce Mediuser</a>.
-					  	</div>
-					  </td>
-					{{/if}}
-          
-        </tr>
-        {{/foreach}}
-        </tbody>
-        {{/foreach}}
-        {{/foreach}}
-      </table>
+      <form name="listFilter" action="?m={{$m}}" method="get" style="float: right;">
+        <input type="hidden" name="m"      value="{{$m}}" />
+        <input type="hidden" name="tab"    value="{{$tab}}" />
+        <input type="text"   name="filter" value="{{$filter}}" />
+      </form>
+      {{include file="vw_list_mediusers.tpl"}}
     </td>
     
     <td style="width: 40%">
-      {{if $mediuserSel->_id}}
-      <a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$mediuserSel->_user_username}}&amp;user_id={{$mediuserSel->_id}}">
-        Administrer cet utilisateur
-      </a>
-      {{/if}}
-      <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-
-      <input type="hidden" name="dosql" value="do_mediusers_aed" />
-      <input type="hidden" name="user_id" value="{{$mediuserSel->_id}}" />
-      <input type="hidden" name="del" value="0" />
-
-      <table class="form">
-        <tr>
-          {{if $mediuserSel->_id}}
-          <th class="title modify text" colspan="2">
-          
-            {{mb_include module=system template=inc_object_idsante400 object=$mediuserSel}}
-            {{mb_include module=system template=inc_object_history object=$mediuserSel}}
-            
-						{{tr}}CMediusers-title-modify{{/tr}} 
-						'{{$mediuserSel->_user_username}}'
-          </th>
-						
-          {{else}}
-          <th class="title" colspan="2">
-            {{tr}}CMediusers-title-create{{/tr}}
-          </th>
-          {{/if}}
-        </tr>
-
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_username"}}</th>
-          <td>{{mb_field object=$mediuserSel field="_user_username"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_password"}}</th>
-          <td>
-	          <input type="password" name="_user_password" class="{{$mediuserSel->_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
-	          <span id="mediuser__user_password_message"></span>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_password2"}}</th>
-          <td><input type="password" name="_user_password2" class="password sameAs|_user_password" value="" /></td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="actif"}}</th>
-          <td>{{mb_field object=$mediuserSel field="actif"}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="deb_activite"}}</th>
-          <td>{{mb_field object=$mediuserSel field="deb_activite" form="mediuser" register=true}}</td>
-        </tr>
-    
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="fin_activite"}}</th>
-          <td>{{mb_field object=$mediuserSel field="fin_activite" form="mediuser" register=true}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="remote"}}</th>
-          <td>{{mb_field object=$mediuserSel field="remote" onchange="changeRemote(this)"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="function_id"}}</th>
-          <td>
-            <select name="function_id" style="width: 150px;" class="{{$mediuserSel->_props.function_id}}">
-              <option value="">&mdash; Choisir une fonction</option>
-              {{foreach from=$groups item=curr_group}}
-              <optgroup label="{{$curr_group->text}}">
-              {{foreach from=$curr_group->_ref_functions item=_function}}
-              <option class="mediuser" style="border-color: #{{$_function->color}};" value="{{$_function->_id}}"
-              	 {{if $_function->_id == $mediuserSel->function_id}} selected="selected" {{/if}}
-              >
-                {{$_function->text}}
-              </option>
-              {{foreachelse}}
-              <option value="" disabled="disabled">
-              	{{tr}}CFunctions.none{{/tr}}
-              </option>
-              
-              {{/foreach}}
-              </optgroup>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        
-        <tr>
-        <th>{{mb_label object=$mediuserSel field="_user_type"}}</th>
-          <td>
-            <select name="_user_type"  style="width: 150px;" class="{{$mediuserSel->_props._user_type}}" onchange="showPratInfo(this.value); loadProfil(this.value)">
-            {{foreach from=$utypes key=curr_key item=type}}
-              <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
-            {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_profile_id"}}</th>
-          <td>
-            <select name="_profile_id" style="width: 150px;">
-              <option value="">&mdash; Choisir un profil</option>
-              {{foreach from=$profiles item=curr_profile}}
-              <option value="{{$curr_profile->user_id}}" {{if $curr_profile->user_id == $mediuserSel->_profile_id}} selected="selected" {{/if}}>{{$curr_profile->user_username}}</option>
-              {{/foreach}}
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_last_name"}}</th>
-          <td>{{mb_field object=$mediuserSel field="_user_last_name"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_first_name"}}</th>
-          <td>{{mb_field object=$mediuserSel field="_user_first_name"}}</td>
-        </tr>
-                
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_email"}}</th>
-          <td>{{mb_field object=$mediuserSel field="_user_email"}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="_user_phone"}}</th>
-          <td>{{mb_field object=$mediuserSel field="_user_phone"}}</td>
-        </tr>
-        
-        <tr>
-          <th>{{mb_label object=$mediuserSel field="commentaires"}}</th>
-          <td>{{mb_field object=$mediuserSel field="commentaires"}}</td>
-        </tr>
-        
-        <tbody id="show_prat_info" style="display:none">
-        
-          {{include file="inc_infos_praticien.tpl" object=$mediuserSel}}
-                   
-        </tbody>
-        
-        <tr>
-          <td class="button" colspan="2">
-            {{if $mediuserSel->user_id}}
-            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$mediuserSel->_user_username|smarty:nodefaults|JSAttribute}}'})">
-              {{tr}}Delete{{/tr}}
-            </button>
-            {{else}}
-            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-            {{/if}}
-          </td>
-        </tr>
-      </table>
-      </form>
+      {{include file="inc_edit_mediuser.tpl"}}
     </td>
   </tr>
 </table>
