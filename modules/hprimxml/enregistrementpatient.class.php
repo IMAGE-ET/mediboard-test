@@ -403,7 +403,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       $IPP = new CIdSante400();
       //Paramétrage de l'id 400
       $IPP->object_class = "CPatient";
-      $IPP->tag = $dest_hprim->_tag;
+      $IPP->tag = $dest_hprim->_tag_patient;
       $IPP->id400 = $data['idSource'];
       
       // idSource non connu

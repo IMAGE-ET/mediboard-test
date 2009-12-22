@@ -76,7 +76,7 @@ foreach ($patients as $patient) {
     //Paramétrage de l'id 400
     $IPP->object_class = "CPatient";
     $IPP->object_id = $patient->_id;
-    $IPP->tag = $dest_hprim->_tag;
+    $IPP->tag = $dest_hprim->_tag_patient;
     $IPP->loadMatchingObject();
 
     $patient->_IPP = $IPP->id400;

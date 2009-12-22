@@ -25,13 +25,13 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     $this->addAttribute($fusionPatient, "action", "fusion");
       
     $patient = $this->addElement($fusionPatient, "patient");
-
     // Ajout du nouveau patient   
     $this->addPatient($patient, $mbPatient, null, $referent);
       
     $patientElimine = $this->addElement($fusionPatient, "patientElimine");
     $mbPatientElimine = new CPatient();
     $mbPatientElimine->load($mbPatient->_merging);
+    $mbPatientElimine->loadIPP();
 
     // Ajout du patient a eliminer
     $this->addPatient($patientElimine, $mbPatientElimine, null, $referent);
@@ -98,7 +98,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $id400Patient = new CIdSante400();
       //Paramétrage de l'id 400
       $id400Patient->object_class = "CPatient";
-      $id400Patient->tag = $dest_hprim->_tag;
+      $id400Patient->tag = $dest_hprim->_tag_patient;
       $id400Patient->id400 = $data['idSource'];
       $id400Patient->loadMatchingObject();
       if ($mbPatient->load($data['idCible'])) {
@@ -121,7 +121,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $id400PatientEliminee = new CIdSante400();
       //Paramétrage de l'id 400
       $id400PatientEliminee->object_class = "CPatient";
-      $id400PatientEliminee->tag = $dest_hprim->_tag;
+      $id400PatientEliminee->tag = $dest_hprim->_tag_patient;
       $id400PatientEliminee->id400 = $data['idSourceEliminee'];
       $id400PatientEliminee->loadMatchingObject();
       if ($mbPatientEliminee->load($data['idCibleEliminee'])) {

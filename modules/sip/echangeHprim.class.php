@@ -162,7 +162,12 @@ class CEchangeHprim extends CMbObject {
 
 		// Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
-    $id400->tag = $dest_hprim->_tag;
+    if ($this->_object_class == "CPatient") {
+      $id400->tag = $dest_hprim->_tag_patient;
+    }
+    if ($this->_object_class == "CSejour") {
+      $id400->tag = $dest_hprim->_tag_sejour;
+    }
 		$id400->object_class = $this->_object_class;
 		if ($this->id_permanent) {
 			$id400->id400 = $this->id_permanent;

@@ -110,7 +110,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           //Paramétrage de l'id 400
           $IPP->object_class = "CPatient";
           $IPP->object_id = $mbObject->_id;
-          $IPP->tag = $dest_hprim->_tag;
+          $IPP->tag = $dest_hprim->_tag_patient;
           $IPP->loadMatchingObject();
   
           $mbObject->_IPP = $IPP->id400;
@@ -202,8 +202,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           //Paramétrage de l'id 400
           $num_dossier->object_class = "CSejour";
           $num_dossier->object_id = $mbObject->_id;
-          $num_dossier->tag = $dest_hprim->_tag;
-          $num_dossier->tag = CAppUI::conf('mb_id')." group:$dest_hprim->group_id";
+          $num_dossier->tag = $dest_hprim->_tag_sejour;
           $num_dossier->loadMatchingObject();
   
           $mbObject->_num_dossier = $num_dossier->id400;
@@ -229,7 +228,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     if ($mbObject instanceof CPatient) {
       $patient1_id = $mbObject->_merging[0]; 
       $patient2_id = $mbObject->_merging[1]; 
-  
+            
       // Si Client
       if (!CAppUI::conf('sip server')) {
         $dest_hprim = new CDestinataireHprim();
@@ -241,7 +240,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         //Paramétrage de l'id 400
         $IPP_pat1->object_class = "CPatient";
         $IPP_pat1->object_id = $patient1_id;
-        $IPP_pat1->tag = $dest_hprim->_tag;
+        $IPP_pat1->tag = $dest_hprim->_tag_patient;
         $IPP_pat1->loadMatchingObject();
         $patient1_ipp = $IPP_pat1->id400;
         
@@ -250,16 +249,23 @@ class CSipObjectHandler extends CMbObjectHandler {
         //Paramétrage de l'id 400
         $IPP_pat2->object_class = "CPatient";
         $IPP_pat2->object_id = $patient2_id;
-        $IPP_pat2->tag = $dest_hprim->_tag;
+        $IPP_pat2->tag = $dest_hprim->_tag_patient;
         $IPP_pat2->loadMatchingObject();
         $patient2_ipp = $IPP_pat2->id400;
-       
-        $min_ipp = "";
-        if ($patient1_ipp || $patient2_ipp) {
-          $min_ipp = min($patient1_ipp, $patient2_ipp);
+        
+        // Cas 0 IPP : Aucune notification envoyée
+        if (!$patient1_ipp && !$patient2_ipp) {
+          return;
         }
-  
-        $mbObject->_merging = $min_ipp ? ($patient1_ipp ? $patient1_id : $patient2_id) : (min($patient1_id,$patient2_id));
+       
+        // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
+        if (!$patient1_ipp || !$patient2_ipp) {
+          $mbObject->_merging = null;
+          return;
+        }
+        
+        // Cas 2 IPPs : Message de fusion
+        $mbObject->_merging = ($mbObject->_base_object_id == $patient1_id) ? $patient2_id : $patient1_id;
       }
     }
   }

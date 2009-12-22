@@ -118,7 +118,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400Venue = new CIdSante400();
       //Paramétrage de l'id 400
       $id400Venue->object_class = "CSejour";
-      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag : $dest_hprim->_tag;
+      $id400Venue->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : $dest_hprim->_tag_sejour;
       $id400Venue->id400 = $data['idSourceVenue'];
       $id400Venue->loadMatchingObject();
       if ($mbVenue->load($data['idCibleVenue'])) {
@@ -144,7 +144,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       $id400VenueEliminee = new CIdSante400();
       //Paramétrage de l'id 400
       $id400VenueEliminee->object_class = "CSejour";
-      $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag : $dest_hprim->_tag;
+      $id400VenueEliminee->tag = ($etatVenue == "préadmission") ? CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour : $dest_hprim->_tag_sejour;
       $id400VenueEliminee->id400 = $data['idSourceVenueEliminee'];
       $id400VenueEliminee->loadMatchingObject();
       if ($mbVenueEliminee->load($data['idCibleVenueEliminee'])) {
@@ -265,8 +265,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $messages['msgNumDosVenue'] = $id400Venue->store();
     
     $id400VenueEliminee->tag = ($etatVenueEliminee != "préadmission") ? 
-      CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$dest_hprim->_tag :
-      CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag;
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_cancel').$dest_hprim->_tag_sejour :
+      CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$dest_hprim->_tag_sejour;
         
     $id400VenueEliminee->object_id = $newVenue->_id;
     $id400VenueEliminee->last_update = mbDateTime();

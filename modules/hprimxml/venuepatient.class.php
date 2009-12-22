@@ -144,7 +144,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $num_dossier = new CIdSante400();
       //Paramétrage de l'id 400
       $num_dossier->object_class = "CSejour";
-      $num_dossier->tag = $dest_hprim->_tag;
+      $num_dossier->tag = $dest_hprim->_tag_sejour;
       $num_dossier->id400 = $data['idSourceVenue'];
       
       // Cas d'une annulation
