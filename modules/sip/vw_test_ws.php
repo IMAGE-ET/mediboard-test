@@ -24,6 +24,7 @@ if (!CAppUI::conf('sip server')) {
   if ($operation && $entier1 && $entier2) {
   	$dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->type = "sip";
+    $dest_hprim->group_id = CGroups::loadCurrent()->_id;
 	  $dest_hprim->loadMatchingObject();
 	  
 	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
@@ -39,6 +40,7 @@ if (!CAppUI::conf('sip server')) {
   if (is_array($file)) {
   	$dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->type = "sip";
+    $dest_hprim->group_id = CGroups::loadCurrent()->_id;
 	  $dest_hprim->loadMatchingObject();
 	  
 	  if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
