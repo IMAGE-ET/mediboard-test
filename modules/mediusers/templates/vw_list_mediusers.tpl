@@ -33,8 +33,8 @@
      <td class="text"><a href="{{$href}}">{{mb_value object=$curr_user field=_user_last_name}}</a></td>
      <td class="text"><a href="{{$href}}">{{mb_value object=$curr_user field=_user_first_name}}</a></td>
      <td  class="text" style="text-align: center">
-     	{{mb_ditto name=function value=$curr_user->_ref_function}}
-			</td>
+     	{{mb_ditto name=function_name value=$curr_user->_ref_function->_view}}
+		 </td>
 
      <td class="text">
        {{assign var=type value=$curr_user->_user_type}}
