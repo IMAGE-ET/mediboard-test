@@ -29,10 +29,12 @@
     {{assign var="href" value="?m=$m&tab=$tab&user_id=$user_id"}}
     {{if $curr_user->_ref_user->_id}}
 
-     <td class="text"><a href="{{$href}}">{{mb_value object=$curr_user field=_user_username}}</a></td>
+     <td class="text"><a href="{{$href}}" class="mediuser" style="border-left-color: #{{$curr_user->_ref_function->color}};">{{mb_value object=$curr_user field=_user_username}}</a></td>
      <td class="text"><a href="{{$href}}">{{mb_value object=$curr_user field=_user_last_name}}</a></td>
      <td class="text"><a href="{{$href}}">{{mb_value object=$curr_user field=_user_first_name}}</a></td>
-     <td  class="text" style="background-color: #{{$curr_user->_ref_function->color}}">{{$curr_user->_ref_function}}</td>
+     <td  class="text" style="text-align: center">
+     	{{mb_ditto name=function value=$curr_user->_ref_function}}
+			</td>
 
      <td class="text">
        {{assign var=type value=$curr_user->_user_type}}
