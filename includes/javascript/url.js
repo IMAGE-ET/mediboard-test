@@ -230,12 +230,17 @@ var Url = Class.create({
             offsetTop: element.offsetHeight
           });
         }
-        Effect.Appear(update,{duration:0.25});
+        Effect.Appear(update, {duration:0.25});
       }
     }, oOptions);
     
-    populate = $(populate);
     input = $(input).addClassName("autocomplete");
+    
+    populate = $(populate);
+    if (!populate) {
+      populate = new Element("div").addClassName("autocomplete").hide();
+      input.insert({after: populate});
+    }
 
     // Autocomplete
     this.addParam("ajax", 1);

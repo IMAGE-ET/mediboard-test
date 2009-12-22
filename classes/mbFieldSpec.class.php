@@ -513,15 +513,15 @@ class CMbFieldSpec {
 	      $ref_object->load($value);
 	      $view = $ref_object->$view_field;
 	      
-	      $sHtml      = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-	                     class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
-	      $sHtml     .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-	                     class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
+	      $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
+	                  class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
+	      $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
+	                  class=\"autocomplete\" onchange='if(!this.value){this.form[\"".$field."\"].value=\"\"}' $extra />";
 	      $ref = true;
 	    }
 	    else {
-	      $sHtml      = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-	                     class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
+	      $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+	                  class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra />";
 	    }
     	
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
@@ -638,6 +638,10 @@ class CMbFieldSpec {
   }
 
   function checkValues(){}
+  
+  function trim($value){
+    return trim($value);
+  }
 }
 
 CMbFieldSpec::$chars  = range("a","z");

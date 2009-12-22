@@ -312,17 +312,17 @@ class CMbObject {
   	$fields = func_get_args();
   	
   	if (isset($fields[0]) && is_array($fields[0])) {
-  		$fields = $fields[0];
+      $fields = $fields[0];
   	}
   	
   	foreach ($fields as $field) {
-	    // Field is valued
-	    if ($this->$field !== null) {
-	      continue;
-	    }
+      // Field is valued
+      if ($this->$field !== null) {
+        continue;
+      }
 	    
       $this->loadOldObject();
-	    $this->$field = $this->_old->$field;
+      $this->$field = $this->_old->$field;
   	}
   }
   
@@ -914,6 +914,8 @@ class CMbObject {
     $object_id = $this->_id;
     
     $type = "store";
+    $extra = null;
+    
     if ($this->_old->_id == null) {
       $type = "create";
       $fields = array();
@@ -925,6 +927,7 @@ class CMbObject {
     if ($this->_id == null) {
       $type = "delete";
       $object_id = $this->_old->_id;
+      $extra = $this->_old->_view;
       $fields = array();
     }
 
@@ -948,9 +951,7 @@ class CMbObject {
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
-    if ($type === "delete") {
-      $log->extra = $this->_old->_view;
-    }
+    $log->extra = $extra;
     
     $this->_ref_last_log = $log;
   }
@@ -1047,6 +1048,10 @@ class CMbObject {
     if ($msg = $this->checkMerge($objects)) return $msg;
     
     if (!$this->_id && $msg = $this->store()) return $msg;
+    
+    foreach ($objects as $object) {
+      $this->_merging[$object->_id] = $object;
+    }
     
     foreach ($objects as &$object) {
       $msg = $fast ? 

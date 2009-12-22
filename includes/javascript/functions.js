@@ -206,7 +206,8 @@ var AjaxResponse = {
   
   onLoaded: function(get, performance) {
     try {
-      if (console.firebug) {
+      // If Firebug or Chrome console
+      if (console.firebug || console._inspectorCommandLineAPI) {
         console.log(get, " ", performance);
       }
     } catch (e) {}

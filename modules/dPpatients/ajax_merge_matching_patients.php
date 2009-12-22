@@ -64,7 +64,7 @@ else {
       /** @todo mergeDBfields resets the _id */
       $first_patient->_id = $first_patient_id;
       
-      $first_patient->_merging = array_keys($patients_array);
+      $first_patient->_merging = $patients_array;
       if ($msg = $first_patient->merge($patients_array)) {
         CAppUI::stepAjax("$_patient : $msg", UI_MSG_WARNING);
       }
