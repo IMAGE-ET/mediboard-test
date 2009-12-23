@@ -27,7 +27,7 @@ $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboa
 $where = array();
 $where["functions_mediboard.group_id"] = "= $group->_id";
 if($filter) {
-  $where[] = "users.user_last_name LIKE '$filter%' OR users.user_first_name LIKE '$filter%'";
+  $where[] = "functions_mediboard.text LIKE '%$filter%' OR users.user_last_name LIKE '$filter%' OR users.user_first_name LIKE '$filter%'";
 }
 $order = "";
 if($order_col == "function_id") {
