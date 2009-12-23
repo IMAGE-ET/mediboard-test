@@ -14,12 +14,17 @@
  */
  
 abstract class CMbObjectHandler {
+  function onAfterStore(CMbObject &$mbObject) {}
   
-  function onStore(CMbObject &$mbObject) {}
+  function onAfterMerge(CMbObject &$mbObject) {}
   
-  function onMerge(CMbObject &$mbObject) {}
+  function onAfterDelete(CMbObject &$mbObject) {}
   
-  function onDelete(CMbObject &$mbObject) {}
+  function onBeforeStore(CMbObject &$mbObject) {}
+  
+  function onBeforeMerge(CMbObject &$mbObject) {}
+  
+  function onBeforeDelete(CMbObject &$mbObject) {}
 }
 
 ?>

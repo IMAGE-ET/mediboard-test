@@ -47,7 +47,7 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
   }
   
   
-  function onStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject &$mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
@@ -195,11 +195,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     }
   }
   
-  function onMerge(CMbObject &$mbObject) {
-    $this->onStore($mbObject);
+  function onAfterMerge(CMbObject &$mbObject) {
+    $this->onAfterStore($mbObject);
   }
   
-  function onDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject &$mbObject) {
   }
 }
 

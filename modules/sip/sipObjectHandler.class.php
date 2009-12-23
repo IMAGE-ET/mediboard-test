@@ -15,7 +15,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     return in_array($mbObject->_class_name, self::$handled);
   }
 
-  function onStore(CMbObject &$mbObject) {
+  function onAfterStore(CMbObject &$mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
@@ -39,8 +39,8 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
-    // Cas d'une fusion 
-    if (is_array($mbObject->_merging)) {
+    // Cas d'une fusion
+    if ($mbObject->_merging) {
       return;
     }
     
@@ -121,7 +121,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           return;
         }
         
-        $domEvenement = (!$mbObject->_merging) ? new CHPrimXMLEnregistrementPatient() : new CHPrimXMLFusionPatient();
+        $domEvenement = new CHPrimXMLEnregistrementPatient();
         $this->sendEvenement($domEvenement, $dest_hprim, $mbObject);
       }
     // Traitement Sejour
@@ -219,58 +219,73 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
   }
 
-  function onMerge(CMbObject &$mbObject) {
+  function onBeforeMerge(CMbObject &$mbObject) {
     if (!$mbObject->_merging) {
       return;
     }
-    
+    /*
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
-      $patient1_id = $mbObject->_merging[0]; 
-      $patient2_id = $mbObject->_merging[1]; 
-            
+      $patient_eliminee = new CPatient();
+      $patient_eliminee->load(reset($mbObject->_merging));
+
       // Si Client
       if (!CAppUI::conf('sip server')) {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
+        $dest_hprim->group_id = CGroups::loadCurrent()->_id;
         $dest_hprim->loadMatchingObject();
         
         // Patient 1
         $IPP_pat1 = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP_pat1->object_class = "CPatient";
-        $IPP_pat1->object_id = $patient1_id;
+        $IPP_pat1->object_id = $patient1->_id;
         $IPP_pat1->tag = $dest_hprim->_tag_patient;
         $IPP_pat1->loadMatchingObject();
-        $patient1_ipp = $IPP_pat1->id400;
+        $patient1_ipp = $patient1->_IPP = $IPP_pat1->id400;
         
         // Patient 2
         $IPP_pat2 = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP_pat2->object_class = "CPatient";
-        $IPP_pat2->object_id = $patient2_id;
+        $IPP_pat2->object_id = $patient2->_id;
         $IPP_pat2->tag = $dest_hprim->_tag_patient;
         $IPP_pat2->loadMatchingObject();
-        $patient2_ipp = $IPP_pat2->id400;
-        
+        $patient2_ipp = $patient2->_IPP = $IPP_pat2->id400;
+
         // Cas 0 IPP : Aucune notification envoyée
         if (!$patient1_ipp && !$patient2_ipp) {
+          mbTrace("cas : ", "0", true);
           return;
         }
-       
+       mbTrace($patient1_ipp, "1", true);
+       mbTrace($patient2_ipp, "2", true);
         // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
-        if (!$patient1_ipp || !$patient2_ipp) {
-          $mbObject->_merging = null;
-          return;
+        if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
+          mbTrace("cas : ", "1", true);
+          $domEvenement = new CHPrimXMLEnregistrementPatient();
+          
+          if ($patient2_ipp)
+            $patient1->_IPP = $patient2_ipp;
+            
+          $patient1->check();
+          $this->sendEvenement($domEvenement, $dest_hprim, $patient1);
         }
         
         // Cas 2 IPPs : Message de fusion
-        $mbObject->_merging = ($mbObject->_base_object_id == $patient1_id) ? $patient2_id : $patient1_id;
+        if ($patient1_ipp && $patient2_ipp) {
+          mbTrace("cas : ", "2", true);
+          $domEvenement = new CHPrimXMLFusionPatient();
+          
+          $patient1->_patient_elimine = $patient2;
+          $this->sendEvenement($domEvenement, $dest_hprim, $patient1);
+        }
       }
-    }
+    }*/
   }
 
-  function onDelete(CMbObject &$mbObject) {
+  function onAfterDelete(CMbObject &$mbObject) {
   }
   
   function sendEvenement ($domEvenement, $dest_hprim, $mbObject) {

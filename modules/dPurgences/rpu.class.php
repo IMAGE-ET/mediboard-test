@@ -269,7 +269,7 @@ class CRPU extends CMbObject {
     $sejour->etablissement_entree_transfert_id = $this->_etablissement_entree_transfert_id;
 
     // Le patient est souvent chargé à vide ce qui pose problème
-    // dans le onStore(). Ne pas supprimer.
+    // dans le onAfterStore(). Ne pas supprimer.
     $sejour->_ref_patient = null;
 
     if ($msg = $sejour->store()) {
@@ -291,7 +291,7 @@ class CRPU extends CMbObject {
       return $msg;
     }
     
-    $this->_ref_sejour->onStore();
+    $this->_ref_sejour->onAfterStore();
   }
   
   function loadComplete() {

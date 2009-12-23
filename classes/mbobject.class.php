@@ -1010,21 +1010,33 @@ class CMbObject {
     $this->doLog();
         
     // Trigger event
-    $this->onStore();
+    $this->onAfterStore();
 
     $this->_old = null;
     return null;
   }
 
   /**
-   * Trigger store event for handlers
+   * Trigger before store event for handlers
    * @return void
    */
-  function onStore() {
+  function onBeforeStore() {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onStore($this);
+      $handler->onBeforeStore($this);
+    }
+  }
+  
+  /**
+   * Trigger after store event for handlers
+   * @return void
+   */
+  function onAfterStore() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onAfterStore($this);
     }
   }
   
@@ -1044,7 +1056,10 @@ class CMbObject {
     else {
       if (count($objects) < 2) return "mergeTooFewObjects";
     }
-  
+    
+    // Trigger before event
+    $this->onBeforeMerge();
+    
     if ($msg = $this->checkMerge($objects)) return $msg;
     
     if (!$this->_id && $msg = $this->store()) return $msg;
@@ -1062,8 +1077,8 @@ class CMbObject {
     	if ($msg = $object->delete()) return $msg;
     }
     
-    // Trigger event
-    $this->onMerge();
+    // Trigger after event
+    $this->onAfterMerge();
     
     return $this->store();
   }
@@ -1120,14 +1135,26 @@ class CMbObject {
   }
   
   /**
-   * Trigger merge event for handlers
+   * Trigger before merge event for handlers
    * @return void
    */
-  function onMerge() {
+  function onBeforeMerge() {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onMerge($this);
+      $handler->onBeforeMerge($this);
+    }
+  }
+  
+  /**
+   * Trigger after merge event for handlers
+   * @return void
+   */
+  function onAfterMerge() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onAfterMerge($this);
     }
   }
   
@@ -1489,7 +1516,7 @@ class CMbObject {
     $this->doLog();
         
     // Event Handlers
-    $this->onDelete();
+    $this->onAfterDelete();
 
     return $this->_old = null;
   }
@@ -1526,14 +1553,26 @@ class CMbObject {
   }
   
   /**
-   * Trigger delete event for handlers
+   * Trigger before delete event for handlers
    * @return void
    */
-  function onDelete() {
+  function onBeforeDelete() {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
-      $handler->onDelete($this);
+      $handler->onBeforeDelete($this);
+    }
+  }
+  
+  /**
+   * Trigger after delete event for handlers
+   * @return void
+   */
+  function onAfterDelete() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onAfterDelete($this);
     }
   }
   

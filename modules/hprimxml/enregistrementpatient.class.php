@@ -15,7 +15,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     'création' => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    'fusion' => "fusion"
   );
   
   function __construct() {   
@@ -27,14 +26,16 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
   function generateFromOperation($mbPatient, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
-    
+
     $enregistrementPatient = $this->addElement($evenementPatient, "enregistrementPatient");
     $actionConversion = array (
       "create" => "création",
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $this->addAttribute($enregistrementPatient, "action", $actionConversion[$mbPatient->_ref_last_log->type]);
+    $action = (!$mbPatient->_ref_last_log) ? "modification" : $actionConversion[$mbPatient->_ref_last_log->type];
+
+    $this->addAttribute($enregistrementPatient, "action", $action);
     
     $patient = $this->addElement($enregistrementPatient, "patient");
     // Ajout du patient   
