@@ -341,19 +341,19 @@ class CPatient extends CMbObject {
     }
   }
   
-	function check(){
-		// Standard check
+  function check(){
+    // Standard check
     if ($msg = parent::check()) {
       return $msg;
     }
-		
-		// Creation d'un patient
-		if(!$this->_id && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"){
-		  if($this->loadMatchingPatient(true) > 0) {
-	      return "Doublons détectés";
-			}
-		}
-	}
+
+    // Creation d'un patient
+    if(!$this->_id && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"){
+      if($this->loadMatchingPatient(true, false) > 0) {
+        return "Doublons détectés";
+      }
+    }
+  }
 	
   function store() {
     // Standard store
@@ -790,9 +790,11 @@ class CPatient extends CMbObject {
    * - Même nom à la casse et aux séparateurs près
    * - Même prénom à la casse et aux séparateurs près
    * - Strictement la même date de naissance
+   * @param $other
+   * @param $loadObject Permet de ne pas charger le patient, seulement renvoyer le nombre de matches
    * @return Nombre d'occurences trouvées 
    */
-  function loadMatchingPatient($other = false) {
+  function loadMatchingPatient($other = false, $loadObject = true) {
     $ds = $this->_spec->ds;
     
     if ($other && $this->_id) {
@@ -816,7 +818,9 @@ class CPatient extends CMbObject {
 
     $where["naissance"] = $ds->prepare("= %", $this->naissance);
     
-    $this->loadObject($where);
+    if ($loadObject) {
+      $this->loadObject($where);
+    }
 
     return $this->countList($where);
   }

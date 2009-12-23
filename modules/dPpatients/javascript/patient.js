@@ -1,7 +1,7 @@
 // $Id: $
 
-Patient = {
-	
+/** TODO: Factoriser ceci pour ne pas avoir a etendre l'objet (sinon Patient.create est ecrasé)
+Patient = Object.extend({
   view: function(patient_id) {
     new Url().
       setModuleTab("dPpatients", "vw_full_patients").
@@ -28,4 +28,4 @@ Patient = {
       addParam("use_vitale", use_vitale).
       redirectOpener();
   }
-}
+}, window.Patient);
