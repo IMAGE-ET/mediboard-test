@@ -145,14 +145,11 @@ function printLivret(){
      <td>
        <form action="?" method="get" name="searchProd" onsubmit="return false;">
          <!-- Champ permettant d'effectuer une recherche par autocomplete-->
-         <input type="text" name="produit" value="" class="autocomplete" />
+         <input type="text" name="produit" value="" class="autocomplete"/>
          <!-- Champ permettant de stocker le libelle dans le cas d'une recherche par la popup -->
          <input type="text" name="_produit" value="" style="display: none;"/>  
-         <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-         <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>
-         <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
-         <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
-         <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
+         <div style="display:none; width: 30em;" class="autocomplete" id="produit_auto_complete"></div>
+				 <button type="button" class="search" onclick="MedSelector.init('produit');">{{tr}}Search{{/tr}}</button>
          <input type="hidden" name="code_cip" onchange="Livret.addProduit(this.value, this.form._produit.value);" />
          <script type="text/javascript">
           MedSelector.init = function(onglet){
