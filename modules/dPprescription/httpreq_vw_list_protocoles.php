@@ -26,10 +26,11 @@ $protocoles = CPrescription::getAllProtocolesFor($praticien_id, $function_id, $g
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("protocoles", $protocoles);
-$smarty->assign("protocoleSel_id", $protocoleSel_id);
-
+$smarty->assign("protocoles"      , $protocoles);
+$smarty->assign("protocoleSel_id" , $protocoleSel_id);
+$smarty->assign("praticien_id"    , $praticien_id);
+$smarty->assign("function_id"     , $function_id);
+$smarty->assign("group_id"        , $group_id);
 $smarty->display("inc_vw_list_protocoles.tpl");
 
 ?>

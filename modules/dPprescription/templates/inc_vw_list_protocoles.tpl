@@ -20,16 +20,24 @@ removeSelectedTr = function(){
 }
 
 Main.add(function(){
-  Control.Tabs.create('list_protocoles_prescription', true);
+  if($('list_protocoles_prescription')){
+    Control.Tabs.create('list_protocoles_prescription', true);
+  }
 });
 </script>
 
+{{if $praticien_id || $function_id || $group_id}}
 <ul id="list_protocoles_prescription" class="control_tabs">
 	{{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
 	<li><a href="#list_prot_{{$owner}}" {{if !$_protocoles_by_owner|@count}}class="empty"{{/if}}>{{tr}}CPrescription._owner.{{$owner}}{{/tr}}</a></li>
 	{{/foreach}}
 </ul>
 <hr class="control_tabs" />
+{{else}}
+<div class="small-info">
+	Veuillez sélectionner un praticien, un cabinet ou un établissement pour visualiser les protocoles
+</div>
+{{/if}}
 
 <table class="tbl" id="all_protocoles">
   {{foreach from=$protocoles key=owner item=_protocoles_by_owner}}
@@ -45,7 +53,7 @@ Main.add(function(){
   </tr>
   {{foreach from=$_protocoles item=protocole}}
   <tr {{if $protocole->_id == $protocoleSel_id}}class="selected"{{/if}}>
-    <td>
+    <td class="text">
       <div style="float:right">
 	      <form name="delProt-{{$protocole->_id}}" action="?" method="post">
 	        <input type="hidden" name="dosql" value="do_prescription_aed" />
@@ -57,7 +65,7 @@ Main.add(function(){
 	      </form>
       </div>
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">
-        {{$protocole->_view}}
+        {{$protocole->libelle}}
       </a>
     </td>
   </tr>

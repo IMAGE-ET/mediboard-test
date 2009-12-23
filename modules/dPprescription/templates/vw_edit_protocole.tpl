@@ -27,14 +27,14 @@ Main.add( function(){
 </script>
 
 <table class="main">
-  <tr>
+	<tr>
     <!-- Affichage de la liste des protocoles pour le praticien selectionné -->
-    <td class="halfPane" style="width: 330px;">
+    <td class="halfPane" style="width: 23em;">
 	    <form name="selPrat" action="?" method="get">
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
         <input type="hidden" name="m" value="dPprescription" />
-        <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();">
-          <option value="">&mdash; Choix d'un praticien</option>
+        <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();" style="width: 23em;">
+          <option value="">&mdash; Praticien</option>
 	        {{foreach from=$praticiens item=praticien}}
 	        <option class="mediuser" 
 	                style="border-color: #{{$praticien->_ref_function->color}};" 
@@ -43,25 +43,25 @@ Main.add( function(){
 	        </option>
 	        {{/foreach}}
 	      </select>
-	      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();">
-          <option value="">&mdash; Choix du cabinet</option>
+	      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.group_id.value=''; Protocole.refreshListProt();" style="width: 23em;">
+          <option value="">&mdash; Cabinet</option>
           {{foreach from=$functions item=_function}}
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
           {{/foreach}}
         </select>
-        <select name="group_id" onchange="this.form.function_id.value=''; this.form.praticien_id.value=''; Protocole.refreshListProt();">
-          <option value="">&mdash; Choix d'un établissement</option>
+        <select name="group_id" onchange="this.form.function_id.value=''; this.form.praticien_id.value=''; Protocole.refreshListProt();" style="width: 23em;">
+          <option value="">&mdash; Etablissement</option>
           {{foreach from=$groups item=_group}}
           <option value="{{$_group->_id}}" {{if $group_id == $_group->_id}}selected=selected{{/if}}>{{$_group->_view}}</option>
           {{/foreach}}
         </select>
-        <br />
+				<br />
 	      <button type="button" class="submit" onclick="this.form.submit();">
 	        Créer un protocole
 	      </button>
 	    </form>
 	    <div id="protocoles"></div>
-    </td>
+		 </td>
     <!-- Affichage du protocole sélectionné-->
     <td>
       <div id="vw_protocole">
