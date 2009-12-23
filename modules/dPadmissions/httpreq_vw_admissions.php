@@ -48,7 +48,9 @@ if($type){
   $where["type"] = "!= 'urg'";
 }
 $where["group_id"] = "= '$g'";
-$where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
+
+$where[] = "(entree_reelle IS NULL AND entree_prevue BETWEEN '$date' AND '$next') OR (entree_reelle IS NOT NULL AND entree_reelle BETWEEN '$date' AND '$next')";
+
 if($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";
   $where["annule"] = "= '0'";

@@ -24,11 +24,10 @@ $selSaisis = CValue::getOrSession("selSaisis", "0");
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
-
 // Liste des admissions par jour
-$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`), '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
+    "\nWHERE IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`type` != 'urg'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
@@ -46,9 +45,9 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
 $list2 = $ds->loadlist($sql);
 
 // Liste des admissions non préparées
-$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`), '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
+    "\nWHERE IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`saisi_SHS` = '0'" .
     "\nAND `sejour`.`annule` = '0'" .
     "\nAND `sejour`.`type` != 'urg'" .
