@@ -57,12 +57,12 @@ var Filter = Class.create({
         var field = form.limit;
         var rangeSel = new Element('div', {className:'pagination'});
         
-        if (count > 20) {
+        if (count > 30) {
           var total = count;
-          var r = makeRanges(total, 20);
+          var r = makeRanges(total, 30);
           
           r.each(function (e, k) {
-            var a = new Element('a', {href: '#1', className: 'page'})
+            var a = new Element('a', {href: '#1', className: 'page', onclick:"return false"})
                         .update(k+1)
                         .observe('click', function () {$V(field, e); form.onsubmit(); this.selected = k;}.bind(this));
                         

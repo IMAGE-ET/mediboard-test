@@ -20,9 +20,9 @@ $order->loadRefsBack();
 
 // Smarty template
 $smarty = new CSmartyDP();
-
 $smarty->assign('order', $order);
-$smarty->assign('hide_products_list', true);
 
-$smarty->display('inc_order.tpl');
-?>
+if (!$order->date_ordered)
+  $smarty->display('inc_order.tpl');
+else
+  $smarty->display('inc_order_to_receive.tpl');

@@ -24,7 +24,6 @@ class CProduct extends CMbObject {
   var $unit_title        = null;
   var $packaging         = null;
   var $renewable         = null;
-  var $code_lpp          = null;
   var $cancelled         = null;
 
   // Object References
@@ -59,7 +58,7 @@ class CProduct extends CMbObject {
     $backProps['references']     = 'CProductReference product_id';
     $backProps['stocks_group']   = 'CProductStockGroup product_id';
     $backProps['stocks_service'] = 'CProductStockService product_id';
-    $backProps['lines_dmi']      = 'CPrescriptionLineDMI product_id';    
+    $backProps['lines_dmi']      = 'CPrescriptionLineDMI product_id';
     return $backProps;
   }
 
@@ -76,7 +75,6 @@ class CProduct extends CMbObject {
     $specs['unit_quantity'] = 'float min|0';
     $specs['packaging']     = 'str';
     $specs['renewable']     = 'enum list|0|1|2';
-    $specs['code_lpp']      = 'numchar length|7';
     $specs['cancelled']     = 'bool default|0';
     
     $specs['_unit_title']   = 'str';
@@ -145,9 +143,7 @@ class CProduct extends CMbObject {
   		return $msg;
   	}
 
-  	$this->completeField('code');
-  	$this->completeField('quantity');
-  	$this->completeField('unit_quantity');
+  	$this->completeField('code', 'quantity', 'unit_quantity');
   	
   	if(!$this->quantity)          $this->quantity = 1;
     if($this->unit_quantity == 0) $this->unit_quantity = '';

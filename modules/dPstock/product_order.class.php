@@ -80,13 +80,15 @@ class CProductOrder extends CMbObject {
 
 	/** Counts this received product's items */
 	function countReceivedItems() {
-		$count = 0;
-		$this->loadRefsBack();
-		if ($this->_ref_order_items) {
-			foreach ($this->_ref_order_items as $item) {
-				if ($item->isReceived()) {
-					$count++;
-				}
+    if (!$this->_ref_order_items) {
+      $this->loadRefsBack();
+    }
+    
+    $count = 0;
+      
+		foreach ($this->_ref_order_items as $item) {
+			if ($item->isReceived()) {
+				$count++;
 			}
 		}
 		return $count;
@@ -213,6 +215,93 @@ class CProductOrder extends CMbObject {
         $reception->delete();
       }
     }
+  }
+  
+  /**
+   * @param object $type The type of orders we are looking for [waiting|locked|pending|received|cancelled]
+   * @param object $keywords [optional]
+   * @param object $limit = 30 [optional]
+   * @return The list of orders
+   */
+  function search($type, $keywords = "", $limit = 30) {
+    global $g;
+    
+    $where = array();
+    $leftjoin = array();
+    $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
+    
+    // if keywords have been provided
+    if ($keywords) {
+      $societe = new CSociete();
+      $where_or = array();
+      
+      // we seek among the societes
+      foreach ($societe->getSeekables() as $field => $spec) {
+        $where_societe_or[] = "societe.$field LIKE '%$keywords%'";
+      }
+      $where_societe[] = implode(' OR ', $where_societe_or);
+      
+      // we seek among the orders
+      foreach($this->getSeekables() as $field => $spec) {
+        $where_or[] = "product_order.$field LIKE '%$keywords%'";
+      }
+      $where_or[] = 'product_order.societe_id ' . CSQLDataSource::prepareIn(array_keys($societe->loadList($where_societe)));
+      $where[] = implode(' OR ', $where_or);
+    }
+    
+    $orderby = 'product_order.date_ordered DESC, product_order_item_reception.date DESC';
+    $where['product_order.deleted'] = " = 0";
+    $where['product_order.cancelled'] = " = 0";
+    $where['product_order.locked'] = " = 0";
+    $where['product_order.date_ordered'] = "IS NULL";
+    
+    $leftjoin['product_order_item_reception'] = 
+          'product_order_item.order_item_id = product_order_item_reception.order_item_id';
+    
+    switch ($type) {
+      case 'waiting': break;
+      case 'locked':
+        $where['product_order.locked'] = " = 1";
+        break;
+      case 'pending': // pending or received are the same here but they are sorted thanks to PHP
+      case 'received':
+        $where['product_order.locked'] = " = 1";
+        $where['product_order.date_ordered'] = "IS NOT NULL";
+        break;
+      default:
+      case 'cancelled':
+        $where['product_order.cancelled'] = " = 1";
+        unset($where['product_order.locked']);
+        unset($where['product_order.date_ordered']);
+        break;
+    }
+    
+    if ($g)
+      $where['product_order.group_id'] = " = $g";
+      
+    $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
+    
+    if ($type === 'pending') {
+      $list = array();
+      foreach ($orders_list as $_order) {
+        if ($_order->countReceivedItems() < count($_order->_ref_order_items)) {
+          $list[] = $_order;
+        }
+      }
+      $orders_list = $list;
+    }
+    
+    else if ($type === 'received') {
+      $list = array();
+      foreach ($orders_list as $_order) {
+        if ($_order->countReceivedItems() >= count($_order->_ref_order_items)) {
+          $list[] = $_order;
+        }
+      }
+      $orders_list = $list;
+    }
+    
+    return $orders_list;
   }
   
   function getUniqueNumber() {

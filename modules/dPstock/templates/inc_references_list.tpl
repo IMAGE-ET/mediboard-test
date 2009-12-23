@@ -12,9 +12,6 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="10">{{mb_title class=CProductReference field=product_id}}</th>
-  </tr>
-  <tr>
     <th>{{mb_title class=CProductReference field=societe_id}}</th>
     <th>{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_title class=CProductReference field=quantity}}</th>

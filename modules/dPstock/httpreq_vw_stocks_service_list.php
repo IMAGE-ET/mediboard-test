@@ -37,7 +37,7 @@ $leftjoin['product'] = 'product.product_id = product_stock_service.product_id'; 
 
 $stock = new CProductStockService();
 $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:30, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();

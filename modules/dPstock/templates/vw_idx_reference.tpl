@@ -55,9 +55,9 @@ ProductSelector.init = function(){
         </select>
         
         <input type="hidden" name="limit" value="" />
-        <input type="text" name="keywords" value="" />
+        <input type="text" name="keywords" value="" size="12" />
         
-        <button type="button" class="search" onclick="referencesFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search notext" onclick="referencesFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="referencesFilter.empty();"></button>
       </form>
 

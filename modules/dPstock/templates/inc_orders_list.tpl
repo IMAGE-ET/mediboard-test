@@ -150,7 +150,7 @@
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
-        <button type="button" class="tick" onclick="popupOrder({{$curr_order->_id}});">{{tr}}CProductOrder-_receive{{/tr}}</button>
+        <button type="button" class="tick" onclick="popupReception({{$curr_order->_id}});">{{tr}}Recevoir{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />

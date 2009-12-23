@@ -14,6 +14,7 @@ class CProductOrderItemReception extends CMbObject {
 
   // DB Fields
   var $order_item_id      = null;
+  var $reception_id       = null;
   var $quantity           = null;
   var $code               = null;
   var $lapsing_date       = null;
@@ -36,6 +37,7 @@ class CProductOrderItemReception extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['order_item_id'] = 'ref notNull class|CProductOrderItem';
+    $specs['reception_id']  = 'ref notNull class|CProductReception';
     $specs['quantity']      = 'num notNull';
     $specs['code']          = 'str';
     $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
@@ -54,17 +56,21 @@ class CProductOrderItemReception extends CMbObject {
     parent::updateFormFields();
     $this->loadRefOrderItem();
     /*$this->_ref_order_item->updateFormFields();*/
-    $this->_view = $this->quantity.' x '.$this->_ref_order_item->_view;
+    $this->_view = "$this->quantity x $this->_ref_order_item";
   }
   
   function loadRefOrderItem() {
-    $this->_ref_order_item = new CProductOrderItem();
-    $this->_ref_order_item = $this->_ref_order_item->getCached($this->order_item_id);
+    $this->_ref_order_item = $this->loadFwdRef("order_item_id", true);
+  }
+  
+  function loadRefReception() {
+    $this->_ref_reception = $this->loadFwdRef("reception_id", true);
   }
 
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefOrderItem();
+    $this->loadRefReception();
   }
 
   function store() {
@@ -88,7 +94,7 @@ class CProductOrderItemReception extends CMbObject {
       $stock->group_id = $g;
       $stock->quantity = $qty;
       $stock->order_threshold_min = $qty;
-      CAppUI::setMsg('Un nouveau stock pour ['.$product->_view.'] a été créé', UI_MSG_OK);
+      CAppUI::setMsg("Un nouveau stock pour [$product] a été créé", UI_MSG_OK);
     }
     if ($msg = $stock->store()) {
       return $msg;

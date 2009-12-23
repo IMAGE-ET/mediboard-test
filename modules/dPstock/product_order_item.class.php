@@ -66,7 +66,7 @@ class CProductOrderItem extends CMbObject {
   
   function isReceived() {
     $this->updateReceived();
-  	return ($this->_quantity_received >= $this->quantity);
+  	return $this->_quantity_received >= $this->quantity;
   }
   
   function getStock() {

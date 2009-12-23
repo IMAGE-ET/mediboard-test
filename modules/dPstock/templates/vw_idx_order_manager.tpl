@@ -29,9 +29,10 @@ Main.add(function () {
 
   <!-- Filter -->
   <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($V(this.keywords));">
-    <input type="hidden" class="m" name="{{$m}}" />
-    <input type="text" class="search" name="keywords" />
-    <button type="button" class="search" onclick="refreshLists($V(this.form.keywords))">{{tr}}Filter{{/tr}}</button>
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="text" name="keywords" onchange="this.form.onsubmit()" />
+    <button type="button" class="search" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+    <button type="button" class="cancel notext" onclick="$V(this.form.elements.keywords, '')">{{tr}}Empty{{/tr}}</button>
   </form>
 
   <!-- Tabs titles -->

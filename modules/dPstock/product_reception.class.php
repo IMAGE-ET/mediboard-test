@@ -36,7 +36,7 @@ class CProductReception extends CMbObject {
 
 	function getBackProps() {
 		$backProps = parent::getBackProps();
-		$backProps["reception_items"] = "CProductOrderItem order_id";
+		$backProps["reception_items"] = "CProductOrderItemReception reception_id";
 		return $backProps;
 	}
 
@@ -63,7 +63,7 @@ class CProductReception extends CMbObject {
 	function updateFormFields() {
 		parent::updateFormFields();
 
-		$count = count($this->_ref_reception_items);
+		$count = $this->countBackRefs('reception_items');
 		$this->_view  = $this->_ref_societe ? "{$this->_ref_societe->_view} - " : "";
 		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total";
 	}

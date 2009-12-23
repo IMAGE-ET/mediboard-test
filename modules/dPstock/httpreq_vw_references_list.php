@@ -37,7 +37,7 @@ $leftjoin['product'] = 'product.product_id = product_reference.product_id';
 
 $reference = new CProductReference();
 $list_references_count = $reference->countList($where, $orderby, null, null, $leftjoin);
-$list_references = $reference->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
+$list_references = $reference->loadList($where, $orderby, $limit?$limit:30, null, $leftjoin);
 foreach($list_references as $ref) {
   $ref->loadRefs();
 }

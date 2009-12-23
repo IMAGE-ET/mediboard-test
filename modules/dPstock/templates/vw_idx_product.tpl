@@ -103,10 +103,6 @@ Main.add(function () {
           <td>{{mb_field object=$product field="renewable"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$product field="code_lpp"}}</th>
-          <td>{{mb_field object=$product field="code_lpp"}}</td>
-        </tr>
-        <tr>
           <th>{{mb_label object=$product field="cancelled"}}</th>
           <td>{{mb_field object=$product field="cancelled"}}</td>
         </tr>

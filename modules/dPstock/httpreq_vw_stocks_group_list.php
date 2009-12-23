@@ -52,7 +52,7 @@ if ($only_ordered_stocks) {
 
 $stock = new CProductStockGroup();
 $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:30, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();

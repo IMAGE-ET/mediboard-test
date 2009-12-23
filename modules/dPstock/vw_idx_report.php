@@ -16,7 +16,7 @@ $list_stocks = new CProductStockGroup();
 $where = array();
 $where['group_id'] = " = '$g'";
 $orderby = "quantity / order_threshold_max";
-$list_stocks = $list_stocks->loadList($where, $orderby, 20);
+$list_stocks = $list_stocks->loadList($where, $orderby, 40);
 foreach($list_stocks as $stock) {
 	$stock->loadRefOrders();
 }

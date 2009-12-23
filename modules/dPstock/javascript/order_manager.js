@@ -85,6 +85,8 @@ function refreshOrderItem(order_item_id) {
   url.requestUpdate("order-item-"+order_item_id);
 }
 
+var orderTypes = ["waiting", "locked", "pending", "received", "cancelled"];
+
 function refreshListOrders(type, keywords) {
   var url = new Url("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
@@ -96,11 +98,17 @@ function refreshListOrders(type, keywords) {
 
 function refreshLists(keywords) {
   if (!window.opener) {
-    refreshListOrders("waiting",   keywords);
-    refreshListOrders("locked",    keywords);
-    refreshListOrders("pending",   keywords);
-    refreshListOrders("received",  keywords);
-    refreshListOrders("cancelled", keywords);
+    // We load the visible one first
+    orderTypes.each(function(type){
+      if ($("list-orders-"+type).visible()) {
+        refreshListOrders(type, keywords);
+      }
+    });
+    orderTypes.each(function(type){
+      if (!$("list-orders-"+type).visible()) {
+        refreshListOrders(type, keywords);
+      }
+    });
   } else if (window.opener.refreshLists) {
     window.opener.refreshLists();
   }
@@ -118,6 +126,15 @@ function popupOrder(iOrderId, width, height, bAutofill) {
   }
 
   url.popup(width, height, "Edition de commande");
+}
+
+function popupReception(iOrderId, width, height) {
+  width = width || 1000;
+  height = height || 800;
+
+  var url = new Url("dPstock", "vw_edit_reception");
+  url.addParam("order_id", iOrderId);
+  url.popup(width, height, "Réception de commande");
 }
 
 function popupOrderForm(iOrderId, width, height) {

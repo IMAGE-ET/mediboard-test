@@ -16,7 +16,7 @@ $keywords = CValue::get('keywords');
 
 $societe = new CSociete();
 $list_count = $societe->countList();
-$list = $societe->loadList(null, "name", intval($start).",25");
+$list = $societe->loadList(null, "name", intval($start).",30");
 
 // Smarty template
 $smarty = new CSmartyDP();

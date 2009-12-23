@@ -11,18 +11,12 @@
 global $can;
 $can->needsEdit();
 
-$order_id     = CValue::get('order_id');
 $reception_id = CValue::get('reception_id');
-
-// Loads the expected Order
-$order = new CProductOrder();
-$order->load($order_id);
 
 $reception = new CProductReception();
 $reception->load($reception_id);
+$reception->loadBackRefs("reception_items");
 
-// Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign('order', $order);
 $smarty->assign('reception', $reception);
-$smarty->display('vw_aed_order.tpl');
+$smarty->display('vw_edit_reception.tpl');

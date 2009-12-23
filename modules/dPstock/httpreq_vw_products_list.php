@@ -32,7 +32,7 @@ $orderby = 'name, code';
 
 $product = new CProduct();
 $list_products_count = $product->countList($where, $orderby);
-$list_products = $product->loadList($where, $orderby, $limit?$limit:20);
+$list_products = $product->loadList($where, $orderby, $limit?$limit:30);
 
 foreach($list_products as $prod) {
 	$prod->loadRefs();
