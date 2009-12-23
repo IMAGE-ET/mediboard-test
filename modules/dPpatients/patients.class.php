@@ -341,6 +341,20 @@ class CPatient extends CMbObject {
     }
   }
   
+	function check(){
+		// Standard check
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+		
+		// Creation d'un patient
+		if(!$this->_id && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"){
+		  if($this->loadMatchingPatient(true) > 0) {
+	      return "Doublons détectés";
+			}
+		}
+	}
+	
   function store() {
     // Standard store
     if ($msg = parent::store()) {
