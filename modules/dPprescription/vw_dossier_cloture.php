@@ -10,15 +10,21 @@
 
 global $AppUI, $can, $m, $g;
 
-// Chargement de la prescription
-$prescription_id = CValue::getOrSession("prescription_id");
-$prescription = new CPrescription();
-$prescription->load($prescription_id);
+$sejour_id = CValue::getOrSession("sejour_id");
 
-$sejour =& $prescription->_ref_object;
+// Chargement du sejour
+$sejour = new CSejour();
+$sejour->load($sejour_id);
 $sejour->loadRefPatient();
 $sejour->_ref_patient->loadRefConstantesMedicales();
 $sejour->loadSuiviMedical();
+
+// Chargement de la prescription de sejour
+$prescription = new CPrescription();
+$prescription->object_class = "CSejour";
+$prescription->type = "sejour";
+$prescription->object_id = $sejour->_id;
+$prescription->loadMatchingObject();
 
 $dossier = array();
 $list_lines = array();

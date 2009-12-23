@@ -268,9 +268,9 @@ viewLegend = function(){
   url.popup(300,150, "Légende");
 }
 
-viewDossier = function(prescription_id){
+viewDossier = function(sejour_id){
   var url = new Url("dPprescription", "vw_dossier_cloture");
-  url.addParam("prescription_id", prescription_id);
+  url.addParam("sejour_id", sejour_id);
   url.popup(800,600,"Dossier cloturé");
 }
 
@@ -428,6 +428,9 @@ Main.add(function () {
 <table class="tbl">
   <tr>
     <th colspan="10" class="title">
+    	 <span style="float: right">
+ 	 	     <button type="button" class="print" style="float: right" onclick="viewDossier('{{$sejour->_id}}');">Dossier</button>
+    	 </span>
        <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
        </a>
@@ -472,8 +475,6 @@ Main.add(function () {
 
 {{if $prescription_id}}
   {{if !$mode_bloc}}
-    <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
-
 	 <h1 style="text-align: center">
 	   <a href="#1" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
 	     <img src="images/icons/prev.png" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
