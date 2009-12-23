@@ -53,27 +53,45 @@ document.observe('dom:loaded', main);
  * Main page initialization scripts
  */
 var Main = {
-  scripts: [],
+  callbacks: [],
+  loadedScripts: {},
   initialized: false,
   
   /**
    * Add a script to be lanuched after onload notification
    * On the fly execution if already page already loaded
    */
-  add: function(script) {
+  add: function(callback) {
     if (this.initialized) {
-      script();
+      callback();
     }
     else {
-      this.scripts.push(script);
+      this.callbacks.push(callback);
     }
+  },
+  
+  require: function(script, options) {
+    if (this.loadedScripts[script]) {
+      return;
+    }
+    
+    options = Object.extend({
+      evalJS: true,
+      onSuccess: (function(script){
+        return function() {
+          Main.loadedScripts[script] = true;
+        }
+      })(script)
+    }, options);
+    
+    return new Ajax.Request(script, options);
   },
   
   /**
    * Call all Main functions
    */
   init: function() {
-    this.scripts.each(function(e) { e() } );
+    this.callbacks.each(function(e) { e() } );
     this.initialized = true;
   }
 };

@@ -356,7 +356,9 @@ function prepareForm(oForm) {
     
     // ui:change is a custom event fired on the native onchange throwed by $V, 
     // because fire doesn't work with native events 
-    oElement.fire("ui:change");
+    // Fire it only if the element has a spec
+    if (oElement.className)
+      oElement.fire("ui:change");
 
     // Select tree
     if (props["select-tree"] && Prototype.Browser.Gecko) {
