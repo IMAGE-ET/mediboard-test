@@ -1,6 +1,6 @@
 // $Id: $
 
-/** TODO: Factoriser ceci pour ne pas avoir a etendre l'objet (sinon Patient.create est ecrasé)
+/** TODO: Factoriser ceci pour ne pas avoir a etendre l'objet (sinon Patient.create est ecrasé) */
 Patient = Object.extend({
   view: function(patient_id) {
     new Url().
