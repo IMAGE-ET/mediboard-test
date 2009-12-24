@@ -75,7 +75,7 @@
             <input type="text" name="lapsing_date" value="" size="10" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
           </td>
           <td>
-            <button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+            <!--<button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>-->
           </td>
          </tr>
        </table>

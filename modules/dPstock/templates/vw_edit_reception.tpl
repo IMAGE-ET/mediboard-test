@@ -12,7 +12,7 @@
 Main.add(function () {
   var form = getForm("orders-search");
   var url = new Url("dPstock", "httpreq_orders_autocomplete");
-  url.autoComplete(form.keywords, null, {
+  url.autoComplete(form.keywords, $("keywords_autocomplete"), {
     select: "view",
     dropdown: true,
     valueElement: form.id_reference
@@ -20,6 +20,8 @@ Main.add(function () {
 });
 
 function addOrder(id_reference){
+  if (!id_reference) return;
+  
   var parts = id_reference.match(/^(.*)-(.*)$/);
   var elementId = "order-"+parts[1];
   
@@ -73,10 +75,10 @@ function addOrder(id_reference){
     <td class="halfPane" style="padding: 0;">
       <form name="orders-search" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="id_reference" value="" onchange="addOrder(this.value)" />
-        <label>
-          Recherche de commandes :
-          <input type="text" name="keywords" />
+        <label for="keywords">
+          Commandes actuelles :
         </label>
+        <input type="text" name="keywords" />
       </form>
       
       <ul class="control_tabs" id="orders-tabs"></ul>
