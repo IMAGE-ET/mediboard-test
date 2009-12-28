@@ -42,10 +42,10 @@ for($i = 1; $i <= 7; $i++) {
   $from = mbDateTime("+1 second", $to);
   $to = mbDateTime("+1 day", $to);
   $where = array(
-    "entree_prevue" => "BETWEEN '$from' AND '$to'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
+  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$from' AND '$to'";
   $list[$from] = loadSejourNonAffectes($where);
 }
 
