@@ -264,6 +264,8 @@ class CSipObjectHandler extends CMbObjectHandler {
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
+      $patient->check();
+      $patient->updateFormFields();
       
       // Si Client
       if (!CAppUI::conf('sip server')) {
@@ -288,7 +290,6 @@ class CSipObjectHandler extends CMbObjectHandler {
             if ($patient2_ipp)
               $patient->_IPP = $patient2_ipp;
               
-            $patient->check();
             $this->sendEvenement($domEvenement, $dest_hprim, $patient);
             continue;
           }
@@ -298,7 +299,6 @@ class CSipObjectHandler extends CMbObjectHandler {
             $domEvenement = new CHPrimXMLFusionPatient();
             
             $patient->_patient_elimine = $patient_eliminee;
-            $patient->check();
             $this->sendEvenement($domEvenement, $dest_hprim, $patient);
             continue;
           }

@@ -47,7 +47,7 @@ $where = array(
   "type" => "NOT IN ('exte', 'urg', 'seances')",
   "annule" => "= '0'"
 );
-$where[] = "(entree_prevue BETWEEN '$today' AND '$endWeek') OR (entree_reelle BETWEEN '$today' AND '$endWeek')";
+$where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
 
@@ -89,8 +89,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
-  $where[] = "(entree_prevue BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59') OR 
-              (entree_reelle BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59')";
+  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -101,8 +100,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
-  $where[] = "(entree_prevue BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."') OR 
-              (entree_reelle BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."')";
+  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -113,8 +111,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );  
-  $where[] = "(entree_prevue BETWEEN '$date $heureLimit' AND '$date 23:59:59') OR 
-              (entree_reelle BETWEEN '$date $heureLimit' AND '$date 23:59:59')";
+  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -126,8 +123,8 @@ if ($can->edit) {
     "annule" => "= '0'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
   );
-  $where[] = "(entree_prevue <= '$twoDaysBefore 23:59:59') OR (entree_reelle <= '$twoDaysBefore 23:59:59')";
-  $where[] = "(sortie_prevue >= '$date 00:00:00') OR (sortie_reelle >= '$date 00:00:00')";
+  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$twoDaysBefore 23:59:59'";
+  $where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date 00:00:00'";
   $where[] = $whereFilter;
   $order = $orderTri;
   
