@@ -10,6 +10,8 @@
 /**
  * The CDocumentItem class
  */
+CAppUI::requireSystemClass('mmetabobject');
+
 class CDocumentItem extends CMbMetaObject {
   
 	// DB Fields
