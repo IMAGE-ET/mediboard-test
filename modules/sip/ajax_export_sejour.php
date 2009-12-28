@@ -116,8 +116,10 @@ foreach ($sejours as $sejour) {
   }
   
   $domEvenement = new CHPrimXMLVenuePatient();
-  $domEvenement->emetteur = CAppUI::conf('mb_id');
+  $domEvenement->emetteur     = CAppUI::conf('mb_id');
   $domEvenement->destinataire = $dest_hprim->nom;
+  $domEvenement->group_id     = $dest_hprim->group_id;
+  
   $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
   $doc_valid = $domEvenement->schemaValidate();
   
@@ -129,8 +131,10 @@ foreach ($sejours as $sejour) {
   
   if ($sejour->_ref_patient->code_regime) {
     $domEvenement = new CHPrimXMLDebiteursVenue();
-    $domEvenement->emetteur = CAppUI::conf('mb_id');
+    $domEvenement->emetteur     = CAppUI::conf('mb_id');
     $domEvenement->destinataire = $dest_hprim->nom;
+    $domEvenement->group_id     = $dest_hprim->group_id;
+    
     $messageEvtPatient = $domEvenement->generateTypeEvenement($sejour);
     $doc_valid = $domEvenement->schemaValidate();
     

@@ -138,16 +138,14 @@ Main.add(function () {
 	    </a>
 
 	    Modification du {{$rpu}}
-	    {{if $sejour->_num_dossier}}
-	      [{{$sejour->_num_dossier}}]
-	    {{/if}}
+	    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     </th>
     {{else}}
     <th class="title" colspan="4">
 	    Création d'un RPU 
 	    {{if $sejour->_num_dossier}}
 	    	pour le dossier
-	      [{{$sejour->_num_dossier}}]
+	      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
 	    {{/if}}
 	  </th>
     {{/if}}

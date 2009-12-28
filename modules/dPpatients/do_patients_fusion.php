@@ -61,13 +61,13 @@ if (intval(CValue::post("del"))) {
 }
 
 $patients = array($patient1, $patient2);
-
 if ($base_object_id) {
   $do->_obj->load($base_object_id);
   
   foreach($patients as $key => $patient) {
     if ($base_object_id == $patient->_id) {
       unset($patients[$key]);
+      unset($_POST["_merging"][$base_object_id]);
     }
   }
 }

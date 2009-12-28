@@ -20,12 +20,12 @@
   <tr>
     <th class="title" colspan="10">
 	    {{$_sejour->_view}}
-	    <strong>[{{$_sejour->_num_dossier}}]</strong>
+	    <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}</strong>
 	    <br />Dr {{$_sejour->_ref_praticien->_view}}
     </th>
   </tr>
 
- 	{{if $_sejour->_num_dossier == "-"}}
+ 	{{if !$_sejour->_num_dossier}}
 		<tr>  
 	    <td colspan="10">
 	    	<div class="error">

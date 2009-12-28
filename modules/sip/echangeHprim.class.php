@@ -122,6 +122,10 @@ class CEchangeHprim extends CMbObject {
 	    	$this->_object_class = "CPatient";
 	    	$this->loadObjectId("hprim:enregistrementPatient", "hprim:patient");
 	    	break;
+      case "fusionPatient" :
+        $this->_object_class = "CPatient";
+        $this->loadObjectId("hprim:fusionPatient", "hprim:patient");
+        break;
 	    case "venuePatient" :
 	    	$this->_object_class = "CSejour"; 
 	      $this->loadObjectId("hprim:venuePatient", "hprim:venue");

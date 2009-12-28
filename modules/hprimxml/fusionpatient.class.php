@@ -37,8 +37,6 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
   }
   
   function getFusionPatientXML() {
-    global $m;
-
     $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";

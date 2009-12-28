@@ -68,7 +68,7 @@ merge = function(radio) {
       </div>
     </td>
     <td style="text-align: center">
-      <strong>[{{mb_value object=$patient field=_IPP}}]</strong>
+      <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</strong>
     </td>
     <td>
       <big>{{mb_value object=$patient field=naissance}}</big> 
@@ -88,12 +88,12 @@ merge = function(radio) {
 			</big>
 		</td>
     <td>
-    	{{if $_sejour->_num_dossier == "-"}} 
-        <div class="warning">
+    	{{if !$_sejour->_num_dossier}} 
+       <div class="warning">
           {{tr}}None{{/tr}}
        </div>
     	{{else}}
-      <strong>[{{mb_value object=$_sejour field=_num_dossier}}]</strong>
+      <strong>{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}</strong>
     	{{/if}}
 		</td>
 

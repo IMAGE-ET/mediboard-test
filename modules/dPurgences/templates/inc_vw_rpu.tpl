@@ -233,7 +233,7 @@ function printDossier(id) {
 				      {{else}}
 				      <strong>
 				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-				      	Hospitalisation dossier [{{$rpu->_ref_sejour_mutation->_num_dossier}}]
+				      	Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
 				     	</a> 
 				     	</strong>
 				      {{/if}}

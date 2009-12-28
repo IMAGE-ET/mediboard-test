@@ -70,19 +70,19 @@ function toggleAltMode(check) {
         {{/if}}
       </th>
       <th width="30%" class="category">
-        1er patient
+        1er patient {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient1->_IPP}}
         <br />
-        <label style="font-weight: normal;">
+        <label style="font-weight: normal;" title="{{$patient1->_id}}">
           <input type="radio" name="_base_object_id" value="{{$patient1->_id}}" checked="checked" {{if !$alternative_mode}}disabled="disabled"{{/if}} />
-          Utiliser comme base [#{{$patient1->_id}}]
+          Utiliser comme base 
         </label>
       </th>
       <th width="30%" class="category">
-        2ème patient
+        2ème patient {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient2->_IPP}}
         <br />
-        <label style="font-weight: normal;">
+        <label style="font-weight: normal;" title="{{$patient2->_id}}">
           <input type="radio" name="_base_object_id" value="{{$patient2->_id}}" {{if !$alternative_mode}}disabled="disabled"{{/if}} />
-          Utiliser comme base [#{{$patient2->_id}}]
+          Utiliser comme base 
         </label>
       </th>
       <th width="30%" class="category">Résultat</th>

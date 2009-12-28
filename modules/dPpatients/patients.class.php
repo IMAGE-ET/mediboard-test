@@ -138,12 +138,14 @@ class CPatient extends CMbObject {
   var $_dossier_cabinet_url = null;
 
   // HPRIM Fields
-  var $_prenoms        = null; // multiple
-  var $_nom_naissance  = null; // +/- = nom_jeune_fille
-  var $_adresse_ligne2 = null;
-  var $_adresse_ligne3 = null;
-  var $_pays           = null;
-  var $_IPP            = null;
+  var $_prenoms          = null; // multiple
+  var $_nom_naissance    = null; // +/- = nom_jeune_fille
+  var $_adresse_ligne2   = null;
+  var $_adresse_ligne3   = null;
+  var $_pays             = null;
+  var $_IPP              = null;
+  var $_fusion           = null; // fusion
+  var $_patient_elimine  = null; // fusion
   
   // Object References
   var $_nb_docs              = null;
@@ -287,6 +289,7 @@ class CPatient extends CMbObject {
     $specs["_age"]                        = "num show|1";
     $specs["_age_assure"]                 = "num";
     $specs["_IPP"]                        = "str";
+    
     return $specs;
   }
   
@@ -330,6 +333,10 @@ class CPatient extends CMbObject {
   	$dossier_medical = new CDossierMedical();
   	$list = $dossier_medical->loadList($where);
   	
+    foreach ($objects as $object) {
+      $object->loadIPP();
+    }
+    
   	if ($msg = parent::merge($objects)) return $msg;
     
     // Merge them
@@ -1140,11 +1147,6 @@ class CPatient extends CMbObject {
     // Stockage de la valeur de l'id400
     $this->_ref_IPP = $id400;
     $this->_IPP     = $id400->id400;
-    
-    // Si pas d'id400 correspondant, on stocke "_"
-    if (!$this->_IPP){
-    	$this->_IPP = "-";
-    }
   }
 
   function loadFromIPP($group_id = null) {

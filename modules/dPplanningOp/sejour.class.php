@@ -966,11 +966,6 @@ class CSejour extends CCodable {
     // Stockage de la valeur de l'id400
     $this->_ref_numdos  = $id400;
     $this->_num_dossier = $id400->id400;
-    
-    // Si pas d'id400 correspondant, on stocke "-"
-    if(!$this->_num_dossier){
-      $this->_num_dossier = "-";
-    }
   }
   
   function loadFromNumDossier($num_dossier) {

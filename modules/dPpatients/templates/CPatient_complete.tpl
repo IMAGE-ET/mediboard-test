@@ -27,7 +27,7 @@
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$object->_id}}" />
       {{$object->_view}}
-      {{if $object->_IPP}}[{{$object->_IPP}}]{{/if}}
+      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$object->_IPP}}
       </form>
     </th>
   </tr>

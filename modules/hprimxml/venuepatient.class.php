@@ -15,7 +15,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    /*'suppression'   => "suppression"*/
+    'suppression'   => "suppression"
   );
   
   function __construct() {    
@@ -35,9 +35,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       "delete" => "suppression"
     );
     $action = $actionConversion[$mbVenue->_ref_last_log->type];
-    /*if ($mbVenue->annule) {
+    if ($mbVenue->annule) {
       $action = "suppression";
-    }*/
+    }
     $this->addAttribute($venuePatient, "action", $action);
     
     $patient = $this->addElement($venuePatient, "patient");
@@ -149,9 +149,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       
       // Cas d'une annulation
       $cancel = false;
-      /*if ($data['action'] == "suppression") {
+      if ($data['action'] == "suppression") {
         $cancel = true;
-      }*/
+      }
       
       // idSource non connu
       if(!$num_dossier->loadMatchingObject()) {
@@ -234,8 +234,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $msgNumDossier = $num_dossier->store();
         
         $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), 
-                        $msgNumDossier ? "A105" : $_code_NumDos,
-                        $cancel ? "A130" : "");
+                        $msgNumDossier ? "A105" : $_code_NumDos);
+        if ($cancel) {
+          $codes[] = "A130";
+        }
         
         if ($msgVenue || $msgNumDossier) {
           $avertissement = $msgVenue." ".$msgNumDossier;
@@ -285,7 +287,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $modified_fields .= "$field \n";
           }
         }
-        $codes = array ($msgVenue ? "A103" : "I102", $_code_NumDos, $cancel ? "A130" : "");
+        $codes = array($msgVenue ? "A103" : "I102", $_code_NumDos);
+        if ($cancel) {
+          $codes[] = "A130";
+        }
         
         if ($msgVenue) {
           $avertissement = $msgVenue." ";

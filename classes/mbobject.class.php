@@ -1056,11 +1056,11 @@ class CMbObject {
     else {
       if (count($objects) < 2) return "mergeTooFewObjects";
     }
+        
+    if ($msg = $this->checkMerge($objects)) return $msg;
     
     // Trigger before event
     $this->onBeforeMerge();
-    
-    if ($msg = $this->checkMerge($objects)) return $msg;
     
     if (!$this->_id && $msg = $this->store()) return $msg;
     

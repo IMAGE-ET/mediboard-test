@@ -61,9 +61,8 @@ Main.add(function () {
   {{if $consult->sejour_id}}
   <li><a href="#rpuConsult">
      RPU 
-    {{if $consult->_ref_sejour->_num_dossier}}
-      [{{$consult->_ref_sejour->_num_dossier}}]
-    {{/if}}</a>
+    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
+    </a>
   </li>
    <li {{if !$rpu->mutation_sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, !Preferences.mode_readonly,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">

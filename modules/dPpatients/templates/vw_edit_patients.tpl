@@ -138,7 +138,7 @@ Main.add(function () {
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
       Modification du dossier de {{$patient}} 
-      {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
+      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>
   {{else}}

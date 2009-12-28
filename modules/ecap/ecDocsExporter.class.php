@@ -19,7 +19,7 @@ class CEcDocsExporter {
   static function exportSejour(CSejour &$sejour) {
 	  // Suppression des actes
 	  $sejour->loadNumDossier();
-	  if ($sejour->_num_dossier == "-") {
+	  if (!$sejour->_num_dossier) {
       trigger_error("Pas de numéro de dossier pour le séjour [$sejour->_id] '$sejour->_view''", E_USER_WARNING);
 	    return;
 	  }

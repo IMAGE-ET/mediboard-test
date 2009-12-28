@@ -38,6 +38,7 @@ foreach ($patients_id as $patient_id) {
   
   $patient->loadRefsFwd();
   $patient->updateNomPaysInsee();
+  $patient->loadIPP();
   $patients[] = $patient;
 }
   

@@ -56,9 +56,7 @@ Main.add(function () {
 	        <strong>
 	        {{$patient->_view}}
 	        </strong>
-	        {{if $patient->_IPP}}
-	        <br />[{{$patient->_IPP}}]
-	        {{/if}}
+	        <br />{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
 	      </a>
       </td>
       

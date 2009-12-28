@@ -268,7 +268,7 @@ Main.add( function(){
       <img src="images/icons/edit.png" alt="modifier" />
      </a>
     {{/if}}
-    {{tr}}CSejour-msg-informations{{/tr}} {{if $mode_operation && $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+    {{tr}}CSejour-msg-informations{{/tr}} {{if $mode_operation && $sejour->_num_dossier}}{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}{{/if}}
   </th>
 </tr>
 

@@ -169,9 +169,7 @@ function submitSejour(){
 	 	  </a>
  	  
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
-        {{if $patient->_IPP}}
-          [{{$patient->_IPP}}]<br />
-        {{/if}}
+        {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}<br />
         <strong>{{$patient->_view}}</strong>
       </a>
     </td>
@@ -181,7 +179,7 @@ function submitSejour(){
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
       <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-        dossier [{{$rpu->_ref_sejour_mutation->_num_dossier}}]
+        dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
      	</a> 
       {{else}}
       {{tr}}Cancelled{{/tr}}
@@ -252,7 +250,7 @@ function submitSejour(){
 			  {{if $sejour->sortie_reelle}}
 		    <tr>
 		      <td>
-		        {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+		        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
             {{if $sejour->mode_sortie}}
               {{mb_value object=$sejour field=mode_sortie}}
               {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
@@ -276,10 +274,8 @@ function submitSejour(){
 			   {{else}}
 			   <tr>
 			     <td class="text">
-			      {{if $sejour->_num_dossier}}
-              [{{$sejour->_num_dossier}}]
-              <br />
-            {{/if}}
+			       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+             <br />
             {{assign var=rpu_id value=$rpu->_id}}
             {{assign var=sejour_id value=$sejour->_id}}
             

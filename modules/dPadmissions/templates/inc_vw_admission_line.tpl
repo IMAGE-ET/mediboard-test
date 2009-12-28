@@ -85,7 +85,7 @@
   </form>
   {{/if}}
   {{/if}}
-  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
+  {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}
   <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient->_view}}

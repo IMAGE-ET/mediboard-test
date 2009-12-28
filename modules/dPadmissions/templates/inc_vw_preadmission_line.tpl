@@ -47,7 +47,7 @@
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
 </td>
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
+  {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}
   <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
   le {{$curr_adm->_entree|date_format:$dPconfig.date}}
   </span>

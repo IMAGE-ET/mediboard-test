@@ -42,9 +42,7 @@ Main.add(function () {
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   <li><a href="#rpuConsult">
     RPU 
-    {{if $consult->_ref_sejour->_num_dossier}}
-      [{{$consult->_ref_sejour->_num_dossier}}]
-    {{/if}}
+    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
   </a></li>
   {{/if}}
   <li onclick="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>

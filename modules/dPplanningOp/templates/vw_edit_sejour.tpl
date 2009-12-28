@@ -66,7 +66,7 @@ function toggleMode() {
         {{tr}}button-COperation-modeExpert{{/tr}}
       </button>
       
-      Modification du séjour {{$sejour->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+      Modification du séjour {{$sejour->_view}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     </th>
     {{else}}
     <th colspan="2" class="title">

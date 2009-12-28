@@ -21,6 +21,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $identifiant_emetteur  = null;
   var $destinataire          = null;
   var $destinataire_libelle  = null;
+  var $group_id              = null;
   
   var $type                  = null;
   var $sous_type             = null;
@@ -121,18 +122,18 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim = new CEchangeHprim();
     $this->date_production    = $echg_hprim->date_production = mbDateTime();
     $echg_hprim->emetteur     = $this->emetteur;
-    $echg_hprim->group_id     = CGroups::loadCurrent()->_id;
+    $echg_hprim->group_id     = $this->group_id;
     $echg_hprim->destinataire = $this->destinataire;
     $echg_hprim->type         = $this->type;
     $echg_hprim->sous_type    = $this->sous_type;
     $echg_hprim->message      = utf8_encode($this->saveXML());
     if ($mbObject instanceof CPatient) {
-      if ($mbObject->_IPP && $mbObject->_IPP != "-") {
+      if ($mbObject->_IPP) {
         $echg_hprim->id_permanent = $mbObject->_IPP;
       }
     }
     if ($mbObject instanceof CSejour) {
-      if ($mbObject->_num_dossier && $mbObject->_num_dossier != "-") {
+      if ($mbObject->_num_dossier) {
         $echg_hprim->id_permanent = $mbObject->_num_dossier;
       }
     }
@@ -269,7 +270,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if(!$referent) {
       $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->patient_id, $referent);
-      if($mbPatient->_IPP && ($mbPatient->_IPP != "-")) 
+      if($mbPatient->_IPP) 
         $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP, $referent);
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbPatient->_IPP, $referent);
@@ -409,13 +410,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addErreurAvertissement($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {
     $erreurAvertissement = $this->addElement($elParent, "erreurAvertissement");
     $this->addAttribute($erreurAvertissement, "statut", $statut);
-    
-    $enregistrementPatient = $this->addElement($erreurAvertissement, "enregistrementPatient");
-    $identifiantPatient = $this->addElement($enregistrementPatient, "identifiantPatient");
-    
-    if ($mbObject) {
-      $this->addIdentifiantPart($identifiantPatient, "emetteur",  $mbObject->_id);
-    }
      
     $observations = $this->addElement($erreurAvertissement, "observations");
     $observation = $this->addObservation($observations, $code, $libelle, $commentaires);   
@@ -469,7 +463,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if(!$referent) {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
-      if($mbVenue->_num_dossier && ($mbVenue->_num_dossier != "-"))
+      if($mbVenue->_num_dossier)
         $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_num_dossier, $referent);
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->_num_dossier, $referent);

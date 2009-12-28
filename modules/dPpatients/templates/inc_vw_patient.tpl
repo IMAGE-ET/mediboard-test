@@ -34,7 +34,7 @@ Document.refreshList = function() {
 
   <tr>
     <th class="category" colspan="3">
-      Identité {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
+      Identité {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
     </th>
     <th class="category" colspan="2">Coordonnées</th>
   </tr>
@@ -270,7 +270,7 @@ Document.refreshList = function() {
       {{else}}
       <a href="#nothing">
       {{/if}}
-      {{if $_sejour->_num_dossier && $_sejour->group_id == $g}}[{{$_sejour->_num_dossier}}]{{/if}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
       {{$_sejour->_shortview}}
       {{if $_sejour->_nb_files_docs}}

@@ -34,7 +34,7 @@
   {{assign var=consult value=$rpu->_ref_consult}}
 
   {{assign var=background value=none}}
-  {{if $consult && $consult->_id}}{{assign var=background value=#ccf}}{{/if}}
+  {{if $consult && $consult->_id}}{{assign var=background value="#ccf"}}{{/if}}
   
   {{* Param to create/edit a RPU *}}
   {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
@@ -72,9 +72,7 @@
         </strong>
       </a>
       
-      {{if $patient->_IPP}}
-      [{{$patient->_IPP}}]
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
       {{if $dPconfig.dPurgences.age_patient_rpu_view}}{{$patient->_age}} ans{{/if}}
       
     </td>
@@ -84,7 +82,7 @@
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
       <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-        dossier [{{$rpu->_ref_sejour_mutation->_num_dossier}}]
+        dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
      	</a> 
       {{else}}
       {{tr}}Cancelled{{/tr}}
@@ -109,9 +107,7 @@
         {{else}}
         {{$curr_sejour->_entree|date_format:$dPconfig.datetime}}
         {{/if}}
-        {{if $curr_sejour->_num_dossier}}
-          [{{$curr_sejour->_num_dossier}}]
-        {{/if}}
+        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
       </a>
       {{if ($rpu->radio_debut || $rpu->bio_depart)}}
         <div style="clear: both; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">

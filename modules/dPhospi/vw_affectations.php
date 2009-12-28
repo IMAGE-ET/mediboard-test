@@ -44,10 +44,10 @@ foreach ($services as &$service) {
 $today   = mbDate()." 01:00:00";
 $endWeek = mbDateTime("+7 days", $today);
 $where = array(
-  "entree_prevue" => "BETWEEN '$today' AND '$endWeek'",
   "type" => "NOT IN ('exte', 'urg', 'seances')",
   "annule" => "= '0'"
 );
+$where[] = "(entree_prevue BETWEEN '$today' AND '$endWeek') OR (entree_reelle BETWEEN '$today' AND '$endWeek')";
 $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
 
@@ -68,7 +68,7 @@ if ($can->edit) {
       $orderTri = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
       break;
   }
-	
+  
   switch ($filterAdm) {
     case "ambu" :
       $whereFilter = "type = 'ambu'";
@@ -86,10 +86,11 @@ if ($can->edit) {
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(
-    "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
+  $where[] = "(entree_prevue BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59') OR 
+              (entree_reelle BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59')";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -97,10 +98,11 @@ if ($can->edit) {
   
   // Admissions du matin
   $where = array(
-    "entree_prevue" => "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
+  $where[] = "(entree_prevue BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."') OR 
+              (entree_reelle BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."')";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -108,10 +110,11 @@ if ($can->edit) {
   
   // Admissions du soir
   $where = array(
-    "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );  
+  $where[] = "(entree_prevue BETWEEN '$date $heureLimit' AND '$date 23:59:59') OR 
+              (entree_reelle BETWEEN '$date $heureLimit' AND '$date 23:59:59')";
   $where[] = $whereFilter;
   $order = $orderTri;
   
@@ -120,11 +123,11 @@ if ($can->edit) {
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
   $where = array(
-    "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
-    "sortie_prevue" => ">= '$date 00:00:00'",
     "annule" => "= '0'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
   );
+  $where[] = "(entree_prevue <= '$twoDaysBefore 23:59:59') OR (entree_reelle <= '$twoDaysBefore 23:59:59')";
+  $where[] = "(sortie_prevue >= '$date 00:00:00') OR (sortie_reelle >= '$date 00:00:00')";
   $where[] = $whereFilter;
   $order = $orderTri;
   

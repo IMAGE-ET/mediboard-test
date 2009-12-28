@@ -118,7 +118,7 @@
        <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
      </a>
       {{/if}}
-      {{if $curr_sortie->_num_dossier}}[{{$curr_sortie->_num_dossier}}]{{/if}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sortie->_num_dossier}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sortie->_ref_patient->_guid}}');">
         {{$curr_sortie->_ref_patient->_view}}
       </span>
