@@ -10,7 +10,7 @@
 /**
  * The CDocumentItem class
  */
-CAppUI::requireSystemClass('mbmetabobject');
+CAppUI::requireSystemClass('mbMetaObject');
 
 class CDocumentItem extends CMbMetaObject {
   
