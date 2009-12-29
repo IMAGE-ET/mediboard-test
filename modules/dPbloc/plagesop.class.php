@@ -259,7 +259,7 @@ class CPlageOp extends CMbObject {
       $oldPlage->loadRefsBack();
     }
     // Erreur si on est en multi-praticiens, qu'il y a des interventions et qu'on veut mettre un praticien
-    if (null !== $this->chir_id && $this->_id) {
+    if (null !== $this->chir_id && $this->_id && !$this->unique_chir) {
       if(count($oldPlage->_ref_operations) && $oldPlage->spec_id && $this->chir_id) {
         $msg = "Impossible de selectionner un praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes dans une plage multi-praticiens";
         return $msg;
@@ -281,6 +281,11 @@ class CPlageOp extends CMbObject {
           $_operation->store();
         }
       }
+    }
+    // Modification du début de la plage ou des minutes entre les interventions
+    $this->completeField("debut","temps_inter_op");
+    if($this->_id && ($this->debut != $oldPlage->debut || $this->temps_inter_op != $oldPlage->temps_inter_op)) {
+      $this->reorderOp();
     }
     return parent::store();
   }
@@ -311,7 +316,7 @@ class CPlageOp extends CMbObject {
     if($this->_min_inter_op !== null) {
       $this->temps_inter_op = "00:$this->_min_inter_op:00";
     }
-    $this->reorderOp();
+    return parent::updateDBFields();
   }
   
   function becomeNext() {
