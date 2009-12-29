@@ -259,20 +259,9 @@ class COperation extends CCodable {
   function check() {
     global $AppUI;
     $msg = null;
-    if(!$this->operation_id && !$this->chir_id) {
+    $this->completeField("chir_id", "plageop_id", "sejour_id");
+    if(!$this->_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";
-    }
-    
-    $old = new COperation();
-    $old->load($this->_id);
-    
-    // Vérification sur les dates des séjours et des plages op
-    if (null === $this->plageop_id) {
-      $this->plageop_id = $old->plageop_id;
-    }
-    
-    if (null === $this->sejour_id) {
-      $this->sejour_id = $old->sejour_id;
     }
 
     $this->loadRefSejour();
@@ -439,7 +428,6 @@ class COperation extends CCodable {
     } elseif($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
-      $this->store($reorder);
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
@@ -454,20 +442,20 @@ class COperation extends CCodable {
     
     // Cas de la création dans une plage de spécialité
     if($this->plageop_id) {
-      $plageTmp = new CPlageOp;
-      $plageTmp->load($this->plageop_id);
-      if($plageTmp->spec_id && $plageTmp->unique_chir) {
-        $plageTmp->spec_id = null;
-        $chirTmp = new CMediusers;
-        $chirTmp->load($this->chir_id);
-        $plageTmp->chir_id = $chirTmp->user_id;
-        $plageTmp->spec_id = "";
-        $plageTmp->store();
-      } elseif($reorder) {
-        $plageTmp->store();
+      $this->loadRefPlageOp();
+      if($this->_ref_plageop->spec_id && $this->_ref_plageop->unique_chir) {
+        $this->completeField("chir_id");
+        $this->_ref_plageop->chir_id = $this->chir_id;
+        $this->_ref_plageop->spec_id = "";
+        $this->_ref_plageop->store();
       }
     }
-    return $msg;
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    if($reorder) {
+      $this->_ref_plageop->reorderOp();
+    }
   }
   
   /**
@@ -615,10 +603,6 @@ class COperation extends CCodable {
   }
   
   function loadRefSejour($cache = 0) {
-    if ($this->_ref_sejour) {
-      return;
-    }
-
     $this->_ref_sejour = new CSejour();
     if($cache) {
       $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
