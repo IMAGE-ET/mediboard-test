@@ -182,7 +182,7 @@ class CSejour extends CCodable {
 
   function getProps() {
    	$specs = parent::getProps();
-    $specs["patient_id"]          = "ref notNull class|CPatient seekable show|0";
+    $specs["patient_id"]          = "ref notNull class|CPatient seekable";
     $specs["praticien_id"]        = "ref notNull class|CMediusers seekable";
     $specs["group_id"]            = "ref notNull class|CGroups";
     $specs["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";

@@ -103,7 +103,8 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
       
       // Mapping des mouvements
       $newPatient = $this->mappingDebiteurs($data['debiteurs'], $newPatient);
-
+      $newPatient->repair();
+      
       // Evite de passer dans le sip handler
       $newPatient->_coms_from_hprim = 1;
       $msgPatient = $newPatient->store();

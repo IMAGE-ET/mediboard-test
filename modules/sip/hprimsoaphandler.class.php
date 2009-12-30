@@ -49,6 +49,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
+      $domAcquittement->_sous_type_evt = $domGetEvenement->sous_type;
       
       // Acquittement d'erreur d'un document XML recu non valide
       if ($doc_errors !== true) {

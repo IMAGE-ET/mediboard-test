@@ -11,8 +11,9 @@
 CAppUI::requireModuleClass("hprimxml", "hprimxmldocument");
 
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
+  var $_sous_type_evt = null;
   var $_codes_erreurs = null;
-
+  
   function __construct() {
     $this->evenement = "evt_patients";
      
@@ -63,10 +64,10 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
      
     if (is_array($codes)) {
       foreach ($codes as $code) {
-        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CAppUI::tr("sip-hprim-error-$code"), $commentaires);
+        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CAppUI::tr("sip-hprim-error-$code"), $commentaires, $mbObject);
       }
     } else {
-      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires);
+      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires, $mbObject);
     }   
   }
 
@@ -80,10 +81,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     } else {
       $this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
     }
-    
-    // Traitement final
-    $this->purgeEmptyElements();
-    
+
     $this->saveTempFile();
     $messageAcquittementPatient = utf8_encode($this->saveXML());
 

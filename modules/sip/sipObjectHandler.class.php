@@ -223,6 +223,11 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
+    // Si client et traitement HPRIM
+    if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
+      return;
+    }
+    
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
@@ -258,6 +263,11 @@ class CSipObjectHandler extends CMbObjectHandler {
   
   function onAfterMerge(CMbObject &$mbObject) {
     if (!$mbObject->_merging) {
+      return;
+    }
+    
+    // Si client et traitement HPRIM
+    if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
       return;
     }
     

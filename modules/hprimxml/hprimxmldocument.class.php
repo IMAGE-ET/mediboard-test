@@ -269,7 +269,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $pat = $addPat ? "pat" : "";
     
     if(!$referent) {
-      $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->patient_id, $referent);
+      $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->_id, $referent);
       if($mbPatient->_IPP) 
         $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP, $referent);
     } else {
@@ -411,6 +411,36 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $erreurAvertissement = $this->addElement($elParent, "erreurAvertissement");
     $this->addAttribute($erreurAvertissement, "statut", $statut);
      
+    $dateHeureEvenementConcerne =  $this->addElement($erreurAvertissement, "dateHeureEvenementConcerne");
+    $this->addElement($dateHeureEvenementConcerne, "date", mbDate());
+    $this->addElement($dateHeureEvenementConcerne, "heure", mbTime());
+    
+    $evenementPatients = $this->addElement($erreurAvertissement, $this->_sous_type_evt);
+    $identifiantPatient = $this->addElement($evenementPatients, "identifiantPatient");
+    
+    if ($this->_sous_type_evt == "fusionPatient") {
+      $identifiantPatientElimine = $this->addElement($evenementPatients, "identifiantPatientElimine");
+    }
+    
+    if ($this->_sous_type_evt == "venuePatient") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+    }
+    
+    if ($this->_sous_type_evt == "debiteursVenue") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $debiteurs = $this->addElement($evenementPatients, "debiteurs");
+    }
+    
+    if ($this->_sous_type_evt == "mouvementPatient") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $identifiantMouvement = $this->addElement($evenementPatients, "identifiantMouvement");
+    }
+    
+    if ($this->_sous_type_evt == "fusionVenue") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $identifiantVenueEliminee = $this->addElement($evenementPatients, "identifiantVenueEliminee");
+    }
+    
     $observations = $this->addElement($erreurAvertissement, "observations");
     $observation = $this->addObservation($observations, $code, $libelle, $commentaires);   
   }
