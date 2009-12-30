@@ -184,6 +184,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
+      $mbPatientElimine_id = $mbPatientElimine->_id;
+      
       /** @todo mergeDBfields resets the _id */
       $mbPatient->_id = $first_patient_id;
       
@@ -198,7 +200,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       if ($msg) {
         $avertissement = $msg." ";
       } else {
-        $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine->_id.";
+        $commentaire = "Le patient $mbPatient->_id a été fusionné avec le patient $mbPatientElimine_id.";
       }
         
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000), $newPatient); 
