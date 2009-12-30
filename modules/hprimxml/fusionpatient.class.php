@@ -11,6 +11,10 @@
 CAppUI::requireModuleClass("hprimxml", "evenementspatients");
 
 class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients { 
+  var $actions = array(
+    'fusion' => "fusion"
+  );
+  
   function __construct() {        
   	$this->sous_type = "fusionPatient";
   	    
