@@ -1,3 +1,14 @@
+<script type="text/javascript">
+  
+{{if $object->_id}}
+Main.add(function () {
+  showPratInfo("{{$object->_user_type}}");
+  loadProfil("{{$object->_user_type}}");
+});
+{{/if}}
+
+</script>
+
 {{if $object->_id}}
 <a class="button search" style="" href="?m=admin&amp;tab=view_edit_users&amp;user_username={{$object->_user_username}}&amp;user_id={{$object->_id}}">
   Administrer cet utilisateur

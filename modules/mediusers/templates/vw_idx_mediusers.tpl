@@ -17,13 +17,6 @@ function showPratInfo(type) {
 	$('show_prat_info').setVisible(type == 3 || type == 4 || type == 13);
 }
 
-{{if $object->_id}}
-Main.add(function () {
-	showPratInfo("{{$object->_user_type}}");
-  loadProfil("{{$object->_user_type}}");
-});
-{{/if}}
-
 function changeRemote(o) {
   var oPassword = $(o.form._user_password);
   
@@ -41,6 +34,13 @@ function changeRemote(o) {
   checkFormElement(oPassword);
 }
 
+showMediuser = function(user_id){
+  var url = new Url;
+  url.setModuleAction("mediusers", "ajax_show_mediuser");
+  url.addParam("user_id", user_id);
+  url.requestUpdate("vw_mediuser");
+}
+ 
 </script>
 
 <table class="main">
@@ -57,7 +57,7 @@ function changeRemote(o) {
       {{include file="vw_list_mediusers.tpl"}}
     </td>
     
-    <td style="width: 40%">
+    <td style="width: 40%" id="vw_mediuser">
       {{include file="inc_edit_mediuser.tpl"}}
     </td>
   </tr>
