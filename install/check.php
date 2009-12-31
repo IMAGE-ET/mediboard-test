@@ -198,6 +198,12 @@ $extension->description = "Extension d'optimsation d'OPCODE et de mémoire partag
 $extension->reasons[] = "Accélération globale du système";
 $extensions[] = $extension;
 
+$extension = new CPHPExtension;
+$extension->name = "GnuPG";
+$extension->description = "GNU Privacy Guard (GPG ou GnuPG)";
+$extension->reasons[] = "Transmettre des messages signés et/ou chiffrés";
+$extensions[] = $extension;
+
 $versions = array();
 
 // Do not use $version which is a Mediboard global
