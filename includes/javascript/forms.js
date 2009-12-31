@@ -13,33 +13,24 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
     typeName: "",
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
-    ajax    : 0,
-    target  : "systemMsg"
+    ajax    : false,
+    target  : "systemMsg",
+    callback: null
   }, oOptions);
   
-  if (oOptions.objName.length) oOptions.objName = " '" + oOptions.objName + "'";
+  if (oOptions.objName) oOptions.objName = " '" + oOptions.objName + "'";
   if (confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
     oForm.del.value = 1;
-    if(oOptions.ajax)
-      submitFormAjax(oForm, oOptions.target, oOptionsAjax);
-    else
-      oForm.submit();
-  }
-}
-
-function confirmDeletionOffline(oForm, oFct, oOptions) {
-  oOptions = Object.extend({
-    typeName: "",
-    objName : "",
-    msg     : "Voulez-vous réellement supprimer ",
-    ajax    : 0,
-    target  : "systemMsg"
-  }, oOptions);
-  
-  if (oOptions.objName.length) oOptions.objName = " '" + oOptions.objName + "'";
-  if (confirm(oOptions.msg + oOptions.typeName + " " + oOptions.objName + " ?" )) {
-    oForm.del.value = 1;
-    oFct();
+    
+    if (oOptions.callback) {
+      oOptions.callback();
+    }
+    else {
+      if(oOptions.ajax)
+        submitFormAjax(oForm, oOptions.target, oOptionsAjax);
+      else
+        oForm.submit();
+    }
   }
 }
 
@@ -179,30 +170,31 @@ Element.addMethods({
       step: 1
     }, options);
   
-    var staticOffset = null;
-    var cookie = new CookieJar(); 
-    
-    // oGrippie is the draggable element
-    var oGrippie = new Element('div');
+    var staticOffset, 
+        cookie = new CookieJar(),
+        grippie = new Element('div'); // the draggable element
     
     // We remove the margin between the textarea and the grippie
-    element.style.marginBottom = '0';
+    $(element).setStyle({
+      marginBottom: 0,
+      resize: 'none'
+    });
     
     // grippie's class and style
-    oGrippie.addClassName('grippie-h').setOpacity(0.5);
+    grippie.addClassName('grippie-h').setOpacity(0.5);
     if (!element.visible()) {
-      oGrippie.hide();
+      grippie.hide();
     }
     
     // When the mouse is pressed on the grippie, we begin the drag
-    oGrippie.observe('mousedown', startDrag);
-    element.insert({after: oGrippie});
+    grippie.observe('mousedown', startDrag);
+    element.insert({after: grippie});
     
     // Loads the height maybe saved in a cookie
     function loadHeight() {
-      if (h = cookie.getValue('ElementHeight', element.id)) {
+      var h = cookie.getValue('ElementHeight', element.id);
+      if (h)
         element.setStyle({height: (h+'px')});
-      }
     }
     loadHeight.defer(); // deferred to prevent Firefox 2 resize bug
     
@@ -216,12 +208,12 @@ Element.addMethods({
   
     function performDrag(e) {
       Event.stop(e);
-      var h = null;
+      var h, iStep;
       if (typeof options.step == 'string') {
-        var iStep = element.getStyle(options.step);
+        iStep = element.getStyle(options.step);
         iStep = iStep.substr(0, iStep.length - 2);
         
-        h = Math.max(iStep*2, staticOffset + e.pointerY()) - Math.round(oGrippie.getHeight()/2);
+        h = Math.max(iStep*2, staticOffset + e.pointerY()) - Math.round(grippie.getHeight()/2);
         h = Math.round(h / iStep)*iStep;
       } else {
         h = Math.max(32, staticOffset + e.pointerY());
@@ -236,7 +228,7 @@ Element.addMethods({
               .stopObserving('mouseup', endDrag);
 
       if (element.id) {
-        cookie.setValue('ElementHeight', element.id, element.getHeight() - Math.round(oGrippie.getHeight()/2));
+        cookie.setValue('ElementHeight', element.id, element.getHeight() - Math.round(grippie.getHeight()/2));
       }
     }
   }
@@ -267,7 +259,7 @@ function prepareForm(oForm) {
   }
   
   // Form preparation
-  if (Prototype.Browser.IE) // Stupid IE hack, because it considers an input named "name" as an attribute
+  if (Prototype.Browser.IE && oForm.name && oForm.name.nodeName) // Stupid IE hack, because it considers an input named "name" as an attribute
     sFormName = oForm.cloneNode(false).getAttribute("name");
   else
     sFormName = oForm.getAttribute("name");
@@ -288,6 +280,7 @@ function prepareForm(oForm) {
   var xorFields, re = /xor(?:\|(\S+))+/g;
   while (xorFields = re.exec(oForm.className)) {
     xorFields = xorFields[1].split("|");
+    
     xorFields.each(function(xorField){
       var element = $(oForm.elements[xorField]);
       if (!element) return;
@@ -311,8 +304,8 @@ function prepareForm(oForm) {
   // For each element
   var i = 0, oElement;
   while (oElement = $(oForm.elements[i++])) {
-    var sElementName = oElement.getAttribute("name");
-    var props = oElement.getProperties();
+    var sElementName = oElement.getAttribute("name"),
+        props = oElement.getProperties();
 
     // Locked object
     if (oForm.lockAllFields) {
@@ -357,8 +350,9 @@ function prepareForm(oForm) {
     // ui:change is a custom event fired on the native onchange throwed by $V, 
     // because fire doesn't work with native events 
     // Fire it only if the element has a spec
-    if (oElement.className)
+    if (oElement.className) {
       oElement.fire("ui:change");
+    }
 
     // Select tree
     if (props["select-tree"] && Prototype.Browser.Gecko) {
@@ -376,8 +370,7 @@ function prepareForm(oForm) {
     }
     
     // Won't make it resizable on IE
-    if ((Prototype.Browser.Gecko || Prototype.Browser.Opera) && 
-        oElement.type === "textarea" && 
+    if (oElement.type === "textarea" && 
         oElement.id !== "htmlarea") {
       oElement.setResizable({autoSave: true, step: 'font-size'});
     }
@@ -908,10 +901,12 @@ Element.addMethods('select', {
 
 // Form getter
 function getForm (form, prepare) {
-  prepare = prepare || true;
-  if (Object.isString(form)) {
+  if (Object.isString(form))
     form = $(document.forms[form]);
-  }
+  
+  if (Object.isUndefined(prepare))
+    prepare = true;
+  
   if (prepare) prepareForm(form);
   return form;
 }
