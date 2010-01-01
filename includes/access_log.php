@@ -15,21 +15,14 @@ if (!$ds->loadTable("access_log") || !$action) { // $sction is not defined when 
   return;
 }
 
-$module = $m;
 $period = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");
 
-$where = array(
-  "module" => "= '$module'",
-  "action" => "= '$action'",
-  "period" => "= '$period'",
-);
-
 $log = new CAccessLog();
-$log->loadObject($where);
-if (!$log->accesslog_id) {
-  $log->module   = $module;
-  $log->action   = $action;
-  $log->period   = $period;
+$log->module   = $m;
+$log->action   = $action;
+$log->period   = $period;
+
+if (!$log->loadMatchingObject()) {
   $log->hits     = 0;
   $log->duration = 0.0;
   $log->request  = 0.0;
@@ -50,4 +43,3 @@ $log->notices  += $performance["notice"];
 if ($msg = $log->store()) {
   trigger_error($msg, E_USER_WARNING);
 }
-?>

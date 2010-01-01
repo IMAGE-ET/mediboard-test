@@ -202,7 +202,7 @@ abstract class CSQLDataSource {
     $this->dsn = $dsn;
     $this->config = CAppUI::conf("db $dsn");
 
-    $this->chrono->start = new Chronometer;
+    $this->chrono = new Chronometer;
     $this->link = $this->connect(
 	    $this->config["dbhost"],
 	    $this->config["dbname"],

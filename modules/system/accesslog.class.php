@@ -24,8 +24,13 @@ class CAccessLog extends CMbObject {
   var $notices  = null;
   
   // Form fields
-  var $_average_duration = null;
-  var $_average_request  = null;
+  var $_average_duration = 0;
+  var $_average_request  = 0;
+  var $_average_errors   = 0;
+  var $_average_warnings = 0;
+  var $_average_notices  = 0;
+  var $_average_hits     = 0;
+  var $_average_size     = 0;
   
   function getSpec() {
     $spec = parent::getSpec();

@@ -27,17 +27,11 @@ class Chronometer {
     $this->step = microtime(true) - $this->step;
     $this->total += $this->step;
     $this->maxStep = max($this->maxStep, $this->step);
-    $this->avgStep = $this->total/$this->nbSteps;
+    $this->avgStep = $this->total / $this->nbSteps;
 
     if ($key) {
       if (!array_key_exists($key, $this->report)) {
-        $this->report[$key] = new CObject;
-        $report =& $this->report[$key];
-        $report->nbSteps = 0;
-        $report->step = 0;
-        $report->total = 0;
-        $report->maxStep = 0;
-        $report->avgStep = 0;
+        $this->report[$key] = new self;
       }
       
       $report =& $this->report[$key];
