@@ -36,9 +36,13 @@ function changeRemote(o) {
 
 showMediuser = function(user_id){
   var url = new Url;
-  url.setModuleAction("mediusers", "ajax_show_mediuser");
+  url.setModuleAction("mediusers", "ajax_edit_mediuser");
   url.addParam("user_id", user_id);
   url.requestUpdate("vw_mediuser");
+}
+
+function changePage(page) {
+	$V(getForm('listFilter').page,page);
 }
  
 </script>
@@ -49,10 +53,37 @@ showMediuser = function(user_id){
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;user_id=0" class="button new">
         {{tr}}CMediusers-title-create{{/tr}}
       </a>
-      <form name="listFilter" action="?m={{$m}}" method="get" style="float: right;">
-        <input type="hidden" name="m"      value="{{$m}}" />
-        <input type="hidden" name="tab"    value="{{$tab}}" />
-        <input type="text"   name="filter" value="{{$filter}}" />
+    </td>
+  </tr>
+  <tr>
+  	<td>
+      <form name="listFilter" action="?m={{$m}}" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
+        
+        <table class="form">
+        	<tr>
+        		<th>Champ de recherche</th>
+        		<td>
+              <input type="text" name="filter" value="{{$filter}}" />
+            </td>
+        	</tr>
+        	<tr>
+        		<th></th>
+        		<td>
+        			<input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé	
+        		</td>
+        	</tr>
+        	<tr>
+            <td colspan="2" style="text-align: center">
+              <button type="submit" class="search">Filtrer</button>
+            </td>
+          </tr>
+        </table>        
+        {{if $total_mediuser != 0}}
+          {{mb_include module=system template=inc_pagination total=$total_mediuser current=$page change_page='changePage'}}
+	      {{/if}}
       </form>
       {{include file="vw_list_mediusers.tpl"}}
     </td>
