@@ -124,7 +124,7 @@
         ({{$curr_affectation->_sortie_relative}}j)
       </td>
       <td class="action">
-        {{if $can->edit}}
+        {{if $can->edit && (!$sejour->esortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -164,7 +164,7 @@
         ({{$curr_affectation->_entree_relative}}j)
       </td>
       <td class="action">
-        {{if $can->edit}}
+        {{if $can->edit && (!$sejour->entree_reelle || $aff_prev->_id)}}
         <form name="entreeAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
@@ -199,7 +199,7 @@
         ({{$curr_affectation->_sortie_relative}}j)
       </td>
       <td class="action">
-        {{if $can->edit}}
+        {{if $can->edit && (!$sejour->sortie_reelle || $aff_next->_id)}}
         <form name="sortieAffectation{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="dosql" value="do_affectation_aed" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />

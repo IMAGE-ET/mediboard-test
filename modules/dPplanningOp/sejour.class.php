@@ -417,17 +417,15 @@ class CSejour extends CCodable {
     $this->loadRefsAffectations();
     $firstAff =& $this->_ref_first_affectation;
     $lastAff =& $this->_ref_last_affectation;
-    if ($this->entree_prevue) {
-      if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
-        $firstAff->entree = $this->entree_prevue;
-        $firstAff->_no_synchro = 1;
-        $firstAff->store();
-      }
-      if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
-        $lastAff->sortie = $this->sortie_prevue;
-        $lastAff->_no_synchro = 1;
-        $lastAff->store();
-      }
+    if($firstAff->_id && ($firstAff->entree != $this->_entree)) {
+      $firstAff->entree = $this->_entree;
+      $firstAff->_no_synchro = 1;
+      $firstAff->store();
+    }
+    if($lastAff->_id && ($lastAff->sortie != $this->_sortie)) {
+      $lastAff->sortie = $this->_sortie;
+      $lastAff->_no_synchro = 1;
+      $lastAff->store();
     }
     
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
@@ -440,9 +438,8 @@ class CSejour extends CCodable {
   
   function delAffectations() {
     $this->loadRefsAffectations();
-    
 		// dPhospi might not be active
-		if ($this->_ref_affectations) {
+		if($this->_ref_affectations) {
 	    foreach($this->_ref_affectations as $key => $value) {
 	      $this->_ref_affectations[$key]->deleteOne();
 	    }

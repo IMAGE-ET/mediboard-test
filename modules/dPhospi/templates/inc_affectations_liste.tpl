@@ -12,8 +12,8 @@
 <input type="hidden" name="dosql" value="do_affectation_aed" />
 <input type="hidden" name="lit_id" value="" />
 <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-<input type="hidden" name="entree" value="{{$_sejour->entree_prevue}}" />
-<input type="hidden" name="sortie" value="{{$_sejour->sortie_prevue}}" />
+<input type="hidden" name="entree" value="{{$_sejour->_entree}}" />
+<input type="hidden" name="sortie" value="{{$_sejour->_sortie}}" />
 
 </form>
 
@@ -28,7 +28,7 @@
     <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
       <strong {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}><a name="sejour{{$_sejour->_id}}">{{$_sejour->_ref_patient->_view}}</a></strong>
       {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
-      ({{$_sejour->_duree_prevue}}j - {{$_sejour->_ref_praticien->_shortview}})
+      ({{$_sejour->_duree}}j - {{$_sejour->_ref_praticien->_shortview}})
       {{else}}
       ({{$_sejour->type|truncate:1:""|capitalize}} - {{$_sejour->_ref_praticien->_shortview}})
       {{/if}}
@@ -42,9 +42,9 @@
       <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
         <img style="float: right;" src="images/icons/planning.png" />
       </a>
-      <strong>Entrée</strong> : {{$_sejour->entree_prevue|date_format:"%a %d %b %Hh%M"}}
+      <strong>Entrée</strong> : {{$_sejour->_entree|date_format:"%a %d %b %Hh%M"}}
       <br />
-      <strong>Sortie</strong> : {{$_sejour->sortie_prevue|date_format:"%a %d %b %Hh%M"}}
+      <strong>Sortie</strong> : {{$_sejour->_sortie|date_format:"%a %d %b %Hh%M"}}
     </td>
   </tr>
 	

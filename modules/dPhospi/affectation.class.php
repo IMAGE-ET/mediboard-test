@@ -124,7 +124,7 @@ class CAffectation extends CMbObject {
   }
 
   function delete() {
-    $this->load();
+    $this->completeField("sejour_id");
     if($this->sejour_id){
       $this->loadRefSejour();
       return $this->_ref_sejour->delAffectations();
@@ -162,8 +162,12 @@ class CAffectation extends CMbObject {
       return $msg;
     }
     if(!$this->_ref_prev->affectation_id && $this->sejour_id) {
-      if($this->entree != $this->_ref_sejour->entree_prevue) {
-        $this->_ref_sejour->entree_prevue = $this->entree;
+      if($this->entree != $this->_ref_sejour->_entree) {
+        if($this->_ref_sejour->entree_reelle) {
+          $this->_ref_sejour->entree_reelle = $this->entree;
+        } else {
+          $this->_ref_sejour->entree_prevue = $this->entree;
+        }
         $changeSejour = 1;
       }
     } elseif($this->sejour_id) {
@@ -173,8 +177,12 @@ class CAffectation extends CMbObject {
       }
     }
     if(!$this->_ref_next->affectation_id  && $this->sejour_id) {
-      if($this->sortie != $this->_ref_sejour->sortie_prevue) {
-        $this->_ref_sejour->sortie_prevue = $this->sortie;
+      if($this->sortie != $this->_ref_sejour->_sortie) {
+        if($this->_ref_sejour->sortie_reelle) {
+          $this->_ref_sejour->sortie_reelle = $this->sortie;
+        } else {
+          $this->_ref_sejour->sortie_prevue = $this->sortie;
+        }
         $changeSejour = 1;
       }
     } elseif($this->sejour_id) {
@@ -190,12 +198,6 @@ class CAffectation extends CMbObject {
       $this->_ref_next->store();
     }
     if($changeSejour) {
-      $this->_ref_sejour->_date_entree_prevue = null;
-      $this->_ref_sejour->_date_sortie_prevue = null;
-      $this->_ref_sejour->_hour_entree_prevue = null;
-      $this->_ref_sejour->_hour_sortie_prevue = null;
-      $this->_ref_sejour->_min_entree_prevue  = null;
-      $this->_ref_sejour->_min_sortie_prevue  = null;
       $this->_ref_sejour->store();
     }
     return $msg;
