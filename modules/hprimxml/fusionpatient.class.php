@@ -189,8 +189,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       /** @todo mergeDBfields resets the _id */
       $mbPatient->_id = $first_patient_id;
       
-      // Evite de passer dans le sip handler
-      $mbPatient->_coms_from_hprim = 1;
+      // Notifier les autres destinataires
+      $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
             
       $mbPatient->_merging = array_keys($patientsElimine_array);
       $msg = $mbPatient->merge($patientsElimine_array);

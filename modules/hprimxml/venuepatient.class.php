@@ -161,8 +161,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             // Mapping du séjour
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
         
-            // Evite de passer dans le sip handler
-            $newVenue->_coms_from_hprim = 1;
+            // Notifier les autres destinataires
+            $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
             $msgVenue = $newVenue->store();
         
             $newVenue->loadLogs();
@@ -182,8 +182,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {
-          // Evite de passer dans le sip handler
-          $newVenue->_coms_from_hprim = 1;
+          // Notifier les autres destinataires
+          $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
           // Mapping du séjour
           $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
             
@@ -276,8 +276,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $_code_NumDos = "A120";
           }
         }
-        // Evite de passer dans le sip handler
-        $newVenue->_coms_from_hprim = 1;
+        // Notifier les autres destinataires
+        $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
         $msgVenue = $newVenue->store();
         
         $newVenue->loadLogs();

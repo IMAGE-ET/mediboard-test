@@ -236,8 +236,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     // Mapping de la venue a garder
     $newVenue = $this->mappingVenue($data['venue'], $newVenue);
 
-     // Evite de passer dans le sip handler
-    $newVenue->_coms_from_hprim = 1;
+    // Notifier les autres destinataires
+    $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
 
     // Séjour retrouvé
     if ($newVenue->loadMatchingSejour() || $newVenue->_id) {

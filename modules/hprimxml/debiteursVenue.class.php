@@ -99,14 +99,18 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
       $avertissement = null;
       
       // Mapping des mouvements
       $newPatient = $this->mappingDebiteurs($data['debiteurs'], $newPatient);
       $newPatient->repair();
       
-      // Evite de passer dans le sip handler
-      $newPatient->_coms_from_hprim = 1;
+      // Notifier les autres destinataires
+      $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
       $msgPatient = $newPatient->store();
       
       $newPatient->loadLogs();

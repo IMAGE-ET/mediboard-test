@@ -28,11 +28,6 @@ class CSipObjectHandler extends CMbObjectHandler {
       CAppUI::setMsg("Aucun tag (patient/séjour) de défini pour la synchronisation.", UI_MSG_ERROR);
       return;
     }
-    
-    // Si client et traitement HPRIM
-    if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
-      return;
-    }
 
     // Si serveur et pas d'IPP sur le patient
     if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && CAppUI::conf('sip server')) {
@@ -105,14 +100,14 @@ class CSipObjectHandler extends CMbObjectHandler {
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
+          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
+            return;
+          }
+          
            if (!$mbObject->_IPP) {
             $IPP = new CIdSante400();
-            //Paramétrage de l'id 400
-            $IPP->object_class = "CPatient";
-            $IPP->object_id = $mbObject->_id;
-            $IPP->tag = $_destinataire->_tag_patient;
-            $IPP->loadMatchingObject();
-    
+            $IPP->loadLatestFor($mbObject, $_destinataire->_tag_patient);
+            
             $mbObject->_IPP = $IPP->id400;
           }
           
@@ -190,6 +185,10 @@ class CSipObjectHandler extends CMbObjectHandler {
       }
        // Si Client
       else {
+        if ($mbObject->_hprim_initiateur_group_id) {
+          return;
+        }
+          
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
         $destinataires = $dest_hprim->loadMatchingList();
@@ -198,10 +197,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           if (!$mbObject->_num_dossier) {
             $num_dossier = new CIdSante400();
             //Paramétrage de l'id 400
-            $num_dossier->object_class = "CSejour";
-            $num_dossier->object_id = $mbObject->_id;
-            $num_dossier->tag = $_destinataire->_tag_sejour;
-            $num_dossier->loadMatchingObject();
+            $num_dossier->loadLatestFor($mbObject, $_destinataire->_tag_sejour);
     
             $mbObject->_num_dossier = $num_dossier->id400;
           }
@@ -223,11 +219,6 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
-    // Si client et traitement HPRIM
-    if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
-      return;
-    }
-    
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
@@ -243,6 +234,10 @@ class CSipObjectHandler extends CMbObjectHandler {
         
         $mbObject->_fusion = array();
         foreach ($destinataires as $_destinataire) {
+          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
+            return;
+          }
+          
           $patient->_IPP = null;
           $patient->loadIPP($_destinataire->group_id);
           $patient1_ipp = $patient->_IPP;
@@ -266,11 +261,6 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
     
-    // Si client et traitement HPRIM
-    if (isset($mbObject->_coms_from_hprim) && ($mbObject->_coms_from_hprim == 1) && !CAppUI::conf('sip server')) {
-      return;
-    }
-    
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
@@ -280,6 +270,10 @@ class CSipObjectHandler extends CMbObjectHandler {
       // Si Client
       if (!CAppUI::conf('sip server')) {
         foreach ($mbObject->_fusion as $destinataire_id => $infos_fus) {
+          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
+            return;
+          }
+          
           $dest_hprim = new CDestinataireHprim();
           $dest_hprim->load($destinataire_id);
           

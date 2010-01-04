@@ -84,13 +84,17 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
       $avertissement = null;
       
       // Mapping des mouvements
       $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
 
-      // Evite de passer dans le sip handler
-      $newVenue->_coms_from_hprim = 1;
+      // Notifier les autres destinataires
+      $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
       $msgVenue = $newVenue->store();
       
       $newVenue->loadLogs();

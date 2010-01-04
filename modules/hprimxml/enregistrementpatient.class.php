@@ -415,8 +415,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         
-            // Evite de passer dans le sip handler
-            $newPatient->_coms_from_hprim = 1;
+            // Notifier les autres destinataires
+            $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
             $msgPatient = $newPatient->store();
         
             $newPatient->loadLogs();
@@ -437,8 +437,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         }
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-        // Evite de passer dans le sip handler
-        $newPatient->_coms_from_hprim = 1;
+        // Notifier les autres destinataires
+        $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
         
         // Patient retrouvé      
         if (!$newPatient->_id) {
@@ -505,8 +505,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $_code_IPP = "A020";
           }
         }
-        // Evite de passer dans le sip handler
-        $newPatient->_coms_from_hprim = 1;
+        // Notifier les autres destinataires
+        $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
         $msgPatient = $newPatient->store();
         
         $newPatient->loadLogs();

@@ -504,8 +504,40 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
         $mbVenue->sortie_reelle = $dateHeure;
       }
     } 
-
+    
+    $modeSortieHprim = $xpath->queryAttributNode("hprim:modeSortieHprim", $sortie, "valeur");
+    if ($modeSortieHprim) {
+      // décès
+      if ($modeSortieHprim == "05") {
+        $mbVenue->mode_sortie = "deces";
+      } 
+      // autre transfert dans un autre CH
+      else if ($modeSortieHprim == "02") {
+        $mbVenue->mode_sortie = "transfert";
+        
+        $destination = $xpath->queryUniqueNode("hprim:destination", $sortie);
+        if ($destination) {
+          $mbVenue = $this->getEtablissementTransfert($destination, $mbVenue);
+        }
+      } 
+      //retour au domicile
+      else {
+        $mbVenue->mode_sortie = "normal";
+      }
+    }
+    
     return $mbVenue;
+  }
+  
+  function getEtablissementTransfert($node, $mbVenue) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    $code = $xpath->queryUniqueNode("hprim:code", $node);
+    
+    $etabExterne = new CEtabExterne();
+    
+    
+    return $mbVenue->etablissement_transfert_id;
   }
   
   function mappingMouvements($node, $mbVenue) {
