@@ -101,10 +101,10 @@ class CSipObjectHandler extends CMbObjectHandler {
         
         foreach ($destinataires as $_destinataire) {
           if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
-            return;
+            continue;
           }
           
-           if (!$mbObject->_IPP) {
+          if (!$mbObject->_IPP) {
             $IPP = new CIdSante400();
             $IPP->loadLatestFor($mbObject, $_destinataire->_tag_patient);
             
@@ -194,6 +194,10 @@ class CSipObjectHandler extends CMbObjectHandler {
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
+          if (CGroups::loadCurrent()->_id != $_destinataire->group_id) {
+            continue;
+          }
+          
           if (!$mbObject->_num_dossier) {
             $num_dossier = new CIdSante400();
             //Paramétrage de l'id 400
@@ -235,7 +239,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         $mbObject->_fusion = array();
         foreach ($destinataires as $_destinataire) {
           if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
-            return;
+            continue;
           }
           
           $patient->_IPP = null;
@@ -271,7 +275,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!CAppUI::conf('sip server')) {
         foreach ($mbObject->_fusion as $destinataire_id => $infos_fus) {
           if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
-            return;
+            continue;
           }
           
           $dest_hprim = new CDestinataireHprim();
