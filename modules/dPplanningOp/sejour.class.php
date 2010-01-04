@@ -689,31 +689,20 @@ class CSejour extends CCodable {
   }
   
   function loadRefPatient($cache = 0) {
-    if ($this->_ref_patient) {
-      return;
+    if (!$this->_ref_patient) {
+      $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
     }
     
-    $this->_ref_patient = new CPatient;
-    if($cache) {
-      $this->_ref_patient = $this->_ref_patient->getCached($this->patient_id);
-    } else {
-      $this->_ref_patient->load($this->patient_id);
-    }
     $this->getDroitsCMU();
 
     // View
-    if(substr($this->_view, 0, 9) == "Séjour du") {
+    if (substr($this->_view, 0, 9) == "Séjour du") {
       $this->_view = $this->_ref_patient->_view . " - " . $this->_view;
     }
   }
   
   function loadRefPraticien($cache = 0) {
-    $this->_ref_praticien = new CMediusers;
-    if($cache) {
-      $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
-    } else {
-      $this->_ref_praticien->load($this->praticien_id);
-    }
+    $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
     $this->_ref_praticien->loadRefFunction();
   }
   
