@@ -256,8 +256,8 @@
           </span>
         </a>
 				<br />
-				<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
-          Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+				<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');" {{if !$curr_op->_ref_sejour->entree_reelle}}style="color: red;"{{/if}}>
+          Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
         </span>
         <br />
         Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
@@ -352,8 +352,8 @@
             </span>
           </a>
           <br />
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');">
-            Admission le {{mb_value object=$curr_op->_ref_sejour field=entree_prevue}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_ref_sejour->_guid}}');" {{if !$curr_op->_ref_sejour->entree_reelle}}style="color: red;"{{/if}}>
+            Admission le {{mb_value object=$curr_op->_ref_sejour field=_entree}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
           </span>
           <br />
           Horaire : {{$curr_op->time_operation|date_format:$dPconfig.time}} - Durée : {{$curr_op->temp_operation|date_format:$dPconfig.time}}
