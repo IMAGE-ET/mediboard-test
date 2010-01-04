@@ -210,7 +210,7 @@ Main.add(function(){
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="patient_id" class="notNull ref" value="{{$patient->_id}}" />
 
-      <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
+      <label for="prat_id" class="checkNull" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
 
       <select name="prat_id" class="notNull ref">
         <option value="">&mdash; Choisir un praticien</option>

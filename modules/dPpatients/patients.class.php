@@ -829,7 +829,7 @@ class CPatient extends CMbObject {
     if ($loadObject) {
       $this->loadObject($where);
     }
-
+		
     return $this->countList($where);
   }
 	
@@ -869,6 +869,38 @@ class CPatient extends CMbObject {
     return $siblings;
   }
 	  
+  /**
+   * Find patient phoning similar
+   * @param $date restrict to a venue collide date
+   * @return array[CPatient] Array of phoning patients
+   */
+  function getPhoning($date = null) {
+    $whereNom[] = "nom_soundex2    LIKE '$this->nom_soundex2%'";
+    $whereNom[] = "nomjf_soundex2  LIKE '$this->nom_soundex2%'";
+
+    if ($this->nomjf_soundex2) {
+	    $whereNom[] = "nom_soundex2    LIKE '$this->nomjf_soundex2%'";
+	    $whereNom[] = "nomjf_soundex2  LIKE '$this->nomjf_soundex2%'";
+    } 
+    
+    $where[] = implode(" OR ", $whereNom);
+    $where["prenom_soundex2"] = "LIKE '$this->prenom_soundex2%'";
+    $where["patients.patient_id"] = "!= '$this->_id'";
+		
+		$join = null;
+		if ($date) {
+			$join["sejour"] = "sejour.patient_id = patients.patient_id";
+			$min = mbDateTime("-1 DAY", $date);
+      $max = mbDateTime("+1 DAY", $date);
+      $whereDate[] = "sejour.entree_reelle BETWEEN '$min' AND '$max'";
+      $whereDate[] = "sejour.entree_prevue BETWEEN '$min' AND '$max'";
+      $where[] = implode(" OR ", $whereDate);
+		}
+		
+    return $this->loadList($where, null, null, null, $join);
+  }
+
+
   function checkSimilar($nom, $prenom) {
     $soundex2 = new soundex2;
     $testNom    = $this->nom_soundex2    == $soundex2->build($nom);
