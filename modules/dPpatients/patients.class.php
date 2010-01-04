@@ -146,6 +146,7 @@ class CPatient extends CMbObject {
   var $_IPP              = null;
   var $_fusion           = null; // fusion
   var $_patient_elimine  = null; // fusion
+  var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
   
   // Object References
   var $_nb_docs              = null;

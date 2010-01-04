@@ -274,12 +274,12 @@ class CSipObjectHandler extends CMbObjectHandler {
       // Si Client
       if (!CAppUI::conf('sip server')) {
         foreach ($mbObject->_fusion as $destinataire_id => $infos_fus) {
-          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
-            continue;
-          }
-          
           $dest_hprim = new CDestinataireHprim();
           $dest_hprim->load($destinataire_id);
+          
+          if ($mbObject->_hprim_initiateur_group_id == $dest_hprim->group_id) {
+            continue;
+          }
           
           $patient1_ipp = $patient->_IPP = $infos_fus["patient1_ipp"];
           

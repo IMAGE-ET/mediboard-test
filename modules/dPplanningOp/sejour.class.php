@@ -93,7 +93,10 @@ class CSejour extends CCodable {
   // Behaviour fields
   var $_check_bounds = true;
   var $_en_mutation  = null;
-  
+
+  // HPRIM Fields
+  var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
+    
   // Object References
   var $_ref_patient           = null; // Declared in CCodable
   var $_ref_praticien         = null;
