@@ -1,6 +1,6 @@
 // $Id: $
 
-var CodeCCAM = {
+CodeCCAM = {
 	show: function(code, object_class) {
 	  var url = new Url("dPccam", "vw_full_code");
 	  url.addParam("codeacte", code);
