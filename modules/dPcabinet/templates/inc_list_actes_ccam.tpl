@@ -39,7 +39,7 @@
 	{{/if}}
 	<tr>
 	  <td> 
-	    <a href="#" onclick="CodeCCAM.show('{{$code}}','CSejour')">
+	    <a class="button search" href="#CodeCCAM-show-{{$code}}" onclick="CodeCCAM.show('{{$code}}','{{$subject->_class_name}}')">
 	      {{mb_value object=$_acte field=code_acte}}
 	    </a>
 	  </td>  
@@ -50,9 +50,7 @@
 	  <td>{{mb_value object=$_acte field=code_association}}</td>
 
 	  <td> 
-	    <div class="mediuser" style="border-color: #{{$_acte->_ref_executant->_ref_function->color}};">
-        {{$_acte->_ref_executant}}
-	    </div>
+		  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_acte->_ref_executant}}
 	  </td>    
 
 	  <td>{{mb_value object=$_acte field=execution}}</td>
