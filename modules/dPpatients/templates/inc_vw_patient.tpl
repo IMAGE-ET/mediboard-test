@@ -1,4 +1,5 @@
 <!-- $Id$ -->
+
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPpatients" script="patient"}}
 
@@ -253,100 +254,17 @@ Document.refreshList = function() {
   <tr>
     <th colspan="2" class="category">Séjours</th>
   </tr>
-  {{foreach from=$patient->_ref_sejours item=_sejour}}
-  <tr>
-    <td class="text">
-      {{if $_sejour->group_id == $g && $_sejour->_canEdit}}
-      <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
-        <img src="images/icons/planning.png" alt="Planifier"/>
-      </a>
-      <a
-         {{if $canAdmissions->view}}
-         href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$_sejour->_date_entree_prevue}}#adm{{$_sejour->_id}}"
-         {{else}}
-         href="#nothing"
-         {{/if}}
-      >
-      {{else}}
-      <a href="#nothing">
-      {{/if}}
-      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-      {{$_sejour->_shortview}}
-      {{if $_sejour->_nb_files_docs}}
-        - ({{$_sejour->_nb_files_docs}} Doc.)
-      {{/if}}
-      </span>
-      </a>
-    </td>
-    {{if $_sejour->group_id == $g}}
-    <td {{if $_sejour->annule}}class="cancelled"{{/if}}>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
-    </td>
-    {{else}}
-    <td style="background-color:#afa">
-      {{$_sejour->_ref_group->text|upper}}
-    </td>
-    {{/if}}
-  </tr>
-  
-  {{foreach from=$_sejour->_ref_operations item=curr_op}}
-  <tr>
-    <td class="text" style="text-indent: 1em;">
-      {{if $_sejour->group_id == $g && $curr_op->_canEdit}}
-      <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
-        <img src="images/icons/planning.png" alt="modifier"/>
-      </a>
-      <a href="{{$curr_op->_link_editor}}">
-      {{else}}
-      <a href="#nothing">
-      {{/if}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
-        Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
-        {{if $curr_op->_nb_files_docs}}
-          - ({{$curr_op->_nb_files_docs}} Doc.)
-        {{/if}}
-        </span>
-      </a>
-    </td>
-    {{if $_sejour->group_id == $g}}
-    <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}
-    </td>
-    {{else}}
-    <td style="background-color: #afa">
-      {{$_sejour->_ref_group->_view|upper}}
-    </td>
-    {{/if}}
-  </tr>
-  {{/foreach}}
+  {{foreach from=$patient->_ref_sejours item=object}}
+  {{include file=inc_vw_elem_dossier.tpl}}
   {{/foreach}}
   {{/if}}
   
   {{if $patient->_ref_consultations}}
-  <tr><th class="category" colspan="2">Consultations</th></tr>
-  {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
-    <td class="text">
-      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
-        <img src="images/icons/planning.png" alt="modifier" />
-      </a>
-      {{if $curr_consult->_canEdit}}
-      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}">
-      {{else}}
-      <a href="#nothing">
-      {{/if}}
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_consult->_guid}}')">
-      Le {{$curr_consult->_datetime|date_format:$dPconfig.datetime}} - {{$curr_consult->_etat}}
-      </span>
-      </a>
-    </td>
-
-    <td {{if $curr_consult->annule}}class="cancelled"{{/if}}>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_consult->_ref_chir}}
-    </td>
+    <th colspan="2" class="category">Consultations</th>
   </tr>
-
+  {{foreach from=$patient->_ref_consultations item=object}}
+  {{include file=inc_vw_elem_dossier.tpl}}
   {{/foreach}}
   {{/if}}
 </table>

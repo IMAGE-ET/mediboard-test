@@ -28,17 +28,8 @@ Main.add(function () {
   <tr>
     <th class="category" colspan="100">Configuration pour les patients</th>
   </tr>
-  <tr>
-    {{assign var="var" value="tag_ipp"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  
+  {{mb_include module=system template=inc_config_str var=tag_ipp thcolspan=3 tdcolspan=3}}
   
   {{assign var="var" value="identitovigilence"}}
   <tr>
@@ -56,68 +47,32 @@ Main.add(function () {
     </td>            
   </tr>
   
-  <!-- Merge only for admin -->
-  {{assign var="var" value="merge_only_admin"}}
+  {{assign var="var" value="multi_group"}}
   <tr>
-  
     <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>    
     </th>
-    <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
-	
-  {{assign var="var" value="extended_print"}}
-  <tr>
-   <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-   </th>
-    <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
+    <td class="text" colspan="3">
+      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
+        <option value="full"    {{if $dPconfig.$m.$class.$var == "full"   }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-full{{/tr}}</option>
+        <option value="limited" {{if $dPconfig.$m.$class.$var == "limited"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-limited{{/tr}}</option>
+        <option value="hidden"  {{if $dPconfig.$m.$class.$var == "hidden" }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-hidden{{/tr}}</option>
+      </select> 
+    </td>            
   </tr>
   
-	<tr>
-    {{assign var="var" value="adult_age"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=merge_only_admin thcolspan=3 tdcolspan=3}}
+  {{mb_include module=system template=inc_config_bool var=extended_print   thcolspan=3 tdcolspan=3}}
+  {{mb_include module=system template=inc_config_str  var=adult_age        thcolspan=3 tdcolspan=3}}
 	
   {{assign var="class" value="intermax"}}
   <tr>
     <th class="category" colspan="100">Configuration Intermax</th>
   </tr>
-  <tr>
-    {{assign var="var" value="auto_watch"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.1{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.0{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=auto_watch   thcolspan=3 tdcolspan=3}}
 
 
   {{assign var="class" value="CAntecedent"}}
@@ -184,41 +139,15 @@ Main.add(function () {
   <tr>
     <th class="category" colspan="100">{{tr}}CTraitement{{/tr}}</th>
   </tr>
-
-  <tr>
-    {{assign var="var" value="enabled"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.1{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.0{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=enabled thcolspan=3 tdcolspan=3}}
 
   {{assign var="class" value="CDossierMedical"}}
   <tr>
     <th class="category" colspan="100">{{tr}}CDossierMedical{{/tr}}</th>
   </tr>
 
-  <tr>
-    {{assign var="var" value="diags_static_cim"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>
-    </th>
-    <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.1{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.0{{/tr}}</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=diags_static_cim thcolspan=3 tdcolspan=3}}
 
   <tr>
     <td class="button" colspan="6">

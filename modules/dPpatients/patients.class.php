@@ -1063,6 +1063,8 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
       
       $consult->loadRefsFwd(1);
+      $consult->_ref_chir->loadRefFunction();
+      $consult->_ref_chir->_ref_function->loadRefGroup();
       $consult->canRead();
       $consult->canEdit();
     }

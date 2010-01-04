@@ -70,12 +70,13 @@ function popEtatSejour(sejour_id) {
 <!-- Séjours -->
 
 <tr id="sejours-trigger">
-  <th colspan="3" class="title">{{$patient->_ref_sejours|@count}} séjour(s)</th>
+  <th colspan="3" class="title">Séjours</th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="sejours">
 
 {{foreach from=$patient->_ref_sejours item=_sejour}}
+{{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
 <tr id="CSejour-{{$_sejour->_id}}">
   <td>
   	<button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
@@ -90,15 +91,9 @@ function popEtatSejour(sejour_id) {
   </td>
 
 	{{assign var=praticien value=$_sejour->_ref_praticien}}
-	{{if $_sejour->group_id == $g}}
   <td {{if $_sejour->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
   </td>
-  {{else}}
-  <td style="background-color:#afa">
-    {{$_sejour->_ref_group->text|upper}}
-  </td>
-  {{/if}}
   
   <td style="text-align:right;">
   {{if $_sejour->_canRead}}
@@ -123,7 +118,7 @@ function popEtatSejour(sejour_id) {
       {{$_sejour->_nb_files_docs}}
       <img align="top" src="images/icons/next{{if !$_sejour->_nb_files_docs}}_gray{{/if}}.png" title="{{$_sejour->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
-    {{/if}}         
+  {{/if}}         
   </td>
 </tr>
 
@@ -199,15 +194,9 @@ function popEtatSejour(sejour_id) {
   </td>
 
   {{assign var=praticien value=$_op->_ref_chir}}
-	{{if $_sejour->group_id == $g}}
   <td {{if $_op->annulee}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
   </td>
-  {{else}}
-  <td style="background-color:#afa">
-    {{$_sejour->_ref_group->text|upper}}
-  </td>
-  {{/if}}
 
   <td style="text-align:right;">
   {{if $_op->_canRead}}
@@ -258,14 +247,21 @@ function popEtatSejour(sejour_id) {
       {{$_consult->_nb_files_docs}}
       <img align="top" src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
-    {{/if}}
+  {{/if}}
   </td>
 </tr>
 {{/if}}
 {{/foreach}}
-
-{{foreachelse}}
-<tr><td colspan="3"><em>Pas de séjours</em></td></tr>
+{{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
+<tr>
+  <td>
+    {{$_sejour->_shortview}}
+  </td>
+  <td colspan="2" style="background-color:#afa">
+    {{$_sejour->_ref_group->text|upper}}
+  </td>
+</tr>
+{{/if}}
 {{/foreach}}
 </tbody>
 
@@ -274,12 +270,13 @@ function popEtatSejour(sejour_id) {
 <!-- Consultations -->
 
 <tr id="consultations-trigger">
-  <th colspan="3" class="title">{{$patient->_ref_consultations|@count}} consultation(s)</th>
+  <th colspan="3" class="title">Consultations</th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="consultations">
 
 {{foreach from=$patient->_ref_consultations item=_consult}}
+{{if $_consult->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
 <tr>
   <td>
     {{assign var=consult_anesth value=$_consult->_ref_consult_anesth}}
@@ -319,8 +316,16 @@ function popEtatSejour(sejour_id) {
     {{/if}}
   </td>
 </tr>
-{{foreachelse}}
-<tr><td colspan="3"><em>Pas de consultations</em></td></tr>
+{{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_consult->annule}}
+<tr>
+  <td>
+    Le {{$_consult->_datetime|date_format:$dPconfig.datetime}}
+  </td>
+  <td style="background-color:#afa" colspan="2">
+    {{$_consult->_ref_chir->_ref_function->_ref_group->text|upper}}
+  </td>
+</tr>
+{{/if}}
 {{/foreach}}
 
 </tbody>

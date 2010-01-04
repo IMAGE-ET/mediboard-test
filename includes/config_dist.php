@@ -9,25 +9,25 @@
  */
   
 // Global hosting settings
-$dPconfig["root_dir"] = "D:/Sites/Mediboard.org/demo";  // No trailing slash, no backslashes for Win users (use slashes instead)
+$dPconfig["root_dir"]     = "D:/Sites/Mediboard.org/demo";  // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["company_name"] = "mediboard.org";
-$dPconfig["page_title"] = "Mediboard SIH";
-$dPconfig["base_url"] = "http://www.mediboard.org/demo";
-$dPconfig["site_domain"] = "mediboard.org";
-$dPconfig["offline"] = "0";
-$dPconfig["mb_id"] = "";
+$dPconfig["page_title"]   = "Mediboard SIH";
+$dPconfig["base_url"]     = "http://www.mediboard.org/demo";
+$dPconfig["site_domain"]  = "mediboard.org";
+$dPconfig["offline"]      = "0";
+$dPconfig["mb_id"]        = "";
 
-$dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
+$dPconfig["dbtype"]       = "mysql";   // ONLY MySQL is supported at present
 
-$dPconfig["date"] = "%d/%m/%Y";
-$dPconfig["time"] = "%Hh%M";
-$dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
-$dPconfig["longdate"] = "%A %d %B %Y";
-$dPconfig["longtime"] = "%H heures %M minutes";
-$dPconfig["timezone"] = "Europe/Paris";
+$dPconfig["date"]         = "%d/%m/%Y";
+$dPconfig["time"]         = "%Hh%M";
+$dPconfig["datetime"]     = "%d/%m/%Y %Hh%M";
+$dPconfig["longdate"]     = "%A %d %B %Y";
+$dPconfig["longtime"]     = "%H heures %M minutes";
+$dPconfig["timezone"]     = "Europe/Paris";
 
 $dPconfig["graph_engine"] = "jpgraph";
-$dPconfig["graph_svg"] = "non";
+$dPconfig["graph_svg"]    = "non";
 
 // PHP config
 $dPconfig["php"] = array(
@@ -125,31 +125,31 @@ $dPconfig["db"]["bcbges"] = array(
 //);
 
 // Currency symbol (html entities allowed)
-$dPconfig["currency_symbol"] = "&euro;";
+$dPconfig["currency_symbol"]   = "&euro;";
 
 // Enable if you want to hide confidentials fields
 $dPconfig["hide_confidential"] = false;
 
 // Enable if you want to have a demo version interface
-$dPconfig["demo_version"] = false;
+$dPconfig["demo_version"]      = false;
 
 // Warn when a translation is not found (for developers and tranlators)
-$dPconfig["locale_warn"] = false;
+$dPconfig["locale_warn"]       = false;
 
 // The string appended to untranslated string or unfound keys
-$dPconfig["locale_alert"] = "^";
+$dPconfig["locale_alert"]      = "^";
 
 // Set to true to help analyse errors
-$dPconfig["debug"] = true;
+$dPconfig["debug"]             = true;
 
 // Use mediboard in a read-only mode
-$dPconfig["readonly"] = false;
+$dPconfig["readonly"]          = false;
 
 // Choose shared memory handler [none|eaccelerator|apc]
-$dPconfig["shared_memory"] = "none";
+$dPconfig["shared_memory"]     = "none";
 
 // Object handlers
-$dPconfig["object_handlers"] = array (
+$dPconfig["object_handlers"]   = array (
 //  "CMyObjectHandler" => true,
 );
 
@@ -159,10 +159,10 @@ $dPconfig["interop"]["base_url"]    = "http://myserver/mypage";
 
 // File parsers to return indexing information about uploaded files
 $dPconfig["ft"] = array(
-  "default" => "/usr/bin/strings",
+  "default"            => "/usr/bin/strings",
   "application/msword" => "/usr/bin/strings",
-  "text/html" => "/usr/bin/strings",
-  "application/pdf" => "/usr/bin/pdftotext",
+  "text/html"          => "/usr/bin/strings",
+  "application/pdf"    => "/usr/bin/pdftotext",
 );
 
 /********* 
@@ -177,7 +177,7 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "easy_horaire_voulu" => "1",
   "easy_materiel"      => "0",
   "easy_remarques"     => "0",
-  "easy_regime" => "1",
+  "easy_regime"        => "1",
   "duree_deb"          => "0",
   "duree_fin"          => "10",
   "hour_urgence_deb"   => "0",
@@ -206,7 +206,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "tag_dossier_pa"      => "pa_",
   "tag_dossier_cancel"  => "cancel_",
   "service_id_notNull"  => "0",
-  "sortie_prevue" => array(
+  "sortie_prevue"       => array(
     "comp"    => "24",
     "ambu"    => "04",
     "exte"    => "04",
@@ -216,19 +216,19 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
     "urg"     => "24",
     "consult" => "04",
   ),
-	"delete_only_admin"  => "0"
+	"delete_only_admin"   => "0"
 );
 
 $dPconfig["dPsalleOp"] = array(
-  "mode_anesth" => "0",
+  "mode_anesth"     => "0",
   "max_add_minutes" => "10",
   "max_sub_minutes" => "30",
-  "COperation" => array(
+  "COperation"      => array(
     "mode"        => "0",
     "modif_salle" => "0",
     "modif_actes" => "oneday",
   ),
-  "CActeCCAM" => array(
+  "CActeCCAM"       => array(
     "contraste"       => "0",
     "alerte_asso"     => "1",
     "tarif"           => "0",
@@ -240,11 +240,11 @@ $dPconfig["dPsalleOp"] = array(
   "CDossierMedical" => array (
     "DAS" => "0",
   ),
-  "CReveil"  => array (
+  "CReveil"         => array (
     "multi_tabs_reveil" => "1",
   ),
   "CDailyCheckList" => array(
-    "active" => "0",
+    "active"              => "0",
     "active_salle_reveil" => "0"
   )
 );
@@ -276,8 +276,8 @@ $dPconfig["dPcabinet"] = array(
      * %e - Heure d'entrée
      * %T - Type de séjour (A, O, E...)
      */
-    "format_auto_motif" => "Pré-anésth. %I %L %S",
-    "format_auto_rques" => "%T %E %e",
+    "format_auto_motif"  => "Pré-anésth. %I %L %S",
+    "format_auto_rques"  => "%T %E %e",
     "view_premedication" => "0"
   ),
   "CPrescription" => array (
@@ -286,53 +286,54 @@ $dPconfig["dPcabinet"] = array(
 );
 
 $dPconfig["dPbloc"]["CPlageOp"] = array (
-  "hours_start"      => "8",
-  "hours_stop"       => "20",
-  "minutes_interval" => "15",
-  "plage_vide"       => "0",
-  "libelle_ccam"     => "1", 
-  "locked"           => "1",
-  "days_locked"      => "0",
-  "planning" => array (
+  "hours_start"          => "8",
+  "hours_stop"           => "20",
+  "minutes_interval"     => "15",
+  "plage_vide"           => "0",
+  "libelle_ccam"         => "1", 
+  "locked"               => "1",
+  "days_locked"          => "0",
+  "planning"             => array (
     "col1" => "interv",
     "col2" => "sejour",
     "col3" => "patient"
   ),
-  "chambre_operation" => "0",
-  "impression_suivi"  => "0",
+  "chambre_operation"    => "0",
+  "impression_suivi"     => "0",
   "id_salles_impression" => "",
 );
 
 $dPconfig["dPImeds"] = array (
-  "url" => "http://localhost/mediboard/modules/dPImeds/demo/listedossiers.aspx.htm",
+  "url"        => "http://localhost/mediboard/modules/dPImeds/demo/listedossiers.aspx.htm",
   "remote_url" => "",
-  "soap_url" => "",
+  "soap_url"   => "",
 );
 
 $dPconfig["dPfiles"] = array (
-  "nb_upload_files" => "1",
+  "nb_upload_files"     => "1",
   "upload_max_filesize" => "2M",
-  "system_sender" => "",
-  "rooturl" => "",
-  "CFile" => array(
-    "upload_directory" => "files",
+  "system_sender"       => "",
+  "rooturl"             => "",
+  "CFile"               => array(
+    "upload_directory"  => "files",
   ),
-  "CFilesCategory" => array(
+  "CFilesCategory"      => array(
     "show_empty" => "1",
   ),
 );
 
 $dPconfig["dPpatients"] = array (
-  "CPatient" => array (
-    "tag_ipp" => "",
+  "CPatient"    => array (
+    "tag_ipp"           => "",
     "identitovigilence" => "nodate",
-    "merge_only_admin" => "0",
-    "extended_print" => "0",
-    "adult_age" => "15",
+    "multi_group"       => "limited",
+    "merge_only_admin"  => "0",
+    "extended_print"    => "0",
+    "adult_age"         => "15",
   ),
   
   "CAntecedent" => array (
-    "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
+    "types"     => "med|alle|trans|obst|chir|fam|anesth|gyn",
     "appareils" => "cardiovasculaire|digestif|endocrinien|neuro_psychiatrique|pulmonaire|uro_nephrologique"
   ),
   
@@ -340,7 +341,7 @@ $dPconfig["dPpatients"] = array (
     "enabled" => "1",
   ),
   
-  "intermax" => array (
+  "intermax"    => array (
     "auto_watch" => "0",
   ),
   
@@ -362,7 +363,7 @@ $dPconfig["dPsante400"] = array (
 $dPconfig["dPlabo"] = array (
   "CCatalogueLabo" => array (
     "remote_name" => "LABO",
-    "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
+    "remote_url"  => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
   ),
   
   "CPackExamensLabo" => array (
@@ -370,11 +371,11 @@ $dPconfig["dPlabo"] = array (
   )
   ,
   "CPrescriptionLabo" => array (
-    "url_ftp_prescription" => "",
-    "url_ws_id_prescription" => "",
+    "url_ftp_prescription"    => "",
+    "url_ws_id_prescription"  => "",
     "pass_ws_id_prescription" => "",
-    "login_ftp_prescription" => "",
-    "pass_ftp_prescription" => "",
+    "login_ftp_prescription"  => "",
+    "pass_ftp_prescription"   => "",
   ),
 );
 
@@ -425,10 +426,10 @@ $dPconfig["dPprescription"] = array (
         "niv22" => "2",
       ),
       "profil" => array( 
-        "niv0" => "1",
-        "niv1" => "1",
-        "niv2" => "1",
-        "niv9" => "1",
+        "niv0"  => "1",
+        "niv1"  => "1",
+        "niv2"  => "1",
+        "niv9"  => "1",
         "niv30" => "1",
         "niv39" => "1"
       ),
@@ -436,49 +437,49 @@ $dPconfig["dPprescription"] = array (
       "IPC" => "2",
       "hors_livret" => "1"
     ),
-	  "droits_infirmiers_med" => "0",
-		"droits_infirmiers_anapath" => "0",
+	  "droits_infirmiers_med"      => "0",
+		"droits_infirmiers_anapath"  => "0",
 		"droits_infirmiers_biologie" => "0",
 		"droits_infirmiers_imagerie" => "0",
-		"droits_infirmiers_consult" => "0",
-		"droits_infirmiers_kine" => "0",
-		"droits_infirmiers_soin" => "0",
-		"droits_infirmiers_dm" => "0",
-		"droits_infirmiers_dmi" => "0",
-		"preselect_livret" => "1",
+		"droits_infirmiers_consult"  => "0",
+		"droits_infirmiers_kine"     => "0",
+		"droits_infirmiers_soin"     => "0",
+		"droits_infirmiers_dm"       => "0",
+		"droits_infirmiers_dmi"      => "0",
+		"preselect_livret"           => "1",
   ),
   
   "CCategoryPrescription" => array (
     "dmi" => array(
-      "phrase" => "Bon pour",
+      "phrase"      => "Bon pour",
       "unite_prise" => "dispositif(s)"
     ),
     "anapath" => array(
-      "phrase" => "Faire pratiquer",
+      "phrase"      => "Faire pratiquer",
       "unite_prise" => "examen(s)"
     ),
     "biologie" => array(
-      "phrase" => "Faire pratiquer",
+      "phrase"      => "Faire pratiquer",
       "unite_prise" => "examen(s)"
     ),
     "imagerie" => array(
-      "phrase" => "Faire pratiquer",
+      "phrase"      => "Faire pratiquer",
       "unite_prise" => "cliché(s)"
     ),
     "consult" => array(
-      "phrase" => "",
+      "phrase"      => "",
       "unite_prise" => "consultation(s)"
     ),
     "kine" => array(
-      "phrase" => "Faire pratiquer",
+      "phrase"      => "Faire pratiquer",
       "unite_prise" => "séance(s)"
     ),
     "soin" => array(
-      "phrase" => "Pratiquer",
+      "phrase"      => "Pratiquer",
       "unite_prise" => "soin(s)"
     ),
     "dm" => array(
-      "phrase" => "Délivrer",
+      "phrase"      => "Délivrer",
       "unite_prise" => "dispositif(s)"
     ),
     "show_description" => "0",
@@ -569,16 +570,16 @@ $dPconfig["hprim21"] = array (
 );
 
 $dPconfig["dPurgences"] = array (
-  "old_rpu"          => "1",
-  "rpu_warning_time" => "00:20:00",
-  "rpu_alert_time"   => "01:00:00",
-  "default_view"     => "tous",
-  "allow_change_patient" => "1",
-  "motif_rpu_view"   => "1",
-  "age_patient_rpu_view"   => "0",
-  "responsable_rpu_view"   => "1",
-  "diag_prat_view" => "0",
-  "sortie_prevue" => "sameday",
+  "old_rpu"               => "1",
+  "rpu_warning_time"      => "00:20:00",
+  "rpu_alert_time"        => "01:00:00",
+  "default_view"          => "tous",
+  "allow_change_patient"  => "1",
+  "motif_rpu_view"        => "1",
+  "age_patient_rpu_view"  => "0",
+  "responsable_rpu_view"  => "1",
+  "diag_prat_view"        => "0",
+  "sortie_prevue"         => "sameday",
   "only_prat_responsable" => "0"
 );
 
@@ -588,7 +589,7 @@ $dPconfig["dPpmsi"] = array(
 
 $dPconfig["bloodSalvage"] = array (
     "inLivretTherapeutique" => "1",
-    "AntiCoagulantList" => "",
+    "AntiCoagulantList"     => "",
 );
 
 $dPconfig["pharmacie"] = array (
@@ -607,52 +608,52 @@ $dPconfig["dmi"] = array (
 );
 
 $dPconfig["sip"] = array (
-  "wsdl_mode" => 1,
-  "server" => 0,
-  "export_segment" => "100",
-  "export_id_min" => "",
-  "export_id_max" => "",
-	"export_date_min" => "",
-  "export_date_max" => "",
-  "batch_count" => "10",
-  "transport_layer" => "",
-  "fileprefix" => "",
-  "fileextension" => "XML",
-  "filenbroll" => "2",
-  "pat_no_ipp" => 0,
+  "wsdl_mode"         => 1,
+  "server"            => 0,
+  "export_segment"    => "100",
+  "export_id_min"     => "",
+  "export_id_max"     => "",
+	"export_date_min"   => "",
+  "export_date_max"   => "",
+  "batch_count"       => "10",
+  "transport_layer"   => "",
+  "fileprefix"        => "",
+  "fileextension"     => "XML",
+  "filenbroll"        => "2",
+  "pat_no_ipp"        => 0,
   "send_all_patients" => 1,
-  "sej_no_numdos" => 0,
-  "send_sej_pa" => 1,
-  "enable_send" => 1
+  "sej_no_numdos"     => 0,
+  "send_sej_pa"       => 1,
+  "enable_send"       => 1
 );
 
 $dPconfig["webservices"] = array (
   "connection_timeout" => 5,
-  "webservice" => "CWebservice",
+  "webservice"         => "CWebservice",
 );
 
 $dPconfig["hprimxml"] = array (
   "evt_serveuractes" => array(
     "validation" => "0",
-    "version" => "1.01",
+    "version"    => "1.01",
   ),
   "evt_pmsi" => array(
     "validation" => "0",
-    "version" => "1.01",
+    "version"    => "1.01",
   ),
   "evt_patients" => array(
     "validation" => "0",
-    "version" => "1.05",
+    "version"    => "1.05",
   ),
   "evt_mvtStock" => array(
     "validation" => "0",
-    "version" => "1.01",
+    "version"    => "1.01",
   ),
-  "functionPratImport" => "Import",
-  "medecinIndetermine" => "Medecin Indeterminé",
-  "medecinActif" => "0",
-  "mvtComplet"  => "0",
-  "strictSejourMatch"  => "1",
+  "functionPratImport"     => "Import",
+  "medecinIndetermine"     => "Medecin Indeterminé",
+  "medecinActif"           => "0",
+  "mvtComplet"             => "0",
+  "strictSejourMatch"      => "1",
   "notifier_sortie_reelle" => 1
 );
 
