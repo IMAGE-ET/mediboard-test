@@ -59,7 +59,21 @@ Main.add(function () {
 </form>
 
 <button type="button" class="search" onclick="viewLegendPancarte();" style="float: right;">Légende</button>
-
+<div style="text-align: center">
+	<form name="selService" action="?" method="get">
+		<input type="hidden" name="m" value="{{$m}}" />
+		<input type="hidden" name="tab" value="vw_pancarte_service" />
+		<select name="service_id" onchange="this.form.submit();">
+		  <option value="">&mdash; Choix d'un service</option>
+		  {{foreach from=$services item=_service}}
+		    <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+		  {{/foreach}}
+		</select>
+		le
+		{{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();"}}
+  </form>
+</div>
+			
 <ul id="tab-pancarte" class="control_tabs">
   <li><a href="#viewPancarte">Pancarte {{$service->_view}}</a></li>
   <li><a href="#viewTransmissions">Transmissions</a></li>
@@ -71,17 +85,8 @@ Main.add(function () {
 <table class="form">
   <tr>
     <th class="category">
-      Pancarte du service
-	    <form name="selService" action="?" method="get">
-	      <input type="hidden" name="m" value="{{$m}}" />
-	      <input type="hidden" name="tab" value="vw_pancarte_service" />
-		    <select name="service_id" onchange="this.form.submit();">
-		      <option value="">&mdash; Choix d'un service</option>
-		      {{foreach from=$services item=_service}}
-		        <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
-		      {{/foreach}}
-		    </select>
-	    </form>
+      Pancarte du service {{$service->_view}}
+	    
     </th>
   </tr>
 </table>
@@ -260,6 +265,12 @@ Main.add(function () {
 		      {{/foreach}}
 		    {{/foreach}} 
 	    {{/foreach}}	
+	  </tr>
+	{{foreachelse}}
+	  <tr>
+	  	<td colspan="30">
+	  		Aucune prise
+	  	</td>
 	  </tr>
 	{{/foreach}}
 </table>

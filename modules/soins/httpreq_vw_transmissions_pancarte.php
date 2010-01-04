@@ -51,7 +51,8 @@ foreach($prescriptions as $_prescription){
   
   $where = array();
   $where["sejour_id"] = " = '$_prescription->object_id'";
-	$where["date"] = " >= '$date_min'";
+	$where[] = "date >= '$date_min' AND date <= '$date 23:59:59'";
+	
 	if($user_id){
 	  $where["user_id"] = " = '$user_id'";
 	}
@@ -153,6 +154,9 @@ $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("filter_obs", $filter_obs);
 $smarty->assign("users", $users);
 $smarty->assign("with_filter", "1");
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", "$date 23:59:59");
+
 if($user_id || $degre || $refresh){
   $smarty->display('../../dPprescription/templates/inc_vw_transmissions.tpl'); 
 } else {

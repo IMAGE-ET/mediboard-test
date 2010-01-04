@@ -42,7 +42,7 @@ tri_transmissions = function(order_col, order_way){
 		      </select>
 	      </span>
       </form>
-      Transmissions des dernieres 24 heures
+      Dernieres transmissions (du {{$date_min|date_format:$dPconfig.datetime}} au {{$date_max|date_format:$dPconfig.datetime}})
     </th>
   </tr>
 </table>

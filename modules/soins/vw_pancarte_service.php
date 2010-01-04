@@ -9,7 +9,10 @@
  */
 
 $service_id = CValue::getOrSession("service_id");
-$date = CValue::getOrSession("date_pancarte", mbDate());
+$date = CValue::getOrSession("debut", mbDate());
+
+$filter_line = new CPrescriptionLineMedicament();
+$filter_line->debut = $date;
 
 // Chargement du service
 $service = new CService();
@@ -73,18 +76,25 @@ foreach($nuit_matin as &$_hour_nuit_matin){
 $time = mbTransformTime(null,null,"%H");
 
 // Construction de la structure de date à parcourir dans le tpl
-if(in_array($time, $matin)){
-  $date_min = mbDate("- 1 DAY", $date)." ".reset($soir).":00:00";
-  $dates = array($date => array("matin" => $matin, "soir" => $soir));
+if($date == mbDate()){
+  if(in_array($time, $matin)){
+    $date_min = mbDate("- 1 DAY", $date)." ".reset($soir).":00:00";
+    $dates = array($date => array("matin" => $matin, "soir" => $soir));
+  }
+  if(in_array($time, $soir)){
+    $date_min = mbDate("- 1 DAY", $date)." ".reset($nuit).":00:00";
+    $dates = array($date => array("soir" => $soir, "nuit" => $nuit));
+  }
+  if(in_array($time, $nuit)){
+    $date_min = mbDate("- 1 DAY", $date)." ".reset($matin).":00:00";
+    $dates = array($date => array("nuit" => $nuit), mbDate("+ 1 DAY", $date) => array("matin" => $matin));
+  }
+} else {
+  $date_min = "$date 00:00:00"; 
+  $dates = array($date => array("matin" => $matin, "soir" => $soir, 'nuit' => $nuit));
 }
-if(in_array($time, $soir)){
-  $date_min = mbDate("- 1 DAY", $date)." ".reset($nuit).":00:00";
-  $dates = array($date => array("soir" => $soir, "nuit" => $nuit));
-}
-if(in_array($time, $nuit)){
-  $date_min = mbDate("- 1 DAY", $date)." ".reset($matin).":00:00";
-  $dates = array($date => array("nuit" => $nuit), mbDate("+ 1 DAY", $date) => array("matin" => $matin));
-}
+
+$tabDates = array();
 
 $composition_dossier = array();
 foreach($dates as $curr_date => $_date){
@@ -97,6 +107,9 @@ foreach($dates as $curr_date => $_date){
       }
       $_dates[$date_reelle] = $date_reelle;
       $tabHours[$curr_date][$moment_journee][$date_reelle]["$_hour:00:00"] = $_hour;
+      if(!in_array($date_reelle, $tabDates)){
+        $tabDates[] = $date_reelle;
+      }
     }
   }
 }
@@ -113,12 +126,12 @@ foreach($prescriptions as $_prescription){
   $_prescription->loadRefsLinesElementByCat("1",null,"service");
   
   // Calcul du plan de soin
-  foreach($tabHours as $curr_date => $curr_hours) {
-    $_prescription->calculPlanSoin($curr_date);
+  foreach($tabDates as $_date) {
+    $_prescription->calculPlanSoin($_date);
   }
 
   // Creation du tableau de stockage des elements precrits pour un patient et un dateTime donné
-	foreach($tabHours as $_date => $_hours_by_moment){
+  foreach($tabHours as $_date => $_hours_by_moment){
     foreach($_hours_by_moment as $moment_journee => $_dates){
       foreach($_dates as $date_reelle => $_hours){
         foreach($_hours as $_heure_reelle => $_hour){
@@ -136,46 +149,46 @@ foreach($prescriptions as $_prescription){
           // Parcours des medicaments, injections, elements
           foreach($lines_by_type as $_lines_by_chap){
             foreach($_lines_by_chap as $type => $_lines){
-	          	foreach($_lines as $chapitres){
-						    foreach($chapitres as $_lines_by_unite){
-						      foreach($_lines_by_unite as $unite_prise => $_line){
-						      	if($_line->_class_name == "CPrescriptionLineMedicament"){
-						      		$_line->loadRefProduitPrescription();
-						      	}
-						        $quantite_prevue = $quantite_adm = 0;           
-						        if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'])){
-			                $quantite_prevue = $_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'];
-	                  } else {
-							        if(isset($_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'])){
-							          $quantite_prevue = $_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'];
-							        }
-						        }
-						        if($quantite_prevue){
-	                    $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["prevue"] = $quantite_prevue;
-							      }
-						      	if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
-							        $quantite_adm = $_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
-							        @$pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["adm"] = $quantite_adm;
-								    }
-								    if($quantite_prevue || $quantite_adm){
-								      $list_lines[$type][$_line->_id] = $_line;
-									    if($_line->_recent_modification){
-							          $new[$_prescription->_id][$dateTime] = 1;
-							          $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["new"] = 1;
-							        }
-							        // Creation du tableau d'urgences
-	                    if(is_array($_line->_dates_urgences) && array_key_exists($date_reelle, $_line->_dates_urgences) 
-							           && in_array($dateTime, $_line->_dates_urgences[$date_reelle])){
-							          $urgences[$_prescription->_id][$dateTime] = 1;
-							          $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["urgence"] = 1;
-							        }
-								    }
-							      if($quantite_prevue != $quantite_adm){
-							        $alertes[$_prescription->_id][$dateTime][$type] = 1;
-							      }
-						      }
-						    }
-		          }
+              foreach($_lines as $chapitres){
+                foreach($chapitres as $_lines_by_unite){
+                  foreach($_lines_by_unite as $unite_prise => $_line){
+                    if($_line->_class_name == "CPrescriptionLineMedicament"){
+                      $_line->loadRefProduitPrescription();
+                    }
+                    $quantite_prevue = $quantite_adm = 0;           
+                    if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'])){
+                      $quantite_prevue = $_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'];
+                    } else {
+                      if(isset($_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'])){
+                        $quantite_prevue = $_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'];
+                      }
+                    }
+                    if($quantite_prevue){
+                      $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["prevue"] = $quantite_prevue;
+                    }
+                    if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
+                      $quantite_adm = $_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
+                      @$pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["adm"] = $quantite_adm;
+                    }
+                    if($quantite_prevue || $quantite_adm){
+                      $list_lines[$type][$_line->_id] = $_line;
+                      if($_line->_recent_modification){
+                        $new[$_prescription->_id][$dateTime] = 1;
+                        $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["new"] = 1;
+                      }
+                      // Creation du tableau d'urgences
+                      if(is_array($_line->_dates_urgences) && array_key_exists($date_reelle, $_line->_dates_urgences) 
+                         && in_array($dateTime, $_line->_dates_urgences[$date_reelle])){
+                        $urgences[$_prescription->_id][$dateTime] = 1;
+                        $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["urgence"] = 1;
+                      }
+                    }
+                    if($quantite_prevue != $quantite_adm){
+                      $alertes[$_prescription->_id][$dateTime][$type] = 1;
+                    }
+                  }
+                }
+              }
             }
           }
           // Parcours des perfusions
@@ -193,17 +206,17 @@ foreach($prescriptions as $_prescription){
                 if(isset($_perf_line->_administrations[$date_reelle][$_hour])){
                   $quantite_adm = $_perf_line->_administrations[$date_reelle][$_hour];
                   $pancarte[$_prescription->_id][$dateTime]["perf"][$_perfusion->_id][$_perf_line->_id]["adm"] = $quantite_adm;
-                }		
+                }   
                 if($quantite_prevue != $quantite_adm){
-							    $alertes[$_prescription->_id][$dateTime]["perf"] = 1;
-							  }    
+                  $alertes[$_prescription->_id][$dateTime]["perf"] = 1;
+                }    
               }              
             }
           }
-	      }
-  	  }
-	  }
-	}
+        }
+      }
+    }
+  }
 }
 
 // Classement par lit
@@ -231,6 +244,7 @@ $smarty->assign("patients", $patients);
 $smarty->assign("alertes", $alertes);
 $smarty->assign("new", $new);
 $smarty->assign("urgences", $urgences);
+$smarty->assign("filter_line", $filter_line);
 $smarty->display('vw_pancarte_service.tpl');
 
 ?>
