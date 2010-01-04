@@ -158,21 +158,6 @@ else {
 	}
 }
 
-$listPrat = array();
-if ($patient->_id) {
-  // Liste des praticiens disponibles
-  $listPrat = new CMediusers();
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
-  $patient->loadDossierComplet();
-  foreach($patient->_ref_sejours as $sejour){
-  	$sejour->loadNumDossier();
-  }
-}
-
-// Chargement des identifiants standards
-$patient->loadIPP();
-$patient->loadIdVitale();
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -200,7 +185,6 @@ $smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
 $smarty->assign("patient"             , $patient                  );
 $smarty->assign("chir"                , $chir                     );
 $smarty->assign("anesth"              , $anesth                   );
-$smarty->assign("listPrat"            , $listPrat                 );
 $smarty->assign("board"               , 0                         );
 $smarty->assign("patient_ipp"         , $patient_ipp              );
 

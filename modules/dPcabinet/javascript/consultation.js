@@ -11,7 +11,7 @@ Consultation = {
   plan: function(consult_id) {
     new Url().
       setModuleTab("dPcabinet", "edit_planning").
-      addParam("selConsult", consult_id).
+      addParam("consultation_id", consult_id).
       redirectOpener();
   }
 }

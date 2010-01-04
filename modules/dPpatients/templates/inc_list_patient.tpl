@@ -1,38 +1,51 @@
 {{if !$board}}
-
-{{if $app->user_prefs.VitaleVision}}
-  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
-{{else}}
-  {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+	{{if $app->user_prefs.VitaleVision}}
+	  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+	{{else}}
+	  {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+		
+		<script type="text/javascript">
+	    Intermax.ResultHandler["Consulter Vitale"] =
+	    Intermax.ResultHandler["Lire Vitale"] = function() {
+	      var url = new Url;
+	      url.setModuleTab("dPpatients", "vw_idx_patients");
+	      url.addParam("useVitale", 1);
+	      url.redirect();
+	    }
+		</script>
+	{{/if}}
 	
 	<script type="text/javascript">
-    Intermax.ResultHandler["Consulter Vitale"] =
-    Intermax.ResultHandler["Lire Vitale"] = function() {
-      var url = new Url;
-      url.setModuleTab("dPpatients", "vw_idx_patients");
-      url.addParam("useVitale", 1);
-      url.redirect();
-    }
+	var Patient = {
+	  create : function(form) {
+	    var url = new Url;
+	    url.setModuleTab("dPpatients", "vw_edit_patients");
+	    url.addParam("patient_id", 0);
+	    url.addParam("useVitale", $V(form.useVitale));
+	    url.addParam("name",      $V(form.nom));
+	    url.addParam("firstName", $V(form.prenom));
+	    url.addParam("naissance_day",  $V(form.Date_Day));
+	    url.addParam("naissance_month",$V(form.Date_Month));
+	    url.addParam("naissance_year", $V(form.Date_Year));
+	    url.redirect();
+	  }
+	}
 	</script>
 {{/if}}
 
 <script type="text/javascript">
-var Patient = {
-  create : function(form) {
-    var url = new Url;
-    url.setModuleTab("dPpatients", "vw_edit_patients");
-    url.addParam("patient_id", 0);
-    url.addParam("useVitale", $V(form.useVitale));
-    url.addParam("name",      $V(form.nom));
-    url.addParam("firstName", $V(form.prenom));
-    url.addParam("naissance_day",  $V(form.Date_Day));
-    url.addParam("naissance_month",$V(form.Date_Month));
-    url.addParam("naissance_year", $V(form.Date_Year));
-    url.redirect();
-  }
+
+reloadPatient = function(patient_id, link){
+	{{if $board}}
+    window.location="?m=dPpatients&tab=vw_full_patients&patient_id="+patient_id;
+  {{else}}
+    var url = new Url("dPpatients", "httpreq_vw_patient");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate("vwPatient", { onComplete: function(){ if(link){ markAsSelected(link); } }  } );
+  {{/if}}
 }
+
 </script>
-{{/if}}
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
   <p id="msg-multiple-benef">
@@ -156,7 +169,7 @@ var Patient = {
 <form name="fusion" action="?" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="a" value="fusion_pat" />
-<table class="tbl">
+<table class="tbl" id="list_patients">
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
     <th style="width: 0.1%;">
@@ -189,19 +202,21 @@ var Patient = {
         <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
       </div>
       {{/if}}
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+
+			<a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
         {{mb_value object=$curr_patient field="_view"}}
       </a>
+      
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
       	<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_patient->_guid}}')">
           {{mb_value object=$curr_patient field="naissance"}}
       	</span>
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
         {{$curr_patient->adresse}}
         {{$curr_patient->cp}}
         {{$curr_patient->ville}}
@@ -232,17 +247,17 @@ var Patient = {
     <td style="text-align: center;"><input type="checkbox" name="patients_id[]" value="{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
         {{mb_value object=$curr_patient field="_view"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
         {{mb_value object=$curr_patient field="naissance"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
+      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
         {{$curr_patient->adresse}}
         {{$curr_patient->cp}}
         {{$curr_patient->ville}}

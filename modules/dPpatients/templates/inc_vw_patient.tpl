@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPpatients" script="patient"}}
+{{mb_include_script module="dPpatients" script="patient" ajax=true}}
 
 <script type="text/javascript">
 
@@ -10,6 +10,11 @@ Document.refreshList = function() {
     addParam("patient_id", document.actionPat.patient_id.value).
     requestUpdate('vwPatient');
 }
+
+Main.add(function(){
+  initNotes();
+});
+
 </script>
 
 <table class="form">
