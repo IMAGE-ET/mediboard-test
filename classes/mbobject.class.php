@@ -675,19 +675,6 @@ class CMbObject {
     $ds->freeResult($cur);
     return $list;
   }
-
-  /**
-   *  Clone the current record
-   *  @return object  The new record object or null if error
-   */
-
-  function cloneObject() {
-    $newObj = $this;
-    // blanking the primary key to ensure that's a new record
-    $newObj->{$this->_spec->key} = "";
-    
-    return $newObj;
-  }
   
   /**
    * Update the form fields from the DB fields
@@ -1108,7 +1095,9 @@ class CMbObject {
    * @return $this or an error
    */
   function mergeDBFields ($objects = array()/*<CMbObject>*/, $getFirstValue = false) {
-		if ($msg = $this->checkMerge($objects)) return $msg;
+		if ($msg = $this->checkMerge($objects)) {
+			return $msg;
+		}
 		
     $db_fields = $this->getDBFields();
     $diffs = $db_fields;
