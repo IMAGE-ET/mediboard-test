@@ -250,7 +250,6 @@ function prepareForm(oForm) {
   }
   
   oForm = $(oForm);
-  
   if (!oForm || oForm.hasClassName("prepared")) return;
   
   // Event Observer
@@ -275,7 +274,7 @@ function prepareForm(oForm) {
       oLabel.htmlFor = sFormName + "_" + sFor;
     }
   }
-  
+
   // XOR modifications
   var xorFields, re = /xor(?:\|(\S+))+/g;
   while (xorFields = re.exec(oForm.className)) {
@@ -346,7 +345,7 @@ function prepareForm(oForm) {
         oLabel.removeClassName("checkNull");
       }
     }
-    
+
     // ui:change is a custom event fired on the native onchange throwed by $V, 
     // because fire doesn't work with native events 
     // Fire it only if the element has a spec
@@ -404,7 +403,7 @@ function prepareForm(oForm) {
       else oElement.focus();
       bGiveFormFocus = false;
     }
-    
+    		
     // We mark this form as prepared
     oForm.addClassName("prepared");
   }

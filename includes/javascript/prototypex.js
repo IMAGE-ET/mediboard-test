@@ -168,6 +168,12 @@ Element.addMethods({
     return element[condition ? "show" : "hide"]();
   },
 	
+  setVisibility: function(element, condition) {
+    return element.setStyle( {
+		  visibility: condition ? "visible" : "hidden"
+	  } );
+  },
+  
   getInnerWidth: function(element){
     var aBorderLeft = parseInt(element.getStyle("border-left-width")),
         aBorderRight = parseInt(element.getStyle("border-right-width"));
@@ -249,7 +255,10 @@ Class.extend(String, {
     return this
       .replace(/\\n/g, "\n")
       .replace(/\\t/g, "\t");
-  }
+  },
+	stripAll: function() {
+		return this.strip().gsub(/\s+/, " ");
+	}
 });
 
 document.observeOnce = function(event_name, outer_callback){
