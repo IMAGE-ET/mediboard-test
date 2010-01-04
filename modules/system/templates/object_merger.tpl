@@ -12,20 +12,52 @@
 {{mb_include_script module=system script=object_selector}}
 
 <script type="text/javascript">
-function setField (field, value, form) {
-  field = $(form.elements[field]);
+function setField(field, source) {
+  var form = source.form;
+	var value = $V(source);
+  var field = $(form.elements[field]);
 
-  var dateView = $(form.elements[field.name+'_da']);
-  if (dateView) {
-    dateView.update(value);
-    $V(field, (value ? Date.fromLocaleDate(value).toDATE() : ''));
-    return;
-  }
-  
+  // Update Value
   $V(field, value);
-  if (field.fire) {
-    field.fire('mask:check');
+  
+	if (!field.hasClassName) {
+	  return;
+	}
+
+  var oView = null;
+	var oProperties = field.getProperties();
+	
+  // Can't we use Calendar.js helpers ???
+  if (oProperties.dateTime) {
+	  oView = $(form.elements[field.name+'_da']);
+	  $V(oView, value ? Date.fromDATETIME(value).toLocaleDateTime() : "");
+	}
+  
+  if (oProperties.date) {
+    oView = $(form.elements[field.name+'_da']);
+    $V(oView, value ? Date.fromDATE(value).toLocaleDate() : "");
   }
+
+  if (oProperties.time) {
+    oView = $(form.elements[field.name+'_da']);
+    $V(oView, value);
+  }
+
+  if (oProperties.ref) {
+    oView = $(form.elements["_"+field.name+'_view']);
+	  $V(oView, Element.getLabel(source).textContent.strip());
+  }
+
+  if (oProperties.mask) {
+    $V(field, Element.getLabel(source).textContent.strip(), false);
+	}
+}
+
+function updateOptions(field) {
+  var form = field.form;
+	$A(form.elements["_choix_"+field.name]).each(function (element) {
+	  element.checked = element.value.stripAll() == field.value.stripAll();
+	} );
 }
 
 var objectsList = [];
@@ -52,16 +84,11 @@ function addObjectField(id, view) {
   $("objects-list").insert(field);
 }
 
-function toggleAltMode(check) {
-  $(check.form).select("input[name='_base_object_id']").each(function(e){
-    e.disabled = !e.disabled;
-  });
-}
-
 function confirmMerge(button, fast) {
   $V(button.form.fast, fast);
   return confirm("Etes-vous sûr(e) de vouloir fusionner ces objets ?");
 }
+
 
 Main.add(function() {
   {{foreach from=$objects item=object}}
@@ -96,16 +123,39 @@ Main.add(function() {
       <th>Objets</th>
       <td id="objects-list"></td>
     </tr>
+
     <tr>
       <td />
       <td>
         <button type="submit" class="submit">{{tr}}Submit{{/tr}}</button>
-        <label>
-          <input type="checkbox" onclick="$$('tr.equal').invoke('setVisible', $V(this));" /> Afficher les champs vides ou identiques
-        </label>
       </td>
       <th />
       <td><button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button></td>
+    </tr>
+
+    <tr>
+      <th>Afficher les champs</th>
+      <td>
+        <label>
+          <input type="checkbox" onclick="$$('tr.duplicate').invoke('setVisible', $V(this));" />
+          avec une valeur multiple identiques
+          <strong>({{$counts.duplicate}} valeurs)</strong>
+        </label>
+        <br />
+        <label>
+          <input type="checkbox" onclick="$$('tr.unique').invoke('setVisible', $V(this));" />
+          avec une valeur unique
+          <em>({{$counts.unique}} valeurs)</em>
+        </label>
+        <br />
+        <label>
+          <input type="checkbox" onclick="$$('tr.none'  ).invoke('setVisible', $V(this));" />
+          sans valeurs
+          <em>({{$counts.none}} valeurs)</em>
+        </label>
+      </td>
+      <th />
+      <td />
     </tr>
   </table>
 </form>
@@ -141,34 +191,35 @@ Main.add(function() {
   <input type="hidden" name="_objects_class" value="{{$result->_class_name}}" />
   
   {{math equation="100/(count+1)" count=$objects|@count assign=width}}
-  <table class="form">
+  <table class="form merger">
     <tr>
       <th class="category" style="width: 1%;">
-        {{if !$alternative_mode}}
-        <label style="font-weight: normal;">
-          <input type="checkbox" name="_keep_object" value="1" onclick="toggleAltMode(this)" /> Mode de fusion alternatif
-        </label>
-        {{/if}}
       </th>
+      <th class="category" style="width: {{$width}}%;">Résultat</th>
+
       {{foreach from=$objects item=object name=object}}
       <th class="category" style="width: {{$width}}%;">
-        {{tr}}{{$object->_class_name}}{{/tr}} {{$smarty.foreach.object.iteration}}<br />
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+					{{tr}}{{$object->_class_name}}{{/tr}} 
+					{{$smarty.foreach.object.iteration}}
+					<br/>
+          {{$object}}
+				</span>
+
+        {{if $alternative_mode}}
+				<br />
         <label style="font-weight: normal;">
-          <input type="radio" name="_base_object_id" value="{{$object->_id}}" {{if $smarty.foreach.object.first}}checked="checked"{{/if}} {{if !$alternative_mode}}disabled="disabled"{{/if}} />
+          <input type="radio" name="_base_object_id" value="{{$object->_id}}" {{if $smarty.foreach.object.first}}checked="checked"{{/if}} />
           Utiliser comme base [#{{$object->_id}}]
         </label>
+        {{/if}} 
       </th>
       {{/foreach}}
-      <th class="category" style="width: {{$width}}%;">Résultat</th>
     </tr>
     
     {{foreach from=$result->_specs item=spec name=spec}}
       {{if $spec->fieldName != $result->_spec->key && ($spec->fieldName|substr:0:1 != '_' || $spec->reported)}}
-        {{if $spec instanceof CRefSpec}}
-          {{include field=$spec->fieldName file="../../system/templates/inc_merge_field_ref.tpl"}}
-        {{else}}
-          {{include field=$spec->fieldName file="../../system/templates/inc_merge_field.tpl"}}
-        {{/if}}
+        {{mb_include module=system template=inc_merge_field field=$spec->fieldName}}
       {{/if}}
     {{/foreach}}
 
@@ -183,27 +234,21 @@ Main.add(function() {
 	  	   <br />
 	  	   <strong>Cette opération est irréversible, il est donc impératif d'utiliser cette fonction avec une extrême prudence !</strong>
 	  	   <br />
-         Vous avez la possibilité de faire une fusion de deux manières différentes :<br />
-         <br />
-	  	   La <strong>procédure normale</strong> de fusion se passe en trois phases :
-	  	   <ol>
-	  	     <li>Création d'un nouvel objet, avec les propriétés choisies ci-dessus</li>
-	  	     <li>Transfert des relations depuis les anciens objets vers le nouveau</li>
-	  	     <li>Suppression des anciens objets</li>
-	  	   </ol>
+
          {{if $alternative_mode}}
-           Ce mode n'est pas disponible à cause de la configuration de Mediboard (module SIP installé et handler actif)
-         {{/if}}
-         
-         <br />
-         L'<strong>autre procédure qui est nécessaire dans certains cas</strong>, mais qui limite le nombre maximum d'objets fusionnés à deux, se déroule en trois phases :
+         La<strong>procédure alternative est sélectionnée</strong>, elle limite la fusion à 2 objets et se déroule en trois phases :
          <ol>
            <li>Modification d'un des deux objets avec les propriétés choisies ci-dessus</li>
            <li>Transfert des relations depuis l'autre objet</li>
            <li>Suppression de l'autre objet</li>
          </ol>
-         {{if !$alternative_mode}}
-           Vous pouvez utiliser ce mode en cochant en haut de la colonne de gauche "Mode de fusion alternatif" et en choisissant quel objet est l'objet conservé.<br />
+				 {{else}}
+         La <strong>procédure normale</strong> de fusion se passe en trois phases :
+         <ol>
+           <li>Création d'un nouvel objet, avec les propriétés choisies ci-dessus</li>
+           <li>Transfert des relations depuis les anciens objets vers le nouveau</li>
+           <li>Suppression des anciens objets</li>
+         </ol>
          {{/if}}
 	   	 </div>
 
@@ -212,7 +257,6 @@ Main.add(function() {
     	   <ul>
     	     <li><strong>La fusion standard qui automatise des sauvegardes normales</strong>. Ce processus
     	       <ul>
-    	         <li>automatise des sauvegardes normales</li>
     	         <li>effectue des vérifications d'intégrité, au risque d'échouer dans certaines circonstances</li>
     	         <li>journalise tous les transferts d'objet</li>
     	         <li>est très lent</li>

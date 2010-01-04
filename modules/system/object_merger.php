@@ -10,13 +10,17 @@
 
 global $m;
 
-$objects_id    = CValue::get('objects_id'); // array
 $objects_class = CValue::get('objects_class');
 $readonly_class = CValue::get('readonly_class');
+$objects_id    = CValue::get('objects_id');
+if (!is_array($objects_id)) {
+	$objects_id = explode("-", $objects_id);
+}
 
-$objects = $unequal = array();
-$result = $checkMerge = null;
-
+$objects = array();
+$result = null;
+$checkMerge = null;
+$statuses = array();
 if (class_exists($objects_class) && count($objects_id)) {
   foreach ($objects_id as $object_id) {
     $object = new $objects_class;
@@ -29,37 +33,53 @@ if (class_exists($objects_class) && count($objects_id)) {
 
     $object->loadAllFwdRefs(true);
     $objects[] = $object;
-    
-    // On base le résultat sur patient1
-    if (!$result) {
-      $result = new $objects_class;
-      $result->load($object_id);
-      $result->loadAllFwdRefs(true);
-      $result->_id = null;
-    }
   }
   
-  // checkMerge
+  // Check merge
+	$result = new $objects_class;
   $checkMerge = $result->checkMerge($objects);
-  $result->mergeDBFields($objects, true);
-  $result->_fwd = array();
-  $result->loadAllFwdRefs();
-  $result->updateFormFields();
-  
-  // find unequal fields
-  $db_fields = $result->getDBFields();
-  foreach ($db_fields as $field => $value) {
-    foreach ($objects as $key1 => $object1) {
-      foreach ($objects as $key2 => $object2) {
-        if ($object1->$field != $object2->$field) {
-          $unequal[$field] = true;
-        }
-      }
+
+  // Merge trivial fields
+  foreach (array_keys($result->getDBFields()) as $field) {
+    $values = CMbArray::pluck($objects, $field);
+    CMbArray::removeValue("", $values);
+
+    // No values
+    if (!count($values)) {
+      $statuses[$field] = "none";
+			continue;
+		}
+		
+    $result->$field = reset($values);
+
+    // One unique value
+    if (count($values) == 1) {
+      $statuses[$field] = "unique";
+      continue;
     }
+
+    // Multiple values
+    $statuses[$field] = count(array_unique($values)) == 1 ? "duplicate" : "multiple";
   }
+
+
+  $result->updateFormFields();
+  $result->loadAllFwdRefs(true);
 }
 
-$alternative_mode = CModule::getActive("sip") && CAppUI::conf("object_handlers CSipObjectHandler");
+// Count statuses
+$counts = array(
+  "none"      => 0,
+  "unique"    => 0,
+  "duplicate" => 0,
+  "multiple"  => 0,
+);
+
+foreach ($statuses as $status) {
+	$counts[$status]++;
+}
+
+$alternative_mode = CModule::getActive("sip") && @CAppUI::conf("object_handlers CSipObjectHandler");
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -67,7 +87,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("objects", $objects);
 $smarty->assign("objects_class", $objects_class);
 $smarty->assign("result",  $result);
-$smarty->assign("unequal", $unequal);
+$smarty->assign("statuses",  $statuses);
+$smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
 $smarty->assign("list_classes", getInstalledClasses());
 $smarty->assign("alternative_mode", $alternative_mode);

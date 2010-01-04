@@ -808,8 +808,24 @@ table.tbl td.button {
   line-height: 140%;
 }
 
-table tr.unequal td, table tr.unequal th {
-  background-color: #FFA88C;
+table.merger tr.none td, 
+table.merger tr.none th {
+  opacity: 0.5;
+}
+
+table.merger tr.unique td, 
+table.merger tr.unique th {
+  background-color: #aaf;
+}
+
+table.merger tr.multiple td, 
+table.merger tr.multiple th {
+  background-color: #faa;
+}
+
+table.merger tr.duplicate td, 
+table.merger tr.duplicate th {
+  background-color: #afa;
 }
 
 table.tbl tr.clear,
