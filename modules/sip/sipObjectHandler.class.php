@@ -230,7 +230,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
       $patient = $mbObject;
-      
+
       $patient_elimine = new CPatient();
       $patient_elimine->load(reset($mbObject->_merging));
 

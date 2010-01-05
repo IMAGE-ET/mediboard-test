@@ -37,6 +37,7 @@ if (class_exists($objects_class)) {
     foreach ($objects_id as $key => $object_id) {
       if ($do->_obj->_id == $object_id) {
         unset ($objects_id[$key]);
+        unset ($_POST["_merging"][$base_object_id]);
       }
     }
     // Only one objet to merge
