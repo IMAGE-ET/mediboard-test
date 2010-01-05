@@ -22,6 +22,7 @@ class CFile extends CDocumentItem {
   var $file_size          = null;
 
   // Form fields
+  var $_extensioned  = null;
   var $_file_size    = null;
   var $_sub_dir      = null;
   var $_absolute_dir = null;
@@ -69,8 +70,7 @@ class CFile extends CDocumentItem {
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();
-    $this->_ref_file_owner = new CMediusers;
-    $this->_ref_file_owner->load($this->file_owner);
+    $this->_ref_file_owner = $this->loadFwdRef("file_owner");
   }
   
   function updateFormFields() {

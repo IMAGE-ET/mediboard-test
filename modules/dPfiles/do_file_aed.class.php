@@ -117,14 +117,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     $cat_id = intval(CValue::post("file_category_id"));
     
     if ($this->ajax) {
-      $idName = $this->objectKeyGetVarName;
-      $idValue = $this->_obj->$idName;
-      $callBack = $this->callBack;
-      echo CAppUI::getMsg();
-      if ($callBack) {
-        echo "\n<script type=\"text/javascript\">$callBack($idValue);</script>";
-      }
-      CApp::rip();
+      $this->doCallback();
     }
     
     if ($this->redirect !== null) {

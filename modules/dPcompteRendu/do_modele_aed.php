@@ -99,14 +99,7 @@ if (intval(CValue::post("del"))) {
 
 
 if($do->ajax){
-  $idName   = $do->objectKeyGetVarName;
-  $callBack = $do->callBack;
-  $idValue  = $do->_obj->$idName;
-  echo CAppUI::getMsg();
-  if ($callBack) {
-    echo "\n<script type='text/javascript'>$callBack($idValue);</script>";
-  }
-  CApp::rip();
+  $do->doCallback();
 }
 
 else {
