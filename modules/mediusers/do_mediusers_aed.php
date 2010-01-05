@@ -24,9 +24,9 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
     } 
     else {
       // Keep trace for redirections
-      CValue::setSession($this->objectKeyGetVarName, $this->_obj->_id);
+      CValue::setSession($this->objectKey, $this->_obj->_id);
       
-      $isNotNew = @$_POST[$this->objectKeyGetVarName];
+      $isNotNew = @$_POST[$this->objectKey];
       
       // Insert new group and function permission
       if ($this->_obj->fieldModified("function_id") || !$isNotNew) {

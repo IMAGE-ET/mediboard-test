@@ -144,15 +144,15 @@ class CMbObject {
    * Staticly build object handlers array
    * @return void
    */
-  function makeHandlers() {
-    if (CMbObject::$handlers) {
+  private static final function makeHandlers() {
+    if (self::$handlers) {
       return;
     }
     // Static initialisations
-    CMbObject::$handlers = array();
+    self::$handlers = array();
     foreach (CAppUI::conf("object_handlers") as $handler => $active) {
       if ($active) {
-        CMbObject::$handlers[] = new $handler;
+        self::$handlers[] = new $handler;
       }
     }
   }
@@ -188,7 +188,7 @@ class CMbObject {
 	        break;
         }
       }
-    } 
+    }
 
     return count($this->_ref_notes);
   }
@@ -198,8 +198,10 @@ class CMbObject {
    * @return int file count
    */
   function loadRefsFiles() {
+  	if (!$this->_id) return;
+  	
     $file = new CFile();
-    if ($file->_ref_module && $this->_id) {
+    if ($file->_ref_module) {
       $this->_ref_files = CFile::loadFilesForObject($this);
       return count($this->_ref_files);
     }
@@ -210,8 +212,10 @@ class CMbObject {
    * @return int document count
    */
   function loadRefsDocs() {
+  	if (!$this->_id) return;
+  	
     $document = new CCompteRendu();
-    if ($document->_ref_module && $this->_id) {
+    if ($document->_ref_module) {
       $document->object_class = $this->_class_name;
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
@@ -442,7 +446,7 @@ class CMbObject {
    * Register the object into cache
    * @return void
    */
-  function registerCache() {
+  private final function registerCache() {
     self::$objectCount++;
     
     // Statistiques sur cache d'object
@@ -708,7 +712,6 @@ class CMbObject {
 
 	    return $object->load($id);
     }
-    return null;
   }
   
   /**
@@ -882,7 +885,7 @@ class CMbObject {
   /**
    * Prepare the user log before object persistence (store or delete)
    */
-  function prepareLog() {
+  private function prepareLog() {
     // Si object non loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return;
@@ -899,27 +902,39 @@ class CMbObject {
     }
     
     $object_id = $this->_id;
+    $old = $this->_old;
     
     $type = "store";
     $extra = null;
     
-    if ($this->_old->_id == null) {
+    if ($old->_id == null) {
       $type = "create";
       $fields = array();
     }
+    
     if ($this->_merging) {
-      $type = "merge" ;
+      $type = "merge";
     }
       
     if ($this->_id == null) {
       $type = "delete";
-      $object_id = $this->_old->_id;
-      $extra = $this->_old->_view;
+      $object_id = $old->_id;
+      $extra = $old->_view;
       $fields = array();
     }
 
     if (!count($fields) && $type === "store") {
-      return;
+    	return;
+    }
+   
+    if ($type === "store" || $type === "merge") {
+    	$old_values = array();
+    	foreach($fields as $_field) {
+    		if (!$this->_specs[$_field] instanceof CTextSpec) {
+    		  $old_values[$_field] = utf8_encode($old->$_field);
+    		}
+    	}
+    	$extra = json_encode($old_values);
     }
     
     // TODO: supprimer ces lignes
@@ -946,7 +961,7 @@ class CMbObject {
   /**
    * Prepare the user log before object persistence (store or delete)
    */
-  function doLog() {
+  private function doLog() {
     // Aucun log à produire (non loggable, pas de modifications, etc.)
     if (!$this->_ref_last_log) {
       return;
@@ -982,12 +997,10 @@ class CMbObject {
       $keyToUpdate = $spec->incremented ? $spec->key : null;
       $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
     }
-    
 
     if (!$ret) {
       return "$this->_class_name::store failed <br />" . $spec->ds->error();
     }
-    
 
     // Load the object to get all properties
     $this->load();

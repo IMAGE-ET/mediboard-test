@@ -10,7 +10,7 @@
 
 class CDoObjectAddEdit {
   var $className           = null;
-  var $objectKeyGetVarName = null;
+  var $objectKey           = null;
   var $createMsg           = null;
   var $modifyMsg           = null;
   var $deleteMsg           = null;
@@ -27,7 +27,7 @@ class CDoObjectAddEdit {
   var $_objBefore          = null;
   var $_logIt              = null;
 
-  function CDoObjectAddEdit($className, $objectKeyGetVarName = null) {
+  function CDoObjectAddEdit($className, $objectKey = null) {
     global $m;
 
     $this->className           = $className;
@@ -47,7 +47,7 @@ class CDoObjectAddEdit {
     $this->_obj                = new $this->className();
     $this->_objBefore          = new $this->className();
     
-    $this->objectKeyGetVarName = $objectKeyGetVarName ? $objectKeyGetVarName : $this->_obj->_spec->key;
+    $this->objectKey = $objectKey ? $objectKey : $this->_obj->_spec->key;
   }
 
   function doBind() {
@@ -75,7 +75,7 @@ class CDoObjectAddEdit {
         }
       }
       else {
-        CValue::setSession($this->objectKeyGetVarName);
+        CValue::setSession($this->objectKey);
         CAppUI::setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
         if ($this->redirectDelete) {
           $this->redirect =& $this->redirectDelete;
@@ -91,7 +91,7 @@ class CDoObjectAddEdit {
       }
     } 
     else {
-      CValue::setSession($this->objectKeyGetVarName);
+      CValue::setSession($this->objectKey);
       CAppUI::setMsg($this->deleteMsg, UI_MSG_ALERT);
       if ($this->redirectDelete) {
         $this->redirect =& $this->redirectDelete;
@@ -107,9 +107,9 @@ class CDoObjectAddEdit {
       }
     } 
     else {
-      $id = $this->objectKeyGetVarName;
-      CValue::setSession($id, $this->_obj->$id);
-      $this->isNotNew = CValue::read($this->request, $this->objectKeyGetVarName);
+      $id = $this->objectKey;
+      CValue::setSession($id, $this->_obj->_id);
+      $this->isNotNew = CValue::read($this->request, $this->objectKey);
       CAppUI::setMsg($this->isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
       if ($this->redirectStore) {
         $this->redirect =& $this->redirectStore;
@@ -124,18 +124,19 @@ class CDoObjectAddEdit {
     
     // Cas ajax
     if ($this->ajax) {
-      $idName = $this->objectKeyGetVarName;
-      $idValue = $this->_obj->$idName;
-      $callBack = $this->callBack;
-      echo CAppUI::getMsg();
-      if ($callBack) {
-        echo "\n<script type=\"text/javascript\">$callBack($idValue);</script>";
-      }
-      CApp::rip();
+      $this->doCallback();
     }
 
     // Cas normal
     CAppUI::redirect($this->redirect);
+  }
+  
+  function doCallback(){
+    echo CAppUI::getMsg();
+    if ($this->callBack) {
+      echo "\n<script type=\"text/javascript\">{$this->callBack}({$this->_obj->_id});</script>";
+    }
+    CApp::rip();
   }
 
   function doIt() {
