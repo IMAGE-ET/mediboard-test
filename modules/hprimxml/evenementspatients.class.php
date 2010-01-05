@@ -377,10 +377,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
-    if (is_array($medecins)) {
+    if ($medecins->hasChildNodes()) {
       $medecin = $medecins->childNodes;
       foreach ($medecin as $_med) {
-     	$mediuser_id = $this->getMedecin($_med);
+     		$mediuser_id = $this->getMedecin($_med);
                 
         $lien = $xpath->getValueAttributNode($_med, "lien");
         if ($lien == "rsp") {
@@ -439,9 +439,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   function createPraticien($mediuser) {
     $functions = new CFunctions();
     $functions->text = CAppUI::conf("hprimxml functionPratImport");
+    $functions->group_id = CGroups::loadCurrent()->_id;
     $functions->loadMatchingObject();
     if (!$functions->loadMatchingObject()) {
-      $functions->group_id = CGroups::loadCurrent()->_id;
       $functions->type = "cabinet";
       $functions->compta_partagee = 0;
       $functions->store();
