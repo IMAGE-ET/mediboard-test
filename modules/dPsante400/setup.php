@@ -89,7 +89,12 @@ class CSetupdPsante400 extends CSetup {
     $sql = "ALTER TABLE `trigger_mark` ADD INDEX ( `mark` );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.18";
+		$this->makeRevision("0.18");
+		$sql = "ALTER TABLE `trigger_mark` 
+              CHANGE `trigger_number` `trigger_number` BIGINT (10) UNSIGNED ZEROFILL NOT NULL;";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.19";
   } 
 }
 ?>

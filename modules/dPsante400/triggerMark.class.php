@@ -29,7 +29,7 @@ class CTriggerMark extends CMbObject {
   function getProps() {
   	$props = parent::getProps();
     $props["trigger_class"]  = "str notNull";
-  	$props["trigger_number"] = "str notNull maxLength|10";
+  	$props["trigger_number"] = "numchar notNull maxLength|10";
     $props["done"]           = "bool notNull";
     $props["mark"]           = "str notNull";
     
