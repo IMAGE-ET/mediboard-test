@@ -163,7 +163,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
         
             // Notifier les autres destinataires
-            $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+            $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
             $msgVenue = $newVenue->store();
         
             $newVenue->loadLogs();
@@ -184,7 +184,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         }
         if (!$newVenue->_id) {
           // Notifier les autres destinataires
-          $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+          $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
           // Mapping du séjour
           $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
             
@@ -278,7 +278,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           }
         }
         // Notifier les autres destinataires
-        $newPatient->_hprim_initiateur_group_id = $dest_hprim->group_id;
+        $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
         $msgVenue = $newVenue->store();
         
         $newVenue->loadLogs();
