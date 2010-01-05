@@ -110,7 +110,7 @@ class CSipObjectHandler extends CMbObjectHandler {
             
             $mbObject->_IPP = $IPP->id400;
           }
-          
+          mbTrace($mbObject->_IPP, $_destinataire->_tag_patient, true);
           // Envoi pas les patients qui n'ont pas d'IPP
           if (!CAppUI::conf("sip send_all_patients") && !$mbObject->_IPP) {
             return;
