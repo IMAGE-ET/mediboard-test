@@ -122,8 +122,9 @@ class CSipObjectHandler extends CMbObjectHandler {
           $mbObject->_IPP = null;
         }
       }
+    } 
     // Traitement Sejour
-    } else if ($mbObject instanceof CSejour) {
+    elseif ($mbObject instanceof CSejour) {
       $mbObject->loadRefPraticien();
       $mbObject->loadRefPatient();
       $mbObject->_ref_patient->loadIPP();
@@ -190,7 +191,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         if ($mbObject->_hprim_initiateur_group_id) {
           return;
         }
-        mbTrace($mbObject->_hprim_initiateur_group_id, "hprim_initiateur_group_id", true);
+
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
         $destinataires = $dest_hprim->loadMatchingList();
