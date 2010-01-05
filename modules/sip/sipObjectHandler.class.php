@@ -103,14 +103,14 @@ class CSipObjectHandler extends CMbObjectHandler {
           if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
             continue;
           }
-          
+
           if (!$mbObject->_IPP) {
             $IPP = new CIdSante400();
             $IPP->loadLatestFor($mbObject, $_destinataire->_tag_patient);
             
             $mbObject->_IPP = $IPP->id400;
           }
-          mbTrace($mbObject->_IPP, $_destinataire->_tag_patient, true);
+
           // Envoi pas les patients qui n'ont pas d'IPP
           if (!CAppUI::conf("sip send_all_patients") && !$mbObject->_IPP) {
             return;
@@ -118,6 +118,8 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenement = new CHPrimXMLEnregistrementPatient();
           $this->sendEvenement($domEvenement, $_destinataire, $mbObject);
+          
+          $mbObject->_IPP = null;
         }
       }
     // Traitement Sejour
@@ -213,6 +215,8 @@ class CSipObjectHandler extends CMbObjectHandler {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
             $this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
           }
+          
+          $mbObject->_num_dossier = null;
         }
       }
     }
