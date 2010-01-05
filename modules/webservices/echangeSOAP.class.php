@@ -33,6 +33,7 @@ class CEchangeSOAP extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
+    $spec->loggable = false;
     $spec->table = 'echange_soap';
     $spec->key   = 'echange_soap_id';
     return $spec;

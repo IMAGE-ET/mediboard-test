@@ -47,6 +47,7 @@ class CEchangeHprim extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
+    $spec->loggable = false;
     $spec->table = 'echange_hprim';
     $spec->key   = 'echange_hprim_id';
     return $spec;
