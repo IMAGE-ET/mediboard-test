@@ -299,7 +299,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro dossier associé : $num_dossier->id400.";
         }
       }
-      mbTrace($newVenue->_hprim_initiateur_group_id, "hprim_initiateur_group_id", true);
+      
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
