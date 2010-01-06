@@ -125,7 +125,11 @@
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_sortie->_guid}}');">
-        {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
+        {{if ($curr_sortie->sortie_prevue < $date_min) || ($curr_sortie->sortie_prevue > $date_max)}}
+          {{$curr_sortie->sortie_prevue|date_format:$dPconfig.datetime}}
+        {{else}}
+          {{$curr_sortie->sortie_prevue|date_format:$dPconfig.time}}
+        {{/if}}
       </span>
       {{if $curr_sortie->_ref_last_affectation->confirme}}
         <img src="images/icons/tick.png" title="Sortie confirmée par le praticien" />

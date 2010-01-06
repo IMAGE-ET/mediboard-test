@@ -43,7 +43,7 @@ $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
-$where["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) BETWEEN '$limit1' AND '$limit2'";
 if($mode != "autre") {
   $where["type"] = " = '$mode'";
 } else {
@@ -98,6 +98,7 @@ foreach($listSejour as $key => $sejour){
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("date_min"      , $date_min);
 $smarty->assign("date_max"      , $date_max);
 $smarty->assign("order_col"     , $order_col);
@@ -114,6 +115,7 @@ $smarty->assign("vue"           , $vue );
 $smarty->assign("listSejour"    , $listSejour );
 $smarty->assign("date_sortie"   , $date_sortie);
 $smarty->assign("mode"          , $mode);
+
 $smarty->display("inc_vw_sorties.tpl");
 
 ?>
