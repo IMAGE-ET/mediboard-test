@@ -144,6 +144,20 @@ class CFTP {
     return true;
   }
   
+  function renameFile($oldname, $newname) {
+    if(!$this->connexion) {
+      return false;
+    }
+    
+    // Rename the file
+    $rename = ftp_put($this->connexion, $oldname, $newname);
+    if (!$rename) {
+      return false;
+    } 
+    
+    return true;
+  }
+  
   function close() {
     // close the FTP stream
     ftp_close($this->connexion);
