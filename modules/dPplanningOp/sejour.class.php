@@ -93,6 +93,7 @@ class CSejour extends CCodable {
   // Behaviour fields
   var $_check_bounds = true;
   var $_en_mutation  = null;
+  var $_no_synchro   = null;
 
   // HPRIM Fields
   var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
@@ -416,25 +417,28 @@ class CSejour extends CCodable {
       $this->cancelOperations();
     }
 
-    // Cas où on a une premiere affectation différente de l'heure d'admission
-    $this->loadRefsAffectations();
-    $firstAff =& $this->_ref_first_affectation;
-    $lastAff =& $this->_ref_last_affectation;
-    if($firstAff->_id && ($firstAff->entree != $this->_entree)) {
-      $firstAff->entree = $this->_entree;
-      $firstAff->_no_synchro = 1;
-      $firstAff->store();
-    }
-    if($lastAff->_id && ($lastAff->sortie != $this->_sortie)) {
-      $lastAff->sortie = $this->_sortie;
-      $lastAff->_no_synchro = 1;
-      $lastAff->store();
-    }
-    
-    //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
-    if($lastAff->_id){
-      $this->_ref_last_affectation->effectue = $this->sortie_reelle ? 1 : 0;
-      $this->_ref_last_affectation->store();
+    // Synchronisation des affectations
+    if(!$this->_no_synchro) {
+      $this->loadRefsAffectations();
+      $firstAff =& $this->_ref_first_affectation;
+      $lastAff =& $this->_ref_last_affectation;
+      // Cas où on a une premiere affectation différente de l'heure d'admission
+      if($firstAff->_id && ($firstAff->entree != $this->_entree)) {
+        $firstAff->entree = $this->_entree;
+        $firstAff->_no_synchro = 1;
+        $firstAff->store();
+      }
+      // Cas où on a une dernière affectation différente de l'heure de sortie
+      if($lastAff->_id && ($lastAff->sortie != $this->_sortie)) {
+        $lastAff->sortie = $this->_sortie;
+        $lastAff->_no_synchro = 1;
+        $lastAff->store();
+      }
+      //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
+      if($lastAff->_id){
+        $this->_ref_last_affectation->effectue = $this->sortie_reelle ? 1 : 0;
+        $this->_ref_last_affectation->store();
+      }
     }
     
   }

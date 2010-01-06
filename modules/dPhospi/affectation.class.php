@@ -161,7 +161,7 @@ class CAffectation extends CMbObject {
     if($this->_no_synchro) {
       return $msg;
     }
-    if(!$this->_ref_prev->affectation_id && $this->sejour_id) {
+    if(!$this->_ref_prev->_id && $this->sejour_id) {
       if($this->entree != $this->_ref_sejour->_entree) {
         if($this->_ref_sejour->entree_reelle) {
           $this->_ref_sejour->entree_reelle = $this->entree;
@@ -176,7 +176,7 @@ class CAffectation extends CMbObject {
         $changePrev = 1;
       }
     }
-    if(!$this->_ref_next->affectation_id  && $this->sejour_id) {
+    if(!$this->_ref_next->_id  && $this->sejour_id) {
       if($this->sortie != $this->_ref_sejour->_sortie) {
         if($this->_ref_sejour->sortie_reelle) {
           $this->_ref_sejour->sortie_reelle = $this->sortie;
@@ -198,6 +198,7 @@ class CAffectation extends CMbObject {
       $this->_ref_next->store();
     }
     if($changeSejour) {
+      $this->_ref_sejour->_no_synchro = 1;
       $this->_ref_sejour->store();
     }
     return $msg;
