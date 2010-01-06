@@ -64,8 +64,33 @@ class CFile extends CDocumentItem {
     return $specs;
   }
   
+  private function forceDir() {
+    // Check global directory
+    if (!CMbPath::forceDir(self::$directory)) {
+      trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
+      return false;
+    }
+    
+    // Checks complete file directory
+    CMbPath::forceDir($this->_absolute_dir);
+  }
+  
   function getContent() {
     return file_get_contents($this->_file_path);
+  }
+  
+  function putContent($filedata) {
+    if (!$this->file_real_filename) {
+      return false;
+    }
+    
+    $this->updateFormFields();
+    
+    if ($this->forceDir() === false) {
+      return false;
+    }
+    
+    return file_put_contents($this->_file_path, $filedata);
   }
   
   function loadRefsFwd() {
@@ -149,14 +174,9 @@ class CFile extends CDocumentItem {
       
     $this->updateFormFields();
     
-    // Check global directory
-    if (!CMbPath::forceDir(self::$directory)) {
-      trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
+    if ($this->forceDir() === false) {
       return false;
     }
-    
-    // Checks complete file directory
-    CMbPath::forceDir($this->_absolute_dir);
   
     // Actually move any file
     if ($uploaded)
@@ -164,7 +184,7 @@ class CFile extends CDocumentItem {
     else 
       return rename($file, $this->_file_path);
   }
-  
+    
   static function loadFilesForObject(CMbObject $object){
     $listFile = new CFile();
     $listFile->setObject($object);

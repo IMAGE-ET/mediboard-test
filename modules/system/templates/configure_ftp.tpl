@@ -138,7 +138,7 @@
         var FTPSN = {
           test: function (sFTPSN) {
             var url = new Url;
-            url.setModuleAction("sip", "ajax_test_ftpsn");
+            url.setModuleAction("system", "ajax_test_ftpsn");
             url.addParam("ftpsn", sFTPSN);
             url.requestUpdate("config-admin-ftpsn-test-" + sFTPSN);
           }
