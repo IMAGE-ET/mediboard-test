@@ -28,6 +28,12 @@ function refreshConstantesMedicales (force) {
   }
 }
 
+refreshFacteursRisque = function(){
+  var url = new Url("dPcabinet", "httpreq_vw_facteurs_risque");
+	url.addParam("consultation_id", "{{$consult->_id}}");
+	url.requestUpdate("facteursRisque");
+}
+
 Main.add(function () {
   tabsConsultAnesth = new Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -58,6 +64,9 @@ Main.add(function () {
 	  <li onclick="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'', null, false);">
 	    <a href="#prescription_sejour">Trait. et prescription</a>
 	  </li>
+  {{/if}}
+	{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+    <li onmousedown="refreshFacteursRisque();"><a href="#facteursRisque">Facteurs de risque</a></li>
   {{/if}}
   <li><a href="#fdrConsult">Docs. et Réglements</a></li>
 </ul>
@@ -122,4 +131,8 @@ Main.add(function () {
 <div id="prescription_sejour" style="display: none"></div>
 {{/if}}
 
+{{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+<div id="facteursRisque" style="display: none;"></div>
+{{/if}}
+	
 <div id="fdrConsult" style="display: none;">{{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}</div>

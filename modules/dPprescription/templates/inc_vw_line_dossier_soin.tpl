@@ -181,24 +181,28 @@
   
   <!-- Affichage des posologies de la ligne -->
   <td class="text">
-    <small>
-    {{if @$line->_prises_for_plan.$unite_prise}}
-      {{if is_numeric($unite_prise)}}
-        <!-- Cas des posologies de type "tous_les", "fois par" ($unite_prise == $prise->_id) -->
-        <div style="white-space: nowrap;">
-	        {{assign var=prise value=$line->_prises_for_plan.$unite_prise}}
-	        {{$prise->_short_view}}
-        </div>
-      {{else}}
-        <!-- Cas des posologies sous forme de moments -->
-        {{foreach from=$line->_prises_for_plan.$unite_prise item=_prise}}
-          <div style="white-space: nowrap;">
-            {{$_prise->_short_view}}
-					</div>
-        {{/foreach}}
-      {{/if}}
-    {{/if}}
-    </small>
+  	{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+		
+		{{else}}
+	    <small>
+	    {{if @$line->_prises_for_plan.$unite_prise}}
+	      {{if is_numeric($unite_prise)}}
+	        <!-- Cas des posologies de type "tous_les", "fois par" ($unite_prise == $prise->_id) -->
+	        <div style="white-space: nowrap;">
+		        {{assign var=prise value=$line->_prises_for_plan.$unite_prise}}
+		        {{$prise->_short_view}}
+	        </div>
+	      {{else}}
+	        <!-- Cas des posologies sous forme de moments -->
+	        {{foreach from=$line->_prises_for_plan.$unite_prise item=_prise}}
+	          <div style="white-space: nowrap;">
+	            {{$_prise->_short_view}}
+						</div>
+	        {{/foreach}}
+	      {{/if}}
+	    {{/if}}
+	    </small>
+		{{/if}}
   </td>
   
   {{if $smarty.foreach.$global_foreach.first && $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
@@ -206,15 +210,26 @@
    <img src="images/icons/a_left.png" />
   </th>
   {{/if}}
-  
-  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
-  </td>
-  
-  {{include file="../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl" nodebug=true}}
  
-  <td id="last_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
-  </td>
-  
+	  <td id="first_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
+	  </td>
+	  
+		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+      {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+          <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
+                               {{if $moment_journee == 'nuit'}}{{$count_nuit-2}}{{/if}}
+                               {{if $moment_journee == 'matin'}}{{$count_matin-2}}{{/if}}">
+		        <div class="small-warning">Ligne non signée</div>
+		      </td>      
+		      {{/foreach}}
+		    {{/foreach}}
+   {{else}} 
+     {{include file="../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl" nodebug=true}}
+   {{/if}}
+	 
+	  <td id="last_{{$line_id}}_{{$line_class}}_{{$unite_prise}}" style="display: none;">
+	  </td>
  
  {{if $smarty.foreach.$global_foreach.first &&  $smarty.foreach.$first_foreach.first  && $smarty.foreach.$last_foreach.first}}
    <th class="after" style="cursor: pointer" onclick="showAfter();" rowspan="{{$nb_lines_chap}}" onmouseout="clearTimeout(timeOutAfter);">

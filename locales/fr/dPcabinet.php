@@ -1699,8 +1699,8 @@ $locales['CConsultation-_count_actes'] = 'Nombre d\'actes';
 $locales['CConsultation-_count_actes-court'] = 'Nb. actes';
 $locales['CConsultation-_count_actes-desc'] = 'Nombre d\'actes de la consultation';
 $locales['CLmLot.S_LOT_ETAT.10'] = '10 = MdS (Message de Service)';
-$locales['config-dPcabinet-CConsultAnesth-view_premedication'] = '';
-$locales['config-dPcabinet-CConsultAnesth-view_premedication-desc'] = '';
+$locales['config-dPcabinet-CConsultAnesth-view_premedication'] = 'Affichage de la premedication';
+$locales['config-dPcabinet-CConsultAnesth-view_premedication-desc'] = 'Affichage de la premedication';
 $locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
 $locales['pref-showDatesAntecedents'] = 'Afficher les champs dates dans l\'édition des antécédents et traitements';
 $locales['pref-showDatesAntecedents-desc'] = 'Afficher les champs dates dans l\'édition des antécédents et traitements';
@@ -1770,4 +1770,6 @@ $locales['CConsultation-_du_tiers_restant-court'] = 'Restant tiers';
 $locales['CConsultation-_du_tiers_restant-desc'] = 'Reste à régler par le tiers payant';
 $locales['pref-pratOnlyForConsult'] = 'Rendez-vous uniquement pour les praticiens';
 $locales['pref-pratOnlyForConsult-desc'] = 'Possibilité de ne donner des rendez-vous que pour des médecins';
+$locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque'] = 'Affichage de l\'onglet Facteurs de risque';
+$locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque-desc'] = 'Affichage de l\'onglet Facteurs de risque';
 ?>

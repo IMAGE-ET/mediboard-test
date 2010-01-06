@@ -1102,7 +1102,17 @@ class CSetupdPpatients extends CSetup {
               CHANGE `appareil` `appareil` VARCHAR (80);";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "0.94";
+		$this->makeRevision("0.94");
+		$sql = "ALTER TABLE `dossier_medical` 
+              ADD `risque_thrombo_patient` ENUM ('faible','modere','eleve','majeur','NR') DEFAULT 'NR',
+              ADD `risque_MCJ_patient` ENUM ('sans','avec','suspect','atteint','NR') DEFAULT 'NR',
+              ADD `risque_thrombo_chirurgie` ENUM ('faible','modere','eleve','NR') DEFAULT 'NR',
+              ADD `risque_antibioprophylaxie` ENUM ('oui','non','NR') DEFAULT 'NR',
+              ADD `risque_prophylaxie` ENUM ('oui','non','NR') DEFAULT 'NR',
+              ADD `risque_MCJ_chirurgie` ENUM ('sans','avec','NR') DEFAULT 'NR';";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.95";
   }
 }
 

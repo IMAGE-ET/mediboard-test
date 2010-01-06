@@ -603,6 +603,55 @@
     </td>
   </tr>
 
+  {{if $dPconfig.dPcabinet.CConsultAnesth.show_facteurs_risque}}
+  <tr>
+  	<td>
+  		<table style="width: 100%">
+			  <tr>
+			  	<th class="category" colspan="3">Facteurs de risque</th>
+			  </tr>
+				<tr>
+			    <th class="category">Facteur</th>
+			    <th class="category">Patient</th>
+			    <th class="category">Chirurgie</th>
+			  </tr>
+				<tr>
+					<th>Maladie thrombo-embolique</th>
+			    <td style="text-align: center;">
+			      {{mb_value object=$dossier_medical field="risque_thrombo_patient"}}
+			    </td>
+					<td style="text-align: center;">
+			      {{mb_value object=$dossier_medical_sejour field="risque_thrombo_chirurgie"}}
+			    </td> 
+				</tr>
+			  <tr>
+			    <th>MCJ</th>
+			    <td style="text-align: center;">
+			      {{mb_value object=$dossier_medical field="risque_MCJ_patient"}}
+			    </td>
+			    <td style="text-align: center;">
+			      {{mb_value object=$dossier_medical_sejour field="risque_MCJ_chirurgie"}}
+			    </td> 
+			  </tr>
+			  <tr>
+			    <th>Risque Anesthesique - Antibioprophylaxie</th>
+			    <td style="text-align: center;">&mdash;</td>
+			    <td style="text-align: center;">
+			      {{mb_value object=$dossier_medical_sejour field="risque_antibioprophylaxie"}}
+			    </td> 
+			  </tr>
+			  <tr>
+			    <th>Risque Anesthesique - Prophylaxie</th>
+			    <td style="text-align: center;">&mdash;</td>
+			    <td style="text-align: center;">
+			      {{mb_value object=$dossier_medical_sejour field="risque_prophylaxie"}}
+			   </td>  
+			  </tr>
+     </table>
+	 </td>
+	</tr>
+  {{/if}}
+	
 	<tr>
 		<th class="category">Visite de pré-anesthésie {{if $operation->date_visite_anesth}}- {{$operation->date_visite_anesth|date_format:$dPconfig.datetime}}{{/if}}</th>
 	</tr>

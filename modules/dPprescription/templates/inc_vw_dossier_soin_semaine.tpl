@@ -82,8 +82,8 @@ Main.add(function () {
 				    <th>Libelle</th>
 				    <th>Posologie</th>
 				    {{foreach from=$dates item=date}}
-				    <th>
-				      {{$date|date_format:"%d/%m/%Y"}}
+				    <th style="width: 1%">
+				      {{$date|date_format:$dPconfig.date}}
 				    </th>
 				    {{/foreach}}
 				  </tr>

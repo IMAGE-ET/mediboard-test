@@ -278,7 +278,8 @@ $dPconfig["dPcabinet"] = array(
      */
     "format_auto_motif"  => "Pré-anésth. %I %L %S",
     "format_auto_rques"  => "%T %E %e",
-    "view_premedication" => "0"
+    "view_premedication" => "0",
+		"show_facteurs_risque" => "0"
   ),
   "CPrescription" => array (
     "view_prescription" => "0"
@@ -405,6 +406,7 @@ $dPconfig["dPmedicament"] = array (
 $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
     "show_unsigned_lines" => "1",
+		"show_unsigned_med_msg"   => "0",
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
     "time_alerte_modification" => "2",

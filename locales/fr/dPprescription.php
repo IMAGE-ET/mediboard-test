@@ -1617,4 +1617,6 @@ $locales['CPerfusion-jour_decalage-desc'] = '';
 $locales['CPerfusion.jour_decalage.'] = '';
 $locales['CPerfusion.jour_decalage.I'] = 'I';
 $locales['CPerfusion.jour_decalage.N'] = 'N';
+$locales['config-dPprescription-CPrescription-show_unsigned_med_msg'] = 'Bloquer l\'administration des médicaments non signées dans le plan de soin';
+$locales['config-dPprescription-CPrescription-show_unsigned_med_msg-desc'] = 'Bloquer l\'administration des médicaments non signées dans le plan de soin';
 ?>

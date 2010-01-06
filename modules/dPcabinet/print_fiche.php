@@ -31,10 +31,12 @@ if ($consultation_id) {
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
   $consult->loadRefsExamIgs();
-  
+
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }
+
+  $consult->_ref_consult_anesth->_ref_sejour->loadRefDossierMedical();
 
   $praticien =& $consult->_ref_chir;
   $patient =& $consult->_ref_patient;
@@ -100,6 +102,7 @@ foreach($listChamps as $keyCol=>$aColonne){
     }
 	}
 }
+
 //Tableau d'unités
 $unites = array();
 $unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
@@ -116,7 +119,6 @@ $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 $unites["date_analyse"] = array("nom"=>"Date","unit"=>"");
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -125,6 +127,7 @@ $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
 $smarty->assign("etatDents" , $sEtatsDents);
 $smarty->assign("print", $print);
+$smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_sejour->_ref_dossier_medical);
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 
 $smarty->display($template.".tpl");

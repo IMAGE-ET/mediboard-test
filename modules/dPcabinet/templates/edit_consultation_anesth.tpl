@@ -80,6 +80,10 @@ function reloadConsultAnesth() {
   infosAnesthUrl.requestUpdate('InfoAnesth');
  
   Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, !Preferences.mode_readonly,'', null, false);
+
+  if($('facteursRisque')){
+	  refreshFacteursRisque();
+	}
 }
 
 Main.add(function () {

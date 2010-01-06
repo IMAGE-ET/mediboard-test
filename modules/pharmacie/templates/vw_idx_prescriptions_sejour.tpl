@@ -14,10 +14,12 @@
 {{mb_include_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
+
 function markAsSelected(element) {
   $("prescriptions-list").select('.selected').each(function (e) {e.removeClassName('selected')});
   $(element).up(1).addClassName('selected');
 }
+
 function updatePatientsListHeight() {
   var vpd = document.viewport.getDimensions(),
       scroller = $("left-column").down(".scroller"),
@@ -25,8 +27,16 @@ function updatePatientsListHeight() {
   scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
 }
 
+function updateListPrescrition(){
+  var url = new Url("pharmacie", "httpreq_vw_list_prescriptions");
+	url.addFormData(getForm("filterForm"));
+	url.requestUpdate('prescriptions-list');
+}
+
 Main.add(function () {
   updatePatientsListHeight();
+	updateListPrescrition();
+	setInterval(updateListPrescrition, 300000);
 });
 
 
@@ -39,6 +49,11 @@ Main.add(function () {
 			  <input type="hidden" name="m" value="{{$m}}" />
 	
         <table class="form">
+        	<tr>
+        	  <th class="category" colspan="6">
+        	  	Filtres pour l'affichage des prescriptions de séjour
+        	  </th>
+					</tr>
           <tr>
 			      <th>A partir du</th>
 			      <td>  
@@ -76,40 +91,23 @@ Main.add(function () {
               </select>
             </td>
             <td>
-              <button class="tick" type="button" onclick="this.form.submit()">Filtrer</button>
+              <button class="tick" type="button" onclick="updateListPrescrition();">Filtrer</button>
             </td>
           </tr>
         </table>
       </form>
     </td>
   </tr>
-  <tr>
+	<tr>
     <td style="width: 250px;" id="left-column">
 		  <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
       <table class="tbl" id="prescriptions-list" style="width:240px;">  
-        <tr>
-          <th>Prescriptions ({{$prescriptions|@count}})</th>
-        </tr>
-				{{foreach from=$prescriptions item=_prescription}}
-				<tr>
-				  <td style="width: 100px">
-				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}',true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); markAsSelected(this);">
-						  {{$_prescription->_ref_object->_view}}<br />
-				      {{$_prescription->_ref_patient->_view}}
-				    </a>
-				  </td>
-				</tr>
-				{{foreachelse}}
-				<tr>
-					<td colspan="3">{{tr}}CPrescription.none{{/tr}}</td>
-				</tr>
-				{{/foreach}}
-      </table>
+			</table>
 			</div>
     </td>
     <td>
       <div id="prescription_pharma">
-      {{include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 pharma=1}}
+      {{include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 pharma=1 mode_pack=0}}
       </div>
     </td>
   </tr>

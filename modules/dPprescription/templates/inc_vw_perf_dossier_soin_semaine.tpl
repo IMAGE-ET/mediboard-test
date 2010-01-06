@@ -29,9 +29,16 @@
  	     <li>{{$_line->_view}}</li>
  	   {{/foreach}}
  	  </ul>
- 	</td>	  
-  {{foreach from=$dates item=date name="foreach_date"}}
-    <td style="{{if $date < $_perfusion->_debut|date_format:'%Y-%m-%d' ||  $date > $_perfusion->_fin|date_format:'%Y-%m-%d'}}background-color: #ddd;{{/if}} text-align: center"> 		          
-    </td>
-  {{/foreach}}
+ 	</td>
+	
+	{{if !$_perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+	  <td colspan="5">
+	  	<div class="small-warning">Ligne non signée</div>
+	  </td>
+	{{else}}
+	  {{foreach from=$dates item=date name="foreach_date"}}
+	    <td style="{{if $date < $_perfusion->_debut|date_format:'%Y-%m-%d' ||  $date > $_perfusion->_fin|date_format:'%Y-%m-%d'}}background-color: #ddd;{{/if}} text-align: center"> 		          
+	    </td>
+	  {{/foreach}}
+	{{/if}}
 </tr>

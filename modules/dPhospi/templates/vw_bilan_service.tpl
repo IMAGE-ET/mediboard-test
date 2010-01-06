@@ -191,8 +191,6 @@ selectPeriode = function(element) {
   </table>
 </form>
 
-
-
 {{foreach from=$lines_by_patient key=chap item=_lines_by_chap name=foreach_chapitres}}
 <table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first}}style="page-break-before: always;"{{/if}}>
     <tr>
@@ -244,12 +242,11 @@ selectPeriode = function(element) {
 		</tr>
   	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 	  <tr>
-	    <td style="border:none;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+	    <td style="border:none; width: 1%;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
 			<th style="width: 250px; border:none;">Libellé</th> 
 			<th style="width: 50px; border:none;">Prévues</th>
 			<th style="width: 50px; border:none;">Effectuées</th>
 			<th style="width: 150px; border:none;">Unité adm.</th>
-			<th style="border:none;">Commentaire</th>
 	  </tr>
 	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
 		  {{assign var=_date_time value="$date $hour:00:00"}}
@@ -261,6 +258,27 @@ selectPeriode = function(element) {
 						  <td>{{$hour}}h</td>
 						 	<td colspan="5"><strong>{{$perfusion->_view}}</strong></td>
 						</tr>
+						
+						{{if !$perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+						<tr>
+							  <td></td>
+                <td class="text">
+                	<ul>
+                	{{foreach from=$lines key=perf_line_id item=_perf}}
+                    {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+                    <li>{{$perf_line->_ucd_view}}</li>
+                   {{/foreach}}
+									 </ul>
+                </td>
+								<td colspan="3">
+									<div class="small-warning">
+										Ligne non signée
+									</div>
+								</td>
+								<td></td>
+						</tr>
+						
+						{{else}}
             {{foreach from=$lines key=perf_line_id item=_perf}}
               {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
 					    <tr>
@@ -288,9 +306,9 @@ selectPeriode = function(element) {
                     {{$perf_line->_unite_administration}}
                   {{/if}}
                 </td>
-                <td></td>
               </tr>
            {{/foreach}}
+					 {{/if}}
 			   {{/foreach}}
 	      {{else}}
 				  {{foreach from=$prises key=line_id item=quantite}}
@@ -298,10 +316,21 @@ selectPeriode = function(element) {
             <tr>
             	<td>{{$hour}}h</td>
               <td style="width: 250px;">{{$line->_view}}
+							{{if $line->commentaire}}
+							  <br />{{$line->commentaire}}
+							{{/if}}
               {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
                 <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
               {{/if}}
               </td> 
+							
+							{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+							<td colspan="3">
+							  <div class="small-warning">
+							  	Ligne non signée
+							  </div>
+								</td>
+							{{else}}
               <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
               <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
               <td style="width: 150px; text-align: center;" class="text">
@@ -315,7 +344,7 @@ selectPeriode = function(element) {
                   {{$line->_unite_prise}}
                 {{/if}}
             </td>
-            <td class="text">{{$line->commentaire}}</td>
+						{{/if}}
           </tr>
           {{/foreach}}
 				{{/if}}
@@ -325,6 +354,7 @@ selectPeriode = function(element) {
   {{/foreach}}
 {{/foreach}}
 </table>
+
 {{/foreach}}
 
 <table>

@@ -33,7 +33,8 @@ Main.add(function () {
 
 </script>
 
-<table class="form">
+<button class="add" onclick="$('form_trans').toggle(); this.toggleClassName('add').toggleClassName('remove');">Formulaire de transmissions</button>
+<table class="form" id="form_trans" style="display: none;">
   <tr>
     <th class="title" style="width: 50%" colspan="4">
       Observations

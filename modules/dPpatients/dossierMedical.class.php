@@ -13,8 +13,18 @@
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $dossier_medical_id = null;
-  var $codes_cim          = null;
+  var $dossier_medical_id      = null;
+  var $codes_cim               = null;
+	
+	// Dossier medical Patient
+	var $risque_thrombo_patient   = null;
+	var $risque_MCJ_patient = null;
+
+	// Dossier medical Sejour
+	var $risque_thrombo_chirurgie = null;
+  var $risque_antibioprophylaxie   = null;
+  var $risque_prophylaxie = null;
+  var $risque_MCJ_chirurgie = null;
   
   // Form Fields
   var $_added_code_cim   = null;
@@ -44,6 +54,13 @@ class CDossierMedical extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["object_class"] = "enum list|CPatient|CSejour";
     $specs["codes_cim"] = "text";
+		
+	  $specs["risque_thrombo_patient"] = "enum list|NR|faible|modere|eleve|majeur default|NR";
+    $specs["risque_thrombo_chirurgie"] = "enum list|NR|faible|modere|eleve default|NR";
+		$specs["risque_MCJ_patient"] = "enum list|NR|sans|avec|suspect|atteint default|NR";
+    $specs["risque_MCJ_chirurgie"] = "enum list|NR|sans|avec default|NR";
+    $specs["risque_antibioprophylaxie"] = "enum list|NR|non|oui default|NR";
+	  $specs["risque_prophylaxie"] = "enum list|NR|non|oui default|NR";
     return $specs;
   }  
 

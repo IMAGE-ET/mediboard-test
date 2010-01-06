@@ -55,6 +55,7 @@ function updateUCD(){
       </th>
     </tr>
 		{{mb_include module=system template=inc_config_bool var=show_unsigned_lines}}
+		{{mb_include module=system template=inc_config_bool var=show_unsigned_med_msg}}
 		{{mb_include module=system template=inc_config_bool var=add_element_category}}
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
 		<tr>

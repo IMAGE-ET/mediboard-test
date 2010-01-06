@@ -40,6 +40,7 @@
 				{{/if}}
 	    </a>
     {{if $_perfusion->_active}}
+		  {{if $_perfusion->signature_prat || !$dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
 	      <form name="editPerfusion-{{$_perfusion->_id}}" method="post" action="?" style="float: right">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_perfusion_aed" />
@@ -59,6 +60,7 @@
 	        {{if !$_perfusion->date_retrait}}</a>{{/if}}
 	      </form>
 				{{/if}}
+	{{/if}}
 	  </div>
 	  
 		{{if $_perfusion->conditionnel}}
@@ -127,87 +129,103 @@
  	  {{$_perfusion->_frequence}}
  	</td>	      
   <th></th>
-  {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
-    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-      {{foreach from=$_dates key=_date item=_hours}}
-        {{foreach from=$_hours key=_heure_reelle item=_hour}}
-		      {{assign var=_date_hour value="$_date $_heure_reelle"}}	
-			    <td class="{{$_view_date}}-{{$moment_journee}}"
-			        style='cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
-					    
-							
-					    {{if ($_date_hour >= $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00') && ($_date_hour < $_perfusion->_fin) && $_perfusion->_active}}
-					      {{if ($_date_hour < $now) && $_perfusion->_pose}}
-					        background-image: url(images/pictures/perf_vert.png);
-					      {{else}}
-					        background-image: url(images/pictures/perf_bleu.png);
-					      {{/if}}
-					      {{if ($_perfusion->_pose && $_perfusion->_pose <= $_date_hour)}}
-					        {{if ($_perfusion->_retrait && $_perfusion->_retrait >= $_date_hour) || (!$_perfusion->_retrait && $_date_hour < $now)}}
-					          background-image: url(images/pictures/perf_vert.png);
-					        {{/if}}
-					      {{/if}}
-								{{if $_perfusion->_retrait && ($_perfusion->_retrait < $_date_hour)}}
-								   background-image: url(images/pictures/perf_rouge.png);
-								{{/if}}			    
-					    {{else}}
-					      background-color: #aaa;
-					       {{if ($_perfusion->_pose && $_perfusion->_pose <= $_date_hour)}}
-					        {{if ($_perfusion->_retrait && $_perfusion->_retrait > $_date_hour) || (!$_perfusion->_retrait && $_date_hour < $now)}}
-					          background-image: url(images/pictures/perf_vert.png);
-					        {{/if}}
-					      {{/if}}
-					    {{/if}}
-					    background-repeat: repeat-x; background-position: bottom; margin-bottom: 10px;'>
-					    
-					   {{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perf_line"}}
-						     {{if isset($_perf_line->_administrations.$_date.$_hour|smarty:nodefaults)}}
-						       {{assign var=nb_adm value=$_perf_line->_administrations.$_date.$_hour}}
-						     {{else}}
-						       {{assign var=nb_adm value=""}}
-						     {{/if}}
-
-								 {{if isset($_perfusion->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
-                   {{assign var=nb_prevue value=$_perf_line->_quantite_administration}}
-                   {{assign var=hour_prevue value=$_perfusion->_prises_prevues.$_date.$_hour.real_hour}}
-								 {{else}}
-								   {{assign var=nb_prevue value=""}}
-								   {{assign var=hour_prevue value=""}}
-								 {{/if}}
-						     
-	               <div {{if $smarty.foreach.foreach_perf_line.last}}style="margin-bottom: 15px;"{{else}}style="margin-bottom: 5px;"{{/if}} 
-	                    onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}');"
-	                    ondblclick='addAdministrationPerf("{{$_perfusion->_id}}","{{$_date}}","{{$_hour}}","{{$hour_prevue}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
-											class="administration
-											       {{if $nb_prevue && $_perfusion->_active && ($nb_adm || $nb_adm == 0)}}
-											         {{if $nb_prevue == $nb_adm}}administre
-											         {{elseif $nb_adm == '0'}}administration_annulee
-											         {{elseif $nb_adm}}administration_partielle
-											         {{elseif $_date_hour < $now}}non_administre
-											         {{else}}a_administrer{{/if}}
-											       {{/if}}">
-									
-									 {{* Affichage des prises prevues et des administrations *}}
-									 {{if $nb_adm}}{{$nb_adm}}{{elseif $nb_prevue && $_perfusion->_active}}0{{/if}}
-									 {{if $nb_prevue && $_perfusion->_active}}/{{/if}}
-									 {{if $nb_prevue && $_perfusion->_active}}{{$nb_prevue}}{{/if}}
-						    </div>	
-						    <div id="tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}" style="display: none;">
-						      Prises prévues à {{$hour_prevue|date_format:$dPconfig.time}}
-						      <ul>
-						      {{foreach from=$_perfusion->_ref_lines item=_perf_line}}
-						        <li>{{$_perf_line->_ref_produit->libelle_abrege}} {{$_perf_line->_ref_produit->dosage}}: {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}</li>
-						      {{/foreach}}
-						      </ul>
-						    </div>
-					    {{/foreach}}
-							
-							
-			    </td>
-		    {{/foreach}}
-     {{/foreach}}		   
-   {{/foreach}}
- {{/foreach}}		
+	
+	{{if !$_perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+	  {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+          <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
+                               {{if $moment_journee == 'nuit'}}{{$count_nuit-2}}{{/if}}
+                               {{if $moment_journee == 'matin'}}{{$count_matin-2}}{{/if}}">
+            <div class="small-warning">Ligne non signée</div>
+          </td>      
+          {{/foreach}}
+        {{/foreach}}
+	
+	{{else}}
+		{{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+	    {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+	      {{foreach from=$_dates key=_date item=_hours}}
+	        {{foreach from=$_hours key=_heure_reelle item=_hour}}
+			      {{assign var=_date_hour value="$_date $_heure_reelle"}}	
+				    <td class="{{$_view_date}}-{{$moment_journee}}"
+				        style='cursor: pointer; {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}
+						    
+								
+						    {{if ($_date_hour >= $_perfusion->_debut|date_format:'%Y-%m-%d %H:00:00') && ($_date_hour < $_perfusion->_fin) && $_perfusion->_active}}
+						      {{if ($_date_hour < $now) && $_perfusion->_pose}}
+						        background-image: url(images/pictures/perf_vert.png);
+						      {{else}}
+						        background-image: url(images/pictures/perf_bleu.png);
+						      {{/if}}
+						      {{if ($_perfusion->_pose && $_perfusion->_pose <= $_date_hour)}}
+						        {{if ($_perfusion->_retrait && $_perfusion->_retrait >= $_date_hour) || (!$_perfusion->_retrait && $_date_hour < $now)}}
+						          background-image: url(images/pictures/perf_vert.png);
+						        {{/if}}
+						      {{/if}}
+									{{if $_perfusion->_retrait && ($_perfusion->_retrait < $_date_hour)}}
+									   background-image: url(images/pictures/perf_rouge.png);
+									{{/if}}			    
+						    {{else}}
+						      background-color: #aaa;
+						       {{if ($_perfusion->_pose && $_perfusion->_pose <= $_date_hour)}}
+						        {{if ($_perfusion->_retrait && $_perfusion->_retrait > $_date_hour) || (!$_perfusion->_retrait && $_date_hour < $now)}}
+						          background-image: url(images/pictures/perf_vert.png);
+						        {{/if}}
+						      {{/if}}
+						    {{/if}}
+						    background-repeat: repeat-x; background-position: bottom; margin-bottom: 10px;'>
+						    
+						   {{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perf_line"}}
+							     {{if isset($_perf_line->_administrations.$_date.$_hour|smarty:nodefaults)}}
+							       {{assign var=nb_adm value=$_perf_line->_administrations.$_date.$_hour}}
+							     {{else}}
+							       {{assign var=nb_adm value=""}}
+							     {{/if}}
+	
+									 {{if isset($_perfusion->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
+	                   {{assign var=nb_prevue value=$_perf_line->_quantite_administration}}
+	                   {{assign var=hour_prevue value=$_perfusion->_prises_prevues.$_date.$_hour.real_hour}}
+									 {{else}}
+									   {{assign var=nb_prevue value=""}}
+									   {{assign var=hour_prevue value=""}}
+									 {{/if}}
+							     
+		               <div {{if $smarty.foreach.foreach_perf_line.last}}style="margin-bottom: 15px;"{{else}}style="margin-bottom: 5px;"{{/if}} 
+		                    onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}');"
+		                    ondblclick='addAdministrationPerf("{{$_perfusion->_id}}","{{$_date}}","{{$_hour}}","{{$hour_prevue}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
+												class="administration
+												       {{if $nb_prevue && $_perfusion->_active && ($nb_adm || $nb_adm == 0)}}
+												         {{if $nb_prevue == $nb_adm}}administre
+												         {{elseif $nb_adm == '0'}}administration_annulee
+												         {{elseif $nb_adm}}administration_partielle
+												         {{elseif $_date_hour < $now}}non_administre
+												         {{else}}a_administrer{{/if}}
+												       {{/if}}">
+										
+										 {{* Affichage des prises prevues et des administrations *}}
+										 {{if $nb_adm}}{{$nb_adm}}{{elseif $nb_prevue && $_perfusion->_active}}0{{/if}}
+										 {{if $nb_prevue && $_perfusion->_active}}/{{/if}}
+										 {{if $nb_prevue && $_perfusion->_active}}{{$nb_prevue}}{{/if}}
+							    </div>	
+							    <div id="tooltip-content-{{$_perfusion->_guid}}-{{$_date_hour}}" style="display: none;">
+							      Prises prévues à {{$hour_prevue|date_format:$dPconfig.time}}
+							      <ul>
+							      {{foreach from=$_perfusion->_ref_lines item=_perf_line}}
+							        <li>{{$_perf_line->_ref_produit->libelle_abrege}} {{$_perf_line->_ref_produit->dosage}}: {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}</li>
+							      {{/foreach}}
+							      </ul>
+							    </div>
+						    {{/foreach}}
+						  
+								
+				    </td>
+			    {{/foreach}}
+	     {{/foreach}}		   
+	   {{/foreach}}
+	 {{/foreach}}		
+ {{/if}}
+ 
+ 
  <th></th>
  <td style="text-align: center">
    {{if $_perfusion->signature_prat}}
