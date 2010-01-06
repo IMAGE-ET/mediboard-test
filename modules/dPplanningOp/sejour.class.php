@@ -405,7 +405,6 @@ class CSejour extends CCodable {
     if($this->mode_sortie === ""){
       $this->sortie_reelle = "";
     }
-  	
     // On fait le store du séjour
   	if ($msg = parent::store()) {
       return $msg;
