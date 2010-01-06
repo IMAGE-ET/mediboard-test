@@ -188,13 +188,13 @@ class CMbXMLDocument extends DOMDocument {
    * Create a CFile attachment to given CMbObject
    * @return string store-like message, null if successful
    */
-  function addFile($object) {
+  function addFile(CMbObject $object) {
     global $AppUI;
     $this->saveFile();
     $file = new CFile();
     $file->object_id          = $object->_id;
     $file->object_class       = $object->_class_name;
-    $file->file_name          = $object->_class_name."-".$object->_id.".xml";
+    $file->file_name          = "$object->_guid.xml";
     $file->file_type          = "text/xml";
     $file->file_size          = filesize($this->documentfilename);
     $file->file_date          = mbDateTime();

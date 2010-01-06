@@ -420,7 +420,9 @@ abstract class CSQLDataSource {
     
     $fields = array();
     $values = array();
-    foreach (get_object_vars($object) as $k => $v) {
+    $vars = get_object_vars($object);
+    
+    foreach ($vars as $k => $v) {
       // Skip null, arrays and objects
       if ($v === null || is_array($v) || is_object($v)) {
         continue;
@@ -430,8 +432,6 @@ abstract class CSQLDataSource {
       if ($k[0] === "_") {
         continue;
       }
-      
-      $v = trim($v);
       
       // Skip empty vars
       if ($v === "" && $k !== $keyName) {
@@ -494,6 +494,7 @@ abstract class CSQLDataSource {
     
     $tmp = array();
     $vars = get_object_vars($object);
+    
     foreach ($vars as $k => $v) {
       // Where clause on key name
       if ($k === $keyName) { 
@@ -510,8 +511,8 @@ abstract class CSQLDataSource {
       if ($k[0] === "_") { // internal field
         continue;
       }
-
-      $v = $this->escape(trim($v));
+      
+      $v = $this->escape($v);
       
       // Quote everything
       $this->quote($table, $k, $v);

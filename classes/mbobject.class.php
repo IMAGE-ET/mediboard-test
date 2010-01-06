@@ -878,8 +878,15 @@ class CMbObject {
   /**
    * Update the form fields from the DB fields
    */
-
   function updateDBFields() {
+    $fields = $this->getDBFields();
+    $specs = $this->_specs;
+    
+    foreach ($fields as $field => $value) {
+      if ($value !== null) {
+        $this->$field = $specs[$field]->trim($value);
+      }
+    }
   }
   
   /**
@@ -943,13 +950,13 @@ class CMbObject {
       return;	
     }
     
-    //$address = get_remote_address();
+    $address = get_remote_address();
     
     $log = new CUserLog;
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
-    //$log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
+    $log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
