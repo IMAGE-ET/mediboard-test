@@ -377,7 +377,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
-    if ($medecins->hasChildNodes()) {
+    if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
       foreach ($medecin as $_med) {
      		$mediuser_id = $this->getMedecin($_med);
