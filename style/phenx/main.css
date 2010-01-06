@@ -1866,10 +1866,14 @@ table#weber td {
 }
 
 /* Liste de choix dans les comptes rendus */
-td.listeChoixCR select {
-	margin: 1px;
-	float: left;
-  width: 150px;	
+.listeChoixCR {
+  white-space: normal;
+}
+
+.listeChoixCR select {
+  margin: 1px;
+  float: left;
+  width: 150px; 
 }
 
 /* Installation wizard */

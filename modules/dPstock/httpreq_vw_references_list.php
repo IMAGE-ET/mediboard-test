@@ -15,7 +15,7 @@ $category_id = CValue::get('category_id');
 $societe_id  = CValue::get('societe_id');
 $keywords    = CValue::get('keywords');
 $order_id    = CValue::get('order_id');
-$limit       = CValue::get('limit');
+$start       = CValue::get('start', 0);
 
 $where = array();
 if ($category_id) {
@@ -36,18 +36,18 @@ $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_reference.product_id';
 
 $reference = new CProductReference();
-$list_references_count = $reference->countList($where, $orderby, null, null, $leftjoin);
-$list_references = $reference->loadList($where, $orderby, $limit?$limit:30, null, $leftjoin);
+$total = $reference->countList($where, null, null, null, $leftjoin);
+$list_references = $reference->loadList($where, $orderby, intval($start).",15", null, $leftjoin);
 foreach($list_references as $ref) {
-  $ref->loadRefs();
+  $ref->loadRefsFwd();
 }
 
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_references',       $list_references);
-$smarty->assign('list_references_count', $list_references_count);
-$smarty->assign('order_id',              $order_id);
+$smarty->assign('list_references', $list_references);
+$smarty->assign('total', $total);
+$smarty->assign('order_id', $order_id);
+$smarty->assign('start', $start);
 
 $smarty->display('inc_references_list.tpl');
-?>

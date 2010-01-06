@@ -67,12 +67,22 @@ function submitOrderItem (oForm, options) {
   }
 }
 
+function refreshReception(reception_id, options) {
+  var url = new Url("dPstock","httpreq_vw_reception");
+  url.addParam("reception_id", reception_id);
+  url.requestUpdate("reception");
+}
+
 /** The refresh order function
  *  Used to refresh the view of an order
 */
 function refreshOrder(order_id, options) {
   if (options && options.refreshLists) {
-    refreshLists();
+    if (options.refreshLists === true)
+      refreshLists();
+    else {
+     (window.opener || window).refreshListOrders(options.refreshLists);
+    }
   }
   var url = new Url("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
@@ -146,10 +156,9 @@ function popupOrderForm(iOrderId, width, height) {
   url.popup(width, height, "Bon de commande");
 }
 
-function printBarcodeGrid(order_id, receptions_list, force_print) {
+function printBarcodeGrid(reception_id, force_print) {
   var url = new Url("dPstock", "print_reception_barcodes");
-  url.addParam("order_id", order_id);
-  url.addParam("receptions_list", receptions_list);
+  url.addParam("reception_id", reception_id);
   url.addParam("force_print", force_print);
   url.addParam("suppressHeaders", true);
   url.popup(800, 700, "Codes barres");

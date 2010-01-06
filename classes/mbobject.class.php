@@ -1603,8 +1603,8 @@ class CMbObject {
    *  Generic seek method
    *  @return the first 100 records which fits the keywords
    */
-  function seek($keywords, $where = array(), $limit = 100) {
-    $query = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
+  function seek($keywords, $where = array(), $limit = 100, $countTotal = false) {
+    $query = "FROM `{$this->_spec->table}` WHERE 1";
 		
     if (!is_array($keywords)) {
       $keywords = array_filter(explode(' ', $keywords));
@@ -1612,11 +1612,14 @@ class CMbObject {
 		
     $seekables = $this->getSeekables();
     
+    $noWhere = true;
+    
     // Add specific where clauses
     if ($where && count($where)) {
-	    foreach ($where as $col => $value) {
-	    	$query .= " AND `$col` $value";
-	    }
+      $noWhere = false;
+      foreach ($where as $col => $value) {
+        $query .= " AND `$col` $value";
+      }
     }
     
     // Add seek clauses
@@ -1649,21 +1652,29 @@ class CMbObject {
           }
         }
         
-        
         $query .= "\n)";
       }
     } 
-    else {
+    else if ($noWhere){
       $query .= "\nAND 0";
+    }
+    
+    $this->_totalSeek = null;
+    
+    if ($countTotal) {
+      $ds = $this->_spec->ds;
+      $result = $ds->query("SELECT COUNT(*) AS _total $query");
+      $line = $ds->fetchAssoc($result);
+      $this->_totalSeek = $line["_total"];
     }
     
     $query .= "\nORDER BY";
     foreach($seekables as $field => $spec) {
       $query .= "\n`$field`,";
     }
-    $query .= "\n `{$this->_spec->key}`";
-    $query .=" LIMIT $limit";
-    return $this->loadQueryList($query);
+    $query .= "\n `{$this->_spec->key}` LIMIT $limit";
+    
+    return $this->loadQueryList("SELECT * $query");
   }
   
   /**

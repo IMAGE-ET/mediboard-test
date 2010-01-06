@@ -12,7 +12,7 @@
 <!-- Orders not validated yet -->
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
+    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
@@ -32,7 +32,7 @@
         </span>
       </td>
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
-	    <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
+	    <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total decimals=4}}</td>
 	    <td>
         <button type="button" class="edit" onclick="popupOrder({{$curr_order->_id}});">{{tr}}Modify{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
@@ -66,7 +66,7 @@
 <!-- Orders locked -->
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
+    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
@@ -86,7 +86,7 @@
         </span>
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
+      <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total decimals=4}}</td>
       <td>
         <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de commande</button>
         <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
@@ -126,7 +126,7 @@
 <!-- Orders not received yet -->
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
+    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
@@ -148,7 +148,7 @@
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
+      <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total decimals=4}}</td>
       <td>
         <button type="button" class="tick" onclick="popupReception({{$curr_order->_id}});">{{tr}}Recevoir{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
@@ -174,7 +174,7 @@
 <!-- Received orders -->
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
+    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
@@ -198,7 +198,7 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
+      <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total decimals=4}}</td>
       <td>
         <button type="button" class="print" onclick="printBarcodeGrid('{{$curr_order->_id}}')">Imprimer les codes barres</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
@@ -224,7 +224,7 @@
 <!-- Cancelled orders -->
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
+    <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
@@ -248,7 +248,7 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
+      <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total decimals=4}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -277,5 +277,14 @@
 
 <!-- The orders count -->
 <script type="text/javascript">
-  $('list-orders-{{$type}}-count').innerHTML = {{$orders|@count}};
+  tab = $$('a[href="#list-orders-{{$type}}"]')[0];
+  counter = tab.down("small");
+  count = {{$orders|@count}};
+  
+  if (count > 0)
+    tab.removeClassName("empty");
+  else
+    tab.addClassName("empty");
+    
+  counter.update("("+count+")");
 </script>

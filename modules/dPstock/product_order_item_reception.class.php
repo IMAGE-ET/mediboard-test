@@ -72,8 +72,35 @@ class CProductOrderItemReception extends CMbObject {
     $this->loadRefOrderItem();
     $this->loadRefReception();
   }
+  
+  function delete(){
+    $this->loadRefOrderItem();
+    $this->_ref_order_item->loadReference();
+    $this->_ref_order_item->_ref_reference->loadRefProduct();
+    $product = $this->_ref_order_item->_ref_reference->_ref_product;
+    if ($product->loadRefStock()) {
+      $this->completeField("quantity");
+      $product->_ref_stock_group->quantity -= $this->quantity;
+      $product->_ref_stock_group->store();
+    }
+    return parent::delete();
+  }
 
   function store() {
+    $this->completeField("reception_id");
+    
+    if (!$this->_id && !$this->reception_id) {
+      $reception = new CProductReception;
+      
+      /////////////////////////////////////////////////////
+      //$reception->societe_id = 20; // FIXME: supprimer ça pour prendre en compte une vraie societé
+      /////////////////////////////////////////////////////
+      
+      $reception->group_id = CGroups::loadCurrent()->_id;
+      $reception->store();
+      $this->reception_id = $reception->_id;
+    }
+    
     $this->loadRefOrderItem();
     $this->_ref_order_item->loadRefsFwd();
     $this->_ref_order_item->_ref_reference->loadRefsFwd();
@@ -94,18 +121,10 @@ class CProductOrderItemReception extends CMbObject {
       $stock->group_id = $g;
       $stock->quantity = $qty;
       $stock->order_threshold_min = $qty;
-      CAppUI::setMsg("Un nouveau stock pour [$product] a été créé", UI_MSG_OK);
+      CAppUI::setMsg("Un nouveau stock pour [%s] a été créé", UI_MSG_OK, $product);
     }
     if ($msg = $stock->store()) {
       return $msg;
-    }
-    
-    if ($this->_cancel && $this->_id) {
-    	$product->_ref_stock_group->quantity -= $this->quantity;
-    	$product->_ref_stock_group->store();
-    	$this->delete();
-    	$this->_cancel = null;
-    	return;
     }
     
     return parent::store();

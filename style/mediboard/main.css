@@ -32,6 +32,7 @@ pre {
 table {
   font-family: inherit;
   font-size: 1em;
+  /*border-collapse: collapse;*/
 }
 
 th {
@@ -43,6 +44,8 @@ td p,
 th p {
   white-space: normal;
   margin: 0;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
 }
 
 img {
@@ -115,7 +118,6 @@ form {
 }
 
 textarea {
-  font-family: inherit;
   font-size: 1em;
   border: 1px black solid;
   padding-left: 2px;
@@ -1356,7 +1358,7 @@ div.postit table.decoration td.content {
   border-bottom-width: 1px;
   background-color: #ff6;
   max-height: 40px;
-  overflow: scroll;
+  overflow: auto;
   padding-right: 10px;
   padding-bottom: 10px;
   white-space: nowrap;
@@ -2396,7 +2398,11 @@ table#weber td {
 }
 
 /* Liste de choix dans les comptes rendus */
-td.listeChoixCR select {
+.listeChoixCR {
+  white-space: normal;
+}
+
+.listeChoixCR select {
 	margin: 1px;
 	float: left;
   width: 150px;	

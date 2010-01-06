@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
-<button type="button" class="print" onclick="printBarcodeGrid('{{$order->_id}}')">Codes barres</button>
-
 <table class="tbl">
   <tr>
     {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
@@ -34,10 +31,12 @@
   {{/foreach}}
   <tr>
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">
+      <strong style="float: right;">
         {{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span>
-      </span>
+      </strong>
       
+      <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: 'waiting'})">{{tr}}Refresh{{/tr}}</button>
+
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}
        <form name="order-lock-{{$order->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />

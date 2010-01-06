@@ -62,8 +62,16 @@ class CProductReference extends CMbObject {
   }
 
   function loadRefsFwd(){
-    $this->_ref_product = $this->loadFwdRef("product_id", true);
-    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+    $this->loadRefProduct();
+    $this->loadRefSociete();
+  }
+  
+  function loadRefProduct(){
+    return $this->_ref_product = $this->loadFwdRef("product_id", true);
+  }
+  
+  function loadRefSociete(){
+    return $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
   
   function check() {
@@ -92,7 +100,7 @@ class CProductReference extends CMbObject {
     if(!$this->_ref_product) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_product->getPerm($permType));
+    return $this->_ref_product->getPerm($permType);
   }
 }
 ?>

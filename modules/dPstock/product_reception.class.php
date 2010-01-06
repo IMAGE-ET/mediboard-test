@@ -17,7 +17,6 @@ class CProductReception extends CMbObject {
 	var $societe_id       = null;
   var $group_id         = null;
   var $reference        = null;
-  //var $reception_number = null;
 
 	// Object References
 	//    Multiple
@@ -31,6 +30,7 @@ class CProductReception extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "product_reception";
     $spec->key   = "reception_id";
+    $spec->uniques["reference"] = array("reference");
     return $spec;
   }
 
@@ -43,13 +43,13 @@ class CProductReception extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date']       = 'dateTime seekable';
-    $specs['societe_id'] = 'ref notNull class|CSociete';
+    $specs['societe_id'] = 'ref class|CSociete';
     $specs['group_id']   = 'ref notNull class|CGroups';
 	  $specs['reference']  = 'str notNull';
 		return $specs;
 	}
   
-  function getUniqueNumber() {
+  private function getUniqueNumber() {
   	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
     if (strpos($format, '%id') === false) {
@@ -59,24 +59,48 @@ class CProductReception extends CMbObject {
   	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 6, '0', STR_PAD_LEFT), $format);
   	return mbTransformTime(null, null, $format);
   }
+  
+  function findFromOrder($order_id) {
+    $receptions = array();
+    $order = new CProductOrder;
+    $order->load($order_id);
+    $order->loadBackRefs("order_items");
+   
+    foreach($order->_back["order_items"] as $order_item) {
+      $r = $order_item->loadBackRefs("receptions");
+      
+      foreach($r as $_r) {
+        if (!$_r->reception_id) continue;
+        
+        if (!isset($receptions[$_r->reception_id])) {
+          $receptions[$_r->reception_id] = 0;
+        }
+        $receptions[$_r->reception_id]++;
+      }
+    }
+    
+    if (!count($receptions)) return;
+    
+    $reception_id = array_search(max($receptions), $receptions);
+    if ($reception_id) {
+      $this->load($reception_id);
+    }
+  }
 
 	function updateFormFields() {
 		parent::updateFormFields();
-
-		$count = $this->countBackRefs('reception_items');
-		$this->_view  = $this->_ref_societe ? "{$this->_ref_societe->_view} - " : "";
-		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total";
+    $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe" : "");
 	}
   
-  /*function store () {
-    if (!$this->_id && empty($this->reception_number)) {
-      $this->reception_number = uniqid(rand());
+  function store () {
+    if (!$this->_id && empty($this->reference)) {
+      $this->reference = uniqid(rand());
       if ($msg = parent::store()) return $msg;
-      $this->reception_number = $this->getUniqueNumber();
+      $this->reference = $this->getUniqueNumber();
     }
     
     return parent::store();
-  }*/
+  }
 
 	function loadRefsBack(){
 		$this->_ref_reception_items = $this->loadBackRefs('reception_items');
@@ -89,7 +113,7 @@ class CProductReception extends CMbObject {
 
 	function getPerm($permType) {
 		if(!$this->_ref_reception_items) {
-			$this->loadRefsFwd();
+			$this->loadRefsBack();
 		}
 
 		foreach ($this->_ref_reception_items as $item) {

@@ -13,7 +13,7 @@ $can->needsRead();
 
 $category_id = CValue::getOrSession('category_id');
 $societe_id  = CValue::getOrSession('societe_id');
-$limit       = CValue::get('limit');
+$start       = CValue::get('start');
 $keywords    = CValue::get('keywords');
 
 $where = array();
@@ -31,8 +31,8 @@ if ($keywords) {
 $orderby = 'name, code';
 
 $product = new CProduct();
-$list_products_count = $product->countList($where, $orderby);
-$list_products = $product->loadList($where, $orderby, $limit?$limit:30);
+$total = $product->countList($where);
+$list_products = $product->loadList($where, $orderby, intval($start).",15");
 
 foreach($list_products as $prod) {
 	$prod->loadRefs();
@@ -41,8 +41,9 @@ foreach($list_products as $prod) {
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_products',       $list_products);
-$smarty->assign('list_products_count', $list_products_count);
+$smarty->assign('list_products', $list_products);
+$smarty->assign('total', $total);
+$smarty->assign('start', $start);
 
 $smarty->display('inc_products_list.tpl');
 ?>

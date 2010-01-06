@@ -13,10 +13,9 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "societe_id", "keywords", "limit"];
-  referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
-  referencesFilter.submit();
-  updateUnitQuantity(getForm("edit_reference"), "equivalent_quantity");
+  var form = getForm("edit_reference");
+  updateUnitQuantity(form, "equivalent_quantity");
+  filterReferences(form);
 });
 
 function updateUnitQuantity(form, view) {
@@ -32,33 +31,44 @@ ProductSelector.init = function(){
   this.sPackaging = "packaging";
   this.pop({{$reference->product_id}});
 }
+
+function changePage(start) {
+  $V(getForm("filter-references").start, start);
+}
+
+function filterReferences(form) {
+  var url = new Url("dPstock", "httpreq_vw_references_list");
+  url.addFormData(form);
+  url.requestUpdate("list-references");
+  return false;
+}
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-references" action="?" method="post" onsubmit="return referencesFilter.submit('keywords');">
+      <form name="filter-references" action="?" method="post" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
-        <select name="category_id" onchange="referencesFilter.submit();">
+        <select name="category_id" onchange="this.form.onsubmit()">
           <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="referencesFilter.submit();">
+        <select name="societe_id" onchange="this.form.onsubmit()">
           <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
         </select>
         
-        <input type="hidden" name="limit" value="" />
         <input type="text" name="keywords" value="" size="12" />
         
-        <button type="button" class="search notext" onclick="referencesFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="referencesFilter.empty();"></button>
+        <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="this.form.reset()"></button>
       </form>
 
       <div id="list-references"></div>
@@ -112,7 +122,7 @@ ProductSelector.init = function(){
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>
-          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=5 min="0" size=8}}</td>
+          <td style="text-align: right;">{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min="0" size=8}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="code"}}</th>

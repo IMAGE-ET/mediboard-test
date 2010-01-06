@@ -24,9 +24,9 @@
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
   <td>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
-      {{$curr_item->_view|truncate:60}}
-    </span>
+    <p onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
+      {{$curr_item|truncate:80}}
+    </p>
   </td>
   <td>
     {{if !$order->date_ordered}}
@@ -51,11 +51,17 @@
       {{mb_value object=$curr_item field=quantity}}
     {{/if}}
   </td>
-  <td>{{mb_value object=$curr_item field=unit_price}}</td>
-  <td id="order-item-{{$id}}-price">{{mb_value object=$curr_item field=_price}}</td>
+  <td style="text-align: right;">
+    {{mb_value object=$curr_item field=unit_price}}
+  </td>
+  <td id="order-item-{{$id}}-price" style="text-align: right;">
+    {{mb_value object=$curr_item field=_price}}
+  </td>
   
   {{if $order->date_ordered}}
-  <td style="width: 1%; white-space: nowrap;">{{$curr_item->_quantity_received}}</td>
+  <td style="width: 1%; white-space: nowrap;">
+  {{$curr_item->_quantity_received}}
+  </td>
   
   <!-- Receive item -->
   <td style="width: 1%; white-space: nowrap; padding: 0;">

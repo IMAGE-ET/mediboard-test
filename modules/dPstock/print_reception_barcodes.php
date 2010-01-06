@@ -11,9 +11,9 @@
 global $can;
 $can->needsRead();
 
-$order_id    = CValue::get('order_id');
-$force_print = CValue::get('force_print');
-$receptions_list = CValue::get('receptions_list');
+// FIXME: corriger ça
+$reception_id = CValue::get('reception_id');
+$force_print  = CValue::get('force_print');
 
 $order = new CProductOrder();
 $order->load($order_id);
@@ -34,26 +34,26 @@ $pdf->AddPage();
 
 $data = array();
 $j = 0;
-if ($order->_id) {
-	foreach ($order->_ref_order_items as &$item) {
+if ($reception->_id) {
+	foreach ($reception->_ref_order_items as &$item) {
 		$item->loadRefsBack();
 		$item->loadRefsFwd();
 		$item->_ref_reference->loadRefsFwd();
 		$item->_ref_reference->_ref_product->loadRefsFwd();
 		
-		foreach ($item->_ref_receptions as &$reception) {
-			if(!$reception->barcode_printed || $force_print) {
-				for ($i = 0; $i < $reception->quantity; $i++) {
+		foreach ($item->_ref_receptions as &$_reception) {
+			if(!$_reception->barcode_printed || $force_print) {
+				for ($i = 0; $i < $_reception->quantity; $i++) {
 	        $data[$j] = array();
 	        $d = &$data[$j];
         
 					$d[] = $item->_ref_reference->_ref_product->name;
 					$d[] = $item->_ref_reference->_ref_product->_ref_societe->_view;
-					$d[] = $reception->lapsing_date;
-					$d[] = $reception->code;
+					$d[] = $_reception->lapsing_date;
+					$d[] = $_reception->code;
 					
 					$d[] = array(
-					  'barcode' => $item->_ref_reference->_ref_product->code." ".$reception->code,
+					  'barcode' => $item->_ref_reference->_ref_product->code." ".$_reception->code,
 					  'type'    => 'C128B'
 					);
 					$j++;
@@ -95,5 +95,3 @@ $pdf->WriteBarcodeGrid(8,8,210-16,297-16,4,10, $data);
 
 // Nom du fichier: prescription-xxxxxxxx.pdf   / I : sortie standard
 $pdf->Output("barcodes.pdf","I");
-
-?>

@@ -12,44 +12,53 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  var filterFields = ["category_id", "societe_id", "keywords", "limit"];
-  // Filter must be global
-  productsFilter = new Filter("filter-products", "{{$m}}", "httpreq_vw_products_list", "list-products", filterFields);
-  productsFilter.submit();
+  filterReferences(getForm("filter-products"));
 });
+
+function changePage(start) {
+  $V(getForm("filter-products").start, start);
+}
+
+function filterReferences(form) {
+  var url = new Url("dPstock", "httpreq_vw_products_list");
+  url.addFormData(form);
+  url.requestUpdate("list-products");
+  return false;
+}
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">
-      <form name="filter-products" action="?" method="post" onsubmit="return productsFilter.submit('keywords');">
+      <form name="filter-products" action="?" method="post" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
-        <select name="category_id" onchange="productsFilter.submit();">
+        <select name="category_id" onchange="this.form.onsubmit()">
           <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="productsFilter.submit();" style="width: 12em;">
+        <select name="societe_id" onchange="this.form.onsubmit()" style="width: 12em;">
           <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
         </select>
         
-        <input type="hidden" name="limit" value="" />
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="productsFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="productsFilter.empty();"></button>
+        <button type="button" class="search" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="this.form.reset()"></button>
       </form>
 
       <div id="list-products"></div>
     </td>
     <td class="halfPane" style="width: 1%;">
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
+      
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	    <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -57,9 +66,9 @@ Main.add(function () {
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">{{$product->name}}</th>
+          <th class="title modify text" colspan="2">{{$product->name}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
+          <th class="title text" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>

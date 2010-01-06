@@ -8,20 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
+
 <table class="tbl">
   <tr>
-    <th>{{mb_title class=CProductOrderItem field=reference_id}}</th>
-    <th>{{mb_title class=CProductOrderItem field=quantity}}</th>
-    <th>{{mb_title class=CProductOrderItem field=unit_price}}</th>
-    <th>{{mb_title class=CProductOrderItem field=_price}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
   </tr>
   {{foreach from=$reception->_back.reception_items item=curr_item}}
     <tbody id="order-item-{{$curr_item->_id}}">
-      {{include file="inc_order_item.tpl"}}
+      {{include file="inc_reception_item.tpl"}}
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="10">{{tr}}CProductOrderItem.none{{/tr}}</td>
+      <td colspan="10">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

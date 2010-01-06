@@ -41,7 +41,7 @@ class CProductOrderItem extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs['reference_id']       = 'ref notNull class|CProductReference';
-    $specs['order_id']           = 'ref class|CProductOrder';
+    $specs['order_id']           = 'ref class|CProductOrder'; // can be null because of gifts
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency';
     $specs['_price']             = 'currency';

@@ -20,6 +20,7 @@ class CProductOrder extends CMbObject {
 	var $order_number     = null;
 	var $cancelled        = null;
 	var $deleted          = null;
+  var $received         = null;
 
 	// Object References
 	//    Multiple
@@ -304,7 +305,7 @@ class CProductOrder extends CMbObject {
     return $orders_list;
   }
   
-  function getUniqueNumber() {
+  private function getUniqueNumber() {
   	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
     if (strpos($format, '%id') === false) {
@@ -318,6 +319,7 @@ class CProductOrder extends CMbObject {
 	function updateFormFields() {
 		parent::updateFormFields();
 		$this->loadRefs();
+    $this->completeField("received");
 
 		$this->_count_received = $this->countReceivedItems();
 
@@ -330,12 +332,13 @@ class CProductOrder extends CMbObject {
 			}
 		}
 
-		$this->_received = (count($this->_ref_order_items) == $this->_count_received);
+		$this->_received = $this->received || (count($this->_ref_order_items) >= $this->_count_received);
 		$this->_partial = !$this->_received && ($this->_count_received > 0);
 
 		$count = count($this->_ref_order_items);
-		$this->_view  = $this->_ref_societe ? "$this->_ref_societe - " : "";
-		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total";
+		$this->_view  = "$this->order_number - ";
+		$this->_view .= $this->societe_id ? "$this->_ref_societe - " : "";
+		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total ".CAppUI::conf("currency_symbol");
 	}
 	
 	function updateDBFields() {

@@ -91,7 +91,9 @@ document.observe('keydown', function(e){
 
   {{if $lists|@count}}
   <tr>
-    <td class="listeChoixCR" id="liste">
+    <td id="liste">
+      <!-- The div is required because of a Webkit float issue -->
+      <div class="listeChoixCR">
         {{foreach from=$lists item=curr_list}}
           <select name="_{{$curr_list->_class_name}}[{{$curr_list->_id}}][]">
             <option value="undef">&mdash; {{$curr_list->nom}}</option>
@@ -100,6 +102,7 @@ document.observe('keydown', function(e){
             {{/foreach}}
           </select>
         {{/foreach}}
+      </div>
     </td>
   </tr>
   

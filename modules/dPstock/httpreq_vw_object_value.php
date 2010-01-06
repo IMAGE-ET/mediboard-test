@@ -16,10 +16,15 @@ $class = CValue::get('class');
 $id    = CValue::get('id');
 $field = CValue::get('field');
 
+$object = null;
+
 // Loads the expected Object
 if (class_exists($class)) {
   $object = new $class;
   $object->load($id);
+  if (!$object->canRead()) {
+    CApp::rip();
+  }
 }
 
 // Smarty template
@@ -29,4 +34,3 @@ $smarty->assign('object', $object);
 $smarty->assign('field',  $field);
 
 $smarty->display('inc_object_value.tpl');
-?>

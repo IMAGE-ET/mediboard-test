@@ -8,26 +8,32 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<div id="list-products-total-count" style="display: none;">{{$list_products_count}}</div>
+{{mb_include module=system template=inc_pagination change_page="changePage" 
+    total=$total current=$start step=16}}
 
 <table class="tbl">
   <tr>
-    <th>{{mb_title class=CProduct field=name}}</th>
+    <th colspan="4">{{mb_title class=CProduct field=name}}</th>
+  </tr>
+  <tr
     <th>{{mb_title class=CProduct field=societe_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=_quantity}}</th>
     <th>{{mb_title class=CProduct field=packaging}}</th>
   </tr>
   {{foreach from=$list_products item=curr_product}}
+    <tbody class="hoverable">
     <tr>
-      <td>
+      <td colspan="4">
         <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
-            {{$curr_product->name|truncate:25}}
-          </span>
+          <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
+            {{$curr_product->name|truncate:90}}
+          </strong>
         </a>
       </td>
-      <td>
+    </tr>
+    <tr>
+      <td style="padding-left: 2em;">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_ref_societe->_guid}}')">
           {{$curr_product->_ref_societe}}
         </span>
@@ -38,6 +44,7 @@
       </td>
       <td>{{$curr_product->packaging}}</td>
     </tr>
+    </tbody>
   {{foreachelse}}
     <tr>
       <td colspan="6">{{tr}}CProduct.none{{/tr}}</td>
