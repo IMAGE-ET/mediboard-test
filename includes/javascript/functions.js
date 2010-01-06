@@ -23,7 +23,8 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
         errorMsg: errorMsg,
         url: url,
         lineNumber: lineNumber,
-        stack: exception.stack || exception.stacktrace
+        stack: exception.stack || exception.stacktrace,
+        location: location.href
       }).toQueryString()
     });
   } catch (e) {}

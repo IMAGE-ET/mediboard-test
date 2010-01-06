@@ -12,6 +12,7 @@ $errorMsg   = CValue::post('errorMsg');
 $url        = CValue::post('url');
 $lineNumber = CValue::post('lineNumber');
 $stack      = CValue::post('stack');
+$location   = CValue::post('location');
 
 $stackTrace = array();
 $stack = explode("\n", $stack);
@@ -26,6 +27,8 @@ foreach($stack as $trace) {
 }
 
 if (!count($stackTrace))
-	$errorMsg .= " Extended message: ".implode(" -- \n", $stack);
+	$errorMsg .= " <strong>Extended message:</strong> ".implode(" -- \n", $stack);
+  
+$errorMsg .= " <strong>Location:</strong> ".$location;
 
 errorHandler(E_JS_ERROR, $errorMsg, $url, $lineNumber, null, $stackTrace);
