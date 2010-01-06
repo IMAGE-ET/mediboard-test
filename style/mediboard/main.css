@@ -3435,16 +3435,12 @@ span.highlight {
 }
 
 @media print {
-  body { 
+  body {
     background: transparent;
   }
   
   .not-printable {
     display: none;
-  }
-  
-  table.tbl {
-    font-size: 100%;
   }
   
   h1.newpage {

@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include module=system template=CMbObject_view object=$order}}
+
 <table class="tbl">
   <tr>
     {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}
@@ -32,7 +34,7 @@
   <tr>
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
       <strong style="float: right;">
-        {{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span>
+        {{tr}}Total{{/tr}} : <span class="total">{{mb_value object=$order field=_total}}</span>
       </strong>
       
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: 'waiting'})">{{tr}}Refresh{{/tr}}</button>
@@ -43,7 +45,7 @@
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="locked" value="1" />
-        <button type="button" class="tick" onclick="submitOrder(this.form, {close: true, confirm: true});">{{tr}}CProductOrder-_validate{{/tr}}</button>
+        <button type="button" class="tick" onclick="submitOrder(this.form, {close: false, confirm: true, onComplete: reloadOrders});">{{tr}}CProductOrder-_validate{{/tr}}</button>
       </form>
       {{/if}}
     </td>

@@ -9,7 +9,6 @@
 *}}
 
 {{mb_include_script module=dPstock script=order_manager}}
-{{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
 Main.add(function () {
@@ -21,10 +20,6 @@ Main.add(function () {
   });
 
   filterReferences(getForm("filter-references"));
-
-  {{if $order->_id}}
-  //refreshOrder({{$order->_id}}, {refreshLists: false});
-  {{/if}}
 });
 
 function changePage(start) {
@@ -38,28 +33,37 @@ function filterReferences(form) {
   return false;
 }
 
+function orderItemCallback(order_item_id, order_item) {
+  createOrders(order_item.order_id);
+}
+
+function reloadOrders(order_id) {
+  window.order_id = order_id;
+  
+  var url = new Url("dPstock", "httpreq_vw_orders_tabs");
+  url.requestUpdate("orders-list");
+}
+
+function createOrders(order_id) {
+  var tab = $$('a[href="#order-'+order_id+'"]')[0];
+  if (tab) {
+    refreshOrder(order_id);
+    tabs.setActiveTab("order-"+order_id);
+  }
+  else {
+    reloadOrders(order_id);
+  }
+}
 </script>
-
-<div style="float: right">
-  <form name="order-cancel-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="hidden" name="dosql" value="do_order_aed" />
-    <input type="hidden" name="order_id" value="{{$order->_id}}" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="cancelled" value="1" />
-    <button class="cancel" type="button" onclick="submitOrder(this.form, {close: true})">Annuler la commande</button>
-  </form>
-</div>
-
-<h3>{{tr}}CProductOrder{{/tr}} {{$order->order_number}}</h3>
 
 <table class="main">
   <tr>
     <td class="halfPane">
       <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
         <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="order_id" value="{{$order->_id}}" />
-        <input type="hidden" name="societe_id" value="{{$order->societe_id}}" />
+        <input type="hidden" name="societe_id" value="{{$societe_id}}" />
+        <input type="hidden" name="order_form" value="true" />
+        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
           <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
@@ -68,16 +72,22 @@ function filterReferences(form) {
           {{/foreach}}
         </select>
         
-        <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0, false)" />
-        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        <select name="societe_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
+          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
+          {{foreach from=$list_societes item=_societe}} 
+            <option value="{{$_societe->_id}}">{{$_societe}}</option>
+          {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" size="10" onchange="$V(this.form.start, 0, false)" />
         
         <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
       </form>
       <div id="list-references"></div>
     </td>
 
-    <td class="halfPane" id="order-{{$order->_id}}">
-      {{include file="inc_order.tpl"}}
+    <td class="halfPane" id="orders-list">
+      {{mb_include module=dPstock template=inc_orders_tabs}}
     </td>
   </tr>
 </table>

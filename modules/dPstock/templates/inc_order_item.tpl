@@ -39,7 +39,7 @@
         field=quantity 
         onchange="
           submitOrderItem(this.form, {noRefresh: true});
-          refreshValue('order-total', 'CProductOrder', $order_id, '_total');
+          refreshValue(\$('order-$order_id').down('.total'), 'CProductOrder', $order_id, '_total');
           refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
         form=form-item-quantity-$id 
         min=0
@@ -52,10 +52,10 @@
     {{/if}}
   </td>
   <td style="text-align: right;">
-    {{mb_value object=$curr_item field=unit_price}}
+    {{mb_value object=$curr_item field=unit_price decimals=4}}
   </td>
   <td id="order-item-{{$id}}-price" style="text-align: right;">
-    {{mb_value object=$curr_item field=_price}}
+    {{mb_value object=$curr_item field=_price decimals=4}}
   </td>
   
   {{if $order->date_ordered}}

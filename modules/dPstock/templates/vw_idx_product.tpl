@@ -56,7 +56,9 @@ function filterReferences(form) {
 
       <div id="list-products"></div>
     </td>
-    <td class="halfPane" style="width: 1%;">
+    
+    
+    <td class="halfPane">
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -160,14 +162,17 @@ function filterReferences(form) {
           <th class="title" colspan="4">{{tr}}CProduct-back-stocks_group{{/tr}}</th>
         </tr>
         <tr>
-          <th>{{tr}}CGroups{{/tr}}</th>
           <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
           <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
         </tr>
         {{foreach from=$product->_ref_stocks_group item=curr_stock}}
         <tr>
-          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
-          <td>{{$curr_stock->quantity}}</td>
+          <td>{{$curr_stock->_ref_group->_view}}</a></td>
+          <td>
+            <a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">
+              {{$curr_stock->quantity}}
+            </a>
+          </td>
           <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
         </tr>
         {{foreachelse}}

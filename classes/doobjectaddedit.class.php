@@ -134,7 +134,9 @@ class CDoObjectAddEdit {
   function doCallback(){
     echo CAppUI::getMsg();
     if ($this->callBack) {
-      echo "\n<script type=\"text/javascript\">{$this->callBack}({$this->_obj->_id});</script>";
+    	$fields = $this->_obj->getDBFields();
+    	$json = json_encode($fields);
+      echo "\n<script type=\"text/javascript\">{$this->callBack}({$this->_obj->_id}, $json)</script>";
     }
     CApp::rip();
   }

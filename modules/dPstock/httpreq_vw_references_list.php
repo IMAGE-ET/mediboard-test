@@ -14,8 +14,10 @@ $can->needsRead();
 $category_id = CValue::get('category_id');
 $societe_id  = CValue::get('societe_id');
 $keywords    = CValue::get('keywords');
-$order_id    = CValue::get('order_id');
+$order_form  = CValue::get('order_form');
 $start       = CValue::get('start', 0);
+
+CValue::setSession('category_id', $category_id);
 
 $where = array();
 if ($category_id) {
@@ -47,7 +49,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_references', $list_references);
 $smarty->assign('total', $total);
-$smarty->assign('order_id', $order_id);
+$smarty->assign('order_form', $order_form);
 $smarty->assign('start', $start);
 
 $smarty->display('inc_references_list.tpl');

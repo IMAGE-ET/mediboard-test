@@ -21,6 +21,9 @@ Ajax.Responders.register({
   },
   onComplete: function(e) {
     Url.activeRequests[e.method]--;
+  },
+  onException: function(e) {
+    Url.activeRequests[e.method]--;
   }
 });
 

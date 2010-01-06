@@ -18,7 +18,7 @@
     <th>{{mb_title class=CProductReference field=quantity}}</th>
     <th>{{mb_title class=CProductReference field=price}}</th>
     <th>{{mb_title class=CProductReference field=_unit_price}}</th>
-    {{if $order_id}}<th style="width: 1%;"></th>{{/if}}
+    {{if $order_form}}<th style="width: 1%;"></th>{{/if}}
   </tr>
   
   <!-- Références list -->
@@ -26,26 +26,27 @@
   <tbody class="hoverable">
     <tr>
       <td colspan="5">
-        {{if !$order_id}}
+        {{if !$order_form}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" >
         {{/if}}
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_product->_guid}}')">
-          {{$curr_reference->_ref_product|truncate:60}}
+          {{$curr_reference->_ref_product|truncate:80}}
         </strong>
-        {{if !$order_id}}
+        {{if !$order_form}}
           </a>
         {{/if}}
       </td>
       
-      {{if $order_id}}
+      {{if $order_form}}
       <td rowspan="2">
         {{assign var=id value=$curr_reference->_id}}
         {{assign var=packaging value=$curr_reference->_ref_product->packaging}}
         <form name="product-reference-{{$id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_item_aed" />
-          <input type="hidden" name="order_id" value="{{$order_id}}" />
           <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
+          <input type="hidden" name="callback" value="orderItemCallback" />
+          <input type="hidden" name="_create_order" value="true" />
           {{mb_field object=$curr_reference 
             field=quantity 
             size=2 

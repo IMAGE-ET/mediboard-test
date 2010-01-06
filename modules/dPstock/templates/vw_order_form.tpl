@@ -9,15 +9,17 @@
 *}}
 
 <button class="print not-printable" onclick="window.print();">{{tr}}Print{{/tr}}</button>
-      
-<h1>
-  Bon de commande - 
-  {{mb_value object=$order->_ref_group field=text}}
-</h1>
 
-<hr />
+<div style="position: fixed; width: 100%;">
+  <h1>
+    Bon de commande - 
+    {{mb_value object=$order->_ref_group field=text}}
+  </h1>
+  
+  <hr />
+</div>
 
-<table class="main print" style="margin-bottom: 2em;">
+<table class="main print" style="margin-bottom: 2em; margin-top: 6em;">
   <tr>
     <th style="text-align: left; width: 50%;">Expéditeur</th>
     <th style="text-align: left; width: 50%;">Fournisseur</th>

@@ -15,9 +15,10 @@ $can->needsRead();
 $reception_id = CValue::get('reception_id');
 $force_print  = CValue::get('force_print');
 
-$order = new CProductOrder();
-$order->load($order_id);
-$order->loadRefsFwd();
+$reception = new CProductReception();
+$reception->load($reception_id);
+$reception->loadRefsFwd();
+$reception->loadRefsBack();
 
 $pdf = new CMbPdf(); 
 
@@ -35,29 +36,30 @@ $pdf->AddPage();
 $data = array();
 $j = 0;
 if ($reception->_id) {
-	foreach ($reception->_ref_order_items as &$item) {
+	foreach ($reception->_ref_reception_items as &$item) {
 		$item->loadRefsBack();
 		$item->loadRefsFwd();
-		$item->_ref_reference->loadRefsFwd();
-		$item->_ref_reference->_ref_product->loadRefsFwd();
+		$item->_ref_order_item->loadReference();
 		
-		foreach ($item->_ref_receptions as &$_reception) {
-			if(!$_reception->barcode_printed || $force_print) {
-				for ($i = 0; $i < $_reception->quantity; $i++) {
-	        $data[$j] = array();
-	        $d = &$data[$j];
+		$reference = $item->_ref_order_item->_ref_reference;
+		$reference->loadRefsFwd();
+		$reference->_ref_product->loadRefsFwd();
+		
+		if(!$item->barcode_printed || $force_print) {
+			for ($i = 0; $i < $item->quantity; $i++) {
+        $data[$j] = array();
+        $d = &$data[$j];
         
-					$d[] = $item->_ref_reference->_ref_product->name;
-					$d[] = $item->_ref_reference->_ref_product->_ref_societe->_view;
-					$d[] = $_reception->lapsing_date;
-					$d[] = $_reception->code;
-					
-					$d[] = array(
-					  'barcode' => $item->_ref_reference->_ref_product->code." ".$_reception->code,
-					  'type'    => 'C128B'
-					);
-					$j++;
-				}
+				$d[] = substr($reference->_ref_product->name, 0, 30);
+        $d[] = CMbString::truncate(substr($reference->_ref_product->name, 29, 30));
+				$d[] = $reference->_ref_product->_ref_societe->_view;
+				$d[] = $item->lapsing_date;
+				
+				$d[] = array(
+				  'barcode' => "{$reference->_ref_product->code} $item->code",
+				  'type'    => 'C128B'
+				);
+				$j++;
 			}
 		}
 	}

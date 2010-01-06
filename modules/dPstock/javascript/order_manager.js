@@ -30,19 +30,19 @@ function submitOrder (oForm, options) {
     refreshLists: false
   }, options);
   
+  options.onComplete = options.onComplete || function() {
+    if (options.close && window.opener) {
+      window.close();
+    } else {
+      refreshOrder($V(oForm.order_id), options);
+    }
+    if (options.refreshLists) {
+      refreshLists();
+    }
+  };
+  
   if (!options.confirm || (options.confirm && confirm('Voulez-vous vraiment effectuer cette action ?'))) {
-    return onSubmitFormAjax(oForm, {
-      onComplete: function() {
-        if (options.close && window.opener) {
-          window.close();
-        } else {
-          refreshOrder($V(oForm.order_id), options);
-        }
-        if (options.refreshLists) {
-          refreshLists();
-        }
-      }
-    });
+    return onSubmitFormAjax(oForm, options);
   }
   else return false;
 }
@@ -126,11 +126,11 @@ function refreshLists(keywords) {
 }
 
 function popupOrder(iOrderId, width, height, bAutofill) {
-  width = width || 900;
-  height = height || 700;
+  width = width || 1000;
+  height = height || 800;
 
   var url = new Url("dPstock", "vw_aed_order");
-  url.addParam("order_id", iOrderId);
+  url.setFragment("order-"+iOrderId);
   if (bAutofill) {
     url.addParam("_autofill", 1);
   }
@@ -148,8 +148,8 @@ function popupReception(iOrderId, width, height) {
 }
 
 function popupOrderForm(iOrderId, width, height) {
-  width = width || 900;
-  height = height || 700;
+  width = width || 1000;
+  height = height || 800;
 
   var url = new Url("dPstock", "vw_order_form");
   url.addParam("order_id", iOrderId);
@@ -161,5 +161,5 @@ function printBarcodeGrid(reception_id, force_print) {
   url.addParam("reception_id", reception_id);
   url.addParam("force_print", force_print);
   url.addParam("suppressHeaders", true);
-  url.popup(800, 700, "Codes barres");
+  url.popup(800, 800, "Codes barres");
 }

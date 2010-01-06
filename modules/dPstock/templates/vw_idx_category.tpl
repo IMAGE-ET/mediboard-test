@@ -15,6 +15,7 @@
       <table class="tbl">
         <tr>
           <th>{{tr}}CProductCategory{{/tr}}</th>
+          <th>{{tr}}CProductCategory-back-products{{/tr}}</th>
         </tr>
         {{foreach from=$list_categories item=curr_category}}
         <tr {{if $curr_category->_id == $category->_id}}class="selected"{{/if}}>
@@ -23,6 +24,7 @@
               {{mb_value object=$curr_category field=name}}
             </a>
           </td>
+          <td>{{$curr_category->_count.products}}</td>
         </tr>
         {{/foreach}}        
       </table>  

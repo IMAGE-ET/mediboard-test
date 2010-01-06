@@ -60,11 +60,12 @@ class CProductOrder extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
-    $specs['societe_id']      = 'ref class|CSociete';
+    $specs['societe_id']      = 'ref notNull class|CSociete';
 	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
 	  $specs['cancelled']       = 'bool';
 	  $specs['deleted']         = 'bool';
+    $specs['received']        = 'bool';
     $specs['order_number']    = 'str maxLength|64 seekable';
     $specs['_total']          = 'currency';
     $specs['_count_received'] = 'num pos';
@@ -224,10 +225,9 @@ class CProductOrder extends CMbObject {
    * @param object $limit = 30 [optional]
    * @return The list of orders
    */
-  function search($type, $keywords = "", $limit = 30) {
+  function search($type, $keywords = "", $limit = 30, $where = array()) {
     global $g;
     
-    $where = array();
     $leftjoin = array();
     $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
     
@@ -305,7 +305,7 @@ class CProductOrder extends CMbObject {
     return $orders_list;
   }
   
-  private function getUniqueNumber() {
+  function getUniqueNumber() {
   	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
   	
     if (strpos($format, '%id') === false) {

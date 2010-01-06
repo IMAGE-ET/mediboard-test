@@ -106,7 +106,7 @@ class CCodable extends CMbObject {
   function loadView() {
     parent::loadView();
     $this->loadRefsActesCCAM();
-    $this->loadExtCodesCCAM(1);
+    $this->loadExtCodesCCAM(true);
   }
 	
   function getActeExecution() {
@@ -248,7 +248,7 @@ class CCodable extends CMbObject {
       $this->_temp_ccam[] = $_acte_ccam->makeFullCode();
     }
     
-    $this->_tokens_ccam = join($this->_temp_ccam, "|");
+    $this->_tokens_ccam = implode("|", $this->_temp_ccam);
   }
   
   /**
@@ -265,17 +265,17 @@ class CCodable extends CMbObject {
       $_acte_ngap->loadRefExecutant();
     }
     
-    $this->_tokens_ngap = join($this->_codes_ngap, "|");
+    $this->_tokens_ngap = implode("|", $this->_codes_ngap);
   }
   
   /**
    * Charge les codes CCAM en tant qu'objets externes
    */
-  function loadExtCodesCCAM($full = 0) {
+  function loadExtCodesCCAM($full = false) {
     $this->_ext_codes_ccam = array();
     if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $this->_ext_codes_ccam[] = CCodeCCAM::get($code, $full?(CCodeCCAM::FULL):(CCodeCCAM::LITE));
+        $this->_ext_codes_ccam[] = CCodeCCAM::get($code, $full ? CCodeCCAM::FULL : CCodeCCAM::LITE);
       }
     }
   }
@@ -329,9 +329,8 @@ class CCodable extends CMbObject {
 	  }
   }
   
-  
-  
   function check(){
+  	//@todo: why not use $this->_old ?
     $oldObject = new $this->_class_name;
     if($this->_id) {
       $oldObject->load($this->_id);
@@ -356,9 +355,8 @@ class CCodable extends CMbObject {
     // existing acts may only be affected once to possible acts
     $used_actes = array();
     
-    $this->loadExtCodesCCAM(1);
+    $this->loadExtCodesCCAM(true);
     foreach ($this->_ext_codes_ccam as $code_ccam) {
-     
       foreach ($code_ccam->activites as &$activite) {
         foreach ($activite->phases as &$phase) {
           $possible_acte = new CActeCCAM;
@@ -366,7 +364,7 @@ class CCodable extends CMbObject {
           $possible_acte->code_acte = $code_ccam->code;
           $possible_acte->code_activite = $activite->numero;
           
-          $possible_acte->_anesth = ( $activite->numero == 4 ) ? true : false;
+          $possible_acte->_anesth = ($activite->numero == 4);
           
           $possible_acte->code_phase = $phase->phase;
           $possible_acte->execution = $this->_acte_execution;
@@ -412,6 +410,5 @@ class CCodable extends CMbObject {
       }
     } 
   }
-  
 }
 ?>

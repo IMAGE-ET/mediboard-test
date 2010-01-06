@@ -63,7 +63,10 @@ function makeReception(form) {
       if (element.name == 'barcode_printed') element.disabled = true;
     }
   );
-  return onSubmitFormAjax(form);
+  return onSubmitFormAjax(form, {onComplete: function(){
+    $V(form.code, ''); 
+    $V(form.lapsing_date, '');
+  }});
 }
 
 function barcodePrintedReception(reception_id, value) {

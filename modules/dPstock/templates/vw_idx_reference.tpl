@@ -87,7 +87,7 @@ function filterReferences(form) {
       <table class="form">
         <tr>
           {{if $reference->_id}}
-          <th class="title modify" colspan="2">{{$reference->_view}}</th>
+          <th class="title modify text" colspan="2">{{$reference->_view}}</th>
           {{else}}
           <th class="title" colspan="2">{{tr}}CProductReference.create{{/tr}}</th>
           {{/if}}
@@ -122,7 +122,7 @@ function filterReferences(form) {
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>
-          <td style="text-align: right;">{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min="0" size=8}}</td>
+          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min="0" size=8}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="code"}}</th>
