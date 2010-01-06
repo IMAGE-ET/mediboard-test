@@ -163,3 +163,23 @@ if(!function_exists("date_default_timezone_set")) {
     // void
   }
 }
+
+/**
+ * (PHP 5 >= 5.1.0)
+ * inet_pton Converts a human readable IP address to its packed in_addr representation
+ */
+if(!function_exists("inet_pton")) {
+  function inet_pton($address) {
+    // void
+  }
+}
+
+/**
+ * (PHP 5 >= 5.1.0)
+ * inet_pton Converts a packed internet address to a human readable representation
+ */
+if(!function_exists("inet_ntop")) {
+  function inet_ntop($in_addr) {
+    return "";
+  }
+}
