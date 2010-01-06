@@ -933,23 +933,25 @@ class CPatient extends CMbObject {
   function loadRefsAffectations() {
     $this->loadRefsSejours();
     // Affectation actuelle et prochaine affectation
-    $where["sejour_id"] = CSQLDataSource::prepareIn(array_keys($this->_ref_sejours));
-    $order = "entree";
+    $where["affectation.sejour_id"] = CSQLDataSource::prepareIn(array_keys($this->_ref_sejours));
+    $where["sejour.group_id"] = ">= '".CGroups::loadCurrent()->_id."'";
+    $ljoin["sejour"]      = "sejour.sejour_id = affectation.sejour_id";
+    $order = "affectation.entree";
     $now = mbDateTime();
     
     $this->_ref_curr_affectation = new CAffectation();
     if($this->_ref_curr_affectation->_ref_module) {
-      $where["entree"] = "< '$now'";
-      $where["sortie"] = ">= '$now'";
-      $this->_ref_curr_affectation->loadObject($where, $order);
+      $where["affectation.entree"] = "< '$now'";
+      $where["affectation.sortie"] = ">= '$now'";
+      $this->_ref_curr_affectation->loadObject($where, $order, null, $ljoin);
     } else {
       $this->_ref_curr_affectation = null;
     }
     
     $this->_ref_next_affectation = new CAffectation();
     if($this->_ref_next_affectation->_ref_module) {
-      $where["entree"] = "> '$now'";
-      $this->_ref_next_affectation->loadObject($where, $order);
+      $where["affectation.entree"] = "> '$now'";
+      $this->_ref_next_affectation->loadObject($where, $order, null, $ljoin);
     } else {
       $this->_ref_next_affectation = null;
     }
