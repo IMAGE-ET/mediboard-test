@@ -159,7 +159,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
-    
+    	$domAcquittement->_sous_type_evt = "inconnu";
+    	
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
