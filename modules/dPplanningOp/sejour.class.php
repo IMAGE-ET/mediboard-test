@@ -291,6 +291,11 @@ class CSejour extends CCodable {
 	        }	
 	    	}
 	    }
+	    
+	    $this->completeField("entree_reelle", "annule");
+	    if ($this->entree_reelle && $this->fieldModified("annule", "1")) {
+	    	$msg .= "Impossible d'annuler un dossier en cours.<br />";
+	    }
 	
 	    foreach ($this->getCollisions() as $collision) {
 	      $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 

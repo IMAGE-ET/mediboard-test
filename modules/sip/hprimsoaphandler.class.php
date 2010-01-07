@@ -38,9 +38,9 @@ class CHprimSoapHandler extends CSoapHandler {
     // Gestion de l'acquittement
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     
+    $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
+    
     try {
-      $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
-
       // Récupération des informations du message XML
       $domGetEvenement->loadXML(utf8_decode($messagePatient));
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
@@ -159,7 +159,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
-    	$domAcquittement->_sous_type_evt = "inconnu";
+    	$domAcquittement->_sous_type_evt = $domGetEvenement->sous_type;
     	
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();

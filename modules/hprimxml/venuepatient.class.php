@@ -15,7 +15,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    //'suppression'   => "suppression"
+    'suppression'   => "suppression"
   );
   
   function __construct() {    
@@ -35,9 +35,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       "delete" => "suppression"
     );
     $action = $actionConversion[$mbVenue->_ref_last_log->type];
-    /*if ($mbVenue->annule) {
+    if ($mbVenue->annule) {
       $action = "suppression";
-    }*/
+    }
     $this->addAttribute($venuePatient, "action", $action);
     
     $patient = $this->addElement($venuePatient, "patient");
@@ -150,18 +150,29 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       
       // Cas d'une annulation
       $cancel = false;
-      /*if ($data['action'] == "suppression") {
+      if ($data['action'] == "suppression") {
         $cancel = true;
-      }*/
+      }
       
       // idSource non connu
       if(!$num_dossier->loadMatchingObject()) {
         // idCible fourni
         if ($data['idCibleVenue']) {
           if ($newVenue->load($data['idCibleVenue'])) {
+          	if ($cancel && $newVenue->entree_reelle) {
+          	  $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
+              $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+              $echange_hprim->acquittement = $messageAcquittement;
+              $echange_hprim->statut_acquittement = "erreur";
+              $echange_hprim->store();
+              return $messageAcquittement;		
+          	}
             // Mapping du séjour
             $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-        
+        		
             // Notifier les autres destinataires
             $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
             $msgVenue = $newVenue->store();
@@ -183,6 +194,17 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {
+        	if ($cancel && $newVenue->entree_reelle) {
+            $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
+            $doc_valid = $domAcquittement->schemaValidate();
+            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+            $echange_hprim->acquittement = $messageAcquittement;
+            $echange_hprim->statut_acquittement = "erreur";
+            $echange_hprim->store();   
+            return $messageAcquittement;		
+          }
           // Notifier les autres destinataires
           $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
           // Mapping du séjour
@@ -208,6 +230,17 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $collision = $newVenue->getCollisions();
             if (count($collision) == 1) {
               $newVenue = reset($collision);
+            	if ($cancel && $newVenue->entree_reelle) {
+			          $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+			          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
+			          $doc_valid = $domAcquittement->schemaValidate();
+			          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+			        
+			          $echange_hprim->acquittement = $messageAcquittement;
+			          $echange_hprim->statut_acquittement = "erreur";
+			          $echange_hprim->store();   
+			          return $messageAcquittement;		
+			        }
               // Mapping du séjour
               $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
               $msgVenue = $newVenue->store();
@@ -248,6 +281,17 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       } 
       // idSource connu
       else {
+        if ($cancel && $newVenue->entree_reelle) {
+          $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
+          $doc_valid = $domAcquittement->schemaValidate();
+          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        
+          $echange_hprim->acquittement = $messageAcquittement;
+          $echange_hprim->statut_acquittement = "erreur";
+          $echange_hprim->store();   
+          return $messageAcquittement;		
+        }
         $newVenue->load($num_dossier->object_id);
         // Mapping du séjour
         $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);

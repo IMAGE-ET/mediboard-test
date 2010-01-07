@@ -173,6 +173,7 @@ $locales['sip-hprim-error-E141'] = 'Discordance entre l\'identifiant source et l
 $locales['sip-hprim-error-E105'] = 'Identifiants source et cible de la venue non fournis';
 $locales['sip-hprim-error-E106'] = 'Numéro de dossier non fourni';
 $locales['sip-hprim-error-E107'] = 'Aucun médecin responsable n\'est défini dans la venue. Il est nécessaire d\'en fournir un pour l\'enregistrement de la venue dans Mediboard.';
+$locales['sip-hprim-error-E108'] = 'Impossible d\'annuler un dossier en cours.';
 $locales['sip-hprim-error-A001'] = 'IPP envoyé non existant sur le SIP, attribution IPP forcée.';
 $locales['sip-hprim-error-A002'] = 'L\'enregistrement du patient a échoué.';
 $locales['sip-hprim-error-A003'] = 'Modification du patient a échoué.';
