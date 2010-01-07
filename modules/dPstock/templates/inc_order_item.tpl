@@ -25,7 +25,7 @@
   {{assign var=id value=$curr_item->_id}}
   <td>
     <p onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
-      {{$curr_item|truncate:80}}
+      {{$curr_item->_view|truncate:80}}
     </p>
   </td>
   <td>

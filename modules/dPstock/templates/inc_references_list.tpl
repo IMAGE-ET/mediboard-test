@@ -30,7 +30,7 @@
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" >
         {{/if}}
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_product->_guid}}')">
-          {{$curr_reference->_ref_product|truncate:80}}
+          {{$curr_reference->_ref_product->_view|truncate:80}}
         </strong>
         {{if !$order_form}}
           </a>
