@@ -61,7 +61,7 @@ class CFTP {
       return false;
     }
     if($this->passif_mode) {
-      $passif = ftp_pasv($conn_id, true);
+      $passif = ftp_pasv($this->connexion, true);
       if (!$passif) {
         return false;
       }
