@@ -300,13 +300,13 @@ class CPlageOp extends CMbObject {
   
   function updateDBFields() {
     if(($this->_heuredeb !== null) && ($this->_minutedeb !== null)) {
-      $this->debut = $this->_heuredeb.":".$this->_minutedeb.":00";
+      $this->debut = "$this->_heuredeb:$this->_minutedeb:00";
     }
     if(($this->_heurefin !== null) && ($this->_minutefin !== null)) {
-      $this->fin   = $this->_heurefin.":".$this->_minutefin.":00";
+      $this->fin   = "$this->_heurefin:$this->_minutefin:00";
     }
     if(($this->_year !== null) && ($this->_month !== null) && ($this->_day !== null)) {
-      $this->date = $this->_year."-".$this->_month."-".$this->_day;
+      $this->date = "$this->_year-$this->_month-$this->_day";
     }
     if($this->_min_inter_op !== null) {
       $this->temps_inter_op = "00:$this->_min_inter_op:00";

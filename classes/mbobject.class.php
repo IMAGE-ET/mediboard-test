@@ -169,8 +169,8 @@ class CMbObject {
    * Returns the field's formatted value
    * @return string The field's formatted value
    */
-  function getFormattedValue($field) {
-  	return $this->_specs[$field]->getValue($this, new CSmartyDP);
+  function getFormattedValue($field, $options = array()) {
+  	return $this->_specs[$field]->getValue($this, new CSmartyDP, $options);
   }
   
   /**

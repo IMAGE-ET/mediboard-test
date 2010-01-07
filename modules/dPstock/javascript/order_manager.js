@@ -8,13 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-function refreshValue(element, klass, id, field) {
-  if (id && $(element)) {
-    var url = new Url("dPstock", "httpreq_vw_object_value");
-    url.addParam("class", klass);
-    url.addParam("id", id);
+function refreshValue(guid, field, callback, options) {
+  if (guid && callback) {
+    var url = new Url("system", "ajax_object_value");
+    url.addParam("guid", guid);
     url.addParam("field", field);
-    url.requestUpdate(element);
+    
+    if (options)
+      url.addObjectParam("options", options);
+      
+    url.requestJSON(callback);
   }
 }
 
@@ -58,6 +61,9 @@ function submitOrderItem (oForm, options) {
   } else {
     onSubmitFormAjax(oForm, {
       onComplete: function() {
+        if (options.onComplete) {
+          options.onComplete();
+        }
         refreshOrder(oForm.order_id.value, options);
         if (!options.noRefresh) {
           refreshOrderItem($V(oForm.order_item_id), options);

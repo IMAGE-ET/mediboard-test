@@ -37,10 +37,10 @@
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       {{mb_field object=$curr_item 
         field=quantity 
-        onchange="
-          submitOrderItem(this.form, {noRefresh: true});
-          refreshValue(\$('order-$order_id').down('.total'), 'CProductOrder', $order_id, '_total');
-          refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
+        onchange="submitOrderItem(this.form, {noRefresh: true, onComplete: function(){
+            refreshValue('CProductOrder-$order_id', '_total', function(v){\$('order-$order_id').down('.total').update(v)}, {decimals:4});
+            refreshValue('CProductOrderItem-$id', '_price', function(v){\$('order-item-$id-price').update(v)}, {decimals:4});
+        } });"
         form=form-item-quantity-$id 
         min=0
         size=2
@@ -60,7 +60,7 @@
   
   {{if $order->date_ordered}}
   <td style="width: 1%; white-space: nowrap;">
-  {{$curr_item->_quantity_received}}
+    {{$curr_item->_quantity_received}}
   </td>
   
   <!-- Receive item -->

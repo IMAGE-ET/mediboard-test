@@ -33,11 +33,11 @@ function deliver(oForm, sign) {
   if (sign == undefined) sign = 1;
   oForm.service_id.value = $V($('service_id'));
   oForm.quantity.value = $V(oForm.quantity) * sign;
-  stock_id = $V(oForm.stock_id);
+  var stock_id = $V(oForm.stock_id);
   
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function() {
-      refreshValue('stock-'+stock_id+'-bargraph', 'CProductStockGroup', stock_id, 'bargraph');
+      refreshValue('CProductStockGroup-'+stock_id, 'bargraph', function(v){$('stock-'+stock_id+'-bargraph').update(v)});
       refreshDeliveriesList();
     }
   });
