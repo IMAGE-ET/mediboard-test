@@ -15,7 +15,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     'création'     => "création",
     'remplacement' => "remplacement",
     'modification' => "modification",
-    'suppression'   => "suppression"
+    //'suppression'   => "suppression"
   );
   
   function __construct() {    
