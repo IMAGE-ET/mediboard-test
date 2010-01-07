@@ -8,10 +8,6 @@
 {{assign var=object_class value=$object->_class_name}}
 {{assign var=object_id value=$object->_id}}
 
-<script type="text/javascript">
-  Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
-</script>
-
 <form name="DocumentAdd-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">
@@ -20,7 +16,6 @@
     	{{if $praticien->_can->edit}}
 
       <!-- Création via select classique -->
-
       <select name="_choix_modele" style="width: 7em;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Modèle</option>
         {{foreach from=$modelesByOwner key=owner item=_modeles}}
@@ -67,7 +62,6 @@
 	    	{{else}}
         Modèles disponibles
 	      {{/if}}
-      
       </button>
       
 	    <input type="hidden" name="_modele_id" value="" />
