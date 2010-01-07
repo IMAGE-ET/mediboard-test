@@ -339,7 +339,7 @@ changePraticienMed = function(praticien_id){
 
   $V(oFormAddLine.praticien_id, praticien_id);
 	$V(oFormTransfert.praticien_id, praticien_id);
-  $V(oFormAddLineCommentMed, praticien_id);
+  $V(oFormAddLineCommentMed.praticien_id, praticien_id);
 }
 
 // Test permettant de pré-selectionner la case à cocher 
