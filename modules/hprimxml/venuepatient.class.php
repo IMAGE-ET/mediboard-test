@@ -35,9 +35,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       "delete" => "suppression"
     );
     $action = $actionConversion[$mbVenue->_ref_last_log->type];
-    if ($mbVenue->annule) {
+    /*if ($mbVenue->annule) {
       $action = "suppression";
-    }
+    }*/
     $this->addAttribute($venuePatient, "action", $action);
     
     $patient = $this->addElement($venuePatient, "patient");
@@ -150,9 +150,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       
       // Cas d'une annulation
       $cancel = false;
-      if ($data['action'] == "suppression") {
+      /*if ($data['action'] == "suppression") {
         $cancel = true;
-      }
+      }*/
       
       // idSource non connu
       if(!$num_dossier->loadMatchingObject()) {
