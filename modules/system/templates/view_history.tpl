@@ -28,7 +28,9 @@
     <th colspan="2">{{mb_title class=CUserLog field=date}}</th>
     <th>{{mb_title class=CUserLog field=type}}</th>
     <th>{{mb_title class=CUserLog field=fields}}</th>
-    <th>{{mb_title class=CUserLog field=ip_address}}</th>
+    {{if !$dialog}}
+      <th>{{mb_title class=CUserLog field=ip_address}}</th>
+    {{/if}}
   </tr>
   
   {{include file=../../system/templates/inc_history_line.tpl logs=$list}}

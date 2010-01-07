@@ -47,11 +47,13 @@ if ($filter->_date_max   ) $where[] = "date <= '$filter->_date_max'";
 $log = new CUserLog;
 $list = $log->loadList($where, "date DESC", "$start,100");
 $list_count = $log->countList($where);
+
 $item = "";
-foreach($list as $key => $value) {
-  $list[$key]->loadRefsFwd();
-  if(!$item)
-    $item = $value->_ref_object->_view;
+foreach($list as $key => $log) {
+  $log->loadRefsFwd();
+  $log->getOldValues();
+  if (!$item)
+    $item = $log->_ref_object->_view;
 }
 
 // Création du template

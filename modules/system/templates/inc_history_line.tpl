@@ -37,10 +37,13 @@
   <td>{{mb_value object=$_log field=type}}</td>
   <td class="text">
     {{foreach from=$_log->_fields item=curr_field name=field}}
-    <label title="{{$curr_field}}">{{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}</label>{{if !$smarty.foreach.field.last}}, {{/if}}
+    <label title="{{$curr_field}}{{if isset($_log->_old_values.$curr_field|smarty:nodefaults)}} - {{$_log->_old_values.$curr_field}}{{/if}}">{{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}</label>{{if !$smarty.foreach.field.last}}, {{/if}}
     {{/foreach}}
   </td>
-  <td>{{mb_value object=$_log field=ip_address}}</td>
+  
+  {{if !$dialog}}
+    <td>{{mb_value object=$_log field=ip_address}}</td>
+  {{/if}}
 </tr>
 {{foreachelse}}
 <tr>

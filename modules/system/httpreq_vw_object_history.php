@@ -19,13 +19,12 @@ $log = new CUserLog;
 $log->setObject($object);
 $count = $log->countMatchingList();
 
-$order = "date DESC";
-$limit = "10";
-$logs = $log->loadMatchingList($order, $limit);
+$logs = $log->loadMatchingList("date DESC", 10);
 
 foreach($logs as $key => $_log) {
   $_log->setObject($object);
   $_log->loadRefsFwd();
+  $_log->getOldValues();
 }
 
 $more = $count - count($logs);
@@ -37,4 +36,3 @@ $smarty->assign("logs", $logs);
 $smarty->assign("more", $more);
 
 $smarty->display("vw_object_history.tpl");
-?>

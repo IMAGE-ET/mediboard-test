@@ -29,6 +29,7 @@ class CUserLog extends CMbMetaObject {
   
   // Object References
   var $_fields = null;
+  var $_old_values = null;
   var $_ref_user = null;
   
   var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
@@ -68,6 +69,12 @@ class CUserLog extends CMbMetaObject {
     parent::updateDBFields();
     if ($this->_fields) {
       $this->fields = implode(" ", $this->_fields);
+    }
+  }
+  
+  function getOldValues() {
+    if ($this->extra && ($this->type === "store" || $this->type === "merge")) {
+      $this->_old_values = (array) json_decode($this->extra);
     }
   }
   
