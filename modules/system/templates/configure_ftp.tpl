@@ -101,10 +101,10 @@
               </label>  
             </th>
             <td>
-              <label for="{{$section}}[{{$ftpsn}}][{{$var}}]_1">{{tr}}config-{{$section}}-{{$var}}-0{{/tr}}</label>
-              <input type="radio" name="{{$section}}[{{$ftpsn}}][{{$var}}]" value="1" {{if $ftpsnConfig.$var == "1"}}checked="checked"{{/if}}/>
-              <label for="{{$section}}[{{$ftpsn}}][{{$var}}]_0">{{tr}}config-{{$section}}-{{$var}}-1{{/tr}}</label>
+              <label for="{{$section}}[{{$ftpsn}}][{{$var}}]_0">{{tr}}config-{{$section}}-{{$var}}-0{{/tr}}</label>
               <input type="radio" name="{{$section}}[{{$ftpsn}}][{{$var}}]" value="0" {{if $ftpsnConfig.$var == "0"}}checked="checked"{{/if}}/>
+              <label for="{{$section}}[{{$ftpsn}}][{{$var}}]_1">{{tr}}config-{{$section}}-{{$var}}-1{{/tr}}</label>
+              <input type="radio" name="{{$section}}[{{$ftpsn}}][{{$var}}]" value="1" {{if $ftpsnConfig.$var == "1"}}checked="checked"{{/if}}/>
             </td>
           </tr>
         

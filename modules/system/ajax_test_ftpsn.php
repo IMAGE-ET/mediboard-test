@@ -32,6 +32,10 @@ if (!$ftp->connect()) {
   CAppUI::stepAjax("Connecté au serveur $ftp->hostname et authentifié en tant que $ftp->username");
 }
 
+if($ftp->passif_mode) {
+  CAppUI::stepAjax("Activation du mode passif");
+}
+
 $local_file = CAppUI::conf('root_dir')."/offline.php";
 $remote_file = "offline.php";
 if (!$ftp->sendFile($local_file, $remote_file)) {

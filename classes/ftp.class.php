@@ -60,18 +60,20 @@ class CFTP {
     if (!$this->connexion) {
       return false;
     }
-    if($this->passif_mode) {
-      $passif = ftp_pasv($this->connexion, true);
-      if (!$passif) {
-        return false;
-      }
-    }
 
     // Login with username and password
     $login_result = ftp_login($this->connexion, $this->username, $this->userpass);
     if (!$login_result) {
       return false;
     } 
+    
+    // Turn passive mode on
+    if($this->passif_mode) {
+      $passif = ftp_pasv($this->connexion, true);
+      if (!$passif) {
+        return false;
+      }
+    }
     
     return true;
   }
