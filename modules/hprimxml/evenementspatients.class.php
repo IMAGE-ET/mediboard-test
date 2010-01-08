@@ -339,11 +339,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     $dateHeure = "$date $heure";
     
+    
+    
     $etat = self::getEtatVenue($node);
-    if ($etat == "préadmission") {
+    if (($etat == "préadmission") || ($etat == "encours")) {
       $mbVenue->entree_prevue = $dateHeure;
     } 
-    if (($etat == "encours") || ($etat == "clôturée")) {
+    if ($etat == "clôturée") {
       if (!$mbVenue->_id) {
         $mbVenue->entree_prevue = $dateHeure;
       }
