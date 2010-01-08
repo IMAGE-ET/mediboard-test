@@ -15,7 +15,7 @@
 				<input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$patient->_id}}" />
         <input type="hidden" name="object_class" value="CPatient" />
-				{{mb_field object=$dossier_medical_patient field="risque_thrombo_patient" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_patient field="risque_thrombo_patient" onchange="onSubmitFormAjax(this.form);"}}
 		  </form>
 		</td>
 		
@@ -27,7 +27,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="object_class" value="CSejour" />
-				{{mb_field object=$dossier_medical_sejour field="risque_thrombo_chirurgie" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_sejour field="risque_thrombo_chirurgie" onchange="onSubmitFormAjax(this.form);"}}
 		  </form>
 		</td>	
 		{{else}}
@@ -47,7 +47,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$patient->_id}}" />
         <input type="hidden" name="object_class" value="CPatient" />
-				{{mb_field object=$dossier_medical_patient field="risque_MCJ_patient" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_patient field="risque_MCJ_patient" onchange="onSubmitFormAjax(this.form);"}}
 		  </form>
 		</td>
 		{{if $sejour->_id}}
@@ -58,7 +58,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="object_class" value="CSejour" />
-				{{mb_field object=$dossier_medical_sejour field="risque_MCJ_chirurgie" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_sejour field="risque_MCJ_chirurgie" onchange="onSubmitFormAjax(this.form);"}}
 			</form>	
 	  </td> 
 		{{/if}}
@@ -74,7 +74,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="object_class" value="CSejour" />
-				{{mb_field object=$dossier_medical_sejour field="risque_antibioprophylaxie" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_sejour field="risque_antibioprophylaxie" onchange="onSubmitFormAjax(this.form);"}}
 			</form>
 		</td> 
 		{{/if}}
@@ -90,7 +90,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="object_class" value="CSejour" />
-				{{mb_field object=$dossier_medical_sejour field="risque_prophylaxie" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				{{mb_field object=$dossier_medical_sejour field="risque_prophylaxie" onchange="onSubmitFormAjax(this.form);"}}
 		  </form>
 	 </td>  
 	 {{/if}}
