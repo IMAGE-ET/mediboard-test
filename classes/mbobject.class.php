@@ -1187,7 +1187,7 @@ class CMbObject {
 
     // Empty object
     if (!$this->_id || !$backObject->_spec->table || !$backObject->_spec->key) {
-      return 0;
+      return $this->_count[$backName] = 0;
     }
     
     $query = "SELECT COUNT({$backObject->_spec->key}) 
