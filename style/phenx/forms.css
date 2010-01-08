@@ -129,8 +129,8 @@ a.button {
   -moz-appearance: button;
   -webkit-appearance: button;
   vertical-align: middle;*/
-  border: 1px solid #333;
-  background: #eee;
+  border: 1px solid #666;
+  background: url(images/buttons/dropdown.png) center center repeat-x;
   padding: 2px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -138,12 +138,12 @@ a.button {
   margin: 1px;
 }
 
-button {
-  padding: 0;
+a.button:hover {
+  background-image: url(images/buttons/dropdown-hover.png);
 }
 
-a.button:hover {
-  background: #C1E0FF;
+button {
+  padding: 0;
 }
 
 button.edit:before, a.button.edit:before {
@@ -336,6 +336,47 @@ a.button.notext {
   margin: 0;
 }
 
+div.autocomplete {
+  position: absolute;
+  width: 250px;
+  max-height: 200px;
+  overflow: auto;
+  overflow-x: hidden;
+  background-color: white;
+  border: 1px solid #888;
+  margin: 0px;
+  padding: 0px;
+  z-index: 50;
+}
+
+div.autocomplete ul {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+div.autocomplete ul em {
+  text-decoration: underline;
+  font-style: normal;
+}
+
+div.autocomplete ul li.selected {
+  background-color: #ccc;
+  /*font-weight:bold;*/
+}
+
+div.autocomplete ul li {
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding: 2px;
+  cursor: pointer;
+}
+
+div.autocomplete ul li small {
+  white-space: normal;
+}
+
 input.autocomplete {
   background-image: url(../../images/icons/throbber.gif);
   background-position: 100% 1px;
@@ -345,6 +386,24 @@ input.autocomplete {
 
 input.autocomplete.throbbing {
   background-position: 100% -19px;
+}
+
+div.dropdown-trigger {
+  background: url(images/buttons/dropdown.png) center center repeat-x;
+  border: 1px solid #999;
+}
+
+div.dropdown-trigger:hover {
+  border: 1px solid #333;
+}
+
+div.dropdown-trigger div {
+  background: url(../../images/buttons/down.gif) center center no-repeat;
+  border: 1px solid #eee;
+}
+
+div.dropdown div.autocomplete ul li.selected { 
+  background-color: #ccc;
 }
 
 input[readonly],

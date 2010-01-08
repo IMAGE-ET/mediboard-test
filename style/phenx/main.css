@@ -594,46 +594,6 @@ table.form td.button {
   vertical-align: middle;
 }
 
-div.autocomplete {
-  position: absolute;
-  width: 250px;
-  max-height: 200px;
-  overflow: auto;
-  background-color: white;
-  border: 1px solid #888;
-  margin: 0px;
-  padding: 0px;
-  z-index: 50;
-}
-
-div.autocomplete ul {
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
-}
-
-div.autocomplete ul em {
-  text-decoration: underline;
-  font-style: normal;
-}
-
-div.autocomplete ul li.selected {
-  background-color: #ccc;
-  /*font-weight:bold;*/
-}
-
-div.autocomplete ul li {
-  list-style-type: none;
-  display: block;
-  margin: 0;
-  padding: 2px;
-  cursor: pointer;
-}
-
-div.autocomplete ul li small {
-  white-space: normal;
-}
-
 /* tabbed boxes */
 td.tabox {
   background-color: #ccc;
@@ -867,7 +827,7 @@ div.postit table.decoration td.top {
 }
 
 div.postit table.decoration td.top-left {
-  width: 12px;
+  width: 18px;
   height: 15px;
   background: url(images/pictures/note-top-left.png) top left no-repeat;
   opacity: 1;
@@ -896,9 +856,8 @@ div.postit table.decoration td.content {
   border-bottom-width: 1px;
   background-color: #ff6;
   max-height: 40px;
-  overflow: scroll;
+  overflow: auto;
   white-space: nowrap;
-  background: #fff;
   padding-right: 10px;
   padding-bottom: 10px;
 }
@@ -1174,7 +1133,7 @@ table.Offline button {
   margin-right: 4px;
 }
 
-#main .content {
+#main div.content {
   background: #FCFCFE;
   border: 1px solid #919B9C;
 }
