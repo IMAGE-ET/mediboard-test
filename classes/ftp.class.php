@@ -152,7 +152,7 @@ class CFTP {
     }
     
     // Rename the file
-    $rename = ftp_put($this->connexion, $oldname, $newname);
+    $rename = ftp_rename($this->connexion, $oldname, $newname);
     if (!$rename) {
       return false;
     } 
