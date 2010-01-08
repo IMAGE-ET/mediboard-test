@@ -21,17 +21,14 @@ legend {
   margin: 0 4px;
 }
 
-input, select, textarea, button {
-  margin: 1px;
-  font-family: inherit;
-}
-
 .control {
   margin: 1px !important;
 }
 
 input, select, textarea, button {
   font-size: 1em;
+  font-family: inherit;
+  margin: 1px;
   padding: 1px;
 }
 
@@ -111,7 +108,6 @@ a *[onmouseover] {
 }
 
 textarea {
-  font-family: Verdana, Arial, Helvetica, sans-serif;
   width: 99%;
 }
 
@@ -121,27 +117,33 @@ a.button {
   cursor: pointer;
   font-size: 11px;
   line-height: 1em;
+  color: #000;
   font-weight: normal;
   white-space: nowrap;
   margin:0;
 }
 
-button.edit, 
-button.hslip, 
-button.trash, 
-button.submit, 
-button.new, 
-button.print, 
-button.cancel, 
-button.modify, 
-button.search, 
-button.lock, 
-button.tick, 
-button.change, 
-button.remove, 
-button.add, 
-button.down {
+a.button {
+  /*padding: 1px;
+  height: 20px;
+  -moz-appearance: button;
+  -webkit-appearance: button;
+  vertical-align: middle;*/
+  border: 1px solid #333;
+  background: #eee;
+  padding: 2px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1px;
+}
+
+button {
   padding: 0;
+}
+
+a.button:hover {
+  background: #C1E0FF;
 }
 
 button.edit:before, a.button.edit:before {
@@ -159,12 +161,15 @@ button.trash:before, a.button.trash:before {
 button.submit:before, a.button.submit:before {
   content: url(images/buttons/save.png);
 }
+
 button.new:before, a.button.new:before {
   content: url(images/buttons/new.png);
 }
+
 button.print:before, a.button.print:before {
   content: url(images/buttons/print.png);
 }
+
 button.cancel:before, a.button.cancel:before {
   content: url(images/buttons/cancel.png);
 }
@@ -205,11 +210,29 @@ button.remove:before, a.button.remove:before {
   content: url(images/buttons/remove.png);
 }
 
+button.send:before, a.button.send:before {
+  content: url(images/buttons/send.png);
+}
+
+button.send-cancel:before, a.button.send-cancel:before {
+  content: url(images/buttons/send-cancel.png);
+}
+
+button.send-again:before, a.button.send-again:before {
+  content: url(images/buttons/send-again.png);
+}
+
+button.send-problem:before, a.button.send-problem:before {
+  content: url(images/buttons/send-problem.png);
+}
+
+button.send-auto:before, a.button.send-auto:before {
+  content: url(images/buttons/send-auto.png);
+}
+
 button:before,
 a.button:before {
   vertical-align: middle;
-  margin: 0;
-  padding: 0;
   padding-right: 2px;
   height: 11px;
   width: 11px;
@@ -225,12 +248,20 @@ a.button:hover {
   /*background: url(images/buttons/button_hover_background.gif);*/
 }
 
-button.notext, a.notext {
+button.notext, 
+a.button.notext {
   font-size: 0;
   color: transparent;
-  overflow: hidden;
   text-indent: -1px;
-  width: 21px;
+  overflow: hidden;
+  width: 20px;
+  height: 20px;
+}
+
+a.button.notext {
+  text-indent: 1px;
+  width: 12px;
+  height: 12px;
 }
 
 .numericField {

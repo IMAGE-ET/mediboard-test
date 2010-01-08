@@ -11,7 +11,7 @@
         <tbody id="menuIcons">
           <!-- Module icons -->
 	        <tr>
-	          <td />
+	          <td></td>
 	          {{foreach from=$modules key=mod_name item=currModule}}
 	          {{if $currModule->_can->view && $currModule->mod_ui_active}}
 	          <td align="center" class="{{if $mod_name==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
