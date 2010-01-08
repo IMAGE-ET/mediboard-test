@@ -167,7 +167,7 @@ function smarty_modifier_emphasize($text, $tokens) {
 	  $token = CMbString::allowDiacriticsInRegexp($token);
 	}
 	
-	$regexp = implode("|", $tokens);
+	$regexp = str_replace("/", "\\/", implode("|", $tokens));
 	return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
 }
 
