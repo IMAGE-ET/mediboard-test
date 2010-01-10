@@ -11,9 +11,7 @@ Document.refreshList = function() {
     requestUpdate('vwPatient');
 }
 
-Main.add(function(){
-  initNotes();
-});
+Main.add(initNotes);
 
 </script>
 
@@ -260,7 +258,7 @@ Main.add(function(){
     <th colspan="2" class="category">Séjours</th>
   </tr>
   {{foreach from=$patient->_ref_sejours item=object}}
-  {{include file=inc_vw_elem_dossier.tpl}}
+    {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
   {{/foreach}}
   {{/if}}
   
@@ -269,7 +267,7 @@ Main.add(function(){
     <th colspan="2" class="category">Consultations</th>
   </tr>
   {{foreach from=$patient->_ref_consultations item=object}}
-  {{include file=inc_vw_elem_dossier.tpl}}
+    {{mb_include module=dPpatients template=inc_vw_elem_dossier}}
   {{/foreach}}
   {{/if}}
 </table>
