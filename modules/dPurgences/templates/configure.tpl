@@ -85,84 +85,19 @@
    </td>
   </tr>  
 
- {{assign var="var" value="motif_rpu_view"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+ {{mb_include module=system template=inc_config_bool var=motif_rpu_view}}
   
-  {{assign var="var" value="age_patient_rpu_view"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=age_patient_rpu_view}}
+
+  {{mb_include module=system template=inc_config_bool var=responsable_rpu_view}}
   
-  {{assign var="var" value="responsable_rpu_view"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
-  
-  {{assign var="var" value="diag_prat_view"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=diag_prat_view}}
   
   <tr>
     <th class="category" colspan="100">Configuration des urgences</th>
   </tr>
   
-  {{assign var="var" value="allow_change_patient"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
+  {{mb_include module=system template=inc_config_bool var=allow_change_patient}}
   
   {{assign var="var" value="sortie_prevue"}} 
   <tr>
@@ -179,21 +114,8 @@
    </td>
   </tr>
   
-  {{assign var="var" value="only_prat_responsable"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td>
-      <label for="{{$m}}[{{$var}}]_1">Oui</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$var}}]_0">Non</label>
-      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>             
-  </tr>
-  
+  {{mb_include module=system template=inc_config_bool var=only_prat_responsable}}
+    
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

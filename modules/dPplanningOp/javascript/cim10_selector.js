@@ -1,6 +1,7 @@
 // $Id$
 
-var CIM10Selector = {
+if (!window.CIM10Selector) 
+CIM10Selector = {
   sForm     : null,
   sView     : null,
   sChir     : null,
