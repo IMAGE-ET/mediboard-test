@@ -633,13 +633,13 @@ class CAppUI {
     }
     
     // Defined and not empty
-    if (!empty($locales[$str])) {
-      return $locales[$str];
+    if (empty($locales[$str])) {
+      return $str;
     }
     
-    // DO NOT REMOVE THIS ASSIGNATION or else, there will be a fatal error in PHP < 5.3
     // Fatal error: func_get_args(): Can't be used as a function parameter
     $args = func_get_args();
+		$args[0] = $locales[$str];
     return nl2br(sprintf(self::$locale_mask, call_user_func_array("sprintf", $args)));
   }
 
