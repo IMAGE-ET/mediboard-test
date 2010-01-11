@@ -36,7 +36,7 @@ changePraticien = function(praticien_id){
 }
 
 submitProtocole = function(){
-  var oForm = document.forms.applyProtocole;
+  var oForm = getForm("applyProtocole");
   if(oForm.debut_date){
 	  var debut_date = oForm.debut_date.value;
 	  if(debut_date != "other" && oForm.debut){
@@ -45,8 +45,9 @@ submitProtocole = function(){
   }
 	if(document.selPraticienLine){
    oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
-  }
-  submitFormAjax(oForm, 'systemMsg');
+	 oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value
+  }	
+  return onSubmitFormAjax(oForm, 'systemMsg');
 }
 
 popupTransmission = function(sejour_id){
@@ -368,7 +369,7 @@ Main.add( function(){
   {{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
    <td id="div_protocoles" colspan="3">
       <!-- Formulaire de selection protocole -->
-      <form name="applyProtocole" method="post" action="?">
+      <form name="applyProtocole" method="post" action="?" onsubmit="return submitProtocole();">
 	      <input type="hidden" name="m" value="dPprescription" />
 	      <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
 	      <input type="hidden" name="del" value="0" />
@@ -404,7 +405,7 @@ Main.add( function(){
 	          } );
 	 				</script>				 				
  				{{/if}}
-        <button type="button" class="submit" onclick="if(document.selPraticienLine){ $V(this.form.pratSel_id, document.selPraticienLine.praticien_id.value); }submitProtocole(this.form);">Appliquer</button>
+        <button type="button" class="submit" onclick="this.form.onsubmit();">Appliquer</button>
       </form>
     </td>  
   {{/if}}
