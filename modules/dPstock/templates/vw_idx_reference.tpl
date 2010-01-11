@@ -13,9 +13,8 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  var form = getForm("edit_reference");
-  updateUnitQuantity(form, "equivalent_quantity");
-  filterReferences(form);
+  updateUnitQuantity(getForm("edit_reference"), "equivalent_quantity");
+  filterReferences(getForm("filter-references"));
 });
 
 function updateUnitQuantity(form, view) {
@@ -94,13 +93,14 @@ function filterReferences(form) {
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="societe_id"}}</th>
-          <td><select name="societe_id" class="{{$reference->_props.societe_id}}">
-            <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
-            {{foreach from=$list_societes item=curr_societe}}
-              <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
-              {{$curr_societe->_view}}
-              </option>
-            {{/foreach}}
+          <td>
+            <select name="societe_id" class="{{$reference->_props.societe_id}}">
+              <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
+              {{foreach from=$list_societes item=curr_societe}}
+                <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
+                {{$curr_societe->_view}}
+                </option>
+              {{/foreach}}
             </select>
           </td>
         </tr>
@@ -108,25 +108,29 @@ function filterReferences(form) {
           <th>{{mb_label object=$reference field="product_id"}}</th>
           <td>
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
-            <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
+            <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="40" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
           </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$reference field="code"}}</th>
+          <td>{{mb_field object=$reference field="code"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
           <td>
-            {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min="1" size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
+            {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
             <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
             <span id="equivalent_quantity"></span>
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>
-          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min="0" size=8}}</td>
+          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=8}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$reference field="code"}}</th>
-          <td>{{mb_field object=$reference field="code"}}</td>
+          <th>{{mb_label object=$reference field="mdq"}}</th>
+          <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4}}</td>
         </tr>
         <tr>
           <td class="button" colspan="4">

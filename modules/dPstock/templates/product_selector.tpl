@@ -67,12 +67,12 @@ function refreshProductInfo(product_id) {
     <th class="title">{{tr}}Information{{/tr}}</th>
   </tr>
   <tr>
-    <td>
-      <input type="text" name="search_category" size="20" value="" onkeyup="refreshCategoriesList(this.value);" />
+    <td style="white-space: nowrap;">
+      <input type="text" name="search_category" size="16" value="" onkeyup="refreshCategoriesList(this.value);" />
       <button class="cancel notext" id="clear_category" onclick="refreshCategoriesList(); this.form.search_category.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
-    <td>
-      <input type="text" name="search_product" size="20" value="" onkeyup="refreshProductsList(null, this.value);" />
+    <td style="white-space: nowrap;">
+      <input type="text" name="search_product" size="30" value="" onkeyup="refreshProductsList(null, this.value);" />
       <button class="cancel notext" id="clear_product" onclick="refreshProductsList(); this.form.search_product.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
     <td id="product_info" style="vertical-align: top;" rowspan="2"></td>

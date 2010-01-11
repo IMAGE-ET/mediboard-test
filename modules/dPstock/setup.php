@@ -444,6 +444,11 @@ class CSetupdPstock extends CSetup {
               CHANGE `societe_id` `societe_id` INT (11) UNSIGNED NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.13";
+    $this->makeRevision('1.13');
+    $sql = "ALTER TABLE `product_reference` 
+              ADD `mdq` INT (11);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.14";
   }
 }

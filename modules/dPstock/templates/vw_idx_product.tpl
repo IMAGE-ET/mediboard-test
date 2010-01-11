@@ -75,7 +75,7 @@ function filterReferences(form) {
         </tr>   
         <tr>
           <th style="width: 1%;">{{mb_label object=$product field="name"}}</th>
-          <td>{{mb_field object=$product field="name"}}</td>
+          <td>{{mb_field object=$product field="name" size=50}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$product field="category_id"}}</th>
@@ -159,30 +159,22 @@ function filterReferences(form) {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">{{tr}}CProduct-back-stocks_group{{/tr}}</th>
+          <th class="title" colspan="4">Stock de l'établissement</th>
         </tr>
         <tr>
           <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
           <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
         </tr>
-        {{foreach from=$product->_ref_stocks_group item=curr_stock}}
-        <tr>
-          <td>{{$curr_stock->_ref_group->_view}}</a></td>
-          <td>
-            <a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">
-              {{$curr_stock->quantity}}
-            </a>
-          </td>
-          <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
-        </tr>
-        {{foreachelse}}
-        <tr>
-          <td colspan="3">{{tr}}CProductStockGroup.none{{/tr}}</td>
-        </tr>
-        {{/foreach}}
-        {{if $product->_id}}
+        {{if $product->_ref_stock_group->_id}}
+          {{assign var=_stock_group value=$product->_ref_stock_group}}
           <tr>
-            <td colspan="3">
+            <td>{{$_stock_group->quantity}}</td>
+            <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td>{{tr}}CProductStockGroup.none{{/tr}}</td>
+            <td>
               <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
                 {{tr}}CProductStockGroup.create{{/tr}}
               </button>

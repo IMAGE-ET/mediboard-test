@@ -25,6 +25,12 @@ ProductSelector.init = function(){
   this.sUnit = "_unit_title";
   this.pop({{$stock->product_id}});
 }
+
+function refreshListStocksService(product_id) {
+  var url = new Url("dPstock", "httpreq_vw_list_stock_services");
+  url.addParam("product_id", product_id);
+  url.requestUpdate("list-stock-services");
+}
 </script>
 
 <table class="main">
@@ -40,7 +46,7 @@ ProductSelector.init = function(){
         </select>
         <input type="text" name="keywords" value="" />
         <input type="hidden" name="limit" value="" />
-        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search notext" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
         <br />
     
@@ -78,7 +84,7 @@ ProductSelector.init = function(){
             <td>
               {{mb_field object=$stock field="product_id" hidden=true}}
               <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
-              <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+              <button class="search notext" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
             </td>
           </tr>
           <tr>
@@ -104,7 +110,7 @@ ProductSelector.init = function(){
           <tr>
             <td class="button" colspan="4">
               {{if $stock->_id}}
-                <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+                <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}
                 </button>
@@ -117,4 +123,12 @@ ProductSelector.init = function(){
       </form>
     </td>
   </tr>
+  
+  {{if $stock->_id}}
+  <tr>
+    <td id="list-stock-services">
+      {{mb_include module=dPstock template=inc_list_stock_services services=$list_services}}
+    </td>
+  </tr>
+  {{/if}}
 </table>

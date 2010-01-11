@@ -15,6 +15,7 @@ $can->needsEdit();
 $stock_service_id = CValue::getOrSession('stock_service_id');
 $category_id      = CValue::getOrSession('category_id');
 $service_id       = CValue::getOrSession('service_id');
+$product_id       = CValue::get('product_id');
 
 // Loads the stock 
 $stock = new CProductStockService();
@@ -25,6 +26,16 @@ if ($stock_service_id) {
   $stock->loadMatchingObject();
   $stock->loadRefsFwd();
   $stock->_ref_product->loadRefsFwd();
+} 
+else if($product_id) {
+  $product = new CProduct();
+  $product->load($product_id);
+  
+  $stock->product_id = $product_id;
+  $stock->_ref_product = $product;
+} 
+else {
+  $stock->loadRefsFwd();
 }
 $stock->updateFormFields();
 

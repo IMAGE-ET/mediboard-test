@@ -49,7 +49,8 @@ class CProductStockLocation extends CMbObject {
 
 	function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "[$this->position] $this->name";
+    
+    $this->_view = ($this->position ? "[$this->position] " : "") . $this->name;
   }
 	
 	function updateDBfields() {
@@ -62,12 +63,12 @@ class CProductStockLocation extends CMbObject {
 			if ($next_object->_id) {
 				$query = '';
 				if ($this->position)
-					$query = ' AND `position` BETWEEN '.$next_object->position.' AND '.$this->position;
+					$query = "AND `position` BETWEEN $next_object->position AND $this->position";
 				else if ($next_object->position)
-					$query = ' AND `position` >= '.$next_object->position;
+					$query = "AND `position` >= $next_object->position";
 				
 				$where = array(
-			    '`position` IS NOT NULL'.$query
+			    "`position` IS NOT NULL $query"
 				);
 				
 				$this->position = $next_object->position;

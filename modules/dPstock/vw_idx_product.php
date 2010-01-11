@@ -25,6 +25,7 @@ if ($product->load($product_id)) {
     $value->loadRefsBack();
   }
 }
+$product->loadRefStock();
 
 // Loads the required Category the complete list
 $category = new CProductCategory();

@@ -16,8 +16,8 @@ var ProductSelector = {
   sPackaging  : null,
   sUnit       : null,
   options : {
-    width : 750,
-    height: 400
+    width : 800,
+    height: 450
   },
 
   pop: function(product_id) {
