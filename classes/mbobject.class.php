@@ -770,7 +770,7 @@ class CMbObject {
    * Extends object properties with target object (of the same class) properties
    * @param CMbObject $mbObject object to extend with 
    */
-  function extendsWith($mbObject) {
+  function extendsWith(CMbObject $mbObject) {
     $targetClass = $mbObject->_class_name;
     $thisClass = $this->_class_name;
     if ($targetClass !== $thisClass) {

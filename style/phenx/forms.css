@@ -117,6 +117,7 @@ a.button {
   cursor: pointer;
   font-size: 11px;
   line-height: 1em;
+  text-align: left;
   color: #000;
   font-weight: normal;
   white-space: nowrap;
@@ -130,7 +131,7 @@ a.button {
   -webkit-appearance: button;
   vertical-align: middle;*/
   border: 1px solid #666;
-  background: url(images/buttons/dropdown.png) center center repeat-x;
+  background: url(images/buttons/button.png) center center repeat-x;
   padding: 2px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -139,7 +140,7 @@ a.button {
 }
 
 a.button:hover {
-  background-image: url(images/buttons/dropdown-hover.png);
+  background-image: url(images/buttons/button-over.png);
 }
 
 button {
@@ -389,11 +390,14 @@ input.autocomplete.throbbing {
 }
 
 div.dropdown-trigger {
-  background: url(images/buttons/dropdown.png) center center repeat-x;
+  background-repeat: repeat-x;
+  background-position: center center;
+  background-image: url(images/buttons/button.png);
   border: 1px solid #999;
 }
 
 div.dropdown-trigger:hover {
+  background-image: url(images/buttons/button-over.png);
   border: 1px solid #333;
 }
 

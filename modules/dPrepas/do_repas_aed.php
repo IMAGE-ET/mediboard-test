@@ -33,10 +33,6 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     global $AppUI, $root;
 
     if ($this->ajax) {
-      $idName = $this->objectKeyGetVarName;
-      $idValue = $this->_obj->$idName;
-      $callBack = $this->callBack;
-      
       if($this->synchro){
         $del          = CValue::post("del", 0);
         $tmp_repas_id = CValue::post("_tmp_repas_id", 0);
@@ -48,7 +44,7 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
         $smarty->assign("tmp_repas_id"   , $tmp_repas_id);
         $smarty->assign("demandeSynchro" , $demandeSynchro);
         $smarty->assign("msgSystem"      , $msgSystem);
-        $smarty->assign("callBack"       , $callBack);
+        $smarty->assign("callBack"       , $this->callBack);
         if($demandeSynchro){
           $smarty->assign("object"     , $this->_objBefore);
         }

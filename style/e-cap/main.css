@@ -268,217 +268,6 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-button, a.button {
-  padding-left: 18px;
-  padding-bottom: 1px;
-  padding-top: 1px;
-  background-image: url(../tonkin/images/buttons/button.png);
-  background-repeat: repeat-x;
-  background-position: left bottom;
-}
-
-button:hover, a.button:hover {
-  background-image: url(../tonkin/images/buttons/buttonover.png);
-  background-position: left bottom;
-}
-
-button.trash, 
-a.button.trash {
-  background-image: url(../tonkin/images/buttons/trash.png);
-}
-
-button.trash:hover, 
-a.button.trash:hover {
-  background-image: url(../tonkin/images/buttons/trashover.png);
-}
-
-button.submit, 
-a.button.submit {
-  background-image: url(../tonkin/images/buttons/save.png);
-}
-
-button.submit:hover, 
-a.button.submit:hover {
-  background-image: url(../tonkin/images/buttons/saveover.png);
-}
-
-button.new, 
-a.button.new {
-  background-image: url(../tonkin/images/buttons/new.png);
-}
-
-button.new:hover, 
-a.button.new:hover {
-  background-image: url(../tonkin/images/buttons/newover.png);
-}
-
-button.print, 
-a.button.print {
-  background-image: url(../tonkin/images/buttons/print.png);
-}
-
-button.print:hover, 
-a.button.print:hover {
-  background-image: url(../tonkin/images/buttons/printover.png);
-}
-
-button.cancel, 
-a.button.cancel {
-  background-image: url(../tonkin/images/buttons/cancel.png);
-}
-
-button.cancel:hover, 
-a.button.cancel:hover {
-  background-image: url(../tonkin/images/buttons/cancelover.png);
-}
-
-button.modify, 
-a.button.modify {
-  background-image: url(../tonkin/images/buttons/save.png);
-}
-
-button.modify:hover, 
-a.button.modify:hover {
-  background-image: url(../tonkin/images/buttons/saveover.png);
-}
-
-button.search, 
-a.button.search {
-  background-image: url(../tonkin/images/buttons/search.png);
-}
-
-button.search:hover, 
-a.button.search:hover {
-  background-image: url(../tonkin/images/buttons/searchover.png);
-}
-
-button.lookup, 
-a.button.lookup {
-  background-image: url(../tonkin/images/buttons/lookup.png);
-}
-
-button.lookup:hover, 
-a.button.lookup:hover {
-  background-image: url(../tonkin/images/buttons/lookupover.png);
-}
-
-button.lock, 
-a.button.lock {
-  background-image: url(../tonkin/images/buttons/lock.png);
-}
-
-button.lock:hover, 
-a.button.lock:hover {
-  background-image: url(../tonkin/images/buttons/lockover.png);
-}
-
-button.tick, 
-a.button.tick {
-  background-image: url(../tonkin/images/buttons/tick.png);
-}
-
-button.tick:hover, 
-a.button.tick:hover {
-  background-image: url(../tonkin/images/buttons/tickover.png);
-}
-
-button.down, 
-a.button.down {
-  background-image: url(../tonkin/images/buttons/down.png);
-}
-
-button.down:hover, 
-a.button.down:hover {
-  background-image: url(../tonkin/images/buttons/downover.png);
-}
-
-button.up, 
-a.button.up {
-  background-image: url(../tonkin/images/buttons/up.png);
-}
-
-button.up:hover, 
-a.button.up:hover {
-  background-image: url(../tonkin/images/buttons/upover.png);
-}
-
-button.change, 
-a.button.change {
-  background-image: url(../tonkin/images/buttons/change.png);
-}
-
-button.change:hover, 
-a.button.change:hover {
-  background-image: url(../tonkin/images/buttons/changeover.png);
-}
-
-button.edit, 
-a.button.edit {
-  background-image: url(../tonkin/images/buttons/edit.png);
-}
-
-button.edit:hover, 
-a.button.edit:hover {
-  background-image: url(../tonkin/images/buttons/editover.png);
-}
-
-button.hslip, 
-a.button.hslip {
-  background-image: url(../tonkin/images/buttons/hslip.png);
-}
-
-button.hslip:hover, 
-a.button.hslip:hover {
-  background-image: url(../tonkin/images/buttons/hslipover.png);
-}
-
-button.add, 
-a.button.add {
-  background-image: url(../tonkin/images/buttons/add.png);
-}
-
-button.add:hover, 
-a.button.add:hover {
-  background-image: url(../tonkin/images/buttons/addover.png);
-}
-
-button.warning, 
-a.button.warning {
-  background-image: url(../tonkin/images/buttons/warning.png);
-}
-
-button.warning:hover, 
-a.button.warning:hover {
-  background-image: url(../tonkin/images/buttons/warningover.png);
-}
-
-button.remove, 
-a.button.remove {
-  background-image: url(../tonkin/images/buttons/remove.png);
-}
-
-button.remove:hover, 
-a.button.remove:hover {
-  background-image: url(../tonkin/images/buttons/removeover.png);
-}
-
-button.stop, 
-a.button.stop {
-  background-image: url(../tonkin/images/buttons/stop.png);
-}
-
-button.stop:hover, 
-a.button.stop:hover {
-  background-image: url(../tonkin/images/buttons/stopover.png);
-}
-
-button.notext, 
-button.notext:hover,
-a.notext, 
-a.notext:hover{
-  background-position: -2px bottom;
-}
-
 input, select, textarea {
   color: #082F54;
   background: #fff;
@@ -492,6 +281,16 @@ input:focus, select:focus, textarea:focus {
 
 select {
   border: 1px #a5acb2 solid;
+}
+
+button, 
+a.button {
+  background-image: url(../tonkin/images/buttons/button.png);
+}
+
+button:hover,
+a:hover.button {
+  background-image: url(../tonkin/images/buttons/button-over.png);
 }
 
 /* Standard table */
@@ -609,25 +408,4 @@ tr.catalogue-3 th {
   font-weight: bold;
   text-align: left;
   background-color: transparent;
-}
-
-.touchscreen button, 
-.touchscreen button:hover,
-.touchscreen button.notext,
-.touchscreen button.notext:hover,
-.touchscreen a.button, 
-.touchscreen a:hover.button,
-.touchscreen a.button.notext,
-.touchscreen a:hover.button.notext {
-  background-position: 3px 140%;
-  background-color: #A9C8CD;
-  background-repeat: repeat-x;
-  padding-top: 0px;
-}
-
-.touchscreen button.notext,
-.touchscreen button.notext:hover,
-.touchscreen a.button.notext,
-.touchscreen a:hover.button.notext {
-  background-position: 1px 140%;
 }

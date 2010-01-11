@@ -227,7 +227,7 @@ class CActeCCAM extends CActe {
     $this->_shortview  = $this->code_acte;
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
-    $this->_anesth = ($this->code_activite == 4) ? true : false;
+    $this->_anesth = ($this->code_activite == 4);
     
     // Remboursement exceptionnel
     $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
@@ -661,7 +661,7 @@ class CActeCCAM extends CActe {
     foreach ($this->_modificateurs as $modif) {
       $result = $this->_ref_code_ccam->getForfait($modif);
       $forfait     += $result["forfait"];
-      $coefficient += ($result["coefficient"]) - 100;
+      $coefficient += $result["coefficient"] - 100;
     }
     $this->_tarif = ($this->_tarif * ($coefficient / 100) + $forfait) * ($coeffAsso / 100);
     

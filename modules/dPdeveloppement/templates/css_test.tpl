@@ -1,7 +1,7 @@
 <script type="text/javascript">
 Main.add(function(){
-  var buttonClasses = $w("none edit hslip trash submit new print cancel modify search lookup lock tick down "+
-                      "up change add remove stop send send-cancel send-again send-problem send-auto");
+  var buttonClasses = $w("none edit hslip trash submit modify save new print cancel search lookup lock tick down "+
+                      "up left right change add remove stop warning send send-cancel send-again send-problem send-auto");
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
@@ -156,7 +156,7 @@ Main.add(function(){
     </th>
     <td>
       <select>
-        <option>Option 1</option>
+        <option style="background: url(./images/icons/cancel.png)">Option 1</option>
         <option value="1">Option 2</option>
         <option value="2">Option 3</option>
         <optgroup label="Optgroup 1">

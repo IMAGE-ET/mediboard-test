@@ -8,6 +8,16 @@
 
 <!--[if IE 7]>
 <script type="text/javascript">
+function processIE7Button(e) {
+  if (e._processed) return;
+  e._processed = true;
+
+  var className = $w(e.className).without("button", "notext")[0];
+
+  if (className)
+    e.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
+}
+
 var cookiejar = new CookieJar();
 Main.add(function () {
   if (cookiejar.get('IE7WarningClosed') != 'closed') {
@@ -15,13 +25,14 @@ Main.add(function () {
   }
 });
 </script>
+
 <div id="ie7warning" style="background-color: #ffc; border-bottom: 1px solid #333; padding: 0.3em; height: 1.4em; display: none;">
-  <a href="#1" style="float: right;" onclick="$('ie7warning').hide(); cookiejar.put('IE7WarningClosed', 'closed');">Fermer</a>
+  <a href="#1" style="float: right;" onclick="$('ie7warning').hide(); cookiejar.put('IE7WarningClosed', 'closed');">{{tr}}Close{{/tr}}</a>
   <img src="images/icons/warning.png" style="float: left;"/>
   <span style="margin: 0.2em;">
   	Pour un meilleur confort d'utilisation, nous vous conseillons d'utiliser le navigateur Firefox. 
   	<a href="http://mediboard.org/public/Firefox" target="_blank" style="font-weight: bold; text-decoration: underline;">Cliquez ici</a> 
-  	pour l'installer.
+  	pour plus d'informations.
   </span>
 </div>
 <![endif]-->

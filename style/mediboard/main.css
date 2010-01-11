@@ -111,19 +111,6 @@ h3 {
   margin: 5px 20px;
 }
 
-form {
-  display: inline;
-  padding: 0;
-  margin: 0;
-}
-
-textarea {
-  font-size: 1em;
-  border: 1px black solid;
-  padding-left: 2px;
-  width: 99%;
-}
-
 hr {
   border: none;
   border-bottom: 1px solid #666;
@@ -215,47 +202,6 @@ span.smarty-include:hover {
 	padding: 5px 10px;
 }
 
-button,
-a.button {
-  color: #000;
-  border: 1px outset #444;
-  font-family: inherit;
-  font-size: 11px;
-  background-color: #ddd;
-  margin: 0px 2px;
-  padding: 2px;
-  padding-left: 18px;
-  height: 18px;
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -moz-user-select: none;
-}
-
-button[disabled], a.button[disabled] {
-  opacity: 0.5;
-  -moz-opacity: 0.5;
-  cursor: not-allowed;
-}
-
-button[disabled]:hover, a.button[disabled]:hover {
-  outline: none;
-}
-
-a.button {
-  display: inline-block;
-  height: 14px;
-  text-decoration: none;
-}
-
-button:hover, 
-a.button:hover {
-  background-color: #bbb;
-  outline: 1px solid #666;
-}
-
 a.selected{
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
   padding-bottom: 8px;		
@@ -298,115 +244,15 @@ a.DESC:hover{
   padding-bottom: 8px;
 }
 
-button.edit, a.button.edit {
-  background-image: url(images/buttons/edit.png);
-}
-
-button.hslip, a.button.hslip {
-  background-image: url(images/buttons/hslip.png);
-}
-
-button.trash, a.button.trash {
-  background-image: url(images/buttons/trash.png);
-  outline-color: #f66;
-}
-
-button.submit, a.button.submit {
-  background-image: url(images/buttons/save.png);
-}
-
-button.new, a.button.new {
-  background-image: url(images/buttons/new.png);
-}
-
-button.print, a.button.print {
-  background-image: url(images/buttons/print.png);
-}
-
-button.cancel, a.button.cancel {
-  background-image: url(images/buttons/cancel.png);
-}
-
-button.modify, a.button.modify {
-  background-image: url(images/buttons/save.png);
-}
-
-button.search, a.button.search {
-  background-image: url(images/buttons/search.png);
-}
-
-button.lookup, a.button.lookup {
-  background-image: url(images/buttons/lookup.png);
-}
-
-button.lock, a.button.lock {
-  background-image: url(images/buttons/lock.png);
-}
-
-button.tick, a.button.tick {
-  background-image: url(images/buttons/tick.png);
-}
-
-button.down, a.button.down {
-  background-image: url(images/buttons/down.png);
-}
-
-button.up, a.button.up {
-  background-image: url(images/buttons/up.png);
-}
-
-button.change, a.button.change {
-  background-image: url(images/buttons/change.png);
-}
-
-button.add, a.button.add {
-  background-image: url(images/buttons/add.png);
-}
-
-button.remove, a.button.remove {
-  background-image: url(images/buttons/remove.png);
-}
-
-button.stop, a.button.stop {
-  background-image: url(images/buttons/stop.png);
-}
-
-button.send, a.button.send {
-  background-image: url(images/buttons/send.png);
-}
-
-button.send-cancel, a.button.send-cancel {
-  background-image: url(images/buttons/send-cancel.png);
-}
-
-button.send-again, a.button.send-again {
-  background-image: url(images/buttons/send-again.png);
-}
-
-button.send-problem, a.button.send-problem {
-  background-image: url(images/buttons/send-problem.png);
-}
-
-button.send-auto, a.button.send-auto {
-  background-image: url(images/buttons/send-auto.png);
-}
-
-button.notext,
-a.button.notext {
-  color: #ccc;
-  font-size: 0;
-  overflow: hidden;
-  color: transparent;
-  width: 0px;
-  padding-left: 14px;
-}
-
-button.notext {
-  width: 18px;
+/** Form elements **/
+form {
+  display: inline;
+  padding: 0;
+  margin: 0;
 }
 
 button.intermax-result {
-	opacity: .4;
+  opacity: .4;
 }
 
 input, select, textarea, button {
@@ -428,6 +274,11 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   background-color: #fff;
+}
+
+textarea {
+  padding-left: 2px;
+  width: 99%;
 }
 
 select {
@@ -456,8 +307,8 @@ option.novalue {
 }
 
 option.checked {
-	background: url(images/buttons/tick.png) no-repeat 12px;
-	padding-left: 30px;	
+  background: url(images/buttons/tick.png) no-repeat 12px;
+  padding-left: 30px; 
 }
 
 option[value=""] {
@@ -473,6 +324,186 @@ label:hover,
 a[onmouseover],
 a *[onmouseover] {
   cursor: pointer;
+}
+
+/** Buttons **/
+button,
+a.button {
+  font-size: 11px;
+  line-height: 1.0em;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  font-weight: normal;
+  white-space: nowrap;
+	display: inline-block;
+	
+  color: #000;
+  background: #eee url(images/buttons/button.png) center center repeat-x;
+	
+  border: 1px solid #666;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+	
+  vertical-align: middle;
+  height: 20px;
+  padding: 1px;
+  vertical-align: middle;
+  margin: 1px;
+  /*
+  -moz-appearance: button;
+  -webkit-appearance: button;*/
+}
+
+button {
+	padding: 0;
+  text-indent: -2px;
+  padding-right: 2px;
+	padding-bottom: 1px;
+}
+
+a.button {
+  height: 16px;
+	padding-right: 4px;
+}
+
+button.notext, 
+a.button.notext {
+  font-size: 0;
+  color: transparent;
+  overflow: hidden;
+}
+
+button.notext {
+  width: 20px;
+  padding-right: 0;
+}
+
+a.button.notext {
+  width: 16px;
+  padding-right: 1px;
+}
+
+button:before,
+a.button:before {
+  line-height: 6px;
+  margin-right: 2px;
+	vertical-align: text-bottom;
+}
+
+a.button:hover,
+button:hover {
+  background-image: url(images/buttons/button-over.png);
+	border-color: #333;
+}
+
+button.edit:before, a.button.edit:before {
+  content: url(images/buttons/edit.png);
+}
+
+button.hslip:before, a.button.hslip:before {
+  content: url(images/buttons/hslip.png);
+}
+
+button.trash:before, a.button.trash:before {
+  content: url(images/buttons/trash.png);
+}
+
+button.submit:before, a.button.submit:before {
+  content: url(images/buttons/save.png);
+}
+
+button.new:before, a.button.new:before {
+  content: url(images/buttons/new.png);
+}
+
+button.print:before, a.button.print:before {
+  content: url(images/buttons/print.png);
+}
+
+button.cancel:before, a.button.cancel:before {
+  content: url(images/buttons/cancel.png);
+}
+
+button.modify:before, a.button.modify:before {
+  content: url(images/buttons/save.png);
+}
+
+button.save:before, a.button.save:before {
+  content: url(images/buttons/save.png);
+}
+
+button.search:before, a.button.search:before {
+  content: url(images/buttons/search.png);
+}
+
+button.lookup:before, a.button.lookup:before {
+  content: url(images/buttons/lookup.png);
+}
+
+button.lock:before, a.button.lock:before {
+  content: url(images/buttons/lock.png);
+}
+
+button.tick:before, a.button.tick:before {
+  content: url(images/buttons/tick.png);
+}
+
+button.down:before, a.button.down:before {
+  content: url(images/buttons/down.png);
+}
+
+button.up:before, a.button.up:before {
+  content: url(images/buttons/up.png);
+}
+
+button.left:before, a.button.left:before {
+  content: url(images/buttons/left.png);
+}
+
+button.right:before, a.button.right:before {
+  content: url(images/buttons/right.png);
+}
+
+button.change:before, a.button.change:before {
+  content: url(images/buttons/change.png);
+}
+
+button.add:before, a.button.add:before {
+  content: url(images/buttons/add.png);
+}
+
+button.remove:before, a.button.remove:before {
+  content: url(images/buttons/remove.png);
+}
+
+button.stop:before, a.button.stop:before {
+  content: url(images/buttons/stop.png);
+}
+
+button.warning:before, a.button.warning:before {
+  content: url(images/buttons/warning.png);
+}
+
+button.send:before, a.button.send:before {
+  content: url(images/buttons/send.png);
+}
+
+button.send-cancel:before, a.button.send-cancel:before {
+  content: url(images/buttons/send-cancel.png);
+}
+
+button.send-again:before, a.button.send-again:before {
+  content: url(images/buttons/send-again.png);
+}
+
+button.send-problem:before, a.button.send-problem:before {
+  content: url(images/buttons/send-problem.png);
+}
+
+button.send-auto:before, a.button.send-auto:before {
+  content: url(images/buttons/send-auto.png);
 }
 
 /**
@@ -1023,11 +1054,14 @@ input.autocomplete.throbbing {
 }
 
 div.dropdown-trigger {
-  background: url(images/buttons/dropdown.png) center center repeat-x;
+  background-repeat: repeat-x;
+  background-position: center center;
+  background-image: url(images/buttons/button.png);
   border: 1px solid #999;
 }
 
 div.dropdown-trigger:hover {
+  background-image: url(images/buttons/button-over.png);
   border: 1px solid #333;
 }
 
@@ -1419,8 +1453,8 @@ table.note th.low {
 
 #login button {
   font-size: 1.3em;
-	height: 1.5em;
-	background-position: left 110%;
+	padding: 4px;
+	height: 26px;
 }
 
 
@@ -1565,89 +1599,75 @@ span.hilite {
 }
 
 /* Touchscreen mode */
+.touchscreen input,
 .touchscreen select,
 .touchscreen option,
-.touchscreen optgroup {
-  padding: 0;
-  font-size: 16px;
-  vertical-align: middle;
-}
-
-.touchscreen select {
-  margin-bottom: 1px;
-}
-
-.touchscreen input:focus,
-.touchscreen select:focus,
-.touchscreen option:focus,
-.touchscreen optgroup:focus {
-  border-style: solid;
-  border-width: 1px;
-}
-
-.touchscreen option,
-.touchscreen optgroup {
-  padding-left: 3px;
-}
-
-.touchscreen input,
 .touchscreen button,
 .touchscreen a.button,
-.touchscreen textarea {
-  font-size: 17px;
-}
-
-.touchscreen input,
-.touchscreen button,
-.touchscreen a.button {
-  height: 26px;
-  font-weight: normal;
-  vertical-align: middle;
-}
-
-.touchscreen a.button {
-  padding: 3px;
-  padding-left: 1px;
-  padding-bottom: 1px;
-}
-
-.touchscreen input[type="text"],
-.touchscreen input[type="password"] {
-  height: 20px;
-  font-size: 15px;
-}
-
-.touchscreen button, 
-.touchscreen button:hover,
-.touchscreen a.button,
-.touchscreen a:hover.button {
-  padding-left: 22px;
-  padding-right: 3px;
-  background-position: 3px center;
-  background-repeat: no-repeat;
-}
-
 .touchscreen label {
-  padding: 4px;
+  height: 26px;
+  vertical-align: middle;
+}
+
+.touchscreen input {
+	height: 18px;
+}
+
+.touchscreen input,
+.touchscreen option,
+.touchscreen label {
+  padding-top: 5px;
 }
 
 .touchscreen optgroup option {
   padding-left: 16px;
 }
 
+.touchscreen button {
+  padding-top: 3px;
+}
+
+.touchscreen a.button {
+  height: 19px;
+	padding-top: 4px;
+}
+
+.touchscreen a.button:before {
+  margin: 6px 4px;
+}
+
+.touchscreen button:before {
+  margin: 6px;
+	margin-left: 3px;
+}
+
+.touchscreen .notext {
+  font-size: 0;
+}
+
+.touchscreen button.notext {
+  width: 26px;
+}
+
+.touchscreen a.button.notext {
+  width: 24px;
+}
+
+.touchscreen input.autocomplete {
+  background-position: 100% 5px;
+}
+
+.touchscreen input.autocomplete.throbbing {
+  background-position: 100% -15px;
+}
+
+.touchscreen div.autocomplete ul li {
+  padding: 6px;
+}
+
 .touchscreen .control .trigger {
   width: 22px;
   height: 22px;
-}
-
-.touchscreen button.notext,
-.touchscreen button.notext:hover,
-.touchscreen a.button.notext,
-.touchscreen a:hover.button.notext {
-  font-size: 0;
-  padding-left: 20px;
-  background-position: 3px center;
-  background-repeat: no-repeat;
 }
 
 .touchscreen .control .trigger,
@@ -2875,7 +2895,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .numericField .arrows div {
   /*outline: 1px solid #999;*/
-  background-color: #ddd;
+  background-color: #eee;
   background-repeat: no-repeat;
   background-position: center center;
   cursor: pointer;

@@ -37,7 +37,7 @@
       {{/if}}
       {{if $curr_affectation->sejour_id}}
         <script type="text/javascript">new Draggable('affectation_{{$curr_affectation->_id}}', {revert:true})</script>
-        <a style="float: right;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}"
+        <a style="float: right;" href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$patient->_id}}">
           <img src="images/icons/edit.png" alt="edit" title="Modifier le dossier administratif du patient" />
         </a>
         {{if $sejour->_couvert_cmu}}

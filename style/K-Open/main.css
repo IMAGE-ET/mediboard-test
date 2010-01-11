@@ -166,16 +166,6 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-a.button, button {
-  color: #fff;
-  background-color: #638cc9;
-  padding-left: 18px; 
-}
-
-a.button:hover, button:hover {
-  background-color: #8ae;
-}
-
 input, select {
   border: 1px #a5acb2 solid;
 }
@@ -250,9 +240,4 @@ table.dialog #systemMsg {
 
 div.message, div.loading, div.error, div.warning {
    white-space: nowrap;
-}
-
-.touchscreen button, 
-.touchscreen button:hover {
-  padding-left: 1.4em;
 }

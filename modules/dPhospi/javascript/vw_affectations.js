@@ -175,7 +175,7 @@ function initServicesState(){
 ObjectTooltip.modes.timeHospi = {
   module: "dPplanningOp",
   action: "httpreq_get_hospi_time",
-  sClass: "tooltip",
+  sClass: "tooltip"
 }
 
 ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {

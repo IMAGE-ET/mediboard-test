@@ -177,145 +177,12 @@ option {
 
 button, 
 a.button {
-  background-image: url(./images/buttons/button.png);
-  background-repeat: repeat-x;
-  background-position: left bottom;
-  padding-left: 18px;
+  background-image: url(../tonkin/images/buttons/button.png);
 }
 
-a.button:hover,
-button:hover {
-  background-image: url(./images/buttons/buttonover.png);
-}
-
-button.trash, a.button.trash {
-  background-image: url(./images/buttons/trash.png);
-}
-
-button.trash:hover, a.button.trash:hover {
-  background-image: url(./images/buttons/trashover.png);
-}
-
-button.submit, a.button.submit {
-  background-image: url(./images/buttons/save.png);
-}
-
-button.submit:hover, a.button.submit:hover {
-  background-image: url(./images/buttons/saveover.png);
-}
-
-button.new, a.button.new {
-  background-image: url(./images/buttons/new.png);
-}
-
-button.new:hover, a.button.new:hover {
-  background-image: url(./images/buttons/newover.png);
-}
-
-button.print, a.button.print {
-  background-image: url(./images/buttons/print.png);
-}
-
-button.print:hover, a.button.print:hover {
-  background-image: url(./images/buttons/printover.png);
-}
-
-button.cancel, a.button.cancel {
-  background-image: url(./images/buttons/cancel.png);
-}
-
-button.cancel:hover, a.button.cancel:hover {
-  background-image: url(./images/buttons/cancelover.png);
-}
-
-button.modify, a.button.modify {
-  background-image: url(./images/buttons/save.png);
-}
-
-button.modify:hover, a.button.modify:hover {
-  background-image: url(./images/buttons/saveover.png);
-}
-button.search, a.button.search {
-  background-image: url(./images/buttons/search.png);
-}
-
-button.search:hover, a.button.search:hover {
-  background-image: url(./images/buttons/searchover.png);
-}
-button.lookup, a.button.lookup {
-  background-image: url(./images/buttons/lookup.png);
-}
-button.lookup:hover, a.button.lookup:hover {
-  background-image: url(./images/buttons/lookup.png);
-}
-button.lock, a.button.lock {
-  background-image: url(./images/buttons/lock.png);
-}
-button.lock:hover, a.button.lock:hover {
-  background-image: url(./images/buttons/lock.png);
-}
-button.tick, a.button.tick {
-  background-image: url(./images/buttons/tick.png);
-}
-
-button.tick:hover, a.button.tick:hover {
-  background-image: url(./images/buttons/tickover.png);
-}
-
-button.down, a.button.down {
-  background-image: url(./images/buttons/down.png);
-}
-
-button.down:hover, a.button.down:hover {
-  background-image: url(./images/buttons/downover.png);
-}
-
-button.change, a.button.change {
-  background-image: url(./images/buttons/change.png);
-}
-
-button.change:hover, a.button.change:hover {
-  background-image: url(./images/buttons/changeover.png);
-}
-
-button.edit, a.button.edit {
-  background-image: url(./images/buttons/edit.png);
-}
-
-button.edit:hover, a.button.edit:hover {
-  background-image: url(./images/buttons/editover.png);
-}
-
-button.hslip, a.button.hslip {
-  background-image: url(./images/buttons/hslip.png);
-}
-
-button.hslip:hover, a.button.hslip:hover {
-  background-image: url(./images/buttons/hslipover.png);
-}
-
-button.add, a.button.add {
-  background-image: url(./images/buttons/add.png);
-}
-
-button.add:hover, a.button.add:hover {
-  background-image: url(./images/buttons/addover.png);
-}
-
-button.remove, a.button.remove {
-  background-image: url(./images/buttons/remove.png);
-}
-
-button.remove:hover, a.button.remove:hover {
-  background-image: url(./images/buttons/removeover.png);
-}
-
-button.stop, a.button.stop {
-  background-image: url(./images/buttons/stop.png);
-}
-
-button.stop:hover, a.button.stop:hover {
-  background-image: url(./images/buttons/stopover.png);
+button:hover,
+a:hover.button {
+  background-image: url(../tonkin/images/buttons/button-over.png);
 }
 
 /* Standard table */
@@ -367,16 +234,4 @@ table#header table.titleblock td.titlecell {
 /* System message */
 #systemMsg {
   text-align: left;
-}
-
-.touchscreen button, 
-.touchscreen button:hover,
-.touchscreen button.notext,
-.touchscreen button.notext:hover,
-.touchscreen a.button, 
-.touchscreen a:hover.button,
-.touchscreen a.button.notext,
-.touchscreen a:hover.button.notext {
-  background-position: 3px 140%;
-  background-repeat: repeat-x;
 }

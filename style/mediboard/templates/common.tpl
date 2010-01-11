@@ -19,7 +19,7 @@
   {{$mediboardStyle|smarty:nodefaults}}
   {{$mediboardScript|smarty:nodefaults}}
   
-  <!--[if lt IE 8]>
+  <!--[if lte IE 8]>
   <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
   <![endif]-->
   
