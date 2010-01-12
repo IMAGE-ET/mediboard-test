@@ -79,6 +79,29 @@
         </tr>  
       </table>
       </form>
+      
+      <table class="main tbl">
+        <tr>
+          <th class="category" colspan="10">
+            Stocks à cet emplacement
+          </th>
+        </tr>
+        {{foreach from=$stock_location->_back.group_stocks item=_stock}}
+          <tr>
+            <td>
+              <strong onmouseover="ObjectTooltip.createEx(this, '{{$_stock->_guid}}')">
+                {{$_stock}}
+              </strong>
+            </td>
+            <td>{{$_stock->quantity}}</td>
+            <td>{{mb_include module=dPstock template=inc_bargraph stock=$_stock}}</td>
+          </tr>
+        {{foreachelse}}
+          <tr>
+            <td colspan="10">{{tr}}CProductStockGroup.none{{/tr}}</td>
+          </tr>
+        {{/foreach}}
+      </table>
     </td>
   </tr>
 </table>

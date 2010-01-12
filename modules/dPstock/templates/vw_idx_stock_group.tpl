@@ -39,7 +39,7 @@ function refreshListStocksService(product_id) {
       <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="category_id" onchange="stocksFilter.submit();">
-          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}}</option>
           {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}

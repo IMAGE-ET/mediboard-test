@@ -15,6 +15,8 @@ $stock_location_id = CValue::getOrSession('stock_location_id');
 
 $stock_location = new CProductStockLocation();
 $stock_location->load($stock_location_id);
+$stock_location->loadBackRefs("group_stocks");
+
 $list_locations = $stock_location->loadList(null, 'position,name');
 
 // Création du template

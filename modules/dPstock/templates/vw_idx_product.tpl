@@ -35,14 +35,14 @@ function filterReferences(form) {
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="this.form.onsubmit()">
-          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+          <option value="0" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="this.form.onsubmit()" style="width: 12em;">
-          <option value="0">&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
+        <select name="societe_id" onchange="this.form.onsubmit()" style="width: 13em;">
+          <option value="0">&ndash; Tous les fournisseurs</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -50,7 +50,7 @@ function filterReferences(form) {
         
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="this.form.reset()"></button>
       </form>
 

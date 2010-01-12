@@ -33,20 +33,20 @@ ProductSelector.init = function(){
       <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="category_id" onchange="stocksFilter.submit();">
-          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}}</option>
           {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
         <select name="service_id" onchange="stocksFilter.submit();">
-          <option value="0">&mdash; {{tr}}CService.all{{/tr}} &mdash;</option>
+          <option value="0">&mdash; {{tr}}CService.all{{/tr}}</option>
           {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->_view}}</option>
           {{/foreach}}
         </select>
         <input type="text" name="keywords" value="" />
         <input type="hidden" name="limit" value="" />
-        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search notext" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
       </form>
   
