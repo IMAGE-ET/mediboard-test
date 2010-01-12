@@ -51,6 +51,7 @@ function reload(mode) {
   var url = new Url("dPadmissions", "httpreq_vw_sorties");
   url.addParam("date", "{{$date}}");
   url.addParam("vue", "{{$vue}}");
+  url.addParam("filter_function_id" , "{{$filter_function_id}}");
   url.addParam("mode", mode);
   url.requestUpdate('sorties'+mode);
 }
@@ -86,18 +87,21 @@ Main.add(function () {
   var ambuUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   ambuUpdater.addParam("date", "{{$date}}");
   ambuUpdater.addParam("vue" , "{{$vue}}");
+	ambuUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
   ambuUpdater.addParam("mode", "ambu");
   ambuUpdater.periodicalUpdate('sortiesambu', { frequency: 90 });
   
   var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue" , "{{$vue}}");
+  compUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
   compUpdater.addParam("mode", "comp");
   compUpdater.periodicalUpdate('sortiescomp', { frequency: 90 });
   
   var compUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue" , "{{$vue}}");
+  compUpdater.addParam("filter_function_id" , "{{$filter_function_id}}");
   compUpdater.addParam("mode", "autre");
   compUpdater.periodicalUpdate('sortiesautre', { frequency: 90 });
   
@@ -118,6 +122,14 @@ Main.add(function () {
           <option value="0" {{if $vue == 0}}selected="selected"{{/if}}>Tout afficher</option>
           <option value="1" {{if $vue == 1}}selected="selected"{{/if}}>Ne pas afficher les sorties effectuées</option>
         </select>
+
+	      <select name="filter_function_id" style="width: 16em;" onchange="this.form.submit();">
+	        <option value=""> &mdash; Toutes les fonctions</option>
+	        {{foreach from=$functions item=_function}}
+	          <option value="{{$_function->_id}}" {{if $_function->_id == $filter_function_id}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
+	        {{/foreach}}
+	      </select>
+
       </form>
     </td>
     <td class="halfPane" style="text-align: center">

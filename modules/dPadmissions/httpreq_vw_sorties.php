@@ -16,6 +16,7 @@ $can->needsRead();
 $selTri = CValue::getOrSession("selTri", "nom");
 $order_col = CValue::getOrSession("order_col", "_nomPatient");
 $order_way = CValue::getOrSession("order_way", "ASC");
+$filter_function_id = CValue::getOrSession("filter_function_id");
 
 // Mode => ambu ou comp
 $mode = CValue::getOrSession("mode");
@@ -43,6 +44,7 @@ $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
+$ljoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
 $where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) BETWEEN '$limit1' AND '$limit2'";
 if($mode != "autre") {
   $where["type"] = " = '$mode'";
@@ -71,6 +73,10 @@ if($order_col == "sortie_prevue"){
 }
 if($order_col == "_nomPraticien"){
   $order .= "users.user_last_name $order_way, users.user_first_name";
+}
+
+if($filter_function_id){
+	$where["users_mediboard.function_id"] = " = '$filter_function_id'";
 }
 
 $listSejour = $listSejour->loadGroupList($where, $order, null, null, $ljoin);
