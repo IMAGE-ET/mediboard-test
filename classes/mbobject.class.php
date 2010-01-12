@@ -937,9 +937,14 @@ class CMbObject {
     if ($type === "store" || $type === "merge") {
     	$old_values = array();
     	foreach($fields as $_field) {
-    		if (!$this->_specs[$_field] instanceof CTextSpec) {
-    		  $old_values[$_field] = utf8_encode($old->$_field);
+    		$_spec = $this->_specs[$_field];
+    		if ($_spec instanceof CTextSpec ||
+            $_spec instanceof CHtmlSpec ||
+            $_spec instanceof CXmlSpec ||
+            $_spec instanceof CPhpSpec) {
+    			continue;
     		}
+    		$old_values[$_field] = utf8_encode($old->$_field);
     	}
     	$extra = json_encode($old_values);
     }
