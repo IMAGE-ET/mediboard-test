@@ -173,8 +173,8 @@ Main.add(function(){
           <optgroup label="Praticiens">
             {{assign var=_obj value=$check_list->_ref_object}}
             <option value="{{$_obj->_ref_chir->user_id}}">{{$_obj->_ref_chir}}</option>
-            {{if $_obj->anesth_id}}
-            <option value="{{$_obj->_ref_anesth->user_id}}">{{$_obj->_ref_anesth}}</option>
+            {{if $anesth_id}}
+            <option value="{{$anesth->_id}}">{{$anesth}}</option>
             {{/if}}
           </optgroup>
           {{/if}}

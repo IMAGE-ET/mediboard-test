@@ -209,6 +209,9 @@ foreach($operation_check_list->_specs["type"]->_list as $type) {
 $anesth_perop = new CAnesthPerop();
 $anesth_perop->loadAides($AppUI->user_id);
 
+$anesth = new CMediusers();
+$anesth->load($anesth_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -237,6 +240,7 @@ $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
 $smarty->assign("prescription"           , $prescription);
 $smarty->assign("protocoles"             , $protocoles);
 $smarty->assign("anesth_id"              , $anesth_id);
+$smarty->assign("anesth"                 , $anesth);
 $smarty->assign("hide_finished"          , $hide_finished);
 
 // Check lists
