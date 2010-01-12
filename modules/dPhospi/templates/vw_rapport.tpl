@@ -2,18 +2,6 @@
   <tr>
     <th colspan="2">
       <a href="#" onclick="print()">Rapport du {{$date|date_format:"%d/%m/%Y"}}</a>
-      <br />
-      <form name="chgMode" action="?" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="a" value="{{$a}}" />
-      <input type="hidden" name="dialog" value="1" />
-      <input type="hidden" name="date" value="{{$date}}" />
-      Type d'affichage :
-      <select name="rapport_reel" onchange="this.form.submit();">
-        <option value="1" {{if $reel}}selected="selected"{{/if}}>Rapport réel</option>
-        <option value="0" {{if !$reel}}selected="selected"{{/if}}>Rapport prévisionnel</option>
-      </select>
-      </form>
     </th>
   </tr>
   <tr>

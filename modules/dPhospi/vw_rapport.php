@@ -12,15 +12,6 @@ global $AppUI, $can, $m, $g;
 
 $date = CValue::getOrSession("date");
 
-$reel = CValue::getOrSession("rapport_reel", 1);
-if($reel) {
-  $champ_entree = "entree_reelle";
-  $champ_sortie = "sortie_reelle";
-} else {
-  $champ_entree = "entree_prevue";
-  $champ_sortie = "sortie_prevue";
-}
-
 // Chargement des praticiens
 $med = new CMediusers();
 $listPrat = $med->loadPraticiens(PERM_READ);
@@ -33,7 +24,8 @@ $hierEntree = mbDateTime("23:59:00", $hierEntree);
 
 // Chargement des services
 $services = new CService;
-$services = $services->loadListWithPerms(PERM_READ, null, "nom");
+$whereServices = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$services = $services->loadListWithPerms(PERM_READ, $whereServices, "nom");
 
 // Initialisations
 $totalHospi = 0;
@@ -49,12 +41,10 @@ foreach($listPrat as $key => $prat){
 
 $sejour = new CSejour;
 $whereSejour = array();
-$whereSejour[$champ_entree] = "<= '$dateEntree'";
-if($reel){
-  $whereSejour[] = "(sortie_reelle >= '$dateSortie') OR (sortie_reelle IS NULL && sortie_prevue >= '$dateSortie')";
-} else {
-  $whereSejour[$champ_sortie] = ">= '$dateSortie'";
-}
+$whereSejour["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$whereSejour["entree_reelle"] = "IS NOT NULL";
+$whereSejour[] = "`sejour`.`entree_reelle` <= '$dateEntree'";
+$whereSejour[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$dateSortie'";
 $whereSejour["annule"]        = "= '0'";
 $listSejours = $sejour->loadList($whereSejour);
    
@@ -84,19 +74,25 @@ foreach($listSejours as $_sejour) {
 
 // Calcul du nombre d'affectations a la date $date
 $affectation = new CAffectation();
-$whereAffect["entree"] = "<= '$dateEntree'";
-$whereAffect["sortie"] = ">= '$dateSortie'";
-$whereAffect["sejour_id"] = "!= '0'";
-$groupAffect = "sejour_id";
+$whereAffect = array();
+$ljoin = array();
 
+$whereAffect["entree"]                = "<= '$dateEntree'";
+$whereAffect["sortie"]                = ">= '$dateSortie'";
+$whereAffect["affectation.sejour_id"] = "!= '0'";
+$whereAffect["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
+
+$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
+
+$groupAffect = "affectation.sejour_id";
+
+$list_affectations = $affectation->loadList($whereAffect, null, null, $groupAffect, $ljoin);
 $total_service = array();
-foreach($services as $key=>$_service){
+
+foreach($services as $_service){
 	$total_service[$_service->_id]["service"] = $_service;
 	$total_service[$_service->_id]["total"]   = 0;
 }
-
-$list_affectations = $affectation->loadList($whereAffect,null,null,$groupAffect);
-
 
 foreach($list_affectations as $key=>$_affectation){
   // Chargement des références nécessaire pour parcourir les affectations
@@ -108,7 +104,7 @@ foreach($list_affectations as $key=>$_affectation){
 
   // Stockage des informations liées aux services
   foreach($services as $key=>$_service){
-    if($_service->_id == $_affectation->_ref_lit->_ref_chambre->_ref_service->_id && $_affectation->_ref_sejour->annule == 0){
+    if($_service->_id == $_affectation->_ref_lit->_ref_chambre->_ref_service->_id && !$_affectation->_ref_sejour->annule){
       $total_service[$_service->_id]["total"]++;    
     }
   }
@@ -120,8 +116,8 @@ $date_fin = mbDateTime("23:59:00",$date);
 // present du jour
 $sejourJour = new CSejour();
 $whereJour = array();
-$whereJour[$champ_entree] = "<= '$date_fin'";
-$whereJour[$champ_sortie] = ">= '$date_debut'";
+$whereJour[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$date_fin'";
+$whereJour[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date_debut'";
 $whereJour["annule"] = "= '0'";
 $whereJour["type"] = "= 'comp'";
 $countPresentJour = $sejourJour->countList($whereJour);
@@ -129,8 +125,8 @@ $countPresentJour = $sejourJour->countList($whereJour);
 // present de la veille
 $sejourVeille = new CSejour();
 $whereVeille = array();
-$whereVeille[$champ_entree] = "<= '$hierEntree'";
-$whereVeille[$champ_sortie] = ">= '$dateSortie'";
+$whereVeille[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$hierEntree'";
+$whereVeille[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$dateSortie'";
 $whereVeille["annule"] = "= '0'";
 $whereVeille["type"] = "= 'comp'";
 $countPresentVeille = $sejourVeille->countList($whereVeille);
@@ -138,7 +134,7 @@ $countPresentVeille = $sejourVeille->countList($whereVeille);
 // entree du jour
 $sejourEntreeJour = new CSejour();
 $whereEntree = array();
-$whereEntree[$champ_entree] = "BETWEEN '$date_debut' AND '$date_fin'";
+$whereEntree[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date_debut' AND '$date_fin'";
 $whereEntree["annule"] = "= '0'";
 $whereEntree["type"] = "= 'comp'";
 $countEntreeJour = $sejourEntreeJour->countList($whereEntree);
@@ -146,7 +142,7 @@ $countEntreeJour = $sejourEntreeJour->countList($whereEntree);
 // sorties du jour
 $sejourSortieJour = new CSejour();
 $whereSortie = array();
-$whereSortie[$champ_sortie] = "BETWEEN '$date_debut' AND '$date_fin'";
+$whereSortie[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) BETWEEN '$date_debut' AND '$date_fin'";
 $whereSortie["annule"] = "= '0'";
 $whereSortie["type"] = "= 'comp'";
 $countSortieJour = $sejourSortieJour->countList($whereSortie);
@@ -155,7 +151,6 @@ $countSortieJour = $sejourSortieJour->countList($whereSortie);
 $smarty = new CSmartyDP();
 
 $smarty->assign("date",$date);
-$smarty->assign("reel",$reel);
 $smarty->assign("totalHospi",$totalHospi);
 $smarty->assign("totalMedecin",$totalMedecin);
 $smarty->assign("totalAmbulatoire",$totalAmbulatoire);
@@ -168,6 +163,7 @@ $smarty->assign("countEntreeJour",$countEntreeJour);
 $smarty->assign("countPresentJour", $countPresentJour);
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("totalPrat",$totalPrat);
+
 $smarty->display("vw_rapport.tpl");
 
 ?>
