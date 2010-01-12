@@ -58,6 +58,7 @@ if ($patient->patient_id) {
   // Consultation
   foreach ($patient->_ref_consultations as &$consult) {
     $consult->loadRefsFwd(); //loadRefs();
+    $consult->loadRefConsultAnesth();
     $consult->_ref_chir->loadRefFunction();
   }
 
