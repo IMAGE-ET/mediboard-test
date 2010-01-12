@@ -15,6 +15,7 @@
 Main.add(function () {
   updateUnitQuantity(getForm("edit_reference"), "equivalent_quantity");
   filterReferences(getForm("filter-references"));
+  Control.Tabs.create("reference-tabs", true);
 });
 
 function updateUnitQuantity(form, view) {
@@ -147,6 +148,80 @@ function filterReferences(form) {
       </table>
       </form>
       {{/if}}
+      
+      <table class="main">
+        <tr>
+          <td>
+            <ul class="control_tabs" id="reference-tabs">
+              <li><a href="#reference-orders">Bons de commande</a></li>
+              <li><a href="#reference-receptions">Bons de réceptions</a></li>
+              <li><a href="#reference-bills">Facture</a></li>
+            </ul>
+            
+            <hr class="control_tabs" />
+          </td>
+        </tr>
+        
+        <tr id="reference-orders" style="display: none;">
+          <td>
+            <table class="main tbl">
+              <tr>
+                <th></th>
+                <th>Date de commande</th>
+              </tr>
+              {{foreach from=$lists_objects.orders item=_order}}
+              <tr>
+                <td>
+                  <strong onmouseover="ObjectTooltip.createEx(this, '{{$_order->_guid}}')">
+                    {{$_order->order_number}}
+                  </strong>
+                </td>
+                <td>{{mb_value object=$_order field=date_ordered}}</td>
+              </tr>
+              {{foreachelse}}
+              <tr>
+                <td colspan="10">{{tr}}CProductOrder.none{{/tr}}</td>
+              </tr>
+              {{/foreach}}
+            </table>
+          </td>
+        </tr>
+        
+        <tr id="reference-receptions" style="display: none;">
+          <td>
+            <table class="main tbl">
+              <tr>
+                <th></th>
+                <th>Date de réception</th>
+              </tr>
+              {{foreach from=$lists_objects.receptions item=_reception}}
+              <tr>
+                <td>
+                  <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reception->_guid}}')">
+                    {{$_reception->reference}}
+                  </strong>
+                </td>
+                <td>{{mb_value object=$_reception field=date}}</td>
+              </tr>
+              {{foreachelse}}
+              <tr>
+                <td colspan="10">{{tr}}CProductReception.none{{/tr}}</td>
+              </tr>
+              {{/foreach}}
+            </table>
+          </td>
+        </tr>
+        
+        <tr id="reference-bills" style="display: none;">
+          <td>
+            <table class="main tbl">
+              <tr>
+                <td colspan="10">Aucune facture</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

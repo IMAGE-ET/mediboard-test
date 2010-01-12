@@ -98,6 +98,32 @@ class CProductReference extends CMbObject {
     return parent::check();
   }
   
+  function loadRefsObjects() {
+    $items = $this->loadBackRefs("order_items");
+    $lists = array(
+      "orders" => array(),
+      "receptions" => array(),
+      "bills" => array()
+    );
+    
+    foreach($items as $_item) {
+      if ($_item->order_id) {
+        $_item->loadOrder();
+        $lists["orders"][$_item->order_id] = $_item->_ref_order;
+      }
+      
+      $_item->loadBackRefs("receptions");
+      foreach($_item->_back["receptions"] as $_reception) {
+        if ($_reception->reception_id) {
+          $_reception->loadRefReception();
+          $lists["receptions"][$_reception->reception_id] = $_reception->_ref_reception;
+        }
+      }
+    }
+    
+    return $lists;
+  }
+  
   function getPerm($permType) {
     if(!$this->_ref_product) {
       $this->loadRefsFwd();

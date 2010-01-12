@@ -49,10 +49,13 @@ $list_categories = $category->loadList(null, 'name');
 $societe = new CSociete();
 $list_societes = $societe->loadList(null, 'name');
 
+$lists = $reference->loadRefsObjects();
+
 // Smarty template
 $smarty = new CSmartyDP();
 
 $smarty->assign('reference',       $reference);
+$smarty->assign('lists_objects',   $lists);
 $smarty->assign('category_id',     $category_id);
 $smarty->assign('societe_id',      $societe_id);
 $smarty->assign('list_categories', $list_categories);
