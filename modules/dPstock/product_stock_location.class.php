@@ -28,6 +28,7 @@ class CProductStockLocation extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_location';
     $spec->key   = 'stock_location_id';
+    $spec->uniques["name"] = array("name");
     return $spec;
   }
 	
@@ -87,6 +88,13 @@ class CProductStockLocation extends CMbObject {
 
 			$this->_before = null;
 		}
+    else if (!$this->_id && !$this->position) {
+      $existing = $this->loadList(null, "position");
+      if ($location = end($existing)) 
+        $this->position = $location->position + 1;
+      else 
+        $this->position = 1;
+    }
 	}
 
   function loadRefsFwd(){
