@@ -8,13 +8,11 @@
 
 {{foreach from=$sejourNonAffectes item=_sejour}}
 <form name="addAffectationsejour_{{$_sejour->_id}}" action="?m={{$m}}" method="post">
-
-<input type="hidden" name="dosql" value="do_affectation_aed" />
-<input type="hidden" name="lit_id" value="" />
-<input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
-<input type="hidden" name="entree" value="{{$_sejour->_entree}}" />
-<input type="hidden" name="sortie" value="{{$_sejour->_sortie}}" />
-
+  <input type="hidden" name="dosql" value="do_affectation_aed" />
+  <input type="hidden" name="lit_id" value="" />
+  <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
+  <input type="hidden" name="entree" value="{{$_sejour->_entree}}" />
+  <input type="hidden" name="sortie" value="{{$_sejour->_sortie}}" />
 </form>
 
 <table class="sejourcollapse" id="sejour_{{$_sejour->_id}}">
