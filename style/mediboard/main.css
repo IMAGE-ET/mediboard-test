@@ -398,6 +398,16 @@ button:hover {
 	border-color: #333;
 }
 
+button[disabled], a.button[disabled] {
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button[disabled]:hover, a.button[disabled]:hover {
+  outline: none;
+}
+
 button.edit:before, a.button.edit:before {
   content: url(images/buttons/edit.png);
 }
