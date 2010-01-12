@@ -9,7 +9,7 @@
  */
 
 global $can, $g;
-$can->needsAdmin();
+$can->needsEdit();
 
 $product_id = CValue::get('product_id');
 

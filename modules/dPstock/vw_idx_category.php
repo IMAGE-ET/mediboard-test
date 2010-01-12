@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsAdmin();
+$can->needsEdit();
 
 $category_id = CValue::getOrSession('category_id');
 

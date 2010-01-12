@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsAdmin();
+$can->needsEdit();
 
 $reference_id = CValue::getOrSession('reference_id');
 $societe_id   = CValue::getOrSession('societe_id');

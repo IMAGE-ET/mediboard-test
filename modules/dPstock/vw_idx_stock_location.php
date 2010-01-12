@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsAdmin();
+$can->needsEdit();
 
 $stock_location_id = CValue::getOrSession('stock_location_id');
 

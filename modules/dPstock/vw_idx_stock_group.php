@@ -9,7 +9,7 @@
  */
 
 global $can, $g;
-$can->needsAdmin();
+$can->needsEdit();
 
 $stock_id            = CValue::getOrSession('stock_id');
 $category_id         = CValue::getOrSession('category_id');

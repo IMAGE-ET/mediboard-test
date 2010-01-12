@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsAdmin();
+$can->needsEdit();
 
 // Gets objects ID from Get or Session
 $product_id  = CValue::getOrSession('product_id', null);
