@@ -15,24 +15,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 <table class="tbl">
   <tr>
     <th colspan="9">
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
-      {{$date|date_format:$dPconfig.longdate}}
-      <form name="changeDateAdmissions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_idx_admission" />
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-			</form>
-	
-			<select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadAdmission($V(getForm('selType')._type_admission), this.value);">
-        <option value=""> &mdash; Toutes les fonctions</option>
-        {{foreach from=$functions_filter item=_function}}
-          <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}}>{{$_function}}</option>
-        {{/foreach}}
-      </select>
-		
-			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
-      <br /> 
-      <em>
+      <em style="float: left">
       {{if $selAdmis == "n"}}Admissions non effectuées
       {{elseif $selSaisis == "n"}}Dossiers non préparés
       {{else}}Toutes les admissions
@@ -42,6 +25,23 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       {{elseif $order_col == "entree_prevue"}}triées par heure d'entrée
       {{/if}}
       </em>
+	
+			<select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadAdmission($V(getForm('selType')._type_admission), this.value);">
+        <option value=""> &mdash; Toutes les fonctions</option>
+        {{foreach from=$functions_filter item=_function}}
+          <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}}>{{$_function}}</option>
+        {{/foreach}}
+      </select>
+      
+      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
+      {{$date|date_format:$dPconfig.longdate}}
+      <form name="changeDateAdmissions" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_admission" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+			</form>
+		
+			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
     </th>
   </tr>
   <tr>
