@@ -4,16 +4,12 @@
 
 function checkBilanFSE() {
   var oForm = document.BilanFSE;
-  
   if (!checkForm(oForm)) {
   	return false;
   }
   
   var url = new Url("dPcabinet", "print_bilan_fse");
-  $H(Form.toObject(oForm)).each(function (pair) { 
-  	url.addParam(pair.key, pair.value) 
-  } );
-  
+  url.addFormData(oForm);
   url.popup("700", "400", "Bilan FSE");
   return false;
 }

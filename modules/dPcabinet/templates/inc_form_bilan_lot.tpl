@@ -8,12 +8,9 @@ function checkBilanLot() {
   if (!checkForm(oForm)) {
   	return false;
   }
-  
+
   var url = new Url("dPcabinet", "print_bilan_lot");
-  $H(Form.toObject(oForm)).each(function (pair) { 
-  	url.addParam(pair.key, pair.value) 
-  } );
-  
+  url.addFormData(oForm);
   url.popup("700", "400", "Bilan Lot");
   return false;
 }
