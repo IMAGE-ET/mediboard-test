@@ -1232,5 +1232,21 @@ Element.addMethods({
       e.parentNode.replaceChild(e.firstChild, e);
     });
     return element;
+  },
+  getSelection: function(element) {
+    if ((doc = element.ownerDocument) && (win = doc.defaultView) && 
+        win.getSelection && doc.createRange && 
+        (selection = window.getSelection()) && 
+        selection.removeAllRanges) {
+        range = doc.createRange();
+        range.selectNode(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    else if (document.body && document.body.createTextRange && 
+            (range = document.body.createTextRange())) {
+        range.moveToElementText(element);
+        range.select();
+    }
   }
 });
