@@ -21,8 +21,16 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_admission" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-      </form>
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
+			</form>
+	
+			<select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadAdmission($V(getForm('selType')._type_admission), this.value);">
+        <option value=""> &mdash; Toutes les fonctions</option>
+        {{foreach from=$functions_filter item=_function}}
+          <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}}>{{$_function}}</option>
+        {{/foreach}}
+      </select>
+		
+			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
       <br /> 
       <em>
       {{if $selAdmis == "n"}}Admissions non effectuées
@@ -59,7 +67,8 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       <input type="hidden" name="id" value="{{$date}}" />
       <input type="hidden" name="mode" value="allsaisie" />
       <input type="hidden" name="value" value="1" />
-      <button class="tick" type="submit">
+			<input type="hidden" name="filterFunction" value="{{$filterFunction}}" />
+			<button class="tick" type="submit">
         {{tr}}CSejour-saisi_SHS-tous{{/tr}}
       </button>
       </form>

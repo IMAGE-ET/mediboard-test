@@ -38,12 +38,15 @@ function printDepassement(id) {
   url.popup(700, 550, "Depassement");
 }
 
-function reloadAdmission(type) {
+function reloadAdmission(type, filterFunction) {
   var admUrl = new Url("dPadmissions", "httpreq_vw_admissions");
   admUrl.addParam("selAdmis", "{{$selAdmis}}");
   admUrl.addParam("selSaisis", "{{$selSaisis}}");
   admUrl.addParam("date", "{{$date}}");
   admUrl.addParam("type", type);
+	if(!Object.isUndefined(filterFunction)){
+	  admUrl.addParam("filterFunction", filterFunction);
+	}
   admUrl.requestUpdate('listAdmissions');
 }
 

@@ -23,6 +23,7 @@ $order_col = CValue::getOrSession("order_col", "_nomPatient");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $date      = CValue::getOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
+$filterFunction = CValue::getOrSession("filterFunction");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain   = mbDateTime("00:00:00","+ 1 day");
@@ -77,13 +78,22 @@ if($order_col == "_nomPraticien"){
   
 $today = $today->loadGroupList($where, $order, null, null, $ljoin);
 
+$functions_filter = array();
+
 foreach ($today as $keySejour => $valueSejour) {
   $sejour =& $today[$keySejour];
 //  $sejour->loadRefs();
   $sejour->loadRefPatient();
   $sejour->_ref_patient->loadIPP();
   $sejour->loadRefPraticien();
-  $sejour->loadRefsOperations();
+	$functions_filter[$sejour->_ref_praticien->function_id] = $sejour->_ref_praticien->_ref_function;
+  
+	if ($filterFunction && $filterFunction != $sejour->_ref_praticien->function_id) {
+    unset($today[$keySejour]);
+	  continue;
+  }
+		
+	$sejour->loadRefsOperations();
   $sejour->loadRefsAffectations();
   $sejour->loadNumDossier();
   foreach($sejour->_ref_operations as $key_op => $curr_op) {
@@ -101,6 +111,12 @@ foreach ($today as $keySejour => $valueSejour) {
   }
 }
 
+// Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
+if($filterFunction && !array_key_exists($filterFunction, $functions_filter)){
+	$_function = new CFunctions();
+	$_function->load($filterFunction);
+	$functions_filter[$filterFunction] = $_function;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -121,7 +137,8 @@ $smarty->assign("prestations"  , $prestations );
 $smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
-
+$smarty->assign("functions_filter", $functions_filter);
+$smarty->assign("filterFunction", $filterFunction);
 $smarty->display("inc_vw_admissions.tpl");
 
 ?>
