@@ -31,7 +31,7 @@
 
   <tr>
     <td class="button" colspan="100">
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
 </table>

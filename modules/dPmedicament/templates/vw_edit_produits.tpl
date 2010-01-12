@@ -187,7 +187,7 @@ function updateUniteDispensation(element){
 							<td class="button" colspan="2" class="button">
 		          {{if $produit->_id}}
 		            <button class="modify" type="submit" name="modify">
-		              {{tr}}Modify{{/tr}}
+		              {{tr}}Save{{/tr}}
 		            </button>
 		            <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'le produit',objName:'{{$produit->_view|smarty:nodefaults|JSAttribute}}'})">
 		              {{tr}}Delete{{/tr}}

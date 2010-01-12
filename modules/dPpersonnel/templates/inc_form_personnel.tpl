@@ -64,7 +64,7 @@
   <tr>
     <td class="button" colspan="2">
       {{if $personnel->_id}}
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le personnel ',objName:'{{$personnel->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
       </button>

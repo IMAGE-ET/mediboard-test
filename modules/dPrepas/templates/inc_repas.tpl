@@ -43,7 +43,7 @@
     <td colspan="2" class="button">
       {{if $repas->repas_id}}
         <button type="submit" class="modify">
-          {{tr}}Modify{{/tr}}
+          {{tr}}Save{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CRepas.one{{/tr}}'})">
           {{tr}}Delete{{/tr}}

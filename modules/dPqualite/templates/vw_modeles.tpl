@@ -150,7 +150,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <td colspan="2" class="button">
             {{if $docGed->doc_ged_id}}
             <button class="modify" type="submit">
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
             </button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one-modele{{/tr}}',objName:'{{$docGed->titre|smarty:nodefaults|JSAttribute}}'})" title="{{tr}}Delete{{/tr}}">
               {{tr}}Delete{{/tr}}

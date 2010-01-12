@@ -1,5 +1,6 @@
 <!-- $Id$ -->
 
+{{if $sejour->_canRead}}
 <table class="tbl">
   <tr>
     <th class="title" colspan="10">
@@ -23,8 +24,11 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CAffectation.none{{/tr}}</td>
+    <td colspan="10"><em>{{tr}}CAffectation.none{{/tr}}</em></td>
   </tr>
   {{/foreach}}
   
-</table> 
+</table>
+{{elseif $sejour->_id}}
+  <div class="small-info">Vous n'avez pas accès au détail des déjours.</div>
+{{/if}}

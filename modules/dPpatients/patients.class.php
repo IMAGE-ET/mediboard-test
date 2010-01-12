@@ -781,10 +781,10 @@ class CPatient extends CMbObject {
     $sejours_collision = array();
     if ($this->_ref_sejours) {
 			foreach ($this->_ref_sejours as $_sejour) {
-			  if (!$_sejour->annule) {
+			  if (!$_sejour->annule && $_sejour->group_id == CGroups::loadCurrent()->_id) {
 				  $sejours_collision[$_sejour->_id] = array (
-				    "entree_prevue" => mbDate($_sejour->entree_prevue),
-				    "sortie_prevue" => mbDate($_sejour->sortie_prevue)
+				    "entree" => mbDate($_sejour->_entree),
+				    "sortie" => mbDate($_sejour->_sortie)
 				  );
 			  }
 			}

@@ -290,7 +290,7 @@ Main.add(function () {
       <td class="button" colspan="2">
         {{if $aide->aide_id}}
         <button class="modify" type="submit">
-          {{tr}}Modify{{/tr}}
+          {{tr}}Save{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$aide->name|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}

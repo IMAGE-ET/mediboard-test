@@ -133,6 +133,49 @@ ProtocoleSelector.init = function(){
 {{include file="js_form_operation.tpl"}}
 {{include file="js_form_sejour.tpl"}}
 
+<div class="big-info text"  style="display: none; text-align: center;" id="sejour-value-chooser">
+  Veuillez indiquer si vous souhaitez garder les valeurs du <strong>dossier existant</strong> ou bien utiliser celles que vous venez de saisir (<strong>nouveau dossier</strong>) :
+  <br /><br />
+  <form name="sejourChooserFrm" action="?m={{$m}}" method="get">
+  <input name="majDP"     type="hidden" value="0" />
+  <input name="majEntree" type="hidden" value="0" />
+  <input name="majSortie" type="hidden" value="0" />
+  <table class="form">
+    <tr>
+      <th class="title"></th>
+      <th class="category" colspan="2">Dossier existant</th>
+      <th class="category" colspan="2">Nouveau dossier</th>
+    </tr>
+    <tr id="chooseDiag">
+      <th>Diagnostic</th>
+      <td style="width: 1%;"><input name="valueDiag" type="radio" value="" /></td>
+      <td id="chooseNewDiag"></td>
+      <td style="width: 1%;"><input name="valueDiag" type="radio" checked="checked" value="" /></td>
+      <td id="chooseOldDiag"></td>
+    </tr>
+    <tr id="chooseAdm">
+      <th>Admission</th>
+      <td style="width: 1%;"><input name="valueAdm" type="radio" value="" /></td>
+      <td id="chooseNewAdm"></td>
+      <td style="width: 1%;"><input name="valueAdm" type="radio" checked="checked" value="" /></td>
+      <td id="chooseOldAdm"></td>
+    </tr>
+    <tr id="chooseSortie">
+      <th>Sortie prévue</th>
+      <td style="width: 1%;"><input name="valueSortie" type="radio" value="" /></td>
+      <td id="chooseNewSortie"></td>
+      <td style="width: 1%;"><input name="valueSortie" type="radio" checked="checked" value="" /></td>
+      <td id="chooseOldSortie"></td>
+    </tr>
+    <tr>
+      <td colspan="5" class="button">
+        <button class="tick" type="button" onclick="applyNewSejour()">{{tr}}OK{{/tr}}</button>
+      </td>
+    </tr>
+  </table>  
+  </form>
+</div>
+
 <table class="main" style="margin: 4px; border-spacing: 0px;">
   {{if $op->operation_id}}
   <tr>
@@ -192,7 +235,7 @@ ProtocoleSelector.init = function(){
   <tr>
     <td colspan="2" style="text-align: center;">
     {{if $op->_id}}
-      <button class="modify" type="button" onclick="submitForms();">{{tr}}Modify{{/tr}}</button>
+      <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
 			{{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
 			{{/if}}

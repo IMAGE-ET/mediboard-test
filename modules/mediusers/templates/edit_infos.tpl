@@ -56,7 +56,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
+            <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           </td>
         </tr>
       </table>
@@ -106,7 +106,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
+            <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           </td>
         </tr>
       </table>

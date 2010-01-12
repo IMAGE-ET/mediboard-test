@@ -365,12 +365,12 @@ Main.add(function () {
     <td colspan="2" style="text-align: center;">
     {{if $protocole->protocole_id}}
       <button class="submit" type="button" onclick="copier()">Dupliquer</button>
-      <button class="modify" type="submit">Modifier</button>
+      <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
-        Supprimer
+        {{tr}}Delete{{/tr}}
       </button>
     {{else}}
-      <button class="submit" type="submit">Créer</button>
+      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
     {{/if}}
     </td>
   </tr>

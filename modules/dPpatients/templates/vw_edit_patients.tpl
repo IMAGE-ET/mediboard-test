@@ -205,7 +205,7 @@ Main.add(function () {
       <div id="divSiblings" style="display:none;"></div>
       {{if $patient->_id}}
         <button tabindex="400" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
-          {{tr}}Modify{{/tr}}
+          {{tr}}Save{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}
           {{/if}}

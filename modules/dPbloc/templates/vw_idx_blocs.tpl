@@ -52,7 +52,7 @@
           <tr>
             <td class="button" colspan="2">
               {{if $bloc->_id}}
-              <button class="submit" type="submit">{{tr}}Modify{{/tr}}</button>
+              <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
               <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$bloc->nom|smarty:nodefaults|JSAttribute}}'})">
                 {{tr}}Delete{{/tr}}
               </button>

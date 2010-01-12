@@ -139,7 +139,7 @@
   </table>
   
   <select id="templatelistService" class="notNull ref" name="service_id"><option value="">&mdash; Veuillez sélectionner un service</option></select>
-  <button id="templateButtonMod" onclick="saveRepas();" type="button" class="modify">{{tr}}Modify{{/tr}}</button>
+  <button id="templateButtonMod" onclick="saveRepas();" type="button" class="modify">{{tr}}Save{{/tr}}</button>
   <button id="templateButtonDel" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CRepas.one{{/tr}}', callback: saveRepas})" type="button" class="trash">{{tr}}Delete{{/tr}}</button>
   <button id="templateButtonAdd" onclick="saveRepas();" type="button" class="submit">{{tr}}Create{{/tr}}</button>
   <a id="templateHrefBack" class="button" style="float:left;" href="#" onclick="view_planning();" >

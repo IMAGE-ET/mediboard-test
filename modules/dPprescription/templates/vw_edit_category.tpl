@@ -112,7 +112,7 @@ Main.add( function(){
           <td class="button" colspan="2">
           {{if $category->_id}}
             <button class="modify" type="submit" name="modify">
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
             </button>
             <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$category->nom|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
@@ -194,7 +194,7 @@ Main.add( function(){
              <td class="button" colspan="2">
              {{if $element_prescription->_id}}
                <button class="modify" type="submit" name="modify">
-                 {{tr}}Modify{{/tr}}
+                 {{tr}}Save{{/tr}}
                </button>
                {{if $element_prescription->cancelled}}
                  <button class="tick" type="submit" name="restore" onclick="$V(this.form.cancelled, '0');">

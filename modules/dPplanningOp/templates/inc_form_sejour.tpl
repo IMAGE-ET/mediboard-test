@@ -41,8 +41,8 @@ function checkModeSortie(){
     alert("Date de sortie réelle et mode de sortie incompatibles");
     return false;
   }
-	
-	return true;
+  
+  return true;
 }
 
 function checkSejour() {
@@ -128,51 +128,55 @@ Medecin = {
   },
   
   set: function(id, view) {
-	  $('_adresse_par_prat').show().update('Autres : '+view);
-	  $V(this.form.adresse_par_prat_id, id);
-	  $V(this.form._correspondants_medicaux, '', false);
+    $('_adresse_par_prat').show().update('Autres : '+view);
+    $V(this.form.adresse_par_prat_id, id);
+    $V(this.form._correspondants_medicaux, '', false);
   }
 };
 
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
 var Sejour = {
-  sejours_collision: [],
+  sejours_collision: null,
   
   // Preselectionne un sejour existant en fonction de la date d'intervention choisie
   preselectSejour: function(date_plage){
-	  if (!date_plage){
-	    return;
-	  }
-	  
-	  var sejours_collision = this.sejours_collision;
-	  var oForm = document.editSejour;
-	  var sejour_courant_id = oForm.sejour_id.value;
-	  	
-		// Liste des sejours
-		for (sejour_id in sejours_collision){
-		  var entree_prevue = sejours_collision[sejour_id]["entree_prevue"];
-		  var sortie_prevue = sejours_collision[sejour_id]["sortie_prevue"];
-		  if ((entree_prevue <= date_plage) && (sortie_prevue >= date_plage)) {
-		    if (sejour_courant_id != sejour_id){
-		      var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
-		                Date.fromDATE(date_plage).toLocaleDate(), 
-		                Date.fromDATE(entree_prevue).toLocaleDate(),
-		                Date.fromDATE(sortie_prevue).toLocaleDate());
-		      
-		      if (confirm(msg)){
-		        $V(oForm.sejour_id, sejour_id);
-		      }
-		    }
-		  }
-		}
+    if (!date_plage){
+      return;
+    }
+    
+    var sejours_collision = this.sejours_collision;
+    var oForm = document.editSejour;
+    var sejour_courant_id = $V(oForm.sejour_id);
+    // Liste des sejours
+    if(sejours_collision instanceof Array) {
+      return;
+    }
+    for (sejour_id in sejours_collision){
+      var entree = sejours_collision[sejour_id]["entree"];
+      var sortie = sejours_collision[sejour_id]["sortie"];
+      //alert("plage : "+date_plage+", entree : "+entree+", sortie : "+sortie);
+      //Console.debug(sejours_collision[sejour_id]);
+      if ((entree <= date_plage) && (sortie >= date_plage)) {
+        if (sejour_courant_id != sejour_id){
+          var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez-vous placer l'intervention dans ce séjour ?", 
+                    Date.fromDATE(date_plage).toLocaleDate(), 
+                    Date.fromDATE(entree).toLocaleDate(),
+                    Date.fromDATE(sortie).toLocaleDate());
+                    
+          if (confirm(msg)){
+            $V(oForm.sejour_id, sejour_id);
+          }
+        }
+      }
+    }
   }
 }
 
 Main.add( function(){
   Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = document.editOp;
-  Sejour.preselectSejour(oForm._date.value);
+  Sejour.preselectSejour($V(oForm._date));
 });
 {{/if}}
 
@@ -216,6 +220,7 @@ Main.add( function(){
   //refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_anesth_id);
   
   removePlageOp(false);
+  
 });
 </script>
 
@@ -319,10 +324,10 @@ Main.add( function(){
     {{mb_label object=$sejour field=praticien_id}}
   </th>
   <td colspan="3">
-  	{{if $sejour->praticien_id && !array_key_exists($sejour->praticien_id, $listPraticiens) && ($sejour->_ref_praticien->_is_praticien)}}
+    {{if $sejour->praticien_id && !array_key_exists($sejour->praticien_id, $listPraticiens) && ($sejour->_ref_praticien->_is_praticien)}}
     {{mb_field object=$sejour field=praticien_id hidden=1}}
     {{mb_value object=$sejour field=praticien_id}}
-		{{else}} 
+    {{else}} 
     <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="max-width: 150px;">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
@@ -331,7 +336,7 @@ Main.add( function(){
       </option>
       {{/foreach}}
     </select>
-		{{/if}}
+    {{/if}}
   </td>
 </tr>
 
@@ -341,16 +346,16 @@ Main.add( function(){
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td>
-  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
-  	  {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-  	    ondblclick="PatSelector.init()"
-  	  {{/if}}
-  	/>
+    <input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
+      {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
+        ondblclick="PatSelector.init()"
+      {{/if}}
+    />
   </td>
   <td colspan="2" class="button">
     {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
-  	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-  	{{/if}}
+    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+    {{/if}}
   </td>
 </tr>
 
@@ -484,8 +489,8 @@ Main.add( function(){
     {{if $can->edit}}
     {{mb_field object=$sejour field=entree_reelle form=editSejour}}
     {{else}}
-		{{mb_value object=$sejour field=entree_reelle}}
-		{{/if}}    
+    {{mb_value object=$sejour field=entree_reelle}}
+    {{/if}}    
   </td>
 </tr>
 
@@ -495,8 +500,8 @@ Main.add( function(){
     {{if $can->edit}}
     {{mb_field object=$sejour field=sortie_reelle form=editSejour}}
     {{else}}
-		{{mb_value object=$sejour field=sortie_reelle}}
-		{{/if}}    
+    {{mb_value object=$sejour field=sortie_reelle}}
+    {{/if}}    
   </td>
 </tr>
 
@@ -511,8 +516,8 @@ Main.add( function(){
         {{/if}}
       </span>
     {{else}}
-	  {{mb_value object=$sejour field=mode_sortie}}
-	{{/if}}    
+    {{mb_value object=$sejour field=mode_sortie}}
+  {{/if}}    
   </td>
   <th><strong>{{mb_label object=$sejour field=_sortie_autorisee}}</strong></th>
   <td><strong>{{mb_value object=$sejour field=_sortie_autorisee}}</strong></td>
@@ -668,19 +673,19 @@ Main.add( function(){
 <tr>
   <td class="button" colspan="4">
   {{if $sejour->sejour_id}}
-    <button class="modify" type="submit">Modifier</button>
-		{{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
-	    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
-	      Supprimer
-	    </button>
+    <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+    {{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
+        {{tr}}Delete{{/tr}}
+      </button>
     {{/if}}
-		{{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
+    {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
     {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
-      {{$annule_text}}
+      {{tr}}{{$annule_text}}{{/tr}}
     </button>
   {{else}}
-    <button class="submit" type="submit">Créer</button>
+    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
   {{/if}}
   </td>
 </tr>
@@ -693,9 +698,9 @@ Main.add( function(){
 <table style="width:100%" class="form"> 
   <tr>
     <td id="prescription_register">
-		  <script type="text/javascript">
-		    PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class_name}}','dhe','{{$sejour->praticien_id}}');
-		  </script>
+      <script type="text/javascript">
+        PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class_name}}','dhe','{{$sejour->praticien_id}}');
+      </script>
     </td>
   </tr>  
 </table>

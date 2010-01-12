@@ -233,17 +233,99 @@ function reloadListSejours() {
 }
 
 function reloadSejour(sejour_id) {
+  var oFormSejour    = document.editSejour;
+  var oFormOp        = document.editOp;
+  
+  var sDP            = $V(oFormSejour.DP);
+  var sDateEntree    = $V(oFormSejour._date_entree_prevue);
+  var sHeureEntree   = $V(oFormSejour._hour_entree_prevue);
+  var sMinutesEntree = $V(oFormSejour._min_entree_prevue);
+  var sDateSortie    = $V(oFormSejour._date_sortie_prevue);
+  var sHeureSortie   = $V(oFormSejour._hour_sortie_prevue);
+  var sMinutesSortie = $V(oFormSejour._min_sortie_prevue);
+  
   var sejoursUrl = new Url;
-  var oForm = document.editSejour;
-  var iPatient_id = oForm.patient_id.value;
-  var iSejour_id = oForm.sejour_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
-  sejoursUrl.addParam("sejour_id", iSejour_id);
-  sejoursUrl.addParam("patient_id", iPatient_id);
-  if(document.editOp) {
+  sejoursUrl.addParam("sejour_id", $V(oFormSejour.sejour_id));
+  sejoursUrl.addParam("patient_id", $V(oFormSejour.patient_id));
+  if(oFormOp) {
     sejoursUrl.addParam("mode_operation", 1);
   }
-  sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: initNotes } );
+  sejoursUrl.requestUpdate('inc_form_sejour', { onComplete: function() {initNotes(); checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie);} } );
+}
+
+function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSortie, sHeureSortie, sMinutesSortie) {
+  var oFormSejour       = getForm('editSejour');
+  var oSejourChooserFrm = getForm('sejourChooserFrm');
+  $V(oSejourChooserFrm.majDP    , 0);
+  $V(oSejourChooserFrm.majEntree, 0);
+  $V(oSejourChooserFrm.majSortie, 0);
+  
+  if(!$V(oFormSejour.DP)) {
+    $V(oFormSejour.DP, sDP);
+    $('chooseDiag').hide();
+  } else if(sDP && sDP != $V(oFormSejour.DP)) {
+    oSejourChooserFrm.elements.valueDiag[1].value =  sDP;
+    $('chooseOldDiag').update(sDP);
+    oSejourChooserFrm.elements.valueDiag[0].value = $V(oFormSejour.DP);
+    $('chooseNewDiag').update($V(oFormSejour.DP));
+    $V(oSejourChooserFrm.majDP, 1);
+    $('chooseDiag').show();
+  } else {
+    $('chooseDiag').hide();
+  }
+  if(sDateEntree && sDateEntree+sHeureEntree+sMinutesEntree != $V(oFormSejour._date_entree_prevue)+$V(oFormSejour._hour_entree_prevue)+$V(oFormSejour._min_entree_prevue)) {
+    var oEntreeOld = Date.fromDATETIME(sDateEntree+" "+sHeureEntree.pad('0', 2, false)+":"+sMinutesEntree.pad('0', 2, false)+":00");
+    var oEntreeNew = Date.fromDATETIME($V(oFormSejour._date_entree_prevue)+" "+$V(oFormSejour._hour_entree_prevue).pad('0', 2, false)+":"+$V(oFormSejour._min_entree_prevue).pad('0', 2, false)+":00");
+    oSejourChooserFrm.elements.valueAdm[1].value =  oEntreeOld.toDATETIME();
+    $('chooseOldAdm').update(oEntreeOld.toLocaleDateTime());
+    oSejourChooserFrm.elements.valueAdm[0].value = oEntreeNew.toDATETIME();
+    $('chooseNewAdm').update(oEntreeNew.toLocaleDateTime());
+    $V(oSejourChooserFrm.majEntree, 1);
+    $('chooseAdm').show();
+  } else {
+    $('chooseAdm').hide();
+  }
+  if(sDateSortie && sDateSortie+sHeureSortie+sMinutesSortie != $V(oFormSejour._date_sortie_prevue)+$V(oFormSejour._hour_sortie_prevue)+$V(oFormSejour._min_sortie_prevue)) {
+    var oSortieOld = Date.fromDATETIME(sDateSortie+" "+sHeureSortie.pad('0', 2, false)+":"+sMinutesSortie.pad('0', 2, false)+":00");
+    var oSortieNew = Date.fromDATETIME($V(oFormSejour._date_sortie_prevue)+" "+$V(oFormSejour._hour_sortie_prevue).pad('0', 2, false)+":"+$V(oFormSejour._min_sortie_prevue).pad('0', 2, false)+":00");
+    oSejourChooserFrm.elements.valueSortie[1].value =  oSortieOld.toDATETIME();
+    $('chooseOldSortie').update(oSortieOld.toLocaleDateTime());
+    oSejourChooserFrm.elements.valueSortie[0].value = oSortieNew.toDATETIME();
+    $('chooseNewSortie').update(oSortieNew.toLocaleDateTime());
+    $V(oSejourChooserFrm.Sortie, 1);
+    $('chooseSortie').show();
+  } else {
+    $('chooseSortie').hide();
+  }
+  if($V(oSejourChooserFrm.majDP) || $V(oSejourChooserFrm.majEntree) || $V(oSejourChooserFrm.majSortie)) {
+    changeSejourModal = modal($('sejour-value-chooser'));
+  }
+}
+
+function applyNewSejour() {
+  var oFormSejour       = getForm('editSejour');
+  var oSejourChooserFrm = getForm('sejourChooserFrm');
+  if($V(oSejourChooserFrm.majDP)) {
+    $V(oFormSejour.DP, $V(oSejourChooserFrm.valueDiag));
+  }
+  if($V(oSejourChooserFrm.majEntree)) {
+    Console.debug($V(oSejourChooserFrm.valueAdm));
+    oEntree = Date.fromDATETIME($V(oSejourChooserFrm.valueAdm));
+    $V(oFormSejour._date_entree_prevue   , oEntree.toDATE());
+    $V(oFormSejour._date_entree_prevue_da, oEntree.toLocaleDate());
+    $V(oFormSejour._hour_entree_prevue   , oEntree.getHours());
+    $V(oFormSejour._min_entree_prevue    , oEntree.getMinutes());
+  }
+  if($V(oSejourChooserFrm.majSortie)) {
+    Console.debug($V(oSejourChooserFrm.valueSortie));
+    oSortie = Date.fromDATETIME($V(oSejourChooserFrm.valueSortie));
+    $V(oFormSejour._date_sortie_prevue   , oSortie.toDATE());
+    $V(oFormSejour._date_sortie_prevue_da, oSortie.toLocaleDate());
+    $V(oFormSejour._hour_sortie_prevue   , oSortie.getHours());
+    $V(oFormSejour._min_sortie_prevue    , oSortie.getMinutes());
+  }
+  changeSejourModal.close();
 }
 
 function changePat() {

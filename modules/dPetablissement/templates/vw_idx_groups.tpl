@@ -143,7 +143,7 @@
           <td class="button" colspan="2">
           {{if $usergroup->_id}}
             <button class="modify" type="submit" name="modify">
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
             </button>
             <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}

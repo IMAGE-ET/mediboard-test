@@ -183,7 +183,7 @@ Main.add(function () {
             {{if !$constantes->datetime}}
               {{tr}}Create{{/tr}}
             {{else}}
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
             {{/if}}
           </button>
           {{if $constantes->datetime}}

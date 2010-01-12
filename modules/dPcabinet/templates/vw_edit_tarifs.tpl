@@ -187,7 +187,7 @@ Main.add(function () {
         <tr>
           <td class="button" colspan="2">
             {{if $tarif->_id}}
-	            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+	            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
               {{if count($tarif->_new_actes) && !$tarif->_has_mto}}
               <input type="hidden" name="_add_mto" value="0" />
 	            <button class="add" type="submit" onclick="$V(this.form._add_mto, '1');">{{tr}}Add{{/tr}} MTO</button>

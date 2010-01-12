@@ -179,7 +179,7 @@ Main.add(function () {
 				  <td colspan="6" style="text-align: center">
 				    {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly"}}
 			      {{if $exam_igs->_id}}
-              <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
+              <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
               <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen IGS',target:'systemMsg'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
               <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>

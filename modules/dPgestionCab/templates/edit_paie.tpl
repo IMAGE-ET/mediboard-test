@@ -126,7 +126,7 @@ function saveFiche() {
           <td class="button" colspan="2">
             {{if !$fichePaie->_locked}}
 	            {{if $fichePaie->_id}}
-	            <button class="submit" type="submit">{{tr}}Modify{{/tr}}</button>
+	            <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
 	            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la ',objName:'{{$fichePaie->_view|smarty:nodefaults|JSAttribute}}'})">
 	              {{tr}}Delete{{/tr}}
 	            </button>

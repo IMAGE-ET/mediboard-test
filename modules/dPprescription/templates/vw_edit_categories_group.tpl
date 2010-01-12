@@ -77,7 +77,7 @@ submitItem = function(checked, oForm){
           <td class="button" colspan="2">
           {{if $cat_group->_id}}
             <button class="modify" type="submit" name="modify">
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
             </button>
             <button class="trash" type="button" name="delete" 
 						        onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$cat_group->libelle|smarty:nodefaults|JSAttribute}}'})">

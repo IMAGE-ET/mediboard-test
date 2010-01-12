@@ -238,7 +238,7 @@ Main.add(function () {
           <td colspan="4" class="button">
             <button class="submit" type="submit">
               {{if $fiche->fiche_ei_id}}
-              {{tr}}Modify{{/tr}}
+              {{tr}}Save{{/tr}}
               {{else}}
               {{tr}}button-CFicheEi-send{{/tr}}
               {{/if}}

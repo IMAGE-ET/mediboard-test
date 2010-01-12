@@ -16,7 +16,7 @@ printFiche = function(consultation_id) {
 	      {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
 	        <button style="float: right" class="print" type="button" onclick="printFiche('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche</button>
 	      {{/if}}
-	      {{tr}}CSejour-msg-infoOper{{/tr}}
+	      {{tr}}CSejour-back-operations{{/tr}}
 	    </th>
 	  </tr>
 	  <tr>
@@ -48,8 +48,12 @@ printFiche = function(consultation_id) {
 	    </td>
 	    {{/if}}
 	  </tr>
+	  {{foreachelse}}
+	  <tr>
+	    <td colspan="4"><em>{{tr}}COperation.none{{/tr}}</em></td>
+	  </tr>
 	  {{/foreach}}
 	</table>
-{{else}}
+{{elseif $sejour->_id}}
   <div class="small-info">Vous n'avez pas accès au détail des interventions.</div>
 {{/if}}

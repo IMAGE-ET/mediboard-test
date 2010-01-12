@@ -116,7 +116,7 @@ function removeFunction(function_category_id){
 		         <td class="button" colspan="2">
 		         {{if $executant_prescription_line->_id}}
 		           <button class="modify" type="submit" name="modify">
-		             {{tr}}Modify{{/tr}}
+		             {{tr}}Save{{/tr}}
 		           </button>
 		           <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'executant',objName:'{{$executant_prescription_line->nom|smarty:nodefaults|JSAttribute}}'})">
 		             {{tr}}Delete{{/tr}}

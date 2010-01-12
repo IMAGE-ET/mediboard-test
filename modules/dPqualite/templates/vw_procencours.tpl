@@ -283,7 +283,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <td colspan="2" class="button">
               {{if $docGed->doc_ged_id && $docGed->etat!=$docGed|const:'TERMINE'}}
               <button class="modify" type="submit">
-                {{tr}}Modify{{/tr}}
+                {{tr}}Save{{/tr}}
               </button>
               {{assign var="date_proc" value=$docGed->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one{{/tr}}',objName:'{{$date_proc|smarty:nodefaults|JSAttribute}}'})" title="{{tr}}Delete{{/tr}}">

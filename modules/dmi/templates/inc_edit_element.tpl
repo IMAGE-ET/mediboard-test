@@ -155,7 +155,7 @@ Main.add(function () {
 		  <td colspan="2" class="button">
 		  	{{if $element->_id}}
 		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshElement('0') } } )">{{tr}}Delete{{/tr}}</button>
-			    <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ viewListElement('{{$category_class}}','{{$element->_id}}') } } );">{{tr}}Modify{{/tr}}</button>
+			    <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ viewListElement('{{$category_class}}','{{$element->_id}}') } } );">{{tr}}Save{{/tr}}</button>
 			  {{else}}
 				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">{{tr}}Save{{/tr}}</button>
 			  {{/if}}

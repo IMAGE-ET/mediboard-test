@@ -173,7 +173,7 @@ Main.add(function () {
         <tr>
           <td class="button" colspan="4">
             {{if $type_ei->_id}}
-            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$type_ei->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>

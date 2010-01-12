@@ -209,7 +209,7 @@ Main.add(function () {
       <td class="button" colspan="2">
         {{if $pack->pack_id}}
         <button class="modify" type="submit">
-          {{tr}}Modify{{/tr}}
+          {{tr}}Save{{/tr}}
         </button>
         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le pack',objName:'{{$pack->nom|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}

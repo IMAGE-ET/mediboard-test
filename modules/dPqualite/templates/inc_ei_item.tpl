@@ -48,7 +48,7 @@
   <tr>
     <td class="button" colspan="2">            
       {{if $item->ei_item_id}}
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CEiItem.one{{/tr}}',objName:'{{$item->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
       {{else}}
       <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>

@@ -35,7 +35,7 @@ function updateDays() {
         <input type="hidden" name="dosql" value="do_configure" />
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </form>
     </td>
   </tr>

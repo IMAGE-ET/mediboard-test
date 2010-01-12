@@ -159,7 +159,7 @@
         <tr>
           <td class="button" colspan="2">            
             {{if $chapitre->doc_chapitre_id}}
-              <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+              <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'{{tr escape="javascript"}}CChapitreDoc.one{{/tr}}',objName:'{{$chapitre->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
             {{else}}
               <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>

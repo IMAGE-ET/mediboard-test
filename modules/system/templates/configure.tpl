@@ -233,7 +233,7 @@ tr.important th {
       
   <tr>
     <td class="button" colspan="2">
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
 
@@ -262,7 +262,7 @@ Utilisez cet outil avec une grande prudence, une mauvaise configuration peut avo
       {{/foreach}}
       </ul>
       <div style="text-align: right;">
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </div>
     </td>
     <td style="vertical-align: top;">
