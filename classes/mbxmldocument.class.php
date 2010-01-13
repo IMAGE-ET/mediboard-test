@@ -94,13 +94,15 @@ class CMbXMLDocument extends DOMDocument {
      return $return;
   }
   
-  function libxml_display_errors() {
+  function libxml_display_errors($display_errors = true) {
      $errors = libxml_get_errors();
      $chain_errors = "";
      
      foreach ($errors as $error) {
      	 $chain_errors .= preg_replace('/( in\ \/(.*))/', '', strip_tags($this->libxml_display_error($error)))."\n";
-       trigger_error($this->libxml_display_error($error), E_USER_WARNING);
+       if ($display_errors) {
+         trigger_error($this->libxml_display_error($error), E_USER_WARNING);
+       }
      }
      libxml_clear_errors();
 
@@ -113,7 +115,7 @@ class CMbXMLDocument extends DOMDocument {
    * @param string Path of schema, use document inline schema if null 
    * @return boolean  
    */
-  function schemaValidate($filename = null, $returnErrors = false) {
+  function schemaValidate($filename = null, $returnErrors = false, $display_errors = true) {
     if (!$filename) {
       $filename = $this->schemafilename;
     }
@@ -127,7 +129,7 @@ class CMbXMLDocument extends DOMDocument {
     libxml_use_internal_errors(true);
     
     if (!parent::schemaValidate($filename)) {
-      $errors = $this->libxml_display_errors();
+      $errors = $this->libxml_display_errors($display_errors);
       return $returnErrors ? $errors : false;
     }
     

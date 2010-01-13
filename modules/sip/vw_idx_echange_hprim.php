@@ -47,14 +47,14 @@ if($echange_hprim->_id) {
 	
 	$domGetEvenement = new CHPrimXMLEvenementsPatients();
   $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
-  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true);
+  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
 
   if ($echange_hprim->acquittement) {
 		$domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
   
     $observations = $domGetAcquittement->getAcquittementObservation();
-    $doc_errors_ack[] = @$domGetEvenement->schemaValidate(null, true);
+    $doc_errors_ack[] = @$domGetEvenement->schemaValidate(null, true, false);
 	}
 }
 
