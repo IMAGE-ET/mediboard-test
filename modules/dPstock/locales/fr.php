@@ -827,4 +827,11 @@ $locales['CProductReception-failed-reference'] = '';
 $locales['CProductReference-mdq'] = 'Qté min. de commande';
 $locales['CProductReference-mdq-court'] = 'QML';
 $locales['CProductReference-mdq-desc'] = 'Quantité minimum de commande';
+$locales['CProductStockLocation-failed-name'] = '';
+$locales['CSociete-distributor_code'] = 'Code du distributeur';
+$locales['CSociete-distributor_code-court'] = 'Code distrib.';
+$locales['CSociete-distributor_code-desc'] = 'Code du distributeur';
+$locales['CProductReference-supplier_code'] = 'Code fournisseur';
+$locales['CProductReference-supplier_code-court'] = 'Code fourn.';
+$locales['CProductReference-supplier_code-desc'] = 'Code fournisseur';
 ?>

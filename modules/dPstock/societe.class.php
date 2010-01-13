@@ -15,6 +15,7 @@ class CSociete extends CMbObject {
   // DB Fields
   var $name            = null;
   var $code            = null;
+  var $distributor_code= null;
   var $address         = null;
   var $postal_code     = null;
   var $city            = null;
@@ -26,13 +27,13 @@ class CSociete extends CMbObject {
   var $carriage_paid   = null;
   var $delivery_time   = null;
   var $departments     = null;
-  var $distributor_for_id = null;
   
   var $_departments    = null;
 
   // Object References
   //     Multiple
   var $_ref_product_references = null;
+  var $_ref_product_orders = null;
   var $_ref_products   = null;
 
   function getSpec() {
@@ -47,7 +48,6 @@ class CSociete extends CMbObject {
 	  $backProps["products"]           = "CProduct societe_id";
 	  $backProps["product_orders"]     = "CProductOrder societe_id";
 	  $backProps["product_references"] = "CProductReference societe_id";
-    $backProps["distributors"]       = "CSociete distributor_for_id";
 	  return $backProps;
 	}
 
@@ -55,6 +55,7 @@ class CSociete extends CMbObject {
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
     $specs['code']            = 'str maxLength|80';
+    $specs['distributor_code']= 'str maxLength|80';
     $specs['address']         = 'text';
     $specs['postal_code']     = 'str minLength|4 maxLength|5';
     $specs['city']            = 'str seekable';
@@ -66,7 +67,6 @@ class CSociete extends CMbObject {
     $specs['carriage_paid']   = 'str';
     $specs['delivery_time']   = 'str';
     $specs['departments']     = 'text'; // not str, as it could be longer than 255 chars
-    $specs['distributor_for_id'] = 'ref class|CSociete';
     return $specs;
   }
 
@@ -95,6 +95,5 @@ class CSociete extends CMbObject {
     $this->_ref_products = $this->loadBackRefs('products');
     $this->_ref_product_references = $this->loadBackRefs('product_references');
     $this->_ref_product_orders = $this->loadBackRefs('product_orders');
-    $this->_ref_distributors = $this->loadBackRefs('distributors');
   }
 }

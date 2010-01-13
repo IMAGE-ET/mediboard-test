@@ -82,7 +82,7 @@ table.print td{
 	</tr>	
 	
 	<tr>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=code}}</th>
+    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=supplier_code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProduct field=name}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=quantity}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
@@ -97,7 +97,7 @@ table.print td{
 		{{assign var=iterations_restantes value=$smarty.foreach.foreach_products.total-$smarty.foreach.foreach_products.iteration}}
     <table style="border-spacing:0" class="print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
     <tr>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=code}}</th>
+    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=supplier_code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProduct field=name}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=quantity}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
@@ -106,7 +106,7 @@ table.print td{
   {{/if}}
 	
 	<tr>
-    <td style="border: 1px solid black;">{{mb_value object=$curr_item->_ref_reference field=code}}</td>
+    <td style="border: 1px solid black;">{{mb_value object=$curr_item->_ref_reference field=supplier_code}}</td>
     <td style="border: 1px solid black;">{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
     <td style="text-align: center; white-space: nowrap; border: 1px solid black;">{{mb_value object=$curr_item field=quantity}}</td>
     <td style="white-space: nowrap; text-align: right; border: 1px solid black;">{{mb_value object=$curr_item field=unit_price decimals=4}}</td>

@@ -118,6 +118,10 @@ function filterReferences(form) {
           <td>{{mb_field object=$reference field="code"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$reference field="supplier_code"}}</th>
+          <td>{{mb_field object=$reference field="supplier_code"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
           <td>
             {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
