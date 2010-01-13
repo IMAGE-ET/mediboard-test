@@ -8,14 +8,16 @@
 
 <!--[if IE 7]>
 <script type="text/javascript">
-function processIE7Button(e) {
-  if (e._processed) return;
-  e._processed = true;
-
-  var className = $w(e.className).without("button", "notext")[0];
-
-  if (className)
-    e.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
+function processIE7Button(button) {
+  if (button._processed) return;
+  button._processed = true;
+  
+  setTimeout(function(){
+    var className = $w(button.className).without("button", "notext")[0];
+  
+    if (className)
+      button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
+  }, 0.1);
 }
 
 var cookiejar = new CookieJar();
