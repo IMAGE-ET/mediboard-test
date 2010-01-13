@@ -848,7 +848,11 @@ class CSetupdPplanningOp extends CSetup {
               CHANGE `chambre_seule` `chambre_seule` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.03";
+    $this->makeRevision("1.03");
+    $sql = "UPDATE sejour SET sortie_prevue = entree_reelle WHERE entree_reelle IS NOT NULL AND sortie_prevue < entree_reelle";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.04";
   }
 }
 ?>
