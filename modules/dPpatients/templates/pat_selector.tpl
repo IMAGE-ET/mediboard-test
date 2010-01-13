@@ -102,7 +102,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 	
 	<tr>
 	  <th>{{mb_label object=$patVitale field="prenom"}}</th>
-	  <td>
+	  <td colspan="3">
 	    {{mb_value object=$patVitale field="prenom"}}
 	    {{mb_field object=$patVitale field="prenom" hidden="true"}}
 	  </td>
@@ -139,7 +139,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 
 	<tr>
 	  <th>{{mb_label object=$patVitale field="regime_sante"}}</th>
-	  <td>
+	  <td colspan="3">
 	    {{mb_value object=$patVitale field="regime_sante"}}
 	    {{mb_field object=$patVitale field="code_regime" hidden="true"}}
 	    {{mb_field object=$patVitale field="caisse_gest" hidden="true"}}
@@ -147,7 +147,19 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 	    {{mb_field object=$patVitale field="regime_sante" hidden="true"}}
 	  </td>
 	</tr>
-	
+	<tr>
+	  <td class="button">
+      {{if $can->edit}}
+        <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
+          {{tr}}Create{{/tr}}
+          {{if $useVitale}}avec Vitale{{/if}}
+        </button>
+      {{/if}}
+    </td>
+    <td class="button">
+      <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+    </td>
+	</tr>
 </table>
 
 </form>
@@ -231,7 +243,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       {{if $name || $firstName || $nomjf || $patient_ipp || ($datePat && $datePat != "--")}}
       <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
         {{tr}}Create{{/tr}}
-        {{if $useVitale}}avec Vitale{{/if}}
       </button>
       {{/if}}
     {{/if}}
