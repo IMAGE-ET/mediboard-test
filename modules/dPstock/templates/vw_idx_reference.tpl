@@ -77,7 +77,7 @@ function filterReferences(form) {
 
     <td class="halfPane">
       {{if $can->edit}}
-      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">{{tr}}CProductReference.create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">{{tr}}CProductReference-title-create{{/tr}}</a>
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
@@ -89,7 +89,7 @@ function filterReferences(form) {
           {{if $reference->_id}}
           <th class="title modify text" colspan="2">{{$reference->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProductReference.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProductReference-title-create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
@@ -160,7 +160,6 @@ function filterReferences(form) {
             <ul class="control_tabs" id="reference-tabs">
               <li><a href="#reference-orders">Bons de commande</a></li>
               <li><a href="#reference-receptions">Bons de réceptions</a></li>
-              <li><a href="#reference-bills">Facture</a></li>
             </ul>
             
             <hr class="control_tabs" />

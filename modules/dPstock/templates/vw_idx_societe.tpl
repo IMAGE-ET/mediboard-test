@@ -28,6 +28,9 @@ Main.add(refreshSocietesList);
     <td>
       <form name="filterSociete" method="get" action="" onsubmit="return refreshSocietesList()">
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        
+        <input type="text" name="keywords" value="" />
+        <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
       </form>
     </td>
   </tr>
@@ -156,7 +159,7 @@ Main.add(refreshSocietesList);
          </tr>
          {{/foreach}}
        </table>
-      <button class="new" type="button" onclick="window.location='?m=dPproduct&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
+      <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
         {{tr}}CProduct.create{{/tr}}
       </button>
       <table class="tbl">

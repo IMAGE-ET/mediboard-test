@@ -22,6 +22,7 @@ class CProductReception extends CMbObject {
 	//    Multiple
 	var $_ref_reception_items = null;
   var $_count_reception_items = null;
+  var $_total = null;
 	
 	//    Single
 	var $_ref_societe = null;
@@ -47,6 +48,7 @@ class CProductReception extends CMbObject {
     $specs['societe_id'] = 'ref class|CSociete';
     $specs['group_id']   = 'ref notNull class|CGroups';
 	  $specs['reference']  = 'str notNull';
+    $specs['_total']     = 'currency';
 		return $specs;
 	}
   
@@ -90,6 +92,7 @@ class CProductReception extends CMbObject {
 
 	function updateFormFields() {
 		parent::updateFormFields();
+    $this->loadRefSociete();
     $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe" : "");
 	}
   
@@ -107,12 +110,27 @@ class CProductReception extends CMbObject {
 		$this->_ref_reception_items = $this->loadBackRefs('reception_items');
 	}
 
+  function updateTotal(){
+    $this->loadRefsBack();
+    $total = 0;
+    foreach($this->_ref_reception_items as $_item) {
+      $_item->loadRefOrderItem();
+      $total += $_item->_ref_order_item->_price;
+    }
+    $this->_total = $total;
+  }
+
+  // @todo: supprimer ceci
   function countReceptionItems(){
     $this->_count_reception_items = $this->countBackRefs('reception_items');
   }
 	
+  function loadRefSociete(){
+    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+  }
+  
 	function loadRefsFwd(){
-		$this->_ref_societe = $this->loadFwdRef("societe_id", true);
+		$this->loadRefSociete();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
 	}
 

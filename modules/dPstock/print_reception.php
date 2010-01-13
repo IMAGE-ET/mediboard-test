@@ -17,6 +17,7 @@ $reception = new CProductReception();
 $reception->load($reception_id);
 $reception->loadRefsBack();
 $reception->loadRefsFwd();
+$reception->updateTotal();
 
 foreach($reception->_ref_reception_items as $_reception_item){
 	$_reception_item->loadRefs();

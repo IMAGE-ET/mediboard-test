@@ -18,6 +18,8 @@ $order_form  = CValue::get('order_form');
 $start       = CValue::get('start', 0);
 
 CValue::setSession('category_id', $category_id);
+CValue::setSession('societe_id', $societe_id);
+CValue::setSession('keywords', $keywords);
 
 $where = array();
 if ($category_id) {

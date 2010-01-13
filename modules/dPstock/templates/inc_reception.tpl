@@ -9,6 +9,7 @@
 *}}
 
 <button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
+<button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
 
 <table class="tbl">
   <tr>

@@ -14,7 +14,7 @@
   </tr>
 </table>
 
-{{assign var=nb_par_page value="20"}} 
+{{assign var=nb_par_page value="25"}} 
   
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css header=4 footer=4 nodebug=true}}
@@ -69,10 +69,10 @@ table.print td{
  	
   <tr>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=reception_id}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
+    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=_price}}</th>
   </tr>
   
   {{foreach from=$reception->_ref_reception_items item=curr_item name="foreach_products"}}
@@ -84,23 +84,27 @@ table.print td{
     <table style="border-spacing:0" class="print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
     <tr>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=reception_id}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
+    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=_price}}</th>
   </tr>
   {{/if}}
   
   <tr>
   	<td class="category" style="border: 1px solid black;">{{mb_value object=$curr_item field=order_item_id}}</td>
-    <td class="category" style="border: 1px solid black;">{{mb_value object=$curr_item field=reception_id}}</td>
     <td class="category" style="text-align: center; border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=quantity}}</td>
     <td class="category" style="text-align: center; border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=code}}</td>
     <td class="category" style="border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=lapsing_date}}</td>
+    <td class="category" style="border: 1px solid black; width: 1%">{{mb_value object=$curr_item->_ref_order_item field=_price decimals=4}}</td>
   </tr>
   
   {{if $smarty.foreach.foreach_products.last}}
- 
+  <tr>
+    <td colspan="10" style="border-top: 1px solid #666;">
+      <strong style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$reception field=_total decimals=4}}</strong>
+    </td>
+  </tr>
   {{/if}}
   {{/foreach}}
 </table>

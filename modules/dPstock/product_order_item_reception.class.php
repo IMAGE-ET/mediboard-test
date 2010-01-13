@@ -90,14 +90,17 @@ class CProductOrderItemReception extends CMbObject {
     $this->completeField("reception_id");
     
     if (!$this->_id && !$this->reception_id) {
+      $this->loadRefOrderItem();
+      $this->_ref_order_item->loadOrder();
+      
       $reception = new CProductReception;
-      
-      /////////////////////////////////////////////////////
-      //$reception->societe_id = 20; // FIXME: supprimer ça pour prendre en compte une vraie societé
-      /////////////////////////////////////////////////////
-      
+      $reception->date = mbDateTime();
+      $reception->societe_id = $this->_ref_order_item->_ref_order->societe_id;
       $reception->group_id = CGroups::loadCurrent()->_id;
-      $reception->store();
+      if ($msg = $reception->store()) {
+        return $msg;
+      }
+      
       $this->reception_id = $reception->_id;
     }
     

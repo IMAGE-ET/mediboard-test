@@ -131,12 +131,12 @@ function refreshLists(keywords) {
   return false;
 }
 
-function popupOrder(iOrderId, width, height, bAutofill) {
+function popupOrder(order_id, width, height, bAutofill) {
   width = width || 1000;
   height = height || 800;
 
   var url = new Url("dPstock", "vw_aed_order");
-  url.setFragment("order-"+iOrderId);
+  url.setFragment("order-"+order_id);
   if (bAutofill) {
     url.addParam("_autofill", 1);
   }
@@ -144,22 +144,31 @@ function popupOrder(iOrderId, width, height, bAutofill) {
   url.popup(width, height, "Edition de commande");
 }
 
-function popupReception(iOrderId, width, height) {
+function popupReception(order_id, width, height) {
   width = width || 1000;
   height = height || 800;
 
   var url = new Url("dPstock", "vw_edit_reception");
-  url.addParam("order_id", iOrderId);
+  url.addParam("order_id", order_id);
   url.popup(width, height, "Réception de commande");
 }
 
-function popupOrderForm(iOrderId, width, height) {
+function popupOrderForm(order_id, width, height) {
   width = width || 1000;
   height = height || 800;
 
   var url = new Url("dPstock", "vw_order_form");
-  url.addParam("order_id", iOrderId);
+  url.addParam("order_id", order_id);
   url.popup(width, height, "Bon de commande");
+}
+
+function printReception(reception_id, width, height) {
+  width = width || 1000;
+  height = height || 800;
+
+  var url = new Url("dPstock", "print_reception");
+  url.addParam("reception_id", reception_id);
+  url.popup(width, height, "Bon de reception");
 }
 
 function printBarcodeGrid(reception_id, force_print) {

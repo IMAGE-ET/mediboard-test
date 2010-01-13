@@ -14,9 +14,13 @@ $can->needsRead();
 $start    = CValue::get('start', 0);
 $keywords = CValue::get('keywords');
 
+if (!$keywords) {
+  $keywords = "%";
+}
+
 $societe = new CSociete();
-$list_count = $societe->countList();
-$list = $societe->loadList(null, "name", intval($start).",30");
+$list = $societe->seek($keywords, null, intval($start).",30", true);
+$list_count = $societe->_totalSeek;
 
 // Smarty template
 $smarty = new CSmartyDP();
