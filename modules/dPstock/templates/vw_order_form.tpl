@@ -14,14 +14,14 @@
   </tr>
 </table>
 
-{{assign var=nb_par_page value="23"}}	
+{{assign var=nb_par_page value="25"}}	
 	
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css header=4 footer=4 nodebug=true}}
 
 table.print td{
- font-size: 0.9em;
- font-family: Arial;
+ font-size: 11px;
+ font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
 }
 
 </style>
