@@ -1372,7 +1372,7 @@ class CMbObject {
    * @return CMbObject concrete loaded object 
    */
   function loadFwdRef($field, $cached = false) {
-  	if (isset($this->_fwd[$field])) {
+  	if (isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
   		return $this->_fwd[$field];
   	}
 
