@@ -293,12 +293,12 @@ function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSo
     $('chooseOldSortie').update(oSortieOld.toLocaleDateTime());
     oSejourChooserFrm.elements.valueSortie[0].value = oSortieNew.toDATETIME();
     $('chooseNewSortie').update(oSortieNew.toLocaleDateTime());
-    $V(oSejourChooserFrm.Sortie, 1);
+    $V(oSejourChooserFrm.majSortie, 1);
     $('chooseSortie').show();
   } else {
     $('chooseSortie').hide();
   }
-  if($V(oSejourChooserFrm.majDP) || $V(oSejourChooserFrm.majEntree) || $V(oSejourChooserFrm.majSortie)) {
+  if($V(oSejourChooserFrm.majDP) == 1 || $V(oSejourChooserFrm.majEntree) == 1 || $V(oSejourChooserFrm.majSortie) == 1) {
     changeSejourModal = modal($('sejour-value-chooser'));
   }
 }
@@ -306,17 +306,19 @@ function checkNewSejour(sDP,  sDateEntree, sHeureEntree, sMinutesEntree, sDateSo
 function applyNewSejour() {
   var oFormSejour       = getForm('editSejour');
   var oSejourChooserFrm = getForm('sejourChooserFrm');
-  if($V(oSejourChooserFrm.majDP)) {
+  if($V(oSejourChooserFrm.majDP) == 1) {
     $V(oFormSejour.DP, $V(oSejourChooserFrm.valueDiag));
   }
-  if($V(oSejourChooserFrm.majEntree)) {
+  if($V(oSejourChooserFrm.majEntree) == 1) {
+    Console.debug($V(oSejourChooserFrm.valueAdm));
     oEntree = Date.fromDATETIME($V(oSejourChooserFrm.valueAdm));
     $V(oFormSejour._date_entree_prevue   , oEntree.toDATE());
     $V(oFormSejour._date_entree_prevue_da, oEntree.toLocaleDate());
     $V(oFormSejour._hour_entree_prevue   , oEntree.getHours());
     $V(oFormSejour._min_entree_prevue    , oEntree.getMinutes());
   }
-  if($V(oSejourChooserFrm.majSortie)) {
+  if($V(oSejourChooserFrm.majSortie) == 1) {
+    Console.debug($V(oSejourChooserFrm.valueSortie));
     oSortie = Date.fromDATETIME($V(oSejourChooserFrm.valueSortie));
     $V(oFormSejour._date_sortie_prevue   , oSortie.toDATE());
     $V(oFormSejour._date_sortie_prevue_da, oSortie.toLocaleDate());
