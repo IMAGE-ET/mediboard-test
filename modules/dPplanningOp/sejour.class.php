@@ -547,8 +547,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue.= ":00";
     }
         
-		$this->completeField('entree_prevue');
-		$this->completeField('sortie_prevue');
+		$this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle');
     
 		// Synchro durée d'hospi / type d'hospi
     $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
@@ -576,6 +575,9 @@ class CSejour extends CCodable {
     if ($this->sortie_reelle && !$this->sortie_prevue) {
       $this->sortie_prevue = $this->sortie_reelle;
     }
+    
+    $this->sortie_prevue = max($this->sortie_prevue, $this->entree_reelle);
+    
   }
 
   function getTemplateClasses(){
