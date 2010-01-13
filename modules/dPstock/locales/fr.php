@@ -834,4 +834,5 @@ $locales['CSociete-distributor_code-desc'] = 'Code du distributeur';
 $locales['CProductReference-supplier_code'] = 'Code fournisseur';
 $locales['CProductReference-supplier_code-court'] = 'Code fourn.';
 $locales['CProductReference-supplier_code-desc'] = 'Code fournisseur';
+$locales['mod-dPstock-tab-vw_idx_reception'] = 'Réceptions';
 ?>

@@ -21,7 +21,8 @@ class CProductReception extends CMbObject {
 	// Object References
 	//    Multiple
 	var $_ref_reception_items = null;
-
+  var $_count_reception_items = null;
+	
 	//    Single
 	var $_ref_societe = null;
   var $_ref_group   = null;
@@ -106,6 +107,10 @@ class CProductReception extends CMbObject {
 		$this->_ref_reception_items = $this->loadBackRefs('reception_items');
 	}
 
+  function countReceptionItems(){
+    $this->_count_reception_items = $this->countBackRefs('reception_items');
+  }
+	
 	function loadRefsFwd(){
 		$this->_ref_societe = $this->loadFwdRef("societe_id", true);
     $this->_ref_group = $this->loadFwdRef("group_id", true);

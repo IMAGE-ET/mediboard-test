@@ -11,7 +11,7 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab('vw_idx_order_manager', TAB_EDIT);
-//$module->registerTab('vw_idx_reception',     TAB_EDIT);
+$module->registerTab('vw_idx_reception',     TAB_EDIT);
 $module->registerTab('vw_idx_stock_group',   TAB_EDIT);
 $module->registerTab('vw_idx_stock_service', TAB_EDIT);
 //$module->registerTab('vw_idx_discrepancy',   TAB_EDIT);
