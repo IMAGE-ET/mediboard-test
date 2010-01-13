@@ -63,6 +63,21 @@ Main.add(function () {
   </li>
 </ul>
 
+      
+<form action="?" name="selection" method="get">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="tab" value="vw_idx_materiel" />
+  <select name="bloc_id" style="float: right;" onchange="this.form.submit()">
+    {{foreach from=$listBlocs item=curr_bloc}}
+    <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc_id}}selected="selected"{{/if}}>
+      {{$curr_bloc->nom}}
+    </option>
+    {{foreachelse}}
+    <option value="" disabled="disabled">{{tr}}CBlocOperatoire.none{{/tr}}</option>
+    {{/foreach}}
+  </select>
+</form>
+
 <hr class="control_tabs" />
 
 {{foreach from=$operations key=commande_mat item=_operations}}

@@ -12,9 +12,9 @@ global $AppUI, $can, $m, $g;
 
 $date       = CValue::getOrSession("date", mbDate());
 $plageop_id = CValue::getOrSession("plageop_id");
-$bloc_id    = CValue::getOrSession("bloc_id");
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 $listSalles = array();
 
 foreach($listBlocs as &$curr_bloc) {
@@ -22,11 +22,8 @@ foreach($listBlocs as &$curr_bloc) {
 }
 
 $bloc = new CBlocOperatoire();
-if (!$bloc->load($bloc_id) && count($listBlocs)) {
-  $bloc = reset($listBlocs);
-} else {
-  $bloc->loadRefsSalles();
-}
+$bloc->load($bloc_id);
+$bloc->loadRefsSalles();
 
 $listSalles = $bloc->_ref_salles;
   

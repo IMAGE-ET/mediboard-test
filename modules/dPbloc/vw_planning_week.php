@@ -11,7 +11,6 @@
 global $AppUI, $can, $m, $g;
 
 $date    = CValue::getOrSession("date", mbDate());
-$bloc_id = CValue::getOrSession("bloc_id");
 
 $date = mbDate("last sunday", $date);
 $fin  = mbDate("next sunday", $date);
@@ -26,12 +25,10 @@ for($i = 0; $i < 7; $i++) {
 
 // Liste des blocs
 $listBlocs = CGroups::loadCurrent()->loadBlocs();
+$bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 
 $bloc = new CBlocOperatoire();
-if (!$bloc->load($bloc_id) && count($listBlocs)) {
-	$bloc = reset($listBlocs);
-}
-
+$bloc->load($bloc_id);
 $bloc->loadRefsSalles();
 
 if (!$listSalles = $bloc->_ref_salles) {

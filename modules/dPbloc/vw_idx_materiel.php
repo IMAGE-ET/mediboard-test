@@ -17,11 +17,14 @@ $filter = new CMateriel;
 $filter->_date_min = CValue::get("_date_min"    , "$now");
 $filter->_date_max = CValue::get("_date_max"    , "$now");
 
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+
 $typeAff = CValue::getOrSession("typeAff");
 
 // Récupération des salles
 $salle = new CSalle();
-$where["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+$where["bloc_id"] = "= '$bloc_id'";
 $salles = $salle->loadListWithPerms(PERM_READ, $where);
 
 // Récupération des opérations
@@ -59,8 +62,10 @@ foreach($operations as &$_operations) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("typeAff"	, $typeAff);
-$smarty->assign("filter"  , $filter);
+$smarty->assign("typeAff"	  , $typeAff);
+$smarty->assign("filter"    , $filter);
+$smarty->assign("bloc_id"   , $bloc_id);
+$smarty->assign("listBlocs" , $listBlocs);
 $smarty->assign("operations", $operations);
 
 $smarty->display("vw_idx_materiel.tpl");

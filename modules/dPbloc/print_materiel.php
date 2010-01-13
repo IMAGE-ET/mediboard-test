@@ -17,6 +17,9 @@ $filter = new COperation;
 $filter->_date_min = CValue::get("_date_min", $now);
 $filter->_date_max = CValue::get("_date_max", $now);
 
+$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
+$bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+
 // Récupération des opérations
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
@@ -24,7 +27,7 @@ $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 
 $salle = new CSalle();
-$whereSalle = array("bloc_id" => CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ))));
+$whereSalle = array("bloc_id" => "= '$bloc_id'");
 $where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
 
 $where["materiel"] = "!= ''";
