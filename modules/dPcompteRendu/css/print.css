@@ -1,10 +1,10 @@
-div.body {
+div.body, table.body {
   page-break-after: always;
   padding: 0;
   font-size: 12px;
 }
 
-div.bodyWithoutPageBreak {
+div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
   padding: 0;
   font-size: 12px; 
 }
@@ -81,7 +81,7 @@ div.header table {
 }
 
 @media screen {
-  div.body {
+  div.body, table.body {
     padding-bottom: 15px;
     border-bottom: 1px dotted #888;
   }
@@ -91,16 +91,14 @@ table#mainPane {
   display:none;
 }
 
-div.body, 
-div.bodyWithoutPageBreak {
+div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
   padding-top: {{$header}}em;
   padding-bottom: {{$footer}}em;
 }
 
-/*  Partie variable */
+/* Partie variable */
 @media print {
-	div.body,
-	div.bodyWithoutPageBreak {
+	div.body, table.body,	div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
 	  padding-top: {{$header+3}}em;
 	  padding-bottom: {{$footer+3}}em;
 	}
