@@ -108,19 +108,22 @@ Main.add(function () {
               {{assign var="over" value=1}}
               {{assign var="pct" value=100}}
             {{else}}
-              {{assign var="over" value=0}}              
+              {{assign var="over" value=0}}
             {{/if}}
             
-            {{if $_plage->spec_id}}
-              {{assign var="pct" value="100"}}
-              {{assign var="backgroundClass" value="empty"}}
-            {{elseif $pct < 100}}
+            {{if $pct < 100}}
               {{assign var="backgroundClass" value="normal"}}
             {{elseif !$over}}
               {{assign var="backgroundClass" value="booked"}}
             {{else}}
               {{assign var="backgroundClass" value="full"}}
             {{/if}} 
+            
+            {{if $_plage->spec_id}}
+            <img src="images/icons/user-function.png" style="float: left" />
+            {{else}}
+            <img src="images/icons/user.png" style="float: left" />
+            {{/if}}
             <div class="progressBar">
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text" style="text-align: left">
@@ -250,9 +253,13 @@ Main.add(function () {
         </tr>
         <tr>
           <td>
-            <div class="progressBar">
-              <div class="bar empty"></div>
-            </div>
+            <img src="images/icons/user.png" />
+          </td>
+          <td colspan="2">plage personnelle</td>
+        </tr>
+        <tr>
+          <td>
+            <img src="images/icons/user-function.png" />
           </td>
           <td colspan="2">plage de spécialité</td>
         </tr>
