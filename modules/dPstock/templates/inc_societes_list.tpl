@@ -31,6 +31,10 @@
     <td>{{mb_value object=$curr field=phone}}</td>
     <td>{{mb_value object=$curr field=email}}</td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="10">{{tr}}CSociete.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
   
 </table>
