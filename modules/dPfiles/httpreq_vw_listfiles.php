@@ -1,94 +1,80 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPfiles
-* @version $Revision$
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage dPfiles
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 
 //$can->needsRead();
-$ds = CSQLDataSource::get("std");
-$selClass      = CValue::getOrSession("selClass", null);
-$selKey        = CValue::getOrSession("selKey"  , null);
+
+$object_class = CValue::getOrSession("selClass", null);
+$object_id    = CValue::getOrSession("selKey"  , null);
 $typeVue       = CValue::getOrSession("typeVue" , 0);
 $accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist = 1;
 
 // Liste des Class
 $listClass = getChildClasses("CMbObject", array("_ref_files"));
-$listCategory = CFilesCategory::listCatClass($selClass);
-
+$listCategory = CFilesCategory::listCatClass($object_class);
 
 // Id de l'utilisateur courant
 $user_id = $AppUI->user_id;
 
 // Chargement de l'utilisateur courant
-$userSel = new CMediusers;
-$userSel->load($user_id);
-$userSel->loadRefs();
-$canUserSel = $userSel->canDo();
+$mediuser = new CMediusers;
+$mediuser->load($user_id);
+$mediuser->loadRefs();
 
-$etablissements = CMediusers::loadEtablissements(PERM_EDIT);
-
-// Récupération des modèles
-$whereCommon = array();
-$whereCommon["object_id"] = "IS NULL";
-$whereCommon[] = "`object_class` = '$selClass'";
-
-$order = "nom";
+$object = null;
+$canFile  = new CCanDo;
+$praticienId = null;
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$object = null;
-
-$canFile  = new CCanDo;
-$praticienId = null;
-
-if($selClass && $selKey){
+if($object_class && $object_class){
   // Chargement de l'objet
-  $object = new $selClass;
-  $object->load($selKey);
+  $object = new $object_class;
+  $object->load($object_id);
   $canFile = $object->canDo();
   
   // To add the modele selector in the toolbar
   $object->updateFormFields();
-  if ($selClass == 'CConsultation') {
+  if ($object_class == 'CConsultation') {
     $praticienId = $object->_praticien_id;
   } 
-  else if ($selClass == 'CConsultAnesth') {
+  else if ($object_class == 'CConsultAnesth') {
     $praticienId = $object->_ref_consultation->_praticien_id;
   }
-  else if ($selClass == 'CSejour') {
+  else if ($object_class == 'CSejour') {
     $praticienId = $object->praticien_id;
   }
-  else if ($selClass == 'COperation') {
+  else if ($object_class == 'COperation') {
     $praticienId = $object->chir_id;
   }
-  else if ($userSel->isPraticien()) {
-    $praticienId = $userSel->_id;
+  else if ($mediuser->isPraticien()) {
+    $praticienId = $mediuser->_id;
   }
-  /////
   
   $affichageFile = CFile::loadDocItemsByObject($object);
-  
   $smarty->assign("affichageFile",$affichageFile);
 }
 
-$smarty->assign("canFile"        , $canFile);
-
-$smarty->assign("reloadlist"     , $reloadlist  ); 
-$smarty->assign("listCategory"   , $listCategory);
-$smarty->assign("praticienId"    , $praticienId );
-$smarty->assign("selClass"       , $selClass    );
-$smarty->assign("selKey"         , $selKey      );
-$smarty->assign("object"         , $object      );
-$smarty->assign("typeVue"        , $typeVue     );
-$smarty->assign("accordDossier"  , $accordDossier);
-
+$smarty->assign("canFile"      , $canFile);
+$smarty->assign("reloadlist"   , $reloadlist); 
+$smarty->assign("listCategory" , $listCategory);
+$smarty->assign("praticienId"  , $praticienId);
+$smarty->assign("selClass"     , $object_class);
+$smarty->assign("selKey"       , $object_id);
+$smarty->assign("object"       , $object);
+$smarty->assign("typeVue"      , $typeVue);
+$smarty->assign("accordDossier", $accordDossier);
+mbtrace($typeVue);
 switch($typeVue) {
   case 0 :
     $smarty->display("inc_list_view.tpl");
@@ -97,6 +83,5 @@ switch($typeVue) {
     $smarty->display("inc_list_view_colonne.tpl");
     break;
 }
-
 
 ?>
