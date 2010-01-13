@@ -698,7 +698,8 @@ class CSejour extends CCodable {
   
   function loadRefPatient($cache = 0) {
     if (!$this->_ref_patient) {
-      $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
+      $this->_ref_patient = new CPatient();
+      $this->_ref_patient->load($this->patient_id);
     }
     
     $this->getDroitsCMU();
