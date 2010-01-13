@@ -310,7 +310,6 @@ function applyNewSejour() {
     $V(oFormSejour.DP, $V(oSejourChooserFrm.valueDiag));
   }
   if($V(oSejourChooserFrm.majEntree) == 1) {
-    Console.debug($V(oSejourChooserFrm.valueAdm));
     oEntree = Date.fromDATETIME($V(oSejourChooserFrm.valueAdm));
     $V(oFormSejour._date_entree_prevue   , oEntree.toDATE());
     $V(oFormSejour._date_entree_prevue_da, oEntree.toLocaleDate());
@@ -318,7 +317,6 @@ function applyNewSejour() {
     $V(oFormSejour._min_entree_prevue    , oEntree.getMinutes());
   }
   if($V(oSejourChooserFrm.majSortie) == 1) {
-    Console.debug($V(oSejourChooserFrm.valueSortie));
     oSortie = Date.fromDATETIME($V(oSejourChooserFrm.valueSortie));
     $V(oFormSejour._date_sortie_prevue   , oSortie.toDATE());
     $V(oFormSejour._date_sortie_prevue_da, oSortie.toLocaleDate());
