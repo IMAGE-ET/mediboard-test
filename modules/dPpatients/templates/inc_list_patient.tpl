@@ -154,10 +154,12 @@ reloadPatient = function(patient_id, link){
       {{/if}}
       
       {{if $can->edit}}
-      <button class="new" type="button" onclick="Patient.create(this.form);">
-        {{tr}}Create{{/tr}}
-        {{if $useVitale}}avec Vitale{{/if}}
-      </button>
+        {{if $nom || $prenom || $jeuneFille || $patient_ipp || $naissance}}
+        <button class="new" type="button" onclick="Patient.create(this.form);">
+          {{tr}}Create{{/tr}}
+          {{if $useVitale}}avec Vitale{{/if}}
+        </button>
+        {{/if}}
       {{/if}}
       
       {{/if}}

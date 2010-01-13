@@ -40,11 +40,8 @@
 </td>
 
 <td class="button">
-   par <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_ref_consult->_ref_plageconsult->_ref_chir->_guid}};')">
-        {{$rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
-      </span>
-   <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$rpu->_ref_consult->_id}}">Voir prise en charge</a>
-</td>
+        {{include file="inc_pec_praticien.tpl"}}
+      </td>
 
 <td>
   <!-- Vérification des champs semi obligatoires -->

@@ -75,7 +75,7 @@
         Effectuer la sortie
       </button>
       <br />  
-      {{mb_field object=$curr_sortie field="mode_sortie" defaultOption="&mdash; mode de sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '$mode');"}}
+      {{mb_field object=$curr_sortie field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '$mode');"}}
       <br />
       <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
       <script type="text/javascript">

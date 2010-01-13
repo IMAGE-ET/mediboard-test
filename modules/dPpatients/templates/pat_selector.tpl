@@ -172,25 +172,12 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
   <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
   
-  <th><label for="nomjf" title="Nom de naissance">Nom de naissance</label></th>
-  <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
-  
-  <td>
-  {{if $app->user_prefs.GestionFSE}}
-    {{if $app->user_prefs.VitaleVision}}
-      <button class="search" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
-        Lire Vitale
-      </button>
-    {{else}}
-      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-        Lire Vitale
-      </button>
-      <button class="change intermax-result" type="button" onclick="Intermax.result();">
-        Résultat Vitale
-      </button>
-    {{/if}}
+  {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+      <th>IPP</th>
+      <td>
+        <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
+      </td>
   {{/if}}
-  </td>
 </tr>
 
 <tr>
@@ -210,20 +197,49 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       month_extra="tabindex='5'"
       year_extra="tabindex='6'"
       all_extra="style='display:inline;'"}}         
-    </td>
-  <td><button class="search" type="submit">Rechercher</button></td>
+  </td>
 </tr>
-{{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+
+<tr>
+  <th><label for="nomjf" title="Nom de naissance">Nom de naissance</label></th>
+  <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
+  <td colspan="3"></td>
+</tr>  
   
 <tr>
-  <td colspan="2"></td>
-    <th>IPP</th>
-    <td>
-      <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
-    </td>
-    <td></td>
- </tr>
-{{/if}}
+  <td>
+  {{if $app->user_prefs.GestionFSE}}
+    {{if $app->user_prefs.VitaleVision}}
+      <button class="search" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
+        Lire Vitale
+      </button>
+    {{else}}
+      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+        Lire Vitale
+      </button>
+      <button class="change intermax-result" type="button" onclick="Intermax.result();">
+        Résultat Vitale
+      </button>
+    {{/if}}
+  {{/if}}
+  </td>
+  <td class="button"
+    <button class="search" type="submit">Rechercher</button>
+  </td>
+  <td class="button">
+    {{if $can->edit}}
+      {{if $name || $firstName || $nomjf || $patient_ipp || ($datePat && $datePat != "--")}}
+      <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
+        {{tr}}Create{{/tr}}
+        {{if $useVitale}}avec Vitale{{/if}}
+      </button>
+      {{/if}}
+    {{/if}}
+  </td>
+  <td class="button">
+    <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+  </td>
+</tr>    
 </table>
 
 </form>
@@ -246,7 +262,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
     {{/if}}
     <th align="center">Actions</th>
   </tr>
-
+  
   <!-- Recherche exacte -->
   {{foreach from=$patients item=_patient}}
     {{include file="inc_line_pat_selector.tpl"}}
@@ -259,17 +275,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   </tr>
   {{/if}}
   {{/foreach}}
-  <tr>
-    <td class="button" colspan="5">
-      {{if $can->edit}}
-      <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
-        {{tr}}Create{{/tr}}
-        {{if $useVitale}}avec Vitale{{/if}}
-      </button>
-      {{/if}}
-      <button class="cancel" type="button" onclick="window.close()">Annuler</button>
-    </td>
-  </tr>
 
   <!-- Recherche phonétique -->
   {{if $patientsSoundex|@count}}
