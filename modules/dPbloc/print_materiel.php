@@ -19,6 +19,8 @@ $filter->_date_max = CValue::get("_date_max", $now);
 
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
 $bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+$bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
 
 // Récupération des opérations
 $ljoin = array();
@@ -59,6 +61,7 @@ foreach($operations as &$_operations) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("filter", $filter);
+$smarty->assign("bloc", $bloc);
 $smarty->assign("operations", $operations);
 
 $smarty->display("print_materiel.tpl");

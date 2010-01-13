@@ -31,6 +31,7 @@ Main.add(function () {
 	</li>
   {{/foreach}}
 </ul>
+<span style="float: right">{{$bloc}}</span>
 
 <hr class="control_tabs" />
 
