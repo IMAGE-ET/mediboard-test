@@ -39,7 +39,7 @@ table.print td{
 
 	<table class="print {{if $order->_ref_order_items|@count <= $nb_par_page}}bodyWithoutPageBreak{{else}}body{{/if}}" style="border-spacing:0">
 		<tr>
-			<td colspan="5">
+			<td colspan="5" style="padding-bottom: 10px;">
 			  <table class="tbl">
 				  <tr>
 				    <th style="text-align: left; width: 50%;">Expéditeur</th>
