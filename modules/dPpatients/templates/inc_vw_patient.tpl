@@ -148,7 +148,7 @@ Main.add(initNotes);
       <input type="hidden" name="patient_id" value="{{$patient->_id}}" />
               
        <script type="text/javascript">
-         function confirmPurge(form) {
+         confirmPurge = function(form) {
            if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier d'un patient !")) {
              form._purge.value = "1";
              confirmDeletion(form,  {
