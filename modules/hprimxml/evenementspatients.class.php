@@ -286,6 +286,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $mbVenue = self::getPlacement($node, $mbVenue);
     $mbVenue = self::getSortie($node, $mbVenue);
 
+    /* TODO Supprimer ceci après l'ajout des times picker */
+    $mbVenue->_hour_entree_prevue = null;
+    $mbVenue->_min_entree_prevue = null;
+    $mbVenue->_hour_sortie_prevue = null;
+    $mbVenue->_min_sortie_prevue = null;
+    
     return $mbVenue;
   }
   
@@ -338,9 +344,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
     
     $dateHeure = "$date $heure";
-    
-    
-    
+        
     $etat = self::getEtatVenue($node);
     if (($etat == "préadmission") || ($etat == "encours")) {
       $mbVenue->entree_prevue = $dateHeure;
@@ -487,7 +491,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
     $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
-    
     $dateHeure = "$date $heure";
 
     if (!$date) {
