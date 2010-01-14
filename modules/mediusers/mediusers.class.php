@@ -105,8 +105,8 @@ class CMediusers extends CMbObject {
     $specs["deb_activite"]     = "date";
     $specs["fin_activite"]     = "date";
     $specs["spec_cpam_id"]     = "ref class|CSpecCPAM";
-    $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99";
-    $specs["banque_id"]        = "ref class|CBanque";
+    $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99 show|0";
+    $specs["banque_id"]        = "ref class|CBanque show|0";
     
     $specs["_group_id"]        = "ref notNull class|CGroups";
     
