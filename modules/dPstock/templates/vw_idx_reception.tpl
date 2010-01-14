@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=dPstock script=order_manager}}
+
 <table class="main tbl">
 	<tr>
 		<th colspan="5">Réceptions <small>({{$receptions|@count}})</small></th>
