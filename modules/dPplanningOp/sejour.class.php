@@ -576,8 +576,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue = $this->sortie_reelle;
     }
     
-    $this->sortie_prevue = max($this->sortie_prevue, $this->entree_reelle);
-    
+    //$this->sortie_prevue = max($this->sortie_prevue, $this->entree_reelle);
   }
 
   function getTemplateClasses(){
