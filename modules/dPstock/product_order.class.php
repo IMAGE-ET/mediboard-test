@@ -60,7 +60,7 @@ class CProductOrder extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
-    $specs['societe_id']      = 'ref notNull class|CSociete';
+    $specs['societe_id']      = 'ref notNull class|CSociete seekable';
 	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
 	  $specs['cancelled']       = 'bool';

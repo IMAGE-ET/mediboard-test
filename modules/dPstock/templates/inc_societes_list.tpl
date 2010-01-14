@@ -15,7 +15,6 @@
     <th>{{mb_title class=CSociete field=name}}</th>
     <th>{{mb_title class=CSociete field=contact_name}}</th>
     <th>{{mb_title class=CSociete field=phone}}</th>
-    <th>{{mb_title class=CSociete field=email}}</th>
   </tr>
   
   {{foreach from=$list item=curr}}
@@ -29,7 +28,6 @@
     </td>
     <td>{{mb_value object=$curr field=contact_name}}</td>
     <td>{{mb_value object=$curr field=phone}}</td>
-    <td>{{mb_value object=$curr field=email}}</td>
   </tr>
   {{foreachelse}}
   <tr>

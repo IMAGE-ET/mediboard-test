@@ -54,14 +54,14 @@ class CSociete extends CMbObject {
 	function getProps() {
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
-    $specs['code']            = 'str maxLength|80';
-    $specs['distributor_code']= 'str maxLength|80';
-    $specs['address']         = 'text';
-    $specs['postal_code']     = 'str minLength|4 maxLength|5';
+    $specs['code']            = 'str maxLength|80 seekable';
+    $specs['distributor_code']= 'str maxLength|80 seekable';
+    $specs['address']         = 'text seekable';
+    $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';
     $specs['phone']           = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs['fax']             = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    $specs['siret']           = 'code siret';
+    $specs['siret']           = 'code siret seekable';
     $specs['email']           = 'email';
     $specs['contact_name']    = 'str seekable';
     $specs['carriage_paid']   = 'str';

@@ -34,8 +34,8 @@ class CProductStockLocation extends CMbObject {
 	
   function getProps() {
     $specs = parent::getProps();
-    $specs['name'] = 'str notNull';
-    $specs['desc'] = 'text';
+    $specs['name'] = 'str notNull seekable';
+    $specs['desc'] = 'text seekable';
 		$specs['position'] = 'num min|1';
 		$specs['group_id'] = 'ref notNull class|CGroups';
 		$specs['_before']  = 'ref class|CProductStockLocation autocomplete|name|true';

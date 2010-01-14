@@ -9,7 +9,6 @@
 *}}
 
 {{mb_include_script module=dPstock script=product_selector}}
-{{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
 Main.add(function () {

@@ -47,7 +47,7 @@ class CProductReception extends CMbObject {
     $specs['date']       = 'dateTime seekable';
     $specs['societe_id'] = 'ref class|CSociete';
     $specs['group_id']   = 'ref notNull class|CGroups';
-	  $specs['reference']  = 'str notNull';
+	  $specs['reference']  = 'str notNull seekable';
     $specs['_total']     = 'currency';
 		return $specs;
 	}

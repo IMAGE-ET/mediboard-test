@@ -29,7 +29,7 @@ Main.add(refreshSocietesList);
       <form name="filterSociete" method="get" action="" onsubmit="return refreshSocietesList()">
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
-        <input type="text" name="keywords" value="" />
+        <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0)" />
         <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
       </form>
     </td>
