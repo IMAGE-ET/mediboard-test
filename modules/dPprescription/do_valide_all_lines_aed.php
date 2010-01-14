@@ -8,90 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-/*
- * Permet de valider une ou toutes les lignes
- * en mode pharmacien ou praticien
- */
-
-
-// Fonction permettant d'inserer $lines dans $prescription
-function insertMedElts($lines, $prescription, $sejour){
-	global $AppUI;
-	
-  if($prescription->type == "sejour"){ 
-    $limit = $sejour->_entree;	
-  }
-  if($prescription->type == "sortie"){ 
-    $limit = $sejour->_sortie;	
-  }
-  				
-  // Chargement des lignes de medicament deja presents dans la prescription
-  $medicaments = array();
-  $line_medicament = new CPrescriptionLineMedicament();
-  $line_medicament->prescription_id = $prescription->_id;
-  $medicaments = $line_medicament->loadMatchingList();
-  $produits = array();
-  foreach($medicaments as &$_medicament){
-    $produits[$_medicament->code_cip] = $_medicament;  	
-  }	
-  
-  // Chargement des elements deja presents dans la prescription
-  $elements = array();
-  $line_element = new CPrescriptionLineElement();
-  $line_element->prescription_id = $prescription->_id;
-  $elements = $line_element->loadMatchingList();
-  
-  // Parcours des elements de la prescription courante
-  foreach($lines as $cat => $lines_by_cat){
-  	foreach($lines_by_cat as &$line){
-  		// Si le medicament est deja present dans la prescription, on passe a la ligne suivante
-  		if($cat == "medicament" && array_key_exists($line->code_cip,$produits)){
-      	continue;
-  		}
-  		// Si l'element est deja present, on passe a la ligne suivante
-  		if($cat == "element" && array_key_exists($line->_id, $elements)){
-  			continue;
-  		}	
-	
-  		// On ne duplique pas la ligne si elle est finie
-  		if($line->_fin_reelle && $line->_fin_reelle < $limit){
-	      continue;
-	    }
-		
-  		// Chargement des prises 
-			$line->loadRefsPrises();
-			
-  		// Adaptation des dates
-			if($line->debut < mbDate($limit)){
-				$diff_duree = mbDaysRelative($line->debut, mbDate($limit));
-				if( $line->duree - $diff_duree > 0){
-					$line->duree = $line->duree - $diff_duree;
-					$line->debut = mbDate($limit);
-				}
-			}					
-			$line->_id = "";
-	    $line->prescription_id = $prescription->_id;
-	    $line->signee = 0;
-	    if($cat == "medicament"){
-	      $line->valide_pharma = 0;
-	    }
-	    $msg = $line->store();
-	    CAppUI::displayMsg($msg, "msg-$line->_class_name-create");  
-	  
-		  // Parcours des prises et creation des nouvelles prises
-		  foreach($line->_ref_prises as $prise){
-			  $prise->_id = "";
-			  $prise->object_id = $line->_id;
-			  $msg = $prise->store();
-		    CAppUI::displayMsg($msg, "CPrisePosologie-msg-create");  	
-		  }
-  	}
-  }
-}
-
-
-
 global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
@@ -144,59 +60,92 @@ if($prescription_id){
 }
 
 // Pour la validation d'une ligne precise
-$prescription_line_id = CValue::post("prescription_line_id");
+$prescription_line_guid = CValue::post("prescription_line_guid");
 
-$medicaments = array();
-$elements = array();
-$comments = array();
-$lines = array();
-$perfusions = array();
+// Initalisation du tableau de lignes
+$lines = array("CPrescriptionLineMedicament" => array(), "CPerfusion" => array(), "CPrescriptionLineElement" => array(), "CPrescriptionLineComment" => array());
 
-// Validation d'une ligne
-if($prescription_line_id){	
-	// Ligne de médicaments
-	if($chapitre == "medicament"){
-		// Chargement de la ligne de prescription
-	  $prescription_line = new CPrescriptionLineMedicament();
-	  $prescription_line->load($prescription_line_id);
-		$medicaments[$prescription_line->_id] = $prescription_line;
-	  // Chargement de la prescription
-	  $prescription = new CPrescription();
-	  $prescription->load($prescription_line->prescription_id);
+/*
+ * Signature d'une ligne (medicament ou perfusion)
+ */
+if($prescription_line_guid){
+	// Chargement de la ligne de prescription (medicament ou perfusion)
+	$prescription_line = CMbObject::loadFromGuid($prescription_line_guid);
+	
+	// On rajoute la ligne passée au tableau des lignes à traiter
+	$lines[$prescription_line->_class_name][$prescription_line->_id] = $prescription_line;
+
+	// Si la ligne peut etre substituée par les infirmieres, elle est automatiquement signée
+	if($prescription_line->substitute_for_id){
+		$original_line = new $prescription_line->substitute_for_class;
+		$original_line->load($prescription_line->substitute_for_id);
+		$subst_plan_soin = $original_line->substitution_plan_soin;
+	} else {
+		$subst_plan_soin = $prescription_line->substitution_plan_soin;
 	}
+	if($subst_plan_soin){
+		$prescription_line->loadRefsSubstitutionLines();
+		foreach($prescription_line->_ref_substitution_lines as $_subst_lines_by_type){
+		  foreach($_subst_lines_by_type as $_subst_line){
+		  	$lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+		  }
+		}
+	}
+  // Chargement de la prescription
+  $prescription = new CPrescription();
+  $prescription->load($prescription_line->prescription_id);
 }
 
-// Si mode pharma en validation globale, chargement de tous les medicaments de la prescription
-if($prescription->_id && $mode_pharma){
-	$prescription->loadRefsLinesMed();
-  $prescription->loadRefsPerfusions();	
-  foreach ($prescription->_ref_prescription_lines as &$_line_med) {
-  	if(!$_line_med->child_id){
-	    $medicaments[$_line_med->_id] = $_line_med;
-  	}
-  }
-  foreach($prescription->_ref_perfusions as &$_perfusion){
-    if(!$_perfusion->next_perf_id){
-      $perfusions[$_perfusion->_id] = $_perfusion;
-    }
-  }
-}
 
-// Validation de tous les medicaments
+/*
+ * Signature de toutes les lignes de medicaments / perfusions
+ */
 if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode_pharma){
 	// Chargement de toutes les lignes du user_courant non validées
 	$prescriptionLineMedicament = new CPrescriptionLineMedicament();
-	$prescriptionLineMedicament->prescription_id = $prescription_id;
-  $prescriptionLineMedicament->praticien_id = $praticien_id;
-	$prescriptionLineMedicament->signee = $search_value;
-	$medicaments = $prescriptionLineMedicament->loadMatchingList();
+	$where = array();
+	$where["prescription_id"] = " = '$prescription_id'";
+	$where["praticien_id"] = " = '$praticien_id'";
+	$where["signee"] = " = '$search_value'";
+  $where["substitution_active"] = " = '1'";
+	$lines_med = $prescriptionLineMedicament->loadList($where);
+	foreach($lines_med as $_line_med){
+		$lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
+	  $_line_med->countSubstitutionsLines();
+		if($_line_med->_count_substitution_lines){
+			$_line_med->loadRefsSubstitutionLines();
+			if($_line_med->_ref_substitute_for->substitution_plan_soin){
+		    foreach($_line_med->_ref_substitution_lines as $_subst_lines_by_type){
+		      foreach($_subst_lines_by_type as $_subst_line){
+		        $lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+		      } 
+		    }
+			}
+		}
+	}
 
 	// Chargement des perfusions
   $perfusion = new CPerfusion();
-  $perfusion->prescription_id = $prescription_id;
-  $perfusion->praticien_id = $praticien_id;
-  $perfusion->signature_prat = $search_value;
-  $perfusions = $perfusion->loadMatchingList();
+  $where = array();
+  $where["prescription_id"] = " = '$prescription_id'";
+  $where["praticien_id"] = " = '$praticien_id'";
+  $where["signature_prat"] = " = '$search_value'";
+  $where["substitution_active"] = " = '1'";
+  $lines_perf = $perfusion->loadList($where);
+  foreach($lines_perf as $_line_perf){
+  	$lines[$_line_perf->_class_name][$_line_perf->_id] = $_line_perf;
+    $_line_perf->countSubstitutionsLines();
+    if($_line_perf->_count_substitution_lines){
+      $_line_perf->loadRefsSubstitutionLines();
+      if($_line_perf->_ref_substitute_for->substitution_plan_soin){
+        foreach($_line_perf->_ref_substitution_lines as $_subst_lines_by_type){
+          foreach($_subst_lines_by_type as $_subst_line){
+            $lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
+          } 
+        }
+      }
+    }
+  }
 
   $prescriptionLineComment = new CPrescriptionLineComment();
   $where = array();
@@ -205,126 +154,89 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
   $where["category_prescription_id"] = "IS NULL";
   $where["signee"] = " = '$search_value'";
   $where["child_id"] = "IS NULL";
-  $comments = $prescriptionLineComment->loadList($where);
+  $lines["CPrescriptionLineComment"] = $prescriptionLineComment->loadList($where);
 	
 	// Chargement de la prescription
 	$prescription = new CPrescription();
   $prescription->load($prescription_id);
 }
 
-
+/*
+ * Signature des lignes d'elements
+ */
 if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode_pharma){
-	// Elements
-	$ljoinElement["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
-	$ljoinElement["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
-	
-	// Comments
-	$ljoinComment["category_prescription"] = "category_prescription.category_prescription_id = prescription_line_comment.category_prescription_id";
-	
-	$where = array();
-	$where["prescription_id"] = " = '$prescription_id'";
-	$where["praticien_id"] = " = '$praticien_id'";
-	$where["signee"] = " = '$search_value'";
-	$where["child_id"] = "IS NULL";
-	if($chapitre != "all"){
-	  $where["category_prescription.chapitre"] = " = '$chapitre'";
-	}
-	$prescription_line_element = new CPrescriptionLineElement();
-	$elements = $prescription_line_element->loadList($where, null, null, null, $ljoinElement);
-	
-	$prescription_line_comment = new CPrescriptionLineComment();
-	$comments = $prescription_line_comment->loadList($where, null, null, null, $ljoinComment);
-}
-
-// Parcours des medicaments et passage de valide à 1
-foreach($medicaments as $key => $lineMedicament){
-	if($mode_pharma){
-		$lineMedicament->valide_pharma = 1;
-	} else {
-	  $lineMedicament->signee = $new_value;
-	}
-	$msg = $lineMedicament->store();
-	CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
-}
-
-// Parcours des perfusions et passage de valide a 1
-foreach($perfusions as &$_perfusion){
-  if($mode_pharma){
-    $_perfusion->signature_pharma = 1;
-  } else {
-    $_perfusion->signature_prat = $new_value;
+  // Elements
+  $ljoinElement["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+  $ljoinElement["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
+  // Comments
+  $ljoinComment["category_prescription"] = "category_prescription.category_prescription_id = prescription_line_comment.category_prescription_id";
+  
+  $where = array();
+  $where["prescription_id"] = " = '$prescription_id'";
+  $where["praticien_id"] = " = '$praticien_id'";
+  $where["signee"] = " = '$search_value'";
+  $where["child_id"] = "IS NULL";
+  if($chapitre != "all"){
+    $where["category_prescription.chapitre"] = " = '$chapitre'";
   }
-  $msg = $_perfusion->store();
-  CAppUI::displayMsg($msg, "CPerfusion-msg-store");
+  $prescription_line_element = new CPrescriptionLineElement();
+  $lines["CPrescriptionLineElement"] = $prescription_line_element->loadList($where, null, null, null, $ljoinElement);
+  
+  $prescription_line_comment = new CPrescriptionLineComment();
+  $lines["CPrescriptionLineComment"] = $prescription_line_comment->loadList($where, null, null, null, $ljoinComment);
 }
-
-// Parcours des medicaments et passage de valide à 1
-if(!$mode_pharma){
-	foreach($elements as $key => $lineElement){
-		$lineElement->signee = $new_value;
-		$msg = $lineElement->store();
-		CAppUI::displayMsg($msg, "CPrescriptionLineElement-msg-modify");	
-	}
-}
-
-// Parcours des medicaments et passage de valide à 1
-if(!$mode_pharma){
-	foreach($comments as $key => $lineComment){
-		$lineComment->signee = $new_value;
-		$msg = $lineComment->store();
-		CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-modify");	
-	}
-}
-
 
 
 /*
-// Ajout des lignes a la prescription suivante si la ligne n'est pas déja incluse
-if(!$mode_pharma){
-	// Stockage dans un tableaux des medicaments et elements de la prescription courante
-	$lines["medicament"] = $medicaments;
-	$lines["element"] = $elements;
-	  
-  // Chargement de la prescription de sejour
-  $prescription_sejour = new CPrescription();
-  $prescription_sejour->object_id = $prescription->object_id;
-  $prescription_sejour->object_class = $prescription->object_class;
-  $prescription_sejour->type = "sejour";
-  $prescription_sejour->loadMatchingObject();
-  
-  $sejour =& $prescription_sejour->_ref_object;
-  
-  // Chargement de la prescription de sortie
-  $prescription_sortie = new CPrescription();
-  $prescription_sortie->object_id = $prescription->object_id;
-  $prescription_sortie->object_class = $prescription->object_class;
-  $prescription_sortie->praticien_id = $praticien_id;
-  $prescription_sortie->type = "sortie";
-  $prescription_sortie->loadMatchingObject();
-  
-  // Si la prescription est de type pre_admission, on insere les medicaments et les elements dans les prescriptions de sejour et de sortie
-	if($prescription->type == "pre_admission"){
-	  if($prescription_sejour->_id){
-		  // Insertion des medicaments et elements de pre_admission dans le sejour
-		  insertMedElts($lines, $prescription_sejour, $sejour);
-		}
-	}
+ * Pharmacie => validation de toutes les lignes actives
+ */ 
+if($prescription->_id && $mode_pharma){
+  $prescription->loadRefsLinesMed();
+  $prescription->loadRefsPerfusions();  
+  foreach ($prescription->_ref_prescription_lines as &$_line_med) {
+    if(!$_line_med->child_id && $_line_med->substitution_active){
+      $lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
+    }
+  }
+  foreach($prescription->_ref_perfusions as &$_perfusion){
+    if(!$_perfusion->next_perf_id && $_perfusion->substitution_active){
+      $lines[$_perfusion->_class_name][$_perfusion->_id] = $_perfusion;
+    }
+  }
+}
 
-	// Si la prescription est de type pre_admission ou sejour
-	if($prescription->type == "pre_admission" || $prescription->type == "sejour"){
-		if($prescription_sejour->_id){
-			insertMedElts($lines, $prescription_sejour, $sejour);
+// Parcours du tableau et signature des lignes
+foreach($lines as $_type_line => $_lines){
+	foreach($_lines as $_line){
+		switch($_type_line){
+			case "CPrescriptionLineMedicament":
+				$_line->countPrisesLine();
+				$mode_pharma ? ($_line->valide_pharma = 1) : ($_line->signee = $new_value);
+				if($new_value && !$_line->_count_prises_line && !$mode_pharma){
+				  CAppUI::displayMsg("Impossible de signer une ligne qui ne possède pas de posologie", "$_line->_class_name-title-modify"); 
+				} else {
+					$msg = $_line->store();
+	        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 	
+				}
+        break;
+			case "CPerfusion":
+				$mode_pharma ? ($_line->signature_pharma = 1) : ($_line->signature_prat = $new_value);
+				$msg = $_line->store();
+        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
+				break;
+			case "CPrescriptionLineElement":
+			case "CPrescriptionLineComment":
+				$_line->signee = $new_value;
+			  $msg = $_line->store();
+        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
+      	break;
 		}
-	  if($prescription_sortie->_id){
-      // Insertion des medicaments et elements de pre_admission dans la sortie
-			insertMedElts($lines, $prescription_sortie, $sejour);
-		}
+		
 	}
 }
-*/
 
+// Refresh de la prescription
 $prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
-
 if($chapitre == "all"){
   $lite = CAppUI::pref('mode_readonly') ? 0 : 1;
   if($mediuser->_is_praticien){

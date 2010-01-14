@@ -43,12 +43,12 @@ $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
   
 $where["prescription.object_class"] = " = 'CSejour'";
 $where["prescription.type"] = " = 'sejour'";
-
-$where["prescription_line_medicament.substitution_active"] = " = '1'";
-$where["perfusion.substitution_active"] = " = '1'";
-    
+  
 if($valide_pharma == 0){
-  $where[] = "prescription_line_medicament.valide_pharma != '1' OR perfusion.signature_pharma != '1'";
+  $where[] = "(prescription_line_medicament.valide_pharma != '1' AND prescription_line_medicament.substitution_active = '1') 
+	           OR (perfusion.signature_pharma != '1' AND perfusion.substitution_active = '1')";
+} else {
+  $where[] = "prescription_line_medicament.substitution_active = '1' OR perfusion.substitution_active = '1'";
 }
 
 // Filtre sur le praticiens (lignes)
@@ -59,6 +59,7 @@ if($praticien_id){
 // Filtre sur le service, date des affectations
 $min = "$filter_sejour->_date_entree 00:00:00";
 $max = "$filter_sejour->_date_sortie 23:59:59";
+
 if($service_id){
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"]         = "affectation.lit_id = lit.lit_id";

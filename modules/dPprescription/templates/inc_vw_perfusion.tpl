@@ -56,17 +56,22 @@
 		      <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{$readonly}}, {{$lite}},'');"></button>
 		    {{/if}}
       </div>
+			 <div style="float: right">
       <!-- Formulaire de signature du praticien -->
       {{if $_perfusion->_can_vw_form_signature_praticien}}
-			  <div style="float: right">
-					{{if $_perfusion->signature_prat}}
-					  <button type="button" class="cancel" onclick="submitSignaturePraticien('{{$_perfusion->_id}}','{{$_perfusion->prescription_id}}','0')">Annuler la signature</button>
-					{{else}}
-					  <button type="button" class="tick" onclick="submitSignaturePraticien('{{$_perfusion->_id}}','{{$_perfusion->prescription_id}}','1')">Signer</button>
-					{{/if}}
-				</div>
+			  <form name="validation-{{$_perfusion->_class_name}}-{{$_perfusion->_id}}" action="" method="post">
+			    <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+			    <input type="hidden" name="m" value="dPprescription" />
+			    <input type="hidden" name="prescription_line_guid" value="{{$_perfusion->_guid}}" />
+			    <input type="hidden" name="prescription_reelle_id" value="{{$prescription_reelle->_id}}" />
+			    <input type="hidden" name="mode_pharma" value="0" />
+			    {{if $_perfusion->signature_prat}}
+			    <input type="hidden" name="annulation" value="1" />
+			    {{/if}}
+			    <button type="button" class="{{if $_perfusion->signature_prat}}cancel{{else}}tick{{/if}}" onclick="submitFormAjax(this.form,'systemMsg');">{{if $_perfusion->signature_prat}}Annuler signature{{else}}Signer{{/if}}</button>
+			  </form>
       {{/if}}
-      <div style="float: right">
+     
 		    <!-- Signature pharmacien -->
         {{if $_perfusion->_can_vw_form_signature_pharmacien}}
       		{{if $_perfusion->signature_pharma}}
@@ -76,6 +81,7 @@
 					{{/if}}
 			  {{/if}}
 		  </div>
+			
 		  <!-- Accord du praticien -->
 			{{if $mode_pharma}}
 				<div style="float: right">

@@ -235,6 +235,7 @@ submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_ph
   } } );
 }
 
+
 submitValidationInfir = function(perfusion_id, prescription_id, validation_infir){
   var oForm = getForm("perf_validation_infir");
   oForm.perfusion_id.value = perfusion_id;
@@ -590,6 +591,7 @@ toggleTypePerfusion = function(oForm){
   <input type="hidden" name="voie" value="" />
 </form>
 
+
 <form name="perf_signature_prat" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_perfusion_aed" />
@@ -605,6 +607,7 @@ toggleTypePerfusion = function(oForm){
   <input type="hidden" name="perfusion_id" value="" />
   <input type="hidden" name="signature_pharma" value="" />
 </form>
+
 
 <form name="perf_validation_infir" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />

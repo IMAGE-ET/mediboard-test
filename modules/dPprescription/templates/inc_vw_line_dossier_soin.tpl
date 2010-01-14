@@ -157,7 +157,7 @@
 	      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
 	      <select name="object_guid" style="width: 75px;" 
 	              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-	                           loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')
+	                           loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
 	                         } } )">
 	        <option value="">Subst.</option>
 		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
