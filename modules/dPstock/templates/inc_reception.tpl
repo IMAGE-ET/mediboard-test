@@ -8,23 +8,29 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
-<button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
+{{if $reception->_id}}
+  <button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
+  <button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
 
-<table class="tbl">
-  <tr>
-    <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
-    <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
-    <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
-    <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
-  </tr>
-  {{foreach from=$reception->_back.reception_items item=curr_item}}
-    <tbody id="order-item-{{$curr_item->_id}}">
-      {{include file="inc_reception_item.tpl"}}
-    </tbody>
-  {{foreachelse}}
+  <table class="tbl">
     <tr>
-      <td colspan="10">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
+      <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
+      <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+      <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
+      <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     </tr>
-  {{/foreach}}
-</table>
+    {{foreach from=$reception->_back.reception_items item=curr_item}}
+      <tbody id="order-item-{{$curr_item->_id}}">
+        {{include file="inc_reception_item.tpl"}}
+      </tbody>
+    {{foreachelse}}
+      <tr>
+        <td colspan="10">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
+      </tr>
+    {{/foreach}}
+  </table>
+{{else}}
+  <div class="small-info">
+    Effectuez la récéption d'une ligne de commande à gauche pour commencer le bon de réception
+  </div>
+{{/if}}
