@@ -55,9 +55,8 @@ class CHprimSoapHandler extends CSoapHandler {
       if ($doc_errors !== true) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
-        
         $echange_hprim->date_production = mbDateTime();
-        $echange_hprim->emetteur = "inconnu";
+        $echange_hprim->emetteur = $data['idClient'] ? $data['idClient'] : "inconnu";
         $echange_hprim->destinataire = CAppUI::conf('mb_id');
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "patients";

@@ -429,6 +429,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     if ($this->_sous_type_evt == "debiteursVenue") {
       $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
       $debiteurs = $this->addElement($evenementPatients, "debiteurs");
+      $debiteur = $this->addElement($debiteurs, "debiteur");
+      $identifiantParticulier = $this->addElement($debiteur, "identifiantParticulier");
     }
     
     if ($this->_sous_type_evt == "mouvementPatient") {
