@@ -56,6 +56,7 @@ foreach($list_services as $_service) {
   if (!$stock_service->loadMatchingObject()) {
     $stock_service->quantity = $stock->_ref_product->quantity;
     $stock_service->order_threshold_min = $stock->_ref_product->quantity;
+    $stock_service->order_threshold_optimum = $stock->getOptimumQuantity();
   }
   $_service->_ref_stock = $stock_service;
 }

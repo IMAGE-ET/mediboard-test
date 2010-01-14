@@ -46,6 +46,7 @@ if ($only_service_stocks == 1 || $only_common == 1) {
       $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
       if ($stock && $stock->_id) {
         $stock->_ref_stock_service = $stock_service;
+        $stock->quantity = max(0, $stock_service->getOptimumQuantity() - $stock_service->quantity);
         $stocks[$stock->_id] = $stock;
       }
     }
@@ -61,6 +62,9 @@ else {
     foreach($stocks as $_id => $stock){
       if ($stock->_ref_product->cancelled) {
         unset($stocks[$_id]);
+      }
+      else {
+        $stock->quantity = min($stock->quantity, $stock->getOptimumQuantity());
       }
     }
   }
