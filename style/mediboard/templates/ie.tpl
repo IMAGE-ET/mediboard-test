@@ -9,7 +9,7 @@
 <!--[if IE 7]>
 <script type="text/javascript">
 function processIE7Button(button) {
-  if (button._processed) return;
+  if (button._processed || (window.Main && !Main.initialized)) return;
   button._processed = true;
   
   setTimeout(function(){
