@@ -232,7 +232,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         {{/if}}
       {{/if}}
       </td>
-      <td class="button"
+      <td class="button">
         <button class="search" type="submit">Rechercher</button>
       </td>
       <td class="button">
