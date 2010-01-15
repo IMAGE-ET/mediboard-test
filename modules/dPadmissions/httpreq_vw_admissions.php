@@ -92,8 +92,9 @@ foreach ($today as $keySejour => $valueSejour) {
     unset($today[$keySejour]);
 	  continue;
   }
-		
-	$sejour->loadRefsOperations();
+  
+  $whereSejour = array("annulee" => "= '0'");
+	$sejour->loadRefsOperations($whereSejour);
   $sejour->loadRefsAffectations();
   $sejour->loadNumDossier();
   foreach($sejour->_ref_operations as $key_op => $curr_op) {

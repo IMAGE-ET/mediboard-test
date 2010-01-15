@@ -103,6 +103,8 @@
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
     {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} ({{$curr_adm->type|truncate:1:"":true}})
+    <br />
+    {{$curr_adm->_ref_operations|@count}} interv(s).
     </span>
   </a>
 </td>
