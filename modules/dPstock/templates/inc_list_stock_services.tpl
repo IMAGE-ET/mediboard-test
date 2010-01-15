@@ -10,14 +10,8 @@
 
 <table class="main tbl">
   <tr>
-    <th colspan="10" class="title">Stocks de services</th>
-  </tr>
-  <tr>
-    <th>{{mb_title class=CProductStockService field=service_id}}</th>
-    <th>
-      {{mb_title class=CProductStockService field=quantity}} / 
-      {{mb_title class=CProductStockService field=order_threshold_min}} / 
-      {{mb_title class=CProductStockService field=order_threshold_optimum}}
+    <th class="category" colspan="2">
+      {{tr}}CProductStockService{{/tr}}
     </th>
   </tr>
   {{foreach from=$list_services item=_service}}
@@ -35,13 +29,24 @@
           <input type="hidden" name="dosql" value="do_stock_service_aed" />
           
           {{if !$_stock->_id}}
+            {{mb_title class=CProductStockService field=quantity}}
             {{mb_field object=$_stock field=quantity increment=1 size=1 form="CProductStockService-create-$_id"}}
+            
+            {{mb_title class=CProductStockService field=order_threshold_min}}
             {{mb_field object=$_stock field=order_threshold_min increment=1 size=1 form="CProductStockService-create-$_id"}}
+            
+            {{mb_title class=CProductStockService field=order_threshold_optimum}}
             {{mb_field object=$_stock field=order_threshold_optimum increment=1 size=1 form="CProductStockService-create-$_id"}}
             <button type="button" class="add notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
+            
           {{else}}
-            {{mb_value object=$_stock field=quantity}} / 
-            {{mb_value object=$_stock field=order_threshold_min}} / 
+            {{mb_title class=CProductStockService field=quantity}}:
+            {{mb_value object=$_stock field=quantity}}
+            
+            {{mb_title class=CProductStockService field=order_threshold_min}}:
+            {{mb_value object=$_stock field=order_threshold_min}}
+            
+            {{mb_title class=CProductStockService field=order_threshold_optimum}}:
             {{mb_value object=$_stock field=order_threshold_optimum}}
             
             {{mb_include module=dPstock template=inc_bargraph stock=$_stock}}

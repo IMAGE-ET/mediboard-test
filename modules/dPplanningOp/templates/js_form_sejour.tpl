@@ -17,8 +17,7 @@ function modifPrat(){
 
 function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
   if (list) {
-    var url = new Url;
-    url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
+    var url = new Url("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
     url.addParam("praticien_id", praticien_id);
     url.addParam("selected_id", selected_id);
     url.requestUpdate(list);
@@ -27,8 +26,7 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
 
 function refreshViewProtocoleAnesth(prescription_id) {
   if($("prot_anesth_view")) {
-    var url = new Url;
-    url.setModuleAction("dPplanningOp", "httpreq_vw_protocole_anesth");
+    var url = new Url("dPplanningOp", "httpreq_vw_protocole_anesth");
     url.addParam("prescription_id", prescription_id);
     url.requestUpdate("prot_anesth_view");
   }
@@ -219,10 +217,9 @@ function checkSejoursToReload() {
 }
 
 function reloadListSejours() {
-  var sejoursUrl = new Url;
   var oForm = document.editSejour;
   var iPatient_id = oForm.patient_id.value;
-  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
+  var sejoursUrl = new Url("dPplanningOp", "httpreq_get_sejours");
   sejoursUrl.addParam("patient_id", iPatient_id);
   sejoursUrl.requestUpdate("selectSejours");
   
@@ -244,8 +241,7 @@ function reloadSejour(sejour_id) {
   var sHeureSortie   = $V(oFormSejour._hour_sortie_prevue);
   var sMinutesSortie = $V(oFormSejour._min_sortie_prevue);
   
-  var sejoursUrl = new Url;
-  sejoursUrl.setModuleAction("dPplanningOp", "httpreq_vw_sejour");
+  var sejoursUrl = new Url("dPplanningOp", "httpreq_vw_sejour");
   sejoursUrl.addParam("sejour_id", $V(oFormSejour.sejour_id));
   sejoursUrl.addParam("patient_id", $V(oFormSejour.patient_id));
   if(oFormOp) {
@@ -332,8 +328,7 @@ function changePat() {
 
 function popRegimes() {
   var oForm = document.editSejour;
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "vw_regimes_alimentaires");
+  var url = new Url("dPplanningOp", "vw_regimes_alimentaires");
   url.addParam("hormone_croissance" , $V(oForm.hormone_croissance));
   url.addParam("repas_sans_sel"     , $V(oForm.repas_sans_sel));
   url.addParam("repas_sans_porc"    , $V(oForm.repas_sans_porc));

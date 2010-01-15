@@ -13,10 +13,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="2" style="vertical-align:middle;">
-
-      <div style="float:left;" class="noteDiv {{$object->_guid}}">
-        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
-      </div>
+      {{mb_include module=system template=inc_object_notes object=$object}}
 			
       <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}

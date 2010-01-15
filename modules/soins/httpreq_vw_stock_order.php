@@ -78,13 +78,14 @@ foreach($stocks as &$stock) {
   $where = array(
     'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
     'product_delivery.stock_id' => "= $stock->_id",
-    'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
+    //'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
   );
   
   $ljoin = array(
     'product_stock_group' => 'product_delivery.stock_id = product_stock_group.stock_id',
     'product' => 'product.product_id = product_stock_group.product_id',
   );
+  
   $delivery = new CProductDelivery;
   $stock->_ref_deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
 }

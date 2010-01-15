@@ -29,6 +29,11 @@ fillInputs = function(data){
   });
 }
 
+changeOrderPage = function(start) {
+  $V(getForm('filter').start, start); 
+  refreshOrders();
+}
+
 {{if $only_service_stocks == 1}}
 Main.add(function(){
   autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}');
@@ -42,29 +47,23 @@ Main.add(function(){
 	</div>
 {{/if}}
 
-<div class="pagination">
+<div style="float: left;">
   <!-- 
   <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
   -->
-  <label style="float: left; font-weight: normal;">
+  <label style="font-weight: normal;">
     <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
     Seulement les stocks du service 
   </label>
-  
-  <label style="float: left; font-weight: normal; margin-left: 1em;">
+  <br />
+  <label style="font-weight: normal;">
     <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
-    Seulement les stocks courants
+    Seulement les stocks couramment utilisés
   </label>
-
-{{assign var=step value=$count_stocks|min:20}}
-{{foreach from=0|range:$count_stocks:$step item=page}}
-  {{assign var=view value=$page/20+1}}
-  {{if $view|intval == $view}}
-  <a href="#1" class="page {{if $page==$start}}active{{/if}}" 
-     onclick="$V(getForm('filter').start,'{{$page}}'); refreshOrders();">{{$view}}</a>
-  {{/if}}
-{{/foreach}}
 </div>
+
+{{mb_include module=system template=inc_pagination change_page="changeOrderPage" 
+    total=$count_stocks current=$start step=20}}
 
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}

@@ -121,14 +121,12 @@ function refreshListStocksService(product_id) {
           </tr>
         </table>
       </form>
+      
+      {{if $stock->_id}}
+      <div id="list-stock-services">
+        {{mb_include module=dPstock template=inc_list_stock_services services=$list_services}}
+      </div>
+      {{/if}}
     </td>
   </tr>
-  
-  {{if $stock->_id}}
-  <tr>
-    <td id="list-stock-services">
-      {{mb_include module=dPstock template=inc_list_stock_services services=$list_services}}
-    </td>
-  </tr>
-  {{/if}}
 </table>
