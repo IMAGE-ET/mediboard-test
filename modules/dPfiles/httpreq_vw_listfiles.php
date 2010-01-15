@@ -74,7 +74,7 @@ $smarty->assign("selKey"       , $object_id);
 $smarty->assign("object"       , $object);
 $smarty->assign("typeVue"      , $typeVue);
 $smarty->assign("accordDossier", $accordDossier);
-mbtrace($typeVue);
+
 switch($typeVue) {
   case 0 :
     $smarty->display("inc_list_view.tpl");
