@@ -93,11 +93,15 @@ class CProduct extends CMbObject {
 	    $this->unit_quantity = round($this->unit_quantity);
 	  }
 	  if ($this->unit_quantity === 0) $this->unit_quantity = '';
+    
 	  $this->_quantity = '';
     if ($this->item_title && $this->quantity) {
-    	$this->_quantity .= "$this->quantity $this->item_title x ";
+    	$this->_quantity .= "$this->quantity $this->item_title";
     }
-    $this->_quantity .= "$this->unit_quantity $this->unit_title";
+    
+    if ($this->unit_quantity && $this->unit_title) {
+      $this->_quantity .= ($this->_quantity ? " x " : "") . "$this->unit_quantity $this->unit_title";
+    }
     
     if ($this->item_title && $this->quantity) {
 	    $this->_unit_quantity = ($this->quantity ? $this->quantity : 1);

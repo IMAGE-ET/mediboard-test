@@ -60,6 +60,11 @@ Main.add(function(){
     <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
     Seulement les stocks couramment utilisés
   </label>
+  <!--<br />
+  <label style="font-weight: normal;">
+    <input type="text" value="{{$keywords}}" onchange="$V(getForm('filter').keywords, this.value)" />
+    Mots clés
+  </label>-->
 </div>
 
 {{mb_include module=system template=inc_pagination change_page="changeOrderPage" 

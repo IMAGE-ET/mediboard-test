@@ -15,6 +15,7 @@ $service_id = CValue::get('service_id');
 $start = intval(CValue::getOrSession('start', 0));
 $only_service_stocks = CValue::get('only_service_stocks');
 $only_common = CValue::get('only_common');
+$keywords = CValue::get('keywords');
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -38,7 +39,7 @@ if ($only_service_stocks == 1 || $only_common == 1) {
   
   $stocks = array();
   if ($stocks_service) {
-    foreach($stocks_service as $_id => $stock_service){
+    foreach($stocks_service as $_id => $stock_service) {
       if ($stock_service->_ref_product->cancelled) {
         continue;
       }
@@ -101,6 +102,7 @@ $smarty->assign('stocks', $stocks);
 $smarty->assign('count_stocks', $count_stocks);
 $smarty->assign('date_min', $date_min);
 $smarty->assign('date_max', $date_max);
+$smarty->assign('keywords', $keywords);
 $smarty->assign('service', $service);
 $smarty->assign('only_service_stocks', $only_service_stocks);
 $smarty->assign('only_common', $only_common);

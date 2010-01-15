@@ -59,6 +59,7 @@ Main.add(function () {
 <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="start" value="{{$start}}" />
+  <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
   <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
   <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
   <table class="form">
