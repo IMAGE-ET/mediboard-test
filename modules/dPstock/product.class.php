@@ -70,10 +70,10 @@ class CProduct extends CMbObject {
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete seekable';
     $specs['quantity']      = 'num notNull min|0';
-    $specs['item_title']    = 'str';
-    $specs['unit_title']    = 'str';
+    $specs['item_title']    = 'str autocomplete';
     $specs['unit_quantity'] = 'float min|0';
-    $specs['packaging']     = 'str';
+    $specs['unit_title']    = 'str autocomplete';
+    $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0';
     

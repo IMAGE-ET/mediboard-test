@@ -15,7 +15,7 @@
   <tr>
     <th colspan="4">{{mb_title class=CProduct field=name}}</th>
   </tr>
-  <tr
+  <tr>
     <th>{{mb_title class=CProduct field=societe_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=_quantity}}</th>

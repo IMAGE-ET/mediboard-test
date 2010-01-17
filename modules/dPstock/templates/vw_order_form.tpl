@@ -17,91 +17,112 @@
 {{assign var=nb_par_page value="25"}}	
 	
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css header=4 footer=4 nodebug=true}}
+{{include file=../../dPcompteRendu/css/print.css header=4 footer=2 nodebug=true}}
 
 table.print td{
  font-size: 11px;
  font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
 }
-
 </style>
 
 <div class="header">
   <h1>
-    <a href="#" onclick="window.print();">Bon de commande - {{mb_value object=$order->_ref_group field=text}}</a>
+    <a href="#" onclick="window.print();">
+      Bon de commande - {{$order->_ref_group}}
+    </a>
   </h1>
 </div>
 
-
 <div class="footer">
-
+  <span style="float: right;">
+    {{$smarty.now|date_format:$dPconfig.datetime}}
+  </span>
+  
+  Bon de commande n°{{$order->order_number}}
 </div>
 
-	<table class="print {{if $order->_ref_order_items|@count <= $nb_par_page}}bodyWithoutPageBreak{{else}}body{{/if}}" style="border-spacing:0">
-		<tr>
-			<td colspan="5" style="padding-bottom: 10px;">
-			  <table class="tbl">
-				  <tr>
-				    <th style="text-align: left; width: 50%;">Expéditeur</th>
-				    <th style="text-align: left; width: 50%;">Fournisseur</th>
-				  </tr>
-				  <tr>
-				    <td>
-				      {{assign var=group value=$order->_ref_group}}
-				      <strong>{{mb_value object=$group field=raison_sociale}}</strong><br />
-				      {{$group->adresse|nl2br}}<br />
-				      {{mb_value object=$group field=cp}} {{mb_value object=$group field=ville}}
-				      
-				      <br />
-				      {{if $group->tel}}
-				        <br />{{mb_title object=$group field=tel}}: {{mb_value object=$group field=tel}}
-				      {{/if}}
-				      
-				      {{if $group->fax}}
-				        <br />{{mb_title object=$group field=fax}}: {{mb_value object=$group field=fax}}
-				      {{/if}}
-				    </td>
-				    <td>
-				      {{assign var=societe value=$order->_ref_societe}}
-				      <strong>{{mb_value object=$societe field=name}}</strong><br />
-				      {{$societe->address|nl2br}}<br />
-				      {{mb_value object=$societe field=postal_code}} {{mb_value object=$societe field=city}}
-				      
-				      <br />
-				      {{if $societe->phone}}
-				        <br />{{mb_title object=$societe field=phone}}: {{mb_value object=$societe field=phone}}
-				      {{/if}}
-				      
-				      {{if $societe->fax}}
-				        <br />{{mb_title object=$societe field=fax}}: {{mb_value object=$societe field=fax}}
-				      {{/if}}
-				    </td>
-				  </tr>
-	     </table>
-	   </td>
+<table class="print {{if $order->_ref_order_items|@count <= $nb_par_page}}bodyWithoutPageBreak{{else}}body{{/if}}" style="border-spacing:0">
+	<tr>
+		<td colspan="5" style="padding-bottom: 10px;">
+		  <table class="form">
+        <col style="width: 10%" />
+        <col style="width: 40%" />
+        <col style="width: 10%" />
+        <col style="width: 40%" />
+        
+        <tr>
+          <th>Date</th>
+          <td>{{$smarty.now|date_format:$dPconfig.datetime}}</td>
+          <th>Numéro de commande</th>
+          <td>{{$order->order_number}}</td>
+        </tr>
+        
+        <tr>
+          <td colspan="4">
+            <hr />
+          </td>
+        </tr>
+        
+        <tr>
+			    <th>Expéditeur</th>
+          <td>
+            {{assign var=group value=$order->_ref_group}}
+            <strong>{{mb_value object=$group field=raison_sociale}}</strong><br />
+            {{$group->adresse|nl2br}}<br />
+            {{mb_value object=$group field=cp}} {{mb_value object=$group field=ville}}
+            
+            <br />
+            {{if $group->tel}}
+              <br />{{mb_title object=$group field=tel}}: {{mb_value object=$group field=tel}}
+            {{/if}}
+            
+            {{if $group->fax}}
+              <br />{{mb_title object=$group field=fax}}: {{mb_value object=$group field=fax}}
+            {{/if}}
+          </td>
+          
+			    <th>Fournisseur</th>
+			    <td>
+			      {{assign var=societe value=$order->_ref_societe}}
+			      <strong>{{mb_value object=$societe field=name}}</strong><br />
+			      {{$societe->address|nl2br}}<br />
+			      {{mb_value object=$societe field=postal_code}} {{mb_value object=$societe field=city}}
+			      
+			      <br />
+			      {{if $societe->phone}}
+			        <br />{{mb_title object=$societe field=phone}}: {{mb_value object=$societe field=phone}}
+			      {{/if}}
+			      
+			      {{if $societe->fax}}
+			        <br />{{mb_title object=$societe field=fax}}: {{mb_value object=$societe field=fax}}
+			      {{/if}}
+			    </td>
+			  </tr>
+	    </table>
+	  </td>
 	</tr>	
 	
 	<tr>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=supplier_code}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductReference field=supplier_code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProduct field=name}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=quantity}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=_price}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=quantity}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=_price}}</th>
   </tr>
 	
 	{{foreach from=$order->_ref_order_items item=curr_item name="foreach_products"}}
 	{{assign var=nb_pages value=$smarty.foreach.foreach_products.total/$nb_par_page}}
 	
 	{{if !$smarty.foreach.foreach_products.first && $smarty.foreach.foreach_products.index%$nb_par_page == 0}}
-		</table>
+</table>
 		{{assign var=iterations_restantes value=$smarty.foreach.foreach_products.total-$smarty.foreach.foreach_products.iteration}}
-    <table style="border-spacing:0" class="print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
-    <tr>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductReference field=supplier_code}}</th>
+<table style="border-spacing:0" class="print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
+  <tr>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductReference field=supplier_code}}</th>
     <th class="category" style="border: 1px solid black;">{{mb_title class=CProduct field=name}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=quantity}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
-    <th class="category" style="border: 1px solid black;">{{mb_title class=CProductOrderItem field=_price}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=quantity}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
+    <th class="category" style="border: 1px solid black; width: 0.1%;">{{mb_title class=CProductOrderItem field=_price}}</th>
   </tr>
   {{/if}}
 	

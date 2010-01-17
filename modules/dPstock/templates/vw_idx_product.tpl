@@ -124,7 +124,7 @@ function filterReferences(form) {
         </tr>
         <tr>
           <th>{{mb_label object=$product field="item_title"}}</th>
-          <td>{{mb_field object=$product field="item_title"}}</td>
+          <td>{{mb_field object=$product field="item_title" form="edit_product"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$product field="unit_quantity"}}</th>
@@ -132,11 +132,11 @@ function filterReferences(form) {
         </tr>
         <tr>
           <th>{{mb_label object=$product field="unit_title"}}</th>
-          <td>{{mb_field object=$product field="unit_title"}}</td>
+          <td>{{mb_field object=$product field="unit_title" form="edit_product"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$product field="packaging"}}</th>
-          <td>{{mb_field object=$product field="packaging"}}</td>
+          <td>{{mb_field object=$product field="packaging" form="edit_product"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">
