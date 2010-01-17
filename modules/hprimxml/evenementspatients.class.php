@@ -344,17 +344,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
     
     $dateHeure = "$date $heure";
-        
-    $etat = self::getEtatVenue($node);
-    if (($etat == "préadmission") || ($etat == "encours")) {
-      $mbVenue->entree_prevue = $dateHeure;
-    } 
-    if ($etat == "clôturée") {
-      if (!$mbVenue->_id) {
-        $mbVenue->entree_prevue = $dateHeure;
-      }
-      $mbVenue->entree_reelle = $dateHeure;
-    }
+
+  	if($mbVenue->entree_reelle) {
+  		$mbVenue->entree_reelle = $dateHeure;
+		} else {
+			$mbVenue->entree_prevue = $dateHeure;
+		}
        
     return $mbVenue;
   }
@@ -491,26 +486,21 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
     $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
-    $dateHeure = "$date $heure";
-
-    if (!$date) {
+		if ($date) {
+			$dateHeure = "$date $heure";
+		}
+    elseif (!$date && !$mbVenue->sortie_prevue) {
       $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
-    }
-    
-    $etat = self::getEtatVenue($node);
-    if (($etat == "préadmission") || ($etat == "encours")) {
-      if (!$mbVenue->sortie_prevue) {
-        $mbVenue->sortie_prevue = $dateHeure;
-      }
-    }
-    if ($etat == "clôturée") {
-      if (!$mbVenue->_id) {
-        $mbVenue->sortie_prevue = $dateHeure;
-      }
-      if (CAppUI::conf("hprimxml notifier_sortie_reelle")) {
-        $mbVenue->sortie_reelle = $dateHeure;
-      }
     } 
+    else {
+    	$dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
+    }
+
+  	if($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
+  		$mbVenue->sortie_reelle = $dateHeure;
+		} else {
+			$mbVenue->sortie_prevue = $dateHeure;
+		}
     
     $modeSortieHprim = $xpath->queryAttributNode("hprim:modeSortieHprim", $sortie, "valeur");
     if ($modeSortieHprim) {
