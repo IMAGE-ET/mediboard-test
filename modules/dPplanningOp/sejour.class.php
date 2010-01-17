@@ -570,7 +570,7 @@ class CSejour extends CCodable {
     
     //@TODO : mieux gérer les current et now dans l'updateDBFields et le store
     $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? mbDateTime() : $this->entree_reelle;
-    if($entree_reelle && $this->sortie_prevue > $entree_reelle) {
+    if($entree_reelle && ($this->sortie_prevue < $entree_reelle)) {
       $this->sortie_prevue = $this->type == "comp" ? mbDateTime("+1 DAY", $entree_reelle) : $entree_reelle;
     }
     
