@@ -547,15 +547,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue.= ":00";
     }
         
-		$this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle');
-    
-		// Synchro durée d'hospi / type d'hospi
-    $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
-    if($this->_at_midnight && $this->type == "ambu") {
-      $this->type = "comp";
-    } elseif(!$this->_at_midnight && $this->type == "comp") {
-      $this->type = "ambu";
-    }
+		$this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle', 'type');
     
     // Signaler l'action de validation de la sortie
     if ($this->_modifier_sortie === '1') {
@@ -576,7 +568,20 @@ class CSejour extends CCodable {
       $this->sortie_prevue = $this->sortie_reelle;
     }
     
-    //$this->sortie_prevue = max($this->sortie_prevue, $this->entree_reelle);
+    //@TODO : mieux gérer les current et now dans l'updateDBFields et le store
+    $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? mbDateTime() : $this->entree_reelle;
+    if($this->sortie_prevue > $entree_reelle) {
+      $this->sortie_prevue = $this->type == "comp" ? mbDate("+1 DAY", $entree_reelle) : $entree_reelle;
+    }
+    
+		// Synchro durée d'hospi / type d'hospi
+    $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
+    if($this->_at_midnight && $this->type == "ambu") {
+      $this->type = "comp";
+    } elseif(!$this->_at_midnight && $this->type == "comp") {
+      $this->type = "ambu";
+    }
+    
   }
 
   function getTemplateClasses(){
