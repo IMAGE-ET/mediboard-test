@@ -13,6 +13,7 @@
 {{else}}
   {{assign var=f value=$view_field}}
 {{/if}}
+
 <ul>
 {{foreach from=$matches item=match}}
   {{* Do not add carriage returns or it will add whitespace in the input *}}
