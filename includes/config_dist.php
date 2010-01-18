@@ -205,6 +205,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "tag_dossier"         => "",
   "tag_dossier_pa"      => "pa_",
   "tag_dossier_cancel"  => "cancel_",
+  "tag_dossier_trash"   => "trash_",
   "service_id_notNull"  => "0",
   "sortie_prevue"       => array(
     "comp"    => "24",

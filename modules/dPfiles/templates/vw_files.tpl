@@ -1,4 +1,4 @@
-{{include file="inc_files_functions.tpl"}}
+{{mb_include_script module="dPfiles" script="files"}}
 {{mb_include_script module="system" script="object_selector"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}

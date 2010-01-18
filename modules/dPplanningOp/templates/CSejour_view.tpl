@@ -1,4 +1,23 @@
-{{include file=CMbObject_view.tpl}}
+<table class="tbl">
+  <tr>
+    <th class="title text">
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
+
+      {{mb_include module=system template=inc_object_history object=$patient}}
+
+      {{mb_include module=system template=inc_object_notes object=$patient}}
+      
+      {{$object}}
+    </th>
+  </tr>
+  <tr>
+    <td>
+      {{foreach from=$object->_specs key=prop item=spec}}
+      {{mb_include module=system template=inc_field_view}}
+      {{/foreach}}
+    </td>
+  </tr>
+</table>
 
 {{assign var="sejour" value=$object}}
 <table class="tbl tooltip">

@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+{{mb_include_script module="dPfiles" script="files"}}
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="hprim21" script="pat_hprim_selector"}}
 {{mb_include_script module="hprim21" script="sejour_hprim_selector"}}

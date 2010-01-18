@@ -214,6 +214,7 @@ $locales['sip-hprim-error-I121'] = 'Numéro dossier non connu, IC connu. Associat
 $locales['sip-hprim-error-I122'] = 'Numéro dossier non connu, IC non fourni. Association Numéro dossier.';
 $locales['sip-hprim-error-I123'] = 'Numéro dossier connu, IC non fourni.';
 $locales['sip-hprim-error-I124'] = 'Numéro dossier connu, IC connu.';
+$locales['sip-hprim-error-I125'] = 'Numéro dossier non connu, IC connu avec un numéro de dossier. Poubelle Numéro dossier.';
 $locales['mod-sip-tab-vw_test_ws'] = 'Test WS';
 $locales['config-sip-pat_no_ipp'] = 'Patient n\'ayant pas d\'IPP';
 $locales['config-sip-pat_no_ipp-desc'] = 'Patient n\'ayant pas d\'IPP';

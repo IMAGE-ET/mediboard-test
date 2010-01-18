@@ -1,8 +1,7 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
-
-{{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
+{{mb_include_script module="dPfiles" script="files"}}
 
 <script type="text/javascript">
 

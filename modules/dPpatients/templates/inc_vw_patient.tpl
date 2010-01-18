@@ -26,9 +26,7 @@ Main.add(initNotes);
 
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
 
-      <a style="float:right;" href="#History-{{$patient->_guid}}" onclick="Patient.history('{{$patient->_id}}')">
-        <img src="images/icons/history.gif" alt="historique" />
-      </a>
+      {{mb_include module=system template=inc_object_history object=$patient}}
 
       {{mb_include module=system template=inc_object_notes object=$patient}}
 

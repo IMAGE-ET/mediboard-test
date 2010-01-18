@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
-{{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 {{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPfiles" script="files"}}
 
 <script type="text/javascript">
 

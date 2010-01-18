@@ -3,6 +3,12 @@
 <table class="tbl">
   <tr>
     <th colspan="2" class="title text">
+      {{mb_include module=system template=inc_object_idsante400 object=$patient}}
+
+      {{mb_include module=system template=inc_object_history object=$patient}}
+
+      {{mb_include module=system template=inc_object_notes object=$patient}}
+      
       {{$patient}}
     </th>
   </tr>
