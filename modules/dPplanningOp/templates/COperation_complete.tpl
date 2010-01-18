@@ -4,10 +4,10 @@
 
   <tr>
     <th class="title" colspan="2">
-      {{mb_include module=system template=inc_object_idsante400 object=$object}}
-      {{mb_include module=system template=inc_object_history    object=$object}}
-      {{mb_include module=system template=inc_object_notes      object=$object}}
-      {{$operation->_view}}
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history}}
+      {{mb_include module=system template=inc_object_notes}}
+      {{$operation}}
     </th>
   </tr>
   
