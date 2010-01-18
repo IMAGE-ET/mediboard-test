@@ -97,12 +97,14 @@ class CMySQLDataSource extends CSQLDataSource {
   }
 
   function escape($value) {
+    // @todo: mysql_escape_string is deprecated if PHP5.3, use mysql_real_escape_string instead
+    //return mysql_real_escape_string($value);
     return mysql_escape_string($value);
   }
   
   function prepareLike($value) {
     $value = preg_replace('`\\\\`', '\\\\\\', $value);
-    return "LIKE '$value'";
+    return $this->prepare("LIKE %", $value);
   }
 
   function version() {

@@ -34,7 +34,8 @@ $total = $delivery->countList($where);
 
 $stocks_service = array();
 foreach($deliveries as $_delivery) {
-  $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
+  if ($_delivery->_ref_stock->_id)
+    $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
 }
 
 // Création du template

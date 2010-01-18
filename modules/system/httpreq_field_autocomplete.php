@@ -17,6 +17,7 @@ $input       = CValue::get($input_field);
 $limit       = CValue::get('limit', 30);
 $wholeString = CValue::get('wholeString', 'false') == 'true';
 
+$input = str_replace("\\'", "'", $input);
 $search = $wholeString ? "%$input%" : "$input%";
 
 $object = new $class;
@@ -26,8 +27,10 @@ $matches = array();
 $count = 0;
 
 if ($spec instanceof CRefSpec) {
-	$target_object = new $spec->class;
-	$where = "`$view_field` ".$ds->prepareLike($search);
+  $target_object = new $spec->class;
+  $where = array(
+    $view_field => $ds->prepareLike($search)
+  );
   
   if ($spec->perm) {
     $permsTable = array(
@@ -45,7 +48,9 @@ if ($spec instanceof CRefSpec) {
   }
 }
 else {
-	$where = "`$field` ".$ds->prepareLike($search);
+  $where = array(
+    $field => $ds->prepareLike($search)
+  );
 	$matches = $object->loadList($where, $field, $limit, $field);
   /*$counts = CMbArray::pluck($object->countMultipleList($where, $field, $limit, $field), "total");
   $count = count($counts);

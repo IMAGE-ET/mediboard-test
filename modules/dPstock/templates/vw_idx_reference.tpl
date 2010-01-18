@@ -133,6 +133,10 @@ function filterReferences(form) {
           <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=8}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$reference field="tva"}}</th>
+          <td>{{mb_field object=$reference field="tva" increment=1 form=edit_reference decimals=1 min=0 size=2}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$reference field="mdq"}}</th>
           <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4}}</td>
         </tr>

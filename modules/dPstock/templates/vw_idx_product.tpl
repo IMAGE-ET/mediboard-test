@@ -110,6 +110,10 @@ function filterReferences(form) {
           <td>{{mb_field object=$product field="description"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$product field="classe_comptable"}}</th>
+          <td>{{mb_field object=$product field="classe_comptable"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$product field="renewable"}}</th>
           <td>{{mb_field object=$product field="renewable"}}</td>
         </tr>
@@ -117,7 +121,9 @@ function filterReferences(form) {
           <th>{{mb_label object=$product field="cancelled"}}</th>
           <td>{{mb_field object=$product field="cancelled"}}</td>
         </tr>
-        <tr><th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th></tr>
+        <tr>
+          <th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th>
+        </tr>
         <tr>
           <th>{{mb_label object=$product field="quantity"}}</th>
           <td>{{mb_field object=$product field="quantity"}}</td>

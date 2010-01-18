@@ -464,6 +464,12 @@ class CSetupdPstock extends CSetup {
               ADD `supplier_code` VARCHAR (80)";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.16";
+    $this->makeRevision('1.16');
+    $sql = "ALTER TABLE `product` ADD `classe_comptable` INT (7) UNSIGNED";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_reference` ADD `tva` FLOAT UNSIGNED DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.17";
   }
 }

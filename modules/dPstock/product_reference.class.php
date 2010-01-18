@@ -17,6 +17,7 @@ class CProductReference extends CMbObject {
   var $societe_id    = null;
   var $quantity      = null;
   var $price         = null;
+  var $tva           = null;
   var $code          = null;
   var $supplier_code = null;
   var $mdq           = null; // minimum delivery quantity
@@ -42,6 +43,7 @@ class CProductReference extends CMbObject {
     $specs['societe_id']  = 'ref notNull class|CSociete';
     $specs['quantity']    = 'num notNull pos';
     $specs['price']       = 'currency notNull';
+    $specs['tva']         = 'pct min|0 default|0';
     $specs['code']        = 'str seekable';
     $specs['supplier_code'] = 'str seekable';
     $specs['mdq']         = 'num min|0';

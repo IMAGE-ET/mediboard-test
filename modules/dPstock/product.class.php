@@ -25,6 +25,7 @@ class CProduct extends CMbObject {
   var $packaging         = null;
   var $renewable         = null;
   var $cancelled         = null;
+  var $classe_comptable  = null;
 
   // Object References
   //    Single
@@ -76,6 +77,7 @@ class CProduct extends CMbObject {
     $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0';
+    $specs['classe_comptable'] = 'numchar maxLength|7';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';

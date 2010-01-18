@@ -40,7 +40,7 @@ class CProductDelivery extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['stock_id']          = 'ref notNull class|CProductStockGroup';
+    $specs['stock_id']          = 'ref class|CProductStockGroup'; // can be null when the stock doesn't exist in the group
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['quantity']          = 'num notNull';
     $specs['service_id']        = 'ref notNull class|CService';
@@ -119,6 +119,7 @@ class CProductDelivery extends CMbObject {
     } else {
       return ($this->_ref_stock->getPerm($permType));
     }
+    return true;
   }
 }
 ?>

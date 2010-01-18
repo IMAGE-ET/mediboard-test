@@ -29,7 +29,6 @@
 
   <!-- Formulaire de dispensation -->
   <td style="text-align: left;">
-    <script type="text/javascript">prepareForm('form-dispensation-{{$stock->_id}}');</script>
     <form name="form-dispensation-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
       <input type="hidden" name="m" value="dPstock" />
       <input type="hidden" name="tab" value="{{$tab}}" />

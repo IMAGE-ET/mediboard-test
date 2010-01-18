@@ -63,7 +63,7 @@
         </tr>
 				<tr>
           <th>{{mb_label object=$stock_location field="_before"}}</th>
-          <td>{{mb_field object=$stock_location field="_before" form="edit_stock_location"}}</td>
+          <td>{{mb_field object=$stock_location field="_before" form="edit_stock_location" autocomplete="true,2,30,false,true"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="4">

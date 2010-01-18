@@ -492,17 +492,20 @@ class CMbFieldSpec {
 
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
-    $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false");
+    $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false");
     $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
     $spec         = $object->_specs[$field];
     $ref = false;
 
-    list($activated, $minChars, $limit, $wholeString) = explode(',', $autocomplete);
-    if ($this->autocomplete && $form && $activated == 'true') {
-    	if ($minChars === null) $minChars = 2;
-    	if ($limit === null) $limit = 30;
-    	if ($wholeString === null) $wholeString = false;
+    // @todo: use a better way of getting options
+    @list($activated, $minChars, $limit, $wholeString, $dropdown) = explode(',', $autocomplete);
+    
+    if ($this->autocomplete && $form && $activated === 'true') {
+    	if ($minChars === null || $minChars === "")       $minChars = 2;
+    	if ($limit === null || $limit === "")             $limit = 30;
+    	if ($wholeString === null || $wholeString === "") $wholeString = false;
+      if ($dropdown === null || $dropdown === "" || $dropdown === "false") $dropdown = false;
     	
       $options = explode('|', $this->autocomplete);
       $view_field = reset($options);
@@ -538,7 +541,7 @@ class CMbFieldSpec {
 			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {
 			    minChars: '.$minChars.',
 			    method: "get",
- 			    dropdown: '.($ref ? 'false' : 'true');
+ 			    dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
     	
     	if ($ref) {
 			  $sHtml .= ',

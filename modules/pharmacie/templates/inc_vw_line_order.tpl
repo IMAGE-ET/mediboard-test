@@ -19,9 +19,21 @@
     {{/if}}
   </td>
   <td>
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
-      {{$curr_delivery->_ref_stock->_view}}
-    </span>
+    {{if $curr_delivery->_ref_stock->_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
+        {{$curr_delivery->_ref_stock->_view}}
+      </span>
+    {{else}}
+    <form name="dispensation-stock-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post">
+      <input type="hidden" name="m" value="dPstock" /> 
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_delivery_aed" />
+      <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
+      {{mb_field object=$curr_delivery field=stock_id autocomplete=true form=dispensation-validate-$id}}
+      <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
+      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
+    </form>
+    {{/if}}
   </td>
   <td class="text">{{$curr_delivery->comments}}</td>
   {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
@@ -45,7 +57,9 @@
   *}}
   
   <td style="text-align: center;">
-    {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
+    {{if $curr_delivery->_ref_stock->_id}}
+      {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
+    {{/if}}
   </td>
   <td>
     <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}}>
