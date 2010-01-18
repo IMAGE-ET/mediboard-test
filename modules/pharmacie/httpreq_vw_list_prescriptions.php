@@ -51,6 +51,8 @@ if($valide_pharma == 0){
   $where[] = "prescription_line_medicament.substitution_active = '1' OR perfusion.substitution_active = '1'";
 }
 
+$where[] = "prescription_line_medicament.child_id IS NULL AND perfusion.next_perf_id IS NULL";
+
 // Filtre sur le praticiens (lignes)
 if($praticien_id){
   $where[] = "prescription_line_medicament.praticien_id = '$praticien_id' OR perfusion.praticien_id = '$praticien_id'";
