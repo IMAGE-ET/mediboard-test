@@ -28,9 +28,14 @@ function updatePatientsListHeight() {
 }
 
 function updateListPrescrition(){
-  var url = new Url("pharmacie", "httpreq_vw_list_prescriptions");
+	var tr_selected = $('prescriptions-list').select('tr.selected')[0];
+	var url = new Url("pharmacie", "httpreq_vw_list_prescriptions");
 	url.addFormData(getForm("filterForm"));
-	url.requestUpdate('prescriptions-list');
+	url.requestUpdate('prescriptions-list', { onComplete: function(){
+	  if(tr_selected){
+      $(tr_selected.id).addUniqueClassName('selected');
+		}
+	} });
 }
 
 Main.add(function () {
@@ -108,7 +113,7 @@ Main.add(function () {
     <td>
       <div id="prescription_pharma">
       {{include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 pharma=1 mode_pack=0}}
-      </div>
+			</div>
     </td>
   </tr>
 </table>
