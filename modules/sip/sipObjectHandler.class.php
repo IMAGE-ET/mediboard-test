@@ -100,8 +100,8 @@ class CSipObjectHandler extends CMbObjectHandler {
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
-          if ($mbObject->_hprim_initiateur_group_id == $_destinataire->group_id) {
-            continue;
+          if ($mbObject->_hprim_initiateur_group_id) {
+            return;
           }
 
           if (!$mbObject->_IPP) {
