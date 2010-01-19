@@ -42,10 +42,10 @@ if($type == "sejour" || $type == "sortie_manquante"){
 if($signee == "0"){ 
   if($praticien_id){
     $where[] = "(prescription_line_element.praticien_id = '$praticien_id' AND prescription_line_element.signee != '1') 
-                OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1')
-                OR (perfusion.praticien_id = '$praticien_id' AND perfusion.signature_prat != '1')";
+                OR (prescription_line_medicament.praticien_id = '$praticien_id' AND prescription_line_medicament.signee != '1' AND prescription_line_medicament.substitution_active = '1')
+                OR (perfusion.praticien_id = '$praticien_id' AND perfusion.signature_prat != '1' AND perfusion.substitution_active = '1')";
   } else {
-    $where[] = "(prescription_line_element.signee != '1') OR (prescription_line_medicament.signee != '1') OR (perfusion.signature_prat != '1')";
+    $where[] = "(prescription_line_element.signee != '1') OR (prescription_line_medicament.signee != '1' AND prescription_line_medicament.substitution_active = '1') OR (perfusion.signature_prat != '1' AND perfusion.substitution_active = '1')";
   }
 } else {
   if($praticien_id){
