@@ -22,6 +22,7 @@ if (!$echange_hprim_id) {
   $where['statut_acquittement'] = "IS NULL";
 	$where['emetteur'] = " = '".CAppUI::conf("mb_id")."'";
 	$where['message_valide'] = " = '1'";
+  $where['acquittement_valide'] = "IS NULL"; 
 	
   $notifications = $echange_hprim->loadList($where, null, $limit);
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
