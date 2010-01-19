@@ -287,6 +287,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         
         if (isset($num_dossier->_trash)) {
           $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$dest_hprim->_tag_sejour;
+          $num_dossier->loadMatchingObject();
           $codes = array("I125");
           $commentaire = "Sejour non récupéré. Impossible d'associer le numéro de dossier.";
         }
