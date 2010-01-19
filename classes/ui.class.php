@@ -458,7 +458,7 @@ class CAppUI {
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
-    if (!self::checkPasswordAttempt($user)) {
+    if ($user->template || !self::checkPasswordAttempt($user)) {
       return false;
     }
         
