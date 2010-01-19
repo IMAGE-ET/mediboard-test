@@ -84,6 +84,15 @@ Main.add(function () {
 <table class="main">  
   <tr>
     <td class="greedyPane">
+      {{if $listPlages|@count > 1}}
+      <div class="small-warning">
+        Plusieurs blocs sont disponible, veillez à bien choisir le bloc souhaité
+      </div>
+      {{elseif $listPlages|@count == 0}}
+      <div class="small-info">
+        Vous n'avez pas de plage ce mois-ci, vous pouvez contacter le responsable de bloc pour ajouter une vacation
+      </div>
+      {{/if}}
       <ul id="main_tab_group" class="control_tabs">
         {{foreach from=$listPlages key=_key_bloc item=_blocplage}}
         {{assign var=_bloc value=$blocs.$_key_bloc}}
@@ -290,7 +299,7 @@ Main.add(function () {
         <tr>
           <td colspan="3" class="button">
             <button class="cancel" type="button" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
-            <button class="tick" type="button" onclick="setClose('', '')">{{tr}}Select{{/tr}}</button>          
+            <button class="tick" type="button" onclick="setClose('', '')">{{tr}}OK{{/tr}}</button>          
           </td>
         </tr>
       </table>

@@ -26,18 +26,18 @@ class CProtocole extends CMbObject {
   var $septique      = null;
 
   // DB Fields Operation
-  var $codes_ccam      = null;
-  var $libelle         = null;
-  var $temp_operation  = null;
-  var $examen          = null;
-  var $materiel        = null;
-  var $duree_hospi     = null;
-  var $rques_operation = null; // Operation->rques
-  var $depassement     = null;
-  var $forfait         = null;
-  var $fournitures     = null;
+  var $codes_ccam        = null;
+  var $libelle           = null;
+  var $temp_operation    = null;
+  var $examen            = null;
+  var $materiel          = null;
+  var $duree_hospi       = null;
+  var $rques_operation   = null; // Operation->rques
+  var $depassement       = null;
+  var $forfait           = null;
+  var $fournitures       = null;
   var $service_id_sejour = null;
-  var $libelle_sejour  = null;
+  var $libelle_sejour    = null;
 
   // DB fields linked protocols
   var $protocole_prescription_chir_id   = null;
@@ -55,6 +55,7 @@ class CProtocole extends CMbObject {
 
   // External references
   var $_ext_codes_ccam = null;
+  var $_ext_code_cim   = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -146,13 +147,21 @@ class CProtocole extends CMbObject {
     }
   }
 
+  function loadExtCodeCIM() {
+    $this->_ext_code_cim = new CCodeCIM10($this->DP);
+    $this->_ext_code_cim->loadLite();
+  }
+
   function loadRefsFwd() {
     $this->loadRefChir();
     $this->loadRefPrescriptionChir();
     $this->loadRefPrescriptionAnesth();
     $this->loadExtCodesCCAM();
+    $this->loadExtCodeCIM();
     $this->_view = "Protocole du Dr {$this->_ref_chir->_view}";
-    if($this->libelle) {
+    if($this->libelle_sejour) {
+      $this->_view .= " - $this->libelle_sejour";
+    } elseif($this->libelle) {
       $this->_view .= " - $this->libelle";
     } else {
       foreach($this->_ext_codes_ccam as $key => $ccam) {

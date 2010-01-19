@@ -92,34 +92,33 @@ Main.add(function(){
         {{else}}
         <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$_protocole->_id}}">
         {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_protocole->_guid}}');">
           <strong>
-            {{$_protocole->_ref_chir->_view}} 
-            
+            {{$_protocole->_ref_chir->_view}}
             {{if $key_type == 'interv'}}
-              {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
-              &mdash; {{$_code->code}}
-              {{/foreach}}
+              {{if $_protocole->libelle}}
+                - <em>[{{$_protocole->libelle}}]</em>
+              {{/if}}
             {{else}}
-              &mdash; {{$_protocole->duree_hospi}} nuits
-            {{/if}}
-            
-            {{if $_protocole->DP}}
-              &mdash; {{$_protocole->DP}}
+              {{if $_protocole->libelle_sejour}}
+                - <em>[{{$_protocole->libelle_sejour}}]</em>
+              {{/if}}
             {{/if}}
           </strong>
+          </span>
         </a>
-        
-        {{if $key_type == 'interv'}}
-          {{if $_protocole->libelle}}
-            <em>[{{$_protocole->libelle}}]</em>
-            <br />
-          {{/if}}
-          {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
-          {{$_code->libelleLong}} <br />
-          {{/foreach}}
-        {{else}}
-          {{* afficher des champs de séjour *}}
+        {{$_protocole->duree_hospi}} nuits en {{mb_value object=$_protocole field=type}}
+        <br />
+        {{if $_protocole->_ext_code_cim->code}}
+          {{$_protocole->_ext_code_cim->code}}
+          <em>[{{$_protocole->_ext_code_cim->libelle|truncate:80}}]</em>
+          <br />
         {{/if}}
+        {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
+          {{$_code->code}}
+          <em>[{{$_code->libelleLong|truncate:80}}]</em>
+          <br />
+        {{/foreach}}
       </td>
     </tr>
     {{foreachelse}}
