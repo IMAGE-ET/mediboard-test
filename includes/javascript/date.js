@@ -539,6 +539,10 @@ var Calendar = {
     
     var datepicker = new Control.DatePicker(elementView, options);
     
+    if (options.inline) {
+      Event.stopObserving(document, 'click', datepicker.hidePickerListener);
+    }
+    
     if (options.noView) {
       datepicker.element.setStyle({width: 0, height: 0, border: 'none'});
       datepicker.element.up().setStyle({width: "12px"});
