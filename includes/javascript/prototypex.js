@@ -237,6 +237,16 @@ Element.addMethods('select', {
   }
 });
 
+Element.addMethods('form', {
+  clear: function(form){
+    $A(form.elements).each(function(e){
+      if (e.type != "hidden") {
+        $V(e, '');
+      }
+    });
+  }
+});
+
 Object.extend(Event, {
   key: function(e){
     return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;

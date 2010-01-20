@@ -49,10 +49,16 @@ function $V (element, value, fire) {
   
   // We get the tag and the type
   var tag  = element.tagName || '',
-      type = element.type || '';
+      type = element.type || '',
+      isInput = tag.match(/^(input|select|textarea)$/i),
+      isElement = Object.isElement(element);
+
+  if (isElement && !isInput) {
+    return;
+  }
 
   // If it is a form element
-  if (Object.isElement(element) && tag.match(/^(input|select|textarea)$/i)) {
+  if (isInput && isElement) {
     // If the element is a checkbox, we check if it's checked
     var oldValue = (type.match(/^checkbox$/i) ? element.checked : $F(element));
 

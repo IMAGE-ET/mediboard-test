@@ -199,14 +199,17 @@ var Url = Class.create({
     // Prefixed window collection
     if (sPrefix) {
       (this.oPrefixed[sPrefix] || []).each(function (oWindow) { 
+        oWindow.blur(); // Chrome issue
         oWindow.focus();
       });
     }
 
-    if (this.oWindow)
+    if (this.oWindow) {
+      this.oWindow.blur(); // Chrome issue
       this.oWindow.focus();
-    else 
+    } else {
       this.showPopupBlockerAlert(sWindowName);
+    }
       
     return this;
   },
