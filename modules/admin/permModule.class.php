@@ -8,15 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $permissionSystemeDown;
-$sql = "SHOW TABLE STATUS LIKE 'perm_module'";
-
-$permissionSystemeDown = !CSQLDataSource::get("std")->loadResult($sql);
-
 /**
  * The CPermModule class
  */
 class CPermModule extends CMbObject {
+  static $system_down = false;
+
+  // Constants
+  const DENY = 0;
+  const READ = 1;
+  const EDIT = 2;
+  
+  // Permissions for connected user
+  static $users_perms = null;
+  static $users_queries = null;
+	
   // DB Table key
   var $perm_module_id = null;
 
@@ -69,13 +75,54 @@ class CPermModule extends CMbObject {
     );
     return $perm->loadList($where);
   }
+	
+  /**
+   * Build the class object permission tree for given user
+   * Cache the result as static member
+   * @param user_id ref|CUser The concerned user, connected user if null
+   * @return void
+   */
+  static function buildUser($user_id = null) {
+    $user = CUser::get($user_id);
+
+    // Never reload permissions for a given user
+    if (isset(self::$users_perms[$user->_id])) {
+      return;
+    }
+    
+    $perm = new CPermModule;
+
+    // Profile specific permissions
+    $perms["prof"] = array();
+    if ($user->profile_id) {
+      $perm->user_id = $user->profile_id;
+      $perms["prof"] = $perm->loadMatchingList();
+    }
+
+    // User specific permissions
+    $perm->user_id = $user->_id;
+    $perms["user"] = $perm->loadMatchingList();
+    
+    // Build final tree
+    foreach($perms as $owner => $_perms) {
+      foreach($_perms as $_perm) {
+        self::$users_perms[$user->_id][$_perm->mod_id ? $_perm->mod_id : "all"] = array(
+				  "permission" => $_perm->permission,
+					"view"       => $_perm->view,
+				);
+      }
+    }
+    
+    self::$users_queries = array();
+    mbTrace(self::$users_perms);
+  }	
   
   static function loadUserPerms($user_id = null) {
-    global $AppUI, $userPermsModules, $permissionSystemeDown;
-    
-    if($permissionSystemeDown) {
+    if (CPermModule::$system_down) {
       return true;
     }
+    
+    global $AppUI, $userPermsModules;
     
     // Déclaration du user
     $user = new CUser();
@@ -131,7 +178,9 @@ class CPermModule extends CMbObject {
         }
       }
       return $currPermsModules;
-    } else {
+    } 
+		
+		else {
       $userPermsModules = array();
       foreach($listPermsModules as $perm_mod) {
         if(!$perm_mod->mod_id){
@@ -153,11 +202,12 @@ class CPermModule extends CMbObject {
   }
   
   static function getInfoModule($field, $mod_id, $permType, $user_id = null) {
-    global $userPermsModules, $permissionSystemeDown;
-    if($permissionSystemeDown) {
+    if (CPermModule::$system_down) {
       return true;
     }
     
+    global $userPermsModules;
+		
     $result = PERM_DENY;
     if($user_id !== null) {
       $perms = CPermModule::loadUserPerms($user_id);
@@ -205,6 +255,11 @@ class CPermModule extends CMbObject {
   }
 }
 
+
+// Check if permission system is down
+CPermModule::$system_down = !CSQLDataSource::get("std")->loadTable("perm_module");
 CPermModule::loadUserPerms();
+//CPermModule::buildUser();
+//CPermModule::buildUser(10);
 
 ?>

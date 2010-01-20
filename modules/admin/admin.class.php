@@ -148,6 +148,16 @@ class CUser extends CMbObject {
       $this->_props['_user_password_weak'];
   }
 
+  /**
+   * Lazy access to a gven user, defaultly connected user
+   * @param $user_id ref|CUser The user id, connected user if null;
+   * @return CUser
+   */
+  static function get($user_id = null) {
+		$user = new CUser;
+		return $user->getCached(CValue::first($user_id, CAppUI::$user->_id));
+  }
+	
   function loadRefMediuser() {
     $user = new CMediusers();
     if ($user->isInstalled()) {

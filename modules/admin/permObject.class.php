@@ -18,6 +18,16 @@ if(!defined("PERM_DENY")) {
  * The CPermObject class
  */
 class CPermObject extends CMbObject {
+	
+	// Constants
+  const DENY = 0;
+  const READ = 1;
+  const EDIT = 2;
+	
+	// Permissions for connected user
+	static $users_perms = null;
+	static $users_queries = null;
+	
   // DB Table key
   var $perm_object_id = null;
   
@@ -71,12 +81,50 @@ class CPermObject extends CMbObject {
     return $perm->loadList($where);
   }
   
+  /**
+   * Build the class object permission tree for given user
+   * Cache the result as static member
+   * @param user_id ref|CUser The concerned user, connected user if null
+   * @return void
+   */
+	static function buildUser($user_id = null) {
+    $user = CUser::get($user_id);
+
+    // Never reload permissions for a given user
+		if (isset(self::$users_perms[$user->_id])) {
+			return;
+		}
+		
+    $perm = new CPermObject;
+
+    // Profile specific permissions
+    $perms["prof"] = array();
+    if ($user->profile_id) {
+      $perm->user_id = $user->profile_id;
+      $perms["prof"] = $perm->loadMatchingList();
+    }
+
+    // User specific permissions
+		$perm->user_id = $user->_id;
+		$perms["user"] = $perm->loadMatchingList();
+		
+		// Build final tree
+		foreach($perms as $owner => $_perms) {
+			foreach($_perms as $_perm) {
+				self::$users_perms[$user->_id][$_perm->object_class][$_perm->object_id ? $_perm->object_id : "all"] = $_perm->permission;
+			}
+		}
+		
+    self::$users_queries = array();
+	}
+	
   // Those functions are statics
   static function loadUserPerms($user_id = null) {
-    global $AppUI, $userPermsObjects, $permissionSystemeDown;
-    if($permissionSystemeDown) {
+    if (CPermModule::$system_down) {
       return true;
     }
+
+    global $AppUI, $userPermsObjects;
     
     // Déclaration du user
     $user = new CUser();
@@ -126,14 +174,37 @@ class CPermObject extends CMbObject {
         $userPermsObjects[$perm_obj->object_class][$perm_obj->object_id] = $perm_obj;
       }
     }
-    return $userPermsObjects;
+		
+//		foreach($userPermsObjects as $class => $userPermByClass) {
+//      foreach($userPermByClass as $userPerm) {
+//	   		mbTrace($userPerm->getDBFields(), "[$userPerm->object_class][$userPerm->object_id]");
+//      }
+//    }
   }
   
   static function getPermObject(CMbObject $object, $permType) {
-    global $userPermsObjects, $permissionSystemeDown;
-    if($permissionSystemeDown) {
+    if (CPermModule::$system_down) {
       return true;
     }
+
+//    mbTrace($permType, $object->_guid);
+		
+    if (is_array(self::$users_perms)) {
+    	$perms = self::$users_perms[CAppUI::$user->_id];
+    	$class = $object->_class_name;
+	    $id    = $object->_id;
+			
+    	if (!isset(self::$users_queries[$class][$id])) {
+    		// query object permission and cache it
+//      $perm = 
+//        isset($perms[$class][id]    ? $perms[$class][id] :
+//        isset($perms[$class]["all"] ? $perms[$class]["all"] :
+//        CModule
+    	}
+			// return queried object permission
+    }
+
+    global $userPermsObjects;
 
     $result = PERM_DENY;
     $object_class = $object->_class_name;
@@ -181,5 +252,6 @@ class CPermObject extends CMbObject {
 }
 
 CPermObject::loadUserPerms();
+//CPermObject::buildUser();
 
 ?>
