@@ -13,6 +13,7 @@ $can->needsRead();
 
 $category_id = CValue::getOrSession('category_id');
 $societe_id  = CValue::getOrSession('societe_id');
+$product_id  = CValue::getOrSession('product_id');
 $start       = CValue::get('start');
 $keywords    = CValue::get('keywords');
 
@@ -42,6 +43,7 @@ foreach($list_products as $prod) {
 $smarty = new CSmartyDP();
 
 $smarty->assign('list_products', $list_products);
+$smarty->assign('product_id', $product_id);
 $smarty->assign('total', $total);
 $smarty->assign('start', $start);
 

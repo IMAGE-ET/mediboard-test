@@ -23,7 +23,7 @@
   </tr>
   {{foreach from=$list_products item=curr_product}}
     <tbody class="hoverable">
-    <tr>
+    <tr {{if $curr_product->_id == $product_id}}class="selected"{{/if}}>
       <td colspan="4">
         <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">
           <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
@@ -32,7 +32,7 @@
         </a>
       </td>
     </tr>
-    <tr>
+    <tr {{if $curr_product->_id == $product_id}}class="selected"{{/if}}>
       <td style="padding-left: 2em;">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_ref_societe->_guid}}')">
           {{$curr_product->_ref_societe}}
