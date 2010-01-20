@@ -331,7 +331,7 @@ class CMediusers extends CMbObject {
   function loadProtocoles() {
     $where = array("chir_id" => "= '$this->user_id'");
     $protocoles = new CProtocole;
-    $this->_ref_protocoles = $protocoles->loadList($where, "codes_ccam");
+    $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
 
   /**
