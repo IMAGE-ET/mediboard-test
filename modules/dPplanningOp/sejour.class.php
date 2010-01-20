@@ -351,7 +351,7 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    if ($this->annule || $sejour->annule || $this->type == "urg" || $sejour->type == "urg" || ) {
+    if ($this->annule || $sejour->annule || $this->type == "urg" || $sejour->type == "urg") {
       return false;
     }
 		
