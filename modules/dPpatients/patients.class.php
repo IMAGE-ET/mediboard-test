@@ -298,31 +298,20 @@ class CPatient extends CMbObject {
     if ($msg = parent::checkMerge($patients)) {
       return $msg;
     }
-    foreach($patients as &$patient1) {
-      if (!$patient1->_ref_sejours)
-        $patient1->loadRefsSejours();
-      
-      //FIXME: parfois _ref_sejours est NULL, pas array()
-      if (!$patient1->_ref_sejours) continue;
-      
-      foreach($patients as &$patient2) {
-        if ($patient1->_id == $patient2->_id) continue;
-        
-        if (!$patient2->_ref_sejours)
-          $patient2->loadRefsSejours();
-
-        if (!$patient2->_ref_sejours) continue;
-          
-        foreach($patient1->_ref_sejours as $sej_pat1) {
-          foreach($patient2->_ref_sejours as $sej_pat2) {
-            if($sej_pat1->collides($sej_pat2)) {
-              return "Conflit de séjours entre $patient1->_view et $patient2->_view";
-            }
-          }
+		
+		$sejour = new CSejour;
+		$where["patient_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($patients, "_id"));
+		$sejours = $sejour->loadList($where);
+		
+		foreach ($sejours as $_sejour1) {
+	    foreach ($sejours as $_sejour2) {
+        if ($_sejour1->collides($_sejour2)) {
+          $_sejour1->loadRefPatient(1);
+          $_sejour2->loadRefPatient(1);
+          return CAppUI::tr("CPatient-merge-warning-venue-conflict", $_sejour1, $_sejour2);
         }
-      }
-    }
-    return null;
+	    }
+		}
   }
   
   function merge($objects = array/*<CPatient>*/()) {
