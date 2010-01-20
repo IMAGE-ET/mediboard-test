@@ -121,7 +121,7 @@
 </tr>
 
 {{if $dPconfig.dPsalleOp.COperation.modif_salle && !($_operation->_deplacee && $_operation->salle_id != $salle->_id) && @$allow_moves|default:1}}
-<tr>
+<tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="dosql" value="do_planning_aed" />
