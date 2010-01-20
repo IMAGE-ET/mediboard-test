@@ -80,7 +80,7 @@
 		{{/if}}
   </tr>
 	<tr>
-    <th>Risque Anesthesique - Prophylaxie</th>
+    <th>Risque Anesthesique - Thrombo prophylaxie</th>
     <td style="text-align: center;">&mdash;</td>
 		{{if $sejour->_id}}
     <td style="text-align: center;">
