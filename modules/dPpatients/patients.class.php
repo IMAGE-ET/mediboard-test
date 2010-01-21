@@ -308,7 +308,7 @@ class CPatient extends CMbObject {
         if ($_sejour1->collides($_sejour2)) {
           $_sejour1->loadRefPatient(1);
           $_sejour2->loadRefPatient(1);
-          return CAppUI::tr("CPatient-merge-warning-venue-conflict", $_sejour1, $_sejour2);
+          return CAppUI::tr("CPatient-merge-warning-venue-conflict", $_sejour1->_view, $_sejour2->_view);
         }
 	    }
 		}
