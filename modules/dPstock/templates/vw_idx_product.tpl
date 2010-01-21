@@ -35,14 +35,14 @@ function filterReferences(form) {
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="this.form.onsubmit()">
-          <option value="0" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
+          <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <select name="societe_id" onchange="this.form.onsubmit()" style="width: 13em;">
-          <option value="0">&ndash; Tous les fournisseurs</option>
+          <option value="">&ndash; Tous les fournisseurs</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -51,7 +51,7 @@ function filterReferences(form) {
         <input type="text" name="keywords" value="" />
         
         <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="this.form.reset()"></button>
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
       </form>
 
       <div id="list-products"></div>
@@ -151,6 +151,25 @@ function filterReferences(form) {
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
+            
+            <!-- purge: a supprimer pour le 27/01/2010 -->
+            <input type="hidden" name="_purge" value="0" />
+            <script type="text/javascript">
+             confirmPurge = function(form) {
+               if (confirm("ATTENTION : Vous êtes sur le point de supprimer un produit, ainsi que tous les objets qui s'y rattachent")) {
+                 form._purge.value = 1;
+                 confirmDeletion(form,  {
+                   typeName:'le produit',
+                   objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'
+                 } );
+               }
+             }
+            </script>
+            <button type="button" class="cancel" onclick="confirmPurge(this.form)">
+              {{tr}}Purge{{/tr}}
+            </button>
+            <!-- /purge -->
+            
             {{else}}
             <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}

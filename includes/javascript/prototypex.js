@@ -238,10 +238,10 @@ Element.addMethods('select', {
 });
 
 Element.addMethods('form', {
-  clear: function(form){
+  clear: function(form, fire){
     $A(form.elements).each(function(e){
       if (e.type != "hidden") {
-        $V(e, '');
+        $V(e, '', fire)
       }
     });
   }
