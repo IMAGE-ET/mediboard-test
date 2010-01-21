@@ -171,6 +171,9 @@ reloadPatient = function(patient_id, link){
 <form name="fusion" action="?" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="a" value="fusion_pat" />
+<input type="hidden" name="readonly_class" value="1" />
+<input type="hidden" name="objects_class" value="CPatient" />
+
 <table class="tbl" id="list_patients">
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
@@ -193,39 +196,39 @@ reloadPatient = function(patient_id, link){
      value="vw_full_patients&patient_id=" 
      other="vw_idx_patients&patient_id="}}
   
-  {{foreach from=$patients item=curr_patient}}
-  <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
+  {{foreach from=$patients item=_patient}}
+  <tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
     {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td style="text-align: center;"><input type="checkbox" name="patients_id[]" value="{{$curr_patient->_id}}" /></td>
+    <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
-      {{if $curr_patient->_id == $patVitale->_id}}
+      {{if $_patient->_id == $patVitale->_id}}
       <div style="float:right;">
         <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
       </div>
       {{/if}}
 
-			<a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-        {{mb_value object=$curr_patient field="_view"}}
+			<a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{mb_value object=$_patient field="_view"}}
       </a>
       
     </td>
     <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-      	<span onmouseover="ObjectTooltip.createEx(this, '{{$curr_patient->_guid}}')">
-          {{mb_value object=$curr_patient field="naissance"}}
+      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
+          {{mb_value object=$_patient field="naissance"}}
       	</span>
       </a>
     </td>
     <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-        {{$curr_patient->adresse}}
-        {{$curr_patient->cp}}
-        {{$curr_patient->ville}}
+      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{$_patient->adresse}}
+        {{$_patient->cp}}
+        {{$_patient->ville}}
       </a>
     </td>
     <td>
-      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_patient->_id}}" title="Afficher le dossier complet">
+      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" title="Afficher le dossier complet">
         Afficher
       </a>
     </td>
@@ -243,30 +246,30 @@ reloadPatient = function(patient_id, link){
     </th>
   </tr>
   {{/if}}
-  {{foreach from=$patientsSoundex item=curr_patient}}
-  <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
+  {{foreach from=$patientsSoundex item=_patient}}
+  <tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
     {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td style="text-align: center;"><input type="checkbox" name="patients_id[]" value="{{$curr_patient->_id}}" /></td>
+    <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-        {{mb_value object=$curr_patient field="_view"}}
+      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{mb_value object=$_patient field="_view"}}
       </a>
     </td>
     <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-        {{mb_value object=$curr_patient field="naissance"}}
+      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{mb_value object=$_patient field="naissance"}}
       </a>
     </td>
     <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$curr_patient->_id}}', this);">
-        {{$curr_patient->adresse}}
-        {{$curr_patient->cp}}
-        {{$curr_patient->ville}}
+      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
+        {{$_patient->adresse}}
+        {{$_patient->cp}}
+        {{$_patient->ville}}
       </a>
     </td>
     <td>
-      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_patient->_id}}" title="Afficher">
+      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" title="Afficher">
         Afficher
       </a>
     </td>

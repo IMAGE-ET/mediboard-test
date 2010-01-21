@@ -66,9 +66,11 @@ function mergeMatchingPatients(button){
     <form name="fusion" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="a" value="fusion_pat" />
+      <input type="hidden" name="objects_class" value="CPatient" />
+      <input type="hidden" name="readonly_class" value="CPatient" />
       <tr>
         <th class="title">
-          <input type="radio" name="fusion_{{$patient->_id}}" value="{{$patient->_id}}" checked="checked" style="float: left;" />
+          <input type="radio" name="objects_id[]" value="{{$patient->_id}}" checked="checked" style="float: left;" />
           <button type="submit" class="search" style="float: left;">
             {{tr}}Merge{{/tr}}
           </button>
@@ -76,7 +78,7 @@ function mergeMatchingPatients(button){
         </th>
         {{foreach from=$listSiblings item="curr_sib"}}
         <th class="title">
-          <input type="checkbox" name="fusion_{{$curr_sib->_id}}" style="float: left;" />
+          <input type="checkbox" name="objects_id[]" value="{{$patient->_id}}" style="float: left;" />
           <label for="fusion_fusion_{{$curr_sib->_id}}">Doublon</label>
         </th>
         {{/foreach}}

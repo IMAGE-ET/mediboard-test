@@ -61,15 +61,8 @@
 </table>
 </form>
 
-<form name="fusion" action="?" method="get">
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="a" value="fusion_pat" />
 <table class="tbl">
   <tr>
-    {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit && 0}}
-    <th>
-    <button type="submit" class="search">{{tr}}Merge{{/tr}}</button>
-    </th>
     {{/if}}
     <th>
       Patient
@@ -83,9 +76,6 @@
   
   {{foreach from=$patients item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit && 0}}
-    <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
-    {{/if}}
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
         {{mb_value object=$curr_patient field="_view"}}
@@ -121,9 +111,6 @@
   {{/if}}
   {{foreach from=$patientsSoundex item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit && 0}}
-    <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
-    {{/if}}
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
         {{mb_value object=$curr_patient field="_view"}}
@@ -146,4 +133,3 @@
   {{/foreach}}
   
 </table>
-</form>      
