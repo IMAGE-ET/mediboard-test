@@ -117,7 +117,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenement = new CHPrimXMLEnregistrementPatient();
-          $this->sendEvenement($domEvenement, $_destinataire, $mbObject);
+          @$this->sendEvenement($domEvenement, $_destinataire, $mbObject);
           
           $mbObject->_IPP = null;
         }
@@ -210,11 +210,11 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
-          $this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
+          @$this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
           
           if ($mbObject->_ref_patient->code_regime) {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
-            $this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
+            @$this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
           }
           
           $mbObject->_num_dossier = null;
