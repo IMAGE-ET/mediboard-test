@@ -64,7 +64,7 @@ $where = array(
 $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
-
+$where[] = $where_service;
 $leftjoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
 
 $sejour = new CSejour();
