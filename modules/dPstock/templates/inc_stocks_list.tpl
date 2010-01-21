@@ -12,43 +12,41 @@
 
 <table class="tbl">
   <tr>
-    <th>{{tr}}{{$stock->_class_name}}-product_id{{/tr}}</th>
+    <th>{{mb_title object=$stock field=product_id}}</th>
     {{if $stock->_class_name == 'CProductStockService'}}
-      <th>{{tr}}CProductStockService-service_id{{/tr}}</th>
-      <th>{{tr}}CProductStockService-common{{/tr}}</th>
+      <th>{{mb_title object=$stock field=service_id}}</th>
+      <th>{{mb_title object=$stock field=common}}</th>
     {{/if}}
-    <th>{{tr}}{{$stock->_class_name}}-quantity{{/tr}}</th>
-    <th>{{tr}}{{$stock->_class_name}}-_package_quantity-court{{/tr}}</th>
+    <th>{{mb_title object=$stock field=quantity}}</th>
+    <th>{{mb_title object=$stock field=_package_quantity}}</th>
     <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
   </tr>
   
 <!-- Stocks service list -->
-{{foreach from=$list_stocks item=curr_stock}}
-  <tr>
+{{foreach from=$list_stocks item=_stock}}
+  <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
     <td>
-      <a href="?m={{$m}}&amp;tab={{if $stock->_class_name == 'CProductStockService'}}vw_idx_stock_service&amp;stock_service_id{{else}}vw_idx_stock_group&amp;stock_id{{/if}}={{$curr_stock->_id}}">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_stock->_ref_product->_guid}}')">
-          {{$curr_stock->_ref_product->_view|truncate:60}}
+      <a href="?m={{$m}}&amp;tab={{if $stock->_class_name == 'CProductStockService'}}vw_idx_stock_service&amp;stock_service_id{{else}}vw_idx_stock_group&amp;stock_id{{/if}}={{$_stock->_id}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_stock->_ref_product->_guid}}')">
+          {{$_stock->_ref_product->_view|truncate:60}}
         </span>
       </a>
     </td>
     {{if $stock->_class_name == 'CProductStockService'}}
-      <td>{{$curr_stock->_ref_service->_view}}</td>
-      <td>{{tr}}{{$curr_stock->common|ternary:'Yes':''}}{{/tr}}</td>
+      <td>{{$_stock->_ref_service}}</td>
+      <td>{{tr}}{{$_stock->common|ternary:'Yes':''}}{{/tr}}</td>
     {{/if}}
-    <td>{{$curr_stock->quantity}}</td>
+    <td style="text-align: right;">
+		  <strong>{{$_stock->quantity}}</strong>
+		</td>
     <td>
-      {{*if $curr_stock->_package_quantity > 0 && $curr_stock->_package_mod > 0}}
-        {{assign var=both value=true}}
-      {{else}}
-        {{assign var=both value=false}}
-      {{/if*}}
-      {{if $curr_stock->_package_quantity > 0}}
-        <strong>{{$curr_stock->_package_quantity}} {{$curr_stock->_ref_product->packaging}}</strong> + 
+			=
+      {{if $_stock->_package_quantity > 0}}
+        {{$_stock->_package_quantity}} {{$_stock->_ref_product->packaging}} + 
       {{/if}}
-      {{$curr_stock->_package_mod-0}}
+      {{$_stock->_package_mod-0}}
     </td>
-    <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
+    <td>{{include file="inc_bargraph.tpl" stock=$_stock}}</td>
   </tr>
 {{foreachelse}}
   <tr>
