@@ -117,7 +117,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenement = new CHPrimXMLEnregistrementPatient();
-          @$this->sendEvenement($domEvenement, $_destinataire, $mbObject);
+          $this->sendEvenement($domEvenement, $_destinataire, $mbObject);
           
           $mbObject->_IPP = null;
         }
@@ -210,11 +210,11 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
-          @$this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
+          $this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
           
           if ($mbObject->_ref_patient->code_regime) {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
-            @$this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
+            $this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
           }
           
           $mbObject->_num_dossier = null;
@@ -332,12 +332,12 @@ class CSipObjectHandler extends CMbObjectHandler {
     
     if (CAppUI::conf('sip enable_send')) {
       if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
-        trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+        //trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
       }
   
       // Récupère le message d'acquittement après l'execution la methode evenementPatient
       if (null == $acquittement = $client->evenementPatient($msgEvtVenuePatient)) {
-        trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
+        //trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
       }
       
       $echange_hprim = new CEchangeHprim();
