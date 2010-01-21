@@ -351,19 +351,22 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    if ($this->annule || $sejour->annule || $this->type == "urg" || $sejour->type == "urg") {
+    if ($this->annule || $sejour->annule) {
       return false;
     }
-		
+    
+    if ($this->type == "urg" || $sejour->type == "urg") {
+      return false;
+    }
+    
     if ($this->group_id != $sejour->group_id) {
       return false;
     }
-    else {
-      $this->updateFormFields();
-      return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
-           or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
-           or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
-    }
+		
+    $this->updateFormFields();
+    return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
+         or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
+         or(mbDate($sejour->_entree) >= mbDate($this->_entree) and mbDate($sejour->_sortie) <= mbDate($this->_sortie));
   }
   
   function applyProtocolesPrescription($operation_id = null) {
