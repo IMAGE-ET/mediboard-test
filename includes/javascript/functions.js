@@ -1057,29 +1057,49 @@ var Modal = {
       closeOnClick: null
     }, options || {});
     
-    var html = '<div style="min-height: 3em;"></div><div style="text-align: center; margin-left: -3em;"><button class="tick" type="button">'+options.okLabel+'</button></div>';
-    var m = Control.Modal.open(html, options);
-    m.container.select('div').first().update(message);
-    m.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate();}).bind(m));
+    // Force element shot if undisplayed    
+    if (Object.isElement(message)) {
+      message.show();
+    }
+
+    html = DOM.div(null, 
+      DOM.div( { style: "min-height: 3em;"}, message),
+      DOM.div( { style: "text-align: center; margin-left: -3em;" },
+        DOM.button( {className : "tick"  , type: "button"}, options.okLabel)
+      )
+    );
+
+    var m = Control.Modal.open(html.innerHTML, options);
+    m.container.down('button.tick').observe('click', (function(){this.close(); options.onValidate();}).bind(m));
   },
   
   confirm: function(message, options) {
-    options = Object.extend({
+    options = Object.extend( {
       className: 'modal confirm big-info',
       yesLabel: 'Oui',
       noLabel: 'Non',
+      onOK: Prototype.emptyFunction,
+      onKO: Prototype.emptyFunction,
       onValidate: Prototype.emptyFunction,
       closeOnClick: null
     }, options || {});
     
-    var html = '<div style="min-height: 3em;"></div><div style="text-align: center; margin-left: -3em;">'+
-      '<button class="tick" type="button">'+options.yesLabel+'</button>'+
-      '<button class="cancel" type="button">'+options.noLabel+'</button>'+
-    '</div>';
-    var m = Control.Modal.open(html, options);
-    m.container.select('div').first().update(message);
-    m.container.select('button.tick').first().observe('click', (function(){this.close(); options.onValidate(true);}).bind(m));
-    m.container.select('button.cancel').first().observe('click', (function(){this.close(); options.onValidate(false);}).bind(m));
+    // Force element shot if undisplayed		
+		if (Object.isElement(message)) {
+		  message.show();
+		}
+
+    html = DOM.div(null, 
+		  DOM.div( { style: "min-height: 3em;"}, message),
+			DOM.div( { style: "text-align: center; margin-left: -3em;" },
+       DOM.button( {className : "tick"  , type: "button"}, options.yesLabel), 
+       DOM.button( {className : "cancel", type: "button"}, options.noLabel )
+			)
+		);
+				 
+    var m = Control.Modal.open(html.innerHTML, options);
+    m.container.down('button.tick'  ).observe('click', (function(){this.close(); options.onValidate(true ); options.onOK(); }).bind(m));
+    m.container.down('button.cancel').observe('click', (function(){this.close(); options.onValidate(false); options.onKO(); }).bind(m));
   }, 
   
   open: function(container, options) {
