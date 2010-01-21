@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
+global $can, $m, $AppUI;
 
 $dialog = CValue::get("dialog");
 $start  = CValue::get("start", 0);
@@ -48,12 +48,22 @@ $log = new CUserLog;
 $list = $log->loadList($where, "date DESC", "$start,100");
 $list_count = $log->countList($where);
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $item = "";
 foreach($list as $key => $log) {
   $log->loadRefsFwd();
+  $log->_ref_user->loadRefMediuser();
+  $mediuser = $log->_ref_user->_ref_mediuser;
+  $mediuser->loadRefFunction();
   $log->getOldValues();
   if (!$item)
     $item = $log->_ref_object->_view;
+  if (!$can->admin) {
+    if ($mediuser->_ref_function->group_id != $group_id) {
+      unset($list[$key]);
+    }
+  }
 }
 
 // Création du template
