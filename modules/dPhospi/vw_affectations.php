@@ -24,6 +24,8 @@ $mode      = CValue::getOrSession("mode", 0);
 $filterAdm = CValue::getOrSession("filterAdm", "tout");
 $filterFunction = CValue::getOrSession("filterFunction");
 $triAdm    = CValue::getOrSession("triAdm", "praticien");
+$list_services    = CValue::getOrSession("list_services");
+
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -35,8 +37,19 @@ $services = new CService;
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
+if(!$list_services){
+  foreach($services as $_service){
+    $list_services[] = $_service->_id;
+  }
+}
+
+$where_service = "service_id IN (".join($list_services, ',').") OR service_id IS NULL"; 
+
 // Chargment des services
 foreach ($services as &$service) {
+  if(!in_array($service->_id, $list_services)){
+	continue;
+  }
   loadServiceComplet($service, $date, $mode);
   $totalLits += $service->_nb_lits_dispo;
 }
@@ -90,9 +103,9 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
-  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
-  $where[] = $whereFilter;
-  
+	$where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
+	$where[] = $whereFilter;
+	$where[] = $where_service;
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
   
   // Admissions du matin
@@ -102,7 +115,7 @@ if ($can->edit) {
   );
   $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
   $where[] = $whereFilter;
-  
+  $where[] = $where_service;
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
   
   // Admissions du soir
@@ -112,7 +125,7 @@ if ($can->edit) {
   );  
   $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
   $where[] = $whereFilter;
-  
+  $where[] = $where_service;
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
   
   // Admissions antérieures
@@ -124,7 +137,7 @@ if ($can->edit) {
   $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$twoDaysBefore 23:59:59'";
   $where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date 00:00:00'";
   $where[] = $whereFilter;
-  
+  $where[] = $where_service;
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
 }
 
@@ -142,13 +155,13 @@ $affectation = new CAffectation();
 $affectation->entree = mbAddDateTime("08:00:00",$date);
 $affectation->sortie = mbAddDateTime("23:00:00",$date);
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("list_services"         , $list_services);
 $smarty->assign("affectation"           , $affectation);
 $smarty->assign("pathos"                , $pathos);
-$smarty->assign("date"                  , $date );
+$smarty->assign("date"                  , $date);
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);

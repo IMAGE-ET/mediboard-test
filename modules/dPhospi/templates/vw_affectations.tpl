@@ -3,7 +3,7 @@
 <script type="text/javascript">
 Main.add(function () {
   Calendar.regField(getForm("chgAff").date, null, {noView: true, inline: true, container: $('calendar-container')});
-  initServicesState();
+  //initServicesState();
 });
 </script>
 
@@ -27,34 +27,33 @@ Main.add(function () {
       {{$totalLits}} place(s) de libre
     </th>
   </tr>
-
   <tr>
     <td>
       <button type="button" onclick="showLegend()" class="search">Légende</button>
       <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
     </td>
-    
     <td>
       <form name="chgAff" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-
+			
       {{foreach from=$services item=curr_service}}
         <label title="Afficher le service {{$curr_service->nom}}">
         <input
           type="checkbox"
-          name="service{{$curr_service->_id}}"
+          name="list_services[]"
           value="{{$curr_service->_id}}"
+					{{if in_array($curr_service->_id, $list_services)}}
           checked="checked" 
-          onchange="toggleService(this, {{$mode}})"
+					{{/if}}
           />
           {{$curr_service->nom}}
         </label>
       {{/foreach}}
+			  <button class="search" type="button" onclick="this.form.submit();">Afficher</button> 
       </form>
     </td>
-
     {{include file="inc_mode_hospi.tpl"}}
   </tr>
 
@@ -63,9 +62,11 @@ Main.add(function () {
       <table class="affectations">
         <tr>
         {{foreach from=$services item=curr_service}}
+				  {{if $curr_service->_ref_chambres|@count}}
           <td style="width: 1%" class="fullService" id="service{{$curr_service->service_id}}">
           {{include file="inc_affectations_services.tpl"}}
           </td>
+          {{/if}}
         {{/foreach}}
         </tr>
       </table>
@@ -141,7 +142,7 @@ Main.add(function () {
       </tr>
       </table>
       </form>
-      
+
       {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
         {{include file="inc_affectations_liste.tpl"}}
       {{/foreach}}
