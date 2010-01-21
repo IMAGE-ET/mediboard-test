@@ -345,7 +345,7 @@ class CPatient extends CMbObject {
     }
 
     // Creation d'un patient
-    if(!$this->_id && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"){
+    if(!$this->_merging && !$this->_id && CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons"){
       if($this->loadMatchingPatient(true, false) > 0) {
         return "Doublons détectés";
       }
