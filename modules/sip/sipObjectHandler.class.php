@@ -333,11 +333,13 @@ class CSipObjectHandler extends CMbObjectHandler {
     if (CAppUI::conf('sip enable_send')) {
       if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
         //trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
+        return;
       }
-  
+      
       // Récupère le message d'acquittement après l'execution la methode evenementPatient
       if (null == $acquittement = $client->evenementPatient($msgEvtVenuePatient)) {
         //trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
+        return;
       }
       
       $echange_hprim = new CEchangeHprim();
