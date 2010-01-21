@@ -36,7 +36,7 @@
 			</button>
       {{/if}}
 
-      {{if $modules.dPadmissions->_can->read}}
+      {{if @$modules.dPadmissions->_can->read}}
 			<button type="button" class="search" onclick="Sejour.admission('{{$sejour->_date_entree_prevue}}');">
 				{{tr}}Admission{{/tr}}
 			</button>
