@@ -16,7 +16,7 @@ Main.add(function () {
 
 {{foreach from=$messages item=_message}}
 <div id="{{$_message->_guid}}" class="{{if $_message->urgence == "urgent"}}error{{else}}message{{/if}}" 
-     style="border-bottom: 1px solid #ccc; background-color: #f6f6f6;">
+     style="border-bottom: 1px solid #ccc; background-color: #f6f6f6; white-space: normal;">
   <a href="#1" style="float: right;" onclick="hideMessage('{{$_message->_guid}}', true);">{{tr}}Close{{/tr}}</a>
   <strong>{{$_message->titre}}</strong> : {{$_message->corps}}
 </div>
