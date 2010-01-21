@@ -100,6 +100,7 @@ $smarty->assign("debut"    , $debut);
 $smarty->assign("prec"     , $prec);
 $smarty->assign("suiv"     , $suiv);
 $smarty->assign("plages"   , $plages);
+$smarty->assign("plage"    , new CPlageressource());
 $smarty->assign("prat"     , $prat);
 $smarty->assign("isprat"   , $isprat);
 $smarty->assign("compte"   , $compte);

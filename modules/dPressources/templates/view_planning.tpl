@@ -178,27 +178,27 @@ Main.add(function () {
           <th colspan="2" class="category">Légende</th>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'OUT'}}" />
+          <th style="background:{{$plage|const:'OUT'}}" />
           <td class="text">Plage terminée</td>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'FREE'}}" />
+          <th style="background:{{$plage|const:'FREE'}}" />
           <td class="text">Plage libre</td>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'FREEB'}}" />
+          <th style="background:{{$plage|const:'FREEB'}}" />
           <td class="text">Plage libre non réservable (dans plus d'1 mois)</td>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'BUSY'}}" />
+          <th style="background:{{$plage|const:'BUSY'}}" />
           <td class="text">Plage réservée (echéance dans plus de 15 jours)</td>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'BLOCKED'}}" />
+          <th style="background:{{$plage|const:'BLOCKED'}}" />
           <td class="text">Plage bloquée (échéance dans moins de 15 jours)</td>
         </tr>
         <tr>
-          <th style="background:{{$curr_plage|const:'PAYED'}}" />
+          <th style="background:{{$plage|const:'PAYED'}}" />
           <td class="text">Plage réglée</td>
         </tr>
         <tr>
