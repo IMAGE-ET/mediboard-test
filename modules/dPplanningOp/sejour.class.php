@@ -351,6 +351,10 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
+    if ($this->_id || $sejour->_id) {
+      return false;
+    }
+
     if ($this->annule || $sejour->annule) {
       return false;
     }
