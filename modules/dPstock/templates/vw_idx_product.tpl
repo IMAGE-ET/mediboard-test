@@ -13,6 +13,7 @@
 <script type="text/javascript">
 Main.add(function () {
   filterReferences(getForm("filter-products"));
+  Control.Tabs.create("tabs-stocks-references", true);
 });
 
 function changePage(start) {
@@ -177,76 +178,64 @@ function filterReferences(form) {
         </tr>
       </table>
       </form>
-    </td>
-  </tr>
-  {{if $product->_id}}
-  <tr>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="4">Stock de l'établissement</th>
-        </tr>
-        <tr>
-          <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
-          <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
-        </tr>
-        {{if $product->_ref_stock_group->_id}}
+      
+      {{if $product->_id}}
+      <ul class="control_tabs" id="tabs-stocks-references">
+        <li><a href="#tab-stocks">{{tr}}CProductStock{{/tr}}</a></li>
+        <li><a href="#tab-references">{{tr}}CProduct-back-references{{/tr}}</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      
+      <div id="tab-stocks" style="display: none;">
+        <table class="tbl">
+          <tr>
+            <th></th>
+            <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
+            <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
+          </tr>
+          
           {{assign var=_stock_group value=$product->_ref_stock_group}}
           <tr>
-            <td>{{$_stock_group->quantity}}</td>
-            <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
-          </tr>
-        {{else}}
-          <tr>
-            <td>{{tr}}CProductStockGroup.none{{/tr}}</td>
             <td>
-              <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                {{tr}}CProductStockGroup.create{{/tr}}
-              </button>
+              <a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$_stock_group->_id}}">
+                Etablissement
+              </a>
             </td>
+            
+            {{if $product->_ref_stock_group->_id}}
+              <td>{{$_stock_group->quantity}}</td>
+              <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
+            {{else}}
+              <td>{{tr}}CProductStockGroup.none{{/tr}}</td>
+              <td>
+                <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
+                  {{tr}}CProductStockGroup.create{{/tr}}
+                </button>
+              </td>
+            {{/if}}
           </tr>
-        {{/if}}
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="4">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
-        </tr>
-        <tr>
-          <th>{{tr}}CService{{/tr}}</th>
-          <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
-        </tr>
-        {{foreach from=$product->_ref_stocks_service item=curr_stock}}
-        <tr>
-          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock du service">{{$curr_stock->_ref_service->_view}}</a></td>
-          <td>{{$curr_stock->quantity}}</td>
-        </tr>
-        {{foreachelse}}
-        <tr>
-          <td colspan="3">{{tr}}CProductStockService.none{{/tr}}</td>
-        </tr>
-        {{/foreach}}
-        {{if $product->_id}}
           <tr>
-            <td colspan="3">
-              <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                {{tr}}CProductStockService.create{{/tr}}
-              </button>
-            </td>
+            <th class="category" colspan="3">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
           </tr>
-        {{/if}}
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td class="halfPane">
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="4">{{tr}}CProduct-back-references{{/tr}}</th>
-        </tr>
+          {{foreach from=$product->_ref_stocks_service item=curr_stock}}
+            <tr>
+              <td>
+                <a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id={{$curr_stock->_id}}">
+                  {{$curr_stock->_ref_service}}
+                </a>
+              </td>
+              <td>{{$curr_stock->quantity}}</td>
+              <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
+            </tr>
+          {{foreachelse}}
+            <tr>
+              <td colspan="3">{{tr}}CProductStockService.none{{/tr}}</td>
+            </tr>
+          {{/foreach}}
+        </table>
+      </div>
+      
+      <table class="tbl" id="tab-references" style="display: none;">
         <tr>
            <th>Fournisseur</th>
            <th>Quantité</th>
@@ -275,8 +264,8 @@ function filterReferences(form) {
           </tr>
         {{/if}}
        </table>
-    
+     
+       {{/if}}
     </td>
   </tr>
-  {{/if}}
 </table>
