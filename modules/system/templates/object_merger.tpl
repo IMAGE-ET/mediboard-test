@@ -14,6 +14,9 @@
 
 {{if $result}}
 
+{{mb_include_script module=system script=mb_object}}
+{{mb_include_script module=system script=object_merger}}
+
 <h2>Fusion de {{tr}}{{$result->_class_name}}{{/tr}}</h2>
 
 {{if $checkMerge}}
@@ -31,6 +34,31 @@
     Vous êtes en mode SIP, vous ne pourrez fusionner que deux objets au maximum.
   </div>
 {{/if}}
+
+
+<table>
+  <tr>
+    <th>Afficher les champs</th>
+    <td>
+      <label>
+        <input type="checkbox" onclick="$$('tr.duplicate').invoke('setVisible', $V(this));" />
+        avec une valeur multiple identiques
+        <strong>({{$counts.duplicate}} valeurs)</strong>
+      </label>
+      <label>
+        <input type="checkbox" onclick="$$('tr.unique').invoke('setVisible', $V(this));" />
+        avec une valeur unique
+        <em>({{$counts.unique}} valeurs)</em>
+      </label>
+      <label>
+        <input type="checkbox" onclick="$$('tr.none'  ).invoke('setVisible', $V(this));" />
+        sans valeurs
+        <em>({{$counts.none}} valeurs)</em>
+      </label>
+    </td>
+  </tr>
+</table>
+
 
 <form name="form-merge" action="?m={{$m}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_object_merge" />
@@ -79,9 +107,10 @@
 
 	  <tr>
 	  	<td colspan="100" class="button">
-       <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class_name}}', objectsList);">
-         {{tr}}CMbObject-merge-moreinfo{{/tr}}
-       </button>
+	  		<script type="text/javascript">var objects_id = {{$objects_id|@json}};</script>
+        <button type="button" class="search" onclick="MbObject.viewBackRefs('{{$result->_class_name}}', objects_id);">
+          {{tr}}CMbObject-merge-moreinfo{{/tr}}
+        </button>
       </td>
 		</tr>
 
@@ -139,25 +168,11 @@
 
     <tr>
 	  	<td colspan="100" class="button">
-	  		<script>
-	  			Merge = {
-					  confirm: function(fast) {
-	            $V(getForm("form-merge").fast, fast);
-              Modal.confirm($('confirm-'+fast), { onOK: Merge.perform } );
-							return false;
-						},
-						perform: function() {
-						  getForm("form-merge").submit();
-						}
-					}
-
-	  		</script>
-				
-		    <button type="submit" class="change" onclick="return Merge.confirm('0')">
+		    <button type="submit" class="change" onclick="return ObjectMerger.confirm('0')">
 		      {{tr}}Merge{{/tr}}
 		    </button>
 				{{if $modules.system->_can->admin}}
-		    <button type="submit" class="change" onclick="return Merge.confirm('1');">
+		    <button type="submit" class="change" onclick="return ObjectMerger.confirm('1');">
 		      {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
 		    </button>
 				{{/if}}

@@ -17,7 +17,7 @@
   
   <!-- Result field -->
   <td class="{{$result->_props.$field}}">
-    {{assign var=onchange value="updateOptions(this)"}}
+    {{assign var=onchange value="ObjectMerger.updateOptions(this)"}}
     {{if $spec instanceof CDateSpec || $spec instanceof CTimeSpec || $spec instanceof CDateTimeSpec}}
       {{mb_field object=$result field=$field form="form-merge" register=true onchange=$onchange}}
     {{elseif $spec instanceof CEnumSpec || $spec instanceof CBoolSpec}}
@@ -38,7 +38,7 @@
       <input type="radio" name="_choix_{{$field}}" id="form-merge__choix_{{$iteration}}_{{$field}}"
          value="{{$object->$field}}"
          {{if $result->$field == $object->$field}}checked="checked"{{/if}}
-         onclick="setField('{{$field}}', this);" />
+         onclick="ObjectMerger.setField('{{$field}}', this);" />
       {{if $object->$field !== ""}}
         {{if $spec instanceof CTextSpec}}
   				{{$object->$field|nl2br}}

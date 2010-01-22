@@ -86,6 +86,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("objects", $objects);
 $smarty->assign("objects_class", $objects_class);
+$smarty->assign("objects_id", $objects_id);
 $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);

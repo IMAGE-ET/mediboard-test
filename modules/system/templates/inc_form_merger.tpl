@@ -8,17 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=system script=mb_object}}
 {{mb_include_script module=system script=object_selector}}
 
 <script>
-
-function updateOptions(field) {
-  var form = field.form;
-	$A(form.elements["_choix_"+field.name]).each(function (element) {
-	  element.checked = element.value.stripAll() == field.value.stripAll();
-	} );
-}
 
 var objectsList = [];
 
@@ -81,38 +73,10 @@ Main.add(function() {
     <tr>
       <td />
       <td>
-        <button type="submit" class="submit">{{tr}}Submit{{/tr}}</button>
+        <button type="submit" class="hslip">{{tr}}Comparer{{/tr}}</button>
       </td>
       <th />
       <td><button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button></td>
     </tr>
-
-    {{if $result}}
-    <tr>
-      <th>Afficher les champs</th>
-      <td>
-        <label>
-          <input type="checkbox" onclick="$$('tr.duplicate').invoke('setVisible', $V(this));" />
-          avec une valeur multiple identiques
-          <strong>({{$counts.duplicate}} valeurs)</strong>
-        </label>
-        <br />
-        <label>
-          <input type="checkbox" onclick="$$('tr.unique').invoke('setVisible', $V(this));" />
-          avec une valeur unique
-          <em>({{$counts.unique}} valeurs)</em>
-        </label>
-        <br />
-        <label>
-          <input type="checkbox" onclick="$$('tr.none'  ).invoke('setVisible', $V(this));" />
-          sans valeurs
-          <em>({{$counts.none}} valeurs)</em>
-        </label>
-      </td>
-      <th />
-      <td />
-    </tr>
-    {{/if}}
-
  </table>
 </form>

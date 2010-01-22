@@ -10,9 +10,6 @@
 {{/if}}
 
 <script type="text/javascript">
-function setField(oField, sValue) {
-  oField.value = sValue;
-}
 
 function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
