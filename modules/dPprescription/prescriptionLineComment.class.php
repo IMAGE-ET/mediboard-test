@@ -87,9 +87,12 @@ class CPrescriptionLineComment extends CPrescriptionLine {
 		       
 	  $current_user = new CMediusers();
     $current_user->load($AppUI->user_id);
+		
 			
 		$chapitre = $this->_ref_category_prescription->chapitre;
-      
+    if(!$chapitre){
+    	$chapitre = "med";
+    }
 		$perm_edit = $can->admin || (!$this->signee && ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id  || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_$chapitre"))));             
     $this->_perm_edit = $perm_edit;
     
