@@ -42,7 +42,7 @@
     <td>
       <label>
         <input type="checkbox" onclick="$$('tr.duplicate').invoke('setVisible', $V(this));" />
-        avec une valeur multiple identiques
+        avec des valeurs identiques
         <strong>({{$counts.duplicate}} valeurs)</strong>
       </label>
       <label>
