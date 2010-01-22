@@ -15,6 +15,6 @@ var MbObject = {
     var url = new Url("system", "view_back_refs");
     url.addParam("object_class", object_class);
     url.addParam("object_ids[]", object_ids);
-    url.popup(300 * object_ids.length + 100, 600, "View back refs");
+    url.popup(300 * object_ids.length + 200, 600, "View back refs");
   }
 }
