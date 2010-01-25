@@ -18,17 +18,23 @@
       <th>{{mb_title object=$stock field=common}}</th>
     {{/if}}
     <th>{{mb_title object=$stock field=quantity}}</th>
-    <th>{{mb_title object=$stock field=_package_quantity}}</th>
+    <th colspan="3">{{mb_title object=$stock field=_package_quantity}}</th>
     <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
   </tr>
   
 <!-- Stocks service list -->
 {{foreach from=$list_stocks item=_stock}}
+  {{assign var=product value=$_stock->_ref_product}}
   <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
     <td>
-      <a href="?m={{$m}}&amp;tab={{if $stock->_class_name == 'CProductStockService'}}vw_idx_stock_service&amp;stock_service_id{{else}}vw_idx_stock_group&amp;stock_id{{/if}}={{$_stock->_id}}">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_stock->_ref_product->_guid}}')">
-          {{$_stock->_ref_product->_view|truncate:60}}
+    	{{if $stock->_class_name == 'CProductStockService'}}
+			{{assign var=tab value=vw_idx_stock_service&stock_service_id}}
+			{{else}}
+      {{assign var=tab value=vw_idx_stock_group&stock_id}}
+			{{/if}}
+      <a href="?m={{$m}}&amp;tab={{$tab}}={{$_stock->_id}}">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$product->_guid}}')">
+          {{$product->_view|truncate:60}}
         </span>
       </a>
     </td>
@@ -39,13 +45,14 @@
     <td style="text-align: right;">
 		  <strong>{{$_stock->quantity}}</strong>
 		</td>
-    <td>
-			=
-      {{if $_stock->_package_quantity > 0}}
-        {{$_stock->_package_quantity}} {{$_stock->_ref_product->packaging}} + 
-      {{/if}}
-      {{$_stock->_package_mod-0}}
-    </td>
+		
+    <td style="text-align: right;">= {{$_stock->_package_quantity}}</td>
+		<td>{{$product->packaging}}</td>
+    <td style="text-align: right;">
+		  {{if $_stock->_package_mod-0}}
+		  + {{$_stock->_package_mod-0}}
+			{{/if}}
+		</td>
     <td>{{include file="inc_bargraph.tpl" stock=$_stock}}</td>
   </tr>
 {{foreachelse}}

@@ -40,15 +40,17 @@
             <button type="button" class="add notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
             
           {{else}}
+					  <strong>
             {{mb_title class=CProductStockService field=quantity}}:
             {{mb_value object=$_stock field=quantity}}
-            
+            </strong>
+						&mdash;
             {{mb_title class=CProductStockService field=order_threshold_min}}:
             {{mb_value object=$_stock field=order_threshold_min}}
-            
+            &mdash;
             {{mb_title class=CProductStockService field=order_threshold_optimum}}:
             {{mb_value object=$_stock field=order_threshold_optimum}}
-            
+
             {{mb_include module=dPstock template=inc_bargraph stock=$_stock}}
             {{mb_label object=$_stock field=common}}
             {{mb_field object=$_stock field=common typeEnum=checkbox onchange="this.form.onsubmit()"}}
