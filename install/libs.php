@@ -298,7 +298,7 @@ $library->extraDir = "livepipe";
 $library->sourceDir = "livepipe";
 $library->targetDir = "livepipe";
 $library->versionFile = "livepipe.js";
-$library->versionString = "@copyright 2008 PersonalGrid";
+$library->versionString = "@copyright 2010 PersonalGrid";
 
 CLibrary::$all[$library->name] = $library;
 
