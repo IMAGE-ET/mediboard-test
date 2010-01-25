@@ -15,6 +15,7 @@
       codes_ccam       : "{{$curr_protocole->codes_ccam}}",
       DP               : "{{$curr_protocole->DP}}",
       libelle          : "{{$curr_protocole->libelle|smarty:nodefaults|escape:"javascript"}}",
+      libelle_sejour   : "{{$curr_protocole->libelle_sejour|smarty:nodefaults|escape:"javascript"}}",
       _hour_op         : "{{$curr_protocole->_hour_op}}",
       _min_op          : "{{$curr_protocole->_min_op}}",
       examen           : "{{$curr_protocole->examen|smarty:nodefaults|escape:"javascript"}}",

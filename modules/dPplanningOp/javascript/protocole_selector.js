@@ -17,6 +17,7 @@ var ProtocoleSelector = {
   sForfait         : null,
   sFournitures     : null,
   sRques_op        : null,
+  sLibelle_sejour  : null,
   sType            : null,
   sConvalescence   : null,
   sDP              : null,
@@ -53,7 +54,7 @@ var ProtocoleSelector = {
         $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
         $V(oOpFormEasy[this.sServiceId_easy] , protocole.service_id_sejour);
         $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
-        $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
+        $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam);
       }
       
       $V(oOpForm[this.sCodes_ccam],        protocole.codes_ccam);
@@ -85,6 +86,10 @@ var ProtocoleSelector = {
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value) {
       $V(oSejourForm[this.sDP], protocole.DP);
+    }
+    if(!oSejourForm.sejour_id.value || !oSejourForm[this.sLibelle_sejour].value) {
+    alert(protocole.libelle_sejour+" dans le champs "+this.sLibelle_sejour);
+      $V(oSejourForm[this.sLibelle_sejour], protocole.libelle_sejour);
     }
     if(oSejourForm.sejour_id.value && oSejourForm[this.sConvalescence].value) {
       $V(oSejourForm[this.sConvalescence], oSejourForm[this.sConvalescence].value+"\n"+protocole.convalescence);

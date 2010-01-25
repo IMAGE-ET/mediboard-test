@@ -2,17 +2,18 @@
 
 <script type="text/javascript">
 ProtocoleSelector.init = function(){
-  this.sForSejour     = true;
-  this.sForm          = "editSejour";
-  this.sChir_id       = "praticien_id";
-  this.sServiceId     = "service_id";
-  this.sDepassement   = "depassement";
+  this.sForSejour      = true;
+  this.sForm           = "editSejour";
+  this.sChir_id        = "praticien_id";
+  this.sServiceId      = "service_id";
+  this.sDP             = "DP";
+  this.sDepassement    = "depassement";
   
-  this.sType          = "type";
-  this.sDuree_prevu   = "_duree_prevue";
-  this.sConvalescence = "convalescence";
-  this.sDP            = "DP";
-  this.sRques_sej     = "rques";
+  this.sLibelle_sejour = "libelle";
+  this.sType           = "type";
+  this.sDuree_prevu    = "_duree_prevue";
+  this.sConvalescence  = "convalescence";
+  this.sRques_sej      = "rques";
 
   this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
   this.sProtoPrescChir   = "_protocole_prescription_chir_id";
