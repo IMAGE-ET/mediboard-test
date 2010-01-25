@@ -133,8 +133,10 @@ class CAppUI {
       $file = "$root/lib/$name.php";
       if (is_file($file))
         return require_once($file);
-      else
-        self::setMsg("La librairie <b>".ucwords(dirname($name))."</b> n'est pas installée", UI_MSG_ERROR); die;
+      else {
+        self::setMsg("La librairie <strong>".ucwords(dirname($name))."</strong> n'est pas installée", UI_MSG_ERROR);
+        CApp::rip();
+      }
     }
   }
   
@@ -293,6 +295,21 @@ class CAppUI {
     CApp::rip();
   }
   
+  /**
+   * Returns the class corresponding to a message type
+   * @param const $type
+   * @return string The corresponding class
+   */
+  private static function getErrorClass($type) {
+    switch ($type) {
+      case UI_MSG_ERROR   : return "error" ;
+      case UI_MSG_WARNING : return "warning";
+      default:
+      case UI_MSG_OK      : 
+      case UI_MSG_ALERT   : return "message";
+    }
+  }
+  
  /**
   * Add message to the the system UI
   * @param string $msg The (translated) message
@@ -300,13 +317,9 @@ class CAppUI {
   * @param any number of printf-like parameters to be applied 
   */
   static function setMsg($msg, $type = UI_MSG_OK) {
-    // Formatage
     $args = func_get_args();
-    $args[0] = self::tr($msg);
-    unset($args[1]);
-    $msg = call_user_func_array("sprintf", $args);
-
-    // Ajout
+    $msg = CAppUI::tr($msg, array_slice($args, 2));
+    
     @self::$instance->messages[$type][$msg]++;
   }
   
@@ -324,8 +337,10 @@ class CAppUI {
    * @param string $action message à afficher
    */
   static function displayMsg($msg, $action) {
-    $action = self::tr($action);
-    $msg ? self::setMsg("$action: $msg", UI_MSG_ERROR ) : self::setMsg($action, UI_MSG_OK );
+    $args = func_get_args();
+    $action = CAppUI::tr($action, array_slice($args, 2));
+
+    $msg ? self::setMsg("$action: $msg", UI_MSG_ERROR) : self::setMsg($action, UI_MSG_OK);
   }
 
   /**
@@ -338,13 +353,7 @@ class CAppUI {
     ksort(self::$instance->messages);
     
     foreach (self::$instance->messages as $type => $messages) {
-      switch ($type) {
-        case UI_MSG_ERROR   : $class = "error" ; break;
-        case UI_MSG_WARNING : $class = "warning"; break;
-        default:
-        case UI_MSG_OK      : 
-        case UI_MSG_ALERT   : $class = "message"; break;
-      }
+      $class = self::getErrorClass($type);
 
       foreach ($messages as $message => $count) {
         $render = $count > 1 ? "$message x $count" : $message;
@@ -364,41 +373,28 @@ class CAppUI {
   * @param enum $msgType Type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
   * @param string $msg The message
   */
-  static function stepMessage($msgType, $msg) {
-    switch ($msgType) {
-      case UI_MSG_ERROR   : $class = "small-error" ; break;
-      case UI_MSG_WARNING : $class = "small-warning"; break;
-      default: 
-      case UI_MSG_OK      : $class = "small-message"; break;
-    }
+  static function stepMessage($type, $msg) {
+    $args = func_get_args();
+    $msg = CAppUI::tr($msg, array_slice($args, 2));
     
-    $msg = nl2br(self::tr($msg));
-    echo "\n<div class='$class'>$msg</div>";
+    $class = self::getErrorClass($type);
+    echo "\n<div class='small-$class'>$msg</div>";
   }
   
  /**
   * Display an ajax step, and exit on error messages
   * @TODO Switch parameter order, like stepMessage()
   * @param string $msg : the message
-  * @param enum $msgType : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+  * @param enum $type : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
   */
-  static function stepAjax($msg, $msgType = UI_MSG_OK) {
-    switch($msgType) {
-      case UI_MSG_ERROR   : $class = "error" ; break;
-      case UI_MSG_WARNING : $class = "warning"; break;
-      default: 
-      case UI_MSG_OK      : $class = "message"; break;
-    }
-    
-    // Formatage
+  static function stepAjax($msg, $type = UI_MSG_OK) {
     $args = func_get_args();
-    unset($args[1]);
-    $msg = call_user_func_array(array("CAppUI", "tr"), $args);
-    $msg = nl2br($msg);
+    $msg = CAppUI::tr($msg, array_slice($args, 2));
 
+    $class = self::getErrorClass($type);
     echo "\n<div class='$class'>$msg</div>";
     
-    if ($msgType == UI_MSG_ERROR) {
+    if ($type == UI_MSG_ERROR) {
       CApp::rip();
     }
   }
@@ -597,9 +593,10 @@ class CAppUI {
  * preferences variable.
  * @param int $uid User id number, 0 for default preferences
  */
-  static function loadPrefs($uid = 0) {
-    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$uid'";
+  static function loadPrefs($user_id = 0) {
+    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$user_id'";
     $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
+
     self::$instance->user_prefs = array_merge(self::$instance->user_prefs, $user_prefs);
   }
   
@@ -624,7 +621,7 @@ class CAppUI {
    * @param string $str statement to translate
    * @return string translated statement
    */
-  static function tr($str) {
+  static function tr($str, $args = null) {
     global $locales;
     
     $str = trim($str);
@@ -633,14 +630,23 @@ class CAppUI {
     }
     
     // Defined and not empty
-    if (empty($locales[$str])) {
-      return $str;
+    if (isset($locales[$str]) && $locales[$str] !== "") {
+      $str = $locales[$str];
     }
     
-    // Fatal error: func_get_args(): Can't be used as a function parameter
-    $args = func_get_args();
-		$args[0] = $locales[$str];
-    return nl2br(sprintf(self::$locale_mask, call_user_func_array("sprintf", $args)));
+    if ($args) {
+      if (!is_array($args)) {
+        $args = func_get_args();
+        unset($args[0]);
+      }
+      $str = vsprintf($str, $args);
+    }
+    
+    if (self::$locale_mask) {
+      $str = sprintf(self::$locale_mask, $str);
+    }
+    
+    return nl2br($str);
   }
 
   /**
@@ -688,17 +694,5 @@ class CAppUI {
 }
 
 // choose to alert for missing translation or not
-$locale_warn = CAppUI::conf("locale_warn") ;
 $locale_alert = CAppUI::conf("locale_alert");
-CAppUI::$locale_mask = $locale_warn ? "$locale_alert%s$locale_alert" : "%s";
-
-/*if ($locale_warn) {
-  $s = '<form name="locale-edit-form" action="" onsubmit="onSubmitFormAjax(this)">
-          <span ondblclick="$(this).hide();">%s</span>
-          <input type="text" name="locale" value="" style="display: none;" />
-        </form>';
-  CAppUI::$locale_mask = $s;
-} else {
-  CAppUI::$locale_mask = "%s";
-}*/
-?>
+CAppUI::$locale_mask = CAppUI::conf("locale_warn") ? "$locale_alert%s$locale_alert" : null;

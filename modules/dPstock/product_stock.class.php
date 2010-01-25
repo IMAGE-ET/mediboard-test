@@ -84,6 +84,7 @@ class CProductStock extends CMbObject {
     $this->loadRefsFwd();
     $this->_ref_product->updateFormFields();
     $this->_view = $this->_ref_product->_view;
+    
     $units = $this->_ref_product->_unit_quantity ? $this->_ref_product->_unit_quantity : 1;
     $this->_package_quantity = floor($this->quantity / $units);
     $this->_package_mod      = $this->quantity % $units;

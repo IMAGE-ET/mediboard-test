@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=unit_order value=$dPconfig.dPstock.CProductStockGroup.unit_order}}
+
 <tr>
   {{if !$order->date_ordered}}
   <td>
@@ -30,29 +32,48 @@
   </td>
   <td>
     {{if !$order->date_ordered}}
+    <script type="text/javascript">
+      quantitySubmit{{$id}} = function(element){
+        submitOrderItem(element.form, {noRefresh: true, onComplete: function(){
+          refreshValue('CProductOrder-{{$order_id}}', '_total', function(v){$('order-{{$order_id}}').down('.total').update(v)}, {decimals:4});
+          refreshValue('CProductOrderItem-{{$id}}', '_price', function(v){$('order-item-{{$id}}-price').update(v)}, {decimals:4});
+        } });
+      };
+    </script>
+    
     <!-- Order item quantity change -->
-    <form name="form-item-quantity-{{$curr_item->_id}}" action="?" method="post">
+    <form name="form-item-quantity-{{$id}}" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      {{mb_field object=$curr_item 
-        field=quantity 
-        onchange="submitOrderItem(this.form, {noRefresh: true, onComplete: function(){
-            refreshValue('CProductOrder-$order_id', '_total', function(v){\$('order-$order_id').down('.total').update(v)}, {decimals:4});
-            refreshValue('CProductOrderItem-$id', '_price', function(v){\$('order-item-$id-price').update(v)}, {decimals:4});
-        } });"
-        form=form-item-quantity-$id 
-        min=0
-        size=2
-        style="width: 2em;"
-        increment=true}}
+      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+        {{mb_field object=$curr_item 
+          field=_quantity
+          onchange="quantitySubmit$id(this)"
+          form=form-item-quantity-$id 
+          min=0
+          size=2
+          step=$curr_item->_ref_reference->_ref_product->quantity*$curr_item->_ref_reference->quantity
+          style="width: 3em;"
+          increment=true}}
+        {{mb_value object=$curr_item->_ref_reference->_ref_product field=item_title}}
+      {{else}}
+        {{mb_field object=$curr_item 
+          field=quantity
+          onchange="quantitySubmit$id(this)"
+          form=form-item-quantity-$id 
+          min=0
+          size=2
+          style="width: 2em;"
+          increment=true}}
+      {{/if}}
     </form>
     {{else}}
-      {{mb_value object=$curr_item field=quantity}}
+      {{mb_value object=$curr_item field=$unit_order|ternary:_quantity:quantity}}
     {{/if}}
   </td>
   <td style="text-align: right;">
-    {{mb_value object=$curr_item field=unit_price decimals=4}}
+    {{mb_value object=$curr_item field=$unit_order|ternary:_unit_price:unit_price decimals=4}}
   </td>
   <td id="order-item-{{$id}}-price" style="text-align: right;">
     {{mb_value object=$curr_item field=_price decimals=4}}
@@ -100,7 +121,7 @@
               increment=true
               size=2
               min=0
-              style="width: 2em;"
+              style="width: 3em;"
               value=$curr_item->quantity-$curr_item->_quantity_received
             }}
           </td>

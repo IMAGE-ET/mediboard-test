@@ -40,8 +40,7 @@ class CProductCategory extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $count = $this->countBackRefs("products");
-    $this->_view = "$this->name ($count articles)";
+    $this->_view = $this->name;
   }
 
   function loadRefsBack() {

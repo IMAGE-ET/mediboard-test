@@ -46,8 +46,7 @@ $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
 // Suppliers list
-$societe = new CSociete();
-$list_societes = $societe->loadList(null, 'name');
+$list_societes = CSociete::getSuppliers(false);
 
 $lists = $reference->loadRefsObjects();
 

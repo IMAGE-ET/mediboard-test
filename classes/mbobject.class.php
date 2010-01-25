@@ -1606,18 +1606,27 @@ class CMbObject {
 
   /**
    *  Generic seek method
+   *  @todo Change the order of the arguments so that it matches the loadList method
    *  @return the first 100 records which fits the keywords
    */
-  function seek($keywords, $where = array(), $limit = 100, $countTotal = false) {
-    $query = "FROM `{$this->_spec->table}` WHERE 1";
-		
+  function seek($keywords, $where = array(), $limit = 100, $countTotal = false, $ljoin = null) {
     if (!is_array($keywords)) {
-      $keywords = array_filter(explode(' ', $keywords));
+      $keywords = array_filter(explode(" ", $keywords));
     }
-		
+    
     $seekables = $this->getSeekables();
     
+    $query = "FROM `{$this->_spec->table}` ";
+    
+    if ($ljoin && count($ljoin)) {
+      foreach ($ljoin as $table => $condition) {
+        $query .= "\nLEFT JOIN `$table` ON $condition";
+      }
+    }
+    
     $noWhere = true;
+    
+    $query .= " WHERE 1";
     
     // Add specific where clauses
     if ($where && count($where)) {

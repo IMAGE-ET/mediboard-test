@@ -12,6 +12,9 @@ global $can;
 $can->needsEdit();
 
 $societe_id = CValue::getOrSession('societe_id');
+$suppliers = CValue::getOrSession('suppliers');
+$manufacturers = CValue::getOrSession('manufacturers');
+$inactive = CValue::getOrSession('inactive');
 
 // Loads the expected Societe
 $societe = new CSociete();
@@ -28,14 +31,13 @@ foreach($societe->_ref_products as $key => $value) {
   $value->loadRefsFwd();
 }
 
-// Loads the Societes list
-$list_societes = $societe->loadList(null, 'name');
-
 // Smarty template
 $smarty = new CSmartyDP();
 
 $smarty->assign('societe',       $societe);
-$smarty->assign('list_societes', $list_societes);
+$smarty->assign('suppliers',     $suppliers);
+$smarty->assign('manufacturers', $manufacturers);
+$smarty->assign('inactive',      $inactive);
 
 $smarty->display('vw_idx_societe.tpl');
 

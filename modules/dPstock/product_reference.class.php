@@ -29,11 +29,15 @@ class CProductReference extends CMbObject {
 
   // Form fields
   var $_unit_price   = null;
+  var $_sub_unit_price   = null;
+  var $_quantity = null; // The quantity of product's sub-quantity
 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_reference';
     $spec->key   = 'reference_id';
+    $spec->uniques["code"] = array("code");
+    $spec->uniques["quantity"] = array("quantity", "product_id", "societe_id");
     return $spec;
   }
 
@@ -48,6 +52,8 @@ class CProductReference extends CMbObject {
     $specs['supplier_code'] = 'str seekable';
     $specs['mdq']         = 'num min|0';
     $specs['_unit_price'] = 'currency notNull';
+    $specs['_sub_unit_price'] = 'currency';
+    $specs['_quantity']   = 'num min|0';
     return $specs;
   }
 
@@ -59,11 +65,27 @@ class CProductReference extends CMbObject {
 
 	function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
-    $this->_view = "{$this->_ref_product->_view} (par {$this->quantity})";
+    $this->loadRefProduct();
     
-    if($this->quantity != 0) {
-      $this->_unit_price = ($this->price / $this->quantity);
+    $this->completeField("quantity", "price");
+    
+    $this->_view = "$this->_ref_product (par $this->quantity)";
+    
+    if($this->quantity) {
+      $this->_unit_price = $this->price / $this->quantity;
+      $this->_sub_unit_price = $this->_unit_price / $this->_ref_product->quantity;
+    }
+    
+    $this->_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
+  }
+  
+  function updateDBfields(){
+    parent::updateDBFields();
+    
+    $this->completeField("quantity");
+    
+    if ($this->_unit_price) {
+      $this->price = $this->_unit_price * $this->quantity;
     }
   }
 
@@ -80,34 +102,12 @@ class CProductReference extends CMbObject {
     return $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
   
-  function check() {
-  	// checks if the product reference doesn't exist yet :
-  	// no other reference can have the same product_id AND societe_id
-    if($this->product_id && $this->societe_id) {
-      $where = array(
-        'product_id' => "= '$this->product_id'",
-        'societe_id' => "= '$this->societe_id'",
-        'quantity'   => "= '$this->quantity'",
-        'reference_id' => "!= '$this->reference_id'"
-      );
-      
-      $VerifDuplicateKey = new CProductReference();
-      $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);
-      
-      if(count($ListVerifDuplicateKey) != 0) {
-        return 'Erreur : La référence produit existe déjà';
-      }
-    }
-    
-    return parent::check();
-  }
-  
   function loadRefsObjects() {
     $items = $this->loadBackRefs("order_items");
     $lists = array(
       "orders" => array(),
       "receptions" => array(),
-      "bills" => array()
+      "bills" => array(),
     );
     
     foreach($items as $_item) {
@@ -129,9 +129,7 @@ class CProductReference extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_product) {
-      $this->loadRefsFwd();
-    }
+    $this->loadRefProduct();
     return $this->_ref_product->getPerm($permType);
   }
 }

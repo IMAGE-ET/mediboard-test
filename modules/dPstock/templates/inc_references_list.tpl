@@ -49,11 +49,11 @@
           <input type="hidden" name="_create_order" value="true" />
           {{mb_field object=$curr_reference 
             field=quantity 
-            size=2 
+            size=2
             form="product-reference-$id" 
             increment=true 
             value=1
-            style="width: 1em;"
+            style="width: 2em;"
           }}
           <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
         </form>

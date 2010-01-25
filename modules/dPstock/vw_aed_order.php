@@ -20,14 +20,14 @@ $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
 // Suppliers list
-$societe = new CSociete();
-$list_societes = $societe->loadList(null, 'name');
+$list_societes = CSociete::getSuppliers(false);
 
 $order = new CProductOrder;
 $list_orders = $order->search("waiting", null, 30);
 
 foreach($list_orders as $_order) {
 	$_order->countBackRefs("order_items");
+  $_order->loadRefsOrderItems();
 }
 
 // Smarty template

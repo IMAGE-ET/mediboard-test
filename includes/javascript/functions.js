@@ -140,15 +140,15 @@ var WaitingMessage = {
   
   show: function() {
     var doc  = document.documentElement,
-		    mask = $('waitingMsgMask'),
-				text = $('waitingMsgText');
-				
+        mask = $('waitingMsgMask'),
+        text = $('waitingMsgText');
+        
     if (!mask && !text) return;
   
     // Display waiting text
     var vpd = document.viewport.getDimensions(),
-		    etd = text.getDimensions();
-				
+        etd = text.getDimensions();
+        
     text.setStyle({
       top: (vpd.height - etd.height)/2 + "px",
       left: (vpd.width - etd.width)/2 + "px",
@@ -207,7 +207,7 @@ function createDocument(oSelect, consultation_id) {
 
 function closeWindowByEscape(e) {
   if(Event.key(e) == 27){
-  	e.stop();
+    e.stop();
     window.close();
   }
 }
@@ -671,7 +671,7 @@ var ViewPort = {
     if (!element) return;
 
     var pos = 0,
-		    winHeight = 0;
+        winHeight = 0;
   
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
@@ -968,10 +968,10 @@ Object.extend (Control.Tabs, {
         tab.options.afterChange = function (tab, tabName) {
           Control.Tabs.storeTab(name, tab.id);
         }
-				var tabName = Control.Tabs.loadTab(name);
-				if (tabName) {
-					tab.setActiveTab(tabName);
-				}
+        var tabName = Control.Tabs.loadTab(name);
+        if (tabName) {
+          tab.setActiveTab(tabName);
+        }
       }
       return tab;
     }
@@ -1057,15 +1057,15 @@ var Modal = {
       closeOnClick: null
     }, options || {});
     
-    // Force element shot if undisplayed    
+    // Display element
     if (Object.isElement(message)) {
       message.show();
     }
 
-    html = DOM.div(null, 
+    var html = DOM.div(null, 
       DOM.div( { style: "min-height: 3em;"}, message),
       DOM.div( { style: "text-align: center; margin-left: -3em;" },
-        DOM.button( {className : "tick"  , type: "button"}, options.okLabel)
+        DOM.button( {className : "tick", type: "button"}, options.okLabel)
       )
     );
 
@@ -1084,19 +1084,19 @@ var Modal = {
       closeOnClick: null
     }, options || {});
     
-    // Force element shot if undisplayed		
-		if (Object.isElement(message)) {
-		  message.show();
-		}
+    // Display element  
+    if (Object.isElement(message)) {
+      message.show();
+    }
 
-    html = DOM.div(null, 
-		  DOM.div( { style: "min-height: 3em;"}, message),
-			DOM.div( { style: "text-align: center; margin-left: -3em;" },
+    var html = DOM.div(null, 
+      DOM.div( { style: "min-height: 3em;"}, message),
+      DOM.div( { style: "text-align: center; margin-left: -3em;" },
        DOM.button( {className : "tick"  , type: "button"}, options.yesLabel), 
        DOM.button( {className : "cancel", type: "button"}, options.noLabel )
-			)
-		);
-				 
+      )
+    );
+    
     var m = Control.Modal.open(html.innerHTML, options);
     m.container.down('button.tick'  ).observe('click', (function(){this.close(); options.onValidate(true ); options.onOK(); }).bind(m));
     m.container.down('button.cancel').observe('click', (function(){this.close(); options.onValidate(false); options.onKO(); }).bind(m));

@@ -14,6 +14,7 @@ class CProductOrder extends CMbObject {
 
 	// DB Fields
 	var $date_ordered     = null;
+  var $comments         = null;
 	var $societe_id       = null;
   var $group_id         = null;
 	var $locked           = null;
@@ -29,6 +30,7 @@ class CProductOrder extends CMbObject {
 	//    Single
 	var $_ref_societe     = null;
 	var $_ref_group       = null;
+  var $_ref_address     = null;
 
 	// Form fields
 	var $_total           = null;
@@ -60,6 +62,7 @@ class CProductOrder extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
+    $specs['comments']        = 'text';
     $specs['societe_id']      = 'ref notNull class|CSociete seekable';
 	  $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['locked']          = 'bool';
@@ -82,12 +85,9 @@ class CProductOrder extends CMbObject {
 
 	/** Counts this received product's items */
 	function countReceivedItems() {
-    if (!$this->_ref_order_items) {
-      $this->loadRefsBack();
-    }
-    
+    $this->loadRefsOrderItems();
     $count = 0;
-      
+    
 		foreach ($this->_ref_order_items as $item) {
 			if ($item->isReceived()) {
 				$count++;
@@ -98,9 +98,7 @@ class CProductOrder extends CMbObject {
 
 	/** Marks every order's items as received */
 	function receive() {
-		if (!$this->_ref_order_items) {
-		  $this->loadRefsBack();
-		}
+		$this->loadRefsOrderItems();
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
@@ -193,7 +191,7 @@ class CProductOrder extends CMbObject {
     $order->order_number = $order->getUniqueNumber();
     $order->store();
   	
-  	$this->loadRefsBack();
+  	$this->loadRefsOrderItems();
   	foreach ($this->_ref_order_items as $item) {
   		$item->loadRefs();
   		$new_item = new CProductOrderItem();
@@ -211,7 +209,7 @@ class CProductOrder extends CMbObject {
     $this->locked = 0;
     $this->cancelled = 0;
     
-    $this->loadRefsBack();
+    $this->loadRefsOrderItems();
     foreach ($this->_ref_order_items as $item) {
       foreach($item->_ref_receptions as $reception) {
         $reception->delete();
@@ -285,7 +283,7 @@ class CProductOrder extends CMbObject {
     if ($type === 'pending') {
       $list = array();
       foreach ($orders_list as $_order) {
-        if ($_order->countReceivedItems() < count($_order->_ref_order_items)) {
+        if ($_order->countReceivedItems() < $_order->countBackRefs("order_items")) {
           $list[] = $_order;
         }
       }
@@ -295,7 +293,7 @@ class CProductOrder extends CMbObject {
     else if ($type === 'received') {
       $list = array();
       foreach ($orders_list as $_order) {
-        if ($_order->countReceivedItems() >= count($_order->_ref_order_items)) {
+        if ($_order->countReceivedItems() >= $_order->countBackRefs("order_items")) {
           $list[] = $_order;
         }
       }
@@ -318,28 +316,71 @@ class CProductOrder extends CMbObject {
 
 	function updateFormFields() {
 		parent::updateFormFields();
-		$this->loadRefs();
+    
     $this->completeField("received");
 
-		$this->_count_received = $this->countReceivedItems();
-
-		$this->_total = 0;
-		if ($this->_ref_order_items) {
-			foreach ($this->_ref_order_items as $item) {
-				$item->updateFormFields();
-				$this->_total += $item->_price;
-				$this->_date_received = isset($item->_ref_receptions[0]) ? $item->_ref_receptions[0]->date : null;
-			}
-		}
-
-		$this->_received = $this->received || (count($this->_ref_order_items) >= $this->_count_received);
-		$this->_partial = !$this->_received && ($this->_count_received > 0);
-
-		$count = count($this->_ref_order_items);
+    if (!$this->comments) {
+      $group = CGroups::loadCurrent();
+      if ($group->pharmacie_id) {
+        $this->comments = $group->loadRefPharmacie()->soustitre;
+      }
+    }
+    
+    $items_count = $this->countBackRefs("order_items");
+    $this->loadRefsFwd();
+    $this->updateTotal();
+    
 		$this->_view  = "$this->order_number - ";
 		$this->_view .= $this->societe_id ? "$this->_ref_societe - " : "";
-		$this->_view .= "$count article".(($count>1)?'s':'').", total = $this->_total ".CAppUI::conf("currency_symbol");
+		$this->_view .= "$items_count article".(($items_count > 1) ? 's' : '');
+    
+    if ($this->_total !== null) {
+      $this->_view .= ", total = $this->_total ".CAppUI::conf("currency_symbol");
+    }
 	}
+  
+  function updateTotal(){
+    $this->_total = 0;
+    $this->loadRefsOrderItems();
+    foreach ($this->_ref_order_items as $item) {
+      $item->updateFormFields();
+      $this->_total += $item->_price;
+    }
+  }
+  
+  function updateCounts(){
+    $this->_count_received = $this->countReceivedItems();
+    
+    $this->loadRefsOrderItems();
+    foreach ($this->_ref_order_items as $item) {
+      $item->loadRefsReceptions();
+      $this->_date_received = isset($item->_ref_receptions[0]) ? $item->_ref_receptions[0]->date : null;
+    }
+    
+    $items_count = count($this->_ref_order_items);
+
+    $this->_received = $this->received || ($items_count >= $this->_count_received);
+    $this->_partial = !$this->_received && ($this->_count_received > 0);
+  }
+  
+  function loadRefsOrderItems($force = false) {
+    if ($this->_ref_order_items && !$force) {
+      return $this->_ref_order_items;
+    }
+      
+    return $this->_ref_order_items = $this->loadBackRefs('order_items');
+  }
+  
+  function loadRefAddress(){
+    $group = CGroups::loadCurrent();
+    if ($group->pharmacie_id) {
+      $this->_ref_address = $group->loadRefPharmacie();
+    }
+    else {
+      $this->_ref_address = $group;
+    }
+    return $this->_ref_address;
+  }
 	
 	function updateDBFields() {
 		$this->updateFormFields();
@@ -384,7 +425,7 @@ class CProductOrder extends CMbObject {
 	}
 
 	function loadRefsBack(){
-		$this->_ref_order_items = $this->loadBackRefs('order_items');
+		$this->loadRefsOrderItems();
 	}
 
 	function loadRefsFwd(){
@@ -393,8 +434,9 @@ class CProductOrder extends CMbObject {
 	}
 	
 	function delete() {
-		$this->updateFormFields();
-		if ((count($this->_ref_order_items) == 0) || !$this->date_ordered) {
+		$items_count = $this->countBackRefs("order_items");
+    
+		if (($items_count == 0) || !$this->date_ordered) {
 			return parent::delete();
 		} else if ($this->date_ordered && !$this->_received) {
 			
@@ -406,9 +448,7 @@ class CProductOrder extends CMbObject {
 	}
 
 	function getPerm($permType) {
-		if(!$this->_ref_order_items) {
-			$this->loadRefsFwd();
-		}
+		$this->loadRefsOrderItems();
 
 		foreach ($this->_ref_order_items as $item) {
 			if (!$item->getPerm($permType)) {

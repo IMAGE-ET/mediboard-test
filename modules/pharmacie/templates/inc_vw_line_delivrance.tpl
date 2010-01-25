@@ -42,24 +42,38 @@
     {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>
   <td>
-  {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
-    {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} - <b>{{$trace->quantity}} éléments</b> - [{{$trace->code}}] 
-    {{if !$trace->date_reception}}
-    <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
-      <input type="hidden" name="m" value="dPstock" /> 
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
-      <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
-      <input type="hidden" name="_undeliver" value="1" />
-      <button type="submit" class="cancel notext">{{tr}}Cancel{{/tr}}</button>
-    </form>
-    {{else}}
-     - déjà reçue
-    {{/if}}
-    <br />
-  {{foreachelse}}
-    Aucune délivrance pour cette dispensation<br />
-  {{/foreach}}
+    <table class="layout">
+    {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
+      <tr>
+        <td>
+          {{if !$trace->date_reception}}
+            <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
+              <input type="hidden" name="m" value="dPstock" /> 
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+              <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
+              <input type="hidden" name="_undeliver" value="1" />
+              <button type="submit" class="cancel notext">{{tr}}Cancel{{/tr}}</button>
+            </form>
+          {{else}}
+            <img src="images/icons/tick.png" title="Délivré" />
+          {{/if}}
+        </td>
+        <td>
+          <strong>{{$trace->quantity}} éléments</strong>
+        </td>
+        <td>
+          {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}
+        </td>
+        <td>
+          {{if $trace->code}}
+            [{{$trace->code}}] 
+          {{/if}}
+        </td>
+      </tr>
+    {{/foreach}}
+    </table>
+  
     <form {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}} name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return deliverLine(this)">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />

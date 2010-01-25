@@ -470,6 +470,10 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_reference` ADD `tva` FLOAT UNSIGNED DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.17";
+    $this->makeRevision('1.17');
+    $sql = "ALTER TABLE `product_order` ADD `comments` TEXT";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.18";
   }
 }

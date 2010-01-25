@@ -20,6 +20,8 @@ if ($order_id) {
   $order->load($order_id);
   $order->updateFormFields();
   $order->loadRefsFwd();
+  $order->loadRefAddress();
+  $order->updateCounts();
 }
 
 // Smarty template

@@ -24,14 +24,38 @@
         {{$curr_delivery->_ref_stock->_view}}
       </span>
     {{else}}
+     <script type="text/javascript">
+      var oFormDispensation = getForm('dispensation-stock-{{$curr_delivery->_id}}');
+    
+      var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+      url.addParam("produit_max", 40);
+      url.autoComplete(oFormDispensation.produit, $(oFormDispensation.produit).next(), {
+        minChars: 3,
+        select: "libelle",
+        afterUpdateElement: function(input, selected) {
+          $V(input.form._code, selected.down(".code-cip").innerHTML);
+        },
+        callback: function(input, queryString){
+          return queryString + "&inLivret=1&search_by_cis=0";
+        }
+      });
+     </script>
     <form name="dispensation-stock-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
-      {{mb_field object=$curr_delivery field=stock_id autocomplete=true form=dispensation-validate-$id}}
+      
+      
+      <input type="hidden" name="_code" value="" />
+      Produit: 
+      <input type="text" name="produit" value="" autocomplete="off" class="autocomplete" />
+      <div style="display: none; text-align: left;" class="autocomplete"></div>
+      
+      {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-stock-$id size=3}}
+
       <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
-      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
+      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); $V(this.form.stock_id, ''); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
     </form>
     {{/if}}
   </td>
@@ -62,6 +86,7 @@
     {{/if}}
   </td>
   <td>
+    {{if $curr_delivery->_ref_stock->_id}}
     <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}}>
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
@@ -73,5 +98,8 @@
       <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
       <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
     </form>
+    {{else}}
+    
+    {{/if}}
   </td>
 </tr>

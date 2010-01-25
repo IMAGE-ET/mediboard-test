@@ -12,13 +12,14 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  updateUnitQuantity(getForm("edit_reference"), "equivalent_quantity");
+  updateUnitQuantity(getForm("edit_reference").quantity, "equivalent_quantity");
+  updateUnitQuantity(getForm("edit_reference").mdq, "equivalent_quantity_mdq");
   filterReferences(getForm("filter-references"));
   Control.Tabs.create("reference-tabs", true);
 });
 
-function updateUnitQuantity(form, view) {
-  $(view).update('('+(form.quantity.value * form._unit_quantity.value)+' '+form._unit_title.value+')');
+function updateUnitQuantity(element, view) {
+  $(view).update('('+(element.value * element.form._unit_quantity.value)+' '+element.form._unit_title.value+')');
 }
 
 ProductSelector.init = function(){
@@ -50,15 +51,15 @@ function filterReferences(form) {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
-        <select name="category_id" onchange="this.form.onsubmit()">
-          <option value="0">&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
+        <select name="category_id" onchange="$V(this.form.start,'');this.form.onsubmit()">
+          <option value="">&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="this.form.onsubmit()">
-          <option value="0">&ndash; Tous les distributeurs</option>
+        <select name="societe_id" onchange="$V(this.form.start,'');this.form.onsubmit()">
+          <option value="">&ndash; Tous les distributeurs</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -66,8 +67,8 @@ function filterReferences(form) {
         
         <input type="text" name="keywords" value="" size="12" />
         
-        <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="this.form.reset()"></button>
+        <button type="button" class="search notext" onclick="$V(this.form.start,'');this.form.onsubmit();">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
       </form>
 
       <div id="list-references"></div>
@@ -81,7 +82,7 @@ function filterReferences(form) {
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="_unit_quantity" value="{{$reference->_ref_product->_unit_quantity}}" onchange="updateUnitQuantity(this.form, 'equivalent_quantity')" />
+      <input type="hidden" name="_unit_quantity" value="{{$reference->_ref_product->_unit_quantity}}" onchange="updateUnitQuantity(this.form.quantity, 'equivalent_quantity')" />
       <input type="hidden" name="_unit_title" value="{{$reference->_ref_product->_unit_title}}" />
       <table class="form">
         <tr>
@@ -109,7 +110,8 @@ function filterReferences(form) {
           <td>
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="40" readonly="readonly" ondblclick="ProductSelector.init()" />
-            <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+            <button class="search notext" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+            <button class="edit notext" type="button" onclick="location.href='?m=dPstock&amp;tab=vw_idx_product&amp;product_id='+this.form.product_id.value">{{tr}}Edit{{/tr}}</button>
           </td>
         </tr>
         <tr>
@@ -123,22 +125,57 @@ function filterReferences(form) {
         <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
           <td>
-            {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this.form, 'equivalent_quantity')"}}
+            {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity')"}}
             <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
             <span id="equivalent_quantity"></span>
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$reference field="price"}}</th>
-          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=8}}</td>
+          <th>{{mb_label object=$reference field="mdq"}}</th>
+          <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity_mdq')"}}
+            <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
+            <span id="equivalent_quantity_mdq"></span>
+          </td>
         </tr>
+        
+        <tr>
+        {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+          <th>{{mb_label object=$reference field="_unit_price"}}</th>
+          <td>
+            {{* <div style="float: right; display: none;">
+              {{mb_label object=$reference field="price"}}
+              {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=5 
+                         onchange="\$V(this.form._unit_price, this.value/(this.form.quantity.value || 1))"}}
+            </div>
+            
+            {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
+                       onchange="\$V(this.form.price, this.value*this.form.quantity.value)"}}
+             *}}
+             
+            {{mb_field object=$reference field="price" hidden=true}}
+            
+            {{assign var=sub_quantity value=$reference->_ref_product->quantity}}
+            {{mb_field object=$reference field="_sub_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
+                       onchange="\$V(this.form.price, this.value*this.form.quantity.value*$sub_quantity)"}}
+          </td>
+        {{else}}
+          <th>{{mb_label object=$reference field="price"}}</th>
+          <td>
+            <div style="float: right;">
+              {{mb_label object=$reference field="_unit_price"}}
+              {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
+                         onchange="\$V(this.form.price, this.value*this.form.quantity.value)"}}
+            </div>
+            
+            {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=5 
+                       onchange="\$V(this.form._unit_price, this.value/(this.form.quantity.value || 1))"}}
+          </td>
+        {{/if}}
+        </tr>
+        
         <tr>
           <th>{{mb_label object=$reference field="tva"}}</th>
           <td>{{mb_field object=$reference field="tva" increment=1 form=edit_reference decimals=1 min=0 size=2}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$reference field="mdq"}}</th>
-          <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4}}</td>
         </tr>
         <tr>
           <td class="button" colspan="4">

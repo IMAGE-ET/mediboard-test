@@ -31,6 +31,24 @@ Main.add(refreshSocietesList);
         
         <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0)" />
         <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        
+        <label>
+          <input type="checkbox" name="suppliers" value="1" {{if $suppliers}}checked="checked"{{/if}}
+                 onchange="$V(this.form.start, 0); this.form.onsubmit()" />
+          Distributeurs
+        </label>
+        
+        <label>
+          <input type="checkbox" name="manufacturers" value="1" {{if $manufacturers}}checked="checked"{{/if}}
+                 onchange="$V(this.form.start, 0); this.form.onsubmit()" />
+          Fabricants
+        </label>
+        
+        <label>
+          <input type="checkbox" name="inactive" value="1" {{if $inactive}}checked="checked"{{/if}}
+                 onchange="$V(this.form.start, 0); this.form.onsubmit()" />
+          Sociétés inactives
+        </label>
       </form>
     </td>
   </tr>

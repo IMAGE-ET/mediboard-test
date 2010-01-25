@@ -37,11 +37,11 @@ Main.add(function () {
 
   <!-- Tabs titles -->
   <ul id="tab_orders" class="control_tabs">
-    <li><a href="#list-orders-waiting">A valider <small>(0)</small></a></li>
-    <li><a href="#list-orders-locked">A passer <small>(0)</small></a></li>
-    <li><a href="#list-orders-pending">A recevoir <small>(0)</small></a></li>
-    <li><a href="#list-orders-received">Reçues <small>(0)</small></a></li>
-    <li><a href="#list-orders-cancelled">Annulées <small>(0)</small></a></li>
+    <li><a href="#list-orders-waiting" class="empty">A valider <small>(0)</small></a></li>
+    <li><a href="#list-orders-locked" class="empty">A passer <small>(0)</small></a></li>
+    <li><a href="#list-orders-pending" class="empty">A recevoir <small>(0)</small></a></li>
+    <li><a href="#list-orders-received" class="empty">Reçues <small>(0)</small></a></li>
+    <li><a href="#list-orders-cancelled" class="empty">Annulées <small>(0)</small></a></li>
   </ul>
   <hr class="control_tabs" />
   

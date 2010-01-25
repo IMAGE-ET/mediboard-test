@@ -14,10 +14,8 @@ $can->needsEdit();
 $category_id         = CValue::get('category_id');
 $stock_id            = CValue::getOrSession('stock_id');
 $keywords            = CValue::get('keywords');
-$only_ordered_stocks = CValue::get('only_ordered_stocks')=='true';
-
-// Often valued as empty string
-$limit               = CValue::first(CValue::get('limit'), "30");
+$start               = CValue::get('start');
+$only_ordered_stocks = CValue::get('only_ordered_stocks');
 
 CValue::setSession('category_id', $category_id);
 
@@ -55,7 +53,7 @@ if ($only_ordered_stocks) {
 
 $stock = new CProductStockGroup();
 $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, $limit, null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, intval($start).",30", null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
@@ -64,6 +62,7 @@ $smarty->assign('stock',             $stock);
 $smarty->assign('stock_id',          $stock_id);
 $smarty->assign('list_stocks',       $list_stocks);
 $smarty->assign('list_stocks_count', $list_stocks_count);
+$smarty->assign('start',             $start);
 
 $smarty->display('inc_stocks_list.tpl');
 ?>

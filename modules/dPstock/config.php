@@ -9,13 +9,15 @@
  */
 
 $dPconfig["dPstock"] = array (
+  "group_independent" => false,
   "CProductOrder" => array(
     "order_number_format" => "%y%m%d%H%M%id",
   ),
   "CProductStockGroup" => array(
-    "infinite_quantity" => 0
+    "infinite_quantity" => false,
+    "unit_order" => false,
   ),
   "CProductStockService" => array(
-    "infinite_quantity" => 0
+    "infinite_quantity" => false,
   )
 );

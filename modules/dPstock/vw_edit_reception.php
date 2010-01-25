@@ -25,6 +25,7 @@ $reception->loadBackRefs("reception_items");
 
 $order = new CProductOrder;
 $order->load($order_id);
+$order->updateCounts();
 
 $smarty = new CSmartyDP();
 $smarty->assign('reception', $reception);

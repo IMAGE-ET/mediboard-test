@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit('CProductOrderItem', 'order_item_id');
+$do = new CDoObjectAddEdit('CProductOrderItem');
 
 if(CValue::post("_create_order")) {
   $reference_id = CValue::post("reference_id");
@@ -21,8 +21,11 @@ if(CValue::post("_create_order")) {
   
 	$where = array(
 	  "societe_id" => "= '$reference->societe_id'",
-    "group_id" => "= '".CGroups::loadCurrent()->_id."'"
 	);
+  
+  if (CAppUI::conf("dPstock group_independent") == 0) {
+    $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+  }
 	
 	$order = new CProductOrder;
 	$orders = $order->search("waiting", null, 1, $where);

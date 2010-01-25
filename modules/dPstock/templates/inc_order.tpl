@@ -35,6 +35,8 @@
     <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
       <strong style="float: right;">
         {{tr}}Total{{/tr}} : <span class="total">{{mb_value object=$order field=_total decimals=4}}</span>
+        <br />
+        {{mb_label object=$order->_ref_societe field=carriage_paid}} : {{mb_value object=$order->_ref_societe field=carriage_paid}}
       </strong>
       
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: 'waiting'})">{{tr}}Refresh{{/tr}}</button>

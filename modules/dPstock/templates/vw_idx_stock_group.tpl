@@ -9,14 +9,20 @@
 *}}
 
 {{mb_include_script module=dPstock script=product_selector}}
-{{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
-Main.add(function () {
-  filterFields = ["category_id", "keywords", "only_ordered_stocks", "limit"];
-  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_group_list", "list-stocks-group", filterFields);
-  stocksFilter.submit();
-});
+function refreshList(){
+  var url = new Url("dPstock", "httpreq_vw_stocks_group_list");
+  url.addFormData("filter-stocks");
+  url.requestUpdate("list-stocks-group");
+  return false;
+}
+
+function changePage(page){
+  $V(getForm("filter-stocks").start, page);
+}
+
+Main.add(refreshList);
 
 ProductSelector.init = function(){
   this.sForm = "edit_stock";
@@ -36,21 +42,24 @@ function refreshListStocksService(product_id) {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
+      <form name="filter-stocks" action="?" method="post" onsubmit="return refreshList()">
         <input type="hidden" name="m" value="{{$m}}" />
-        <select name="category_id" onchange="stocksFilter.submit();">
-          <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}}</option>
+        <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        
+        <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
+          <option value="">&mdash; {{tr}}CProductCategory.all{{/tr}}</option>
           {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
-        <input type="text" name="keywords" value="" />
-        <input type="hidden" name="limit" value="" />
-        <button type="button" class="search notext" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
+        
+        <input type="text" name="keywords" value="" onchange="$V(this.form.start,0)" />
+        
+        <button type="button" class="search notext" onclick="$V(this.form.start,0);this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
         <br />
     
-        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
+        <input type="checkbox" name="only_ordered_stocks" onchange="$V(this.form.start,0);this.form.onsubmit()" />
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
       </form>
   
@@ -62,7 +71,6 @@ function refreshListStocksService(product_id) {
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_group_aed" />
         <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-        <input type="hidden" name="group_id" value="{{$g}}" />
         <input type="hidden" name="del" value="0" />
         <table class="form">
           <tr>
@@ -85,6 +93,7 @@ function refreshListStocksService(product_id) {
               {{mb_field object=$stock field="product_id" hidden=true}}
               <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
               <button class="search notext" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
+              <button class="edit notext" type="button" onclick="location.href='?m=dPstock&amp;tab=vw_idx_product&amp;product_id='+this.form.product_id.value">{{tr}}Edit{{/tr}}</button>
             </td>
           </tr>
           <tr>

@@ -844,4 +844,13 @@ $locales['CProduct-classe_comptable-desc'] = 'Classe comptable';
 $locales['CProductReference-tva'] = 'TVA';
 $locales['CProductReference-tva-court'] = 'TVA';
 $locales['CProductReference-tva-desc'] = 'TVA';
+$locales['CProductOrder-comments'] = '';
+$locales['CProductOrder-comments-court'] = '';
+$locales['CProductOrder-comments-desc'] = '';
+$locales['CProductReference-failed-code'] = 'Une référence avec le même code existe déjà';
+$locales['CProductReference-failed-quantity'] = 'Une référence avec les mêmes quantité, distributeur et produit';
+$locales['config-dPstock-group_independent'] = 'Pharmacie globale pour toutes les cliniques';
+$locales['config-dPstock-group_independent-desc'] = 'La pharmacie est globale pour toutes les cliniques';
+$locales['config-dPstock-CProductStockGroup-unit_order'] = 'Commandes à l\'unité';
+$locales['config-dPstock-CProductStockGroup-unit_order-desc'] = 'Les commandes se font à l\'unité';
 ?>

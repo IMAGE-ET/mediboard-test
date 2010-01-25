@@ -100,10 +100,14 @@ class CSetupdPetablissement extends CSetup {
               ADD `finess` INT (9) UNSIGNED ZEROFILL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    $sql = "ALTER TABLE `groups_mediboard` 
+              ADD `pharmacie_id` INT (11) UNSIGNED,
+              ADD INDEX (`pharmacie_id`);";
+    $this->addQuery($sql);
     
+    $this->mod_version = "0.22";
   } 
-  
 }
 
 ?>

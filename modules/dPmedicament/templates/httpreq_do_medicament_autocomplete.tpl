@@ -11,9 +11,9 @@
 <ul>
   {{foreach from=$produits item=produit}}
     <li style="text-align: left;">
-      <small style="display: none;">{{$produit->CodeCIP}}</small>
-      <small style="display: none;">{{$produit->CodeUCD}}</small>
-      <small style="display: none;">{{$produit->code_cis}}</small>
+      <small style="display: none;" class="code-cip">{{$produit->CodeCIP}}</small>
+      <small style="display: none;" class="code-ucd">{{$produit->CodeUCD}}</small>
+      <small style="display: none;" class="code-cis">{{$produit->code_cis}}</small>
 			Produit:
 			<strong> 
 			{{if $search_libelle_long}}
@@ -42,6 +42,9 @@
 			  ({{$produit->Commentaire|emphasize:$tokens}})
 			</div>
 			{{/if}}
+      
+      <small style="display: none;" class="libelle-long">{{$produit->LibelleLong}}</small>
+      <small style="display: none;" class="libelle">{{$produit->Libelle}}</small>
     </li>
   {{foreachelse}}
     <li style="text-align: left;"><span class="informal">Aucun résultat</span></li>

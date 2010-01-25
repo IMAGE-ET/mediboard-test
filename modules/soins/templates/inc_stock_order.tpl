@@ -73,7 +73,6 @@ Main.add(function(){
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 
-{{* 
 <form name="form-create-order" action="?" method="post" style="float: right;"
       onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
   <input type="hidden" name="m" value="dPstock" />
@@ -87,7 +86,7 @@ Main.add(function(){
   <input type="text" name="quantity" value="1" size="2" />
   
   {{mb_label class=CProductDelivery field=comments}}
-  <input type="text" name="comments" />
+  <input type="text" name="comments" size="40" />
   
   <button type="submit" class="tick notext" title="Faire la demande">Faire la demande</button>
 
@@ -95,7 +94,6 @@ Main.add(function(){
     getForm("form-create-order").quantity.addSpinner({min:0});
   </script>
 </form>
- *}}
 
 <table class="tbl">
   <tr>

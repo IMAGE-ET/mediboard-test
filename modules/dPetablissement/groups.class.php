@@ -28,6 +28,7 @@ class CGroups extends CMbObject {
   var $ape                 = null;
   var $tel_anesth          = null;
   var $service_urgences_id = null;
+  var $pharmacie_id        = null;
   var $finess              = null;
 
   // Object References
@@ -36,6 +37,8 @@ class CGroups extends CMbObject {
   var $_ref_produits_livret = null;
   var $_ref_dmi_categories = null;
   var $_ref_services = null;
+  var $_ref_pharmacie = null;
+  
   static $_ref_current = null;
   
   function getSpec() {
@@ -91,6 +94,7 @@ class CGroups extends CMbObject {
     $specs["fax"]                 = "numchar length|10 mask|$phone_number_format";
     $specs["tel_anesth"]          = "numchar length|10 mask|$phone_number_format";
     $specs["service_urgences_id"] = "ref class|CFunctions";
+    $specs["pharmacie_id"]        = "ref class|CFunctions";
     $specs["directeur"]           = "str maxLength|50";
     $specs["domiciliation"]       = "str maxLength|9";
     $specs["siret"]               = "str length|14";
@@ -158,6 +162,10 @@ class CGroups extends CMbObject {
   function loadRefsService(){
     $this->_ref_services = $this->loadBackRefs("services");
   }
+
+  function loadRefPharmacie(){
+    return $this->_ref_pharmacie = $this->loadFwdRef("pharmacie_id");
+  }
   
   /**
    * Load groups with given permission
@@ -185,8 +193,8 @@ class CGroups extends CMbObject {
    * @return CGroups
    */
   static function loadCurrent() {
-    global $g;
     if (!self::$_ref_current) {
+      global $g;
 	    self::$_ref_current = new CGroups();
 	    self::$_ref_current->load($g);
     }

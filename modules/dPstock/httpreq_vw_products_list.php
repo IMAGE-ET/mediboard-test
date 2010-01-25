@@ -14,8 +14,8 @@ $can->needsRead();
 $category_id = CValue::getOrSession('category_id');
 $societe_id  = CValue::getOrSession('societe_id');
 $product_id  = CValue::getOrSession('product_id');
-$start       = CValue::get('start');
-$keywords    = CValue::get('keywords');
+$start       = CValue::getOrSession('start');
+$keywords    = CValue::getOrSession('keywords');
 
 $where = array();
 if ($category_id) {

@@ -28,8 +28,10 @@ class CProductOrderItem extends CMbObject {
 
   // Form fields
   var $_price             = null;
+  var $_unit_price        = null;
   var $_date_received     = null;
   var $_quantity_received = null;
+  var $_quantity          = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,14 +46,14 @@ class CProductOrderItem extends CMbObject {
     $specs['order_id']           = 'ref class|CProductOrder'; // can be null because of gifts
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency';
+    $specs['_unit_price']         = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
+    $specs['_quantity']          = 'num';
     return $specs;
   }
 
   function receive($quantity, $code = null) {
-    $this->loadRefsFwd();
-    
     if ($this->_id) {
       $reception = new CProductOrderItemReception();
       $reception->order_item_id = $this->_id;
@@ -60,7 +62,7 @@ class CProductOrderItem extends CMbObject {
       $reception->code = $code;
       return $reception->store();
     } else {
-      return $this->_class_name.'::receive failed : order_item must be stored before';
+      return "$this->_class_name::receive failed : order_item must be stored before";
     }
   }
   
@@ -70,9 +72,9 @@ class CProductOrderItem extends CMbObject {
   }
   
   function getStock() {
-    if (!$this->_ref_order || $this->_ref_reference) {
-      $this->loadRefsFwd();
-    }
+    $this->loadReference();
+    $this->loadOrder();
+    
     $stock = new CProductStockGroup();
     $stock->group_id = $this->_ref_order->group_id;
     $stock->product_id = $this->_ref_reference->product_id;
@@ -81,7 +83,8 @@ class CProductOrderItem extends CMbObject {
   }
   
   function updateReceived() {
-    $this->loadRefsBack();
+    $this->loadRefsReceptions();
+    
     $quantity = 0;
     foreach ($this->_ref_receptions as $reception) {
       $quantity += $reception->quantity;
@@ -96,6 +99,20 @@ class CProductOrderItem extends CMbObject {
     $this->loadReference();
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
+    
+    $this->loadReference();
+    $this->_quantity = $this->quantity * $this->_ref_reference->_quantity;
+    $this->_unit_price = $this->_price / $this->_quantity;
+  }
+  
+  function updateDBFields() {
+    parent::updateDBFields();
+    
+    if ($this->_quantity) {
+      $this->completeField("reference_id");
+      $this->loadReference();
+      $this->quantity = $this->_quantity / $this->_ref_reference->_quantity;
+    }
   }
   
   function loadReference() {
@@ -104,6 +121,10 @@ class CProductOrderItem extends CMbObject {
   
   function loadOrder() {
     $this->_ref_order = $this->loadFwdRef("order_id", true);
+  }  
+  
+  function loadRefsReceptions() {
+    $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
   }
 
   function loadRefsFwd() {
@@ -120,7 +141,7 @@ class CProductOrderItem extends CMbObject {
   }
   
   function loadRefsBack() {
-    $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
+    $this->loadRefsReceptions();
   }
 
   function store() {

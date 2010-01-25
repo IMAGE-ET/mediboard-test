@@ -14,13 +14,35 @@ $can->needsRead();
 $start    = CValue::get('start', 0);
 $keywords = CValue::get('keywords');
 
+$suppliers = CValue::get('suppliers');
+$manufacturers = CValue::get('manufacturers');
+$inactive  = CValue::get('inactive');
+
+CValue::setSession('suppliers', $suppliers);
+CValue::setSession('manufacturers', $manufacturers);
+CValue::setSession('inactive', $inactive);
+
 if (!$keywords) {
   $keywords = "%";
 }
 
 $societe = new CSociete();
-$list = $societe->seek($keywords, null, intval($start).",30", true);
+$list = $societe->seek($keywords, null, 1000, true);
 $list_count = $societe->_totalSeek;
+
+foreach($list as $_id => $_societe) {
+  $is_manufacturer = $_societe->countBackRefs("products") > 0;
+  $is_supplier = $_societe->countBackRefs("product_references") > 0;
+  
+  if (!($manufacturers && $is_manufacturer || 
+        $suppliers && $is_supplier ||
+        $inactive && (!$is_supplier && !$is_manufacturer))) {
+    unset($list[$_id]);
+    $list_count--;
+  }
+}
+
+$list = array_slice($list, $start, 30);
 
 // Smarty template
 $smarty = new CSmartyDP();

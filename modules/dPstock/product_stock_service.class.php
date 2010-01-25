@@ -48,7 +48,7 @@ class CProductStockService extends CProductStock {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "{$this->_ref_product->_view} ({$this->_ref_service->_view})";
+    $this->_view = "$this->_ref_product ($this->_ref_service)";
   }
 
   function loadRefsFwd(){

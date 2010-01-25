@@ -66,14 +66,14 @@ function createOrders(order_id) {
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
-          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+          <option value="" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
           {{foreach from=$list_categories item=curr_category}} 
             <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
         
         <select name="societe_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
-          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
+          <option value="" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
           {{foreach from=$list_societes item=_societe}} 
             <option value="{{$_societe->_id}}">{{$_societe}}</option>
           {{/foreach}}
@@ -82,6 +82,7 @@ function createOrders(order_id) {
         <input type="text" name="keywords" value="" size="10" onchange="$V(this.form.start, 0, false)" />
         
         <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
       </form>
       <div id="list-references"></div>
     </td>

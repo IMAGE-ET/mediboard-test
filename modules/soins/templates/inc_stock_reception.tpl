@@ -47,29 +47,39 @@ printReceptionReport = function(service_id){
       <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>
+        <table class="layout">
         {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
-          {{assign var=id value=$trace->_id}}
-          <form name="delivery-trace-{{$id}}-receive" action="?" method="post" onsubmit="return receiveLine(this)">
-            <input type="hidden" name="m" value="dPstock" /> 
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
-            <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
-            {{if !$trace->date_reception}}
-              {{mb_field object=$trace field=quantity increment=1 form=delivery-trace-$id-receive size=2}}
-              {{mb_field object=$trace field=code size=10 title="Code"}}
-              <input type="hidden" name="date_reception" value="now" />
-              <button type="submit" class="tick">Recevoir</button>
-            {{else}}
-              <b>{{mb_value object=$trace field=quantity}} éléments</b>
-              [{{mb_value object=$trace field=code}}]
-              <input type="hidden" name="_unreceive" value="1" />
-              <button type="submit" class="cancel">Annuler</button>
-            {{/if}}
-          </form>
-          <br />
+          <tr>
+            <td>
+              {{assign var=id value=$trace->_id}}
+              <form name="delivery-trace-{{$id}}-receive" action="?" method="post" onsubmit="return receiveLine(this)">
+                <input type="hidden" name="m" value="dPstock" /> 
+                <input type="hidden" name="del" value="0" />
+                <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+                <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
+                {{if !$trace->date_reception}}
+                  {{mb_field object=$trace field=quantity increment=1 form=delivery-trace-$id-receive size=2}}
+                  {{mb_field object=$trace field=code size=10 title="Code"}}
+                  <input type="hidden" name="date_reception" value="now" />
+                  <button type="submit" class="tick notext">Recevoir</button>
+                {{else}}
+                  <button type="submit" class="cancel notext">Annuler</button>
+                  {{mb_value object=$trace field=date_reception}} - 
+                  <strong>{{mb_value object=$trace field=quantity}} éléments</strong>
+                  {{if $trace->code}}
+                    [{{mb_value object=$trace field=code}}]
+                  {{/if}}
+                  <input type="hidden" name="_unreceive" value="1" />
+                {{/if}}
+              </form>
+            </td>
+          </tr>
         {{foreachelse}}
-        Ce produit n'est pas encore sorti de la pharmacie
+          <tr>
+            <td>Pas encore sorti de la pharmacie</td>
+          </tr>
         {{/foreach}}
+        </table>
       </td>
     </tr>
   {{foreachelse}}

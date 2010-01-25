@@ -16,6 +16,8 @@ $list_orders = $order->search("waiting", null, 30);
 
 foreach($list_orders as $_order) {
 	$_order->countBackRefs("order_items");
+  $_order->loadRefsOrderItems();
+  $_order->updateCounts();
 }
 
 // Smarty template

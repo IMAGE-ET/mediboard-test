@@ -121,7 +121,6 @@
           <th>{{mb_label object=$usergroup field="ape"}}</th>
           <td>{{mb_field object=$usergroup field="ape"}}</td>
      		</tr>
-        
 
         {{if $usergroup->_id}}
         <tr>
@@ -129,9 +128,23 @@
           <td>
             <select name="service_urgences_id">
               <option value="">&mdash Choisir le service d'urgences</option>
-              {{foreach from=$usergroup->_ref_functions item="curr_fct"}}
-              <option value="{{$curr_fct->_id}}" class="mediuser" style="border-color: #{{$curr_fct->color}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
-                {{$curr_fct->_view}}
+              {{foreach from=$usergroup->_ref_functions item=_function}}
+              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
+                {{$_function}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$usergroup field="pharmacie_id"}}</th>
+          <td>
+            <select name="pharmacie_id">
+              <option value="">&mdash Choisir la pharmacie</option>
+              {{foreach from=$usergroup->_ref_functions item=_function}}
+              <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->pharmacie_id}}selected="selected"{{/if}}>
+                {{$_function}}
               </option>
               {{/foreach}}
             </select>

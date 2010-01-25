@@ -12,21 +12,13 @@ global $can;
 $can->needsRead();
 
 $service_id = CValue::get('service_id');
-$hide_done  = CValue::get('hide_done');
 $start      = CValue::get('start', 0);
-
-// Calcul de date_max et date_min
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
 $where = array (
  'order' => " = '1'"
 );
 
-//$where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, intval($start).",30");

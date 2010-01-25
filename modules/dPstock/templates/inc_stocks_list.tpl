@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<div id="list-stocks-{{if $stock->_class_name == 'CProductStockService'}}service{{else}}group{{/if}}-total-count" style="display: none;">{{$list_stocks_count}}</div>
+
+{{mb_include module=system template=inc_pagination change_page="changePage" total=$list_stocks_count current=$start step=30}}
 
 <table class="tbl">
   <tr>

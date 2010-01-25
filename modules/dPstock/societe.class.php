@@ -81,6 +81,32 @@ class CSociete extends CMbObject {
     }
   }
   
+  static function getManufacturers($also_inactive = true){
+    $societe = new self;
+    $list = $societe->loadList(null, "name");
+    foreach($list as $_id => $_societe) {
+      $is_supplier = $_societe->countBackRefs("product_references") > 0;
+      $is_manufacturer = $_societe->countBackRefs("products") > 0;
+      if (!($is_manufacturer || $also_inactive && !$is_supplier)) {
+        unset($list[$_id]);
+      }
+    }
+    return $list;
+  }
+  
+  static function getSuppliers($also_inactive = true){
+    $societe = new self;
+    $list = $societe->loadList(null, "name");
+    foreach($list as $_id => $_societe) {
+      $is_supplier = $_societe->countBackRefs("product_references") > 0;
+      $is_manufacturer = $_societe->countBackRefs("products") > 0;
+      if (!($is_supplier || $also_inactive && !$is_manufacturer)) {
+        unset($list[$_id]);
+      }
+    }
+    return $list;
+  }
+  
   function updateDBFields() {
     parent::updateDBFields();
     if ($this->_departments) {

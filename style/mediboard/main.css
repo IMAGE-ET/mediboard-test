@@ -822,6 +822,18 @@ div.selected {
   background-color: #ffc;
 }
 
+table.layout {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none !important;
+  margin: 0 !important;
+}
+
+table.layout td,
+table.layout th {
+  border: none !important;
+}
+
 div.dragged {
   background-color: #ffc;
   border: 1px solid black;
@@ -2828,7 +2840,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .bargraph {
   overflow: hidden;
-  height: 1em; 
+  height: 1.2em; 
   min-width: 2em;
 }
 
@@ -2852,7 +2864,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 .bargraph .threshold {
   height: 55%;
   opacity: .3;
-  margin-top: 1px;
+  margin-top: 0;
   z-index: 0;
 }
 
