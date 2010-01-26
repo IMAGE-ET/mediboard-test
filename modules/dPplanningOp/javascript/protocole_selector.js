@@ -88,7 +88,6 @@ var ProtocoleSelector = {
       $V(oSejourForm[this.sDP], protocole.DP);
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sLibelle_sejour].value) {
-    alert(protocole.libelle_sejour+" dans le champs "+this.sLibelle_sejour);
       $V(oSejourForm[this.sLibelle_sejour], protocole.libelle_sejour);
     }
     if(oSejourForm.sejour_id.value && oSejourForm[this.sConvalescence].value) {
