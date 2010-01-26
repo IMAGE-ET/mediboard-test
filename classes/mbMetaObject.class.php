@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php
 
 /**
  * @package Mediboard
@@ -6,11 +6,6 @@
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- */
-
-/**
- * Class CMbMetaObject 
- * @abstract Adds Mediboard abstraction layer functionality for meta-objects
  */
 
 CAppUI::requireSystemClass('mbobject');
@@ -31,8 +26,8 @@ class CMbMetaObject extends CMbObject {
   }
     
   function setObject($object) {
-    $this->_ref_object = $object;
-    $this->object_id = $object->_id;
+    $this->_ref_object  = $object;
+    $this->object_id    = $object->_id;
     $this->object_class = $object->_class_name;
   }
   
