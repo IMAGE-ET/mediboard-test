@@ -289,9 +289,14 @@ optgroup, option {
   font-style: normal;
   font-weight: normal;
   font-size: 1em;
+  font-family: inherit;
   padding: 0;
   margin: 0;
   background: #fff;
+}
+
+option {
+  padding-right: 0.6em;
 }
 
 optgroup {

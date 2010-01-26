@@ -33,14 +33,14 @@ function filterReferences(form) {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
-        <select name="category_id" onchange="this.form.onsubmit()">
+        <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="this.form.onsubmit()" style="width: 13em;">
+        <select name="societe_id" onchange="$V(this.form.start,0);this.form.onsubmit()" style="width: 13em;">
           <option value="">&ndash; Tous les fabricants</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
@@ -235,9 +235,9 @@ function filterReferences(form) {
       
       <table class="tbl" id="tab-references" style="display: none;">
         <tr>
-           <th style="width: 0.1%;"></th>
+           <th style="width: 0.1%;">{{mb_title class=CProductReference field=code}}</th>
            <th>{{mb_title class=CProductReference field=societe_id}}</th>
-           <th>{{mb_title class=CProductReference field=code}}</th>
+           <th>{{mb_title class=CProductReference field=supplier_code}}</th>
            <th>{{mb_title class=CProductReference field=quantity}}</th>
            <th>{{mb_title class=CProductReference field=price}}</th>
            <th>{{mb_title class=CProductReference field=_unit_price}}</th>
@@ -245,14 +245,22 @@ function filterReferences(form) {
          {{foreach from=$product->_ref_references item=curr_reference}}
          <tr>
            <td>
-             <button type="button" class="edit notext" onclick="location.href='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}'"></button>
+             <a href="?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}">
+               <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_guid}}')">
+                 {{if $curr_reference->code}}
+                   {{mb_value object=$curr_reference field=code}}
+                 {{else}}
+                   [Aucun code]
+                 {{/if}}
+               </span>
+             </a>
            </td>
            <td>
              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_societe->_guid}}')">
                {{mb_value object=$curr_reference field=societe_id}}
              </span>
            </td>
-           <td>{{mb_value object=$curr_reference field=code}}</td>
+           <td>{{mb_value object=$curr_reference field=supplier_code}}</td>
            <td>{{mb_value object=$curr_reference field=quantity}}</td>
            <td>{{mb_value object=$curr_reference field=price}}</td>
            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>

@@ -14,6 +14,7 @@ class CStrSpec extends CMbFieldSpec {
   var $length    = null;
   var $minLength = null;
   var $maxLength = null;
+  var $protected = null;
   
   function getSpecType() {
     return "str";

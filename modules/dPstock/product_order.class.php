@@ -69,7 +69,7 @@ class CProductOrder extends CMbObject {
 	  $specs['cancelled']       = 'bool';
 	  $specs['deleted']         = 'bool';
     $specs['received']        = 'bool';
-    $specs['order_number']    = 'str maxLength|64 seekable';
+    $specs['order_number']    = 'str maxLength|64 seekable protected';
     $specs['_total']          = 'currency';
     $specs['_count_received'] = 'num pos';
 	  $specs['_date_received']  = 'dateTime';

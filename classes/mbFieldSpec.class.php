@@ -492,6 +492,12 @@ class CMbFieldSpec {
 
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
+    $protected    = $object->_id && isset($this->protected) && $this->protected;
+    
+    if ($protected) {
+      $params["readonly"] = "readonly";
+    }
+    
     $autocomplete = CMbArray::extract($params, "autocomplete", "true,2,30,false,false");
     $form         = CMbArray::extract($params, "form");
     $extra        = CMbArray::makeXmlAttributes($params);
@@ -555,15 +561,20 @@ class CMbFieldSpec {
     }
     else {
     	$sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra/>";
+                class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra/>";
     }
+    
+    if ($protected) {
+      $sHtml .= '<button type="button" onclick="var p=$(this).previous(\'input\');p.readOnly=!p.readOnly;" class="notext lock" title="'.CAppUI::tr("Unlock").'"></button>';
+    }
+    
     return $sHtml;
   }
 
   function getFormElementTextarea($object, &$params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
-    $sHtml        = "<textarea name=\"$field\" class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    $sHtml        = "<textarea name=\"$field\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
     return $sHtml;
   }
 

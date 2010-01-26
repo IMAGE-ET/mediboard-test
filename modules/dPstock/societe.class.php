@@ -54,8 +54,8 @@ class CSociete extends CMbObject {
 	function getProps() {
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
-    $specs['code']            = 'str maxLength|80 seekable';
-    $specs['distributor_code']= 'str maxLength|80 seekable';
+    $specs['code']            = 'str maxLength|80 seekable protected';
+    $specs['distributor_code']= 'str maxLength|80 seekable protected';
     $specs['address']         = 'text seekable';
     $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';

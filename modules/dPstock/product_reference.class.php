@@ -48,7 +48,7 @@ class CProductReference extends CMbObject {
     $specs['quantity']    = 'num notNull pos';
     $specs['price']       = 'currency notNull';
     $specs['tva']         = 'pct min|0 default|0';
-    $specs['code']        = 'str seekable';
+    $specs['code']        = 'str seekable protected';
     $specs['supplier_code'] = 'str seekable';
     $specs['mdq']         = 'num min|0';
     $specs['_unit_price'] = 'currency notNull';
