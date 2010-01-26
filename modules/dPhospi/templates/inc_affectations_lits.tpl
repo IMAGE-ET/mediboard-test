@@ -151,7 +151,7 @@
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="affectation_id" value="{{$curr_affectation->_id}}" />
         </form>
-        <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
+        <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
           <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
         </a>
         {{/if}}
