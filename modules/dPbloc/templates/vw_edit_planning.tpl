@@ -145,17 +145,27 @@ Main.add(function(){
         <td>
           <select name="salle_id" class="{{$plagesel->_props.salle_id}}" style="max-width: 170px;">
             <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
-            {{foreach from=$listBlocs item=curr_bloc}}
-              <optgroup label="{{$curr_bloc->_view}}">
-              {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+            {{if $plagesel->_id}}
+              {{foreach from=$listBlocs item=curr_bloc}}
+                <optgroup label="{{$curr_bloc->_view}}">
+                {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
+                  <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
+                    {{$curr_salle}}
+                  </option>
+                {{foreachelse}}
+                  <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
+                {{/foreach}}
+                </optgroup>
+              {{/foreach}}
+            {{else}}
+              {{foreach from=$bloc->_ref_salles item=curr_salle}}
                 <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $plagesel->salle_id}}selected="selected"{{/if}}>
-                  {{$curr_salle->nom}}
+                  {{$curr_salle}}
                 </option>
               {{foreachelse}}
                 <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
               {{/foreach}}
-              </optgroup>
-            {{/foreach}}
+            {{/if}}
           </select>
         </td>
       </tr>
