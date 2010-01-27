@@ -223,20 +223,30 @@ var Url = Class.create({
     oOptions = Object.extend({
       minChars: 2,
       frequency: 0.5,
+			width: null,
       dropdown: false,
       valueElement: null,
 	    
 	    // Allows bigger width than input
 			onShow: function(element, update) { 
-        if(!update.style.position || update.style.position == 'absolute') {
-          update.style.position = 'absolute';
-          Position.clone(element, update, {
-            setWidth: !parseFloat(update.getStyle('width')), // In order to make the list as wide as the input if the style contains width:0
-            setHeight: false, 
-            offsetTop: element.offsetHeight
-          });
+        update.style.position = 'absolute';
+        Position.clone(element, update, {
+          setWidth: false,
+          setHeight: false, 
+          offsetTop: element.offsetHeight
+        });
+
+        if (oOptions.width) {
+          update.style.width = oOptions.width;
         }
-        Effect.Appear(update, {duration:0.25});
+        else {
+          update.style.width = "auto";
+					update.style.whiteSpace = "nowrap"; 
+          update.style.minWidth = $(input).getDimensions().width+"px";
+          update.style.maxWidth = "400px";
+        }
+        update.show();
+        update.unoverflow();
       }
     }, oOptions);
     
