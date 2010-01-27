@@ -16,14 +16,14 @@
 
 <ul>
 {{foreach from=$matches item=match}}
+  <li id="{{$match->_id}}">
   {{if $template}}
-    <li id="{{$match->_id}}">{{include file=$template}}</li>
+    {{include file=$template}}
   {{else}}
-    <li id="{{$match->_id}}">
-      {{* Do not add carriage returns or it will add whitespace in the input *}}
-      <span class="view">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
-    </li>
+    {{* Do not add carriage returns or it will add whitespace in the input *}}
+    <span class="view">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
   {{/if}}
+  </li>
 {{foreachelse}}
   <li><span class="informal">{{tr}}No result{{/tr}}</span></li>
 {{/foreach}}

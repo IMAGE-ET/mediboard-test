@@ -31,7 +31,7 @@ Main.add(function () {
   <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($V(this.keywords));">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="text" name="keywords" onchange="this.form.onsubmit()" />
-    <button type="button" class="search" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+    <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
     <button type="button" class="cancel notext" onclick="$V(this.form.elements.keywords, '')">{{tr}}Empty{{/tr}}</button>
   </form>
 

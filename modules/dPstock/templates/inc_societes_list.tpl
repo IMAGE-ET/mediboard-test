@@ -48,7 +48,7 @@
     <td>{{mb_value object=$curr field=phone}}</td>
     <td>
       <span class="societe-type {{if $curr->_count.products}}active{{/if}}" title="Fabricant">F</span>
-      <span class="societe-type {{if $curr->_count.product_references}}active{{/if}}" title="Distributeur">D</divspan
+      <span class="societe-type {{if $curr->_count.product_references}}active{{/if}}" title="Distributeur">D</span>
     </td>
   </tr>
   {{foreachelse}}

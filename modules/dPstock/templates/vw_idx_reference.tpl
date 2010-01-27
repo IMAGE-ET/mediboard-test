@@ -67,7 +67,7 @@ function filterReferences(form) {
         
         <input type="text" name="keywords" value="" size="12" onchange="$V(this.form.start,0)" />
         
-        <button type="button" class="search notext" onclick="$V(this.form.start,0);this.form.onsubmit();">{{tr}}Filter{{/tr}}</button>
+        <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
       </form>
 
@@ -95,14 +95,8 @@ function filterReferences(form) {
         <tr>
           <th>{{mb_label object=$reference field="societe_id"}}</th>
           <td>
-            <select name="societe_id" class="{{$reference->_props.societe_id}}">
-              <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
-              {{foreach from=$list_societes item=curr_societe}}
-                <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
-                {{$curr_societe->_view}}
-                </option>
-              {{/foreach}}
-            </select>
+            {{mb_field object=$reference field=societe_id form="edit_reference" autocomplete="true,1,50,false,true" 
+                       style="width: 15em;"}}
           </td>
         </tr>
         <tr>

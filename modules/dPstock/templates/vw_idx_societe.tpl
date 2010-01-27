@@ -33,7 +33,7 @@ Main.add(function(){
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0)" />
-        <button type="button" class="search notext" onclick="this.form.onsubmit()">{{tr}}Filter{{/tr}}</button>
+        <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         
         <label>
           <input type="checkbox" name="suppliers" value="1" {{if $suppliers}}checked="checked"{{/if}}
