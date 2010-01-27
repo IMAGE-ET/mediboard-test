@@ -18,7 +18,7 @@
 {{foreach from=$matches item=match}}
   <li id="{{$match->_id}}">
   {{if $template}}
-    {{include file=$template}}
+    {{include file=$template nodebug=true}}
   {{else}}
     {{* Do not add carriage returns or it will add whitespace in the input *}}
     <span class="view">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
