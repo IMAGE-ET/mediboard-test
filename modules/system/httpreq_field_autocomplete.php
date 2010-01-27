@@ -25,6 +25,7 @@ $spec = $object->_specs[$field];
 $ds = $object->_spec->ds;
 $matches = array();
 $count = 0;
+$template = null;
 
 if ($spec instanceof CRefSpec) {
   $target_object = new $spec->class;
@@ -45,6 +46,10 @@ if ($spec instanceof CRefSpec) {
   else {
     $matches = $target_object->loadList($where, $view_field, $limit);
     $total = $target_object->countList($where);
+  } 
+  $template_file = "modules/{$target_object->_ref_module->mod_name}/templates/{$target_object->_class_name}_autocomplete.tpl";
+  if (is_file($template_file)) {
+    $template = "../../../$template_file";
   }
 }
 else {
@@ -73,13 +78,14 @@ else {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('matches',  $matches);
-$smarty->assign('count',    $count);
-$smarty->assign('input',    $input);
-$smarty->assign('field',    $field);
+$smarty->assign('matches',    $matches);
+$smarty->assign('count',      $count);
+$smarty->assign('input',      $input);
+$smarty->assign('field',      $field);
 $smarty->assign('view_field', $view_field);
 $smarty->assign('show_view',  $show_view);
-$smarty->assign('nodebug', true);
+$smarty->assign('template',   $template);
+$smarty->assign('nodebug',    true);
 
 $smarty->display('inc_field_autocomplete.tpl');
 

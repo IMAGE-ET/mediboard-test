@@ -14,21 +14,15 @@ $can->needsRead();
 $service_id = CValue::getOrSession('service_id');
 $mode       = CValue::get('mode');
 
-// Calcul de date_max et date_min
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
-
 $order_by = 'service_id, patient_id, date_dispensation DESC';
-$where = array ();
+$where = array();
 if ($service_id) {
   $where['service_id'] = " = $service_id";
 }
-$where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where['date_delivery'] = "IS NULL";
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, 100);
+$deliveries = $delivery->loadList($where, $order_by, 30);
 
 $deliveries_nominatif = array();
 $deliveries_global = array();

@@ -15,6 +15,9 @@
 <!-- Stock Pharmacie -->
   <!-- Affichage des stocks du service -->
   <td class="text">
+    {{$stock->_ref_product->code}}
+  </td>
+  <td class="text">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');">
       {{$stock}}
     </span>
@@ -97,9 +100,11 @@
   </td>
   
   {{if !$infinite_service && $only_service_stocks == 1}}
+  <td style="width: 0.1%;">
+   {{$stock->_ref_stock_service->quantity}}
+  </td>
   <td>
    {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
-   {{$stock->_ref_stock_service->quantity}}
   </td>
   {{/if}}
 </tr>

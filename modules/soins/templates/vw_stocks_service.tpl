@@ -10,16 +10,11 @@
 
 <script type="text/javascript">
 function refreshLists() {
-  var url, form = getForm("filter");
-    
   refreshOrders();
+  refreshReceptions();
   
-  url = new Url("soins", "httpreq_vw_stock_reception");
-  url.addFormData(form);
-  url.requestUpdate("list-reception");
-  
-  url = new Url("soins", "httpreq_vw_stock_inventory");
-  url.addFormData(form);
+  var url = new Url("soins", "httpreq_vw_stock_inventory");
+  url.addFormData(getForm("filter"));
   url.requestUpdate("list-inventory");
   
   return false;
@@ -29,6 +24,12 @@ function refreshOrders(){
   var url = new Url("soins", "httpreq_vw_stock_order");
   url.addFormData(getForm("filter"));
   url.requestUpdate("list-order");
+}
+
+function refreshReceptions(){
+  var url = new Url("soins", "httpreq_vw_stock_reception");
+  url.addFormData(getForm("filter"));
+  url.requestUpdate("list-reception");
 }
 
 function receiveLine(form, dontRefresh) {
@@ -58,10 +59,10 @@ Main.add(function () {
 
 <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="start" value="{{$start}}" />
-  <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
-  <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
-  <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshOrders()"/>
+  <input type="hidden" name="start" value="{{$start}}" onchange="refreshLists()" />
+  <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshLists()"/>
+  <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshLists()"/>
+  <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshLists()"/>
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>

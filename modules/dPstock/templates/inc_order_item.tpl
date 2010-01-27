@@ -42,7 +42,7 @@
     </script>
     
     <!-- Order item quantity change -->
-    <form name="form-item-quantity-{{$id}}" action="?" method="post">
+    <form name="form-item-quantity-{{$id}}" action="?" method="post" onsubmit="return false">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />

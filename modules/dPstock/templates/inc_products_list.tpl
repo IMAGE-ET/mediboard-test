@@ -26,9 +26,7 @@
     <tr {{if $curr_product->_id == $product_id}}class="selected"{{/if}}>
       <td colspan="4">
         <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">
-          <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
-            {{$curr_product->name|truncate:90}}
-          </strong>
+          {{$curr_product->name|truncate:90}}
         </a>
       </td>
     </tr>

@@ -16,9 +16,15 @@
 
 <ul>
 {{foreach from=$matches item=match}}
-  {{* Do not add carriage returns or it will add whitespace in the input *}}
-  <li id="{{$match->_id}}">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</li>
+  {{if $template}}
+    <li id="{{$match->_id}}">{{include file=$template}}</li>
+  {{else}}
+    <li id="{{$match->_id}}">
+      {{* Do not add carriage returns or it will add whitespace in the input *}}
+      <span class="view">{{if $show_view}}{{$match->_view}}{{else}}{{$match->$f|emphasize:$input}}{{/if}}</span>
+    </li>
+  {{/if}}
 {{foreachelse}}
-  <li><span class="informal">Aucun résultat</span></li>
+  <li><span class="informal">{{tr}}No result{{/tr}}</span></li>
 {{/foreach}}
 </ul>

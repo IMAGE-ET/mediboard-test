@@ -95,9 +95,41 @@ updateFieldsMedicament = function(selected) {
   }
 }
 
+function refreshPatient(){
+  var url = new Url("pharmacie","httpreq_vw_list_patients");
+  url.addFormData(getForm("filter"));
+  url.requestUpdate("patients");
+}
+
+var tabs;
+Main.add(function () {
+  tabs = Control.Tabs.create('tab_delivrances', true);
+  refreshLists();
+  refreshPatient();
+});
 </script>
 
-{{include file=inc_filter_delivrances.tpl}}
+<form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="start" value="0" />
+  <table class="form">
+    <tr>
+      <th>{{mb_label object=$delivrance field=_date_min}}</th>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter register=true onchange="refreshPatient()"}}</td>
+      <th>{{mb_label object=$delivrance field=_date_max}}</th>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="refreshPatient()"}}</td>
+      <td>
+        <select name="service_id" onchange="refreshPatient();">
+        {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+        {{/foreach}}
+        </select>
+      </td>
+      <td id="patients"></td>
+      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
+    </tr>
+  </table>
+</form>
 
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>

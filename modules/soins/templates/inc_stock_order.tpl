@@ -97,12 +97,15 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
+    <th style="width: 0.1%;">Code</th>
     <th></th>
     <th>Unité de dispensation</th>
     <th style="width: 30%">Commande</th>
     <th>Déjà effectuées</th>
     {{if !$infinite_service && $only_service_stocks == 1}}
-    <th>Stock<br /> du service</th>
+    <th colspan="2">
+      Stock du service
+    </th>
     {{/if}}
   </tr>
   {{foreach from=$stocks item=stock}}

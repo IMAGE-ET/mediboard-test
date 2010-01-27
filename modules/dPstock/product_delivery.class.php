@@ -15,6 +15,7 @@ class CProductDelivery extends CMbObject {
   // DB Fields
   var $stock_id       = null;
   var $date_dispensation = null;
+  var $date_delivery  = null;
   var $quantity       = null;
   var $service_id     = null;
   var $patient_id     = null;
@@ -42,6 +43,7 @@ class CProductDelivery extends CMbObject {
     $specs = parent::getProps();
     $specs['stock_id']          = 'ref class|CProductStockGroup'; // can be null when the stock doesn't exist in the group
     $specs['date_dispensation'] = 'dateTime notNull';
+    $specs['date_delivery']     = 'dateTime';
     $specs['quantity']          = 'num notNull';
     $specs['service_id']        = 'ref notNull class|CService';
     $specs['patient_id']        = 'ref class|CPatient';

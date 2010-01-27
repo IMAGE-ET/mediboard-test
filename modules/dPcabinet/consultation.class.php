@@ -253,7 +253,7 @@ class CConsultation extends CCodable {
     // si _coded vaut 1 alors, impossible de modifier la consultation
     $this->_coded = $this->valide;
     
-    $this->_exam_fields = $this->getExamFields();
+    $this->_exam_fields = self::getExamFields();
   }
    
   function updateDBFields() {
@@ -934,13 +934,13 @@ class CConsultation extends CCodable {
     foreach($this->_ref_examcomp as $keyExam => &$currExam){
       $this->_types_examen[$currExam->realisation][$keyExam] = $currExam;
     }
-    
   }
   
   static function getExamFields() {
-    $fields = array();
-    $fields[] = "motif";
-    $fields[] = "rques";
+    $fields = array(
+      "motif",
+      "rques",
+    );
     if(CAppUI::conf("dPcabinet CConsultation show_histoire_maladie")) {
       $fields[] = "histoire_maladie";
     }

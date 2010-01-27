@@ -24,5 +24,12 @@
 			<strong>{{mb_title object=$object field=_unique_usage}}</strong> : {{mb_value object=$object field=_unique_usage}}
 		</td>
 	</tr>
+  {{if $object->canEdit()}}
+  <tr>
+    <td class="button">
+      <button type="button" class="edit" onclick="location.href='?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$object->_id}}'">{{tr}}Edit{{/tr}}</button>
+    </td>
+  </tr>
+  {{/if}}
 </table>
                   

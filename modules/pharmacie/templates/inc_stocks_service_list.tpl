@@ -37,6 +37,26 @@ updateDispensationUrgence = function(formUrgence) {
     <th colspan="6" class="title">Dispensations - Produits présents dans les services</th>
   </tr>
   <tr>
+    <td colspan="6" style="text-align: center;">
+      <form name="dispensation-urgence" action="?" method="post" onsubmit="updateDispensationUrgence(this); $('produit_view').update(''); return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
+        <input type="hidden" name="m" value="dPstock" />
+        <input type="hidden" name="dosql" value="do_delivery_aed" />
+        {{mb_field object=$delivrance field=service_id hidden=true}}
+        {{mb_field object=$delivrance field=patient_id hidden=true}}
+        <input type="hidden" name="date_dispensation" value="now" />
+        <input type="hidden" name="_code" value="" class="notNull" />
+        
+        Produit: <input type="text" name="produit" value="" autocomplete="off" class="autocomplete" />
+        <span id="produit_view"></span>
+        <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
+        
+        Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence" value="1"}}
+        
+        <button class="tick">Dispenser</button>
+      </form>
+    </td>
+  </tr>
+  <tr>
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
     {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
     <th>{{tr}}CProductStockService{{/tr}}</th>
@@ -99,29 +119,4 @@ updateDispensationUrgence = function(formUrgence) {
       <td colspan="10">{{tr}}CProductStockService.none{{/tr}}</td>
     </tr>
   {{/foreach}}
-  <tr>
-    <th class="title" colspan="6">
-			Autres produits
-    </th>
-  </tr>
-  <tr>
-    <td colspan="6" style="text-align: center;">
-    <form name="dispensation-urgence" action="?" method="post" onsubmit="updateDispensationUrgence(this); $('produit_view').update(''); return (checkForm(this) && onSubmitFormAjax(this, {onComplete: refreshLists}))">
-      <input type="hidden" name="m" value="dPstock" />
-      <input type="hidden" name="dosql" value="do_delivery_aed" />
-      {{mb_field object=$delivrance field=service_id hidden=true}}
-      {{mb_field object=$delivrance field=patient_id hidden=true}}
-      <input type="hidden" name="date_dispensation" value="now" />
-      <input type="hidden" name="_code" value="" class="notNull" />
-      
-      Produit: <input type="text" name="produit" value="" autocomplete="off" class="autocomplete" />
-      <span id="produit_view"></span>
-      <div style="display: none; text-align: left;" class="autocomplete" id="produit_auto_complete"></div>
-      
-      Quantité: {{mb_field object=$delivrance field=quantity size="4" increment=true form="dispensation-urgence" value="1"}}
-      
-      <button class="tick">Dispenser</button>
-    </form>
-    </td>
-  </tr>
 </table>

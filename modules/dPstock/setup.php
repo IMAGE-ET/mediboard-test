@@ -474,6 +474,13 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_order` ADD `comments` TEXT";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.18";
+    $this->makeRevision('1.18');
+    $sql = "ALTER TABLE `product_delivery` 
+              CHANGE `stock_id` `stock_id` INT (11) UNSIGNED,
+              ADD `date_delivery` DATETIME,
+              ADD INDEX (`date_delivery`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.19";
   }
 }

@@ -18,7 +18,8 @@ $patient_id = CValue::getOrSession('patient_id');
 $service = new CService();
 $list_services = $service->loadGroupList();
 
-$day_min = $day_max = mbDate();
+$day_min = mbDate("-1 DAY");
+$day_max = mbDate("+2 DAY");
 
 $schedule = str_split(CAppUI::conf('pharmacie dispensation_schedule'));
 $schedule2 = str_split(CAppUI::conf('pharmacie dispensation_schedule'));

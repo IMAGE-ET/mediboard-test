@@ -29,6 +29,8 @@ class CSociete extends CMbObject {
   var $departments     = null;
   
   var $_departments    = null;
+  var $_is_supplier    = null;
+  var $_is_manufacturer= null;
 
   // Object References
   //     Multiple
@@ -79,15 +81,16 @@ class CSociete extends CMbObject {
     if (count($this->_departments)) {
       $this->_view .= " (".implode(", ", $this->_departments).")";
     }
+    
+    $this->_is_supplier = $this->countBackRefs("product_references") > 0;
+    $this->_is_manufacturer = $this->countBackRefs("products") > 0;
   }
   
   static function getManufacturers($also_inactive = true){
     $societe = new self;
     $list = $societe->loadList(null, "name");
     foreach($list as $_id => $_societe) {
-      $is_supplier = $_societe->countBackRefs("product_references") > 0;
-      $is_manufacturer = $_societe->countBackRefs("products") > 0;
-      if (!($is_manufacturer || $also_inactive && !$is_supplier)) {
+      if (!($societe->_is_manufacturer || $also_inactive && !$societe->_is_supplier)) {
         unset($list[$_id]);
       }
     }
@@ -98,9 +101,7 @@ class CSociete extends CMbObject {
     $societe = new self;
     $list = $societe->loadList(null, "name");
     foreach($list as $_id => $_societe) {
-      $is_supplier = $_societe->countBackRefs("product_references") > 0;
-      $is_manufacturer = $_societe->countBackRefs("products") > 0;
-      if (!($is_supplier || $also_inactive && !$is_manufacturer)) {
+      if (!($societe->_is_supplier || $also_inactive && !$societe->_is_manufacturer)) {
         unset($list[$_id]);
       }
     }

@@ -22,8 +22,9 @@ printReceptionReport = function(service_id){
 <table class="tbl">
   <tr>
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
+    <th style="width: 0.1%;"></th>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>Date commande</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th><button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button></th>
   </tr>
@@ -37,12 +38,32 @@ printReceptionReport = function(service_id){
         {{/if}}
       </td>
       <td>
-        <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_ref_product->_quantity}}</div>
-        <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$curr_delivery->_ref_stock->_id}}">
-          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
-            {{$curr_delivery->_ref_stock->_view}}
-          </span>
-        </a>
+        <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptions})">
+          <input type="hidden" name="m" value="dPstock" /> 
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_delivery_aed" />
+          {{mb_key object=$curr_delivery}}
+          <input type="hidden" name="date_delivery" value="now" />
+          <button type="submit" class="tick notext" title="Marquer comme reçu"></button>
+        </form>
+      </td>
+      <td>
+        {{if $curr_delivery->stock_id}}
+          <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">
+            {{if $curr_delivery->comments}}
+              <strong>Commentaires: </strong>{{mb_value object=$curr_delivery field=comments}}
+              <hr />
+            {{/if}}
+            {{$curr_delivery->_ref_stock->_ref_product->_quantity}}
+          </div>
+          <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$curr_delivery->_ref_stock->_id}}">
+            <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
+              {{$curr_delivery->_ref_stock}}
+            </span>
+          </a>
+        {{else}}
+          {{mb_value object=$curr_delivery field=comments}}
+        {{/if}}
       </td>
       <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>

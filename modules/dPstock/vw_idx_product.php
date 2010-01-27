@@ -13,9 +13,14 @@ $can->needsEdit();
 
 // Gets objects ID from Get or Session
 $product_id  = CValue::getOrSession('product_id', null);
+
 $societe_id  = CValue::getOrSession('societe_id');
 $category_id = CValue::getOrSession('category_id');
 $keywords    = CValue::getOrSession('keywords');
+
+$filter = new CProduct;
+$filter->societe_id = $societe_id;
+$filter->category_id = $category_id;
 
 // Loads the required Product and its References
 $product = new CProduct();
@@ -44,8 +49,8 @@ $smarty->assign('product',         $product);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
 $smarty->assign('list_potential_manufacturers', $list_potential_manufacturers);
-$smarty->assign('category_id',     $category_id);
-$smarty->assign('societe_id',      $societe_id);
+
+$smarty->assign('filter',          $filter);
 $smarty->assign('keywords',        $keywords);
 
 $smarty->display('vw_idx_product.tpl');

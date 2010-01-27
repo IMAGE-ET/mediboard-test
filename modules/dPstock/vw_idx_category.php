@@ -19,6 +19,9 @@ $category->load($category_id);
 
 // Categories list
 $list_categories = $category->loadList();
+foreach($list_categories as $_cat) {
+  $_cat->countBackRefs("products");
+}
 
 // Smarty template
 $smarty = new CSmartyDP();

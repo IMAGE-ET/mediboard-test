@@ -20,12 +20,15 @@ function changePage(page){
   $V(getForm("filterSociete").start, page);
 }
 
-Main.add(refreshSocietesList);
+Main.add(function(){
+  refreshSocietesList();
+  Control.Tabs.create("societe-tabs", true);
+});
 </script>
 
 <table class="main">
   <tr>
-    <td>
+    <td class="halfPane">
       <form name="filterSociete" method="get" action="" onsubmit="return refreshSocietesList()">
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
@@ -53,7 +56,7 @@ Main.add(refreshSocietesList);
     </td>
   </tr>
   <tr>
-    <td class="halfPane" id="list-societe"></td>
+    <td id="list-societe"></td>
     <td class="halfPane" rowspan="2">
       <a class="button new" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete.create{{/tr}}</a>
       {{if $can->edit}}
@@ -151,56 +154,71 @@ Main.add(refreshSocietesList);
       {{/if}}
       
       {{if $societe->_id}}
-      <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id=0&amp;societe_id={{$societe->_id}}'">
-        {{tr}}CProductReference.create{{/tr}}
-      </button>
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="4">{{tr}}CSociete-back-product_references{{/tr}}</th>
-        </tr>
-        <tr>
-           <th>{{tr}}CProduct{{/tr}}</th>
-           <th>{{tr}}CProductReference-quantity{{/tr}}</th>
-           <th>{{tr}}CProductReference-price{{/tr}}</th>
-           <th>{{tr}}CProductReference-_unit_price{{/tr}}</th>
-         </tr>
-         {{foreach from=$societe->_ref_product_references item=curr_reference}}
-         <tr>
-           <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="{{tr}}CProductReference.modify{{/tr}}">{{$curr_reference->_ref_product->_view}}</a></td>
-           <td>{{mb_value object=$curr_reference field=quantity}}</td>
-           <td>{{mb_value object=$curr_reference field=price}}</td>
-           <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
-         </tr>
-         {{foreachelse}}
-         <tr>
-           <td class="button" colspan="4">{{tr}}CProductReference.none{{/tr}}</td>
-         </tr>
-         {{/foreach}}
-       </table>
-      <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
-        {{tr}}CProduct.create{{/tr}}
-      </button>
-      <table class="tbl">
-        <tr>
-          <th class="title" colspan="3">{{tr}}CSociete-back-products{{/tr}}</th>
-        </tr>
-        <tr>
-           <th>{{tr}}CProduct-name{{/tr}}</th>
-           <th>{{tr}}CProduct-description{{/tr}}</th>
-           <th>{{tr}}CProduct-code{{/tr}}</th>
-         </tr>
-         {{foreach from=$societe->_ref_products item=curr_product}}
-         <tr>
-           <td><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}" title="{{tr}}CProduct.create{{/tr}}">{{$curr_product->_view}}</a></td>
-           <td>{{mb_value object=$curr_product field=description}}</td>
-           <td>{{mb_value object=$curr_product field=code}}</td>
-         </tr>
-         {{foreachelse}}
-         <tr>
-           <td class="button" colspan="3">{{tr}}CProduct.none{{/tr}}</td>
-         </tr>
-         {{/foreach}}
-       </table>
+      <ul class="control_tabs" id="societe-tabs">
+        <li><a href="#societe-references" class="{{if $societe->_ref_product_references|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-product_references{{/tr}}</a></li>
+        <li><a href="#societe-products" class="{{if $societe->_ref_products|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-products{{/tr}}</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      
+      <div id="societe-references" style="display: none;">
+        <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id=0&amp;societe_id={{$societe->_id}}'">
+          {{tr}}CProductReference.create{{/tr}}
+        </button>
+        <table class="tbl">
+          <tr>
+            <th>{{mb_title class=CProductReference field=product_id}}</th>
+            <th>{{mb_title class=CProductReference field=supplier_code}}</th>
+            <th>{{mb_title class=CProductReference field=quantity}}</th>
+            <th>{{mb_title class=CProductReference field=price}}</th>
+            <th>{{mb_title class=CProductReference field=_unit_price}}</th>
+          </tr>
+          {{foreach from=$societe->_ref_product_references item=curr_reference}}
+          <tr>
+            <td>
+              <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}">
+                {{mb_value object=$curr_reference field=product_id}}
+              </a>
+            </td>
+            <td>{{mb_value object=$curr_reference field=supplier_code}}</td>
+            <td>{{mb_value object=$curr_reference field=quantity}}</td>
+            <td>{{mb_value object=$curr_reference field=price}}</td>
+            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td colspan="10">{{tr}}CProductReference.none{{/tr}}</td>
+          </tr>
+          {{/foreach}}
+        </table>
+      </div>
+      
+      <div id="societe-products" style="display: none;">
+        <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
+          {{tr}}CProduct.create{{/tr}}
+        </button>
+        <table class="tbl">
+          <tr>
+            <th>{{tr}}CProduct-name{{/tr}}</th>
+            <th>{{tr}}CProduct-description{{/tr}}</th>
+            <th>{{tr}}CProduct-code{{/tr}}</th>
+          </tr>
+          {{foreach from=$societe->_ref_products item=curr_product}}
+          <tr>
+            <td>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_guid}}')">
+                {{$curr_product->_view}}
+              </span>
+            </td>
+            <td>{{mb_value object=$curr_product field=description}}</td>
+            <td>{{mb_value object=$curr_product field=code}}</td>
+          </tr>
+          {{foreachelse}}
+          <tr>
+            <td colspan="3">{{tr}}CProduct.none{{/tr}}</td>
+          </tr>
+          {{/foreach}}
+        </table>
+      </div>
     </td>
   </tr>
   {{/if}}

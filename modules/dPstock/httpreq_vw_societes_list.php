@@ -31,14 +31,15 @@ $list = $societe->seek($keywords, null, 1000, true);
 $list_count = $societe->_totalSeek;
 
 foreach($list as $_id => $_societe) {
-  $is_manufacturer = $_societe->countBackRefs("products") > 0;
-  $is_supplier = $_societe->countBackRefs("product_references") > 0;
-  
-  if (!($manufacturers && $is_manufacturer || 
-        $suppliers && $is_supplier ||
-        $inactive && (!$is_supplier && !$is_manufacturer))) {
+  if (!($manufacturers && $_societe->_is_manufacturer || 
+        $suppliers && $_societe->_is_supplier ||
+        $inactive && (!$_societe->_is_supplier && !$_societe->_is_manufacturer))) {
     unset($list[$_id]);
     $list_count--;
+  }
+  else {
+    $_societe->countBackRefs("products");
+    $_societe->countBackRefs("product_references");
   }
 }
 

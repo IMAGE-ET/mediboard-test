@@ -10,11 +10,29 @@
 
 {{mb_include module=system template=inc_pagination change_page="changePage" total=$list_count current=$start step=30}}
 
+<style type="text/css">
+.societe-type {
+  width: 15px; 
+  height: 15px; 
+  background-color: #eee; 
+  color: #999;
+  text-align: center; 
+  display: inline-block;
+  border: 1px solid #ccc;
+}
+
+.societe-type.active {
+  background-color: #73BF2F;
+  color: #000;
+}
+</style>
+
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CSociete field=name}}</th>
     <th>{{mb_title class=CSociete field=contact_name}}</th>
     <th>{{mb_title class=CSociete field=phone}}</th>
+    <th style="width: 0.1%;"></th>
   </tr>
   
   {{foreach from=$list item=curr}}
@@ -28,6 +46,10 @@
     </td>
     <td>{{mb_value object=$curr field=contact_name}}</td>
     <td>{{mb_value object=$curr field=phone}}</td>
+    <td>
+      <span class="societe-type {{if $curr->_count.products}}active{{/if}}" title="Fabricant">F</span>
+      <span class="societe-type {{if $curr->_count.product_references}}active{{/if}}" title="Distributeur">D</divspan
+    </td>
   </tr>
   {{foreachelse}}
   <tr>

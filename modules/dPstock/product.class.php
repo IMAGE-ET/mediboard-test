@@ -69,7 +69,7 @@ class CProduct extends CMbObject {
     $specs['description']   = 'text seekable';
     $specs['code']          = 'str maxLength|32 seekable protected';
     $specs['category_id']   = 'ref notNull class|CProductCategory';
-    $specs['societe_id']    = 'ref class|CSociete seekable';
+    $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
     $specs['quantity']      = 'num notNull min|0';
     $specs['item_title']    = 'str autocomplete';
     $specs['unit_quantity'] = 'float min|0';

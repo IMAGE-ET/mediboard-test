@@ -36,16 +36,12 @@ function filterReferences(form) {
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}}
-          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
+          <option value="{{$curr_category->category_id}}" {{if $filter->category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="$V(this.form.start,0);this.form.onsubmit()" style="width: 13em;">
-          <option value="">&ndash; Tous les fabricants</option>
-        {{foreach from=$list_societes item=curr_societe}} 
-          <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
-        {{/foreach}}
-        </select>
+        {{mb_field object=$filter field=societe_id form="filter-products" autocomplete="true,2,50,false,true" 
+                   style="width: 13em;"}}
         
         <input type="text" name="keywords" value="{{$keywords}}" />
         

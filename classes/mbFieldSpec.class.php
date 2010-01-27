@@ -547,6 +547,7 @@ class CMbFieldSpec {
 			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {
 			    minChars: '.$minChars.',
 			    method: "get",
+          select: ".view",
  			    dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
     	
     	if ($ref) {
