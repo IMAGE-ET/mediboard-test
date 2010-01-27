@@ -76,14 +76,7 @@ Main.add(function(){
 {{foreach from=$protocoles key=key_type item=_type}}
   <tbody id="{{$key_type}}" style="display: none;">
     <tr>
-      <th>
-        {{if $key_type == 'interv'}}
-          Chirurgien &mdash; Actes CCAM
-        {{else}}
-          Praticien &mdash; Durée 
-        {{/if}}
-        &mdash; Diagnostic principal
-      </th>
+      <th>Liste des protocoles disponibles</th>
     </tr>
     {{foreach from=$_type item=_protocole}}
     <tr {{if $protSel->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
@@ -108,23 +101,32 @@ Main.add(function(){
           </strong>
           </span>
         </a>
-        {{$_protocole->duree_hospi}} nuits en {{mb_value object=$_protocole field=type}}
+        {{if $_protocole->duree_hospi}}
+        {{$_protocole->duree_hospi}} nuits en
+        {{/if}}
+        {{mb_value object=$_protocole field=type}}
         <br />
         {{if $_protocole->_ext_code_cim->code}}
           {{$_protocole->_ext_code_cim->code}}
-          <em>[{{$_protocole->_ext_code_cim->libelle|truncate:80}}]</em>
+          <em><strong>[{{$_protocole->_ext_code_cim->libelle|truncate:80}}]</strong></em>
           <br />
         {{/if}}
         {{foreach from=$_protocole->_ext_codes_ccam item=_code}}
           {{$_code->code}}
-          <em>[{{$_code->libelleLong|truncate:80}}]</em>
+          <em><strong>[{{$_code->libelleLong|truncate:80}}]</strong></em>
           <br />
         {{/foreach}}
       </td>
     </tr>
     {{foreachelse}}
     <tr>
-      <td colspan="5">{{tr}}CProtocole.none{{/tr}}</td>
+      <td colspan="5">
+        <div class="small-info">
+        {{tr}}CProtocole.none{{/tr}} n'est disponible,
+        veuillez commencer par créer un protocole
+        afin de l'utiliser pour planifier un séjour
+        </div>
+      </td>
     </tr>
     {{/foreach}}
   </tbody>

@@ -29,7 +29,16 @@ function printAdmission(id) {
       </a>
     </th>
   </tr>
-  {{foreach from=$plagesop item=curr_plageop}}
+  {{foreach from=$listDates key=curr_date item=listPlages}}
+  {{foreach from=$listPlages key=curr_plage_id item=curr_plageop}}
+  {{if $curr_plage_id == "hors_plage"}}
+  <tr>
+    <td class="text">
+      <strong>Interventions hors plage</strong>
+      du {{$curr_date|date_format:"%d/%m/%Y"}}
+    </td>
+  </tr>
+  {{else}}
   <tr>
     <td class="text">
       {{if $curr_plageop->chir_id}}
@@ -57,6 +66,7 @@ function printAdmission(id) {
       {{/foreach}}
     </td>
   </tr>
+  {{/if}}
   <tr>
     <td />
   </tr>
@@ -80,7 +90,12 @@ function printAdmission(id) {
         {{include file=inc_planning/$col2$suffixe}}
         {{include file=inc_planning/$col3$suffixe}}
         </tr>
-        {{foreach from=$curr_plageop->_ref_operations item=curr_op}}
+        {{if $curr_plage_id == "hors_plage"}}
+          {{assign var=listOperations value=$curr_plageop}}
+        {{else}}
+          {{assign var=listOperations value=$curr_plageop->_ref_operations}}
+        {{/if}}
+        {{foreach from=$listOperations item=curr_op}}
         <tr>
         {{assign var=sejour value=$curr_op->_ref_sejour}}
         {{assign var=patient value=$sejour->_ref_patient}}
@@ -94,5 +109,6 @@ function printAdmission(id) {
       </table>
     </td>
   </tr>
+  {{/foreach}}
   {{/foreach}}
 </table>

@@ -11,13 +11,18 @@
 <!-- Intervention -->
 		  {{if $curr_op->annulee}}
 		    <td class="cancelled">ANNULEE</td>
-		  {{elseif $curr_op->rank}}
-		    <td>{{$curr_op->time_operation|date_format:$dPconfig.time}}</td>
+		  {{elseif $curr_op->rank || !$curr_op->plageop_id}}
+		    <td class="text">
+		      {{if $curr_plageop|is_array && $curr_op->salle_id}}
+		        {{$curr_op->_ref_salle->_view}} à
+		      {{/if}}
+		      {{$curr_op->time_operation|date_format:$dPconfig.time}}
+		    </td>
 		  {{else}}
 		    <td>NP</td>
 		  {{/if}}
 		  <td class="text">
-		    {{if $curr_plageop->spec_id}}
+		    {{if $curr_plageop|is_array || $curr_plageop->spec_id}}
 		      <strong>Dr {{$curr_op->_ref_chir->_view}}</strong>
 		      <br />
 		    {{/if}}

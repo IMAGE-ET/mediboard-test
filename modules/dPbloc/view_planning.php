@@ -31,17 +31,19 @@ $_coordonnees  = CValue::get("_coordonnees");
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
 
-//On sort les plages opératoires
-//  Chir - Salle - Horaires
+// On sort les plages opératoires et les interventions hors plage
+//  date - salle - horaires
 
-$plagesop = new CPlageOp;
+$plagesop   = new CPlageOp();
+$operations = new COperation();
 
 $affectations_plage = array();
 
-$where = array();
-$where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+$wherePlagesop   = array();
+$whereOperations = array();
 
-$order = "date, salle_id, debut";
+$wherePlagesop["plagesop.date"]     =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+$whereOperations["operations.date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
 $user = new CMediusers();
 $user->load($AppUI->user_id);
@@ -93,7 +95,8 @@ if(!$filter->_specialite && !$filter->_prat_id) {
 }
 
 // Liste des praticiens et fonctions à charger
-$where[] = "plagesop.chir_id ".CSQLDataSource::prepareIn(array_keys($praticiens))." OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($functions));
+$wherePlagesop[]                       = "plagesop.chir_id ".CSQLDataSource::prepareIn(array_keys($praticiens))." OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($functions));
+$whereOperations["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
 
 // En fonction de la salle
 $salle = new CSalle();
@@ -102,46 +105,63 @@ $whereSalle["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups
 if($filter->salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
 }
-$where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)));
+$listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
+if($filter->salle_id || $filter->_bloc_id) {
+  $whereOperations["operations.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+}
 
-$plagesop = $plagesop->loadList($where, $order);
+$whereOperations["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+
+$wherePlagesop["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+
+$orderPlagesop = "date, salle_id, debut";
+
+$plagesop   = $plagesop->loadList($wherePlagesop, $orderPlagesop);
+
+$ljoin = array();
+$ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
+$where = array();
+$where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
+switch ($filter->_intervention) {
+  case "1" : $where["operations.rank"] = "!= '0'"; break;
+  case "2" : $where["operations.rank"] = "= '0'"; break;
+}
+if ($filter->_codes_ccam) {
+  $where["operations.codes_ccam"]           = "LIKE '%$filter->_codes_ccam%'";
+  $whereOperations["operations.codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
+}
+if($filterSejour->type) {
+  $where["sejour.type"]           = "= '$filterSejour->type'";
+  $whereOperations["sejour.type"] = "= '$filterSejour->type'";
+}
+
+$orderOperations = "date, salle_id, chir_id";
+
+$operations = $operations->loadList($whereOperations, $orderOperations, null, null, $ljoin);
+
+$order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
+
+$listDates = array();
 
 // Operations de chaque plage
 foreach($plagesop as &$plage) {
   $plage->loadRefsFwd(1);
   
-  $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
-  
-  $where = array();
   $where["operations.plageop_id"] = "= '$plage->_id'";
-  $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
-  switch ($filter->_intervention) {
-    case "1" : $where["operations.rank"] = "!= '0'"; break;
-    case "2" : $where["operations.rank"] = "= '0'"; break;
-  }
   
-  if ($filter->_codes_ccam) {
-    $where["operations.codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
-  }
-  
-  $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
   $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
 
   foreach($listOp as $keyOp => &$operation) {
     $operation->loadRefsFwd(1);
     $sejour =& $operation->_ref_sejour;
-    if($filterSejour->type && $filterSejour->type != $sejour->type) {
-      unset($listOp[$keyOp]);
-    } else {
-     $sejour->loadRefsFwd(1);   
-     // On utilise la first_affectation pour contenir l'affectation courante du patient
-     $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
-     $affectation =& $sejour->_ref_first_affectation;
-     if ($affectation->_id) {
-       $affectation->loadRefsFwd();
-       $affectation->_ref_lit->loadCompleteView();
-     }
+    $sejour->loadRefsFwd(1);   
+    // On utilise la first_affectation pour contenir l'affectation courante du patient
+    $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
+    $affectation =& $sejour->_ref_first_affectation;
+    if ($affectation->_id) {
+      $affectation->loadRefsFwd();
+      $affectation->_ref_lit->loadCompleteView();
     }
   }
   if ((sizeof($listOp) == 0) && !$filter->_plage) {
@@ -153,16 +173,34 @@ foreach($plagesop as &$plage) {
   $plage->loadAffectationsPersonnel();
   
   // Initialisation des tableaux de stockage des affectation pour les op et les panseuses
-  $affectations_plage[$plage->_id]["iade"] = array();
-	$affectations_plage[$plage->_id]["op"] = array();
+  $affectations_plage[$plage->_id]["iade"]        = array();
+	$affectations_plage[$plage->_id]["op"]          = array();
   $affectations_plage[$plage->_id]["op_panseuse"] = array();
   
   if (null !== $plage->_ref_affectations_personnel) {
-  	$affectations_plage[$plage->_id]["iade"] = $plage->_ref_affectations_personnel["iade"];
-    $affectations_plage[$plage->_id]["op"] = $plage->_ref_affectations_personnel["op"];
+  	$affectations_plage[$plage->_id]["iade"]        = $plage->_ref_affectations_personnel["iade"];
+    $affectations_plage[$plage->_id]["op"]          = $plage->_ref_affectations_personnel["op"];
     $affectations_plage[$plage->_id]["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
   }
+  
+  $listDates[$plage->date][$plage->_id] = $plage;
 }
+
+foreach($operations as &$curr_op) {
+  $curr_op->loadRefsFwd(1);
+  $sejour =& $curr_op->_ref_sejour;
+  $sejour->loadRefsFwd(1);   
+  // On utilise la first_affectation pour contenir l'affectation courante du patient
+  $sejour->_ref_first_affectation = $sejour->getCurrAffectation(mbDate($curr_op->_datetime));
+  $affectation =& $sejour->_ref_first_affectation;
+  if ($affectation->_id) {
+    $affectation->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
+  }
+  $listDates[$curr_op->date]["hors_plage"][] = $curr_op;
+}
+
+ksort($listDates);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -170,7 +208,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"            , $filter);
 $smarty->assign("_coordonnees"      , $_coordonnees);
-$smarty->assign("plagesop"          , $plagesop);
+$smarty->assign("listDates"         , $listDates);
 
 $smarty->display("view_planning.tpl");
 
