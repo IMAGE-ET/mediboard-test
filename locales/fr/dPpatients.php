@@ -1033,4 +1033,5 @@ $locales['CDossierMedical.risque_thrombo_patient.faible'] = 'Risque faible';
 $locales['CDossierMedical.risque_thrombo_patient.majeur'] = 'Risque majeur';
 $locales['CDossierMedical.risque_thrombo_patient.modere'] = 'Risque modéré';
 $locales['CPatient-merge-warning-venue-conflict'] = 'Conflit de dates entre \'%s\' et  \'%s\'  (en annuler un pour permettre la fusion)';
+$locales['CMbObject-back-dossier_medical'] = 'Dossier Médical';
 ?>

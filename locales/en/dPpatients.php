@@ -1033,4 +1033,5 @@ $locales['CDossierMedical.risque_thrombo_patient.faible'] = '';
 $locales['CDossierMedical.risque_thrombo_patient.majeur'] = '';
 $locales['CDossierMedical.risque_thrombo_patient.modere'] = '';
 $locales['CDossierMedical.risque_thrombo_patient.NR'] = '';
+$locales['CMbObject-back-dossier_medical'] = '';
 ?>
