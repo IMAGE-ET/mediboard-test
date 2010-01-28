@@ -13,19 +13,24 @@
 
 <table class="tbl">
   <tr>
-    <th>{{mb_title class=CProductReference field=societe_id}}</th>
-    <th>{{mb_title class=CProductReference field=code}}</th>
-    <th>{{mb_title class=CProductReference field=quantity}}</th>
-    <th>{{mb_title class=CProductReference field=price}}</th>
-    <th>{{mb_title class=CProductReference field=_unit_price}}</th>
-    {{if $order_form}}<th style="width: 1%;"></th>{{/if}}
+    <th rowspan="2">{{mb_title class=CProductReference field=societe_id}}</th>
+    <th rowspan="2">{{mb_title class=CProductReference field=code}}</th>
+    <th rowspan="2">{{mb_title class=CProductReference field=quantity}}</th>
+    <th colspan="2">{{mb_title class=CProductReference field=price}}</th>
+    {{if $order_form}}
+      <th style="width: 1%;" rowspan="2"></th>
+    {{/if}}
+  </tr>
+  <tr>
+    <th style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
+    <th>{{mb_title class=CProductReference field=_sub_unit_price}}</th>
   </tr>
   
   <!-- Références list -->
   {{foreach from=$list_references item=curr_reference}}
   <tbody class="hoverable">
     <tr>
-      <td colspan="5">
+      <td colspan="4">
         {{if !$order_form}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" >
         {{/if}}
@@ -35,6 +40,10 @@
         {{if !$order_form}}
           </a>
         {{/if}}
+      </td>
+      
+      <td style="text-align: right; padding-right: 1em;">
+        {{mb_value object=$curr_reference field=price decimals=4}}
       </td>
       
       {{if $order_form}}
@@ -61,11 +70,11 @@
       {{/if}}
     </tr>
     <tr>
-      <td style="padding-left: 2em;">{{$curr_reference->_ref_societe->_view}}</td>
+      <td style="padding-left: 2em;">{{$curr_reference->_ref_societe}}</td>
       <td>{{mb_value object=$curr_reference field=code}}</td>
       <td>{{mb_value object=$curr_reference field=quantity}} {{mb_value object=$curr_reference->_ref_product field=packaging}}</td>
-      <td style="text-align: right;">{{mb_value object=$curr_reference field=price decimals=4}}</td>
       <td style="text-align: right;">{{mb_value object=$curr_reference field=_unit_price decimals=4}}</td>
+      <td style="text-align: right; font-weight: bold;">{{mb_value object=$curr_reference field=_sub_unit_price decimals=4}}</td>
     </tr>
   </tbody>
   {{foreachelse}}
