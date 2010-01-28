@@ -11,7 +11,7 @@ Main.add(function(){
 <ul class="control_tabs" id="orders-tabs">
 {{foreach from=$list_orders item=_order}}
   <li>
-    <a href="#order-{{$_order->_id}}">
+    <a href="#order-{{$_order->_id}}" {{if $_order->_count.order_items == 0}}class="empty"{{/if}}>
       {{$_order->_ref_societe}} <br />
       <small>{{$_order->order_number}}</small> 
       <small class="count">({{$_order->_count.order_items}})</small>

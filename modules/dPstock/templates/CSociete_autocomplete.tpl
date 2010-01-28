@@ -15,6 +15,6 @@
   <span style="width:9px;height:11px;display:inline-block;border:1px solid #ccc;{{if $match->_is_supplier}}background-color:#73BF2F;color:#000;{{else}}background-color:#eee;{{/if}}" title="Distributeur">D</span>
 </div>
 
-<div style="color: #999; font-size: 0.7em; padding-left: 0.5em; clear: both;">
-  {{if $match->postal_code && $match->city}}{{$match->postal_code}} - {{$match->city}}{{/if}}&nbsp;
+<div style="color: #666; font-size: 0.7em; padding-left: 0.5em; clear: both;">
+  {{if $match->postal_code && $match->city}}{{$match->postal_code}} {{$match->city}}{{/if}}&nbsp;
 </div>

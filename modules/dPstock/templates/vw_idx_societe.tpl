@@ -155,8 +155,8 @@ Main.add(function(){
       
       {{if $societe->_id}}
       <ul class="control_tabs" id="societe-tabs">
-        <li><a href="#societe-references" class="{{if $societe->_ref_product_references|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-product_references{{/tr}}</a></li>
-        <li><a href="#societe-products" class="{{if $societe->_ref_products|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-products{{/tr}}</a></li>
+        <li><a href="#societe-references" class="{{if $societe->_ref_product_references|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-product_references{{/tr}} <small>({{$societe->_ref_product_references|@count}})</small></a></li>
+        <li><a href="#societe-products" class="{{if $societe->_ref_products|@count == 0}}empty{{/if}}">{{tr}}CSociete-back-products{{/tr}} <small>({{$societe->_ref_products|@count}})</small></a></li>
       </ul>
       <hr class="control_tabs" />
       

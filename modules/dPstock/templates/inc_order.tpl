@@ -10,6 +10,23 @@
 
 {{mb_include module=system template=CMbObject_view object=$order}}
 
+<script type="text/javascript">
+Main.add(function(){
+  if (!$("orders-tabs")) return;
+  
+  var tab = $$("a[href='#order-{{$order->_id}}']")[0], 
+      count = {{$order->_count.order_items}};
+  
+  tab.down(".count").update("("+count+")");
+  
+  if (count > 0)
+    tab.removeClassName("empty");
+  else 
+    tab.addClassName("empty");
+    
+});
+</script>
+
 <table class="tbl">
   <tr>
     {{if !$order->date_ordered}}<th style="width: 1%;"></th>{{/if}}

@@ -192,8 +192,8 @@ function filterReferences(form) {
         <tr>
           <td>
             <ul class="control_tabs" id="reference-tabs">
-              <li><a href="#reference-orders">Bons de commande</a></li>
-              <li><a href="#reference-receptions">Bons de réceptions</a></li>
+              <li><a href="#reference-orders" {{if $lists_objects.orders|@count == 0}}class="empty"{{/if}}>Bons de commande <small>({{$lists_objects.orders|@count}})</small></a></li>
+              <li><a href="#reference-receptions" {{if $lists_objects.receptions|@count == 0}}class="empty"{{/if}}>Bons de réceptions <small>({{$lists_objects.receptions|@count}})</small></a></li>
             </ul>
             
             <hr class="control_tabs" />

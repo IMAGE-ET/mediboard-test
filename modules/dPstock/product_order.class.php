@@ -310,7 +310,7 @@ class CProductOrder extends CMbObject {
       $format .= '%id';
     }
     
-  	$format = str_replace('%id', str_pad($this->_id ? $this->_id : 0, 6, '0', STR_PAD_LEFT), $format);
+  	$format = str_replace('%id', str_pad($this->_id ? $this->_id : 0, 4, '0', STR_PAD_LEFT), $format);
   	return mbTransformTime(null, null, $format);
   }
 
