@@ -72,8 +72,8 @@ class CProductReference extends CMbObject {
     $this->_view = "$this->_ref_product (par $this->quantity)";
     
     if($this->quantity) {
-      $this->_unit_price = $this->price / $this->quantity;
-      $this->_sub_unit_price = $this->_unit_price / $this->_ref_product->quantity;
+      $this->_unit_price = round($this->price / $this->quantity, 3);
+      $this->_sub_unit_price = round($this->_unit_price / $this->_ref_product->quantity, 3);
     }
     
     $this->_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;

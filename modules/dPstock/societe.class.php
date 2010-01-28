@@ -90,7 +90,7 @@ class CSociete extends CMbObject {
     $societe = new self;
     $list = $societe->loadList(null, "name");
     foreach($list as $_id => $_societe) {
-      if (!($societe->_is_manufacturer || $also_inactive && !$societe->_is_supplier)) {
+      if (!($_societe->_is_manufacturer || $also_inactive && !$_societe->_is_supplier)) {
         unset($list[$_id]);
       }
     }
@@ -101,7 +101,7 @@ class CSociete extends CMbObject {
     $societe = new self;
     $list = $societe->loadList(null, "name");
     foreach($list as $_id => $_societe) {
-      if (!($societe->_is_supplier || $also_inactive && !$societe->_is_manufacturer)) {
+      if (!($_societe->_is_supplier || $also_inactive && !$_societe->_is_manufacturer)) {
         unset($list[$_id]);
       }
     }

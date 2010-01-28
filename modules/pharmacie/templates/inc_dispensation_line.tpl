@@ -163,7 +163,7 @@
        {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
        {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
          {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style 
-           onchange="this.form._quantity_package.value = this.value/$qty"}}
+           onchange="this.form._quantity_package.value = (this.value/$qty).toFixed(2)"}}
          
          (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
                 onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
@@ -215,7 +215,7 @@
          {{assign var=qty value=$delivrance->_ref_stock->_ref_product->_unit_quantity-0}}
          {{if $delivrance->_ref_stock->_ref_product->packaging && $qty}}
            {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cis-$code_cip" increment=1 size=3 min=0 style=$style 
-             onchange="this.form._quantity_package.value = this.value/$qty"}}
+             onchange="this.form._quantity_package.value = (this.value/$qty).toFixed(2)"}}
             
            (soit <input type="text" name="_quantity_package" value="{{if $qty}}{{$delivrance->quantity/$qty}}{{else}}0{{/if}}" size="3" 
                   onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />

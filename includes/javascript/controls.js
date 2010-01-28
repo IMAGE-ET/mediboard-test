@@ -504,11 +504,12 @@ Element.addMethods('input', {
         
         var step = Number(element.spinner.getStep(0.1));
         var result = (parseInt(Number(element.value) / step) + 1) * step;
+        
         if (options.max != null) {
           result = (result <= options.max) ? result : options.max;
         }
         if (options.decimals !== null) {
-          result = printf("%."+options.decimals+"f", result);
+          result = result.toFixed(options.decimals);
         }
         result = ((options.showPlus && result >= 0)?'+':'')+result;
         
@@ -522,11 +523,12 @@ Element.addMethods('input', {
         
         var step = Number(element.spinner.getStep(-0.1));
         var result = (parseInt(Number(element.value) / step) - 1) * step;
+        
         if (options.min != null) {
           result = (result >= options.min) ? result : options.min;
         }
         if (options.decimals !== null) {
-          result = printf("%."+options.decimals+"f", result);
+          result = result.toFixed(options.decimals);
         }
         result = ((options.showPlus && result >= 0)?'+':'')+result;
         
@@ -535,10 +537,14 @@ Element.addMethods('input', {
       }
     }
     
-    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;" /><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></table>';
+    if (element.value && options.decimals !== null) {
+      element.value = Number(element.value).toFixed(options.decimals);
+    }
+    
+    var table = '<table class="control numericField"><tr><td style="padding:0;border:none;"></td><td class="arrows" style="padding:0;border:none;"><div class="up"></div><div class="down"></div></td></tr></table>';
     element.insert({before: table});
     table = element.previous();
-    table.select('td')[0].update(element);
+    table.down('td').update(element);
 
     var arrows = table.select('.arrows div');
     arrows[0].observe('click', element.spinner.inc);

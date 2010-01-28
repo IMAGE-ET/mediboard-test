@@ -139,30 +139,30 @@ function filterReferences(form) {
             {{* <div style="float: right; display: none;">
               {{mb_label object=$reference field="price"}}
               {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                         onchange="\$V(this.form._unit_price, this.value/(this.form.quantity.value || 1))"}}
+                         onchange="this.form._unit_price.value = (this.value/(this.form.quantity.value || 1)).toFixed(2)"}}
             </div>
             
             {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                       onchange="\$V(this.form.price, this.value*this.form.quantity.value)"}}
+                       onchange="this.form.price.value = this.value*this.form.quantity.value"}}
              *}}
              
             {{mb_field object=$reference field="price" hidden=true}}
             
             {{assign var=sub_quantity value=$reference->_ref_product->quantity}}
-            {{mb_field object=$reference field="_sub_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                       onchange="\$V(this.form.price, this.value*this.form.quantity.value*$sub_quantity)"}}
+            {{mb_field object=$reference field="_sub_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
+                       onchange="this.form.price.value = this.value*this.form.quantity.value*$sub_quantity"}}
           </td>
         {{else}}
           <th>{{mb_label object=$reference field="price"}}</th>
           <td>
             <div style="float: right;">
               {{mb_label object=$reference field="_unit_price"}}
-              {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                         onchange="\$V(this.form.price, this.value*this.form.quantity.value)"}}
+              {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
+                         onchange="this.form.price.value = this.value*this.form.quantity.value"}}
             </div>
             
-            {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                       onchange="\$V(this.form._unit_price, this.value/(this.form.quantity.value || 1))"}}
+            {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=4 
+                       onchange="this.form._unit_price.value = (this.value/(this.form.quantity.value || 1)).toFixed(2)"}}
           </td>
         {{/if}}
         </tr>
