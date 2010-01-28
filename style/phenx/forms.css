@@ -372,10 +372,8 @@ div.autocomplete ul li {
   margin: 0;
   padding: 2px;
   cursor: pointer;
-}
-
-div.autocomplete ul li:nth-of-type(2n+1) {
-  background-color: #f3f3f3;
+  background-image: url(images/pictures/bg-gradient.png);
+  background-position: center top;
 }
 
 div.autocomplete ul li small {

@@ -767,6 +767,11 @@ div.tree-header {
   background-color: #eee;
 }*/
 
+/*table.tbl tr td {
+  background-image: url(images/pictures/bg-gradient.png);
+  background-position: center top;
+}*/
+
 table.tbl td.error,
 table.tbl tr:hover td.error,
 table.tbl tbody:hover td.error,
@@ -1058,11 +1063,13 @@ div.autocomplete ul li {
   margin: 0px;
   padding: 2px;  
   cursor:pointer;
+  background-image: url(images/pictures/bg-gradient.png);
+  background-position: center top;
 }
 
-div.autocomplete ul li:nth-of-type(2n+1) {
+/*div.autocomplete ul li:nth-of-type(2n+1) {
   background-color: #eee;
-}
+}*/
 
 div.autocomplete ul li small {
   white-space: normal;
@@ -2846,7 +2853,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 .bargraph {
   overflow: hidden;
   height: 1.2em; 
-  min-width: 2em;
+  min-width: 4em;
 }
 
 

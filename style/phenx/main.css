@@ -2200,7 +2200,7 @@ table.tbl td.ccmu-P {
 .bargraph {
   overflow: hidden;
   height: 1em;
-  min-width: 5em;
+  min-width: 4em;
 }
 
 .legend .value {
