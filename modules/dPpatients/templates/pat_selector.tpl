@@ -20,10 +20,13 @@ var Patient = {
     url.addParam("patient_id", patient_id);
     url.addParam("dialog", 1);
 
-	  var oForm = null;
+	  var oForm;
     if (oForm = document.patientSearch) {
       url.addElement(oForm.name);
       url.addElement(oForm.firstName);
+      url.addElement(oForm.Date_Day, "naissance_day");
+      url.addElement(oForm.Date_Month, "naissance_month");
+      url.addElement(oForm.Date_Year, "naissance_year");
     }
     
     if (useVitale || (oForm = document.patientEdit)) {

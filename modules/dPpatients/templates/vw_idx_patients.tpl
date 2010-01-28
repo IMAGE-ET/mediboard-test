@@ -11,11 +11,11 @@ removeSelectedTr = function(){
   $("list_patients").select('.selected').each(function (e) {e.removeClassName('selected')});
 }
 
+{{if $patient->_id}}
 Main.add(function(){
-  {{if $patient->_id}}
-	  reloadPatient('{{$patient->_id}}',0);
-	{{/if}}
-});	
+	reloadPatient('{{$patient->_id}}', 0);
+});
+{{/if}}
 	
 </script>
 
