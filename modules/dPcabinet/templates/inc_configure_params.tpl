@@ -43,6 +43,8 @@
   {{mb_include module=system template=inc_config_bool var=show_histoire_maladie}}
   
   {{mb_include module=system template=inc_config_bool var=show_conclusion}}
+  
+  {{mb_include module=system template=inc_config_bool var=attach_consult_sejour}}
 
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}

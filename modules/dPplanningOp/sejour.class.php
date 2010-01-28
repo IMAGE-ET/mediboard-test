@@ -831,8 +831,16 @@ class CSejour extends CCodable {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
     
     $this->_ref_consult_atu = new CConsultation;
-    if ($this->type == "urg" && count($this->_ref_consultations)) {
-    	$this->_ref_consult_atu = reset($this->_ref_consultations);
+    if ($this->type == "urg" && !$this->_ref_consult_atu->_id) {
+      foreach ($this->_ref_consultations as $_consult) {
+        $_consult->loadRefPraticien();      
+        $praticien = $_consult->_ref_praticien;
+        $praticien->loadRefFunction();
+        if ($praticien->function_id == CGroups::loadCurrent()->service_urgences_id) {
+          $this->_ref_consult_atu = $_consult;
+          $this->_ref_consult_atu->countDocItems();
+        }
+      }
     }
   }
   

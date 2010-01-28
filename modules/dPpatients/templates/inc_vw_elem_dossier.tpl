@@ -32,6 +32,25 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_praticien}}
   </td>
 </tr>
+
+{{foreach from=$object->_ref_consultations item=_consult}}
+<tr>
+  <td class="text" style="text-indent: 1em;">
+    <a href="#" class="iconed-text {{$_consult->_type}}">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+      Consultation le {{$_consult->_datetime|date_format:$dPconfig.date}}
+      {{if $_consult->_nb_files_docs}}
+        - ({{$_consult->_nb_files_docs}} Doc.)
+      {{/if}}
+      </span>
+    </a>
+  </td>
+  <td {{if $_consult->annule}}class="cancelled"{{/if}}>
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
+  </td>
+</tr>
+{{/foreach}}
+
 {{foreach from=$object->_ref_operations item=curr_op}}
 <tr>
   <td class="text" style="text-indent: 1em;">
@@ -39,9 +58,9 @@
     <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
       <img src="images/icons/planning.png" alt="modifier"/>
     </a>
-    <a href="{{$curr_op->_link_editor}}">
+    <a href="{{$curr_op->_link_editor}}" class="iconed-text interv">
     {{else}}
-    <a href="#nothing">
+    <a href="#nothing" class="iconed-text interv">
     {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}')">
       Intervention le {{$curr_op->_datetime|date_format:$dPconfig.date}}
@@ -76,12 +95,12 @@
     <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$object->_id}}">
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
-    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$object->_id}}&amp;chirSel={{$object->_ref_plageconsult->chir_id}}">
+    <a class="iconed-text {{$object->_type}}" 
+      href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$object->_id}}&amp;chirSel={{$object->_ref_plageconsult->chir_id}}">
     {{else}}
-    <a href="#nothing">
+    <a href="#nothing" class="iconed-text {{$object->_type}}">
     {{/if}}
-    <span {{if $object->_ref_consult_anesth->_id}}style="padding-left: 20px; background: url(images/icons/anesth.png) no-repeat center left;"{{/if}} 
-		  onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
       Le {{$object->_datetime|date_format:$dPconfig.datetime}} - {{$object->_etat}}
     </span>
     </a>

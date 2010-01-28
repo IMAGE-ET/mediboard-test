@@ -460,6 +460,9 @@ $locales['CConsultation-_type_affichage-court'] = 'Affichage';
 $locales['CConsultation-_type_affichage-desc'] = 'Type d\'affichage';
 $locales['CConsultation-_type_affichage.complete'] = '';
 $locales['CConsultation-_type_affichage.totaux'] = '';
+$locales['CConsultation._type.'] = 'Type de la consultation';
+$locales['CConsultation._type.urg'] = 'Passage aux urgences';
+$locales['CConsultation._type.anesth'] = 'Anesthésie';
 $locales['CConsultation.annule.'] = ' ';
 $locales['CConsultation.annule.0'] = '0';
 $locales['CConsultation.annule.1'] = '1';
@@ -1772,4 +1775,6 @@ $locales['pref-pratOnlyForConsult'] = 'Rendez-vous uniquement pour les praticien
 $locales['pref-pratOnlyForConsult-desc'] = 'Possibilité de ne donner des rendez-vous que pour des médecins';
 $locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque'] = 'Affichage de l\'onglet Facteurs de risque';
 $locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque-desc'] = 'Affichage de l\'onglet Facteurs de risque';
+$locales['config-dPcabinet-CConsultation-attach_consult_sejour'] = 'Consultation dans séjour';
+$locales['config-dPcabinet-CConsultation-attach_consult_sejour-desc'] = 'Consultation dans séjour';
 ?>

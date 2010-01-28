@@ -61,7 +61,7 @@ class CUser extends CMbObject {
     14 => "Personnel",
     15 => "Kinesitherapeute",
     16 => "Sage Femme",
-    17 => "pharmacien"
+    17 => "Pharmacien"
   );
   
   function getSpec() {

@@ -68,6 +68,7 @@ class CConsultation extends CCodable {
   var $_types_examen   = null;
   var $_precode_acte   = null;
   var $_exam_fields    = null;
+  var $_type           = null;  // Type de la consultation
   
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
@@ -202,6 +203,7 @@ class CConsultation extends CCodable {
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
     $specs["_somme"]            = "currency";		
+    $specs["_type"]             = "enum list|urg|anesth";
     
     return $specs;
   }
@@ -688,6 +690,22 @@ class CConsultation extends CCodable {
   }
   
   function store() {
+    // Consultation dans un séjour
+    if (!$this->_id && !$this->sejour_id && 
+        CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
+      // Recherche séjour englobant
+      $this->loadRefPlageConsult();
+      $datetime = $this->_datetime;
+      $where = array();
+      $where['patient_id']   = " = '$this->patient_id'";
+      $where[] = "`entree_prevue` <= '$datetime' AND `sortie_prevue` >= '$datetime'";
+      
+      $sejour = new CSejour();
+      if ($sejour->loadObject($where)) {
+        $this->sejour_id = $sejour->_id;
+      }
+    }
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -703,7 +721,7 @@ class CConsultation extends CCodable {
     // Bind FSE
     if ($this->_bind_fse && $this->_id) {
       return $this->bindFSE();
-    }
+    }    
   }
   
   function loadRefCategorie($cache = 0) {
@@ -757,6 +775,14 @@ class CConsultation extends CCodable {
   function loadRefPraticien(){
   	$this->loadRefPlageConsult(1);
     $this->_ref_praticien =& $this->_ref_chir;
+    
+    // Calcul du type de la consultation
+    if ($this->_ref_praticien->function_id == CGroups::loadCurrent()->service_urgences_id) {
+      $this->_type = "urg";
+    }
+    if ($this->_ref_praticien->isFromType(array("Anesthésiste"))) {
+      $this->_type = "anesth";
+    }
   }
   
   function preparePossibleActes() {

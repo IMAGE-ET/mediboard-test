@@ -218,13 +218,10 @@ class CRPU extends CMbObject {
 
     // Chargement de la consultation ATU
     $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
-    $this->_ref_consult = $this->_ref_sejour->loadUniqueBackRef("consultations");
-    if ($this->_ref_consult->_id) {
-      $this->_ref_consult->loadRefPraticien();      
-      $this->_ref_consult->_ref_praticien->loadRefFunction();
-      $this->_ref_consult->countDocItems();
-    }
-    
+    $this->_ref_sejour->loadRefsConsultations();
+
+    $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
+       
 	  // Calcul des temps d'attente et présence
 		$entree = mbTime($this->_ref_sejour->_entree);
 		$this->_presence =  mbSubTime($entree, mbTime());

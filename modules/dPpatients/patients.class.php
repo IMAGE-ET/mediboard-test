@@ -1076,9 +1076,14 @@ class CPatient extends CMbObject {
     if(!$pat_id) {
       return;
     }
-  
+
     // Consultations
     foreach ($this->_ref_consultations as $keyConsult => $valueConsult) {
+      if ($valueConsult->sejour_id) {
+        unset($this->_ref_consultations[$keyConsult]);
+        continue;
+      }
+
       $consult =& $this->_ref_consultations[$keyConsult];
       
       $consult->loadRefConsultAnesth();
@@ -1087,12 +1092,13 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
       
       $consult->loadRefsFwd(1);
+      $consult->loadRefPraticien();
       $consult->_ref_chir->loadRefFunction();
       $consult->_ref_chir->_ref_function->loadRefGroup();
       $consult->canRead();
       $consult->canEdit();
     }
-    
+
     // Sejours
     foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
       $sejour =& $this->_ref_sejours[$keySejour];
@@ -1100,7 +1106,6 @@ class CPatient extends CMbObject {
       $sejour->loadRefsAffectations();
       $sejour->loadRefsOperations();
       $sejour->countDocItems($permType);
-      
       $sejour->loadRefsFwd(1);
       $sejour->canRead();
       $sejour->canEdit();
@@ -1115,6 +1120,19 @@ class CPatient extends CMbObject {
       $sejour->loadRefRPU();
       if($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
         $sejour->_ref_rpu->countDocItems($permType);
+      }
+      $sejour->loadRefsConsultations();
+      foreach ($sejour->_ref_consultations as $_consult) {
+        $_consult->loadRefConsultAnesth();
+        $_consult->loadRefsFichesExamen();
+        $_consult->loadExamsComp();
+        $_consult->countDocItems($permType);
+        
+        $_consult->loadRefsFwd(1);
+        $_consult->_ref_chir->loadRefFunction();
+        $_consult->_ref_chir->_ref_function->loadRefGroup();
+        $_consult->canRead();
+        $_consult->canEdit();
       }
     }
   }

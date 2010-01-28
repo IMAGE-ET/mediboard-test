@@ -983,7 +983,7 @@ table.form th.text {
 table.form td {
   white-space: nowrap;
   vertical-align: top;
-  background: #eee;
+  background-color: #eee;
   text-align: left;
   padding: 1px 4px;
 }
@@ -997,7 +997,7 @@ table.form td.light {
 }
 
 table.form td.compte_rendu {
-  background: #ddd;
+  background-color: #ddd;
 }
 
 table.form td.text,
@@ -3481,6 +3481,24 @@ span.highlight {
   opacity: 0;
   z-index: 2;
   right: 0;
+}
+
+.iconed-text {
+  padding-left: 20px !important;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+.iconed-text.interv {
+  background-image: url(images/icons/interv.png);
+}
+
+.iconed-text.urg {
+  background-image: url(images/icons/urg.png);
+}
+
+.iconed-text.anesth {
+  background-image: url(images/icons/anesth.png);
 }
 
 .merge-selected {

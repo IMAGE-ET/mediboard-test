@@ -22,16 +22,18 @@ $consultation->loadRefConsultAnesth();
 
 foreach($patient->_ref_sejours as $key => $sejour) {
   $patient->_ref_sejours[$key]->loadRefsOperations();
+  $patient->_ref_sejours[$key]->loadRefsConsultations();
   foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
     $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
   }
 }
 foreach($patient->_ref_consultations as $key => $consult) {
-	if ($patient->_ref_consultations[$key]->annule) {
+	if ($patient->_ref_consultations[$key]->annule || $patient->_ref_consultations[$key]->sejour_id) {
 		unset($patient->_ref_consultations[$key]);
 		continue;
 	}
   $patient->_ref_consultations[$key]->loadRefsFwd();
+  $patient->_ref_consultations[$key]->loadRefPraticien();
   $patient->_ref_consultations[$key]->_ref_plageconsult->loadRefsFwd();
 }
 
