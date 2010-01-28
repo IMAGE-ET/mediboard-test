@@ -92,13 +92,13 @@ class CBcbControleSurdosage {
                 AND POSO_MAXIMUM.Terrain='A'";
       $result = reset($ds->loadList($query));
     }
+		
     $conditionnement = $line->_ref_produit->loadUnitePresentation();
     $uadministration = $line->_ref_produit->libelle_unite_presentation;
-    $unite = $conditionnement["CODE_UNITE_DE_PRISE1"] == $uadministration ? "UP1" : "UP2";
-
-    // UP1QTEMINI, UP1QTEMAXI, UP1QTEMINIPKG, UP1QTEMAXIPKG, UP1PKG, UP1QTEMINIPM2, UP1QTEMAXIPM2, UP1PM2, UP1QTEMAXITOXIQUE, UP1QTEMAXITOXIQUEPKG, UP1QTEMAXITOXIQUEPM2,
-    // UP2QTEMINI, UP2QTEMAXI, UP2QTEMINIPKG, UP2QTEMAXIPKG, UP2PKG, UP2QTEMINIPM2, UP2QTEMAXIPM2, UP2PM2, UP2QTEMAXITOXIQUE, UP2QTEMAXITOXIQUEPKG, UP2QTEMAXITOXIQUEPM2,
-    // DUREEMINI, DUREEMAXI, DUREEMAXITOXIQUE
+   
+    $unite_prise_1 = CBcbProduit::getLibellePrise($conditionnement["CODE_UNITE_DE_PRISE1"]);
+		$unite = ($unite_prise_1 == $uadministration) ? "UP1" : "UP2";
+			
     if($result){
       $this->qte_mini           = $result[$unite."QTEMINI"];
       $this->qte_maxi           = $result[$unite."QTEMAXI"];
@@ -106,6 +106,7 @@ class CBcbControleSurdosage {
       $this->duree_mini         = $result["DUREEMINI"];
       $this->duree_maxi         = $result["DUREEMAXI"];
       $this->duree_maxi_toxique = $result["DUREEMAXITOXIQUE"];
+			
       $msg = "qte toxique : $this->qte_maxi_toxique $uadministration, qte max : $this->qte_maxi $uadministration, qte min : $this->qte_mini $uadministration";
       //mbTrace($msg, $line->code_cip." - ".$line->_view);
       $msg = "duree toxique : $this->duree_maxi_toxique jours, duree max : $this->duree_maxi jours, duree min : $this->duree_mini jours";
@@ -118,41 +119,36 @@ class CBcbControleSurdosage {
     $debut_reel = mbDate(null, $line->_debut_reel);
     $fin_reelle = mbDate(null, $line->_fin_reelle);
     $unite = $line->_ref_produit->libelle_unite_presentation;
+    
     for($date = $debut_reel; $fin_reelle && $date <= $fin_reelle; $date = mbDate("+1 DAY", $date)) {
       $qte = $line->calculPrises($this->_ref_prescription, $date);
       if($qte) {
         $date_formated = mbTransformTime(null, $date, "%d/%m/%Y");
-        if($this->qte_maxi_toxique && $qte > $this->qte_maxi_toxique) {
+
+        $msg = "";
+				$alerte = new CObject();
+      	$alerte->Type = "Qte";
+        $alerte->Produit = $line->_ref_produit->libelle;
+        $alerte->CIP = $line->code_cip;
+      
+			  if($this->qte_maxi_toxique && $qte > $this->qte_maxi_toxique) {
           $msg = "$qte $unite est superieure à la quantité toxique de ";
           $msg .= "$this->qte_maxi_toxique $unite pour le $date_formated";
-          $alerte = new CObject();
-          $alerte->Type = "Qte";
           $alerte->Niveau = 12;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
         } elseif($this->qte_maxi && $qte > $this->qte_maxi) {
           $msg = "$qte $unite est superieure à la quantité maximale usuelle de ";
           $msg .= "$this->qte_maxi $unite pour le $date_formated";
-          $alerte = new CObject();
-          $alerte->Type = "Qte";
-          $alerte->Niveau = 11;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
+      	  $alerte->Niveau = 11;
         } elseif($this->qte_mini && $qte < $this->qte_mini) {
-          $msg = "$qte $unite est inférieur à la quantité minimal usuelle de ";
+          $msg = "$qte $unite est inférieur à la quantité minimale usuelle de ";
           $msg .= "$this->qte_mini $unite pour le $date_formated";
-          $alerte = new CObject();
-          $alerte->Type = "Qte";
-          $alerte->Niveau = 10;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
+          $alerte->Niveau = 10;        	
         }
+				
+				if($msg){
+					$alerte->LibellePb = $msg;
+      		$this->alertes[] = $alerte;
+				}
       }
     }
     return true;
@@ -163,33 +159,25 @@ class CBcbControleSurdosage {
     $fin_reelle = CValue::first(mbDate(null, $line->_fin_reelle));
     if($fin_reelle) {
       $duree = mbDaysRelative($debut_reel, $fin_reelle) + 1;
-      if($this->duree_maxi_toxique && $duree >= $this->duree_maxi_toxique) {
-          $msg = "$duree jours de prescription est superieur à la durée toxique de $this->duree_maxi_toxique jours";
-          $alerte = new CObject();
-          $alerte->Type = "Duree";
-          $alerte->Niveau = 22;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
+      $msg = "";
+			$alerte = new CObject();
+      $alerte->Type = "Duree";
+      $alerte->CIP = $line->code_cip;
+      $alerte->Produit = $line->_ref_produit->libelle;
+			if($this->duree_maxi_toxique && $duree >= $this->duree_maxi_toxique) {
+        $msg = "$duree jours de prescription est superieur à la durée toxique de $this->duree_maxi_toxique jours";
+        $alerte->Niveau = 22;
       } elseif($this->duree_maxi && $duree > $this->duree_maxi) {
-          $msg = "$duree jours de prescription est superieur à la durée maximale usuelle de $this->duree_maxi jours";
-          $alerte = new CObject();
-          $alerte->Type = "Duree";
-          $alerte->Niveau = 21;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
+        $msg = "$duree jours de prescription est superieur à la durée maximale usuelle de $this->duree_maxi jours";
+        $alerte = new CObject();
+        $alerte->Niveau = 21;
       } elseif($this->duree_mini && $duree < $this->duree_mini) {
-          $msg = "$duree jours de prescription est inferieur à la durée minimale usuelle de $this->duree_mini jours";
-          $alerte = new CObject();
-          $alerte->Type = "Duree";
-          $alerte->Niveau = 20;
-          $alerte->CIP = $line->code_cip;
-          $alerte->Produit = $line->_ref_produit->libelle;
-          $alerte->LibellePb = $msg;
-          $this->alertes[] = $alerte;
+        $msg = "$duree jours de prescription est inferieur à la durée minimale usuelle de $this->duree_mini jours";
+        $alerte->Niveau = 20;
+      }
+			if($msg){
+			  $alerte->LibellePb = $msg;
+        $this->alertes[] = $alerte;
       }
     }
   }
@@ -217,7 +205,6 @@ class CBcbControleSurdosage {
 		}
     return $this->alertes;
   }
-  
 }
 
 ?>

@@ -12,12 +12,11 @@
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
 {{assign var=typeDate value="Med"}}
+
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
              {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}
-             {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}"
-       id="line_medicament_{{$line->_id}}">
+             {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}" id="line_medicament_{{$line->_id}}">
 <tbody  class="hoverable">
-  <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="text element {{if $line->traitement_personnel}}traitement{{/if}}
@@ -34,16 +33,11 @@
           <img src="images/icons/history.gif" title="Ligne possédant un historique" 
                onmouseover="ObjectTooltip.createEx(this, '{{$parent_line->_guid}}')"/>
         {{/if}}
-        <!-- Selecteur equivalent -->
         {{if $line->_can_select_equivalent}}
           {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
         {{/if}}	       
-        <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
-        <!-- Formulaire Conditionnel -->
 		    {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
-
-	      <!-- Formulaire Traitement -->
         {{if $line->_can_vw_form_traitement}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
         {{/if}} 
@@ -67,30 +61,18 @@
             {{$line->_ref_praticien->_view}}    
           {{/if}}
         {{/if}}
-        {{if $mode_pharma}}
-        <!-- Vue pharmacie -->
-          {{if !$line->_protocole}}
-            {{include file="../../dPprescription/templates/line/inc_vw_form_accord_praticien.tpl"}}
-            {{if $line->valide_pharma}}
-              <button type="button" class="cancel" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '0', '{{$mode_pharma}}');">Annuler la validation pharmacien</button>
-            {{else}}
-              <button type="button" class="tick" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '1', '{{$mode_pharma}}');">Validation pharmacien</button>
-            {{/if}}
-          {{/if}}
-        {{elseif !$line->_protocole}}
-        <!-- Vue normale  -->
-          {{if $line->traitement_personnel}}
-            {{if $line->_can_view_form_signature_praticien}}
-							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-					  {{/if}}
+        {{if $mode_pharma && !$line->_protocole}}
+				  <!-- Vue pharmacie -->
+          {{include file="../../dPprescription/templates/line/inc_vw_form_accord_praticien.tpl"}}
+          {{if $line->valide_pharma}}
+            <button type="button" class="cancel" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '0', '{{$mode_pharma}}');">Annuler la validation pharmacien</button>
           {{else}}
-					  {{if !$line->valide_pharma}}
-						  {{if $line->_can_view_form_signature_praticien}}
-							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-							{{/if}}
-					  {{/if}}	
-			    {{/if}}
+            <button type="button" class="tick" onclick="submitValidationPharmacien('{{$prescription_reelle->_id}}', '{{$line->_id}}', '1', '{{$mode_pharma}}');">Validation pharmacien</button>
+          {{/if}}
+        {{elseif $line->_can_view_form_signature_praticien}}
+				  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
         {{/if}}
+			
         {{if $line->_protocole && !$line->substitute_for_id && !$mode_pack}}
           <button type="button" class="add" onclick="Prescription.viewSubstitutionLines('{{$line->_id}}','{{$line->_class_name}}')">
              Lignes de substitution
@@ -109,8 +91,6 @@
       </a>
     </th>
   </tr>
-  
-	
 	<!-- Produit perfusable -->
   {{if $line->_is_perfusable && $line->_perm_edit}}
 	  <tr>
@@ -121,61 +101,61 @@
 				</div>
 	    </td>
 	    <td>
-	    		<form name="addPerfusionLine-{{$line->_id}}">
-		  		  <input type="hidden" name="dosql" value="do_line_to_perfusion_aed" />
-		  		  <input type="hidden" name="m" value="dPprescription" />
-		  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
-		  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
+    		<form name="addPerfusionLine-{{$line->_id}}">
+	  		  <input type="hidden" name="dosql" value="do_line_to_perfusion_aed" />
+	  		  <input type="hidden" name="m" value="dPprescription" />
+	  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
+	  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
 
-		  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
-		  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
+	  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
+	  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
 
-		  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
-		  		    <option value="">Nouvelle perfusion</option>
-		  		  
-		  		  {{if $line->substitute_for_id}}
-			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-			  		    {{if ($line->substitute_for_id == $_perfusion->substitute_for_id) && ($line->substitute_for_class == $_perfusion->substitute_for_class)}}
-			  		    <option value="{{$_perfusion->_id}}">
-			  		    {{foreach from=$_perfusion->_ref_lines item=_perf_line name=foreach_perfusion}}
-								  {{$_perf_line->_ref_produit->libelle_abrege}}
-									{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
-								{{/foreach}}
-								({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
-                </option>
-			  		    {{/if}}
-			  		  {{/foreach}}
-		  		  {{else}}
-			  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-			  		    <option value="{{$_perfusion->_id}}">
-			  		    	{{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perfusion"}}
-                  {{$_perf_line->_ref_produit->libelle_abrege}}
-									{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
-                {{/foreach}}
-							  ({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
-                </option>
-			  		  {{/foreach}}
-		  		  {{/if}}
-		  		  
-		  		  </select>
-		  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
-		  		  
-			  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
-			  		  onComplete: function() { 
-			  		    {{if @$mode_substitution}}
-			  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
-			  		    {{else}}
-			  			    Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
-			  			  {{/if}}
-			  		  } } );">
-			  		  Ajouter à la perfusion
-			  		</button>
-		  		</form>
-		  		<script type="text/javascript">
-						Main.add( function(){
-						  toggleTypePerfusion(document.forms["addPerfusionLine-{{$line->_id}}"]);
-						} );
-		  		</script>	
+	  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
+	  		    <option value="">Nouvelle perfusion</option>
+	  		  
+	  		  {{if $line->substitute_for_id}}
+		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+		  		    {{if ($line->substitute_for_id == $_perfusion->substitute_for_id) && ($line->substitute_for_class == $_perfusion->substitute_for_class)}}
+		  		    <option value="{{$_perfusion->_id}}">
+		  		    {{foreach from=$_perfusion->_ref_lines item=_perf_line name=foreach_perfusion}}
+							  {{$_perf_line->_ref_produit->libelle_abrege}}
+								{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+							{{/foreach}}
+							({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+              </option>
+		  		    {{/if}}
+		  		  {{/foreach}}
+	  		  {{else}}
+		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+		  		    <option value="{{$_perfusion->_id}}">
+		  		    	{{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perfusion"}}
+                {{$_perf_line->_ref_produit->libelle_abrege}}
+								{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+              {{/foreach}}
+						  ({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+              </option>
+		  		  {{/foreach}}
+	  		  {{/if}}
+	  		  
+	  		  </select>
+	  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
+	  		  
+		  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
+		  		  onComplete: function() { 
+		  		    {{if @$mode_substitution}}
+		  		      Prescription.viewSubstitutionLines('{{$line->substitute_for_id}}','{{$line->substitute_for_class}}');
+		  		    {{else}}
+		  			    Prescription.reloadPrescPerf('{{$prescription_reelle->_id}}','{{$line->_protocole}}','{{$mode_pharma}}');
+		  			  {{/if}}
+		  		  } } );">
+		  		  Ajouter à la perfusion
+		  		</button>
+	  		</form>
+	  		<script type="text/javascript">
+					Main.add( function(){
+					  toggleTypePerfusion(document.forms["addPerfusionLine-{{$line->_id}}"]);
+					} );
+	  		</script>	
 	    </td>
 	  </tr>
   {{/if}}
@@ -203,7 +183,6 @@
       <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
       {{/if}}
     </td>
-    
     <td colspan="3">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
       <script type="text/javascript">
@@ -279,10 +258,7 @@
       {{/if}}
     </td>
     <td colspan="4">
-     {{if $line->_perm_edit && !$line->_protocole}}
-       <button class="search" type="button" onclick="$('subst-{{$line->_guid}}').toggle();" style="float: right;">Substitutions</button>
-		 {{/if}}
-		 {{if $prescription->type == "sortie"}}
+ 	 {{if $prescription->type == "sortie"}}
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
       {{if $line->_can_vw_form_add_line_contigue}}
 	      <div style="float: right">
@@ -310,108 +286,83 @@
 		      </button>
 		      {{/if}}
 	    </form>
-  		
-  		 <!-- Si seulement 1 voie possible ou affichage bloqué-->
-  		{{if $line->voie || $line->_ref_produit_prescription->voie}}
-	  		{{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
-	  		  {{if $line->voie}}
-					  {{$line->voie}}
-					{{elseif $line->_ref_produit_prescription->voie}}
-					   {{$line->_ref_produit_prescription->voie}}
-					{{/if}}
-	  		{{else}}
-		  		<select name="voie-{{$line->_id}}" 
-		  						onchange="{{if !in_array($line->voie, $line->_ref_produit->voies)}}
-		  												$('warning-voie-{{$line->_id}}').hide();
-		  												$('warning-voie-option-{{$line->_id}}').hide();
-		  		                  {{/if}}
-		  		                  return submitVoie('{{$line->_id}}',this.value);">
-			  		{{foreach from=$line->_ref_produit->voies item=libelle_voie}}
-			  		  <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
-			  		{{/foreach}}
-			  		{{if !in_array($line->voie, $line->_ref_produit->voies)}}
-			  		  <script type="text/javascript">
-			  		    $('warning-voie-{{$line->_id}}').show();
-			  		  </script>
-			  		  <option id="warning-voie-option-{{$line->_id}}" value="{{$line->voie}}" selected="selected" style="background-color: red">
-			  		    {{$line->voie}}
-			  		  </option>
-			  		{{/if}}
-		  		</select>
-	  		{{/if}}
-	  		<div id="warning-voie-{{$line->_id}}" class="small-warning" style="display:none;">
-  		    Attention, la voie <strong>"{{$line->voie}}"</strong> n'est plus proposée pour ce médicament
-  		  </div>
-  		{{else}}
-  		Aucune voie
-  		{{/if}}
+			
+       {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
+			      !$line->_count.administration && $line->_ref_prescription->object_id && $line->_perm_edit && !$line->_protocole}}
+        <form action="?" method="post" name="changeLine-{{$line->_guid}}">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+          <select name="object_guid" style="width: 150px;" 
+                  onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+                               Prescription.reload('{{$line->_ref_prescription->_id}}', '', 'medicament');  
+                             } } )">
+            <option value="">Lignes de substitutions</option>
+            {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+                {{foreach from=$lines_subst_by_chap item=_line_subst}}
+                <option value="{{$_line_subst->_guid}}">
+                  {{if $_line_subst->_class_name == "CPerfusion"}}
+                    {{$_line_subst->_short_view}}
+                  {{else}}
+                    {{$_line_subst->_view}}
+                  {{/if}}
+                {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+              {{/foreach}}
+            {{/foreach}}
+          </select>
+        </form>
+      {{/if}}
+
+       <!-- Si seulement 1 voie possible ou affichage bloqué-->
+      {{if $line->voie || $line->_ref_produit_prescription->voie}}
+        {{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
+          {{if $line->voie}}
+            {{$line->voie}}
+          {{elseif $line->_ref_produit_prescription->voie}}
+             {{$line->_ref_produit_prescription->voie}}
+          {{/if}}
+        {{else}}
+          <select name="voie-{{$line->_id}}" 
+                  onchange="{{if !in_array($line->voie, $line->_ref_produit->voies)}}
+                              $('warning-voie-{{$line->_id}}').hide();
+                              $('warning-voie-option-{{$line->_id}}').hide();
+                            {{/if}}
+                            return submitVoie('{{$line->_id}}',this.value);">
+            {{foreach from=$line->_ref_produit->voies item=libelle_voie}}
+              <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
+            {{/foreach}}
+            {{if !in_array($line->voie, $line->_ref_produit->voies)}}
+              <script type="text/javascript">
+                $('warning-voie-{{$line->_id}}').show();
+              </script>
+              <option id="warning-voie-option-{{$line->_id}}" value="{{$line->voie}}" selected="selected" style="background-color: red">
+                {{$line->voie}}
+              </option>
+            {{/if}}
+          </select>
+        {{/if}}
+        <div id="warning-voie-{{$line->_id}}" class="small-warning" style="display:none;">
+          Attention, la voie <strong>"{{$line->voie}}"</strong> n'est plus proposée pour ce médicament
+        </div>
+      {{else}}
+      Aucune voie
+      {{/if}}
  	  </td>
   </tr>
-  {{if ($prescription->type != "sortie") && !$line->_protocole && $line->signee && ($is_praticien || @$operation_id || $can->admin)}}
-  <tr>
-  <td></td>
-    <td style="text-align:center;">
-      <div id="stop-CPrescriptionLineMedicament-{{$line->_id}}">
-        {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
-      </div>
-    </td>
-    <td colspan="2">
-      <!-- Ajouter une ligne (même dans le cas du traitement)-->
-      {{if $line->_can_vw_form_add_line_contigue}}
-	      <div>
-	        {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
-	      </div>
-      {{/if}}
-      </td>
-  </tr>
-  {{/if}}
 	
-  <tr id="subst-{{$line->_guid}}" style="display: none;">
-	  <td />
-	  <td colspan="3">
-    {{if !$line->_count.administration && $line->_ref_prescription->object_id}}
-      {{if $line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count}}
-				{{if $line->_perm_edit}}
-				  <form action="?" method="post" name="changeLine-{{$line->_guid}}">
-            <input type="hidden" name="m" value="dPprescription" />
-            <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-            <select name="object_guid" style="width: 150px;" 
-                    onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-                                 Prescription.reload('{{$line->_ref_prescription->_id}}', '', 'medicament');  
-                               } } )">
-              <option value="">Lignes de substitutions</option>
-              {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
-                  {{foreach from=$lines_subst_by_chap item=_line_subst}}
-                  <option value="{{$_line_subst->_guid}}">
-                    {{if $_line_subst->_class_name == "CPerfusion"}}
-                      {{$_line_subst->_short_view}}
-                    {{else}}
-                      {{$_line_subst->_view}}
-                    {{/if}}
-                  {{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
-                {{/foreach}}
-              {{/foreach}}
-            </select>
-          </form>
-        {{/if}}
-        {{if $line->_ref_substitute_for->_class_name == "CPrescriptionLineMedicament"}}
-          {{assign var=dosql value="do_prescription_line_medicament_aed"}}
-        {{else}}
-          {{assign var=dosql value="do_perfusion_aed"}}
-        {{/if}}
-
-        {{if $prescription->type == "sejour" && $line->_perm_edit}}
-             Modification par les infirmières
-          <form name="editLine" action="?" method="post">
-            <input type="hidden" name="m" value="dPprescription" />
-            <input type="hidden" name="dosql" value="{{$dosql}}" />
-            <input type="hidden" name="{{$line->_ref_substitute_for->_spec->key}}" value="{{$line->_ref_substitute_for->_id}}" />
-            {{mb_field object=$line->_ref_substitute_for field="substitution_plan_soin" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-          </form>
-        {{/if}}
-      {{/if}}
-    {{/if}}
-		</td>
-	</tr>
+  {{if $line->_can_vw_form_add_line_contigue}}
+		<tr>
+	  <td></td>
+	    <td style="text-align:center;">
+	      <div id="stop-CPrescriptionLineMedicament-{{$line->_id}}">
+	        {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
+	      </div>
+	    </td>
+	    <td colspan="2">
+		    <div>
+		      {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
+		    </div>
+	    </td>
+	  </tr>
+  {{/if}}
 </tbody>
 </table>

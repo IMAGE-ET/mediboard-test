@@ -90,17 +90,33 @@ $alertesInteractions = $interactions->getInteractions();
 $alertesIPC          = $IPC->getIPC();
 $alertesPosologie    = $posologie->getSurdosage();
 
+$interactions = array();
+
+
+  
+foreach($alertesInteractions as $_alerte_interaction){
+  $produit1 = new CBcbProduit();
+	$produit1->load($_alerte_interaction->CIP1);
+	 
+  $produit2 = new CBcbProduit();
+  $produit2->load($_alerte_interaction->CIP2);
+  
+	$interactions["$_alerte_interaction->CIP1-$_alerte_interaction->CIP2"]["interactions"][] = $_alerte_interaction;
+	$interactions["$_alerte_interaction->CIP1-$_alerte_interaction->CIP2"]["CIP1"] = $produit1;
+	$interactions["$_alerte_interaction->CIP1-$_alerte_interaction->CIP2"]["CIP2"] = $produit2;
+}
+
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("interactions"       , $interactions);
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);
 $smarty->assign("alertesIPC"         , $alertesIPC);
 $smarty->assign("alertesProfil"      , $alertesProfil);
 $smarty->assign("alertesPosologie"   , $alertesPosologie);
-
 $smarty->display("vw_full_alertes.tpl");
 
 ?>

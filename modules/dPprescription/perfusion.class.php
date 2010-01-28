@@ -229,10 +229,17 @@ class CPerfusion extends CMbObject {
         $perm_edit = $protocole->_ref_group->canEdit();
       }
     } else {
-      $perm_edit = ($can->admin && !$mode_pharma) || ((!$this->signature_prat || $mode_pharma) && 
-                   !$this->signature_pharma && 
-                   ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma));
-    }
+    	$current_user = new CMediusers();
+      $current_user->load($AppUI->user_id);
+			
+			if($mode_pharma && $this->signature_pharma){
+				$perm_edit = 0;
+			} else {
+        $perm_edit = ($can->admin && !$mode_pharma) ||
+				             ((!$this->signature_prat || $mode_pharma) && 
+                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $operation_id || $mode_pharma || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med"))));
+			}
+		}
     $this->_perm_edit = $perm_edit;
     
     // Modification de la perfusion et des lignes des perfusions
@@ -249,7 +256,7 @@ class CPerfusion extends CMbObject {
     	$this->_can_vw_form_signature_pharmacien = 1;
     }
     // Affichage du formulaire de signature praticien
-    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id) && !$mode_pharma){
+    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
     	$this->_can_vw_form_signature_praticien = 1;
     }
     // View signature praticien
@@ -257,9 +264,11 @@ class CPerfusion extends CMbObject {
     	$this->_can_vw_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
+		/*
     if(!$mode_pharma && !$this->_protocole && !$is_praticien && !$this->signature_prat && $this->creator_id == $AppUI->user_id && !$this->signature_pharma){
     	$this->_can_vw_form_signature_infirmiere = 1;
-    }
+    }*/
+		
     // Suppression de la ligne
     if ($perm_edit || $this->_protocole){
       $this->_can_delete_perfusion = 1;

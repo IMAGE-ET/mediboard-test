@@ -100,7 +100,7 @@
 			 {{/if}}
     </td>
 		{{if !$line->_protocole}}
-	    <td style="width: 15%">
+	    <td style="width: 15%" class="text">
 	      <!-- Date de debut -->
 	      {{if $line->debut}}
 	        {{mb_value object=$line field=debut}}
@@ -109,7 +109,7 @@
 	        {{/if}}
 	      {{/if}}
 	    </td>
-	    <td style="width: 10%">
+	    <td style="width: 10%" class="text">
 	      {{if !$mode_induction_perop}}   
 	        <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
 	      {{/if}}

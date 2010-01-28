@@ -392,6 +392,7 @@ Prescription = {
       }
     }
   },
+	/*
   submitFormStop: function(oForm, object_id, object_class){
     submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
       var url = new Url("dPprescription", "httpreq_vw_stop_line");
@@ -399,7 +400,7 @@ Prescription = {
       url.addParam("object_class", object_class)
       url.requestUpdate("stop-"+object_class+"-"+object_id);
     } } );
-  },
+  },*/
   viewAllergies: function(prescription_id){
     var url = new Url("dPprescription", "httpreq_vw_allergies_sejour");
     url.addParam("prescription_id", prescription_id);

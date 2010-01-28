@@ -294,11 +294,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$current_user = new CMediusers();
 			$current_user->load($AppUI->user_id);
 
-      $perm_edit = ($can->admin && !$mode_pharma) || 
-			             ((!$this->signee || $mode_pharma) && 
-                   !$this->valide_pharma && 
-                   ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med"))));
-    }
+      if($mode_pharma && $this->valide_pharma){
+        $perm_edit = 0;
+      } else {
+			  $perm_edit = ($can->admin && !$mode_pharma) || 
+			               ((!$this->signee || $mode_pharma) && 
+                     ($this->praticien_id == $AppUI->user_id || $is_praticien || $mode_pharma || $operation_id || ($current_user->isInfirmiere() && CAppUI::conf("dPprescription CPrescription droits_infirmiers_med"))));
+			}
+		}
     
     $this->_perm_edit = $perm_edit;
     
@@ -333,9 +336,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
+		/*
     if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma && $this->_ref_prescription->type !== "externe"){
     	$this->_can_view_form_signature_infirmiere = 1;
-    }
+    }*/
     // Affichage de l'icone Livret Therapeutique
     if(!$this->_ref_produit->inLivret && ($prescription_type === "sejour" || $this->_protocole)){
       $this->_can_vw_livret_therapeutique = 1;
@@ -357,7 +361,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->_can_delete_line = 1;
   	}
   	// Affichage du bouton "Modifier une ligne"
-  	if(!$this->_protocole && $this->_ref_prescription->type !== "externe"){
+  	if(!$this->_protocole && $this->_ref_prescription->type !== "externe" && $this->signee){
   		$this->_can_vw_form_add_line_contigue = 1;
   	}
 	}

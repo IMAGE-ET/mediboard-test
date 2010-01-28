@@ -1361,12 +1361,6 @@ class CPrescription extends CMbObject {
 		} else {
 			$favoris[$chapitreSel] = CElementPrescription::getFavoris($praticien_id, $chapitreSel);
 		}
-		
-  	//$category = new CCategoryPrescription();
-    //foreach($category->_specs["chapitre"]->_list as $chapitre){
-  	  //$listFavoris[$chapitre] = array();
-  	  //$favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
-    //}
     if(isset($favoris)){
 		  foreach($favoris as $key => $typeFavoris) {
 		  	foreach($typeFavoris as $curr_fav){
@@ -1412,8 +1406,6 @@ class CPrescription extends CMbObject {
     foreach($interactions as $key => $int) {
       if($int->CIP1 == $code_cip || $int->CIP2 == $code_cip) {
         $_interaction =& $this->_alertes["interaction"][$int->CIP1][$key];
-        $_interaction["libelle"] = $int->Type;
-        $_interaction["niveau"] = $int->Niveau;
         $_interaction["libelle"] = $int->Type;
         $_interaction["niveau"] = $int->Niveau;
         if(!isset($this->_scores["interaction"]["niv$int->Niveau"])){

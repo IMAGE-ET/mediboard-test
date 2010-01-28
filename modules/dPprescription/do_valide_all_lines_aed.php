@@ -215,12 +215,18 @@ foreach($lines as $_type_line => $_lines){
 				if($new_value && !$_line->_count_prises_line && !$mode_pharma){
 				  CAppUI::displayMsg("Impossible de signer une ligne qui ne possède pas de posologie", "$_line->_class_name-title-modify"); 
 				} else {
+					if(!$mode_pharma && !$new_value){
+						$_line->valide_pharma = '0';
+					}
 					$msg = $_line->store();
 	        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 	
 				}
         break;
 			case "CPerfusion":
 				$mode_pharma ? ($_line->signature_pharma = 1) : ($_line->signature_prat = $new_value);
+				if(!$mode_pharma && !$new_value){
+          $_line->signature_pharma = '0';
+        }
 				$msg = $_line->store();
         CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
 				break;
@@ -231,7 +237,6 @@ foreach($lines as $_type_line => $_lines){
         CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
       	break;
 		}
-		
 	}
 }
 

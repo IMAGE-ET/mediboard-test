@@ -8,38 +8,53 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl">
+<script type="text/javascript">
+	Main.add( function(){
+    Control.Tabs.create('tab_alertes', false);
+	});
+</script>
+
+<ul class="control_tabs" id="tab_alertes">
+	<li><a href="#interaction" {{if !$alertesInteractions|@count}}class="empty"{{/if}}>Interactions <small>({{$alertesInteractions|@count}})</small></a></li>
+	<li><a href="#posologie" {{if !$alertesPosologie|@count}}class="empty"{{/if}}>Posologies <small>({{$alertesPosologie|@count}})</small></a></li>
+  <li><a href="#profil" {{if !$alertesProfil|@count}}class="empty"{{/if}}>Profil <small>({{$alertesProfil|@count}})</small></a></li>
+  <li><a href="#IPC" {{if !$alertesIPC|@count}}class="empty"{{/if}}>IPC <small>({{$alertesIPC|@count}}</small>)</a></li>
+  <li><a href="#allergie" {{if !$alertesAllergies|@count}}class="empty"{{/if}}>Allergies <small>({{$alertesAllergies|@count}})</small></a></li>
+</ul>
+<hr class="control_tabs" />
+
+<table class="tbl" id="interaction">
   <tr>
-    <th class="title">Alertes</th>
-  </tr>
-</table>
-{{if $alertesInteractions|@count}}
-<table class="tbl">
-  <tr>
-    <th colspan="5">{{$alertesInteractions|@count}} interaction(s)</th>
+    <th colspan="5" class="title">{{$alertesInteractions|@count}} interaction(s)</th>
   </tr>
   <tr>
     <th>Gravité</th>
-    <th>Produit</th>
-    <th>Interéagit avec</th>
     <th>Mécanisme</th>
     <th>Conduite à tenir</th>
   </tr>
-  {{foreach from=$alertesInteractions item=curr_alerte}}
+	{{foreach from=$interactions item=_interactions}}
+	  {{assign var=produit1 value=$_interactions.CIP1}}
+	  {{assign var=produit2 value=$_interactions.CIP2}}
+	  <tr>
+	    <th colspan="3">Interaction entre <strong>{{$produit1->libelle}}</strong> et <strong>{{$produit2->libelle}}</strong></th>
+		</tr>	
+		{{foreach from=$_interactions.interactions item=curr_alerte}}
+		  <tr>
+		    <td class="text">{{$curr_alerte->Gravite}}</td>
+		    <td class="text">{{$curr_alerte->Type}}<br /><strong>{{$curr_alerte->strTexte}}</strong></td>
+		    <td class="text">{{$curr_alerte->strConduite}}</td>
+		  </tr>
+		{{/foreach}}  
+  {{foreachelse}}
   <tr>
-    <td class="text">{{$curr_alerte->Gravite}}</td>
-    <td class="text">{{$curr_alerte->Nom1}} ({{$curr_alerte->strClasse1}})</td>
-    <td class="text">{{$curr_alerte->Nom2}} ({{$curr_alerte->strClasse2}})</td>
-    <td class="text">{{$curr_alerte->Type}} : {{$curr_alerte->Message}}</td>
-    <td class="text">{{$curr_alerte->strConduite}}</td>
+  	<td colspan="3">Aucune interaction</td>
   </tr>
   {{/foreach}}
 </table>
-{{/if}}
-{{if $alertesPosologie|@count}}
-<table class="tbl">
+
+<table class="tbl" id="posologie" style="display: none;">
   <tr>
-    <th colspan="3">{{$alertesPosologie|@count}} problème(s) de posologie</th>
+    <th colspan="3" class="title">{{$alertesPosologie|@count}} problème(s) de posologie</th>
   </tr>
   <tr>
     <th>Type</th>
@@ -58,13 +73,17 @@
     <td class="text">{{$curr_alerte->Produit}}</td>
     <td class="text">{{$curr_alerte->LibellePb}}</td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="3">Aucun problème de posologie</td>
+  </tr>  
   {{/foreach}}
 </table>
-{{/if}}
-{{if $alertesProfil|@count}}
-<table class="tbl">
+
+
+<table class="tbl" id="profil" style="display: none;">
   <tr>
-    <th colspan="2">{{$alertesProfil|@count}} contre-indication(s) / précaution(s) d'emploi</th>
+    <th colspan="2" class="title">{{$alertesProfil|@count}} contre-indication(s) / précaution(s) d'emploi</th>
   </tr>
   <tr>
     <th>Produit</th>
@@ -75,20 +94,22 @@
     <td class="text">{{$curr_alerte->Libelle}}</td>
     <td class="text">{{$curr_alerte->LibelleMot}}</td>
   </tr>
-  {{/foreach}}
-</table>
-{{/if}}
-{{if $alertesIPC|@count}}
-<table class="tbl">
+  {{foreachelse}}
   <tr>
-    <th>{{$alertesIPC|@count}} incompatibilités pysico-chimiques</th>
+    <td colspan="2">Aucune contre-indication</td>
+  </tr>	
+	{{/foreach}}
+</table>
+
+<table class="tbl" id="IPC" style="display: none;">
+  <tr>
+    <th class="title">{{$alertesIPC|@count}} incompatibilité(s) pysico-chimiques</th>
   </tr>
 </table>
-{{/if}}
-{{if $alertesAllergies|@count}}
-<table class="tbl">
+
+<table class="tbl" id="allergie" style="display: none;">
   <tr>
-    <th colspan="2">{{$alertesAllergies|@count}} hypersensibilités</th>
+    <th colspan="2" class="title">{{$alertesAllergies|@count}} hypersensibilité(s)</th>
   </tr>
   <tr>
     <th>Produit</th>
@@ -99,11 +120,9 @@
     <td class="text">{{$curr_alerte->Libelle}}</td>
     <td class="text">{{$curr_alerte->LibelleAllergie}}</td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="2">Aucune allergie</td>
+  </tr>  
   {{/foreach}}
 </table>
-{{/if}}
-{{if !$alertesInteractions && !$alertesProfil && !$alertesIPC && !$alertesAllergies}}
-  <div class="small-info">
-    Aucune alerte dans cette prescription
-  </div>
-{{/if}}

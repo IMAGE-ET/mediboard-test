@@ -245,7 +245,6 @@ submitValidationInfir = function(perfusion_id, prescription_id, validation_infir
   } } );
 }
 
-
 // Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
 changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
   if(oForm.date_arret){

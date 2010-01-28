@@ -364,7 +364,6 @@ class CPrescriptionLine extends CMbObject {
     CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     
     foreach($new_line->_ref_prises as &$prise){
-      // On copie les prises
       $prise->_id = "";
       $prise->object_id = $new_line->_id;
       $prise->object_class = "CPrescriptionLineMedicament";

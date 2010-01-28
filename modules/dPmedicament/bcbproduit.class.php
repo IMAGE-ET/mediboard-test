@@ -436,6 +436,18 @@ class CBcbProduit extends CBcbObject {
 		}
   }
   
+	
+	
+	static function getLibellePrise($code_prise){
+    $ds = CBcbObject::getDataSource();
+    $query = "SELECT LIBELLE_UNITE_DE_PRISE 
+		          FROM `POSO_UNITES_PRISE`
+							WHERE `CODE_UNITE_DE_PRISE` = '$code_prise';";
+		return $ds->loadResult($query);
+	}
+	
+	
+	
   function loadDosage($dosage_unite, $dosage_nb){
    $ds = CBcbObject::getDataSource();
    if($dosage_unite){
