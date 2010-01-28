@@ -6,18 +6,12 @@ var InseeFields = {
   	
 		// Populate div creation for CP
     var oField = oForm.elements[sFieldCP];
-		var sPopulateDiv = sFieldCP + "_auto_complete";
-		var oPopulateDiv = DOM.div( {
-			className: "autocomplete", 
-			id: sPopulateDiv, 
-			style: "display: inline; width: 250px;"
-  	} );
-		$(oField).insert( { after: oPopulateDiv } );
 		
     // Autocomplete for CP
 		var url = new Url("dPpatients", "autocomplete_cp_commune");
 		url.addParam("column", "code_postal");
-		url.autoComplete(oField.id, sPopulateDiv , {
+		url.autoComplete(oField.id, null , {
+			width: "250px",
 			minChars: 2,
 			updateElement: function(selected) {
 				InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
@@ -26,18 +20,12 @@ var InseeFields = {
 		
     // Populate div creation for Commune
     var oField = oForm.elements[sFieldCommune];
-    var sPopulateDiv = sFieldCommune + "_auto_complete";
-    var oPopulateDiv = DOM.div( {
-      className: "autocomplete", 
-      id: sPopulateDiv, 
-      style: "display: inline; width: 250px;"
-    } );
-    $(oField).insert( { after: oPopulateDiv } );
 		
     // Autocomplete for Commune
     var url = new Url("dPpatients", "autocomplete_cp_commune");
     url.addParam("column", "commune");
-    url.autoComplete(oField.id, sPopulateDiv , {
+    url.autoComplete(oField.id, null , {
+      width: "250px",
       minChars: 3,
       updateElement: function(selected) {
         InseeFields.updateCPVille(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus);
