@@ -452,7 +452,9 @@ class CMbFieldSpec {
     
     $extra  = CMbArray::makeXmlAttributes($params);
 
-    $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"".CAppUI::tr("$object->_class_name-$this->fieldName-desc")."\" $extra>";
+    $desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
+    $desc = htmlentities($desc);
+    $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"$desc\" $extra>";
     $sHtml .= CAppUI::tr("$object->_class_name-$this->fieldName");
     $sHtml .= "</label>";
 
@@ -468,9 +470,9 @@ class CMbFieldSpec {
    * @return string Rendered HTML
    */
   function getTitleElement($object, $params) {
+		$desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
+    $desc = htmlentities($desc);
     $title = CAppUI::tr("$object->_class_name-$this->fieldName-court");
-    $desc  = CAppUI::tr("$object->_class_name-$this->fieldName-desc");
-
     return "<label title=\"$desc\" >$title</label>";
   }
 
