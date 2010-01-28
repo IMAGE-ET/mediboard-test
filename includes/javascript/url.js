@@ -245,8 +245,7 @@ var Url = Class.create({
           update.style.minWidth = $(input).getDimensions().width+"px";
           update.style.maxWidth = "400px";
         }
-        update.show();
-        update.unoverflow();
+        update.show().setOpacity(1).unoverflow();
       }
     }, oOptions);
     
