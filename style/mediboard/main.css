@@ -1048,7 +1048,7 @@ div.autocomplete ul em {
 }
 
 div.autocomplete ul li.selected { 
-	background-color: #fafaa4;
+	background-color: #fafaa4 !important;
 	/*font-weight:bold;*/
 }
 
@@ -1058,6 +1058,10 @@ div.autocomplete ul li {
   margin: 0px;
   padding: 2px;  
   cursor:pointer;
+}
+
+div.autocomplete ul li:nth-of-type(2n+1) {
+  background-color: #eee;
 }
 
 div.autocomplete ul li small {
@@ -1094,10 +1098,6 @@ div.dropdown-trigger:hover {
 div.dropdown-trigger div {
   background: url(../../images/buttons/down.gif) center center no-repeat;
   border: 1px solid #eee;
-}
-
-div.dropdown div.autocomplete ul li.selected { 
-	background-color: #ccc;
 }
 
 .textarea-helped {

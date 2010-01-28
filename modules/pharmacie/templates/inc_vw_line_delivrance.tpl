@@ -45,7 +45,7 @@
     <table class="layout">
     {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
       <tr>
-        <td>
+        <td class="button" style="width: 0.1%;">
           {{if !$trace->date_reception}}
             <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return deliverLine(this)">
               <input type="hidden" name="m" value="dPstock" /> 
@@ -59,7 +59,7 @@
             <img src="images/icons/tick.png" title="Délivré" />
           {{/if}}
         </td>
-        <td>
+        <td style="width: 0.1%;">
           <strong>{{$trace->quantity}} éléments</strong>
         </td>
         <td>
@@ -72,17 +72,26 @@
         </td>
       </tr>
     {{/foreach}}
+    
+      {{assign var=_delivered value=$curr_delivery->isDelivered()}}
+      <tr>
+        <td>
+          <button type="button" class="add notext" onclick="$(this).up().next().down('form').toggle()" {{if !$_delivered}}style="visibility: hidden;"{{/if}}></button>
+        </td>
+        <td colspan="10">
+          <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" 
+                onsubmit="return deliverLine(this)" {{if $_delivered}}style="display: none;"{{/if}}>
+            <input type="hidden" name="m" value="dPstock" /> 
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+            <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
+            <input type="hidden" name="date_delivery" value="now" />
+            {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
+            <input type="text" name="code" value="" />
+            <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
+          </form>
+        </td>
+      </tr>
     </table>
-  
-    <form {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}} name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return deliverLine(this)">
-      <input type="hidden" name="m" value="dPstock" /> 
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
-      <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
-      <input type="hidden" name="date_delivery" value="now" />
-      {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
-      <input type="text" name="code" value="" />
-      <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
-    </form>
   </td>
 </tr>

@@ -79,7 +79,7 @@ Main.add(function () {
       </td>
       <td>
         <label>
-          <input type="checkbox" name="display_delivered" onclick="this.form.onsubmit()" /> Afficher les délivrances effectuées
+          <input type="checkbox" name="display_delivered" onclick="this.form.onsubmit()" /> Afficher les délivrances completées
         </label>
       </td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
