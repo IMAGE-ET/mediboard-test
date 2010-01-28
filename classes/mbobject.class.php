@@ -1611,7 +1611,27 @@ class CMbObject {
    */
   function seek($keywords, $where = array(), $limit = 100, $countTotal = false, $ljoin = null) {
     if (!is_array($keywords)) {
-      $keywords = array_filter(explode(" ", $keywords));
+      $regex = '/"([^"]+)"/';
+      
+      // @fixme: there are slashes in the $keywords
+      $keywords = stripslashes($keywords);
+      
+      if (preg_match_all($regex, $keywords, $matches)) { // Find quoted strings
+        $keywords = preg_replace($regex, "", $keywords); // ... and remove them
+      }
+      
+      $keywords = explode(" ", $keywords);
+      
+      // If there are quoted strings
+      if (isset($matches[1])) {
+        $quoted_strings = $matches[1];
+        foreach($quoted_strings as &$_quoted) {
+          $_quoted = str_replace(" ", "_", $_quoted);
+        }
+        $keywords = array_merge($quoted_strings, $keywords);
+      }
+      
+      $keywords = array_filter($keywords);
     }
     
     $seekables = $this->getSeekables();
