@@ -275,7 +275,7 @@ class COperation extends CCodable {
     
     // Vérification de la signature de l'anesthésiste pour la
     // visite de pré-anesthésie
-    if($this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $AppUI->user_id) {
+    if($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $AppUI->user_id) {
       $anesth = new CUser();
       $anesth->load($this->prat_visite_anesth_id);
       if($anesth->user_password != md5($this->_password_visite_anesth)) {
