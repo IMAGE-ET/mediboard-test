@@ -15,6 +15,7 @@ $reference_id = CValue::getOrSession('reference_id');
 $societe_id   = CValue::getOrSession('societe_id');
 $category_id  = CValue::getOrSession('category_id');
 $product_id   = CValue::getOrSession('product_id');
+$keywords     = CValue::getOrSession('keywords');
 
 // Loads the expected Reference
 $reference = new CProductReference();
@@ -59,6 +60,8 @@ $smarty->assign('category_id',     $category_id);
 $smarty->assign('societe_id',      $societe_id);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
+$smarty->assign('keywords',        $keywords);
+
 
 $smarty->display('vw_idx_reference.tpl');
 

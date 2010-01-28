@@ -27,15 +27,15 @@
   </tr>
   
   <!-- Références list -->
-  {{foreach from=$list_references item=curr_reference}}
+  {{foreach from=$list_references item=_reference}}
   <tbody class="hoverable">
-    <tr>
+    <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
       <td colspan="4">
         {{if !$order_form}}
-          <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" >
+          <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_reference->_ref_product->_guid}}')">
-          {{$curr_reference->_ref_product->_view|truncate:80}}
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_ref_product->_guid}}')">
+          {{$_reference->_ref_product->_view|truncate:80}}
         </strong>
         {{if !$order_form}}
           </a>
@@ -43,20 +43,20 @@
       </td>
       
       <td style="text-align: right; padding-right: 1em;">
-        {{mb_value object=$curr_reference field=price decimals=4}}
+        {{mb_value object=$_reference field=price decimals=4}}
       </td>
       
       {{if $order_form}}
       <td rowspan="2">
-        {{assign var=id value=$curr_reference->_id}}
-        {{assign var=packaging value=$curr_reference->_ref_product->packaging}}
+        {{assign var=id value=$_reference->_id}}
+        {{assign var=packaging value=$_reference->_ref_product->packaging}}
         <form name="product-reference-{{$id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_item_aed" />
-          <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
+          <input type="hidden" name="reference_id" value="{{$_reference->_id}}" />
           <input type="hidden" name="callback" value="orderItemCallback" />
           <input type="hidden" name="_create_order" value="true" />
-          {{mb_field object=$curr_reference 
+          {{mb_field object=$_reference 
             field=quantity 
             size=2
             form="product-reference-$id" 
@@ -69,14 +69,16 @@
       </td>
       {{/if}}
     </tr>
-    <tr>
-      <td style="padding-left: 2em;">{{$curr_reference->_ref_societe}}</td>
-      <td>{{mb_value object=$curr_reference field=code}}</td>
-      <td>{{mb_value object=$curr_reference field=quantity}} {{mb_value object=$curr_reference->_ref_product field=packaging}}</td>
-      <td style="text-align: right;">{{mb_value object=$curr_reference field=_unit_price decimals=4}}</td>
-      <td style="text-align: right; font-weight: bold;">{{mb_value object=$curr_reference field=_sub_unit_price decimals=4}}</td>
+		
+    <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
+      <td style="padding-left: 2em;">{{$_reference->_ref_societe}}</td>
+      <td>{{mb_value object=$_reference field=code}}</td>
+      <td>{{mb_value object=$_reference field=quantity}} {{mb_value object=$_reference->_ref_product field=packaging}}</td>
+      <td style="text-align: right;">{{mb_value object=$_reference field=_unit_price decimals=4}}</td>
+      <td style="text-align: right; font-weight: bold;">{{mb_value object=$_reference field=_sub_unit_price decimals=4}}</td>
     </tr>
-  </tbody>
+  
+	</tbody>
   {{foreachelse}}
   <tr>
     <td colspan="10">{{tr}}CProductReference.none{{/tr}}</td>

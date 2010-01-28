@@ -55,7 +55,6 @@ class CProductOrderItemReception extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefOrderItem();
-    /*$this->_ref_order_item->updateFormFields();*/
     $this->_view = "$this->quantity x $this->_ref_order_item";
   }
   

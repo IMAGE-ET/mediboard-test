@@ -105,7 +105,7 @@ function updateReceptionId(reception_item_id) {
 
 <table class="main">
   <tr>
-    <th class="title">{{tr}}CProductOrder{{/tr}}s</th>
+    <th class="title">{{tr}}CProductOrder{{/tr}}</th>
     <th class="title">
       {{tr}}CProductReception{{/tr}} - {{$reception->reference}}
     </th>

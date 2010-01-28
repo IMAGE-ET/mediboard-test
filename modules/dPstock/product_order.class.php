@@ -34,6 +34,7 @@ class CProductOrder extends CMbObject {
 
 	// Form fields
 	var $_total           = null;
+	var $_status          = null;
 	var $_count_received  = null;
 	var $_date_received   = null;
 	var $_received        = null;
@@ -62,15 +63,17 @@ class CProductOrder extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
-    $specs['comments']        = 'text';
-    $specs['societe_id']      = 'ref notNull class|CSociete seekable';
-	  $specs['group_id']        = 'ref notNull class|CGroups';
-    $specs['locked']          = 'bool';
-	  $specs['cancelled']       = 'bool';
-	  $specs['deleted']         = 'bool';
-    $specs['received']        = 'bool';
     $specs['order_number']    = 'str maxLength|64 seekable protected';
-    $specs['_total']          = 'currency';
+    $specs['societe_id']      = 'ref notNull class|CSociete seekable';
+    $specs['group_id']        = 'ref notNull class|CGroups';
+    $specs['comments']        = 'text';
+    $specs['locked']          = 'bool show|0';
+	  $specs['cancelled']       = 'bool show|0';
+	  $specs['deleted']         = 'bool show|0';
+    $specs['received']        = 'bool';
+		
+    $specs['_total']          = 'currency show|1';
+    $specs['_status']         = 'enum list|opened|locked|ordered|received|cancelled show|1';
     $specs['_count_received'] = 'num pos';
 	  $specs['_date_received']  = 'dateTime';
     $specs['_received']       = 'bool';
@@ -79,7 +82,8 @@ class CProductOrder extends CMbObject {
 		$specs['_receive']        = 'bool';
 		$specs['_autofill']       = 'bool';
 		$specs['_redo']           = 'bool';
-	  $specs['_reset']          = 'bool';
+    $specs['_reset']          = 'bool';
+		
 		return $specs;
 	}
 
@@ -326,10 +330,19 @@ class CProductOrder extends CMbObject {
       }
     }
     
+		// Total
     $items_count = $this->countBackRefs("order_items");
     $this->loadRefsFwd();
     $this->updateTotal();
-    
+		
+		// Status
+		$this->_status = "opened";
+		if ($this->locked) $this->_status = "locked";
+    if ($this->date_ordered) $this->_status = "ordered";
+    if ($this->received) $this->_status = "received";
+    if ($this->cancelled) $this->_status = "cancelled";
+		
+    // View
 		$this->_view  = "$this->order_number - ";
 		$this->_view .= $this->societe_id ? "$this->_ref_societe - " : "";
 		$this->_view .= "$items_count article".(($items_count > 1) ? 's' : '');

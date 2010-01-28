@@ -10,6 +10,7 @@
 
 {{mb_include module=system template=CMbObject_view object=$order}}
 
+<hr />
 <table class="tbl">
   <tr>
     <th style="width: 50%;"></th>

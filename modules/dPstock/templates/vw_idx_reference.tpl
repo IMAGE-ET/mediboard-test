@@ -65,7 +65,7 @@ function filterReferences(form) {
         {{/foreach}}
         </select>
         
-        <input type="text" name="keywords" value="" size="12" onchange="$V(this.form.start,0)" />
+        <input type="text" name="keywords" value="{{$keywords}}" size="12" onchange="$V(this.form.start,0)" />
         
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
@@ -192,40 +192,55 @@ function filterReferences(form) {
         <tr>
           <td>
             <ul class="control_tabs" id="reference-tabs">
-              <li><a href="#reference-orders" {{if $lists_objects.orders|@count == 0}}class="empty"{{/if}}>Bons de commande <small>({{$lists_objects.orders|@count}})</small></a></li>
-              <li><a href="#reference-receptions" {{if $lists_objects.receptions|@count == 0}}class="empty"{{/if}}>Bons de réceptions <small>({{$lists_objects.receptions|@count}})</small></a></li>
+              <li>
+                 {{assign var=orders_count value=$lists_objects.orders|@count}}
+              	 <a href="#reference-orders" {{if !$orders_count}}class="empty"{{/if}}>
+              	   {{tr}}CProductOrder{{/tr}}
+									 <small>({{$orders_count}})</small>
+								 </a>
+							</li>
+              <li>
+                 {{assign var=receptions_count value=$lists_objects.receptions|@count}}
+                 <a href="#reference-receptions" {{if !$receptions_count}}class="empty"{{/if}}>
+                   {{tr}}CProductReception{{/tr}}
+                   <small>({{$receptions_count}})</small>
+                 </a>
+              <li>
             </ul>
             
             <hr class="control_tabs" />
           </td>
         </tr>
         
-        <tr id="reference-orders" style="display: none;">
+        <tr id="reference-orders" style="display: block;">
           <td>
             <table class="main tbl">
               <tr>
-                <th></th>
-                <th>Date de commande</th>
+                <th>{{mb_title class=CProductOrder field=order_number}}</th>
+                <th>{{mb_title class=CProductOrder field=date_ordered}}</th>
+                <th>{{mb_title class=CProductOrder field=_status}}</th>
               </tr>
+							
               {{foreach from=$lists_objects.orders item=_order}}
               <tr>
                 <td>
                   <strong onmouseover="ObjectTooltip.createEx(this, '{{$_order->_guid}}')">
-                    {{$_order->order_number}}
+                    {{mb_value object=$_order field=order_number}}
                   </strong>
                 </td>
                 <td>{{mb_value object=$_order field=date_ordered}}</td>
+                <td>{{mb_value object=$_order field=_status}}</td>
               </tr>
               {{foreachelse}}
               <tr>
-                <td colspan="10">{{tr}}CProductOrder.none{{/tr}}</td>
+                <td colspan="10"><em>{{tr}}CProductOrder.none{{/tr}}</em></td>
               </tr>
               {{/foreach}}
             </table>
           </td>
         </tr>
         
-        <tr id="reference-receptions" style="display: none;">
+        <tr id="reference-receptions" style="display: block;">
           <td>
             <table class="main tbl">
               <tr>
@@ -243,7 +258,7 @@ function filterReferences(form) {
               </tr>
               {{foreachelse}}
               <tr>
-                <td colspan="10">{{tr}}CProductReception.none{{/tr}}</td>
+                <td colspan="10"><em>{{tr}}CProductReception.none{{/tr}}</em></td>
               </tr>
               {{/foreach}}
             </table>

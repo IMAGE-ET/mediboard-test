@@ -11,15 +11,12 @@
 global $can;
 $can->needsRead();
 
-$category_id = CValue::get('category_id');
-$societe_id  = CValue::get('societe_id');
-$keywords    = CValue::get('keywords');
-$order_form  = CValue::get('order_form');
-$start       = CValue::get('start', 0);
-
-CValue::setSession('category_id', $category_id);
-CValue::setSession('societe_id', $societe_id);
-CValue::setSession('keywords', $keywords);
+$category_id  = CValue::getOrSession('category_id');
+$societe_id   = CValue::getOrSession('societe_id');
+$keywords     = CValue::getOrSession('keywords');
+$reference_id = CValue::getOrSession('reference_id');
+$order_form   = CValue::get('order_form');
+$start        = CValue::get('start', 0);
 
 $where = array();
 if ($category_id) {
@@ -53,5 +50,7 @@ $smarty->assign('list_references', $list_references);
 $smarty->assign('total', $total);
 $smarty->assign('order_form', $order_form);
 $smarty->assign('start', $start);
+$smarty->assign('reference_id', $reference_id);
+
 
 $smarty->display('inc_references_list.tpl');

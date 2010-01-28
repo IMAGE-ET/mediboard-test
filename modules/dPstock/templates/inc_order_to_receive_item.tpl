@@ -12,7 +12,7 @@
 <tr>
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
-  <td colspan="6">
+  <td colspan="6" {{if $curr_item->_quantity_received >= $curr_item->quantity}}class="arretee"{{/if}}>
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_ref_reference->_guid}}')">
       {{$curr_item->_view|truncate:80}}
     </strong>
@@ -55,13 +55,16 @@
       {{/foreach}}
     </table>
     
-    <div onmouseover="ObjectTooltip.createDOM(this, 'item-received-{{$curr_item->_id}}')">
+		{{if $curr_item->_quantity_received}}
+    <button class="search" type="button" onclick="ObjectTooltip.createDOM(this, 'item-received-{{$curr_item->_id}}')">
       {{$curr_item->_quantity_received}}
-    </div>
+    </button>
+		{{/if}}
   </td>
   
   <!-- Receive item -->
   <td style="text-align: right; width: 0.1%;">
+	  {{if $curr_item->_quantity_received < $curr_item->quantity}}
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return makeReception(this, '{{$order->_id}}')">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
@@ -84,6 +87,7 @@
       <input type="text" name="lapsing_date" value="" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
       <button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
     </form>
+  	{{/if}}
   </td>
 </tr>
 </tbody>
