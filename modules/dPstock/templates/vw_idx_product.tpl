@@ -13,6 +13,14 @@ Main.add(function () {
   filterReferences(getForm("filter-products"));
   Control.Tabs.create("tabs-stocks-references", true);
   Control.Tabs.create("product-conditionnement-tabs", false);
+  
+  var editForm = getForm("edit_product");
+  if (!$V(editForm.unit_quantity) && !$V(editForm.unit_title)) {
+    toggleFractionnedAdministration.defer(editForm, false);
+  }
+  else {
+    $V(editForm._toggle_fractionned, true);
+  }
 });
 
 function changePage(start) {
@@ -24,6 +32,14 @@ function filterReferences(form) {
   url.addFormData(form);
   url.requestUpdate("list-products");
   return false;
+}
+
+function toggleFractionnedAdministration(form, toggle) {
+  $(form.unit_quantity).up("table").select(".arrows").invoke("setVisible", toggle);
+  form.unit_quantity.disabled = !toggle;
+  
+  $(form.unit_title).up("div").select(".dropdown-trigger").invoke("setVisible", toggle);
+  form.unit_title.disabled = !toggle;
 }
 </script>
 
@@ -113,16 +129,12 @@ function filterReferences(form) {
           <td colspan="2">
             <ul id="product-conditionnement-tabs" class="control_tabs">
               <li><a href="#conditionnement">{{tr}}CProduct-packaging{{/tr}}</a></li>
-              <li><a href="#composition">{{tr}}Composition{{/tr}}</a></li>
+              <li><a href="#composition" {{if !$product->unit_title && !$product->unit_quantity}}class="empty"{{/if}}>{{tr}}Composition{{/tr}}</a></li>
             </ul>
             <hr class="control_tabs" />
           </td>
         </tr>
         <tbody id="conditionnement" style="display: none;">
-          <tr>
-            <th>{{mb_label object=$product field="packaging"}}</th>
-            <td>{{mb_field object=$product field="packaging" form="edit_product"}}</td>
-          </tr>
           <tr>
             <th>{{mb_label object=$product field="quantity"}}</th>
             <td>{{mb_field object=$product field="quantity" form="edit_product" increment=true size=4}}</td>
@@ -131,8 +143,21 @@ function filterReferences(form) {
             <th>{{mb_label object=$product field="item_title"}}</th>
             <td>{{mb_field object=$product field="item_title" form="edit_product"}}</td>
           </tr>
+          <tr>
+            <th>{{mb_label object=$product field="packaging"}}</th>
+            <td>{{mb_field object=$product field="packaging" form="edit_product"}}</td>
+          </tr>
         </tbody>
         <tbody id="composition" style="display: none;">
+          <tr>
+            <th></th>
+            <td>
+              <label>
+                <input type="checkbox" name="_toggle_fractionned" onclick="toggleFractionnedAdministration(this.form, this.checked)" /> 
+                Permettre l'administration fractionnée
+              </label>
+            </td>
+          </tr>
           <tr>
             <th>{{mb_label object=$product field="unit_quantity"}}</th>
             <td>{{mb_field object=$product field="unit_quantity" form="edit_product" increment=true size=4}}</td>
