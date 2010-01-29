@@ -12,6 +12,7 @@
 Main.add(function () {
   filterReferences(getForm("filter-products"));
   Control.Tabs.create("tabs-stocks-references", true);
+  Control.Tabs.create("product-conditionnement-tabs", false);
 });
 
 function changePage(start) {
@@ -51,7 +52,6 @@ function filterReferences(form) {
 
       <div id="list-products"></div>
     </td>
-    
     
     <td class="halfPane">
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
@@ -108,29 +108,41 @@ function filterReferences(form) {
           <th>{{mb_label object=$product field="cancelled"}}</th>
           <td>{{mb_field object=$product field="cancelled"}}</td>
         </tr>
+        
         <tr>
-          <th colspan="2" class="title" style="font-size: 1em;">{{tr}}CProduct-packaging{{/tr}}</th>
+          <td colspan="2">
+            <ul id="product-conditionnement-tabs" class="control_tabs">
+              <li><a href="#conditionnement">{{tr}}CProduct-packaging{{/tr}}</a></li>
+              <li><a href="#composition">{{tr}}Composition{{/tr}}</a></li>
+            </ul>
+            <hr class="control_tabs" />
+          </td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$product field="quantity"}}</th>
-          <td>{{mb_field object=$product field="quantity"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$product field="item_title"}}</th>
-          <td>{{mb_field object=$product field="item_title" form="edit_product"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$product field="unit_quantity"}}</th>
-          <td>{{mb_field object=$product field="unit_quantity"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$product field="unit_title"}}</th>
-          <td>{{mb_field object=$product field="unit_title" form="edit_product"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$product field="packaging"}}</th>
-          <td>{{mb_field object=$product field="packaging" form="edit_product"}}</td>
-        </tr>
+        <tbody id="conditionnement" style="display: none;">
+          <tr>
+            <th>{{mb_label object=$product field="packaging"}}</th>
+            <td>{{mb_field object=$product field="packaging" form="edit_product"}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$product field="quantity"}}</th>
+            <td>{{mb_field object=$product field="quantity" form="edit_product" increment=true size=4}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$product field="item_title"}}</th>
+            <td>{{mb_field object=$product field="item_title" form="edit_product"}}</td>
+          </tr>
+        </tbody>
+        <tbody id="composition" style="display: none;">
+          <tr>
+            <th>{{mb_label object=$product field="unit_quantity"}}</th>
+            <td>{{mb_field object=$product field="unit_quantity" form="edit_product" increment=true size=4}}</td>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$product field="unit_title"}}</th>
+            <td>{{mb_field object=$product field="unit_title" form="edit_product"}}</td>
+          </tr>
+        </tbody>
+        
         <tr>
           <td class="button" colspan="2">
             {{if $product->_id}}
