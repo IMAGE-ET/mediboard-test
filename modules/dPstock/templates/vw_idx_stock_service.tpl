@@ -35,7 +35,7 @@ ProductSelector.init = function(){
 
 <table class="main">
   <tr>
-    <td rowspan="3">
+    <td rowspan="3" class="halfPane">
       <form name="filter-stocks" action="?" method="post" onsubmit="return refreshList()">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
@@ -63,7 +63,7 @@ ProductSelector.init = function(){
       <div id="list-stocks-service"></div>
     </td>
 
-    <td style="width: 1%;">
+    <td>
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
       
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

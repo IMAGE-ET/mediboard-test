@@ -19,6 +19,7 @@ $orders_list = $order->search($type, $keywords, 30);
 
 foreach($orders_list as $_order){
   $_order->countBackRefs("order_items");
+  $_order->updateCounts();
 }
 
 // Smarty template

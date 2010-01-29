@@ -56,7 +56,7 @@
     </table>
     
 		{{if $curr_item->_quantity_received}}
-    <button class="search" type="button" onclick="ObjectTooltip.createDOM(this, 'item-received-{{$curr_item->_id}}')">
+    <button class="search" type="button" onclick="ObjectTooltip.createDOM(this, 'item-received-{{$curr_item->_id}}', {duration:0})">
       {{$curr_item->_quantity_received}}
     </button>
 		{{/if}}

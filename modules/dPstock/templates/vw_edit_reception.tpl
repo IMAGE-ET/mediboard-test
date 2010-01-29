@@ -44,10 +44,14 @@ function addOrder(id_reference){
   var tabs = Control.Tabs.create("orders-tabs");
   tabs.setActiveTab(elementId);
   
-  var url = new Url("dPstock", "httpreq_vw_order");
-  url.addParam("order_id", parts[1]);
-  url.requestUpdate(order);
+  refreshOrderToReceive(parts[1], order);
 }
+
+function refreshOrderToReceive(order_id, element) {
+  var url = new Url("dPstock", "httpreq_vw_order");
+  url.addParam("order_id", order_id);
+  url.requestUpdate(element);
+} 
 
 function cancelReception(reception_id, on_complete) {
   var form = getForm("cancel-reception");
@@ -55,7 +59,7 @@ function cancelReception(reception_id, on_complete) {
   return onSubmitFormAjax(form, {onComplete: on_complete});
 }
 
-function makeReception(form) {
+function makeReception(form, order_id) {
   $V(form.reception_id, reception_id);
   
   form.getElements().each(
@@ -64,8 +68,9 @@ function makeReception(form) {
     }
   );
   return onSubmitFormAjax(form, {onComplete: function(){
-    $V(form.code, ''); 
-    $V(form.lapsing_date, '');
+    /*$V(form.code, ''); 
+    $V(form.lapsing_date, '');*/
+    refreshOrderToReceive(order_id, "order-"+order_id);
   }});
 }
 
@@ -101,9 +106,13 @@ function updateReceptionId(reception_item_id) {
   <input type="hidden" name="barcode_printed" value="" />
 </form>
 
-<h3>{{tr}}CProductReception{{/tr}} (commande {{$order->order_number}})</h3>
+
 
 <table class="main">
+  <tr>
+    <td><h3>{{tr}}CProductReception{{/tr}} (commande {{$order->order_number}})</h3></td>
+    <td><h3>{{tr}}CProductReference-societe_id{{/tr}} : {{$order->societe_id|ternary:$order->_ref_societe:$reception->_ref_societe}}</h3></td>
+  </tr>
   <tr>
     <th class="title">{{tr}}CProductOrder{{/tr}}</th>
     <th class="title">
@@ -112,12 +121,13 @@ function updateReceptionId(reception_item_id) {
   </tr>
   <tr>
     <td class="halfPane" style="padding: 0;">
+      
       <form name="orders-search" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="id_reference" value="" onchange="addOrder(this.value)" />
         <label for="keywords">
           Commandes actuelles :
         </label>
-        <input type="text" name="keywords" />
+        <input type="text" name="keywords" size="30" />
       </form>
       
       <ul class="control_tabs" id="orders-tabs">

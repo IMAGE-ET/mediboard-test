@@ -47,7 +47,7 @@ var ObjectTooltip = Class.create({
   
   launchShow: function() {
     this.idTimeout = this.show.bind(this).delay(this.oOptions.duration);
-		this.dontShow = false;
+    this.dontShow = false;
   },
   
   launchHide: function() {
@@ -60,13 +60,13 @@ var ObjectTooltip = Class.create({
   
   cancelShow: function() {
     window.clearTimeout(this.idTimeout);
-		this.dontShow = true;
+    this.dontShow = true;
   },
   
   show: function() {
     var eTarget = $(this.sTarget);
     
-    if (this.oOptions.popup || !eTarget.innerHTML) {
+    if (this.oOptions.popup || eTarget.empty()) {
       this.load();
     }
     
@@ -131,25 +131,41 @@ var ObjectTooltip = Class.create({
         .observe("mouseout", this.launchHide.bind(this))
         .observe("mouseover", this.cancelHide.bind(this));
   },
-  
+
   createDiv: function() {
-    var eTrigger = $(this.sTrigger),
-        eDiv  = $("tooltipTpl").clone(true);
-        
-    eDiv.addClassName(this.mode.sClass)
-        .removeAttribute("_extended");
-        
+    var eTrigger = $(this.sTrigger), eTarget;
+    
+    var eDiv = 
+    DOM.div({className: this.mode.sClass}, 
+      DOM.table({className: "decoration"},
+        DOM.tbody({}, // Necessary for IE7
+          DOM.tr({},
+            DOM.td({className: "deco top-left"}),
+            DOM.td({className: "deco top"}),
+            DOM.td({className: "deco top-right"})
+          ),
+          DOM.tr({},
+            DOM.td({className: "deco left"}),
+            eTarget = DOM.td({className: "content"}),
+            DOM.td({className: "deco right"})
+          ),
+          DOM.tr({},
+            DOM.td({className: "deco bottom-left"}),
+            DOM.td({className: "deco bottom"}),
+            DOM.td({className: "deco bottom-right"})
+          )
+        )
+      )
+    );
+    
     this.sDiv = eDiv.identify();
     $(document.body).insert(eDiv.hide());
     
-    var eTarget = eDiv.down(".content");
-    eTarget.removeAttribute("_extended");
-    
     if (!Prototype.Browser.IE) {
-      eTarget.setStyle( {
+      eTarget.setStyle({
         minWidth : this.mode.width+"px",
         minHeight: this.mode.height+"px"
-      } );
+      });
     }
     
     this.sTarget = eTarget.identify();
@@ -222,14 +238,13 @@ Object.extend(ObjectTooltip, {
     this.create(eTrigger, oOptions);
   },
   
-  createDOM: function(eTrigger, sTarget, params) {
-  	params = params || {};
-  	params.element = sTarget;
+  createDOM: function(eTrigger, sTarget, oOptions) {
+    oOptions = Object.extend( {
+      params: {}
+    }, oOptions);
     
-    var oOptions = {
-      mode: 'dom',
-      params: params
-    };
+    oOptions.params.element = sTarget;
+    oOptions.mode = "dom";
     
     this.create(eTrigger, oOptions);
   }
