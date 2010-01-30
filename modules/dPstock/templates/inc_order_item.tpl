@@ -73,7 +73,7 @@
     {{/if}}
   </td>
   <td style="text-align: right;">
-    {{mb_value object=$curr_item field=$unit_order|ternary:_unit_price:unit_price decimals=4}}
+    {{mb_value object=$curr_item field=$unit_order|ternary:_cond_price:unit_price decimals=4}}
   </td>
   <td id="order-item-{{$id}}-price" style="text-align: right;">
     {{mb_value object=$curr_item field=_price decimals=4}}

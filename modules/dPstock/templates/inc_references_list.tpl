@@ -22,8 +22,8 @@
     {{/if}}
   </tr>
   <tr>
-    <th style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
-    <th>{{mb_title class=CProductReference field=_sub_unit_price}}</th>
+    <th style="width: 1%;">{{mb_title class=CProductReference field=_cond_price}}</th>
+    <th>{{mb_title class=CProductReference field=_unit_price}}</th>
   </tr>
   
   <!-- Références list -->
@@ -74,8 +74,8 @@
       <td style="padding-left: 2em;">{{$_reference->_ref_societe}}</td>
       <td>{{mb_value object=$_reference field=code}}</td>
       <td>{{mb_value object=$_reference field=quantity}} {{mb_value object=$_reference->_ref_product field=packaging}}</td>
-      <td style="text-align: right;">{{mb_value object=$_reference field=_unit_price decimals=4}}</td>
-      <td style="text-align: right; font-weight: bold;">{{mb_value object=$_reference field=_sub_unit_price decimals=4}}</td>
+      <td style="text-align: right;">{{mb_value object=$_reference field=_cond_price decimals=4}}</td>
+      <td style="text-align: right; font-weight: bold;">{{mb_value object=$_reference field=_unit_price decimals=4}}</td>
     </tr>
   
 	</tbody>

@@ -28,7 +28,7 @@ class CProductOrderItem extends CMbObject {
 
   // Form fields
   var $_price             = null;
-  var $_unit_price        = null;
+  var $_cond_price        = null;
   var $_date_received     = null;
   var $_quantity_received = null;
   var $_quantity          = null;
@@ -46,7 +46,7 @@ class CProductOrderItem extends CMbObject {
     $specs['order_id']           = 'ref class|CProductOrder'; // can be null because of gifts
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency';
-    $specs['_unit_price']         = 'currency';
+    $specs['_cond_price']         = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
     $specs['_quantity']          = 'num';
@@ -101,8 +101,8 @@ class CProductOrderItem extends CMbObject {
     $this->_price = $this->unit_price * $this->quantity;
     
     $this->loadReference();
-    $this->_quantity = $this->quantity * $this->_ref_reference->_quantity;
-    $this->_unit_price = $this->_price / $this->_quantity;
+    $this->_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
+    $this->_cond_price = $this->_price / $this->_quantity;
   }
   
   function updateDBFields() {
@@ -111,7 +111,7 @@ class CProductOrderItem extends CMbObject {
     if ($this->_quantity) {
       $this->completeField("reference_id");
       $this->loadReference();
-      $this->quantity = $this->_quantity / $this->_ref_reference->_quantity;
+      $this->quantity = $this->_quantity / $this->_ref_reference->_unit_quantity;
     }
   }
   

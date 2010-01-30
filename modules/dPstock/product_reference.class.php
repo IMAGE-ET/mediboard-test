@@ -28,9 +28,11 @@ class CProductReference extends CMbObject {
   var $_ref_societe  = null;
 
   // Form fields
+  var $_cond_price   = null;
   var $_unit_price   = null;
-  var $_sub_unit_price   = null;
-  var $_quantity = null; // The quantity of product's sub-quantity
+  var $_unit_quantity = null;
+
+  // Distant fields
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -51,9 +53,10 @@ class CProductReference extends CMbObject {
     $specs['code']        = 'str seekable protected';
     $specs['supplier_code'] = 'str seekable';
     $specs['mdq']         = 'num min|0';
-    $specs['_unit_price'] = 'currency notNull';
-    $specs['_sub_unit_price'] = 'currency';
-    $specs['_quantity']   = 'num min|0';
+
+    $specs['_cond_price']    = 'currency notNull';
+    $specs['_unit_price']    = 'currency';
+    $specs['_unit_quantity'] = 'num min|0';
     return $specs;
   }
 
@@ -71,12 +74,12 @@ class CProductReference extends CMbObject {
     
     $this->_view = "$this->_ref_product (par $this->quantity)";
     
-    if($this->quantity) {
-      $this->_unit_price = round($this->price / $this->quantity, 3);
-      $this->_sub_unit_price = round($this->_unit_price / $this->_ref_product->quantity, 3);
+    if ($this->quantity) {
+      $this->_cond_price = round($this->price / $this->quantity, 5);
+      $this->_unit_price = round($this->_cond_price / $this->_ref_product->quantity, 5);
     }
     
-    $this->_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
+    $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
   }
   
   function updateDBfields(){
@@ -84,8 +87,8 @@ class CProductReference extends CMbObject {
     
     $this->completeField("quantity");
     
-    if ($this->_unit_price) {
-      $this->price = $this->_unit_price * $this->quantity;
+    if ($this->_cond_price) {
+      $this->price = $this->_cond_price * $this->quantity;
     }
   }
 

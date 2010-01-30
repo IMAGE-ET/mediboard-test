@@ -170,7 +170,7 @@ Main.add(function(){
             <th>{{mb_title class=CProductReference field=supplier_code}}</th>
             <th>{{mb_title class=CProductReference field=quantity}}</th>
             <th>{{mb_title class=CProductReference field=price}}</th>
-            <th>{{mb_title class=CProductReference field=_unit_price}}</th>
+            <th>{{mb_title class=CProductReference field=_cond_price}}</th>
           </tr>
           {{foreach from=$societe->_ref_product_references item=curr_reference}}
           <tr>
@@ -182,7 +182,7 @@ Main.add(function(){
             <td>{{mb_value object=$curr_reference field=supplier_code}}</td>
             <td>{{mb_value object=$curr_reference field=quantity}}</td>
             <td>{{mb_value object=$curr_reference field=price}}</td>
-            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
+            <td>{{mb_value object=$curr_reference field=_cond_price}}</td>
           </tr>
           {{foreachelse}}
           <tr>
