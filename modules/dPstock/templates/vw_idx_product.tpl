@@ -50,8 +50,10 @@ function filterReferences(form) {
     
     <td class="halfPane">
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
-      
+      			
+      {{if $can->edit}}
       {{mb_include template=inc_form_product}}
+      {{/if}}
       
       {{if $product->_id}}
       <ul class="control_tabs" id="tabs-stocks-references">
@@ -119,7 +121,7 @@ function filterReferences(form) {
          </tr>
          {{foreach from=$product->_ref_references item=_reference}}
          <tr>
-           <td style="text-align: right;">
+           <td>
              <a href="?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}">
                <span onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_guid}}')">
                  {{if $_reference->code}}

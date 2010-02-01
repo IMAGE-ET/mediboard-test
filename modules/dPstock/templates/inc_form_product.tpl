@@ -53,12 +53,22 @@ function filterReferences(form) {
     {{else}}
     <th class="title text" colspan="2">{{tr}}CProduct-title-create{{/tr}}</th>
     {{/if}}
-  </tr>   
+  </tr>
+	
+  {{if $product->cancelled == 1}}
+  <tr>
+    <th class="category cancelled" colspan="10">
+      {{mb_label object=$product field=cancelled}}
+    </th>
+  </tr>
+  {{/if}}
+	   
   <tr>
     <th style="width: 1%;">{{mb_label object=$product field="name"}}</th>
     <td>{{mb_field object=$product field="name" size=50}}</td>
   </tr>
-  <tr>
+  
+	<tr>
     <th>{{mb_label object=$product field="category_id"}}</th>
     <td><select name="category_id" class="{{$product->_props.category_id}}">
       <option value="">&mdash; {{tr}}CProductCategory.select{{/tr}}</option>
@@ -84,7 +94,7 @@ function filterReferences(form) {
   </tr>
   <tr>
     <th>{{mb_label object=$product field="classe_comptable"}}</th>
-    <td>{{mb_field object=$product field="classe_comptable"}}</td>
+    <td>{{mb_field object=$product field="classe_comptable"  form="edit_product"}}</td>
   </tr>
 	
 	{{if @$modules.dmi}}
@@ -93,10 +103,6 @@ function filterReferences(form) {
     <td>{{mb_field object=$product field="renewable"}}</td>
   </tr>
   {{/if}}
-  <tr>
-    <th>{{mb_label object=$product field="cancelled"}}</th>
-    <td>{{mb_field object=$product field="cancelled"}}</td>
-  </tr>
   
   <tr>
     <td colspan="2">
@@ -145,16 +151,51 @@ function filterReferences(form) {
   
   <tr>
     <td class="button" colspan="2">
+    	<hr />
+
       {{if $product->_id}}
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+      
+			{{mb_field object=$product field=cancelled hidden=1}}
+			<script type="text/javascript">
+				function confirmCancel(element) {
+          var form = element.form;
+				  var element = form.cancelled;
+				  
+				  // Cancel 
+				  if ($V(element) != "1") {
+            if (confirm("Voulez-vous vraiment archiver ce produit ?")) {
+				      $V(element, "1");
+				      form.submit();
+				      return;   
+				    }
+				  }
+				      
+				  // Restore
+				  if ($V(element) == "1") {
+				    if (confirm("Voulez-vous vraiment rétablir ce produit ?")) {
+              $V(element, "0");
+              form.submit();
+				      return;
+				    }
+				  }
+				}
+				
+			</script>
+			
+	    <button class="{{$product->cancelled|ternary:"change":"cancel"}}" type="button" onclick="confirmCancel(this);">
+	      {{tr}}{{$product->cancelled|ternary:"Restore":"Archive"}}{{/tr}}
+	    </button>
+
       <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
       </button>
-      
-      <!-- purge: a supprimer pour le 27/01/2010 -->
+
+      {{if $can->admin}}
       <input type="hidden" name="_purge" value="0" />
       <script type="text/javascript">
-       confirmPurge = function(form) {
+       confirmPurge = function(element) {
+			   var form = element.form;
          if (confirm("ATTENTION : Vous êtes sur le point de supprimer un produit, ainsi que tous les objets qui s'y rattachent")) {
            form._purge.value = 1;
            confirmDeletion(form,  {
@@ -164,10 +205,10 @@ function filterReferences(form) {
          }
        }
       </script>
-      <button type="button" class="cancel" onclick="confirmPurge(this.form)">
+      <button type="button" class="cancel" onclick="confirmPurge(this)">
         {{tr}}Purge{{/tr}}
       </button>
-      <!-- /purge -->
+			{{/if}}
       
       {{else}}
       <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
