@@ -1,11 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * @package Mediboard
+ * @subpackage dPhospi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 function getCurrentChambre($sejour, $_date, $_hour, &$chambres, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
@@ -38,11 +39,13 @@ $elts = $cats = explode("|",$token_cat);
 CMbArray::removeValue("med", $elts);
 CMbArray::removeValue("perf", $elts);
 CMbArray::removeValue("inj", $elts);
+CMbArray::removeValue("trans", $elts);
 
 $do_elements = (count($elts) > 0);
 $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
 $do_perfusions = (in_array("perf", $cats));
+$do_trans = (in_array("trans", $cats));
 
 // Filtres sur l'heure des prises
 $time_min = mbTime($dateTime_min, "00:00:00");
@@ -62,7 +65,64 @@ $list_lines = array();
 $chambres = array();
 $affectations = array();
 
-if (CValue::get("do")) {
+$_transmissions = array();
+$_observations = array();
+
+
+$transmissions = array();
+$observations = array();
+$trans_obs = array();
+
+if($do_trans){
+  $where = array();
+  $ljoin = array();
+
+  $ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
+	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["lit"] = "affectation.lit_id = lit.lit_id";
+  $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+  $ljoin["service"] = "chambre.service_id = service.service_id";
+  
+  $where[] = "date >= '$dateTime_min' AND date <= '$dateTime_max'";
+  $where["service.service_id"] = " = '$service_id'";
+
+  $transmission = new CTransmissionMedicale();
+  $_transmissions = $transmission->loadList($where, null, null, null, $ljoin);
+	
+	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
+  $observation = new CObservationMedicale();
+  $_observations = $observation->loadList($where, null, null, null, $ljoin);
+}
+
+$patients = array();
+$trans_and_obs = array();
+foreach($_transmissions as $_trans){
+	$_trans->loadRefSejour();
+	$patient_id = $_trans->_ref_sejour->patient_id;
+	if(!array_key_exists($patient_id, $patients)){
+    $_trans->_ref_sejour->loadRefPatient();
+		$patients[$patient_id] = $_trans->_ref_sejour->_ref_patient;
+	}
+	$_trans->loadRefsFwd();
+	$trans_and_obs[$_trans->_ref_sejour->patient_id][$_trans->date][] = $_trans;
+}
+
+foreach($_observations as $_obs){
+  $_obs->loadRefSejour();
+  $patient_id = $_obs->_ref_sejour->patient_id;
+  if(!array_key_exists($patient_id, $patients)){
+    $_obs->_ref_sejour->loadRefPatient();
+    $patients[$patient_id] = $_obs->_ref_sejour->_ref_patient;
+  }
+  $_obs->loadRefsFwd();
+	$trans_and_obs[$_obs->_ref_sejour->patient_id][$_obs->date][] = $_obs;
+}
+
+foreach($trans_and_obs as &$trans_by_patients){
+	ksort($trans_by_patients);
+}
+
+if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_elements)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();
@@ -81,7 +141,6 @@ if (CValue::get("do")) {
 	$prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 	
 	$lines = array();
-	$patients = array();
 	$lines["med"] = array();
 	$lines["elt"] = array();
 	foreach($prescriptions as $_prescription){
@@ -353,6 +412,8 @@ $service = new CService();
 $service->load($service_id);
 
 $smarty = new CSmartyDP();
+$smarty->assign("patients", $patients);
+$smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("service", $service);
 $smarty->assign("periode", $periode);
 $smarty->assign("cat_used", $cat_used);

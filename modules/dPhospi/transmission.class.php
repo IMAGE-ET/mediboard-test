@@ -58,6 +58,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   function loadRefUser(){
     $this->_ref_user = new CMediusers;
     $this->_ref_user = $this->_ref_user->getCached($this->user_id);
+		$this->_ref_user->loadRefFunction();
   }
   
   function loadRefsFwd() {

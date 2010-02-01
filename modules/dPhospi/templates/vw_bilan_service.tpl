@@ -138,6 +138,14 @@ selectPeriode = function(element) {
          <table>
            <tr>
              <td>
+               <strong>Transmissions</strong>
+             </td>
+             <td>
+               <input type="checkbox" value="trans" id="trans" onclick="oCatField.toggle(this.value, this.checked);" />
+             </td>
+           </tr>
+					 <tr>
+             <td>
                <strong>{{tr}}CPrescription._chapitres.med{{/tr}}</strong>
              </td>
              <td>
@@ -183,7 +191,7 @@ selectPeriode = function(element) {
     <tr>
       <td style="text-align: center" colspan="4">
         <button class="tick">Filtrer</button>
-        {{if $lines_by_patient|@count}}
+        {{if $lines_by_patient|@count || $trans_and_obs|@count}}
           <button class="print" type="button" onclick="window.print()">Imprimer les résultats</button>
         {{/if}}
       </td>
@@ -191,169 +199,191 @@ selectPeriode = function(element) {
   </table>
 </form>
 
-{{foreach from=$lines_by_patient key=chap item=_lines_by_chap name=foreach_chapitres}}
-<table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first}}style="page-break-before: always;"{{/if}}>
-    <tr>
-      <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} - 
-			{{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}</th>
-    </tr>
-    <tr>
-      <td colspan="6" class="text">
-        Catégorie(s) sélectionnée(s):
-        {{foreach from=$cat_used.$chap item=_cat_view name=cat}}
-          <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
-        {{/foreach}}
-      </td>
-    </tr>
-
-{{foreach from=$_lines_by_chap key=chambre_id item=_lines_by_patient}}
-  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
-    {{assign var=sejour value=$sejours.$sejour_id}}
-    {{assign var=patient value=$sejour->_ref_patient}}
-		{{assign var=operation value=$sejour->_ref_last_operation}} 
-    <tr><td colspan="6"><br /></td></tr>
-		<tr>
-      <th colspan="6" class="text">
-        <span style="float: left">
-          {{assign var=chambre value=$chambres.$chambre_id}}
-          <strong>Chambre {{$chambre->_view}}</strong>
-        </span>
-		    <span style="float: right">
-		      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-		      DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
-		    </span>
-		    <strong>{{$patient->_view}}</strong>
-		    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
-		    <br />
-        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
-		    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
-      </th>
-    </tr>
-		<tr>
-			<th class="element text" colspan="6" style="text-align: left">
-        <strong>{{$operation->libelle}}</strong> 
-        {{if !$operation->libelle}}
-          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
-            <strong>{{$curr_ext_code->code}}</strong> :
-            {{$curr_ext_code->libelleLong}}<br />
-            {{/foreach}}
-        {{/if}}
-			</th>
-		</tr>
-  	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
+{{if $trans_and_obs|@count}}
+<br />
+<table class="tbl">
+	<tr>
+		<th colspan="6" class="title">Transmissions  - 
+    {{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}
+		</th>
+	</tr>
+  {{foreach from=$trans_and_obs key=patient_id item=_trans_and_obs_by_patient}}
+	  {{assign var=patient value=$patients.$patient_id}}
 	  <tr>
-	    <td style="border:none; width: 1%;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
-			<th style="width: 250px; border:none;">Libellé</th> 
-			<th style="width: 50px; border:none;">Prévues</th>
-			<th style="width: 50px; border:none;">Effectuées</th>
-			<th style="width: 150px; border:none;">Unité adm.</th>
+	  	<th colspan="6"><strong>{{$patient->_view}}</strong></th>
 	  </tr>
-	  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
-		  {{assign var=_date_time value="$date $hour:00:00"}}
-      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
-				{{if $line_class == "CPerfusion"}}
-					{{foreach from=$prises key=perfusion_id item=lines}}
-          {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
-            <tr>
-						  <td>{{$hour}}h</td>
-						 	<td colspan="5"><strong>{{$perfusion->_view}}</strong></td>
-						</tr>
-						
-						{{if !$perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
-						<tr>
-							  <td></td>
-                <td class="text">
-                	<ul>
-                	{{foreach from=$lines key=perf_line_id item=_perf}}
-                    {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
-                    <li>{{$perf_line->_ucd_view}}</li>
-                   {{/foreach}}
-									 </ul>
-                </td>
-								<td colspan="3">
-									<div class="small-warning">
-										Ligne non signée
-									</div>
-								</td>
-								<td></td>
-						</tr>
-						
-						{{else}}
-            {{foreach from=$lines key=perf_line_id item=_perf}}
-              {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
-					    <tr>
-					    	<td></td>
-					      <td class="text">
-                  <em>{{$perf_line->_ucd_view}}</em>
-                  {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
-                    <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-                  {{/if}}
-                </td>
-                <td style="text-align: center;">
-                  {{if array_key_exists('prevu', $_perf)}}
-                    {{$_perf.prevu}}
-                  {{/if}}
-                </td>
-                <td style="text-align: center;">
-                  {{if array_key_exists('administre', $_perf)}}
-                  {{$_perf.administre}}
-                  {{/if}}
-                </td>
-                <td style="text-align: center;">
-                  {{if $perf_line->_ref_produit_prescription->_id}}
-                    {{$perf_line->_ref_produit_prescription->unite_prise}}
-                  {{else}}
-                    {{$perf_line->_unite_administration}}
-                  {{/if}}
-                </td>
-              </tr>
-           {{/foreach}}
-					 {{/if}}
-			   {{/foreach}}
-	      {{else}}
-				  {{foreach from=$prises key=line_id item=quantite}}
-           {{assign var=line value=$list_lines.$line_class.$line_id}}        
-            <tr>
-            	<td>{{$hour}}h</td>
-              <td style="width: 250px;">{{$line->_view}}
-							{{if $line->commentaire}}
-							  <br />{{$line->commentaire}}
-							{{/if}}
-              {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
-                <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
-              {{/if}}
-              </td> 
+	  {{foreach from=$_trans_and_obs_by_patient item=_trans_and_obs_by_date}}
+		  {{foreach from=$_trans_and_obs_by_date item=_trans_and_obs}}
+        {{include file=../../dPhospi/templates/inc_line_suivi.tpl _suivi=$_trans_and_obs show_patient=false without_del_form=true nodebug=true}}
+      {{/foreach}}
+	  {{/foreach}}
+	{{/foreach}}	
+</table>
+<br />
+{{/if}}
+
+{{foreach from=$lines_by_patient key=chap item=_lines_by_chap name=foreach_chapitres}}
+<table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first || $trans_and_obs|@count}}style="page-break-before: always;"{{/if}}>
+  <tr>
+    <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} - 
+		{{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}</th>
+  </tr>
+  <tr>
+    <td colspan="6" class="text">
+      Catégorie(s) sélectionnée(s):
+      {{foreach from=$cat_used.$chap item=_cat_view name=cat}}
+        <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
+      {{/foreach}}
+    </td>
+  </tr>
+	{{foreach from=$_lines_by_chap key=chambre_id item=_lines_by_patient}}
+	  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
+	    {{assign var=sejour value=$sejours.$sejour_id}}
+	    {{assign var=patient value=$sejour->_ref_patient}}
+			{{assign var=operation value=$sejour->_ref_last_operation}} 
+	    <tr><td colspan="6"><br /></td></tr>
+			<tr>
+	      <th colspan="6" class="text">
+	        <span style="float: left">
+	          {{assign var=chambre value=$chambres.$chambre_id}}
+	          <strong>Chambre {{$chambre->_view}}</strong>
+	        </span>
+			    <span style="float: right">
+			      DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
+			      DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+			    </span>
+			    <strong>{{$patient->_view}}</strong>
+			    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+			    <br />
+	        Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}} - 
+			    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong>
+	      </th>
+	    </tr>
+			<tr>
+				<th class="element text" colspan="6" style="text-align: left">
+	        <strong>{{$operation->libelle}}</strong> 
+	        {{if !$operation->libelle}}
+	          {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
+	            <strong>{{$curr_ext_code->code}}</strong> :
+	            {{$curr_ext_code->libelleLong}}<br />
+	          {{/foreach}}
+	        {{/if}}
+				</th>
+			</tr>
+			
+	  	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
+		  <tr>
+		    <td style="border:none; width: 1%;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+				<th style="width: 250px; border:none;">Libellé</th> 
+				<th style="width: 50px; border:none;">Prévues</th>
+				<th style="width: 50px; border:none;">Effectuées</th>
+				<th style="width: 150px; border:none;">Unité adm.</th>
+		  </tr>
+		  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
+			  {{assign var=_date_time value="$date $hour:00:00"}}
+	      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
+					{{if $line_class == "CPerfusion"}}
+						{{foreach from=$prises key=perfusion_id item=lines}}
+	          {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
+	            <tr>
+							  <td>{{$hour}}h</td>
+							 	<td colspan="5"><strong>{{$perfusion->_view}}</strong></td>
+							</tr>
 							
-							{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
-							<td colspan="3">
-							  <div class="small-warning">
-							  	Ligne non signée
-							  </div>
-								</td>
+							{{if !$perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+								<tr>
+								  <td></td>
+		              <td class="text">
+		              	<ul>
+		              	{{foreach from=$lines key=perf_line_id item=_perf}}
+		                  {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+		                  <li>{{$perf_line->_ucd_view}}</li>
+		                 {{/foreach}}
+										 </ul>
+		              </td>
+									<td colspan="3">
+										<div class="small-warning">
+											Ligne non signée
+										</div>
+									</td>
+									<td></td>
+								</tr>
 							{{else}}
-              <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
-              <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-              <td style="width: 150px; text-align: center;" class="text">
-                {{if $line_class=="CPrescriptionLineMedicament"}}
-                  {{if $line->_ref_produit_prescription->_id}}
-                    {{$line->_ref_produit_prescription->unite_prise}}
-                  {{else}}
-                    {{$line->_ref_produit->libelle_unite_presentation}}
-                  {{/if}}
-                {{else}}
-                  {{$line->_unite_prise}}
-                {{/if}}
-            </td>
-						{{/if}}
-          </tr>
-          {{/foreach}}
-				{{/if}}
-      {{/foreach}}  
+	            {{foreach from=$lines key=perf_line_id item=_perf}}
+	              {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+						    <tr>
+						    	<td></td>
+						      <td class="text">
+	                  <em>{{$perf_line->_ucd_view}}</em>
+	                  {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
+	                    <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+	                  {{/if}}
+	                </td>
+	                <td style="text-align: center;">
+	                  {{if array_key_exists('prevu', $_perf)}}
+	                    {{$_perf.prevu}}
+	                  {{/if}}
+	                </td>
+	                <td style="text-align: center;">
+	                  {{if array_key_exists('administre', $_perf)}}
+	                  {{$_perf.administre}}
+	                  {{/if}}
+	                </td>
+	                <td style="text-align: center;">
+	                  {{if $perf_line->_ref_produit_prescription->_id}}
+	                    {{$perf_line->_ref_produit_prescription->unite_prise}}
+	                  {{else}}
+	                    {{$perf_line->_unite_administration}}
+	                  {{/if}}
+	                </td>
+	              </tr>
+	           {{/foreach}}
+						 {{/if}}
+				   {{/foreach}}
+		      {{else}}
+					  {{foreach from=$prises key=line_id item=quantite}}
+	           {{assign var=line value=$list_lines.$line_class.$line_id}}        
+	            <tr>
+	            	<td>{{$hour}}h</td>
+	              <td style="width: 250px;">{{$line->_view}}
+								{{if $line->commentaire}}
+								  <br />{{$line->commentaire}}
+								{{/if}}
+	              {{if array_key_exists('prevu', $quantite) && array_key_exists('administre', $quantite) && $quantite.prevu == $quantite.administre}}
+	                <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
+	              {{/if}}
+	              </td> 
+								
+								{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+								<td colspan="3">
+								  <div class="small-warning">
+								  	Ligne non signée
+								  </div>
+									</td>
+								{{else}}
+	              <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
+	              <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
+	              <td style="width: 150px; text-align: center;" class="text">
+	                {{if $line_class=="CPrescriptionLineMedicament"}}
+	                  {{if $line->_ref_produit_prescription->_id}}
+	                    {{$line->_ref_produit_prescription->unite_prise}}
+	                  {{else}}
+	                    {{$line->_ref_produit->libelle_unite_presentation}}
+	                  {{/if}}
+	                {{else}}
+	                  {{$line->_unite_prise}}
+	                {{/if}}
+	            </td>
+							{{/if}}
+	          </tr>
+	          {{/foreach}}
+					{{/if}}
+	      {{/foreach}}  
+		  {{/foreach}}
+		{{/foreach}}
 	  {{/foreach}}
 	{{/foreach}}
-  {{/foreach}}
-{{/foreach}}
-</table>
+	</table>
 
 {{/foreach}}
 
