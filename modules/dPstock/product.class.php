@@ -76,8 +76,8 @@ class CProduct extends CMbObject {
     $specs['unit_title']    = 'str autocomplete';
     $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
-    $specs['cancelled']     = 'bool default|0';
-    $specs['classe_comptable'] = 'numchar maxLength|7';
+    $specs['cancelled']     = 'bool default|0 show|0';
+    $specs['classe_comptable'] = 'numchar maxLength|7 autocomplete';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';

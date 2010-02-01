@@ -136,7 +136,12 @@ function filterReferences(form) {
              </span>
            </td>
            <td style="text-align: right;">{{mb_value object=$_reference field=price}}</td>
-           <td style="text-align: right;">{{mb_value object=$_reference field=quantity}} x</td>
+           <td style="text-align: right;">
+					   <label title="">
+             {{mb_value object=$_reference field=quantity}} 
+					   </label>
+						 x
+					</td>
            <td style="text-align: right;">{{mb_value object=$_reference field=_cond_price}}</td>
            <td style="text-align: right;">{{mb_value object=$_reference field=_unit_quantity}} x</td>
            <td style="text-align: right;"><strong>{{mb_value object=$_reference field=_unit_price}}</strong></td>
