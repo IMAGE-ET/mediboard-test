@@ -2885,7 +2885,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 }
 
 .bargraph .threshold {
-  height: 55%;
+  height: 25%;
   opacity: .3;
   margin-top: 0;
   z-index: 0;
@@ -2920,7 +2920,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 }
 
 .bargraph > .value {
-  height: 40%;
+  height: 60%;
   border-width: 1px;
   border-style: solid;
   background: none;
