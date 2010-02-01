@@ -25,6 +25,9 @@
   {{/if}}
   </li>
 {{foreachelse}}
-  <li><span class="informal">{{tr}}No result{{/tr}}</span></li>
+  <li>
+    <span class="view"></span>
+    <span style="font-style: italic;">{{tr}}No result{{/tr}}</span>
+  </li>
 {{/foreach}}
 </ul>

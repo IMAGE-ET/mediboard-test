@@ -246,7 +246,9 @@ var Url = Class.create({
           update.style.maxWidth = "400px";
         }
         update.show().setOpacity(1).unoverflow();
-      }
+      },
+      
+      onHide: function(element, update){ Element.hide(update) }
     }, oOptions);
     
     input = $(input).addClassName("autocomplete");
@@ -333,7 +335,7 @@ var Url = Class.create({
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("focus", function(){
-        $V(input, '');
+        //$V(input, '');
         input.fire("ui:change");
       });
       populate.observe("mousedown", Event.stop);

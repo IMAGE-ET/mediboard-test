@@ -1937,6 +1937,7 @@ ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #458;
   -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
   background-color: #6688CC;
   font-size: 1.1em;
@@ -2004,22 +2005,21 @@ ul.control_tabs_vertical .separator {
   visibility: hidden;
 }
 
-
 ul.control_tabs_vertical {
   float: left;
-}
-
-ul.control_tabs_vertical {
+  border-right: 1px solid #458;
   padding: 0;
 }
 
 ul.control_tabs_vertical li {
   float: none;
   text-align: right;
+  margin-right: -1px;
 }
 
 ul.control_tabs_vertical li a {
   -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
   padding: 3px 8px;
   margin-bottom: 2px;
@@ -2953,6 +2953,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .numericField .arrows div.up {
   -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
   top: -1px;
   background-image: url(../../images/buttons/up-small.gif);
@@ -2960,6 +2961,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .numericField .arrows div.down {
   -moz-border-radius: 0 0 3px 3px;
+  -webkit-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
   bottom: -1px;
   background-image: url(../../images/buttons/down-small.gif);
@@ -3011,6 +3013,7 @@ table.main td.step.selected a {
 
 .dent {
   -moz-border-radius: 22px;
+  -webkit-border-radius: 22px;
   border-radius: 22px;
   position: absolute;
   cursor: pointer;

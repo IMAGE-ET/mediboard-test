@@ -112,8 +112,7 @@ if (isset($_REQUEST["login"])) {
   require("./locales/core.php");
   $redirect = CValue::request("redirect");
 
-  // FIXME: corriger le setMsg pour que ceci ne fasse pas d'erreur lors de la connexion
-  $ok = @CAppUI::login();
+  $ok = CAppUI::login();
   if (!$ok) {
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }

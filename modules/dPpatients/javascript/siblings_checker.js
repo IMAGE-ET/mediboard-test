@@ -36,7 +36,7 @@ SiblingsChecker = {
   
   // Ask confirmation before sending, when necessary
   alert: function() {
-    confirmed = true;
+    var confirmed = true;
     confirmed &= !this.textMatching  || alert(this.textMatching);
     confirmed &= !this.textSiblings || confirm(this.textSiblings);
 
@@ -47,7 +47,7 @@ SiblingsChecker = {
   },
   
   confirm: function() {
-    confirmed = true;
+    var confirmed = true;
     confirmed &= !this.textSiblings || confirm(this.textSiblings);
     
     if (confirmed) {

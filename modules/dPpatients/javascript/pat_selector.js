@@ -27,7 +27,7 @@ var PatSelector = {
     this.prepared.view = view;
     
     // Lancement de l'execution du set
-    window.setTimeout( window.PatSelector.doSet , 1);
+    window.setTimeout(window.PatSelector.doSet , 1);
   },
     
   doSet: function(){

@@ -75,8 +75,10 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   </div>
 </div>
 
+<div class="small-info">
+  Vous devez faire une recherche avant de créer un patient
+</div>
 
-<div class="small-info">Vous devez faire une recherche avant de créer un patient si celui-ci n'existe pas.</div>
 {{if $patVitale}}
 
 <!-- Formulaire de mise à jour Vitale -->
@@ -87,7 +89,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   {{mb_field object=$patVitale field="patient_id" hidden="true"}}
   
   <table class="form">
-  
   	<tr>
   	  <th class="category" colspan="4">Valeurs SESAM Vitale</th>
   	</tr>
@@ -185,10 +186,12 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
       
       {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
-          <th>IPP</th>
-          <td>
-            <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
-          </td>
+        <th>IPP</th>
+        <td>
+          <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
+        </td>
+      {{else}}
+        <td colspan="2"></td>
       {{/if}}
     </tr>
     
@@ -277,13 +280,13 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   {{foreach from=$patients item=_patient}}
     {{include file="inc_line_pat_selector.tpl"}}
   {{foreachelse}}
-  {{if $name || $firstName}}
-  <tr>
-    <td class="button" colspan="5">
-      Aucun résultat exact
-    </td>
-  </tr>
-  {{/if}}
+    {{if $name || $firstName}}
+    <tr>
+      <td class="button" colspan="5">
+        Aucun résultat exact
+      </td>
+    </tr>
+    {{/if}}
   {{/foreach}}
 
   <!-- Recherche phonétique -->

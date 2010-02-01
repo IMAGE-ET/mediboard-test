@@ -49,7 +49,7 @@ var InseeFields = {
 
 function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
   Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
+  var dn = selected.childNodes;
   $V(sFormName + '_' + sFirstField, dn[0].firstChild.firstChild.nodeValue, true);
 
   if(sSecondField){

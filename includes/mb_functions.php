@@ -625,7 +625,6 @@ function mbLoadScripts() {
   $affichageScript .= mbLoadScript("includes/javascript/forms.js");
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js");
   $affichageScript .= mbLoadScript("includes/javascript/aideSaisie.js");
-  //@todo: ASAP supprimer toutes les réferences à l'ancien fichier
   
   $affichageScript .= mbLoadScript("includes/javascript/printf.js");
   $affichageScript .= mbLoadScript("includes/javascript/mbmail.js");
