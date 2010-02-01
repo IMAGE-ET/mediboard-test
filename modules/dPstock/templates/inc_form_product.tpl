@@ -86,10 +86,13 @@ function filterReferences(form) {
     <th>{{mb_label object=$product field="classe_comptable"}}</th>
     <td>{{mb_field object=$product field="classe_comptable"}}</td>
   </tr>
+	
+	{{if @$modules.dmi}}
   <tr>
     <th>{{mb_label object=$product field="renewable"}}</th>
     <td>{{mb_field object=$product field="renewable"}}</td>
   </tr>
+  {{/if}}
   <tr>
     <th>{{mb_label object=$product field="cancelled"}}</th>
     <td>{{mb_field object=$product field="cancelled"}}</td>
