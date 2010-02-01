@@ -44,9 +44,9 @@ class CRPU extends CMbObject {
   var $urtrau = null;
   
   // Distant Fields
-  var $_count_consultations = null;
-  var $_attente  = null;
-  var $_presence = null;
+  var $_pec_atu           = null;
+  var $_attente           = null;
+  var $_presence          = null;
   var $_can_leave         = null;
   var $_can_leave_since   = null;
   var $_can_leave_about   = null;
@@ -119,15 +119,16 @@ class CRPU extends CMbObject {
       "_responsable_id"  => "ref notNull class|CMediusers",
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
       "_entree"          => "dateTime",
-      "_etablissement_transfert_id" => "ref class|CEtabExterne",
+      "_etablissement_transfert_id"        => "ref class|CEtabExterne",
       "_etablissement_entree_transfert_id" => "ref class|CEtabExterne",  
-      "_attente"         => "time",
-      "_presence"        => "time",
-      "_can_leave"       => "time",
-      "_can_leave_about" => "bool",
-      "_can_leave_since" => "bool",
+      "_attente"           => "time",
+      "_presence"          => "time",
+      "_can_leave"         => "time",
+      "_can_leave_about"   => "bool",
+      "_can_leave_since"   => "bool",
       "_can_leave_warning" => "bool",
       "_can_leave_error"   => "bool",
+      "_pec_atu"           => "bool",
      );
      
 		$specs["urprov"] = "";
@@ -164,7 +165,6 @@ class CRPU extends CMbObject {
     $this->_naissance  = $patient->naissance;
     $this->_sexe       = $patient->sexe;
     $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
-    
     
     // Calcul des valeurs de _mode_sortie
     if ($this->_ref_sejour->mode_sortie == "transtert" && $this->mutation_sejour_id) {
@@ -217,10 +217,12 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->loadRefsFwd();
 
     // Chargement de la consultation ATU
-    $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
     $this->_ref_sejour->loadRefsConsultations();
 
     $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
+    if ($this->_ref_consult->_id) {
+      $this->_pec_atu = true;
+    }
        
 	  // Calcul des temps d'attente et présence
 		$entree = mbTime($this->_ref_sejour->_entree);

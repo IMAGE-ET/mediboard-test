@@ -26,7 +26,7 @@ if ($sejour_id) {
   
   // prévenir les multiples RPU
   $sejour->loadRefRPU();
-  if ($sejour->_ref_rpu->_count_consultations) {
+  if ($sejour->_ref_rpu->_pec_atu) {
     CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
     CAppUI::redirect();
   }
