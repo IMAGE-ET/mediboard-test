@@ -8,6 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
  
+<script type="text/javascript">
+
+viewDossier = function(sejour_id){
+  var url = new Url("dPprescription", "vw_dossier_cloture");
+  url.addParam("sejour_id", sejour_id);
+  url.popup(800,600,"Dossier cloturé");
+}
+
+</script> 
+
 {{assign var="sejour" value=$object}}
 
 <table class="tbl">
@@ -15,15 +25,16 @@
     <th class="title" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
 			
-      <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
+		  <a style="float:left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->_ref_patient->_id}}"'>
        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
       </a>
 	    
+		  <button type="button" class="print" onclick="viewDossier('{{$sejour->_id}}');" style="float: right;">Soins</button> 
+	    <br />
+	
       {{$object}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-      
       {{mb_include module=system template=inc_object_idsante400}}
       {{mb_include module=system template=inc_object_history}}
-
       <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
         <img src="images/icons/edit.png" />
       </a>
