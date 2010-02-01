@@ -30,6 +30,7 @@ class CProductStockGroup extends CProductStock {
     $spec = parent::getSpec();
     $spec->table = 'product_stock_group';
     $spec->key   = 'stock_id';
+    $spec->uniques["product"] = array("product_id", "group_id");
     return $spec;
   }
   
@@ -123,24 +124,14 @@ class CProductStockGroup extends CProductStock {
     }
     return parent::getPerm($permType) && $this->_ref_group->getPerm($permType);
   }
-
-  function check() {
-    if($this->product_id && $this->group_id) {
-      $where = array(
-        'product_id' => "= '$this->product_id'",
-        'group_id'   => "= '$this->group_id'",
-        'stock_id'   => "!= '$this->stock_id'"
-      );
-      
-      $VerifDuplicateKey = new CProductStockGroup();
-      $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);
-      
-      if(count($ListVerifDuplicateKey) != 0) {
-        return 'Erreur : un stock pour ce produit existe déjà';
-      }
-    }
+  
+  function updateDBFields(){
+    parent::updateDBFields();
     
-    return parent::check();
+    $this->completeField("group_id");
+    if (!$this->group_id) {
+      $this->group_id = CGroups::loadCurrent()->_id;
+    }
   }
 }
 ?>

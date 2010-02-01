@@ -289,6 +289,7 @@ $locales['CProductStockGroup-_zone_future'] = 'Zone à atteindre';
 $locales['CProductStockGroup-_zone-court'] = 'Zone';
 $locales['CProductStockGroup-_zone-desc'] = 'Zone de calculée en fonction de la quantité et des seuil ';
 $locales['CProductStockGroup-_zone'] = 'Zone de seuil';
+$locales['CProductStockGroup-failed-product'] = 'Un stock pour ce produit existe déjà';
 $locales['CProductStockGroup-back-'] = '';
 $locales['CProductStockGroup-back-stock_outs'] = 'Sorties du stock';
 $locales['CProductStockGroup-bargraph'] = 'Stocks';

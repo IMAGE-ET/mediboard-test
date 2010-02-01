@@ -39,6 +39,11 @@ function filterReferences(form) {
   return false;
 }
 
+function duplicateObject(form) {
+  $V(form.elements._duplicate, 1);
+  form.submit();
+}
+
 </script>
 
 <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -46,6 +51,7 @@ function filterReferences(form) {
 <input type="hidden" name="dosql" value="do_product_aed" />
 <input type="hidden" name="product_id" value="{{$product->_id}}" />
 <input type="hidden" name="del" value="0" />
+<input type="hidden" name="_duplicate" value="0" />
 <table class="form">
   <tr>
     {{if $product->_id}}
@@ -209,6 +215,10 @@ function filterReferences(form) {
         {{tr}}Purge{{/tr}}
       </button>
 			{{/if}}
+
+      <button type="button" class="add" onclick="duplicateObject(this.form)">
+        {{tr}}Duplicate{{/tr}}
+      </button>
       
       {{else}}
       <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
