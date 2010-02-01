@@ -4,7 +4,7 @@
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{mb_include module=dPsalleOp template=js_codage_ccam}}
 {{assign var=sejour_id value=""}}
-{{if $consult->sejour_id}}
+{{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{/if}}
@@ -43,25 +43,25 @@ function reloadPrescription(prescription_id){
 
 Main.add(function () {
   var tabsConsult = Control.Tabs.create('tab-consult', false);
-  {{if $app->user_prefs.ccam_consultation == 1}}
-	  {{if !($consult->sejour_id && $rpu->mutation_sejour_id)}}
+  {{if ($app->user_prefs.ccam_consultation == 1)}}
+	  {{if !($consult->sejour_id && $consult->_ref_chir->_is_urgentiste && $rpu->mutation_sejour_id)}}
 	    var tabsActes = Control.Tabs.create('tab-actes', false);
 	  {{/if}}
   {{/if}}
-  {{if $consult->sejour_id && !$rpu->mutation_sejour_id}}
+  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste && !$rpu->mutation_sejour_id}}
   loadSuivi({{$rpu->sejour_id}});
   {{/if}}
 });
 </script>
 
 <ul id="tab-consult" class="control_tabs">
-  {{if $consult->sejour_id}}
+  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
   <li><a href="#rpuConsult">
      RPU 
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
     </a>
   </li>
-   <li {{if !$rpu->mutation_sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, !Preferences.mode_readonly,'', null, false);"{{/if}}>
+   <li {{if !$rpu->mutation_sejour_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, !Preferences.mode_readonly,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription
     </a>
@@ -69,7 +69,7 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
-  {{if $consult->sejour_id}}
+  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
   <li><a href="#suivisoins">Suivi soins</a></li>
   {{/if}}
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
@@ -83,7 +83,7 @@ Main.add(function () {
 </ul>
 <hr class="control_tabs" />
 
-{{if $consult->sejour_id}}
+{{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
 <div id="rpuConsult" style="display: none;">{{include file="../../dPurgences/templates/inc_vw_rpu.tpl"}}</div>
 <div id="prescription_sejour" style="display: none;">
   {{if $rpu->mutation_sejour_id}}
@@ -95,7 +95,7 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
-{{if $consult->sejour_id}}
+{{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
 <div id="suivisoins" style="display:none">
   {{if $rpu->mutation_sejour_id}}
 	  <div class="small-info">
@@ -111,9 +111,9 @@ Main.add(function () {
   {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
 </div>
 
-{{if $app->user_prefs.ccam_consultation == 1}}
+{{if $app->user_prefs.ccam_consultation == 1 }}
 <div id="Actes" style="display: none;">
-  {{if $consult->sejour_id && $rpu->mutation_sejour_id}}
+  {{if $consult->sejour_id  && $consult->_ref_chir->_is_urgentiste && $rpu->mutation_sejour_id}}
 	  <div class="small-info">
 	    Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
 	  </div>
@@ -121,7 +121,7 @@ Main.add(function () {
 		  <ul id="tab-actes" class="control_tabs">
 		    <li><a href="#ccam">Actes CCAM</a></li>
 		    <li><a href="#ngap">Actes NGAP</a></li>
-		    {{if $consult->sejour_id}}
+		    {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
 		    <li><a href="#cim">Diagnostics</a></li>
 		    {{/if}}
 	    </ul>
@@ -141,7 +141,7 @@ Main.add(function () {
 	    </div>
 	  </div>
 	  
-	  {{if $consult->sejour_id}}
+	  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
 	  <div id="cim" style="display: none;">
 	      {{assign var="sejour" value=$consult->_ref_sejour}}
 	      {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}

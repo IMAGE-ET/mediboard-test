@@ -186,7 +186,8 @@ $listEtab = array();
 $listServicesUrgence = array();
 
 // Chargement du sejour dans le cas d'une urgence
-if ($consult->_id && $consult->sejour_id){
+$consult->_ref_chir->isUrgentiste();
+if ($consult->_id && $consult->sejour_id && $consult->_ref_chir->_is_urgentiste){
   $consult->loadRefSejour();
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();

@@ -57,6 +57,7 @@ class CMediusers extends CMbObject {
   var $_user_password_weak   = null;
   var $_user_password_strong = null;
   var $_basic_info = null;
+   var $_is_urgentiste       = null;
   
   // Distant fields
   var $_group_id = null;
@@ -722,7 +723,14 @@ class CMediusers extends CMbObject {
     return $this->isFromType(array("Administrator"));
   }
 
-
+  /**
+   * Check whether user is a urgentiste
+   * @return bool
+   */
+  function isUrgentiste () {
+    return $this->_is_urgentiste = ($this->function_id == CGroups::loadCurrent()->service_urgences_id);
+  }
+  
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);

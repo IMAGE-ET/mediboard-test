@@ -836,7 +836,7 @@ class CSejour extends CCodable {
         $_consult->loadRefPraticien();      
         $praticien = $_consult->_ref_praticien;
         $praticien->loadRefFunction();
-        if ($praticien->function_id == CGroups::loadCurrent()->service_urgences_id) {
+        if ($praticien->isUrgentiste()) {
           $this->_ref_consult_atu = $_consult;
           $this->_ref_consult_atu->countDocItems();
         }
