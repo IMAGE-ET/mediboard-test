@@ -97,6 +97,18 @@ function smarty_modifier_currency($value) {
 }
 
 /**
+ * @abstract Truncate a string, with a full string titled span if actually truncated 
+ *
+ * Example:  {$value|spancate}
+ * @param float $value The value to format
+ */
+function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) {
+	CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
+	$truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
+	return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
+}
+
+/**
  * @abstract Percentage 2-digit format modifier
  *
  * Example:  {$value|percent}
@@ -464,6 +476,7 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("ternary"           , "smarty_modifier_ternary");
     $this->register_modifier("currency"          , "smarty_modifier_currency");
     $this->register_modifier("percent"           , "smarty_modifier_percent");
+    $this->register_modifier("spancate"          , "smarty_modifier_spancate");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
     $modules = CModule::getActive();
