@@ -22,19 +22,29 @@ if($type == "semaine") {
   $fin = $date;
 }
 
-$salle = new CSalle();
-$where = array();
-$where["bloc_id"] = "= '$bloc_id'";
-$listSalles = $salle->loadList($where);
+$bloc = new CBlocOperatoire();
+$bloc->load($bloc_id);
+$bloc->loadRefsSalles();
+$bloc->loadRefsAlertesIntervs();
+foreach($bloc->_alertes_intervs as &$_alerte) {
+  $_alerte->loadTargetObject();
+  $_alerte->_ref_object->loadExtCodesCCAM();
+  $_alerte->_ref_object->loadRefPlageOp();
+  $_alerte->_ref_object->loadRefPraticien();
+  $_alerte->_ref_object->updateSalle();
+  $_alerte->_ref_object->_ref_chir->loadRefFunction();
+}
 
 $operation = new COperation();
+
+// Liste des alertes sur les interventions
 
 // Liste des interventions non validées
 $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 $where = array();
 $where["plagesop.date"]      = "BETWEEN '$date' AND '$fin'";
-$where["plagesop.salle_id"]  = CSQLDataSource::prepareIn(array_keys($listSalles));
+$where["plagesop.salle_id"]  = CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
 $where["operations.annulee"] = "= '0'";
 $where["operations.rank"]    = "= '0'";
 $order = "plagesop.date, plagesop.chir_id";
@@ -55,7 +65,7 @@ $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
 $where = array();
 $where["operations.date"]    = "BETWEEN '$date' AND '$fin'";
 $where["operations.annulee"] = "= '0'";
-$where[]                     = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles));
+$where[]                     = "operations.salle_id IS NULL OR operations.salle_id ". CSQLDataSource::prepareIn(array_keys($bloc->_ref_salles));
 $where["sejour.group_id"]    = "= '".CGroups::loadCurrent()->_id."'";
 $order = "operations.date, operations.chir_id";
 
@@ -71,8 +81,9 @@ foreach($listHorsPlage as &$op) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listNonValidees", $listNonValidees);
-$smarty->assign("listHorsPlage"  , $listHorsPlage  );
+$smarty->assign("listAlertes"    , $bloc->_alertes_intervs);
+$smarty->assign("listNonValidees", $listNonValidees       );
+$smarty->assign("listHorsPlage"  , $listHorsPlage         );
 
 $smarty->display("vw_alertes.tpl");
 

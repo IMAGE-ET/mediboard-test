@@ -400,9 +400,48 @@ class COperation extends CCodable {
   }
 
   function store($reorder = true) {
+    
+    $this->completeField("annulee", "rank", "codes_ccam",
+                         "plageop_id", "chir_id", "materiel", "commande_mat");
+    $this->loadOldObject();
+                         
+    // Création d'un alerte sur l'intervention
+    $msgAlerte = "L'intervention a été";
+    $isAlerte = false;
+    if($this->_old->rank || ($this->materiel && $this->commande_mat)) {
+      $this->loadRefPlageOp();
+      $this->_old->loadRefPlageOp();
+      if($this->fieldModified("annulee", "1")) {
+        // Alerte sur l'annulation d'une intervention
+        $msgAlerte .= " annulée pour le ".mbTransformTime(null, $this->_datetime, CAppUI::conf("datetime")).".";
+        $isAlerte = true;
+      } elseif(mbDate(null, $this->_datetime) != mbDate(null, $this->_old->_datetime)) {
+        // Alerte sur le déplacement d'une intervention
+        $msgAlerte .= " déplacée du ".mbTransformTime(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->_datetime, CAppUI::conf("date")).".";
+        $isAlerte = true;
+      }
+      if($this->_old->rank) {
+        $msgAlerte .= " L'intervention avait été validée.";
+      }
+      if($this->materiel && $this->commande_mat) {
+        $msgAlerte .= " Le materiel avait été commandé.";
+      }
+    }
+    
     if ($msg = parent::store()) {
       return $msg;
     }
+    
+    if($isAlerte) {
+      $alerte = new CAlert();
+      $alerte->setObject($this);
+      $alerte->comments = $msgAlerte;
+      $alerte->tag = "mouvement_intervention";
+      $alerte->handled = "0";
+      $alerte->level = "medium";
+      $alerte->store();
+    }
+    
     // Cas d'une annulation
     if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
@@ -444,7 +483,6 @@ class COperation extends CCodable {
     if($this->plageop_id) {
       $this->loadRefPlageOp();
       if($this->_ref_plageop->spec_id && $this->_ref_plageop->unique_chir) {
-        $this->completeField("chir_id");
         $this->_ref_plageop->chir_id = $this->chir_id;
         $this->_ref_plageop->spec_id = "";
         $this->_ref_plageop->store();

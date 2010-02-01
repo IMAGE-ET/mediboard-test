@@ -164,7 +164,25 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`ip_address`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.20";
+    $this->makeRevision("1.0.20");
+    $sql = "CREATE TABLE `alert` (
+              `alert_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `tag` VARCHAR (255) NOT NULL,
+              `level` ENUM ('low','medium','high') NOT NULL DEFAULT 'medium',
+              `comments` TEXT,
+              `handled` ENUM ('0','1') NOT NULL DEFAULT '0',
+              `object_id` INT (11) UNSIGNED NOT NULL,
+              `object_class` VARCHAR (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `alert` 
+              ADD INDEX (`object_id`),
+              ADD INDEX (`object_class`),
+              ADD INDEX (`tag`);";
+    $this->addQuery($sql);
+    
+    
+    $this->mod_version = "1.0.21";
   }
 }
 ?>

@@ -80,5 +80,21 @@ class CBlocOperatoire extends CMbObject {
   function loadRefsBack() {
     $this->loadRefsSalles();
   }
+  
+  function loadRefsAlertesIntervs() {
+    $this->loadRefsSalles();
+    $inSalles = CSQLDataSource::prepareIn(array_keys($this->_ref_salles));
+    $alerte = new CAlert();
+    $ljoin = array();
+    $ljoin["operations"] = "operations.operation_id = alert.object_id";
+    $ljoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
+    $where = array();
+    $where["alert.object_class"] = "= 'COperation'";
+    $where["alert.tag"] = "= 'mouvement_intervention'";
+    $where["alert.handled"]   = "= '0'";
+    $where[] = "operations.salle_id ".$inSalles." OR plagesop.salle_id ".$inSalles." OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
+    $order = "operations.date, operations.chir_id";
+    return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
+  }
 }
 ?>

@@ -161,5 +161,19 @@ class CSalle extends CMbObject {
 		  $urgence->loadRefPlageOp();
 	  }
   }
+  
+  function loadRefsAlertesIntervs() {
+    $alerte = new CAlert();
+    $ljoin = array();
+    $ljoin["operations"] = "operations.operation_id = alert.object_id";
+    $ljoin["plagesop"]   = "plagesop.plageop_id = operations.plageop_id";
+    $where = array();
+    $where["alert.object_class"] = "= 'COperation'";
+    $where["alert.tag"] = "= 'mouvement_intervention'";
+    $where["alert.handled"]   = "= '0'";
+    $where[] = "operations.salle_id = '$this->salle_id' OR plagesop.salle_id = '$this->salle_id' OR (plagesop.salle_id IS NULL AND operations.salle_id IS NULL)";
+    $order = "operations.date, operations.chir_id";
+    return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
+  }
 }
 ?>

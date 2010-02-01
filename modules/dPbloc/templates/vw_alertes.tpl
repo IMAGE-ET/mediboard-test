@@ -5,6 +5,17 @@
     <th>Salle</th>
     <th>Intervention</th>
   </tr>
+  {{if $listAlertes|@count}}
+  <tr>
+    <th colspan="4">{{$listAlertes|@count}} alerte(s) sur des interventions</th>
+  </tr>
+  {{/if}}
+  {{foreach from=$listAlertes item=_alerte}}
+  {{assign var="_operation" value=$_alerte->_ref_object}}
+  <tr>
+    {{mb_include module=dPbloc template=inc_line_alerte is_alerte=1}}
+  </tr>
+  {{/foreach}}
   {{if $listNonValidees|@count}}
   <tr>
     <th colspan="4">{{$listNonValidees|@count}} intervention(s) non validées</th>
@@ -12,14 +23,7 @@
   {{/if}}
   {{foreach from=$listNonValidees item=_operation}}
   <tr>
-    <td>{{$_operation->_ref_plageop->date|date_format:$dPconfig.date}}</td>
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}</td>
-    <td>{{$_operation->_ref_salle->_view}}</td>
-    <td class="text">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-        {{mb_include template=../../dPplanningOp/templates/inc_vw_operation}}
-      </span>
-    </td>
+    {{mb_include module=dPbloc template=inc_line_alerte is_alerte=0}}
   </tr>
   {{/foreach}}
   {{if $listHorsPlage|@count}}
@@ -29,14 +33,7 @@
   {{/if}}
   {{foreach from=$listHorsPlage item=_operation}}
   <tr>
-    <td>{{$_operation->date|date_format:$dPconfig.date}}</td>
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}</td>
-    <td>{{$_operation->_ref_salle->_view}}</td>
-    <td class="text">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-        {{mb_include template=../../dPplanningOp/templates/inc_vw_operation}}
-      </span>
-    </td>
+    {{mb_include module=dPbloc template=inc_line_alerte is_alerte=0}}
   </tr>
   {{/foreach}}
 </table>

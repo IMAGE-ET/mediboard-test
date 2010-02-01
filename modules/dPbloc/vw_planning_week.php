@@ -30,6 +30,7 @@ $bloc_id   = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 $bloc->loadRefsSalles();
+$nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
 
 if (!$listSalles = $bloc->_ref_salles) {
   $listSalles = array();
@@ -126,6 +127,7 @@ $smarty->assign("listMins"          , CPlageOp::$minutes );
 $smarty->assign("affichages"        , $affichages        );
 $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
+$smarty->assign("nbAlertesInterv"   , $nbAlertesInterv   );
 $smarty->assign("date"              , $date              );
 $smarty->assign("listSpec"          , $listSpec          );
 

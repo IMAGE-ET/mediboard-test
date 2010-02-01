@@ -23,18 +23,22 @@ function showAlerte() {
 <table class="main">
   <tr>
     <td>
-      {{if $nbIntervNonPlacees || $nbIntervHorsPlage}}
+      {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
         <div class="warning" style="float: right;">
-          {{if $nbIntervNonPlacees}}
           <a href="#nothing" onclick="showAlerte()">
-            {{$nbIntervNonPlacees}} interventions non validées<br />
-          </a>
+          {{if $nbAlertesInterv}}
+            {{$nbAlertesInterv}} alerte(s) sur des interventions
+            <br />
+          {{/if}}
+          {{if $nbIntervNonPlacees}}
+            {{$nbIntervNonPlacees}} intervention(s) non validée(s)
+            <br />
           {{/if}}
           {{if $nbIntervHorsPlage}}
-          <a href="#nothing" onclick="showAlerte()">
-            {{$nbIntervHorsPlage}} interventions hors plage
-          </a>
+            {{$nbIntervHorsPlage}} intervention(s) hors plage
+            <br />
           {{/if}}
+          </a>
         </div>
       {{/if}}
       <form action="?" name="selection" method="get">
