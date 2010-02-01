@@ -346,7 +346,7 @@ a.button {
   color: #000;
   background: #eee url(images/buttons/button.png) center center repeat-x;
 	
-  border: 1px solid #666;
+  border: 1px solid #888;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -399,7 +399,11 @@ a.button:before {
 a.button:hover,
 button:hover {
   background-image: url(images/buttons/button-over.png);
-	border-color: #333;
+	border-color: #000;
+/* Bug in firefox : 1 pixel between border and outline
+ * outline: 1px solid #000;
+ * -moz-outline-radius: 3px;
+ */
 }
 
 button[disabled], a.button[disabled] {
@@ -424,6 +428,10 @@ button.trash:before, a.button.trash:before {
   content: url(images/buttons/trash.png);
 }
 
+button.trash:hover, a.button.trash:hover {
+  border-color: #f00;
+}
+
 button.submit:before, a.button.submit:before {
   content: url(images/buttons/save.png);
 }
@@ -438,6 +446,10 @@ button.print:before, a.button.print:before {
 
 button.cancel:before, a.button.cancel:before {
   content: url(images/buttons/cancel.png);
+}
+
+button.cancel:hover, a.button.cancel:hover {
+  border-color: #f00;
 }
 
 button.modify:before, a.button.modify:before {
