@@ -946,4 +946,6 @@ $locales['config-dPplanningOp-COperation-delete_only_admin'] = 'Suppression seul
 $locales['config-dPplanningOp-COperation-delete_only_admin-desc'] = 'Suppression seulement pour les admins';
 $locales['config-dPplanningOp-CSejour-delete_only_admin'] = 'Suppression seulement pour les admins';
 $locales['config-dPplanningOp-CSejour-delete_only_admin-desc'] = 'Suppression seulement pour les admins';
+$locales['config-dPplanningOp-CSejour-max_cancel_time'] = 'Temps maximal d\'annulation d\'un dossier';
+$locales['config-dPplanningOp-CSejour-max_cancel_time-desc'] = 'Temps maximal d\'annulation d\'un dossier';
 ?>

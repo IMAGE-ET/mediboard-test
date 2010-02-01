@@ -25,6 +25,7 @@
     </label>  
   </th>
   <td colspan="3">
-    <input class="str" name="{{$field}}" value="{{$value}}" />
+    <input class="str" name="{{$field}}" value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}}/> 
+    {{if @$suffix}}{{$suffix}}{{/if}} 
   </td>
 </tr>

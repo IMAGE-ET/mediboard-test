@@ -1,3 +1,9 @@
+<script type="text/javascript">
+  Main.add(function() {
+    getForm("editConfig")["dPplanningOp[CSejour][max_cancel_time]"].addSpinner({min:0, max:24});
+  })
+</script>
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_configure" />
@@ -148,7 +154,7 @@
 	
   {{assign var="var" value="delete_only_admin"}}
   {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
-	
+	  
   {{assign var="class" value="CSejour"}}
   <tr>
     <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
@@ -252,6 +258,8 @@
 	{{assign var="var" value="delete_only_admin"}}
   {{mb_include module=system template=inc_config_bool var=$var class=$class thcolspan="3" tdcolspan="3"}}
 	
+  {{assign var="var" value="max_cancel_time"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3" size="2" suffix="h"}}
   
   <tr>
     <th class="category" colspan="6">Heure par defaut du séjour</th>
@@ -363,53 +371,20 @@
     <th class="category" colspan="100">Tag pour les numéros de dossier</th>
   </tr>
   
-  <tr>
-    {{assign var="var" value="tag_dossier"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  {{assign var="var" value="tag_dossier"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
   
-  <tr>
-    {{assign var="var" value="tag_dossier_pa"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  {{assign var="var" value="tag_dossier_pa"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
   
-  <tr>
-    {{assign var="var" value="tag_dossier_cancel"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  {{assign var="var" value="tag_dossier_cancel"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
   
-  <tr>
-    {{assign var="var" value="tag_dossier_trash"}}
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
+  {{assign var="var" value="tag_dossier_trash"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
+  
+  {{assign var="var" value="tag_dossier"}}
+  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
   
   <tr>
     <td class="button" colspan="100">

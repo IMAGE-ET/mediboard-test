@@ -36,7 +36,15 @@
 {{foreach from=$object->_ref_consultations item=_consult}}
 <tr>
   <td class="text" style="text-indent: 1em;">
-    <a href="#" class="iconed-text {{$_consult->_type}}">
+    {{if $_consult->_canEdit}}
+    <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}">
+      <img src="images/icons/planning.png" alt="modifier" />
+    </a>
+    <a class="iconed-text {{$_consult->_type}}" 
+      href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}&amp;chirSel={{$_consult->_ref_plageconsult->chir_id}}">
+    {{else}}
+    <a href="#nothing" class="iconed-text {{$_consult->_type}}">
+    {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
       Consultation le {{$_consult->_datetime|date_format:$dPconfig.date}}
       {{if $_consult->_nb_files_docs}}

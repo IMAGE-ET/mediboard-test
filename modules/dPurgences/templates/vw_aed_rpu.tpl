@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPpatients script=pat_selector}}
-{{mb_include_script module=dPurgences script=contraintes_rpu}}
+{{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPurgences" script="contraintes_rpu"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
@@ -97,6 +97,13 @@ function showEtabEntreeTransfert(mode) {
 	}
 }
 
+function loadActesNGAP(sejour_id){
+  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
+  url.addParam("object_id", sejour_id);
+  url.addParam("object_class", "CSejour");
+  url.requestUpdate('listActesNGAP');
+}
+
 Main.add(function () {
   {{if $rpu->_id && $can->edit}}
     DossierMedical.reloadDossierPatient();
@@ -105,8 +112,16 @@ Main.add(function () {
     refreshConstantesHack('{{$rpu->sejour_id}}');
   {{/if}}
   
+  {{if $app->user_prefs.ccam_sejour == 1 }}
+  var tab_actes = Control.Tabs.create('tab-actes', false);
+  {{/if}}
+  
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
+  }
+  
+  if($('listActesNGAP')){
+    loadActesNGAP('{{$rpu->sejour_id}}');
   }
 });
 
@@ -347,6 +362,9 @@ Main.add(function () {
   <li><a href="#suivisoins">Suivi soins</a></li>
   <li onclick="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
   <li><a href="#examens">Examens</a></li>
+  {{if $app->user_prefs.ccam_sejour == 1 }}
+  <li><a href="#actes">Cotation</a></li>
+  {{/if}}
   {{if $isPrescriptionInstalled}}
   <li {{if $rpu->_ref_consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$rpu->_ref_consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
   {{/if}}
@@ -368,6 +386,21 @@ Main.add(function () {
 <div id="examens">
   {{mb_include module=dPcabinet template=inc_main_consultform readonly=1}}
 </div>
+
+{{if $app->user_prefs.ccam_sejour == 1 }}
+<div id="actes" style="display: none;">
+  <ul id="tab-actes" class="control_tabs">
+    <li><a href="#one">Actes NGAP</a></li>
+  </ul>
+  <hr class="control_tabs" />
+  
+  <table class="form">
+    <tr id="one" style="display: none;">
+      <td id="listActesNGAP"> </td>
+    </tr>
+  </table>
+</div>
+{{/if}}
 
 {{if $isPrescriptionInstalled}}
 <div id="prescription_sejour" style="display: none;">

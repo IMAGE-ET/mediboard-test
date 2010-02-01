@@ -293,7 +293,7 @@ class CSejour extends CCodable {
 	    }
 	    
 	    $this->completeField("entree_reelle", "annule");
-	    if ($this->entree_reelle && $this->fieldModified("annule", "1")) {
+	    if ((mbAddDateTime(str_pad(CAppUI::conf("dPplanningOp CSejour max_cancel_time"), 2, "0", STR_PAD_LEFT).":00:00", $this->entree_reelle) < mbDateTime()) && $this->fieldModified("annule", "1")) {
 	    	$msg .= "Impossible d'annuler un dossier en cours.<br />";
 	    }
 	

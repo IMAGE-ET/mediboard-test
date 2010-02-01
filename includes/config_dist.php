@@ -217,7 +217,8 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
     "urg"     => "24",
     "consult" => "04",
   ),
-	"delete_only_admin"   => "0"
+	"delete_only_admin"   => "0",
+  "max_cancel_time"     => "0"
 );
 
 $dPconfig["dPsalleOp"] = array(
