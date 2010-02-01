@@ -42,10 +42,11 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
   $product = new CProduct();
   $product->code          = $produit_livret->code_cip;
   
-  $product->loadMatchingObject();
+  if (!$product->loadMatchingObject()) {
+    $product->category_id = $category_id;
+  }
   
   $product->description   = $produit_livret->commentaire;
-  $product->category_id   = $category_id;
   
 	if($produit_prescription->_id){
 		$libelle = $produit_prescription->libelle;
