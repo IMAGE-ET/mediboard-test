@@ -56,8 +56,8 @@ class CProductReference extends CMbObject {
     $specs['mdq']         = 'num min|0';
     $specs['cancelled']   = 'bool default|0 show|0';
 
-    $specs['_cond_price']    = 'currency notNull';
-    $specs['_unit_price']    = 'currency';
+    $specs['_cond_price']    = 'currency detailed';
+    $specs['_unit_price']    = 'currency detailed';
     $specs['_unit_quantity'] = 'num min|0';
     return $specs;
   }

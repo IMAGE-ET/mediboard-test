@@ -11,6 +11,7 @@
 CAppUI::requireSystemClass("fieldSpecs/floatSpec");
 
 class CCurrencySpec extends CFloatSpec {
+	var $detailed = null;
   function getSpecType() {
     return "currency";
   }
@@ -18,11 +19,9 @@ class CCurrencySpec extends CFloatSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
-    $decimals = CMbArray::extract($params, "decimals");
-    
-    // @todo: money_format() ?
+    $decimals = CMbArray::extract($params, "decimals", $this->detailed ? 4 : 2);
     return ($propValue !== null && $propValue !== "") ? 
-      number_format($propValue, ($decimals ? $decimals : 2), ',', ' ').' '.CAppUI::conf("currency_symbol") : 
+      number_format($propValue, $decimals, ',', ' ').' '.CAppUI::conf("currency_symbol") : 
       "-";
   }
   
@@ -32,7 +31,7 @@ class CCurrencySpec extends CFloatSpec {
   }
 	
   function getDBSpec(){
-    return 'DECIMAL (10, 3)'.($this->pos ? ' UNSIGNED' : '');
+    return 'DECIMAL (10, 5)'.($this->pos ? ' UNSIGNED' : '');
   }
 }
 
