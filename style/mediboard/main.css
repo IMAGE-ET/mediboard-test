@@ -3332,25 +3332,22 @@ ul li a.chapitre_signe.active{
   color: #000;
 }
 
-ul li.user, td.user {
-	background-image: url(../../images/icons/user.png);
-	background-repeat: no-repeat;
-	background-position: right;
-  padding-right: 16px !important;
+ul li.user:before, td.user:before,
+ul li.function:before, td.function:before,
+ul li.group:before, td.group:before {
+  float:right;
 }
 
-ul li.function, td.function {
-  background-image: url(../../images/icons/user-function.png);
-  background-repeat: no-repeat;
-  background-position: right;
-  padding-right: 16px !important;
+ul li.user:before, td.user:before {
+  content: url(../../images/icons/user.png);
 }
 
-ul li.group, td.group {
-  background-image: url(../../images/icons/group.png);
-  background-repeat: no-repeat;
-  background-position: right;
-  padding-right: 16px !important;
+ul li.function:before, td.function:before {
+  content: url(../../images/icons/user-function.png);
+}
+
+ul li.group:before, td.group:before {
+  content: url(../../images/icons/group.png);
 }
 
 table.active {
