@@ -120,6 +120,7 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
 	    }
     }
   } else {
+    $msg .= " ($product->code: $product->name)";
     if (!isset($messages[$msg])) $messages[$msg] = 0;
     $messages[$msg]++;
   }
