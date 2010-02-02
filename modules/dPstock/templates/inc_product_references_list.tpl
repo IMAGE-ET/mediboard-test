@@ -20,15 +20,15 @@
 	{{foreach from=$product->_ref_references item=_reference}}
   {{assign var=_product value=$_reference->_ref_product}}
   <tr>
-    <td>
+    <td {{if $_reference->cancelled}}class="cancelled"{{/if}}>
       <a href="?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_guid}}')">
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_guid}}')">
           {{if $_reference->code}}
             {{mb_value object=$_reference field=code}}
           {{else}}
             [Aucun code]
           {{/if}}
-        </span>
+        </strong>
       </a>
     </td>
     <td>
@@ -36,6 +36,7 @@
         {{mb_value object=$_reference field=societe_id}}
       </span>
     </td>
+
     <td style="text-align: right;">{{mb_value object=$_reference field=price}}</td>
     <td style="text-align: right;">
       <label title="{{$_reference->quantity}} {{$_product->packaging}}">

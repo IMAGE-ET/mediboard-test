@@ -13,34 +13,46 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="4">{{mb_title class=CProduct field=name}}</th>
+    <th colspan="10">{{mb_title class=CProduct field=name}}</th>
   </tr>
   <tr>
+    <th style="width: 1%;">{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=societe_id}}</th>
-    <th>{{mb_title class=CProduct field=code}}</th>
-    <th>{{mb_title class=CProduct field=_quantity}}</th>
+    <th>{{mb_title class=CProduct field=quantity}}</th>
+    <th>{{mb_label class=CProduct field=item_title}}</th>
     <th>{{mb_title class=CProduct field=packaging}}</th>
   </tr>
-  {{foreach from=$list_products item=curr_product}}
+  {{foreach from=$list_products item=_product}}
     <tbody class="hoverable">
-    <tr {{if $curr_product->_id == $product_id}}class="selected"{{/if}}>
-      <td colspan="4">
-        <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}">
-          {{$curr_product->name|truncate:90}}
+    <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
+      <td colspan="10">
+        <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
+          {{$_product->name|truncate:80}}
         </a>
       </td>
     </tr>
-    <tr {{if $curr_product->_id == $product_id}}class="selected"{{/if}}>
-      <td style="padding-left: 2em;">
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_product->_ref_societe->_guid}}')">
-          {{$curr_product->_ref_societe}}
+    <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
+      <td style="padding-left: 1em;" {{if $_product->cancelled}}class="cancelled"{{/if}}>
+			  <strong>
+          {{if $_product->code}}
+            {{mb_value object=$_product field=code}}
+          {{else}}
+            [Aucun code]
+          {{/if}}
+				</strong>
+			</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_ref_societe->_guid}}')">
+          {{$_product->_ref_societe}}
         </span>
       </td>
-      <td>{{$curr_product->code}}</td>
-      <td title="{{$curr_product->_quantity}}">
-        {{$curr_product->_quantity|truncate:35}}
+			<td style="text-align: right;">
+				{{$_product->quantity}}
+			</td>
+      <td>
+        {{$_product->item_title|spancate:25}}
       </td>
-      <td>{{$curr_product->packaging}}</td>
+      <td>{{$_product->packaging}}</td>
     </tr>
     </tbody>
   {{foreachelse}}
