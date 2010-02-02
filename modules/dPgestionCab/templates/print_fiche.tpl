@@ -588,7 +588,7 @@
         <font color="#ffffff">CSG non déductible</font>
       </td>
       <td align="right">
-      	{{mb_value object=$fichePaie field=_base_csgnds}}
+      	{{mb_value object=$fichePaie field=_csgnds}}
       </td>
       <td align="left"></td>
       <td align="left"></td>
