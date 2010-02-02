@@ -10,7 +10,13 @@
 
 <table class="tbl">
   <tr>
-    <th class="title text">{{$object}}</th>
+    <th class="title text">
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history}}
+      {{mb_include module=system template=inc_object_notes}}
+      
+      {{$object}}
+    </th>
   </tr>
   <tr>
     <td>

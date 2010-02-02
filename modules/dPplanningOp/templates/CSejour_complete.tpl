@@ -16,6 +16,11 @@ viewDossier = function(sejour_id){
   url.popup(800,600,"Dossier cloturé");
 }
 
+printDossier = function(rpu_id) {
+  var url = new Url("dPurgences", "print_dossier");
+  url.addParam("rpu_id", rpu_id);
+  url.popup(700, 550, "RPU");
+}
 </script> 
 
 {{assign var="sejour" value=$object}}
@@ -29,15 +34,21 @@ viewDossier = function(sejour_id){
        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$sejour->_ref_patient size=42}}
       </a>
 	    
-		  <button type="button" class="print" onclick="viewDossier('{{$sejour->_id}}');" style="float: right;">Soins</button> 
-	    <br />
-	
+      <div style="float: right;">
+        <button type="button" class="print" onclick="viewDossier('{{$sejour->_id}}');">Dossier Soins</button> 
+        {{if $object->_ref_rpu && $object->_ref_rpu->_id}}
+        <button type="button" class="print" onclick="printDossier({{$object->_ref_rpu->_id}})">Dossier Urgences</button>
+        {{/if}}
+        
+        <br />
+        {{mb_include module=system template=inc_object_idsante400}}
+        {{mb_include module=system template=inc_object_history}}
+        <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
+          <img src="images/icons/edit.png" />
+        </a>
+      </div>
+
       {{$object}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-      {{mb_include module=system template=inc_object_idsante400}}
-      {{mb_include module=system template=inc_object_history}}
-      <a style="float:right" class="action" title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
-        <img src="images/icons/edit.png" />
-      </a>
     </th>
   </tr>
 
@@ -173,13 +184,13 @@ viewDossier = function(sejour_id){
     <td>
       <strong>{{mb_label object=$rpu field="ccmu"}}</strong>
       {{if $rpu->ccmu}}
-      {{mb_value object=$rpu field=ccmu}}
+        {{mb_value object=$rpu field=ccmu}}
       {{/if}}
     </td>
     <td>
       <strong>{{mb_label object=$rpu field="_mode_sortie"}}</strong>
       {{if $rpu->_mode_sortie}}
-      {{mb_value object=$rpu field=_mode_sortie}}
+        {{mb_value object=$rpu field=_mode_sortie}}
       {{/if}}
     </td>
   </tr>
@@ -187,13 +198,13 @@ viewDossier = function(sejour_id){
     <td>
       <strong>{{mb_label object=$rpu field="provenance"}}</strong>
       {{if $rpu->provenance}}
-      {{mb_value object=$rpu field=provenance}}
+        {{mb_value object=$rpu field=provenance}}
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$rpu field="destination"}}</strong>
-      {{if $rpu->destination}}
-      {{mb_value object=$rpu field=destination}}
+      <strong>{{mb_label object=$rpu field="_etablissement_transfert_id"}}</strong>
+      {{if $rpu->provenance}}
+        {{mb_value object=$rpu field=_etablissement_transfert_id}}
       {{/if}}
     </td>
   </tr>
@@ -201,13 +212,13 @@ viewDossier = function(sejour_id){
     <td>
       <strong>{{mb_label object=$rpu field="transport"}}</strong>
       {{if $rpu->transport}}
-      {{mb_value object=$rpu field=transport}}
+        {{mb_value object=$rpu field=transport}}
       {{/if}}
     </td>
     <td>
-      <strong>{{mb_label object=$rpu field="orientation"}}</strong>
-      {{if $rpu->orientation}}
-      {{mb_value object=$rpu field=orientation}}
+      <strong>{{mb_label object=$rpu field="destination"}}</strong>
+      {{if $rpu->destination}}
+        {{mb_value object=$rpu field=destination}}
       {{/if}}
     </td>
   </tr>
@@ -219,7 +230,10 @@ viewDossier = function(sejour_id){
       {{/if}}
     </td>
     <td>
-     
+      <strong>{{mb_label object=$rpu field="orientation"}}</strong>
+      {{if $rpu->orientation}}
+      {{mb_value object=$rpu field=orientation}}
+      {{/if}}
     </td>
   </tr>
   {{else}}
