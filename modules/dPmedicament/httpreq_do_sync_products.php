@@ -110,7 +110,7 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
     if (!$stock->loadMatchingObject()) {
 	    $stock->quantity = $product->_unit_quantity;
 	    $stock->order_threshold_min = $stock->quantity;
-	    $stock->order_threshold_max = $stock->quantity * 2;
+	    //$stock->order_threshold_max = $stock->quantity * 2;
 	    if ($msg = $stock->store()) {
 	    	if (!isset($messages[$msg])) $messages[$msg] = 0;
 	      $messages[$msg]++;
