@@ -12,9 +12,7 @@
   {{/if}}
   {{foreach from=$listAlertes item=_alerte}}
   {{assign var="_operation" value=$_alerte->_ref_object}}
-  <tr>
     {{mb_include module=dPbloc template=inc_line_alerte is_alerte=1}}
-  </tr>
   {{/foreach}}
   {{if $listNonValidees|@count}}
   <tr>
@@ -22,9 +20,7 @@
   </tr>
   {{/if}}
   {{foreach from=$listNonValidees item=_operation}}
-  <tr>
     {{mb_include module=dPbloc template=inc_line_alerte is_alerte=0}}
-  </tr>
   {{/foreach}}
   {{if $listHorsPlage|@count}}
   <tr>
@@ -32,8 +28,6 @@
   </tr>
   {{/if}}
   {{foreach from=$listHorsPlage item=_operation}}
-  <tr>
     {{mb_include module=dPbloc template=inc_line_alerte is_alerte=0}}
-  </tr>
   {{/foreach}}
 </table>

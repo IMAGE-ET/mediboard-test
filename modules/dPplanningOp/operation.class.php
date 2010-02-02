@@ -404,6 +404,7 @@ class COperation extends CCodable {
     $this->completeField("annulee", "rank", "codes_ccam",
                          "plageop_id", "chir_id", "materiel", "commande_mat");
     $this->loadOldObject();
+    $oldIntervention = $this->_old;
                          
     // Création d'un alerte sur l'intervention
     $msgAlerte = "L'intervention a été";
@@ -492,6 +493,10 @@ class COperation extends CCodable {
       return $msg;
     }
     if($reorder) {
+      if($this->plageop_id && $oldIntervention->plageop_id && $oldIntervention->rank && ($this->plageop_id != $oldIntervention->plageop_id)) {
+        $oldIntervention->loadRefPlageOp();
+        $oldIntervention->_ref_plageop->reorderOp();
+      }
       $this->_ref_plageop->reorderOp();
     }
   }

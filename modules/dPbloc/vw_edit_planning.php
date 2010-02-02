@@ -24,6 +24,7 @@ foreach($listBlocs as &$curr_bloc) {
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 $bloc->loadRefsSalles();
+$nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
 
 $listSalles = $bloc->_ref_salles;
   
@@ -131,6 +132,7 @@ $smarty->assign("listMins"          , CPlageOp::$minutes );
 $smarty->assign("affichages"        , $affichages        );
 $smarty->assign("nbIntervNonPlacees", $nbIntervNonPlacees);
 $smarty->assign("nbIntervHorsPlage" , $nbIntervHorsPlage );
+$smarty->assign("nbAlertesInterv"   , $nbAlertesInterv   );
 $smarty->assign("date"              , $date              );
 $smarty->assign("listSpec"          , $specs             );
 $smarty->assign("plagesel"          , $plagesel          );

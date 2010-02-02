@@ -62,18 +62,22 @@ Main.add(function(){
   <tr>
     <td class="greedyPane" style="text-align:center;">
       {{if $can->edit}}
-      {{if $nbIntervNonPlacees || $nbIntervHorsPlage}}
-        <div class="warning" style="float: right;">
-          {{if $nbIntervNonPlacees}}
+      {{if $nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv}}
+        <div class="warning" style="float: right; text-align:left;">
           <a href="#nothing" onclick="showAlerte()">
-            {{$nbIntervNonPlacees}} interventions non validées<br />
-          </a>
+          {{if $nbAlertesInterv}}
+            {{$nbAlertesInterv}} alerte(s) sur des interventions
+            <br />
+          {{/if}}
+          {{if $nbIntervNonPlacees}}
+            {{$nbIntervNonPlacees}} intervention(s) non validée(s)
+            <br />
           {{/if}}
           {{if $nbIntervHorsPlage}}
-          <a href="#nothing" onclick="showAlerte()">
-            {{$nbIntervHorsPlage}} interventions hors plage
-          </a>
+            {{$nbIntervHorsPlage}} intervention(s) hors plage
+            <br />
           {{/if}}
+          </a>
         </div>
       {{/if}}
       <button class="print" onclick="popPlanning('{{$date}}');" style="font-weight: bold;">
