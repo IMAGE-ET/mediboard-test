@@ -14,17 +14,17 @@ $can->needsEdit();
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
 
-// L'utilisateur doit-il voir les informations médicales
-
+// Chargement des séjours concernés
 $sejour = new CSejour;
 $where = array();
 $where["sejour.entree_reelle"] = "LIKE '$date%'";
 $where["sejour.type"] = "= 'urg'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree_reelle";
+$sejours = $sejour->loadList($where, $order);
 
 $guesses = array();
-$sejours = $sejour->loadList($where, $order);
+$patients = array();
 foreach ($sejours as &$_sejour) {
   $_sejour->loadRefRPU();
 
@@ -33,26 +33,42 @@ foreach ($sejours as &$_sejour) {
 
   // Chargement de l'IPP
   $_sejour->loadRefPatient();
-	$patient =& $_sejour->_ref_patient;
-  $patient->loadIPP();
 	
-  CSQLDataSource::$trace = true;
-	$siblings = $patient->getSiblings();
-	foreach ($siblings as $_sibling) {
-		mbTrace("$_sibling->_view ($_sibling->_id)", "Sibling for $patient->_view");
+	// Classement par patient
+	if (!isset($patients[$_sejour->patient_id])) {
+		$patients[$_sejour->patient_id] = $_sejour->_ref_patient;
 	}
 	
-	$matching = $patient;
-	$matching->loadMatchingPatient(true);
-  CSQLDataSource::$trace = false;
-  mbTrace("$matching->_view ($matching->_id)", "Subling for $patient->_view");
+	$patients[$_sejour->patient_id]->_ref_sejours[$_sejour->_id] = $_sejour;
 }
+
+// Chargement des détails sur les patients
+foreach ($patients as $patient) {
+  $patient->loadIPP();
+	
+	$guess = array();
+  $nicer = array();
+
+	$siblings = $patient->getSiblings();
+  $guess["siblings"] = array_keys($siblings);
+  $nicer["siblings"] = CMbArray::pluck($siblings, "_view");
+	
+  $phonings = $patient->getPhoning($_sejour->_entree);
+  $guess["phonings"] = array_keys($phonings);
+  $nicer["phonings"] = CMbArray::pluck($phonings, "_view");
+	
+//	mbTrace($nicer, "Nicer for $patient->_view");
+	
+	$guesses[$patient->_id] = $guess;
+}
+mbTrace(CMbArray::pluck($patients, "_id"));
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("date", $date);
-$smarty->assign("sejours", $sejours);
+$smarty->assign("patients", $patients );
 
 $smarty->display("inc_identito_vigilance.tpl");
 ?>
