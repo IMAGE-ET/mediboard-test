@@ -43,7 +43,7 @@
       </td>
       
       <td style="text-align: right; padding-right: 1em;">
-        {{mb_value object=$_reference field=price decimals=4}}
+        {{mb_value object=$_reference field=price}}
       </td>
       
       {{if $order_form}}
@@ -74,8 +74,8 @@
       <td style="padding-left: 2em;">{{$_reference->_ref_societe}}</td>
       <td>{{mb_value object=$_reference field=code}}</td>
       <td>{{mb_value object=$_reference field=quantity}} {{mb_value object=$_reference->_ref_product field=packaging}}</td>
-      <td style="text-align: right;">{{mb_value object=$_reference field=_cond_price decimals=4}}</td>
-      <td style="text-align: right; font-weight: bold;">{{mb_value object=$_reference field=_unit_price decimals=4}}</td>
+      <td style="text-align: right;">{{mb_value object=$_reference field=_cond_price}}</td>
+      <td style="text-align: right; font-weight: bold;">{{mb_value object=$_reference field=_unit_price}}</td>
     </tr>
   
 	</tbody>

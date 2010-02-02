@@ -96,13 +96,13 @@ table.print td{
     <td class="category" style="text-align: center; border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=quantity}}</td>
     <td class="category" style="text-align: center; border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=code}}</td>
     <td class="category" style="border: 1px solid black; width: 1%">{{mb_value object=$curr_item field=lapsing_date}}</td>
-    <td class="category" style="border: 1px solid black; width: 1%">{{mb_value object=$curr_item->_ref_order_item field=_price decimals=4}}</td>
+    <td class="category" style="border: 1px solid black; width: 1%">{{mb_value object=$curr_item->_ref_order_item field=_price}}</td>
   </tr>
   
   {{if $smarty.foreach.foreach_products.last}}
   <tr>
     <td colspan="10" style="border-top: 1px solid #666;">
-      <strong style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$reception field=_total decimals=4}}</strong>
+      <strong style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$reception field=_total}}</strong>
     </td>
   </tr>
   {{/if}}
