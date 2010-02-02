@@ -1,6 +1,6 @@
 <!-- $Id: $ -->
 
-{{if $object->_class_name == "CSejour"}}
+{{if $object instanceof CSejour}}
 
 {{if $object->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
 <tr>
@@ -94,7 +94,7 @@
 </tr>
 {{/if}}
 
-{{elseif $object->_class_name == "CConsultation"}}
+{{elseif $object instanceof CConsultation}}
 
 {{if $object->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
 <tr>
