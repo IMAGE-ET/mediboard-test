@@ -313,15 +313,12 @@ class CSejour extends CCodable {
     $collisions = array();
     
     // Ne concerne pas les annulés
-    $this->completeField("annule");
-    $this->completeField("type");
-    $this->completeField("group_id");
+    $this->completeField("annule", "type", "group_id", "patient_id");
     if ($this->annule || $this->type == "urg") {
       return $collisions;
     }
     
     // Test de colision avec un autre sejour
-    $this->completeField("patient_id");
     $patient = new CPatient;
     $patient->load($this->patient_id);
     if (!$patient->_id) {
@@ -351,19 +348,17 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    if ($this->_id || $sejour->_id) {
+    if($this->_id && $sejour->_id && $this->_id == $sejour->_id) {
       return false;
     }
-
-    if ($this->annule || $sejour->annule) {
+    if($this->annule || $sejour->annule) {
+      return false;
+    }
+    if($this->type == "urg" || $sejour->type == "urg") {
       return false;
     }
     
-    if ($this->type == "urg" || $sejour->type == "urg") {
-      return false;
-    }
-    
-    if ($this->group_id != $sejour->group_id) {
+    if($this->group_id != $sejour->group_id) {
       return false;
     }
 		
