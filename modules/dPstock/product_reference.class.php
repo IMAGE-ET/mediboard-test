@@ -83,16 +83,6 @@ class CProductReference extends CMbObject {
     
     $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
   }
-  
-  function updateDBfields(){
-    parent::updateDBFields();
-    
-    $this->completeField("quantity");
-    
-    if ($this->_cond_price) {
-      $this->price = $this->_cond_price * $this->quantity;
-    }
-  }
 
   function loadRefsFwd(){
     $this->loadRefProduct();

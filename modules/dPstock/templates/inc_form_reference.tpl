@@ -62,39 +62,33 @@
     </td>
   </tr>
   
+  {{assign var=sub_quantity value=$reference->_ref_product->quantity}}
   <tr>
-  {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
-    <th>{{mb_label object=$reference field="_cond_price"}}</th>
-    <td>
-      {{* <div style="float: right; display: none;">
-        {{mb_label object=$reference field="price"}}
-        {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                   onchange="this.form._cond_price.value = (this.value/(this.form.quantity.value || 1)).toFixed(2)"}}
-      </div>
-      
-      {{mb_field object=$reference field="_cond_price" increment=1 form=edit_reference decimals=4 min=0 size=5 
-                 onchange="this.form.price.value = this.value*this.form.quantity.value"}}
-       *}}
-       
-      {{mb_field object=$reference field="price" hidden=true}}
-      
-      {{assign var=sub_quantity value=$reference->_ref_product->quantity}}
-      {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
-                 onchange="this.form.price.value = this.value*this.form.quantity.value*$sub_quantity"}}
-    </td>
-  {{else}}
     <th>{{mb_label object=$reference field="price"}}</th>
     <td>
-      <div style="float: right;">
-        {{mb_label object=$reference field="_cond_price"}}
-        {{mb_field object=$reference field="_cond_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
-                   onchange="this.form.price.value = this.value*this.form.quantity.value"}}
-      </div>
-      
       {{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=4 min=0 size=4 
-                 onchange="this.form._cond_price.value = (this.value/(this.form.quantity.value || 1)).toFixed(2)"}}
+                 onchange="\$V(this.form._cond_price, (this.value/(this.form.quantity.value || 1)).toFixed(4))"}}
+      (par {{if $reference->_ref_product->packaging}}
+        n {{$reference->_ref_product->packaging}}{{else}}référence{{/if}})
     </td>
-  {{/if}}
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$reference field="_cond_price"}}</th>
+    <td>
+      {{mb_field object=$reference field="_cond_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
+                 onchange="\$V(this.form._unit_price, (this.value/$sub_quantity))"}}
+      (par {{$reference->_ref_product->packaging|ternary:$reference->_ref_product->packaging:"conditionnement"}})
+    </td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$reference field="_unit_price"}}</th>
+    <td>
+      {{mb_field object=$reference field="_unit_price" increment=1 form=edit_reference decimals=4 min=0 size=4 
+                 onchange="\$V(this.form.price, (this.value*this.form.quantity.value*$sub_quantity).toFixed(4))"}}
+      (par {{$reference->_ref_product->item_title|ternary:$reference->_ref_product->item_title:"unité de délivrance"}})
+    </td>
   </tr>
   
   <tr>
