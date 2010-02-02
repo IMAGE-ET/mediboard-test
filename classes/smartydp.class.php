@@ -102,7 +102,7 @@ function smarty_modifier_currency($value) {
  * Example:  {$value|spancate}
  * @param float $value The value to format
  */
-function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = false, $middle = false) {
+function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
 	CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
 	$truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
 	return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;

@@ -197,42 +197,7 @@ reloadPatient = function(patient_id, link){
      other="vw_idx_patients&patient_id="}}
   
   {{foreach from=$patients item=_patient}}
-  <tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
-    {{/if}}
-    <td class="text">
-      {{if $_patient->_id == $patVitale->_id}}
-      <div style="float:right;">
-        <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
-      </div>
-      {{/if}}
-
-			<a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-        {{mb_value object=$_patient field="_view"}}
-      </a>
-      
-    </td>
-    <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
-          {{mb_value object=$_patient field="naissance"}}
-      	</span>
-      </a>
-    </td>
-    <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-        {{$_patient->adresse}}
-        {{$_patient->cp}}
-        {{$_patient->ville}}
-      </a>
-    </td>
-    <td>
-      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" title="Afficher le dossier complet">
-        Afficher
-      </a>
-    </td>
-  </tr>
+  {{mb_include module=dPpatients template=inc_list_patient_line}}
   {{foreachelse}}
   <tr>
     <td colspan="100"><em>Aucun résultat exact</em></td>
@@ -247,33 +212,7 @@ reloadPatient = function(patient_id, link){
   </tr>
   {{/if}}
   {{foreach from=$patientsSoundex item=_patient}}
-  <tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-    <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
-    {{/if}}
-    <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-        {{mb_value object=$_patient field="_view"}}
-      </a>
-    </td>
-    <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-        {{mb_value object=$_patient field="naissance"}}
-      </a>
-    </td>
-    <td class="text">
-      <a href="#1" onclick="reloadPatient('{{$_patient->_id}}', this);">
-        {{$_patient->adresse}}
-        {{$_patient->cp}}
-        {{$_patient->ville}}
-      </a>
-    </td>
-    <td>
-      <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" title="Afficher">
-        Afficher
-      </a>
-    </td>
-  </tr>
+  {{mb_include module=dPpatients template=inc_list_patient_line}}
   {{/foreach}}
   
 </table>

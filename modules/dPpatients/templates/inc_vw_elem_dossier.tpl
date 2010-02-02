@@ -28,7 +28,7 @@
     </a>
     {{/if}}
   </td>
-  <td {{if $object->annule}}class="cancelled"{{/if}}>
+  <td style="text-align: left;" {{if $object->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_praticien}}
   </td>
 </tr>
@@ -53,7 +53,7 @@
       </span>
     </a>
   </td>
-  <td {{if $_consult->annule}}class="cancelled"{{/if}}>
+  <td style="text-align: left;" {{if $_consult->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
   </td>
 </tr>
@@ -78,7 +78,7 @@
       </span>
     </a>
   </td>
-  <td {{if $curr_op->annulee}}class="cancelled"{{/if}}>
+  <td style="text-align: left;" {{if $curr_op->annulee}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}
   </td>
 </tr>
@@ -113,7 +113,7 @@
     </span>
     </a>
   </td>
-  <td {{if $object->annule}}class="cancelled"{{/if}}>
+  <td style="text-align: left;" {{if $object->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_chir}}
   </td>
 </tr>
