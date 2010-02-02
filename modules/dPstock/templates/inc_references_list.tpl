@@ -8,9 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include module=system template=inc_pagination change_page="changePage" 
-    total=$total current=$start step=15}}
-
 <table class="tbl">
   <tr>
     <th rowspan="2">{{mb_title class=CProductReference field=societe_id}}</th>
@@ -35,7 +32,7 @@
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_ref_product->_guid}}')">
-          {{$_reference->_ref_product->_view|truncate:80}}
+          {{$_reference->_ref_product->_view|truncate:60}}
         </strong>
         {{if !$order_form}}
           </a>

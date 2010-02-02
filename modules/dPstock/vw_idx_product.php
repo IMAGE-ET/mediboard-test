@@ -27,9 +27,9 @@ $product = new CProduct();
 if ($product->load($product_id)) {
   $product->loadRefsBack();
   
-  foreach($product->_ref_references as $key => $value) {
-    $value->loadRefsBack();
-    $value->loadRefsFwd();
+  foreach ($product->_ref_references as $_reference) {
+    $_reference->loadRefProduct();
+    $_reference->loadRefSociete();
   }
 }
 $product->loadRefStock();

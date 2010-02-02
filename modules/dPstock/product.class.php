@@ -89,7 +89,6 @@ class CProduct extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
-    //$this->_view = ($this->code ? "[$this->code] " : '') . $this->name . ($this->packaging ? " ($this->packaging)" : '');
     
     if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
 	    $this->unit_quantity = round($this->unit_quantity);
@@ -101,9 +100,10 @@ class CProduct extends CMbObject {
     	$this->_quantity .= "$this->quantity $this->item_title";
     }
     
-    if ($this->unit_quantity && $this->unit_title) {
-      $this->_quantity .= ($this->_quantity ? " x " : "") . "$this->unit_quantity $this->unit_title";
-    }
+//  Unnecessary. Waiting a few days before total removal
+//    if ($this->unit_quantity && $this->unit_title) {
+//      $this->_quantity .= ($this->_quantity ? " x " : "") . "$this->unit_quantity $this->unit_title";
+//    }
     
     if ($this->item_title && $this->quantity) {
 	    $this->_unit_quantity = ($this->quantity ? $this->quantity : 1);
@@ -124,7 +124,7 @@ class CProduct extends CMbObject {
 
   function loadRefsFwd() {
     $this->_ref_category = $this->loadFwdRef("category_id", true);
-    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+    $this->_ref_societe  = $this->loadFwdRef("societe_id" , true);
   }
   
   // Loads the stock associated to the current group
