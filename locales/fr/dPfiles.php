@@ -159,4 +159,6 @@ $locales['CFile-_sub_dir-desc'] = 'Sous-repertoire de stockage';
 $locales['CFile-_file_size'] = 'Taille';
 $locales['CFile-_file_size-court'] = 'Taille';
 $locales['CFile-_file_size-desc'] = 'Taille du fichier en unité décabinaire';
+$locales['CDocumentItem-next'] = 'Document suivant';
+$locales['CDocumentItem-prev'] = 'Document précédent';
 ?>

@@ -367,9 +367,18 @@ button {
 	padding-bottom: 1px;
 }
 
+button.rtl {
+  text-align: right;
+  padding: 0;
+  padding-left: 2px;
+  padding-right: 0px;
+  padding-bottom: 1px;
+}
+
 a.button {
   height: 16px;
-	padding-right: 4px;
+  padding-left: 1px;
+  padding-right: 4px;
 }
 
 button.notext, 
@@ -395,6 +404,25 @@ a.button:before {
   margin-right: 2px;
 	vertical-align: text-bottom;
 }
+
+/* <hack for="rtl"> is a bit messy, maybe should we use content after, that'd be way more symtrical */ 
+a.button.rtl {
+  height: 13px;
+  padding-top: 4px;
+  padding-left: 4px;
+  padding-right: 0px;
+}
+
+button.rtl:before,
+a.button.rtl:before {
+	float: right;
+  margin-left: 4px;
+}
+
+a.button.rtl:before {
+  margin-top: -3px;
+}
+/* </hack> */
 
 a.button:hover,
 button:hover {
@@ -488,8 +516,16 @@ button.left:before, a.button.left:before {
   content: url(images/buttons/left.png);
 }
 
+button.left-disabled:before, a.button.left-disabled:before {
+  content: url(images/buttons/left-disabled.png);
+}
+
 button.right:before, a.button.right:before {
   content: url(images/buttons/right.png);
+}
+
+button.right-disabled:before, a.button.right-disabled:before {
+  content: url(images/buttons/right-disabled.png);
 }
 
 button.change:before, a.button.change:before {

@@ -13,9 +13,8 @@ window.onbeforeunload= function () {
   <tr>
     <td style="width: 20%">
     {{if $filePrev && !$nonavig}}
-    <a class="button" href="{{$href}}&amp;elementClass={{$filePrev.elementClass}}&amp;elementId={{$filePrev.elementId}}">
-      <img align="top" src="images/icons/prev.png" alt="Fichier précédent" />
-      Document précédent
+    <a class="button left" href="{{$href}}&amp;elementClass={{$filePrev.elementClass}}&amp;elementId={{$filePrev.elementId}}">
+      {{tr}}CDocumentItem-next{{/tr}}
     </a>
     {{/if}}
     </td>
@@ -42,9 +41,9 @@ window.onbeforeunload= function () {
     
     <th style="width:20%">
     {{if $fileNext && !$nonavig}}
-    <a class="button" href="{{$href}}&amp;elementClass={{$fileNext.elementClass}}&amp;elementId={{$fileNext.elementId}}">
-      Document suivant <img align="top" src="images/icons/next.png" alt="Fichier suivant" />
-    </a>
+    <a class="button rtl right" href="{{$href}}&amp;elementClass={{$fileNext.elementClass}}&amp;elementId={{$fileNext.elementId}}">
+      {{tr}}CDocumentItem-next{{/tr}}
+		</a>
     {{/if}}
     </th>
   </tr>

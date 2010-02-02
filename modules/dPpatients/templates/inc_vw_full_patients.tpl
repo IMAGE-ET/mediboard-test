@@ -9,10 +9,10 @@ var ViewFullPatient = {
     if (this.idCurrent) {
       $(this.idCurrent).removeClassName("selected");
     }
-		
+    
     // Select current row
     this.idCurrent = $(eLink).up(1).identify();
-		$(this.idCurrent).addClassName("selected");
+    $(this.idCurrent).addClassName("selected");
   },
   
   main: function() {
@@ -35,10 +35,10 @@ function popEtatSejour(sejour_id) {
  
 </script>
 
-<table class="form">
+<table class="tbl" style="vertical-align: middle;">
 
 <tr>
-  <th class="title" colspan="2">
+  <th class="title" colspan="3">
     <a href="#" onclick="viewCompleteItem('{{$patient->_guid}}'); ViewFullPatient.select(this)">
       {{$patient->_view}} ({{$patient->_age}} ans)
     </a>
@@ -51,16 +51,7 @@ function popEtatSejour(sejour_id) {
         <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" />
       </a>
       {{/if}}
-      <a href="#" 
-        onclick="setObject( {
-          objClass: 'CPatient', 
-          keywords: '', 
-          id: {{$patient->patient_id}}, 
-          view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })"
-        title="{{$patient->_nb_files_docs}} doc(s)">
-        {{$patient->_nb_files_docs}}
-        <img align="top" src="images/icons/{{if !$patient->_nb_files_docs}}next_gray.png{{else}}next.png{{/if}}" title="{{$patient->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />                
-      </a>
+      {{mb_include module=dPpatients template=inc_form_docitems_button object=$patient}}
     </div>
     {{/if}} 
   </th>
@@ -69,15 +60,16 @@ function popEtatSejour(sejour_id) {
 {{if !$app->user_prefs.simpleCabinet}}
 <!-- Séjours -->
 <tr id="sejours-trigger">
-  <th colspan="3" class="title">Séjours</th>
+  <th colspan="4" class="title">Séjours</th>
 </tr>
 <tbody class="patientEffect" style="display: none" id="sejours">
 {{foreach from=$patient->_ref_sejours item=_sejour}}
   {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
     <tr id="CSejour-{{$_sejour->_id}}">
-      <td>
-      	<button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
-         
+      <td style="width: 0.1%;">
+        <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
+      </td>
+			<td>   
         <a href="#" onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$_sejour->_shortview}} 
@@ -88,8 +80,8 @@ function popEtatSejour(sejour_id) {
         </script>
       </td>
     
-    	{{assign var=praticien value=$_sejour->_ref_praticien}}
-      <td {{if $_sejour->annule}}class="cancelled"{{/if}}>
+      {{assign var=praticien value=$_sejour->_ref_praticien}}
+      <td {{if $_sejour->annule}}style="text-align: left;" class="cancelled"{{/if}}>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
       </td>
       
@@ -97,25 +89,18 @@ function popEtatSejour(sejour_id) {
       {{if $_sejour->_canRead}}
         {{if $isImedsInstalled}}
         <div id="labo_for_{{$_sejour->_id}}" style="display: none; float: left;">
-        <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
-          <img src="images/icons/labo.png" title="Résultats de laboratoire" />
-        </a>
+          <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
+            <img src="images/icons/labo.png" title="Résultats de laboratoire" />
+          </a>
         </div>
         <div id="labo_hot_for_{{$_sejour->_id}}" style="display: none; float: left;">
-        <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
-          <img src="images/icons/labo_hot.png" title="Résultats de laboratoire"/>
-        </a>
+          <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
+            <img src="images/icons/labo_hot.png" title="Résultats de laboratoire"/>
+          </a>
         </div>
         {{/if}}
-        <a href="#" onclick="setObject( {
-          objClass: 'CSejour', 
-          keywords: '', 
-          id: {{$_sejour->_id}}, 
-          view:'{{$_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
-          title="{{$_sejour->_nb_files_docs}} doc(s)">
-          {{$_sejour->_nb_files_docs}}
-          <img src="images/icons/next{{if !$_sejour->_nb_files_docs}}_gray{{/if}}.png" title="{{$_sejour->_nb_files_docs}} doc(s)" />
-        </a>
+
+        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_sejour}}
       {{/if}}         
       </td>
     </tr>
@@ -123,7 +108,7 @@ function popEtatSejour(sejour_id) {
     <!-- Parcours des consultation d'un séjour -->
     {{foreach from=$_sejour->_ref_consultations item=_consult}}
     <tr>
-      <td>
+      <td colspan="2">
         <a class="iconed-text {{$_consult->_type}}" style="margin-left: 20px" href="#"
           onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
@@ -135,7 +120,7 @@ function popEtatSejour(sejour_id) {
       {{assign var=praticien value=$_consult->_ref_chir}}
       
       {{if $_consult->annule}}
-      <td class="cancelled">
+      <td style="text-align: left;" class="cancelled">
       {{else}}
       <td>
       {{/if}}
@@ -145,15 +130,7 @@ function popEtatSejour(sejour_id) {
       <td style="text-align: right;">
      
       {{if $_sejour->_canRead}}
-        <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
-          onclick="setObject( {
-            objClass: 'CConsultation', 
-            keywords: '', 
-            id: {{$_consult->_id}}, 
-            view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-          {{$_consult->_nb_files_docs}}
-          <img src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" />
-        </a>
+        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
        {{/if}}
       </td>
     </tr>
@@ -161,7 +138,7 @@ function popEtatSejour(sejour_id) {
   
     {{foreach from=$_sejour->_ref_operations item=_op}}
     <tr>
-      <td>
+      <td colspan="2">
         <a href="#" class="iconed-text interv" style="margin-left: 20px" 
            onclick="viewCompleteItem('{{$_op->_guid}}'); ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
@@ -171,22 +148,14 @@ function popEtatSejour(sejour_id) {
       </td>
     
       {{assign var=praticien value=$_op->_ref_chir}}
-      <td {{if $_op->annulee}}class="cancelled"{{/if}}>
+      <td {{if $_op->annulee}}style="text-align: left;" class="cancelled"{{/if}}>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
       </td>
     
       <td style="text-align:right;">
       {{if $_op->_canRead}}
-        <a href="#" onclick="setObject( {
-          objClass: 'COperation', 
-          keywords: '', 
-          id: {{$_op->operation_id}}, 
-          view:'{{$_op->_view|smarty:nodefaults|JSAttribute}}'} )"
-          title="{{$_op->_nb_files_docs}} doc(s)">
-          {{$_op->_nb_files_docs}}
-          <img src="images/icons/next{{if !$_op->_nb_files_docs}}_gray{{/if}}.png" title="{{$_op->_nb_files_docs}} doc(s)" />
-        </a>
-        {{/if}} 
+        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_op}}
+      {{/if}} 
       </td>
     </tr>
   
@@ -194,10 +163,10 @@ function popEtatSejour(sejour_id) {
     {{if $consult_anesth->_id}}
     {{assign var="_consult" value=$consult_anesth->_ref_consultation}}
     <tr>
-      <td style="padding-left: 20px;">
+      <td colspan="2" style="padding-left: 20px;">
         <span
           {{if $consult_anesth->_id}}class="iconed-text anesth"{{/if}} 
-    		  onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
+          onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')"
           onclick="viewCompleteItem('{{$consult_anesth->_guid}}'); ViewFullPatient.select(this)">
           Consult le {{$_consult->_datetime|date_format:$dPconfig.date}}
         </span>
@@ -205,24 +174,16 @@ function popEtatSejour(sejour_id) {
     
       {{assign var=praticien value=$_consult->_ref_chir}}
       {{if $_consult->annule}}
-      <td class="cancelled">[Consult annulée]</td>
+      <td style="text-align: left;" class="cancelled">[Consult annulée]</td>
       {{else}}
       <td>
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
-    	</td>
+      </td>
       {{/if}}
       
       <td style="text-align:right;">
       {{if $_consult->_canRead}}
-        <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
-          onclick="setObject( {
-            objClass: 'CConsultation', 
-            keywords: '', 
-            id: {{$_consult->consultation_id}}, 
-            view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-          {{$_consult->_nb_files_docs}}
-          <img src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" />
-        </a>
+        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
       {{/if}}
       </td>
     </tr>
@@ -230,7 +191,7 @@ function popEtatSejour(sejour_id) {
   {{/foreach}}
 {{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
   <tr>
-    <td>
+    <td colspan="2">
       {{$_sejour->_shortview}}
     </td>
     <td colspan="2" style="background-color:#afa">
@@ -245,7 +206,7 @@ function popEtatSejour(sejour_id) {
 <!-- Consultations -->
 
 <tr id="consultations-trigger">
-  <th colspan="3" class="title">Consultations</th>
+  <th colspan="4" class="title">Consultations</th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="consultations">
@@ -253,7 +214,7 @@ function popEtatSejour(sejour_id) {
 {{foreach from=$patient->_ref_consultations item=_consult}}
   {{if $_consult->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
   <tr>
-    <td>
+    <td colspan="2">
       <a href="#" class="iconed-text {{$_consult->_type}}"  onclick="viewCompleteItem('{{$_consult->_guid}}'); ViewFullPatient.select(this)">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}');">
           Consult. le {{$_consult->_datetime|date_format:$dPconfig.date}}
@@ -263,30 +224,22 @@ function popEtatSejour(sejour_id) {
     
     {{assign var=praticien value=$_consult->_ref_chir}}
     {{if $_consult->annule}}
-    <td class="cancelled">
+    <td style="text-align: left;" class="cancelled">
     {{else}}
     <td>
     {{/if}}
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
-  	</td>
+    </td>
   
     <td style="text-align:right;">
     {{if $_consult->_canRead}}
-      <a href="#" title="{{$_consult->_nb_files_docs}} doc(s)"
-        onclick="setObject( {
-          objClass: 'CConsultation', 
-          keywords: '', 
-          id: {{$_consult->consultation_id}}, 
-          view: '{{$_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
-        {{$_consult->_nb_files_docs}}
-        <img src="images/icons/next{{if !$_consult->_nb_files_docs}}_gray{{/if}}.png" title="{{$_consult->_nb_files_docs}} doc(s)" />
-      </a>
-      {{/if}}
+      {{mb_include module=dPpatients template=inc_form_docitems_button object=$_consult}}
+    {{/if}}
     </td>
   </tr>
   {{elseif $dPconfig.dPpatients.CPatient.multi_group == "limited" && !$_consult->annule}}
   <tr>
-    <td>
+    <td colspan="2">
       Le {{$_consult->_datetime|date_format:$dPconfig.datetime}}
     </td>
     <td style="background-color:#afa" colspan="2">
@@ -338,10 +291,10 @@ function popEtatSejour(sejour_id) {
   <tr>
     <td class="button">
     {{if @$modules.ecap->mod_active}}
-	    {{mb_include_script module=ecap script=dhe}}
-	    <div id="dhe"></div>
-	    <script type="text/javascript">DHE.register({{$patient->patient_id}}, null, "dhe");</script>
-	  {{else}}
+      {{mb_include_script module=ecap script=dhe}}
+      <div id="dhe"></div>
+      <script type="text/javascript">DHE.register({{$patient->patient_id}}, null, "dhe");</script>
+    {{else}}
       <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
       </a>

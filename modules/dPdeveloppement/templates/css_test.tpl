@@ -1,14 +1,16 @@
 <script type="text/javascript">
 Main.add(function(){
   var buttonClasses = $w("none edit hslip trash submit modify save new print cancel search lookup lock tick down "+
-                      "up left right change add remove stop warning send send-cancel send-again send-problem send-auto");
+    "up left left-disabled right right-disabled change add remove stop warning send send-cancel send-again send-problem send-auto");
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
     buttonsContainers[0].insert('<button class="'+c+' notext">'+c+'</button><br />');
     buttonsContainers[1].insert('<button class="'+c+'">'+c+'</button><br />');
-    buttonsContainers[2].insert('<a href="#1" class="button '+c+' notext">'+c+'</a><br />');
-    buttonsContainers[3].insert('<a href="#1" class="button '+c+'">'+c+'</a><br />');
+    buttonsContainers[2].insert('<button class="rtl '+c+'">'+c+'</button><br />');
+    buttonsContainers[3].insert('<a href="#1" class="button '+c+' notext">'+c+'</a><br />');
+    buttonsContainers[4].insert('<a href="#1" class="button '+c+'">'+c+'</a><br />');
+    buttonsContainers[5].insert('<a href="#1" class="button rtl '+c+'">'+c+'</a><br />');
   });
   
   var tooltip = $("tooltipTpl").clone(true).show();
@@ -65,8 +67,10 @@ Main.add(function(){
   <tr>
     <td></td>
     <td></td>
+    <td style="text-align:right;"></td>
     <td></td>
     <td></td>
+    <td style="text-align:right;"></td>
   </tr>
 </table>
 
