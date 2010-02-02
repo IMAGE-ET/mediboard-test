@@ -1112,7 +1112,14 @@ class CSetupdPpatients extends CSetup {
               ADD `risque_MCJ_chirurgie` ENUM ('sans','avec','NR') DEFAULT 'NR';";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "0.95";
+		$this->makeRevision("0.95");
+		$sql = "ALTER TABLE `constantes_medicales` 
+              ADD `redon` FLOAT UNSIGNED,
+              ADD `diurese` FLOAT UNSIGNED,
+              ADD `injection` VARCHAR (10);";
+		$this->addQuery($sql);
+							
+    $this->mod_version = "0.96";
   }
 }
 

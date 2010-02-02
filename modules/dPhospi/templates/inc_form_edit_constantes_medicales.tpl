@@ -170,7 +170,40 @@ Main.add(function () {
       <td style="text-align: center" title="{{$dates.glycemie|date_format:$dPconfig.datetime}}">{{if $const->glycemie}}{{mb_value object=$const field=glycemie size="4"}}{{/if}}</td>
       <td><input type="checkbox" name="checkbox-constantes-medicales-glycemie"  onchange="toggleGraph('constantes-medicales-glycemie');" tabIndex="100" /></td>
     </tr>
-    {{if $real_context}}
+
+    <tr>
+      <th>{{mb_title object=$constantes field=diurese}} (ml)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=diurese size="4"}}</td>{{/if}}
+      <td style="text-align: center" title="{{$dates.diurese|date_format:$dPconfig.datetime}}">{{if $const->diurese}}{{mb_value object=$const field=diurese size="4"}}{{/if}}</td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-diurese"  onchange="toggleGraph('constantes-medicales-diurese');" tabIndex="100" /></td>
+    </tr>
+		
+    <tr>
+      <th>{{mb_title object=$constantes field=redon}} (ml)</th>
+      {{if $real_context}}<td>{{mb_field object=$constantes field=redon size="4"}}</td>{{/if}}
+      <td style="text-align: center" title="{{$dates.redon|date_format:$dPconfig.datetime}}">{{if $const->redon}}{{mb_value object=$const field=redon size="4"}}{{/if}}</td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-redon"  onchange="toggleGraph('constantes-medicales-redon');" tabIndex="100" /></td>
+    </tr>
+    
+		<tr>
+      <th>{{mb_title object=$constantes field=injection}}</th>
+      {{if $real_context}}
+      <td>
+        {{mb_field object=$constantes field=_inj size="1"}} /
+        {{mb_field object=$constantes field=_inj_essai size="1"}}
+      </td>
+      {{/if}}
+      <td style="text-align: center" title="{{$dates.injection|date_format:$dPconfig.datetime}}">
+        {{if $const->injection}}
+          {{mb_value object=$const field=_inj}} /
+          {{mb_value object=$const field=_inj_essai}}
+        {{/if}}
+      </td>
+      <td><input type="checkbox" name="checkbox-constantes-medicales-injection"  onchange="toggleGraph('constantes-medicales-injection');" tabIndex="100" /></td>
+    </tr>
+		
+		
+		{{if $real_context}}
       {{if $constantes->datetime}}
       <tr>
         <th>{{mb_title object=$constantes field=datetime}}</th>

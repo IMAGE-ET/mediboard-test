@@ -121,6 +121,19 @@ $data['ta'] = array(
   ),
 );
 
+$data['injection'] = array(
+  'series' => array(
+    array(
+      'data' => array(),
+      'label' => 'Nb injections',
+    ),
+    array(
+      'data' => array(),
+      'label' => 'Nb essais',
+    ),
+  ),
+);
+
 // Petite fonction utilitaire de récupération des valeurs
 function getValue($v) {
   return ($v === null) ? null : floatval($v);
@@ -152,6 +165,11 @@ if ($list_constantes) {
     		$field['series'][1]['data'][$i] = array($i, getValue($cst->_ta_diastole), $user_view);
     		continue;
     	}
+			if ($name == 'injection') {
+        $field['series'][0]['data'][$i] = array($i, getValue($cst->_inj), $user_view);
+        $field['series'][1]['data'][$i] = array($i, getValue($cst->_inj_essai), $user_view);
+        continue;
+      }
     	foreach ($field['series'] as &$serie) {
     		$serie['data'][$i] = array($i, getValue($cst->$name), $user_view);
     	}
@@ -258,6 +276,25 @@ $data['glycemie']['options']['yaxis'] = array(
   'min' => getMin(0, $data['glycemie']['series'][0]['data']), // min
   'max' => getMax(4, $data['glycemie']['series'][0]['data']), // max
 );
+
+$data['diurese']['options']['title'] = utf8_encode('Diurèse (ml)');
+$data['diurese']['options']['yaxis'] = array(
+  'min' => getMin(0, $data['diurese']['series'][0]['data']), // min
+  'max' => getMax(2000, $data['diurese']['series'][0]['data']), // max
+);
+
+$data['redon']['options']['title'] = utf8_encode('Redon (ml)');
+$data['redon']['options']['yaxis'] = array(
+  'min' => getMin(0, $data['redon']['series'][0]['data']), // min
+  'max' => getMax(500, $data['redon']['series'][0]['data']), // max
+);
+
+$data['injection']['options']['title'] = utf8_encode('Nombre d\'injections');
+$data['injection']['options']['yaxis'] = array(
+  'min' => getMin(0,  $data['injection']['series'][0]['data']), // min
+  'max' => getMax(10,  $data['injection']['series'][0]['data']), // min
+);
+
 
 // Tableau contenant le nom de tous les graphs
 $graphs = array();

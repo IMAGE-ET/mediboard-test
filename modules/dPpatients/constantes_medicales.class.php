@@ -28,6 +28,9 @@ class CConstantesMedicales extends CMbObject {
   var $score_sedation        = null;
   var $frequence_respiratoire = null;
   var $glycemie              = null;
+  var $redon                 = null;
+  var $diurese               = null;
+  var $injection             = null;
 
   // Object References
   //    Single
@@ -41,6 +44,9 @@ class CConstantesMedicales extends CMbObject {
   var $_imc_valeur           = null;
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
+	var $_inj = null;
+	var $_inj_essai = null;
+  
   
   static $list_constantes = array (
     'poids', 
@@ -55,6 +61,9 @@ class CConstantesMedicales extends CMbObject {
     'frequence_respiratoire',
     'EVA',
 		'glycemie',
+		'redon',
+		'diurese',
+		'injection'
   );
 
   function getSpec() {
@@ -82,10 +91,15 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
 		$specs['glycemie']               = 'float pos max|10';
+	  $specs['redon']                  = 'float pos min|0 max|1000';
+    $specs['diurese']                = 'float pos min|0';
+    $specs['injection']              = 'str maxLength|10';
     $specs['_imc']                   = 'float pos';
     $specs['_vst']                   = 'float pos';
     $specs['_ta_systole']            = 'num pos max|50';
     $specs['_ta_diastole']           = 'num pos max|50';
+		$specs['_inj']                   = 'num pos';
+		$specs['_inj_essai']             = 'num pos moreEquals|_inj';
     return $specs;
   }
 
@@ -129,11 +143,21 @@ class CConstantesMedicales extends CMbObject {
       $this->_ta_systole  = $_ta[0];
       $this->_ta_diastole = $_ta[1];
     }
+		
+		$_injection = explode('|', $this->injection);
+    if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
+      $this->_inj  = $_injection[0];
+      $this->_inj_essai = $_injection[1];
+    }
+		
   }
   
   function updateDBFields() {
     if (!empty($this->_ta_systole) && !empty($this->_ta_diastole)) {
       $this->ta = "$this->_ta_systole|$this->_ta_diastole";
+    }
+    if (!empty($this->_inj) && !empty($this->_inj_essai)) {
+      $this->injection = "$this->_inj|$this->_inj_essai";
     }
   }
   

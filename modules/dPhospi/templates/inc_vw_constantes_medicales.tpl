@@ -144,6 +144,7 @@ initializeGraph(data.{{$name}}, options);
 
 // And we put the the specific options
 data.ta.options.colors = [/*'silver', */'#00A8F0', '#C0D800'];
+data.injection.options.colors = [/*'silver', */'#555', '#AAA'];
 
 data.pouls.options.colors = ['silver', 'black'];
 data.pouls.options.mouse.trackDecimals = 0;
