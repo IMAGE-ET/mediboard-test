@@ -290,8 +290,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       "m" => "M",
       "f" => "F",
     );
-    
-    $this->addAttribute($personnePhysique, "sexe", $sexeConversion[$mbPatient->sexe]);
+    $sexe = $mbPatient->sexe ? $sexeConversion[$mbPatient->sexe] : "I";
+    $this->addAttribute($personnePhysique, "sexe", $sexe);
     
     // Ajout typePersonne
     $this->addPersonne($personnePhysique, $mbPatient ,$light);
@@ -649,7 +649,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       "m" => "M",
       "f" => "F",
     );
-    $this->addAttribute($personne, "sexe", $sexeConversion[$mbPatient->assure_sexe]);  
+    $sexe = $mbPatient->assure_sexe ? $sexeConversion[$mbPatient->assure_sexe] : "I";
+    $this->addAttribute($personne, "sexe", $sexe);  
     $this->addTexte($personne, "nomUsuel", $mbPatient->assure_nom);
     $this->addTexte($personne, "nomNaissance", $mbPatient->assure_nom_jeune_fille);
     $prenoms = $this->addElement($personne, "prenoms");
