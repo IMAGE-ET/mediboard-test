@@ -25,7 +25,7 @@
 	{{assign var=_product value=$_reference->_ref_product}}
   <tbody class="hoverable">
     <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
-      <td colspan="10">
+      <td colspan="7">
         {{if !$order_form}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
