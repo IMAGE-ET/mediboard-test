@@ -1,3 +1,14 @@
+<script type="text/javascript">
+Main.add(function () {
+  updateUnitQuantity(getForm("edit_reference").quantity, "equivalent_quantity");
+  updateUnitQuantity(getForm("edit_reference").mdq, "equivalent_quantity_mdq");
+});
+
+function updateUnitQuantity(element, view) {
+  $(view).update('('+(element.value * element.form._unit_quantity.value)+' '+element.form._unit_title.value+')');
+}
+</script>
+
 <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">{{tr}}CProductReference-title-create{{/tr}}</a>
 <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_reference_aed" />
@@ -49,7 +60,7 @@
   <tr>
     <th>{{mb_label object=$reference field="quantity"}}</th>
     <td>
-      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity')"}}
+      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity'); $('CReference-quantity').update(this.value);"}}
       <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
       <span id="equivalent_quantity"></span>
     </td>
@@ -69,7 +80,7 @@
       {{mb_field object=$reference field="price" increment=1 form=edit_reference min=0 size=4 
                  onchange="\$V(this.form._cond_price, (this.value/(this.form.quantity.value || 1)).toFixed(4))"}}
       (par {{if $reference->_ref_product->packaging}}
-        n {{$reference->_ref_product->packaging}}{{else}}référence{{/if}})
+        <span id="CReference-quantity">{{$reference->quantity}}</span> {{$reference->_ref_product->packaging}}{{else}}référence{{/if}})
     </td>
   </tr>
   

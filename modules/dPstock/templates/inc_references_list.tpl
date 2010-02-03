@@ -16,7 +16,9 @@
     <th style="width: 1%;">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_label class=CProductReference field=societe_id}}</th>
     <th style="width: 1%;">{{mb_title class=CProductReference field=price}}</th>
+    {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
     <th colspan="2" style="width: 1%;">{{mb_title class=CProductReference field=_cond_price}}</th>
+    {{/if}}
     <th colspan="2" style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
     {{if $order_form}}
       <th style="width: 1%;"></th>
@@ -79,15 +81,19 @@
 		  <td style="text-align: right;">
 			  {{mb_value object=$_reference field=price}}
 			 </td>
+			 
+      {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
 		  <td style="text-align: right;">
 		    <label title="{{$_reference->quantity}} {{$_product->packaging}}">
 		      {{mb_value object=$_reference field=quantity}} 
 		    </label>
 		    x
-		 </td>
-		  <td style="text-align: right;">
+		  </td>
+	 	  <td style="text-align: right;">
 			  {{mb_value object=$_reference field=_cond_price}}
 			</td>
+	    {{/if}}
+			
 		  <td style="text-align: right;">
 		    <label title="{{$_reference->quantity}} {{$_product->packaging}} x {{$_product->quantity}} {{$_product->item_title}}">
 		      {{mb_value object=$_reference field=_unit_quantity}} x

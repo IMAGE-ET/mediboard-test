@@ -12,15 +12,9 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  updateUnitQuantity(getForm("edit_reference").quantity, "equivalent_quantity");
-  updateUnitQuantity(getForm("edit_reference").mdq, "equivalent_quantity_mdq");
   filterReferences(getForm("filter-references"));
   Control.Tabs.create("reference-tabs", true);
 });
-
-function updateUnitQuantity(element, view) {
-  $(view).update('('+(element.value * element.form._unit_quantity.value)+' '+element.form._unit_title.value+')');
-}
 
 ProductSelector.init = function(){
   this.sForm      = "edit_reference";
@@ -54,7 +48,9 @@ function filterReferences(form) {
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="">&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
         {{foreach from=$list_categories item=curr_category}} 
-          <option value="{{$curr_category->category_id}}" {{if $filter->category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
+          <option value="{{$curr_category->category_id}}" {{if $filter->category_id==$curr_category->_id}}selected="selected"{{/if}}>
+          	{{$curr_category->name}}
+					</option>
         {{/foreach}}
         </select>
         
