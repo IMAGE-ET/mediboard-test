@@ -86,7 +86,6 @@ Main.add(function(){
         {{else}}
         <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$_protocole->_id}}">
         {{/if}}
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_protocole->_guid}}');">
           <strong>
             {{$_protocole->_ref_chir->_view}}
             {{if $key_type == 'interv'}}
@@ -99,7 +98,6 @@ Main.add(function(){
               {{/if}}
             {{/if}}
           </strong>
-          </span>
         </a>
         {{if $_protocole->duree_hospi}}
         {{$_protocole->duree_hospi}} nuits en
