@@ -13,12 +13,11 @@
   <input type="hidden" name="m" value="system" />
 
   <table class="form">
-  	<tr class="category">
-  		{{tr}}CPlateauTechnique{{/tr}}
-  	</tr>
     {{assign var=class value=CPlateauTechnique}}
-    {{mb_include module=system template=inc_config_bool var=unit_order}}
-    {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
+  	<tr>
+  		<th class="title">{{tr}}{{$class}}{{/tr}}
+  	</tr>
+    {{* mb_include module=system template=inc_config_bool var=infinite_quantity *}}
     
     <tr>
       <td class="button" colspan="100">
