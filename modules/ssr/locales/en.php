@@ -1,2 +1,3 @@
 <?php
+$locales['CPlateauTechnique'] = '';
 ?>
