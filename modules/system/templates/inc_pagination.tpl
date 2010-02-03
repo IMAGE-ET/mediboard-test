@@ -20,7 +20,7 @@
     {{if $current >= $step}}
       <a href="#1" onclick="{{$change_page}}({{$current-$step}}); return false;" class="page">&lt;</a>
     {{else}}
-      <span class="page active">&lt;</span>
+      <span class="page disabled">&lt;</span>
     {{/if}}
   
     {{if $pagination|count > 12}}
@@ -62,7 +62,7 @@
     {{if $current < $last_page*$step}}
       <a href="#1" onclick="{{$change_page}}({{$current+$step}}); return false;" class="page">&gt;</a>
     {{else}}
-      <span class="page active">&gt;</span>
+      <span class="page disabled">&gt;</span>
     {{/if}}
     
   {{/if}}

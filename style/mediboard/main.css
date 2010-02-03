@@ -3462,10 +3462,19 @@ table.active {
   background-image: url(images/buttons/button-over.png);
 }
 
+.pagination .page.active,
+.pagination .page.disabled {
+  cursor: default;
+}
+
 .pagination .page.active {
   border: 1px solid #000; 
   color: #FF4200;
-  cursor: default;
+}
+
+.pagination .page.disabled {
+  border: 1px solid #ccc; 
+  color: #ccc;
 }
 
 .septique{
