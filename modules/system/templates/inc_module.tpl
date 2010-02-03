@@ -3,10 +3,10 @@
       <th>{{mb_title class=CModule field=mod_name}}</th>
       <th>{{mb_title class=CModule field=_view}}</th>
       <th>{{mb_title class=CModule field=mod_type}}</th>
-      <th>{{tr}}Action{{/tr}}</th>
+      <th style="width: 0.1%;">{{tr}}Action{{/tr}}</th>
       {{if $installed}}
       <th>{{mb_title class=CModule field=_dsns}}</th>
-      <th>{{mb_title class=CModule field=_configable}}</th>
+      <th style="width: 0.1%;">{{mb_title class=CModule field=_configable}}</th>
       <th>{{mb_title class=CModule field=mod_version}}</th>
       <th>{{mb_title class=CModule field=mod_active}}</th>
       <th>{{mb_title class=CModule field=mod_ui_active}}</th>
@@ -45,9 +45,9 @@
       <td class="text">
         {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
           {{foreach from=$version item=dependency}}
-            <span style="color: {{if !$dependency->verified}}#050{{else}}#900{{/if}}">
-            {{$dependency->module}} ({{$dependency->revision}}), 
-            </span>
+            <label style="color: {{if $dependency->verified}}#050{{else}}#900{{/if}}" title="{{$dependency->module}}">
+              {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}}), 
+            </label>
           {{/foreach}}
         {{/foreach}}
       </td>
@@ -144,9 +144,9 @@
           {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
             {{foreach from=$version item=dependency}}
               {{if $mbmodule->mod_version < $num_version}}
-              <span style="color: {{if $dependency->verified}}#050{{else}}#500{{/if}}">
-              {{$dependency->module}} ({{$dependency->revision}}), 
-              </span>
+              <label style="color: {{if $dependency->verified}}#050{{else}}#500{{/if}}" title="{{$dependency->module}}">
+                {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}}), 
+              </label>
               {{/if}}
             {{/foreach}}
           {{/foreach}}

@@ -514,7 +514,7 @@ $locales['CMbObject-back-'] = '';
 $locales['CUserLog-extra'] = '';
 $locales['CUserLog-extra-court'] = '';
 $locales['CUserLog-extra-desc'] = '';
-$locales['CModule-_dependencies'] = 'Dépendences';
-$locales['CModule-_dependencies-court'] = 'Dépendences';
-$locales['CModule-_dependencies-desc'] = 'Dépendences à d\'autres modules';
+$locales['CModule-_dependencies'] = 'Dépendances';
+$locales['CModule-_dependencies-court'] = 'Dépendances';
+$locales['CModule-_dependencies-desc'] = 'Dépendances à d\'autres modules';
 ?>

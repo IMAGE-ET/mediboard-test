@@ -46,13 +46,10 @@ foreach($setupClasses as $setupClass) {
 
 foreach($mbmodules as $typeModules) {
   foreach($typeModules as $module) {
-    foreach($module->_dependencies as $dependency_version) {
-      foreach($dependency_version as $dependency) {
-        if(isset($mbmodules["installed"][$dependency->module]) && $mbmodules["installed"][$dependency->module]->mod_version >= $dependency->revision) {
-          $dependency->verified = 1;
-        } else {
-          $dependency->verified = 0;
-        }
+    foreach($module->_dependencies as $version => $dependencies) {
+      foreach($dependencies as $dependency) {
+      	$installed = $mbmodules["installed"];
+        $dependency->verified = isset($installed[$dependency->module]) && $installed[$dependency->module]->mod_version >= $dependency->revision;
       }
     }
   }
