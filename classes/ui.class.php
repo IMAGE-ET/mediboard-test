@@ -558,7 +558,7 @@ class CAppUI {
     $sibling->loadMatchingObject();
     $sibling->loadRefMediuser();
     
-    if ($sibling->_ref_mediuser->_id && !$sibling->_ref_mediuser->actif) {
+    if ($sibling->_ref_mediuser && $sibling->_ref_mediuser->_id && !$sibling->_ref_mediuser->actif) {
       self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
       return false;
     }

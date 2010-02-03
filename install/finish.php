@@ -47,7 +47,7 @@ function checkForm(oForm) {
   sécurisé. Il est obligatoire de fournir un mot de passe administrateur sûr.
 </p>
 
-<div class="big-warning">
+<div class="small-warning">
   L'administrateur a pour login admin. Attention, toute la sécurité du système se résume à la sécurité de ce mot de passe. 
   Il est recommandé d'utiliser une séquence de plus de 4 caractères composée de lettres, 
   minuscules et majuscules, de chiffres et d'autres symboles comme @$%^, etc.
@@ -119,7 +119,7 @@ if (@$_POST["changePassword"]) {
 <?php
 if (@$_POST["changePassword"] and $password != "admin") {
 ?>
-<div class="big-success">
+<div class="small-success">
   Félicitations !
   <br />Le framework de Mediboard est maintenant opérationnel.
 </div>
@@ -131,7 +131,7 @@ if (@$_POST["changePassword"] and $password != "admin") {
   nécessaire d'installer et paramétrer un par un les modules que vous souhaitez utiliser.
 </p>
 
-<div class="big-info">
+<div class="small-info">
 A l'heure actuelle, les couplages inter-modules sont encore assez importants, 
 c'est pourquoi il est recommandé sinon obligatoire de tous les installer, quitte à les
 désactiver ou les masquer du menu principal (<em>cf.</em> Administration des modules).

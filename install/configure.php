@@ -66,6 +66,7 @@ showHeader();
       <div style="float: right">
       <?php
         $rootName = basename($dPconfig["root_dir"]);
+        require_once("../classes/ui.class.php");
         require_once("../classes/sharedmemory.class.php");
         require_once("../modules/system/httpreq_do_empty_shared_memory.php");
       ?>

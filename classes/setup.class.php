@@ -232,14 +232,16 @@ class CSetup {
         }
       }
       
-      $mbConfig = new CMbConfig;
-      $mbConfig->load();
-      // Move conf
-      foreach ($this->config_moves[$currRevision] as $config) {
-        $mbConfig->set($config[1], $mbConfig->get($config[0]));
-        $mbConfig->set($config[0], null); 
+      if (count($this->config_moves[$currRevision])) {
+        $mbConfig = new CMbConfig;
+        $mbConfig->load();
+        // Move conf
+        foreach ($this->config_moves[$currRevision] as $config) {
+          $mbConfig->set($config[1], $mbConfig->get($config[0]));
+          $mbConfig->set($config[0], null); 
+        }
+        $mbConfig->update($mbConfig->values);
       }
-      $mbConfig->update($mbConfig->values);
 
     } while ($currRevision = next($this->revisions));
 
