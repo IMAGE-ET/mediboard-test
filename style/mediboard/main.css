@@ -1347,14 +1347,16 @@ div.big-error {
   cursor: pointer;
 }
 
-div.tooltip {
+div.tooltip, 
+div.postit {
   padding: 0px;
   margin-left: 20px;
   position: absolute;
   z-index: 30;
 }
 
-div.tooltip table.decoration {
+div.tooltip table.decoration,
+div.postit table.decoration {
   border-spacing: 0px;
   border: none;
 }
@@ -1400,18 +1402,6 @@ div.tooltip table.decoration td.content {
   background: #fff;
   border: 2px solid #777;
 	padding: 5px;
-}
-
-div.postit {
-  padding: 0px;
-  margin-left: 20px;
-  position: absolute;
-  z-index: 30;
-}
-
-div.postit table.decoration {
-  border-spacing: 0px;
-  border: none;
 }
 
 div.postit table.decoration td {

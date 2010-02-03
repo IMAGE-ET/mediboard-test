@@ -27,11 +27,10 @@ var MedSelector = {
   },
   prepared : {
     code: null,
-    nom:null
+    nom: null
   },
 
   pop: function() {
-    var oForm = document[this.sForm];
     this.oUrl = new Url();
     if(this.sSearch) {
       this.oUrl.addParam(this.sOnglet, this.sSearch);
@@ -48,6 +47,7 @@ var MedSelector = {
     
     this.oUrl.popup(this.options.width, this.options.height, "Medicament Selector");
   },
+  
   set: function(nom, code_cip, code_ucd, code_cis) {
     this.prepared.nom = nom;
     
@@ -67,7 +67,7 @@ var MedSelector = {
   },
   
   doSet: function(){
-    var oForm = document[MedSelector.sForm];
+    var oForm = getForm(MedSelector.sForm);
     $V(oForm[MedSelector.sView], MedSelector.prepared.nom);
     if (MedSelector.prepared.code) {
 		  $V(oForm[MedSelector.sCode], MedSelector.prepared.code);
@@ -79,9 +79,9 @@ var MedSelector = {
       $V(oForm[MedSelector.sCodeCIS], MedSelector.prepared.codeCIS);
     }
   },
-      
-  // Peut être appelé sans contexte : ne pas utiliser this
+  
   close: function() {
+    // Peut être appelé sans contexte : ne pas utiliser this
     MedSelector.oUrl.close();
   }
 }

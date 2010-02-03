@@ -21,9 +21,8 @@ var EquivSelector = {
     width : 700,
     height: 400
   },
-
+  
   pop: function() {
-    var oForm = document[this.sForm];
     this.oUrl = new Url("dPmedicament", "vw_equivalents");
     this.oUrl.addParam("code_cip", this.sCodeCIP);
     this.oUrl.addParam("line_id", this.sLine);
@@ -31,14 +30,10 @@ var EquivSelector = {
     this.oUrl.popup(this.options.width, this.options.height, "Equivalent Selector");
   },
   
-  set: function(code, line) {
-    var oForm = document[this.sForm];
-    oForm[this.sView].value = nom;
-  },
+  set: function(code, line) {},
   
-  // Peut être appelé sans contexte : ne pas utiliser this
   close: function() {
+    // Peut être appelé sans contexte : ne pas utiliser this
     EquivSelector.oUrl.close();
   }
-  
-}
+};

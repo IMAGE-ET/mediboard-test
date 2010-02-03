@@ -65,12 +65,12 @@ Main.add(function(){
       
 <table style="width: 0.1%;" id="buttons">
   <tr>
-    <td></td>
-    <td></td>
-    <td style="text-align:right;"></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right;"></td>
+    <td title="button.notext"></td>
+    <td title="button"></td>
+    <td title="button.rtl" style="text-align:right;"></td>
+    <td title="a.button.notext"></td>
+    <td title="a.button"></td>
+    <td title="a.button.rtl" style="text-align:right;"></td>
   </tr>
 </table>
 
