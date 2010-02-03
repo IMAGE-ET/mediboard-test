@@ -29,23 +29,15 @@
   
 </form>
 
-<div style="font-size: 1.1em; text-align: center">
+<div style="font-size: 1.1em; text-align: center" class="pagination">
 {{foreach from=$tabLettre item=_lettre}}
-  <a href="#" onclick="Livret.reloadAlpha('{{$_lettre}}')">
-    {{if $lettre == $_lettre}}
-      <strong>[{{$_lettre}}]</strong>
-    {{else}}
-      {{$_lettre}}
-    {{/if}}
+  <a href="#" onclick="Livret.reloadAlpha('{{$_lettre}}')" class="page {{if $lettre == $_lettre}}active{{/if}}">
+    {{$_lettre}}
   </a>
 {{/foreach}}
   - 
-  <a href="#" onclick="Livret.reloadAlpha('hors_T2A')">
-    {{if $lettre == "hors_T2A"}}
-      <strong>[Hors T2A]</strong>
-    {{else}}
-      Hors T2A
-    {{/if}}
+  <a href="#" onclick="Livret.reloadAlpha('hors_T2A')" class="page {{if $lettre == "hors_T2A"}}active{{/if}}">
+    Hors T2A
   </a>
 </div>
 

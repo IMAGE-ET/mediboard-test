@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include module=system template=inc_pagination change_page="changePage" 
+    total=$total current=$start step=15}}
+
 <table class="tbl">
   <tr>
     <th style="width: 1%;">{{mb_title class=CProductReference field=code}}</th>

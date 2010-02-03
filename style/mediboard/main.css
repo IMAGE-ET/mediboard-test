@@ -3441,19 +3441,31 @@ table.active {
 .pagination {
   text-align: center; 
   font-weight: bold; 
-  margin: 2px; 
+  margin: 1px; 
 }
 
 .pagination .page {
   display: inline-block; 
   border: 1px solid #999; 
-  padding: 1px 3px;
+  padding: 1px 4px;
   margin: 1px;
+  margin-right: 0;
+  color: #555;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background: url(images/buttons/button.png) center center repeat-x;
+}
+
+.pagination .page:hover {
+  text-decoration: none;
+  background-image: url(images/buttons/button-over.png);
 }
 
 .pagination .page.active {
-  border: 1px solid #ccc; 
-  color: #ccc;
+  border: 1px solid #000; 
+  color: #FF4200;
+  cursor: default;
 }
 
 .septique{
