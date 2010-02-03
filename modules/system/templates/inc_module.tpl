@@ -10,8 +10,9 @@
       <th>{{mb_title class=CModule field=mod_version}}</th>
       <th>{{mb_title class=CModule field=mod_active}}</th>
       <th>{{mb_title class=CModule field=mod_ui_active}}</th>
-      <th colspan="2">{{mb_title class=CModule field=mod_ui_order}}</th>
+      <th>{{mb_title class=CModule field=mod_ui_order}}</th>
       {{/if}}
+      <th>{{mb_title class=CModule field=_dependencies}}</th>
     </tr>
     
     {{foreach from=$object item=mbmodule}}
@@ -33,13 +34,22 @@
   
       <td>{{mb_value object=$mbmodule field=mod_type}}</td>
   
-      <td colspan="10">
+      <td>
         {{if $can->edit}}
         <a class="button new action" href="{{$cmd}}=install">
           {{tr}}Install{{/tr}} &gt;
           {{mb_value object=$mbmodule field=_latest}}
         </a>
         {{/if}}
+      </td>
+      <td class="text">
+        {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
+          {{foreach from=$version item=dependency}}
+            <span style="color: {{if !$dependency->verified}}#050{{else}}#900{{/if}}">
+            {{$dependency->module}} ({{$dependency->revision}}), 
+            </span>
+          {{/foreach}}
+        {{/foreach}}
       </td>
     </tr>
   
@@ -81,7 +91,6 @@
         </a>
         {{/if}}
       </td>
-      
       {{if $installed}}
         <td>
           {{if count($mbmodule->_dsns)}}
@@ -130,6 +139,17 @@
             <area coords="0,8,10,14" href="{{$cmd}}=movedn" />
           </map>
           {{/if}}
+        </td>
+        <td class="text">
+          {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
+            {{foreach from=$version item=dependency}}
+              {{if $mbmodule->mod_version < $num_version}}
+              <span style="color: {{if $dependency->verified}}#050{{else}}#500{{/if}}">
+              {{$dependency->module}} ({{$dependency->revision}}), 
+              </span>
+              {{/if}}
+            {{/foreach}}
+          {{/foreach}}
         </td>
       {{/if}}
     </tr>

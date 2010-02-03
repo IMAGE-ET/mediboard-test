@@ -31,18 +31,33 @@ foreach($setupClasses as $setupClass) {
   $mbmodule->compareToSetup($setup);
 	
   if ($mbmodule->mod_ui_order == 100) {
-    $mbmodules["notInstalled"][] = $mbmodule;
+    $mbmodules["notInstalled"][$mbmodule->mod_name] = $mbmodule;
   } 
   else {
-    $mbmodules["installed"][] = $mbmodule;
+    $mbmodules["installed"][$mbmodule->mod_name] = $mbmodule;
     if ($mbmodule->_upgradable) {
       $upgradable = true;
     }
   }
   if ($mbmodule->mod_type == "core" && $mbmodule->_upgradable) {
-    $coreModules[] = $mbmodule;
+    $coreModules[$mbmodule->mod_name] = $mbmodule;
   }
 }
+
+foreach($mbmodules as $typeModules) {
+  foreach($typeModules as $module) {
+    foreach($module->_dependencies as $dependency_version) {
+      foreach($dependency_version as $dependency) {
+        if(isset($mbmodules["installed"][$dependency->module]) && $mbmodules["installed"][$dependency->module]->mod_version >= $dependency->revision) {
+          $dependency->verified = 1;
+        } else {
+          $dependency->verified = 0;
+        }
+      }
+    }
+  }
+}
+
 
 // Ajout des modules installés dont les fichiers ne sont pas présents
 if (count(CModule::$absent)) {

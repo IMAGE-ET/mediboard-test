@@ -44,10 +44,11 @@ class CModule extends CMbObject {
   var $mod_ui_order  = null; // UI Position
 
   // Form Fields
-  var $_latest     = null;
-  var $_upgradable = null;
-  var $_configable = null;
+  var $_latest        = null;
+  var $_upgradable    = null;
+  var $_configable    = null;
   var $_files_missing = null;
+  var $_dependencies  = null;
   
   // Other fields
   var $_dsns = null;
@@ -112,6 +113,7 @@ class CModule extends CMbObject {
     $props["_latest"]       = "str notNull maxLength|6";
     $props["_upgradable"]   = "bool";
     $props["_configable"]   = "bool";
+    $props["_dependencies"] = "str";
     
     $props["_dsns"]   = "";
     
@@ -130,6 +132,7 @@ class CModule extends CMbObject {
     $this->_upgradable = $this->mod_version != $this->_latest;
     $this->_configable = is_file("modules/$this->mod_name/configure.php");
     $this->_dsns = $setup->getDatasources();
+    $this->_dependencies = $setup->dependencies;
     
     if (!$this->_id) {
       $this->mod_ui_order = 100;
