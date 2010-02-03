@@ -96,8 +96,8 @@ class CFloatSpec extends CMbFieldSpec {
     if ($new_value !== null) $value = $new_value;
     
     $decimals = CMbArray::extract($params, "decimals");
-    if ($decimals == null && isset($this->precise)) {
-      $decimals = $this->precise ? 4 : 2;
+    if ($decimals == null) {
+      $decimals = isset($this->precise) ? 4 : 2;
     }
     
     $step = $this->checkNumeric(CMbArray::extract($params, "step"));
