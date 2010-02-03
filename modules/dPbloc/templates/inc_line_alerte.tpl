@@ -1,5 +1,5 @@
 <tr {{if $is_alerte}}id="{{$_alerte->_guid}}"{{/if}}>
-  <td>{{$_operation->_ref_plageop->date|date_format:$dPconfig.date}}</td>
+  <td>{{$_operation->_datetime|date_format:$dPconfig.date}}</td>
   <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}</td>
   <td>{{$_operation->_ref_salle->_view}}</td>
   <td class="text">

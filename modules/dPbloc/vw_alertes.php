@@ -72,6 +72,7 @@ $order = "operations.date, operations.chir_id";
 $listHorsPlage = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach($listHorsPlage as &$op) {
+  $op->loadRefPlageOp();
   $op->loadExtCodesCCAM();
   $op->loadRefPraticien();
   $op->updateSalle();
