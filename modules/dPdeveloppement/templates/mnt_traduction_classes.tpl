@@ -38,7 +38,7 @@ Main.add(function () {
 
 
 <!-- Modification des items -->
-<form action="?m=dPdeveloppement" name="translate" method="post">
+<form action="?m=dPdeveloppement" name="translate" method="post" class="prepared">
 
 <input type="hidden" name="m" value="dPdeveloppement" />
 <input type="hidden" name="tab" value="mnt_traduction_classes" />

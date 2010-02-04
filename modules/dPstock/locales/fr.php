@@ -884,4 +884,5 @@ $locales['config-dPstock-CProductReference-mask_cond_price'] = '';
 $locales['config-dPstock-CProductReference-mask_cond_price-desc'] = '';
 $locales['config-dPstock-CProductReference-use_mdq'] = 'Utiliser les quantités minimales de commande';
 $locales['config-dPstock-CProductReference-use_mdq-desc'] = 'Utiliser les quantités minimales de commande dans les références';
+$locales['CProduct-failed-code'] = 'Un produit avec ce code existe déjà';
 ?>

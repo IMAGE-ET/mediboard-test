@@ -51,6 +51,7 @@ class CProduct extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'product';
     $spec->key   = 'product_id';
+    $spec->uniques["code"] = array("code");
     return $spec;
   }
 
@@ -141,33 +142,28 @@ class CProduct extends CMbObject {
     if(!$this->_ref_category) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_category->getPerm($permType));
+    return $this->_ref_category->getPerm($permType);
   }
   
-  function check() {
-  	if ($msg = parent::check()) {
-  		return $msg;
-  	}
-
-  	$this->completeField('code', 'quantity', 'unit_quantity');
-  	
-  	if(!$this->quantity)          $this->quantity = 1;
-    if($this->unit_quantity == 0) $this->unit_quantity = '';
-
-  	if ($this->code) {
-	    $product = new CProduct();
-	    $product->code = $this->code;
-	    $duplicates = $product->loadMatchingList();
-	    if ($this->_id) {
-		    foreach ($duplicates as $id => &$duplicate) {
-		    	if ($duplicate->_id == $this->_id) {
-		    	  unset($duplicates[$id]);
-		    	}
-		    }
-	    }
+  function updateDBFields(){
+    $this->completeField('quantity', 'unit_quantity');
     
-      if (count($duplicates)) return 'Un produit avec ce code existe déjà';
-  	}
+    if(!$this->quantity)          $this->quantity = 1;
+    if($this->unit_quantity == 0) $this->unit_quantity = '';
+    
+    return parent::updateDBFields();
+  }
+  
+  function store() {
+    if ($this->fieldModified("cancelled", 1)) {
+      $references = $this->loadBackRefs("references");
+      foreach($references as $_ref) {
+        $_ref->cancelled = 1;
+        $_ref->store();
+      }
+    }
+    
+    return parent::store();
   }
 }
 ?>

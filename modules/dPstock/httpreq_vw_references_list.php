@@ -17,6 +17,10 @@ $keywords     = CValue::getOrSession('keywords');
 $reference_id = CValue::getOrSession('reference_id');
 $order_form   = CValue::get('order_form');
 $start        = CValue::get('start', 0);
+$show_all     = CValue::get('show_all');
+
+// Don't user getOrSession as we don't want to get it from session
+CValue::setSession("show_all", $show_all);
 
 $where = array();
 if ($category_id) {
@@ -30,6 +34,9 @@ if ($keywords) {
               product.code LIKE '%$keywords%' OR 
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
+}
+if (!$show_all) {
+  $where[] = "product_reference.cancelled = '0' OR product_reference.cancelled IS NULL";
 }
 $orderby = 'product.name ASC';
 

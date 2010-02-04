@@ -82,7 +82,8 @@ function array_duplicates($array, $field) {
 foreach ($list_selected_classes as $curr_class_name) {
   $object = new $curr_class_name;
   
-  if ($object->_spec->table) {
+  if (!$object->_spec->table) continue;
+  
   $list_classes[$curr_class_name] = array();
   $class = &$list_classes[$curr_class_name];
   
@@ -98,9 +99,10 @@ foreach ($list_selected_classes as $curr_class_name) {
     $class['fields'][$k] = array();
     
     // object fields
-    $class['fields'][$k]['object'] = array();
-    $class['fields'][$k]['object']['spec'] = null;
-    $class['fields'][$k]['object']['db_spec'] = null;
+    $class['fields'][$k]['object'] = array(
+      'spec' => null,
+      'db_spec' => null
+    );
     
     $class['fields'][$k]['db'] = null;
     
@@ -111,7 +113,7 @@ foreach ($list_selected_classes as $curr_class_name) {
       //mbTrace($spec);
       $class['fields'][$k]['object']['db_spec'] = extract_props($spec->getDBSpec());
       
-      $specs_obj = $object->getSpecs();
+      //$specs_obj = $object->getSpecs();
       $db_spec = &$class['fields'][$k]['object']['db_spec'];
       $db_spec['index'] = (isset($spec->class) || 
                            $spec instanceof CDateTimeSpec || 
@@ -119,17 +121,25 @@ foreach ($list_selected_classes as $curr_class_name) {
                            //$spec instanceof CTimeSpec || 
                            $k == $class['key']);
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
+      
+      $default = null;
+      if (isset($spec->default)) {
+        if ($spec->default === "NULL") {
+          $default = "NULL";
+        }
+        else if ($spec->default !== null) {
+          $default = "'{$spec->default}'";
+        }
+      }
+      
+      $db_spec['default'] = $default;
+      
       if ($is_key) {
         $db_spec['unsigned'] = true;
       }
       if ($k == $class['key']) {
         $db_spec['extra'] = 'auto_increment';
       }
-      $db_spec['default'] = (isset($specs_obj['default']) ? 
-                            $specs_obj['default'] : 
-                            (isset($specs_obj['defaultOption']) ?
-                              $specs_obj['defaultOption'] :
-                              ''));
     }
     $class['fields'][$k]['db'] = null;
   }
@@ -189,7 +199,6 @@ foreach ($list_selected_classes as $curr_class_name) {
     $class['duplicates'] = array();
   }
   $class['suggestion'] = null;
-  }
 }
 
 //mbTrace($class);
@@ -268,6 +277,7 @@ function get_query_for_class($class, $errors = array()) {
         $errors['params']   && ($spec_obj['params']   != $spec_db['params']) ||
         $errors['unsigned'] && ($spec_obj['unsigned'] != $spec_db['unsigned']) ||
         $errors['zerofill'] && ($spec_obj['zerofill'] != $spec_db['zerofill']) ||
+        $errors['default']  && ($spec_obj['default']  != $spec_db['default']) ||
         $errors['extra']    && ($spec_obj['extra']    != $spec_db['extra']) ||
         $errors['null']     && ($spec_obj['null']     != $spec_db['null'])) {
           
@@ -285,12 +295,14 @@ function get_query_for_class($class, $errors = array()) {
       if (count($spec_obj['params']) > 0) {
         $change[$name] .= ' (' . implode(',', $spec_obj['params']) . ')';
       }
+      
       $change[$name] .=
-         ($spec_obj['unsigned']?' UNSIGNED':'').
-         ($spec_obj['zerofill']?' ZEROFILL':'').
-         ($spec_obj['null']?'':' NOT NULL').
-         ($spec_obj['extra']?" {$spec_obj['extra']}":'').
-         (($name == $class['key'])?' PRIMARY KEY':'');
+         ($spec_obj['unsigned'] ? ' UNSIGNED' : '').
+         ($spec_obj['zerofill'] ? ' ZEROFILL' : '').
+         ($spec_obj['null']     ? '' : ' NOT NULL').
+         ($spec_obj['default'] !== null ? " DEFAULT {$spec_obj['default']}" : '').
+         ($spec_obj['extra']    ? " {$spec_obj['extra']}" : '').
+         (($name == $class['key']) ? ' PRIMARY KEY' : '');
     }
     
     // creation des lignes d'ajout suppression des index

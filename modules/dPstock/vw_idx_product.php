@@ -17,6 +17,7 @@ $product_id  = CValue::getOrSession('product_id', null);
 $societe_id  = CValue::getOrSession('societe_id');
 $category_id = CValue::getOrSession('category_id');
 $keywords    = CValue::getOrSession('keywords');
+$show_all     = CValue::getOrSession('show_all');
 
 $filter = new CProduct;
 $filter->societe_id = $societe_id;
@@ -52,6 +53,7 @@ $smarty->assign('list_potential_manufacturers', $list_potential_manufacturers);
 
 $smarty->assign('filter',          $filter);
 $smarty->assign('keywords',        $keywords);
+$smarty->assign('show_all',        $show_all);
 
 $smarty->display('vw_idx_product.tpl');
 

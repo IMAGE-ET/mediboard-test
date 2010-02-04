@@ -16,6 +16,10 @@ $societe_id  = CValue::getOrSession('societe_id');
 $product_id  = CValue::getOrSession('product_id');
 $start       = CValue::getOrSession('start');
 $keywords    = CValue::getOrSession('keywords');
+$show_all    = CValue::get('show_all');
+
+// Don't user getOrSession as we don't want to get it from session
+CValue::setSession("show_all", $show_all);
 
 $where = array();
 if ($category_id) {
@@ -28,6 +32,9 @@ if ($keywords) {
   $where[] = "`code` LIKE '%$keywords%' OR 
               `name` LIKE '%$keywords%' OR 
               `description` LIKE '%$keywords%'";
+}
+if (!$show_all) {
+  $where[] = "cancelled = '0' OR cancelled IS NULL";
 }
 $orderby = 'name, code';
 

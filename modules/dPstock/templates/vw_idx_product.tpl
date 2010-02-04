@@ -43,6 +43,12 @@ function filterReferences(form) {
         
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
+        
+        <br />
+        <label>
+          <input type="checkbox" name="show_all" {{if $show_all}}checked="checked"{{/if}} onchange="$V(this.form.start,0); this.form.onsubmit();" />
+          Afficher les archivés
+        </label>
       </form>
 
       <div id="list-products"></div>

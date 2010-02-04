@@ -97,6 +97,7 @@
                     {{if $curr_field.object.db_spec.zerofill}}ZEROFILL{{/if}}
                   
                     {{if !$curr_field.object.db_spec.null}}NOT NULL{{/if}}
+                    {{if $curr_field.object.db_spec.default !== null}}DEFAULT {{$curr_field.object.db_spec.default}}{{/if}}
                 {{else}}
                   <div class="error">
                     Pas de spec pour cette colonne

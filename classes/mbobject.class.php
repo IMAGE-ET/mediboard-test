@@ -18,7 +18,7 @@ CAppUI::requireSystemClass("mbObjectSpec");
  */
 class CMbObject {
   static $objectCount = 0;
-  static $objectCache = array();
+  private static $objectCache = array();
   static $cachableCounts = array();
   static $handlers = null;
   
@@ -298,7 +298,7 @@ class CMbObject {
     }
     
     // Check against a specific value
-    if ($value !== null && $this->$field !== $value) {
+    if ($value !== null && $this->$field != $value) {
       return false;
     }
     
