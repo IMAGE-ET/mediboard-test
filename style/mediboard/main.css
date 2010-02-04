@@ -3150,7 +3150,7 @@ table.tbl th.arretee, table.tbl td.arretee{
 	background-image: url(images/icons/ray.gif);
 }
 
-table.tbl th.traitement, table.tbl td.traitement {
+table.tbl th.traitement, table.tbl td.traitement, table.tbl tr:hover td.traitement {
   background-color: #bdb;
 }
 

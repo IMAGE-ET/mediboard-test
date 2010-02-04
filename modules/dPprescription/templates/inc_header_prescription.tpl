@@ -232,8 +232,11 @@ Main.add( function(){
   <tr>
     <th class="title text" colspan="3">			
       <!-- Selection du praticien prescripteur de la ligne -->
-       <div style="float: right">
-        {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
+       {{if $mode_pharma}}
+         <button style="float: left" type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+        {{/if}}
+			 <div style="float: right">
+       	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 						<optgroup label="Responsables">
