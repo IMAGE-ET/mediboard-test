@@ -55,30 +55,37 @@ if($prescription->object_id) {
 
 $lines = array();
 $lines["prescription"] = $prescription->_ref_prescription_lines;
-	  
+
+$list_cip_med = array();
 foreach($lines as &$lines_by_type) {
   foreach($lines_by_type as &$line){
     $line->loadRefsPrises();
-	  // Ajout des produits pour les alertes
-	  if($prescription->object_id){
-	    $allergies->addProduit($line->code_cip);
-	    $profil->addProduit($line->code_cip);
-	  }
-	  $interactions->addProduit($line->code_cip);
-	  $IPC->addProduit($line->code_cip);
-  }
+		if(!in_array($line->code_cip, $list_cip_med)){
+    	$list_cip_med[] = $line->code_cip;
+		  if($prescription->object_id){
+		    $allergies->addProduit($line->code_cip);
+		    $profil->addProduit($line->code_cip);
+		  }
+		  $interactions->addProduit($line->code_cip);
+		  $IPC->addProduit($line->code_cip);
+		}
+	}
 }
-  
+
+$list_cip_perf = array();
 $prescription->loadRefsPerfusions();
 foreach($prescription->_ref_perfusions as $_perfusion){
   $_perfusion->loadRefsLines();
   foreach($_perfusion->_ref_lines as $_perf_line){
-    if($prescription->object_id){
-      $allergies->addProduit($_perf_line->code_cip);
-      $profil->addProduit($_perf_line->code_cip);  
-    }
-    $interactions->addProduit($_perf_line->code_cip);
-    $IPC->addProduit($_perf_line->code_cip);
+  	if(!in_array($_perf_line->code_cip, $list_cip_perf)){
+  		$list_cip_perf[] = $_perf_line->code_cip;
+	    if($prescription->object_id){
+	      $allergies->addProduit($_perf_line->code_cip);
+	      $profil->addProduit($_perf_line->code_cip);  
+	    }
+	    $interactions->addProduit($_perf_line->code_cip);
+	    $IPC->addProduit($_perf_line->code_cip);
+		}
   }
 }
 

@@ -233,24 +233,36 @@ if($prescription->_id){
 	  $surdosage    = new CBcbControleSurdosage();
 	  $surdosage->setPrescription($prescription);
 	  
+		$list_cip_perf = array();
 	  foreach($prescription->_ref_perfusions as $_perfusion){
 	    foreach($_perfusion->_ref_lines as $_perf_line){
-	      if($prescription->object_id){
-	        $allergies->addProduit($_perf_line->code_cip);
-	        $profil->addProduit($_perf_line->code_cip);
-	      }			    
-		    $interactions->addProduit($_perf_line->code_cip);
-		    $IPC->addProduit($_perf_line->code_cip);
+	      if(!in_array($_perf_line->code_cip, $list_cip_perf)){
+					$list_cip_perf[] = $_perf_line->code_cip;
+					if($prescription->object_id){
+		        $allergies->addProduit($_perf_line->code_cip);
+		        $profil->addProduit($_perf_line->code_cip);
+		      }			    
+			    $interactions->addProduit($_perf_line->code_cip);
+			    $IPC->addProduit($_perf_line->code_cip);
+				}
 	    }
 	  }
+		
+		$list_cip_med = array();
 	  foreach($prescription->_ref_prescription_lines as &$line) {
-	    if($prescription->object_id){
-	      $allergies->addProduit($line->code_cip);
-	      $profil->addProduit($line->code_cip);
-	    }			    
-	    $interactions->addProduit($line->code_cip);
-	    $IPC->addProduit($line->code_cip);
+	  	if(!in_array($line->code_cip, $list_cip_med)){
+		  	$list_cip_med[] = $line->code_cip;
+		    if($prescription->object_id){
+		      $allergies->addProduit($line->code_cip);
+		      $profil->addProduit($line->code_cip);
+		    }			    
+		    $interactions->addProduit($line->code_cip);
+		    $IPC->addProduit($line->code_cip);
+			}
 	  }
+		
+		
+		
 	  if($prescription->object_id){
 	    $alertesAllergies    = $allergies->getAllergies();
 	    $alertesProfil       = $profil->getProfil();
