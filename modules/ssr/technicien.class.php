@@ -9,36 +9,39 @@
  */
 
 /**
- * Equipement de SSR, fait parti d'un plateau technique
+ * Technicien de SSR, association entre un plateau technique et un utilisateur
  */
-class CEquipement extends CMbObject {
+class CTechnicien extends CMbObject {
   // DB Table key
-  var $equipement_id = null;
+  var $technicien_id = null;
   
   // References
   var $plateau_id = null;
-
-  // DB Fields
-  var $nom      = null;
+  var $kine_id = null;
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'equipement';
-    $spec->key   = 'equipement_id';
+    $spec->table = 'technicien';
+    $spec->key   = 'technicien_id';
     return $spec;
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["plateau_id"] = "ref notNull class|CPlateauTechnique";
-    $specs["nom"]           = "str notNull";
+    $specs["kine_id"]    = "ref notNull class|CMediusers";
     return $specs;
   }
-	
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_view = $this->nom;
-	}
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->nom;
+  }
+  
+  function loadRefKine() {
+    $this->_ref_kine = $this->loadFwdRef("kine_id", true);
+    $this->_view = $this->_ref_kine->_view;
+  }
 }
 
 ?>

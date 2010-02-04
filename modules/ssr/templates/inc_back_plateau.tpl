@@ -34,21 +34,8 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 <div id="equipements" style="display: none;">
-
-  <table class="tbl">
-    <tr>
-      <th>{{mb_title class=CEquipement field=nom}}</th>
-    </tr>
-    {{foreach from=$plateau->_ref_equipements item=_equipement}}
-    <tr>
-      <td>{{mb_value object=$_equipement field=nom}}</td>
-    </tr>   
-    {{foreachelse}}
-    <tr>
-      <td><em>{{tr}}None{{/tr}}</em></td>
-    </tr>   
-    {{/foreach}}
-  </table>
+  {{mb_include_script script=equipement}}
+  {{mb_include template=inc_list_equipement}}
 
 </div>
 
