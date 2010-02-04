@@ -239,12 +239,11 @@ var AjaxResponse = {
  */
 var SystemMessage = {
   id: "systemMsg",
-  autohide: null,
   effect: null,
 
   // Check message type (loading, notice, warning, error) from given div
-  checkType: function() {
-    this.autohide = $A($(this.id).childNodes).pluck("className").compact().last() == "message";
+  autohidable: function() {
+    return $(this.id).select(".error, .warning, .loading").length = 0;
   },
 
   // show/hide the div
@@ -259,8 +258,7 @@ var SystemMessage = {
     $(this.id).show().setOpacity(1);
     
     // Only hide on type 'message'
-    this.checkType();
-    if (!this.autohide && !forceFade) {
+    if (!this.autohidable() && !forceFade) {
       return;
     }
     
@@ -278,7 +276,7 @@ var SystemMessage = {
     });
         
     // Hide empty message immediately
-    if (!element.innerHTML.strip()) {
+    if (element.empty()) {
       SystemMessage.doEffect(0.1, true);
       return;
     }

@@ -336,6 +336,7 @@ var Url = Class.create({
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("focus", function(){
         //$V(input, '');
+        input.select();
         input.fire("ui:change");
       });
       populate.observe("mousedown", Event.stop);
