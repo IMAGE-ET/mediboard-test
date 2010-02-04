@@ -20,6 +20,10 @@ class CPlateauTechnique extends CMbObject {
 
   // DB Fields
   var $nom      = null;
+	
+	// Collections
+  var $_ref_equipements = null;
+  var $_ref_techniciens = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,16 +33,31 @@ class CPlateauTechnique extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["nom"]      = "str notNull";
-    return $specs;
+  	$props = parent::getProps();
+    $props["group_id"] = "ref notNull class|CGroups";
+    $props["nom"]      = "str notNull";
+    return $props;
   }
-	
+		
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["equipements"] = "CEquipement plateau_id";
+    $backProps["techniciens"] = "CTechnicien plateau_id";
+    return $backProps;
+  }
+  
 	function updateFormFields() {
 		parent::updateFormFields();
 		$this->_view = $this->nom;
 	}
+	
+	function loadRefsEquipements() {
+		$this->_ref_equipements = $this->loadBackRefs("equipements");
+	}
+
+  function loadRefsTechniciens() {
+    $this->_ref_techniciens = $this->loadBackRefs("techniciens");
+  }
 }
 
 ?>

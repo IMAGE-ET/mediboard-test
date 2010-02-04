@@ -16,23 +16,57 @@ Main.add(function () {
 
 <ul id="tabs-back" class="control_tabs">
   <li>
-  	<a href="#techniciens">
-  	  {{tr}}CPlateau-back-techniciens{{/tr}}
-		</a>
-  </li>
-  <li>
-  	<a href="#equipements">
-      {{tr}}CPlateau-back-equipements{{/tr}}
+    {{assign var=count_equipements value=$plateau->_ref_equipements|@count}}
+  	<a href="#equipements" {{if !$count_equipements}}class="empty"{{/if}}>
+      {{tr}}CPlateauTechnique-back-equipements{{/tr}}
+			<small>({{$count_equipements}})</small>
 		</a>
 	</li>
+  <li>
+    {{assign var=count_techniciens value=$plateau->_ref_techniciens|@count}}
+    <a href="#techniciens" {{if !$count_techniciens}}class="empty"{{/if}}>
+      {{tr}}CPlateauTechnique-back-techniciens{{/tr}}
+      <small>({{$count_equipements}})</small>
+    </a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
 
-<div id="techniciens" style="display: none;">
-  Techniciens
+<div id="equipements" style="display: none;">
+
+  <table class="tbl">
+    <tr>
+      <th>{{mb_title class=CEquipement field=nom}}</th>
+    </tr>
+    {{foreach from=$plateau->_ref_equipements item=_equipement}}
+    <tr>
+      <td>{{mb_value object=$_equipement field=nom}}</td>
+    </tr>   
+    {{foreachelse}}
+    <tr>
+      <td><em>{{tr}}None{{/tr}}</em></td>
+    </tr>   
+    {{/foreach}}
+  </table>
+
 </div>
 
-<div id="equipements" style="display: none;">
-  Equipements
+<div id="techniciens" style="display: none;">
+
+  <table class="tbl">
+  	<tr>
+  		<th>{{mb_title class=CTechnicien field=kine_id}}</th>
+  	</tr>
+    {{foreach from=$plateau->_ref_techniciens item=_technicien}}
+    <tr>
+      <td>{{mb_value object=$_technicien field=kine_id}}</td>
+    </tr>   
+    {{foreachelse}}
+    <tr>
+      <td><em>{{tr}}None{{/tr}}</em></td>
+    </tr>   
+    {{/foreach}}
+  </table>
+
 </div>

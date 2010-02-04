@@ -46,7 +46,8 @@
         {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
           {{foreach from=$version item=dependency}}
             <label style="color: {{if $dependency->verified}}#050{{else}}#900{{/if}}" title="{{$dependency->module}}">
-              {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}}), 
+              {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}})
+              {{if !$smarty.foreach.dependencies.last}},{{/if}} 
             </label>
           {{/foreach}}
         {{/foreach}}
@@ -142,10 +143,11 @@
         </td>
         <td class="text">
           {{foreach from=$mbmodule->_dependencies key=num_version item=version}}
-            {{foreach from=$version item=dependency}}
-              {{if $mbmodule->mod_version < $num_version}}
+            {{foreach from=$version item=dependency name=dependencies}}
+              {{if $mbmodule->mod_version <= $num_version}}
               <label style="color: {{if $dependency->verified}}#050{{else}}#500{{/if}}" title="{{$dependency->module}}">
-                {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}}), 
+                {{tr}}module-{{$dependency->module}}-court{{/tr}} ({{$dependency->revision}})
+								{{if !$smarty.foreach.dependencies.last}},{{/if}} 
               </label>
               {{/if}}
             {{/foreach}}

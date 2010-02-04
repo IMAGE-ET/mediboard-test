@@ -18,10 +18,16 @@
 	{{foreach from=$plateaux item=_plateau}}
   <tr {{if $_plateau->_id == $plateau->_id}}class="selected"{{/if}}>
     <td>
-    	<a href="?m={{$m}}&amp;plateau_id={{$_plateau->_id}}">
+      <a href="?m={{$m}}&amp;plateau_id={{$_plateau->_id}}">
         {{mb_value object=$_plateau field=nom}}
-    	</a>
-		</td>
+      </a>
+    </td>
+    <td style="text-align: right;">
+      {{$_plateau->_count.equipements}}
+    </td>
+    <td style="text-align: right;">
+      {{$_plateau->_count.techniciens}}
+    </td>
   </tr>
 	{{foreachelse}}
   <tr>

@@ -16,10 +16,15 @@ $plateau->group_id = CGroups::loadCurrent()->_id;
 
 // Plateaux disponible
 $plateaux = $plateau->loadMatchingList();
+foreach($plateaux as $_plateau) {
+  $_plateau->countBackRefs("techniciens");  
+  $_plateau->countBackRefs("equipements");  
+}
 
 // Plateau sélectionné
-$plateau->load(CValue::getOrSessionAbs("plateau_id"));
-
+$plateau->load(CValue::getOrSession("plateau_id"));
+$plateau->loadRefsTechniciens();
+$plateau->loadRefsEquipements();
 
 // Création du template
 $smarty = new CSmartyDP();
