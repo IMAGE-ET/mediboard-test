@@ -11,6 +11,12 @@
 <script type="text/javascript">
 </script>
 
-<div class="big-info">
-	Première version du module SSR !
-</div>
+<table class="main">
+	<tr>
+		<td>{{mb_include template=inc_list_plateaux}}</td>
+    <td>
+      {{mb_include template=inc_form_plateau}}
+      {{mb_include template=inc_back_plateau}}
+		</td>
+  </tr>
+</table>

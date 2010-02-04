@@ -11,8 +11,20 @@
 global $can;
 $can->needsRead();
 
+$plateau = new CPlateauTechnique;
+$plateau->group_id = CGroups::loadCurrent()->_id;
+
+// Plateaux disponible
+$plateaux = $plateau->loadMatchingList();
+
+// Plateau sélectionné
+$plateau->load(CValue::getOrSessionAbs("plateau_id"));
+
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("plateau", $plateau);
+$smarty->assign("plateaux", $plateaux);
 $smarty->display("vw_idx_plateau.tpl");
 
 

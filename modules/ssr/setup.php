@@ -16,8 +16,21 @@ class CSetupssr extends CSetup {
     $this->mod_name = 'ssr';
 
     $this->makeRevision('all');
+    
+    $this->makeRevision('0.01');
+    
+		$query = "CREATE TABLE `plateau_technique` (
+      `plateau_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `group_id` INT (11) UNSIGNED,
+      `nom` VARCHAR (255) NOT NULL
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
 
-    $this->mod_version = '0.01';
+		$query = "ALTER TABLE `plateau_technique` 
+      ADD INDEX (`group_id`);";
+		$this->addQuery($query);
+
+    $this->mod_version = '0.02';
   }
 }
 

@@ -30,9 +30,15 @@ class CPlateauTechnique extends CMbObject {
 
   function getProps() {
   	$specs = parent::getProps();
+    $specs["group_id"] = "ref notNull class|CGroups";
     $specs["nom"]      = "str notNull";
     return $specs;
   }
+	
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_view = $this->nom;
+	}
 }
 
 ?>
