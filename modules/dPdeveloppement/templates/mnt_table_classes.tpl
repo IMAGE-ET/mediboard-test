@@ -141,7 +141,7 @@
                   {{/if}}
                 {{else}}
                   <div class="error">
-                    Pas de table existance pour cette classe
+                    Pas de table existante pour cette classe
                   </div>
                 {{/if}}
               </td>

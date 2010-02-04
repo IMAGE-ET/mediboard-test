@@ -9,8 +9,7 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   file_preview = elementId;
-  var url = new Url;
-  url.setModuleAction("dPfiles", "preview_files");
+  var url = new Url("dPfiles", "preview_files");
   url.addParam("objectClass", objectClass);
   url.addParam("objectId", objectId);
   url.addParam("elementClass", elementClass);
@@ -40,12 +39,10 @@ function setObject(oObject){
 function reloadListFileDossier(sAction){
   var sSelClass = document.FrmClass.selClass.value;
   var sSelKey   = document.FrmClass.selKey.value;
-  if(eval($('tab-'+sSelClass+sSelKey))){
+  if($('tab-'+sSelClass+sSelKey)){
     return false;
   }
-  var url = new Url;
- 
-  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
+  var url = new Url("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", sSelKey);
   url.addParam("selClass", sSelClass);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
@@ -69,9 +66,7 @@ function reloadListFile(sAction){
   if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
-  var url = new Url;
-
-  url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
+  var url = new Url("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);
@@ -80,7 +75,7 @@ function reloadListFile(sAction){
 
 function submitFileChangt(oForm){
   file_deleted = null;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAfterMoveFile });
+  onSubmitFormAjax(oForm, { onComplete : reloadAfterMoveFile });
 }
 
 Document.refreshList = function() { 

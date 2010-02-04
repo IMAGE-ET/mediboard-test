@@ -3358,22 +3358,42 @@ ul li a.chapitre_signe.active{
   color: #000;
 }
 
-ul li.user:before, td.user:before,
-ul li.function:before, td.function:before,
-ul li.group:before, td.group:before {
+ul li.user:before,
+ul li.function:before,
+ul li.group:before {
   float:right;
 }
 
-ul li.user:before, td.user:before {
+ul li.user:before {
   content: url(../../images/icons/user.png);
 }
 
-ul li.function:before, td.function:before {
+ul li.function:before {
   content: url(../../images/icons/user-function.png);
 }
 
-ul li.group:before, td.group:before {
+ul li.group:before {
   content: url(../../images/icons/group.png);
+}
+
+td.user,
+td.function,
+td.group {
+  background-position: top right;
+  background-repeat: no-repeat;
+  padding-right: 16px !important;
+}
+
+td.user {
+  background-image: url(../../images/icons/user.png);
+}
+
+td.function {
+  background-image: url(../../images/icons/user-function.png);
+}
+
+td.group {
+  background-image: url(../../images/icons/group.png);
 }
 
 table.active {

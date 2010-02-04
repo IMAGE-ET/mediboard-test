@@ -190,6 +190,13 @@ Main.add( function(){
     },
     spots: []
   };
+
+  var options = {
+    exactMinutes: false, 
+    minInterval: {{$dPconfig.dPplanningOp.CSejour.min_intervalle}},
+    minHours: {{$dPconfig.dPplanningOp.CSejour.heure_deb}},
+    maxHours: {{$dPconfig.dPplanningOp.CSejour.heure_fin}}
+  };
   
   // Object.value takes the internal functions too :(
   var dates_operations = {{$sejour->_dates_operations|@json}};
@@ -263,11 +270,8 @@ Main.add( function(){
     {{if $mode_operation && $sejour->_id}}
 
     {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
-    {{mb_include module=system template=inc_object_history object=$sejour}}
-    
-    <div style="float:left;" class="noteDiv {{$sejour->_guid}}">
-      <img src="images/icons/note_grey.png" alt="Ecrire une note" />
-    </div>
+    {{mb_include module=system template=inc_object_history    object=$sejour}}
+    {{mb_include module=system template=inc_object_notes      object=$sejour}}
 
     <a class="action" style="float: right"  title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
       <img src="images/icons/edit.png" alt="modifier" />
