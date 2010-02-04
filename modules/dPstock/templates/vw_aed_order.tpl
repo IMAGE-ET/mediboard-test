@@ -62,7 +62,7 @@ function createOrders(order_id) {
       <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="societe_id" value="{{$societe_id}}" />
-        <input type="hidden" name="order_form" value="true" />
+        <input type="hidden" name="mode" value="order" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">

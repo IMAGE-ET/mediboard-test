@@ -17,10 +17,10 @@
     <th>{{mb_label class=CProductReference field=societe_id}}</th>
     <th style="width: 1%;">{{mb_title class=CProductReference field=price}}</th>
     {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
-    <th colspan="2" style="width: 1%;">{{mb_title class=CProductReference field=_cond_price}}</th>
+    <th style="width: 1%;">{{mb_title class=CProductReference field=_cond_price}}</th>
     {{/if}}
-    <th colspan="2" style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
-    {{if $order_form}}
+    <th style="width: 1%;">{{mb_title class=CProductReference field=_unit_price}}</th>
+    {{if $mode}}
       <th style="width: 1%;"></th>
     {{/if}}
   </tr>
@@ -30,38 +30,59 @@
 	{{assign var=_product value=$_reference->_ref_product}}
   <tbody class="hoverable">
     <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
-      <td colspan="7">
-        {{if !$order_form}}
+      <td colspan="5">
+        {{if !$mode}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
           {{$_product->_view|truncate:60}}
         </span>
-        {{if !$order_form}}
+        {{if !$mode}}
           </a>
         {{/if}}
       </td>
       
-      {{if $order_form}}
+      {{if $mode}}
       <td rowspan="2">
         {{assign var=id value=$_reference->_id}}
-        {{assign var=packaging value=$_product->packaging}}
-        <form name="product-reference-{{$id}}" action="?" method="post">
-          <input type="hidden" name="m" value="{{$m}}" />
-          <input type="hidden" name="dosql" value="do_order_item_aed" />
-          <input type="hidden" name="reference_id" value="{{$_reference->_id}}" />
-          <input type="hidden" name="callback" value="orderItemCallback" />
-          <input type="hidden" name="_create_order" value="true" />
-          {{mb_field object=$_reference 
-            field=quantity 
-            size=2
-            form="product-reference-$id" 
-            increment=true 
-            value=1
-            style="width: 2em;"
-          }}
-          <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
-        </form>
+        {{if $mode == "order"}}
+          <form name="product-reference-{{$id}}" action="?" method="post">
+            <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="dosql" value="do_order_item_aed" />
+            <input type="hidden" name="reference_id" value="{{$_reference->_id}}" />
+            <input type="hidden" name="callback" value="orderItemCallback" />
+            <input type="hidden" name="reception_id" value="" />
+            {{mb_field object=$_reference 
+              field=quantity 
+              size=2
+              form="product-reference-$id" 
+              increment=true 
+              value=1
+              style="width: 2em;"
+            }}
+            <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
+          </form>
+        {{else}}
+          <form name="product-reference-{{$id}}" action="?" method="post">
+            <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+            <input type="hidden" name="_reference_id" value="{{$_reference->_id}}" />
+            <input type="hidden" name="date" value="now" />
+            <input type="hidden" name="callback" value="orderItemCallback" />
+            <input type="hidden" name="reception_id" value="" />
+            {{mb_field object=$_reference 
+              field=quantity 
+              size=2
+              form="product-reference-$id" 
+              increment=true 
+              value=1
+              style="width: 2em;"
+            }}
+            <input type="text" name="code" value="" size="6" title="{{tr}}CProductOrderItemReception-code{{/tr}}" />
+            <input type="text" name="lapsing_date" value="" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
+            <button class="tick notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
+          </form>
+        {{/if}}
       </td>
       {{/if}}
     </tr>
@@ -83,23 +104,18 @@
 			 </td>
 			 
       {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
-		  <td style="text-align: right;">
-		    <label title="{{$_reference->quantity}} {{$_product->packaging}}">
-		      {{mb_value object=$_reference field=quantity}} 
-		    </label>
-		    x
-		  </td>
 	 	  <td style="text-align: right;">
-			  {{mb_value object=$_reference field=_cond_price}}
+        <label title="{{$_reference->quantity}} {{$_product->packaging}}">
+			    {{mb_value object=$_reference field=_cond_price}}
+        </label>
 			</td>
 	    {{/if}}
 			
-		  <td style="text-align: right;">
-		    <label title="{{$_reference->quantity}} {{$_product->packaging}} x {{$_product->quantity}} {{$_product->item_title}}">
-		      {{mb_value object=$_reference field=_unit_quantity}} x
-		    </label>
-		   </td>
-		  <td style="text-align: right;"><strong>{{mb_value object=$_reference field=_unit_price}}</strong></td>
+		  <td style="text-align: right; font-weight: bold;">
+        <label title="{{$_reference->quantity}} {{$_product->packaging}} x {{$_product->quantity}} {{$_product->item_title}}">
+          {{mb_value object=$_reference field=_unit_price}}
+        </label>
+      </td>
     </tr>
   
 	</tbody>

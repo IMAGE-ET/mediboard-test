@@ -23,11 +23,18 @@ else
   
 $reception->loadBackRefs("reception_items");
 
+// Categories list
+$category = new CProductCategory();
+$list_categories = $category->loadList(null, 'name');
+
 $order = new CProductOrder;
 $order->load($order_id);
 $order->updateCounts();
 
 $smarty = new CSmartyDP();
+
 $smarty->assign('reception', $reception);
 $smarty->assign('order', $order);
+$smarty->assign('list_categories', $list_categories);
+
 $smarty->display('vw_edit_reception.tpl');

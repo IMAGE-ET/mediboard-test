@@ -21,7 +21,7 @@
     <th style="width: 0.1%; text-align: right;"></th>
   </tr>
   {{foreach from=$order->_ref_order_items item=curr_item}}
-    <tbody id="order-item-{{$curr_item->_id}}">
+    <tbody id="order-item-{{$curr_item->_id}}" class="hoverable">
     {{include file="inc_order_to_receive_item.tpl"}}
     </tbody>
   {{foreachelse}}

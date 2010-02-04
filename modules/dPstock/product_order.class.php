@@ -64,7 +64,7 @@ class CProductOrder extends CMbObject {
 		$specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
     $specs['order_number']    = 'str maxLength|64 seekable protected';
-    $specs['societe_id']      = 'ref notNull class|CSociete seekable';
+    $specs['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
     $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['comments']        = 'text';
     $specs['locked']          = 'bool show|0';

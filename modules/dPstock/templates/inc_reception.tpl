@@ -20,7 +20,7 @@
       <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     </tr>
     {{foreach from=$reception->_back.reception_items item=curr_item}}
-      <tbody id="order-item-{{$curr_item->_id}}">
+      <tbody id="reception-item-{{$curr_item->_id}}">
         {{include file="inc_reception_item.tpl"}}
       </tbody>
     {{foreachelse}}

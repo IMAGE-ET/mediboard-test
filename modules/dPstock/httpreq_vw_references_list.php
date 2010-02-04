@@ -15,7 +15,7 @@ $category_id  = CValue::getOrSession('category_id');
 $societe_id   = CValue::getOrSession('societe_id');
 $keywords     = CValue::getOrSession('keywords');
 $reference_id = CValue::getOrSession('reference_id');
-$order_form   = CValue::get('order_form');
+$mode         = CValue::get('mode');
 $start        = CValue::get('start', 0);
 $show_all     = CValue::get('show_all');
 
@@ -55,7 +55,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_references', $list_references);
 $smarty->assign('total', $total);
-$smarty->assign('order_form', $order_form);
+$smarty->assign('mode', $mode);
 $smarty->assign('start', $start);
 $smarty->assign('reference_id', $reference_id);
 

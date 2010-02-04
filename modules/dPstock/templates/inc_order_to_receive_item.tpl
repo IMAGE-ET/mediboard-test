@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<tbody class="hoverable">
 <tr>
   {{assign var=order_id value=$curr_item->order_id}}
   {{assign var=id value=$curr_item->_id}}
@@ -90,4 +89,3 @@
   	{{/if}}
   </td>
 </tr>
-</tbody>

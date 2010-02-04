@@ -335,9 +335,13 @@ var Url = Class.create({
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
       input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("focus", function(){
-        //$V(input, '');
-        input.select();
+        if (oOptions.valueElement && oOptions.valueElement.value == "")
+          input.value = "";
+        else 
+          input.select();
+          
         input.fire("ui:change");
+        autocompleter.activate.bind(autocompleter)();
       });
       populate.observe("mousedown", Event.stop);
       

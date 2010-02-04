@@ -15,12 +15,17 @@ var reception_id = '{{$reception->_id}}';
 
 Main.add(function () {
   var form = getForm("orders-search");
+  
   var url = new Url("dPstock", "httpreq_orders_autocomplete");
   url.autoComplete(form.keywords, $("keywords_autocomplete"), {
     select: "view",
     dropdown: true,
     valueElement: form.id_reference
   });
+  
+  tabs = Control.Tabs.create("orders-tabs");
+  
+  filterReferences(getForm("filter-references"));
 });
 
 function addOrder(id_reference){
@@ -40,8 +45,8 @@ function addOrder(id_reference){
   }
   
   container.insert(order);
-  $("orders-tabs").insert(orderTab);
-  var tabs = Control.Tabs.create("orders-tabs");
+  $$("a[href='#no-order']")[0].up().insert({before: orderTab});
+  tabs = Control.Tabs.create("orders-tabs");
   tabs.setActiveTab(elementId);
   
   refreshOrderToReceive(parts[1], order);
@@ -90,6 +95,17 @@ function updateReceptionId(reception_item_id) {
     refreshReception(reception_id);
   });
 }
+
+function filterReferences(form) {
+  var url = new Url("dPstock", "httpreq_vw_references_list");
+  url.addFormData(form);
+  url.requestUpdate("list-references");
+  return false;
+}
+
+function changePage(start) {
+  $V(getForm("filter-references").start, start);
+}
 </script>
 
 <form name="cancel-reception" action="" method="post" onsubmit="return checkForm(this)">
@@ -105,8 +121,6 @@ function updateReceptionId(reception_item_id) {
   <input type="hidden" name="order_item_reception_id" value="" />
   <input type="hidden" name="barcode_printed" value="" />
 </form>
-
-
 
 <table class="main">
   <tr>
@@ -134,10 +148,36 @@ function updateReceptionId(reception_item_id) {
         {{if $order->_id}}
           <li><a href="#order-{{$order->_id}}">{{$order->order_number}}</a></li>
         {{/if}}
+        <li><a href="#no-order">Hors commande</a></li>
       </ul>
       <hr class="control_tabs" />
 
       <div id="orders-containers">
+        <div id="no-order">
+          <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
+            <input type="hidden" name="m" value="{{$m}}" />
+            <input type="hidden" name="societe_id" value="{{$societe_id}}" />
+            <input type="hidden" name="mode" value="reception" />
+            <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+            
+            <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
+              <option value="" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+              {{foreach from=$list_categories item=curr_category}} 
+                <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
+              {{/foreach}}
+            </select>
+        
+            {{mb_field object=$order field=societe_id form="filter-references" autocomplete="true,1,50,false,true" 
+                       style="width: 12em;"}}
+            
+            <input type="text" name="keywords" value="" size="10" onchange="$V(this.form.start, 0, false)" />
+            
+            <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
+            <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
+          </form>
+          <div id="list-references"></div>
+        </div>
+        
         {{if !$order->_id}}
         <div class="small-info">
           Veuillez chercher une commande à ajouter à la réception
