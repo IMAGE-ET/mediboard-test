@@ -148,8 +148,9 @@ Main.add( function(){
 
 	<table class="form">
 	  <tr>
-	    <th class="title" colspan="2">
-		    <span style="float: right">
+	  	<th class="title" colspan="2">
+        <button style="float: left" type="button" class="hslip notext" onclick="$('list_protocoles').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+			  <span style="float: right">
 		    	<button type="button" class="add" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
 		      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
 		    </span>
@@ -208,7 +209,7 @@ Main.add( function(){
   </table>
 </form>
 {{/if}}
-      
+
 <form name="moment_unitaire">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  
     <option value="">&mdash; Sélection du moment</option>
@@ -229,7 +230,7 @@ Main.add( function(){
 <table class="form">
   {{if !$mode_protocole}}
   <tr>
-    <th class="title text" colspan="3">
+    <th class="title text" colspan="3">			
       <!-- Selection du praticien prescripteur de la ligne -->
        <div style="float: right">
         {{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}

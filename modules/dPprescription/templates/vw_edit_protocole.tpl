@@ -29,7 +29,7 @@ Main.add( function(){
 <table class="main">
 	<tr>
     <!-- Affichage de la liste des protocoles pour le praticien selectionné -->
-    <td class="halfPane" style="width: 23em;">
+    <td class="halfPane" style="width: 23em;" id="list_protocoles">
 	    <form name="selPrat" action="?" method="get">
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
         <input type="hidden" name="m" value="dPprescription" />
