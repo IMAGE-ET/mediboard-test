@@ -7,6 +7,17 @@
 <![endif]-->
 
 <!--[if IE 7]>
+<style type="text/css">
+hr {
+  height: 0px;
+}
+
+hr.control_tabs {
+  margin-top: -7px;
+  margin-bottom: -7px;
+}
+</style>
+
 <script type="text/javascript">
 function processIE7Button(button) {
   if (button._processed || (window.Main && !Main.initialized)) return;

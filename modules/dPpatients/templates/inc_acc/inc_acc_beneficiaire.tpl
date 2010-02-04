@@ -16,6 +16,10 @@
     <td>{{mb_field object=$patient field="centre_gest"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="code_gestion"}}</th>
+    <td>{{mb_field object=$patient field="code_gestion"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="regime_sante"}}</th>
     <td>{{mb_field object=$patient field="regime_sante"}}</td>
   </tr>
@@ -68,6 +72,30 @@
   <tr>
     <th>{{mb_label object=$patient field="fin_validite_vitale"}}</th>
     <td>{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" register=true}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$patient field="mutuelle_types_contrat"}}</th>
+    <td>
+      {{* 
+      <script type="text/javascript">
+        Main.add(function(){
+          window.mutuelleToken = new TokenField(getForm("editFrm").mutuelle_types_contrat);
+        });
+      </script>
+      {{mb_field object=$patient field="mutuelle_types_contrat" hidden=true}}
+      
+      <div id="mutuelle-types-contrats">
+        {{foreach from=$patient->_mutuelle_types_contrat item=_type_contrat}}
+          <div>
+            <button type="button" class="remove notext" onclick="mutuelleToken.remove(this.innerHTML); $(this).up().remove()">{{$_type_contrat}}</button> {{$_type_contrat}}
+          </div>
+        {{/foreach}}
+        <button type="button" class="add notext" onclick="var n=$(this).next(); mutuelleToken.add(n.value); n.value=''"></button>
+        <input type="text" />
+      </div>
+       *}}
+      {{mb_field object=$patient field="mutuelle_types_contrat"}}
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="notes_amo"}}</th>

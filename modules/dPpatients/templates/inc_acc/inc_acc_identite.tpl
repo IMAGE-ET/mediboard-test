@@ -86,7 +86,7 @@ Main.add(function() {
 	    {{/if}}
     </td>
     {{if $patient->_id}}
-    <td rowspan="13" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
+    <td rowspan="14" style="width: 0.1%; text-align: center;" id="{{$patient->_guid}}-identity">
       {{include file=inc_vw_photo_identite.tpl mode="edit"}}
     </td>
     {{/if}}

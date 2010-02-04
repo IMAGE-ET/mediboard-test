@@ -44,7 +44,7 @@ var VitaleVision = {
       }
     }
     
-    cleanWhitespace = function(node) {
+    function cleanWhitespace(node) {
       var i, notWhitespace = /\S/;
       for (i = 0; i < node.childNodes.length; i++) {
         var childNode = node.childNodes[i];
@@ -217,6 +217,7 @@ var VitaleVision = {
     $V(form.code_regime, getNodeValue("codeRegime", amo));
     $V(form.caisse_gest, getNodeValue("caisse", amo));
     $V(form.centre_gest, getNodeValue("centreGestion", amo));
+    $V(form.code_gestion, getNodeValue("centreCarte", amo));
     
     var periodeDroits = getNodeValue("listePeriodesDroits element debut", amo);
     jour  = periodeDroits.substring(0, 2);
@@ -237,19 +238,38 @@ var VitaleVision = {
     }
     
     var libelleExo = getNodeValue("libelleExo", amo).replace(/\\r\\n/g, "\n");
-    if(libelleExo.match(/affection/i)){
-      $V(form.code_exo, 4);
-    } else if(libelleExo.match(/rente AT/i) || 
-              libelleExo.match(/pension d'invalidité/i) || 
-              libelleExo.match(/pension militaire/i)){
-      $V(form.code_exo, 5);
-    } else if(libelleExo.match(/FSV/i)) {
-      $V(form.code_exo, 9);
-    } else {
-      $V(form.code_exo, 0);
-    }
-  
+    var codeExo = 0;
+    
+    // @todo: voir à recuperer cette liste directment depuis CPatient::$code_exo_guess
+    var codeExoGuess = {
+      "4":[
+        "affection",
+        "ald",
+        "hors liste"],
+      "5":[
+        "rente AT",
+        "pension d'invalidit",
+        "pension militaire",
+        "enceinte",
+        "maternit"],
+      "9":[
+        "FSV",
+        "FNS",
+        "vieillesse"]
+    };
+    
+    $H(codeExoGuess).each(function(pair){
+      pair.value.each(function(rule){
+        if(codeExo == 0 && libelleExo.match(new RegExp(rule, "i"))) {
+          codeExo = pair.key;
+          return;
+        }
+      });
+    });
+    
+    $V(form.code_exo, codeExo);
     $V(form.libelle_exo, libelleExo);
+    
     $V(form.medecin_traitant_declare, (getNodeValue("medecinTraitant", amo) == "Oui") ? '1' : '0');
     $V(form.cmu, (getNodeValue("typeCMU", cmu) != "") ? '1' : '0');
     //calculFinAmo(); ?
@@ -332,7 +352,7 @@ var VitaleVision = {
     tabs.setActiveTab('identite');
     $(form.nom).focus();
   }
-}
+};
 
 // Mapping de l'applet à l'objet VitaleVision
 VitaleVision.applet = document.resultVitaleVision;

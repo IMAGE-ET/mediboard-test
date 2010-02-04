@@ -15,6 +15,50 @@ class CPatient extends CMbObject {
     "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
     "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
   );
+ 
+  // http://www.msa47.fr/front/id/msa47/S1153385038825/S1153385272497/S1153385352251
+  static $libelle_exo_guess = array(
+    "code_exo" => array(
+      //0 => null,
+      4 => array(
+        "affection", 
+        "ald", 
+        "hors liste"
+      ),
+      /*3 => array(
+        "stérilité", 
+        "prématuré", 
+        "HIV"
+      ),*/
+      5 => array(
+        "rente AT", 
+        "pension d'invalidité", 
+        "pension militaire", 
+        "enceinte", 
+        "maternité",
+      ),
+      9 => array(
+        "FSV", 
+        "FNS", 
+        "vieillesse"
+      ),
+    ),
+    "_art115" => array(
+      true => array(
+        "pension militaire"
+      )
+    ),
+    "_type_exoneration" => array(
+      "aldHorsListe" =>  array("hors liste"),
+      "aldListe" =>      array("ald liste"),
+      "aldMultiple" =>   array("ald multiple"),
+      "alsaceMoselle" => array("alsace", "moselle"),
+      "article115" =>    array("pension militaire"),
+      "fns" =>           array("fns", "fsv", "vieillesse"),
+      "autreCas" =>      array(),
+      "autreCasAlsaceMoselle" => array(),
+    ),
+  );
   
   // DB Table key
   var $patient_id = null;
@@ -47,6 +91,7 @@ class CPatient extends CMbObject {
   var $code_regime      = null;
   var $caisse_gest      = null;
   var $centre_gest      = null;
+  var $code_gestion     = null;
   var $regime_sante     = null;
   var $rques            = null;
   var $cmu              = null;
@@ -59,6 +104,7 @@ class CPatient extends CMbObject {
   var $fin_amo          = null;
   var $code_sit         = null;
   var $regime_am        = null;
+  var $mutuelle_types_contrat = null;
   
   var $rang_beneficiaire= null;
   var $rang_naissance   = null;
@@ -127,7 +173,8 @@ class CPatient extends CMbObject {
   var $_civilite_long = null;
   var $_longview    = null;
   var $_art115      = null;
-	var $_exoneration = null;
+  var $_type_exoneration = null;
+  var $_exoneration = null;
   
   // Vitale behaviour
   var $_bind_vitale   = null;
@@ -201,6 +248,7 @@ class CPatient extends CMbObject {
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
+    $specs["code_gestion"]      = "numchar length|4";
     $specs["regime_sante"]      = "str";
     $specs["sexe"]              = "enum list|m|f default|m";
     $specs["civilite"]          = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
@@ -234,6 +282,7 @@ class CPatient extends CMbObject {
     $specs["fin_validite_vitale"] = "date";
     $specs["code_sit"]          = "numchar length|4";
     $specs["regime_am"]         = "bool default|0";
+    $specs["mutuelle_types_contrat"] = "text";
     
     $specs["pays"]                 = "str";
     $specs["pays_insee"]           = "str";
@@ -287,6 +336,19 @@ class CPatient extends CMbObject {
     $specs["_pays_naissance_insee"]       = "str";
     $specs["_assure_pays_naissance_insee"]= "str";
     $specs["_art115"]                     = "bool";
+    
+    $types_exo = array(
+      "aldHorsListe",
+      "aldListe",
+      "aldMultiple",
+      "alsaceMoselle",
+      "article115",
+      "autreCas",
+      "autreCasAlsaceMoselle",
+      "fns",
+    );
+    
+    $specs["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
     $specs["_age"]                        = "num show|1";
     $specs["_age_assure"]                 = "num";
     $specs["_IPP"]                        = "str";
@@ -522,6 +584,9 @@ class CPatient extends CMbObject {
     $this->centre_gest  = $vitale["VIT_CENTRE_GEST"];
     $this->regime_sante = CValue::read($vitale, "VIT_NOM_AMO");
     
+    //@todo: quelle est la clé pour le code gestion ?
+    //$this->code_gestion = CValue::read($vitale, "??");
+    
     // Rang bénéficiaire
     $codeRangMatrix = array(
 			"00"=> "01", // Assuré
@@ -555,6 +620,25 @@ class CPatient extends CMbObject {
     }
     
     $this->regime_am = CValue::read($vitale, "VIT_REGIME_AM");
+  }
+  
+  private function guessExoneration(){
+    $this->completeField("libelle_exo");
+    
+    if (!$this->libelle_exo) return;
+    
+    foreach(self::$libelle_exo_guess as $field => $values) {
+      if ($this->$field !== null) continue;
+      
+      foreach($values as $value => $rules) {
+        foreach($rules as $rule) {
+          if (preg_match("/$rule/i", $this->libelle_exo)) {
+            $this->$field = $value;
+            break;
+          }
+        }
+      }
+    }
   }
   
   function updateFormFields() {
@@ -1177,7 +1261,7 @@ class CPatient extends CMbObject {
       $group_id = $g;
   	}
   	
-    $tag_ipp = str_replace('$g',$group_id, $tag_ipp);
+    $tag_ipp = str_replace('$g', $group_id, $tag_ipp);
 
     // Récupération du premier IPP créé, utile pour la gestion des doublons
     $order = "id400 ASC";
@@ -1234,10 +1318,10 @@ class CPatient extends CMbObject {
     $this->loadRefConstantesMedicales();
     $this->loadIPP();
     
-    $template->addProperty("Patient - article"           , $this->_civilite );
-    $template->addProperty("Patient - article long"      , $this->_civilite_long  );
+    $template->addProperty("Patient - article"           , $this->_civilite  );
+    $template->addProperty("Patient - article long"      , $this->_civilite_long);
     $template->addProperty("Patient - nom"               , $this->nom        );
-    $template->addProperty("Patient - nom jeune fille"   , $this->nom_jeune_fille );
+    $template->addProperty("Patient - nom jeune fille"   , $this->nom_jeune_fille);
     $template->addProperty("Patient - prénom"            , $this->prenom     );
     $template->addProperty("Patient - adresse"           , $this->adresse    );
     $template->addProperty("Patient - ville"             , $this->ville      );
@@ -1290,15 +1374,15 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
     }
     
-    $template->addProperty("Patient - médecin correspondants", join($noms, " - "));
+    $template->addProperty("Patient - médecin correspondants", implode(" - ", $noms));
     
     $const_med = $this->_ref_constantes_medicales;
-    $template->addProperty("Patient - poids",  $const_med->poids." kg");
-    $template->addProperty("Patient - taille", $const_med->taille." cm");
+    $template->addProperty("Patient - poids",  "$const_med->poids kg");
+    $template->addProperty("Patient - taille", "$const_med->taille cm");
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
-    $template->addProperty("Patient - TA",     ($const_med->ta ? $const_med->_ta_systole." / ".$const_med->_ta_diastole : ''));
+    $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
   }
   
   function fillTemplate(&$template) {

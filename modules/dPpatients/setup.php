@@ -1118,8 +1118,14 @@ class CSetupdPpatients extends CSetup {
               ADD `diurese` FLOAT UNSIGNED,
               ADD `injection` VARCHAR (10);";
 		$this->addQuery($sql);
+		
+    $this->makeRevision("0.96");
+    $sql = "ALTER TABLE `patients` 
+              ADD `code_gestion` MEDIUMINT (4) UNSIGNED ZEROFILL,
+              ADD `mutuelle_types_contrat` TEXT";
+    $this->addQuery($sql);
 							
-    $this->mod_version = "0.96";
+    $this->mod_version = "0.97";
   }
 }
 
