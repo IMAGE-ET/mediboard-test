@@ -54,7 +54,7 @@ PlageConsult = {
         <tr>
           <td>
             Paiment patients :
-            {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_tiers}}{{/tr}}
+            {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_patient}}{{/tr}}
           </td>
         </tr>
         {{/if}}
