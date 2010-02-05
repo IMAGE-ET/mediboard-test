@@ -2,15 +2,12 @@
 
 /**
  * @package Mediboard
- * @subpackage system
+ * @subpackage ssr
  * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * The CAlert Class
- */
 class CPlateauTechnique extends CMbObject {
   // DB Table key
   var $plateau_id = null;

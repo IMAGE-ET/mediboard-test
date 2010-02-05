@@ -54,8 +54,36 @@ class CSetupssr extends CSetup {
       ADD INDEX (`plateau_id`),
       ADD INDEX (`kine_id`);";
     $this->addQuery($query);
-
-    $this->mod_version = "0.04";
+    
+    // Fiche d'autonomie
+    $this->makeRevision("0.04");
+    $sql = "CREATE TABLE `fiche_autonomie` (
+              `fiche_autonomie_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `sejour_id` INT (11) UNSIGNED NOT NULL,
+              `alimentation` ENUM ('autonome','partielle','totale'),
+              `toilette` ENUM ('autonome','partielle','totale'),
+              `habillage_haut` ENUM ('autonome','partielle','totale'),
+              `habillage_bas` ENUM ('autonome','partielle','totale'),
+              `utilisation_toilette` ENUM ('sonde','couche','bassin','stomie'),
+              `transfert_lit` ENUM ('autonome','partielle','totale'),
+              `locomotion` ENUM ('autonome','partielle','totale'),
+              `locomotion_materiel` ENUM ('canne','cadre','fauteuil'),
+              `escalier` ENUM ('autonome','partielle','totale'),
+              `pansement` ENUM ('0','1'),
+              `escarre` ENUM ('0','1'),
+              `comprehension` ENUM ('intacte','alteree'),
+              `expression` ENUM ('intacte','alteree'),
+              `memoire` ENUM ('intacte','alteree'),
+              `resolution_pb` ENUM ('intacte','alteree'),
+              `etat_psychique` TEXT,
+              `devenir_envisage` TEXT
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $query = "ALTER TABLE `fiche_autonomie` 
+      ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.05";
   }
 }
 

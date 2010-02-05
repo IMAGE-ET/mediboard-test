@@ -44,8 +44,8 @@ function markAsSelected(element) {
 </script>
 
 <ul id="tab_dispositifs" class="control_tabs">
-  <li onclick="viewListElement('CDMICategory'); viewElement('CDMI','0');"><a href="#dmi">DMI</a></li>
-  <li onclick="viewListElement('CCategoryDM'); viewElement('CDM','0');"><a href="#dm">DM</a></li>
+  <li onmousedown="viewListElement('CDMICategory'); viewElement('CDMI','0');"><a href="#dmi">DMI</a></li>
+  <li onmousedown="viewListElement('CCategoryDM'); viewElement('CDM','0');"><a href="#dm">DM</a></li>
 </ul>
 <hr class="control_tabs" />
 

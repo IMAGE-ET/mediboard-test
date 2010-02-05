@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage soins
+ * @subpackage ssr
  * @version $Revision: 7212 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 

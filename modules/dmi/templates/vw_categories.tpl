@@ -44,8 +44,8 @@ function removeSelectedTr(){
 </script>
 
 <ul id="tab_dispositifs" class="control_tabs">
-  <li onclick="viewListCat('CDMICategory'); viewCat('CDMICategory','0');"><a href="#dmi">DMI</a></li>
-  <li onclick="viewListCat('CCategoryDM'); viewCat('CCategoryDM','0');"><a href="#dm">DM</a></li>
+  <li onmousedown="viewListCat('CDMICategory'); viewCat('CDMICategory','0');"><a href="#dmi">DMI</a></li>
+  <li onmousedown="viewListCat('CCategoryDM'); viewCat('CCategoryDM','0');"><a href="#dm">DM</a></li>
 </ul>
 <hr class="control_tabs" />
 

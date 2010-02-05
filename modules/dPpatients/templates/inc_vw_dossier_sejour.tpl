@@ -34,7 +34,7 @@ Main.add( function(){
 
 <ul id="dossier_sejour_tab_group" class="control_tabs">
   <li><a href="#div_sejour">Séjour</a></li>
-  <li onclick="refreshConstantesHack('{{$object->_id}}')"><a href="#constantes">Constantes</a></li>
+  <li onmousedown="refreshConstantesHack('{{$object->_id}}')"><a href="#constantes">Constantes</a></li>
   <li><a href="#result_labo">Labo</a></li>
 </ul>
 

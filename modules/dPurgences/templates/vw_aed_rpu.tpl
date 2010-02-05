@@ -360,7 +360,7 @@ Main.add(function () {
 <ul id="tab-dossier" class="control_tabs">
   <li><a href="#antecedents">Antécédents / Traitements</a></li>
   <li><a href="#suivisoins">Suivi soins</a></li>
-  <li onclick="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
+  <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
   <li><a href="#examens">Examens</a></li>
   {{if $app->user_prefs.ccam_sejour == 1 }}
   <li><a href="#actes">Cotation</a></li>

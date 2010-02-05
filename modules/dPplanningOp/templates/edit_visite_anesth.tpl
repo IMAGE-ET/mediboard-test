@@ -100,7 +100,7 @@ Main.add(function () {
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#anesth_tab">Anesth.</a></li>
   <li><a href="#antecedents">Atcd.</a></li>
-  <li onclick="refreshConstantesHack('{{$operation->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
+  <li onmousedown="refreshConstantesHack('{{$operation->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
   {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
 	{{/if}}

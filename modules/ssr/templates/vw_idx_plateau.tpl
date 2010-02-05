@@ -1,8 +1,8 @@
-{{* $Id: vw_idx_societe.tpl 7948 2010-01-30 18:54:06Z MyttO $ *}}
+{{* $Id:$ *}}
 
 {{*
  * @package Mediboard
- * @subpackage dPstock
+ * @subpackage ssr
  * @version $Revision: 7948 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html

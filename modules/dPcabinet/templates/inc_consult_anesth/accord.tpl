@@ -51,7 +51,7 @@ Main.add(function () {
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
   </a></li>
   {{/if}}
-  <li onclick="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>
+  <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>

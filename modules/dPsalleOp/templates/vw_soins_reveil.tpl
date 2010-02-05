@@ -173,10 +173,10 @@ Main.add(function () {
 	<ul id="tabs_reveil" class="control_tabs">
 		<li><a href="#viewPatient">Patient</a></li>
 	  <li><a href="#viewSejourHospi">Séjour</a></li>
-		  <li onclick="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
+		  <li onmousedown="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
 		{{if $isPrescriptionInstalled}}
-	    <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
-		  <li onclick="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null, true, Preferences.mode_readonly == 0);"><a href="#prescription_sejour">Prescription</a></li>
+	    <li onmousedown="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+		  <li onmousedown="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null, true, Preferences.mode_readonly == 0);"><a href="#prescription_sejour">Prescription</a></li>
 	  {{/if}}  
 		<li><a href="#dossier_tab">Documents</a></li>
 		{{if $isImedsInstalled}}

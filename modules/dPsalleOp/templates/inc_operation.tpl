@@ -260,7 +260,7 @@ function reloadPrescription(prescription_id){
       <li><a href="#dossier_tab">Chir.</a></li>
     {{/if}}
 		
-    <li onclick="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
+    <li onmousedown="refreshConstantesHack('{{$selOp->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
 		<li><a href="#antecedents">Atcd.</a></li>
 
 	  {{if $isPrescriptionInstalled}}
