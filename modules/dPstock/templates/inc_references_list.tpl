@@ -62,13 +62,13 @@
             }}
             <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
           </form>
-        {{else}}
+        {{else if $mode == "reception"}}
           <form name="product-reference-{{$id}}" action="?" method="post">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
             <input type="hidden" name="_reference_id" value="{{$_reference->_id}}" />
             <input type="hidden" name="date" value="now" />
-            <input type="hidden" name="callback" value="orderItemCallback" />
+            <input type="hidden" name="callback" value="receptionCallback" />
             <input type="hidden" name="reception_id" value="" />
             {{mb_field object=$_reference 
               field=quantity 
@@ -80,7 +80,7 @@
             }}
             <input type="text" name="code" value="" size="6" title="{{tr}}CProductOrderItemReception-code{{/tr}}" />
             <input type="text" name="lapsing_date" value="" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
-            <button class="tick notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
+            <button class="tick notext" type="button" onclick="this.form.reception_id.value = window.reception_id; submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
           </form>
         {{/if}}
       </td>

@@ -106,6 +106,10 @@ function filterReferences(form) {
 function changePage(start) {
   $V(getForm("filter-references").start, start);
 }
+
+function receptionCallback(){
+  refreshReception(window.reception_id);
+}
 </script>
 
 <form name="cancel-reception" action="" method="post" onsubmit="return checkForm(this)">
