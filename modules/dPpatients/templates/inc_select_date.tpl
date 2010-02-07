@@ -18,9 +18,9 @@
   day_value_format="%02d"
   month_format="%m &mdash; %B"
   field_order=DMY
-  day_empty="&mdash;"
-  month_empty="&mdash;"
-  year_empty="&mdash;&mdash;"
+  day_empty="--"
+  month_empty="--"
+  year_empty="----"
   day_extra="tabindex='$day_index'"
   month_extra="tabindex='$month_index' style='width: 3.4em;'"
   year_extra="tabindex='$year_index'"
