@@ -50,8 +50,7 @@ function updateListPatients() {
     url.addElement(oForm.Date_Day);
     url.addElement(oForm.Date_Month);
     url.addElement(oForm.Date_Year);
-    url.addParam("jeuneFille", $V(oForm.jeuneFille));
-    url.addParam("patient_ipp", $V(oForm.patient_ipp));
+    url.addElemeny(oForm.patient_ipp));
   }
   url.addParam("board"   , "1");
   url.requestUpdate("patients");

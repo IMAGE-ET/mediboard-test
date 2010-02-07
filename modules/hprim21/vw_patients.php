@@ -47,7 +47,6 @@ if ($patient_jeuneFille) {
   $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 }
 
-
 if(($patient_year) || ($patient_month) || ($patient_day)){
 	$patient_naissance = "on";
 }

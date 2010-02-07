@@ -185,6 +185,28 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
       <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
       
+      <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
+      <td>
+        {{html_select_date
+          time=$datePat
+          start_year=1900
+          field_order=DMY
+					month_format=%m
+          day_empty="--"
+          month_empty="--"
+          year_empty="----"
+          day_extra="tabindex='3'"
+          month_extra="tabindex='4'"
+          year_extra="tabindex='5'"
+          all_extra="style='display:inline;'"}}         
+      </td>
+
+    </tr>
+    
+    <tr>
+      <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
+      <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
+
       {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
         <th>IPP</th>
         <td>
@@ -194,32 +216,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         <td colspan="2"></td>
       {{/if}}
     </tr>
-    
-    <tr>
-      <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-      <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
-      
-      <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
-      <td>
-        {{html_select_date
-          time=$datePat
-          start_year=1900
-          field_order=DMY
-          day_empty="Jour"
-          month_empty="Mois"
-          year_empty="Année"
-          day_extra="tabindex='4'"
-          month_extra="tabindex='5'"
-          year_extra="tabindex='6'"
-          all_extra="style='display:inline;'"}}         
-      </td>
-    </tr>
-    
-    <tr>
-      <th><label for="nomjf" title="Nom de naissance">Nom de naissance</label></th>
-      <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
-      <td colspan="3"></td>
-    </tr>  
       
     <tr>
       <td>
@@ -239,11 +235,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       {{/if}}
       </td>
       <td class="button">
-        <button class="search" type="submit">Rechercher</button>
+        <button class="search" type="submit">{{tr}}Search{{/tr}}</button>
       </td>
       <td class="button">
         {{if $can->edit}}
-          {{if $name || $firstName || $nomjf || $patient_ipp || ($datePat && $datePat != "--")}}
+          {{if $name || $firstName || $patient_ipp || ($datePat && $datePat != "--")}}
           <button class="new" type="button" onclick="Patient.create({{$useVitale}});">
             {{tr}}Create{{/tr}}
           </button>
@@ -251,7 +247,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         {{/if}}
       </td>
       <td class="button">
-        <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+        <button class="cancel" type="button" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
       </td>
     </tr>    
   </table>

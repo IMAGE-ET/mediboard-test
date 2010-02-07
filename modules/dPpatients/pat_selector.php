@@ -12,7 +12,6 @@ $can->needsRead();
 
 $name          = CValue::get("name"       );
 $firstName     = CValue::get("firstName"  );
-$nomjf         = CValue::get("nomjf"      );
 $patient_year  = CValue::get("Date_Year"  );
 $patient_month = CValue::get("Date_Month" );
 $patient_day   = CValue::get("Date_Day"   );
@@ -42,8 +41,10 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
    $patient->load($idsante->object_id);
    $patients[$patient->_id] = $patient; 
   }
-} else {
+} 
 
+// Recherche par traits classiques
+else {
   // Gestion du cas vitale
   if ($useVitale && CAppUI::pref('GestionFSE') && !CAppUI::pref('VitaleVision')) {
     $patVitale = new CPatient();  
@@ -59,39 +60,26 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $whereSoundex = array();
   $soundexObj   = new soundex2();
   
-  
-  if($name){
-    $name = trim($name);
-    $where["nom"]                    = "LIKE '$name%'";
-    $whereSoundex["nom_soundex2"]    = "LIKE '".$soundexObj->build($name)."%'";
+  if ($name = trim($name)) {
+    $name_soundex = $soundexObj->build($name);
+    $where[] = "`nom` LIKE '$name%' OR `nom_jeune_fille` LIKE '$name%'";
+    $whereSoundex[] = "`nom_soundex2` LIKE '$name_soundex%' OR `nomjf_soundex2` LIKE '$name_soundex%'";
   }
   
-  if($firstName){
-    $firstName = trim($firstName);
+	if ($firstName = trim($firstName)) {
+    $firstName_soundex = $soundexObj->build($firstName);
     $where["prenom"]                 = "LIKE '$firstName%'";
-    $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($firstName)."%'";
+    $whereSoundex["prenom_soundex2"] = "LIKE '$firstName_soundex%'";
   }
-  
-  if($nomjf){
-    $nomjf = trim($nomjf);
-    $where["nom_jeune_fille"]        = "LIKE '$nomjf%'";
-    $whereSoundex["nomjf_soundex2"]    = "LIKE '".$soundexObj->build($nomjf)."%'";  
+         
+  if ($patient_year || $patient_month || $patient_day) {
+    $patient_naissance = 
+      CValue::first($patient_year, "%") . "-" .
+      CValue::first($patient_month, "%") . "-" .
+      ($patient_day ? str_pad($patient_day, 2, "0", STR_PAD_LEFT) : "%");
+    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
   }
-     
-  if(($patient_year) || ($patient_month) || ($patient_day)){
-    $year =($patient_year)?"$patient_year-":"%-";
-    $month =($patient_month)?"$patient_month-":"%-";
-    $day =($patient_day)?"$patient_day":"%";
-    if($day!="%"){
-      $day = str_pad($day,2,"0",STR_PAD_LEFT);
-    }
-    $naissance = $year.$month.$day;
-    
-    if($patient_year || $patient_month || $patient_day){
-      $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
-    }
-  }
-  
+
   $limit = "0, $showCount";
   $order = "patients.nom, patients.prenom";
   
@@ -107,6 +95,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
       $patientsSoundex = array_diff_key($patientsSoundex, $patients);
     }
   }
+	
   // Chargement des consultations du jour
   function loadConsultationsDuJour(&$patients) {
     $today = mbDate();
@@ -147,7 +136,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
 $smarty->assign("name"             , $name            );
 $smarty->assign("firstName"        , $firstName       );
-$smarty->assign("nomjf"            , $nomjf           );
 $smarty->assign("useVitale"        , $useVitale       );
 $smarty->assign("patVitale"        , $patVitale       );
 $smarty->assign("patients"         , $patients        );

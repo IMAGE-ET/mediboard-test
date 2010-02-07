@@ -107,7 +107,6 @@ var VitaleVision = {
     // For the patient selector TODO: change the field names !
     $V(form.elements.name, getNodeValue("nomUsuel", ident));  
     $V(form.elements.firstName, getNodeValue("prenomUsuel", ident));  
-    //$V(form.elements.nomjf, getNodeValue("nomPatronymique", ident));  
     
     if(getNodeValue("naissance date", ident) != "") { // Si format FR
       var dateNaissance = getNodeValue("naissance date", ident),

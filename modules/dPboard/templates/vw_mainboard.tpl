@@ -134,8 +134,7 @@ function updateListPatients() {
     url.addElement(oForm.Date_Day);
     url.addElement(oForm.Date_Month);
     url.addElement(oForm.Date_Year);
-    url.addParam("jeuneFille", oForm.jeuneFille.value);
-    url.addParam("patient_ipp", oForm.patient_ipp.value);
+    url.addElement(oForm.patient_ipp);
   }
   url.addParam("board"   , "1");
 

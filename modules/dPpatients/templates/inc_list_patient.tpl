@@ -78,37 +78,23 @@ reloadPatient = function(patient_id, link){
     <th><label for="nom" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
     <td><input tabindex="1" type="text" name="nom" value="{{$nom|stripslashes}}" /></td>
     <th><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
-    <td><input tabindex="4" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
+    <td><input tabindex="6" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
   </tr>
   
   <tr>
     <th><label for="prenom" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
     <td><input tabindex="2" type="text" name="prenom" value="{{$prenom|stripslashes}}" /></td>
     <th><label for="ville" title="Ville du patient à rechercher">Ville</label></th>
-    <td><input tabindex="5" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
+    <td><input tabindex="7" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
   </tr>
-  
+    
   <tr>
-    <th><label for="jeuneFille" title="Nom de naissance">Nom de naissance</label></th>
-    <td><input tabindex="3" type="text" name="jeuneFille" value="{{$jeuneFille|stripslashes}}" /></td>
-    {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
-    <th>IPP</th>
-    <td>
-      <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
-    </td>
-    {{else}}
-    <td colspan="2" />
-    {{/if}}
-  </tr>
-  
-  <tr>
-    <th colspan="2">
+    <th>
       <label for="Date_Day" title="Date de naissance du patient à rechercher">
         Date de naissance
       </label>
-      <input type="hidden" name="naissance" value="{{$useNaissance}}" />
     </th>
-    <td colspan="2">
+    <td>
     	{{if $naissance}}
 			  {{assign var=naiss value=$naissance}}
 			{{else}}
@@ -117,15 +103,25 @@ reloadPatient = function(patient_id, link){
          {{html_select_date
            time=$naiss
            start_year=1900
+					 month_format=%m
            field_order=DMY
-           day_empty="Jour"
-           month_empty="Mois"
-           year_empty="Année"
-           day_extra="tabindex='7'"
-           month_extra="tabindex='8'"
-           year_extra="tabindex='9'"
+           day_empty="--"
+           month_empty="--"
+           year_empty="----"
+           day_extra="tabindex='3'"
+           month_extra="tabindex='4'"
+           year_extra="tabindex='5'"
            all_extra="style='display:inline;'"}}
     </td>
+
+    {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+    <th>IPP</th>
+    <td>
+      <input tabindex="8" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
+    </td>
+    {{else}}
+    <td colspan="2" />
+    {{/if}}
   </tr>
   
   <tr>
@@ -154,7 +150,7 @@ reloadPatient = function(patient_id, link){
       {{/if}}
       
       {{if $can->edit}}
-        {{if $nom || $prenom || $jeuneFille || $patient_ipp || $naissance}}
+        {{if $nom || $prenom || $patient_ipp || $naissance}}
         <button class="new" type="button" onclick="Patient.create(this.form);">
           {{tr}}Create{{/tr}}
           {{if $useVitale}}avec Vitale{{/if}}
