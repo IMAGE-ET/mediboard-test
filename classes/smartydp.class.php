@@ -345,8 +345,8 @@ function smarty_function_mb_colonne($params, &$smarty) {
   $url           = CMbArray::extract($params, "url"          , null, false);
   $function      = CMbArray::extract($params, "function"     , null, false);
   
-  $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr($class."-".$field."-desc")."\">";
-  $sHtml .= CAppUI::tr($class."-".$field);
+  $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr("$class-$field-desc")."\">";
+  $sHtml .= CAppUI::tr("$class-$field-court");
   $sHtml .= "</label>";
     
   $css_class = ($order_col == $field) ? "sorted" : "sortable";
