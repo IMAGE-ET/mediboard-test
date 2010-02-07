@@ -7,7 +7,7 @@ Medecin = {
     this.form = form;
     var url = new Url();
     url.setModuleAction("dPpatients", "vw_medecins");
-    url.popup(700, 450, "Medecin");
+    url.popup(700, 550, "Medecin");
   },
   
   del: function(form) {

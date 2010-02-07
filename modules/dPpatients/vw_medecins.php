@@ -27,25 +27,23 @@ else if ($medecin->load($medecin_id)) {
   $medecin->countPatients();
 }
 
-$code_default = str_pad(CAppUI::pref("DEPARTEMENT"), 2, "0", STR_PAD_LEFT);
-
 // Récuperation des médecins recherchés
 if($dialog) {
   $medecin_nom    = CValue::get("medecin_nom"   , ""  );
   $medecin_prenom = CValue::get("medecin_prenom", ""  );
-  $medecin_dept   = CValue::get("medecin_dept"  , $code_default);
+  $medecin_cp     = CValue::get("medecin_cp"    , CAppUI::pref("DEPARTEMENT"));
   $medecin_type   = CValue::get("medecin_type"  , "medecin");
 } else {
   $medecin_nom    = CValue::getOrSession("medecin_nom");
   $medecin_prenom = CValue::getOrSession("medecin_prenom");
-  $medecin_dept   = CValue::getOrSession("medecin_dept", $code_default);
+  $medecin_cp     = CValue::getOrSession("medecin_cp", CAppUI::pref("DEPARTEMENT"));
   $medecin_type   = CValue::getOrSession("medecin_type", "medecin");
 }
 
 $where = array();
 if ($medecin_nom   ) $where["nom"]      = "LIKE '$medecin_nom%'";
 if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
-if ($medecin_dept && $medecin_dept != "00") $where["cp"] = "LIKE '".$medecin_dept."___'";
+if ($medecin_cp && $medecin_cp != "00") $where["cp"] = "LIKE '$medecin_cp%'";
 if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
 
 if ($order_col == "cp") {
@@ -67,7 +65,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("dialog"     , $dialog);
 $smarty->assign("nom"        , $medecin_nom);
 $smarty->assign("prenom"     , $medecin_prenom);
-$smarty->assign("departement", $medecin_dept);
+$smarty->assign("cp"         , $medecin_cp);
 $smarty->assign("type"       , $medecin_type);
 $smarty->assign("medecins"   , $medecins);
 $smarty->assign("medecin"    , $medecin);
