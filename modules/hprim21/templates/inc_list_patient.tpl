@@ -34,20 +34,9 @@
       <label for="Date_Day" title="Date de naissance du patient à rechercher">
         Date de naissance
       </label>
-      <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
     </th>
     <td colspan="2">
-         {{html_select_date
-           time=0000-00-00
-           start_year=1900
-           field_order=DMY
-           day_empty="Jour"
-           month_empty="Mois"
-           year_empty="Année"
-           day_extra="tabindex='7'"
-           month_extra="tabindex='8'"
-           year_extra="tabindex='9'"
-           all_extra="style='display:inline;'"}}   
+      {{mb_include module=dPpatients template=inc_select_date date="--" tabindex=7}}
     </td>
   </tr>
   
@@ -63,7 +52,6 @@
 
 <table class="tbl">
   <tr>
-    {{/if}}
     <th>
       Patient
       ({{$patientsCount}} {{tr}}found{{/tr}})

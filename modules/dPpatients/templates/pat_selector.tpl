@@ -187,18 +187,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       
       <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
       <td>
-        {{html_select_date
-          time=$datePat
-          start_year=1900
-          field_order=DMY
-					month_format=%m
-          day_empty="--"
-          month_empty="--"
-          year_empty="----"
-          day_extra="tabindex='3'"
-          month_extra="tabindex='4'"
-          year_extra="tabindex='5'"
-          all_extra="style='display:inline;'"}}         
+        {{mb_include module=dPpatients template=inc_select_date date=$datePat tabindex=3}}
       </td>
 
     </tr>

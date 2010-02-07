@@ -95,23 +95,7 @@ reloadPatient = function(patient_id, link){
       </label>
     </th>
     <td>
-    	{{if $naissance}}
-			  {{assign var=naiss value=$naissance}}
-			{{else}}
-			  {{assign var=naiss value='0000-00-00'}}
-			{{/if}}
-         {{html_select_date
-           time=$naiss
-           start_year=1900
-					 month_format=%m
-           field_order=DMY
-           day_empty="--"
-           month_empty="--"
-           year_empty="----"
-           day_extra="tabindex='3'"
-           month_extra="tabindex='4'"
-           year_extra="tabindex='5'"
-           all_extra="style='display:inline;'"}}
+    	{{mb_include module=dPpatients template=inc_select_date date=$naissance tabindex=3}}
     </td>
 
     {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}

@@ -101,9 +101,9 @@ else {
 	
   if ($patient_year || $patient_month || $patient_day) {
     $patient_naissance = 
-      CValue::first($patient_year, "%") . "-" .
+      CValue::first($patient_year , "%") . "-" .
       CValue::first($patient_month, "%") . "-" .
-      ($patient_day ? str_pad($patient_day, 2, "0", STR_PAD_LEFT) : "%");
+      CValue::first($patient_day  , "%");
     $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
   }
 	
