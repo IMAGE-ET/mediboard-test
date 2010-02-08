@@ -43,10 +43,12 @@ function refreshConstantesMedicales(context_guid) {
 
 var constantesMedicalesDrawn = false;
 function refreshConstantesHack(sejour_id) {
-  if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
-    refreshConstantesMedicales('CSejour-'+sejour_id);
-    constantesMedicalesDrawn = true;
-  }
+  (function(){
+    if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
+      refreshConstantesMedicales('CSejour-'+sejour_id);
+      constantesMedicalesDrawn = true;
+    }
+  }).delay(0.5);
 }
 
 function cancelRPU() {
