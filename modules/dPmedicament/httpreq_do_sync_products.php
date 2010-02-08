@@ -38,43 +38,42 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
 	$produit_prescription = new CProduitPrescription();
 	$produit_prescription->code_cip = $produit_livret->code_cip;
 	$produit_prescription->loadMatchingObject();
-	
+  
+  if($produit_prescription->_id){
+    $libelle = $produit_prescription->libelle;
+    $quantite = $produit_prescription->nb_presentation;
+    
+    $libelle_presentation = $produit_prescription->unite_dispensation;
+    $nb_unite_presentation = $produit_prescription->quantite; 
+    $libelle_unite_presentation = $produit_prescription->unite_prise;
+    $packaging = "";
+  } else {    
+    $_produit =& $produit_livret->_ref_produit; 
+    $libelle = $_produit->libelle;
+    $packaging = $_produit->libelle_conditionnement;  
+    
+    if($_produit->libelle_presentation){
+      $quantite = $_produit->nb_presentation;
+      $libelle_presentation = $_produit->libelle_presentation;
+      $nb_unite_presentation = $_produit->nb_unite_presentation ? $_produit->nb_unite_presentation : 1;
+      $libelle_unite_presentation = $_produit->libelle_unite_presentation;
+    } else {
+      $quantite = $_produit->nb_unite_presentation;
+      $libelle_presentation = $_produit->libelle_unite_presentation;
+      $nb_unite_presentation = "";
+      $libelle_unite_presentation = "";
+    }
+  }
+  
   $product = new CProduct();
   $product->code          = $produit_livret->code_cip;
   
   if (!$product->loadMatchingObject()) {
     $product->category_id = $category_id;
+    $product->name        = $libelle;
   }
   
   $product->description   = $produit_livret->commentaire;
-  
-	if($produit_prescription->_id){
-		$libelle = $produit_prescription->libelle;
-    $quantite = $produit_prescription->nb_presentation;
-		
-		$libelle_presentation = $produit_prescription->unite_dispensation;
-		$nb_unite_presentation = $produit_prescription->quantite; 
-		$libelle_unite_presentation = $produit_prescription->unite_prise;
-		$packaging = "";
-	} else {		
-	  $_produit =& $produit_livret->_ref_produit;	
-		$libelle = $_produit->libelle;
-	  $packaging = $_produit->libelle_conditionnement;  
-		
-		if($_produit->libelle_presentation){
-		  $quantite = $_produit->nb_presentation;
-	    $libelle_presentation = $_produit->libelle_presentation;
-	    $nb_unite_presentation = $_produit->nb_unite_presentation ? $_produit->nb_unite_presentation : 1;
-	    $libelle_unite_presentation = $_produit->libelle_unite_presentation;
-		} else {
-			$quantite = $_produit->nb_unite_presentation;
-      $libelle_presentation = $_produit->libelle_unite_presentation;
-      $nb_unite_presentation = "";
-      $libelle_unite_presentation = "";
-		}
-  }
-	
-	$product->name          = $libelle;
   $product->packaging     = $packaging;
   $product->quantity      = $quantite;
   $product->item_title    = $libelle_presentation;
