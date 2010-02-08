@@ -12,37 +12,44 @@ global $AppUI, $can, $m, $tab;
 
 $sejour_id = CValue::getOrSession("sejour_id");
 
-$group = CGroups::loadCurrent();
 $user = new CMediusers();
-$listPrats = $user->loadPraticiens(PERM_READ);
+$prats = $user->loadPraticiens(PERM_READ);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 
 if ($sejour_id && !$sejour->_id) {
   CAppUI::setMsg(CAppUI::tr("CSejour-unavailable"), UI_MSG_WARNING);
-  CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
+  CAppUI::redirect("m=ssr&tab=vw_aed_sejour&sejour_id=0");
 }
 
-$fiche_autonomie = new CFicheAutonomie();
+$fiche_autonomie = new CFicheAutonomie;
+$patient = new CPatient;
+$bilan = new CBilanSSR;
+
 if ($sejour->_id) {
   $sejour->loadRefPatient();
+  $sejour->loadNumDossier();
+
+  // Chargement du patient
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($AppUI->user_id);
-  
-  // Chargement de l'IPP 
   $patient->loadIPP();
-  // Chargement du numero de dossier
-  $sejour->loadNumDossier();
-  
+
+  // Fiche autonomie  
   $fiche_autonomie->sejour_id = $sejour->_id;
   $fiche_autonomie->loadMatchingObject();
-} else {
+  
+  // Bilan SSR  
+  $bilan->sejour_id = $sejour->_id;
+  $bilan->loadMatchingObject();
+  
+} 
+else {
+	$sejour->group_id = CGroups::loadCurrent()->_id;
   $sejour->praticien_id = $AppUI->user_id;
   $sejour->entree_prevue = mbDate()." 08:00:00";
   $sejour->sortie_prevue = mbDate()." 18:00:00";
-  
-  $patient = new CPatient;
 }
 
 // Aides à la saisie
@@ -54,10 +61,7 @@ $traitement->loadAides($AppUI->user_id);
 $antecedent = new CAntecedent();
 $antecedent->loadAides($AppUI->user_id);
 
-// Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
-
+// Dossier médical visibile ?
 $can_view_dossier_medical = 
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
@@ -71,11 +75,11 @@ $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("today"               , mbDate());
 $smarty->assign("traitement"          , $traitement);
 $smarty->assign("antecedent"          , $antecedent);
-$smarty->assign("fiche_autonomie"     , $fiche_autonomie);
 $smarty->assign("sejour"              , $sejour);
+$smarty->assign("fiche_autonomie"     , $fiche_autonomie);
+$smarty->assign("bilan"               , $bilan);
 $smarty->assign("patient"             , $patient);
-$smarty->assign("listPrats"           , $listPrats);
-$smarty->assign("etablissements"      , $etablissements);
+$smarty->assign("prats"               , $prats);
 
 $smarty->display("vw_aed_sejour_ssr.tpl");
 ?>

@@ -57,38 +57,58 @@ class CSetupssr extends CSetup {
     
     // Fiche d'autonomie
     $this->makeRevision("0.04");
-    $sql = "CREATE TABLE `fiche_autonomie` (
-              `fiche_autonomie_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `sejour_id` INT (11) UNSIGNED NOT NULL,
-              `alimentation` ENUM ('autonome','partielle','totale'),
-              `toilette` ENUM ('autonome','partielle','totale'),
-              `habillage_haut` ENUM ('autonome','partielle','totale'),
-              `habillage_bas` ENUM ('autonome','partielle','totale'),
-              `utilisation_toilette` ENUM ('sonde','couche','bassin','stomie'),
-              `transfert_lit` ENUM ('autonome','partielle','totale'),
-              `locomotion` ENUM ('autonome','partielle','totale'),
-              `locomotion_materiel` ENUM ('canne','cadre','fauteuil'),
-              `escalier` ENUM ('autonome','partielle','totale'),
-              `pansement` ENUM ('0','1'),
-              `escarre` ENUM ('0','1'),
-              `comprehension` ENUM ('intacte','alteree'),
-              `expression` ENUM ('intacte','alteree'),
-              `memoire` ENUM ('intacte','alteree'),
-              `resolution_pb` ENUM ('intacte','alteree'),
-              `etat_psychique` TEXT,
-              `devenir_envisage` TEXT
-            ) TYPE=MYISAM;";
-    $this->addQuery($sql);
+    $query = "CREATE TABLE `fiche_autonomie` (
+      `fiche_autonomie_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `sejour_id` INT (11) UNSIGNED NOT NULL,
+      `alimentation` ENUM ('autonome','partielle','totale'),
+      `toilette` ENUM ('autonome','partielle','totale'),
+      `habillage_haut` ENUM ('autonome','partielle','totale'),
+      `habillage_bas` ENUM ('autonome','partielle','totale'),
+      `utilisation_toilette` ENUM ('sonde','couche','bassin','stomie'),
+      `transfert_lit` ENUM ('autonome','partielle','totale'),
+      `locomotion` ENUM ('autonome','partielle','totale'),
+      `locomotion_materiel` ENUM ('canne','cadre','fauteuil'),
+      `escalier` ENUM ('autonome','partielle','totale'),
+      `pansement` ENUM ('0','1'),
+      `escarre` ENUM ('0','1'),
+      `comprehension` ENUM ('intacte','alteree'),
+      `expression` ENUM ('intacte','alteree'),
+      `memoire` ENUM ('intacte','alteree'),
+      `resolution_pb` ENUM ('intacte','alteree'),
+      `etat_psychique` TEXT,
+      `devenir_envisage` TEXT
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
     $query = "ALTER TABLE `fiche_autonomie` 
       ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.05");
-    $sql = "ALTER TABLE `fiche_autonomie` 
-              ADD `soins_cutanes` TEXT;";
-    $this->addQuery($sql);
+    $query = "ALTER TABLE `fiche_autonomie` 
+      ADD `soins_cutanes` TEXT;";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.06";
+    // Bilan SSR
+    $this->makeRevision("0.06");
+    $query = "CREATE TABLE `bilan_ssr` (
+	    `bilan_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+	    `sejour_id` INT (11) UNSIGNED NOT NULL,
+	    `kine` VARCHAR (255) NOT NULL,
+	    `ergo` VARCHAR (255) NOT NULL,
+	    `psy` VARCHAR (255) NOT NULL,
+	    `ortho` VARCHAR (255) NOT NULL,
+	    `diet` VARCHAR (255) NOT NULL,
+	    `social` VARCHAR (255) NOT NULL,
+	    `apa` VARCHAR (255) NOT NULL,
+	    `entree` TEXT,
+	    `sortie` TEXT
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `bilan_ssr` 
+      ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.07";
   }
 }
 
