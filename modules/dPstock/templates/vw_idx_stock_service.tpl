@@ -64,7 +64,7 @@ ProductSelector.init = function(){
     </td>
 
     <td>
-      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService-title-create{{/tr}}</a>
       
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
@@ -76,7 +76,7 @@ ProductSelector.init = function(){
             {{if $stock->_id}}
             <th class="title modify" colspan="2">{{$stock->_view|truncate:60}}</th>
             {{else}}
-            <th class="title" colspan="2">{{tr}}CProductStockService.create{{/tr}}</th>
+            <th class="title" colspan="2">{{tr}}CProductStockService-title-create{{/tr}}</th>
             {{/if}}
           </tr>
           <tr>

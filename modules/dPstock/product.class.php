@@ -154,6 +154,26 @@ class CProduct extends CMbObject {
     return parent::updateDBFields();
   }
   
+  function getConsommation($since = "-1 MONTH"){
+    $this->loadRefStock();
+    $where = array(
+      "stock_id" => "= '{$this->_ref_stock_group->_id}'",
+      "product_delivery_trace.date_delivery" => " > '".mbDate($since)."'",
+    );
+    $ljoin = array(
+      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_trace_id"
+    );
+    
+    $trace = new CProductDeliveryTrace;
+    $traces = $trace->loadList($where, null, null, null, $ljoin);
+
+    $total = 0;
+    foreach($traces as $_trace) {
+      $total += $_trace->quantity;
+    }
+    return $total;
+  }
+  
   function store() {
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadBackRefs("references");

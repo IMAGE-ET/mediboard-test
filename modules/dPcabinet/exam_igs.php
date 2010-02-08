@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 //$can->needsEdit();
 
@@ -20,26 +20,24 @@ $consultation->load($consultation_id);
 // Chargement du patient
 $consultation->loadRefPatient();
 
-$where = array("consultation_id" => "= '$consultation_id'");
 $exam_igs = new CExamIgs;
-$exam_igs->loadObject($where);
+$exam_igs->consultation_id = $consultation_id;
+$exam_igs->loadMatchingObject();
 
 if (!$exam_igs->_id) {
-  $exam_igs->consultation_id = $consultation_id;
-  
   // Pre-remplissage de l'age du patient
   if($consultation->_ref_patient->_age < 40){
-    $exam_igs->age = '0'; 
+    $exam_igs->age = 0; 
   } elseif ($consultation->_ref_patient->_age < 59) {
-    $exam_igs->age = '7'; 
+    $exam_igs->age = 7; 
   } elseif ($consultation->_ref_patient->_age < 69) {
-    $exam_igs->age = '12'; 
+    $exam_igs->age = 12; 
   } elseif ($consultation->_ref_patient->_age < 74) {
-    $exam_igs->age = '15'; 
+    $exam_igs->age = 15; 
   } elseif ($consultation->_ref_patient->_age < 79) {
-    $exam_igs->age = '16'; 
+    $exam_igs->age = 16; 
   } else {
-    $exam_igs->age = '18';
+    $exam_igs->age = 18;
   }
 }
 

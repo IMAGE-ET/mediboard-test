@@ -111,55 +111,56 @@ class CEnumSpec extends CMbFieldSpec {
       asort($locales); 
     }
     
-    if ($typeEnum === "select") {
-      $sHtml      .= "<select name=\"$field\"";
-      $sHtml      .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>";
-      
-      if($defaultOption){
-        if($value === null) {
-          $sHtml    .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
-        } else {
-          $sHtml    .= "\n<option value=\"\">$defaultOption</option>";
+    switch ($typeEnum) {
+      default:
+      case "select":
+        $sHtml      .= "<select name=\"$field\"";
+        $sHtml      .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>";
+        
+        if($defaultOption){
+          if($value === null) {
+            $sHtml    .= "\n<option value=\"\" selected=\"selected\">$defaultOption</option>";
+          } else {
+            $sHtml    .= "\n<option value=\"\">$defaultOption</option>";
+          }
         }
-      }
-      foreach ($locales as $key => $item){
-        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
-          $selected = " selected=\"selected\""; 
-        }else{
-          $selected = "";
+        foreach ($locales as $key => $item){
+          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+            $selected = " selected=\"selected\""; 
+          }else{
+            $selected = "";
+          }
+          $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
         }
-        $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
-      }
-      $sHtml      .= "\n</select>";
-      return $sHtml;
-    }
+        $sHtml      .= "\n</select>";
+        return $sHtml;
 
-    if ($typeEnum === "radio"){
-      $compteur = 0;
-      
-      foreach ($locales as $key => $item){
-        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
-          $selected = " checked=\"checked\""; 
-        }else{
-          $selected = "";
+      case "radio":
+        $compteur = 0;
+        
+        foreach ($locales as $key => $item){
+          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
+            $selected = " checked=\"checked\""; 
+          }else{
+            $selected = "";
+          }
+          $sHtml    .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
+          if($compteur == 0) {
+            $sHtml  .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\"";
+          }
+          elseif($className != ""){
+            $sHtml  .= " class=\"".htmlspecialchars(trim($className))."\"";
+          }
+          $sHtml    .= " $extra /><label for=\"".$field."_$key\">$item</label> ";
+          $compteur++;
+          
+          $modulo = $compteur % $cycle;
+          if($separator != null && $modulo == 0 && $compteur < count($locales)){
+            $sHtml  .= $separator;
+          }
         }
-        $sHtml    .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
-        if($compteur == 0) {
-          $sHtml  .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\"";
-        }elseif($className != ""){
-          $sHtml  .= " class=\"".htmlspecialchars(trim($className))."\"";
-        }
-        $sHtml    .= " $extra /><label for=\"".$field."_$key\">$item</label> ";
-        $compteur++;
-        if($compteur % $cycle == 0){
-          $sHtml  .= $separator;
-        }
-      }
-      
-      return $sHtml;
+        return $sHtml;
     }
-    
-    trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
   }
   
   function getLabelForElement($object, &$params){

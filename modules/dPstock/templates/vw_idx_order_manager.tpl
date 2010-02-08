@@ -24,7 +24,7 @@ Main.add(function () {
   <!-- Action buttons -->
   <div style="float: right;">
     <button type="button" class="change" onclick="popupOrder(null, null, null, true);">{{tr}}CProductOrder-_autofill{{/tr}}</button>
-    <button type="button" class="new"    onclick="popupOrder(null, null, null);">{{tr}}CProductOrder.create{{/tr}}</button>
+    <button type="button" class="new"    onclick="popupOrder(null, null, null);">{{tr}}CProductOrder-title-create{{/tr}}</button>
   </div>
 
   <!-- Filter -->

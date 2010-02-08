@@ -26,7 +26,7 @@
           {{assign var=future value=$curr_stock->_zone_future}}
           <td style="background: {{$colors.$current}}"></td>
           <td style="background: {{$colors.$future}}"></td>
-          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="{{tr}}CProductStockGroup.modify{{/tr}}">{{$curr_stock->_view}}</a></td>
+          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">{{$curr_stock->_view}}</a></td>
           <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
           <td>
             {{foreach from=$curr_stock->_orders item=curr_order}}

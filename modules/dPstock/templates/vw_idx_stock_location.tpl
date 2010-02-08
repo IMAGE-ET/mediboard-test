@@ -21,7 +21,7 @@
         {{foreach from=$list_locations item=curr_location}}
         <tr {{if $curr_location->_id == $stock_location->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="?m=dPstock&amp;tab=vw_idx_stock_location&amp;stock_location_id={{$curr_location->_id}}" title="{{tr}}CProductStockLocation.modify{{/tr}}">
+            <a href="?m=dPstock&amp;tab=vw_idx_stock_location&amp;stock_location_id={{$curr_location->_id}}" title="{{tr}}CProductStockLocation-title-modify{{/tr}}">
               {{mb_value object=$curr_location field=name}}
             </a>
           </td>

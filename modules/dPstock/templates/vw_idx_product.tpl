@@ -58,7 +58,7 @@ function filterReferences(form) {
       <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct-title-create{{/tr}}</a>
       			
       {{if $can->edit}}
-      {{mb_include template=inc_form_product}}
+        {{mb_include template=inc_form_product}}
       {{/if}}
       
       {{if $product->_id}}
@@ -91,7 +91,7 @@ function filterReferences(form) {
               <td>{{tr}}CProductStockGroup.none{{/tr}}</td>
               <td>
                 <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                  {{tr}}CProductStockGroup.create{{/tr}}
+                  {{tr}}CProductStockGroup-title-create{{/tr}}
                 </button>
               </td>
             {{/if}}

@@ -85,7 +85,7 @@ class CBoolSpec extends CMbFieldSpec {
 	      $sTr = CAppUI::tr("bool.$i");
 	      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
 	      
-	      if ($i != 0 && $separator){
+	      if ($separator && $i != 0){
 	        $sHtml .= "\n$separator";
 	      }
 	    }

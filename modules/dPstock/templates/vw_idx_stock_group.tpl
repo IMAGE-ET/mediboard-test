@@ -67,7 +67,7 @@ function refreshListStocksService(product_id) {
     </td>
 
     <td class="halfPane">
-      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0">{{tr}}CProductStockGroup.create{{/tr}}</a>
+      <a class="button new" href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0">{{tr}}CProductStockGroup-title-create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_stock_group_aed" />
         <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
@@ -77,7 +77,7 @@ function refreshListStocksService(product_id) {
             {{if $stock->_id}}
             <th class="title modify" colspan="2">{{$stock->_view|truncate:60}}</th>
             {{else}}
-            <th class="title" colspan="2">{{tr}}CProductStockGroup.create{{/tr}}</th>
+            <th class="title" colspan="2">{{tr}}CProductStockGroup-title-create{{/tr}}</th>
             {{/if}}
           </tr>
           <tr>

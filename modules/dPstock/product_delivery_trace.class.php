@@ -58,8 +58,8 @@ class CProductDeliveryTrace extends CMbObject {
   }
   
   function store() {
-  	$this->completeField('delivery_id');
-  	$this->completeField('quantity');
+  	$this->completeField('delivery_id', 'quantity');
+    
     $this->loadRefsFwd();
     $stock = $this->getStock();
     $stock->loadRefsFwd();

@@ -58,7 +58,7 @@ Main.add(function(){
   <tr>
     <td id="list-societe"></td>
     <td class="halfPane" rowspan="2">
-      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete.create{{/tr}}</a>
+      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">{{tr}}CSociete-title-create{{/tr}}</a>
       {{if $can->edit}}
 			{{mb_include_script module="dPpatients" script="autocomplete"}}
 			<script type="text/javascript">
@@ -75,9 +75,9 @@ Main.add(function(){
       <table class="form">
         <tr>
           {{if $societe->_id}}
-          <th class="title modify" colspan="2">{{tr}}CSociete.modify{{/tr}} {{$societe->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CSociete-title-modify{{/tr}} {{$societe->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CSociete.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CSociete-title-create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
@@ -162,7 +162,7 @@ Main.add(function(){
       
       <div id="societe-references" style="display: none;">
         <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id=0&amp;societe_id={{$societe->_id}}'">
-          {{tr}}CProductReference.create{{/tr}}
+          {{tr}}CProductReference-title-create{{/tr}}
         </button>
         <table class="tbl">
           <tr>
@@ -194,7 +194,7 @@ Main.add(function(){
       
       <div id="societe-products" style="display: none;">
         <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
-          {{tr}}CProduct.create{{/tr}}
+          {{tr}}CProduct-title-create{{/tr}}
         </button>
         <table class="tbl">
           <tr>

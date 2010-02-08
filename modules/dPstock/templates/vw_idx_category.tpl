@@ -11,7 +11,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}CProductCategory.create{{/tr}}</a>
+      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}CProductCategory-title-create{{/tr}}</a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CProductCategory{{/tr}}</th>
@@ -20,7 +20,7 @@
         {{foreach from=$list_categories item=curr_category}}
         <tr {{if $curr_category->_id == $category->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="{{tr}}CProductCategory.modify{{/tr}}">
+            <a href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="{{tr}}CProductCategory-title-modify{{/tr}}">
               {{mb_value object=$curr_category field=name}}
             </a>
           </td>
@@ -37,9 +37,9 @@
       <table class="form">
         <tr>
           {{if $category->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductCategory.modify{{/tr}} {{$category->name}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProductCategory-title-modify{{/tr}} {{$category->name}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProductCategory.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProductCategory-title-create{{/tr}}</th>
           {{/if}}
         </tr> 
         <tr>
