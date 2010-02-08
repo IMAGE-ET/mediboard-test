@@ -28,6 +28,7 @@ class CMbFieldSpec {
   var $format         = null;
   var $autocomplete   = null;
   var $perm           = null; // Used by autocomplete
+  var $dependsOn      = null;
   var $helped         = null;
   var $seekable       = null;
   var $show           = null;
@@ -88,6 +89,7 @@ class CMbFieldSpec {
       'mask'          => 'str',
       'format'        => 'str',
       'autocomplete'  => 'bool',
+      'dependsOn'     => 'field',
       'perm'          => 'str',
       'helped'        => 'bool',
       'seekable'      => 'bool',
@@ -538,6 +540,7 @@ class CMbFieldSpec {
     	$id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
     	$sHtml .= '<script type="text/javascript">
     	Main.add(function(){
+    	  var input = $("'.$id.'");
 			  var url = new Url("system", "httpreq_field_autocomplete");
 			  url.addParam("class", "'.$object->_class_name.'");
 			  url.addParam("field", "'.$field.'");
@@ -546,7 +549,7 @@ class CMbFieldSpec {
 			  url.addParam("show_view", '.($show_view ? 'true' : 'false').');
 			  url.addParam("input_field", "'.$field.($ref ? '_autocomplete_view' : '').'");
 			  url.addParam("wholeString", '.$wholeString.');
-			  url.autoComplete($("'.$id.'"), "'.$id.'_autocomplete", {
+			  url.autoComplete(input, "'.$id.'_autocomplete", {
 			    minChars: '.$minChars.',
 			    method: "get",
           select: ".view",
@@ -558,6 +561,13 @@ class CMbFieldSpec {
 		        $V(field.form["'.$field.'"], selected.getAttribute("id"));
           }';
     	}
+      if ($this->dependsOn) {
+        $sHtml .= ',
+          callback: function(element, query){
+            var extension = "&where['.$this->dependsOn.']=" + $V(input.form.elements["'.$this->dependsOn.'"]);
+            return query + extension;
+          }';
+      }
     	
     	$sHtml .= '});});</script>';
       $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
