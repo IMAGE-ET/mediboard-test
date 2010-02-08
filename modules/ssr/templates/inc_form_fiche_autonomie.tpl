@@ -10,90 +10,88 @@
       <th class="category" colspan="10">{{tr}}CFicheAutonomie-autonomie-perso{{/tr}}</th>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="alimentation"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="alimentation" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="alimentation" typeEnum="radio" separator="</td><td>"}}</td>
 			<td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="toilette"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="toilette" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="toilette" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="habillage_haut"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="habillage_haut" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="habillage_haut" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="habillage_bas"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="habillage_bas" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="habillage_bas" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="utilisation_toilette"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="utilisation_toilette" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="utilisation_toilette" typeEnum="radio" separator="</td><td>"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="transfert_lit"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="transfert_lit" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="transfert_lit" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="locomotion"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="locomotion" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="locomotion" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="locomotion_materiel"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="locomotion_materiel" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="locomotion_materiel" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="escalier"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="escalier" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="escalier" typeEnum="radio" separator="</td><td>"}}</td>
       <td/>
     </tr>
 
     <tr>
-      <th class="category" colspan="10">{{tr}}CFicheAutonomie-soins-cutanes{{/tr}}</th>
+      <th class="category" colspan="10">{{tr}}CFicheAutonomie-soins_cutanes{{/tr}}</th>
     </tr>
-
+    <tr>
+      <th>{{mb_label object=$fiche_autonomie field="pansement" typeEnum="radio"}}</th>
+      <td>{{mb_field object=$fiche_autonomie field="pansement" typeEnum="radio" separator="</td><td>" default=""}}</td>
+      <td colspan="2" />
+    </tr>
+    <tr>
+      <th>{{mb_label object=$fiche_autonomie field="escarre" typeEnum="radio"}}</th>
+      <td>{{mb_field object=$fiche_autonomie field="escarre" typeEnum="radio" separator="</td><td>" default=""}}</td>
+      <td colspan="2" />
+    </tr>
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="soins_cutanes"}}</th>
       <td colspan="10">{{mb_field object=$fiche_autonomie field="soins_cutanes"}}</td>
     </tr>
 
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="pansement"}}</th>
-      <td>{{mb_field object=$fiche_autonomie field="pansement" typeEnum="radio" separator="</td><td>" default=""}}</td>
-      <td colspan="2" />
-    </tr>
-    <tr>
-      <th>{{mb_label object=$fiche_autonomie field="escarre"}}</th>
-      <td>{{mb_field object=$fiche_autonomie field="escarre" typeEnum="radio" separator="</td><td>" default=""}}</td>
-      <td colspan="2" />
-    </tr>
-
-    <tr>
       <th class="category" colspan="10">{{tr}}CFicheAutonomie-capacite_relationnelle{{/tr}}</th>
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="comprehension"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="comprehension" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="comprehension" typeEnum="radio" separator="</td><td>"}}</td>
       <td colspan="2" />
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="expression"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="expression" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="expression" typeEnum="radio" separator="</td><td>"}}</td>
       <td colspan="2" />
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="memoire"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="memoire" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="memoire" typeEnum="radio" separator="</td><td>"}}</td>
       <td colspan="2" />
     </tr>
     <tr>
-      <th>{{mb_label object=$fiche_autonomie field="resolution_pb"}}</th>
+      <th>{{mb_label object=$fiche_autonomie field="resolution_pb" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="resolution_pb" typeEnum="radio" separator="</td><td>"}}</td>
       <td colspan="2" />
     </tr>
