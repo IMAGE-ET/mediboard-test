@@ -604,11 +604,14 @@ class CMbFieldSpec {
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
+    
+		// Tab index in display input
+		$tabindex = CMbArray::extract($params, "tabindex");
 	
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
-    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" readonly="readonly" />';
+    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" readonly="readonly" tabindex="'.$tabindex.'" />';
     $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
 
     if ($register || $this instanceof CTimeSpec) {
