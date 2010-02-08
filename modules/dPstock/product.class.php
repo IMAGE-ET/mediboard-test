@@ -145,15 +145,6 @@ class CProduct extends CMbObject {
     return $this->_ref_category->getPerm($permType);
   }
   
-  function updateDBFields(){
-    $this->completeField('quantity', 'unit_quantity');
-    
-    if(!$this->quantity)          $this->quantity = 1;
-    if($this->unit_quantity == 0) $this->unit_quantity = '';
-    
-    return parent::updateDBFields();
-  }
-  
   function getConsommation($since = "-1 MONTH"){
     $this->loadRefStock();
     $where = array(
@@ -175,6 +166,11 @@ class CProduct extends CMbObject {
   }
   
   function store() {
+    $this->completeField('quantity', 'unit_quantity');
+    
+    if(!$this->quantity)          $this->quantity = 1;
+    if($this->unit_quantity == 0) $this->unit_quantity = '';
+    
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadBackRefs("references");
       foreach($references as $_ref) {
