@@ -11,31 +11,22 @@
 global $can;
 $can->needsRead();
 
+// Plateau du contexte
 $plateau = new CPlateauTechnique;
-$plateau->group_id = CGroups::loadCurrent()->_id;
-
-// Plateaux disponible
-$plateaux = $plateau->loadMatchingList();
-foreach($plateaux as $_plateau) {
-  $_plateau->countBackRefs("techniciens");  
-  $_plateau->countBackRefs("equipements");  
-}
-
-// Plateau sélectionné
-$plateau->load(CValue::getOrSession("plateau_id"));
-$plateau->loadRefsTechniciens();
+$plateau->load(CValue::get("plateau_id"));
 $plateau->loadRefsEquipements();
 
-// Equipement
+// Equipement à editer
 $equipement = new CEquipement;
+$equipement->load(CValue::get("equipement_id"));
 $equipement->plateau_id = $plateau->_id;
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("equipement", $equipement);
 $smarty->assign("plateau", $plateau);
-$smarty->assign("plateaux", $plateaux);
-$smarty->display("vw_idx_plateau.tpl");
+
+$smarty->display("inc_edit_equipement.tpl");
 
 
 ?>

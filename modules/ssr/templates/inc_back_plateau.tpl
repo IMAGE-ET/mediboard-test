@@ -15,18 +15,18 @@ Main.add(function () {
 </script>
 
 <ul id="tabs-back" class="control_tabs">
-  <li>
+  <li id="tab-equipements">
     {{assign var=count_equipements value=$plateau->_ref_equipements|@count}}
   	<a href="#equipements" {{if !$count_equipements}}class="empty"{{/if}}>
       {{tr}}CPlateauTechnique-back-equipements{{/tr}}
 			<small>({{$count_equipements}})</small>
 		</a>
 	</li>
-  <li>
+  <li id="tab-techniciens">
     {{assign var=count_techniciens value=$plateau->_ref_techniciens|@count}}
     <a href="#techniciens" {{if !$count_techniciens}}class="empty"{{/if}}>
       {{tr}}CPlateauTechnique-back-techniciens{{/tr}}
-      <small>({{$count_equipements}})</small>
+      <small>({{$count_techniciens}})</small>
     </a>
   </li>
 </ul>
@@ -34,9 +34,8 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 <div id="equipements" style="display: none;">
-  {{mb_include_script script=equipement}}
-  {{mb_include template=inc_list_equipement}}
-
+  {{mb_include_script module=ssr script=equipement}}
+  {{mb_include template=inc_edit_equipement}}
 </div>
 
 <div id="techniciens" style="display: none;">

@@ -13,8 +13,12 @@
     <th>{{mb_title class=CEquipement field=nom}}</th>
   </tr>
   {{foreach from=$plateau->_ref_equipements item=_equipement}}
-  <tr>
-    <td>{{mb_value object=$_equipement field=nom}}</td>
+  <tr {{if $equipement->_id == $_equipement->_id}}class="selected"{{/if}}>
+    <td>
+    	<a href="#Edit-{{$_equipement->_guid}}" onclick="Equipement.edit('{{$plateau->_id}}', '{{$_equipement->_id}}')">
+        {{mb_value object=$_equipement field=nom}}
+			</a>
+		</td>
   </tr>   
   {{foreachelse}}
   <tr>
@@ -22,3 +26,7 @@
   </tr>   
   {{/foreach}}
 </table>
+
+<script type="text/javascript">
+	Main.add(Equipement.updateTab.curry({{$plateau->_ref_equipements|@count}}));
+</script>

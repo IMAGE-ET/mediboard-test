@@ -17,16 +17,16 @@
 {{mb_key object=$equipement}}
 {{mb_field object=$equipement field=plateau_id hidden=1}}
 
-<a class="button new" href="#Edit-CEquipement-0" onclick="Equipement.edit('0')">
+<a class="button new" href="#Edit-CEquipement-0" onclick="Equipement.edit('{{$plateau->_id}}', '0')">
   {{tr}}CEquipement-title-create{{/tr}}
 </a>
 <table class="form">
   <tr>
-    {{if $plateau->_id}}
+    {{if $equipement->_id}}
     <th class="title modify" colspan="4">
-      {{mb_include module=system template=inc_object_notes      object=$plateau}}
-      {{mb_include module=system template=inc_object_idsante400 object=$plateau}}
-      {{mb_include module=system template=inc_object_history    object=$plateau}}
+      {{mb_include module=system template=inc_object_notes      object=$equipement}}
+      {{mb_include module=system template=inc_object_idsante400 object=$equipement}}
+      {{mb_include module=system template=inc_object_history    object=$equipement}}
 
       
 	    {{tr}}CEquipement-title-modify{{/tr}} 
@@ -40,17 +40,20 @@
   </tr>
     
   <tr>
-    <th>{{mb_label object=$plateau field=nom}}</th>
-    <td>{{mb_field object=$plateau field=nom}}</td>
+    <th>{{mb_label object=$equipement field=nom}}</th>
+    <td>{{mb_field object=$equipement field=nom}}</td>
   </tr>
 
   <tr>
 		<td class="button" colspan="4">
-		  {{if $plateau->_id}}
+		  {{if $equipement->_id}}
 			  <button class="modify" type="submit">
 			  	{{tr}}Save{{/tr}}
 				</button>
-			  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le plateau ',objName:'{{$plateau->_view|smarty:nodefaults|JSAttribute}}'})">
+			  <button class="trash" type="button" onclick="confirmDeletion(this.form, {
+				  typeName:'l\'équipement ',
+					objName:'{{$equipement->_view|smarty:nodefaults|JSAttribute}}',
+					ajax: 1})">
 			    {{tr}}Delete{{/tr}}
 			  </button>
 				    

@@ -9,18 +9,23 @@
  */
 
 Equipement = {
-	plateau_id : null,
-	
-  edit: function(id) {
-    Console.debug(id, "Editing Equipement");
+  edit: function(plateau_id, equipement_id) {
+		new Url("ssr", "ajax_edit_equipement") .
+		  addParam("equipement_id", equipement_id) .
+			addParam("plateau_id", plateau_id) .
+			requestUpdate("equipements");
+		
   },
-  
-  refresh: function() {
-    Console.debug(this.plateau_id, "Show equipment list for plateau ");
-	},
-	
+  	
   onSubmit: function(form) {
-    Console.debug(getForm(oForm).serialize(true), "Submiting Equipement");
-    return false;
-  }
+    return onSubmitFormAjax(form, { 
+		  onComplete: Equipement.edit.curry($V(form.plateau_id), '0')
+		} );
+  },
+	
+	updateTab: function(count) {
+		var tab = $("tab-equipements");
+    tab.down("a").setClassName("empty", !count);
+    tab.down("a small").update("("+count+")");
+	}
 } 
