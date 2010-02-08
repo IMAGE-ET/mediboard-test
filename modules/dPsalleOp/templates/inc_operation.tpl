@@ -19,8 +19,8 @@ Main.add(function () {
   }
   {{/if}}
   
-  if($('soins')){
-    loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
+  if($('dossier_traitement')){
+    Prescription.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');
   }
   
   if($('antecedents')){
@@ -50,10 +50,12 @@ Main.add(function () {
 
 var constantesMedicalesDrawn = false;
 refreshConstantesHack = function(sejour_id) {
-  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-    refreshConstantesMedicales('CSejour-'+sejour_id);
-    constantesMedicalesDrawn = true;
-  }
+  (function(){
+    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+      refreshConstantesMedicales('CSejour-'+sejour_id);
+      constantesMedicalesDrawn = true;
+    }
+  }).delay(0.5);
 }
 
 refreshConstantesMedicales = function(context_guid) {
@@ -62,69 +64,6 @@ refreshConstantesMedicales = function(context_guid) {
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales");
   }
-}
-
-function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
-  var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("date", date);
-  url.addParam("line_type", "bloc");
-  url.addParam("mode_bloc", "1");
-  url.addParam("mode_dossier", mode_dossier);
-  if(nb_decalage){
-    url.addParam("nb_decalage", nb_decalage);
-	}
-	url.addParam("chapitre", chapitre);
-  url.addParam("object_id", object_id);
-    url.addParam("object_class", object_class);
-    url.addParam("unite_prise", unite_prise);
-    
-    if(object_id && object_class){
-      if(object_class == 'CPerfusion'){
-			  url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
-			    $("line_"+object_class+"-"+object_id).hide();
-				  moveDossierSoin($("line_"+object_class+"-"+object_id));
-			  } } );
-			}
-			else {
-	      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-			  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-			  
-			  // Suppression des td entre les 2 td bornes
-			  td = first_td;
-			  first_td.colSpan = 0;
-			  
-			  while(td.next().id != last_td.id){
-			    if(td.next().visible()){
-			  	  first_td.colSpan = first_td.colSpan + 1;
-			  	}
-			    td.next().remove();
-			    first_td.show();
-	      }
-	      
-	      unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
-	      //unite_prise = unite_prise.replace(/\(/g, '_').replace(/\)/g, '_').replace(/\//g, '_').replace(/ /g, '');
-	      	      
-				url.requestUpdate(first_td, {
-					insertion: Insertion.After,
-					onComplete: function(){
-					  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
-						first_td.hide().colSpan = 0;
-					}
-				} );
-			}
-    } else {
-      if(chapitre){
-      	if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
-      		chapitre = "_"+chapitre;
-      	} else {
-      		chapitre = "_cat-"+chapitre;
-      	}
-      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
-      } else {
-        url.requestUpdate("soins");
-      }
-    }
 }
 
 function loadSuivi(sejour_id, user_id) {
@@ -142,7 +81,7 @@ function submitSuivi(oForm, prescription_id) {
     loadSuivi(sejour_id); 
     if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
       // Refresh de la partie administration
-      loadTraitement(sejour_id,'{{$date}}','','administration');
+      Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
     }  
   } });
 }
@@ -265,7 +204,7 @@ function reloadPrescription(prescription_id){
 
 	  {{if $isPrescriptionInstalled}}
       <li><a href="#prescription_sejour_tab">Prescription</a></li>
-      <li onmouseup="loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+      <li onmouseup="Prescription.loadTraitement('{{$selOp->sejour_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
 	  {{/if}}
 	{{/if}}
   
@@ -411,7 +350,7 @@ function reloadPrescription(prescription_id){
 	</div>
 	
 	<!-- Affichage du dossier de soins avec les lignes "bloc" -->
-	<div id="soins" style="display:none"></div>
+	<div id="dossier_traitement" style="display:none"></div>
 {{/if}}
 
 {{/if}}

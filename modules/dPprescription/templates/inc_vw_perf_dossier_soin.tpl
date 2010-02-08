@@ -34,11 +34,8 @@
 			   onclick='editPerf("{{$_perfusion->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");
 			            addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");'>
 	      {{$_perfusion->voie}}
-				{{if $_perfusion->commentaire}}
-				<br />
-				{{$_perfusion->commentaire}}
-				{{/if}}
 	    </a>
+</div>
     {{if $_perfusion->_active}}
 		  {{if $_perfusion->signature_prat || !$dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
 	      <form name="editPerfusion-{{$_perfusion->_id}}" method="post" action="?" style="float: right">
@@ -60,8 +57,18 @@
 	        {{if !$_perfusion->date_retrait}}</a>{{/if}}
 	      </form>
 				{{/if}}
-	{{/if}}
-	  </div>
+	   {{/if}}
+	  
+		  {{if $_perfusion->commentaire}}
+        <a onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$_perfusion->_guid}}');">
+        <img src="images/icons/flag.png" title="" />
+        </a>
+        <span id="tooltip-content-comment-{{$_perfusion->_guid}}" style="display: none;">
+          {{$_perfusion->commentaire}}
+        </span>
+      {{/if}}
+			
+		</div>
 	  
 		{{if $_perfusion->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$_perfusion->_id}}-{{$_perfusion->_class_name}}">
@@ -95,7 +102,7 @@
 		      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
 		      <select name="object_guid" style="width: 75px;" 
 		              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-		      										loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
+		      										Prescription.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration');} } )">
 		        <option value="">Subst.</option>
 		        {{foreach from=$_perfusion->_ref_substitution_lines item=lines_subst_by_chap}}
 		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
@@ -113,7 +120,7 @@
 		    {{/if}}
 	    {{/if}}
 
-	  </div>
+	  
 	</td>
  	<td style="font-size: 1em;">
  	  <ul>

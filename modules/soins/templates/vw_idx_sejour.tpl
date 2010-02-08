@@ -117,11 +117,10 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   if($('cim')){
     reloadDiagnostic(sejour_id, '1');
   }
-  if($('dossier_soins')){
-    if($('dossier_soins').visible()) {
-      loadTraitement(sejour_id, date,'','administration');
+  if($('dossier_traitement')){
+    if($('dossier_traitement').visible()) {
+      Prescription.loadTraitement(sejour_id, date,'','administration');
     }
-    loadSuivi(sejour_id);
   }
   if($('constantes-medicales')){
     constantesMedicalesDrawn = false;
@@ -148,68 +147,6 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds');
 }
 
-function loadTraitement(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
-  if(sejour_id) {
-    var url = new Url("dPprescription", "httpreq_vw_dossier_soin");
-    url.addParam("sejour_id", sejour_id);
-    url.addParam("date", date);
-    url.addParam("mode_dossier", mode_dossier);
-    if(nb_decalage){
-      url.addParam("nb_decalage", nb_decalage);
-    }
-    url.addParam("object_id", object_id);
-    url.addParam("object_class", object_class);
-    url.addParam("unite_prise", unite_prise);
-    
-    url.addParam("chapitre", chapitre);
-    
-    if(object_id && object_class){
-      if(object_class == 'CPerfusion'){
-				url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
-				  $("line_"+object_class+"-"+object_id).hide();
-				  moveDossierSoin($("line_"+object_class+"-"+object_id));
-				} } );
-      } else {
-	      first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
-			  last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
-			  
-			  // Suppression des td entre les 2 td bornes
-			  td = first_td;
-			  first_td.colSpan = 0;
-			  
-			  while(td.next().id != last_td.id){
-			    if(td.next().visible()){
-			  	  first_td.colSpan = first_td.colSpan + 1;
-			  	}
-			    td.next().remove();
-			    first_td.show();
-	      }
-	      //unite_prise = unite_prise.replace(/\(/g, '_').replace(/\)/g, '_').replace(/\//g, '_').replace(/ /g, '').replace(/./g, '_');
-	      unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
-
-	      url.requestUpdate(first_td, {
-													insertion: Insertion.After,
-													onComplete: function(){
-													  moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
-														first_td.hide().colSpan = 0;
-													}
-													} );
-			}
-    } else {
-      if(chapitre){
-      	if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
-      		chapitre = "_"+chapitre;
-      	} else {
-      		chapitre = "_cat-"+chapitre;
-      	}
-      	url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
-      } else {
-        url.requestUpdate("dossier_traitement");
-      }
-    }
-  }
-}
-
 function loadSuivi(sejour_id, user_id) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
@@ -226,7 +163,7 @@ function submitSuivi(oForm, prescription_id) {
     if(oForm.object_class.value != "" || oForm.libelle_ATC.value != ''){
       // Refresh de la partie administration
       if($('jour').visible()){
-        loadTraitement(sejour_id,'{{$date}}','','administration');
+        Prescription.loadTraitement(sejour_id,'{{$date}}','','administration');
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
@@ -237,11 +174,13 @@ function submitSuivi(oForm, prescription_id) {
 }
 
 var constantesMedicalesDrawn = false;
-function refreshConstantesHack(sejour_id) {
-  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-    refreshConstantesMedicales('CSejour-'+sejour_id);
-    constantesMedicalesDrawn = true;
-  }
+refreshConstantesHack = function(sejour_id) {
+  (function(){
+    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+      refreshConstantesMedicales('CSejour-'+sejour_id);
+      constantesMedicalesDrawn = true;
+    }
+  }).delay(0.5);
 }
 
 function refreshConstantesMedicales(context_guid) {
@@ -543,10 +482,10 @@ viewBilanService = function(service_id, date){
         <li><button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         <li><a href="#viewPatient">Patient</a></li>
         <li><a href="#viewSejourHospi">Séjour</a></li>
-        <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
+        <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         {{if $isPrescriptionInstalled}}
-        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_soins">Soins</a></li>
-        <li onclick="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '', null, false);">
+        <li onmousedown="Prescription.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Soins</a></li>
+        <li onmousedown="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>
         {{/if}}
@@ -558,7 +497,7 @@ viewBilanService = function(service_id, date){
         {{/if}}
         <li><a href="#documents">Documents</a></li>
         {{if $isPrescriptionInstalled && $can_view_dossier_medical}}
-        <li onclick="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
+        <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
       </ul>
       <hr class="control_tabs" />
@@ -586,15 +525,11 @@ viewBilanService = function(service_id, date){
       </div>
       
       {{if $isPrescriptionInstalled}}
-      <div id="dossier_soins" style="display: none;">
-        <div id="dossier_traitement">
-          <div class="small-info">
-            Veuillez sélectionner un séjour dans la liste de gauche pour afficher
-            le dossier de soin du patient concerné.
-          </div>
+      <div id="dossier_traitement" style="display: none;">
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour afficher
+          le dossier de soin du patient concerné.
         </div>
-        <hr />
-        <div id="dossier_suivi"></div>
       </div>
       
       <div id="prescription_sejour" style="display: none;">

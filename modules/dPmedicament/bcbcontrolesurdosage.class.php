@@ -157,19 +157,20 @@ class CBcbControleSurdosage {
   function controleDureeMax($line) {
     $debut_reel = mbDate(null, $line->_debut_reel);
     $fin_reelle = CValue::first(mbDate(null, $line->_fin_reelle));
-    if($fin_reelle) {
+    
+		if($fin_reelle) {
       $duree = mbDaysRelative($debut_reel, $fin_reelle) + 1;
       $msg = "";
 			$alerte = new CObject();
       $alerte->Type = "Duree";
       $alerte->CIP = $line->code_cip;
       $alerte->Produit = $line->_ref_produit->libelle;
+			
 			if($this->duree_maxi_toxique && $duree >= $this->duree_maxi_toxique) {
         $msg = "$duree jours de prescription est superieur à la durée toxique de $this->duree_maxi_toxique jours";
         $alerte->Niveau = 22;
       } elseif($this->duree_maxi && $duree > $this->duree_maxi) {
         $msg = "$duree jours de prescription est superieur à la durée maximale usuelle de $this->duree_maxi jours";
-        $alerte = new CObject();
         $alerte->Niveau = 21;
       } elseif($this->duree_mini && $duree < $this->duree_mini) {
         $msg = "$duree jours de prescription est inferieur à la durée minimale usuelle de $this->duree_mini jours";

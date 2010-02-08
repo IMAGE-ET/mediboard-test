@@ -466,5 +466,67 @@ Prescription = {
     url.addParam("code_cip", code_cip);
     url.addParam("praticien_id", praticien_id);
     url.popup(800,400, "statistiques d'utilisation des posologies");
+  },
+	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
+	  var url = new Url;
+	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+	  url.addParam("sejour_id", sejour_id);
+	  url.addParam("date", date);
+	  url.addParam("line_type", "bloc");
+	  url.addParam("mode_bloc", "0");
+	  url.addParam("mode_dossier", mode_dossier);
+	  if(nb_decalage){
+	    url.addParam("nb_decalage", nb_decalage);
+	  }
+	  url.addParam("chapitre", chapitre);
+	  url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    url.addParam("unite_prise", unite_prise);
+    
+    if(object_id && object_class){
+      if(object_class == 'CPerfusion'){
+        url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
+          $("line_"+object_class+"-"+object_id).hide();
+          moveDossierSoin($("line_"+object_class+"-"+object_id));
+        } } );
+      }
+      else {
+        first_td = $('first_'+object_id+"_"+object_class+"_"+unite_prise);
+        last_td = $('last_'+object_id+"_"+object_class+"_"+unite_prise);
+        
+        // Suppression des td entre les 2 td bornes
+        td = first_td;
+        first_td.colSpan = 0;
+        
+        while(td.next().id != last_td.id){
+          if(td.next().visible()){
+            first_td.colSpan = first_td.colSpan + 1;
+          }
+          td.next().remove();
+          first_td.show();
+        }
+        
+        unite_prise = unite_prise.replace(/[^a-z0-9_-]/gi, '_');
+                
+        url.requestUpdate(first_td, {
+          insertion: Insertion.After,
+          onComplete: function(){
+            moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+            first_td.hide().colSpan = 0;
+          }
+        } );
+      }
+    } else {
+      if(chapitre){
+        if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
+          chapitre = "_"+chapitre;
+        } else {
+          chapitre = "_cat-"+chapitre;
+        }
+        url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
+      } else {
+        url.requestUpdate("dossier_traitement");
+      }
+    }
   }
 };

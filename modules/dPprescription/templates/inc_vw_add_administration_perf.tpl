@@ -17,7 +17,7 @@ removeAdministrationPerf = function(administration_id){
 
 refreshAdministrations = function(){
   var oFormClick = window.opener.document.click;
-  window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
+  window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
   window.close();
 }
 

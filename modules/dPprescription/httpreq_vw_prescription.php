@@ -261,17 +261,14 @@ if($prescription->_id){
 			}
 	  }
 		
-		
-		
 	  if($prescription->object_id){
 	    $alertesAllergies    = $allergies->getAllergies();
 	    $alertesProfil       = $profil->getProfil();
-		}		  
-	  $alertesInteractions = $interactions->getInteractions();
+		  $alertesPosologie    = $surdosage->getSurdosage();
+    }		  
+    $alertesInteractions = $interactions->getInteractions();
 	  $alertesIPC          = $IPC->getIPC();
-		if($prescription->object_id){
-	    $alertesPosologie    = $surdosage->getSurdosage();
-		}
+
 	  if(!$prescription->object_id){
 	    $prescription->_alertes["allergie"] = array();
 	    $prescription->_alertes["profil"] = array(); 
@@ -282,10 +279,10 @@ if($prescription->_id){
       if($prescription->object_id){
         $prescription->checkAllergies($alertesAllergies, $line->code_cip);
         $prescription->checkProfil($alertesProfil, $line->code_cip);
-      }		      
+        $prescription->checkPoso($alertesPosologie, $line->code_cip);
+		  }		      
       $prescription->checkIPC($alertesIPC, $line->code_cip);
       $prescription->checkInteractions($alertesInteractions, $line->code_cip);
-      $prescription->checkPoso($alertesPosologie, $line->code_cip);
       if(!$line->_ref_produit->inLivret && $prescription->type == "sejour"){
         $prescription->_scores["hors_livret"]++;
       }

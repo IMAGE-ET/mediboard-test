@@ -91,8 +91,8 @@
 	{{if !$vueReduite}}
   <td class="text">
 		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99"{{/if}} class="mediuser">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')" >
       {{if $_operation->libelle}}
         {{$_operation->libelle}}
       {{else}}

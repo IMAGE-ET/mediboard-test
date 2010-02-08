@@ -15,7 +15,7 @@ $sejour_id    = CValue::getOrSession("sejour_id");
 $date         = CValue::getOrSession("date");
 $nb_decalage  = CValue::get("nb_decalage", 2);
 $line_type    = CValue::get("line_type", "service");  // Bloc en salle d'op / service en hospi
-$mode_bloc    = CValue::get("mode_bloc", 0);
+//$mode_bloc    = CValue::get("mode_bloc", 0);
 $mode_dossier = CValue::get("mode_dossier", "administration");
 $chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
 $object_id    = CValue::get("object_id");
@@ -276,7 +276,7 @@ $smarty->assign("categories"          , $categories);
 $smarty->assign("real_date"           , mbDate());
 $smarty->assign("real_time"           , mbTime());
 $smarty->assign("categorie"           , new CCategoryPrescription());
-$smarty->assign("mode_bloc"           , $mode_bloc);
+//$smarty->assign("mode_bloc"           , $mode_bloc);
 $smarty->assign("operations"          , $operations);
 $smarty->assign("mode_dossier"        , $mode_dossier);
 $smarty->assign("count_matin"         , count($matin)+2);

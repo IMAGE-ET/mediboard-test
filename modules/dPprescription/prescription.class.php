@@ -1479,6 +1479,7 @@ class CPrescription extends CMbObject {
 
     $niveau_duree_max = 0;
     $niveau_qte_max   = 0;
+		
     foreach($posologies as $key => $poso) {
       if($poso->Type == "Duree") {
         $tab = "posoduree";

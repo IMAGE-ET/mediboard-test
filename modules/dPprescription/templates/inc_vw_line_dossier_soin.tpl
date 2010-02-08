@@ -45,15 +45,16 @@
 	      {{if $line->_ref_produit->_ref_fiches_ATC}}
 	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$_key_cat_ATC}}")' />
 	      {{/if}}
-      </th>
-      <div id="tooltip-content-{{$_key_cat_ATC}}" style="display: none;">
-					<strong>Fiches disponibles</strong><br />
-          <ul>
-          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
-	          <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}')";>Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
-	        {{/foreach}}
-	        </ul>
-      </div>
+	      
+	      <div id="tooltip-content-{{$_key_cat_ATC}}" style="display: none;">
+	          <strong>Fiches disponibles</strong><br />
+	          <ul>
+	          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
+	            <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}');">Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
+	          {{/foreach}}
+	          </ul>
+	      </div>
+			</th>
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
         {{assign var=categorie_id value=$categorie->_id}}
@@ -99,13 +100,21 @@
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
 	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
-	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
 	        {{$line->_view}}
 	      {{/if}} 
 	    </span>
-	   
 	  </div>
+		
+	 {{if $line->commentaire}}
+      <a onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');">
+      <img src="images/icons/flag.png" title="" />
+      </a>
+      <span id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
+        {{$line->commentaire}}
+      </span>
+    {{/if}}
+			
 	  <small>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
@@ -157,7 +166,7 @@
 	      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
 	      <select name="object_guid" style="width: 75px;" 
 	              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-	                           loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
+	                           Prescription.loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
 	                         } } )">
 	        <option value="">Subst.</option>
 		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}

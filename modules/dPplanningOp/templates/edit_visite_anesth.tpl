@@ -42,10 +42,12 @@ reloadAnesth = function(operation_id){
 
 var constantesMedicalesDrawn = false;
 refreshConstantesHack = function(sejour_id) {
-  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
-    refreshConstantesMedicales('CSejour-'+sejour_id);
-    constantesMedicalesDrawn = true;
-  }
+  (function(){
+    if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
+      refreshConstantesMedicales('CSejour-'+sejour_id);
+      constantesMedicalesDrawn = true;
+    }
+  }).delay(0.5);
 }
 
 refreshConstantesMedicales = function(context_guid) {

@@ -48,6 +48,29 @@ if ($hide_finished == 1 && $salle->_ref_plages) {
   }
 }
 
+// Calcul du nombre d'actes codé dans les interventions
+if($salle->_ref_plages){
+	foreach($salle->_ref_plages as $_plageop){
+		foreach($_plageop->_ref_operations as $_operation){
+			$_operation->countActes();
+		}
+		foreach($_plageop->_unordered_operations as $_operation){
+	    $_operation->countActes();
+	  }
+	}
+}
+if($salle->_ref_deplacees){
+	foreach($salle->_ref_deplacees as $_operation){
+	  $_operation->countActes();
+	}  
+}
+if($salle->_ref_urgences){
+	foreach($salle->_ref_urgences as $_operation){
+	  $_operation->countActes();
+	}
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 

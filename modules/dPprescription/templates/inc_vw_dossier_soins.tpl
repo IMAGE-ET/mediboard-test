@@ -135,14 +135,14 @@ addPlanification = function(date, time, key_tab, object_id, object_class, elemen
   
 	if(original_date != dateTime){
 	  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
-	    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
+	    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
 	  } } ); 
   }
 }
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
-    loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
     window[chapitre+'SoinLoaded'] = true;
   }
 }
@@ -217,7 +217,7 @@ submitPosePerf = function(oFormPerf){
   $V(oFormPerf.date_pose, 'current');
   $V(oFormPerf.time_pose, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
   } } )
 }
 
@@ -225,7 +225,7 @@ submitRetraitPerf = function(oFormPerf){
   $V(oFormPerf.date_retrait, 'current');
   $V(oFormPerf.time_retrait, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
   } } )
 }
 
@@ -376,28 +376,24 @@ refreshTabState = function(){
 	{{/foreach}}
 	
 	if(tabs.activeLink){
-	  tabs.activeLink.up().onclick();
+	  tabs.activeLink.up().onmousedown();
 	} else {
 	  if($('tab_categories') && $('tab_categories').down()){
-	    $('tab_categories').down().onclick();
+	    $('tab_categories').down().onmousedown();
 	    tabs.setActiveTab($('tab_categories').down().down().key);
     }
 	}
 }
 
 Main.add(function () {
-	{{if $mode_bloc}}
-	  loadSuivi('{{$sejour->_id}}');
-	{{/if}}
-
+	loadSuivi('{{$sejour->_id}}');
+	
 	// Deplacement du dossier de soin
 	if($('plan_soin')){
     moveDossierSoin($('tbody_date'));
 	}
 	
-  {{if !$mode_bloc}}
-    new Control.Tabs('tab_dossier_soin');
-  {{/if}}
+  new Control.Tabs('tab_dossier_soin');
   tabs = Control.Tabs.create('tab_categories', true);
   
   refreshTabState();
@@ -462,25 +458,21 @@ Main.add(function () {
   </tr>
 </table>
 
+<ul id="tab_dossier_soin" class="control_tabs">
+  <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Administration</a></li>
+  <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
+</ul>
+<hr class="control_tabs" />
 
-{{if !$mode_bloc}}
-	<ul id="tab_dossier_soin" class="control_tabs">
-	  <li onclick="loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Administration</a></li>
-	  <li onclick="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
-	</ul>
-  <hr class="control_tabs" />
-{{/if}}
-
-<div id="jour" {{if !$mode_bloc}}style="display:none"{{/if}}>
+<div id="jour" style="display:none">
 
 {{if $prescription_id}}
-  {{if !$mode_bloc}}
 	 <h1 style="text-align: center">
-	   <a href="#1" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
+	   <a href="#1" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
 	     <img src="images/icons/prev.png" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
 	   </a>
 	   Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-	   <a href="#1" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
+	   <a href="#1" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
 	     <img src="images/icons/next.png" {{if $sejour->_sortie|date_format:"%Y-%m-%d" <= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
 	   </a>
 	 </h1>
@@ -491,15 +483,12 @@ Main.add(function () {
 	 </div>
 	 {{/if}}
 	 
-	 {{/if}}
 	<table style="width: 100%">
 	  <tr>
 	    <td>
-	    {{if !$mode_bloc}}
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 		      Feuille de soins immédiate
 	      </button>
-	    {{/if}}
 	      <button type="button" class="print" onclick="printBons('{{$prescription_id}}');" title="{{tr}}Print{{/tr}}">
 	        Bons
 	      </button>
@@ -535,7 +524,7 @@ Main.add(function () {
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
 						    {{if $prescription->_ref_perfusions_for_plan|@count}}
-						      <li onclick="refreshDossierSoin(null, 'perf');">
+						      <li onmousedown="refreshDossierSoin(null, 'perf');">
 						        <a href="#_perf">Perfusions
 						          {{if $count_recent_modif.perf}}
 						            <img src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
@@ -545,7 +534,7 @@ Main.add(function () {
 						    {{/if}}
 								
 								{{if $prescription->_ref_injections_for_plan|@count}}
-								<li onclick="refreshDossierSoin(null, 'inj');">
+								<li onmousedown="refreshDossierSoin(null, 'inj');">
 								  <a href="#_inj">Injections
 						        {{if $count_recent_modif.inj}}
 						          <img src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
@@ -557,7 +546,7 @@ Main.add(function () {
 						    {{/if}}
 						    
 						    {{if $prescription->_ref_lines_med_for_plan|@count}}
-						      <li onclick="refreshDossierSoin(null, 'med');">
+						      <li onmousedown="refreshDossierSoin(null, 'med');">
 							      <a href="#_med">Médicaments 
 							        {{if $count_recent_modif.med}}
 							        <img src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
@@ -571,7 +560,7 @@ Main.add(function () {
 							  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
 							  {{foreach from=$specs_chapitre->_list item=_chapitre}}
 							    {{if @is_array($prescription->_ref_lines_elt_for_plan.$_chapitre)}}
-							    <li onclick="refreshDossierSoin(null, '{{$_chapitre}}');">
+							    <li onmousedown="refreshDossierSoin(null, '{{$_chapitre}}');">
 							      <a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}
 							      	{{if $count_recent_modif.$_chapitre}}
 							        <img src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
@@ -613,7 +602,7 @@ Main.add(function () {
 								      <img src="images/icons/next.png" alt="&gt;" />
 							      </a>		 
 					          <strong>
-					            <a href="#" onclick="selColonne('{{$_date}}-{{$moment_journee}}')">
+					            <a href="#1" onclick="selColonne('{{$_date}}-{{$moment_journee}}')">
 					              {{$moment_journee}} du {{$_date|date_format:"%d/%m"}}
 					            </a>
 					          </strong>
@@ -673,10 +662,6 @@ Main.add(function () {
   </div>
 {{/if}}
 </div>
-
-{{if $mode_bloc}}
-  <!-- Affichage des transmissions dans le cas de l'affichage au bloc -->
-  <div id="dossier_suivi"></div>
-{{else}}
-  <div id="semaine" style="display:none"></div>
-{{/if}}
+<div id="semaine" style="display:none"></div>
+<hr />
+<div id="dossier_suivi"></div>
