@@ -218,6 +218,11 @@ Element.addMethods({
 		  visibility: condition ? "visible" : "hidden"
 	  } );
   },
+	
+	setClassName: function(element, className, condition) {
+    if (condition ) element.addClassName(className);
+    if (!condition) element.removeClassName(className);
+	},
   
   getInnerWidth: function(element){
     var aBorderLeft = parseInt(element.getStyle("border-left-width")),
