@@ -39,20 +39,6 @@ Main.add(function () {
 </div>
 
 <div id="techniciens" style="display: none;">
-
-  <table class="tbl">
-  	<tr>
-  		<th>{{mb_title class=CTechnicien field=kine_id}}</th>
-  	</tr>
-    {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-    <tr>
-      <td>{{mb_value object=$_technicien field=kine_id}}</td>
-    </tr>   
-    {{foreachelse}}
-    <tr>
-      <td><em>{{tr}}None{{/tr}}</em></td>
-    </tr>   
-    {{/foreach}}
-  </table>
-
+  {{mb_include_script module=ssr script=technicien}}
+  {{mb_include template=inc_edit_technicien}}
 </div>

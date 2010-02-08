@@ -33,13 +33,9 @@ class CTechnicien extends CMbObject {
     return $specs;
   }
   
-  function updateFormFields() {
-    parent::updateFormFields();
-    $this->_view = $this->nom;
-  }
-  
   function loadRefKine() {
     $this->_ref_kine = $this->loadFwdRef("kine_id", true);
+		$this->_ref_kine->loadRefFunction();
     $this->_view = $this->_ref_kine->_view;
   }
 }

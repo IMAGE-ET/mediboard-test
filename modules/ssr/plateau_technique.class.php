@@ -54,6 +54,9 @@ class CPlateauTechnique extends CMbObject {
 
   function loadRefsTechniciens() {
     $this->_ref_techniciens = $this->loadBackRefs("techniciens");
+		foreach ($this->_ref_techniciens as $_technicien) {
+		  $_technicien->loadRefKine();
+		}
   }
 }
 

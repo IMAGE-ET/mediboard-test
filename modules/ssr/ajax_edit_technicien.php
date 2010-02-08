@@ -11,27 +11,14 @@
 global $can;
 $can->needsRead();
 
+// Plateau du contexte
 $plateau = new CPlateauTechnique;
-$plateau->group_id = CGroups::loadCurrent()->_id;
-
-// Plateaux disponible
-$plateaux = $plateau->loadMatchingList();
-foreach($plateaux as $_plateau) {
-  $_plateau->countBackRefs("techniciens");  
-  $_plateau->countBackRefs("equipements");  
-}
-
-// Plateau sélectionné
-$plateau->load(CValue::getOrSession("plateau_id"));
-$plateau->loadRefsEquipements();
+$plateau->load(CValue::get("plateau_id"));
 $plateau->loadRefsTechniciens();
 
-// Equipement
-$equipement = new CEquipement;
-$equipement->plateau_id = $plateau->_id;
-
-// Technicien
+// Equipement à editer
 $technicien = new CTechnicien;
+$technicien->load(CValue::get("technicien_id"));
 $technicien->plateau_id = $plateau->_id;
 
 // Kinés
@@ -40,12 +27,11 @@ $kines = $user->loadKines();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("equipement", $equipement);
 $smarty->assign("technicien", $technicien);
-$smarty->assign("kines", $kines);
 $smarty->assign("plateau", $plateau);
-$smarty->assign("plateaux", $plateaux);
-$smarty->display("vw_idx_plateau.tpl");
+$smarty->assign("kines", $kines);
+
+$smarty->display("inc_edit_technicien.tpl");
 
 
 ?>
