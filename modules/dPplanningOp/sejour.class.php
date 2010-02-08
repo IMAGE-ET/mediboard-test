@@ -224,7 +224,7 @@ class CSejour extends CCodable {
     $specs["etablissement_entree_transfert_id"] = "ref class|CEtabExterne";
     $specs["adresse_par_prat_id"] = "ref class|CMedecin";
     $specs["adresse_par_etab_id"] = "ref class|CEtabExterne";
-    $specs["libelle"]             = "str seekable";
+    $specs["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
     $specs["facture"]             = "bool default|0";
     
     $specs["_entree"]         = "dateTime show";
