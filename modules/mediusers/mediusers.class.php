@@ -675,6 +675,10 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Personnel"), $permType, $function_id, $name);
   }
 
+  function loadKines($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Kinesitherapeute"), $permType, $function_id, $name);
+  }
+
   function isFromType($user_types) {
     // Warning: !== operator
     return array_search(@CUser::$types[$this->_user_type], $user_types) !== false;
