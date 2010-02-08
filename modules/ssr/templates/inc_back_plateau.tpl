@@ -35,10 +35,20 @@ Main.add(function () {
 
 <div id="equipements" style="display: none;">
   {{mb_include_script module=ssr script=equipement}}
-  {{mb_include template=inc_edit_equipement}}
+	<a class="button new" href="#Edit-CEquipement-0" onclick="Equipement.edit('{{$plateau->_id}}', '0')">
+    {{tr}}CEquipement-title-create{{/tr}}
+  </a>
+  <div id="edit-equipements"> 
+    {{mb_include template=inc_list_equipement}}
+  </div>
 </div>
 
 <div id="techniciens" style="display: none;">
   {{mb_include_script module=ssr script=technicien}}
-  {{mb_include template=inc_edit_technicien}}
+  <a class="button new" href="#Edit-CTechnicien-0" onclick="Technicien.edit('{{$plateau->_id}}', '0')">
+    {{tr}}CTechnicien-title-create{{/tr}}
+  </a>
+  <div id="edit-techniciens">
+    {{mb_include template=inc_list_technicien}}
+  </div>
 </div>

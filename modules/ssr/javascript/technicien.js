@@ -13,8 +13,7 @@ Technicien = {
 		new Url("ssr", "ajax_edit_technicien") .
 		  addParam("technicien_id", technicien_id) .
 			addParam("plateau_id", plateau_id) .
-			requestUpdate("techniciens");
-		
+			requestUpdate("edit-techniciens");
   },
   	
   onSubmit: function(form) {

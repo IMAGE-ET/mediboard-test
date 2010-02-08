@@ -17,9 +17,6 @@
 {{mb_key object=$equipement}}
 {{mb_field object=$equipement field=plateau_id hidden=1}}
 
-<a class="button new" href="#Edit-CEquipement-0" onclick="Equipement.edit('{{$plateau->_id}}', '0')">
-  {{tr}}CEquipement-title-create{{/tr}}
-</a>
 <table class="form">
   <tr>
     {{if $equipement->_id}}

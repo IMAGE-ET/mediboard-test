@@ -13,7 +13,7 @@ Equipement = {
 		new Url("ssr", "ajax_edit_equipement") .
 		  addParam("equipement_id", equipement_id) .
 			addParam("plateau_id", plateau_id) .
-			requestUpdate("equipements");
+			requestUpdate("edit-equipements");
 		
   },
   	

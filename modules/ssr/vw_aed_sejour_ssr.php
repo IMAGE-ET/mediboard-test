@@ -24,9 +24,6 @@ if ($sejour_id && !$sejour->_id) {
   CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
 }
 
-// Chargement des aides a la saisie
-$sejour->loadAides($AppUI->user_id);
-
 $fiche_autonomie = new CFicheAutonomie();
 if ($sejour->_id) {
   $sejour->loadRefPatient();
@@ -48,7 +45,9 @@ if ($sejour->_id) {
   $patient = new CPatient;
 }
 
-// Gestion des traitements, antecedents, diagnostics
+// Aides à la saisie
+$sejour->loadAides($AppUI->user_id);
+
 $traitement = new CTraitement();
 $traitement->loadAides($AppUI->user_id);
 
