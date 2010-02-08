@@ -46,22 +46,22 @@ class CFicheAutonomie extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["sejour_id"]      = "ref notNull class|CSejour cascade";
-    $specs["alimentation"]   = "enum list|autonome|partielle|totale";
-    $specs["toilette"]       = "enum list|autonome|partielle|totale";
-    $specs["habillage_haut"] = "enum list|autonome|partielle|totale";
-    $specs["habillage_bas"]  = "enum list|autonome|partielle|totale";
-    $specs["transfert_lit"]  = "enum list|autonome|partielle|totale";
-    $specs["locomotion"]     = "enum list|autonome|partielle|totale";
-    $specs["escalier"]       = "enum list|autonome|partielle|totale";
-    $specs["utilisation_toilette"]   = "enum list|sonde|couche|bassin|stomie";
-    $specs["locomotion_materiel"]    = "enum list|canne|cadre|fauteuil";
-    $specs["pansement"]              = "bool";
-    $specs["escarre"]                = "bool";
+    $specs["alimentation"]   = "enum notNull list|autonome|partielle|totale";
+    $specs["toilette"]       = "enum notNull list|autonome|partielle|totale";
+    $specs["habillage_haut"] = "enum notNull list|autonome|partielle|totale";
+    $specs["habillage_bas"]  = "enum notNull list|autonome|partielle|totale";
+    $specs["transfert_lit"]  = "enum notNull list|autonome|partielle|totale";
+    $specs["locomotion"]     = "enum notNull list|autonome|partielle|totale";
+    $specs["escalier"]       = "enum notNull list|autonome|partielle|totale";
+    $specs["utilisation_toilette"]   = "enum notNull list|sonde|couche|bassin|stomie";
+    $specs["locomotion_materiel"]    = "enum notNull list|canne|cadre|fauteuil";
+    $specs["pansement"]              = "bool notNull";
+    $specs["escarre"]                = "bool notNull";
     $specs["soins_cutanes"]          = "text";
-    $specs["comprehension"]          = "enum list|intacte|alteree";
-    $specs["expression"]             = "enum list|intacte|alteree";
-    $specs["memoire"]                = "enum list|intacte|alteree";
-    $specs["resolution_pb"]          = "enum list|intacte|alteree";
+    $specs["comprehension"]          = "enum notNull list|intacte|alteree";
+    $specs["expression"]             = "enum notNull list|intacte|alteree";
+    $specs["memoire"]                = "enum notNull list|intacte|alteree";
+    $specs["resolution_pb"]          = "enum notNull list|intacte|alteree";
     $specs["etat_psychique"]         = "text";
     $specs["devenir_envisage"]       = "text";
 

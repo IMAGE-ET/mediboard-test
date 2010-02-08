@@ -50,21 +50,6 @@ function updateDureePrevue() {
   }
 }
 
-function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
-  url.addParam("sejour_id", sejour_id);
-  url.addParam("modeDAS", modeDAS);
-  url.requestUpdate("cim");
-}
-
-{{if $can_view_dossier_medical}}
-function loadAntecedents(sejour_id){
-  var url = new Url("dPcabinet","httpreq_vw_antecedents");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate('antecedents')
-}
-{{/if}}
-
 function cancelSejourSSR() {
   var oForm = document.editSejour;
   var oElement = oForm._annule;
@@ -86,31 +71,28 @@ function cancelSejourSSR() {
   }
 }
 
-Main.add(function () {
-var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
-
-{{if $can_view_dossier_medical && $sejour->_id}}
-  loadAntecedents({{$sejour->_id}});
-{{/if}}
-});
 </script>
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_sejour_ssr_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
   <input type="hidden" name="type" value="ssr" />
-  
+	
+  {{mb_key object=$sejour}}
+  {{mb_field object=$sejour field=group_id hidden=1}}
+
   <input type="hidden" name="_bind_sejour" value="1" />
+
   <a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
-    Ajouter un patient
+    Admettre un patient
   </a>
+	
   <table class="form">
     <tr>
       {{if $sejour->_id}}
-      <th class="title modify" colspan="5">
+      <th class="title modify text" colspan="5">
         {{mb_include module=system template=inc_object_notes      object=$sejour}}
         {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
         {{mb_include module=system template=inc_object_history    object=$sejour}}
@@ -141,28 +123,9 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
     {{/if}}
     
     <tr>
-      <th>
-        {{mb_label object=$sejour field="group_id"}}
-      </th>
+      <th>{{mb_label object=$sejour field=praticien_id}}</th>
       <td>
-        <select class="{{$sejour->_props.group_id}}" name="group_id">
-        {{foreach from=$etablissements item=_etab}}
-          <option value="{{$_etab->group_id}}" {{if ($sejour->_id && $sejour->group_id == $_etab->group_id) || 
-          (!$sejour->_id && $g == $_etab->group_id)}} selected="selected"{{/if}}>
-            {{$_etab->text}}
-          </option>
-        {{/foreach}}
-        </select>
-      </td>
-
-      <th>{{mb_label object=$sejour field="entree_prevue"}}</th>
-      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" register=true canNull=false onchange="updateDureePrevue();"}}</td>
-    </tr>
-  
-    <tr>
-      <th>{{mb_label object=$sejour field="praticien_id"}}</th>
-      <td>
-        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}">
+        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" tabindex="1">
           <option value="">&mdash; Choisir un praticien</option>
           {{foreach from=$listPrats item=_user}}
           <option value="{{$_user->_id}}" class="mediuser" 
@@ -172,28 +135,26 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
           {{/foreach}}
         </select>
       </td>
-      
-      <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
-      <td>
-        <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
-        nuits
-      </td>
-      <td id="dureeEst"> </td>
+
+      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
+      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="4" register=true canNull=false onchange="updateDureePrevue();"}}</td>
     </tr>
-    
+  
     <tr>
       <th>
         <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$sejour->patient_id}}" />
         {{mb_label object=$sejour field="patient_id"}}
       </th>
       <td>
-        <input type="text" name="patient_view" size="20" value="{{$patient->_view}}" 
+        <input type="text" name="patient_view" size="20" value="{{$patient->_view}}" tabindex="2" 
           {{if !$sejour->_id || $app->user_type == 1}} 
-            ondblclick="PatSelector.init()" 
+          ondblclick="PatSelector.init()" 
           {{/if}}
-        readonly="readonly" />
+          readonly="readonly" />
         {{if !$sejour->_id || $app->user_type == 1}} 
-          <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+          <button type="button" class="search" onclick="PatSelector.init()">
+          	{{tr}}Choose{{/tr}}
+					</button>
         {{/if}}
         <script type="text/javascript">
           PatSelector.init = function(){
@@ -205,8 +166,19 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
         </script>
       </td>
       
-      <th>{{mb_label object=$sejour field="sortie_prevue"}}</th>
-      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+      <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
+      <td>
+        <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" tabindex="5" size="4" onchange="updateSortiePrevue()" />
+        nuits
+      </td>
+      <td id="dureeEst"> </td>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$sejour field=libelle}}</th>
+      <td>{{mb_field object=$sejour field=libelle form=editSejour  tabindex="3"}}</td>
+      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
+      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
     </tr>
     
     <tr>
@@ -227,7 +199,7 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
           {{/if}}
               
         {{else}}
-          <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
+          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -235,7 +207,11 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
 </form>
 
 {{if $sejour->_id && $can->edit}}
-<ul id="tab-fiche-autonomie" class="control_tabs">
+<script type="text/javascript">
+Main.add(Control.Tabs.create.curry('tab-sejour', true));
+</script>
+
+<ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}</a></li>
   {{/if}} 
@@ -245,6 +221,16 @@ var tab_actes = Control.Tabs.create('tab-fiche-autonomie', false);
 <hr class="control_tabs" />  
 
 {{if $can_view_dossier_medical}}
+<script type="text/javascript">
+function loadAntecedents(sejour_id){
+  var url = new Url("dPcabinet","httpreq_vw_antecedents");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate('antecedents')
+}
+
+Main.add(loadAntecedents.curry({{$sejour->_id}}));
+</script>
+
 <div id="antecedents" style="display: none;">
   <div class="small-info">
     Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
