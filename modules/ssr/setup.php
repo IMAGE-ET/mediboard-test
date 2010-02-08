@@ -83,7 +83,12 @@ class CSetupssr extends CSetup {
       ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.05";
+    $this->makeRevision("0.05");
+    $sql = "ALTER TABLE `fiche_autonomie` 
+              ADD `soins_cutanes` TEXT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.06";
   }
 }
 

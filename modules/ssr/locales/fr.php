@@ -201,11 +201,14 @@ $locales['CFicheAutonomie.utilisation_toilette.sonde'] = 'Sonde';
 $locales['CFicheAutonomie.utilisation_toilette.stomie'] = 'Poche de stomie';
 $locales['CPatient-back-'] = '';
 $locales['CSejour-back-'] = '';
-$locales['mod-ssr-tab-vw_aed_fiche_autonomie'] = 'Fiche d\'Autonomie';
+$locales['mod-ssr-tab-vw_aed_sejour_ssr'] = 'Séjour SSR';
 $locales['CFicheAutonomie-autonomie-perso'] = 'Autonomie personnelle';
 $locales['CFicheAutonomie-capacite_relationnelle'] = 'Capacités relationnelles';
 $locales['CFicheAutonomie-devenir_envisage'] = 'Devenir envisagé';
 $locales['CFicheAutonomie-devenir_envisage-court'] = 'Devenir envisagé';
 $locales['CFicheAutonomie-devenir_envisage-desc'] = 'Devenir envisagé';
 $locales['CFicheAutonomie-unavailable'] = 'Fiche d\'autonomie n\'est pas ou plus disponible';
+$locales['CFicheAutonomie-soins_cutanes'] = 'Soins cutanés';
+$locales['CFicheAutonomie-soins_cutanes-court'] = 'Soins cutanés';
+$locales['CFicheAutonomie-soins_cutanes-desc'] = 'Soins cutanés';
 ?>

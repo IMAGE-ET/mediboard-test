@@ -10,25 +10,26 @@
 
 global $AppUI, $can, $m, $tab;
 
-$fiche_autonomie_id = CValue::getOrSession("fiche_autonomie_id");
+$sejour_id = CValue::getOrSession("sejour_id");
 
 $group = CGroups::loadCurrent();
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_READ);
 
-$fiche_autonomie = new CFicheAutonomie;
-$fiche_autonomie->load($fiche_autonomie_id);
+$sejour = new CSejour;
+$sejour->load($sejour_id);
 
-if ($fiche_autonomie_id && !$fiche_autonomie->load($fiche_autonomie_id)) {
-  CAppUI::setMsg(CAppUI::tr("CFicheAutonomie-unavailable"), UI_MSG_WARNING);
-  CAppUI::redirect("m=$m&tab=$tab&fiche_autonomie_id=0");
+if ($sejour_id && !$sejour->_id) {
+  CAppUI::setMsg(CAppUI::tr("CSejour-unavailable"), UI_MSG_WARNING);
+  CAppUI::redirect("m=$m&tab=$tab&sejour_id=0");
 }
 
 // Chargement des aides a la saisie
-$fiche_autonomie->loadAides($AppUI->user_id);
+$sejour->loadAides($AppUI->user_id);
 
-if ($fiche_autonomie->_id || $fiche_autonomie->sejour_id) {
-  $sejour  = $fiche_autonomie->_ref_sejour;
+$fiche_autonomie = new CFicheAutonomie();
+if ($sejour->_id) {
+  $sejour->loadRefPatient();
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($AppUI->user_id);
   
@@ -37,11 +38,13 @@ if ($fiche_autonomie->_id || $fiche_autonomie->sejour_id) {
   // Chargement du numero de dossier
   $sejour->loadNumDossier();
   
+  $fiche_autonomie->sejour_id = $sejour->_id;
+  $fiche_autonomie->loadMatchingObject();
 } else {
-  $fiche_autonomie->_praticien_id = $AppUI->user_id;
-  $fiche_autonomie->_entree = mbDate()." 08:00:00";
-  $fiche_autonomie->_sortie = mbDate()." 18:00:00";
-  $sejour  = new CSejour;
+  $sejour->praticien_id = $AppUI->user_id;
+  $sejour->entree_prevue = mbDate()." 08:00:00";
+  $sejour->sortie_prevue = mbDate()." 18:00:00";
+  
   $patient = new CPatient;
 }
 
@@ -75,5 +78,5 @@ $smarty->assign("patient"             , $patient);
 $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("etablissements"      , $etablissements);
 
-$smarty->display("vw_aed_fiche_autonomie.tpl");
+$smarty->display("vw_aed_sejour_ssr.tpl");
 ?>
