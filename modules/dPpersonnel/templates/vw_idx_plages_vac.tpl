@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function loadUser(user_id){
   
-    var url = new Url("dPpersonnel", "ajax_idx_plagevac");
+    var url = new Url("dPpersonnel", "ajax_plage_vac");
     url.addParam("user_id", user_id);
     url.requestUpdate("vw_user");
   
@@ -19,7 +19,7 @@ function loadUser(user_id){
 
 function editPlageVac(plage_id, user_id){
   
-    var url = new Url("dPpersonnel", "ajax_idx_edit_plagevac");
+    var url = new Url("dPpersonnel", "ajax_edit_plage_vac");
     url.addParam("plage_id", plage_id);
 		url.addParam("user_id", user_id);
     url.requestUpdate("edit_plage");

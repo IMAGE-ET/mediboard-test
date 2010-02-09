@@ -30,5 +30,5 @@ $smarty->assign("user_id",      $user_id);
 $smarty->assign("plage_id",     $plage_id);
 $smarty->assign("plagevac",     $plagevac);
 $smarty->assign("new_plagevac", $new_plagevac);
-$smarty->display("vw_idx_edit_plagevacances.tpl");
+$smarty->display("inc_edit_plage_vac.tpl");
 ?>
