@@ -77,6 +77,7 @@ class CMediusers extends CMbObject {
   
   // Object references per day
   var $_ref_plages = null;
+	var $_ref_plages_vacances = null;
   var $_ref_urgences = null;
   var $_ref_deplacees = null;
   
@@ -184,6 +185,7 @@ class CMediusers extends CMbObject {
     $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
     $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
     $backProps["plages_consult"]                  = "CPlageconsult chir_id";
+    $backProps["plages_vacances"]                 = "CPlageVacances user_id";
     $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
     $backProps["plages_ressource"]                = "CPlageressource prat_id";
     $backProps["prescriptions"]                   = "CPrescription praticien_id";
@@ -828,12 +830,16 @@ class CMediusers extends CMbObject {
     $this->_ref_function->loadRefGroup();
     return $this->_basic_info = array(
       'id' => $this->_id,
+			'guid' => $this->_guid,
       'view' => $this->_view,
       'function' => array(
         'id' => $this->_ref_function->_id,
+				'guid' => $this->_ref_function->_guid,
         'view' => $this->_ref_function->_view,
+        'color' => $this->_ref_function->color
       ),
       'group' => array(
+			  'guid' => $this->_ref_function->_ref_group->_guid,
         'id' => $this->_ref_function->_ref_group->_id,
         'view' => $this->_ref_function->_ref_group->_view,
       )

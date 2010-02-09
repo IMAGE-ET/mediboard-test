@@ -104,7 +104,35 @@ class CSetupdPpersonnel extends CSetup {
               CHANGE `emplacement` `emplacement` ENUM ('op','op_panseuse','reveil','service','iade') NOT NULL;";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "0.16";
+		$this->makeRevision("0.16");
+		$sql = "CREATE TABLE `plageVacances` (
+              `plage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `date_debut` DATE,
+              `date_fin` DATE,
+              `libelle` VARCHAR (255)
+          ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `plageVacances` 
+              ADD INDEX (`date_debut`),
+              ADD INDEX (`date_fin`);";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("0.17");
+		
+		$sql = "ALTER TABLE `plageVacances` 
+              ADD `user_id` INT (11) UNSIGNED;";
+	  $this->addQuery($sql);
+		$sql = "ALTER TABLE `plageVacances` 
+            ADD INDEX (`user_id`);"; 
+		$this->addQuery($sql);
+		
+    $this->makeRevision("0.18");
+		$sql = "ALTER TABLE `plageVacances` 
+         CHANGE `user_id` `user_id` INT (11) UNSIGNED NOT NULL;";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.19";
   }
 }
     
