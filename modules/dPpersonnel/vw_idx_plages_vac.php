@@ -14,10 +14,13 @@ $can->needsRead();
 // Get filter
 $filter = new CPlageVacances;
 $filter->user_id    = CValue::getOrSession("user_id", CAppUI::$user->_id);
-$filter->libelle    = CValue::getOrSession("libelle");
-$year = date("%Y");
+
+$year = date("Y");
 $filter->date_debut = CValue::getOrSession("date_debut", "$year-01-01");
 $filter->date_fin   = CValue::getOrSession("date_fin"  , "$year-12-31");
+
+$_plage_id = CValue::get("plage_id","");
+$_user_id = CValue::get("user_id","");
 
 // load available users order by name
 $orderby = "user_last_name ASC";
@@ -35,24 +38,12 @@ foreach($mediusers as $_medius) {
 $where = array();
 $where["user_id"] = CSQLDataSource::prepareIn(array_keys($mediusers), $filter->user_id);
 
-if ($filter->libelle) {
-	$where["libelle"] = "LIKE '$filter->libelle%'";
-}
+$debut = CValue::first($filter->date_debut, $filter->date_fin);
+$fin   = CValue::first($filter->date_fin, $filter->date_debut);
 
-if ($filter->date_debut && $filter->date_fin) {
-  $where["date_debut"] = "<= '$filter->date_fin'";
-	$where["date_fin"] = ">= '$filter->date_debut'";
-}
-if ($filter->date_debut && !$filter->date_fin) {
-  
-	$where["date_debut"] = "<= '$filter->date_debut'";
-	$where["date_fin"] = ">= '$filter->date_debut'";
-}
-
-if (!$filter->date_debut && $filter->date_fin) {
-  
-  $where["date_debut"] = "<= '$filter->date_fin'";
-  $where["date_fin"] = ">= '$filter->date_fin'";
+if ($fin || $debut) {
+  $where["date_debut"] = "<= '$fin'";
+  $where["date_fin"] = ">= '$debut'";
 }
 
 // Penser à rajouter une limite et demander à Fabien un exemple d'affichage paginé
@@ -70,9 +61,6 @@ foreach ($plages as $_plage) {
 	}
 	$plages_per_user[$_plage->user_id]++;
 }
-
-$_plage_id = CValue::get("plage_id","");
-$_user_id = CValue::get("user_id","");
 
 // Création du template
 $smarty = new CSmartyDP();

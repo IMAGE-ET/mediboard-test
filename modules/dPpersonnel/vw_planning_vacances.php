@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-$choix = CValue::getOrSession("choix");
+$choix = CValue::getOrSession("choix", "mois");
 $filter = new CPlageVacances();
 $filter->date_debut = CValue::getOrSession("date_debut");
 
@@ -53,15 +53,8 @@ $tabUser_plage_indices = array();
 
 foreach ($plagesvac as $_plage) {
   $_plage->loadRefsFwd();
-	$_plage->_date_debut = $_plage->date_debut;
-	$_plage->_date_fin = $_plage->date_fin;
-	$_plage->_ref_user->loadRefFunction();
-	if ($_plage->date_debut < $debut_periode) {
-		$_plage->_date_debut = $debut_periode;
-	}
-  if ($_plage->date_fin > $fin_periode) {
-  	$_plage->_date_fin   = $fin_periode;
-  }
+  $_plage->_ref_user->loadRefFunction();
+  
 	$_plage->_deb = mbDaysRelative($debut_periode,$_plage->date_debut);
 	//$_plage->_fin = mbDaysRelative($debut_periode,$fin_periode) + 1 - mbDaysRelative($_plage->_date_fin,$fin_periode);
 	$_plage->_fin = mbDaysRelative($_plage->date_debut, $_plage->date_fin)+1;

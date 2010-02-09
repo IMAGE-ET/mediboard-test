@@ -21,8 +21,6 @@ class CPlageVacances extends CMbObject {
   var $_ref_user  = null;
 
   // Form field
-  var $_date_debut = null;
-	var $_date_fin   = null;
   var $_duree      = null;
 
   function getSpec() {
@@ -39,8 +37,6 @@ class CPlageVacances extends CMbObject {
     $specs["date_fin"]    = "date moreEquals|date_debut";
     $specs["libelle"]     = "str";
 		$specs["user_id"]     = "ref class|CMediusers notNull";
-    $specs["_date_debut"] = "date";
-    $specs["_date_fin"]   = "date moreEquals|date_debut";
 		$specs["_duree"]      = "num";
     return $specs;
   }

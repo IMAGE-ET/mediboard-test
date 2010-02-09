@@ -15,10 +15,10 @@
       <th  colspan="4" class="title">{{tr}}CPlageVacances-user-search{{/tr}}</th>
     </tr>
     <tr>
-      <td>{{mb_label class='CMediusers' field="_user_last_name"}}</td>
+      <td>{{mb_label object=$filter field="user_id"}}</td>
       <td colspan="3">
       	<select name="user_id">
-      		<option value="">{{tr}}All users{{/tr}}</option>
+      		<option value="">{{tr}}CMediusers.all{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$mediusers selected=$filter->user_id}}
 				</select>
       </td>
