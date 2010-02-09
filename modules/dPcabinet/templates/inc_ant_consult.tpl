@@ -119,7 +119,7 @@ refreshAidesAntecedents = function(){
   url.addParam("depend_value_2", oForm.appareil.value);
   url.addParam("user_id", "{{$userSel->_id}}")
   url.addParam("field", "rques");
-  url.requestUpdate('div_helpers_rques');
+  url.requestUpdate(document.editAntFrm._helpers_rques);
 }
  
 refreshAddPoso = function(code_cip){
@@ -131,6 +131,9 @@ refreshAddPoso = function(code_cip){
 Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
   refreshAidesAntecedents();
+	if($('tab_traitements_perso')){
+	  var tabs = Control.Tabs.create('tab_traitements_perso', false);
+	}
 });
 
 </script>
@@ -172,9 +175,9 @@ Main.add(function () {
           {{/if}}
           <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-            <span id="div_helpers_rques">
-            </span>
-            <input type="hidden" name="_hidden_rques" value="" />
+            	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)">
+							</select>
+						<input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
               {{tr}}New{{/tr}}
             </button>
@@ -219,14 +222,27 @@ Main.add(function () {
       </form>
     </td>
   </tr>
-  {{if $isPrescriptionInstalled}}
+  {{if $isPrescriptionInstalled || $dPconfig.dPpatients.CTraitement.enabled}}
   <tr>
     <th class="category">
-      Traitements (base de données de médicaments)
+      Traitements
     </th>
   </tr>
   <tr>
     <td class="text">
+			<ul id="tab_traitements_perso" class="control_tabs small">
+				{{if $isPrescriptionInstalled}}
+				<li><a href="#tp_base_med">Base de données de médicaments</a></li>
+				{{/if}}
+				{{if $dPconfig.dPpatients.CTraitement.enabled}}
+				<li><a href="#tp_texte_simple">Texte simple</a></li>
+				{{/if}}
+			</ul>
+			<hr class="control_tabs" /> 
+	</tr>
+	
+	<tr id="tp_base_med">
+		<td class="text">
       <!-- Formulaire d'ajout de traitements -->
       <form name="editLineTP" action="?m=dPcabinet" method="post">
         <input type="hidden" name="m" value="dPprescription" />
@@ -309,12 +325,7 @@ Main.add(function () {
       
   <!-- Traitements -->
   {{if $dPconfig.dPpatients.CTraitement.enabled}}
-  <tr>
-    <th class="category">
-      Traitements (texte simple)
-    </th>
-  </tr>
-  <tr>
+  <tr id="tp_texte_simple">
     <td class="text">
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />

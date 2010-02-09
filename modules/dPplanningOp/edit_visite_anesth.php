@@ -37,7 +37,7 @@ $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
 $smarty->assign("operation"              , $operation);
-  
+$smarty->assign("anesth_perop"           , new CAnesthPerop());
 $smarty->display("edit_visite_anesth.tpl");
 
 ?>
