@@ -28,8 +28,8 @@ if ($patient->_id) {
   $patient->loadIdVitale();
 }
 
-$listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_EDIT);
+$user = new CMediusers();
+$listPrat = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
