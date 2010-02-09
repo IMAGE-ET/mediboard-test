@@ -378,7 +378,7 @@ Element.addMethods('input', {
 });
 
 Element.addMethods({
-  getLabel: function (element) {
+  getLabel: function (element, strict) {
     /*if (!element.form) return null;
   
     var labels = $(element.form).select("label"),
@@ -391,7 +391,16 @@ Element.addMethods({
     return null; */
     
     if (!element || !element.form || !element.id) return;
-    return $(element.form).down("label[for='"+element.id+"'], label[htmlFor='"+element.id+"']");
+    
+    var htmlFor = "", match;
+    
+    if (!strict && /radio|checkbox/i.test(element.type)){
+      if (match = new RegExp("(\.*)_"+element.value+"$", "i").exec(element.id)) {
+        htmlFor = "label[for='"+match[1]+"'], label[htmlFor='"+match[1]+"'], ";
+      }
+    }
+    
+    return $(element.form).down(htmlFor+"label[for='"+element.id+"'], label[htmlFor='"+element.id+"']");
   },
   
   setResizable: function (element, options) {

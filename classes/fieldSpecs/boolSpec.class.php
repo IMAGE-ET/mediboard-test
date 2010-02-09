@@ -58,88 +58,85 @@ class CBoolSpec extends CMbFieldSpec {
     $disabled      = CMbArray::extract($params, "disabled");
     $default       = CMbArray::extract($params, "default", $this->default);
     $defaultOption = CMbArray::extract($params, "defaultOption");
+    $className     = htmlspecialchars(trim("$className $this->prop"));
     $extra         = CMbArray::makeXmlAttributes($params);
     
-    if ($typeEnum === "radio") {
-	    // Attributes for all inputs
-	    $attributes = array(
-	      "type" => "radio",
-	      "name" => $field,
-	    );
-	    
-	    if (null === $value) {
-	      $value = "$default";
-	    }
-	    
-	    for ($i = 1; $i >= 0; $i--) {
-	      $attributes["value"] = "$i"; 
-	      $attributes["checked"] = $value === "$i" ? "checked" : null; 
-	      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
-	      $attributes["class"] = $i == 1 ? $this->prop : null;
-	      $attributes["class"].= $className ? $className : null;
-	      
-	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
-	      
-	      $sHtml .= "\n<input $xmlAttributes $extra />";
-	      
-	      $sTr = CAppUI::tr("bool.$i");
-	      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
-	      
-	      if ($separator && $i != 0){
-	        $sHtml .= "\n$separator";
-	      }
-	    }
-	    return $sHtml;
-    } 
+    switch ($typeEnum) {
+      case "radio":
+  	    // Attributes for all inputs
+  	    $attributes = array(
+  	      "type" => "radio",
+  	      "name" => $field,
+  	    );
+  	    
+  	    if (null === $value) {
+  	      $value = "$default";
+  	    }
+  	    
+  	    for ($i = 1; $i >= 0; $i--) {
+  	      $attributes["value"] = "$i"; 
+  	      $attributes["checked"] = $value === "$i" ? "checked" : null; 
+  	      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
+  	      $attributes["class"] = $className;
+  	      
+  	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
+  	      
+  	      $sHtml .= "\n<input $xmlAttributes $extra />";
+  	      
+  	      $sTr = CAppUI::tr("bool.$i");
+  	      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
+  	      
+  	      if ($separator && $i != 0){
+  	        $sHtml .= "\n$separator";
+  	      }
+  	    }
+	      return $sHtml;
     
-    if ($typeEnum === "checkbox"){
-    	if(($value !== null && $value === "1")){
-        $checked = " checked=\"checked\""; 
-      }else{
-        $checked = "";
-        $value = "0";
-      }
-    	$sHtml = '<input type="checkbox" name="__'.$field.'" 
-        onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' />';
-    	$sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
-    
-    	return $sHtml;
-    } 
-
-    if ($typeEnum === "select") {
-      $sHtml       = "<select name=\"$field\"";
-      $sHtml      .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\" $extra>";
-      
-      if ($defaultOption){
-        if($value === null) {
-          $sHtml    .= "\n<option value=\"\" selected=\"selected\">&mdash; $defaultOption</option>";
-        } else {
-          $sHtml    .= "\n<option value=\"\">&mdash; $defaultOption</option>";
-        }
-      }
-      
-      foreach ($this->_locales as $key => $item){
-        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
-          $selected = " selected=\"selected\""; 
+      case "checkbox":
+      	if(($value !== null && $value === "1")){
+          $checked = " checked=\"checked\""; 
         }else{
-          $selected = "";
+          $checked = "";
+          $value = "0";
         }
-        $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
-      }
-      $sHtml      .= "\n</select>";
-      return $sHtml;
-    }    
+      	$sHtml = '<input type="checkbox" name="__'.$field.'" 
+          onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' />';
+      	$sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
+    	  return $sHtml;
+    
+      case "select":
+        $sHtml       = "<select name=\"$field\" class=\"$className\" $extra>";
+        
+        if ($defaultOption){
+          if($value === null) {
+            $sHtml    .= "\n<option value=\"\" selected=\"selected\">&mdash; $defaultOption</option>";
+          } else {
+            $sHtml    .= "\n<option value=\"\">&mdash; $defaultOption</option>";
+          }
+        }
+        
+        foreach ($this->_locales as $key => $item){
+          if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+            $selected = " selected=\"selected\""; 
+          }else{
+            $selected = "";
+          }
+          $sHtml    .= "\n<option value=\"$key\" $selected>$item</option>";
+        }
+        $sHtml      .= "\n</select>";
+        return $sHtml;
+    }
   }
   
   function getLabelForElement($object, &$params){
   	$typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
     
-  	if($typeEnum === "radio"){
-      return $this->fieldName."_1";
-  	}
-  	if($typeEnum === "checkbox"){
-  		return "__$this->fieldName";
-  	}
+    switch ($typeEnum) {
+      //case "radio":    return "{$this->fieldName}_1";
+      case "checkbox": return "__$this->fieldName";
+      case "radio":    
+      case "select":   return $this->fieldName;
+    }
   }
   
   function sample(&$object, $consistent = true){

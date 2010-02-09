@@ -101,7 +101,8 @@ class CEnumSpec extends CMbFieldSpec {
     $alphabet      = CMbArray::extract($params, "alphabet", false);
     $extra         = CMbArray::makeXmlAttributes($params);
     $locales       = $this->_locales;
-    $sHtml         = '';
+    $className     = htmlspecialchars(trim("$className $this->prop"));
+    $sHtml         = "";
     
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
       $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
@@ -114,8 +115,7 @@ class CEnumSpec extends CMbFieldSpec {
     switch ($typeEnum) {
       default:
       case "select":
-        $sHtml      .= "<select name=\"$field\"";
-        $sHtml      .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>";
+        $sHtml      .= "<select name=\"$field\" class=\"$className\" $extra>";
         
         if($defaultOption){
           if($value === null) {
@@ -130,7 +130,7 @@ class CEnumSpec extends CMbFieldSpec {
           }else{
             $selected = "";
           }
-          $sHtml    .= "\n<option value=\"$key\"$selected>$item</option>";
+          $sHtml    .= "\n<option value=\"$key\" $selected>$item</option>";
         }
         $sHtml      .= "\n</select>";
         return $sHtml;
@@ -144,14 +144,8 @@ class CEnumSpec extends CMbFieldSpec {
           }else{
             $selected = "";
           }
-          $sHtml    .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\"$selected";
-          if($compteur == 0) {
-            $sHtml  .= " class=\"".htmlspecialchars(trim("$className $this->prop"))."\"";
-          }
-          elseif($className != ""){
-            $sHtml  .= " class=\"".htmlspecialchars(trim($className))."\"";
-          }
-          $sHtml    .= " $extra /><label for=\"".$field."_$key\">$item</label> ";
+          $sHtml .= "\n<input type=\"radio\" name=\"$field\" value=\"$key\" $selected class=\"$className\" $extra />
+                       <label for=\"{$field}_{$key}\">$item</label> ";
           $compteur++;
           
           $modulo = $compteur % $cycle;
@@ -164,16 +158,8 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getLabelForElement($object, &$params){
-    $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
-       
-    if ($typeEnum === "select") {
-      return $this->fieldName;
-    }
-    
-    if ($typeEnum === "radio") {
-      return $this->fieldName."_".reset($this->_list);
-    }
-    
-    trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
+    // to extract the XHTML invalid attribute "typeEnum"
+    $typeEnum = CMbArray::extract($params, "typeEnum");
+    return parent::getLabelForElement($object, $params);
   }
 }
