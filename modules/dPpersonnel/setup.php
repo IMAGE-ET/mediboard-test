@@ -132,7 +132,14 @@ class CSetupdPpersonnel extends CSetup {
          CHANGE `user_id` `user_id` INT (11) UNSIGNED NOT NULL;";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.19";
+		$this->makeRevision("0.19");
+		$sql = "ALTER TABLE `plageVacances` 
+	          CHANGE `date_debut` `date_debut` DATE NOT NULL,
+	          CHANGE `date_fin` `date_fin` DATE NOT NULL,
+	          CHANGE `libelle` `libelle` VARCHAR (255) NOT NULL;";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.20";
   }
 }
     

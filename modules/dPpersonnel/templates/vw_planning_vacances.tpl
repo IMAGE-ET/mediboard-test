@@ -11,10 +11,10 @@
 
 var nombreelem = {{$tableau_periode|@json}}.length;
 var tableau_periode={{$tableau_periode|@json}};
-
+var largeur_nom = 100;
 
 function display_plage(plage_id, debut, fin) {
-  var width = parseInt($("schedule").getWidth()) - 100;
+  var width = parseInt($("schedule").getWidth()) - largeur_nom;
 	var plage = $("plage" + plage_id);
 	var width_calc = (fin * (width/nombreelem).floor());
 	var margin_calc = 0 ;
@@ -31,15 +31,26 @@ function display_plage(plage_id, debut, fin) {
 	}); 
 }
 
-function changedate(typeperiode, nb) {
-  var form = getForm("planning");
+function changedate(sens) {
+  var choix = {{$choix|@json}};
+	var form = getForm("planning");
   var date_courante = Date.fromDATE(form.elements.date_debut.value); 
 	
-	if (typeperiode=="j") {
-	  date_courante.addDays(nb);
+	if (choix=="semaine") {
+	  if(sens == "p") {
+	    date_courante.addDays(-7);
+		}
+		else {
+		  date_courante.addDays(7);
+		}
 	}
 	else {
-	  date_courante.setMonth(date_courante.getMonth() + nb);
+	  if(sens == "p") {
+	    date_courante.setMonth(date_courante.getMonth() - 1);
+		}
+		else {
+		  date_courante.setMonth(date_courante.getMonth() + 1);
+		}
 	}
 	form.elements.date_debut.value = date_courante.toDATE();
 	
@@ -54,9 +65,9 @@ function movesnap(x, y, drag) {
 	var widthsave = columns[0].getWidth();
 	
 	var leftOffsets = [];
-	var tableLeft = table.cumulativeOffset().left + 101;
+	var tableLeft = table.cumulativeOffset().left + largeur_nom;
 	columns.each(function(col){
-	 leftOffsets.push(col.cumulativeOffset().left)+101;
+	 leftOffsets.push(col.cumulativeOffset().left)+largeur_nom;
 	});
   //leftOffsets.shift();
 	if(x > 0) {
@@ -76,7 +87,7 @@ function movesnap(x, y, drag) {
 	else {
   leftOffsets.each(function(offset){
     if (found) return;
-    left = offset - parseInt(table.getWidth()-101) + widthsave - tableLeft;
+    left = offset - parseInt(table.getWidth()-largeur_nom) + widthsave - tableLeft;
     if (left >= x) {
       found = true;
       return;
@@ -94,7 +105,7 @@ function movesnap(x, y, drag) {
 function DragDropPlage(draggable){
   var element = draggable.element;
 	var decalage = parseInt(element.style.left);
-	var widthtotal = parseInt($("schedule").getWidth()) - 101;
+	var widthtotal = parseInt($("schedule").getWidth()) - largeur_nom;
 	var taille = (widthtotal / nombreelem).round();
 	var new_left = (decalage / taille).round();
 	var widthplage = (parseInt(element.style.width) / taille).round() - 1;
@@ -136,7 +147,6 @@ function savePosition(drag){
 function detecterror(){
   return $("systemMsg").select(".error").length > 0;
 }
-
 </script>
 
 <style type="text/css">
@@ -157,7 +167,7 @@ function detecterror(){
 }
 
 .ligne {
-height:  50px;
+  height:  50px;
 }
 
 .plage {
@@ -200,10 +210,13 @@ height:  50px;
 			<form name="planning" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}"/>
 				<input type="hidden" name="tab" value="{{$tab}}"/>
-				<table class="halfPane">
+				<table class="form" style="width:30%">
 					<tr>
-						<td>{{mb_label class=CPlageVacances field="date_debut"}}</td>
+						<th>{{mb_label class=CPlageVacances field="date_debut"}}</th>
 						<td>{{mb_field object=$filter field="date_debut" form="planning" register=true}}</td>
+					</tr>	
+					<tr>
+						<th>{{tr}}CPlageVacances-choix-periode{{/tr}}</th>
 						<td>
 							<label>
 							  <input type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> Semaine
@@ -212,8 +225,10 @@ height:  50px;
 							  <input type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> Mois
 					    </label>
 					  </td>
-						<td>
-							<button type="submit" class="submit">{{tr}}Filter{{/tr}}</button>
+					</tr>
+					<tr>
+						<td colspan="2" style="text-align:center" >
+							<button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
 						</td>
 					</tr>
 				</table>
@@ -234,85 +249,81 @@ height:  50px;
 	<!-- Navigation par semaine ou mois-->
 	<tr>
 		<td colspan=2>
-		{{if $choix=="semaine"}}
-	     <button class="left" onclick="changedate('j',-7)" style="float: left;">{{tr}}Previous week{{/tr}}</button>
-     	 <button class="right" onclick="changedate('j',7)" style="float: right;">{{tr}}Next week{{/tr}}</button>
-    {{else}}
-       <button class="left" onclick="changedate('m',-1)" style="float: left;">{{tr}}Previous month{{/tr}}</button>
-       <button class="right" onclick="changedate('m',1)" style="float: right;">{{tr}}Next month{{/tr}}</button>
-	  {{/if}}
+	     <button class="left" onclick="changedate('p')" style="float: left;">
+			   {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
+			 </button>
+     	 <button class="right" onclick="changedate('n')" style="float: right;">
+         {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
+			 </button>
 	  </td>
   </tr>
 	<tr>
-	  <!-- Affichage du planning -->
 		<td>
+		  <!-- Affichage du planning -->
 			<table id="schedule">
 				<tr style="height:30px;">
 					<td style="width: 100px"></td>
-				{{foreach from=$tableau_periode item=_periode}}
-				 <th>{{$_periode|date_format:"%a"}}<br/>{{$_periode|date_format:" %d"}}</th>
-				{{/foreach}}
+				  {{foreach from=$tableau_periode item=_periode}}
+				  <th>{{$_periode|date_format:"%a"}}<br/>{{$_periode|date_format:" %d"}}</th>
+				  {{/foreach}}
 				</tr>
-				
-			   	
-			   	<!-- Zone d'insertion des plages de vacances-->
-					
-						{{assign var="indice" value="-1"}}
-						{{assign var="count" value="-1"}}
-						{{foreach from=$plagesvac item=_plage1}}
-						  {{if $indice != $_plage1->user_id}}
-							{{assign var="userid" value=$_plage1->user_id}}
-              {{assign var="indice" value=$userid}}
-              {{assign var="count" value=$count+1}}
-							<tr class="ligne">
-								<th>
-								   <div class="nom">
-									{{assign var=mediuser value=$_plage1->_ref_user}}
-                   {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
-									 </div>
-								</th>
-							  <td>
-							  	<div class="insertion">
-							  	{{foreach from=$plagesvac item=_plage2}}
-									  {{if $_plage2->user_id == $indice}}
-										  <div id = "plage{{$_plage2->_id}}" class = "plage">
-                        <div class="content">
-			                     {{$_plage2->_duree}}
-													{{if $_plage2->_duree == 1}}
-												    {{tr}}day{{/tr}}
-													{{else}}
-													  {{tr}}days{{/tr}}
-													{{/if}}
-			                    <br/>
-			                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
-			                    {{$_plage2->libelle}}
-			                    </span>
-							              <script type="text/javascript">
-							                Main.add(function(){
-							                  display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-							                  new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
-							                  
-							                  Event.observe(window, "resize", function(){
-							                    display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-							                  });
-							                });
-							               </script>
-                          </div>
-                        </div>
+		   	<!-- Zone d'insertion des plages de vacances-->
+				{{assign var="indice" value="-1"}}
+				{{assign var="count" value="-1"}}
+				{{foreach from=$plagesvac item=_plage1}}
+			  {{if $indice != $_plage1->user_id}}
+				{{assign var="userid" value=$_plage1->user_id}}
+        {{assign var="indice" value=$userid}}
+        {{assign var="count" value=$count+1}}
+				<tr class="ligne">
+					<th>
+					   <div class="nom">
+						{{assign var=mediuser value=$_plage1->_ref_user}}
+             {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
+						 </div>
+					</th>
+				  <td>
+				  	<div class="insertion">
+				  	{{foreach from=$plagesvac item=_plage2}}
+						  {{if $_plage2->user_id == $indice}}
+							  <div id = "plage{{$_plage2->_id}}" class = "plage">
+                  <div class="content">
+                     {{$_plage2->_duree}}
+										{{if $_plage2->_duree == 1}}
+									    {{tr}}day{{/tr}}
+										{{else}}
+										  {{tr}}days{{/tr}}
 										{{/if}}
-									{{/foreach}}
-									</div>
-							  </td>
-							  {{foreach from=$tableau_periode item=td name=td_list}}
-                  {{if !$smarty.foreach.td_list.first}}
-                    <td></td>
-                  {{/if}}
-                {{/foreach}}
-							</tr>
+                    <br/>
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
+                    {{$_plage2->libelle}}
+                    </span>
+				              <script type="text/javascript">
+				                Main.add(function(){
+				                  display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
+				                  new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
+				                  
+				                  Event.observe(window, "resize", function(){
+				                    display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
+				                  });
+				                });
+				               </script>
+                    </div>
+                  </div>
 							{{/if}}
 						{{/foreach}}
-			   </table>	 
-	     </td>
-	   </tr>
+						</div>
+				  </td>
+				  {{foreach from=$tableau_periode item=td name=td_list}}
+            {{if !$smarty.foreach.td_list.first}}
+              <td></td>
+            {{/if}}
+          {{/foreach}}
+        </tr>
+			  {{/if}}
+			  {{/foreach}}
+	    </table>	 
+	  </td>
+	</tr>
 </table>
 

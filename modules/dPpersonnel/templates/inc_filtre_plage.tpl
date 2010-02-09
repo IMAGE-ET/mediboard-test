@@ -7,15 +7,24 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
+
+<script type="text/javascript">
+	function changePage(page) {
+  $V(getForm('recherche').page,page);
+}
+	
+</script>
 <form action="?" name="recherche" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
+	<input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
+
   <table class="form">
     <tr>
       <th  colspan="4" class="title">{{tr}}CPlageVacances-user-search{{/tr}}</th>
     </tr>
     <tr>
-      <td>{{mb_label object=$filter field="user_id"}}</td>
+      <th>{{mb_label object=$filter field="user_id"}}</th>
       <td colspan="3">
       	<select name="user_id">
       		<option value="">{{tr}}CMediusers.all{{/tr}}</option>
@@ -24,9 +33,11 @@
       </td>
     </tr>
     <tr>
-      <td>{{mb_label object=$filter field="date_debut"}}</td>
+      <th>{{mb_label object=$filter field="date_debut"}}</th>
       <td>{{mb_field object=$filter field="date_debut" form="recherche" register="true"}}</td>
-      <td>{{mb_label object=$filter field="date_fin"}}</td>
+		</tr>
+		<tr>
+      <th>{{mb_label object=$filter field="date_fin"}}</th>
       <td>{{mb_field object=$filter field="date_fin" form="recherche" register="true"}}</td>
     </tr>
     <tr>
@@ -40,4 +51,8 @@
       </td>
     </tr>
   </table>
+	  {{if $nbusers != 0}}
+       {{mb_include module=system template=inc_pagination total=$nbusers current=$page change_page='changePage'}}
+    {{/if}}
+      
 </form>

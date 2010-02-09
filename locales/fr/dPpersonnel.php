@@ -99,7 +99,7 @@ $locales['CPlageVacances-msg-modify'] = 'Plage de vacances modifiée';
 $locales['CPlageVacances-plage_id'] = 'Id plage vacances';
 $locales['CPlageVacances-plage_id-court'] = 'Id plage vac';
 $locales['CPlageVacances-plage_id-desc'] = 'Id de la plage vacances';
-$locales['CPlageVacances-title-create'] = 'Création d\'une plage de vacances pour';
+$locales['CPlageVacances-title-create'] = 'Création d\'une plage de vacances';
 $locales['CPlageVacances-title-modify'] = 'Modification d\'une plage de vacances pour';
 $locales['CPlageVacances-user_id'] = 'Utilisateur';
 $locales['CPlageVacances-user_id-court'] = 'Utilisateur';
@@ -126,4 +126,6 @@ $locales['Previous week'] = "Semaine précédente";
 $locales['Next week'] = "Semaine suivante";
 $locales['Previous month'] = "Mois précédent";
 $locales['Next month'] = "Mois suivant";
+$locales['CPlageVacances-choix-periode'] = "Affichage par ";
+$locales['For'] = " pour ";
 ?>

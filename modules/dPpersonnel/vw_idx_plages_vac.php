@@ -22,6 +22,10 @@ $filter->date_fin   = CValue::getOrSession("date_fin"  , "$year-12-31");
 $_plage_id = CValue::get("plage_id","");
 $_user_id = CValue::get("user_id","");
 
+$page      = intval(CValue::get('page', 0));
+
+
+
 // load available users order by name
 $orderby = "user_last_name ASC";
 $ljoin = array();
@@ -48,7 +52,8 @@ if ($fin || $debut) {
 
 // Penser à rajouter une limite et demander à Fabien un exemple d'affichage paginé
 // $count_plages = $filter->countList($where);
-$plages = $filter->loadList($where, null, "0, 30");
+$groupby = "user_id";
+$plages = $filter->loadList($where);
 
 // Regrouper par utilisateur
 $found_users = array();
@@ -62,6 +67,9 @@ foreach ($plages as $_plage) {
 	$plages_per_user[$_plage->user_id]++;
 }
 
+$nbusers = count($found_users);
+$found_users = array_slice($found_users, $page, 20, true);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("mediusers",       $mediusers);
@@ -70,4 +78,7 @@ $smarty->assign("filter",          $filter);
 $smarty->assign("plages_per_user", $plages_per_user);
 $smarty->assign("_plage_id",       $_plage_id);
 $smarty->assign("_user_id",        $_user_id);
+$smarty->assign("nbusers",         $nbusers);
+$smarty->assign("page",         $page);
+
 $smarty->display("vw_idx_plages_vac.tpl");

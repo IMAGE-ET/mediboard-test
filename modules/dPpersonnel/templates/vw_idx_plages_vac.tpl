@@ -85,9 +85,9 @@ function raz(form) {
 		</td>
   </tr>
 </table>
-{{if $_plage_id}}
+{{if $_user_id}}
   <script type='text/javascript'>
     loadUser({{$_user_id}});
-    editPlageVac({{$_plage_id}},{{$_user_id}});
+    editPlageVac('',{{$_user_id}});
   </script>
 {{/if}}

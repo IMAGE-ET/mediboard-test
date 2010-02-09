@@ -12,23 +12,20 @@ global $can;
 $can->needsAdmin();
 
 $user_id  = CValue::getOrSession("user_id");
-$plage_id = CValue::getOrSession("plage_id");
+$plage_id = CValue::get("plage_id");
 $user     = new CMediusers();
 $user->load($user_id);
 
 
-$new_plagevac = new CPlageVacances();
-$new_plagevac->user_id = $user_id;
-
 $plagevac = new CPlageVacances();
+$plagevac->user_id = $user_id;
 $plagevac->load($plage_id);
+if (sizeof($plagevac)==0)
+  $plagevac->plage_id = '';
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user",         $user);
-$smarty->assign("user_id",      $user_id);
-$smarty->assign("plage_id",     $plage_id);
 $smarty->assign("plagevac",     $plagevac);
-$smarty->assign("new_plagevac", $new_plagevac);
 $smarty->display("inc_edit_plage_vac.tpl");
 ?>

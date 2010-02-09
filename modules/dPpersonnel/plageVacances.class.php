@@ -33,9 +33,9 @@ class CPlageVacances extends CMbObject {
   //spécification des propriétés
   function getProps() { 
     $specs = parent::getProps();
-    $specs["date_debut"]  = "date";
-    $specs["date_fin"]    = "date moreEquals|date_debut";
-    $specs["libelle"]     = "str";
+    $specs["date_debut"]  = "date notNull";
+    $specs["date_fin"]    = "date moreEquals|date_debut notNull";
+    $specs["libelle"]     = "str notNull";
 		$specs["user_id"]     = "ref class|CMediusers notNull";
 		$specs["_duree"]      = "num";
     return $specs;

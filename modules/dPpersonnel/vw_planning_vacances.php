@@ -56,7 +56,6 @@ foreach ($plagesvac as $_plage) {
   $_plage->_ref_user->loadRefFunction();
   
 	$_plage->_deb = mbDaysRelative($debut_periode,$_plage->date_debut);
-	//$_plage->_fin = mbDaysRelative($debut_periode,$fin_periode) + 1 - mbDaysRelative($_plage->_date_fin,$fin_periode);
 	$_plage->_fin = mbDaysRelative($_plage->date_debut, $_plage->date_fin)+1;
 	$_plage->_duree = mbDaysRelative($_plage->date_debut,$_plage->date_fin)+1;
 }
