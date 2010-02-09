@@ -43,12 +43,12 @@ if ($spec instanceof CRefSpec) {
       "edit" => PERM_EDIT,
     );
     $perm = $permsTable[$spec->perm] ? $permsTable[$spec->perm] : null;
-    $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit);
-    $total = $target_object->_totalWithPerms;
+    $matches = $target_object->loadListWithPerms($perm, $where, $view_field, $limit, $view_field);
+    //$total = $target_object->_totalWithPerms;
   }
   else {
-    $matches = $target_object->loadList($where, $view_field, $limit);
-    $total = $target_object->countList($where);
+    $matches = $target_object->loadList($where, $view_field, $limit, $view_field);
+    $total = $target_object->countList($where, null, null, $view_field);
   } 
   $template_file = "modules/{$target_object->_ref_module->mod_name}/templates/{$target_object->_class_name}_autocomplete.tpl";
   if (is_file($template_file)) {

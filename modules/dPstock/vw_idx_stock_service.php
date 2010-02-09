@@ -45,8 +45,8 @@ $list_categories = $list_categories->loadList(null, 'name');
 
 // Functions list
 $where = array('group_id' => "= $g");
-$list_services = new CService();
-$list_services = $list_services->loadList($where, 'nom');
+$service = new CService();
+$list_services = $service->loadListWithPerms(PERM_READ, $where, "nom");
 
 // Création du template
 $smarty = new CSmartyDP();
