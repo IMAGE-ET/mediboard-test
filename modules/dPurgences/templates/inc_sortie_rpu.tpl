@@ -1,12 +1,13 @@
 {{assign var=rpu value=$sejour->_ref_rpu}}
 {{assign var=patient value=$sejour->_ref_patient}}
 <td {{if $sejour->annule}}class="cancelled"{{/if}}>
+  
   <form name="validCotation-{{$sejour->_ref_consult_atu->_id}}" action="" method="post"> 
     <input type="hidden" name="dosql" value="do_consultation_aed" />
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="consultation_id" value="{{$sejour->_ref_consult_atu->_id}}" />
-    <input type="hidden" name="valide" value="1" />
+    <input type="hidden" name="valide" value="1" />    
   </form>
 
   <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
@@ -110,7 +111,7 @@
           <input type="hidden" name="mode_sortie" value="" />
           <input type="hidden" name="etablissement_transfert_id" value="" />
           <input type="hidden" name="sortie_reelle" value="" />
-          <button class="cancel" type="button" onclick="onSubmitFormAjax(getForm('editSejour-{{$sejour->_id}}')); refreshSortie(this, '{{$rpu->_id}}');">
+          <button class="cancel" type="button" onclick="onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu->_id}}')});">
             Annuler la sortie
            </button>
          </td>
@@ -127,7 +128,7 @@
           
           {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value);"}}
           <input type="hidden" name="_modifier_sortie" value="1" />
-          <button class="tick" type="button" onclick="validCotation('{{$sejour->_ref_consult_atu->_id}}'); onSubmitFormAjax(getForm('editSejour-{{$sejour_id}}')); refreshSortie(this, '{{$rpu_id}}');">
+          <button class="tick" type="button" onclick="validCotation('{{$sejour->_ref_consult_atu->_id}}'); onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
             Effectuer la sortie
           </button>
          </td>
