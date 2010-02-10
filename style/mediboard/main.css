@@ -360,6 +360,10 @@ a.button {
   -webkit-appearance: button;*/
 }
 
+button.default {
+	border-width: 2px;
+}
+
 button {
 	padding: 0;
   text-indent: -2px;
