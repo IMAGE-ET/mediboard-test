@@ -111,23 +111,23 @@ reloadPatient = function(patient_id, link){
   <tr>
     <td class="button" colspan="4">
       {{if $board}}
-      <button class="search" type="button" onclick="updateListPatients()">
+      <button class="search default" tabindex="10" type="button" onclick="updateListPatients()">
         {{tr}}Search{{/tr}}
       </button>
       {{else}}
-      <button class="search" type="submit">
+      <button class="search default" tabindex="10" type="submit">
         {{tr}}Search{{/tr}}
       </button>
       {{if $app->user_prefs.GestionFSE}}
         {{if $app->user_prefs.VitaleVision}}
-  	      <button class="search" type="button" onclick="VitaleVision.read();">
+  	      <button class="search" type="button" tabindex="11" onclick="VitaleVision.read();">
   	        Lire Vitale
   	      </button>
         {{else}}
-  	      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+  	      <button class="search" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
   	        Lire Vitale
   	      </button>
-  	      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
+  	      <button class="change intermax-result notext" tabindex="12" type="button" onclick="Intermax.result('Lire Vitale');">
   	        Résultat Vitale
   	      </button>
         {{/if}}
@@ -135,7 +135,7 @@ reloadPatient = function(patient_id, link){
       
       {{if $can->edit}}
         {{if $nom || $prenom || $patient_ipp || $naissance}}
-        <button class="new" type="button" onclick="Patient.create(this.form);">
+        <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
           {{tr}}Create{{/tr}}
           {{if $useVitale}}avec Vitale{{/if}}
         </button>
