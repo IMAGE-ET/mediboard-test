@@ -119,7 +119,7 @@ function cancelSejourSSR() {
       <th>{{mb_label object=$sejour field=praticien_id}}</th>
       <td>
         <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" tabindex="1">
-          <option value="">&mdash; Choisir un praticien</option>
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$prats item=_user}}
           <option value="{{$_user->_id}}" class="mediuser" 
             style="border-color: #{{$_user->_ref_function->color}}" {{if $_user->_id == $sejour->praticien_id}}selected="selected"{{/if}}>
@@ -161,38 +161,36 @@ function cancelSejourSSR() {
       
       <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
       <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
-      <td id="dureeEst"></td>
     </tr>
     
     <tr>
       <th>{{mb_label object=$sejour field=libelle}}</th>
       <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3"}}</td>
-      <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
+      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
       <td>
         <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" tabindex="6" size="4" onchange="updateSortiePrevue()" />
         nuits
       </td>
+      <td id="dureeEst"></td>
     </tr>
     
     <tr>
       <td class="button" colspan="5">
         {{if $sejour->_id}}
-          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-          {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
-          {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+          <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
           
-          <button class="{{$annule_class}}" type="button" onclick="cancelSejourSSR();">
-            {{$annule_text}}
+          <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
+             {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
           </button>
           
           {{if $can->admin}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
+            <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
             </button>
           {{/if}}
               
         {{else}}
-          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+          <button class="submit default" tabindex="23" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

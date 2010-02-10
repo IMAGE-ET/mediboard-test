@@ -23,19 +23,17 @@ $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $rpu    = new CRPU;
 $rpu_id = CValue::getOrSession("rpu_id");
-
-// Création d'un RPU pour un séjour existant
-if ($sejour_id = CValue::get("sejour_id")) {
-  $rpu_id = null;
-  $rpu->sejour_id = $sejour_id;
-  $rpu->updateFormFields();
-}
-
 if ($rpu_id && !$rpu->load($rpu_id)) {
   CAppUI::setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
   CAppUI::redirect("m=$m&tab=$tab&rpu_id=0");
 }
 
+// Création d'un RPU pour un séjour existant
+if ($sejour_id = CValue::get("sejour_id")) {
+  $rpu->sejour_id = $sejour_id;
+	$rpu->loadMatchingObject();
+  $rpu->updateFormFields();
+}
 
 // Chargement des aides a la saisie
 $rpu->loadAides($AppUI->user_id);

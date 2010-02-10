@@ -26,9 +26,10 @@ Main.add(Control.Tabs.create.curry('tab-sejour', true));
 
 <ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
-  <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}} &amp; {{tr}}CTraitement{{/tr}}</a></li>
-  <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
+  <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
   <li><a href="#bilan_ssr">{{tr}}CBilanSSR{{/tr}}</a></li>
+  <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
+  <li><a href="#planification">Planification</a></li>
   {{/if}} 
 </ul>
 
@@ -53,12 +54,15 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </div>
 {{/if}}
 
-<div id="autonomie" style="display: none;">
-  {{mb_include template=inc_form_fiche_autonomie}}
-</div>
-
 <div id="bilan_ssr" style="display: none;">
   {{mb_include template=inc_form_bilan_ssr}}
 </div>
 
+<div id="autonomie" style="display: none;">
+  {{mb_include template=inc_form_fiche_autonomie}}
+</div>
+
+<div id="planification" style="display: none;">
+  {{mb_include template=inc_planification}}
+</div>
 {{/if}}

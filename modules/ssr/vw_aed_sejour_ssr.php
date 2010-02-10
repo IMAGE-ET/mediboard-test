@@ -43,6 +43,7 @@ if ($sejour->_id) {
   // Bilan SSR  
   $bilan->sejour_id = $sejour->_id;
   $bilan->loadMatchingObject();
+  $bilan->loadAides($AppUI->user_id);
   
 } 
 else {

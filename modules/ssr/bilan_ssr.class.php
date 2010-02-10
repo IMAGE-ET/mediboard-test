@@ -12,6 +12,7 @@
  * Bilan d'entrée SSR
  */
 class CBilanSSR extends CMbObject {
+  var $_activites = array("kine", "ergo", "psy", "ortho", "diet", "social", "apa");
 
   // DB Table key
   var $bilan_id = null;

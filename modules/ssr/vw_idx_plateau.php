@@ -14,11 +14,11 @@ $can->needsRead();
 $plateau = new CPlateauTechnique;
 $plateau->group_id = CGroups::loadCurrent()->_id;
 
-// Plateaux disponible
+// Plateaux disponibles
 $plateaux = $plateau->loadMatchingList();
 foreach($plateaux as $_plateau) {
-  $_plateau->countBackRefs("techniciens");  
-  $_plateau->countBackRefs("equipements");  
+  $_plateau->countBackRefs("techniciens");
+  $_plateau->countBackRefs("equipements");
 }
 
 // Plateau sélectionné
