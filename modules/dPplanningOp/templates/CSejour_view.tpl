@@ -1,6 +1,6 @@
 {{include file=CMbObject_view.tpl}}
 
-{{assign var="sejour" value=$object}}
+{{assign var=sejour value=$object}}
 <table class="tbl tooltip">
   {{if $sejour->annule == 1}}
   <tr>
@@ -25,6 +25,20 @@
 				{{tr}}Admission{{/tr}}
 			</button>
 			{{/if}}
+
+      {{if $sejour->type == "ssr" && @$modules.ssr->_can->read}}
+			<br />
+      <button type="button" class="search" onclick="Sejour.showSSR('{{$sejour->_id}}');">
+        {{tr}}module-ssr-long{{/tr}}
+      </button>
+      {{/if}}
+
+      {{if $sejour->type == "urg" && @$modules.dPurgences->_can->read}}
+      <br />
+      <button type="button" class="search" onclick="Sejour.showUrgences('{{$sejour->_id}}');">
+        {{tr}}module-dPurgences-long{{/tr}}
+      </button>
+      {{/if}}
     </td>
   </tr>
 </table>

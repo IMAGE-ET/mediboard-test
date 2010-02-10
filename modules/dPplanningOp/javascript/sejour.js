@@ -10,5 +10,15 @@ Sejour = {
     new Url("dPadmissions", "vw_idx_admission", "tab").
       addParam("date", date).
       redirectOpener();
+  },
+  showSSR: function(sejour_id) {
+    new Url("ssr", "vw_aed_sejour_ssr").
+      addParam("sejour_id", sejour_id).
+      redirectOpener();
+  },
+  showUrgences: function(sejour_id) {
+    new Url("dPurgences", "vw_aed_rpu").
+      addParam("sejour_id", sejour_id).
+      redirectOpener();
   }
 }
