@@ -240,7 +240,9 @@ Main.add(function () {
 			</ul>
 			<hr class="control_tabs" /> 
 	</tr>
+	{{/if}}
 	
+	{{if $isPrescriptionInstalled}}
 	<tr id="tp_base_med">
 		<td class="text">
       <!-- Formulaire d'ajout de traitements -->
@@ -395,7 +397,7 @@ Main.add(function () {
     </td>
   </tr>
   {{/if}}
-      
+  
   <!-- Diagnostics CIM -->
   <tr>
     <th class="category">
