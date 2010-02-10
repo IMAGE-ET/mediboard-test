@@ -9,7 +9,7 @@
 *}}
 
 {{mb_include module=system template=inc_pagination change_page="changePage" 
-    total=$total current=$start step=16}}
+    total=$total current=$start step=15}}
 
 <table class="tbl">
   <tr>
