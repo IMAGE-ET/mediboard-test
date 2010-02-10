@@ -39,6 +39,7 @@ class CProductOrder extends CMbObject {
 	var $_date_received   = null;
 	var $_received        = null;
   var $_partial         = null;
+  var $_customer_code   = null;
   
   // actions
 	var $_order           = null;
@@ -78,6 +79,8 @@ class CProductOrder extends CMbObject {
 	  $specs['_date_received']  = 'dateTime';
     $specs['_received']       = 'bool';
     $specs['_partial']        = 'bool';
+    $specs['_customer_code']  = 'str show|1';
+    
 		$specs['_order']          = 'bool';
 		$specs['_receive']        = 'bool';
 		$specs['_autofill']       = 'bool';
@@ -346,6 +349,12 @@ class CProductOrder extends CMbObject {
 		$this->_view  = "$this->order_number - ";
 		$this->_view .= $this->societe_id ? "$this->_ref_societe - " : "";
 		$this->_view .= "$items_count article".(($items_count > 1) ? 's' : '');
+    
+    $customer_code = $this->societe_id ? $this->_ref_societe->customer_code : null;
+    if (!$customer_code) {
+      $customer_code = "-";
+    }
+    $this->_customer_code = $customer_code;
     
     if ($this->_total !== null) {
       $this->_view .= ", total = $this->_total ".CAppUI::conf("currency_symbol");

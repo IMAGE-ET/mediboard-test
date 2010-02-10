@@ -13,6 +13,12 @@ function changePage(start) {
   $V(getForm("filter-products").start, start);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-products");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 function filterReferences(form) {
   var url = new Url("dPstock", "httpreq_vw_products_list");
   url.addFormData(form);
@@ -28,6 +34,7 @@ function filterReferences(form) {
       <form name="filter-products" action="?" method="post" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        <input type="hidden" name="letter" value="A" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
@@ -49,6 +56,8 @@ function filterReferences(form) {
           <input type="checkbox" name="show_all" {{if $show_all}}checked="checked"{{/if}} onchange="$V(this.form.start,0); this.form.onsubmit();" />
           Afficher les archivés
         </label>
+        
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
       </form>
 
       <div id="list-products"></div>

@@ -74,6 +74,13 @@ table.grid th {
   </tr>
   
   <tr>
+    <th>{{mb_label object=$order field=comments}}</th>
+    <td>{{mb_value object=$order field=comments}}</td>
+    <th>{{mb_label object=$order field=_customer_code}}</th>
+    <td>{{mb_value object=$order field=_customer_code}}</td>
+  </tr>
+  
+  <tr>
     <td colspan="4">
       <hr />
     </td>

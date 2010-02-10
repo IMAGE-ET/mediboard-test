@@ -103,8 +103,8 @@ function duplicateObject(form) {
     <td>{{mb_field object=$product field="classe_comptable"  form="edit_product"}}</td>
   </tr>
   <tr>
-    <th>Conso. des 30 derniers jours</th>
-    <td>{{$product->getConsommation()}}</td>
+    <th>Conso. des <strong>3 derniers mois</strong></th>
+    <td>{{$product->getConsommation("-3 MONTHS")}}</td>
   </tr>
 	
 	{{if @$modules.dmi}}

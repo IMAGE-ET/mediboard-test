@@ -3468,8 +3468,7 @@ table.active {
   display: inline-block; 
   border: 1px solid #999; 
   padding: 1px 4px;
-  margin: 1px;
-  margin-right: 0;
+  margin: 1px 0;
   color: #555;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;

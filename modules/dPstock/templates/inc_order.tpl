@@ -10,6 +10,27 @@
 
 {{mb_include module=system template=CMbObject_view object=$order}}
 
+<table class="main form">
+  <tr>
+    <td>
+      {{mb_label object=$order field=comments}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <form name="order-edit-{{$order->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="dosql" value="do_order_aed" />
+        <input type="hidden" name="order_id" value="{{$order->_id}}" />
+        
+        {{mb_field object=$order field=comments}}
+        
+        <button type="submit" class="tick">{{tr}}Save{{/tr}}</button>
+      </form>
+    </td>
+  </tr>
+</table>
+
 <script type="text/javascript">
 Main.add(function(){
   if (!$("orders-tabs")) return;

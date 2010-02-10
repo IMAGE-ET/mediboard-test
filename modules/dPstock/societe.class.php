@@ -16,6 +16,7 @@ class CSociete extends CMbObject {
   var $name            = null;
   var $code            = null;
   var $distributor_code= null;
+  var $customer_code   = null;
   var $address         = null;
   var $postal_code     = null;
   var $city            = null;
@@ -58,6 +59,7 @@ class CSociete extends CMbObject {
     $specs['name']            = 'str notNull maxLength|50 seekable';
     $specs['code']            = 'str maxLength|80 seekable protected';
     $specs['distributor_code']= 'str maxLength|80 seekable protected';
+    $specs['customer_code']   = 'str maxLength|80';
     $specs['address']         = 'text seekable';
     $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';
@@ -119,8 +121,17 @@ class CSociete extends CMbObject {
   }
 
   function loadRefsBack() {
-    $this->_ref_products = $this->loadBackRefs('products');
-    $this->_ref_product_references = $this->loadBackRefs('product_references');
-    $this->_ref_product_orders = $this->loadBackRefs('product_orders');
+    $ljoin = array(
+      "product" => "product_reference.product_id = product.product_id"
+    );
+    $where = array(
+      "product_reference.societe_id" => " = '$this->_id'"
+    );
+    $reference = new CProductReference;
+    $this->_ref_product_references = $reference->loadList($where, "product.name", null, null, $ljoin);
+    $this->_back["product_references"] = $this->_ref_product_references;
+    
+    $this->_ref_products = $this->loadBackRefs('products', "name");
+    $this->_ref_product_orders = $this->loadBackRefs('product_orders', "date_ordered");
   }
 }

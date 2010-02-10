@@ -93,6 +93,10 @@ Main.add(function(){
           <td>{{mb_field object=$societe field="distributor_code"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$societe field="customer_code"}}</th>
+          <td>{{mb_field object=$societe field="customer_code"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$societe field="address"}}</th>
           <td>{{mb_field object=$societe field="address"}}</td>
         </tr>

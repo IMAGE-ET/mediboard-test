@@ -489,7 +489,11 @@ class CSetupdPstock extends CSetup {
               ADD `cancelled` ENUM ('0','1');";
     $this->addQuery($sql);
 
+    $this->makeRevision('1.20');
+    $sql = "ALTER TABLE `societe` 
+              ADD `customer_code` VARCHAR (80);";
+    $this->addQuery($sql);
     
-    $this->mod_version = "1.20";
+    $this->mod_version = "1.21";
   }
 }

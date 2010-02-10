@@ -16,12 +16,15 @@ $societe_id  = CValue::getOrSession('societe_id');
 $product_id  = CValue::getOrSession('product_id');
 $start       = CValue::getOrSession('start');
 $keywords    = CValue::getOrSession('keywords');
+$letter      = CValue::getOrSession('letter', "A");
 $show_all    = CValue::get('show_all');
 
 // Don't user getOrSession as we don't want to get it from session
 CValue::setSession("show_all", $show_all);
 
 $where = array();
+$where["name"] = ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'");
+
 if ($category_id) {
   $where['category_id'] = " = '$category_id'";
 }
