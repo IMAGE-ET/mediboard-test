@@ -1059,7 +1059,7 @@ class CSetupdPprescription extends CSetup {
     $this->addQuery($sql);
     
     // Creation du dossier medical s'il n'existe pas deja
-    $sql = "INSERT INTO `dossier_medical`
+    $sql = "INSERT INTO `dossier_medical` (dossier_medical_id, codes_cim, object_id, object_class) 
             SELECT '',NULL,patients.patient_id,'CPatient'
 		 			  FROM prescription 
 		 			  LEFT JOIN sejour ON prescription.object_id = sejour.sejour_id
