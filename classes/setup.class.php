@@ -106,7 +106,8 @@ class CSetup {
       $this->addTable($table);
     }
     // Table name changed ?
-    if (preg_match("/RENAME\s+TABLE\s+(\S+)\s+TO\s+(\S+)/i", $query, $matches)) {
+    if (preg_match("/RENAME\s+TABLE\s+(\S+)\s+TO\s+(\S+)/i", $query, $matches) || 
+        preg_match("/ALTER\s+TABLE\s+(\S+)\s+RENAME\s+(\S+)/i", $query, $matches)) {
       $tableFrom = trim($matches[1], "`");
       $tableTo   = trim($matches[2], "`");
       $this->renameTable($tableFrom, $tableTo);
