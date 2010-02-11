@@ -29,7 +29,7 @@ Main.add(function () {
   $('_list_produits').hide();
  
   // Initialisation des onglets du menu
-  Control.Tabs.create('tabs-livret', false);
+  Control.Tabs.create('tabs-livret', true);
   
   // Preparation du formulaire
   prepareForm(document.searchProdLivret);
@@ -178,6 +178,9 @@ function printLivret(){
 <ul id="tabs-livret" class="control_tabs">
   <li><a href="#livret">Par ordre alphabétique</a></li>
   <li><a href="#ATC">Par classe ATC</a></li>
+  {{if @$modules.dPstock}}
+    <li><a href="#stocks">Stocks</a></li>
+  {{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -190,3 +193,10 @@ function printLivret(){
 <div id="ATC" style="display: none;">
   {{include file="inc_vw_livret_arbre_ATC.tpl"}}
 </div>
+
+{{if @$modules.dPstock}}
+  <!-- Affichage des produits des stocks -->
+  <div id="stocks" style="display: none;">
+    {{include file="inc_vw_stock_products.tpl"}}
+  </div>
+{{/if}}

@@ -35,8 +35,7 @@ function changeRemote(o) {
 }
 
 showMediuser = function(user_id){
-  var url = new Url;
-  url.setModuleAction("mediusers", "ajax_edit_mediuser");
+  var url = new Url("mediusers", "ajax_edit_mediuser");
   url.addParam("user_id", user_id);
   url.requestUpdate("vw_mediuser");
 }
@@ -66,13 +65,15 @@ function changePage(page) {
         	<tr>
         		<th>Champ de recherche</th>
         		<td>
-              <input type="text" name="filter" value="{{$filter}}" />
+              <input type="text" name="filter" value="{{$filter}}" onchange="$V(this.form.page, 0)" />
             </td>
         	</tr>
         	<tr>
         		<th></th>
         		<td>
-        			<input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé	
+        		  <label>
+        			  <input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
+              </label>
         		</td>
         	</tr>
         	<tr>

@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$page      = CValue::get('page', 0);
+$page      = intval(CValue::get('page', 0));
 $pro_sante = CValue::get("pro_sante", array());
 $filter    = CValue::getOrSession("filter", "");
 $order_way = CValue::getOrSession("order_way", "ASC");
