@@ -112,7 +112,7 @@ $dossierMedical = new CDossierMedical();
 $pat_diag = new CPatient();
 $total_dossierMedicals = null;
 if ($where_diag){
-  $total_dossierMedicals = $dossierMedical->countList($where_diag, $where_diag);
+  $total_dossierMedicals = $dossierMedical->countList($where_diag, $order_diag);
   $dossiersMed = $dossierMedical->loadList($where_diag, $order_diag, "$page_dossierMedical, 30");
 }
 
@@ -177,7 +177,7 @@ $patients_consult = array();
 $order_consult = "patient_id";
 $total_consults = null;
 if ($where_consult){
-  $total_consults = $consult->countList($where_consult, $where_consult);
+  $total_consults = $consult->countList($where_consult, $order_consult);
   $consultations = $consult->loadList($where_consult, $order_consult, "$page_consult, 30"); 
 }
 
