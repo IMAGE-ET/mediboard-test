@@ -585,7 +585,9 @@ $dPconfig["dPurgences"] = array (
   "responsable_rpu_view"  => "1",
   "diag_prat_view"        => "0",
   "sortie_prevue"         => "sameday",
-  "only_prat_responsable" => "0"
+  "only_prat_responsable" => "0",
+  "rpu_sender"            => "",
+  "rpu_xml_validation"    => "1",
 );
 
 $dPconfig["dPpmsi"] = array(

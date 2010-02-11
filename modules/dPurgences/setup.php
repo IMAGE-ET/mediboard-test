@@ -115,7 +115,38 @@ class CSetupdPurgences extends CSetup {
 			ADD INDEX (`bio_retour`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+      
+    $sql = "CREATE TABLE `extract_passages` (
+              `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `date_extract` DATETIME NOT NULL,
+              `debut_selection` DATETIME NOT NULL,
+              `fin_selection` DATETIME NOT NULL,
+              `date_echange` DATETIME,
+              `message` MEDIUMTEXT NOT NULL,
+              `message_valide` ENUM ('0','1'),
+              `nb_tentatives` INT (11)
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `extract_passages` 
+              ADD INDEX (`date_extract`),
+              ADD INDEX (`debut_selection`),
+              ADD INDEX (`fin_selection`),
+              ADD INDEX (`date_echange`);";
+    $this->addQuery($sql);
+      
+    $sql = "CREATE TABLE `rpu_passage` (
+              `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `rpu_id` INT (11) UNSIGNED NOT NULL,
+              `extract_passages_id` INT (11) UNSIGNED NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `rpu_passage` 
+              ADD INDEX (`rpu_id`),
+              ADD INDEX (`extract_passages_id`);";
+    $this->addQuery($sql);
+        
+    $this->mod_version = "0.24";
   }  
 }
 

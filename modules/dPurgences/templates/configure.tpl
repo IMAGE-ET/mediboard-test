@@ -115,6 +115,27 @@
   </tr>
   
   {{mb_include module=system template=inc_config_bool var=only_prat_responsable}}
+  
+  <tr>
+    <th class="category" colspan="100">Protocole d'envoi des RPUs</th>
+  </tr>
+  {{assign var="var" value="rpu_sender"}} 
+  <tr>
+   <th>
+     <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+       {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+     </label>  
+   </th>
+   <td>
+     <select name="{{$m}}[{{$var}}]">
+       <option value="" {{if "" == $dPconfig.$m.$var}} selected="selected" {{/if}}>&mdash; Aucun</option>
+       <option value="COscourSender" {{if "COscourSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}COscourSender{{/tr}}</option>
+       <option value="COuralSender" {{if "COuralSender" == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}COuralSender{{/tr}}</option>
+     </select>
+   </td>
+  </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=rpu_xml_validation}}
     
   <tr>
     <td class="button" colspan="2">
