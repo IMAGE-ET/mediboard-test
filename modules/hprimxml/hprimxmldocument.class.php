@@ -639,6 +639,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($obligatoire, "grandRegime", $mbPatient->code_regime);
     $this->addElement($obligatoire, "caisseAffiliation", $mbPatient->caisse_gest);
     $this->addElement($obligatoire, "centrePaiement", $mbPatient->centre_gest);
+    
+    // Ajout des exonérations 
+    $mbPatient->guessExoneration();
+    if ($mbPatient->_type_exoneration) {
+      $exonerationsTM = $this->addElement($obligatoire, "exonerationsTM");
+      $exonerationTM = $this->addElement($exonerationsTM, "exonerationTM");
+      $this->addAttribute($exonerationTM, "typeExoneration", $mbPatient->_type_exoneration);  
+    }
   }
   
   function addAssure($elParent, $mbPatient) {
@@ -666,7 +674,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($adresse, "pays", str_pad($mbPatient->assure_pays_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $mbPatient->assure_cp);
     $dateNaissance = $this->addElement($personne, "dateNaissance");
-    $this->addElement($dateNaissance, "date", $mbPatient->assure_naissance);
+    $this->addElement($dateNaissance, "date", $mbPatient->assure_naissance ? $mbPatient->assure_naissance : $mbPatient->naissance);
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }

@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
+ * @subpackage hprimxml
  * @version $Revision: 7500 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
