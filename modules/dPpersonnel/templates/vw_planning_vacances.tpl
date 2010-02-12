@@ -91,8 +91,8 @@ DragDropPlage = function(draggable){
 	var new_left = (decalage / taille).round();
 	var widthplage = (parseInt(element.style.width) / taille).round() - 1;
 	var datedeb = tableau_periode[0];
-	
 	var date_debut = Date.fromDATE(datedeb);
+	
 	date_debut.addDays(new_left);
 	
 	var date_fin = date_debut;
@@ -105,6 +105,7 @@ DragDropPlage = function(draggable){
 	var url = new Url("dPpersonnel", "do_plagevac_aed");
   url.addParam("plage_id", plage_id);
 	url.addParam("date_debut", date_debut);
+	
 	url.addParam("date_fin", date_fin);
 	url.requestUpdate("systemMsg", {
 	  getParameters: {m: 'dPpersonnel', a: 'do_plagevac_aed'},

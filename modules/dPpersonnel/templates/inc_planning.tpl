@@ -1,4 +1,5 @@
 <script type="text/javascript">
+	tableau_periode={{$tableau_periode|@json}};
 	nombreelem = {{$tableau_periode|@json}}.length;
 	changedate = function (sens) {
   var choix = {{$choix|@json}};
