@@ -93,6 +93,7 @@ $smarty->assign("plagesvac",       $plagesvac);
 $smarty->assign("choix",           $choix);
 $smarty->assign("mediusers",       $mediusers);
 $smarty->assign("tableau_periode", $tableau_periode);
+$smarty->assign("affiche_nom",     $affiche_nom);
 $smarty->assign("tab_start",       $tab_start);
 
 $smarty->display("vw_planning_vacances.tpl");

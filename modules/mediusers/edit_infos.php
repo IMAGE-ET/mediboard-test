@@ -27,6 +27,8 @@ $banques = $banque->loadList(null, $order);
 $spec_cpam = new CSpecCPAM();
 $spec_cpam = $spec_cpam->loadList();
 
+$affiche_nom = CValue::get("affiche_nom",0); 
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -35,6 +37,6 @@ $smarty->assign("disciplines" , $disciplines            );
 $smarty->assign("spec_cpam"   , $spec_cpam              );
 $smarty->assign("user"        , $mediuser               );
 $smarty->assign("fonction"    , $mediuser->_ref_function);
-
+$smarty->assign("affiche_nom" , $affiche_nom            );
 $smarty->display("edit_infos.tpl");
 ?>

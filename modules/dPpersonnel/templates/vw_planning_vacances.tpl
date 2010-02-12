@@ -216,8 +216,7 @@ detecterror = function(){
 			<form name="searchplanning" method="get" onsubmit="return loadPlanning(this)">
 			  <input type="hidden" name="m" value="{{$m}}"/>
 				<table class="form">
-					{{assign var=affichenom value=$affiche_nom|@json}}
-          {{if $affichenom==1}}
+          {{if $affiche_nom==1}}
 					<tr>
 						<th>{{mb_label object=$filter field="user_id"}}</th>
 							<td>
