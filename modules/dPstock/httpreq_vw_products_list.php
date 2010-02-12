@@ -56,6 +56,7 @@ $smarty->assign('list_products', $list_products);
 $smarty->assign('product_id', $product_id);
 $smarty->assign('total', $total);
 $smarty->assign('start', $start);
+$smarty->assign('letter', $letter);
 
 $smarty->display('inc_products_list.tpl');
 ?>

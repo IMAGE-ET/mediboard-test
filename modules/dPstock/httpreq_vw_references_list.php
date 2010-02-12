@@ -17,10 +17,12 @@ $keywords     = CValue::getOrSession('keywords');
 $reference_id = CValue::getOrSession('reference_id');
 $mode         = CValue::get('mode');
 $start        = CValue::get('start', 0);
+$letter       = CValue::get('letter', "%");
 $show_all     = CValue::get('show_all');
 
 // Don't user getOrSession as we don't want to get it from session
 CValue::setSession("show_all", $show_all);
+CValue::setSession("letter", $letter);
 
 $where = array();
 if ($category_id) {
@@ -38,6 +40,8 @@ if ($keywords) {
 if (!$show_all) {
   $where[] = "product_reference.cancelled = '0' OR product_reference.cancelled IS NULL";
 }
+$where["product.name"] = ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'");
+
 $orderby = 'product.name ASC';
 
 $leftjoin = array();
@@ -57,6 +61,7 @@ $smarty->assign('list_references', $list_references);
 $smarty->assign('total', $total);
 $smarty->assign('mode', $mode);
 $smarty->assign('start', $start);
+$smarty->assign('letter', $letter);
 $smarty->assign('reference_id', $reference_id);
 
 

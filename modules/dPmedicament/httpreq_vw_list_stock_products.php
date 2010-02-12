@@ -8,7 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$keywords = CValue::getOrSession("keywords");
+$keywords     = CValue::getOrSession("keywords");
+$letter       = CValue::getOrSession("letter", "A");
 $start = intval(CValue::getOrSession("start", 0));
 
 if (!$keywords) {
@@ -16,7 +17,8 @@ if (!$keywords) {
 }
 
 $where = array(
-  "code" => "IS NOT NULL"
+  "code" => "IS NOT NULL",
+  "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
 );
 
 $product = new CProduct;

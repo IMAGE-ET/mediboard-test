@@ -12,7 +12,8 @@ global $can;
 $can->needsEdit();
 
 $reception_id = CValue::get('reception_id');
-$order_id = CValue::get('order_id');
+$order_id     = CValue::get('order_id');
+$letter       = CValue::getOrSession('letter', "A");
 
 $reception = new CProductReception();
 
@@ -36,5 +37,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('reception', $reception);
 $smarty->assign('order', $order);
 $smarty->assign('list_categories', $list_categories);
+$smarty->assign('letter',          $letter);
 
 $smarty->display('vw_edit_reception.tpl');

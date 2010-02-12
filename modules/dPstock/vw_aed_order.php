@@ -13,6 +13,7 @@ $can->needsEdit();
 
 $category_id = CValue::getOrSession('category_id');
 $societe_id  = CValue::getOrSession('societe_id');
+$letter      = CValue::getOrSession('letter', "A");
 $_autofill   = CValue::get('_autofill');
 
 // Categories list
@@ -40,6 +41,7 @@ $smarty->assign('category_id',     $category_id);
 
 $smarty->assign('list_societes',   $list_societes);
 $smarty->assign('societe_id',      $societe_id);
+$smarty->assign('letter',          $letter);
 
 $smarty->assign('list_orders',     $list_orders);
 

@@ -30,6 +30,12 @@ function changePage(start) {
   $V(getForm("filter-references").start, start);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-references");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 function filterReferences(form) {
   var url = new Url("dPstock", "httpreq_vw_references_list");
   url.addFormData(form);
@@ -44,6 +50,7 @@ function filterReferences(form) {
       <form name="filter-references" action="?" method="post" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="">&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
@@ -58,7 +65,6 @@ function filterReferences(form) {
                    style="width: 15em;"}}
         
         <input type="text" name="keywords" value="{{$keywords}}" size="12" onchange="$V(this.form.start,0)" />
-
         
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>     
@@ -68,6 +74,8 @@ function filterReferences(form) {
           <input type="checkbox" name="show_all" {{if $show_all}}checked="checked"{{/if}} onchange="$V(this.form.start,0); this.form.onsubmit();" />
           Afficher les archivés
         </label>
+        
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
       </form>
 
       <div id="list-references"></div>

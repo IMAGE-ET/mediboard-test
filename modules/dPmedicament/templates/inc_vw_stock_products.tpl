@@ -13,6 +13,12 @@ function changePageProducts(start) {
   $V(getForm("filter-stock-products").start, start);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-stock-products");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 function filterProducts(form) {
   var url = new Url("dPmedicament", "httpreq_vw_list_stock_products");
   url.addFormData(form);
@@ -28,8 +34,11 @@ Main.add(function(){
 <form action="?" method="get" name="filter-stock-products" onsubmit="return filterProducts(this)">
   <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0)" />
   <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+  <input type="hidden" name="letter" value="A" onchange="this.form.onsubmit()" />
   
   <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
 </form>
+
+{{mb_include module=system template=inc_pagination_alpha current=$lettre change_page=changeLetter}}
 
 <div id="list-stock-products"></div>

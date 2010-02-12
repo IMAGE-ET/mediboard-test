@@ -34,7 +34,7 @@ function filterReferences(form) {
       <form name="filter-products" action="?" method="post" onsubmit="return filterReferences(this)">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
-        <input type="hidden" name="letter" value="A" onchange="this.form.onsubmit()" />
+        <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>

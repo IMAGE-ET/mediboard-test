@@ -9,15 +9,27 @@
 *}}
 
 <script type="text/javascript">
-	// UpdateFields de l'autocomplete
-	function updateFields(selected) {
-	  Element.cleanWhitespace(selected);
-	  var dn = selected.childElements();
-    if (dn[1]) {
-	    Livret.addProduit(dn[0].innerHTML, dn[3].innerHTML.strip());
-    }
-	  $('searchProd_produit').value = "";
-	}
+// UpdateFields de l'autocomplete
+function updateFields(selected) {
+  Element.cleanWhitespace(selected);
+  var dn = selected.childElements();
+  if (dn[1]) {
+    Livret.addProduit(dn[0].innerHTML, dn[3].innerHTML.strip());
+  }
+  $('searchProd_produit').value = "";
+}
+
+Main.add(function(){
+  // Autocomplete
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.autoComplete("searchProd_produit", "produit_auto_complete", {
+      minChars: 3,
+      updateElement: updateFields,
+      callback: function(input, queryString){
+        return (queryString + "&search_by_cis=0"); 
+      }
+  } );
+});
 </script>
 
 <form action="?m=dPmedicament" method="post" name="addProduit" onsubmit="return checkForm(this);">
@@ -31,12 +43,12 @@
 
 <div style="font-size: 1.1em; text-align: center" class="pagination">
 {{foreach from=$tabLettre item=_lettre}}
-  <a href="#" onclick="Livret.reloadAlpha('{{$_lettre}}')" class="page {{if $lettre == $_lettre}}active{{/if}}">
+  <a href="#1" onclick="Livret.reloadAlpha('{{$_lettre}}')" class="page {{if $lettre == $_lettre}}active{{/if}}">
     {{$_lettre}}
   </a>
 {{/foreach}}
   - 
-  <a href="#" onclick="Livret.reloadAlpha('hors_T2A')" class="page {{if $lettre == "hors_T2A"}}active{{/if}}">
+  <a href="#1" onclick="Livret.reloadAlpha('hors_T2A')" class="page {{if $lettre == "hors_T2A"}}active{{/if}}">
     Hors T2A
   </a>
 </div>
@@ -71,20 +83,20 @@
     <td class="text">
 			<div style="float: right">
       {{if $produit_livret->_ref_produit->hospitalier}}
-      <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      <img src="./images/icons/hopital.gif" title="Produit Hospitalier" />
       {{/if}}
       {{if !$produit_livret->_ref_produit->inT2A}}
-        <img src="images/icons/T2A_barre.gif" alt="Produit hors T2A" title="Produit hors T2A" />
+        <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
       {{/if}}
       {{if $produit_livret->_ref_produit->_generique}}
-      <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
+      <img src="./images/icons/generiques.gif" title="Produit Générique" />
       {{/if}}
       {{if $produit_livret->_ref_produit->_referent}}
-      <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
+      <img src="./images/icons/referents.gif" title="Produit Référent" />
       {{/if}}
       </div>
       <a href="#produit{{$produit_livret->code_cip}}" 
-      {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}}onclick="Prescription.viewProduit('{{$produit_livret->code_cip}}')">
+      {{if $produit_livret->_ref_produit->_supprime}}style="color:red"{{/if}} onclick="Prescription.viewProduit('{{$produit_livret->code_cip}}')">
         {{$produit_livret->_ref_produit->libelle_long}}
       </a>
     </td>
@@ -112,20 +124,3 @@
 	Veuillez sélectionner la première lettre du produit recherché
 	</div>
 {{/if}}
-
-
-<script type="text/javascript">
-  // Preparation du formulaire
-  prepareForm(document.addProduit);
-  prepareForm(document.searchProd);
-  // Autocomplete
-  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  url.autoComplete("searchProd_produit", "produit_auto_complete", {
-      minChars: 3,
-      updateElement: updateFields,
-      callback: 
-	      function(input, queryString){
-	        return (queryString + "&search_by_cis=0"); 
-	      }
-  } );
-</script>

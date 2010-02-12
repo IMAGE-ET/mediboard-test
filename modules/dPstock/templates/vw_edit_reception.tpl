@@ -107,6 +107,12 @@ function changePage(start) {
   $V(getForm("filter-references").start, start);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-references");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 function receptionCallback(){
   refreshReception(window.reception_id);
 }
@@ -160,9 +166,9 @@ function receptionCallback(){
         <div id="no-order">
           <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
             <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="societe_id" value="{{$societe_id}}" />
             <input type="hidden" name="mode" value="reception" />
             <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+            <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
             
             <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
               <option value="" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
@@ -178,6 +184,8 @@ function receptionCallback(){
             
             <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
             <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
+            
+            {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
           </form>
           <div id="list-references"></div>
         </div>

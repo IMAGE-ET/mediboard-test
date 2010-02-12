@@ -26,6 +26,12 @@ function changePage(start) {
   $V(getForm("filter-references").start, start);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-references");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 function filterReferences(form) {
   var url = new Url("dPstock", "httpreq_vw_references_list");
   url.addFormData(form);
@@ -64,6 +70,7 @@ function createOrders(order_id) {
         <input type="hidden" name="societe_id" value="{{$societe_id}}" />
         <input type="hidden" name="mode" value="order" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
           <option value="" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
@@ -80,9 +87,10 @@ function createOrders(order_id) {
         </select>
         
         <input type="text" name="keywords" value="" size="10" onchange="$V(this.form.start, 0, false)" />
-        
         <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
+        
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
       </form>
       <div id="list-references"></div>
     </td>

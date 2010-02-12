@@ -51,6 +51,7 @@
             <input type="hidden" name="dosql" value="do_order_item_aed" />
             <input type="hidden" name="reference_id" value="{{$_reference->_id}}" />
             <input type="hidden" name="callback" value="orderItemCallback" />
+            <input type="hidden" name="_create_order" value="1" />
             <input type="hidden" name="reception_id" value="" />
             {{mb_field object=$_reference 
               field=quantity 

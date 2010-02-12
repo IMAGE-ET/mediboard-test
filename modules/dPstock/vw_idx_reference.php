@@ -16,6 +16,7 @@ $societe_id   = CValue::getOrSession('societe_id');
 $category_id  = CValue::getOrSession('category_id');
 $product_id   = CValue::getOrSession('product_id');
 $keywords     = CValue::getOrSession('keywords');
+$letter       = CValue::getOrSession('letter', "A");
 $show_all     = CValue::getOrSession('show_all');
 
 $filter = new CProduct;
@@ -66,6 +67,7 @@ $smarty->assign('list_societes',   $list_societes);
 
 $smarty->assign('filter',          $filter);
 $smarty->assign('keywords',        $keywords);
+$smarty->assign('letter',          $letter);
 $smarty->assign('show_all',        $show_all);
 
 $smarty->display('vw_idx_reference.tpl');

@@ -25,7 +25,7 @@
   {{foreach from=$list_products item=_product}}
     <tbody class="hoverable">
     <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
-      <td colspan="10">
+      <td colspan="10" style="font-weight: bold;">
         <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
           {{$_product->name|truncate:80}}
         </a>
@@ -33,13 +33,11 @@
     </tr>
     <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
       <td style="padding-left: 1em;" {{if $_product->cancelled}}class="cancelled"{{/if}}>
-			  <strong>
-          {{if $_product->code}}
-            {{mb_value object=$_product field=code}}
-          {{else}}
-            [Aucun code]
-          {{/if}}
-				</strong>
+        {{if $_product->code}}
+          {{mb_value object=$_product field=code}}
+        {{else}}
+          &ndash;
+        {{/if}}
 			</td>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_ref_societe->_guid}}')">
