@@ -21,11 +21,10 @@ $heureLimit = "16:00:00";
 
 $date      = CValue::getOrSession("date", mbDate()); 
 $mode      = CValue::getOrSession("mode", 0); 
-$filterAdm = CValue::getOrSession("filterAdm", "tout");
-$filterFunction = CValue::getOrSession("filterFunction");
 $triAdm    = CValue::getOrSession("triAdm", "praticien");
 $list_services    = CValue::getOrSession("list_services");
-
+$filterAdm = CValue::getOrSession("filterAdm", "tout");
+$filterFunction = CValue::getOrSession("filterFunction");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -66,6 +65,20 @@ $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
 $where[] = $where_service;
 $leftjoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+
+// Filtre sur les fonctions
+if($filterFunction){
+	$leftjoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
+  $where["users_mediboard.function_id"] = " = '$filterFunction'";
+}
+
+// Filtre sur les types d'admission
+if($filterAdm == "comp" || $filterAdm == "ambu"){
+  $where["type"] = " = '$filterAdm'";
+}
+if($filterAdm == "csejour"){
+  $where[] = "HOUR(TIMEDIFF(sejour.sortie_prevue, sejour.entree_prevue)) <= 48";
+}
 
 $sejour = new CSejour();
 $alerte = $sejour->countList($where, null, null, null, $leftjoin);
