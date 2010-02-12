@@ -14,7 +14,8 @@
 	{{foreach from=$plages_vac item=_plagevac}}
 	<tr>
     <td>
-    	<a href="#" onclick="editPlageVac({{$_plagevac->_id}},{{$user_id}})">
+    	<a href="#"
+			  onclick="editPlageVac({{$_plagevac->_id}},{{$user_id}})">
     		<span onmouseover="ObjectTooltip.createEx(this, '{{$_plagevac->_guid}}')">
     		{{mb_value object=$_plagevac field="libelle"}}
 				</span>

@@ -9,7 +9,6 @@
  */
 
 global $can;
-
 $can->needsRead();
 
 $emplacement = CValue::getOrSession("emplacement");

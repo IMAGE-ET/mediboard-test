@@ -75,5 +75,17 @@ class CPlageVacances extends CMbObject {
 	  }
     return parent::check();
   }
+	
+	function getPerm($permType) {
+    global $AppUI;
+		if($this->user_id == $AppUI->user_id) {
+      return true;
+    } else {
+		if(!$this->_ref_user) {
+      $this->loadRefsFwd();
+    }
+    return $this->_ref_user->getPerm($permType);
+		}
+  }
 }
 ?>

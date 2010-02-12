@@ -1,18 +1,47 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
+contentconge = function() {
+var url = new Url("dPpersonnel", "vw_planning_vacances");
+   url.addParam("affiche_nom", 0);
+   url.requestUpdate("planningvac");
+}
+
+loadUser=function(user_id){
+  
+    var url = new Url("dPpersonnel", "ajax_plage_vac");
+    url.addParam("user_id", user_id);
+    url.requestUpdate("vw_user");
+  
+}
+
+editPlageVac = function(plage_id, user_id){
+  
+    var url = new Url("dPpersonnel", "ajax_edit_plage_vac");
+    url.addParam("plage_id", plage_id);
+    url.addParam("user_id", user_id);
+    url.requestUpdate("edit_plage"); 
+}
+
 Main.add(function () {
   var tabs = Control.Tabs.create('tab_edit_mediuser', true);
   
   var url = new Url("admin", "edit_prefs");
-  url.addParam("user_id", "{{$user->user_id}}");
+  url.addParam("user_id", "{{$user->_id}}");
   url.requestUpdate("edit-preferences");
+	
+	var tabs = Control.Tabs.create('tab_edit_mediuser', true);
+	contentconge();
+	loadUser("{{$user->_id}}");
+	editPlageVac("","{{$user->_id}}");
+	
 });
 </script>
 
 <ul id="tab_edit_mediuser" class="control_tabs">
   <li><a href="#edit-mediuser">{{tr}}Account{{/tr}}</a></li>
   <li><a href="#edit-preferences">{{tr}}Preferences{{/tr}}</a></li>
+	<li><a href="#edit-holidays">{{tr}}Holidays{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -117,3 +146,16 @@ Main.add(function () {
 </div>
 
 <div id="edit-preferences" style="display: none;"></div>
+<div id="edit-holidays" style="display: none;">
+	<table class="main">
+	  <tr>
+	    <td class="halfPane" id = "vw_user">
+	    </td> 
+	    <td class="halfPane" id = "edit_plage">
+	    </td>
+	  </tr>
+	  <tr>
+	    <td colspan="2" id="planningvac"></td>
+	  </tr>
+	</table>
+</div>

@@ -39,7 +39,9 @@ function raz(form) {
        {{include file="inc_filtre_plage.tpl" }}
     </td>
 		<td>
-			<div id = "edit_plage"></div>
+			
+			  <div id = "edit_plage"></div>
+			
 		</td>
   </tr>
   <tr>
@@ -61,7 +63,8 @@ function raz(form) {
           <td>
             <a href="#{{$mediuser->_guid}}"
 						onclick="loadUser({{$mediuser->_id}});
-										 editPlageVac('',{{$mediuser->_id}})">
+										   editPlageVac('',{{$mediuser->_id}});
+										 ">
             	{{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}</a>
           </td>
           <td>
@@ -85,9 +88,9 @@ function raz(form) {
 		</td>
   </tr>
 </table>
-{{if $_user_id}}
+{{if $filter->user_id}}
   <script type='text/javascript'>
-    loadUser({{$_user_id}});
-    editPlageVac('',{{$_user_id}});
+		loadUser({{$filter->user_id}});
+		editPlageVac('{{$filter->_id}}',{{$filter->user_id}});
   </script>
 {{/if}}

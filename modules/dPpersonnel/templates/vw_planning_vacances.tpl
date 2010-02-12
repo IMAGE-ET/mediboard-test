@@ -9,11 +9,18 @@
 *}}
 <script type="text/javascript">
 
-var nombreelem = {{$tableau_periode|@json}}.length;
-var tableau_periode={{$tableau_periode|@json}};
-var largeur_nom = 100;
+nombreelem = {{$tableau_periode|@json}}.length;
+tableau_periode={{$tableau_periode|@json}};
+largeur_nom = 100;
 
-function display_plage(plage_id, debut, fin) {
+loadPlanning = function(form) {
+    var url = new Url("dPpersonnel", "ajax_planning");
+    url.addFormData(form);
+    url.requestUpdate("planning");
+		return false;
+}
+
+display_plage = function (plage_id, debut, fin) {
   var width = parseInt($("schedule").getWidth()) - largeur_nom;
 	var plage = $("plage" + plage_id);
 	var width_calc = (fin * (width/nombreelem).floor());
@@ -31,33 +38,7 @@ function display_plage(plage_id, debut, fin) {
 	}); 
 }
 
-function changedate(sens) {
-  var choix = {{$choix|@json}};
-	var form = getForm("planning");
-  var date_courante = Date.fromDATE(form.elements.date_debut.value); 
-	
-	if (choix=="semaine") {
-	  if(sens == "p") {
-	    date_courante.addDays(-7);
-		}
-		else {
-		  date_courante.addDays(7);
-		}
-	}
-	else {
-	  if(sens == "p") {
-	    date_courante.setMonth(date_courante.getMonth() - 1);
-		}
-		else {
-		  date_courante.setMonth(date_courante.getMonth() + 1);
-		}
-	}
-	form.elements.date_debut.value = date_courante.toDATE();
-	
-	form.submit();
-}
-
-function movesnap(x, y, drag) {
+movesnap = function(x, y, drag) {
   var table = $("schedule");
   
   var columns = table.down("tr").next().select("td");
@@ -102,7 +83,7 @@ function movesnap(x, y, drag) {
 	return [left,0];
 }
 
-function DragDropPlage(draggable){
+DragDropPlage = function(draggable){
   var element = draggable.element;
 	var decalage = parseInt(element.style.left);
 	var widthtotal = parseInt($("schedule").getWidth()) - largeur_nom;
@@ -137,14 +118,14 @@ function DragDropPlage(draggable){
 	});
 }
 
-function savePosition(drag){
+savePosition = function(drag){
   window.oldDrag = {
 	  left: drag.element.style.left,
 		drag: drag
   };
 }
 
-function detecterror(){
+detecterror = function(){
   return $("systemMsg").select(".error").length > 0;
 }
 </script>
@@ -203,27 +184,66 @@ function detecterror(){
 	text-align: left;
 }
 </style>
-
+<script type="text/javascript">
+	Main.add(function(){
+	  var form = getForm("searchplanning");
+		
+	 loadPlanning(form);
+	 var choixannee = $('annee');
+	 
+	 if($V(form.user_id) == "") {
+	   choixannee.checked='';
+		 choixannee.disabled='disabled';
+	 }
+	 else {
+	   choixannee.disabled='';
+	 } 
+	});
+	
+	toggleYear = function (form) {
+	  if($V(form.user_id) == '') {
+		  form.choix[2].disabled = "disabled";
+			$V(form.choix, "mois");
+	  }
+		else {
+		  form.choix[2].disabled = "";
+		}
+	}
+</script>
 <table class="main">
 	<tr>
-		<td colspan=2>
-			<form name="planning" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}"/>
-				<input type="hidden" name="tab" value="{{$tab}}"/>
-				<table class="form" style="width:30%">
+		<td colspan="2">
+			<form name="searchplanning" method="get" onsubmit="return loadPlanning(this)">
+			  <input type="hidden" name="m" value="{{$m}}"/>
+				<table class="form">
+					{{assign var=affichenom value=$affiche_nom|@json}}
+          {{if $affichenom==1}}
+					<tr>
+						<th>{{mb_label object=$filter field="user_id"}}</th>
+							<td>
+				      <select name="user_id" onchange="toggleYear(this.form)">
+				        <option value="">{{tr}}CMediusers.all{{/tr}}</option>
+				      {{mb_include module=mediusers template=inc_options_mediuser list=$mediusers selected=$filter->user_id}}
+				      </select>
+	          </td>
+			    </tr>
+          {{/if}}
 					<tr>
 						<th>{{mb_label class=CPlageVacances field="date_debut"}}</th>
-						<td>{{mb_field object=$filter field="date_debut" form="planning" register=true}}</td>
-					</tr>	
+						<td>{{mb_field object=$filter field="date_debut" form="searchplanning" register=true}}</td>
+					</tr>
 					<tr>
 						<th>{{tr}}CPlageVacances-choix-periode{{/tr}}</th>
 						<td>
 							<label>
-							  <input type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> Semaine
+							  <input type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}
 						  </label>
 							<label>
-							  <input type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> Mois
+							  <input type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> {{tr}}month{{/tr}}
 					    </label>
+							<label>
+                <input id="annee" type="radio" hidden="true" name="choix" {{if $choix=="annee"}}checked="checked"{{/if}} value="annee" /> {{tr}}year{{/tr}}
+              </label>
 					  </td>
 					</tr>
 					<tr>
@@ -235,95 +255,10 @@ function detecterror(){
 			</form>
 		</td>
 	</tr>
-  <!-- Affichage : semaine du tant au tant -->
+  
+	
 	<tr>
-		<th colspan="{{$tableau_periode|@count}}" style="text-align:center; font-size:14pt">
-			{{if $choix=="semaine"}}
-			  {{$choix}} du {{$tableau_periode.0|date_format:"%d %B %Y"}} au
-		    {{$tableau_periode.6|date_format:"%d %B %Y"}}
-			{{else}}
-			   {{$tableau_periode.0|date_format:"%B %Y"}}
-			{{/if}}
-    </th>
-	</tr>
-	<!-- Navigation par semaine ou mois-->
-	<tr>
-		<td colspan=2>
-	     <button class="left" onclick="changedate('p')" style="float: left;">
-			   {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
-			 </button>
-     	 <button class="right" onclick="changedate('n')" style="float: right;">
-         {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
-			 </button>
-	  </td>
-  </tr>
-	<tr>
-		<td>
-		  <!-- Affichage du planning -->
-			<table id="schedule">
-				<tr style="height:30px;">
-					<td style="width: 100px"></td>
-				  {{foreach from=$tableau_periode item=_periode}}
-				  <th>{{$_periode|date_format:"%a"}}<br/>{{$_periode|date_format:" %d"}}</th>
-				  {{/foreach}}
-				</tr>
-		   	<!-- Zone d'insertion des plages de vacances-->
-				{{assign var="indice" value="-1"}}
-				{{assign var="count" value="-1"}}
-				{{foreach from=$plagesvac item=_plage1}}
-			  {{if $indice != $_plage1->user_id}}
-				{{assign var="userid" value=$_plage1->user_id}}
-        {{assign var="indice" value=$userid}}
-        {{assign var="count" value=$count+1}}
-				<tr class="ligne">
-					<th>
-					   <div class="nom">
-						{{assign var=mediuser value=$_plage1->_ref_user}}
-             {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
-						 </div>
-					</th>
-				  <td>
-				  	<div class="insertion">
-				  	{{foreach from=$plagesvac item=_plage2}}
-						  {{if $_plage2->user_id == $indice}}
-							  <div id = "plage{{$_plage2->_id}}" class = "plage">
-                  <div class="content">
-                     {{$_plage2->_duree}}
-										{{if $_plage2->_duree == 1}}
-									    {{tr}}day{{/tr}}
-										{{else}}
-										  {{tr}}days{{/tr}}
-										{{/if}}
-                    <br/>
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
-                    {{$_plage2->libelle}}
-                    </span>
-				              <script type="text/javascript">
-				                Main.add(function(){
-				                  display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-				                  new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
-				                  
-				                  Event.observe(window, "resize", function(){
-				                    display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-				                  });
-				                });
-				               </script>
-                    </div>
-                  </div>
-							{{/if}}
-						{{/foreach}}
-						</div>
-				  </td>
-				  {{foreach from=$tableau_periode item=td name=td_list}}
-            {{if !$smarty.foreach.td_list.first}}
-              <td></td>
-            {{/if}}
-          {{/foreach}}
-        </tr>
-			  {{/if}}
-			  {{/foreach}}
-	    </table>	 
-	  </td>
+		<td id="planning" colspan="2">
+		</td>
 	</tr>
 </table>
-

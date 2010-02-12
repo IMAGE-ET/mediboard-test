@@ -9,7 +9,8 @@
 *}}
 {{include file=CMbObject_view.tpl}}
 {{assign var=plage value=$object}}
-{{if $can->edit}}
+
+{{if $object->canEdit()}}
 <table class="tbl">
 	<tr>
 		<td class="button">
@@ -18,9 +19,9 @@
 				<input type="hidden" name="tab" value="vw_idx_plages_vac"/>
 			  <input type="hidden" name="plage_id" value="{{$plage->_id}}"/">
 				<input type="hidden" name="user_id" value="{{$plage->user_id}}"/">
-				<button type="submit" class="edit">
-	        {{tr}}Modify{{/tr}}
-	      </button>
+					<button type="submit" class="edit">
+		        {{tr}}Modify{{/tr}}
+		      </button>
 			</form>
     </td>
   </tr>

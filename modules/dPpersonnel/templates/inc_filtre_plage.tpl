@@ -17,6 +17,7 @@
 <form action="?" name="recherche" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
+	<input type="hidden" name="plage_id" value="" />
 	<input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
 
   <table class="form">

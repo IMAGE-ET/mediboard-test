@@ -250,4 +250,5 @@ $locales['CSecondaryFunction.all'] = 'Toutes les fonctions secondaires';
 $locales['CSecondaryFunction.none'] = 'Pas de fonction secondaire';
 $locales['CSecondaryFunction.one'] = 'Une fonction secondaire';
 $locales['CUser-back-'] = 'Utilisateurs';
+$locales['Holidays'] = 'Congés';
 ?>

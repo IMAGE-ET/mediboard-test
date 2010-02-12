@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsAdmin();
+$can->needsRead();
 
 $user_id = CValue::getorSession("user_id");
 $user = new CMediusers();
