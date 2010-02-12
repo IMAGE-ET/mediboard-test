@@ -622,9 +622,9 @@ class CPatient extends CMbObject {
     $this->regime_am = CValue::read($vitale, "VIT_REGIME_AM");
   }
   
-  private function guessExoneration(){
+  function guessExoneration(){
     $this->completeField("libelle_exo");
-    
+   
     if (!$this->libelle_exo) return;
     
     foreach(self::$libelle_exo_guess as $field => $values) {
