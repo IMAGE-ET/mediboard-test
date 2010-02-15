@@ -36,7 +36,7 @@ $sejours = $sejour->loadList($where);
 $smarty = new CSmartyDP();
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("sejours", $sejours);
-$smarty->display("vw_idx_plateau.tpl");
+$smarty->display("vw_idx_repartition.tpl");
 
 
 ?>
