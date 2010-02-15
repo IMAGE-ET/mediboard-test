@@ -360,8 +360,9 @@ a.button {
   -webkit-appearance: button;*/
 }
 
-button.default {
-	border-width: 2px;
+form button[type="submit"] {
+	border-color: #000;
+	font-weight: bold;
 }
 
 button {
@@ -431,7 +432,7 @@ a.button.rtl:before {
 a.button:hover,
 button:hover {
   background-image: url(images/buttons/button-over.png);
-	border-color: #000;
+	border-color: #333;
 /* Bug in firefox : 1 pixel between border and outline
  * outline: 1px solid #000;
  * -moz-outline-radius: 3px;
@@ -585,11 +586,15 @@ div#console {
   overflow: auto;
   background: #444;
   color: #aaf;
-  opacity: .9;
+  opacity: 0.8;
   position: fixed;
   bottom: 0px;
-  border: 1px dotted #aaf;
+  border: none;
   padding: 3px 20px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  z-index: 1000;
 }
 
 div#console div {
@@ -2747,7 +2752,7 @@ div.about div.nav {
   width: 100%;
   position: absolute;
   background-color:#000;
-  z-index: 100;
+  z-index: 1000;
 }
 
 #waitingMsgText {
