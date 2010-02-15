@@ -99,6 +99,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $das = $mbObject->_ref_sejour->_diagnostics_associes;
     if (is_array($das)) {
       foreach ($das as $_da) {
+        $_da = $_da[0].preg_replace("[^\d]", "", substr($_da, 1));
         $this->addDiagAssocie($liste_da, $_da);
       }
     }
