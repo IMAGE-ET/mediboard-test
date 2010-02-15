@@ -44,6 +44,7 @@ class CFTP {
   function testSocket() {
     $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
+      trigger_error("Socket connection failed : ($errno) $errstr");
       return false;
     }
     return true;

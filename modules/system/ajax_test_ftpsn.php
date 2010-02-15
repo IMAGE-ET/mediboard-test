@@ -21,7 +21,7 @@ $ftp = new CFTP();
 $ftp->init($ftpsn);
 
 if (!$ftp->testSocket()) {
-  CAppUI::stepAjax("Connexion au serveur $ftp->hostname' échouée", UI_MSG_ERROR);
+  CAppUI::stepAjax("Connexion au serveur $ftp->hostname' échouée", UI_MSG_WARNING);
 } else {
   CAppUI::stepAjax("Connecté au serveur $ftp->hostname sur le port $ftp->port");
 }
