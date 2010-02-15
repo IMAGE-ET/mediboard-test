@@ -34,9 +34,9 @@
         {{if !$mode}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
+        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
           {{$_product->_view|truncate:60}}
-        </span>
+        </strong>
         {{if !$mode}}
           </a>
         {{/if}}
@@ -90,13 +90,13 @@
 		
     <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
       <td style="padding-left: 1em;" {{if $_reference->cancelled}}class="cancelled"{{/if}}>
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_guid}}')">
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_reference->_guid}}')">
           {{if $_reference->code}}
             {{mb_value object=$_reference field=code}}
           {{else}}
             [Aucun code]
           {{/if}}
-        </strong>
+        </span>
 			</td>
       <td>{{$_reference->_ref_societe}}</td>
 
