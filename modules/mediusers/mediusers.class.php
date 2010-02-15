@@ -216,8 +216,8 @@ class CMediusers extends CMbObject {
   function createUser() {
     $user = new CUser();
     $user->user_id = $this->user_id;
-
-    $user->user_type        = $this->_user_type;
+		
+		$user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
     $user->_user_password   = $this->_user_password;
     $user->user_first_name  = $this->_user_first_name;
@@ -230,6 +230,7 @@ class CMediusers extends CMbObject {
     $user->template         = 0;
     $user->profile_id       = $this->_profile_id;
 
+    $user->_merging = $this->_merging;
     return $user;
   }
 
