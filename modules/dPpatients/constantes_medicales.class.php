@@ -187,7 +187,7 @@ class CConstantesMedicales extends CMbObject {
     $ok = false;
     foreach (CConstantesMedicales::$list_constantes as $const) {
       $this->completeField($const);
-      if ($this->$const) {
+      if ($this->$const !== "" && $this->$const !== null) {
         $ok = true;
         break;
       }
