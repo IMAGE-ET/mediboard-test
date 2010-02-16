@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsRead();
+//$can->needsRead();
 
 $emplacement = CValue::getOrSession("emplacement");
 $_user_last_name = CValue::getOrSession("_user_last_name");

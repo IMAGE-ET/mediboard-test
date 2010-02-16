@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsRead();
+//$can->needsRead();
 
 
 // Get filter

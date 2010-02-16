@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsRead();
+//$can->needsRead();
 $choix = CValue::get("choix", "mois");
 $affiche_nom = CValue::get("affiche_nom",1); 
 $filter = new CPlageVacances();

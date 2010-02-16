@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsRead();
+//$can->needsRead();
 
 $user_id  = CValue::getOrSession("user_id");
 $plage_id = CValue::get("plage_id");
