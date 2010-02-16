@@ -63,7 +63,7 @@ function changePage(page) {
         <input type="hidden" name="extract_passages_id" value="{{$_passage->_id}}" />
                 
          <script type="text/javascript">
-           confirmPurge = function(form) {
+           confirmPurge{{$_passage->_id}} = function(form) {
              if (confirm("ATTENTION : Vous êtes sur le point de purger l'extraction d'un passage !")) {
                form._purge.value = "1";
                confirmDeletion(form,  {
@@ -73,7 +73,7 @@ function changePage(page) {
              }
            }
          </script>
-         <button type="button" class="cancel" onclick="confirmPurge(this.form);">
+         <button type="button" class="cancel" onclick="confirmPurge{{$_passage->_id}}(this.form);">
            {{tr}}Purge{{/tr}}
          </button>
         </form>
