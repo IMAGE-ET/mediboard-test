@@ -281,7 +281,7 @@ class CBcbProduit extends CBcbObject {
 			$query = "SELECT IDENT_PRODUITS.Code_UCD, IDENT_PRODUITS.Libelle_Abrege, ";
 			$query .= "IDENT_PRODUITS.Code_Forme_Galenique, IDENT_PRODUITS.Nb_UP2, IDENT_PRODUITS.LIBELLE_ABREGE, IDENT_PRODUITS.DOSAGE, IDENT_PRODUITS.CODECIS ";
 			$query .= "FROM IDENT_PRODUITS ";
-			$query .= "WHERE IDENT_PRODUITS.Code_CIP=".$CodeCIP; 
+			$query .= "WHERE IDENT_PRODUITS.Code_CIP='".$CodeCIP."'"; 
 			$query = strtoupper($query);
 			$result = $this->distObj->ClasseSQL->sql_query($query,$this->distObj->LinkDBProd) or die( "Erreur DB : ".$this->distObj->ClasseSQL->sql_error($this->distObj->LinkDBProd));
 		
