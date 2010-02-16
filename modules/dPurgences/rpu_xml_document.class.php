@@ -89,17 +89,17 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
     $this->addElement($elParent, "MOTIF", $mbObject->motif);
     $this->addElement($elParent, "GRAVITE", strtoupper($mbObject->ccmu));
-    
-    $this->addElement($elParent, "DP", $mbObject->_DP);
+
+    $this->addElement($elParent, "DP", $mbObject->_DP[0].preg_replace("/[^\d]/", "", substr($mbObject->_DP, 1)));
         
     $liste_da = $this->addElement($elParent, "LISTE_DA");
     if ($dr = $mbObject->_ref_sejour->_ext_diagnostic_relie) {
-      $this->addDiagAssocie($liste_da, $dr->code);
+      $this->addDiagAssocie($liste_da, $dr->code[0].preg_replace("/[^\d]/", "", substr($dr->code, 1)));
     }
     $das = $mbObject->_ref_sejour->_diagnostics_associes;
     if (is_array($das)) {
       foreach ($das as $_da) {
-        $_da = $_da[0].preg_replace("[^\d]", "", substr($_da, 1));
+        $_da = $_da[0].preg_replace("/[^\d]/", "", substr($_da, 1));
         $this->addDiagAssocie($liste_da, $_da);
       }
     }
