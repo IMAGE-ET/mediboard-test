@@ -34,10 +34,11 @@ function changePage(page) {
       
 <table class="tbl">
   <tr>
-    <th class="title" colspan="17">PASSAGES</th>
+    <th class="title" colspan="18">PASSAGES</th>
   </tr>
   <tr>
     <th>{{mb_title object=$extractPassages field="extract_passages_id"}}</th>
+    <th>{{tr}}Purge{{/tr}}</th>
     <th>{{mb_title object=$extractPassages field="date_extract"}}</th>
     <th>{{mb_title object=$extractPassages field="debut_selection"}}</th>
     <th>{{mb_title object=$extractPassages field="fin_selection"}}</th>
@@ -51,6 +52,32 @@ function changePage(page) {
   <tr>
     <td style="width:0.1%">
       {{$_passage->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+    </td>
+    <td style="width:0.1%">
+      {{if $can->admin}} 
+        <form name="Purge-{{$_passage->_guid}}" action="?m={{$m}}&amp;tab=vw_extract_passages" method="post" onsubmit="return confirmCreation(this)">
+        <input type="hidden" name="dosql" value="do_extract_passages_aed" />
+        <input type="hidden" name="tab" value="vw_extract_passages" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_purge" value="0" />
+        <input type="hidden" name="extract_passages_id" value="{{$_passage->_id}}" />
+                
+         <script type="text/javascript">
+           confirmPurge = function(form) {
+             if (confirm("ATTENTION : Vous êtes sur le point de purger l'extraction d'un passage !")) {
+               form._purge.value = "1";
+               confirmDeletion(form,  {
+                 typeName:'l\'extraction de passage',
+                 objName:'{{$_passage->_view|smarty:nodefaults|JSAttribute}}'
+               } );
+             }
+           }
+         </script>
+         <button type="button" class="cancel" onclick="confirmPurge(this.form);">
+           {{tr}}Purge{{/tr}}
+         </button>
+        </form>
+      {{/if}}
     </td>
     <td style="width:0.1%">
       <label title='{{mb_value object=$_passage field="date_extract"}}'>
@@ -102,6 +129,10 @@ function changePage(page) {
         {{/foreach}}
       </table>       
     </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="18">{{tr}}CExtractPassages.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
