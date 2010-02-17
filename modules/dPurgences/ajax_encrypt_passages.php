@@ -2,10 +2,10 @@
 
 /**
  * @package Mediboard
- * @subpackage oscour
- * @version $Revision:$
+ * @subpackage dPurgences
+ * @version $Revision: 7212 $
  * @author SARL OpenXtrem
- * @license OXPL
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 global $can;
@@ -31,6 +31,6 @@ if (!$extractPassages->message_valide) {
 $rpuSender = $extractPassages->getRPUSender();
 $extractPassages = $rpuSender->encrypt($extractPassages);
 
-echo "<script type='text/javascript'>extract_passages_id = $extractPassages->_id;</script>"
+echo "<script type='text/javascript'>extract_passages_id = $extractPassages->_id;</script>";
 
 ?>

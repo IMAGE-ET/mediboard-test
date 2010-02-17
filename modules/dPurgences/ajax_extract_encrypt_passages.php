@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage oscour
+ * @subpackage dPurg
  * @version $Revision:$
  * @author SARL OpenXtrem
  * @license OXPL

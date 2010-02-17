@@ -2,10 +2,10 @@
 
 /**
  * @package Mediboard
- * @subpackage oscour
- * @version $Revision:$
+ * @subpackage dPurgences
+ * @version $Revision: 7212 $
  * @author SARL OpenXtrem
- * @license OXPL
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 global $can;

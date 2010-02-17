@@ -41,12 +41,12 @@ class CRPUXMLDocument extends CMbXMLDocument {
   
   function checkSchema() {
     if (!is_dir($this->schemapath)) {
-      trigger_error("Oscour schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
+      trigger_error("RPU XML schemas are missing. Please extract them from archive in '$this->schemapath/' directory", E_USER_WARNING);
       return false;
     }
     
     if (!is_file($this->schemafilename)) {
-      $schema = new COscourXMLSchema();
+      $schema = new CRPUXMLSchema();
       $schema->importSchemaPackage($this->schemapath);
       $schema->purgeIncludes();
       $schema->purgeImportedNamespaces();
