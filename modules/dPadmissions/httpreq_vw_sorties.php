@@ -14,7 +14,7 @@ $can->needsRead();
 
 // Type de tri
 $selTri = CValue::getOrSession("selTri", "nom");
-$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$order_col = CValue::getOrSession("order_col", "patient_id");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $filter_function_id = CValue::getOrSession("filter_function_id");
 
@@ -58,20 +58,20 @@ if($vue) {
   $where["sortie_reelle"] = "IS NULL";
 }
 
-if($order_col != "_nomPatient" && $order_col != "sortie_prevue" && $order_col != "_nomPraticien"){
-	$order_col = "_nomPatient";	
+if($order_col != "patient_id" && $order_col != "sortie_prevue" && $order_col != "praticien_id"){
+	$order_col = "patient_id";	
 }
 
 $order = "sejour.type,";
 
 
-if($order_col == "_nomPatient"){
+if($order_col == "patient_id"){
   $order .= "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
 if($order_col == "sortie_prevue"){
   $order .= "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
 }
-if($order_col == "_nomPraticien"){
+if($order_col == "praticien_id"){
   $order .= "users.user_last_name $order_way, users.user_first_name";
 }
 

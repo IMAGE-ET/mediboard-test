@@ -19,7 +19,7 @@ $type = CValue::getOrSession("type");
 
 $selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
-$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$order_col = CValue::getOrSession("order_col", "patient_id");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $date      = CValue::getOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
@@ -61,17 +61,17 @@ if($selSaisis != "0") {
   $where["annule"] = "= '0'";
 }
 
-if($order_col != "_nomPatient" && $order_col != "entree_prevue" && $order_col != "_nomPraticien"){
-	$order_col = "_nomPatient";	
+if($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
+	$order_col = "patient_id";	
 }
 
-if($order_col == "_nomPatient"){
+if($order_col == "patient_id"){
   $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
 if($order_col == "entree_prevue"){
   $order = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
 }
-if($order_col == "_nomPraticien"){
+if($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 

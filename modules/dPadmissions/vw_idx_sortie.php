@@ -18,7 +18,7 @@ $filter_function_id = CValue::getOrSession("filter_function_id");
 
 // Récupération des dates
 $date = CValue::getOrSession("date", mbDate());
-$order_col = CValue::getOrSession("order_col","_nomPatient");
+$order_col = CValue::getOrSession("order_col","patient_id");
 $order_way = CValue::getOrSession("order_way","ASC");
 
 $date_actuelle = mbDateTime("00:00:00");

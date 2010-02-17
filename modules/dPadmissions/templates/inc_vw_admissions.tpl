@@ -20,8 +20,8 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       {{elseif $selSaisis == "n"}}Dossiers non préparés
       {{else}}Toutes les admissions
       {{/if}}
-      {{if $order_col == "_nomPatient"}}triées par patient
-      {{elseif $order_col == "_nomPraticien"}}triées par praticien
+      {{if $order_col == "patient_id"}}triées par patient
+      {{elseif $order_col == "praticien_id"}}triées par praticien
       {{elseif $order_col == "entree_prevue"}}triées par heure d'entrée
       {{/if}}
       </em>
@@ -46,11 +46,11 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
   </tr>
   <tr>
     <th>
-    {{mb_colonne class="CSejour" field="_nomPatient" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
     </th>
     
     <th>
-    {{mb_colonne class="CSejour" field="_nomPraticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
     </th>
     
     <th>

@@ -17,7 +17,7 @@ $can->needsRead();
 $selAdmis = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
 $order_way = CValue::getOrSession("order_way", "ASC");
-$order_col = CValue::getOrSession("order_col", "_nomPatient");
+$order_col = CValue::getOrSession("order_col", "patient_id");
 $date = CValue::getOrSession("date", mbDate());
 $type = CValue::getOrSession("type");
 
