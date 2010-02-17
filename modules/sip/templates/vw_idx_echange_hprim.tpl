@@ -163,8 +163,8 @@ function changePage(page) {
           {{if $dPconfig.sip.server}}
           <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>
           {{/if}}
-          <th>{{mb_title object=$echange_hprim field="_object_class"}}</th>
-          <th>{{mb_title object=$echange_hprim field="_object_id"}}</th>
+          <th>{{mb_title object=$echange_hprim field="object_class"}}</th>
+          <th>{{mb_title object=$echange_hprim field="object_id"}}</th>
           <th>{{mb_title object=$echange_hprim field="id_permanent"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_production"}}</th>
           <th>{{mb_title object=$echange_hprim field="identifiant_emetteur"}}</th>

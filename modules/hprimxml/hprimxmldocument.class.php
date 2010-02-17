@@ -126,13 +126,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->destinataire = $this->destinataire;
     $echg_hprim->type         = $this->type;
     $echg_hprim->sous_type    = $this->sous_type;
-    $echg_hprim->message      = utf8_encode($this->saveXML());
+    $echg_hprim->object_id    = $mbObject->_id;
+    $echg_hprim->_uncompressed["message"] = utf8_encode($this->saveXML());
     if ($mbObject instanceof CPatient) {
+      $echg_hprim->object_class = "CPatient";
       if ($mbObject->_IPP) {
         $echg_hprim->id_permanent = $mbObject->_IPP;
       }
     }
     if ($mbObject instanceof CSejour) {
+      $echg_hprim->object_class = "CSejour";
       if ($mbObject->_num_dossier) {
         $echg_hprim->id_permanent = $mbObject->_num_dossier;
       }
@@ -142,7 +145,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $echg_hprim->store();
-    
+
     $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
             
     $this->generateEnteteMessageEvenementsPatients();
@@ -154,9 +157,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->saveTempFile();
     $msg = utf8_encode($this->saveXML()); 
     
-    $echg_hprim->message = $msg;
+    $echg_hprim->_uncompressed["message"] = $msg;
+
     $echg_hprim->store();
-    
+
     return $msg;
   }
   

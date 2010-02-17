@@ -181,6 +181,7 @@ class CSejour extends CCodable {
 	  $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
     $backProps["dossier_medical"]      = "CDossierMedical object_id";
     $backProps["ghm"]                  = "CGHM sejour_id";
+    $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
 	  return $backProps;
 	}
 

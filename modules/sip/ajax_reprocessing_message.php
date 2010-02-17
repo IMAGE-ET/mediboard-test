@@ -16,8 +16,9 @@ $echange_hprim_classname  = CValue::get("echange_hprim_classname");
 // Chargement de l'objet
 $echange_hprim = new $echange_hprim_classname;
 $echange_hprim->load($echange_hprim_id);
+$echange_hprim->uncompressFields();
 
-$acquittement = CHprimSoapHandler::evenementPatient($echange_hprim->message);
+$acquittement = CHprimSoapHandler::evenementPatient($echange_hprim->_uncompressed["message"]);
 
 $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
 $domGetAcquittement->loadXML(utf8_decode($acquittement));
@@ -27,7 +28,7 @@ if ($doc_valid) {
 }
 $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
   
-$echange_hprim->acquittement = $acquittement;
+$echange_hprim->_uncompressed["acquittement"] = $acquittement;
 
 $echange_hprim->store();
 

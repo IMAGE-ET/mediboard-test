@@ -135,7 +135,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           
-        $echange_hprim->acquittement = $messageAcquittement;
+        $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->store();
         
@@ -165,7 +165,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-              $echange_hprim->acquittement = $messageAcquittement;
+              $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->store();
               return $messageAcquittement;		
@@ -208,7 +208,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $doc_valid = $domAcquittement->schemaValidate();
             $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-            $echange_hprim->acquittement = $messageAcquittement;
+            $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
             $echange_hprim->statut_acquittement = "erreur";
             $echange_hprim->store();   
             return $messageAcquittement;		
@@ -251,7 +251,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
 			          $doc_valid = $domAcquittement->schemaValidate();
 			          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
 			        
-			          $echange_hprim->acquittement = $messageAcquittement;
+			          $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
 			          $echange_hprim->statut_acquittement = "erreur";
 			          $echange_hprim->store();   
 			          return $messageAcquittement;		
@@ -321,7 +321,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $doc_valid = $domAcquittement->schemaValidate();
           $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-          $echange_hprim->acquittement = $messageAcquittement;
+          $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
           $echange_hprim->statut_acquittement = "erreur";
           $echange_hprim->store();   
           return $messageAcquittement;		
@@ -344,7 +344,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $doc_valid = $domAcquittement->schemaValidate();
               $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
-              $echange_hprim->acquittement = $messageAcquittement;
+              $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->store();
               return $messageAcquittement;
@@ -384,7 +384,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
     $echange_hprim->store();
 

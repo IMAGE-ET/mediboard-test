@@ -16,6 +16,8 @@ $echange_hprim_classname  = CValue::get("echange_hprim_classname");
 // Chargement de l'objet
 $echange_hprim = new $echange_hprim_classname;
 $echange_hprim->load($echange_hprim_id);
+$echange_hprim->uncompressFields();
+$echange_hprim->getObservations();
 
 // Création du template
 $smarty = new CSmartyDP();

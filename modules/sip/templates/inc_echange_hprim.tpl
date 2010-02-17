@@ -31,18 +31,18 @@
 	</td>
   {{/if}}
   <td style="width:0.1%">
-    {{$object->_object_class}}
+    {{$object->object_class}}
   </td>
 	<td style="width:0.1%">
-	  {{if $object->_object_id}}
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_object_class}}-{{$object->_object_id}}');">
-        {{$object->_object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+	  {{if $object->object_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}');">
+        {{$object->object_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
 	</td>
 	<td>
 	  {{if $object->id_permanent}}
-  	  <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_object_class}}-{{$object->_object_id}}', 'identifiers');">
+  	  <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}', 'identifiers');">
         {{$object->id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}

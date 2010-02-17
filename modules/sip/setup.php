@@ -90,24 +90,40 @@ class CSetupsip extends CSetup {
      
      $sql = "ALTER TABLE `destinataire_hprim` 
               CHANGE `destinataire` `nom` VARCHAR (255) NOT NULL;";
-              
      $this->addQuery($sql);
      
      $this->makeRevision("0.18");
      
      $sql = "ALTER TABLE `echange_hprim` 
               ADD `id_permanent` INT (11) UNSIGNED zerofill;";
-              
      $this->addQuery($sql);
      
      $this->makeRevision("0.19");
      
      $sql = "ALTER TABLE `echange_hprim` 
               CHANGE `id_permanent` `id_permanent` VARCHAR (25);";
-              
+     $this->addQuery($sql);
+     
+     $this->makeRevision("0.20");
+     set_time_limit(360);
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+              ADD `object_id` INT (11) UNSIGNED NOT NULL,
+              ADD `object_class` VARCHAR (255) NOT NULL;";
+     $this->addQuery($sql);
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+               ADD INDEX (`object_id`);";
+     $this->addQuery($sql);
+     
+     $this->makeRevision("0.21");
+     set_time_limit(360);
+     
+     $sql = "ALTER TABLE `echange_hprim` 
+              ADD `compressed` ENUM ('0','1') NOT NULL DEFAULT 0;";
      $this->addQuery($sql);
               
-     $this->mod_version = "0.20";
+     $this->mod_version = "0.22";
   }
 }
 ?>

@@ -12,6 +12,8 @@ CAppUI::requireSystemClass("mbFieldSpec");
 CAppUI::requireLibraryFile("geshi/geshi");
 
 class CXmlSpec extends CMbFieldSpec {
+  var $compressed = null;
+  
   function getSpecType() {
     return "xml";
   }  
@@ -20,12 +22,22 @@ class CXmlSpec extends CMbFieldSpec {
     return "MEDIUMTEXT";
   }
   
+  function getOptions(){
+    return parent::getOptions() + array(
+      'compressed' => 'bool',
+    );
+  }
+  
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    $geshi = new Geshi($object->{$this->fieldName}, "xml");
+    $value = $object->{$this->fieldName};
+    if ($this->compressed) {
+      $value = $object->_uncompressed[$this->fieldName];
+    }
+    $geshi = new Geshi($value, "xml");
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
     $geshi->set_overall_style("max-height: 100%;");
     $geshi->enable_classes();

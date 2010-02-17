@@ -32,7 +32,9 @@ if (!$echange_hprim_id) {
     $notification->store();
   }
   
-  foreach ($notifications as $notification) {    
+  foreach ($notifications as $notification) {  
+    $notification->uncompressFields();  
+    
     $dest_hprim = new CDestinataireHprim();
 	  $dest_hprim->nom = $notification->destinataire;
 	  
@@ -43,7 +45,7 @@ if (!$echange_hprim_id) {
 	  }
 	  
 	  // Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
-	  if (!($acquittement = $client->evenementPatient($notification->message))) {
+	  if (!($acquittement = $client->evenementPatient($notification->_uncompressed["message"]))) {
 	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  }
 	  
@@ -63,7 +65,8 @@ if (!$echange_hprim_id) {
 	// Chargement de l'objet
 	$echange_hprim = new $echange_hprim_classname;
 	$echange_hprim->load($echange_hprim_id);
-	
+	$echange_hprim->uncompressFields();  
+  
 	$dest_hprim = new CDestinataireHprim();
 	$dest_hprim->nom = $echange_hprim->destinataire;
 	$dest_hprim->loadMatchingObject();
@@ -74,7 +77,8 @@ if (!$echange_hprim_id) {
 	}
 	
 	// Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
-	if (null == $acquittement = $client->evenementPatient($echange_hprim->message)) {
+  mbTrace($echange_hprim->_uncompressed["message"], "message", true);
+	if (null == $acquittement = $client->evenementPatient($echange_hprim->_uncompressed["message"])) {
 	  trigger_error("Evenement patient impossible : ".$dest_hprim->url);
 	  CAppUI::setMsg("Evenement patient impossible", UI_MSG_ERROR);
 	}

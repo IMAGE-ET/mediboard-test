@@ -65,6 +65,7 @@ class CMbObject {
   var $_back           = null; // Back references collections
   var $_count          = null; // Back references counts
   var $_fwd            = null; // Forward references
+  var $_uncompressed   = array(); // Compressed fields' uncompressed data
   var $_ref_module     = null; // Parent module
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
@@ -879,12 +880,27 @@ class CMbObject {
    * Update the form fields from the DB fields
    */
   function updateDBFields() {
+    foreach($this->_uncompressed as $field => $data) {
+      $this->$field = gzcompress($data);
+    }
+    $this->_uncompressed = array();
+    
+    $specs = $this->_specs;
+    $fields = $this->getDBFields();
+    foreach ($fields as $field => $value) {
+      if ($value !== null) {
+        $this->$field = $specs[$field]->trim($value);
+      }
+    }
+  }
+  
+  function uncompressFields(){
     $fields = $this->getDBFields();
     $specs = $this->_specs;
     
     foreach ($fields as $field => $value) {
-      if ($value !== null) {
-        $this->$field = $specs[$field]->trim($value);
+      if (isset($specs[$field]->compressed) && $value) {
+        $this->_uncompressed[$field] = gzuncompress($value);
       }
     }
   }
