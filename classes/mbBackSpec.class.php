@@ -20,9 +20,20 @@ class CMbBackSpec {
   
   static function make($owner, $name, $backProp) {
     list($class, $field) = explode(' ', $backProp);
-  	if (!class_exists($class)) return null;
+
+    if (!class_exists($class)) {
+      // Modules might not be installed, can't trigger error for now
+			// @todo: add an 'external' keyword to the backref 
+//      trigger_error("Back spec '$owner'.'$name' refers to unexisting class '$class'", E_USER_ERROR);
+			return;
+    }
 
   	$backObject = new $class;
+		if (!array_key_exists($field, $backObject->_specs)) {
+			trigger_error("Back spec '$owner'.'$name' refers to unexisting ref spec '$class'.'$field'", E_USER_ERROR);
+      return;
+		}
+
     $backObjectSpec = $backObject->_specs[$field];
   	
   	$backSpec = new CMbBackSpec();
