@@ -127,7 +127,6 @@ class CCodable extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
     $backProps["actes_ccam"]    = "CActeCCAM object_id";
-    $backProps["prescriptions"] = "CPrescription object_id";
     return $backProps;
   }
 

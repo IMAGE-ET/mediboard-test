@@ -53,7 +53,7 @@ class CFunctions extends CMbObject {
 	  $backProps["executants_prescription"]        = "CFunctionCategoryPrescription function_id";
 	  $backProps["fiches_compta"]                  = "CGestionCab function_id";
 	  $backProps["services_urgence_pour"]          = "CGroups service_urgences_id";
-    $backProps["pharmacie_pour"]                 = "CGroups pharmacie";
+    $backProps["pharmacie_pour"]                 = "CGroups pharmacie_id";
 	  $backProps["liste_choix"]                    = "CListeChoix function_id";
 	  $backProps["paiements"]                      = "CModePaiement function_id";
 	  $backProps["pack_examens"]                   = "CPackExamensLabo function_id";

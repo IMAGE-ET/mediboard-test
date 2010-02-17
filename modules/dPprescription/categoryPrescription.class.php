@@ -47,6 +47,7 @@ class CCategoryPrescription extends CMbObject {
     $backProps["functions_category"]      = "CFunctionCategoryPrescription category_prescription_id";
     $backProps["comments_prescription"]   = "CPrescriptionLineComment category_prescription_id";
     $backProps["transmissions"]           = "CTransmissionMedicale object_id";
+    $backProps["prescription_category_group_items"] = "CPrescriptionCategoryGroupItem category_prescription_id";
     return $backProps;
   }     
   

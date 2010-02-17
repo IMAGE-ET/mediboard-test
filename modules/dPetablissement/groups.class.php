@@ -50,35 +50,39 @@ class CGroups extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
+    $backProps["aides_saisie"]            = "CAideSaisie group_id";
+    $backProps["categories_prescription"] = "CCategoryPrescription group_id";
+    $backProps["category_DM"]             = "CCategoryDM group_id";
+    $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
+    $backProps["config_service"]          = "CConfigService group_id";
+    $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
+    $backProps["destinataires_hprim"]     = "CDestinataireHprim group_id";
+    $backProps["dmi_categories"]          = "CDMICategory group_id";
     $backProps["documents_ged"]           = "CDocGed group_id";
+    $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
+    $backProps["echanges_hprim"]          = "CEchangeHprim group_id";
     $backProps["functions"]               = "CFunctions group_id";
+    $backProps["listes_choix"]            = "CListeChoix group_id";
+    $backProps["modeles"]                 = "CCompteRendu group_id";
     $backProps["menus"]                   = "CMenu group_id";
+    $backProps["messages"]                = "CMessage group_id";
+    $backProps["packs"]                   = "CPack group_id";
+    $backProps["packs_categorie_prescription"] = "CPrescriptionCategoryGroup group_id";
     $backProps["plats"]                   = "CPlat group_id";
     $backProps["blocs"]                   = "CBlocOperatoire group_id";
     $backProps["sejours"]                 = "CSejour group_id";
     $backProps["services"]                = "CService group_id";
     $backProps["stocks"]                  = "CStock group_id";
     $backProps["types_repas"]             = "CTypeRepas group_id";
-    $backProps["modeles"]                 = "CCompteRendu group_id";
-    $backProps["packs"]                   = "CPack group_id";
-    $backProps["listes_choix"]            = "CListeChoix group_id";
-    $backProps["aides_saisie"]            = "CAideSaisie group_id";
     $backProps["chapitres_qualite"]       = "CChapitreDoc group_id";
     $backProps["themes_qualite"]          = "CThemeDoc group_id";
     $backProps["plateaux_techniques"]     = "CPlateauTechnique group_id";
     $backProps["prestations"]             = "CPrestation group_id";
     $backProps["product_orders"]          = "CProductOrder group_id";
+    $backProps["product_receptions"]      = "CProductReception group_id";
+    $backProps["product_stock_locations"] = "CProductStockLocation group_id";
     $backProps["product_stocks"]          = "CProductStockGroup group_id";
     $backProps["protocoles_prescription"] = "CPrescription group_id";
-    $backProps["etablissements_sherpa"]   = "CSpEtablissement group_id";
-    $backProps["dmi_categories"]          = "CDMICategory group_id";
-    $backProps["categories_prescription"] = "CCategoryPrescription group_id";
-    $backProps["category_DM"]             = "CCategoryDM group_id";
-    $backProps["config_moment"]           = "CConfigMomentUnitaire group_id";
-    $backProps["config_service"]          = "CConfigService group_id";
-    $backProps["check_item_types"]        = "CDailyCheckItemType group_id";
-    $backProps["product_stock_locations"] = "CProductStockLocation group_id";
-    $backProps["messages"]                = "CMessage group_id";
     return $backProps;
   }
   

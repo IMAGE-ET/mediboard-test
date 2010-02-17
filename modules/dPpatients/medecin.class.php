@@ -43,8 +43,9 @@ class CMedecin extends CMbObject {
 	
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["patients_traites"] = "CPatient medecin_traitant";
+    $backProps["patients_traites"]        = "CPatient medecin_traitant";
     $backProps["patients_correspondants"] = "CCorrespondant medecin_id";
+    $backProps["sejours_adresses"]        = "CSejour adresse_par_prat_id";
     return $backProps;
   }
 

@@ -146,6 +146,12 @@ class CRPU extends CMbObject {
 		return array_merge($specsParent, $specs);
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["passages"] = "CRPUPassage rpu_id";
+    return $backProps;
+  }
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();

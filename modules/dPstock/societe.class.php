@@ -50,7 +50,10 @@ class CSociete extends CMbObject {
 	  $backProps = parent::getBackProps();
 	  $backProps["products"]           = "CProduct societe_id";
 	  $backProps["product_orders"]     = "CProductOrder societe_id";
-	  $backProps["product_references"] = "CProductReference societe_id";
+    $backProps["product_references"] = "CProductReference societe_id";
+    $backProps["product_receptions"] = "CProductReception societe_id";
+    $backProps["articles_cahpp"]     = "CCAHPPArticle fournisseur_id";
+		
 	  return $backProps;
 	}
 

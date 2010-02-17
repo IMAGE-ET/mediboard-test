@@ -1801,6 +1801,7 @@ class CMbObject {
    */
   function getBackProps() {
     return array (
+		  "alerts"                 => "CAlert object_id",
       "identifiants"           => "CIdSante400 object_id",
       "notes"                  => "CNote object_id",
       "files"                  => "CFile object_id",

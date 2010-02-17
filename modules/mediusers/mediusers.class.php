@@ -208,6 +208,7 @@ class CMediusers extends CMbObject {
     $backProps["temps_chir"]                      = "CTempsOp chir_id";
     $backProps["temps_prepa"]                     = "CTempsPrepa chir_id";
     $backProps["transmissions"]                   = "CTransmissionMedicale user_id";
+    $backProps["visites_anesth"]                  = "COperation prat_visite_anesth_id";
     $backProps["checked_lists"]                   = "CDailyCheckList validator_id";
     
     return $backProps;
