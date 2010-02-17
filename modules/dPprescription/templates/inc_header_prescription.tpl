@@ -101,6 +101,12 @@ changeManualDate = function(){
 	}
 }
 
+printBons = function(prescription_id){
+  var url = new Url("dPprescription", "print_bon");
+  url.addParam("prescription_id", prescription_id);
+  url.popup(900, 600, "Impression des bons");
+}
+
 Main.add( function(){
   var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
@@ -482,6 +488,7 @@ Main.add( function(){
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
 			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
+      <button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
     </td>
   </tr>  
   {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}
