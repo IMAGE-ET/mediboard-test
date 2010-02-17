@@ -260,7 +260,7 @@ Main.add( function(){
 	      <tr>
 	        <th colspan="{{$numCols*2}}">{{$categorie->_view}}
 	          {{assign var=categorie_id value=$categorie->_id}}
-	          <button  id="{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -2px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
+	          <button  id="{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -16px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
 	          Ajouter tous les éléments de la catégorie
 	          </button>
 	        </th>
