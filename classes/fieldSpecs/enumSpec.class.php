@@ -13,27 +13,14 @@ CAppUI::requireSystemClass("mbFieldSpec");
 class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
-  var $class = null;
   var $_list = null;
   var $_locales = null;
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);
-    if ($this->class) {
-      foreach ($this->getClassList() as $value) {
-        $this->_locales[$value] = CAppUI::tr($value);
-      }
+    foreach ($this->_list = explode('|', $this->list) as $value) {
+      $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
     }
-    else {
-      foreach ($this->_list = explode('|', $this->list) as $value) {
-        $this->_locales[$value] = CAppUI::tr("$className.$field.$value");
-      }
-    }
-  }
-  
-  private function getClassList(){
-    if ($this->_list) return $this->_list;
-      return $this->_list = getInstalledClasses();
   }
   
   function getSpecType() {
@@ -41,48 +28,33 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getDBSpec() {
-    if ($this->class) 
-      return "VARCHAR (80)";
-    else
-      return "ENUM('".str_replace('|', "','", $this->list)."')";
+    return "ENUM('".str_replace('|', "','", $this->list)."')";
   }
   
   function getOptions(){
     return parent::getOptions() + array(
       'list' => 'list',
-      'class' => 'class',
     );
   }
   
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    if ($this->class) 
-      return htmlspecialchars(CAppUI::tr($propValue));
-    else 
-      return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
+    return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
   }
   
   function checkValues(){
     parent::checkValues();
-    if(!$this->list && !$this->class){
-      trigger_error("Spécification 'list' ou 'class' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
+    if (!$this->list){
+      trigger_error("Spécification 'list' manquante pour le champ '$this->fieldName' de la classe '$this->className'", E_USER_WARNING);
     }
   }
   
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
-    if ($this->class) {
-      $object = @new $propValue;
-      if (!$object) {
-        return "La classe '$propValue' n'existe pas";
-      }
-    }
-    else {
-      $specFragments = explode('|', $this->list);
-      if (!in_array($propValue, $specFragments)) {
-        return "N'a pas une valeur possible";
-      }
+    $specFragments = explode('|', $this->list);
+    if (!in_array($propValue, $specFragments)) {
+      return "N'a pas une valeur possible";
     }
   }
   

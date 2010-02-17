@@ -15,23 +15,26 @@ class CStrSpec extends CMbFieldSpec {
   var $minLength = null;
   var $maxLength = null;
   var $protected = null;
+  var $class = null;
   
   function getSpecType() {
     return "str";
   }
   
   function getDBSpec(){
-    $type_sql = "VARCHAR(255)";
-    
     if ($this->maxLength) {
-      $type_sql = "VARCHAR($this->maxLength)";
+      return "VARCHAR($this->maxLength)";
     } 
     
     if ($this->length) {
-      $type_sql = "CHAR($this->length)";
+      return "CHAR($this->length)";
     }
-    
-    return $type_sql;
+		
+    if ($this->class) {
+      return "VARCHAR (80)";
+    }
+		
+    return "VARCHAR(255)";
   }
   
   function getOptions(){
@@ -39,9 +42,20 @@ class CStrSpec extends CMbFieldSpec {
       'length'    => 'num',
       'minLength' => 'num',
       'maxLength' => 'num',
+      'class'     => 'class',
     );
   }
   
+  function getValue($object, $smarty = null, $params = array()) {
+    $fieldName = $this->fieldName;
+    $propValue = $object->$fieldName;
+    if ($this->class) {
+      return htmlspecialchars(CAppUI::tr($propValue));
+    }
+
+    return $propValue;
+  }
+
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
     
@@ -75,6 +89,13 @@ class CStrSpec extends CMbFieldSpec {
       }
       if (strlen($propValue) > $length) {
         return "N'a pas la bonne longueur '$propValue' (longueur maximale souhaitée : $length)'";
+      }
+    }
+		
+    if ($this->class) {
+      $object = @new $propValue;
+      if (!$object) {
+        return "La classe '$propValue' n'existe pas";
       }
     }
   }
