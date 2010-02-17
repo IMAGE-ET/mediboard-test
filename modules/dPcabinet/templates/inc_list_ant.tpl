@@ -61,7 +61,7 @@ Traitement = {
 <strong>Antécédents du patient</strong>
 
 <ul id="antecedents-{{$dossier_medical->_guid}}">
-	{{if $dossier_medical->_count_antecedents}}
+	{{if $dossier_medical->_count_antecedents || $dossier_medical->_count_cancelled_antecedents}}
 	  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
 	  {{foreach from=$list_antecedent item=curr_antecedent}}
 	  <li {{if $curr_antecedent->annule}}class="cancelled" style="display: none;"{{/if}}>
