@@ -182,7 +182,7 @@ function onSubmitCorrespondant(form) {
 			});
     	</script>
 
-      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return {{if $dialog}}onSubmitCorrespondant{{else}}checkForm{{/if}}(this);">
+      <form name="editFrm" action="?m=dPatients" method="post" onsubmit="return {{if $dialog}}onSubmitCorrespondant{{else}}checkForm{{/if}}(this);">
 
       <input type="hidden" name="dosql" value="do_medecins_aed" />
       <input type="hidden" name="del" value="0" />
