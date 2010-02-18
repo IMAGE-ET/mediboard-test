@@ -13,8 +13,6 @@ class CRPUXMLSchema extends CMbXMLSchema {
     parent::__construct();
     
     $root = $this->addElement($this, "xsd:schema", null, "http://www.w3.org/2001/XMLSchema");
-    $this->addAttribute($root, "xmlns", "http://www.mediboard.org/mbHprimXML");
-    $this->addAttribute($root, "targetNamespace", "http://www.mediboard.org/mbHprimXML");
     $this->addAttribute($root, "elementFormDefault", "qualified");
     $this->addAttribute($root, "attributeFormDefault", "unqualified");
   }

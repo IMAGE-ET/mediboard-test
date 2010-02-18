@@ -56,7 +56,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
     return true;
   }
   
-  function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.mediboard.org/mbHprimXML") {
+  function addElement($elParent, $elName, $elValue = null, $elNS = null) {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
  

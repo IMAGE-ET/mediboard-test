@@ -137,10 +137,15 @@
       <script type="text/javascript">
         var FTPSN = {
           test: function (sFTPSN) {
-            var url = new Url;
-            url.setModuleAction("system", "ajax_test_ftpsn");
+            var url = new Url("system", "ajax_test_ftpsn");
             url.addParam("ftpsn", sFTPSN);
             url.requestUpdate("config-admin-ftpsn-test-" + sFTPSN);
+          },
+          
+          getFiles: function (sFTPSN) {
+            var url = new Url("system", "ajax_getFiles_ftpsn");
+            url.addParam("ftpsn", sFTPSN);
+            url.requestUpdate("config-admin-ftpsn-getFiles-" + sFTPSN);
           }
         }
       </script>
@@ -151,7 +156,7 @@
           </th>
         </tr>
         
-        <!-- Test socket FTPSN -->
+        <!-- Test connexion FTPSN -->
         <tr>
           <td>
             <button type="button" class="search" onclick="FTPSN.test('{{$ftpsn}}');">
@@ -159,6 +164,16 @@
             </button>
           </td>
           <td id="config-admin-ftpsn-test-{{$ftpsn}}" />
+        </tr>
+        
+        <!-- Liste des fichiers -->
+        <tr>
+          <td>
+            <button type="button" class="search" onclick="FTPSN.getFiles('{{$ftpsn}}');">
+              {{tr}}config-admin-ftpsn-getFiles{{/tr}}
+            </button> 
+          </td>
+          <td id="config-admin-ftpsn-getFiles-{{$ftpsn}}" />
         </tr>
       </table>
     </td>

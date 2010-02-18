@@ -204,4 +204,5 @@ $locales['config-admin-ftpsn-test'] = 'Test de la connexion';
 $locales['CUser-failed-username'] = 'Nom d\'utilisateur déjà existant';
 $locales['CUserLog.more'] = 'modifications supplémentaires...';
 $locales['Auth-failed-user-deactivated'] = 'L\'utilisateur est désactivé';
+$locales['config-admin-ftpsn-getFiles'] = 'Listage des fichiers';
 ?>

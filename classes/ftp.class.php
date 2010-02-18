@@ -77,20 +77,10 @@ class CFTP {
   
   function getListFiles($folder = ".") {
     if(!$this->connexion) {
-      $this->logError("Non connecté au serveur, impossible de lister le repertoire $folder");
       return false;
     }
-    
-    $list = ftp_nlist($this->connexion, $folder);
-    
-    if(!$list) {
-      $this->logError("Impossible de lister le repertoire $folder");
-      return false;
-    }
-    
-    $this->logStep("Repertoire $folder listé");
-    
-    return $list;
+        
+    return ftp_rawlist($this->connexion, $folder, true);
   }
   
   function delFile($file) {
