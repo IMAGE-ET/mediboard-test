@@ -19,26 +19,45 @@ Repartition = {
       addParam('date', date) . 
       requestUpdate('repartition-plateau-'+plateau_id);
   },
+	
+	registerPlateau: function (plateau_id) {
+	  Main.add(Repartition.updatePlateau.curry(plateau_id));
+	},
+	
   updateSejours: function() {
-    Console.debug('Updating séjours');
+    Console.trace('Updating séjours');
     return;
     new Url('ssr', 'ajax_sejours_non_repartis') .
       addParam('date', date) . 
       requestUpdate('sejours_non_repartis');
+  },
+
+  registerSejours: function () {
+    Main.add(Repartition.updatePlateau);
   }
 }
 </script>
 
-<table class="tbl">
-  <tr>
-    {{foreach from=$plateaux item=_plateau}}
-    <td id="repartition-plateau-{{$_plateau->_id}}" style="width: 25%;">
-      <script type="text/javascript">Main.add(Repartition.updatePlateau.curry('{{$_plateau->_id}}'))</script>
-    </td>
-    {{/foreach}}
+<table class="main">
+	<tr>
+		<td>
 
-    <td id="sejours_non_repartis" style="width: 25%;">
-      <script type="text/javascript">Main.add(Repartition.updateSejours)</script>
+      {{foreach from=$plateaux item=_plateau}}
+			<table class="tbl">
+			  <tr>
+			    <td id="repartition-plateau-{{$_plateau->_id}}" style="width: 25%;">
+			      <script type="text/javascript">Repartition.registerPlateau('{{$_plateau->_id}}')</script>
+						<div class="small-info">{{$_plateau}}</div>
+			    </td>
+			  </tr>
+			</table>			
+      {{/foreach}}
+			
+		</td>
+	
+    <td id="sejours_non_repartis" style="width: 250px;">
+      <script type="text/javascript">Repartition.registerSejours()</script>
+      <div class="small-info">Séjours non répartis</div>
     </td>
   </tr>
 </table>
