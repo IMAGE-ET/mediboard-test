@@ -161,7 +161,7 @@ CAppUI::requireSystemClass("smartydp");
 
 ob_start();
 
-require("main.php");
+require("./includes/main.php");
 
 ob_end_flush();
 

@@ -8,12 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-// This script cannot be called directly
-if (strpos($_SERVER["SCRIPT_NAME"], basename(__FILE__)) !== FALSE) {
-  header("HTTP/1.1 403 Forbidden");
-  exit(0);
-}
-
 // Get the user's style
 $uistyle = CAppUI::pref("UISTYLE");
 if (!is_dir("style/$uistyle")) {
