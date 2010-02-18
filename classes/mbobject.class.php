@@ -1908,18 +1908,9 @@ class CMbObject {
    * @param string $needle Permet de filtrer les aides commançant par le filtre, si non null
    */
   function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
-    $aide = new CAideSaisie();
-    
     foreach ($this->_specs as $field => $spec) {
       if (isset($spec->helped)) {
-        $_owners = array();
-        
-        foreach($aide->_specs["_owner"]->_locales as $_owner) {
-          $_owners[$_owner] = array();
-        }
-        
-        $this->_aides[$field] = $_owners;
-        $this->_aides[$field]["no_enum"] = $_owners;
+        $this->_aides[$field] = array("no_enum" => null);
       }
     }
 
@@ -1951,9 +1942,11 @@ class CMbObject {
       $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
     }
     
-    $order = "depend_value_1, depend_value_2, name, text";
+    // tri par user puis function puis group (ordre inversé pour avoir ce résultat)
+    $order = "group_id, function_id, user_id, depend_value_1, depend_value_2, name, text";
     
     // Chargement des Aides de l'utilisateur
+    $aide = new CAideSaisie();
     $aides = $aide->loadList($where,$order); 
     $this->orderAides($aides, $depend_value_1, $depend_value_2);
   }
@@ -1995,21 +1988,6 @@ class CMbObject {
       
       // Ajout de l'aide à la liste générale
       $this->_aides[$aide->field]["no_enum"][$owner][$aide->text] = $aide->name;
-    }
-    
-    // On supprime les tableaux vides
-    foreach($this->_aides as $field => $owners) {
-      foreach($owners as $owner => $aides) {
-        if (count($aides) == 0) {
-          unset($this->_aides[$field][$owner]);
-        }
-      }
-      
-      foreach($owners["no_enum"] as $owner => $aides) {
-        if (count($aides) == 0) {
-          unset($this->_aides[$field]["no_enum"][$owner]);
-        }
-      }
     }
     
     $this->_aides_new = $aides;
