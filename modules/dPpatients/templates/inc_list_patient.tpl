@@ -62,7 +62,7 @@ reloadPatient = function(patient_id, link){
   </div>
 </div>
 
-<form name="find" action="?" method="get">
+<form name="find" action="?" method="get" {{if $board}}onsubmit="return updateListPatients()"{{/if}}>
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
@@ -110,38 +110,32 @@ reloadPatient = function(patient_id, link){
   
   <tr>
     <td class="button" colspan="4">
-      {{if $board}}
-      <button class="search default" tabindex="10" type="button" onclick="updateListPatients()">
-        {{tr}}Search{{/tr}}
-      </button>
-      {{else}}
-      <button class="search default" tabindex="10" type="submit">
-        {{tr}}Search{{/tr}}
-      </button>
-      {{if $app->user_prefs.GestionFSE}}
-        {{if $app->user_prefs.VitaleVision}}
-  	      <button class="search" type="button" tabindex="11" onclick="VitaleVision.read();">
-  	        Lire Vitale
-  	      </button>
-        {{else}}
-  	      <button class="search" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
-  	        Lire Vitale
-  	      </button>
-  	      <button class="change intermax-result notext" tabindex="12" type="button" onclick="Intermax.result('Lire Vitale');">
-  	        Résultat Vitale
-  	      </button>
-        {{/if}}
-      {{/if}}
+      <button class="search" tabindex="10" type="submit">{{tr}}Search{{/tr}}</button>
       
-      {{if $can->edit}}
-        {{if $nom || $prenom || $patient_ipp || $naissance}}
-        <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
-          {{tr}}Create{{/tr}}
-          {{if $useVitale}}avec Vitale{{/if}}
-        </button>
+      {{if !$board}}
+        {{if $app->user_prefs.GestionFSE}}
+          {{if $app->user_prefs.VitaleVision}}
+    	      <button class="search" type="button" tabindex="11" onclick="VitaleVision.read();">
+    	        Lire Vitale
+    	      </button>
+          {{else}}
+    	      <button class="search" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
+    	        Lire Vitale
+    	      </button>
+    	      <button class="change intermax-result notext" tabindex="12" type="button" onclick="Intermax.result('Lire Vitale');">
+    	        Résultat Vitale
+    	      </button>
+          {{/if}}
         {{/if}}
-      {{/if}}
-      
+        
+        {{if $can->edit}}
+          {{if $nom || $prenom || $patient_ipp || $naissance}}
+          <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
+            {{tr}}Create{{/tr}}
+            {{if $useVitale}}avec Vitale{{/if}}
+          </button>
+          {{/if}}
+        {{/if}}
       {{/if}}
     </td>
   </tr>

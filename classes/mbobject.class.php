@@ -56,7 +56,8 @@ class CMbObject {
   
   static $module_name   = array();
   
-  var $_aides         = array(); // aides à la saisie
+  var $_aides         = array(); // Aides à la saisie
+  var $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
   var $_nb_files_docs = null;
   
   /**
@@ -1941,7 +1942,7 @@ class CMbObject {
       $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
     }
     
-    $order = "name";
+    $order = "depend_value_1, depend_value_2, name, text";
     
     // Chargement des Aides de l'utilisateur
     $aide = new CAideSaisie();
@@ -1987,6 +1988,8 @@ class CMbObject {
       // Ajout de l'aide à la liste générale
       $this->_aides[$aide->field]["no_enum"][$owner][$aide->text] = $aide->name;
     }
+    
+    $this->_aides_new = $aides;
   }
   
   function loadLogs() {

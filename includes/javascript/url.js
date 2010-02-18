@@ -248,7 +248,10 @@ var Url = Class.create({
         update.show().setOpacity(1).unoverflow();
       },
       
-      onHide: function(element, update){ Element.hide(update) }
+      onHide: function(element, update){ 
+        update.scrollTop = 0;
+        Element.hide(update); 
+      }
     }, oOptions);
     
     input = $(input).addClassName("autocomplete");

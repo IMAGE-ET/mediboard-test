@@ -170,17 +170,22 @@ function smarty_modifier_stripslashes($string){
  * @param array|string $tokens The string tokens to emphasize, space seperated if string
  */
 function smarty_modifier_emphasize($text, $tokens) {
-	if (!is_array($tokens)) {
-		$tokens = explode(" ", $tokens);
-	}
+  if (!is_array($tokens)) {
+    $tokens = explode(" ", $tokens);
+  }
+  CMbArray::removeValue("", $tokens);
+  
+  if (count($tokens) == 0) {
+    return $text;
+  }
 
-	foreach ($tokens as &$token) {
-	  $token = preg_quote($token);
-	  $token = CMbString::allowDiacriticsInRegexp($token);
-	}
-	
-	$regexp = str_replace("/", "\\/", implode("|", $tokens));
-	return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
+  foreach ($tokens as &$token) {
+    $token = preg_quote($token);
+    $token = CMbString::allowDiacriticsInRegexp($token);
+  }
+
+  $regexp = str_replace("/", "\\/", implode("|", $tokens));
+  return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
 }
 
 /**

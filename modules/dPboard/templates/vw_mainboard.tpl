@@ -123,10 +123,9 @@ function updateListOperations() {
 }
 
 function updateListPatients() {
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_list_patients");
+  var url = new Url("dPpatients", "httpreq_list_patients");
   
-  var oForm = document.find;
+  var oForm = getForm("find");
   if(oForm) {
     url.addElement(oForm.nom);
     url.addElement(oForm.prenom);
@@ -136,9 +135,10 @@ function updateListPatients() {
     url.addElement(oForm.Date_Year);
     url.addElement(oForm.patient_ipp);
   }
-  url.addParam("board"   , "1");
+  url.addParam("board"   , 1);
 
   url.requestUpdate("patients");
+  return false;
 }
 
 function updateListHospi() {

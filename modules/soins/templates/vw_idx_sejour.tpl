@@ -479,7 +479,9 @@ viewBilanService = function(service_id, date){
     <td style="width:100%;">
       <!-- Tab titles -->
       <ul id="tab-sejour" class="control_tabs">
-        <li><button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+        <li>
+          <button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+        </li>
         <li><a href="#viewPatient">Patient</a></li>
         <li><a href="#viewSejourHospi">Séjour</a></li>
         <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>

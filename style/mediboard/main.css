@@ -1170,11 +1170,16 @@ div.dropdown-trigger div {
 
 .textarea-helped .toolbar {
   position: absolute;
-  bottom: 8px;
-  right: 4px;
-  padding: 4px;
-  vertical-align: top;
+  bottom: 11px;
+  right: 0px;
+  padding: 2px;
+  vertical-align: middle;
   text-align: right;
+  background-color: rgba(255,255,255,0.5);
+  border: 1px solid #ccc;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .textarea-helped .toolbar a:hover img {
@@ -1190,7 +1195,8 @@ div.dropdown-trigger div {
   padding: 1px;
 }
 
-.textarea-helped .throbber {
+.textarea-helped .throbber,
+.textarea-helped .throbber-background {
   position: absolute;
   height: 13px;
   width: 13px;
@@ -1199,6 +1205,10 @@ div.dropdown-trigger div {
   background-image: url(../../images/icons/throbber.gif);
   background-position: 100% -20px;
   background-repeat: no-repeat;
+}
+
+.textarea-helped .throbber-background {
+  background-position: 100% 0px;
 }
 
 /* tabbed boxes */

@@ -63,24 +63,19 @@ class CFTP {
     }
 
     // Login with username and password
-    $login_result = ftp_login($this->connexion, $this->username, $this->userpass);
-    if (!$login_result) {
+    if (!ftp_login($this->connexion, $this->username, $this->userpass)) {
       return false;
     } 
     
     // Turn passive mode on
-    if($this->passif_mode) {
-      $passif = ftp_pasv($this->connexion, true);
-      if (!$passif) {
-        return false;
-      }
+    if($this->passif_mode && !ftp_pasv($this->connexion, true)) {
+      return false;
     }
     
     return true;
   }
   
   function getListFiles($folder = ".") {
-    
     if(!$this->connexion) {
       $this->logError("Non connecté au serveur, impossible de lister le repertoire $folder");
       return false;
@@ -102,11 +97,8 @@ class CFTP {
     if(!$this->connexion) {
       return false;
     }
-       
-    if(!ftp_delete($this->connexion, $file)) {
-      return false;
-    }
-    return true;
+    
+    return ftp_delete($this->connexion, $file);
   }
   
   function getFile($source_file, $destination_file = null) {
@@ -124,10 +116,9 @@ class CFTP {
     }
     
     // Download the file
-    $upload = ftp_get($this->connexion, $destination_file, $source_file, constant($this->mode));
-    if (!$upload) {
+    if (!ftp_get($this->connexion, $destination_file, $source_file, constant($this->mode))) {
       return false;
-    } 
+    }
     
     return $destination_file;
   }
@@ -138,13 +129,9 @@ class CFTP {
     }
 
     $source_base = basename($source_file);
-    // Upload the file
-    $upload = ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode));
-    if (!$upload) {
-      return false;
-    } 
     
-    return true;
+    // Upload the file
+    return ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode));
   }
   
   function renameFile($oldname, $newname) {
@@ -153,12 +140,7 @@ class CFTP {
     }
     
     // Rename the file
-    $rename = ftp_rename($this->connexion, $oldname, $newname);
-    if (!$rename) {
-      return false;
-    } 
-    
-    return true;
+    return ftp_rename($this->connexion, $oldname, $newname);
   }
   
   function close() {
@@ -168,7 +150,6 @@ class CFTP {
     $this->connexion = null;
     return true;
   }
-  
 }
 
 ?>
