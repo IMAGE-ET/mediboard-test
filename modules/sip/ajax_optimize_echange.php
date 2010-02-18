@@ -40,7 +40,11 @@ if (!$do_optimize) {
     if (!$errors) {
       if ($msg = $_echange_hprim->store()) {
         CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à sauvegarder l'échange HPRIM", UI_MSG_WARNING);
+        $msg = $_echange_hprim->delete();
+        CAppUI::stepAjax("#$_echange_hprim->_id : Suppression de l'échange HPRIM", UI_MSG_WARNING);
         CAppUI::stepAjax($msg, UI_MSG_WARNING);
+        
+        continue;
       } else {
         $count++;
       }
@@ -61,6 +65,8 @@ if (!$do_optimize) {
         $errors++;
         CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à compresser l'échange HPRIM", UI_MSG_WARNING);
         CAppUI::stepAjax($msg, UI_MSG_WARNING);
+        
+        continue;
       }
     }
   }
