@@ -258,7 +258,7 @@ class CDossierMedical extends CMbMetaObject {
 
     $this->codes_cim = implode("|", array_unique($this->_codes_cim));
 
-		parent::store();
+		return parent::store();
   }
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
