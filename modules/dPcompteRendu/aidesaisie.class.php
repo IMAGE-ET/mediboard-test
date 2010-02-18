@@ -58,7 +58,7 @@ class CAideSaisie extends CMbObject {
     
     $specs["_depend_field_1"] = "str";
     $specs["_depend_field_2"] = "str";
-    $specs["_owner"]          = "enum list|user|func";
+    $specs["_owner"]          = "enum list|user|func|etab";
     
     return $specs;
   }
