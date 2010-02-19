@@ -1,9 +1,9 @@
-<?php /* $Id: graph_praticienbloc.php 6845 2009-09-03 07:28:13Z rhum1 $ */
+<?php /* $Id: $ */
 
 /**
  * @package Mediboard
  * @subpackage dPstats
- * @version $Revision: 6845 $
+ * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -186,6 +186,37 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $seriesMoy[] = $serieMoy;
   $seriesTot[] = $serieTot;
+  
+  // Fourth serie : reservé
+  $serieMoy = $serieTot = array(
+    'data' => array(),
+    'label' => utf8_encode("Vacations attribuées")
+  );
+  $query = "SELECT SUM(TIME_TO_SEC(plagesop.fin) - TIME_TO_SEC(plagesop.debut)) AS total,
+	  DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+	  DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
+	  FROM plagesop
+    WHERE plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
+  if($prat_id) $query .= "\nAND plagesop.chir_id = '$prat_id'";
+  $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
+    GROUP BY mois ORDER BY orderitem";
+  $result = $ds->loadList($query);
+
+  foreach($ticks as $i => $tick) {
+    $f = true;
+    foreach($result as $r) {
+      if($tick[1] == $r["mois"]) {
+        $serieTot['data'][] = array($i, $r["total"]/(60*60));
+        $totalTot += $r["total"]/(60*60);
+        $f = false;
+      }
+    }
+    if($f) {
+      $serieTot["data"][] = array(count($serieTot["data"]), 0);
+    }
+  }
+  
+  $seriesTot[] = $serieTot;
 
   // Set up the title for the graph
   $subtitle = "";
@@ -195,7 +226,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if($codeCCAM) $subtitle .= "CCAM : $codeCCAM - ";
 
   $optionsMoy = array(
-    'title' => utf8_encode("Durées moyennes de passage au bloc (en minutes)"),
+    'title' => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
     'subtitle' => utf8_encode($subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
     'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
@@ -219,7 +250,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if ($totalMoy == 0) $optionsMoy['yaxis']['max'] = 1;
 
   $optionsTot = array(
-    'title' => utf8_encode("Durées totales de passage au bloc (en heures)"),
+    'title' => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
     'subtitle' => utf8_encode($subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
     'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),

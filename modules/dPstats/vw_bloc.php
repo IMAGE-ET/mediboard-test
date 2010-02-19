@@ -38,7 +38,6 @@ $discipline_id = $filter->_specialite = CValue::getOrSession("discipline_id", 0)
 
 // map Graph Interventions
 CAppUI::requireModuleFile("dPstats", "graph_activite");
-CAppUI::requireModuleFile("dPstats", "graph_praticienbloc");
 CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
 CAppUI::requireModuleFile("dPstats", "graph_op_annulees");
@@ -75,15 +74,14 @@ if($type_view_bloc == "nbInterv") {
   $graphs[] = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
   $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
 } else {
-  $graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
+  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+  $graphs[] = $listOccupation["total"];
+  $graphs[] = $listOccupation["moyenne"];
   if($filter->_specialite) {
     $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
   } else {
     $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
   }
-  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
-  $graphs[] = $listOccupation["total"];
-  $graphs[] = $listOccupation["moyenne"];
 }
 
 // Création du template
