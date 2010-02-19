@@ -227,7 +227,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
 
   $optionsMoy = array(
     'title' => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
-    'subtitle' => utf8_encode($subtitle),
+    'subtitle' => utf8_encode("par intervention - ".$subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
     'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
     'lines' => array('show' => true),
@@ -251,7 +251,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
 
   $optionsTot = array(
     'title' => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
-    'subtitle' => utf8_encode($subtitle),
+    'subtitle' => utf8_encode("total estimé - ".$subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
     'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
     'lines' => array('show' => true),
