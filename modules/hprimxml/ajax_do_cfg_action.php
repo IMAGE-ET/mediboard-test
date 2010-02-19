@@ -31,17 +31,13 @@ switch ($evenement) {
     break;
     
   case "evt_patients":
-  	if ($version == "1.05") {
-      extractFiles("patients" , "schemaEvenementPatient_v105.zip", true);
-    } else if ($version == "1.051") {
-      extractFiles("patients" , "schemaEvenementPatient_v1051.zip", true);
-    }
+  	$version = str_replace(".", "", $version);
+    extractFiles("patients" , "schemaEvenementPatient_v$version.zip", true);
     break;
     
   case "evt_mvtStock":
-    if ($version == "1.01") {
-      extractFiles("mvtStock" , "schemaEvenementMvtStock_v101.zip");
-    }
+    $version = str_replace(".", "", $version);
+    extractFiles("mvtStock" , "schemaEvenementMvtStock_v$version.zip", true);
     break;
    
   default:

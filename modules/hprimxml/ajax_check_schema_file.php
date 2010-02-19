@@ -32,17 +32,13 @@ if ($evenement == "evt_pmsi") {
 }
 
 if ($evenement == "evt_patients") {
-  if ($version == "1.05") {
-   $file = $racine."patients/msgEvenementsPatients105.xsd";
-  } else if ($version == "1.051") {
-    $file = $racine."patients/msgEvenementsPatients1051.xsd";
-  }
+  $version = str_replace(".", "", $version);
+  $file = $racine."patients/msgEvenementsPatients$version.xsd";
 }
 
 if ($evenement == "evt_mvtStock") {
-  if ($version == "1.01") {
-   $file = $racine."mvtStock/msgEvenementsMvtStocks101.xsd";
-  }
+  $version = str_replace(".", "", $version);
+  $file = $racine."mvtStock/msgEvenementsMvtStocks$version.xsd";
 }
 
 if (file_exists($file)) {

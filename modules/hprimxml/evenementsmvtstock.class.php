@@ -12,10 +12,8 @@ class CHPrimXMLEvenementMvtStock extends CHPrimXMLDocument {
   function __construct() {
     $this->evenement = "evt_mvtStock";
     
-    $version = CAppUI::conf('hprimxml evt_mvtStock version');
-    if ($version == "1.01") {
-      parent::__construct("mvtStock", "msgEvenementsMvtStocks101");
-    } 
+    $version = str_replace(".", "", CAppUI::conf('hprimxml evt_mvtStock version'));
+    parent::__construct("mvtStock", "msgEvenementsMvtStocks$version");
   }
 }
 ?>
