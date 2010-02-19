@@ -17,6 +17,8 @@ $filter = new COperation();
 global $debutact, $finact, $prat_id, $salle_id, $bloc_id;
 global $discipline_id, $codes_ccam;
 
+$type_view_bloc = CValue::getOrSession("type_view_bloc", "nbInterv");
+
 $debutact      = $filter->_date_min = CValue::getOrSession("_date_min", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
 $debutact      = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
@@ -40,6 +42,7 @@ CAppUI::requireModuleFile("dPstats", "graph_praticienbloc");
 CAppUI::requireModuleFile("dPstats", "graph_pratdiscipline");
 CAppUI::requireModuleFile("dPstats", "graph_patjoursalle");
 CAppUI::requireModuleFile("dPstats", "graph_op_annulees");
+CAppUI::requireModuleFile("dPstats", "graph_occupation_salle");
 
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
@@ -67,21 +70,26 @@ $listDisciplines = $listDisciplines->loadUsedDisciplines();
 // Fonctionne en direct dans PMA
 // $horaires = $ds->loadList(file_get_contents("modules/dPstats/sql/horaires_salles.sql"));
 
-$graphs = array(
-  graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam),
-);
-
-$graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
-if($filter->_specialite)
-  $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
-else
-  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
-
-$graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+$graphs = array();
+if($type_view_bloc == "nbInterv") {
+  $graphs[] = graphActivite($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
+  $graphs[] = graphOpAnnulees($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+} else {
+  $graphs[] = graphPraticienBloc($debutact, $finact, $prat_id, $salle_id, $bloc_id);
+  if($filter->_specialite) {
+    $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam);
+  } else {
+    $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+  }
+  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam);
+  $graphs[] = $listOccupation["total"];
+  $graphs[] = $listOccupation["moyenne"];
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("type_view_bloc"          , $type_view_bloc    );
 $smarty->assign("filter"       			  		, $filter            );
 $smarty->assign("listPrats"      		  		, $listPrats         );
 $smarty->assign("listBlocs"               , $listBlocs         );

@@ -51,7 +51,13 @@ function drawGraphs(showLegend){
 <input type="hidden" name="_class_name" value="" />
 <table class="main form">
   <tr>
-    <th colspan="6" class="category">Activité du bloc opératoire</th>
+    <th colspan="6" class="category">
+      Activité du bloc opératoire
+      <select name="type_view_bloc" onchange="this.form.submit()">
+        <option value="nbInterv" {{if $type_view_bloc == "nbInterv"}}selected = "selected"{{/if}}>Nombre d'interventions</option>
+        <option value="dureeInterv" {{if $type_view_bloc == "dureeInterv"}}selected = "selected"{{/if}}>Occupation du bloc</option>
+      </select>
+    </th>
   </tr>
   <tr>
     <td>{{mb_label object=$filter field="_date_min"}}</td>

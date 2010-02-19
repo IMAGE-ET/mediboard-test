@@ -22,13 +22,13 @@
           <th colspan="2" class="category">
             <select name="typeVue" onChange="this.form.submit();">
               <option value="0">
-                Moyenne des temps opératoires
+                Moyenne totale des temps opératoires
               </option>
               <option value="1"{{if $typeVue == 1}} selected="selected"{{/if}}>
-                Moyenne des temps de préparation
+                Moyenne totale des temps de préparation
               </option>
               <option value="2"{{if $typeVue == 2}} selected="selected"{{/if}}>
-                Moyenne des temps d'hospitalisation
+                Moyenne totale des temps d'hospitalisation
               </option>
             </select>
           </th>
