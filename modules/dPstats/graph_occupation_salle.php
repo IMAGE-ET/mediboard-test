@@ -47,7 +47,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     WHERE operations.annulee = '0'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
@@ -72,7 +72,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     WHERE operations.annulee = '0'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
@@ -115,7 +115,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     WHERE operations.annulee = '0'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
@@ -158,7 +158,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
     WHERE operations.annulee = '0'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($prat_id) $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
     AND operations.entree_reveil IS NOT NULL
