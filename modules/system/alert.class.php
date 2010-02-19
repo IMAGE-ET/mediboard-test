@@ -33,6 +33,7 @@ class CAlert extends CMbMetaObject {
 
   function getProps() {
   	$specs = parent::getProps();
+    $specs["group_id"] = "ref class|CGroups";
     $specs["tag"]      = "str notNull";
     $specs["level"]    = "enum list|low|medium|high default|medium notNull";
     $specs["comments"] = "text";
