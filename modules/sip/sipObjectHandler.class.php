@@ -255,6 +255,14 @@ class CSipObjectHandler extends CMbObjectHandler {
           $patient_elimine->loadIPP($_destinataire->group_id);
           $patient2_ipp = $patient_elimine->_IPP;
           
+          // Passage en trash de l'IPP du patient a éliminer si fusion
+          if ($patient1_ipp && $patient2_ipp) {
+            $id400PatientElimine = new CIdSante400();
+            $id400PatientElimine->loadLatestFor($patient_elimine);
+            $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$_destinataire->_tag_patient;
+            $id400PatientElimine->store();
+          }
+                      
           $mbObject->_fusion[$_destinataire->_id] = array (
             "patientElimine" => $patient_elimine,
             "patient1_ipp" => $patient1_ipp,
@@ -310,7 +318,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           // Cas 2 IPPs : Message de fusion
           if ($patient1_ipp && $patient2_ipp) {
             $domEvenement = new CHPrimXMLFusionPatient();
-            
+                          
             $patient->_patient_elimine = $patient_eliminee;
             $this->sendEvenement($domEvenement, $dest_hprim, $patient);
             continue;
