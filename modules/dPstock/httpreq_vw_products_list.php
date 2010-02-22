@@ -16,7 +16,7 @@ $societe_id  = CValue::getOrSession('societe_id');
 $product_id  = CValue::getOrSession('product_id');
 $start       = CValue::getOrSession('start');
 $keywords    = CValue::getOrSession('keywords');
-$letter      = CValue::getOrSession('letter', "A");
+$letter      = CValue::getOrSession('letter', "%");
 $show_all    = CValue::get('show_all');
 
 // Don't user getOrSession as we don't want to get it from session

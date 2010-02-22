@@ -178,7 +178,7 @@ function receptionCallback(){
             </select>
         
             {{mb_field object=$order field=societe_id form="filter-references" autocomplete="true,1,50,false,true" 
-                       style="width: 12em;"}}
+                       style="width: 12em;" onchange="\$V(this.form.start,0)"}}
             
             <input type="text" name="keywords" value="" size="10" onchange="$V(this.form.start, 0, false)" />
             

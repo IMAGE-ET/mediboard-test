@@ -62,7 +62,7 @@ function filterReferences(form) {
         </select>
         
         {{mb_field object=$filter field=societe_id form="filter-references" autocomplete="true,1,50,false,true" 
-                   style="width: 15em;"}}
+                   style="width: 15em;" onchange="\$V(this.form.start,0)"}}
         
         <input type="text" name="keywords" value="{{$keywords}}" size="12" onchange="$V(this.form.start,0)" />
         

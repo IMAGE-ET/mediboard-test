@@ -11,9 +11,10 @@
 global $can, $g;
 $can->needsEdit();
 
-$stock_id            = CValue::getOrSession('stock_id');
-$category_id         = CValue::getOrSession('category_id');
-$product_id          = CValue::get('product_id');
+$stock_id    = CValue::getOrSession('stock_id');
+$category_id = CValue::getOrSession('category_id');
+$product_id  = CValue::get('product_id');
+$letter      = CValue::getOrSession('letter', "A");
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStockGroup();
@@ -68,6 +69,7 @@ $smarty->assign('stock',           $stock);
 $smarty->assign('category_id',     $category_id);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_services',   $list_services);
+$smarty->assign('letter',          $letter);
 
 $smarty->display('vw_idx_stock_group.tpl');
 

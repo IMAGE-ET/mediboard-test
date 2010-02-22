@@ -15,6 +15,7 @@ $category_id         = CValue::get('category_id');
 $stock_id            = CValue::getOrSession('stock_id');
 $keywords            = CValue::get('keywords');
 $start               = CValue::get('start');
+$letter              = CValue::get('letter', "%");
 $only_ordered_stocks = CValue::get('only_ordered_stocks');
 
 CValue::setSession('category_id', $category_id);
@@ -31,6 +32,8 @@ if ($keywords) {
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
+$where["product.name"] = ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'");
+
 $orderby = 'product.name ASC';
 
 $leftjoin = array();

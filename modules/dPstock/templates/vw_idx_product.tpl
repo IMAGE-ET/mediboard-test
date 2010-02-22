@@ -44,7 +44,7 @@ function filterReferences(form) {
         </select>
         
         {{mb_field object=$filter field=societe_id form="filter-products" autocomplete="true,1,50,false,true" 
-                   style="width: 15em;"}}
+                   style="width: 15em;" onchange="\$V(this.form.start,0)"}}
         
         <input type="text" name="keywords" value="{{$keywords}}" />
         
@@ -82,6 +82,7 @@ function filterReferences(form) {
           <tr>
             <th></th>
             <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
+            <th>{{tr}}CProductStockGroup-location_id{{/tr}}</th>
             <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
           </tr>
           
@@ -95,9 +96,10 @@ function filterReferences(form) {
             
             {{if $product->_ref_stock_group->_id}}
               <td>{{$_stock_group->quantity}}</td>
+              <td>{{$_stock_group->_ref_location->name}}</td>
               <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
             {{else}}
-              <td>{{tr}}CProductStockGroup.none{{/tr}}</td>
+              <td colspan="2">{{tr}}CProductStockGroup.none{{/tr}}</td>
               <td>
                 <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
                   {{tr}}CProductStockGroup-title-create{{/tr}}
@@ -106,7 +108,7 @@ function filterReferences(form) {
             {{/if}}
           </tr>
           <tr>
-            <th class="category" colspan="3">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
+            <th class="category" colspan="4">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
           </tr>
           {{foreach from=$product->_ref_stocks_service item=curr_stock}}
             <tr>
@@ -116,11 +118,12 @@ function filterReferences(form) {
                 </a>
               </td>
               <td>{{$curr_stock->quantity}}</td>
+              <td></td>
               <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
             </tr>
           {{foreachelse}}
             <tr>
-              <td colspan="3">{{tr}}CProductStockService.none{{/tr}}</td>
+              <td colspan="4">{{tr}}CProductStockService.none{{/tr}}</td>
             </tr>
           {{/foreach}}
         </table>

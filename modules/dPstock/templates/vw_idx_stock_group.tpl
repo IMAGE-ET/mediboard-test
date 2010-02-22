@@ -22,6 +22,12 @@ function changePage(page){
   $V(getForm("filter-stocks").start, page);
 }
 
+function changeLetter(letter) {
+  var form = getForm("filter-stocks");
+  $V(form.start, 0, false);
+  $V(form.letter, letter);
+}
+
 Main.add(refreshList);
 
 ProductSelector.init = function(){
@@ -45,6 +51,7 @@ function refreshListStocksService(product_id) {
       <form name="filter-stocks" action="?" method="post" onsubmit="return refreshList()">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
+        <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
         
         <select name="category_id" onchange="$V(this.form.start,0);this.form.onsubmit()">
           <option value="">&mdash; {{tr}}CProductCategory.all{{/tr}}</option>
@@ -61,6 +68,8 @@ function refreshListStocksService(product_id) {
     
         <input type="checkbox" name="only_ordered_stocks" onchange="$V(this.form.start,0);this.form.onsubmit()" />
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
+        
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
       </form>
   
       <div id="list-stocks-group"></div>
