@@ -35,18 +35,14 @@ function loadPatient(patient_id) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CPatient");
   url.addParam("object_id",patient_id);
-  url.requestUpdate('viewPatient', {
-   onComplete: initNotes
-  } );
+  url.requestUpdate('viewPatient');
 }
 
 function loadSejour(sejour_id) {
   var url = new Url("system", "httpreq_vw_complete_object");
   url.addParam("object_class","CSejour");
   url.addParam("object_id",sejour_id);
-  url.requestUpdate('viewSejourHospi', {
-   onComplete: initNotes
-  } );
+  url.requestUpdate('viewSejourHospi');
 }
 
 function loadDocuments(sejour_id) {
@@ -76,11 +72,11 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 {{/if}}
 
 function reloadAntAllergie(sejour_id){
-  if($('antecedent_allergie')){
+  if(!$('antecedent_allergie')) return;
+  
   var url = new Url("dPprescription", "httpreq_vw_antecedent_allergie");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("antecedent_allergie");
-  }
 }
 
 function addSejourIdToSession(sejour_id){
@@ -104,7 +100,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   loadPatient(patient_id);
   loadSejour(sejour_id); 
   loadDocuments(sejour_id);
-
+  
   if($('Imeds')){
     loadResultLabo(sejour_id);
   }
@@ -148,12 +144,12 @@ function loadResultLabo(sejour_id) {
 }
 
 function loadSuivi(sejour_id, user_id) {
-  if(sejour_id) {
-    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
-    urlSuivi.addParam("sejour_id", sejour_id);
-    urlSuivi.addParam("user_id", user_id);
-    urlSuivi.requestUpdate("dossier_suivi");
-  }
+  if(!sejour_id) return;
+  
+  var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+  urlSuivi.addParam("sejour_id", sejour_id);
+  urlSuivi.addParam("user_id", user_id);
+  urlSuivi.requestUpdate("dossier_suivi");
 }
 
 function submitSuivi(oForm, prescription_id) {

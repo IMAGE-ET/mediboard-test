@@ -138,5 +138,25 @@ abstract class CMbString {
 	  }
 	  return intval($value);
 	}
+  
+  /**
+   * Encodes HTML entities from a string
+   * @param string $string The string to encode
+   * @return 
+   */
+  static function htmlEncode($string) {
+    // Strips MS Word entities
+    $ent = array(
+      chr(145) => '&#8216;',
+      chr(146) => '&#8217;',
+      chr(147) => '&#8220;',
+      chr(148) => '&#8221;',
+      chr(150) => '&#8211;',
+      chr(151) => '&#8212;'
+    );
+    
+    $string = htmlentities($string);
+    return strtr($string, $ent);
+  }
 }
 ?>

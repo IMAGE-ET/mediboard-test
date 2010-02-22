@@ -9,28 +9,29 @@
 *}}
 <script type="text/javascript">
 
-nombreelem = {{$tableau_periode|@json}}.length;
-tableau_periode={{$tableau_periode|@json}};
+tableau_periode = {{$tableau_periode|@json}};
+nombreelem = tableau_periode.length;
 largeur_nom = 100;
 
 loadPlanning = function(form) {
-    var url = new Url("dPpersonnel", "ajax_planning");
-    url.addFormData(form);
-    url.requestUpdate("planning");
-		return false;
+  var url = new Url("dPpersonnel", "ajax_planning");
+  url.addFormData(form);
+  url.requestUpdate("planning");
+  return false;
 }
 
 display_plage = function (plage_id, debut, fin) {
   var width = parseInt($("schedule").getWidth()) - largeur_nom;
 	var plage = $("plage" + plage_id);
 	var width_calc = (fin * (width/nombreelem).floor());
-	var margin_calc = 0 ;
-  if(((debut*width/nombreelem).ceil()) < 0) {
+	var margin_calc = 0;
+  
+  if((debut*width/nombreelem).ceil() < 0) {
 		margin_calc = -(debut*width/nombreelem).ceil();
 	}
 	plage.setStyle({
 	  left: (debut*width/nombreelem).ceil()+'px',
-    width: width_calc - 2 +'px',
+    width: width_calc - 2 +'px'
   });
 	
 	plage.down(".content").setStyle({
@@ -47,40 +48,42 @@ movesnap = function(x, y, drag) {
 	
 	var leftOffsets = [];
 	var tableLeft = table.cumulativeOffset().left + largeur_nom;
+  
 	columns.each(function(col){
-	 leftOffsets.push(col.cumulativeOffset().left)+largeur_nom;
+	 leftOffsets.push(col.cumulativeOffset().left) + largeur_nom;
 	});
-  //leftOffsets.shift();
+  
 	if(x > 0) {
-	leftOffsets.each(function(offset){
-	  
-		if (found) return;
-		left = offset - tableLeft;
-		if (left >= x) {
-		  found = true;
-		  return;
-	  }
-	});
-	if (left < x) {
-		left = left + widthsave - 5;
-	}
+  	leftOffsets.each(function(offset){
+  		if (found) return;
+      
+  		left = offset - tableLeft;
+  		if (left >= x) {
+  		  found = true;
+  		  return;
+  	  }
+  	});
+  	if (left < x) {
+  		left = left + widthsave - 5;
+  	}
 	}
 	else {
-  leftOffsets.each(function(offset){
-    if (found) return;
-    left = offset - parseInt(table.getWidth()-largeur_nom) + widthsave - tableLeft;
-    if (left >= x) {
-      found = true;
-      return;
-    }
-  }); 
+    leftOffsets.each(function(offset){
+      if (found) return;
+      
+      left = offset - parseInt(table.getWidth()-largeur_nom) + widthsave - tableLeft;
+      if (left >= x) {
+        found = true;
+        return;
+      }
+    }); 
   }
 	
 	drag.element.down().setStyle({
 	  marginLeft: Math.abs(Math.min(left, 2))+"px"
 	});
 	
-	return [left,0];
+	return [left, 0];
 }
 
 DragDropPlage = function(draggable){
@@ -112,7 +115,7 @@ DragDropPlage = function(draggable){
 	  method: "post",
 		// Si l'enregistremet de la plage échoue, il faut replacer la plage à sa place antérieure
 		onComplete: function(){
-		  if (detecterror()) {
+		  if ($("systemMsg").select(".error").length > 0) {
 				oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
 			}
 	  }
@@ -125,10 +128,31 @@ savePosition = function(drag){
 		drag: drag
   };
 }
-
-detecterror = function(){
-  return $("systemMsg").select(".error").length > 0;
+  
+toggleYear = function (form) {
+  if($V(form.user_id) == '') {
+    form.choix[2].disabled = "disabled";
+    $V(form.choix, "mois");
+  }
+  else {
+    form.choix[2].disabled = "";
+  }
 }
+
+Main.add(function(){
+  var form = getForm("searchplanning");
+  var choixannee = $('annee');
+  
+  loadPlanning(form);
+  
+  if($V(form.user_id) == "") {
+    choixannee.checked='';
+    choixannee.disabled='disabled';
+  }
+  else {
+    choixannee.disabled='';
+  }
+});
 </script>
 
 <style type="text/css">
@@ -185,32 +209,7 @@ detecterror = function(){
 	text-align: left;
 }
 </style>
-<script type="text/javascript">
-	Main.add(function(){
-	  var form = getForm("searchplanning");
-		
-	 loadPlanning(form);
-	 var choixannee = $('annee');
-	 
-	 if($V(form.user_id) == "") {
-	   choixannee.checked='';
-		 choixannee.disabled='disabled';
-	 }
-	 else {
-	   choixannee.disabled='';
-	 } 
-	});
-	
-	toggleYear = function (form) {
-	  if($V(form.user_id) == '') {
-		  form.choix[2].disabled = "disabled";
-			$V(form.choix, "mois");
-	  }
-		else {
-		  form.choix[2].disabled = "";
-		}
-	}
-</script>
+
 <table class="main">
 	<tr>
 		<td colspan="2">
