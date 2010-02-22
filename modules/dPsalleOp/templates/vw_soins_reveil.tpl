@@ -113,7 +113,7 @@ Main.add(function () {
 	  <li><a href="#viewSejourHospi">Séjour</a></li>
 		  <li onmousedown="refreshConstantesHack('{{$sejour->_id}}');"><a href="#constantes">Constantes</a></li>
 		{{if $isPrescriptionInstalled}}
-	    <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#soins">Soins</a></li>
+	    <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration');"><a href="#dossier_traitement">Soins</a></li>
 		  <li onmousedown="Prescription.reloadPrescSejour('','{{$sejour->_id}}', null, null, null, null, null, true, Preferences.mode_readonly == 0);"><a href="#prescription_sejour">Prescription</a></li>
 	  {{/if}}  
 		<li><a href="#dossier_tab">Documents</a></li>
