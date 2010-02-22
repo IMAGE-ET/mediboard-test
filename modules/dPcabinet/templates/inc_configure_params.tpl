@@ -1,3 +1,18 @@
+<script type="text/javascript">
+  function showCreateSejour(input) {
+    $(input).up('tr').next().setVisible($V(input) == 1);
+    if ($V(input) == 0) {
+      $V(input.form.elements["dPcabinet[CConsultation][create_consult_sejour]"] , "0");
+    }
+  }
+  
+  Main.add(function () {
+    var nodeList = getForm('editConfig').elements["dPcabinet[CConsultation][attach_consult_sejour]"];
+    showCreateSejour(nodeList[1-$V(nodeList)]);
+  });
+</script>
+
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -44,8 +59,10 @@
   
   {{mb_include module=system template=inc_config_bool var=show_conclusion}}
   
-  {{mb_include module=system template=inc_config_bool var=attach_consult_sejour}}
+  {{mb_include module=system template=inc_config_bool var=attach_consult_sejour onchange="showCreateSejour(this)"}}
 
+  {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
+  
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
     

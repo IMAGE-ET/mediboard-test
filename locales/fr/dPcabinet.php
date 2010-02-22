@@ -1779,4 +1779,6 @@ $locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque'] = 'Affichage de
 $locales['config-dPcabinet-CConsultAnesth-show_facteurs_risque-desc'] = 'Affichage de l\'onglet Facteurs de risque';
 $locales['config-dPcabinet-CConsultation-attach_consult_sejour'] = 'Consultation dans séjour';
 $locales['config-dPcabinet-CConsultation-attach_consult_sejour-desc'] = 'Consultation dans séjour';
+$locales['config-dPcabinet-CConsultation-create_consult_sejour'] = 'Création séjour de séjour';
+$locales['config-dPcabinet-CConsultation-create_consult_sejour-desc'] = 'Création séjour de séjour';
 ?>

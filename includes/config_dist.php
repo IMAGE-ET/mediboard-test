@@ -265,6 +265,7 @@ $dPconfig["dPcabinet"] = array(
     "show_histoire_maladie" => 0,
     "show_conclusion"       => 0,
     "attach_consult_sejour" => 0,
+    "create_consult_sejour" => 0,
   ),
   "CConsultAnesth" => array(
     "feuille_anesthesie" => "print_fiche",

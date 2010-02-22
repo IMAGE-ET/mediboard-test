@@ -5,60 +5,52 @@
   <!-- 1ere ligne -->
   <tr>
     <td style="width: 50%">
-
-<table class="form">
-  <!-- Fichiers -->
-	<tr>
-		<th class="category">{{tr}}CFile{{/tr}}</th>
-	</tr>
-	
-	<tr>
-		<td>
-      {{mb_include_script module="dPcabinet" script="file"}}
-      <div id="files">
-      <script type="text/javascript">
-        File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
-      </script>
-      </div>
-    </td>
-  </tr>
-  
-</table>
-      
+      <table class="form">
+        <!-- Fichiers -->
+      	<tr>
+      		<th class="category">{{tr}}CFile{{/tr}}</th>
+      	</tr>
+      	
+      	<tr>
+      		<td>
+            {{mb_include_script module="dPcabinet" script="file"}}
+            <div id="files">
+            <script type="text/javascript">
+              File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');
+            </script>
+            </div>
+          </td>
+        </tr>
+      </table>
   	</td>
   	<td style="width: 50%">
-
-<table class="form">
-  <tr>
-    <th class="category">Documents</th>
-  </tr>
-
-	<tr>
-    <td id="documents-fdr"> 
-      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-      
-      {{mb_include_script module="dPcompteRendu" script="document"}}
-      <script type="text/javascript">
-        Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
-      </script>
-    </td>
-	</tr>
-     
-  {{if $dPconfig.dPcabinet.CPrescription.view_prescription && !$consult->sejour_id}}
-  <tr>
-    <th class="category">{{tr}}CPrescription{{/tr}}</th>
-  </tr>
-
-	<tr>
-		<td id="prescription_register">
-      <script type="text/javascript">
-       PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
-     </script>
-		</td>
-	</tr>
-  {{/if}}
-</table>
-
+      <table class="form">
+        <tr>
+          <th class="category">Documents</th>
+        </tr>
+      	<tr>
+          <td id="documents-fdr"> 
+            {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+            
+            {{mb_include_script module="dPcompteRendu" script="document"}}
+            <script type="text/javascript">
+              Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
+            </script>
+          </td>
+      	</tr>
+        {{if $dPconfig.dPcabinet.CPrescription.view_prescription && !$consult->sejour_id}}
+        <tr>
+          <th class="category">{{tr}}CPrescription{{/tr}}</th>
+        </tr>
+      	<tr>
+      		<td id="prescription_register">
+            <script type="text/javascript">
+             PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
+           </script>
+      		</td>
+      	</tr>
+        {{/if}}
+      </table>
 		</td>  
 	<tr>
 
@@ -82,5 +74,3 @@
     {{mb_include module=sigems template=check_actes_reels}}
   {{/if}}
 </table>
-
-

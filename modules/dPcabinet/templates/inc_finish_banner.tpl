@@ -43,9 +43,15 @@ function reloadFinishBanner() {
       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}"'>
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
       </a>
-      <button class="print" type="button" style="float: right;" onclick="printAllDocs()">
-        Imprimer les documents
-      </button> 
+      <div style="float:right"> 
+        <button class="print" type="button" onclick="printAllDocs()">
+          Imprimer les documents
+        </button> 
+        <br />
+        {{if isset($consult->_ref_sejour->_id|smarty:nodefaults)}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_ref_sejour->_guid}}');">{{$consult->_ref_sejour->_view}} </span> 
+        {{/if}}   
+      </div>
       {{/if}}
       {{$consult->_ref_patient}} - {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
       <br />

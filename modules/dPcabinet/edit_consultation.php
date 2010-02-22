@@ -118,6 +118,10 @@ if ($consult->_id) {
     }
   }
   
+  if ($consult->sejour_id) {
+    $consult->loadRefSejour();
+  }
+  
   // Chargement du patient
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
@@ -154,7 +158,6 @@ if ($consult->_id){
   $consult->_ref_patient->loadIdVitale();
 }
 
-
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
 //$antecedent->loadAides($userSel->user_id);
@@ -188,7 +191,6 @@ $listServicesUrgence = array();
 // Chargement du sejour dans le cas d'une urgence
 $consult->_ref_chir->isUrgentiste();
 if ($consult->_id && $consult->sejour_id && $consult->_ref_chir->_is_urgentiste){
-  $consult->loadRefSejour();
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();

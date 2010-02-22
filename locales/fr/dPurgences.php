@@ -89,7 +89,6 @@ $locales['CRPU-mode_sortie-desc'] = 'Mode de sortie du patient';
 $locales['CEtabExterne-back-'] = 'Séjours reçus';
 $locales['CMediusers-back-'] = '';
 $locales['CPatient-back-'] = '';
-$locales['CRPU-_entree-court'] = '';
 $locales['CRPU-_etablissement_transfert_id'] = 'Etab. Transfert';
 $locales['CRPU-_etablissement_transfert_id-court'] = 'Etab. Trans.';
 $locales['CRPU-_etablissement_transfert_id-desc'] = 'Etablissement de transfert de sortiepour la patient';

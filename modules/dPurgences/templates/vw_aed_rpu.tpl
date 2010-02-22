@@ -370,6 +370,7 @@ Main.add(function () {
   {{if $isPrescriptionInstalled}}
   <li {{if $rpu->_ref_consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$rpu->_ref_consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
   {{/if}}
+  <li><a href="#docs">Documents</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -411,6 +412,16 @@ Main.add(function () {
   </div>
 </div>
 {{/if}}
+
+{{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+<div id="docs" style="display: none;">
+  {{assign var=object value=$rpu->_ref_sejour}}
+  <div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
+    {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.CSejour packsByOwner=$packsByOwner.CSejour praticien=$userSel}}
+  </div>
+</div>
+
 {{/if}}
 
 
