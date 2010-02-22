@@ -10,8 +10,6 @@
     <tr>
       <th class="category" colspan="10">
         {{$dPconfig.company_name}}
-        <br />
-<!--        <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" /> -->
       </th>
     </tr>
     

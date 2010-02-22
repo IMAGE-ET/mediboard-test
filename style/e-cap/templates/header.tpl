@@ -116,7 +116,6 @@ var Menu = {
         <tr>
           <td class="logo">
             {{thumb src="images/pictures/mbNormal.gif" w="140" f="png"}}
-            <!-- <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" /> -->
           </td>
           <td width="1%">
             {{if !$offline}}
@@ -165,18 +164,34 @@ var Menu = {
   {{if !$offline}}
   <tr>
     <td id="menubar">
-      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
       {{foreach from=$modules item=currModule}}
       {{if $currModule->mod_ui_active && $currModule->_can->view}}
       <a href="?m={{$currModule->mod_name}}" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}</a>
       {{/if}}
       {{/foreach}}
-      <a href="#1" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
-      <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>
-      <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a>
-      <a href="#1" onclick="UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a>
-      <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
+      
+      <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">
+        <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+      </a>
+      <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">
+        <img src="style/{{$uistyle}}/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
+      </a>
+      <a href="#1" onclick="popChgPwd()" title="{{tr}}menu-changePassword{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
+      </a>
+      <a href="?m=mediusers&amp;a=edit_infos" title="{{tr}}menu-myInfo{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
+      </a>
+      <a href="#1" onclick="Session.lock()" title="{{tr}}menu-lockSession{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
+      </a>
+      <a href="#1" onclick="UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
+        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
+      </a>
+      <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
+        <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
+      </a>
     </td>
   </tr>
   {{/if}}

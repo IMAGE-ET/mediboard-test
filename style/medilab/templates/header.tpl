@@ -107,10 +107,10 @@ var Menu = {
     <td id="mainHeader">
       <table>
         <tr>
-          <td class="logo">
-            <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" />
+          <td class="logo" style="width:1%">
+            <img src="style/{{$uistyle}}/images/pictures/proxilab-140.jpg" alt="{{tr}}menu-logout{{/tr}}" />
           </td>
-          <td width="1%">
+          <td>
             {{if !$offline}}
             <table class="titleblock">
               <tr>

@@ -267,7 +267,7 @@ input, select, textarea, button {
 
 input, select, textarea {
   padding: 1px;
-  border: 1px black solid;
+  border: 1px #666 solid;
   font-size: 1em;
   background-color: #efe;
 }
@@ -301,6 +301,7 @@ option {
 
 optgroup {
   font-weight: bold;
+  padding-left: 1em;
 }
 
 optgroup option {
@@ -360,7 +361,8 @@ a.button {
   -webkit-appearance: button;*/
 }
 
-form button[type="submit"] {
+form button[type="submit"],
+form button:not([type]) {
 	border-color: #000;
 	font-weight: bold;
 }
@@ -1576,16 +1578,12 @@ table.Offline button  {
 
 
 /* Navigation */
-#menubar table {
-  border: 1px solid #999;
+#menubar {
+  border-bottom: 1px solid #999;
   background-color: #ccc;
   color: #fff;
   text-align: left;
   width: 100%;
-}
-
-#nav {
-  vertical-align: middle;
 }
 
 #nav ul {
@@ -1634,38 +1632,23 @@ table.Offline button  {
   width: 48px;
 }
 
-  /* ---- Begin Patch for damned IE that never works ---- */
-  
-  #nav li a {
-    width: 1em;
-    white-space: nowrap;
-  }
-  
-  #nav li>a {
-    width: auto;
-  }
-  
-  /* ---- End patch ---- */
-
 /* User */
 
-#user table {
-  border-spacing: 0px;
-  border: 2px;
-  width: 100%;
+#user {
   border-bottom: 1px dashed black;
+  padding: 2px;
 }
 
-#user td {
-  padding: 0 3px;
+#user .menu {
+  float: right;
 }
 
-#userWelcome {
-  width: 100%;
+#user .menu img {
+  padding: 2px;
 }
 
-#userMenu {
-  white-space: nowrap;
+#user .menu img:hover {
+  background-color: #ccc;
 }
 
 /* Main -- table -- pane */

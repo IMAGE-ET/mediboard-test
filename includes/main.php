@@ -26,20 +26,20 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
-    $smartyLogin = new CSmartyDP("style/$uistyle");
-    $smartyLogin->assign("localeInfo"           , $locale_info);
-    $smartyLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
-    $smartyLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
-    $smartyLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-    $smartyLogin->assign("mediboardScript"      , mbLoadScripts());
-    $smartyLogin->assign("errorMessage"         , CAppUI::getMsg());
-    $smartyLogin->assign("time"                 , time());
-    $smartyLogin->assign("redirect"             , $redirect);
-    $smartyLogin->assign("uistyle"              , $uistyle);
-    $smartyLogin->assign("browser"              , $browser);
-    $smartyLogin->assign("nodebug"              , true);
-    $smartyLogin->assign("offline"              , false);
-    $smartyLogin->display("login.tpl");
+    $tplLogin = new CSmartyDP("style/$uistyle");
+    $tplLogin->assign("localeInfo"           , $locale_info);
+    $tplLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
+    $tplLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
+    $tplLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
+    $tplLogin->assign("mediboardScript"      , mbLoadScripts());
+    $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
+    $tplLogin->assign("time"                 , time());
+    $tplLogin->assign("redirect"             , $redirect);
+    $tplLogin->assign("uistyle"              , $uistyle);
+    $tplLogin->assign("browser"              , $browser);
+    $tplLogin->assign("nodebug"              , true);
+    $tplLogin->assign("offline"              , false);
+    $tplLogin->display("login.tpl");
   }
   
   // Destroy the current session and output login page
@@ -51,10 +51,9 @@ if (!CAppUI::$instance->user_id) {
 // Set the module and action from the url
 if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
-  if ($pref_module = CAppUI::pref("DEFMODULE")) {
-    if (CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
-      $m = $pref_module;
-    }
+  $pref_module = CAppUI::pref("DEFMODULE");
+  if ($pref_module && CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
+    $m = $pref_module;
   }
 }
 
@@ -63,13 +62,13 @@ if (null == $m) {
   CAppUI::redirect("m=system&a=access_denied");
 }
 
-if (null == $currentModule = CModule::getInstalled($m)) {
+if (null == $module = CModule::getInstalled($m)) {
   CAppUI::redirect("m=system&a=module_missing&module=$m");
 }
 
 // Get current module permissions
 // these can be further modified by the included action files
-$can = $currentModule->canDo();
+$can = $module->canDo();
 
 $a     = CAppUI::checkFileName(CValue::get("a"     , "index"));
 $u     = CAppUI::checkFileName(CValue::get("u"     , ""));
@@ -89,12 +88,9 @@ if (CAppUI::$instance->weak_password &&
 // set the group in use, put the user group if not allowed
 $g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
 $indexGroup = new CGroups;
-$indexGroup->load($g);
-if ($indexGroup->_id) {
-  if (!$indexGroup->canRead()) {
-    $g = CAppUI::$instance->user_group;
-    CValue::setSessionAbs("g", $g);
-  }
+if ($indexGroup->load($g) && !$indexGroup->canRead()) {
+  $g = CAppUI::$instance->user_group;
+  CValue::setSessionAbs("g", $g);
 }
 
 // do some db work if dosql is set
@@ -103,15 +99,11 @@ if ($dosql) {
   require("./modules/$mDo/$dosql.php");
 }
 
-// Feed modules with tabs
-foreach (CModule::getActive() as $module) {
-  include("./modules/$module->mod_name/index.php");
-}
-
-$currentModule->addConfigureTab();
-
+// Feed module with tabs
+include("./modules/{$module->mod_name}/index.php");
+  
 if (!$a || $a === "index")
-  $tab = $currentModule->getValidTab($tab);
+  $tab = $module->getValidTab($tab);
 
 if (!$suppressHeaders) {
   // Liste des Etablissements
@@ -132,7 +124,7 @@ if (!$suppressHeaders) {
     $svnStatus = array( 
       "revision" => explode(": ", $svnInfo[0]),
       "date"     => explode(": ", $svnInfo[1]),
-    );    
+    );
 
     $svnStatus["revision"] = $svnStatus["revision"][1];
     $svnStatus["date"]     = $svnStatus["date"][1];
@@ -140,41 +132,38 @@ if (!$suppressHeaders) {
   }
   
   // Creation du Template
-  $smartyHeader = new CSmartyDP();
-  $smartyHeader->template_dir = "style/$uistyle/templates/";
-  $smartyHeader->compile_dir  = "style/$uistyle/templates_c/";
-  $smartyHeader->config_dir   = "style/$uistyle/configs/";
-  $smartyHeader->cache_dir    = "style/$uistyle/cache/";
+  $tplHeader = new CSmartyDP("style/$uistyle");
   
-  $smartyHeader->assign("offline"              , false);
-  $smartyHeader->assign("nodebug"              , true);
-  $smartyHeader->assign("configOffline"        , null);
-  $smartyHeader->assign("localeInfo"           , $locale_info);
-  $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
-  $smartyHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
-  $smartyHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-  $smartyHeader->assign("mediboardScript"      , mbLoadScripts());
-  $smartyHeader->assign("dialog"               , $dialog);
-  $smartyHeader->assign("messages"             , $messages);
-  $smartyHeader->assign("mails"                , $mails);
-  $smartyHeader->assign("uistyle"              , $uistyle);
-  $smartyHeader->assign("browser"              , $browser);
-  $smartyHeader->assign("errorMessage"         , CAppUI::getMsg());
-  $smartyHeader->assign("Etablissements"       , $etablissements);
-  $smartyHeader->assign("svnStatus"            , $svnStatus);
-  $smartyHeader->assign("portal"               , array (
+  $tplHeader->assign("offline"              , false);
+  $tplHeader->assign("nodebug"              , true);
+  $tplHeader->assign("configOffline"        , null);
+  $tplHeader->assign("localeInfo"           , $locale_info);
+  $tplHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
+  $tplHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
+  $tplHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
+  $tplHeader->assign("mediboardScript"      , mbLoadScripts());
+  $tplHeader->assign("dialog"               , $dialog);
+  $tplHeader->assign("messages"             , $messages);
+  $tplHeader->assign("mails"                , $mails);
+  $tplHeader->assign("uistyle"              , $uistyle);
+  $tplHeader->assign("browser"              , $browser);
+  $tplHeader->assign("errorMessage"         , CAppUI::getMsg());
+  $tplHeader->assign("Etablissements"       , $etablissements);
+  $tplHeader->assign("svnStatus"            , $svnStatus);
+  $tplHeader->assign("portal"               , array (
     "help" => mbPortalURL($m, $tab),
     "tracker" => mbPortalURL("tracker"),
   ));
   
-  $smartyHeader->display("header.tpl");
+  $tplHeader->display("header.tpl");
 }
 
 // tabBox et inclusion du fichier demandé
 if ($tab !== null) {
-  $currentModule->showTabs();
+  $module->addConfigureTab();
+  $module->showTabs();
 } else {
-  $currentModule->showAction();
+  $module->showAction();
 }
 
 $phpChrono->stop();
@@ -205,13 +194,13 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
 if (!$suppressHeaders) {
   $address = get_remote_address();
   
-  $smartyFooter = new CSmartyDP("style/$uistyle");
-  $smartyFooter->assign("offline"       , false);
-  $smartyFooter->assign("debugMode"     , CAppUI::pref("INFOSYSTEM"));
-  $smartyFooter->assign("performance"   , $performance);
-  $smartyFooter->assign("userIP"        , $address["client"]);
-  $smartyFooter->assign("errorMessage"  , CAppUI::getMsg());
-  $smartyFooter->display("footer.tpl");
+  $tplFooter = new CSmartyDP("style/$uistyle");
+  $tplFooter->assign("offline"       , false);
+  $tplFooter->assign("debugMode"     , CAppUI::pref("INFOSYSTEM"));
+  $tplFooter->assign("performance"   , $performance);
+  $tplFooter->assign("userIP"        , $address["client"]);
+  $tplFooter->assign("errorMessage"  , CAppUI::getMsg());
+  $tplFooter->display("footer.tpl");
 }
 
 // Ajax performance
