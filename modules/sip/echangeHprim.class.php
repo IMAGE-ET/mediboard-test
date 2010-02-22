@@ -122,6 +122,11 @@ class CEchangeHprim extends CMbMetaObject {
     return $this->_observations;
   }
   
+  function setObjectIdClass($object_class, $object_id) {
+    $this->object_id = $object_id;
+    $this->object_class = $object_class;
+  }
+  
   function getObjectIdClass() {
     switch($this->sous_type) {
       case "enregistrementPatient" :

@@ -122,8 +122,15 @@ class CSetupsip extends CSetup {
      $sql = "ALTER TABLE `echange_hprim` 
               ADD `compressed` ENUM ('0','1') NOT NULL DEFAULT 0;";
      $this->addQuery($sql);
+     
+     $this->makeRevision("0.22");     
+     $sql = "ALTER TABLE `echange_hprim` 
+               CHANGE `compressed` `compressed` ENUM ('0','1') DEFAULT '0',
+               CHANGE `object_id` `object_id` INT (11) UNSIGNED,
+               CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour');";
+     $this->addQuery($sql);
               
-     $this->mod_version = "0.22";
+     $this->mod_version = "0.23";
   }
 }
 ?>

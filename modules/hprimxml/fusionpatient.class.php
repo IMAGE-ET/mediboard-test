@@ -151,6 +151,10 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         return $messageAcquittement;
       }
       
+      // Passage en trash de l'IPP du patient a éliminer
+      $id400PatientElimine->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$dest_hprim->_tag_patient;
+      $id400PatientElimine->store();
+      
       $messages = array();
       $avertissement = null;
             
@@ -170,7 +174,6 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $echange_hprim->store();
         return $messageAcquittement;
       }
-      
       
       if ($msg = $mbPatient->mergeDBFields($patientsElimine_array)) {
         $commentaire = "La fusion des données des patients a échoué : $msg";
@@ -211,6 +214,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     }
     $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->setObjectIdClass("CPatient", $data['idCible']);
     $echange_hprim->store();
 
     return $messageAcquittement;

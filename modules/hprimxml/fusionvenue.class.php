@@ -221,6 +221,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     }
     $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
     $echange_hprim->store();
 
     return $messageAcquittement;

@@ -18,10 +18,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     'debiteursVenue'        => "CHPrimXMLDebiteursVenue"
   );
     
-  static function getVersionEvenementsPatients() {
-    $version = CAppUI::conf('hprimxml evt_patients version');
-
-    return ($version == "1.051") ? "msgEvenementsPatients1051" : "msgEvenementsPatients105";
+  static function getVersionEvenementsPatients() {    
+    return "msgEvenementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
   } 
   
   static function getHPrimXMLEvenementsPatients($messagePatient) {

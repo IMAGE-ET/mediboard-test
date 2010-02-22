@@ -331,6 +331,12 @@ class CSipObjectHandler extends CMbObjectHandler {
     $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
 
     if (CAppUI::conf('sip enable_send')) {
+      
+      /*$source = CExchangeSource::get($destinataire->_guid);
+      $source->setData($msg);
+      $source->send();
+      $acquittement = $source->receive();*/
+      
       if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
         trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
       }
