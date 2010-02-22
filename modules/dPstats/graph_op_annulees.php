@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = '') {
+function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "") {
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
@@ -51,16 +51,21 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
                 DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
                 DATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem
               FROM operations
+              LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
               INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
               LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
               LEFT JOIN user_log ON user_log.object_id = operations.operation_id
                 AND user_log.object_class = 'COperation'
-              WHERE plagesop.date BETWEEN '$debut' AND '$fin'
+              WHERE sejour.group_id = '".CGroups::loadCurrent()->_id."'
+                AND plagesop.date BETWEEN '$debut' AND '$fin'
                 AND user_log.type = 'store'
                 AND DATE(user_log.date) = plagesop.date
                 AND user_log.fields LIKE '%annulee%'
                 AND operations.annulee = '1'";
   
+    if($type_hospi) {
+      $query .= "\nAND sejour.type = '$type_hospi'";
+    }
     if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
     if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
@@ -92,9 +97,10 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   // Set up the title for the graph
   $title = "Interventions annulées le jour même";
   $subtitle = "$total interventions";
-  if($prat_id)  $subtitle .= " - Dr $prat->_view";
-  if($salle_id) $subtitle .= " - $salle->nom";
-  if($codeCCAM) $subtitle .= " - CCAM : $codeCCAM";
+  if($prat_id)  $subtitle   .= " - Dr $prat->_view";
+  if($salle_id) $subtitle   .= " - $salle->nom";
+  if($codeCCAM) $subtitle   .= " - CCAM : $codeCCAM";
+  if($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
 
   $options = array(
     'title' => utf8_encode($title),

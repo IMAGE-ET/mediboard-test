@@ -10,7 +10,9 @@
 
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
+
 <script type="text/javascript">
+{{if $type_view_bloc == "nbInterv"}}
 function zoomGraphIntervention(date){
   var url = new Url("dPstats", "vw_graph_activite_zoom");
   url.addParam("date"         , date);
@@ -21,6 +23,7 @@ function zoomGraphIntervention(date){
   url.addParam("size"         , 2);
   url.popup(760, 400, "ZoomMonth");
 }
+{{/if}}
 
 var graphs = {{$graphs|@json}};
 Main.add(function(){
@@ -28,13 +31,16 @@ Main.add(function(){
 });
 
 function drawGraphs(showLegend){
+  {{if $type_view_bloc == "nbInterv"}}
   var zoomSelect = $("graph-activite-zoom-date");
   $("graph-0").insert({before: zoomSelect});
+  {{/if}}
   
   graphs.each(function(g, i){
     Flotr.draw($('graph-'+i), g.series, Object.extend(g.options, {legend: {show: showLegend}}));
   });
   
+  {{if $type_view_bloc == "nbInterv"}}
   if (zoomSelect.options.length == 1) {
     graphs[0].options.xaxis.ticks.each(function(tick){
       zoomSelect.insert(new Element('option', {value: tick[1]}).update(tick[1]));
@@ -42,6 +48,7 @@ function drawGraphs(showLegend){
   }
   
   $('graph-0').select('.flotr-tabs-group').first().insert(zoomSelect.show());
+  {{/if}}
 }
 </script>
 
@@ -60,9 +67,20 @@ function drawGraphs(showLegend){
     </th>
   </tr>
   <tr>
-    <td>{{mb_label object=$filter field="_date_min"}}</td>
-    <td>{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}} </td>
-    <td>{{mb_label class=CSalle field="bloc_id"}}</td>
+    <th>{{mb_label object=$filter field="_date_min"}}</th>
+    <td>{{mb_field object=$filter field="_date_min" form="bloc" canNull="false" register=true}}</td>
+    <th>{{mb_label object=$filterSejour field="type"}}</th>
+    <td>
+      <select name="type_hospi">
+        <option value="">&mdash; Tous les types d'hospi</option>
+        {{foreach from=$filterSejour->_specs.type->_locales key=key_hospi item=curr_hospi}}
+        <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
+          {{$curr_hospi}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+    <th>{{mb_label class=CSalle field="bloc_id"}}</th>
     <td>
       <select name="bloc_id">
         <option value="">&mdash; {{tr}}CBlocOperatoire.select{{/tr}}</option>
@@ -73,7 +91,22 @@ function drawGraphs(showLegend){
         {{/foreach}}
       </select>
     </td>
-    <td>{{mb_label object=$filter field="salle_id"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$filter field="_date_max"}}</th>
+    <td>{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
+    <th>{{mb_label object=$filter field="_prat_id"}}</th>
+    <td>
+      <select name="prat_id">
+        <option value="0">&mdash; Tous les praticiens</option>
+        {{foreach from=$listPrats item=curr_prat}}
+        <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
+          {{$curr_prat->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+    <th>{{mb_label object=$filter field="salle_id"}}</th>
     <td>
       <select name="salle_id">
         <option value="">&mdash; {{tr}}CSalle.all{{/tr}}</option>
@@ -92,22 +125,7 @@ function drawGraphs(showLegend){
     </td>
   </tr>
   <tr>
-    <td>{{mb_label object=$filter field="_date_max"}}</td>
-    <td>{{mb_field object=$filter field="_date_max" form="bloc" canNull="false" register=true}} </td>
-    <td>{{mb_label object=$filter field="_prat_id"}}</td>
-    <td colspan="3">
-      <select name="prat_id">
-        <option value="0">&mdash; Tous les praticiens</option>
-        {{foreach from=$listPrats item=curr_prat}}
-        <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $filter->_prat_id}}selected="selected"{{/if}}>
-          {{$curr_prat->_view}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
-  <tr>
-    <td>{{mb_label object=$filter field="codes_ccam"}}</td>
+    <th>{{mb_label object=$filter field="codes_ccam"}}</th>
     <td>
       {{mb_field object=$filter field="codes_ccam" canNull="true" size="20"}}
       <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
@@ -120,9 +138,8 @@ function drawGraphs(showLegend){
           this.pop();
         }
       </script>
-      
     </td>
-    <td>{{mb_label object=$filter field="_specialite"}}</td>
+    <th>{{mb_label object=$filter field="_specialite"}}</th>
     <td colspan="3">
       <select name="discipline_id">
         <option value="0">&mdash; Toutes les spécialités</option>
@@ -143,9 +160,11 @@ function drawGraphs(showLegend){
 </table>
 </form>
 
+{{if $type_view_bloc == "nbInterv"}}
 <select id="graph-activite-zoom-date" onchange="zoomGraphIntervention($V(this))" style="display: none;">
   <option selected="selected" disabled="disabled">&ndash; Vue sur un mois &ndash;</option>
 </select>
+{{/if}}
 
 {{foreach from=$graphs item=graph key=key}}
 	<div style="width: 480px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
