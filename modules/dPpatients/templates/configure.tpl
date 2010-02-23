@@ -31,6 +31,8 @@ Main.add(function () {
   
   {{mb_include module=system template=inc_config_str var=tag_ipp thcolspan=3 tdcolspan=3}}
   
+  {{mb_include module=system template=inc_config_str var=tag_ipp_trash thcolspan=3 tdcolspan=3}}
+  
   {{assign var="var" value="identitovigilence"}}
   <tr>
     <th colspan="3">

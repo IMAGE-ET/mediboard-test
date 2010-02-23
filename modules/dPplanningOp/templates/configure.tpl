@@ -382,10 +382,7 @@
   
   {{assign var="var" value="tag_dossier_trash"}}
   {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
-  
-  {{assign var="var" value="tag_dossier"}}
-  {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3"}}
-  
+    
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

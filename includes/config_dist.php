@@ -330,6 +330,7 @@ $dPconfig["dPfiles"] = array (
 $dPconfig["dPpatients"] = array (
   "CPatient"    => array (
     "tag_ipp"           => "",
+    "tag_ipp_trash"     => "",
     "identitovigilence" => "nodate",
     "multi_group"       => "limited",
     "merge_only_admin"  => "0",
