@@ -391,8 +391,7 @@ function smarty_function_mb_include_script($params, &$smarty) {
 	
 	// Script name providied
   if ($script = CMbArray::extract($params, "script")) {
-  	global $m;
-  	$module = CMbArray::extract($params, "module", $m);
+  	$module = CMbArray::extract($params, "module");
 		$dir = $module ? "modules/$module/javascript" : "includes/javascript";
   	$path = "$dir/$script.js";
 	}
