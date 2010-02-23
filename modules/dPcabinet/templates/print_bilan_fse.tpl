@@ -64,10 +64,10 @@
 				  	<span onmouseover="ObjectTooltip.createEx(this, '{{$_fse->_guid}}')">
 				  	  {{$_fse->_id}}
 				  	</span>
-			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
+			      <button class="search" type="button singleclick" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
 			        {{tr}}View{{/tr}} 
 			      </button>
-			      <button class="print" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_fse->_id}}');">
+			      <button class="print" type="button singleclick" onclick="Intermax.Triggers['Editer FSE']('{{$_fse->_id}}');">
 			        {{tr}}Print{{/tr}}
 			      </button>
 			    </td>

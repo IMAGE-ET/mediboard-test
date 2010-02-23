@@ -115,11 +115,11 @@ reloadPatient = function(patient_id, link){
       {{if !$board}}
         {{if $app->user_prefs.GestionFSE}}
           {{if $app->user_prefs.VitaleVision}}
-    	      <button class="search" type="button" tabindex="11" onclick="VitaleVision.read();">
+    	      <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
     	        Lire Vitale
     	      </button>
           {{else}}
-    	      <button class="search" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
+    	      <button class="search singleclick" type="button" tabindex="11" onclick="Intermax.trigger('Lire Vitale');">
     	        Lire Vitale
     	      </button>
     	      <button class="change intermax-result notext" tabindex="12" type="button" onclick="Intermax.result('Lire Vitale');">

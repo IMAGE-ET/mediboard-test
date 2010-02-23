@@ -1,7 +1,7 @@
 <!-- $Id$ -->
 
-{{mb_include_script module="dPpatients" script="pat_selector"}}
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+{{mb_include_script module=dPpatients script=pat_selector}}
+{{mb_include module=dPpatients template=inc_intermax}}
 
 <script type="text/javascript">
 
@@ -36,7 +36,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <tr>
     <td class="button">
       {{foreach from=$_functions item=_function}}
-      <button class="tick" onclick="Intermax.trigger('{{$_function}}');">
+      <button class="search singleclick" onclick="Intermax.trigger('{{$_function}}');">
         {{$_function}}
       </button>
       {{/foreach}}

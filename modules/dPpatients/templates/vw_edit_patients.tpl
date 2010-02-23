@@ -114,12 +114,12 @@ Main.add(function () {
   {{if $patient->_id}}
     <th class="title modify" colspan="5">
       {{if $app->user_prefs.GestionFSE}}
-	      <button class="search" type="button" onclick="lireVitale();" style="float: left;">
+	      <button class="search" type="button singleclick" onclick="lireVitale();" style="float: left;">
 	        Lire Vitale
 	      </button>
 	      {{if !$app->user_prefs.VitaleVision}}
 		      {{if $patient->_id_vitale}}
-			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
+			      <button class="search singleclick" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
 			        Consulter Vitale
 			      </button>
 		      {{/if}}
@@ -144,7 +144,7 @@ Main.add(function () {
   {{else}}
     <th class="title" colspan="5">
       {{if $app->user_prefs.GestionFSE}}
-        <button class="search" type="button" onclick="lireVitale();" style="float: left;">
+        <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
           Lire Vitale
         </button>
 				{{if !$app->user_prefs.VitaleVision}}

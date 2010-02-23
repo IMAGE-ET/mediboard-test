@@ -210,11 +210,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <td>
       {{if $app->user_prefs.GestionFSE}}
         {{if $app->user_prefs.VitaleVision}}
-          <button class="search" type="button" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
+          <button class="search" type="button singleclick" onclick="$V(this.form.useVitale, 1); VitaleVision.read();">
             Lire Vitale
           </button>
         {{else}}
-          <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+          <button class="search" type="button singleclick" onclick="Intermax.trigger('Lire Vitale');">
             Lire Vitale
           </button>
           <button class="change intermax-result" type="button" onclick="Intermax.result();">
