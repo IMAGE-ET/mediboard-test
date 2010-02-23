@@ -107,7 +107,8 @@ class CSetupsip extends CSetup {
      $this->makeRevision("0.20");     
      $sql = "ALTER TABLE `echange_hprim` 
               ADD `object_id` INT (11) UNSIGNED DEFAULT NULL,
-              ADD `object_class` VARCHAR (255) DEFAULT NULL;";
+              ADD `object_class` VARCHAR (255) DEFAULT NULL,
+              ADD `compressed` ENUM ('0','1') DEFAULT 0;";
      $this->addQuery($sql);
      
      $sql = "ALTER TABLE `echange_hprim` 
