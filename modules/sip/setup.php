@@ -104,33 +104,17 @@ class CSetupsip extends CSetup {
               CHANGE `id_permanent` `id_permanent` VARCHAR (25);";
      $this->addQuery($sql);
      
-     $this->makeRevision("0.20");
-     set_time_limit(360);
-     
+     $this->makeRevision("0.20");     
      $sql = "ALTER TABLE `echange_hprim` 
-              ADD `object_id` INT (11) UNSIGNED NOT NULL,
-              ADD `object_class` VARCHAR (255) NOT NULL;";
+              ADD `object_id` INT (11) UNSIGNED DEFAULT NULL,
+              ADD `object_class` VARCHAR (255) DEFAULT NULL;";
      $this->addQuery($sql);
      
      $sql = "ALTER TABLE `echange_hprim` 
                ADD INDEX (`object_id`);";
      $this->addQuery($sql);
      
-     $this->makeRevision("0.21");
-     set_time_limit(360);
-     
-     $sql = "ALTER TABLE `echange_hprim` 
-              ADD `compressed` ENUM ('0','1') NOT NULL DEFAULT 0;";
-     $this->addQuery($sql);
-     
-     $this->makeRevision("0.22");     
-     $sql = "ALTER TABLE `echange_hprim` 
-               CHANGE `compressed` `compressed` ENUM ('0','1') DEFAULT '0',
-               CHANGE `object_id` `object_id` INT (11) UNSIGNED,
-               CHANGE `object_class` `object_class` ENUM ('CPatient','CSejour');";
-     $this->addQuery($sql);
-              
-     $this->mod_version = "0.23";
+     $this->makeRevision("0.23");
   }
 }
 ?>
