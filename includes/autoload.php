@@ -28,7 +28,7 @@ function updateClassPathCache(){
   SHM::put("class-paths", $classPaths);
 }
 
-function __autoload($className) {
+function mb_autoload($className) {
   global $classPaths, $performance;
 
   if (isset($classPaths[$className])) {
@@ -37,5 +37,15 @@ function __autoload($className) {
   }
   else {
     updateClassPathCache();
+  }
+  return true;
+}
+
+if (function_exists("spl_autoload_register")) {
+  spl_autoload_register("mb_autoload");
+}
+else {
+  function __autoload($className) {
+    return mb_autoload($className);
   }
 }

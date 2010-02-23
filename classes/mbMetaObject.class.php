@@ -25,7 +25,7 @@ class CMbMetaObject extends CMbObject {
     return $specs;
   }
     
-  function setObject($object) {
+  function setObject(CMbObject $object) {
     $this->_ref_object  = $object;
     $this->object_id    = $object->_id;
     $this->object_class = $object->_class_name;
@@ -55,8 +55,5 @@ class CMbMetaObject extends CMbObject {
   function loadRefsFwd() {	
     parent::loadRefsFwd();
     $this->loadTargetObject();
-  }  
+  }
 }
-
-
-?>

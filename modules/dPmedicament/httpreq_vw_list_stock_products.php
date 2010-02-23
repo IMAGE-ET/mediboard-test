@@ -9,7 +9,7 @@
  */
 
 $keywords     = CValue::getOrSession("keywords");
-$letter       = CValue::getOrSession("letter", "A");
+$letter       = CValue::getOrSession("letter", "");
 $start = intval(CValue::getOrSession("start", 0));
 
 if (!$keywords) {

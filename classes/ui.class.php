@@ -91,14 +91,15 @@ class CAppUI {
     $dirs = array(
       "classes/*/*.class.php", // Require all global classes
       "classes/*.class.php", 
-      "modules/*/*.class.php", // Require all modules classes
-      "modules/*/setup.php" // Require all modules setups 
+      "modules/*/*.class.php", 
+      "modules/*/classes/*.class.php", // Require all modules classes
+      "modules/*/setup.php", // Require all modules setups 
     );
     
     foreach ($dirs as $dir) {
-      $files = glob($dir);
+      $files = glob("$rootDir/$dir");
       foreach ($files as $fileName) {
-        require_once("$rootDir/$fileName");
+        require_once($fileName);
       }
     }
   }
@@ -147,7 +148,14 @@ class CAppUI {
   static function requireModuleClass($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
-      return require_once("$root/modules/$name/$filename.class.php");
+      
+      $path = "$root/modules/$name/$filename.class.php";
+      if (file_exists($path))
+        return require_once($path);
+        
+      $path = "$root/modules/$name/classes/$filename.class.php";
+      if (file_exists($path))
+        return require_once($path);
     }
   }
   

@@ -103,11 +103,11 @@ class CMbObject {
       
       global $classPaths;
       if (isset($classPaths[$class])) {
-        $module = basename(dirname($classPaths[$class]));
+        $module = self::getModuleName($classPaths[$class]);
       }
       else {
 	      $reflection = new ReflectionClass($class);
-	      $module = basename(dirname($reflection->getFileName()));
+	      $module = self::getModuleName($reflection->getFileName());
       }
       self::$module_name[$class] = $module;
     }
@@ -140,6 +140,13 @@ class CMbObject {
     $this->_specs     =& self::$specs[$class];
     $this->_backProps =& self::$backProps[$class];
     $this->_backSpecs =& self::$backSpecs[$class];
+  }
+  
+  private static function getModuleName($path) {
+    if (preg_match('#([^\\\/]+)[\\\/](classes[\\\/])?[^\\\/]+.class.php$#i', $path, $matches)) {
+      return $matches[1];
+    }
+    return null;
   }
   
   /**
@@ -656,7 +663,7 @@ class CMbObject {
     return $ds->loadList($request->getCountRequest($this, $fields));
   }
   
-  function loadListByReq($request) {
+  function loadListByReq(CRequest $request) {
   	return $this->loadQueryList($request->getRequest($this));
   }
   
