@@ -519,7 +519,7 @@ class CAppUI {
    * @param CUser $user
    * @return bool
    */
-  static function checkPasswordWeakness($user) {
+  static function checkPasswordWeakness(CUser $user) {
     if (null == $pwd = $user->_user_password) {
       return false;
     }
@@ -560,7 +560,7 @@ class CAppUI {
    * @param CUser $user
    * @return bool
    */
-  static function checkPasswordAttempt($user) {
+  static function checkPasswordAttempt(CUser $user) {
     $sibling = new CUser;
     $sibling->user_username = $user->user_username;
     $sibling->loadMatchingObject();

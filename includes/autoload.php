@@ -31,7 +31,7 @@ function updateClassPathCache(){
 function mb_autoload($className) {
   global $classPaths, $performance;
 
-  if (isset($classPaths[$className])) {
+  if (isset($classPaths[$className]) && file_exists($classPaths[$className])) {
     $performance["autoload"]++;
     return require($classPaths[$className]);
   }
