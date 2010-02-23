@@ -114,7 +114,7 @@ class CSetupsip extends CSetup {
                ADD INDEX (`object_id`);";
      $this->addQuery($sql);
      
-     $this->makeRevision("0.23");
+     $this->mod_version = "0.23";
   }
 }
 ?>
