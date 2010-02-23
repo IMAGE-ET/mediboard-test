@@ -169,6 +169,7 @@ abstract class CMbPath {
    * Reduces a path, removing "folder/.." occurences
    * @param $path The path to reduces
    * @return The reduced path
+   * @todo Use realpath instead
    */ 
   static function reduce($path) {
     while(preg_match('/([A-z0-9-_])+\/\.\.\//', $path)) {

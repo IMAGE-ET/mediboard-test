@@ -143,10 +143,10 @@ class CMbObject {
   }
   
   private static function getModuleName($path) {
-    if (preg_match('#([^\\\/]+)[\\\/](classes[\\\/])?[^\\\/]+.class.php$#i', $path, $matches)) {
-      return $matches[1];
+    if ("classes" === basename($path = dirname($path))) {
+      $path = dirname($path);
     }
-    return null;
+    return basename($path);
   }
   
   /**
