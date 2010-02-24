@@ -44,7 +44,11 @@ class CXmlSpec extends CMbFieldSpec {
     
     return utf8_decode($geshi->parse_code());
   }
-
+  
+  function trim($value) {
+    return $value;
+  }
+  
   function sample(&$object, $consistent = true){
     $object->{$this->fieldName} = <<<EOD
 <?xml version="1.0" encoding="ISO-8859-1"?>
