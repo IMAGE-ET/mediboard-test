@@ -701,9 +701,8 @@ class CConsultation extends CCodable {
       $where[] = "`entree_prevue` <= '$datetime' AND `sortie_prevue` >= '$datetime'";
       
       $sejour = new CSejour();
-      if ($sejour->loadObject($where)) {
-        $this->sejour_id = $sejour->_id;
-      }
+      $sejour->loadObject($where);
+      
       // Si pas de séjour et config alors le créer en type consultation
       if (!$sejour->_id && CAppUI::conf("dPcabinet CConsultation create_consult_sejour")) {
         $sejour->patient_id = $this->patient_id;
@@ -714,10 +713,9 @@ class CConsultation extends CCodable {
         $sejour->sortie_prevue = "$this->_date 23:59:59";
         if ($msg = $sejour->store()) {
           return $msg;
-        }
-        
-        $this->sejour_id = $sejour->_id;
+        }  
       }
+      $this->sejour_id = $sejour->_id;
     }
     
     // Standard store

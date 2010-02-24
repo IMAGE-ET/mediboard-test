@@ -48,10 +48,9 @@ $smarty = new CSmartyDP();
   
 if($echange_hprim->_id) {
 	$echange_hprim->loadRefs();	
-	$echange_hprim->uncompressFields();
   
 	$domGetEvenement = new CHPrimXMLEvenementsPatients();
-  $domGetEvenement->loadXML(utf8_decode($echange_hprim->_uncompressed["message"]));
+  $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
   $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
 
   if ($echange_hprim->acquittement) {
@@ -108,7 +107,6 @@ if($echange_hprim->_id) {
     
   foreach($listEchangeHprim as $_echange_hprim) {
     $_echange_hprim->loadRefNotifications();
-    $_echange_hprim->uncompressFields();
     $_echange_hprim->getObservations();
   }
   

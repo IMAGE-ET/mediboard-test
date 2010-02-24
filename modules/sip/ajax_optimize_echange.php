@@ -27,16 +27,16 @@ if (!$do_optimize) {
   
   CAppUI::stepAjax($count." échanges HPRIM à optimiser");
 } else {
-  
+  $order = "date_production DESC";
   
   // Récupération de la liste des echanges HPRIM
-  $listEchangeHprim = $itemEchangeHprim->loadList($where, null, "0, 1000");
+  $listEchangeHprim = $itemEchangeHprim->loadList($where, $order, "0, 1000");
   $count  = 0;
   foreach($listEchangeHprim as $_echange_hprim) {
     $errors = 0;
     
     // Affectation de l'object_id et object_class
-    $_echange_hprim->getObjectIdClass();
+    /*$_echange_hprim->getObjectIdClass();
     if (!$errors) {
       if ($msg = $_echange_hprim->store()) {
         CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à sauvegarder l'échange HPRIM", UI_MSG_WARNING);
@@ -45,34 +45,38 @@ if (!$do_optimize) {
         CAppUI::stepAjax($msg, UI_MSG_WARNING);
         
         continue;
-      } else {
-        $count++;
-      }
-    }
-    
-    // Compression
-    if (!$_echange_hprim->message = gzcompress($_echange_hprim->message)) {
+      } 
+    }*/
+
+    // Décompression
+    if (!$_echange_hprim->message = @gzuncompress($_echange_hprim->message)) {
       $errors++;
-      CAppUI::stepAjax("Compression du message impossible", UI_MSG_WARNING);
+      CAppUI::stepAjax("#$_echange_hprim->_id : Décompression du message impossible", UI_MSG_WARNING);
     }
-    if (!$_echange_hprim->acquittement = gzcompress($_echange_hprim->acquittement)) {
+    if (!$_echange_hprim->acquittement = @gzuncompress($_echange_hprim->acquittement)) {
       $errors++;
-      CAppUI::stepAjax("Compression de l'acquittement impossible", UI_MSG_WARNING);
+      CAppUI::stepAjax("#$_echange_hprim->_id : Décompression de l'acquittement impossible", UI_MSG_WARNING);
     }
+
     if (!$errors) {
-      $_echange_hprim->compressed = 1;
+      $_echange_hprim->compressed = 0;
       if ($msg = $_echange_hprim->store()) {
         $errors++;
-        CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à compresser l'échange HPRIM", UI_MSG_WARNING);
+        CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à décompresser l'échange HPRIM", UI_MSG_WARNING);
         CAppUI::stepAjax($msg, UI_MSG_WARNING);
         
         continue;
+      } else {
+        $count++;
       }
+    } else {
+      $_echange_hprim->delete();
+      CAppUI::stepAjax("#$_echange_hprim->_id : Suppression de l'échange HPRIM", UI_MSG_WARNING);
     }
   }
   if ($count == 0) {
     echo "<script type='text/javascript'>stop=true;</script>";
   }
-  CAppUI::stepAjax($count. " échanges HPRIM optimisé et sauvegardé");
+  CAppUI::stepAjax($count. " échanges HPRIM décompressés et sauvegardés");
 }
 ?>

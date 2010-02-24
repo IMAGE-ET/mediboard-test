@@ -107,7 +107,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $doc_valid = $domAcquittement->schemaValidate();
     $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       
-    $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
+    $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->statut_acquittement = "erreur";
     $echange_hprim->store();
     

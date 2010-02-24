@@ -127,7 +127,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->type         = $this->type;
     $echg_hprim->sous_type    = $this->sous_type;
     $echg_hprim->object_id    = $mbObject->_id;
-    $echg_hprim->_uncompressed["message"] = utf8_encode($this->saveXML());
+    $echg_hprim->message = utf8_encode($this->saveXML());
     if ($mbObject instanceof CPatient) {
       $echg_hprim->object_class = "CPatient";
       if ($mbObject->_IPP) {
@@ -157,7 +157,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->saveTempFile();
     $msg = utf8_encode($this->saveXML()); 
     
-    $echg_hprim->_uncompressed["message"] = $msg;
+    $echg_hprim->message = $msg;
 
     $echg_hprim->store();
 

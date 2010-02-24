@@ -61,8 +61,8 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "patients";
         $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
-        $echange_hprim->_uncompressed["message"] = $messagePatient;
-        $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
+        $echange_hprim->message = $messagePatient;
+        $echange_hprim->acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->message_valide = 0;
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
@@ -75,7 +75,6 @@ class CHprimSoapHandler extends CSoapHandler {
       if (CAppUI::conf('sip server')) {
         $echange_hprim->identifiant_emetteur = intval($data['identifiantMessage']);
         $echange_hprim->loadMatchingObject();
-        $echange_hprim->uncompressFields();
       }
       if (!$echange_hprim->_id) {
         $echange_hprim->emetteur       = $data['idClient'];
@@ -84,7 +83,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "patients";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;
-        $echange_hprim->_uncompressed["message"] = $messagePatient;
+        $echange_hprim->message        = $messagePatient;
         $echange_hprim->message_valide = 1;
       }
       $echange_hprim->date_production = mbDateTime();
@@ -165,7 +164,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
-      $echange_hprim->_uncompressed["acquittement"] = $messageAcquittement;
+      $echange_hprim->acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->date_echange = mbDateTime();

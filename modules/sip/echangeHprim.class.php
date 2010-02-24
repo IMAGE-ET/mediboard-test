@@ -31,7 +31,7 @@ class CEchangeHprim extends CMbMetaObject {
   var $acquittement_valide  = null;
   var $id_permanent				  = null;
   var $compressed           = null;
-  
+    
   var $_ref_notifications   = null;
   
   // Form fields
@@ -65,8 +65,8 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["type"]                  = "str";
     $specs["sous_type"]             = "str";
     $specs["date_echange"]          = "dateTime";
-    $specs["message"]               = "xml notNull show|0 compressed";
-    $specs["acquittement"]          = "xml show|0 compressed";
+    $specs["message"]               = "xml notNull show|0";
+    $specs["acquittement"]          = "xml show|0";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
     $specs["statut_acquittement"]   = "str show|0";
     $specs["message_valide"]        = "bool show|0";
@@ -111,15 +111,18 @@ class CEchangeHprim extends CMbMetaObject {
   function getObservations() {
     if ($this->acquittement) {
       $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-      $domGetAcquittement->loadXML(utf8_decode($this->_uncompressed["acquittement"]));
+      $domGetAcquittement->loadXML(utf8_decode($this->acquittement));
       $doc_valid = $domGetAcquittement->schemaValidate();
-      if ($doc_valid) {      
-        $observations = $domGetAcquittement->getAcquittementObservation();
-        $this->_observations = $observations;
+      if ($doc_valid) {    
+        return $this->_observations = $domGetAcquittement->getAcquittementObservation();
       }
     }
+  }
+  
+  function loadView() {
+    parent::loadView();
     
-    return $this->_observations;
+    $this->getObservations();
   }
   
   function setObjectIdClass($object_class, $object_id) {
