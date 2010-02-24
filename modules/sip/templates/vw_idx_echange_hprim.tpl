@@ -146,7 +146,7 @@ function changePage(page) {
           </tr>
         </table>
           {{if $total_echange_hprim != 0}}
-            {{mb_include module=system template=inc_pagination total=$total_echange_hprim current=$page change_page='changePage'}}
+            {{mb_include module=system template=inc_pagination total=$total_echange_hprim current=$page change_page='changePage' jumper='10'}}
 	        {{/if}}
       </form>
     </td>
