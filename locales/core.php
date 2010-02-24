@@ -22,7 +22,7 @@ if (null == $locales = SHM::get($shared_name)) {
   foreach (glob("$root_dir/modules/*/locales/$locale.php") as $file) {
     require_once($file);
   }
-
+  $locales = array_filter($locales, "stringNotEmpty");
   SHM::put($shared_name, $locales);
 }
 

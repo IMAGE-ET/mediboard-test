@@ -23,6 +23,8 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     }
   }
   
+  $locales = array_filter($locales, "stringNotEmpty");
+  
   $path = "./tmp/locales.$localeName.js";
   if (!is_file($path)) {
     echo "<div class='warning'>Fichier de traductions JS '$localeName' absent</div>";
@@ -40,7 +42,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
     echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
     continue;
   }      
-    
+  
   if ($sharedLocale != $locales) {
     echo "<div class='warning'>Table périmée pour langage '$localeName'</div>";
     continue;
