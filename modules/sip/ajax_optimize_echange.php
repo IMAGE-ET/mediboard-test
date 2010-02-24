@@ -59,7 +59,7 @@ if (!$do_optimize) {
     }
 
     if (!$errors) {
-      $_echange_hprim->compressed = 0;
+      $_echange_hprim->compressed = 1;
       if ($msg = $_echange_hprim->store()) {
         $errors++;
         CAppUI::stepAjax("#$_echange_hprim->_id : Impossible à décompresser l'échange HPRIM", UI_MSG_WARNING);
