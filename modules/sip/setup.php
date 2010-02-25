@@ -115,7 +115,11 @@ class CSetupsip extends CSetup {
                ADD INDEX (`object_id`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.23";
+     $this->makeRevision("0.23");     
+     $sql = "UPDATE `echange_hprim` SET `compressed` = '0' WHERE `compressed` = '1';";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.23.1";
   }
 }
 ?>

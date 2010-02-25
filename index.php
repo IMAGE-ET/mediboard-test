@@ -99,7 +99,12 @@ if (!CAppUI::$instance->user_id) {
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = CValue::request("suppressHeaders");
+$wsdl = CValue::request("wsdl");
+if (isset($wsdl)) {
+  $wsdl = 1;
+}
+
+$suppressHeaders = CValue::request("suppressHeaders", $wsdl);
 
 // Output the charset header in case of an ajax request
 $ajax = CValue::request("ajax", false);

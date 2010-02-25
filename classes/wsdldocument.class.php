@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
+ * @subpackage classes
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -138,7 +138,7 @@ class CWsdlDocument extends CMbXMLDocument {
     }
   }
   
-  function addService($doc, $username, $password) {
+  function addService($username, $password, $module, $tab) {
     $definitions = $this->documentElement;
     $partie7 = $this->createComment("partie 7 : Service");
     $definitions->appendChild($partie7);
@@ -146,7 +146,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $service = $this->addElement($definitions, "service");
     $this->addAttribute($service, "name", "MediboardService");
     
-    $this->addTexte($service, "documentation", $doc);
+    $this->addTexte($service, "documentation", "Documentation du WebService");
     
     $partie8 = $this->createComment("partie 8 : Port");
     $service->appendChild($partie8);
@@ -155,7 +155,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $this->addAttribute($port, "binding", "MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
-    $this->addAttribute($soapaddress, "location", CAppui::conf("base_url")."/index.php?login=1&username=$username&password=$password&m=sip&a=mbSip&suppressHeaders=1");
+    $this->addAttribute($soapaddress, "location", CAppui::conf("base_url")."/index.php?login=1&username=$username&password=$password&m=$module&a=$tab&suppressHeaders=1");
   }
   
   function saveFileXML() {

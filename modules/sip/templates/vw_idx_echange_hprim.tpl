@@ -178,13 +178,13 @@ function changePage(page) {
           <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>
           <th>{{mb_title object=$echange_hprim field="acquittement_valide"}}</th>
         </tr>
-        {{foreach from=$listEchangeHprim item=curr_echange_hprim}}
-          <tbody id="echange_{{$curr_echange_hprim->_id}}">
-            {{include file="inc_echange_hprim.tpl" object=$curr_echange_hprim}}
+        {{foreach from=$echangesHprim item=_echange}}
+          <tbody id="echange_{{$_echange->_id}}">
+            {{include file="inc_echange_hprim.tpl" object=$_echange}}
           </tbody>
-          {{foreach from=$curr_echange_hprim->_ref_notifications item=curr_ref_notification}}
-            <tbody id="echange_{{$curr_ref_notification->_id}}">
-              {{include file="inc_echange_hprim.tpl" object=$curr_ref_notification}}
+          {{foreach from=$_echange->_ref_notifications item=_ref_notification}}
+            <tbody id="echange_{{$_ref_notification->_id}}">
+              {{include file="inc_echange_hprim.tpl" object=$_ref_notification}}
             </tbody>
           {{/foreach}}
         {{foreachelse}}

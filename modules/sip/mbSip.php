@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
+global $can, $m, $a;
 
 $can->needsRead();
 
@@ -19,12 +19,12 @@ $wsdl = CValue::get('wsdl');
 // première étape : désactiver le cache lors de la phase de test
 ini_set("soap.wsdl_cache_enabled", "0");
 
+$username = CValue::get('username');
+$password = CValue::get('password');
+  
 // Génération du fichier WSDL
 if(isset($wsdl)) {
   header('Content-Type: application/xml; charset=UTF-8');
-
-  $username = CValue::get('username');
-  $password = CValue::get('password');
   
   $functions = CHprimSoapHandler::$paramSpecs;
   
@@ -33,17 +33,13 @@ if(isset($wsdl)) {
   $wsdlFile->addMessage($functions);
   $wsdlFile->addPortType($functions);
   $wsdlFile->addBinding($functions);
-  $documentation = "Ceci est une documentation du WebService";
-  $wsdlFile->addService($documentation, $username, $password);
+  $wsdlFile->addService($username, $password, $m, $a);
   
   echo $wsdlFile->saveXML();
 } else {
-	$username = CValue::get('username');
-	$password = CValue::get('password');
-
 	// on indique au serveur à quel fichier de description il est lié
 	try {
-	  $serverSOAP = new SoapServer(CAppui::conf("base_url")."/index.php?login=1&username=$username&password=$password&m=sip&a=mbSip&suppressHeaders=1&wsdl");
+	  $serverSOAP = new SoapServer(CAppui::conf("base_url")."/index.php?login=1&username=$username&password=$password&m=$m&a=$a&wsdl");
 	} catch (Exception $e) {
 	  echo $e;
 	}
@@ -60,7 +56,5 @@ if(isset($wsdl)) {
 	        echo '<li>' , $func , '</li>';
 	   echo '</ul>';
 	}
-
 }
-
 ?>

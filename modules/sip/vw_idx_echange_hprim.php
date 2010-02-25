@@ -51,11 +51,19 @@ if($echange_hprim->_id) {
   
 	$domGetEvenement = new CHPrimXMLEvenementsPatients();
   $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
+  $domGetEvenement->formatOutput = true;
   $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
-
+  
+  $echange_hprim->message = utf8_decode($domGetEvenement->saveXML());
+  
   if ($echange_hprim->acquittement) {
-	  $observations = $echange_hprim->getObservations();
-    $doc_errors_ack[] = @$domGetEvenement->schemaValidate(null, true, false);
+    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
+    $domGetAcquittement->formatOutput = true;
+    $observations = $domGetAcquittement->getAcquittementObservation();
+    $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
+    
+    $echange_hprim->acquittement = utf8_decode($domGetAcquittement->saveXML());
 	}  
   
   $smarty->assign("echange_hprim"       , $echange_hprim);
@@ -103,15 +111,15 @@ if($echange_hprim->_id) {
   $total_echange_hprim = $itemEchangeHprim->countList($where);
   
   $order = "date_production DESC";
-  $listEchangeHprim    = $itemEchangeHprim->loadList($where, $order, "$page, 20");
+  $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20");
     
-  foreach($listEchangeHprim as $_echange_hprim) {
-    $_echange_hprim->loadRefNotifications();
-    $_echange_hprim->getObservations();
+  foreach($echangesHprim as $_echange) {
+    $_echange->loadRefNotifications();
+    $_echange->getObservations();
   }
   
   $smarty->assign("echange_hprim"       , $echange_hprim);
-  $smarty->assign("listEchangeHprim"    , $listEchangeHprim);
+  $smarty->assign("echangesHprim"       , $echangesHprim);
   $smarty->assign("total_echange_hprim" , $total_echange_hprim);
   $smarty->assign("page"                , $page);
   $smarty->assign("selected_types"      , $t);
