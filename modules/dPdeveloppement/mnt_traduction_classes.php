@@ -93,7 +93,6 @@ foreach ($classes as $class) {
   addLocale($classname, $classname, "$classname.none");
   addLocale($classname, $classname, "$classname.one");
   addLocale($classname, $classname, "$classname.all");
-  //addLocale($classname, $classname, "$classname.select");
   addLocale($classname, $classname, "$classname-msg-create");
   addLocale($classname, $classname, "$classname-msg-modify");
   addLocale($classname, $classname, "$classname-msg-delete");
@@ -141,7 +140,8 @@ foreach ($classes as $class) {
       
       // Find corresponding back name
       $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backProps);
-	    addLocale($classname, $prop, "$spec->class-back-$backName");
+      addLocale($classname, $prop, "$spec->class-back-$backName");
+      addLocale($classname, $prop, "$spec->class-back-$backName.empty");
     }
   }
   
