@@ -40,6 +40,7 @@ class CFicheAutonomie extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'fiche_autonomie';
     $spec->key   = 'fiche_autonomie_id';
+    $spec->uniques["sejour_id"] = array("sejour_id");
     return $spec;
   }
 
