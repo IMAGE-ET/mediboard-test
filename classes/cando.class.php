@@ -69,5 +69,22 @@ class CCanDo {
       $this->redirect("object_not_found", $params);
     }
   }
+	
+  static function checkRead() {
+    global $can;
+    $can->needsRead();
+  }
+
+  static function checkEdit() {
+    global $can;
+    $can->needsEdit();
+  }
+
+  static function checkAdmin() {
+    global $can;
+    $can->needsAdmin();
+  }
+
+	
 }
 ?>
