@@ -10,7 +10,7 @@ submitPersonnel = function(oForm){
        
 <table class="form">
 <tr>
-  <th class="category" colspan="3">
+  <th class="title" colspan="3">
     Personnel en salle
   </th>
 </tr>

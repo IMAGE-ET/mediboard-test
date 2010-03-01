@@ -8,7 +8,7 @@
 	{{mb_include module=system template=inc_config_bool var=mode_anesth}}  
 
   <tr>
-    <th class="category" colspan="6">Listes déroulantes des timings</th>
+    <th class="title" colspan="6">Listes déroulantes des timings</th>
   </tr>
   
   {{assign var="var" value="max_sub_minutes"}}
@@ -38,7 +38,7 @@
   {{assign var="class" value="COperation"}}
   
   <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
 
 	{{mb_include module=system template=inc_config_bool var=mode}}  
@@ -64,7 +64,7 @@
   {{assign var="class" value="CActeCCAM"}}
   
   <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
   
 	{{mb_include module=system template=inc_config_bool var=contraste}}  
@@ -77,21 +77,21 @@
 
   {{assign var="class" value="CDossierMedical"}}
   <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
   
 	{{mb_include module=system template=inc_config_bool var=DAS}}  
   
   {{assign var="class" value="CReveil"}}
   <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
   
 	{{mb_include module=system template=inc_config_bool var=multi_tabs_reveil}}  
 
 	{{assign var="class" value="CDailyCheckList"}}
   <tr>
-    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
   
 	{{mb_include module=system template=inc_config_bool var=active}}
