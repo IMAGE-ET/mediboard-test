@@ -76,7 +76,7 @@ Main.add(function(){
 {{foreach from=$protocoles key=key_type item=_type}}
   <tbody id="{{$key_type}}" style="display: none;">
     <tr>
-      <th>Liste des protocoles disponibles</th>
+      <th class="title">Liste des protocoles disponibles</th>
     </tr>
     {{foreach from=$_type item=_protocole}}
     <tr {{if $protSel->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    

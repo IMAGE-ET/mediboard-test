@@ -32,7 +32,7 @@
   {{foreach from=$listDay item=curr_plage}}
   <tr>
     <th colspan="6">
-    	{{$curr_plage->_ref_salle->nom}} : 
+    	{{$curr_plage->_ref_salle->_view}} : 
     	de {{$curr_plage->debut|date_format:$dPconfig.time}} 
     	à {{$curr_plage->fin|date_format:$dPconfig.time}}
     </th>

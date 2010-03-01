@@ -11,7 +11,7 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="6">Option de la DHE simplifiée</th>
+    <th class="title" colspan="6">Option de la DHE simplifiée</th>
   </tr>
   
   {{assign var="class" value="CSejour"}}
@@ -32,7 +32,7 @@
 
   {{assign var="class" value="COperation"}}
   <tr>
-    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="title" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   {{assign var="var" value="verif_cote"}}
@@ -157,7 +157,7 @@
 	  
   {{assign var="class" value="CSejour"}}
   <tr>
-    <th class="category" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="title" colspan="6">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   {{assign var="var" value="patient_id"}}
@@ -262,7 +262,7 @@
   {{mb_include module=system template=inc_config_str var=$var class=$class thcolspan="3" tdcolspan="3" size="2" suffix="h"}}
   
   <tr>
-    <th class="category" colspan="6">Heure par defaut du séjour</th>
+    <th class="title" colspan="6">Heure par defaut du séjour</th>
   </tr>
   
   <tr>
@@ -320,7 +320,7 @@
   {{assign var="class" value="CSejour"}}
   {{assign var="var"   value="sortie_prevue"}}
   <tr>
-    <th class="category" colspan="6">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+    <th class="title" colspan="6">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
   </tr>
     
   {{foreach from=$dPconfig.$m.$class.$var key=type item=value}}
@@ -340,7 +340,7 @@
   {{/foreach}}
   
   <tr>
-    <th class="category" colspan="6">Blocage des objets</th>
+    <th class="title" colspan="6">Blocage des objets</th>
   </tr>
 
   <tr>
@@ -368,7 +368,7 @@
   </tr>
   
   <tr>
-    <th class="category" colspan="100">Tag pour les numéros de dossier</th>
+    <th class="title" colspan="100">Tag pour les numéros de dossier</th>
   </tr>
   
   {{assign var="var" value="tag_dossier"}}
