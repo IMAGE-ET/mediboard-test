@@ -118,12 +118,12 @@ Main.add(function(){
       <table class="form">
         <tr>
           {{if $plagesel->plageop_id}}
-          <th class="category modify" colspan="6">
+          <th class="title modify" colspan="6">
 				    {{mb_include module=system template=inc_object_idsante400 object=$plagesel}}
 				    {{mb_include module=system template=inc_object_history object=$plagesel}}
             {{tr}}CPlageOp-title-modify{{/tr}}
           {{else}}
-          <th class="category" colspan="6">
+          <th class="title" colspan="6">
             {{tr}}CPlageOp-title-create{{/tr}}
           {{/if}}
           </th>
@@ -284,7 +284,7 @@ Main.add(function(){
       <input type="hidden" name="plageop_id" value="{{$plagesel->plageop_id}}" /> 
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Supprimer la plage opératoire</th>
+          <th class="title" colspan="2">Supprimer la plage opératoire</th>
         </tr>  
         <tr>
           <th>Supprimer cette plage pendant</th> 

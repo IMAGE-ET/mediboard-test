@@ -35,7 +35,7 @@
         <input type="hidden" name="group_id" value="{{$g}}" />
         <table class="form">
           <tr>
-            <th class="category" colspan="2">
+            <th class="title {{if $bloc->_id}}modify{{/if}}" colspan="2">
             {{if $bloc->_id}}
               {{tr}}CBlocOperatoire-title-modify{{/tr}} "{{$bloc->nom}}"
             {{else}}

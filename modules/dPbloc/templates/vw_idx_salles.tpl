@@ -15,7 +15,7 @@
       <table class="tbl">
         {{foreach from=$blocs_list item=curr_bloc}}
           <tr>
-            <th class="category">{{$curr_bloc->nom}}</th>
+            <th class="title">{{$curr_bloc->nom}}</th>
           </tr>
           {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
             <tr {{if $curr_salle->_id == $salle->_id}}class="selected"{{/if}}>
@@ -37,7 +37,7 @@
         <table class="form">
     
         <tr>
-          <th class="category" colspan="2">
+          <th class="title {{if $salle->_id}}modify{{/if}}" colspan="2">
           {{if $salle->_id}}
             {{tr}}CSalle-title-modify{{/tr}} "{{$salle->nom}}"
           {{else}}

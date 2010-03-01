@@ -30,7 +30,7 @@ function doReaffectation(mode_real) {
   {{assign var="class" value="CPlageOp"}}
     
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
@@ -67,7 +67,7 @@ function doReaffectation(mode_real) {
     </td>
   </tr>
   <tr>
-    <th class="category" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
+    <th class="title" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
   </tr>
   <tr>
     <th class="category">Plages vides</th>
@@ -106,7 +106,7 @@ function doReaffectation(mode_real) {
   </tr>
 
   <tr>
-    <th class="category" colspan="4">Blocage des plages opératoires</th>
+    <th class="title" colspan="4">Blocage des plages opératoires</th>
   </tr>
   <tr>
     {{assign var="var" value="locked"}}
@@ -132,7 +132,7 @@ function doReaffectation(mode_real) {
 
   {{assign var="var" value="chambre_operation"}} 
   <tr>
-    <th class="category" colspan="4">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
+    <th class="title" colspan="4">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
   </tr>
   <tr>
     <td colspan="4" style="text-align: center">

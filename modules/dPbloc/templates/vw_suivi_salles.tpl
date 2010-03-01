@@ -59,7 +59,7 @@ function printSuivi(){
     <td>
       <table class="form">
         <tr>
-          <th class="category">{{$_salle->nom}}</th>
+          <th class="title">{{$_salle->nom}}</th>
         </tr>
       </table>
       {{mb_include module=dPsalleOp template=inc_details_plages salle=$_salle}}
