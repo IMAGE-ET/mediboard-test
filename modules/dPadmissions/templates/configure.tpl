@@ -8,7 +8,7 @@
   {{assign var="var" value="fiche_admission"}}
 
   <tr>
-    <th class="category" colspan="2">Affichage</th>
+    <th class="title" colspan="2">Affichage</th>
   </tr>
   
   <tr>

@@ -14,7 +14,7 @@ Calendar.regField(getForm("changeDatePreAdmissions").date, null, {noView: true})
 
 <table class="tbl">
   <tr>
-    <th colspan="9">
+    <th class="title" colspan="9">
       <a href="?m=dPadmissions&tab=vw_idx_preadmission&date={{$hier}}" style="display: inline"><<<</a>
       {{$date|date_format:$dPconfig.longdate}}
       <form name="changeDatePreAdmissions" action="?" method="get">

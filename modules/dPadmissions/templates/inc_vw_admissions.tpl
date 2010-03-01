@@ -14,7 +14,16 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 
 <table class="tbl">
   <tr>
-    <th colspan="9">
+    <th class="title" colspan="9">
+      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
+      {{$date|date_format:$dPconfig.longdate}}
+      <form name="changeDateAdmissions" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_admission" />
+        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+			</form>
+			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
+			<br />
       <em style="float: left">
       {{if $selAdmis == "n"}}Admissions non effectuées
       {{elseif $selSaisis == "n"}}Dossiers non préparés
@@ -32,16 +41,6 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
           <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}}>{{$_function}}</option>
         {{/foreach}}
       </select>
-      
-      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
-      {{$date|date_format:$dPconfig.longdate}}
-      <form name="changeDateAdmissions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="vw_idx_admission" />
-        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-			</form>
-		
-			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
     </th>
   </tr>
   <tr>

@@ -10,7 +10,7 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="4">
+    <th class="title" colspan="4">
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_preadmission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%B %Y"}}
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_preadmission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
