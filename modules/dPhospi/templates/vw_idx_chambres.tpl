@@ -125,9 +125,9 @@ Main.add(function () {
     <table class="form">
     <tr>
       <th class="category" colspan="2">
-      
-      Lits
+        Lits
       </th>
+    </tr>
     {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
     <tr>
       <th>Lit</th>

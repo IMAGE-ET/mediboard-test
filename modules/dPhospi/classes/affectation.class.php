@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id:affectation.class.php 8146 2010-02-25 14:38:16Z rhum1 $ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPhospi
- *	@version $Revision$
+ *	@version $Revision:8146 $
  *  @author Thomas Despoix
  */
 
@@ -27,10 +27,15 @@ class CAffectation extends CMbObject {
   var $rques    = null;
 
   // Form Fields
-  var $_entree_relative;
-  var $_sortie_relative;
-  var $_mode_sortie;
-  var $_duree;
+  var $_entree_relative = null;
+  var $_sortie_relative = null;
+  var $_mode_sortie     = null;
+  var $_duree           = null;
+  
+  // Order fields
+  var $_patient   = null;
+  var $_praticien = null;
+  var $_chambre   = null;
 
   // Object references
   var $_ref_lit    = null;
@@ -65,6 +70,11 @@ class CAffectation extends CMbObject {
 
     $specs["_duree"]       = "num";
     $specs["_mode_sortie"] = "enum list|normal|transfert|deces default|normal";
+    
+    $specs["_patient"]     = "str";
+    $specs["_praticien"]   = "str";
+    $specs["_chambre"]     = "str";
+    
     return $specs;
   }
 

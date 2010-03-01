@@ -63,16 +63,16 @@ if($order_col != "_patient_deplacement" && $order_col != "_praticien_deplacement
 */
 $orderDep = null;
 
-if($order_col == "_patient_dep"){
+if($order_col == "_patient"){
   $orderDep = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
-if($order_col == "_praticien_dep"){
+if($order_col == "_praticien"){
   $orderDep = "users.user_last_name $order_way, users.user_first_name";
 }
-if($order_col == "_chambre_dep"){
+if($order_col == "_chambre"){
   $orderDep = "chambre.nom $order_way, patients.nom, patients.prenom";
 }
-if($order_col == "_sortie_dep"){
+if($order_col == "sortie"){
   $orderDep = "affectation.sortie $order_way, patients.nom, patients.prenom";
 }
 
@@ -185,8 +185,8 @@ $smarty = new CSmartyDP();
 if($deplacements){
   $smarty->assign("timing"       , $timing      );
 }
-$smarty->assign("order_way", $order_way);
-$smarty->assign("order_col", $order_col);
+$smarty->assign("order_way"    , $order_way);
+$smarty->assign("order_col"    , $order_col);
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );

@@ -15,7 +15,7 @@ function synchronizeSejours() {
 <table class="form">
 
   <tr>
-    <th class="category" colspan="2">Prise en compte des pathologies</th>
+    <th class="title" colspan="2">Prise en compte des pathologies</th>
   </tr>
   
   <tr>

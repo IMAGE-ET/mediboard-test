@@ -101,10 +101,10 @@ Main.add(function () {
 				</tr>
 				
         <tr>
-          <th colspan="3" class="category">
+          <th colspan="3" class="title">
            {{$class}}
           </th>
-          <th class="category">
+          <th class="title">
            <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
           </th>
         </tr>
