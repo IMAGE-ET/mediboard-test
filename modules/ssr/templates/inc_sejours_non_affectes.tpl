@@ -17,7 +17,7 @@
   {{foreach from=$sejours item=_sejour}}
   <tr>
     <td>
-		  <div id="{{$_sejour->_guid}}">
+		  <div id="{{$_sejour->_guid}}" style="background-color:#fff;">
         <script type="text/javascript">Repartition.draggableSejour('{{$_sejour->_guid}}')</script>
  		  	{{assign var=patient value=$_sejour->_ref_patient}}
 	      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">

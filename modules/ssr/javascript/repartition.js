@@ -31,7 +31,23 @@ Repartition = {
   },
 	
 	// Make sejour draggable
-	draggableSejour: function(sejour_id) {
-		new Draggable(sejour_id, {revert: true, scroll: window})
-	}
+	draggableSejour: function(sejour_guid) {
+		new Draggable(sejour_guid, {revert: true, scroll: window})
+	},
+	
+	// Make kine droppable
+	droppableKine: function(kine_id) {
+	  Droppables.add("kine-"+kine_id, { 
+	    onDrop:function(element){
+	      Repartition.dropSejour(element.id, kine_id);
+	    }, 
+	    hoverclass:'litselected'
+	  });
+	},
+	
+	// Link séjour to kiné
+	dropSejour: function(element, kine_id) {
+		Console.debug(element.id, "Séjour");
+    Console.debug(kine_id, "Kiné");
+	}	
 }

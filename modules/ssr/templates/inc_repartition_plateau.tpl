@@ -24,7 +24,8 @@
 
   <tr>
     {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-		  <td id="repartition-{{$_technicien->_guid}}">
+		  <td id="kine-{{$_technicien->kine_id}}">
+        <script type="text/javascript">Repartition.droppableKine('{{$_technicien->kine_id}}')</script>
 		    <em>{{tr}}Aucun patient affecté{{/tr}}</em>
 		  </td>
 	  {{/foreach}}
