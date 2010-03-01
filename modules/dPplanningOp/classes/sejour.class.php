@@ -1,9 +1,9 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage dPhospi
+ *  @version $Revision$
  *  @author Thomas Despoix
  */
 
@@ -64,7 +64,7 @@ class CSejour extends CCodable {
   var $adresse_par_prat_id = null;
   var $adresse_par_etab_id = null;
   var $libelle            = null;  
-	
+  
   // Form Fields
   var $_entree             = null;
   var $_sortie             = null;
@@ -135,18 +135,18 @@ class CSejour extends CCodable {
   var $_diagnostics_associes      = null;
   
   // Filter Fields
-  var $_date_min	 			= null;
-  var $_date_max 				= null;
+  var $_date_min        = null;
+  var $_date_max        = null;
   var $_date_entree     = null;
   var $_date_sortie     = null;
   var $_horodatage      = null;
-  var $_admission 			= null;
-  var $_service 				= null;
+  var $_admission       = null;
+  var $_service         = null;
   var $_type_admission  = null;
-  var $_specialite 			= null;
-  var $_date_min_stat		= null;
-  var $_date_max_stat 	= null;
-  var $_filter_type 		= null;
+  var $_specialite      = null;
+  var $_date_min_stat   = null;
+  var $_date_max_stat   = null;
+  var $_filter_type     = null;
   var $_ccam_libelle    = null;
   var $_coordonnees     = null;
   
@@ -166,30 +166,30 @@ class CSejour extends CCodable {
     return $spec;
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["affectations"]         = "CAffectation sejour_id";
-    $backProps["bilans_ssr"]           = "CBilanSSR sejour_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["affectations"]         = "CAffectation sejour_id";
+    $backProps["bilan_ssr"]            = "CBilanSSR sejour_id";
     $backProps["consultations_anesths"] = "CConsultAnesth sejour_id";
-	  $backProps["consultations"]        = "CConsultation sejour_id";
+    $backProps["consultations"]        = "CConsultation sejour_id";
     $backProps["factures"]             = "CFacture sejour_id";
-    $backProps["fiches_autonomie"]     = "CFicheAutonomie sejour_id";
-	  $backProps["GHM"]                  = "CGHM sejour_id";
-	  $backProps["hprim21_sejours"]      = "CHprim21Sejour sejour_id";
-	  $backProps["observations"]         = "CObservationMedicale sejour_id";
-	  $backProps["operations"]           = "COperation sejour_id";
+    $backProps["fiche_autonomie"]      = "CFicheAutonomie sejour_id";
+    $backProps["GHM"]                  = "CGHM sejour_id";
+    $backProps["hprim21_sejours"]      = "CHprim21Sejour sejour_id";
+    $backProps["observations"]         = "CObservationMedicale sejour_id";
+    $backProps["operations"]           = "COperation sejour_id";
     $backProps["prescriptions"]        = "CPrescription object_id";
-	  $backProps["rpu"]                  = "CRPU sejour_id";
-	  $backProps["rpu_mute"]             = "CRPU mutation_sejour_id";
-	  $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
+    $backProps["rpu"]                  = "CRPU sejour_id";
+    $backProps["rpu_mute"]             = "CRPU mutation_sejour_id";
+    $backProps["transmissions"]        = "CTransmissionMedicale sejour_id";
     $backProps["dossier_medical"]      = "CDossierMedical object_id";
     $backProps["ghm"]                  = "CGHM sejour_id";
     $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
-	  return $backProps;
-	}
+    return $backProps;
+  }
 
   function getProps() {
-   	$props = parent::getProps();
+    $props = parent::getProps();
     $props["patient_id"]          = "ref notNull class|CPatient seekable";
     $props["praticien_id"]        = "ref notNull class|CMediusers seekable";
     $props["group_id"]            = "ref notNull class|CGroups";
@@ -232,14 +232,14 @@ class CSejour extends CCodable {
     $props["facture"]             = "bool default|0";
     
     $props["_entree"]         = "dateTime show";
-    $props["_sortie"] 		    = "dateTime show";
-    $props["_date_entree"] 		= "date";
-    $props["_date_sortie"] 		= "date";
-    $props["_date_min"] 		  = "dateTime";
-    $props["_date_max"] 		  = "dateTime moreEquals|_date_min";
+    $props["_sortie"]         = "dateTime show";
+    $props["_date_entree"]    = "date";
+    $props["_date_sortie"]    = "date";
+    $props["_date_min"]       = "dateTime";
+    $props["_date_max"]       = "dateTime moreEquals|_date_min";
     $props["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_reelle";
-    $props["_admission"] 		  = "text";
-    $props["_service"] 	      = "text";
+    $props["_admission"]      = "text";
+    $props["_service"]        = "text";
     $props["_type_admission"] = "enum notNull list|comp|ambu|exte|seances|ssr|psy default|ambu";
     $props["_specialite"]     = "text";
     $props["_date_min_stat"]  = "date";
@@ -275,35 +275,35 @@ class CSejour extends CCodable {
     
     // Test de coherence de date avec les interventions
     if ($this->_check_bounds) {
-	    $this->completeField("entree_prevue");
-	    $this->completeField("sortie_prevue");
-	    $entree = $this->entree_prevue;
-	    $sortie = $this->sortie_prevue;
-	
-	    if ($entree !== null && $sortie !== null) {
-	    	$this->makeDatesOperations();
-	    	foreach($this->_dates_operations as $operation_id => $date_operation){
-	    	  $isCurrOp = $this->_curr_op_id == $operation_id;
-	        if ($isCurrOp) {
-	          $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
-	        } 
-	        else {
-	          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
-	        }
-	        if (!$opInBounds) {
-	           $msg.= "Interventions en dehors des nouvelles dates du séjour";  
-	        }	
-	    	}
-	    }
-	    
-	    $this->completeField("entree_reelle", "annule");
-	    if ((mbAddDateTime(str_pad(CAppUI::conf("dPplanningOp CSejour max_cancel_time"), 2, "0", STR_PAD_LEFT).":00:00", $this->entree_reelle) < mbDateTime()) && $this->fieldModified("annule", "1")) {
-	    	$msg .= "Impossible d'annuler un dossier en cours.<br />";
-	    }
-	
-	    foreach ($this->getCollisions() as $collision) {
-	      $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
-	    }
+      $this->completeField("entree_prevue");
+      $this->completeField("sortie_prevue");
+      $entree = $this->entree_prevue;
+      $sortie = $this->sortie_prevue;
+  
+      if ($entree !== null && $sortie !== null) {
+        $this->makeDatesOperations();
+        foreach($this->_dates_operations as $operation_id => $date_operation){
+          $isCurrOp = $this->_curr_op_id == $operation_id;
+          if ($isCurrOp) {
+            $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+          } 
+          else {
+            $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
+          }
+          if (!$opInBounds) {
+             $msg.= "Interventions en dehors des nouvelles dates du séjour";  
+          } 
+        }
+      }
+      
+      $this->completeField("entree_reelle", "annule");
+      if ((mbAddDateTime(str_pad(CAppUI::conf("dPplanningOp CSejour max_cancel_time"), 2, "0", STR_PAD_LEFT).":00:00", $this->entree_reelle) < mbDateTime()) && $this->fieldModified("annule", "1")) {
+        $msg .= "Impossible d'annuler un dossier en cours.<br />";
+      }
+  
+      foreach ($this->getCollisions() as $collision) {
+        $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
+      }
     }
     
     return $msg . parent::check();
@@ -365,7 +365,7 @@ class CSejour extends CCodable {
     if($this->group_id != $sejour->group_id) {
       return false;
     }
-		
+    
     $this->updateFormFields();
     return (mbDate($sejour->_entree) <= mbDate($this->_sortie) and mbDate($sejour->_sortie) >= mbDate($this->_sortie))
          or(mbDate($sejour->_entree) <= mbDate($this->_entree) and mbDate($sejour->_sortie) >= mbDate($this->_entree))
@@ -419,7 +419,7 @@ class CSejour extends CCodable {
       $this->sortie_reelle = "";
     }
     // On fait le store du séjour
-  	if ($msg = parent::store()) {
+    if ($msg = parent::store()) {
       return $msg;
     }
 
@@ -457,12 +457,12 @@ class CSejour extends CCodable {
   
   function delAffectations() {
     $this->loadRefsAffectations();
-		// dPhospi might not be active
-		if($this->_ref_affectations) {
-	    foreach($this->_ref_affectations as $key => $value) {
-	      $this->_ref_affectations[$key]->deleteOne();
-	    }
-		}
+    // dPhospi might not be active
+    if($this->_ref_affectations) {
+      foreach($this->_ref_affectations as $key => $value) {
+        $this->_ref_affectations[$key]->deleteOne();
+      }
+    }
     return null;
   }
   
@@ -521,13 +521,13 @@ class CSejour extends CCodable {
     $this->_adresse_par = ($this->adresse_par_etab_id || $this->adresse_par_prat_id);
     
     if ($this->_adresse_par) {
-    	$medecin_adresse_par = new CMedecin();
-	    $medecin_adresse_par->load($this->adresse_par_prat_id);
-	    $this->_adresse_par_prat = $medecin_adresse_par->_view;
-	    
-	    $etab = new CEtabExterne();
-	    $etab->load($this->adresse_par_etab_id);
-	    $this->_adresse_par_etab = $etab->_view;
+      $medecin_adresse_par = new CMedecin();
+      $medecin_adresse_par->load($this->adresse_par_prat_id);
+      $this->_adresse_par_prat = $medecin_adresse_par->_view;
+      
+      $etab = new CEtabExterne();
+      $etab->load($this->adresse_par_etab_id);
+      $this->_adresse_par_etab = $etab->_view;
     }
     
     // Etat d'un sejour : encours, clôturé ou preadmission
@@ -555,7 +555,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue.= ":00";
     }
         
-		$this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle', 'type');
+    $this->completeField('entree_prevue', 'sortie_prevue', 'entree_reelle', 'sortie_reelle', 'type');
     
     // Signaler l'action de validation de la sortie
     if ($this->_modifier_sortie === '1') {
@@ -582,7 +582,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue = $this->type == "comp" ? mbDateTime("+1 DAY", $entree_reelle) : $entree_reelle;
     }
     
-		// Synchro durée d'hospi / type d'hospi
+    // Synchro durée d'hospi / type d'hospi
     $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
     if($this->_at_midnight && $this->type == "ambu") {
       $this->type = "comp";
@@ -590,6 +590,23 @@ class CSejour extends CCodable {
       $this->type = "ambu";
     }
     
+  }
+
+  /**
+   * Load sejours including a specific date
+   * @param $date date Date to check for inclusion
+   * @param $where array Array of additional where clauses
+   * @param $order array Array of order fields
+   * @param $limit string MySQL limit clause
+   * @param $group array Array of group by clauses
+   * @param $leftjoin array Array of left join clauses
+   * @return array[CMbObject] List of found objects, null if module is not installed
+   */
+  static function loadListForDate($date, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    $where[] = "IF (sejour.entree_reelle, sejour.entree_reelle, sejour.entree_prevue) <= '$date 23:59:59'";
+    $where[] = "IF (sejour.sortie_reelle, sejour.sortie_reelle, sejour.sortie_prevue) >= '$date 00:00:00'";
+    $sejour = new CSejour;
+    return $sejour->loadList($where, $order, $limit, $group, $leftjoin);
   }
 
   function getTemplateClasses(){
@@ -610,11 +627,11 @@ class CSejour extends CCodable {
   
   // Calcul des droits CMU pour la duree totale du sejour
   function getDroitsCMU () {
-  	if($this->_date_sortie_prevue <= $this->_ref_patient->fin_amo && $this->_ref_patient->cmu){
-  		$this->_couvert_cmu = 1;
-  	} else {
-  		$this->_couvert_cmu = 0;
-  	}
+    if($this->_date_sortie_prevue <= $this->_ref_patient->fin_amo && $this->_ref_patient->cmu){
+      $this->_couvert_cmu = 1;
+    } else {
+      $this->_couvert_cmu = 0;
+    }
   }
   
   function loadRefSejour() {
@@ -626,8 +643,8 @@ class CSejour extends CCodable {
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["group_id"] = "= '$g->_id'";
+    $g = CGroups::loadCurrent();
+    $where["group_id"] = "= '$g->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
@@ -635,12 +652,12 @@ class CSejour extends CCodable {
   
   function loadRefCurrAffectation($date = ""){
     if(!$date){
-  		$date = mbDateTime();
-  	}
-  	$this->_ref_curr_affectation = new CAffectation();
-  	$where = array();
-  	$where["sejour_id"] = " = '$this->_id'";
-	  $where["entree"] = "<= '$date'";
+      $date = mbDateTime();
+    }
+    $this->_ref_curr_affectation = new CAffectation();
+    $where = array();
+    $where["sejour_id"] = " = '$this->_id'";
+    $where["entree"] = "<= '$date'";
     $where["sortie"] = ">= '$date'";
     $this->_ref_curr_affectation->loadObject($where);
     if($this->_ref_curr_affectation->_id){
@@ -652,9 +669,9 @@ class CSejour extends CCodable {
   
   // Chargement de l'affectation courante (en fct de $date)
   function loadCurrentAffectation($date = "") {
-  	if(!$date){
-  		$date = mbDateTime();
-  	}
+    if(!$date){
+      $date = mbDateTime();
+    }
   
     $this->loadRefCurrAffectation($date);
     
@@ -675,7 +692,7 @@ class CSejour extends CCodable {
     $this->_ref_next_affectation->loadObject($where);
     if($this->_ref_next_affectation->_id){
       $this->_ref_next_affectation->loadRefLit();
-      $this->_ref_next_affectation->_ref_lit->loadCompleteView();	
+      $this->_ref_next_affectation->_ref_lit->loadCompleteView(); 
     }
   }
     
@@ -759,7 +776,7 @@ class CSejour extends CCodable {
   }
   
   function loadRefsTransmissions(){
-    $this->_ref_transmissions = $this->loadBackRefs("transmissions");	
+    $this->_ref_transmissions = $this->loadBackRefs("transmissions"); 
   }
   
   function loadSuiviMedical() {
@@ -769,26 +786,26 @@ class CSejour extends CCodable {
     $this->_ref_suivi_medical = array();
 
     if(isset($this->_back["observations"])){
-	    foreach($this->_back["observations"] as $curr_obs) {
-	      $curr_obs->loadRefsFwd();
-	      $curr_obs->_ref_user->loadRefFunction();
-	      $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
-	    }
+      foreach($this->_back["observations"] as $curr_obs) {
+        $curr_obs->loadRefsFwd();
+        $curr_obs->_ref_user->loadRefFunction();
+        $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
+      }
     }
     if(isset($this->_back["transmissions"])){
-    	foreach($this->_back["transmissions"] as $curr_trans) {
-	      $curr_trans->loadRefsFwd();    
-	      if($curr_trans->_ref_object instanceof CAdministration){
-	        $curr_trans->_ref_object->loadRefsFwd();
-	        if($curr_trans->_ref_object->_ref_object instanceof CPrescriptionLineMedicament){
-	          $curr_trans->_ref_object->_ref_object->_ref_produit->loadClasseATC();
-	        }
-	      }
-	      if($curr_trans->_ref_object instanceof CPrescriptionLineMedicament){
-	        $curr_trans->_ref_object->_ref_produit->loadClasseATC();
-	      }
-	      $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
-	    }
+      foreach($this->_back["transmissions"] as $curr_trans) {
+        $curr_trans->loadRefsFwd();    
+        if($curr_trans->_ref_object instanceof CAdministration){
+          $curr_trans->_ref_object->loadRefsFwd();
+          if($curr_trans->_ref_object->_ref_object instanceof CPrescriptionLineMedicament){
+            $curr_trans->_ref_object->_ref_object->_ref_produit->loadClasseATC();
+          }
+        }
+        if($curr_trans->_ref_object instanceof CPrescriptionLineMedicament){
+          $curr_trans->_ref_object->_ref_produit->loadClasseATC();
+        }
+        $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"] = $curr_trans;
+      }
     }
     krsort($this->_ref_suivi_medical);
   }
@@ -847,21 +864,21 @@ class CSejour extends CCodable {
    * Chargement de toutes les prescriptions liées au sejour (object_class CSejour)
    */
   function loadRefsPrescriptions() {
-  	$prescriptions = $this->loadBackRefs("prescriptions");
-  	// Si $prescriptions n'est pas un tableau, module non installé
+    $prescriptions = $this->loadBackRefs("prescriptions");
+    // Si $prescriptions n'est pas un tableau, module non installé
     if(!is_array($prescriptions)){
-    	$this->_ref_last_prescription = null;
-    	return;
+      $this->_ref_last_prescription = null;
+      return;
     }
     $this->_count_prescriptions = count($prescriptions);
-  	$this->_ref_prescriptions["pre_admission"] = new CPrescription();
-  	$this->_ref_prescriptions["sejour"] = new CPrescription();
-  	$this->_ref_prescriptions["sortie"] = new CPrescription();
-  	
-  	// Stockage des prescriptions par type
-  	foreach($prescriptions as $_prescription){
-	    $this->_ref_prescriptions[$_prescription->type] = $_prescription;
-  	}
+    $this->_ref_prescriptions["pre_admission"] = new CPrescription();
+    $this->_ref_prescriptions["sejour"] = new CPrescription();
+    $this->_ref_prescriptions["sortie"] = new CPrescription();
+    
+    // Stockage des prescriptions par type
+    foreach($prescriptions as $_prescription){
+      $this->_ref_prescriptions[$_prescription->type] = $_prescription;
+    }
   }
   
   function loadRefsPrescripteurs(){
@@ -870,12 +887,12 @@ class CSejour extends CCodable {
     foreach($this->_ref_prescriptions as $_prescription){
       $_prescription->getPraticiens();
       if(is_array($_prescription->_praticiens)){
-	      foreach($_prescription->_praticiens as $_praticien_id => $_praticien_view){
+        foreach($_prescription->_praticiens as $_praticien_id => $_praticien_view){
           if(!is_array($this->_ref_prescripteurs) || !array_key_exists($_praticien_id, $this->_ref_prescripteurs)){
             $praticien = new CMediusers(); 
-	          $this->_ref_prescripteurs[$_praticien_id] = $praticien->load($_praticien_id);
-	        } 
-	      }
+            $this->_ref_prescripteurs[$_praticien_id] = $praticien->load($_praticien_id);
+          } 
+        }
       }
     }
   }
@@ -940,28 +957,28 @@ class CSejour extends CCodable {
    * @return Nombre d'occurences trouvées 
    */
   function loadMatchingSejour($strict = null) {
-  	if ($strict && $this->_id) {
+    if ($strict && $this->_id) {
       $where["sejour_id"] = " != '$this->_id'";
     } 
-		$where["patient_id"] = " = '$this->patient_id'";
-		
-		$this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
+    $where["patient_id"] = " = '$this->patient_id'";
+    
+    $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
-		
-		if ($this->_entree){
-			$date_entree = mbDate($this->_entree); 
-		  $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
+    
+    if ($this->_entree){
+      $date_entree = mbDate($this->_entree); 
+      $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
     if ($this->_sortie){
       $date_sortie = mbDate($this->_sortie); 
       $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
     }
-		
+    
     $this->loadObject($where);
     return $this->countList($where);
   }
-	
-	
+  
+  
   function loadNumDossier() {
     // Aucune configuration de numéro de dossier
     if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
@@ -996,15 +1013,15 @@ class CSejour extends CCodable {
     }
     
     $idDossier = new CIdSante400();
-	  $idDossier->id400 = $num_dossier;
+    $idDossier->id400 = $num_dossier;
     $idDossier->tag = $tag_dossier;
-	  $idDossier->object_class = $this->_class_name;
-	  $idDossier->loadMatchingObject();
-	  
-	  if ($idDossier->_id) {
-	    $this->load($idDossier->object_id);
-	    $this->_num_dossier = $idDossier->id400;
-	  }
+    $idDossier->object_class = $this->_class_name;
+    $idDossier->loadMatchingObject();
+    
+    if ($idDossier->_id) {
+      $this->load($idDossier->object_id);
+      $this->_num_dossier = $idDossier->id400;
+    }
   }
     
   function getExecutantId($code_activite) {
@@ -1112,9 +1129,9 @@ class CSejour extends CCodable {
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     
-		$this->loadNumDossier();
-		$template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
-		
+    $this->loadNumDossier();
+    $template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
+    
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
     
@@ -1144,11 +1161,11 @@ class CSejour extends CCodable {
     $this->_ref_dossier_medical->fillTemplate($template, "Sejour");
     
     if(CModule::getActive('dPprescription')){
-	    // Chargement du fillTemplate de la prescription
-	    $this->loadRefsPrescriptions();
-	    $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
-	    $prescription->type = "sejour";
-	    $prescription->fillLimitedTemplate($template);
+      // Chargement du fillTemplate de la prescription
+      $this->loadRefsPrescriptions();
+      $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
+      $prescription->type = "sejour";
+      $prescription->fillLimitedTemplate($template);
     }
   }
   
@@ -1164,10 +1181,10 @@ class CSejour extends CCodable {
     }
     
     foreach ($this->_ref_operations as &$operation) {
-    	if ($operation->annulee){
-    		continue;
-    	}
-    	
+      if ($operation->annulee){
+        continue;
+      }
+      
       // On s'assure d'avoir les plages op
       if (!$operation->_ref_plageop) {
         $operation->loadRefPlageOp();
@@ -1183,10 +1200,10 @@ class CSejour extends CCodable {
    * @return void Valuate $this->_cancel_alert
    */
   function makeCancelAlerts($excluded_id = null) {
-	  $this->_cancel_alerts = array(
-		  "all" => array(),
-		  "acted" => array(),
-		);
+    $this->_cancel_alerts = array(
+      "all" => array(),
+      "acted" => array(),
+    );
     
     // On s'assure d'avoir les opérations
     if (!$this->_ref_operations) {
@@ -1194,30 +1211,30 @@ class CSejour extends CCodable {
     }
     
     if ($this->_ref_operations) {
-		  foreach ($this->_ref_operations as $_operation ) {
-		    // Needed for correct view
-		    $_operation->loadRefPraticien();
-		    $_operation->loadRefPlageOp();
-		    
-		    // Exclude one
-		    if ($_operation->_id == $excluded_id) {
-		      continue;
-		    }
-		    
-		    if ($_operation->annulee == 0) {
-		      $operation_view = " le " 
-						. mbDateToLocale(mbDate($_operation->_datetime)) 
-		        . " par le Dr " 
-						. $_operation->_ref_chir->_view;
-		      $_operation->countActes();
-		      if ($_operation->_count_actes) {
-		        $this->_cancel_alerts["acted"][$_operation->_id] = $operation_view;
-		      }
-		      
-		      $this->_cancel_alerts["all"][$_operation->_id] = $operation_view;
-		    }
-		  }
-		}
+      foreach ($this->_ref_operations as $_operation ) {
+        // Needed for correct view
+        $_operation->loadRefPraticien();
+        $_operation->loadRefPlageOp();
+        
+        // Exclude one
+        if ($_operation->_id == $excluded_id) {
+          continue;
+        }
+        
+        if ($_operation->annulee == 0) {
+          $operation_view = " le " 
+            . mbDateToLocale(mbDate($_operation->_datetime)) 
+            . " par le Dr " 
+            . $_operation->_ref_chir->_view;
+          $_operation->countActes();
+          if ($_operation->_count_actes) {
+            $this->_cancel_alerts["acted"][$_operation->_id] = $operation_view;
+          }
+          
+          $this->_cancel_alerts["all"][$_operation->_id] = $operation_view;
+        }
+      }
+    }
   }
 }
 ?>
