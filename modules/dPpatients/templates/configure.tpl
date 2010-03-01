@@ -26,7 +26,7 @@ Main.add(function () {
 <table class="form">  
   {{assign var="class" value="CPatient"}}
   <tr>
-    <th class="category" colspan="100">Configuration pour les patients</th>
+    <th class="title" colspan="100">Configuration pour les patients</th>
   </tr>
   
   {{mb_include module=system template=inc_config_str var=tag_ipp thcolspan=3 tdcolspan=3}}
@@ -71,7 +71,7 @@ Main.add(function () {
 	
   {{assign var="class" value="intermax"}}
   <tr>
-    <th class="category" colspan="100">Configuration Intermax</th>
+    <th class="title" colspan="100">Configuration Intermax</th>
   </tr>
   
   {{mb_include module=system template=inc_config_bool var=auto_watch   thcolspan=3 tdcolspan=3}}
@@ -79,7 +79,7 @@ Main.add(function () {
 
   {{assign var="class" value="CAntecedent"}}
   <tr>
-    <th class="category" colspan="100">{{tr}}CAntecedent{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}CAntecedent{{/tr}}</th>
   </tr>
   
   <tr>
@@ -139,14 +139,14 @@ Main.add(function () {
   
   {{assign var="class" value="CTraitement"}}
   <tr>
-    <th class="category" colspan="100">{{tr}}CTraitement{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}CTraitement{{/tr}}</th>
   </tr>
   
   {{mb_include module=system template=inc_config_bool var=enabled thcolspan=3 tdcolspan=3}}
 
   {{assign var="class" value="CDossierMedical"}}
   <tr>
-    <th class="category" colspan="100">{{tr}}CDossierMedical{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}CDossierMedical{{/tr}}</th>
   </tr>
 
   {{mb_include module=system template=inc_config_bool var=diags_static_cim thcolspan=3 tdcolspan=3}}

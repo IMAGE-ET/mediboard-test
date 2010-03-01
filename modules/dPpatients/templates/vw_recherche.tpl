@@ -41,7 +41,7 @@ function changePageDossierMed(page) {
     
       <table class="form">
         <tr>
-          <th class="category" colspan="4">Recherche d'un dossier patient</th>
+          <th class="title" colspan="4">Recherche d'un dossier patient</th>
         </tr>
           
         <!-- Criteres sur les patients -->  

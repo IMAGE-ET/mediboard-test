@@ -53,7 +53,7 @@ function onSubmitCorrespondant(form) {
       
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Recherche d'un correspondant</th>
+          <th class="title" colspan="2">Recherche d'un correspondant</th>
         </tr>
   
         <tr>
@@ -202,7 +202,7 @@ function onSubmitCorrespondant(form) {
 			      {{mb_include module=system template=inc_object_history object=$medecin}}
             Modification de la fiche de {{$medecin->_view}}
           {{else}}
-          <th class="category" colspan="2">
+          <th class="title" colspan="2">
             Création d'une fiche
           {{/if}}
           </th>
