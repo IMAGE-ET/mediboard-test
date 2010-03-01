@@ -153,10 +153,10 @@ Main.add(function () {
     <table class="form">
       <tr id="editplage-trigger">
         {{if !$plageSel->plageconsult_id}}
-        <th class="category" colspan="4">Créer une plage</th>
+        <th class="title" colspan="4">Créer une plage</th>
 
         {{else}}
-        <th class="category modify" colspan="4">
+        <th class="title modify" colspan="4">
 		      {{mb_include module=system template=inc_object_idsante400 object=$plageSel}}
 		      {{mb_include module=system template=inc_object_history object=$plageSel}}
           Modifier cette plage
@@ -295,7 +295,7 @@ Main.add(function () {
 	      {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
           <table class="form">
 	        <tr>
-	          <th class="category modify" colspan="2">Supprimer cette plage</th>
+	          <th class="title modify" colspan="2">Supprimer cette plage</th>
             </tr>
 	        <tr>
 	          <th>Supprimer cette plage pendant</th>
