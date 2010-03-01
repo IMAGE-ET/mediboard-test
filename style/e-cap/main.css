@@ -48,27 +48,30 @@ table.form tr.triggerHide th {
 }
 
 table.form th.category {
-  color: #fff;
-  font-style: italic;  
-  background-color: #68c;
+  background-color: #abe;
+  font-weight: bold;
+  color: #000;
   border: #ccc 1px solid;
 }
 
 table.form th.category label {
-  color: #fff;
-  font-style: italic;
+  color: #000;
+}
+
+table.tbl th a {
+  color:#008;
 }
 
 table.form th a:link,
 table.form th a:visited {
-  color: #eee;
+  color:#008;
 }
 
 table.form th a.button:link,
 table.form th a.button.edit:link,
 table.form th a.button.search:link,
 table.form th a.button.save:link {
-	color: #000;
+  color:#008;
 }
 
 table.form td {
@@ -309,10 +312,25 @@ table.tbl th {
 	background-color: #ffd;
 }
 
+/* Old style
 table.tbl th {
   background-color: #68c;
   font-style: italic;
 }
+*/
+
+/* New style */
+table.tbl th {
+  background-color: #abe;
+	font-weight: bold;
+  color: #000;
+}
+
+table.tbl th a {
+  color:#008;
+}
+/* End new style*/
+
 
 table.tbl tr.triggerShow td,
 table.tbl tr.triggerHide td{
