@@ -101,21 +101,21 @@ Main.add(function () {
 				</tr>
 				
         <tr>
+          <th colspan="3" class="category">
+           {{$class}}
+          </th>
+          <th class="category">
+           <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
+          </th>
+        </tr>
+      
+        <tr>
           <th>Nom</th>
           <th>Chaîne</th>
           <th>{{tr}}language.{{$language}}{{/tr}}</th>
           <th>{{tr}}Save{{/tr}}</th>
         </tr>
         
-        <tr>
-	        <th colspan="3" class="category">
-	     		 {{$class}}
-		    	</th>
-		    	<th class="category">
- 	    		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
- 		   	  </th>
-    		</tr>
-    	
         {{foreach from=$_item key=nom item=tabTrad}}
         <tbody class="hoverable">
         {{foreach from=$tabTrad key=chaine item=trad name=trad}}

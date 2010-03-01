@@ -151,6 +151,7 @@ if ($can->edit) {
   $where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date 00:00:00'";
   $where[] = $whereFilter;
   $where[] = $where_service;
+
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
 }
 

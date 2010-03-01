@@ -1,5 +1,5 @@
 
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title" colspan="4">
       Dossier médical du 
@@ -7,11 +7,11 @@
     </th>
   </tr>
   <tr>
-    <th class="title">Antécédent(s)</th>
+    <th>Antécédent(s)</th>
     {{if is_array($object->_ref_traitements)}}
-    <th class="title">Traitement(s)</th>
+    <th>Traitement(s)</th>
     {{/if}}
-    <th class="title">Diagnostic(s)</th>
+    <th>Diagnostic(s)</th>
   </tr>
   
   <tr>

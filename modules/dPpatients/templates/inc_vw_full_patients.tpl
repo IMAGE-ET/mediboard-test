@@ -60,7 +60,10 @@ function popEtatSejour(sejour_id) {
 {{if !$app->user_prefs.simpleCabinet}}
 <!-- Séjours -->
 <tr id="sejours-trigger">
-  <th colspan="4" class="title">Séjours</th>
+  <th colspan="4">
+  	{{tr}}CPatient-back-sejours{{/tr}}
+		<small>({{$patient->_ref_sejours|@count}})</small>
+	</th>
 </tr>
 <tbody class="patientEffect" style="display: none" id="sejours">
 {{foreach from=$patient->_ref_sejours item=_sejour}}
@@ -199,6 +202,10 @@ function popEtatSejour(sejour_id) {
     </td>
   </tr>
 {{/if}}
+{{foreachelse}}
+<tr>
+	<td colspan="10"><em>{{tr}}CPatient-back-sejours.empty{{/tr}}</em></td>
+</tr>
 {{/foreach}}
 </tbody>
 {{/if}}  
@@ -206,7 +213,10 @@ function popEtatSejour(sejour_id) {
 <!-- Consultations -->
 
 <tr id="consultations-trigger">
-  <th colspan="4" class="title">Consultations</th>
+  <th colspan="4">
+    {{tr}}CPatient-back-consultations{{/tr}}
+    <small>({{$patient->_ref_consultations|@count}})</small>
+  </th>
 </tr>
 
 <tbody class="patientEffect" style="display: none" id="consultations">
@@ -247,6 +257,10 @@ function popEtatSejour(sejour_id) {
     </td>
   </tr>
   {{/if}}
+{{foreachelse}}
+<tr>
+  <td colspan="10"><em>{{tr}}CPatient-back-consultations.empty{{/tr}}</em></td>
+</tr>
 {{/foreach}}
 
 </tbody>
@@ -257,7 +271,7 @@ function popEtatSejour(sejour_id) {
   
 <!-- Planifier -->
 
-<table class="form">
+<table class="tbl">
 
 <tr id="planifier-trigger">
   <th colspan="2" class="title">Planifier</th>
@@ -320,11 +334,7 @@ function popEtatSejour(sejour_id) {
       <label for="prat_id" title="Praticien pour la consultation immédiate. Obligatoire">Praticien</label>
       <select name="prat_id" class="notNull ref"  style="width: 140px;">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$listPrat item=_prat}}
-          <option value="{{$_prat->user_id}}" {{if $_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
-            {{$_prat->_view}}
-          </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$app->user_id}}
       </select>
       <button class="new" type="submit">Consulter</button>
       </form>
