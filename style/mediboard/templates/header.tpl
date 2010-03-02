@@ -4,7 +4,31 @@
 
 {{include file="message.tpl" nodebug=true}}
 
-<table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless --> 
+<table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless -->
+</table>
+{{/if}}
+
+<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
+  {{if @$app->user_prefs.MenuPosition == "left"}}
+  <tr>
+    <td id="menubar" rowspan="10" style="width: 100px; text-align: center;">
+      <ul id="nav-vert">  
+        {{foreach from=$modules key=mod_name item=currModule}} 
+        {{if $currModule->_can->view && $currModule->mod_ui_active}}
+        <li {{if $mod_name==$m}}class="selected"{{/if}}>
+        <a href="?m={{$mod_name}}">
+          <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
+          <br />
+         {{tr}}module-{{$mod_name}}-court{{/tr}}
+        </a>
+        </li>
+        {{/if}}
+        {{/foreach}}
+      </ul>
+    </td>
+  </tr>
+  <tr>
+  {{else}}
   <tr>
     <td id="menubar">
       <ul id="nav">
@@ -22,6 +46,7 @@
     </td>
   </tr>
   <tr>
+  {{/if}}
     <td id="user">
       <form name="ChangeGroup" action="" method="get">
         <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
@@ -63,12 +88,8 @@
       </div>
     </td>
   </tr>
-</table>
-{{/if}}
-
-<table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   <tr>
-    <td>
+    <td style="vertical-align: top;">
       <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>

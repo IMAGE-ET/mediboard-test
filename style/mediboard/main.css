@@ -1580,13 +1580,14 @@ table.Offline button  {
 /* Navigation */
 #menubar {
   border-bottom: 1px solid #999;
-  background-color: #ccc;
+  background-color: #ddd;
   color: #fff;
   text-align: left;
   width: 100%;
 }
 
-#nav ul {
+ul#nav,
+ul#nav-vert {
   margin: 0;
   padding: 0;
   list-style-type: none;
@@ -1597,36 +1598,41 @@ table.Offline button  {
   float: left;
 }
 
-#nav a {
+#nav a,
+#nav-vert a {
   display: block;
   text-align: center;
   font-weight: bold;
   font-variant: small-caps;
   font-size: 1em;
-  padding: 3px 4px;
+  padding: 2px 2px;
 }
 
-#nav a:hover {
+#nav a:hover,
+#nav-vert a:hover {
   text-decoration: none;
-  background: #ddd;
-  padding: 2px 3px;
+  background: #eee;
+  padding: 1px 1px;
   border: 1px outset #ddd;
 }
 
-#nav a:active {
-  background: #ddd;
-  padding: 2px 3px;
+#nav a:active,
+#nav-vert a:active {
+  background: #eee;
+  padding: 1px 1px;
   border: 1px inset #ddd;
 }
 
-#nav li.selected a {
+#nav li.selected a,
+#nav-vert li.selected a {
   text-decoration: none;
   background: #aaa;
-  padding: 2px 3px;
+  padding: 1px 1px;
   border: 1px inset #888;
 }
 
-#nav img {
+#nav img,
+#nav-vert img {
   display: block;
   margin: auto;
   width: 48px;
@@ -1635,6 +1641,8 @@ table.Offline button  {
 /* User */
 
 #user {
+	vertical-align: top;
+	height: 1%;
   border-bottom: 1px dashed black;
   padding: 2px;
 }
