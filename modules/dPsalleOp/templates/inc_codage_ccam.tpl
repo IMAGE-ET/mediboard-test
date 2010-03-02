@@ -44,7 +44,7 @@ signerActes = function(object_id, object_class){
   </tr>
 
   <tr>
-    <th class="category">Codage des actes CCAM</th>
+    <th class="title">Codage des actes CCAM</th>
   </tr>
 
   <tr>

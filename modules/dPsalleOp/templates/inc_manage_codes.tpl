@@ -15,7 +15,7 @@
   {{if $can->edit || $modif_operation}}
   <table class="form">
     <tr>
-      <th class="category">Ajout et suppression de codes</th>
+      <th class="title">Ajout et suppression de codes</th>
     </tr>
     <tr>
       <td colspan="2" style="vertical-align:middle;">
