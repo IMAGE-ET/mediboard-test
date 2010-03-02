@@ -10,19 +10,27 @@
 
 global $g;
 
-$category = CValue::get("category");
-$libelle = CValue::post($category, "aaa");
+$chapitre = CValue::get("category");  // Chapitre
+$category_id = CValue::get("category_id");
+$libelle = CValue::post("libelle", "aaa");
 
-// Chargement de la liste des categories
-$category_prescription = new CCategoryPrescription();
-$where["chapitre"] = "= '$category'";
-$where[] = "group_id = '$g' OR group_id IS NULL";
-$categories = $category_prescription->loadList($where);
+if(!$category_id){
+	// Chargement de la liste des categories
+	$category_prescription = new CCategoryPrescription();
+	$where["chapitre"] = "= '$chapitre'";
+	$where[] = "group_id = '$g' OR group_id IS NULL";
+	$categories = $category_prescription->loadList($where);
+}
 
 // Chargement des elements des categories precedements chargées
 $element_prescription = new CElementPrescription();
 $where = array();
-$where["category_prescription_id"] = CSQLDataSource::prepareIn(array_keys($categories));
+if($category_id){
+  $where["category_prescription_id"] = " = '$category_id'";
+} else {
+  $where["category_prescription_id"] = CSQLDataSource::prepareIn(array_keys($categories));
+}
+
 $where["libelle"] = "LIKE '%$libelle%'";
 $where["cancelled"] = " = '0'";
 $elements = $element_prescription->loadList($where);
@@ -31,6 +39,7 @@ foreach($elements as &$element){
 }
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("category_id", $category_id);
 $smarty->assign("libelle", $libelle);
 $smarty->assign("elements", $elements);
 $smarty->assign("nodebug", true);

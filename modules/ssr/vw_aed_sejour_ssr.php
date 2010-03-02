@@ -26,6 +26,8 @@ if ($sejour_id && !$sejour->_id) {
 $fiche_autonomie = new CFicheAutonomie;
 $patient = new CPatient;
 $bilan = new CBilanSSR;
+$prescription_SSR = new CPrescription();
+$lines = array();
 
 if ($sejour->_id) {
   $sejour->loadRefPatient();
@@ -45,6 +47,21 @@ if ($sejour->_id) {
   $bilan->loadMatchingObject();
   $bilan->loadAides($AppUI->user_id);
   
+	// Prescription SSR
+  $prescription_SSR->object_id = $sejour->_id;
+	$presctiption_SSR->object_class = "CSejour";
+	$prescription_SSR->type = "sejour";
+	$prescription_SSR->loadMatchingObject();
+	
+	// Chargement des lignes de la prescription
+	if($prescription_SSR->_id){
+		$line = new CPrescriptionLineElement();
+		$line->prescription_id = $prescription_SSR->_id;
+		$_lines = $line->loadMatchingList();
+		foreach($_lines as $_line){
+			$lines[$_line->_ref_element_prescription->category_prescription_id][] = $_line;
+		}
+	}
 } 
 else {
 	$sejour->group_id = CGroups::loadCurrent()->_id;
@@ -62,13 +79,23 @@ $traitement->loadAides($AppUI->user_id);
 $antecedent = new CAntecedent();
 $antecedent->loadAides($AppUI->user_id);
 
+// Chargement des categories de prescription
+$categories = array();
+$category = new CCategoryPrescription();
+$where[] = "chapitre = 'kine' OR chapitre = 'soin' OR chapitre = 'consult'";
+$order = "nom";
+$_categories = $category->loadList($where, $order);
+foreach($_categories as $_cat){
+	$categories[$_cat->chapitre][] = $_cat;
+}
+
 // Dossier médical visibile ?
 $can_view_dossier_medical = 
   CModule::getCanDo('dPcabinet')->edit ||
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
   $AppUI->_ref_user->isFromType(array("Infirmière"));
-  
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -81,6 +108,9 @@ $smarty->assign("fiche_autonomie"     , $fiche_autonomie);
 $smarty->assign("bilan"               , $bilan);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("prats"               , $prats);
+$smarty->assign("categories"          , $categories);
+$smarty->assign("prescription_SSR"    , $prescription_SSR);
+$smarty->assign("lines"               , $lines);
 
 $smarty->display("vw_aed_sejour_ssr.tpl");
 ?>

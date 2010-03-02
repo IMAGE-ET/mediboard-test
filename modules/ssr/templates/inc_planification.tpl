@@ -36,10 +36,11 @@ Main.add(function() {
 	  addParam("patient_id", "{{$sejour->patient_id}}") .
 	  requestUpdate("planning-patient");
 
-  new Url("ssr", "ajax_planner_sejour") .
+ new Url("ssr", "ajax_planner_sejour") .
     addParam("sejour_id", "{{$sejour->_id}}") .
     requestUpdate("planner-sejour");
-})
+});
+ 
 
 </script>
 
