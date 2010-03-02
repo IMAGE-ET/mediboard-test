@@ -11,7 +11,7 @@
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   {{if @$app->user_prefs.MenuPosition == "left"}}
   <tr>
-    <td id="menubar" rowspan="10" style="width: 100px; text-align: center;">
+    <td id="menubar" rowspan="10" style="width: 1px; text-align: center;">
       <ul id="nav-vert">  
         {{foreach from=$modules key=mod_name item=currModule}} 
         {{if $currModule->_can->view && $currModule->mod_ui_active}}
