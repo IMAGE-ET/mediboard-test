@@ -71,7 +71,7 @@ Main.add(function () {
   {{/if}}
   <table class="form">
   	<tr>
-  		<th class="category {{if $element->_id}}modify{{/if}}" colspan="10">
+  		<th class="title text {{if $element->_id}}modify{{/if}}" colspan="10">
   			{{if $element->_id}}
 	      	{{tr}}{{$element->_class_name}}-title-modify{{/tr}} '{{$element->_view}}'
 				{{else}}

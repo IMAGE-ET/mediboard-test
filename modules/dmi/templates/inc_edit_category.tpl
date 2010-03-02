@@ -37,7 +37,7 @@ refreshCat = function(category_id){
   <input type="hidden" name="group_id" value="{{$g}}" />
   <table class="form">
 	  <tr>
-	    <th class="category {{if $category->_id}}modify{{/if}}" colspan="2">
+	    <th class="title text {{if $category->_id}}modify{{/if}}" colspan="2">
 	      {{if $category->_id}}
 	      {{tr}}{{$category->_class_name}}-title-modify{{/tr}} '{{$category->_view}}'
 				{{else}}
@@ -70,7 +70,7 @@ refreshCat = function(category_id){
 {{if $category->_id}}
 	<table class="tbl">
 	  <tr>
-	    <th colspan="10">Elements dans cette categorie</th>
+	    <th class="title" colspan="10">Elements dans cette categorie</th>
 	  </tr>
 	  <tr>  
 	    <th>{{mb_title class=$object_class field=nom}}</th>
