@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsEdit();
+$can->needsAdmin();
 
 $salle_id = CValue::getOrSession("salle_id");
 

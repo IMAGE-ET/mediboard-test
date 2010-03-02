@@ -9,7 +9,7 @@
  */
  
 global $can;
-$can->needsEdit();
+$can->needsAdmin();
 
 $bloc_id = CValue::getOrSession("bloc_id", 0);
 
