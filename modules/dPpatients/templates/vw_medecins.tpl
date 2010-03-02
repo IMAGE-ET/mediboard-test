@@ -196,7 +196,7 @@ function onSubmitCorrespondant(form) {
         {{/if}}
         <tr>
           {{if $medecin->_id}}
-          <th class="category modify text" colspan="2">
+          <th class="title modify text" colspan="2">
             {{mb_include module=system template=inc_object_notes object=$medecin}}
             {{mb_include module=system template=inc_object_idsante400 object=$medecin}}
 			      {{mb_include module=system template=inc_object_history object=$medecin}}

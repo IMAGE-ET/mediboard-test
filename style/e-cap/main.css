@@ -340,6 +340,7 @@ table.tbl tr.triggerHide td{
 table.tbl th.title {
   background-color: #68c;
   border-color: #ccc;
+  color: #fff;
 }
 
 tbody.hoverable:hover tr td,

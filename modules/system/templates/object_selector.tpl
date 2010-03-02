@@ -41,7 +41,7 @@ function setClose(selClass,keywords,key,val){
 {{/if}}
 <table class="form">
   <tr>
-    <th class="category" colspan="3">Critères de sélection</th>
+    <th class="title" colspan="3">Critères de sélection</th>
   </tr>
   <tr>
     <th><label for="selClass" title="Veuillez Sélectionner une Class">Choix du type d'objet</label></th>
@@ -72,14 +72,13 @@ function setClose(selClass,keywords,key,val){
 	{{if $selClass}}
   {{assign var=fields value=$classes.$selClass}}
   <tr>
-    <td colspan="10">
+    <td colspan="10" class="text">
       {{if $fields|@count}}
 	      <div class="small-info">
 	        Mots clés recherchés dans les champs suivants :
 	        {{foreach from=$fields item=_field name=field}}
 					{{mb_label class=$selClass field=$_field}}
-					{{mb_ternary test=$smarty.foreach.field.last value='.' other=','}}
-
+					{{$smarty.foreach.field.last value='.' other=','}}
 					{{/foreach}}
 	      </div>
 			{{else}}
@@ -114,7 +113,7 @@ function setClose(selClass,keywords,key,val){
 {{if $selClass}}
 <table class="tbl">
   <tr>
-    <th align="center" colspan="2">{{tr}}Results{{/tr}}</th>
+    <th class="title" style="text-align: center;" colspan="2">{{tr}}Results{{/tr}}</th>
   </tr>
   
   {{foreach from=$list item=_object}}

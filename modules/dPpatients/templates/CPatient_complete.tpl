@@ -110,7 +110,7 @@
   {{/if}}
   
   <tr>
-    <th class="title" colspan="2">
+    <th class="category" colspan="2">
       Personne à prévenir
     </th>
   </tr>
@@ -153,8 +153,8 @@
   </tr>
   
   <tr>
-    <th class="title" colspan="2">
-      Informations médicales
+    <th class="category" colspan="2">
+      Bénéficiaire de soins
     </th>
   </tr>
   <tr>

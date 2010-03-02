@@ -12,7 +12,7 @@
 
 <table class="main tbl">
 	<tr>
-		<th colspan="5">Réceptions <small>({{$receptions|@count}})</small></th>
+		<th class="title" colspan="5">Réceptions <small>({{$receptions|@count}})</small></th>
 	</tr>
 	<tr>
     <th style="width: 1%">{{mb_title class=CProductReception field="reference"}}</th>

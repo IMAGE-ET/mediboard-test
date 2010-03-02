@@ -55,7 +55,7 @@ Main.add(function () {
 	
         <table class="form">
         	<tr>
-        	  <th class="category" colspan="6">
+        	  <th class="title" colspan="6">
         	  	Filtres pour l'affichage des prescriptions de séjour
         	  </th>
 					</tr>

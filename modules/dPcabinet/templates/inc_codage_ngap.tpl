@@ -80,7 +80,7 @@ ActesNGAP = {
     {{/if}}
     
     <tr>
-      <th class="category" colspan="10">Codages des actes NGAP</th>
+      <th class="title" colspan="10">Codages des actes NGAP</th>
     </tr>
 
     <tr>

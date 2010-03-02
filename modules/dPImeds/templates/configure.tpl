@@ -6,7 +6,7 @@
 <table class="form">
 
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$m}}{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}{{$m}}{{/tr}}</th>
   </tr>
 
   {{assign var="var" value="url"}}
@@ -64,7 +64,7 @@
 
 <table class="form">  
   <tr>
-    <th colspan="2" class="category">Identifiants externes de {{$etab->_view}}</th>
+    <th colspan="2" class="title">Identifiants externes de {{$etab->_view}}</th>
   </tr>
   <tr>
     <th>CSDV</th>

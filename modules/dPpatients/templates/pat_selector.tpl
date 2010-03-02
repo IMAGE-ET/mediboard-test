@@ -178,7 +178,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <input type="hidden" name="useVitale" value="" />
   <table class="form">
     <tr>
-      <th class="category" colspan="6">Critères de sélection</th>
+      <th class="title" colspan="6">Critères de sélection</th>
     </tr>
     
     <tr>
@@ -246,7 +246,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 <!-- Liste de patients -->
 <table class="tbl">
   <tr>
-    <th class="category" colspan="5">Choisissez un patient dans la liste</th>
+    <th class="title" colspan="5">Choisissez un patient dans la liste</th>
   </tr>
   <tr>
     <th align="center">Patient</th>
