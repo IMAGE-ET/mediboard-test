@@ -70,7 +70,7 @@ function cancelAdministration(administration_id){
 
 function checkTransmission(quantite_prevue, quantite_saisie){
   var oFormTrans = document.editTrans;
-  if(quantite_prevue && quantite_prevue != quantite_saisie && oFormTrans.text.value == ""){
+  if(quantite_prevue && parseFloat(quantite_prevue) != parseFloat(quantite_saisie) && oFormTrans.text.value == ""){
     alert("Veuillez saisir une transmission");
     return false;
   }
