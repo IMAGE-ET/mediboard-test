@@ -35,6 +35,10 @@ $where["horaire_voulu"] = "IS NOT NULL";
 $order = "horaire_voulu";
 $listOp = $operation->loadList($where, $order);
 
+if(!count($listOp)) {
+  CAppUI::redirect("m=$m");
+}
+
 // Modification de la plage pour la première intervention
 $firstOp = reset($listOp);
 $plageop->debut = $firstOp->horaire_voulu;
