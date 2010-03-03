@@ -167,8 +167,10 @@ Main.add( function(){
 				{{/foreach}}
 			</table>
 		</td>
+		
     <td>
-    	<form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    	
+    	<form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="m" value="ssr" />
 			  <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
 			  <input type="hidden" name="del" value="0" />
@@ -176,8 +178,11 @@ Main.add( function(){
 				{{mb_key object=$bilan}}
         {{mb_field object=$bilan field=sejour_id hidden=1}}
 	    	<table class="form">
+          <tr>
+            <th class="title" style="width: 50%">{{tr}}CBilanSSR{{/tr}}</th>
+          </tr>
 	    	  <tr>
-				    <th class="category" style="width: 50%">{{mb_label object=$bilan field=entree}}</th>
+				    <th class="category">{{mb_label object=$bilan field=entree}}</th>
 				  </tr>
 				  <tr>
 				    <td colspan="2" style="text-align : right">
@@ -193,7 +198,7 @@ Main.add( function(){
 					</tr>
 					<tr>
 					<td colspan="2">
-	          {{mb_field object=$bilan field=entree onchange="return onSubmitFormAjax(this.form);"}}
+	          {{mb_field object=$bilan field=entree onchange="this.form.onsubmit()"}}
 	        </td>
 					</tr>
 	        <tr>
@@ -213,7 +218,7 @@ Main.add( function(){
 				  </tr>
 				  <tr>
 				    <td colspan="2">
-				      {{mb_field object=$bilan field=sortie onchange="return onSubmitFormAjax(this.form);"}}
+				      {{mb_field object=$bilan field=sortie onchange="this.form.onsubmit()"}}
 				    </td> 
 				  </tr>
 					<tr>
