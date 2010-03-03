@@ -198,12 +198,14 @@ table.chambrecollapse th.chambre {
   padding: 2px;
   padding-left: 10px;
   background: #aaa url(../../images/icons/collapse.gif) no-repeat center left;
+  color: #fff;
 }
 
 table.chambreexpand th.chambre {
   padding: 2px;
   padding-left: 10px;
   background: #aaa url(../../images/icons/expand.gif) no-repeat center left;
+  color: #400;
 }
 
 th.chambre img {
