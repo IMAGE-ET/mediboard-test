@@ -45,35 +45,42 @@
   </tr>
   <tr>
     <td id="user">
-      <table>
-        <tr>
-          <td id="userWelcome">
-            <form name="ChangeGroup" action="" method="get">
-              <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %Hh%M"}}">
-                {{$app->user_first_name}} {{$app->user_last_name}}
-              </span>
-              <input type="hidden" name="m" value="{{$m}}" />
-              <select name="g" onchange="this.form.submit();">
-                {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-                <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-                  {{$currEtablissement->_view}}
-                </option>
-                {{/foreach}}
-              </select>
-					    {{mb_include module=mediboard template=svnstatus}}    
-            </form>
-          </td>
-          <td id="userMenu">
-            <a href="{{$portal.help}}" target="_blank">{{tr}}portal-help{{/tr}}</a> |
-            <a href="{{$portal.tracker}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
-            <a href="#1" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> |
-            <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="#1" onclick="UserSwitch.popup()">{{tr}}menu-switchUser{{/tr}}</a> | 
-            <a href="#1" onclick="Session.lock()">{{tr}}menu-lockSession{{/tr}}</a> |
-            <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
-          </td>
-        </tr>
-      </table>
+      <script type="text/javascript">Menu.init();</script>
+      <form name="ChangeGroup" action="" method="get">
+        <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+          {{$app->user_first_name}} {{$app->user_last_name}}
+        </span>
+        <input type="hidden" name="m" value="{{$m}}" />
+        <select name="g" onchange="this.form.submit();">
+          {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
+          <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
+            {{$currEtablissement->_view}}
+          </option>
+          {{/foreach}}
+        </select>
+		    {{mb_include module=mediboard template=svnstatus}}    
+      </form>
+      <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
+        <img src="style/mediboard/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />
+      </a>
+      <a title="{{tr}}portal-tracker{{/tr}}" href="{{$portal.tracker}}" target="_blank">
+        <img src="style/mediboard/images/icons/modif.png" alt="{{tr}}portal-tracker{{/tr}}" />
+      </a>
+      <a title="{{tr}}menu-changePassword{{/tr}}" href="#1" onclick="popChgPwd()">
+        <img src="style/mediboard/images/icons/passwd.png" alt="{{tr}}menu-changePassword{{/tr}}" />
+      </a>
+      <a title="{{tr}}menu-myInfo{{/tr}}" href="?m=mediusers&amp;a=edit_infos">
+        <img src="style/mediboard/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
+      </a>
+      <a title="{{tr}}menu-switchUser{{/tr}}" href="#1" onclick="UserSwitch.popup()">
+        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
+      </a>
+      <a title="{{tr}}menu-lockSession{{/tr}}" href="#1" onclick="Session.lock()">
+        <img src="style/mediboard/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
+      </a>
+      <a title="{{tr}}menu-logout{{/tr}}" href="?logout=-1">
+        <img src="style/mediboard/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
+      </a>
     </td>
   </tr>
 </table>

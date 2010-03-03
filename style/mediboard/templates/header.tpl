@@ -33,7 +33,6 @@ var Menu = {
         <li class={{if $mod_name==$m}}selected{{else}}nonSelected{{/if}}>
         <a href="?m={{$mod_name}}">
           <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
-          <br />
          {{tr}}module-{{$mod_name}}-court{{/tr}}
         </a>
         </li>
@@ -63,7 +62,7 @@ var Menu = {
   <tr>
   {{/if}}
     <td id="user">
-      <button id="toggleIcons" class="change notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
+      <button id="toggleIcons" class="vslip notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
       <script type="text/javascript">Menu.init();</script>
       <form name="ChangeGroup" action="" method="get">
         <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
