@@ -13,10 +13,11 @@ $category_id = CValue::get("category_id");
 $full_line_id = CValue::get("full_line_id");
 
 $line = new CPrescriptionLineElement();
+$order = "debut ASC";
 $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
 $where["prescription_id"] = " = '$prescription_id'";
 $where["element_prescription.category_prescription_id"] = " = '$category_id'";
-$lines[$category_id] = $line->loadList($where, null, null, null, $ljoin);
+$lines[$category_id] = $line->loadList($where, $order, null, null, $ljoin);
 
 // Création du template
 $smarty = new CSmartyDP();
