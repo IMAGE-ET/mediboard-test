@@ -27,9 +27,15 @@
 																											});
 		}
 	</script>
-	
+	{{if $warning}}
+	Il est impossible de rajouter cette ligne, celle-ci est déjà présente dans la prescription
+	<div class="button">
+	<button onclick="modalWindow.close();" class="cancel">{{tr}}Close{{/tr}}</button>
+	</div>
+	{{else}}
 	Vous etes sur le point d'ajouter la ligne de prescription <strong>{{$element->_view}}</strong><br /><br />
 	<button onclick="removeLineSSR('{{$last_line->_id}}'); submitAndClose();" class="tick">Remplacer la ligne existante</button>
 	<button onclick="stopLineSSR('{{$last_line->_id}}'); $V(addForm.debut, '{{$current_date}}'); submitAndClose();" class="tick">Ajouter à la suite</button>
 	<button onclick="modalWindow.close();" class="cancel">{{tr}}Cancel{{/tr}}</button>
+  {{/if}}
 {{/if}}

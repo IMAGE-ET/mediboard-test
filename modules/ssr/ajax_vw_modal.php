@@ -23,10 +23,18 @@ $where["prescription_id"] = " = '$prescription_id'";
 $where["element_prescription.category_prescription_id"] = " = '$category_id'";
 $lines = $line->loadList($where, null, null, null, $ljoin);
 
+$warning = false;
+foreach($lines as $_line){
+  if($element_prescription_id == $_line->element_prescription_id){
+  	$warning = true;
+  }	
+}
+
 $last_line = end($lines);
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("warning", $warning);
 $smarty->assign("element", $element);
 $smarty->assign("lines", $lines);
 $smarty->assign("last_line", $last_line);
