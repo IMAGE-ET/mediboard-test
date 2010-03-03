@@ -83,6 +83,9 @@ $antecedent->loadAides($AppUI->user_id);
 $categories = array();
 $category = new CCategoryPrescription();
 $where[] = "chapitre = 'kine' OR chapitre = 'soin' OR chapitre = 'consult'";
+$group_id = CGroups::loadCurrent()->_id;
+$where[] = "group_id = '$group_id' OR group_id IS NULL";
+
 $order = "nom";
 $_categories = $category->loadList($where, $order);
 foreach($_categories as $_cat){
