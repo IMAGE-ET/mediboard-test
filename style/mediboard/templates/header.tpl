@@ -4,6 +4,21 @@
 
 {{include file="message.tpl" nodebug=true}}
 
+<script type="text/javascript">
+var Menu = {
+  toggle: function () {
+    var oCNs = Element.classNames("menubar");
+    oCNs.flip("iconed", "uniconed");
+    oCNs.save("menubar", Date.year);
+  },
+  
+  init: function() {
+    var oCNs = Element.classNames("menubar");
+    oCNs.load("menubar");
+  }
+}
+</script>
+
 <table id="header" cellspacing="0"><!-- IE Hack: cellspacing should be useless -->
 </table>
 {{/if}}
@@ -11,11 +26,11 @@
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
   {{if @$app->user_prefs.MenuPosition == "left"}}
   <tr>
-    <td id="menubar" rowspan="10" style="width: 1px; text-align: center;">
+    <td id="menubar" class="iconed" rowspan="10" style="width: 1px; text-align: center; vertical-align: top;">
       <ul id="nav-vert">  
         {{foreach from=$modules key=mod_name item=currModule}} 
         {{if $currModule->_can->view && $currModule->mod_ui_active}}
-        <li {{if $mod_name==$m}}class="selected"{{/if}}>
+        <li class={{if $mod_name==$m}}selected{{else}}nonSelected{{/if}}>
         <a href="?m={{$mod_name}}">
           <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
           <br />
@@ -30,11 +45,11 @@
   <tr>
   {{else}}
   <tr>
-    <td id="menubar">
+    <td id="menubar" class="iconed">
       <ul id="nav">
         {{foreach from=$modules key=mod_name item=currModule}} 
         {{if $currModule->_can->view && $currModule->mod_ui_active}}
-        <li {{if $mod_name==$m}}class="selected"{{/if}}>
+        <li class={{if $mod_name==$m}}selected{{else}}nonSelected{{/if}}>
         <a href="?m={{$mod_name}}">
           <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
          {{tr}}module-{{$mod_name}}-court{{/tr}}
@@ -48,6 +63,8 @@
   <tr>
   {{/if}}
     <td id="user">
+      <button id="toggleIcons" class="change notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
+      <script type="text/javascript">Menu.init();</script>
       <form name="ChangeGroup" action="" method="get">
         <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
           {{$app->user_first_name}} {{$app->user_last_name}}
@@ -62,7 +79,6 @@
         </select>
 		    {{mb_include module=mediboard template=svnstatus}}    
       </form>
-      
       <div class="menu">
         <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
           <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />

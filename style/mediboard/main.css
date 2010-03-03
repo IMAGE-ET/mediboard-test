@@ -1612,22 +1612,28 @@ ul#nav-vert {
 #nav-vert a:hover {
   text-decoration: none;
   background: #eee;
-  padding: 1px 1px;
+  padding: 1px 1px 1px 2px;
   border: 1px outset #ddd;
 }
 
 #nav a:active,
 #nav-vert a:active {
   background: #eee;
-  padding: 1px 1px;
+  padding:  1px 1px 1px 2px;
   border: 1px inset #ddd;
+}
+
+#nav li.nonSelected a,
+#nav-vert li.nonSelected a {
+  text-decoration: none;
+  border-left: 1px dotted #aaa;
 }
 
 #nav li.selected a,
 #nav-vert li.selected a {
   text-decoration: none;
   background: #aaa;
-  padding: 1px 1px;
+  padding:  1px 1px 1px 2px;
   border: 1px inset #888;
 }
 
@@ -1636,6 +1642,14 @@ ul#nav-vert {
   display: block;
   margin: auto;
   width: 48px;
+}
+
+#menubar.uniconed #nav img {
+  display: none;
+}
+
+#menubar.uniconed #nav-vert li.nonSelected img {
+  display: none;
 }
 
 /* User */
