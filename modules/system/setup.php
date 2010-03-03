@@ -181,8 +181,18 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`tag`);";
     $this->addQuery($sql);
     
+    $this->makeRevision("1.0.21");
+    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pre_value = 'tonkin';";
+    $this->addQuery($sql);
+    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pre_value = 'K-Open';";
+    $this->addQuery($sql);
+    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pre_value = 'mediboard_lite';";
+    $this->addQuery($sql);
+    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pre_value = 'mediboard_super_lite';";
+    $this->addQuery($sql);
     
-    $this->mod_version = "1.0.21";
+    
+    $this->mod_version = "1.0.22";
   }
 }
 ?>
