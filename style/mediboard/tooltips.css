@@ -1,0 +1,155 @@
+/* $Id: $ */
+
+/** Tooltips */
+.tooltip-trigger {
+  cursor: pointer;
+}
+
+div.tooltip, 
+div.postit {
+  padding: 0px;
+  margin-left: 20px;
+  position: absolute;
+  z-index: 30;
+}
+
+div.tooltip table.decoration,
+div.postit table.decoration {
+  border-spacing: 0px;
+  border: none;
+}
+
+div.tooltip table.decoration td.deco {
+	border: 0px;
+	opacity: .7;
+}
+
+div.tooltip table.decoration td.top-right,
+div.tooltip table.decoration td.top,
+div.tooltip table.decoration td.top-left,
+div.tooltip table.decoration td.left,
+div.tooltip table.decoration td.bottom-left {
+  background-color: transparent;
+	opacity: 1;
+}
+
+div.tooltip table.decoration td.bottom {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom.png) top left no-repeat;
+}
+
+div.tooltip table.decoration td.bottom-right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom-right.png) top left no-repeat;
+}
+
+div.tooltip table.decoration td.right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/right.png) top left no-repeat;
+}
+
+div.tooltip table.tbl td{
+  vertical-align: top;
+}
+
+div.tooltip table.decoration td.content {
+  white-space: nowrap;
+  background: #fff;
+  border: 2px solid #777;
+	padding: 5px;
+}
+
+div.postit table.decoration td {
+  border: 0px solid #883;
+}
+
+div.postit table.decoration td.deco {
+	opacity: .7;
+}
+
+div.postit table.decoration td.top-right,
+div.postit table.decoration td.top-left,
+div.postit table.decoration td.bottom-left {
+  background-color: transparent;
+	opacity: 1;
+}
+
+div.postit table.decoration td.left {
+  background-color: #ff6;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+	opacity: 1;
+}
+
+div.postit table.decoration td.top {
+  background: #ff6;
+	opacity: 1;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+div.postit table.decoration td.top-left {
+	width: 17px;
+	height: 15px;
+	background: url(images/pictures/note-top-left.png) top left no-repeat;
+	opacity: 1;
+}
+
+div.postit table.decoration td.bottom {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom.png) top left no-repeat;
+}
+
+div.postit table.decoration td.bottom-right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom-right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.content {
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  background-color: #ff6;
+  max-height: 40px;
+  overflow: auto;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+table.note {
+  background: transparent;
+  border-spacing: 0px;
+  padding: 0px;
+  font-size: 0.9em;
+  color: #000;
+  font-weight: normal;
+}
+
+table.note th,
+table.note td {
+  background: transparent;
+  text-align: left;
+}
+
+table.note th {
+  font-weight: bold;
+}
+
+table.note th.high {
+  background-color: #faa;
+}
+
+table.note th.low {
+  background-color: #afa;
+}

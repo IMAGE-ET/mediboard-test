@@ -322,12 +322,12 @@ Main.add(function () {
       {{/if}}
       <table class="tbl">
         <tr>
-          <th colspan="10">
+          <th class="title" colspan="10">
             <strong>
             {{if $plageSel->plageconsult_id}}
             Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
-            Pas de plage selectionnée
+            {{tr}}CPlageConsult.none{{/tr}}
             {{/if}}
             </strong>
           </th>

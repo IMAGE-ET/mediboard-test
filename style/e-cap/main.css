@@ -384,12 +384,6 @@ table.main th.urgence {
   background-color: #08F;
 }
 
-table.form th.modify,
-table.main th.modify,
-table.main th.urgence.modify {
-  color: #fd4;
-}
-
 /* System message */
 #systemMsg {
   font-size: 80%;

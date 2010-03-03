@@ -1,0 +1,925 @@
+/* $Id: $ */
+
+/** Login page */
+#login {
+  padding-top: 40px; 
+}
+
+#login table {
+  border: solid #8c8 3px;
+  width: 600px;
+  background: #eef;
+  margin: auto;
+  padding: 5px;
+  border-collapse: separate;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 0.9em;
+  white-space: normal;
+}
+
+#login input, #login label{
+	font-size: 1.4em;
+}
+
+#login button {
+  font-size: 1.3em;
+	padding: 4px;
+	height: 26px;
+}
+
+
+/* Global header */
+#header {
+  width: 100%;
+  border-spacing: 0px;
+  border: none;
+}
+
+#header td {
+  padding: 0px;
+}
+
+table.Offline td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.Offline select,
+table.Offline option,
+table.Offline input,
+table.Offline button  {
+  height: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin : 2px 2px;
+}
+
+
+/* Navigation */
+#menubar {
+  border-bottom: 1px solid #999;
+  background-color: #ddd;
+  color: #fff;
+  text-align: left;
+  width: 100%;
+}
+
+ul#nav,
+ul#nav-vert {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#nav li {
+  display: inline;
+  float: left;
+}
+
+#nav a,
+#nav-vert a {
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-variant: small-caps;
+  font-size: 1em;
+  padding: 2px 2px;
+}
+
+#nav a:hover,
+#nav-vert a:hover {
+  text-decoration: none;
+  background: #eee;
+  padding: 1px 2px 1px 1px;
+  border: 1px outset #ddd;
+}
+
+#nav a:active,
+#nav-vert a:active {
+  background: #eee;
+  padding:  1px 2px 1px 1px;
+  border: 1px inset #ddd;
+}
+
+#nav li.nonSelected a,
+#nav-vert li.nonSelected a {
+  text-decoration: none;
+  border-right: 1px dotted #aaa;
+}
+
+#nav li.selected a,
+#nav-vert li.selected a {
+  text-decoration: none;
+  background: #aaa;
+  padding:  1px 2px 1px 1px;
+  border: 1px inset #888;
+}
+
+#nav img,
+#nav-vert img {
+  display: block;
+  margin: auto;
+  width: 48px;
+}
+
+#menubar.uniconed #nav img {
+  display: none;
+}
+
+#menubar.uniconed #nav-vert li.nonSelected img {
+  display: none;
+}
+
+/* User */
+
+#user {
+	vertical-align: top;
+	height: 1%;
+  border-bottom: 1px dashed black;
+  padding: 2px;
+}
+
+#user .menu {
+  float: right;
+}
+
+#user .menu img {
+  padding: 2px;
+}
+
+#user .menu img:hover {
+  background-color: #ccc;
+}
+
+/* Main -- table -- pane */
+#main {
+  clear: both;
+  width: 100%;
+  border-spacing: 0px
+}
+
+#mainPane {
+  vertical-align: top;
+}
+
+
+
+/* Touchscreen mode */
+.touchscreen input,
+.touchscreen select,
+.touchscreen option,
+.touchscreen button,
+.touchscreen a.button,
+.touchscreen label {
+  height: 26px;
+  vertical-align: middle;
+}
+
+.touchscreen input {
+	height: 18px;
+}
+
+.touchscreen input,
+.touchscreen option,
+.touchscreen label {
+  padding-top: 5px;
+}
+
+.touchscreen optgroup option {
+  padding-left: 16px;
+}
+
+.touchscreen button {
+  padding-top: 3px;
+}
+
+.touchscreen a.button {
+  height: 19px;
+	padding-top: 4px;
+}
+
+.touchscreen a.button:before {
+  margin: 6px 4px;
+}
+
+.touchscreen button:before {
+  margin: 6px;
+	margin-left: 3px;
+}
+
+.touchscreen .notext {
+  font-size: 0;
+}
+
+.touchscreen button.notext {
+  width: 26px;
+}
+
+.touchscreen a.button.notext {
+  width: 24px;
+}
+
+.touchscreen input.autocomplete {
+  background-position: 100% 5px;
+}
+
+.touchscreen input.autocomplete.throbbing {
+  background-position: 100% -15px;
+}
+
+.touchscreen div.autocomplete ul li {
+  padding: 6px;
+}
+
+.touchscreen .control .trigger {
+  width: 22px;
+  height: 22px;
+}
+
+.touchscreen .control .trigger,
+.touchscreen .inputExtension  {
+  margin: 1px;
+  top: 3px;
+}
+
+.touchscreen .inputExtension  {
+  margin: 2px;
+}
+
+.touchscreen .control button,
+.touchscreen .control input {
+  top: -4px;
+}
+
+.touchscreen ul.control_tabs li a, 
+.touchscreen ul.control_tabs_vertical li a {
+  font-size: 15px;
+}
+
+.touchscreen .numericField .arrows div {
+  width: 2.2em;
+  height: 13px;
+  right: -3px;
+}
+
+.touchscreen .numericField .arrows div.up {
+  top: -3px;
+  height: 14px;
+}
+
+.touchscreen .numericField .arrows div.down {
+  bottom: -3px;
+}
+
+.touchscreen .numericField input {
+  padding-right: 2.2em;
+}
+
+.touchscreen .datepickerControl {
+  font-size: 14px;
+}
+
+.touchscreen .datepickerControl td {
+  padding: 3px;
+}
+
+
+
+/* control tabs */
+hr.control_tabs {
+  clear: both;
+  border: none;
+  border-top: 1px solid #458;
+}
+  
+ul.control_tabs,
+ul.control_tabs_vertical {
+  list-style: none;
+  clear: both;
+  padding: 3px 6px;
+}
+  
+ul.full_width li {
+	width: 100%;
+}
+
+ul.control_tabs li, 
+ul.control_tabs_vertical li {
+  float: left;
+  margin: 0px 2px;
+  text-align: center;
+}
+
+ul.control_tabs li.linebreak, 
+ul.control_tabs_vertical li.linebreak {
+	clear: both;
+}
+
+ul.control_tabs li a, 
+ul.control_tabs_vertical li a {
+  display: block;
+  border: 1px solid #458;
+  -moz-border-radius: 3px 3px 0 0;
+  -webkit-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+  background-color: #6688CC;
+  font-size: 1.1em;
+  padding: 3px 8px;
+  color: #FFF;
+  font-weight: bold;
+  margin-bottom: -1px;
+}
+
+ul.control_tabs li a:focus, 
+ul.control_tabs_vertical li a:focus {
+  outline: 0;
+}
+
+ul.control_tabs li a:hover, 
+ul.control_tabs_vertical li a:hover {
+  background-color: #98B5DF;
+  text-decoration: none;
+}
+
+ul.control_tabs li a.active, 
+ul.control_tabs_vertical li a.active {
+  background-color: #FFF;
+  color: #000;
+  border-bottom: 1px solid #fff;
+}
+
+ul.control_tabs li a.empty, 
+ul.control_tabs_vertical li a.empty,
+span.empty {
+  background-color: #bbb;
+}
+
+ul.control_tabs li a.empty:hover, 
+ul.control_tabs_vertical li a.empty:hover {
+  background-color: #ccc;
+}
+
+ul.control_tabs li a.empty.active, 
+ul.control_tabs_vertical li a.empty.active {
+  background-color: #eee;
+}
+
+ul.control_tabs li a.wrong, 
+ul.control_tabs_vertical li a.wrong,
+span.wrong {
+  background-color: #fb0;
+}
+
+ul.control_tabs li a.wrong:hover, 
+ul.control_tabs_vertical li a.wrong:hover {
+  background-color: #fd4;
+}
+
+ul.control_tabs li a.wrong.active, 
+ul.control_tabs_vertical li a.wrong.active {
+  background-color: #ffa;
+  color: #000000;
+}
+
+ul.control_tabs .separator, 
+ul.control_tabs_vertical .separator {
+  padding: 0 10px; 
+  display: block;
+  visibility: hidden;
+}
+
+ul.control_tabs_vertical {
+  float: left;
+  border-right: 1px solid #458;
+  padding: 0;
+}
+
+ul.control_tabs_vertical li {
+  float: none;
+  text-align: right;
+  margin-right: -1px;
+}
+
+ul.control_tabs_vertical li a {
+  -moz-border-radius: 3px 0 0 3px;
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+  padding: 3px 8px;
+  margin-bottom: 2px;
+}
+
+ul.control_tabs_vertical li a.active {
+  background-color: #FFF;
+  color: #000;
+  border-bottom: 1px solid #458;
+}
+
+ul.control_tabs.small li a {
+	font-size: 1em; 
+	padding: 2px 8px;
+	font-weight: normal;
+}
+
+
+
+div.progressBar {
+  font-size: 0.9em;
+  background: #fff;
+  margin: 0 auto;
+  height: 11px;
+  width: 90%;
+  text-align: left;
+  border: 1px solid #ccc;
+  position: relative;
+  color: #000;
+  min-width: 4em;
+}
+
+div.progressBar div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+div.progressBar div.bar {
+  height: 100%;
+  background-repeat: repeat;
+}
+
+div.progressBar div.text {
+  text-align: center;
+  white-space: nowrap;
+}
+
+div.progressBar div.empty {
+  background-image: url(./images/icons/pempty.png);
+}
+
+div.progressBar div.normal {
+  background-image: url(./images/icons/pnormal.png);
+}
+
+div.progressBar div.booked {
+  background-image: url(./images/icons/pbooked.png);
+}
+
+div.progressBar div.full {
+  background-image: url(./images/icons/pfull.png);
+}
+
+tr.groupexpand td,
+tr.groupcollapse td {
+  background-color: #ddf;
+}
+
+tr.groupexpand td,
+tr.groupcollapse td,
+tr.groupexpand th,
+tr.groupcollapse th {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.groupcollapse td,
+tr.groupcollapse th {
+  background-image: url(../../images/icons/collapse.gif);
+}
+
+tr.groupexpand td,
+tr.groupexpand th {
+  background-image: url(../../images/icons/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerHide td {
+  background-color: #ddf;
+}
+
+tr.triggerShow td,
+td.triggerShow,
+tr.triggerHide td,
+td.triggerHide,
+tr.triggerShow th,
+tr.triggerHide th,
+div.triggerShow,
+div.triggerHide {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.triggerHide td,
+tr.triggerHide th,
+td.triggerHide,
+div.triggerHide {
+  background-image: url(../../images/icons/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerShow th,
+td.triggerShow,
+div.triggerShow {
+  background-image: url(../../images/icons/collapse.gif);
+}
+
+tr.show {
+  display: table-row;
+}
+
+td.show {
+  display: table-cell;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+.datepickerControl {
+	border:				1px solid #999999;
+	border-radius: 6px;
+	border-radius-topleft: 0;
+	-moz-border-radius: 6px;
+	-moz-border-radius-topleft: 0;
+	-webkit-border-radius: 6px;
+	-webkit-border-top-left-radius: 0;
+	background-color:	#EEEEEE;
+	padding:			5px;
+  margin-top: -1px;
+	cursor: default;
+}
+
+.datepickerControl.inline {
+	border:				none;
+  padding: 0;
+	background-color:	transparent;
+  width: auto;
+}
+
+.datepickerControl td {
+	text-align:			center;
+	padding:			1px;
+}
+
+.datepickerControl tr.monthLabel td {
+	background-color:	#FFFFFF;
+	border:				1px solid #999999;
+	font-weight:		bold;
+}
+
+.datepickerControl tr.navigation td {
+	cursor:				pointer;
+}
+
+.datepickerControl tr.navigation td:hover {
+	text-decoration:	underline;
+}
+
+.datepickerControl tr.dayLabel td,
+.datepickerControl td.weeknumber {
+	border:				1px solid #003366;
+	background-color:	#003366;
+	color:				white;
+	font-weight:		bold;
+}
+
+.datepickerControl td.day, 
+.datepickerControl td.dayothermonth {
+	cursor:				pointer;
+	background-color:	#FFFFFF;
+	border:				1px solid #EEEEEE;
+	width:				2em;
+}
+
+/* We should use a class "othermonth" in addition to "day" instead of "dayothermonth" */
+.datepickerControl td.dayothermonth { 
+	color:				#999999;
+	font-style:			italic;
+}
+
+.datepickerControl td.day:hover,
+.datepickerControl td.hour:hover,
+.datepickerControl td.minute:hover {
+	background-color:	#EBE4C0;
+	border:					outset 1px #666666;
+}
+
+.datepickerControl td.weekend {
+	background-color:	#CCCCCC;
+	font-style:			italic;
+}
+
+.datepickerControl td.today {
+	outline:	2px solid #EBC2C0;
+}
+
+/* Spotted days */
+.datepickerControl td.day.spot,
+.datepickerControl td.dayothermonth.spot {
+	color:		red;
+	font-weight: bold;
+}
+
+/* Active days */
+.datepickerControl td.day.active,
+.datepickerControl td.dayothermonth.active,
+.datepickerControl td.day.active:hover,
+.datepickerControl td.dayothermonth.active:hover {
+	border-bottom: green 1px solid;
+}
+
+/* Hours and minutes */
+.datepickerControl td.hour,
+.datepickerControl td.minute {
+	cursor:				pointer;
+	background-color:	#FFFFFF;
+	border:				1px solid #EEEEEE;
+	width:				2em;
+}
+
+/* Disabled days, minutes and hours */
+.datepickerControl td.disabled {
+  color: #999999;
+  background-color: #EEEEEE;
+  cursor: default;
+}
+
+.datepickerControl td.disabled:hover {
+  background-color: #EEEEEE;
+  border:       1px solid #EEEEEE;
+}
+
+.datepickerControl td input,
+.datepickerControl td button {
+	padding:			0;
+	border:				1px solid #999999;
+	text-align:			center;
+}
+
+.datepickerControl td.ampm {
+	cursor:				pointer;
+	background-color:	#CCCCCC;
+	border:				1px solid #EEEEEE;
+	width:				2em;
+}
+
+.datepickerControl input.current,
+.datepickerControl td.current,
+.datepickerControl td.current:hover {
+	background-color:	#EBC2C0;
+}
+
+.datepickerControl td.current {
+	font-weight:		bold;
+}
+
+.datepickerControl div.dropdown {
+	border:				1px solid #999999;
+	background-color:	#EEEEEE;
+  padding: 0;
+  margin: 0;
+  font-size: 0.8em;
+  text-align: left;
+  z-index: 999;
+}
+
+.datepickerControl div.dropdown a {
+  display: block;
+  margin: 0;
+  padding: 1px 2px;
+  text-decoration: none;
+}
+
+.datepickerControl div.dropdown a.current {
+	background-color:	#CCCCCC;
+}
+
+.datepickerControl div.dropdown a:hover {
+	outline: 2px solid #666666;
+}
+
+
+
+#waitingMsgMask {
+  width: 100%;
+  position: absolute;
+  background-color:#000;
+  z-index: 1000;
+}
+
+#waitingMsgText {
+  width: 20%;
+  min-width: 150px;
+  position: fixed;
+  z-index: 101;
+  font-size: 1.2em;
+  background-color:#fff;
+  color:#000;
+  border: 1px solid #666;
+  padding: 20px 5px;
+  text-align: center;
+}
+
+#waitingMsgText .loading{
+  display: inline;
+}
+
+/** Flotr */
+.flotr-datagrid-container {
+  border: 1px solid #999;
+  border-bottom: none;
+  background: #fff;
+}
+.flotr-datagrid-toolbar {
+  padding: 1px;
+  border-bottom: 1px solid #ccc;
+  background: #f9f9f9;
+}
+.flotr-datagrid {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+.flotr-datagrid td, .flotr-datagrid th {
+  border: 1px solid #ccc;
+  padding: 1px 3px;
+  min-width: 2em;
+}
+.flotr-datagrid tr:hover {
+  background: #f3f3f3;
+}
+.flotr-datagrid tr:hover th {
+  background: #999;
+  color: #fff;
+}
+.flotr-datagrid th {
+  text-align: left;
+  background: #e3e3e3;
+  border: 2px outset #fff;
+}
+.flotr-datagrid td:hover {
+  background: #ccc;
+}
+.flotr-datagrid .first-row th {
+  text-align: center;
+}
+.flotr-canvas {
+  margin-bottom: -3px;
+  padding-bottom: 1px;
+}
+.flotr-tabs-group {
+  border-top: 1px solid #999;
+}
+.flotr-tab {
+  border: 1px solid #666;
+  border-top: none;
+  margin: 0 3px;
+  padding: 1px 4px;
+  cursor: pointer;
+  -moz-border-radius: 0 0 4px 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  border-radius: 0 0 4px 4px;
+  opacity: 0.5;
+  -moz-opacity: 0.5;
+}
+.flotr-tab.selected {
+  background: #ddd;
+  opacity: 1;
+  -moz-opacity: 1;
+}
+.flotr-tab:hover {
+  background: #ccc;
+}
+.flotr-datagrid tr:hover, .flotr-datagrid col.hover {
+  border: none;
+  background: #f3f3f3;
+}
+.flotr-datagrid tr:hover th, .flotr-datagrid th.hover {
+  background: #999;
+  color: #fff;
+}
+
+
+
+ul li.user:before,
+ul li.function:before,
+ul li.group:before {
+  float:right;
+}
+
+ul li.user:before {
+  content: url(../../images/icons/user.png);
+}
+
+ul li.function:before {
+  content: url(../../images/icons/user-function.png);
+}
+
+ul li.group:before {
+  content: url(../../images/icons/group.png);
+}
+
+td.user,
+td.function,
+td.group {
+  background-position: top right;
+  background-repeat: no-repeat;
+  padding-right: 16px !important;
+}
+
+td.user {
+  background-image: url(../../images/icons/user.png);
+}
+
+td.function {
+  background-image: url(../../images/icons/user-function.png);
+}
+
+td.group {
+  background-image: url(../../images/icons/group.png);
+}
+
+table.active {
+  outline: 2px solid #6688CC;
+}
+
+#control_overlay {
+	background-color: #000;
+}
+
+.modal {
+	min-width: 200px;
+	padding: 0.3em;
+	border: 1px solid #999;
+  border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	background-color: #eee;
+}
+
+.modal h1 {
+  text-align: center;
+  font-size: inherit;
+  background: #ccc; 
+  border-radius: 5px; 
+  -moz-border-radius: 5px; 
+  -webkit-border-radius: 5px; 
+  font-weight: bold; 
+  margin: 0; 
+  padding: 5px 1em; 
+  white-space: nowrap;
+}
+
+.modal div {
+  padding: 0.5em;
+  text-align: center;
+}
+
+.pagination {
+  text-align: center; 
+  font-weight: bold; 
+  margin: 1px; 
+}
+
+.pagination .page {
+  display: inline-block; 
+  border: 1px solid #999; 
+  padding: 1px 4px;
+  margin: 1px 0;
+  color: #555;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background: url(images/buttons/button.png) center center repeat-x;
+}
+
+.pagination .page:hover {
+  text-decoration: none;
+  background-image: url(images/buttons/button-over.png);
+}
+
+.pagination .page.active,
+.pagination .page.disabled {
+  cursor: default;
+}
+
+.pagination .page.active {
+  border: 1px solid #000; 
+  color: #FF4200;
+}
+
+.pagination .page.disabled {
+  border: 1px solid #ccc; 
+  color: #ccc;
+}

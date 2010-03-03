@@ -1,0 +1,497 @@
+/* $Id: $ */
+
+th.title.modify {
+  color: #fd4;
+}
+th.title.urgence {
+  background-color: #00a;
+  color: #fff;
+}
+th.title.urgence.modify {
+  background-color: #00a;
+  color: #fd4;
+}
+th.category.modify {
+  color: #fd4;
+}
+
+table.form td.cancelled,
+table.form tr.selected td.cancelled,
+table.tbl td.cancelled,
+table.tbl tr:hover td.cancelled,
+table.tbl tr.selected td.cancelled,
+table.tbl tbody.hoverable td.cancelled,
+th.cancelled,
+th.category.cancelled,
+table.form th.category.cancelled {
+  color: #fff;
+  background-color: #f00;
+	text-transform: uppercase;
+	font-weight: bold;
+	text-align: center;
+}
+
+
+
+/* Title block */
+
+table.titleblock td {
+  white-space: nowrap;
+}
+
+table.titleblock td.titlecell {
+  font-family: Georgia, serif;
+  font-size: 1.8em; 
+  color: #620;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+/* Tab view table */
+
+table.tabview {
+  border-spacing: 0px;
+  border-collapse: collapse; /* Hack for IE */
+  empty-cells: show;
+  width: 100%;
+}
+
+table.tabview td {
+  padding: 0px;
+}
+
+table.tabmenu {
+  margin-left: 20px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 28px;	
+  line-height: 90%;
+  background: url(./images/icons/tabBg.png) repeat-x bottom;
+}
+
+table.tabmenu td.left,
+table.tabmenu td.right {
+  width: 17px;
+}
+
+table.tabmenu td.left {
+  background: url(./images/icons/tabLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.right {
+  background: url(./images/icons/tabRight.png) no-repeat bottom left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/icons/tabSelectedBg.png) repeat-x;
+}
+
+table.tabmenu td.selected.left {
+  background: url(./images/icons/tabSelectedLeft.png) no-repeat bottom right;
+}
+
+table.tabmenu td.selected.right {
+  background: url(./images/icons/tabSelectedRight.png) no-repeat bottom left;
+}
+
+/* Pane table */
+
+table.main {
+  width: 100%;
+  border-spacing: 4px;
+}
+
+table.main td {
+  vertical-align: top;
+}
+
+table.main td.button {
+  text-align: center;
+}
+
+table.main td.text {
+  white-space: normal;
+}
+
+table.main td.top {
+  vertical-align: top;
+}
+
+table.main tbody.viewported td.viewport {
+  border: 1px solid #000;
+}
+
+table.main td.halfPane,
+table.main th.halfPane {
+  width: 50%;
+}
+
+td.greedyPane,
+th.greedyPane {
+  width: 100%;
+}
+
+th.title {
+	color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;  
+  text-align: center;
+  background: #888;
+  border: #aaa 1px solid;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 1px solid #eee;
+  border-spacing: 0;
+  border-collapse: collapse;
+  background-color: #777;
+}
+
+table.tbl a {
+  display: block;
+  margin: 0 1px;
+}
+
+table.tbl a.button {
+  display: inline-block;
+}
+
+a.text {
+	white-space: normal;
+}
+
+a.actionPat {
+  display: inline;
+  float: right;
+  margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th {
+  background-color: #bbb;
+  padding: 2px;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+table.tbl th.title {
+  font-size: 1.2em;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #888;
+  border: #aaa 1px outset;
+}
+
+table.tbl td,
+div.tree-header {
+  background-color: #fff;
+  padding: 2px;
+  white-space: nowrap;
+  vertical-align: middle;
+  border: 1px solid #999;
+}
+
+/*table.tbl tr:nth-of-type(2n+1) td {
+  background-color: #eee;
+}*/
+
+/*table.tbl tr td {
+  background-image: url(images/pictures/bg-gradient.png);
+  background-position: center top;
+}*/
+
+table.tbl td.error,
+table.tbl tr:hover td.error,
+table.tbl tbody:hover td.error,
+span.error {
+  background-color: #f00;
+}
+
+table.tbl td.big-error,
+span.big-error {
+  background-image: url(images/icons/error.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #fee;
+  padding-left: 55px;
+}
+
+table.tbl td.warning,
+table.tbl tr:hover td.warning,
+table.tbl tbody:hover td.warning,
+span.warning {
+  background-color: #fc0;
+}
+
+table.tbl td.big-warning,
+span.big-warning {
+  background-image: url(images/icons/warning.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #ffd;
+  padding-left: 55px;
+}
+
+table.tbl td.ok,
+table.tbl tr:hover td.ok,
+table.tbl tbody:hover td.ok,
+span.ok {
+  background-color: #afa;
+}
+
+table.tbl td.checked {
+	background-image : url(images/buttons/tick.png);
+	background-repeat: no-repeat;
+	background-position: 4px;
+	padding-left: 20px;
+}
+
+table.tbl td.big-info,
+span.big-info {
+  background-image: url(images/icons/info.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #eef;
+  padding-left: 55px;
+}
+
+table.tbl tr.selected td,
+div.selected {
+  background-color: #ffc;
+}
+
+table.layout {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none !important;
+  margin: 0 !important;
+}
+
+table.layout td,
+table.layout th {
+  border: none !important;
+}
+
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
+  background-color: #f8f8f8;
+}
+
+table.tbl th.text,
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  line-height: 140%;
+}
+
+table.merger tr.none td, 
+table.merger tr.none th {
+  opacity: 0.5;
+}
+
+table.merger tr.unique td, 
+table.merger tr.unique th {
+  background-color: #aaf;
+}
+
+table.merger tr.multiple td, 
+table.merger tr.multiple th {
+  background-color: #faa;
+}
+
+table.merger tr.duplicate td, 
+table.merger tr.duplicate th {
+  background-color: #afa;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #ddf;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+/* Form tables */
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #eee;
+  vertical-align: middle;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border: none;
+}
+
+table.form th.title {
+  font-size: 1.2em;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #888;
+  border: #aaa 1px solid;
+}
+
+table.form th.category {
+  font-weight: bold;  
+  text-align: center;
+  background-color: #bbb;
+  border: #aaa 1px solid;
+  vertical-align: middle;
+}
+
+table.form th.category label {
+  font-weight: bold;  
+  text-align: center;
+  background-color: transparent;
+  vertical-align: middle;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background-color: #eee;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+table.form td.dark {
+  background-color: #ddd;
+}
+
+table.form td.light {
+  background-color: #fff;
+}
+
+table.form td.compte_rendu {
+  background-color: #ddd;
+}
+
+table.form td.text,
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* The admission table based on the form one */
+table.print {
+  width: 100%;
+  border-spacing: 3px;
+  font-family: georgia, serif;
+  color: #006;
+}
+
+table.print th {
+  white-space: nowrap;
+  background: transparent;
+  vertical-align: top;
+  text-align: right;
+  font-weight: bold;
+  border-right: #eee 1px solid;
+  padding-right : 0.5em;
+}
+
+table.print th.title {
+  font-weight: bold;  
+  text-align: center;
+  background: #68f;
+  border: #aaa 2px solid;
+  padding: 2px;
+  font-size: 1.4em;
+  color: #006;
+}
+
+table.print th.category {
+  font-weight: bold;  
+  text-align: center;
+  background: #abf;
+  padding: 2px;
+  border: #aaa 2px solid;
+  font-size: 12pt;
+}
+
+table.print td {
+  white-space: normal;
+  vertical-align: top;
+  background: transparent;
+  text-align: left;
+  font-size: 10pt;
+}
+
+table.print td.halfPane {
+  white-space: normal;
+  vertical-align: top;
+  width: 50%;
+  background: transparent;
+  text-align: left;
+}
+
+ table.print td.info {
+  white-space: normal;
+  font-style: italic;
+  padding: 10px;
+  margin: 5px;
+  border: #aaa 2px dotted;
+}
+
+table.tbl td.highlight,
+table.tbl:hover td.highlight,
+td.highlight {
+  background-color: #ff5;
+}
+
+
+
+table.main td.step {
+	background: url(images/pictures/background.png) left bottom;
+	width: 10%; 
+	font-size: 12px; 
+	font-weight: bold; 
+	text-align: center;
+	vertical-align: middle;
+	border: 1px dotted #55A;
+}
+
+table.main td.step.selected  {
+	border: 2px solid;
+}
+
+table.main td.step.selected a {
+  font-size: 1.5em;
+}
+

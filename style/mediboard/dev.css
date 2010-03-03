@@ -1,0 +1,80 @@
+/* $Id: $ */
+
+span.smarty-include {
+  background: #444;
+  position: absolute;
+  color: #fff;
+  opacity: 0.7;
+  text-indent: 0.9em;    
+  width: 5px;
+  height: 5px;
+  overflow: hidden;
+  font-family: "lucida console", "courier new", courier, monospace;
+  border: 1px solid #fff;
+}
+
+span.smarty-include.ajax {
+  background: #494;
+}
+
+span.smarty-include:hover {
+	opacity: 1;
+	width: auto;
+	height: auto;
+	padding: 5px 10px;
+}
+
+/**
+ * Debug console
+ */
+
+div#console {
+  font-family: "lucida console", "courier new", courier, monospace;
+  font-size: 10px;
+  margin: 5px;
+  max-height: 300px;
+  width: 50%;
+  overflow: auto;
+  background: #444;
+  color: #aaf;
+  opacity: 0.8;
+  position: fixed;
+  bottom: 0px;
+  border: none;
+  padding: 3px 20px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  z-index: 1000;
+}
+
+div#console div {
+  background: transparent;
+  padding: 0 2px;
+}
+
+div#console div#console-title {
+  font-weight: bold;
+  text-align: center;
+}
+
+div#console div#console-hide {
+  background: url(../../images/icons/cancel.png) no-repeat;
+  width: 20px;
+  height: 20px;
+  margin-left: -20px;
+  position: fixed;
+}
+
+div#console div.key {
+  color: #afa;
+  float: left;
+}
+
+div#console div.error {
+  color: #faa;
+}
+
+div#console div.value {
+  color: #fff;
+}

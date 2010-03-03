@@ -1,0 +1,31 @@
+/* $Id: $ */
+
+@media print {
+  body {
+    background: transparent;
+  }
+  
+  .not-printable {
+    display: none;
+  }
+  
+  h1.newpage {
+    page-break-before:always;
+    display:none;
+  }
+  
+  div.warning,
+  div.error,
+  div.message {
+    display: none;
+  }
+  
+  div#performance {
+  	display: none;
+  }
+  
+  table#weber table#allvalues,
+  table#weber td.radiointeractive {
+    display: none;
+  }
+}
