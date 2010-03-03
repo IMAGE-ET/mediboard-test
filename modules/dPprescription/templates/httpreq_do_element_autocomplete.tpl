@@ -24,5 +24,7 @@
 			  </span>
       {{/if}}
     </li>
+   {{foreachelse}}
+    <li style="text-align: left;"><span class="informal">Aucun résultat</span></li>
   {{/foreach}}
 </ul>
