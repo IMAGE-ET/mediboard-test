@@ -6,24 +6,26 @@ updateFieldsElementSSR = function(selected, oFormElement, category_id) {
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
   
-	// On vide l'autocomplete
-	$V(oFormElement.libelle, '');
-  
-	// On remplit la categorie et l'element_id dans le formulaire de creation de ligne
-	var oForm = getForm("addLineSSR");
-	$V(oForm._category_id, category_id);
-	
-	// Si la prescription existe, creation de la ligne
-	if($V(oForm.prescription_id)){
-	  $V(oForm.element_prescription_id, dn[0].firstChild.nodeValue);
-		updateModal();
+	if(dn[0].className != 'informal'){
+		// On vide l'autocomplete
+		$V(oFormElement.libelle, '');
+	  
+		// On remplit la categorie et l'element_id dans le formulaire de creation de ligne
+		var oForm = getForm("addLineSSR");
+		$V(oForm._category_id, category_id);
+		
+		// Si la prescription existe, creation de la ligne
+		if($V(oForm.prescription_id)){
+		  $V(oForm.element_prescription_id, dn[0].firstChild.nodeValue);
+			updateModal();
+		}
+	  // Sinon, creation de la prescription
+	  else {
+		  $V(oForm.element_prescription_id, dn[0].firstChild.nodeValue, false);
+	    var oFormPrescriptionSSR = getForm("addPrescriptionSSR");
+	    return onSubmitFormAjax(oFormPrescriptionSSR); 
+	  }
 	}
-  // Sinon, creation de la prescription
-  else {
-	  $V(oForm.element_prescription_id, dn[0].firstChild.nodeValue, false);
-    var oFormPrescriptionSSR = getForm("addPrescriptionSSR");
-    return onSubmitFormAjax(oFormPrescriptionSSR); 
-  }
 }
 
 updateFormLine = function(prescription_id){
@@ -136,6 +138,7 @@ Main.add( function(){
 				  <th class="title" colspan="2">Prescription</th>
 				</tr>
 				{{foreach from=$categories key=chap item=_categories}}
+				
 			    <tr>
 			      <th colspan="2" class="category">{{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}</th>
 			    </tr>
@@ -154,8 +157,14 @@ Main.add( function(){
 							{{assign var=full_line_id value=""}}
                 {{include file="inc_list_lines.tpl" nodebug=true}}
 						</tbody>
-			    {{/foreach}}
-			  {{/foreach}}
+				  {{foreachelse}}
+	        <tr>
+	          <td colspan="2">
+	          	<div class="small-info">Ce chapitre ne contient aucune catégorie</div>
+	          </td>
+	        </tr>
+					{{/foreach}}
+				{{/foreach}}
 			</table>
 		</td>
     <td>

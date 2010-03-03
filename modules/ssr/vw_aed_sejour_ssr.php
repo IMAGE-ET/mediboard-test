@@ -80,7 +80,7 @@ $antecedent = new CAntecedent();
 $antecedent->loadAides($AppUI->user_id);
 
 // Chargement des categories de prescription
-$categories = array();
+$categories = array("kine" => array(), "soin" => array(), "consult" => array());
 $category = new CCategoryPrescription();
 $where[] = "chapitre = 'kine' OR chapitre = 'soin' OR chapitre = 'consult'";
 $group_id = CGroups::loadCurrent()->_id;
@@ -91,6 +91,7 @@ $_categories = $category->loadList($where, $order);
 foreach($_categories as $_cat){
 	$categories[$_cat->chapitre][] = $_cat;
 }
+ksort($categories);
 
 // Dossier médical visibile ?
 $can_view_dossier_medical = 
