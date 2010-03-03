@@ -182,13 +182,13 @@ class CSetupsystem extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.21");
-    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pre_value = 'tonkin';";
+    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pref_value = 'tonkin';";
     $this->addQuery($sql);
-    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pre_value = 'K-Open';";
+    $sql = "UPDATE user_preferences SET pref_value = 'e-cap' WHERE pref_value = 'K-Open';";
     $this->addQuery($sql);
-    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pre_value = 'mediboard_lite';";
+    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pref_value = 'mediboard_lite';";
     $this->addQuery($sql);
-    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pre_value = 'mediboard_super_lite';";
+    $sql = "UPDATE user_preferences SET pref_value = 'mediboard' WHERE pref_value = 'mediboard_super_lite';";
     $this->addQuery($sql);
     
     
