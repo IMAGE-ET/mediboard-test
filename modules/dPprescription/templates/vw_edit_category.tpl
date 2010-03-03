@@ -71,12 +71,12 @@ Main.add( function(){
       <table class="form">
         <tr>
           {{if $category->_id}}
-          <th class="title modify" colspan="2">
+          <th class="title text modify" colspan="2">
             {{mb_include module=system template=inc_object_idsante400 object=$category}}
             {{mb_include module=system template=inc_object_history object=$category}}
             Modification de la catégorie &lsquo;{{$category}}&rsquo;
           {{else}}
-          <th class="title" colspan="2">
+          <th class="title text" colspan="2">
             Création d'une catégorie
           {{/if}}
           </th>
@@ -172,12 +172,12 @@ Main.add( function(){
          <table class="form">
            <tr>
              {{if $element_prescription->_id}}
-             <th class="category modify" colspan="2">
+             <th class="title text modify" colspan="2">
                {{mb_include module=system template=inc_object_idsante400 object=$element_prescription}}
                {{mb_include module=system template=inc_object_history object=$element_prescription}}
                Modification de l'element &lsquo;{{$element_prescription->libelle}}&rsquo;
              {{else}}
-             <th class="category" colspan="2">
+             <th class="title text" colspan="2">
                Création d'un élément
              {{/if}}
              </th>
@@ -220,11 +220,11 @@ Main.add( function(){
 			{{/if}} 
 				<table class="tbl">
 				<tr>	
-					<th colspan="2" class="category">
-	            <span style="float: right">
-	              Afficher les annulés <input type="checkbox" id="show_canceled" onclick="toggleCancelled();" />
-	            </span> 
-	            Elements de la catégorie {{$category->_view}}
+					<th colspan="2" class="title text">
+	            <button class="search" style="float: right" onclick="toggleCancelled();">
+	              Afficher les annulés
+	            </button> 
+	            Elements de la catégorie '{{$category}}'
 	          </th>
 	        </tr>
 	        <tr>
@@ -232,7 +232,8 @@ Main.add( function(){
 	          <th class="category">Description</th>
 	        </tr>
 	         {{foreach from=$category->_ref_elements_prescription item=_element}}
-	          <tr {{if $_element->cancelled}}class="cancelled" style="display: none; opacity: 0.5"{{/if}}>
+	          <tr {{if $_element->_id == $element_prescription->_id}}class="selected"{{/if}}
+						    {{if $_element->cancelled}}class="cancelled" style="display: none; opacity: 0.5"{{/if}}>
 	            <td class="text">
 	              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id={{$_element->_id}}">
 	                {{$_element->libelle}}
