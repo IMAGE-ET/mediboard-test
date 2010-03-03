@@ -83,14 +83,3 @@ table.tabmenu td.selected.right {
 table.tabview td.tabox {
   background: url(./images/pictures/acierOnglet.png) repeat;
 }
-
-/* Bouttons */
-button, 
-a.button {
-  background-image: url(../tonkin/images/buttons/button.png);
-}
-
-button:hover,
-a:hover.button {
-  background-image: url(../tonkin/images/buttons/button-over.png);
-}

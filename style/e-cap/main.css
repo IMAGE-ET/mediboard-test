@@ -288,12 +288,12 @@ select {
 
 button, 
 a.button {
-  background-image: url(../tonkin/images/buttons/button.png);
+  background-image: url(./images/buttons/button.png);
 }
 
 button:hover,
 a:hover.button {
-  background-image: url(../tonkin/images/buttons/button-over.png);
+  background-image: url(./images/buttons/button-over.png);
 }
 
 /* Standard table */
