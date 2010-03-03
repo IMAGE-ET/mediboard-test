@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage sip
+ * @subpackage system
  * @version $Revision: 6069 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -13,12 +13,12 @@ global $can;
 $can->needsAdmin();
 
 // Check params
-if (null == $ftpsn = CValue::get("ftpsn")) {
-  CAppUI::stepAjax("Aucun FTPSN spécifié", UI_MSG_ERROR);
+if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
+  CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
 }
 
 $ftp = new CFTP();
-$ftp->init($ftpsn);
+$ftp->init($exchange_source_name);
 
 if (!$ftp->testSocket()) {
   CAppUI::stepAjax("Connexion au serveur $ftp->hostname' échouée", UI_MSG_WARNING);
