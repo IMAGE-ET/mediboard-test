@@ -116,7 +116,8 @@ class CActeNGAP extends CActe {
     	$this->demi = $details[5];
     }
 
-     if (count($details) >= 7){
+
+    if (count($details) >= 7){
     	$this->complement = $details[6];
     }
     
