@@ -47,12 +47,12 @@
       <table class="form">
         <tr>
           {{if $etabExterne->_id}}
-          <th class="category modify" colspan="2">
+          <th class="title text modify" colspan="2">
 			      {{mb_include module=system template=inc_object_idsante400 object=$etabExterne}}
 			      {{mb_include module=system template=inc_object_history object=$etabExterne}}
-            Modification de l'établissement &lsquo;{{$etabExterne->nom}}&rsquo;
+            Modification de l'établissement '{{$etabExterne->nom}}'
           {{else}}
-          <th class="category" colspan="2">
+          <th class="title" colspan="2">
             Création d'un établissement externe
           {{/if}}
           </th>

@@ -51,12 +51,12 @@
       <table class="form">
         <tr>
           {{if $usergroup->group_id}}
-          <th class="category modify" colspan="2">
+          <th class="title text modify" colspan="2">
 		      {{mb_include module=system template=inc_object_idsante400 object=$usergroup}}
 		      {{mb_include module=system template=inc_object_history object=$usergroup}}
             Modification de l'établissement &lsquo;{{$usergroup->text}}&rsquo;
           {{else}}
-          <th class="category" colspan="2">
+          <th class="title text" colspan="2">
             Création d'un établissement
           {{/if}}
           </th>
