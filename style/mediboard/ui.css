@@ -890,6 +890,7 @@ table.active {
   text-align: center; 
   font-weight: bold; 
   margin: 1px; 
+  word-spacing: -2px;
 }
 
 .pagination .page {

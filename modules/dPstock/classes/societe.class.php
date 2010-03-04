@@ -43,6 +43,7 @@ class CSociete extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'societe';
     $spec->key   = 'societe_id';
+    $spec->uniques["name"] = array("name");
     return $spec;
   }
 
@@ -53,11 +54,12 @@ class CSociete extends CMbObject {
     $backProps["product_references"] = "CProductReference societe_id";
     $backProps["product_receptions"] = "CProductReception societe_id";
     $backProps["articles_cahpp"]     = "CCAHPPArticle fournisseur_id";
-		
+		$backProps["receptions_bills"]   = "CProductReceptionBill societe_id";
 	  return $backProps;
 	}
 
 	function getProps() {
+	  $phone_mask = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
     $specs['code']            = 'str maxLength|80 seekable protected';
@@ -66,8 +68,8 @@ class CSociete extends CMbObject {
     $specs['address']         = 'text seekable';
     $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';
-    $specs['phone']           = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
-    $specs['fax']             = 'numchar length|10 mask|'.str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+    $specs['phone']           = "numchar length|10 mask|$phone_mask";
+    $specs['fax']             = "numchar length|10 mask|$phone_mask";
     $specs['siret']           = 'code siret seekable';
     $specs['email']           = 'email';
     $specs['contact_name']    = 'str seekable';

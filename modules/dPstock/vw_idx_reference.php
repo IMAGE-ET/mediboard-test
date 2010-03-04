@@ -28,9 +28,7 @@ $reference = new CProductReference();
 
 // If a reference ID has been provided, 
 // we load it and its associated product
-if ($reference_id) {
-  $reference->reference_id = $reference_id;
-  $reference->loadMatchingObject();
+if ($reference->load($reference_id)) {
   $reference->loadRefsFwd();
   $reference->_ref_product->loadRefsFwd();
 

@@ -46,6 +46,7 @@ class CService extends CMbObject {
 	  $backProps["valid_repas"]            = "CValidationRepas service_id";
 	  $backProps["config_moment"]          = "CConfigMomentUnitaire service_id";
 	  $backProps["config_service"]         = "CConfigService service_id";
+    $backProps["endowments"]             = "CProductEndowment service_id";
 	  return $backProps;
 	}
 

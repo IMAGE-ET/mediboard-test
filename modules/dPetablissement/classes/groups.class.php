@@ -83,6 +83,8 @@ class CGroups extends CMbObject {
     $backProps["product_stock_locations"] = "CProductStockLocation group_id";
     $backProps["product_stocks"]          = "CProductStockGroup group_id";
     $backProps["protocoles_prescription"] = "CPrescription group_id";
+    $backProps["group_alerts"]            = "CAlert group_id"; // "alerts" backref already exists for CMbObject
+    $backProps["reception_bills"]         = "CProductReceptionBill group_id";
     return $backProps;
   }
   

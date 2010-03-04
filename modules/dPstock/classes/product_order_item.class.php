@@ -95,12 +95,11 @@ class CProductOrderItem extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->updateReceived();
-
     $this->loadReference();
+    
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
     
-    $this->loadReference();
     $this->_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
     $this->_cond_price = $this->_price / $this->_quantity;
   }

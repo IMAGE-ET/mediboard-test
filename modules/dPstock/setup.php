@@ -494,6 +494,51 @@ class CSetupdPstock extends CSetup {
               ADD `customer_code` VARCHAR (80);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.21";
+    $this->makeRevision("1.21");
+    $sql = "CREATE TABLE `product_equivalence` (
+              `equivalence_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product` 
+              ADD `equivalence_id` INT (11) UNSIGNED,
+              ADD INDEX (`equivalence_id`)";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_selection` (
+              `selection_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_selection_item` (
+              `selection_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `product_id` INT (11) UNSIGNED NOT NULL,
+              `selection_id` INT (11) UNSIGNED NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_selection_item` 
+              ADD INDEX (`product_id`),
+              ADD INDEX (`selection_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_endowment` (
+              `endowment_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL,
+              `service_id` INT (11) UNSIGNED NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_endowment` ADD INDEX (`service_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_endowment_item` (
+              `endowment_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `quantity` INT (11) UNSIGNED NOT NULL,
+              `endowment_id` INT (11) UNSIGNED NOT NULL,
+              `product_id` INT (11) UNSIGNED NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_endowment_item` 
+              ADD INDEX (`endowment_id`),
+              ADD INDEX (`product_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.22";
   }
 }

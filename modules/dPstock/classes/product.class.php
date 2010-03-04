@@ -26,6 +26,7 @@ class CProduct extends CMbObject {
   var $renewable         = null;
   var $cancelled         = null;
   var $classe_comptable  = null;
+  var $equivalence_id    = null;
 
   // Object References
   //    Single
@@ -61,6 +62,8 @@ class CProduct extends CMbObject {
     $backProps['stocks_group']   = 'CProductStockGroup product_id';
     $backProps['stocks_service'] = 'CProductStockService product_id';
     $backProps['lines_dmi']      = 'CPrescriptionLineDMI product_id';
+    $backProps['selections']     = 'CProductSelectionItem product_id';
+    $backProps['endowments']     = 'CProductEndowmentItem product_id';
     return $backProps;
   }
 
@@ -79,6 +82,7 @@ class CProduct extends CMbObject {
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0 show|0';
     $specs['classe_comptable'] = 'str maxLength|7 autocomplete';
+    $specs['equivalence_id'] = 'ref class|CProductEquivalence';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
@@ -121,6 +125,7 @@ class CProduct extends CMbObject {
   	$this->_ref_references     = $this->loadBackRefs('references');
     $this->_ref_stocks_group   = $this->loadBackRefs('stocks_group');
     $this->_ref_stocks_service = $this->loadBackRefs('stocks_service');
+    $this->_ref_selections     = $this->loadBackRefs('selections');
   }
 
   function loadRefsFwd() {
