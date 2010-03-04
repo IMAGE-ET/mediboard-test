@@ -16,13 +16,11 @@ class CDestinataireHprim extends CMbObject {
   var $nom      = null;
   var $group_id = null;
   var $type     = null;
-  var $url      = null;
-  var $username = null;
-  var $password = null;
   var $actif    = null;
   
   // Forward references
   var $_ref_group = null;
+  var $_ref_exchange_source = null;
   
   // Form fields
   var $_tag_patient = null;
@@ -40,9 +38,6 @@ class CDestinataireHprim extends CMbObject {
     $specs["nom"]      = "str notNull";
     $specs["group_id"] = "ref notNull class|CGroups";
     $specs["type"]     = "enum notNull list|cip|sip default|cip";
-    $specs["url"]      = "text notNull";
-    $specs["username"] = "str";
-    $specs["password"] = "password";
     $specs["actif"]    = "bool notNull";
     
     $specs["_tag_patient"] = "str";
@@ -53,6 +48,8 @@ class CDestinataireHprim extends CMbObject {
   function loadRefsFwd() {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
+    
+    $this->_ref_exchange_source = CExchangeSource::get($this->_guid);
   }
   
   function updateFormFields() {

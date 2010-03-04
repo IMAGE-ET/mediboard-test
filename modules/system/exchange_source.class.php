@@ -31,7 +31,7 @@ class CExchangeSource extends CMbObject {
    
   static function getExchangeClasses() {
     CAppUI::getAllClasses();
-    
+      
     return getChildClasses("CExchangeSource");
   }
   
@@ -44,13 +44,21 @@ class CExchangeSource extends CMbObject {
     return $exchange_objects;
   } 
   
-  static function get($name) {
+  static function get($name, $type = null) {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_source = new $_class;
       $exchange_source->name = $name;
       $exchange_source->loadMatchingObject();
       if ($exchange_source->_id) {
         return $exchange_source;
+      }
+    }
+    if ($type) {
+      if ($type == "soap") {
+        return new CSourceSOAP();
+      }
+      if ($type == "ftp") {
+        return new CSourceFTP();
       }
     }
   }
@@ -66,7 +74,7 @@ class CExchangeSource extends CMbObject {
   function setData($data) {
     $this->_data = $data;
   }
-  
+    
   function send($evenement_name = null) {}
   
   function receive() {}

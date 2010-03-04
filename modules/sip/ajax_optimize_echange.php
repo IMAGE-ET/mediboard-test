@@ -19,7 +19,7 @@ $itemEchangeHprim = new CEchangeHprim;
 
 // Requêtes
 $where = array();
-$where["compressed"] = "= '1'";
+$where["compressed"] = "= '0'";
 
 if (!$do_optimize) {
   $count = $itemEchangeHprim->countList($where);
@@ -30,14 +30,14 @@ if (!$do_optimize) {
 $order = "date_production DESC";
 
 // Récupération de la liste des echanges HPRIM
-$echangesHprim = $itemEchangeHprim->loadList($where, $order, "0, 1000");
+$echangesHprim = $itemEchangeHprim->loadList($where, $order, "0, 20");
 $count  = 0;
 foreach($echangesHprim as $_echange_hprim) {  
   // Affectation de l'object_id et object_class
   $_echange_hprim->getObjectIdClass();
   if (!$_echange_hprim->object_class || !$_echange_hprim->object_id || $_echange_hprim->store()) {
-    $_echange_hprim->delete();
     CAppUI::stepAjax("#$_echange_hprim->_id : Suppression de l'échange HPRIM", UI_MSG_WARNING);
+    $_echange_hprim->delete();
     continue;
   }
   

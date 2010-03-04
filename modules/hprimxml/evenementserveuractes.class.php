@@ -91,7 +91,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     );
     
     $debut = $this->addElement($intervention, "debut");
-    $this->addElement($debut, "date", $mbOp->_ref_plageop->date);
+    $this->addElement($debut, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
     $this->addElement($debut, "heure", $mbOpDebut);
     
     $mbOpFin   = CValue::first(
@@ -101,7 +101,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     );
     
     $fin = $this->addElement($intervention, "fin");
-    $this->addElement($fin, "date", $mbOp->_ref_plageop->date);
+    $this->addElement($fin, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
     $this->addElement($fin, "heure", $mbOpFin);
     
     $this->addUniteFonctionnelle($intervention, $mbOp);

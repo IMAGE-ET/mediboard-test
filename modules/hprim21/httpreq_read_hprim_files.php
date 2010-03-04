@@ -1,26 +1,19 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage hprim21
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-global $AppUI, $can, $m;
+// Envoi à la source créée 'HPRIM21' (FTP)
+$exchange_source = CExchangeSource::get("hprim21");
+$extension = $exchange_source->fileextension;
 
-$hprim_config = CAppUI::conf("hprim21 CHprim21Reader");
-
-$extension = CValue::get("fileextension", $hprim_config["fileextension"]);
-
-$list = array();
 $ftp = new CFTP();
-$ftp->hostname = $hprim_config["hostname"];
-$ftp->username = $hprim_config["username"];
-$ftp->userpass = $hprim_config["userpass"];
-$ftp->mode     = "FTP_ASCII";
-$ftp->passif_mode = "0";
-$ftp->timeout  = "90";
+$ftp->init($exchange_source);
 $ftp->connect();
 $list = $ftp->getListFiles("./");
 

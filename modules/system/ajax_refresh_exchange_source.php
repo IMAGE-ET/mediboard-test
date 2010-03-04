@@ -12,15 +12,17 @@ global $can;
 
 $can->needsRead();
 
-$exchange_source_name = CValue::get('exchange_source_name');
+$type                 = CValue::get('type');
+$exchange_source_name = CValue::get('exchange_source_name', $type);
 
-$exchange_source = CExchangeSource::get($exchange_source_name);
+$exchange_source      = CExchangeSource::get($exchange_source_name);
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("exchange_objects"    , CExchangeSource::getObjects());
 $smarty->assign("exchange_source_name", $exchange_source_name);
 $smarty->assign("object"              , $exchange_source);
+$smarty->assign("type"                , $type);
 
 $smarty->display("inc_config_exchange_source.tpl");
 

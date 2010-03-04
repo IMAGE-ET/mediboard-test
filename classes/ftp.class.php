@@ -9,16 +9,18 @@
  */
  
 class CFTP {
-  var $ftpsn       = null;
-  var $hostname    = null;
-  var $username    = null;
-  var $userpass    = null;
-  var $connexion   = null;
-  var $port        = null;
-  var $timeout     = null;
-  var $passif_mode = false;
-  var $mode        = null;
-  var $logs        = array();
+  var $hostname      = null;
+  var $username      = null;
+  var $userpass      = null;
+  var $connexion     = null;
+  var $port          = null;
+  var $timeout       = null;
+  var $passif_mode   = false;
+  var $mode          = null;
+  var $fileprefix    = null;
+  var $fileextension = null;
+  var $filenbroll    = null;
+  var $logs          = array();
   
   function logError($log) {
     $this->logs[] = "<strong>Erreur : </strong>$log";
@@ -28,17 +30,21 @@ class CFTP {
     $this->logs[] = "Etape : $log";
   }
   
-  function init($ftpsn) {
-    $this->ftpsn = $ftpsn;
-    $this->config = CAppUI::conf("ftp $ftpsn");
-    
-    $this->hostname    = $this->config["ftphost"];
-    $this->username    = $this->config["ftpuser"];
-    $this->userpass    = $this->config["ftppass"];
-    $this->port        = $this->config["port"];
-    $this->timeout     = $this->config["timeout"];
-    $this->passif_mode = $this->config["pasv"];
-    $this->mode        = $this->config["mode"];
+  function init($exchange_source) {   
+    if (!$exchange_source) {
+      trigger_error("Aucune source d'échange disponible pour ce nom : '$exchange_source_name'");
+    }
+       
+    $this->hostname      = $exchange_source->host;
+    $this->username      = $exchange_source->user;
+    $this->userpass      = $exchange_source->password;
+    $this->port          = $exchange_source->port;
+    $this->timeout       = $exchange_source->timeout;
+    $this->passif_mode   = $exchange_source->pasv;
+    $this->mode          = $exchange_source->mode;
+    $this->fileprefix    = $exchange_source->fileprefix;
+    $this->fileextension = $exchange_source->fileextension;
+    $this->filenbroll    = $exchange_source->filenbroll;
   }
   
   function testSocket() {
@@ -113,13 +119,24 @@ class CFTP {
     return $destination_file;
   }
   
+  function sendContent($source_content, $destination_file) {
+    if(!$this->connexion) {
+      return false;
+    }
+    
+    $tmpfile = tempnam("","");    
+    file_put_contents($tmpfile, $source_content);
+    $result = $this->sendFile($tmpfile, $destination_file);
+    unlink($tmpfile);
+    
+    return $result;
+  }
+
   function sendFile($source_file, $destination_file) {
     if(!$this->connexion) {
       return false;
     }
 
-    $source_base = basename($source_file);
-    
     // Upload the file
     return ftp_put($this->connexion, $destination_file, $source_file, constant($this->mode));
   }

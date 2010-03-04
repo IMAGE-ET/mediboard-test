@@ -33,7 +33,7 @@
 </script>
 <table class="tbl">
   <tr>
-    <th class="category" colspan="10">Schémas HPRIM XML</th>
+    <th class="title" colspan="10">Schémas HPRIM XML</th>
   </tr>
   <tr>
     <th class="category">Evénement</th>
@@ -81,39 +81,25 @@
   {{/foreach}}
 </table>
 
-<hr />
-
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    {{assign var="var" value="functionPratImport"}}
     <tr>
-      <th>
-        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-      </td>
+      <th class="title" colspan="10">Configuration des schémas HPRIM XML</th>
     </tr>
-    
-    {{assign var="var" value="medecinIndetermine"}}
-    <tr>
-      <th>
-        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <input class="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-      </td>
-    </tr>
-    
-    {{mb_include module=system template=inc_config_bool var=medecinActif}}
     
     {{mb_include module=system template=inc_config_bool var=mvtComplet}}
+    
+    <tr>
+      <th class="title" colspan="10">Traitement des schémas HPRIM XML</th>
+    </tr>
+
+    {{mb_include module=system template=inc_config_str var=functionPratImport}}
+    
+    {{mb_include module=system template=inc_config_str var=medecinIndetermine}}
+    
+    {{mb_include module=system template=inc_config_bool var=medecinActif}}
     
     {{mb_include module=system template=inc_config_bool var=strictSejourMatch}}
     

@@ -17,8 +17,10 @@ if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
   CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
 }
 
+$exchange_source = CExchangeSource::get($exchange_source_name);
+
 $ftp = new CFTP();
-$ftp->init($exchange_source_name);
+$ftp->init($exchange_source);
 
 if (!$ftp->testSocket()) {
   CAppUI::stepAjax("Connexion au serveur $ftp->hostname' échouée", UI_MSG_WARNING);

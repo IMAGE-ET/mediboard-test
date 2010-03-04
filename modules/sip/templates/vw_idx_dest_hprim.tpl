@@ -10,7 +10,7 @@
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="3">
+    <td class="halfPane" rowspan="4">
       {{if $dPconfig.sip.server}}
       <a class="button new" href="?m=sip&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
         Créer un nouveau destinataire HPRIM
@@ -18,16 +18,13 @@
       {{/if}}
       <table class="tbl">
         <tr>
-          <th class="title" colspan="7">DESTINATAIRES HPRIM</th>
+          <th class="title" colspan="4">DESTINATAIRES HPRIM</th>
         </tr>
         <tr>
           <th>{{mb_title object=$dest_hprim field="nom"}}</th>
           <th>{{mb_title object=$dest_hprim field="group_id"}}</th>
           <th>{{mb_title object=$dest_hprim field="type"}}</th>
           <th>{{mb_title object=$dest_hprim field="actif"}}</th>
-          <th>{{mb_title object=$dest_hprim field="url"}}</th>
-          <th>{{mb_title object=$dest_hprim field="username"}}</th>
-          <th>{{mb_title object=$dest_hprim field="password"}}</th>
         </tr>
         {{foreach from=$listDestHprim item=_dest_hprim}}
         <tr {{if $_dest_hprim->_id == $dest_hprim->_id}}class="selected"{{/if}}>
@@ -39,9 +36,6 @@
           <td>{{$_dest_hprim->_ref_group->_view}}</td>
           <td>{{mb_value object=$_dest_hprim field="type"}}</td>
           <td>{{mb_value object=$_dest_hprim field="actif"}}</td>
-          <td class="text">{{mb_value object=$_dest_hprim field="url"}}</td>
-          <td>{{mb_value object=$_dest_hprim field="username"}}</td>
-          <td>{{if $_dest_hprim->password}}Oui{{else}}Non{{/if}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -95,20 +89,6 @@
           	<input type="text" name="type" size="20" value="{{if $dPconfig.sip.server}}cip{{else}}sip{{/if}}" readonly="readonly" />
           </td>
         </tr>
-        <tr>  
-          <th>{{mb_label object=$dest_hprim field="url"}}</th>
-          <td><input type="text" name="url" value="{{$dest_hprim->url}}" class="str notNull" value="%u%p" /></td>
-        </tr>
-        <tr>  
-          <th>{{mb_label object=$dest_hprim field="username"}}</th>
-          <td>{{mb_field object=$dest_hprim field="username"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$dest_hprim field="password"}}</th>
-          <td>
-            <input type="password" name="password" class="password {{if !$dest_hprim->_id}} notNull{{/if}}" value="" />
-          </td>
-        </tr>
         <tr>
           <th>{{mb_label object=$dest_hprim field="actif"}}</th>
           <td>{{mb_field object=$dest_hprim field="actif"}}</td>
@@ -125,17 +105,25 @@
               <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
-        </tr>        
+        </tr>     
       </table>
       </form>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="form">  
+        <tr>
+          <th class="category" colspan="2">
+            {{tr}}config-exchange-source{{/tr}}
+          </th>
+        </tr>
+        
+        <tr>
+          <td colspan="2"> {{mb_include module=system template=inc_config_exchange_source object=$dest_hprim->_ref_exchange_source exchange_source_name=$dest_hprim->_guid}} </td>
+        </tr>
+      </table>
       {{/if}}
-      <div class="big-info">
-        Les caractères suivants sont utilisés pour spécifier l'authentification dans l'url :
-        <ul>
-          <li>%u - Utilisateur service web </li>
-          <li>%p - Mot de passe service web</li>
-        </ul>
-      </div>
     </td>
   </tr>
 </table>

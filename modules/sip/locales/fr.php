@@ -6,6 +6,7 @@ $locales['mod-sip-tab-vw_soapclient'] = 'Soap Client';
 $locales['config-sip-server'] = 'Mode Serveur';
 $locales['config-sip-server-desc'] = 'Mode Serveur';
 $locales['config-sip'] = 'Configuration mode SIP';
+$locales['config-traitement-sip'] = 'Traitement du mode SIP';
 $locales['CEchangeHprim'] = 'Echange HPRIM XML';
 $locales['CEchangeHprim-date_echange'] = 'Date d\'échange';
 $locales['CEchangeHprim-date_echange-court'] = 'Echange';

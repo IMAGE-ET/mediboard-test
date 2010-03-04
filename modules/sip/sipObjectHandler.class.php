@@ -329,6 +329,7 @@ class CSipObjectHandler extends CMbObjectHandler {
   }
   
   function onAfterDelete(CMbObject &$mbObject) {
+    
   }
   
   function sendEvenement ($domEvenement, $dest_hprim, $mbObject) {
@@ -339,34 +340,26 @@ class CSipObjectHandler extends CMbObjectHandler {
     $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
 
     if (CAppUI::conf('sip enable_send')) {
+      $source = CExchangeSource::get($dest_hprim->_guid);
+      $source->setData($msgEvtVenuePatient);
+      $source->send("evenementPatient");
+      $acquittement = $source->receive();
       
-      /*$source = CExchangeSource::get($destinataire->_guid);
-      $source->setData($msg);
-      $source->send();
-      $acquittement = $source->receive();*/
-      
-      if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
-        trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-      }
-      
-      // Récupère le message d'acquittement après l'execution la methode evenementPatient
-      if (null == $acquittement = $client->evenementPatient($msgEvtVenuePatient)) {
-        trigger_error("Evénement patient impossible sur le SIP : ".$dest_hprim->url);
-      }
-      
-      $echange_hprim = new CEchangeHprim();
-      $echange_hprim->load($domEvenement->identifiant);
-      $echange_hprim->date_echange = mbDateTime();
-      
-      $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-      $domGetAcquittement->loadXML(utf8_decode($acquittement));        
-      $doc_valid = $domGetAcquittement->schemaValidate();
-      
-      $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-      $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-      $echange_hprim->acquittement = $acquittement;
-  
-      $echange_hprim->store();
+      if ($acquittement) {
+        $echange_hprim = new CEchangeHprim();
+        $echange_hprim->load($domEvenement->identifiant);
+        $echange_hprim->date_echange = mbDateTime();
+        
+        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
+        $doc_valid = $domGetAcquittement->schemaValidate();
+        
+        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        $echange_hprim->acquittement = $acquittement;
+    
+        $echange_hprim->store();
+      }      
     }
   }
 }

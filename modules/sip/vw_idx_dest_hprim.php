@@ -23,6 +23,7 @@ if($dest_hprim->load($dest_hprim_id)) {
   $dest_hprim->loadRefsFwd();
 }
 
+
 // Récupération de la liste des destinataires HPRIM
 $itemDestHprim = new CDestinataireHprim;
 
@@ -36,8 +37,9 @@ foreach($listDestHprim as &$_dest_hprim) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("dest_hprim"    , $dest_hprim);
-$smarty->assign("listEtab"      , $listEtab);
-$smarty->assign("listDestHprim" , $listDestHprim);
+$smarty->assign("dest_hprim"      , $dest_hprim);
+$smarty->assign("exchange_objects", CExchangeSource::getObjects());
+$smarty->assign("listEtab"        , $listEtab);
+$smarty->assign("listDestHprim"   , $listDestHprim);
 $smarty->display("vw_idx_dest_hprim.tpl");
 ?>

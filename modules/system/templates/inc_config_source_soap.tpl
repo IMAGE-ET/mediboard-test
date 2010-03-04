@@ -11,7 +11,7 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceSoap" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}') } )">
+      <form name="editSourceSoap" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_soap_aed" />
         <input type="hidden" name="source_soap_id" value="{{$object->_id}}" />
@@ -49,7 +49,7 @@
             <td class="button" colspan="2">
               {{if $object->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  

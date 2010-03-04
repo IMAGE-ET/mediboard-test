@@ -50,16 +50,16 @@ class CSourceFTP extends CExchangeSource {
   
   function send() {
     $ftp = new CFTP();
-    $ftp->init("pmsi");
+    $ftp->init($this);
     
     $this->counter++;
       
     $destination_basename = sprintf("%s%0".$this->filenbroll."d", $this->fileprefix, $this->counter % pow(10, $this->filenbroll));
   
     if($ftp->connect()) {
-      $ftp->sendFile($this->_data, "$destination_basename.$this->fileextension");
+      $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension");
       if ($this->fileextension_write_end) {
-        $ftp->sendFile($this->_data, "$destination_basename.ok");
+        $ftp->sendContent($this->_data, "$destination_basename.$this->fileextension_write_end");
       }
       $ftp->close();
       

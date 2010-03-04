@@ -11,16 +11,6 @@
 global $can;
 $can->needsRead();
 
-// HPRIM export FTP settings
-$fileprefix    = CAppUI::conf("sip fileprefix");
-$filenbroll    = CAppUI::conf("sip filenbroll");
-$fileextension = CAppUI::conf("sip fileextension");
-
-$ftp = new CFTP();
-$ftp->init("SIP");
-
-$ajax = CValue::get("ajax");
-
 if (null == $typeObject = CValue::get("typeObject")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
   return;
@@ -86,47 +76,32 @@ switch ($typeObject) {
 //$doc->addNameSpaces(); 	// Nécessaire pour la validation avec XML Spy
 $doc->saveTempFile();
 
-// Connexion FTP
- $sent_files = CValue::get("sent_files");
-if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
-  // Compte le nombre de fichiers déjà générés
-  CMbPath::forceDir($doc->finalpath);
-  $count = 0;
-  $dir = dir($doc->finalpath);
-  while (false !== ($entry = $dir->read())) {
-    $count++;
-  }
-  $dir->close();
-  $count -= 2; // Exclure . et ..
-  $counter = $count % pow(10, $filenbroll);
-  
-  // Transfert réel
-  $destination_basename = sprintf("%s%0".$filenbroll."d", $fileprefix, $counter);
-  // Transfert en mode FTP_ASCII obligatoire pour les AS400
-  if($ftp->connect()) {
-    $ftp->sendFile($doc->documentfilename, "$destination_basename.$fileextension");
-    $ftp->sendFile($doc->documentfilename, "$destination_basename.ok");
+// Envoi à la source créée 'PMSI'
+$exchange_source = CExchangeSource::get("pmsi");
 
+$sent_files = CValue::get("sent_files");
+if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
+  $exchange_source->setData($doc->saveXML());
+  $logs = array();
+  if ($exchange_source->send()) {
     $doc->saveFinalFile();
     $documentFinalBaseName = basename($doc->documentfinalfilename);
-    $ftp->logStep("Archivage du fichier envoyé sur le serveur Mediboard sous le nom $documentFinalBaseName");
-    $ftp->close();
+    $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard sous le nom $documentFinalBaseName";
   }
 }
 
 // Récupération de tous les fichiers produits
 $doc->getSentFiles();
-		
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("doc"       , $doc);
-$smarty->assign("fileprefix", $fileprefix);
-$smarty->assign("ftp"       , $ftp);
-$smarty->assign("ajax"      , $ajax);
-$smarty->assign("doc_valid" , @$doc_valid);
-$smarty->assign("typeObject", $typeObject);
-$smarty->assign("mbObject"  , $mbObject);
+$smarty->assign("doc"            , $doc);
+$smarty->assign("exchange_source", $exchange_source);
+$smarty->assign("logs"           , $logs);
+$smarty->assign("doc_valid"      , @$doc_valid);
+$smarty->assign("typeObject"     , $typeObject);
+$smarty->assign("mbObject"       , $mbObject);
 
 $smarty->display("export_evtServeurActivitePmsi.tpl");
 
