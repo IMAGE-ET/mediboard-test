@@ -39,7 +39,7 @@ Main.add( function(){
 </table>
 
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css header=7 footer=0 nodebug=true}}
+{{include file=../../dPcompteRendu/css/print.css header=8 footer=0 nodebug=true}}
 
 /* decalage du header pour permettre l'insertion de filtres */
 @media screen {

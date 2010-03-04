@@ -18,6 +18,7 @@ $prescription->loadRefsLinesElementByCat();
 
 $prescription->calculPlanSoin(array($debut));
 
+$prescription->loadRefPatient();
 $patient =& $prescription->_ref_patient;
 $patient->loadRefConstantesMedicales();
 	  
