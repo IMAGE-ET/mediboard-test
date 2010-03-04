@@ -1,6 +1,6 @@
 // $Id$
 
-var PlageOpSelector = {
+PlageOpSelector = {
   sForm               : null,  // Ici, on ne se sert pas de ce formulaire
   sPlage_id           : null,  // Identifiant de la plage
   sSalle_id           : null,  // Identifiant de la salle
@@ -98,4 +98,4 @@ var PlageOpSelector = {
       $V(oSejourForm[PlageOpSelector.s_date_entree_prevue], PlageOpSelector.prepared.dAdm.toDATE());
     }
   }
-}
+};

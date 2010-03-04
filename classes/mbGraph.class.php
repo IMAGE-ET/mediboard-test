@@ -25,7 +25,6 @@ class CMbGraph {
   * Constructor
   */
 	function CMbGraph() {
-		$this->config = CAppUI::conf('graph_engine');
 		$this->options = array ("width" => 320,   //width of frame 
 														"height" => 125,  //height of frame
 														"size" => 1, 			//frame scale
@@ -38,7 +37,6 @@ class CMbGraph {
 																								 "#FFFFFF", "#C90062", "#E05206", "#F0AB00", 
 																								 "#000000", "#FF0000", "#3C8A2E", "#006983", 
 																								 "#0098C3", "#21578A", "#55517B", "#4E7D5B" ),  //color pallets
-														"ezCPalette" => "ez", //eZComponent pallets
 														"margin" => array (0, 
 																							 0, 
 																							 0, 
@@ -82,152 +80,51 @@ class CMbGraph {
 	}
 
 	function selectType($type,$options) {
-		if ($this->config == 'eZgraph') {
-			$this->eZgraphSelectType($type,$options);
-		} else if ($this->config == 'jpgraph'){
-			$this->jpgraphSelectType($type,$options);
-		}
+		$this->jpgraphSelectType($type,$options);
 	}
 	
 	function selectPalette($options) {
-		if ($this->config == 'eZgraph') {
-			$this->eZgraphSelectPalette($options);
-		} else if ($this->config == 'jpgraph'){
-			$this->jpgraphSelectPalette($options);
-		}
+		$this->jpgraphSelectPalette($options);
 	}
 	
 	function setupAxis($options) {
-		if ($this->config == 'jpgraph'){
-			$this->jpgraphSetupAxis($options);
-		}
+		$this->jpgraphSetupAxis($options);
 	}
 	
 	function addDataPiePlot($options) {
-		if ($this->config == 'eZgraph') {
-			$this->eZgraphAddData($options);
-		} else if ($this->config == 'jpgraph'){
-			$this->jpgraphAddDataPiePlot($options);
-		}
+		$this->jpgraphAddDataPiePlot($options);
 	}
 	
 	function addDataBarPlot($options) {
-		if ($this->config == 'jpgraph'){
-			$this->jpgraphAddDataBarPlot($options);
-		}
+		$this->jpgraphAddDataBarPlot($options);
 	}
 	
 	function addDataLinePlot($options) {
-		if ($this->config == 'jpgraph'){
-			$this->jpgraphAddDataLinePlot($options);
-		}
+		$this->jpgraphAddDataLinePlot($options);
 	}
 	
 	function addAccBarPlot($options) {
-		if ($this->config == 'jpgraph'){
-			$this->jpgraphAddAccBarPlot($options);
-		}
+		$this->jpgraphAddAccBarPlot($options);
 	}
 	
 	function addSplinePlot($options) {
-	  if ($this->config == 'jpgraph'){
-			$this->jpgraphAddSplinePlot($options);
-		}	
+	  $this->jpgraphAddSplinePlot($options);
 	}
 	
 	function addSecondAxis ($options) {
-	  if ($this->config == 'jpgraph'){
-			$this->jpgraphAddSecondAxis($options);
-		}
+	  $this->jpgraphAddSecondAxis($options);
 	}
 	
 	function setMapTarget ($options){
-	  if ($this->config == 'jpgraph'){
-			$this->jpgraphSetMapTarget($options);
-		}
+	  $this->jpgraphSetMapTarget($options);
 	}
 	
 	function getHTMLImageMap (){
-	  if ($this->config == 'jpgraph'){
-			return $this->jpgraphGetHTMLImageMap();
-		}
+	  return $this->jpgraphGetHTMLImageMap();
 	}
 	
 	function render ($type,$options) {
-		if ($this->config == 'eZgraph') {
-			$this->eZgraphRender($type,$options);
-		} else if ($this->config == 'jpgraph'){
-			$this->jpgraphRender($type,$options);
-		}
-	}
-	
-	function eZgraphSelectType($type,$options) {
-		$this->options = array_merge($this->options, $options);
-		if($type == "Pie") {
-			$this->graph = new ezcGraphPieChart();
-			$this->graph->title = $this->options['title'];
-			$this->graph->options->label = '%3$.1f%%';
-			$this->graph->options->font = './shell/arial.ttf';
-			$this->graph->legend->symbolSize = $this->options['size']*9;
-  			//$this->graph->legend->portraitSize = ".25";
-			$this->graph->options->font->maxFontSize = $this->options['size']*8;
-			$this->graph->options->font->padding = "1";
-		}
-	}
-	
-	function eZgraphSelectPalette($options) {
-		$this->options = array_merge($this->options, $options);
-		if($this->options['ezCPalette'] == "ez") {
-			$this->graph->palette = new ezcGraphPaletteEz();
-			$this->graph->palette->dataSetColor  = $this->options['palette'];
-		} else if($this->options['ezCPalette'] == "black") {
-			$this->graph->palette = new ezcGraphPaletteEzBlack();
-		} else if($this->options['ezCPalette'] == "blue") {
-			$this->graph->palette = new ezcGraphPaletteEzBlue();
-		} else if($this->options['ezCPalette'] == "green") {
-			$this->graph->palette = new ezcGraphPaletteEzGreen();
-		} else if($this->options['ezCPalette'] == "red") {
-			$this->graph->palette = new ezcGraphPaletteEzRed();
-		}
-	}
-	
-	function eZgraphAddData($options) {
-		$this->options = array_merge($this->options, $options);
-//		$tab = array();
-//		foreach($datas as $data) {
-//  			$tab[$data['legend']] = $data['value'];
-//		}
-		$datas = array();
-		mbTrace($this->options['dataPie']);
-		foreach($values as $value) {
-//  		$datas[]  = $data["value"];
-//  		$legends[] = $data["legend"];
-		}
-		$this->graph->data[$this->options['title']] = new ezcGraphArrayDataSet($tab);
-	}
-	
-	function eZgraphRender($render,$options) {
-		if(CAppUI::conf('graph_svg') == "non") {
-			$this->graph->driver = new ezcGraphGdDriver();
-		} else if(CAppUI::conf('graph_svg') == "oui") {
-			$this->graph->renderer->options->moveOut = .2;
- 			$this->graph->renderer->options->pieChartOffset = 1;
- 			$this->graph->renderer->options->pieChartGleam = .3;
- 			$this->graph->renderer->options->pieChartGleamColor = '#FFFFFF';
- 			$this->graph->renderer->options->pieChartGleamBorder = 2;
-			$this->graph->renderer->options->pieChartShadowSize = 2;
-  			$this->graph->renderer->options->pieChartShadowColor = '#000000';
- 			$this->graph->renderer->options->legendSymbolGleam = .5;
-  			$this->graph->renderer->options->legendSymbolGleamSize = .9;
-  			$this->graph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
- 			$this->graph->renderer->options->pieChartSymbolColor = '#BABDB688';
-		}
-		$this->renderer->options->moveOut = .2;
-		if($render == "in") {
-			$this->graph->render($size*420, $size*200);
-		} else if($render == "out") {
-			$this->graph->renderToOutput($size*420, $size*200);
-		}
+		$this->jpgraphRender($type,$options);
 	}
 	
 	function jpgraphSelectType ($type,$options) {

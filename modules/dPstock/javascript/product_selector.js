@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-var ProductSelector = {
+ProductSelector = {
   sForm       : null,
   sId         : null,
   sView       : null,
@@ -27,7 +27,7 @@ var ProductSelector = {
   },
 
   set: function(product_id, product_name, quantity, unit, packaging) {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     $V(oForm[this.sId],        product_id, true);
     $V(oForm[this.sView],      product_name, true);
     $V(oForm[this.sUnit],      unit, true);

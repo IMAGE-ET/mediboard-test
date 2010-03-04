@@ -16,7 +16,8 @@ $can->needsEdit();
 foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $locales = array();
-  $localeFiles = array_merge(glob("locales/$localeName/*.php"), glob("modules/*/locales/$localeName.php"));
+  $localeFiles = CAppUI::getLocaleFilesPaths($localeName);
+  
   foreach ($localeFiles as $localeFile) {
     if (basename($localeFile) != "meta.php") {
       require $localeFile;

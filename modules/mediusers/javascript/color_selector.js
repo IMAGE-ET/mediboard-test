@@ -1,6 +1,6 @@
 // $Id$
 
-var ColorSelector = {
+ColorSelector = {
   sForm : null,
   sColor: null,
   options : {
@@ -22,4 +22,4 @@ var ColorSelector = {
     $('select_color').style.background = '#' + oForm[this.sColor].value;
     
   }
-}
+};

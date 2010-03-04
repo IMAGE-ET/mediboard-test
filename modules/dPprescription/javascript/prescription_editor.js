@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
  
-var PrescriptionEditor = {
+PrescriptionEditor = {
   sForm     : null,
   options : {
     width : 810,
@@ -45,4 +45,4 @@ var PrescriptionEditor = {
 	    PrescriptionEditor.refresh(object_id, object_class, praticien_id);
     } );
   }
-}
+};

@@ -29,13 +29,15 @@ Ajax.Responders.register({
 
 var Url = Class.create({
   initialize: function(sModule, sAction, sType) {
-    if(!sType) sType = "action";
+    sType = sType || "action";
+
     this.oParams = {};
     this.oWindow = null;
     this.sFragment = null;
   	this.oPrefixed = {};
+  	
   	if(sModule && sAction) {
-  	  if(sType == "action") {
+  	  if(sType === "action") {
    	    this.setModuleAction(sModule, sAction);
    	  } else {
    	    this.setModuleTab(sModule, sAction);
@@ -137,7 +139,7 @@ var Url = Class.create({
     
     var sFeatures = Url.buildPopupFeatures({left: iLeft, height: iHeight, width: iWidth});
   
-    // Pefixed window collection
+    // Prefixed window collection
     if (sPrefix && this.oPrefixed[sPrefix]) {
       this.oPrefixed[sPrefix] = this.oPrefixed[sPrefix].reject(function(oWindow) {
         return oWindow.closed;
@@ -240,10 +242,12 @@ var Url = Class.create({
           update.style.width = oOptions.width;
         }
         else {
-          update.style.width = "auto";
-					update.style.whiteSpace = "nowrap"; 
-          update.style.minWidth = $(input).getDimensions().width+"px";
-          update.style.maxWidth = "400px";
+          update.setStyle({
+            width: "auto",
+            whiteSpace: "nowrap",
+            minWidth: $(input).getWidth()+"px",
+            maxWidth: "400px"
+          });
         }
         update.show().setOpacity(1).unoverflow();
       },

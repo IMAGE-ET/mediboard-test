@@ -82,10 +82,18 @@ class CAppUI {
 
   private function __construct(){}
 
+  /**
+   * Initializes the CAppUI instance
+   * @return CAppUI The instance
+   */
   static function init(){
   	return self::$instance = new CAppUI;
   }
 
+  /**
+   * Includes all the classes of the framework
+   * @return void
+   */
   static function getAllClasses() {
     $rootDir = self::conf("root_dir");
     $dirs = array(
@@ -116,7 +124,7 @@ class CAppUI {
 
   /**
    * Used to include a php class file from the legacy classes directory
-   * @param string <b>$name</b> The class file name (excluding .class.php)
+   * @param string $name The class file name (excluding .class.php)
    * @return string The path to the include file
    */
   static function requireLegacyClass($name) {
@@ -127,7 +135,7 @@ class CAppUI {
   
   /**
    * Used to include a php class file from the lib directory
-   * @param string <b>$name</b> The class root file name (excluding .php)
+   * @param string $name The class root file name (excluding .php)
    */
   static function requireLibraryFile($name) {
     if ($root = self::conf("root_dir")) {
@@ -143,7 +151,8 @@ class CAppUI {
   
   /**
    * Used to load a php class file from the module directory
-   * @param string $name The class root file name (excluding .class.php)
+   * @param string $name The module name
+   * @param string $file The file name of the class to include
    */
   static function requireModuleClass($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
@@ -159,10 +168,11 @@ class CAppUI {
     }
   }
   
-/**
- * Used to include a php file from the module directory
- * @param string $name The class root file name (excluding .class.php)
- */
+	/**
+	 * Used to include a php file from the module directory
+	 * @param string $name The module name
+	 * @param string $file The name of the file to include
+	 */
   static function requireModuleFile($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
@@ -170,29 +180,35 @@ class CAppUI {
     }
   }
   
-/**
- * Used to store information in tmp directory
- * @param string $subpath in tmp directory
- * @return string The path to the include file
- */
+	/**
+	 * Used to store information in tmp directory
+	 * @param string $subpath in tmp directory
+	 * @return string The path to the include file
+	 */
   static function getTmpPath($subpath) {
     if ($subpath && $root = self::conf("root_dir")) {
       return "$root/tmp/$subpath";
     }
   }
   
-/**
- * Utility function to read the "directories" under "path"
- *
- * This function is used to read the modules or locales installed on the file system.
- * @param string The path to read.
- * @return array A named array of the directories (the key and value are identical).
- */
+	/**
+	 * Utility function to read the "directories" under "path"
+	 *
+	 * This function is used to read the modules or locales installed on the file system
+	 * @param string The path to read
+	 * @return array A named array of the directories (the key and value are identical)
+	 */
   static function readDirs($path) {
+  	$root_dir = self::conf("root_dir");
     $dirs = array();
-    $d = dir(self::conf("root_dir") . "/$path");
+    $d = dir("$root_dir/$path");
+    
     while (false !== ($name = $d->read())) {
-      if(is_dir(self::conf("root_dir")."/$path/$name") && $name != "." && $name != ".." && $name != "CVS") {
+      if(is_dir("$root_dir/$path/$name") && 
+          $name !== "." && 
+          $name !== ".." && 
+          $name !== "CVS" && 
+          $name !== ".svn") {
         $dirs[$name] = $name;
       }
     }
@@ -200,18 +216,20 @@ class CAppUI {
     return $dirs;
   }
 
-/**
- * Utility function to read the "files" under "path"
- * @param string The path to read.
- * @param string A regular expression to filter by.
- * @return array A named array of the files (the key and value are identical).
- */
-  static function readFiles($path, $filter=".") {
+	/**
+	 * Utility function to read the files under $path
+	 * @param string The path to read
+	 * @param string A regular expression to filter by
+	 * @return array A named array of the files (the key and value are identical)
+	 */
+  static function readFiles($path, $filter = ".") {
     $files = array();
 
     if ($handle = opendir($path)) {
       while (false !== ($file = readdir($handle))) { 
-        if ($file != "." && $file != ".." && preg_match("/$filter/", $file)) { 
+        if ($file !== "." && 
+            $file !== ".." && 
+            preg_match("/$filter/", $file)) { 
           $files[$file] = $file; 
         } 
       }
@@ -220,13 +238,12 @@ class CAppUI {
     return $files;
   }
 
-/**
- * Utility function to check whether a file name is "safe"
- *
- * Prevents from access to relative directories (eg ../../dealyfile.php);
- * @param string The file name.
- * @return array A named array of the files (the key and value are identical).
- */
+	/**
+	 * Utility function to check whether a file name is "safe"
+	 * Prevents from access to relative directories (eg ../../dealyfile.php)
+	 * @param string The file name
+	 * @return array A named array of the files (the key and value are identical)
+	 */
   static function checkFileName($file) {
     // define bad characters and their replacement
     $bad_chars = ";.\\";
@@ -241,14 +258,13 @@ class CAppUI {
     }
   }
 
-/**
-	* Save the url query string
-	*
-	* Also saves one level of history.  This is useful for returning from a delete
-	* operation where the record more not now exist.  Returning to a view page
-	* would be a nonsense in this case.
-	* @param string If not set then the current url query string is used
-	*/
+  /**
+	 * Save the url query string
+	 * Also saves one level of history. This is useful for returning from a delete
+	 * operation where the record more not now exist. Returning to a view page
+	 * would be a nonsense in this case.
+	 * @param string If not set then the current url query string is used
+	 */
   static function savePlace($query = "") {
     if (!$query) {
       $query = @$_SERVER["QUERY_STRING"];
@@ -602,8 +618,13 @@ class CAppUI {
  * @param int $uid User id number, 0 for default preferences
  */
   static function loadPrefs($user_id = 0) {
-    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$user_id'";
-    $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
+    if (CModule::getInstalled("system")->mod_version < "1.0.24"){
+	    $query = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = '$user_id'";
+	    $user_prefs = CSQLDataSource::get("std")->loadHashList($query);
+    }
+    else {
+    	$user_prefs = CPreferences::get($user_id);
+    }
 
     self::$instance->user_prefs = array_merge(self::$instance->user_prefs, $user_prefs);
   }
@@ -615,13 +636,44 @@ class CAppUI {
   
   /**
    * Get a named user preference
-   * @param string $name of the user preference
+   * @param string $name Name of the user preference
    * @return string The value
    */
   static function pref($name = null, $default = null) {
     $prefs = self::$instance->user_prefs;
     if (!$name) return $prefs;
     return isset($prefs[$name]) ? $prefs[$name] : $default; 
+  }
+  
+  /**
+   * Returns the list of $locale files
+   * @param string $locale The locale of the paths to return
+   * @return array The paths
+   */
+  static function getLocaleFilesPaths($locale) {
+    global $root_dir;
+    
+    /*$paths = array();
+    $paths[] = "$root_dir/locales/$locale/common.php";
+    
+    foreach (CModule::$installed as $_mod => $_module) {
+      $file = "$root_dir/locales/$locale/$_mod.php";
+      if (is_file($file)) {
+        $paths[] = $file;
+        continue;
+      }
+      
+      $file = "$root_dir/modules/$_mod/locales/$locale.php";
+      if (is_file($file)) {
+        $paths[] = $file;
+      }
+    }*/
+
+    $paths = array_merge(
+      glob("$root_dir/locales/$locale/*.php"), 
+      glob("$root_dir/modules/*/locales/$locale.php")
+    );
+    return $paths;
   }
 
   /**
@@ -660,7 +712,7 @@ class CAppUI {
   /**
    * Return the configuration setting for a given path
    * @param $path string Tokenized path, eg "module class var";
-   * @return mixed scalar or array of values depending on the path
+   * @return string|array scalar or array of values depending on the path
    */
   static function conf($path = '') {
     global $dPconfig;

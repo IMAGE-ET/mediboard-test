@@ -317,6 +317,7 @@ class CModule extends CMbObject {
   
   /**
    * Returns all or a named installed module
+   * @return array|CModule
    */
   static function getInstalled($moduleName = null) {
     if ($moduleName) {
@@ -328,6 +329,7 @@ class CModule extends CMbObject {
 
   /**
    * Returns all or a named active module
+   * @return array|CModule
    */
   static function getActive($moduleName = null) {
     if ($moduleName) {
@@ -339,6 +341,7 @@ class CModule extends CMbObject {
    
   /**
    * Returns all or a named visible module
+   * @return array|CModule
    */
   static function getVisible($moduleName = null) {
     if ($moduleName) {

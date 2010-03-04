@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
  
-var ElementSelector = {
+ElementSelector = {
   sForm     : null,
   sLibelle  : null,
   sType     : null,
@@ -21,9 +21,9 @@ var ElementSelector = {
     element_id: null
   },
   pop: function() {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     this.oUrl = new Url("dPprescription", "element_selector");
-    this.oUrl.addParam("libelle", oForm[this.sLibelle].value)
+    this.oUrl.addParam("libelle", oForm[this.sLibelle].value);
     this.oUrl.addParam("type"  , this.sType);
     this.oUrl.popup(this.options.width, this.options.height, "Element Prescription Selector");
   },
@@ -36,7 +36,7 @@ var ElementSelector = {
   },
   
   doSet: function(){
-    var oForm = document[ElementSelector.sForm];
+    var oForm = getForm(ElementSelector.sForm);
     $V(oForm[ElementSelector.sElement_id], ElementSelector.prepared.element_id);
   },
   
@@ -44,5 +44,4 @@ var ElementSelector = {
   close: function() {
     ElementSelector.oUrl.close();
   }
-  
-}
+};

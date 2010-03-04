@@ -5,12 +5,12 @@ Main.add(function(){
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){
-    buttonsContainers[0].insert('<button class="'+c+' notext">'+c+'</button><br />');
-    buttonsContainers[1].insert('<button class="'+c+'">'+c+'</button><br />');
-    buttonsContainers[2].insert('<button class="rtl '+c+'">'+c+'</button><br />');
-    buttonsContainers[3].insert('<a href="#1" class="button '+c+' notext">'+c+'</a><br />');
-    buttonsContainers[4].insert('<a href="#1" class="button '+c+'">'+c+'</a><br />');
-    buttonsContainers[5].insert('<a href="#1" class="button rtl '+c+'">'+c+'</a><br />');
+    buttonsContainers[0].insert('<button class="'+c+' notext" title="button.'+c+' notext">'+c+'</button><br />');
+    buttonsContainers[1].insert('<button class="'+c+'" title="button.'+c+'">'+c+'</button><br />');
+    buttonsContainers[2].insert('<button class="'+c+' rtl" title="button.'+c+' rtl">'+c+'</button><br />');
+    buttonsContainers[3].insert('<a href="#1" class="button '+c+' notext" title="a.button '+c+' notext">'+c+'</a><br />');
+    buttonsContainers[4].insert('<a href="#1" class="button '+c+'" title="a.button '+c+'">'+c+'</a><br />');
+    buttonsContainers[5].insert('<a href="#1" class="button '+c+' rtl" title="a.button '+c+' rtl">'+c+'</a><br />');
   });
   
   var tooltip = $("tooltipTpl").clone(true).show();
@@ -65,12 +65,12 @@ Main.add(function(){
       
 <table style="width: 0.1%;" id="buttons">
   <tr>
-    <td title="button.notext"></td>
-    <td title="button"></td>
-    <td title="button.rtl" style="text-align:right;"></td>
-    <td title="a.button.notext"></td>
-    <td title="a.button"></td>
-    <td title="a.button.rtl" style="text-align:right;"></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right;"></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right;"></td>
   </tr>
 </table>
 
@@ -210,7 +210,7 @@ Main.add(function(){
   </tr>
   <tr>
     <td colspan="10">
-      <button class="tick">button</button>
+      <button class="tick" type="button">button</button>
       <a class="button tick">a.button</a>
       <input type="checkbox" />
       <input type="radio" />
@@ -222,8 +222,8 @@ Main.add(function(){
   </tr>
   <tr>
     <td class="button" colspan="4">
-      <button class="submit">{{tr}}Save{{/tr}}</button>
-      <button class="trash">{{tr}}Remove{{/tr}}</button>
+      <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+      <button class="trash" type="button">{{tr}}Remove{{/tr}}</button>
     </td>
   </tr>
 </table>

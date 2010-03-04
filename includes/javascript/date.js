@@ -2,11 +2,13 @@ DateFormat = Class.create();
 Object.extend(DateFormat, {
 	MONTH_NAMES: ['January','February','March','April','May','June','July','August','September','October','November','December','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
 	DAY_NAMES: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-	LZ: function(x) {return(x<0||x>9?"":"0")+x},
-	compareDates: function(date1,dateformat1,date2,dateformat2) {
-		var d1=DateFormat.parseFormat(date1,dateformat1);
-		var d2=DateFormat.parseFormat(date2,dateformat2);
-		if (d1==0 || d2==0) return -1;
+	LZ: function(x) {
+    return (x < 0 || x > 9 ? "" : "0") + x;
+  },
+	compareDates: function(date1, dateformat1, date2, dateformat2) {
+		var d1 = DateFormat.parseFormat(date1,dateformat1);
+		var d2 = DateFormat.parseFormat(date2,dateformat2);
+		if (d1 == 0 || d2 == 0) return -1;
 		else if (d1 > d2) return 1;
 		return 0;
 	},
@@ -288,7 +290,7 @@ var ProgressiveCalendar = Class.create({
     	year: parts[0] || 0,
     	month: parts[1] || 0,
     	day: parts[2] || 0
-    }
+    };
   },
   setDate: function(date){
     $V(this.element, this.pad(date.year,4)+'-'+this.pad(date.month)+'-'+this.pad(date.day));

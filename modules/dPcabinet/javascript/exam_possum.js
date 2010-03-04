@@ -60,17 +60,16 @@ function calculOper(){
 
 
 function Fmt(x) {
-  var v
-  if(x>=0) { v=''+(x+0.05) } else { v=''+(x-0.05) }
-  return v.substring(0,v.indexOf('.')+2)
+  var v = '' + (x >= 0 ? (x+0.05) : (x-0.05));
+  return v.substring(0,v.indexOf('.')+2);
 }
 
 function calculPossum(){
   var morbidite;
   var mortalite;
   
-  formule_morb = (0.16 * scorePhysio) + (0.19 * scoreOper)- 5.91;
-  formule_mort = (0.13 * scorePhysio) + (0.16 * scoreOper)- 7.04;
+  var formule_morb = (0.16 * scorePhysio) + (0.19 * scoreOper)- 5.91;
+  var formule_mort = (0.13 * scorePhysio) + (0.16 * scoreOper)- 7.04;
 
   morbidite = 1/(1+Math.exp(-formule_morb));
   mortalite = 1/(1+Math.exp(-formule_mort));

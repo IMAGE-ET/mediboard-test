@@ -32,10 +32,10 @@ var ExamDialog = {
       objName: oButton.form._view.value,
       ajax: 1,
       target: 'systemMsg'
-    }
+    };
     var oAjaxOptions = {
-      onComplete: function() { ExamDialog.reload(object_id) } 
-    }
+      onComplete: function() { ExamDialog.reload(object_id); } 
+    };
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   }
-}
+};

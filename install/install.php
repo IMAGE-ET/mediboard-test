@@ -123,5 +123,6 @@ showHeader();
   </tr>
 	<?php } ?>
 </table>
+</form>
 
 <?php showFooter(); ?>

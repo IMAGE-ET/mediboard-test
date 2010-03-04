@@ -28,4 +28,4 @@ Equipement = {
     tab.down("a").setClassName("empty", !count);
     tab.down("a small").update("("+count+")");
 	}
-} 
+};

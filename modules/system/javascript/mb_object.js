@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-var MbObject = {
+MbObject = {
   viewBackRefs : function(object_class, object_ids) {
     object_ids = object_ids instanceof Array ? object_ids : [object_ids];
 
@@ -17,4 +17,4 @@ var MbObject = {
     url.addParam("object_ids[]", object_ids);
     url.popup(300 * object_ids.length + 200, 600, "View back refs");
   }
-}
+};

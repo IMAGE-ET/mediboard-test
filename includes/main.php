@@ -14,6 +14,52 @@ if (!is_dir("style/$uistyle")) {
   $uistyle = "mediboard";
 }
 
+$scripts = array(
+  mbLoadJSLocales(),
+  "lib/scriptaculous/lib/prototype.js",
+  "lib/scriptaculous/src/scriptaculous.js",
+
+  // We force the download of the dependencies 
+  "lib/scriptaculous/src/builder.js",
+  "lib/scriptaculous/src/effects.js",
+  "lib/scriptaculous/src/dragdrop.js",
+  "lib/scriptaculous/src/controls.js",
+  "lib/scriptaculous/src/slider.js",
+  "lib/scriptaculous/src/sound.js",
+
+  "includes/javascript/prototypex.js",
+
+  // Datepicker
+  "includes/javascript/date.js",
+  "lib/datepicker/datepicker.js",
+  "lib/datepicker/datepicker-locale-fr_FR.js",
+
+  // Livepipe UI
+  "lib/livepipe/livepipe.js",
+  "lib/livepipe/tabs.js",
+  "lib/livepipe/window.js",
+
+  // Flotr
+  "lib/flotr/flotr.js",
+  array("lib/flotr/lib/excanvas.js", "IE"), // for IE
+  "lib/flotr/lib/base64.js",
+  "lib/flotr/lib/canvas2image.js",
+  "lib/flotr/lib/canvastext.js",
+
+  "includes/javascript/common.js",
+  "includes/javascript/functions.js",
+  "includes/javascript/tooltip.js",
+  "includes/javascript/controls.js",
+  "includes/javascript/cookies.js",
+  "includes/javascript/url.js",
+  "includes/javascript/forms.js",
+  "includes/javascript/checkForms.js",
+  "includes/javascript/aideSaisie.js",
+
+  "includes/javascript/printf.js",
+  "includes/javascript/mbmail.js",
+);
+
 // check if we are logged in
 if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
@@ -31,7 +77,7 @@ if (!CAppUI::$instance->user_id) {
     $tplLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
     $tplLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
     $tplLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-    $tplLogin->assign("mediboardScript"      , mbLoadScripts());
+    $tplLogin->assign("mediboardScript"      , mbLoadScripts($scripts));
     $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
     $tplLogin->assign("time"                 , time());
     $tplLogin->assign("redirect"             , $redirect);
@@ -144,7 +190,7 @@ if (!$suppressHeaders) {
   $tplHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
   $tplHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
   $tplHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-  $tplHeader->assign("mediboardScript"      , mbLoadScripts());
+  $tplHeader->assign("mediboardScript"      , mbLoadScripts($scripts));
   $tplHeader->assign("dialog"               , $dialog);
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);

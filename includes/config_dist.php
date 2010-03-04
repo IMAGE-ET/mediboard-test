@@ -9,15 +9,13 @@
  */
   
 // Global hosting settings
-$dPconfig["root_dir"]     = "D:/Sites/Mediboard.org/demo";  // No trailing slash, no backslashes for Win users (use slashes instead)
+$dPconfig["root_dir"]     = "/var/www/mediboard";  // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["company_name"] = "mediboard.org";
 $dPconfig["page_title"]   = "Mediboard SIH";
-$dPconfig["base_url"]     = "http://www.mediboard.org/demo";
-$dPconfig["site_domain"]  = "mediboard.org";
+$dPconfig["base_url"]     = "http://localhost/mediboard/";
+
 $dPconfig["offline"]      = "0";
 $dPconfig["mb_id"]        = "";
-
-$dPconfig["dbtype"]       = "mysql";   // ONLY MySQL is supported at present
 
 $dPconfig["date"]         = "%d/%m/%Y";
 $dPconfig["time"]         = "%Hh%M";
@@ -25,9 +23,6 @@ $dPconfig["datetime"]     = "%d/%m/%Y %Hh%M";
 $dPconfig["longdate"]     = "%A %d %B %Y";
 $dPconfig["longtime"]     = "%H heures %M minutes";
 $dPconfig["timezone"]     = "Europe/Paris";
-
-$dPconfig["graph_engine"] = "jpgraph";
-$dPconfig["graph_svg"]    = "non";
 
 // PHP config
 $dPconfig["php"] = array(

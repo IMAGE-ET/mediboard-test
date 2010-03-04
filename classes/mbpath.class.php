@@ -68,7 +68,7 @@ abstract class CMbPath {
     
     while ($node = readdir($dh)) {
       $path = "$dir/$node";
-      if (is_dir($path) and $node != "." and $node != "..") {
+      if (is_dir($path) && $node !== "." && $node !== "..") {
         $removedDirsCount += self::purgeEmptySubdirs($path);
       }
     }

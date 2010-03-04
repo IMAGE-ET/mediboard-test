@@ -1,6 +1,6 @@
 // $Id$
 
-var PatHprimSelector = {
+PatHprimSelector = {
   sForm       : null,
   sId         : null,
   sPatient_id : null,
@@ -36,5 +36,4 @@ var PatHprimSelector = {
     var oForm = document[PatHprimSelector.sForm];
     $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
   }
-  
-}
+};

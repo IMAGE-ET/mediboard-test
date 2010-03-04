@@ -44,11 +44,11 @@ function submitAffectation() {
 Droppables.addLit = function(lit_id) {
   Droppables.add("lit-" + lit_id, { 
     onDrop:function(element){
-      DragDropSejour(element.id, lit_id)
+      DragDropSejour(element.id, lit_id);
     }, 
     hoverclass:'litselected'
   });
-}
+};
 
 function DragDropSejour(sejour_id, lit_id){
   $(sejour_id).style.display="none";
@@ -108,7 +108,7 @@ Calendar.setupAffectation = function(affectation_id, options) {
 	dates.limit = {
     start: options.currAffect.start,
     stop: options.outerAffect.stop
-  }
+  };
 
   if (form = getForm("sortieAffectation" + affectation_id)) {
     Calendar.regField(form.sortie, dates, {noView: true, icon: 'images/icons/planning.png'});
@@ -118,12 +118,12 @@ Calendar.setupAffectation = function(affectation_id, options) {
 	dates.limit = {
     start: options.currAffect.start,
     stop: options.currAffect.stop
-  }
+  };
 
   if (form = getForm("splitAffectation" + affectation_id)) {
     Calendar.regField(form._date_split, dates, {noView: true, icon: 'images/icons/move.gif'});
   }
-}
+};
 
 function popPlanning() {
   var url = new Url("dPhospi", "vw_affectations");
@@ -176,7 +176,7 @@ ObjectTooltip.modes.timeHospi = {
   module: "dPplanningOp",
   action: "httpreq_get_hospi_time",
   sClass: "tooltip"
-}
+};
 
 ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
 	ObjectTooltip.createEx(element, null, 'timeHospi', { 
@@ -184,4 +184,4 @@ ObjectTooltip.createTimeHospi = function (element, chir_id, codes) {
 		codes : codes, 
 		javascript : 0 
 	} );
-}
+};

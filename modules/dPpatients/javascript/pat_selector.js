@@ -41,5 +41,4 @@ var PatSelector = {
       $V(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);
     }
   }
-  
-}
+};

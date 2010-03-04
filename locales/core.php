@@ -15,12 +15,8 @@ $shared_name = "locales-$locale";
 
 // Load from shared memory if possible
 if (null == $locales = SHM::get($shared_name)) {
-  foreach (glob("$root_dir/locales/$locale/*.php") as $file) {
-    require_once($file);
-  }
-  
-  foreach (glob("$root_dir/modules/*/locales/$locale.php") as $file) {
-    require_once($file);
+  foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
+  	require_once($_path);
   }
   $locales = array_filter($locales, "stringNotEmpty");
   SHM::put($shared_name, $locales);

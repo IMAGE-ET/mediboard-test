@@ -8,13 +8,12 @@ var Reglement = {
   },
   submit: function(oForm, reload_acts) {
 	  submitFormAjax(oForm, 'systemMsg', {
-	    onComplete : 
-	      function() {
-	        Reglement.reload(reload_acts);
-	        if(Preferences.autoCloseConsult == "1"){
-	          reloadFinishBanner();
-	        }
-	      }
+	    onComplete : function() {
+        Reglement.reload(reload_acts);
+        if(Preferences.autoCloseConsult == "1"){
+          reloadFinishBanner();
+        }
+      }
 	  } );
   }, 
   reload: function(reload_acts) {

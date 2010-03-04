@@ -219,8 +219,16 @@ class CSetupsystem extends CSetup {
               `password` VARCHAR (50)
             ) TYPE=MYISAM;";
     $this->addQuery($sql);
-     
-    $this->mod_version = "1.0.23";
+    
+    $this->makeRevision("1.0.23");
+    $sql = "ALTER TABLE `user_preferences` 
+              ADD `pref_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              CHANGE `pref_user` `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+              CHANGE `pref_name` `key` VARCHAR (40) NOT NULL,
+              CHANGE `pref_value` `value` VARCHAR (255);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.24";
   }
 }
 ?>

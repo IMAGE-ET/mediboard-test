@@ -1,6 +1,6 @@
 // $Id$
 
-if (!window.CIM10Selector) 
+if (!window.CIM10Selector)
 CIM10Selector = {
   sForm     : null,
   sView     : null,
@@ -19,9 +19,8 @@ CIM10Selector = {
   },
 
   pop: function() {
-    var oForm = document[this.sForm];
-    this.oUrl = new Url();
-    this.oUrl.setModuleAction("dPplanningOp", "code_selector");
+    var oForm = getForm(this.sForm);
+    this.oUrl = new Url("dPplanningOp", "code_selector");
     
     this.oUrl.addParam("chir", oForm[this.sChir].value);
     this.oUrl.addParam("type", "cim10");
@@ -32,11 +31,10 @@ CIM10Selector = {
   
   // Code finder
   find: function(){
-    var oForm = document[this.sForm];
-    this.oUrl = new Url();
-    this.oUrl.setModuleAction("dPcim10", "code_finder");
+    var oForm = getForm(this.sForm);
+    this.oUrl = new Url("dPcim10", "code_finder");
     this.oUrl.addParam("code", oForm[this.sCode].value);
-    this.oUrl.popup(this.options.width, this.options.height, "CIM")
+    this.oUrl.popup(this.options.width, this.options.height, "CIM");
   },
   
   set: function(code) {
@@ -45,7 +43,7 @@ CIM10Selector = {
   },
   
   doSet: function(){
-    var oForm = document[CIM10Selector.sForm];
+    var oForm = getForm(CIM10Selector.sForm);
     $V(oForm[CIM10Selector.sView], CIM10Selector.prepared.code);
   }
-}
+};

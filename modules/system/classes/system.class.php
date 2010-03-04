@@ -8,51 +8,47 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
-* Preferences class
-*/
-class CPreferences {
-	var $pref_user = null;
-	var $pref_name = null;
-	var $pref_value = null;
-	var $ds = null ; 
-    
-	function CPreferences() {
-		$this->ds = CSQLDataSource::get("std");
-		// empty constructor
-	}
+class CPreferences extends CMbObject {
+	var $pref_id = null;
+	
+	var $user_id = null;
+	var $key     = null;
+	var $value   = null;
 
-	function bind($hash) {
-		bindHashToObject(stripslashes_deep($hash), $this);
-	}
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = "user_preferences";
+    $spec->key   = "pref_id";
+    $spec->uniques["uniques"] = array("user_id", "key");
+    return $spec;
+  }
 
-	function check() {
-		// TODO MORE
-		return null; // object is ok
-	}
-
-	function store() {
-		$msg = $this->check();
-		if( $msg ) {
-			return "CPreference::store-check failed<br />$msg";
-		}
-		if (($msg = $this->delete())) {
-			return "CPreference::store-delete failed<br />$msg";
-		}
-		if (!($ret = $this->ds->insertObject("user_preferences", $this, "pref_user"))) {
-			return "CPreference::store failed <br />" . $this->ds->error();
-		} else {
-			return null;
-		}
-	}
-
-	function delete() {
-		$sql = "DELETE FROM user_preferences WHERE pref_user = '$this->pref_user' AND pref_name = '$this->pref_name'";
-		if ($this->ds->exec( $sql )) {
-			return $this->ds->error();
-		} else {
-			return null;
-		}
-	}
+  function getProps() {
+    $specs = parent::getProps();
+    $specs["user_id"] = "ref class|CUser";
+    $specs["key"]     = "str notNull maxLength|40";
+    $specs["value"]   = "str";
+    return $specs;
+  }
+  
+  static function get($user_id = 0) {
+  	$pref = new self;
+  	$pref->user_id = $user_id;
+  	$list = $pref->loadMatchingList();
+  	
+  	$preferences = array();
+  	foreach($list as $_pref) {
+  		$preferences[$_pref->key] = $_pref->value;
+  	}
+  	return $preferences;
+  } 
+  
+  function loadRefsFwd(){
+  	$this->loadRefUser();
+  }
+  
+  function loadRefUser(){
+  	return $this->loadFwdRef("user_id", true);
+  }
 }
 ?>

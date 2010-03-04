@@ -18,10 +18,10 @@ var File = {
       objName: oButton.form._view.value,
       ajax: 1,
       target: 'systemMsg'
-    }
+    };
     var oAjaxOptions = {
-      onComplete: function() { File.refresh(object_id, object_class) } 
-    }
+      onComplete: function() { File.refresh(object_id, object_class); } 
+    };
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   },
   

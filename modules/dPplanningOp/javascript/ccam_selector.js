@@ -1,6 +1,6 @@
 // $Id$
 
-var CCAMSelector = {
+CCAMSelector = {
   sForm     : null,
   sView     : null,
   sTarif    : null,
@@ -20,9 +20,8 @@ var CCAMSelector = {
   },
 
   pop: function() {
-    var oForm = document[this.sForm];
-    this.oUrl = new Url();
-    this.oUrl.setModuleAction("dPplanningOp", "code_selector");
+    var oForm = getForm(this.sForm);
+    this.oUrl = new Url("dPplanningOp", "code_selector");
     
     if(this.sAnesth) {
       this.oUrl.addParam("anesth"    , oForm[this.sAnesth].value);
@@ -42,11 +41,11 @@ var CCAMSelector = {
   },
   
   doSet: function(){
-    var oForm = document[CCAMSelector.sForm];
+    var oForm = getForm(CCAMSelector.sForm);
 
     $V(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
     if (this.sTarif) {
 	    $V(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
     }
   }
-}
+};

@@ -1,5 +1,6 @@
 // $Id$
-var SejourHprimSelector = {
+
+SejourHprimSelector = {
   sForm       : null,
   sId         : null,
   sIPPForm    : null,
@@ -17,8 +18,7 @@ var SejourHprimSelector = {
     IPPid : null
   },
   pop: function() {
-    var url = new Url();
-    url.setModuleAction("hprim21", "sejour_hprim_selector");
+    var url = new Url("hprim21", "sejour_hprim_selector");
     if(this.sPatient_id) {
       url.addParam("patient_id", this.sPatient_id);
     } else {
@@ -47,5 +47,4 @@ var SejourHprimSelector = {
       $V(oFormIPP[SejourHprimSelector.sIPPId]  , SejourHprimSelector.prepared.IPPid);
     }
   }
-  
-}
+};

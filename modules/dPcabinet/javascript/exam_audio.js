@@ -31,11 +31,10 @@ function changeTonalValue(sCote, sConduction, iFrequence, iNewValue) {
   }
   
   oElement.value = iNewValue;
-  if(oForm.examaudio_id.value==""){
+  if(oForm.examaudio_id.value=="")
     oForm.submit();
-  }else{
-    submitFormAjax(oForm, 'systemMsg', { onComplete : window["reloadGraphTonale"+sCote]});
-  }
+  else
+    onSubmitFormAjax(oForm, { onComplete : window["reloadGraphTonale"+sCote] });
 }
 
 function changeTonalValueMouse(event, sCote) {
@@ -47,14 +46,14 @@ function changeTonalValueMouse(event, sCote) {
     top   : 30,
     right : 20 + iLegendMargin,
     bottom: 15
-  }
+  };
   
   var oGraphRect = {
     x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
     y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
-  }
+  };
   
   var iStep = oGraphRect.w / (iMaxIndexFrequence+1);
   var iRelatX = Event.pointerX(event) - oGraphRect.x; 
@@ -128,14 +127,14 @@ function changeTympanValueMouse(event, sCote) {
     top   : 20,
     right : 10,
     bottom: 30
-  }
+  };
   
   var oGraphRect = {
     x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
     y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
-  }
+  };
 
   var iStep = oGraphRect.w / (iMaxIndexPression+1);
   var iRelatX = Event.pointerX(event) - oGraphRect.x; 
@@ -227,14 +226,14 @@ function changeVocalValueMouse(event) {
     top   : 45,
     right : 20,
     bottom: 20
-  }
+  };
   
   var oGraphRect = {
     x : Position.cumulativeOffset(oImg)[0] + oGraphMargins.left,
     y : Position.cumulativeOffset(oImg)[1] + oGraphMargins.top ,
     w : oImg.width  - oGraphMargins.left - oGraphMargins.right ,
     h : oImg.height - oGraphMargins.top  - oGraphMargins.bottom
-  }
+  };
   
   var iRelatX = Event.pointerX(event) - oGraphRect.x; 
   var iRelatY = Event.pointerY(event) - oGraphRect.y;

@@ -30,16 +30,12 @@ if($user_id !== null){
   $user = new CUser;
   $user->load($user_id);
   
-  $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = 0";
-  $global_prefs = $ds->loadHashList($sql);
+  $global_prefs = CPreferences::get(0);
 
-  if($user_id == $AppUI->user_id){
+  if($user_id == $AppUI->user_id)
     $prefs = array_merge($global_prefs, $AppUI->user_prefs);
-  }
-  else{
-    $sql = "SELECT pref_name, pref_value FROM user_preferences WHERE pref_user = $user_id";
-    $prefs = array_merge($global_prefs, $ds->loadHashList($sql));
-  }
+  else
+    $prefs = CPreferences::get($user_id);
 }
 
 // load the preferences

@@ -1,4 +1,4 @@
-var DHE = {
+DHE = {
   refresh: function(patient_id, praticien_id) {
     var url = new Url("ecap", "httpreq_new_dhe");
     url.addParam("patient_id", patient_id);

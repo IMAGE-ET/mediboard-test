@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-var ObjectSelector = {
+ObjectSelector = {
   sForm    : null,
   sId      : null,
   sView    : null,
@@ -21,7 +21,7 @@ var ObjectSelector = {
   },
    
   pop: function() {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     var url = new Url("system", "object_selector");
     url.addParam("onlyclass", this.onlyclass);
     url.addParam("selClass", oForm[this.sClass].value);
@@ -29,7 +29,7 @@ var ObjectSelector = {
   },
   
   set: function(oObject) {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     
     if (oForm[this.sView]) {
       $V(oForm[this.sView], oObject.view);
@@ -38,4 +38,4 @@ var ObjectSelector = {
     $V(oForm[this.sClass], oObject.objClass);
     $V(oForm[this.sId], oObject.id);
   }
-}
+};

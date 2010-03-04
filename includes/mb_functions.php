@@ -574,63 +574,17 @@ function mbLoadJSLocales() {
     mbWriteJSLocalesFile($language);
   }
   
-  return mbLoadScript($path);
+  return $path;
 }
 
 /**
  * Loads all scripts
  */
-function mbLoadScripts() {
-  $affichageScript = '';
+function mbLoadScripts($scripts) {
+  $affichageScript = "";
   
-  // Locales
-  $affichageScript .= mbLoadJSLocales();
-  
-  // Prototype JS & Scriptaculous
-  $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js");
-  
-  // We force the download of the dependencies 
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/builder.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/effects.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/dragdrop.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/controls.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/slider.js");
-  $affichageScript .= mbLoadScript("lib/scriptaculous/src/sound.js");
-  
-  $affichageScript .= mbLoadScript("includes/javascript/prototypex.js");
-  
-  // Datepicker
-  $affichageScript .= mbLoadScript("includes/javascript/date.js");
-  $affichageScript .= mbLoadScript("lib/datepicker/datepicker.js");
-  $affichageScript .= mbLoadScript("lib/datepicker/datepicker-locale-fr_FR.js");
-  
-  // Livepipe UI
-  $affichageScript .= mbLoadScript("lib/livepipe/livepipe.js");
-  $affichageScript .= mbLoadScript("lib/livepipe/tabs.js");
-  $affichageScript .= mbLoadScript("lib/livepipe/window.js");
-  
-  // Flotr
-  $affichageScript .= mbLoadScript("lib/flotr/flotr.js");
-  $affichageScript .= mbLoadScript("lib/flotr/lib/excanvas.js", "IE"); // for IE
-  $affichageScript .= mbLoadScript("lib/flotr/lib/base64.js");
-  $affichageScript .= mbLoadScript("lib/flotr/lib/canvas2image.js");
-  $affichageScript .= mbLoadScript("lib/flotr/lib/canvastext.js");
-  
-  $affichageScript .= mbLoadScript("includes/javascript/functions.js");
-  $affichageScript .= mbLoadScript("includes/javascript/tooltip.js");
-  $affichageScript .= mbLoadScript("includes/javascript/controls.js");
-  $affichageScript .= mbLoadScript("includes/javascript/cookies.js");
-  $affichageScript .= mbLoadScript("includes/javascript/url.js");
-  $affichageScript .= mbLoadScript("includes/javascript/forms.js");
-  $affichageScript .= mbLoadScript("includes/javascript/checkForms.js");
-  $affichageScript .= mbLoadScript("includes/javascript/aideSaisie.js");
-  
-  $affichageScript .= mbLoadScript("includes/javascript/printf.js");
-  $affichageScript .= mbLoadScript("includes/javascript/mbmail.js");
-  
-  if (CAppUI::conf('debug')) {
-    //$affichageScript .= mbLoadScript("http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js", "IE");
+  foreach($scripts as $script) {
+    $affichageScript .= is_array($script) ? mbLoadScript($script[0], $script[1]) : mbLoadScript($script);
   }
   
   return $affichageScript;
@@ -934,6 +888,10 @@ function get_remote_address(){
     $address["proxy"]  = $address["client"];
     $address["client"] = $client;
   }
+  
+  // To handle weird IPs sent by iPhones, in the form "10.10.10.10, 10.10.10.10"
+  $address["proxy"]  = reset(explode(",", $address["proxy"]));
+  $address["client"] = reset(explode(",", $address["client"]));
   
   return $address;
 }

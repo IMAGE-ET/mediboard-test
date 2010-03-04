@@ -62,7 +62,7 @@ class CCanDo {
     }
   }
   
-  function needsObject($object, $setValues = null){
+  function needsObject(CMbObject $object, $setValues = null){
     $this->setValues = $setValues;
     if(!$object->_id){
       $params = "&object_guid=$object->_class_name-?";

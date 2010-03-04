@@ -35,7 +35,7 @@ var Filter = Class.create({
   submit: function (fieldToSelect) {
     var oForm = this.getForm();
     
-    makeRanges = function (total, step) {
+    var makeRanges = function (total, step) {
       var ranges = [], i = 0;
       while(total > 0) {
         ranges.push(i*step+','+step);
@@ -43,9 +43,9 @@ var Filter = Class.create({
         i++;
       }
       return ranges;
-    }
+    };
 
-    makeRangeSelector = function () {
+    var makeRangeSelector = function () {
       var form = this.getForm();
 
       this.sList.each(function (list) {

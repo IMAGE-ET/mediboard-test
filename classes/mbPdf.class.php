@@ -11,7 +11,7 @@
 define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
 
 define ("K_PATH_MAIN", CAppUI::conf('root_dir')."/lib/tcpdf/");
-define ("K_PATH_URL", "http://".CAppUI::conf('site_domain'));
+define ("K_PATH_URL", "");
 
 define ("FPDF_FONTPATH", K_PATH_MAIN."fonts/");
 define ("K_PATH_CACHE", K_PATH_MAIN."cache/");

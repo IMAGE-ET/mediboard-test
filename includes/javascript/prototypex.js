@@ -13,7 +13,7 @@
  */
 Class.extend = function (oClass, oExtension) {
   Object.extend(oClass.prototype, oExtension);
-}
+};
  
 /**
  * Function class
@@ -291,7 +291,7 @@ Element.addMethods('form', {
   clear: function(form, fire){
     $A(form.elements).each(function(e){
       if (e.type != "hidden" || /(autocomplete|date|time)/i.test(e.className)) {
-        $V(e, '', fire)
+        $V(e, '', fire);
       }
     });
   }

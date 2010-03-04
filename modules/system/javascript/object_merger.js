@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-var ObjectMerger = {
+ObjectMerger = {
 	setField: function(field, source) {
 	  var form = source.form;
 	  var value = $V(source);
@@ -66,4 +66,4 @@ var ObjectMerger = {
 	perform: function() {
 	  getForm("form-merge").submit();
 	}
-}
+};

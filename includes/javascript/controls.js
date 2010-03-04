@@ -281,7 +281,7 @@ Element.addMethods('input', {
     }
     
     element.observe("focus", focusEvent);
-    element.observe("blur",  (function(){checkVal(true)}).bind(this));
+    element.observe("blur",  (function(){checkVal(true);}).bind(this));
     element.observe("mask:check", checkVal);
     element.onkeydown  = keydownEvent;
     element.onkeypress = keypressEvent;
@@ -544,7 +544,7 @@ Element.addMethods('input', {
         $V(element, result, true);
         element.select();
       }
-    }
+    };
     
     if (element.value && options.decimals !== null) {
       element.value = Number(element.value).toFixed(options.decimals);
@@ -577,7 +577,7 @@ Element.addMethods('select', {
     // Utility functions ////////
     var hideSelectTrees = function () {
       $$('ul.'+options.className+' ul').invoke('hide');
-    }
+    };
     
     var validKey = function (keycode) {
       return (keycode >= 48 && keycode <= 90 || // letters and digits
@@ -586,7 +586,7 @@ Element.addMethods('select', {
               keycode >= 219 && keycode <= 222 ||
               keycode == 32 || // space
               keycode == 8); // backspace
-    }
+    };
     
     var updateCoordinates = function () {
       pos = select.cumulativeOffset();
@@ -594,14 +594,14 @@ Element.addMethods('select', {
       
       pos.left = pos.left+parseInt(select.getStyle('margin-left'))+'px';
       pos.top  = pos.top +parseInt(select.getStyle('margin-top'))-1+dim.height+'px';
-    }
+    };
     
     var reposition = function () {
       updateCoordinates();
       var style = {zIndex: 40, position: 'absolute', left: pos.left, top: pos.top};
       tree.setStyle(style);
       list.setStyle(style);
-    }
+    };
     
     var makeTree = function (sel, ul) {
       updateCoordinates();
@@ -672,7 +672,7 @@ Element.addMethods('select', {
         ul.insert(li);
       });
       tree.highlight();
-    }
+    };
     /////////////////////////////
     
     // Every element is hidden, but preserves its width
@@ -693,12 +693,12 @@ Element.addMethods('select', {
       tree.show();
       
       document.body.observe('mouseup', tree.undisplay);
-    }
+    };
     
     tree.undisplay = function (e) {
       document.body.stopObserving('mouseup', tree.undisplay);
       tree.hide();
-    }
+    };
     
     tree.highlight = function () {
       var selected = tree.select('.selected'),
@@ -710,7 +710,7 @@ Element.addMethods('select', {
       if (val && (s = $(select.id+'_'+val))) {
         s.addClassName('selected');
       }
-    }
+    };
     select.insert({after: tree.hide()});
     
     // List -------------
@@ -751,7 +751,7 @@ Element.addMethods('select', {
           break;
         }
       }
-    }
+    };
     
     list.search = function(s) {
       var li, text;
@@ -761,7 +761,7 @@ Element.addMethods('select', {
         select.select('option').each(function (c) {
           text = c.text.toLowerCase();
           if (text.indexOf(s) != -1) {
-            li = new Element('li').update(c.text.replace(new RegExp(s, "gi"), function($1){return '<span class="highlight">'+$1+'</span>'}));
+            li = new Element('li').update(c.text.replace(new RegExp(s, "gi"), function($1){return '<span class="highlight">'+$1+'</span>';}));
             li.observe('click', function() {
               $V(select, c.value, true);
               tree.highlight();
@@ -772,7 +772,8 @@ Element.addMethods('select', {
           }
         });
       }
-    }
+    };
+    
     select.insert({after: list.hide()});
     
     reposition();
@@ -804,7 +805,7 @@ Element.addMethods('select', {
         }
         search.value = null;
       }
-    }
+    };
     
     search.display = function (e) {
       var keycode = Event.key(e);
@@ -816,7 +817,8 @@ Element.addMethods('select', {
         search.setStyle({position: 'relative', top: 0})
               .stopObserving('keydown', search.display);
       }
-    }
+    };
+    
     select.insert({after: search});
     
     // The search input to blur the select control and catch keys
@@ -834,7 +836,7 @@ Element.addMethods('select', {
       if (show) tree.display();
       search.value = '';
       search.observe('keydown', search.display);
-    }
+    };
 
     select.onclick = tree.display;
   },

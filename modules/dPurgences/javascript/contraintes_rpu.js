@@ -104,5 +104,4 @@ ContraintesRPU = {
 	    input.disabled = !valeursPossibles.include(input.value);
 	  });
 	}
-}
-
+};

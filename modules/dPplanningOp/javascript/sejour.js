@@ -21,4 +21,4 @@ Sejour = {
       addParam("sejour_id", sejour_id).
       redirectOpener();
   }
-}
+};

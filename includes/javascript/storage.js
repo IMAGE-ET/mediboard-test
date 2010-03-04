@@ -35,7 +35,7 @@ var MbStorage = {
       this._printStatus("Veuillez entrer une clé", "error");
       return;
     }
-    this._save(key, value)
+    this._save(key, value);
   },
 
   clear: function(){
@@ -52,8 +52,7 @@ var MbStorage = {
       // redraw our keys after the dialog is closed, in
       // case they have all been erased
       var self = this;
-      dojo.storage.onHideSettingsUI = function(){
-      }
+      dojo.storage.onHideSettingsUI = function(){};
       
       // show the dialog
       dojo.storage.showSettingsUI();

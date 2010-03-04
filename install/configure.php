@@ -51,11 +51,6 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="site_domain" title="Nom de domaine de premier du système">Nom de domaine :</label></th>
-    <td><input type="text" size="40" name="site_domain" value="<?php echo $dPconfig['site_domain'] ?>" /></td>
-  </tr>
-
-  <tr>
     <th><label for="offline" title="Nom de domaine de premier du système">Mode maintenance :</label></th>
     <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
   </tr>
@@ -83,8 +78,8 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="dbtype" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
-    <td><input type="text" readonly="readonly" size="20" name="dbtype" value="<?php echo @$dPconfig["dbtype"]; ?>" /></td>
+    <th><label for="db[std][dbtype]" title="Type de base de données. Seul mysql est possible pour le moment">Type de base de données :</label></th>
+    <td><input type="text" readonly="readonly" size="40" name="db[std][dbtype]" value="<?php echo @$dPconfig["db"]["std"]["dbtype"]; ?>" /></td>
   </tr>
 
   <tr>
@@ -129,30 +124,6 @@ showHeader();
   <tr>
     <th><label for="ft[application/pdf]" title="Application par défaut">Application pour les fichiers MIME <strong>application/pdf</strong> :</label></th>
     <td><input type="text" size="40" name="ft[application/pdf]" value="<?php echo $dPconfig['ft']['application/pdf'] ?>" /></td>
-  </tr>
-
-  <tr>
-    <th class="category" colspan="2">Graphiques</th>
-  </tr>
-
-  <tr>
-    <th><label for="graph_engine" title="Graphique">Selection du type de graphique :</label></th>
-    <td>
-      <select name="graph_engine">
-        <option value="jpgraph" <?php if($dPconfig['graph_engine'] == 'jpgraph'){echo 'selected="selected"';} ?> >jpgraph</option>
-        <option value="eZgraph" <?php if($dPconfig['graph_engine'] == 'eZgraph'){echo 'selected="selected"';} ?> >eZgraph</option>
-      </select>
-    </td>
-  </tr>
-  
-  <tr>
-    <th><label for="graph_svg" title="Graphique">Choix du mode SVG :</label></th>
-    <td>
-      <select name="graph_svg">
-        <option value="oui" <?php if($dPconfig['graph_svg'] == 'oui'){echo 'selected="selected"';} ?> >oui</option>
-        <option value="non" <?php if($dPconfig['graph_svg'] == 'non'){echo 'selected="selected"';} ?> >non</option>
-      </select>
-    </td>
   </tr>
 </table>
 

@@ -29,7 +29,7 @@ var Intermax = {
     var sLogicMaxError = sError != "0" ? "\n\n[Code LogicMax "+sError+"]" : "";
 
     // Actual alert
-    sErrorMessage = $T("Intermax.error." + sError).unslash() || "Description non traduite";
+    var sErrorMessage = $T("Intermax.error." + sError).unslash() || "Description non traduite";
     alert(sLogicMaxFonction + "\n\n" + sErrorMessage + sExtraInfo + sLogicMaxError);
   },
   
@@ -38,10 +38,11 @@ var Intermax = {
    */
   bindContent: function(sContent) {    
     var aContentLines = sContent.split(this.newLine);
-    this.oContent = {}
-    var sCurrentCategory = "";
+    var sCurrentCategory;
+    
+    this.oContent = {};
+    
     aContentLines.each(function(line) {
-      
       // Create new category
       if (aMatches = line.match(/\[(\w*)\]/)) {
         sCurrentCategory = aMatches[1];
@@ -80,7 +81,8 @@ var Intermax = {
       PARAM: {
         AFFICHAGE: 1
       }
-    }
+    };
+    
     Object.extend(this.oContent, oCallContent);
         
     var sContent = this.makeContent();
@@ -100,7 +102,6 @@ var Intermax = {
 	    document.intermaxResult.performRead();
 	  	this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 1);
     }
-    
   },
   
   handleContent: function() {
@@ -112,7 +113,6 @@ var Intermax = {
 	    if (!this.watcher) {
 	    	Intermax.alert("100");
 	   	}
-
       return;
     }
     
@@ -151,7 +151,6 @@ var Intermax = {
   },
   
   handleResult: function(sFunction) {
-    
 		// Activate function handler
     var fResultHandler = this.ResultHandler[this.oContent.FONCTION.NOM] || this.ResultHandler["all"];
     fResultHandler();
@@ -183,7 +182,7 @@ var Intermax = {
         VITALE: {
           VIT_NUMERO_LOGICMAX: iVitale
         }
-      }
+      };
       
       // Won't extend properly with an array
       if (Intermax.Triggers['Formater FSE'].aActes.length == 0) {
@@ -226,6 +225,5 @@ var Intermax = {
         } 
 			} );
     }
-
   }
-}
+};

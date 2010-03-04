@@ -28,8 +28,7 @@ class CMbConfig {
     global $mbpath;
 
     $this->values["root_dir"] = strtr(realpath($mbpath), "\\", "/");
-    $this->values["base_url"] = "http://" . $_SERVER["HTTP_HOST"] . dirname(dirname($_SERVER["PHP_SELF"]));     
-    $this->values["site_domain"] = $_SERVER["HTTP_HOST"];     
+    $this->values["base_url"] = "http://" . $_SERVER["HTTP_HOST"] . dirname(dirname($_SERVER["PHP_SELF"]));
   }
   
   function loadValuesFromPath($path) {

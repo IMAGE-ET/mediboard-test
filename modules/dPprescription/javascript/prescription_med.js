@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-var prescriptionMed = {
+prescriptionMed = {
  refresh: function(sejour_id) {
    var url = new Url("dPprescription", "httpreq_vw_prescription_meds");
    url.addParam("sejour_id", sejour_id);

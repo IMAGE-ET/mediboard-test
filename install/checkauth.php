@@ -33,8 +33,8 @@ function showLogin() {
   </tr>
   <tr>
     <th><label for="password">Mot de passe :</label></th>
-    <td><input type="password" name="password" />
-  </td>
+    <td><input type="password" name="password" /></td>
+  </tr>
   <tr>
     <td class="button" colspan="2"><button class="submit" type="submit">Valider</button></td>
   </tr>
