@@ -1,6 +1,8 @@
 /* $Id: $ */
 
-th.title.modify {
+th.title.modify,
+table.form th.title.modify,
+table.tbl th.title.modify {
   color: #fd4;
 }
 th.title.urgence {
