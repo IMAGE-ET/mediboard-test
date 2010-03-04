@@ -124,22 +124,17 @@ Main.add(function () {
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
 
-<table class="form">
-  <tr>
-    <td style="width: 50%;">
-    	<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
-    	  {{tr}}CConsultation-title-create{{/tr}}
-      </a>
-    </td>
-    <td style="width: 50%;">
-		  {{if $consult->_id}}
-    	<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-    	  {{tr}}CConsultation-title-access{{/tr}}
-    	</a>
-		  {{/if}}
-    </td>
-  </tr>
-  
+
+<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
+  {{tr}}CConsultation-title-create{{/tr}}
+</a>
+{{if $consult->_id}}
+<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+  {{tr}}CConsultation-title-access{{/tr}}
+</a>
+{{/if}}
+
+<table class="form">  
   <tr>
     {{if $consult->_id}}
       <th class="title modify" colspan="5">
@@ -159,7 +154,7 @@ Main.add(function () {
   </tr>
   {{/if}}
   <tr>
-    <td>
+    <td style="width: 50%;">
       <table class="form">
         <tr>
         	<th class="category" colspan="3">Informations sur la consultation</th>
@@ -232,7 +227,7 @@ Main.add(function () {
       </table>
 
     </td>
-    <td>
+    <td style="width: 50%;">
 
       <table class="form">
         <tr><th class="category" colspan="3">Rendez-vous</th></tr>
