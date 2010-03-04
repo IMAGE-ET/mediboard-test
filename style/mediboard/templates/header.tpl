@@ -24,6 +24,7 @@ var Menu = {
 {{/if}}
 
 <table id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
+  {{if !$dialog}}
   {{if @$app->user_prefs.MenuPosition == "left"}}
   <tr>
     <td id="menubar" class="iconed" rowspan="10" style="width: 1px; text-align: center; vertical-align: top;">
@@ -41,7 +42,6 @@ var Menu = {
       </ul>
     </td>
   </tr>
-  <tr>
   {{else}}
   <tr>
     <td id="menubar" class="iconed">
@@ -59,8 +59,8 @@ var Menu = {
       </ul>
     </td>
   </tr>
-  <tr>
   {{/if}}
+  <tr>
     <td id="user">
       <button id="toggleIcons" class="vslip notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
       <script type="text/javascript">Menu.init();</script>
@@ -103,6 +103,7 @@ var Menu = {
       </div>
     </td>
   </tr>
+  {{/if}}
   <tr>
     <td style="vertical-align: top;">
       <div id="systemMsg">

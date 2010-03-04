@@ -351,6 +351,7 @@ table.form th {
 }
 
 table.form th.title {
+	color: #fff;
   font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
