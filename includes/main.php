@@ -101,6 +101,9 @@ if ($dosql) {
 
 // Feed module with tabs
 include("./modules/{$module->mod_name}/index.php");
+if ($tab !== null) {
+  $module->addConfigureTab();
+}
   
 if (!$a || $a === "index")
   $tab = $module->getValidTab($tab);
@@ -160,7 +163,6 @@ if (!$suppressHeaders) {
 
 // tabBox et inclusion du fichier demandé
 if ($tab !== null) {
-  $module->addConfigureTab();
   $module->showTabs();
 } else {
   $module->showAction();
