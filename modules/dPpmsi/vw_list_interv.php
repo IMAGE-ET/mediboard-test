@@ -58,11 +58,13 @@ foreach($plages as &$_plage) {
 
 $operation = new COperation;
 $where = array();
-$where["date"]     = "= '$date'";
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
-$where["annulee"]  = "= '0'";
-$order = "chir_id";
-$urgences = $operation->loadList($where, $order);
+$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$where["operations.date"]       = "= '$date'";
+$where["operations.plageop_id"] = "IS NULL";
+$where["operations.annulee"]    = "= '0'";
+$where["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
+$order = "operations.chir_id";
+$urgences = $operation->loadList($where, $order, null, null, $ljoin);
 $totalOp += count($urgences);
 foreach($urgences as $_urgence) {
   $_urgence->loadRefChir(1);
