@@ -10,12 +10,6 @@
 
 {{assign var=patient value=$prescription->_ref_patient}}
 {{assign var=sejour value=$prescription->_ref_object}}
-{{if $sejour->_ref_curr_affectation->_id}}
-{{assign var=chambre value=$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre}}
-{{else}}
-{{assign var=chambre value=""}}
-{{/if}}
-
 
 <script type="text/javascript">
 
@@ -90,22 +84,28 @@ Main.add( function(){
 
 
 <div class="header">
-  {{if $chambre}}
-  <span style="float: left">
-    <strong>Chambre {{$chambre->_view}}</strong>
-  </span>
-  {{/if}}
   <span style="float: right">
-    DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
-    DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+    {{foreach from=$affectations item=_affectation}}
+		  Chambre {{$_affectation->_ref_lit->_ref_chambre->_view}} 
+			{{if $_affectation->entree|date_format:$dPconfig.date == $debut|date_format:$dPconfig.date}}
+			à partir de {{$_affectation->entree|date_format:$dPconfig.time}} 
+			{{/if}} 
+		  {{if $_affectation->sortie|date_format:$dPconfig.date == $debut|date_format:$dPconfig.date}}
+		    {{if $_affectation->sortie}}jusqu'à {{$_affectation->sortie|date_format:$dPconfig.time}}{{/if}}
+		  {{/if}} 
+			<br />
+			  DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
+		    DS: {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
+		{{/foreach}}
   </span>
-  <div style="text-align: center">
+	
+  <div>
     <strong>{{$patient->_view}}</strong>
     Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
     <br />
     {{assign var=operation value=$sejour->_ref_last_operation}}
     Intervention le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}
-    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong><br />
+    <strong>(I{{if $operation->_compteur_jour >=0}}+{{/if}}{{$operation->_compteur_jour}})</strong><br /><br />
 		<strong>{{$operation->libelle}}</strong> 
     <div style="text-align: left">
 		{{if !$operation->libelle}}

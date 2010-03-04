@@ -57,7 +57,7 @@ if(count($prescription->_ref_lines_elt_for_plan)){
 			                if(isset($_quantite["total"]) && $_quantite["total"]){
 			                  if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
 			                    $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
-			                  }		                  
+												}		                  
 			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
 			                }
 			                if(!array_key_exists($_line->_id, $lines)){
@@ -100,6 +100,17 @@ foreach($bons as $_chap => &$_bons){
   ksort($_bons);
 }
 
+
+// Creation d'un tableau des affectations pour la date courante
+$affectations = array();
+$prescription->_ref_object->loadRefsAffectations();
+foreach($prescription->_ref_object->_ref_affectations as $_affectation){
+	if(mbDate($_affectation->entree) == $debut || mbDate($_affectation->sortie) == $debut){
+	  $affectations[$_affectation->entree] = $_affectation;
+	}
+}
+ksort($affectations);
+
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
@@ -107,6 +118,7 @@ $filter_line = new CPrescriptionLineElement();
 $filter_line->debut = $debut;
 
 $smarty = new CSmartyDP;
+$smarty->assign("affectations", $affectations);
 $smarty->assign("bons", $bons);
 $smarty->assign("lines", $lines);
 $smarty->assign("debut", $debut);
@@ -116,6 +128,7 @@ $smarty->assign("sel_chapitre", $sel_chapitre);
 $smarty->assign("chapitres", $chapitres);
 $smarty->assign("filter_line", $filter_line);
 $smarty->assign("categories", $categories);
+$smarty->assign("debut", $debut);
 $smarty->display("print_bon.tpl");
 
 ?>
