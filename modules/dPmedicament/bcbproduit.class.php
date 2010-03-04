@@ -136,6 +136,9 @@ class CBcbProduit extends CBcbObject {
 	    $this->getReferent();
     }
     $this->isInLivret();
+		if(!$this->voies){
+		  $this->loadVoies();
+		}
   }
   
   
