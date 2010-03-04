@@ -25,7 +25,7 @@ Main.add( function(){
   if(document.search{{$element}}){
     var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
     url.addParam("category", "{{$element}}");
-    url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
+    url.autoComplete("search{{$element}}_libelle", "{{$element}}_auto_complete", {
       minChars: 2,
       updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
     } );
@@ -60,9 +60,9 @@ Main.add( function(){
 
   <tr>
     {{if $perm_add_line}}
-      <th class="category">Nouvelle ligne</th>
+      <th class="title">Nouvelle ligne</th>
     {{/if}}
-    <th class="category" style="width: 1%;">Affichage</th>
+    <th class="title" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
     {{if $perm_add_line}}
@@ -83,14 +83,14 @@ Main.add( function(){
 			 <br />
 			 
 			  <!-- Selecteur d'elements -->
-			  <input type="text" name="{{$element}}" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+			  <input type="text" name="libelle" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
 			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
 			  <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>
 			  <script type="text/javascript">   
 			    ElementSelector.init{{$element}} = function(type){
 			      this.sForm = "search{{$element}}";
-			      this.sLibelle = "{{$element}}";
+			      this.sLibelle = "libelle";
 			      this.sElement_id = "element_id";
 			      this.sType = type;
 			      this.selfClose = false;

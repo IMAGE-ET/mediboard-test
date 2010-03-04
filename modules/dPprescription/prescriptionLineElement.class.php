@@ -55,6 +55,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $backProps["transmissions"]   = "CTransmissionMedicale object_id";
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
+    $backProps["planifications"]  = "CPlanificationSysteme object_id";
     return $backProps;
   }
   
@@ -121,18 +122,31 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   }
   
   function store(){
-  	$get_guid = $this->_id ? false : true;
+  	$mode_creation = !$this->_id;
+		
+    $calcul_planif = ($this->fieldModified("debut") || 
+                      $this->fieldModified("time_debut") || 
+                      $this->fieldModified("duree") || 
+                      $this->fieldModified("unite_duree")|| 
+                      $this->fieldModified("time_fin")) ? true : false;
     
     if($msg = parent::store()){
   		return $msg;
   	}
     
+		if($calcul_planif){
+			if($this->_ref_prescription->type == "sejour"){
+	      $this->removePlanifSysteme();
+	      $this->calculPlanifSysteme();	
+			}
+    }
+		
   	// On met en session le dernier guid créé
-    if($get_guid){
+    if($mode_creation){
       $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
     }
-  }
-  
+	}
+		
   function loadView() {
     $this->loadRefsPrises();
     $this->loadRefsTransmissions();

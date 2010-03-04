@@ -251,7 +251,7 @@ viewBilanService = function(service_id, date){
       
       <table class="form" id="left-column" style="width:240px;">
         <tr>
-          <th class="category">
+          <th class="title">
             {{$date|date_format:$dPconfig.longdate}}
             <form action="?" name="changeDate" method="get">
               <input type="hidden" name="m" value="{{$m}}" />

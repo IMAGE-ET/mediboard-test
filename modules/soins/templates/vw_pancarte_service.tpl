@@ -84,20 +84,19 @@ Main.add(function () {
 <div id="viewPancarte" style="display: none;">
 <table class="form">
   <tr>
-    <th class="category">
+    <th class="title">
       Pancarte du service {{$service->_view}}
-	    
     </th>
   </tr>
 </table>
 <table class="tbl">
   <tr>
-    <th rowspan="2" style="width: 1%;">Patient</th>
-    <th rowspan="2" style="width: 1%;">Lit</th>
-    <th rowspan="2" style="width: 1%;">Praticien</th>
+    <th rowspan="2" style="width: 1%;" class="title">Patient</th>
+    <th rowspan="2" style="width: 1%;" class="title">Lit</th>
+    <th rowspan="2" style="width: 1%;" class="title">Praticien</th>
       {{foreach from=$tabHours key=_date item=_hours_by_moment}}
         {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-          <th class="{{$_date}}-{{$moment_journee}}"
+          <th class="{{$_date}}-{{$moment_journee}} title"
               colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}{{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}{{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
 	            <strong>{{$moment_journee}} du {{$_date|date_format:"%d/%m"}}</strong>
 		    {{/foreach}} 
@@ -117,14 +116,13 @@ Main.add(function () {
 	{{foreach from=$prescriptions item=_prescription}}
 	  {{assign var=_prescription_id value=$_prescription->_id}}
 	  <tr>
-	    <td style="width: 10%;" class="text">
-       	<span style="float: left; padding-right: 5px;">
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=20 nodebug=true}} 
-         </span>
-         <a href="#1" onclick="viewDossierSoin('{{$_prescription->_ref_object->_id}}')">
+	    <td>
+        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$_prescription->_ref_patient size=20 nodebug=true}}
+         <a href="#1" onclick="viewDossierSoin('{{$_prescription->_ref_object->_id}}')" style="display: inline;">
            {{assign var=sejour value=$_prescription->_ref_object}}
-           <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}">
-             {{$_prescription->_ref_patient->_view}}
+           <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
+					       onmouseover="ObjectTooltip.createEx(this, '{{$_prescription->_ref_patient->_guid}}');">					 
+						  {{$_prescription->_ref_patient->_view}}
            </span>
 				 </a>
 	    </td>
@@ -192,7 +190,7 @@ Main.add(function () {
 		          		              {{$perfusion->_view}}
 		          		            </th>
 		          		          </tr>
-			          		        {{foreach from=$quantites_by_perf key=perf_line_id item=_quantites}}
+													{{foreach from=$quantites_by_perf key=perf_line_id item=_quantites}}
 			          		            {{assign var=quantite_prevue value=0}}
 			          		            {{assign var=quantite_adm value=0}}
 		         		            		{{if array_key_exists('prevue', $_quantites)}}
@@ -232,23 +230,23 @@ Main.add(function () {
 			          		          </td>
 			          		          <td>
 			          		             {{assign var=line value=$list_lines.$chapitre.$line_id}}
-			          		             {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-			          		               {{$line->_ucd_view}}<br />
+			          		             {{if $line instanceof CPrescriptionLineMedicament}}
+			          		               <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');">{{$line->_ucd_view}}</span><br />
 			          		               <span style="opacity: 0.5; font-size:0.8em;">
 			          		                 {{$line->_forme_galenique}}
 			          		               </span>
 			          		             {{/if}}
-			          		             {{if $line->_class_name == "CPrescriptionLineElement"}}
-				          		             {{$line->_view}}
+			          		             {{if $line instanceof CPrescriptionLineElement}}
+				          		             <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}');">{{$line->_view}}</span>
 				          		          {{/if}}
 			          		          </td>
 				          		        <td style="text-align: center;">{{$quantite_prevue}}</td>
 				          		        <td style="text-align: center;">{{$quantite_adm}}</td>
 				          		        <td>
-				          		          {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+				          		          {{if $line instanceof CPrescriptionLineMedicament}}
 			          		              {{$line->_unite_administration}}
 			          		             {{/if}}
-			          		             {{if $line->_class_name == "CPrescriptionLineElement"}}
+			          		             {{if $line instanceof CPrescriptionLineElement}}
 				          		           {{$line->_unite_prise}}
 				          		          {{/if}}
 				          		        </td>

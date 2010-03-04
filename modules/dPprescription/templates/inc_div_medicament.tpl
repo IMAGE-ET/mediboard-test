@@ -193,9 +193,9 @@ togglePerfDecalage = function(oForm){
   {{/if}}
   <tr>
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
-      <th class="category">Nouvelle ligne</th>
+      <th class="title">Nouvelle ligne</th>
     {{/if}}
-    <th class="category" style="width: 1%;">Affichage</th>
+    <th class="title" style="width: 1%;">Affichage</th>
   </tr>
   <tr>
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
@@ -298,7 +298,7 @@ togglePerfDecalage = function(oForm){
 {{if $lite && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment) && $readonly}}
 <table class="tbl">
   <tr>
-    <th colspan="6">Médicaments</th>
+    <th colspan="6" class="title">Médicaments</th>
   </tr>
   <tr>
     <th style="width: 5%;">Alertes</th> 
@@ -345,7 +345,7 @@ togglePerfDecalage = function(oForm){
   {{if $lite && $prescription->_ref_perfusions && $readonly}}
 	<table class="tbl">
 	  <tr>
-	    <th colspan="7">Perfusions</th>
+	    <th colspan="7" class="title">Perfusions</th>
 	  </tr>
 	  <tr>
 	    <th style="width: 8%;">Type</th>

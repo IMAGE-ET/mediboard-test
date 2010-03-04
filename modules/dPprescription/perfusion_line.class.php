@@ -67,6 +67,7 @@ class CPerfusionLine extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["administrations"]  = "CAdministration object_id";
+		$backProps["planifications"]  = "CPlanificationSysteme object_id";
     return $backProps;
   }
   
@@ -178,6 +179,74 @@ class CPerfusionLine extends CMbObject {
     }
   }
   
+	
+	function updateQuantiteAdministration(){
+		 if($this->unite && $this->quantite){
+        $_unite_prise = str_replace('/kg', '', $this->unite);
+        // Si l'unite de prise est en fonction du poids du patient
+        if($_unite_prise != $this->unite){
+          $this->_ref_perfusion->loadRefPrescription();
+          $this->_ref_perfusion->_ref_prescription->loadRefObject();
+          $this->_ref_perfusion->_ref_prescription->_ref_object->loadRefPatient();
+          $patient =& $this->_ref_perfusion->_ref_prescription->_ref_object->_ref_patient;
+          if(!$patient->_ref_constantes_medicales){
+            $patient->loadRefConstantesMedicales();
+          }
+          $poids = $patient->_ref_constantes_medicales->poids;
+        }
+
+        // Chargement du tableau de correspondance entre les unites de prises
+        $this->_ref_produit->loadRapportUnitePriseByCIS();
+        $coef = @$this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
+        if(!$coef){
+          $coef = 1;
+        }
+        $this->_quantite_administration = $this->quantite * $coef;
+        if(isset($poids)){
+          $this->_quantite_administration *= $poids;
+        }
+				
+        if(isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
+          $this->_ref_perfusion->_quantite_totale += $this->_quantite_administration;
+        }
+        $produit =& $this->_ref_produit;   
+        if(!$produit->libelle_unite_presentation){
+          $produit->loadLibellePresentation();
+          $produit->loadUnitePresentation();
+        }
+        $this->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
+        $this->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
+
+        // Calcul du ration entre quantite d'administration et quantite de dispensation
+        if($this->_unite_dispensation == $produit->libelle_unite_presentation){
+          $this->_ratio_administration_dispensation = 1;
+        } else {
+          $this->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
+        }
+        $this->_quantite_dispensation = $this->_quantite_administration * $this->_ratio_administration_dispensation; 
+      }
+	}
+	
+	function store(){
+		$calculPlanif =  ($this->fieldModified("quantite") || $this->fieldModified("unite"));
+    $mode_creation = !$this->_id;
+		
+	  if($msg = parent::store()){
+	  	return $msg;
+	  }	
+		
+    if($calculPlanif || $mode_creation){
+    	$this->loadRefPerfusion();
+			if($this->_ref_perfusion->_ref_prescription->type != "sejour"){
+				return;
+			}
+    	$this->_ref_perfusion->removePlanifSysteme();
+			 if($this->_ref_perfusion->substitution_active && (!$this->_ref_perfusion->conditionnel || ($this->_ref_perfusion->conditionnel && $this->_ref_perfusion->condition_active))){
+         $this->_ref_perfusion->calculPlanifsPerf();
+			 }
+    }
+	}
+	
   function loadRefsAdministrations(){
     $this->_ref_administrations = $this->loadBackRefs("administrations");
   }

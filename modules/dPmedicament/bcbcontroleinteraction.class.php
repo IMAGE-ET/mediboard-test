@@ -26,7 +26,7 @@ class CBcbControleInteraction extends CBcbObject {
   }
   
   function getInteractions() {
-    $this->testInteractions();
+  	$this->testInteractions();
     // Chargement du niveau de gravité (erreur dans la classe BCB)
     $ds = CBcbObject::getDataSource();
     foreach($this->distObj->gtabInter as $_interaction){

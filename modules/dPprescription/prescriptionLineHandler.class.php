@@ -9,7 +9,7 @@
  */
 
 class CPrescriptionLineHandler extends CMbObjectHandler {
-  static $handled = array ("CSejour","COperation");
+  static $handled = array ("CSejour","COperation", "CAffectation");
   
   static function isHandled(CMbObject &$mbObject) {
     if(!CModule::getActive("dPprescription")){
@@ -62,7 +62,18 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
         return;
       }
     }
-    
+
+    if($mbObject instanceof CAffectation){
+    	// Suppression des planifs lors de la sauvegarde d'une affectation
+      $prescription = new CPrescription();
+      $prescription->object_id = $mbObject->sejour_id;
+      $prescription->object_class = "CSejour";
+      $prescription->type = "sejour";
+      $prescription->loadMatchingObject();
+      $prescription->removeAllPlanifSysteme();   
+      return;
+    }
+		
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
    if($mbObject->_class_name == "COperation"){
      $mbObject->loadRefSejour();
@@ -200,6 +211,20 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
   }
   
   function onAfterDelete(CMbObject &$mbObject) {
+  	 if (!$this->isHandled($mbObject)) {
+      return;
+    }
+		
+		if($mbObject instanceof CAffectation){
+      // Suppression des planifs lors de la sauvegarde d'une affectation
+      $prescription = new CPrescription();
+      $prescription->object_id = $mbObject->sejour_id;
+      $prescription->object_class = "CSejour";
+      $prescription->type = "sejour";
+      $prescription->loadMatchingObject();
+      $prescription->removeAllPlanifSysteme();   
+      return;
+    }
   }
 }
 

@@ -158,7 +158,6 @@ Main.add( function(){
         <button style="float: left" type="button" class="hslip notext" onclick="$('list_protocoles').toggle();" title="Afficher/cacher la colonne de gauche"></button>
 			  <span style="float: right">
 		    	<button type="button" class="add" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
-		      <button type="button" class="search" onclick="Protocole.preview('{{$prescription->_id}}')">Visualiser</button>
 		    </span>
 		    Modification du protocole
 		  </th>
@@ -488,8 +487,21 @@ Main.add( function(){
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
 			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
-      <button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
-    </td>
+      {{if $prescription->object_id}}
+			<button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
+      {{/if}}
+			
+			{{if !$mode_protocole && $can->admin && $prescription->type == "sejour"}}
+				<form name="removePlanifsSystemes" action="?" method="post">
+			    <input type="hidden" name="m" value="dPprescription" />
+					<input type="hidden" name="dosql" value="do_prescription_aed" />
+          <input type="hidden" name="del" value="dPprescription" />
+          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+          <input type="hidden" name="_purge_planifs_systemes" value="true" />
+          <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg');">Suppression des planifs systemes</button>
+				</form>
+			{{/if}}
+		</td>
   </tr>  
   {{if $praticien_sortie_id && $prescription->_praticiens|@count > 1}}
   <tr>

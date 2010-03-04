@@ -331,6 +331,99 @@ class CPerfusion extends CMbObject {
     $this->loadRefsLines();
     $this->loadRefsTransmissions();
   }
+	
+	function removePlanifSysteme(){
+		if(!$this->_ref_lines){
+		  $this->loadRefsLines();
+		}
+		foreach($this->_ref_lines as $_perf_line){
+	    $planifSysteme = new CPlanificationSysteme();
+	    $planifSysteme->object_id = $_perf_line->_id;
+	    $planifSysteme->object_class = $_perf_line->_class_name;
+	    $planifs = $planifSysteme->loadMatchingList();
+	    foreach($planifs as $_planif){
+	      $_planif->delete();
+	    }
+		}
+  }
+	
+	/*
+   * Calcul des prises prevues pour la perfusion
+   */
+  function calculPrisesPrevues($date){
+  	$line_perf = reset($this->_ref_lines);
+		
+		$planif = new CPlanificationSysteme();
+		$where["object_id"] = " = '$line_perf->_id'";
+		$where["object_class"] = " = '$line_perf->_class_name'";
+		$where["dateTime"] = " LIKE '$date%'";
+		$planifs = $planif->loadList($where);
+		
+		foreach($planifs as $_planif){
+			$date = mbDate($_planif->dateTime);
+      $hour = mbTransformTime(null, $_planif->dateTime, "%H");
+			$this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($_planif->dateTime);
+	    $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
+    }	
+  }
+	
+	function calculPlanifsPerf(){
+		// Calcul de la quantite totale de la perf en fonction des produits
+    $this->calculQuantiteTotal();
+    
+		$dates_planif = array();
+    if($this->date_debut && $this->time_debut && $this->duree){
+      $date_time_temp = $this->_debut;
+      $dates_planif[] = $date_time_temp;
+      
+      // Perfusion à la vitesse de x ml/h
+      if($this->vitesse && $this->_quantite_totale){
+        $increment = "";
+				// calcul du nombre d'heure entre le renouvellement de la perf
+        $nb_hours = $this->_quantite_totale / $this->vitesse;
+        
+        // Calcul de l'incrementation
+        $explode_hour = explode(".", $nb_hours);
+        $nb_hours = $explode_hour[0]; 
+        if(isset($explode_hour[1])){
+          $minutes = substr($explode_hour[1],0,1) * 6;
+        }
+        if($nb_hours){
+					$increment = "+ $nb_hours hours ";
+	        if(isset($minutes)){
+	          $increment .= "$minutes minutes";
+	        }
+				}
+				 
+        // Calcul des prises en fonction de la vitesse
+				if($increment){
+	        while((mbDateTime($increment, $date_time_temp)) < $this->_fin){
+	          $date_time_temp = mbDateTime($increment, $date_time_temp);
+						$dates_planif[] = $date_time_temp;
+	        } 
+				}
+      }
+      // Perfusion toutes les x heures
+      if($this->nb_tous_les){
+        while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
+          $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
+          $dates_planif[] = $date_time_temp;
+        }
+      }
+    }
+    
+    // Creation des planifications
+		foreach($this->_ref_lines as $_perf_line){
+      foreach($dates_planif as $_datetime){
+        $new_planif = new CPlanificationSysteme();
+        $new_planif->dateTime = $_datetime;
+        $new_planif->object_id = $_perf_line->_id;
+        $new_planif->object_class = $_perf_line->_class_name;
+        $new_planif->sejour_id = $this->_ref_prescription->object_id;    
+        $new_planif->store();
+      }
+    }
+	}
   
   function store(){
     if($this->_add_perf_contigue){
@@ -338,14 +431,38 @@ class CPerfusion extends CMbObject {
         return $msg;
       }
     }  
-    
-    $get_guid = $this->_id ? false : true;
-    
+              
+    $creation = !$this->_id;
+    $calculPlanif =  ($this->fieldModified("vitesse") || 
+		                  $this->fieldModified("nb_tous_les") || 
+											$this->fieldModified("date_debut") || 
+											$this->fieldModified("time_debut") ||
+											$this->fieldModified("duree") ||
+											$this->fieldModified("date_pose")||
+											$this->fieldModified("time_pose")||
+                      $this->fieldModified("date_retrait")||
+                      $this->fieldModified("date_retrait")||
+                      $this->fieldModified("date_arret")||
+											$this->fieldModified("time_arret")||
+											$this->fieldModified("conditionnel")||
+											$this->fieldModified("condition_active")||
+											$this->fieldModified("substitution_active"));
+													
     if($msg = parent::store()){
   		return $msg;
     }
+
+		if($calculPlanif){
+			if($this->_ref_prescription->type == "sejour"){
+			  $this->removePlanifSysteme();
+				if($this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
+					$this->calculPlanifsPerf();
+				}
+			}
+		}
+		
   	// On met en session le dernier guid créé
-    if($get_guid){
+    if($creation){
   	  $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
     }
   }
@@ -362,7 +479,6 @@ class CPerfusion extends CMbObject {
         return $msg;
       }
     }
-    // Suppression de la ligne
     return parent::delete();
   }
   
@@ -455,134 +571,29 @@ class CPerfusion extends CMbObject {
     	if(!$_perf_line->_ref_produit->voies){
 			  $_perf_line->_ref_produit->loadVoies();
 			}
-			
 			$_perf_line->loadRefProduitPrescription();
 			if($_perf_line->_ref_produit_prescription->_id){
 			  $this->_voies[$_perf_line->_ref_produit_prescription->voie] = $_perf_line->_ref_produit_prescription->voie;
       }
 			if($_perf_line->_ref_produit->voies){
 	      foreach($_perf_line->_ref_produit->voies as $_voie){
-	        //if(CPrescriptionLineMedicament::$voies[$_voie]["perfusable"]){
-	          $this->_voies[$_voie] = $_voie;
-	        //}
+	        $this->_voies[$_voie] = $_voie;
 	      }
 		  }
-			
     }
   }
   
-  
   /*
-   *  Calcul de la quantite totale de la perf en ml
+   *  Calcul de la quantite totale de la perf en ml ($this->_quantite_totale)
    */
   function calculQuantiteTotal(){
-    if(!$this->_ref_lines){
+		if(!$this->_ref_lines){
       $this->loadRefsLines();
     }
+		$this->_quantite_totale = 0;
+	
     foreach($this->_ref_lines as $_perf_line){
-      if($_perf_line->unite && $_perf_line->quantite){
-	      $_unite_prise = str_replace('/kg', '', $_perf_line->unite);
-			  // Si l'unite de prise est en fonction du poids du patient
-	      if($_unite_prise != $_perf_line->unite){
-	        $this->loadRefPrescription();
-	        $this->_ref_prescription->loadRefObject();
-	        $this->_ref_prescription->_ref_object->loadRefPatient();
-			    $patient =& $this->_ref_prescription->_ref_object->_ref_patient;
-	        if(!$patient->_ref_constantes_medicales){
-	          $patient->loadRefConstantesMedicales();
-	        }
-	        $poids = $patient->_ref_constantes_medicales->poids;
-			  }
-
-			  // Chargement du tableau de correspondance entre les unites de prises
-	      $_perf_line->_ref_produit->loadRapportUnitePriseByCIS();
-	      $coef = @$_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
-	      if(!$coef){
-	        $coef = 1;
-	      }
-	      $_perf_line->_quantite_administration = $_perf_line->quantite * $coef;
-	      if(isset($poids)){
-	        $_perf_line->_quantite_administration *= $poids;
-	      }
-	      if(isset($_perf_line->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
-			    $this->_quantite_totale += $_perf_line->_quantite_administration;
-	      }
-			  $produit =& $_perf_line->_ref_produit;   
-				if(!$produit->libelle_unite_presentation){
-			    $produit->loadLibellePresentation();
-          $produit->loadUnitePresentation();
-				}
-    	  $_perf_line->_unite_administration = $produit->_unite_administration = $produit->libelle_unite_presentation;
-		    $_perf_line->_unite_dispensation = $produit->_unite_dispensation = $produit->libelle_presentation ? $produit->libelle_presentation : $produit->libelle_unite_presentation;
-
-		    // Calcul du ration entre quantite d'administration et quantite de dispensation
-		    if($_perf_line->_unite_dispensation == $produit->libelle_unite_presentation){
-		      $_perf_line->_ratio_administration_dispensation = 1;
-		    } else {
-		      $_perf_line->_ratio_administration_dispensation = 1 / $produit->nb_unite_presentation;
-		    }
-		    $_perf_line->_quantite_dispensation = $_perf_line->_quantite_administration * $_perf_line->_ratio_administration_dispensation; 
-      }
-    }
-  }
-  
-  /*
-   * Calcul des prises prevues pour la perfusion
-   */
-  function calculPrisesPrevues(){    
-    // Test des infos essentielles au calcul
-    if($this->date_debut && $this->time_debut && $this->duree){
-      // Premiere prise lors du debut de la ligne
-      //$date_time_temp = "$this->date_debut $this->time_debut";
-      $date_time_temp = $this->_debut;
-      $date = mbDate($date_time_temp);
-			$hour = mbTransformTime(null, $date_time_temp, "%H");
-			    
-      $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
-      $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
-    
-      
-      // Perfusion à la vitesse de x ml/h
-      if($this->vitesse && $this->_quantite_totale){
-        // calcul du nombre d'heure entre le renouvellement de la perf
-        $nb_hours = $this->_quantite_totale / $this->vitesse;
-        
-        // Calcul de l'incrementation
-        $explode_hour = explode(".", $nb_hours);
-        $nb_hours = $explode_hour[0]; 
-        if(isset($explode_hour[1])){
-          $minutes = substr($explode_hour[1],0,1) * 6;
-        }
-        $increment = "+ $nb_hours hours ";
-        if(isset($minutes)){
-          $increment .= "$minutes minutes";
-        }
-        
-        // Calcul des prises en fonction de la vitesse
-			  while((mbDateTime($increment, $date_time_temp)) < $this->_fin){
-	        $date_time_temp = mbDateTime($increment, $date_time_temp);
-	        
-			    $date = mbDate($date_time_temp);
-			    $hour = mbTransformTime(null, $date_time_temp, "%H");
-
-			    $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
-	        $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
-	      } 
-      }
-  
-      // Perfusion toutes les x heures
-      if($this->nb_tous_les){
-        // Calcul des prises en fonction de la vitesse
-			  while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
-	        $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
-	        
-			    $date = mbDate($date_time_temp);
-			    $hour = mbTransformTime(null, $date_time_temp, "%H");
-			    
-          $this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($date_time_temp);
-	        $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
-	      }
-      }
+    	$_perf_line->updateQuantiteAdministration();
     }
   }
   
@@ -603,7 +614,6 @@ class CPerfusion extends CMbObject {
       }
     }
   }
-  
   
   /*
    * Chargement du praticien

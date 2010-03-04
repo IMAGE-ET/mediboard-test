@@ -15,7 +15,8 @@ $debut = CValue::get("debut", mbDate());
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsLinesElementByCat();
-$prescription->calculPlanSoin($debut);
+
+$prescription->calculPlanSoin(array($debut));
 
 $patient =& $prescription->_ref_patient;
 $patient->loadRefConstantesMedicales();

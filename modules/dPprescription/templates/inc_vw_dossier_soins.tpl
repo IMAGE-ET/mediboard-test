@@ -178,6 +178,10 @@ addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
 }
 
 addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations, planification_id) {
+  // On ne permet pas de faire des planifications sur des lignes de medicament
+	if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification")){
+	  return;
+	}
   var url = new Url("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
   url.addParam("quantite", quantite);
@@ -582,14 +586,14 @@ Main.add(function () {
 				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
 				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
-					    <th rowspan="2">Catégorie</th>
-					    <th rowspan="2">Libellé</th>
-					    <th rowspan="2">Posologie</th>
+					    <th rowspan="2" class="title">Catégorie</th>
+					    <th rowspan="2" class="title">Libellé</th>
+					    <th rowspan="2" class="title">Posologie</th>
 					    	    
       
 					    {{foreach from=$tabHours key=_date item=_hours_by_moment}}
 				        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-				          <th class="{{$_date}}-{{$moment_journee}}"
+				          <th class="{{$_date}}-{{$moment_journee}} title"
 				              colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}
 				          						 {{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}
 				          						 {{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
@@ -609,7 +613,7 @@ Main.add(function () {
 									</th>
 						    {{/foreach}} 
 					    {{/foreach}}
-					    <th colspan="2">Sign.</th>
+					    <th colspan="2" class="title">Sign.</th>
 					  </tr>
 					  <tr>
 					    <th></th>

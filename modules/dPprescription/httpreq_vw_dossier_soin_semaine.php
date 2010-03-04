@@ -44,9 +44,7 @@ if($prescription_id){
   $patient->loadRefConstantesMedicales();
 
   // Calcul du plan de soin sur les 5 jours
-  foreach($dates as $_date){
-    $prescription->calculPlanSoin($_date, 0, 1);
-  }
+  $prescription->calculPlanSoin($dates, 0, 1);
 }
 
 // Calcul du nombre de produits (rowspan)

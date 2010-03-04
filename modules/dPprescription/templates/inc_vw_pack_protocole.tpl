@@ -29,7 +29,6 @@
 	        {{mb_field object=$pack field="libelle"}}
 	        <button class="tick notext" onclick="this.form.onsubmit()"></button>  
 	      </form>
-	      <button type="button" class="search" onclick="Protocole.previewPack('{{$pack->_id}}')">Visualiser</button>
 	    </th>
 	  </tr>
 	  <tr>

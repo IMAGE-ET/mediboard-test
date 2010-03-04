@@ -1,5 +1,5 @@
 <tr>
-  <th>Prescriptions ({{$prescriptions|@count}})</th>
+  <th class="title">Prescriptions ({{$prescriptions|@count}})</th>
 </tr>
 {{foreach from=$prescriptions item=_prescription}}
 <tr id="prescription_pharma_{{$_prescription->_id}}">

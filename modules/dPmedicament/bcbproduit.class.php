@@ -415,6 +415,8 @@ class CBcbProduit extends CBcbObject {
   	    }
   	  }
   	}
+
+		
   	return $produits;
   }
   

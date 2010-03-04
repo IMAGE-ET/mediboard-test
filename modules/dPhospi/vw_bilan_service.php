@@ -152,10 +152,9 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 	  if($do_perfusions){
 	    $_prescription->loadRefsPerfusions();
 	  }
-	  // Calcul du plan de soin
-	  foreach($dates as $_date){
-	    $_prescription->calculPlanSoin($_date);
-	  }
+	  
+		// Calcul du plan de soin
+	  $_prescription->calculPlanSoin($dates);
 	  
 	  // Chargement du sejour et du patient
 	  $sejour =& $_prescription->_ref_object;

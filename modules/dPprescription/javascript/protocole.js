@@ -50,13 +50,7 @@ var Protocole = {
     var url = new Url("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
     url.requestUpdate("systemMsg");
-  },
-  preview: function(protocole_id){
-    var url = new Url("dPprescription", "httpreq_preview_protocole");
-    url.addParam("protocole_id", protocole_id);
-    url.popup(800,600, "Previsualisation protocole");
-  },
-  
+  },  
   // Gestion des packs de protocoles
   addPack: function(){
     var oFormPrat = document.selPrat;
@@ -106,10 +100,5 @@ var Protocole = {
     submitFormAjax(oFormDelProtocole, 'systemMsg', { 
     	onComplete: function() { Protocole.viewPack(oFormDelProtocole.prescription_protocole_pack_id.value);  } 
     } );
-  },
-  previewPack: function(pack_id){
-    var url = new Url("dPprescription", "httpreq_preview_protocole");
-    url.addParam("pack_id", pack_id);
-    url.popup(800,600, "Previsualisation pack");
   }
 }

@@ -26,19 +26,12 @@ class CBcbControleSurdosage {
   var $_ref_patient           = null;
   
   function setPrescription($prescription) {
-    if($prescription->_class_name == "CPrescription") {
-      $this->_ref_prescription  = $prescription;
-      $this->_ref_patient       = $prescription->_ref_patient;
-      $this->terrain            = null;
-      $this->qte_mini           = null;
-      $this->qte_maxi           = null;
-      $this->qte_maxi_toxique   = null;
-      $this->duree_mini         = null;
-      $this->duree_maxi         = null;
-      $this->duree_maxi_toxique = null;
-      return true;
+    $this->_ref_prescription =& $prescription;
+		
+		if(!$prescription->_ref_patient){
+		  $prescription->loadRefPatient();
     }
-    return false;
+		$this->_ref_patient = $prescription->_ref_patient;
   }
   
   function getTerrain() {
@@ -48,7 +41,12 @@ class CBcbControleSurdosage {
     if($this->terrain) {
       return $this->terrain;
     }
-    // Test par rapport à l'age du patient
+		
+    if(!$this->_ref_patient->_age){
+      $this->_ref_patient->evalAge();
+    }
+		
+		// Test par rapport à l'age du patient
     // T : Tous
     if(!$this->_ref_patient->_age) {
       $this->terrain = "T";
@@ -69,15 +67,27 @@ class CBcbControleSurdosage {
   }
   
   function getPosoMax($line) {
+    $this->qte_mini           = "";
+    $this->qte_maxi           = "";
+    $this->qte_maxi_toxique   = "";
+    $this->duree_mini         = "";
+    $this->duree_maxi         = "";
+    $this->duree_maxi_toxique = "";
+			
     $this->getTerrain();
-    $ds = CBcbObject::getDataSource();
+ 
+		$ds = CBcbObject::getDataSource();
     $result = null;
+		
+		// Si le terrain est defini
     if($this->terrain != "T") {
       $query = "SELECT POSO_MAXIMUM.*
                 FROM POSO_MAXIMUM
                 WHERE POSO_MAXIMUM.Code_CIP='".$line->code_cip."'
                 AND POSO_MAXIMUM.Terrain='".$this->terrain."'";
+			$result = reset($ds->loadList($query));
     }
+		
     if(!$result) {
       $query = "SELECT POSO_MAXIMUM.*
                 FROM POSO_MAXIMUM
@@ -98,7 +108,7 @@ class CBcbControleSurdosage {
    
     $unite_prise_1 = CBcbProduit::getLibellePrise($conditionnement["CODE_UNITE_DE_PRISE1"]);
 		$unite = ($unite_prise_1 == $uadministration) ? "UP1" : "UP2";
-			
+
     if($result){
       $this->qte_mini           = $result[$unite."QTEMINI"];
       $this->qte_maxi           = $result[$unite."QTEMAXI"];
@@ -106,12 +116,10 @@ class CBcbControleSurdosage {
       $this->duree_mini         = $result["DUREEMINI"];
       $this->duree_maxi         = $result["DUREEMAXI"];
       $this->duree_maxi_toxique = $result["DUREEMAXITOXIQUE"];
-			
       $msg = "qte toxique : $this->qte_maxi_toxique $uadministration, qte max : $this->qte_maxi $uadministration, qte min : $this->qte_mini $uadministration";
-      //mbTrace($msg, $line->code_cip." - ".$line->_view);
       $msg = "duree toxique : $this->duree_maxi_toxique jours, duree max : $this->duree_maxi jours, duree min : $this->duree_mini jours";
-      //mbTrace($msg, $line->code_cip." - ".$line->_view);
     }
+
   }
   
   function controleSurdosage($line) {
@@ -119,12 +127,12 @@ class CBcbControleSurdosage {
     $debut_reel = mbDate(null, $line->_debut_reel);
     $fin_reelle = mbDate(null, $line->_fin_reelle);
     $unite = $line->_ref_produit->libelle_unite_presentation;
-    
+  	
     for($date = $debut_reel; $fin_reelle && $date <= $fin_reelle; $date = mbDate("+1 DAY", $date)) {
       $qte = $line->calculPrises($this->_ref_prescription, $date);
+			
       if($qte) {
         $date_formated = mbTransformTime(null, $date, "%d/%m/%Y");
-
         $msg = "";
 				$alerte = new CObject();
       	$alerte->Type = "Qte";

@@ -205,6 +205,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $backProps["transmissions"]   = "CTransmissionMedicale object_id";
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
+		$backProps["planifications"]  = "CPlanificationSysteme object_id";
     return $backProps;
   }
   
@@ -212,7 +213,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     parent::updateFormFields();   
 
     $this->_nb_alertes = 0;
-    $this->loadRefProduit();
+		$this->loadRefProduit();
     $this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
     //$this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
@@ -401,7 +402,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	          $view .= ", ";
 	        }
 				}
-				$view .= " ($line->voie)"; 
+				$view .= " ($line->voie)";
 				
 	      if(!isset($temp_view[$view])){
 	        $temp_view[$view] = array("occ" => "", "line_id" => "");
@@ -496,7 +497,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($line_medicament->voie){
       $this->voie = $line_medicament->voie;
       $this->store();
-    }
+		}
   }
   
   function updateDBFields(){
@@ -511,6 +512,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function store(){
+
     // Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
     	
@@ -529,11 +531,30 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     
     $mode_creation = !$this->_id;
-    
+    $calcul_planif = ($this->fieldModified("debut") || 
+		                  $this->fieldModified("time_debut") || 
+											$this->fieldModified("duree") || 
+											$this->fieldModified("unite_duree") || 
+											$this->fieldModified("time_fin") ||
+											$this->fieldModified("conditionnel") ||
+											$this->fieldModified("condition_active") ||
+											$this->fieldModified("substitution_active") ||
+											$this->fieldModified("date_arret") || 
+											$this->fieldModified("substitution_line_id"));
+  
   	if($msg = parent::store()){
   		return $msg;
   	}
 
+    if($calcul_planif){
+    	if($this->_ref_prescription->type == "sejour"){
+				$this->removePlanifSysteme();
+				if(!$this->substitution_line_id && $this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
+					$this->calculPlanifSysteme();
+				}
+			}
+    }
+    
     // Pre-remplissage de la posologie la plus utilisée
     if($mode_creation && $this->_most_used_poso && $this->code_cis){
       $posos = $this->getMostUsedPoso();
@@ -542,11 +563,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
     
-  	// On met en session le dernier guid créé
+		// On met en session le dernier guid créé
     if($mode_creation){
       $_SESSION["dPprescription"]["full_line_guid"] = $this->_guid;
     }
-    
   	if($this->_delete_prises){
   		if($msg = $this->deletePrises()){
   			return $msg;
@@ -554,23 +574,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	}
   }
     
-  /*
-   * Calcul des quantite de medicaments à fournir pour les dates indiquées
-   */
-  function calculQuantiteLine($date_min, $date_max){	
-  	$borne_min = ($this->_debut_reel > $date_min) ? $this->_debut_reel : $date_min;
-  	$borne_max = ($this->_fin_reelle < $date_max) ? $this->_fin_reelle : $date_max;
-  	if(!$this->_ref_prises){
-  		$this->loadRefsPrises();
-  	}
-  	foreach($this->_ref_prises as &$_prise){
-  	  $_prise->calculQuantitePrise($borne_min, $borne_max);
-  	}
-  	if(count($this->_ref_prises) < 1){
-  		$this->_quantites = array();
-  	}
-  }
-
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->loadRefProduit();

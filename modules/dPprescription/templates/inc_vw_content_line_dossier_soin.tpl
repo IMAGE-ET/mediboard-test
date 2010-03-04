@@ -123,6 +123,7 @@
 							     {{/if}}
 								 {{/if}}
 						   {{/if}}   
+							 
 					  </div>	
 
 					{{if $quantite && @$line->_quantity_by_date.$unite_prise.$_date.quantites.$_hour|@count < 4}}

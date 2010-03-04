@@ -113,112 +113,155 @@ foreach($dates as $curr_date => $_date){
     }
   }
 }
+$date_max = "$date_reelle $_hour:00:00";
+
 
 foreach($prescriptions as $_prescription){
-  $_prescription->_ref_object->loadRefsAffectations();
-  $lits[$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
+  $_prescription->loadRefPatient();
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
-  $_prescription->loadRefPraticien();
+  
+	$_prescription->_ref_object->loadRefsAffectations();
+  $lits[$_prescription->_ref_object->_ref_last_affectation->_ref_lit->_view."-".$_prescription->_id] = $_prescription->_id;
+  
+	$_prescription->loadRefPraticien();
   $_prescription->_ref_praticien->loadRefFunction();
   $_prescription->_ref_patient->loadRefPhotoIdentite();
-  $_prescription->loadRefsLinesMedByCat("1","1","service"); 
-  $_prescription->loadRefsPerfusions();
-  $_prescription->loadRefsLinesElementByCat("1",null,"service");
+	
+	$_prescription->calculAllPlanifSysteme();
   
-  // Calcul du plan de soin
-  foreach($tabDates as $_date) {
-    $_prescription->calculPlanSoin($_date);
-  }
+	// Chargement des prises prevues entre les dates prevues
+	$planif = new CPlanificationSysteme();
+	$where = array();
+  $where["sejour_id"] = " = '$_prescription->object_id'";
+	$where["dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
+  $planifs = $planif->loadList($where);
+	
+	
+	foreach($planifs as $_planif){
+		// Chargement et stockage de la ligne
+		$_planif->loadTargetObject();
 
-  // Creation du tableau de stockage des elements precrits pour un patient et un dateTime donné
-  foreach($tabHours as $_date => $_hours_by_moment){
-    foreach($_hours_by_moment as $moment_journee => $_dates){
-      foreach($_dates as $date_reelle => $_hours){
-        foreach($_hours as $_heure_reelle => $_hour){
-          $dateTime = "$date_reelle $_heure_reelle";
-          $lines_by_type = array();
-          if($_prescription->_ref_lines_med_for_plan){
-            $lines_by_type["produit"]["med"] = $_prescription->_ref_lines_med_for_plan;
-          }
-          if($_prescription->_ref_injections_for_plan){
-            $lines_by_type["produit"]["inj"] = $_prescription->_ref_injections_for_plan;
-          }
-          if($_prescription->_ref_lines_elt_for_plan){
-            $lines_by_type["elt"] = $_prescription->_ref_lines_elt_for_plan;
-          }
-          // Parcours des medicaments, injections, elements
-          foreach($lines_by_type as $_lines_by_chap){
-            foreach($_lines_by_chap as $type => $_lines){
-              foreach($_lines as $chapitres){
-                foreach($chapitres as $_lines_by_unite){
-                  foreach($_lines_by_unite as $unite_prise => $_line){
-                    if($_line->_class_name == "CPrescriptionLineMedicament"){
-                      $_line->loadRefProduitPrescription();
-                    }
-                    $quantite_prevue = $quantite_adm = 0;           
-                    if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'])){
-                      $quantite_prevue = $_line->_administrations[$unite_prise][$date_reelle][$_hour]['quantite_planifiee'];
-                    } else {
-                      if(isset($_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'])){
-                        $quantite_prevue = $_line->_quantity_by_date[$unite_prise][$date_reelle]['quantites'][$_hour]['total'];
-                      }
-                    }
-                    if($quantite_prevue){
-                      $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["prevue"] = $quantite_prevue;
-                    }
-                    if(isset($_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"])){
-                      $quantite_adm = $_line->_administrations[$unite_prise][$date_reelle][$_hour]["quantite"];
-                      @$pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["adm"] = $quantite_adm;
-                    }
-                    if($quantite_prevue || $quantite_adm){
-                      $list_lines[$type][$_line->_id] = $_line;
-                      if($_line->_recent_modification){
-                        $new[$_prescription->_id][$dateTime] = 1;
-                        $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["new"] = 1;
-                      }
-                      // Creation du tableau d'urgences
-                      if(is_array($_line->_dates_urgences) && array_key_exists($date_reelle, $_line->_dates_urgences) 
-                         && in_array($dateTime, $_line->_dates_urgences[$date_reelle])){
-                        $urgences[$_prescription->_id][$dateTime] = 1;
-                        $pancarte[$_prescription->_id][$dateTime][$type][$_line->_id]["urgence"] = 1;
-                      }
-                    }
-                    if($quantite_prevue != $quantite_adm){
-                      $alertes[$_prescription->_id][$dateTime][$type] = 1;
-                    }
-                  }
-                }
-              }
-            }
-          }
-          // Parcours des perfusions
-          if($_prescription->_ref_perfusions_for_plan){
-            foreach($_prescription->_ref_perfusions_for_plan as $_perfusion){
-              $list_lines["perf"][$_perfusion->_id] = $_perfusion;
-              foreach($_perfusion->_ref_lines as $_perf_line){
-                $list_lines["perf_line"][$_perf_line->_id] = $_perf_line;
-                $quantite_prevue = 0;
-                $quantite_adm = 0;
-                if(isset($_perfusion->_prises_prevues[$date_reelle][$_hour])){
-                  $quantite_prevue = $_perf_line->_quantite_administration;
-                  $pancarte[$_prescription->_id][$dateTime]["perf"][$_perfusion->_id][$_perf_line->_id]["prevue"] = $quantite_prevue;
-                }
-                if(isset($_perf_line->_administrations[$date_reelle][$_hour])){
-                  $quantite_adm = $_perf_line->_administrations[$date_reelle][$_hour];
-                  $pancarte[$_prescription->_id][$dateTime]["perf"][$_perfusion->_id][$_perf_line->_id]["adm"] = $quantite_adm;
-                }   
-                if($quantite_prevue != $quantite_adm){
-                  $alertes[$_prescription->_id][$dateTime]["perf"] = 1;
-                }    
-              }              
-            }
-          }
-        }
-      }
+    if($_planif->_ref_object instanceof CPrescriptionLineMedicament || $_planif->_ref_object instanceof CPrescriptionLineElement){
+	    // Chargement de la prise
+	    $_planif->loadRefPrise();
+			if($_planif->_ref_object instanceof CPrescriptionLineMedicament){
+				$type = $_planif->_ref_object->_is_injectable ? "inj" : "med";
+			}
+			if($_planif->_ref_object instanceof CPrescriptionLineElement){
+	      $type = $_planif->_ref_object->_ref_element_prescription->_ref_category_prescription->chapitre;
+	    }
+			$list_lines[$type][$_planif->_ref_object->_id] = $_planif->_ref_object;
+			
+			if($_planif->_ref_prise->_quantite_administrable){			
+	      $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
+	      $date = mbDate($_planif->dateTime);
+			  if(!isset($pancarte[$_prescription->_id][$_planif->dateTime][$type][$_planif->object_id]["prevue"])){
+				  $pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] = 0;
+				}
+				$pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] += $_planif->_ref_prise->_quantite_administrable;
+			}
+		}
+		
+		if($_planif->_ref_object instanceof CPerfusionLine){
+      $_planif->_ref_object->updateQuantiteAdministration();
+			$list_lines["perf"][$_planif->_ref_object->_ref_perfusion->_id] = $_planif->_ref_object->_ref_perfusion;
+      $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
+			$time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
+			$date = mbDate($_planif->dateTime);
+      $pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->perfusion_id][$_planif->object_id]["prevue"] = $_planif->_ref_object->_quantite_administration;
+  	}
+	}
+	
+	// Chargement des administrations
+	$administration = new CAdministration();
+	$ljoin = array();
+	$ljoin["prescription_line_medicament"] = "(prescription_line_medicament.prescription_line_medicament_id = administration.object_id) 
+	                                           AND (administration.object_class = 'CPrescriptionLineMedicament')";
+																						 
+	$ljoin["prescription_line_element"] = "(prescription_line_element.prescription_line_element_id = administration.object_id) 
+                                             AND (administration.object_class = 'CPrescriptionLineElement')";
+																						 
+	$ljoin["perfusion_line"] = "(perfusion_line.perfusion_line_id = administration.object_id) 
+                                             AND (administration.object_class = 'CPerfusionLine')";										
+																						 
+	$ljoin["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";           
+																						 																					 
+	$ljoin["prescription"] = "(prescription_line_medicament.prescription_id = prescription.prescription_id) OR
+	                          (prescription_line_element.prescription_id = prescription.prescription_id) OR
+														(perfusion.prescription_id = prescription.prescription_id)";
+	$where = array();
+	$where["prescription.prescription_id"] = " = '$_prescription->_id'";
+	$administrations = $administration->loadList($where, null, null, null, $ljoin);
+											
+	foreach($administrations as $_administration){
+		$_administration->loadTargetObject();
+		if($_administration->_ref_object instanceof CPrescriptionLineMedicament || $_administration->_ref_object instanceof CPrescriptionLineElement){
+			if($_administration->_ref_object instanceof CPrescriptionLineMedicament){
+	      $type = $_administration->_ref_object->_is_injectable ? "inj" : "med";
+	    }
+	    if($_administration->_ref_object instanceof CPrescriptionLineElement){
+	      $type = $_administration->_ref_object->_ref_element_prescription->_ref_category_prescription->chapitre;
+	    }	  
+	    $_administration->_ref_object->_unite_administration = $_administration->unite_prise;
+	    $list_lines[$type][$_administration->_ref_object->_id] = $_administration->_ref_object;
+	    
+	    if(!isset($pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"])){
+	      $pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"] = 0;
+	    }
+	    $pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"] += $_administration->quantite;
     }
+		
+		
+		if($_administration->_ref_object instanceof CPerfusionLine){
+			$perfusion_line = $_administration->_ref_object;
+      $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
+      $date = mbDate($_administration->dateTime);			
+			
+			$list_lines["perf"][$_administration->_ref_object->_ref_perfusion->_id] = $_administration->_ref_object->_ref_perfusion;
+      $list_lines["perf_line"][$_administration->_ref_object->_id] = $_administration->_ref_object; 
+			
+			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perf"][$perfusion_line->perfusion_id][$_administration->object_id]["adm"])){
+        $pancarte[$_prescription->_id]["$date $time"]["perf"][$perfusion_line->perfusion_id][$_administration->object_id]["adm"] = 0;
+      }
+		  $pancarte[$_prescription->_id]["$date $time"]["perf"][$perfusion_line->perfusion_id][$_administration->object_id]["adm"] += $_administration->quantite;
+		}
+	}																																		 											 
+
+
+  foreach($pancarte as $_prescription_id => $pancarte_by_prescription){
+  	foreach($pancarte_by_prescription as $_dateTime => $prescription_by_datetime){
+  		foreach($prescription_by_datetime as $_type => $presc_by_type){
+  			if($_type != "perf"){
+	  			foreach($presc_by_type as $prescription_by_object){
+	  				if(!isset($prescription_by_object["adm"])){
+	  					$prescription_by_object["adm"] = 0;
+	  				}
+						if(!isset($prescription_by_object["prevue"])){
+	            $prescription_by_object["prevue"] = 0;
+	          }
+						if($prescription_by_object["adm"] != $prescription_by_object["prevue"]){
+	  					$alertes[$_prescription_id][$_dateTime][$_type] = 1;
+	  				}
+	  			}
+				} else {
+					foreach($presc_by_type as $prescription_by_object){
+						foreach($prescription_by_object as $_prescription_by_object){
+						  if(!isset($_prescription_by_object["adm"])){
+                $_prescription_by_object["adm"] = 0;
+	            }
+	            if(!isset($_prescription_by_object["prevue"])){
+	              $_prescription_by_object["prevue"] = 0;
+	            }
+	            if($_prescription_by_object["adm"] != $_prescription_by_object["prevue"]){
+	              $alertes[$_prescription_id][$_dateTime][$_type] = 1;
+	            }	
+						}
+					}
+				}
+  		}
+  	}
   }
 }
-
 // Classement par lit
 ksort($lits);
 $_prescriptions = array();

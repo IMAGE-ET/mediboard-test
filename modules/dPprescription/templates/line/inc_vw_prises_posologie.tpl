@@ -19,7 +19,7 @@
 		  oForm.debut_da.value = dDate.toLocaleDate();
 		{{/if}}
 		$V(oForm.duree,'{{$line->duree}}');
-		$V(oForm.unite_duree,'{{$line->unite_duree}}');
+	  $V(oForm.unite_duree,'{{$line->unite_duree}}', false);
 	{{/if}}
 	
 	// On grise le formulaire de signature de la ligne si aucune prise n'est créée

@@ -15,7 +15,6 @@ $sejour_id    = CValue::getOrSession("sejour_id");
 $date         = CValue::getOrSession("date");
 $nb_decalage  = CValue::get("nb_decalage", 2);
 $line_type    = CValue::get("line_type", "service");  // Bloc en salle d'op / service en hospi
-//$mode_bloc    = CValue::get("mode_bloc", 0);
 $mode_dossier = CValue::get("mode_dossier", "administration");
 $chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
 $object_id    = CValue::get("object_id");
@@ -45,6 +44,9 @@ $prescription->object_id = $sejour_id;
 $prescription->object_class = "CSejour";
 $prescription->type = "sejour";
 $prescription->loadMatchingObject();
+
+// Chargement de toutes les planifs systemes si celles-ci ne sont pas deja chargées
+$prescription->calculAllPlanifSysteme();
 
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
@@ -117,7 +119,7 @@ if($object_id && $object_class){
   // Chargement de la ligne de prescription
   $line = new $object_class;
   $line->load($object_id);
-  if($line->_class_name == "CPrescriptionLineMedicament"){
+  if($line instanceof CPrescriptionLineMedicament){
   	$line->countSubstitutionsLines();
 	  $line->countBackRefs("administration");
 		$line->loadRefsSubstitutionLines();
@@ -125,55 +127,49 @@ if($object_id && $object_class){
 
   foreach($_dates as $curr_date){
     // Refresh d'une ligne de medicament
-    if($line->_class_name == "CPrescriptionLineMedicament"){
+    if($line instanceof CPrescriptionLineMedicament){
        if(!$line->_fin_reelle){
 		    $line->_fin_reelle = $prescription->_ref_object->_sortie;
 		  }
-		  $line->calculAdministrations($curr_date, null, $service_id);
+		  $line->calculAdministrations($curr_date);
       $line->_ref_produit->loadClasseATC();
       $line->_ref_produit->loadRefsFichesATC();
       if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-			  $line->calculPrises($prescription, $curr_date, null, null, true, $configs);
+			  $line->calculPrises($prescription, $curr_date, null, null, true);
       }
-		  // Suppression des prises replanifiées
 		  $line->removePrisesPlanif();
-    } 
+    }
+		 
     // refresh d'une ligne d'element
-    if($line->_class_name == "CPrescriptionLineElement") {
+    if($line instanceof CPrescriptionLineElement) {
       $element = $line->_ref_element_prescription;
     	$name_cat = $element->category_prescription_id;
       $element->loadRefCategory();
       $name_chap = $element->_ref_category_prescription->chapitre;
-     	$line->calculAdministrations($curr_date, null, $service_id);  
-   	  if($name_chap == "imagerie" || $name_chap == "consult"){
-        if(($line->debut == $curr_date) && $line->time_debut){
-		  	  $time_debut = substr($line->time_debut, 0, 2);
-		  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut]['total'] = 1;
-		  	  @$line->_quantity_by_date["aucune_prise"][$line->debut]['quantites'][$time_debut][] = array("quantite" => 1, "heure_reelle" => $time_debut);
-    	  }
-    	} else {
-    	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-	        $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true, $configs);
-    	  }
-    	}
-      // Suppression des prises replanifiées
+     	$line->calculAdministrations($curr_date);  
+  	  if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
+        $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true);
+  	  }
 		  $line->removePrisesPlanif();
     }
   }
     
-  if($line->_class_name == "CPerfusion"){
+  if($line instanceof CPerfusion){
 	 	$line->countSubstitutionsLines();
 		$line->loadRefsSubstitutionLines();
     $line->loadRefsLines();
 		$line->loadVoies();
     $line->loadRefPraticien();
 	  $line->loadRefLogSignaturePrat();
-	  // Calcul de la quantite totale de la perfusion
-    $line->calculQuantiteTotal();
-    // Calcul des prises prevues
-    $line->calculPrisesPrevues();
+	  
+		// Calcul des prises prevues
+		$line->calculQuantiteTotal();
+		foreach($_dates as $curr_date){
+      $line->calculPrisesPrevues($curr_date);
+		}
     $line->calculAdministrations();
-    // Chargement des transmissions de la perfusion
+    
+		// Chargement des transmissions de la perfusion
   	$transmission = new CTransmissionMedicale();
   	$transmission->object_class = "CPerfusion";
   	$transmission->object_id = $line->_id;
@@ -220,8 +216,9 @@ else {
       $prescription->loadRefsPerfusions("1", $line_type);
       $prescription->loadRefsLinesMedByCat("1","1",$line_type);
 	    
-      // Chargement des lignes d'elements  avec pour chapitre $chapitre
+      // Chargement des lignes d'elements 
 		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
+			
 		  // Calcul des modifications recentes par chapitre
 		  $prescription->countRecentModif();
 		  $prescription->countUrgence($date);
@@ -231,13 +228,10 @@ else {
     }
 		
     $with_calcul = $chapitre ? true : false; 
+		$prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul);
 
-	  foreach($_dates as $curr_date){
-		  $prescription->calculPlanSoin($curr_date, 0, null, null, null, $with_calcul);
-		}
-	  
 	  // Chargement des operations
-	  if($prescription->_ref_object->_class_name == "CSejour"){
+	  if($prescription->_ref_object instanceof CSejour){
 	    $operation = new COperation();
 	    $operation->sejour_id = $prescription->object_id;
 	    $operation->annulee = "0";
@@ -276,7 +270,6 @@ $smarty->assign("categories"          , $categories);
 $smarty->assign("real_date"           , mbDate());
 $smarty->assign("real_time"           , mbTime());
 $smarty->assign("categorie"           , new CCategoryPrescription());
-//$smarty->assign("mode_bloc"           , $mode_bloc);
 $smarty->assign("operations"          , $operations);
 $smarty->assign("mode_dossier"        , $mode_dossier);
 $smarty->assign("count_matin"         , count($matin)+2);

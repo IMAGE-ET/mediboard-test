@@ -77,20 +77,20 @@ if($prescription->_id){
   $prescription->loadRefsPerfusions();
   
   $lines_med = array();
-  $lines_med["medicament"] = $prescription->_ref_prescription_lines;
   
 	
   // Calcul du plan de soin
-  foreach($dates as $_date){
-    if(strlen($_selected_cis) == 8){
-    	// CIS
-		  $prescription->calculPlanSoin($_date, 0, 0, 1, null, true, $_selected_cis);
-		} else {
-			// CIP
-		  $prescription->calculPlanSoin($_date, 0, 0, 1, $_selected_cis, true);
-    }
+  if(strlen($_selected_cis) == 8){
+  	// CIS
+	  $prescription->calculPlanSoin($dates, 0, 0, 1, null, true, $_selected_cis);
+	} else {
+		// CIP
+	  $prescription->calculPlanSoin($dates, 0, 0, 1, $_selected_cis, true);
 	}
   
+	$lines_med["medicament"] = $prescription->_ref_prescription_lines;
+  
+	
   // Parcours des prises prevues pour les medicaments
   foreach($lines_med as $lines_by_type){
     foreach($lines_by_type as $_line_med){

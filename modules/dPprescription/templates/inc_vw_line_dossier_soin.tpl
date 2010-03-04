@@ -14,7 +14,7 @@
 {{assign var=administrations_line value=$line->_administrations}}
 {{assign var=transmissions value=$prescription->_transmissions}}
 
-{{if $line->_class_name == "CPrescriptionLineMedicament"}}
+{{if $line instanceof CPrescriptionLineMedicament}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$type}}
 {{else}}
   {{assign var=nb_lines_chap value=$prescription->_nb_produit_by_chap.$name_chap}}
@@ -82,7 +82,7 @@
   
   {{if $smarty.foreach.$last_foreach.first}}
     <td class="text" rowspan="{{$nb_line}}"
-         {{if $line->_class_name == 'CPrescriptionLineMedicament' && $line->traitement_personnel}}
+         {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}
 	       style="background-color: #BDB"
 	       {{/if}}>
     {{if $line->_recent_modification}}
@@ -116,19 +116,15 @@
     {{/if}}
 			
 	  <small>
-	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	  {{if $line instanceof CPrescriptionLineMedicament}}
 	    {{$line->voie}}
-	  {{/if}}
-		
-    {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-		{{if $line->_ref_produit_prescription->unite_prise}}
-			({{$line->_ref_produit_prescription->unite_prise}})
-		{{else}}
-			{{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
-	      <br />
-	      ({{$line->_unite_administration}})<br />
+		  {{if $line->_ref_produit_prescription->unite_prise}}
+	      ({{$line->_ref_produit_prescription->unite_prise}})
+	    {{else}}
+	      {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}<br />
+	        ({{$line->_unite_administration}})<br />
+	      {{/if}}
 	    {{/if}}
-		{{/if}}
 		{{/if}}
     </small>
     
@@ -155,42 +151,40 @@
        </form>
 		{{/if}}
 		
-				
-	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	  
-	  {{if !$line->_count.administration}}
-	    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
-	    			$line->_ref_substitute_for->substitution_plan_soin}}
-	    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
-	      <input type="hidden" name="m" value="dPprescription" />
-	      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
-	      <select name="object_guid" style="width: 75px;" 
-	              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-	                           Prescription.loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
-	                         } } )">
-	        <option value="">Subst.</option>
-		      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
-		          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-							{{if $_line_subst->_class_name == "CPerfusion"}}
-							<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
-              {{else}}
-		          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
-		          {{/if}}
-							{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
-		        {{/foreach}}
-		      {{/foreach}}
-	      </select>
-	    </form>
-	    {{/if}}
+	  {{if $line instanceof CPrescriptionLineMedicament}}
+	    {{if !$line->_count.administration}}
+		    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
+		    			$line->_ref_substitute_for->substitution_plan_soin}}
+			    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
+			      <input type="hidden" name="m" value="dPprescription" />
+			      <input type="hidden" name="dosql" value="do_substitution_line_aed" />
+			      <select name="object_guid" style="width: 75px;" 
+			              onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+			                           Prescription.loadTraitement('{{$line->_ref_prescription->object_id}}','{{$date}}','','administration')
+			                         } } )">
+			        <option value="">Subst.</option>
+				      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
+				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
+									{{if $_line_subst->_class_name == "CPerfusion"}}
+									<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
+		              {{else}}
+				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}
+				          {{/if}}
+									{{if !$_line_subst->substitute_for_id}}(originale){{/if}}</option>
+				        {{/foreach}}
+				      {{/foreach}}
+			      </select>
+			    </form>
+		    {{/if}}
 	    {{/if}}
 	    </div>
-		</td>
 	  {{/if}}
+		</td>
   {{/if}}
   
   <!-- Affichage des posologies de la ligne -->
   <td class="text">
-  	{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+  	{{if !$line->signee && $line instanceof CPrescriptionLineMedicament && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
 		
 		{{else}}
 	    <small>
@@ -224,15 +218,15 @@
 	  </td>
 	  
 		{{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
-      {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
-        {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
-          <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
-                               {{if $moment_journee == 'nuit'}}{{$count_nuit-2}}{{/if}}
-                               {{if $moment_journee == 'matin'}}{{$count_matin-2}}{{/if}}">
-		        <div class="small-warning">Ligne non signée</div>
-		      </td>      
-		      {{/foreach}}
-		    {{/foreach}}
+    {{foreach from=$tabHours key=_view_date item=_hours_by_moment}}
+      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
+        <td class="{{$_view_date}}-{{$moment_journee}}" colspan="{{if $moment_journee == 'soir'}}{{$count_soir-2}}{{/if}}
+                             {{if $moment_journee == 'nuit'}}{{$count_nuit-2}}{{/if}}
+                             {{if $moment_journee == 'matin'}}{{$count_matin-2}}{{/if}}">
+	        <div class="small-warning">Ligne non signée</div>
+	      </td>      
+	      {{/foreach}}
+	    {{/foreach}}
    {{else}} 
      {{include file="../../dPprescription/templates/inc_vw_content_line_dossier_soin.tpl" nodebug=true}}
    {{/if}}

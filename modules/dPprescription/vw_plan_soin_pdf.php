@@ -135,9 +135,7 @@ foreach($dates as $curr_date => $_date){
   }
 }
 
-foreach($_dates as $curr_date){ 
-  $prescription->calculPlanSoin($curr_date, 0);
-}
+$prescription->calculPlanSoin($_dates, 0);
 
 // Chargement des categories
 $categories = CCategoryPrescription::loadCategoriesByChap();

@@ -78,11 +78,11 @@ Main.add(function () {
 	    <td>
 	      <table class="tbl">  
 				  <tr>
-				    <th>Catégorie</th>
-				    <th>Libelle</th>
-				    <th>Posologie</th>
+				    <th class="title">Catégorie</th>
+				    <th class="title">Libelle</th>
+				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
-				    <th style="width: 1%">
+				    <th style="width: 1%" class="title">
 				      {{$date|date_format:$dPconfig.date}}
 				    </th>
 				    {{/foreach}}

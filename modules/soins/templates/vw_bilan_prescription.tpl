@@ -49,7 +49,7 @@ Main.add(function () {
       <form name="bilanPrescriptions" action="?" method="get">
 	      <table class="form">
 	        <tr>
-	          <th class="category" colspan="6">Critères de recherche</th>
+	          <th class="title" colspan="6">Critères de recherche</th>
 	        </tr>
 	        <tr>
 	          <td>

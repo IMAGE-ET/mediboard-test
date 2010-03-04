@@ -1418,7 +1418,26 @@ class CSetupdPprescription extends CSetup {
               ADD `jour_decalage` ENUM ('I','N') DEFAULT 'I';";
 		$this->addQuery($sql);
 
-		$this->mod_version = "0.93";
+    $this->makeRevision("0.93");
+		$sql = "CREATE TABLE `planification_systeme` (
+              `planification_systeme_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `dateTime` DATETIME,
+              `unite_prise` TEXT,
+              `prise_id` INT (11) UNSIGNED,
+              `sejour_id` INT (11) UNSIGNED NOT NULL,
+              `object_id` INT (11) UNSIGNED NOT NULL,
+              `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPerfusionLine') NOT NULL
+          ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+		
+    $sql = "ALTER TABLE `planification_systeme` 
+              ADD INDEX (`dateTime`),
+              ADD INDEX (`prise_id`),
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`object_id`);";
+		$this->addQuery($sql);
+							
+		$this->mod_version = "0.94";
   }  
 }
 

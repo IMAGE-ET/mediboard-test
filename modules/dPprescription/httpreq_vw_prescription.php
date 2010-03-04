@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-     
+
 global $AppUI, $can, $m;
 
 $can->needsRead();
@@ -143,7 +143,11 @@ $categories = ($full_mode || $chapitre != "medicament") ? CCategoryPrescription:
 
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
+	// Calcul des planifs systemes
+	$prescription->calculAllPlanifSysteme();
+
   // Chargement de la photo d'identité du patient
+	$prescription->loadRefPatient();
   $patient =& $prescription->_ref_patient;
   $patient->loadRefPhotoIdentite();
 
@@ -247,7 +251,7 @@ if($prescription->_id){
 				}
 	    }
 	  }
-		
+
 		$list_cip_med = array();
 	  foreach($prescription->_ref_prescription_lines as &$line) {
 	  	if(!in_array($line->code_cip, $list_cip_med)){
@@ -260,7 +264,7 @@ if($prescription->_id){
 		    $IPC->addProduit($line->code_cip);
 			}
 	  }
-		
+
 	  if($prescription->object_id){
 	    $alertesAllergies    = $allergies->getAllergies();
 	    $alertesProfil       = $profil->getProfil();
@@ -273,7 +277,7 @@ if($prescription->_id){
 	    $prescription->_alertes["allergie"] = array();
 	    $prescription->_alertes["profil"] = array(); 
 	  }
-	  
+
 	  $prescription->_scores["hors_livret"] = 0;
     foreach($prescription->_ref_prescription_lines as &$line) {
       if($prescription->object_id){
@@ -287,6 +291,7 @@ if($prescription->_id){
         $prescription->_scores["hors_livret"]++;
       }
     }
+		
 	  foreach($prescription->_ref_perfusions as $_perfusion){
 	  	foreach($_perfusion->_ref_lines as $_perf_line){
 	  	  if($prescription->object_id){
@@ -300,7 +305,7 @@ if($prescription->_id){
 		    }
 		  }
 	  }
-		  
+
 		if($prescription->object_id){
 		  $score_prescription = 0;
 		  foreach($prescription->_scores as $type_score => $_score){
@@ -460,8 +465,6 @@ function compareMed($line1, $line2){
 if(isset($prescription->_ref_lines_med_comments["med"])){
   usort($prescription->_ref_lines_med_comments["med"], "compareMed");
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

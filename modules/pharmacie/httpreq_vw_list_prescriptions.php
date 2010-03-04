@@ -83,6 +83,10 @@ if($service_id){
 $prescriptions = new CPrescription();
 $prescriptions = $prescriptions->loadList($where, null, null, "prescription_id", $ljoin);
 
+foreach($prescriptions as $_prescription){
+	$_prescription->loadRefPatient();
+}
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("prescriptions", $prescriptions);

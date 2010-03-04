@@ -315,8 +315,8 @@
        <!-- Si seulement 1 voie possible ou affichage bloqué-->
       {{if $line->voie || $line->_ref_produit_prescription->voie}}
         {{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
-          {{if $line->voie}}
-            {{$line->voie}}
+				  {{if $line->voie}}
+					  {{$line->voie}}
           {{elseif $line->_ref_produit_prescription->voie}}
              {{$line->_ref_produit_prescription->voie}}
           {{/if}}

@@ -92,6 +92,10 @@ if(!$praticien_id){
   }
 }
 
+foreach($prescriptions as $_prescription){
+	$_prescription->loadRefPatient();
+}
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("prescriptions", $prescriptions);
