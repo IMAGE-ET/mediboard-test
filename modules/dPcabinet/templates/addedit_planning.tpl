@@ -129,7 +129,7 @@ Main.add(function () {
   {{tr}}CConsultation-title-create{{/tr}}
 </a>
 {{if $consult->_id}}
-<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+<a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">
   {{tr}}CConsultation-title-access{{/tr}}
 </a>
 {{/if}}
