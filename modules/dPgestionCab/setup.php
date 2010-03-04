@@ -133,6 +133,9 @@ class CSetupdPgestionCab extends CSetup {
     function setup_paie(){
       $param = new CParamsPaie;
       $params = $param->loadList();
+      if(!is_array($params)) {
+        return true;
+      }
       foreach($params as $key => $curr_param) {
         $user = new CMediusers;
         $user->load($params[$key]->employecab_id);
