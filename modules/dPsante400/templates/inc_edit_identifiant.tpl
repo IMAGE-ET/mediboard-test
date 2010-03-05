@@ -8,7 +8,7 @@
 <table class="form">
 
 <tr>
-  <th class="category" colspan="2">
+  <th class="title text {{if $idSante400->_id}}modify{{/if}}" colspan="2">
   {{if $idSante400->_id}}
     {{mb_include module=system template=inc_object_history object=$idSante400}}
     {{tr}}CIdSante400-title-modify{{/tr}} &lsquo;{{$idSante400->_view}}&rsquo;
@@ -18,7 +18,7 @@
   </th>
   
   <tr>
-    <td>{{mb_label object=$filter field="object_class"}}</td>
+    <th>{{mb_label object=$filter field="object_class"}}</th>
     <td>
       {{if $dialog && $target}}
       <input type="hidden" name="object_class" class="{{$filter->_props.object_class}}" value="{{$filter->object_class}}" />
@@ -37,7 +37,7 @@
   </tr>
 
   <tr>
-    <td>{{mb_label object=$filter field="object_id"}}</td>
+    <th>{{mb_label object=$filter field="object_id"}}</th>
     <td>
 	  {{if $dialog && $target}}
 	  <input type="hidden" name="object_id" class="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
@@ -63,17 +63,17 @@
   </tr>
 
   <tr>
-    <td>{{mb_label object=$idSante400 field="id400" }}</td>
+    <th>{{mb_label object=$idSante400 field="id400" }}</th>
     <td>{{mb_field object=$idSante400 field="id400" canNull="false"}}</td>
   </tr>
 
   <tr>
-    <td>{{mb_label object=$idSante400 field="tag"}}</td>
+    <th>{{mb_label object=$idSante400 field="tag"}}</th>
     <td>{{mb_field object=$idSante400 field="tag" size="40"}}</td>
   </tr>
 
   <tr>
-    <td>{{mb_label object=$idSante400 field="last_update"}}</td>
+    <th>{{mb_label object=$idSante400 field="last_update"}}</th>
     <td>{{mb_field object=$idSante400 field="last_update" form="editFrm" canNull="false" register=true}} </td>
   </tr>
 

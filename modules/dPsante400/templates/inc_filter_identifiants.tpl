@@ -7,7 +7,7 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="6">
+    <th class="title" colspan="6">
       {{$list_idSante400|@count}} identifiants 
       {{if $list_idSante400|@count != $count_idSante400}}
       sur {{$count_idSante400}}
