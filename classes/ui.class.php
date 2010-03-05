@@ -113,6 +113,17 @@ class CAppUI {
   }
   
   /**
+   * Used to load a php class file from its name
+   * @param string $className The class name
+   */
+  static function loadClass($className) {
+    if (!class_exists($className)) {
+      return mb_autoload($className);
+    }
+    return true;
+  }
+  
+  /**
    * Used to include a php class file from the system classes directory
    * @param string $name The class root file name (excluding .class.php)
    */
