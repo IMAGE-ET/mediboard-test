@@ -99,7 +99,7 @@ class CSetup {
    * Associates an SQL query to a module revision
    * @param string $query SQL query
    */
-  function addQuery($query) {
+  function addQuery($query, $ignore_errors = false) {
     // Table creation ?
     if (preg_match("/CREATE\s+TABLE\s+(\S+)/i", $query, $matches)) {
       $table = trim($matches[1], "`");
@@ -118,7 +118,7 @@ class CSetup {
       $this->dropTable($table);
     }
     
-    $this->queries[current($this->revisions)][] = $query;
+    $this->queries[current($this->revisions)][] = array($query, $ignore_errors);
   }
   
   /**
@@ -228,8 +228,13 @@ class CSetup {
       }
 
       // Query upgrading
-      foreach ($this->queries[$currRevision] as $query) {
+      foreach ($this->queries[$currRevision] as $_query) {
+        list($query, $ignore_errors) = $_query;
         if (!$this->ds->exec($query)) {
+          if ($ignore_errors) {
+            CAppUI::setMsg("Warning in queries for revision '$currRevision' (errors ignored)", UI_MSG_WARNING);
+            continue;
+          }
           CAppUI::setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
           return $currRevision;
         }

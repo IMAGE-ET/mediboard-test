@@ -221,8 +221,9 @@ class CSetupsystem extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("1.0.23");
+    $sql = "ALTER TABLE `user_preferences` DROP PRIMARY KEY;";
+    $this->addQuery($sql, true);
     $sql = "ALTER TABLE `user_preferences` 
-              DROP PRIMARY KEY,
               ADD `pref_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               CHANGE `pref_user` `user_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
               CHANGE `pref_name` `key` VARCHAR (40) NOT NULL,
