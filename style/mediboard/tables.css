@@ -1,8 +1,13 @@
 /* $Id: $ */
 
 th.title.modify,
+th.category.modify,
 table.form th.title.modify,
-table.tbl th.title.modify {
+table.tbl th.title.modify,
+table.form th.category.modify,
+table.tbl th.category.modify,
+table.main th.title.modify,
+table.main th.title.modify {
   color: #fd4;
 }
 th.title.urgence {
@@ -11,9 +16,6 @@ th.title.urgence {
 }
 th.title.urgence.modify {
   background-color: #00a;
-  color: #fd4;
-}
-th.category.modify {
   color: #fd4;
 }
 
