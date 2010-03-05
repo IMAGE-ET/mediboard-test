@@ -8,13 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=class_name value=$stock->_class_name}}
 
-{{mb_include module=system template=inc_pagination change_page="changePage" total=$list_stocks_count current=$start step=30}}
+{{mb_include module=system template=inc_pagination change_page="changePage" 
+    total=$list_stocks_count current=$start step=$dPconfig.dPstock.$class_name.pagination_size}}
 
 <table class="tbl">
   <tr>
     <th>{{mb_title object=$stock field=product_id}}</th>
-    {{if $stock->_class_name == 'CProductStockService'}}
+    {{if $class_name == 'CProductStockService'}}
       <th>{{mb_title object=$stock field=service_id}}</th>
       <th>{{mb_title object=$stock field=common}}</th>
     {{/if}}
@@ -28,7 +30,7 @@
   {{assign var=product value=$_stock->_ref_product}}
   <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
     <td>
-    	{{if $stock->_class_name == 'CProductStockService'}}
+    	{{if $class_name == 'CProductStockService'}}
 			{{assign var=tab value=vw_idx_stock_service&stock_service_id}}
 			{{else}}
       {{assign var=tab value=vw_idx_stock_group&stock_id}}
@@ -39,7 +41,7 @@
         </span>
       </a>
     </td>
-    {{if $stock->_class_name == 'CProductStockService'}}
+    {{if $class_name == 'CProductStockService'}}
       <td>{{$_stock->_ref_service}}</td>
       <td>{{tr}}{{$_stock->common|ternary:'Yes':''}}{{/tr}}</td>
     {{/if}}
@@ -58,7 +60,7 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}{{$stock->_class_name}}.none{{/tr}}</td>
+    <td colspan="10">{{tr}}{{$class_name}}.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

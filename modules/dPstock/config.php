@@ -16,12 +16,18 @@ $dPconfig["dPstock"] = array (
   "CProductStockGroup" => array (
     "infinite_quantity" => '0',
     "unit_order" => '0',
+    "pagination_size" => 30
   ),
   "CProductStockService" => array (
     "infinite_quantity" => '0',
+    "pagination_size" => 30
   ),
 	"CProductReference" => array (
     "show_cond_price" => '1',
     "use_mdq" => '1',
+    "pagination_size" => 15
 	),
+  "CProduct" => array (
+    "pagination_size" => 15
+  ),
 );

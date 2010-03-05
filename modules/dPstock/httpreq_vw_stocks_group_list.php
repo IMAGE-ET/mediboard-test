@@ -56,7 +56,7 @@ if ($only_ordered_stocks) {
 
 $stock = new CProductStockGroup();
 $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, intval($start).",30", null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockGroup pagination_size"), null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();

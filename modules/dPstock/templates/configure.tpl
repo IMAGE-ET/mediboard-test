@@ -38,6 +38,15 @@
     {{mb_include module=system template=inc_config_bool var=use_mdq}}
     
     <tr>
+      <th colspan="2" class="category">Paginations</th>
+    </tr>
+    
+    {{mb_include module=system template=inc_config_pagination_size class=CProduct}}
+    {{mb_include module=system template=inc_config_pagination_size class=CProductReference}}
+    {{mb_include module=system template=inc_config_pagination_size class=CProductStockGroup}}
+    {{mb_include module=system template=inc_config_pagination_size class=CProductStockService}}
+    
+    <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>

@@ -49,7 +49,7 @@ $leftjoin['product'] = 'product.product_id = product_reference.product_id';
 
 $reference = new CProductReference();
 $total = $reference->countList($where, null, null, null, $leftjoin);
-$list_references = $reference->loadList($where, $orderby, intval($start).",15", null, $leftjoin);
+$list_references = $reference->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductReference pagination_size"), null, $leftjoin);
 foreach($list_references as $ref) {
   $ref->loadRefsFwd();
 }

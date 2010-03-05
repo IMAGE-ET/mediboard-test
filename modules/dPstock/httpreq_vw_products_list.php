@@ -43,7 +43,7 @@ $orderby = 'name, code';
 
 $product = new CProduct();
 $total = $product->countList($where);
-$list_products = $product->loadList($where, $orderby, intval($start).",15");
+$list_products = $product->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProduct pagination_size"));
 
 foreach($list_products as $prod) {
 	$prod->loadRefs();
