@@ -6,6 +6,7 @@
  *  @author Yohann Poiron
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
+CAppUI::requireModuleClass('dPfiles', 'documentSender');
 
 class CEcDocumentSender extends CDocumentSender { 
   public static $sendables = array(
