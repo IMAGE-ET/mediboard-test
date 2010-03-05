@@ -266,6 +266,7 @@ Main.add( function(){
 				  </select>
 				</form>
 				{{/if}}
+				<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
 				<br />
 				  <div id="antecedent_allergie" style="float: right">
             {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
