@@ -327,7 +327,7 @@ Main.add(function () {
             {{if $plageSel->plageconsult_id}}
             Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
-            {{tr}}CPlageConsult.none{{/tr}}
+            {{tr}}CPlageconsult.none{{/tr}}
             {{/if}}
             </strong>
           </th>
