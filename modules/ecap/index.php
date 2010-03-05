@@ -15,5 +15,6 @@ $module->registerTab("vw_soap_services" , TAB_EDIT);
 $module->registerTab("export_documents" , TAB_EDIT);
 $module->registerTab("manage_categories", TAB_EDIT);
 $module->registerTab("export_egate"     , TAB_READ);
+$module->registerTab("vw_ssr"           , TAB_EDIT);
 
 ?>

@@ -23,4 +23,5 @@ $locales['config-ecap-soap-user-desc'] = 'Utilisateur service web';
 $locales['mod-ecap-tab-export_egate'] = 'Export EGATE';
 $locales['CMouvSejourEcap'] = 'Séjour e-Cap';
 $locales['CMouvInterventionECap'] = 'Internvention e-Cap';
+$locales['mod-ecap-tab-vw_ssr'] = 'Redirection SSR';
 ?>

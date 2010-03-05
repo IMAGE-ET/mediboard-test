@@ -21,13 +21,13 @@
 
 {{if $sejour->_id && $can->edit}}
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tab-sejour', true));
+Main.add(Control.Tabs.create.curry('tab-sejour'));
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
-  <li><a href="#bilan_ssr">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
+  <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
   <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
   <li><a href="#planification">Planification</a></li>
   {{/if}} 
@@ -54,7 +54,7 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </div>
 {{/if}}
 
-<div id="bilan_ssr" style="display: none;">
+<div id="bilan" style="display: none;">
   {{mb_include template=inc_form_bilan_ssr}}
 </div>
 
