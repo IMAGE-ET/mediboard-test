@@ -10,7 +10,7 @@
 
 <table class="main">
   <tr>
-    <th>
+    <th class="title">
       <a href="#" onclick="window.print()">
         Livret Thérapeutique ({{$date|date_format:"%d %b %Y"}}) - {{$produits_livret|@count}} produits
       </a>

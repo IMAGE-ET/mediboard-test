@@ -73,7 +73,7 @@ var BCBScripts = {
 
   <!-- Niveau d'affichage des produits pour la recherche dans les classes ATC -->  
   <tr>
-    <th class="category" colspan="100">Configuration recherche ATC</th>
+    <th class="title" colspan="100">Configuration recherche ATC</th>
   </tr>
   
   <tr>
@@ -99,7 +99,7 @@ var BCBScripts = {
   <!-- Niveau d'affichage des produits pour la recherche dans les classes ATC -->  
   {{assign var="class" value=CBcbProduit}}
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+    <th class="title" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
   </tr>
   
   <tr>
@@ -118,7 +118,7 @@ var BCBScripts = {
   </tr>
 
   <tr>
-    <th class="category" colspan="100">Configuration recherche BCB</th>
+    <th class="title" colspan="100">Configuration recherche BCB</th>
   </tr>
   
   <tr>

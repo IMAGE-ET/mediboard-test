@@ -48,7 +48,7 @@ function updateUCD(){
 	<table class="form">
 	  {{assign var="class" value="CPrescription"}}
     <tr>
-      <th class="category" colspan="2">
+      <th class="title" colspan="2">
         <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
           {{tr}}config-{{$m}}-{{$class}}{{/tr}}
         </label>    
@@ -59,7 +59,7 @@ function updateUCD(){
 		{{mb_include module=system template=inc_config_bool var=add_element_category}}
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
 		<tr>
-      <th class="category" colspan="2">
+      <th class="title" colspan="2">
         Droits infirmiers sur la prescription
       </th>
     </tr>
@@ -74,7 +74,7 @@ function updateUCD(){
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_dmi}}
 	  {{assign var="var" value="time_alerte_modification"}}
 	  <tr>
-	    <th colspan="2" class="category">
+	    <th colspan="2" class="title">
 	      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
 	        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
 	      </label>    
@@ -95,7 +95,7 @@ function updateUCD(){
 	  <!-- Gestion des scores de prescription -->
 	  {{assign var="var" value="scores"}}
 	  <tr>
-	    <th class="category" colspan="2">
+	    <th class="title" colspan="2">
 	      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
 	        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
 	      </label>    
@@ -185,7 +185,7 @@ function updateUCD(){
 		</tr>  
 	  {{assign var="class" value="CCategoryPrescription"}}
 	  <tr>
-	   <th class="category" colspan="2">
+	   <th class="title" colspan="2">
 	      <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
 	        {{tr}}config-{{$m}}-{{$class}}{{/tr}}
 	      </label>    
@@ -215,7 +215,7 @@ function updateUCD(){
 	  {{assign var="class" value="CMomentUnitaire"}}
 	  {{assign var="var" value="principaux"}}
 	  <tr>
-	   <th class="category" colspan="2">
+	   <th class="title" colspan="2">
 	      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
 	        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
 	      </label>    
@@ -230,7 +230,7 @@ function updateUCD(){
 	    </td>             
 	  </tr>
 	  <tr>
-	    <th class="category" colspan="10">Affichage des voies disponibles</th>
+	    <th class="title" colspan="10">Affichage des voies disponibles</th>
 	  </tr>
 	  <tr>
 	    <td colspan="2" style="text-align: center;">
@@ -244,7 +244,7 @@ function updateUCD(){
 	  {{assign var=class value="CAdministration"}}
 	  {{assign var=var value="hors_plage"}}
 	  <tr>
-	    <th class="category" colspan="2">{{tr}}{{$class}}{{/tr}} en dehors des plages prevues</th>
+	    <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}} en dehors des plages prevues</th>
 	  </tr>
 	  <tr>  
 	    <td colspan="2" style="text-align: center">

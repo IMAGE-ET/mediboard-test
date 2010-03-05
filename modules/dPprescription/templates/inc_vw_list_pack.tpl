@@ -43,7 +43,7 @@
 	
 	  {{if !$packs|@count}}
 	  <tr>
-	    <th>Liste des packs</th>
+	    <th class="title">Liste des packs</th>
 	  </tr>
 	  <tr>
 	    <td>Aucun pack disponible</td>

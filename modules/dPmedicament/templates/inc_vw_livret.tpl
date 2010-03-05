@@ -56,7 +56,7 @@ Main.add(function(){
 {{if $lettre}}	
 <table class="tbl">
   <tr>
-    <th colspan="10">{{$produits_livret|@count}} produits dans le livret</th>
+    <th colspan="10" class="title">{{$produits_livret|@count}} produits dans le livret</th>
   </tr>  
   <tr>
     <th>Actions</th>

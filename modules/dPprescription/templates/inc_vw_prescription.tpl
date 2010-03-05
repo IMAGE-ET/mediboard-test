@@ -47,7 +47,7 @@ Main.add(function () {
 		   <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
 		   <table class="form">
 		     <tr>
-		       <th class="category" colspan="2">
+		       <th class="title" colspan="2">
 		         Création d'un protocole
 		       </th>
 		    </tr>

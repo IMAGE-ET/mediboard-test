@@ -66,7 +66,7 @@ function removeFunction(function_category_id){
     <td class="halfPane">
 		  <table class="tbl">
 	      <tr>
-	        <th colspan="2">Executants de la catégorie {{$category->_view}}</th>
+	        <th colspan="2" class="title">Executants de la catégorie {{$category->_view}}</th>
 	      </tr>
 	      <tr>
 	        <th>Nom</th>
@@ -94,7 +94,7 @@ function removeFunction(function_category_id){
 		     <input type="hidden" name="del" value="0" />
 		     <table class="form">
 		       <tr>
-		         <th class="category" colspan="2">
+		         <th class="title {{if $executant_prescription_line->_id}}modify{{/if}}" colspan="2">
 		         {{if $executant_prescription_line->_id}}
 	  			     {{mb_include module=system template=inc_object_idsante400 object=$executant_prescription_line}}
  				       {{mb_include module=system template=inc_object_history object=$executant_prescription_line}}

@@ -35,7 +35,7 @@ if(Livret.urlEditProd) {
 			        <img src="./images/icons/uparrow.png" alt="Retour" title="Retour" />
             </a>
           </td> 
-			    <th>{{$chapitreATC}} ({{$codeATC}})</th>
+			    <th class="title">{{$chapitreATC}} ({{$codeATC}})</th>
 			  </tr>
 			</table>
       {{/if}}
@@ -55,8 +55,8 @@ if(Livret.urlEditProd) {
 {{if $codeATC}}
 <table class="tbl">
   <tr>
-    <th colspan="10">{{$listProduits|@count}} produits dans le livret</th>
-  </tr>  
+    <th colspan="10" class="title">{{$listProduits|@count}} produits dans le livret</th>
+  </tr>
   <tr>
     <th>Actions</th>
     <th>Libelle</th>

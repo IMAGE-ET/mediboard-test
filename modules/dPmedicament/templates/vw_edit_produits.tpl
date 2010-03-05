@@ -41,7 +41,7 @@ function updateUniteDispensation(element){
       
       <table class="tbl">
         <tr>
-          <th>Produits</th>
+          <th class="title">Produits</th>
         </tr>
         {{foreach from=$produits item=_produit}}
           <tr {{if $_produit->_id == $produit->_id}}class="selected"{{/if}}>
@@ -69,18 +69,16 @@ function updateUniteDispensation(element){
           <input type="hidden" name="m" value="dPmedicament" />
           <input type="hidden" name="dosql" value="do_produit_prescription_aed" />
           <input type="hidden" name="del" value="0" />
-					
           <input type="hidden" name="produit_prescription_id" value="{{$produit->_id}}" />
-        
           <table class="form">
             <tr>
 		          {{if $produit->_id}}
-              <th class="category modify" colspan="2">
+              <th class="title modify" colspan="2">
 					      {{mb_include module=system template=inc_object_idsante400 object=$produit}}
 					      {{mb_include module=system template=inc_object_history object=$produit}}
 		            Modification du produit
 						  {{else}}
-              <th class="category" colspan="2">
+              <th class="title" colspan="2">
 		            Création d'un produit
 		          {{/if}}
 		          </th>

@@ -49,6 +49,9 @@ function reloadMomentsUnitaires(code_moment_id){
   <tr>
     <td class="halfPane">
       <table class="tbl" id="moments">
+      	<tr>
+      		<th class="title" colspan="3">Moments</th>
+        </tr>
         <tr>
           <th>Libelle</th>
           <th>Code Moment</th>

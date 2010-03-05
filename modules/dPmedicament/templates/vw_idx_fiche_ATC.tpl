@@ -29,7 +29,7 @@
 			
 	    <table class="tbl">
 			  <tr>
-			    <th>Fiches ATC</th>
+			    <th class="title">Fiches ATC</th>
 			  </tr>
 			  {{foreach from=$fiches key=code_atc_1 item=_fiches_atc_1}}
 			    {{assign var=libelle_atc_1 value=$code_to_libelle.$code_atc_1}}
@@ -51,7 +51,11 @@
 			        </tr>
 				  	{{/foreach}} 
 				  {{/foreach}}
-			  {{/foreach}}
+			  {{foreachelse}}
+				<tr>
+					<td>{{tr}}CFicheATC.none{{/tr}}</td>
+				</tr>
+				{{/foreach}}
 			</table>
 		</td>
 
@@ -67,7 +71,7 @@
 			  
 				  <table class="form">
 				    <tr>
-				      <th class="category" colspan="2">
+				      <th class="title modify" colspan="2">
 				        Modification d'une fiche ATC
 				      </th>
 				    </tr>
@@ -103,7 +107,7 @@
 			  	
 			  	<table class="form">
 			  	  <tr>
-			  	    <th colspan="2" class="category">Création d'une fiche ATC</th>
+			  	    <th colspan="2" class="title">Création d'une fiche ATC</th>
 			  	  </tr>
 			  	  <tr>
 						  <th>

@@ -546,13 +546,8 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field=adresse_par_etab_id}}</th>
   <td colspan="3">
-     <select name="adresse_par_etab_id"">
-       <option value="">&mdash;{{tr}}Choose{{/tr}}</option>
-       {{foreach from=$listEtab item="etab"}}
-         <option value="{{$etab->_id}}" {{if $etab->_id == $sejour->adresse_par_etab_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
-        {{/foreach}}
-    </select>
-  </td>
+	{{mb_field object=$sejour field=adresse_par_etab_id form="editSejour" autocomplete="true,1,50,true,true"}}
+	</td>
 </tr>
 {{/if}}
 

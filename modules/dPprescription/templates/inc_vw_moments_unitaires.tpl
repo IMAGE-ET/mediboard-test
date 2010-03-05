@@ -11,7 +11,7 @@
 {{if $moment->code_moment_id}}
 <table class="form" style="position: fixed; width: 200px;">
   <tr>
-    <th class="category" colspan="2">Moment complexe: "{{$moment->libelle_moment}}"</th>
+    <th class="title" colspan="2">Moment complexe: "{{$moment->libelle_moment}}"</th>
   </tr>     
   <tr>
     <td>

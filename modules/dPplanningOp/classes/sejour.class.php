@@ -225,10 +225,10 @@ class CSejour extends CCodable {
     $props["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
-    $props["etablissement_transfert_id"] = "ref class|CEtabExterne";
-    $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne";
+    $props["etablissement_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
-    $props["adresse_par_etab_id"] = "ref class|CEtabExterne";
+    $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]             = "bool default|0";
     
