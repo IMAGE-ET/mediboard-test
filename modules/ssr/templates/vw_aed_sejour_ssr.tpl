@@ -26,14 +26,19 @@ Main.add(Control.Tabs.create.curry('tab-sejour'));
 
 <ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
+  <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
   <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
-  <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
   <li><a href="#planification">Planification</a></li>
+  <li><a href="#cotation">Cotation</a></li>
   {{/if}} 
 </ul>
 
 <hr class="control_tabs" />  
+
+<div id="autonomie" style="display: none;">
+  {{mb_include template=inc_form_fiche_autonomie}}
+</div>
 
 {{if $can_view_dossier_medical}}
 <script type="text/javascript">
@@ -47,10 +52,6 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </script>
 
 <div id="antecedents" style="display: none;">
-  <div class="small-info">
-    Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-    consulter et modifier les antécédents du patient concerné.
-  </div>
 </div>
 {{/if}}
 
@@ -58,11 +59,11 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
   {{mb_include template=inc_form_bilan_ssr}}
 </div>
 
-<div id="autonomie" style="display: none;">
-  {{mb_include template=inc_form_fiche_autonomie}}
-</div>
-
 <div id="planification" style="display: none;">
   {{mb_include template=inc_planification}}
+</div>
+
+<div id="cotation" style="display: none;">
+  {{mb_include template=inc_cotation_rhs}}
 </div>
 {{/if}}
