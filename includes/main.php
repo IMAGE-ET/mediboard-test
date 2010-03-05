@@ -142,7 +142,11 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
 // do some db work if dosql is set
 if ($dosql) {
   $mDo = CValue::post("m", $m);
-  require("./modules/$mDo/$dosql.php");
+  if(is_file("./modules/$mDo/controllers/$dosql.php")) {
+    require("./modules/$mDo/controllers/$dosql.php");
+  } else {
+    require("./modules/$mDo/$dosql.php");
+  }
 }
 
 // Feed module with tabs

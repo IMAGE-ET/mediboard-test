@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id: do_order_aed.php 7346 2009-11-16 22:51:04Z phenxdesign $ */
 
 /**
  * @package Mediboard
  * @subpackage dPstock
- * @version $Revision$
+ * @version $Revision: 7346 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
