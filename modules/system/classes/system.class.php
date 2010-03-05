@@ -25,7 +25,7 @@ class CPreferences extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["user_id"] = "ref class|CUser";
+    $specs["user_id"] = "num min|0"; //"ref class|CUser"; // Needed for the default preferences
     $specs["key"]     = "str notNull maxLength|40";
     $specs["value"]   = "str";
     return $specs;
