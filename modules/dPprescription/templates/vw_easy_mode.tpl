@@ -275,11 +275,13 @@ Main.add( function(){
 	                  class="{{$categorie->_id}}" 
 	                  onclick="oEltField.toggle('{{$element->_id}}', this.checked);" />    
           </td>
-          <td>		         
+          <td class="text">		         
             <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}">{{$element->_view}}</label>
 	        </td>
 	        {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
-	      {{/foreach}}
+	      {{foreachelse}}
+				  <td colspan="8"><div class="small-info">Aucun élément dans cette catégorie</div></td>
+        {{/foreach}}
 	    {{foreachelse}}
 			  <div class="small-info">
 			    Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}

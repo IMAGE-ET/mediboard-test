@@ -69,7 +69,7 @@ class CCategoryPrescription extends CMbObject {
 		  $element->cancelled = '0';
 		}
 		$element->category_prescription_id = $this->_id;
-		$this->_ref_elements_prescription = $element->loadMatchingList();
+		$this->_ref_elements_prescription = $element->loadMatchingList("libelle");
 	}
   
 	function countElementsPrescription() {

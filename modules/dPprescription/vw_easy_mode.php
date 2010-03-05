@@ -34,8 +34,7 @@ foreach($prescription->_ref_prescription_lines_element as $_line_element){
 	$elements[] = $_line_element->element_prescription_id; 
 }
 
-
-if($prescription->_ref_object->_class_name == "CSejour"){
+if($prescription->_ref_object instanceof CSejour){
 	// Chargement des dates des operations
 	$sejour =& $prescription->_ref_object;
 	$sejour->makeDatesOperations();
