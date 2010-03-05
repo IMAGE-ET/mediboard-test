@@ -25,12 +25,12 @@ class CMbSOAPClient extends SoapClient {
   	
     if (!$html = file_get_contents($this->wsdl)) {
     	$this->soap_client_error = true;
-    	//trigger_error("Impossible d'analyser l'url : ".$this->wsdl, E_USER_ERROR);
+    	trigger_error("Impossible d'analyser l'url : ".$this->wsdl, E_USER_ERROR);
     	return;
     }
     if (strpos($html, "<?xml") === false) {
     	$this->soap_client_error = true;
-      //trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
+      trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);
       return;
     }
     
@@ -61,7 +61,7 @@ class CMbSOAPClient extends SoapClient {
   	} catch(SoapFault $fault) {
   		$output = $echange_soap->output = $fault->faultstring;
   		$echange_soap->soapfault = 1;
-      //trigger_error($fault->faultstring, E_USER_ERROR);
+      trigger_error($fault->faultstring, E_USER_ERROR);
     }
     
     if ($echange_soap->soapfault != 1) {
@@ -75,7 +75,7 @@ class CMbSOAPClient extends SoapClient {
   
   static public function make($rooturl, $login = null, $password = null, $type = null, $options = array()) {
   	if (!url_exists($rooturl)) {
-  		//trigger_error("Impossible d'établir la connexion avec le serveur : ".$rooturl, E_USER_ERROR);
+  		trigger_error("Impossible d'établir la connexion avec le serveur : ".$rooturl, E_USER_ERROR);
   		return;
   	}
 
@@ -89,7 +89,7 @@ class CMbSOAPClient extends SoapClient {
   	}
 
     if (!$client = new CMbSOAPClient($rooturl, $type, $options)) {
-      //trigger_error("Instanciation du SoapClient impossible.");
+      trigger_error("Instanciation du SoapClient impossible.");
     }
     return $client;
   }

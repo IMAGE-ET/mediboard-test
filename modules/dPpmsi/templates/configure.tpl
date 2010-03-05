@@ -35,7 +35,7 @@
     </th>
   </tr>
   <tr>
-    <td> {{mb_include module=system template=inc_config_exchange_source object=$exchange_source exchange_source_name="pmsi"}} </td>
+    <td> {{mb_include module=system template=inc_config_exchange_source source=$pmsi_source}} </td>
   </tr>
 </table>
 

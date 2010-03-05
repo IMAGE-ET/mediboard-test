@@ -8,90 +8,91 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !@$type}} 
-  {{assign var="type" value=""}}
-{{/if}}
+{{assign var="sourcename" value=$source->name}}
 
-{{if !$exchange_source_name}} 
+{{if !$sourcename}} 
   <div class="small-info">
     {{tr}}CExchangeSource-no-name{{/tr}}
   </div>
 {{else}}
-  <div id="exchange_source">
+  <div id="exchange_source-{{$sourcename}}">
     <script type="text/javascript">
       refreshExchangeSource = function(exchange_source_name, type){
         var url = new Url("system", "ajax_refresh_exchange_source");
-        url.addParam("type", type);
         url.addParam("exchange_source_name", exchange_source_name);
-        url.requestUpdate('exchange_source');
+        url.addParam("type", type);
+        url.requestUpdate('exchange_source-'+exchange_source_name);
       }
     </script>
     
-    {{if !$type}} 
+    {{if $source->_allowed_instances}} 
     <script type="text/javascript">
     Main.add(function () {
-      Control.Tabs.create('tabs-exchange-source', true);
+      Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
     });
     </script>
     
-    <ul id="tabs-exchange-source" class="control_tabs">
-      <li><a href="#ftp">{{tr}}CSourceFTP{{/tr}}</a></li>
-      <li><a href="#soap">{{tr}}CSourceSOAP{{/tr}}</a></li>
+    <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
+      {{foreach from=$source->_allowed_instances item=_source_allowed}}
+      <li><a href="#{{$_source_allowed->_class_name}}-{{$sourcename}}">{{tr}}{{$_source_allowed->_class_name}}{{/tr}}</a></li>
+     {{/foreach}}
     </ul>
       
     <hr class="control_tabs" />
     {{/if}} 
     
-    <div id="ftp" style="display:{{if $type == "ftp"}}block{{else}}none{{/if}};">
-      {{if isset($object->_id|smarty:nodefaults) && $object->_class_name != "CSourceFTP"}}
+    <div id="CSourceFTP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
+      {{if $source->_id && !($source instanceof CSourceFTP)}}
         <div class="small-info">
           {{tr}}CExchangeSource-already-exist{{/tr}}
         </div>
       {{else}}
       <table class="main">
-        {{if !isset($object->_class_name|smarty:nodefaults)}}
-          {{assign var="object" value=$exchange_objects.CSourceFTP}}
+        {{assign var="_source_ftp" value=$source}}
+        {{if $source->_class_name == "CExchangeSource"}}
+          {{assign var="_source_ftp" value=$source->_allowed_instances.CSourceFTP}}
         {{/if}}
-        {{if !isset($object->_id|smarty:nodefaults)}}
+        {{if !$source->_id}}
         <tr>
           <td class="halfPane">
-            <a class="button new" onclick="$('config-source-ftp').show()">
+            <a class="button new" onclick="$('config-source-ftp-{{$sourcename}}').show()">
               Créer une source FTP
             </a>
          </td>
         </tr>
         {{/if}}
         <tr>
-          <td id="config-source-ftp" {{if !isset($object->_id|smarty:nodefaults)}}style="display:none"{{/if}}>
-            {{mb_include module=system template=inc_config_source_ftp}}       
+          <td id="config-source-ftp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+            {{mb_include module=system template=inc_config_source_ftp source=$_source_ftp}}       
           </td>
         </tr>
       </table> 
       {{/if}}
     </div>
     
-    <div id="soap" style="display:{{if $type == "soap"}}block{{else}}none{{/if}};">
-      {{if isset($object->_id|smarty:nodefaults) && $object->_class_name != "CSourceSOAP"}}
+    <div id="CSourceSOAP-{{$sourcename}}" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}block{{else}}none{{/if}};">
+      {{if $source->_id && !($source instanceof CSourceSOAP)}}
         <div class="small-info">
           {{tr}}CExchangeSource-already-exist{{/tr}}
         </div>
       {{else}}
       <table class="main">
-        {{if !isset($object->_class_name|smarty:nodefaults)}}
-          {{assign var="object" value=$exchange_objects.CSourceSOAP}}
+        {{assign var="_source_soap" value=$source}}
+        {{if $source->_class_name == "CExchangeSource"}}
+          {{assign var="_source_soap" value=$source->_allowed_instances.CSourceSOAP}}
         {{/if}}
-        {{if !isset($object->_id|smarty:nodefaults)}}
+        {{if !$source->_id}}
         <tr>
           <td class="halfPane">
-            <a class="button new" onclick="$('config-source-soap').show()">
+            <a class="button new" onclick="$('config-source-soap-{{$sourcename}}').show()">
               Créer une source SOAP
             </a> 
          </td>
         </tr>
         {{/if}}
         <tr>
-          <td id="config-source-soap" {{if !isset($object->_id|smarty:nodefaults)}}style="display:none"{{/if}}>
-            {{mb_include module=system template=inc_config_source_soap}}        
+          <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
+            {{mb_include module=system template=inc_config_source_soap source=$_source_soap}}        
           </td>
         </tr>
       </table>

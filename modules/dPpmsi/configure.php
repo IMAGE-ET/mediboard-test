@@ -12,12 +12,13 @@ global $can;
 $can->needsAdmin();
 
 // Source PMSI
-$exchange_source = CExchangeSource::get("pmsi");
+$pmsi_source = CExchangeSource::get("pmsi");
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("exchange_objects", CExchangeSource::getObjects());
-$smarty->assign("exchange_source" , $exchange_source);
+
+$smarty->assign("pmsi_source" , $pmsi_source);
+
 $smarty->display("configure.tpl");
 
 ?>

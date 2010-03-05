@@ -16,8 +16,10 @@ class CExchangeSource extends CMbObject {
   var $password = null;
   
   // Behaviour Fields
-  var $_client  = null;
-  var $_data    = null;
+  var $_client      = null;
+  var $_data        = null;
+  var $_allowed_instances = null;
+  var $_wanted_type = null;
   
   function getProps() {
     $specs = parent::getProps();
@@ -35,10 +37,15 @@ class CExchangeSource extends CMbObject {
     return getChildClasses("CExchangeSource");
   }
   
-  static function getObjects() {
+  static function getObjects($name, $type) {
+    if ($type) {
+      return null;
+    }
+    
     $exchange_objects = array();
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_objects[$_class] = new $_class;
+      $exchange_objects[$_class]->name = $name;
     }
     
     return $exchange_objects;
@@ -50,21 +57,27 @@ class CExchangeSource extends CMbObject {
       $exchange_source->name = $name;
       $exchange_source->loadMatchingObject();
       if ($exchange_source->_id) {
+        $exchange_source->_wanted_type = $type;
+        $exchange_source->_allowed_instances = self::getObjects($name, $type);
         return $exchange_source;
       }
     }
-    if ($type) {
-      if ($type == "soap") {
-        return new CSourceSOAP();
-      }
-      if ($type == "ftp") {
-        return new CSourceFTP();
-      }
+    $source = new CExchangeSource();
+    if ($type == "soap") {
+      $source = new CSourceSOAP();
     }
+    if ($type == "ftp") {
+      $source = new CSourceFTP();
+    }
+    $source->name = $name;
+    $source->_wanted_type = $type;
+    $source->_allowed_instances = self::getObjects($name, $type);
+    return $source;
   }
   
   function check() {
-    if (!$this->_id && $source = self::get($this->name)) {
+    $source = self::get($this->name);
+    if (!$this->_id && $source->_id) {
       return "Impossible de créer une nouvelle source"; // Mettre en traduction
     }
     

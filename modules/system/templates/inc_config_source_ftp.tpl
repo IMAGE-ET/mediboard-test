@@ -7,16 +7,15 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceFTP" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}') } )">
+      <form name="editSourceFTP" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_ftp_aed" />
-        <input type="hidden" name="source_ftp_id" value="{{$object->_id}}" />
+        <input type="hidden" name="source_ftp_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" /> 
-        <input type="hidden" name="name" value="{{$exchange_source_name}}" /> 
+        <input type="hidden" name="name" value="{{$source->name}}" /> 
            
         <table class="form">        
           <tr>
@@ -26,63 +25,63 @@
           </tr>
           
           <tr>
-            <th>{{mb_label object=$object field="name"}}</th>
-            <td><input type="text" readonly="readonly" name="name" value="{{$exchange_source_name}}" /></td>
+            <th>{{mb_label object=$source field="name"}}</th>
+            <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" /></td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="host"}}</th>
-            <td>{{mb_field object=$object field="host"}}</td>
+            <th>{{mb_label object=$source field="host"}}</th>
+            <td>{{mb_field object=$source field="host"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="user"}}</th>
-            <td>{{mb_field object=$object field="user"}}</td>
+            <th>{{mb_label object=$source field="user"}}</th>
+            <td>{{mb_field object=$source field="user"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="password"}}</th>
-            <td>{{mb_field object=$object field="password"}}</td>
+            <th>{{mb_label object=$source field="password"}}</th>
+            <td>{{mb_field object=$source field="password"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="port"}}</th>
-            <td>{{mb_field object=$object field="port"}}</td>
+            <th>{{mb_label object=$source field="port"}}</th>
+            <td>{{mb_field object=$source field="port"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="timeout"}}</th>
-            <td>{{mb_field object=$object field="timeout"}}</td>
+            <th>{{mb_label object=$source field="timeout"}}</th>
+            <td>{{mb_field object=$source field="timeout"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="pasv"}}</th>
-            <td>{{mb_field object=$object field="pasv"}}</td>
+            <th>{{mb_label object=$source field="pasv"}}</th>
+            <td>{{mb_field object=$source field="pasv"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="mode"}}</th>
-            <td>{{mb_field object=$object field="mode"}}</td>
+            <th>{{mb_label object=$source field="mode"}}</th>
+            <td>{{mb_field object=$source field="mode"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="counter"}}</th>
-            <td>{{mb_field object=$object field="counter"}}</td>
+            <th>{{mb_label object=$source field="counter"}}</th>
+            <td>{{mb_field object=$source field="counter"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="fileprefix"}}</th>
-            <td>{{mb_field object=$object field="fileprefix"}}</td>
+            <th>{{mb_label object=$source field="fileprefix"}}</th>
+            <td>{{mb_field object=$source field="fileprefix"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="fileextension"}}</th>
-            <td>{{mb_field object=$object field="fileextension"}}</td>
+            <th>{{mb_label object=$source field="fileextension"}}</th>
+            <td>{{mb_field object=$source field="fileextension"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="filenbroll"}}</th>
-            <td>{{mb_field object=$object field="filenbroll"}}</td>
+            <th>{{mb_label object=$source field="filenbroll"}}</th>
+            <td>{{mb_field object=$source field="filenbroll"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="fileextension_write_end"}}</th>
-            <td>{{mb_field object=$object field="fileextension_write_end"}}</td>
+            <th>{{mb_label object=$source field="fileextension_write_end"}}</th>
+            <td>{{mb_field object=$source field="fileextension_write_end"}}</td>
           </tr>
           
           <tr>
             <td class="button" colspan="2">
-              {{if $object->_id}}
+              {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}')})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  
@@ -95,7 +94,7 @@
     </td>
     <td class="greedyPane">
       <script type="text/javascript">
-        var FTP = {
+        FTP = {
           connexion: function (exchange_source_name) {
             var url = new Url("system", "ajax_connexion_ftp");
             url.addParam("exchange_source_name", exchange_source_name);
@@ -119,21 +118,21 @@
         <!-- Test connexion FTP -->
         <tr>
           <td>
-            <button type="button" class="search" onclick="FTP.connexion('{{$exchange_source_name}}');">
+            <button type="button" class="search" onclick="FTP.connexion('{{$source->name}}');">
               {{tr}}utilities-source-ftp-connexion{{/tr}}
             </button>
           </td>
-          <td id="utilities-source-ftp-connexion-{{$exchange_source_name}}" />
+          <td id="utilities-source-ftp-connexion-{{$source->name}}" />
         </tr>
         
         <!-- Liste des fichiers -->
         <tr>
           <td>
-            <button type="button" class="search" onclick="FTP.getFiles('{{$exchange_source_name}}');">
+            <button type="button" class="search" onclick="FTP.getFiles('{{$source->name}}');">
               {{tr}}utilities-source-ftp-getFiles{{/tr}}
             </button> 
           </td>
-          <td id="utilities-source-ftp-getFiles-{{$exchange_source_name}}" />
+          <td id="utilities-source-ftp-getFiles-{{$source->name}}" />
         </tr>
       </table>
     </td>

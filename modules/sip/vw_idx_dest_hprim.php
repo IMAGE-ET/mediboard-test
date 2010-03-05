@@ -38,7 +38,6 @@ foreach($listDestHprim as &$_dest_hprim) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("dest_hprim"      , $dest_hprim);
-$smarty->assign("exchange_objects", CExchangeSource::getObjects());
 $smarty->assign("listEtab"        , $listEtab);
 $smarty->assign("listDestHprim"   , $listDestHprim);
 $smarty->display("vw_idx_dest_hprim.tpl");

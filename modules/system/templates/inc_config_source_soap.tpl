@@ -11,12 +11,12 @@
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceSoap" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}') } )">
+      <form name="editSourceSoap" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_soap_aed" />
-        <input type="hidden" name="source_soap_id" value="{{$object->_id}}" />
+        <input type="hidden" name="source_soap_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" /> 
-        <input type="hidden" name="name" value="{{$exchange_source_name}}" />  
+        <input type="hidden" name="name" value="{{$source->name}}" />  
         
         <table class="form">
           <tr>
@@ -25,31 +25,31 @@
             </th>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="name"}}</th>
-            <td><input type="text" readonly="readonly" name="name" value="{{$exchange_source_name}}" /></td>
+            <th>{{mb_label object=$source field="name"}}</th>
+            <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" /></td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="host"}}</th>
-            <td>{{mb_field object=$object field="host"}}</td>
+            <th>{{mb_label object=$source field="host"}}</th>
+            <td>{{mb_field object=$source field="host"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="user"}}</th>
-            <td>{{mb_field object=$object field="user"}}</td>
+            <th>{{mb_label object=$source field="user"}}</th>
+            <td>{{mb_field object=$source field="user"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="password"}}</th>
-            <td>{{mb_field object=$object field="password"}}</td>
+            <th>{{mb_label object=$source field="password"}}</th>
+            <td>{{mb_field object=$source field="password"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$object field="wsdl_mode"}}</th>
-            <td>{{mb_field object=$object field="wsdl_mode"}}</td>
+            <th>{{mb_label object=$source field="wsdl_mode"}}</th>
+            <td>{{mb_field object=$source field="wsdl_mode"}}</td>
           </tr>
           
           <tr>
             <td class="button" colspan="2">
-              {{if $object->_id}}
+              {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$exchange_source_name}}', '{{$type}}')})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  
@@ -62,7 +62,7 @@
     </td>
     <td class="greedyPane">
       <script type="text/javascript">
-        var SOAP = {
+        SOAP = {
           connexion: function (exchange_source_name) {
             var url = new Url("system", "ajax_connexion_soap");
             url.addParam("exchange_source_name", exchange_source_name);
@@ -86,21 +86,21 @@
         <!-- Test connexion SOAP -->
         <tr>
           <td>
-            <button type="button" class="search" onclick="SOAP.connexion('{{$exchange_source_name}}');">
+            <button type="button" class="search" onclick="SOAP.connexion('{{$source->name}}');">
               {{tr}}utilities-source-soap-connexion{{/tr}}
             </button>
           </td>
-          <td id="utilities-source-soap-connexion-{{$exchange_source_name}}" />
+          <td id="utilities-source-soap-connexion-{{$source->name}}" />
         </tr>
         
         <!-- Liste des functions SOAP -->
         <tr>
           <td>
-            <button type="button" class="search" onclick="SOAP.getFunctions('{{$exchange_source_name}}');">
+            <button type="button" class="search" onclick="SOAP.getFunctions('{{$source->name}}');">
               {{tr}}utilities-source-soap-getFunctions{{/tr}}
             </button> 
           </td>
-          <td id="utilities-source-soap-getFunctions-{{$exchange_source_name}}" />
+          <td id="utilities-source-soap-getFunctions-{{$source->name}}" />
         </tr>
         
       </table>

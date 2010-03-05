@@ -110,6 +110,7 @@
       </form>
     </td>
   </tr>
+  {{if $dest_hprim->_ref_exchange_source}}
   <tr>
     <td>
       <table class="form">  
@@ -120,10 +121,11 @@
         </tr>
         
         <tr>
-          <td colspan="2"> {{mb_include module=system template=inc_config_exchange_source object=$dest_hprim->_ref_exchange_source exchange_source_name=$dest_hprim->_guid}} </td>
+          <td colspan="2"> {{mb_include module=system template=inc_config_exchange_source source=$dest_hprim->_ref_exchange_source}} </td>
         </tr>
       </table>
       {{/if}}
     </td>
   </tr>
+  {{/if}}
 </table>

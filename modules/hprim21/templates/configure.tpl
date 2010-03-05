@@ -7,8 +7,6 @@
     </th>
   </tr>
   <tr>
-    <td> {{mb_include module=system template=inc_config_exchange_source object=$exchange_source exchange_source_name="hprim21"}} </td>
+    <td> {{mb_include module=system template=inc_config_exchange_source source=$hprim21_source}} </td>
   </tr>
 </table>
-
-</form>
