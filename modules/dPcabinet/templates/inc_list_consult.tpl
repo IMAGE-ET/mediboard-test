@@ -82,9 +82,18 @@ Main.add( function () {
   {{else}} 
     {{assign var="style" value=""}}
   {{/if}}
+
+  {{assign var=prat_id value=$_plage->chir_id}}
+  
+	{{assign var=destinations value=""}}
+  {{if @count($listPlages.$prat_id.destinations) && $canCabinet->edit}}
+  {{assign var=destinations value=$listPlages.$prat_id.destinations}}
+  {{/if}}
+
   <tbody class="hoverable">
 
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
+    {{assign var=categorie value=$_consult->_ref_categorie}}
     <td style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
@@ -126,7 +135,8 @@ Main.add( function () {
         {{/if}}
       {{/if}}
     </td>
-    <td class="text" style="{{$style}}">
+		
+    <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}} {{if !$destinations && !$_consult->motif}}rowspan="2"{{/if}}>
       {{if $patient->_id}}
 	      {{if $canCabinet->view}}
 	      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
@@ -144,19 +154,21 @@ Main.add( function () {
         [PAUSE]
       {{/if}}
     </td>
+
+    {{if $categorie->nom_icone}}
     <td rowspan="2" style="{{$style}}">
-    	{{assign var=categorie value=$_consult->_ref_categorie}}
-      {{if $categorie && $categorie->nom_icone}}
         <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}"/>
-      {{/if}}
     </td>
+    {{/if}}
   </tr>
+	
+  {{if $destinations || $_consult->motif}}
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
-    <td class="text" style="{{$style}}">
+    <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}}>
       {{assign var=prat_id value=$_plage->chir_id}}
       
-      {{if @count($listPlages.$prat_id.destinations) && $canCabinet->edit}}
-      <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post" style="float: right">
+      {{if $destinations}}
+      <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post" style="float: right;">
       
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       <input type="hidden" name="m" value="dPcabinet" />
@@ -168,7 +180,7 @@ Main.add( function () {
         <option value="">
           &mdash; Transférer
         </option>
-        {{foreach from=$listPlages.$prat_id.destinations item=destination}}
+        {{foreach from=$destinations item=destination}}
         <option value={{$destination->_id}}>
           {{$destination->_ref_chir->_view}}
           : {{$destination->debut|date_format:$dPconfig.time}} 
@@ -196,6 +208,9 @@ Main.add( function () {
       {{/if}}
     </td>
   </tr>
+	{{/if}}
+	
+	
   </tbody>
   {{/foreach}}
   
