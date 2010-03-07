@@ -13,9 +13,12 @@
   <input type="hidden" name="m" value="system" />
 
   <table class="form">
+    <tr>
+      <th class="title">Configuration générale
+    </tr>
     {{assign var=class value=CPlateauTechnique}}
   	<tr>
-  		<th class="title">{{tr}}{{$class}}{{/tr}}
+  		<th class="category">{{tr}}{{$class}}{{/tr}}
   	</tr>
     {{* mb_include module=system template=inc_config_bool var=infinite_quantity *}}
     
@@ -26,3 +29,5 @@
     </tr>
   </table>
 </form>
+
+{{mb_include module=system template=configure_dsn dsn=cdarr}}
