@@ -287,11 +287,14 @@ $locales['CRHS-rhs_id-desc'] = 'Identifiant interne';
 $locales['CRHS-sejour_id'] = 'Séjour';
 $locales['CRHS-sejour_id-court'] = 'RHS';
 $locales['CRHS-sejour_id-desc'] = 'Séjour concerné par le RHS';
-$locales['CRHS-title-create'] = 'Créer un RHS';
+$locales['CRHS-title-create'] = 'Créer le RHS';
 $locales['CRHS-title-modify'] = 'Modifier le RHS';
 $locales['CRHS.all'] = 'Tous les RHS';
 $locales['CRHS.none'] = 'Aucun RHS';
 $locales['CRHS.one'] = 'Un RHS';
 $locales['CSejour-back-rhss'] = 'RHSs';
 $locales['CSejour-back-rhss.empty'] = 'Aucun RHS pour ce séjour';
+$locales['CRHS-_in_bounds'] = 'Dans les bornes';
+$locales['CRHS-_in_bounds-court'] = 'Bornes';
+$locales['CRHS-_in_bounds-desc'] = 'Le RHS est dans les bornes d\'entrée/sortie du séjour';
 ?>
