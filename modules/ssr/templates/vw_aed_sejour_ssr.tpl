@@ -30,7 +30,7 @@ Main.add(Control.Tabs.create.curry('tab-sejour'));
   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
   <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
   <li><a href="#planification">Planification</a></li>
-  <li><a href="#cotation">Cotation</a></li>
+  <li onmousedown="CotationRHS.refresh('{{$sejour->_id}}')"><a href="#cotation-rhs">Cotation</a></li>
   {{/if}} 
 </ul>
 
@@ -63,7 +63,7 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
   {{mb_include template=inc_planification}}
 </div>
 
-<div id="cotation" style="display: none;">
-  {{mb_include template=inc_cotation_rhs}}
+{{mb_include_script module="ssr" script="cotation_rhs"}}
+<div id="cotation-rhs" style="display: none;">
 </div>
 {{/if}}

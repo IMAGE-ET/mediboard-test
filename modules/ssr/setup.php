@@ -108,7 +108,20 @@ class CSetupssr extends CSetup {
       ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.07";
+    // RHS
+    $this->makeRevision("0.07");
+    $query = "CREATE TABLE `rhs` (
+      `rhs_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `sejour_id` INT (11) UNSIGNED NOT NULL,
+      `date_monday` DATE NOT NULL
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `rhs` 
+      ADD INDEX (`sejour_id`),
+      ADD INDEX (`date_monday`);";
+    $this->addQuery($query);
+			
+    $this->mod_version = "0.08";
   }
 }
 

@@ -21,60 +21,94 @@ class CRHS extends CMbObject {
   var $date_monday = null;
   
 	// Form Field
-	var $_semaine = null;
+	var $_date_sunday = null;
+	var $_week_number = null;
+	
+	// Remote fields
+  var $_in_bounds = null;	
 	
   // Object References
   var $_ref_sejour    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'rhs';
-    $spec->key   = 'rhs_id';
+    $spec->table = "rhs";
+    $spec->key   = "rhs_id";
     $spec->uniques["rhs"] = array("sejour_id", "date_monday");
     return $spec;
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["sejour_id"]    = "ref notNull class|CSejour";
-    $specs["date_monday"]   = "date notNull";
+    $props = parent::getProps();
+		
+    // DB Fields
+    $props["sejour_id"]    = "ref notNull class|CSejour";
+    $props["date_monday"]   = "date notNull";
 
-    return $specs;
+    // Form Field
+    $props["_date_sunday"]   = "date";
+    $props["_week_number"]   = "num min|0 max|52";
+
+    // Remote fields
+    $props["_in_bounds"] = "bool";
+		
+    return $props;
   }
   
 	function check() {
 		return parent::check();
 		
 		if ($this->date_monday && strftime($this->date_monday != "1")) {
-			return CAppUI::tr("CRHS-check-monday", $this->date_monday);
+			return CAppUI::tr("CRHS-failed-monday", $this->date_monday);
 		}
 	}
 	
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_week_number = mbTransformTime(null, $this->date_monday, "%U");
+		$this->_date_sunday = mbDate("next sunday", $this->date_monday);
+		$this->_view = CAppUI::tr("Week") . " $this->_week_number";
+	}
+
+  function loadRefSejour() {
+  	$this->_ref_sejour = $sejour = $this->loadFwdRef("sejour_id", true);
+    $this->_in_bounds = 
+		  $this->date_monday <= mbDate($sejour->_sortie) && 
+      $this->_date_sunday >= mbDate($sejour->_entree); 
+  }
+	
 	/**
-	 * Make an empty RHS for sejour 
+	 * Get all possible and existing RHS for given sejour, by date as keys
 	 * @param CSejour $sejour
-	 * @return CRHS, null if not applyable, with an empty date_monday if not available
+	 * @return array[CRHS], null if not applyable
 	 */
-	function getNextAvailableRHS(CSejour $sejour) {
+	static function getAllRHSsFor(CSejour $sejour) {
 		if (!$sejour->_id || $sejour->type != "ssr") {
 			return;
 		}
-				
-		$rhss = $sejour->loadBackRefs("rhss");
-		$max_monday = max(CMbArray::pluck($rhss, "date_monday"));
-		
-		$rhs = new CRHS;
-		$rhs->sejour_id = $sejour->_id;
-		$rhs->date_monday = mbDate("last monday", $sejour->_entree);
-		while ($rhs->countMultipleList()) {
-			if ($rhs->date_monday > $sejour->_sortie) {
-				$rhs->date_monday = "";
-				break;
+			
+	  $rhss = array();	
+    foreach ($sejour->loadBackRefs("rhss") as $_rhs) {
+    	$rhss[$_rhs->date_monday] = $_rhs;
+    }
+    
+		for (
+		  $date_monday = mbDate("last sunday + 1 day", $sejour->_entree);
+			$date_monday <= $sejour->_sortie;
+			$date_monday = mbDate("+1 week", $date_monday)
+		) {
+			if (!isset($rhss[$date_monday])) {
+				$rhs = new CRHS;
+				$rhs->sejour_id = $sejour->_id;
+				$rhs->date_monday = $date_monday;
+				$rhs->updateFormFields();
+				$rhss[$date_monday] = $rhs;
 			}
-			$rhs->date_monday = mbdate("+1 week", $rhs->date_monday);
 		}
 		
-		return $rhs;
+		ksort($rhss);
+		
+		return $rhss;
 	}
 }
 
