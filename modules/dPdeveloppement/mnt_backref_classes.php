@@ -27,7 +27,7 @@ foreach ($classes as $class) {
 }
 
 ksort($present);
-// mbTrace($present);
+//mbTrace($present, "Present");
 
 // Looking for what should be coded
 $wanted = array();
@@ -59,13 +59,14 @@ foreach ($classes as $class) {
 }
 
 ksort($wanted);
-//mbTrace($wanted);
+//mbTrace($wanted, "Wanted");
 
 // Checking out the result
 $class_name = CValue::get("class_name");
 $show       = CValue::get("show", "all");
 
 $reports = array();
+$error_count = 0;
 foreach ($classes as $class) {
   if ($class_name && $class != $class_name) {
     continue;
@@ -74,14 +75,18 @@ foreach ($classes as $class) {
   // Are the wanted present ?
 	if (isset($wanted[$class])) {
 	  foreach ($wanted[$class] as $backProp => $backName) {
-	    $reports[$class][$backProp] = @array_key_exists($backProp, $present[$class]) ? "ok"  : "wanted";
+	  	$correct = @array_key_exists($backProp, $present[$class]);
+			$error_count += $correct ? 0 : 1;
+	    $reports[$class][$backProp] =  $correct ? "ok"  : "wanted";
 	  }
 	}
 
   // Are the present wanted ?
 	if (isset($present[$class])) {
 	  foreach ($present[$class] as $backProp => $backName) {
-	    $reports[$class][$backProp] = @array_key_exists($backProp, $wanted[$class]) ? "ok"  : "present";
+	  	$correct = @array_key_exists($backProp, $wanted[$class]);
+      $error_count += $correct ? 0 : 1;
+	    $reports[$class][$backProp] =  $correct ? "ok"  : "present";
 	  }
 	}
 	
@@ -94,9 +99,8 @@ if ($show == "errors") {
 	CMbArray::removeValue(array(), $reports);
 }
 
-
-
 //mbTrace($reports);
+//mbTrace($error_count);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -107,6 +111,7 @@ $smarty->assign("classes", $classes);
 $smarty->assign("present", $present);
 $smarty->assign("wanted" , $wanted);
 $smarty->assign("reports", $reports);
+$smarty->assign("error_count", $error_count);
 
 $smarty->display("mnt_backref_classes.tpl");
 

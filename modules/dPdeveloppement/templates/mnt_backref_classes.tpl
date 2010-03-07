@@ -36,6 +36,19 @@
 
 </form>
 
+{{if $error_count}}
+<div class="small-warning">
+	Attention, il reste <strong>{{$error_count}} erreur(s)</strong> 
+	dans la déclaration des <em>BackProps</em>, ce qui met en péril 
+	l'intégrité référentielle du système.
+</div>
+{{else}}
+<div class="small-success">
+  Félicitations, toutes les <em>BackProps</em> sont correctement déclarées, 
+	ce qui assure l'intégrité référentielle du système.
+</div>
+{{/if}}
+
 <table class="tbl">
 {{foreach from=$reports key=class item=_report}}  
   <tr>
