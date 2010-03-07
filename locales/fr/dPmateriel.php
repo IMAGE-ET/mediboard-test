@@ -1,6 +1,6 @@
 <?php
-$locales['module-dPmateriel-court'] = 'Stocks';
-$locales['module-dPmateriel-long'] = 'Gestion des stocks';
+$locales['module-dPmateriel-court'] = 'Matériel';
+$locales['module-dPmateriel-long'] = 'Gestion des matériel';
 $locales['CRefMateriel-prix'] = 'Prix';
 $locales['CCategory'] = 'Catégorie des Materiels';
 $locales['CCategory-category_name'] = 'Catégorie';
@@ -201,4 +201,13 @@ $locales['CStock-title-create'] = '';
 $locales['CStock-title-modify'] = '';
 $locales['CStock.all'] = '';
 $locales['CStock.select'] = '';
+$locales['CCategory-back-materiel.empty'] = '';
+$locales['CFournisseur-back-materiels.empty'] = '';
+$locales['CGroups-back-stocks.empty'] = '';
+$locales['CMateriel-back-refMateriel.empty'] = '';
+$locales['CMateriel-back-stock.empty'] = '';
+$locales['CRefMateriel-back-commandes_materiel.empty'] = '';
+$locales['CRefMateriel-reference_id'] = '';
+$locales['CRefMateriel-reference_id-court'] = '';
+$locales['CRefMateriel-reference_id-desc'] = '';
 ?>

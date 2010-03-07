@@ -187,4 +187,7 @@ $locales['Unknown'] = '';
 $locales['Loading tooltip'] = '';
 $locales['Reset'] = '';
 $locales['WaitingForAjaxRequestReturn'] = '';
+$locales['Week'] = 'Week';
+$locales['No result'] = '';
+$locales['Optimize'] = '';
 ?>
