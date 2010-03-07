@@ -9,20 +9,24 @@
  */
 
 /**
- * Catégorie d'activité CdARR
+ * Activité CdARR
  */
 class CActiviteCdARR {  
   var $code = null;
   var $type = null;
 	var $libelle = null;
 	
+	// Prefix code with category
+	var $_view = null;
+	
 	/**
 	 * Get an instance from the code
 	 * @param $code string
-	 * @return CActiviteCdARR|null, null if not found
+	 * @return CActiviteCdARR
 	 **/
 	static function get($code) {
-		return;
+		$found = new CActiviteCdARR();
+		return $found;
 	}
 	
 	/**

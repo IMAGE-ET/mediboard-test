@@ -120,8 +120,47 @@ class CSetupssr extends CSetup {
       ADD INDEX (`sejour_id`),
       ADD INDEX (`date_monday`);";
     $this->addQuery($query);
-			
-    $this->mod_version = "0.08";
+		
+    // Dépendances RHS
+    $this->makeRevision("0.08");
+    $query = "CREATE TABLE `dependances_rhs` (
+	    `dependances_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+	    `rhs_id` INT (11) UNSIGNED NOT NULL,
+	    `habillage`    ENUM ('1','2','3','4'),
+	    `deplacement`  ENUM ('1','2','3','4'),
+	    `alimentation` ENUM ('1','2','3','4'),
+	    `continence`   ENUM ('1','2','3','4'),
+	    `comportement` ENUM ('1','2','3','4'),
+	    `relation`     ENUM ('1','2','3','4')
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `dependances_rhs` 
+      ADD INDEX (`rhs_id`);";
+    $this->addQuery($query);
+    
+    // Ligne d'activités RHS
+    $this->makeRevision("0.09");
+    $query = "CREATE TABLE `ligne_activites_rhs` (
+	    `ligne_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+	    `rhs_id` INT (11) UNSIGNED NOT NULL,
+	    `executant_id` INT (11) UNSIGNED NOT NULL,
+	    `code_activite_cdarr` CHAR (4),
+	    `code_intervenant_cdarr` CHAR (2),
+	    `qty_mon` INT (11),
+	    `qty_tue` INT (11),
+	    `qty_wed` INT (11),
+	    `qty_thu` INT (11),
+	    `qty_fri` INT (11),
+	    `qty_sat` INT (11),
+	    `qty_sun` INT (11)
+    ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ligne_activites_rhs` 
+      ADD INDEX (`rhs_id`),
+      ADD INDEX (`executant_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.10";
   }
 }
 

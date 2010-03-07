@@ -24,8 +24,15 @@ class CRHS extends CMbObject {
 	var $_date_sunday = null;
 	var $_week_number = null;
 	
-	// Remote fields
+	// Distant fields
   var $_in_bounds = null;	
+  var $_in_bounds_mon = null;
+  var $_in_bounds_tue = null;
+  var $_in_bounds_wed = null;
+  var $_in_bounds_thu = null;
+  var $_in_bounds_fri = null;
+  var $_in_bounds_sat = null;
+  var $_in_bounds_sun = null;
 	
   // Object References
   var $_ref_sejour    = null;
@@ -51,6 +58,13 @@ class CRHS extends CMbObject {
 
     // Remote fields
     $props["_in_bounds"] = "bool";
+    $props["_in_bounds_mon"] = "bool";
+    $props["_in_bounds_tue"] = "bool";
+    $props["_in_bounds_wed"] = "bool";
+    $props["_in_bounds_thu"] = "bool";
+    $props["_in_bounds_fri"] = "bool";
+    $props["_in_bounds_sat"] = "bool";
+    $props["_in_bounds_sun"] = "bool";
 		
     return $props;
   }
@@ -75,6 +89,8 @@ class CRHS extends CMbObject {
     $this->_in_bounds = 
 		  $this->date_monday <= mbDate($sejour->_sortie) && 
       $this->_date_sunday >= mbDate($sejour->_entree); 
+			
+	  // @todo: Compute other inbounds
   }
 	
 	/**

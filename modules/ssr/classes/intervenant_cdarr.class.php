@@ -12,16 +12,17 @@
  * Intervenant d'activité CdARR
  */
 class CIntervenantCdARR {  
-  var $numero = null;
+  var $code = null;
 	var $libelle = null;
 	
 	/**
 	 * Get an instance from the code
 	 * @param $code string
-	 * @return CIntervenantCdARR|null, null if not found
+	 * @return CIntervenantCdARR
 	 **/
-	static function get($numero) {
-		return;
+	static function get($code) {
+    $found = new CIntervenantCdARR();
+    return $found;
 	}
 	
 	/**

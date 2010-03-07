@@ -18,10 +18,11 @@ class CTypeActiviteCdARR {
 	/**
 	 * Get an instance from the code
 	 * @param $code string
-	 * @return CTypeActiviteCdARR|null, null if not found
+	 * @return CTypeActiviteCdARR
 	 **/
 	static function get($code) {
-		return;
+    $found = new CTypeActiviteCdARR();
+    return $found;
 	}
 	
 	/**
