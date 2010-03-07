@@ -349,7 +349,14 @@ ul.control_tabs li a.active,
 ul.control_tabs_vertical li a.active {
   background-color: #FFF;
   color: #000;
+}
+
+ul.control_tabs li a.active {
   border-bottom: 1px solid #fff;
+}
+
+ul.control_tabs_vertical li a.active {
+  border-right: 1px solid #fff;
 }
 
 ul.control_tabs li a.empty, 
@@ -396,6 +403,7 @@ ul.control_tabs_vertical {
   float: left;
   border-right: 1px solid #458;
   padding: 0;
+	padding-top: 6px;
 }
 
 ul.control_tabs_vertical li {
