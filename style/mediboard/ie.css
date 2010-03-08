@@ -32,3 +32,8 @@ button img {
   width: 24px;
   height: 24px;
 }
+
+#nav img {
+  /* IE7 and below */
+  *margin: 0;
+}
