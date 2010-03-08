@@ -65,8 +65,6 @@
 
 {{include file="../../system/templates/configure_dsn.tpl" dsn=ccamV2}}
 
-<h2>Import de la base de données CCAM</h2>
-
 <script type="text/javascript">
 
 function startCCAM() {
@@ -82,6 +80,8 @@ function startNGAP(){
 }
 
 </script>
+
+<h2>Import de la base de données CCAM</h2>
 
 <table class="tbl">
   <tr>

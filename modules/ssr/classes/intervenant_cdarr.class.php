@@ -3,17 +3,36 @@
 /**
  * @package Mediboard
  * @subpackage ssr
- * @version $Revision: 6148 $
+ * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CAppUI::requireModuleClass("ssr", "cdarrObject");
+
 /**
  * Intervenant d'activité CdARR
  */
-class CIntervenantCdARR {  
-  var $code = null;
+class CIntervenantCdARR extends CCdARRObject {  
+  var $code    = null;
 	var $libelle = null;
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table       = 'intervenant';
+    $spec->key         = 'code';
+    return $spec;
+  }
+
+  function getProps() {
+    $props = parent::getProps();
+
+    // DB Fields
+    $props["code"]    = "str notNull length|4";
+    $props["libelle"] = "str notNull maxLength|50";
+    
+    return $props;
+  }
 	
 	/**
 	 * Get an instance from the code
@@ -21,18 +40,8 @@ class CIntervenantCdARR {
 	 * @return CIntervenantCdARR
 	 **/
 	static function get($code) {
-    $found = new CIntervenantCdARR();
-    return $found;
-	}
-	
-	/**
-	 * seek instances from needle, in all fields
-	 * @param $needle
-	 * @param array[CIntervenantCdARR]
-	 **/
-	static function seek($needle) {
-		$found = array();
-		
+		$found = new CIntervenantCdARR();
+    $found->load($code);
 		return $found;
 	}
 }

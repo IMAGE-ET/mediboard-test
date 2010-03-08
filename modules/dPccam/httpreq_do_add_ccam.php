@@ -85,7 +85,7 @@ function addFileIntoDB($file, $table) {
       $reussi++;
     }
   }
-  CAppUI::stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échoué(s)", UI_MSG_OK);
+  CAppUI::stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échouée(s)", UI_MSG_OK);
   fclose($handle);
 }
 

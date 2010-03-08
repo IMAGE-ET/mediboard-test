@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id:codeCCAM.class.php 8143 2010-02-25 10:59:37Z rhum1 $ */
 
 /**
  * @package Mediboard
  * @subpackage dPccam
- * @version $Revision$
+ * @version $Revision:8143 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -25,7 +25,7 @@ class CCodeCCAM {
   var $couleur       = null; // Couleur du code par rapport à son chapitre
   
   // Variable calculées
-  var $_code7 = null; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
+  var $_code7    = null; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
   var $_default  = null;
   
   // Activités et phases recuperées depuis le code CCAM

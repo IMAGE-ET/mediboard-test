@@ -17,7 +17,7 @@ class CRHS extends CMbObject {
   var $rhs_id = null;
  
   // DB Fields
-  var $sejour_id  = null;
+  var $sejour_id   = null;
   var $date_monday = null;
   
 	// Form Field
@@ -25,7 +25,7 @@ class CRHS extends CMbObject {
 	var $_week_number = null;
 	
 	// Distant fields
-  var $_in_bounds = null;	
+  var $_in_bounds     = null;
   var $_in_bounds_mon = null;
   var $_in_bounds_tue = null;
   var $_in_bounds_wed = null;

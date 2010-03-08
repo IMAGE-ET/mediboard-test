@@ -31,3 +31,27 @@
 </form>
 
 {{mb_include module=system template=configure_dsn dsn=cdarr}}
+
+<script type="text/javascript">
+
+function startCdARR() {
+  var CCAMUrl = new Url;
+  CCAMUrl.setModuleAction("ssr", "httpreq_do_add_cdarr");
+  CCAMUrl.requestUpdate("cdarr");
+}
+
+</script>
+
+<h2>Import de la base de données CdARR</h2>
+
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="startCdARR()" >Importer la base de données CdARR</button></td>
+    <td id="cdarr"></td>
+  </tr>
+</table>

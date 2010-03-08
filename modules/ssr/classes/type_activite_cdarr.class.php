@@ -3,17 +3,42 @@
 /**
  * @package Mediboard
  * @subpackage ssr
- * @version $Revision: 6148 $
+ * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CAppUI::requireModuleClass("ssr", "cdarrObject");
+
 /**
  * Catégorie d'activité CdARR
  */
-class CTypeActiviteCdARR {  
-  var $code = null;
+class CTypeActiviteCdARR extends CCdARRObject {
+  var $code    = null;
 	var $libelle = null;
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table       = 'type_activite';
+    $spec->key         = 'code';
+    return $spec;
+  }
+
+  function getProps() {
+    $props = parent::getProps();
+
+    // DB Fields
+    $props["code"]    = "str notNull length|4";
+    $props["libelle"] = "str notNull maxLength|50";
+    
+    return $props;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view      = $this->libelle . "(" . $this->code . ")";
+    $this->_shortview = $this->code;
+  }
 	
 	/**
 	 * Get an instance from the code
@@ -21,18 +46,8 @@ class CTypeActiviteCdARR {
 	 * @return CTypeActiviteCdARR
 	 **/
 	static function get($code) {
-    $found = new CTypeActiviteCdARR();
-    return $found;
-	}
-	
-	/**
-	 * seek instances from needle, in all fields
-	 * @param $needle
-	 * @param array[CTypeActiviteCdARR]
-	 **/
-	static function seek($needle) {
-		$found = array();
-		
+		$found = new CTypeActiviteCdARR();
+    $found->load($code);
 		return $found;
 	}
 }
