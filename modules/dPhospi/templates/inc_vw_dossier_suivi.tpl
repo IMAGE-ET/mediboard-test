@@ -29,6 +29,23 @@ Main.add(function () {
     minChars: 3,
     updateElement: updateFieldsCible
   } );
+	
+	
+  var options = {
+    minHours: '{{$hour-1}}',
+    maxHours: '{{$hour+1}}'
+  };
+	
+	var dates = {};
+  dates.limit = {
+    start: '{{$date}}',
+    stop: '{{$date}}'
+  };
+  Calendar.regField(getForm("editTrans").date, dates, options);
+	
+	// Initialisation du champ dates
+	$("editTrans_date_da").value = "Heure actuelle";
+	$V(getForm("editTrans").date, "now");
 });
 
 </script>
@@ -81,7 +98,9 @@ Main.add(function () {
 	      <input type="hidden" name="libelle_ATC" value=""  onchange="$V(this.form.object_class, '', false); $V(this.form.object_id, '', false);"/>
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="user_id" value="{{$user->_id}}" />
-	      <input type="hidden" name="date" value="now" />
+
+				{{mb_field object=$transmission field="date"}}
+
 	      <div style="float: right">
 			    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
 			      <option value="">&mdash; Choisir une aide</option>

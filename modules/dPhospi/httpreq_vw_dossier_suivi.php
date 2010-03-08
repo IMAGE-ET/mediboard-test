@@ -41,7 +41,7 @@ $cibles = array();
 $users = array();
 foreach($sejour->_ref_suivi_medical as $_trans_or_obs){
   $users[$_trans_or_obs->user_id] = $_trans_or_obs->_ref_user;
-  $type = ($_trans_or_obs->_class_name == "CObservationMedicale") ? "obs" : "trans";
+  $type = ($_trans_or_obs instanceof CObservationMedicale) ? "obs" : "trans";
   if($user_id && $_trans_or_obs->user_id != $user_id){
     unset($sejour->_ref_suivi_medical[$_trans_or_obs->date.$_trans_or_obs->_id.$type]);
   }
@@ -63,6 +63,8 @@ $smarty->assign("prescription"        , $prescription);
 $smarty->assign("cibles", $cibles);
 $smarty->assign("users", $users);
 $smarty->assign("user_id", $user_id);
+$smarty->assign("date", mbDate());
+$smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
 $smarty->display("inc_vw_dossier_suivi.tpl");
 
 ?>
