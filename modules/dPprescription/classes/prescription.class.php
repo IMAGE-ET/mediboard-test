@@ -695,7 +695,9 @@ class CPrescription extends CMbObject {
    * Chargement des perfusions
    */
   function loadRefsPerfusions($with_child = 0, $emplacement = "", $with_subst_active = 1){
-    //$this->_ref_perfusions = $this->loadBackRefs("perfusion");
+    if($this->_ref_perfusions){
+    	return;
+    }
     $perfusion = new CPerfusion();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
