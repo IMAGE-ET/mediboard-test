@@ -54,4 +54,6 @@ $locales['config-hprimxml-strictSejourMatch'] = 'Recherche des séjours stricts';
 $locales['config-hprimxml-strictSejourMatch-desc'] = 'Recherche des séjours stricts';
 $locales['config-hprimxml-notifier_sortie_reelle'] = 'Notifier la date de sortie réelle';
 $locales['config-hprimxml-notifier_sortie_reelle-desc'] = 'Notifier la date de sortie réelle lorsque la venue est clôturée';
+$locales['config-hprimxml-trash_numdos_sejour_cancel'] = 'Poubelle du numdos lors de l\'annulation d\'un séjour';
+$locales['config-hprimxml-trash_numdos_sejour_cancel-desc'] = 'Mise en poubelle du numdos lors de l\'annulation d\'un séjour';
 ?>

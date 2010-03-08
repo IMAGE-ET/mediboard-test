@@ -32,7 +32,7 @@ class CFTP {
   
   function init($exchange_source) {   
     if (!$exchange_source) {
-      trigger_error("Aucune source d'échange disponible pour ce nom : '$exchange_source_name'");
+      trigger_error("Aucune source d'échange disponible pour ce nom : '$exchange_source->name'");
     }
        
     $this->hostname      = $exchange_source->host;

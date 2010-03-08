@@ -658,28 +658,8 @@ $dPconfig["hprimxml"] = array (
   "medecinActif"           => "0",
   "mvtComplet"             => "0",
   "strictSejourMatch"      => "1",
-  "notifier_sortie_reelle" => 1
-);
-
-// you can add as much ftp as you want by using
-//$dPconfig["ftp"]["ftpsn"] = array(
-//  "ftphost" => "ftphost",
-//  "ftpuser" => "ftpuser",
-//  "ftppass" => "ftppass",
-//  "port"    => "21",
-//  "timeout" => "90",
-//  "pasv"    => "false",
-//  "mode"    => "FTP_ASCII",
-//);
-
-$dPconfig["ftp"]["SIP"] = array(
-  "ftphost"  => "ftphost",
-  "ftpuser"  => "ftpuser",
-  "ftppass"  => "ftppass",
-  "port"     => "21",
-  "timeout"  => "90",
-  "pasv"     => "0",
-  "mode"     => "FTP_ASCII",
+  "notifier_sortie_reelle" => "1",
+  "trash_numdos_sejour_cancel" => "0"
 );
 
 // Inclusion des fichiers de config de chaque module

@@ -33,9 +33,13 @@ foreach ($list_idSante400 as $curr_idSante400) {
   $curr_idSante400->loadRefs();
 }
 
+$prescriptionlabo_source = CExchangeSource::get("prescriptionlabo", "ftp");
+$get_id_prescriptionlabo_source = CExchangeSource::get("get_id_prescriptionlabo_source", "soap");
+
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("prescriptionlabo_source" , $prescriptionlabo_source);
+$smarty->assign("get_id_prescriptionlabo_source" , $get_id_prescriptionlabo_source);
 $smarty->assign("listPrat", $listPrat);
 $smarty->assign("date", $date);
 $smarty->assign("remote_name", $remote_name);

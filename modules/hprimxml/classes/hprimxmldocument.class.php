@@ -26,6 +26,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $type                  = null;
   var $sous_type             = null;
   
+  // Behaviour fields
+  var $_dest_tag             = null;
+  
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
     

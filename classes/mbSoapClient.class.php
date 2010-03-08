@@ -61,7 +61,7 @@ class CMbSOAPClient extends SoapClient {
   	} catch(SoapFault $fault) {
   		$output = $echange_soap->output = $fault->faultstring;
   		$echange_soap->soapfault = 1;
-      trigger_error($fault->faultstring, E_USER_ERROR);
+      trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
     }
     
     if ($echange_soap->soapfault != 1) {

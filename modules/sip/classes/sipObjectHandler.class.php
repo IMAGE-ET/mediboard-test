@@ -116,8 +116,9 @@ class CSipObjectHandler extends CMbObjectHandler {
             return;
           }
           
-          $domEvenement = new CHPrimXMLEnregistrementPatient();
-          $this->sendEvenement($domEvenement, $_destinataire, $mbObject);
+          $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+          $domEvenementEnregistrementPatient->_dest_tag = $_destinataire->_tag_patient;
+          $this->sendEvenement($domEvenementEnregistrementPatient, $_destinataire, $mbObject);
           
           $mbObject->_IPP = null;
         }
@@ -210,6 +211,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
+          $domEvenementVenuePatient->_dest_tag = $_destinataire->_tag_sejour;
           $this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
           
           if ($mbObject->_ref_patient->code_regime) {
@@ -328,9 +330,7 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
   }
   
-  function onAfterDelete(CMbObject &$mbObject) {
-    
-  }
+  function onAfterDelete(CMbObject &$mbObject) {}
   
   function sendEvenement ($domEvenement, $dest_hprim, $mbObject) {
     $domEvenement->emetteur     = CAppUI::conf('mb_id');

@@ -114,17 +114,16 @@ class CPrescriptionLabo extends CMbObject {
       $idPresc->object_class = "CPrescriptionLabo";
       $idPresc->loadMatchingObject("id400 DESC");
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
-
-      // Fin de la partie à factoriser
-      $client = new SoapClient(CAppUI::conf("dPlabo CPrescriptionLabo url_ws_id_prescription"), array('exceptions' => 0));
-      $result = $client->NDOSLAB(array("NumMedi" => $numprovisoire, "pwd" =>CAppUI::conf("dPlabo CPrescriptionLabo pass_ws_id_prescription")));
-      if (is_soap_fault($result)) {
-        trigger_error("SOAP Fault: (faultcode: {$result->faultcode}, faultstring: {$result->faultstring})", E_USER_ERROR);
-      }
+  
+      // Envoi à la source créée 'get_id_prescriptionlabo' (SOAP)
+      $exchange_source = CExchangeSource::get("get_id_prescriptionlabo_source");
+      $exchange_source->setData(array("NumMedi" => $numprovisoire, "pwd" =>$exchange_source->password));
+      $exchange_source->send("NDOSLAB");
+      
       $idExterne->tag = "iMeds";
       $idExterne->object_class = "CPrescriptionLabo";
       $idExterne->object_id = $this->_id;
-      $idExterne->id400 = $result->NDOSLABResult;
+      $idExterne->id400 = $exchange_source->receive();
       $idExterne->last_update = mbDateTime();
       $idExterne->store();
     }

@@ -1,12 +1,12 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPlabo
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
 global $AppUI, $can, $m;
 
@@ -171,12 +171,10 @@ foreach($tab_prescription as $curr_analyse){
   $code = $doc->addElement($analyse,"code", $curr_analyse);
 }
 
-
 // Prescription -> Prescripteur
 $prescripteur = $doc->addElement($prescription, "Prescripteur");
 $code9 = $doc->addElement($prescripteur, "Code9", $idSantePratCode9->id400);
 $code4 = $doc->addElement($prescripteur, "Code4", $idSantePratCode4->id400);
-
 
 // Sauvegarde du fichier temporaire
 $tmpPath = "tmp/dPlabo/export_prescription.xml";
@@ -190,57 +188,39 @@ if (!$doc->schemaValidate()) {
   redirect();
 }
 
-
 // Envoi de la prescription par sur un seveurFTP
-// Config du FTP
-$FTPConfig = CAppUI::conf("dPlabo CPrescriptionLabo");
-
+// Envoi à la source créée 'PrescriptionLabo' (FTP)
+$prescriptionlabo_source = CExchangeSource::get("prescriptionlabo");
 // Creation du FTP
 $ftp = new CFTP;
-
-$ftp->hostname = $FTPConfig["url_ftp_prescription"];
-$ftp->username = $FTPConfig["login_ftp_prescription"];
-$ftp->userpass = $FTPConfig["pass_ftp_prescription"];
-
-// Connexion FTP
-if($ftp->hostname){
-  // Transfert
-  $destination_basename = "Prescription-".$mbPrescription->_id;
-  $file = "tmp/dPlabo/export_prescription.xml";
-  $envoi = $ftp->connect();
-  if(!$ftp->connect()) {
-    if($ftp->logs) {
-      foreach($ftp->logs as $log) {
-        CAppUI::setMsg($log, UI_MSG_ERROR );
-      }
-    }
-    redirect();
-  }
-  if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
-    $ftp->close();
-    if($ftp->logs) {
-      foreach($ftp->logs as $log) {
-        CAppUI::setMsg($log, UI_MSG_ERROR );
-      }
-    }
-    redirect();
-  }
-  $ftp->close();
-  CAppUI::setMsg("Document envoyé", UI_MSG_OK );
-  
-  // Créer le document joint
-  if ($msg = $doc->addFile($mbPrescription)) {  
-    CAppUI::setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
-    //redirect();
-  }
-  redirect();
-}
+$ftp->init($prescriptionlabo_source);
 
 if(!$ftp->hostname){
   CAppUI::setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
   redirect();
 }
 
+// Transfert
+$destination_basename = "Prescription-".$mbPrescription->_id;
+$file = "tmp/dPlabo/export_prescription.xml";
+$envoi = $ftp->connect();
+if(!$ftp->connect()) {
+  CAppUI::stepAjax("Impossible de se connecter au serveur $ftp->hostname", UI_MSG_ERROR);
+  redirect();
+}
+if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
+  CAppUI::stepAjax("Impossible de copier le fichier source $local_file en fichier cible $remote_file", UI_MSG_ERROR);
+  $ftp->close();
+  redirect();
+}
+$ftp->close();
+CAppUI::setMsg("Document envoyé", UI_MSG_OK );
 
+// Créer le document joint
+if ($msg = $doc->addFile($mbPrescription)) {  
+  CAppUI::setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
+  //redirect();
+}
+redirect();
 
 ?>

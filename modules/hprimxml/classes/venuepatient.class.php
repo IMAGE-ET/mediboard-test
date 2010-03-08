@@ -62,7 +62,21 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     
     $this->addAttribute($venue, "facturable", ($mbVenue->facturable)  ? "oui" : "non");
     $this->addAttribute($venue, "declarationMedecinTraitant", ($mbVenue->_adresse_par_prat)  ? "oui" : "non");
-        
+    
+    // Cas d'une annulation dans Mediboard on passe en trash le num dossier
+    if (CAppUI::conf("hprimxml trash_numdos_sejour_cancel") && $mbVenue->annule && $mbVenue->_num_dossier) {
+      $num_dossier = new CIdSante400();
+      //Paramétrage de l'id 400
+      $num_dossier->object_class = "CSejour";
+      $num_dossier->tag = $this->_dest_tag;
+      $num_dossier->id400 = $mbVenue->_num_dossier;
+      
+      if ($num_dossier->loadMatchingObject()) {
+        $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_dest_tag;
+        $num_dossier->store();
+      }
+    }
+            
     // Traitement final
     $this->purgeEmptyElements();
   }

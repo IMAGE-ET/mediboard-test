@@ -21,89 +21,33 @@ var Action = {
 
 <h2>Environnement d'execution</h2>
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<table class="form">  
+  <tr>
+    <th class="category">
+      {{tr}}config-exchange-source{{/tr}} '{{$prescriptionlabo_source->name}}'
+    </th>
+  </tr>
+  <tr>
+    <td> {{mb_include module=system template=inc_config_exchange_source source=$prescriptionlabo_source}} </td>
+  </tr>
+</table>
 
+<table class="form">  
+  <tr>
+    <th class="category">
+      {{tr}}config-exchange-source{{/tr}} '{{$get_id_prescriptionlabo_source->name}}'
+    </th>
+  </tr>
+  <tr>
+    <td> {{mb_include module=system template=inc_config_exchange_source source=$get_id_prescriptionlabo_source}} </td>
+  </tr>
+</table>
+  
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="system" />
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">
-
-  <tr>
-    <th class="category" colspan="100">Liaisons FTP et web service</th>
-  </tr> 
-
-  <!-- prescription -->  
-  {{assign var="class" value="CPrescriptionLabo"}}
-  
-  {{assign var="var" value="url_ftp_prescription"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>  
-  
-  {{assign var="var" value="login_ftp_prescription"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
-  
-  
-  {{assign var="var" value="pass_ftp_prescription"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
-  
-  
-    
-  {{assign var="var" value="url_ws_id_prescription"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>  
-
-  {{assign var="var" value="pass_ws_id_prescription"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>
-
-  <tr>
-    <td class="button" colspan="100">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-
   <!-- CCatalogueLabo -->  
   {{assign var="class" value="CCatalogueLabo"}}
     
