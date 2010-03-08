@@ -5,13 +5,13 @@
 </table>
 
 <table class="main tbl">
-{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consult vue=complete}}
+{{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consult vue=complete extra=tarif}}
 </table>
 
 {{assign var=object value=$consult}}
 <table class="main tbl">
   <tr>
-    <th class="category" colspan="10">Codages des actes NGAP</th>
+    <th class="title" colspan="10">Codages des actes NGAP</th>
   </tr>
 
   <tr>
@@ -31,8 +31,8 @@
     <td>{{mb_value object=$_acte_ngap field="code"}}</td>
     <td>{{mb_value object=$_acte_ngap field="coefficient"}}</td>
     <td>{{mb_value object=$_acte_ngap field="demi"}}</td>
-    <td>{{mb_value object=$_acte_ngap field="montant_base"}}</td>
-    <td>{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
+    <td style="text-align: right">{{mb_value object=$_acte_ngap field="montant_base"}}</td>
+    <td style="text-align: right">{{mb_value object=$_acte_ngap field="montant_depassement"}}</td>
     <td>
       {{if $_acte_ngap->complement}}
         {{mb_value object=$_acte_ngap field="complement"}}
