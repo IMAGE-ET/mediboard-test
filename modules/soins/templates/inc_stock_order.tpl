@@ -52,9 +52,9 @@ Main.add(function(){
 <table class="main">
   <tr>
     <td>
-      <!-- 
+      {{* 
       <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
-      -->
+       *}}
       <label style="font-weight: normal;">
         <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
         Seulement les stocks du service 
@@ -64,13 +64,15 @@ Main.add(function(){
         <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
         Seulement les stocks couramment utilisés
       </label>
-      <!--<br />
+      {{* <br />
       <label style="font-weight: normal;">
         <input type="text" value="{{$keywords}}" onchange="$V(getForm('filter').keywords, this.value)" />
         Mots clés
-      </label>-->
+      </label>
+      *}}
     </td>
     <td>
+      {{if $service->_back.endowments|@count}}
       <label>
         En fonction d'une dotation
         <select onchange="$V(getForm('filter').endowment_id, $V(this))">
@@ -80,6 +82,11 @@ Main.add(function(){
           {{/foreach}}
         </select>
       </label>
+      {{else}}
+        <em style="color: #aaa;">
+          {{tr}}CProductEndowment.none{{/tr}}
+        </em>
+      {{/if}}
     </td>
     <td>
       <form name="form-create-order" action="?" method="post" style="float: right;"
