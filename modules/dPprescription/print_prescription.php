@@ -106,7 +106,7 @@ if(count($prescription->_ref_lines_elements_comments)){
           if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$element->signee && $prescription->object_id){
             continue;
           }
-          if($element->_class_name == "CPrescriptionLineElement"){
+          if($element instanceof CPrescriptionLineElement){
             $element->loadCompleteView();
           }
           $executant = "aucun";
@@ -127,11 +127,11 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	foreach($lines_medicament_type as $line_medicament){
 	  $line_medicament->loadRefsFwd();
 	  if(!$prescription->object_id){
-	    if($line_medicament->_class_name == "CPrescriptionLineMedicament"){
+	    if($line_medicament instanceof CPrescriptionLineMedicament){
 		    $line_medicament->loadRefsSubstitutionLines();
 		    foreach($line_medicament->_ref_substitution_lines as $_subst_by_chap){
 		      foreach($_subst_by_chap as $_subst_line){
-		        if($_subst_line->_class_name == "CPrescriptionLineMedicament"){
+		        if($_subst_line instanceof CPrescriptionLineMedicament){
 						  $_subst_line->loadRefsPrises();
 					  } else {
 					  	$_subst_line->loadRefsLines();
@@ -161,6 +161,9 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		  if($line_medicament->_is_injectable){
 		  	$ald = $line_medicament->ald ? "ald" : "no_ald";
 	      $linesElt["soin"]["aucun"][$ald]["inj"][] = $line_medicament;
+				if($ald == "ald" && !isset($linesElt["soin"]["aucun"]["no_ald"])){
+					 $linesElt["soin"]["aucun"]["no_ald"] = array();
+				}
 	    }
 		}
 	}
@@ -173,7 +176,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
   foreach($_perfusion->_ref_substitution_lines as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
       $_subst_perf->loadRefPraticien();
-			if($_subst_perf->_class_name == "CPerfusion"){
+			if($_subst_perf instanceof CPerfusion){
         $_subst_perf->loadRefsLines();
 		  } else {
 		  	$_subst_perf->loadRefsPrises();
