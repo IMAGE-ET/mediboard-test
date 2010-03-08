@@ -88,8 +88,10 @@ $where[] = "group_id = '$group_id' OR group_id IS NULL";
 
 $order = "nom";
 $_categories = $category->loadList($where, $order);
-foreach($_categories as $_cat){
-	$categories[$_cat->chapitre][] = $_cat;
+if ($_categories) {
+  foreach($_categories as $_cat){
+  	$categories[$_cat->chapitre][] = $_cat;
+  }
 }
 
 // Dossier médical visibile ?
