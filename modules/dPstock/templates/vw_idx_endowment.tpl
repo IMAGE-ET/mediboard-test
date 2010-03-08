@@ -40,16 +40,6 @@ function loadEndowment(endowment_id, endowment_item) {
   return false;
 }
 
-function deleteEndowmentItem(item_id) {
-  var form = getForm("edit_endowment_item");
-  var endowment_id = $V(form.endowment_id);
-  $V(form.del, 1);
-  $V(form.endowment_item_id, item_id);
-  form.product_id.className = "";
-  form.onsubmit();
-  loadEndowment(endowment_id);
-}
-
 Main.add(function(){
   filterEndowments(getForm("filter-endowments"));
   loadEndowment();

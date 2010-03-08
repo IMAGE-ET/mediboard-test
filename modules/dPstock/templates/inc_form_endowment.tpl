@@ -55,16 +55,22 @@
 {{if $endowment->_id}}
 <table class="form">
   <tr>
-    <th class="category" colspan="2">{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
+    <th class="category">{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
   </tr>
   {{foreach from=$endowment->_back.endowment_items item=_item}}
     <tr>
-      <td style="width: 0.1%;">
-        <button class="remove notext" onclick="deleteEndowmentItem({{$_item->_id}})"></button>
-      </td>
       <td>
+        {{assign var=_item_id value=$_item->_id}}
+        <form name="edit_endowment_item_{{$_item->_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){if ($V(this.del) == 1) loadEndowment({{$endowment->_id}})}.bind(this)})">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_product_endowment_item_aed" />
+          <input type="hidden" name="del" value="0" />
+          {{mb_key object=$_item}}
+          {{mb_field object=$_item field=quantity form="edit_endowment_item_$_item_id" increment=true size=2 onchange="this.form.onsubmit()"}}
+          <button class="remove notext" type="button" onclick="confirmDeletion(this.form,{ajax:true,objName:'{{$_item->_view|smarty:nodefaults|JSAttribute}}'})"></button>
+        </form>
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$_item->_ref_product->_guid}}')">
-          {{$_item}}
+          {{$_item->_ref_product}}
         </strong>
       </td>
     </tr>
