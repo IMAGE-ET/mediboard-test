@@ -121,6 +121,16 @@ function filterReferences(form) {
               <td></td>
               <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
             </tr>
+            {{if $curr_stock->_ref_endowment_items|@count}}
+              <tr>
+                <td colspan="10" style="padding-left: 2em;">
+                  Dotations:
+                  {{foreach from=$curr_stock->_ref_endowment_items item=_endowment name=endowment}}
+                    <strong>{{$_endowment->_ref_endowment->name}}</strong> ({{$_endowment->quantity}}){{$smarty.foreach.endowment.last|ternary:'':','}}
+                  {{/foreach}}
+                </td>
+              </tr>
+            {{/if}}
           {{foreachelse}}
             <tr>
               <td colspan="4">{{tr}}CProductStockService.none{{/tr}}</td>
@@ -131,9 +141,10 @@ function filterReferences(form) {
       
       {{mb_include template=inc_product_references_list}}
 
+<!--
       <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0&amp;product_id={{$product->_id}}'">
         Nouvelle référence pour ce produit
-      </button>
+      </button>-->
      
        {{/if}}
     </td>

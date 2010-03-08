@@ -124,7 +124,12 @@ class CProduct extends CMbObject {
   function loadRefsBack() {
   	$this->_ref_references     = $this->loadBackRefs('references');
     $this->_ref_stocks_group   = $this->loadBackRefs('stocks_group');
-    $this->_ref_stocks_service = $this->loadBackRefs('stocks_service');
+    
+    $ljoin = array(
+      'service' => "service.service_id = product_stock_service.service_id"
+    );
+    
+    $this->_ref_stocks_service = $this->loadBackRefs('stocks_service', "service.nom", null, null, $ljoin);
     $this->_ref_selections     = $this->loadBackRefs('selections');
   }
 

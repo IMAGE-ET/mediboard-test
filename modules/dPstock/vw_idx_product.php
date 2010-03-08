@@ -29,6 +29,18 @@ $product = new CProduct();
 if ($product->load($product_id)) {
   $product->loadRefsBack();
   
+  $endowment_item = new CProductEndowmentItem;
+  $ljoin = array(
+    'product_endowment'     => "product_endowment.endowment_id = product_endowment_item.endowment_id",
+  );
+  foreach($product->_ref_stocks_service as $_stock) {
+    $where = array(
+      "product_endowment.service_id" => "= '$_stock->service_id'",
+      "product_endowment_item.product_id" => "= '$product->_id'",
+    );
+    $_stock->_ref_endowment_items = $endowment_item->loadList($where, null, null, null, $ljoin);
+  }
+  
   foreach ($product->_ref_references as $_reference) {
     $_reference->loadRefProduct();
     $_reference->loadRefSociete();
