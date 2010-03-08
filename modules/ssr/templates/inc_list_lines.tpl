@@ -1,4 +1,4 @@
-{{if array_key_exists($category_id, $lines)}}
+{{if array_key_exists($category_id, $lines) && $lines.$category_id|@count > 0}}
   {{foreach from=$lines.$category_id item=_line}}
 	 {{if $_line->_id == $full_line_id}}
 		<tr>
