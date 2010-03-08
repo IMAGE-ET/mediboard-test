@@ -11,11 +11,12 @@
 global $can;
 $can->needsRead();
 
-$service_id = CValue::get('service_id');
-$start = intval(CValue::getOrSession('start', 0));
+$service_id          = CValue::get('service_id');
+$start               = intval(CValue::getOrSession('start', 0));
 $only_service_stocks = CValue::get('only_service_stocks');
-$only_common = CValue::get('only_common');
-$keywords = CValue::get('keywords');
+$only_common         = CValue::get('only_common');
+$keywords            = CValue::get('keywords');
+$endowment_id        = CValue::get('endowment_id');
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -23,7 +24,26 @@ $date_max = CValue::getOrSession('_date_max');
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 
-if ($only_service_stocks == 1 || $only_common == 1) {
+CValue::setSession('endowment_id', $endowment_id);
+
+if ($endowment_id) {
+  $endowment = new CProductEndowment;
+  $endowment->load($endowment_id);
+  $endowment_items = $endowment->loadBackRefs("endowment_items");
+  
+  $stocks = array();
+  foreach($endowment_items as $_item) {
+    $_item->loadRefsFwd();
+    $stock_service = CProductStockService::getFromCode($_item->_ref_product->code, $service_id);
+    
+    $stock = CProductStockGroup::getFromCode($_item->_ref_product->code);
+    $stock->_ref_stock_service = $stock_service;
+    $stock->quantity = $_item->quantity;
+    $stocks[] = $stock;
+  }
+  $count_stocks = count($stocks);
+}
+else if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
     'product' => 'product.product_id = product_stock_service.product_id'
   );
@@ -78,7 +98,7 @@ foreach($stocks as &$stock) {
   
   $where = array(
     'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
-    'product_delivery.stock_id' => "= $stock->_id",
+    'product_delivery.stock_id' => "= '$stock->_id'",
     //'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
   );
   
@@ -93,6 +113,7 @@ foreach($stocks as &$stock) {
 
 $service = new CService();
 $service->load($service_id);
+$service->loadBackRefs("endowments");
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -106,5 +127,6 @@ $smarty->assign('keywords', $keywords);
 $smarty->assign('service', $service);
 $smarty->assign('only_service_stocks', $only_service_stocks);
 $smarty->assign('only_common', $only_common);
+$smarty->assign('endowment_id', $endowment_id);
 
 $smarty->display('inc_stock_order.tpl');

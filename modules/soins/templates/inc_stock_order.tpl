@@ -31,10 +31,9 @@ fillInputs = function(data){
 
 changeOrderPage = function(start) {
   $V(getForm('filter').start, start); 
-  refreshOrders();
 }
 
-{{if $only_service_stocks == 1}}
+{{if $only_service_stocks == 1 && !$endowment_id}}
 Main.add(function(){
   autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}');
 });
@@ -47,53 +46,72 @@ Main.add(function(){
 	</div>
 {{/if}}
 
-<div style="float: left;">
-  <!-- 
-  <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
-  -->
-  <label style="font-weight: normal;">
-    <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
-    Seulement les stocks du service 
-  </label>
-  <br />
-  <label style="font-weight: normal;">
-    <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
-    Seulement les stocks couramment utilisés
-  </label>
-  <!--<br />
-  <label style="font-weight: normal;">
-    <input type="text" value="{{$keywords}}" onchange="$V(getForm('filter').keywords, this.value)" />
-    Mots clés
-  </label>-->
-</div>
-
-{{mb_include module=system template=inc_pagination change_page="changeOrderPage" 
-    total=$count_stocks current=$start step=20}}
-
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
-
-<form name="form-create-order" action="?" method="post" style="float: right;"
-      onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
-  <input type="hidden" name="m" value="dPstock" />
-  <input type="hidden" name="dosql" value="do_delivery_aed" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="date_dispensation" value="now" />
-  <input type="hidden" name="service_id" value="{{$service->_id}}" />
-  <input type="hidden" name="order" value="1" />
-  
-  Faire une demande: 
-  <input type="text" name="quantity" value="1" size="2" />
-  
-  {{mb_label class=CProductDelivery field=comments}}
-  <input type="text" name="comments" size="40" />
-  
-  <button type="submit" class="tick notext" title="Faire la demande">Faire la demande</button>
-
-  <script type="text/javascript">
-    getForm("form-create-order").quantity.addSpinner({min:0});
-  </script>
-</form>
+      
+<table class="main">
+  <tr>
+    <td>
+      <!-- 
+      <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$date_min}}', '{{$date_max}}')">Commande auto</button>
+      -->
+      <label style="font-weight: normal;">
+        <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_service_stocks, this.checked ? 1 : 0)" />
+        Seulement les stocks du service 
+      </label>
+      <br />
+      <label style="font-weight: normal;">
+        <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(getForm('filter').only_common, this.checked ? 1 : 0)" />
+        Seulement les stocks couramment utilisés
+      </label>
+      <!--<br />
+      <label style="font-weight: normal;">
+        <input type="text" value="{{$keywords}}" onchange="$V(getForm('filter').keywords, this.value)" />
+        Mots clés
+      </label>-->
+    </td>
+    <td>
+      <label>
+        En fonction d'une dotation
+        <select onchange="$V(getForm('filter').endowment_id, $V(this))">
+          <option value="">{{tr}}No{{/tr}}</option>
+          {{foreach from=$service->_back.endowments item=_endowment}}
+            <option value="{{$_endowment->_id}}" {{if $endowment_id == $_endowment->_id}}selected="selected"{{/if}}>{{$_endowment->name}}</option>
+          {{/foreach}}
+        </select>
+      </label>
+    </td>
+    <td>
+      <form name="form-create-order" action="?" method="post" style="float: right;"
+            onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+        <input type="hidden" name="m" value="dPstock" />
+        <input type="hidden" name="dosql" value="do_delivery_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="date_dispensation" value="now" />
+        <input type="hidden" name="service_id" value="{{$service->_id}}" />
+        <input type="hidden" name="order" value="1" />
+        
+        Faire une demande: 
+        <input type="text" name="quantity" value="1" size="2" />
+        
+        {{mb_label class=CProductDelivery field=comments}}
+        <input type="text" name="comments" size="40" />
+        
+        <button type="submit" class="tick notext" title="Faire la demande">Faire la demande</button>
+      
+        <script type="text/javascript">
+          getForm("form-create-order").quantity.addSpinner({min:0});
+        </script>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="10">
+      {{mb_include module=system template=inc_pagination change_page="changeOrderPage" 
+          total=$count_stocks current=$start step=20}}
+    </td>
+  </tr>
+</table>
 
 <table class="tbl">
   <tr>
@@ -103,7 +121,7 @@ Main.add(function(){
     <th style="width: 30%">Commande</th>
     <th>Déjà effectuées</th>
     {{if !$infinite_service && $only_service_stocks == 1}}
-    <th colspan="2">
+    <th colspan="2" style="width: 0.1%;">
       Stock du service
     </th>
     {{/if}}

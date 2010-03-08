@@ -174,6 +174,9 @@ function prepareForm(oForm) {
     new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
   }
   
+  // Autofill of the form disabled (useful for the login form for example)
+  oForm.setAttribute("autocomplete", "off");
+  
   // Form preparation
   if (Prototype.Browser.IE && oForm.name && oForm.name.nodeName) // Stupid IE hack, because it considers an input named "name" as an attribute
     sFormName = oForm.cloneNode(false).getAttribute("name");

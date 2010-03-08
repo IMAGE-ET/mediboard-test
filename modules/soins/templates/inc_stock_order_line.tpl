@@ -49,8 +49,9 @@
       {{*/if*}}
       
       {{assign var=qty value=$stock->_ref_product->_unit_quantity-0}}
+      
       {{assign var=stock_id value=$stock->_id}}
-      {{if $stock->_ref_product->packaging && $qty}}
+      {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=0 value=$qty style=$style 
          onchange="this.form._quantity_package.value = this.value/$qty"}}
        
@@ -63,8 +64,7 @@
       {{else}}
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=2 min=1 style=$style}}
       {{/if}}
-      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next(1).show().focus()"></button>
-      
+      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next('input').show().focus()"></button>
       <button type="submit" class="tick notext" title="Dispenser" style="{{$style}}">Dispenser</button>
       <br />
       <input type="text" name="comments" style="display: none; width: 100%;" />
@@ -100,11 +100,17 @@
   </td>
   
   {{if !$infinite_service && $only_service_stocks == 1}}
-  <td style="width: 0.1%;">
-   {{$stock->_ref_stock_service->quantity}}
-  </td>
-  <td>
-   {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
-  </td>
+    {{if $stock->_ref_stock_service->_id}}
+      <td>
+        {{$stock->_ref_stock_service->quantity}}
+      </td>
+      <td>
+        {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
+      </td>
+    {{else}}
+      <td colspan="2">
+        {{tr}}CProductStockService.none{{/tr}}
+      </td>
+    {{/if}}
   {{/if}}
 </tr>

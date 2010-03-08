@@ -63,6 +63,7 @@ Main.add(function () {
   <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshLists()"/>
   <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshLists()"/>
   <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshLists()"/>
+  <input type="hidden" name="endowment_id" value="{{$endowment_id}}" onchange="$V(this.form.start, 0); refreshLists()"/>
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
@@ -70,7 +71,7 @@ Main.add(function () {
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
       <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
       <td>
-        <select name="service_id" onchange="$V(this.form.start, 0); refreshOrders()">
+        <select name="service_id" onchange="$V(this.form.start, 0); $V(this.form.endowment_id, ''); refreshOrders()">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
