@@ -18,6 +18,9 @@ $object->load($object_id);
 
 // Chargement des fichiers
 $object->loadRefsFiles();
+foreach ($object->_ref_files as $_file) {
+  $_file->loadRefCategory();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

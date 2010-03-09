@@ -13,54 +13,54 @@
 class CMedinetSender extends CDocumentSender {
   public static $tag = "medinet transaction";
   public static $cpamConversion = array (
-                        2 => 5,
-                        3 => 2,
-                        5 => 7,
-                        7 => 12,
-                        8 => 9,
-                        10 => 16,
-                        11 => 17,
-                        12 => 19,
-                        13 => 20,
-                        14 => 22,
-                        15 => 17,
-                        16 => 15,
-                        21 => 21,
-                        30 => 6,
-                        32 => 16,
-                        33 => 21,
-                        35 => 15,
-                        41 => 18,
-                        42 => 8,
-                        43 => 19,
-                        47 => 2,
-                        48 => 2,
-                        70 => 12,
-                        71 => 13,
-                        73 => 1,
-                        74 => 1,
-                        75 => 21,
-                        77 => 12 
-                      );
+    2 => 5,
+    3 => 2,
+    5 => 7,
+    7 => 12,
+    8 => 9,
+    10 => 16,
+    11 => 17,
+    12 => 19,
+    13 => 20,
+    14 => 22,
+    15 => 17,
+    16 => 15,
+    21 => 21,
+    30 => 6,
+    32 => 16,
+    33 => 21,
+    35 => 15,
+    41 => 18,
+    42 => 8,
+    43 => 19,
+    47 => 2,
+    48 => 2,
+    70 => 12,
+    71 => 13,
+    73 => 1,
+    74 => 1,
+    75 => 21,
+    77 => 12 
+  );
   public static $civiliteConversion = array (
-                        "m" => "monsieur",
-                        "f" => "madame",
-                      );
+    "m" => "monsieur",
+    "f" => "madame",
+  );
 
   public static $sexeConversion = array (
-                        "m" => "M",
-                        "f" => "F",
-                      );  
+    "m" => "M",
+    "f" => "F",
+  );  
                        
   public static $descriptifStatus = array (
-                            10 => "Données reçues non traitées.",
-                            11 => "Données reçues traitées mais en erreur.",
-                            12 => "Données reçues traitées correctement, message non créé.",
-                            21 => "Message non créé car erreur.",
-                            22 => "Message créé correctement, non envoyé. Fichier peut être supprimé.",
-                            31 => "Erreur à l'envoi du message. Fichier peut être supprimé.",
-                            32 => "Message envoyé correctement. Fichier peut être supprimé.",
-                          );
+    10 => "Données reçues non traitées.",
+    11 => "Données reçues traitées mais en erreur.",
+    12 => "Données reçues traitées correctement, message non créé.",
+    21 => "Message non créé car erreur.",
+    22 => "Message créé correctement, non envoyé. Fichier peut être supprimé.",
+    31 => "Erreur à l'envoi du message. Fichier peut être supprimé.",
+    32 => "Message envoyé correctement. Fichier peut être supprimé.",
+  );
                                                                
   var $clientSOAP = null;
   
@@ -221,43 +221,45 @@ class CMedinetSender extends CDocumentSender {
       return;
     }
     
-    $parameters = array ( "sej_id" => $sej_id,
-                          "aut_id" => $aut_id,
-                          "aut_nom" => $aut_nom,
-                          "aut_prenom" => $aut_prenom,
-                          "aut_numOrdre" => $aut_numOrdre,
-                          "pat_id" => $pat_id,
-                          "pat_civilite" => $pat_civilite,
-                          "pat_nomNaissance" => $pat_nomNaissance,
-                          "pat_nomUsuel" => $pat_nomUsuel,
-                          "pat_prenom" => $pat_prenom,
-                          "pat_sexe" => $pat_sexe,
-                          "pat_dateNaissance" => $pat_dateNaissance,
-                          "pat_cpNaissance" => $pat_cpNaissance,
-                          "pat_villeNaissance" => $pat_villeNaissance,
-                          "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
-                          "pat_adresseVie" => $pat_adresseVie,
-                          "pat_cpVie" => $pat_cpVie,
-                          "pat_villeVie" => $pat_villeVie,
-                          "pat_cinseePaysVie" =>$pat_cinseePaysVie,
-                          "pat_telephone1" => $pat_telephone1,
-                          "pat_telephone2" => $pat_telephone2,
-                          "doc_id" => $doc_id,
-                          "doc_nom" => $doc_nom,
-                          "doc_titre" => $doc_titre,
-                          "doc_commentaire" => $doc_commentaire,
-                          "doc_type" => $doc_type,
-                          "doc_nomReel" => $doc_nomReel,
-                          "doc_typeMime" => $doc_typeMime,
-                          "act_id" => $act_id,
-                          "act_pathologie" => $act_pathologie,
-                          "act_dateActe" => $act_dateActe,
-                          "act_dateCreationActe" => $act_dateCreationActe,
-                          "act_dateValidationActe" => $act_dateValidationActe,
-                          "etab_id" => $etab_id,
-                          "etab_nom" => $etab_nom,
-                          "invalidation" => $invalidation,
-                          "fichier" => $fichier);
+    $parameters = array ( 
+  		"sej_id" => $sej_id,
+      "aut_id" => $aut_id,
+      "aut_nom" => $aut_nom,
+      "aut_prenom" => $aut_prenom,
+      "aut_numOrdre" => $aut_numOrdre,
+      "pat_id" => $pat_id,
+      "pat_civilite" => $pat_civilite,
+      "pat_nomNaissance" => $pat_nomNaissance,
+      "pat_nomUsuel" => $pat_nomUsuel,
+      "pat_prenom" => $pat_prenom,
+      "pat_sexe" => $pat_sexe,
+      "pat_dateNaissance" => $pat_dateNaissance,
+      "pat_cpNaissance" => $pat_cpNaissance,
+      "pat_villeNaissance" => $pat_villeNaissance,
+      "pat_cinseePaysNaissance" => $pat_cinseePaysNaissance,
+      "pat_adresseVie" => $pat_adresseVie,
+      "pat_cpVie" => $pat_cpVie,
+      "pat_villeVie" => $pat_villeVie,
+      "pat_cinseePaysVie" =>$pat_cinseePaysVie,
+      "pat_telephone1" => $pat_telephone1,
+      "pat_telephone2" => $pat_telephone2,
+      "doc_id" => $doc_id,
+      "doc_nom" => $doc_nom,
+      "doc_titre" => $doc_titre,
+      "doc_commentaire" => $doc_commentaire,
+      "doc_type" => $doc_type,
+      "doc_nomReel" => $doc_nomReel,
+      "doc_typeMime" => $doc_typeMime,
+      "act_id" => $act_id,
+      "act_pathologie" => $act_pathologie,
+      "act_dateActe" => $act_dateActe,
+      "act_dateCreationActe" => $act_dateCreationActe,
+      "act_dateValidationActe" => $act_dateValidationActe,
+      "etab_id" => $etab_id,
+      "etab_nom" => $etab_nom,
+      "invalidation" => $invalidation,
+      "fichier" => $fichier,
+		);
     
     $parameters = array_map("utf8_encode", $parameters);
 
@@ -368,7 +370,7 @@ class CMedinetSender extends CDocumentSender {
      return;
      
      return sprintf("Type d'objet '%s' non pris en charge", 
-       CAppUI::tr($docItem->ref_object->_class_name));
+       CAppUI::tr($docItem->_ref_object->_class_name));
   }
   
   function getTransactionId($docItem) {

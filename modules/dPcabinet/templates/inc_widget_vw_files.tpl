@@ -1,4 +1,4 @@
-<table class="tbl">
+<table class="form">
 	<tr>
 		<td class="button" colspan="10">
 			<button class="new" type="button" onclick="File.upload('{{$object->_class_name}}','{{$object->_id}}', '')" >
@@ -6,14 +6,16 @@
 			</button>
 		</td>
 	</tr>
+</table>
 
+<table class="tbl">
   {{foreach from=$object->_ref_files item=_file}}
   <tr>
-  	<td>
+  	<td class="text">
 	    <a href="#" class="action" 
 	    	 onclick="File.popup('{{$object->_class_name}}','{{$object->_id}}','{{$_file->_class_name}}','{{$_file->_id}}');"
 	    	 onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectViewHistory')">
-	      {{$_file->file_name}}
+	      {{$_file}}
 	    </a>
 	    <small>({{$_file->_file_size}})</small>
   	</td>
@@ -34,8 +36,8 @@
 
 	  </td>
 	  
+    {{if $dPconfig.dPfiles.system_sender}}
 	  <td class="button" style="width: 1px">
-
       <form name="Edit-{{$_file->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
      
       <input type="hidden" name="m" value="dPfiles" />
@@ -53,8 +55,9 @@
 		  }}
 	   
       </form>
-
   	</td>
+		{{/if}}
+		
   </tr>
   
   {{foreachelse}}

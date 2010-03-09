@@ -114,8 +114,7 @@ class CFile extends CDocumentItem {
       $this->_file_path    = "$this->_absolute_dir/$this->file_real_filename";
     }
     
-    $this->_shortview = $this->file_name;
-    $this->_view = $this->file_name;  
+    $this->_shortview = $this->_view = str_replace("_", " ", $this->file_name);
   }
   
   function getPerm($permType) {
