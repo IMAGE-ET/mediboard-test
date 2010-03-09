@@ -86,7 +86,7 @@ Main.add(function(){
 </form>
 <table class="tbl">
   <tr>
-    <th colspan="4">Droits existants</th>
+    <th class="title" colspan="4">Droits existants</th>
   </tr>
   <tr>
     <th>Classe</th>
