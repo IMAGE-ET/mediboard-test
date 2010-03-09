@@ -2,7 +2,7 @@
   <tr><th colspan="100" class="title">Constantes</th></tr>
   <tr>
     <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
-    {{foreach from="CConstantesMedicales"|static:"list_constantes" item=_constante}}
+    {{foreach from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
     <th>{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
     {{/foreach}}
   </tr>

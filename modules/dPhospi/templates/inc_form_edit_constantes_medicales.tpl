@@ -73,135 +73,62 @@ Main.add(function () {
       {{if $real_context}}<th class="category">Nouvelles</th>{{/if}}
       <th class="category" colspan="2">Dernières</th>
     </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=poids}} (Kg)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=poids size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.poids|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=poids}}</td>
-      <td style="width: 0.1%;"><input type="checkbox" name="checkbox-constantes-medicales-poids" onchange="toggleGraph('constantes-medicales-poids');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=taille}} (cm)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=taille size="4" onchange="calculImcVst(this.form)"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.taille|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=taille}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-taille" onchange="toggleGraph('constantes-medicales-taille');" tabIndex="100" /></td>
-    </tr>
-		<tr>
-      <th>{{mb_title object=$constantes field=pouls}} (/min)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=pouls size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.pouls|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=pouls}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-pouls"  onchange="toggleGraph('constantes-medicales-pouls');" tabIndex="100" /></td>
-    </tr>
-		<tr>
-      <th>{{mb_title object=$constantes field=ta}} (cm Hg)</th>
-      {{if $real_context}}
-      <td>
-        {{mb_field object=$constantes field=_ta_systole size="1"}} /
-        {{mb_field object=$constantes field=_ta_diastole size="1"}}
-      </td>
-      {{/if}}
-      <td style="text-align: center" title="{{$dates.ta|date_format:$dPconfig.datetime}}">
-        {{if $const->ta}}
-          {{mb_value object=$const field=_ta_systole}} /
-          {{mb_value object=$const field=_ta_diastole}}
-        {{/if}}
-      </td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-ta"  onchange="toggleGraph('constantes-medicales-ta');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=_vst}} (ml)</th>
-      {{if $real_context}}<td>{{mb_field object=$const field=_vst size="4" readonly="readonly" tabIndex="100"}}</td>{{/if}}
-      <td>{{mb_value object=$const field=_vst}}{{if $const->_vst}}{{/if}}</td>
-      <td />
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=_imc}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=_imc size="4" readonly="readonly" tabIndex="100"}}</td>{{/if}}
-      <td>{{mb_value object=$const field=_imc}}</td>
-      <td />
-    </tr>
-    <tr>
-      <td colspan="4" id="constantes_medicales_imc" style="color:#F00; text-align: center;"></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=temperature}} (°C)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=temperature size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.temperature|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=temperature}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-temperature"  onchange="toggleGraph('constantes-medicales-temperature');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=spo2}} (%)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=spo2 size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.spo2|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=spo2}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-spo2" onchange="toggleGraph('constantes-medicales-spo2');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=score_sensibilite}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=score_sensibilite size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.score_sensibilite|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=score_sensibilite}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-score_sensibilite"  onchange="toggleGraph('constantes-medicales-score_sensibilite');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=score_motricite}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=score_motricite size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.score_motricite|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=score_motricite}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-score_motricite"  onchange="toggleGraph('constantes-medicales-score_motricite');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=score_sedation}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=score_sedation size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.score_sedation|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=score_sedation}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-score_sedation"  onchange="toggleGraph('constantes-medicales-score_sedation');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=frequence_respiratoire}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=frequence_respiratoire size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.frequence_respiratoire|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=frequence_respiratoire}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-frequence_respiratoire"  onchange="toggleGraph('constantes-medicales-frequence_respiratoire');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=EVA}}</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=EVA size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.EVA|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=EVA}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-EVA"  onchange="toggleGraph('constantes-medicales-EVA');" tabIndex="100" /></td>
-    </tr>
-    <tr>
-      <th>{{mb_title object=$constantes field=glycemie}} (g/l)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=glycemie size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.glycemie|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=glycemie}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-glycemie"  onchange="toggleGraph('constantes-medicales-glycemie');" tabIndex="100" /></td>
-    </tr>
-
-    <tr>
-      <th>{{mb_title object=$constantes field=diurese}} (ml)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=diurese size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.diurese|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=diurese}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-diurese"  onchange="toggleGraph('constantes-medicales-diurese');" tabIndex="100" /></td>
-    </tr>
-		
-    <tr>
-      <th>{{mb_title object=$constantes field=redon}} (ml)</th>
-      {{if $real_context}}<td>{{mb_field object=$constantes field=redon size="4"}}</td>{{/if}}
-      <td style="text-align: center" title="{{$dates.redon|date_format:$dPconfig.datetime}}">{{mb_value object=$const field=redon}}</td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-redon"  onchange="toggleGraph('constantes-medicales-redon');" tabIndex="100" /></td>
-    </tr>
     
-		<tr>
-      <th>{{mb_title object=$constantes field=injection}}</th>
-      {{if $real_context}}
-      <td>
-        {{mb_field object=$constantes field=_inj size="1"}} /
-        {{mb_field object=$constantes field=_inj_essai size="1"}}
-      </td>
-      {{/if}}
-      <td style="text-align: center" title="{{$dates.injection|date_format:$dPconfig.datetime}}">
-        {{if $const->injection}}
-          {{mb_value object=$const field=_inj}} /
-          {{mb_value object=$const field=_inj_essai}}
+    {{foreach from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
+      <tr>
+        <th>
+          {{mb_title object=$constantes field=$_constante}} {{if $_params.unit}}({{$_params.unit}}){{/if}}
+        </th>
+        
+        {{if array_key_exists("formfields", $_params)}}
+          {{if $real_context}}
+            <td>
+              {{mb_field object=$constantes field=$_params.formfields.0 size="1"}} /
+              {{mb_field object=$constantes field=$_params.formfields.1 size="1"}}
+            </td>
+          {{/if}}
+          <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
+            {{if $const->$_constante}}
+              {{mb_value object=$const field=$_params.formfields.0}} /
+              {{mb_value object=$const field=$_params.formfields.1}}
+            {{/if}}
+          </td>
+        {{else}}
+          {{if $_constante.0 == "_"}}
+            {{assign var=_readonly value="readonly"}}
+          {{else}}
+            {{assign var=_readonly value=null}}
+          {{/if}}
+          {{if $real_context}}
+            <td>
+              {{if array_key_exists("callback", $_params)}}
+                {{assign var=_callback value=$_params.callback}}
+              {{else}}
+                {{assign var=_callback value=null}}
+              {{/if}}
+              
+              {{mb_field object=$constantes field=$_constante size="4" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly}}
+            </td>
+          {{/if}}
+          <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
+            {{mb_value object=$const field=$_constante}}
+          </td>
         {{/if}}
-      </td>
-      <td><input type="checkbox" name="checkbox-constantes-medicales-injection"  onchange="toggleGraph('constantes-medicales-injection');" tabIndex="100" /></td>
-    </tr>
-		
+        {{if !$_readonly}}
+          <td style="width: 0.1%;">
+            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}');" tabIndex="100" />
+          </td>
+        {{else}}
+          <td></td>
+        {{/if}}
+      </tr>
+      
+      {{if $_constante == "_imc"}}
+        <tr>
+          <td colspan="4" id="constantes_medicales_imc" style="color:#F00; text-align: center;"></td>
+        </tr>
+      {{/if}}
+    {{/foreach}}
 		
 		{{if $real_context}}
       {{if $constantes->datetime}}

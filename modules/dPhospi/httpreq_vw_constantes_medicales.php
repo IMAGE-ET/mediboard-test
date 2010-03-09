@@ -104,8 +104,9 @@ $standard_struct = array(
 
 // Initialisation de la structure des données
 $data = array();
-foreach(CConstantesMedicales::$list_constantes as $cst) {
-  $data[$cst] = $standard_struct;
+foreach(CConstantesMedicales::$list_constantes as $cst => $params) {
+  if ($cst[0] !== "_") // we ignore form fields
+    $data[$cst] = $standard_struct;
 }
 
 $data['ta'] = array(

@@ -16,6 +16,9 @@ class CConstantesMedicales extends CMbObject {
   var $datetime              = null;
   var $context_class         = null;
   var $context_id            = null;
+  
+  // The other fields are built in the contructor
+  /*
   var $poids                 = null;
   var $taille                = null;
   var $ta                    = null;
@@ -31,6 +34,7 @@ class CConstantesMedicales extends CMbObject {
   var $redon                 = null;
   var $diurese               = null;
   var $injection             = null;
+  */
 
   // Object References
   //    Single
@@ -38,33 +42,48 @@ class CConstantesMedicales extends CMbObject {
   var $_ref_patient          = null;
   
   // Forms fields
+  /*
   var $_ta_systole           = null;
   var $_ta_diastole          = null;
+  var $_inj                  = null;
+  var $_inj_essai            = null;
   var $_imc                  = null;
+  */
   var $_imc_valeur           = null;
   var $_vst                  = null;
   var $_new_constantes_medicales = null;
-	var $_inj = null;
-	var $_inj_essai = null;
-  
   
   static $list_constantes = array (
-    'poids', 
-    'taille', 
-    'pouls', 
-    'ta',
-    'temperature', 
-		'spo2', 
-    'score_sensibilite',
-    'score_motricite',
-    'score_sedation',
-    'frequence_respiratoire',
-    'EVA',
-		'glycemie',
-		'redon',
-		'diurese',
-		'injection'
+    "poids"             => array("unit" => "kg", "callback" => "calculImcVst"), 
+    "taille"            => array("unit" => "cm", "callback" => "calculImcVst"),
+    "pouls"             => array("unit" => "/min"), 
+    "ta"                => array("unit" => "cm Hg", "formfields" => array("_ta_systole", "_ta_diastole")),
+    "_vst"              => array("unit" => "ml"),
+    "_imc"              => array("unit" => ""),
+    "temperature"       => array("unit" => "°C"), 
+    "spo2"              => array("unit" => "%"), 
+    "score_sensibilite" => array("unit" => ""),
+    "score_motricite"   => array("unit" => ""),
+    "score_sedation"    => array("unit" => ""),
+    "frequence_respiratoire"=> array("unit" => ""),
+    "EVA"               => array("unit" => ""),
+    "glycemie"          => array("unit" => "g/l"),
+    "redon"             => array("unit" => "ml"),
+    "diurese"           => array("unit" => "ml"),
+    "injection"         => array("unit" => "kg", "formfields" => array("_inj", "_inj_essai")),
   );
+  
+  function __construct() {
+    foreach(self::$list_constantes as $_constant => $_params) {
+      $this->$_constant = null;
+      if (isset($_params["formfields"])) {
+        foreach ($_params["formfields"] as $_formfield) {
+          $this->$_formfield = null;
+        }
+      }
+    }
+    return parent::__construct();
+  }
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -185,7 +204,7 @@ class CConstantesMedicales extends CMbObject {
     
     // Verifie si au moins une des valeurs est remplie
     $ok = false;
-    foreach (CConstantesMedicales::$list_constantes as $const) {
+    foreach (CConstantesMedicales::$list_constantes as $const => $params) {
       $this->completeField($const);
       if ($this->$const !== "" && $this->$const !== null) {
         $ok = true;
@@ -204,7 +223,7 @@ class CConstantesMedicales extends CMbObject {
       $constante->context_id    = $this->context_id;
       
       if ($constante->loadMatchingObject()) {
-        foreach (CConstantesMedicales::$list_constantes as $type) {
+        foreach (CConstantesMedicales::$list_constantes as $type => $params) {
           if (empty($this->$type) && !empty($constante->$type)) {
             $this->$type = $constante->$type;
           }
@@ -235,7 +254,7 @@ class CConstantesMedicales extends CMbObject {
     // Liste des dates des dernières valeurs
     $list_datetimes = array();
     
-    foreach (CConstantesMedicales::$list_constantes as $type) {
+    foreach (CConstantesMedicales::$list_constantes as $type => $params) {
       $list_datetimes[$type] = null;
     }
     
@@ -247,7 +266,7 @@ class CConstantesMedicales extends CMbObject {
       }
       
       $continue = false;
-      foreach (CConstantesMedicales::$list_constantes as $type) {
+      foreach (CConstantesMedicales::$list_constantes as  $type => $params) {
         if ($const->$type != null && $constante->$type == null) {
           $constante->$type = $const->$type;
           $list_datetimes[$type] = $const->datetime;

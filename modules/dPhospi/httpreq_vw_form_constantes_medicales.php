@@ -22,7 +22,7 @@ $latest_constantes = CConstantesMedicales::getLatestFor($constantes->patient_id)
 
 // Tableau contenant le nom de tous les graphs
 $graphs = array();
-foreach(CConstantesMedicales::$list_constantes as $cst) {
+foreach(CConstantesMedicales::$list_constantes as $cst => $params) {
   $graphs[] = "constantes-medicales-$cst";
 }
                  

@@ -46,7 +46,7 @@ foreach ($consult->_ref_actes_ccam as $_ccam) {
 $csteByTime = array();
 foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
 	$csteByTime[$_constante_medicale->datetime] = array();
-	foreach (CConstantesMedicales::$list_constantes as $_constante) {
+	foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
 		$csteByTime[$_constante_medicale->datetime][$_constante] = $_constante_medicale->$_constante;
 	}
 }
