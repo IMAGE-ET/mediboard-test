@@ -85,21 +85,21 @@ $consult->_ref_chir->loadIdCPS();
 $consult->_ref_patient->loadIdVitale();
 
 // Récupération des tarifs
-if (!$consult->tarif) {
+$tarif = new CTarif;
+$tarifs = array();
+if (!$consult->tarif || $consult->tarif == "pursue") {
 	$order = "description";
 	$where = array();
 	$where["chir_id"] = "= '$userSel->user_id'";
-	$tarifsChir = new CTarif;
-	$tarifsChir = $tarifsChir->loadList($where, $order);
-	foreach($tarifsChir as $_tarif) {
+	$tarifs["user"] = $tarif->loadList($where, $order);
+	foreach ($tarifs["user"] as $_tarif) {
 	  $_tarif->getPrecodeReady();
 	}
 	
 	$where = array();
 	$where["function_id"] = "= '$userSel->function_id'";
-	$tarifsCab = new CTarif;
-	$tarifsCab = $tarifsCab->loadList($where, $order);
-	foreach($tarifsCab as $_tarif) {
+	$tarifs["func"] = $tarif->loadList($where, $order);
+	foreach($tarifs["func"] as $_tarif) {
 	  $_tarif->getPrecodeReady();
 	}
 }
@@ -118,14 +118,10 @@ $consult->loadRefsActesNGAP();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("banques"       , $banques);
-$smarty->assign("consult"       , $consult);
-$smarty->assign("reglement"     , $reglement);
-
-if (!$consult->tarif) {
-  $smarty->assign("tarifsChir"    , $tarifsChir);
-  $smarty->assign("tarifsCab"     , $tarifsCab);
-}
+$smarty->assign("banques"  , $banques);
+$smarty->assign("consult"  , $consult);
+$smarty->assign("reglement", $reglement);
+$smarty->assign("tarifs"   , $tarifs);
 
 $smarty->display("inc_vw_reglement.tpl");
 

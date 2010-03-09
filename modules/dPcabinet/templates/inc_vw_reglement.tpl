@@ -2,55 +2,63 @@
 {{assign var=praticien value=$consult->_ref_chir}}
 
 <script type="text/javascript">
+	
+pursueTarif = function() {
+  var form = document.tarifFrm;
+  $V(form.tarif, "pursue");
+  $V(form.valide, 0);
+  Reglement.submit(form, false);
+}	
+	
 cancelTarif = function(action) {
-  var oForm = document.tarifFrm;
+  var form = document.tarifFrm;
   
-  if(action == "delActes"){
-    $V(oForm._delete_actes, 1);
-    $V(oForm.tarif, "");
+  if(action == "delActes") {
+    $V(form._delete_actes, 1);
+    $V(form.tarif, "");
   }
   
   {{if $app->user_prefs.autoCloseConsult}}
-  $V(oForm.chrono, "48");
+  $V(form.chrono, "48");
   {{/if}}
   
-  $V(oForm.valide, 0);
-  $V(oForm._somme, 0);
+  $V(form.valide, 0);
+  $V(form._somme, 0);
   
   // On met à 0 les valeurs de tiers 
-  $V(oForm.tiers_date_reglement, "");
-  $V(oForm.patient_date_reglement, "");
+  $V(form.tiers_date_reglement, "");
+  $V(form.patient_date_reglement, "");
   
-  Reglement.submit(oForm, true);
+  Reglement.submit(form, true);
 }
 
 validTarif = function(){
-  var oForm = document.tarifFrm;
+  var form = document.tarifFrm;
   
-  $V(oForm.du_tiers,  $V(oForm._somme) - $V(oForm.du_patient));
+  $V(form.du_tiers,  $V(form._somme) - $V(form.du_patient));
   
-  if ($V(oForm.tarif) == ""){
-    $V(oForm.tarif, "manuel");
+  if ($V(form.tarif) == ""){
+    $V(form.tarif, "manuel");
   }
-  Reglement.submit(oForm, true);
+  Reglement.submit(form, true);
 }
 
 modifTotal = function(){
-  var oForm = document.tarifFrm;
-  var secteur1 = oForm.secteur1.value;
-  var secteur2 = oForm.secteur2.value;
+  var form = document.tarifFrm;
+  var secteur1 = form.secteur1.value;
+  var secteur2 = form.secteur2.value;
 
-  $V(oForm._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
-  $V(oForm.du_patient, $V(oForm._somme)); 
+  $V(form._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
+  $V(form.du_patient, $V(form._somme)); 
 }
 
 modifSecteur2 = function(){
-  var oForm = document.tarifFrm;
-  var secteur1 = oForm.secteur1.value;
-  var somme = oForm._somme.value;
+  var form = document.tarifFrm;
+  var secteur1 = form.secteur1.value;
+  var somme = form._somme.value;
   
-  $V(oForm.du_patient, somme);
-  $V(oForm.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
+  $V(form.du_patient, somme);
+  $V(form.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
 }
 
 printActes = function(){
@@ -71,7 +79,7 @@ Main.add( function(){
 	{{if $consult->_ref_patient->ald}}
 	if($('accidentTravail_concerne_ALD_1')){
 	  $('accidentTravail_concerne_ALD_1').checked = "checked";
-		submitFormAjax(document.accidentTravail, 'systemMsg');
+		onSubmitFormAjax(document.accidentTravail);
 	}
 	{{/if}}	
 });
@@ -122,51 +130,56 @@ Main.add( function(){
             </div>
           
             <!-- Formulaire de selection de tarif -->
-            <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload.curry(true) } );">
       	      <input type="hidden" name="m" value="dPcabinet" />
       	      <input type="hidden" name="del" value="0" />
       	      <input type="hidden" name="dosql" value="do_consultation_aed" />
+              {{mb_key object=$consult}}
+              <input type="hidden" name="_bind_tarif" value="1" />
+
+              {{if $consult->tarif == "pursue"}}
+              {{mb_field object=$consult field=tarif hidden=1}}
+              <input type="hidden" name="_delete_actes" value="0" />
+              {{else}}
               <input type="hidden" name="_delete_actes" value="1" />
-      	      <input type="hidden" name="_bind_tarif" value="1" />
-      	      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+							{{/if}}
       	     
       	      <table class="form">
-      	        {{if !$consult->tarif}}
-
-       	        <tr>
-       	          <th>{{mb_label object=$consult field=accident_travail}}</th>
-       	          <td>{{mb_field object=$consult field=accident_travail form=selectionTarif register=true}}</td>    
-       	        </tr>
-
-                {{if $consult->_ref_patient->ald}}
-                <tr>
-                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
-                  <td>{{mb_field object=$consult field=concerne_ALD}}</td>
-                </tr>
-                {{/if}}
-      	        
-      	        <tr>
-      	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
-      	          <td>
-      	            <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload.curry(true) } );">
-      	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
-      	              {{if $tarifsChir|@count}}
-        	              <optgroup label="Tarifs praticien">
-        	              {{foreach from=$tarifsChir item=_tarif}}
-        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
-        	              {{/foreach}}
-        	              </optgroup>
-      	              {{/if}}
-      	              {{if $tarifsCab|@count}}
-        	              <optgroup label="Tarifs cabinet">
-        	              {{foreach from=$tarifsCab item=_tarif}}
-        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
-        	              {{/foreach}}
-        	              </optgroup>
-      	              {{/if}}
-      	            </select>
-      	          </td>
-      	        </tr>
+      	        {{if !$consult->tarif || $consult->tarif == "pursue"}}
+	       	        <tr>
+	       	          <th>{{mb_label object=$consult field=accident_travail}}</th>
+	       	          <td>{{mb_field object=$consult field=accident_travail form=selectionTarif register=true}}</td>    
+	       	        </tr>
+	
+	                {{if $consult->_ref_patient->ald}}
+	                <tr>
+	                  <th>{{mb_label object=$consult field=concerne_ALD}}</th>
+	                  <td>{{mb_field object=$consult field=concerne_ALD}}</td>
+	                </tr>
+	                {{/if}}
+	      	        
+	      	        <tr>
+	      	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
+	      	          <td>
+	      	            <select name="_tarif_id"  class="notNull str" style="width: 130px;" onchange="this.form.onsubmit();">
+	      	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
+	      	              {{if $tarifs.user|@count}}
+	        	              <optgroup label="Tarifs praticien">
+	        	              {{foreach from=$tarifs.user item=_tarif}}
+	        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
+	        	              {{/foreach}}
+	        	              </optgroup>
+	      	              {{/if}}
+	      	              {{if $tarifs.func|@count}}
+	        	              <optgroup label="Tarifs cabinet">
+	        	              {{foreach from=$tarifs.func item=_tarif}}
+	        	                <option value="{{$_tarif->_id}}" {{if $_tarif->_precode_ready}}class="checked"{{/if}}>{{$_tarif}}</option>
+	        	              {{/foreach}}
+	        	              </optgroup>
+	      	              {{/if}}
+	      	            </select>
+	      	          </td>
+	      	        </tr>
       	        {{else}}
       	          
                   {{if $consult->accident_travail}}
@@ -185,7 +198,14 @@ Main.add( function(){
         	        
         	        <tr>
         	          <th>{{mb_label object=$consult field=tarif}}</th>
-        	          <td>{{mb_value object=$consult field=tarif}}</td>    
+        	          <td>{{mb_value object=$consult field=tarif}}</td>
+										{{if !$consult->valide}}
+                    <td class="button">
+                    	<button type="button" class="add" onclick="pursueTarif();">
+                    		{{tr}}Add{{/tr}}
+											</button>
+										</td>
+										{{/if}}
         	        </tr>
       	        {{/if}}
       	      </table>
@@ -198,9 +218,9 @@ Main.add( function(){
             <script type="text/javascript">
               Main.add( function(){
                 // Mise a jour de du_patient
-                var oForm = document.forms['tarifFrm'];
-                if(oForm && oForm.du_patient && oForm.du_patient.value == "0"){
-                  $V(oForm.du_patient, $V(oForm._somme)); 
+                var form = document.forms['tarifFrm'];
+                if(form && form.du_patient && form.du_patient.value == "0"){
+                  $V(form.du_patient, $V(form._somme)); 
                 }
               } );
             </script>
@@ -209,15 +229,15 @@ Main.add( function(){
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-           {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
-           {{mb_field object=$consult field="sejour_id" hidden=1 prop=""}}
+            {{mb_key object=$consult}}
+            {{mb_field object=$consult field="sejour_id" hidden=1}}
       
             <table width="100%">
-              <!-- A regler -->
+              <!-- A régler -->
               <tr>
                 <th>{{mb_label object=$consult field="_somme"}}</th>
                 <td>
-                  {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
+                  {{mb_field object=$consult field="tarif" hidden=1}}
                   <input type="hidden" name="patient_date_reglement" value="" />
                   {{if $consult->valide}}
                     {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}

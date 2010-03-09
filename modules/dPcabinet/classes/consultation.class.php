@@ -265,6 +265,7 @@ class CConsultation extends CCodable {
     
     // Nom de tarif manuel
     if ($this->tarif == "manuel") {
+			// Get all acts
       $this->loadRefsActes();
       foreach ($this->_ref_actes as $acte) {
         $this->tarif.= " $acte->_shortview";
@@ -393,11 +394,20 @@ class CConsultation extends CCodable {
     $tarif = new CTarif();
     $tarif->load($this->_tarif_id);
  
-    // Copie des elements du tarif dans la consultation
-    $this->secteur1     = $tarif->secteur1;
-    $this->secteur2     = $tarif->secteur2;
-    $this->du_patient   = $tarif->secteur1 + $tarif->secteur2;
-    $this->tarif        = $tarif->description;
+    // Cas de la cotation poursuivie
+		if ($this->tarif == "pursue") {
+	    $this->secteur1 += $tarif->secteur1;
+	    $this->secteur2 += $tarif->secteur2;
+	    $this->tarif     = "composite";
+	 	}
+    // Cas de la cotation normale
+		else {
+	    $this->secteur1 = $tarif->secteur1;
+	    $this->secteur2 = $tarif->secteur2;
+      $this->tarif    = $tarif->description;
+ 		}
+
+    $this->du_patient   = $this->secteur1 + $this->secteur2;
     
     // codes_ccam complet avec infos sur l'activite phase
     $codes_ccam_full = $tarif->codes_ccam;

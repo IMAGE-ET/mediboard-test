@@ -3,7 +3,7 @@
 <!-- S'il y a deja des actes codés, affichage seulement des actes codes -->
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}
 	<tr>
-	  <th class="category" colspan="10">
+	  <th class="title" colspan="10">
 	  	{{tr}}Codage des actes CCAM{{/tr}}
 	  </th>
 	</tr> 
