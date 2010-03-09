@@ -86,7 +86,7 @@ class CFTP {
       return false;
     }
         
-    return ftp_nlist($this->connexion, $folder, true);
+    return ftp_nlist($this->connexion, $folder);
   }
   
   function delFile($file) {
