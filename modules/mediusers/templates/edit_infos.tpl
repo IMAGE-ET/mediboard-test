@@ -29,11 +29,12 @@ Main.add(function () {
   var url = new Url("admin", "edit_prefs");
   url.addParam("user_id", "{{$user->_id}}");
   url.requestUpdate("edit-preferences");
-	
+	{{if @$modules.dPpersonnel->mod_active}}
 	var tabs = Control.Tabs.create('tab_edit_mediuser', true);
 	contentconge();
 	loadUser("{{$user->_id}}");
 	editPlageVac("","{{$user->_id}}");
+	{{/if}}
 	
 });
 </script>
