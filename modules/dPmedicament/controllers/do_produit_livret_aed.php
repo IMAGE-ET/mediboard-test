@@ -58,9 +58,15 @@ if($del == 1){
 		$livret->distObj->CIP = $code_cip;
     if($livret->distObj->Insert() < 0){
       // Affichage de l'erreur
-      CAppUI::setMsg("Produit créé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
+      CAppUI::setMsg("Produit ajouté au livret thérapeutique".$livret->distObj->GetLastError(), UI_MSG_ERROR );
     } else {
-      CAppUI::setMsg("Produit créé", UI_MSG_OK );
+      CAppUI::setMsg("Produit ajouté au livret thérapeutique", UI_MSG_OK );
+      
+      $produitLivret = new CBcbProduitLivretTherapeutique();
+      $produitLivret->load($code_cip);
+      if ($produitLivret->addToStocks()) {
+        CAppUI::setMsg("Produit ajouté aux stocks", UI_MSG_OK );
+      }
     }
   }
 }
