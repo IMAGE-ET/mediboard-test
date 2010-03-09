@@ -11,7 +11,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" style="width: 200px;">Séjours non affectés</th>
+    <th class="title" style="width: 150px;">Séjours non affectés</th>
   </tr>
 
   {{foreach from=$sejours item=_sejour}}

@@ -10,6 +10,23 @@
 
 {{mb_include_script module=ssr script=repartition}}
 
+<form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="ssr" />
+<input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
+<input type="hidden" name="del" value="0" />
+
+{{mb_key object=$bilan}}
+<br/>
+{{mb_label object=$bilan field=sejour_id}}
+{{mb_field object=$bilan field=sejour_id}}
+<br/>
+{{mb_label object=$bilan field=kine_id}}
+{{mb_field object=$bilan field=kine_id}}
+
+
+</form>
+
 <table class="main">
   {{foreach from=$plateaux item=_plateau name=plateaux}}
   <tr>

@@ -38,16 +38,23 @@ Repartition = {
 	// Make kine droppable
 	droppableKine: function(kine_id) {
 	  Droppables.add("kine-"+kine_id, { 
-	    onDrop:function(element){
-	      Repartition.dropSejour(element.id, kine_id);
-	    }, 
-	    hoverclass:'litselected'
+	    onDrop: Repartition.dropSejour,
+	    hoverclass:'dropover'
 	  });
 	},
 	
 	// Link séjour to kiné
-	dropSejour: function(element, kine_id) {
-		Console.debug(element.id, "Séjour");
-    Console.debug(kine_id, "Kiné");
+	dropSejour: function(sejour, kine) {
+		var sejour_id = sejour.id.split("-")[1];
+    var kine_id   = kine  .id.split("-")[1];
+		sejour.hide();
+    console.debug(sejour_id, "Séjour");
+    console.debug(kine_id, "Kiné");
+
+		var form = document.forms['Edit-CBilanSSR'];
+    $V(form.sejour_id, sejour_id);
+    $V(form.kine_id, kine_id);
+		onSubmitFormAjax(form);
+		
 	}	
 }

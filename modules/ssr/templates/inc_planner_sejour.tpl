@@ -36,6 +36,12 @@ selectEquipement = function(equipement_id) {
 
 <table class="form">
 	<tr><th class="title" colspan="10">Boîte à activités</th></tr>
+
+  <tr>
+    <th>{{mb_label object=$bilan field=kine_id}}</th>
+    <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
+  </tr>
+
 	<tr>
 		<th>Activités</th>
 		<td>

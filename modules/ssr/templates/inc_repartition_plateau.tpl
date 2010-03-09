@@ -8,27 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl">
+<table class="main" style="border-spacing: 4px; border-collapse: separate; width: auto;">
   <tr>
     <th class="title" colspan="0">{{$plateau}}</th>
   </tr>
   <tr>
 	  {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-	    <th style="width: 200px;">
-	      {{$_technicien}}
-			</th>
+	    <td style="width: 150px;">
+			{{mb_include template=inc_repartition_kine}}
+			</td>
 		{{foreachelse}}
-	    <td><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></th>
+	    <td><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
 	  {{/foreach}}
-  </tr>
-
-  <tr>
-    {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-		  <td id="kine-{{$_technicien->kine_id}}">
-        <script type="text/javascript">Repartition.droppableKine('{{$_technicien->kine_id}}')</script>
-		    <em>{{tr}}Aucun patient affecté{{/tr}}</em>
-		  </td>
-	  {{/foreach}}
-  </td>
-	
+  </tr>	
 </table>

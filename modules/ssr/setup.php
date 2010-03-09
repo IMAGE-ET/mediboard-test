@@ -160,7 +160,23 @@ class CSetupssr extends CSetup {
       ADD INDEX (`executant_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.10";
+    // Bilan SSR: suppresion des anciennes prescriptions texte, ajout du kine
+    $this->makeRevision("0.10");
+    $query = "ALTER TABLE `bilan_ssr` 
+      ADD `kine_id` INT (11) UNSIGNED,
+      DROP COLUMN `kine`,
+      DROP COLUMN `ergo`,
+      DROP COLUMN `psy`,
+      DROP COLUMN `ortho`,
+      DROP COLUMN `social`,
+      DROP COLUMN `diet`,
+      DROP COLUMN `apa`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `bilan_ssr` 
+      ADD INDEX (`kine_id`);";
+    $this->addQuery($query);
+		
+    $this->mod_version = "0.11";
     
     // Data source query
     $query = "SELECT *
