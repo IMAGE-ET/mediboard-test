@@ -84,7 +84,7 @@ Main.add(function () {
       </form>
       {{/if}}
     </td>     
-    <td colspan="4">
+    <td colspan="4" style="white-space: normal;">
       Recherche
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 	      <input name="cible" type="text" value="" class="autocomplete" />
@@ -100,7 +100,10 @@ Main.add(function () {
 	      <input type="hidden" name="user_id" value="{{$user->_id}}" />
 
 				{{mb_field object=$transmission field="date"}}
-
+        {{mb_field object=$transmission field="degre"}}
+        {{mb_field object=$transmission field="type" typeEnum=radio}}
+        <br />
+				
 	      <div style="float: right">
 			    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
 			      <option value="">&mdash; Choisir une aide</option>
@@ -108,9 +111,7 @@ Main.add(function () {
 			    </select>
 			    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
 		    </div>
-	      {{mb_field object=$transmission field="degre"}}
-	      {{mb_field object=$transmission field="type" typeEnum=radio}}
-	      <br />
+	      
 	      {{mb_field object=$transmission field="text"}}
 	      <button type="button" class="add" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Add{{/tr}}</button>
       </form>
