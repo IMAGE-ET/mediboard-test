@@ -90,7 +90,7 @@
               {{tr}}utilities-source-soap-connexion{{/tr}}
             </button>
           </td>
-          <td id="utilities-source-soap-connexion-{{$source->name}}" />
+          <td id="utilities-source-soap-connexion-{{$source->name}}"></td>
         </tr>
         
         <!-- Liste des functions SOAP -->
@@ -100,7 +100,7 @@
               {{tr}}utilities-source-soap-getFunctions{{/tr}}
             </button> 
           </td>
-          <td id="utilities-source-soap-getFunctions-{{$source->name}}" />
+          <td id="utilities-source-soap-getFunctions-{{$source->name}}"></td>
         </tr>
         
       </table>
