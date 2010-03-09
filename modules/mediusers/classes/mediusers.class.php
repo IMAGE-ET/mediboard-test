@@ -112,7 +112,7 @@ class CMediusers extends CMbObject {
     $specs["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
     $specs["banque_id"]              = "ref class|CBanque show|0";
     
-    $specs["code_intervenant_cdarr"] = "str length|4";
+    $specs["code_intervenant_cdarr"] = "str length|2";
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     
