@@ -438,7 +438,12 @@ class CSetupmediusers extends CSetup {
      $sql = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(80,'SANTE PUBLIQUE ET MEDECINE SOCIALE','');";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.32";
+     $this->makeRevision("0.32");
+     
+     $sql = "ALTER TABLE `users_mediboard` ADD `code_intervenant_cdarr` CHAR (2) DEFAULT NULL;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.33";
   }
 }
 ?>
