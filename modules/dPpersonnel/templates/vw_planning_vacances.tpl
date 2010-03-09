@@ -105,13 +105,12 @@ DragDropPlage = function(draggable){
 	date_fin = date_fin.toDATE();
 	var plage_id = element.id.substring(5);
 
-	var url = new Url("dPpersonnel", "do_plagevac_aed");
+	var url = new Url("dPpersonnel", "toto");
   url.addParam("plage_id", plage_id);
 	url.addParam("date_debut", date_debut);
-	
+	url.addParam("dosql","do_plagevac_aed")
 	url.addParam("date_fin", date_fin);
 	url.requestUpdate("systemMsg", {
-	  getParameters: {m: 'dPpersonnel', a: 'do_plagevac_aed'},
 	  method: "post",
 		// Si l'enregistremet de la plage échoue, il faut replacer la plage à sa place antérieure
 		onComplete: function(){
