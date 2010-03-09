@@ -41,7 +41,7 @@ Main.add(function () {
 <ul id="tab_edit_mediuser" class="control_tabs">
   <li><a href="#edit-mediuser">{{tr}}Account{{/tr}}</a></li>
   <li><a href="#edit-preferences">{{tr}}Preferences{{/tr}}</a></li>
-	<li><a href="#edit-holidays">{{tr}}Holidays{{/tr}}</a></li>
+	{{if @$modules.dPpersonnel->mod_active}}<li><a href="#edit-holidays">{{tr}}Holidays{{/tr}}</a></li>{{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -146,6 +146,7 @@ Main.add(function () {
 </div>
 
 <div id="edit-preferences" style="display: none;"></div>
+{{if @$modules.dPpersonnel->mod_active}}
 <div id="edit-holidays" style="display: none;">
 	<table class="main">
 	  <tr>
@@ -159,3 +160,4 @@ Main.add(function () {
 	  </tr>
 	</table>
 </div>
+{{/if}}
