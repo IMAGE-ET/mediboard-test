@@ -542,7 +542,18 @@ Main.add(function () {
       </select>
     </td>
   </tr>
-
+  {{assign var="var" value="show_transmissions_form"}}
+  <tr>
+    <th>
+      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref[{{$var}}]">
+        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
+        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
   </tbody>
   {{/if}}
   

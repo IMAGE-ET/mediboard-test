@@ -100,6 +100,7 @@ $array_list_module_pref = array (
   ),
   "dPprescription" => array (
     "mode_readonly",
+		"show_transmissions_form"
   )
 );
 

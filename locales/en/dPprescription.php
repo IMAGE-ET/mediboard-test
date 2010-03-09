@@ -1368,5 +1368,9 @@ $locales['CPrescription._type_alerte.posoduree'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoduree-court'] = '';
 $locales['CPrescriptionLineMedicament-alerte-posoqte-court'] = '';
 $locales['mod-dPprescription-tab-vw_edit_config_service'] = '';
-$locales['mod-dPprescription-tab-vw_edit_categories_group'] = ''; 
+$locales['mod-dPprescription-tab-vw_edit_categories_group'] = '';
+$locales['pref-show_transmissions_form'] = '';
+$locales['pref-show_transmissions_form-desc'] = '';
+$locales['pref-show_transmissions_form-0'] = '';
+$locales['pref-show_transmissions_form-1'] = '';
 ?>

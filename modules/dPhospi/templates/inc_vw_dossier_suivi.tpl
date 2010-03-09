@@ -51,7 +51,7 @@ Main.add(function () {
 </script>
 
 <button class="add" onclick="$('form_trans').toggle(); this.toggleClassName('add').toggleClassName('remove');">Formulaire de transmissions</button>
-<table class="form" id="form_trans" style="display: none;">
+<table class="form" id="form_trans" {{if !$app->user_prefs.show_transmissions_form}}style="display: none;"{{/if}}>
   <tr>
     <th class="title" style="width: 50%" colspan="4">
       Observations

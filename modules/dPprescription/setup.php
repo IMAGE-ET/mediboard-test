@@ -1436,8 +1436,11 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`sejour_id`),
               ADD INDEX (`object_id`);";
 		$this->addQuery($sql);
+		
+		$this->makeRevision("0.94");
+		$this->addPrefQuery("show_transmissions_form", "0");
 							
-		$this->mod_version = "0.94";
+		$this->mod_version = "0.95";
   }  
 }
 
