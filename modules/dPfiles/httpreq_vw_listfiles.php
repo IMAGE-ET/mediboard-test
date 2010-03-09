@@ -12,8 +12,8 @@ global $AppUI, $can, $m;
 
 //$can->needsRead();
 
-$object_class = CValue::getOrSession("selClass", null);
-$object_id    = CValue::getOrSession("selKey"  , null);
+$object_class  = CValue::getOrSession("selClass", null);
+$object_id     = CValue::getOrSession("selKey"  , null);
 $typeVue       = CValue::getOrSession("typeVue" , 0);
 $accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist = 1;
@@ -33,18 +33,15 @@ $mediuser->loadRefs();
 $object = null;
 $canFile  = new CCanDo;
 $praticienId = null;
+$affichageFile = array();
 
-// Création du template
-$smarty = new CSmartyDP();
-
-if($object_class && $object_class){
+if($object_id && $object_class){
   // Chargement de l'objet
   $object = new $object_class;
   $object->load($object_id);
   $canFile = $object->canDo();
   
   // To add the modele selector in the toolbar
-  $object->updateFormFields();
   if ($object_class == 'CConsultation') {
     $praticienId = $object->_praticien_id;
   } 
@@ -62,9 +59,12 @@ if($object_class && $object_class){
   }
   
   $affichageFile = CFile::loadDocItemsByObject($object);
-  $smarty->assign("affichageFile",$affichageFile);
 }
 
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("affichageFile", $affichageFile);
 $smarty->assign("canFile"      , $canFile);
 $smarty->assign("reloadlist"   , $reloadlist); 
 $smarty->assign("listCategory" , $listCategory);

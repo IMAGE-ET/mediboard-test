@@ -136,7 +136,8 @@ class CDoObjectAddEdit {
     if ($this->callBack) {
     	$fields = $this->_obj->getDBFields();
     	$json = json_encode($fields);
-      echo "\n<script type=\"text/javascript\">{$this->callBack}({$this->_obj->_id}, $json)</script>";
+      $id = $this->_obj->_id ? $this->_obj->_id : 0;
+      echo "\n<script type=\"text/javascript\">{$this->callBack}($id, $json)</script>";
     }
     CApp::rip();
   }

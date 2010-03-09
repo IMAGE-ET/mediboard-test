@@ -20,11 +20,7 @@ editConstantes = function (const_id, context_guid){
   url.addParam('const_id', const_id);
   url.addParam('context_guid', context_guid);
   url.addParam('readonly', '{{$readonly}}');
-  url.requestUpdate('constantes-medicales-form', { 
-    onComplete: function () {
-      prepareForm('edit-constantes-medicales');
-    }
-  } );
+  url.requestUpdate('constantes-medicales-form');
 }
 
 insertGraph = function (container, data, id, width, height) {
@@ -181,8 +177,6 @@ toggleGraph = function(id){
 
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
-
-  prepareForm(oForm);
   drawGraph();
   
   {{foreach from=$data item=curr_data key=key}}

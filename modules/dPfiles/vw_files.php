@@ -19,17 +19,14 @@ $typeVue       = CValue::getOrSession("typeVue" , 0);
 $file_id       = CValue::get("file_id"          , null);
 $accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist    = 0;
-$canFile       = new CCanDo;
 
 $file = new CFile;
 $file->load($file_id);
 
 $listCategory = CFilesCategory::listCatClass($selClass);
-
-// Création du template
-$smarty = new CSmartyDP();
-
+$affichageFile = array();
 $object = null;
+$canFile       = new CCanDo;
 
 if($selClass && $selKey){
   // Chargement de l'objet
@@ -37,12 +34,12 @@ if($selClass && $selKey){
   $object->load($selKey);
   $canFile = $object->canDo();
   $affichageFile = CFile::loadDocItemsByObject($object);
-
-  $smarty->assign("affichageFile",$affichageFile);
 }
 
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->assign("affichageFile"  , $affichageFile);
 $smarty->assign("canFile"        , $canFile     );
-
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );
