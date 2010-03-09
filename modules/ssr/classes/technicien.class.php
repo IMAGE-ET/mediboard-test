@@ -23,6 +23,7 @@ class CTechnicien extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'technicien';
     $spec->key   = 'technicien_id';
+		$spec->uniques["technicien"] = array("kine_id");
     return $spec;
   }
 
