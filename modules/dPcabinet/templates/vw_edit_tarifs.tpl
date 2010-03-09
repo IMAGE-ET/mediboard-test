@@ -75,7 +75,7 @@ Main.add(function () {
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$tarif->_spec}}">
       <input type="hidden" name="dosql" value="do_tarif_aed" />
       <input type="hidden" name="del" value="0" />
-      {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}
+      {{mb_key object=$tarif}}
 
       <table class="form">
         {{if $tarif->_id}}
@@ -125,10 +125,11 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=codes_ccam}}</th>
 			    <td>
 			    	{{foreach from=$tarif->_codes_ccam item=_code_ccam}}
-						<div onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</div>
+						<span onmouseover="ObjectTooltip.createDOM(this, 'DetailCCAM-{{$_code_ccam}}');">{{$_code_ccam}}</span>
 						<div id="DetailCCAM-{{$_code_ccam}}" style="display: none">
 							{{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ccam}}
 						</div>
+            <br/>
 			    	{{foreachelse}}
 			    	<em>{{tr}}None{{/tr}}</em>
 						{{/foreach}}
@@ -139,7 +140,8 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field=codes_ngap}}</th>
           <td>
          	  {{foreach from=$tarif->_codes_ngap item=_code_ngap}}
-					  <div onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</div>
+					  <span onmouseover="ObjectTooltip.createDOM(this, 'DetailNGAP-{{$_code_ngap}}');">{{$_code_ngap}}</span>
+						<br/>
 					  <div id="DetailNGAP-{{$_code_ngap}}" style="display: none">
 				 	    {{mb_include module=system template=CMbObject_view object=$tarif->_new_actes.$_code_ngap}}
 			 		  </div>
