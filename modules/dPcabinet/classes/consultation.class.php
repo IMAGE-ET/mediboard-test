@@ -409,30 +409,23 @@ class CConsultation extends CCodable {
 
     $this->du_patient   = $this->secteur1 + $this->secteur2;
     
-    // codes_ccam complet avec infos sur l'activite phase
-    $codes_ccam_full = $tarif->codes_ccam;
-    
-    // creation du codes ccam sans les info supplementaires
-    $_codes_ccam = array();
-    $codes_ccam_tarif = explode("|", $tarif->codes_ccam);
-    foreach($codes_ccam_tarif as $_code_ccam){
-      $_codes_ccam[] = substr($_code_ccam, 0, 7);
+    // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
+    foreach($tarif->_codes_ccam as $_code_ccam) {
+      $this->_codes_ccam[] = substr($_code_ccam, 0, 7);
     }
-    $codes_ccam_lite = implode("|", $_codes_ccam);
-
-    $this->codes_ccam = $codes_ccam_lite;
+    $this->codes_ccam = implode("|", $this->_codes_ccam);
     if ($msg = $this->store()) {
       return $msg;
     }
 
-    // Precodage des actes NGAP
+    // Precodage des actes NGAP avec information sérialisée complète
     $this->_tokens_ngap = $tarif->codes_ngap;
     if ($msg = $this->precodeNGAP()){
       return $msg;
     }  
 
-    $this->codes_ccam = $codes_ccam_full;
-    // Precodage des actes CCAM
+    $this->codes_ccam = $tarif->codes_ccam;
+    // Precodage des actes CCAM avec information sérialisée complète
     if ($msg = $this->precodeCCAM()){
       return $msg;
     }  
