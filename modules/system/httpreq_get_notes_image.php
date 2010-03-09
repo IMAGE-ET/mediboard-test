@@ -13,7 +13,9 @@ $object_guid = CValue::get("object_guid");
 if (!$object_guid) return;
 
 $object = CMbObject::loadFromGuid($object_guid);
-$object->loadRefsNotes(PERM_READ);
+if ($object->_id) {
+  $object->loadRefsNotes(PERM_READ);
+}
 
 // Création du template
 $smarty = new CSmartyDP();

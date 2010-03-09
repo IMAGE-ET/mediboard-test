@@ -711,14 +711,14 @@ class CMbObject {
    */
   static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
-    if ($class && $id) {
+    if ($class) {
 	    $object = new $class;
 	    
-      if ($cached) {
-        return $object->getCached($id);
-      }
-
-	    return $object->load($id);
+			if ($id) {
+        return $cached ? $object->getCached($id) : $object->load($id);
+			}
+			
+			return $object;
     }
   }
   
