@@ -1084,4 +1084,14 @@ $locales['CProductEndowmentItem.one'] = 'dotation de produit';
 $locales['mod-dPstock-tab-vw_idx_endowment'] = 'Dotations';
 $locales['CProductEndowment-back-endowment_items'] = 'Produits';
 $locales['CProductEndowment-back-endowment_items.empty'] = '';
+$locales['CProductStockLocation-back-'] = '';
+$locales['CProductStockLocation-back-.empty'] = '';
+$locales['config-dPstock-CProduct-pagination_size'] = '';
+$locales['config-dPstock-CProduct-pagination_size-desc'] = '';
+$locales['config-dPstock-CProductReference-pagination_size'] = '';
+$locales['config-dPstock-CProductReference-pagination_size-desc'] = '';
+$locales['config-dPstock-CProductStockGroup-pagination_size'] = '';
+$locales['config-dPstock-CProductStockGroup-pagination_size-desc'] = '';
+$locales['config-dPstock-CProductStockService-pagination_size'] = '';
+$locales['config-dPstock-CProductStockService-pagination_size-desc'] = '';
 ?>

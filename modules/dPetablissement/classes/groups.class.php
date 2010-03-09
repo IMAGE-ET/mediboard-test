@@ -38,6 +38,7 @@ class CGroups extends CMbObject {
   var $_ref_dmi_categories = null;
   var $_ref_services = null;
   var $_ref_pharmacie = null;
+  var $_ref_service_urgences = null;
   
   static $_ref_current = null;
   
@@ -172,6 +173,10 @@ class CGroups extends CMbObject {
 
   function loadRefPharmacie(){
     return $this->_ref_pharmacie = $this->loadFwdRef("pharmacie_id");
+  }
+
+  function loadRefServiceUrgences(){
+    return $this->_ref_service_urgences = $this->loadFwdRef("service_urgences_id");
   }
   
   /**

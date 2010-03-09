@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
+global $can, $m, $g;
 $can->needsEdit();
 
 $service_id          = CValue::getOrSession('service_id');
@@ -22,6 +22,14 @@ $keywords            = CValue::getOrSession('keywords');
 $service = new CService();
 $list_services = $service->loadGroupList();
 
+if ($m == "dPurgences") {
+  foreach($list_services as $_id => $_service) {
+    if (!$_service->urgence) {
+      unset($list_services[$_id]);
+    }
+  } 
+}
+
 $date = mbDate();
 $delivrance = new CProductDelivery();
 $date_min = CValue::getOrSession('_date_min', $date);
@@ -34,7 +42,7 @@ $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/soins");
 
 $smarty->assign('service_id',    $service_id);
 $smarty->assign('list_services', $list_services);

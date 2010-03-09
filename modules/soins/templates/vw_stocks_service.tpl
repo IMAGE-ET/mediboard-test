@@ -58,7 +58,7 @@ Main.add(function () {
 </script>
 
 <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
-  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="m" value="soins" />
   <input type="hidden" name="start" value="{{$start}}" onchange="refreshLists()" />
   <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshLists()"/>
   <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshLists()"/>
@@ -71,11 +71,16 @@ Main.add(function () {
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
       <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
       <td>
-        <select name="service_id" onchange="$V(this.form.start, 0); $V(this.form.endowment_id, ''); refreshOrders()">
-        {{foreach from=$list_services item=curr_service}}
-          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
-        {{/foreach}}
-        </select>
+        {{if $list_services|@count > 1}}
+          <select name="service_id" onchange="$V(this.form.start, 0); $V(this.form.endowment_id, ''); refreshOrders()">
+          {{foreach from=$list_services item=curr_service}}
+            <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+          {{/foreach}}
+          </select>
+        {{else}}
+          {{assign var=_service value=$list_services|@reset}}
+          <input type="hidden" name="service_id" value="{{$_service->_id}}" />
+        {{/if}}
       </td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>
