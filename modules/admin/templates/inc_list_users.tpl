@@ -15,7 +15,7 @@
   
 <table class="form">
   <tr>
-    <th class="category" colspan="4">Recherche d'un utilisateur</th>
+    <th class="title" colspan="4">Recherche d'un utilisateur</th>
   </tr>
   
   <tr>

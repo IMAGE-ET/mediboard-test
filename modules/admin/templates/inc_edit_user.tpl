@@ -18,8 +18,11 @@
   <tr>
     {{if $user->_id}}
     <th class="title modify" colspan="2">
-      Utilisateur : {{$user->_view}}
-      {{mb_include module=system template=inc_object_history object=$user}}
+    	{{assign var=object value=$user}}
+      {{mb_include module=system template=inc_object_idsante400}}
+      {{mb_include module=system template=inc_object_history}}
+      {{mb_include module=system template=inc_object_notes}}
+      Utilisateur '{{$user}}'
     {{else}}
     <th class="title" colspan="2">
       Création d'utilisateur
