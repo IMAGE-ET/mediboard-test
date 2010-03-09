@@ -8,7 +8,7 @@
   <table class="form">
     {{if !$dialog}}
     <tr>
-      <th class="category" colspan="10">{{$dPconfig.company_name}}</th>
+      <th class="title" colspan="10">{{$dPconfig.company_name}}</th>
     </tr>
     <tr>
       <td class="logo" colspan="10">
