@@ -17,69 +17,71 @@ class CMediusers extends CMbObject {
   var $user_id = null;
 
   // DB Fields
-  var $remote        = null;
-  var $adeli         = null;
-  var $rpps          = null;
-  var $titres        = null;
-  var $commentaires  = null;
-  var $actif         = null;
-  var $deb_activite  = null;
-  var $fin_activite  = null;
-  var $compte        = null;
-  var $banque_id     = null;
+  var $remote                 = null;
+  var $adeli                  = null;
+  var $rpps                   = null;
+  var $titres                 = null;
+  var $commentaires           = null;
+  var $actif                  = null;
+  var $deb_activite           = null;
+  var $fin_activite           = null;
+  var $compte                 = null;
+  var $banque_id              = null;
 
   // DB References
-  var $function_id   = null;
-  var $discipline_id = null;
-  var $spec_cpam_id  = null;
+  var $function_id            = null;
+  var $discipline_id          = null;
+  var $spec_cpam_id           = null;
+  
+  var $code_intervenant_cdarr = null;
 
   // dotProject user fields
-  var $_user_type       = null;
-  var $_user_username   = null;
-  var $_user_password   = null;
-  var $_user_password2  = null;
-  var $_user_first_name = null;
-  var $_user_last_name  = null;
-  var $_user_email      = null;
-  var $_user_phone      = null;
-  var $_user_adresse    = null;
-  var $_user_cp         = null;
-  var $_user_ville      = null;
-  var $_user_last_login = null;
-  var $_user_template   = null;
+  var $_user_type             = null;
+  var $_user_username         = null;
+  var $_user_password         = null;
+  var $_user_password2        = null;
+  var $_user_first_name       = null;
+  var $_user_last_name        = null;
+  var $_user_email            = null;
+  var $_user_phone            = null;
+  var $_user_adresse          = null;
+  var $_user_cp               = null;
+  var $_user_ville            = null;
+  var $_user_last_login       = null;
+  var $_user_template         = null;
 
   // Other fields
-  var $_profile_id           = null;
-  var $_is_praticien         = null;
-  var $_is_secretaire        = null;
-  var $_is_anesth            = null;
-  var $_is_infirmiere        = null;
-  var $_user_password_weak   = null;
-  var $_user_password_strong = null;
-  var $_basic_info = null;
-   var $_is_urgentiste       = null;
+  var $_profile_id            = null;
+  var $_is_praticien          = null;
+  var $_is_secretaire         = null;
+  var $_is_anesth             = null;
+  var $_is_infirmiere         = null;
+  var $_user_password_weak    = null;
+  var $_user_password_strong  = null;
+  var $_basic_info            = null;
+   var $_is_urgentiste        = null;
   
   // Distant fields
-  var $_group_id = null;
+  var $_group_id              = null;
 
   // CPS
-  var $_bind_cps = null;
-  var $_id_cps   = null;
+  var $_bind_cps              = null;
+  var $_id_cps                = null;
 
   // Object references
-  var $_ref_banque              = null;
-  var $_ref_function            = null;
-  var $_ref_discipline          = null;
-  var $_ref_profile             = null;
-  var $_ref_user                = null;
-  var $_ref_packs               = array();
-  var $_ref_protocoles          = array();
+  var $_ref_banque            = null;
+  var $_ref_function          = null;
+  var $_ref_discipline        = null;
+  var $_ref_profile           = null;
+  var $_ref_user              = null;
+  var $_ref_packs             = array();
+  var $_ref_protocoles        = array();
   
   // Object references per day
-  var $_ref_plages = null;
-	var $_ref_plages_vacances = null;
-  var $_ref_urgences = null;
-  var $_ref_deplacees = null;
+  var $_ref_plages            = null;
+	var $_ref_plages_vacances   = null;
+  var $_ref_urgences          = null;
+  var $_ref_deplacees         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -94,42 +96,44 @@ class CMediusers extends CMbObject {
 
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
-    $specs["user_id"]          = "ref class|CUser seekable show|0";
+    $specs["user_id"]                = "ref class|CUser seekable show|0";
     
-    $specs["remote"]           = "bool default|1 show|0";
-    $specs["adeli"]            = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
-    $specs["rpps"]             = "numchar length|11 confidential mask|99999999999 control|luhn";
-    $specs["function_id"]      = "ref notNull class|CFunctions seekable";
-    $specs["discipline_id"]    = "ref class|CDiscipline";
-    $specs["titres"]           = "text";
-    $specs["commentaires"]     = "text";
-    $specs["actif"]            = "bool default|1";
-    $specs["deb_activite"]     = "date";
-    $specs["fin_activite"]     = "date";
-    $specs["spec_cpam_id"]     = "ref class|CSpecCPAM";
-    $specs["compte"]           = "code rib confidential mask|99999S99999S99999999999S99 show|0";
-    $specs["banque_id"]        = "ref class|CBanque show|0";
+    $specs["remote"]                 = "bool default|1 show|0";
+    $specs["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
+    $specs["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $specs["function_id"]            = "ref notNull class|CFunctions seekable";
+    $specs["discipline_id"]          = "ref class|CDiscipline";
+    $specs["titres"]                 = "text";
+    $specs["commentaires"]           = "text";
+    $specs["actif"]                  = "bool default|1";
+    $specs["deb_activite"]           = "date";
+    $specs["fin_activite"]           = "date";
+    $specs["spec_cpam_id"]           = "ref class|CSpecCPAM";
+    $specs["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
+    $specs["banque_id"]              = "ref class|CBanque show|0";
     
-    $specs["_group_id"]        = "ref notNull class|CGroups";
+    $specs["code_intervenant_cdarr"] = "str length|4";
     
-    $specs["_user_username"]   = "str notNull minLength|4 reported";
-    $specs["_user_password2"]  = "password sameAs|_user_password reported";
-    $specs["_user_first_name"] = "str reported";
-    $specs["_user_last_name"]  = "str notNull confidential reported";
-    $specs["_user_email"]      = "str confidential reported";
-    $specs["_user_phone"]      = "numchar confidential length|10 mask|$phone_number_format reported";
-    $specs["_user_adresse"]    = "str confidential reported";
-    $specs["_user_last_login"] = "dateTime reported";
-    $specs["_user_cp"]         = "num length|5 confidential reported";
-    $specs["_user_ville"]      = "str confidential reported";
-    $specs["_profile_id"]      = "ref reported class|CUser";
-    $specs["_user_type"]       = "num notNull min|0 max|20 reported";
+    $specs["_group_id"]              = "ref notNull class|CGroups";
+    
+    $specs["_user_username"]         = "str notNull minLength|4 reported";
+    $specs["_user_password2"]        = "password sameAs|_user_password reported";
+    $specs["_user_first_name"]       = "str reported";
+    $specs["_user_last_name"]        = "str notNull confidential reported";
+    $specs["_user_email"]            = "str confidential reported";
+    $specs["_user_phone"]            = "numchar confidential length|10 mask|$phone_number_format reported";
+    $specs["_user_adresse"]          = "str confidential reported";
+    $specs["_user_last_login"]       = "dateTime reported";
+    $specs["_user_cp"]               = "num length|5 confidential reported";
+    $specs["_user_ville"]            = "str confidential reported";
+    $specs["_profile_id"]            = "ref reported class|CUser";
+    $specs["_user_type"]             = "num notNull min|0 max|20 reported";
     
     // The different levels of security are stored to be usable in JS
-    $specs["_user_password_weak"]   = "password minLength|4";
-    $specs["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
+    $specs["_user_password_weak"]    = "password minLength|4";
+    $specs["_user_password_strong"]  = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
 
-    $specs["_user_password"] = $specs["_user_password_weak"]." reported";
+    $specs["_user_password"]         = $specs["_user_password_weak"]." reported";
 
     return $specs;
   }
