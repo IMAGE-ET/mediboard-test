@@ -33,16 +33,7 @@
 			<td />
 			<td>
 			<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">Edit</button>
-		  {{if $_line->debut}}
-			  A partir du {{mb_value object=$_line field="debut"}}
-			{{/if}}
-			<strong>{{$_line->_view}}</strong>
-			{{if $_line->date_arret}}
-        jusqu'au {{mb_value object=$_line field="date_arret"}}
-      {{/if}}
-			{{if $_line->commentaire}}
-			<div style="text-indent: 2em; opacity: 0.7;">{{$_line->commentaire}}</div>
-			{{/if}}
+      {{mb_include template=inc_vw_line}}
 	   </td>
     </tr>
     {{/if}}

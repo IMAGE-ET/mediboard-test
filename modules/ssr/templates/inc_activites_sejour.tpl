@@ -45,12 +45,17 @@ selectEquipement = function(equipement_id) {
 	<tr>
 		<th>Activités</th>
 		<td>
-			{{foreach from=$bilan->_activites item=_activite}}
-			{{if $bilan->$_activite}}
-	    <button id="trigger-{{$_activite}}" class="search activite" type="button" onclick="selectActivite('{{$_activite}}')">
-	    	{{mb_title object=$bilan field=$_activite}}
-			</button>
-			{{/if}}		
+			{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+			  {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+  		    {{foreach from=$_lines_by_cat.element item=_line name=category}}
+            {{if $smarty.foreach.category.first}}
+		          {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
+						  <button id="trigger-{{$category->_guid}}" class="search activite" type="button" onclick="selectActivite('{{$category->_guid}}')">
+						    {{$category}}
+						  </button>
+			      {{/if}}
+			    {{/foreach}}
+			  {{/foreach}}
 			{{/foreach}}
     </td>
 	</tr>
@@ -58,11 +63,20 @@ selectEquipement = function(equipement_id) {
 	<tr>
     <th>Détails</th>
     <td>
-      {{foreach from=$bilan->_activites item=_activite}}
-      {{if $bilan->$_activite}}
-      <div class="activite" id="activite-{{$_activite}}" style="display: none;">
-      	<strong>{{mb_value object=$bilan field=$_activite}}</strong></div>
-      {{/if}}   
+      {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+          {{foreach from=$_lines_by_cat.element item=_line name=category}}
+            {{assign var=element value=$_line->_ref_element_prescription}}
+            {{if $smarty.foreach.category.first}}
+              {{assign var=category value=$element->_ref_category_prescription}}
+				      <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
+            {{/if}}
+              {{mb_include template=inc_vw_line}}
+            {{if $smarty.foreach.category.last}}
+						  </div>
+            {{/if}}
+          {{/foreach}}
+        {{/foreach}}
       {{/foreach}}
     </td>
   </tr>

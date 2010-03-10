@@ -8,11 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkEdit();
 
-$patient = new CPatient;
-$patient->load(CValue::get("patient_id"));
+$sejour = new CSejour;
+$sejour->load(CValue::get("sejour_id"));
+$sejour->loadRefPatient();
+
+$patient = $sejour->_ref_patient;
 
 $planning = new CPlanningWeek;
 $planning->title = "Planning du patient '$patient->_view'";

@@ -30,8 +30,16 @@ Main.add(Control.Tabs.create.curry('tab-sejour'));
   <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
   <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
-  <li><a href="#planification">Planification</a></li>
-  <li onmousedown="CotationRHS.refresh('{{$sejour->_id}}')"><a href="#cotation-rhs">Cotation</a></li>
+  <li onmousedown="Planification.refresh('{{$sejour->_id}}')">
+  	<a href="#planification">
+  		Planification
+		</a>
+	</li>
+  <li onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
+  	<a href="#cotation-rhs">
+  		Cotation
+		</a>
+	</li>
   {{/if}} 
 </ul>
 

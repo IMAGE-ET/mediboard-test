@@ -45,8 +45,8 @@ Repartition = {
     $V(form.sejour_id, sejour_id);
     $V(form.kine_id, kine_id);
 		onSubmitFormAjax(form, { onComplete: function() {
-      Repartition.updateKine(kine_id);
       Repartition.updateKine(former_kine_id);
+      Repartition.updateKine(kine_id);
 		} } );
 		
 	}	

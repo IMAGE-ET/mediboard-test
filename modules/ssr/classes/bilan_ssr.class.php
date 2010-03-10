@@ -59,8 +59,6 @@ class CBilanSSR extends CMbObject {
     $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
 		return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
 	}
-	
-	
 }
 
 ?>
