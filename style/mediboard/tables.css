@@ -215,7 +215,17 @@ div.tree-header {
   background-position: center top;
 }*/
 
+table.tbl td.disabled,
+table.tbl th.disabled,
+table.tbl tr:hover td.disabled,
+table.tbl tbody:hover td.disabled,
+span.disabled {
+  color: #555;
+  font-style:italic;
+}
+
 table.tbl td.error,
+table.tbl th.error,
 table.tbl tr:hover td.error,
 table.tbl tbody:hover td.error,
 span.error {
@@ -232,6 +242,7 @@ span.big-error {
 }
 
 table.tbl td.warning,
+table.tbl th.warning,
 table.tbl tr:hover td.warning,
 table.tbl tbody:hover td.warning,
 span.warning {
@@ -248,6 +259,7 @@ span.big-warning {
 }
 
 table.tbl td.ok,
+table.tbl th.ok,
 table.tbl tr:hover td.ok,
 table.tbl tbody:hover td.ok,
 span.ok {

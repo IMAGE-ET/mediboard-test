@@ -120,13 +120,13 @@ Main.add( function(){
     <th style="width: 1%"></th>
     <th>{{mb_title object=$rhs_line field=code_activite_cdarr}}</th>
     <th>{{mb_title object=$rhs_line field=executant_id}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_mon}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_tue}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_wed}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_thu}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_fri}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_sat}}</th>
-    <th style="width: 1%">{{mb_title object=$rhs_line field=qty_sun}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_mon}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_mon}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_tue}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_tue}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_wed}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_wed}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_thu}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_thu}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_fri}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_fri}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_sat}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_sat}}</th>
+    <th style="width: 1%" {{if !$rhs->_in_bounds_sun}}class="disabled"{{/if}}>{{mb_title object=$rhs_line field=qty_sun}}</th>
   </tr>
   {{foreach from=$rhs->_back.lines item=_line name=backlines}}
   {{assign var=executant value=$_line->_fwd.executant_id}}
@@ -159,7 +159,7 @@ Main.add( function(){
       <br />
       <small>{{$_line->_ref_code_intervenant_cdarr->_view}}</small>
     </td>
-    <td class="button {{if $_line->qty_mon}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_mon}}disabled{{elseif $_line->qty_mon}}ok{{/if}}">
       {{if $rhs->_in_bounds_mon}}
       <form name="chg-mon-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_mon');">
       <input type="hidden" name="m" value="ssr" />
@@ -173,10 +173,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_mon form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_mon}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_tue}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_tue}}disabled{{elseif $_line->qty_tue}}ok{{/if}}">
       {{if $rhs->_in_bounds_tue}}
       <form name="chg-tue-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_tue');">
       <input type="hidden" name="m" value="ssr" />
@@ -190,10 +190,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_tue form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_tue}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_wed}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_wed}}disabled{{elseif $_line->qty_wed}}ok{{/if}}">
       {{if $rhs->_in_bounds_wed}}
       <form name="chg-wed-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_wed');">
       <input type="hidden" name="m" value="ssr" />
@@ -207,10 +207,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_wed form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_wed}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_thu}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_thu}}disabled{{elseif $_line->qty_thu}}ok{{/if}}">
       {{if $rhs->_in_bounds_thu}}
       <form name="chg-thu-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_thu');">
       <input type="hidden" name="m" value="ssr" />
@@ -224,10 +224,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_thu form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_thu}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_fri}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_fri}}disabled{{elseif $_line->qty_fri}}ok{{/if}}">
       {{if $rhs->_in_bounds_fri}}
       <form name="chg-fri-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_fri');">
       <input type="hidden" name="m" value="ssr" />
@@ -241,10 +241,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_fri form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_fri}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_sat}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_sat}}disabled{{elseif $_line->qty_sat}}ok{{/if}}">
       {{if $rhs->_in_bounds_sat}}
       <form name="chg-sat-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_sat');">
       <input type="hidden" name="m" value="ssr" />
@@ -258,10 +258,10 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_sat form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_sat}}
       {{/if}}
     </td>
-    <td class="button {{if $_line->qty_sun}}ok{{/if}}">
+    <td class="button {{if $rhs->_in_bounds_sun}}disabled{{elseif $_line->qty_sun}}ok{{/if}}">
       {{if $rhs->_in_bounds_sun}}
       <form name="chg-sun-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_sun');">
       <input type="hidden" name="m" value="ssr" />
@@ -275,7 +275,7 @@ Main.add( function(){
       {{mb_field object=$_line field=qty_sun form=$qty_form onchange="this.form.onsubmit()" tabindex="$numsemaine$indexforeach$day"}}
       </form>
       {{else}}
-      -
+      {{$_line->qty_sun}}
       {{/if}}
     </td>
   </tr>
