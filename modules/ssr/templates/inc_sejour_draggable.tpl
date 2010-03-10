@@ -9,7 +9,12 @@
 *}}
 
 <tr>
-	<td class="text" style="border-bottom: 1px solid #aaa;">
+	<td class="text {{if $sejour->annule}}ssr_annule
+                  {{elseif !$sejour->entree_reelle}}ssr_non_debute
+                  {{elseif $sejour->sortie_reelle}}ssr_fini 
+                  {{/if}}
+                  style="border-bottom: 1px solid #aaa;">
+                   
 		<div class="draggable" id="{{$sejour->_guid}}">
 		<script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
 		
