@@ -89,7 +89,7 @@ Main.add(function(){
     <th class="disabled">disabled</th>
   </tr>
   <tr >
-    <td></td>
+    <td class="highlight">highlight</td>
     <td class="ok">ok</td>
     <td class="warning">warning</td>
     <td class="error">error</td>
