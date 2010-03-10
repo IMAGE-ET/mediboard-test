@@ -23,6 +23,8 @@ class CCategoryPrescription extends CMbObject {
   var $_ref_elements_prescription = null;
 	var $_count_elements_prescription = null;
   
+	static $chapitres_elt = array('anapath','biologie','imagerie','consult','kine','soin','dm','dmi');
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'category_prescription';
@@ -32,12 +34,21 @@ class CCategoryPrescription extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["chapitre"]    = "enum notNull list|anapath|biologie|imagerie|consult|kine|soin|dm|dmi";
+    //$specs["chapitre"]    = "enum notNull list|".implode('|',self::$chapitres_elt);
     $specs["nom"]         = "str notNull seekable";
     $specs["description"] = "text";
     $specs["header"]      = "text";
     $specs["group_id"]    = "ref class|CGroups";
-    return $specs;
+		
+		$_chapitres = array();
+		$conf_presc = CAppUI::conf("dPprescription CPrescription");
+		foreach(self::$chapitres_elt as $_chapitre){
+			if($conf_presc["show_chapter_$_chapitre"]){
+				$_chapitres[] = $_chapitre;
+			}
+		}
+		$specs["chapitre"]  = "enum notNull list|".implode('|', $_chapitres);
+		return $specs;
   }
   
   function getBackProps() {

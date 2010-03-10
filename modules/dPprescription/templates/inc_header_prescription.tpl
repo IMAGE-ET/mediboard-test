@@ -26,13 +26,18 @@ refreshListProtocole = function(oForm){
 }
 
 changePraticien = function(praticien_id){
-  var oFormAddLine = document.addLine;
-  var oFormAddLineCommentMed = document.addLineCommentMed;
-  var oFormAddLineElement = document.addLineElement;
-  
-  oFormAddLine.praticien_id.value = praticien_id;
-  oFormAddLineCommentMed.praticien_id.value = praticien_id;
-  oFormAddLineElement.praticien_id.value = praticien_id;
+  if(document.addLine){
+	  var oFormAddLine = document.addLine;
+    oFormAddLine.praticien_id.value = praticien_id;
+  }
+	if(document.addLineCommentMed){
+    var oFormAddLineCommentMed = document.addLineCommentMed;	
+    oFormAddLineCommentMed.praticien_id.value = praticien_id;
+	}
+	if(document.addLineElement){
+    var oFormAddLineElement = document.addLineElement;
+    oFormAddLineElement.praticien_id.value = praticien_id;
+	}
 }
 
 submitProtocole = function(){

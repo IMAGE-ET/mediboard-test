@@ -16,7 +16,8 @@ $category_id = CValue::getOrSession("category_prescription_id");
 $mode_duplication = CValue::get("mode_duplication");
 
 $category = new CCategoryPrescription();
-$_categories = $category->loadList(null, "nom");
+$where["chapitre"] = $category->_spec->ds->prepareIn($category->_specs["chapitre"]->_list);
+$_categories = $category->loadList($where, "nom");
 $countElements = array();
 
 // Chargement et classement par chapitre

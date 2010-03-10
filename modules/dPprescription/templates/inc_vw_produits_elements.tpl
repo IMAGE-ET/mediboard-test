@@ -10,6 +10,19 @@
 
 <script type="text/javascript">
 
+// Initialisation des dates pour les calendars
+var date = new Date().toDATE();
+var dDate = Date.fromDATE(date); 
+dDate.addDays(-1);
+date = dDate.toDATE();
+
+dates = {  
+  limit: {
+    start: date,
+    stop: null
+  }
+}
+
 // Initialisation des onglets
 Main.add( function(){
   window.menuTabs = Control.Tabs.create('prescription_tab_group', false);
@@ -423,20 +436,35 @@ toggleTypePerfusion = function(oForm){
 
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
+	
+	{{if $dPconfig.dPprescription.CPrescription.show_chapter_med}}
   <li><a href="#div_medicament">Médicaments</a></li>
-
+  {{/if}}
+	
 {{if $app->user_prefs.mode_readonly}}
   {{assign var=_lite value=false}}
 {{else}}
   {{assign var=_lite value=true}}
 {{/if}}
+
+
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
-  {{foreach from=$specs_chapitre->_list item=_chapitre}}
+  {{foreach from=$specs_chapitre->_list item=_chapitre name="foreach_chapitres"}}
   
-  {{if !($mode_protocole && $_chapitre == "dmi")}}
-  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
-  {{/if}}
+		  {{if !$dPconfig.dPprescription.CPrescription.show_chapter_med && $smarty.foreach.foreach_chapitres.first}}
+		  <script type="text/javascript">
+        window['{{$_chapitre}}Loaded'] = false;
+				Main.add( function(){
+				  refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');
+				} )
+		  </script>
+			{{/if}}
+			
+			{{if !($mode_protocole && $_chapitre == "dmi")}}
+		  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+		  {{/if}}
+		
   
   {{/foreach}}
 {{/if}}
@@ -445,6 +473,7 @@ toggleTypePerfusion = function(oForm){
 <hr class="control_tabs" />
 
 <!-- Declaration des divs -->
+{{if $dPconfig.dPprescription.CPrescription.show_chapter_med}}
 <div id="div_medicament" style="display:none;">
   {{if $mode_pack}}
     {{include file="../../dPprescription/templates/inc_div_medicament_short.tpl"}}
@@ -452,15 +481,16 @@ toggleTypePerfusion = function(oForm){
     {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
   {{/if}}
 </div>
+{{/if}}
 
 {{if !$mode_pharma}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}
     {{if !($mode_protocole && $_chapitre == "dmi")}}
-	    <script type="text/javascript">
-	    window['{{$_chapitre}}Loaded'] = false;
-	    Main.add( function(){
-	      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$_chapitre}}{{else}}0{{/if}}');
-	    });
+		  <script type="text/javascript">
+		    window['{{$_chapitre}}Loaded'] = false;
+		    Main.add( function(){
+		      Prescription.refreshTabHeader('div_{{$_chapitre}}','{{$prescription->_counts_by_chapitre.$_chapitre}}','{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.$_chapitre}}{{else}}0{{/if}}');
+		    });
 	    </script>
 	    <div id="div_{{$_chapitre}}" style="display:none;">
 	    {{if $mode_pack}}

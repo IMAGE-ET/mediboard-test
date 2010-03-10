@@ -10,20 +10,6 @@
 
 <script type="text/javascript">
 
-// Initialisation des dates pour les calendars
-var date = new Date().toDATE();
-var dDate = Date.fromDATE(date); 
-dDate.addDays(-1);
-date = dDate.toDATE();
-
-dates = {  
-  limit: {
-    start: date,
-    stop: null
-  }
-}
-
-
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){

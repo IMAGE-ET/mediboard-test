@@ -60,6 +60,20 @@ function updateUCD(){
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
 		<tr>
       <th class="title" colspan="2">
+        Chapitres visibles dans la prescription
+      </th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool var=show_chapter_med}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_anapath}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_biologie}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_imagerie}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_consult}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_kine}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_soin}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_dm}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_dmi}}
+		<tr>
+      <th class="title" colspan="2">
         Droits infirmiers sur la prescription
       </th>
     </tr>
@@ -80,6 +94,9 @@ function updateUCD(){
 	      </label>    
 	    </th>
 	  </tr>
+		
+		
+		
 	  <tr>  
 	    <td colspan="2" style="text-align: center">
 	      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
