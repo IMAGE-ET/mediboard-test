@@ -27,7 +27,7 @@ class CProductStock extends CMbObject {
   var $_optimum                 = null;
   var $_max                     = null;
   // In which part of the graph the quantity is
-  var $_zone                    = null;
+  var $_zone                    = 0;
   
   var $_package_quantity        = null; // The number of packages
   var $_package_mod             = null; // The modulus of the quantity
@@ -120,7 +120,7 @@ class CProductStock extends CMbObject {
   }
 
   function loadRefsFwd(){
-    $this->_ref_product = $this->loadFwdRef("product_id", true);
+    $this->_ref_product = $this->loadFwdRef("product_id", false);
   }
   
   function getPerm($permType) {
