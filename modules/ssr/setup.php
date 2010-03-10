@@ -175,8 +175,20 @@ class CSetupssr extends CSetup {
     $query = "ALTER TABLE `bilan_ssr` 
       ADD INDEX (`kine_id`);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.11");
+    $sql = "ALTER TABLE `ligne_activites_rhs` 
+              CHANGE `code_activite_cdarr` `code_activite_cdarr` CHAR (4) NOT NULL,
+              CHANGE `qty_mon` `qty_mon` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_tue` `qty_tue` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_wed` `qty_wed` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_thu` `qty_thu` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_fri` `qty_fri` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_sat` `qty_sat` TINYINT (4) UNSIGNED DEFAULT '0',
+              CHANGE `qty_sun` `qty_sun` TINYINT (4) UNSIGNED DEFAULT '0';";
+    $this->addQuery($sql);
 		
-    $this->mod_version = "0.11";
+    $this->mod_version = "0.12";
     
     // Data source query
     $query = "SELECT *
