@@ -332,6 +332,8 @@ var Url = Class.create({
           $V(input, '');
           input.fire("ui:change");
         }
+        // We blur so that focus() fires the onfocus event
+        input.blur();
         input.focus();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
