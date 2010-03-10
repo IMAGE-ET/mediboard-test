@@ -12,13 +12,12 @@
 
 <table class="main">
 	<tr>
-		<td style="width: 50%; height: 240px; padding: 0 20px;" id="planning-sejour"></td>
-    <td style="width: 50%; height: 240px; padding: 0 20px;" id="activites-sejour"></td>
+		<td style="width: 50%; padding: 5px 10px;" id="planning-sejour"></td>
+    <td style="width: 50%; padding: 5px 10px;" id="activites-sejour"></td>
 	</tr>
-	<tr><td colspan="10"><hr/></td></tr>
   <tr>
-  	<td style="width: 50%; height: 240px; padding: 0 20px;" id="planning-technicien"></td>
-    <td style="width: 50%; height: 240px; padding: 0 20px;" id="planning-equipement"></td>
+  	<td style="width: 50%; padding: 5px 10px;" id="planning-technicien"></td>
+    <td style="width: 50%; padding: 5px 10px;" id="planning-equipement"></td>
   </tr>
   
 </table>

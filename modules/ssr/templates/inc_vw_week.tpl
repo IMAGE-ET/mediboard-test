@@ -9,9 +9,22 @@
 *}}
 
 <script type="text/javascript">
+WeekPlanning = {
+  scroll  : function(guid, hour_min, hour_max) {
+	  var div = $(guid);
+    var trMin = div.down(".hour-"+hour_min);
+    var trMax = div.down(".hour-"+hour_max);
+    var posMin = trMin.offsetTop;
+    var posMax = trMax.offsetTop;
+    div.show();
+		div.setStyle({ height: posMax-posMin +"px", visibility: "visible" });
+    div.scrollTop = posMin;
+	}
+}
+	
 Main.add(function() {
-
-})
+  WeekPlanning.scroll('{{$planning->guid}}', '{{$planning->hour_min}}', '{{$planning->hour_max}}');
+} )
 </script>
 
 <table class="tbl">
@@ -19,31 +32,33 @@ Main.add(function() {
   	 <th class="title" colspan="10">{{$planning->title}}</th>
   </tr>
   <tr>
-     <th />
+     <th style="width: 1%;"><div style="width: 2em;"></div></th>
   	 {{foreach from=$planning->days item=_day}}
-     <th class="category">{{$_day|date_format:"%a %d"}}</th>
+     <th class="category" style="width: 10%;">{{$_day|date_format:"%a %d"|nl2br}}</th>
   	 {{/foreach}}
+     <th style="width: 1%;"><div style="width: 9px;"></div></th>
   </tr>
-
-  {{foreach from=$planning->hours item=_hour}}
-	{{if !$_hour}}
-	<tr>
-		<td colspan="10" style="background-color: #666;"/>
-	</tr>
-	{{else}}
-  {{foreach from=$planning->minutes item=_minute name=minutes}}
-  <tr>
-    {{if $smarty.foreach.minutes.first}} 
-    <th rowspan="{{$planning->minutes|@count}}" class="category" style="width: 1%;">
-      {{$_hour}}h
-    </th>
-    {{/if}}
-    {{foreach from=$planning->days item=_day}}
-    <td style="width: 40px; height: 4px; padding: 0;" class="segment-{{$_day}}-{{$_hour}}-{{$_minute}}">
-    </td>
-    {{/foreach}}
-  </tr>
-  {{/foreach}}
-  {{/if}}
-  {{/foreach}}
 </table>
+
+<div id="{{$planning->guid}}" style="visibility: hidden; overflow-y: scroll; overflow-x: hidden;">
+<table class="tbl">
+    {{foreach from=$planning->hours item=_hour}}
+    <tr class="hour-{{$_hour}}">
+    {{if !$_hour}}
+      <td colspan="9" style="background-color: #aaa; height: 4px;"/>
+    {{else}}
+      <th class="category" style="width: 1%;">
+			  <div style="width: 2em;">
+        {{$_hour}}h
+				</div>
+      </th>
+      {{foreach from=$planning->days item=_day}}
+      <td style="width: 10%; height: 20px; padding: 0;" class="segment-{{$_day}}-{{$_hour}}">
+      </td>
+      {{/foreach}}
+    {{/if}}
+    </tr>
+    {{/foreach}}
+</table>
+	
+</div>

@@ -8,12 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=ssr_class value=""}}
+{{if $sejour->annule == "1"}}
+{{assign var=ssr_class value=ssr_annule}}
+{{elseif !$sejour->entree_reelle}}
+{{assign var=ssr_class value=ssr_non_debute}}
+{{elseif $sejour->sortie_reelle}}
+{{assign var=ssr_class value=ssr_fini}}
+{{/if}}
 <tr>
-	<td class="text {{if $sejour->annule}}ssr_annule
-                  {{elseif !$sejour->entree_reelle}}ssr_non_debute
-                  {{elseif $sejour->sortie_reelle}}ssr_fini 
-                  {{/if}}
-                  style="border-bottom: 1px solid #aaa;">
+	<td class="text {{$ssr_class}}" style="border: 1px solid #aaa; border-width: 1px 0px;">
                    
 		<div class="draggable" id="{{$sejour->_guid}}">
 		<script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
@@ -45,7 +49,7 @@
 		
 		<br/> 
 		<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-			<strong>pour {{$sejour->_duree}}j</strong> 
+			<strong>pour {{$sejour->_sortie_relative}}j</strong> 
 		  (arrivée {{$sejour->_entree_relative}}j)
 		</span>
 		</div>

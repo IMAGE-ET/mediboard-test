@@ -18,6 +18,7 @@ $patient = $sejour->_ref_patient;
 
 $planning = new CPlanningWeek;
 $planning->title = "Planning du patient '$patient->_view'";
+$planning->guid = $sejour->_guid;
 
 // Création du template
 $smarty = new CSmartyDP();

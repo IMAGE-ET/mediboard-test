@@ -16,6 +16,7 @@ $equipement->load(CValue::get("equipement_id", 33));
 
 $planning = new CPlanningWeek;
 $planning->title = "Planning de l'équipement '$equipement->_view'";
+$planning->guid = $equipement->_guid;
 
 // Création du template
 $smarty = new CSmartyDP();

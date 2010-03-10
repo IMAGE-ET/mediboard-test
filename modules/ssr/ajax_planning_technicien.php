@@ -14,10 +14,13 @@ $can->needsRead();
 $technicien = new CTechnicien;
 $technicien->load(CValue::get("technicien_id"));
 
+// Kine
 $technicien->loadRefKine();
+$kine = $technicien->_ref_kine;
 
 $planning = new CPlanningWeek;
-$planning->title = "Planning du technicien '{$technicien->_ref_kine->_view}'";
+$planning->title = "Planning du technicien '$kine->_view'";
+$planning->guid = $kine->_guid;
 
 // Création du template
 $smarty = new CSmartyDP();
