@@ -38,7 +38,7 @@ class CSourceSOAP extends CExchangeSource {
     $this->_acquittement = $this->_args_list ? 
         call_user_func_array(array($this->_client, $evenement_name), $this->_data) : 
         $this->_client->$evenement_name($this->_data);
-        
+
     if (null == $this->_acquittement) {
       trigger_error("Acquittement non reçu.");
     }

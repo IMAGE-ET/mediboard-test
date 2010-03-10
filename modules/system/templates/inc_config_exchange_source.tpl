@@ -63,7 +63,9 @@
         {{/if}}
         <tr>
           <td id="config-source-ftp-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{mb_include module=system template=inc_config_source_ftp source=$_source_ftp}}       
+            {{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}
+              {{mb_include module=system template=inc_config_source_ftp source=$_source_ftp}}  
+            {{/if}}     
           </td>
         </tr>
       </table> 
@@ -92,7 +94,9 @@
         {{/if}}
         <tr>
           <td id="config-source-soap-{{$sourcename}}" {{if !$source->_id}}style="display:none"{{/if}}>
-            {{mb_include module=system template=inc_config_source_soap source=$_source_soap}}        
+            {{if !$source->_allowed_instances && ($source instanceof CSourceSOAP)}}
+              {{mb_include module=system template=inc_config_source_soap source=$_source_soap}}
+            {{/if}}            
           </td>
         </tr>
       </table>

@@ -24,7 +24,7 @@
       </button>
     </td>
     
-    <td class="text" id="makeInternal" />
+    <td class="text" id="makeInternal"></td>
   </tr>
 
 </table>

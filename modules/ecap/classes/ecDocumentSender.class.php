@@ -16,55 +16,20 @@ class CEcDocumentSender extends CDocumentSender {
 	  "CConsultation"  => array ("PA"),
 	  "CConsultAnesth" => array ("PA"),
   );
-
-  var $clientSOAP = null;
   
-  /**
-   * Instanciate Soap Client
-   * @return array Base SOAP params array, null on error
-   */
-  function initClientSOAP () {
-    if (!$this->clientSOAP instanceof SoapClient) {
-	    try {
-	      CMedicap::makeUrls();
-				$serviceURL = CMedicap::$urls["soap"]["documents"];
-				
-				if (!url_exists($serviceURL)) {
-				  CAppUI::stepMessage(UI_MSG_ERROR, "Serveur wep inatteignable à l'adresse : $serviceURL");
-				  return;
-				}
-				
-				$this->clientSOAP = new SoapClient("$serviceURL?WSDL");
-	    } 
-	    catch (Exception $e) {
-	      trigger_error("Instanciation du SoapClient impossible : ".$e);
-	      return;
-	    }
-    }
-	    
-    return array (
-		  "aLoginApplicatif"       => CAppUI::conf("ecap soap user"),
-		  "aPasswordApplicatif"    => CAppUI::conf("ecap soap pass"),
-		  "aTypeIdentifiantActeur" => 1,
-		  "aIdentifiantActeur"     => "pr1",
-		  "aIdClinique"            => CAppUI::conf("dPsante400 group_id"),
-	  );
-  }
-  
-  /**
-   * Instanciate Soap Client
-   * @param string $method
-   * @param array $params
-   * @return object Parsed from XML response
-   */
-  function sendSOAP($method, $params)  {
-    mbDump($params, "Final SOAP params");
-    $result = $this->clientSOAP->__call($method, $params);
-    $resultField = $method."Result";
-		$result = simplexml_load_string($result->$resultField->any);
-		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
-		mbTrace($result, "SOAP response");
-		return $result;
+  public static function getParams() {
+    $source = CExchangeSource::get("ecap_files");
+    
+    $idExt = new CIdSante400;
+    $idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
+   
+    return array(
+            "aLoginApplicatif"       => $source->user,
+            "aPasswordApplicatif"    => $source->password,
+            "aTypeIdentifiantActeur" => 1,
+            "aIdentifiantActeur"     => "pr1",
+            "aIdClinique"            => $idExt->id400,
+          );
   }
   
   static $ids = array();
@@ -149,7 +114,7 @@ class CEcDocumentSender extends CDocumentSender {
     // Chargement de la cible
     $ecObject = self::getIdFor($docItem->_ref_object, $ecTypeObjet);
     
-    if (null == $params = $this->initClientSOAP()) {
+    if (null == $params = self::getParams()) {
       return false;
     }
     
@@ -166,12 +131,10 @@ class CEcDocumentSender extends CDocumentSender {
     $params["aNomFichier"     ] = utf8_encode($docItem->_extensioned);
     $params["aFichierByte"    ] = $docItem->getContent();
     
-    // Appel SOAP
-//    $this->sendSOAP("DeposerDocument", $params));
-//    return false;
-    
-    $result = $this->clientSOAP->DeposerDocument($params);
-		$result = simplexml_load_string($result->DeposerDocumentResult->any);
+    $source = CExchangeSource::get("ecap_files");
+    $source->setData($params);
+    $source->send("DeposerDocument");
+    $result = simplexml_load_string($source->receive()->DeposerDocumentResult->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
 		if ($result->codeRetour != "0") {
 	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);
@@ -208,7 +171,7 @@ class CEcDocumentSender extends CDocumentSender {
     // Identifiant externe du patient, quelle que soit la cible
     $ecPatient = self::getPatientIdFor($docItem->_ref_object);
     
-    if (null == $params = $this->initClientSOAP()) {
+    if (null == $params = self::getParams()) {
       return false;
     }
     
@@ -219,8 +182,10 @@ class CEcDocumentSender extends CDocumentSender {
     $params["aIdPatient"        ] = $ecPatient;
     $params["aMotifInvalidation"] = "Mediboard user request";
     
-    $result = $this->clientSOAP->InvaliderDocument($params);
-		$result = simplexml_load_string($result->InvaliderDocumentResult->any);
+    $source = CExchangeSource::get("ecap_files");
+    $source->setData($params);
+    $source->send("InvaliderDocument");
+    $result = simplexml_load_string($source->receive()->InvaliderDocumentResult->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
 		if ($result->codeRetour != "0") {
 	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);

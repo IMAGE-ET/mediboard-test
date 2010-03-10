@@ -13,10 +13,15 @@ $can->needsAdmin();
 
 CMedicap::getTag();
 
+$ecap_files_source = CExchangeSource::get("ecap_files", "soap");
+$ecap_ssr_source = CExchangeSource::get("ecap_ssr", "soap");
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("paths", CMedicap::$paths);
 $smarty->assign("tags", CMedicap::$tags);
+$smarty->assign("ecap_files_source" , $ecap_files_source);
+$smarty->assign("ecap_ssr_source" , $ecap_ssr_source);
 $smarty->display("configure.tpl");
 
 ?>

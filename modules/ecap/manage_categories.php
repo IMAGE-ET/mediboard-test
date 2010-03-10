@@ -11,11 +11,6 @@
 global $can;
 $can->needsEdit();
 
-$sender = new CEcDocumentSender;
-$params = $sender->initClientSOAP();
-
-CMedicap::makeURLs();
-
 class CEcapTypeDocument {
   var $level = 0;
   var $id = null;
@@ -42,12 +37,15 @@ class CEcapTypeDocument {
 	}
 }
 
+$source = CExchangeSource::get("ecap_files");
+$params = CEcDocumentSender::getParams();
 $typesEcapByMbClass= array();
 foreach (CEcDocumentSender::$sendables as $mbClass => $typesEcapByEcObject) {
   foreach ($typesEcapByEcObject as $ecObject) {
     $params["aTypeObjet"] = $ecObject;
-    $result = $sender->clientSOAP->ListerTypeDocument($params);
-		$result = simplexml_load_string($result->ListerTypeDocumentResult->any);
+    $source->setData($params);
+    $source->send("ListerTypeDocument");
+    $result = simplexml_load_string($source->receive()->ListerTypeDocumentResult->any);
 		if ($result->codeRetour != "0") {
 		  $warning = sprintf("Erreur d'appel au service web e-Cap avec les paramètres '%s' : [%s] %s ", 
 		    http_build_query($params),

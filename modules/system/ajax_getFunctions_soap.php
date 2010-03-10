@@ -11,6 +11,13 @@
 include_once('ajax_connexion_soap.php');
 
 CAppUI::stepAjax("Liste des fonctions SOAP publiées");
-mbTrace($client->__getFunctions());
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("exchange_source", $exchange_source);
+$smarty->assign("functions", $client->__getFunctions());
+
+$smarty->display("inc_soap_functions.tpl");
 
 ?>

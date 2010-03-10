@@ -30,7 +30,7 @@ if (!CAppUI::conf('sip server')) {
     $source = CExchangeSource::get($dest_hprim->_guid);
     $source->setData(array($operation, $entier1, $entier2), true);
     $source->send("calculatorAuth");
-    $acquittement = $source->receive();
+    $result = $source->receive();
   }
   
   if (is_array($file)) {

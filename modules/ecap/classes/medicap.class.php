@@ -27,14 +27,10 @@ class CMedicap {
    * Computes URLs from module config
    */
   static function makeURLs() {
-    $soap = CAppUI::conf("ecap soap");
     $dhe = CAppUI::conf("ecap dhe");
     
     self::$urls = array (
-    "dhe" => $dhe["rooturl"] . "/InterfaceCabinets/Generique/AppelDHE.aspx",
-    "soap" => array (
-      "documents" => $soap["rooturl"] . "/GestionDocumentaire.asmx",
-      ),    
+      "dhe" => $dhe["rooturl"] . "/InterfaceCabinets/Generique/AppelDHE.aspx"    
     );
   }
 
