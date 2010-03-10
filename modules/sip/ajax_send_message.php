@@ -37,27 +37,27 @@ if (!$echange_hprim_id) {
 	  $dest_hprim->nom = $notification->destinataire;
 	  
 	  $dest_hprim->loadMatchingObject();
-
-	  if (!($client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml"))) {
-	    trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-	  }
-	  
-	  // Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
-	  if (!($acquittement = $client->evenementPatient($notification->message))) {
-	    trigger_error("Evenement patient impossible : ".$dest_hprim->url);
-	  }
-	  
-	  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-	  $domGetAcquittement->loadXML(utf8_decode($acquittement));
-    $doc_valid = $domGetAcquittement->schemaValidate();
-    if ($doc_valid) {
-    	$notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-    }
-    $notification->acquittement_valide = $doc_valid ? 1 : 0;
     
-	  $notification->date_echange = mbDateTime();
-	  $notification->acquittement = $acquittement;
-	  $notification->store();
+    if (CAppUI::conf('sip enable_send')) {
+      $source = CExchangeSource::get($dest_hprim->_guid);
+      $source->setData($notification->message);
+      $source->send("evenementPatient");
+      $acquittement = $source->receive();
+      
+      if ($acquittement) {
+        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+        $domGetAcquittement->loadXML(utf8_decode($acquittement));
+        $doc_valid = $domGetAcquittement->schemaValidate();
+        if ($doc_valid) {
+          $notification->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+        }
+        $notification->acquittement_valide = $doc_valid ? 1 : 0;
+        
+        $notification->date_echange = mbDateTime();
+        $notification->acquittement = $acquittement;
+        $notification->store();
+      }      
+    }
   }
 } else {
 	// Chargement de l'objet
@@ -67,34 +67,30 @@ if (!$echange_hprim_id) {
 	$dest_hprim = new CDestinataireHprim();
 	$dest_hprim->nom = $echange_hprim->destinataire;
 	$dest_hprim->loadMatchingObject();
-
-	if (!$client = CMbSOAPClient::make($dest_hprim->url, $dest_hprim->username, $dest_hprim->password, "hprimxml")) {
-	  trigger_error("Impossible de joindre le destinataire : ".$dest_hprim->url);
-	  CAppUI::setMsg("Impossible de joindre le destinataire", UI_MSG_ERROR);
-	}
-	
-	// Récupère le message d'acquittement après l'execution de l'enregistrement d'un evenement patient
-	if (null == $acquittement = $client->evenementPatient($echange_hprim->message)) {
-	  trigger_error("Evenement patient impossible : ".$dest_hprim->url);
-	  CAppUI::setMsg("Evenement patient impossible", UI_MSG_ERROR);
-	}
-
-  $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-  $domGetAcquittement->loadXML(utf8_decode($acquittement));
-  $doc_valid = $domGetAcquittement->schemaValidate();
-  if ($doc_valid) {
-    $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-  }
-  $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+  
+  $source = CExchangeSource::get($dest_hprim->_guid);
+  $source->setData($echange_hprim->message);
+  $source->send("evenementPatient");
+  $acquittement = $source->receive();
+  
+  if ($acquittement) {
+    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domGetAcquittement->loadXML(utf8_decode($acquittement));
+    $doc_valid = $domGetAcquittement->schemaValidate();
+    if ($doc_valid) {
+      $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+    }
+    $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+      
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->acquittement = $acquittement;
+  
+    $echange_hprim->store();
     
-	$echange_hprim->date_echange = mbDateTime();
-	$echange_hprim->acquittement = $acquittement;
-
-	$echange_hprim->store();
-	
-	CAppUI::setMsg("Message HPRIM envoyé", UI_MSG_OK);
-	
-	echo CAppUI::getMsg();
+    CAppUI::setMsg("Message HPRIM envoyé", UI_MSG_OK);
+    
+    echo CAppUI::getMsg();
+  }
 }
 
 ?>

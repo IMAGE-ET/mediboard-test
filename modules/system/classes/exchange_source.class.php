@@ -18,6 +18,7 @@ class CExchangeSource extends CMbObject {
   // Behaviour Fields
   var $_client      = null;
   var $_data        = null;
+  var $_args_list   = false;
   var $_allowed_instances = null;
   var $_wanted_type = null;
   
@@ -84,7 +85,8 @@ class CExchangeSource extends CMbObject {
     return parent::check();
   }
   
-  function setData($data) {
+  function setData($data, $argsList = false) {
+    $this->_args_list = $argsList;
     $this->_data = $data;
   }
     
