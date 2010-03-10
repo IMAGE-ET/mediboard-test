@@ -89,11 +89,11 @@ Prescription = {
     if(callback){
       oForm.callback.value = callback;
     }
-    if(!chapitre){
+    if(!chapitre || !Object.isString(chapitre)){
       var chapitre = oForm._chapitre.value;
     }
     oForm.element_prescription_id.value = element_id;
-   
+    
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){ 
         if(!callback){
