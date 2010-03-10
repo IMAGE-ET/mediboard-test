@@ -12,16 +12,18 @@ global $AppUI, $can, $m;
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-if(!$user->isPraticien()) {
-  if(!CModule::getCanDo('soins')->read && !CModule::getCanDo('dPurgences')->read && !CModule::getCanDo('dPcabinet')->edit){
-    CModule::getCanDo($m)->redirect();
-  }
+if(!$user->isPraticien() &&
+   !CModule::getCanDo('soins')->read && 
+   !CModule::getCanDo('dPurgences')->read && 
+    CModule::getCanDo('dPcabinet')->edit){
+     CModule::getCanDo($m)->redirect();
 }
 
-$context_guid = CValue::get('context_guid');
+$context_guid          = CValue::get('context_guid');
 $selected_context_guid = CValue::get('selected_context_guid', $context_guid);
-$patient_id = CValue::get('patient_id');
-$readonly = CValue::get('readonly');
+$patient_id            = CValue::get('patient_id');
+$readonly              = CValue::get('readonly');
+$selection             = CValue::get('selection', array());
 
 $context = null;
 $patient = null;
@@ -144,6 +146,10 @@ $dates = array();
 $hours = array();
 $const_ids = array();
 $i = 0;
+
+/////////////////
+// @todo: factoriser avec les parametres dispo dans CConstantesMedicales::$list_constantes
+/////////////////
 
 // Si le séjour a des constantes médicales
 if ($list_constantes) {

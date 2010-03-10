@@ -325,7 +325,7 @@ class CProductOrder extends CMbObject {
 		parent::updateFormFields();
     
     $this->completeField("received");
-
+    
     if (!$this->comments) {
       $group = CGroups::loadCurrent();
       if ($group->pharmacie_id) {
@@ -335,30 +335,31 @@ class CProductOrder extends CMbObject {
     
 		// Total
     $items_count = $this->countBackRefs("order_items");
-    $this->loadRefsFwd();
     $this->updateTotal();
+    $this->loadRefsFwd(false);
 		
 		// Status
 		$this->_status = "opened";
-		if ($this->locked) $this->_status = "locked";
+		if ($this->locked)       $this->_status = "locked";
     if ($this->date_ordered) $this->_status = "ordered";
-    if ($this->received) $this->_status = "received";
-    if ($this->cancelled) $this->_status = "cancelled";
+    if ($this->received)     $this->_status = "received";
+    if ($this->cancelled)    $this->_status = "cancelled";
 		
     // View
 		$this->_view  = "$this->order_number - ";
-		$this->_view .= $this->societe_id ? "$this->_ref_societe - " : "";
-		$this->_view .= "$items_count article".(($items_count > 1) ? 's' : '');
+		$this->_view .= $this->societe_id ? $this->_ref_societe : "";
+    
+    /*
+		$this->_view .= " - $items_count article".(($items_count > 1) ? 's' : '');
+    if ($this->_total !== null) {
+      $this->_view .= ", total = $this->_total ".CAppUI::conf("currency_symbol");
+    }*/
     
     $customer_code = $this->societe_id ? $this->_ref_societe->customer_code : null;
     if (!$customer_code) {
       $customer_code = "-";
     }
     $this->_customer_code = $customer_code;
-    
-    if ($this->_total !== null) {
-      $this->_view .= ", total = $this->_total ".CAppUI::conf("currency_symbol");
-    }
 	}
   
   function updateTotal(){
@@ -450,9 +451,9 @@ class CProductOrder extends CMbObject {
 		$this->loadRefsOrderItems();
 	}
 
-	function loadRefsFwd(){
-    $this->_ref_societe = $this->loadFwdRef("societe_id", true);
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
+	function loadRefsFwd($cache = true){
+    $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
+    $this->_ref_group = $this->loadFwdRef("group_id", $cache);
 	}
 	
 	function delete() {

@@ -83,6 +83,9 @@
       <table class="main tbl">
         <tr>
           <th class="category" colspan="10">
+            <button style="float: right;" class="print notext" onclick="new Url('dPstock','print_stock_location').addParam('stock_location_id','{{$stock_location->_id}}').popup()">
+              {{tr}}Print{{/tr}}
+            </button>
             Stocks à cet emplacement
           </th>
         </tr>

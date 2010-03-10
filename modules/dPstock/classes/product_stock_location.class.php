@@ -96,6 +96,13 @@ class CProductStockLocation extends CMbObject {
         $this->position = 1;
     }
 	}
+  
+  function loadRefsStocks(){
+    $ljoin = array(
+      "product" => "product_stock_group.product_id = product.product_id",
+    );
+    return $this->loadBackRefs("group_stocks", "product.name", null, null, $ljoin);
+  }
 
   function loadRefsFwd(){
     $this->_ref_group = $this->loadFwdRef("group_id", true);

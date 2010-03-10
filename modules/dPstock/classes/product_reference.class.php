@@ -70,7 +70,7 @@ class CProductReference extends CMbObject {
 
 	function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefProduct();
+    $this->loadRefProduct(false);
     
     $this->completeField("quantity", "price");
     
@@ -84,17 +84,17 @@ class CProductReference extends CMbObject {
     $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
   }
 
-  function loadRefsFwd(){
-    $this->loadRefProduct();
-    $this->loadRefSociete();
+  function loadRefsFwd($cache = true){
+    $this->loadRefProduct($cache);
+    $this->loadRefSociete($cache);
   }
   
-  function loadRefProduct(){
-    return $this->_ref_product = $this->loadFwdRef("product_id", true);
+  function loadRefProduct($cache = true){
+    return $this->_ref_product = $this->loadFwdRef("product_id", $cache);
   }
   
-  function loadRefSociete(){
-    return $this->_ref_societe = $this->loadFwdRef("societe_id", true);
+  function loadRefSociete($cache = true){
+    return $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
   }
   
   function loadRefsObjects() {

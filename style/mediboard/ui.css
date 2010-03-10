@@ -913,6 +913,10 @@ table.active {
   background: url(images/buttons/button.png) center center repeat-x;
 }
 
+.pagination.narrow .page {
+  padding: 1px 2px;
+}
+
 .pagination .page:hover {
   text-decoration: none;
   background-image: url(images/buttons/button-over.png);
