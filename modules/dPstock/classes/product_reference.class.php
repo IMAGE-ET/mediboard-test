@@ -74,7 +74,7 @@ class CProductReference extends CMbObject {
     
     $this->completeField("quantity", "price");
     
-    $this->_view = "$this->_ref_product (par $this->quantity)";
+    $this->_view = "$this->_ref_product->_view (par $this->quantity)";
     
     if ($this->quantity) {
       $this->_cond_price = round($this->price / $this->quantity, 5);

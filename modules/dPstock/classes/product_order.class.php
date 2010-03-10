@@ -145,7 +145,6 @@ class CProductOrder extends CMbObject {
   	
   	// for every stock
     foreach($list_stocks as $stock) {
-    	$stock->updateFormFields();
     	$stock->loadRefsFwd();
     	
     	// if the stock is in the "red" or "orange" zone
@@ -336,7 +335,7 @@ class CProductOrder extends CMbObject {
 		// Total
     $items_count = $this->countBackRefs("order_items");
     $this->updateTotal();
-    $this->loadRefsFwd(false);
+    $this->loadRefsFwd();
 		
 		// Status
 		$this->_status = "opened";
@@ -347,7 +346,7 @@ class CProductOrder extends CMbObject {
 		
     // View
 		$this->_view  = "$this->order_number - ";
-		$this->_view .= $this->societe_id ? $this->_ref_societe : "";
+		$this->_view .= $this->societe_id ? $this->_ref_societe->_view : "";
     
     /*
 		$this->_view .= " - $items_count article".(($items_count > 1) ? 's' : '');

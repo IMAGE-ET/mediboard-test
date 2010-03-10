@@ -82,7 +82,6 @@ class CProductStock extends CMbObject {
 	function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_ref_product->updateFormFields();
     $this->_view = $this->_ref_product->_view;
     
     $units = $this->_ref_product->_unit_quantity ? $this->_ref_product->_unit_quantity : 1;
@@ -120,13 +119,11 @@ class CProductStock extends CMbObject {
   }
 
   function loadRefsFwd(){
-    $this->_ref_product = $this->loadFwdRef("product_id", false);
+    $this->_ref_product = $this->loadFwdRef("product_id", true);
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_product) {
-      $this->loadRefsFwd();
-    }
+    $this->loadRefsFwd();
     return $this->_ref_product->getPerm($permType);
   }
 }

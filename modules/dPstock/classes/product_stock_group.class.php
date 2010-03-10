@@ -21,10 +21,10 @@ class CProductStockGroup extends CProductStock {
   //    Multiple
   var $_ref_deliveries          = null;
   
-  var $_zone_future             = null;
-  var $_ordered_count           = null;
+  var $_zone_future             = 0;
+  var $_ordered_count           = 0;
   var $_ordered_last            = null;
-  var $_orders                  = null;
+  var $_orders                  = array();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -62,7 +62,6 @@ class CProductStockGroup extends CProductStock {
     $this->_orders = array();
     
     foreach ($list_orders as $order) {
-      $order->updateFormFields();
       if (!$order->_received && !$order->cancelled) {
         $done = false;
         foreach ($order->_ref_order_items as $item) {
@@ -119,9 +118,7 @@ class CProductStockGroup extends CProductStock {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_group) {
-      $this->loadRefsFwd();
-    }
+    $this->loadRefsFwd();
     return parent::getPerm($permType) && $this->_ref_group->getPerm($permType);
   }
   
