@@ -122,7 +122,8 @@ class CSejour extends CCodable {
   var $_ref_numdos            = null;
   var $_ref_prescripteurs     = null;
   var $_ref_adresse_par_prat  = null;
-  
+  var $_ref_prescription_sejour = null;
+	
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
@@ -898,6 +899,14 @@ class CSejour extends CCodable {
     }
   }
   
+	function loadRefPrescriptionSejour(){
+		$this->_ref_prescription_sejour = new CPrescription();
+		$this->_ref_prescription_sejour->object_class = "CSejour";
+		$this->_ref_prescription_sejour->object_id = $this->_id;
+    $this->_ref_prescription_sejour->type = "sejour";
+		$this->_ref_prescription_sejour->loadMatchingObject();
+	}
+	
   function loadRefsPrescripteurs(){
     $prescription_sejour = new CPrescription();
     $this->loadRefsPrescriptions();
