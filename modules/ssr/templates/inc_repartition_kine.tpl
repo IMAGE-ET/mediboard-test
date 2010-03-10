@@ -11,16 +11,16 @@
 <table class="tbl">
 
   <tr>
-    <th id="kine-{{$_technicien->kine_id}}">
-      <script type="text/javascript">Repartition.droppableKine('{{$_technicien->kine_id}}')</script>
+    <th id="kine-{{$kine_id}}">
+      <script type="text/javascript">
+        Repartition.registerKine('{{$kine_id}}')
+			</script>
     	{{$_technicien}}
 		</th>
   </tr>
 	
-  <tr>
-    <td>
-      <em>{{tr}}Aucun patient affecté{{/tr}}</em>
-    </td>
-  </tr>	
+	<tbody id="sejours-kine-{{$kine_id}}">
+
+	</tbody>
 
 </table>

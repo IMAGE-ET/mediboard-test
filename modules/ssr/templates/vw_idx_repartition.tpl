@@ -24,21 +24,18 @@
 {{mb_label object=$bilan field=kine_id}}
 {{mb_field object=$bilan field=kine_id}}
 
-
 </form>
 
 <table class="main">
   {{foreach from=$plateaux item=_plateau name=plateaux}}
   <tr>
-    <td id="repartition-plateau-{{$_plateau->_id}}">
-      <script type="text/javascript">Repartition.registerPlateau('{{$_plateau->_id}}')</script>
-      <div class="small-info">{{$_plateau}}</div>
+    <td>
+    	{{mb_include template=inc_repartition_plateau plateau=$_plateau}}
     </td>
 
     {{if $smarty.foreach.plateaux.first}}
-    <td id="sejours_non_repartis" rowspan="100" style="width: 200px;">
-      <script type="text/javascript">Repartition.registerSejours()</script>
-      <div class="small-info">Séjours non répartis</div>
+    <td rowspan="100" style="width: 150px;">
+      {{mb_include template=inc_sejours_non_affectes}}
     </td>
     {{/if}}
   </tr>

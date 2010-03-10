@@ -87,14 +87,22 @@ a.DESC:hover{
   margin-left: 0px;
 }
 
+/* Drag'n'Drop */ 
+.dropover {
+  outline: 4px solid #f88;
+}
+
+/* Should not be used */
 div.dragged {
   background-color: #ffc;
   border: 1px solid black;
   padding: 2px 10px;
 }
 
-div.draggable {
+.draggable:hover {
   cursor: move;
+	background-color: #fff;
+  outline: 4px solid #8f8;
 }
 
 /* tabbed boxes */
@@ -222,11 +230,6 @@ table.chambrecollapse tr.lit td,
 table.chambreexpand tr.lit td {
   background: #ccc;
   color: #000;
-}
-
-table.chambrecollapse tr.litselected td,
-table.chambreexpand tr.litselected td {
-  background: #f00;
 }
 
 table.chambrecollapse tr.patient td,

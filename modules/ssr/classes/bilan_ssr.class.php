@@ -41,12 +41,26 @@ class CBilanSSR extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["sejour_id"] = "ref notNull class|CSejour";
+    $specs["sejour_id"] = "ref notNull class|CSejour show|0";
 		$specs["kine_id"]   = "ref class|CMediusers";
     $specs["entree"] = "text helped";
     $specs["sortie"] = "text helped";
     return $specs;
   }
+	
+	/**
+	 * Load Sejour for kine at a date
+	 **/ 
+	static function loadSejoursSSRfor($kine_id, $date) {
+		$group = CGroups::loadCurrent();
+    $where["type"] = "= 'ssr'";
+    $where["group_id"] = "= '$group->_id'";
+		$where["kine_id"] = $kine_id ? "= '$kine_id'" : "IS NULL";
+    $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
+		return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
+	}
+	
+	
 }
 
 ?>

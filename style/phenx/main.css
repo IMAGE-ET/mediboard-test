@@ -1497,30 +1497,37 @@ th.chambre img {
   margin: 0 1px;
 }
 
-table.chambrecollapse tr.litdispo td,table.chambreexpand tr.litdispo td {
+table.chambrecollapse tr.litdispo td,
+table.chambreexpand tr.litdispo td {
   background: #dfd;
 }
 
-table.chambrecollapse tr.lit td,table.chambreexpand tr.lit td {
+table.chambrecollapse tr.lit td,
+table.chambreexpand tr.lit td {
   background: #ccc;
   color: #000;
 }
 
-table.chambrecollapse tr.litselected td,table.chambreexpand tr.litselected td {
+table.chambrecollapse tr.dropover td,
+table.chambreexpand tr.dropover td {
   background: #f00;
 }
 
-table.chambrecollapse tr.patient td,table.chambreexpand tr.patient td {
+table.chambrecollapse tr.patient td,
+table.chambreexpand tr.patient td {
   background: #eee;
   color: #000;
 }
 
-table.chambrecollapse tr.patient img,table.chambreexpand tr.patient img {
+table.chambrecollapse tr.patient img,
+table.chambreexpand tr.patient img {
   float: left;
   margin-right: 2px;
 }
 
-table.chambrecollapse tr.lit,table.chambrecollapse tr.litdispo,table.chambrecollapse tr.dates {
+table.chambrecollapse tr.lit,
+table.chambrecollapse tr.litdispo,
+table.chambrecollapse tr.dates {
   display: none;
 }
 
@@ -1534,24 +1541,36 @@ table.chambreexpand tr.dates {
 }
 
 /* Operations */
-table.operationcollapse,table.operationexpand,table.sejourcollapse,table.sejourexpand {
+table.operationcollapse,
+table.operationexpand,
+table.sejourcollapse,
+table.sejourexpand {
   width: 100%;
   background: #fff;
   border-spacing: 0px;
   border-collapse: collapse;
 }
 
-table.operationcollapse td,table.operationexpand td,table.sejourcollapse td,table.sejourexpand td {
+table.operationcollapse td,
+table.operationexpand td,
+table.sejourcollapse td,
+table.sejourexpand td {
   border: 1px solid #555;
   padding: 0 2px;
   color: #000;
 }
 
-table.operationcollapse em,table.operationexpand em,table.sejourcollapse em,table.sejourexpand em {
+table.operationcollapse em,
+table.operationexpand em,
+table.sejourcollapse em,
+table.sejourexpand em {
   font-weight: bold;
 }
 
-table.operationcollapse td.selectoperation,table.operationexpand td.selectsejour,table.sejourcollapse td.selectsejour,table.sejourexpand td.selectsejour
+table.operationcollapse td.selectoperation,
+table.operationexpand td.selectsejour,
+table.sejourcollapse td.selectsejour,
+table.sejourexpand td.selectsejour
   {
   background: #ddf;
   text-align: center;
@@ -1559,22 +1578,26 @@ table.operationcollapse td.selectoperation,table.operationexpand td.selectsejour
   width: 20px;
 }
 
-table.operationcollapse td.patient,table.sejourcollapse td.patient {
+table.operationcollapse td.patient,
+table.sejourcollapse td.patient {
   white-space: normal;
   padding-left: 17px;
   background: #ddf url(../../images/icons/collapse.gif) no-repeat center left;
 }
 
-table.operationexpand td.patient,table.sejournexpand td.patient {
+table.operationexpand td.patient,
+table.sejournexpand td.patient {
   padding-left: 17px;
   background: #ddf url(../../images/icons/expand.gif) no-repeat center left;
 }
 
-table.operationexpand td.date,table.sejourexpand td.date {
+table.operationexpand td.date,
+table.sejourexpand td.date {
   
 }
 
-table.operationcollapse td.date,table.sejourcollapse td.date {
+table.operationcollapse td.date,
+table.sejourcollapse td.date {
   display: none;
 }
 

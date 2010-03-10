@@ -12,12 +12,17 @@ global $can;
 $can->needsRead();
 
 // Plateaux disponibles
-$plateau = new CPlateauTechnique;
-$plateau->load(CValue::get("plateau_id"));
-$plateau->loadRefsTechniciens();
+$kine_id = CValue::get("kine_id");
+$date = CValue::getOrSession("date", mbDate());
+$sejours = CBilanSSR::loadSejoursSSRfor($kine_id, $date);
+foreach($sejours as $_sejour) {
+  $_sejour->checkDaysRelative($date);
+  $_sejour->loadRefPatient();
+  $_sejour->loadRefBilanSSR();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("plateau", $plateau);
-$smarty->display("inc_repartition_plateau.tpl");
+$smarty->assign("sejours", $sejours);
+$smarty->display("inc_sejours_kine.tpl");
 ?>

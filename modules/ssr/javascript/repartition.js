@@ -9,52 +9,45 @@
  */
 
 Repartition = {
-  updatePlateau: function(plateau_id) {
-    new Url('ssr', 'ajax_repartition_plateau') .
-      addParam('plateau_id', plateau_id) . 
-      requestUpdate('repartition-plateau-'+plateau_id);
+  updateKine: function(kine_id) {
+    new Url('ssr', 'ajax_sejours_kine') .
+      addParam('kine_id', kine_id) . 
+      requestUpdate('sejours-kine-'+kine_id);
   },
   
-  updateSejours: function() {
-    new Url('ssr', 'ajax_sejours_non_repartis') .
-      requestUpdate('sejours_non_repartis');
+  // Make kine droppable
+  droppableKine: function(kine_id) {
+    Droppables.add("kine-"+kine_id, { 
+      onDrop: Repartition.dropSejour,
+      hoverclass:'dropover'
+    });
   },
-
+  
   // Launch initial plateau update
-  registerPlateau: function (plateau_id) {
-    Main.add(Repartition.updatePlateau.curry(plateau_id));
+  registerKine: function (kine_id) {
+    Main.add(Repartition.updateKine.curry(kine_id));
+    Repartition.droppableKine(kine_id)
   },
   
-  // Launch initial sejours update
-  registerSejours: function () {
-    Main.add(Repartition.updateSejours);
-  },
-	
 	// Make sejour draggable
 	draggableSejour: function(sejour_guid) {
 		new Draggable(sejour_guid, {revert: true, scroll: window})
 	},
 	
-	// Make kine droppable
-	droppableKine: function(kine_id) {
-	  Droppables.add("kine-"+kine_id, { 
-	    onDrop: Repartition.dropSejour,
-	    hoverclass:'dropover'
-	  });
-	},
-	
 	// Link séjour to kiné
 	dropSejour: function(sejour, kine) {
+    sejour.hide();
 		var sejour_id = sejour.id.split("-")[1];
     var kine_id   = kine  .id.split("-")[1];
-		sejour.hide();
-    console.debug(sejour_id, "Séjour");
-    console.debug(kine_id, "Kiné");
+		var former_kine_id = sejour.up(2).id.split("-")[2];
 
 		var form = document.forms['Edit-CBilanSSR'];
     $V(form.sejour_id, sejour_id);
     $V(form.kine_id, kine_id);
-		onSubmitFormAjax(form);
+		onSubmitFormAjax(form, { onComplete: function() {
+      Repartition.updateKine(kine_id);
+      Repartition.updateKine(former_kine_id);
+		} } );
 		
 	}	
 }

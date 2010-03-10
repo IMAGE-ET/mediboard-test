@@ -489,4 +489,10 @@ $locales['CTypeActiviteCdARR.all'] = 'les types d\'activité';
 $locales['CTypeActiviteCdARR.none'] = 'Aucun type d\'activité';
 $locales['CTypeActiviteCdARR.one'] = 'le type d\'activité';
 $locales['mod-ssr-tab-vw_cdarr'] = 'Codes CdARR';
+$locales['CBilanSSR-kine_id'] = 'Kiné responsable';
+$locales['CBilanSSR-kine_id-court'] = 'Kiné';
+$locales['CBilanSSR-kine_id-desc'] = 'Kiné responsable';
+$locales['CMediusers-back-bilans_ssr'] = 'Séjours SSR sous responsabilité';
+$locales['CMediusers-back-bilans_ssr.empty'] = 'Pas de séjour SSR sous responsabilité';
+$locales['CTechnicien-failed-technicien'] = '';
 ?>

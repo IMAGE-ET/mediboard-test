@@ -163,6 +163,7 @@ class CMediusers extends CMbObject {
     $backProps["actes_ngap_executes"]             = "CActeNGAP executant_id";
     $backProps["administrations"]                 = "CAdministration administrateur_id";
     $backProps["aides_saisie"]                    = "CAideSaisie user_id";
+    $backProps["bilans_ssr"]                      = "CBilanSSR kine_id";
     $backProps["modeles"]                         = "CCompteRendu chir_id";
     $backProps["documents_ged"]                   = "CDocGed user_id";
     $backProps["suivis__ged"]                     = "CDocGedSuivi user_id";

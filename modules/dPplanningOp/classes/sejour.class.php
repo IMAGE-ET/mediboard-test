@@ -89,6 +89,8 @@ class CSejour extends CCodable {
   var $_adresse_par_prat   = null;
   var $_adresse_par_etab   = null;
   var $_etat               = null;
+  var $_entree_relative    = null;
+  var $_sortie_relative    = null;
   
   // Behaviour fields
   var $_check_bounds = true;
@@ -111,6 +113,7 @@ class CSejour extends CCodable {
   var $_ref_etabExterne       = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
+  var $_ref_bilan_ssr         = null;
   var $_ref_consult_anesth    = null;
   var $_ref_consultations     = null;
   var $_ref_consult_atu       = null;
@@ -541,7 +544,15 @@ class CSejour extends CCodable {
       $this->_etat = "cloture";
     }
   }
-  
+
+  function checkDaysRelative($date) {
+    if ($this->_entree && $this->_sortie) {
+      $this->_entree_relative = mbDaysRelative($date, mbDate($this->_entree));
+      $this->_sortie_relative = mbDaysRelative($date, mbDate($this->_sortie));
+    }
+  }
+
+	
   function updateDBFields() {
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
@@ -824,6 +835,10 @@ class CSejour extends CCodable {
   
   function loadRefRPU() {
     $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
+  }
+  
+  function loadRefBilanSSR() {
+    $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
   }
   
   function loadRefAdresseParPraticien() {

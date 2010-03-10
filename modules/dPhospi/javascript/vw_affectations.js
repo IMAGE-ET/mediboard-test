@@ -46,7 +46,7 @@ Droppables.addLit = function(lit_id) {
     onDrop:function(element){
       DragDropSejour(element.id, lit_id);
     }, 
-    hoverclass:'litselected'
+    hoverclass:'dropover'
   });
 };
 

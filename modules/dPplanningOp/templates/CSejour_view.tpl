@@ -1,6 +1,7 @@
 {{include file=CMbObject_view.tpl}}
 
 {{assign var=sejour value=$object}}
+
 <table class="tbl tooltip">
   {{if $sejour->annule == 1}}
   <tr>

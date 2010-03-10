@@ -22,20 +22,9 @@ foreach ($plateaux as $_plateau) {
   $_plateau->loadRefsTechniciens();
 }
 
-// Sejours en court
-$date = CValue::get("date");
-$where["group_id"] = "= '$group->_id'";
-$where["type"] = "= 'ssr'";
-$where["annule"] = "!= '1'";
-$where["entree_reelle"] = "<= '$date'";
-$where[] = "`sortie_reelle` IS NULL OR `sortie_reelle` >= '$date'";
-$sejour = new CSejour;
-$sejours = $sejour->loadList($where);
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("plateaux", $plateaux);
-$smarty->assign("sejours", $sejours);
 $smarty->assign("bilan", new CBilanSSR);
 $smarty->display("vw_idx_repartition.tpl");
 
