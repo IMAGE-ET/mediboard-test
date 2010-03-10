@@ -40,7 +40,8 @@ class CRHS extends CMbObject {
   var $_in_bounds_sun = null;
 	
   // Object References
-  var $_ref_sejour    = null;
+  var $_ref_sejour      = null;
+  var $_ref_dependances = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -81,7 +82,8 @@ class CRHS extends CMbObject {
  
 	function getBackProps() {
 	  $backProps = parent::getBackProps();
-	  $backProps["lines"] = "CLigneActivitesRHS rhs_id";
+	  $backProps["lines"]       = "CLigneActivitesRHS rhs_id";
+	  $backProps["dependances"] = "CDependancesRHS rhs_id";
 	  return $backProps;
 	}
   
@@ -176,6 +178,17 @@ class CRHS extends CMbObject {
 		
 		return $rhss;
 	}
+
+  function loadRefDependances() {
+    if ($this->_ref_dependances) {
+      return;
+    }
+    
+    $order = "dependances_id ASC";
+    $this->_ref_dependances = new CDependancesRHS();
+    $this->_ref_dependances->rhs_id = $this->_id;
+    $this->_ref_dependances->loadMatchingObject($order);
+  }
 }
 
 ?>

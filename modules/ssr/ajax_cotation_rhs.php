@@ -38,6 +38,10 @@ foreach($rhss as $_rhs) {
       $totaux[$_rhs->_id][$_type->code] = 0;
     }
     $_rhs->loadRefSejour();
+    $_rhs->loadRefDependances();
+    if(!$_rhs->_ref_dependances->_id) {
+      $_rhs->_ref_dependances->store();
+    }
     $_rhs->loadBackRefs("lines");
     $_line = new CLigneActivitesRHS();
     foreach($_rhs->_back["lines"] as $_line) {

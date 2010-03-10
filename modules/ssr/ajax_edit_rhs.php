@@ -27,13 +27,16 @@ if (!$rhs->_id) {
 $type_activite = new CTypeActiviteCdARR();
 $types_activite = $type_activite->loadList();
 $totaux = array();
-
 if($rhs->_id) {
   $totaux[$rhs->_id] = array();
   foreach($types_activite as $_type) {
     $totaux[$rhs->_id][$_type->code] = 0;
   }
   $rhs->loadRefSejour();
+  $rhs->loadRefDependances();
+  if(!$rhs->_ref_dependances->_id) {
+    $rhs->_ref_dependances->store();
+  }
   $rhs->loadBackRefs("lines");
   $_line = new CLigneActivitesRHS();
   foreach($rhs->_back["lines"] as $_line) {
