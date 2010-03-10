@@ -76,6 +76,24 @@ class CLigneActivitesRHS extends CMbObject {
     $this->_view = $this->_ref_code_activite_cdarr->_view;
     $this->_qty_total = $this->qty_mon + $this->qty_tue + $this->qty_wed + $this->qty_thu +
                         $this->qty_fri + $this->qty_sat + $this->qty_sun;
+    if(!$this->qty_mon) $this->qty_mon = "";
+    if(!$this->qty_tue) $this->qty_tue = "";
+    if(!$this->qty_wed) $this->qty_wed = "";
+    if(!$this->qty_thu) $this->qty_thu = "";
+    if(!$this->qty_fri) $this->qty_fri = "";
+    if(!$this->qty_sat) $this->qty_sat = "";
+    if(!$this->qty_sun) $this->qty_sun = "";
+  }
+  
+  function updateDBFields() {
+    return parent::updateDBFields();
+    if($this->qty_mon == "") $this->qty_mon = "0";
+    if($this->qty_tue == "") $this->qty_tue = "0";
+    if($this->qty_wed == "") $this->qty_wed = "0";
+    if($this->qty_thu == "") $this->qty_thu = "0";
+    if($this->qty_fri == "") $this->qty_fri = "0";
+    if($this->qty_sat == "") $this->qty_sat = "0";
+    if($this->qty_sun == "") $this->qty_sun = "0";
   }
   
   function loadRefActiviteCdARR() {

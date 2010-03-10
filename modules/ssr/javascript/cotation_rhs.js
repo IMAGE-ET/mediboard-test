@@ -41,10 +41,10 @@ CotationRHS = {
   },
   
   onSubmitQuantity: function(oForm, sField) {
-    if($V(oForm[sField]) == '0') {
-      oForm.parentNode.removeClassName("highlight");
+    if($V(oForm[sField]) == '0' || $V(oForm[sField]) == '') {
+      oForm.parentNode.removeClassName("ok");
     } else {
-      oForm.parentNode.addClassName("highlight");
+      oForm.parentNode.addClassName("ok");
     }
     return onSubmitFormAjax(oForm, {
       onComplete : CotationRHS.refreshTotaux.curry($V(oForm.rhs_id))
