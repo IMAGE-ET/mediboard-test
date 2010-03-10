@@ -75,6 +75,7 @@
         <input type="hidden" name="dosql" value="do_product_selection_item_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="callback" value="loadSelection" />
+        <input type="hidden" name="cancelled" value="0" disabled="disabled" />
         {{mb_field object=$selection field=selection_id hidden=true}}
         {{mb_field class=CProductSelectionItem field=selection_item_id hidden=true}}
         {{mb_field class=CProductSelectionItem field=product_id form="edit_selection_item" autocomplete="true,1,50,false,true"}}

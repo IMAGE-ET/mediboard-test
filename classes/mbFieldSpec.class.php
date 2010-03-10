@@ -564,8 +564,9 @@ class CMbFieldSpec {
       if ($this->dependsOn) {
         $sHtml .= ',
           callback: function(element, query){
-            var extension = "&where['.$this->dependsOn.']=" + $V(input.form.elements["'.$this->dependsOn.'"]);
-            return query + extension;
+            var element = input.form.elements["'.$this->dependsOn.'"];
+            if (!element) return query;
+            return query + "&where['.$this->dependsOn.']=" + $V(element);
           }';
       }
     	

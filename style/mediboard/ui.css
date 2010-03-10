@@ -904,7 +904,7 @@ table.active {
 .pagination .page {
   display: inline-block; 
   border: 1px solid #999; 
-  padding: 1px 4px;
+  padding: 1px 3px;
   margin: 1px 0;
   color: #555;
   -moz-border-radius: 3px;

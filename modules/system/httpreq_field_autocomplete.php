@@ -19,7 +19,7 @@ $wholeString = CValue::get('wholeString', 'false') == 'true';
 $where       = CValue::get('where', array());
 
 foreach($where as $key => $value) {
-  $where[$key] = "='$value'";
+  $where[$key] = "= '$value'";
 }
 
 $input = str_replace("\\'", "'", $input);

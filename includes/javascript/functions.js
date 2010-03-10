@@ -608,7 +608,7 @@ var TokenField = Class.create({
       onChange: Prototype.emptyFunction,
       confirm : null,
       sProps  : null
-    }, options || {});
+    }, options);
   },
   onComplete: function(value) {
     if(this.options.onChange != null)
@@ -620,8 +620,7 @@ var TokenField = Class.create({
       return false;
     }
     if(this.options.sProps) {
-      oCode = new Element('input', {value: value, className: this.options.sProps});
-      ElementChecker.prepare(oCode);
+      ElementChecker.prepare(new Element('input', {value: value, className: this.options.sProps}));
       ElementChecker.checkElement();
       if(ElementChecker.oErrors.length) {
         alert(ElementChecker.getErrorMessage());

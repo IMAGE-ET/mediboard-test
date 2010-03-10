@@ -333,14 +333,12 @@ var Url = Class.create({
           input.fire("ui:change");
         }
         input.focus();
-        autocompleter.activate.bind(autocompleter)();
         Event.stop(e);
         document.observeOnce("mousedown", hideAutocomplete);
       };
       
       // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
-      input.observe("click", showAutocomplete.bindAsEventListener(this, true));
       input.observe("focus", function(){
         if (oOptions.valueElement && oOptions.valueElement.value == "")
           input.value = "";

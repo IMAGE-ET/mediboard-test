@@ -185,7 +185,7 @@ function receptionCallback(){
             <button type="button" class="search notext" name="search" onclick="this.form.onsubmit()">{{tr}}Search{{/tr}}</button>
             <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
             
-            {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
+            {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter narrow=true}}
           </form>
           <div id="list-references"></div>
         </div>

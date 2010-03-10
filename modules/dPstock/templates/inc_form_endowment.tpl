@@ -86,6 +86,7 @@
         <input type="hidden" name="dosql" value="do_product_endowment_item_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="callback" value="loadEndowment" />
+        <input type="hidden" name="cancelled" value="0" disabled="disabled" />
         {{mb_field object=$endowment field=endowment_id hidden=true}}
         {{mb_field class=CProductEndowmentItem field=endowment_item_id hidden=true}}
         {{mb_field class=CProductEndowmentItem field=product_id form="edit_endowment_item" autocomplete="true,1,50,false,true"}}

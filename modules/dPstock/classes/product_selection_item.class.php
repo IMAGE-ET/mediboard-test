@@ -30,7 +30,7 @@ class CProductSelectionItem extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["product_id"]   = "ref notNull class|CProduct autocomplete|name";
+    $specs["product_id"]   = "ref notNull class|CProduct autocomplete|name dependsOn|cancelled";
     $specs["selection_id"] = "ref notNull class|CProductSelection";
     return $specs;
   }
