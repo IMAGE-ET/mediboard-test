@@ -21,8 +21,13 @@ class CRHS extends CMbObject {
   var $date_monday = null;
   
 	// Form Field
-	var $_date_sunday = null;
-	var $_week_number = null;
+	var $_date_tuesday   = null;
+	var $_date_wednesday = null;
+	var $_date_thursday  = null;
+	var $_date_friday    = null;
+	var $_date_saturday  = null;
+	var $_date_sunday    = null;
+	var $_week_number    = null;
 	
 	// Distant fields
   var $_in_bounds     = null;
@@ -53,11 +58,16 @@ class CRHS extends CMbObject {
     $props["date_monday"]   = "date notNull";
 
     // Form Field
-    $props["_date_sunday"]   = "date";
-    $props["_week_number"]   = "num min|0 max|52";
+    $props["_date_tuesday"]   = "date";
+    $props["_date_wednesday"] = "date";
+    $props["_date_thursday"]  = "date";
+    $props["_date_friday"]    = "date";
+    $props["_date_saturday"]  = "date";
+    $props["_date_sunday"]    = "date";
+    $props["_week_number"]    = "num min|0 max|52";
 
     // Remote fields
-    $props["_in_bounds"] = "bool";
+    $props["_in_bounds"]     = "bool";
     $props["_in_bounds_mon"] = "bool";
     $props["_in_bounds_tue"] = "bool";
     $props["_in_bounds_wed"] = "bool";
@@ -68,6 +78,12 @@ class CRHS extends CMbObject {
 		
     return $props;
   }
+ 
+	function getBackProps() {
+	  $backProps = parent::getBackProps();
+	  $backProps["lines"] = "CLigneActivitesRHS rhs_id";
+	  return $backProps;
+	}
   
 	function check() {
 		return parent::check();
@@ -80,17 +96,51 @@ class CRHS extends CMbObject {
 	function updateFormFields() {
 		parent::updateFormFields();
 		$this->_week_number = mbTransformTime(null, $this->date_monday, "%U");
-		$this->_date_sunday = mbDate("next sunday", $this->date_monday);
+      
+    $this->_date_tuesday   = mbDate("+1 DAY", $this->date_monday);
+    $this->_date_wednesday = mbDate("+2 DAY", $this->date_monday);
+    $this->_date_thursday  = mbDate("+3 DAY", $this->date_monday);
+    $this->_date_friday    = mbDate("+4 DAY", $this->date_monday);
+    $this->_date_saturday  = mbDate("+5 DAY", $this->date_monday);
+    $this->_date_sunday    = mbDate("+6 DAY", $this->date_monday);
+    
 		$this->_view = CAppUI::tr("Week") . " $this->_week_number";
 	}
 
   function loadRefSejour() {
   	$this->_ref_sejour = $sejour = $this->loadFwdRef("sejour_id", true);
-    $this->_in_bounds = 
+    
+  	$this->_in_bounds = 
+		  $this->date_monday <= mbDate(null, $sejour->_sortie) && 
+      $this->_date_sunday >= mbDate(null, $sejour->_entree);
+      
+    $this->_in_bounds_mon = 
 		  $this->date_monday <= mbDate($sejour->_sortie) && 
-      $this->_date_sunday >= mbDate($sejour->_entree); 
-			
-	  // @todo: Compute other inbounds
+      $this->date_monday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_tue = 
+		  $this->_date_tuesday <= mbDate($sejour->_sortie) && 
+      $this->_date_tuesday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_wed = 
+		  $this->_date_wednesday <= mbDate($sejour->_sortie) && 
+      $this->_date_wednesday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_thu = 
+		  $this->_date_thursday <= mbDate($sejour->_sortie) && 
+      $this->_date_thursday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_fri = 
+		  $this->_date_friday <= mbDate($sejour->_sortie) && 
+      $this->_date_friday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_sat = 
+		  $this->_date_saturday <= mbDate($sejour->_sortie) && 
+      $this->_date_saturday >= mbDate($sejour->_entree);
+    
+    $this->_in_bounds_sun = 
+		  $this->_date_sunday <= mbDate($sejour->_sortie) && 
+      $this->_date_sunday >= mbDate($sejour->_entree);
   }
 	
 	/**
@@ -103,7 +153,7 @@ class CRHS extends CMbObject {
 			return;
 		}
 			
-	  $rhss = array();	
+	  $rhss = array();
     foreach ($sejour->loadBackRefs("rhss") as $_rhs) {
     	$rhss[$_rhs->date_monday] = $_rhs;
     }

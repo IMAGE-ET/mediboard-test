@@ -12,6 +12,7 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="ssr" script="cotation_rhs"}}
 
 <a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
   Admettre un patient
@@ -63,7 +64,6 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
   {{mb_include template=inc_planification}}
 </div>
 
-{{mb_include_script module="ssr" script="cotation_rhs"}}
 <div id="cotation-rhs" style="display: none;">
 </div>
 {{/if}}

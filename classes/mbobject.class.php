@@ -1617,7 +1617,7 @@ class CMbObject {
    *  @todo Change the order of the arguments so that it matches the loadList method
    *  @return the first 100 records which fits the keywords
    */
-  function seek($keywords, $where = array(), $limit = 100, $countTotal = false, $ljoin = null) {
+  function seek($keywords, $where = array(), $limit = 100, $countTotal = false, $ljoin = null, $order = null) {
     if (!is_array($keywords)) {
       $regex = '/"([^"]+)"/';
       
@@ -1660,6 +1660,9 @@ class CMbObject {
     if ($where && count($where)) {
       $noWhere = false;
       foreach ($where as $col => $value) {
+        if (is_string($col)) {
+          $col = str_replace('.', '`.`', $col);
+        }
         $query .= " AND `$col` $value";
       }
     }
@@ -1671,13 +1674,13 @@ class CMbObject {
         foreach($seekables as $field => $spec) {
           // Note: a swith won't work du to boolean trus value
           if ($spec->seekable === "equal") {
-            $query .= "\nOR `$field` = '$keyword'";
+            $query .= "\nOR `{$this->_spec->table}`.`$field` = '$keyword'";
           }
           if ($spec->seekable === "begin") {
-            $query .= "\nOR `$field` LIKE '$keyword%'";
+            $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '$keyword%'";
           }
           if ($spec->seekable === "end") {
-            $query .= "\nOR `$field` LIKE '%$keyword'";
+            $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword'";
           }
           if ($spec->seekable === true) {
             if ($spec instanceof CRefSpec) {
@@ -1685,11 +1688,11 @@ class CMbObject {
             	$objects = $object->seek($keywords);
             	if (count($objects)) {
             	  $ids = implode(',', array_keys($objects));
-                $query .= "\nOR `$field` IN ($ids)";
+                $query .= "\nOR `{$this->_spec->table}`.`$field` IN ($ids)";
             	}
             }
             else {
-              $query .= "\nOR `$field` LIKE '%$keyword%'";
+              $query .= "\nOR `{$this->_spec->table}`.`$field` LIKE '%$keyword%'";
             }
           }
         }
@@ -1711,10 +1714,15 @@ class CMbObject {
     }
     
     $query .= "\nORDER BY";
-    foreach($seekables as $field => $spec) {
-      $query .= "\n`$field`,";
+    if($order) {
+      $query .= "\n $order";
+    } else {
+      foreach($seekables as $field => $spec) {
+        $query .= "\n`$field`,";
+      }
+      $query .= "\n `{$this->_spec->table}`.`{$this->_spec->key}`";
     }
-    $query .= "\n `{$this->_spec->key}` LIMIT $limit";
+    $query .= "\n LIMIT $limit";
     
     return $this->loadQueryList("SELECT * $query");
   }

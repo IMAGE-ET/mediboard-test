@@ -34,9 +34,9 @@ class CActiviteCdARR extends CCdARRObject {
     $props = parent::getProps();
 
     // DB Fields
-    $props["code"]    = "str notNull length|4";
-    $props["type"]    = "str notNull length|2";
-    $props["libelle"] = "str notNull maxLength|250";
+    $props["code"]    = "str notNull length|4 seekable";
+    $props["type"]    = "str notNull length|2 seekable";
+    $props["libelle"] = "str notNull maxLength|250 seekable";
     $props["note"]    = "text";
     $props["inclu"]   = "text";
     $props["exclu"]   = "text";
@@ -46,8 +46,8 @@ class CActiviteCdARR extends CCdARRObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->type . "-" . $this->code . " : " . $this->libelle;
-    $this->_shortview = $this->type . "-" . $this->code;
+    $this->_view = $this->code . " : " . $this->libelle;
+    $this->_shortview = $this->code;
   }
   
   function loadRefTypeActivite() {

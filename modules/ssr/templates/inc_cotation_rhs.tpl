@@ -16,10 +16,10 @@
 Main.add(Control.Tabs.create.curry('tabs-rhss', true));
 </script>
 
-<ul id="tabs-rhss" class="control_tabs_vertical" style="width: 15em;">
+<ul id="tabs-rhss" class="control_tabs_vertical" style="width: 14em;">
   {{foreach from=$rhss item=_rhs}}
   <li>
-  	<a href="#{{$_rhs->_guid}}" 
+  	<a href="#cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" 
       {{if !$_rhs->_id}}class="empty"{{/if}}
       {{if !$_rhs->_in_bounds}}class="wrong"{{/if}}
 			>
@@ -38,7 +38,7 @@ Main.add(Control.Tabs.create.curry('tabs-rhss', true));
 		<td>
 			
 {{foreach from=$rhss item=_rhs}}
-<div id="{{$_rhs->_guid}}" style="display: none;">
+<div id="cotation-{{if $_rhs->_id}}{{$_rhs->_id}}{{else}}{{$_rhs->date_monday}}{{/if}}" style="display: none;">
   {{mb_include template=inc_edit_rhs rhs=$_rhs}}
 </div>
 {{/foreach}}

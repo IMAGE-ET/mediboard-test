@@ -28,10 +28,16 @@ class CIntervenantCdARR extends CCdARRObject {
     $props = parent::getProps();
 
     // DB Fields
-    $props["code"]    = "str notNull length|4";
+    $props["code"]    = "str notNull length|2";
     $props["libelle"] = "str notNull maxLength|50";
     
     return $props;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = "$this->code - $this->libelle";
+    $this->_shortview = $this->code;
   }
 	
 	/**

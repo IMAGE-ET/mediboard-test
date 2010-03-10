@@ -251,4 +251,16 @@ $locales['CSecondaryFunction.none'] = 'Pas de fonction secondaire';
 $locales['CSecondaryFunction.one'] = 'Une fonction secondaire';
 $locales['CUser-back-'] = 'Utilisateurs';
 $locales['Holidays'] = 'Congés';
+$locales['CBanque-back-users.empty'] = '';
+$locales['CDiscipline-back-users.empty'] = '';
+$locales['CFunctions-back-secondary_functions.empty'] = '';
+$locales['CFunctions-back-users.empty'] = '';
+$locales['CGroups-back-.empty'] = '';
+$locales['CGroups-back-functions.empty'] = '';
+$locales['CMediusers-back-secondary_functions.empty'] = '';
+$locales['CMediusers-code_intervenant_cdarr'] = 'Code CdARR';
+$locales['CMediusers-code_intervenant_cdarr-court'] = 'Code CdARR';
+$locales['CMediusers-code_intervenant_cdarr-desc'] = 'Code CdARR de l\'intervenant';
+$locales['CSpecCPAM-back-users.empty'] = '';
+$locales['CUser-back-.empty'] = '';
 ?>

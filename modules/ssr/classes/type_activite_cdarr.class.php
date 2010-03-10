@@ -14,8 +14,9 @@ CAppUI::requireModuleClass("ssr", "cdarrObject");
  * Catégorie d'activité CdARR
  */
 class CTypeActiviteCdARR extends CCdARRObject {
-  var $code    = null;
-	var $libelle = null;
+  var $code          = null;
+	var $libelle       = null;
+	var $libelle_court = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -28,8 +29,9 @@ class CTypeActiviteCdARR extends CCdARRObject {
     $props = parent::getProps();
 
     // DB Fields
-    $props["code"]    = "str notNull length|4";
-    $props["libelle"] = "str notNull maxLength|50";
+    $props["code"]          = "str notNull length|4";
+    $props["libelle"]       = "str notNull maxLength|50";
+    $props["libelle_court"] = "str notNull maxLength|50";
     
     return $props;
   }
@@ -37,7 +39,7 @@ class CTypeActiviteCdARR extends CCdARRObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view      = $this->libelle . "(" . $this->code . ")";
-    $this->_shortview = $this->code;
+    $this->_shortview = $this->libelle_court . "(" . $this->code . ")";
   }
 	
 	/**

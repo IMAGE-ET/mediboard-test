@@ -191,9 +191,7 @@ class CSetupssr extends CSetup {
     $this->mod_version = "0.12";
     
     // Data source query
-    $query = "SELECT *
-      FROM `activite`
-      WHERE CODE = 'AA07'";
+    $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
     $this->addDatasource("cdarr", $query);
   }
 }
