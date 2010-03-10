@@ -81,6 +81,7 @@ class CPrescription extends CMbObject {
   
   var $_chapter_view = null;
   var $_purge_planifs_systemes = null;
+	var $_chapitres = null;
 	
 	static $cache_service = null;
   static $images = array(
@@ -583,6 +584,16 @@ class CPrescription extends CMbObject {
   }
   
   
+	function loadView(){
+	  parent::loadView();
+		
+		// Chargement de toutes les lignes
+    $this->loadRefsLinesMed("1","1");
+    $this->loadRefsLinesElementByCat("1");
+    $this->loadRefsPerfusions();
+	}
+	
+	
   function store(){   
     if(!$this->_id){
       $this->calculPraticienId(); 

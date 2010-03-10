@@ -247,8 +247,6 @@ viewBilanService = function(service_id, date){
       <form name="form_prescription" action="">
         <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
-      
-      
       <table class="form" id="left-column" style="width:240px;">
         <tr>
           <th class="title">

@@ -19,6 +19,7 @@ foreach($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient();
   $_sejour->loadRefBilanSSR();
+	$_sejour->loadRefPrescriptionSejour();
 }
 
 // Création du template

@@ -145,7 +145,9 @@ Main.add( function(){
 			    {{foreach from=$_categories item=_category}}
 			      {{assign var=category_id value=$_category->_id}}
 			      <tr>
-			        <th>{{$_category->_view}}</th>
+			        <th>
+			        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+						  </th>
 			        <td>
 			          <form name="search_{{$_category->_guid}}" action="?">
 			            <input type="text" name="libelle" value="" class="autocomplete" />

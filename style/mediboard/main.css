@@ -1034,8 +1034,6 @@ ul li a.chapitre_signe.active{
   line-height: 1.2em; 
 }
 
-
-
 .septique{
   color: #3A3;
 }
@@ -1043,6 +1041,20 @@ ul li a.chapitre_signe.active{
 .patient-not-arrived {
   color: #A33;
 }
+
+table.tbl td.ssr_annule {
+	background-color: #f00;
+}
+
+.ssr_fini {
+  background-image: url(./images/icons/ray.gif); 
+}
+
+.ssr_non_debute {
+  color: #f00;
+}
+
+
 
 table.tbl td.trans-data {
   background-image: url(../../images/icons/trans_data.png);

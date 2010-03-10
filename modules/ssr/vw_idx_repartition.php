@@ -13,6 +13,7 @@ $can->needsRead();
 
 // Etablissement courant
 $group = CGroups::loadCurrent();
+$date = CValue::getOrSession("date", mbDate());
 
 // Plateaux disponibles
 $plateau = new CPlateauTechnique;
@@ -24,6 +25,7 @@ foreach ($plateaux as $_plateau) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("date", $date);
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("bilan", new CBilanSSR);
 $smarty->display("vw_idx_repartition.tpl");
