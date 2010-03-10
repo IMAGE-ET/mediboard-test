@@ -17,12 +17,8 @@
 <input type="hidden" name="del" value="0" />
 
 {{mb_key object=$bilan}}
-<br/>
-{{mb_label object=$bilan field=sejour_id}}
-{{mb_field object=$bilan field=sejour_id}}
-<br/>
-{{mb_label object=$bilan field=kine_id}}
-{{mb_field object=$bilan field=kine_id}}
+{{mb_field object=$bilan field=sejour_id hidden=1}}
+{{mb_field object=$bilan field=kine_id hidden=1}}
 
 </form>
 
@@ -34,7 +30,7 @@
     </td>
 
     {{if $smarty.foreach.plateaux.first}}
-    <td rowspan="100" style="width: 150px;">
+    <td rowspan="100" style="width: 180px;">
       {{mb_include template=inc_sejours_non_affectes}}
     </td>
     {{/if}}

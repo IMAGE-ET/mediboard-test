@@ -14,7 +14,7 @@
   </tr>
   <tr>
 	  {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-	    <td style="width: 150px;">
+      <td style="width: 180px;">
 			{{mb_include template=inc_repartition_kine kine_id=$_technicien->kine_id}}
 			</td>
 		{{foreachelse}}
