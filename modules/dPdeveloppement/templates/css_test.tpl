@@ -79,33 +79,37 @@ Main.add(function(){
       
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">Title 1</th>
+    <th class="title" colspan="5">Title 1</th>
   </tr>
   <tr>
     <th>Title 1</th>
     <th>Title 2</th>
     <th>Title 3</th>
     <th>Title 4</th>
+    <th class="disabled">disabled</th>
   </tr>
   <tr >
     <td></td>
     <td class="ok">ok</td>
     <td class="warning">warning</td>
     <td class="error">error</td>
+    <td class="disabled">disabled</td>
   </tr>
   <tr>
     <td>Cell 1 - 1</td>
     <td>Cell 1 - 2</td>
     <td>Cell 1 - 3</td>
     <td>Cell 1 - 4</td>
+    <td>Cell 1 - 5</td>
   </tr>
   <tr>
     <td>Cell 2 - 1</td>
     <td colspan="2">Cell 2 - 2-3</td>
     <td>Cell 2 - 4</td>
+    <td>Cell 2 - 5</td>
   </tr>
   <tr>
-    <td colspan="4" class="text">
+    <td colspan="5" class="text">
       <p>
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat libero pharetra tempor. Cras vestibulum bibendum augue. Praesent egestas leo in pede.
       </p>
@@ -116,6 +120,7 @@ Main.add(function(){
     <td>Cell 4 - 2</td>
     <td>Cell 4 - 3</td>
     <td>Cell 4 - 4</td>
+    <td>Cell 4 - 5</td>
   </tr>
 </table>
 
