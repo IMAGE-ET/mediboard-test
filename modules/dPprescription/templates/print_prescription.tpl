@@ -20,7 +20,7 @@ Main.add(window.print);
 </table>
 
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css header=10 footer=8}}
+{{include file=../../dPcompteRendu/css/print.css}}
 </style>
   
 <div class="header" onclick="window.print();" style="cursor: pointer">

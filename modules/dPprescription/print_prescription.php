@@ -242,23 +242,29 @@ $traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie");
 $prescription->_ref_selected_prat = $praticien;
 
 // Chargement du header
+$header_height = 8;
 $template_header = new CTemplateManager();
 $prescription->fillTemplate($template_header);
 $header = CPrescription::getPrescriptionTemplate("header", $praticien);
 if($header->_id){
   $template_header->renderDocument($header->source);
+	$header_height = $header->height;
 }
 
 // Chargement du footer
+$footer_height = 10;
 $template_footer = new CTemplateManager();
 $prescription->fillTemplate($template_footer);
 $footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
 if($footer->_id){
   $template_footer->renderDocument($footer->source);
+  $footer_height = $footer->height;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("header", $header_height);
+$smarty->assign("footer", $footer_height);
 $smarty->assign("traduction"     , $traduction);
 $smarty->assign("print"          , $print);
 $smarty->assign("praticien"      , $praticien);
