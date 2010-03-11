@@ -341,7 +341,15 @@ class CPrescriptionLine extends CMbObject {
     // Chargement de la ligne de prescription
     $new_line = new CPrescriptionLineMedicament();
     $new_line->load($this->_id);
-    $date_arret_tp = $new_line->date_arret;
+		
+		if($new_line->date_arret){
+			$debut = $new_line->date_arret;
+		}
+		if($new_line->time_arret){
+      $time_debut = $new_line->time_arret;
+    }
+		
+		
     $new_line->loadRefsPrises();
     $new_line->loadRefPrescription(); 
     $new_line->_id = "";
