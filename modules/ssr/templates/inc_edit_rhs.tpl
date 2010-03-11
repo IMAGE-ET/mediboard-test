@@ -73,7 +73,7 @@ Main.add( function(){
 
 <table class="main">
   <tr>
-    <td>
+    <td rowspan="2">
       {{assign var=dependances value=$rhs->_ref_dependances}}
       <form name="dependances-{{$rhs->_guid}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
       <input type="hidden" name="m" value="ssr" />
@@ -118,6 +118,10 @@ Main.add( function(){
     </td>
     <td class="greedyPane" id="totaux-{{$rhs->_id}}">
       {{mb_include module="ssr" template="inc_totaux_rhs"}}
+    </td>
+  </tr>
+  <tr>
+    <td>
       <form name="new-line-{{$rhs->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitLine(this);">
       <input type="hidden" name="m" value="ssr" />
       <input type="hidden" name="dosql" value="do_line_rhs_aed" />
@@ -200,7 +204,7 @@ Main.add( function(){
       <br />
       <small>{{$_line->_ref_code_intervenant_cdarr->_view}}</small>
     </td>
-    <td class="button {{if $rhs->_in_bounds_mon}}disabled{{elseif $_line->qty_mon}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_mon}}disabled{{elseif $_line->qty_mon}}ok{{/if}}">
       {{if $rhs->_in_bounds_mon}}
       <form name="chg-mon-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_mon');">
       <input type="hidden" name="m" value="ssr" />
@@ -217,7 +221,7 @@ Main.add( function(){
       {{$_line->qty_mon}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_tue}}disabled{{elseif $_line->qty_tue}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_tue}}disabled{{elseif $_line->qty_tue}}ok{{/if}}">
       {{if $rhs->_in_bounds_tue}}
       <form name="chg-tue-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_tue');">
       <input type="hidden" name="m" value="ssr" />
@@ -234,7 +238,7 @@ Main.add( function(){
       {{$_line->qty_tue}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_wed}}disabled{{elseif $_line->qty_wed}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_wed}}disabled{{elseif $_line->qty_wed}}ok{{/if}}">
       {{if $rhs->_in_bounds_wed}}
       <form name="chg-wed-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_wed');">
       <input type="hidden" name="m" value="ssr" />
@@ -251,7 +255,7 @@ Main.add( function(){
       {{$_line->qty_wed}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_thu}}disabled{{elseif $_line->qty_thu}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_thu}}disabled{{elseif $_line->qty_thu}}ok{{/if}}">
       {{if $rhs->_in_bounds_thu}}
       <form name="chg-thu-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_thu');">
       <input type="hidden" name="m" value="ssr" />
@@ -268,7 +272,7 @@ Main.add( function(){
       {{$_line->qty_thu}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_fri}}disabled{{elseif $_line->qty_fri}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_fri}}disabled{{elseif $_line->qty_fri}}ok{{/if}}">
       {{if $rhs->_in_bounds_fri}}
       <form name="chg-fri-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_fri');">
       <input type="hidden" name="m" value="ssr" />
@@ -285,7 +289,7 @@ Main.add( function(){
       {{$_line->qty_fri}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_sat}}disabled{{elseif $_line->qty_sat}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_sat}}disabled{{elseif $_line->qty_sat}}ok{{/if}}">
       {{if $rhs->_in_bounds_sat}}
       <form name="chg-sat-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_sat');">
       <input type="hidden" name="m" value="ssr" />
@@ -302,7 +306,7 @@ Main.add( function(){
       {{$_line->qty_sat}}
       {{/if}}
     </td>
-    <td class="button {{if $rhs->_in_bounds_sun}}disabled{{elseif $_line->qty_sun}}ok{{/if}}">
+    <td class="button {{if !$rhs->_in_bounds_sun}}disabled{{elseif $_line->qty_sun}}ok{{/if}}">
       {{if $rhs->_in_bounds_sun}}
       <form name="chg-sun-{{$_line->_guid}}" action="?m={{$m}}" method="post" onsubmit="return CotationRHS.onSubmitQuantity(this, 'qty_sun');">
       <input type="hidden" name="m" value="ssr" />
