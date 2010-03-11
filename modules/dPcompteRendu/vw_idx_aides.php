@@ -34,6 +34,8 @@ foreach ($classes as $class => &$infos) {
    	    $info[$key] = array();
    	    $list = &$info[$key];
    	    $list = array();
+   	    // Because some depend_fields are not enums (like object_class from CCompteRendu)
+        if (!isset($object->_specs[$depend_field]->_list)) continue;
    	    foreach ($object->_specs[$depend_field]->_list as $value) {
    	      $locale = "$class.$depend_field.$value";
    	      $list[$value] = $locale;
