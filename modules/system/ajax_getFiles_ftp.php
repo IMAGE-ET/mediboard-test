@@ -38,12 +38,20 @@ if($ftp->passif_mode) {
   CAppUI::stepAjax("Activation du mode passif");
 }
 
-$list = $ftp->getListFiles();
+/*$list = $ftp->getListFiles();
 if (!is_array($list)) {
   CAppUI::stepAjax("Impossible de lister les fichiers", UI_MSG_ERROR);
 } else {
   CAppUI::stepAjax("Liste des fichiers du dossier");
   mbTrace($list);
-}
+}*/
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("exchange_source", $exchange_source);
+$smarty->assign("files", $ftp->getListFiles());
+
+$smarty->display("inc_ftp_files.tpl");
 
 ?>

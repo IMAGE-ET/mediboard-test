@@ -123,7 +123,7 @@ class CPrescriptionLabo extends CMbObject {
       $idExterne->tag = "iMeds";
       $idExterne->object_class = "CPrescriptionLabo";
       $idExterne->object_id = $this->_id;
-      $idExterne->id400 = $exchange_source->receive();
+      $idExterne->id400 = $exchange_source->receive()->NDOSLABResult;
       $idExterne->last_update = mbDateTime();
       $idExterne->store();
     }
