@@ -23,8 +23,9 @@ $date_min = CValue::getOrSession('_date_min');
 $date_max = CValue::getOrSession('_date_max');
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
-
 CValue::setSession('endowment_id', $endowment_id);
+
+$group_id = CGroups::loadCurrent()->_id;
 
 if ($endowment_id) {
   $endowment = new CProductEndowment;
@@ -34,9 +35,17 @@ if ($endowment_id) {
   $stocks = array();
   foreach($endowment_items as $_item) {
     $_item->loadRefsFwd();
-    $stock_service = CProductStockService::getFromCode($_item->_ref_product->code, $service_id);
+    $stock_service = new CProductStockService;
+    $stock_service->product_id = $_item->_ref_product->_id;
+    $stock_service->service_id = $service_id;
+    $stock_service->loadMatchingObject();
     
-    $stock = CProductStockGroup::getFromCode($_item->_ref_product->code);
+    $stock = new CProductStockGroup;
+    $stock->product_id = $_item->_ref_product->_id;
+    $stock->group_id = $group_id;
+    $stock->loadMatchingObject();
+    $stock->updateFormFields();
+    
     $stock->_ref_stock_service = $stock_service;
     $stock->quantity = $_item->quantity;
     $stocks[] = $stock;
@@ -64,8 +73,12 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
         continue;
       }
       //if (count($stocks) == 20) continue;
-      $stock = CProductStockGroup::getFromCode($stock_service->_ref_product->code);
-      if ($stock && $stock->_id) {
+      $stock = new CProductStockGroup;
+      $stock->product_id = $stock_service->_ref_product->_id;
+      $stock->group_id = $group_id;
+      
+      if ($stock->loadMatchingObject()) {
+        $stock->updateFormFields();
         $stock->_ref_stock_service = $stock_service;
         $stock->quantity = max(0, $stock_service->getOptimumQuantity() - $stock_service->quantity);
         $stocks[$stock->_id] = $stock;
