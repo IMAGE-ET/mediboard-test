@@ -161,10 +161,13 @@ if ($list_constantes) {
     
     foreach ($data as $name => &$field) {
       $log = $cst->loadLastLogForField($name);
-      if (!$log->_id) {
+      if (!$log->_id && $cst->_ref_last_log) {
         $log = $cst->_ref_last_log;
         $log->loadRefsFwd();
-      }
+      } 
+      else {
+        $log = new CUserLog;
+      } 
       $user_view = $log->_ref_user ? utf8_encode($log->_ref_user->_view) : "";
       
     	if ($name == 'ta') {
