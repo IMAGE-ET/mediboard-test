@@ -35,6 +35,11 @@ setTimeout(readonlyFCKEditor, 2000);
 // Surveillance de modification de l'éditeur de texte
 function FCKeditor_OnComplete(editorInstance) {
   editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
+  
+  var fck_iframe = document.getElementById('source___Frame');
+  var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
+  fck_editing_area.style.height = '100.1%';
+  setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
 }
   
 function FCKeventChanger(editorInstance) {

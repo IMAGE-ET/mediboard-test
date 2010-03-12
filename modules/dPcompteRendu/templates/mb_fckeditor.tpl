@@ -10,6 +10,7 @@ FCKConfig.EnterMode = 'br';
 FCKConfig.Debug = false;
 FCKConfig.FirefoxSpellChecker = true;
 FCKConfig.BrowserContextMenuOnCtrl = true;
+FCKConfig.AutoDetectPasteFromWord = true;
 
 {{if $templateManager->printMode}}
 FCKConfig.ToolbarSets["Default"] = [
