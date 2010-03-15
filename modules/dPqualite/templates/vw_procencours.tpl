@@ -28,7 +28,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       {{if $procTermine|@count}}
       <table class="form">
         <tr>
-          <th class="category" colspan="5">
+          <th class="title" colspan="5">
             {{tr}}Informations{{/tr}}
           </th>
         </tr>
@@ -93,7 +93,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       {{if $procDemande|@count}}
       <table class="form">
         <tr>
-          <th class="category" colspan="5">
+          <th class="title" colspan="5">
             {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
@@ -147,7 +147,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       
       <table class="form">
         <tr>
-          <th class="category" colspan="5">{{tr}}_CDocGed_attente_demande{{/tr}}</th>
+          <th class="title" colspan="5">{{tr}}_CDocGed_attente_demande{{/tr}}</th>
         </tr>
         <tr>
           <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
