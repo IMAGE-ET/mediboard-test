@@ -114,7 +114,7 @@ Main.add(function () {
   {{if $patient->_id}}
     <th class="title modify" colspan="5">
       {{if $app->user_prefs.GestionFSE}}
-	      <button class="search" type="button singleclick" onclick="lireVitale();" style="float: left;">
+	      <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
 	        Lire Vitale
 	      </button>
 	      {{if !$app->user_prefs.VitaleVision}}
@@ -131,7 +131,7 @@ Main.add(function () {
     
 			{{if $patient->_id_vitale}}
       <div style="float:right;">
-	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
+	      <img src="images/icons/carte_vitale.png" title="Bénéficiaire associé à une carte Vitale" />
       </div>
       {{/if}}
       

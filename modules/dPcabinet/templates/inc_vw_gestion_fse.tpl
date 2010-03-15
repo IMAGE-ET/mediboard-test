@@ -132,13 +132,13 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
           {{if !$_ext_fse->_annulee}}
           <tr>
             <td class="button" colspan="2">
-              <button class="search" type="button singleclick" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
+              <button class="search singleclick" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
                 Consulter 
               </button>
-              <button class="print" type="button singleclick" onclick="Intermax.Triggers['Editer FSE']('{{$_id_fse}}');">
+              <button class="print singleclick" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_id_fse}}');">
                 Imprimer
               </button>
-              <button class="cancel" type="button singleclick" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
+              <button class="cancel singleclick" type="button" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
                 Annuler
               </button>
             </td>
@@ -156,7 +156,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         <tr>
           <td class="button" colspan="2">
             {{if !$consult->_current_fse}}
-            <button class="new" type="button singleclick" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
+            <button class="new singleclick" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
               Formater FSE
             </button>
             {{/if}}
