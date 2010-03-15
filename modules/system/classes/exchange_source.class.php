@@ -85,6 +85,14 @@ class CExchangeSource extends CMbObject {
     return parent::check();
   }
   
+  function store() {
+    if ($this->password === "") {
+      $this->password = null;
+    }
+    
+    return parent::store();
+  }
+  
   function setData($data, $argsList = false) {
     $this->_args_list = $argsList;
     $this->_data = $data;
