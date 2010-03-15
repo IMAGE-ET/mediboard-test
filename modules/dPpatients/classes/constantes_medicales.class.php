@@ -78,10 +78,14 @@ class CConstantesMedicales extends CMbObject {
       "colors" => array("#00A8F0", "#C0D800")
     ),
     "_vst"              => array(
-      "unit" => "ml"
+      "unit" => "ml",
+      "min" => 5000,
+      "max" => 7000,
     ),
     "_imc"              => array(
-      "unit" => ""
+      "unit" => "",
+      "min" => 15,
+      "max" => 40,
     ),
     "temperature"       => array(
       "unit" => "°C", 

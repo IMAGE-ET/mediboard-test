@@ -1124,8 +1124,24 @@ class CSetupdPpatients extends CSetup {
               ADD `code_gestion` MEDIUMINT (4) UNSIGNED ZEROFILL,
               ADD `mutuelle_types_contrat` TEXT";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.97");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `patients` ADD `code_gestion2` MEDIUMINT (2) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` CHANGE `code_gestion` `centre_carte` MEDIUMINT (4) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` CHANGE `code_gestion2` `code_gestion` MEDIUMINT (2) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD `qual_beneficiaire` ENUM ('0','1','2','3','4','5','6','7','8','9')";
+    $this->addQuery($sql);
+    
+    foreach(CPatient::$rangToQualBenef as $from => $to) {
+      $sql = "UPDATE `patients` SET `qual_beneficiaire` = '$to' WHERE `rang_beneficiaire` = '$from'";
+      $this->addQuery($sql);
+    }
 							
-    $this->mod_version = "0.97";
+    $this->mod_version = "0.98";
   }
 }
 

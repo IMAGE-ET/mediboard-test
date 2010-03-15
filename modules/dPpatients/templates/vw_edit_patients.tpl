@@ -43,7 +43,7 @@ function copyAssureValues(element) {
 }
 
 function copyIdentiteAssureValues(element) {
-	if (element.form.rang_beneficiaire.value == "01") {
+	if (element.form.qual_beneficiaire.value == "0") {
 		copyAssureValues(element);
 	}
 }

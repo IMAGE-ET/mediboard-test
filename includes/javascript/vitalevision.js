@@ -206,17 +206,13 @@ var VitaleVision = {
     if($V(form.ville) == "") $V(form.ville, ville.substring(6));
     
     $V(form.rang_naissance, getNodeValue("rangDeNaissance", ident));
-
-    if(getNodeValue("qualBenef", amo) == 0) {
-      $V(form.rang_beneficiaire, '01');
-    } else if(getNodeValue("qualBenef", amo) == 6) {
-      $V(form.rang_beneficiaire, '11');
-    }
+    $V(form.qual_beneficiaire, parseInt(getNodeValue("qualBenef", amo)));
     
-    $V(form.code_regime, getNodeValue("codeRegime", amo));
-    $V(form.caisse_gest, getNodeValue("caisse", amo));
-    $V(form.centre_gest, getNodeValue("centreGestion", amo));
-    $V(form.code_gestion, getNodeValue("centreCarte", amo));
+    $V(form.code_regime,  getNodeValue("codeRegime", amo));
+    $V(form.caisse_gest,  getNodeValue("caisse", amo));
+    $V(form.centre_gest,  getNodeValue("centreGestion", amo));
+    $V(form.code_gestion, getNodeValue("codeGestion", amo));
+    $V(form.centre_carte, getNodeValue("centreCarte", amo));
     
     var periodeDroits = getNodeValue("listePeriodesDroits element debut", amo);
     jour  = periodeDroits.substring(0, 2);

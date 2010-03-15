@@ -399,7 +399,9 @@ class CMouvSejourEcap extends CMouvementEcap {
 //  Le matricule n'est actuellement que mal recu par la DHE donc on garde celle de Mediboard
 //    $this->patient->matricule         = $pat400->consume("NSEC") . $pat400->consume("CSEC");
 
-    $this->patient->rang_beneficiaire = str_pad($pat400->consume("RBEN"), 2, "0", STR_PAD_LEFT);
+    $rang = str_pad($pat400->consume("RBEN"), 2, "0", STR_PAD_LEFT);
+    $this->patient->rang_beneficiaire = $rang;
+    $this->patient->qual_beneficiaire = CValue::read(CPatient::$rangToQualBenef, $rang);
 
 //    $this->patient->pays              = $pat400->consume("ZPAY");
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];

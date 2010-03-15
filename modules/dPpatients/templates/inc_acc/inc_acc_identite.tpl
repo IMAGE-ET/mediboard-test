@@ -169,8 +169,8 @@ Main.add(function() {
     <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
   <tr>
-    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
-    <td>{{mb_field object=$patient field="rang_beneficiaire" onchange=showCopieIdentite()}}</td>
+    <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>
+    <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite()}}</td>
 	</tr>
 </table>	
     
@@ -214,7 +214,7 @@ Main.add(function() {
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="rques"}}</th>
-    <td>{{mb_field object=$patient field="rques" onblur="this.form.rang_beneficiaire.value == '01' ?
+    <td>{{mb_field object=$patient field="rques" onblur="this.form.qual_beneficiaire.value == '0' ?
            tabs.changeTabAndFocus('beneficiaire', this.form.regime_sante) :
            tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
   </tr>
@@ -226,12 +226,12 @@ Main.add(function() {
     <td class="text">
     	<div class="big-info" id="copie-identite">
     	  Les champs d'identité du patient sont <strong>recopiés en temps réel</strong> vers 
-    	  les champs d'identités de l'assuré
-    	  car le rang de bénéficiaire est <strong>01 (assuré)</strong>.
+    	  les champs d'identité de l'assuré
+    	  car la qualité de bénéficiaire est <strong>0 (assuré)</strong>.
     	</div>
       <script type="text/javascript">
         function showCopieIdentite() {
-        	$("copie-identite").setVisible(document.editFrm.rang_beneficiaire.value == "01");
+        	$("copie-identite").setVisible($V(getForm("qual_beneficiaire")) == "0");
         }
         
         showCopieIdentite();

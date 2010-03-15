@@ -20,6 +20,10 @@
     <td>{{mb_field object=$patient field="code_gestion"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="centre_carte"}}</th>
+    <td>{{mb_field object=$patient field="centre_carte"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="regime_sante"}}</th>
     <td>{{mb_field object=$patient field="regime_sante"}}</td>
   </tr>

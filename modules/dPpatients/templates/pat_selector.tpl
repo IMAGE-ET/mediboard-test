@@ -135,6 +135,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   	    {{mb_field object=$patVitale field="matricule" hidden="true"}}
   	    {{mb_field object=$patVitale field="assure_matricule" hidden="true"}}
   	    {{mb_field object=$patVitale field="rang_beneficiaire" hidden="true"}}
+        {{mb_field object=$patVitale field="qual_beneficiaire" hidden="true"}}
   	  </td>
   	  <th>{{mb_label object=$patVitale field="ville"}}</th>
   	  <td>

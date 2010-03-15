@@ -60,6 +60,13 @@ class CPatient extends CMbObject {
     ),
   );
   
+  static $rangToQualBenef = array(
+    "01" => 0,
+    "31" => 1,
+    "02" => 2,
+    "11" => 6,
+  );
+  
   // DB Table key
   var $patient_id = null;
 
@@ -92,6 +99,7 @@ class CPatient extends CMbObject {
   var $caisse_gest      = null;
   var $centre_gest      = null;
   var $code_gestion     = null;
+  var $centre_carte     = null;
   var $regime_sante     = null;
   var $rques            = null;
   var $cmu              = null;
@@ -107,6 +115,7 @@ class CPatient extends CMbObject {
   var $mutuelle_types_contrat = null;
   
   var $rang_beneficiaire= null;
+  var $qual_beneficiaire= null; // LogicMax, VitaleVision
   var $rang_naissance   = null;
   var $fin_validite_vitale = null;
   
@@ -249,7 +258,8 @@ class CPatient extends CMbObject {
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
-    $specs["code_gestion"]      = "numchar length|4";
+    $specs["code_gestion"]      = "numchar length|2";
+    $specs["centre_carte"]      = "numchar length|4";
     $specs["regime_sante"]      = "str";
     $specs["sexe"]              = "enum list|m|f default|m";
     $specs["civilite"]          = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
@@ -279,6 +289,7 @@ class CPatient extends CMbObject {
     $specs["notes_amo"]         = "text";
     $specs["notes_amc"]         = "text";
     $specs["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
+    $specs["qual_beneficiaire"] = "enum list|0|1|2|3|4|5|6|7|8|9";
     $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
     $specs["fin_validite_vitale"] = "date";
     $specs["code_sit"]          = "numchar length|4";
@@ -588,21 +599,7 @@ class CPatient extends CMbObject {
     //@todo: quelle est la clé pour le code gestion ?
     //$this->code_gestion = CValue::read($vitale, "??");
     
-    // Rang bénéficiaire
-    $codeRangMatrix = array(
-			"00"=> "01", // Assuré
-			"01"=> "31", // Ascendant, descendant, collatéraux ascendants
-			"02"=> "02", // Conjoint
-			"03"=> "02", // Conjoint divorcé
-			"04"=> "02", // Concubin
-			"05"=> "02", // Conjoint séparé
-			"06"=> "11", // Enfant
-			"07"=> "02", // Bénéficiaire hors article 313
-			"08"=> "02", // Conjoint veuf
-			"09"=> "02", // Autre ayant droit
-    );
-    
-    $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
+    $this->qual_beneficiaire = intval($vitale["VIT_CODE_QUALITE"]);
     
     // Recherche de la période AMO courante
     foreach ($intermax as $category => $periode) {
@@ -666,7 +663,7 @@ class CPatient extends CMbObject {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
     
-		$nom_naissance = $this->nom_jeune_fille ? " ($this->nom_jeune_fille) " : "";
+    $nom_naissance   = $this->nom_jeune_fille ? "($this->nom_jeune_fille)" : " ";
     $this->_view     = "$this->_civilite $this->nom $nom_naissance $this->prenom";
     $this->_longview = "$this->_civilite_long $this->nom $nom_naissance $this->prenom";
 		
@@ -854,9 +851,11 @@ class CPatient extends CMbObject {
    */
   function getSejoursCollisions() {
     $sejours_collision = array();
+    $group_id = CGroups::loadCurrent()->_id;
+    
     if ($this->_ref_sejours) {
 			foreach ($this->_ref_sejours as $_sejour) {
-			  if (!$_sejour->annule && $_sejour->group_id == CGroups::loadCurrent()->_id) {
+			  if (!$_sejour->annule && $_sejour->group_id == $group_id) {
 				  $sejours_collision[$_sejour->_id] = array (
 				    "entree" => mbDate($_sejour->_entree),
 				    "sortie" => mbDate($_sejour->_sortie)
