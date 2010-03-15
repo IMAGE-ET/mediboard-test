@@ -329,8 +329,9 @@ Main.add( function(){
             <!-- Debut du formulaire de rajout de reglements -->
             {{if $consult->tarif && $consult->valide == "1"}}
               {{if $consult->sejour_id}}
-               <div style="text-align: center; font-weight: bold;">
-                 ATU : Règlement à effectuer au bureau des sorties
+               <div class="small-info">
+                 Consultation de séjour : 
+								 <strong>Règlement à effectuer au bureau des sorties</strong>
                </div>
               {{else}}
               
