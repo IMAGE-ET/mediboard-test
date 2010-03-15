@@ -10,7 +10,7 @@
 
 // Get the user's style
 $uistyle = CAppUI::pref("UISTYLE");
-if (!is_dir("style/$uistyle")) {
+if (!file_exists("style/$uistyle/templates/header.tpl")) {
   $uistyle = "mediboard";
 }
 

@@ -99,16 +99,21 @@
     </table>
   </td>
   
-  {{if !$infinite_service && $only_service_stocks == 1}}
-    {{if $stock->_ref_stock_service->_id}}
+  {{if !$infinite_service}}
+    {{if isset($stock->_ref_stock_service|smarty:nodefaults) && $stock->_ref_stock_service->_id}}
       <td>
-        {{$stock->_ref_stock_service->quantity}}
+        {{mb_label object=$stock->_ref_stock_service field=quantity}}:
+        <strong>{{mb_value object=$stock->_ref_stock_service field=quantity}}</strong>
+      </td>
+      <td>
+        {{mb_label object=$stock->_ref_stock_service field=order_threshold_optimum}}:
+        <strong>{{mb_value object=$stock->_ref_stock_service field=order_threshold_optimum}}</strong>
       </td>
       <td>
         {{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock->_ref_stock_service}}
       </td>
     {{else}}
-      <td colspan="2">
+      <td colspan="3">
         {{tr}}CProductStockService.none{{/tr}}
       </td>
     {{/if}}

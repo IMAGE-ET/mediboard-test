@@ -35,9 +35,6 @@
     <td style="text-align: center;">{{$stock->quantity+$curr_destockage.nb_produit}}</td>
     <td style="text-align: center;">{{$curr_destockage.nb_produit}}</td>
     <td>
-      <script type="text/javascript">
-        prepareForm("destockage-{{$stock->_id}}");
-      </script>
       <form name="destockage-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})"
       {{if $stock->_ref_logs|@count>0 && false}}style="opacity: 0.5" title="Destockage déjà réalisé durant la période indiquée"{{/if}}>
         <input type="hidden" name="m" value="dPstock" /> 
@@ -50,9 +47,6 @@
       </form>
     </td>
     <td>
-      <script type="text/javascript">
-        prepareForm("retour-{{$code}}");
-      </script>
       <form name="retour-{{$code}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})">
         <input type="hidden" name="m" value="dPstock" /> 
         <input type="hidden" name="del" value="0" />

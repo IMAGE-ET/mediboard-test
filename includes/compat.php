@@ -63,6 +63,45 @@ function in_array_recursive($needle, $haystack, $strict = false) {
 }
 
 /**
+ * (PHP 5 >= 5.3.0)
+ * array_replace_recursive Replaces elements from passed arrays into the first array recursively
+ * 
+ * cf. http://php.net/array_replace_recursive
+ */
+if (!function_exists('array_replace_recursive')) {
+  function array_replace_recursive($array, $array1) {
+    function recurse($array, $array1) {
+      foreach ($array1 as $key => $value) {
+        // create new key in $array, if it is empty or not an array
+        if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
+          $array[$key] = array();
+        }
+ 
+        // overwrite the value in the base array
+        if (is_array($value)) {
+          $value = recurse($array[$key], $value);
+        }
+        $array[$key] = $value;
+      }
+      return $array;
+    }
+ 
+    // handle the arguments, merge one by one
+    $args = func_get_args();
+    $array = $args[0];
+    if (!is_array($array)) {
+      return $array;
+    }
+    for ($i = 1; $i < count($args); $i++) {
+      if (is_array($args[$i])) {
+        $array = recurse($array, $args[$i]);
+      }
+    }
+    return $array;
+  }
+}
+
+/**
  * (PHP 5 >= 5.1.0)
  * property_exists Computes the difference of arrays using keys for comparison 
  * 

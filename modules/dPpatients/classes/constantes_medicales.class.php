@@ -54,23 +54,82 @@ class CConstantesMedicales extends CMbObject {
   var $_new_constantes_medicales = null;
   
   static $list_constantes = array (
-    "poids"             => array("unit" => "kg", "callback" => "calculImcVst"), 
-    "taille"            => array("unit" => "cm", "callback" => "calculImcVst"),
-    "pouls"             => array("unit" => "/min"), 
-    "ta"                => array("unit" => "cm Hg", "formfields" => array("_ta_systole", "_ta_diastole")),
-    "_vst"              => array("unit" => "ml"),
-    "_imc"              => array("unit" => ""),
-    "temperature"       => array("unit" => "°C"), 
-    "spo2"              => array("unit" => "%"), 
-    "score_sensibilite" => array("unit" => ""),
-    "score_motricite"   => array("unit" => ""),
-    "score_sedation"    => array("unit" => ""),
-    "frequence_respiratoire"=> array("unit" => ""),
-    "EVA"               => array("unit" => ""),
-    "glycemie"          => array("unit" => "g/l"),
-    "redon"             => array("unit" => "ml"),
-    "diurese"           => array("unit" => "ml"),
-    "injection"         => array("unit" => "kg", "formfields" => array("_inj", "_inj_essai")),
+    "poids"             => array(
+      "unit" => "kg", 
+      "callback" => "calculImcVst", 
+      "min" => 0, "max" => 150
+    ), 
+    "taille"            => array(
+      "unit" => "cm", 
+      "callback" => "calculImcVst", 
+      "min" => 0, "max" => 220
+    ),
+    "pouls"             => array(
+      "unit" => "puls./min", 
+      "min" => 50, "max" => 120,
+      "standard" => 60,
+      "colors" => array("black")
+    ), 
+    "ta"                => array(
+      "unit" => "cm Hg", 
+      "formfields" => array("_ta_systole", "_ta_diastole"), 
+      "min" => 0, "max" => 20,
+      "standard" => 12,
+      "colors" => array("#00A8F0", "#C0D800")
+    ),
+    "_vst"              => array(
+      "unit" => "ml"
+    ),
+    "_imc"              => array(
+      "unit" => ""
+    ),
+    "temperature"       => array(
+      "unit" => "°C", 
+      "min" => 36, "max" => 41,
+      "standard" => 37.5,
+      "colors" => array("orange")
+    ), 
+    "spo2"              => array(
+      "unit" => "%", 
+      "min" => 70, "max" => 100
+    ), 
+    "score_sensibilite" => array(
+      "unit" => "", 
+      "min" => 0, "max" => 5
+    ),
+    "score_motricite"   => array(
+      "unit" => "", 
+      "min" => 0, "max" => 5
+    ),
+    "score_sedation"    => array(
+      "unit" => "", 
+      "min" => 70, "max" => 100
+    ),
+    "frequence_respiratoire"=> array(
+      "unit" => "", 
+      "min" => 0, "max" => 60
+    ),
+    "EVA"               => array(
+      "unit" => "", 
+      "min" => 0, "max" => 10
+    ),
+    "glycemie"          => array(
+      "unit" => "g/l", 
+      "min" => 0, "max" => 4
+    ),
+    "redon"             => array(
+      "unit" => "ml", 
+      "min" => 0, "max" => 500
+    ),
+    "diurese"           => array(
+      "unit" => "ml", 
+      "min" => 0, "max" => 2000
+    ),
+    "injection"         => array(
+      "unit" => "kg", 
+      "formfields" => array("_inj", "_inj_essai"), 
+      "min" => 0, "max" => 10
+    ),
   );
   
   function __construct() {

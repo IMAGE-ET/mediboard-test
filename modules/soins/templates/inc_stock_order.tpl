@@ -127,8 +127,8 @@ Main.add(function(){
     <th>Unité de dispensation</th>
     <th style="width: 30%">Commande</th>
     <th>Déjà effectuées</th>
-    {{if !$infinite_service && $only_service_stocks == 1}}
-    <th colspan="2" style="width: 0.1%;">
+    {{if !$infinite_service}}
+    <th colspan="3" style="width: 0.1%;">
       Stock du service
     </th>
     {{/if}}
