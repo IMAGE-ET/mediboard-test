@@ -23,6 +23,9 @@ $consultation->loadRefConsultAnesth();
 foreach($patient->_ref_sejours as $key => $sejour) {
   $patient->_ref_sejours[$key]->loadRefsOperations();
   $patient->_ref_sejours[$key]->loadRefsConsultations();
+  foreach($patient->_ref_sejours[$key]->_ref_consultations as $keyCslt => $cslt) {
+    $patient->_ref_sejours[$key]->_ref_consultations[$keyCslt]->getType();
+  }
   foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
     $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
   }

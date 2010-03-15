@@ -12,7 +12,7 @@
 {{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
-{{elseif $curr_adm->type == 'urg'}} {{assign var=background value="#ff6"}}
+{{elseif $curr_adm->type == 'consult'}} {{assign var=background value="#cfdfff"}}
 {{else}}
 {{assign var=background value="#ccc"}}
 {{/if}}
@@ -110,60 +110,61 @@
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{if $canAdmissions->edit}}
-  <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
-  
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_sejour_aed" />
-  <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
-  <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
-  {{if $curr_adm->chambre_seule}}
-  <input type="hidden" name="chambre_seule" value="0" />
-  <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
-    Chambre simple
-  </button>
-  {{else}}
-  <input type="hidden" name="chambre_seule" value="1" />
-  <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
-    Chambre double
-  </button>
-  {{/if}}
-  </form>
-  
-  <!-- Prestations -->
-  {{if $prestations}}
-  <form name="editPrestFrm{{$curr_adm->sejour_id}}" method="post">
-    <input type="hidden" name="m" value="dPplanningOp" />
-    <input type="hidden" name="dosql" value="do_sejour_aed" />
-    <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
-    <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
-  <select name="prestation_id" onchange="submitFormAjax(this.form, 'systemMsg')">
-  <option value="">&mdash; Prestation</option>
-  {{foreach from=$prestations item="_prestation"}}
-    <option value="{{$_prestation->_id}}" {{if $curr_adm->prestation_id==$_prestation->_id}} selected = selected {{/if}}>{{$_prestation->_view}}</option>
-  {{/foreach}}
-  </select>
-  </form>
-  {{/if}}
-  {{else}}
-  {{if $curr_adm->chambre_seule}}
-    Chambre simple
-  {{else}}
-    Chambre double
-  {{/if}}
-  {{if $curr_adm->prestation_id && $prestations}}
-  {{assign var=_prestation_id value=$curr_adm->prestation_id}}
-  <br />
-  Prest. {{$prestations.$_prestation_id->_view}}
-  {{/if}}
-  {{/if}}
-  <br />
-  {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
-  {{if $affectation->affectation_id}}
-  {{$affectation->_ref_lit->_view}}
-  {{else}}
-  Non placé
-  {{/if}}
+  {{if !($curr_adm->type == 'exte') && !($curr_adm->type == 'consult') && $curr_adm->annule != 1}}
+    {{if $canAdmissions->edit}}
+      <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
+      <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
+      {{if $curr_adm->chambre_seule}}
+        <input type="hidden" name="chambre_seule" value="0" />
+        <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
+          Chambre simple
+        </button>
+      {{else}}
+        <input type="hidden" name="chambre_seule" value="1" />
+        <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
+          Chambre double
+        </button>
+      {{/if}}
+      </form>
+    
+      <!-- Prestations -->
+      {{if $prestations}}
+      <form name="editPrestFrm{{$curr_adm->sejour_id}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
+        <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
+        <select name="prestation_id" onchange="submitFormAjax(this.form, 'systemMsg')">
+        <option value="">&mdash; Prestation</option>
+        {{foreach from=$prestations item="_prestation"}}
+          <option value="{{$_prestation->_id}}" {{if $curr_adm->prestation_id==$_prestation->_id}} selected = selected {{/if}}>{{$_prestation->_view}}</option>
+        {{/foreach}}
+        </select>
+      </form>
+      {{/if}}
+    {{else}}
+      {{if $curr_adm->chambre_seule}}
+        Chambre simple
+      {{else}}
+        Chambre double
+      {{/if}}
+      {{if $curr_adm->prestation_id && $prestations}}
+        {{assign var=_prestation_id value=$curr_adm->prestation_id}}
+        <br />
+        Prest. {{$prestations.$_prestation_id->_view}}
+      {{/if}}
+    {{/if}}
+    <br />
+    {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
+    {{if $affectation->affectation_id}}
+      {{$affectation->_ref_lit->_view}}
+    {{else}}
+      Non placé
+    {{/if}}
+  {{/if}}  
 </td>
 
 {{if $curr_adm->annule == 1}}

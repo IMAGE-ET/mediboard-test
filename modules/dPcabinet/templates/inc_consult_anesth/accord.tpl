@@ -44,13 +44,6 @@ Main.add(function () {
 
 <!-- Tab titles -->
 <ul id="tab-consult-anesth" class="control_tabs">
-  {{if $consult->sejour_id}}
-  {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
-  <li><a href="#rpuConsult">
-    RPU 
-    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
-  </a></li>
-  {{/if}}
   <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#AntTrait">Antécédents</a></li>
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Exams">Exam. Clinique</a></li>
@@ -74,10 +67,6 @@ Main.add(function () {
 
 
 <!-- Tabs -->
-{{if $consult->sejour_id}}
-<div id="rpuConsult" style="display: none;">{{include file="../../dPurgences/templates/inc_vw_rpu.tpl"}}</div>
-{{/if}}
-
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
 
 <div id="Constantes" style="display: none;">

@@ -701,7 +701,7 @@ class CConsultation extends CCodable {
       $datetime = $this->_datetime;
       $where = array();
       $where['patient_id']   = " = '$this->patient_id'";
-      $where[] = "`entree_prevue` <= '$datetime' AND `sortie_prevue` >= '$datetime'";
+      $where[] = "IF(`entree_reelle`,`entree_reelle`,`entree_prevue`) <= '$datetime' AND IF(`sortie_reelle`,`sortie_reelle`,`sortie_prevue`) >= '$datetime'";
       
       $sejour = new CSejour();
       $sejour->loadObject($where);
@@ -790,9 +790,14 @@ class CConsultation extends CCodable {
   function loadRefPraticien(){
   	$this->loadRefPlageConsult(1);
     $this->_ref_praticien =& $this->_ref_chir;
+  }
+  
+  function getType() {
+    $this->loadRefPraticien();
+    $this->loadRefSejour();
     
     // Calcul du type de la consultation
-    if ($this->_ref_praticien->function_id == CGroups::loadCurrent()->service_urgences_id) {
+    if ($this->_ref_praticien->isUrgentiste() && $this->sejour_id && $this->_ref_sejour->type == "urg") {
       $this->_type = "urg";
     }
     if ($this->_ref_praticien->isFromType(array("Anesthésiste"))) {

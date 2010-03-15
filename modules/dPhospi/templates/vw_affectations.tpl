@@ -103,7 +103,7 @@ Main.add(function () {
               <select name="filterFunction" style="width: 16em;" onchange="this.form.submit()">
                 <option value=""> &mdash; Toutes les fonctions</option>
                 {{foreach from=$functions_filter item=_function}}
-                  <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}}>{{$_function}}</option>
+                  <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
                 {{/foreach}}
               </select>
             </td>

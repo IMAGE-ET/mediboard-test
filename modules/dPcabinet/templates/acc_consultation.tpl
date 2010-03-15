@@ -7,7 +7,7 @@
 
 {{assign var="rpu" value=""}}
 {{assign var="mutation_id" value=""}}
-{{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
+{{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   {{assign var="mutation_id" value=$rpu->mutation_sejour_id}}
 {{/if}}
@@ -60,7 +60,7 @@ Main.add(function () {
 </script>
 
 <ul id="tab-consult" class="control_tabs">
-  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
+  {{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
 	  <li><a href="#rpuConsult">
 	     RPU 
 	    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$consult->_ref_sejour->_num_dossier}}
@@ -78,7 +78,7 @@ Main.add(function () {
   </li>
   {{/if}}
  
-  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
+  {{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
   <li><a href="#suivisoins">Suivi soins</a></li>
   {{/if}}
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
@@ -93,7 +93,7 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 {{if $consult->sejour_id}}
-  {{if $consult->_ref_chir->_is_urgentiste}}
+  {{if ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
     <div id="rpuConsult" style="display: none;">
 		  {{include file="../../dPurgences/templates/inc_vw_rpu.tpl"}}
 		</div>
@@ -109,7 +109,7 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
-{{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
+{{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
 <div id="suivisoins" style="display:none">
   {{if $mutation_id}}
 	  <div class="small-info">
@@ -127,7 +127,7 @@ Main.add(function () {
 
 {{if $app->user_prefs.ccam_consultation == 1 }}
 <div id="Actes" style="display: none;">
-  {{if $consult->sejour_id  && $consult->_ref_chir->_is_urgentiste && $rpu->mutation_sejour_id}}
+  {{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste && $rpu->mutation_sejour_id}}
 	  <div class="small-info">
 	    Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
 	  </div>
@@ -155,7 +155,7 @@ Main.add(function () {
 	    </div>
 	  </div>
 	  
-	  {{if $consult->sejour_id && $consult->_ref_chir->_is_urgentiste}}
+	  {{if $consult->sejour_id && ($consult->_ref_sejour->type == "urg") && $consult->_ref_chir->_is_urgentiste}}
 	  <div id="cim" style="display: none;">
 	      {{assign var="sejour" value=$consult->_ref_sejour}}
 	      {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}

@@ -978,4 +978,8 @@ $locales['CService-back-protocoles.empty'] = '';
 $locales['CService-back-sejours'] = 'Séjours';
 $locales['CService-back-sejours.empty'] = 'Aucun séjour';
 $locales['CTypeAnesth-back-operations.empty'] = '';
+$locales['CSejour._filter_type.consult'] = 'Consultation';
+$locales['CSejour._filter_type.urg'] = 'Urgence';
+$locales['CSejour._type_admission.consult'] = 'Consultation';
+$locales['CSejour._type_admission.urg'] = 'Urgence';
 ?>

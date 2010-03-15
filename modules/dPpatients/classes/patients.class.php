@@ -1178,7 +1178,7 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
       
       $consult->loadRefsFwd(1);
-      $consult->loadRefPraticien();
+      $consult->getType();
       $consult->_ref_chir->loadRefFunction();
       $consult->_ref_chir->_ref_function->loadRefGroup();
       $consult->canRead();
@@ -1215,6 +1215,7 @@ class CPatient extends CMbObject {
         $_consult->countDocItems($permType);
         
         $_consult->loadRefsFwd(1);
+        $_consult->getType();
         $_consult->_ref_chir->loadRefFunction();
         $_consult->_ref_chir->_ref_function->loadRefGroup();
         $_consult->canRead();
