@@ -275,16 +275,18 @@
   {{/if}}
 </td>
 
-<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{foreach from=$curr_adm->_ref_operations item=curr_op}}
-  {{if $curr_op->depassement}}
-  <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-  <!-- <a href="#" onclick="printDepassement({{$curr_adm->sejour_id}})"></a> -->
-  {{mb_value object=$curr_op field="depassement"}}
-  <br />
-  {{/if}}
-  {{foreachelse}}
-  -
-  {{/foreach}}
-</td>
+{{if $dPconfig.dPadmissions.show_dh}}
+  <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    {{foreach from=$curr_adm->_ref_operations item=curr_op}}
+    {{if $curr_op->depassement}}
+    <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
+    <!-- <a href="#" onclick="printDepassement({{$curr_adm->sejour_id}})"></a> -->
+    {{mb_value object=$curr_op field="depassement"}}
+    <br />
+    {{/if}}
+    {{foreachelse}}
+    -
+    {{/foreach}}
+  </td>
+{{/if}}
 {{/if}}

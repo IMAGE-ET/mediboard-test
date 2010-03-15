@@ -117,23 +117,19 @@ if ($consult->_id) {
       $consultAnesth->_ref_sejour->loadRefPraticien();
     }
   }
-  
-  if ($consult->sejour_id) {
-    $consult->loadRefSejour();
-  }
-  
+ 
   // Chargement du patient
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadRefPhotoIdentite();
   $patient->loadStaticCIM10($userSel->user_id);
   
-  // Chargement des ses consultations
+  // Chargement de ses consultations
   foreach ($patient->_ref_consultations as &$_consultation) {
     $_consultation->loadRefsFwd();
   }
   
-  // Chargement des ses séjours
+  // Chargement de ses séjours
   foreach ($patient->_ref_sejours as &$_sejour) {
     $_sejour->loadRefsFwd();
     $_sejour->loadRefsOperations();
@@ -188,22 +184,29 @@ $consult->loadRefsActesNGAP();
 $listEtab = array();
 $listServicesUrgence = array();
 
-// Chargement du sejour dans le cas d'une urgence
-$consult->_ref_chir->isUrgentiste();
-if ($consult->_id && $consult->sejour_id && $consult->_ref_chir->_is_urgentiste){
+if ($consult->sejour_id) {
+  $consult->loadRefSejour();
+}
+// Chargement du sejour
+if ($consult->_ref_sejour->_id){
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();
-  $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
-  $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
-
-  // Chargement des etablissements externes
-  $order = "nom";
-  $etab = new CEtabExterne();
-  $listEtab = $etab->loadList(null, $order);
   
-  // Chargement des boxes d'urgences
-  $listServicesUrgence = CService::loadServicesUrgence();
+  $consult->_ref_chir->isUrgentiste();
+  if ($consult->_ref_chir->_is_urgentiste) {
+    
+    $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
+    $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
+  
+    // Chargement des etablissements externes
+    $order = "nom";
+    $etab = new CEtabExterne();
+    $listEtab = $etab->loadList(null, $order);
+    
+    // Chargement des boxes d'urgences
+    $listServicesUrgence = CService::loadServicesUrgence();
+  }
 }
 
 // Initialisation d'un acte NGAP

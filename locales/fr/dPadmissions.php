@@ -22,4 +22,6 @@ $locales['CSejour.mode_sortie.normal'] = '';
 $locales['CSejour.mode_sortie.transfert'] = '';
 $locales['config-dPadmissions-fiche_admission-desc'] = 'Modèle d\'impression pour les fiches d\'admission';
 $locales['mod-dPadmissions-tab-vw_idx_preadmission'] = 'Pré-admissions';
+$locales['config-dPadmissions-show_dh'] = 'Afficher dépassement honoraire';
+$locales['config-dPadmissions-show_dh-desc'] = 'Afficher dépassement honoraire';
 ?>

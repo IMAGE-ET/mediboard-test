@@ -77,11 +77,13 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     </th>
     <th>Anesth</th>
     <th>CMU</th>
+    {{if $dPconfig.dPadmissions.show_dh}}
     <th>DH</th>
+    {{/if}}
   </tr>
   {{foreach from=$today item=curr_adm}}
-  <tr id="admission{{$curr_adm->sejour_id}}">
-  {{include file="inc_vw_admission_line.tpl" nodebug=true}}
-  </tr>
+    <tr id="admission{{$curr_adm->sejour_id}}">
+      {{mb_include module=dPadmissions template="inc_vw_admission_line" nodebug=true}}
+    </tr>
   {{/foreach}}
 </table>

@@ -166,6 +166,7 @@ $dPconfig["ft"] = array(
 
 $dPconfig["dPadmissions"] = array (
   "fiche_admission" => "a4",
+  "show_dh"         => "1",
 );
 
 $dPconfig["dPplanningOp"]["COperation"] = array (

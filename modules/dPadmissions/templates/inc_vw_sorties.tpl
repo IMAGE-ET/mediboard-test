@@ -140,20 +140,20 @@
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sortie->_ref_praticien}}
     </td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      
-      {{foreach from=$curr_sortie->_ref_affectations item="affectation"}}
-        {{if $affectation->effectue}}
-          <div style="display: inline;" class="effectue">{{$affectation->_ref_lit->_view}}</div>
-        {{else}}
-          {{$affectation->_ref_lit->_view}}
+      {{if !($curr_sortie->type == 'exte') && !($curr_sortie->type == 'consult') && $curr_sortie->annule != 1}}
+        {{foreach from=$curr_sortie->_ref_affectations item="affectation"}}
+          {{if $affectation->effectue}}
+            <div style="display: inline;" class="effectue">{{$affectation->_ref_lit->_view}}</div>
+          {{else}}
+            {{$affectation->_ref_lit->_view}}
+          {{/if}}
+          <br />
+        {{/foreach}}
+        
+        {{if !$curr_sortie->_ref_affectations|@count}}
+          Non placé
         {{/if}}
-        <br />
-      {{/foreach}}
-      
-      {{if !$curr_sortie->_ref_affectations|@count}}
-        Non placé
-      {{/if}}
-         
+       {{/if}}  
     </td>
   </tr>
   {{/foreach}}

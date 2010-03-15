@@ -4,15 +4,15 @@
 <input type="hidden" name="m" value="system" />
 
 <table class="form">
-
-  {{assign var="var" value="fiche_admission"}}
-
   <tr>
     <th class="title" colspan="2">Affichage</th>
   </tr>
   
+  {{mb_include module=system template=inc_config_bool var=show_dh}}
+  
+  {{assign var="var" value="fiche_admission"}}
   <tr>
-    <th>
+    <th style="width:50%">
       <label for="{{$m}}[fiche_admission]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
       </label>  

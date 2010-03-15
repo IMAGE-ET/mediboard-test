@@ -95,7 +95,7 @@ Main.add(function () {
 {{if $consult->sejour_id}}
   {{if $rpu}}
     <div id="rpuConsult" style="display: none;">
-		  {{mb_include module=dPurgences template=inc_vw_rpu.tpl}}
+		  {{mb_include module=dPurgences template=inc_vw_rpu}}
 		</div>
 	{{/if}}
 
