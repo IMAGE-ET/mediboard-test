@@ -32,7 +32,7 @@ class CSourceSOAP extends CExchangeSource {
   
   function send($evenement_name) {
     if (!$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->web_service_name)) {
-      trigger_error("Impossible de joindre le destinataire : ".$this->url);
+      trigger_error("Impossible de joindre le destinataire : ".$this->host);
     }
     
     $this->_acquittement = $this->_args_list ? 
