@@ -187,8 +187,9 @@ $listServicesUrgence = array();
 if ($consult->sejour_id) {
   $consult->loadRefSejour();
 }
+
 // Chargement du sejour
-if ($consult->_ref_sejour->_id){
+if ($consult->_ref_sejour && $consult->_ref_sejour->_id){
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();
