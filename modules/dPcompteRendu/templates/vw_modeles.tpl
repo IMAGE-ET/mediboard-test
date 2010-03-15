@@ -23,8 +23,7 @@ Main.add(function () {
       <option value="">&mdash; Choisir un utilisateur</option>
       {{foreach from=$praticiens item=curr_prat}}
         <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" 
-        	{{if $curr_prat->_id == $filtre->chir_id}} selected="selected" {{/if}}
-        >
+        	{{if $curr_prat->_id == $filtre->chir_id}} selected="selected" {{/if}}>
           {{$curr_prat->_view}}
         </option>
       {{/foreach}}
@@ -32,7 +31,15 @@ Main.add(function () {
   </td>
 
   <th>{{mb_label object=$filtre field=object_class}}</th>
-  <td>{{mb_field object=$filtre field=object_class onchange="this.form.submit()" canNull=true defaultOption="&mdash; Tous les objets"}}</td>
+  <td>
+	 {{assign var=_spec value=$filtre->_specs.object_class}}
+    <select name="object_class" onchange="this.form.submit()">
+      <option value="">&mdash; Tous les types</option>
+      {{foreach from=$_spec->_locales item=_locale key=_object_class}}
+        <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected="selected"{{/if}}>{{$_locale}}</option>
+      {{/foreach}}
+    </select>
+	</td>
 
   <th>{{mb_label object=$filtre field=type}}</th>
   <td>{{mb_field object=$filtre field=type onchange="this.form.submit()" canNull=true defaultOption="&mdash; Tous les types"}}</td>
