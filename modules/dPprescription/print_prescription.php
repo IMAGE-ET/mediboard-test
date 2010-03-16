@@ -22,6 +22,10 @@ $etablissement = CGroups::loadCurrent();
 $prescription_id = CValue::getOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
+
+if(!$prescription->object_id){
+	$praticien_sortie_id = "";
+}
 $prescription->loadRefsFwd();
 
 // Chargement du poids du patient
