@@ -122,6 +122,9 @@ Main.add( function(){
       document.selPraticienLine.praticien_id.value = {{$praticien_for_prot_id}};   
     {{/if}}
     changePraticien(praticien_id);
+
+		pratSelect = document.selPraticienLine.praticien_id;
+		$('protocole_prat_name').update('Dr '+pratSelect.options[pratSelect.selectedIndex].text);
   } else {
     praticien_id = '{{$prescription->_ref_current_praticien->_id}}';
   }
@@ -248,7 +251,7 @@ Main.add( function(){
 			 <div style="float: right">
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
-				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
+				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text);">
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
 						          value="{{$prescription->_ref_current_praticien->_id}}"
@@ -313,7 +316,7 @@ Main.add( function(){
   	<td colspan="3">
 			<ul id="header_prescription" class="control_tabs small">
 				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
-				<li><a href="#div_protocoles">Protocoles</a></li>
+				<li><a href="#div_protocoles">Protocoles <span id="protocole_prat_name"></span></a></li>
 				{{/if}}
 				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
 				<li><a href="#div_ajout_lignes">Paramètres d'ajout de lignes</a></li>
@@ -420,7 +423,7 @@ Main.add( function(){
 	          } );
 	 				</script>				 				
  				{{/if}}
-        <button type="button" class="submit" onclick="this.form.onsubmit();">Appliquer</button>
+        <button type="button" class="submit singleclick" onclick="this.form.onsubmit();">Appliquer</button>
       </form>
     </td>  
   {{/if}}

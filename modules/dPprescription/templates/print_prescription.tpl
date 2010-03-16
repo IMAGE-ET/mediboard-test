@@ -105,7 +105,6 @@ Main.add(window.print);
   {{/if}}
   
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald}}
-  <h1>Medicaments</h1>
     <!-- Affichage des ald -->
     <h3>
     Prescriptions relatives au traitement de l'affection de longue durée
@@ -137,7 +136,6 @@ Main.add(window.print);
     </ul>
 <!-- Affichage en mode normal -->
 {{else}}
-  <h1>Médicaments</h1>
     <!-- Affichage des no_ald -->
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald name="foreach_med"}}
@@ -210,7 +208,7 @@ Main.add(window.print);
      {{else}} 
        <div class="body">
      {{/if}}
-     <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
+
      <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
      {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
      <h3>
