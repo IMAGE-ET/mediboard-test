@@ -296,7 +296,7 @@ class CTemplateManager {
     
     $image = "data:image/jpg;base64,".urlencode(base64_encode($image));
     
-    self::$barcodeCache[$code][$size] = $image;
+    return self::$barcodeCache[$code][$size] = $image;
   }
   
   function renderDocument($source) {
