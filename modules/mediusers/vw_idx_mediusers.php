@@ -45,7 +45,9 @@ if ($pro_sante) {
     $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
   }
 }
-$where["users_mediboard.actif"] = $inactif ? "!= '1'" : "= '1'";
+if (!$filter) {
+  $where["users_mediboard.actif"] = $inactif ? "!= '1'" : "= '1'";
+}
 
 $order = "";
 if ($order_col == "function_id") {
@@ -65,7 +67,6 @@ if ($order_col == "function_id") {
 }
 
 $total_mediuser = $mediuser->countList($where, $order, null, null, $ljoin);
-
 $mediusers = $mediuser->loadList($where, $order, "$page, 25", null, $ljoin);
 foreach($mediusers as &$_mediuser) {
   $_mediuser->loadRefFunction();

@@ -32,6 +32,8 @@ foreach($functions as $_function) {
 // Récupération de la fonction selectionnée
 $userfunction = new CFunctions;
 $userfunction->load(CValue::getOrSession("function_id", 0));
+$primary_users       = array();
+$total_userfunctions = null;
 if($userfunction->_id) {
   $userfunction->loadRefsFwd();
   $userfunction->loadBackRefs("users");
