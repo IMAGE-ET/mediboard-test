@@ -1,196 +1,45 @@
 <script type="text/javascript">
-
-function startINSEE() {
-  var url = new Url("dPpatients", "httpreq_do_add_insee");
-  url.requestUpdate("INSEE");
-}
-
-var oTokenAntecedents = null;
-var oTokenAppareils = null;
-Main.add(function () {
-  var oField = getForm("editConfig")["dPpatients[CAntecedent][types]"];
-  oTokenAntecedents = new TokenField(oField);
-  
-  var oFieldAppareil = getForm("editConfig")["dPpatients[CAntecedent][appareils]"];
-  oTokenAppareils = new TokenField(oFieldAppareil);
-  
-});
-
+Main.add(Control.Tabs.create.curry('tabs-configure', true));
 </script>
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#CPatient"       >{{tr}}CPatient{{/tr}}       </a></li>
+  <li><a href="#CAntecedent"    >{{tr}}CAntecedent{{/tr}}    </a></li>
+  <li><a href="#CTraitement"    >{{tr}}CTraitement{{/tr}}    </a></li>
+  <li><a href="#CDossierMedical">{{tr}}CDossierMedical{{/tr}}</a></li>
+  <li><a href="#CMedecin"       >{{tr}}CMedecin{{/tr}}       </a></li>
+  <li><a href="#LogicMax"       >{{tr}}LogicMax{{/tr}}       </a></li>
+  <li><a href="#INSEE"          >{{tr}}INSEE{{/tr}}          </a></li>
+</ul>
 
-<input type="hidden" name="m" value="system" />
-<input type="hidden" name="dosql" value="do_configure" />
+<hr class="control_tabs" />
 
-<table class="form">  
-  {{assign var="class" value="CPatient"}}
-  <tr>
-    <th class="title" colspan="100">Configuration pour les patients</th>
-  </tr>
-  
-  {{mb_include module=system template=inc_config_str var=tag_ipp thcolspan=3 tdcolspan=3}}
-  
-  {{mb_include module=system template=inc_config_str var=tag_ipp_trash thcolspan=3 tdcolspan=3}}
-  
-  {{assign var="var" value="identitovigilence"}}
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td class="text" colspan="3">
-      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="nodate"   {{if $dPconfig.$m.$class.$var == "nodate"  }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-nodate{{/tr}}</option>
-        <option value="date"     {{if $dPconfig.$m.$class.$var == "date"    }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-date{{/tr}}</option>
-        <option value="doublons" {{if $dPconfig.$m.$class.$var == "doublons"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-doublons{{/tr}}</option>
-      </select> 
-    </td>            
-  </tr>
-  
-  {{assign var="var" value="multi_group"}}
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>    
-    </th>
-    <td class="text" colspan="3">
-      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="full"    {{if $dPconfig.$m.$class.$var == "full"   }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-full{{/tr}}</option>
-        <option value="limited" {{if $dPconfig.$m.$class.$var == "limited"}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-limited{{/tr}}</option>
-        <option value="hidden"  {{if $dPconfig.$m.$class.$var == "hidden" }} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-hidden{{/tr}}</option>
-      </select> 
-    </td>            
-  </tr>
-  
-  {{mb_include module=system template=inc_config_bool var=merge_only_admin thcolspan=3 tdcolspan=3}}
-  {{mb_include module=system template=inc_config_bool var=extended_print   thcolspan=3 tdcolspan=3}}
-  {{mb_include module=system template=inc_config_str  var=adult_age        thcolspan=3 tdcolspan=3}}
+<div id="CAntecedent" style="display: none;">
+{{mb_include template=CAntecedent_configure}}
+</div>
+
+<div id="CPatient" style="display: none;">
+{{mb_include template=CPatient_configure}}
+{{mb_include template=inc_configure_actions}}
+</div>
 	
-  {{assign var="class" value="intermax"}}
-  <tr>
-    <th class="title" colspan="100">Configuration Intermax</th>
-  </tr>
-  
-  {{mb_include module=system template=inc_config_bool var=auto_watch   thcolspan=3 tdcolspan=3}}
+<div id="CTraitement" style="display: none;">
+	{{mb_include template=CTraitement_configure}}
+</div>
 
+<div id="CDossierMedical" style="display: none;">
+{{mb_include template=CDossierMedical_configure}}
+</div>
 
-  {{assign var="class" value="CAntecedent"}}
-  <tr>
-    <th class="title" colspan="100">{{tr}}CAntecedent{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    {{assign var="var" value="types"}}
-    <th class="category" colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>
-      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="100" />
-    </th>
-    {{assign var="var" value="appareils"}}
-    <th class="category" colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>
-      <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="100" />
-    </th>
-  </tr>
-  <tr>
-    <td class="text" colspan="3">
-	    <table>
-	      <tr>
-	      {{foreach from=$types_antecedents item=ant name=list_antecedents}}
-	        <td>
-	          <label>
-	            <input type="checkbox" name="types_antecedents[]" value="{{$ant}}" 
-	            {{if in_array($ant, $types_antecedents_active)}}checked="checked"{{/if}} 
-	            onchange="oTokenAntecedents.toggle('{{$ant}}', this.checked)"
-	            /> 
-	            {{tr}}CAntecedent.type.{{$ant}}{{/tr}}
-	          </label>
-	        </td>
-	        {{if $smarty.foreach.list_antecedents.index % 4 == 3}}</tr><tr>{{/if}}
-	      {{/foreach}}
-	      </tr>
-	    </table>
-    </td>
-    <td class="text" colspan="3">
-	    <table>
-	      <tr>
-	      {{foreach from=$appareils_antecedents item=appareil name=list_appareils}}
-	        <td>
-	          <label>
-	            <input type="checkbox" name="appareils_antecedents[]" value="{{$appareil}}" 
-	            {{if in_array($appareil, $appareils_antecedents_active)}}checked="checked"{{/if}} 
-	            onchange="oTokenAppareils.toggle('{{$appareil}}', this.checked)"
-	            /> 
-	            {{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}}
-	          </label>
-	        </td>
-	        {{if $smarty.foreach.list_appareils.index % 4 == 3}}</tr><tr>{{/if}}
-	      {{/foreach}}
-	      </tr>
-	    </table>
-    </td>
-  </tr>
-  
-  {{assign var="class" value="CTraitement"}}
-  <tr>
-    <th class="title" colspan="100">{{tr}}CTraitement{{/tr}}</th>
-  </tr>
-  
-  {{mb_include module=system template=inc_config_bool var=enabled thcolspan=3 tdcolspan=3}}
+<div id="CMedecin" style="display: none;">
+{{mb_include template=CMedecin_configure}}
+</div>
 
-  {{assign var="class" value="CDossierMedical"}}
-  <tr>
-    <th class="title" colspan="100">{{tr}}CDossierMedical{{/tr}}</th>
-  </tr>
+<div id="LogicMax" style="display: none;">
+{{mb_include template=inc_configure_intermax}}
+</div>
 
-  {{mb_include module=system template=inc_config_bool var=diags_static_cim thcolspan=3 tdcolspan=3}}
+<div id="INSEE" style="display: none;">
+{{mb_include template=inc_configure_insee}}
+</div>
 
-  <tr>
-    <td class="button" colspan="6">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-  
-</table>
-</form>
-
-<h2>Import de la base de données des codes INSEE / ISO</h2>
-
-{{include file="../../system/templates/configure_dsn.tpl" dsn=INSEE}}
-
-<script type="text/javascript">
-
-function startINSEE() {
-  var url = new Url("dPpatients", "httpreq_do_add_insee");
-  url.requestUpdate("INSEE");
-}
-
-</script>
-
-<table class="tbl">
-
-<tr>
-  <th>Action</th>
-  <th>Status</th>
-</tr>
-  
-<tr>
-  <td>
-    <button class="tick" onclick="startINSEE()">
-      Importer les codes INSEE / ISO
-    </button>
-  </td>
-  <td id="INSEE" />
-</tr>
-
-</table>
-
-{{include file=inc_configure_medecins.tpl}}
-
-{{include file=inc_configure_actions.tpl}}
