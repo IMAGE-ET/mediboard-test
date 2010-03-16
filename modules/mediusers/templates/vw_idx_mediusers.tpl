@@ -76,6 +76,14 @@ function changePage(page) {
               </label>
         		</td>
         	</tr>
+          <tr>
+            <th></th>
+            <td>
+              <label>
+                <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
+              </label>
+            </td>
+          </tr>
         	<tr>
             <td colspan="2" style="text-align: center">
               <button type="submit" class="search">Filtrer</button>

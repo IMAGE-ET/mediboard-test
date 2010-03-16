@@ -11,6 +11,15 @@ ColorSelector.init = function(){
   this.sColor = "color";
   this.pop();
 }
+
+function changePage(page) {
+  $V(getForm('listFilter').page,page);
+}
+
+function changePagePrimaryUsers(page) {
+  $V(getForm('listFilterPrimaryUsers').page_userfunction,page);
+}
+
 </script>
 
 <table class="main">
@@ -20,13 +29,25 @@ ColorSelector.init = function(){
         Créer une fonction
       </a>
       <table class="tbl">
-      {{foreach from=$listGroups item=curr_group}}
         <tr>
-          <th>Etablissement {{$curr_group->text}} &mdash; {{$curr_group->_ref_functions|@count}} fonction(s)</th>
+          <td colspan="3">
+            <form name="listFilter" action="?m={{$m}}" method="get">
+              <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="tab" value="{{$tab}}" />
+              <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
+              
+              {{if $total_functions != 0}}
+                {{mb_include module=system template=inc_pagination total=$total_functions current=$page change_page='changePage' step=35}}
+              {{/if}}
+            </form>
+          </td>
+        </tr>
+        <tr>
+          <th>Etablissement - {{$total_functions}} fonction(s)</th>
           <th>Type</th>
           <th>Utilisateurs</th>
         </tr>
-        {{foreach from=$curr_group->_ref_functions item=curr_function}}
+        {{foreach from=$functions item=curr_function}}
         <tr {{if $curr_function->_id == $userfunction->_id}}class="selected"{{/if}}>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$curr_function->_id}}">
@@ -43,7 +64,6 @@ ColorSelector.init = function(){
           </td>
         </tr>
         {{/foreach}}
-      {{/foreach}}
       </table>
     </td>
     <td class="halfPane" style="height: 1%">
@@ -91,9 +111,9 @@ ColorSelector.init = function(){
           <td>
             <select name="group_id" class="{{$userfunction->_props.group_id}}">
               <option value="">&mdash; {{tr}}CGroups.select{{/tr}}</option>
-              {{foreach from=$listGroups item=curr_group}}
-              <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
-                {{$curr_group->text}}
+              {{foreach from=$groups item=_group}}
+              <option value="{{$_group->group_id}}" {{if $_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
+                {{$_group->text}}
               </option>
               {{/foreach}}
             </select>
@@ -152,8 +172,8 @@ ColorSelector.init = function(){
     <td>
       <ul id="tab_user" class="control_tabs">
         <li>
-          <a {{if !$userfunction->_back.users|@count}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
-            Utilisateurs principaux <small>({{$userfunction->_back.users|@count}})</small>
+          <a {{if !$total_userfunctions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
+            Utilisateurs principaux <small>({{$total_userfunctions}})</small>
           </a>
         </li>
         <li>
@@ -166,6 +186,19 @@ ColorSelector.init = function(){
       <div id="list-primary-users" style="display: none;">
         <table class="tbl">
           <tr>
+            <td colspan="6">
+              <form name="listFilterPrimaryUsers" action="?m={{$m}}" method="get">
+                <input type="hidden" name="m" value="{{$m}}" />
+                <input type="hidden" name="tab" value="{{$tab}}" />
+                <input type="hidden" name="page_userfunction" value="{{$page_userfunction}}" onchange="this.form.submit()"/>
+                
+                {{if $total_userfunctions != 0}}
+                  {{mb_include module=system template=inc_pagination total=$total_userfunctions current=$page_userfunction change_page='changePagePrimaryUsers'}}
+                {{/if}}
+              </form>
+            </td>
+          </tr>
+          <tr>
             <th>{{mb_title class=CUser field=user_username}}</th>
             <th>{{mb_title class=CUser field=user_last_name}}</th>
             <th>{{mb_title class=CUser field=user_first_name}}</th>
@@ -173,22 +206,22 @@ ColorSelector.init = function(){
             <th>{{mb_title class=CUser field=profile_id}}</th>
             <th>{{mb_title class=CUser field=user_last_login}}</th>
           </tr>
-          {{foreach from=$userfunction->_back.users item=curr_user}}
+          {{foreach from=$primary_users item=_user}}
           <tr>
-            {{assign var=user_id value=$curr_user->_id}}
+            {{assign var=user_id value=$_user->_id}}
             {{assign var="href" value="?m=mediusers&tab=vw_idx_mediusers&user_id=$user_id"}}
-	          <td><a href="{{$href}}">{{$curr_user->_user_username}}</a></td>
-	          <td><a href="{{$href}}">{{$curr_user->_user_last_name}}</a></td>
-	          <td><a href="{{$href}}">{{$curr_user->_user_first_name}}</a></td>
+	          <td><a href="{{$href}}">{{$_user->_user_username}}</a></td>
+	          <td><a href="{{$href}}">{{$_user->_user_last_name}}</a></td>
+	          <td><a href="{{$href}}">{{$_user->_user_first_name}}</a></td>
             <td>
-	          	{{assign var=type value=$curr_user->_user_type}}
+	          	{{assign var=type value=$_user->_user_type}}
 	          	{{if array_key_exists($type, $utypes)}}{{$utypes.$type}}{{/if}}
 	          </td>
-	          <td>{{$curr_user->_ref_profile->user_username}}</td>
+	          <td>{{$_user->_ref_profile->user_username}}</td>
 	          <td>
-	            {{if $curr_user->_user_last_login}}
-	            <label title="{{mb_value object=$curr_user field=_user_last_login}}">
-	              {{mb_value object=$curr_user field=_user_last_login format=relative}}
+	            {{if $_user->_user_last_login}}
+	            <label title="{{mb_value object=$_user field=_user_last_login}}">
+	              {{mb_value object=$_user field=_user_last_login format=relative}}
 	            </label>
 	          	{{/if}}
 	          </td>
@@ -201,7 +234,6 @@ ColorSelector.init = function(){
         </table>
       </div>
       <div id="list-secondary-users" style="display: none;">
-        
 	      <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_secondary_function_aed" />
 	    	<input type="hidden" name="secondary_function_id" value="" />

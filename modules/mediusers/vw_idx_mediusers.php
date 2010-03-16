@@ -13,6 +13,7 @@ $can->needsRead();
 
 $page      = intval(CValue::get('page', 0));
 $pro_sante = CValue::get("pro_sante", array());
+$inactif   = CValue::get("inactif", array());
 $filter    = CValue::getOrSession("filter", "");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "function_id");
@@ -44,6 +45,7 @@ if ($pro_sante) {
     $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
   }
 }
+$where["users_mediboard.actif"] = $inactif ? "!= '1'" : "= '1'";
 
 $order = "";
 if ($order_col == "function_id") {
@@ -110,6 +112,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("total_mediuser", $total_mediuser);
 $smarty->assign("page"          , $page         );
 $smarty->assign("pro_sante"     , $pro_sante    );
+$smarty->assign("inactif"       , $inactif      );
 $smarty->assign("filter"        , $filter       );
 $smarty->assign("mediusers"     , $mediusers    );
 $smarty->assign("tabProfil"     , $tabProfil    );
