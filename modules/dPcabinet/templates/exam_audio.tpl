@@ -30,6 +30,16 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
 </tr>
 
 <tr>
+	<th>
+		<span style="float: left; padding-left: 30px;">Grave</span>
+		<span style="float: right; padding-right: 30px;">Aigu</span>
+	</th>
+  <th>
+      <span style="float: left; padding-left: 30px;">Grave</span>
+    <span style="float: right; padding-right: 30px;">Aigu</span>
+  </th>
+</tr>
+<tr>
   <td id="td_graph_tonal_droite" class="halfPane" style="height: 250px;">
     {{$map_tonal_droite|smarty:nodefaults}}    
     <img id="tonal_droite" src="?m=dPcabinet&amp;a=graph_audio_tonal&amp;suppressHeaders=1&amp;examaudio_id={{$exam_audio->_id}}&amp;side=droite&amp;time={{$time}}" usemap="#graph_tonal_droite" onclick="changeTonalValueMouseDroite(event)" alt="Audio tonal gauche" />
@@ -284,11 +294,11 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
       </tr>
       <tr>
         <td style="text-align:left;">
-          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);">
+          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);" class="not-printable">
             <option value="">&mdash; Choisir une aide</option>
             {{html_options options=$exam_audio->_aides.remarques.no_enum}}
           </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)">{{tr}}New{{/tr}}</button><br />
+          <button class="new notext not-printable" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)">{{tr}}New{{/tr}}</button><br />
           <textarea name="remarques" rows="2">{{$exam_audio->remarques}}</textarea>
         </td>
       </tr>
@@ -301,7 +311,4 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
   </td>
 </tr>
 </table>
-
-    
 </form>
-

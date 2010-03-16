@@ -175,4 +175,11 @@ AudiogrammeVocal::$graph = new AudiogrammeVocal();
 AudiogrammeVocal::$graph->addAudiogramme($exam_audio->_gauche_vocale, "Oreille gauche", "blue", MARK_STAR);
 AudiogrammeVocal::$graph->addAudiogramme($exam_audio->_droite_vocale, "Oreille droite", "red", MARK_SQUARE);
 
+// Ajout de la legende courbe optimale
+$_p = new LinePlot("0");
+AudiogrammeVocal::$graph->Add($_p);
+$_p->SetLegend("Courbe optimale");
+$_p->SetColor("#999999");
+
+			
 ?>
