@@ -25,6 +25,8 @@ class CTemplateManager {
   var $simplifyMode = false;
   var $parameters = array();
   
+  private static $barcodeCache = array();
+  
   function CTemplateManager($parameters = array()) {
     global $AppUI;
     $user = new CMediusers();
@@ -42,9 +44,9 @@ class CTemplateManager {
     $this->addProperty("Général - rédacteur"     , $user->_shortview);
   }
 	
-	function getParameter($name, $default = null) {
-		return isset($this->parameters[$name]) ? $this->parameters[$name] : $default;
-	}
+  function getParameter($name, $default = null) {
+    return CValue::read($this->parameters, $name, $default);
+  }
 
   function makeSpan($spanClass, $text) {
     // Escape entities cuz FCKEditor does so
@@ -55,7 +57,7 @@ class CTemplateManager {
     return "<span class=\"{$spanClass}\">{$text}</span>";
   }
   
-  function addProperty($field, $value = null) {
+  function addProperty($field, $value = null, $options = array()) {
   	$sec = explode(' - ', $field, 2);
   	if (count($sec) > 1) {
   		$section = $sec[0];
@@ -73,8 +75,26 @@ class CTemplateManager {
       "field"     => $field,
       "value"     => $value,
       "fieldHTML" => htmlentities("[{$field}]"),
-      "valueHTML" => $value
+      "valueHTML" => $value,
+      "options"   => $options
     );
+    
+    if (isset($options["barcode"])) {
+      $_field = &$this->sections[$section][$field];
+      
+      if ($this->valueMode)
+        $src = $this->getBarcodeDataUri($_field['value'], $options["barcode"]);
+      else 
+        $src = $_field['fieldHTML'];
+      
+      $_field["field"]  = "<img alt=\"$field\" src=\"$src\" ";
+      
+      foreach($options["barcode"] as $name => $attribute) {
+        $_field["field"] .= " $name=\"$attribute\"";
+      }
+      
+      $_field["field"] .= "/>";
+    }
   }
   
   function addDateProperty($field, $value = null) {
@@ -94,22 +114,33 @@ class CTemplateManager {
 	
   function addListProperty($field, $list = null) {
     if (!is_array($list)) $list = array($list);
-		$str = '<ul>';
+		$str = "<ul>";
 		if (count($list)) {
-			$str .= '<li>' . implode('</li><li>', $list) . '</li>';
+			$str .= "<li>" . implode("</li><li>", $list) . "</li>";
 		}
-		$str .= '</ul>';
+		$str .= "</ul>";
     $this->addProperty($field, $str);
   }
 	
   function addGraph($field, $data, $options = array()) {
     $this->graphs[utf8_encode($field)] = array(
-      'data' => $data, 
-      'options' => $options, 
-      'name' => utf8_encode($field)
+      "data" => $data, 
+      "options" => $options, 
+      "name" => utf8_encode($field)
     );
 		
 		$this->addProperty($field, $field);
+  }
+  
+  function addBarcode($field, $data, $options = array()) {
+    $options = array(
+      "barcode" => array(
+        "width"  => 150,
+        "height" => 60,
+        "class"  => "barcode"
+      )
+    );
+    $this->addProperty($field, $data, $options);
   }
 
   function addList($name, $choice = null) {
@@ -129,17 +160,16 @@ class CTemplateManager {
     
     if($template instanceof CCompteRendu) {
     
-		  /** @todo : setFields doesn't take two arguments*/ 
       if (!$this->valueMode) {
-        $this->setFields($template->object_class, $template->chir_id);
+        $this->setFields($template->object_class);
       }
 
       $this->renderDocument($template->source);
     
     } else {
-    
+      /** FIXME: ?? */
       if (!$this->valueMode) {
-        $this->setFields("hospitalisation", $template->chir_id);
+        $this->setFields("hospitalisation");
       }
 
       $this->renderDocument($template->_source);
@@ -235,16 +265,58 @@ class CTemplateManager {
       if($aideFunc->depend_value_1 == $modeleType){
         $this->helpers[$aideFunc->name] = $aideFunc->text;
       } 
-   }
+    }
+  }
+  
+  private function getBarcodeDataUri($code, $options) {
+    if (!$code) return;
+    
+    $size = "{$options['width']}x{$options['width']}";
+    
+    if (isset(self::$barcodeCache[$code][$size])) {
+      return self::$barcodeCache[$code][$size];
+    }
+    
+    CAppUI::requireLibraryFile("tcpdf/barcode/barcode");
+    CAppUI::requireLibraryFile("tcpdf/barcode/c128bobject");
+    CAppUI::requireLibraryFile("tcpdf/barcode/cmb128bobject");
+    
+    $bc_options = (BCD_DEFAULT_STYLE | BCS_DRAW_TEXT) & ~BCS_BORDER;
+    $barcode = new CMb128BObject($options["width"] * 2, $options["height"] * 2, $bc_options, $code);
+    
+    $barcode->SetFont(7);
+    $barcode->DrawObject(2);
+    
+    ob_start();
+    $barcode->FlushObject();
+    $image = ob_get_contents();
+    ob_end_clean();
+    
+    $barcode->DestroyObject();
+    
+    $image = "data:image/jpg;base64,".urlencode(base64_encode($image));
+    
+    self::$barcodeCache[$code][$size] = $image;
   }
   
   function renderDocument($source) {
     $fields = array();
     $values = array();
+    
     foreach($this->sections as $properties) {
       foreach($properties as $property) {
+        if ($property["valueHTML"] && isset($property["options"]["barcode"])) {
+          $options = $property["options"]["barcode"];
+          
+          $image = $this->getBarcodeDataUri($property["valueHTML"], $options);
+          
+          $fields[] = "src=\"{$property['fieldHTML']}\"";
+          $values[] = "src=\"$image\"";
+        }
+        else {
           $fields[] = $property["fieldHTML"];
           $values[] = nl2br($property["valueHTML"]);
+        }
       }
     }
 	

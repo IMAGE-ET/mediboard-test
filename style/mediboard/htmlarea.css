@@ -73,6 +73,11 @@ span.hilite {
     background: #bbb;
     height: 5px;
   }
+  
+  img.barcode {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAABCAIAAABG0om7AAAABGdBTUEAALGPC%2FxhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuND6NzHYAAAAXSURBVBhXYziMBP4jAYgwRIB4NcgmAADkS0%2FP67r7igAAAABJRU5ErkJggg%3D%3D);
+    margin: 0.2em;
+  }
 }
 
 @media print {

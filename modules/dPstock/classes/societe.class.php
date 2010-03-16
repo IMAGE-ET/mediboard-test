@@ -54,7 +54,7 @@ class CSociete extends CMbObject {
     $backProps["product_references"] = "CProductReference societe_id";
     $backProps["product_receptions"] = "CProductReception societe_id";
     $backProps["articles_cahpp"]     = "CCAHPPArticle fournisseur_id";
-		$backProps["receptions_bills"]   = "CProductReceptionBill societe_id";
+		//$backProps["receptions_bills"]   = "CProductReceptionBill societe_id";
 	  return $backProps;
 	}
 
