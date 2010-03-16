@@ -104,7 +104,9 @@ foreach($_transmissions as $_trans){
 		$patients[$patient_id] = $_trans->_ref_sejour->_ref_patient;
 	}
 	$_trans->loadRefsFwd();
-	$_trans->_ref_object->loadRefsFwd();
+	if($_trans->object_id){
+	  $_trans->_ref_object->loadRefsFwd();
+	}
 	$trans_and_obs[$_trans->_ref_sejour->patient_id][$_trans->date][] = $_trans;
 }
 
