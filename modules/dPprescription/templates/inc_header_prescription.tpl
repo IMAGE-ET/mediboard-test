@@ -124,7 +124,9 @@ Main.add( function(){
     changePraticien(praticien_id);
 
 		pratSelect = document.selPraticienLine.praticien_id;
-		$('protocole_prat_name').update('Dr '+pratSelect.options[pratSelect.selectedIndex].text);
+		if($('protocole_prat_name')){
+		  $('protocole_prat_name').update('Dr '+pratSelect.options[pratSelect.selectedIndex].text);
+		}
   } else {
     praticien_id = '{{$prescription->_ref_current_praticien->_id}}';
   }
@@ -251,7 +253,7 @@ Main.add( function(){
 			 <div style="float: right">
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
-				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text);">
+				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
 						<optgroup label="Responsables">
 				      <option class="mediuser" style="border-color: #{{$prescription->_ref_current_praticien->_ref_function->color}};" 
 						          value="{{$prescription->_ref_current_praticien->_id}}"
@@ -424,7 +426,7 @@ Main.add( function(){
 	 				</script>				 				
  				{{/if}}
         <button type="button" class="submit singleclick" onclick="this.form.onsubmit();">Appliquer</button>
-      </form>
+		 </form>
     </td>  
   {{/if}}
   
