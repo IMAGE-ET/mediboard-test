@@ -53,6 +53,19 @@ Main.add(function () {
 
 
 <ul id="tab_main_courante" class="control_tabs">
+  <li style="float: right">
+    <form action="?" name="FindSejour" method="get">
+      <label for="sip_barcode" title="Veuillez doucher le numéro de dossier sur un document ou bien le saisir à la main">
+        Code à barres de dossier
+      </label>
+        
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
+      <input type="text" name="sip_barcode" onchange="this.form.submit()" />
+      
+      <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
+    </form>
+  </li>
   <li><a href="#holder_main_courante">Main courante</a></li>
   <li><a href="#consultations" class="empty">Reconvocations</a></li>
   <li><a href="#identito_vigilance" class="empty">Identito-vigilance</a></li>
@@ -60,7 +73,7 @@ Main.add(function () {
 <hr class="control_tabs" />
 
 <div id="holder_main_courante">
-	<table style="width:100%">
+	<table style="width: 100%;">
 	  <tr>
 	    <td>
 	      <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
