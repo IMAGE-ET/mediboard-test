@@ -4,6 +4,7 @@ data = {{$data|@json}};
 dates = {{$dates|@json}};
 hours = {{$hours|@json}};
 const_ids = {{$const_ids|@json}};
+selection = {{$selection|@array_keys|@json}};
 last_date = null;
 
 submitConstantesMedicales = function(oForm) {
@@ -20,6 +21,7 @@ editConstantes = function (const_id, context_guid){
   url.addParam('const_id', const_id);
   url.addParam('context_guid', context_guid);
   url.addParam('readonly', '{{$readonly}}');
+  url.addParam("selection[]", selection);
   url.requestUpdate('constantes-medicales-form');
 }
 
@@ -63,6 +65,7 @@ initializeGraph = function (src, data) {
     lines: src.options.lines || {},
     grids: src.options.grids || {},
     legend: src.options.legend || {},
+    colors: src.options.colors || {},
     selection: src.options.selection || {}
   };
 
@@ -74,6 +77,7 @@ initializeGraph = function (src, data) {
   Object.extend(src.options.lines,  data.lines);
   Object.extend(src.options.grids,  data.grids);
   Object.extend(src.options.legend, data.legend);
+  Object.extend(src.options.colors, data.colors);
   Object.extend(src.options.selection, data.selection);
   
   // Suppression des valeurs Y nulles
@@ -84,11 +88,13 @@ initializeGraph = function (src, data) {
   });
   
   // Ajout de la ligne de niveau standard
-  if (0 && src.standard) {
+  if (src.standard) {
     src.series.unshift({
       data: [[0, src.standard], [1000, src.standard]], 
       points: {show: false},
-      mouse: {track: false}
+      mouse: {track: false},
+      lines: {lineWidth: 1},
+      color: "silver"
     });
   }
 }
@@ -138,15 +144,6 @@ options = {
 initializeGraph(data.{{$name}}, options);
 {{/foreach}}
 
-// And we put the the specific options
-data.ta.options.colors = [/*'silver', */'#00A8F0', '#C0D800'];
-data.injection.options.colors = [/*'silver', */'#555', '#AAA'];
-
-data.pouls.options.colors = ['silver', 'black'];
-data.pouls.options.mouse.trackDecimals = 0;
-
-data.temperature.options.colors = ['silver', 'orange'];
-
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
   if (c) {
@@ -171,17 +168,21 @@ drawGraph = function() {
   }
 };
 
-toggleGraph = function(id){
-  $(id).toggle();
+toggleGraph = function(id, state){
+  $(id).setVisible(state);
 };
 
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
+  var checkbox;
+  
   drawGraph();
   
   {{foreach from=$data item=curr_data key=key}}
-    oForm["checkbox-constantes-medicales-{{$key}}"].checked = !!data.{{$key}}.series.first().data.length;
-    $('constantes-medicales-{{$key}}').setVisible(oForm["checkbox-constantes-medicales-{{$key}}"].checked);
+    checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
+    
+    checkbox.checked = !!data.{{$key}}.series.first().data.length;
+    $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
   {{/foreach}}
 });
 
@@ -192,6 +193,7 @@ loadConstantesMedicales  = function(context_guid) {
   url.addParam("context_guid", '{{$context_guid}}');
   url.addParam("patient_id", '{{$patient->_id}}');
   url.addParam("readonly", '{{$readonly}}');
+  url.addParam("selection[]", selection);
   url.addParam("selected_context_guid", context_guid);
   url.requestUpdate(container);
 };

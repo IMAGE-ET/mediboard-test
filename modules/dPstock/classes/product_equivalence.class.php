@@ -43,8 +43,12 @@ class CProductEquivalence extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
+  
+  function loadRefsProducts(){
+    return $this->_ref_products = $this->loadBackRefs('products', 'name');
+  }
 
   function loadRefsBack() {
-  	$this->_ref_products = $this->loadBackRefs('products');
+  	$this->loadRefsProducts();
   }
 }

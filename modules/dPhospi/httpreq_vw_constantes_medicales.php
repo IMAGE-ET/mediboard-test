@@ -23,17 +23,21 @@ $context_guid          = CValue::get('context_guid');
 $selected_context_guid = CValue::get('selected_context_guid', $context_guid);
 $patient_id            = CValue::get('patient_id');
 $readonly              = CValue::get('readonly');
-$selection             = CValue::get('selection', array());
+$selection             = CValue::get('selection');
 
-$context = null;
-$patient = null;
-
-if ($selected_context_guid !== 'all') {
-  $context = CMbObject::loadFromGuid($selected_context_guid);
+if (!$selection || $selected_context_guid === 'all') {
+  $selection = CConstantesMedicales::$list_constantes;
 }
 else {
-  $context = CMbObject::loadFromGuid($context_guid);
+  $selection_flip = array_flip($selection);
+  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection_flip);
 }
+
+if ($selected_context_guid !== 'all')
+  $context = CMbObject::loadFromGuid($selected_context_guid);
+else
+  $context = CMbObject::loadFromGuid($context_guid);
+  
 $context->loadRefs();
 
 if ($context) {
@@ -48,13 +52,17 @@ if ($patient_id) {
 $patient->loadRefConstantesMedicales();
 $patient->loadRefPhotoIdentite();
 
+$where = array(
+  "patient_id" => " = '$patient->_id'"
+);
+
 // Construction d'une constante médicale
 $constantes = new CConstantesMedicales();
 $constantes->patient_id = $patient->_id;
 $constantes->loadRefPatient();
 
 // Les constantes qui correspondent (dans le contexte ou non)
-$list_constantes = $constantes->loadMatchingList('datetime');
+$list_constantes = $constantes->loadList($where, "datetime");
 
 $list_contexts = array();
 foreach($list_constantes as $const) {
@@ -87,54 +95,35 @@ if (!count($list_contexts)) {
 }
 
 if ($context && $selected_context_guid !== 'all') {
+  $where["context_class"] = " = '$context->_class_name'";
+  $where["context_id"] = " = '$context->_id'";
+  
+  // Needed to know if we are in the right context
   $constantes->context_class = $context->_class_name;
   $constantes->context_id = $context->_id;
-	$constantes->loadRefContext();
+  $constantes->loadRefContext();
 }
 
+$whereOr = array();
+foreach($selection as $name => $params) {
+  if ($name[0] === "_") continue;
+  $whereOr[] = "$name IS NOT NULL ";
+}
+$where[] = implode(" OR ", $whereOr);
+
 // Les constantes qui correspondent (dans le contexte cette fois)
-$list_constantes = $constantes->loadMatchingList('datetime');
+$list_constantes = $constantes->loadList($where, "datetime");
 
 // La liste des derniers mesures
 $latest_constantes = CConstantesMedicales::getLatestFor($patient->_id);
 
 $standard_struct = array(
-  'series' => array(
-    array('data' => array()),
-  ),
-);
-
-// Initialisation de la structure des données
-$data = array();
-foreach(CConstantesMedicales::$list_constantes as $cst => $params) {
-  if ($cst[0] !== "_") // we ignore form fields
-    $data[$cst] = $standard_struct;
-}
-
-$data['ta'] = array(
-  'series' => array(
+  "series" => array(
     array(
-      'data' => array(),
-      'label' => 'Systole',
-    ),
-    array(
-      'data' => array(),
-      'label' => 'Diastole',
-    ),
-  ),
-);
-
-$data['injection'] = array(
-  'series' => array(
-    array(
-      'data' => array(),
-      'label' => 'Nb injections',
-    ),
-    array(
-      'data' => array(),
-      'label' => 'Nb essais',
-    ),
-  ),
+      "data" => array(),
+      //"options" => array()
+    )
+  )
 );
 
 // Petite fonction utilitaire de récupération des valeurs
@@ -142,191 +131,122 @@ function getValue($v) {
   return ($v === null) ? null : floatval($v);
 }
 
-$dates = array();
-$hours = array();
-$const_ids = array();
-$i = 0;
-
-/////////////////
-// @todo: factoriser avec les parametres dispo dans CConstantesMedicales::$list_constantes
-/////////////////
-
-// Si le séjour a des constantes médicales
-if ($list_constantes) {
-  foreach ($list_constantes as $cst) {
-    $dates[$i] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
-    $hours[$i] = mbTransformTime($cst->datetime, null, '%Hh%M');
-    $const_ids[$i] = $cst->_id;
-    $cst->loadLogs();
-    
-    foreach ($data as $name => &$field) {
-      $log = $cst->loadLastLogForField($name);
-      if (!$log->_id && $cst->_ref_last_log) {
-        $log = $cst->_ref_last_log;
-        $log->loadRefsFwd();
-      } 
-      else {
-        $log = new CUserLog;
-      } 
-      $user_view = $log->_ref_user ? utf8_encode($log->_ref_user->_view) : "";
-      
-    	if ($name == 'ta') {
-    		$field['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole), $user_view);
-    		$field['series'][1]['data'][$i] = array($i, getValue($cst->_ta_diastole), $user_view);
-    		continue;
-    	}
-			if ($name == 'injection') {
-        $field['series'][0]['data'][$i] = array($i, getValue($cst->_inj), $user_view);
-        $field['series'][1]['data'][$i] = array($i, getValue($cst->_inj_essai), $user_view);
-        continue;
-      }
-    	foreach ($field['series'] as &$serie) {
-    		$serie['data'][$i] = array($i, getValue($cst->$name), $user_view);
-    	}
-    }
-    $i++;
-  }
-}
-
 function getMax($n, $array) {
   $max = -PHP_INT_MAX;
-  
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $max = max($n, $a[1], $max);
-    }
-  }
+  foreach ($array as $a)
+    if (isset($a[1])) $max = max($n, $a[1], $max);
   return $max;
 }
 
 function getMin($n, $array) {
   $min = PHP_INT_MAX;
-  
-  foreach ($array as $a) {
-    if (isset($a[1])) {
-      $min = min($n, $a[1], $min);
-    }
-  }
+  foreach ($array as $a) 
+    if (isset($a[1]))$min = min($n, $a[1], $min);
   return $min;
 }
 
-// Mise en place de la ligne de niveau normal pour chaque constante et de l'unité
-$data['ta']['standard'] = 12;
-$data['ta']['options']['title'] = utf8_encode('Tension artérielle (cmHg)');
-$data['ta']['options']['yaxis'] = array(
-  'min' => getMin(5,  $data['ta']['series'][0]['data']), // min
-  'max' => getMax(20, $data['ta']['series'][0]['data']), // max
-);
+$dates     = array();
+$hours     = array();
+$const_ids = array();
+$data      = array();
+$graphs    = array();
 
-$data['pouls']['standard'] = 60;
-$data['pouls']['options']['title'] = utf8_encode('Pouls (puls./min)');
-$data['pouls']['options']['yaxis'] = array(
-  'min' => getMin(50,  $data['pouls']['series'][0]['data']), // min
-  'max' => getMax(120, $data['pouls']['series'][0]['data']), // max
-);
+foreach ($selection as $name => $params) {
+  $data[$name] = $standard_struct;
+  
+  if (isset($params["formfields"])) {
+    $serie = &$data[$name]["series"];
+    
+    $serie = array();
+    foreach($params["formfields"] as $_field) {
+      $serie[] = array(
+        "data" => array(),
+        "label" => CAppUI::tr("CConstantesMedicales-$_field-court"),
+      );
+    }
+  }
+}
 
-$data['poids']['options']['title'] = utf8_encode('Poids (Kg)');
-$data['poids']['options']['yaxis'] = array(
-  'min' => getMin(0,   $data['poids']['series'][0]['data']), // min
-  'max' => getMax(150, $data['poids']['series'][0]['data']), // max
-);
+// Si le séjour a des constantes médicales
+if ($list_constantes) {
+  foreach ($list_constantes as $cst) {
+    $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
+    $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
+    $const_ids[] = $cst->_id;
+    $cst->loadLogs();
+    
+    foreach ($selection as $name => $params) {
+      $isFormField = ($name[0] === "_");
+      
+      $d = &$data[$name];
 
-$data['taille']['options']['title'] = utf8_encode('Taille (cm)');
-$data['taille']['options']['yaxis'] = array(
-  'min' => getMin(0,   $data['taille']['series'][0]['data']), // min
-  'max' => getMax(220, $data['taille']['series'][0]['data']), // max
-);
+      $user_view = "";
+      if (!$isFormField) {
+        $log = $cst->loadLastLogForField($name);
+        if (!$log->_id && $cst->_ref_last_log) {
+          $log = $cst->_ref_last_log;
+        }
+        $log->loadRefsFwd();
+        
+        if ($log->_ref_user) {
+          $user_view = utf8_encode($log->_ref_user->_view);
+        }
+      }
+    
+      // We push the values
+      if (isset($params["formfields"])) {
+        $fields = $params["formfields"];
+      }
+      else {
+        $fields = array($name);
+      }
+      
+      $i = count($d["series"][0]["data"]);
+      foreach($fields as $n => $_field) {
+        $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view);
+      }
+     
+      $graphs[] = "constantes-medicales-$name";
+    }
+  }
+}
 
-$data['temperature']['standard'] = 37.5;
-$data['temperature']['options']['title'] = utf8_encode('Température (°C)');
-$data['temperature']['options']['yaxis'] = array(
-  'min' => getMin(36, $data['temperature']['series'][0]['data']), // min
-  'max' => getMax(41, $data['temperature']['series'][0]['data']), // max
-);
-
-$data['spo2']['options']['title'] = utf8_encode('Spo2 (%)');
-$data['spo2']['options']['yaxis'] = array(
-  'min' => getMin(70,  $data['spo2']['series'][0]['data']), // min
-  'max' => getMax(100, $data['spo2']['series'][0]['data']), // max
-);
-
-$data['score_sensibilite']['options']['title'] = utf8_encode('Score de sensibilité');
-$data['score_sensibilite']['options']['yaxis'] = array(
-  'min' => getMin(0, $data['score_sensibilite']['series'][0]['data']), // min
-  'max' => getMax(5, $data['score_sensibilite']['series'][0]['data']), // max
-);
-
-$data['score_motricite']['options']['title'] = utf8_encode('Score de motricité');
-$data['score_motricite']['options']['yaxis'] = array(
-  'min' => getMin(0, $data['score_motricite']['series'][0]['data']), // min
-  'max' => getMax(5, $data['score_motricite']['series'][0]['data']), // max
-);
-
-$data['EVA']['options']['title'] = utf8_encode('EVA');
-$data['EVA']['options']['yaxis'] = array(
-  'min' => getMin(0,  $data['EVA']['series'][0]['data']), // min
-  'max' => getMax(10, $data['EVA']['series'][0]['data']), // max
-);
-
-$data['score_sedation']['options']['title'] = utf8_encode('Score de sédation');
-$data['score_sedation']['options']['yaxis'] = array(
-  'min' => getMin(70,  $data['score_sedation']['series'][0]['data']), // min
-  'max' => getMax(100, $data['score_sedation']['series'][0]['data']), // max
-);
-
-$data['frequence_respiratoire']['options']['title'] = utf8_encode('Fréquence respiratoire');
-$data['frequence_respiratoire']['options']['yaxis'] = array(
-  'min' => getMin(0,  $data['frequence_respiratoire']['series'][0]['data']), // min
-  'max' => getMax(60, $data['frequence_respiratoire']['series'][0]['data']), // max
-);
-
-//$data['glycemie']['standard'] = 1;
-$data['glycemie']['options']['title'] = utf8_encode('Glycémie (g/l)');
-$data['glycemie']['options']['yaxis'] = array(
-  'min' => getMin(0, $data['glycemie']['series'][0]['data']), // min
-  'max' => getMax(4, $data['glycemie']['series'][0]['data']), // max
-);
-
-$data['diurese']['options']['title'] = utf8_encode('Diurèse (ml)');
-$data['diurese']['options']['yaxis'] = array(
-  'min' => getMin(0, $data['diurese']['series'][0]['data']), // min
-  'max' => getMax(2000, $data['diurese']['series'][0]['data']), // max
-);
-
-$data['redon']['options']['title'] = utf8_encode('Redon (ml)');
-$data['redon']['options']['yaxis'] = array(
-  'min' => getMin(0, $data['redon']['series'][0]['data']), // min
-  'max' => getMax(500, $data['redon']['series'][0]['data']), // max
-);
-
-$data['injection']['options']['title'] = utf8_encode('Nombre d\'injections');
-$data['injection']['options']['yaxis'] = array(
-  'min' => getMin(0,  $data['injection']['series'][0]['data']), // min
-  'max' => getMax(10,  $data['injection']['series'][0]['data']), // min
-);
-
-
-// Tableau contenant le nom de tous les graphs
-$graphs = array();
-foreach ($data as $name => &$field) {
-	$graphs[] = "constantes-medicales-$name";
+foreach($data as $name => &$_data) {
+  $params = $selection[$name];
+        
+  // And the options
+  if (isset($params["standard"])) {
+    $d["standard"] = $params["standard"];
+  }
+  $_data["options"] = array(
+    "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),
+    "yaxis" => array(
+      "min" => getMin($params["min"], $_data["series"][0]["data"]), // min
+      "max" => getMax($params["max"], $_data["series"][0]["data"]), // max
+    )
+  );
+  
+  if (isset($params["colors"])) {
+    $_data["options"]["colors"] = $params["colors"];
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('readonly', $readonly);
-$smarty->assign('constantes', $constantes);
-$smarty->assign('context',    $context);
-$smarty->assign('context_guid', $context_guid);
+$smarty->assign('readonly',      $readonly);
+$smarty->assign('constantes',    $constantes);
+$smarty->assign('context',       $context);
+$smarty->assign('context_guid',  $context_guid);
 $smarty->assign('list_contexts', $list_contexts);
-$smarty->assign('all_contexts',    $selected_context_guid == 'all');
-$smarty->assign('patient',    $patient);
-$smarty->assign('data',       $data);
-$smarty->assign('dates',      $dates);
-$smarty->assign('hours',      $hours);
-$smarty->assign('const_ids',  $const_ids);
+$smarty->assign('all_contexts',  $selected_context_guid == 'all');
+$smarty->assign('patient',       $patient);
+$smarty->assign('data',          $data);
+$smarty->assign('dates',         $dates);
+$smarty->assign('hours',         $hours);
+$smarty->assign('const_ids',     $const_ids);
 $smarty->assign('latest_constantes', $latest_constantes);
-$smarty->assign('graphs', $graphs);
+$smarty->assign('selection',     $selection);
+$smarty->assign('graphs',        $graphs);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
 ?>

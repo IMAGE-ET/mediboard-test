@@ -22,7 +22,11 @@ calculImcVst = function(form) {
   $V(form._vst, vst);
   $V(form._imc, imc);
   
-  $('constantes_medicales_imc').update(imcInfo);
+  var element = $('constantes_medicales_imc');
+  if (element) {
+    element.update(imcInfo);
+  }
+  
   if(typeof(calculPSA) == 'function' && typeof(calculClairance) == 'function') {
     calculPSA(); 
     calculClairance();
@@ -33,8 +37,9 @@ Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
 
   $H(data).each(function(d){
-    oForm["checkbox-constantes-medicales-"+d.key].checked = !!d.value.series.first().data.length;
-    $('constantes-medicales-'+d.key).setVisible(oForm["checkbox-constantes-medicales-"+d.key].checked);
+    var checkbox = oForm["checkbox-constantes-medicales-"+d.key];
+    checkbox.checked = !!d.value.series.last().data.length; // Not the first as it could be the "grey" line
+    $('constantes-medicales-'+d.key).setVisible(checkbox.checked);
   });
   
   calculImcVst(oForm);
@@ -74,7 +79,7 @@ Main.add(function () {
       <th class="category" colspan="2">Dernières</th>
     </tr>
     
-    {{foreach from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
+    {{foreach from=$selection key=_constante item=_params}}
       <tr>
         <th>
           {{mb_title object=$constantes field=$_constante}} {{if $_params.unit}}({{$_params.unit}}){{/if}}
@@ -83,8 +88,8 @@ Main.add(function () {
         {{if array_key_exists("formfields", $_params)}}
           {{if $real_context}}
             <td>
-              {{mb_field object=$constantes field=$_params.formfields.0 size="1"}} /
-              {{mb_field object=$constantes field=$_params.formfields.1 size="1"}}
+              {{mb_field object=$constantes field=$_params.formfields.0 size="2" increment=true form="edit-constantes-medicales"}} /
+              {{mb_field object=$constantes field=$_params.formfields.1 size="2" increment=true form="edit-constantes-medicales"}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
@@ -107,20 +112,18 @@ Main.add(function () {
                 {{assign var=_callback value=null}}
               {{/if}}
               
-              {{mb_field object=$constantes field=$_constante size="4" onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly}}
+              {{mb_field object=$constantes field=$_constante size="2" 
+                         onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly 
+                         increment=$_readonly|ternary:false:true form="edit-constantes-medicales"}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
             {{mb_value object=$const field=$_constante}}
           </td>
         {{/if}}
-        {{if !$_readonly}}
-          <td style="width: 0.1%;">
-            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}');" tabIndex="100" />
-          </td>
-        {{else}}
-          <td></td>
-        {{/if}}
+        <td style="width: 0.1%;">
+          <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}', this.checked);" tabIndex="100" />
+        </td>
       </tr>
       
       {{if $_constante == "_imc"}}
