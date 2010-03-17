@@ -116,6 +116,7 @@ if(!$prescription_line->debut){
 }
 $prescription_line->loadRefsPrises();
 $prescription_line->countPrisesLine();
+$prescription_line->loadRefsFwd();
 
 // Création du template
 $smarty = new CSmartyDP();
