@@ -1007,6 +1007,9 @@ class CMbObject {
         CAppUI::tr("CMbObject-msg-check-failed") .
         CAppUI::tr($msg);
     }
+    
+    // Trigger before event
+    $this->onBeforeStore();
 
     $spec = $this->_spec;
 		

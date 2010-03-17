@@ -622,6 +622,23 @@ class CSejour extends CCodable {
     $sejour = new CSejour;
     return $sejour->loadList($where, $order, $limit, $group, $leftjoin);
   }
+  
+  /**
+   * Load sejours including a specific datetime
+   * @param $date datetime Datetime to check for inclusion
+   * @param $where array Array of additional where clauses
+   * @param $order array Array of order fields
+   * @param $limit string MySQL limit clause
+   * @param $group array Array of group by clauses
+   * @param $leftjoin array Array of left join clauses
+   * @return array[CMbObject] List of found objects, null if module is not installed
+   */
+  static function loadListForDateTime($datetime, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    $where[] = "IF (sejour.entree_reelle, sejour.entree_reelle, sejour.entree_prevue) <= '$datetime'";
+    $where[] = "IF (sejour.sortie_reelle, sejour.sortie_reelle, sejour.sortie_prevue) >= '$datetime'";
+    $sejour = new CSejour;
+    return $sejour->loadList($where, $order, $limit, $group, $leftjoin);
+  }
 
   function getTemplateClasses(){
     $this->loadRefsFwd();
@@ -1262,6 +1279,19 @@ class CSejour extends CCodable {
           $this->_cancel_alerts["all"][$_operation->_id] = $operation_view;
         }
       }
+    }
+  }
+  
+  function closeSejour() {
+    $where = array();
+    $where[] = "sejour.patient_id = '$this->patient_id'";
+    $where[] = "sejour.entree_reelle IS NOT NULL";
+    $where[] = "sejour.sortie_reelle IS NULL";
+    
+    $sejours = self::loadListForDateTime($this->entree_reelle, $where);
+    foreach ($sejours as $_sejour) {
+      $_sejour->sortie_reelle = mbDateTime();
+      $_sejour->store();
     }
   }
 }
