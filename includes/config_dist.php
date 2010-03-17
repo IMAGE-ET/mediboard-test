@@ -332,6 +332,7 @@ $dPconfig["dPpatients"] = array (
     "merge_only_admin"  => "0",
     "extended_print"    => "0",
     "adult_age"         => "15",
+    "limit_char_search" => "0",
   ),
   
   "CAntecedent" => array (
