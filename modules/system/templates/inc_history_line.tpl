@@ -17,7 +17,7 @@
   	</label>
   	({{$_log->object_id}})
   </td>
-  <td>
+  <td class="text">
   	{{assign var=object value=$_log->_ref_object}}
   	{{if $object->_id}} 
       <label onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
