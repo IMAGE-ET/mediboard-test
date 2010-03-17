@@ -29,7 +29,6 @@
   <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
     <select class="str" name="{{$field}}">
       {{assign var=values value='|'|explode:$values}}
-      {{$values}}
     	{{foreach from=$values item=_value}}
         <option value="{{$_value}}" {{if $value == $_value}} selected="selected"{{/if}}>
         	{{tr}}{{$locale}}-{{$_value}}{{/tr}}</option>
