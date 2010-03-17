@@ -27,7 +27,7 @@
 </table>
 </form>
 
-<form action="?m={{$m}}" name="translate" method="post">
+<form action="?m={{$m}}" name="translate" method="post" class="prepared">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
 <input type="hidden" name="tab" value="{{$tab}}" />
