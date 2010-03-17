@@ -93,6 +93,11 @@ option[value=""] {
   font-style: italic;
 }
 
+form hr {
+  border-bottom: 1px solid #ddd;
+  margin: 2px;
+}
+
 label:hover,
 *[onmouseover] {
   border-bottom: 1px dotted #bbb;

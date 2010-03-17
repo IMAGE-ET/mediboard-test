@@ -26,7 +26,8 @@
     {{$value|count_words}} mots
 
   {{elseif $spec instanceof CTextSpec}}
-	  {{$value|truncate:40}}
+    {{* FIXME: smarty:nodefault is required because HTML entities are double escaped *}}
+	  {{$value|smarty:nodefaults|truncate:40}}
 		
   {{else}}
     {{mb_value object=$object field=$prop}}

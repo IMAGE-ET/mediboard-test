@@ -23,8 +23,7 @@ function copier(){
 }
 
 function refreshListProtocolesPrescription(praticien_id, selected_id) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
+  var url = new Url("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
   url.addParam("praticien_id", praticien_id);
   url.addParam("without_pack", true);
   //url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
@@ -37,7 +36,7 @@ function refreshListProtocolesPrescription(praticien_id, selected_id) {
 }
 
 function refreshListCCAM() {
-  oCcamNode = $("listCodesCcam");
+  var oCcamNode = $("listCodesCcam");
 
   var oForm = document.editFrm;
   oForm._codeCCAM.value="";
@@ -45,14 +44,14 @@ function refreshListCCAM() {
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
   aCcam = aCcam.without("");
   
-  var aCodeNodes = new Array();
+  var aCodeNodes = [];
   var iCode = 0;
   
   while (sCode = aCcam[iCode++]) {
     var sCodeNode = printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode);
     aCodeNodes.push(sCodeNode);
   }
-  oCcamNode.innerHTML = aCodeNodes.join("");
+  oCcamNode.update(aCodeNodes.join(""));
 }
 
 function checkFormSejour() {
@@ -162,9 +161,13 @@ Main.add(function () {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_class_name_" value="COperation" />
 
+{{if $dialog}}
+  <input type="hidden" name="postRedirect" value="m=dPplanningOp&a=vw_protocoles&dialog=1" />
+{{/if}}
+
 {{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
 
-<table class="main" style="margin: 4px; border-spacing: 0px;">
+<table class="main" style="border-spacing: 0px;">
   {{if $protocole->protocole_id}}
   <tr>
     <td colspan="2">
@@ -232,21 +235,19 @@ Main.add(function () {
           <th>
             {{mb_label object=$protocole field="codes_ccam"}}
           </th>
-          <td>
+          <td colspan="2">
             <input type="text" name="_codeCCAM" ondblclick="CCAMSelector.init()" size="10" value="" />
             <button class="add notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
-            
-          </td>
-          <td class="button"><button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
-          <script type="text/javascript">
-            CCAMSelector.init = function(){
-              this.sForm  = "editFrm";
-              this.sView  = "_codeCCAM";
-              this.sChir  = "chir_id";
-              this.sClass = "_class_name_";
-              this.pop();
-            }
-          </script>          
+            <button class="search" type="button" onclick="CCAMSelector.init()">Choisir un code</button>
+            <script type="text/javascript">
+              CCAMSelector.init = function(){
+                this.sForm  = "editFrm";
+                this.sView  = "_codeCCAM";
+                this.sChir  = "chir_id";
+                this.sClass = "_class_name_";
+                this.pop();
+              }
+            </script>          
           </td>
         </tr>
 
@@ -255,14 +256,18 @@ Main.add(function () {
             Liste des codes CCAM
             {{mb_field object=$protocole field="codes_ccam" hidden=1 prop=""}}
           </th>
-          <td colspan="2" class="text" id="listCodesCcam">
-          </td>
+          <td colspan="2" class="text" id="listCodesCcam"></td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field="libelle"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="libelle" size="50"}}</td>
+          <td colspan="2">{{mb_field object=$protocole field="libelle" size="35"}}</td>
         </tr>
+        
+        <tr>
+          <td colspan="3"><hr /></td>
+        </tr>
+        
         <tr>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="examen"}}</td>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="materiel"}}</td>
@@ -292,14 +297,14 @@ Main.add(function () {
     <td id="sejour">
       <table class="form">
         <tr>
-         <th class="category" colspan="3">Informations concernant le séjour</th>
+         <th class="category" colspan="2">Informations concernant le séjour</th>
         </tr>
         
         <tr>
 				  <th>
 				    {{mb_label object=$protocole field="service_id_sejour"}}
 				  </th>
-				  <td colspan="3">
+				  <td>
 				    <select name="service_id_sejour" class="{{$protocole->_props.service_id_sejour}}" style="max-width: 150px;">
 				      <option value="">&mdash; Choisir un service</option>
 				      {{foreach from=$listServices item=_service}}
@@ -312,50 +317,57 @@ Main.add(function () {
 				</tr>
         
         <tr>
-          <th>{{mb_label object=$protocole field="DP"}}</th>
-          <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
-          <td class="button"><button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
-          <script type="text/javascript">
-            CIM10Selector.init = function(){
-              this.sForm = "editFrm";
-              this.sView = "DP";
-              this.sChir = "chir_id";
-              this.pop();
-            }
-          </script>
+          <th>
+            {{mb_label object=$protocole field="DP"}}
+          </th>
+          <td>
+            {{mb_field object=$protocole field="DP" size="10"}}
+            <button type="button" class="search" onclick="CIM10Selector.init()">Choisir un code</button>
+            <script type="text/javascript">
+              CIM10Selector.init = function(){
+                this.sForm = "editFrm";
+                this.sView = "DP";
+                this.sChir = "chir_id";
+                this.pop();
+              }
+            </script>
           </td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field="libelle_sejour"}}</th>
-          <td colspan="3">{{mb_field object=$protocole field="libelle_sejour"}}</td>
+          <td>{{mb_field object=$protocole field="libelle_sejour"}}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>
+          <td>{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>
-          <td colspan="2">
-            {{mb_field object=$protocole field="type"}}
-          </td>
+          <td>{{mb_field object=$protocole field="type"}}</td>
         </tr>
-
+        
+        <tr>
+          <td colspan="2"><hr /></td>
+        </tr>
+        
         <tr>
           <td>{{mb_label object=$protocole field="convalescence"}}</td>
-          <td colspan="2">{{mb_label object=$protocole field="rques_sejour"}}</td>
+          <td>{{mb_label object=$protocole field="rques_sejour"}}</td>
         </tr>
 
         <tr>
           <td>{{mb_field object=$protocole field="convalescence" rows="3"}}</td>
-          <td colspan="2">{{mb_field object=$protocole field="rques_sejour" rows="3"}}</td>
+          <td>{{mb_field object=$protocole field="rques_sejour" rows="3"}}</td>
         </tr>
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
-          <td colspan="2">{{mb_label object=$protocole field="protocole_prescription_chir_id"}}</td>
-          <td colspan="2"><select name="protocole_prescription_chir_id"></select></td>
+          <td colspan="2">
+            {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
+            <select name="protocole_prescription_chir_id"></select>
+          </td>
         </tr>
         {{/if}}
       </table>

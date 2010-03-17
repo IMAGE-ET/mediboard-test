@@ -51,7 +51,7 @@ function setClose(type, protocole_id) {
 {{if !$dialog}}
 <ul id="tabs-protocoles" class="control_tabs">
   <li>
-  	<a  href="#interv" {{if !count($protocoles.interv)}}class="empty"{{/if}}>
+  	<a href="#interv" {{if !count($protocoles.interv)}}class="empty"{{/if}}>
   		Chirurgicaux <small>({{$protocoles.interv|@count}})</small>
   	</a>
   </li>
@@ -64,8 +64,9 @@ function setClose(type, protocole_id) {
 
 <script type="text/javascript">
 Main.add(function(){
-  // Don't use .create() : why ?? (tom)
-  Control.Tabs.create('tabs-protocoles', true);
+  // Don't use .create() because the #fragment of the url 
+  // is not taken into account, and this is important here
+  new Control.Tabs('tabs-protocoles');
 });
 </script>
 

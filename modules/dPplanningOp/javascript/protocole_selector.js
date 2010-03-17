@@ -27,7 +27,7 @@ ProtocoleSelector = {
   sServiceId	   : null,
   sServiceId_easy  : null,
   options : {
-    width : 700,
+    width : 800,
     height: 500
   },
 
