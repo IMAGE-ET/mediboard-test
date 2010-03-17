@@ -1157,6 +1157,8 @@ class CSejour extends CCodable {
     
     $this->loadNumDossier();
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
+    $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
+    $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_num_dossier");
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);

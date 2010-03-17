@@ -1336,7 +1336,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - mobile"            , $this->tel2       );
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
-    $template->addBarcode ("Patient - Code barre ID"     , "ID$this->_id"    );
+    $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
     $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
     
     if ($this->sexe === "m"){
