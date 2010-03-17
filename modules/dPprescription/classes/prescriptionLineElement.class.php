@@ -182,7 +182,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   /*
    * Calcul des droits
    */
-  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {	
+  function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {	
 		global $AppUI, $can;
 
     // Cas d'une ligne de protocole  

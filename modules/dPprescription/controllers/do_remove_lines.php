@@ -12,7 +12,7 @@ global $AppUI;
 
 $prescription_id = CValue::post("prescription_id");
 $praticien_id    = CValue::post("praticien_id");
-
+$operation_id    = CValue::post("operation_id");
 $lines = array();
 
 $line_med = new CPrescriptionLineMedicament();
@@ -45,7 +45,7 @@ $current_user->isPraticien();
 
 foreach($lines as $lines_by_type){
   foreach($lines_by_type as $_line){
-  	$_line->getAdvancedPerms($current_user->_is_praticien);
+  	$_line->getAdvancedPerms($current_user->_is_praticien, 0, 0, $operation_id);
 		if($_line->_perm_edit){
 	    $msg = $_line->delete();
 	    CAppUI::displayMsg($msg, "$_line->_class_name-msg-delete");

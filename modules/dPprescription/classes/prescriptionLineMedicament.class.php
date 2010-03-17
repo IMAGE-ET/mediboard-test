@@ -269,7 +269,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   /*
    * Calcul des droits
    */
-  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
+  function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
   	
   	/*
   	 * Une infirmiere peut remplir entierement une ligne si elle l'a créée.
@@ -342,11 +342,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_signature_infirmiere = 1;
     }*/
     // Affichage de l'icone Livret Therapeutique
-    if(!$this->_ref_produit->inLivret && ($prescription_type === "sejour" || $this->_protocole)){
+    if(!$this->_ref_produit->inLivret && ($this->_ref_prescription->type === "sejour" || $this->_protocole)){
       $this->_can_vw_livret_therapeutique = 1;
     }
     // Affichage de l'icone Produit Hospitalier
-    if(!$this->_ref_produit->hospitalier && ($prescription_type === "sortie" || $this->_protocole)){
+    if(!$this->_ref_produit->hospitalier && ($this->_ref_prescription->type === "sortie" || $this->_protocole)){
       $this->_can_vw_hospi = 1;
     }
     // Affichage de l'icone generique

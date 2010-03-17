@@ -42,7 +42,7 @@ foreach($object->_ref_substitution_lines as $_lines){
 	    }
 	  }
 	  
-	  $_line_sub->getAdvancedPerms($is_praticien,"0"); 
+	  $_line_sub->getAdvancedPerms($is_praticien); 
     $_line_sub->loadRefParentLine();  
 	}
 }
