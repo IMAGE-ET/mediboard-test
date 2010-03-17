@@ -294,7 +294,7 @@ class CTemplateManager {
     
     $barcode->DestroyObject();
     
-    $image = "data:image/jpg;base64,".urlencode(base64_encode($image));
+    $image = "data:image/png;base64,".urlencode(base64_encode($image));
     
     return self::$barcodeCache[$code][$size] = $image;
   }
