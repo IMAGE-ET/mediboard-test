@@ -163,10 +163,10 @@ Main.add(function () {
     <td colspan="5">
       <ul id="tab-patient" class="control_tabs">
         <li><a href="#identite">Identité</a></li>
-        <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
         <li><a href="#medecins">Correspondants médicaux</a></li>
         <li><a href="#correspondance">Correspondance</a></li>
         <li><a href="#assure">Assuré social</a></li>
+        <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
       </ul>
       <hr class="control_tabs" />
       
@@ -191,9 +191,9 @@ Main.add(function () {
         {{/if}}
         
         <div id="identite"       style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
-        <div id="beneficiaire"   style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
         <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
         <div id="assure"         style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
+        <div id="beneficiaire"   style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
       </form>
       
       <div id="medecins" style="display: none;">{{include file="inc_acc/inc_acc_medecins.tpl"}}</div>
