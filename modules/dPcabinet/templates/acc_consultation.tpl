@@ -136,7 +136,7 @@ Main.add(function () {
 	  <ul id="tab-actes" class="control_tabs">
 	    <li><a href="#ccam">Actes CCAM</a></li>
 	    <li><a href="#ngap">Actes NGAP</a></li>
-	    {{if $consult->_ref_sejour->_id}}
+	    {{if $consult->_ref_sejour && $consult->_ref_sejour->_id}}
 	    <li><a href="#cim">Diagnostics</a></li>
 	    {{/if}}
     </ul>
@@ -156,7 +156,7 @@ Main.add(function () {
 	    </div>
 	  </div>
 	  
-    {{if $consult->_ref_sejour->_id}}
+    {{if $consult->_ref_sejour && $consult->_ref_sejour->_id}}
 	  <div id="cim" style="display: none;">
       {{assign var=sejour value=$consult->_ref_sejour}}
       {{mb_include module=dPsalleOp template=inc_diagnostic_principal modeDAS="1"}}
