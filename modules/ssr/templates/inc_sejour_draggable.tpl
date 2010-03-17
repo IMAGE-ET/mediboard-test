@@ -49,7 +49,7 @@
 		
 		<br/> 
 		<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-			<strong>pour {{$sejour->_sortie_relative}}j</strong> 
+			<strong>pour {{$sejour->_duree}}j</strong> 
 		  (arrivée {{$sejour->_entree_relative}}j)
 		</span>
 		</div>
