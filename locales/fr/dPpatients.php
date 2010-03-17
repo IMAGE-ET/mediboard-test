@@ -1095,4 +1095,13 @@ $locales['CPatient-qual_beneficiaire'] = 'Qualité bénéficiaire';
 $locales['CPatient-qual_beneficiaire-court'] = 'Qual. bénéficiaire';
 $locales['CPatient-qual_beneficiaire-desc'] = 'Qualité bénéficiaire';
 $locales['CPatient.qual_beneficiaire.'] = ' ';
+$locales['config-dPpatients-CPatient-limit_char_search'] = 'Limiter la recherche';
+$locales['config-dPpatients-CPatient-limit_char_search-desc'] = 'Limiter la recherche à un certain nombre de caractères pour le nom et le prénom';
+$locales['config-dPpatients-CPatient-limit_char_search-0'] = 'Pas de limite';
+$locales['config-dPpatients-CPatient-limit_char_search-3'] = 'à 3 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-4'] = 'à 4 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-6'] = 'à 6 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-8'] = 'à 8 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-5'] = 'à 6 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-10'] = 'à 10 caractères';
 ?>

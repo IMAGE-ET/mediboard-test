@@ -16,12 +16,6 @@ $mediuser->load($AppUI->user_id);
 
 $showCount = 30;
 
-// L'utilisateur est-il un chirurgien
-$chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;
-
-// L'utilisateur est-il un anesthésiste
-$anesth = $mediuser->isFromType(array("Anesthésiste")) ? $mediuser : null;
-
 // Chargement du patient sélectionné
 $patient_id = CValue::getOrSession("patient_id");
 $patient = new CPatient;
@@ -30,21 +24,25 @@ if ($new = CValue::get("new")) {
   CValue::setSession("patient_id", null);
   CValue::setSession("selClass", null);
   CValue::setSession("selKey", null);
-} else {
+} 
+else {
   $patient->load($patient_id);
 }
 
 // Récuperation des patients recherchés
-$patient_nom         = CValue::getOrSession("nom"        , "");
-$patient_prenom      = CValue::getOrSession("prenom"     , "");
-$patient_ville       = CValue::getOrSession("ville"      , "");
-$patient_cp          = CValue::getOrSession("cp"         , "");
-$patient_day         = CValue::get("Date_Day"  , "");
-$patient_month       = CValue::get("Date_Month", "");
-$patient_year        = CValue::get("Date_Year" , "");
+$patient_nom         = trim(CValue::getOrSession("nom"   ));
+$patient_prenom      = trim(CValue::getOrSession("prenom"));
+$patient_ville       = CValue::getOrSession("ville" );
+$patient_cp          = CValue::getOrSession("cp"    );
+$patient_day         = CValue::get("Date_Day"  );
+$patient_month       = CValue::get("Date_Month");
+$patient_year        = CValue::get("Date_Year" );
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $useVitale           = CValue::get("useVitale",  CAppUI::pref('GestionFSE') && CAppUI::pref('VitaleVision') ? 1 : 0);
+
+$patient_nom_search    = null;
+$patient_prenom_search = null;
 
 $patVitale = new CPatient();
   
@@ -87,15 +85,23 @@ else {
 	$whereSoundex = array();
 	$soundexObj   = new soundex2();
 	
-	if ($patient_nom = trim($patient_nom)) {
-		$patient_nom_soundex = $soundexObj->build($patient_nom);
-	  $where[] = "`nom` LIKE '$patient_nom%' OR `nom_jeune_fille` LIKE '$patient_nom%'";
+	// Limitation du nombre de caractères
+	$patient_nom_search    = $patient_nom;
+	$patient_prenom_search = $patient_prenom;
+	if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
+	  $patient_nom_search    = substr($patient_nom_search   , 0, $limit_char_search);
+	  $patient_prenom_search = substr($patient_prenom_search, 0, $limit_char_search);
+	}
+	
+	if ($patient_nom_search) {
+		$patient_nom_soundex = $soundexObj->build($patient_nom_search);
+	  $where[] = "`nom` LIKE '$patient_nom_search%' OR `nom_jeune_fille` LIKE '$patient_nom_search%'";
 	  $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%' OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
 	}
 	
-	if ($patient_prenom = trim($patient_prenom)) {
-    $patient_prenom_soundex = $soundexObj->build($patient_prenom);
-	  $where["prenom"]                 = "LIKE '$patient_prenom%'";
+	if ($patient_prenom_search) {
+    $patient_prenom_soundex = $soundexObj->build($patient_prenom_search);
+	  $where["prenom"]                 = "LIKE '$patient_prenom_search%'";
 	  $whereSoundex["prenom_soundex2"] = "LIKE '$patient_prenom_soundex%'";
 	}
 	
@@ -158,6 +164,8 @@ $smarty->assign("prenom"              , $patient_prenom           );
 $smarty->assign("naissance"           , $patient_naissance        );
 $smarty->assign("ville"               , $patient_ville            );
 $smarty->assign("cp"                  , $patient_cp               );
+$smarty->assign("nom_search"          , $patient_nom_search       );
+$smarty->assign("prenom_search"       , $patient_prenom_search    );
 
 $smarty->assign("useVitale"           , $useVitale                );
 $smarty->assign("patVitale"           , $patVitale                );
@@ -167,8 +175,6 @@ $smarty->assign("patientsCount"       , $patientsCount            );
 $smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
 
 $smarty->assign("patient"             , $patient                  );
-$smarty->assign("chir"                , $chir                     );
-$smarty->assign("anesth"              , $anesth                   );
 $smarty->assign("board"               , 0                         );
 $smarty->assign("patient_ipp"         , $patient_ipp              );
 

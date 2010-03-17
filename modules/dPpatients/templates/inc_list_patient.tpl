@@ -142,6 +142,20 @@ reloadPatient = function(patient_id, link){
 </table>
 </form>
 
+{{if $dPconfig.dPpatients.CPatient.limit_char_search && ($nom != $nom_search || $prenom != $prenom_search)}}
+<div class="small-info">
+	La recherche est volontairement limitée aux {{$dPconfig.dPpatients.CPatient.limit_char_search}} premiers caractères 
+  <ul>
+	  {{if $nom != $nom_search}}
+	  <li>pour le <strong>nom</strong> : '{{$nom_search}}'</li>
+    {{/if}}  	
+    {{if $prenom != $prenom_search}}
+    <li>pour le <strong>prénom</strong> : '{{$prenom_search}}'</li>
+    {{/if}}   
+  </ul>
+</div>
+{{/if}}
+
 <form name="fusion" action="?" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="a" value="fusion_pat" />
