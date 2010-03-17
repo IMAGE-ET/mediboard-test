@@ -663,7 +663,7 @@ class CPatient extends CMbObject {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
     
-    $nom_naissance   = $this->nom_jeune_fille ? "($this->nom_jeune_fille)" : " ";
+    $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? "($this->nom_jeune_fille)" : " ";
     $this->_view     = "$this->_civilite $this->nom $nom_naissance $this->prenom";
     $this->_longview = "$this->_civilite_long $this->nom $nom_naissance $this->prenom";
 		
