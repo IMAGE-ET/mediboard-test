@@ -22,10 +22,6 @@ $etablissement = CGroups::loadCurrent();
 $prescription_id = CValue::getOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
-
-if(!$prescription->object_id){
-	$praticien_sortie_id = "";
-}
 $prescription->loadRefsFwd();
 
 // Chargement du poids du patient
@@ -146,7 +142,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		    }
 	    }
 	  }
-		if($praticien->_id && $line_medicament->praticien_id != $praticien->_id){
+		if($prescription->object_id && $praticien->_id && $line_medicament->praticien_id != $praticien->_id){
 			continue;
 		}	
 		if($line_medicament->child_id){
@@ -189,7 +185,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
 		  }
     }
   }	   
-  if($praticien->_id && $_perfusion->praticien_id != $praticien->_id){
+  if($prescription->object_id && $praticien->_id && $_perfusion->praticien_id != $praticien->_id){
 		continue;
 	}	
 	if($_perfusion->next_perf_id){
@@ -209,7 +205,7 @@ if(count($prescription->_ref_lines_elements_comments)){
 		foreach($chap_element as $name_cat => $cat_element){
 			foreach($cat_element as $type => $elements){
 				foreach($elements as $element){
-			  	if($praticien->_id && $element->praticien_id != $praticien->_id){
+					if($prescription->object_id && $praticien->_id && $element->praticien_id != $praticien->_id){
 				    continue;
 			    }	
 					if($element->child_id){

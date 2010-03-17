@@ -134,11 +134,16 @@ Main.add( function(){
 
   if(oFormProtocole){
 	  var url = new Url("dPprescription", "httpreq_vw_select_protocole");
-	  url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
+	  var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
 		  dropdown: true,
 	    minChars: 1,
-      select: "view",
       valueElement: oFormProtocole.elements.pack_protocole_id,
+			updateElement: function(selectedElement) {
+			  var node = $(selectedElement).down('.view');
+			  $V($("applyProtocole_libelle_protocole"), node.innerHTML);
+				if (autocompleter.options.afterUpdateElement)
+			    autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+			},
 	    callback: 
 	      function(input, queryString){
 				  if(document.selPraticienLine){

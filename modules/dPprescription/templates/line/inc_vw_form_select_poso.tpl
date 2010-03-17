@@ -33,6 +33,6 @@
   {{if $line->no_poso}}
     {{$line->_ref_posologie->_view}}
   {{else}}
-    Aucune posologie sélectionnée
+    <!-- Aucune posologie sélectionnée -->
   {{/if}}
 {{/if}}
