@@ -1102,6 +1102,6 @@ $locales['config-dPpatients-CPatient-limit_char_search-3'] = 'à 3 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-4'] = 'à 4 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-6'] = 'à 6 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-8'] = 'à 8 caractères';
-$locales['config-dPpatients-CPatient-limit_char_search-5'] = 'à 6 caractères';
+$locales['config-dPpatients-CPatient-limit_char_search-5'] = 'à 5 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-10'] = 'à 10 caractères';
 ?>
