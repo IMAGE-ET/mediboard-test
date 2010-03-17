@@ -929,7 +929,9 @@ table.active {
 
 .pagination .page.active {
   border: 1px solid #000; 
-  color: #FF4200;
+  color: #f30;
+  margin: -1px;
+  border-width: 2px;
 }
 
 .pagination .page.disabled {
