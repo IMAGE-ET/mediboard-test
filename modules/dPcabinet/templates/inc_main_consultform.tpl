@@ -6,15 +6,10 @@
 {{mb_include_script module="dPcabinet" script="exam_dialog"}}
 
 <script type="text/javascript">
+	{{if !$readonly}}
   ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
-  
-  /*refreshExamens = function(consult_id, user_id) {
-    var url = new Url("dPcabinet", "httpreq_vw_main_consult");
-    url.addParam("selConsult", consult_id);
-    url.addParam("chirSel", user_id);
-    url.requestUpdate($("mainConsult") || $("Examens"));
-  }*/
-  
+  {{/if}}
+	 
   onExamComplete = function(){
     FormObserver.changes = 0;
   }

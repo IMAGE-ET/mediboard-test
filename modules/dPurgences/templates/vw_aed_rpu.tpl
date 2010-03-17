@@ -109,7 +109,7 @@ function loadActesNGAP(sejour_id){
 Main.add(function () {
   {{if $rpu->_id && $can->edit}}
     DossierMedical.reloadDossierPatient();
-    var tab_sejour = Control.Tabs.create('tab-dossier');
+    var tab_sejour = Control.Tabs.create('tab-dossier', true);
     loadSuivi({{$rpu->sejour_id}});
     refreshConstantesHack('{{$rpu->sejour_id}}');
   {{/if}}
@@ -343,85 +343,80 @@ Main.add(function () {
 
 <!-- Dossier Médical du patient -->
 {{if $rpu->_id && $can->edit}}
-<table width="100%" class="form">
-  <tr>
-    <th class="category">Autres informations</th>
-    <th class="category">Prise en charge</th>
-  </tr>
+	<table width="100%" class="form">
+	  <tr>
+	    <th class="category">Autres informations</th>
+	    <th class="category">Prise en charge</th>
+	  </tr>
+	
+	  <tr>
+	    <td style="width: 60%">
+	      {{include file="inc_vw_radio.tpl"}}
+	    </td>
+	    <td class="button">
+	  		{{include file="inc_pec_praticien.tpl"}}
+	    </td>
+	  </tr>
+	</table>
+	
+  {{assign var=consult value=$rpu->_ref_consult}}
 
-  <tr>
-    <td style="width: 60%">
-      {{include file="inc_vw_radio.tpl"}}
-    </td>
-    <td class="button">
-  		{{include file="inc_pec_praticien.tpl"}}
-    </td>
-  </tr>
-</table>
-
-<ul id="tab-dossier" class="control_tabs">
-  <li><a href="#antecedents">Antécédents / Traitements</a></li>
-  <li><a href="#suivisoins">Suivi soins</a></li>
-  <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
-  <li><a href="#examens">Examens</a></li>
-  {{if $app->user_prefs.ccam_sejour == 1 }}
-  <li><a href="#actes">Cotation</a></li>
-  {{/if}}
-  {{if $isPrescriptionInstalled}}
-  <li {{if $rpu->_ref_consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$rpu->_ref_consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
-  {{/if}}
-  <li><a href="#docs">Documents</a></li>
-</ul>
-
-<hr class="control_tabs" />
-
-<div id="antecedents">
-  {{assign var="current_m" value="dPurgences"}}
-  {{assign var="_is_anesth" value="0"}}
-  {{assign var="consult" value=$rpu->_ref_consult}}
-  {{assign var=sejour_id value=""}}
-  {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$app->user_id}}
-</div>
-
-<div id="suivisoins" style="display:none"></div>
-<div id="constantes" style="display:none"></div>
-
-<div id="examens">
-  {{mb_include module=dPcabinet template=inc_main_consultform readonly=1}}
-</div>
-
-{{if $app->user_prefs.ccam_sejour == 1 }}
-<div id="actes" style="display: none;">
-  <ul id="tab-actes" class="control_tabs">
-    <li><a href="#one">Actes NGAP</a></li>
-  </ul>
-  <hr class="control_tabs" />
-  
-  <table class="form">
-    <tr id="one" style="display: none;">
-      <td id="listActesNGAP"> </td>
-    </tr>
-  </table>
-</div>
-{{/if}}
-
-{{if $isPrescriptionInstalled}}
-<div id="prescription_sejour" style="display: none;">
-  <div class="small-info">
-    Aucune prescription
+	<ul id="tab-dossier" class="control_tabs">
+	  <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
+	  <li><a href="#suivisoins">Suivi soins</a></li>
+	  <li onmousedown="refreshConstantesHack('{{$rpu->sejour_id}}')"><a href="#constantes">Constantes</a></li>
+	  <li><a href="#examens">Consultation médicale</a></li>
+	  {{if $app->user_prefs.ccam_sejour == 1 }}
+	  <li><a href="#actes">Cotation infirmière</a></li>
+	  {{/if}}
+	  {{if $isPrescriptionInstalled}}
+	  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
+	  {{/if}}
+	  <li><a href="#doc-items">Documents</a></li>
+	</ul>
+	
+	<hr class="control_tabs" />
+	
+	<div id="antecedents">
+	  {{assign var="current_m" value="dPurgences"}}
+	  {{assign var="_is_anesth" value="0"}}
+	  {{assign var=sejour_id value=""}}
+	  {{mb_include module=dPcabinet template=inc_ant_consult chir_id=$app->user_id}}
+	</div>
+	
+	<div id="suivisoins" style="display:none"></div>
+	<div id="constantes" style="display:none"></div>
+	
+	<div id="examens">
+	  {{mb_include module=dPcabinet template=inc_main_consultform readonly=1}}
+	</div>
+	
+	{{if $app->user_prefs.ccam_sejour == 1 }}
+	<div id="actes" style="display: none;">
+	  <ul id="tab-actes" class="control_tabs">
+	    <li><a href="#one">Actes NGAP</a></li>
+	  </ul>
+	  <hr class="control_tabs" />
+	  
+	  <table class="form">
+	    <tr id="one" style="display: none;">
+	      <td id="listActesNGAP"> </td>
+	    </tr>
+	  </table>
+	</div>
+	{{/if}}
+	
+	{{if $isPrescriptionInstalled}}
+	<div id="prescription_sejour" style="display: none;">
+	  <div class="small-info">
+	    Aucune prescription
+	  </div>
+	</div>
+	{{/if}}
+	
+  <div id="doc-items">
+  	{{mb_include template=inc_rpu_docitems}}
   </div>
-</div>
-{{/if}}
-
-{{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-<div id="docs" style="display: none;">
-  {{assign var=object value=$rpu->_ref_sejour}}
-  <div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
-    {{include file="../../dPcompteRendu/templates/inc_widget_documents.tpl" mode="collapse" modelesByOwner=$modelesByOwner.CSejour packsByOwner=$packsByOwner.CSejour praticien=$userSel}}
-  </div>
-</div>
-
 {{/if}}
 
 
