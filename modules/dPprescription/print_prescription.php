@@ -92,6 +92,7 @@ if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
 
 $medicament = 0;
 $comment = 0;
+$ald = false;
 
 // Parcours des medicaments, pas de gestion d'executant pour les medicaments
 $lines["medicaments"]["med"]["ald"] = array();
@@ -155,6 +156,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		  continue;
 		}
 	  if($line_medicament->ald){
+	  	$ald = true;
 	    $lines["medicaments"][$key]["ald"][] = $line_medicament;
 	  } else {
 	  	$lines["medicaments"][$key]["no_ald"][] = $line_medicament;
@@ -222,6 +224,7 @@ if(count($prescription->_ref_lines_elements_comments)){
 			      $executant = $element->_ref_executant->_guid;
 			    }
 			    if($element->ald){
+			    	$ald = true;
 			    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
 			    } else {
 			      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
@@ -246,27 +249,32 @@ $traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie");
 $prescription->_ref_selected_prat = $praticien;
 
 // Chargement du header
-$header_height = 8;
+$header_height = 10;
 $template_header = new CTemplateManager();
-$prescription->fillTemplate($template_header);
-$header = CPrescription::getPrescriptionTemplate("header", $praticien);
-if($header->_id){
-  $template_header->renderDocument($header->source);
-	$header_height = $header->height;
+if(!$ald){
+	$prescription->fillTemplate($template_header);
+	$header = CPrescription::getPrescriptionTemplate("header", $praticien);
+	if($header->_id){
+	  $template_header->renderDocument($header->source);
+		$header_height = $header->height;
+	}
 }
 
 // Chargement du footer
 $footer_height = 10;
 $template_footer = new CTemplateManager();
-$prescription->fillTemplate($template_footer);
-$footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
-if($footer->_id){
-  $template_footer->renderDocument($footer->source);
-  $footer_height = $footer->height;
+if(!$ald){
+	$prescription->fillTemplate($template_footer);
+	$footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
+	if($footer->_id){
+	  $template_footer->renderDocument($footer->source);
+	  $footer_height = $footer->height;
+	}
 }
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("ald", $ald);
 $smarty->assign("header", $header_height);
 $smarty->assign("footer", $footer_height);
 $smarty->assign("traduction"     , $traduction);
@@ -282,8 +290,8 @@ $smarty->assign("linesDMI"       , $linesDMI);
 $smarty->assign("categories"     , $categories);
 $smarty->assign("executants"     , $executants);
 $smarty->assign("poids"          , $poids);
-$smarty->assign("generated_header", $header->_id ? $template_header->document : "");
-$smarty->assign("generated_footer", $footer->_id ? $template_footer->document : "");
+$smarty->assign("generated_header", @$header->_id ? $template_header->document : "");
+$smarty->assign("generated_footer", @$footer->_id ? $template_footer->document : "");
 $smarty->display("print_prescription.tpl");
 
 ?>

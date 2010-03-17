@@ -22,54 +22,88 @@ Main.add(window.print);
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css}}
 </style>
-  
+
 <div class="header" onclick="window.print();" style="cursor: pointer">
-  {{if $generated_header}}
-    {{$generated_header|smarty:nodefaults}}
-  {{else}}
-  	<table class="main">
-		  <tr>
-		    <td class="left">
-		      {{if $praticien->_id}}
-			      <strong>Dr {{$praticien->_view}}</strong>
+  {{if $ald}}
+	 <table class="main">
+        <tr>
+          <td class="left">
+            <strong>Dr {{$praticien->_view}}</strong>
+            <br />
+            {{$praticien->_ref_discipline->_view}}
+            <br />
+						{{mb_title object=$praticien field=adeli}}
+            {{mb_value object=$praticien field=adeli}}
+            <br />
+            {{mb_value object=$function field=adresse}}
+	          {{$function->cp}} {{$function->ville}}
+						<br />
+	          Tel: {{mb_value object=$function field=tel}}
+						{{if $function->fax}}
+	          / Fax: {{mb_value object=$function field=fax}}
+						{{/if}}
+          </td>
+          <td class="right">
+            le {{$date|date_format:"%d %B %Y"}}
+            <br />
+            A l'attention de 
+            <br />          
+            <strong>{{$prescription->_ref_patient->_view}}</strong>
+            <br />
+            Age: {{$prescription->_ref_patient->_age}} ans<br />
+            Poids: {{$poids}} kg
+          </td>
+        </tr>
+      </table>  
+	{{else}}
+		{{if $generated_header}}
+	    {{$generated_header|smarty:nodefaults}}
+	  {{else}}
+	  	<table class="main">
+			  <tr>
+			    <td class="left">
+			      {{if $praticien->_id}}
+				      <strong>Dr {{$praticien->_view}}</strong>
+				      <br />
+				      {{mb_title object=$praticien field=adeli}}
+				      {{mb_value object=$praticien field=adeli}}
+				      <br />
+				      {{$praticien->_ref_discipline->_view}}
+				      <br />
+				      {{mb_value object=$praticien field=titres}}
+				      <br />
+			      {{elseif $prescription->object_id}}
+			        Prescription globale
+			      {{/if}}
+			    </td>
+			    <td class="center">
+			      <h1>{{$etablissement->_view}}</h1>
+			      {{if $function}}
+			        {{mb_value object=$function field=soustitre}}
+			      {{/if}}
+			    </td>
+			    <td class="right">
+			      le {{$date|date_format:"%d %B %Y"}}
 			      <br />
-			      {{mb_title object=$praticien field=adeli}}
-			      {{mb_value object=$praticien field=adeli}}
+			      {{if $prescription->object_id}}
+						A l'attention de 
+						<br />		      
+			      <strong>{{$prescription->_ref_patient->_view}}</strong>
 			      <br />
-			      {{$praticien->_ref_discipline->_view}}
-			      <br />
-			      {{mb_value object=$praticien field=titres}}
-			      <br />
-		      {{elseif $prescription->object_id}}
-		        Prescription globale
-		      {{/if}}
-		    </td>
-		    <td class="center">
-		      <h1>{{$etablissement->_view}}</h1>
-		      {{if $function}}
-		        {{mb_value object=$function field=soustitre}}
-		      {{/if}}
-		    </td>
-		    <td class="right">
-		      le {{$date|date_format:"%d %B %Y"}}
-		      <br />
-		      {{if $prescription->object_id}}
-					A l'attention de 
-					<br />		      
-		      <strong>{{$prescription->_ref_patient->_view}}</strong>
-		      <br />
-		      Age: {{$prescription->_ref_patient->_age}} ans<br />
-		      Poids: {{$poids}} kg
-		      {{else}}
-		      Protocole: {{$prescription->libelle}}
-		      {{/if}}
-		    </td>
-		  </tr>
-		</table>  
-	{{/if}} 
+			      Age: {{$prescription->_ref_patient->_age}} ans<br />
+			      Poids: {{$poids}} kg
+			      {{else}}
+			      Protocole: {{$prescription->libelle}}
+			      {{/if}}
+			    </td>
+			  </tr>
+			</table>  
+		{{/if}} 
+	{{/if}}
 </div>
 
 <!-- Affichage du pieds de page -->
+{{if !$ald}}
 <div class="footer">
   {{if $generated_footer}}
     {{$generated_footer|smarty:nodefaults}}
@@ -93,6 +127,7 @@ Main.add(window.print);
 	  </table>
   {{/if}}
 </div>
+{{/if}}
 
 <!-- Affichage en mode ALD -->
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
@@ -106,9 +141,12 @@ Main.add(window.print);
   
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald}}
     <!-- Affichage des ald -->
-    <h3>
-    Prescriptions relatives au traitement de l'affection de longue durée
-		</h3>
+   <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
+     <strong>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</strong>
+		 <br />
+		 (AFFECTION EXONERANTE)
+	 </div>
+		
 		<ul>
       {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald nodebug=true}}
@@ -119,9 +157,11 @@ Main.add(window.print);
     </ul>
     <div class="middle"></div>
     <!-- Affichage des no_ald -->
-    <h3>
-    Prescriptions SANS RAPPORT avec l'affection de longue durée
-    </h3>
+		<div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
+     <strong>Prescriptions SANS RAPPORT avec l'affection de longue durée</strong>
+     <br />
+    (MALADIES INTERCURRENTES)
+   </div>
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
@@ -211,9 +251,11 @@ Main.add(window.print);
 
      <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
      {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
-     <h3>
-	     Prescriptions relatives au traitement de l'affection de longue durée 
-		 </h3>
+	   <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
+	     <strong>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</strong>
+	     <br />
+	     (AFFECTION EXONERANTE)
+	   </div>
 	   {{/if}}
 
      {{if array_key_exists("ald", $elements)}}
@@ -249,9 +291,12 @@ Main.add(window.print);
 	     
 	    {{if array_key_exists("ald", $elements) && $elements.ald|@count}}
 	    <div class="middle"></div>
-		  	 <h3>
-	         Prescriptions SANS RAPPORT avec l'affection de longue durée 
-	       </h3>
+	    <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
+	     <strong>Prescriptions SANS RAPPORT avec l'affection de longue durée</strong>
+	     <br />
+	    (MALADIES INTERCURRENTES)
+	   </div>
+
 	    {{/if}}
 	     <!-- Affichage des no_ald -->
 	    <ul>
