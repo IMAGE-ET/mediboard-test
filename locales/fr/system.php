@@ -523,6 +523,7 @@ $locales['CModule-back-messages.empty'] = '';
 $locales['config-exchange-source'] = 'Configuration Source d\'échange';
 $locales['CExchangeSource-already-exist'] = 'Une source d\'échange existe déjà';
 $locales['CExchangeSource-no-name'] = 'Veuillez indiquer un nom pour ajouter une source de donnée';
+$locales['CExchangeSource'] = 'Source d\'échange';
 $locales['CSourceFTP'] = 'Source FTP';
 $locales['CSourceFTP-counter'] = 'Compteur fichier';
 $locales['CSourceFTP-counter-court'] = 'Compteur fichier';

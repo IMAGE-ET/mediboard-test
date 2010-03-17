@@ -2024,6 +2024,13 @@ class CMbObject {
   	return $log;
   }
   
+  function loadLastLog() {
+    $last_log = new CUserLog;
+    $last_log->setObject($this);
+    $last_log->loadMatchingObject("date DESC");
+    $this->_ref_last_log = $last_log;
+  }
+  
   function loadAffectationsPersonnel() {
     // Initialisation
     $personnel = new CPersonnel();

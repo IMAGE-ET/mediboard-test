@@ -311,7 +311,7 @@ var Livret = {
     <td id="do_add_bcbges"></td>
   </tr>
   <tr>
-    <td><button class="tick" onclick="Livret.import()" >Importer un fichier CSV de livrets thérapeutiques</button></td>
+    <td><button class="tick" onclick="Livret.import()" >{{tr}}Import-CSV{{/tr}} de livrets thérapeutiques</button></td>
     <td></td>
   </tr>
   <tr>

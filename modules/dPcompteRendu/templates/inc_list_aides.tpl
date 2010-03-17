@@ -4,7 +4,7 @@
        Exporter au format CSV
   </button>
   
-  <button onclick="return popupImport('{{$owner->_guid}}');" class="hslip">Importer un fichier CSV</button>
+  <button onclick="return popupImport('{{$owner->_guid}}');" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
 {{/if}}
 
 <table class="tbl">

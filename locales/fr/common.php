@@ -190,4 +190,5 @@ $locales['Loading tooltip'] = 'Chargement infobulle';
 $locales['No result'] = 'Aucun résultat';
 $locales['Optimize'] = 'Optimiser';
 $locales['Week'] = 'Semaine';
+$locales['Import-CSV'] = 'Importer un fichier CSV';
 ?>
