@@ -568,6 +568,13 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     $entree = $sejECap->consumeDateTime("DTEN", "HREN");
     $sortie = $sejECap->consumeDateTime("DTSO", "HRSO");
+		
+		$idGroupUrg = new CIdSante400;
+		$idGroupUrg->loadLatestFor($this->etablissement, "eCap URGSER");
+    $CSER = $sejECap->consume("CSER");
+		if ($idGroupUrg->id400 && $idGroupUrg->id400 == $CSER) {
+      $this->sejour->type = "urg";
+		}
 
     // Dates prévues et réelles
     switch ($sejECap->consume("PRES")) {
