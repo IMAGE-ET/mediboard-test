@@ -11,7 +11,8 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$page              = intval(CValue::get('page', 0));
+$page    = intval(CValue::get('page', 0));
+$inactif = CValue::get("inactif", array());
 $page_userfunction = intval(CValue::get('page_userfunction', 0));
 
 // Récupération des groupes
@@ -20,6 +21,7 @@ $order = "text";
 $groups = $group->loadListWithPerms(PERM_EDIT, null, $order);
 
 $function = new CFunctions();
+$where["actif"] = $inactif ? "!= '1'" : "= '1'";
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $total_functions = $function->countList($where);
 
@@ -52,6 +54,7 @@ if($userfunction->_id) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("inactif"            , $inactif);
 $smarty->assign("functions"          , $functions);
 $smarty->assign("total_functions"    , $total_functions);
 $smarty->assign("page"               , $page);
@@ -63,7 +66,6 @@ $smarty->assign("page_userfunction"  , $page_userfunction);
 $smarty->assign("groups"             , $groups  );
 $smarty->assign("secondary_function" , new CSecondaryFunction());
 $smarty->assign("utypes"             , CUser::$types );
-
 $smarty->display("vw_idx_functions.tpl");
 
 ?>

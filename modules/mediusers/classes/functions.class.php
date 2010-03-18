@@ -27,7 +27,9 @@ class CFunctions extends CMbObject {
   var $ville     = null;
   var $tel       = null;
   var $fax       = null;
+  var $actif     = null;
   var $compta_partagee = null;
+  var $admission_auto  = null;
   
   // Object References
   var $_ref_group = null;
@@ -81,6 +83,8 @@ class CFunctions extends CMbObject {
     $specs["fax"]             = "numchar length|10 mask|$phone_number_format";
     $specs["soustitre"]       = "text";
     $specs["compta_partagee"] = "bool notNull";
+    $specs["admission_auto"]  = "bool";
+    $specs["actif"]           = "bool default|1";
     return $specs;
   }
     

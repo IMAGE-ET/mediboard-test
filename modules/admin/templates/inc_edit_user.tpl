@@ -83,7 +83,7 @@
   <tr>
     <td class="button" colspan="2">
       {{if $user->user_id}}
-      <button class="modify" type="submit">Valider</button>
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form, {
       	  typeName:'l\'utilisateur',
       	  objName:'{{$user->user_username|smarty:nodefaults|JSAttribute}}'

@@ -60,28 +60,18 @@ function changePage(page) {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
-        
         <table class="form">
         	<tr>
         		<th>Champ de recherche</th>
         		<td>
               <input type="text" name="filter" value="{{$filter}}" onchange="$V(this.form.page, 0)" />
             </td>
-        	</tr>
-        	<tr>
-        		<th></th>
-        		<td>
-        		  <label>
-        			  <input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
-              </label>
-        		</td>
-        	</tr>
+          </tr>
           <tr>
             <th></th>
             <td>
-              <label>
-                <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
-              </label>
+              <input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
+              <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
             </td>
           </tr>
         	<tr>

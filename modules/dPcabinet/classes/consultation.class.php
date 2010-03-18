@@ -693,6 +693,7 @@ class CConsultation extends CCodable {
   }
   
   function store() {
+    $this->completeField('sejour_id');
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
@@ -705,7 +706,7 @@ class CConsultation extends CCodable {
       
       $sejour = new CSejour();
       $sejour->loadObject($where);
-      
+
       // Si pas de séjour et config alors le créer en type consultation
       if (!$sejour->_id && CAppUI::conf("dPcabinet CConsultation create_consult_sejour")) {
         $sejour->patient_id = $this->patient_id;
@@ -719,6 +720,19 @@ class CConsultation extends CCodable {
         }  
       }
       $this->sejour_id = $sejour->_id;
+    }
+    
+    if ($this->_id && $this->sejour_id && $this->fieldModified("chrono", self::PATIENT_ARRIVE)) {
+      $this->completeField("plageconsult_id");
+      $this->loadRefPlageConsult();
+      $this->_ref_chir->loadRefFunction();
+      $function = $this->_ref_chir->_ref_function;
+      if ($function->admission_auto) {
+        $sejour = new CSejour();
+        $sejour->load($this->sejour_id);
+        $sejour->entree_reelle = $this->arrivee;
+        $sejour->store();
+      }
     }
     
     // Standard store

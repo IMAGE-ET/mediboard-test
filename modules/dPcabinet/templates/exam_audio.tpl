@@ -157,7 +157,7 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
   
         <tr>
           <td class="button" colspan="9">
-            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTonale})">Valider</button>
+            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTonale})">{{tr}}Save{{/tr}}</button>
           </td>
         </tr>
       </tbody>
@@ -275,9 +275,9 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
         <tr>
           <td class="button" colspan="9">
             {{if $exam_audio->examaudio_id}}
-            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTympan})">Valider</button>
+            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTympan})">{{tr}}Save{{/tr}}</button>
             {{else}}
-            <button class="submit" type="submit">Valider</button>
+            <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
             {{/if}}
           </td>
         </tr>
@@ -304,7 +304,7 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
       </tr>
       <tr>
         <td class="button radiointeractive">
-          <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: reloadAllGraphs })">Valider</button>
+          <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: reloadAllGraphs })">{{tr}}Save{{/tr}}</button>
         </td>
       </tr>
     </table>

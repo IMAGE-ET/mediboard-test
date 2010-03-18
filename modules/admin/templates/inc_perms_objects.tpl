@@ -136,8 +136,8 @@ Main.add(function(){
           <img src="images/icons/no.png" title="Profil desactivé" />
         {{/if}}
         {{if $key == "user"}}
-          <button class="modify" type="submit">Valider</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </form>
     </td>

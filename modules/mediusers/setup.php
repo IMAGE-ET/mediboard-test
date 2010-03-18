@@ -443,7 +443,14 @@ class CSetupmediusers extends CSetup {
      $sql = "ALTER TABLE `users_mediboard` ADD `code_intervenant_cdarr` CHAR (2) DEFAULT NULL;";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.33";
+     $this->makeRevision("0.33");
+     
+     $sql = "ALTER TABLE `functions_mediboard` 
+              ADD `actif` ENUM ('0','1') DEFAULT '1',
+              ADD `admission_auto` ENUM ('0','1') DEFAULT '0';";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.34";
   }
 }
 ?>
