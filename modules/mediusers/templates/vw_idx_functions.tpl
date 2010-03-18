@@ -9,7 +9,8 @@ ColorSelector.init = function(){
   this.pop();
 }
 
-showFunction = function(function_id){
+showFunction = function(function_id, element){
+  element.up('tr').addUniqueClassName('selected');
   var url = new Url("mediusers", "ajax_edit_function");
   url.addParam("function_id", function_id);
   url.requestUpdate("vw_function");

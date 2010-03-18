@@ -13,7 +13,7 @@
   <table class="form">
     <tr>
       {{if $userfunction->_id}}
-      <th class="title modify" colspan="2">
+      <th class="title modify text" colspan="2">
         {{mb_include module=system template=inc_object_idsante400 object=$userfunction}}
         {{mb_include module=system template=inc_object_history object=$userfunction}}
         

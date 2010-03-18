@@ -7,7 +7,7 @@
   {{foreach from=$functions item=_function}}
   <tr {{if $_function->_id == $userfunction->_id}}class="selected"{{/if}}>
     <td>
-      <a href="#" onclick="showFunction('{{$_function->_id}}')">
+      <a href="#" onclick="showFunction('{{$_function->_id}}', this)">
         {{$_function->text}}
       </a>
     </td>
@@ -15,7 +15,7 @@
       {{tr}}CFunctions.type.{{$_function->type}}{{/tr}}
     </td>
     <td style="background: #{{$_function->color}}">
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;function_id={{$_function->_id}}">
+      <a href="#" onclick="showFunction('{{$_function->_id}}', this)">
         {{$_function->_ref_users|@count}}
       </a>
     </td>
