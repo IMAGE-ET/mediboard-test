@@ -161,10 +161,12 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		// Creation d'une ligne de soin pour la prescription des injections
 		if($prescription->type != "sejour"){
 		  if($line_medicament->_is_injectable){
-		  	$ald = $line_medicament->ald ? "ald" : "no_ald";
-	      $linesElt["soin"]["aucun"][$ald]["inj"][] = $line_medicament;
-				if($ald == "ald" && !isset($linesElt["soin"]["aucun"]["no_ald"])){
-					 $linesElt["soin"]["aucun"]["no_ald"] = array();
+		  	if($line_medicament->injection_ide){
+			  	$ald = $line_medicament->ald ? "ald" : "no_ald";
+		      $linesElt["soin"]["aucun"][$ald]["inj"][] = $line_medicament;
+					if($ald == "ald" && !isset($linesElt["soin"]["aucun"]["no_ald"])){
+						 $linesElt["soin"]["aucun"]["no_ald"] = array();
+					}
 				}
 	    }
 		}

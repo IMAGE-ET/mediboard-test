@@ -97,7 +97,19 @@
 	    <td />
 	    <td>
 	      <div class="small-info">
-	      	<label title="Vous pouvez l'associer à une perfusion existante ou une nouvelle">Ce produit est injectable</label>
+	      	<label title="Vous pouvez l'associer à une perfusion existante ou une nouvelle">
+	      		Ce produit est injectable
+					</label>
+				  {{if $line->_ref_prescription->type != "sejour"}}
+					  <br />
+					  <form name="editLineInjectable" method="post" action="">
+					  	<input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+							<input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
+							{{mb_label object=$line field="injection_ide"}}
+							{{mb_field object=$line field="injection_ide" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+					  </form>
+					{{/if}}
 				</div>
 	    </td>
 	    <td>

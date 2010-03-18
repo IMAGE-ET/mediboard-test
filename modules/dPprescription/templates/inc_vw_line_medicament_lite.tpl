@@ -104,25 +104,35 @@
 			 {{/if}}
     </td>
 		{{if !$line->_protocole}}
-	    <td style="width: 15%" class="text">
-	      <!-- Date de debut -->
-	      {{if $line->debut}}
-	        {{mb_value object=$line field=debut}}
-	        {{if $line->time_debut}}
-	          à {{mb_value object=$line field=time_debut}}
+	    {{if $line->fin}}
+			  <td colspan="2" style="width: 25%" class="text">
+			     {{if !$mode_induction_perop}}   
+            <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+          {{/if}}
+					  A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
+           
+				</td>
+			{{else}}
+				<td style="width: 15%" class="text">
+	        <!-- Date de debut -->
+	        {{if $line->debut}}
+	          {{mb_value object=$line field=debut}}
+	          {{if $line->time_debut}}
+	            à {{mb_value object=$line field=time_debut}}
+	          {{/if}}
 	        {{/if}}
-	      {{/if}}
-	    </td>
-	    <td style="width: 10%" class="text">
-	      {{if !$mode_induction_perop}}   
-	        <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
-	      {{/if}}
-	      <!-- Duree de la ligne -->
-	      {{if $line->duree && $line->unite_duree}}
-	        {{mb_value object=$line field=duree}}  
-	        {{mb_value object=$line field=unite_duree}}
-	      {{/if}}
-	    </td>
+	      </td>
+	      <td style="width: 10%" class="text">
+	        {{if !$mode_induction_perop}}   
+	          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+	        {{/if}}
+	        <!-- Duree de la ligne -->
+	        {{if $line->duree && $line->unite_duree}}
+	          {{mb_value object=$line field=duree}}  
+	          {{mb_value object=$line field=unite_duree}}
+	        {{/if}}
+	      </td>
+			{{/if}}
 		{{else}}
 		 <td style="width: 25%" class="text">
 		 	 {{if !$mode_induction_perop}}   

@@ -1439,9 +1439,14 @@ class CSetupdPprescription extends CSetup {
 		
 		$this->makeRevision("0.94");
 		$this->addPrefQuery("show_transmissions_form", "0");
+		
+		$this->makeRevision("0.95");
+		$sql = "ALTER TABLE `prescription_line_medicament` 
+              ADD `injection_ide` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
 							
-		$this->mod_version = "0.95";
-  }  
+		$this->mod_version = "0.96";
+  }
 }
 
 ?>

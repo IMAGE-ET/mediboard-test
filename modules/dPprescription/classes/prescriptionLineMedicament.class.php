@@ -33,6 +33,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $substitution_active  = null;    
   var $substitution_plan_soin = null;
   var $traitement_personnel = null;
+	var $injection_ide = null;
   
   var $_most_used_poso = null;
   
@@ -181,6 +182,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["voie"]                   = "str";
     $specs["substitution_plan_soin"] = "bool";
     $specs["traitement_personnel"]   = "bool";
+		$specs["injection_ide"]          = "bool";
     return $specs;
   }
   
@@ -515,7 +517,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
     // Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
-    	
     	$this->loadRefProduitPrescription();
 			if($this->_ref_produit_prescription->_id && $this->_ref_produit_prescription->voie){
 			  $this->voie = $this->_ref_produit_prescription->voie;	
@@ -529,6 +530,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 	      }
 			}
     }
+		
+		if(!$this->_id){
+			$this->isInjectable();
+			if($this->_is_injectable){
+			  $this->injection_ide = '1';
+			}
+		}
     
     $mode_creation = !$this->_id;
     $calcul_planif = ($this->fieldModified("debut") || 
