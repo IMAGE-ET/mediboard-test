@@ -30,6 +30,7 @@ class CGroups extends CMbObject {
   var $service_urgences_id = null;
   var $pharmacie_id        = null;
   var $finess              = null;
+  var $chambre_particuliere= null;
 
   // Object References
   var $_ref_functions = null;
@@ -110,6 +111,7 @@ class CGroups extends CMbObject {
     $specs["mail"]                = "email";
     $specs["web"]                 = "str";
     $specs["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
+    $specs["chambre_particuliere"]= "bool notNull default|0";
     
     return $specs;
   }

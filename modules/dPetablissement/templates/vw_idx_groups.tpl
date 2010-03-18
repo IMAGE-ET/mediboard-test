@@ -151,6 +151,11 @@
           </td>
         </tr>
         {{/if}}
+        
+        <tr>
+          <th>{{mb_label object=$usergroup field="chambre_particuliere"}}</th>
+          <td>{{mb_field object=$usergroup field="chambre_particuliere"}}</td>
+        </tr>
 
         <tr>
           <td class="button" colspan="2">

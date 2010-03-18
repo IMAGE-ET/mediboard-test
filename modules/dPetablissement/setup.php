@@ -106,7 +106,12 @@ class CSetupdPetablissement extends CSetup {
               ADD INDEX (`pharmacie_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `groups_mediboard` 
+              ADD `chambre_particuliere` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.23";
   } 
 }
 
