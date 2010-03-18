@@ -246,52 +246,20 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   if($codeCCAM)   $subtitle .= " - CCAM : $codeCCAM";
   if($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
 
-  $optionsMoy = array(
-    'title' => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
-    'subtitle' => utf8_encode("par intervention ".$subtitle),
-    'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
-    'lines' => array('show' => true),
-    'points' => array('show' => true),
-    'markers' => array('show' => true),
-    'HtmlText' => false,
-    'mouse' => array('track' => true, 'relative' => true, 'position' => 'ne'),
-    'legend' => array('show' => true, 'position' => 'nw'),
-    'grid' => array('verticalLines' => true),
-    'spreadsheet' => array(
-      'show' => true,
-      'csvFileSeparator' => ';',
-      'decimalSeparator' => ',',
-      'tabGraphLabel' => utf8_encode('Graphique'),
-      'tabDataLabel' => utf8_encode('Données'),
-      'toolbarDownload' => utf8_encode('Fichier CSV'),
-      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
-    )
-  );
+  $optionsMoy = CFlotrGraph::merge("lines", array(
+    'title'    => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
+    'subtitle' => utf8_encode("par intervention $subtitle"),
+    'xaxis'    => array('ticks' => $ticks),
+    'grid'     => array('verticalLines' => true)
+  ));
   if ($totalMoy == 0) $optionsMoy['yaxis']['max'] = 1;
 
-  $optionsTot = array(
-    'title' => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
-    'subtitle' => utf8_encode("total estimé".$subtitle),
-    'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis' => array('autoscaleMargin' => 1, 'min' => 0),
-    'lines' => array('show' => true),
-    'points' => array('show' => true),
-    'markers' => array('show' => true),
-    'HtmlText' => false,
-    'mouse' => array('track' => true, 'relative' => true, 'position' => 'ne'),
-    'legend' => array('show' => true, 'position' => 'nw'),
-    'grid' => array('verticalLines' => true),
-    'spreadsheet' => array(
-      'show' => true,
-      'csvFileSeparator' => ';',
-      'decimalSeparator' => ',',
-      'tabGraphLabel' => utf8_encode('Graphique'),
-      'tabDataLabel' => utf8_encode('Données'),
-      'toolbarDownload' => utf8_encode('Fichier CSV'),
-      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
-    )
-  );
+  $optionsTot = CFlotrGraph::merge("lines", array(
+    'title'    => utf8_encode("Durées totales d'occupation du bloc (en heures)"),
+    'subtitle' => utf8_encode("total estimé $subtitle"),
+    'xaxis'    => array('ticks' => $ticks),
+    'grid'     => array('verticalLines' => true)
+  ));
   if ($totalTot == 0) $optionsTot['yaxis']['max'] = 1;
   
   return array(

@@ -116,25 +116,12 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   if($discipline_id) $subtitle .= " - $discipline->_view";
   if($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
 
-  $options = array(
+  $options = CFlotrGraph::merge("bars", array(
     'title' => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
-    'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis' => array('autoscaleMargin' => 1),
-    'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
-    'HtmlText' => false,
-    'legend' => array('show' => true, 'position' => 'nw'),
-    'grid' => array('verticalLines' => false),
-    'spreadsheet' => array(
-      'show' => true,
-      'csvFileSeparator' => ';',
-      'decimalSeparator' => ',',
-      'tabGraphLabel' => utf8_encode('Graphique'),
-      'tabDataLabel' => utf8_encode('Données'),
-      'toolbarDownload' => utf8_encode('Fichier CSV'),
-      'toolbarSelectAll' => utf8_encode('Sélectionner tout le tableau')
-    )
-  );
+    'xaxis' => array('ticks' => $ticks),
+    'bars' => array('stacked' => true, 'barWidth' => 0.8),
+  ));
   
   return array('series' => $series, 'options' => $options);
 }
