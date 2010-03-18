@@ -41,7 +41,7 @@
         {{if !$line->_protocole}}
 				{{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
-          {{if $prescription_reelle->type != "externe"}}
+          {{if $prescription_reelle->type == "sejour"}}
           {{if $line->valide_pharma}}
 				    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 				  {{else}}

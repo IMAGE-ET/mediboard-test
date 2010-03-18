@@ -90,7 +90,7 @@
 					{{else}}
 					  <img src="images/icons/cross.png" title="Ligne non signée par le praticien" />
 					{{/if}}
-          {{if $prescription_reelle->type != "externe"}}
+          {{if $prescription_reelle->type == "sejour"}}
 	          {{if $line->valide_pharma}}
 					    <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 					  {{else}}
