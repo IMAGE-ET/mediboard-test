@@ -18,7 +18,7 @@ Main.add(function () {
 
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#general">Général</a></li>
-	<li><a href="#current">Etablissement courant</a></li>
+	<li><a href="#current">{{$etab->_view}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
