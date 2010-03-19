@@ -62,7 +62,7 @@
   
    <!-- Affichage du libelle de la ligne -->
    <td style="width: 1%;" class="text">
-     <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
+    
        <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#{{$line->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
@@ -71,14 +71,16 @@
 	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	        {{if $line->commentaire}}<br /> ({{$line->commentaire}}){{/if}}
 	      {{else}}
-	        {{$line->_view}}
+				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
+	          {{$line->_view}}
+					</div>
 	      {{/if}} 
 	    </a>
 	  </div>
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	    {{$line->voie}}
 	  {{/if}}
-	  </div>
+	 
    </td>
    
 	 {{if !$line->signee && $line->_class_name == "CPrescriptionLineMedicament" && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
@@ -202,53 +204,65 @@
 			   {{/if}}
 	       </span>
 	    {{/if}}
-	    <br />
 	   
-	     {{if $line->debut == $date || $line->_fin == $date}}
-		     <table>
-		       <tr>
-		         <td style="border: none;">
-				      <form name="modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}" action="?" method="post" style="display: block; white-space: nowrap; height :0.1%;">
-				        <input type="hidden" name="m" value="dPprescription" />
-				        <input type="hidden" name="del" value="0" />
-				        <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}"/>
-				        <input type="hidden" name="dosql" value="{{$dosql}}" />
-				        <input type="hidden" name="duree" value="{{$line->duree}}" />
+	    {{if $line->debut == $date || $line->_fin == $date}}
+		    <form name="modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}" action="?" method="post">
+		      <input type="hidden" name="m" value="dPprescription" />
+		      <input type="hidden" name="del" value="0" />
+		      <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}"/>
+		      <input type="hidden" name="dosql" value="{{$dosql}}" />
+		      <input type="hidden" name="duree" value="{{$line->duree}}" />
 		   {{/if}}  
 	     
 	     <!-- Affichage de la date de debut si date courante -->
-	     {{if $date == $line->debut}}
-	       {{mb_field object=$line field="debut" canNull=false form="modifDates-$line_class-$line_id-$unite_prise-$date"}}
-	       <button class="tick notext" type="button" 
-	               onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ 
-	         		        calculSoinSemaine('{{$now}}','{{$prescription->_id}}'); } });"></button>
-	       
-	         <script type="text/javascript">
-						Main.add(function(){
-						  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}").debut, dates);
-						} );
-			     </script>
+	     {{if $date == $line->debut && !$line->signee}}
+	       {{mb_field object=$line field="debut" canNull=false form="modifDates-$line_class-$line_id-$unite_prise-$date" onchange="submitDossierSoinSemaine(this.form);"}}
+         <script type="text/javascript">
+					Main.add(function(){
+					  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}").debut, dates, {noView: true});
+					} );
+		     </script>
 	     {{/if}}
 	     
 	     {{assign var=line_fin value=$line->_fin}}
 	     <!-- Affichage de la date de fin si date courante -->
-	     {{if ($date == $line->_fin) && ($line->debut != $line->_fin)}}
-	       {{mb_field object=$line field="_fin" canNull=false form="modifDates-$line_class-$line_id-$unite_prise-$date"}}
-	         <button class="tick notext" type="button" onclick="calculDuree('{{$line_fin}}', this.form._fin.value, this.form, '{{$now}}', '{{$prescription->_id}}');"></button>
-	         <script type="text/javascript">
-						Main.add( function(){
-						  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}")._fin, dates);
-						} );
-			     </script>
+	     {{if ($date == $line->_fin) && ($line->debut != $line->_fin)  && !$line->signee}}
+	       {{mb_field object=$line field="_fin" canNull=false form="modifDates-$line_class-$line_id-$unite_prise-$date" onchange="submitFinDossierSoinSemaine('$line_fin', this.form);"}}
+         <script type="text/javascript">
+					Main.add( function(){
+					  Calendar.regField(getForm("modifDates-{{$line_class}}-{{$line_id}}-{{$unite_prise}}-{{$date}}")._fin, dates, {noView: true});
+					} );
+		     </script>
 	     {{/if}}
 	     
 	    {{if $line->debut == $date || $line->_fin == $date}}
 	            </form>
-	          </td>
-	        </tr>
-	      </table>
+
 	    {{/if}}
 	    </td>
 	  {{/foreach}}
 	{{/if}}
+	
+	 <!-- Signature du praticien -->
+	 <td style="text-align: center">
+	   <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
+	   {{if $line->signee}}
+	   <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
+	   {{else}}
+	   <img src="images/icons/cross.png" title="Non signée par le praticien" />
+	   {{/if}}
+	   </div>
+	 </td>
+	 <!-- Signature du pharmacien -->
+	 <td style="text-align: center">
+    {{if $line_class == "CPrescriptionLineMedicament"}}
+      {{if $line->valide_pharma}}
+      <img src="images/icons/tick.png" title="Signée par le pharmacien" />
+      {{else}}
+      <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
+      {{/if}}
+    {{else}}
+      - 
+    {{/if}}
+  </td>
 </tr>

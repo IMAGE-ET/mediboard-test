@@ -14,17 +14,19 @@
  */
 class CElementPrescription extends CMbObject {
   // DB Table key
-  var $element_prescription_id = null;
+  var $element_prescription_id    = null;
   
   // DB Fields
-  var $category_prescription_id = null;
-  var $libelle                  = null;
-  var $description              = null;
-	var $cancelled                = null;
-  
+  var $category_prescription_id   = null;
+  var $libelle                    = null;
+  var $description                = null;
+	var $cancelled                  = null;
+  var $color                      = null;
+	
   // FwdRefs
   var $_ref_category_prescription = null;
-
+  var $_color                     = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'element_prescription';
@@ -38,6 +40,7 @@ class CElementPrescription extends CMbObject {
     $specs["libelle"]      = "str notNull seekable";
     $specs["description"]  = "text";
 		$specs["cancelled"]    = "bool default|0";
+    $specs["color"]        = "str length|6";
     return $specs;
   }
   
@@ -50,6 +53,13 @@ class CElementPrescription extends CMbObject {
   function updateFormFields(){
   	parent::updateFormFields();
   	$this->_view = $this->libelle;
+		
+		if(!$this->color){
+			$this->loadRefCategory();
+			$this->_color = $this->_ref_category_prescription->color;
+		} else {
+			$this->_color = $this->color;
+		}
   }
       
   static function getFavoris($praticien_id, $category) {
@@ -71,7 +81,7 @@ class CElementPrescription extends CMbObject {
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefCategory();
-  }
+	}
   
   function loadRefCategory() {
     $category = new CCategoryPrescription();

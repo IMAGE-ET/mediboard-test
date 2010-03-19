@@ -10,20 +10,28 @@
 
 <script type="text/javascript">
   
-var date_init = new Date().toDATE();
+// Initialisation des dates pour les calendars
+var date = new Date().toDATE();
+var dDate = Date.fromDATE(date); 
+dDate.addDays(-1);
+date = dDate.toDATE();
+
 dates = {  
   limit: {
-    start: date_init,
+    start: date,
     stop: null
   }
 }
 
+
 calculDuree = function(date1, date2, oForm, now, prescription_id){
-  var dDate1 = Date.fromDATE(date1); 
+	var dDate1 = Date.fromDATE(date1); 
   var dDate2 = Date.fromDATE(date2); 
   var date = dDate2 - dDate1;
   nb_days = date / (24 * 60 * 60 * 1000);
   oForm.duree.value = parseInt(oForm.duree.value,10) + nb_days;
+	
+	
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
     calculSoinSemaine(now,prescription_id); 
   } });
@@ -44,6 +52,15 @@ addAdministrationPlan = function(line_id, line_class, unite_prise, date, list_ad
   url.popup(600,400,"Administration");
 }
 
+submitDossierSoinSemaine = function(oForm){
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+                      calculSoinSemaine('{{$now}}','{{$prescription->_id}}'); 
+  } });
+}
+
+submitFinDossierSoinSemaine = function(line_fin, oForm){
+  calculDuree(line_fin, oForm._fin.value, oForm, '{{$now}}', '{{$prescription->_id}}');
+}
 
 Main.add(function () {
   var tabs = Control.Tabs.create('tab_categories_plan', true);
@@ -82,10 +99,11 @@ Main.add(function () {
 				    <th class="title">Libelle</th>
 				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
-				    <th style="width: 1%" class="title">
+				    <th style="width: 1%" class="category">
 				      {{$date|date_format:$dPconfig.date}}
 				    </th>
 				    {{/foreach}}
+						 <th colspan="2" class="title">Sign.</th>
 				  </tr>
 	        
 	        {{assign var=transmissions value=$prescription->_transmissions}}	  

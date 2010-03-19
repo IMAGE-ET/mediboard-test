@@ -6,6 +6,7 @@
 ColorSelector.init = function(){
   this.sForm  = "editFrm";
   this.sColor = "color";
+	this.sColorView = "select_color";
   this.pop();
 }
 

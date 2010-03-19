@@ -8,11 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module="mediusers" script="color_selector"}}
+
 <script type="text/javascript">
 
 toggleCancelled = function(){
   $$(".cancelled").invoke("toggle");
 }
+
+ColorSelector.init = function(form_name, color_view){
+  this.sForm  = form_name;
+  this.sColor = "color";
+	this.sColorView = color_view;
+  this.pop();
+}
+
 
 Main.add( function(){
   categories_tab = new Control.Tabs.create('categories_tab', true);
@@ -43,7 +53,8 @@ Main.add( function(){
 				  <tr>
 				  	<th>{{mb_label class=CCategoryPrescription field=nom}}</th>
 						<th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
-          </tr>
+            <th></th>
+					</tr>
 				  {{foreach from=$_categories item=_cat}}
 					  <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}} >
 				      <td>
@@ -58,6 +69,9 @@ Main.add( function(){
 			            Tous
 			          {{/if}}
 			        </td>
+							<td style="width: 1em; {{if $_cat->color}}background-color: #{{$_cat->color}}{{/if}}">
+								
+							</td>
 			      </tr>
 			    {{/foreach}}
 				</table>
@@ -96,6 +110,14 @@ Main.add( function(){
         <tr>
           <th>{{mb_label object=$category field="header"}}</th>
           <td>{{mb_field object=$category field="header"}}</td>
+        </tr>
+				<tr>
+          <th>{{mb_label object=$category field="color"}}</th>
+          <td>
+            <a href="#1" id="select_color_cat" style="background: #{{$category->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init('editCategory','select_color_cat')">Cliquer pour changer</a>
+            {{mb_field object=$category field="color" hidden=1}}
+						<button type="button" class="cancel" onclick="$('select_color_cat').setStyle({ background: '' }); $V(this.form.color, '');">Vider</button>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$category field="group_id"}}</th>
@@ -190,6 +212,22 @@ Main.add( function(){
              <th>{{mb_label object=$element_prescription field="description"}}</th>
              <td>{{mb_field object=$element_prescription field="description"}}</td>
            </tr>
+					 <tr>
+	           <th>{{mb_label object=$category field="color"}}</th>
+	           <td class="text">
+	             <a href="#1" id="select_color_elt" style="background: #{{$element_prescription->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init('editElement','select_color_elt');">Cliquer pour changer</a>
+	             {{mb_field object=$element_prescription field="color" hidden=1}}
+	             <button type="button" class="cancel" onclick="$('select_color_elt').setStyle({ background: '' }); $V(this.form.color, '');">Vider</button>
+	             
+						 </td>
+	         </tr>
+					 <tr>
+					 	 <td colspan="2">
+               <div class="small-info">
+                 Si aucune couleur n'est spécifiée pour l'élément, la couleur qui apparaitra sera celle de sa catégorie
+               </div>
+					   </td>
+					 </tr>
            <tr>
              <td class="button" colspan="2">
              {{if $element_prescription->_id}}
@@ -220,7 +258,7 @@ Main.add( function(){
 			{{/if}} 
 				<table class="tbl">
 				<tr>	
-					<th colspan="2" class="title text">
+					<th colspan="3" class="title text">
 	            <button class="search" style="float: right" onclick="toggleCancelled();">
 	              Afficher les annulés
 	            </button> 
@@ -230,6 +268,7 @@ Main.add( function(){
 	        <tr>
 	          <th class="category">Libelle</th>
 	          <th class="category">Description</th>
+						<th></th>
 	        </tr>
 	         {{foreach from=$category->_ref_elements_prescription item=_element}}
 	          <tr {{if $_element->_id == $element_prescription->_id}}class="selected"{{/if}}
@@ -242,6 +281,7 @@ Main.add( function(){
 	            <td class="text">
 	              {{$_element->description}}
 	            </td>
+							 <td style="width: 1em; {{if $_element->color}}background-color: #{{$_element->color}}{{/if}}">
 	          </tr>
 	        {{foreachelse}}
 	         <tr>

@@ -3,6 +3,7 @@
 ColorSelector = {
   sForm : null,
   sColor: null,
+	sColorView: null,
   options : {
     width : 320,
     height: 250
@@ -19,7 +20,7 @@ ColorSelector = {
     if (color) {
       $V(oForm[this.sColor], color);
     }
-    $('select_color').style.background = '#' + oForm[this.sColor].value;
+    $(this.sColorView).style.background = '#' + oForm[this.sColor].value;
     
   }
 };

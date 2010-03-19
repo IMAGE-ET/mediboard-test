@@ -93,16 +93,18 @@
           <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
     
-    <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
-	  <div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
+		
+		<div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
 	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
 	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	      {{else}}
-	        {{$line->_view}}
-	      {{/if}} 
+				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
+					  {{$line->_view}}
+					</div>
+				{{/if}} 
 	    </span>
 	  </div>
 		
@@ -177,7 +179,6 @@
 			    </form>
 		    {{/if}}
 	    {{/if}}
-	    </div>
 	  {{/if}}
 		</td>
   {{/if}}
@@ -242,11 +243,13 @@
  
  <!-- Signature du praticien -->
  <td style="text-align: center">
+ 	 <div class="mediuser" style="border-color: #{{$line->_ref_praticien->_ref_function->color}}">
    {{if $line->signee}}
    <img src="images/icons/tick.png" title="Signée le {{$line->_ref_log_signee->date|date_format:$dPconfig.datetime}} par {{$line->_ref_praticien->_view}}" />
    {{else}}
    <img src="images/icons/cross.png" title="Non signée par le praticien" />
    {{/if}}
+	 </div>
  </td>
  <!-- Signature du pharmacien -->
  <td style="text-align: center">

@@ -22,8 +22,7 @@
 		{{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}}
 	</td>
  	<td class="text">
- 	  <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
- 		<div>
+ 	  <div>
 	    {{if $_perfusion->_recent_modification}}
         <img style="float: right" src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
       {{/if}}
@@ -68,7 +67,6 @@
         </span>
       {{/if}}
 			
-		</div>
 	  
 		{{if $_perfusion->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$_perfusion->_id}}-{{$_perfusion->_class_name}}">
@@ -224,11 +222,13 @@
  {{/if}}
  <th></th>
  <td style="text-align: center">
-   {{if $_perfusion->signature_prat}}
-   <img src="images/icons/tick.png" title="Signée le {{$_perfusion->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_perfusion->_ref_praticien->_view}}" />
-   {{else}}
-   <img src="images/icons/cross.png" title="Non signée par le praticien" />
-   {{/if}}
+ 	 <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
+	   {{if $_perfusion->signature_prat}}
+	   <img src="images/icons/tick.png" title="Signée le {{$_perfusion->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_perfusion->_ref_praticien->_view}}" />
+	   {{else}}
+	   <img src="images/icons/cross.png" title="Non signée par le praticien" />
+	   {{/if}}
+	 </div>
  </td>
  <td style="text-align: center">
    {{if $_perfusion->signature_pharma}}

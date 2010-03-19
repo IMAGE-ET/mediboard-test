@@ -14,7 +14,6 @@
    - 
   </td>
  	<td class="text">
- 	  <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
  	  <div onclick='addCibleTransmission("CPerfusion","{{$_perfusion->_id}}","{{$_perfusion->_view}}");' 
 	       class="{{if @$transmissions.CPerfusion.$perfusion_id|@count}}transmission{{else}}transmission_possible{{/if}}">
 	    <a href="#{{$_perfusion->_guid}}" onmouseover="ObjectTooltip.createEx(this, '{{$_perfusion->_guid}}')">
@@ -41,4 +40,22 @@
 	    </td>
 	  {{/foreach}}
 	{{/if}}
+	
+	 <td style="text-align: center">
+	   <div class="mediuser" style="border-color: #{{$_perfusion->_ref_praticien->_ref_function->color}}">
+	     {{if $_perfusion->signature_prat}}
+	     <img src="images/icons/tick.png" title="Signée le {{$_perfusion->_ref_log_signature_prat->date|date_format:$dPconfig.datetime}} par {{$_perfusion->_ref_praticien->_view}}" />
+	     {{else}}
+	     <img src="images/icons/cross.png" title="Non signée par le praticien" />
+	     {{/if}}
+	   </div>
+	 </td>
+	 <td style="text-align: center">
+	   {{if $_perfusion->signature_pharma}}
+	   <img src="images/icons/tick.png" title="Signée par le pharmacien" />
+	   {{else}}
+	   <img src="images/icons/cross.png" title="Non signée par le pharmacien" />
+	   {{/if}}
+	 </td>
+ 
 </tr>

@@ -1444,8 +1444,17 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `prescription_line_medicament` 
               ADD `injection_ide` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
-							
-		$this->mod_version = "0.96";
+		
+		$this->makeRevision("0.96");
+		$sql = "ALTER TABLE `category_prescription` 
+              ADD `color` CHAR (6);";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `element_prescription` 
+              ADD `color` CHAR (6);";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.97";
   }
 }
 
