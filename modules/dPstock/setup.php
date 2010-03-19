@@ -539,6 +539,33 @@ class CSetupdPstock extends CSetup {
               ADD INDEX (`product_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.22";
+    $this->makeRevision("1.22");
+    $sql = "CREATE TABLE `product_bill` (
+              `bill_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `date` DATETIME,
+              `societe_id` INT (11) UNSIGNED NOT NULL,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `reference` VARCHAR (80) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_bill` 
+              ADD INDEX (`date`),
+              ADD INDEX (`societe_id`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `product_reception_bill_item` (
+              `reception_bill_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `bill_id` INT (11) UNSIGNED,
+              `reception_item_id` INT (11) UNSIGNED,
+              `quantity` INT (11) UNSIGNED,
+              `unit_price` DECIMAL  (12,5)
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_reception_bill_item` 
+              ADD INDEX (`bill_id`),
+              ADD INDEX (`reception_item_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.23";
   }
 }

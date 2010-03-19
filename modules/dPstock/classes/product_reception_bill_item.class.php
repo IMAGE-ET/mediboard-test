@@ -10,32 +10,26 @@
 
 class CProductReceptionBillItem extends CMbObject {
   // DB Table key
-  var $bill_item_id       = null;
+  var $reception_bill_item_id = null;
 
   // DB Fields
-  var $reception_item_id  = null;
   var $bill_id            = null;
+  var $reception_item_id  = null;
   var $quantity           = null;
   var $unit_price         = null; // In the case the reference price changes
 
   // Object References
   //    Single
-  var $_ref_reference     = null;
-  
-  //    Multiple
-  var $_ref_receptions    = null;
+  var $_ref_reception_item= null;
+  var $_ref_bill          = null;
 
   // Form fields
   var $_price             = null;
-  var $_cond_price        = null;
-  var $_date_received     = null;
-  var $_quantity_received = null;
-  var $_quantity          = null;
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'product_order_item';
-    $spec->key   = 'order_item_id';
+    $spec->table = 'product_reception_bill_item';
+    $spec->key   = 'reception_bill_item_id';
     return $spec;
   }
 
@@ -45,6 +39,7 @@ class CProductReceptionBillItem extends CMbObject {
     $specs['reception_item_id'] = 'ref class|CProductOrderItemReception';
     $specs['quantity']          = 'num min|0';
     $specs['unit_price']        = 'currency precise';
+    $specs['_price']            = 'currency';
     return $specs;
   }
 }

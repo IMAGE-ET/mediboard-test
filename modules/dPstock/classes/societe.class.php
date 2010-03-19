@@ -47,19 +47,19 @@ class CSociete extends CMbObject {
     return $spec;
   }
 
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["products"]           = "CProduct societe_id";
-	  $backProps["product_orders"]     = "CProductOrder societe_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["products"]           = "CProduct societe_id";
+    $backProps["product_orders"]     = "CProductOrder societe_id";
     $backProps["product_references"] = "CProductReference societe_id";
     $backProps["product_receptions"] = "CProductReception societe_id";
     $backProps["articles_cahpp"]     = "CCAHPPArticle fournisseur_id";
-		//$backProps["receptions_bills"]   = "CProductReceptionBill societe_id";
-	  return $backProps;
-	}
+    $backProps["receptions_bills"]   = "CProductReceptionBill societe_id";
+    return $backProps;
+  }
 
-	function getProps() {
-	  $phone_mask = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
+  function getProps() {
+    $phone_mask = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs = parent::getProps();
     $specs['name']            = 'str notNull maxLength|50 seekable';
     $specs['code']            = 'str maxLength|80 seekable protected';
