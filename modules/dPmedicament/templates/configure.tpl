@@ -315,6 +315,13 @@ var Livret = {
     <td></td>
   </tr>
   <tr>
+    <td colspan="2">  
+      <button class="hslip" onclick="window.open('?m=dPmedicament&amp;a=export_livret_therapeutique&amp;suppressHeaders=1');">
+        Exporter le livret therapeutique au format CSV
+      </button>
+    </td>
+  </tr>
+  <tr>
     <td><button class="trash" onclick="Livret.purge()" >Vider le livret thérapeutique</button></td>
     <td id="livret-purge"></td>
   </tr>
@@ -338,13 +345,6 @@ var Livret = {
 		  {{/if}}
 		</td>
   </tr>
-	<tr>
-	  <td>  
-		  <button class="hslip" onclick="window.open('?m=dPmedicament&amp;a=export_livret_therapeutique&amp;suppressHeaders=1');">
-        Exporter le livret therapeutique au format CSV
-      </button>
-	  </td>
-	</tr>
   <tr>
     <td>
       <form name="sync-products" action="" onsubmit="return false">
