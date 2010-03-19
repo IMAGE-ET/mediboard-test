@@ -174,7 +174,7 @@ $library->description = "Composant de génération de fichiers PDF avec codes barr
 $library->sourceDir = "tcpdf";
 $library->targetDir = "tcpdf";
 $library->versionFile = "barcode/cmb128bobject.php";
-$library->versionString = "CMb128BObject";
+$library->versionString = "public function DrawObject";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "tcpdf";

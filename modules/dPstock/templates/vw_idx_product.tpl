@@ -57,7 +57,7 @@ function filterReferences(form) {
           Afficher les archivés
         </label>
         
-        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter narrow=true}}
       </form>
 
       <div id="list-products"></div>

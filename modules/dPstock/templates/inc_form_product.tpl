@@ -71,7 +71,7 @@ function duplicateObject(form) {
 	   
   <tr>
     <th style="width: 1%;">{{mb_label object=$product field="name"}}</th>
-    <td>{{mb_field object=$product field="name" size=50}}</td>
+    <td>{{mb_field object=$product field="name" size=40}}</td>
   </tr>
   
 	<tr>
@@ -103,15 +103,17 @@ function duplicateObject(form) {
     <td>{{mb_field object=$product field="classe_comptable" form="edit_product"}}</td>
   </tr>
   <tr>
-    <th>Conso. des <strong>3 derniers mois</strong></th>
+    <th>Conso. <strong>3 dern. mois</strong></th>
     <td>{{$product->getConsommation("-3 MONTHS")}}</td>
   </tr>
   <tr>
     <th>{{tr}}CProduct-back-selections{{/tr}}</th>
     <td>
       {{foreach from=$product->_back.selections item=_selection name=selection}}
+        <button class="remove notext"></button>
         {{$_selection->_ref_selection}}{{$smarty.foreach.selection.last|ternary:"":","}}
       {{foreachelse}}
+        <em style="color:#999">{{tr}}CProductSelection.none{{/tr}}</em>
       {{/foreach}}
     </td>
   </tr>
