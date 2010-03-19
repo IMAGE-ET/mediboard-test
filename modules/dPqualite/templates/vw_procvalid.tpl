@@ -80,7 +80,7 @@ function redactionDoc(oForm){
       {{if $procDemande|@count}}
       <table class="form">
         <tr>
-          <th class="category" colspan="5">
+          <th class="title" colspan="5">
             {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
@@ -129,7 +129,7 @@ function redactionDoc(oForm){
       
       <table class="form">
         <tr>
-          <th class="category" colspan="6">{{tr}}_CDocGed_attente{{/tr}}</th>
+          <th class="title" colspan="6">{{tr}}_CDocGed_attente{{/tr}}</th>
         </tr>
         <tr>
           <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
@@ -189,7 +189,7 @@ function redactionDoc(oForm){
         </a>
         <table class="form">
           <tr>
-            <th class="category" colspan="5">
+            <th class="title" colspan="5">
               {{tr}}_CDocGed_cancel{{/tr}}
             </th>
           </tr>
