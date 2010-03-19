@@ -29,7 +29,7 @@
     Ce patient vient-il pour cette intervention ?
     <br />
     <button class="tick" onclick="selectOperation('{{$nextSejourAndOperation.COperation->_id}}'); modalWindow.close();">Oui</button>
-  {{elseif $nextSejourAndOperation.CSejour->_id && $nextSejourAndOperation.COperation->_id && ($nextSejourAndOperation.COperation->_ref_sejour->_id != $nextSejourAndOperation.CSejour->_id)}}
+  {{elseif $nextSejourAndOperation.CSejour->_id}}
     Un dossier est présent dans le système pour ce patient :
     <br />
     <strong>{{$nextSejourAndOperation.CSejour->_view}}</strong>

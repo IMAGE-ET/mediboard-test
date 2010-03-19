@@ -86,7 +86,7 @@ $smarty->assign("consult"               , $consult);
 $smarty->assign("consult_anesth"        , $consult_anesth);
 $smarty->assign("patient"               , $patient);
 $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
-$smarty->assign("listChirs"      , $listChirs);
+$smarty->assign("listChirs"             , $listChirs);
 
 $smarty->display("inc_consult_anesth/interventions.tpl");
 
