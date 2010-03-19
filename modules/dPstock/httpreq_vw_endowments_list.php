@@ -21,7 +21,7 @@ $where = array(
 
 $endowment = new CProductEndowment();
 $endowment->load($endowment_id);
-$list = $endowment->seek($keywords, $where, "$start,20", true);
+$list = $endowment->seek($keywords, $where, "$start,20", true, null, "service_id, name");
 $total = $endowment->_totalSeek;
 
 foreach($list as $_item) {

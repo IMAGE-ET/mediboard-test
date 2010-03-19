@@ -48,7 +48,7 @@
 </form>
 
 {{if $selection->_id}}
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="category" colspan="2">{{tr}}CProductSelection-back-selection_items{{/tr}}</th>
   </tr>

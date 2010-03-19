@@ -53,9 +53,9 @@
 </form>
 
 {{if $endowment->_id}}
-<table class="form">
+<table class="main tbl">
   <tr>
-    <th class="category">{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
   </tr>
   {{foreach from=$endowment->_back.endowment_items item=_item}}
     <tr>
@@ -69,9 +69,15 @@
           {{mb_field object=$_item field=quantity form="edit_endowment_item_$_item_id" increment=true size=2 onchange="this.form.onsubmit()"}}
           <button class="remove notext" type="button" onclick="confirmDeletion(this.form,{ajax:true,objName:'{{$_item->_view|smarty:nodefaults|JSAttribute}}'})"></button>
         </form>
+        
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$_item->_ref_product->_guid}}')">
           {{$_item->_ref_product}}
         </strong>
+      </td>
+      <td>
+        {{if $_item->_ref_product->_ref_stock_group && $_item->_ref_product->_ref_stock_group->_ref_location}}
+          {{$_item->_ref_product->_ref_stock_group->_ref_location->name}}
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}

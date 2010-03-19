@@ -45,6 +45,9 @@ class CProductSelection extends CMbObject {
   }
 
   function loadRefsBack() {
-  	$this->_ref_items = $this->loadBackRefs("selection_items");
+    $ljoin = array(
+      "product" => "product.product_id = product_selection_item.product_id"
+    );
+  	$this->_ref_items = $this->loadBackRefs("selection_items", "product.name", null, null, $ljoin);
   }
 }

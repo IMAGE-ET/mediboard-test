@@ -19,6 +19,7 @@ if ($endowment->load($endowment_id)) {
   
   foreach($endowment->_back["endowment_items"] as $_item) {
     $_item->updateFormFields();
+    $_item->_ref_product->loadRefStock();
   }
 }
 

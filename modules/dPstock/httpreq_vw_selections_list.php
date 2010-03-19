@@ -21,7 +21,7 @@ $where = array(
 
 $selection = new CProductSelection();
 $selection->load($selection_id);
-$list = $selection->seek($keywords, $where, "$start,20", true);
+$list = $selection->seek($keywords, $where, "$start,20", true, null, "name");
 $total = $selection->_totalSeek;
 
 foreach($list as $_item) {

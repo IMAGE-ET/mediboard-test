@@ -50,7 +50,12 @@ class CProductEndowment extends CMbObject {
   }
 
   function loadRefsBack(){
-    $this->_ref_endowment_items = $this->loadBackRefs('endowment_items');
+    $ljoin = array(
+      "product" => "product.product_id = product_endowment_item.product_id",
+      "product_stock_group" => "product_stock_group.product_id = product.product_id",
+      "product_stock_location" => "product_stock_location.stock_location_id = product_stock_group.location_id"
+    );
+    $this->_ref_endowment_items = $this->loadBackRefs('endowment_items', "product_stock_location.position, product.name", null, null, $ljoin);
   }
   
   function getPerm($permType) {
