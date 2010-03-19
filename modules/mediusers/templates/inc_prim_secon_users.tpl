@@ -2,6 +2,11 @@
   Main.add(function () {
     Control.Tabs.create('tab_user', true);
   });
+  
+  function changePagePrimaryUsers(page) {
+    $V(getForm('listFilterPrimaryUsers').page_userfunction,page);
+  }
+
 </script>
 
 {{if $userfunction->function_id}}

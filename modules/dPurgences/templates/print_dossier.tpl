@@ -24,7 +24,7 @@
     <td>{{mb_value object=$consult field="_date"}}</td>
 		
 		<th>{{mb_label object=$sejour field="_num_dossier"}}</th>
-    <td>{{mb_value object=$sejour field="_num_dossier"}}</td>
+    <td style="font-size: 20px">{{mb_value object=$sejour field="_num_dossier"}}</td>
   </tr>
 	
 	<tr>
@@ -34,7 +34,7 @@
 	  
 	<tr>
     <th>Patient</th>
-    <td>{{mb_value object=$patient field="_view"}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</td>
+    <td style="font-size: 20px">{{mb_value object=$patient field="_view"}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</td>
 		
 		<th>Né(e) le </th>
     <td>{{mb_value object=$patient field=naissance}} </td>

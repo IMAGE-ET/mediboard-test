@@ -20,10 +20,6 @@ function changePage(page) {
   $V(getForm('listFilter').page,page);
 }
 
-function changePagePrimaryUsers(page) {
-  $V(getForm('listFilterPrimaryUsers').page_userfunction,page);
-}
-
 </script>
 
 <table class="main">
