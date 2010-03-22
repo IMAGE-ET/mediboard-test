@@ -40,6 +40,7 @@ $line->jour_decalage = $jour_decalage;
 $line->decalage_line = $decalage_line;
 $line->unite_decalage = $unite_decalage;
 $line->operation_id = $operation_id;
+$line->fin = "";
 
 $msg = $line->store();
 CAppUI::displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
