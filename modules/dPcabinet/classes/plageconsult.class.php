@@ -38,6 +38,9 @@ class CPlageconsult extends CMbObject {
   var $_fill_rate = null;
   var $_nb_patients = null;
   
+  // Field pour le calcul de collision (fin à 00:00:00)
+  var $_fin = null;
+	
   // Filter fields
   var $_date_min = null;
   var $_date_max = null;
@@ -186,11 +189,14 @@ class CPlageconsult extends CMbObject {
     
     $this->completeField("debut");
     $this->completeField("fin");
-    foreach ($plages as $plage) {
-      if (($plage->debut <  $this->fin   and $plage->fin >  $this->fin  )
-        or($plage->debut <  $this->debut and $plage->fin >  $this->debut)
-        or($plage->debut >= $this->debut and $plage->fin <= $this->fin  )) {
-        $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->fin.";
+		
+		$this->_fin = $this->fin == "00:00:00" ? "23:59:59" : $this->fin;
+		foreach ($plages as $plage) {
+			$plage->_fin = $plage->fin == "00:00:00" ? "23:59:59" : $plage->fin;
+			if (($plage->debut <  $this->_fin   and $plage->_fin >  $this->_fin  )
+        or($plage->debut <  $this->debut and $plage->_fin >  $this->debut)
+        or($plage->debut >= $this->debut and $plage->_fin <= $this->_fin  )) {
+        $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->_fin.";
       }
     }
     
