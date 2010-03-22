@@ -1,4 +1,4 @@
-{{include file="common.tpl" nodebug=true}}
+{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
 
 <div id="login" {{if $dialog}}style="height: 50px; margin: auto; position: relative; top: 0; left: 0;"{{/if}}>
   <h2>{{$dPconfig.company_name}}</h2>
@@ -14,13 +14,19 @@
     <input type="hidden" name="dialog" value="{{$dialog}}" />
     <table class="form">
       <tr>
-        <th style="width: 1%;"><label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label></th>
-        <td style="width: 1%;"><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
+        <th style="width: 1%;">
+          <label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label>
+        </th>
+        <td style="width: 1%;">
+          <input type="text" class="notNull str" size="20" name="username" />
+        </td>
       </tr>
       <tr>
-        <th><label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label></th>
+        <th>
+          <label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label>
+        </th>
         <td>
-          <input type="password" class="notNull str" size="25" maxlength="32" name="password" />
+          <input type="password" class="notNull str" size="20" name="password" />
           <button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button>
         </td>
       </tr>

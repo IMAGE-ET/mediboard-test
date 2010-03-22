@@ -21,7 +21,7 @@ th.title.urgence.modify {
 
 table.form td.cancelled,
 table.form tr.selected td.cancelled,
-table.tbl td.cancelled,
+table.tbl tr td.cancelled,
 table.tbl tr:hover td.cancelled,
 table.tbl tr.selected td.cancelled,
 table.tbl tbody.hoverable td.cancelled,
@@ -215,8 +215,8 @@ div.tree-header {
   background-position: center top;
 }*/
 
-table.tbl td.disabled,
-table.tbl th.disabled,
+table.tbl tr td.disabled,
+table.tbl tr th.disabled,
 table.tbl tr:hover td.disabled,
 table.tbl tbody:hover td.disabled,
 span.disabled {
@@ -224,8 +224,8 @@ span.disabled {
   font-style:italic;
 }
 
-table.tbl td.error,
-table.tbl th.error,
+table.tbl tr td.error,
+table.tbl tr th.error,
 table.tbl tr:hover td.error,
 table.tbl tbody:hover td.error,
 span.error {
@@ -241,8 +241,8 @@ span.big-error {
   padding-left: 55px;
 }
 
-table.tbl td.warning,
-table.tbl th.warning,
+table.tbl tr td.warning,
+table.tbl tr th.warning,
 table.tbl tr:hover td.warning,
 table.tbl tbody:hover td.warning,
 span.warning {
@@ -258,8 +258,8 @@ span.big-warning {
   padding-left: 55px;
 }
 
-table.tbl td.ok,
-table.tbl th.ok,
+table.tbl tr td.ok,
+table.tbl tr th.ok,
 table.tbl tr:hover td.ok,
 table.tbl tbody:hover td.ok,
 span.ok {

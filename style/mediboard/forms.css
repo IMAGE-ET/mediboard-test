@@ -37,14 +37,18 @@ input, select, textarea, button {
   margin: 1px !important;
 }
 
-input, select, textarea {
+input, 
+select, 
+textarea {
   padding: 1px;
   border: 1px #666 solid;
   font-size: 1em;
   background-color: #efe;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus, 
+select:focus, 
+textarea:focus {
   background-color: #fff;
 }
 
