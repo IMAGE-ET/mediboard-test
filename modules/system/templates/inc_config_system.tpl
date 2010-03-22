@@ -18,9 +18,9 @@
     
     {{mb_include module=system template=inc_config_str var=mb_id}}
     
-    {{mb_include module=system template=inc_config_str m=system var=reverse_proxy}}
+    {{mb_include module=system template=inc_config_str var=reverse_proxy}}
     
-    {{mb_include module=system template=inc_config_str m=system var=website_url}}
+    {{mb_include module=system template=inc_config_str var=website_url}}
         
     <tr>
       <td class="button" colspan="2">
