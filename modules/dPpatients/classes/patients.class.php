@@ -830,13 +830,11 @@ class CPatient extends CMbObject {
         }
         foreach($curr_sejour->_ref_operations as $curr_op) {
           $curr_op->loadRefPlageOp();
-          if($curr_op->_datetime >= $date) {
-            if(!$op->_id) {
+          if(!$op->_id) {
+            $op = $curr_op;
+          } else {
+            if($curr_op->_datetime < $op->_datetime) {
               $op = $curr_op;
-            } else {
-              if($curr_op->_datetime < $op->_datetime) {
-                $op = $curr_op;
-              }
             }
           }
         }
