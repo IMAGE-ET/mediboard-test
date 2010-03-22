@@ -234,10 +234,10 @@ class CPlageconsult extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_hour_deb = intval(substr($this->debut, 0, 2));
-    $this->_min_deb  = intval(substr($this->debut, 3, 2));
-    $this->_hour_fin = intval(substr($this->fin, 0, 2));
-    $this->_min_fin  = intval(substr($this->fin, 3, 2));
+    $this->_hour_deb = substr($this->debut, 0, 2);
+    $this->_min_deb  = substr($this->debut, 3, 2);
+    $this->_hour_fin = substr($this->fin, 0, 2);
+    $this->_min_fin  = substr($this->fin, 3, 2);
     $this->_freq     = substr($this->freq, 3, 2);
     $tmpHfin         = substr($this->fin, 0, 2);
     $tmpMfin         = substr($this->fin, 3, 2);
@@ -248,6 +248,7 @@ class CPlageconsult extends CMbObject {
   }
   
   function updateDBFields() {
+  	
   	if($this->_hour_deb !== null) {
       if($this->_min_deb !== null)
         $this->debut = $this->_hour_deb.":".$this->_min_deb.":00";
@@ -262,7 +263,11 @@ class CPlageconsult extends CMbObject {
     }
     if ($this->_freq !== null)
       $this->freq  = "00:". $this->_freq. ":00";
-  }
+  
+	  if($this->fin && $this->fin == "00:00:00"){
+	  	$this->fin = "23:59:59";
+	  }
+	}
   
   function becomeNext() {
     // Store form fields

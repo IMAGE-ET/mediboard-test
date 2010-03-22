@@ -1280,7 +1280,11 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `consultation_anesth` DROP `intubation`";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.20";
+		$this->makeRevision("1.20");
+		$sql = "UPDATE plageconsult SET fin = '23:59:59' WHERE fin = '00:00:00'";
+		$this->addquery($sql);
+		
+    $this->mod_version = "1.21";
   }
 }
 ?>
