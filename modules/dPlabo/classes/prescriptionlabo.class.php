@@ -116,7 +116,7 @@ class CPrescriptionLabo extends CMbObject {
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
   
       // Envoi à la source créée 'get_id_prescriptionlabo' (SOAP)
-      $exchange_source = CExchangeSource::get("get_id_prescriptionlabo_source");
+      $exchange_source = CExchangeSource::get("get_id_prescriptionlabo");
       $exchange_source->setData(array("NumMedi" => $numprovisoire, "pwd" =>$exchange_source->password));
       $exchange_source->send("NDOSLAB");
       

@@ -51,8 +51,18 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="offline" title="Nom de domaine de premier du système">Mode maintenance :</label></th>
+    <th><label for="offline" title="Mode maintenance">Mode maintenance :</label></th>
     <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
+  </tr>
+  
+  <tr>
+    <th><label for="instance_role" title="Instance">Rôle de l'instance :</label></th>
+    <td>
+      <select name="instance_role" size="1">
+        <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) { echo 'selected="selected"'; } ?> >Production</option>
+        <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') { echo 'selected="selected"'; } ?> >Qualification</option>
+      </select>
+    </td>
   </tr>
 
   <tr>

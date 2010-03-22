@@ -15,7 +15,7 @@ $can->needsRead();
 $type                 = CValue::get('type');
 $exchange_source_name = CValue::get('exchange_source_name');
 
-$exchange_source      = CExchangeSource::get($exchange_source_name, $type);
+$exchange_source      = CExchangeSource::get($exchange_source_name, $type, true);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -49,7 +49,7 @@ class CDestinataireHprim extends CMbObject {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
     
-    $this->_ref_exchange_source = CExchangeSource::get($this->_guid);
+    $this->_ref_exchange_source = CExchangeSource::get($this->_guid, null, true);
   }
   
   function updateFormFields() {

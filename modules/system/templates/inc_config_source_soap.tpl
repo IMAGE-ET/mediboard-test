@@ -29,6 +29,10 @@
             <td><input type="text" readonly="readonly" name="name" value="{{$source->name}}" /></td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="role"}}</th>
+            <td>{{mb_field object=$source field="role"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="host"}}</th>
             <td>{{mb_field object=$source field="host"}}</td>
           </tr>

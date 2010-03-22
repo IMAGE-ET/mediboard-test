@@ -12,7 +12,7 @@ global $can;
 $can->needsAdmin();
 
 // Source PMSI
-$pmsi_source = CExchangeSource::get("pmsi");
+$pmsi_source = CExchangeSource::get("pmsi", null, true);
 
 // Création du template
 $smarty = new CSmartyDP();

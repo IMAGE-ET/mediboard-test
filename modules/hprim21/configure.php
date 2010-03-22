@@ -10,7 +10,7 @@
 global $can;
 $can->needsAdmin();
 
-$hprim21_source = CExchangeSource::get("hprim21", "ftp");
+$hprim21_source = CExchangeSource::get("hprim21", "ftp", true);
 
 // Création du template
 $smarty = new CSmartyDP();

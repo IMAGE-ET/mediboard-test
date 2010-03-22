@@ -358,6 +358,21 @@ class CAppUI {
     @self::$instance->messages[$type][$msg]++;
   }
   
+  /**
+  * Add message to the the system message
+  * @param string $msg The (translated) message
+  * @param int $type type of message (cf UI constants)
+  * @param any number of printf-like parameters to be applied 
+  */
+  static function displayAjaxMsg($msg, $type = UI_MSG_OK) {
+    $args = func_get_args();
+    $msg = CAppUI::tr($msg, array_slice($args, 2));
+    
+    $class = self::getErrorClass($type);
+    
+    self::callbackAjax('$("systemMsg").insert', "<div class='$class'>$msg</div>");
+  }
+  
   static function isMsgOK() {
     $messages = self::$instance->messages;
     $errors = count(@$messages[UI_MSG_ALERT]) + 

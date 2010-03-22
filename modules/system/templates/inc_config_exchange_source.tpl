@@ -10,6 +10,12 @@
 
 {{assign var="sourcename" value=$source->name}}
 
+{{if $source->_incompatible}} 
+<div class="small-error">
+  {{tr}}CExchangeSource-_incompatible{{/tr}} <strong>({{tr}}config-instance_role-{{$dPconfig.instance_role}}{{/tr}})</strong>
+</div>
+{{/if}}
+
 {{if !$sourcename}} 
   <div class="small-info">
     {{tr}}CExchangeSource-no-name{{/tr}}

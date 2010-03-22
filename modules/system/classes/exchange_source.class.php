@@ -9,8 +9,14 @@
  */
 
 class CExchangeSource extends CMbObject {
+  static $typeToClass = array (
+    "ftp"  => "CSourceFTP",
+    "soap" => "CSourceSOAP"
+  );
+  
   // DB Fields
   var $name     = null;
+  var $role     = null;
   var $host     = null;
   var $user     = null;
   var $password = null;
@@ -20,14 +26,18 @@ class CExchangeSource extends CMbObject {
   var $_data        = null;
   var $_args_list   = false;
   var $_allowed_instances = null;
-  var $_wanted_type = null;
+  var $_wanted_type  = null;
+  var $_incompatible = false;
   
   function getProps() {
     $specs = parent::getProps();
     $specs["name"]     = "str notNull";
+    $specs["role"]     = "enum list|prod|qualif default|qualif notNull";
     $specs["host"]     = "text notNull";
     $specs["user"]     = "str";
     $specs["password"] = "password";
+    
+    $specs["_incompatible"] = "bool";
     
     return $specs;
   }
@@ -51,8 +61,8 @@ class CExchangeSource extends CMbObject {
     
     return $exchange_objects;
   } 
-  
-  static function get($name, $type = null) {
+    
+  static function get($name, $type = null, $override = false) {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_source = new $_class;
       $exchange_source->name = $name;
@@ -60,16 +70,24 @@ class CExchangeSource extends CMbObject {
       if ($exchange_source->_id) {
         $exchange_source->_wanted_type = $type;
         $exchange_source->_allowed_instances = self::getObjects($name, $type);
+        if ($exchange_source->role != CAppUI::conf("instance_role")) {
+          if (!$override) {
+            $incompatible_source = new $exchange_source->_class_name;
+            $incompatible_source->name = $exchange_source->name;
+            $incompatible_source->_incompatible = true;
+            CAppUI::displayAjaxMsg(CAppUI::tr("CExchangeSource-_incompatible"), UI_MSG_ERROR);
+            return $incompatible_source;
+          }
+          $exchange_source->_incompatible = true;
+        }
         return $exchange_source;
       }
     }
     $source = new CExchangeSource();
-    if ($type == "soap") {
-      $source = new CSourceSOAP();
+    if ($type) {
+      $source = new self::$typeToClass[$type];
     }
-    if ($type == "ftp") {
-      $source = new CSourceFTP();
-    }
+
     $source->name = $name;
     $source->_wanted_type = $type;
     $source->_allowed_instances = self::getObjects($name, $type);
@@ -77,9 +95,9 @@ class CExchangeSource extends CMbObject {
   }
   
   function check() {
-    $source = self::get($this->name);
+    $source = self::get($this->name, null, true);
     if (!$this->_id && $source->_id) {
-      return "Impossible de créer une nouvelle source"; // Mettre en traduction
+      return CAppUI::tr("CExchangeSource-already-exist");
     }
     
     return parent::check();

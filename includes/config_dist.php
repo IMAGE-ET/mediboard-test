@@ -14,8 +14,9 @@ $dPconfig["company_name"] = "mediboard.org";
 $dPconfig["page_title"]   = "Mediboard SIH";
 $dPconfig["base_url"]     = "http://localhost/mediboard/";
 
-$dPconfig["offline"]      = "0";
-$dPconfig["mb_id"]        = "";
+$dPconfig["offline"]       = "0";
+$dPconfig["instance_role"] = "qualif";
+$dPconfig["mb_id"]         = "";
 
 $dPconfig["date"]         = "%d/%m/%Y";
 $dPconfig["time"]         = "%Hh%M";

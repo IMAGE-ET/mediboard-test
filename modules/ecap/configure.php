@@ -13,8 +13,8 @@ $can->needsAdmin();
 
 CMedicap::getTag();
 
-$ecap_files_source = CExchangeSource::get("ecap_files", "soap");
-$ecap_ssr_source = CExchangeSource::get("ecap_ssr", "soap");
+$ecap_files_source = CExchangeSource::get("ecap_files", "soap", true);
+$ecap_ssr_source = CExchangeSource::get("ecap_ssr", "soap", true);
 
 // Création du template
 $smarty = new CSmartyDP();
