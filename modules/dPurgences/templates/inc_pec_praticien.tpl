@@ -34,7 +34,7 @@ checkPraticien = function(oForm){
 
 {{if !$consult->_id}}
 {{if $can->edit}}
-<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this) || 'Error'">
+<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);">
   <input type="hidden" name="dosql" value="do_consult_now" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="del" value="0" />
