@@ -159,7 +159,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  }
 		
 		// Creation d'une ligne de soin pour la prescription des injections
-		if($prescription->type != "sejour"){
+		if(($prescription->type != "sejour") && $line_medicament instanceof CPrescriptionLineMedicament){
 		  if($line_medicament->_is_injectable){
 		  	if($line_medicament->injection_ide){
 			  	$ald = $line_medicament->ald ? "ald" : "no_ald";
