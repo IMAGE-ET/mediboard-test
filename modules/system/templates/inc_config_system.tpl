@@ -18,6 +18,7 @@
     
     {{mb_include module=system template=inc_config_str var=mb_id}}
     
+    {{assign var="m" value="system"}}
     {{mb_include module=system template=inc_config_str var=reverse_proxy}}
     
     {{mb_include module=system template=inc_config_str var=website_url}}

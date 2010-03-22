@@ -42,6 +42,7 @@
       </td>
     </tr>
     
+    {{assign var="m" value="system"}}
     {{mb_include module=system template=inc_config_str var=phone_number_format maxlength=14 suffix="Le format ne doit contenir que des '9' et des espaces. Il doit y avoir au maximum 10 fois '9'. Un '9' correspond à un numéro de 0 à 9."}}
     
     <tr>
