@@ -11,7 +11,7 @@
 <table class="print">
   <tr>
     <th class="title" colspan="10" style="font-size: 16px">
-      Dossier d'urgence de {{$patient->_view}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
+      Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
       né(e) le {{mb_value object=$patient field=naissance}} de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
     </th>
@@ -24,7 +24,7 @@
     <td>{{mb_value object=$consult field="_date"}}</td>
 		
 		<th>{{mb_label object=$sejour field="_num_dossier"}}</th>
-    <td style="font-size: 20px">{{mb_value object=$sejour field="_num_dossier"}}</td>
+    <td>{{mb_value object=$sejour field="_num_dossier"}}</td>
   </tr>
 	
 	<tr>
@@ -34,7 +34,7 @@
 	  
 	<tr>
     <th>Patient</th>
-    <td style="font-size: 20px">{{mb_value object=$patient field="_view"}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</td>
+    <td>{{mb_value object=$patient field="_view"}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</td>
 		
 		<th>Né(e) le </th>
     <td>{{mb_value object=$patient field=naissance}} </td>
