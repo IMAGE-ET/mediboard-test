@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id:acteccam.class.php 8144 2010-02-25 11:05:27Z rhum1 $ */
 
 /**
  *	@package Mediboard
  *	@subpackage mediusers
- *	@version $Revision$
+ *	@version $Revision:8144 $
  *  @author Thomas Despoix
  */
 
@@ -450,12 +450,14 @@ class CActeCCAM extends CActe {
 			$operation =& $this->_ref_object;
 			$operation->loadRefSejour();
 			$sejour =& $operation->_ref_sejour;
-      if ($sejour->DP[0] == "S" || $sejour->DP[0] == "T") {
-        $DPST = true;
-        $membresDiff = true;
-      }
-      if ($sejour->DP[0] == "C") {
-        $DPC = true;
+			if($sejour->DP) {
+        if ($sejour->DP[0] == "S" || $sejour->DP[0] == "T") {
+          $DPST = true;
+          $membresDiff = true;
+        }
+        if ($sejour->DP[0] == "C") {
+          $DPC = true;
+        }
       }
     }
     
