@@ -130,7 +130,7 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 2000
     ),
     "injection"         => array(
-      "unit" => "kg", 
+      "unit" => "", 
       "formfields" => array("_inj", "_inj_essai"), 
       "min" => 0, "max" => 10
     ),
