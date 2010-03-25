@@ -30,8 +30,11 @@ $group_id = CGroups::loadCurrent()->_id;
 if ($endowment_id) {
   $endowment = new CProductEndowment;
   $endowment->load($endowment_id);
-  $endowment_items = $endowment->loadBackRefs("endowment_items");
-  
+  $ljoin = array(
+    'product' => 'product.product_id = product_endowment_item.product_id'
+  );
+  $endowment_items = $endowment->loadBackRefs("endowment_items", 'product.name', "$start,20", null, $ljoin);
+
   $stocks = array();
   foreach($endowment_items as $_item) {
     $_item->loadRefsFwd();
@@ -50,7 +53,8 @@ if ($endowment_id) {
     $stock->quantity = $_item->quantity;
     $stocks[] = $stock;
   }
-  $count_stocks = count($stocks);
+  
+  $count_stocks = $endowment->countBackRefs("endowment_items", null, null, null, $ljoin);
 }
 else if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
