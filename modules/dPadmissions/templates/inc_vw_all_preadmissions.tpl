@@ -17,13 +17,13 @@
     </th>
   <tr>
     <th class="text">Date</th>
-    <th class="text">Pré-admissions</th>
+    <th class="text">Pré-ad.</th>
   </tr>
   {{foreach from=$listMonth item=curr_day}}
   <tr {{if $curr_day.date == $date}}class="selected"{{/if}}>
     <td align="right">
       <a href="?m={{$m}}&amp;tab=vw_idx_preadmission&amp;date={{$curr_day.date|date_format:"%Y-%m-%d"}}">
-      {{$curr_day.date|date_format:"%A %d"}}
+      {{$curr_day.date|date_format:"%a %d"}}
       </a>
     </td>
     <td align="center">
