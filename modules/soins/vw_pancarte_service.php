@@ -43,8 +43,14 @@ $where = array();
 $where["prescription.object_class"] = " = 'CSejour'";
 $where["prescription.type"]         = " = 'sejour'";
 $where["service.service_id"]        = " = '$service_id'";
-$where["sejour.entree_prevue"]      = " < '$date 23:59:59'";
-$where["sejour.sortie_prevue"]      = " > '$date 00:00:00'";
+
+
+//$where["sejour.entree_prevue"]      = " < '$date 23:59:59'";
+//$where["sejour.sortie_prevue"]      = " > '$date 00:00:00'";
+$where["affectation.entree"]      = " < '$date 23:59:59'";
+$where["affectation.sortie"]      = " > '$date 00:00:00'";	
+
+
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
 // Chargement des configs de services
