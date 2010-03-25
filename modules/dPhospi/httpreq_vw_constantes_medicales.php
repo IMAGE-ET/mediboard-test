@@ -152,6 +152,8 @@ $data      = array();
 $graphs    = array();
 
 foreach ($selection as $name => $params) {
+  if ($name[0] === "_") continue;
+  
   $data[$name] = $standard_struct;
   
   if (isset($params["formfields"])) {
@@ -176,21 +178,19 @@ if ($list_constantes) {
     $cst->loadLogs();
     
     foreach ($selection as $name => $params) {
-      $isFormField = ($name[0] === "_");
+      if ($name[0] === "_") continue;
       
       $d = &$data[$name];
 
       $user_view = "";
-      if (!$isFormField) {
-        $log = $cst->loadLastLogForField($name);
-        if (!$log->_id && $cst->_ref_last_log) {
-          $log = $cst->_ref_last_log;
-        }
-        $log->loadRefsFwd();
-        
-        if ($log->_ref_user) {
-          $user_view = utf8_encode($log->_ref_user->_view);
-        }
+      $log = $cst->loadLastLogForField($name);
+      if (!$log->_id && $cst->_ref_last_log) {
+        $log = $cst->_ref_last_log;
+      }
+      $log->loadRefsFwd();
+      
+      if ($log->_ref_user) {
+        $user_view = utf8_encode($log->_ref_user->_view);
       }
     
       // We push the values

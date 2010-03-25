@@ -122,8 +122,10 @@ Main.add(function () {
           </td>
         {{/if}}
         <td style="width: 0.1%;">
-          <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}', this.checked);" tabIndex="100" />
-        </td>
+				  {{if $_constante.0 != "_"}}
+            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}', this.checked);" tabIndex="100" />
+          {{/if}}
+				</td>
       </tr>
       
       {{if $_constante == "_imc"}}
