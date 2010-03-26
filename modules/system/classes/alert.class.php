@@ -15,9 +15,6 @@ class CAlert extends CMbMetaObject {
   // DB Table key
   var $alert_id = null;
   
-  // References
-  var $group_id = null;
-
   // DB Fields
   var $tag      = null;
   var $level    = null;
@@ -33,7 +30,6 @@ class CAlert extends CMbMetaObject {
 
   function getProps() {
   	$specs = parent::getProps();
-    $specs["group_id"] = "ref class|CGroups";
     $specs["tag"]      = "str notNull";
     $specs["level"]    = "enum list|low|medium|high default|medium notNull";
     $specs["comments"] = "text";
