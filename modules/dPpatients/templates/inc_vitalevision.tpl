@@ -8,7 +8,7 @@
   width="400" height="200"
   {{else}}
   width="0" height="0"
-  style="position: absolute;"
+  style="position: absolute; left: 5000px;"
   {{/if}}>
   <param name="action" value="sleep" />
   <param name="lineSeparator" value="" />

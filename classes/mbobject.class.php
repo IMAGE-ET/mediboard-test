@@ -17,6 +17,7 @@ CAppUI::requireSystemClass("mbObjectSpec");
  * @abstract Adds Mediboard abstraction layer functionality
  */
 class CMbObject {
+  static $useObjectCache = true;
   static $objectCount = 0;
   private static $objectCache = array();
   static $cachableCounts = array();
@@ -455,6 +456,8 @@ class CMbObject {
    * @return void
    */
   private final function registerCache() {
+    if (!self::$useObjectCache) return;
+    
     self::$objectCount++;
     
     // Statistiques sur cache d'object
@@ -467,6 +470,12 @@ class CMbObject {
     }
     
     self::$objectCache[$this->_class_name][$this->_id] =& $this;
+  }
+  
+  public function clearCache(){
+    self::$objectCount = 0;
+    self::$cachableCounts = array();
+    self::$objectCache = array();
   }
   
   /**

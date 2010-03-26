@@ -895,12 +895,20 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision("0.91");
+    // First attempt
     $sql = "DELETE FROM `user_preferences` WHERE `pref_name` = 'ccam_consultation'";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
     $sql = "UPDATE `user_preferences`
             SET `pref_name` = 'ccam_consultation'
             WHERE `pref_name` = 'ccam'";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
+    // Second attempt
+    $sql = "DELETE FROM `user_preferences` WHERE `key` = 'ccam_consultation'";
+    $this->addQuery($sql, true);
+    $sql = "UPDATE `user_preferences`
+            SET `key` = 'ccam_consultation'
+            WHERE `key` = 'ccam'";
+    $this->addQuery($sql, true);
     
     $this->makeRevision("0.92");
     $sql = "ALTER TABLE `acte_ngap` 

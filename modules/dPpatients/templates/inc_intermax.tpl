@@ -26,7 +26,7 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   {{else}}
   width="0" 
   height="0"
-  style="position: absolute;"
+  style="position: absolute; left: 5000px;"
   {{/if}}
 >
 
@@ -49,7 +49,7 @@ Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
   {{else}}
   width="0" 
   height="0"
-  style="position: absolute;"
+  style="position: absolute; left: 5000px;"
   {{/if}}
 >
   <param name="action" value="sleep" />

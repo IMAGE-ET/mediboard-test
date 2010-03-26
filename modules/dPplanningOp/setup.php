@@ -621,7 +621,9 @@ class CSetupdPplanningOp extends CSetup {
         
     $this->makeRevision("0.67");
     $sql = "UPDATE `user_preferences` SET `pref_name` = 'mode_dhe' WHERE `pref_name` = 'mode';";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
+    $sql = "UPDATE `user_preferences` SET `key` = 'mode_dhe' WHERE `key` = 'mode';";
+    $this->addQuery($sql, true);
     
     $this->makeRevision("0.68");
     $sql = "ALTER TABLE `sejour` ADD `mode_sortie` ENUM( 'normal', 'transfert', 'deces' );";

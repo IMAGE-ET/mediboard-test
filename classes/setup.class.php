@@ -232,7 +232,7 @@ class CSetup {
         list($query, $ignore_errors) = $_query;
         if (!$this->ds->exec($query)) {
           if ($ignore_errors) {
-            CAppUI::setMsg("Warning in queries for revision '$currRevision' (errors ignored)", UI_MSG_WARNING);
+            CAppUI::setMsg("Errors ignored for revision '$currRevision'", UI_MSG_OK);
             continue;
           }
           CAppUI::setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);

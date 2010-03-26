@@ -118,11 +118,15 @@ class CSetupadmin extends CSetup {
                 
     $this->makeRevision("1.0.2");
     $sql = "DELETE FROM `user_preferences` WHERE (`pref_name`!='LOCALE' && `pref_name`!='UISTYLE');";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
+    $sql = "DELETE FROM `user_preferences` WHERE (`key`!='LOCALE' && `key`!='UISTYLE');";
+    $this->addQuery($sql, true);
     
     $this->makeRevision("1.0.3");
     $sql = "UPDATE `user_preferences` SET `pref_name`='AFFCONSULT' WHERE `pref_name`='CABCONSULT';";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
+    $sql = "UPDATE `user_preferences` SET `key`='AFFCONSULT' WHERE `key`='CABCONSULT';";
+    $this->addQuery($sql, true);
     
     $this->makeRevision("1.0.4");
     $sql = "ALTER TABLE `perm_module` " .
@@ -209,9 +213,12 @@ class CSetupadmin extends CSetup {
     $sql = "ALTER TABLE `users` CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) NULL DEFAULT '0'";
     $this->addQuery($sql);
     
+    // @FIXME: cet upgrade n'aurait pas du detre dans ce module, on doit faire 2 requetes escapées
     $this->makeRevision("1.0.14");
     $sql = "ALTER TABLE `user_preferences` CHANGE `pref_value` `pref_value` VARCHAR( 255 ) NOT NULL";
-    $this->addQuery($sql);
+    $this->addQuery($sql, true);
+    $sql = "ALTER TABLE `user_preferences` CHANGE `value` `value` VARCHAR( 255 ) NOT NULL";
+    $this->addQuery($sql, true);
     
     $this->makeRevision("1.0.15");
     $sql = "ALTER TABLE `users` 

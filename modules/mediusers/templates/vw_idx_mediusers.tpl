@@ -70,8 +70,12 @@ function changePage(page) {
           <tr>
             <th></th>
             <td>
-              <input onclick="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
-              <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
+              <label>
+                <input onchange="$V(this.form.page, 0)" type="checkbox" name="pro_sante" {{if $pro_sante}}checked="checked"{{/if}} /> Professionnel de santé
+              </label>
+              <label>
+                <input onchange="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
+              </label>
             </td>
           </tr>
         	<tr>
