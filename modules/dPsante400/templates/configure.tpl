@@ -13,116 +13,37 @@
     <th class="category" colspan="100">Connexion à la source de données</th>
   </tr>
   
-  {{assign var="mod" value="interop"}}
-  {{assign var="var" value="mode_compat"}}
-  <tr>
-    <th>
-      <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
-    </th>
-    <td>
-      <select name="{{$mod}}[{{$var}}]">
-        <option value="default" {{if $dPconfig.$mod.$var == "default"}}selected="selected"{{/if}}>Par défaut</option>
-        <option value="medicap" {{if $dPconfig.$mod.$var == "medicap"}}selected="selected"{{/if}}>Medicap</option>
-      </select>
-    </td>
-  </tr> 
+  {{assign var=m value=interop}}
+  {{assign var=mod value=interop}}
 
-
-  {{assign var="var" value="dsn"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
-    
-  {{assign var="var" value="user"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
-    
-  {{assign var="var" value="pass"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
-    
+  {{mb_include module=system template=inc_config_enum var=mode_compat values="default|medicap"}}
+	
+  {{assign var=m value=dPsante400}}
+  {{mb_include module=system template=inc_config_str var=dsn}}
+  {{mb_include module=system template=inc_config_str var=user}}
+  {{mb_include module=system template=inc_config_str var=pass}}
+   
   <tr>
     <th class="category" colspan="100">Traitement des mouvements</th>
   </tr>
 
-  {{assign var="var" value="group_id"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
-    
-  {{assign var="var" value="nb_rows"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="num pos" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
-    
-  {{assign var="var" value="mark_row"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <select class="bool" name="{{$m}}[{{$var}}]">
-        <option value="0" {{if $dPconfig.$m.$var == 0}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if $dPconfig.$m.$var == 1}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>  
-
+  {{mb_include module=system template=inc_config_str var=group_id}}
+  {{mb_include module=system template=inc_config_str var=nb_rows}}
+  {{mb_include module=system template=inc_config_bool var=mark_row}}
+        
   <tr>
     <th class="category" colspan="100">Synchronisation des objets</th>
   </tr>
 
-  {{assign var="var" value="cache_hours"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="num min|0" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-    </td>
-  </tr>  
+  {{mb_include module=system template=inc_config_str var=cache_hours}}
+	
+  
+	{{assign var=class value=CSejour}}
+	<tr>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
+	
+  {{mb_include module=system template=inc_config_str var=sibling_hours}}
 
   <tr>
     <td class="button" colspan="6">

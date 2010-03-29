@@ -99,4 +99,7 @@ $locales['CTriggerMark-trigger_number'] = 'Identifiant du mouvement';
 $locales['CTriggerMark-trigger_number-court'] = 'Mouvement';
 $locales['CTriggerMark-trigger_number-desc'] = 'Identifiant du mouvement marqué';
 $locales['mod-dPsante400-tab-view_marks'] = 'Marques';
+$locales['CMbObject-back-identifiants.empty'] = 'Aucun indenfiant externe';
+$locales['config-dPsante400-CSejour-sibling_hours'] = 'Tolérance pour les séjours proches';
+$locales['config-dPsante400-CSejour-sibling_hours-desc'] = 'Nombre d\'heures de tolérancepour essayer de rapprocher des séjour pour le même patient et le même établisssement';
 ?>

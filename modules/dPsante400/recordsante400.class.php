@@ -12,6 +12,7 @@ class CRecordSante400 {
   static $dbh = null;
   static $chrono = null;
   static $verbose = false;
+	static $consumeUnsets = true;
  
   // Fake data source for chrono purposes
   static $ds = null;
@@ -83,7 +84,8 @@ class CRecordSante400 {
       }
       self::$chrono->stop();
 
-    } catch (PDOException $e) {
+    } 
+		catch (PDOException $e) {
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
     }
     
@@ -112,7 +114,8 @@ class CRecordSante400 {
       $sth->execute($values);
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
       self::$chrono->stop("query");
-    } catch (PDOException $e) {
+    } 
+		catch (PDOException $e) {
       // Fetch throws this exception in case of UPDATE or DELETE query
       if ($e->getCode() == 24000) {
         self::$chrono->stop("query");
@@ -151,7 +154,11 @@ class CRecordSante400 {
     }
     
     $value = $this->data[$valueName];
-    unset($this->data[$valueName]);
+		
+		if (self::$consumeUnsets) {
+      unset($this->data[$valueName]);
+		}
+
     return trim(addslashes($value));    
   }
 

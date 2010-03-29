@@ -623,12 +623,20 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->sejour->annule = $this->type == "S" ? '1' : '0';
     $this->mapSej($this);
     
-    // En cas de collision, on a affaire au même séjour
+    // En cas de collision (cas général), on a affaire au même séjour
     $collisions = $this->sejour->getCollisions();
     if (count($collisions)) {
       $collision = reset($collisions);
       $this->sejour->_id = $collision->_id;
     }
+		
+    // En cas de ressemblance à quelques près (cas des urgences), on a affaire au même séjour
+    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
+		if (count($siblings)) {
+      $sibling = reset($siblings);
+      $this->sejour->_id = $sibling->_id;
+		}
+		
             
     $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
     $this->sejour->_check_bounds = false;

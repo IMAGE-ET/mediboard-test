@@ -351,6 +351,36 @@ class CSejour extends CCodable {
     
     return $collisions;
   }
+	
+  /**
+   * Cherche des séjours les dates d'entrée ou sortie sont proches, 
+   * pour le même patient dans le même établissement
+   * @param $tolerance int Tolérance en heures
+   * @return array|CSejour
+   */
+	function getSiblings($tolerance = 1) {
+		
+		$sejour = new CSejour;
+		$sejour->patient_id = $this->patient_id;
+		$sejour->group_id   = $this->group_id;
+		$siblings = $sejour->loadMatchingList();
+
+    $this->updateFormFields();
+		foreach($siblings as $_sibling) {
+      if ($_sibling->_id == $this->_id) {
+        unset($siblings[$_sibling->_id]);
+				continue;
+      }
+
+	    $entree_relative = abs(mbHoursRelative($this->_entree, $_sibling->_entree));
+      $sortie_relative = abs(mbHoursRelative($this->_sortie, $_sibling->_sortie));
+	    if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
+	      unset($siblings[$_sibling->_id]);
+	    }
+	  }
+		
+		return $siblings;
+	}
   
   /**
    * Check is the object collide another
@@ -484,10 +514,14 @@ class CSejour extends CCodable {
     $this->updateFormFields();
   }
   
-  function updateFormFields() {
-    parent::updateFormFields();
+	function updateEntreeSortie() {
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
+	}
+	
+  function updateFormFields() {
+    parent::updateFormFields();
+		$this->updateEntreeSortie();
     
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);

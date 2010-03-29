@@ -151,7 +151,6 @@ $dPconfig["object_handlers"]   = array (
 
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";
-$dPconfig["interop"]["base_url"]    = "http://myserver/mypage";
 
 // File parsers to return indexing information about uploaded files
 $dPconfig["ft"] = array(
@@ -362,6 +361,9 @@ $dPconfig["dPsante400"] = array (
   "user" => "",
   "pass" => "",
   "group_id" => "",
+	"CSejour" => array(
+	  "sibling_hours" => 1,
+	),
 );
 
 $dPconfig["dPlabo"] = array (

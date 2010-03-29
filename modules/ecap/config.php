@@ -2,7 +2,7 @@
 
 $dPconfig["ecap"] = array (
   "dhe" => array (
-    "rooturl" => "",
+    "rooturl" => "http://myserver/mypage",
   ),
   "soap" => array (
     "rooturl" => "",

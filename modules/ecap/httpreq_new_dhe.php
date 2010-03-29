@@ -24,10 +24,8 @@ if (!CModule::getActive("dPsante400")) {
 }
 
 // Construction de l'URL
-$urlDHE = CAppUI::conf("interop base_url");
-if ($root_url = CAppUI::conf("ecap dhe rooturl")) {
-  $urlDHE = $root_url . CMedicap::$paths["dhe"];
-}
+$root_url = CAppUI::conf("ecap dhe rooturl");
+$urlDHE = $root_url . CMedicap::$paths["dhe"];
 
 $urlDHEParams["logineCap"]       = "";
 $urlDHEParams["codeAppliExt"]    = "mediboard";

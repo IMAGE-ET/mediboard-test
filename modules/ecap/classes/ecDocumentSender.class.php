@@ -24,12 +24,12 @@ class CEcDocumentSender extends CDocumentSender {
     $idExt->loadLatestFor(CGroups::loadCurrent(), "eCap");
    
     return array(
-            "aLoginApplicatif"       => $source->user,
-            "aPasswordApplicatif"    => $source->password,
-            "aTypeIdentifiantActeur" => 1,
-            "aIdentifiantActeur"     => "pr1",
-            "aIdClinique"            => $idExt->id400,
-          );
+      "aLoginApplicatif"       => $source->user,
+      "aPasswordApplicatif"    => $source->password,
+      "aTypeIdentifiantActeur" => 1,
+      "aIdentifiantActeur"     => "pr1",
+      "aIdClinique"            => $idExt->id400,
+    );
   }
   
   static $ids = array();

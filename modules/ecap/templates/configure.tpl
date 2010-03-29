@@ -37,17 +37,14 @@
     <th class="category" colspan="10">DHE e-Cap</th>
   </tr>
 
-  {{assign var="mod" value="interop"}}
+  {{assign var=m value=interop}}
   {{assign var="var" value="base_url"}}
+
+  {{mb_include module=system template=inc_config_str var=base_url}}
+	
   <tr>
-    <th>
-      <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
+    <th />
     <td>
-      <input class="str" size="60" name="{{$mod}}[{{$var}}]" value="{{$dPconfig.$mod.$var}}" />
-			<br/>
       <div class="small-info">
         Il s'agit de l'ancienne variable de configuration.
         <br/>
@@ -56,66 +53,32 @@
     </td>
   </tr> 
 
-  {{assign var="mod" value="ecap"}}
-  {{assign var="class" value="dhe"}}
+  {{assign var=m value=ecap}}
+	
+  {{assign var=class value=dhe}}
   <tr>
-    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}}</th>
+    <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
 
-  {{assign var="var" value="rooturl"}}
+  {{mb_include module=system template=inc_config_str var=rooturl}}
   <tr>
-    <th>
-      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" size="30" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-      {{$paths.dhe}}
-    </td>
+    <th />
+    <td>{{$paths.dhe}}</td>
   </tr> 
    
-  {{assign var="class" value="soap"}}
+  {{assign var=class value=soap}}
   <tr>
-    <th class="category" colspan="10">{{tr}}config-{{$mod}}-{{$class}}{{/tr}} (Obsolète)</th>
+    <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}} (Obsolète)</th>
   </tr>
 
-  {{assign var="var" value="rooturl"}}
+  {{mb_include module=system template=inc_config_str var=rooturl}}
   <tr>
-    <th>
-      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" size="30" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-      {{$paths.soap.documents}}
-    </td>
-  </tr> 
-   
-  {{assign var="var" value="user"}}
-  <tr>
-    <th>
-      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-    </td>
-  </tr> 
-
-  {{assign var="var" value="pass"}}
-  <tr>
-    <th>
-      <label for="{{$mod}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$mod}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="str" name="{{$mod}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$mod.$class.$var}}" />
-    </td>
-  </tr> 
+    <th />
+    <td>{{$paths.soap.documents}}</td>
+  </tr>
+	
+  {{mb_include module=system template=inc_config_str var=user}}
+  {{mb_include module=system template=inc_config_str var=pass}}
 
 	<tr>
 	  <th class="category" colspan="2">Tags d'identifications</th>

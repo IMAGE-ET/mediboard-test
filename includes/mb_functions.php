@@ -247,7 +247,7 @@ function mbDaysRelative($from, $to) {
 }
 
 /**
- * Returns the time difference between two times in hours
+ * Returns the time difference between two times in time format
  * @return string hh:mm:ss diff duration
  **/
 function mbTimeRelative($from, $to, $format = '%02d:%02d:%02d') {
@@ -258,6 +258,10 @@ function mbTimeRelative($from, $to, $format = '%02d:%02d:%02d') {
   return sprintf($format, $hours, $mins, $secs);
 }
 
+/**
+ * Returns the time difference between two times in time format
+ * @return float difference in hours
+ **/
 function mbHoursRelative($from, $to) {
   if (!$from || !$to) {
     return null;
