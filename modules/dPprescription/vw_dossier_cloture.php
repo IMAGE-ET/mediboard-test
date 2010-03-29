@@ -41,6 +41,7 @@ foreach($prescription->_ref_perfusions as $_perfusion){
     $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
     $_perf_line->loadRefsAdministrations();
     foreach($_perf_line->_ref_administrations as $_administration_perf){
+    	$_administration_perf->loadRefAdministrateur();
       if(!$_administration_perf->planification){
         $dossier[mbDate($_administration_perf->dateTime)]["perfusion"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
       }
@@ -55,6 +56,7 @@ foreach($prescription->_ref_prescription_lines as $_line_med){
 	$list_lines["medicament"][$_line_med->_id] = $_line_med;
 	$_line_med->loadRefsAdministrations();
 	foreach($_line_med->_ref_administrations as $_administration_med){
+		$_administration_med->loadRefAdministrateur();
 	  if(!$_administration_med->planification){
 		  $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
 	  }
@@ -68,6 +70,7 @@ foreach($prescription->_ref_prescription_lines_element_by_cat as $chap => $_line
 			$list_lines[$chap][$_line_elt->_id] = $_line_elt;
 		  $_line_elt->loadRefsAdministrations();
 		  foreach($_line_elt->_ref_administrations as $_administration_elt){
+		  	$_administration_elt->loadRefAdministrateur();
 		    if(!$_administration_elt->planification){
 		      $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
 		    }
