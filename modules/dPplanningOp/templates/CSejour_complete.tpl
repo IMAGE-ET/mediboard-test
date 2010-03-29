@@ -26,6 +26,7 @@ printDossier = function(rpu_id) {
 {{assign var="sejour" value=$object}}
 
 <table class="tbl">
+	{{if !@$no_header}}
   <tr>
     <th class="title" colspan="2" style="vertical-align:middle;">
       {{mb_include module=system template=inc_object_notes}}
@@ -51,7 +52,7 @@ printDossier = function(rpu_id) {
       {{$object}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     </th>
   </tr>
-
+  {{/if}}
   {{if $sejour->annule == 1}}
   <tr>
     <th class="category cancelled" colspan="4">

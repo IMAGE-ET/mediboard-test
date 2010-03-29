@@ -1,6 +1,7 @@
 {{mb_include_script module="dPpatients" script="patient" ajax=true}}
 
 <table class="tbl">
+	{{if !@$no_header}}
   <tr>
     <th class="title" colspan="2">
     
@@ -31,6 +32,7 @@
       </form>
     </th>
   </tr>
+	{{/if}}
   <tr>
     <td class="button" colspan="2">
       {{assign var=patient value=$object}}
