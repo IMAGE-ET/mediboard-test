@@ -1140,8 +1140,12 @@ class CSetupdPpatients extends CSetup {
       $sql = "UPDATE `patients` SET `qual_beneficiaire` = '$to' WHERE `rang_beneficiaire` = '$from'";
       $this->addQuery($sql);
     }
+    
+    $this->makeRevision("0.98");
+    $sql = "ALTER TABLE `patients` CHANGE `code_gestion` `code_gestion` CHAR (2)";
+    $this->addQuery($sql);
 							
-    $this->mod_version = "0.98";
+    $this->mod_version = "0.99";
   }
 }
 

@@ -258,7 +258,7 @@ class CPatient extends CMbObject {
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
-    $specs["code_gestion"]      = "numchar length|2";
+    $specs["code_gestion"]      = "str length|2";
     $specs["centre_carte"]      = "numchar length|4";
     $specs["regime_sante"]      = "str";
     $specs["sexe"]              = "enum list|m|f default|m";
