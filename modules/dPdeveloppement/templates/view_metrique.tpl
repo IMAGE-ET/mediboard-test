@@ -11,8 +11,9 @@ function viewCurrent() {
 
 Main.add(function () {
   searchTabs = new Control.Tabs('main_tab_group');
-  // Au chargement, vue de l'établissement courant
-	viewGeneral();
+	{{if $nb_etabs > 1}}
+	  viewGeneral();
+	{{/if}}
 });
 </script>
 
@@ -46,7 +47,7 @@ Main.add(function () {
 	  {{/foreach}}
 	</table>
 </div>
-{{if $nb_etabs}}
+{{if $nb_etabs > 1}}
 	<div id="current" style="display: none;">
 	  <table class="tbl main">
 	    <tr>
