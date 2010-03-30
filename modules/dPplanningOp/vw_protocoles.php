@@ -19,10 +19,17 @@ if($dialog) {
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
-$chir_id   = $mediuser->isPraticien() ? $mediuser->user_id : null;
-$chir_id   = CValue::getOrSession("chir_id", $chir_id);
-$code_ccam = CValue::getOrSession("code_ccam");
-$page      = intval(CValue::get('page', 0));
+$chir_id      = $mediuser->isPraticien() ? $mediuser->user_id : null;
+
+$chir_id      = CValue::getOrSession("chir_id", $chir_id);
+$protocole_id = CValue::getOrSession("protocole_id");
+$code_ccam    = CValue::getOrSession("code_ccam");
+$type         = CValue::getOrSession("type", "interv");
+$page         = CValue::get("page", array(
+  "sejour" => 0,
+  "interv" => 0,
+));
+
 // Praticiens et protocoles disponibles
 $listPrat   = new CMediusers();
 $listPrat   = $listPrat->loadPraticiens(PERM_READ);
@@ -40,24 +47,19 @@ foreach($listPrat as $keyPrat => $valuePrat) {
     foreach ($protocole->_codes_ccam as $code) {
       @$listCodes[$code]++;
     }
-
-  
   }
 }
 
 // Protocole selectionné
 $protSel = new CProtocole;
-if($protocole_id = CValue::getOrSession("protocole_id")) {
-  $protSel->load($protocole_id);
+if($protSel->load($protocole_id)) {
   $protSel->loadRefs();
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("page" , $page );
+$smarty->assign("page"      , $page);
 $smarty->assign("listCodes" , $listCodes );
 $smarty->assign("listPrat"  , $listPrat  );
 $smarty->assign("protSel"   , $protSel   );
