@@ -11,7 +11,7 @@
 global  $can;
 $can->needsRead();
 
-$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa');
+$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id');
 
 $filters          = CValue::getOrSession('filters', array());
 $months_count     = CValue::getOrSession('months_count', 12);
@@ -60,6 +60,10 @@ if ($filters['code_asa']) {
   $where['consultation_anesth.ASA'] = " = '{$filters['code_asa']}'";
 }
 
+if ($filters['cell_saver_id']) {
+  $where['blood_salvage.cell_saver_id'] = " = '{$filters['cell_saver_id']}'";
+}
+
 $bs = new CBloodSalvage();
 $data = array();
 
@@ -87,7 +91,6 @@ foreach($age_areas as $key => $age) {
 	$i = 0;
 	foreach ($dates as $month => $date) {
 	  $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-
 		$count = $bs->countList($where, null, null, null, $ljoin);
 		$d[$i] = array($i, intval($count));
 	  $i++;
@@ -176,6 +179,41 @@ if ($filters['codes_ccam']) {
 	  }
 	  unset($where[$pos]);
 	}
+}
+
+// Cell savers
+$cell_saver = new CCellSaver;
+$list_cell_savers = $cell_saver->loadList(null, "marque, modele");
+$list_cell_savers[] = null;
+
+$data['cell_saver'] = array(
+  'options' => array(
+    'title' => utf8_encode('Par cell-saver')
+  ),
+  'data' => array()
+);
+$series = &$data['cell_saver']['series'];
+
+// array_values() to have contiguous keys
+foreach(array_values($list_cell_savers) as $key => $_cell_saver) {
+  if ($_cell_saver->_id)
+    $where[] = "blood_salvage.cell_saver_id = $_cell_saver->_id";
+  else
+    $where[] = "blood_salvage.cell_saver_id IS NULL || blood_salvage.cell_saver_id = ''";
+    
+  $pos = end(array_keys($where));
+  
+  $series[$key] = array('data' => null, 'label' => $_cell_saver ? utf8_encode($_cell_saver) : CAppUI::tr("Unknown"));
+  $d = &$series[$key]['data'];
+  
+  $i = 0;
+  foreach ($dates as $month => $date) {
+    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+    $count = $bs->countList($where, null, null, null, $ljoin);
+    $d[$i] = array($i, intval($count));
+    $i++;
+  }
+  unset($where[$pos]);
 }
 
 // Ticks

@@ -22,7 +22,7 @@ refreshList = function(form, types, reset) {
   types = types || ["interv", "sejour"];
   
   if (reset) {
-    types.each(function(type){
+    types.each(function(type) {
       $V(form.elements["page["+type+"]"], 0, false);
     });
   }

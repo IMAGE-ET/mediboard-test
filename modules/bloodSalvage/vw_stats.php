@@ -11,7 +11,7 @@
 global  $can;
 $can->needsRead();
 
-$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa');
+$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id');
 
 $filters          = CValue::getOrSession('filters', array());
 $months_count     = CValue::getOrSession('months_count', 12);
@@ -25,6 +25,17 @@ foreach ($possible_filters as $n) {
   if (!isset($filters[$n])) $filters[$n] = null;
 }
 
+$cell_saver = new CCellSaver;
+$cell_savers = $cell_saver->loadList(null, "marque, modele");
+
+$mediuser = new CMediusers();
+$fields = array(
+  "anesth_id"  => $mediuser->loadListFromType(array('Anesthésiste')),
+  "chir_id"    => $mediuser->loadListFromType(array('Chirurgien')),
+  "codes_asa"  => range(1, 5),
+  "cell_saver_id" => $cell_savers,
+);
+
 $smarty = new CSmartyDP();
 
 // Filter
@@ -34,12 +45,6 @@ $smarty->assign('months_count',    $months_count);
 $smarty->assign('mode',            "comparison");
 
 // Lists
-$mediuser = new CMediusers();
-$fields = array(
-  "anesth_id" => $mediuser->loadListFromType(array('Anesthésiste')),
-  "chir_id"   => $mediuser->loadListFromType(array('Chirurgien')),
-  "codes_asa" => range(1, 5),
-);
 $smarty->assign('fields', $fields);
 
 $smarty->display('vw_stats.tpl');

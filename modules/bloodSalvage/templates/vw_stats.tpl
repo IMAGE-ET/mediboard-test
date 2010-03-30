@@ -12,13 +12,32 @@
 
 <script type="text/javascript">
 var oCcamField = null,
-		filterForm;
+		filterForm,
+    options = {},
+    data;
+    
+var profiles = {
+  lines: {
+    lines: {show: true},
+    bars: {show: false},
+    mouse: {track: true},
+    grid: {verticalLines: true}
+  },
+  bars: {
+    lines: {show: false},
+    bars: {show: true},
+    mouse: {track: false},
+    grid: {verticalLines: false}
+  }
+};
 
 function yTickFormatter(y) {
 	return parseInt(y).toString();
 }
 
 function drawGraphs(data) {
+  data = data || window.data;
+  
   var container = $("graphs").update("");
   
   $H(data).each(function(pair) {
@@ -26,6 +45,8 @@ function drawGraphs(data) {
     container.insert(graph);
     
     var data = pair.value;
+    data.options = Object.merge(options, data.options);
+    
     Flotr.draw(
       $('stats-'+pair.key),
       data.series, Object.extend({
@@ -33,6 +54,8 @@ function drawGraphs(data) {
       }, data.options)
     );
   });
+  
+  window.data = data;
 }
 
 function updateGraphs(form){
@@ -96,7 +119,9 @@ function updateTokenCcam(v) {
 </script>
 
 <form name="stats-filter" action="?" method="get" onsubmit="return updateGraphs(this)">
-  <table class="main form">
+  <input type="hidden" name="suppressHeaders" value="1" />
+  
+  <table class="main form" style="table-layout: fixed;">
     <tr>
       <th><label for="months_count">Depuis</label></th>
       <td>
@@ -179,6 +204,27 @@ function updateTokenCcam(v) {
       <th>Codes choisis :</th>
       <td id="list_codes_ccam"></td>
     </tr>
+    
+    <tr>
+      <th>
+        <label for="filters[cell_saver_id]">Cell saver</label>
+        <span class="comparison">
+          <input type="checkbox" value="cell_saver_id" name="comparison[]" />
+          <input type="radio" value="cell_saver_id" name="comparison_left" />
+          <input type="radio" value="cell_saver_id" name="comparison_right" />
+        </span>
+      </th>
+      <td>
+        <select name="filters[cell_saver_id]">
+          <option value="">&mdash; Tous</option>
+          {{foreach from=$fields.cell_saver_id item=_cell_saver}}
+          <option value="{{$_cell_saver->_id}}" {{if $filters.cell_saver_id == $_cell_saver->_id}}selected="selected"{{/if}}>{{$_cell_saver}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+      <th colspan="2"></th>
+    </tr>
+    
     <tr>
       <td colspan="4" class="button">
         <!--
@@ -187,6 +233,12 @@ function updateTokenCcam(v) {
           <input type="checkbox" onclick="switchMode(this.checked ? 'comparison' : '')" {{if $mode == "comparison"}} checked="checked" {{/if}} />
         </label>
         -->
+        
+        <label>
+          Diagrammes en lignes
+          <input type="checkbox" onclick="options = profiles[this.checked ? 'lines' : 'bars']; drawGraphs()" />
+        </label>
+        
         <button type="submit" class="search">Filtrer</button>
       </td>
     </tr>

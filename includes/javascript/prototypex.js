@@ -25,6 +25,20 @@ Class.extend(Function, {
   }
 });
 
+/**
+ * Recursively merges two objects.
+ * @param {Object} src - source object (likely the object with the least properties)
+ * @param {Object} dest - destination object (optional, object with the most properties)
+ * @return {Object} recursively merged Object
+ */
+Object.merge = function(src, dest){
+  var i, v, result = dest || {};
+  for(i in src){
+    v = src[i];
+    result[i] = (v && typeof(v) === 'object' && !(v.constructor === Array || v.constructor === RegExp) && !Object.isElement(v)) ? Object.merge(v, dest[i]) : result[i] = v;
+  }
+  return result;
+};
 
 /** TODO: Remove theses fixes */
 
