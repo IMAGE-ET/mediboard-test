@@ -21,7 +21,7 @@ class CApp {
   static $inPeace = false;
   
   /**
-   * Will trigger an error for logging purpose whenever the application dies unexpectely
+   * Will trigger an error for logging purpose whenever the application dies unexpectedly
    */
   static function checkPeace() {
     if (!self::$inPeace) {
@@ -35,6 +35,19 @@ class CApp {
   static function rip() {
     self::$inPeace = true;
     die;
+  }
+  
+  /**
+   * Outputs JSON data after removing the Output Buffer, with a custom mime type
+   * @param object $data The data to output
+   * @param string $mimeType [optional] The mime type of the data, application/json by default
+   * @return void
+   */
+  static function json($data, $mimeType = "application/json") {
+    ob_clean();
+    header("Content-Type: $mimeType");
+    echo json_encode($data);
+    self::rip();
   }
 }
 
