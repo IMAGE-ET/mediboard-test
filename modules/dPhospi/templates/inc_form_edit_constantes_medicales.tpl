@@ -112,13 +112,14 @@ Main.add(function () {
                 {{assign var=_callback value=null}}
               {{/if}}
               
-              {{mb_field object=$constantes field=$_constante size="2" 
+              {{mb_field object=$constantes field=$_constante size="4" 
                          onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly 
                          increment=$_readonly|ternary:false:true form="edit-constantes-medicales"}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
             {{mb_value object=$const field=$_constante}}
+            <input type="hidden" name="_last_{{$_constante}}" value="{{$const->$_constante}}" />
           </td>
         {{/if}}
         <td style="width: 0.1%;">

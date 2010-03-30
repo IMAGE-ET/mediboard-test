@@ -72,8 +72,8 @@ Main.add(function () {
 <div id="Constantes" style="display: none;">
   <!-- We put a fake form for the ExamCompFrm form, before we insert the real one -->
   <form name="edit-constantes-medicales" action="?" method="post" onsubmit="return false">
-    <input type="hidden" name="_poids" value="{{$consult->_ref_patient->_ref_constantes_medicales->poids}}" />
-    <input type="hidden" name="_vst" value="{{$consult->_ref_patient->_ref_constantes_medicales->_vst}}" />
+    <input type="hidden" name="_last_poids" value="{{$consult->_ref_patient->_ref_constantes_medicales->poids}}" />
+    <input type="hidden" name="_last__vst" value="{{$consult->_ref_patient->_ref_constantes_medicales->_vst}}" />
   </form>
 </div>
 

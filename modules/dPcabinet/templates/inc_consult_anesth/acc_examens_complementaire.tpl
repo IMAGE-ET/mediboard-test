@@ -3,7 +3,7 @@ function calculClairance () {
   var oFormExam  = document.forms["editExamCompFrm"];
   var oFormConst = document.forms["edit-constantes-medicales"];
   
-  var poids      = parseFloat($V(oFormConst.poids) || $V(oFormConst._poids));
+  var poids      = parseFloat($V(oFormConst._last_poids));
   var creatinine = parseFloat($V(oFormExam.creatinine));
   
   if({{if $patient->_age && $patient->_age!="??" && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}} && 
@@ -18,11 +18,11 @@ function calculClairance () {
 }
 
 function calculPSA () {
-  var oFormExam  = document.forms["editExamCompFrm"];
-  var oFormConst = document.forms["edit-constantes-medicales"];
+  var oFormExam     = getForm("editExamCompFrm");
+  var oFormConst    = getForm("edit-constantes-medicales");
   
-  var vst = parseFloat($V(oFormConst._vst));
-  var ht = parseFloat($V(oFormExam.ht));
+  var vst      = parseFloat($V(oFormConst._last__vst));
+  var ht       = parseFloat($V(oFormExam.ht));
   var ht_final = parseFloat($V(oFormExam.ht_final));
   
   if (vst && !isNaN(vst) && 
