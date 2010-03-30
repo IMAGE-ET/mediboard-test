@@ -30,7 +30,7 @@ $protocole_interv = array ();
 $protocole        = new CProtocole; 
 
 $where = array();
-$limit = "$page, 20";
+$limit = "$page, 40";
 	  
 if ($chir_id) {
 	$where["chir_id"] = "= '$chir_id'";
@@ -47,7 +47,7 @@ if ($type_protocole == 'interv'){
 	$nb["interv"]= $protocole->countList($where);
 
   $where["for_sejour"] = "= '1'";
-	$protocole_sejour = $protocole->loadList($where,$order,"0,20");
+	$protocole_sejour = $protocole->loadList($where,$order,"0,40");
 	$nb["sejour"]= $protocole->countList($where);
 }
 else if($type_protocole == 'sejour')  {
@@ -56,7 +56,7 @@ else if($type_protocole == 'sejour')  {
 	$nb["sejour"]= $protocole->countList($where);
 	
 	$where["for_sejour"] = "= '0'";
-	$protocole_interv = $protocole->loadList($where,$order,"0,20");
+	$protocole_interv = $protocole->loadList($where,$order,"0,40");
 	 $nb["interv"]= $protocole->countList($where);
 }
 else {
@@ -69,6 +69,15 @@ else {
   $nb["sejour"]= $protocole->countList($where);
 }
 
+foreach ($protocole_interv as $_prot){
+  $_prot->loadRefChir();
+	$_prot->loadExtCodeCim();
+}
+foreach ($protocole_sejour as $_prot){
+  $_prot->loadRefChir();
+  $_prot->loadExtCodeCim();
+}
+
 $protocoles = array(
   'sejour' => array(),
   'interv' => array(),
@@ -77,7 +86,7 @@ $protocoles = array(
 $protocoles['interv'] = $protocole_interv;
 $protocoles['sejour'] = $protocole_sejour;
 
-// Protocole seectionnï¿½
+// Protocole selectionné
 $protSel = new CProtocole;
 if($protocole_id = CValue::getOrSession("protocole_id")) {
   $protSel->load($protocole_id);
@@ -85,7 +94,7 @@ if($protocole_id = CValue::getOrSession("protocole_id")) {
 }
 
 
-// Crï¿½ation du template
+// Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("protocoles", $protocoles);

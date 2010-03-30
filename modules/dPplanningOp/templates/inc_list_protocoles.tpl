@@ -83,6 +83,7 @@ Main.add(function(){
 	 {{else}}
 	    {{ assign var=nbprotocoles value=$nb.sejour}}
     {{/if}}
+		  {{assign var="step" value=40}}
 	    {{mb_include module=system template=inc_pagination total=$nbprotocoles current=$page change_page='changePage'}}
     <tr>
       <th class="title">Liste des protocoles disponibles</th>
