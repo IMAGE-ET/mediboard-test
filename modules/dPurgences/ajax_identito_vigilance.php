@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
@@ -58,10 +57,10 @@ foreach ($patients as $patient) {
   $nicer["phonings"] = CMbArray::pluck($phonings, "_view");
 	
 //	mbTrace($nicer, "Nicer for $patient->_view");
-	
 	$guesses[$patient->_id] = $guess;
 }
-mbTrace(CMbArray::pluck($patients, "_id"));
+
+//mbTrace($guesses);
 
 
 // Création du template

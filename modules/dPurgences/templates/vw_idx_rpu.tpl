@@ -39,10 +39,15 @@ function printMainCourante() {
   url.popup(800, 600, "Impression main courante");
 }
 
+onMergeComplete = function() {
+  updateMainCourante();
+	updateIdentitoVigilance()
+}
+
 Main.add(function () {
   updateMainCourante();
   updateConsultations();
-//  updateIdentitoVigilance();
+  updateIdentitoVigilance();
 	
   Calendar.regField(getForm("changeDate").date, null, { noView: true } );
   
@@ -110,6 +115,5 @@ Main.add(function () {
 <div id="consultations" style="display: none;">
 </div>
 
-<div class="small-info" id="identito_vigilance" style="display: none;">
-  Fonctionnalité en cours de développement
+<div id="identito_vigilance" style="display: none;">
 </div>

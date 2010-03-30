@@ -8,6 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script>
+
+Main.add(function () {
+  if (window.opener.onMergeComplete) {
+    window.opener.onMergeComplete();
+  }
+} );
+</script>
+
 {{if !$dialog}}
 {{mb_include module=system template=inc_form_merger}}
 {{/if}}
@@ -51,7 +60,7 @@
         <em>({{$counts.unique}} valeurs)</em>
       </label>
       <label>
-        <input type="checkbox" onclick="$$('tr.none'  ).invoke('setVisible', $V(this));" />
+        <input type="checkbox" onclick="$$('tr.none').invoke('setVisible', $V(this));" />
         sans valeurs
         <em>({{$counts.none}} valeurs)</em>
       </label>
@@ -59,10 +68,8 @@
   </tr>
 </table>
 
-
-<form name="form-merge" action="?m={{$m}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}checkForm(this){{/if}}">
+<form name="form-merge" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}return checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_object_merge" />
-  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="fast" value="0" />

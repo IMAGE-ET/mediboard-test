@@ -9,41 +9,70 @@
 *}}
 
 <script type="text/javascript">
-highlite = function(radio) {
-  var first_id = $V(document.Merger["CPatient-first"]);
-	var tbody = $("CPatient-" + first_id);
-  var inputFirst = "input[name=CPatient-first]";
-  var inputSecond = "input[name=CPatient-second]";
-
-  $$(inputFirst).each(function (e) {
-    e.setVisibility(!radio.checked || e.descendantOf(tbody));
+highlite = function(check) {
+  // Hide and empty all inputs
+  $$("input[type=radio]").each(function(e) {
+    e.checked = false;
+    e.setVisibility(false);
   } );
 
-  $$(inputSecond).each(function (e) {
-    e.setVisibility(radio.checked && !e.descendantOf(tbody));
-  } );
+  // Uncheck and unselect all other inputs
+  var checked = check.checked;
+  $$("input[type=checkbox]").each(function(e) {
+    e.checked = false;
+    e.setVisibility(!checked);
+  } )
+  check.setVisibility(true);
+	if (checked) {
+	  check.checked = true;
+	}
 
-  $$(".merge-selected").each(function(e) {
-    e.removeClassName("merge-selected");
-  } );
+  // Show all possible radios
+  var object_class = check.name.split('-')[0];
+  var tbody = $(check).up(2);
+  var inputFirst  = "input[name="+object_class+"-first]";
+  var inputSecond = "input[name="+object_class+"-second]";
 
-	if (radio.checked) {
+  if (checked) {
+	  if (object_class == "CPatient") {
+	    $$(inputSecond).each(function (e) {
+	      e.setVisibility(!e.descendantOf(tbody));
+	    } );
+	  }
+		else {
+      var tr = $(check).up(1);
+      $$(inputSecond).each(function (e) {
+        e.setVisibility(e.descendantOf(tbody) && !e.descendantOf(tr));
+      } );
+		}
+	}
+
+  // Handle highlight
+	$$(".merge-selected").each(function (e) {
+    e.removeClassName("merge-selected")
+	} )
+	
+	if (check.checked) {
     tbody.addClassName("merge-selected");
 	}
 }
 
 merge = function(radio) {
-  var first_id = $V(document.Merger["CPatient-first"])[0];
-  var second_id = $V(document.Merger["CPatient-second"]);
-  Console.debug(first_id, "First Patient");
-  Console.debug(second_id, "Second Patient");
-	
+  var object_class = radio.name.split('-')[0];
+  Console.debug(object_class, "Object class");
+  var first_id  = $V(document.Merger[object_class+"-first"])[0];
+  var second_id = radio.value;
+	url = new Url("system", "object_merger") .
+	  addParam("objects_class", object_class) .
+    addParam("objects_id", [first_id, second_id].join('-'));
+	url.popup(900, 700);
 }
 	
-</script>
 
-<form name="Merger" action="?">
+</script>
 	
+<form name="Merger" action="?">
+
 <table class="tbl">
   <tr>
     <th colspan="5" class="title">{{tr}}CPatient{{/tr}}</th>
@@ -62,16 +91,16 @@ merge = function(radio) {
   </tr>
 
   {{foreach from=$patients item=_patient}}
-	<tbody class="hoverable" id="{{$_patient->_guid}}">
+	<tbody class="hoverable" class="CPatient">
   {{assign var=count_sejour value=$_patient->_ref_sejours|@count}}
   <tr>
     <td rowspan="{{$count_sejour}}">
-      <input name="CPatient-first" type="checkbox" value="{{$_patient->_id}}" onclick="highlite(this);" />
-      <input name="CPatient-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="merge(this);"/>
+      <input name="{{$_patient->_class_name}}-first" type="checkbox" value="{{$_patient->_id}}" onclick="highlite(this);" />
+      <input name="{{$_patient->_class_name}}-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="merge(this);"/>
       <big onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">{{$_patient}}</big>
     </td>
     <td rowspan="{{$count_sejour}}" style="text-align: center">
-      <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</strong>
+      <strong>{{mb_include module=dPpatients template=inc_vw_ipp ipp=$_patient->_IPP}}</strong>
     </td>
     <td rowspan="{{$count_sejour}}">
       <big>{{mb_value object=$_patient field=naissance}}</big> 
@@ -90,6 +119,10 @@ merge = function(radio) {
 	  {{assign var=rpu value=$_sejour->_ref_rpu}}
 
     <td id="{{$_sejour->_guid}}">
+      {{if $count_sejour > 1}} 
+      <input name="{{$_sejour->_class_name}}-first" type="checkbox" value="{{$_sejour->_id}}" onclick="highlite(this);" />
+      <input name="{{$_sejour->_class_name}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="merge(this);"/>
+      {{/if}}
     	<big onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
     		{{mb_value object=$_sejour field=_entree date=$date}}
 			</big>
