@@ -45,7 +45,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <th class="category">
+    <th class="title" style="font-size: 16px;">
       {{assign var=prev    value=-1}}
       {{assign var=next    value=1}}
       {{assign var=current value=0}}
@@ -133,7 +133,7 @@ Main.add(function () {
             {{else}}
             <img src="images/icons/user.png" style="float: left" />
             {{/if}}
-            <div class="progressBar">
+            <div class="progressBar" {{if $_plage->spec_id}}style="height: 25px;"{{/if}}>
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text" style="text-align: left">
                 <label 
@@ -149,8 +149,11 @@ Main.add(function () {
                 >
                   {{$_plage->date|date_format:"%a %d"}} -
                   {{$_plage->debut|date_format:"%Hh%M"}} -
-                  {{$_plage->fin|date_format:"%Hh%M"}} 
-                  &mdash; {{$_plage->_ref_salle->_shortview}}
+                  {{$_plage->fin|date_format:"%Hh%M"}}
+                  &mdash; {{$_plage->_ref_salle->_view}}
+                  {{if $_plage->spec_id}}
+                  <br />{{$_plage->_ref_spec->_view|truncate:50}}
+                  {{/if}}
                 </label>
               </div>
             </div>

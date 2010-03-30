@@ -22,6 +22,8 @@ $curr_op_min  = CValue::get("curr_op_min"  , "00");
 
 $date_min = mbDate("+ ".CAppUI::conf("dPbloc CPlageOp days_locked")." DAYS");
 
+$resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
+
 // Liste des mois selectionnables
 
 $date = mbTransformTime(null, $date, "%Y-%m-01");
@@ -42,7 +44,7 @@ foreach($mediChir->_back["secondary_functions"] as $curr_sec_func) {
   $secondary_functions[] = $curr_sec_func->function_id;
 }
 
-// Chargement de la list des blocx opératoires
+// Chargement de la list des blocs opératoires
 $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
 foreach($blocs as $_bloc) {
@@ -54,6 +56,9 @@ $where = array();
 $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
 $where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
 $where["date"] = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
+if(!$resp_bloc) {
+  $where[] = "date >= '".mbDate()."'";
+}
 $order = "date, debut";
 $plage = new CPlageOp;
 $listPlages = array();
@@ -71,6 +76,7 @@ foreach ($listPlages as &$_bloc) {
   foreach($_bloc as &$_plage){
     $_plage->loadRefSalle();
     $_plage->getNbOperations($nb_secondes, false);
+    $_plage->loadRefSpec(1);
     $_plage->loadRefsBack(0);
   }
 }
@@ -102,7 +108,7 @@ $smarty->assign("mins"               , $mins);
 $smarty->assign("heure_entree_veille", $heure_entree_veille);
 $smarty->assign("heure_entree_jour"  , $heure_entree_jour);
 
-$smarty->assign("resp_bloc", CModule::getInstalled("dPbloc")->canEdit());
+$smarty->assign("resp_bloc", $resp_bloc);
 
 $smarty->display("plage_selector.tpl");
 ?>
