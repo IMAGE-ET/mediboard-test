@@ -11,13 +11,14 @@
 {{mb_include_script module=ssr script=planification}}
 
 <table class="main">
+  <col style="width: 60%;" />
+  
 	<tr>
-		<td style="width: 50%; padding: 5px 10px;" id="planning-sejour"></td>
-    <td style="width: 50%; padding: 5px 10px;" id="activites-sejour"></td>
+		<td style="padding: 3px;" id="planning-sejour"></td>
+    <td style="padding: 3px;" id="activites-sejour"></td>
 	</tr>
   <tr>
-  	<td style="width: 50%; padding: 5px 10px;" id="planning-technicien"></td>
-    <td style="width: 50%; padding: 5px 10px;" id="planning-equipement"></td>
+  	<td style="padding: 3px;" id="planning-technicien"></td>
+    <td style="padding: 3px;" id="planning-equipement"></td>
   </tr>
-  
 </table>

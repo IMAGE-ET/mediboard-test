@@ -429,6 +429,52 @@ table#weeklyPlanning th.today {
   background-color: #ffd;
 }
 
+.planning .event {
+  background: #9F1313;
+  position: absolute;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #fff;
+  white-space: normal;
+  font-size: 9px;
+}
+
+.planning .event .time {
+  padding: 1px;
+  font-size: 8px;
+  font-weight: bold;
+  border-bottom: 1px dotted rgba(255,255,255,0.4);
+}
+
+.planning .event .body {
+  padding: 2px;
+}
+
+.planning .hours td {
+  height: 30px; 
+  padding: 0;
+  vertical-align: top;
+}
+
+.planning .hours td>div {
+  position: relative;
+}
+
+.planning .hours .pause {
+  border-bottom: 4px solid #ccc;
+}
+
+.planning .hours .pause td,
+.planning .hours .pause th {
+  height: 26px;
+}
+
+.planning .hour {
+  vertical-align: top;
+  padding: 1px;
+}
+
 div.tree-content {
   margin: 0; 
   padding-left: 25px;

@@ -17,7 +17,7 @@ PlanningEquipement = {
   hide: function() {
     $("planning-equipement").update("");
   }
-} 
+};
   
 PlanningTechnicien = {
   show: function(id) {
@@ -28,14 +28,13 @@ PlanningTechnicien = {
   hide: function() {
     $("planning-technicien").update("");
   }
-} 
+};
 
 Planification = { 
 	refreshActivites: function(sejour_id) {
 		new Url("ssr", "ajax_activites_sejour") .
 		  addParam("sejour_id", sejour_id) .
 		  requestUpdate("activites-sejour");
-		
 	},
 	
 	refreshSejour: function(sejour_id) {
@@ -48,4 +47,4 @@ Planification = {
 		Planification.refreshActivites(sejour_id);
     Planification.refreshSejour   (sejour_id);
 	}
-}
+};
