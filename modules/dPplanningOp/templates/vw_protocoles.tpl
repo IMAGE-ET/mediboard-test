@@ -54,7 +54,6 @@ Main.add(function(){
   <tr>
     <td colspan="2">
       <a class="button new" href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_edit_protocole&amp;protocole_id=0">Créer un nouveau protocole</a>
-          
       <form name="selectFrm" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -65,7 +64,7 @@ Main.add(function(){
           <tr>
             <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
             <td>
-              <select name="chir_id" onchange="refreshList(this.form, null, true)">
+              <select name="chir_id" onchange="this.form.submit()">
                 <option value="" >&mdash; Tous les praticiens</option>
                 {{foreach from=$listPrat item=curr_prat}}
                 {{if $curr_prat->_ref_protocoles|@count}}
