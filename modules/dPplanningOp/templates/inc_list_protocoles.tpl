@@ -41,7 +41,7 @@
   });
 {{/if}}
 
-function setClose(type, protocole_id) {
+setClose = function(type, protocole_id) {
   window.opener.ProtocoleSelector.set(aProtocoles[type][protocole_id]);
   window.close();
 }
@@ -75,7 +75,15 @@ Main.add(function(){
 
 <table class="tbl">
 {{foreach from=$protocoles key=key_type item=_type}}
+    
   <tbody id="{{$key_type}}" style="display: none;">
+	<input id="type" type="hidden" name="type_protocole" value="{{$key_type}}">
+	 {{if $key_type=="interv"}}
+	 {{ assign var=nbprotocoles value=$nb.interv}}
+	 {{else}}
+	    {{ assign var=nbprotocoles value=$nb.sejour}}
+    {{/if}}
+	    {{mb_include module=system template=inc_pagination total=$nbprotocoles current=$page change_page='changePage'}}
     <tr>
       <th class="title">Liste des protocoles disponibles</th>
     </tr>
@@ -85,7 +93,7 @@ Main.add(function(){
         {{if $dialog}}
         <a href="#1" onclick="setClose('{{$key_type}}', {{$_protocole->_id}})">
         {{else}}
-        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;protocole_id={{$_protocole->_id}}">
+        <a href="?m={{$m}}&amp;tab=vw_protocoles&amp;protocole_id={{$_protocole->_id}}&amp;page={{$page}}">
         {{/if}}
           <strong>
             {{$_protocole->_ref_chir->_view}}
