@@ -304,12 +304,6 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "id_salles_impression" => "",
 );
 
-$dPconfig["dPImeds"] = array (
-  "url"        => "http://localhost/mediboard/modules/dPImeds/demo/listedossiers.aspx.htm",
-  "remote_url" => "",
-  "soap_url"   => "",
-);
-
 $dPconfig["dPfiles"] = array (
   "nb_upload_files"     => "1",
   "upload_max_filesize" => "2M",
@@ -642,7 +636,6 @@ $dPconfig["sip"] = array (
   "send_all_patients" => 1,
   "sej_no_numdos"     => 0,
   "send_sej_pa"       => 1,
-  "enable_send"       => 1
 );
 
 $dPconfig["webservices"] = array (

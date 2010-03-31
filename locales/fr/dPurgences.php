@@ -382,4 +382,5 @@ $locales['config-dPurgences-only_prat_reponsable-desc'] = '';
 $locales['config-dPurgences-programme_rpu_view'] = '';
 $locales['config-dPurgences-programme_rpu_view-desc'] = '';
 $locales['mod-dPurgences-tab-vw_stock_order'] = 'Commandes / Réception';
+$locales['dPurgences-no-service_urgences_id'] = 'Veuillez indiquer un service d\'urgences dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 ?>
