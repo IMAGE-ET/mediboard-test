@@ -562,7 +562,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       // Traitement du medecin adressant
       $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
       if ($mbVenue->_adresse_par_prat) {
-        if ($_ref_adresse_par_prat->adeli) {
+        if ($_ref_adresse_par_prat && $_ref_adresse_par_prat->adeli) {
           $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
         }
       }
