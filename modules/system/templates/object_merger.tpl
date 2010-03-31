@@ -8,10 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script>
+<script type="text/javascript">
 
 Main.add(function () {
-  if (window.opener.onMergeComplete) {
+  if (window.opener && window.opener.onMergeComplete) {
     window.opener.onMergeComplete();
   }
 } );
