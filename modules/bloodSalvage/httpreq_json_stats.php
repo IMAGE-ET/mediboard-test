@@ -27,10 +27,12 @@ foreach ($possible_filters as $n) {
 
 // Dates
 $dates = array();
+$first_day = mbTransformTime(null, null, "%Y-%m-01");
 for ($i = $months_count - 1; $i >= 0; --$i) {
   $mr = $months_relative+$i;
-  $sample_end = mbTransformTime("-$mr MONTHS", mbDate(), "%Y-%m-31 23:59:59");
-  $sample_start = mbTransformTime("-$mr MONTHS", mbDate(), "%Y-%m-01 00:00:00");
+  $sample_end = mbTransformTime("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
+  $sample_start = mbTransformTime("-$mr MONTHS", $first_day, "%Y-%m-01 00:00:00");
+
   $dates[$sample_start] = array(
     'start' => $sample_start,
     'end' => $sample_end,
@@ -77,12 +79,15 @@ $data['age'] = array(
 $series = &$data['age']['series'];
 $age_areas = array(0, 20, 40, 50, 60, 70, 80);
 foreach($age_areas as $key => $age) {
-	$limits = array($age, (isset($age_areas[$key+1]) ? $age_areas[$key+1] : null));
+	$limits = array($age, CValue::read($age_areas, $key+1));
 	$label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
 	
+  $date_min = mbDate("-{$limits[1]} YEARS");
+  $date_max = mbDate("-{$limits[0]} YEARS");
+  
 	// Age calculation
-  $where[] = "DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(patients.naissance)), '%Y') > ".$limits[0].
-	           ($limits[1] != null ? (" AND DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(patients.naissance)), '%Y') <= ".$limits[1]) : '');
+  $where[] = "patients.naissance <= '$date_max' ".
+	           ($limits[1] != null ? " AND patients.naissance > '$date_min'" : "");
 	$pos = end(array_keys($where));
 	
 	$series[$key] = array('data' => null, 'label' => "$label ans");
@@ -97,7 +102,6 @@ foreach($age_areas as $key => $age) {
 	}
 	unset($where[$pos]);
 }
-
 
 // > 6h ou pas
 $data['6h'] = array(

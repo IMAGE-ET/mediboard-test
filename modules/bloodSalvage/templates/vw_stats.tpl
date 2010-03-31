@@ -36,26 +36,24 @@ function yTickFormatter(y) {
 }
 
 function drawGraphs(data) {
-  data = data || window.data;
+  window.data = data || window.data;
   
   var container = $("graphs").update("");
   
-  $H(data).each(function(pair) {
+  $H(window.data).each(function(pair) {
     var graph = new Element("div", {id:"stats-"+pair.key, style:"width: 600px; height: 300px; margin: auto;"});
     container.insert(graph);
     
-    var data = pair.value;
-    data.options = Object.merge(options, data.options);
+    var d = pair.value;
+    d.options = Object.merge(options, d.options);
     
     Flotr.draw(
       $('stats-'+pair.key),
-      data.series, Object.extend({
+      d.series, Object.extend({
         yaxis: {tickFormatter: yTickFormatter}
-      }, data.options)
+      }, d.options)
     );
   });
-  
-  window.data = data;
 }
 
 function updateGraphs(form){
