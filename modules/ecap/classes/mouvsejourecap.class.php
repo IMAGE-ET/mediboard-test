@@ -136,6 +136,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $etablissement = new CGroups;
     $etablissement->text = $etab400->consume("ZIDC");
     $etablissement->raison_sociale = $etablissement->text;
+    $etablissement->chambre_particuliere = "0";
 
     $this->trace($this->etablissement->getDBFields(), "Etablissement à enregistrer");
 
