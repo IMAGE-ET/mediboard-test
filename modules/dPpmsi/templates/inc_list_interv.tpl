@@ -1,6 +1,6 @@
 <tr>
   <td>
-    {{if $_operation->_ref_hprim_files|@count}}
+    {{if $_operation->_nb_echange_hprim}}
       <img src="images/icons/tick.png" alt="ok" />
     {{else}}
       <img src="images/icons/cross.png" alt="alerte" />

@@ -145,6 +145,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $echg_hprim->id_permanent = $mbObject->_num_dossier;
       }
     }
+		if ($mbObject instanceof COperation) {
+			$echg_hprim->object_class = "COperation";
+		}
     if ($initiateur) {
       $echg_hprim->initiateur_id = $initiateur;
     }
@@ -153,7 +156,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
             
-    $this->generateEnteteMessageEvenementsPatients();
+    $this->generateEnteteMessage();
     $this->generateFromOperation($mbObject, $referent);
 
     $doc_valid = $this->schemaValidate();
@@ -536,11 +539,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     // mode d'entrée inconnu
     $mode = "09";
     // admission après consultation d'un médecin de l'établissement
-    if ($mbVenue->_ref_consult_anesth->_id) {
+    if ($mbVenue->_ref_consult_anesth && $mbVenue->_ref_consult_anesth->_id) {
       $mode = "01";
     }
     // malade envoyé par un médecin extérieur
-    if ($mbVenue->_ref_adresse_par_prat->_id) {
+    if ($mbVenue->_ref_adresse_par_prat && $mbVenue->_ref_adresse_par_prat->_id) {
       $mode = "02";
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
@@ -550,7 +553,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
       // Traitement du medecin traitant du patient
       $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
-      if ($_ref_medecin_traitant->_id) {
+      if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
         if ($_ref_medecin_traitant->adeli) {
           $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
         }
@@ -624,6 +627,49 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
     }
   }
+	
+	function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
+		$identifiant = $this->addElement($elParent, "identifiant");
+    $emetteur = $this->addElement($identifiant, "emetteur", $mbOp->operation_id);
+    
+    $mbOpDebut = CValue::first(
+      $mbOp->debut_op, 
+      $mbOp->entree_salle, 
+      $mbOp->time_operation
+    );
+    
+    $debut = $this->addElement($elParent, "debut");
+    $this->addElement($debut, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
+    $this->addElement($debut, "heure", $mbOpDebut);
+    
+    $mbOpFin   = CValue::first(
+      $mbOp->fin_op, 
+      $mbOp->sortie_salle, 
+      mbAddTime($mbOp->temp_operation, $mbOp->time_operation)
+    );
+    
+    $fin = $this->addElement($elParent, "fin");
+    $this->addElement($fin, "date", CValue::first($mbOp->_ref_plageop->date, $mbOp->date));
+    $this->addElement($fin, "heure", $mbOpFin);
+    
+    $this->addUniteFonctionnelle($elParent, $mbOp);
+    
+    // Ajout des participants
+    $mbParticipants = array();
+    foreach($mbOp->_ref_actes_ccam as $acte_ccam) {
+      $mbParticipant = $acte_ccam->_ref_executant;
+      $mbParticipants[$mbParticipant->user_id] = $mbParticipant;
+    }
+    
+    $participants = $this->addElement($elParent, "participants");
+    foreach ($mbParticipants as $mbParticipant) {
+      $participant = $this->addElement($participants, "participant");
+      $this->addProfessionnelSante($participant, $mbParticipant);
+    }
+        
+    // Libellé de l'opération
+    $this->addTexte($elParent, "libelle", 80);
+	}
   
   function addDebiteurs($elParent, $mbPatient, $referent = null) {
     $debiteur = $this->addElement($elParent, "debiteur");

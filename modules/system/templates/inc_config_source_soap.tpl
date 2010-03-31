@@ -111,10 +111,3 @@
     </td>
   </tr>
 </table>
-<div class="big-info">
-  Les caractères suivants sont utilisés pour spécifier l'authentification dans l'url :
-  <ul>
-    <li>%u - Utilisateur service web </li>
-    <li>%p - Mot de passe service web</li>
-  </ul>
-</div>

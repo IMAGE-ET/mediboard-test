@@ -28,17 +28,6 @@
   </table>
 </form>
 
-<table class="form">  
-  <tr>
-    <th class="title">
-      {{tr}}config-exchange-source{{/tr}}
-    </th>
-  </tr>
-  <tr>
-    <td> {{mb_include module=system template=inc_config_exchange_source source=$pmsi_source}} </td>
-  </tr>
-</table>
-
 {{mb_include template=inc_configure_ghs}}
 
 {{mb_include template=inc_configure_facture_hprim}}

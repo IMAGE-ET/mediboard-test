@@ -12,7 +12,7 @@
 
 sendMessage = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
-  url.setModuleAction("sip", "ajax_send_message");
+  url.setModuleAction("hprimxml", "ajax_send_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
 	url.requestUpdate("systemMsg", { onComplete:function() { 
@@ -21,7 +21,7 @@ sendMessage = function(echange_hprim_id, echange_hprim_classname){
 
 reprocessing = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
-  url.setModuleAction("sip", "ajax_reprocessing_message");
+  url.setModuleAction("hprimxml", "ajax_reprocessing_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
   url.requestUpdate("systemMsg", { onComplete:function() { 
@@ -30,12 +30,23 @@ reprocessing = function(echange_hprim_id, echange_hprim_classname){
 
 refreshEchange = function(echange_hprim_id, echange_hprim_classname){
   var url = new Url;
-  url.setModuleAction("sip", "ajax_refresh_message");
+  url.setModuleAction("hprimxml", "ajax_refresh_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
   url.requestUpdate("echange_"+echange_hprim_id);
 }
 
+var evenements = {{$evenements|@json}};
+function fillSelect(source, dest) {
+  var selected = $V(source);
+	console.debug(selected);
+  dest.update();
+  $H(evenements[selected]).each(function(pair){
+	  var v = pair.key;
+    dest.insert(new Element('option', {value: v}).update(v));
+  });
+}
+	
 function changePage(page) {
   $V(getForm('filterEchange').page,page);
 }
@@ -78,7 +89,7 @@ function changePage(page) {
           <tr>
             <th colspan="2">Type de message d'événement</th>
             <td colspan="2">
-              <select class="str" name="msg_evenement" onchange="$V(this.form.page, 0)">
+              <select class="str" name="msg_evenement" onchange="fillSelect(this, this.form.elements.type_evenement)">
                 <option value="">&mdash; Liste des messages </option>
                 <option value="patients" {{if $msg_evenement == "patients"}}selected="selected"{{/if}}>
                   Message patients
@@ -86,38 +97,22 @@ function changePage(page) {
                 <option value="pmsi" {{if $msg_evenement == "pmsi"}}selected="selected"{{/if}}>
                   Message PMSI
                 </option>
-                <option value="serveurActes" {{if $msg_evenement == "serveurActes"}}selected="selected"{{/if}}>
-                  Message serveur actes
-                </option>
               </select>
             </td>
           </tr> 
 	        <tr>
             <th colspan="2">Types d'événements</th>
             <td colspan="2">
-              <select class="str" name="type_evenement" onchange="$V(this.form.page, 0)">
+              <select class="str" name="type_evenement">
                 <option value="">&mdash; Liste des événements </option>
-                <option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-none{{/tr}}
+								<option value="inconnu" {{if $type_evenement == "inconnu"}}selected="selected"{{/if}}>
+                  {{tr}}hprimxml-evt-none{{/tr}}
                 </option>
-                <option value="enregistrementPatient" {{if $type_evenement == "enregistrementPatient"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-enregistrementPat{{/tr}}
-                </option>
-                <option value="fusionPatient" {{if $type_evenement == "fusionPatient"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-fusionPat{{/tr}}
-                </option>
-                <option value="venuePatient" {{if $type_evenement == "venuePatient"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-venuePat{{/tr}}
-                </option>
-                <option value="fusionVenue" {{if $type_evenement == "fusionVenue"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-fusionVen{{/tr}}
-                </option>
-                <option value="mouvementPatient" {{if $type_evenement == "mouvementPatient"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-mvtPat{{/tr}}
-                </option>
-                <option value="debiteursVenue" {{if $type_evenement == "debiteursVenue"}}selected="selected"{{/if}}>
-                  {{tr}}hprimxml-evt_patients-debiteursVenue{{/tr}}
-                </option>
+								{{foreach from=$evenements.$msg_evenement key=_type_evenement item=_class_evenement}}
+                  <option value="{{$_type_evenement}}" {{if $type_evenement == $_type_evenement}}selected="selected"{{/if}}>
+                    {{tr}}hprimxml-evt_{{$msg_evenement}}-{{$_type_evenement}}{{/tr}}
+                  </option>
+                {{/foreach}}
               </select>
             </td>
           </tr>

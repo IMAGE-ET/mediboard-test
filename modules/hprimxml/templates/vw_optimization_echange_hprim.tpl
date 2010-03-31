@@ -20,7 +20,7 @@
     if (!action) {
       stop=true;
     }
-    var url = new Url("sip", "ajax_optimize_echange");
+    var url = new Url("hprimxml", "ajax_optimize_echange");
     url.addParam("do_optimize", $V(button.form.elements.do_optimize) ? 1 : 0);
     url.requestUpdate("optimize-echange-messages", { onComplete:function() { 
       optimizeEchangeHprim(button);

@@ -28,6 +28,7 @@ class CMbSOAPClient extends SoapClient {
     	trigger_error("Impossible d'analyser l'url : ".$this->wsdl, E_USER_ERROR);
     	return;
     }
+
     if (strpos($html, "<?xml") === false) {
     	$this->soap_client_error = true;
       trigger_error("Erreur de connexion sur le service web. WSDL non accessible ou au mauvais format.", E_USER_ERROR);

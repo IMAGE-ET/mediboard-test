@@ -92,7 +92,7 @@ foreach ($sejours as $sejour) {
       
   $sejour->_ref_last_log->type = "create";
   $dest_hprim = new CDestinataireHprim();
-  
+  $dest_hprim->evenement = "patient";
   $dest_hprim->type = "sip";
   $dest_hprim->loadMatchingObject();
 

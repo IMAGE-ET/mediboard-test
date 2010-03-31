@@ -127,7 +127,8 @@ class CSejour extends CCodable {
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
-  var $_ref_hprim_files          = null;
+	var $_nb_echange_hprim         = null;
+  var $_ref_echange_hprim        = null;
   
   // Distant fields
   var $_dates_operations          = null;
@@ -1192,11 +1193,15 @@ class CSejour extends CCodable {
     $this->_ref_GHM->getGHM();
   }
   
-  function loadHprimFiles() {
-    $hprimFile = new CHPrimXMLEvenementPmsi();
-    $hprimFile->setFinalPrefix($this);
-    $hprimFile->getSentFiles();
-    $this->_ref_hprim_files = $hprimFile->sentFiles;
+  function loadEchangeHprim() {
+  	$order = "date_production DESC";
+		// Récupération de tous les échanges produits
+		$this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
+  }
+	
+	function countEchangeHprim() {
+    // Récupération de tous les échanges produits
+    $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
   
   function fillLimitedTemplate(&$template) {

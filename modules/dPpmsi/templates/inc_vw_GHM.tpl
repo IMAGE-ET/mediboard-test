@@ -48,9 +48,9 @@
   </tr>
   <tr>
     <td>
-      {{if $sejour->_ref_hprim_files|@count}}
+      {{if $sejour->_nb_echange_hprim}}
       <div class="small-success">
-        Export déjà effectué {{$sejour->_ref_hprim_files|@count}} fois
+        Export déjà effectué {{$sejour->_nb_echange_hprim}} fois
       </div>
       {{else}}
       <div class="small-info">

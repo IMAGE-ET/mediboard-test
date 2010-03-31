@@ -19,8 +19,8 @@ if (null == $typeObject = CValue::get("typeObject")) {
 switch ($typeObject) {
   case "op" :
 		$mbObject = new COperation();
-		$doc = new CHPrimXMLServeurActes();
-		
+		$evenementPMSI = new CHPrimXMLServeurActes();
+
 		// Chargement de l'opération et génération du document
 		$operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
 		if ($mbObject->load($operation_id)) {
@@ -36,19 +36,11 @@ switch ($typeObject) {
 		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_num_dossier       = $_POST["sc_venue_id"    ];
 		  if (isset($_POST["cmca_uf_code"   ])) $mbObject->code_uf            = $_POST["cmca_uf_code"   ];
 		  if (isset($_POST["cmca_uf_libelle"])) $mbObject->libelle_uf         = $_POST["cmca_uf_libelle"];
-		  if (!$doc->checkSchema()) {
-		    return;
-		  }
-		  $doc->generateFromOperation($mbObject);
-			if ($doc_valid = $doc->schemaValidate()) {
-			  $mbObject->facture = true;
-				$mbObject->store();
-			}
 		}
 		break;
   case "sej" :
 		$mbObject = new CSejour();
-		$doc = new CHPrimXMLEvenementPmsi();
+		$evenementPMSI = new CHPrimXMLEvenementPmsi();
 				
 		// Chargement du séjour et génération du document
 		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
@@ -59,50 +51,60 @@ switch ($typeObject) {
 		  $mbObject->_ref_patient->loadIPP();
 		  if (isset($_POST["sc_patient_id"  ])) $mbObject->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
 		  if (isset($_POST["sc_venue_id"    ])) $mbObject->_num_dossier       = $_POST["sc_venue_id"    ];
-		  if (!$doc->checkSchema()) {
-		    return;
-		  }
-		  $doc->generateFromSejour($mbObject);
-		  $doc_valid = $doc->schemaValidate();
-			if ($doc_valid = $doc->schemaValidate()) {
-        $mbObject->facture = true;
-        $mbObject->store();
-      }
 		}
     break;
 }
 
-// Traitement sur le document HPRIM produit
-//$doc->addNameSpaces(); 	// Nécessaire pour la validation avec XML Spy
-$doc->saveTempFile();
+if (!$evenementPMSI->checkSchema()) {
+  return;
+}
+			
+$dest_hprim = new CDestinataireHprim();
+$dest_hprim->group_id = CGroups::loadCurrent()->_id;
+$dest_hprim->evenement = "pmsi";
+$destinataires = $dest_hprim->loadMatchingList();
+        
+foreach ($destinataires as $_destinataire) {
+	$evenementPMSI->emetteur     = CAppUI::conf('mb_id');
+  $evenementPMSI->destinataire = $_destinataire->nom;
+  $evenementPMSI->group_id     = $_destinataire->group_id;
 
-// Envoi à la source créée 'PMSI'
-$exchange_source = CExchangeSource::get("pmsi");
-
-$sent_files = CValue::get("sent_files");
-if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
-  $exchange_source->setData($doc->saveXML());
-  $logs = array();
-  if ($exchange_source->send()) {
-    $doc->saveFinalFile();
-    $documentFinalBaseName = basename($doc->documentfinalfilename);
-    $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard sous le nom $documentFinalBaseName";
+	$msgEvtPMSI = $evenementPMSI->generateTypeEvenement($mbObject);
+	
+	$echange_hprim = new CEchangeHprim();
+  $echange_hprim->load($evenementPMSI->identifiant);
+  if ($doc_valid = $echange_hprim->message_valide) {
+    $mbObject->facture = true;
+    $mbObject->store();
+  }
+		
+	$logs = array();
+	if ($_destinataire->actif) {
+    $source = CExchangeSource::get($_destinataire->_guid);
+		$sent_files = CValue::get("sent_files");
+		if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
+		  $source->setData($msgEvtPMSI);
+		  if ($source->send()) {
+        $echange_hprim->date_echange = mbDateTime();
+        $echange_hprim->store();
+		    $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard";
+		  }
+		}
   }
 }
 
-// Récupération de tous les fichiers produits
-$doc->getSentFiles();
+$order = "date_production DESC";
+// Récupération de tous les échanges produits
+$mbObject->loadBackRefs("echanges_hprim", $order);
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("doc"            , $doc);
-$smarty->assign("exchange_source", $exchange_source);
+$smarty->assign("evenementPMSI"  , $evenementPMSI);
+$smarty->assign("exchange_source", $source);
 $smarty->assign("logs"           , $logs);
 $smarty->assign("doc_valid"      , @$doc_valid);
 $smarty->assign("typeObject"     , $typeObject);
 $smarty->assign("mbObject"       , $mbObject);
-
 $smarty->display("export_evtServeurActivitePmsi.tpl");
 
 ?>

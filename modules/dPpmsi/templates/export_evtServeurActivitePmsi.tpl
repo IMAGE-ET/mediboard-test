@@ -4,6 +4,13 @@
 
 <script type="text/javascript">
 
+popupEchangeViewer = function(echange_hprim_id) {
+  var url = new Url("hprimxml", "echangeviewer");
+	url.addParam("echange_hprim_id", echange_hprim_id);
+  url.popup(700, 550, "Message Echange");
+	return false;
+}
+
 function choosePreselection(oSelect) {
   if (!oSelect.value) { 
     return;
@@ -102,11 +109,11 @@ function choosePreselection(oSelect) {
       {{/if}}
       <h3>
 
-      {{if $doc->documentfilename}}
+      {{if $evenementPMSI->documentfilename}}
       <h3>XML: Génération du document</h3>
       <ul>
         <li>
-          Consulter <a href="{{$doc->documentfilename}}">le Document H'XML</a>: 
+          Consulter <a href="{{$evenementPMSI->documentfilename}}">le Document H'XML</a>: 
           Le document <strong>{{if $doc_valid}}est valide!{{else}}n'est pas valide...{{/if}}</strong>
         </li>
         {{if $typeObject == "op"}}
@@ -124,15 +131,18 @@ function choosePreselection(oSelect) {
       {{/foreach}}
       </ul>
       {{/if}}
-      <h3>Tous les fichiers envoyés pour cet objet</h3>
+      <h3>Tous les échanges envoyés pour cet objet ({{$mbObject->_back.echanges_hprim|@count}})</h3>
       <ul>
-        {{foreach from=$doc->sentFiles item=curr_file}}
+        {{foreach from=$mbObject->_back.echanges_hprim item=_echange}}
         <li>
-          Fichier <a href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_path={{$curr_file.path}}">{{$curr_file.name}}</a>
-          envoyé le {{$curr_file.datetime|date_format:"%A %d %B %Y à %H:%M:%S"}}
+          Echange <a href="#1" onclick="return popupEchangeViewer('{{$_echange->_id}}')">{{$_echange->_id}}</a>
+          produit le {{$_echange->date_production|date_format:"%A %d %B %Y à %H:%M:%S"}} 
+					{{if $_echange->date_echange}}
+					 échangé le {{$_echange->date_echange|date_format:"%A %d %B %Y à %H:%M:%S"}} 
+					{{/if}}
         </li>
         {{foreachelse}}
-        Aucun fichier envoyé
+        <li>Aucun échange envoyé</li>
         {{/foreach}}
       </ul>
       {{/if}}

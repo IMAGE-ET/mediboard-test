@@ -38,14 +38,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
    
   function __construct() {
     $this->evenement = "evt_patients";
-    $this->destinataire_libelle = "";
     $this->type = "patients";
-    
                 
     parent::__construct("patients", self::getVersionEvenementsPatients());
   }
 
-  function generateEnteteMessageEvenementsPatients() {
+  function generateEnteteMessage() {
     $evenementsPatients = $this->addElement($this, "evenementsPatients", null, "http://www.hprim.org/hprimXML");
     // Retourne un message d'acquittement par le récepteur
     $this->addAttribute($evenementsPatients, "acquittementAttendu", "oui");

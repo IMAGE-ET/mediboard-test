@@ -14,7 +14,7 @@
   <table class="form">
   	{{assign var="mod" value="sip"}}
     <tr>
-      <th class="category" colspan="10">{{tr}}config-{{$mod}}-export{{/tr}}</th>
+      <th class="title" colspan="10">{{tr}}config-{{$mod}}-export{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_str var=export_segment}}
 	  

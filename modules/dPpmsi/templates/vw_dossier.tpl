@@ -281,7 +281,7 @@ Main.add(function () {
                   </li>
                   {{/if}}
                   {{foreachelse}}
-                  <li>Pas d'antécédents</li>
+                  <li>{{tr}}CAntecedent.type.none{{/tr}}</li>
                   {{/foreach}}
                 </ul>
               </li>
@@ -304,7 +304,7 @@ Main.add(function () {
                   </li>
                   {{/if}}
                   {{foreachelse}}
-                  <li>Pas d'antécédents</li>
+                  <li>{{tr}}CAntecedent.type.none{{/tr}}</li>
                   {{/foreach}}
                 </ul>
               </li>
@@ -500,9 +500,9 @@ Main.add(function () {
             <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Export S@nté.com</button>
           </td>
           <td colspan="2" class="text">
-            {{if $curr_op->_ref_hprim_files|@count}}
+            {{if $curr_op->_nb_echange_hprim}}
             <div class="small-success">
-              Export déjà effectué {{$curr_op->_ref_hprim_files|@count}} fois
+              Export déjà effectué {{$curr_op->_nb_echange_hprim}} fois
             </div>
             {{else}}
             <div class="small-info">
@@ -537,7 +537,5 @@ Main.add(function () {
        </table>
      </td>
      {{/if}}
-    
   </tr>
 </table>
-

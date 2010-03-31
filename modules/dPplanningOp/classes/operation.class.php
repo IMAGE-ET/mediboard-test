@@ -115,8 +115,9 @@ class COperation extends CCodable {
   var $_ref_consult_anesth = null;
   var $_ref_anesth_visite  = null;
   var $_ref_actes_ccam     = array();
-  var $_ref_hprim_files    = null;
-  var $_ref_anesth_perops = null;
+  var $_nb_echange_hprim   = null;
+  var $_ref_echange_hprim  = null;
+  var $_ref_anesth_perops  = null;
 	
   // External references
   var $_ext_codes_ccam = null;
@@ -238,6 +239,7 @@ class COperation extends CCodable {
 	  $backProps["perfusion"]                = "CPerfusion operation_id";
     $backProps["check_lists"]              = "CDailyCheckList object_id";
 		$backProps["anesth_perops"]            = "CAnesthPerop operation_id";
+		$backProps["echanges_hprim"]           = "CEchangeHprim object_id";
 	  return $backProps;
 	}
 
@@ -689,11 +691,15 @@ class COperation extends CCodable {
     $this->loadRefsDocs();
   }
   
-  function loadHprimFiles() {
-    $hprimFile = new CHPrimXMLServeurActes();
-    $hprimFile->setFinalPrefix($this);
-    $hprimFile->getSentFiles();
-    $this->_ref_hprim_files = $hprimFile->sentFiles;
+  function loadEchangeHprim() {
+    $order = "date_production DESC";
+    // Récupération de tous les échanges produits
+    $this->_ref_echange_hprim = $this->loadBackRefs("echanges_hprim", $order);
+  }
+	
+	function countEchangeHprim() {
+    // Récupération de tous les échanges produits
+    $this->_nb_echange_hprim = $this->countBackRefs("echanges_hprim");
   }
   
   function getPerm($permType) {

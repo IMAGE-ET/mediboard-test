@@ -54,7 +54,7 @@ if($echange_hprim->_id) {
   $domGetEvenement->formatOutput = true;
   $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
   
-  $echange_hprim->message = utf8_decode($domGetEvenement->saveXML());
+  $echange_hprim->message = utf8_encode($domGetEvenement->saveXML());
   
   if ($echange_hprim->acquittement) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
@@ -88,10 +88,11 @@ if($echange_hprim->_id) {
   if ($statut_acquittement) {
     $where["statut_acquittement"] = " = '".$statut_acquittement."'";
   }
+	if ($msg_evenement) {
+		$where["type"] = " = '".$msg_evenement."'";
+	}
   if ($type_evenement) {
     $where["sous_type"] = " = '".$type_evenement."'";
-  } else {
-    $where["sous_type"] = "IS NOT NULL";
   }
   if (isset($t["message_invalide"])) {
     $where["message_valide"] = " = '0'";
@@ -105,11 +106,10 @@ if($echange_hprim->_id) {
   if ($id_permanent) {
     $where["id_permanent"] = " = '$id_permanent'";
   }
-  
+
   $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-  
+
   $total_echange_hprim = $itemEchangeHprim->countList($where);
-  
   $order = "date_production DESC";
   $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20");
     
@@ -117,7 +117,14 @@ if($echange_hprim->_id) {
     $_echange->loadRefNotifications();
     $_echange->getObservations();
   }
-  
+	
+	$evenements = array();
+	foreach (CEchangeHprim::$evenements as $_evt_name => $_evt_class) {
+		$class = new ReflectionClass($_evt_class);
+    $statics = $class->getStaticProperties();
+		$evenements[$_evt_name] = $statics["evenements"];
+	}
+
   $smarty->assign("echange_hprim"       , $echange_hprim);
   $smarty->assign("echangesHprim"       , $echangesHprim);
   $smarty->assign("total_echange_hprim" , $total_echange_hprim);
@@ -127,6 +134,7 @@ if($echange_hprim->_id) {
   $smarty->assign("statut_acquittement" , $statut_acquittement);
   $smarty->assign("msg_evenement"       , $msg_evenement);
   $smarty->assign("type_evenement"      , $type_evenement);
+	$smarty->assign("evenements"          , $evenements);
 }
 
 $smarty->display("vw_idx_echange_hprim.tpl");

@@ -13,10 +13,11 @@ class CDestinataireHprim extends CMbObject {
   var $dest_hprim_id  = null;
   
   // DB Fields
-  var $nom      = null;
-  var $group_id = null;
-  var $type     = null;
-  var $actif    = null;
+  var $nom       = null;
+  var $group_id  = null;
+  var $type      = null;
+	var $evenement = null;
+  var $actif     = null;
   
   // Forward references
   var $_ref_group = null;
@@ -35,10 +36,11 @@ class CDestinataireHprim extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["nom"]      = "str notNull";
-    $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["type"]     = "enum notNull list|cip|sip default|cip";
-    $specs["actif"]    = "bool notNull";
+    $specs["nom"]       = "str notNull";
+    $specs["group_id"]  = "ref notNull class|CGroups";
+    $specs["type"]      = "enum notNull list|cip|sip default|cip";
+		$specs["evenement"] = "enum list|pmsi|patients|stock default|patient";
+    $specs["actif"]     = "bool notNull";
     
     $specs["_tag_patient"] = "str";
     $specs["_tag_sejour"]  = "str";

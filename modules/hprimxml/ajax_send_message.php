@@ -38,7 +38,7 @@ if (!$echange_hprim_id) {
 	  
 	  $dest_hprim->loadMatchingObject();
     
-    if (CAppUI::conf('sip enable_send')) {
+    if ($dest_hprim->actif) {
       $source = CExchangeSource::get($dest_hprim->_guid);
       $source->setData($notification->message);
       $source->send("evenementPatient");

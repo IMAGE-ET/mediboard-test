@@ -11,6 +11,11 @@
 CAppUI::requireSystemClass('mbMetaObject');
 
 class CEchangeHprim extends CMbMetaObject {
+	static $evenements = array(
+	   "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi", 
+		 "patients" => "CHPrimXMLEvenementsPatients"  
+	);
+	
   // DB Table key
   var $echange_hprim_id     = null;
   
@@ -74,7 +79,7 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["id_permanent"]          = "str";
     $specs["compressed"]            = "bool show|0";
     $specs["object_id"]             = "ref class|CMbObject meta|object_class unlink";
-    $specs["object_class"]          = "enum list|CPatient|CSejour show|0";
+    $specs["object_class"]          = "enum list|CPatient|CSejour|COperation show|0";
     
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool notNull";

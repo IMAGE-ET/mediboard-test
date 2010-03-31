@@ -10,6 +10,9 @@
 global $can;
 $can->needsAdmin();
 
+CAppUI::stepAjax("Fonctionnalité désactivée pour le moment", UI_MSG_ERROR);
+return;
+
 $operation = new COperation;
 
 $operation->facture = "1";

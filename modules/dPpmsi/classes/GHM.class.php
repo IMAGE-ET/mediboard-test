@@ -125,6 +125,7 @@ class CGHM extends CMbObject {
       $_operation->loadRefsActesCCAM();
       $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $_operation->_ref_actes_ccam);
     }
+		$this->_ref_sejour->loadRefPatient();
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
 
     // Infos patient

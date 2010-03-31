@@ -8,75 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
+CAppUI::requireModuleClass("hprimxml", "evenementsserveuractivitepmsi");
+
+class CHPrimXMLEvenementPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
   function __construct() {
-    $version = CAppUI::conf('hprimxml evt_pmsi version');
-    if ($version == "1.01") {
-      parent::__construct("evenementPmsi", "msgEvenementsPmsi101");
-    } else if ($version == "1.05") {
-      parent::__construct("serveurActivitePmsi", "msgEvenementsPmsi105");
-    }   
-    
-    $this->evenement            = "evt_pmsi";
-    $this->destinataire         = "SANTEcom";
-    $this->destinataire_libelle = "Siemens Health Services: S@NTE.com";
-        
-    $evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($evenementsPMSI, "version", $version);
+    $this->sous_type = "evenementPMSI";
+    $this->evenement = "evt_pmsi";
+		
+    parent::__construct("evenementPmsi", "msgEvenementsPmsi");
+  }
+  
+	function generateEnteteMessage() {
+		$evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
+    $this->addAttribute($evenementsPMSI, "version", CAppUI::conf('hprimxml evt_serveuractes version'));
     
     $this->addEnteteMessage($evenementsPMSI);
   }
-  
-  function setFinalPrefix($mbSej) {
-    $this->documentfinalprefix = "sej" . sprintf("%06d", $mbSej->_id); 
-  }
-  
-  function generateFromSejour($mbSej) {
-    $this->setFinalPrefix($mbSej);
 
+  function generateFromOperation($mbSej) {
     $evenementsPMSI = $this->documentElement;
 
     $evenementPMSI = $this->addElement($evenementsPMSI, "evenementPMSI");
 
     // Ajout du patient
     $mbPatient =& $mbSej->_ref_patient;
-    
     $patient = $this->addElement($evenementPMSI, "patient");
-    $this->addPatient($patient, $mbPatient, true, null, true);
+    $this->addPatient($patient, $mbPatient, false, null, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");
-    
-    $identifiant = $this->addElement($venue, "identifiant");
-    $this->addIdentifiantPart($identifiant, "emetteur", "sj$mbSej->_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbSej->_num_dossier);
-    
-    // Entrée de séjour
-    $mbEntree = CValue::first($mbSej->entree_reelle, $mbSej->entree_prevue);
-    $entree = $this->addElement($venue, "entree");
-    $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
-    $this->addDateHeure($dateHeureOptionnelle, $mbEntree);
-    
-    // Ajout du médecin prescripteur
-    $mbPraticien =& $mbSej->_ref_praticien;
-    
-    $medecins = $this->addElement($venue, "medecins");
-    $medecin = $this->addElement($medecins, "medecin");
-    $this->addElement($medecin, "numeroAdeli", $mbPraticien->adeli);
-    $this->addAttribute($medecin, "lien", "rsp");
-    $this->addCodeLibelle($medecin, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
-    
-    // Sortie de séjour
-    $mbSortie = CValue::first($mbSej->sortie_reelle, $mbSej->sortie_prevue);
-    $sortie = $this->addElement($venue, "sortie");
-    $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
-    $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
-    
-    /*$placement = $this->addElement($venue, "Placement");
-    $modePlacement = $this->addElement($placement, "modePlacement");
-    $this->addAttribute($modePlacement, "modaliteHospitalisation", $mbSej->modalite);
-    $datePlacement = $this->addElement($placement, "datePlacement");
-    $this->addDateHeure($datePlacement, $mbEntree);*/
+    $this->addVenue($venue, $mbSej);
     
     // Ajout de la saisie délocalisée
     $saisie = $this->addElement($evenementPMSI, "saisieDelocalisee");
@@ -97,9 +58,11 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     
     // Médecin responsable
     $medecinResponsable = $this->addElement($saisie, "medecinResponsable");
+    $mbPraticien =& $mbSej->_ref_praticien;
     $this->addElement($medecinResponsable, "numeroAdeli", $mbPraticien->adeli);
     $this->addAttribute($medecinResponsable, "lien", "rsp");
     $this->addCodeLibelle($medecinResponsable, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
+		
     // Diagnostics RUM
     $diagnosticsRum = $this->addElement($saisie, "diagnosticsRum");
     $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
@@ -117,9 +80,10 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     }
     // Ajout de l'IGS2 : à faire
     $igs2 = $this->addElement($saisie, "igs2");
-    
+
     // Traitement final
     $this->purgeEmptyElements();
   }
+   
 }
 ?>
