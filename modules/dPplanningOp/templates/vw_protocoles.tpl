@@ -32,6 +32,7 @@ refreshList = function(form, types, reset) {
   url.addParam("page[interv]", $V(form["page[interv]"]));
   url.addParam("page[sejour]", $V(form["page[sejour]"]));
   url.addParam("chir_id", $V(form.chir_id));
+  url.addParam("dialog", $V(form.dialog));
   url.addParam("code_ccam", $V(form.code_ccam));
   
   types.each(function(type){
