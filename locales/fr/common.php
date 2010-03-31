@@ -47,6 +47,7 @@ $locales['Modify'] = 'Modifier';
 $locales['module--court'] = 'Connexion';
 $locales['module-all-court'] = 'Tous';
 $locales['Next'] = 'Suivant';
+$locales['Validate'] = 'Valider';
 $locales['No'] = 'Non';
 $locales['OK'] = 'OK';
 $locales['Owner'] = 'Propriétaire';
