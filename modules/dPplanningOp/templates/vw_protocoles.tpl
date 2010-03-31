@@ -28,8 +28,11 @@ refreshList = function(form, types, reset) {
   }
   
   var url = new Url("dPplanningOp","httpreq_vw_list_protocoles");
-  url.addFormData(form);
   url.addParam("protocole_id", '{{$protSel->_id}}');
+  url.addParam("page[interv]", $V(form["page[interv]"]));
+  url.addParam("page[sejour]", $V(form["page[sejour]"]));
+  url.addParam("chir_id", $V(form.chir_id));
+  url.addParam("code_ccam", $V(form.code_ccam));
   
   types.each(function(type){
     url.addParam("type", type);
@@ -57,6 +60,7 @@ Main.add(function(){
       <form name="selectFrm" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dialog" value="{{$dialog}}" />
+        <input type="hidden" {{if $dialog}} name="a" {{else}} name="tab" {{/if}} value="vw_protocoles" />
   			<input type="hidden" name="page[interv]" value="{{$page.interv}}" onchange="refreshList(this.form, ['interv'])" />
         <input type="hidden" name="page[sejour]" value="{{$page.sejour}}" onchange="refreshList(this.form, ['sejour'])"/>
         
