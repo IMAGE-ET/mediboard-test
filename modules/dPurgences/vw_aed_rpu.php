@@ -30,6 +30,7 @@ if ($rpu_id && !$rpu->load($rpu_id)) {
 
 // Création d'un RPU pour un séjour existant
 if ($sejour_id = CValue::get("sejour_id")) {
+  $rpu = new CRPU;
   $rpu->sejour_id = $sejour_id;
 	$rpu->loadMatchingObject();
   $rpu->updateFormFields();
