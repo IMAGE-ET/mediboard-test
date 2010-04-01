@@ -83,7 +83,7 @@ $listEtab = $etab->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("group"               , $group);
 $smarty->assign("line"                , new CPrescriptionLineMedicament());
 $smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);

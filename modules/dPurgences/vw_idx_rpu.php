@@ -47,7 +47,7 @@ $today = mbDate();
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("group"       , CGroups::loadCurrent());
 $smarty->assign("selAffichage", $selAffichage);
 $smarty->assign("date"        , $date);
 

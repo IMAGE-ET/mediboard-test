@@ -32,11 +32,16 @@
 	      {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
 	      <td style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">{{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}</td>
 	      {{if $acte->_id}}
+				<td>
 	        {{assign var="executant_id" value=$acte->executant_id}}
-	        {{assign var="executant" value=$listExecutants.$executant_id}}
-	      <td> 
-	        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
-          {{$executant}}
+					{{if array_key_exists($executant_id, $listExecutants)}}
+	          {{assign var="executant" value=$listExecutants.$executant_id}}
+						<div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+            {{$executant}}
+					{{else}}
+					<div class="small-info">
+				  L'éxécutant de l'acte est désactivé.
+					{{/if}}
 	        </div>
 	      </td>
 	      {{else}}

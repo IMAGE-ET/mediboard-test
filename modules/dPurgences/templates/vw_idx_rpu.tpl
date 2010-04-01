@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$group->service_urgences_id}}
+  <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
+{{else}}
 <script type="text/javascript">
 
 function showLegend() {
@@ -55,7 +58,6 @@ Main.add(function () {
 });
 
 </script>
-
 
 <ul id="tab_main_courante" class="control_tabs">
   <li style="float: right">
@@ -112,8 +114,7 @@ Main.add(function () {
 	<div id="main_courante"></div>
 </div>
 
-<div id="consultations" style="display: none;">
-</div>
+<div id="consultations" style="display: none;"></div>
 
-<div id="identito_vigilance" style="display: none;">
-</div>
+<div id="identito_vigilance" style="display: none;"></div>
+{{/if}}
