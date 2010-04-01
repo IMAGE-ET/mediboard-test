@@ -48,7 +48,7 @@ var Main = {
    */
   add: function(callback) {
     if (this.initialized) {
-      callback();
+      callback.defer();
     }
     else {
       this.callbacks.push(callback);

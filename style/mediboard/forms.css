@@ -97,6 +97,12 @@ option[value=""] {
   font-style: italic;
 }
 
+input[type=checkbox],
+input[type=radio] {
+  border: none;
+  background: none;
+}
+
 form hr {
   border-bottom: 1px solid #ddd;
   margin: 2px;

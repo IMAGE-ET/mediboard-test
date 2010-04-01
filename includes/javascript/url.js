@@ -232,12 +232,18 @@ var Url = Class.create({
 	    // Allows bigger width than input
 			onShow: function(element, update) { 
         update.style.position = 'absolute';
-        Position.clone(element, update, {
+        
+        /*Position.clone(element, update, {
           setWidth: false,
           setHeight: false, 
           offsetTop: element.offsetHeight
+        });*/
+        
+        update.setStyle({
+          marginTop: "-2px", // For the 1px borders
+          marginLeft: element.getStyle("marginLeft")
         });
-
+        
         if (oOptions.width) {
           update.style.width = oOptions.width;
         }
@@ -344,8 +350,9 @@ var Url = Class.create({
       input.observe("focus", function(){
         if (oOptions.valueElement && oOptions.valueElement.value == "")
           input.value = "";
-        else 
+        else try {
           input.select();
+        } catch(e) {}
           
         input.fire("ui:change");
         autocompleter.activate.bind(autocompleter)();
