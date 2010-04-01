@@ -171,38 +171,42 @@ reloadPatient = function(patient_id, link){
     	</button>
     </th>
     {{/if}}
-    <th>
-      {{mb_title class=CPatient field=nom}}
-      ({{$patientsCount}} {{tr}}found{{/tr}})
-    </th>
-    <th>{{mb_title class=CPatient field=naissance}}</th>
-    <th>{{mb_title class=CPatient field=adresse}}</th>
+    <th>{{tr}}CPatient{{/tr}}</th>
+    <th>{{tr}}CPatient-naissance-court{{/tr}}</th>
+    <th>{{tr}}CPatient-adresse{{/tr}}</th>
     <th style="width: 0.1%;"></th>
   </tr>
 
   {{mb_ternary var="tabPatient" test=$board 
      value="vw_full_patients&patient_id=" 
      other="vw_idx_patients&patient_id="}}
-  
-  {{foreach from=$patients item=_patient}}
-  {{mb_include module=dPpatients template=inc_list_patient_line}}
-  {{foreachelse}}
-  <tr>
-    <td colspan="100"><em>Aucun résultat exact</em></td>
-  </tr>
-  {{/foreach}}
-  {{if $patientsSoundex|@count}}
-  <tr>
+		 
+  <!-- Recherche exacte -->
+	<tr>
     <th colspan="5">
-      Résultats proches
-      ({{$patientsSoundexCount}} {{tr}}found{{/tr}})
+      <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
+      {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
     </th>
   </tr>
+  {{foreach from=$patients item=_patient}}
+    {{mb_include module=dPpatients template=inc_list_patient_line}}
+  {{foreachelse}}
+	  <tr>
+	    <td colspan="100"><em>{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</em></td>
+	  </tr>
+  {{/foreach}}
+	
+	<!-- Recherche phonétique -->
+  {{if $patientsSoundex|@count}}
+	  <tr>
+	    <th colspan="5">
+	      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
+				  {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+	    </th>
+	  </tr>
   {{/if}}
   {{foreach from=$patientsSoundex item=_patient}}
-  {{mb_include module=dPpatients template=inc_list_patient_line}}
+    {{mb_include module=dPpatients template=inc_list_patient_line}}
   {{/foreach}}
-  
 </table>
-</form>
-      
+</form>  

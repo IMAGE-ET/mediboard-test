@@ -60,16 +60,24 @@ else {
   $whereSoundex = array();
   $soundexObj   = new soundex2();
   
-  if ($name = trim($name)) {
-    $name_soundex = $soundexObj->build($name);
-    $where[] = "`nom` LIKE '$name%' OR `nom_jeune_fille` LIKE '$name%'";
-    $whereSoundex[] = "`nom_soundex2` LIKE '$name_soundex%' OR `nomjf_soundex2` LIKE '$name_soundex%'";
+	// Limitation du nombre de caractères
+  $patient_name_search    = trim($name);
+  $patient_firstName_search = trim($firstName);
+  if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
+    $patient_name_search    = substr($patient_name_search   , 0, $limit_char_search);
+    $patient_firstName_search = substr($patient_firstName_search, 0, $limit_char_search);
   }
   
-	if ($firstName = trim($firstName)) {
-    $firstName_soundex = $soundexObj->build($firstName);
-    $where["prenom"]                 = "LIKE '$firstName%'";
-    $whereSoundex["prenom_soundex2"] = "LIKE '$firstName_soundex%'";
+  if ($patient_name_search) {
+    $patient_nom_soundex = $soundexObj->build($patient_name_search);
+    $where[] = "`nom` LIKE '$patient_name_search%' OR `nom_jeune_fille` LIKE '$patient_name_search%'";
+    $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%' OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
+  }
+  
+  if ($patient_firstName_search) {
+    $patient_prenom_soundex = $soundexObj->build($patient_firstName_search);
+    $where["prenom"]                 = "LIKE '$patient_firstName_search%'";
+    $whereSoundex["prenom_soundex2"] = "LIKE '$patient_prenom_soundex%'";
   }
          
   if ($patient_year || $patient_month || $patient_day) {
@@ -86,9 +94,9 @@ else {
   $pat             = new CPatient();
   $patients        = array();
   $patientsSoundex = array();
-  
+	
   if($where){
-  $patients = $pat->loadList($where, $order, $limit);
+    $patients = $pat->loadList($where, $order, $limit);
     if ($nbExact = ($showCount - count($patients))) {
       $limit = "0, $nbExact";
       $patientsSoundex = $pat->loadList($whereSoundex, $order, $limit);
@@ -129,19 +137,20 @@ else {
   loadAdmissionsDuJour($patientsSoundex);
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
-$smarty->assign("name"             , $name            );
-$smarty->assign("firstName"        , $firstName       );
-$smarty->assign("useVitale"        , $useVitale       );
-$smarty->assign("patVitale"        , $patVitale       );
-$smarty->assign("patients"         , $patients        );
-$smarty->assign("patientsSoundex"  , $patientsSoundex );
-$smarty->assign("patient_ipp"      , $patient_ipp     );
-$smarty->assign("datePat"          , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("dPsanteInstalled"    , CModule::getInstalled("dPsante400"));
+$smarty->assign("name"                , $name            );
+$smarty->assign("firstName"           , $firstName       );
+$smarty->assign("name_search"         , $patient_name_search);
+$smarty->assign("firstName_search"    , $patient_firstName_search);
+$smarty->assign("useVitale"           , $useVitale       );
+$smarty->assign("patVitale"           , $patVitale       );
+$smarty->assign("patients"            , $patients        );
+$smarty->assign("patientsSoundex"     , $patientsSoundex );
+$smarty->assign("patient_ipp"         , $patient_ipp     );
+$smarty->assign("datePat"             , "$patient_year-$patient_month-$patient_day");
 
 $smarty->display("pat_selector.tpl");
 

@@ -244,32 +244,52 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 </form>
 {{/if}}
 
+{{if $dPconfig.dPpatients.CPatient.limit_char_search && ($name != $name_search || $firstName != $firstName_search)}}
+<div class="small-info">
+  La recherche est volontairement limitée aux {{$dPconfig.dPpatients.CPatient.limit_char_search}} premiers caractères 
+  <ul>
+    {{if $name != $name_search}}
+    <li>pour le <strong>nom</strong> : '{{$name_search}}'</li>
+    {{/if}}   
+    {{if $firstName != $firstName_search}}
+    <li>pour le <strong>prénom</strong> : '{{$firstName_search}}'</li>
+    {{/if}}   
+  </ul>
+</div>
+{{/if}}
+
 <!-- Liste de patients -->
 <table class="tbl">
   <tr>
     <th class="title" colspan="5">Choisissez un patient dans la liste</th>
   </tr>
   <tr>
-    <th align="center">Patient</th>
-    <th align="center">Date de naissance</th>
+    <th align="center">{{tr}}CPatient{{/tr}}</th>
+    <th align="center">{{tr}}CPatient-naissance-court{{/tr}}</th>
     {{if $patVitale}}
     <th align="center">{{mb_label object=$patVitale field="matricule"}}</th>
     <th align="center">{{mb_label object=$patVitale field="adresse"}}</th>
     {{else}}
-    <th align="center">Téléphone</th>
-    <th align="center">Mobile</th>
+    <th align="center">{{tr}}CPatient-tel{{/tr}}</th>
+    <th align="center">{{tr}}CPatient-tel2{{/tr}}</th>
     {{/if}}
-    <th align="center">Actions</th>
+    <th align="center">{{tr}}Actions{{/tr}}</th>
   </tr>
   
   <!-- Recherche exacte -->
+	<tr>
+    <th colspan="5">
+      <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
+			{{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+    </th>
+  </tr>
   {{foreach from=$patients item=_patient}}
     {{include file="inc_line_pat_selector.tpl"}}
   {{foreachelse}}
     {{if $name || $firstName}}
     <tr>
       <td class="button" colspan="5">
-        Aucun résultat exact
+        {{tr}}dPpatients-CPatient-no-exact-results{{/tr}}
       </td>
     </tr>
     {{/if}}
@@ -279,7 +299,8 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   {{if $patientsSoundex|@count}}
   <tr>
     <th colspan="5">
-      <em>Résultats proches</em>
+      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
+			{{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
     </th>
   </tr>
   {{/if}}

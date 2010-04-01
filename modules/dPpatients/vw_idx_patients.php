@@ -86,8 +86,8 @@ else {
 	$soundexObj   = new soundex2();
 	
 	// Limitation du nombre de caractères
-	$patient_nom_search    = $patient_nom;
-	$patient_prenom_search = $patient_prenom;
+	$patient_nom_search    = trim($patient_nom);
+  $patient_prenom_search = trim($patient_prenom);
 	if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
 	  $patient_nom_search    = substr($patient_nom_search   , 0, $limit_char_search);
 	  $patient_prenom_search = substr($patient_prenom_search, 0, $limit_char_search);
@@ -121,11 +121,6 @@ else {
 	
 	$order = "nom, prenom, naissance";
 	$pat = new CPatient();
-	
-	// Patient counts
-	$patientsCount = $where ? $pat->countList($where) : 0;
-	$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
-	$patientsSoundexCount -= $patientsCount;
 	
 	// Chargement des patients
 	if ($where) {
@@ -171,8 +166,6 @@ $smarty->assign("useVitale"           , $useVitale                );
 $smarty->assign("patVitale"           , $patVitale                );
 $smarty->assign("patients"            , $patients                 );
 $smarty->assign("patientsSoundex"     , $patientsSoundex          );
-$smarty->assign("patientsCount"       , $patientsCount            );
-$smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
 
 $smarty->assign("patient"             , $patient                  );
 $smarty->assign("board"               , 0                         );

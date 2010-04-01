@@ -1104,4 +1104,7 @@ $locales['config-dPpatients-CPatient-limit_char_search-6'] = 'à 6 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-8'] = 'à 8 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-5'] = 'à 5 caractères';
 $locales['config-dPpatients-CPatient-limit_char_search-10'] = 'à 10 caractères';
+$locales['dPpatients-CPatient-exact-results'] = 'Résultats exacts';
+$locales['dPpatients-CPatient-no-exact-results'] = 'Aucun résultat exact';
+$locales['dPpatients-CPatient-close-results'] = 'Résultats proches';
 ?>
