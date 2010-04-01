@@ -53,8 +53,7 @@ $list_protocoles  = $protocole->loadList($where, "users.user_username, libelle_s
 $total_protocoles = $protocole->countList($where, null, null, null, $ljoin);
 
 foreach ($list_protocoles as $_prot){
-  $_prot->loadRefChir();
-	$_prot->loadExtCodeCim();
+  $_prot->loadRefsFwd();
 }
 
 // Protocole selectionné
