@@ -42,5 +42,24 @@ class CPlanningWeek  {
   function addEvent(CPlanningEvent $event) {
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
+    
+    $colliding = array($event);
+    foreach($this->days[$event->day] as $_event) {
+      if ($_event->collides($event)) {
+        $colliding[] = $_event;
+      }
+    }
+    
+    $_event->offset = 0.0;
+    $_event->width = 1.0;
+      
+    $count = count($colliding);
+    
+    if ($count) {
+      foreach($colliding as $_key => $_event) {
+        $_event->width = 1 / $count;
+        $_event->offset = $_key * $_event->width;
+      }
+    }
   }
 }

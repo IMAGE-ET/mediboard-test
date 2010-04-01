@@ -20,10 +20,13 @@ $planning = new CPlanningWeek;
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 
-$planning->addEvent(new CPlanningEvent("CTruc-1", "2010-03-29 10:30", 2*60, "Evt 1"));
-$planning->addEvent(new CPlanningEvent("CTruc-2", "2010-03-30 10:20", 1.25*60, "Evt 2"));
-$planning->addEvent(new CPlanningEvent("CTruc-3", "2010-03-30 12:15", 1.0*60, "Evt 3"));
-$planning->addEvent(new CPlanningEvent("CTruc-4", "2010-04-01 15:15", 1.5*60, "Evt 4"));
+$i = 1;
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-03-29 10:30", 2*60, "Evt ".$i++, "#109618"));
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-03-30 10:20", 2*60, "Evt ".$i++));
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-03-30 10:00", 1.0*60, "Evt ".$i++, "#9F1313"));
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-04-01 12:15", 1.5*60, "Evt ".$i++, "#B08B59"));
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-04-01 13:15", 1.5*60, "Evt ".$i++, "#109618"));
+$planning->addEvent(new CPlanningEvent("CTruc-".$i, "2010-04-01 14:15", 1.5*60, "Evt ".$i++));
 
 // Création du template
 $smarty = new CSmartyDP();

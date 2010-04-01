@@ -28,10 +28,14 @@ WeekPlanning = {
       var container = $(event.guid);
       var dimensions = container.up("td").getDimensions();
       
+      var width = dimensions.width;
+      var height = dimensions.height / 60;
+     
       container.setStyle({
-        top: (event.minutes / 60 * dimensions.height)+"px",
-        height: (event.length / 60 * dimensions.height)+"px",
-        width: (dimensions.width-1)+"px"
+        top:    (event.minutes * height)+"px",
+        left:   (event.offset * width)+"px",
+        width:  (event.width * width - 1)+"px",
+        height: (event.length * height)+"px"
       });
     });
   }
@@ -74,9 +78,13 @@ Main.add(function() {
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->guid}}" class="event">
-                    <div class="time">{{$_event->start|date_format:"%H:%M"}} - {{$_event->end|date_format:"%H:%M"}}</div>
-                    <div class="body">{{$_event->title}}</div>
+                  <div id="{{$_event->guid}}" class="event" style="background-color: {{$_event->color}};">
+                    <div class="time" title="{{$_event->start|date_format:"%H:%M"}} - {{$_event->end|date_format:"%H:%M"}}">
+                      {{$_event->start|date_format:"%H:%M"}} - {{$_event->end|date_format:"%H:%M"}}
+                    </div>
+                    <div class="body">
+                      {{$_event->title}}
+                    </div>
                   </div>
                 {{/if}}
               {{/foreach}}

@@ -430,7 +430,6 @@ table#weeklyPlanning th.today {
 }
 
 .planning .event {
-  background: #9F1313;
   position: absolute;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -438,6 +437,14 @@ table#weeklyPlanning th.today {
   color: #fff;
   white-space: normal;
   font-size: 9px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.planning .event:hover {
+  margin: -1px;
+  border: 1px solid #666;
+  z-index: 100;
 }
 
 .planning .event .time {
@@ -445,6 +452,7 @@ table#weeklyPlanning th.today {
   font-size: 8px;
   font-weight: bold;
   border-bottom: 1px dotted rgba(255,255,255,0.4);
+  white-space: nowrap;
 }
 
 .planning .event .body {

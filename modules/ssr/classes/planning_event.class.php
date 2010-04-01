@@ -20,7 +20,11 @@ class CPlanningEvent  {
   var $hour   = null;
   var $minutes = null;
   
-  function __construct ($guid, $date, $length, $title = "") {
+  var $width = null;
+  var $offset = null;
+  var $color = null;
+  
+  function __construct ($guid, $date, $length, $title = "", $color = "grey") {
     $this->guid = $guid;
     
     $this->start = $date;
@@ -28,21 +32,18 @@ class CPlanningEvent  {
     $this->end = mbDateTime("+{$this->length} MINUTES", $date);
     
     $this->title = htmlentities($title);
-    
-    //$iso_date = mbTransformTime(null, $date, "%c");
-    //preg_match("/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/i", $iso_date, $match);
+    $this->color = $color;
     
     $this->day = mbDate($date);
     $this->hour = mbTransformTime(null, $date, "%H");
     $this->minutes = mbTransformTime(null, $date, "%M");
   }
   
-  function __toString() {
-    $str = mbDateToLocale($this->start);
-    $str .= " - ".mbDateToLocale(mbDateTime("+{$this->length} SECONDS", $this->start));
-    if ($this->title) {
-      $str .= " - ".$this->title;
-    }
-    return $str;
+  function collides(self $event) {
+    if ($event == $this) return false;
+    
+    return ($event->start <  $this->end   && $event->end >  $this->end  ) || 
+           ($event->start <  $this->start && $event->end >  $this->start) || 
+           ($event->start >= $this->start && $event->end <= $this->end  );
   }
 }

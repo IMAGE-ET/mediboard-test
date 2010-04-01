@@ -299,14 +299,19 @@ function prepareForm(oForm) {
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.type === "text") {
       
+      oElement.writeAttribute("autofocus", "autofocus");
+      
       var i, applets = document.applets;
+      
       if (applets.length) {
         window._focusElement = oElement;
-        var inactiveApplets = applets.length,
-            tries = 50;
+        
+        var inactiveApplets;
+        var tries = 50;
             
         function waitForApplet() {
           inactiveApplets = applets.length;
+          
           for(i = 0; i < applets.length; i++) {
             if (Prototype.Browser.IE || applets[i].isActive && applets[i].isActive()) inactiveApplets--;
             else break;
@@ -330,16 +335,18 @@ function prepareForm(oForm) {
 }
 
 function prepareForms(root) {
-	root = root || document.documentElement;
+  root = root || document.documentElement;
+  
   try {
     $(root).select("form:not(.prepared)").each(prepareForm);
-		$(root).select("button.singleclick").each(function(button) {
-			button.observe('click', function(event){
-		  	var element = Event.element(event);
+    
+    $(root).select("button.singleclick").each(function(button) {
+      button.observe('click', function(event) {
+        var element = Event.element(event);
         Form.Element.disable(element);
         Form.Element.enable.delay(1, element);
-		  } );
-		} );
+      });
+    });
   } catch (e) {}
 }
 
