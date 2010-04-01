@@ -50,6 +50,12 @@ var changePage = {
   }
 };
 
+reloadPage = function(form) {
+  $V(form["page[interv]"], 0, false);
+  $V(form["page[sejour]"], 0, false);
+  form.submit();
+}
+
 Main.add(function(){
   refreshList(getForm("selectFrm"));
 });
@@ -69,7 +75,7 @@ Main.add(function(){
           <tr>
             <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
             <td>
-              <select name="chir_id" onchange="this.form.submit()">
+              <select name="chir_id" onchange="reloadPage(this.form)">
                 <option value="" >&mdash; Tous les praticiens</option>
                 {{foreach from=$listPrat item=curr_prat}}
                 {{if $curr_prat->_ref_protocoles|@count}}
