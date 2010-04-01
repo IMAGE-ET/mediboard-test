@@ -111,18 +111,18 @@ ActesNGAP = {
     {{if !$object->_coded}}
       {{if ($can->edit || $modif_operation)}}
         <tr>
-          <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}</td>
+          <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td>
             {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
             <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
           </td>
-          <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()"}}</td>
-          <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()"}}</td>
+          <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
+          <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td id="tarifActe">
             {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
-          <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
+          <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
