@@ -13,6 +13,7 @@
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="ssr" script="cotation_rhs"}}
+{{mb_include_script module="ssr" script="planning"}}
 
 <a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
   Admettre un patient

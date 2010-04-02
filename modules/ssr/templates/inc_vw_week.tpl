@@ -9,45 +9,15 @@
 *}}
 
 <script type="text/javascript">
-WeekPlanning = {
-  events: {{$planning->events|@json}},
-  scroll: function(guid, hour_min, hour_max) {
-	  var container = $(guid);
-    var top = container.down(".hour-"+hour_min).offsetTop;
-    /*var bottom = container.down(".hour-"+hour_max).offsetTop;
-    
-    container.show().setStyle({ 
-      height: bottom-top +"px"
-    });*/
-    container.scrollTop = top;
-	},
-  updateEventsDimensions: function(){
-    this.events.each(function(event){
-      var container = $(event.guid);
-      var dimensions = container.up("td").getDimensions();
-      
-      var width = dimensions.width;
-      var height = dimensions.height / 60;
-     
-      container.setStyle({
-        top:    (event.minutes * height)+"px",
-        left:   (event.offset * width)+"px",
-        width:  (event.width * width - 1)+"px",
-        height: (event.length * height)+"px"
-      });
-    });
-  },
-  init: function(guid, hour_min, hour_max) {
-    this.scroll(guid, hour_min, hour_max);
-    this.updateEventsDimensions();
-  }
-};
-
 Main.add(function() {
-  WeekPlanning.init('{{$planning->guid}}', '{{$planning->hour_min}}', '{{$planning->hour_max}}');
+  var planning = new WeekPlanning(
+    '{{$planning->guid}}', 
+    '{{$planning->hour_min}}', 
+    '{{$planning->hour_max}}', 
+    {{$planning->events|@json}}
+  );
+  Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
 });
-
-Event.observe(window, "resize", WeekPlanning.updateEventsDimensions.bind(WeekPlanning));
 </script>
 
 <div class="planning">
@@ -62,7 +32,12 @@ Event.observe(window, "resize", WeekPlanning.updateEventsDimensions.bind(WeekPla
     <tr>
        <th></th>
     	 {{foreach from=$planning->days key=_day item=_events}}
-         <th class="hour">{{$_day|date_format:"%a %d"|nl2br}}</th>
+        {{if $_day < $planning->date_min || $_day > $planning->date_max}}
+          {{assign var=disabled value=true}}
+        {{else}}
+          {{assign var=disabled value=false}}
+        {{/if}}
+         <th class="hour {{if $disabled}}disabled{{/if}}">{{$_day|date_format:"%a %d"|nl2br}}</th>
     	 {{/foreach}}
        <th></th>
     </tr>
@@ -78,7 +53,13 @@ Event.observe(window, "resize", WeekPlanning.updateEventsDimensions.bind(WeekPla
           <th class="hour">{{$_hour}}:00</th>
           
           {{foreach from=$planning->days key=_day item=_events}}
-            <td class="segment-{{$_day}}-{{$_hour}}">
+            {{if $_day < $planning->date_min || $_day > $planning->date_max}}
+              {{assign var=disabled value=true}}
+            {{else}}
+              {{assign var=disabled value=false}}
+            {{/if}}
+            
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}

@@ -12,6 +12,8 @@ class CPlanningWeek  {
   var $guid = null;
   var $title = null;
   
+  var $date = null;
+  
   var $date_min = null;
   var $date_max = null;
   var $hour_min = "09";
@@ -30,16 +32,32 @@ class CPlanningWeek  {
 
   var $days = array();
 
-  function __construct() {
+  function __construct($date, $date_min = null, $date_max = null) {
+    $this->date = $date;
+    
+    $monday = mbDate("last monday", mbDate("+1 day", $this->date));
+    $sunday = mbDate("next sunday", $this->date);
+    
+    if ($date_min) 
+      $this->date_min = max($monday, $date_min);
+    else
+      $this->date_min = $monday;
+    
+    if ($date_max)
+      $this->date_max = min($sunday, $date_max);
+    else 
+      $this->date_max = $sunday;
+      
     // Days period
-    $today = mbDate();
-    $start = mbDate("+1 day", mbDate("last sunday", $today));
     for ($i = 0; $i < 7; $i++) {
-      $this->days[mbDate("+$i day", $start)] = array();
+      $this->days[mbDate("+$i day", $this->date_min)] = array();
     }
   }
   
   function addEvent(CPlanningEvent $event) {
+    if ($event->day < $this->date_min || $event->day > $this->date_max) 
+      return;
+      
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
     
