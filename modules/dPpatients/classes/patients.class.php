@@ -1355,6 +1355,23 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin traitant - adresse");
     }
     
+		// Employeur
+		$template->addProperty("Patient - employeur - nom"    , $this->employeur_nom);
+	  $template->addProperty("Patient - employeur - adresse", $this->employeur_adresse);
+		$template->addProperty("Patient - employeur - cp"     , $this->employeur_cp);
+		$template->addProperty("Patient - employeur - ville"  , $this->employeur_ville);
+		$template->addProperty("Patient - employeur - tel"    , $this->employeur_tel);
+		$template->addProperty("Patient - employeur - urssaf" , $this->employeur_urssaf);
+    
+    // Prevenir
+		$template->addProperty("Patient - prévenir - nom"    , $this->prevenir_nom);
+		$template->addProperty("Patient - prévenir - prénom" , $this->prevenir_prenom);
+    $template->addProperty("Patient - prévenir - adresse", $this->prevenir_adresse);
+    $template->addProperty("Patient - prévenir - cp"     , $this->prevenir_cp);
+    $template->addProperty("Patient - prévenir - ville"  , $this->prevenir_ville);
+    $template->addProperty("Patient - prévenir - tel"    , $this->prevenir_tel);
+    $template->addProperty("Patient - prévenir - parente", $this->prevenir_parente);
+	
     // Vider les anciens holders
     if ($this->_id) {
 	    for ($i = 1; $i < 4; $i++) {
