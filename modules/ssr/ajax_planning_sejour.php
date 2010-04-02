@@ -16,7 +16,7 @@ $sejour->loadRefPatient();
 
 $patient = $sejour->_ref_patient;
 
-$planning = new CPlanningWeek;
+$planning = new CPlanningWeek("2010-03-29", "2010-03-27", "2010-03-30");
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 
