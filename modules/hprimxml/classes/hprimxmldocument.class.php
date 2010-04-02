@@ -322,7 +322,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $personne = array();
     $civiliteHprimConversion = array (
       "mme"   => "mme",
-      "melle" => "mlle",
+      "mlle"  => "mlle",
       "m"     => "mr",
       "dr"    => "dr",
       "pr"    => "pr",

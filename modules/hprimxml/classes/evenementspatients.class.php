@@ -153,7 +153,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $civilite = $xpath->queryAttributNode("hprim:civiliteHprim", $node, "valeur");
     $civiliteHprimConversion = array (
       "mme"   => "mme",
-      "mlle"  => "melle",
+      "mlle"  => "mlle",
       "mr"    => "m",
       "dr"    => "dr",
       "pr"    => "pr",

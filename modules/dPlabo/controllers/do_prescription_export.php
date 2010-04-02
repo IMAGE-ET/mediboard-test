@@ -90,7 +90,7 @@ if($mbPatient->sexe == "f"){
   if($mbPatient->civilite == "enf") {
     $titre_ = "Enfant fille";
   }
-  if($mbPatient->civilite == "melle") {
+  if($mbPatient->civilite == "mlle") {
     $titre_ = "Mademoiselle";
   }
   if($mbPatient->civilite == "mme") {

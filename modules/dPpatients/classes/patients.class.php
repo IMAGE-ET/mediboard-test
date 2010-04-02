@@ -262,7 +262,7 @@ class CPatient extends CMbObject {
     $specs["centre_carte"]      = "numchar length|4";
     $specs["regime_sante"]      = "str";
     $specs["sexe"]              = "enum list|m|f default|m";
-    $specs["civilite"]          = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
+    $specs["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve default|m";
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential seekable";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
@@ -326,7 +326,7 @@ class CPatient extends CMbObject {
     $specs["assure_prenom_4"]             = "str";
     $specs["assure_nom_jeune_fille"]      = "str confidential";
     $specs["assure_sexe"]                 = "enum list|m|f default|m";
-    $specs["assure_civilite"]             = "enum list|m|mme|melle|enf|dr|pr|me|vve default|m";
+    $specs["assure_civilite"]             = "enum list|m|mme|mlle|enf|dr|pr|me|vve default|m";
     $specs["assure_naissance"]            = "birthDate confidential mask|99/99/9999 format|$3-$2-$1";
     $specs["assure_adresse"]              = "text confidential";
     $specs["assure_ville"]                = "str confidential";

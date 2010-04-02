@@ -312,7 +312,7 @@ class CModule extends CMbObject {
    * @return bool
    */
   static function exists($moduleName) {
-    return is_dir("./modules/$moduleName"); 
+    return is_file("./modules/$moduleName/index.php"); 
   }
   
   /**

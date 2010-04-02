@@ -28,7 +28,7 @@ changeCiviliteForSexe = function(element, assure) {
 	var oForm = document.editFrm.elements;
 	var valueSexe = $V(element);
 	if(valueSexe == 'm') {
-		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'melle', 'vve']);
+		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['mme', 'mlle', 'vve']);
 	} else {
 		disableOptions($(oForm[(assure ? 'assure_' : '')+'civilite']), ['m']);
 	} 

@@ -1145,7 +1145,25 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` CHANGE `code_gestion` `code_gestion` CHAR (2)";
     $this->addQuery($sql);
 							
-    $this->mod_version = "0.99";
+    $this->makeRevision("0.99");
+		
+		$sql = "ALTER TABLE `patients`
+             CHANGE `civilite` `civilite` ENUM ('m','mme','melle','mlle','enf','dr','pr','me','vve') DEFAULT 'm',
+             CHANGE `assure_civilite` `assure_civilite` ENUM ('m','mme','melle','mlle','enf','dr','pr','me','vve') DEFAULT 'm';";
+    $this->addQuery($sql);
+		
+		$sql = "UPDATE `patients` SET `civilite` = 'mlle' WHERE `civilite` = 'melle'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients` SET `assure_civilite` = 'mlle' WHERE `assure_civilite` = 'melle'";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `patients`
+             CHANGE `civilite` `civilite` ENUM ('m','mme','mlle','enf','dr','pr','me','vve') DEFAULT 'm',
+             CHANGE `assure_civilite` `assure_civilite` ENUM ('m','mme','mlle','enf','dr','pr','me','vve') DEFAULT 'm';";
+    $this->addQuery($sql);
+				
+		$this->mod_version = "1.0";
   }
 }
 
