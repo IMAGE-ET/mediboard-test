@@ -13,16 +13,31 @@ $can->needsRead();
 
 $possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id');
 
-$filters          = CValue::getOrSession('filters', array());
-$months_count     = CValue::getOrSession('months_count', 12);
-$months_relative  = CValue::getOrSession('months_relative', 0);
-$comparison       = CValue::getOrSession('comparison', $possible_filters);
-$comparison_left  = CValue::getOrSession('comparison_left');
-$comparison_right = CValue::getOrSession('comparison_right');
+$filters          = CValue::get('filters', array());
+$months_count     = CValue::get('months_count', 12);
+$months_relative  = CValue::get('months_relative', 0);
+$comparison       = CValue::get('comparison', $possible_filters);
+$comparison_left  = CValue::get('comparison_left');
+$comparison_right = CValue::get('comparison_right');
 $mode             = CValue::get('mode');
 
 foreach ($possible_filters as $n) {
   if (!isset($filters[$n])) $filters[$n] = null;
+}
+
+function fillData(&$where, $ljoin, &$serie, $dates) {
+  $d = &$serie['data'];
+  $bs = new CBloodSalvage;
+  $pos = end(array_keys($where));
+  $i = 0;
+  
+  foreach ($dates as $month => $date) {
+    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+    $count = $bs->countList($where, null, null, null, $ljoin);
+    $d[$i] = array($i, intval($count));
+    $i++;
+  }
+  unset($where[$pos]);
 }
 
 // Dates
@@ -88,19 +103,9 @@ foreach($age_areas as $key => $age) {
 	// Age calculation
   $where[] = "patients.naissance <= '$date_max' ".
 	           ($limits[1] != null ? " AND patients.naissance > '$date_min'" : "");
-	$pos = end(array_keys($where));
-	
-	$series[$key] = array('data' => null, 'label' => "$label ans");
-	$d = &$series[$key]['data'];
-	
-	$i = 0;
-	foreach ($dates as $month => $date) {
-	  $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-		$count = $bs->countList($where, null, null, null, $ljoin);
-		$d[$i] = array($i, intval($count));
-	  $i++;
-	}
-	unset($where[$pos]);
+  
+  $series[$key] = array('data' => array(), 'label' => "$label ans");
+  fillData($where, $ljoin, $series[$key], $dates);
 }
 
 // > 6h ou pas
@@ -114,19 +119,8 @@ $series = &$data['6h']['series'];
 $areas = array("< 6", ">= 6", "IS NULL");
 foreach($areas as $key => $area) {
 	$where[] = "HOUR(TIMEDIFF(blood_salvage.transfusion_end, blood_salvage.recuperation_start)) $area";
-	$pos = end(array_keys($where));
-	
-	$series[$key] = array('data' => null, 'label' => (($area == 'IS NULL') ? 'Inconnu' : $area.'h'));
-	$d = &$series[$key]['data'];
-	
-	$i = 0;
-	foreach ($dates as $month => $date) {
-	  $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-	  $count = $bs->countList($where, null, null, null, $ljoin);
-	  $d[$i] = array($i, intval($count));
-	  $i++;
-	}
-	unset($where[$pos]);
+	$series[$key] = array('data' => array(), 'label' => (($area == 'IS NULL') ? CAppUI::tr("Unknown") : $area.'h'));
+	fillData($where, $ljoin, $series[$key], $dates);
 }
 
 // H/F
@@ -141,19 +135,8 @@ $areas = array("= 'm'", "= 'f'");
 $areas_labels = array("= 'm'" => "Homme", "= 'f'" => "Femme");
 foreach($areas as $key => $area) {
   $where[] = "patients.sexe $area";
-  $pos = end(array_keys($where));
-  
-  $series[$key] = array('data' => null, 'label' => $areas_labels[$area]);
-  $d = &$series[$key]['data'];
-  
-  $i = 0;
-  foreach ($dates as $month => $date) {
-    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-    $count = $bs->countList($where, null, null, null, $ljoin);
-    $d[$i] = array($i, intval($count));
-    $i++;
-  }
-  unset($where[$pos]);
+  $series[$key] = array('data' => array(), 'label' => $areas_labels[$area]);
+  fillData($where, $ljoin, $series[$key], $dates);
 }
 
 // Codes CCAM
@@ -169,19 +152,8 @@ if ($filters['codes_ccam']) {
 	$series = &$data['ccam']['series'];
 	foreach($list_codes_ccam as $key => $ccam) {
 	  $where[] = "operations.codes_ccam LIKE '%$ccam%'";
-	  $pos = end(array_keys($where));
-	  
-	  $series[$key] = array('data' => null, 'label' => $ccam);
-	  $d = &$series[$key]['data'];
-	  
-	  $i = 0;
-	  foreach ($dates as $month => $date) {
-	    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-	    $count = $bs->countList($where, null, null, null, $ljoin);
-	    $d[$i] = array($i, intval($count));
-	    $i++;
-	  }
-	  unset($where[$pos]);
+	  $series[$key] = array('data' => array(), 'label' => $ccam);
+	  fillData($where, $ljoin, $series[$key], $dates);
 	}
 }
 
@@ -190,13 +162,13 @@ $cell_saver = new CCellSaver;
 $list_cell_savers = $cell_saver->loadList(null, "marque, modele");
 $list_cell_savers[] = null;
 
-$data['cell_saver'] = array(
+$data['cell_saver_id'] = array(
   'options' => array(
     'title' => utf8_encode('Par cell-saver')
   ),
   'data' => array()
 );
-$series = &$data['cell_saver']['series'];
+$series = &$data['cell_saver_id']['series'];
 
 // array_values() to have contiguous keys
 foreach(array_values($list_cell_savers) as $key => $_cell_saver) {
@@ -204,20 +176,36 @@ foreach(array_values($list_cell_savers) as $key => $_cell_saver) {
     $where[] = "blood_salvage.cell_saver_id = $_cell_saver->_id";
   else
     $where[] = "blood_salvage.cell_saver_id IS NULL || blood_salvage.cell_saver_id = ''";
-    
-  $pos = end(array_keys($where));
   
-  $series[$key] = array('data' => null, 'label' => $_cell_saver ? utf8_encode($_cell_saver) : CAppUI::tr("Unknown"));
-  $d = &$series[$key]['data'];
+  $series[$key] = array('data' => array(), 'label' => $_cell_saver ? utf8_encode($_cell_saver) : CAppUI::tr("Unknown"));
+  fillData($where, $ljoin, $series[$key], $dates);
+}
+
+if ($mode === "comparison") {
+  $data_left = $data[$comparison_left];
+  $data_right = ($comparison_left == $comparison_right) ? array("series" => array()) : $data[$comparison_right];
   
-  $i = 0;
-  foreach ($dates as $month => $date) {
-    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
-    $count = $bs->countList($where, null, null, null, $ljoin);
-    $d[$i] = array($i, intval($count));
-    $i++;
+  $title = $data_left["options"]["title"]." / ".$data_right["options"]["title"];
+  
+  foreach($data_right["series"] as &$_serie) {
+    $_serie["yaxis"] = 2;
+    $_serie["lines"] = array(
+      "show" => true,
+    );
+    $_serie["mouse"] = array(
+      "track" => true,
+    );
+    $_serie["bars"] = array(
+      "show" => false,
+    );
   }
-  unset($where[$pos]);
+  
+  $data = array(
+    "comp" => array(
+      "series" => array_merge($data_left["series"], $data_right["series"]),
+      "options" => $data_left["options"],
+    ),
+  );
 }
 
 // Ticks

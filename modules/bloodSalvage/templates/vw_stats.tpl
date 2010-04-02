@@ -40,11 +40,17 @@ function drawGraphs(data) {
   
   var container = $("graphs").update("");
   
+  var style = window.data.comp ? 
+     "width: 800px; height: 500px;" : 
+     "width: 600px; height: 300px;" ;
+  
   $H(window.data).each(function(pair) {
-    var graph = new Element("div", {id:"stats-"+pair.key, style:"width: 600px; height: 300px; margin: auto;"});
+    var d = pair.value;
+    if (!d || !d.series) return;
+    
+    var graph = new Element("div", {id:"stats-"+pair.key, style: style+" margin: auto;"});
     container.insert(graph);
     
-    var d = pair.value;
     d.options = Object.merge(options, d.options);
     
     Flotr.draw(
@@ -87,7 +93,7 @@ function switchMode(mode) {
     input.disabled = true;
   });
   
-  /*$$(".comparison input[type="+type+"]").each(function(input){
+  $$(".comparison input[type="+type+"]").each(function(input){
     input.show();
     input.disabled = null;
   });
@@ -95,7 +101,7 @@ function switchMode(mode) {
   if ((type == "radio") && ($$(".comparison input:checked").length < 2)) {
     $$(".comparison input[name=comparison_left]")[0].checked = true;
     $$(".comparison input[name=comparison_right]")[1].checked = true;
-  }*/
+  }
 }
 
 CCAMSelector.init = function() {
@@ -129,14 +135,62 @@ function updateTokenCcam(v) {
           <option value="6" {{if $months_count == 6}}selected="selected"{{/if}}>6 mois</option>
         </select>
       </td>
-      
+      <th>
+        <label for="_code_ccam">Codes CCAM</label>
+        <!--
+        <span class="comparison">
+          <input type="checkbox" value="1" name="comparison[_code_ccam]" />
+          <input type="radio" value="_code_ccam" name="comparison_left" />
+          <input type="radio" value="_code_ccam" name="comparison_right" />
+        </span>
+        -->
+      </th>
+      <td>
+        <input type="hidden" name="filters[codes_ccam]" value="{{$filters.codes_ccam}}" />
+        <input type="hidden" name="_class_name" value="COperation" />
+        <input type="text" name="_code_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
+        <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_code_ccam']))">{{tr}}Add{{/tr}}</button>
+      </td>
+    </tr>
+    
+    <tr>
+      <th>
+        <label for="filters[chir_id]">Chirurgien</label>
+      </th>
+      <td>
+        <select name="filters[chir_id]">
+          <option value="">&mdash; Tous</option>
+          {{foreach from=$fields.chir_id item=user}}
+          <option value="{{$user->_id}}" {{if $filters.chir_id == $user->_id}}selected="selected"{{/if}} style="border-left: #{{$user->_ref_function->color}} 5px solid;">{{$user->_view}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+      <th>Codes choisis :</th>
+      <td id="list_codes_ccam"></td>
+    </tr>
+    
+    <tr>
+      <th>
+        <label for="filters[anesth_id]">Anésthesiste</label>
+      </th>
+      <td>
+        <select name="filters[anesth_id]">
+          <option value="">&mdash; Tous</option>
+          {{foreach from=$fields.anesth_id item=user}}
+          <option value="{{$user->_id}}" {{if $filters.anesth_id == $user->_id}}selected="selected"{{/if}} style="border-left: #{{$user->_ref_function->color}} 5px solid;">{{$user->_view}}</option>
+          {{/foreach}}
+        </select>
+      </td>
       <th>
         <label for="filters[code_asa]">Code ASA</label>
+        <!--
         <span class="comparison">
-          <input type="checkbox" value="code_asa" name="comparison[]" />
+          <input type="checkbox" value="1" name="comparison[code_asa]" />
           <input type="radio" value="code_asa" name="comparison_left" />
           <input type="radio" value="code_asa" name="comparison_right" />
         </span>
+        -->
       </th>
       <td>
         <select name="filters[code_asa]">
@@ -147,67 +201,12 @@ function updateTokenCcam(v) {
         </select>
       </td>
     </tr>
-    <tr>
-      <th>
-        <label for="filters[chir_id]">Chirurgien</label>
-        <span class="comparison">
-          <input type="checkbox" value="chir_id" name="comparison[]" />
-          <input type="radio" value="chir_id" name="comparison_left" />
-          <input type="radio" value="chir_id" name="comparison_right" />
-        </span>
-      </th>
-      <td>
-        <select name="filters[chir_id]">
-          <option value="">&mdash; Tous</option>
-          {{foreach from=$fields.chir_id item=user}}
-          <option value="{{$user->_id}}" {{if $filters.chir_id == $user->_id}}selected="selected"{{/if}} style="border-left: #{{$user->_ref_function->color}} 5px solid;">{{$user->_view}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-      
-      <th>
-        <label for="_code_ccam">Codes CCAM</label>
-        <span class="comparison">
-          <input type="checkbox" value="_code_ccam" name="comparison[]" />
-          <input type="radio" value="_code_ccam" name="comparison_left" />
-          <input type="radio" value="_code_ccam" name="comparison_right" />
-        </span>
-      </th>
-      <td>
-        <input type="hidden" name="filters[codes_ccam]" value="{{$filters.codes_ccam}}" />
-        <input type="hidden" name="_class_name" value="COperation" />
-        <input type="text" name="_code_ccam" ondblclick="CCAMSelector.init()" size="10" value="" />
-				<button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
-        <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_code_ccam']))">{{tr}}Add{{/tr}}</button>
-      </td>
-    </tr>
-    
-    <tr>
-      <th>
-        <label for="filters[anesth_id]">Anésthesiste</label>
-        <span class="comparison">
-          <input type="checkbox" value="anesth_id" name="comparison[]" />
-          <input type="radio" value="anesth_id" name="comparison_left" />
-          <input type="radio" value="anesth_id" name="comparison_right" />
-        </span>
-      </th>
-      <td>
-        <select name="filters[anesth_id]">
-          <option value="">&mdash; Tous</option>
-          {{foreach from=$fields.anesth_id item=user}}
-          <option value="{{$user->_id}}" {{if $filters.anesth_id == $user->_id}}selected="selected"{{/if}} style="border-left: #{{$user->_ref_function->color}} 5px solid;">{{$user->_view}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-      <th>Codes choisis :</th>
-      <td id="list_codes_ccam"></td>
-    </tr>
     
     <tr>
       <th>
         <label for="filters[cell_saver_id]">Cell saver</label>
         <span class="comparison">
-          <input type="checkbox" value="cell_saver_id" name="comparison[]" />
+          <input type="checkbox" value="1" name="comparison[cell_saver_id]" />
           <input type="radio" value="cell_saver_id" name="comparison_left" />
           <input type="radio" value="cell_saver_id" name="comparison_right" />
         </span>
@@ -220,23 +219,30 @@ function updateTokenCcam(v) {
           {{/foreach}}
         </select>
       </td>
-      <th colspan="2"></th>
+      <th>
+        <label for="comparison[age]">Tranche d'age</label>
+        <span class="comparison">
+          <input type="checkbox" value="1" name="comparison[age]" />
+          <input type="radio" value="age" name="comparison_left" />
+          <input type="radio" value="age" name="comparison_right" />
+        </span>
+      </th>
+      <td></td>
     </tr>
     
     <tr>
-      <td colspan="4" class="button">
-        <!--
+      <th colspan="2">
         <label>
           Mode comparaison
-          <input type="checkbox" onclick="switchMode(this.checked ? 'comparison' : '')" {{if $mode == "comparison"}} checked="checked" {{/if}} />
+          <input type="checkbox" name="mode" onclick="switchMode(this.checked ? 'comparison' : '')" {{if $mode == "comparison"}} checked="checked" {{/if}} value="comparison" />
         </label>
-        -->
-        
+        <br />
         <label>
           Diagrammes en lignes
           <input type="checkbox" onclick="options = profiles[this.checked ? 'lines' : 'bars']; drawGraphs()" />
         </label>
-        
+      </th>
+      <td colspan="2">
         <button type="submit" class="search">Filtrer</button>
       </td>
     </tr>
