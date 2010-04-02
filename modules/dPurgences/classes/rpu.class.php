@@ -120,7 +120,7 @@ class CRPU extends CMbObject {
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
       "_entree"          => "dateTime",
       "_etablissement_transfert_id"        => "ref class|CEtabExterne",
-      "_etablissement_entree_transfert_id" => "ref class|CEtabExterne",  
+      "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom",  
       "_attente"           => "time",
       "_presence"          => "time",
       "_can_leave"         => "time",
@@ -191,7 +191,9 @@ class CRPU extends CMbObject {
     
     $this->_sortie = $this->_ref_sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
-    
+		$this->_etablissement_entree_transfert_id = $this->_ref_sejour->etablissement_entree_transfert_id;
+		
+		
     if (!$this->_ref_sejour->sortie_reelle) {
     	//En consultation 
     	if ($this->_ref_consult->chrono != 64) {

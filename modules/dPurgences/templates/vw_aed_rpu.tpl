@@ -202,19 +202,11 @@
 	    <td>{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
 	    
 		  <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
-		  <td>
-		     <div id="etablissement_entree_transfert" {{if !$sejour->etablissement_entree_transfert_id}}style="display:none"{{/if}}> 
-		       {{assign var=_transfert_id value=$sejour->etablissement_entree_transfert_id}}
-		       {{if $listEtab|@count}}
-					 <select name="_etablissement_entree_transfert_id">
-						 <option value="">&mdash; Etablissement de transfert</option>
-					   {{foreach from=$listEtab item="etab"}}
-						 <option value="{{$etab->_id}}" {{if $etab->_id == $_transfert_id}}selected="selected"{{/if}}>{{$etab->_view}}</option>
-						 {{/foreach}}
-					</select>
-					{{/if}}
-	       </div>
-		  </td>
+			<td>
+				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_transfert_id}}style="display:none"{{/if}}>
+				  {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+			  </div>
+			</td>	
 	  </tr>
 	
 	  <tr>

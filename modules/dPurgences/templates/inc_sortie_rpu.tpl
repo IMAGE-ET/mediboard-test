@@ -135,13 +135,10 @@
        </tr>
        <tr>
         <td>
-         <div id="listEtabs-{{$sejour->_id}}">
-           {{if $sejour->mode_sortie == "transfert"}}
-             {{assign var=_transfert_id value=$sejour->etablissement_transfert_id}}
-             {{include file="../../dPurgences/templates/inc_vw_etab_externes.tpl"}}
-           {{/if}}
-         </div>
-        </td>
+					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != 'transfert'}}style="visibility: hidden"{{/if}}>
+            {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
+          </div>
+				</td>
        </tr>
       {{/if}}
       </table>

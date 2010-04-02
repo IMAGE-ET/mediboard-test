@@ -23,6 +23,6 @@
    {{/foreach}}
  </optgroup>
  {{foreachelse}}
- <option value="">Aucun service disponibke</option>
+ <option value="">Aucun service disponible</option>
  {{/foreach}}
 </select>

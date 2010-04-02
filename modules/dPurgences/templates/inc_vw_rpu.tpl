@@ -67,15 +67,13 @@ function validCotation() {
 
 function loadTransfert(mode_sortie){
   // si Transfert, affichage du select
-  if($('listEtabs')){
-	  if(mode_sortie=="transfert"){
-	    var url = new Url();
-	    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
-	    url.requestUpdate('listEtabs');
-	  } else {
-	    // sinon, on vide le contenu de la div
-	    $("listEtabs").innerHTML = "";
-	  }
+  if($('etablissement_sortie_transfert')){
+    if(mode_sortie=="transfert"){
+      $('etablissement_sortie_transfert').setVisibility(true);
+    } else {
+      $('etablissement_sortie_transfert').setVisibility(false);
+      $V(getForm('editSejour').etablissement_transfert_id, '');
+    }
   }
 }
 
@@ -90,6 +88,15 @@ function printDossier(id) {
   url.popup(700, 550, "RPU");
 }
 
+function showEtabEntreeTransfert(mode) {
+  // mode de transfert = transfert (7)
+  if (mode == 7) {
+    $('etablissement_entree_transfert').show();
+  } else {
+    $('etablissement_entree_transfert').hide();
+    $V(getForm('editRPU')._etablissement_entree_transfert_id, '');
+  }
+}
 
 </script>
 
@@ -101,6 +108,9 @@ function printDossier(id) {
 			  <input type="hidden" name="m" value="dPurgences" />
 			  <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+				<input type="hidden" name="sejour_id" value="{{$rpu->sejour_id}}" />
+				<input type="hidden" name="_bind_sejour" value="1" />
+				
 				<table class="form">
 				  <tr>
 				    <th class="category" colspan="2">Prise en charge infirmier</th>
@@ -139,10 +149,19 @@ function printDossier(id) {
 				  
 				  <tr> 
 				    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
 			    </tr>
 			    
-			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+					<tr>
+						<th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
+			      <td>
+			        <div id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
+			          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+			        </div>
+           </td> 
+					</tr>
+			    
+					{{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urprov"}}</th>
 				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
@@ -225,11 +244,12 @@ function printDossier(id) {
 				    <td>
 				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value);submitSejour();loadTransfert(this.value);"}}
 				      {{if !$rpu->mutation_sejour_id}}
-				      <div id="listEtabs">
-				        {{if $sejour->mode_sortie == "transfert"}}
-				          {{include file="../../dPurgences/templates/inc_vw_etab_externes.tpl" _transfert_id=$sejour->etablissement_transfert_id}}
-				        {{/if}}
-				      </div>
+				   
+							  <div id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != 'transfert'}}style="visibility:hidden;"{{/if}}>
+	                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+	              </div>
+              
+							
 				      {{else}}
 				      <strong>
 				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
