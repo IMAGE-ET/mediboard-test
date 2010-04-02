@@ -146,7 +146,7 @@
 			    {{/if}}
 		
 		    {{else}}
-		      {{include file="inc_vw_attente.tpl" sejour=$curr_sejour}}
+		      {{include file="inc_attente.tpl" sejour=$curr_sejour}}
 	      {{/if}}
 	    </td>
     

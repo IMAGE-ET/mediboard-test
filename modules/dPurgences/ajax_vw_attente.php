@@ -16,6 +16,6 @@ $rpu->load($rpu_id);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("rpu"   , $rpu);
-$smarty->display("inc_vw_radio.tpl");
+$smarty->display("inc_vw_attente.tpl");
 
 ?>

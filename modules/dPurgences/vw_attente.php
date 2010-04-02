@@ -23,7 +23,7 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
   
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
-$where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL)";
+$where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
 
 $listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 
@@ -44,5 +44,5 @@ $smarty->assign("listSejours", $listSejours);
 $smarty->assign("date", $date);
 $smarty->assign("today", $today);
 
-$smarty->display("vw_radio.tpl");
+$smarty->display("vw_attente.tpl");
 ?>

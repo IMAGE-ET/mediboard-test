@@ -145,8 +145,20 @@ class CSetupdPurgences extends CSetup {
               ADD INDEX (`rpu_id`),
               ADD INDEX (`extract_passages_id`);";
     $this->addQuery($sql);
+		
+		$this->makeRevision("0.24");
+      
+    $sql = "ALTER TABLE `rpu` 
+              ADD `specia_att` DATETIME,
+              ADD `specia_arr` DATETIME;";
+    $this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `rpu` 
+              ADD INDEX (`specia_att`),
+              ADD INDEX (`specia_arr`);";
+    $this->addQuery($sql);
         
-    $this->mod_version = "0.24";
+    $this->mod_version = "0.25";
   }  
 }
 

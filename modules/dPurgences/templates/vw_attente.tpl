@@ -31,13 +31,20 @@ Main.add(function () {
 </table>
 
 <table class="tbl">
+	<tr>
+		<th class="title" rowspan="2">{{tr}}CRPU-_patient_id{{/tr}}</th>
+		<th class="title" rowspan="2">{{tr}}CRPU-_responsable_id{{/tr}}</th>
+		<th class="title" colspan="2">{{tr}}CRPU-radio{{/tr}}</th>
+		<th class="title" colspan="2">{{tr}}CRPU-bio{{/tr}}</th>
+		<th class="title" colspan="2">{{tr}}CRPU-specia{{/tr}}</th>
+  </tr>
   <tr>
-    <th>{{mb_title class=CRPU field="_patient_id"}}</th>
-    <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     <th>{{mb_title class=CRPU field="radio_debut"}}</th>
     <th>{{mb_title class=CRPU field="radio_fin"}}</th>
     <th>{{mb_title class=CRPU field="bio_depart"}}</th>
     <th>{{mb_title class=CRPU field="bio_retour"}}</th>
+		<th>{{mb_title class=CRPU field="specia_att"}}</th>
+    <th>{{mb_title class=CRPU field="specia_arr"}}</th>
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=rpu value=$_sejour->_ref_rpu}}
@@ -66,10 +73,12 @@ Main.add(function () {
 	      </a>
       </td>
       
-      <td>{{mb_value object=$rpu field="radio_debut"}}</td>
-      <td>{{mb_value object=$rpu field="radio_fin"}}</td>
-      <td>{{mb_value object=$rpu field="bio_depart"}}</td>
-      <td>{{mb_value object=$rpu field="bio_retour"}}</td>
+      <td>{{$rpu->radio_debut|date_format:$dPconfig.time}}</td>
+      <td>{{$rpu->radio_fin|date_format:$dPconfig.time}}</td>
+      <td>{{$rpu->bio_depart|date_format:$dPconfig.time}}</td>
+      <td>{{$rpu->bio_retour|date_format:$dPconfig.time}}</td>
+			<td>{{$rpu->specia_att|date_format:$dPconfig.time}}</td>
+      <td>{{$rpu->specia_arr|date_format:$dPconfig.time}}</td>
     </tr>
   {{/foreach}}
 </table>

@@ -1,4 +1,4 @@
-{{* $Id: inc_vw_radio.tpl 6473 2009-06-24 15:18:19Z lryo $ *}}
+{{* $Id: inc_horodatage_field.tpl 6473 2009-06-24 15:18:19Z lryo $ *}}
 
 {{*
  * @package Mediboard

@@ -14,7 +14,7 @@ $module->registerTab("vw_idx_rpu"       , TAB_READ);
 $module->registerTab("vw_aed_rpu"       , TAB_READ);
 $module->registerTab("edit_consultation", TAB_EDIT);
 $module->registerTab("vw_sortie_rpu"    , TAB_READ);
-$module->registerTab("vw_radio"         , TAB_READ);
+$module->registerTab("vw_attente"       , TAB_READ);
 
 if (isset(CModule::$active["dPstock"])) {
   $module->registerTab("vw_stock_order" , TAB_READ);
