@@ -21,9 +21,7 @@ WeekPlanning = {
     });*/
     container.scrollTop = top;
 	},
-  init: function(guid, hour_min, hour_max) {
-    this.scroll(guid, hour_min, hour_max);
-    
+  updateEventsDimensions: function(){
     this.events.each(function(event){
       var container = $(event.guid);
       var dimensions = container.up("td").getDimensions();
@@ -38,12 +36,18 @@ WeekPlanning = {
         height: (event.length * height)+"px"
       });
     });
+  },
+  init: function(guid, hour_min, hour_max) {
+    this.scroll(guid, hour_min, hour_max);
+    this.updateEventsDimensions();
   }
 };
-	
+
 Main.add(function() {
   WeekPlanning.init('{{$planning->guid}}', '{{$planning->hour_min}}', '{{$planning->hour_max}}');
 });
+
+Event.observe(window, "resize", WeekPlanning.updateEventsDimensions.bind(WeekPlanning));
 </script>
 
 <div class="planning">
