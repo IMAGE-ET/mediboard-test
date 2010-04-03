@@ -12,6 +12,8 @@
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=100" /> <!-- IE8+ mode -->
+  
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{if $uistyle != 'mediboard'}}
     {{$mediboardCommonStyle|smarty:nodefaults}}

@@ -10,7 +10,7 @@
 
 {{mb_include_script module=system script=object_selector}}
 
-<script>
+<script type="text/javascript">
 
 var objectsList = [];
 

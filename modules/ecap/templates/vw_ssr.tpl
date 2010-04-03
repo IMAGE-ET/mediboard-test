@@ -89,7 +89,7 @@
 
           <td>
               {{if $sejour->_id && $group->_id}}
-							  <script>
+							  <script type="text/javascript">
 							  	SSR = {
 									  redirect: function(button, group_id, sejour_id) {
 										  var form = button.form;
