@@ -40,7 +40,7 @@ header("Content-type: text/html; charset=iso-8859-1");
     Merci de réessayer ultérieurement.
   </h2>
   <br />
-  <a class="button" href="index.php">Accéder à Mediboard</a>
+  <a class="button change" href="index.php">Accéder à Mediboard</a>
 </body>
 
 </html>
