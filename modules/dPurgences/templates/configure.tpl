@@ -37,7 +37,6 @@
   </tr>
 
   {{mb_include module=system template=inc_config_enum var=default_view values="tous|presents"}}
-  {{mb_include module=system template=inc_config_bool var=motif_rpu_view}}
   {{mb_include module=system template=inc_config_bool var=age_patient_rpu_view}}
   {{mb_include module=system template=inc_config_bool var=responsable_rpu_view}}
   {{mb_include module=system template=inc_config_bool var=diag_prat_view}}
