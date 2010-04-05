@@ -396,4 +396,6 @@ $locales['config-dPurgences-output_mode_required'] = '';
 $locales['config-dPurgences-output_mode_required-desc'] = '';
 $locales['config-dPurgences-reponsable_id_notNull'] = '';
 $locales['config-dPurgences-reponsable_id_notNull-desc'] = '';
+$locales['config-dPurgences-check_cotation'] = 'Vérifier la cotation';
+$locales['config-dPurgences-check_cotation-desc'] = 'Vérifier que la cotation des actes CCAM et NGAP a été réalisé et validé par le praticien dans l\'onglet des sorties';
 ?>

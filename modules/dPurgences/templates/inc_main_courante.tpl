@@ -173,6 +173,7 @@
     {{/if}}
   </tr>
   
-  
+  {{foreachelse}}
+  <tr><td colspan=="10"><em>Aucun séjour dans la main courante</em></td></tr>
   {{/foreach}}
 </table>

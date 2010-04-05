@@ -590,6 +590,7 @@ $dPconfig["dPurgences"] = array (
   "age_patient_rpu_view"  => "0",
   "responsable_rpu_view"  => "1",
   "diag_prat_view"        => "0",
+  "check_cotation"        => "1",
   "sortie_prevue"         => "sameday",
   "only_prat_responsable" => "0",
   "rpu_sender"            => "",
