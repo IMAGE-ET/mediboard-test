@@ -91,6 +91,7 @@
 		<td class="cancelled">
       {{include file="inc_pec_praticien.tpl"}}
     </td>
+		
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
     	{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
@@ -125,7 +126,7 @@
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <td class="text" style="background-color: {{$background}};">
       <a href="{{$rpu_link}}">
-        {{$curr_sejour->_ref_praticien->_view}}
+        {{$curr_sejour->_ref_praticien}}
       </a>
     </td>
     {{/if}}
@@ -136,7 +137,7 @@
 			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
 			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
 			      {{if $date != $consult->_ref_plageconsult->date}}
-			      <br/>le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
 			      {{/if}}
 			    </a>
 			    {{if !$curr_sejour->sortie_reelle}}

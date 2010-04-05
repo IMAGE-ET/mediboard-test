@@ -9,3 +9,7 @@
 *}}
 
 {{mb_value object=$sejour->_ref_rpu field=_attente}}
+{{if $curr_sejour->sortie_reelle}}
+  <br />(sortie à {{$curr_sejour->sortie_reelle|date_format:$dPconfig.time}})
+{{/if}}
+
