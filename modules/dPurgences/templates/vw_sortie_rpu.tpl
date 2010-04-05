@@ -144,7 +144,9 @@ function submitSejour(){
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
+    {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
+    {{/if}}
     <th>Prise en charge</th>
     <th>{{mb_title class=CRPU field="rpu_id"}}</th>
     <th>{{mb_title class=CRPU field="sejour_id"}}</th>

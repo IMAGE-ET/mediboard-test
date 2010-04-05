@@ -31,7 +31,7 @@ $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 $where = array();
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
-$where["consultation.consultation_id"] = "IS NOT NULL";
+$where["rpu.rpu_id"] = "IS NOT NULL";
 
 if($selAffichage == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
@@ -67,6 +67,11 @@ $contrainteDestination["normal"] = array("", 6, 7);
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
+// Praticiens urgentistes
+$group = CGroups::loadCurrent();
+
+$listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
@@ -76,6 +81,7 @@ $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);
 $smarty->assign("listSejours", $listSejours);
 $smarty->assign("selAffichage", $selAffichage);
+$smarty->assign("listPrats", $listPrats);
 $smarty->assign("date", $date);
 $smarty->assign("today", $today);
 

@@ -177,43 +177,46 @@ class CRPU extends CMbObject {
     $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
     
     // Calcul des valeurs de _mode_sortie
-    if ($this->_ref_sejour->mode_sortie == "transtert" && $this->mutation_sejour_id) {
+    if ($sejour->mode_sortie == "transtert" && $this->mutation_sejour_id) {
     	$this->_mode_sortie = 6;
     }
     
-    if ($this->_ref_sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id) {
+    if ($sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id) {
     	$this->_mode_sortie = 7; 
     }
     
-    if ($this->_ref_sejour->mode_sortie == "normal") {
+    if ($sejour->mode_sortie == "normal") {
     	$this->_mode_sortie = 8;
     }
     
-    if ($this->_ref_sejour->mode_sortie == "deces") {
+    if ($sejour->mode_sortie == "deces") {
     	$this->_mode_sortie = 9;
     }
     
-    $this->_sortie = $this->_ref_sejour->sortie_reelle;
-    $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
-		$this->_etablissement_entree_transfert_id = $this->_ref_sejour->etablissement_entree_transfert_id;
+    $this->_sortie = $sejour->sortie_reelle;
+    $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
+		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
 		
 		
-    if (!$this->_ref_sejour->sortie_reelle) {
-    	//En consultation 
+    if (!$sejour->sortie_reelle) {
+      $this->_can_leave_warning = !$this->_ref_consult->_id;
+    	// En consultation 
     	if ($this->_ref_consult->chrono != 64) {
     	  $this->_can_leave = -1;
-      } else {
-      	if (mbTime($this->_ref_sejour->sortie_prevue) > mbTime()) {
+      } 
+			else {
+      	if (mbTime($sejour->sortie_prevue) > mbTime()) {
       		$this->_can_leave_since = true;
-      		$this->_can_leave = mbTimeRelative(mbTime(), mbTime($this->_ref_sejour->sortie_prevue));
+      		$this->_can_leave = mbTimeRelative(mbTime(), mbTime($sejour->sortie_prevue));
       	} else {
       		$this->_can_leave_about = true;
-      		$this->_can_leave = mbTimeRelative(mbTime($this->_ref_sejour->sortie_prevue), mbTime());
+      		$this->_can_leave = mbTimeRelative(mbTime($sejour->sortie_prevue), mbTime());
       	}
       	
-      	$this->_can_leave_warning = (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave) 
-      	                                   && ($this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time"));
-        $this->_can_leave_error   = ($this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time"));
+      	$this->_can_leave_warning = 
+				  CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave && 
+					$this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time");
+        $this->_can_leave_error   = $this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time");
       }
     }
   }

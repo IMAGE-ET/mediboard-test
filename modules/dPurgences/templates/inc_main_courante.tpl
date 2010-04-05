@@ -14,7 +14,7 @@
     <th>{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
-    <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
+    <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th>{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
@@ -48,7 +48,7 @@
 	  {{else}}
 
     <td class="ccmu-{{$rpu->ccmu}}">
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;{{$rpu_link_param}}">
+      <a href="{{$rpu_link}}">
         {{if $rpu->ccmu}}
 				  {{mb_value object=$rpu field=ccmu}}
         {{/if}}
@@ -66,15 +66,7 @@
 	  {{else}}
     <td class="text" style="background-color: {{$background}};">
     {{/if}}
-      <a href="{{$rpu_link}}">
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
-          <big>{{$patient}}</big> 
-        </strong>
-      </a>
-      
-      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
-      {{if $dPconfig.dPurgences.age_patient_rpu_view}}{{$patient->_age}} ans{{/if}}
-      
+      {{mb_include template=inc_rpu_patient}}
     </td>
 
   	{{if $curr_sejour->annule}}
@@ -126,7 +118,7 @@
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <td class="text" style="background-color: {{$background}};">
       <a href="{{$rpu_link}}">
-        {{$curr_sejour->_ref_praticien}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sejour->_ref_praticien}}
       </a>
     </td>
     {{/if}}

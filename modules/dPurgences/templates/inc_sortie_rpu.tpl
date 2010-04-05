@@ -1,27 +1,29 @@
+{{assign var=sejour_id value=$sejour->_id}}
+
 {{assign var=rpu value=$sejour->_ref_rpu}}
+{{assign var=rpu_id value=$rpu->_id}}
+
 {{assign var=patient value=$sejour->_ref_patient}}
+{{assign var=atu value=$sejour->_ref_consult_atu}}
+
+{{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
+{{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
+
 <td {{if $sejour->annule}}class="cancelled"{{/if}}>
   
-  <form name="validCotation-{{$sejour->_ref_consult_atu->_id}}" action="" method="post"> 
+  <form name="validCotation-{{$atu->_id}}" action="" method="post"> 
     <input type="hidden" name="dosql" value="do_consultation_aed" />
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="consultation_id" value="{{$sejour->_ref_consult_atu->_id}}" />
+    <input type="hidden" name="consultation_id" value="{{$atu->_id}}" />
     <input type="hidden" name="valide" value="1" />    
   </form>
 
-  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-      <img src="images/icons/edit.png" alt="modifier" />
-  </a>
-
-  <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
-    {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}<br />
-    <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">{{$patient->_view}}</strong>
-  </a>
+  {{mb_include template=inc_rpu_patient}}
 </td>
 
 {{if $sejour->annule}}
-<td class="cancelled" colspan="5">
+<td class="cancelled" colspan="10">
   {{if $rpu->mutation_sejour_id}}
   Hospitalisation
   <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
@@ -31,18 +33,19 @@
   {{tr}}Cancelled{{/tr}}
   {{/if}}
 </td>
+
 {{else}}
+{{if $dPconfig.dPurgences.responsable_rpu_view}}
 <td>
-  <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_praticien->_guid}};')">
-      {{$sejour->_ref_praticien->_view}}
-    </span>
+  <a href="{{$rpu_link}}">
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
   </a>
 </td>
+{{/if}}
 
 <td class="button">
-        {{include file="inc_pec_praticien.tpl"}}
-      </td>
+  {{include file="inc_pec_praticien.tpl"}}
+</td>
 
 <td>
   <!-- Vérification des champs semi obligatoires -->
@@ -128,7 +131,7 @@
           
           {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value);"}}
           <input type="hidden" name="_modifier_sortie" value="1" />
-          <button class="tick" type="button" onclick="validCotation('{{$sejour->_ref_consult_atu->_id}}'); onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
+          <button class="tick" type="button" onclick="{{if $atu->_id}}validCotation('{{$atu->_id}}');{{/if}} onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
             Effectuer la sortie
           </button>
          </td>
@@ -144,11 +147,17 @@
       </table>
     </form>
   </td>
-  <td id="rpu-{{$rpu->_id}}" {{if !$sejour->sortie_reelle}}class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"{{/if}}>
+  <td id="rpu-{{$rpu->_id}}" 
+	  {{if !$sejour->sortie_reelle}}
+		  class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"{{/if}}>
     {{if $sejour->sortie_reelle}}
       
     {{elseif $rpu->_can_leave == -1}}
-      {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
+		  {{if !$atu->_id}} 
+        Pas encore de prise en charge <br />
+ 		  {{else}}
+        {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
+		  {{/if}}
       {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
     {{elseif $rpu->_can_leave != -1 && !$rpu->sortie_autorisee}}
       {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.64{{/tr}} <br />
@@ -164,4 +173,4 @@
       {{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
     {{/if}}
   </td>
-  {{/if}}
+{{/if}}
