@@ -33,5 +33,5 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("consult", $consult);
 $smarty->assign("rpu"   , $rpu);
 
-$smarty->display("inc_sortie_prevue.tpl");
+$smarty->display("inc_sortie_reelle.tpl");
 ?>

@@ -150,11 +150,16 @@
       </table>
     </form>
   </td>
-  <td id="rpu-{{$rpu->_id}}" 
+  <td id="rpu-{{$rpu->_id}}"
+  	{{if $sejour->sortie_reelle}} 
+  		class="{{if !$rpu->sortie_autorisee}}arretee error{{/if}}"
+  	{{/if}}
 	  {{if !$sejour->sortie_reelle}}
 		  class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"{{/if}}>
     {{if $sejour->sortie_reelle}}
-      
+    	{{if !$rpu->sortie_autorisee}}
+      	{{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
+      {{/if}}
     {{elseif $rpu->_can_leave == -1}}
 		  {{if !$atu->_id}} 
         Pas encore de prise en charge <br />

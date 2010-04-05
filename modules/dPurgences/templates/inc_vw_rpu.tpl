@@ -16,12 +16,12 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function reloadSortiePrevue() {
+function reloadSortieReelle() {
 	var url = new Url;
-	url.setModuleAction("dPurgences", "ajax_sortie_prevue");
-	url.addParam("sejour_id", getForm('editSortiePrevue').elements.sejour_id.value);
+	url.setModuleAction("dPurgences", "ajax_sortie_reelle");
+	url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
 	url.addParam("consult_id", getForm('formValidCotation').elements.consultation_id.value);
-	url.requestUpdate('div_sortie_prevue');
+	url.requestUpdate('div_sortie_reelle');
 }
 
 function submitSejour(){
@@ -38,8 +38,8 @@ function redir(){
   }
 }
 
-function submitSejourWithSortiePrevue(){
-  submitFormAjax(getForm('editSortiePrevue'), 'systemMsg', { onComplete : function(){ reloadSortiePrevue(); redir(); }});
+function submitSejourWithSortieReelle(){
+  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : function(){ reloadSortieReelle(); redir(); }});
 }
 
 function submitConsultWithChrono(chrono) {
@@ -50,12 +50,12 @@ function submitConsultWithChrono(chrono) {
 
 function submitRPU() {
 	var oForm = document.editSortieAutorise;
-	submitFormAjax(oForm, 'systemMsg', { onComplete : redir });
+	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle(); redir(); }});
 }
 
 function submitSejRpuConsult() {
 	if (checkForm(getForm("editRPU")) && checkForm(getForm("editRPUDest"))) {
-		submitSejourWithSortiePrevue(); 
+		submitSejourWithSortieReelle(); 
 		submitRPU();
 	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
 	}
@@ -362,8 +362,8 @@ function showEtabEntreeTransfert(mode) {
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
         <input type="hidden" name="sortie_autorisee" value="1" />
       </form>
-      <span id="div_sortie_prevue">
-        {{include file="../../dPurgences/templates/inc_sortie_prevue.tpl"}}
+      <span id="div_sortie_reelle">
+        {{include file="../../dPurgences/templates/inc_sortie_reelle.tpl"}}
       </span>
       
       <button type="button" class="print" onclick="printDossier({{$rpu->_id}})">

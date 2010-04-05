@@ -23,8 +23,11 @@ foreach($rpus as $_rpu_id) {
   
   $_sortie_autorisee = $rpu->sortie_autorisee ? CAppUI::tr('CRPU-sortie_assuree.1') : CAppUI::tr('CRPU-sortie_assuree.0');
   
+  $listRpu[$_rpu_id]["value"] = "";
   if ($rpu->_ref_sejour->sortie_reelle) {
-  	$listRpu[$_rpu_id]["value"] = "";
+  	if (!$rpu->sortie_autorisee) {
+  		$listRpu[$_rpu_id]["value"] = $_sortie_autorisee;
+  	}
   } else if ($rpu->_can_leave == -1) {
 		$listRpu[$_rpu_id]["value"] = CAppUI::tr("CConsultation")." ".CAppUI::tr("CConsultation.chrono.48")."<br />".$_sortie_autorisee;
 	} else {
@@ -45,8 +48,11 @@ foreach($rpus as $_rpu_id) {
 	
 	
 	$_class_sortie_autorise = $rpu->sortie_autorisee ? "" : "arretee"; 
+	$listRpu[$_rpu_id]["alert"] = "";
 	if ($rpu->_ref_sejour->sortie_reelle) {
-		$listRpu[$_rpu_id]["alert"] = "";
+		if (!$rpu->sortie_autorisee) {
+			$listRpu[$_rpu_id]["alert"] = "$_class_sortie_autorise error";
+		}
 	} else if ($rpu->_can_leave_warning) {
 		$listRpu[$_rpu_id]["alert"] = "$_class_sortie_autorise warning";
 	} else if ($rpu->_can_leave_error) {
