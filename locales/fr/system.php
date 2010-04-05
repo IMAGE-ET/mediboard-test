@@ -687,4 +687,12 @@ $locales['config-appareils_antecedents-7'] = '';
 $locales['config-appareils_antecedents-7-desc'] = '';
 $locales['config-appareils_antecedents-8'] = '';
 $locales['config-appareils_antecedents-8-desc'] = '';
+$locales['config-alternative_mode'] = 'Mode alternatif';
+$locales['config-alternative_mode-desc'] = 'Mode alternatif';
+$locales['config-dPImeds-remote_url'] = '';
+$locales['config-dPImeds-remote_url-desc'] = '';
+$locales['config-dPImeds-soap_url'] = '';
+$locales['config-dPImeds-soap_url-desc'] = '';
+$locales['config-dPImeds-url'] = '';
+$locales['config-dPImeds-url-desc'] = '';
 ?>

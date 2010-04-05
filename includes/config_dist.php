@@ -17,6 +17,7 @@ $dPconfig["base_url"]     = "http://localhost/mediboard/";
 $dPconfig["offline"]       = "0";
 $dPconfig["instance_role"] = "qualif";
 $dPconfig["mb_id"]         = "";
+$dPconfig["alternative_mode"] = "0";
 
 $dPconfig["date"]         = "%d/%m/%Y";
 $dPconfig["time"]         = "%Hh%M";

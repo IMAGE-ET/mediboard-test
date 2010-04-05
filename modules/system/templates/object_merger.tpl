@@ -40,7 +40,7 @@ Main.add(function () {
 
 {{if $alternative_mode}}
   <div class="small-info">
-    Vous êtes en mode SIP, vous ne pourrez fusionner que deux objets au maximum.
+    Vous êtes en mode alternatif, vous ne pourrez fusionner que deux objets au maximum.
   </div>
 {{/if}}
 

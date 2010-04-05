@@ -14,6 +14,8 @@
   <table class="form">
     {{mb_include module=system template=inc_config_enum var=instance_role values="prod|qualif"}}
     
+    {{mb_include module=system template=inc_config_bool var=alternative_mode}}
+    
     {{mb_include module=system template=inc_config_str var=page_title}}
     
     {{mb_include module=system template=inc_config_str var=mb_id}}

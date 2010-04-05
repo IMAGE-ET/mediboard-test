@@ -79,8 +79,6 @@ foreach ($statuses as $status) {
 	$counts[$status]++;
 }
 
-$alternative_mode = CModule::getActive("sip") && @CAppUI::conf("object_handlers CSipObjectHandler");
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -92,7 +90,7 @@ $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
 $smarty->assign("list_classes", getInstalledClasses());
-$smarty->assign("alternative_mode", $alternative_mode);
+$smarty->assign("alternative_mode", CAppUI::conf("alternative_mode"));
 $smarty->assign("readonly_class", $readonly_class);
 
 $merger_template = $result ? "../../{$result->_ref_module->mod_name}/templates/{$result->_class_name}_merger.tpl" : '';
