@@ -61,7 +61,7 @@ checkPraticien = function(oForm){
 		  &mdash;
 		{{/if}}
 	{{else}}
-	  {{tr}}CRPU.orientation.PSA{{/tr}}
+	  {{tr}}PEC non saisie{{/tr}}
 	{{/if}}
 
 
