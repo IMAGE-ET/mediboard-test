@@ -48,7 +48,9 @@ if ($rpu->_id || $rpu->sejour_id) {
   $patient->loadIPP();
   // Chargement du numero de dossier ($_num_dossier)
   $sejour->loadNumDossier();
-  
+	$sejour->loadRefPraticien(1);
+	$praticien = $sejour->_ref_praticien;
+  $listResponsables[$praticien->_id] = $praticien;
 } 
 else {
   $rpu->_responsable_id = $AppUI->user_id;
