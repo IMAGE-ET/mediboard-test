@@ -3,6 +3,13 @@
 
 <table style="width: 100%">
   <!-- 1ere ligne -->
+  
+  {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
+  <tr>
+    <th class="title" colspan="2">{{tr}}CConsultation{{/tr}}</th>
+  </tr>
+  {{/if}}
+  
   <tr>
     <td style="width: 50%">
       <table class="form">
@@ -52,10 +59,49 @@
         {{/if}}
       </table>
 		</td>  
-	<tr>
+	</tr>
+  
+  {{if $consult->sejour_id}} {{* Cas d'un RPU *}}
+    {{assign var=sejour value=$consult->_ref_sejour}}
+    
+    <tr>
+      <th class="title" colspan="2">{{tr}}CSejour{{/tr}}</th>
+    </tr>
+    
+    <tr>
+      <td>
+        <table class="form">
+          <tr>
+            <th class="category">{{tr}}CFile{{/tr}}</th>
+          </tr>
+          <tr>
+            <td id="files-CSejour">
+              <script type="text/javascript">
+                File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
+              </script>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table class="form">
+          <tr>
+            <th class="category">Documents</th>
+          </tr>
+          <tr>
+            <td id="documents-CSejour">
+              <script type="text/javascript">
+                Document.register('{{$sejour->_id}}','{{$sejour->_class_name}}','{{$sejour->_praticien_id}}','documents-CSejour');
+              </script>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  {{/if}}
 
   <!-- 2eme ligne -->
-  {{* si on n'est pas dans le module dPsalleOp (pas besoin du reglement) * }}
+  {{* si on n'est pas dans le module dPsalleOp (pas besoin du reglement) *}}
   {{if $m!="dPsalleOp"}}
   <tr>
     <!-- Reglement -->

@@ -22,7 +22,12 @@ function refreshLists() {
 
 function refreshOrders(){
   var url = new Url("soins", "httpreq_vw_stock_order");
+  var filterOrder = getForm("filter-order");
   url.addFormData(getForm("filter"));
+  
+  if (filterOrder)
+    url.addFormData(getForm("filter-order"));
+    
   url.requestUpdate("list-order");
 }
 
@@ -57,40 +62,26 @@ Main.add(function () {
 
 </script>
 
-<form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
-  <input type="hidden" name="m" value="soins" />
-  <input type="hidden" name="start" value="{{$start}}" onchange="refreshLists()" />
-  <input type="hidden" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0); refreshLists()"/>
-  <input type="hidden" name="only_service_stocks" value="{{$only_service_stocks}}" onchange="$V(this.form.start, 0); refreshLists()"/>
-  <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshLists()"/>
-  <input type="hidden" name="endowment_id" value="{{$endowment_id}}" onchange="$V(this.form.start, 0); refreshLists()"/>
-  <table class="form">
-    <tr>
-      <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
-      <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
-      <td>
-        {{if $list_services|@count > 1}}
-          <select name="service_id" onchange="$V(this.form.start, 0); $V(this.form.endowment_id, ''); refreshOrders()">
-          {{foreach from=$list_services item=curr_service}}
-            <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
-          {{/foreach}}
-          </select>
-        {{else}}
-          {{assign var=_service value=$list_services|@reset}}
-          <input type="hidden" name="service_id" value="{{$_service->_id}}" />
-        {{/if}}
-      </td>
-      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
-    </tr>
-  </table>
-</form>
-
 <ul id="tab_stocks_soins" class="control_tabs">
   <li><a href="#list-order">Commandes</a></li>
   <li><a href="#list-reception">Réceptions <small>(0)</small></a></li>
   <li><a href="#list-inventory">Inventaire</a></li>
+  <li>
+    <form name="filter" action="?" method="get" onsubmit="return (checkForm(this) && refreshLists())">
+      <input type="hidden" name="m" value="soins" />
+    
+      {{if $list_services|@count > 1}}
+        <select name="service_id" onchange="this.form.onsubmit()">
+        {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+        {{/foreach}}
+        </select>
+      {{else}}
+        {{assign var=_service value=$list_services|@reset}}
+        <input type="hidden" name="service_id" value="{{$_service->_id}}" />
+      {{/if}}
+    </form>
+  </li>
 </ul>
 <hr class="control_tabs" />
 

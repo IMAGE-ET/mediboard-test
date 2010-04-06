@@ -12,8 +12,8 @@ global $can;
 $can->needsEdit();
 
 $societe_id = CValue::getOrSession('societe_id');
-$suppliers = CValue::getOrSession('suppliers');
-$manufacturers = CValue::getOrSession('manufacturers');
+$suppliers = CValue::getOrSession('suppliers', 1);
+$manufacturers = CValue::getOrSession('manufacturers', 1);
 $inactive = CValue::getOrSession('inactive');
 
 // Loads the expected Societe

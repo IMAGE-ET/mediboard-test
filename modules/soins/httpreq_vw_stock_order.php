@@ -13,10 +13,10 @@ $can->needsRead();
 
 $service_id          = CValue::get('service_id');
 $start               = intval(CValue::getOrSession('start', 0));
-$only_service_stocks = CValue::get('only_service_stocks');
-$only_common         = CValue::get('only_common');
-$keywords            = CValue::get('keywords');
-$endowment_id        = CValue::get('endowment_id');
+$only_service_stocks = CValue::getOrSession('only_service_stocks');
+$only_common         = CValue::getOrSession('only_common');
+$keywords            = CValue::getOrSession('keywords');
+$endowment_id        = CValue::getOrSession('endowment_id');
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -24,6 +24,10 @@ $date_max = CValue::getOrSession('_date_max');
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 CValue::setSession('endowment_id', $endowment_id);
+
+$delivrance = new CProductDelivery();
+$delivrance->_date_min = $date_min;
+$delivrance->_date_max = $date_max;
 
 $group_id = CGroups::loadCurrent()->_id;
 
@@ -138,8 +142,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('start', $start);
 $smarty->assign('stocks', $stocks);
 $smarty->assign('count_stocks', $count_stocks);
-$smarty->assign('date_min', $date_min);
-$smarty->assign('date_max', $date_max);
+$smarty->assign('delivrance', $delivrance);
 $smarty->assign('keywords', $keywords);
 $smarty->assign('service', $service);
 $smarty->assign('only_service_stocks', $only_service_stocks);
