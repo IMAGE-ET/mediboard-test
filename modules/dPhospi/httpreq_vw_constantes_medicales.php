@@ -26,7 +26,9 @@ $readonly              = CValue::get('readonly');
 $selection             = CValue::get('selection');
 
 if (!$selection || $selected_context_guid === 'all') {
-  $selection = CConstantesMedicales::$list_constantes;
+  //$selection = CConstantesMedicales::$list_constantes;
+  $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+  $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {
   $selection_flip = array_flip($selection);
