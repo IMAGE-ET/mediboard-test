@@ -81,6 +81,19 @@ foreach ($listSejours as &$sejour) {
   $sejour->_ref_patient->loadIPP();
 }
 
+// Tri pour afficher les sans CCMU en premier
+if ($order_col == "ccmu") {
+	function ccmu_cmp($sejour1, $sejour2) {
+    $ccmu1 = CValue::first($sejour1->_ref_rpu->ccmu, "9");
+    $ccmu2 = CValue::first($sejour2->_ref_rpu->ccmu, "9");
+    if ($ccmu1 == "P") $ccmu1 = "1";
+    if ($ccmu2 == "P") $ccmu2 = "1";
+		return $ccmu2 - $ccmu1;
+	}
+
+  uasort($listSejours, "ccmu_cmp");
+}
+
 // Chargement des boxes d'urgences
 $boxes = array();
 foreach (CService::loadServicesUrgence() as $service) {
