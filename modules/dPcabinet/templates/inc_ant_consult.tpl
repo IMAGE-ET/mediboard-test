@@ -6,7 +6,7 @@
 var cim10url = new Url;
 
 reloadCim10 = function(sCode){
-  var oForm = document.addDiagFrm;
+  var oForm = getForm("addDiagFrm");
   
   oCimField.add(sCode);
  
@@ -20,13 +20,13 @@ reloadCim10 = function(sCode){
 }
 
 updateTokenCim10 = function() {
-  var oForm = document.editDiagFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : DossierMedical.reloadDossierPatient });
+  var oForm = getForm("editDiagFrm");
+  onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierPatient });
 }
 
 updateTokenCim10Anesth = function(){
-  var oForm = document.editDiagAnesthFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : DossierMedical.reloadDossierSejour });
+  var oForm = getForm("editDiagAnesthFrm");
+  onSubmitFormAjax(oForm, { onComplete : DossierMedical.reloadDossierSejour });
 }
 
 onSubmitAnt = function (oForm) {
@@ -35,7 +35,7 @@ onSubmitAnt = function (oForm) {
   }
 
   onSubmitFormAjax(oForm, {
-  	onComplete : DossierMedical.reloadDossiersMedicaux 
+    onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
   // Nettoyage du formulaire
@@ -51,7 +51,7 @@ onSubmitTraitement = function (oForm) {
   }
   
   onSubmitFormAjax(oForm, {
-  	onComplete : DossierMedical.reloadDossiersMedicaux 
+    onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
   // Nettoyage du formulaire
@@ -63,12 +63,10 @@ onSubmitTraitement = function (oForm) {
 }
 
 easyMode = function() {
-  var width = 900;
-  var height = 600;
   var url = new Url("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
   url.addParam("patient_id", "{{$patient->_id}}");
-  url.pop(width, height, "Mode grille");
+  url.pop(900, 600, "Mode grille");
 }
 
 /**
@@ -76,17 +74,17 @@ easyMode = function() {
  * et la widget de dossier medical
  */
 DossierMedical = {
-	sejour_id: '{{$sejour_id}}',
+  sejour_id: '{{$sejour_id}}',
   updateSejourId : function(sejour_id) {
-  	this.sejour_id = sejour_id;
-  	
-  	// Mise à jour des formulaire
-  	if(document.editTrmtFrm){
-	    document.editTrmtFrm._sejour_id.value   = sejour_id;
-	  }
-	  if(document.editAntFrm){
-	    document.editAntFrm._sejour_id.value    = sejour_id;
-	  }
+    this.sejour_id = sejour_id;
+    
+    // Mise à jour des formulaire
+    if(document.editTrmtFrm){
+      document.editTrmtFrm._sejour_id.value   = sejour_id;
+    }
+    if(document.editAntFrm){
+      document.editAntFrm._sejour_id.value    = sejour_id;
+    }
   },
   
   reloadDossierPatient: function() {
@@ -132,7 +130,7 @@ Main.add(function () {
   DossierMedical.reloadDossiersMedicaux();
   refreshAidesAntecedents();
 	if($('tab_traitements_perso')){
-	  var tabs = Control.Tabs.create('tab_traitements_perso', false);
+	  Control.Tabs.create('tab_traitements_perso', false);
 	}
 });
 
@@ -166,13 +164,17 @@ Main.add(function () {
       {{/if}}
 
       <table class="form">
+        <col style="width: 70px;" />
+        <col style="width: 0.1%;" />
+        
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
-          <th>{{mb_label object=$antecedent field=date}}</th>
-          <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
+            <th>{{mb_label object=$antecedent field=date}}</th>
+            <td>{{mb_field object=$antecedent field=date form=editAntFrm register=true}}</td>
           {{else}}
-          <td colspan="2" />
+            <td colspan="2" />
           {{/if}}
+          
           <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
             	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)">
@@ -186,14 +188,21 @@ Main.add(function () {
 
         <tr>
           <!-- Auto-completion -->
-          <th style="width: 70px;">{{mb_label object=$antecedent field=_search}}</th>
-          <td style="width:100px;">
+          <th>{{mb_label object=$antecedent field=_search}}</th>
+          <td>
             {{mb_field object=$antecedent field=_search size=10 class="autocomplete"}}
             <script type="text/javascript">
-              Main.add(function() {
-                prepareForm(document.editAntFrm);
-                new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "appareil", "_search", "CAntecedent", "{{$userSel->_id}}");
-              } );
+              Main.add(function(){
+                var form = getForm("editAntFrm");
+                var elements = form.elements;
+                new AideSaisie.AutoComplete(elements.rques, {
+                  searchField: elements._search, 
+                  dependField1: elements.type, 
+                  dependField2: elements.appareil, 
+                  objectClass: "CAntecedent", 
+                  userId: "{{$userSel->_id}}"
+                });
+              });
             </script>
           </td>
           <td rowspan="3">
@@ -232,13 +241,14 @@ Main.add(function () {
     <td class="text">
 			<ul id="tab_traitements_perso" class="control_tabs small">
 				{{if $isPrescriptionInstalled}}
-				<li><a href="#tp_base_med">Base de données de médicaments</a></li>
+				  <li><a href="#tp_base_med">Base de données de médicaments</a></li>
 				{{/if}}
 				{{if $dPconfig.dPpatients.CTraitement.enabled}}
-				<li><a href="#tp_texte_simple">Texte simple</a></li>
+				  <li><a href="#tp_texte_simple">Texte simple</a></li>
 				{{/if}}
 			</ul>
 			<hr class="control_tabs" /> 
+    </td>
 	</tr>
 	{{/if}}
 	
@@ -254,8 +264,11 @@ Main.add(function () {
         <input type="hidden" name="praticien_id" value="{{$userSel->_id}}" />
         
         <table class="form">
+          <col style="width: 70px;" />
+          <col style="width: 0.1%;" />
+        
           <tr>
-            <th style="width: 1%">Recherche</th>
+            <th>Recherche</th>
             <td>
               <input type="text" name="produit" value="" size="12" class="autocomplete" />
               <button type="button" class="search notext" onclick="MedSelector.init('produit');"></button>
@@ -278,10 +291,8 @@ Main.add(function () {
                   }
               </script>
             </td>
-            <td style="width: 50%">
-              <strong>
-              <div id="_libelle"></div>
-              </strong>
+            <td>
+              <strong><div id="_libelle"></div></strong>
             </td>
           </tr>
           
@@ -290,7 +301,7 @@ Main.add(function () {
             <th>{{mb_label object=$line field="debut"}}</th>
             <td>{{mb_field object=$line field="debut" register=true form=editLineTP}}</td>
             {{else}}
-            <td colspan="2" />
+            <td colspan="2"></td>
             {{/if}}
             <td rowspan="3" id="addPosoLine"></td>
           </tr>
@@ -341,12 +352,15 @@ Main.add(function () {
       {{/if}}
       
       <table class="form">
+        <col style="width: 70px;" />
+        <col style="width: 0.1%;" />
+         
         <tr>
           {{if $app->user_prefs.showDatesAntecedents}}
           <th>{{mb_label object=$traitement field=debut}}</th>
           <td>{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}</td>
           {{else}}
-          <td colspan="2" />
+          <td colspan="2"></td>
           {{/if}}
           <th>
             {{mb_label object=$traitement field="traitement"}}
@@ -365,7 +379,7 @@ Main.add(function () {
           <th>{{mb_label object=$traitement field=fin}}</th>
           <td>{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}</td>
           {{else}}
-          <td colspan="2" />
+          <td colspan="2"></td>
           {{/if}}
           <td rowspan="3">
             <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
@@ -373,14 +387,19 @@ Main.add(function () {
         </tr>
         <tr>
           <!-- Auto-completion -->
-          <th style="width: 70px;">{{mb_label object=$traitement field=_search}}</th>
-          <td style="width: 100px;">
+          <th>{{mb_label object=$traitement field=_search}}</th>
+          <td>
             {{mb_field object=$traitement field=_search size=10 class="autocomplete"}}
             <script type="text/javascript">
-              Main.add(function() {
-                prepareForm(document.editTrmtFrm);
-                new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, null, "_search", "CTraitement", "{{$userSel->_id}}");
-              } );
+              Main.add(function(){
+                var form = getForm("editTrmtFrm");
+                var elements = form.elements;
+                new AideSaisie.AutoComplete(elements.traitement, {
+                  searchField: elements._search, 
+                  objectClass: "CTraitement", 
+                  userId: "{{$userSel->_id}}"
+                });
+              });
             </script>
           </td>
         </tr>
@@ -411,7 +430,7 @@ Main.add(function () {
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
         <button class="search" type="button" onclick="CIM10Selector.init()">{{tr}}Search{{/tr}}</button>
         <input type="text" name="code_diag" size="5"/>
-        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">Valider</button>
+        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)">{{tr}}Validate{{/tr}}</button>
         <script type="text/javascript">   
           CIM10Selector.init = function(){
             this.sForm = "addDiagFrm";
@@ -470,9 +489,7 @@ Main.add(function () {
       
 <table class="form">
   <tr>
-    <th class="category">
-      Dossier patient
-    </th>
+    <th class="category">Dossier patient</th>
   </tr>
   <tr>
     <td class="text" id="listAnt"></td>
@@ -493,54 +510,52 @@ Main.add(function () {
   </tr>
 </table>
 
-<script type="text/javascript">
 {{if $isPrescriptionInstalled}}
-  var oFormTP = getForm("editLineTP");
-  
-  // UpdateFields de l'autocomplete de medicaments
-  updateFieldsMedicamentTP = function(selected) {
-	  // Submit du formulaire avant de faire le selection d'un nouveau produit
-		if(oFormTP.code_cip.value){
-		  submitFormAjax(oFormTP, "systemMsg", { onComplete: function() { 
-			  updateTP(selected);
-				DossierMedical.reloadDossiersMedicaux();
-			} } );
-		} else {
-		  updateTP(selected);
-		}
-			
-  }
-  	
-  updateTP = function(selected){
-	  resetEditLineTP();
-    Element.cleanWhitespace(selected);
-    var dn = selected.childElements();
-    $V(oFormTP.code_cip, dn[0].innerHTML);
-    $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
-    $V(oFormTP.produit, '');
-    $('button_submit_traitement').focus();
-	}  
+<script type="text/javascript">
+var oFormTP = getForm("editLineTP");
 
-  // Autocomplete des medicaments
-  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-  urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
-    minChars: 3,
-    updateElement: updateFieldsMedicamentTP, 
-    callback: 
-      function(input, queryString){
-        return (queryString + "&produit_max=40"); 
-      }
-  } );
-  
-  resetEditLineTP = function(){
-    $("_libelle").update("");
-    oFormTP.code_cip.value = '';
+// UpdateFields de l'autocomplete de medicaments
+updateFieldsMedicamentTP = function(selected) {
+  // Submit du formulaire avant de faire le selection d'un nouveau produit
+  if(oFormTP.code_cip.value){
+    submitFormAjax(oFormTP, "systemMsg", { onComplete: function() { 
+      updateTP(selected);
+      DossierMedical.reloadDossiersMedicaux();
+    } } );
+  } else {
+    updateTP(selected);
   }
+}
   
-  resetFormTP = function(){
-    $V(oFormTP.commentaire, '');
-    $V(oFormTP.token_poso, '');
-    $('addPosoLine').update('');                   
+updateTP = function(selected){
+  resetEditLineTP();
+  Element.cleanWhitespace(selected);
+  var dn = selected.childElements();
+  $V(oFormTP.code_cip, dn[0].innerHTML);
+  $("_libelle").insert("<button type='button' class='cancel notext' onclick='resetEditLineTP(); resetFormTP();'></button><a href=\"#nothing\" onclick=\"Prescription.viewProduit('','"+dn[1].innerHTML+"','"+dn[2].innerHTML+"')\">"+dn[3].innerHTML.stripTags()+"</a>");
+  $V(oFormTP.produit, '');
+  $('button_submit_traitement').focus();
+}  
+
+// Autocomplete des medicaments
+var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+urlAuto.autoComplete("editLineTP_produit", "_produit_auto_complete", {
+  minChars: 3,
+  updateElement: updateFieldsMedicamentTP, 
+  callback: function(input, queryString){
+    return (queryString + "&produit_max=40"); 
   }
-{{/if}}
+} );
+
+resetEditLineTP = function(){
+  $("_libelle").update("");
+  oFormTP.code_cip.value = '';
+}
+
+resetFormTP = function(){
+  $V(oFormTP.commentaire, '');
+  $V(oFormTP.token_poso, '');
+  $('addPosoLine').update('');                   
+}
 </script>
+{{/if}}

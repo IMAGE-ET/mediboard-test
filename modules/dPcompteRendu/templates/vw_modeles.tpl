@@ -49,21 +49,31 @@ Main.add(function () {
 
 </form>
 
-<ul id="tabs-owner" class="control_tabs">
-  <li><a href="#owner-prat">{{$user->_view}} <small>({{$modeles.prat|@count}})</small></a></li>
-  <li><a href="#owner-func">{{$user->_ref_function->_view}} <small>({{$modeles.func|@count}})</small></a></li>
-  <li><a href="#owner-etab">{{$user->_ref_function->_ref_group->_view}} <small>({{$modeles.etab|@count}})</small></a></li>
-</ul>
-<hr class="control_tabs" />
+{{if $user->_id}}
 
-<div id="owner-prat" style="display: none;">
-{{include file=inc_modeles.tpl modeles=$modeles.prat}}
-</div>
+  <ul id="tabs-owner" class="control_tabs">
+    <li><a href="#owner-prat">{{$user->_view}} <small>({{$modeles.prat|@count}})</small></a></li>
+    <li><a href="#owner-func">{{$user->_ref_function->_view}} <small>({{$modeles.func|@count}})</small></a></li>
+    <li><a href="#owner-etab">{{$user->_ref_function->_ref_group->_view}} <small>({{$modeles.etab|@count}})</small></a></li>
+  </ul>
+  <hr class="control_tabs" />
+  
+  <div id="owner-prat" style="display: none;">
+  {{include file=inc_modeles.tpl modeles=$modeles.prat}}
+  </div>
+  
+  <div id="owner-func" style="display: none;">
+  {{include file=inc_modeles.tpl modeles=$modeles.func}}
+  </div>
+  
+  <div id="owner-etab" style="display: none;">
+  {{include file=inc_modeles.tpl modeles=$modeles.etab}}
+  </div>
+  
+{{else}}
 
-<div id="owner-func" style="display: none;">
-{{include file=inc_modeles.tpl modeles=$modeles.func}}
-</div>
-
-<div id="owner-etab" style="display: none;">
-{{include file=inc_modeles.tpl modeles=$modeles.etab}}
-</div>
+  <div class="small-info">
+    Veuillez choisir un utilisateur pour consulter ses modèles
+  </div>
+  
+{{/if}}

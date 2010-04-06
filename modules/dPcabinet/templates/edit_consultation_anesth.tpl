@@ -22,23 +22,24 @@ function view_history_consult(id){
 }
 
 function submitForm(oForm) {
-  submitFormAjax(oForm, 'systemMsg');
+  onSubmitFormAjax(oForm);
 }
 
 function submitOpConsult() {
-  var oForm = document.addOpFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: reloadConsultAnesth } ); 
+  onSubmitFormAjax(getForm("addOpFrm"), { onComplete: reloadConsultAnesth } ); 
 }
 
 function submitAll() {
-  var oForm = document.forms['edit-constantes-medicales'];
-  submitFormAjax(oForm, 'systemMsg');
+  var oForm;
   
-  oForm = document.editFrmIntubation;
-  submitFormAjax(oForm, 'systemMsg');
+  oForm = getForm('edit-constantes-medicales');
+  onSubmitFormAjax(oForm);
   
-  oForm = document.editExamCompFrm;
-  submitFormAjax(oForm, 'systemMsg');  
+  oForm = getForm("editFrmIntubation");
+  onSubmitFormAjax(oForm);
+  
+  oForm = getForm("editExamCompFrm");
+  onSubmitFormAjax(oForm);  
 }
 
 function printFiche() {

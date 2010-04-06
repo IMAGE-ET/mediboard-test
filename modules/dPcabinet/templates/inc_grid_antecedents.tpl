@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function addAntecedent(rques, type, appareil, input) {
   if (window.opener) {
-    var oForm = window.opener.document.forms['editAntFrm'];
+    var oForm = window.opener.getForm('editAntFrm');
     if (oForm) {
       oForm.rques.value = rques;
       oForm.type.value = type;
@@ -38,7 +38,7 @@ Main.add(function () {
 <table id="antecedents" class="main" style="display: none;">
   <tr>
     <td colspan="3">
-			<form name="editAntFrmGrid" action="?m=dPcabinet" method="post" onsubmit="return window.opener.onSubmitAnt(this);">
+			<form name="editAntFrmGrid" action="?m=dPcabinet" method="post" onsubmit="return window.opener.onSubmitAnt(this)">
 			  <input type="hidden" name="m" value="dPpatients" />
 			  <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="dosql" value="do_antecedent_aed" />
@@ -48,15 +48,22 @@ Main.add(function () {
 			  <input type="hidden" name="_hidden_rques" value="" />
 			  <input type="hidden" name="rques" onchange="this.form.onsubmit();"/>
 			 
-			 <input type="hidden" name="type" />
-			 <input type="hidden" name="appareil" />
+        <input type="hidden" name="type" />
+        <input type="hidden" name="appareil" />
        
 			  {{mb_label object=$antecedent field=_search}}
 			  {{mb_field object=$antecedent field=_search size=25 class="autocomplete"}}
 			  <script type="text/javascript">
 			    Main.add(function() {
-			      prepareForm(document.editAntFrmGrid);
-			      new AideSaisie.AutoComplete("editAntFrmGrid" , "rques", "type", "appareil", "_search", "CAntecedent", "{{$user_id}}");
+            var form = getForm("editAntFrmGrid");
+            var elements = form.elements;
+            new AideSaisie.AutoComplete(elements.rques, {
+              searchField: elements._search, 
+              dependField1: elements.type, 
+              dependField2: elements.appareil, 
+              objectClass: "CAntecedent", 
+              userId: "{{$user_id}}"
+            });
 			    } );
 			  </script>
       </form>

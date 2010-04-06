@@ -10,24 +10,20 @@
 <script type="text/javascript">
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url();
-  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim");
 }
 
 function printAllDocs() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_select_docs");
+  var url = new Url("dPcabinet", "print_select_docs");
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printDocuments");
-  return;
 }
 
 function submitAll() {
-  var oForm = document.editFrmExams;
-  submitFormAjax(oForm, 'systemMsg');
+  return onSubmitFormAjax(getForm("editFrmExams"));
 }
 
 Main.add(function () {

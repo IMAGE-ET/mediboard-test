@@ -16,7 +16,7 @@ Main.add(function(){
     <td style="white-space: nowrap; width: 0.1%;">
       <ul class="control_tabs_vertical" id="tabs-aides-depend">
       {{foreach from=$aidesByDepend1 key=depend1 item=aidesByDepend2}}
-        <li>
+        <li class="{{$aidesByDepend2|@count|ternary:"":"empty"}}">
           <a href="#{{$object->_class_name}}-{{$depend1}}">{{tr}}{{$object->_class_name}}.{{$depend_field_1}}.{{$depend1}}{{/tr}} 
             <small>({{$aidesByDepend2|@count}})</small>
           </a>
@@ -36,7 +36,7 @@ Main.add(function(){
           <hr class="control_tabs" />
           
           {{foreach from=$aidesByDepend2 key=depend2 item=aides}}
-            <table id="{{$object->_class_name}}-{{$depend1}}-{{if $depend2}}{{$depend2}}{{else}}all{{/if}}" class="main tbl">
+            <table id="{{$object->_class_name}}-{{$depend1}}-{{if $depend2}}{{$depend2}}{{else}}all{{/if}}" class="main tbl" style="table-layout: fixed;">
               <tr>
               {{foreach from=$aides item=_aide name=_aides}}
                 {{assign var=i value=$smarty.foreach._aides.index}}

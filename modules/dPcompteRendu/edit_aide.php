@@ -10,9 +10,9 @@
 global $AppUI, $can;
 $can->needsRead();
 
-$field        = CValue::get("field");
-$text         = utf8_decode(CValue::get("text" ));
 $class        = CValue::get("class");
+$field        = CValue::get("field");
+$text         = utf8_decode(CValue::get("text"));
 $depend_value_1 = CValue::get("depend_value_1");
 $depend_value_2 = CValue::get("depend_value_2");
 
