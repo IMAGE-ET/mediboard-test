@@ -168,10 +168,6 @@ drawGraph = function() {
   }
 };
 
-toggleGraph = function(id, state){
-  $(id).setVisible(state);
-};
-
 Main.add(function () {
   var oForm = document.forms['edit-constantes-medicales'];
   var checkbox;
@@ -180,8 +176,7 @@ Main.add(function () {
   
   {{foreach from=$data item=curr_data key=key}}
     checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
-    
-    checkbox.checked = !!data.{{$key}}.series.first().data.length;
+    checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
     $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
   {{/foreach}}
 });

@@ -105,7 +105,7 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 $whereOr = array();
-foreach($selection as $name => $params) {
+foreach(CConstantesMedicales::$list_constantes as $name => $params) {
   if ($name[0] === "_") continue;
   $whereOr[] = "$name IS NOT NULL ";
 }
@@ -132,14 +132,14 @@ function getValue($v) {
 }
 
 function getMax($n, $array) {
-  $max = -PHP_INT_MAX;
+  $max = $n;
   foreach ($array as $a)
     if (isset($a[1])) $max = max($n, $a[1], $max);
   return $max;
 }
 
 function getMin($n, $array) {
-  $min = PHP_INT_MAX;
+  $min = $n;
   foreach ($array as $a) 
     if (isset($a[1]))$min = min($n, $a[1], $min);
   return $min;
@@ -151,7 +151,7 @@ $const_ids = array();
 $data      = array();
 $graphs    = array();
 
-foreach ($selection as $name => $params) {
+foreach (CConstantesMedicales::$list_constantes as $name => $params) {
   if ($name[0] === "_") continue;
   
   $data[$name] = $standard_struct;
@@ -177,7 +177,7 @@ if ($list_constantes) {
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
     
-    foreach ($selection as $name => $params) {
+    foreach (CConstantesMedicales::$list_constantes as $name => $params) {
       if ($name[0] === "_") continue;
       
       $d = &$data[$name];
@@ -203,7 +203,8 @@ if ($list_constantes) {
       
       $i = count($d["series"][0]["data"]);
       foreach($fields as $n => $_field) {
-        $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view);
+        if ($cst->$_field !== null && $cst->$_field !== "")
+          $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view);
       }
      
       $graphs[] = "constantes-medicales-$name";
@@ -212,11 +213,11 @@ if ($list_constantes) {
 }
 
 foreach($data as $name => &$_data) {
-  $params = $selection[$name];
+  $params = CConstantesMedicales::$list_constantes[$name];
         
   // And the options
   if (isset($params["standard"])) {
-    $d["standard"] = $params["standard"];
+    $_data["standard"] = $params["standard"];
   }
   $_data["options"] = array(
     "title" => utf8_encode(CAppUI::tr("CConstantesMedicales-$name-desc").($params['unit'] ? " ({$params['unit']})" : "")),

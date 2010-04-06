@@ -1162,8 +1162,12 @@ class CSetupdPpatients extends CSetup {
              CHANGE `civilite` `civilite` ENUM ('m','mme','mlle','enf','dr','pr','me','vve') DEFAULT 'm',
              CHANGE `assure_civilite` `assure_civilite` ENUM ('m','mme','mlle','enf','dr','pr','me','vve') DEFAULT 'm';";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.0");
+    $sql = "ALTER TABLE `constantes_medicales` ADD `ta_droit` VARCHAR (10) AFTER `ta`";
+    $this->addQuery($sql);
 				
-		$this->mod_version = "1.0";
+		$this->mod_version = "1.01";
   }
 }
 

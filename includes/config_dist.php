@@ -346,6 +346,9 @@ $dPconfig["dPpatients"] = array (
   "CDossierMedical" => array (
     "diags_static_cim" => "1"
   ),
+  "CConstantesMedicales" => array(
+    "important_constantes" => "poids|pouls|ta|temperature"
+  )
 );
 
 $dPconfig["dPsante400"] = array (

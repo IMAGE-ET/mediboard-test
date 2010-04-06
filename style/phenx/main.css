@@ -155,6 +155,10 @@ th.title.modify,th.category.modify {
   text-align: center;
 }
 
+table.main {
+  border-spacing: 0;
+}
+
 table.tbl td.text {
   white-space: normal;
 }
@@ -224,7 +228,7 @@ table.titleblock td.titlecell {
 /* Pane table */
 .main {
   width: 100%;
-  margin: 2px;
+  margin: 0;
 }
 
 .main td {

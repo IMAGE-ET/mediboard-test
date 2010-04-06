@@ -36,11 +36,11 @@ calculImcVst = function(form) {
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
 
-  $H(data).each(function(d){
+  /*$H(data).each(function(d){
     var checkbox = oForm["checkbox-constantes-medicales-"+d.key];
-    checkbox.checked = !!d.value.series.last().data.length; // Not the first as it could be the "grey" line
+    checkbox.checked = (d.value.series.last().data.length > 1); // Not the first as it could be the "grey" line
     $('constantes-medicales-'+d.key).setVisible(checkbox.checked);
-  });
+  });*/
   
   calculImcVst(oForm);
 });
@@ -72,14 +72,21 @@ Main.add(function () {
   
   <input type="hidden" name="_poids" value="{{$const->poids}}" />
   
-  <table class="main form" style="width: 1%;">
+  <table class="main form constantes" style="width: 1%;">
     <tr>
       <th class="category">Constantes</th>
       {{if $real_context}}<th class="category">Nouvelles</th>{{/if}}
       <th class="category" colspan="2">Dernières</th>
     </tr>
     
-    {{foreach from=$selection key=_constante item=_params}}
+    {{assign var=all_constantes value="CConstantesMedicales"|static:"list_constantes"}}
+    {{assign var=at_least_one_hidden value=false}}
+    
+    {{foreach from=$all_constantes key=_constante item=_params}}
+    <tbody {{if !array_key_exists($_constante, $selection) && $const->$_constante == ""}}
+      style="display: none;" class="secondary"
+      {{assign var=at_least_one_hidden value=true}}
+    {{/if}}>
       <tr>
         <th>
           {{mb_title object=$constantes field=$_constante}} {{if $_params.unit}}({{$_params.unit}}){{/if}}
@@ -124,7 +131,7 @@ Main.add(function () {
         {{/if}}
         <td style="width: 0.1%;">
 				  {{if $_constante.0 != "_"}}
-            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="toggleGraph('constantes-medicales-{{$_constante}}', this.checked);" tabIndex="100" />
+            <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
           {{/if}}
 				</td>
       </tr>
@@ -134,6 +141,7 @@ Main.add(function () {
           <td colspan="4" id="constantes_medicales_imc" style="color:#F00; text-align: center;"></td>
         </tr>
       {{/if}}
+    </tbody>
     {{/foreach}}
 		
 		{{if $real_context}}
@@ -162,6 +170,14 @@ Main.add(function () {
           {{/if}}
         </td>
       </tr>
+    {{/if}}
+    
+    {{if $at_least_one_hidden}}
+    <tr>
+      <td colspan="4" class="button">
+        <button class="down" type="button" onclick="$$('.constantes .secondary').invoke('toggle')">Afficher toutes les valeurs</button>
+      </td>
+    </tr>
     {{/if}}
   </table>
 </form>

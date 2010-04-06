@@ -30,12 +30,6 @@ $constantes->loadRefPatient();
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id);
-
-// Tableau contenant le nom de tous les graphs
-$graphs = array();
-foreach($selection as $cst => $params) {
-  $graphs[] = "constantes-medicales-$cst";
-}
                  
 // Création du template
 $smarty = new CSmartyDP();
@@ -43,7 +37,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('constantes', $constantes);
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('context_guid', $context_guid);
-$smarty->assign('graphs', $graphs);
 $smarty->assign('readonly', $readonly);
 $smarty->assign('selection', $selection);
 $smarty->display('inc_form_edit_constantes_medicales.tpl');

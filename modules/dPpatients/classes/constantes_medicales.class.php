@@ -22,6 +22,7 @@ class CConstantesMedicales extends CMbObject {
   var $poids                 = null;
   var $taille                = null;
   var $ta                    = null;
+  var $ta_droit              = null;
   var $pouls                 = null;
   var $spo2                  = null;
   var $temperature           = null;
@@ -45,6 +46,8 @@ class CConstantesMedicales extends CMbObject {
   /*
   var $_ta_systole           = null;
   var $_ta_diastole          = null;
+  var $_ta_droit_systole     = null;
+  var $_ta_droit_diastole    = null;
   var $_inj                  = null;
   var $_inj_essai            = null;
   var $_imc                  = null;
@@ -73,6 +76,13 @@ class CConstantesMedicales extends CMbObject {
     "ta"                => array(
       "unit" => "cm Hg", 
       "formfields" => array("_ta_systole", "_ta_diastole"), 
+      "min" => 0, "max" => 20,
+      "standard" => 12,
+      "colors" => array("#00A8F0", "#C0D800")
+    ),
+    "ta_droit"          => array(
+      "unit" => "cm Hg", 
+      "formfields" => array("_ta_droit_systole", "_ta_droit_diastole"), 
       "min" => 0, "max" => 20,
       "standard" => 12,
       "colors" => array("#00A8F0", "#C0D800")
@@ -164,6 +174,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['poids']                  = 'float pos';
     $specs['taille']                 = 'float pos';
     $specs['ta']                     = 'str maxLength|10';
+    $specs['ta_droit']               = 'str maxLength|10';
     $specs['pouls']                  = 'num pos';
     $specs['spo2']                   = 'float min|0 max|100';
     $specs['temperature']            = 'float min|20 max|50'; // Au cas ou il y aurait des malades très malades
@@ -180,6 +191,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['_vst']                   = 'float pos';
     $specs['_ta_systole']            = 'num pos max|50';
     $specs['_ta_diastole']           = 'num pos max|50';
+    $specs['_ta_droit_systole']      = 'num pos max|50';
+    $specs['_ta_droit_diastole']     = 'num pos max|50';
 		$specs['_inj']                   = 'num pos';
 		$specs['_inj_essai']             = 'num pos moreEquals|_inj';
     return $specs;
@@ -225,18 +238,26 @@ class CConstantesMedicales extends CMbObject {
       $this->_ta_systole  = $_ta[0];
       $this->_ta_diastole = $_ta[1];
     }
-		
+
+    $_ta_droit = explode('|', $this->ta_droit);
+    if ($this->ta_droit && isset($_ta_droit[0]) && isset($_ta_droit[1])) {
+      $this->_ta_droit_systole  = $_ta_droit[0];
+      $this->_ta_droit_diastole = $_ta_droit[1];
+    }
+    
 		$_injection = explode('|', $this->injection);
     if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
       $this->_inj  = $_injection[0];
       $this->_inj_essai = $_injection[1];
     }
-		
   }
   
   function updateDBFields() {
     if (!empty($this->_ta_systole) && !empty($this->_ta_diastole)) {
       $this->ta = "$this->_ta_systole|$this->_ta_diastole";
+    }
+    if (!empty($this->_ta_droit_systole) && !empty($this->_ta_droit_diastole)) {
+      $this->ta_droit = "$this->_ta_droit_systole|$this->_ta_droit_diastole";
     }
     if (!empty($this->_inj) && !empty($this->_inj_essai)) {
       $this->injection = "$this->_inj|$this->_inj_essai";
