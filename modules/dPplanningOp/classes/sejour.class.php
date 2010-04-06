@@ -1251,6 +1251,9 @@ class CSejour extends CCodable {
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
     }
+		
+		$this->loadRefRPU();
+		$this->_ref_rpu->fillLimitedTemplate($template);
   }
   
   /**

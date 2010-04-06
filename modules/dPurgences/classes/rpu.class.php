@@ -313,5 +313,40 @@ class CRPU extends CMbObject {
     
     $this->_ref_sejour->loadComplete();
   }
+	
+
+	function fillLimitedTemplate(&$template) {
+	
+			
+	  $template->addProperty("RPU - Diagnostic infirmier" , $this->diag_infirmier);
+    $template->addProperty("RPU - Mode d'entrée"        , $this->getFormattedValue("mode_entree"));
+    $template->addProperty("RPU - Transport"            , $this->getFormattedValue("transport"));
+    $template->addProperty("RPU - PeC Transport"        , $this->getFormattedValue("pec_transport"));
+    $template->addProperty("RPU - Motif"                , $this->motif);
+    $template->addProperty("RPU - CCMU"                 , $this->getFormattedValue("ccmu"));
+    $template->addProperty("RPU - Code GEMSA"           , $this->getFormattedValue("gemsa"));
+    $template->addDateTimeProperty("RPU - Départ Radio"         , $this->radio_debut);
+    $template->addDateTimeProperty("RPU - Retour Radio"         , $this->radio_fin);
+    $template->addDateTimeProperty("RPU - Dépôt Biologie"       , $this->bio_depart);
+    $template->addDateTimeProperty("RPU - Réception Biologie"   , $this->bio_retour);
+    $template->addDateTimeProperty("RPU - Attente spécialiste"  , $this->specia_att);
+    $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
+		$template->addProperty("RPU - Sortie autorisée"     , $this->getFormattedValue("sortie_autorisee"));
+    $template->addProperty("RPU - Accident du travail"  , $this->getFormattedValue("accident_travail"));
+      
+		if(CAppUI::conf("dPurgences old_rpu") == "1"){
+			if (CModule::getActive("sherpa")) {
+				$template->addProperty("RPU - Provenance"         , $this->getFormattedValue("urprov"));
+		    $template->addProperty("RPU - Soins pour trauma"  , $this->getFormattedValue("urtrau"));
+		    $template->addProperty("RPU - Cause du transfert" , $this->getFormattedValue("urmuta"));
+			}
+	    $template->addProperty("RPU - Type de pathologie" , $this->getFormattedValue("type_pathologie"));
+	  } 
+		else {
+			$template->addProperty("RPU - Provenance"          , $this->getFormattedValue("provenance"));
+	    $template->addProperty("RPU - Orientation"         , $this->getFormattedValue("orientation"));
+	    $template->addProperty("RPU - Destination"         , $this->getFormattedValue("destination"));
+		}
+  }
 }
 ?>
