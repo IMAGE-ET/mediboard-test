@@ -590,7 +590,12 @@ class CMouvSejourEcap extends CMouvementEcap {
       
       case "2": // Sorti
       $this->sejour->entree_reelle = $entree;
-      $this->sejour->sortie_reelle = $sortie;
+			
+			// Les dossiers d'urgences sont toujours créés sorties dès l'admission
+		  if ($this->sejour->type = "urg") {
+        $this->sejour->sortie_reelle = $sortie;
+		  }
+
       break;
     }
     
