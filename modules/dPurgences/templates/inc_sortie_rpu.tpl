@@ -9,7 +9,7 @@
 {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
 {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
 
-<td {{if $sejour->annule}}class="cancelled"{{/if}}>
+<td class="text {{if $sejour->annule}}cancelled{{/if}}">
   
   <form name="validCotation-{{$atu->_id}}" action="" method="post"> 
     <input type="hidden" name="dosql" value="do_consultation_aed" />

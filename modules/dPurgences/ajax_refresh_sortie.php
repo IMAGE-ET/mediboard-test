@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
+global $AppUI;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $rpu_id = CValue::get("rpu_id");
 
@@ -40,12 +40,17 @@ $contrainteDestination["normal"] = array("", 6, 7);
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
+// Praticiens urgentistes
+$group = CGroups::loadCurrent();
+
+$listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("listEtab", $listEtab);
-
+$smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
 
 $smarty->display("inc_sortie_rpu.tpl");
