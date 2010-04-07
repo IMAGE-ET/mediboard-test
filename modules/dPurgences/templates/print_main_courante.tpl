@@ -26,8 +26,7 @@
 					<th>{{mb_label class=CRPU field=diag_infirmier}}</th>
 					<th>Heure PeC</th>
 				  <th>{{mb_label class=CRPU field=_responsable_id}}</th>  
-					<th>{{mb_label class=CRPU field=orientation}}</th>
-					<th>{{mb_label class=CSejour field=mode_sortie}}</th>
+					<th>{{mb_label class=CSejour field=mode_sortie}} / {{mb_label class=CRPU field=orientation}}</th>
           
 				  <th>{{mb_label class=CRPU field=_sortie}}</th>
 				</tr>
@@ -43,15 +42,16 @@
 					<td>{{mb_value object=$consult field="heure"}}</td>      
 			    <td>{{mb_value object=$sejour field="praticien_id"}}</td>
 					<td>
-						{{if $rpu->orientation}}
-						  {{mb_value object=$rpu field="orientation"}}
+						{{if $sejour->mode_sortie}}
+							{{mb_value object=$sejour field="mode_sortie"}}
 						{{/if}}
-				  </td>
-					<td>
-						{{mb_value object=$sejour field="mode_sortie"}}
 					  {{if $sejour->mode_sortie == "transfert"}}
 						  <br />
 						  {{mb_value object=$sejour field="etablissement_transfert_id"}}
+						{{/if}}
+						{{if $rpu->orientation}}
+							<br />
+						  {{mb_value object=$rpu field="orientation"}}
 						{{/if}}
 					</td>
 					<td>{{mb_value object=$rpu field="_sortie"}}</td>

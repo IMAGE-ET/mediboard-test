@@ -14,12 +14,14 @@ $date = CValue::getOrSession("date");
 
 // Chargement des rpu de la main courante
 $sejour = new CSejour;
-$where = array();
-$where["entree_reelle"] = "LIKE '$date%'";
-$where["type"] = "= 'urg'";
-$ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
-$order = "entree_reelle ASC";
 
+$ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
+$where = array();
+$where["sejour.entree_reelle"] = "LIKE '$date%'";
+$where["sejour.type"] = "= 'urg'";
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+
+$order = "sejour.entree_reelle ASC";
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach($listSejours as &$curr_sejour) {
