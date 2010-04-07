@@ -33,8 +33,8 @@
 			  {{assign var=rpu value=$sejour->_ref_rpu}}
 			  {{assign var=patient value=$sejour->_ref_patient}}
 			  {{assign var=consult value=$rpu->_ref_consult}}
-			  {{if $rpu->_id}}
 			  <tr>
+			  {{if $rpu->_id}}
 			  	<td>{{mb_value object=$rpu field="_entree"}}</td>
 			    <td>{{mb_value object=$sejour field="patient_id"}}</td>
 					<td>{{mb_value object=$rpu field="ccmu"}}</td>
@@ -55,15 +55,15 @@
 						{{/if}}
 					</td>
 					<td>{{mb_value object=$rpu field="_sortie"}}</td>
-			  </tr>
 			  {{else}}
-				<!-- Pas de RPU pour ce séjour d'urgence -->
-				<td colspan="10">
-				  <div class="small-warning">
-				  	Ce séjour d'urgence n'est pas associé à un RPU.
-				  </div>
-				</td>
+					<!-- Pas de RPU pour ce séjour d'urgence -->
+					<td colspan="10">
+					  <div class="small-warning">
+					  	Ce séjour d'urgence n'est pas associé à un RPU.
+					  </div>
+					</td>
 				{{/if}}
+				</tr>
 			  {{/foreach}}
 			</table>
 	  </td>
