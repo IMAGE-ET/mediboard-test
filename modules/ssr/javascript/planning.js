@@ -36,7 +36,7 @@ WeekPlanning = Class.create({
         top:    (event.minutes * height)+"px",
         left:   (event.offset * width)+"px",
         width:  (event.width * width - 1)+"px",
-        height: (event.length * height)+"px"
+        height: ((event.length * height) || 1)+"px"
       });
     });
   }

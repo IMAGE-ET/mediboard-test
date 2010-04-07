@@ -64,8 +64,11 @@ Main.add(function() {
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
                   <div id="{{$_event->guid}}" class="event" style="background-color: {{$_event->color}};">
-                    <div class="time" title="{{$_event->start|date_format:"%H:%M"}} - {{$_event->end|date_format:"%H:%M"}}">
-                      {{$_event->start|date_format:"%H:%M"}} - {{$_event->end|date_format:"%H:%M"}}
+                    <div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+                      {{$_event->start|date_format:"%H:%M"}}
+                      {{if $_event->length}}
+                       - {{$_event->end|date_format:"%H:%M"}}
+                      {{/if}}
                     </div>
                     <div class="body">
                       {{$_event->title}}

@@ -24,8 +24,8 @@ class CPlanningEvent  {
   var $offset = null;
   var $color = null;
   
-  function __construct ($guid, $date, $length, $title = "", $color = "grey") {
-    $this->guid = $guid;
+  function __construct ($guid, $date, $length = 0, $title = "", $color = "red") {
+    $this->guid = $guid ? $guid : "id-".uniqid();
     
     $this->start = $date;
     $this->length = $length;
