@@ -27,6 +27,8 @@
 					<th>Heure PeC</th>
 				  <th>{{mb_label class=CRPU field=_responsable_id}}</th>  
 					<th>{{mb_label class=CRPU field=orientation}}</th>
+					<th>{{mb_label class=CSejour field=mode_sortie}}</th>
+          
 				  <th>{{mb_label class=CRPU field=_sortie}}</th>
 				</tr>
 			  {{foreach from=$listSejours item=sejour}}
@@ -45,6 +47,13 @@
 						  {{mb_value object=$rpu field="orientation"}}
 						{{/if}}
 				  </td>
+					<td>
+						{{mb_value object=$sejour field="mode_sortie"}}
+					  {{if $sejour->mode_sortie == "transfert"}}
+						  <br />
+						  {{mb_value object=$sejour field="etablissement_transfert_id"}}
+						{{/if}}
+					</td>
 					<td>{{mb_value object=$rpu field="_sortie"}}</td>
 			  </tr>
 			  {{/foreach}}
