@@ -18,16 +18,17 @@
     {{$stock->_ref_product->code}}
   </td>
   <td class="text">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');">
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$stock->_ref_product->_guid}}');">
       {{$stock}}
-    </span>
+    </strong>
   </td>
 
   <td style="text-align: right;" class="text">
-   {{if $stock->_ref_product->item_title}}
-   {{$stock->_ref_product->item_title}} x {{$stock->_ref_product->unit_quantity}}
-   {{/if}}
-   {{$stock->_ref_product->unit_title}}
+    {{if $stock->_ref_product->item_title}}
+      {{$stock->_ref_product->item_title}}
+    {{else}}
+      <em style="color: #aaa">Sans unité de délivrance</em>
+    {{/if}}
   </td>
 
   <!-- Formulaire de dispensation -->

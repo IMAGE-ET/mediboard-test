@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include module=system template=CMbObject_view object=$order}}
+{{* mb_include module=system template=CMbObject_view object=$order*}}
 
 <table class="main form">
   <tr>
