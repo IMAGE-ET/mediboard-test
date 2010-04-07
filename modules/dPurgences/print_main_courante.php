@@ -18,7 +18,7 @@ $where = array();
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
-$order = "rpu.ccmu DESC, entree_reelle";
+$order = "entree_reelle ASC";
 
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
