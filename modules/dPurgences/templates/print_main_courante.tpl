@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="main">
+<table class="main" style="font-size: 1.2em;">
   <tr>
     <th>
       <a href="#print" onclick="window.print()">
-        Main courante du {{$date|date_format:"%A %d %b %Y"}} - {{$listSejours|@count}} RPU
+        Main courante du {{$date|date_format:"%A %d %b %Y"}}<br /> Total: {{$listSejours|@count}} RPU
       </a>
     </th>
   </tr>
@@ -23,7 +23,7 @@
           <th>{{mb_label class=CRPU field=_entree }}</th>
 				  <th>{{mb_label class=CRPU field=_patient_id}}</th>
 				  <th>{{mb_label class=CRPU field=ccmu}}</th>
-					<th>{{mb_label class=CRPU field=motif}}</th>
+					<th>{{mb_label class=CRPU field=diag_infirmier}}</th>
 					<th>Heure PeC</th>
 				  <th>{{mb_label class=CRPU field=_responsable_id}}</th>  
 					<th>{{mb_label class=CRPU field=orientation}}</th>
@@ -37,10 +37,14 @@
 			  	<td>{{mb_value object=$rpu field="_entree"}}</td>
 			    <td>{{mb_value object=$sejour field="patient_id"}}</td>
 					<td>{{mb_value object=$rpu field="ccmu"}}</td>
-					<td>{{mb_value object=$rpu field="motif"}}</td>    
+					<td>{{mb_value object=$rpu field="diag_infirmier"}}</td>    
 					<td>{{mb_value object=$consult field="heure"}}</td>      
 			    <td>{{mb_value object=$sejour field="praticien_id"}}</td>
-					<td>{{mb_value object=$rpu field="orientation"}}</td>				
+					<td>
+						{{if $rpu->orientation}}
+						  {{mb_value object=$rpu field="orientation"}}
+						{{/if}}
+				  </td>
 					<td>{{mb_value object=$rpu field="_sortie"}}</td>
 			  </tr>
 			  {{/foreach}}
