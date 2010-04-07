@@ -99,44 +99,43 @@
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-	    <span onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
-	      {{$document}}
-	    </span>
+	    <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;">
+	      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
+	        {{$document}}
+	      </span>
+	    </a>
 	  </td>
 	  
 	  <td class="button" style="width: 1px">
 	    <form name="Edit-{{$document->_guid}}" action="?m={{$m}}" method="post">
-
-	    <input type="hidden" name="m" value="dPcompteRendu" />
-	    <input type="hidden" name="del" value="0" />
-	    <input type="hidden" name="dosql" value="do_modele_aed" />
-	    {{mb_key object=$document}}
-	    <input type="hidden" name="object_id" value="{{$object_id}}" />
-	    <input type="hidden" name="object_class" value="{{$object_class}}" />
-	    
-	    <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
-	    	{{tr}}Delete{{/tr}}
-	    </button>
-
+  	    <input type="hidden" name="m" value="dPcompteRendu" />
+  	    <input type="hidden" name="dosql" value="do_modele_aed" />
+        <input type="hidden" name="del" value="0" />
+  	    {{mb_key object=$document}}
+        
+  	    <input type="hidden" name="object_id" value="{{$object_id}}" />
+  	    <input type="hidden" name="object_class" value="{{$object_class}}" />
+  	    
+  	    <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
+  	    	{{tr}}Delete{{/tr}}
+  	    </button>
 	    </form>
-	    
  	  </td> 
 
     {{if $dPconfig.dPfiles.system_sender}}
  	  <td class="button" style="width: 1px">
  	    <form name="Send-{{$document->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-	   
-	    <input type="hidden" name="m" value="dPcompteRendu" />
-	    <input type="hidden" name="dosql" value="do_modele_aed" />
-	    <input type="hidden" name="del" value="0" />
-      {{mb_key object=$document}}
-    
-      <!-- Send File -->
-		  {{mb_include module=dPfiles template=inc_file_send_button 
-	 	 		_doc_item=$document
-		 		notext=notext
-		 		onComplete="Document.refreshList('$object_class','$object_id')"
-	 	  }}
+  	    <input type="hidden" name="m" value="dPcompteRendu" />
+  	    <input type="hidden" name="dosql" value="do_modele_aed" />
+  	    <input type="hidden" name="del" value="0" />
+        {{mb_key object=$document}}
+      
+        <!-- Send File -->
+  		  {{mb_include module=dPfiles template=inc_file_send_button 
+  	 	 		_doc_item=$document
+  		 		notext=notext
+  		 		onComplete="Document.refreshList('$object_class','$object_id')"
+  	 	  }}
       </form>
  	  </td>
 		{{/if}}

@@ -25,8 +25,10 @@ WeekPlanning = Class.create({
     this.container.scrollTop = top;
   },
   updateEventsDimensions: function(){
-    this.events.each(function(event){
+    this.events.each(function(event, i){
       var container = $(event.guid);
+      if (!container) return;
+      
       var dimensions = container.up("td").getDimensions();
       
       var width = dimensions.width;
@@ -38,6 +40,6 @@ WeekPlanning = Class.create({
         width:  (event.width * width - 1)+"px",
         height: ((event.length * height) || 1)+"px"
       });
-    });
+    }, this);
   }
 });
