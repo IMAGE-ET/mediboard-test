@@ -24,6 +24,9 @@ class CProductDelivery extends CMbObject {
 
   // Object References
   //    Single
+  /** 
+   * @var CProductStockGroup 
+   */
   var $_ref_stock     = null;
   var $_ref_service   = null;
   
@@ -110,6 +113,24 @@ class CProductDelivery extends CMbObject {
     $this->loadRefStock();
     $this->loadRefService();
     $this->loadRefPatient();
+  }
+  
+  function store(){
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()){
+      return $msg;
+    }
+    
+    if (!$is_new) return;
+    
+    $this->loadRefStock();
+    $this->_ref_stock->loadRefsFwd();
+    if ($this->_ref_stock->_ref_product->auto_dispensed) {
+      $this->date_delivery = mbDateTime();
+      $this->order = 0;
+      return parent::store();
+    }
   }
 
   function getPerm($permType) {

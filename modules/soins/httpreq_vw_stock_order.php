@@ -120,6 +120,7 @@ foreach($stocks as &$stock) {
   $where = array(
     'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
     'product_delivery.stock_id' => "= '$stock->_id'",
+    'product_delivery.service_id' => "= '$service_id'",
     //'product.category_id' => "= '".CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id')."'"
   );
   

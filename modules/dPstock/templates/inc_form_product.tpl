@@ -103,6 +103,10 @@ function duplicateObject(form) {
     <td>{{mb_field object=$product field="classe_comptable" form="edit_product"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$product field="auto_dispensed"}}</th>
+    <td>{{mb_field object=$product field="auto_dispensed"}}</td>
+  </tr>
+  <tr>
     <th>Conso. <strong>3 dern. mois</strong></th>
     <td>{{$product->getConsommation("-3 MONTHS")}}</td>
   </tr>

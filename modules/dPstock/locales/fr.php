@@ -1094,4 +1094,13 @@ $locales['config-dPstock-CProductStockGroup-pagination_size'] = '';
 $locales['config-dPstock-CProductStockGroup-pagination_size-desc'] = '';
 $locales['config-dPstock-CProductStockService-pagination_size'] = '';
 $locales['config-dPstock-CProductStockService-pagination_size-desc'] = '';
+$locales['CProduct-auto_dispensed'] = 'Dispensé automatiquement';
+$locales['CProduct-auto_dispensed-court'] = 'Dispensation auto.';
+$locales['CProduct-auto_dispensed-desc'] = 'Dispensation automatique';
+$locales['CProductReceptionBillItem-_price'] = '';
+$locales['CProductReceptionBillItem-_price-court'] = '';
+$locales['CProductReceptionBillItem-_price-desc'] = '';
+$locales['CProductReceptionBillItem-reception_bill_item_id'] = '';
+$locales['CProductReceptionBillItem-reception_bill_item_id-court'] = '';
+$locales['CProductReceptionBillItem-reception_bill_item_id-desc'] = '';
 ?>

@@ -53,7 +53,7 @@
       {{assign var=stock_id value=$stock->_id}}
       {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=0 value=$qty style=$style 
-         onchange="this.form._quantity_package.value = this.value/$qty"}}
+         onchange="this.form._quantity_package.value = this.value/$qty" class="num notNull min|1"}}
        
        (soit <input type="text" name="_quantity_package" value="{{if $qty}}1{{else}}0{{/if}}" size="2" 
               onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />

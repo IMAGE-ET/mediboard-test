@@ -18,14 +18,9 @@ autoOrder = function(service_id, date_min, date_max) {
 }
 
 fillInputs = function(data){
-  $('list-order').select('input.num').each(function(e){
+  $('list-order').select('input.num[name=quantity]').each(function(e){
     var stock_id = e.form.stock_id.value;
-    if (data[stock_id]) {
-      if (e.name == 'quantity') {
-        $V(e, data[stock_id], true);
-      }
-    }
-    else e.value = 0;
+    $V(e, data[stock_id] || 0, true);
   });
 }
 

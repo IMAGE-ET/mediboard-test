@@ -27,6 +27,7 @@ class CProduct extends CMbObject {
   var $cancelled         = null;
   var $classe_comptable  = null;
   var $equivalence_id    = null;
+  var $auto_dispensed    = null;
 
   // Object References
   //    Single
@@ -83,6 +84,7 @@ class CProduct extends CMbObject {
     $specs['cancelled']     = 'bool default|0 show|0';
     $specs['classe_comptable'] = 'str maxLength|7 autocomplete';
     $specs['equivalence_id'] = 'ref class|CProductEquivalence';
+    $specs['auto_dispensed'] = 'bool default|0';
     
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';

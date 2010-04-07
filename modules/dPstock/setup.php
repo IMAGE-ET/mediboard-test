@@ -566,6 +566,10 @@ class CSetupdPstock extends CSetup {
               ADD INDEX (`reception_item_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.23";
+    $this->makeRevision("1.23");
+    $sql = "ALTER TABLE `product` ADD `auto_dispensed` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.24";
   }
 }
