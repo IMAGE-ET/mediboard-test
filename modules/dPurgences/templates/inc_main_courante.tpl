@@ -113,13 +113,23 @@
         {{/if}}
         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
       </a>
-      {{if ($rpu->radio_debut || $rpu->bio_depart)}}
+			
+      {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
         <div style="clear: both; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
         {{if $rpu->radio_debut}}
-        	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}</div>
+        	<div {{if $rpu->radio_fin}}style="opacity: 0.6"{{/if}}>
+        		{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}
+					</div>
         {{/if}}
         {{if $rpu->bio_depart}}
-        	<div>{{tr}}CRPU-{{mb_ternary test=$rpu->bio_retour value=bio_retour other=bio_depart}}{{/tr}}</div>
+        	<div {{if $rpu->bio_retour}}style="opacity: 0.6"{{/if}}>
+        		{{tr}}CRPU-{{mb_ternary test=$rpu->bio_retour value=bio_retour other=bio_depart}}{{/tr}}
+					</div>
+        {{/if}}
+        {{if $rpu->specia_att}}
+          <div {{if $rpu->specia_arr}}style="opacity: 0.6"{{/if}}>
+          	{{tr}}CRPU-{{mb_ternary test=$rpu->specia_arr value=specia_arr other=specia_att}}{{/tr}}
+					</div>
         {{/if}}
       	</div>
       {{/if}}
