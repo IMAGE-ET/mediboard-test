@@ -695,4 +695,5 @@ $locales['config-dPImeds-soap_url'] = '';
 $locales['config-dPImeds-soap_url-desc'] = '';
 $locales['config-dPImeds-url'] = '';
 $locales['config-dPImeds-url-desc'] = '';
+$locales['mod-system-tab-view_network_address'] = 'Adresses réseau';
 ?>
