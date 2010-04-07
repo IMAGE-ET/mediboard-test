@@ -97,6 +97,10 @@ Main.add(function () {
 	      </form>
 	    </th>
 	    <td style="text-align: right">
+	     <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')">
+	       Afficher les <span class="count">0</span> admissions de la veille
+       </button>
+
 	     Type d'affichage
 	     <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
 		      <select name="selAffichage" onchange="this.form.submit();">

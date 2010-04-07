@@ -21,6 +21,7 @@ $order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
+$date_before = mbDate("-1 DAY", $date);
 $today = mbDate();
 
 // L'utilisateur doit-il voir les informations médicales
@@ -31,11 +32,14 @@ $medicalView = $user->isMedical();
 $group = CGroups::loadCurrent();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
+// FIXME: ne pas utiliser LIKE mais un delai de 24heures (les urgences sont en continu)
 $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$where["sejour.entree_reelle"] = "LIKE '$date%'";
+$where[] = "sejour.entree_reelle LIKE '$date%' OR (
+  sejour.sortie_reelle IS NULL AND sejour.entree_reelle LIKE '$date_before%'
+)";
 $where["sejour.type"] = "= 'urg'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
@@ -68,6 +72,8 @@ if ($order_col == "_patient_id") {
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
+$sejours_veille = 0;
+
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
   $sejour->loadNumDossier();
@@ -79,6 +85,11 @@ foreach ($listSejours as &$sejour) {
     
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
+  $sejour->_veille = strpos($sejour->entree_reelle, $date_before) !== false;
+  
+  if ($sejour->_veille) {
+    $sejours_veille++;
+  }
 }
 
 // Tri pour afficher les sans CCMU en premier
@@ -115,7 +126,9 @@ $smarty->assign("listSejours" , $listSejours);
 $smarty->assign("selAffichage", $selAffichage);
 $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
+$smarty->assign("date_before" , $date_before);
 $smarty->assign("today"       , $today);
+$smarty->assign("sejours_veille", $sejours_veille);
 
 $smarty->display("inc_main_courante.tpl");
 ?>

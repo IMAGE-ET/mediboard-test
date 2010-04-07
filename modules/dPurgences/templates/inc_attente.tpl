@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_value object=$sejour->_ref_rpu field=_attente}}
-{{if $curr_sejour->sortie_reelle}}
-  <br />(sortie à {{$curr_sejour->sortie_reelle|date_format:$dPconfig.time}})
+{{if $sejour->sortie_reelle}}
+  {{mb_value object=$sejour->_ref_rpu field=_attente}}
+  <br />(sortie à {{$sejour->sortie_reelle|date_format:$dPconfig.time}})
+{{else}}
+  Admis la veille
 {{/if}}
-

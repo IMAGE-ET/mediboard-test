@@ -8,6 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  Main.add(function(){
+    var count = {{$sejours_veille}};
+    var counter = $$("button .count")[0];
+    counter.update(count);
+    counter.up().setVisible(count != 0);
+  });
+</script>
+
 <table class="tbl">
   <tr>
     <th>{{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
@@ -40,7 +49,7 @@
   {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
   {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
   
-  <tr>
+  <tr {{if !$curr_sejour->sortie_reelle && $curr_sejour->_veille}}style="display: none;" class="veille"{{/if}}>
   	{{if $curr_sejour->annule}}
     <td class="cancelled">
       {{tr}}Cancelled{{/tr}}
