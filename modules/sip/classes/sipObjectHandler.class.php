@@ -97,7 +97,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       else {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patient";
+				$dest_hprim->evenement = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -196,7 +196,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patient";
+				$dest_hprim->evenement = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -243,7 +243,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!CAppUI::conf('sip server')) {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patient";
+				$dest_hprim->evenement = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         $mbObject->_fusion = array();
