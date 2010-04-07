@@ -46,6 +46,15 @@ Main.add(function () {
 	// Initialisation du champ dates
 	$("editTrans_date_da").value = "Heure actuelle";
 	$V(getForm("editTrans").date, "now");
+	
+	var oFormTrans = getForm("editTrans");
+  new AideSaisie.AutoComplete(oFormTrans.text, {
+            objectClass: "CTransmissionMedicale", 
+            userId: "{{$app->user_id}}",
+						dependField1: oFormTrans.type,
+						dependField2: '',
+      			validateOnBlur:0
+          });
 });
 
 </script>
@@ -102,17 +111,9 @@ Main.add(function () {
 				{{mb_field object=$transmission field="date"}}
         {{mb_field object=$transmission field="degre"}}
         {{mb_field object=$transmission field="type" typeEnum=radio}}
+        <button type="button" class="cancel notext" onclick="$V(this.form.type, null);"></button>
         <br />
-				
-	      <div style="float: right">
-			    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
-			      <option value="">&mdash; Choisir une aide</option>
-			      {{html_options options=$transmission->_aides.text.no_enum}}
-			    </select>
-			    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
-		    </div>
-	      
-	      {{mb_field object=$transmission field="text"}}
+				{{mb_field object=$transmission field="text"}}<br />
 	      <button type="button" class="add" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Add{{/tr}}</button>
       </form>
     </td>

@@ -126,7 +126,9 @@ var AideSaisie = {
         paramName: "_search",
         //updateElement: this.update.bind(this),
         callback: function(input, query){
-          return query + "&depend_value_1="+$V(options.dependField1)+"&depend_value_2="+$V(options.dependField2);
+          query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
+          query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
+          return query;
         }
       });
       
