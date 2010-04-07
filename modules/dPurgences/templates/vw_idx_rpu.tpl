@@ -73,7 +73,7 @@ Main.add(function () {
       <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
     </form>
   </li>
-  <li><a href="#holder_main_courante">Main courante</a></li>
+  <li><a href="#holder_main_courante">Main courante <small>(0)</small></a></li>
   <li><a href="#consultations" class="empty">Reconvocations</a></li>
   <li><a href="#identito_vigilance" class="empty">Identito-vigilance</a></li>
 </ul>
