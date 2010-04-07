@@ -1159,5 +1159,13 @@ table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-resul
 }
 
 .merge-selected {
-	outline: 3px solid #8f8;
+	outline: 3px solid #88f;
+}
+
+.merge-probable {
+  outline: 3px solid #8f8;
+}
+
+.merge-possible {
+  outline: 3px solid #ff8;
 }

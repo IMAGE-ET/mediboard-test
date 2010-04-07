@@ -308,18 +308,10 @@ table.tbl {
 
 table.tbl td, 
 table.tbl th {
-  border: 1px solid #ddd;
+  border-color: #ddd;
 	background-color: #eee;
 }
 
-/* Old style
-table.tbl th {
-  background-color: #68c;
-  font-style: italic;
-}
-*/
-
-/* New style */
 table.tbl th {
   background-color: #abe;
 	font-weight: bold;
@@ -328,10 +320,8 @@ table.tbl th {
 }
 
 table.tbl th a {
-  color:#008;
+  color: #008;
 }
-/* End new style*/
-
 
 table.tbl tr.triggerShow td,
 table.tbl tr.triggerHide td{
@@ -383,6 +373,14 @@ table.main th.title {
 
 table.main th.urgence {
   background-color: #08F;
+}
+
+@media print {
+  table.tbl td,
+  table.tbl th,
+  table.tbl th.title {
+    border: 2px solid #888;
+  }
 }
 
 /* System message */
