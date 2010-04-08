@@ -1253,7 +1253,9 @@ class CSejour extends CCodable {
     }
 		
 		$this->loadRefRPU();
-		$this->_ref_rpu->fillLimitedTemplate($template);
+		if($this->_ref_rpu) {
+      $this->_ref_rpu->fillLimitedTemplate($template);
+		}
   }
   
   /**
