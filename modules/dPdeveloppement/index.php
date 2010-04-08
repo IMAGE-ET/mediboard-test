@@ -9,8 +9,8 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
+$module->registerTab("view_logs"              , TAB_READ);
 $module->registerTab("view_metrique"       	  , TAB_READ);
-$module->registerTab("view_logs"           	  , TAB_READ);
 $module->registerTab("mnt_module_actions"  	  , TAB_READ);
 $module->registerTab("mnt_table_classes"   	  , TAB_READ);
 $module->registerTab("mnt_backref_classes"    , TAB_READ);
