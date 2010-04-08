@@ -55,6 +55,16 @@ Main.add(function () {
 						dependField2: '',
       			validateOnBlur:0
           });
+					
+					
+  var oFormObs = getForm("editObs");
+  new AideSaisie.AutoComplete(oFormObs.text, {
+            objectClass: "CObservationMedicale", 
+            userId: "{{$app->user_id}}",
+            dependField1: '',
+            dependField2: '',
+            validateOnBlur:0
+          });
 });
 
 </script>
@@ -79,13 +89,7 @@ Main.add(function () {
 	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 	      <input type="hidden" name="user_id" value="{{$user->_id}}" />
 	      <input type="hidden" name="date" value="now" /> 
-	      <div style="float: right">
-		      <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
-		        <option value="">&mdash; Choisir une aide</option>
-		        {{html_options options=$observation->_aides.text.no_enum}}
-		      </select>
-		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CObservationMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
-	      </div>
+	      
 	      {{mb_field object=$observation field="degre"}}
 	      <br />
 	      {{mb_field object=$observation field="text"}}
