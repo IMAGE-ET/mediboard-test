@@ -4,6 +4,9 @@
 
 
 <form name="editOpEasy" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
+{{if $op->_ref_sejour->sortie_reelle && !$can->admin}}
+<input type="hidden" name="_locked" value="1" />
+{{/if}}
 <table class="form">
   {{if $op->annulee == 1}}
   <tr>

@@ -236,6 +236,9 @@ Main.add( function(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
+{{if $sejour->sortie_reelle && !$can->admin}}
+<input type="hidden" name="_locked" value="1" />
+{{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
 
@@ -670,8 +673,9 @@ Main.add( function(){
 
 {{if !$mode_operation}}
 <tr>
-  <td class="button" colspan="4">
+  <td class="button text" colspan="4">
   {{if $sejour->sejour_id}}
+  {{if !$sejour->sortie_reelle || $can->admin}}
     <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
     {{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
@@ -683,6 +687,13 @@ Main.add( function(){
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{tr}}{{$annule_text}}{{/tr}}
     </button>
+  {{else}}
+    <div class="big-info">
+      Les informations sur le séjour ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
+      Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
+      <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
+    </div>
+  {{/if}}
   {{else}}
     <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
   {{/if}}

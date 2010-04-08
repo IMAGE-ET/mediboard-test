@@ -482,7 +482,7 @@ var Calendar = {
   },
   
   regField: function(element, dates, options){
-    if (!$(element)) return;
+    if (!$(element) || $V(element.form._locked) == 1) return;
 
     if (element.hasClassName('datepicker')) return;
 		

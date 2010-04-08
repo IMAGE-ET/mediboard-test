@@ -231,10 +231,10 @@ ProtocoleSelector.init = function(){
       {{include file="inc_form_sejour.tpl" mode_operation=true}}
     </td>
   </tr>
-
   <tr>
-    <td colspan="2" style="text-align: center;">
+    <td colspan="2" class="button">
     {{if $op->_id}}
+    {{if !$op->_ref_sejour->sortie_reelle || $can->admin}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
 			{{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
@@ -245,6 +245,13 @@ ProtocoleSelector.init = function(){
       <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
       {{/if}}
       <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
+    {{else}}
+      <div class="big-info">
+        Les informations sur le séjour et sur l'intervention ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
+        Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
+        <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
+      </div>
+    {{/if}}
     {{else}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
     {{/if}}
