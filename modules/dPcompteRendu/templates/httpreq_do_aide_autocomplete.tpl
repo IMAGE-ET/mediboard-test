@@ -29,7 +29,7 @@ at the end of the selected element in the textareas. DO NOT REMOVE. -->
     </li>
   {{foreachelse}}
     <li>
-      {{tr}}No result{{/tr}}
+      {{tr}}CAideSaisie.none{{/tr}}
 <small class="text" style="display: none;">{{$needle}}
 </small>
     </li>
