@@ -53,7 +53,7 @@ find_property()
 }
 
 # Detect current DSN
-current_dsn=$(find_property "dPmedicament CBcbObject dsn")
+current_dsn=$(find_property "bcb CBcbObject dsn")
 echo "Current BCB DSN detected is '$current_dsn'"
 
 # Compute DSN to be updated

@@ -41,7 +41,7 @@ CAppUI::stepAjax('Synchronisation des produits terminée', UI_MSG_OK);
 // Sauvegarde de la catégorie en variable de config
 $conf = new CMbConfig();
 $data = array();
-$data['dPmedicament']['CBcbProduitLivretTherapeutique']['product_category_id'] = $category_id;
+$data['bcb']['CBcbProduitLivretTherapeutique']['product_category_id'] = $category_id;
 if ($conf->update($data, true)) {
   CAppUI::stepAjax('Enregistrement de la catégorie de produits effectuée', UI_MSG_OK);
 }

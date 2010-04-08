@@ -41,7 +41,7 @@
 			  <tr>
 			    <th colspan="2">{{$classeATC->_ref_produits|@count}} produits trouvés (niveau {{$niveauCodeATC}})</th>
 			  </tr>
-			  {{if $niveauCodeATC >= $dPconfig.dPmedicament.CBcbClasseATC.niveauATC}}
+			  {{if $niveauCodeATC >= $dPconfig.bcb.CBcbClasseATC.niveauATC}}
 			  {{foreach from=$classeATC->_ref_produits item=produit}}
 			  <tr>
 			    <td>

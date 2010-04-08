@@ -212,7 +212,7 @@ foreach($dispensations as $code => $quantites){
     
 	  $product = new CProduct();
 	  $product->code = $_code_cip;
-	  $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+	  $product->category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
 	  
 	  if ($product->loadMatchingObject()) {
 	    // Chargement du stock
@@ -266,7 +266,7 @@ foreach($dispensations as $code_cis => $_quantites){
 	  $where = array();
 	  $where['product_delivery.date_dispensation'] = "BETWEEN '$date_min_orig 00:00:00' AND '$date_max_orig 23:59:59'";
 	  $where['product.code'] = "= '$code_cip'";
-	  $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+	  $where['product.category_id'] = '= '.CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
 	  $where['product_delivery.patient_id'] = "= '$patient_id'";
 	  $where['product_delivery.quantity'] = " > 0";
 	  // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement

@@ -41,7 +41,7 @@
 			  <tr>
 			    <th colspan="2">{{$classeBCB->_refs_produits|@count}} produits trouvés (niveau {{$niveauCodeBCB}})</th>
 			  </tr>
-			  {{if $niveauCodeBCB >= $dPconfig.dPmedicament.CBcbClasseTherapeutique.niveauBCB}}
+			  {{if $niveauCodeBCB >= $dPconfig.bcb.CBcbClasseTherapeutique.niveauBCB}}
 			  {{foreach from=$classeBCB->_refs_produits item=produit}}
 			  <tr>
 			    <td>

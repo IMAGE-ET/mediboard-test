@@ -229,7 +229,7 @@ foreach($besoin_patient as &$quantites_by_patient){
 	}
 }
 
-$category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+$category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
 
 // Calcul du nombre de boites (unites de presentation)
 foreach($dispensations as $code => $unites){
