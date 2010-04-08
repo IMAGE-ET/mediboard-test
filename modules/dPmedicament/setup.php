@@ -72,15 +72,7 @@ class CSetupdPmedicament extends CSetup {
             ADD `unite_dispensation` VARCHAR (255) NOT NULL;";
 		$this->addQuery($sql);
 		
-		$this->makeRevision("0.16");
-		
-		$this->moveConf("dPmedicament CBcbObject dsn", "bcb CBcbObject dsn");
-		$this->moveConf("dPmedicament CBcbProduit use_cache", "bcb CBcbProduit use_cache");
-		$this->moveConf("dPmedicament CBcbClasseATC niveauATC", "bcb CBcbClasseATC niveauATC");
-		$this->moveConf("dPmedicament CBcbClasseTherapeutique niveauBCB", "bcb CBcbClasseTherapeutique niveauBCB");
-		$this->moveConf("dPmedicament CBcbProduitLivretTherapeutique product_category_id", "bcb CBcbProduitLivretTherapeutique product_category_id");
- 
-    $this->mod_version = "0.17";
+    $this->mod_version = "0.16";
   }  
 }
 

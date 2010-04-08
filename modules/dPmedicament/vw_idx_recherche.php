@@ -10,6 +10,12 @@
 
 global $AppUI, $can, $m, $g, $dialog;
 
+if(!CModule::getActive('bcb')){
+	CAppUI::stepMessage(UI_MSG_ERROR, "Le module de médicament autonome est en cours de developpement. 
+	Pour être utilisé, ce module a pour le moment besoin d'être connecté à une base de données de médicaments externe");
+	return;
+}
+
 $search_by_cis = CValue::get("search_by_cis", 1);
 $gestion_produits = CValue::get("gestion_produits", 0);
 $_recherche_livret = CValue::get("_recherche_livret");
