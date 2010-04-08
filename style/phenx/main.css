@@ -316,7 +316,6 @@ table.tbl tr.clear th {
 /* Form tables */
 table.form th {
   vertical-align: top;
-  width: 0.1%;
 }
 
 table.form th.title {

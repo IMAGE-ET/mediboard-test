@@ -25,6 +25,7 @@ printReceptionReport = function(service_id){
     <th style="width: 0.1%;"></th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>Date commande</th>
+    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th><button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button></th>
   </tr>
@@ -66,6 +67,7 @@ printReceptionReport = function(service_id){
         {{/if}}
       </td>
       <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+      <td style="text-align: right">{{mb_value object=$curr_delivery field=quantity}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>
         <table class="layout">

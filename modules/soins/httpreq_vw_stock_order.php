@@ -13,7 +13,7 @@ $can->needsRead();
 
 $service_id          = CValue::get('service_id');
 $start               = intval(CValue::getOrSession('start', 0));
-$only_service_stocks = CValue::getOrSession('only_service_stocks');
+$only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
 $only_common         = CValue::getOrSession('only_common');
 $keywords            = CValue::getOrSession('keywords');
 $endowment_id        = CValue::getOrSession('endowment_id');

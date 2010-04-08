@@ -24,6 +24,8 @@
         {{$curr_delivery->_ref_stock->_view}}
       </span>
     {{else}}
+    
+    {{* 
      <script type="text/javascript">
       var oFormDispensation = getForm('dispensation-stock-{{$curr_delivery->_id}}');
     
@@ -40,18 +42,22 @@
         }
       });
      </script>
+    *}}
+    
     <form name="dispensation-stock-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
       
-      
+      {{* 
       <input type="hidden" name="_code" value="" />
       Produit: 
       <input type="text" name="produit" value="" autocomplete="off" class="autocomplete" />
-      <div style="display: none; text-align: left;" class="autocomplete"></div>
+      <div style="display: none; text-align: left;" class="autocomplete"></div> 
+      *}}
       
+      {{mb_field object=$curr_delivery->_ref_stock field=product_id form=dispensation-stock-$id autocomplete="true,1,50,false,true"}}
       {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-stock-$id size=3}}
 
       <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>

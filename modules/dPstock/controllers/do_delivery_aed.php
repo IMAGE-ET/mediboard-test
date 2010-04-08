@@ -16,6 +16,15 @@ if (isset ($_POST['_code'])) {
 	}
 }
 
+if (isset ($_POST['product_id'])) {
+  $product = new CProduct;
+  $product->load($_POST['product_id']);
+  if ($product->loadRefStock()) {
+    $_POST["stock_id"] = $product->_ref_stock_group->_id;
+    unset($_POST['product_id']);
+  }
+}
+
 $do = new CDoObjectAddEdit('CProductDelivery', 'delivery_id');
 $do->doIt();
 
