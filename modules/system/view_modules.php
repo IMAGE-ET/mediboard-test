@@ -29,7 +29,8 @@ foreach($setupClasses as $setupClass) {
   $setup = new $setupClass;
   $mbmodule = new CModule();
   $mbmodule->compareToSetup($setup);
-	
+  $mbmodule->checkModuleFiles();
+  
   if ($mbmodule->mod_ui_order == 100) {
     $mbmodules["notInstalled"][$mbmodule->mod_name] = $mbmodule;
   } 

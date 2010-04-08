@@ -66,8 +66,12 @@ var AideSaisie = {
     },
     
     // Update field after selection
-    update: function(selected){
-      var data = this.getSelectedData(selected);
+    update: function(selected, selected2){
+      // When used as "updateElement", the LI is the first arg
+      // When used as "afterUpdateElement", the LI is in the second arg
+      var s = selected2 || selected;
+      
+      var data = this.getSelectedData(s);
       
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
@@ -119,7 +123,6 @@ var AideSaisie = {
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
         minChars: 2,
-        frequency: 0.2,
         tokens: '\n',
         indicator: throbber,
         select: 'text', 
@@ -129,7 +132,8 @@ var AideSaisie = {
           query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
           return query;
-        }
+        },
+        afterUpdateElement: this.update.bind(this)
       });
       
       // Grid mode 

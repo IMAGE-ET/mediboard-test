@@ -140,7 +140,7 @@ class CModule extends CMbObject {
   }
   
   function checkModuleFiles(){
-    $this->_files_missing = !is_dir("./modules/$this->mod_name");
+    $this->_files_missing = !self::exists($this->mod_name);
     return !$this->_files_missing;
   }
   
