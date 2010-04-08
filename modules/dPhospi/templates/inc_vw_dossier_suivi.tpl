@@ -58,13 +58,15 @@ Main.add(function () {
 					
 					
   var oFormObs = getForm("editObs");
-  new AideSaisie.AutoComplete(oFormObs.text, {
-            objectClass: "CObservationMedicale", 
-            userId: "{{$app->user_id}}",
-            dependField1: '',
-            dependField2: '',
-            validateOnBlur:0
-          });
+	if(oFormObs){
+	  new AideSaisie.AutoComplete(oFormObs.text, {
+	            objectClass: "CObservationMedicale", 
+	            userId: "{{$app->user_id}}",
+	            dependField1: '',
+	            dependField2: '',
+	            validateOnBlur:0
+	          });
+	}
 });
 
 </script>
