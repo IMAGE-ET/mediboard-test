@@ -86,32 +86,6 @@ $dPconfig["db"]["Transit"] = array(
   "dbpass" => "AdminTransit",
 );
   
-// BCB
-$dPconfig["db"]["bcb1"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "bcb1",
-  "dbuser" => "",
-  "dbpass" => "",
-);
-
-$dPconfig["db"]["bcb2"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "bcb2",
-  "dbuser" => "",
-  "dbpass" => "",
-);
-
-// BCBGES
-$dPconfig["db"]["bcbges"] = array(
-  "dbtype" => "mysql",
-  "dbhost" => "localhost",
-  "dbname" => "bcbges",
-  "dbuser" => "",
-  "dbpass" => "",
-);
-
 // you can add as much databases as you want by using
 //$dPconfig["db"]["dsn"] = array(
 //  "dbtype" => "dbtype",
@@ -382,29 +356,6 @@ $dPconfig["dPlabo"] = array (
     "pass_ftp_prescription"   => "",
   ),
 );
-
-$dPconfig["dPmedicament"] = array (
-  "CBcbObject" =>  array (
-    "dsn" => "bcb",
-  ),
-  
-  "CBcbProduit" => array (
-    "use_cache" => "0",
-  ),
-  
-  "CBcbClasseATC" => array (
-    "niveauATC" => "2",
-  ),
-  
-  "CBcbClasseTherapeutique" => array (
-    "niveauBCB" => "2",
-  ),
-  
-  "CBcbProduitLivretTherapeutique" => array(
-    "product_category_id" => "",
-  ),
-);
-
 
 $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
