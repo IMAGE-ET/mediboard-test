@@ -397,6 +397,20 @@ Class.extend(String, {
   }
 });
 
+Ajax.PeriodicalUpdater.addMethods({
+  resume: function() {
+    this.updateComplete();
+  }
+});
+
+PeriodicalExecuter.addMethods({
+  resume: function() {
+    if (!this.timer) this.registerCallback();
+  }
+});
+
+
+
 document.observeOnce = function(event_name, outer_callback){
   $(document.documentElement).observeOnce(event_name, outer_callback);
 };
