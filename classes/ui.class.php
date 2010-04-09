@@ -49,6 +49,40 @@ class CApp {
     echo json_encode($data);
     self::rip();
   }
+  
+  /**
+   * 
+   * @param object $module The module name or the file path
+   * @param object $file [optional] The file of the module, or null
+   * @param object $arguments [optional] The GET arguments
+   * @return string The fetched content
+   */
+  static function fetch($module, $file = null, $arguments = array()) {
+    $save = array();
+    foreach($arguments as $_key => $_value) {
+      if (!isset($_GET[$_key])) continue;
+      $save[$_key] = $_GET[$_key];
+    }
+    
+    foreach($arguments as $_key => $_value) {
+      $_GET[$_key] = $_value;
+    }
+    
+    ob_start();
+    if (isset($file)) {
+      include("./modules/$module/$file.php");
+    }
+    else {
+      include($module);
+    }
+    $output = ob_get_clean();
+   
+    foreach($save as $_key => $_value) {
+      $_GET[$_key] = $_value;
+    }
+    
+    return $output;
+  }
 }
 
 

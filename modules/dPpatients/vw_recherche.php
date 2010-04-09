@@ -61,7 +61,7 @@ $order_ant = "antecedent_id, rques";
 $total_antecedents = null;
 if ($where_ant) {
   $total_antecedents = $ant->countList($where_ant, $order_ant, null, null, $ljoin);
-  $antecedents = $ant->loadList($where_ant, $order_ant, "$page_antecedentt, 30", null, $ljoin);
+  $antecedents = $ant->loadList($where_ant, $order_ant, "$page_antecedent, 30", null, $ljoin);
 }
 
 foreach($antecedents as $key => $value){
