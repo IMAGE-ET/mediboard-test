@@ -182,14 +182,15 @@ if ($module == "system") {
   }
 }
 
-// Ajout du module et des onglets
-CAppUI::requireModuleFile($module, "index");
-addLocale("Module", "Module", "module-$module-court");
-addLocale("Module", "Module", "module-$module-long");
-if (!empty(CModule::getInstalled($module)->_tabs)) {
-  foreach (CModule::getInstalled($module)->_tabs as $_tab) {
-    addLocale("Module", "Tabs", "mod-$module-tab-" . $_tab);
-  }
+$files = CAppUI::readFiles("modules/$module", '\.php$');
+
+foreach($files as $_file) {
+  $_tab = substr($_file, 0, -4);
+  
+  if (in_array($_tab, array("setup", "index")) ||
+      preg_match("/^httpreq|^ajax/", $_tab)) continue;
+  
+  addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
 }
 
 // Création du template
