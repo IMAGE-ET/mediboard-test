@@ -49,7 +49,7 @@
           </td>
           <td>{{$sejour->_entree|date_format:$dPconfig.time}}</td>
 			    <td class="text">
-						{{if $offline}}
+						{{if $offline && $rpu->_id}}
 	            <button class="search notext" onclick="modalwindow = modal($('modal-{{$sejour->_id}}'));"></button>
 	            <div id="modal-{{$sejour->_id}}" style="display: none; height: 600px; overflow: auto;">
 	              <div style="float: right"> 
