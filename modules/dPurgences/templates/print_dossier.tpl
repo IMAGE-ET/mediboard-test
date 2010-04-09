@@ -1,14 +1,17 @@
-<script type="text/javascript">
-  Main.add(window.print);
-</script>
+{{assign var=tbl_class value="main tbl"}}
+{{if !@$offline}}
+	<script type="text/javascript">
+	  Main.add(window.print);
+	</script>
+	<button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
+	</td>
+	</tr>
+  </table>
 
-<button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
+  {{assign var=tbl_class value="print"}}
+{{/if}}
 
-</td>
-</tr>
-</table>
-
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <th class="title" colspan="10" style="font-size: 16px">
       Dossier d'urgence de <span style="font-size: 20px">{{$patient->_view}}</span> {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}} <br />
@@ -76,7 +79,7 @@
 
 <hr />
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
   	<th width="50%">{{mb_label object=$consult field="motif"}}</th>
     <td>{{mb_value object=$consult field="motif"}}</td>
@@ -90,7 +93,7 @@
 
 {{include file="../../dPpatients/templates/print_constantes.tpl"}}
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <th>{{mb_label object=$rpu field="motif"}}</th>
     <td>{{mb_value object=$rpu field="motif"}}</td>
@@ -112,10 +115,7 @@
         {{/foreach}}
         {{/foreach}}
       {{else}}
-        <tr>
-          <th></th>
-          <td>{{tr}}CAntecedent.unknown{{/tr}}</td>
-        </tr>
+         {{tr}}CAntecedent.unknown{{/tr}}
       {{/if}}
     </td>
   </tr>
@@ -177,9 +177,11 @@
   </tr>		
 </table>
 
+{{if !@$offline}}
 <br style="page-break-after: always;" />
+{{/if}}
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr><th class="category" colspan="10">Transmissions paramedicales de passage aux urgences</th></tr>
 	
 	<tr>
@@ -268,7 +270,7 @@
 
 <hr />
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <th width="50%">{{mb_label object=$consult field="motif"}}</th>
     <td>{{mb_value object=$consult field="motif"}}</td>
@@ -277,7 +279,7 @@
 
 {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=true}}
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <th>Documents</th>
     <td>
@@ -311,12 +313,14 @@
   
 <table>
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr><th class="category" colspan="10">Actes</th></tr>
 </table>
 
 {{include file="../../dPcabinet/templates/print_actes.tpl" without_del_form=true}}
 
+{{if !@$offline}}
 <table>
 <tr>
 <td>
+{{/if}}

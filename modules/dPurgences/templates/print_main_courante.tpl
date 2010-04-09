@@ -11,7 +11,12 @@
 <table class="main" style="font-size: 1.2em;">
   <tr>
     <th>
-      <a href="#print" onclick="window.print()">
+    	{{if $offline}}
+	      <span style="float: right">
+	        {{$dateTime|date_format:$dPconfig.datetime}}
+	      </span>
+	    {{/if}}
+       <a href="#print" onclick="window.print()">
         Main courante du {{$date|date_format:$dPconfig.longdate}}
 				<br /> Total: {{$listSejours|@count}} RPU
       </a>
@@ -21,7 +26,7 @@
     <td>
       <table class="tbl">
         <tr>
-          <th>{{mb_title class=CRPU field=_entree}}</th>
+          <th colspan="2">{{mb_title class=CRPU field=_entree}}</th>
 				  <th>{{mb_label class=CRPU field=_patient_id}}</th>
 				  <th>{{mb_label class=CRPU field=ccmu}}</th>
 					<th>{{mb_label class=CRPU field=diag_infirmier}}</th>
@@ -39,8 +44,27 @@
 			  {{assign var=patient value=$sejour->_ref_patient}}
 			  {{assign var=consult value=$rpu->_ref_consult}}
 			  <tr>
-					<td>{{$sejour->_entree|date_format:$dPconfig.time}}</td>
-			    <td class="text">{{mb_value object=$sejour field="patient_id"}}</td>
+					<td style="text-align: center">
+            {{mb_ditto value=$sejour->_entree|date_format:$dPconfig.date name=entree}}
+          </td>
+          <td>{{$sejour->_entree|date_format:$dPconfig.time}}</td>
+			    <td class="text">
+						{{if $offline}}
+	            <button class="search notext" onclick="modalwindow = modal($('modal-{{$sejour->_id}}'));"></button>
+	            <div id="modal-{{$sejour->_id}}" style="display: none; height: 600px; overflow: auto;">
+	              <div style="float: right"> 
+	              <button class="cancel" onclick="modalwindow.close();">Fermer</button>
+	              </div>
+	              {{assign var=sejour_id value=$sejour->_id}}
+	              {{assign var=dossier_medical value=$sejour->_ref_patient->_ref_dossier_medical}}
+	              {{if array_key_exists($sejour_id, $csteByTime)}}
+	              {{assign var=csteByTime value=$csteByTime.$sejour_id}}
+	              {{/if}}
+	              {{mb_include module=dPurgences template=print_dossier}}
+	            </div>
+	          {{/if}}
+						{{mb_value object=$sejour field="patient_id"}}
+					</td>
         {{if $rpu->_id}}
 					<td>
             {{if $rpu->ccmu}}
@@ -64,9 +88,9 @@
 						{{/if}}
 					</td>
           <td style="text-align: center">
-            {{mb_ditto value=$sejour->_entree|date_format:$dPconfig.date name=entree}}
+            {{mb_ditto value=$sejour->_sortie|date_format:$dPconfig.date name=sortie}}
           </td>
-					<td>{{$sejour->_entree|date_format:$dPconfig.time}}</td>
+					<td>{{$sejour->_sortie|date_format:$dPconfig.time}}</td>
 			  {{else}}
 					<!-- Pas de RPU pour ce séjour d'urgence -->
 					<td colspan="10">

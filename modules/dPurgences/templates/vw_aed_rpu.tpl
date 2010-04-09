@@ -110,6 +110,12 @@
 	  url.requestUpdate('listActesNGAP');
 	}
 	
+	function printDossier(id) {
+	  var url = new Url("dPurgences", "print_dossier");
+	  url.addParam("rpu_id", id);
+	  url.popup(700, 550, "RPU");
+	}
+
 	Main.add(function () {
 	  {{if $rpu->_id && $can->edit}}
 	    DossierMedical.reloadDossierPatient();
@@ -326,6 +332,10 @@
 					    {{tr}}Delete{{/tr}}
 					  </button>
 					{{/if}}
+					
+					<button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
+		        {{tr}}Print{{/tr}} dossier
+		      </button>
 					    
 		    {{else}}
 			    <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
