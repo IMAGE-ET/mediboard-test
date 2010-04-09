@@ -42,6 +42,21 @@ function printMainCourante() {
   url.popup(800, 600, "Impression main courante");
 }
 
+function filterPatient(input) {
+  var patients = $$("#main_courante .CPatient-view");
+  var term = $V(input);
+  
+  $$("#main_courante tr").invoke("show");
+  
+  if (term) {
+    patients.each(function(p){
+      if (!p.innerHTML.like(term)) {
+        p.up("tr").hide();
+      }
+    });
+  }
+}
+
 onMergeComplete = function() {
   updateMainCourante();
 	updateIdentitoVigilance()
@@ -82,13 +97,12 @@ Main.add(function () {
 <div id="holder_main_courante">
 	<table style="width: 100%;">
 	  <tr>
-	    <td>
+	    <td style="white-space: nowrap; width: 1%;">
 	      <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
 	        Ajouter un patient
-	      </a> 
+	      </a>
 	    </td>
-	    <th>
-	     le
+	    <th style="font-size: 1.2em;">
 	     {{$date|date_format:$dPconfig.longdate}}
 	      <form action="?" name="changeDate" method="get">
 	        <input type="hidden" name="m" value="{{$m}}" />
@@ -97,10 +111,6 @@ Main.add(function () {
 	      </form>
 	    </th>
 	    <td style="text-align: right">
-	     <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')">
-	       Afficher les <span class="count">0</span> admissions de la veille
-       </button>
-
 	     Type d'affichage
 	     <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
 		      <select name="selAffichage" onchange="this.form.submit();">
@@ -113,6 +123,18 @@ Main.add(function () {
 	      <a href="#" onclick="printMainCourante()" class="button print">Main courante</a>
 	      <a href="#" onclick="showLegend()" class="button search">Légende</a>
 	    </td>
+	  </tr>
+	  <tr>
+	    <td></td>
+	    <td>
+          Filtrer par nom : 
+          <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
+        </td>
+        <td style="text-align: right;">
+	     <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')" style="display: none;">
+	       Afficher les <span class="count">0</span> admissions de la veille
+         </button>
+       </td>
 	  </tr>
 	</table>
 	<div id="main_courante"></div>

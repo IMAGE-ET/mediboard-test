@@ -16,6 +16,8 @@
     counter.up().setVisible(count != 0);
 
     $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+    
+    $V($("filter-patient-name"), "");
   });
 </script>
 

@@ -40,7 +40,7 @@ var ObjectTooltip = Class.create({
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
 
     if (!this.oOptions.popup) {
-      this.createDiv();
+      this.createDiv(eTrigger);
       this.addHandlers();
     }
   },
@@ -132,8 +132,8 @@ var ObjectTooltip = Class.create({
         .observe("mouseover", this.cancelHide.bind(this));
   },
 
-  createDiv: function() {
-    var eTrigger = $(this.sTrigger), eTarget;
+  createDiv: function(eTrigger) {
+    var eTarget;
     
     var eDiv = 
     DOM.div({className: this.mode.sClass}, 
@@ -159,7 +159,8 @@ var ObjectTooltip = Class.create({
     );
     
     this.sDiv = eDiv.identify();
-    $(document.body).insert(eDiv.hide());
+    
+    $(eTrigger.up(".tooltip") || document.body).insert(eDiv.hide());
     
     if (!Prototype.Browser.IE) {
       eTarget.setStyle({

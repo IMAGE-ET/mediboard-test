@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m, $g;
 
-$date = CValue::getOrSession("date");
+$date = CValue::getOrSession("date", mbDate());
 $offline = CValue::get("offline");
 $date_before = mbDate("-1 DAY", $date);
 

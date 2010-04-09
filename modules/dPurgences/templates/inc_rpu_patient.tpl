@@ -10,7 +10,7 @@
 
 <a href="{{$rpu_link}}">
   <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
-    <big>{{$patient}}</big> 
+    <big class="CPatient-view">{{$patient}}</big> 
   </strong>
 </a>
       

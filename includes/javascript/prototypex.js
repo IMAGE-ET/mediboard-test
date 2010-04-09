@@ -318,6 +318,20 @@ Object.extend(Event, {
 });
 
 Class.extend(String, {
+  allographs: {
+    withDiacritics   : "אבגדהועףפץצרטיךכחלםמןשתûüÿס",
+    withoutDiacritics: "aaaaaaooooooeeeeciiiiuuuuyn"
+  },
+  glyphs: {
+    "a": "אבגדהו",
+    "c": "ח",
+    "e": "טיךכ",
+    "i": "לםמן",
+    "o": "עףפץצר",
+    "u": "שתûü",
+    "y": "ÿ",
+    "n": "ס"
+  },
   pad: function(ch, length, right) {
     length = length || 30;
     ch = ch || ' ';
@@ -330,9 +344,51 @@ Class.extend(String, {
       .replace(/\\n/g, "\n")
       .replace(/\\t/g, "\t");
   },
-	stripAll: function() {
-		return this.strip().gsub(/\s+/, " ");
-	}
+  stripAll: function() {
+    return this.strip().gsub(/\s+/, " ");
+  },
+  removeDiacritics: function(){
+    var str = this;
+    var from, to;
+    
+    from = this.allographs.withDiacritics.split("");
+    to   = this.allographs.withoutDiacritics.split("");
+    
+    from.each(function(c, i){
+      str = str.gsub(c, to[i]);
+    });
+    
+    from = this.allographs.withDiacritics.toUpperCase().split("");
+    to   = this.allographs.withoutDiacritics.toUpperCase().split("");
+    
+    from.each(function(c, i){
+      str = str.gsub(c, to[i]);
+    });
+    
+    return str;
+  },
+  // @todo: should extend RegExp instead of String
+  allowDiacriticsInRegexp: function() {
+    var re = this.removeDiacritics();
+    
+    var translation = {};
+    $H(this.glyphs).each(function(g){
+      translation[g.key] = "["+g.key+g.value+"]";
+    });
+        
+    $H(translation).each(function(t){
+      re = re.replace(new RegExp(t.key, "gi"), t.value);
+    });
+    
+    return re;
+  },
+  like: function(term) {
+    var specials = "/.*+?|()[]{}\\".split("");
+    
+    term = term.replace(new RegExp('(\\' + specials.join('|\\') + ')', "g"), '\\$1');
+    
+    return !!this.match(new RegExp(term.trim().allowDiacriticsInRegexp(), "i"));
+  }
 });
 
 document.observeOnce = function(event_name, outer_callback){

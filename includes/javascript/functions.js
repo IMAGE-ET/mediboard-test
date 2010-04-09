@@ -1131,7 +1131,7 @@ Element.addMethods({
       }
       else if (element.nodeType == 1 && element.childNodes && !/(script|style|textarea|select)/i.test(element.tagName)) {
         for (var i = 0; i < element.childNodes.length; ++i)
-          i += innerHighlight(element.childNodes[i], term);
+          i += innerHighlight(element.childNodes[i], term, className);
       }
       return skip;
     }
