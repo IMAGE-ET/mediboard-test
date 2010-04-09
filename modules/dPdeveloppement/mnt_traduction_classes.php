@@ -187,7 +187,7 @@ $files = CAppUI::readFiles("modules/$module", '\.php$');
 foreach($files as $_file) {
   $_tab = substr($_file, 0, -4);
   
-  if (in_array($_tab, array("setup", "index")) ||
+  if (in_array($_tab, array("setup", "index", "config")) ||
       preg_match("/^httpreq|^ajax/", $_tab)) continue;
   
   addLocale("Module", "Tabs", "mod-$module-tab-$_tab");
