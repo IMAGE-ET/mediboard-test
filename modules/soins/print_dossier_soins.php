@@ -10,6 +10,11 @@
 
 $sejour_id = CValue::get("sejour_id");
 
+if(!$sejour_id){
+	CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
+	return;
+}
+
 // Chargement du sejour
 $sejour = new CSejour();
 $sejour->load($sejour_id);
