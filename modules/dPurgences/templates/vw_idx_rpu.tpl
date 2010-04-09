@@ -43,18 +43,16 @@ function printMainCourante() {
 }
 
 function filterPatient(input) {
-  var patients = $$("#main_courante .CPatient-view");
-  var term = $V(input);
-  
   $$("#main_courante tr").invoke("show");
   
-  if (term) {
-    patients.each(function(p){
-      if (!p.innerHTML.like(term)) {
-        p.up("tr").hide();
-      }
-    });
-  }
+  var term = $V(input);
+  if (!term) return;
+  
+  $$("#main_courante .CPatient-view").each(function(p) {
+    if (!p.innerHTML.like(term)) {
+      p.up("tr").hide();
+    }
+  });
 }
 
 onMergeComplete = function() {
@@ -69,7 +67,7 @@ Main.add(function () {
 	
   Calendar.regField(getForm("changeDate").date, null, { noView: true } );
   
-  var tabs = Control.Tabs.create('tab_main_courante', true);
+  Control.Tabs.create('tab_main_courante', true);
 });
 
 </script>
@@ -127,16 +125,17 @@ Main.add(function () {
 	  <tr>
 	    <td></td>
 	    <td>
-          Filtrer par nom : 
-          <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
-        </td>
-        <td style="text-align: right;">
-	     <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')" style="display: none;">
-	       Afficher les <span class="count">0</span> admissions de la veille
-         </button>
-       </td>
+        Filtrer par nom : 
+        <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
+      </td>
+      <td style="text-align: right;">
+	      <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')" style="display: none;">
+	        Afficher les <span class="count">0</span> admissions de la veille
+        </button>
+      </td>
 	  </tr>
 	</table>
+  
 	<div id="main_courante"></div>
 </div>
 

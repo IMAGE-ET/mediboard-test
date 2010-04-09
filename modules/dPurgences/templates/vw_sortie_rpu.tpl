@@ -110,6 +110,19 @@ refreshSortie = function(button, rpu_id){
   url.requestUpdate(line);
 }
 
+function filterPatient(input) {
+  $$("#list-sorties tr").invoke("show");
+  
+  var term = $V(input);
+  if (!term) return;
+  
+  $$("#list-sorties .CPatient-view").each(function(p) {
+    if (!p.innerHTML.like(term)) {
+      p.up("tr").hide();
+    }
+  });
+}
+
 // Fonction appelée dans inc_vw_etab_externe qui submit le sejour dans le cas de "inc_vw_rpu.tpl"
 // Dans la sortie, on ne veut pas déclencher de submit
 function submitSejour(){
@@ -121,7 +134,12 @@ function submitSejour(){
 <table class="main">
   <tr>
     <th>
-      <div style="float: right">
+      <div style="float: left;">
+        Filtrer par nom : 
+        <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
+      </div>
+      
+      <div style="float: right;">
         Type d'affichage
         <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
           <select name="aff_sortie" onchange="submit();">
@@ -131,7 +149,7 @@ function submitSejour(){
         </form>
       </div>
       
-      le {{$date|date_format:$dPconfig.longdate}}
+      {{$date|date_format:$dPconfig.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -141,7 +159,7 @@ function submitSejour(){
   </tr>
 </table>
 
-<table class="tbl">
+<table class="tbl" id="list-sorties">
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
