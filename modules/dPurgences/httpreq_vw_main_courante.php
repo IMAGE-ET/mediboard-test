@@ -53,7 +53,6 @@ if ($selAffichage == "prendre_en_charge"){
 	$where["sejour.annule"] = " = '1'";
 }
 
-
 if ($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id") {
   $order_col = "ccmu";  
 }

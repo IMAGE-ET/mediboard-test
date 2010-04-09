@@ -295,6 +295,30 @@ class CRPU extends CMbObject {
   }
   
   function store() {
+  	// Recherche si un séjour n'éxiste pas déjà
+    if (!$this->_id) {
+    	$where = array();
+			$where['type']   = " = 'urg'";
+      $where['patient_id']   = " = '$this->_patient_id'";
+			$sortie = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
+      $where[] = "IF(`entree_reelle`,`entree_reelle`,`entree_prevue`) <= '$this->_entree' AND (IF(`sortie_reelle`,`sortie_reelle`,`sortie_prevue`) >= '$this->_entree') ";
+			
+    	$sejour = new CSejour();
+      $sejour->loadObject($where);
+
+			if ($sejour->_id) {
+				$this->sejour_id = $sejour->_id;
+				$this->loadRefSejour();
+				$this->_ref_sejour->loadRefRPU();
+				$rpu = $this->_ref_sejour->_ref_rpu;
+				// Si y'a un RPU déjà existant on alerte d'une erreur 
+				if ($rpu->_id) {
+					return CAppUI::tr("CRPU-already-exists");
+				}
+				$this->_bind_sejour = false;
+			}
+    }   
+ 
     // Bind Sejour
     if ($msg = $this->bindSejour()) {
       return $msg;
@@ -313,11 +337,8 @@ class CRPU extends CMbObject {
     
     $this->_ref_sejour->loadComplete();
   }
-	
 
 	function fillLimitedTemplate(&$template) {
-	
-			
 	  $template->addProperty("RPU - Diagnostic infirmier" , $this->diag_infirmier);
     $template->addProperty("RPU - Mode d'entrée"        , $this->getFormattedValue("mode_entree"));
     $template->addProperty("RPU - Transport"            , $this->getFormattedValue("transport"));

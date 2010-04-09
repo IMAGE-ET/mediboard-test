@@ -9,11 +9,18 @@
 *}}
 
 <script type="text/javascript">
-
-Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
-});
-
+	function refreshAttente(debut, fin, rpu_id) {
+	  var url = new Url("dPurgences", "ajax_vw_attente");
+	  url.addParam("rpu_id", rpu_id);
+		url.addParam("debut", debut);
+		url.addParam("fin", fin);
+	  url.addParam("attente", 1);
+	  url.requestUpdate(fin+'-'+rpu_id);
+  }
+		
+	Main.add(function () {
+    Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  });
 </script>
 
 <table style="width:100%">
@@ -32,8 +39,8 @@ Main.add(function () {
 
 <table class="tbl">
 	<tr>
-		<th class="title" rowspan="2">{{tr}}CRPU-_patient_id{{/tr}}</th>
-		<th class="title" rowspan="2">{{tr}}CRPU-_responsable_id{{/tr}}</th>
+		<th class="title" rowspan="2">{{mb_title class=CRPU field="_patient_id"}}</th>
+		<th class="title" rowspan="2">{{mb_title class=CRPU field="_responsable_id"}}</th>
 		<th class="title" colspan="2">{{tr}}CRPU-radio{{/tr}}</th>
 		<th class="title" colspan="2">{{tr}}CRPU-bio{{/tr}}</th>
 		<th class="title" colspan="2">{{tr}}CRPU-specia{{/tr}}</th>
@@ -48,37 +55,33 @@ Main.add(function () {
   </tr>
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=rpu value=$_sejour->_ref_rpu}}
-    {{assign var=rpu_id value=$rpu->_id}}
-    {{assign var=patient value=$_sejour->_ref_patient}}
-  
-    {{* Param to create/edit a RPU *}}
-    {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$_sejour->_id"}}
-    {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
-    <tr>
-      <td>
-	      <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
-	        <img src="images/icons/search.png" alt="Dossier patient"/>
-	      </a>
-	      <a href="{{$rpu_link}}">
-	        <strong>
-	        {{$patient->_view}}
-	        </strong>
-	        <br />{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
-	      </a>
-      </td>
-      
-      <td>
-	      <a href="{{$rpu_link}}">
-	        {{$_sejour->_ref_praticien->_view}}
-	      </a>
-      </td>
-      
-      <td>{{$rpu->radio_debut|date_format:$dPconfig.time}}</td>
-      <td>{{$rpu->radio_fin|date_format:$dPconfig.time}}</td>
-      <td>{{$rpu->bio_depart|date_format:$dPconfig.time}}</td>
-      <td>{{$rpu->bio_retour|date_format:$dPconfig.time}}</td>
-			<td>{{$rpu->specia_att|date_format:$dPconfig.time}}</td>
-      <td>{{$rpu->specia_arr|date_format:$dPconfig.time}}</td>
-    </tr>
+		{{assign var=rpu_id value=$rpu->_id}}
+      {{assign var=patient value=$_sejour->_ref_patient}}
+			
+		<tr style="text-align: center;{{if $_sejour->sortie_reelle}}opacity: 0.6{{/if}}">			
+			<td>
+			  <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
+			    <img src="images/icons/search.png" alt="Dossier patient"/>
+			  </a>
+			  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+			    <strong>
+			    {{$patient->_view}}
+			    </strong>
+			    <br />{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+			  </a>
+			</td>
+			
+			<td>
+			  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
+			    {{$_sejour->_ref_praticien->_view}}
+			  </a>
+			</td>
+			
+			{{mb_include module=dPurgences template=inc_vw_attente debut=radio_debut fin=radio_fin}}
+			
+			{{mb_include module=dPurgences template=inc_vw_attente debut=bio_depart fin=bio_retour}}
+			
+			{{mb_include module=dPurgences template=inc_vw_attente debut=specia_att fin=specia_arr}}
+		</tr>
   {{/foreach}}
 </table>

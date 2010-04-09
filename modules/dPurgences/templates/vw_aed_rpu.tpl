@@ -357,7 +357,7 @@
 		
 		  <tr>
 		    <td style="width: 60%">
-		      {{include file="inc_vw_attente.tpl"}}
+		      {{include file="inc_vw_rpu_attente.tpl"}}
 		    </td>
 		    <td class="button">
 		  		{{include file="inc_pec_praticien.tpl"}}

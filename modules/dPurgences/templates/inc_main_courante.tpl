@@ -98,7 +98,7 @@
     </td>
 		
 	  {{else}}
-    <td class="text" style="background-color: {{$background}};">
+    <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
     	{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
     
       {{if $modules.dPhospi->canEdit()}}
@@ -117,7 +117,7 @@
       </a>
 			
       {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
-        <div style="clear: both; font-weight: bold;" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+        <div style="clear: both; font-weight: bold;">
         {{if $rpu->radio_debut}}
         	<div {{if $rpu->radio_fin}}style="opacity: 0.6"{{/if}}>
         		{{tr}}CRPU-{{mb_ternary test=$rpu->radio_fin value=radio_fin other=radio_debut}}{{/tr}}
