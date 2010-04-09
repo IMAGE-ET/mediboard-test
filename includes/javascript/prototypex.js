@@ -317,7 +317,7 @@ Object.extend(Event, {
   }
 });
 
-Class.extend(String, {
+Object.extend(String, {
   allographs: {
     withDiacritics   : "אבגדהועףפץצרטיךכחלםמןשתûüÿס",
     withoutDiacritics: "aaaaaaooooooeeeeciiiiuuuuyn"
@@ -331,6 +331,12 @@ Class.extend(String, {
     "u": "שתûü",
     "y": "ÿ",
     "n": "ס"
+  }
+});
+
+Class.extend(String, {
+  trim: function() {
+    return this.replace(/^\s+|\s+$/g, "");
   },
   pad: function(ch, length, right) {
     length = length || 30;
@@ -351,15 +357,15 @@ Class.extend(String, {
     var str = this;
     var from, to;
     
-    from = this.allographs.withDiacritics.split("");
-    to   = this.allographs.withoutDiacritics.split("");
+    from = String.allographs.withDiacritics.split("");
+    to   = String.allographs.withoutDiacritics.split("");
     
     from.each(function(c, i){
       str = str.gsub(c, to[i]);
     });
     
-    from = this.allographs.withDiacritics.toUpperCase().split("");
-    to   = this.allographs.withoutDiacritics.toUpperCase().split("");
+    from = String.allographs.withDiacritics.toUpperCase().split("");
+    to   = String.allographs.withoutDiacritics.toUpperCase().split("");
     
     from.each(function(c, i){
       str = str.gsub(c, to[i]);
@@ -372,7 +378,7 @@ Class.extend(String, {
     var re = this.removeDiacritics();
     
     var translation = {};
-    $H(this.glyphs).each(function(g){
+    $H(String.glyphs).each(function(g){
       translation[g.key] = "["+g.key+g.value+"]";
     });
         
