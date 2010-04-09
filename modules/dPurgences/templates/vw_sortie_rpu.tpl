@@ -124,9 +124,9 @@ function submitSejour(){
       <div style="float: right">
         Type d'affichage
         <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
-          <select name="selAffichage" onchange="submit();">
-            <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
-            <option value="sortie" {{if $selAffichage == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
+          <select name="aff_sortie" onchange="submit();">
+            <option value="tous" {{if $aff_sortie == "tous"}}selected = "selected"{{/if}}>Tous</option>
+            <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
           </select>
         </form>
       </div>
@@ -159,6 +159,6 @@ function submitSejour(){
     {{mb_include module=dPurgences template=inc_sortie_rpu}}
   </tr>
   {{foreachelse}}
-	<tr><td colspan=="10"><em>Aucune sortie à effectuer</em></td></tr>
+	<tr><td colspan="10"><em>Aucune sortie à effectuer</em></td></tr>
   {{/foreach}}
 </table>

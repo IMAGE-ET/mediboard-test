@@ -13,7 +13,7 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 // Type d'affichage
-$selAffichage = CValue::postOrSession("selAffichage","tous");
+$aff_sortie = CValue::postOrSession("aff_sortie","tous");
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "ASC");
@@ -33,7 +33,7 @@ $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if($selAffichage == "sortie"){
+if($aff_sortie == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
 }
 
@@ -80,7 +80,7 @@ $smarty->assign("listEtab", $listEtab);
 $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);
 $smarty->assign("listSejours", $listSejours);
-$smarty->assign("selAffichage", $selAffichage);
+$smarty->assign("aff_sortie", $aff_sortie);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("date", $date);
 $smarty->assign("today", $today);
