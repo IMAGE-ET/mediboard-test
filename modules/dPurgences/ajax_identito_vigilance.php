@@ -35,39 +35,59 @@ foreach ($sejours as &$_sejour) {
 	
 	// Classement par patient
 	if (!isset($patients[$_sejour->patient_id])) {
-		$patients[$_sejour->patient_id] = $_sejour->_ref_patient;
+		$patients["$_sejour->patient_id"] = $_sejour->_ref_patient;
 	}
 	
-	$patients[$_sejour->patient_id]->_ref_sejours[$_sejour->_id] = $_sejour;
+	$patients["$_sejour->patient_id"]->_ref_sejours[$_sejour->_id] = $_sejour;
 }
 
 // Chargement des détails sur les patients
+$mergeables_count = 0;
 foreach ($patients as $patient) {
   $patient->loadIPP();
 	
 	$guess = array();
   $nicer = array();
 
+  $guess["mergeable"] = false;
+	
+	// Sibling patients
 	$siblings = $patient->getSiblings();
-  $guess["siblings"] = array_keys($siblings);
-  $nicer["siblings"] = CMbArray::pluck($siblings, "_view");
-	
+  foreach ($guess["siblings"] = array_keys($siblings) as $sibling_id) {
+  	if (array_key_exists($sibling_id, $patients)) {
+		  $guess["mergeable"] = true;
+  	}
+  }
+
+  // Phoning patients
   $phonings = $patient->getPhoning($_sejour->_entree);
-  $guess["phonings"] = array_keys($phonings);
-  $nicer["phonings"] = CMbArray::pluck($phonings, "_view");
+  foreach ($guess["phonings"] = array_keys($phonings) as $phoning_id) {
+    if (array_key_exists($phoning_id, $patients)) {
+      $guess["mergeable"] = true;
+    }
+  }
 	
-//	mbTrace($nicer, "Nicer for $patient->_view");
+	if (count($patient->_ref_sejours) > 1) {
+    $guess["mergeable"] = true;
+	}
+	
+	if ($guess["mergeable"]) {
+		$mergeables_count++;
+	}
+
 	$guesses[$patient->_id] = $guess;
 }
 
-//mbTrace($guesses);
-
+// Tri sur la vue a posteriori : détruit les clés !
+array_multisort(CMbArray::pluck($patients, "nom"), SORT_ASC, $patients);
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("mergeables_count", $mergeables_count);
 $smarty->assign("date", $date);
 $smarty->assign("patients", $patients );
+$smarty->assign("guesses", $guesses );
 
 $smarty->display("inc_identito_vigilance.tpl");
 ?>

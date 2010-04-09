@@ -13,7 +13,7 @@
     var count = {{$sejours_veille}};
     var counter = $$("button .count")[0];
     counter.update(count);
-    counter.up().setVisible(count != 0);
+    counter.up().setVisibility(count != 0);
 
     $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
     
@@ -23,21 +23,32 @@
 
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    <th>{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    <th>{{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    <th style="width: 8em;">
+		  {{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+		</th>
+    <th style="width: 16em;">
+    	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+		</th>
+		<th style="width: 1%;">
+      <input type="text" size="4" style="float:right;" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
+		</th>
+    <th style="width: 10em;">
+		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+		</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
-    <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
+    <th style="width: 1%;">{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
-    <th>{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
+    <th style="width: 1%;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
+			<th style="width: 16em;">
 			{{if $dPconfig.dPurgences.diag_prat_view}}
-	      <th>{{tr}}CRPU-diag_infirmier{{/tr}} / médical</th>
+	      {{tr}}CRPU-diag_infirmier{{/tr}} / médical
 			{{else}}
-			 <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
+			  {{tr}}CRPU-diag_infirmier{{/tr}}
 			{{/if}}
+		  </th>
     {{/if}}
-    <th>Prise en charge</th>
+    <th style="width: 0em;">Prise en charge</th>
   </tr>
 
   {{foreach from=$listSejours item=curr_sejour key=sejour_id}}
@@ -60,7 +71,7 @@
     </td>
 	  {{else}}
 
-    <td class="ccmu-{{$rpu->ccmu}}">
+    <td class="ccmu-{{$rpu->ccmu}} text">
       <a href="{{$rpu_link}}">
         {{if $rpu->ccmu}}
 				  {{mb_value object=$rpu field=ccmu}}
@@ -77,7 +88,7 @@
   	{{if $curr_sejour->annule}}
   	<td class="cancelled">
 	  {{else}}
-    <td class="text" style="background-color: {{$background}};">
+    <td colspan="2" class="text" style="background-color: {{$background}};">
     {{/if}}
       {{mb_include template=inc_rpu_patient}}
     </td>

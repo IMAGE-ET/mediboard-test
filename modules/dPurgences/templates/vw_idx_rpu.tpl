@@ -8,66 +8,34 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=dPurgences script=main_courante}}
+{{mb_include_script module=dPurgences script=identito_vigilance}}
+
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
 {{else}}
+
 <script type="text/javascript">
-
-function showLegend() {
-  var url = new Url("dPurgences", "vw_legende");
-  url.popup(300, 320, "Legende");
-}
-
-// fonction de refresh periodique de la main courante
-function updateMainCourante() {
-  var url = new Url("dPurgences", "httpreq_vw_main_courante");
-  url.periodicalUpdate('main_courante', { frequency: 60 } );
-}
-
-function updateIdentitoVigilance() {
-  var url = new Url("dPurgences", "ajax_identito_vigilance");
-  url.periodicalUpdate('identito_vigilance', { frequency: 60 } );
-}
  
-function updateConsultations() {
+function updateConsultations(frequency) {
   var url = new Url("dPcabinet", "vw_journee");
   url.addParam("date", "{{$date}}");
   url.addParam("mode_urgence", true);
-  url.periodicalUpdate('consultations', { frequency: 60 } );
+  url.periodicalUpdate('consultations', { frequency: frequency } );
 } 
  
-function printMainCourante() {
-  var url = new Url("dPurgences", "print_main_courante");
-  url.addParam("date", "{{$date}}");
-  url.popup(800, 600, "Impression main courante");
-}
-
-function filterPatient(input) {
-  $$("#main_courante tr").invoke("show");
-  
-  var term = $V(input);
-  if (!term) return;
-  
-  $$("#main_courante .CPatient-view").each(function(p) {
-    if (!p.innerHTML.like(term)) {
-      p.up("tr").hide();
-    }
-  });
-}
-
 onMergeComplete = function() {
-  updateMainCourante();
-	updateIdentitoVigilance()
+  IdentitoVigilance.start(0, 80);
+  MainCourante.start(1, 60);
 }
 
 Main.add(function () {
-  updateMainCourante();
-  updateConsultations();
-  updateIdentitoVigilance();
-	
-  Calendar.regField(getForm("changeDate").date, null, { noView: true } );
-  
-  Control.Tabs.create('tab_main_courante', true);
+  // Delays prevent potential overload with periodical previous updates
+  MainCourante.start(0, 60);
+  updateConsultations.delay(1, 80);
+  IdentitoVigilance.start(2,100);
+
+  var tabs = Control.Tabs.create('tab_main_courante', false);
 });
 
 </script>
@@ -86,9 +54,9 @@ Main.add(function () {
       <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
     </form>
   </li>
-  <li><a href="#holder_main_courante">Main courante <small>(0)</small></a></li>
-  <li><a href="#consultations" class="empty">Reconvocations</a></li>
-  <li><a href="#identito_vigilance" class="empty">Identito-vigilance</a></li>
+  <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
+  <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
+  <li><a href="#identito_vigilance" class="empty">Identito-vigilance <small>(&ndash;)</small></a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -100,16 +68,29 @@ Main.add(function () {
 	        Ajouter un patient
 	      </a>
 	    </td>
-	    <th style="font-size: 1.2em;">
-	     {{$date|date_format:$dPconfig.longdate}}
+	    <th>
+	    	<script type="text/javascript">
+	    	Main.add(function() {
+				  Calendar.regField(getForm("changeDate").date, null, { noView: true } );
+				} );
+        </script>
+	    	<big>{{$date|date_format:$dPconfig.longdate}}</big>
+				
 	      <form action="?" name="changeDate" method="get">
 	        <input type="hidden" name="m" value="{{$m}}" />
 	        <input type="hidden" name="tab" value="{{$tab}}" />
 	        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 	      </form>
 	    </th>
+			
+	    <td style="text-align: right;">
+	     <button type="button" class="warning" style="visibility: hidden;" onclick="$$('.veille').invoke('toggle')">
+	       Afficher les <span class="count">0</span> admissions de la veille
+       </button>
+			</td>
+
 	    <td style="text-align: right">
-	     Type d'affichage
+	     Affichage
 	     <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
 		      <select name="selAffichage" onchange="this.form.submit();">
 		        <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
@@ -118,28 +99,20 @@ Main.add(function () {
 		        <option value="annule_hospitalise" {{if $selAffichage == "annule_hospitalise"}} selected = "selected" {{/if}}>Annulé et Hospitalisé</option>
 		      </select>
 		    </form>
-	      <a href="#" onclick="printMainCourante()" class="button print">Main courante</a>
-	      <a href="#" onclick="showLegend()" class="button search">Légende</a>
+	      <a href="#" onclick="MainCourante.print('{{$date}}')" class="button print">Main courante</a>
+	      <a href="#" onclick="MainCourante.legend()" class="button search">Légende</a>
 	    </td>
-	  </tr>
-	  <tr>
-	    <td></td>
-	    <td>
-        Filtrer par nom : 
-        <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
-      </td>
-      <td style="text-align: right;">
-	      <button type="button" class="warning" onclick="$$('.veille').invoke('toggle')" style="display: none;">
-	        Afficher les <span class="count">0</span> admissions de la veille
-        </button>
-      </td>
 	  </tr>
 	</table>
   
 	<div id="main_courante"></div>
 </div>
 
-<div id="consultations" style="display: none;"></div>
+<div id="consultations" style="display: none;">
+  <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
+</div>
 
-<div id="identito_vigilance" style="display: none;"></div>
+<div id="identito_vigilance" style="display: none; margin: 0 5px;">
+  <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
+</div>
 {{/if}}
