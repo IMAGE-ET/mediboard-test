@@ -50,7 +50,7 @@ Main.add(function() {
     <tr {{if !$mergeable}}class="non-mergeable" style="opacity: 0.6;"{{/if}}>
 
     {{if $smarty.foreach.sejour.first}} 
-	    <td rowspan="{{$count_sejour}}">
+	    <td rowspan="{{$count_sejour}}" style="width: 1%;">
 	      <input name="{{$_patient->_class_name}}-first" type="checkbox" value="{{$_patient->_id}}" onclick="IdentitoVigilance.highlite(this);" />
 	      <input name="{{$_patient->_class_name}}-second" type="radio" value="{{$_patient->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
 	    </td>
@@ -75,10 +75,8 @@ Main.add(function() {
 	    </td>
     {{/if}}
        
-	  {{assign var=rpu value=$_sejour->_ref_rpu}}
-
-    <td>
-      {{if $count_sejour > 0}} 
+    <td style="width: 1%;">
+      {{if $count_sejour > 1}}
       <input name="{{$_sejour->_class_name}}-first" type="checkbox" value="{{$_sejour->_id}}" onclick="IdentitoVigilance.highlite(this);" />
       <input name="{{$_sejour->_class_name}}-second" type="radio" value="{{$_sejour->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
       {{/if}}
@@ -98,20 +96,24 @@ Main.add(function() {
     	{{/if}}
 		</td>
 
-
-    <td {{if $rpu->_id}}id="{{$rpu->_guid}}"{{/if}}>
-    	{{if $rpu->_id}} 
-	      <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}')">
-	        {{tr}}CRPU-msg-create{{/tr}}
-	      </span>
-    	{{else}}
-        <div class="warning">
-          {{tr}}CRPU-msg-absent{{/tr}}
-       </div>
-    	{{/if}}
+    <td>
+	    {{foreach from=$_sejour->_back.rpu key=rpu_id item=_rpu}}
+	    <div>
+	      {{if count($_sejour->_back.rpu) > 1}}
+	      <input name="{{$_rpu->_class_name}}-first" type="checkbox" value="{{$_rpu->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+	      <input name="{{$_rpu->_class_name}}-second" type="radio" value="{{$_rpu->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+	      {{/if}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_rpu->_guid}}')">
+          {{tr}}CRPU-msg-create{{/tr}}
+        </span>
+	    </div>
+	    {{foreachelse}}
+      <div class="warning">
+        {{tr}}CRPU-msg-absent{{/tr}}
+      </div>
+	    {{/foreach}}
     </td>
-
-    </tr>
+       
     {{/foreach}}
   {{/foreach}}
 	

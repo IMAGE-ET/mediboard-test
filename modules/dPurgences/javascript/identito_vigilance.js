@@ -39,6 +39,8 @@ IdentitoVigilance = {
 	    e.checked = false;
 	    e.setVisibility(!checked);
 	  } )
+		
+		// Recheck checkbox
 	  checkbox.setVisibility(true);
 	  if (checked) {
 	    checkbox.checked = true;
@@ -46,7 +48,7 @@ IdentitoVigilance = {
 	
 	  // Show all possible radios
 	  var object_class = checkbox.name.split('-')[0];
-	  var tbody = $(checkbox).up(2);
+	  var tbody = $(checkbox).up('tbody');
 	  var inputFirst  = "input[name="+object_class+"-first]";
 	  var inputSecond = "input[name="+object_class+"-second]";
 	
@@ -60,7 +62,6 @@ IdentitoVigilance = {
 	  $$(".merge-probable").each(function (e) {
 	    e.removeClassName("merge-probable")
 	  } )
-	
 	
 	  if (checked) {
 	    if (object_class == "CPatient") {
@@ -90,9 +91,9 @@ IdentitoVigilance = {
 	
 	    }
 	    else {
-	      var tr = $(checkbox).up(1);
+	      var container = $(checkbox).up();
 	      $$(inputSecond).each(function (e) {
-	        e.setVisibility(e.descendantOf(tbody) && !e.descendantOf(tr));
+	        e.setVisibility(e.descendantOf(tbody) && !e.descendantOf(container));
 	      } );
 	    }
 	  }

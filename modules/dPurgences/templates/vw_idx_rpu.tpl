@@ -49,7 +49,7 @@ Main.add(function () {
         
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
-      <input type="text" name="sip_barcode" onchange="this.form.submit()" />
+      <input type="text" size="5" name="sip_barcode" onchange="this.form.submit()" />
       
       <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
     </form>
@@ -57,6 +57,20 @@ Main.add(function () {
   <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
   <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
   <li><a href="#identito_vigilance" class="empty">Identito-vigilance <small>(&ndash;)</small></a></li>
+  <li style="width: 20em; text-align: center">
+    <script type="text/javascript">
+    Main.add(function() {
+      Calendar.regField(getForm("changeDate").date, null, { noView: true } );
+    } );
+    </script>
+    <strong><big>{{$date|date_format:$dPconfig.longdate}}</big></strong>
+    
+    <form action="?" name="changeDate" method="get">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
+      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+    </form>
+  </li>
 </ul>
 <hr class="control_tabs" />
 
@@ -68,20 +82,6 @@ Main.add(function () {
 	        Ajouter un patient
 	      </a>
 	    </td>
-	    <th>
-	    	<script type="text/javascript">
-	    	Main.add(function() {
-				  Calendar.regField(getForm("changeDate").date, null, { noView: true } );
-				} );
-        </script>
-	    	<big>{{$date|date_format:$dPconfig.longdate}}</big>
-				
-	      <form action="?" name="changeDate" method="get">
-	        <input type="hidden" name="m" value="{{$m}}" />
-	        <input type="hidden" name="tab" value="{{$tab}}" />
-	        <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-	      </form>
-	    </th>
 			
 	    <td style="text-align: right;">
 	     <button type="button" class="warning" style="visibility: hidden;" onclick="$$('.veille').invoke('toggle')">
@@ -115,4 +115,6 @@ Main.add(function () {
 <div id="identito_vigilance" style="display: none; margin: 0 5px;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>
+
+
 {{/if}}
