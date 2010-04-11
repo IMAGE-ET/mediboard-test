@@ -43,11 +43,13 @@ Main.add(function() {
   {{assign var=phonings value=$guesses.$patient_id.phonings}}
   {{assign var=siblings value=$guesses.$patient_id.siblings}}
   {{assign var=mergeable value=$guesses.$patient_id.mergeable}}
+	
+	{{if $mergeable}}
 	<tbody class="hoverable" class="CPatient">
 
     {{foreach from=$_patient->_ref_sejours item=_sejour name=sejour}}
     {{assign var=count_sejour value=$_patient->_ref_sejours|@count}}
-    <tr {{if !$mergeable}}class="non-mergeable" style="opacity: 0.6;"{{/if}}>
+    <tr>
 
     {{if $smarty.foreach.sejour.first}} 
 	    <td rowspan="{{$count_sejour}}" style="width: 1%;">
@@ -115,9 +117,11 @@ Main.add(function() {
     </td>
        
     {{/foreach}}
+  </tbody>
+  {{/if}}
+
   {{/foreach}}
 	
-  </tbody>
 
 </table>
 
