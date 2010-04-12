@@ -62,21 +62,25 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
-    <th>Nb. de Logs</th>
-    <th>IP</th>
-    <th>Dernier log</th>
+    <th colspan="4">IP</th>
+    <th colspan="2">Dernier log</th>
     <th>Utilisateurs</th>
+    <th>Nb. de Logs</th>
   </tr>
   {{foreach from=$total_list item=_log}}
   <tr>
-    <td>{{$_log.total}}</td>
-    <td>{{$_log.ip}}</td>
-    <td>{{$_log.date_max|date_format:$dPconfig.datetime}}</td>
-    <td class="text">
+    <td style="text-align: right;">{{$_log.ip_explode.0}}.</td>
+    <td style="text-align: right;">{{$_log.ip_explode.1}}.</td>
+    <td style="text-align: right;">{{$_log.ip_explode.2}}.</td>
+    <td style="text-align: right;">{{$_log.ip_explode.3}}</td>
+    <td class="button">{{mb_ditto value=$_log.date_max|date_format:$dPconfig.date name=date}}</td>
+    <td class="button">{{$_log.date_max|date_format:$dPconfig.time}}</td>
+    <td class="text" style="width: 100%;">
       {{foreach from=$_log.users item=_user}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}
       {{/foreach}}
     </td>
+    <td style="text-align: right;">{{$_log.total}}</td>
   </tr>
   {{/foreach}}
 </table>

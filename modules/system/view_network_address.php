@@ -51,7 +51,8 @@ $ljoin = null;
 $total_list_count = $filter->countMultipleList($where, $order, null, $group, $ljoin, array("ip_address", "MAX(date) AS date_max, GROUP_CONCAT(DISTINCT user_id SEPARATOR '|') AS user_list"));
 $total_list = array_slice($total_list_count, $start, 30);
 foreach($total_list as &$_log) {
-  $_log["ip"] = inet_ntop($_log["ip_address"]);
+  $_log["ip"]         = inet_ntop($_log["ip_address"]);
+  $_log["ip_explode"] = explode(".", $_log["ip"]);
   $list_users = explode("|", $_log["user_list"]);
   $_log["users"] = array();
   foreach($list_users as $_user_id) {
