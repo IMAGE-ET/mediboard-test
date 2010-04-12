@@ -42,7 +42,7 @@ if($service_id == "NP") {
   $_sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 } else {
   $service->load($service_id);
-  loadServiceComplet($service, $date, 0);	
+  loadServiceComplet($service, $date, 1);	
 	foreach($service->_ref_chambres as $chambre){
 		foreach($chambre->_ref_lits as $_lit){
 			foreach($_lit->_ref_affectations as $_affectation){
