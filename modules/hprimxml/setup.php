@@ -70,8 +70,23 @@ class CSetuphprimxml extends CSetup {
 		 $sql = "ALTER TABLE `destinataire_hprim` 
                 ADD `evenement` ENUM ('pmsi','patients','stock') DEFAULT 'patients';";
      $this->addQuery($sql);	
+		
+		 $this->makeRevision("0.12");
+      
+     $sql = "ALTER TABLE `echange_hprim` 
+		          ADD INDEX (`emetteur`),
+              ADD INDEX (`identifiant_emetteur`),
+              ADD INDEX (`destinataire`),
+              ADD INDEX (`type`),
+              ADD INDEX (`sous_type`),
+              ADD INDEX (`statut_acquittement`),
+              ADD INDEX (`message_valide`),
+              ADD INDEX (`acquittement_valide`),
+							ADD INDEX (`id_permanent`),
+							ADD INDEX (`object_class`);";
+     $this->addQuery($sql); 
 			
-     $this->mod_version = "0.12";
+     $this->mod_version = "0.13";
   }
 }
 

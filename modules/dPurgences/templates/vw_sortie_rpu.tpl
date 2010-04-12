@@ -75,6 +75,14 @@ function loadTransfert(mode_sortie, sejour_id){
   }
 }
 
+function loadServiceMutation(mode_sortie, sejour_id){
+  if(mode_sortie=="mutation"){
+    $('service_sortie_transfert_'+sejour_id).setVisibility(true);
+  } else {
+    $('service_sortie_transfert_'+sejour_id).setVisibility(false);
+  }
+}
+
 function initFields(rpu_id,sejour_id, mode_sortie){
   var oForm = document.forms['editRPU-'+rpu_id];
   oForm.destination.value = '';
@@ -82,6 +90,7 @@ function initFields(rpu_id,sejour_id, mode_sortie){
   modeSortieDest(mode_sortie, rpu_id); 
   modeSortieOrient(mode_sortie, rpu_id); 
   loadTransfert(mode_sortie, sejour_id);
+	loadServiceMutation(mode_sortie, sejour_id);
 }
 
 function refreshTime(rpus) {

@@ -853,8 +853,18 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("1.03");
     $sql = "UPDATE sejour SET sortie_prevue = entree_reelle WHERE entree_reelle IS NOT NULL AND sortie_prevue < entree_reelle";
     $this->addQuery($sql);
-    
-    $this->mod_version = "1.04";
+		
+		$this->makeRevision("1.04");
+    $sql = "ALTER TABLE `sejour`
+		          CHANGE `mode_sortie` `mode_sortie` ENUM ('normal','transfert','mutation','deces') DEFAULT 'normal',
+		          ADD `service_mutation_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+		
+    $sql = "ALTER TABLE `sejour` 
+              ADD INDEX (`service_mutation_id`);";
+     $this->addQuery($sql);
+		 
+    $this->mod_version = "1.05";
   }
 }
 ?>

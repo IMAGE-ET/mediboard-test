@@ -77,6 +77,18 @@ function loadTransfert(mode_sortie){
   }
 }
 
+function loadServiceMutation(mode_sortie){
+  // si Mutation, affichage du select
+  if($('service_sortie_transfert')){
+    if(mode_sortie=="mutation"){
+      $('service_sortie_transfert').setVisibility(true);
+    } else {
+      $('service_sortie_transfert').setVisibility(false);
+      $V(getForm('editSejour').service_mutation_id, '');
+    }
+  }
+}
+
 function initFields(mode_sortie){
   ContraintesRPU.updateDestination(mode_sortie, true);
   ContraintesRPU.updateOrientation(mode_sortie, true); 
@@ -242,20 +254,20 @@ function showEtabEntreeTransfert(mode) {
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
 				    <td>
-				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value);submitSejour();loadTransfert(this.value);"}}
+				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value);submitSejour();loadTransfert(this.value);loadServiceMutation(this.value);"}}
 				      {{if !$rpu->mutation_sejour_id}}
-				   
 							  <div id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != 'transfert'}}style="visibility:hidden;"{{/if}}>
 	                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
 	              </div>
-              
-							
 				      {{else}}
-				      <strong>
-				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-				      	Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
-				     	</a> 
-				     	</strong>
+					      <strong>
+						      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
+						      	Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
+						     	</a> 
+					     	</strong>
+								<div id="service_sortie_transfert" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
+                  {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+                </div>
 				      {{/if}}
 		 		    </td>
 				   </tr>

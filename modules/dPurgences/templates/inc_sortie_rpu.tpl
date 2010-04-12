@@ -111,6 +111,11 @@
               {{assign var=etab_externe value=$listEtab.$etab_externe_id}}
               <br />vers {{$etab_externe->_view}}<br />
             {{/if}}
+						{{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
+              {{assign var=service_id value=$sejour->service_mutation_id}}
+              {{assign var=service value=$services.$service_id}}
+              <br />vers {{$service->_view}}<br />
+            {{/if}}
           {{/if}}
           {{mb_value object=$sejour field=sortie_reelle}}<br />
           
@@ -143,6 +148,9 @@
         <td>
 					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != 'transfert'}}style="visibility: hidden"{{/if}}>
             {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
+          </div>
+					<div id="service_sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
+            {{mb_field object=$sejour field="service_mutation_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
           </div>
 				</td>
        </tr>

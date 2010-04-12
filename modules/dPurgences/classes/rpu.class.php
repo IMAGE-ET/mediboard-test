@@ -69,7 +69,9 @@ class CRPU extends CMbObject {
   var $_DP             = null;
   var $_ref_actes_ccam = null;
   var $_service_id     = null;
+	var $_etablissement_transfert_id = null;
   var $_etablissement_entree_transfert_id = null;
+	var $_service_mutation_id = null;
   
   // Object References
   var $_ref_sejour = null;
@@ -78,8 +80,6 @@ class CRPU extends CMbObject {
   
   // Behaviour fields
   var $_bind_sejour = null;
-  var $_etablissement_transfert_id = null;
-  
   var $_sortie          = null;
   var $_mode_sortie     = null;
   
@@ -123,8 +123,9 @@ class CRPU extends CMbObject {
       "_responsable_id"  => "ref notNull class|CMediusers",
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
       "_entree"          => "dateTime",
-      "_etablissement_transfert_id"        => "ref class|CEtabExterne",
+      "_etablissement_transfert_id"        => "ref class|CEtabExterne autocomplete|nom",
       "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom",  
+			"_service_mutation_id" => "ref class|CService autocomplete|nom",
       "_attente"           => "time",
       "_presence"          => "time",
       "_can_leave"         => "time",
@@ -177,7 +178,7 @@ class CRPU extends CMbObject {
     $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
     
     // Calcul des valeurs de _mode_sortie
-    if ($sejour->mode_sortie == "transtert" && $this->mutation_sejour_id) {
+    if ($sejour->mode_sortie == "mutation" && $this->mutation_sejour_id) {
     	$this->_mode_sortie = 6;
     }
     
@@ -196,7 +197,7 @@ class CRPU extends CMbObject {
     $this->_sortie = $sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
-		
+		$this->_service_mutation_id = $sejour->service_mutation_id;
 		
     if (!$sejour->sortie_reelle) {
       $this->_can_leave_warning = !$this->_ref_consult->_id;

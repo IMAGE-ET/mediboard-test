@@ -982,4 +982,13 @@ $locales['CSejour._filter_type.consult'] = 'Consultation';
 $locales['CSejour._filter_type.urg'] = 'Urgence';
 $locales['CSejour._type_admission.consult'] = 'Consultation';
 $locales['CSejour._type_admission.urg'] = 'Urgence';
+$locales['CSejour.mode_sortie.mutation'] = 'Mutation';
+$locales['mod-dPplanningOp-tab-code_selector'] = '';
+$locales['mod-dPplanningOp-tab-configure'] = '';
+$locales['mod-dPplanningOp-tab-edit_visite_anesth'] = '';
+$locales['mod-dPplanningOp-tab-plage_selector'] = '';
+$locales['mod-dPplanningOp-tab-view_planning'] = '';
+$locales['mod-dPplanningOp-tab-vw_actes_realises'] = '';
+$locales['mod-dPplanningOp-tab-vw_regimes_alimentaires'] = '';
+$locales['mod-dPplanningOp-tab-vw_resp_no_prat'] = '';
 ?>

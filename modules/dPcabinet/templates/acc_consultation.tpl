@@ -143,7 +143,6 @@ Main.add(function () {
 	    {{/if}}
     </ul>
     <hr class="control_tabs"/>
-	  {{/if}}
 	  
 	  <div id="ccam" style="display: none;">
 	    {{assign var="module" value="dPcabinet"}}
@@ -158,12 +157,13 @@ Main.add(function () {
 	    </div>
 	  </div>
 	  
-    {{if $sejour && $sejour->_id}}
+	  {{if $sejour && $sejour->_id}}
 	  <div id="cim" style="display: none;">
-      {{assign var=sejour value=$consult->_ref_sejour}}
-      {{mb_include module=dPsalleOp template=inc_diagnostic_principal modeDAS="1"}}
+	    {{assign var=sejour value=$consult->_ref_sejour}}
+	    {{mb_include module=dPsalleOp template=inc_diagnostic_principal modeDAS="1"}}
 	  </div>
 	  {{/if}}
+	{{/if}}
 </div>
 {{/if}}
 

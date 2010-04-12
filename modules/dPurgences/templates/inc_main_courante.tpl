@@ -86,7 +86,7 @@
     {{/if}}
 
   	{{if $curr_sejour->annule}}
-  	<td class="cancelled">
+  	<td colspan="2" class="text cancelled">
 	  {{else}}
     <td colspan="2" class="text" style="background-color: {{$background}};">
     {{/if}}
@@ -196,7 +196,7 @@
 
 		{{else}}
 			<!-- Pas de RPU pour ce séjour d'urgence -->
-			<td colspan="5">
+			<td colspan="6">
 			  <div class="small-warning">
 			  	Ce séjour d'urgence n'est pas associé à un RPU.
 			  	<br />

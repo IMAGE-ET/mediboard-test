@@ -24,6 +24,7 @@ class CSejour extends CCodable {
   
   var $etablissement_transfert_id        = null;
   var $etablissement_entree_transfert_id = null;
+	var $service_mutation_id               = null; // Service du séjour de mutation
   
   // DB Fields
   var $type               = null; // remplace $op->type_adm
@@ -63,8 +64,8 @@ class CSejour extends CCodable {
   var $facturable         = null; 
   var $adresse_par_prat_id = null;
   var $adresse_par_etab_id = null;
-  var $libelle            = null;  
-  
+  var $libelle             = null;  
+	
   // Form Fields
   var $_entree             = null;
   var $_sortie             = null;
@@ -111,6 +112,7 @@ class CSejour extends CCodable {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
   var $_ref_etabExterne       = null;
+	var $_ref_service_mutation  = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
   var $_ref_bilan_ssr         = null;
@@ -228,11 +230,12 @@ class CSejour extends CCodable {
     $props["repas_sans_sel"]      = "bool";
     $props["repas_sans_residu"]   = "bool";
     $props["repas_sans_porc"]     = "bool";
-    $props["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
+    $props["mode_sortie"]         = "enum list|normal|transfert|mutation|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
     $props["etablissement_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
+		$props["service_mutation_id"] = "ref class|CService autocomplete|nom";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
     $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
@@ -778,6 +781,15 @@ class CSejour extends CCodable {
       $this->_ref_etabExterne->load($this->etablissement_transfert_id);
     }
   }
+	
+	function loadRefServiceMutation($cache = 0){
+    $this->_ref_service_mutation = new CService();
+    if($cache) {
+      $this->_ref_service_mutation = $this->_ref_service_mutation->getCached($this->service_mutation_id);
+    } else {
+      $this->_ref_service_mutation->load($this->service_mutation_id);
+    }
+  }
   
   function countNotificationVisite($date = ''){
     $this->completeField("praticien_id");
@@ -991,6 +1003,7 @@ class CSejour extends CCodable {
     $this->loadRefPraticien($cache);
     $this->loadRefEtablissement($cache);
     $this->loadRefEtabExterne($cache);
+		$this->loadRefServiceMutation($cache);
     $this->loadExtCodesCCAM();
   }
   

@@ -32,6 +32,10 @@ $sejour->_ref_patient->loadIPP();
 $etab = new CEtabExterne();
 $listEtab = $etab->loadList(null, "nom");
 
+// Chargement des services
+$service = new CService();
+$services = $service->loadList(null, "nom");
+
 // Contraintes sur le mode de sortie / destination
 $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
 $contrainteDestination["normal"] = array("", 6, 7);
@@ -50,6 +54,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("listEtab", $listEtab);
+$smarty->assign("services", $services);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
 

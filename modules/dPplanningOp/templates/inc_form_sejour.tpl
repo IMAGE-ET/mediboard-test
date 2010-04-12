@@ -22,15 +22,27 @@ function checkHeureSortie(){
   }
 }
 
-function loadTransfert(form, mode_sortie){
+function loadTransfert(form, mode_sortie) {
   // si Transfert, affichage du select
-  if(mode_sortie=="transfert"){
+  if (mode_sortie=="transfert"){
     //Chargement de la liste des etablissement externes
     var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
     url.requestUpdate('listEtabExterne');
   } else {
     // sinon, on vide le contenu de la div
     $("listEtabExterne").innerHTML = "";
+  }
+}
+
+function loadServiceMutation(form, mode_sortie) {
+  // si Transfert, affichage du select
+  if (mode_sortie=="mutation"){
+    //Chargement de la liste des services
+    var url = new Url("dPadmissions", "ajax_vw_services");
+    url.requestUpdate('services');
+  } else {
+    // sinon, on vide le contenu de la div
+    $("services").innerHTML = "";
   }
 }
 
@@ -516,10 +528,15 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
   <td>
     {{if $can->view}}
-      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);"}}
+      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);loadServiceMutation(this.form, this.value);"}}
       <span id="listEtabExterne">
         {{if $sejour->_id}}
           {{$sejour->_ref_etabExterne->_view}}
+        {{/if}}
+      </span>
+			<span id="services">
+        {{if $sejour->_id}}
+          {{$sejour->_ref_service_mutation->_view}}
         {{/if}}
       </span>
     {{else}}
