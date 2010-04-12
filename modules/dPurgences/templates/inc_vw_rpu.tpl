@@ -259,6 +259,9 @@ function showEtabEntreeTransfert(mode) {
 							  <div id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != 'transfert'}}style="visibility:hidden;"{{/if}}>
 	                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
 	              </div>
+								<div id="service_sortie_transfert" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
+                  {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+                </div>
 				      {{else}}
 					      <strong>
 						      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
