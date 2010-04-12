@@ -116,8 +116,9 @@ var Livret = {
   }
 };
 
-function printLivret(){
+function printLivret(orderbyATC){
   var url = new Url("dPmedicament", "print_livret");
+  url.addParam("orderby", orderbyATC ? "atc" : "libelle");
   url.popup(850, 650, "Livret Thérapeutique");
 }
 
@@ -133,7 +134,12 @@ function printLivret(){
 <table class="form">
    <tr>
      <th class="title" colspan="2">
-       <button style="float: right" type="button" class="print" onclick="printLivret()">Imprimer le livret</button>
+       <span style="float: right">
+         <button type="button" class="print" onclick="printLivret($('orderby-atc').checked)">Imprimer le livret</button>
+         <label>
+           <input type="checkbox" id="orderby-atc" /> Trier par classe ATC
+         </label>
+       </span>
        Livret Thérapeutique
      </th>
    </tr>

@@ -20,6 +20,7 @@
     <td>
 			<table class="tbl">
 			  <tr>
+          <th rowspan="2">Classe ATC</th>
 			    <th rowspan="2">Code CIP</th>
 			    <th rowspan="2">Code UCD</th>
 			    <th rowspan="2">Code CIS</th>
@@ -39,6 +40,7 @@
 			  {{assign var="produit" value=$produit_livret->_ref_produit}}
         {{if $produit->code_cip}}
 			  <tr>
+          <td>{{$produit_livret->_atc}}</td>
 			    <td>   
 			      {{$produit->code_cip}}
 			      {{if $produit->hospitalier}}
