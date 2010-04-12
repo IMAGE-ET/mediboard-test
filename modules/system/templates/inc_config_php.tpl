@@ -22,6 +22,7 @@ Main.add(function(){
 
 function toggleInput(input, value) {
   $(input)[value ? "enable" : "disable"]().setOpacity(value ? 1 : 0.5);
+
 }
 
 function toggleType(type, value) {
@@ -82,8 +83,9 @@ tr.important th {
                 <td class="text">{{$value.global_value}}</td>
                 <td>
                   {{if $access}}
-                    <input type="text" name="php[{{$key}}]" value="{{$value.local_value}}" disabled="disabled" style="opacity: 0.5" />
-                    <input type="checkbox" onclick="toggleInput($(this).previous(), this.checked)" {{if array_key_exists($key, $dPconfig.php)}}checked="checked"{{/if}} />
+									  <input type="hidden" name="php[{{$key}}]" value=""/>
+                    <input type="text" name="php[{{$key}}]" value="{{$value.local_value}}" disabled="disabled" style="opacity: 0.5;" />
+                    <input type="checkbox" onclick="toggleInput($(this).previous(), this.checked); this.checked ? (this.previous()).previous().disabled='disabled' : (this.previous()).previous().removeAttribute('disabled');" {{if array_key_exists($key, $dPconfig.php) && $dPconfig.php.$key !== ""}}checked="checked"{{/if}} />
                   {{else}}
                     <input type="text" value="{{$value.local_value}}" readonly="readonly" disabled="disabled" />
                   {{/if}}
