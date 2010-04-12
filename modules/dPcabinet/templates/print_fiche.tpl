@@ -1,18 +1,25 @@
+{{if !@$offline}}
 {{if $print}}
 	<script type="text/javascript">
 	Main.add(window.print);
 	</script> 
 {{/if}}
 
+  </td>
+  </tr>
+</table>
+
+{{assign var=tbl_class value="print"}}
+{{else}}
+{{assign var=tbl_class value="main form"}}
+{{/if}}
 
 {{assign var="patient" value=$consult->_ref_patient}}
 {{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}  
 {{assign var="operation" value=$consult_anesth->_ref_operation}}
 
-    </td>
-  </tr>
-</table>
-<table class="print">
+  
+<table class="{{$tbl_class}}">
   <tr>
     <td>
       <table width="100%">
@@ -35,7 +42,7 @@
 </table>
 
 
-<table class="print" style="page-break-after: always;">
+<table class="{{$tbl_class}}" style="page-break-after: always;">
   <tr>
     <td colspan="2">
       <table width="100%">
@@ -358,7 +365,7 @@
   </tr>
 </table>
 
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <td>
       <table width="100%">
@@ -385,7 +392,7 @@
   </tr>
 </table>
         
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <td>
       <table width="100%">
@@ -696,6 +703,8 @@
 	{{/if}}
 </table>
 
+{{if !@$offline}}
 <table class="main">
   <tr>
     <td>
+{{/if}}

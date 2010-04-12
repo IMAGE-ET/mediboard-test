@@ -9,6 +9,7 @@
  */
 
 $sejour_id = CValue::get("sejour_id");
+$offline = CValue::get("offline");
 
 if(!$sejour_id){
 	CAppUI::stepMessage(UI_MSG_WARNING, "Veuillez sélectionner un sejour pour visualiser le dossier complet");
@@ -123,6 +124,7 @@ $smarty->assign("list_lines", $list_lines);
 $smarty->assign("csteByTime", $csteByTime);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("praticien", $praticien);
+$smarty->assign("offline", $offline);
 $smarty->display("print_dossier_soins.tpl");
 
 ?>

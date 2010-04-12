@@ -8,11 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
+{{if !@$offline}}
 <!-- Fermeture du tableau pour faire fonctionner le page-break -->
     </td>
   </tr>
 </table>
+{{/if}}
 
 {{assign var=object value=$sejour->_ref_patient}}
 <table class="tbl">
@@ -121,8 +122,10 @@
    {{/foreach}}
 </table>
 
+{{if !@$offline}}
 
 <!-- re-ouverture du tableau -->
 <table>
   <tr>
     <td>
+ {{/if}}

@@ -19,6 +19,7 @@ $print = CValue::getOrSession("print", false);
 $today = mbDate();
 
 $consultation_id = CValue::get("consultation_id");
+$offline = CValue::get("offline");
 
 // Consultation courante
 $consult = new CConsultation();
@@ -120,8 +121,9 @@ $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 $unites["date_analyse"] = array("nom"=>"Date","unit"=>"");
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPcabinet");
 
+$smarty->assign("offline", $offline);
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);

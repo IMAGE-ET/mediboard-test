@@ -52,7 +52,7 @@ Main.add(function () {
             objectClass: "CTransmissionMedicale", 
             userId: "{{$app->user_id}}",
 						dependField1: oFormTrans.type,
-						dependField2: '',
+						dependField2: oFormTrans.degre,
       			validateOnBlur:0
           });
 					
@@ -62,7 +62,7 @@ Main.add(function () {
 	  new AideSaisie.AutoComplete(oFormObs.text, {
 	            objectClass: "CObservationMedicale", 
 	            userId: "{{$app->user_id}}",
-	            dependField1: '',
+	            dependField1: oFormObs.degre,
 	            dependField2: '',
 	            validateOnBlur:0
 	          });

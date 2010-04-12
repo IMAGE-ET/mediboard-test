@@ -43,7 +43,7 @@ class CObservationMedicale extends CMbObject {
     $specs["user_id"]      = "ref notNull class|CMediusers";
     $specs["degre"]        = "enum notNull list|low|high|info default|low";
     $specs["date"]         = "dateTime notNull";
-    $specs["text"]         = "text helped";
+    $specs["text"]         = "text helped|degre";
     return $specs;
   }
     

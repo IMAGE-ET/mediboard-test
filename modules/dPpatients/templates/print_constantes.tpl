@@ -8,9 +8,9 @@
   </tr>
   {{foreach from=$csteByTime key=_time item=_cste_time}}    
   <tr>
-    <td>{{$_time|date_format:$dPconfig.datetime}}</td>
+    <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime}}</td>
     {{foreach from=$_cste_time item=_constante_medicale}}
-    <td {{if !$_constante_medicale}}class="arretee"{{/if}}>{{$_constante_medicale}}</td>
+    <td style="text-align: right">{{$_constante_medicale}}</td>
     {{/foreach}}
   </tr>  
   {{/foreach}}

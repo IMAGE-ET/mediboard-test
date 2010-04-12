@@ -1,11 +1,17 @@
-    </td>
-  </tr>
-</table>
-
-{{if $print}}
-  <script type="text/javascript">
-  Main.add(window.print);
-  </script> 
+{{if !@$offline}}
+	    </td>
+	  </tr>
+	</table>
+	
+	{{if $print}}
+	  <script type="text/javascript">
+	  Main.add(window.print);
+	  </script> 
+	{{/if}}
+	
+	{{assign var=tbl_class value="print"}}
+{{else}}
+{{assign var=tbl_class value="main form"}}
 {{/if}}
 
 {{assign var="patient" value=$consult->_ref_patient}}
@@ -16,7 +22,7 @@
 {{assign var=const_med value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=ant value=$dossier_medical->_ref_antecedents}}
-<table class="print">
+<table class="{{$tbl_class}}">
   <tr>
     <td colspan="2">
       <!-- Bordereau d'en-tête -->
@@ -657,6 +663,9 @@
   {{/if}}
 </table>
 
+{{if !@$offline}}
 <table class="main">
   <tr>
     <td>
+{{/if}}
+    
