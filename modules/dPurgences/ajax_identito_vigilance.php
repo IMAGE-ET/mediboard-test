@@ -10,13 +10,19 @@
 
 CCanDo::checkEdit();
 
+// Filtres
+$see_mergeable = CValue::get("see_mergeable", "1");
+$see_yesterday = CValue::get("see_yesterday", "1");
+
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
+$date_min = $see_yesterday ? mbDate("-1 day", $date) : $date;
+$date_max = mbDate("+1 day", $date);
 
 // Chargement des séjours concernés
 $sejour = new CSejour;
 $where = array();
-$where["sejour.entree_reelle"] = "LIKE '$date%'";
+$where["sejour.entree_reelle"] = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.type"] = "= 'urg'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "entree_reelle";
@@ -97,6 +103,8 @@ array_multisort(CMbArray::pluck($patients, "nom"), SORT_ASC, $patients);
 $smarty = new CSmartyDP();
 
 $smarty->assign("mergeables_count", $mergeables_count);
+$smarty->assign("see_mergeable", $see_mergeable);
+$smarty->assign("see_yesterday", $see_yesterday);
 $smarty->assign("date", $date);
 $smarty->assign("patients", $patients );
 $smarty->assign("guesses", $guesses );

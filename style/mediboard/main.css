@@ -1169,3 +1169,7 @@ table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-resul
 .merge-probable {
   outline: 3px solid #8f8;
 }
+
+.mergeable big {
+	font-weight: bold;
+}

@@ -11,6 +11,7 @@
 <script type="text/javascript">
 IdentitoVigilance.guesses = {{$guesses|@json}};
 Main.add(function() {
+  getForm("Merger");
   var tab = $$("a[href=#identito_vigilance]")[0];
 	tab.down("small").update("({{$mergeables_count}})");
 	{{if $mergeables_count}}
@@ -18,8 +19,14 @@ Main.add(function() {
 	{{/if}}
 })
 </script>
-	
+
 <form name="Merger" action="?">
+
+Voir les séjour :
+<input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);">
+<label for="see_mergeable">Seulement les suspects</label>
+<input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);">
+<label for="see_yesterday">Egalement ceux de la veille</label>
 
 <table class="tbl">
   <tr>
@@ -44,8 +51,8 @@ Main.add(function() {
   {{assign var=siblings value=$guesses.$patient_id.siblings}}
   {{assign var=mergeable value=$guesses.$patient_id.mergeable}}
 	
-	{{if $mergeable}}
-	<tbody class="hoverable" class="CPatient">
+	{{if $mergeable || !$see_mergeable}}
+	<tbody class="hoverable CPatient {{if $mergeable}}mergeable{{/if}}">
 
     {{foreach from=$_patient->_ref_sejours item=_sejour name=sejour}}
     {{assign var=count_sejour value=$_patient->_ref_sejours|@count}}
@@ -58,7 +65,7 @@ Main.add(function() {
 	    </td>
 	    <td rowspan="{{$count_sejour}}">
 	      <div class="text" id="{{$_patient->_guid}}">
-	        <strong><big onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">{{$_patient}}</big></strong>
+	        <big onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">{{$_patient}}</big>
 	      </div>
 	    </td>
 	    <td rowspan="{{$count_sejour}}" style="text-align: center">

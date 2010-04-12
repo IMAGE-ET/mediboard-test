@@ -4,6 +4,13 @@ IdentitoVigilance = {
 
   init: function(frequency) {
 	  var url = new Url("dPurgences", "ajax_identito_vigilance");
+
+    // Get extra filter params
+    if (form = document.Merger) {
+	    url.addParam("see_mergeable", form.see_mergeable.checked ? 1 : 0);
+	    url.addParam("see_yesterday", form.see_yesterday.checked ? 1 : 0);
+		}
+
 	  IdentitoVigilance.updater = url.periodicalUpdate('identito_vigilance', { frequency: frequency } );
   },
 	
@@ -29,16 +36,16 @@ IdentitoVigilance = {
 	  IdentitoVigilance[checked ? "stop" : "resume"]();
 	  
 	  // Hide and empty all inputs
-	  $$("input[type=radio]").each(function(e) {
+	  $$("tbody.CPatient tbody input[type=radio]").each(function(e) {
 	    e.checked = false;
 	    e.setVisibility(false);
 	  } );
 	
 	  // Uncheck and unselect all other inputs
-	  $$("input[type=checkbox]").each(function(e) {
+	  $$("tbody.CPatient input[type=checkbox]").each(function(e) {
 	    e.checked = false;
 	    e.setVisibility(!checked);
-	  } )
+	  } );
 		
 		// Recheck checkbox
 	  checkbox.setVisibility(true);
