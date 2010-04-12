@@ -46,7 +46,9 @@
         </tr> 
         {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
           {{assign var=_sejour value=$curr_affectation->_ref_sejour}}
-		      {{mb_include module=soins template=inc_dossiers_service}}
+					{{if $_sejour->_id}}
+		        {{mb_include module=soins template=inc_dossiers_service}}
+					{{/if}}
 				{{/foreach}}	
 			{{/foreach}}
 		{{/foreach}}
