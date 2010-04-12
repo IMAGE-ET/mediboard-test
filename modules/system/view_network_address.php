@@ -16,7 +16,11 @@ $filter = new CUserLog();
 $filter->_date_min    = CValue::getOrSession("_date_min");
 $filter->_date_max    = CValue::getOrSession("_date_max");
 $filter->user_id      = CValue::getOrSession("user_id");
-$filter->ip_address   = CValue::getOrSession("address_ip");
+$filter->ip_address   = CValue::getOrSession("ip_address");
+
+$order_col = CValue::getOrSession("order_col", "date_max");
+$order_way = CValue::getOrSession("order_way", "DESC");
+$order_way_alt = $order_way == "ASC" ? "DESC" : "ASC";
 
 $user = new CMediusers();
 $where = array();
@@ -43,7 +47,7 @@ if($filter->ip_address) {
   $binary_address = $filter->ip_address;
   $where[] = "('$binary_address' & ip_address) = $binary_address";
 }
-$order = "date_max DESC";
+$order = "$order_col $order_way";
 $group = null;
 $group = array("ip_address");
 $ljoin = null;
@@ -66,11 +70,14 @@ $list_count = count($total_list_count);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("start"       , $start     );
-$smarty->assign("filter"      , $filter    );
-$smarty->assign("listUsers"   , $listUsers );
-$smarty->assign("list_count"  , $list_count);
-$smarty->assign("total_list"  , $total_list);
+$smarty->assign("start"        , $start        );
+$smarty->assign("filter"       , $filter       );
+$smarty->assign("listUsers"    , $listUsers    );
+$smarty->assign("list_count"   , $list_count   );
+$smarty->assign("total_list"   , $total_list   );
+$smarty->assign("order_col"    , $order_col    );
+$smarty->assign("order_way"    , $order_way    );
+$smarty->assign("order_way_alt", $order_way_alt);
 
 $smarty->display("view_network_address.tpl");
 

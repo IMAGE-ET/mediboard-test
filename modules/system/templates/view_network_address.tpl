@@ -13,6 +13,13 @@ function changePage(start) {
   $V(getForm("filterFrm").start, start);
 }
 
+function changeSort(sCol, sWay) {
+  oForm = getForm("filterFrm");
+  $V(oForm.order_col, sCol);
+  $V(oForm.order_way, sWay);
+  oForm.submit();
+}
+
 Main.add(function(){
   var form = getForm("filterFrm");
   form.getElements().each(function(e){
@@ -29,6 +36,8 @@ Main.add(function(){
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="start" value="{{$start|default:0}}" onchange="this.form.submit()" />
 <input type="hidden" name="ip_adress" value="" />
+<input type="hidden" name="order_col" value="{{$order_col}}" />
+<input type="hidden" name="order_way" value="{{$order_way}}" />
 
 <table class="main form">
   <tr>
@@ -62,10 +71,28 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
-    <th colspan="4">IP</th>
-    <th colspan="2">Dernier log</th>
+    <th colspan="4">
+      <a href="#sorted_by_ip" {{if $order_col == "ip_address"}}class="sorted {{$order_way}}" onclick="changeSort('{{$order_col}}', '{{$order_way_alt}}');"
+                              {{else}}                         class="sortable" onclick="changeSort('ip_address', 'ASC');"
+                              {{/if}}">
+      IP
+      </a>
+    </th>
+    <th colspan="2">
+      <a href="#sorted_by_date" {{if $order_col == "date_max"}}class="sorted {{$order_way}}" onclick="changeSort('{{$order_col}}', '{{$order_way_alt}}');"
+                                {{else}}                       class="sortable" onclick="changeSort('{date_max', 'ASC');"
+                                {{/if}}">
+      Dernier log
+      </a>
+    </th>
     <th>Utilisateurs</th>
-    <th>Nb. de Logs</th>
+    <th>
+      <a href="#sorted_by_qty" {{if $order_col == "total"}}class="sorted {{$order_way}}" onclick="changeSort('{{$order_col}}', '{{$order_way_alt}}');"
+                              {{else}}                         class="sortable" onclick="changeSort('total', 'ASC');"
+                              {{/if}}">
+      Nb. de Logs
+      </a>
+    </th>
   </tr>
   {{foreach from=$total_list item=_log}}
   <tr>
