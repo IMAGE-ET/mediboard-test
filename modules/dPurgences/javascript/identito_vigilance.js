@@ -36,7 +36,7 @@ IdentitoVigilance = {
 	  IdentitoVigilance[checked ? "stop" : "resume"]();
 	  
 	  // Hide and empty all inputs
-	  $$("tbody.CPatient tbody input[type=radio]").each(function(e) {
+	  $$("tbody.CPatient input[type=radio]").each(function(e) {
 	    e.checked = false;
 	    e.setVisibility(false);
 	  } );
