@@ -71,7 +71,7 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
-    <th colspan="5">
+    <th colspan="4">
       <a href="#sorted_by_ip" {{if $order_col == "ip_address"}}class="sorted {{$order_way}}" onclick="changeSort('{{$order_col}}', '{{$order_way_alt}}');"
                               {{else}}                         class="sortable" onclick="changeSort('ip_address', 'ASC');"
                               {{/if}}">
