@@ -991,4 +991,8 @@ $locales['mod-dPplanningOp-tab-view_planning'] = '';
 $locales['mod-dPplanningOp-tab-vw_actes_realises'] = '';
 $locales['mod-dPplanningOp-tab-vw_regimes_alimentaires'] = '';
 $locales['mod-dPplanningOp-tab-vw_resp_no_prat'] = '';
+$locales['CSejour-service_mutation_id'] = 'Service de mutation de sortie';
+$locales['CSejour-service_mutation_id-court'] = 'Mutation de sortie';
+$locales['CSejour-service_mutation_id-desc'] = 'Service de mutation du patient après sa sortie';
+$locales['CService-back-.empty'] = '';
 ?>
