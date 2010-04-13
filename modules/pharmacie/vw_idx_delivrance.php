@@ -11,12 +11,6 @@
 global $can, $g;
 $can->needsRead();
 
-$service_id = CValue::getOrSession('service_id');
-
-// Services list
-$service = new CService();
-$list_services = $service->loadGroupList();
-
 $delivrance = new CProductDelivery();
 
 $date_min = CValue::getOrSession('_date_min', mbDate("-1 DAY"));
@@ -31,8 +25,6 @@ $delivrance->_date_max = $date_max;
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('service_id',    $service_id);
-$smarty->assign('list_services', $list_services);
 $smarty->assign('delivrance',    $delivrance);
 
 $smarty->display('vw_idx_delivrance.tpl');

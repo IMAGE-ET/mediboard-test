@@ -9,13 +9,9 @@
 *}}
 
 <tr>
-  <td>
-    {{if $curr_delivery->patient_id}}
-      {{$curr_delivery->_ref_patient->_view}}
-    {{else}}
-      {{$curr_delivery->_ref_service->_view}}
-    {{/if}}
-  </td>
+  {{if $curr_delivery->patient_id}}
+    <td>{{$curr_delivery->_ref_patient->_view}}</td>
+  {{/if}}
   <td>
     <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
     <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">

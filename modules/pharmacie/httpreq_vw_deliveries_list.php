@@ -11,8 +11,7 @@
 global $can;
 $can->needsRead();
 
-$service_id = CValue::getOrSession('service_id');
-$mode       = CValue::getOrSession('mode');
+$mode               = CValue::getOrSession('mode');
 $display_delivered  = CValue::getOrSession('display_delivered', 'false') == 'true';
 
 // Calcul de date_max et date_min
@@ -21,50 +20,61 @@ $date_max = CValue::getOrSession('_date_max');
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 
+if (!in_array($mode, array("global", "nominatif"))) {
+  $mode = "global";
+}
+
+$service = new CService;
+$services = $service->loadGroupList();
+
 $order_by = 'service_id, patient_id, date_dispensation DESC';
 $where = array();
-if ($service_id) {
-  $where['service_id'] = " = $service_id";
-}
+
+if ($mode == "global")
+  $where['patient_id'] = "IS NULL";
+else
+  $where['patient_id'] = "IS NOT NULL";
+
+$where['service_id'] = CSQLDataSource::prepareIn(array_keys($services));
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 $where[] = "`order` != '1' OR `order` IS NULL";
-$delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, 100);
 
-$deliveries_nominatif = array();
-$deliveries_global = array();
+$delivery = new CProductDelivery();
+$deliveries = $delivery->loadList($where, $order_by, 200);
+
 $stocks_service = array();
 
 // Creation d'un tableau de patient
-$patients = array();
 if (count($deliveries)) {
   foreach($deliveries as $_delivery){
-  	if (!$_delivery->isDelivered() || $display_delivered) {
+  	if ($display_delivered || !$_delivery->isDelivered()) {
 	    $_delivery->loadRefsFwd();
 	    $_delivery->loadRefsBack();
 	    $_delivery->_ref_stock->loadRefsFwd();
-    
-	    if($_delivery->patient_id){
-	    	$_delivery->loadRefPatient();
-	      $deliveries_nominatif[$_delivery->_id] = $_delivery;
-	    } else {
-	    	$_delivery->loadRefService();
-	    	$deliveries_global[$_delivery->_id] = $_delivery;
-	    }
-      $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
+      
+      $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_delivery->service_id);
     }
   }
+}
+
+$deliveries_by_service = array_fill_keys(array_keys($services), array());
+
+foreach ($deliveries as $_delivery) {
+  $deliveries_by_service[$_delivery->service_id][$_delivery->_id] = $_delivery;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('mode',    $mode);
-$smarty->assign('deliveries_global',    $deliveries_global);
-$smarty->assign('deliveries_nominatif', $deliveries_nominatif);
-$smarty->assign('stocks_service',       $stocks_service);
+$smarty->assign('deliveries',     $deliveries);
+$smarty->assign('deliveries_by_service', $deliveries_by_service);
+$smarty->assign('stocks_service', $stocks_service);
+$smarty->assign('services',       $services);
 
-$smarty->display('inc_deliveries_list.tpl');
+if ($mode == "nominatif")
+  $smarty->display('inc_deliveries_nominatif_list.tpl');
+else
+  $smarty->display('inc_deliveries_global_list.tpl');
 
 ?>

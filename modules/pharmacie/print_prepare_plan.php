@@ -12,9 +12,10 @@ global $can;
 $can->needsRead();
 
 // Calcul de date_max et date_min
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
-$nominatif = CValue::getOrSession("nominatif");
+$date_min   = CValue::getOrSession('_date_min');
+$date_max   = CValue::getOrSession('_date_max');
+$mode       = CValue::get("mode");
+$service_selection = CValue::get("service_id");
 
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
@@ -30,7 +31,7 @@ $where = array (
   'product_delivery.order = \'0\' OR product_delivery.order IS NULL'
 );
 
-if($nominatif){
+if($mode == "nominatif"){
   $where["patient_id"] = " IS NOT NULL";
 } else {
   $where["patient_id"] = " IS NULL";
@@ -44,6 +45,14 @@ $ljoin = array(
 
 $list_services = new CService();
 $list_services = $list_services->loadGroupList();
+
+if (count($service_selection) > 0) {
+  foreach($list_services as $_key => $_service) {
+    if (!in_array($_key, $service_selection)) {
+      unset($list_services[$_key]);
+    }
+  }
+}
 
 $deliveries = array();
 foreach ($list_services as $service) {
@@ -79,7 +88,7 @@ $smarty->assign('date_min'     , $date_min);
 $smarty->assign('date_max'     , $date_max);
 $smarty->assign('list_services', $list_services);
 $smarty->assign('deliveries'   , $deliveries);
-$smarty->assign('nominatif'    , $nominatif);
+$smarty->assign('mode'         , $mode);
 $smarty->display('print_prepare_plan.tpl');
 
 ?>

@@ -17,14 +17,14 @@ Main.add(window.print);
   {{$date_max|date_format:$dPconfig.datetime}} le 
   {{$smarty.now|date_format:$dPconfig.datetime}}</h1>
 
-<h2>Délivrances {{if $nominatif}}nominatives{{else}}globales{{/if}}</h2>
+<h2>Délivrances {{if $mode == "nominatif"}}nominatives{{else}}globales{{/if}}</h2>
 <table class="main tbl">
   <colgroup>
     <col span="5" style="width: 0.1%;" />
   </colgroup>
   
   <tr>
-  	{{if $nominatif}}
+  	{{if $mode == "nominatif"}}
 		<th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
     {{/if}}
     <th>{{tr}}CProduct-code{{/tr}}</th>
