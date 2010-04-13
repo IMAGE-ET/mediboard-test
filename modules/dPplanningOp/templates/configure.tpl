@@ -130,9 +130,9 @@
   {{assign var="var" value="heure_sortie_autre"}}
   {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
   
-  {{assign var="group" value="sortie_prevue"}}
+  {{assign var="var" value="sortie_prevue"}}
   <tr>
-    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}-{{$group}}{{/tr}}</th>
+    <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}</th>
   </tr>
     
   {{foreach from=$dPconfig.$m.$class.$var key=type item=value}}
