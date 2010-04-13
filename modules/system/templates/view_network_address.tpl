@@ -100,7 +100,6 @@ Main.add(function(){
     <td style="text-align: right;">{{$_log.ip_explode.1}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.2}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.3}}</td>
-    <td style="text-align: right;">{{$_log.ip_network}}</td>
     <td class="button">{{mb_ditto value=$_log.date_max|date_format:$dPconfig.date name=date}}</td>
     <td class="button">{{$_log.date_max|date_format:$dPconfig.time}}</td>
     <td class="text" style="width: 100%;">
