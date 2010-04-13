@@ -33,28 +33,11 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">
-  <tr>
-    <th class="category" colspan="10">DHE e-Cap</th>
-  </tr>
-
-  {{assign var=m value=interop}}
-  {{assign var="var" value="base_url"}}
-
-  {{mb_include module=system template=inc_config_str var=base_url}}
-	
-  <tr>
-    <th />
-    <td>
-      <div class="small-info">
-        Il s'agit de l'ancienne variable de configuration.
-        <br/>
-        Elle restera utilisée si la nouvelle variable (ci-desosus) n'est pas renseignée.
-      </div>
-    </td>
-  </tr> 
 
   {{assign var=m value=ecap}}
 	
+  {{mb_include module=system template=configure_handler class_handler=CEcObjectHandler}}
+
   {{assign var=class value=dhe}}
   <tr>
     <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
@@ -66,20 +49,6 @@
     <td>{{$paths.dhe}}</td>
   </tr> 
    
-  {{assign var=class value=soap}}
-  <tr>
-    <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}} (Obsolète)</th>
-  </tr>
-
-  {{mb_include module=system template=inc_config_str var=rooturl}}
-  <tr>
-    <th />
-    <td>{{$paths.soap.documents}}</td>
-  </tr>
-	
-  {{mb_include module=system template=inc_config_str var=user}}
-  {{mb_include module=system template=inc_config_str var=pass}}
-
 	<tr>
 	  <th class="category" colspan="2">Tags d'identifications</th>
 	</tr>
