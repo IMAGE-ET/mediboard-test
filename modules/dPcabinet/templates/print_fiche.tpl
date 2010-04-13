@@ -399,14 +399,22 @@
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
         </tr>
-        <tr>
+        <!--
           {{if $consult->_ref_consult_anesth->mallampati}}
           <td rowspan="4" class="button" style="white-space: nowrap;">
             <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
             <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
           </td>
           {{/if}}
-          <th style="font-weight: normal;">Ouverture de la bouche</th>
+        -->					
+				<tr>
+					<th style="font-weight: normal;">Mallampati</th>
+          <td style="font-weight: bold;">
+           {{mb_value object=$consult->_ref_consult_anesth field="mallampati"}}
+          </td>
+				</tr>	
+        <tr>
+				  <th style="font-weight: normal;">Ouverture de la bouche</th>
           <td style="font-weight: bold;">
             {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
           </td>
