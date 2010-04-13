@@ -773,22 +773,12 @@ class CSejour extends CCodable {
     $this->_ref_dossier_medical->loadObject($where);
   }
   
-  function loadRefEtabExterne($cache = 0){
-    $this->_ref_etabExterne = new CEtabExterne();
-    if($cache) {
-      $this->_ref_etabExterne = $this->_ref_etabExterne->getCached($this->etablissement_transfert_id);
-    } else {
-      $this->_ref_etabExterne->load($this->etablissement_transfert_id);
-    }
+  function loadRefEtabExterne($cache = true){
+    $this->_ref_etabExterne = $this->loadFwdRef("etablissement_transfert_id", $cache);
   }
 	
-	function loadRefServiceMutation($cache = 0){
-    $this->_ref_service_mutation = new CService();
-    if($cache) {
-      $this->_ref_service_mutation = $this->_ref_service_mutation->getCached($this->service_mutation_id);
-    } else {
-      $this->_ref_service_mutation->load($this->service_mutation_id);
-    }
+	function loadRefServiceMutation($cache = true){
+    $this->_ref_service_mutation = $this->loadFwdRef("service_mutation_id", $cache);
   }
   
   function countNotificationVisite($date = ''){
@@ -888,14 +878,8 @@ class CSejour extends CCodable {
     krsort($this->_ref_suivi_medical);
   }
   
-  function loadRefEtablissement($cache = 0) {
-    // Chargement de l'établissement correspondant
-    $this->_ref_group = new CGroups;
-    if($cache) {
-      $this->_ref_group = $this->_ref_group->getCached($this->group_id);
-    } else {
-      $this->_ref_group->load($this->group_id);
-    }
+  function loadRefEtablissement($cache = true) {
+    $this->_ref_group = $this->loadFwdRef("group_id", $cache);
   }
   
   function loadRefRPU() {
