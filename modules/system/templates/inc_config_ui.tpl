@@ -12,6 +12,10 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
+    {{mb_include module=system template=inc_config_str var=page_title}}
+    
+    {{mb_include module=system template=inc_config_str var=company_name}}
+    
     {{mb_include module=system template=inc_config_str var=currency_symbol}}
     
     {{mb_include module=system template=inc_config_str var=hide_confidential}}
