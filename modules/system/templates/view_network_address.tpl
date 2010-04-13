@@ -35,7 +35,6 @@ Main.add(function(){
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="start" value="{{$start|default:0}}" onchange="this.form.submit()" />
-<input type="hidden" name="ip_adress" value="" />
 <input type="hidden" name="order_col" value="{{$order_col}}" />
 <input type="hidden" name="order_way" value="{{$order_way}}" />
 
@@ -58,7 +57,8 @@ Main.add(function(){
   <tr>
     <th>{{mb_label object=$filter field="_date_max"}}</th>
     <td>{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}}</td>
-    <td colspan="2"></td>
+    <th><label for="ip_address">Sous-réseau</label></th>
+    <td><input type="text" name="ip_address" value="{{$filter->ip_address}}" /></td>
   </tr>
   <tr>
     <td class="button" colspan="4"><button type="submit" class="search">{{tr}}Filter{{/tr}}</button></td>
@@ -71,7 +71,7 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
-    <th colspan="4">
+    <th colspan="5">
       <a href="#sorted_by_ip" {{if $order_col == "ip_address"}}class="sorted {{$order_way}}" onclick="changeSort('{{$order_col}}', '{{$order_way_alt}}');"
                               {{else}}                         class="sortable" onclick="changeSort('ip_address', 'ASC');"
                               {{/if}}">
@@ -100,6 +100,7 @@ Main.add(function(){
     <td style="text-align: right;">{{$_log.ip_explode.1}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.2}}.</td>
     <td style="text-align: right;">{{$_log.ip_explode.3}}</td>
+    <td style="text-align: right;">{{$_log.ip_network}}</td>
     <td class="button">{{mb_ditto value=$_log.date_max|date_format:$dPconfig.date name=date}}</td>
     <td class="button">{{$_log.date_max|date_format:$dPconfig.time}}</td>
     <td class="text" style="width: 100%;">

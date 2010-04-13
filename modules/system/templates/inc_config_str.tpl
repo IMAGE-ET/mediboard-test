@@ -30,7 +30,8 @@
       {{tr}}{{$locale}}{{/tr}}
     </label>  
   </th>
-  <td colspan="3">
+  
+  <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
     <input class="str" name="{{$field}}" value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}} {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
     {{if @$suffix}}{{$suffix}}{{/if}} 
   </td>

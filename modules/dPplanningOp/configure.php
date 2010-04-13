@@ -16,8 +16,10 @@ $listInterval = array("5","10","15","20","30");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listHours"    , $listHours);
-$smarty->assign("listInterval" , $listInterval);
+$smarty->assign("listHours"      , $listHours);
+$smarty->assign("hours_piped"    , implode("|", $listHours));
+$smarty->assign("listInterval"   , $listInterval);
+$smarty->assign("intervals_piped", implode("|", $listInterval));
 
 $smarty->display("configure.tpl");
 ?>
