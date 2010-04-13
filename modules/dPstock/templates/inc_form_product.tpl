@@ -46,8 +46,9 @@ function duplicateObject(form) {
 
 </script>
 
-<form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="edit_product" action="" method="post" onsubmit="return checkForm(this)">
 
+<input type="hidden" name="m" value="dPstock" />
 <input type="hidden" name="dosql" value="do_product_aed" />
 <input type="hidden" name="product_id" value="{{$product->_id}}" />
 <input type="hidden" name="del" value="0" />
