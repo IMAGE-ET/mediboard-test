@@ -164,7 +164,7 @@ var SystemMessage = {
     element.show().setOpacity(1);
     
     // Only hide on type 'message'
-    if ((Preferences.INFOSYSTEM == 1) || !forceFade && !this.autohidable()) {
+    if (!forceFade && (!this.autohidable() || Preferences.INFOSYSTEM == 1)) {
       return;
     }
     
