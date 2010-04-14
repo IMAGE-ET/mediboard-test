@@ -97,7 +97,8 @@ var WaitingMessage = {
 };
 
 function createDocument(oSelect, consultation_id) {
-  if (modele_id = oSelect.value) {
+  var modele_id = oSelect.value;
+  if (modele_id) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("modele_id", modele_id);
     url.addParam("object_id", consultation_id);
@@ -139,7 +140,7 @@ var SystemMessage = {
 
   // Check message type (loading, notice, warning, error) from given div
   autohidable: function() {
-    return $(this.id).select(".error, .warning, .loading").length = 0;
+    return $(this.id).select(".error, .warning, .loading").length == 0;
   },
 
   // show/hide the div
@@ -406,8 +407,7 @@ var PairEffect = Class.create({
 
   // Constructor
   initialize: function(idTarget, oOptions) {
-    
-    var oDefaultOptions = {
+    this.oOptions = Object.extend({
       idTarget       : idTarget,
       idTrigger      : idTarget + "-trigger",
       sEffect        : null, // could be null, "appear", "slide", "blind"
@@ -415,11 +415,8 @@ var PairEffect = Class.create({
       bStoreInCookie : true,
       sCookieName    : "effects",
       duration       : 0.3
-    };
-
-    Object.extend(oDefaultOptions, oOptions);
+    }, oOptions);
     
-    this.oOptions = oDefaultOptions;
     var oTarget   = $(this.oOptions.idTarget);
     var oTrigger  = $(this.oOptions.idTrigger);
 
@@ -466,20 +463,16 @@ Object.extend(PairEffect, {
 
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {
-    var oDefaultOptions = {
+    oOptions = Object.extend({
       idStartVisible   : null, // Forces one element to start visible
       bStartAllVisible : false,
       sCookieName      : sTargetsClass
-    }
+    }, oOptions);
     
-    Object.extend(oDefaultOptions, oOptions);
-    
-    $$('.'+sTargetsClass).each( 
-      function(oElement) {
-        oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
-        new PairEffect(oElement.id, oDefaultOptions);
-      }
-    );
+    $$('.'+sTargetsClass).each(function(oElement) {
+      oOptions.bStartVisible = oOptions.bStartAllVisible || (oElement.id == oOptions.idStartVisible);
+      new PairEffect(oElement.id, oOptions);
+    });
   }
 });
 
@@ -490,18 +483,14 @@ Object.extend(PairEffect, {
 var TogglePairEffect = Class.create({
   // Constructor
   initialize: function(idTarget1, idTarget2, oOptions) {
-    
-    var oDefaultOptions = {
+    this.oOptions = Object.extend({
       idFirstVisible : 1,
       idTarget1      : idTarget1,
       idTarget2      : idTarget2,
       idTrigger1     : idTarget1 + "-trigger",
       idTrigger2     : idTarget2 + "-trigger"
-    };
-
-    Object.extend(oDefaultOptions, oOptions);
+    }, oOptions);
     
-    this.oOptions = oDefaultOptions;
     var oTarget1  = $(this.oOptions.idTarget1);
     var oTarget2  = $(this.oOptions.idTarget2);
     var oTrigger1 = $(this.oOptions.idTrigger1);
@@ -537,20 +526,16 @@ Object.extend(TogglePairEffect, {
 
   // Initialize a whole group giving the className for all targets
   initGroup: function(sTargetsClass, oOptions) {
-    var oDefaultOptions = {
+    oOptions = Object.extend({
       idStartVisible   : null, // Forces one element to start visible
       bStartAllVisible : false,
       sCookieName      : sTargetsClass
-    };
+    }, oOptions);
     
-    Object.extend(oDefaultOptions, oOptions);
-    
-    $A(document.getElementsByClassName(sTargetsClass)).each( 
-      function(oElement) {
-        oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
-        new PairEffect(oElement.id, oDefaultOptions);
-      }
-    );
+    $$('.'+sTargetsClass).each(function(oElement) {
+      oOptions.bStartVisible = oOptions.bStartAllVisible || (oElement.id == oOptions.idStartVisible);
+      new PairEffect(oElement.id, oOptions);
+    });
   }
 });
 
@@ -563,14 +548,11 @@ var ViewPort = {
   SetAvlHeight: function (element, pct) {
     element = $(element);
     if (!element) return;
-
-    var pos = 0,
-        winHeight = 0;
   
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
-    pos       = element.cumulativeOffset()[1];
-    winHeight = window.getInnerDimensions().height;
+    var pos       = element.cumulativeOffset()[1];
+    var winHeight = window.getInnerDimensions().height;
     element.style.overflow = "auto";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
@@ -578,20 +560,16 @@ var ViewPort = {
   SetFrameHeight: function(element, options){
     options = Object.extend({
       marginBottom : 15
-    }, options || {});
-      
-    var fYFramePos        = 0;
-    var fNavHeight        = 0;
-    var fFrameHeight      = 0;
+    }, options);
     
     // Calcul de la position top de la frame
-    fYFramePos = Position.cumulativeOffset(element)[1];  
+    var fYFramePos = Position.cumulativeOffset(element)[1];  
     
     // hauteur de la fenetre
-    fNavHeight = window.getInnerDimensions().height;
+    var fNavHeight = window.getInnerDimensions().height;
     
     // Calcul de la hauteur de la div
-    fFrameHeight = fNavHeight - fYFramePos;
+    var fFrameHeight = fNavHeight - fYFramePos;
     
     element.setAttribute("height", fFrameHeight - options.marginBottom);
   }
@@ -948,7 +926,7 @@ var Modal = {
       okLabel: 'OK',
       onValidate: Prototype.emptyFunction,
       closeOnClick: null
-    }, options || {});
+    }, options);
     
     // Display element
     if (Object.isElement(message)) {
@@ -975,7 +953,7 @@ var Modal = {
       onKO: Prototype.emptyFunction,
       onValidate: Prototype.emptyFunction,
       closeOnClick: null
-    }, options || {});
+    }, options);
     
     // Display element  
     if (Object.isElement(message)) {
@@ -1000,7 +978,8 @@ var Modal = {
       className: 'modal',
       closeOnClick: null,
       overlayOpacity: 0.5
-    }, options || {});
+    }, options);
+    
     return Control.Modal.open(container, options);
   }
 };
@@ -1011,7 +990,7 @@ window.open = function(element, title, options) {
     width: 800,
     height: 500,
     iframe: true
-  }, options || {});
+  }, options);
   
   Control.Modal.open(element, options);
   return false;
@@ -1023,7 +1002,8 @@ window.modal = function(container, options) {
     className: 'modal',
     closeOnClick: null,
     overlayOpacity: 0.5
-  }, options || {});
+  }, options);
+  
   return Control.Modal.open(container, options);
 };
 

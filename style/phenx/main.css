@@ -563,11 +563,11 @@ table.form th.category {
   padding: 4px;
 }
 
-#main .title h1 {
+#main>.title h1 {
   margin: 2px;
 }
 
-#main .title img {
+#main>.title img {
   float: left;
   margin-right: 4px;
 }
