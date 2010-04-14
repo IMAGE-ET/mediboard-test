@@ -126,8 +126,9 @@ if (isset($_REQUEST["login"])) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
 
-  // This must be done even if there is no $redirect to clear POST data
-  CAppUI::redirect($redirect);
+  if($redirect) {
+    CAppUI::redirect($redirect);
+  }
 }
 
 // clear out main url parameters
