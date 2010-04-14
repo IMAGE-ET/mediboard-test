@@ -64,7 +64,6 @@ class CMySQLDataSource extends CSQLDataSource {
   }
 
   function query($query) {
-//    mysql_select_db($this->config["dbname"], $this->link);
     return mysql_query($query, $this->link);
   }
 

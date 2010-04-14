@@ -862,9 +862,19 @@ class CSetupdPplanningOp extends CSetup {
 		
     $sql = "ALTER TABLE `sejour` 
               ADD INDEX (`service_mutation_id`);";
-     $this->addQuery($sql);
+    $this->addQuery($sql);
+
+    $this->makeRevision("1.05");
+    $sql = "ALTER TABLE `sejour`
+		          ADD `entree` DATETIME AFTER `sortie_reelle`,
+              ADD `sortie` DATETIME AFTER `entree`";
+    $this->addQuery($sql);
+    $sql = "UPDATE `sejour` SET
+              `sejour`.`entree` = IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`),
+              `sejour`.`sortie` = IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`)";
+    $this->addQuery($sql);
 		 
-    $this->mod_version = "1.05";
+    $this->mod_version = "1.06";
   }
 }
 ?>

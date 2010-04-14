@@ -641,6 +641,10 @@ class CSejour extends CCodable {
     } elseif(!$this->_at_midnight && $this->type == "comp") {
       $this->type = "ambu";
     }
+
+    // Has to be donne once entree / sortie - reelle / prevue is not modified
+    $this->entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
+    $this->sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
     
   }
 
