@@ -73,7 +73,7 @@ var WaitingMessage = {
   cover: function(element) {
     element = $(element);
     
-    var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).hide(),
+    var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),
         cover = new Element("div").addClassName("ajax-loading"),
         descendant = element.down();
 
@@ -94,9 +94,10 @@ var WaitingMessage = {
     
     coverContainer.show();
     
-    if (receiver.getStyle("vertical-align") === "middle") {
-      var lineHeight = parseFloat(receiver.getStyle("line-height"));
-      coverContainer.style.top = -(cover.getHeight() / 2 - lineHeight)+"px";
+    if (receiver.getStyle("vertical-align") !== "top") {
+      var offsetCover = coverContainer.cumulativeOffset();
+      var offsetContainer = receiver.cumulativeOffset();
+      coverContainer.style.top = (- offsetCover.top + offsetContainer.top + 2)+"px";
     }
   }
 };
