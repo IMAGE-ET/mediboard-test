@@ -156,17 +156,25 @@ var SystemMessage = {
       this.effect.cancel();
       this.effect = null;
     }
-      
+    
+    var element = $(this.id);
+    delay = delay || 5;
+    
     // Ensure visible        
-    $(this.id).show().setOpacity(1);
+    element.show().setOpacity(1);
     
     // Only hide on type 'message'
-    if (!this.autohidable() && !forceFade) {
+    if ((Preferences.INFOSYSTEM == 1) || !forceFade && !this.autohidable()) {
       return;
     }
     
     // Program fading
-    this.effect = new Effect.Fade(this.id, { delay : delay || 5} );
+    if (window.Effect) {
+      this.effect = new Effect.Fade(this.id, { delay: delay } );
+    }
+    else {
+      element.hide.delay(delay);
+    }
   },
   
   init : function () {
@@ -180,7 +188,7 @@ var SystemMessage = {
         
     // Hide empty message immediately
     if (element.empty()) {
-      SystemMessage.doEffect(0.1, true);
+      element.hide();
       return;
     }
     
@@ -204,6 +212,7 @@ var Console = {
     if(Preferences.INFOSYSTEM == 1) {
       Element.show(this.id);
     }
+    
     var eDiv = new Element("div", {className: sClass});
     eDiv.innerHTML = sContent.toString().escapeHTML();
 
@@ -258,7 +267,7 @@ var Console = {
   },
   
   debug: function(oValue, sLabel, oOptions) {
-    if (Preferences.INFOSYSTEM != "1") {
+    if (Preferences.INFOSYSTEM != 1) {
       return;
     }
   
