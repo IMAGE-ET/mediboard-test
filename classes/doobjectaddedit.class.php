@@ -118,13 +118,16 @@ class CDoObjectAddEdit {
   }
 
   function doRedirect() {
+    if ($this->redirect === null) {
+      return;
+    }
+    
     // Cas ajax
     if ($this->ajax) {
       $this->doCallback();
     }
 
     // Cas normal
-    // This must be done even if there is no $redirect to clear POST data
     CAppUI::redirect($this->redirect);
   }
   
