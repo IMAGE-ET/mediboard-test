@@ -114,7 +114,8 @@ var AjaxResponse = {
     if (!window.children['login']) {
       var url = new Url;
       url.addParam("dialog", 1);
-      url.pop(610, 300, "login");
+      url.addParam("login_info", 1);
+      url.pop(650, 400, "login");
     }
   },
   

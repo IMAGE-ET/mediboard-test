@@ -115,18 +115,17 @@ $dialog = CValue::request("dialog");
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
   require("./locales/core.php");
-  $redirect = CValue::request("redirect");
-
-  $ok = CAppUI::login();
-  if (!$ok) {
+  if (null == $ok = CAppUI::login()) {
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
-  
-  if ($ok && $dialog && !isset($_REQUEST["no_login_info"])) {
+
+  $redirect = CValue::request("redirect");
+  parse_str($redirect, $parsed_redirect);
+  if ($ok && $dialog && isset($parsed_redirect["login_info"])) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
 
-  if($redirect) {
+  if ($redirect) {
     CAppUI::redirect($redirect);
   }
 }
