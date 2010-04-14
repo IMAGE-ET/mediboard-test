@@ -93,6 +93,11 @@ var WaitingMessage = {
     }).clonePosition(element, {setLeft: false, setTop: false});
     
     coverContainer.show();
+    
+    if (receiver.getStyle("vertical-align") === "middle") {
+      var lineHeight = parseFloat(receiver.getStyle("line-height"));
+      coverContainer.style.top = -(cover.getHeight() / 2 - lineHeight)+"px";
+    }
   }
 };
 
