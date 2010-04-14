@@ -174,6 +174,7 @@ function cancelSejourSSR() {
       <td id="dureeEst"></td>
     </tr>
     
+    {{if !$dialog}} 
     <tr>
       <td class="button" colspan="5">
         {{if $sejour->_id}}
@@ -194,5 +195,6 @@ function cancelSejourSSR() {
         {{/if}}
       </td>
     </tr>
+		{{/if}}
   </table>
 </form>

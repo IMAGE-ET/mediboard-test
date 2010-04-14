@@ -32,7 +32,8 @@ if ($idDHE = CValue::get("idDHE")) {
 
 if ($actionType == "a" && $sejour->_id && $group->_id) {
 	$view = CValue::get("view");
-  CAppUI::redirect("g={$group->_id}&m=ssr&a=vw_aed_sejour_ssr&sejour_id={$sejour->_id}#$view");
+	global $dialog;
+  CAppUI::redirect("g={$group->_id}&dialog=$dialog&m=ssr&a=vw_aed_sejour_ssr&sejour_id={$sejour->_id}#$view");
 }
 
 // Création du template

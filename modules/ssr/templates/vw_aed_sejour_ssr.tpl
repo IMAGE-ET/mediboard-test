@@ -15,9 +15,11 @@
 {{mb_include_script module="ssr" script="cotation_rhs"}}
 {{mb_include_script module="ssr" script="planning"}}
 
+{{if !$dialog}} 
 <a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
   Admettre un patient
 </a>
+{{/if}}
   
 {{mb_include module=ssr template=inc_form_sejour_ssr}}
 
