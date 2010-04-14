@@ -234,7 +234,7 @@ ProtocoleSelector.init = function(){
   <tr>
     <td colspan="2" class="button">
     {{if $op->_id}}
-    {{if !$op->_ref_sejour->sortie_reelle || $can->admin}}
+    {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
 			{{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>

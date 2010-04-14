@@ -182,7 +182,7 @@ $smarty->assign("plage"     , $op->plageop_id ? $op->_ref_plageop : new CPlageOp
 $smarty->assign("sejour"    , $sejour);
 $smarty->assign("chir"      , $chir);
 $smarty->assign("praticien" , $prat);
-$smarty->assign("patient"   , $patient );
+$smarty->assign("patient"   , $patient);
 $smarty->assign("sejours"   , $sejours);
 $smarty->assign("modurgence", 0);
 $smarty->assign("today"     , $today);
@@ -199,14 +199,14 @@ $smarty->assign("hours_duree"  , $hours_duree);
 $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
 
-$smarty->assign("list_hours_voulu", $list_hours_voulu);
+$smarty->assign("list_hours_voulu"  , $list_hours_voulu);
 $smarty->assign("list_minutes_voulu", $list_minutes_voulu);
 
 $smarty->assign("prestations", $prestations);
 
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
-$smarty->assign("listEtab", $listEtab);
-$smarty->assign("medecin_adresse_par", $medecin_adresse_par);
+$smarty->assign("listEtab"              , $listEtab);
+$smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 
 $smarty->display("vw_edit_planning.tpl");
 
