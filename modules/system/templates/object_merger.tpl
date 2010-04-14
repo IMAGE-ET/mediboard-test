@@ -68,10 +68,12 @@ Main.add(function () {
   </tr>
 </table>
 
-<form name="form-merge" action="?m=system&amp;{{$actionType}}=object_merger" method="post" onsubmit="{{if $checkMerge}}false{{else}}return checkForm(this){{/if}}">
+<form name="form-merge" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}" method="post" onsubmit="{{if $checkMerge}}false{{else}}return checkForm(this){{/if}}">
   <input type="hidden" name="dosql" value="do_object_merge" />
   <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="postRedirect" value="m=system&amp;{{$actionType}}=object_merger&amp;dialog={{$dialog}}" />
+  {{if $dialog}}
+    <input type="hidden" name="postRedirect" value="m=system&amp;{{$actionType}}=object_merger&amp;dialog={{$dialog}}" />
+  {{/if}}
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="fast" value="0" />
   {{foreach from=$objects item=object name=object}}
