@@ -1027,7 +1027,7 @@ class CConsultation extends CCodable {
     $this->updateFormFields();
   	$this->loadRefsFwd();
     $this->_ref_plageconsult->loadRefsFwd();
-    $this->_ref_plageconsult->_ref_chir->fillTemplate($template);
+		$this->_ref_plageconsult->_ref_chir->fillTemplate($template);
     $this->_ref_patient->fillTemplate($template);
     $this->fillLimitedTemplate($template);
     if (CModule::getActive('dPprescription')) {
@@ -1039,8 +1039,9 @@ class CConsultation extends CCodable {
     }
 		$this->loadRefSejour();
 		if ($this->_ref_sejour->_id) {
-			$this->_ref_sejour->fillTemplate($template);
+			$this->_ref_sejour->fillLimitedTemplate($template);
 		}
+	
   }
   
   function fillLimitedTemplate(&$template) {
