@@ -39,6 +39,8 @@ class CSejour extends CCodable {
   var $sortie_prevue      = null;
   var $entree_reelle      = null;
   var $sortie_reelle      = null;
+  var $entree             = null;
+  var $sortie             = null;
   
   var $saisi_SHS          = null; // remplace $op->saisie
   var $modif_SHS          = null; // remplace $op->modifiee
@@ -213,6 +215,8 @@ class CSejour extends CCodable {
     $props["sortie_prevue"]       = "dateTime notNull moreEquals|entree_prevue show|0";
     $props["entree_reelle"]       = "dateTime show|0";
     $props["sortie_reelle"]       = "dateTime moreEquals|entree_reelle show|0";
+    $props["entree"]              = "dateTime show|0";
+    $props["sortie"]              = "dateTime moreEquals|entree_reelle show|0";
     $props["saisi_SHS"]           = "bool";
     $props["modif_SHS"]           = "bool";
     $props["DP"]                  = "code cim10 show|0";
