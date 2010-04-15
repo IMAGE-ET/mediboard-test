@@ -11,13 +11,11 @@
 <script type="text/javascript">
   Main.add(function(){
     var count = {{$sejours_veille}};
-    var counter = $$("button .count")[0];
-    counter.update(count);
-    counter.up().setVisibility(count != 0);
+    var counter = $$("label.count")[0];
+    counter.setVisibility(count != 0);
+    counter.down("span").update(count);
 
     $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
-    
-    $V($("filter-patient-name"), "");
   });
 </script>
 
@@ -64,7 +62,7 @@
   {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
   {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
   
-  <tr {{if !$curr_sejour->sortie_reelle && $curr_sejour->_veille}}style="display: none;" class="veille"{{/if}}>
+  <tr {{if !$curr_sejour->sortie_reelle && $curr_sejour->_veille}}class="veille"{{/if}}>
   	{{if $curr_sejour->annule}}
     <td class="cancelled">
       {{tr}}Cancelled{{/tr}}

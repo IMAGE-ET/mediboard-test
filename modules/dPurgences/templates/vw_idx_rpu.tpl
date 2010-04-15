@@ -84,9 +84,10 @@ Main.add(function () {
 	    </td>
 			
 	    <td style="text-align: right;">
-	     <button type="button" class="warning" style="visibility: hidden;" onclick="$$('.veille').invoke('toggle')">
-	       Afficher les <span class="count">0</span> admissions de la veille
-       </button>
+        <label style="visibility: hidden;" class="count">
+  	      <input type="checkbox" onchange="$$('.veille').invoke('setVisible', !this.checked)" />
+  	      Cacher les <span>0</span> admissions de la veille
+        </label>
 			</td>
 
 	    <td style="text-align: right">
