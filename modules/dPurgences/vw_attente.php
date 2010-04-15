@@ -24,6 +24,7 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 $where[] = "(rpu.radio_debut IS NOT NULL) OR (rpu.bio_depart IS NOT NULL) OR (rpu.specia_att IS NOT NULL)";
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $listSejours = $sejour->loadList($where, null, null, null, $ljoin);
 
@@ -39,10 +40,11 @@ foreach($listSejours as &$_sejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("listSejours", $listSejours);
 
+$smarty->assign("listSejours", $listSejours);
 $smarty->assign("date", $date);
 $smarty->assign("today", $today);
+$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 
 $smarty->display("vw_attente.tpl");
 ?>

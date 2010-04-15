@@ -12,7 +12,9 @@
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_include_script module="dPcabinet" script="file"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{if $isImedsInstalled}}
 {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
@@ -101,9 +103,12 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   loadSejour(sejour_id); 
   loadDocuments(sejour_id);
   
-  if($('Imeds')){
-    loadResultLabo(sejour_id);
-  }
+  {{if $isImedsInstalled}}
+    if($('Imeds')){
+      loadResultLabo(sejour_id);
+    }
+  {{/if}}
+	
   if($('listActesNGAP')){
     loadActesNGAP(sejour_id);
   }
@@ -200,11 +205,13 @@ function updatePatientsListHeight() {
   scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
 }
 
+var tab_sejour = null;
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
   /* Tab initialization */
-  var tab_sejour = Control.Tabs.create('tab-sejour', true);
+  tab_sejour = Control.Tabs.create('tab-sejour', true);
   // Activation d'un onglet
   {{if $_active_tab}}
     tab_sejour.setActiveTab('{{$_active_tab}}');
@@ -397,18 +404,12 @@ printDossierComplet = function(){
                       {{$sejour->_ref_patient->_view}}
                     </span>
                   </a>
-                  <script type="text/javascript">
-                    ImedsResultsWatcher.addSejour('{{$sejour->_id}}', '{{$sejour->_num_dossier}}');
-                  </script>
                 </td>
 
-                <td style="padding: 1px;">
-                  <div id="labo_for_{{$sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo.png" title="Résultats de laboratoire disponibles" />
-                  </div>
-                  <div id="labo_hot_for_{{$sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo_hot.png" title="Résultats de laboratoire disponibles" />
-                  </div>
+                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+								  {{if $isImedsInstalled}}
+                    {{mb_include module=dPImeds template=inc_sejour_labo link="#"}}
+					        {{/if}}
                 </td>
                 
                 <td class="action" style="padding: 1px;">

@@ -115,11 +115,17 @@
 	  url.addParam("rpu_id", id);
 	  url.popup(700, 550, "RPU");
 	}
+  
+	function loadResultLabo(sejour_id) {
+	  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+	  url.addParam("sejour_id", sejour_id);
+	  url.requestUpdate('Imeds');
+	}
 
 	Main.add(function () {
 	  {{if $rpu->_id && $can->edit}}
 	    DossierMedical.reloadDossierPatient();
-	    var tab_sejour = Control.Tabs.create('tab-dossier', true);
+	    var tab_sejour = Control.Tabs.create('tab-dossier');
 	    loadSuivi({{$rpu->sejour_id}});
 	    refreshConstantesHack('{{$rpu->sejour_id}}');
 	  {{/if}}
@@ -135,6 +141,12 @@
 	  if($('listActesNGAP')){
 	    loadActesNGAP('{{$rpu->sejour_id}}');
 	  }
+		
+		{{if $isImedsInstalled}}
+	    if($('Imeds')){
+	      loadResultLabo('{{$rpu->sejour_id}}');
+	    }
+    {{/if}}
 	});
 	
 	</script>
@@ -378,6 +390,9 @@
 		  {{if $isPrescriptionInstalled}}
 		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
+			{{if $isImedsInstalled}}
+        <li><a href="#Imeds">Labo</a></li>
+      {{/if}}
 		  <li><a href="#doc-items">Documents</a></li>
 		</ul>
 		
@@ -420,6 +435,15 @@
 		</div>
 		{{/if}}
 		
+		{{if $isImedsInstalled}}
+      <div id="Imeds" style="display: none;">
+        <div class="small-info">
+          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+          consulter les résultats de laboratoire disponibles pour le patient concerné.
+        </div>
+      </div>
+      {{/if}}
+			
 	  <div id="doc-items">
 	  	{{mb_include template=inc_rpu_docitems}}
 	  </div>

@@ -30,7 +30,9 @@ function popEtatSejour(sejour_id) {
 }
 
 {{if $isImedsInstalled}}
-//Main.add(ImedsResultsWatcher.loadResults);
+  Main.add(function(){
+    ImedsResultsWatcher.loadResults();
+  });
 {{/if}}
  
 </script>
@@ -78,9 +80,6 @@ function popEtatSejour(sejour_id) {
             {{$_sejour->_shortview}} 
           </span>
         </a>
-        <script type="text/javascript">
-          ImedsResultsWatcher.addSejour('{{$_sejour->_id}}', '{{$_sejour->_num_dossier}}');
-        </script>
       </td>
     
       {{assign var=praticien value=$_sejour->_ref_praticien}}
@@ -88,19 +87,10 @@ function popEtatSejour(sejour_id) {
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
       </td>
       
-      <td style="text-align:right;">
+      <td style="text-align:right;" {{if $isImedsInstalled}}onclick="view_labo_sejour({{$_sejour->_id}})"{{/if}}>
       {{if $_sejour->_canRead}}
         {{if $isImedsInstalled}}
-        <div id="labo_for_{{$_sejour->_id}}" style="display: none; float: left;">
-          <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
-            <img src="images/icons/labo.png" title="Résultats de laboratoire" />
-          </a>
-        </div>
-        <div id="labo_hot_for_{{$_sejour->_id}}" style="display: none; float: left;">
-          <a href="#" onclick="view_labo_sejour({{$_sejour->_id}})">
-            <img src="images/icons/labo_hot.png" title="Résultats de laboratoire"/>
-          </a>
-        </div>
+				  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="#"}}
         {{/if}}
 
         {{mb_include module=dPpatients template=inc_form_docitems_button object=$_sejour}}

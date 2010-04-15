@@ -50,6 +50,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("group"       , CGroups::loadCurrent());
 $smarty->assign("selAffichage", $selAffichage);
 $smarty->assign("date"        , $date);
+$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 
 $smarty->display("vw_idx_rpu.tpl");
 ?>

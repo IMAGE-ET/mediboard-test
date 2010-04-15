@@ -8,6 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $isImedsInstalled}}
+  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 <script type="text/javascript">
 	function refreshAttente(debut, fin, rpu_id) {
 	  var url = new Url("dPurgences", "ajax_vw_attente");
@@ -20,6 +24,10 @@
 		
 	Main.add(function () {
     Calendar.regField(getForm("changeDate").date, null, {noView: true});
+		
+		{{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
   });
 </script>
 
@@ -27,7 +35,7 @@
   <tr>
     <th>
      le
-     {{$date|date_format:$dPconfig.longdate}}
+     <big>{{$date|date_format:$dPconfig.longdate}}</big>
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -56,7 +64,8 @@
   {{foreach from=$listSejours item=_sejour}}
     {{assign var=rpu value=$_sejour->_ref_rpu}}
 		{{assign var=rpu_id value=$rpu->_id}}
-      {{assign var=patient value=$_sejour->_ref_patient}}
+    {{assign var=patient value=$_sejour->_ref_patient}}
+		{{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
 			
 		<tr style="text-align: center;{{if $_sejour->sortie_reelle}}opacity: 0.6{{/if}}">			
 			<td>

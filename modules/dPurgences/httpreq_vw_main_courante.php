@@ -21,7 +21,7 @@ $order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
-$date_before = mbDate("-1 DAY", $date);
+$date_before = mbDate("-2 DAY", $date);
 $today = mbDate();
 
 // L'utilisateur doit-il voir les informations médicales
@@ -128,6 +128,7 @@ $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
 $smarty->assign("today"       , $today);
 $smarty->assign("sejours_veille", $sejours_veille);
+$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 
 $smarty->display("inc_main_courante.tpl");
 ?>

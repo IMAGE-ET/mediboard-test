@@ -16,6 +16,10 @@
     counter.down("span").update(count);
 
     $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+		
+		{{if $isImedsInstalled}}
+      ImedsResultsWatcher.loadResults();
+    {{/if}}
   });
 </script>
 
@@ -30,7 +34,7 @@
 		<th style="width: 1%;">
       <input type="text" size="6" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
 		</th>
-    <th style="width: 10em;">
+    <th style="width: 12em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
@@ -108,12 +112,15 @@
 		
 	  {{else}}
     <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-    	{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
-    
+			{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
+      
       {{if $modules.dPhospi->canEdit()}}
       <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
+      {{/if}}
+			{{if $isImedsInstalled}}
+			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$curr_sejour link="$rpu_link#Imeds"}}
       {{/if}}
 
       <a href="{{$rpu_link}}">
@@ -124,7 +131,7 @@
         {{/if}}
         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
       </a>
-			
+								
       {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
         <div style="clear: both; font-weight: bold;">
         {{if $rpu->radio_debut}}
@@ -144,7 +151,6 @@
         {{/if}}
       	</div>
       {{/if}}
-      
     </td>
     
     {{if $dPconfig.dPurgences.responsable_rpu_view}}

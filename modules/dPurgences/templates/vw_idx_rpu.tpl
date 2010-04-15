@@ -10,6 +10,9 @@
 
 {{mb_include_script module=dPurgences script=main_courante}}
 {{mb_include_script module=dPurgences script=identito_vigilance}}
+{{if $isImedsInstalled}}
+  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
 
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>

@@ -1,7 +1,7 @@
 {{if $curr_sejour->_id != ""}}
 <tr {{if $object->_id == $curr_sejour->_id}}class="selected"{{/if}}>
   <td style="padding: 0;">
-    <button class="lookup notext" onclick="popEtatSejour({{$curr_sejour->_id}});" />
+    <button class="lookup notext" onclick="popEtatSejour({{$curr_sejour->_id}});">Etat du séjour</button>
   </td>
   
   <td>
@@ -16,18 +16,12 @@
         {{$curr_sejour->_ref_patient->_view}}
       </span>
     </a>
-    <script type="text/javascript">
-      ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
-    </script>
   </td>
 
-  <td style="padding: 1px;">
-    <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
-      <img src="images/icons/labo.png" title="Résultats de laboratoire disponibles" />
-    </div>
-    <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none">
-      <img src="images/icons/labo_hot.png" title="Résultats de laboratoire disponibles" />
-    </div>
+  <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$curr_sejour->_id}}', {{$curr_sejour->praticien_id}}, {{$curr_sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+	  {{if $isImedsInstalled}}
+      {{mb_include module=dPImeds template=inc_sejour_labo sejour=$curr_sejour link="#"}}
+    {{/if}}
   </td>
   
   <td class="action" style="padding: 1px;">
