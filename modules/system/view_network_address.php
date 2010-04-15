@@ -27,38 +27,34 @@ $where = array();
 $order = "users.user_last_name, users.user_first_name";
 $ljoin = array();
 $ljoin["users"] = "users.user_id = users_mediboard.user_id";
-$listUsers = $user->loadGroupList(array(), $order, null, null, $ljoin);
+
+$listUsers = $user->loadGroupList($where, $order, null, null, $ljoin);
 foreach($listUsers as $_user) {
   $_user->loadRefFunction();
 }
 
-$where = array();
-$where["ip_address"] = "IS NOT NULL";
+$where = array(
+  "ip_address IS NOT NULL AND ip_address != ''"
+);
 if($filter->_date_min) {
   $where[] = "date >= '$filter->_date_min'";
-  mbTrace($filter->_date_min);
 }
 if($filter->_date_max) {
   $where[] = "date <= '$filter->_date_max'";
 }
 $where[] = "user_id ".CSQLDataSource::prepareIn(array_keys($listUsers), $filter->user_id);
-if($filter->ip_address) {
-  //$binary_address = inet_pton($filter->ip_address);
-  //$binary_address = $filter->ip_address;
-  //$where[] = "('$binary_address' & ip_address) = $binary_address";
-}
-$order = "$order_col $order_way";
-$group = null;
-$group = array("ip_address");
-$ljoin = null;
 
-$total_list_count = $filter->countMultipleList($where, $order, null, $group, $ljoin, array("ip_address", "MAX(date) AS date_max, GROUP_CONCAT(DISTINCT user_id SEPARATOR '|') AS user_list"));
-//if($filter->ip_address) {
-  foreach($total_list_count as $key => $_log) {
-    if(!(inet_ntop($_log["ip_address"]) == inet_ntop($_log["ip_address"] & inet_pton($filter->ip_address)))) {
-      unset($total_list_count[$key]);
-    }
+$order = "$order_col $order_way";
+$group = "ip_address";
+
+$total_list_count = $filter->countMultipleList($where, $order, null, $group, null, array("ip_address", "MAX(date) AS date_max, GROUP_CONCAT(DISTINCT user_id SEPARATOR '|') AS user_list"));
+
+foreach($total_list_count as $key => $_log) {
+  if (inet_ntop($_log["ip_address"]) != (inet_ntop($_log["ip_address"] & inet_pton($filter->ip_address)))) {
+    unset($total_list_count[$key]);
   }
+}
+
 $total_list = array_slice($total_list_count, $start, 30);
 foreach($total_list as &$_log) {
   $_log["ip"]         = inet_ntop($_log["ip_address"]);
