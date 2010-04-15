@@ -106,11 +106,35 @@ function popupImport(owner_guid){
   return false;
 }
 
+function loadTabsAides(form){
+  var url = new Url("dPcompteRendu", "httpreq_vw_list_aides");
+  url.addFormData(form);
+  url.requestUpdate("tabs_aides");
+  return false;
+}
+
+function resetStart(form){
+  ["user", "func", "etab"].each(function(type){
+    form["start["+type+"]"].value = 0;
+  });
+}
+
+var changePage = {};
+
 Main.add(function () {
-  Control.Tabs.create('tabs-owner', true);
+  var form = getForm("filterFrm");
+  
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
   loadDependances('{{$aide->depend_value_1}}', '{{$aide->depend_value_2}}');
+  
+  loadTabsAides(form);
+  
+  ["user", "func", "etab"].each(function(type){
+    changePage[type] = function(page) {
+      $V(form["start["+type+"]"], page);
+    }
+  });
 });
 
 </script>
@@ -122,61 +146,49 @@ Main.add(function () {
     
     <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
     
-    <form name="filterFrm" action="?" method="get">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <table class="form">
-      <tr>
-        <th class="category" colspan="10">Filtrer les aides</th>
-      </tr>
-
-      <tr>
-        <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
-        <td>
-          <select name="filter_user_id" onchange="this.form.submit()">
-            <option value="">&mdash; Choisir un utilisateur</option>
-            {{foreach from=$listPrat item=curr_user}}
-            <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
-              {{$curr_user->_view}}
-            </option>
-            {{/foreach}}
-          </select>
-        </td>
-        <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet</label></th>
-        <td>
-          <select name="filter_class" onchange="this.form.submit()">
-            <option value="0">&mdash; Tous les types d'objets</option>
-            {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
-            <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
-              {{tr}}{{$class_name}}{{/tr}}
-            </option>
-            {{/foreach}}
-          </select>
-        </td>
-      </tr>
-    </table>
-
+    <form name="filterFrm" action="?" method="get" onsubmit="return loadTabsAides(this)">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="start[user]" value="{{$start.user}}" onchange="this.form.onsubmit()" />
+      <input type="hidden" name="start[func]" value="{{$start.func}}" onchange="this.form.onsubmit()" />
+      <input type="hidden" name="start[etab]" value="{{$start.etab}}" onchange="this.form.onsubmit()" />
+      
+      <table class="form">
+        <tr>
+          <th class="category" colspan="10">Filtrer les aides</th>
+        </tr>
+  
+        <tr>
+          <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
+          <td>
+            <select name="filter_user_id" onchange="resetStart(this.form); this.form.onsubmit()">
+              <option value="">&mdash; Choisir un utilisateur</option>
+              {{foreach from=$listPrat item=curr_user}}
+              <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
+                {{$curr_user->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+          <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet</label></th>
+          <td>
+            <select name="filter_class" onchange="resetStart(this.form); this.form.onsubmit()">
+              <option value="">&mdash; Tous les types d'objets</option>
+              {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
+              <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
+                {{tr}}{{$class_name}}{{/tr}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+          <th><label for="keywords">Mots clés</label></th>
+          <td>
+            <input type="text" name="keywords" onchange="resetStart(this.form); this.form.onsubmit()" value="{{$keywords}}" />
+          </td>
+        </tr>
+      </table>
     </form>
 
-<ul id="tabs-owner" class="control_tabs">
-  <li><a href="#owner-user">{{$userSel}} <small>({{$aidesPrat|@count}})</small></a></li>
-  <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$aidesFunc|@count}})</small></a></li>
-  <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$aidesEtab|@count}})</small></a></li>
-</ul>
-
-<hr class="control_tabs" />
-
-<div id="owner-user" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel aides=$aidesPrat}}
-</div>
-
-<div id="owner-func" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aidesFunc}}
-</div>
-
-<div id="owner-etab" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function->_ref_group aides=$aidesEtab}}
-</div>
-    
+    <div id="tabs_aides"></div>
   </td>
   <td>
 

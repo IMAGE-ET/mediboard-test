@@ -7,6 +7,8 @@
   <button onclick="return popupImport('{{$owner->_guid}}');" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
 {{/if}}
 
+{{mb_include module=system template=inc_pagination change_page="changePage['$type']" total=$aidesCount.$type current=$start.$type step=30}}
+
 <table class="tbl">
 <tr>
   <th>{{mb_title class=CAideSaisie field=class}}</th>
@@ -18,9 +20,9 @@
 </tr>
 
 {{foreach from=$aides item=_aide}}
-<tr {{if $_aide->_id == $aide->_id}}class="selected"{{/if}}>
+<tr>
   {{assign var="aide_id" value=$_aide->aide_id}}
-  {{assign var="href" value="?m=$m&tab=$tab&aide_id=$aide_id"}}
+  {{assign var="href" value="?m=dPcompteRendu&tab=vw_idx_aides&aide_id=$aide_id"}}
   {{assign var="class" value=$_aide->class}}
   {{assign var="field" value=$_aide->field}}
   <td><a href="{{$href}}">{{tr}}{{$class}}{{/tr}}</a></td>
@@ -51,8 +53,21 @@
     {{/if}}
     </a>
   </td>
+  
   <td class="text"><a href="{{$href}}">{{mb_value object=$_aide field=name}}</a></td>
   <td class="text">{{mb_value object=$_aide field=text}}</td>
+    
+  <td>
+    <form name="delete-{{$_aide->_guid}}" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="dosql" value="do_aide_aed" />
+      {{mb_key object=$_aide}}
+      <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$_aide|smarty:nodefaults|JSAttribute}}'})">
+        {{tr}}Delete{{/tr}}
+      </button>
+    </form>
+  </td>
 </tr>
 {{foreachelse}}
 <tr>

@@ -1,14 +1,13 @@
 <script type="text/javascript">
 function submitFormAides(oForm){
   if(checkForm(oForm)){
-    submitFormAjax(oForm, 'systemMsg', { onComplete : window.close });
-    window.close();
+    onSubmitFormAjax(oForm, { onComplete : window.close });
   }
   return false;
 }
 </script>
 
-<form name="editAides" action="?m=dPcompteRendu" method="post" class="{{$aide->_spec}}">
+<form name="editAides" action="?m=dPcompteRendu" method="post" class="{{$aide->_spec}}" onsubmit="return submitFormAides(this)">
 <input type="hidden" name="dosql" value="do_aide_aed" />
 <input type="hidden" name="m" value="dPcompteRendu" />
 <input type="hidden" name="aide_id" value="" />
@@ -116,9 +115,7 @@ function submitFormAides(oForm){
 
   <tr>
     <td class="button" colspan="2">
-      <button class="submit" type="button" onclick="submitFormAides(this.form)">
-        Créer et fermer
-      </button>
+      <button class="submit" type="submit">Créer et fermer</button>
     </td>
   </tr>
 </table>

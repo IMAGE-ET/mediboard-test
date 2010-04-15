@@ -19,14 +19,14 @@
 	  <td>{{mb_value object=$_modele field=type}}</td>
 	  
 	  <td>
-	    <form name="editFrm" action="?m={{$m}}" method="post">
-	    <input type="hidden" name="m" value="{{$m}}" />
-	    <input type="hidden" name="del" value="1" />
-	    <input type="hidden" name="dosql" value="do_modele_aed" />
-	    {{mb_key object=$_modele}}
-	    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$_modele->nom|smarty:nodefaults|JSAttribute}}'})">
-	      {{tr}}Delete{{/tr}}
-	    </button>
+	    <form name="delete-{{$_modele->_guid}}" action="?m={{$m}}" method="post">
+  	    <input type="hidden" name="m" value="{{$m}}" />
+  	    <input type="hidden" name="del" value="1" />
+  	    <input type="hidden" name="dosql" value="do_modele_aed" />
+  	    {{mb_key object=$_modele}}
+  	    <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$_modele->nom|smarty:nodefaults|JSAttribute}}'})">
+  	      {{tr}}Delete{{/tr}}
+  	    </button>
 	    </form>
 	  </td>
 	</tr>

@@ -51,8 +51,8 @@ class CAideSaisie extends CMbObject {
     
     $specs["class"]        = "str notNull";
     $specs["field"]        = "str notNull";
-    $specs["name"]         = "str notNull";
-    $specs["text"]         = "text notNull";
+    $specs["name"]         = "str notNull seekable";
+    $specs["text"]         = "text notNull seekable";
     $specs["depend_value_1"] = "str";
     $specs["depend_value_2"] = "str";
     

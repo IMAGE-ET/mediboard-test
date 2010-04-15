@@ -11,6 +11,13 @@ global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("std");
 $can->needsRead();
 
+// Utilisateur sélectionné ou utilisateur courant
+$filter_user_id = CValue::getOrSession("filter_user_id");
+$filter_class   = CValue::getOrSession("filter_class");
+$aide_id        = CValue::getOrSession("aide_id");
+$keywords       = CValue::getOrSession("keywords");
+$start          = CValue::getOrSession("start", array("user" => 0, "func" => 0, "etab" => 0));
+
 $classes = array_flip(getInstalledClasses());
 $listTraductions = array();
 
@@ -71,11 +78,6 @@ $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
 
 $listEtab = CGroups::loadGroups(PERM_EDIT);
 
-// Utilisateur sélectionné ou utilisateur courant
-$filter_user_id = CValue::getOrSession("filter_user_id");
-$filter_class   = CValue::getOrSession("filter_class");
-$aide_id        = CValue::getOrSession("aide_id");
-
 $userSel = new CMediusers;
 $userSel->load($filter_user_id ? $filter_user_id : $AppUI->user_id);
 $userSel->loadRefs();
@@ -84,44 +86,6 @@ $userSel->_ref_function->loadRefGroup();
 if ($userSel->isPraticien()) {
   CValue::setSession("filter_user_id", $userSel->user_id);
   $filter_user_id = $userSel->user_id;
-}
-
-$where = array();
-if ($filter_class) {
-  $where["class"] = "= '$filter_class'";
-}
-
-$order = array("group_id", "function_id", "user_id", "class", "depend_value_1", "field", "name");
-
-// Liste des aides pour le praticien
-$aidesPrat = array();
-$aidesFunc = array();
-$aidesEtab = array();
-
-if ($userSel->user_id) {
-  $userSel->loadRefFunction();
-  $_aide = new CAideSaisie();
-  
-  $where["user_id"] = "= '$userSel->user_id'";
-  $aidesPrat = $_aide->loadlist($where, $order);
-  foreach($aidesPrat as $aide) {
-    $aide->loadRefsFwd();
-  }
-  unset($where["user_id"]);
-
-  $where["function_id"] = "= '$userSel->function_id'";
-  $aidesFunc = $_aide->loadlist($where, $order);
-  foreach($aidesFunc as $aide) {
-    $aide->loadRefsFwd();
-  }
-  unset($where["function_id"]);
-
-  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
-  $aidesEtab = $_aide->loadlist($where, $order);
-  foreach($aidesEtab as $aide) {
-    $aide->loadRefsFwd();
-  }
-  unset($where["group_id"]);
 }
 
 // Aide sélectionnée
@@ -142,9 +106,8 @@ $smarty->assign("listFunc"        , $listFunc);
 $smarty->assign("listEtab"        , $listEtab);
 $smarty->assign("classes"         , $classes);
 $smarty->assign("aide"            , $aide);
-$smarty->assign("aidesPrat"       , $aidesPrat);
-$smarty->assign("aidesFunc"       , $aidesFunc);
-$smarty->assign("aidesEtab"       , $aidesEtab);
+$smarty->assign("start"           , $start);
+$smarty->assign("keywords"        , $keywords);
 $smarty->assign("filter_class"    , $filter_class);
 $smarty->assign("filter_user_id"  , $filter_user_id);
 $smarty->assign("listTraductions" , $listTraductions);
