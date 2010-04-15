@@ -118,13 +118,6 @@ if($echange_hprim->_id) {
     $_echange->getObservations();
   }
 	
-	$evenements = array();
-	foreach (CEchangeHprim::$evenements as $_evt_name => $_evt_class) {
-		$class = new ReflectionClass($_evt_class);
-    $statics = $class->getStaticProperties();
-		$evenements[$_evt_name] = $statics["evenements"];
-	}
-
   $smarty->assign("echange_hprim"       , $echange_hprim);
   $smarty->assign("echangesHprim"       , $echangesHprim);
   $smarty->assign("total_echange_hprim" , $total_echange_hprim);
@@ -134,8 +127,16 @@ if($echange_hprim->_id) {
   $smarty->assign("statut_acquittement" , $statut_acquittement);
   $smarty->assign("msg_evenement"       , $msg_evenement);
   $smarty->assign("type_evenement"      , $type_evenement);
-	$smarty->assign("evenements"          , $evenements);
+	
 }
+
+$evenements = array();
+foreach (CEchangeHprim::$evenements as $_evt_name => $_evt_class) {
+	$class = new ReflectionClass($_evt_class);
+  $statics = $class->getStaticProperties();
+	$evenements[$_evt_name] = $statics["evenements"];
+}
+$smarty->assign("evenements"          , $evenements);
 
 $smarty->display("vw_idx_echange_hprim.tpl");
 
