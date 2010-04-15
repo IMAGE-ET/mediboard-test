@@ -41,7 +41,7 @@ $ljoin["users"]    = "sejour.praticien_id = users.user_id";
 $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]  = "service.service_id = chambre.service_id";
-$where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
+$where["affectation.sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
 //$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services));
