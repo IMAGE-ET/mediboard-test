@@ -28,28 +28,29 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   
   $path = "./tmp/locales.$localeName.js";
   if (!is_file($path)) {
-    echo "<div class='warning'>Fichier de traductions JS '$localeName' absent</div>";
+    CAppUI::stepAjax("Fichier de traductions JS '$localeName' absent", UI_MSG_WARNING);
     continue;
   }
   
   $fp = fopen($path, 'r');
   preg_match('#^//(\d+)#', fgets($fp), $v);
   if ($v[1] < $version['build']) {
-    echo "<div class='warning'>Fichier de traductions JS '$localeName' perimé</div>";
+    CAppUI::stepAjax("Fichier de traductions JS '$localeName' perimé", UI_MSG_WARNING);
+    fclose($fp);
     continue;
   }
 
   if (null == $sharedLocale = SHM::get("locales-$localeName")) {
-    echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
-    continue;
-  }      
-  
-  if ($sharedLocale != $locales) {
-    echo "<div class='warning'>Table périmée pour langage '$localeName'</div>";
+    CAppUI::stepAjax("Table absente en mémoire pour le langage '$localeName'", UI_MSG_OK);
     continue;
   }
   
-  echo "<div class='message'>Table à jour pour langage '$localeName'</div>";
+  if ($sharedLocale != $locales) {
+    CAppUI::stepAjax("Table périmée pour langage '$localeName'", UI_MSG_WARNING);
+    continue;
+  }
+  
+  CAppUI::stepAjax("Table à jour pour langage '$localeName'", UI_MSG_OK);
 }
 
 // Check class paths
@@ -61,14 +62,13 @@ foreach($classNames as $className) {
 }
 
 if (null == $sharedClassPaths = SHM::get("class-paths")) {
-  echo "<div class='message'>Table des classes absente en mémoire</div>";
+  CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_OK);
   return;
 }      
   
 if ($sharedClassPaths != $classPaths) {
-  echo "<div class='error'>Table des classes périmée</div>";
+  CAppUI::stepAjax("Table des classes périmée", UI_MSG_ERROR);
   return;
 }
 
-echo "<div class='message'>Table des classes à jour</div>";
-
+CAppUI::stepAjax("Table des classes à jour", UI_MSG_OK);

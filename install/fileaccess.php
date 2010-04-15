@@ -24,14 +24,14 @@ class CPathAccess {
 $pathAccesses = array();
 
 $pathAccess = new CPathAccess;
-$pathAccess->path = "files/";
-$pathAccess->description = "Répertoire de tous les fichiers attachés";
+$pathAccess->path = "tmp/";
+$pathAccess->description = "Répertoire des fichiers temporaires";
 
 $pathAccesses[] = $pathAccess;
 
 $pathAccess = new CPathAccess;
-$pathAccess->path = "tmp/";
-$pathAccess->description = "Répertoire des fichiers temporaires";
+$pathAccess->path = "files/";
+$pathAccess->description = "Répertoire de tous les fichiers attachés";
 
 $pathAccesses[] = $pathAccess;
 
@@ -52,25 +52,6 @@ $pathAccess->path = "modules/hprimxml/xsd";
 $pathAccess->description = "Répertoire des schemas HPRIM";
 
 $pathAccesses[] = $pathAccess;
-
-
-foreach(glob($mbpath."modules/*/templates_c") as $templates_c) {
-  $module = basename(dirname($templates_c));
-  $pathAccess = new CPathAccess;
-  $pathAccess->path = "modules/$module/templates_c/";
-  $pathAccess->description = "Templates compilés pour le module '$module'";
-  
-  $pathAccesses[] = $pathAccess;  
-}
-
-foreach(glob($mbpath."style/*/templates_c") as $templates_c) {
-  $style = basename(dirname($templates_c));
-  $pathAccess = new CPathAccess;
-  $pathAccess->path = "style/$style/templates_c/";
-  $pathAccess->description = "Templates compilés pour le style '$style'";
-  
-  $pathAccesses[] = $pathAccess;  
-}
 
 showHeader(); 
 

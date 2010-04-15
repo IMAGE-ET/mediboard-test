@@ -27,7 +27,6 @@ $list = array_merge(
 $issues = array();
 foreach ($list as $path) {
 	if (is_dir($path) ||
-	    strpos($path, 'templates_c/') !== false ||
 	    strpos($path, 'libpkg/') !== false ||
 	    strpos($path, 'lib/') !== false ||
 	    strpos($path, 'tmp/') !== false ||

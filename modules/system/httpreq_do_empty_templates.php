@@ -11,14 +11,9 @@
 global $can;
 $can->needsEdit();
 
-$i = 0;
-foreach(glob("modules/*/templates_c/*") as $tplPath) {
-  $i++;
-  CMbPath::remove($tplPath);
-}
-foreach(glob("style/*/templates_c/*") as $tplPath) {
-  $i++;
+$paths = glob("tmp/templates_c/*/*");
+foreach($paths as $tplPath) {
   CMbPath::remove($tplPath);
 }
 
-echo "<div class='message'>$i fichiers de cache supprimés</div>";
+CAppUI::stepAjax(count($paths)." fichiers de cache supprimés", UI_MSG_OK);

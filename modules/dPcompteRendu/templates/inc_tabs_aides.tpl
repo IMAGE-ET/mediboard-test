@@ -15,9 +15,21 @@ Main.add(function(){
 </script>
 
 <ul id="tabs-owner" class="control_tabs">
-  <li><a href="#owner-user">{{$userSel}} <small>({{$aidesCount.user}})</small></a></li>
-  <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$aidesCount.func}})</small></a></li>
-  <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$aidesCount.etab}})</small></a></li>
+  <li>
+    <a href="#owner-user" {{if $aidesCount.user == 0}}class="empty"{{/if}}>
+      {{$userSel}} <small>({{$aidesCount.user}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#owner-func" {{if $aidesCount.func == 0}}class="empty"{{/if}}>
+      {{$userSel->_ref_function}} <small>({{$aidesCount.func}})</small>
+    </a>
+  </li>
+  <li>
+    <a href="#owner-etab" {{if $aidesCount.etab == 0}}class="empty"{{/if}}>
+      {{$userSel->_ref_function->_ref_group}} <small>({{$aidesCount.etab}})</small>
+    </a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />

@@ -443,13 +443,19 @@ class CSmartyDP extends Smarty {
 
     if (!$rootDir) {
       $rootDir = "$root/modules/$m"; 
+      $this->compile_dir = "$root/tmp/templates_c/modules/$m/";
+    }
+    else {
+      $this->compile_dir = "$root/tmp/templates_c/$rootDir/";
     }
     
     // Directories initialisation
     $this->template_dir = "$rootDir/templates/";
-    $this->compile_dir  = "$rootDir/templates_c/";
-    $this->config_dir   = "$rootDir/configs/";
-    $this->cache_dir    = "$rootDir/cache/";
+    
+    // Check if the cache dir is writeable
+    if (!is_dir($this->compile_dir)) {
+      CMbPath::forceDir($this->compile_dir);
+    }
 
     // Delimiter definition
     $this->left_delimiter = "{{";

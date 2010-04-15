@@ -174,7 +174,7 @@ Main.add(function () {
         <tr>
           <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
           <td>
-            <select name="filter_user_id" onchange="this.form.onsubmit()">
+            <select name="filter_user_id" onchange="this.form.onsubmit()" style="width: 12em;">
               <option value="">&mdash; Choisir un utilisateur</option>
               {{foreach from=$listPrat item=curr_user}}
               <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
@@ -185,7 +185,7 @@ Main.add(function () {
           </td>
           <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet</label></th>
           <td>
-            <select name="filter_class" onchange="this.form.onsubmit()">
+            <select name="filter_class" onchange="this.form.onsubmit()" style="width: 12em;">
               <option value="">&mdash; Tous les types d'objets</option>
               {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
               <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
@@ -230,8 +230,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="user_id"}}</th>
       <td>
-        <select name="user_id" class="{{$aide->_props.user_id}}">
-          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
+        <select name="user_id" class="{{$aide->_props.user_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
@@ -244,8 +244,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$aide->_props.function_id}}">
-          <option value="">&mdash; Associer à une fonction &mdash;</option>
+        <select name="function_id" class="{{$aide->_props.function_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $aide->function_id}} selected="selected" {{/if}}>
               {{$curr_func->_view}}
@@ -258,8 +258,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="group_id"}}</th>
       <td>
-        <select name="group_id" class="{{$aide->_props.group_id}}">
-          <option value="">&mdash; Associer à un établissement &mdash;</option>
+        <select name="group_id" class="{{$aide->_props.group_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listEtab item=curr_etab}}
             <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $aide->group_id}} selected="selected" {{/if}}>
               {{$curr_etab}}
@@ -272,7 +272,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="class"}}</th>
       <td>
-        <select name="class" class="{{$aide->_props.class}}" onchange="loadFields()">
+        <select name="class" class="{{$aide->_props.class}}" onchange="loadFields()" style="width: 12em;">
           <option value="">&mdash; Choisir un type objet</option>
         </select>
       </td>
@@ -281,7 +281,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$aide field="field"}}</th>
       <td>
-        <select name="field" class="{{$aide->_props.field}}" onchange="loadDependances()">
+        <select name="field" class="{{$aide->_props.field}}" onchange="loadDependances()" style="width: 12em;">
           <option value="">&mdash; Choisir un champ</option>
         </select>
       </td>

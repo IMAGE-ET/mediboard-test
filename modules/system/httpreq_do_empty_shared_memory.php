@@ -23,30 +23,30 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $sharedName = "locales-$localeName";
   
   if (!SHM::get($sharedName)) {
-    echo "<div class='message'>Table absente en mémoire pour langage '$localeName'</div>";
-    continue;
-  } 
-  
-  if (!SHM::rem($sharedName)) {
-    echo "<div class='error'>Impossible de supprimer la table pour langage '$localeName'</div>";
+    CAppUI::stepAjax("Table absente en mémoire pour langage '$localeName'", UI_MSG_OK);
     continue;
   }
   
-  echo "<div class='message'>Table supprimée pour langage '$localeName'</div>";
+  if (!SHM::rem($sharedName)) {
+    CAppUI::stepAjax("Impossible de supprimer la table pour le langage '$localeName'", UI_MSG_ERROR);
+    continue;
+  }
+  
+  CAppUI::stepAjax("Table supprimée pour langage '$localeName'", UI_MSG_OK);
 }
 
 // Remove class paths
 if (!SHM::get("class-paths")) {
-  echo "<div class='message'>Table des classes absente en mémoire</div>";
+  CAppUI::stepAjax("Table des classes absente en mémoire", UI_MSG_OK);
   return;
 }
   
 if (!SHM::rem("class-paths")) {
-  echo "<div class='error'>Impossible de supprimer la table des classes</div>";
+  CAppUI::stepAjax("Impossible de supprimer la table des classes", UI_MSG_ERROR);
   return;
 }
 
-echo "<div class='message'>Table des classes supprimée</div>";
+CAppUI::stepAjax("Table des classes supprimée", UI_MSG_OK);
 
 mbWriteJSLocalesFile();
-echo "<div class='message'>Fichiers de locales mis à jour</div>";
+CAppUI::stepAjax("Fichiers de locales mis à jour", UI_MSG_OK);
