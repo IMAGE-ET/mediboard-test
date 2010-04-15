@@ -229,7 +229,7 @@ table.tbl tr th.error,
 table.tbl tr:hover td.error,
 table.tbl tbody:hover td.error,
 span.error {
-  background-color: #f00;
+  background-color: #f66;
 }
 
 table.tbl td.big-error,
