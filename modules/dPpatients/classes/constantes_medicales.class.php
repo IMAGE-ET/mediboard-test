@@ -135,6 +135,14 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "ml", 
       "min" => 0, "max" => 500
     ),
+    "redon_2"           => array(
+      "unit" => "ml", 
+      "min" => 0, "max" => 500
+    ),
+    "redon_3"           => array(
+      "unit" => "ml", 
+      "min" => 0, "max" => 500
+    ),
     "diurese"           => array(
       "unit" => "ml", 
       "min" => 0, "max" => 2000
@@ -184,7 +192,9 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
 		$specs['glycemie']               = 'float pos max|10';
-	  $specs['redon']                  = 'float pos min|0 max|1000';
+    $specs['redon']                  = 'float pos min|0 max|1000';
+    $specs['redon_2']                = 'float pos min|0 max|1000';
+    $specs['redon_3']                = 'float pos min|0 max|1000';
     $specs['diurese']                = 'float pos min|0';
     $specs['injection']              = 'str maxLength|10';
     $specs['_imc']                   = 'float pos';

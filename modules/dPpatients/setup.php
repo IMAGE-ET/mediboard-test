@@ -1166,8 +1166,14 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.0");
     $sql = "ALTER TABLE `constantes_medicales` ADD `ta_droit` VARCHAR (10) AFTER `ta`";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.01");
+    $sql = "ALTER TABLE `constantes_medicales`
+              ADD `redon_2` FLOAT UNSIGNED AFTER `redon`,
+              ADD `redon_3` FLOAT UNSIGNED AFTER `redon_2`";
+    $this->addQuery($sql);
 				
-		$this->mod_version = "1.01";
+		$this->mod_version = "1.02";
   }
 }
 
