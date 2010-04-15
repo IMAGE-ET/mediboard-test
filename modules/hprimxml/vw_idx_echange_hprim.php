@@ -19,9 +19,8 @@ $statut_acquittement = CValue::getOrSession("statut_acquittement");
 $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
 $type_evenement      = CValue::getOrSession("type_evenement");
 $page                = CValue::get('page', 0);
-$now                 = mbDate();
-$_date_min           = CValue::getOrSession('_date_min');
-$_date_max           = CValue::getOrSession('_date_max');
+$_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
+$_date_max           = CValue::getOrSession('_date_max', mbDateTime());
 
 $observations = array();
 
@@ -111,7 +110,8 @@ if($echange_hprim->_id) {
 
   $total_echange_hprim = $itemEchangeHprim->countList($where);
   $order = "date_production DESC";
-  $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20");
+  $forceindex[] = "date_production, group_id";
+  $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20", null, null, $forceindex);
     
   foreach($echangesHprim as $_echange) {
     $_echange->loadRefNotifications();

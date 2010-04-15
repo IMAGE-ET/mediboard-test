@@ -19,6 +19,7 @@ class CRequest {
   var $where  = array();
   var $group  = array();
   var $order  = array();
+  var $forceindex = array();
   var $limit  = "";
   
   function addSelect($select) {
@@ -100,6 +101,14 @@ class CRequest {
       $this->order[] = $order;
     }
   }
+  
+  function addForceIndex($forceindex) {
+  	if(is_array($forceindex)) {
+      $this->forceindex = array_merge($this->forceindex, $forceindex);
+    } elseif(is_string($forceindex)) {
+      $this->forceindex[] = $forceindex;
+    }
+  }
 
   function setLimit($limit) {
     $this->limit = $limit;
@@ -111,7 +120,14 @@ class CRequest {
    */
   function getRequestFrom($from) {
     $sql = "\nFROM $from";
-
+		
+  	// Force index by fields
+    if ($this->forceindex) {
+      $sql .= "\nFORCE INDEX (";
+      $sql .= is_array($this->forceindex) ? implode(', ', $this->forceindex) : $this->forceindex;
+      $sql .= ")";
+    }
+    
     // Left join clauses
     if ($this->ljoin) {
       assert(is_array($this->ljoin));

@@ -589,14 +589,16 @@ class CMbObject {
    * @param $limit string MySQL limit clause
    * @param $group array Array of group by clauses
    * @param $leftjoin array Array of left join clauses
+   * @param $forceindex array Array of key list  
    * @return array[CMbObject] List of found objects, null if module is not installed
    */
-  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+  function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
     if (!$this->_ref_module) {
       return null;
     }
     
   	$request = new CRequest();
+  	$request->addForceIndex($forceindex);
     $request->addLJoin($leftjoin);
     $request->addWhere($where);
     $request->addGroup($group);
