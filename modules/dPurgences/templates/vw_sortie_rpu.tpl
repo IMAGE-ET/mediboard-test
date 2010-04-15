@@ -12,7 +12,7 @@
 
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
-  setInterval(refreshCanLeaveSince, 60000);
+//  setInterval(refreshCanLeaveSince, 60000);
 });
 
 function modeSortieDest(mode_sortie, rpu_id) {

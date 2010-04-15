@@ -33,6 +33,14 @@ checkPraticien = function(oForm){
 </script>
 
 {{if $consult}}
+{{if $sejour->type != "urg"}}
+  <strong>{{mb_value object=$sejour field=type}}</strong>
+	<br/>
+	<a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&tab=vw_full_patients&patient_id={{$sejour->patient_id}}">
+	  Dossier Complet
+	</a>
+
+{{else}}
 	{{if !$consult->_id}}
 		{{if !$sejour->sortie_reelle}}
 			{{if $can->edit}}
@@ -40,7 +48,7 @@ checkPraticien = function(oForm){
 			  <input type="hidden" name="dosql" value="do_consult_now" />
 			  <input type="hidden" name="m" value="dPcabinet" />
 			  <input type="hidden" name="del" value="0" />
-			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />   
+			  <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />   
 			  <input type="hidden" name="accident_travail" value="{{$rpu->accident_travail}}" />
 			  <select name="prat_id" class="ref notNull" style="width: 8em;">
@@ -72,4 +80,5 @@ checkPraticien = function(oForm){
 		</a>
 		{{/if}}
 	{{/if}}
+{{/if}}
 {{/if}}

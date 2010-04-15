@@ -361,7 +361,7 @@
 	
 	<!-- Dossier Médical du patient -->
 	{{if $rpu->_id && $can->edit}}
-		<table width="100%" class="form">
+		<table width="100%" class="tbl">
 		  <tr>
 		    <th class="category">Autres informations</th>
 		    <th class="category">Prise en charge</th>
@@ -371,7 +371,7 @@
 		    <td style="width: 60%">
 		      {{include file="inc_vw_rpu_attente.tpl"}}
 		    </td>
-		    <td class="button">
+		    <td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
 		  		{{include file="inc_pec_praticien.tpl"}}
 		    </td>
 		  </tr>

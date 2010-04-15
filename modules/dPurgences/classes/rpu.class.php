@@ -46,7 +46,6 @@ class CRPU extends CMbObject {
   var $urtrau = null;
   
   // Distant Fields
-  var $_pec_atu           = null;
   var $_attente           = null;
   var $_presence          = null;
   var $_can_leave         = null;
@@ -133,7 +132,6 @@ class CRPU extends CMbObject {
       "_can_leave_since"   => "bool",
       "_can_leave_warning" => "bool",
       "_can_leave_error"   => "bool",
-      "_pec_atu"           => "bool",
      );
      
 		$specs["urprov"] = "";
@@ -199,27 +197,8 @@ class CRPU extends CMbObject {
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
 		$this->_service_mutation_id = $sejour->service_mutation_id;
 		
-    if (!$sejour->sortie_reelle) {
-      $this->_can_leave_warning = !$this->_ref_consult->_id;
-    	// En consultation 
-    	if ($this->_ref_consult->chrono != 64) {
-    	  $this->_can_leave = -1;
-      } 
-			else {
-      	if (mbTime($sejour->sortie_prevue) > mbTime()) {
-      		$this->_can_leave_since = true;
-      		$this->_can_leave = mbTimeRelative(mbTime(), mbTime($sejour->sortie_prevue));
-      	} else {
-      		$this->_can_leave_about = true;
-      		$this->_can_leave = mbTimeRelative(mbTime($sejour->sortie_prevue), mbTime());
-      	}
-      	
-      	$this->_can_leave_warning = 
-				  CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave && 
-					$this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time");
-        $this->_can_leave_error   = $this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time");
-      }
-    }
+		// @todo: A supprimer du updateFormFields
+		$this->loadRefConsult();
   }
   
   function loadRefsFwd() {
@@ -232,14 +211,6 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefsFwd();
 
-    // Chargement de la consultation ATU
-    $this->_ref_sejour->loadRefsConsultations();
-
-    $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
-    if ($this->_ref_consult->_id) {
-      $this->_pec_atu = true;
-    }
-       
 	  // Calcul des temps d'attente et présence
 		$entree = mbTime($this->_ref_sejour->_entree);
 		$this->_presence =  mbSubTime($entree, mbTime());
@@ -247,13 +218,43 @@ class CRPU extends CMbObject {
 		if ($this->_ref_sejour->sortie_reelle) {
 	    $this->_presence  = mbSubTime($entree, mbTime($this->_ref_sejour->sortie_reelle));
 	  }
-	  
-		$this->_attente  = $this->_presence;
-		
-	  if ($this->_ref_consult->_id) {
-	    $this->_attente  = mbSubTime($entree, mbTime($this->_ref_consult->heure));
-	  }
   }
+	
+	function loadRefConsult() {
+    // Chargement de la consultation ATU
+		$sejour =& $this->_ref_sejour;
+    $sejour->loadRefsConsultations();
+    $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
+
+    // Calcul du l'attente       
+    $this->_attente  = $this->_presence;
+    if ($this->_ref_consult->_id) {
+      $entree = mbTime($this->_ref_sejour->_entree);
+      $this->_attente  = mbSubTime($entree, mbTime($this->_ref_consult->heure));
+    }
+
+    if (!$sejour->sortie_reelle) {
+      $this->_can_leave_warning = !$this->_ref_consult->_id;
+      // En consultation 
+      if ($this->_ref_consult->chrono != 64) {
+        $this->_can_leave = -1;
+      } 
+      else {
+        if (mbTime($sejour->sortie_prevue) > mbTime()) {
+          $this->_can_leave_since = true;
+          $this->_can_leave = mbTimeRelative(mbTime(), mbTime($sejour->sortie_prevue));
+        } else {
+          $this->_can_leave_about = true;
+          $this->_can_leave = mbTimeRelative(mbTime($sejour->sortie_prevue), mbTime());
+        }
+        
+        $this->_can_leave_warning = 
+          CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave && 
+          $this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time");
+        $this->_can_leave_error   = $this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time");
+      }
+    }
+	}
   
   function loadRefSejourMutation() {
     $this->_ref_sejour_mutation = new CSejour;

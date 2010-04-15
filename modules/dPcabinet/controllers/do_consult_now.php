@@ -23,10 +23,8 @@ $_operation_id = CValue::post("_operation_id");
 if ($sejour_id) {
   $sejour = new CSejour();
   $sejour->load($sejour_id);
-  
-  // prévenir les multiples RPU
-  $sejour->loadRefRPU();
-  if ($sejour->_ref_rpu->_pec_atu) {
+	$sejour->loadRefsConsultations();
+  if ($sejour->_ref_consult_atu->_id) {
     CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
     CAppUI::redirect();
   }

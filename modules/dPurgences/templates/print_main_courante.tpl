@@ -95,10 +95,22 @@
 						  {{mb_value object=$rpu field="orientation"}}
 						{{/if}}
 					</td>
-          <td style="text-align: center">
-            {{mb_ditto value=$sejour->_sortie|date_format:$dPconfig.date name=sortie}}
-          </td>
-					<td>{{$sejour->_sortie|date_format:$dPconfig.time}}</td>
+          
+					
+          {{if $sejour->type != "urg"}}
+            <td colspan="2" class="text arretee">
+    					<strong>{{mb_value object=$sejour field=type}}</strong>
+						</td>
+					{{else}}
+						{{if !$sejour->sortie_reelle}}
+	  					<td colspan="2" />
+						{{else}}
+		          <td style="text-align: center">
+		            {{mb_ditto value=$sejour->sortie_reelle|date_format:$dPconfig.date name=sortie}}
+		          </td>
+							<td>{{$sejour->_sortie|date_format:$dPconfig.time}}</td>
+	          {{/if}}
+					{{/if}}
 			  {{else}}
 					<!-- Pas de RPU pour ce séjour d'urgence -->
 					<td colspan="10">

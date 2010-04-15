@@ -30,7 +30,7 @@ $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 
 $where = array();
 $where["entree_reelle"] = "LIKE '$date%'";
-$where["type"] = "= 'urg'";
+$where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
 if($aff_sortie == "sortie"){

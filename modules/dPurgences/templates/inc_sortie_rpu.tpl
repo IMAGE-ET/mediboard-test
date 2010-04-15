@@ -43,7 +43,7 @@
 </td>
 {{/if}}
 
-<td class="button">
+<td class="button {{if $sejour->type != "urg"}}arretee{{/if}}">
   {{include file="inc_pec_praticien.tpl"}}
 </td>
 
@@ -158,19 +158,24 @@
       </table>
     </form>
   </td>
-  <td id="rpu-{{$rpu->_id}}"
-  	{{if $sejour->sortie_reelle}} 
-  		class="{{if !$rpu->sortie_autorisee}}arretee error{{/if}}"
-  	{{/if}}
-	  {{if !$sejour->sortie_reelle}}
-		  class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"{{/if}}>
+	
+  <td id="rpu-{{$rpu->_id}}" style="font-weight: bold"
+		{{if $sejour->sortie_reelle}} 
+			class="{{if !$rpu->sortie_autorisee}}arretee error{{/if}}"
+	  {{else}}
+		  class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"
+		{{/if}}
+	>
+			
     {{if $sejour->sortie_reelle}}
     	{{if !$rpu->sortie_autorisee}}
       	{{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}
       {{/if}}
     {{elseif $rpu->_can_leave == -1}}
-		  {{if !$atu->_id}} 
-        Pas encore de prise en charge <br />
+		  {{if $sejour->type != "urg"}}
+        {{mb_value object=$sejour field=type}}<br />
+		  {{elseif !$atu->_id}} 
+        Pas encore de prise en charge<br />
  		  {{else}}
         {{tr}}CConsultation{{/tr}} {{tr}}CConsultation.chrono.48{{/tr}} <br />
 		  {{/if}}

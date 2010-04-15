@@ -40,7 +40,7 @@ $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where[] = "sejour.entree_reelle LIKE '$date%' OR (
   sejour.sortie_reelle IS NULL AND sejour.entree_reelle LIKE '$date_before%'
 )";
-$where["sejour.type"] = "= 'urg'";
+$where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 if ($selAffichage == "prendre_en_charge"){

@@ -808,13 +808,19 @@ class CConsultation extends CCodable {
   
   function getType() {
     $this->loadRefPraticien();
+		$praticien =& $this->_ref_praticien;
+		
     $this->loadRefSejour();
-    
-    // Calcul du type de la consultation
-    if ($this->_ref_praticien->isUrgentiste() && $this->sejour_id && $this->_ref_sejour->type == "urg") {
+		$sejour =& $this->_ref_sejour;
+    $sejour->loadRefRPU();
+		
+    // Consultations d'urgences
+    if ($praticien->isUrgentiste() && $sejour->_ref_rpu->_id) {
       $this->_type = "urg";
     }
-    if ($this->_ref_praticien->isFromType(array("Anesthésiste"))) {
+		
+		// Consultation d'anesthésie
+    if ($praticien->isAnesth()) {
       $this->_type = "anesth";
     }
   }

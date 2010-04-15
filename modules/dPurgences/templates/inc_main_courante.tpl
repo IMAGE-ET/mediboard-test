@@ -53,10 +53,10 @@
     <th style="width: 0em;">Prise en charge</th>
   </tr>
 
-  {{foreach from=$listSejours item=curr_sejour key=sejour_id}}
-  {{assign var=rpu value=$curr_sejour->_ref_rpu}}
+  {{foreach from=$listSejours item=_sejour key=sejour_id}}
+  {{assign var=rpu value=$_sejour->_ref_rpu}}
   {{assign var=rpu_id value=$rpu->_id}}
-  {{assign var=patient value=$curr_sejour->_ref_patient}}
+  {{assign var=patient value=$_sejour->_ref_patient}}
   {{assign var=consult value=$rpu->_ref_consult}}
 
   {{assign var=background value=none}}
@@ -66,8 +66,8 @@
   {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
   {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
   
-  <tr {{if !$curr_sejour->sortie_reelle && $curr_sejour->_veille}}class="veille"{{/if}}>
-  	{{if $curr_sejour->annule}}
+  <tr {{if !$_sejour->sortie_reelle && $_sejour->_veille}}class="veille"{{/if}}>
+  	{{if $_sejour->annule}}
     <td class="cancelled">
       {{tr}}Cancelled{{/tr}}
     </td>
@@ -87,7 +87,7 @@
     </td>
     {{/if}}
 
-  	{{if $curr_sejour->annule}}
+  	{{if $_sejour->annule}}
   	<td colspan="2" class="text cancelled">
 	  {{else}}
     <td colspan="2" class="text" style="background-color: {{$background}};">
@@ -95,7 +95,7 @@
       {{mb_include template=inc_rpu_patient}}
     </td>
 
-  	{{if $curr_sejour->annule}}
+  	{{if $_sejour->annule}}
     <td class="cancelled" colspan=" {{if $dPconfig.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
       {{if $rpu->mutation_sejour_id}}
       Hospitalisation
@@ -112,7 +112,7 @@
 		
 	  {{else}}
     <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-			{{mb_include module=system template=inc_get_notes_image object=$curr_sejour mode=view float=right}}
+			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
       {{if $modules.dPhospi->canEdit()}}
       <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
@@ -120,16 +120,16 @@
       </a>
       {{/if}}
 			{{if $isImedsInstalled}}
-			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$curr_sejour link="$rpu_link#Imeds"}}
+			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
       {{/if}}
 
       <a href="{{$rpu_link}}">
-        {{if $curr_sejour->_date_entree_prevue == $date}}
-        {{$curr_sejour->_entree|date_format:$dPconfig.time}}
+        {{if $_sejour->_date_entree_prevue == $date}}
+        {{$_sejour->_entree|date_format:$dPconfig.time}}
         {{else}}
-        {{$curr_sejour->_entree|date_format:$dPconfig.datetime}}
+        {{$_sejour->_entree|date_format:$dPconfig.datetime}}
         {{/if}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_sejour->_num_dossier}}
+        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
       </a>
 								
       {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
@@ -156,7 +156,7 @@
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
     <td class="text" style="background-color: {{$background}};">
       <a href="{{$rpu_link}}">
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sejour->_ref_praticien}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
       </a>
     </td>
     {{/if}}
@@ -170,14 +170,14 @@
 			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
 			      {{/if}}
 			    </a>
-			    {{if !$curr_sejour->sortie_reelle}}
+			    {{if !$_sejour->sortie_reelle}}
 			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
 			    {{else}}
-			      (sortie à {{$curr_sejour->sortie_reelle|date_format:$dPconfig.time}})
+			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})
 			    {{/if}}
 		
 		    {{else}}
-		      {{include file="inc_attente.tpl" sejour=$curr_sejour}}
+		      {{include file="inc_attente.tpl" sejour=$_sejour}}
 	      {{/if}}
 	    </td>
     
@@ -194,7 +194,7 @@
 	    </td>
 	    {{/if}}
 	
-	    <td class="button" style="background-color: {{$background}};">
+	    <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
 			  {{include file="inc_pec_praticien.tpl"}}
 	    </td>
 

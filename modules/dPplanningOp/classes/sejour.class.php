@@ -921,7 +921,7 @@ class CSejour extends CCodable {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
     
     $this->_ref_consult_atu = new CConsultation;
-    if ($this->type == "urg" && !$this->_ref_consult_atu->_id) {
+    if ($this->type == "urg") {
       foreach ($this->_ref_consultations as $_consult) {
         $_consult->loadRefPraticien();      
         $praticien = $_consult->_ref_praticien;
@@ -929,6 +929,7 @@ class CSejour extends CCodable {
         if ($praticien->isUrgentiste()) {
           $this->_ref_consult_atu = $_consult;
           $this->_ref_consult_atu->countDocItems();
+					break;
         }
       }
     }
