@@ -143,11 +143,6 @@ function submitSejour(){
 <table class="main">
   <tr>
     <th>
-      <div style="float: left;">
-        Filtrer par nom : 
-        <input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" />
-      </div>
-      
       <div style="float: right;">
         Type d'affichage
         <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
@@ -158,7 +153,8 @@ function submitSejour(){
         </form>
       </div>
       
-      {{$date|date_format:$dPconfig.longdate}}
+      <big>{{$date|date_format:$dPconfig.longdate}}</big>
+      
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -171,8 +167,9 @@ function submitSejour(){
 <table class="tbl" id="list-sorties">
   <tr>
     <th>{{mb_title class=CRPU field="_patient_id"}}</th>
+    <th style="width: 0.1%;"><input type="text" onkeyup="filterPatient(this)" id="filter-patient-name" size="6" /></th>
     {{if $dPconfig.dPurgences.responsable_rpu_view}}
-    <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
+      <th>{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th>Prise en charge</th>
     <th>{{mb_title class=CRPU field="rpu_id"}}</th>
@@ -180,12 +177,12 @@ function submitSejour(){
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
   </tr>
   {{foreach from=$listSejours item=sejour}}
-  {{assign var=rpu value=$sejour->_ref_rpu}}
-  {{assign var=patient value=$sejour->_ref_patient}}
-  <tr>
-    {{mb_include module=dPurgences template=inc_sortie_rpu}}
-  </tr>
+    {{assign var=rpu value=$sejour->_ref_rpu}}
+    {{assign var=patient value=$sejour->_ref_patient}}
+    <tr>
+      {{mb_include module=dPurgences template=inc_sortie_rpu}}
+    </tr>
   {{foreachelse}}
-	<tr><td colspan="10"><em>Aucune sortie à effectuer</em></td></tr>
+	  <tr><td colspan="10"><em>Aucune sortie à effectuer</em></td></tr>
   {{/foreach}}
 </table>

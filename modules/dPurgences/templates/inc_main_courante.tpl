@@ -30,7 +30,7 @@
     	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
 		</th>
 		<th style="width: 1%;">
-      <input type="text" size="4" style="float:right;" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
+      <input type="text" size="6" onkeyup="MainCourante.filter(this)" id="filter-patient-name" />
 		</th>
     <th style="width: 10em;">
 		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
