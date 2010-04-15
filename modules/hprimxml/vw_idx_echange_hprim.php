@@ -110,7 +110,7 @@ if($echange_hprim->_id) {
 
   $total_echange_hprim = $itemEchangeHprim->countList($where);
   $order = "date_production DESC";
-  $forceindex[] = "date_production, group_id";
+  $forceindex[] = "date_production";
   $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20", null, null, $forceindex);
     
   foreach($echangesHprim as $_echange) {
