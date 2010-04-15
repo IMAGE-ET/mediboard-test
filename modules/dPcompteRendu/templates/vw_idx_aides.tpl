@@ -117,6 +117,20 @@ function resetStart(form){
   ["user", "func", "etab"].each(function(type){
     form["start["+type+"]"].value = 0;
   });
+  form.onsubmit();
+}
+
+function getListDependValues(select, object_class, field) {
+  if (select.hasClassName("loaded")) return;
+  
+  var oldValue = $V(select);
+  var url = new Url("dPcompteRendu", "httpreq_select_enum_values");
+  url.addParam("object_class", object_class);
+  url.addParam("field", field);
+  url.requestUpdate(select, {onComplete: function(){
+    select.addClassName("loaded");
+    $V(select, oldValue);
+  }});
 }
 
 var changePage = {};
@@ -160,7 +174,7 @@ Main.add(function () {
         <tr>
           <th><label for="filter_user_id" title="Filtrer les aides pour cet utilisateur">Utilisateur</label></th>
           <td>
-            <select name="filter_user_id" onchange="resetStart(this.form); this.form.onsubmit()">
+            <select name="filter_user_id" onchange="this.form.onsubmit()">
               <option value="">&mdash; Choisir un utilisateur</option>
               {{foreach from=$listPrat item=curr_user}}
               <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter_user_id}} selected="selected" {{/if}}>
@@ -171,7 +185,7 @@ Main.add(function () {
           </td>
           <th><label for="filter_class" title="Filtrer les aides pour ce type d'objet">Type d'objet</label></th>
           <td>
-            <select name="filter_class" onchange="resetStart(this.form); this.form.onsubmit()">
+            <select name="filter_class" onchange="this.form.onsubmit()">
               <option value="">&mdash; Tous les types d'objets</option>
               {{foreach from=$classes|smarty:nodefaults key=class_name item=fields}}
               <option value="{{$class_name}}" {{if $class_name == $filter_class}} selected="selected" {{/if}}>
@@ -182,7 +196,10 @@ Main.add(function () {
           </td>
           <th><label for="keywords">Mots clés</label></th>
           <td>
-            <input type="text" name="keywords" onchange="resetStart(this.form); this.form.onsubmit()" value="{{$keywords}}" />
+            <input type="text" name="keywords" value="{{$keywords}}" />
+          </td>
+          <td>
+            <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
           </td>
         </tr>
       </table>
