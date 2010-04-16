@@ -328,33 +328,10 @@ function showEtabEntreeTransfert(mode) {
   </tr>
 </table>
 
-{{if !$rpu->mutation_sejour_id}}
 <table class="form">    
   <tr>
 	  <td class="button" colspan="4">
-      <!-- ZSTCD --> 
-		  {{if 0}}
-      <form name="EditSejourZT" method="post" action="?m={{$m}}">
-				<input type="hidden" name="dosql" value="do_sejour_aed" />
-				<input type="hidden" name="m" value="dPplanningOp" />
-				<input type="hidden" name="del" value="0" />
-				<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-				{{if $sejour->zt == "0"}}
-				<input type="hidden" name="zt" value="1" />
-        <button class="tick" type="submit">
-          Passer en ZSTCD
-        </button>
-				{{/if}}
-				
-				{{if $sejour->zt == "1"}}
-				<input type="hidden" name="zt" value="0" />
-        <button class="cancel" type="submit">
-          Revenir en ATU
-        </button>
-				{{/if}}
-      </form>
-      {{/if}}
-
+      {{if !$rpu->mutation_sejour_id}}
 	    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
 	    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
         Reconvoquer
@@ -368,7 +345,7 @@ function showEtabEntreeTransfert(mode) {
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
         <button class="new" type="submit">Hospitaliser</button>
       </form>
-      
+      {{/if}}
       <!--  Autoriser sortie du patient --> <!--  Autoriser sortie du patient et valider la sortie -->
       <form name="editSortieAutorise" method="post" action="?m={{$m}}">
         <input type="hidden" name="dosql" value="do_rpu_aed" />
@@ -387,17 +364,6 @@ function showEtabEntreeTransfert(mode) {
 	  </td>
 	</tr>
 </table>
-{{else}}
-<table class="form">    
-  <tr>
-    <td class="button">
-			<button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
-			  {{tr}}Print{{/tr}} dossier
-			</button>
-	 </td>
-	</tr>
-</table>
-{{/if}}
 
 <script type="text/javascript">
 
