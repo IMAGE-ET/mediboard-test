@@ -10,6 +10,7 @@
   Main.add(function(){
     var urlComponents = Url.parse();
     $(urlComponents.fragment || 'interv').show();
+    getForm("selectFrm").action = "#"+urlComponents.fragment;
   });
 {{/if}}
 
