@@ -1,4 +1,4 @@
-{{* $Id: inc_main_courante.tpl 8582 2010-04-15 20:53:09Z MyttO $ *}}
+{{* $Id: $ *}}
 
 {{*
  * @package Mediboard
@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<td class="warning">
+<td class="warning" colspan="{{$colspan}}">
   <span onmouseover="ObjectTooltip.createEx(this, 'CSejour-{{$rpu->mutation_sejour_id}}')">
     <strong>Dossier de Mutation</strong>
     <br/>

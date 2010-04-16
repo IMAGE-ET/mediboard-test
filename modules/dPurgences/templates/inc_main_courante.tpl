@@ -157,7 +157,7 @@
 
     {{if $rpu->_id}}
       {{if $rpu->mutation_sejour_id}}
-			{{mb_include template=inc_dossier_mutation}}
+			{{mb_include template=inc_dossier_mutation colspan=1}}
       {{else}} 
 		  <td style="background-color: {{$background}}; text-align: center">
 		    {{if $consult && $consult->_id}}

@@ -102,8 +102,13 @@
     					<strong>{{mb_value object=$sejour field=type}}</strong>
 						</td>
 
-		      {{elseif $rpu->mutation_sejour_id}}
-		      {{mb_include template=inc_dossier_mutation}}
+		      {{elseif $sejour->annule}}
+          <td class="cancelled">
+            {{tr}}Cancelled{{/tr}}
+				  </td>
+					
+          {{elseif $rpu->mutation_sejour_id}}
+		      {{mb_include template=inc_dossier_mutation colspan=2}}
 						
 					{{else}}
 						{{if !$sejour->sortie_reelle}}
