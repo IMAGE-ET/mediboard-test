@@ -635,12 +635,31 @@ class CMouvSejourEcap extends CMouvementEcap {
     }
 		
     // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
-		if ($this->sejour->type == "urg") {
-	    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
+    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
+    if ($this->sejour->type == "urg") {
 	    if (count($siblings)) {
 	      $sibling = reset($siblings);
 	      $this->sejour->_id = $sibling->_id;
 	    }
+		}
+		// En cas de possible mutation
+		else {
+			foreach ($siblings as $_sibling) {
+				// Sejour de type urgence annulé, avec la même heure d'entrée
+				if ($_sibling->type == "urg" && $_sibling->annule) {
+          $_sibling->annule ="0";
+					$_sibling->loadRefRPU();
+          $_sibling->store();
+					
+					// Il faut un RPU
+          $rpu = $_sibling->_ref_rpu;
+					if ($rpu->_id) {
+            $rpu->mutation_sejour_id = $this->sejour->_id;
+            $rpu->store();
+					}
+          break;
+				}
+			}		
 		}
             
     $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
