@@ -406,7 +406,7 @@ printDossierComplet = function(){
                   </a>
                 </td>
 
-                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$curr_sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
+                <td style="padding: 1px;" onclick="markAsSelected(this); addSejourIdToSession('{{$sejour->_id}}'); loadViewSejour('{{$sejour->_id}}', {{$sejour->praticien_id}}, {{$sejour->patient_id}}, '{{$date}}'); tab_sejour.setActiveTab('Imeds')">
 								  {{if $isImedsInstalled}}
                     {{mb_include module=dPImeds template=inc_sejour_labo link="#"}}
 					        {{/if}}
