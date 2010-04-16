@@ -13,14 +13,14 @@ Main.add(function () {
 <table class="form">
         
 <tr>
-  <th class="category" colspan="10">Filtrer les modèles</th>
+  <th class="category" colspan="10">{{tr}}CCompteRendu-filter{{/tr}}</th>
 </tr>
 
 <tr>
   <th>{{mb_label object=$filtre field=chir_id}}</th>
   <td>
     <select name="chir_id" onchange="submit()">
-      <option value="">&mdash; Choisir un utilisateur</option>
+      <option value="">&mdash; {{tr}}CCompteRendu-choose-user{{/tr}}</option>
       {{foreach from=$praticiens item=curr_prat}}
         <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" 
         	{{if $curr_prat->_id == $filtre->chir_id}} selected="selected" {{/if}}>
@@ -34,7 +34,7 @@ Main.add(function () {
   <td>
 	 {{assign var=_spec value=$filtre->_specs.object_class}}
     <select name="object_class" onchange="this.form.submit()">
-      <option value="">&mdash; Tous les types</option>
+      <option value="">&mdash; {{tr}}CCompteRendu-type-all{{/tr}}</option>
       {{foreach from=$_spec->_locales item=_locale key=_object_class}}
         <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected="selected"{{/if}}>{{$_locale}}</option>
       {{/foreach}}

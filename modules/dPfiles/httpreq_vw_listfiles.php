@@ -59,6 +59,16 @@ if($object_id && $object_class){
   }
   
   $affichageFile = CFile::loadDocItemsByObject($object);
+
+  foreach($affichageFile as $_cat) {
+    if (!isset($_cat["items"])) break;
+    
+    foreach($_cat["items"] as $data) {
+      if ($data->_class_name == "CCompteRendu") {
+        $data->loadFile();
+      }
+    }
+  }
 }
 
 // Création du template

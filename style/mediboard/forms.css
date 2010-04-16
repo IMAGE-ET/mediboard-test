@@ -270,6 +270,10 @@ button.print:before, a.button.print:before {
   content: url(images/buttons/print.png);
 }
 
+button.pagelayout:before, a.button.pagelayout:before {
+  content: url(images/buttons/pagelayout.png);
+}
+
 button.cancel:before, a.button.cancel:before {
   content: url(images/buttons/cancel.png);
 }

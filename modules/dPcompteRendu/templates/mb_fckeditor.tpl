@@ -1,3 +1,5 @@
+{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+
 // Mediboard Combo configuration
 var aMbCombos = [];
 var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{/if}};
@@ -14,8 +16,8 @@ FCKConfig.AutoDetectPasteFromWord = true;
 
 {{if $templateManager->printMode}}
 FCKConfig.ToolbarSets["Default"] = [
-	['Preview', 'Print', '-','Find'],
-	['About']
+  ['Preview', 'Print', '-','Find'],
+  ['About']
 ] ;
 
 {{else}}
@@ -26,21 +28,20 @@ FCKConfig.ToolbarSets["Default"] = [
   {{/if}}
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
-
-	['Save','Preview'],
-{{if !$templateManager->simplifyMode}}
-	['Cut','Copy','Paste','PasteText','PasteWord','-',textForPrint,'-','mbHeader','mbFooter'],
-	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-	['Table','Rule','Image', 'Smiley','SpecialChar','mbPageBreak'],
-	['FitWindow','Source','About'],
-	'/',
-{{/if}}
-	['FontFormat',{{if !$templateManager->simplifyMode}}'FontName',{{/if}}'FontSize'],
-	['Bold','Italic','Underline',{{if !$templateManager->simplifyMode}}'StrikeThrough',{{/if}}'-','Subscript','Superscript'],
-	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-	['OrderedList','UnorderedList','-','Outdent','Indent'],
-	['TextColor','BGColor']
-] ;
+  ['Save','Preview'],
+  {{if !$templateManager->simplifyMode}}
+    ['Cut','Copy','Paste','PasteText','PasteWord','-', {{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint,'-','mbHeader','mbFooter'],
+    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
+    ['Table','Rule','Image','SpecialChar','mbPageBreak'],
+    ['FitWindow','Source','About'],
+	  '/',
+  {{/if}}
+  ['FontFormat',{{if !$templateManager->simplifyMode}}'FontName',{{/if}}'FontSize'],
+  ['Bold','Italic','Underline',{{if !$templateManager->simplifyMode}}'StrikeThrough',{{/if}}'-','Subscript','Superscript'],
+  ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
+  ['OrderedList','UnorderedList','-','Outdent','Indent'],
+  ['TextColor','BGColor']
+];
 
 // Add properties Combo
 var aOptions = [];
@@ -132,7 +133,9 @@ for (var i = 0; i < aMbCombos.length; i++) {
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
+{{if $pdf_thumbnails == 1}}
+  FCKConfig.Plugins.Add( 'mbprintPDF', 'en,fr', sMbPluginsPath );
+{{/if}}
 FCKConfig.Plugins.Add( 'mbheader', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
-
 {{/if}}

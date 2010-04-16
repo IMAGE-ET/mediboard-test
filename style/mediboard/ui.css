@@ -890,7 +890,7 @@ table.active {
   white-space: nowrap;
 }
 
-.modal div {
+.modal > div {
   padding: 0.5em;
   text-align: center;
 }
@@ -938,4 +938,14 @@ table.active {
 .pagination .page.disabled {
   border: 1px solid #ccc; 
   color: #ccc;
+}
+
+img.thumbnail {
+  border: 1px solid #000;
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+}
+img.thumbnail:hover {
+  outline: 1px solid #000;
 }

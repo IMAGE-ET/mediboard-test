@@ -26,11 +26,19 @@ class CCompteRendu extends CDocumentItem {
   var $header_id         = null;
   var $footer_id         = null;
   var $height            = null;
-  
+  var $margin_top        = null;
+  var $margin_bottom     = null;
+  var $margin_left       = null;
+  var $margin_right      = null;
+  var $page_height       = null;
+  var $page_width        = null;
+
   /// Form fields
   var $_is_document      = false;
   var $_is_modele        = false;
   var $_owner            = null;
+  var $_page_format      = null;
+  var $_orientation      = null;
   
   // Referenced objects
   var $_ref_chir         = null;
@@ -39,6 +47,16 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_group        = null;
   var $_ref_header       = null;
   var $_ref_footer       = null;
+  var $_ref_file         = null;
+
+  static $_page_formats = array(
+    'a3'      => array(29.7 , 42),
+    'a4'      => array(21   , 29.7),
+    'a5'      => array(14.8 , 21),
+    'letter'  => array(21.6 , 27.9),
+    'legal'   => array(21.6 , 35.6),
+    'tabloid' => array(27.9 , 43.2),
+  );
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -69,9 +87,18 @@ class CCompteRendu extends CDocumentItem {
     $specs["source"]           = "html helped|object_class";
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
-    $specs["height"]           = "float";
+    $specs["height"]           = "float min|0";
+    $specs["margin_top"]       = "float notNull min|0 default|2";
+    $specs["margin_bottom"]    = "float notNull min|0 default|2";
+    $specs["margin_left"]      = "float notNull min|0 default|2";
+    $specs["margin_right"]     = "float notNull min|0 default|2";
+    $specs["page_height"]      = "float notNull min|1 default|29.7";
+    $specs["page_width"]       = "float notNull min|1 default|21";
     $specs["valide"]           = "bool";
+    
     $specs["_owner"]           = "enum list|prat|func|etab";
+    $specs["_orientation"]     = "enum list|portrait|landscape";
+    $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
     return $specs;
   }
   
@@ -104,6 +131,22 @@ class CCompteRendu extends CDocumentItem {
     if ($this->chir_id    ) $this->_owner = "prat";
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
+
+    $this->_page_format = "";
+    
+    foreach(CCompteRendu::$_page_formats as $_key=>$_format) {
+      if(($_format[0] == $this->page_width && $_format[1] == $this->page_height) ||
+        ($_format[1] == $this->page_width && $_format[0] == $this->page_height)) {
+        $this->_page_format = $_key;
+        break;
+      }
+    }
+    
+    $this->_orientation = "portrait";
+    
+    if ($this->page_width > $this->page_height) {
+      $this->_orientation = "landscape";
+    }
   }
 
   function updateDBFields() {
@@ -126,6 +169,14 @@ class CCompteRendu extends CDocumentItem {
     }
   }
 
+  function loadFile() {
+  	$files = new CFile;
+    $files = $files->loadFilesForObject($this);
+    if (count($files)) {
+      $this->_ref_file = reset($files);
+    }
+  }
+	
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
@@ -299,6 +350,40 @@ class CCompteRendu extends CDocumentItem {
     return $can;
   }
   
+  function store() {
+    $source_modified = 
+	  $this->fieldModified("source")  || 
+	  $this->fieldModified("margin_top") || 
+	  $this->fieldModified("margin_left") || 
+	  $this->fieldModified("margin_right") || 
+	  $this->fieldModified("margin_bottom") || 
+	  $this->fieldModified("page_height") || 
+	  $this->fieldModified("page_width") || 
+	  $this->fieldModified("header_id") || 
+	  $this->fieldModified("footer_id");
+	  
+    if($source_modified) {
+      $file = new CFile();
+      $files = $file->loadFilesForObject($this);
+      foreach($files as $_file) {
+        $_file->file_empty();
+      }
+    }
+   
+    return parent::store();
+  }
+	
+  function delete() {
+    $file = new CFile();
+    $files = $file->loadFilesForObject($this);
+    
+    foreach($files as $_file) {
+      $_file->delete();
+    }
+    
+    return parent::delete();
+  }
+	
   function handleSend() {
     if (!$this->_send) {
       return;
@@ -321,6 +406,94 @@ class CCompteRendu extends CDocumentItem {
       }
     }
     return $classes;
+  }
+
+  function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = '', $sizeheader = 0, $footer = '', $sizefooter = 0, $margins = array()) {
+
+    $style = 
+      "<style type = \"text/css\">" .
+      file_get_contents("style/mediboard/htmlarea.css") .
+      "@page {
+         margin-top:    ".$margins[0]."cm;
+         margin-bottom: ".$margins[2]."cm;
+         margin-left:   ".$margins[3]."cm;
+         margin-right:  ".$margins[1]."cm;
+       }
+       body {
+         margin:  0;
+         padding: 0;
+       }
+       </style>";
+
+    $content = '';
+    $position = array("header"=>"top",
+                      "footer"=>"bottom");
+                      
+    if($mode == "modele") {
+      switch($type) {
+        case "header":
+        case "footer":
+          $position = $position[$type];
+          $sizeheader = $sizeheader != '' ? $sizeheader : 50;
+          $hauteur_position = 0;
+          
+          $style .= "
+          <style type=\"text/css\">
+            #{$type} {
+              height: {$sizeheader}px;
+              {$position}: 0cm;
+              width: auto;
+            }
+          </style>";
+          
+          $content =  "<div id=\"$type\">$htmlcontent</div>";
+          break;
+        case "body":
+          if($header) {
+            $sizeheader = $sizeheader != '' ? $sizeheader : 50;
+            $padding_top = $sizeheader + 20;
+            
+            $style .= "
+              <style type=\"text/css\">
+                @media print {
+                  #body { 
+                    padding-top: {$padding_top}px;
+                  }
+                  #header {
+                    height: {$sizeheader}px;
+                    top: 0cm;
+                  }
+                }
+              </style>";
+              
+            $content .= "<div id=\"header\">$header</div>";
+          }
+          if($footer) {
+            $sizefooter = $sizefooter != '' ? $sizefooter : 50;
+            $style .= "
+              <style type=\"text/css\">
+                @media print {
+                  #body { 
+                    padding-bottom: {$sizefooter}px;
+                  }
+                  #footer {
+                    height: {$sizefooter}px;
+                    bottom: 0cm;
+                  }
+                }
+              </style>";
+            $content .= "<div id=\"footer\">$footer</div>";
+          }
+          $content .= "<div id=\"body\">$htmlcontent</div>";
+        }
+    }
+    else {
+      $content = $htmlcontent;
+    }
+    $smarty = new CSmartyDP();
+    $smarty->assign("style"  , $style);
+    $smarty->assign("content", $content);
+    return $smarty->fetch("htmlheader.tpl");
   }
 }
 

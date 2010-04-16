@@ -82,20 +82,24 @@ else {
       <style type='text/css'>
       #header {
         height: {$header->height}px;
+        //DOMPDF//top: 0;
       }
 
       #footer {
         height: {$footer->height}px;
+        //DOMPDF//bottom: 0;
       }";
     
     if ($header->_id) {
       $header->source = "<div id='header'>$header->source</div>";
+      //DOMPDF//$header->height += 50;
       $header->height += 20;
       $compte_rendu->header_id = null;
     }
     
     if ($footer->_id) {
       $footer->source = "<div id='footer'>$footer->source</div>";
+      //DOMPDF//$footer->height += 50;
       $footer->height += 20;
       $compte_rendu->footer_id = null;
     }
@@ -103,7 +107,8 @@ else {
     $style.= "
       @media print { 
         #body { 
-          padding-top: {$header->height}px; 
+          padding-top: {$header->height}px;
+          //DOMPDF//padding-bottom: {$footer->height}px;
         } 
 
         hr.pagebreak { 
@@ -128,11 +133,11 @@ $user = new CMediusers;
 $user->_id = $AppUI->user_id;
 
 if ($object instanceof CConsultAnesth) {
-	$user->_id = $object->_ref_consultation->_praticien_id;
+  $user->_id = $object->_ref_consultation->_praticien_id;
 }
 
 if ($object instanceof CCodable) {
-	$user->_id = $object->_praticien_id;
+  $user->_id = $object->_praticien_id;
 }
 
 $user->load();
@@ -177,9 +182,10 @@ $smarty = new CSmartyDP();
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
+$smarty->assign("modele_id"      , $modele_id);
 $smarty->assign("lists"          , $lists);
 $smarty->assign("destinataires"  , $destinataires);
-
+$smarty->assign("user_id"        , $user->_id);
 $smarty->display("edit_compte_rendu.tpl");
 
 ?>

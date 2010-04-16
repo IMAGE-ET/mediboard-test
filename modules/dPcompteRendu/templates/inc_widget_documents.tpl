@@ -100,7 +100,7 @@
   <tr>
     <td class="text">
 	    <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;">
-	      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectViewHistory')">
+	      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
 	        {{$document}}
 	      </span>
 	    </a>

@@ -108,7 +108,7 @@ DragDropPlage = function(draggable){
 	var url = new Url("dPpersonnel", "toto");
   url.addParam("plage_id", plage_id);
 	url.addParam("date_debut", date_debut);
-	url.addParam("dosql","do_plagevac_aed")
+	url.addParam("dosql","do_plagevac_aed");
 	url.addParam("date_fin", date_fin);
 	url.requestUpdate("systemMsg", {
 	  method: "post",

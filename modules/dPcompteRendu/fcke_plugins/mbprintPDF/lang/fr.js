@@ -7,4 +7,4 @@
  *
  */
 
-FCKLang['mbPrint'] = 'Imprimer (ancienne version)' ; 
+FCKLang['mbPrintPDF'] = 'Export direct en PDF' ; 

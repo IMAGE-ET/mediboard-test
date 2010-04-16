@@ -78,10 +78,10 @@ window.onbeforeunload= function () {
         {{/if}}
         <br />
           {{if $includeInfosFile}}
-          {{include file="inc_preview_contenu_file.tpl"}}
+            {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
           <a href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}" title="Télécharger le fichier">
-            <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
+            <img style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" />
           </a> 
           {{/if}}
       {{/if}}

@@ -64,7 +64,7 @@ class CFile extends CDocumentItem {
     return $specs;
   }
   
-  private function forceDir() {
+  function forceDir() {
     // Check global directory
     if (!CMbPath::forceDir(self::$directory)) {
       trigger_error("Files directory is not writable : " . self::$directory, E_USER_WARNING);
@@ -180,8 +180,8 @@ class CFile extends CDocumentItem {
     // Actually move any file
     if ($uploaded)
       return move_uploaded_file($file["tmp_name"], $this->_file_path);
-    else 
-      return rename($file, $this->_file_path);
+    else
+			return rename($file, $this->_file_path);
   }
     
   static function loadFilesForObject(CMbObject $object){
@@ -259,7 +259,7 @@ class CFile extends CDocumentItem {
           }
         }
       }
-      elseif(strpos($dataFile, "%PDF-1.3") !== false || $nb_count == 1){
+      elseif(strpos($dataFile, "%PDF-1.3") !== false || strpos($dataFile, "%PDF-1.6") !== false || $nb_count == 1){
         // Fichier PDF 1.3 ou 1 seule occurence
         $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
         $nombre_temp = explode (" ", trim(substr($dataFile,$position_count, strlen($dataFile)-$position_count)), 2);
@@ -327,6 +327,10 @@ class CFile extends CDocumentItem {
     $this->updateFormFields();
     
     return parent::handleSend();
+  }
+	
+  function file_empty() {
+    file_put_contents($this->_file_path, '');
   }
 }
 

@@ -30,6 +30,8 @@ $catFileSel       = null;
 $acces_denied     = true;      // droit d'affichage du fichier demandé
 $arrNumPages      = array();   // navigation par pages (PDF)
 
+$pdf_active = CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1;
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -53,13 +55,19 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $type = "_ref_documents";
       $nameFile = "nom";
     }
-    
+
     if (array_key_exists($elementId, $object->$type)) {
       $listFile =& $object->$type;
       $listFile[$elementId]->canRead();
       $acces_denied = !$listFile[$elementId]->_canRead;
       if($listFile[$elementId]->_canRead) {
         $fileSel = $listFile[$elementId];
+        if($pdf_active && $type == "_ref_documents") {
+          $compte_rendu = new CCompteRendu;
+          $compte_rendu->load($elementId);
+          $compte_rendu->loadFile();
+          $fileSel = $compte_rendu->_ref_file;
+        }
         $keyTable = $listFile[$elementId]->_spec->key;
         $keyFileSel = $listFile[$elementId]->$nameFile;
         $keyFileSel .= "-" . $elementClass . "-";
@@ -76,16 +84,14 @@ if($objectClass && $objectId && $elementClass && $elementId){
   }
 }
 
-
-
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
-if($fileSel && $elementClass == "CFile" && !$acces_denied){
+if($fileSel && !$pdf_active && !$acces_denied){
 
   if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
     // Fichier texte, on récupére le contenu
     $includeInfosFile = nl2br(htmlspecialchars(utf8_decode(file_get_contents($fileSel->_file_path))));
   }
-
+  
   $fileSel->loadNbPages();
   if($fileSel->_nb_pages){
     if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
@@ -100,16 +106,21 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
     }
   }
 }
-elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
-  $includeInfosFile = $fileSel->source;
-}
 
-// Initialisation de FCKEditor
-if ($includeInfosFile) {
+if ($pdf_active) {
+  if ($elementClass == "CCompteRendu") {
+    $elementId = $fileSel->_id;
+  }
+}
+else {
+  // Initialisation de FCKEditor
+  if ($includeInfosFile) {
 	$templateManager = new CTemplateManager;
 	$templateManager->printMode = true;
 	$templateManager->initHTMLArea();
+  }
 }
+
 
 $smarty->assign("objectClass"     , $objectClass);
 $smarty->assign("objectId"        , $objectId);

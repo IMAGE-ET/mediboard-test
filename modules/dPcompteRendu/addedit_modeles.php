@@ -106,23 +106,23 @@ $footers = array();
 $headers = array();
 
 if ($compte_rendu->_id) {
-	// Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
-	if ($compte_rendu->chir_id) {
-		$owner = 'prat';
+  // Si modèle de fonction, on charge en fonction d'un des praticiens de la fonction
+  if ($compte_rendu->chir_id) {
+    $owner = 'prat';
     $id = $compte_rendu->chir_id;
-	}
-	else if ($compte_rendu->function_id) {
-		$owner = 'func';
-		$id = $compte_rendu->function_id;
-	}
-	else if ($compte_rendu->group_id) {
-		$owner = 'etab';
+  }
+  else if ($compte_rendu->function_id) {
+    $owner = 'func';
+    $id = $compte_rendu->function_id;
+  }
+  else if ($compte_rendu->group_id) {
+    $owner = 'etab';
     $id = $compte_rendu->group_id;
-	} else {
+  } else {
     $owner = 'etab';
     $id = CGroups::loadCurrent()->_id;
-	}
-	
+  }
+
   $footers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "footer");
   $headers = CCompteRendu::loadAllModelesFor($id, $owner, $compte_rendu->object_class, "header");
   
@@ -136,6 +136,8 @@ if ($compte_rendu->_id) {
     unset($headers["func"]);
   }
 }
+
+$formats = CCompteRendu::$_page_formats;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -154,7 +156,7 @@ $smarty->assign("listObjectAffichage" , $listObjectAffichage);
 $smarty->assign("droit"               , $droit);
 $smarty->assign("footers"             , $footers);
 $smarty->assign("headers"             , $headers);
-
+$smarty->assign("formats"             , $formats);
 $smarty->display("addedit_modeles.tpl");
 
 ?>

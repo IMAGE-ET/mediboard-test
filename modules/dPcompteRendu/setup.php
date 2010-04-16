@@ -367,7 +367,17 @@ class CSetupdPcompteRendu extends CSetup {
               CHANGE `chir_id` `chir_id` INT (11) UNSIGNED;";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.49";
+    $this->makeRevision("0.49");
+    $sql = "ALTER TABLE `compte_rendu` 
+              ADD `margin_top`    FLOAT UNSIGNED NOT NULL DEFAULT '2',
+              ADD `margin_bottom` FLOAT UNSIGNED NOT NULL DEFAULT '2',
+              ADD `margin_left`   FLOAT UNSIGNED NOT NULL DEFAULT '2',
+              ADD `margin_right`  FLOAT UNSIGNED NOT NULL DEFAULT '2',
+              ADD `page_height`   FLOAT UNSIGNED NOT NULL DEFAULT '29.7',
+              ADD `page_width`    FLOAT UNSIGNED NOT NULL DEFAULT '21'";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.50";
   }
 }
 ?>
