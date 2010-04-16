@@ -79,7 +79,7 @@
 					<td>{{mb_value object=$consult field="heure"}}</td>      
 			    <td>{{mb_value object=$sejour field="praticien_id"}}</td>
 					<td>
-						{{if $sejour->mode_sortie}}
+						{{if $sejour->sortie_reelle}}
 							{{mb_value object=$sejour field="mode_sortie"}}
 						{{/if}}
 					  {{if $sejour->mode_sortie == "transfert"}}
@@ -103,7 +103,7 @@
 						</td>
 
 		      {{elseif $sejour->annule}}
-          <td class="cancelled">
+          <td class="cancelled" colspan="2">
             {{tr}}Cancelled{{/tr}}
 				  </td>
 					
