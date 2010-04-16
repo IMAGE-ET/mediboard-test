@@ -574,7 +574,6 @@ class CMouvSejourEcap extends CMouvementEcap {
 		$idGroupUrg->loadLatestFor($this->etablissement, "eCap URGSER");
     $CSER = $sejECap->consume("CSER");
     $this->sejour->type = $idGroupUrg->id400 && $idGroupUrg->id400 == $CSER ? "urg" : "comp";
-		mbTrace($this->sejour->type, "Type après analyse");
 
     // Dates prévues et réelles
     switch ($sejECap->consume("PRES")) {
