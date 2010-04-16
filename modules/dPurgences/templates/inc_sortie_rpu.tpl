@@ -159,14 +159,7 @@
     </form>
   </td>
 	
-  <td id="rpu-{{$rpu->_id}}" style="font-weight: bold"
-		{{if $sejour->sortie_reelle}} 
-			class="{{if !$rpu->sortie_autorisee}}arretee error{{/if}}"
-	  {{else}}
-		  class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{if $rpu->_can_leave_error}}error{{elseif $rpu->_can_leave_warning}}warning{{else}}ok{{/if}}"
-		{{/if}}
-	>
-			
+  <td id="rpu-{{$rpu->_id}}" style="font-weight: bold" class="{{if !$rpu->sortie_autorisee}}arretee{{/if}} {{$rpu->_can_leave_level}}">
     {{if $sejour->sortie_reelle}}
     	{{if !$rpu->sortie_autorisee}}
       	{{tr}}CRPU-sortie_assuree.{{$rpu->sortie_autorisee}}{{/tr}}

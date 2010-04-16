@@ -49,6 +49,7 @@ $csteByTime = array();
 foreach ($sejours as &$_sejour) {
   $_sejour->loadRefsFwd(1);
   $_sejour->loadRefRPU();  
+	$_sejour->_ref_rpu->loadRefSejourMutation();
 
   // Statistiques de mutations de sejours
   $service_mutation = $_sejour->_ref_service_mutation;

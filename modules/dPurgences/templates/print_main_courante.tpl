@@ -101,6 +101,10 @@
             <td colspan="2" class="text arretee">
     					<strong>{{mb_value object=$sejour field=type}}</strong>
 						</td>
+
+		      {{elseif $rpu->mutation_sejour_id}}
+		      {{mb_include template=inc_dossier_mutation}}
+						
 					{{else}}
 						{{if !$sejour->sortie_reelle}}
 	  					<td colspan="2" />

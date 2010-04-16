@@ -96,21 +96,15 @@
     </td>
 
   	{{if $_sejour->annule}}
-    <td class="cancelled" colspan=" {{if $dPconfig.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
-      {{if $rpu->mutation_sejour_id}}
-      Hospitalisation
-      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
-        dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
-     	</a> 
-      {{else}}
+    <td class="cancelled" colspan="{{if $dPconfig.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
       {{tr}}Cancelled{{/tr}}
-      {{/if}}
     </td>
 		<td class="cancelled">
       {{include file="inc_pec_praticien.tpl"}}
     </td>
-		
+
 	  {{else}}
+
     <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
 			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
@@ -162,7 +156,10 @@
     {{/if}}
 
     {{if $rpu->_id}}
-		  <td id="attente-{{$sejour_id}}" style="background-color: {{$background}}; text-align: center">
+      {{if $rpu->mutation_sejour_id}}
+			{{mb_include template=inc_dossier_mutation}}
+      {{else}} 
+		  <td style="background-color: {{$background}}; text-align: center">
 		    {{if $consult && $consult->_id}}
 			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
 			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
@@ -180,6 +177,7 @@
 		      {{include file="inc_attente.tpl" sejour=$_sejour}}
 	      {{/if}}
 	    </td>
+      {{/if}} 
     
 	    {{if $medicalView}}
 	    <td class="text" style="background-color: {{$background}};">

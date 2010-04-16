@@ -51,8 +51,7 @@ class CRPU extends CMbObject {
   var $_can_leave         = null;
   var $_can_leave_since   = null;
   var $_can_leave_about   = null;
-  var $_can_leave_warning = null;
-  var $_can_leave_error   = null;
+  var $_can_leave_level   = null;
 
   // Patient
   var $_patient_id = null;
@@ -130,8 +129,7 @@ class CRPU extends CMbObject {
       "_can_leave"         => "time",
       "_can_leave_about"   => "bool",
       "_can_leave_since"   => "bool",
-      "_can_leave_warning" => "bool",
-      "_can_leave_error"   => "bool",
+      "_can_leave_level"   => "enum list|ok|warning|error",
      );
      
 		$specs["urprov"] = "";
@@ -233,25 +231,34 @@ class CRPU extends CMbObject {
       $this->_attente  = mbSubTime($entree, mbTime($this->_ref_consult->heure));
     }
 
+    $this->_can_leave_level = $sejour->sortie_reelle ? "" : "ok";
     if (!$sejour->sortie_reelle) {
-      $this->_can_leave_warning = !$this->_ref_consult->_id;
+    	if (!$this->_ref_consult->_id) {
+        $this->_can_leave_level = "warning";
+    	}
+			
       // En consultation 
       if ($this->_ref_consult->chrono != 64) {
         $this->_can_leave = -1;
+        $this->_can_leave_level = "warning";
       } 
       else {
         if (mbTime($sejour->sortie_prevue) > mbTime()) {
           $this->_can_leave_since = true;
           $this->_can_leave = mbTimeRelative(mbTime(), mbTime($sejour->sortie_prevue));
-        } else {
+        } 
+				else {
           $this->_can_leave_about = true;
           $this->_can_leave = mbTimeRelative(mbTime($sejour->sortie_prevue), mbTime());
         }
         
-        $this->_can_leave_warning = 
-          CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave && 
-          $this->_can_leave < CAppUI::conf("dPurgences rpu_alert_time");
-        $this->_can_leave_error   = $this->_can_leave > CAppUI::conf("dPurgences rpu_alert_time");
+				if (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave) {
+          $this->_can_leave_level = "warning";					
+				}
+          	
+        if (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave) {
+          $this->_can_leave_level = "error";          
+        }
       }
     }
 	}
