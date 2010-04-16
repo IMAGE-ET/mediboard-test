@@ -311,9 +311,12 @@ class CSejour extends CCodable {
       }
       
       $this->completeField("entree_reelle", "annule");
-      if ((mbAddDateTime(str_pad(CAppUI::conf("dPplanningOp CSejour max_cancel_time"), 2, "0", STR_PAD_LEFT).":00:00", $this->entree_reelle) < mbDateTime()) && $this->fieldModified("annule", "1")) {
-        $msg .= "Impossible d'annuler un dossier en cours.<br />";
-      }
+			if ($this->fieldModified("annule", "1")) {
+				$max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
+	      if ((mbDateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < mbDateTime())) {
+	        $msg .= "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
+	      }
+			}
   
       foreach ($this->getCollisions() as $collision) {
         $msg .= "Collision avec le séjour du $collision->entree_prevue au $collision->sortie_prevue.<br />"; 
