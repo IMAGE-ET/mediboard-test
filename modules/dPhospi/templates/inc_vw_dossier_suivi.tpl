@@ -52,7 +52,7 @@ Main.add(function () {
             objectClass: "CTransmissionMedicale", 
             userId: "{{$app->user_id}}",
 						dependField1: oFormTrans.type,
-						dependField2: oFormTrans.degre,
+						//dependField2: oFormTrans.degre,
       			validateOnBlur:0
           });
 					
