@@ -7,6 +7,8 @@
  * @author
  */
 
+if (!is_dir("lib/dompdf")) return;
+
 CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
 CAppUI::requireLibraryFile("dompdf/include/dompdf.cls");
 
