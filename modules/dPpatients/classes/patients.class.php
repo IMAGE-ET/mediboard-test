@@ -142,6 +142,14 @@ class CPatient extends CMbObject {
   var $prevenir_tel     = null;
   var $prevenir_parente = null;
 
+  var $confiance_nom     = null;
+  var $confiance_prenom  = null;
+  var $confiance_adresse = null;
+  var $confiance_cp      = null;
+  var $confiance_ville   = null;
+  var $confiance_tel     = null;
+  var $confiance_parente = null;
+
   // Assuré
   var $assure_nom                   = null;
   var $assure_nom_jeune_fille       = null;
@@ -318,6 +326,14 @@ class CPatient extends CMbObject {
     $specs["prevenir_ville"]    = "str confidential";
     $specs["prevenir_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
     $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
+    
+    $specs["confiance_nom"]      = "str confidential";
+    $specs["confiance_prenom"]   = "str";
+    $specs["confiance_adresse"]  = "text";
+    $specs["confiance_cp"]       = "numchar minLength|4 maxLength|5";
+    $specs["confiance_ville"]    = "str confidential";
+    $specs["confiance_tel"]      = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["confiance_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
     $specs["assure_nom"]                  = "str confidential";
     $specs["assure_prenom"]               = "str";
@@ -1371,6 +1387,15 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - prévenir - ville"  , $this->prevenir_ville);
     $template->addProperty("Patient - prévenir - tel"    , $this->prevenir_tel);
     $template->addProperty("Patient - prévenir - parente", $this->prevenir_parente);
+    
+    // confiance
+		$template->addProperty("Patient - confiance - nom"    , $this->confiance_nom);
+		$template->addProperty("Patient - confiance - prénom" , $this->confiance_prenom);
+    $template->addProperty("Patient - confiance - adresse", $this->confiance_adresse);
+    $template->addProperty("Patient - confiance - cp"     , $this->confiance_cp);
+    $template->addProperty("Patient - confiance - ville"  , $this->confiance_ville);
+    $template->addProperty("Patient - confiance - tel"    , $this->confiance_tel);
+    $template->addProperty("Patient - confiance - parente", $this->confiance_parente);
 	
     // Vider les anciens holders
     if ($this->_id) {

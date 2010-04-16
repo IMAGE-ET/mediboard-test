@@ -1172,8 +1172,19 @@ class CSetupdPpatients extends CSetup {
               ADD `redon_2` FLOAT UNSIGNED AFTER `redon`,
               ADD `redon_3` FLOAT UNSIGNED AFTER `redon_2`";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.02");
+    $sql = "ALTER TABLE `patients` " .
+           "\nADD `confiance_nom` VARCHAR( 50 ) AFTER `prevenir_parente`," .
+           "\nADD `confiance_prenom` VARCHAR( 50 ) AFTER `confiance_nom`," .
+           "\nADD `confiance_adresse` TEXT AFTER `confiance_prenom`," .
+           "\nADD `confiance_cp` VARCHAR( 5 ) AFTER `confiance_adresse`," .
+           "\nADD `confiance_ville` VARCHAR( 50 ) AFTER `confiance_cp`," .
+           "\nADD `confiance_tel` VARCHAR( 10 ) AFTER `confiance_ville`," .
+           "\nADD `confiance_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) AFTER `confiance_tel`;";
+    $this->addQuery($sql);
 				
-		$this->mod_version = "1.02";
+		$this->mod_version = "1.03";
   }
 }
 

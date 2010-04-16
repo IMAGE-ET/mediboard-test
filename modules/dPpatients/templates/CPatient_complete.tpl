@@ -156,6 +156,49 @@
   
   <tr>
     <th class="category" colspan="2">
+      Personne de confiance
+    </th>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_nom"}}</strong>
+      {{mb_value object=$object field="confiance_nom"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_adresse"}}</strong>
+      {{mb_value object=$object field="confiance_adresse"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_prenom"}}</strong>
+      {{mb_value object=$object field="confiance_prenom"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_cp"}}</strong>
+      {{mb_value object=$object field="confiance_cp"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_tel"}}</strong>
+      {{mb_value object=$object field="confiance_tel"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_ville"}}</strong>
+      {{mb_value object=$object field="confiance_ville"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="confiance_parente"}}</strong>
+      {{mb_value object=$object field="confiance_parente"}}
+    </td>
+    <td class="text" />
+  </tr>
+  
+  <tr>
+    <th class="category" colspan="2">
       Bénéficiaire de soins
     </th>
   </tr>
