@@ -573,9 +573,8 @@ class CMouvSejourEcap extends CMouvementEcap {
 		$idGroupUrg = new CIdSante400;
 		$idGroupUrg->loadLatestFor($this->etablissement, "eCap URGSER");
     $CSER = $sejECap->consume("CSER");
-		if ($idGroupUrg->id400 && $idGroupUrg->id400 == $CSER) {
-      $this->sejour->type = "urg";
-		}
+    $this->sejour->type = $idGroupUrg->id400 && $idGroupUrg->id400 == $CSER ? "urg" : "comp";
+		mbTrace($this->sejour->type, "Type après analyse");
 
     // Dates prévues et réelles
     switch ($sejECap->consume("PRES")) {
@@ -636,13 +635,14 @@ class CMouvSejourEcap extends CMouvementEcap {
       $this->sejour->_id = $collision->_id;
     }
 		
-    // En cas de ressemblance à quelques près (cas des urgences), on a affaire au même séjour
-    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
-		if (count($siblings)) {
-      $sibling = reset($siblings);
-      $this->sejour->_id = $sibling->_id;
+    // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
+		if ($this->sejour == "urg") {
+	    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
+	    if (count($siblings)) {
+	      $sibling = reset($siblings);
+	      $this->sejour->_id = $sibling->_id;
+	    }
 		}
-		
             
     $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
     $this->sejour->_check_bounds = false;
