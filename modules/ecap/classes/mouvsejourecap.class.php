@@ -90,7 +90,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     );
     
     $query = "SELECT * 
-			FROM $this->base.ECTXPF
+      FROM $this->base.ECTXPF
       WHERE TXCIDC = ?  AND TXCDIV = '01' AND TXCSDV = '01'
       AND TXTABL = ?
       AND TXZONE = ?
@@ -132,7 +132,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->etablissement->web            = $etab400->consume("ZWEB");
     $this->etablissement->mail           = $etab400->consume("MAIL");
     $this->etablissement->domiciliation  = $etab400->consume("FINS");
-		
+    
     $etablissement = new CGroups;
     $etablissement->text = $etab400->consume("ZIDC");
     $etablissement->raison_sociale = $etablissement->text;
@@ -150,10 +150,10 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     $this->etablissement->loadBlocs();
     if (!count($this->etablissement->_ref_blocs)) {
-    	$bloc = new CBlocOperatoire();
-    	$bloc->group_id = $this->etablissement->_id;
-    	$bloc->nom = "Bloc Import eCap";
-    	$bloc->store();
+      $bloc = new CBlocOperatoire();
+      $bloc->group_id = $this->etablissement->_id;
+      $bloc->nom = "Bloc Import eCap";
+      $bloc->store();
     }
     
     $this->trace($etab400->data, "Données établissement non importées");
@@ -245,8 +245,8 @@ class CMouvSejourEcap extends CMouvementEcap {
       $praticien->actif = "0";
     } else {
       $query = "SELECT * FROM $this->base.ECPRPF 
-				WHERE PRCIDC = ? AND PRCDIV = '01' AND PRCSDV = '01' 
-				AND PRCPRT = ?";
+        WHERE PRCIDC = ? AND PRCDIV = '01' AND PRCSDV = '01' 
+        AND PRCPRT = ?";
       $values = array (
         $this->id400Etab->id400, 
         $CPRT,
@@ -276,7 +276,7 @@ class CMouvSejourEcap extends CMouvementEcap {
       $CSPE = $prat400->consume("CSPE");
       
       $query = "SELECT * FROM $this->base.ECSPPF
-				WHERE SPCSPE = ?";
+        WHERE SPCSPE = ?";
       $values = array (
         $CSPE,
       );
@@ -301,17 +301,17 @@ class CMouvSejourEcap extends CMouvementEcap {
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->_id;
     
-		// Permettre plusieurs praticiens en doublant avec des CPRT différents
+    // Permettre plusieurs praticiens en doublant avec des CPRT différents
     $nomsPraticien     = explode(" ", $praticien->_user_last_name);
     $prenomsPraticiens = explode(" ", $praticien->_user_first_name);
-		$pratDefault->makeUsernamePassword($prenomsPraticiens[0], join($nomsPraticien, ""), $CPRT);
+    $pratDefault->makeUsernamePassword($prenomsPraticiens[0], join($nomsPraticien, ""), $CPRT);
     
     // Type de mediuser
     if (isset($prat400)) {
-	    $PROF = $prat400->consume("PROF");
-	    if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
-	    if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
-	    if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
+      $PROF = $prat400->consume("PROF");
+      if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
+      if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
+      if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
     }
 
     $this->trace($praticien->getValues(), "Praticien à enregistrer");
@@ -365,17 +365,17 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     $pat400 = new CRecordSante400();
     $query = "SELECT * FROM $this->base.ECPAPF 
-			WHERE PACIDC = ? AND PACDIV = '01' AND PACSDV = '01'
-			AND PADMED = ?";
+      WHERE PACIDC = ? AND PACDIV = '01' AND PACSDV = '01'
+      AND PADMED = ?";
     $values = array (
       $this->id400Etab->id400,
       $DMED,
     );
     $pat400->query($query, $values);
     if (!$pat400->data) {
-			$this->setStatus(self::STATUS_PATIENT);
-			$this->starStatus(self::STATUS_SEJOUR);
-			return;
+      $this->setStatus(self::STATUS_PATIENT);
+      $this->starStatus(self::STATUS_SEJOUR);
+      return;
     }
     
     $pat400->valuePrefix = "PA";
@@ -445,7 +445,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     // Motifs d'hospitalisations
     if ("0" != $CMOT = $dheECap->consume("CMOT")) {
       $query = "SELECT * FROM $this->base.ECMOPF 
-				WHERE MOCMOT = ?";
+        WHERE MOCMOT = ?";
           
       $values = array (
         $CMOT
@@ -522,10 +522,10 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
 
     $query = "SELECT * 
-			FROM $this->base.ECATPF
-			WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01'
-			AND ATDMED = ?
-		  AND ATNDOS = ?";
+      FROM $this->base.ECATPF
+      WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01'
+      AND ATDMED = ?
+      AND ATNDOS = ?";
 
     // Recherche de la DHE
     $dheECap = new CRecordSante400();
@@ -569,9 +569,9 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     $entree = $sejECap->consumeDateTime("DTEN", "HREN");
     $sortie = $sejECap->consumeDateTime("DTSO", "HRSO");
-		
-		$idGroupUrg = new CIdSante400;
-		$idGroupUrg->loadLatestFor($this->etablissement, "eCap URGSER");
+    
+    $idGroupUrg = new CIdSante400;
+    $idGroupUrg->loadLatestFor($this->etablissement, "eCap URGSER");
     $CSER = $sejECap->consume("CSER");
     $this->sejour->type = $idGroupUrg->id400 && $idGroupUrg->id400 == $CSER ? "urg" : "comp";
 
@@ -588,11 +588,11 @@ class CMouvSejourEcap extends CMouvementEcap {
       
       case "2": // Sorti
       $this->sejour->entree_reelle = $entree;
-			
-			// Les dossiers d'urgences sont toujours créés sorties dès l'admission
-		  if (!$this->sejour->type == "urg") {
+      
+      // Les dossiers d'urgences sont toujours créés sorties dès l'admission
+      if (!$this->sejour->type == "urg") {
         $this->sejour->sortie_reelle = $sortie;
-		  }
+      }
 
       break;
     }
@@ -633,34 +633,34 @@ class CMouvSejourEcap extends CMouvementEcap {
       $collision = reset($collisions);
       $this->sejour->_id = $collision->_id;
     }
-		
+    
     // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
     $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
     if ($this->sejour->type == "urg") {
-	    if (count($siblings)) {
-	      $sibling = reset($siblings);
-	      $this->sejour->_id = $sibling->_id;
-	    }
-		}
-		// En cas de possible mutation
-		else {
-			foreach ($siblings as $_sibling) {
-				// Sejour de type urgence annulé, avec la même heure d'entrée
-				if ($_sibling->type == "urg" && $_sibling->annule) {
+      if (count($siblings)) {
+        $sibling = reset($siblings);
+        $this->sejour->_id = $sibling->_id;
+      }
+    }
+    // En cas de possible mutation
+    else {
+      foreach ($siblings as $_sibling) {
+        // Sejour de type urgence annulé, avec la même heure d'entrée
+        if ($_sibling->type == "urg") {
           $_sibling->annule ="0";
-					$_sibling->loadRefRPU();
           $_sibling->store();
-					
-					// Il faut un RPU
+          
+          // Il faut un RPU
+          $_sibling->loadRefRPU();
           $rpu = $_sibling->_ref_rpu;
-					if ($rpu->_id) {
+          if ($rpu->_id) {
             $rpu->mutation_sejour_id = $this->sejour->_id;
             $rpu->store();
-					}
+          }
           break;
-				}
-			}		
-		}
+        }
+      }    
+    }
             
     $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
     $this->sejour->_check_bounds = false;
