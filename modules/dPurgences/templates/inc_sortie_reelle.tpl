@@ -20,13 +20,18 @@
 		  Annuler l'autorisation de sortie
 		</button>
   {{else}}    
-    <input type="hidden" name="sortie_reelle" value="{{$now}}" />
-    <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-        submitRPU();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
-    <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-        this.form.elements._modifier_sortie.value=1; 
-        validCotation(); 
-        submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
+	  {{if $rpu->sortie_autorisee}}
+	    <button class="cancel" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=0;
+          submitRPU();">Annuler l'autorisation de sortie</button>
+		{{else}}
+		  <input type="hidden" name="sortie_reelle" value="{{$now}}" />
+      <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
+          submitRPU();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
+      <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
+          this.form.elements._modifier_sortie.value=1; 
+          validCotation(); 
+          submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
+		{{/if}}
   {{/if}}
 </form>
 
