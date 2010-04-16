@@ -48,13 +48,13 @@ $stocks_service = array();
 // Creation d'un tableau de patient
 if (count($deliveries)) {
   foreach($deliveries as $_delivery){
-  	if ($display_delivered || !$_delivery->isDelivered()) {
+  	//if ($display_delivered || !$_delivery->isDelivered()) {
 	    $_delivery->loadRefsFwd();
 	    $_delivery->loadRefsBack();
 	    $_delivery->_ref_stock->loadRefsFwd();
       
       $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_delivery->service_id);
-    }
+    //}
   }
 }
 

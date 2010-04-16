@@ -102,6 +102,18 @@ if (!function_exists('array_replace_recursive')) {
 }
 
 /**
+ * (PHP 5 >= 5.2.0)
+ * array_fill_keys Fill an array with values, specifying keys
+ * 
+ * cf. http://php.net/array_fill_keys
+ */
+if (!function_exists('array_fill_keys')) {
+  function array_fill_keys($keys, $value) {
+    return array_combine($keys, array_fill(0, count($keys), $value));
+  }
+}
+
+/**
  * (PHP 5 >= 5.1.0)
  * property_exists Computes the difference of arrays using keys for comparison 
  * 
