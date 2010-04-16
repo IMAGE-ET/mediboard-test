@@ -636,7 +636,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     }
 		
     // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
-		if ($this->sejour == "urg") {
+		if ($this->sejour->type == "urg") {
 	    $siblings = $this->sejour->getSiblings(CAppUI::conf("dPsante400 CSejour sibling_hours"));
 	    if (count($siblings)) {
 	      $sibling = reset($siblings);
