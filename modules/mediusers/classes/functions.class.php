@@ -28,8 +28,9 @@ class CFunctions extends CMbObject {
   var $tel       = null;
   var $fax       = null;
   var $actif     = null;
-  var $compta_partagee = null;
-  var $admission_auto  = null;
+  var $compta_partagee    = null;
+  var $admission_auto     = null;
+  var $consults_partagees = null;
   
   // Object References
   var $_ref_group = null;
@@ -72,19 +73,20 @@ class CFunctions extends CMbObject {
   	$specs = parent::getProps();
     $phone_number_format = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     
-    $specs["group_id"]        = "ref notNull class|CGroups";
-    $specs["type"]            = "enum notNull list|administratif|cabinet";
-    $specs["text"]            = "str notNull confidential seekable";
-    $specs["color"]           = "str notNull length|6 default|ffffff";
-    $specs["adresse"]         = "text";
-    $specs["cp"]              = "numchar length|5";
-    $specs["ville"]           = "str maxLength|50";
-    $specs["tel"]             = "numchar length|10 mask|$phone_number_format";
-    $specs["fax"]             = "numchar length|10 mask|$phone_number_format";
-    $specs["soustitre"]       = "text";
-    $specs["compta_partagee"] = "bool notNull";
-    $specs["admission_auto"]  = "bool";
-    $specs["actif"]           = "bool default|1";
+    $specs["group_id"]           = "ref notNull class|CGroups";
+    $specs["type"]               = "enum notNull list|administratif|cabinet";
+    $specs["text"]               = "str notNull confidential seekable";
+    $specs["color"]              = "str notNull length|6 default|ffffff";
+    $specs["adresse"]            = "text";
+    $specs["cp"]                 = "numchar length|5";
+    $specs["ville"]              = "str maxLength|50";
+    $specs["tel"]                = "numchar length|10 mask|$phone_number_format";
+    $specs["fax"]                = "numchar length|10 mask|$phone_number_format";
+    $specs["soustitre"]          = "text";
+    $specs["compta_partagee"]    = "bool default|0 notNull";
+    $specs["consults_partagees"] = "bool default|1 notNull";
+    $specs["admission_auto"]     = "bool";
+    $specs["actif"]              = "bool default|1";
     return $specs;
   }
     

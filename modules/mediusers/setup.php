@@ -421,11 +421,9 @@ class CSetupmediusers extends CSetup {
      $this->addQuery($sql);
      
      $this->makeRevision("0.30");
-     
      $sql = "ALTER TABLE `users_mediboard` 
 						   ADD `rpps` BIGINT (11) UNSIGNED ZEROFILL AFTER `adeli`;";
      $this->addQuery($sql);
-     
      $sql = "ALTER TABLE `users_mediboard` 
 							 ADD INDEX (`deb_activite`),
 							 ADD INDEX (`fin_activite`),
@@ -434,23 +432,26 @@ class CSetupmediusers extends CSetup {
      $this->addQuery($sql);
      
      $this->makeRevision("0.31");
-      
      $sql = "INSERT INTO `spec_cpam` (`spec_cpam_id`, `text`, `actes`) VALUES(80,'SANTE PUBLIQUE ET MEDECINE SOCIALE','');";
      $this->addQuery($sql);
      
      $this->makeRevision("0.32");
-     
      $sql = "ALTER TABLE `users_mediboard` ADD `code_intervenant_cdarr` CHAR (2) DEFAULT NULL;";
      $this->addQuery($sql);
      
      $this->makeRevision("0.33");
-     
      $sql = "ALTER TABLE `functions_mediboard` 
               ADD `actif` ENUM ('0','1') DEFAULT '1',
               ADD `admission_auto` ENUM ('0','1') DEFAULT '0';";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.34";
+     $this->makeRevision("0.34");
+     $sql = "ALTER TABLE `functions_mediboard`
+              ADD `consults_partagees` ENUM ('0','1') NOT NULL DEFAULT '1' AFTER compta_partagee;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.35";
   }
 }
+
 ?>

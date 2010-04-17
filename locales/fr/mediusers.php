@@ -262,11 +262,16 @@ $locales['CDiscipline-back-users.empty'] = '';
 $locales['CFunctions-back-secondary_functions.empty'] = '';
 $locales['CFunctions-back-users.empty'] = '';
 $locales['CGroups-back-.empty'] = '';
-$locales['CGroups-back-functions.empty'] = '';
+$locales['CGroups-back-functions.empty'] = 'Aucune fonction';
 $locales['CMediusers-back-secondary_functions.empty'] = '';
 $locales['CMediusers-code_intervenant_cdarr'] = 'Code CdARR';
 $locales['CMediusers-code_intervenant_cdarr-court'] = 'Code CdARR';
 $locales['CMediusers-code_intervenant_cdarr-desc'] = 'Code CdARR de l\'intervenant';
 $locales['CSpecCPAM-back-users.empty'] = '';
 $locales['CUser-back-.empty'] = '';
+$locales['CFunctions-consults_partagees'] = 'Consultations partagées';
+$locales['CFunctions-consults_partagees-court'] = 'Consult. part.';
+$locales['CFunctions-consults_partagees-desc'] = 'Visibilité de consultations par les autres utilisateurs';
+$locales['mod-mediusers-tab-color_selector'] = '';
+$locales['mod-mediusers-tab-edit_infos'] = '';
 ?>

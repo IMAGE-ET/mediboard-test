@@ -8,11 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+
+changePagePrescripteur = function(page) {
+  var url = new Url("dPboard", "vw_stats", "tab");
+  url.addParam("start_prescripteur", page);
+  url.redirect();
+}
+
+</script>
+
+{{mb_include module=system template=inc_pagination change_page="changePagePrescripteur" total=$total_prescripteurs current=$start_prescripteurs step=$step_prescripteurs}}
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="4">
     	Médecins traitants les plus prescripteurs
-    	(max. {{$max}})
     </th>
   </tr>
 

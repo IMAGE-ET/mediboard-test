@@ -34,7 +34,8 @@ function changeRemote(o) {
   checkFormElement(oPassword);
 }
 
-showMediuser = function(user_id){
+showMediuser = function(user_id, element){
+  element.up('tr').addUniqueClassName('selected');
   var url = new Url("mediusers", "ajax_edit_mediuser");
   url.addParam("user_id", user_id);
   url.requestUpdate("vw_mediuser");

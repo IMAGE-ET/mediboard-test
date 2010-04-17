@@ -998,14 +998,21 @@ class CPatient extends CMbObject {
   
   function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
+    $curr_user = CAppUI::$user;
     if ($this->patient_id){
       if ($where === null) {
         $where = array();
       }
+      if(!$curr_user->isAdmin()) {
+        $where[] = "functions_mediboard.consults_partagees = '1' ||
+                    (functions_mediboard.consults_partagees = '0' && functions_mediboard.function_id = '$curr_user->function_id')";
+      }
       $where["patient_id"] = "= '$this->patient_id'";
       $order = "plageconsult.date DESC";
       $leftjoin = array();
-      $leftjoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+      $leftjoin["plageconsult"]        = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+      $leftjoin["users_mediboard"]     = "plageconsult.chir_id = users_mediboard.user_id";
+      $leftjoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
       $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
     }
   }

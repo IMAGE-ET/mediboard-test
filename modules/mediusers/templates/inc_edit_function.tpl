@@ -1,4 +1,5 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
+
 <script type="text/javascript">
   Main.add(function () {
     InseeFields.initCPVille("editFrm", "cp", "ville", "tel");
@@ -32,10 +33,6 @@
     <tr>
       <th>{{mb_label object=$userfunction field="soustitre"}}</th>
       <td>{{mb_field object=$userfunction field="soustitre"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$userfunction field="compta_partagee"}}</th>
-      <td>{{mb_field object=$userfunction field="compta_partagee"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$userfunction field="group_id"}}</th>
@@ -84,6 +81,14 @@
     <tr>
       <th>{{mb_label object=$userfunction field="actif"}}</th>
       <td>{{mb_field object=$userfunction field="actif"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$userfunction field="compta_partagee"}}</th>
+      <td>{{mb_field object=$userfunction field="compta_partagee"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$userfunction field="consults_partagees"}}</th>
+      <td>{{mb_field object=$userfunction field="consults_partagees"}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$userfunction field="admission_auto"}}</th>

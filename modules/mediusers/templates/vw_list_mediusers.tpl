@@ -29,19 +29,19 @@
     {{if $curr_user->_ref_user->_id}}
 
      <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}')" class="mediuser" style="border-left-color: #{{$curr_user->_ref_function->color}};">
+       <a href="#" onclick="showMediuser('{{$user_id}}', this)" class="mediuser" style="border-left-color: #{{$curr_user->_ref_function->color}};">
          <span onmouseover="ObjectTooltip.createEx(this,'{{$curr_user->_guid}}', 'identifiers')">
            {{mb_value object=$curr_user field=_user_username}}
          </span>
        </a>
      </td>
      <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}')">
+       <a href="#" onclick="showMediuser('{{$user_id}}', this)">
          {{mb_value object=$curr_user field=_user_last_name}}
        </a>
      </td>
      <td class="text">
-       <a href="#" onclick="showMediuser('{{$user_id}}')">
+       <a href="#" onclick="showMediuser('{{$user_id}}', this)">
          {{mb_value object=$curr_user field=_user_first_name}}
        </a>
      </td>
