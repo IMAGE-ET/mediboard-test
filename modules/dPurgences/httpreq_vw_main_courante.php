@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m;
+global $AppUI;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 // Type d'affichage
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
@@ -21,8 +21,9 @@ $order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
-$date_before = mbDate("-2 DAY", $date);
-$today = mbDate();
+$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
+$date_before = mbDate("-$date_tolerance DAY", $date);
+$date_after  = mbDate("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
 $user = new CMediusers();
@@ -32,14 +33,12 @@ $medicalView = $user->isMedical();
 $group = CGroups::loadCurrent();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
-// FIXME: ne pas utiliser LIKE mais un delai de 24heures (les urgences sont en continu)
 $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$where[] = "sejour.entree_reelle LIKE '$date%' OR (
-  sejour.sortie_reelle IS NULL AND sejour.entree_reelle LIKE '$date_before%'
-)";
+$where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 $where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
@@ -84,8 +83,9 @@ foreach ($listSejours as &$sejour) {
     
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
-  $sejour->_veille = strpos($sejour->entree_reelle, $date_before) !== false;
-  
+
+  // Séjours antérieurs  
+	$sejour->_veille = mbDate($sejour->entree_reelle) != $date;
   if ($sejour->_veille) {
     $sejours_veille++;
   }
@@ -126,7 +126,7 @@ $smarty->assign("selAffichage", $selAffichage);
 $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
-$smarty->assign("today"       , $today);
+$smarty->assign("today"       , mbDate());
 $smarty->assign("sejours_veille", $sejours_veille);
 $smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 

@@ -87,9 +87,9 @@ Main.add(function () {
 	    </td>
 			
 	    <td style="text-align: right;">
-        <label style="visibility: hidden;" class="count">
+        <label style="visibility: hidden;" class="count" title="Cacher les admissions non-sorties des {{$dPconfig.dPurgences.date_tolerance}} derniers jours">
   	      <input type="checkbox" onchange="$$('.veille').invoke('setVisible', !this.checked)" />
-  	      Cacher les <span>0</span> admissions de la veille
+  	      Cacher les <span>0</span> admission(s) antérieure(s)
         </label>
 			</td>
 
