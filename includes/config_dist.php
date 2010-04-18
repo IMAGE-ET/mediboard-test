@@ -534,23 +534,6 @@ $dPconfig["hprim21"] = array (
   ),
 );
 
-$dPconfig["dPurgences"] = array (
-  "old_rpu"               => "1",
-  "rpu_warning_time"      => "00:20:00",
-  "rpu_alert_time"        => "01:00:00",
-  "default_view"          => "tous",
-  "allow_change_patient"  => "1",
-  "motif_rpu_view"        => "1",
-  "age_patient_rpu_view"  => "0",
-  "responsable_rpu_view"  => "1",
-  "diag_prat_view"        => "0",
-  "check_cotation"        => "1",
-  "sortie_prevue"         => "sameday",
-  "only_prat_responsable" => "0",
-  "rpu_sender"            => "",
-  "rpu_xml_validation"    => "1",
-);
-
 $dPconfig["dPpmsi"] = array(
   "systeme_facturation" => "",
 ); 
