@@ -140,7 +140,7 @@ Class.extend(Autocompleter.Base, {
     if(this.observer) clearTimeout(this.observer);
     this.observer =
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
-  }/*,
+  },
   getTokenBounds: function() {
     if (!this.options.caretBounds && (null != this.tokenBounds)) return this.tokenBounds;
     var value = this.element.value;
@@ -153,9 +153,18 @@ Class.extend(Autocompleter.Base, {
       var end = value.substr(caret).indexOf("\n")+caret+1;
       return (this.tokenBounds = [start, end]);
     }
+    
+    // This needs to be declared here as the arguments.callee is not the same
+    var firstDiff = function(newS, oldS) {
+      var boundary = Math.min(newS.length, oldS.length);
+      for (var index = 0; index < boundary; ++index)
+        if (newS[index] != oldS[index])
+          return index;
+      return boundary;
+    };
     /////////////
     
-    var diff = arguments.callee.getFirstDifferencePos(value, this.oldElementValue);
+    var diff = firstDiff(value, this.oldElementValue);
     var offset = (diff == this.oldElementValue.length ? 1 : 0);
     var prevTokenPos = -1, nextTokenPos = value.length;
     var tp;
@@ -166,7 +175,7 @@ Class.extend(Autocompleter.Base, {
       if (-1 != tp && tp < nextTokenPos) nextTokenPos = tp;
     }
     return (this.tokenBounds = [prevTokenPos + 1, nextTokenPos]);
-  }*/
+  }
 });
 
 Element.addMethods({
