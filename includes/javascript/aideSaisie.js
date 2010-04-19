@@ -66,18 +66,22 @@ var AideSaisie = {
     },
     
     // Update field after selection
-    update: function(selected, selected2){
-      // When used as "updateElement", the LI is the first arg
-      // When used as "afterUpdateElement", the LI is in the second arg
-      var s = selected2 || selected;
-      
-      var data = this.getSelectedData(s);
+    update: function(selected){
+      var data = this.getSelectedData(selected);
       
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
       
       $V(this.element, data.text.strip());
       this.element.focus();
+    },
+    
+    // Update depend fields after selection
+    updateDependFields: function(input, selected){
+      var data = this.getSelectedData(selected);
+      
+      $V(this.options.dependField1, data.depend1);
+      $V(this.options.dependField2, data.depend2);
     },
     
     buildAdvancedUI: function(url){
@@ -123,17 +127,16 @@ var AideSaisie = {
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
         minChars: 2,
-        tokens: '\n',
+        tokens: "\n",
         indicator: throbber,
-        select: 'text', 
+        select: "text", 
         paramName: "_search",
-        //updateElement: this.update.bind(this),
         callback: function(input, query){
           query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
           return query;
         },
-        afterUpdateElement: this.update.bind(this)
+        afterUpdateElement: this.updateDependFields.bind(this)
       });
       
       // Grid mode 
@@ -164,8 +167,19 @@ var AideSaisie = {
         buttons.owner.setOpacity(0.5);
         buttons.owner.src = "images/icons/user.png";
       }
+      
+      var activate = function(){
+        this.changed = false;
+        this.hasFocus = true;
+        // We save the default params, change it so that _search 
+        // is empty to have all the entries and restore it after
+        var oldDefaultParams = this.options.defaultParams;
+        this.options.defaultParams = "_search=";
+        this.getUpdatedChoices();
+        this.options.defaultParams = oldDefaultParams;
+      }.bind(autocomplete);
 
-      buttons.down.observe('click', autocomplete.activate.bind(autocomplete));
+      buttons.down.observe('click', activate);
       //buttons.grid.observe('mousedown', gridMode);
       buttons.valid.observe('click', validate);
       buttons.create.observe('click', function(e){
@@ -198,7 +212,6 @@ var AideSaisie = {
             validate();
         }.bindAsEventListener(this));
       }
-      
     }
   }),
   

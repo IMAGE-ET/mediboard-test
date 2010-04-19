@@ -42,7 +42,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('filters',         $filters);
 $smarty->assign('months_relative', $months_relative);
 $smarty->assign('months_count',    $months_count);
-$smarty->assign('mode',            "comparison");
+$smarty->assign('mode',            $mode);
 
 // Lists
 $smarty->assign('fields', $fields);
