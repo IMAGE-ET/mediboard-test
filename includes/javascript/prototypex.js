@@ -142,7 +142,7 @@ Class.extend(Autocompleter.Base, {
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
   },
   getTokenBounds: function() {
-    if (null != this.tokenBounds) return this.tokenBounds;
+    if (!this.options.caretBounds && (null != this.tokenBounds)) return this.tokenBounds;
     var value = this.element.value;
     if (value.strip().empty()) return [-1, 0];
     
