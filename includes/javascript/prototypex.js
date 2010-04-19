@@ -140,7 +140,7 @@ Class.extend(Autocompleter.Base, {
     if(this.observer) clearTimeout(this.observer);
     this.observer =
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
-  },
+  }/*,
   getTokenBounds: function() {
     if (!this.options.caretBounds && (null != this.tokenBounds)) return this.tokenBounds;
     var value = this.element.value;
@@ -166,7 +166,7 @@ Class.extend(Autocompleter.Base, {
       if (-1 != tp && tp < nextTokenPos) nextTokenPos = tp;
     }
     return (this.tokenBounds = [prevTokenPos + 1, nextTokenPos]);
-  }
+  }*/
 });
 
 Element.addMethods({
