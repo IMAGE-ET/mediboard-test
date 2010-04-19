@@ -108,7 +108,7 @@
     <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
 			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
-      {{if $modules.dPhospi->canEdit()}}
+      {{if $modules.dPhospi->_can->edit}}
       <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
@@ -118,11 +118,7 @@
       {{/if}}
 
       <a href="{{$rpu_link}}">
-        {{if $_sejour->_date_entree_prevue == $date}}
-        {{$_sejour->_entree|date_format:$dPconfig.time}}
-        {{else}}
-        {{$_sejour->_entree|date_format:$dPconfig.datetime}}
-        {{/if}}
+      	{{mb_value object=$_sejour field=_entree date=$date}}
         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
       </a>
 								
