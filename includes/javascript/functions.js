@@ -97,21 +97,17 @@ var WaitingMessage = {
     if (receiver.getStyle("vertical-align") !== "top") {
       var offsetCover = coverContainer.cumulativeOffset();
       var offsetContainer = receiver.cumulativeOffset();
-      coverContainer.style.top = (- offsetCover.top + offsetContainer.top + 2)+"px";
+      coverContainer.style.top = (- offsetCover.top + offsetContainer.top)+"px";
     }
   }
 };
 
-function createDocument(oSelect, consultation_id) {
-  var modele_id = oSelect.value;
-  if (modele_id) {
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("modele_id", modele_id);
-    url.addParam("object_id", consultation_id);
-    url.popup(700, 700, "Document");
-  }
-  
-  oSelect.value = "";
+/**
+ * Detects the Skype scripts and stylesheets to check whether the extension is active or not
+ * This extension slows down Firefox
+ */
+function detectSkypeExtension(){
+  return $$("#injection_graph_func, #_skypeplugin_dropdownmenu_css, #_injection_graph_nh_css, #_nameHighlight_injection").length > 0;
 }
 
 var AjaxResponse = {
@@ -417,10 +413,7 @@ var Assert = {
 /**
  * PairEffect Class
  */
-
 var PairEffect = Class.create({
-
-  // Constructor
   initialize: function(idTarget, oOptions) {
     this.oOptions = Object.extend({
       idTarget       : idTarget,
@@ -496,7 +489,6 @@ Object.extend(PairEffect, {
  * TogglePairEffect Class
  */
 var TogglePairEffect = Class.create({
-  // Constructor
   initialize: function(idTarget1, idTarget2, oOptions) {
     this.oOptions = Object.extend({
       idFirstVisible : 1,

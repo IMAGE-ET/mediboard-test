@@ -140,6 +140,21 @@ var AideSaisie = {
         afterUpdateElement: this.updateDependFields.bind(this)
       });
       
+      // The blur event must not hide the list
+      Event.stopObserving(this.element, 'blur');
+      Event.observe(this.element, 'blur', function() {
+        // needed to make click events working
+        //setTimeout(this.hide.bind(this), 2500);
+        this.hasFocus = false;
+        this.active = false;
+      }.bindAsEventListener(autocomplete));
+      
+      document.observe("click", function(e){
+        // if click outside the container
+        if (!Event.element(e).descendantOf(container))
+          list.hide();
+      });
+      
       // Grid mode 
       var gridMode = function(e) {
         var options = this.options, fragment = "", dependValue;
