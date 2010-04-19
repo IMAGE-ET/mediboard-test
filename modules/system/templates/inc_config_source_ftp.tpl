@@ -126,7 +126,9 @@
               {{tr}}utilities-source-ftp-connexion{{/tr}}
             </button>
           </td>
-          <td id="utilities-source-ftp-connexion-{{$source->name}}"></td>
+			  </tr>
+			  <tr>
+          <td id="utilities-source-ftp-connexion-{{$source->name}}" class="text"></td>
         </tr>
         
         <!-- Liste des fichiers -->
@@ -136,6 +138,8 @@
               {{tr}}utilities-source-ftp-getFiles{{/tr}}
             </button> 
           </td>
+			  </tr>
+        <tr>
           <td id="utilities-source-ftp-getFiles-{{$source->name}}"></td>
         </tr>
       </table>

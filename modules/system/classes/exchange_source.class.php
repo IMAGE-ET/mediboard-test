@@ -15,12 +15,13 @@ class CExchangeSource extends CMbObject {
   );
   
   // DB Fields
-  var $name     = null;
-  var $role     = null;
-  var $host     = null;
-  var $user     = null;
-  var $password = null;
-  
+  var $name         = null;
+  var $role         = null;
+  var $host         = null;
+  var $user         = null;
+  var $password     = null;
+  var $type_echange = null;
+	
   // Behaviour Fields
   var $_client      = null;
   var $_data        = null;
@@ -36,6 +37,7 @@ class CExchangeSource extends CMbObject {
     $specs["host"]     = "text notNull";
     $specs["user"]     = "str";
     $specs["password"] = "password";
+		$specs["type_echange"] = "str protected";
     
     $specs["_incompatible"] = "bool";
     
@@ -48,7 +50,7 @@ class CExchangeSource extends CMbObject {
     return getChildClasses("CExchangeSource");
   }
   
-  static function getObjects($name, $type) {
+  static function getObjects($name, $type = null, $type_echange = null) {
     if ($type) {
       return null;
     }
@@ -57,19 +59,20 @@ class CExchangeSource extends CMbObject {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_objects[$_class] = new $_class;
       $exchange_objects[$_class]->name = $name;
+			$exchange_objects[$_class]->type_echange = $type_echange;
     }
     
     return $exchange_objects;
   } 
     
-  static function get($name, $type = null, $override = false) {
+  static function get($name, $type = null, $override = false, $type_echange = null) {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_source = new $_class;
       $exchange_source->name = $name;
       $exchange_source->loadMatchingObject();
       if ($exchange_source->_id) {
         $exchange_source->_wanted_type = $type;
-        $exchange_source->_allowed_instances = self::getObjects($name, $type);
+        $exchange_source->_allowed_instances = self::getObjects($name, $type, $type_echange);
         if ($exchange_source->role != CAppUI::conf("instance_role")) {
           if (!$override) {
             $incompatible_source = new $exchange_source->_class_name;
@@ -89,8 +92,9 @@ class CExchangeSource extends CMbObject {
     }
 
     $source->name = $name;
+		$source->type_echange = $type_echange;
     $source->_wanted_type = $type;
-    $source->_allowed_instances = self::getObjects($name, $type);
+    $source->_allowed_instances = self::getObjects($name, $type, $type_echange);
     return $source;
   }
   

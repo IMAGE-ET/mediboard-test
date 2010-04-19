@@ -21,12 +21,11 @@ $dest_hprim = new CDestinataireHprim();
 $dest_hprim->load($dest_hprim_id);
 if($dest_hprim->load($dest_hprim_id)) {
   $dest_hprim->loadRefsFwd();
+	$dest_hprim->loadRefsExchangesSources();
 }
-
 
 // Récupération de la liste des destinataires HPRIM
 $itemDestHprim = new CDestinataireHprim;
-
 $where = array();
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $listDestHprim = $itemDestHprim->loadList($where);

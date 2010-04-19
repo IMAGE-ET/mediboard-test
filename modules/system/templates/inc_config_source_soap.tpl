@@ -44,11 +44,18 @@
             <th>{{mb_label object=$source field="password"}}</th>
             <td>{{mb_field object=$source field="password"}}</td>
           </tr>
+					<tr>
+            <th>{{mb_label object=$source field="type_echange"}}</th>
+            <td>{{mb_field object=$source field="type_echange"}}</td>
+          </tr>
+					<tr>
+            <th>{{mb_label object=$source field="evenement_name"}}</th>
+            <td>{{mb_field object=$source field="evenement_name"}}</td>
+          </tr>
           <tr>
             <th>{{mb_label object=$source field="wsdl_mode"}}</th>
             <td>{{mb_field object=$source field="wsdl_mode"}}</td>
           </tr>
-          
           <tr>
             <td class="button" colspan="2">
               {{if $source->_id}}
@@ -94,7 +101,9 @@
               {{tr}}utilities-source-soap-connexion{{/tr}}
             </button>
           </td>
-          <td id="utilities-source-soap-connexion-{{$source->name}}"></td>
+			  </tr>
+				<tr>
+          <td id="utilities-source-soap-connexion-{{$source->name}}" class="text"></td>
         </tr>
         
         <!-- Liste des functions SOAP -->
@@ -104,9 +113,10 @@
               {{tr}}utilities-source-soap-getFunctions{{/tr}}
             </button> 
           </td>
-          <td id="utilities-source-soap-getFunctions-{{$source->name}}"></td>
+				</tr>
+        <tr>
+          <td id="utilities-source-soap-getFunctions-{{$source->name}}" class="text"></td>
         </tr>
-        
       </table>
     </td>
   </tr>

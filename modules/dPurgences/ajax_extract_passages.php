@@ -55,6 +55,9 @@ foreach ($rpus as $_rpu) {
 
 // Appel de la fonction d'extraction du RPUSender
 $rpuSender = $extractPassages->getRPUSender();
+if (!$rpuSender) {
+	CAppUI::stepAjax("Aucun sender définit dans le module dPurgences.", UI_MSG_ERROR);
+}
 $extractPassages = $rpuSender->extract($extractPassages, $rpus);
 
 CAppUI::stepAjax("Extraction de ".count($rpus)." RPUs du ".mbDateToLocale($debut_selection)." au ".mbDateToLocale($fin_selection)." terminée.", UI_MSG_OK);

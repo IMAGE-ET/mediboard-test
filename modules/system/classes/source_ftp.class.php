@@ -64,6 +64,7 @@ class CSourceFTP extends CExchangeSource {
       $ftp->close();
       
       $this->store();
+			
       return true;
     }
   }

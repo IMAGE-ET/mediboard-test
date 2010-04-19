@@ -18,7 +18,7 @@
           </tr>
           {{foreach from=$files item=_file}}
           <tr>
-            <td> {{$_file}} </td>
+            <td class="text"> {{$_file}} </td>
           </tr>
           {{/foreach}}
         {{else}}

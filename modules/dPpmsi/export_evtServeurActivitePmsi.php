@@ -19,7 +19,7 @@ if (null == $typeObject = CValue::get("typeObject")) {
 switch ($typeObject) {
   case "op" :
 		$mbObject = new COperation();
-		$evenementPMSI = new CHPrimXMLServeurActes();
+		$evenementActivitePMSI = new CHPrimXMLServeurActes();
 
 		// Chargement de l'opération et génération du document
 		$operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
@@ -40,7 +40,7 @@ switch ($typeObject) {
 		break;
   case "sej" :
 		$mbObject = new CSejour();
-		$evenementPMSI = new CHPrimXMLEvenementPmsi();
+		$evenementActivitePMSI = new CHPrimXMLEvenementPmsi();
 				
 		// Chargement du séjour et génération du document
 		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
@@ -55,24 +55,24 @@ switch ($typeObject) {
     break;
 }
 
-if (!$evenementPMSI->checkSchema()) {
+if (!$evenementActivitePMSI->checkSchema()) {
   return;
 }
 			
 $dest_hprim = new CDestinataireHprim();
 $dest_hprim->group_id = CGroups::loadCurrent()->_id;
-$dest_hprim->evenement = "pmsi";
+$dest_hprim->message = "pmsi";
 $destinataires = $dest_hprim->loadMatchingList();
         
 foreach ($destinataires as $_destinataire) {
-	$evenementPMSI->emetteur     = CAppUI::conf('mb_id');
-  $evenementPMSI->destinataire = $_destinataire->nom;
-  $evenementPMSI->group_id     = $_destinataire->group_id;
+	$evenementActivitePMSI->emetteur     = CAppUI::conf('mb_id');
+  $evenementActivitePMSI->destinataire = $_destinataire->nom;
+  $evenementActivitePMSI->group_id     = $_destinataire->group_id;
 
-	$msgEvtPMSI = $evenementPMSI->generateTypeEvenement($mbObject);
+	$msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
 	
 	$echange_hprim = new CEchangeHprim();
-  $echange_hprim->load($evenementPMSI->identifiant);
+  $echange_hprim->load($evenementActivitePMSI->identifiant);
   if ($doc_valid = $echange_hprim->message_valide) {
     $mbObject->facture = true;
     $mbObject->store();
@@ -80,15 +80,34 @@ foreach ($destinataires as $_destinataire) {
 		
 	$logs = array();
 	if ($_destinataire->actif) {
-    $source = CExchangeSource::get($_destinataire->_guid);
+    $source = CExchangeSource::get("$_destinataire->_guid-$evenementActivitePMSI->sous_type");
 		$sent_files = CValue::get("sent_files");
 		if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
-		  $source->setData($msgEvtPMSI);
+		  $source->setData($msgEvtActivitePMSI);
 		  if ($source->send()) {
         $echange_hprim->date_echange = mbDateTime();
         $echange_hprim->store();
 		    $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard";
 		  }
+			$acquittement = $source->receive();
+      if ($acquittement) {
+      	switch ($typeObject) {
+          case "op" :
+						$domGetAcquittement = new CHPrimXMLAcquittementsServeurActes();
+				    break;
+          case "sej" :
+						$domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
+						break;
+				}
+        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
+        $doc_valid = $domGetAcquittement->schemaValidate();
+        
+        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+        $echange_hprim->acquittement = $acquittement;
+    
+        $echange_hprim->store();				
+			}
 		}
   }
 }
@@ -99,7 +118,7 @@ $mbObject->loadBackRefs("echanges_hprim", $order);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("evenementPMSI"  , $evenementPMSI);
+$smarty->assign("evenementActivitePMSI"  , $evenementActivitePMSI);
 $smarty->assign("exchange_source", $source);
 $smarty->assign("logs"           , $logs);
 $smarty->assign("doc_valid"      , @$doc_valid);

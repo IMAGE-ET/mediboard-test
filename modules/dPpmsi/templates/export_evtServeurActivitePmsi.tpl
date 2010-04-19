@@ -109,11 +109,11 @@ function choosePreselection(oSelect) {
       {{/if}}
       <h3>
 
-      {{if $evenementPMSI->documentfilename}}
+      {{if $evenementActivitePMSI->documentfilename}}
       <h3>XML: Génération du document</h3>
       <ul>
         <li>
-          Consulter <a href="{{$evenementPMSI->documentfilename}}">le Document H'XML</a>: 
+          Consulter <a href="{{$evenementActivitePMSI->documentfilename}}">le Document H'XML</a>: 
           Le document <strong>{{if $doc_valid}}est valide!{{else}}n'est pas valide...{{/if}}</strong>
         </li>
         {{if $typeObject == "op"}}

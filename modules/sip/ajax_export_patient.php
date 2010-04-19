@@ -67,7 +67,7 @@ foreach ($patients as $patient) {
   $patient->loadRefsSejours();
   $patient->_ref_last_log->type = "create";
   $dest_hprim = new CDestinataireHprim();
-	$dest_hprim->evenement = "patients";
+	$dest_hprim->message = "patients";
   $dest_hprim->type = "sip";
   $dest_hprim->loadMatchingObject();
 

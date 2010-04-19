@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLDocument extends CMbXMLDocument {
+class CHPrimXMLDocument extends CMbXMLDocument {	
   var $evenement              = null;
   var $finalpath              = null;
   var $documentfinalprefix    = null;

@@ -23,7 +23,8 @@ if (!$exchange_source) {
   CAppUI::stepAjax("Aucune source d'échange disponible pour ce nom : '$exchange_source_name'", UI_MSG_ERROR);
 }
 
-if (!$client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->web_service_name)) {
+$client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange);
+if ($client->soap_client_error) {
   CAppUI::stepAjax("Impossible de joindre la source de donnée : '$exchange_source_name'", UI_MSG_ERROR);
 } else {
   CAppUI::stepAjax("Connecté à la source '$exchange_source_name'");

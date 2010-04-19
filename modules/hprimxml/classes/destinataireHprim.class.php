@@ -9,6 +9,16 @@
  */
 
 class CDestinataireHprim extends CMbObject {
+	static $messagesHprim = array(
+    "patients" => array ( 
+      "evenementPatient" ),
+    "pmsi" => array ( 
+      "evenementPmsi" ,
+      "evenementServeurActe"),
+    "stock" => array ( 
+      "evenementMvtStocks")
+  );
+	
   // DB Table key
   var $dest_hprim_id  = null;
   
@@ -16,16 +26,18 @@ class CDestinataireHprim extends CMbObject {
   var $nom       = null;
   var $group_id  = null;
   var $type      = null;
-	var $evenement = null;
+	var $message   = null;
   var $actif     = null;
-  
+	
   // Forward references
   var $_ref_group = null;
-  var $_ref_exchange_source = null;
+  var $_ref_exchanges_sources = null;
   
   // Form fields
-  var $_tag_patient = null;
-  var $_tag_sejour  = null;
+  var $_tag_patient     = null;
+  var $_tag_sejour      = null;
+	var $_tag_mediusers   = null;
+	var $_type_echange    = "hprimxml";
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,24 +51,34 @@ class CDestinataireHprim extends CMbObject {
     $specs["nom"]       = "str notNull";
     $specs["group_id"]  = "ref notNull class|CGroups";
     $specs["type"]      = "enum notNull list|cip|sip default|cip";
-		$specs["evenement"] = "enum list|pmsi|patients|stock default|patient";
+		$specs["message"]   = "enum list|pmsi|patients|stock default|patient";
     $specs["actif"]     = "bool notNull";
     
-    $specs["_tag_patient"] = "str";
-    $specs["_tag_sejour"]  = "str";
+    $specs["_tag_patient"]   = "str";
+    $specs["_tag_sejour"]    = "str";
+		$specs["_tag_mediusers"] = "str";
     return $specs;
   }
   
   function loadRefsFwd() {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
-    
-    $this->_ref_exchange_source = CExchangeSource::get($this->_guid, null, true);
   }
+	
+	function loadRefsExchangesSources() {
+		$this->_ref_exchanges_sources = array();
+		foreach (self::$messagesHprim as $_message => $_evenements) {
+			if ($_message == $this->message) {
+				foreach ($_evenements as $_evenement) {
+          $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
+				}
+			}
+		}
+	}
   
   function updateFormFields() {
     parent::updateFormFields();
-    
+    		
     $this->_tag_patient = str_replace('$g', $this->group_id, CAppUI::conf("dPpatients CPatient tag_ipp"));
     $this->_tag_sejour  = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
   }

@@ -11,7 +11,7 @@
 CAppUI::requireSystemClass('mbMetaObject');
 
 class CEchangeHprim extends CMbMetaObject {
-	static $evenements = array(
+	static $messages = array(
 	   "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi", 
 		 "patients" => "CHPrimXMLEvenementsPatients"  
 	);

@@ -33,9 +33,9 @@
     
     {{if $source->_allowed_instances}} 
     <script type="text/javascript">
-    Main.add(function () {
-      Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
-    });
+	    Main.add(function () {
+	      Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
+	    });
     </script>
     
     <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
@@ -84,7 +84,7 @@
           {{tr}}CExchangeSource-already-exist{{/tr}}
         </div>
       {{else}}
-      <table class="main">
+      <table class="main source">
         {{assign var="_source_soap" value=$source}}
         {{if $source->_class_name == "CExchangeSource"}}
           {{assign var="_source_soap" value=$source->_allowed_instances.CSourceSOAP}}

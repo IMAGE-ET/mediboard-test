@@ -85,8 +85,14 @@ class CSetuphprimxml extends CSetup {
 							ADD INDEX (`id_permanent`),
 							ADD INDEX (`object_class`);";
      $this->addQuery($sql); 
-			
-     $this->mod_version = "0.13";
+		
+		 $this->makeRevision("0.13");
+      
+     $sql = "ALTER TABLE `destinataire_hprim` 
+                CHANGE `evenement` `message` ENUM ('pmsi','patients','stock') DEFAULT 'patients';";
+     $this->addQuery($sql); 
+		 	
+     $this->mod_version = "0.14";
   }
 }
 

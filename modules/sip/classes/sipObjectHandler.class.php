@@ -97,7 +97,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       else {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patients";
+				$dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -196,7 +196,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patients";
+				$dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -243,7 +243,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!CAppUI::conf('sip server')) {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->evenement = "patients";
+				$dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         $mbObject->_fusion = array();
@@ -343,9 +343,9 @@ class CSipObjectHandler extends CMbObjectHandler {
     $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
 
     if ($dest_hprim->actif) {
-      $source = CExchangeSource::get($dest_hprim->_guid);
+      $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($msgEvtVenuePatient);
-      $source->send("evenementPatient");
+      $source->send();
       $acquittement = $source->receive();
       
       if ($acquittement) {

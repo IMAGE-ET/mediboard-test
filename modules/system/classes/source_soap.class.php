@@ -14,7 +14,7 @@ class CSourceSOAP extends CExchangeSource {
   
   // DB Fields
   var $wsdl_mode        = null;
-  var $web_service_name = null;
+	var $evenement_name   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,15 +26,22 @@ class CSourceSOAP extends CExchangeSource {
   function getProps() {
     $specs = parent::getProps();
     $specs["wsdl_mode"] = "bool default|1";
-    
+		$specs["evenement_name"] = "str";
     return $specs;
   }
   
-  function send($evenement_name) {
-    if (!$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->web_service_name)) {
-      trigger_error("Impossible de joindre le destinataire : ".$this->host);
+  function send($evenement_name = null) {
+  	if (!$evenement_name) {
+  		$evenement_name = $this->evenement_name;
+			
+			CAppUI::stepAjax("Aucune méthode définie pour l'appel SOAP.", UI_MSG_ERROR);
+  	}
+		
+		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
+    if ($this->client->soap_client_error) {
+      CAppUI::stepAjax("Impossible de joindre la source de donnée : '$this->name'", UI_MSG_ERROR);
     }
-    
+		
     $this->_acquittement = $this->_args_list ? 
         call_user_func_array(array($this->_client, $evenement_name), $this->_data) : 
         $this->_client->$evenement_name($this->_data);
@@ -42,6 +49,8 @@ class CSourceSOAP extends CExchangeSource {
     if (null == $this->_acquittement) {
       trigger_error("Acquittement non reçu.");
     }
+		
+		return true;
   }
   
   function receive() {    

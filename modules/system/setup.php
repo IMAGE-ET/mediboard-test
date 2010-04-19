@@ -237,8 +237,18 @@ class CSetupsystem extends CSetup {
     $sql = "ALTER TABLE `source_soap` 
               ADD `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif';";
     $this->addQuery($sql);
-    
-    $this->mod_version = "1.0.25";
+		
+		$this->makeRevision("1.0.25");
+		
+    $sql = "ALTER TABLE `source_soap` 
+              ADD `evenement_name` VARCHAR (255),
+              ADD `type_echange` VARCHAR (255);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `source_ftp` 
+              ADD `type_echange` VARCHAR (255);";
+    $this->addQuery($sql);
+		
+    $this->mod_version = "1.0.26";
   }
 }
 ?>

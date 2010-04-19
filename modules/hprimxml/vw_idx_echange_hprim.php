@@ -131,12 +131,12 @@ if($echange_hprim->_id) {
 }
 
 $evenements = array();
-foreach (CEchangeHprim::$evenements as $_evt_name => $_evt_class) {
+foreach (CEchangeHprim::$messages as $_message => $_evt_class) {
 	$class = new ReflectionClass($_evt_class);
   $statics = $class->getStaticProperties();
-	$evenements[$_evt_name] = $statics["evenements"];
+	$evenements[$_message] = $statics["evenements"];
 }
-$smarty->assign("evenements"          , $evenements);
+$smarty->assign("evenements", $evenements);
 
 $smarty->display("vw_idx_echange_hprim.tpl");
 
