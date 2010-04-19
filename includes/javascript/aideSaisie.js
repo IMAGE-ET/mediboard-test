@@ -131,6 +131,7 @@ var AideSaisie = {
         indicator: throbber,
         select: "text", 
         paramName: "_search",
+        caretBounds: true,
         callback: function(input, query){
           query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';

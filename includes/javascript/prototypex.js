@@ -50,9 +50,8 @@ Class.extend(Autocompleter.Base, {
     this.index = this.entryCount-1;
     this.update.scrollTop = this.update.scrollHeight;
    }
-   selection = this.getEntry(this.index);
-   selection_top = selection.offsetTop;
-   if(selection_top < this.update.scrollTop){
+   var selection = this.getEntry(this.index);
+   if(selection.offsetTop < this.update.scrollTop){
     this.update.scrollTop = this.update.scrollTop-selection.offsetHeight;
    }
   },
@@ -62,9 +61,8 @@ Class.extend(Autocompleter.Base, {
     this.index = 0;
     this.update.scrollTop = 0;
    }
-   selection = this.getEntry(this.index);
-   selection_bottom = selection.offsetTop+selection.offsetHeight;
-   if(selection_bottom > this.update.scrollTop+this.update.offsetHeight){
+   var selection = this.getEntry(this.index);
+   if((selection.offsetTop+selection.offsetHeight) > this.update.scrollTop+this.update.offsetHeight){
     this.update.scrollTop = this.update.scrollTop+selection.offsetHeight;
    }
   },
@@ -142,6 +140,32 @@ Class.extend(Autocompleter.Base, {
     if(this.observer) clearTimeout(this.observer);
     this.observer =
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
+  },
+  getTokenBounds: function() {
+    if (null != this.tokenBounds) return this.tokenBounds;
+    var value = this.element.value;
+    if (value.strip().empty()) return [-1, 0];
+    
+    // This has been added so that the token bounds are relative to the current cert position
+    if (this.options.caretBounds) {
+      var caret = this.element.caret().begin;
+      var start = value.substr(0, caret).lastIndexOf("\n")+1;
+      var end = value.substr(caret).indexOf("\n")+caret+1;
+      return (this.tokenBounds = [start, end]);
+    }
+    /////////////
+    
+    var diff = arguments.callee.getFirstDifferencePos(value, this.oldElementValue);
+    var offset = (diff == this.oldElementValue.length ? 1 : 0);
+    var prevTokenPos = -1, nextTokenPos = value.length;
+    var tp;
+    for (var index = 0, l = this.options.tokens.length; index < l; ++index) {
+      tp = value.lastIndexOf(this.options.tokens[index], diff + offset - 1);
+      if (tp > prevTokenPos) prevTokenPos = tp;
+      tp = value.indexOf(this.options.tokens[index], diff + offset);
+      if (-1 != tp && tp < nextTokenPos) nextTokenPos = tp;
+    }
+    return (this.tokenBounds = [prevTokenPos + 1, nextTokenPos]);
   }
 });
 
@@ -167,7 +191,8 @@ Element.addMethods({
 Class.extend(Element.ClassNames, {
   load: function (sCookieName, nDuration) {
     var oCookie = new CookieJar({expires: nDuration});
-    if (sValue = oCookie.getValue(sCookieName, this.element.id)) {
+    var sValue = oCookie.getValue(sCookieName, this.element.id);
+    if (sValue) {
       this.set(sValue);
     }
   },
@@ -408,8 +433,6 @@ PeriodicalExecuter.addMethods({
     if (!this.timer) this.registerCallback();
   }
 });
-
-
 
 document.observeOnce = function(event_name, outer_callback){
   $(document.documentElement).observeOnce(event_name, outer_callback);
