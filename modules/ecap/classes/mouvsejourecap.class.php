@@ -642,29 +642,37 @@ class CMouvSejourEcap extends CMouvementEcap {
         $this->sejour->_id = $sibling->_id;
       }
     }
-    // En cas de possible mutation
-    else {
+            
+    $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
+    $this->sejour->_check_bounds = false;
+    $this->id400Sej->bindObject($this->sejour);
+
+    // Eventuellement la mutation d'un séjour d'urgences
+    if ($this->sejour->type != "urg") {
       foreach ($siblings as $_sibling) {
         // Sejour de type urgence annulé, avec la même heure d'entrée
         if ($_sibling->type == "urg") {
-          $_sibling->annule ="0";
-          $_sibling->store();
+          $_sibling->annule = "0";
+          mbTrace($_sibling->getDBFields(), "Sibling before storage");
+          if ($msg = $_sibling->store()) {
+            throw new Exception($msg);
+          }
           
           // Il faut un RPU
           $_sibling->loadRefRPU();
           $rpu = $_sibling->_ref_rpu;
           if ($rpu->_id) {
             $rpu->mutation_sejour_id = $this->sejour->_id;
-            $rpu->store();
+            mbTrace($rpu->getDBFields(), "RPU before storage");
+            if ($msg = $rpu->store()) {
+              throw new Exception($msg);
+            }
           }
           break;
         }
       }    
     }
-            
-    $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
-    $this->sejour->_check_bounds = false;
-    $this->id400Sej->bindObject($this->sejour);
+
     
     $this->markStatus(self::STATUS_SEJOUR);
   }
