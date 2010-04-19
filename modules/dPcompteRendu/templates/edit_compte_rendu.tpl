@@ -38,134 +38,68 @@ document.observe('keydown', function(e){
 });
 
 {{if $pdf_thumbnails == 1}}
-var Thumb = {
-  thumb_up2date: true,
-  choixaffiche: function() {
-    $("thumbs").toggle();
-    $("thumbs_button").toggle();
-    var editeur = $("editeur");
-    var colspan_editeur = editeur.readAttribute("colspan");
-    colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
-  },
-
-  refreshthumbs: function(first_time) {
-	  this.thumb_up2date = true;
-    $("thumbs").setOpacity(1);
-    var form = getForm("editFrm");
-    var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-    url.addParam("compte_rendu_id", '{{$compte_rendu->_id}}'||'{{$modele_id}}');
-		
-    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances.source.GetHTML()) ? FCKeditorAPI.Instances.source.GetHTML() : $V(form.source);
-		
-    url.addParam("content", content);
-    url.addParam("mode", "doc");
-    url.addParam("stream", 0);
-    url.addParam("generate_thumbs", 1);
-    url.addParam("first_time", first_time);
-    url.addParam("user_id", '{{$user_id}}');
-    url.addParam("margins[]",[form.margin_top.value,
-                              form.margin_right.value,
-                              form.margin_bottom.value,
-                              form.margin_left.value]);
-    url.addParam("orientation", $V(PageFormat.form._orientation));
-		url.addParam("page_format", form._page_format.value);
-    url.requestUpdate("thumbs",{method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf_and_thumbs"}});
-  },
-	old: function() {
-    if(!this.thumb_up2date) return;
-		
-    var thumb_0 = $("thumb_0");
-    var thumbs = $("thumbs"); 
-		
-    thumbs.setOpacity(0.5);
-    thumb_0.onclick = null;
-    var mess = new Element('div', {id: 'mess', style: 'position: absolute; width: 160px; font-size: 12pt; font-weight: bold;'}).update("<br/><br/>Vignettes obsolètes : cliquez sur le bouton pour réactualiser.<br/>");
-    mess = mess.insert({bottom: new Element('button', {id: 'refresh', class: 'change notext', type: 'button', title: 'Rafraîchir les vignettes', onclick: 'Thumb.refreshthumbs();'})});
-    thumbs.insert({top: mess});
-    this.thumb_up2date = false;
-  }
-}
-
-togglePageLayout = function() {
-  $("page_layout").toggle();
-}
-
-completeLayout = function() {
-  var tab_margin = ["top", "right", "bottom", "left"];
-  var form = getForm("editFrm");
-  var dform = getForm('download-pdf-form');
-  for(var i=0; i < 4; i++) {
-    if ($("input_margin_"+tab_margin[i])) {
-      $("input_margin_"+tab_margin[i]).remove();
-    }
-    dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
-  }
-  $V(dform.orientation, $V(form._orientation));
-  $V(dform.page_format, form._page_format.value);
-}
-
-save_page_layout = function() {
-  page_layout_save = { 
-	  margin_top:    PageFormat.form.margin_top.value,
-		margin_left:   PageFormat.form.margin_left.value,
-		margin_right:  PageFormat.form.margin_right.value,
-		margin_bottom: PageFormat.form.margin_bottom.value,
-		page_format:   PageFormat.form._page_format.value,
-		page_width:    PageFormat.form.page_width.value,
-		page_height:   PageFormat.form.page_height.value,
-		orientation:   $V(PageFormat.form._orientation)
-  };
-}
-
-cancel_page_layout = function() {
-  $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
-	$V(PageFormat.form.margin_left,   page_layout_save.margin_left);
-	$V(PageFormat.form.margin_right,  page_layout_save.margin_right);
-	$V(PageFormat.form.margin_bottom, page_layout_save.margin_bottom);
-	$V(PageFormat.form._page_format,  page_layout_save.page_format);
-	$V(PageFormat.form.page_height,   page_layout_save.page_height);
-	$V(PageFormat.form.page_width,    page_layout_save.page_width);
-	$V(PageFormat.form._orientation,  page_layout_save.orientation);
-	if(!Thumb.thumb_up2date) {
-	  Thumb.thumb_up2date = true;
-	  $('mess').remove();
-	  $('thumbs').setOpacity(1);
+  </script>
+	  {{mb_include_script module=dPcompteRendu script=thumb}}
+	<script type="text/javascript">
+	togglePageLayout = function() {
+	  $("page_layout").toggle();
 	}
-	Control.Modal.close();
-}
-
-function FCKeditor_OnComplete(editorInstance) {
-  editorInstance.Events.AttachEvent('OnSelectionChange', loadold);
-  Thumb.content = editorInstance.GetHTML(false);
-
-  editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
-  var fck_iframe = document.getElementById('source___Frame');
-  var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
-  fck_editing_area.style.height = '100.1%';
-  setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
 	
-  Thumb.refreshthumbs(1);
-}
-
-function loadold(editorInstance) {
-  if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
-    Thumb.old();
-  }
-}
-
-function FCKeventChanger(editorInstance) {
-  if(editorInstance.LastOnChangeTimer) {
-    FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
-  }
-}
+	completeLayout = function() {
+	  var tab_margin = ["top", "right", "bottom", "left"];
+	  var form = getForm("editFrm");
+	  var dform = getForm('download-pdf-form');
+	  for(var i=0; i < 4; i++) {
+	    if ($("input_margin_"+tab_margin[i])) {
+	      $("input_margin_"+tab_margin[i]).remove();
+	    }
+	    dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
+	  }
+	  $V(dform.orientation, $V(form._orientation));
+	  $V(dform.page_format, form._page_format.value);
+	}
 	
-Main.add(function(){
-  PageFormat.init(getForm("editFrm")); 
-});
+	save_page_layout = function() {
+	  page_layout_save = { 
+		  margin_top:    PageFormat.form.margin_top.value,
+			margin_left:   PageFormat.form.margin_left.value,
+			margin_right:  PageFormat.form.margin_right.value,
+			margin_bottom: PageFormat.form.margin_bottom.value,
+			page_format:   PageFormat.form._page_format.value,
+			page_width:    PageFormat.form.page_width.value,
+			page_height:   PageFormat.form.page_height.value,
+			orientation:   $V(PageFormat.form._orientation)
+	  };
+	}
+	
+	cancel_page_layout = function() {
+	  $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
+		$V(PageFormat.form.margin_left,   page_layout_save.margin_left);
+		$V(PageFormat.form.margin_right,  page_layout_save.margin_right);
+		$V(PageFormat.form.margin_bottom, page_layout_save.margin_bottom);
+		$V(PageFormat.form._page_format,  page_layout_save.page_format);
+		$V(PageFormat.form.page_height,   page_layout_save.page_height);
+		$V(PageFormat.form.page_width,    page_layout_save.page_width);
+		$V(PageFormat.form._orientation,  page_layout_save.orientation);
+		if(!Thumb.thumb_up2date) {
+		  Thumb.thumb_up2date = true;
+		  $('mess').remove();
+		  $('thumbs').setOpacity(1);
+		}
+		Control.Modal.close();
+	}
+		
+	Main.add(function(){
+	  PageFormat.init(getForm("editFrm")); 
+		Thumb.compte_rendu_id = {{$compte_rendu->_id}};
+    Thumb.modele_id = {{$modele_id}};
+    Thumb.user_id = {{$user_id}};
+		Thumb.mode = "doc";
+	});
 {{else}}
-var Thumb = {
-  old: function(){}
-};
+	var Thumb = {
+	  old: function(){}
+	};
 {{/if}}
 </script>
 

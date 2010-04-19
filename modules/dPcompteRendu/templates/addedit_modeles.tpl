@@ -114,86 +114,11 @@ document.observe('keydown', function(e){
 });
 
 {{if $pdf_thumbnails == 1}}
-var Thumb = {
-  thumb_up2date: 1,
-  choixaffiche: function() {
-    $("thumbs").toggle();
-		var editeur = $("htmlarea");
-    var colspan_editeur = editeur.readAttribute("colspan");
-    colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
-  },
-  
-  refreshthumbs: function(first_time) {
-	  this.thumb_up2date = 1;
-	  $("thumbs").setOpacity(1);
-    var form = getForm("editFrm");
-    var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances.source.GetHTML()) ? FCKeditorAPI.Instances.source.GetHTML() : $V(form.source);
-    url.addParam("compte_rendu_id", '{{$compte_rendu->_id}}');
-    url.addParam("content"        , content);
-    url.addParam("mode"           , "modele");
-    url.addParam("header_id"      , $V(form.editFrm_header_id));
-    url.addParam("footer_id"      , $V(form.editFrm_footer_id));
-    url.addParam("type"           , $V(form.editFrm_type));
-    url.addParam("height"         , $V(form.editFrm_height));
-    url.addParam("stream"         , 0);
-    url.addParam("generate_thumbs", 1);
-    url.addParam("user_id", '{{$user_id}}');
-    url.addParam("first_time", first_time);
-		
-    if (form.type.value == "body") {
-      url.addParam("page_width"     , form.page_width.value);
-      url.addParam("page_height"    , form.page_height.value);
-      url.addParam("page_format"    , form._page_format.value);
-      url.addParam("margins[]",[form.margin_top.value,
-                                form.margin_right.value,
-                                form.margin_bottom.value,
-                                form.margin_left.value]);
-      url.addParam("orientation", $V(PageFormat.form._orientation));
-    }
-    url.requestUpdate("thumbs",{method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf_and_thumbs"}});
-  },
-	
-	old: function() {
-		if(this.thumb_up2date) {
-		  thumb_0 = $("thumb_0");
-			thumbs = $("thumbs");
-		  thumbs.setOpacity(0.5);
-			this.save_onclick = thumb_0.getAttribute("onclick");
-			thumb_0.setAttribute("onclick", "");
-			var mess = new Element('div', {id: 'mess', style: 'position: absolute; width: 160px; font-size: 12pt; font-weight: bold;'}).update("<br/><br/>Vignettes obsolètes : cliquez sur le bouton pour réactualiser.<br/>");
-			mess = mess.insert({bottom: new Element('button', {id: 'refresh', class: 'change notext', type: 'button', title: 'Rafraîchir les vignettes', onclick: 'Thumb.refreshthumbs();'})});
-			thumbs.insert({top: mess});
-			this.thumb_up2date = 0;
-		}
-	}
-}
-
-function FCKeditor_OnComplete(editorInstance) {
-  editorInstance.Events.AttachEvent('OnSelectionChange', loadold);
-	Thumb.content = editorInstance.GetHTML(false);
-
-	editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
-  var fck_iframe = document.getElementById('source___Frame');
-  var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
-  fck_editing_area.style.height = '100.1%';
-  setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
-	
-  Thumb.refreshthumbs(1);
-}
-
-function loadold(editorInstance) {
-  if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
-	  Thumb.old();
-	}
-}
-
-function FCKeventChanger(editorInstance) {
-  if(editorInstance.LastOnChangeTimer) {
-    FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
-  }
-}
+  </script>
+	{{mb_include_script module=dPcompteRendu script=thumb}}
+	<script>
 {{else}}
+
 var Thumb = {
   old: function(){}
 };
@@ -203,7 +128,11 @@ Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
   loadCategory('{{$compte_rendu->file_category_id}}');
   {{if $compte_rendu->_id && $droit && $pdf_thumbnails}}
-    PageFormat.init(getForm("editFrm"));
+    Thumb.compte_rendu_id = {{$compte_rendu->_id}};
+		Thumb.modele_id = {{$modele_id}};
+		Thumb.user_id = {{$user_id}};
+		Thumb.mode = "modele";
+		PageFormat.init(getForm("editFrm"));
   {{/if}}
 });
 
@@ -332,7 +261,7 @@ Main.add(function () {
               var oForm = document.editFrm;
               var bBody = oForm.type.value == "body";
               var bHeader = oForm.type.value == "header";
-              {{if $pdf_thumbnails == 1}}
+              
               if(bHeader) {
                 $("preview_page").insert({top: $("header_footer_content").remove()});
                 $("preview_page").insert({bottom: $("body_content").remove()});
@@ -342,7 +271,8 @@ Main.add(function () {
                 $("preview_page").insert({top: $("body_content").remove()});
               }
               // layout
-              $("page_layout").setVisible(bBody);
+							{{if $pdf_thumbnails == 1}}
+                $("page_layout").setVisible(bBody);
               {{/if}}
               $("layout_header_footer").setVisible(!bBody);
               
