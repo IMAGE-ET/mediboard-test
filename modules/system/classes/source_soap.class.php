@@ -38,7 +38,7 @@ class CSourceSOAP extends CExchangeSource {
   	}
 		
 		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
-    if ($this->client->soap_client_error) {
+    if ($this->_client->soap_client_error) {
       CAppUI::stepAjax("Impossible de joindre la source de donnée : '$this->name'", UI_MSG_ERROR);
     }
 		
@@ -47,7 +47,7 @@ class CSourceSOAP extends CExchangeSource {
         $this->_client->$evenement_name($this->_data);
 
     if (null == $this->_acquittement) {
-      trigger_error("Acquittement non reçu.");
+    	CAppUI::stepAjax("Acquittement non reçu.", UI_MSG_ERROR);
     }
 		
 		return true;

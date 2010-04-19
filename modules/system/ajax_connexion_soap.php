@@ -24,7 +24,7 @@ if (!$exchange_source) {
 }
 
 $client = CMbSOAPClient::make($exchange_source->host, $exchange_source->user, $exchange_source->password, $exchange_source->type_echange);
-if ($client->soap_client_error) {
+if (!$client || $client->soap_client_error) {
   CAppUI::stepAjax("Impossible de joindre la source de donnée : '$exchange_source_name'", UI_MSG_ERROR);
 } else {
   CAppUI::stepAjax("Connecté à la source '$exchange_source_name'");
