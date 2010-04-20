@@ -365,7 +365,7 @@ Main.add( function(){
 											{{mb_label object=$line field=quantite}}:
 					            {{if $_perfusion->_can_modify_perfusion_line}}
 												{{mb_field object=$line field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry($perfusion_id, $line_id) });"}}
-						            <select name="unite" style="width: 75px;" onchange="return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry('{{$line->perfusion_id}}','{{$line->_id}}') });">
+						            <select name="unite" style="width: 12em;" onchange="return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry('{{$line->perfusion_id}}','{{$line->_id}}') });">
 												  {{if $line->_ref_produit_prescription->_id}}
 													   <option value="{{$line->_ref_produit_prescription->unite_prise}}">{{$line->_ref_produit_prescription->unite_prise}}</option>
 													{{else}}

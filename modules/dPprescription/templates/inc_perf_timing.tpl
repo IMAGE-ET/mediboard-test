@@ -71,8 +71,9 @@
 			  		<td>
 			  			<button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); this.form.onsubmit();"></button>
 			  		</td>
-			  		<td>{{mb_field object=$_variation field=dateTime form=editVariation-$variation_id register=true onchange="this.form.onsubmit();"}}</td>
-	          <td>{{mb_field object=$_variation field=debit increment=1 form=editVariation-$variation_id onchange="this.form.onsubmit();"}}</td>
+			  		<td>{{mb_field object=$_variation field=dateTime form=editVariation-$variation_id register=true}}</td>
+	          <td>{{mb_field object=$_variation field=debit increment=1 form=editVariation-$variation_id"}}</td>
+						<td><button type="submit" class="submit notext"></button></td>
 			  	</tr>
 			  </table>
 			</form>
