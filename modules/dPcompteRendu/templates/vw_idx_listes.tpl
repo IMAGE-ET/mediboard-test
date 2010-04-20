@@ -58,13 +58,19 @@ Main.add(function () {
       <tr>
         {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
         {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
-        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
-        {{if $curr_liste->_ref_modele->compte_rendu_id}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
-        {{else}}
-        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
-        {{/if}}
+        <td class="text">
+          <a href="{{$href}}">{{$curr_liste->nom}}</a>
+        </td>
+        <td>
+          <a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a>
+        </td>
+        <td class="text">
+          {{if $curr_liste->_ref_modele->compte_rendu_id}}
+          <a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a>
+          {{else}}
+          <a href="{{$href}}">&mdash; Tous &mdash;</a>
+          {{/if}}
+        </td>
       </tr>
       {{foreachelse}}
       <tr>
@@ -127,8 +133,9 @@ Main.add(function () {
     <table class="form">
 
     <tr>
-      <th class="category" colspan="2">
+      <th class="title {{if $liste->_id}}modify{{/if}}" colspan="2">
       {{if $liste->_id}}
+        {{mb_include module=system template=inc_object_history object=$liste}}
         {{tr}}CListeChoix-title-modify{{/tr}} '{{$liste->_view}}'
       {{else}}
         {{tr}}CListeChoix-title-create{{/tr}}
@@ -139,8 +146,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$liste->_props.chir_id}}">
-          <option value="">&mdash; Associer à un utilisateur &mdash;</option>
+        <select name="chir_id" class="{{$liste->_props.chir_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listPrat item=curr_prat}}
             <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>
               {{$curr_prat->_view}}
@@ -153,8 +160,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$liste->_props.function_id}}">
-          <option value="">&mdash; Associer à une fonction &mdash;</option>
+        <select name="function_id" class="{{$liste->_props.function_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listFunc item=curr_func}}
             <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $liste->function_id}} selected="selected" {{/if}}>
               {{$curr_func->_view}}
@@ -167,8 +174,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="group_id"}}</th>
       <td>
-        <select name="group_id" class="{{$liste->_props.group_id}}">
-          <option value="">&mdash; Associer à un établissement &mdash;</option>
+        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listEtab item=curr_group}}
             <option value="{{$curr_group->_id}}" {{if $curr_group->_id == $liste->group_id}} selected="selected" {{/if}}>
               {{$curr_group->_view}}
@@ -186,7 +193,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$liste field="compte_rendu_id"}}</th>
       <td>
-        <select name="compte_rendu_id">
+        <select name="compte_rendu_id" style="width: 12em;">
           <option value="">&mdash; Tous</option>
           
           <optgroup label="CR de l'utilisateur">

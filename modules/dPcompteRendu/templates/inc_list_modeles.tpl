@@ -4,7 +4,7 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
   <label for="_new" title="{{tr}}CCompteRendu.select{{/tr}}" />
-  <select name="_new" class="notNull ref" onchange="this.form.submit()">
+  <select name="_new" class="notNull ref" onchange="this.form.submit()" style="width: 20em;">
     <option value="">&mdash; {{tr}}CCompteRendu.select{{/tr}}</option>
     <optgroup label="{{tr}}CCompteRendu-owned-by-user{{/tr}}">
       {{foreach from=$modeles.prat item=_modele}}

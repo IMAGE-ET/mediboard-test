@@ -218,8 +218,9 @@ Main.add(function () {
     <table class="form">
 
     <tr>
-      <th class="category" colspan="2">
+      <th class="title {{if $aide->aide_id}}modify{{/if}}" colspan="2">
       {{if $aide->aide_id}}
+      {{mb_include module=system template=inc_object_history object=$aide}}
         Modification d'une aide
       {{else}}
         Création d'une aide

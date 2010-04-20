@@ -26,8 +26,8 @@
   {{assign var="href" value="?m=dPcompteRendu&tab=vw_idx_aides&aide_id=$aide_id"}}
   {{assign var="class" value=$_aide->class}}
   {{assign var="field" value=$_aide->field}}
-  <td><a href="{{$href}}">{{tr}}{{$class}}{{/tr}}</a></td>
-  <td><a href="{{$href}}">{{tr}}{{$class}}-{{$field}}{{/tr}}</a></td>
+  <td class="text"><a href="{{$href}}">{{tr}}{{$class}}{{/tr}}</a></td>
+  <td class="text"><a href="{{$href}}">{{tr}}{{$class}}-{{$field}}{{/tr}}</a></td>
   <td>
     {{if $_aide->_depend_field_1}}
       <form name="edit-CAidesSaisie-depend1" action="" method="post" onsubmit="return onSubmitFormAjax(this)">

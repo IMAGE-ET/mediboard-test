@@ -78,9 +78,9 @@ Main.add(function () {
         <tr {{if $_pack->_id == $pack->_id}}class="selected"{{/if}}>
           {{assign var="pack_id" value=$_pack->_id}}
           {{assign var="href" value="?m=$m&tab=$tab&pack_id=$pack_id"}}
-          <td><a href="{{$href}}">{{$_pack->nom}}</a></td>
+          <td class="text"><a href="{{$href}}">{{$_pack->nom}}</a></td>
           <td><a href="{{$href}}">{{$_pack->_modeles|@count}}</a></td>
-          <td><a href="{{$href}}">{{tr}}{{$_pack->object_class}}{{/tr}}</a></td>
+          <td class="text"><a href="{{$href}}">{{tr}}{{$_pack->object_class}}{{/tr}}</a></td>
         </tr>
         {{foreachelse}}
         <tr>
@@ -135,8 +135,9 @@ Main.add(function () {
     <table class="form">
 
     <tr>
-      <th class="category" colspan="2">
-      {{if $pack->pack_id}}
+      <th class="title {{if $pack->_id}}modify{{/if}}" colspan="2">
+      {{if $pack->_id}}
+        {{mb_include module=system template=inc_object_history object=$pack}}
         Modification d'un pack
       {{else}}
         Création d'un pack
@@ -147,8 +148,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$pack field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$pack->_props.chir_id}}">
-          <option value="">&mdash; Choisir un utilisateur</option>
+        <select name="chir_id" class="{{$pack->_props.chir_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listUser item=_user}}
             <option class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" value="{{$_user->_id}}" {{if $_user->_id == $pack->chir_id}}selected="selected"{{/if}}>
               {{$_user}}
@@ -161,8 +162,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$pack field="function_id"}}</th>
       <td>
-        <select name="function_id" class="{{$pack->_props.function_id}}">
-          <option value="">&mdash; Choisir une fonction</option>
+        <select name="function_id" class="{{$pack->_props.function_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listFunc item=_func}}
             <option class="mediuser" style="border-color: #{{$_func->color}};" value="{{$_func->_id}}" {{if $_func->_id == $pack->function_id}}selected="selected"{{/if}}>
               {{$_func}}
@@ -175,8 +176,8 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$pack field="group_id"}}</th>
       <td>
-        <select name="group_id" class="{{$pack->_props.group_id}}">
-          <option value="">&mdash; Choisir un établissement</option>
+        <select name="group_id" class="{{$pack->_props.group_id}}" style="width: 12em;">
+          <option value="">&mdash; Associer &mdash;</option>
           {{foreach from=$listEtab item=_etab}}
             <option value="{{$_etab->_id}}" {{if $_etab->_id == $pack->group_id}} selected="selected" {{/if}}>
               {{$_etab}}
@@ -194,7 +195,7 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$pack field="object_class"}}</th>
       <td>
-        <select name="object_class" {{if $pack->_id}}onchange="reloadListModele(this.value);"{{/if}}>
+        <select name="object_class" {{if $pack->_id}}onchange="reloadListModele(this.value);"{{/if}} style="width: 12em;">
           <option value="">&mdash; Choix d'une classe</option>
           {{foreach from=$pack->_specs.object_class->_list item=object_class}}
             <option value="{{$object_class}}" {{if $object_class == $pack->object_class}}selected = "selected"{{/if}}>
@@ -207,7 +208,7 @@ Main.add(function () {
 
     <tr>
       <td class="button" colspan="2">
-        {{if $pack->pack_id}}
+        {{if $pack->_id}}
         <button class="modify" type="submit">
           {{tr}}Save{{/tr}}
         </button>
@@ -226,7 +227,7 @@ Main.add(function () {
     
     </form>
 
-    {{if $pack->pack_id}}
+    {{if $pack->_id}}
     <table class="form">
       {{if $pack->_modeles|@count}}
       <tr><th class="category" colspan="2">Modèles du pack</th></tr>
