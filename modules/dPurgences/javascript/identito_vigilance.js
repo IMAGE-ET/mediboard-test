@@ -4,9 +4,10 @@ IdentitoVigilance = {
 
   init: function(frequency) {
 	  var url = new Url("dPurgences", "ajax_identito_vigilance");
-
+    var form = getForm("Merger");
+    
     // Get extra filter params
-    if (form = document.Merger) {
+    if (form) {
 	    url.addParam("see_mergeable", form.see_mergeable.checked ? 1 : 0);
 	    url.addParam("see_yesterday", form.see_yesterday.checked ? 1 : 0);
 		}
@@ -15,7 +16,7 @@ IdentitoVigilance = {
   },
 	
   start: function(delay, frequency) {
-    this.stop()
+    this.stop();
     this.init.delay(delay, frequency);
   },
 
@@ -60,15 +61,9 @@ IdentitoVigilance = {
 	  var inputSecond = "input[name="+object_class+"-second]";
 	
 	  // Remove highligths
-	  $$(".merge-selected").each(function (e) {
-	    e.removeClassName("merge-selected")
-	  } )
-	  $$(".merge-possible").each(function (e) {
-	    e.removeClassName("merge-possible")
-	  } )
-	  $$(".merge-probable").each(function (e) {
-	    e.removeClassName("merge-probable")
-	  } )
+	  $$(".merge-selected").invoke("removeClassName", "merge-selected");
+	  $$(".merge-possible").invoke("removeClassName", "merge-possible");
+	  $$(".merge-probable").invoke("removeClassName", "merge-probable");
 	
 	  if (checked) {
 	    if (object_class == "CPatient") {
@@ -114,7 +109,7 @@ IdentitoVigilance = {
 	  var object_class = radio.name.split('-')[0];
 	  var first_id  = $V(document.Merger[object_class+"-first"])[0];
 	  var second_id = radio.value;
-	  url = new Url("system", "object_merger") .
+	  var url = new Url("system", "object_merger") .
 	    addParam("objects_class", object_class) .
 	    addParam("objects_id", [first_id, second_id].join('-'));
 	  url.popup(900, 700);

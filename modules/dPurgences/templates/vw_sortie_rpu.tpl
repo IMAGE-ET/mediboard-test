@@ -9,10 +9,14 @@
 *}}
 
 <script type="text/javascript">
+var refreshExecuter;
 
 Main.add(function () {
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
-//  setInterval(refreshCanLeaveSince, 60000);
+  
+  refreshExecuter = new PeriodicalExecuter(function(){
+    getForm("changeDate").submit();
+  }, 60);
 });
 
 function modeSortieDest(mode_sortie, rpu_id) {
@@ -93,21 +97,6 @@ function initFields(rpu_id,sejour_id, mode_sortie){
 	loadServiceMutation(mode_sortie, sejour_id);
 }
 
-function refreshTime(rpus) {
-  $H(rpus).each(function(s) {
-    $("rpu-"+s.key).className = "";
-    $("rpu-"+s.key).addClassName(s.value.alert).update(s.value.value);
-  });
-}
-
-function refreshCanLeaveSince() {
-  var url = new Url("dPurgences", "ajax_reload_can_leave_since");
-  {{foreach from=$listSejours item=_sejour}}
-    url.addParam("rpus[{{$_sejour->_ref_rpu->_id}}]", {{$_sejour->_ref_rpu->_id}});
-  {{/foreach}}
-  url.requestJSON(refreshTime);
-}
-
 function validCotation(consutation_id) {
   return onSubmitFormAjax(getForm('validCotation-'+consutation_id));
 }
@@ -116,7 +105,17 @@ refreshSortie = function(button, rpu_id){
   var line = button.up('tr').up('tr');
   var url = new Url("dPurgences", "ajax_refresh_sortie");
   url.addParam("rpu_id", rpu_id);
-  url.requestUpdate(line);
+  url.requestUpdate(line, {onComplete: function(){refreshExecuter.resume()}});
+}
+
+function cancelSortie(button, rpu_id) {
+  var form = button.form;
+  form.mode_sortie.value = "";
+  form.etablissement_transfert_id.value = "";
+  form.sortie_reelle.value = "";
+  return onSubmitFormAjax(form, {
+    onComplete: refreshSortie.curry(button, rpu_id)
+  });
 }
 
 function filterPatient(input) {
@@ -146,7 +145,7 @@ function submitSejour(){
       <div style="float: right;">
         Type d'affichage
         <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
-          <select name="aff_sortie" onchange="submit();">
+          <select name="aff_sortie" onchange="this.form.submit()">
             <option value="tous" {{if $aff_sortie == "tous"}}selected = "selected"{{/if}}>Tous</option>
             <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
           </select>

@@ -117,14 +117,21 @@
               <br />vers {{$service->_view}}<br />
             {{/if}}
           {{/if}}
-          {{mb_value object=$sejour field=sortie_reelle}}<br />
+          <br />
           
-          <input type="hidden" name="mode_sortie" value="" />
-          <input type="hidden" name="etablissement_transfert_id" value="" />
-          <input type="hidden" name="sortie_reelle" value="" />
-          <button class="cancel" type="button" onclick="onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu->_id}}')});">
+          {{assign var=sejour_id value=$sejour->_id}}
+          {{assign var=rpu_id value=$rpu->_id}}
+          
+          {{mb_field object=$sejour field=entree_reelle hidden=true}}
+          {{mb_field object=$sejour field=sortie_reelle register=true form="editSejour-$sejour_id" 
+                     onchange="onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
+          <br />
+          
+          {{mb_field object=$sejour field=mode_sortie hidden=true}}
+          {{mb_field object=$sejour field=etablissement_transfert_id hidden=true}}
+          <button class="cancel" type="button" onclick="cancelSortie(this, '{{$rpu->_id}}')">
             Annuler la sortie
-           </button>
+          </button>
          </td>
        </tr>
         
@@ -137,7 +144,7 @@
           {{assign var=rpu_id value=$rpu->_id}}
           {{assign var=sejour_id value=$sejour->_id}}
           
-          {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value);"}}
+          {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value); refreshExecuter.stop();"}}
           <input type="hidden" name="_modifier_sortie" value="1" />
           <button class="tick" type="button" onclick="{{if $atu->_id}}validCotation('{{$atu->_id}}');{{/if}} onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
             Effectuer la sortie

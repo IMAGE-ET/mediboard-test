@@ -13,22 +13,28 @@
 {{/if}}
 
 <script type="text/javascript">
-	function refreshAttente(debut, fin, rpu_id) {
-	  var url = new Url("dPurgences", "ajax_vw_attente");
-	  url.addParam("rpu_id", rpu_id);
-		url.addParam("debut", debut);
-		url.addParam("fin", fin);
-	  url.addParam("attente", 1);
-	  url.requestUpdate(fin+'-'+rpu_id);
-  }
-		
-	Main.add(function () {
-    Calendar.regField(getForm("changeDate").date, null, {noView: true});
-		
-		{{if $isImedsInstalled}}
-      ImedsResultsWatcher.loadResults();
-    {{/if}}
-  });
+var refreshExecuter;
+
+function refreshAttente(debut, fin, rpu_id) {
+  var url = new Url("dPurgences", "ajax_vw_attente");
+  url.addParam("rpu_id", rpu_id);
+	url.addParam("debut", debut);
+	url.addParam("fin", fin);
+  url.addParam("attente", 1);
+  url.requestUpdate(fin+'-'+rpu_id);
+}
+	
+Main.add(function () {
+  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+
+  refreshExecuter = new PeriodicalExecuter(function(){
+    getForm("changeDate").submit();
+  }, 60);
+
+	{{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
+  {{/if}}
+});
 </script>
 
 <table style="width:100%">
