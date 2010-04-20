@@ -97,17 +97,13 @@
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
       <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
-    
-	
-      
-			
+
 		<div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
-	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
+	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}"
+				 onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
 	   
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-					<span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
-					  {{$line->_ucd_view}}
-					</span>
+					{{$line->_ucd_view}}
 					<br />
 					<span style="opacity: 0.7;">
 						<small>
@@ -128,7 +124,6 @@
 					</div>
 				{{/if}} 
 	  </div>
-		
 		
 	  {{if $line instanceof CPrescriptionLineMedicament}}
       <small>{{$line->voie}}</small>
