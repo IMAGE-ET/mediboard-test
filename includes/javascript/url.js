@@ -233,15 +233,13 @@ var Url = Class.create({
 			onShow: function(element, update) { 
         update.style.position = 'absolute';
         
-        /*Position.clone(element, update, {
-          setWidth: false,
+        update.clonePosition(element, {
+          setWidth: true,
           setHeight: false, 
-          offsetTop: element.offsetHeight
-        });*/
-        
-        update.setStyle({
-          marginTop: "-2px", // For the 1px borders
-          marginLeft: element.getStyle("marginLeft")
+          setTop: false,
+          setLeft: true
+        }).setStyle({
+          marginTop: "-2px" // For the 1px borders
         });
         
         if (oOptions.width) {
@@ -251,7 +249,7 @@ var Url = Class.create({
           update.setStyle({
             width: "auto",
             whiteSpace: "nowrap",
-            minWidth: $(input).getWidth()+"px",
+            minWidth: element.getWidth()+"px",
             maxWidth: "400px"
           });
         }
