@@ -36,7 +36,7 @@
       {{assign var=values value='|'|explode:$values}}
     	{{foreach from=$values item=_value}}
         <option value="{{$_value}}" {{if $value == $_value}} selected="selected"{{/if}}>
-          {{if @skip_locales}}
+          {{if @$skip_locales}}
           {{$_value}}
           {{else}}
         	{{tr}}{{$locale}}-{{$_value}}{{/tr}}
