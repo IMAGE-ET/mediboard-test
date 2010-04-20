@@ -85,7 +85,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
 }
 
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
-if($fileSel && !$pdf_active && !$acces_denied){
+if($fileSel && $elementClass == "CFile" && !$pdf_active && !$acces_denied){
 
   if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
     // Fichier texte, on récupére le contenu
@@ -105,6 +105,9 @@ if($fileSel && !$pdf_active && !$acces_denied){
       $arrNumPages[] = $i;
     }
   }
+}
+elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
+  $includeInfosFile = $fileSel->source;
 }
 
 if ($pdf_active) {
