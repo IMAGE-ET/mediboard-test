@@ -111,13 +111,9 @@ if($prescription->_id){
 			  	  if (@$quantity_by_hour['quantites']) { //FIXME: parfois cette valeur est vide
 				  	  foreach($quantity_by_hour['quantites'] as $hour => $quantity){
 				  	  	@$dispensations[$code]["quantite_administration"] += $quantity["total"];
-					      
-								
 								if($_line_med->_ref_produit_prescription->_id && ($_line_med->_ref_produit_prescription->unite_prise != $_line_med->_ref_produit_prescription->unite_dispensation)){
 								  $quantity["total_disp"] = $quantity["total_disp"] / ($_line_med->_ref_produit_prescription->quantite * $_line_med->_ref_produit_prescription->nb_presentation);
 								}
-								
-
 								@$dispensations[$code]["quantite_dispensation"] += $quantity["total_disp"];
 				  	  }
 			  		}
@@ -157,6 +153,8 @@ if($prescription->_id){
 	      foreach($_prises_by_hour as $_hour => $_prise){
 	        foreach($_perfusion->_ref_lines as $_perf_line){
 	        	
+						$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
+						
 	        	$_perf_line->loadRefProduitPrescription();
             $_perf_line->loadRefProduit();
 	          $datetime = "$_date $_hour:00:00";
@@ -174,14 +172,14 @@ if($prescription->_id){
 	            $dispensations[$code]["quantite_administration"] = 0;
 	            $dispensations[$code]["quantite_dispensation"] = 0;
 	          }
-	          $dispensations[$code]["quantite_administration"] += $_perf_line->_quantite_administration;
+	          $dispensations[$code]["quantite_administration"] += ($_perf_line->_quantite_administration * $count_prises_by_hour);
 						
 				    if($_perf_line->_ref_produit_prescription->_id && ($_perf_line->_ref_produit_prescription->unite_prise != $_perf_line->_ref_produit_prescription->unite_dispensation)){
               $quantite_dispensation = $_perf_line->_quantite_dispensation / ($_perf_line->_ref_produit_prescription->quantite * $_perf_line->_ref_produit_prescription->nb_presentation);
             } else {
               $quantite_dispensation = $_perf_line->_quantite_dispensation;
             }
-	          $dispensations[$code]["quantite_dispensation"] += $quantite_dispensation;
+	          $dispensations[$code]["quantite_dispensation"] += ($quantite_dispensation * $count_prises_by_hour);
 	        }
 	      }
 	    }

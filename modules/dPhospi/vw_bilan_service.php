@@ -189,7 +189,10 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 									
 									foreach($_perfusion->_ref_lines as $_perf_line){
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
-			              $lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration;
+										
+										// Plusieurs prises pdt la meme heure
+										$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
+										$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
 			            }
 			          }
 			        }

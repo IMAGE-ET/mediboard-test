@@ -84,15 +84,6 @@ transfertLineTP = function(line_id, sejour_id){
   } } );
 }
 
-togglePerfDecalage = function(oForm){
-  if($V(oForm.jour_decalage) == 'N'){
-    $V(oForm.decalage_interv, '0');
-    $('decalage_interv-'+$V(oForm.perfusion_id)).hide();
-  } else {
-    $('decalage_interv-'+$V(oForm.perfusion_id)).show();
-  }
-}
-
 </script>
 
 <form name="transfert_line_TP" action="?" method="post">
@@ -179,7 +170,7 @@ togglePerfDecalage = function(oForm){
   {{/if}}
   <tr>
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
-      <th class="title">Nouvelle ligne</th>
+      <th class="title">Nouvelle ligne de prescription</th>
     {{/if}}
     <th class="title" style="width: 1%;">Affichage</th>
   </tr>
@@ -337,7 +328,7 @@ togglePerfDecalage = function(oForm){
 	    <th style="width: 8%;">Type</th>
 	    <th style="width: 44%;">Médicaments</th> 
 	    <th style="width: 8%;">Prat</th>
-	    <th style="width: 5%;">Vitesse</th>
+	    <th style="width: 5%;">Débit</th>
 	    <th style="width: 15%;">Voie</th>
 			{{if $prescription->object_id}}
 		    <th style="width: 10%;">Début</th>

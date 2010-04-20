@@ -20,6 +20,8 @@ $perfusion = new CPerfusion();
 $perfusion->load($perfusion_id);
 $perfusion->loadRefsLines();
 $perfusion->loadVoies();
+$perfusion->loadRefsVariations();
+
 // Refresh des transmissions
 if($mode_refresh == "trans"){
   $transmissions = array();

@@ -1454,7 +1454,31 @@ class CSetupdPprescription extends CSetup {
               ADD `color` CHAR (6);";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.97";
+		$this->makeRevision("0.97");
+		$sql = "ALTER TABLE `perfusion` 
+              ADD `quantite_totale` INT (11),
+              ADD `duree_passage` INT (11);";
+		$this->addquery($sql);
+		
+		$sql = "ALTER TABLE `perfusion_line` 
+              ADD `solvant` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("0.98");
+		$sql = "CREATE TABLE `perfusion_variation` (
+              `perfusion_variation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `perfusion_id` INT (11) UNSIGNED NOT NULL,
+              `debit` INT (11) UNSIGNED NOT NULL,
+              `dateTime` DATETIME NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+	 
+	  $sql = "ALTER TABLE `perfusion_variation` 
+              ADD INDEX (`perfusion_id`),
+              ADD INDEX (`dateTime`);";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.99";
   }
 }
 

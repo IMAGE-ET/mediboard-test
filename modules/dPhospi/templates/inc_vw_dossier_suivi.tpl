@@ -100,7 +100,7 @@ Main.add(function () {
       {{/if}}
     </td>     
     <td colspan="4" style="white-space: normal;">
-      Recherche
+      Cible
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 	      <input name="cible" type="text" value="" class="autocomplete" />
 	      <div style="display:none; width: 350px; white-space: normal;" class="autocomplete" id="cible_auto_complete"></div>

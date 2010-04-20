@@ -42,6 +42,11 @@ class CPerfusion extends CMbObject {
   var $emplacement      = null;
   var $nb_tous_les      = null;
   
+	
+	var $quantite_totale = null; // valeur en ml
+	var $duree_passage   = null; // valeur en minutes
+	
+	
   // Champs specifiques aux PCA
   var $mode_bolus          = null; // Mode de bolus 
   var $dose_bolus          = null; // Dose du bolus (en mg)
@@ -78,11 +83,13 @@ class CPerfusion extends CMbObject {
   var $_retrait   = null;
   var $_voies = null;
   var $_active = null;
-	  
+	var $_nb_gouttes = null;
+	
   // Object references
   var $_ref_log_signature_prat = null;
   var $_ref_substitute_for = null; // ligne (med ou perf) que la ligne peut substituer
 
+  var $_ref_variations = null;
 
   var $_short_view = null;
 
@@ -103,6 +110,9 @@ class CPerfusion extends CMbObject {
   var $_prises_prevues                   = null;
 
   var $_frequence = null;
+	var $_continuite = null;  // continue, discontinue
+	var $_last_debit = null;
+	var $_variations = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -151,7 +161,9 @@ class CPerfusion extends CMbObject {
 		$specs["conditionnel"]           = "bool";
     $specs["condition_active"]       = "bool";
     $specs["jour_decalage"]          = "enum list|I|N default|I"; // Permet de noter N comme jour de decalage
-    return $specs;
+	  $specs["quantite_totale"]        = "num";
+		$specs["duree_passage"]          = "num";
+		return $specs;
   }
 
   function updateFormFields(){
@@ -200,6 +212,13 @@ class CPerfusion extends CMbObject {
       $this->countSubstitutionsLines();
     }
 		$this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
+		
+		if($this->vitesse){
+		  $this->_continuite = "continue";
+		}
+		if($this->nb_tous_les || $this->duree_passage){
+			$this->_continuite = "discontinue";
+		}
   }
   
   function getBackProps() {
@@ -209,6 +228,7 @@ class CPerfusion extends CMbObject {
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
     $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
     $backProps["substitutions_perfusion"]  = "CPerfusion substitute_for_id";
+		$backProps["variations"] = "CPerfusionVariation perfusion_id";
     return $backProps;
   }
   
@@ -326,6 +346,88 @@ class CPerfusion extends CMbObject {
 	  }
 	}
 	
+	function loadRefsVariations(){
+	  $this->_ref_variations = $this->loadBackRefs("variations", "dateTime");
+		
+		if(count($this->_ref_variations)){
+		  $this->_last_variation = end($this->_ref_variations);
+		} else {
+  		$this->_last_variation = new CPerfusionVariation();
+			$this->_last_variation->debit = $this->vitesse;
+			$this->_last_variation->perfusion_id = $this->_id;
+  	}
+	}
+	
+	function calculVariations(){
+		$max_height = 2; // 2 em
+
+		// Perfusion continue (avec eventuellement des changements de debit)
+		if($this->_continuite == "continue"){
+			// Calcul des modifications du debit
+	    $this->loadRefsVariations();
+	
+		  $_date = mbTransformTime(null, $this->_debut, "%Y-%m-%d %H:00:00");
+		  $current_debit = $this->vitesse;
+		  $max_debit = $current_debit ? $current_debit : 1;
+			
+			$variation_id = "perf";
+			
+			if($this->_debut != $_date){
+				$_variations[$_date][mbTime($_date)]["debit"] = '';
+				$_variations[$_date][mbTime($_date)]["variation_id"] = "perf";
+				
+				$_variations[$_date][mbTime($this->_debut)]["debit"] = $this->vitesse;
+        $_variations[$_date][mbTime($this->_debut)]["variation_id"] = "perf";
+        
+        $_date = mbDateTime("+ 1 hour", $_date);
+			}
+			
+		  while($_date <= $this->_fin){
+			  $_variations[$_date][mbTime($_date)]["debit"] = $current_debit;
+				$_variations[$_date][mbTime($_date)]["variation_id"] = $variation_id;
+			  foreach($this->_ref_variations as $_variation){
+			 	  if($_variation->dateTime >= $_date && $_variation->dateTime < mbDateTime("+ 1 hour", $_date)){
+		 	   	  $current_debit = $_variation->debit;
+				   
+						$_variations[$_date][mbTime($_variation->dateTime)]["debit"] = $current_debit;
+						$variation_id = $_variations[$_date][mbTime($_variation->dateTime)]["variation_id"] = $_variation->_id;
+				  }
+					$max_debit = max($max_debit, $_variation->debit);
+	      }
+		    $_date = mbDateTime("+ 1 hour", $_date);
+			}
+		  
+			foreach($_variations as $key => &$_variations_by_hour){
+		    krsort($_variations_by_hour);
+				
+				if(count($_variations_by_hour) == 1){
+					$_variations[$key][mbTime($key)]["pourcentage"] = "100";
+					$_variations[$key][mbTime($key)]["height"] = round($_variations[$key][mbTime($key)]["debit"] * $max_height / $max_debit, 1);
+				  $_variations[$key][mbTime($key)]["normale"] = round($this->vitesse * $max_height / $max_debit, 1);
+	    	}
+				else {
+					$prev_hour_variation = 0;
+					foreach($_variations_by_hour as $_hour_variation => $_debit_variation){
+						if($prev_hour_variation){
+							$_nb_min = mbTransformTime(null, $prev_hour_variation, "%M") - mbTransformTime(null, $_hour_variation, "%M");
+						} else {
+							$_nb_min = 60 - mbTransformTime(null, $_hour_variation, "%M");
+						}
+						$prev_hour_variation = $_hour_variation;
+						$pourcentage = round($_nb_min * 100 / 60);
+						$_variations[$key][$_hour_variation]["pourcentage"] = $pourcentage;
+						$_variations[$key][$_hour_variation]["height"] = round($_debit_variation["debit"] * $max_height / $max_debit, 1);
+						$_variations[$key][$_hour_variation]["variation_id"] = $_debit_variation["variation_id"];
+						$_variations[$key][$_hour_variation]["normale"] = round($this->vitesse * $max_height / $max_debit, 1);
+					}
+				}
+				ksort($_variations_by_hour);
+			}
+      $this->_variations = $_variations;
+	  } 
+		
+	}
+	
   function loadView() {
   	parent::loadView();
     $this->loadRefsLines();
@@ -357,20 +459,36 @@ class CPerfusion extends CMbObject {
 		$where["object_id"] = " = '$line_perf->_id'";
 		$where["object_class"] = " = '$line_perf->_class_name'";
 		$where["dateTime"] = " LIKE '$date%'";
-		$planifs = $planif->loadList($where);
+		$planifs = $planif->loadList($where, "dateTime ASC");
 		
 		foreach($planifs as $_planif){
 			$date = mbDate($_planif->dateTime);
       $hour = mbTransformTime(null, $_planif->dateTime, "%H");
-			$this->_prises_prevues[$date][$hour]["real_hour"] = mbTime($_planif->dateTime);
-	    $this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
-    }	
+			$this->_prises_prevues[$date][$hour]["real_hour"][] = mbTime($_planif->dateTime);
+			$this->_prises_prevues[$date][$hour]["plan_hour"] = "$hour:00:00";
+    }
+  }
+	
+	/*
+   *  Calcul de la quantite totale de la perf en ml ($this->_quantite_totale)
+   */
+  function calculQuantiteTotal(){
+    if(!$this->_ref_lines){
+      $this->loadRefsLines();
+    }
+    $this->_quantite_totale = 0;
+  
+    foreach($this->_ref_lines as $_perf_line){
+      $_perf_line->updateQuantiteAdministration();
+    }
   }
 	
 	function calculPlanifsPerf(){
 		// Calcul de la quantite totale de la perf en fonction des produits
     $this->calculQuantiteTotal();
-    
+		
+		$volume_restant = 0;
+		
 		$dates_planif = array();
     if($this->date_debut && $this->time_debut && $this->duree){
       $date_time_temp = $this->_debut;
@@ -378,32 +496,75 @@ class CPerfusion extends CMbObject {
       
       // Perfusion à la vitesse de x ml/h
       if($this->vitesse && $this->_quantite_totale){
-        $increment = "";
-				// calcul du nombre d'heure entre le renouvellement de la perf
-        $nb_hours = $this->_quantite_totale / $this->vitesse;
+      	
+				// Chargement de toutes les variations
+				$this->loadRefsVariations();
+				
+				// Initialisation au valeur de depart
+				$prec_variation = $this->_debut;
+				$prec_debit = $this->vitesse;
+				
+				$last_variation = new CPerfusionVariation();
+				$last_variation->debit = 0;
+				$last_variation->dateTime = $this->_fin;
+				$this->_ref_variations[] = $last_variation;
+				
+				// La quantite restante dans la perf est la quantite totale de la perf (quantite mise au depart)
+				$qte_restante = $this->_quantite_totale;
+				$volume_variation = 0;
+				$current_date = $this->_debut;
         
-        // Calcul de l'incrementation
-        $explode_hour = explode(".", $nb_hours);
-        $nb_hours = $explode_hour[0]; 
-        if(isset($explode_hour[1])){
-          $minutes = substr($explode_hour[1],0,1) * 6;
-        }
-        if($nb_hours){
-					$increment = "+ $nb_hours hours ";
-	        if(isset($minutes)){
-	          $increment .= "$minutes minutes";
-	        }
+				// Parcours des variations
+				foreach($this->_ref_variations as $_variation){
+          $duree_variation = mbHoursRelative($prec_variation, $_variation->dateTime);
+					$volume_variation += round($prec_debit * $duree_variation);
+          
+					if($volume_restant){
+						if($prec_debit){
+						  $_duree_volume_restant = round(($volume_restant / $prec_debit) * 60);
+					  	$current_date = mbDateTime("$_duree_volume_restant minutes", $prec_variation);
+						  $dates_planif[] = $current_date;
+						}
+						$volume_restant = 0;
+					}
+				
+					if($volume_variation < $qte_restante){
+						$volume_restant = $qte_restante - $volume_variation;
+						$_duree_variation = round($duree_variation * 60);
+						$current_date = mbDateTime("$_duree_variation minutes", $current_date);
+				  }
+					
+					// si le volume de la variation est plus grand que le contenu de la perf (plusieurs remplissages dans la meme variation)
+					else {
+					  while($volume_variation >= $qte_restante){
+	            // Modification du volume total de la variation en fonction de ce qui est consommé
+							$volume_variation = $volume_variation - $qte_restante;
+							
+							// Calcul de la duree de la consommation en fonction du debit de la perfusion
+							$_duree = $qte_restante / $prec_debit;
+							
+							// Calcul de l'heure de la prise
+	            if($_duree){
+	              $increment = round($_duree * 60);
+	              $current_date = mbDateTime("$increment minutes", $current_date);
+							}
+	            
+							// Si la quantité restant dans la perfusion est superieure au volume de la variation, on calcule le volume restant 
+							if($volume_variation <= $qte_restante){
+								$volume_restant = $qte_restante - $volume_variation;                
+							}
+	            
+							if($current_date < $_variation->dateTime){
+							  $dates_planif[] = $current_date;
+							}
+            }
+					}
+					$prec_variation = $_variation->dateTime;
+          $prec_debit = $_variation->debit;
 				}
-				 
-        // Calcul des prises en fonction de la vitesse
-				if($increment){
-	        while((mbDateTime($increment, $date_time_temp)) < $this->_fin){
-	          $date_time_temp = mbDateTime($increment, $date_time_temp);
-						$dates_planif[] = $date_time_temp;
-	        } 
-				}
-      }
-      // Perfusion toutes les x heures
+			}
+			
+			// Perfusion toutes les x heures
       if($this->nb_tous_les){
         while((mbDateTime("+ $this->nb_tous_les hours", $date_time_temp)) < $this->_fin){
           $date_time_temp = mbDateTime("+ $this->nb_tous_les hours", $date_time_temp);
@@ -411,7 +572,7 @@ class CPerfusion extends CMbObject {
         }
       }
     }
-    
+		
     // Creation des planifications
 		foreach($this->_ref_lines as $_perf_line){
       foreach($dates_planif as $_datetime){
@@ -421,16 +582,16 @@ class CPerfusion extends CMbObject {
         $new_planif->object_class = $_perf_line->_class_name;
         $new_planif->sejour_id = $this->_ref_prescription->object_id;    
         $new_planif->store();
-      }
+			}
     }
 	}
-  
+  	
   function store(){
     if($this->_add_perf_contigue){
       if($msg = $this->duplicatePerf()){
         return $msg;
       }
-    }  
+    }
               
     $creation = !$this->_id;
     $calculPlanif =  ($this->fieldModified("vitesse") || 
@@ -583,19 +744,6 @@ class CPerfusion extends CMbObject {
     }
   }
   
-  /*
-   *  Calcul de la quantite totale de la perf en ml ($this->_quantite_totale)
-   */
-  function calculQuantiteTotal(){
-		if(!$this->_ref_lines){
-      $this->loadRefsLines();
-    }
-		$this->_quantite_totale = 0;
-	
-    foreach($this->_ref_lines as $_perf_line){
-    	$_perf_line->updateQuantiteAdministration();
-    }
-  }
   
   /*
    * Calcul des administrations

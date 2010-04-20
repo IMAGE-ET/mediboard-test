@@ -1,9 +1,16 @@
 <script type="text/javascript">
 
 addAdministrationsPerf = function(){
-  $('administrations_perf').select("form").each( function(oForm){
+  var formsAdm = $('administrations_perf').select("form");
+  last_form = formsAdm.last();
+  
+  formsAdm.each( function(oForm){
     if(oForm.quantite.value != ''){
-      submitFormAjax(oForm, 'systemMsg', { onComplete: refreshAdministrations } );
+      if(oForm == last_form){
+        submitFormAjax(oForm, 'systemMsg', { onComplete: refreshAdministrations } );
+      } else {
+        submitFormAjax(oForm, 'systemMsg');
+      }
     }
   });
 }

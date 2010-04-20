@@ -9,6 +9,7 @@
 *}}
 
 {{if $line->_can_modify_poso}}
+ {{if $line->_most_used_poso|@count}}
 	<form action="?m=dPprescription" method="post" name="editLine-{{$line->_id}}" onsubmit="return checkForm(this);">
 	  <input type="hidden" name="m" value="dPprescription" />
 	  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -29,6 +30,7 @@
     </button>
   </form>
 	<br />
+	{{/if}}
 {{else}}
   {{if $line->no_poso}}
     {{$line->_ref_posologie->_view}}

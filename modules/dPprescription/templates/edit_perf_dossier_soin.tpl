@@ -16,19 +16,23 @@ submitTiming = function(){
   var oFormClick = window.opener.document.click;
   var oForm = document.forms['editPerf{{$perfusion->_id}}'];
   submitFormAjax(oForm,'systemMsg', { onComplete: function() { 
-  	refreshPerfTiming(); 
-    window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
+  	refreshPerfTiming();
+		refreshDossierSoin();
   } } );
 }
 
 submitTransmissions = function(){
-  var oFormClick = window.opener.document.click;
   var oForm = document.forms['editTrans'];
   submitFormAjax(oForm,'systemMsg', { onComplete: function() { 
   	refreshPerfTransmissions(); 
-    window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
-    window.opener.loadSuivi('{{$sejour_id}}');
+    refreshDossierSoin();
+		window.opener.loadSuivi('{{$sejour_id}}');
   } } );
+}
+
+refreshDossierSoin = function(){
+  var oFormClick = window.opener.document.click;
+	window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
 }
 
 refreshPerfTiming = function(){

@@ -326,7 +326,7 @@ Main.add( function(){
 				<li><a href="#div_protocoles">Protocoles <span id="protocole_prat_name"></span></a></li>
 				{{/if}}
 				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
-				<li><a href="#div_ajout_lignes">Paramètres d'ajout de lignes</a></li>
+				<li><a href="#div_ajout_lignes">Date de début de la ligne de prescription</a></li>
 				{{/if}}
 				<li><a href="#div_outils">Outils</a></li>
 				<li style="float: right; button">		

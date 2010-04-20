@@ -79,6 +79,10 @@ changeModeBolus = function(oForm){
   oForm.nb_tous_les.writeAttribute("disabled",null);
   oForm.nb_tous_les.up('table').select('td.arrows').invoke('show');
   oForm.nb_tous_les.setOpacity(1);
+	
+	oForm.duree_passage.writeAttribute("disabled",null);
+  oForm.duree_passage.up('table').select('td.arrows').invoke('show');
+  oForm.duree_passage.setOpacity(1);
   
   oForm.dose_bolus.writeAttribute("disabled",null);
   oForm.dose_bolus.setOpacity(1);
@@ -112,6 +116,11 @@ changeModeBolus = function(oForm){
     oForm.nb_tous_les.up('table').select('td.arrows').invoke('hide');
     oForm.nb_tous_les.setOpacity(0.3);
         
+    $V(oForm.duree_passage, '');
+    oForm.duree_passage.writeAttribute("disabled","disabled");
+    oForm.duree_passage.up('table').select('td.arrows').invoke('hide');
+    oForm.duree_passage.setOpacity(0.3);
+		
     return;
   }
 }
@@ -387,7 +396,7 @@ toggleTypePerfusion = function(oForm){
 	  oForm.type.hide();
 	}
 }
-		  		  
+
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}

@@ -60,7 +60,7 @@ Main.add( function(){
 
   <tr>
     {{if $perm_add_line}}
-      <th class="title">Nouvelle ligne</th>
+      <th class="title">Nouvelle ligne de prescription</th>
     {{/if}}
     <th class="title" style="width: 1%;">Affichage</th>
   </tr>

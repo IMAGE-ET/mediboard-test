@@ -161,7 +161,8 @@ if($object_id && $object_class){
 		$line->loadVoies();
     $line->loadRefPraticien();
 	  $line->loadRefLogSignaturePrat();
-	  
+		$line->calculVariations();
+		
 		// Calcul des prises prevues
 		$line->calculQuantiteTotal();
 		foreach($_dates as $curr_date){
@@ -210,6 +211,8 @@ else {
 				$_perfusion->loadVoies();
 		    $_perfusion->loadRefPraticien();
 		    $_perfusion->loadRefLogSignaturePrat();
+				$_perfusion->calculVariations();
+    
 		  }
     } elseif (!$chapitre) {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)

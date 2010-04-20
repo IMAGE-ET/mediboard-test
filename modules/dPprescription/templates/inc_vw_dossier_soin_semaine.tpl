@@ -23,7 +23,6 @@ dates = {
   }
 }
 
-
 calculDuree = function(date1, date2, oForm, now, prescription_id){
 	var dDate1 = Date.fromDATE(date1); 
   var dDate2 = Date.fromDATE(date2); 
@@ -69,7 +68,7 @@ Main.add(function () {
 </script>
 
 {{if $prescription->_id}}
-	<table>
+	<table class="main">
 	  <tr>
 	    <td style="width: 1%">
 			  <ul id="tab_categories_plan" class="control_tabs_vertical">

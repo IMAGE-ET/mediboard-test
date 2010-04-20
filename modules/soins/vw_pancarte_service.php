@@ -174,7 +174,10 @@ foreach($prescriptions as $_prescription){
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
 			$time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
 			$date = mbDate($_planif->dateTime);
-      $pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->perfusion_id][$_planif->object_id]["prevue"] = $_planif->_ref_object->_quantite_administration;
+			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->perfusion_id][$_planif->object_id]["prevue"])){
+				$pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->perfusion_id][$_planif->object_id]["prevue"] = 0;
+			}
+      $pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->perfusion_id][$_planif->object_id]["prevue"] += $_planif->_ref_object->_quantite_administration;
   	}
 	}
 	

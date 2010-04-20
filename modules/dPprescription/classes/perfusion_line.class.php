@@ -19,7 +19,8 @@ class CPerfusionLine extends CMbObject {
   var $code_cis     = null;
   var $quantite     = null; // Quantite de produit
   var $unite        = null;
-  
+  var $solvant      = null;
+	
   // Object references
   var $_ref_perfusion = null;
 
@@ -61,6 +62,7 @@ class CPerfusionLine extends CMbObject {
     $specs["code_cis"]     = "numchar length|8";
     $specs["quantite"]     = "num";
     $specs["unite"]        = "str";
+		$specs["solvant"]      = "bool default|0";
     return $specs;
   }
   
@@ -183,25 +185,28 @@ class CPerfusionLine extends CMbObject {
 	function updateQuantiteAdministration(){
 		 if($this->unite && $this->quantite){
         $_unite_prise = str_replace('/kg', '', $this->unite);
-        // Si l'unite de prise est en fonction du poids du patient
+        
+				// Si l'unite de prise est en fonction du poids du patient, calcul du poids du patient
         if($_unite_prise != $this->unite){
-          $this->_ref_perfusion->loadRefPrescription();
-          $this->_ref_perfusion->_ref_prescription->loadRefObject();
-          $this->_ref_perfusion->_ref_prescription->_ref_object->loadRefPatient();
-          $patient =& $this->_ref_perfusion->_ref_prescription->_ref_object->_ref_patient;
-          if(!$patient->_ref_constantes_medicales){
+        	$this->_ref_perfusion->loadRefPrescription();
+        	$prescription =& $this->_ref_perfusion->_ref_prescription;
+					$prescription->loadRefObject();
+					$object =& $prescription->_ref_object;
+					$object->loadRefPatient();
+          $patient =& $object->_ref_patient;
+					if(!$patient->_ref_constantes_medicales){
             $patient->loadRefConstantesMedicales();
           }
           $poids = $patient->_ref_constantes_medicales->poids;
+					if(!$poids){
+						$poids = 0;
+					}
         }
 
         // Chargement du tableau de correspondance entre les unites de prises
         $this->_ref_produit->loadRapportUnitePriseByCIS();
-        $coef = @$this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"];
-        if(!$coef){
-          $coef = 1;
-        }
-        $this->_quantite_administration = $this->quantite * $coef;
+				$coef = isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"]) ? $this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"] : 1;
+				$this->_quantite_administration = $this->quantite * $coef;
         if(isset($poids)){
           $this->_quantite_administration *= $poids;
         }

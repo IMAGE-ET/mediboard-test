@@ -523,8 +523,11 @@ Prescription = {
         } else {
           chapitre = "_cat-"+chapitre;
         }
-        url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
-      } else {
+				if($(chapitre)){
+          url.requestUpdate(chapitre, { onComplete: function() { moveDossierSoin($(chapitre)); } } );
+        }
+				
+			} else {
         url.requestUpdate("dossier_traitement");
       }
     }

@@ -79,56 +79,60 @@
     {{/if}}
   {{/if}}
   
-  
   {{if $smarty.foreach.$last_foreach.first}}
-    <td class="text" rowspan="{{$nb_line}}"
-         {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}
-	       style="background-color: #BDB"
-	       {{/if}}>
-    {{if $line->_recent_modification}}
+  <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
+ 
+	 
+		{{if $line->commentaire}}
+      <img src="images/icons/flag.png" title="" style="float: right; margin: 2px;" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');" />
+      <span id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
+        {{$line->commentaire}}
+      </span>
+    {{/if}}
+		
+	  {{if $line->_recent_modification}}
       <img style="float: right" src="images/icons/ampoule.png" title="Ligne recemment modifiée"/>
     {{/if}}
     
     {{if is_array($line->_dates_urgences) && array_key_exists($date, $line->_dates_urgences)}}
-          <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
+      <img style="float: right" src="images/icons/ampoule_urgence.png" title="Urgence"/>
     {{/if}}
     
-		
+	
+      
+			
 		<div onclick='addCibleTransmission("{{$line_class}}","{{$line->_id}}","{{$line->_view}}");' 
 	       class="{{if @$transmissions.$line_class.$line_id|@count}}transmission{{else}}transmission_possible{{/if}}">
-	    <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+	   
 	      {{if $line_class == "CPrescriptionLineMedicament"}}
-	        {{$line->_ucd_view}}  - <span style="font-size: 0.8em">{{$line->_forme_galenique}}</span>
-	        {{if $line->traitement_personnel}} (Traitement perso){{/if}}
+					<span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+					  {{$line->_ucd_view}}
+					</span>
+					<br />
+					<span style="opacity: 0.7;">
+						<small>
+							{{$line->_forme_galenique}}
+							{{if $line->_ref_produit_prescription->unite_prise}}
+				        ({{$line->_ref_produit_prescription->unite_prise}})
+				      {{else}}
+				        {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}
+				          ({{$line->_unite_administration}})<br />
+				        {{/if}}
+				      {{/if}}
+					  </small>
+				  </span>
+					{{if $line->traitement_personnel}} (Traitement perso){{/if}}
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
 					  {{$line->_view}}
 					</div>
 				{{/if}} 
-	    </span>
 	  </div>
 		
-	 {{if $line->commentaire}}
-      <a onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-comment-{{$line->_guid}}');">
-      <img src="images/icons/flag.png" title="" />
-      </a>
-      <span id="tooltip-content-comment-{{$line->_guid}}" style="display: none;">
-        {{$line->commentaire}}
-      </span>
-    {{/if}}
-			
-	  <small>
+		
 	  {{if $line instanceof CPrescriptionLineMedicament}}
-	    {{$line->voie}}
-		  {{if $line->_ref_produit_prescription->unite_prise}}
-	      ({{$line->_ref_produit_prescription->unite_prise}})
-	    {{else}}
-	      {{if $line->_unite_administration && ($line->_unite_administration != $line->_forme_galenique)}}<br />
-	        ({{$line->_unite_administration}})<br />
-	      {{/if}}
-	    {{/if}}
-		{{/if}}
-    </small>
+      <small>{{$line->voie}}</small>
+    {{/if}}
     
     {{if $line->conditionnel}}
       <form action="?" method="post" name="activeCondition-{{$line_id}}-{{$line_class}}">

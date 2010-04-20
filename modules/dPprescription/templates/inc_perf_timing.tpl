@@ -16,13 +16,10 @@
   <input type="hidden" name="perfusion_id" value="{{$perfusion_id}}" />
 	<table class="form">
 	  <tr>
-	    <th class="category text">
-	    <ul>
+	    <th class="title text">
 	    {{foreach from=$perfusion->_ref_lines item=_perf_line name="foreach_perf"}}
-	      <li>{{$_perf_line->_view}}</li>
+	     {{$_perf_line->_view}}<br />
 	    {{/foreach}}
-	    </ul>
-	    
 	    {{$perfusion->_view}}
 	    </th>
 	  </tr>
@@ -56,3 +53,34 @@
 	  </tr>
 	</table>
 </form>
+
+<table class="tbl">
+	<th class="title">Variations du débit de la perfusion</th>
+	{{foreach from=$perfusion->_ref_variations item=_variation}}
+	{{assign var=variation_id value=$_variation->_id}}
+	<tr>
+		<td>
+			<form name="editVariation-{{$variation_id}}" 
+			      onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ refreshPerfTiming(); refreshDossierSoin(); } } );">
+			  <input type="hidden" name="m" value="dPprescription" />
+				<input type="hidden" name="dosql" value="do_perfusion_variation_aed" />
+				<input type="hidden" name="perfusion_variation_id" value="{{$_variation->_id}}" />
+				<input type="hidden" name="del" value="0" />
+			  <table class="layout">
+			  	<tr>
+			  		<td>
+			  			<button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); this.form.onsubmit();"></button>
+			  		</td>
+			  		<td>{{mb_field object=$_variation field=dateTime form=editVariation-$variation_id register=true onchange="this.form.onsubmit();"}}</td>
+	          <td>{{mb_field object=$_variation field=debit increment=1 form=editVariation-$variation_id onchange="this.form.onsubmit();"}}</td>
+			  	</tr>
+			  </table>
+			</form>
+		</td>
+  </tr>
+	{{foreachelse}}
+	<tr>
+		<td>Aucune variation</td>
+	</tr>
+	{{/foreach}}
+</table>

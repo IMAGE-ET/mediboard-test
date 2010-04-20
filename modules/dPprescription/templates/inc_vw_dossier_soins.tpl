@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 selColonne = function(hour){
-	$('plan_soin').select('div.non_administre, div.a_administrer').each(function(oDiv){
+	$('plan_soin').select('div.non_administre:not(.perf), div.a_administrer:not(.perf)').each(function(oDiv){
 	  if(oDiv.up(2).visible() && oDiv.up().hasClassName(hour)){
 	    oDiv.onclick();
 	  }
@@ -379,14 +379,22 @@ refreshTabState = function(){
     window['{{$_chapitre}}SoinLoaded'] = false;
 	{{/foreach}}
 	
-	if(tabs.activeLink){
-	  tabs.activeLink.up().onmousedown();
-	} else {
-	  if($('tab_categories') && $('tab_categories').down()){
-	    $('tab_categories').down().onmousedown();
-	    tabs.setActiveTab($('tab_categories').down().down().key);
-    }
+	if(tabs){
+		if(tabs.activeLink){
+		  tabs.activeLink.up().onmousedown();
+		} else {
+		  if($('tab_categories') && $('tab_categories').down()){
+		    $('tab_categories').down().onmousedown();
+		    tabs.setActiveTab($('tab_categories').down().down().key);
+	    }
+		}
 	}
+}
+
+showDebit = function(div, color){
+	$("_perf").select("."+div.down().className).each(function(elt){
+	  elt.setStyle( { backgroundColor: '#'+color } );
+	});
 }
 
 Main.add(function () {
@@ -398,8 +406,9 @@ Main.add(function () {
 	}
 	
   new Control.Tabs('tab_dossier_soin');
-  tabs = Control.Tabs.create('tab_categories', true);
-  
+	if($('tab_categories')){
+    tabs = Control.Tabs.create('tab_categories', true);
+  }
   refreshTabState();
 });
 
@@ -622,7 +631,7 @@ Main.add(function () {
 				          {{foreach from=$_dates key=_date_reelle item=_hours}}
 				            {{foreach from=$_hours key=_heure_reelle item=_hour}}
 				              <th class="{{$_date}}-{{$moment_journee}}" 
-				                  style='width: 30px; text-align: center; 
+				                  style='width: 50px; text-align: center; 
 			                  {{if array_key_exists("$_date $_hour:00:00", $operations)}}border-right: 3px solid black;{{/if}}'>
 			                  <a href="#1" onclick="selColonne('{{$_hour}}');">{{$_hour}}h</a>
 				                {{if array_key_exists("$_date $_hour:00:00", $operations)}}

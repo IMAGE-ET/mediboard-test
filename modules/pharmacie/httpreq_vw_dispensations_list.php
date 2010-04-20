@@ -175,8 +175,10 @@ if($prescriptions) {
 		    if(is_array($_perfusion->_prises_prevues)){
 			    foreach($_perfusion->_prises_prevues as $_date => $_prises_by_hour){
 			      foreach($_prises_by_hour as $_hour => $_prise){
-			        foreach($_perfusion->_ref_lines as $_perf_line){
-			        	$_perf_line->loadRefProduitPrescription();
+			        foreach($_perfusion->_ref_lines as $_perf_line){   	
+								$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
+           
+					     	$_perf_line->loadRefProduitPrescription();
 								$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;
 								
 			          $_lines[$code] = $_perf_line;
@@ -196,7 +198,7 @@ if($prescriptions) {
 			            $dispensations[$code]["quantite_administration"] = 0;
 			            $dispensations[$code]["quantite_dispensation"] = 0;
 			          }
-			          $dispensations[$code]["quantite_administration"] += $_perf_line->_quantite_administration;
+			          $dispensations[$code]["quantite_administration"] += ($_perf_line->_quantite_administration * $count_prises_by_hour);
 								
 						    if($_perf_line->_ref_produit_prescription->_id && ($_perf_line->_ref_produit_prescription->unite_prise != $_perf_line->_ref_produit_prescription->unite_dispensation)){
                   $quantite_dispensation = $_perf_line->_quantite_dispensation / ($_perf_line->_ref_produit_prescription->quantite * $_perf_line->_ref_produit_prescription->nb_presentation);
@@ -204,10 +206,10 @@ if($prescriptions) {
                 	$quantite_dispensation = $_perf_line->_quantite_dispensation;
                 }
 										
-			          $dispensations[$code]["quantite_dispensation"] += $quantite_dispensation;
+			          $dispensations[$code]["quantite_dispensation"] += ($quantite_dispensation * $count_prises_by_hour);
 					      $besoin_patient[$code][$patient->_id]["patient"] = $patient; 
-	 				      $besoin_patient[$code][$patient->_id]["quantite_administration"] += $_perf_line->_quantite_administration;
-					      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += $quantite_dispensation;
+	 				      $besoin_patient[$code][$patient->_id]["quantite_administration"] += ($_perf_line->_quantite_administration * $count_prises_by_hour);
+					      $besoin_patient[$code][$patient->_id]["quantite_dispensation"] += ($quantite_dispensation * $count_prises_by_hour);
 	
 			        }
 			      }

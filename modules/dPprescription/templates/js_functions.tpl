@@ -399,4 +399,71 @@ modifUniteDecal = function(oFieldJour, oFieldUnite){
     oFieldUnite.disabled = "";
   }
 }
+
+togglePerfDecalage = function(oForm){
+  if($V(oForm.jour_decalage) == 'N'){
+    $V(oForm.decalage_interv, '0');
+    $('decalage_interv-'+$V(oForm.perfusion_id)).hide();
+  } else {
+    $('decalage_interv-'+$V(oForm.perfusion_id)).show();
+  }
+}
+
+toggleContinuitePerf = function(radioButton, perfusion_id){
+  if($V(radioButton) == "continue"){
+    $('discontinue-'+perfusion_id).hide();
+  }
+  if($V(radioButton) == "discontinue"){
+    $('continue-'+perfusion_id).hide();
+  }
+  $($V(radioButton)+'-'+perfusion_id).show();
+}
+
+removeSolvant = function(checkbox){
+  if (!checkbox.checked) return;
+
+  $(checkbox).up('table.group').select('input[name=__solvant]').each(
+    function(e){
+      if(e != checkbox){
+        e.checked=false;
+        e.onclick();
+      }
+    }
+  );
+}
+
+updateSolvant = function(perfusion_id, line_id){
+  var checked = $('lines-'+perfusion_id).select('input[name=__solvant]:checked')[0];
+  if(!checked){
+    return;
+  }
+
+  // Ligne de solvant
+  var perfusion_line_id = $V(checked.up('form').perfusion_line_id);
+  
+  var modif_qte_totale = 0;
+  if(line_id && perfusion_line_id == line_id){
+    modif_qte_totale = 1;
+  }
+  
+  var url = new Url("dPprescription", "httpreq_update_solvant");
+  url.addParam("perfusion_line_id", perfusion_line_id);
+  url.addParam("modif_qte_totale", modif_qte_totale);
+  
+  url.requestJSON(function(e){
+    if(!e){
+      return;
+    }
+    if(modif_qte_totale){
+      var oFormPerfusion = getForm("editPerf-"+perfusion_id);
+      $V(oFormPerfusion.quantite_totale, e, false);
+    } else {
+      var oForm = getForm("editLinePerf-"+perfusion_line_id);
+      $V(oForm.quantite, e);
+      $V(oForm.unite, 'ml');
+    }
+  });
+}
+
+
 </script>
