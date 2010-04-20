@@ -108,6 +108,9 @@
     </td>
   </tr>
   
+	{{mb_include module=system template=inc_config_bool var=show_mallampati}}
+  
+	
   {{mb_include module=system template=inc_config_bool var=view_premedication}}
 	{{mb_include module=system template=inc_config_bool var=show_facteurs_risque}}
   

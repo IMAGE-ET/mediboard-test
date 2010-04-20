@@ -17,51 +17,40 @@
 {{assign var="patient" value=$consult->_ref_patient}}
 {{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}  
 {{assign var="operation" value=$consult_anesth->_ref_operation}}
-
   
-<table class="{{$tbl_class}}">
-  <tr>
-    <td>
-      <table width="100%">
-        <tr>
-          <th class="title" colspan="4">
-            <a href="#" onclick="window.print()">
-              Consultation pré-anesthésique
-            </a>
-          </th>
-        </tr>
-        <tr>
-          <th>Date </th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}}</td>
-          <th>Anesthésiste </th>
-          <td>Dr {{$consult->_ref_chir->_view}}</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-
+{{mb_include module=dPcabinet template=inc_header_fiche_anesth}}
 
 <table class="{{$tbl_class}}" style="page-break-after: always;">
   <tr>
     <td colspan="2">
       <table width="100%">
-        <tr>
-          <th class="category" colspan="2">Sejour</th>
-        </tr>
-        <tr>
+				<tr>
+					<th class="category" colspan="2">Intervention</th>
+				</tr>
+				<tr>
           <td colspan="2">
-          {{$patient->_view}}<br />
-          {{if $consult_anesth->operation_id}}
-            {{if $consult_anesth->_ref_operation->_ref_sejour}}
-            Admission en {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
-            le <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
-            pour <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} nuit(s)</strong>
-            <br />
+            {{if $consult_anesth->operation_id}}
+              {{if $consult_anesth->_ref_operation->_ref_sejour}}
+              Admission en {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
+              le <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
+              pour <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} nuit(s)</strong>
+              <br />
+              {{/if}}
+            {{else}}
+              Intervention le <strong>{{$consult_anesth->date_interv|date_format:"%A %d/%m/%Y"}}</strong>
+              par le <strong>Dr {{$consult_anesth->_ref_chir->_view}}</strong>
+              <br />
+              {{$consult_anesth->libelle_interv}}
             {{/if}}
-         
+          </td>
+        </tr>
+				{{if $consult_anesth->operation_id}}
+				<tr>
+          <td colspan="2">
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
-            par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong>
+            {{if $consult_anesth->_ref_operation->libelle}}
+              - {{$consult_anesth->_ref_operation->libelle}}
+            {{/if}}
             <ul>
               {{if $consult_anesth->_ref_operation->libelle}}
                 <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
@@ -70,32 +59,26 @@
               <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})</li>
               {{/foreach}}
             </ul>
-          {{else}}
-            Intervention le <strong>{{$consult_anesth->date_interv|date_format:"%A %d/%m/%Y"}}</strong>
-            par le <strong>Dr {{$consult_anesth->_ref_chir->_view}}</strong>
-            <br />
-            {{$consult_anesth->libelle_interv}}
-          {{/if}}
           </td>
         </tr>
+				{{/if}}
         <tr>
           <td class="halfPane">
             {{if $consult_anesth->operation_id}}
-            <table>
-              <tr>
-                <th style="font-weight: normal;">Anesthésie prévue</th>
-                <td style="font-weight: bold;">
-                  {{$consult_anesth->_ref_operation->_lu_type_anesth}}
-                </td>
-              </tr>
-              <tr>
-                <th style="font-weight: normal;">Position</th>
-                <td style="font-weight: bold;">
-                  {{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}
-                </td>
-              </tr>
-            </table>
-            
+	            <table>
+	              <tr>
+	                <th style="font-weight: normal;">Anesthésie prévue</th>
+	                <td style="font-weight: bold;">
+	                  {{$consult_anesth->_ref_operation->_lu_type_anesth}}
+	                </td>
+	              </tr>
+	              <tr>
+	                <th style="font-weight: normal;">Position</th>
+	                <td style="font-weight: bold;">
+	                  {{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}
+	                </td>
+	              </tr>
+	            </table>
             {{elseif $consult_anesth->position}}
             Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong>
             {{/if}}
@@ -365,33 +348,8 @@
   </tr>
 </table>
 
-<table class="{{$tbl_class}}">
-  <tr>
-    <td>
-      <table width="100%">
-        <tr>
-          <th class="title" colspan="4">
-            <a href="#" onclick="window.print()">
-              Consultation pré-anesthésique
-            </a>
-          </th>
-        </tr>
-        <tr>
-          <th>Date </th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:$dPconfig.longdate}}</td>
-          <th>Anesthésiste </th>
-          <td>Dr {{$consult->_ref_chir->_view}}</td>
-        </tr>
-        <tr>
-          <th>Patient </th>
-          <td>{{$patient->_view}}</td>
-          <td colspan="2"></td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-        
+{{mb_include module=dPcabinet template=inc_header_fiche_anesth}}
+
 <table class="{{$tbl_class}}">
   <tr>
     <td>
@@ -399,21 +357,23 @@
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
         </tr>
-        <!--
-          {{if $consult->_ref_consult_anesth->mallampati}}
-          <td rowspan="4" class="button" style="white-space: nowrap;">
-            <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
-            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
-          </td>
-          {{/if}}
-        -->					
+    
+          
+        {{if !$dPconfig.dPcabinet.CConsultAnesth.show_mallampati}}
 				<tr>
 					<th style="font-weight: normal;">Mallampati</th>
           <td style="font-weight: bold;">
            {{mb_value object=$consult->_ref_consult_anesth field="mallampati"}}
           </td>
 				</tr>	
+				{{/if}}
         <tr>
+        	{{if $consult->_ref_consult_anesth->mallampati && $dPconfig.dPcabinet.CConsultAnesth.show_mallampati}}
+          <td rowspan="4" class="button" style="white-space: nowrap;">
+            <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
+            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+          </td>
+          {{/if}}
 				  <th style="font-weight: normal;">Ouverture de la bouche</th>
           <td style="font-weight: bold;">
             {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}

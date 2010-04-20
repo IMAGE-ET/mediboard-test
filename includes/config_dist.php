@@ -254,7 +254,8 @@ $dPconfig["dPcabinet"] = array(
     "format_auto_motif"  => "Pré-anésth. %I %L %S",
     "format_auto_rques"  => "%T %E %e",
     "view_premedication" => "0",
-		"show_facteurs_risque" => "0"
+		"show_facteurs_risque" => "0",
+		"show_mallampati" => "0"
   ),
   "CPrescription" => array (
     "view_prescription" => "0"
