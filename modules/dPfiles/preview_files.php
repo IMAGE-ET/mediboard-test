@@ -17,8 +17,11 @@ $elementId    = CValue::get("elementId"    , null);
 $popup        = CValue::get("popup"        , 0);
 $nonavig      = CValue::get("nonavig"      , null);
 $sfn          = CValue::get("sfn"          , 0);
+$typeVue      = CValue::getOrSession("typeVue");
+
 
 // Déclaration de variables
+$file_id          = null;
 $object           = null;
 $fileSel          = null;
 $keyFileSel       = null;
@@ -106,13 +109,28 @@ if($fileSel && $elementClass == "CFile" && !$pdf_active && !$acces_denied){
     }
   }
 }
-elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
+elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_active){
   $includeInfosFile = $fileSel->source;
 }
 
 if ($pdf_active) {
   if ($elementClass == "CCompteRendu") {
-    $elementId = $fileSel->_id;
+    if ($typeVue || $popup == 1) {
+      $file_id = $fileSel->_id;
+    }
+    $fileSel->loadNbPages();
+    if($fileSel->_nb_pages) {
+      if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
+      if($sfn!=0){
+        $page_prev = $sfn - 1; 
+      }
+      if($sfn<($fileSel->_nb_pages-1)){
+        $page_next = $sfn + 1;
+      }
+      for($i=1;$i<=$fileSel->_nb_pages;$i++){
+        $arrNumPages[] = $i;
+      }
+    }
   }
 }
 else {
@@ -139,6 +157,7 @@ $smarty->assign("sfn"             , $sfn);
 $smarty->assign("includeInfosFile", $includeInfosFile);    
 $smarty->assign("popup"           , $popup);
 $smarty->assign("acces_denied"    , $acces_denied);
+$smarty->assign("file_id"         , $file_id);
 
 if($popup==1){
   $listCat  = null;
@@ -158,9 +177,10 @@ if($popup==1){
       if($value){
         $aFile =& $aAllFilesDocs[$aFilePrevNext[$key]];
         $keyFile = $aFile->_spec->key;
-        ${"file".$key} = array();
-        ${"file".$key}["elementId"]   = $aFile->$keyFile;
-        ${"file".$key}["elementClass"] = $aFile->_class_name;
+        ${"file".$key} = array(
+          "elementId"    => $aFile->$keyFile,
+          "elementClass" => $aFile->_class_name,
+        );
       }
     }
     

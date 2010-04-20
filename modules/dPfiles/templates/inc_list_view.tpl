@@ -43,13 +43,19 @@ Main.add(function () {
     <td class="{{cycle name=cellicon values="dark, light"}}">
       {{assign var="elementId" value=$_doc_item->_id}}
       {{if $_doc_item->_class_name=="CCompteRendu"}}
-        {{assign var="srcImg" value="images/pictures/medifile.png"}}
+        {{if $dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+          {{assign var="nomdoc" value=$_doc_item->nom}}
+          {{assign var="file_owner" value=$_doc_item->chir_id}}
+          {{assign var="srcImg" value="?m=dPcompteRendu&a=ajax_display_first_thumb&suppressHeaders=1&compte_rendu_id=$elementId&nomdoc=$nomdoc&user_id=$file_owner"}}
+        {{else}}
+          {{assign var="srcImg" value="images/pictures/medifile.png"}}
+        {{/if}}
       {{else}}
         {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
       {{/if}}
       
       <a href="#" onclick="ZoomAjax('{{$selClass}}', '{{$selKey}}', '{{$_doc_item->_class_name}}', '{{$elementId}}', '0');" title="Afficher l'aperçu">
-        <img src="{{$srcImg}}" alt="-" />
+        <img src="{{$srcImg}}" alt="-" width="64"/>
       </a>
 
     </td>
