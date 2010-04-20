@@ -32,6 +32,7 @@ $where = array();
 $where['sejour.type'] = " = 'urg'";
 $where['sejour.annule'] = " = '0'";
 $where['sejour.entree_reelle'] = " BETWEEN '".$debut_selection."' AND '".$fin_selection."' "; 
+$where['sejour.group_id'] = " = '".CGroups::loadCurrent()->_id."'";
 
 $leftjoin = array();
 $leftjoin['sejour'] = 'sejour.sejour_id = rpu.sejour_id';
