@@ -87,13 +87,17 @@ function popEtatSejour(sejour_id) {
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
       </td>
       
-      <td style="text-align:right;" {{if $isImedsInstalled}}onclick="view_labo_sejour({{$_sejour->_id}})"{{/if}}>
+      <td style="text-align:right;">
       {{if $_sejour->_canRead}}
         {{if $isImedsInstalled}}
-				  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="#"}}
+          <div onclick="view_labo_sejour({{$_sejour->_id}})" style="float: left;">
+            {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="#1"}}
+          </div>
         {{/if}}
-
-        {{mb_include module=dPpatients template=inc_form_docitems_button object=$_sejour}}
+        
+        <div style="clear: both;">
+          {{mb_include module=dPpatients template=inc_form_docitems_button object=$_sejour}}
+        </div>
       {{/if}}         
       </td>
     </tr>
