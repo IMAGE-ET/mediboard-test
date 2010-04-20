@@ -198,7 +198,7 @@ Main.add( function(){
             </td>
 						
 						<td style="border:none;">
-             {{mb_label object=$_perfusion field=quantite_totale}}
+             {{mb_title object=$_perfusion field=quantite_totale}}
              {{if $_perfusion->_can_modify_perfusion}}
                {{mb_field object=$_perfusion field=quantite_totale size=1 increment=1 min=0 form="editPerf-$perfusion_id" onchange="return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry($perfusion_id) } );"}} ml
              {{else}}
@@ -258,11 +258,16 @@ Main.add( function(){
 					<tr>
 					  <td style="border: none;"></td>
             <td style="border:none;">    
+						  <label>
 						  <input type="radio" {{if $_perfusion->_continuite != 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="continue"/> 
 							Continue
+							</label>
+              
+							<label>
 							<input type="radio" {{if $_perfusion->_continuite == 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="discontinue"/>
 							Discontinue		
-					  </td>
+					    </label>
+						</td>
 						<td style="border:none;" colspan="2">
 					    <div style="display: none;" id="continue-{{$_perfusion->_id}}">
 	              Débit
@@ -350,7 +355,11 @@ Main.add( function(){
 			              <td style="border:none; width: 30%;">
 					             <span style="float: right">
 					             	{{if $_perfusion->_can_modify_perfusion_line}}
-												  {{mb_field object=$line field="solvant" typeEnum=checkbox onchange="removeSolvant(this.form.__solvant); return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry($perfusion_id)} );"}} Solvant
+												<label>
+												  {{mb_field object=$line field="solvant" typeEnum=checkbox 
+													           onchange="removeSolvant(this.form.__solvant); return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry($perfusion_id)} );"}} 
+													Solvant
+											  </label>
 												{{/if}}
                         </span>
 											{{mb_label object=$line field=quantite}}:
