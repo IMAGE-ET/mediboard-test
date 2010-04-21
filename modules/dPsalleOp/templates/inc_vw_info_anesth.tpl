@@ -43,8 +43,23 @@ reloadAnesth = function() {
 {{/if}}
 
 Main.add(function(){
-  refreshAidesPreAnesth($V(getForm('visiteAnesth').prat_visite_anesth_id));
+  var oFormVisiteAnesth = getForm('visiteAnesth');
+	
+  refreshAidesPreAnesth($V(oFormVisiteAnesth.prat_visite_anesth_id));
 	refreshAnesthPerops('{{$selOp->_id}}');
+
+  {{if !$selOp->date_visite_anesth}}
+	  var dates = {};
+	  dates.limit = {
+	    start: '{{$smarty.now|@date_format:"%Y-%m-%d"}}',
+	    stop: '{{$smarty.now|@date_format:"%Y-%m-%d"}}'
+	  };
+	  Calendar.regField(oFormVisiteAnesth.date_visite_anesth, dates);
+	  
+	  // Initialisation du champ date
+	  $("visiteAnesth_date_visite_anesth_da").value = "Heure actuelle";
+	  $V(oFormVisiteAnesth.date_visite_anesth, "current");
+  {{/if}}
 });
 </script>
 
@@ -256,27 +271,29 @@ Main.add(function(){
 {{/if}}
 
 <form name="visiteAnesth" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
-<input type="hidden" name="dosql" value="do_planning_aed" />
-<input type="hidden" name="m" value="dPplanningOp" />
-<input type="hidden" name="del" value="0" />
-{{mb_key object=$selOp}}
-{{if !$selOp->date_visite_anesth}}
-<input name="date_visite_anesth" type="hidden" value="current" />
-{{else}}
-<input name="prat_visite_anesth_id" type="hidden" value="{{$selOp->prat_visite_anesth_id}}" />
-<input name="date_visite_anesth"    type="hidden" value="" />
-{{/if}}
+	<input type="hidden" name="dosql" value="do_planning_aed" />
+	<input type="hidden" name="m" value="dPplanningOp" />
+	<input type="hidden" name="del" value="0" />
+	{{mb_key object=$selOp}}
+	{{if $selOp->date_visite_anesth}}
+	  <input name="prat_visite_anesth_id" type="hidden" value="{{$selOp->prat_visite_anesth_id}}" />
+	  <input name="date_visite_anesth"    type="hidden" value="" />
+	{{/if}}
 
 <table class="form">
   <tr>
     <th class="title" colspan="2">Visite de pré-anesthésie</th>
   </tr>
-  {{if $selOp->date_visite_anesth}}
   <tr>
     <th>{{mb_label object=$selOp field="date_visite_anesth"}}</th>
-    <td>{{mb_value object=$selOp field="date_visite_anesth"}}</td>
+    <td>
+    	{{if $selOp->date_visite_anesth}}
+  		  {{mb_value object=$selOp field="date_visite_anesth"}}
+		  {{else}}
+			  {{mb_field object=$selOp field="date_visite_anesth"}}
+			{{/if}}
+		</td>
   </tr>
-  {{/if}}
   <tr>
     <th>{{mb_label object=$selOp field="prat_visite_anesth_id"}}</th>
     <td>
@@ -297,7 +314,7 @@ Main.add(function(){
     {{/if}}
     </td>
   <tr>
-  </tr>
+  <tr>
     <th>
       {{mb_label object=$selOp field="rques_visite_anesth"}}
       {{if !$selOp->date_visite_anesth}}
