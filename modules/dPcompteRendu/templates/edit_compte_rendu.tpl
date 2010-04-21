@@ -91,9 +91,9 @@ document.observe('keydown', function(e){
 		
 	Main.add(function(){
 	  PageFormat.init(getForm("editFrm")); 
-		Thumb.compte_rendu_id = {{$compte_rendu->_id}};
-    Thumb.modele_id = {{$modele_id}};
-    Thumb.user_id = {{$user_id}};
+		Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
+    Thumb.modele_id = '{{$modele_id}}';
+    Thumb.user_id = '{{$user_id}}';
 		Thumb.mode = "doc";
 	});
 {{else}}
@@ -158,12 +158,13 @@ document.observe('keydown', function(e){
           <button class="hslip" type="button" title="Afficher / Masquer les vignettes"
                   onclick = "Thumb.choixaffiche();">Vignettes</button>
         {{/if}}
-      {{/if}}
+      
       <div id="page_layout" style="display: none;">
         {{include file="inc_page_layout.tpl" droit=1}}
         <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
 				<button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
       </div>
+			{{/if}}
     </th>
   </tr>
   <tr>
