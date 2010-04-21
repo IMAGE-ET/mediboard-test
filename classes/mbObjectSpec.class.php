@@ -20,7 +20,9 @@ class CMbObjectSpec {
   public $uniques             = array();
   public $xor                 = array();
   
-  // Derivate fields
+  /**
+   * @var CSQLDataSource
+   */
   public $ds = null;
   
   /**

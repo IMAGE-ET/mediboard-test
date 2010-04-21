@@ -24,14 +24,35 @@ class CMbObject {
   static $handlers = null;
   
   /**
-   * Global properties
+   * @var string The object's class name
    */
-  var $_class_name    = null; // class name of the object
-  var $_id            = null; // shortcut for the object id
-  var $_guid          = null; // shortcut for the object class+id
+  var $_class_name    = null; 
   
-  var $_view          = ''; // universal view of the object
-  var $_shortview     = ''; // universal shortview for the object
+  /**
+   * @var integer The object ID
+   */
+  var $_id            = null;
+  
+  /**
+   * @var string The object GUID (object_class-object_id)
+   */
+  var $_guid          = null;
+  
+  /**
+   * @var string The universal object view
+   */
+  var $_view          = '';
+  
+  /**
+   * @var string The universal object shortview
+   */
+  var $_shortview     = '';
+  
+  /**
+   * @var CCanDo
+   */
+  var $_can           = null;
+  
   var $_canRead       = null; // read permission for the object
   var $_canEdit       = null; // write permission for the object
   var $_external      = null; // true if object is has remote ids
@@ -41,7 +62,7 @@ class CMbObject {
   var $_complete_view_template = null; // complete view template path
 
   /**
-   * Properties  specification
+   * @var CMbObjectSpec The class specification
    */
   var $_spec          = null;    // Class specification
   var $_props         = array(); // Properties specifications as string
@@ -76,7 +97,11 @@ class CMbObject {
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
   var $_ref_affectations_personnel  = null;
-  var $_old            = null; // Object in database
+  
+  /**
+   * @var CMbObject The object in database
+   */
+  var $_old            = null;
   
   // Behaviour fields
   var $_merging = null;
@@ -1109,6 +1134,18 @@ class CMbObject {
         
     	if ($msg) return $msg;
     	if ($msg = $object->delete()) return $msg;
+    }
+    
+    // If external IDs are available, we save old objects' id as external IDs
+    if (CModule::getInstalled("dPsante400")) {
+      foreach ($objects as $object) {
+        $idex = new CIdSante400;
+        $idex->tag = "merged";
+        $idex->setObject($this);
+        $idex->id400 = $object->_id;
+        $idex->last_update = mbDateTime();
+        $idex->store();
+      }
     }
     
     // Trigger after event

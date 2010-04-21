@@ -39,9 +39,13 @@ class CMbFieldSpecFact {
   );
    
   /**
-   * 
+   * Returns a spec object for an objects's field
+   * @param $object CMbObject The object
+   * @param $fieldName string The field
+   * @param $strSpec string The spec as string
+   * @return CMbFieldSpec
    */
-  static function getSpec($object, $fieldName, $strSpec = null) {
+  static function getSpec(CMbObject $object, $fieldName, $strSpec = null) {
     $className = $object->_class_name;
         
     $specFragments = explode(" ", $strSpec);
@@ -50,7 +54,7 @@ class CMbFieldSpecFact {
 	    if (null == $specClassName = CMbArray::get(self::$classes, $specName)) {
 	      trigger_error("No spec class name for '$className'::'$fieldName' = '$strSpec'", E_USER_ERROR);
 	    }
-    }    
+    }
     
     $specOptions = array();
     foreach ($specFragments as $specFragment) {
