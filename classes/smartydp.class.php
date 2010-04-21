@@ -438,21 +438,25 @@ class CSmartyDP extends Smarty {
    * Directories initialisation
    * Standard data assignment
    */
-  function CSmartyDP($rootDir = null) {
+  function CSmartyDP($dir = null) {
     global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
     
-    $root = CAppUI::conf("root_dir").self::$extraPath;
+    $rootDir = CAppUI::conf("root_dir");
+    $extraPath = self::$extraPath;
 
-    if (!$rootDir) {
-      $rootDir = "$root/modules/$m"; 
-      $this->compile_dir = "$root/tmp/templates_c/modules/$m/";
+    $root = $rootDir.$extraPath;
+    $tmpDir = "$root/tmp";
+    
+    if (!$dir) {
+      $dir = "$root/modules/$m"; 
+      $this->compile_dir = "$tmpDir/templates_c/{$extraPath}modules/$m/";
     }
     else {
-      $this->compile_dir = "$root/tmp/templates_c/$rootDir/";
+      $this->compile_dir = "$tmpDir/templates_c/{$extraPath}$dir/";
     }
     
     // Directories initialisation
-    $this->template_dir = "$rootDir/templates/";
+    $this->template_dir = "$dir/templates/";
     
     // Check if the cache dir is writeable
     if (!is_dir($this->compile_dir)) {
