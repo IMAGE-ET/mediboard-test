@@ -38,7 +38,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     $mbVenueElimine->load($mbVenue->_merging);
 
     // Ajout du patient a eliminer
-    $this->addPatient($venueElimine, $mbVenueElimine, null, $referent);
+    $this->addPatient($venueElimine, $mbVenueElimine, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();

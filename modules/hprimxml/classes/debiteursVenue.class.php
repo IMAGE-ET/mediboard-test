@@ -37,7 +37,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     
     $patient = $this->addElement($debiteursVenue, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $mbVenue->_ref_patient, null, $referent, true);
+    $this->addPatient($patient, $mbVenue->_ref_patient, $referent, true);
     
     $venue = $this->addElement($debiteursVenue, "venue"); 
     // Ajout de la venue   

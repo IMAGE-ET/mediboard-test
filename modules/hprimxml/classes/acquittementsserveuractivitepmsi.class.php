@@ -3,29 +3,29 @@
 /**
  * @package Mediboard
  * @subpackage hprimxml
- * @version $Revision$
+ * @version $Revision: 8208 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CAppUI::requireModuleClass("hprimxml", "hprimxmldocument");
 
-class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
+class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
+  var $acquittement = null;
+  
   var $_sous_type_evt = null;
   var $_codes_erreurs = null;
   
-  function __construct() {
-    $this->evenement = "evt_patients";
-     
-    parent::__construct("patients", "msgAcquittementsPatients105");
+  function __construct($messageAcquittement) {     
+    parent::__construct("serveurActivitePmsi", $messageAcquittement);
   }
+	
+  function generateEnteteMessageAcquittement($statut) {
+  	$acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
 
-  function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
-
-    $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
-
-    $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
+    $enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessageAcquittement");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
+    $this->addAttribute($enteteMessageAcquittement, "version", CAppUI::conf("hprimxml $this->evenement version"));
 
     $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
@@ -42,64 +42,63 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
 
     $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
-    
-    if ($statut == "OK") {
-      if (is_array($codes)) {
-        $_codes = $_libelle_codes = "";
-        foreach ($codes as $code) {
-          $_codes .= $code;
-          $_libelle_codes .= CAppUI::tr("sip-hprim-error-$code");
-        }
-        $this->addObservation($enteteMessageAcquittement, $_codes, $_libelle_codes, $commentaires);
-      } else {
-        $this->addObservation($enteteMessageAcquittement, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires);
-      }
-    }
   }
-
-  function addErreursAvertissements($statut, $codes, $commentaires = null, $mbObject = null) {
-    $acquittementsPatients = $this->documentElement;
-     
-    $erreursAvertissements = $this->addElement($acquittementsPatients, "erreursAvertissements");
-     
+  
+  function addReponses($statut, $codes, $commentaires = null, $mbObject = null) {
+    $acquittementsServeurActivitePmsi = $this->documentElement;
+        
+    if ($mbObject instanceof CSejour) {
+	    $mbPatient =& $mbObject->_ref_patient;
+	    $mbSejour  =& $mbObject;
+    }
+  	if ($mbObject instanceof COperation) {
+    	$mbPatient =& $mbObject->_ref_sejour->_ref_patient;
+	    $mbSejour  =& $mbObject->_ref_sejour;
+    }	
+   	
+    // Ajout du patient et de la venue
+    $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
+	  $this->addPatient($patient, $mbPatient, false, true);
+	  
+	  $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
+		$this->addVenue($venue, $mbSejour, false, true);
+		
+    // Ajout des réponses
+    $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
     if (is_array($codes)) {
       foreach ($codes as $code) {
-        $this->addErreurAvertissement($erreursAvertissements, $statut, $code, CAppUI::tr("sip-hprim-error-$code"), $commentaires, $mbObject);
+        $this->addReponse($reponses, $statut, $code, CAppUI::tr("sip-hprim-error-$code"), $commentaires, $mbObject);
       }
     } else {
-      $this->addErreurAvertissement($erreursAvertissements, $statut, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires, $mbObject);
+      $this->addReponse($reponses, $statut, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires, $mbObject);
     }   
   }
 
-  function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
+  function generateAcquittementsServeurActivitePmsi($statut, $codes, $commentaires = null, $mbObject = null) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
-    if ($statut != "OK") {
-      $this->generateEnteteMessageAcquittement($statut);
-      $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
-    } else {
-      $this->generateEnteteMessageAcquittement($statut, $codes, $commentaires);
-    }
+    $this->generateEnteteMessageAcquittement($statut);
+    $this->addReponses($statut, $codes, $commentaires, $mbObject);
 
     $this->saveTempFile();
-    $messageAcquittementPatient = utf8_encode($this->saveXML());
+    $messageAcquittementServeurActivitePmsi = utf8_encode($this->saveXML());
 
-    return $messageAcquittementPatient;
+    return $messageAcquittementServeurActivitePmsi;
   }
    
-  function getStatutAcquittementPatient() {
+  function getStatutAcquittementServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
         
-    return $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    return $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
   }
   
-  function getAcquittementsPatients() {
+  function getAcquittementsServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
     
-    $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    $statut = $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
     
-    $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
+    $query = "/hprim:$this->evenement/hprim:enteteMessageAcquittement";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
     
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
@@ -113,16 +112,16 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     return $data;
   }
   
-  function getAcquittementObservationPatients() {
+  function getAcquittementReponsesServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
     
-    $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
+    $statut = $xpath->queryAttributNode("/hprim:a$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
     
-    $query = "/hprim:acquittementsPatients/hprim:enteteMessageAcquittement";
+    $query = "/hprim:$this->evenement/hprim:enteteMessageAcquittement";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
     
     $observations = array();
-    if ($statut == "OK") {
+    if ($statut == "ok") {
       $d = array();
       $observations[] = &$d;
         
@@ -131,13 +130,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
       $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
       $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);
     } else {
-      $query = "/hprim:acquittementsPatients/hprim:erreursAvertissements/*";
-      $erreursAvertissements = $xpath->query($query);   
+      $query = "/hprim:$this->evenements/hprim:reponses/*";
+      $reponses = $xpath->query($query);   
 
-      foreach ($erreursAvertissements as $erreurAvertissement) {
+      foreach ($reponses as $_reponse) {
         $d = array();
 
-        $observation = $xpath->queryUniqueNode("hprim:observations/hprim:observation", $erreurAvertissement);
+        $observation = $xpath->queryUniqueNode("hprim:observations/hprim:observation", $_reponse);
         $d['code'] = chunk_split($xpath->queryTextNode("hprim:code", $observation, "", false), 4, ' ');
         $d['libelle'] = $xpath->queryTextNode("hprim:libelle", $observation, "", false);
         $d['commentaire'] = $xpath->queryTextNode("hprim:commentaire", $observation, "", false);

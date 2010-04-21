@@ -39,7 +39,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     $patient = $this->addElement($enregistrementPatient, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $mbPatient, null, $referent);
+    $this->addPatient($patient, $mbPatient, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();

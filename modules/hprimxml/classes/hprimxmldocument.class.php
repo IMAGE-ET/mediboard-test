@@ -276,19 +276,38 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteCCAM;
   }
   
-  function addPatient($elParent, $mbPatient, $addPat = null, $referent = null, $light = false) {
+	function addActeCCAMAcquittement($elParent, $mbActeCCAM, $mbOp) {
+    $this->addAttribute($elParent, "valide", "oui");
+    
     $identifiant = $this->addElement($elParent, "identifiant");
-    $pat = $addPat ? "pat" : "";
+    $emetteur = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
+    $this->addElement($elParent, "codeActe", $mbActeCCAM->code_acte);
+    $this->addElement($elParent, "codeActivite", $mbActeCCAM->code_activite);
+    $this->addElement($elParent, "codePhase", $mbActeCCAM->code_phase);
+
+    $mbOpDebut = CValue::first(
+      $mbOp->debut_op, 
+      $mbOp->entree_salle, 
+      $mbOp->time_operation
+    );
+    
+    $execute = $this->addElement($elParent, "execute");
+    $this->addElement($execute, "date", $mbOp->_ref_plageop->date);
+    $this->addElement($execute, "heure", $mbOpDebut);    
+  }
+  
+  function addPatient($elParent, $mbPatient, $referent = false, $light = false) {
+    $identifiant = $this->addElement($elParent, "identifiant");
     
     if(!$referent) {
-      $this->addIdentifiantPart($identifiant, "emetteur",  $pat.$mbPatient->_id, $referent);
+      $this->addIdentifiantPart($identifiant, "emetteur",  $mbPatient->_id, $referent);
       if($mbPatient->_IPP) 
         $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP, $referent);
     } else {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbPatient->_IPP, $referent);
       
       if(isset($mbPatient->_id400))
-        $this->addIdentifiantPart($identifiant, "recepteur", $pat.$mbPatient->_id400, $referent);
+        $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_id400, $referent);
     }  
     
     // Ajout typePersonnePhysique
@@ -465,6 +484,58 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($observation, "code", substr($code, 0, 17));
     $this->addElement($observation, "libelle", substr($libelle, 0, 80));
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
+  }
+  
+  function addReponse($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {
+    $reponse = $this->addElement($elParent, "reponse");
+    $this->addAttribute($reponse, "statut", $statut);
+    $this->addAttribute($reponse, "codeErreur", $code);
+    
+    if ($mbObject instanceof CSejour) {
+	    $mbPatient =& $mbObject->_ref_patient;
+	    $mbSejour  =& $mbObject;
+    }
+  	if ($mbObject instanceof COperation) {
+  		
+    	$acteCCAM = $this->addElement($reponse, "acteCCAM");
+    	
+    	$this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
+    	
+    }	
+    
+    $dateHeureEvenementConcerne =  $this->addElement($erreurAvertissement, "dateHeureEvenementConcerne");
+    $this->addElement($dateHeureEvenementConcerne, "date", mbDate());
+    $this->addElement($dateHeureEvenementConcerne, "heure", mbTime());
+    
+    $evenementPatients = $this->addElement($erreurAvertissement, $this->_sous_type_evt);
+    $identifiantPatient = $this->addElement($evenementPatients, "identifiantPatient");
+    
+    if ($this->_sous_type_evt == "fusionPatient") {
+      $identifiantPatientElimine = $this->addElement($evenementPatients, "identifiantPatientElimine");
+    }
+    
+    if ($this->_sous_type_evt == "venuePatient") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+    }
+    
+    if ($this->_sous_type_evt == "debiteursVenue") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $debiteurs = $this->addElement($evenementPatients, "debiteurs");
+      $debiteur = $this->addElement($debiteurs, "debiteur");
+      $identifiantParticulier = $this->addElement($debiteur, "identifiantParticulier");
+    }
+    
+    if ($this->_sous_type_evt == "mouvementPatient") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $identifiantMouvement = $this->addElement($evenementPatients, "identifiantMouvement");
+    }
+    
+    if ($this->_sous_type_evt == "fusionVenue") {
+      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
+      $identifiantVenueEliminee = $this->addElement($evenementPatients, "identifiantVenueEliminee");
+    }
+    
+    $erreur = $this->addObservation($reponse, $code, $libelle, $commentaires);   
   }
   
   function getTypeEvenementPatient() {

@@ -59,7 +59,7 @@ if($echange_hprim->_id) {
     $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
     $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
     $domGetAcquittement->formatOutput = true;
-    $observations = $domGetAcquittement->getAcquittementObservation();
+    $observations = $domGetAcquittement->getAcquittementObservationPatients();
     $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
     
     $echange_hprim->acquittement = utf8_decode($domGetAcquittement->saveXML());

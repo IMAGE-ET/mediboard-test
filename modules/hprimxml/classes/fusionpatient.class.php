@@ -30,11 +30,11 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       
     $patient = $this->addElement($fusionPatient, "patient");
     // Ajout du nouveau patient   
-    $this->addPatient($patient, $mbPatient, null, $referent);
+    $this->addPatient($patient, $mbPatient, $referent);
       
     $patientElimine = $this->addElement($fusionPatient, "patientElimine");
     // Ajout du patient a eliminer
-    $this->addPatient($patientElimine, $mbPatient->_patient_elimine, null, $referent);
+    $this->addPatient($patientElimine, $mbPatient->_patient_elimine, $referent);
         
     // Traitement final
     $this->purgeEmptyElements();

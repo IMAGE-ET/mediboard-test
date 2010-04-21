@@ -33,7 +33,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     // Ajout du patient
     $mbPatient =& $mbSej->_ref_patient;
     $patient = $this->addElement($evenementPMSI, "patient");
-    $this->addPatient($patient, $mbPatient, false, null, true);
+    $this->addPatient($patient, $mbPatient, false, true);
     
     // Ajout de la venue, c'est-à-dire le séjour
     $venue = $this->addElement($evenementPMSI, "venue");

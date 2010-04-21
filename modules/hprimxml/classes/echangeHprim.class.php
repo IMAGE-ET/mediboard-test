@@ -119,7 +119,7 @@ class CEchangeHprim extends CMbMetaObject {
       $domGetAcquittement->loadXML(utf8_decode($this->acquittement));
       $doc_valid = $domGetAcquittement->schemaValidate();
       if ($doc_valid) {    
-        return $this->_observations = $domGetAcquittement->getAcquittementObservation();
+        return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
       }
     }
   }
