@@ -247,26 +247,26 @@ $traduction = array("E" => "l'entrée", "I" => "I", "S" => "la sortie");
 $prescription->_ref_selected_prat = $praticien;
 
 // Chargement du header
-$header_height = 10;
+$header_height = 120;
 $template_header = new CTemplateManager();
 if(!$ald){
 	$prescription->fillTemplate($template_header);
 	$header = CPrescription::getPrescriptionTemplate("header", $praticien);
 	if($header->_id){
 	  $template_header->renderDocument($header->source);
-		$header_height = $header->height;
+		$header_height = $header->height * 12;
 	}
 }
 
 // Chargement du footer
-$footer_height = 10;
+$footer_height = 120;
 $template_footer = new CTemplateManager();
 if(!$ald){
 	$prescription->fillTemplate($template_footer);
 	$footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
 	if($footer->_id){
 	  $template_footer->renderDocument($footer->source);
-	  $footer_height = $footer->height;
+	  $footer_height = $footer->height * 12;
 	}
 }
 

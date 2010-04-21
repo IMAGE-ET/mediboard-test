@@ -21,6 +21,29 @@ Main.add(window.print);
 
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css}}
+
+div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
+  padding-top: {{$header}}px;
+  padding-bottom: {{$footer}}px;
+}
+
+/* Partie variable */
+@media print {
+  div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
+    padding-top: {{$header+3}}px;
+    padding-bottom: {{$footer+3}}px;
+  }
+}
+
+div.header {
+  height: {{$header}}px;
+}
+
+div.footer {
+  height: {{$footer}}px;
+}
+
+
 </style>
 
 <div class="header" onclick="window.print();" style="cursor: pointer">
