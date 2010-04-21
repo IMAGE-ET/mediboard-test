@@ -76,6 +76,8 @@ class CSejour extends CCodable {
   var $_duree              = null;
   var $_date_entree_prevue = null;
   var $_date_sortie_prevue = null;
+  var $_time_entree_prevue = null;
+  var $_time_sortie_prevue = null;
   var $_hour_entree_prevue = null;
   var $_hour_sortie_prevue = null;
   var $_min_entree_prevue  = null;
@@ -245,6 +247,9 @@ class CSejour extends CCodable {
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]             = "bool default|0";
     
+    $props["_time_entree_prevue"] = "time";
+    $props["_time_sortie_prevue"] = "time";
+		
     $props["_entree"]         = "dateTime show";
     $props["_sortie"]         = "dateTime show";
     $props["_date_entree"]    = "date";
@@ -537,6 +542,9 @@ class CSejour extends CCodable {
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
     $this->_duree              = mbDaysRelative($this->_entree, $this->_sortie);
+		
+    $this->_time_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H:%M:00");
+	  $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
 
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
@@ -600,6 +608,7 @@ class CSejour extends CCodable {
 
 	
   function updateDBFields() {
+
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
       $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);

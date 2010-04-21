@@ -257,6 +257,21 @@ Element.addMethods({
     return element;
   },
   
+  centerH : function(element) {
+    element.setStyle({
+      left: 0
+    });
+  
+    var viewport = document.viewport.getDimensions(); // Viewport size
+    var dim = element.getDimensions(); // Element dimensions
+    
+    element.setStyle({
+      left: (viewport.width - dim.width) / 2 + "px"
+    });
+    
+    return element;
+  },
+  
   setVisible: function(element, condition) {
     return element[condition ? "show" : "hide"]();
   },

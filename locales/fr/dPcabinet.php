@@ -1810,6 +1810,12 @@ $locales['CPatient-back-consultations.empty'] = 'Aucune consultation';
 $locales['CPlageconsult-back-consulations.empty'] = 'Aucune consultation';
 $locales['CSejour-back-consultations.empty'] = 'Aucune consultation';
 $locales['CSejour-back-consultations_anesths.empty'] = 'Aucune dossier d\'anesthésie';
+<<<<<<< .mine
+$locales['edit_consult'] = 'Création rendez-vous';
+$locales['consult_prg'] = 'Liste des consultations';
+$locales['dPcabinet'] = 'Consultations';
+$locales['home'] = 'Accueil';
+=======
 $locales['config-dPcabinet-CConsultAnesth-show_mallampati'] = 'Affichage de la mallampati sous forme d\'image';
 $locales['config-dPcabinet-CConsultAnesth-show_mallampati-desc'] = 'Affichage de la mallampati sous forme d\'image';
 $locales['mod-dPcabinet-tab-configure'] = '';
@@ -1843,4 +1849,5 @@ $locales['mod-dPcabinet-tab-view_consultation'] = '';
 $locales['mod-dPcabinet-tab-vw_ant_easymode'] = '';
 $locales['mod-dPcabinet-tab-vw_history'] = '';
 $locales['mod-dPcabinet-tab-vw_resume'] = '';
+>>>>>>> .r8636
 ?>

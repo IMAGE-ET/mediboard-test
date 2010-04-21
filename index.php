@@ -165,7 +165,14 @@ CAppUI::requireSystemClass("smartydp");
 
 ob_start();
 
-require("./includes/main.php");
+// verifier si Mobile
+if(is_file("./mobile/main.php") && preg_match('/mobi/i', $_SERVER['HTTP_USER_AGENT'])||preg_match('/phone/i', $_SERVER['HTTP_USER_AGENT'])||preg_match('/symbian/i', $_SERVER['HTTP_USER_AGENT']) ){
+  require("./mobile/main.php");
+}
+else {
+  require("./includes/main.php");
+}
+
 require("./includes/access_log.php");
 
 ob_end_flush();

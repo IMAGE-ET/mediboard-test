@@ -430,6 +430,8 @@ function smarty_function_mb_include($params, &$smarty) {
  * integrated to dotProject framework as well as standard data assignment
  */
 class CSmartyDP extends Smarty {
+	static $extraPath = "";
+	
   /**
    * Construction
    *
@@ -439,7 +441,7 @@ class CSmartyDP extends Smarty {
   function CSmartyDP($rootDir = null) {
     global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
     
-    $root = CAppUI::conf("root_dir");
+    $root = CAppUI::conf("root_dir").self::$extraPath;
 
     if (!$rootDir) {
       $rootDir = "$root/modules/$m"; 

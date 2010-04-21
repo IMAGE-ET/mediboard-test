@@ -515,8 +515,9 @@ var Calendar = {
       timePickerAdjacent: true, 
       use24hrs: true,
       container: $(document.body),
-      dateProperties: function(date){return Calendar.dateProperties(date, dates)}
-    }, options || {});
+      dateProperties: function(date){return Calendar.dateProperties(date, dates)},
+      center: window.Mobile
+    }, options);
     
 		options.captureKeys = !options.inline;
     options.emptyButton = (!options.noView && !element.hasClassName('notNull'));
@@ -553,7 +554,12 @@ var Calendar = {
     else {
       elementView.observe('click', Event.stop).observe('focus', function(e){
         datepicker.show.bind(datepicker)(e);
-        $(datepicker.datepicker.element).unoverflow();
+        if (options.center) {
+          $(datepicker.datepicker.element).centerH();
+        }
+        else {
+          $(datepicker.datepicker.element).unoverflow();
+        }
       });
     }
     
@@ -565,7 +571,12 @@ var Calendar = {
     
     if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
-        $(datepicker.datepicker.element).unoverflow();
+        if (options.center) {
+          $(datepicker.datepicker.element).centerH();
+        }
+        else {
+          $(datepicker.datepicker.element).unoverflow();
+        }
       });
     }
     
