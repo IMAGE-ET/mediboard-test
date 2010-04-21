@@ -59,36 +59,40 @@ $prescription->loadRefsLinesMedComments();
 $prescription->loadRefsLinesElementsComments();
 $prescription->loadRefsPerfusions();
 
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();
-  $_perfusion->calculQuantiteTotal();
-	$_perfusion->loadRefPraticien();
-  foreach($_perfusion->_ref_lines as $_perf_line){
-    $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
-    $_perf_line->loadRefsAdministrations();
-    foreach($_perf_line->_ref_administrations as $_administration_perf){
-    	$_administration_perf->loadRefAdministrateur();
-      if(!$_administration_perf->planification){
-        $dossier[mbDate($_administration_perf->dateTime)]["perfusion"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
-      }
-    }
-  }
+if($prescription->_ref_perfusions|@count){
+	foreach($prescription->_ref_perfusions as $_perfusion){
+	  $_perfusion->loadRefsLines();
+	  $_perfusion->calculQuantiteTotal();
+		$_perfusion->loadRefPraticien();
+	  foreach($_perfusion->_ref_lines as $_perf_line){
+	    $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
+	    $_perf_line->loadRefsAdministrations();
+	    foreach($_perf_line->_ref_administrations as $_administration_perf){
+	    	$_administration_perf->loadRefAdministrateur();
+	      if(!$_administration_perf->planification){
+	        $dossier[mbDate($_administration_perf->dateTime)]["perfusion"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
+	      }
+	    }
+	  }
+	}
 }
 
 // Parcours des lignes de medicament et stockage du dossier cloturé
-foreach($prescription->_ref_prescription_lines as $_line_med){
-	$_line_med->loadRefsFwd();
-	$_line_med->loadRefsPrises();
-  $_line_med->loadRefProduitPrescription();
-  $_line_med->_ref_produit->loadConditionnement();
-  $list_lines["medicament"][$_line_med->_id] = $_line_med;
-  $_line_med->loadRefsAdministrations();
-  foreach($_line_med->_ref_administrations as $_administration_med){
-  	$_administration_med->loadRefAdministrateur();
-    if(!$_administration_med->planification){
-      $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
-    }
-  }
+if($prescription->_ref_prescription_lines|@count){
+	foreach($prescription->_ref_prescription_lines as $_line_med){
+		$_line_med->loadRefsFwd();
+		$_line_med->loadRefsPrises();
+	  $_line_med->loadRefProduitPrescription();
+	  $_line_med->_ref_produit->loadConditionnement();
+	  $list_lines["medicament"][$_line_med->_id] = $_line_med;
+	  $_line_med->loadRefsAdministrations();
+	  foreach($_line_med->_ref_administrations as $_administration_med){
+	  	$_administration_med->loadRefAdministrateur();
+	    if(!$_administration_med->planification){
+	      $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+	    }
+	  }
+	}
 }
 
 // Parcours des lignes d'elements
