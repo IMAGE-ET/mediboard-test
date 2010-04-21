@@ -18,7 +18,10 @@
   <tr>
     {{if !$line->fin}}
     <td>
-      {{mb_label object=$line field="debut"}}: {{mb_value object=$line field="debut"}}
+      {{mb_label object=$line field="debut"}}: {{mb_value object=$line field="debut"}} 
+			{{if $line->time_debut}}
+  			à {{mb_value object=$line field="time_debut"}}
+			{{/if}}
     </td>
    {{if $chapitre != "anapath" && $chapitre != "imagerie" && $chapitre != "consult"}}
     <td>

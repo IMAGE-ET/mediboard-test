@@ -47,7 +47,7 @@ div.footer {
 </style>
 
 <div class="header" onclick="window.print();" style="cursor: pointer">
-  {{if $ald}}
+  {{if $_ald}}
 	 <table class="main">
         <tr>
           <td class="left">
@@ -126,7 +126,7 @@ div.footer {
 </div>
 
 <!-- Affichage du pieds de page -->
-{{if !$ald}}
+{{if !$_ald}}
 <div class="footer">
   {{if $generated_footer}}
     {{$generated_footer|smarty:nodefaults}}
