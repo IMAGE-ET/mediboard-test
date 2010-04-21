@@ -16,10 +16,11 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables
-$chir_id   = CValue::get("chir_id");
-$date      = CValue::get("date", mbDate());
-$nb_months = CValue::get("nb_months", 3);
-$period    = CValue::get("period", CAppUI::pref("DefaultPeriod"));
+$chir_id     = CValue::get("chir_id");
+$function_id = CValue::get("function_id");
+$date        = CValue::get("date", mbDate());
+$nb_months   = CValue::get("nb_months", 3);
+$period      = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des plages de consultation disponibles
 $plage = new CPlageconsult;
@@ -29,9 +30,9 @@ $where = array();
 // Praticiens sélectionnés
 $praticien = new CMediusers;
 if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $praticien->loadPraticiens(PERM_EDIT);
+  $listPrat = $praticien->loadPraticiens(PERM_EDIT, $function_id);
 } else {
-  $listPrat = $praticien->loadProfessionnelDeSante(PERM_EDIT);
+  $listPrat = $praticien->loadProfessionnelDeSante(PERM_EDIT, $function_id);
 }
 
 $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
