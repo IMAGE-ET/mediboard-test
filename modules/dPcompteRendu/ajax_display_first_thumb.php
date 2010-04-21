@@ -9,11 +9,9 @@
  */
 
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
-CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
-CAppUI::requireLibraryFile("dompdf/include/dompdf.cls");
 
 $compte_rendu_id = CValue::get("compte_rendu_id");
-$user_id         = CValue::get("user_id");
+$user_id         = CValue::get("user_id", CAppUI::$user->user_id);
 $nomdoc          = CValue::get("nomdoc");
 
 $compte_rendu = new CCompteRendu();
@@ -59,7 +57,7 @@ if(!count($files)) {
 	
   $htmltopdf = new CHtmlToPDF;
   $htmltopdf->generate_pdf($content, 0, $page_format, $orientation,$file->_file_path);
-	
+  $file->file_size = filesize($file->_file_path);
   $file->store();
 }
 else {

@@ -31,17 +31,19 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_right,
                                              $compte_rendu->margin_bottom,
                                              $compte_rendu->margin_left));
+$files = null;
 $file = new CFile;
-$files = $file->loadFilesForObject($compte_rendu);
 
-if (count($files)) {
+if($compte_rendu_id) {
+  $files = $file->loadFilesForObject($compte_rendu);
+}
+if (isset($files) && count($files)) {
   $file = reset($files);
 }
 
-if (!count($files) && $mode != "modele" && $first_time == 1 && !$compte_rendu->object_id) {
+if (!isset($files) && !count($files) && $mode != "modele" && $first_time == 1 && !$compte_rendu->object_id) {
   CAppUI::stepAjax(CAppUI::tr("CCompteRendu-no-pdf-generated"));
   return;
-	
 }
 else if (count($files) && $first_time == 1 && file_get_contents($file->_file_path) != '') {
   // rien
@@ -52,7 +54,7 @@ else {
     switch($type) {
       case "header":
       case "footer":
-        $content = $compte_rendu->loadHTMLcontent($content, $mode,$type, '',$height,'','',$margins);
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, '', $height, '', '', $margins);
         break;
       case "body":
         $compte_rendu_h_f = new CCompteRendu;
@@ -68,7 +70,7 @@ else {
           $footer = $compte_rendu_h_f->source;
           $sizefooter = $compte_rendu_h_f->height;
         }
-        $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, $header,$sizeheader,$footer,$sizefooter,$margins);
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, $header, $sizeheader, $footer, $sizefooter, $margins);
       }
     }
   else {

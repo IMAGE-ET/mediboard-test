@@ -39,15 +39,19 @@ var Thumb = {
   },
   old: function() {
     if(!this.thumb_up2date) return;
-    
-    var thumb_0 = $("thumb_0");
-    var thumbs = $("thumbs"); 
-    
-    thumbs.setOpacity(0.5);
-    thumb_0.onclick = null;
-    var mess = new Element('div', {id: 'mess', style: 'position: absolute; width: 160px; font-size: 12pt; font-weight: bold;'}).update("<br/><br/>Vignettes obsolètes : cliquez sur le bouton pour réactualiser.<br/>");
-    mess = mess.insert( {bottom: new Element('button', {id: 'refresh', class: 'change notext', type: 'button', title: 'Rafraîchir les vignettes', onclick: 'Thumb.refreshthumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);'})});
-    thumbs.insert({top: mess});
+    var on_click = function(){
+      Thumb.refreshthumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+    }
+    $("thumbs").setOpacity(0.5);
+
+    for(var i = 0; i < Thumb.nb_thumbs; i++) {
+      $("thumb_" + i).onclick = null;
+      $("thumb_" + i).observe("click", on_click);
+    }
+
+    var mess = $('mess').show();
+    mess.observe("click", on_click);
+    mess.down("button").observe("click", on_click);
     this.thumb_up2date = false;
   }
 }
@@ -68,6 +72,7 @@ function loadold(editorInstance) {
   if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
     Thumb.old();
   }
+	Thumb.content = editorInstance.GetHTML(false);
 }
 
 function FCKeventChanger(editorInstance) {

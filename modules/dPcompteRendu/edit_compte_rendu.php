@@ -57,6 +57,7 @@ else {
   
   // A partir d'un pack
   if ($pack_id) {
+
     $pack = new CPack;
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;
@@ -72,6 +73,16 @@ else {
     	if (!isset($footer)) $footer = $mod->_ref_footer;
     	if ($header && $footer) break;
     }
+
+    // Marges et format
+    $first_modele = reset($pack->_modeles);
+    $compte_rendu->margin_top    = $first_modele->margin_top;
+    $compte_rendu->margin_left   = $first_modele->margin_left;
+    $compte_rendu->margin_right  = $first_modele->margin_right;
+    $compte_rendu->margin_bottom = $first_modele->margin_bottom;
+    $compte_rendu->page_height   = $first_modele->page_height;
+    $compte_rendu->page_width    = $first_modele->page_width;
+
   }
   
   if ($header || $footer) {

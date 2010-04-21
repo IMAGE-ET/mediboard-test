@@ -43,7 +43,7 @@ Main.add(function () {
             {{if $_doc_item->_class_name=="CCompteRendu"}}
               {{if $dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
-                {{assign var="file_owner" value=$_doc_item->chir_id}}
+                {{assign var="file_owner" value=$_doc_item->_ref_chir->_id}}
                 {{assign var="srcImg" value="?m=dPcompteRendu&a=ajax_display_first_thumb&suppressHeaders=1&compte_rendu_id=$elementId&nomdoc=$nomdoc&user_id=$file_owner"}}
               {{else}}
 			     {{assign var="srcImg" value="images/pictures/medifile.png"}}

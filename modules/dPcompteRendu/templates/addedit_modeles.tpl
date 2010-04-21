@@ -129,7 +129,6 @@ Main.add(function () {
   loadCategory('{{$compte_rendu->file_category_id}}');
   {{if $compte_rendu->_id && $droit && $pdf_thumbnails}}
     Thumb.compte_rendu_id = {{$compte_rendu->_id}};
-		Thumb.modele_id = {{$modele_id}};
 		Thumb.user_id = {{$user_id}};
 		Thumb.mode = "modele";
 		PageFormat.init(getForm("editFrm"));

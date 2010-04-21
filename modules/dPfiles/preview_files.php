@@ -65,11 +65,13 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $acces_denied = !$listFile[$elementId]->_canRead;
       if($listFile[$elementId]->_canRead) {
         $fileSel = $listFile[$elementId];
+        $file_id = $fileSel->_id;
         if($pdf_active && $type == "_ref_documents") {
           $compte_rendu = new CCompteRendu;
           $compte_rendu->load($elementId);
           $compte_rendu->loadFile();
           $fileSel = $compte_rendu->_ref_file;
+          $file_id = $fileSel->_id;
         }
         $keyTable = $listFile[$elementId]->_spec->key;
         $keyFileSel = $listFile[$elementId]->$nameFile;
@@ -88,7 +90,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
 }
 
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
-if($fileSel && $elementClass == "CFile" && !$pdf_active && !$acces_denied){
+if($fileSel && $elementClass == "CFile" && !$acces_denied){
 
   if($fileSel->file_type == "text/plain" && file_exists($fileSel->_file_path)){
     // Fichier texte, on récupére le contenu
@@ -115,9 +117,6 @@ elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_ac
 
 if ($pdf_active) {
   if ($elementClass == "CCompteRendu") {
-    if ($typeVue || $popup == 1) {
-      $file_id = $fileSel->_id;
-    }
     $fileSel->loadNbPages();
     if($fileSel->_nb_pages) {
       if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}

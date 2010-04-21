@@ -1,3 +1,12 @@
+<script type='text/javascript'>
+	Thumb.nb_thumbs = {{$nbpages}};
+</script>
+
+<div id="mess" style="position: fixed; width: 160px; font-size: 12pt; font-weight: bold; display: none;">
+  <br/><br/>Vignettes obsolètes : cliquez sur le bouton pour réactualiser.<br/>
+	<button type="button" class="change notext">Rafraîchir les vignettes</button>
+</div>
+
 {{assign var=i value=0}}
 {{foreach from=$vignettes item=_vignette}}
   <p style="margin-bottom: 10px;">

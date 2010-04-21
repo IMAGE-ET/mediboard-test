@@ -9,6 +9,7 @@
 
 if (!is_dir("lib/dompdf")) return;
 
+CAppUI::requireModuleFile("dPcompteRendu", "dompdf_config");
 CAppUI::requireLibraryFile("dompdf/dompdf_config.inc");
 CAppUI::requireLibraryFile("dompdf/include/dompdf.cls");
 
