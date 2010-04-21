@@ -11,6 +11,19 @@
 $prescription_id = CValue::get("prescription_id");
 $sel_chapitre = CValue::get("sel_chapitre");
 $debut = CValue::get("debut", mbDate());
+$print = CValue::get("print", "0");
+$list_bons = CValue::get("list_bons");
+
+// Recuperation des bons à imprimer
+$_list_bons = array();
+if(count($list_bons)){
+	foreach($list_bons as $_key_bon){
+		$explode_bon = explode("-", $_key_bon);
+		$line_bon = $explode_bon[0];
+		$hour_bon = $explode_bon[1];
+		$_list_bons[$line_bon][] = $hour_bon;
+	}
+}
 
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
@@ -28,6 +41,7 @@ $sejour->loadRefsOperations();
 $sejour->_ref_last_operation->loadRefPlageOp();
 $sejour->_ref_last_operation->loadExtCodesCCAM();
 $bons = array();
+$all_bons = array();
 $lines = array();
 
 // Liste des chapitres concernés par l'impression des bons
@@ -48,22 +62,32 @@ if(count($prescription->_ref_lines_elt_for_plan)){
 		            foreach($quantites as $_quantites){
 			            if(is_array($_quantites)){  
 			              foreach($_quantites as $_hour => $_quantite){
-			                if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
-			                	if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
-			                    $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
-			                  }
-			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
+			                $print_bon = false;
+											// Si le bon n'a pas ete selectionné
+											if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
+			                  $print_bon = true;
+											}
+
+											if(isset($_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"])){
+			                	$quantite = $_line->_administrations[$unite][$_date][$_hour]["quantite_planifiee"];
+												if($print_bon){
+			                    @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
+												}
+												@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite;
 			                }
-			                if(isset($_quantite["total"]) && $_quantite["total"]){
-			                  if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
-			                    $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
-												}		                  
-			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+											
+											if(isset($_quantite["total"]) && $_quantite["total"]){
+												if($print_bon){		                  
+			                    @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
+												}
+												@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $_quantite["total"];
 			                }
+
 			                if(!array_key_exists($_line->_id, $lines)){
 			                  $lines[$_line->_id] = $_line;
 			                }
-			              }
+			              
+										}
 			            }
 		            }
 		          }
@@ -73,14 +97,21 @@ if(count($prescription->_ref_lines_elt_for_plan)){
 			      foreach($_line->_administrations as $unite_prise => &$administrations_by_unite){
 			        foreach($administrations_by_unite as $_date => &$administrations_by_date){
 			          foreach($administrations_by_date as $_hour => &$administrations_by_hour){
-	                if(is_numeric($_hour)){  
+	                if(is_numeric($_hour)){
+                	  $print_bon = false;
+                    // Si le bon ne fait pas parti de ceux selectionnes
+                    if(array_key_exists($_line->_id, $_list_bons) && in_array($_hour, $_list_bons[$_line->_id])){
+                     $print_bon = true;
+                    }
+										
 				          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 					          if($quantite_planifiee){
-		                	if(!isset($bons[$_name_chap][$_hour][$_name_cat][$_line->_id])){
-			                  $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] = 0;
-			                }
-			                $bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+		                	if($print_bon){
+			                  @$bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
+											}
+											@$all_bons[$_name_chap][$_hour][$_name_cat][$_line->_id] += $quantite_planifiee;
 					          }
+										
 	                	if(!array_key_exists($_line->_id, $lines)){
 			                $lines[$_line->_id] = $_line;
 			              }
@@ -100,6 +131,10 @@ foreach($bons as $_chap => &$_bons){
   ksort($_bons);
 }
 
+// Tri par heures
+foreach($all_bons as $_chap => &$_all_bons){
+  ksort($_all_bons);
+}
 
 // Creation d'un tableau des affectations pour la date courante
 $affectations = array();
@@ -119,6 +154,7 @@ $filter_line->debut = $debut;
 
 $smarty = new CSmartyDP;
 $smarty->assign("affectations", $affectations);
+$smarty->assign("all_bons", $all_bons);
 $smarty->assign("bons", $bons);
 $smarty->assign("lines", $lines);
 $smarty->assign("debut", $debut);
@@ -129,6 +165,8 @@ $smarty->assign("chapitres", $chapitres);
 $smarty->assign("filter_line", $filter_line);
 $smarty->assign("categories", $categories);
 $smarty->assign("debut", $debut);
+$smarty->assign("print", $print);
+$smarty->assign("list_bons", $list_bons);
 $smarty->display("print_bon.tpl");
 
 ?>

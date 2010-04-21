@@ -24,6 +24,11 @@ Main.add( function(){
     spots: []
   };
   Calendar.regField(oForm.debut, dates);
+	
+	
+	{{if $print}}
+	window.print();
+	{{/if}}
 });
 </script>  
   
@@ -53,36 +58,73 @@ Main.add( function(){
 
 </style>
 
-<form name="filtreBons" method="get">
+<form name="filtreBons" method="get" class="not-printable">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="a" value="print_bon" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
   <input type="hidden" name="dialog" value="1" />
-	<table class="form">
+	
+	<table class="tbl">
 	  <tr>
-	    <th colspan="3" class="category">Filtres</th>
-	  </tr>
+	    <th class="title" colspan="4">
+	      Sélection des bons à imprimer
+	    </th>
+	  </tr> 
+		
+     <tr>
+      <td colspan="2" style="text-align: center;">
+        Chapitre
+        <select name="sel_chapitre" onchange=this.form.submit();>
+          <option value="">&mdash; Tous</option>
+          {{foreach from=$chapitres item=_chapitre}}
+            <option value="{{$_chapitre}}" {{if $_chapitre == $sel_chapitre}}selected="selected"{{/if}}>{{tr}}CPrescription._chapitres.{{$_chapitre}}{{/tr}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+      <td colspan="2" style="text-align: center;">
+        Date {{mb_field object=$filter_line field=debut class=notNull onchange=this.form.submit()}}
+      </td>
+    </tr>
 	  <tr>
-	    <td>
-	      <button type="button" class="print" onclick="window.print();">Imprimer les bons</button>
-	    </td>
-	    <td>
-	      Chapitre
-		    <select name="sel_chapitre" onchange=this.form.submit();>
-		      <option value="">&mdash; Tous</option>
-		      {{foreach from=$chapitres item=_chapitre}}
-		        <option value="{{$_chapitre}}" {{if $_chapitre == $sel_chapitre}}selected="selected"{{/if}}>{{tr}}CPrescription._chapitres.{{$_chapitre}}{{/tr}}</option>
+	    <th>Bon</th>
+	    <th>Prescripteur</th>
+	    <th>Heure</th>
+	    <th></th>
+		</tr>
+		{{foreach from=$all_bons key=chapitre item=_bons_by_hour key=_chap name=foreach_chap}}
+		  {{foreach from=$_bons_by_hour key=hour item=_bons_by_cat name=foreach_hour}}
+		    {{foreach from=$_bons_by_cat item=_bons key=name_cat}}         
+		      {{foreach from=$_bons key=line_id item=_bon}}
+		        {{assign var=line value=$lines.$line_id}}
+		        <tr>
+		          <td>
+		            <strong>{{$line->_view}}</strong>
+		          </td>
+		          <td>
+		            {{mb_value object=$line field="praticien_id"}}
+		          </td>
+		          <td>
+		            {{$hour}}h
+		          </td>
+		          <td style="width: 1%">
+		          	{{assign var=key_bon value="$line_id-$hour"}}
+		            <input type="checkbox" name="list_bons[]" {{if @in_array($key_bon, $list_bons) || !is_array($list_bons) || !$print}}checked="checked"{{/if}} value="{{$key_bon}}" />
+		          </td>
+		        </tr>               
 		      {{/foreach}}
-		    </select>
-	    </td>
-	    <td>
-	      Date {{mb_field object=$filter_line field=debut class=notNull onchange=this.form.submit()}}
-	    </td>
-	  </tr>
-	</table> 
+		    {{/foreach}}    
+		  {{/foreach}}
+		{{/foreach}}
+		<tr>
+			<td class="button" colspan="4">
+				<input type="hidden" name="print" value="0" />
+		    <button type="button" class="print" onclick="$V(this.form.print, '1'); this.form.submit();">Imprimer les bons sélectionnés</button>
+    	</td>
+		</tr>
+	</table>
 </form>
-
-
+<br />
+{{if $print}}
 <div class="header">
   <span style="float: right">
     {{foreach from=$affectations item=_affectation}}
@@ -153,6 +195,7 @@ Main.add( function(){
 	    </div>
 	{{/foreach}}
 {{/foreach}}
+{{/if}}
 
 <!-- re-ouverture du tableau -->
 <table>
