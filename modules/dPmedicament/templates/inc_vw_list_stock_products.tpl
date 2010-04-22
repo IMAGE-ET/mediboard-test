@@ -17,7 +17,14 @@
           <input type="hidden" name="code_cip" value="{{$_product->code}}"/>
           
           {{if $_product->_is_valid}}
-            <button type="submit" class="{{$_product->_in_livret|ternary:none:add}} notext" {{if $_product->_in_livret}}disabled="disabled"{{/if}}></button>
+            {{if $_product->_in_livret}}
+              <button type="button" class="cancel notext" 
+                      onclick="confirmDeletion(this.form,{ajax:true,typeName:'le produit du livret thérapeutique',objName:'{{$_product|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+            {{else}}
+              <button type="submit" class="add notext">{{tr}}Add{{/tr}}</button>
+            {{/if}}
           {{/if}}
         </form>
       </td>
