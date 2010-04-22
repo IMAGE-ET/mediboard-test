@@ -280,7 +280,7 @@ class CCodable extends CMbObject {
   }
 
   function getMaxCodagesActes() {
-    if(!$this->_id || $this->codes_ccam === null) {
+    if(!$this->_id || $this->codes_ccam === null || $this->_forwardRefMerging) {
       return;
     }
 
@@ -318,7 +318,6 @@ class CCodable extends CMbObject {
 	    }
 	    @$nb_codes_ccam[$code]++;
 	  }
-	  
 	  
 	  // Test entre les deux tableaux
 	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
