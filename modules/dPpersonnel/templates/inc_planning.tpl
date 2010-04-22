@@ -8,10 +8,10 @@
   var date_courante = Date.fromDATE(form.elements.date_debut.value); 
   
   if (choix=="semaine") {
-    if(sens == "p") {
+    if(sens=='p') {
       date_courante.addDays(-7);
     }
-    else {
+    else if(sens=='n'){
       date_courante.addDays(7);
     }
   }
@@ -19,7 +19,7 @@
     if(sens == "p") {
       date_courante.setMonth(date_courante.getMonth() - 1);
     }
-    else {
+    else if(sens=='n'){
       date_courante.setMonth(date_courante.getMonth() + 1);
     }
   }
@@ -27,7 +27,6 @@
 	var champs = date_courante.toDATE().split('-');
   form.elements.date_debut_da.value = champs[2] + "/" + champs[1] + "/" + champs[0];
   loadPlanning(form);
-  //form.submit();
 }
 </script>
 <table class="main">
@@ -97,9 +96,8 @@
                   <script type="text/javascript">
                     Main.add(function(){
                       display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-                      
-											new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
-											
+                      new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
+
                       Event.observe(window, "resize", function(){
                         display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
                       });

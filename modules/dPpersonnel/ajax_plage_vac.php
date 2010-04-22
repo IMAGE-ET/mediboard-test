@@ -27,7 +27,6 @@ $new_plagevac = new CPlageVacances();
 $smarty = new CSmartyDP();
 $smarty->assign("user",         $user);
 $smarty->assign("plages_vac",   $plages_vac);
-$smarty->assign("user_id",      $user_id);
 $smarty->assign("new_plagevac", $new_plagevac);
 $smarty->display("inc_liste_plages_vac.tpl");
 ?>
