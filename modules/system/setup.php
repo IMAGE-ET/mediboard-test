@@ -239,7 +239,6 @@ class CSetupsystem extends CSetup {
     $this->addQuery($sql);
 		
 		$this->makeRevision("1.0.25");
-		
     $sql = "ALTER TABLE `source_soap` 
               ADD `evenement_name` VARCHAR (255),
               ADD `type_echange` VARCHAR (255);";
@@ -248,7 +247,11 @@ class CSetupsystem extends CSetup {
               ADD `type_echange` VARCHAR (255);";
     $this->addQuery($sql);
 		
-    $this->mod_version = "1.0.26";
+    $this->makeRevision("1.0.26");
+    $sql = "DELETE FROM `modules` WHERE `mod_name` = 'dPinterop'";
+    $this->addQuery($sql, true);
+    
+    $this->mod_version = "1.0.27";
   }
 }
 ?>
