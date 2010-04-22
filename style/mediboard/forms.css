@@ -488,7 +488,23 @@ input.autocomplete.throbbing {
   background-position: 100% -18px;
 }
 
+div.dropdown {
+  border:none;
+  margin:0;
+  padding:0;
+  position:relative;
+  display:inline-block;
+}
+
 div.dropdown-trigger {
+  height: 16px;
+  width: 16px;
+  padding:0;
+  position:absolute;
+  right:0;
+  top:0;
+  margin: 1px;
+  cursor:pointer;
   background-repeat: repeat-x;
   background-position: center center;
   background-image: url(images/buttons/button.png);
@@ -501,6 +517,11 @@ div.dropdown-trigger:hover {
 }
 
 div.dropdown-trigger div {
+  position:absolute;
+  right:0;
+  top:0;
+  left:0;
+  bottom:0;
   background: url(../../images/buttons/down.gif) center center no-repeat;
   border: 1px solid #eee;
 }

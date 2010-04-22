@@ -165,8 +165,8 @@ CAppUI::requireSystemClass("smartydp");
 
 ob_start();
 
-// verifier si Mobile
-if(is_file("./mobile/main.php") && preg_match('/mobi/i', $_SERVER['HTTP_USER_AGENT'])||preg_match('/phone/i', $_SERVER['HTTP_USER_AGENT'])||preg_match('/symbian/i', $_SERVER['HTTP_USER_AGENT']) ){
+// We check if the mobile feature is available and if the user agent is a mobile
+if (is_file("./mobile/main.php") && preg_match("/mobi|phone|symbian/i", CValue::read($_SERVER, "HTTP_USER_AGENT"))) {
   require("./mobile/main.php");
 }
 else {

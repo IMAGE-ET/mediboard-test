@@ -303,27 +303,15 @@ var Url = Class.create({
     
     // Drop down button, like <select> tags
     if (oOptions.dropdown) {
-      var container = new Element("div", {style: "border:none;margin:0;padding:0;position:relative;display:inline-block"}).addClassName("dropdown"),
-          height = (input.getHeight() || 18)-2,
-          margin = parseInt(input.getStyle("marginTop"));
-      
-      container.setStyle({paddingRight: (height+3)+'px'}).
-                clonePosition(input, {setLeft: false, setTop: false});
-      
-      if (!container.getWidth()) {
-        container.style.width = null;
-        input.style.marginRight = "-1px";
-      }
+      var container = new Element("div").addClassName("dropdown");
       
       input.wrap(container);
       container.insert(populate);
       
       // The trigger button
-      var trigger = new Element("div", {
-        style:"padding:0;position:absolute;right:0;top:0;width:"+height+"px;height:"+height+"px;margin:"+margin+"px;cursor:pointer;"
-      }).addClassName("dropdown-trigger");
+      var trigger = new Element("div").addClassName("dropdown-trigger");
       
-      trigger.insert(new Element("div", {style: "position:absolute;right:0;top:0;left:0;bottom:0;"}));
+      trigger.insert(new Element("div"));
       
       // Hide the list
       var hideAutocomplete = function(e){

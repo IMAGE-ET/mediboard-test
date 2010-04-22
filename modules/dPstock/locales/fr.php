@@ -1103,4 +1103,13 @@ $locales['CProductReceptionBillItem-_price-desc'] = '';
 $locales['CProductReceptionBillItem-reception_bill_item_id'] = '';
 $locales['CProductReceptionBillItem-reception_bill_item_id-court'] = '';
 $locales['CProductReceptionBillItem-reception_bill_item_id-desc'] = '';
+$locales['mod-dPstock-tab-configure'] = 'Configuration';
+$locales['mod-dPstock-tab-print_reception'] = 'Bon de réception';
+$locales['mod-dPstock-tab-print_reception_barcodes'] = 'Codes barre de réception';
+$locales['mod-dPstock-tab-print_stock_location'] = 'Emplacements de stocks';
+$locales['mod-dPstock-tab-product_selector'] = 'Sélection de produit';
+$locales['mod-dPstock-tab-vw_aed_order'] = 'Saisie de bon de commande';
+$locales['mod-dPstock-tab-vw_edit_reception'] = 'Saisie de bon de réception';
+$locales['mod-dPstock-tab-vw_order_form'] = 'Saisie de bon de commande';
+$locales['mod-dPstock-tab-vw_product_overview'] = 'Vue globale d\'un produit';
 ?>

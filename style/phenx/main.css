@@ -703,3 +703,8 @@ ul.control_tabs_vertical li a.active {
   -webkit-border-radius: 6px;
   border-radius: 6px;
 }
+
+div.dropdown-trigger {
+  height: 15px;
+  width: 15px;
+}

@@ -287,7 +287,10 @@ ul#nav-vert {
   padding: 3px;
 }
 
-
+.touchscreen div.dropdown-trigger {
+  height: 24px;
+  width: 24px;
+}
 
 /* control tabs */
 hr.control_tabs {
