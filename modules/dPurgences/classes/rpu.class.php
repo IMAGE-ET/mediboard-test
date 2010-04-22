@@ -67,9 +67,10 @@ class CRPU extends CMbObject {
   var $_DP             = null;
   var $_ref_actes_ccam = null;
   var $_service_id     = null;
-	var $_etablissement_transfert_id = null;
+	var $_etablissement_transfert_id        = null;
   var $_etablissement_entree_transfert_id = null;
-	var $_service_mutation_id = null;
+	var $_service_entree_mutation_id        = null;
+	var $_service_mutation_id               = null;
   
   // Object References
   var $_ref_sejour = null;
@@ -122,8 +123,9 @@ class CRPU extends CMbObject {
       "_service_id"      => "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable",
       "_entree"          => "dateTime",
       "_etablissement_transfert_id"        => "ref class|CEtabExterne autocomplete|nom",
-      "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom",  
-			"_service_mutation_id" => "ref class|CService autocomplete|nom",
+      "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom", 
+			"_service_entree_mutation_id" => "ref class|CService autocomplete|nom dependsOn|group_id", 
+			"_service_mutation_id"         => "ref class|CService autocomplete|nom dependsOn|group_id",
       "_attente"           => "time",
       "_presence"          => "time",
       "_can_leave"         => "time",
@@ -193,6 +195,7 @@ class CRPU extends CMbObject {
     $this->_sortie = $sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
+		$this->_service_entree_mutation_id = $sejour->service_entree_mutation_id;
 		$this->_service_mutation_id = $sejour->service_mutation_id;
 		
 		// @todo: A supprimer du updateFormFields
@@ -290,6 +293,7 @@ class CRPU extends CMbObject {
     $sejour->annule        = $this->_annule;    
     $sejour->service_id    = $this->_service_id;
     $sejour->etablissement_entree_transfert_id = $this->_etablissement_entree_transfert_id;
+		$sejour->service_entree_mutation_id = $this->_service_entree_mutation_id;
 
     // Le patient est souvent chargé à vide ce qui pose problème
     // dans le onAfterStore(). Ne pas supprimer.

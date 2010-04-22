@@ -24,6 +24,7 @@ class CSejour extends CCodable {
   
   var $etablissement_transfert_id        = null;
   var $etablissement_entree_transfert_id = null;
+	var $service_entree_mutation_id        = null; // Service d'entrée du séjour
 	var $service_mutation_id               = null; // Service du séjour de mutation
   
   // DB Fields
@@ -240,9 +241,10 @@ class CSejour extends CCodable {
     $props["mode_sortie"]         = "enum list|normal|transfert|mutation|deces default|normal";
     $props["prestation_id"]       = "ref class|CPrestation";
     $props["facturable"]          = "bool notNull default|1 show|0";
-    $props["etablissement_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
+    $props["etablissement_transfert_id"]        = "ref class|CEtabExterne autocomplete|nom";
     $props["etablissement_entree_transfert_id"] = "ref class|CEtabExterne autocomplete|nom";
-		$props["service_mutation_id"] = "ref class|CService autocomplete|nom";
+		$props["service_entree_mutation_id"]        = "ref class|CService autocomplete|nom dependsOn|group_id";
+		$props["service_mutation_id"]               = "ref class|CService autocomplete|nom dependsOn|group_id";
     $props["adresse_par_prat_id"] = "ref class|CMedecin";
     $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";

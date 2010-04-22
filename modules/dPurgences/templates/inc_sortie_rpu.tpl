@@ -153,10 +153,10 @@
 			 
        <tr>
         <td>
-					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != 'transfert'}}style="visibility: hidden"{{/if}}>
+					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" style="display:none">
             {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
           </div>
-					<div id="service_sortie_transfert_{{$sejour->_id}}" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
+					<div id="service_sortie_transfert_{{$sejour->_id}}" style="display:none">
             {{mb_field object=$sejour field="service_mutation_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
           </div>
 				</td>

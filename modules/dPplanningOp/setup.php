@@ -879,8 +879,13 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`entree`),
               ADD INDEX (`sortie`);";
     $this->addQuery($sql);
+		
+		$this->makeRevision("1.07");
+    $sql = "ALTER TABLE `sejour`
+              ADD `service_entree_mutation_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
 		 
-    $this->mod_version = "1.07";
+    $this->mod_version = "1.08";
   }
 }
 ?>

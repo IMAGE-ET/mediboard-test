@@ -72,19 +72,11 @@ function modeSortieOrient(mode_sortie, rpu_id){
 }
 
 function loadTransfert(mode_sortie, sejour_id){
-  if(mode_sortie=="transfert"){
-	  $('etablissement_sortie_transfert_'+sejour_id).setVisibility(true);
-  } else {
-	  $('etablissement_sortie_transfert_'+sejour_id).setVisibility(false);
-  }
+  $('etablissement_sortie_transfert_'+sejour_id).setVisible(mode_sortie == "transfert");
 }
 
 function loadServiceMutation(mode_sortie, sejour_id){
-  if(mode_sortie=="mutation"){
-    $('service_sortie_transfert_'+sejour_id).setVisibility(true);
-  } else {
-    $('service_sortie_transfert_'+sejour_id).setVisibility(false);
-  }
+  $('service_sortie_transfert_'+sejour_id).setVisible(mode_sortie == "mutation");
 }
 
 function initFields(rpu_id,sejour_id, mode_sortie){

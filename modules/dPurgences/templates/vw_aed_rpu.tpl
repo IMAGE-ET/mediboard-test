@@ -93,16 +93,16 @@
 	  }
 	}
 	
-	function showEtabEntreeTransfert(mode) {
-		// mode de transfert = transfert (7)
-		if (mode == 7) {
-			$('etablissement_entree_transfert').show();
-		} else {
-			$('etablissement_entree_transfert').hide();
-			$V(getForm('editRPU')._etablissement_entree_transfert_id, '');
-		}
+	function loadTransfert(mode_entree){
+    $('etablissement_entree_transfert').setVisible(mode_entree == 7);
+		$V(getForm('editRPU').elements._service_entree_mutation_id, '');
 	}
 	
+	function loadServiceMutation(mode_entree){
+	  $('service_entree_mutation').setVisible(mode_entree == 6);
+		$V(getForm('editRPU').elements._etablissement_entree_transfert_id, '');
+	}
+		
 	function loadActesNGAP(sejour_id){
 	  var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("object_id", sejour_id);
@@ -212,18 +212,22 @@
 	    </td>
 	    
 	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value);"}}</td>
+	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); loadTransfert(this.value); loadServiceMutation(this.value);"}}</td>
 	  </tr>
 	  
 	  <tr>
 	    <th>{{mb_label object=$rpu field="_entree"}}</th>
 	    <td>{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
 	    
-		  <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
+		  <th></th>
 			<td>
+				<input type="hidden" name="group_id" value="{{$g}}" />
 				<div id="etablissement_entree_transfert" {{if !$rpu->_etablissement_entree_transfert_id}}style="display:none"{{/if}}>
-				  {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true"}}
-			  </div>
+          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+        </div>
+        <div id="service_entree_mutation" {{if !$rpu->_service_entree_mutation_id}}style="display:none"{{/if}}>
+          {{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true"}}
+        </div>
 			</td>	
 	  </tr>
 	
