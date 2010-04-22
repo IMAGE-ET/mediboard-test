@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage includes
+ * @subpackage dPurgences
  * @version $Revision: 8507 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -24,6 +24,8 @@ $dPconfig["dPurgences"] = array (
   "only_prat_responsable" => "0",
   "rpu_sender"            => "",
   "rpu_xml_validation"    => "1",
+	"gerer_hospi"           => "1",
+	"gerer_reconvoc"        => "1",
 );
 
 

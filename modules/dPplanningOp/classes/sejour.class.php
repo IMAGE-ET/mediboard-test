@@ -96,6 +96,7 @@ class CSejour extends CCodable {
   var $_etat               = null;
   var $_entree_relative    = null;
   var $_sortie_relative    = null;
+	var $_not_collides       = array ("urg", "consult"); // Séjour dont on ne test pas la collision
   
   // Behaviour fields
   var $_check_bounds = true;
@@ -338,9 +339,9 @@ class CSejour extends CCodable {
   function getCollisions() {
     $collisions = array();
     
-    // Ne concerne pas les annulés
+    // Ne concerne pas les annulés 
     $this->completeField("annule", "type", "group_id", "patient_id");
-    if ($this->annule || $this->type == "urg") {
+    if ($this->annule || in_array($this->type, $this->_not_collides)) {
       return $collisions;
     }
     
@@ -404,13 +405,15 @@ class CSejour extends CCodable {
    * @return boolean
    */
   function collides(CSejour $sejour) {
-    if($this->_id && $sejour->_id && $this->_id == $sejour->_id) {
+    if ($this->_id && $sejour->_id && $this->_id == $sejour->_id) {
       return false;
     }
-    if($this->annule || $sejour->annule) {
+		
+    if ($this->annule || $sejour->annule) {
       return false;
     }
-    if($this->type == "urg" || $sejour->type == "urg") {
+		
+    if (in_array($this->type, $this->_not_collides) || in_array($sejour->type, $this->_not_collides)) {
       return false;
     }
     

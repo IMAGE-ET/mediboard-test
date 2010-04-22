@@ -35,7 +35,9 @@ onMergeComplete = function() {
 Main.add(function () {
   // Delays prevent potential overload with periodical previous updates
   MainCourante.start(0, 60);
+	{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
   updateConsultations.delay(1, 80);
+	{{/if}}
   IdentitoVigilance.start(2,100);
 
   var tabs = Control.Tabs.create('tab_main_courante', false);
@@ -58,7 +60,9 @@ Main.add(function () {
     </form>
   </li>
   <li><a href="#holder_main_courante">Main courante <small>(&ndash;)</small></a></li>
+	{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
   <li><a href="#consultations" class="empty">Reconvocations <small>(&ndash; / &ndash;)</small></a></li>
+	{{/if}}
   <li><a href="#identito_vigilance" class="empty">Identito-vigilance <small>(&ndash;)</small></a></li>
   <li style="width: 20em; text-align: center">
     <script type="text/javascript">
@@ -111,11 +115,11 @@ Main.add(function () {
   
 	<div id="main_courante"></div>
 </div>
-
+{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
 <div id="consultations" style="display: none;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>
-
+{{/if}}
 <div id="identito_vigilance" style="display: none; margin: 0 5px;">
   <div class="small-info">{{tr}}msg-common-loading-soon{{/tr}}</div>
 </div>

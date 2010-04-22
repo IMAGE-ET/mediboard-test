@@ -332,19 +332,23 @@ function showEtabEntreeTransfert(mode) {
   <tr>
 	  <td class="button" colspan="4">
       {{if !$rpu->mutation_sejour_id}}
-	    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
-	    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
-        Reconvoquer
-      </button>
-       
-      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm('{{tr}}confirm-RPU-Hospitalisation{{/tr}}');">
-        <input type="hidden" name="dosql" value="do_transfert_aed" />
-        <input type="hidden" name="m" value="dPurgences" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-        <button class="new" type="submit">Hospitaliser</button>
-      </form>
+				{{if $dPconfig.dPurgences.gerer_reconvoc == "1"}}
+			    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
+			    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
+		        Reconvoquer
+		      </button>
+	      {{/if}}
+				
+				{{if $dPconfig.dPurgences.gerer_hospi == "1"}} 
+		      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
+		      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm('{{tr}}confirm-RPU-Hospitalisation{{/tr}}');">
+		        <input type="hidden" name="dosql" value="do_transfert_aed" />
+		        <input type="hidden" name="m" value="dPurgences" />
+		        <input type="hidden" name="del" value="0" />
+		        <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+		        <button class="new" type="submit">Hospitaliser</button>
+	        </form>
+				{{/if}}
       {{/if}}
       <!--  Autoriser sortie du patient --> <!--  Autoriser sortie du patient et valider la sortie -->
       <form name="editSortieAutorise" method="post" action="?m={{$m}}">

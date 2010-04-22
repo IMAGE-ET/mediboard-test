@@ -6,6 +6,7 @@ $locales['mod-hprimxml-tab-vw_idx_echange_hprim'] = 'Echanges H\'XML';
 $locales['mod-hprimxml-tab-vw_idx_dest_hprim'] = 'Destinataires H\'XML';
 $locales['config-hprimxml-evt_patients'] = 'H\'XML Evénements Patients';
 $locales['config-hprimxml-evt_patients-desc'] = 'H\'XML Evénements Patients';
+$locales['hprimxml-schema-no-acquittement'] = 'La version des schémas utilisée ne permet pas de prendre en compte les acquittements';
 $locales['hprimxml-evt-none'] = 'Inconnu';
 $locales['hprimxml-evt-none-desc'] = 'Inconnu';
 $locales['hprimxml-evt_patients-enregistrementPatient'] = 'Enregistrement Patient';
