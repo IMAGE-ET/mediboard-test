@@ -251,7 +251,11 @@ class CSetupsystem extends CSetup {
     $sql = "DELETE FROM `modules` WHERE `mod_name` = 'dPinterop'";
     $this->addQuery($sql, true);
     
-    $this->mod_version = "1.0.27";
+		$this->makeRevision("1.0.27");
+    $sql = "DELETE FROM `modules` WHERE `mod_name` = 'dPmateriel'";
+    $this->addQuery($sql, true);
+		
+    $this->mod_version = "1.0.28";
   }
 }
 ?>
