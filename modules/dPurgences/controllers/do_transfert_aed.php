@@ -56,28 +56,12 @@ $sejour->updateDBFields();
 $msg = $sejour->store();
 viewMsg($msg, "CSejour-title-create");
 
-// Chargement des actes de la prise en charge aux urgences
-$consult_atu =& $rpu->_ref_consult;
-$consult_atu->loadRefsActes();
-foreach ($consult_atu->_ref_actes as $acte) {
-  $acte->setObject($sejour);
-  $acte->_adapt_object = 1;
-  $msg = $acte->store();
-  viewMsg($msg, "msg-$acte->_class_name-title-modify");
+$rpu->_ref_sejour->loadRefsConsultations();
+foreach ($rpu->_ref_sejour->_ref_consultations as $_consult) {
+  $_consult->sejour_id = $sejour->_id;      
+  $msg = $_consult->store();
+  viewMsg($msg, "CConsultation-title-modify");
 }
-
-
-$consult_atu->codes_ccam = "";
-$consult_atu->tarif = "Transfert Séjour";
-$consult_atu->valide = "0";
-$consult_atu->du_patient = 0;
-$consult_atu->du_tiers = 0;
-$consult_atu->secteur1 = 0;
-$consult_atu->secteur2 = 0;
-$consult_atu->chrono = "64";
-
-$msg = $consult_atu->store();
-viewMsg($msg, "CConsultation-title-modify");
 
 // Sauvegarde du RPU
 $rpu->orientation = "HO";
