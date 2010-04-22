@@ -16,4 +16,9 @@ Options -Indexes
  deny from all
 </FilesMatch>
 
+<FilesMatch "mb-log\.html">
+ order allow,deny
+ deny from all
+</FilesMatch>
+
 php_flag magic_quotes_gpc off
