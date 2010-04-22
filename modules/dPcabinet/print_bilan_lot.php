@@ -44,7 +44,7 @@ $days = array();
 foreach ($lots as &$_lot) {
 	$fichiers[$_lot->S_LOT_FIC]->_back["lots"][$_lot->_id] = $_lot;
   $_lot->_fwd["S_LOT_FIC"] = $fichiers[$_lot->S_LOT_FIC];
-	if ($_lot->S_LOT_ETAT == "7") {
+	if ($_lot->S_LOT_ETAT == "7" || $_lot->S_LOT_ETAT == "6") {
 		$fichiers[$_lot->S_LOT_FIC]->_resend_fixable = "1";
 	}
 	
