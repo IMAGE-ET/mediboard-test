@@ -14,17 +14,17 @@ global $m;
 //$canModule = $module->canDo();
 //$canModule->needsEdit();
 
-$sejour_id = CValue::post("sejour_id");
 $prat_id = CValue::post("prat_id");
 $patient_id = CValue::post("patient_id");
 $_operation_id = CValue::post("_operation_id");
 
-// Cas des urgences 
-if ($sejour_id) {
-  $sejour = new CSejour();
-  $sejour->load($sejour_id);
+$sejour = new CSejour();
+$sejour->load(CValue::post("sejour_id"));
+	
+// Cas des urgences
+if ($sejour->type == "urg") {
 	$sejour->loadRefsConsultations();
-  if ($sejour->_ref_consult_atu->_id) {
+	if ($sejour->_ref_consult_atu->_id) {
     CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
     CAppUI::redirect();
   }
@@ -98,7 +98,7 @@ $ref_chir = $plage->_ref_chir;
 
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
-$consult->sejour_id = $sejour_id;
+$consult->sejour_id = $sejour->_id;
 $consult->patient_id = $patient_id;
 $consult->heure = $time_now;
 $consult->arrivee = $day_now." ".$time_now;
@@ -107,7 +107,7 @@ $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->accident_travail = CValue::post("accident_travail");
 
 // Cas des urgences
-if ($sejour_id) {
+if ($sejour->type == "urg") {
   // Motif de la consultation
   $consult->motif = "";
   if (CAppUI::conf('dPurgences motif_rpu_view')) {
@@ -142,7 +142,7 @@ if($ajax) {
 if($current_m = CValue::post("_m_redirect")) {
   CAppUI::redirect("m=$current_m");
 } else {
-  $current_m = $sejour_id ? "dPurgences" : "dPcabinet";
+  $current_m = ($sejour->type == "urg") ? "dPurgences" : "dPcabinet";
   CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }
 ?>
