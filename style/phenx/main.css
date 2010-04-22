@@ -704,6 +704,10 @@ ul.control_tabs_vertical li a.active {
   border-radius: 6px;
 }
 
+div.dropdown {
+  padding-right: 16px;
+}
+
 div.dropdown-trigger {
   height: 15px;
   width: 15px;

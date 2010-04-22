@@ -494,6 +494,7 @@ div.dropdown {
   padding:0;
   position:relative;
   display:inline-block;
+  padding-right: 17px;
 }
 
 div.dropdown-trigger {

@@ -225,12 +225,13 @@ var Url = Class.create({
     oOptions = Object.extend({
       minChars: 2,
       frequency: 0.5,
-			width: null,
+      width: null,
       dropdown: false,
+      adaptDropdown: false,
       valueElement: null,
 	    
-	    // Allows bigger width than input
-			onShow: function(element, update) { 
+      // Allows bigger width than input
+      onShow: function(element, update) { 
         update.style.position = 'absolute';
         
         update.clonePosition(element, {
@@ -312,6 +313,12 @@ var Url = Class.create({
       var trigger = new Element("div").addClassName("dropdown-trigger");
       
       trigger.insert(new Element("div"));
+      
+      if(oOptions.adaptDropdown) {
+        trigger.setStyle({
+          height: (input.getHeight()-2)+"px"
+        });
+      }
       
       // Hide the list
       var hideAutocomplete = function(e){
