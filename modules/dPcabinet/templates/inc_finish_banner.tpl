@@ -1,7 +1,4 @@
 <script type="text/javascript">
-{{if $ajax}}
-new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
-{{/if}}
 
 function submitConsultWithChrono(chrono) {
   var oForm = document.editFrmFinish;
@@ -40,7 +37,7 @@ function reloadFinishBanner() {
       <button type="button" class="hslip notext" style="float:left" onclick="ListConsults.toggle();">
         {{tr}}Programme{{/tr}}
       </button>
-      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}"'>
+      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}">
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
       </a>
       <div style="float:right"> 
