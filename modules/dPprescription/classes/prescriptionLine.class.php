@@ -648,9 +648,9 @@ class CPrescriptionLine extends CMbObject {
     }
 		
 		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie (imagerie et consult)
-		if($with_calcul){
+		if($with_calcul && $this instanceof CPrescriptionLineElement){
 			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
-	    if($chapitre == "imagerie" || $chapitre == "consult"){
+			if($chapitre == "imagerie" || $chapitre == "consult"){
 				// Mode permettant de calculer seulement les onglets visibles
 	      $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
 	      
