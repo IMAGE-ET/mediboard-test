@@ -45,7 +45,7 @@ for($i = 1; $i <= 7; $i++) {
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
-  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$from' AND '$to'";
+  $where["sejour.entree"] = "BETWEEN '$from' AND '$to'";
   $list[$from] = loadSejourNonAffectes($where);
 }
 

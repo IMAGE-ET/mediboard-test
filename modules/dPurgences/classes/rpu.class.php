@@ -310,7 +310,7 @@ class CRPU extends CMbObject {
 			$where['type']   = " = 'urg'";
       $where['patient_id']   = " = '$this->_patient_id'";
 			$sortie = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
-      $where[] = "IF(`entree_reelle`,`entree_reelle`,`entree_prevue`) <= '$this->_entree' AND (IF(`sortie_reelle`,`sortie_reelle`,`sortie_prevue`) >= '$this->_entree') ";
+      $where[] = "(sejour.entree <= '$this->_entree') AND (sejour.sortie >= '$this->_entree') ";
 			
     	$sejour = new CSejour();
       $sejour->loadObject($where);

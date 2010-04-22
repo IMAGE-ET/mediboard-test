@@ -60,7 +60,7 @@ $where = array(
   "type" => "NOT IN ('exte', 'urg', 'seances')",
   "annule" => "= '0'"
 );
-$where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$today' AND '$endWeek'";
+$where["sejour.entree"] = "BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
 $where[] = "affectation.affectation_id IS NULL";
 $where[] = $where_service;
@@ -116,7 +116,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
-	$where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
+	$where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
 	$where[] = $whereFilter;
 	$where[] = $where_service;
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
@@ -126,7 +126,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );
-  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
+  $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
   $where[] = $whereFilter;
   $where[] = $where_service;
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
@@ -136,7 +136,7 @@ if ($can->edit) {
     "type" => "NOT IN ('exte', 'urg', 'seances')",
     "annule" => "= '0'"
   );  
-  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
+  $where["sejour.entree"] = "BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
   $where[] = $whereFilter;
   $where[] = $where_service;
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
@@ -147,8 +147,8 @@ if ($can->edit) {
     "annule" => "= '0'",
     "type" => "NOT IN ('exte', 'urg', 'seances')",
   );
-  $where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$twoDaysBefore 23:59:59'";
-  $where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date 00:00:00'";
+  $where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
+  $where["sejour.sortie"] = ">= '$date 00:00:00'";
   $where[] = $whereFilter;
   $where[] = $where_service;
 

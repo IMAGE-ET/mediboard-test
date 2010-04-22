@@ -50,7 +50,7 @@ if($type){
 }
 $where["group_id"] = "= '$g'";
 
-$where[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date' AND '$next'";
+$where["sejour.entree"] = "BETWEEN '$date' AND '$next'";
 
 if($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";

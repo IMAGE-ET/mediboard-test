@@ -41,11 +41,11 @@ foreach($listPrat as $key => $prat){
 
 $sejour = new CSejour;
 $whereSejour = array();
-$whereSejour["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$whereSejour["entree_reelle"] = "IS NOT NULL";
-$whereSejour[] = "`sejour`.`entree_reelle` <= '$dateEntree'";
-$whereSejour[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$dateSortie'";
-$whereSejour["annule"]        = "= '0'";
+$whereSejour["sejour.group_id"]      = "= '".CGroups::loadCurrent()->_id."'";
+$whereSejour["sejour.entree_reelle"] = "IS NOT NULL";
+$whereSejour[]                       = "`sejour`.`entree_reelle` <= '$dateEntree'";
+$whereSejour["sejour.sortie"]        = ">= '$dateSortie'";
+$whereSejour["sejour.annule"]        = "= '0'";
 $listSejours = $sejour->loadList($whereSejour);
    
 // Stockage des informations liées au praticiens
@@ -116,8 +116,8 @@ $date_fin = mbDateTime("23:59:00",$date);
 // present du jour
 $sejourJour = new CSejour();
 $whereJour = array();
-$whereJour[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$date_fin'";
-$whereJour[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$date_debut'";
+$whereJour["sejour.entree"] = "<= '$date_fin'";
+$whereJour["sejour.sortie"] = ">= '$date_debut'";
 $whereJour["annule"] = "= '0'";
 $whereJour["type"] = "= 'comp'";
 $countPresentJour = $sejourJour->countList($whereJour);
@@ -125,8 +125,8 @@ $countPresentJour = $sejourJour->countList($whereJour);
 // present de la veille
 $sejourVeille = new CSejour();
 $whereVeille = array();
-$whereVeille[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) <= '$hierEntree'";
-$whereVeille[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) >= '$dateSortie'";
+$whereVeille["sejour.entree"] = "<= '$hierEntree'";
+$whereVeille["sejour.sortie"] = ">= '$dateSortie'";
 $whereVeille["annule"] = "= '0'";
 $whereVeille["type"] = "= 'comp'";
 $countPresentVeille = $sejourVeille->countList($whereVeille);
@@ -134,7 +134,7 @@ $countPresentVeille = $sejourVeille->countList($whereVeille);
 // entree du jour
 $sejourEntreeJour = new CSejour();
 $whereEntree = array();
-$whereEntree[] = "IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`) BETWEEN '$date_debut' AND '$date_fin'";
+$whereEntree["sejour.entree"] = "BETWEEN '$date_debut' AND '$date_fin'";
 $whereEntree["annule"] = "= '0'";
 $whereEntree["type"] = "= 'comp'";
 $countEntreeJour = $sejourEntreeJour->countList($whereEntree);
@@ -142,7 +142,7 @@ $countEntreeJour = $sejourEntreeJour->countList($whereEntree);
 // sorties du jour
 $sejourSortieJour = new CSejour();
 $whereSortie = array();
-$whereSortie[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) BETWEEN '$date_debut' AND '$date_fin'";
+$whereSortie["sejour.sortie"] = "BETWEEN '$date_debut' AND '$date_fin'";
 $whereSortie["annule"] = "= '0'";
 $whereSortie["type"] = "= 'comp'";
 $countSortieJour = $sejourSortieJour->countList($whereSortie);

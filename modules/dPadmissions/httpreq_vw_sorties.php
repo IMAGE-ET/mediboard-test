@@ -45,17 +45,17 @@ $limit2 = $date." 23:59:59";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 $ljoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
-$where[] = "IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`) BETWEEN '$limit1' AND '$limit2'";
+$where["sejour.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 if($mode != "autre") {
-  $where["type"] = " = '$mode'";
+  $where["sejour.type"] = " = '$mode'";
 } else {
   $where[] = "(type != 'comp' AND type != 'ambu')";
 }
-$where["annule"] = " = '0'";
+$where["sejour.annule"] = " = '0'";
 
 // Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
 if($vue) {
-  $where["sortie_reelle"] = "IS NULL";
+  $where["sejour.sortie_reelle"] = "IS NULL";
 }
 
 if($order_col != "patient_id" && $order_col != "sortie_prevue" && $order_col != "praticien_id"){
