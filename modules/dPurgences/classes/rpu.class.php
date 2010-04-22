@@ -125,7 +125,7 @@ class CRPU extends CMbObject {
       "_etablissement_transfert_id"        => "ref class|CEtabExterne autocomplete|nom",
       "_etablissement_entree_transfert_id" => "ref class|CEtabExterne autocomplete|nom", 
 			"_service_entree_mutation_id" => "ref class|CService autocomplete|nom dependsOn|group_id", 
-			"_service_mutation_id"         => "ref class|CService autocomplete|nom dependsOn|group_id",
+			"_service_mutation_id"        => "ref class|CService autocomplete|nom dependsOn|group_id",
       "_attente"           => "time",
       "_presence"          => "time",
       "_can_leave"         => "time",
@@ -176,11 +176,11 @@ class CRPU extends CMbObject {
     $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
     
     // Calcul des valeurs de _mode_sortie
-    if ($sejour->mode_sortie == "mutation" && $this->mutation_sejour_id) {
+    if ($sejour->mode_sortie == "mutation") {
     	$this->_mode_sortie = 6;
     }
     
-    if ($sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id) {
+    if ($sejour->mode_sortie == "transfert") {
     	$this->_mode_sortie = 7; 
     }
     
@@ -331,6 +331,20 @@ class CRPU extends CMbObject {
 				$this->_bind_sejour = false;
 			}
     }   
+		
+		// Changement suivant le mode d'entrée
+		switch ($this->mode_entree) {
+			case 6:
+			  $this->_etablissement_entree_transfert_id = "";
+			  break;
+			case 7:
+			  $this->_service_entree_mutation_id = "";
+				break;
+			case 8:
+				$this->_service_entree_mutation_id = "";
+        $this->_etablissement_entree_transfert_id = "";
+				break;
+		}
  
     // Bind Sejour
     if ($msg = $this->bindSejour()) {

@@ -64,32 +64,18 @@ function submitSejRpuConsult() {
 }
 
 function loadTransfert(mode_sortie){
-  // si Transfert, affichage du select
-  if($('etablissement_sortie_transfert')){
-    if(mode_sortie=="transfert"){
-      $('etablissement_sortie_transfert').setVisibility(true);
-    } else {
-      $('etablissement_sortie_transfert').setVisibility(false);
-      $V(getForm('editSejour').etablissement_transfert_id, '');
-    }
-  }
+  $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
 }
 
 function loadServiceMutation(mode_sortie){
-  // si Mutation, affichage du select
-  if($('service_sortie_transfert')){
-    if(mode_sortie=="mutation"){
-      $('service_sortie_transfert').setVisibility(true);
-    } else {
-      $('service_sortie_transfert').setVisibility(false);
-      $V(getForm('editSejour').service_mutation_id, '');
-    }
-  }
+  $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
 }
 
 function initFields(mode_sortie){
   ContraintesRPU.updateDestination(mode_sortie, true);
   ContraintesRPU.updateOrientation(mode_sortie, true); 
+	loadTransfert(mode_sortie);
+  loadServiceMutation(mode_sortie);
 }
 
 function printDossier(id) {
@@ -252,24 +238,23 @@ function showEtabEntreeTransfert(mode) {
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
 				    <td>
-				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value);submitSejour();loadTransfert(this.value);loadServiceMutation(this.value);"}}
+				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value); submitSejour();"}}
 				      {{if !$rpu->mutation_sejour_id}}
-							  <div id="etablissement_sortie_transfert" {{if $sejour->mode_sortie != 'transfert'}}style="visibility:hidden;"{{/if}}>
+							  <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
+								
+							  <div id="etablissement_sortie_transfert" {{if !$sejour->etablissement_transfert_id}}style="display:none;"{{/if}}>
 	                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
 	              </div>
-								<div id="service_sortie_transfert" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
-                  {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-                </div>
 				      {{else}}
 					      <strong>
 						      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
 						      	Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
 						     	</a> 
 					     	</strong>
-								<div id="service_sortie_transfert" {{if $sejour->mode_sortie != 'mutation'}}style="visibility:hidden;"{{/if}}>
-                  {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-                </div>
 				      {{/if}}
+							<div id="service_sortie_transfert" {{if !$sejour->service_mutation_id}}style="display:none;"{{/if}}>
+                {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+              </div>
 		 		    </td>
 				   </tr>
 				   

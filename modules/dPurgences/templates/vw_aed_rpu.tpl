@@ -95,12 +95,10 @@
 	
 	function loadTransfert(mode_entree){
     $('etablissement_entree_transfert').setVisible(mode_entree == 7);
-		$V(getForm('editRPU').elements._service_entree_mutation_id, '');
 	}
 	
 	function loadServiceMutation(mode_entree){
 	  $('service_entree_mutation').setVisible(mode_entree == 6);
-		$V(getForm('editRPU').elements._etablissement_entree_transfert_id, '');
 	}
 		
 	function loadActesNGAP(sejour_id){
