@@ -26,6 +26,7 @@ $list_products = $product->seek($keywords, $where, "$start, 20", true);
 
 foreach($list_products as $_product) {
   $_bcb_product = CBcbProduit::get($_product->code, false);
+  $_bcb_product->isInLivret(false);
   $_product->_is_valid = $_bcb_product->libelle != "";
   $_product->_in_livret = $_bcb_product->inLivret ? 1 : 0;
 }

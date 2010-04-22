@@ -34,7 +34,7 @@ Main.add(function(){
 <form action="?" method="get" name="filter-stock-products" onsubmit="return filterProducts(this)">
   <input type="text" name="keywords" value="" onchange="$V(this.form.start, 0)" />
   <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
-  <input type="hidden" name="letter" value="A" onchange="this.form.onsubmit()" />
+  <input type="hidden" name="letter" value="%" onchange="this.form.onsubmit()" />
   
   <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
 </form>
