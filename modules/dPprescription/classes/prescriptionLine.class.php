@@ -589,14 +589,13 @@ class CPrescriptionLine extends CMbObject {
    */
   function calculPrises($prescription, $date, $name_chap = "", $name_cat = "", $with_calcul = true) {
     $total_day = 0;
-		
+
 		// Chargement des planifications pour la date courante
 		$planif = new CPlanificationSysteme();
     $where["object_id"] = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     $where["dateTime"] = " LIKE '$date%'";
     $planifs = $planif->loadList($where);
-
 		
     foreach($this->_ref_prises as &$_prise) {
     	// Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
@@ -647,6 +646,26 @@ class CPrescriptionLine extends CMbObject {
         $this->_prises_for_plan[$_prise->_id] = $_prise;
       }
     }
+		
+		// Pre-remplissage du plan de soins avec les planifs systemes pour les lignes ne possedant pas de posologie (imagerie et consult)
+		if($with_calcul){
+			$chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+	    if($chapitre == "imagerie" || $chapitre == "consult"){
+				// Mode permettant de calculer seulement les onglets visibles
+	      $line_plan_soin =& $this->_quantity_by_date["aucune_prise"][$date]['quantites'];
+	      
+				foreach($planifs as $_planif){
+		      $_heure = substr(mbTime($_planif->dateTime), 0, 2);
+		      if(!isset($line_plan_soin[$_heure])){
+		        $line_plan_soin[$_heure] = array("total" => 0, "total_disp" => 0);
+		      }
+		      $line_plan_soin[$_heure]["total"] += 1;
+		      $line_plan_soin[$_heure]["total_disp"] += 1;
+		      $line_plan_soin[$_heure][] = array("quantite" => 1, "heure_reelle" => $_heure);
+		      $total_day += 1;
+		    }
+			}
+		}
     return $total_day;
   }
 }
