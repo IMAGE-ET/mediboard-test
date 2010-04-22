@@ -17,7 +17,7 @@
 	      </span>
 	    {{/if}}
        <a href="#print" onclick="window.print()">
-        Main courante du 
+        Résumé des Passages aux Urgences du 
 				{{$date|date_format:$dPconfig.longdate}}
 				<br /> Total: {{$sejours|@count}} RPU
       </a>
@@ -27,7 +27,7 @@
     <td>
       <table class="tbl">
         <tr>
-          <th style="width:   1%;" colspan="2">{{mb_title class=CRPU field=_entree}}</th>
+          <th style="width:   1%;">{{mb_title class=CRPU field=_entree}}</th>
 				  <th style="width: 16em;">{{mb_label class=CRPU field=_patient_id}}</th>
 				  <th style="width:  8em;">{{mb_label class=CRPU field=ccmu}}</th>
 					<th style="width: 16em;">{{mb_label class=CRPU field=diag_infirmier}}</th>
@@ -38,17 +38,14 @@
 						<br/> &amp; 
 						{{mb_label class=CRPU field=orientation}}
 					</th>
-				  <th style="width:   1%;" colspan="2">{{mb_title class=CRPU field=_sortie}}</th>
+				  <th style="width:   1%;">{{mb_title class=CRPU field=_sortie}}</th>
 				</tr>
 			  {{foreach from=$sejours item=sejour}}
 			  {{assign var=rpu value=$sejour->_ref_rpu}}
 			  {{assign var=patient value=$sejour->_ref_patient}}
 			  {{assign var=consult value=$rpu->_ref_consult}}
 			  <tr>
-					<td style="text-align: center">
-            {{mb_ditto value=$sejour->_entree|date_format:$dPconfig.date name=entree}}
-          </td>
-          <td>{{$sejour->_entree|date_format:$dPconfig.time}}</td>
+          <td style="text-align: right;">{{mb_value object=$sejour field=_entree}}</td>
 			    <td class="text">
 						{{if $offline && $rpu->_id}}
 	            <button class="search notext" onclick="modalwindow = modal($('modal-{{$sejour->_id}}'));"></button>
@@ -112,12 +109,9 @@
 						
 					{{else}}
 						{{if !$sejour->sortie_reelle}}
-	  					<td colspan="2" />
+	  					<td />
 						{{else}}
-		          <td style="text-align: center">
-		            {{mb_ditto value=$sejour->sortie_reelle|date_format:$dPconfig.date name=sortie}}
-		          </td>
-							<td>{{$sejour->_sortie|date_format:$dPconfig.time}}</td>
+		          <td style="text-align: right;">{{mb_value object=$sejour field=_sortie}}</td>
 	          {{/if}}
 					{{/if}}
 			  {{else}}
@@ -137,36 +131,45 @@
 
 <table class="tbl">
 	<tr>
-		<th class="title" colspan="10">Statistiques</th>
+    <th class="title" colspan="1">
+    	Statistiques d'entrée
+      <small>({{$stats.entree.total}})</small>
+		</th>
+    <th class="title" colspan="2">
+    	Statistiques de sorties
+      <small>({{$stats.sortie.total}})</small>
+		</th>
 	</tr>
+	
 	<tr>
 		<th>{{mb_title class=CPatient field=_age}}</th>
     <th>
     	{{mb_title class=CSejour field=etablissement_transfert_id}}
-			<small>({{$stats.transferts_count}})</small>
+			<small>({{$stats.sortie.transferts_count}})</small>
 		</th>
     <th>
     	{{mb_title class=CSejour field=service_mutation_id}}
-      <small>({{$stats.mutations_count}})</small>
+      <small>({{$stats.sortie.mutations_count}})</small>
 		</th>
 	</tr>
+	
 	<tr>
 		<td>
 			<ul>
 			  <li>
 			    Patients de moins de 1 ans : 
-			    <strong>{{$stats.less_than_1}}</strong>
+			    <strong>{{$stats.entree.less_than_1}}</strong>
 			  </li>
 			  <li>
 			    Patients de 75 ans ou plus : 
-			    <strong>{{$stats.more_than_75}}</strong>
+			    <strong>{{$stats.entree.more_than_75}}</strong>
 			  </li>
 			</ul>
 		</td>
 
     <td>
       <ul>
-      	{{foreach from=$stats.etablissements_transfert item=_etablissement_transfert}}
+      	{{foreach from=$stats.sortie.etablissements_transfert item=_etablissement_transfert}}
       	<li>
       		{{$_etablissement_transfert.ref}} : 
 					<strong>{{$_etablissement_transfert.count}}</strong>
@@ -181,7 +184,7 @@
 
     <td>
       <ul>
-        {{foreach from=$stats.services_mutation item=_service_mutation}}
+        {{foreach from=$stats.sortie.services_mutation item=_service_mutation}}
         <li>
           {{$_service_mutation.ref}} : 
           <strong>{{$_service_mutation.count}}</strong>

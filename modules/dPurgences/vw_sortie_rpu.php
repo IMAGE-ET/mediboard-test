@@ -19,24 +19,25 @@ $aff_sortie = CValue::postOrSession("aff_sortie","tous");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "_pec_transport");
 
-// Selection de la date
-$date = CValue::getOrSession("date", mbDate());
-$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before = mbDate("-$date_tolerance DAY", $date);
-$date_after  = mbDate("+1 DAY", $date);
-
 // Chargement des urgences prises en charge
 $ljoin = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 
+// Selection de la date
+$date = CValue::getOrSession("date", mbDate());
+$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
+$date_before = mbDate("-$date_tolerance DAY", $date);
+$date_after  = mbDate("+1 DAY", $date);
 $where = array();
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
+
+// RPU Existants
 $where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
-if($aff_sortie == "sortie"){
+if ($aff_sortie == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
 }
 
