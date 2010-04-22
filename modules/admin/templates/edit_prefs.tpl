@@ -557,6 +557,29 @@ Main.add(function () {
   </tbody>
   {{/if}}
   
+  {{assign var="module" value="dPurgences"}}
+  {{if $prefsUser.$module}}  
+  <tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
+  {{assign var=var value=defaultRPUSort}}
+  <tr>
+    <th>
+      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
+    </th>
+    <td>
+      <select name="pref[{{$var}}]">
+        <option value="ccmu"       {{if $prefsUser.$module.$var == "ccmu"       }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-ccmu       {{/tr}}</option>
+        <option value="_patient_id"{{if $prefsUser.$module.$var == "_patient_id"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-_patient_id{{/tr}}</option>
+        <option value="_entree"    {{if $prefsUser.$module.$var == "_entree"    }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-_entree    {{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
+  </tbody>
+  {{/if}}
+  
+
   <tr>
     <td class="button" colspan="2">
       <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>

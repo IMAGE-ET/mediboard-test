@@ -36,9 +36,6 @@ if ($sip_barcode = CValue::get("sip_barcode")) {
 // Type d'affichage
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
-// Parametre de tri
-$order_way = CValue::getOrSession("order_way", "DESC");
-$order_col = CValue::getOrSession("order_col", "ccmu");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());

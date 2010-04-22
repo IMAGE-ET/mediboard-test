@@ -416,4 +416,13 @@ $locales['mod-dPurgences-tab-print_dossier'] = 'Impression dossier';
 $locales['mod-dPurgences-tab-print_main_courante'] = 'Impression de la main courante';
 $locales['mod-dPurgences-tab-vw_extract_passages'] = 'Extraction des passages';
 $locales['mod-dPurgences-tab-vw_legende'] = 'Legende';
+$locales['pref-defaultRPUSort'] = 'Tri main courante';
+$locales['CRPU-_can_leave_error'] = '';
+$locales['CRPU-_can_leave_error-court'] = '';
+$locales['CRPU-_can_leave_error-desc'] = '';
+$locales['mod-dPurgences-tab-vw_radio'] = '';
+$locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
+$locales['pref-defaultRPUSort-ccmu'] = 'CCMU';
+$locales['pref-defaultRPUSort-_patient_id'] = 'Patient';
+$locales['pref-defaultRPUSort-_entree'] = 'Arrivée';
 ?>

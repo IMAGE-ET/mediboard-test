@@ -17,7 +17,7 @@ $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences d
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "DESC");
-$order_col = CValue::getOrSession("order_col", "ccmu");
+$order_col = CValue::getOrSession("order_col", CAppUI::pref("defaultRPUSort"));
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());

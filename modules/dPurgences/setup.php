@@ -118,47 +118,50 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.23");
       
     $sql = "CREATE TABLE `extract_passages` (
-              `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `date_extract` DATETIME NOT NULL,
-              `debut_selection` DATETIME NOT NULL,
-              `fin_selection` DATETIME NOT NULL,
-              `date_echange` DATETIME,
-              `message` MEDIUMTEXT NOT NULL,
-              `message_valide` ENUM ('0','1'),
-              `nb_tentatives` INT (11)
-            ) TYPE=MYISAM;";
+      `extract_passages_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `date_extract` DATETIME NOT NULL,
+      `debut_selection` DATETIME NOT NULL,
+      `fin_selection` DATETIME NOT NULL,
+      `date_echange` DATETIME,
+      `message` MEDIUMTEXT NOT NULL,
+      `message_valide` ENUM ('0','1'),
+      `nb_tentatives` INT (11)
+    ) TYPE=MYISAM;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `extract_passages` 
-              ADD INDEX (`date_extract`),
-              ADD INDEX (`debut_selection`),
-              ADD INDEX (`fin_selection`),
-              ADD INDEX (`date_echange`);";
+      ADD INDEX (`date_extract`),
+      ADD INDEX (`debut_selection`),
+      ADD INDEX (`fin_selection`),
+      ADD INDEX (`date_echange`);";
     $this->addQuery($sql);
       
     $sql = "CREATE TABLE `rpu_passage` (
-              `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `rpu_id` INT (11) UNSIGNED NOT NULL,
-              `extract_passages_id` INT (11) UNSIGNED NOT NULL
-            ) TYPE=MYISAM;";
+      `rpu_passage_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `rpu_id` INT (11) UNSIGNED NOT NULL,
+      `extract_passages_id` INT (11) UNSIGNED NOT NULL
+    ) TYPE=MYISAM;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `rpu_passage` 
-              ADD INDEX (`rpu_id`),
-              ADD INDEX (`extract_passages_id`);";
+      ADD INDEX (`rpu_id`),
+      ADD INDEX (`extract_passages_id`);";
     $this->addQuery($sql);
 		
 		$this->makeRevision("0.24");
       
     $sql = "ALTER TABLE `rpu` 
-              ADD `specia_att` DATETIME,
-              ADD `specia_arr` DATETIME;";
+      ADD `specia_att` DATETIME,
+      ADD `specia_arr` DATETIME;";
     $this->addQuery($sql);
 		
 		$sql = "ALTER TABLE `rpu` 
-              ADD INDEX (`specia_att`),
-              ADD INDEX (`specia_arr`);";
+      ADD INDEX (`specia_att`),
+      ADD INDEX (`specia_arr`);";
     $this->addQuery($sql);
         
-    $this->mod_version = "0.25";
+    $this->makeRevision("0.25");
+    $this->addPrefQuery("defaultRPUSort", "ccmu");
+
+    $this->mod_version = "0.26";
   }  
 }
 
