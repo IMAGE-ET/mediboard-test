@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI;
-
 CCanDo::checkRead();
 
 $rpu_id = CValue::get("rpu_id");
@@ -47,6 +45,7 @@ $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 // Praticiens urgentistes
 $group = CGroups::loadCurrent();
 
+global $AppUI;
 $listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 // Création du template
@@ -57,6 +56,7 @@ $smarty->assign("listEtab", $listEtab);
 $smarty->assign("services", $services);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
+$smarty->assign("date" , CValue::getOrSession("date", mbDate()));
 
 $smarty->display("inc_sortie_rpu.tpl");
 ?>

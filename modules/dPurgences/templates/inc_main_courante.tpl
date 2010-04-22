@@ -9,18 +9,13 @@
 *}}
 
 <script type="text/javascript">
-  Main.add(function(){
-    var count = {{$sejours_veille}};
-    var counter = $$("label.count")[0];
-    counter.setVisibility(count != 0);
-    counter.down("span").update(count);
-
-    $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
-		
-		{{if $isImedsInstalled}}
-      ImedsResultsWatcher.loadResults();
-    {{/if}}
-  });
+Main.add(function() {
+  Veille.refresh();
+  $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
+	{{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
+  {{/if}}
+});
 </script>
 
 <table class="tbl">

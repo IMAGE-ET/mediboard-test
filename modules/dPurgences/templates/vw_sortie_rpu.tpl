@@ -12,7 +12,7 @@
 var refreshExecuter;
 
 Main.add(function () {
-  Calendar.regField(getForm("changeDate").date, null, {noView: true});
+  Veille.refresh();
   
   refreshExecuter = new PeriodicalExecuter(function(){
     getForm("changeDate").submit();
@@ -141,25 +141,31 @@ function submitSejour(){
 
 <table class="main">
   <tr>
-    <th>
-      <div style="float: right;">
-        Type d'affichage
-        <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
-          <select name="aff_sortie" onchange="this.form.submit()">
-            <option value="tous" {{if $aff_sortie == "tous"}}selected = "selected"{{/if}}>Tous</option>
-            <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
-          </select>
-        </form>
-      </div>
-      
+    <td style="text-align: left;">
+      {{mb_include template=inc_hide_previous_rpus}}
+    </td>
+		
+    <th style="text-align: center;">
       <big>{{$date|date_format:$dPconfig.longdate}}</big>
-      
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
+      <script type="text/javascript">
+          Main.add(Calendar.regField.curry(getForm("changeDate").date, null, {noView: true}));
+      </script>
     </th>
+
+    <td style="text-align: right;">
+      Type d'affichage
+      <form name="selView" action="?m=dPurgences&amp;tab=vw_sortie_rpu" method="post">
+        <select name="aff_sortie" onchange="this.form.submit()">
+          <option value="tous" {{if $aff_sortie == "tous"}}selected = "selected"{{/if}}>Tous</option>
+          <option value="sortie" {{if $aff_sortie == "sortie"}} selected = "selected" {{/if}}>Sortie à effectuer</option>
+        </select>
+      </form>
+    </td>
   </tr>
 </table>
 
@@ -172,13 +178,16 @@ function submitSejour(){
     {{/if}}
     <th>Prise en charge</th>
     <th>{{mb_title class=CRPU field="rpu_id"}}</th>
-    <th>{{mb_title class=CRPU field="sejour_id"}}</th>
+    <th>
+      {{mb_title class=CSejour field=_entree}} /
+      {{mb_title class=CSejour field=_sortie}}
+		</th>
     <th>{{mb_title class=CRPU field="_can_leave"}}</th>
   </tr>
   {{foreach from=$listSejours item=sejour}}
     {{assign var=rpu value=$sejour->_ref_rpu}}
     {{assign var=patient value=$sejour->_ref_patient}}
-    <tr>
+    <tr {{if !$sejour->sortie_reelle && $sejour->_veille}}class="veille"{{/if}}>
       {{mb_include module=dPurgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}

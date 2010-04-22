@@ -36,7 +36,7 @@ checkPraticien = function(oForm){
 {{if $sejour->type != "urg"}}
   <strong>{{mb_value object=$sejour field=type}}</strong>
 	<br/>
-	<a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&tab=vw_full_patients&patient_id={{$sejour->patient_id}}">
+	<a class="button search" title="Voir le dossier complet du patient" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$sejour->patient_id}}">
 	  Dossier Complet
 	</a>
 

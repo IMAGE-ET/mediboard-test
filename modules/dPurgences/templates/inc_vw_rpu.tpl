@@ -20,7 +20,7 @@ function reloadSortieReelle() {
 	var url = new Url;
 	url.setModuleAction("dPurgences", "ajax_sortie_reelle");
 	url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
-	url.addParam("consult_id", getForm('formValidCotation').elements.consultation_id.value);
+	url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
 	url.requestUpdate('div_sortie_reelle');
 }
 
@@ -29,9 +29,11 @@ function submitSejour(){
   submitFormAjax(oForm, 'systemMsg');
 }
 
+// Comportement broken avec l'annulation d'autorisation
+// Implémentation douteuse : A REVOIR
 var redirection = 0;
-
-function redir(){
+function redir() {
+  return;
 	redirection++;
   if (redirection == 3) { 
 	 document.location.href="?m=dPurgences&tab=vw_idx_rpu";
@@ -59,10 +61,6 @@ function submitSejRpuConsult() {
 		submitRPU();
 	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
 	}
-}
-
-function validCotation() {
-  submitFormAjax(getForm('formValidCotation'), 'systemMsg');
 }
 
 function loadTransfert(mode_sortie){
@@ -358,9 +356,9 @@ function showEtabEntreeTransfert(mode) {
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
         <input type="hidden" name="sortie_autorisee" value="1" />
       </form>
-      <span id="div_sortie_reelle">
-        {{include file="../../dPurgences/templates/inc_sortie_reelle.tpl"}}
-      </span>
+      <div id="div_sortie_reelle">
+        {{mb_include module=dPurgences template=inc_sortie_reelle}}
+      </div>
       
       <button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
         {{tr}}Print{{/tr}} dossier

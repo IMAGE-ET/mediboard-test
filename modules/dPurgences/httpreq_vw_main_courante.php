@@ -69,9 +69,6 @@ if ($order_col == "_patient_id") {
 }
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
-
-$sejours_veille = 0;
-
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
   $sejour->loadNumDossier();
@@ -86,9 +83,6 @@ foreach ($listSejours as &$sejour) {
 
   // Séjours antérieurs  
 	$sejour->_veille = mbDate($sejour->entree_reelle) != $date;
-  if ($sejour->_veille) {
-    $sejours_veille++;
-  }
 }
 
 // Tri pour afficher les sans CCMU en premier
@@ -127,7 +121,6 @@ $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
 $smarty->assign("today"       , mbDate());
-$smarty->assign("sejours_veille", $sejours_veille);
 $smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 
 $smarty->display("inc_main_courante.tpl");

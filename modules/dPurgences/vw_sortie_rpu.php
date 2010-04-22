@@ -21,7 +21,9 @@ $order_col = CValue::getOrSession("order_col", "_pec_transport");
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
-$today = mbDate();
+$date_tolerance = CAppUI::conf("dPurgences date_tolerance");
+$date_before = mbDate("-$date_tolerance DAY", $date);
+$date_after  = mbDate("+1 DAY", $date);
 
 // Chargement des urgences prises en charge
 $ljoin = array();
@@ -29,7 +31,8 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 
 $where = array();
-$where["entree_reelle"] = "LIKE '$date%'";
+$where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
+  OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 $where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
@@ -42,17 +45,22 @@ $order = "consultation.heure $order_way";
 
 $sejour = new CSejour;
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
-
-foreach($listSejours as &$curr_sejour) {
-  $curr_sejour->loadRefsFwd();
-  $curr_sejour->loadRefRPU();
-  $curr_sejour->_ref_rpu->loadRefSejourMutation();
-  $curr_sejour->loadNumDossier();
-  $curr_sejour->loadRefsConsultations();
-  $curr_sejour->_ref_rpu->_ref_consult->loadRefsActes();
+foreach ($listSejours as &$_sejour) {
+  $_sejour->loadRefsFwd();
+  $_sejour->loadRefRPU();
+  $_sejour->loadNumDossier();
+  $_sejour->loadRefsConsultations();
+  $_sejour->_veille = mbDate($_sejour->entree_reelle) != $date;
+  
+	// Détail du RPU
+	$rpu =& $_sejour->_ref_rpu;
+  $rpu->loadRefSejourMutation();
+  $rpu->_ref_consult->loadRefsActes();
    
-  // Chargement de l'IPP
-  $curr_sejour->_ref_patient->loadIPP();
+  // Détail du patient
+	$patient =& $_sejour->_ref_patient; 
+  $patient->loadIPP();
+
 }
 
 // Chargement des etablissements externes
@@ -88,7 +96,7 @@ $smarty->assign("listSejours", $listSejours);
 $smarty->assign("aff_sortie", $aff_sortie);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("date", $date);
-$smarty->assign("today", $today);
+$smarty->assign("today", mbDate());
 
 $smarty->display("vw_sortie_rpu.tpl");
 ?>

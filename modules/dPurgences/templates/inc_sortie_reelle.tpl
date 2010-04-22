@@ -29,13 +29,13 @@
           submitRPU();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
       <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
           this.form.elements._modifier_sortie.value=1; 
-          validCotation(); 
+          getForm('ValidCotation').onsubmit(); 
           submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
 		{{/if}}
   {{/if}}
 </form>
 
-<form name="formValidCotation" action="" method="post"> 
+<form name="ValidCotation" action="" method="post" onsubmit="return onSubmitFormAjax(this)"> 
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="del" value="0" />
