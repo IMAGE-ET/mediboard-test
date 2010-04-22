@@ -98,7 +98,7 @@ selectPeriode = function(element) {
   		<th class="title" colspan="5">Bilan du service {{$service->_view}}</th>
   	</tr>
     <tr>
-      <th class="category" colspan="4">Sélection des horaires</th>
+      <th class="category" colspan="4">Paramètres d'impression</th>
     </tr>
     <tr>
       <th>A partir du</th>
@@ -115,6 +115,15 @@ selectPeriode = function(element) {
        </td>
      </tr>
 		 <tr>
+		 	<th>
+		 		Impression par patient 
+			</th>
+			<td>
+				<input type="checkbox" name="by_patient" value="true" {{if $by_patient}}checked="checked"{{/if}} />
+		 	</td>
+			<td colspan="2"></td>
+		 </tr>
+		 <tr>
 		   <th class="category" colspan="4">Pré-sélection des catégories</th>	
 		 </tr>
 		 <tr>
@@ -130,8 +139,9 @@ selectPeriode = function(element) {
 				   <div class="small-info">Aucun groupe de catégories n'est disponible. <br />Pour pouvoir utiliser des pré-sélections de catégories, il faut tout d'abord les paramétrer dans le module "Prescription", onglet "Groupe de catégories"</div>
          {{/if}}
 			 </td>
+		 </tr>
 		 <tr>
-       <th class="category" colspan="4">Sélection des catégories</th>
+		   <th class="category" colspan="4">Sélection des catégories</th>
      </tr>
      <tr>
        <td colspan="4">
@@ -222,30 +232,54 @@ selectPeriode = function(element) {
 <br />
 {{/if}}
 
-{{foreach from=$lines_by_patient key=chap item=_lines_by_chap name=foreach_chapitres}}
+{{foreach from=$lines_by_patient key=key1 item=_lines_by_chap name=foreach_chapitres}}
 <table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first || $trans_and_obs|@count}}style="page-break-before: always;"{{/if}}>
-  <tr>
-    <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$chap}}{{/tr}} - 
+  {{if !$by_patient}}
+	<tr>
+    <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$key1}}{{/tr}} - 
 		{{$service->_view}} - du {{$dateTime_min|date_format:$dPconfig.datetime}} au {{$dateTime_max|date_format:$dPconfig.datetime}}</th>
   </tr>
   <tr>
     <td colspan="6" class="text">
       Catégorie(s) sélectionnée(s):
-      {{foreach from=$cat_used.$chap item=_cat_view name=cat}}
+      {{foreach from=$cat_used.$key1 item=_cat_view name=cat}}
         <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
       {{/foreach}}
     </td>
   </tr>
-	{{foreach from=$_lines_by_chap key=chambre_id item=_lines_by_patient}}
-	  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates}}
+	{{/if}}
+	
+	{{if $by_patient}}
+	<tr>
+    <td colspan="6" class="text">
+      Catégorie(s) sélectionnée(s):
+      {{foreach from=$cat_used key=_cat item=curr_cat}}
+			  <strong>{{tr}}CPrescription._chapitres.{{$_cat}}{{/tr}}: 
+				{{foreach from=$curr_cat item=_cat_view name=cat}}
+	        {{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}
+	      {{/foreach}}
+			{{/foreach}}
+    </td>
+  </tr>
+	{{/if}}
+	
+	{{foreach from=$_lines_by_chap key=key2 item=_lines_by_patient name="foreach_lines"}}
+		{{if $by_patient}}
+		  {{assign var=chambre value=$chambres.$key1}}
+		{{else}}
+		   {{assign var=chambre value=$chambres.$key2}}
+	  {{/if}}
+	
+	  {{foreach from=$_lines_by_patient key=sejour_id item=prises_by_dates }}
 	    {{assign var=sejour value=$sejours.$sejour_id}}
 	    {{assign var=patient value=$sejour->_ref_patient}}
 			{{assign var=operation value=$sejour->_ref_last_operation}} 
+			
+			{{if !$by_patient || ($by_patient && $smarty.foreach.foreach_lines.first)}}
 	    <tr><td colspan="6"><br /></td></tr>
 			<tr>
 	      <th colspan="6" class="text">
 	        <span style="float: left">
-	          {{assign var=chambre value=$chambres.$chambre_id}}
 	          <strong>Chambre {{$chambre->_view}}</strong>
 	        </span>
 			    <span style="float: right">
@@ -270,8 +304,15 @@ selectPeriode = function(element) {
 	        {{/if}}
 				</th>
 			</tr>
+			{{/if}}
 			
-	  	{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
+			{{if $by_patient}}
+			<tr>
+			  <th colspan="6">{{tr}}CPrescription._chapitres.{{$key2}}{{/tr}}</th>
+			</tr>
+			{{/if}}
+			
+			{{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
 		  <tr>
 		    <td style="border:none; width: 1%;"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
 				<th style="width: 250px; border:none;">Libellé</th> 
@@ -345,7 +386,7 @@ selectPeriode = function(element) {
 	           {{assign var=line value=$list_lines.$line_class.$line_id}}        
 	            <tr>
 	            	<td>{{$hour}}h</td>
-	              <td style="width: 250px;">{{$line->_view}}
+	              <td style="width: 250px;" class="text">{{$line->_view}}
 								{{if $line->commentaire}}
 								  <br />{{$line->commentaire}}
 								{{/if}}

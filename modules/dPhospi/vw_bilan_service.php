@@ -28,6 +28,7 @@ $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
 $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
 $periode      = CValue::get("periode");
 $service_id   = CValue::getOrSession("service_id");
+$by_patient   = CValue::get("by_patient", false);
 
 $date_min = mbDate($dateTime_min);
 $date_max = mbDate($dateTime_max);
@@ -188,11 +189,15 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			            if(!$chambre) continue;
 									
 									foreach($_perfusion->_ref_lines as $_perf_line){
+										
+										$key1 = $by_patient ? $chambre->_id : "med";
+										$key2 = $by_patient ? "med" : $chambre->_id;
+                    
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 										
 										// Plusieurs prises pdt la meme heure
 										$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
-										$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
+										$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
 			            }
 			          }
 			        }
@@ -210,8 +215,11 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                     }
 									  $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 				            if(!$chambre) continue;			              
-				          
-									  $lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
+				            
+                    $key1 = $by_patient ? $chambre->_id : "med";
+                    $key2 = $by_patient ? "med" : $chambre->_id;
+                    
+									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
 				        }
 		          }
@@ -250,7 +258,11 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 								            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			                      if(!$chambre) continue;
 								            if($prise_prevue["total"]){
-								              @$lines_by_patient["med"][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
+								            	
+                              $key1 = $by_patient ? $chambre->_id : "med";
+                              $key2 = $by_patient ? "med" : $chambre->_id;
+    
+								              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_med->_class_name][$_line_med->_id]["prevu"] += $prise_prevue["total"];
 								              $prise_prevue["total"] = 0;
 								            }			            
 								          }
@@ -315,7 +327,11 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 						            if(!$chambre) continue;			  
 						            if($prise_prevue["total"]){
-						              @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
+
+													$key1 = $by_patient ? $chambre->_id : $name_chap;
+													$key2 = $by_patient ? $name_chap : $chambre->_id;
+                    													
+						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $prise_prevue["total"];
 						              $prise_prevue = 0;
 						            }
 						          }
@@ -338,12 +354,20 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 						            if(!$chambre) continue;			  
 						            $quantite = @$administrations_by_hour["quantite"];
 						            if($quantite){
-						              @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
+						            	
+                          $key1 = $by_patient ? $chambre->_id : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $chambre->_id;
+													
+						              @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["administre"] += $quantite;
 						              $administrations_by_hour["quantite"] = 0;
 						            }
 						          	$quantite_planifiee = @$administrations_by_hour["quantite_planifiee"];
 							          if($quantite_planifiee){
-							            @$lines_by_patient[$name_chap][$chambre->_id][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
+							          	
+                          $key1 = $by_patient ? $chambre->_id : $name_chap;
+                          $key2 = $by_patient ? $name_chap : $chambre->_id;
+													
+							            @$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour][$_line_elt->_class_name][$_line_elt->_id]["prevu"] += $quantite_planifiee;
 							            $administrations_by_hour["quantite_planifiee"] = 0;
 							          }
 	                    }
@@ -417,24 +441,25 @@ $service = new CService();
 $service->load($service_id);
 
 $smarty = new CSmartyDP();
-$smarty->assign("patients", $patients);
-$smarty->assign("trans_and_obs", $trans_and_obs);
-$smarty->assign("service", $service);
-$smarty->assign("periode", $periode);
-$smarty->assign("cat_used", $cat_used);
-$smarty->assign("token_cat", $token_cat);
-$smarty->assign("cats", $cats);
-$smarty->assign("dates", $dates);
-$smarty->assign("categories", $categories);
-$smarty->assign("prescription", $prescription);
-$smarty->assign("sejours", $sejours);
+$smarty->assign("patients"        , $patients);
+$smarty->assign("trans_and_obs"   , $trans_and_obs);
+$smarty->assign("service"         , $service);
+$smarty->assign("periode"         , $periode);
+$smarty->assign("cat_used"        , $cat_used);
+$smarty->assign("token_cat"       , $token_cat);
+$smarty->assign("cats"            , $cats);
+$smarty->assign("dates"           , $dates);
+$smarty->assign("categories"      , $categories);
+$smarty->assign("prescription"    , $prescription);
+$smarty->assign("sejours"         , $sejours);
 $smarty->assign("lines_by_patient", $lines_by_patient);
-$smarty->assign("list_lines", $list_lines);
-$smarty->assign("chambres", $chambres);
-$smarty->assign("dateTime_min", $dateTime_min);
-$smarty->assign("dateTime_max", $dateTime_max);
-$smarty->assign("cat_groups", $cat_groups);
-$smarty->assign("all_groups", $all_groups);
+$smarty->assign("list_lines"      , $list_lines);
+$smarty->assign("chambres"        , $chambres);
+$smarty->assign("dateTime_min"    , $dateTime_min);
+$smarty->assign("dateTime_max"    , $dateTime_max);
+$smarty->assign("cat_groups"      , $cat_groups);
+$smarty->assign("all_groups"      , $all_groups);
+$smarty->assign("by_patient"         , $by_patient);
 $smarty->display('vw_bilan_service.tpl');
 
 ?>
