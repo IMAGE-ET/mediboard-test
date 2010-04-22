@@ -873,8 +873,14 @@ class CSetupdPplanningOp extends CSetup {
               `sejour`.`entree` = IF(`sejour`.`entree_reelle`,`sejour`.`entree_reelle`,`sejour`.`entree_prevue`),
               `sejour`.`sortie` = IF(`sejour`.`sortie_reelle`,`sejour`.`sortie_reelle`,`sejour`.`sortie_prevue`)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.06");
+    $sql = "ALTER TABLE `sejour` 
+              ADD INDEX (`entree`),
+              ADD INDEX (`sortie`);";
+    $this->addQuery($sql);
 		 
-    $this->mod_version = "1.06";
+    $this->mod_version = "1.07";
   }
 }
 ?>
