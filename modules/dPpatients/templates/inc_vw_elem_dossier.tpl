@@ -99,10 +99,12 @@
 {{if $object->_ref_chir->_ref_function->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
 <tr>
   <td class="text">
-    {{if $object->_canEdit}}
+    {{if $object->_canRead}}
     <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$object->_id}}">
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
+    {{/if}}
+    {{if $object->_canEdit}}
     <a class="iconed-text {{$object->_type}}" 
       href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$object->_id}}&amp;chirSel={{$object->_ref_plageconsult->chir_id}}">
     {{else}}
