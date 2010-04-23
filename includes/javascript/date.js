@@ -514,7 +514,7 @@ var Calendar = {
       locale: "fr_FR", 
       timePickerAdjacent: true, 
       use24hrs: true,
-      weekNumber: true,
+      //weekNumber: true,
       container: $(document.body),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
       center: window.Mobile
