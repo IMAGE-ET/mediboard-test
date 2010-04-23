@@ -100,7 +100,7 @@ Main.add(function() {
 
 	  {{else}}
 
-    <td class="text" style="background-color: {{$background}};" onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+    <td class="text" style="background-color: {{$background}};">
 			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
       {{if $modules.dPhospi->_can->edit}}
@@ -113,8 +113,10 @@ Main.add(function() {
       {{/if}}
 
       <a href="{{$rpu_link}}">
-      	{{mb_value object=$_sejour field=_entree date=$date}}
-        {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+      	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+          {{mb_value object=$_sejour field=_entree date=$date}}
+         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+        </span>
       </a>
 								
       {{if ($rpu->radio_debut || $rpu->bio_depart || $rpu->specia_att)}}
@@ -173,12 +175,13 @@ Main.add(function() {
 	    {{if $medicalView}}
 	    <td class="text" style="background-color: {{$background}};">
 				{{if $rpu->motif && $dPconfig.dPurgences.diag_prat_view}}
-				<strong>{{mb_title class=$rpu field=motif}}</strong> :
-	       {{$rpu->motif|nl2br}}
+				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
+				  </span>
 	      {{else}}
-	      <a href="{{$rpu_link}}">
-	        {{$rpu->diag_infirmier|nl2br}}
-	      </a>
+				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+            {{$rpu->diag_infirmier|nl2br}}
+          </span>
 	      {{/if}}
 	    </td>
 	    {{/if}}
