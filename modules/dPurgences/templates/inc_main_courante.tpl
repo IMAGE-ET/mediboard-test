@@ -103,11 +103,6 @@ Main.add(function() {
     <td class="text" style="background-color: {{$background}};">
 			{{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
       
-      {{if $modules.dPhospi->_can->edit}}
-      <a style="float: right" title="{{tr}}CSejour.modify{{/tr}}" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
-        <img src="images/icons/planning.png" alt="Planifier"/>
-      </a>
-      {{/if}}
 			{{if $isImedsInstalled}}
 			  {{mb_include module=dPImeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
       {{/if}}
