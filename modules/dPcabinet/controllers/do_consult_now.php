@@ -113,6 +113,7 @@ if ($sejour->type == "urg") {
   if (CAppUI::conf('dPurgences motif_rpu_view')) {
 	  $consult->motif .= "RPU: ";
   }
+	$sejour->loadRefRPU();
   $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
 } 
 
