@@ -13,7 +13,7 @@ $can->needsRead();
 
 $now       = mbDate();
 
-$filter = new CMateriel;
+$filter = new COperation;
 $filter->_date_min = CValue::get("_date_min"    , "$now");
 $filter->_date_max = CValue::get("_date_max"    , "$now");
 
