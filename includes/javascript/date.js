@@ -512,9 +512,9 @@ var Calendar = {
       altFormat: 'yyyy-MM-dd',
       icon: "images/icons/calendar.gif",
       locale: "fr_FR", 
-      timePickerAdjacent: true, 
+      timePickerAdjacent: !window.Mobile, 
       use24hrs: true,
-      //weekNumber: true,
+      weekNumber: true,
       container: $(document.body),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
       center: window.Mobile

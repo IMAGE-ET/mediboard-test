@@ -22,7 +22,7 @@ if (!$db->getOne("SELECT * FROM `users`")) {
   showHeader();
 ?>
 
-<div class="big-error">
+<div class="small-error">
   Erreur : la structure de la base de données principale n'a pas été construite, il est
   donc impossible de finaliser l'installation.
   <br />Retourner à l'étape précédente pour construire la structure.

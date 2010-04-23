@@ -92,7 +92,7 @@ $db->connect();
 if ($db->getOne("SELECT * FROM `users`")) {
 ?>
 
-<div class="big-warning">
+<div class="small-warning">
   Attention, la base de données principale possède déjà une structure. La 
   reconstruire endommagerait probablement les données. 
   <br />

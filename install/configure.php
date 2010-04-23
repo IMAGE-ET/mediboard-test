@@ -35,28 +35,29 @@ showHeader();
 <form name="configure" action="configure.php" method="post">
 
 <table class="form">
-
+  <col style="width: 50%" />
+  
   <tr>
     <th class="category" colspan="2">Configuration générale</th>
   </tr>
 
   <tr>
-    <th><label for="root_dir" title="Repertoire racine. Pas de slash final. Utiliser les slashs aussi pour MS Windows">Répertoire racine :</label></th>
+    <th><label for="root_dir" title="Repertoire racine. Pas de slash final. Utiliser les slashs aussi pour MS Windows">Répertoire racine</label></th>
     <td><input type="text" size="40" name="root_dir" value="<?php echo $dPconfig["root_dir"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="base_url" title="Url Racine pour le système">Url racine :</label></th>
+    <th><label for="base_url" title="Url Racine pour le système">Url racine</label></th>
     <td><input type="text" size="40" name="base_url" value="<?php echo $dPconfig['base_url'] ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="offline" title="Mode maintenance">Mode maintenance :</label></th>
+    <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>
     <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
   </tr>
   
   <tr>
-    <th><label for="instance_role" title="Instance">Rôle de l'instance :</label></th>
+    <th><label for="instance_role" title="Instance">Rôle de l'instance</label></th>
     <td>
       <select name="instance_role" size="1">
         <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) { echo 'selected="selected"'; } ?> >Production</option>
@@ -66,7 +67,7 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée ?</label></th>
+    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
     <td>
       <div style="float: right">
       <?php
@@ -93,31 +94,32 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="db[std][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
+    <th><label for="db[std][dbhost]" title="Nom de l'hôte">Nom de l'hôte</label></th>
     <td><input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbname]" title="Nom de la base">Nom de la base :</label></th>
+    <th><label for="db[std][dbname]" title="Nom de la base">Nom de la base</label></th>
     <td><input type="text" size="40" name="db[std][dbname]" value="<?php echo @$dPconfig["db"]["std"]["dbname"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur :</label></th>
+    <th><label for="db[std][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur</label></th>
     <td><input type="text" size="40" name="db[std][dbuser]" value="<?php echo @$dPconfig["db"]["std"]["dbuser"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe :</label></th>
+    <th><label for="db[std][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe</label></th>
     <td><input type="text" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
   </tr>
 
+<!--
   <tr>
     <th class="category" colspan="2">Paramètres d'indexation de fichiers</th>
   </tr>
 
   <tr>
-    <th><label for="ft[default]" title="Application par défaut">Application par défaut :</label></th>
+    <th><label for="ft[default]" title="Application par défaut">Application par défaut</label></th>
     <td><input type="text" size="40" name="ft[default]" value="<?php echo $dPconfig['ft']['default'] ?>" /></td>
   </tr>
 
@@ -135,6 +137,7 @@ showHeader();
     <th><label for="ft[application/pdf]" title="Application par défaut">Application pour les fichiers MIME <strong>application/pdf</strong> :</label></th>
     <td><input type="text" size="40" name="ft[application/pdf]" value="<?php echo $dPconfig['ft']['application/pdf'] ?>" /></td>
   </tr>
+-->
 </table>
 
 

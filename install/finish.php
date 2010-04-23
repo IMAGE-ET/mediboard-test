@@ -125,16 +125,15 @@ if (@$_POST["changePassword"] and $password != "admin") {
 </div>
 <?php } ?>
 
-
 <p>
   A cette étape le framework général de Mediboard est fonctionnel. Il est maintenant 
   nécessaire d'installer et paramétrer un par un les modules que vous souhaitez utiliser.
 </p>
 
 <div class="small-info">
-A l'heure actuelle, les couplages inter-modules sont encore assez importants, 
-c'est pourquoi il est recommandé sinon obligatoire de tous les installer, quitte à les
-désactiver ou les masquer du menu principal (<em>cf.</em> Administration des modules).
+  A l'heure actuelle, les couplages inter-modules sont encore assez importants, 
+  c'est pourquoi il est recommandé sinon obligatoire de tous les installer, quitte à les
+  désactiver ou les masquer du menu principal (<em>cf.</em> Administration des modules).
 </div>
 
 <p>  
@@ -143,11 +142,9 @@ désactiver ou les masquer du menu principal (<em>cf.</em> Administration des mod
 </p>
 
 <div class="navigation">
-  <a href="../index.php?m=system&amp;tab=view_modules">
+  <button class="tick" onclick="location.href='../index.php?m=system&amp;tab=view_modules'">
     Me rendre à la page d'administration des modules
-  </a>
+  </button>
 </div>
-
-
 
 <?php showFooter(); ?>

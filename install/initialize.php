@@ -14,7 +14,7 @@ require_once("checkconfig.php");
 // Data sources to test in the wizard
 global $dPconfig;
 $dbConfigs = array (
-  "std"     => $dPconfig["db"]["std"]
+  "std" => $dPconfig["db"]["std"]
 );
 
 require_once("mbdb.class.php");
@@ -44,23 +44,24 @@ showHeader();
 <form name="createBases" action="initialize.php" method="post">
 
 <table class="form">
+  <col style="width: 25%" />
 
   <tr>
-    <th class="category" colspan="2">Avec des droits d'aministrateurs</th>
+    <th class="title" colspan="2">Avec des droits d'aministrateurs</th>
   </tr>
 
   <tr>
-    <th><label for="adminhost" title="Nom de l'hôte">Nom de l'hôte :</label></th>
+    <th><label for="adminhost" title="Nom de l'hôte">Nom de l'hôte</label></th>
     <td><input type="text" size="40" name="adminhost" value="localhost" /></td>
   </tr>
 
   <tr>
-    <th><label for="adminuser" title="Nom de l'utilisateur">Nom de l'administrateur :</label></th>
+    <th><label for="adminuser" title="Nom de l'utilisateur">Nom de l'administrateur</label></th>
     <td><input type="text" size="40" name="adminuser" value="root" /></td>
   </tr>
 
   <tr>
-    <th><label for="adminpass" title="Mot de passe de l'utililisateur'">Mot de passe de l'administrateur :</label></th>
+    <th><label for="adminpass" title="Mot de passe de l'utililisateur'">Mot de passe de l'administrateur</label></th>
     <td><input type="password" size="40" name="adminpass" value="" /></td>
   </tr>
 
@@ -69,8 +70,6 @@ showHeader();
     	<button type="submit" class="new">Création de la base et des utilisateurs</button>
     </td>
   </tr>
-
-</table>
 
 <?php 
 if (@$_POST["adminhost"]) { 
@@ -86,11 +85,9 @@ if (@$_POST["adminhost"]) {
   }
 ?>
 
-<table class="tbl">
-
 <tr>
-  <th>Action</th>
-  <th>Statut</th>
+  <th class="category">Action</th>
+  <th class="category">Statut</th>
 </tr>
 
 <tr>
@@ -102,7 +99,7 @@ if (@$_POST["adminhost"]) {
     <div class="error">
       Erreurs lors des créations
       <br />
-      <?php echo nl2br(join($dbConnection->_errors, "\n")); ?>
+      <?php echo nl2br(implode("\n", $dbConnection->_errors)); ?>
     </div>
     <?php } ?>
   </td>
@@ -119,14 +116,15 @@ if (@$_POST["adminhost"]) {
 <input type="hidden" name="generate" value="true"/>
   
 <table class="form">
+  <col style="width: 50%" />
 
   <tr>
-    <th class="category" colspan="2">Sans des droits d'aministrateurs</th>
+    <th class="title" colspan="2">Sans droits d'aministrateurs</th>
   </tr>
 
   <tr>
     <td class="button" colspan="2">
-    	<button type="submit" class="edit">Générer le code de création des utilisateurs et des bases"</button>
+    	<button type="submit" class="edit">Générer le code de création des utilisateurs et des bases</button>
     </td>
   </tr>
   
@@ -140,11 +138,11 @@ if (@$_POST["adminhost"]) {
   données pour qu'il puisse l'exécuter.
 </p>
 <p>
-  Vous <strong>ne pouvez pas </strong> continuer l'installation de Mediboard 
-  tant que cette étape n'est effectuée.
+  Vous <strong>ne pouvez pas</strong> continuer l'installation de Mediboard 
+  tant que cette étape n'est pas effectuée.
 </p>
 
-<textarea cols="50" rows="10"><?php echo join($queries, "\n\n"); ?></textarea>
+<textarea cols="50" rows="10"><?php echo implode("\n\n", $queries); ?></textarea>
 <?php } ?>
 
 <h3>Tests de connexion</h3>
