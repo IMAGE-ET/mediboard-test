@@ -89,8 +89,8 @@ function showFooter() {
 ?>
 <hr />
 <div class="navigation">
-  <?php if ($prevStep) { ?><a href="<?php echo $prevStep; ?>.php">&lt;&lt; <?php echo $stepsText[$prevStep]; ?></a><?php } ?>
-  <?php if ($nextStep) { ?><a href="<?php echo $nextStep; ?>.php"><?php echo $stepsText[$nextStep]; ?> &gt;&gt;</a><?php } ?>
+  <?php if ($prevStep) { ?><button class="left" onclick="location.href='<?php echo $prevStep; ?>.php'"><?php echo $stepsText[$prevStep]; ?></button><?php } ?>
+  <?php if ($nextStep) { ?><button class="right rtl" onclick="location.href='<?php echo $nextStep; ?>.php'"><?php echo $stepsText[$nextStep]; ?></button><?php } ?>
 </div>
 
 <div class="generated">
