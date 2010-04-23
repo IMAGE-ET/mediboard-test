@@ -1,6 +1,6 @@
 /* $Id: $ */
 
-/** Tooltips */
+/** Tooltip **/
 .tooltip-trigger {
   cursor: pointer;
 }
@@ -29,7 +29,7 @@ div.tooltip table.decoration td.top,
 div.tooltip table.decoration td.top-left,
 div.tooltip table.decoration td.left,
 div.tooltip table.decoration td.bottom-left {
-  background-color: transparent;
+  background: transparent;
 	opacity: 1;
 }
 
@@ -62,8 +62,9 @@ div.tooltip table.decoration td.content {
 	padding: 5px;
 }
 
+/** Postit **/
 div.postit table.decoration td {
-  border: 0px solid #883;
+  border: none;
 }
 
 div.postit table.decoration td.deco {
@@ -73,22 +74,15 @@ div.postit table.decoration td.deco {
 div.postit table.decoration td.top-right,
 div.postit table.decoration td.top-left,
 div.postit table.decoration td.bottom-left {
-  background-color: transparent;
+  background: transparent;
 	opacity: 1;
 }
 
-div.postit table.decoration td.left {
-  background-color: #ff6;
-  border-left-width: 1px;
-  border-bottom-width: 1px;
-	opacity: 1;
-}
-
-div.postit table.decoration td.top {
+div.postit table.decoration td.left,
+div.postit table.decoration td.top,
+div.postit table.decoration td.content {
   background: #ff6;
 	opacity: 1;
-  border-top-width: 1px;
-  border-right-width: 1px;
 }
 
 div.postit table.decoration td.top-left {
@@ -117,9 +111,7 @@ div.postit table.decoration td.right {
 }
 
 div.postit table.decoration td.content {
-  border-right-width: 1px;
-  border-bottom-width: 1px;
-  background-color: #ff6;
+  border: none;
   max-height: 40px;
   overflow: auto;
   padding-right: 10px;
@@ -127,6 +119,7 @@ div.postit table.decoration td.content {
   white-space: nowrap;
 }
 
+/** Note **/
 table.note {
   background: transparent;
   border-spacing: 0px;
