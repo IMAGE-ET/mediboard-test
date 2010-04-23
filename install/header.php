@@ -26,7 +26,8 @@ $stepsText = array (
   "initialize" => "Initialisation", 
   "feed" => "Remplissage des bases", 
   "finish" => "Finalisation",
-  "phpinfo" => "Infos PHP"
+  "phpinfo" => "Infos PHP",
+  "errorlog" => "Logs d'erreur",
 );
 
 $steps = array_keys($stepsText);

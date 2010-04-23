@@ -332,4 +332,17 @@ $library->versionString = "define('GESHI_VERSION', '1.0.8.3')";
 
 CLibrary::$all[$library->name] = $library;
 
+/*
+$library = new CLibrary;
+$library->name = "dsHistory";
+$library->url = "http://code.google.com/p/dshistory/";
+$library->fileName = "dshistory.tar.gz";
+$library->description = "A JavaScript-based browser history event manager";
+$library->sourceDir = "dshistory";
+$library->targetDir = "dshistory";
+$library->versionFile = "dshistory.js";
+$library->versionString = "v1-beta5";
+
+CLibrary::$all[$library->name] = $library;*/
+
 ?>
