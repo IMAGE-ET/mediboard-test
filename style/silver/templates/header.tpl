@@ -4,6 +4,21 @@
 
 {{include file="../../mediboard/templates/message.tpl"}}
 
+<script type="text/javascript">
+var Menu = {
+  toggle: function () {
+    var oCNs = Element.classNames("menubar");
+    oCNs.flip("iconed", "uniconed");
+    oCNs.save("menubar", Date.year);
+  },
+  
+  init: function() {
+    var oCNs = Element.classNames("menubar");
+    oCNs.load("menubar");
+  }
+}
+</script>
+
 <table id="header" cellspacing="0">
   <tr>
     <td id="menubar">
