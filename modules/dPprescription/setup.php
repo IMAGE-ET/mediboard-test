@@ -1478,7 +1478,10 @@ class CSetupdPprescription extends CSetup {
               ADD INDEX (`dateTime`);";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.99";
+		$this->makeRevision("0.99");
+		$this->addPrefQuery("easy_mode", "0");
+
+		$this->mod_version = "1.00";
   }
 }
 

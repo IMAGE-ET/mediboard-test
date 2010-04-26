@@ -112,7 +112,7 @@
 	{{/if}}
 	
 	<td style="width:10%;" class="text">
-    <button style="float: right" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+    <button style="float: right" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null,'{{$line->_guid}}');"></button>
    {{if $line->executant_prescription_line_id || $line->user_executant_id}}{{$line->_ref_executant->_view}}{{else}}aucun{{/if}}
   </td>
 </tr>

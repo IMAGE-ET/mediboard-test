@@ -14,7 +14,7 @@
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
-<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}} {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}" id="line_element_{{$line->_id}}">
+<table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}} {{if $full_line_guid == $line->_guid}}active{{/if}}" id="line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
@@ -42,8 +42,8 @@
         {{if $line->_can_view_form_signature_praticien}} 
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	      {{/if}}
-	      {{if ($full_line_guid == $line->_guid) && $readonly}}
-	        <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
+	      {{if $full_line_guid == $line->_guid}}
+	        <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$category->chapitre}}', '', '{{$mode_pharma}}', null, '');"></button>
 	      {{/if}}
 	    </div>
 	    <!-- View de l'element -->

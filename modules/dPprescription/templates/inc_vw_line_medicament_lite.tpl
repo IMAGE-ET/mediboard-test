@@ -107,7 +107,7 @@
 	    {{if $line->fin}}
 			  <td colspan="2" style="width: 25%" class="text">
 			     {{if !$mode_induction_perop}}   
-            <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+            <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
           {{/if}}
 					  A partir de la fin du séjour jusqu'au {{mb_value object=$line field=fin}}
            
@@ -124,7 +124,7 @@
 	      </td>
 	      <td style="width: 10%" class="text">
 	        {{if !$mode_induction_perop}}   
-	          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+	          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
 	        {{/if}}
 	        <!-- Duree de la ligne -->
 	        {{if $line->duree && $line->unite_duree}}
@@ -136,7 +136,7 @@
 		{{else}}
 		 <td style="width: 25%" class="text">
 		 	 {{if !$mode_induction_perop}}   
-          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$line->_guid}}');"></button>
+          <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
        {{/if}}
 		 
 			 <!-- Duree de la prise --> 

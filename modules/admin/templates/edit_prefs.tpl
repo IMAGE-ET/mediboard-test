@@ -530,7 +530,7 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{assign var="var" value="mode_readonly"}}
+  {{assign var="var" value="easy_mode"}}
   <tr>
     <th>
       <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>

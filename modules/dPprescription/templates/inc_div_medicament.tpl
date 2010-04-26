@@ -33,6 +33,11 @@ Main.add( function(){
         }
     } );
   }
+	
+	{{if $app->user_prefs.easy_mode}}
+	  toggleSearchOptions('searchProd', 'med');
+	{{/if}}
+	
 } );
 
 {{if $prescription->_praticiens|@count}}
@@ -83,6 +88,7 @@ transfertLineTP = function(line_id, sejour_id){
     Prescription.reload('{{$prescription->_id}}', '', 'medicament','',null, null);
   } } );
 }
+
 
 </script>
 
@@ -168,39 +174,60 @@ transfertLineTP = function(line_id, sejour_id){
     </td>
   </tr>
   {{/if}}
+  
+	{{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
   <tr>
-    {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
-      <th class="title">Nouvelle ligne de prescription</th>
-    {{/if}}
-    <th class="title" style="width: 1%;">Affichage</th>
+    <th class="title">
+    	{{if $app->user_prefs.easy_mode}}
+      <button type="button" class="add notext" onclick="toggleSearchOptions('searchProd','med');" style="float: left">Détails</button>
+			{{/if}}
+			Nouvelle ligne de prescription - Médicaments
+		</th>
   </tr>
-  <tr>
+  {{/if}}
+  
+	<tr>
+  	<td>
+  	 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+    {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
+    <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');" style="float: right">
+      {{if $mode_pharma}}
+        Valider toutes les lignes
+      {{else}}
+        Signer les lignes de médicaments
+      {{/if}}
+    </button>
+    {{/if}}
+		
     {{if ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $mode_pharma || ($current_user->isInfirmiere() && $dPconfig.dPprescription.CPrescription.droits_infirmiers_med))}}  
-    <td>
+    
 			<!-- Affichage des div des medicaments et autres produits -->
 			  <form action="?" method="get" name="searchProd" onsubmit="return false;">
 			    
 					<!-- Affichage des produits les plus utilises -->
-				  <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 120px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
+					<select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 120px;" onclick="updateFavoris('{{$favoris_praticien_id}}','med', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
 				 	  <option value="">&mdash; les plus utilisés</option>
 					</select>
 					
 					{{if $prescription->object_class == "CSejour" && $prescription->object_id}}
-					<select name="tp" onchange="transfertLineTP(this.value, '{{$prescription->_ref_object->_id}}'); this.value = '';" style="width: 120px;" onclick="updateSelectTP('{{$prescription->_ref_object->patient_id}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
+					<select name="tp" onchange="transfertLineTP(this.value, '{{$prescription->_ref_object->_id}}'); this.value = '';" style="width: 12em;" onclick="updateSelectTP('{{$prescription->_ref_object->patient_id}}', this); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">
 						<option value="">&mdash; Traitements perso</option>
 					</select>
 					{{/if}}
 					
-			    <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
+					<span id="addComment-med">
+			    <button  class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
 			    <br />
-			    <input type="text" name="produit" value="" size="20" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
-			    <label>
+					</span>
+			    <input type="text" name="produit" value="" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
+					       onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+			    <label title="Recherche dans le livret thérapeutique">
 			      <input type="checkbox" value="1" name="_recherche_livret" {{if $prescription->type=="sejour" && $dPconfig.dPprescription.CPrescription.preselect_livret}}checked="checked"{{/if}} onchange="if($V(this.form.produit)) { ac.activate.bind(ac)() };" />
 			      Livret Thérap.
 			    </label>
 			    
 			    <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
-			    <button type="button" class="search" onclick="MedSelector.init('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
+			    <button id="searchButton-med" type="button" class="search" onclick="MedSelector.init('produit'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Rechercher</button>
 			    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 			
 			    <script type="text/javascript">
@@ -216,36 +243,8 @@ transfertLineTP = function(line_id, sejour_id){
 			      }
 			  </script>
 			  </form>
-    </td>
     {{/if}}
-    <td style="text-align: center;">
-			{{if ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions)}}
-			  {{if $readonly}}
-        <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
-          {{if $lite}}Vue complète
-          {{else}}Vue simplifiée
-          {{/if}}
-        </button>
-        {{else}}
-				<button class="lock" type="button" 
-			  				onclick="Prescription.reload('{{$prescription->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true,{{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');">
-			    Lecture seule
-			  </button>
-			  {{/if}}
-		  {{/if}}
-      
-      <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-      {{if $prescription->object_id && ($is_praticien || ($mode_pharma && $prescription->_score_prescription != "2"))}}
-      <br />
-      <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', 'medicament', '{{$mode_pharma}}');">
-        {{if $mode_pharma}}
-          Valider toutes les lignes
-        {{else}}
-          Signer les lignes de médicaments
-        {{/if}}
-      </button>
-      {{/if}}
-    </td>
+	 </td>
   </tr>
   <tbody id="add_line_comment_med" style="display: none">
   <tr>
@@ -264,7 +263,7 @@ transfertLineTP = function(line_id, sejour_id){
 	      <input type="hidden" name="chapitre" value="medicament" />
 	      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
 	      {{mb_field class=CPrescriptionLineComment field=commentaire}}
-	      <button class="submit" type="button" onclick="this.form.onsubmit();"">Ajouter ce commentaire</button>
+	      <button class="submit" type="button" onclick="this.form.onsubmit();">Ajouter ce commentaire</button>
 	    </form>
 	    </div>
 	</td>
@@ -272,7 +271,7 @@ transfertLineTP = function(line_id, sejour_id){
   </tbody>
 </table>
 
-{{if $lite && ($prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment) && $readonly}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
 <table class="tbl">
   <tr>
     <th colspan="6" class="title">Médicaments</th>
@@ -300,26 +299,18 @@ transfertLineTP = function(line_id, sejour_id){
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
-    <!-- Si la ligne ne possede pas d'enfant -->
-    {{if !$curr_line->child_id}}
-      {{if $readonly}}
-        {{if $full_line_guid == $curr_line->_guid}}
-          {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
-        {{else}}
-	        {{if $lite}}
-	          {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" prescription_reelle=$prescription}}
-	        {{else}}
-	          {{include file="../../dPprescription/templates/inc_vw_line_medicament_readonly.tpl" prescription_reelle=$prescription}}
-	        {{/if}}
-        {{/if}}
-      {{else}}
-        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
-      {{/if}}
-    {{/if}}
+      <!-- Si la ligne ne possede pas d'enfant -->
+	    {{if !$curr_line->child_id}}
+	      {{if $full_line_guid == $curr_line->_guid}}
+	        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+	      {{else}}
+	         {{include file="../../dPprescription/templates/inc_vw_line_medicament_lite.tpl" prescription_reelle=$prescription}}
+	      {{/if}}
+	    {{/if}}
     {{/if}}
   {{/foreach}}
    
-  {{if $lite && $prescription->_ref_perfusions && $readonly}}
+  {{if $prescription->_ref_perfusions}}
 	<table class="tbl">
 	  <tr>
 	    <th colspan="7" class="title">Perfusions</th>
@@ -343,18 +334,10 @@ transfertLineTP = function(line_id, sejour_id){
   <!-- Parcours des perfusions -->
   {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $_perfusion->praticien_id)}}
-	    {{if $readonly}}
-	      {{if $full_line_guid == $_perfusion->_guid}}
-	        {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" prescription_reelle=$prescription}}
-	      {{else}}
-		      {{if $lite}}
-		        {{include file="../../dPprescription/templates/inc_vw_perfusion_lite.tpl" prescription_reelle=$prescription}} 
-		      {{else}}
-		        {{include file="../../dPprescription/templates/inc_vw_perfusion_readonly.tpl" prescription_reelle=$prescription}}    
-		      {{/if}}
-		    {{/if}}
-	    {{else}}
-	      {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" prescription_reelle=$prescription}}
+      {{if $full_line_guid == $_perfusion->_guid}}
+        {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" prescription_reelle=$prescription}}
+      {{else}}
+	       {{include file="../../dPprescription/templates/inc_vw_perfusion_lite.tpl" prescription_reelle=$prescription}} 
 	    {{/if}}
     {{/if}}
   {{/foreach}}
@@ -368,14 +351,10 @@ transfertLineTP = function(line_id, sejour_id){
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $_line_comment->praticien_id)}}
-      {{if $readonly}}
-        {{if $full_line_guid == $_line_comment->_guid}}
-          {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
-        {{else}}
-          {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl" prescription_reelle=$prescription}}
-        {{/if}}
-      {{else}}
+      {{if $full_line_guid == $_line_comment->_guid}}
         {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl" prescription_reelle=$prescription}}
+      {{else}}
+        {{include file="../../dPprescription/templates/inc_vw_line_comment_readonly.tpl" prescription_reelle=$prescription}}
       {{/if}}
     {{/if}}
   {{/foreach}}

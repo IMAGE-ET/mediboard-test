@@ -52,7 +52,7 @@
           {{$line->_ref_praticien->_view}}
         {{/if}}
 				{{/if}}
-        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$line->_guid}}');"></button>
+        <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$line->_guid}}');"></button>
         </div>
 			
       </div>

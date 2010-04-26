@@ -21,7 +21,7 @@ Main.add( function(){
 
 </script>
 
-<table class="tbl {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}active{{/if}}" id="perfusion-{{$_perfusion->_id}}"> 
+<table class="tbl {{if $full_line_guid == $_perfusion->_guid}}active{{/if}}" id="perfusion-{{$_perfusion->_id}}"> 
 <tbody class="hoverable {{if $_perfusion->_fin < $now && !$_perfusion->_protocole}}line_stopped{{/if}}">
 {{assign var=perfusion_id value=$_perfusion->_id}}
   <tr>
@@ -56,8 +56,8 @@ Main.add( function(){
             </button>
         {{/if}}
         
-        {{if ($full_line_guid == $_perfusion->_guid) && $readonly}}
-		      <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, {{$readonly}}, {{$lite}},'');"></button>
+        {{if $full_line_guid == $_perfusion->_guid}}
+		      <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');"></button>
 		    {{/if}}
       </div>
 			 <div style="float: right">
@@ -157,8 +157,12 @@ Main.add( function(){
 			        {{* if $_perfusion->_ref_lines|@count || !$_perfusion->_can_modify_perfusion*}}
 				        {{* mb_value object=$_perfusion field="type"*}}
 				      {{* else*}}
+							{{if $_perfusion->_perm_edit}}
 				        {{mb_field object=$_perfusion field="type" onchange="if(this.value == 'PCA'){ $('bolus-$perfusion_id').show(); changeModeBolus(this.form);} else { resetBolus(this.form); $('bolus-$perfusion_id').hide(); }; return onSubmitFormAjax(this.form);"}}
-				      {{* /if*}}
+				      {{else}}
+							  {{mb_value object=$_perfusion field="type"}}
+              {{/if}}
+							{{* /if*}}
 				    </td>
 						
 						{{if $_perfusion->_protocole}}
@@ -257,14 +261,14 @@ Main.add( function(){
 					</tr>
 					<tr>
 					  <td style="border: none;"></td>
-            <td style="border:none;">    
-						  <label>
-						  <input type="radio" {{if $_perfusion->_continuite != 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="continue"/> 
+            <td style="border:none;">
+					    <label>
+						  <input type="radio" {{if !$_perfusion->_perm_edit}}disabled="disabled"{{/if}} {{if $_perfusion->_continuite != 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="continue"/> 
 							Continue
 							</label>
               
 							<label>
-							<input type="radio" {{if $_perfusion->_continuite == 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="discontinue"/>
+							<input type="radio" {{if !$_perfusion->_perm_edit}}disabled="disabled"{{/if}} {{if $_perfusion->_continuite == 'discontinue'}}checked="checked"{{/if}} name="continuite_perf" onchange="toggleContinuitePerf(this, '{{$_perfusion->_id}}');" value="discontinue"/>
 							Discontinue		
 					    </label>
 						</td>
@@ -278,12 +282,18 @@ Main.add( function(){
 	              {{/if}}
 							</div>
 							<div style="display: none;" id="discontinue-{{$_perfusion->_id}}">
-	              A passer en {{mb_field object=$_perfusion size=2 field=duree_passage increment=1 min=0 form="editPerf-$perfusion_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} minutes
-	               toutes les 
+	              {{if $_perfusion->_can_modify_perfusion}}
+                  A passer en 
+                 {{mb_field object=$_perfusion size=2 field=duree_passage increment=1 min=0 form="editPerf-$perfusion_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} minutes
+	              {{elseif $_perfusion->duree_passage}}
+								  A passer en 
+                 {{mb_value object=$_perfusion field=duree_passage}} minutes
+                {{/if}}
+								 toutes les 
 	              {{if $_perfusion->_can_modify_perfusion}}
 	                {{mb_field object=$_perfusion field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$perfusion_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} heures
 	              {{else}}      
-	                {{mb_value object=$_perfusion field="nb_tous_les"}}
+	                {{mb_value object=$_perfusion field="nb_tous_les"}} heures
 	              {{/if}}
 							</div>
             </td>

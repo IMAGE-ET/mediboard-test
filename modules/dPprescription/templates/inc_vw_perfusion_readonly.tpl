@@ -41,7 +41,7 @@
 			  	{{/if}}
         {{/if}}
 				{{/if}} 
-       <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, false,'{{$_perfusion->_guid}}');"></button>
+       <button class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$_perfusion->_guid}}');"></button>
       </div>
         
       <strong>

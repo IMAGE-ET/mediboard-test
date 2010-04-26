@@ -30,6 +30,10 @@ Main.add( function(){
       updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
     } );
   }
+	
+	{{if $app->user_prefs.easy_mode}}
+    toggleSearchOptions('search{{$element}}', '{{$element}}');
+  {{/if}}
 } );
 
 {{if $prescription->_praticiens|@count}}
@@ -58,15 +62,27 @@ Main.add( function(){
     {{assign var=perm_add_line value=0}}  
 	{{/if}}
 
+  {{if $perm_add_line}}
   <tr>
-    {{if $perm_add_line}}
-      <th class="title">Nouvelle ligne de prescription</th>
-    {{/if}}
-    <th class="title" style="width: 1%;">Affichage</th>
+    <th class="title">
+    	{{if $app->user_prefs.easy_mode}}
+      <button type="button" class="add notext" onclick="toggleSearchOptions('search{{$element}}','{{$element}}');" style="float: left">Détails</button>
+      {{/if}}
+			Nouvelle ligne de prescription - {{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}
+		</th>
   </tr>
-  <tr>
-    {{if $perm_add_line}}
-    <td>
+  {{/if}}
+  
+	<tr>
+  	<td>
+			<!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+      {{if $prescription->object_id && $is_praticien}}
+      <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');" style="float: right;">
+        Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
+      </button>
+      {{/if}}
+ 
+     {{if $perm_add_line}}
       <!-- Formulaire d'elements les plus utilisés -->
 			<form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
 			  <!-- Affichage des produits les plus utilises -->
@@ -76,17 +92,18 @@ Main.add( function(){
         </select>
 				
 			  <!-- Boutons d'ajout d'elements et de commentaires -->
-			  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-			  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Ajouter élément</button>
-			  {{/if}}
-			  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
-			 <br />
-			 
+				<span id="addComment-{{$element}}">
+				  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+				  <button class="new" onclick="toggleFieldComment(this, $('add_{{$element}}'), 'élément'); headerPrescriptionTabs.setActiveTab('div_ajout_lignes');">Ajouter élément</button>
+				  {{/if}}
+				  <button class="new" onclick="toggleFieldComment(this, $('add_line_comment_{{$element}}'), 'commentaire');" type="button">Ajouter commentaire</button>
+				  <br />
+			  </span>
 			  <!-- Selecteur d'elements -->
-			  <input type="text" name="libelle" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
+			  <input type="text" name="libelle" value="" class="autocomplete" onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
 			  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
 			  <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
-			  <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>
+			  <button id="searchButton-{{$element}}" class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>
 			  <script type="text/javascript">   
 			    ElementSelector.init{{$element}} = function(type){
 			      this.sForm = "search{{$element}}";
@@ -98,32 +115,9 @@ Main.add( function(){
 			    }
 			  </script>
 			</form>
-    </td>
+   
 		{{/if}}
-    <td>
-		  {{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
-      {{if $readonly}}
-	        <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, true, {{if $lite}}false{{else}}true{{/if}});">
-	          {{if $lite}}Vue complète
-	          {{else}}Vue simplifiée
-	          {{/if}}
-	        </button>
-      {{else}}
-			  <button class="lock" type="button" onclick="Prescription.reload('{{$prescription->_id}}', '', '{{$element}}', '', '{{$mode_pharma}}', null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');");">
-			    Lecture seule
-			  </button>
-		  {{/if}}
-			{{/if}}
-		  
-
-			   
-		  <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-		  {{if $prescription->object_id && $is_praticien}}
-		  <button class="tick" type="button" onclick="submitValideAllLines('{{$prescription->_id}}', '{{$element}}');">
-		  	Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
-		  </button>
-		  {{/if}}
-    </td>
+   </td>
   </tr>
   {{if $perm_add_line}}
   <tbody id="add_{{$element}}" style="display: none">
@@ -210,7 +204,7 @@ Main.add( function(){
 </table>
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
-{{if $lite && is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments) && $readonly}}
+{{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
  <table class="tbl">
    <th style="width:22%;">Libellé</th>
    <th style="width:35%;">Prises</th>
@@ -233,56 +227,35 @@ Main.add( function(){
   <!-- Parcours des elements de type $element -->
   {{foreach from=$lines item=lines_cat key=category_id}}
 	  {{assign var=category value=$categories.$element.$category_id}}
-	
-        <table class="tbl">
+      <table class="tbl">
         <tr>
           <th class="title" colspan="9">{{$category->_view}}</th>
         </tr>
       </table>	  
 
-      
 	  <!-- Div permettant de classer les elements suivantes la date d'arret -->
 	  <div id="elt_{{$category->_id}}"></div>
 	  <div id="elt_art_{{$category->_id}}"></div>
     
     {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_element->praticien_id)}}
-	      {{if $readonly}}
-	        {{if $full_line_guid == $line_element->_guid}}
-	          {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-	        {{else}}
-		        {{if $lite}}
-		          {{include file="inc_vw_line_element_lite.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-		        {{else}}
-	            {{include file="inc_vw_line_element_readonly.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-	          {{/if}}
-          {{/if}}
-        {{else}}
+        {{if $full_line_guid == $line_element->_guid}}
           {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
-	      {{/if}}
+        {{else}}
+	        {{include file="inc_vw_line_element_lite.tpl" _line_element=$line_element prescription_reelle=$prescription nodebug=true}}
+        {{/if}}
       {{/if}}
 	  {{/foreach}}
 	  
 	  <!-- Commentaires d'une categorie -->
 	  <table class="tbl">
-  	  {{if $lines_cat.comment|@count}}
-  	  {{if !$lite}}
-  	  <tr>
-  	    <th colspan="9" class="element">Commentaires</th>
-  	  </tr>
-  	  {{/if}}
-  	  {{/if}}
   	  {{foreach from=$lines_cat.comment item=line_comment}}
   	    {{if !$praticien_sortie_id || ($praticien_sortie_id == $line_comment->praticien_id)}}
-          {{if $readonly}}
-            {{if $full_line_guid == $line_comment->_guid}}
-              {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}            
-            {{else}}
-	              {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
-	          {{/if}}
+          {{if $full_line_guid == $line_comment->_guid}}
+            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}            
           {{else}}
-            {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
-  	      {{/if}}
+              {{include file="inc_vw_line_comment_readonly.tpl" _line_comment=$line_comment prescription_reelle=$prescription nodebug=true}}
+          {{/if}}
         {{/if}}
   	  {{/foreach}}
 	  </table>

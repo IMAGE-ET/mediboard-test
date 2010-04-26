@@ -44,7 +44,7 @@ function refreshConstantesMedicales (force) {
 };
 
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, !Preferences.mode_readonly,'', null, false);
+  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
 }
 
 Main.add(function () {
@@ -72,7 +72,7 @@ Main.add(function () {
   <li><a href="#AntTrait">Antécédents</a></li>
  
   {{if $consult->sejour_id}}
-  <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, !Preferences.mode_readonly,'', null, false);"{{/if}}>
+  <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription Séjour
     </a>

@@ -99,7 +99,7 @@ $array_list_module_pref = array (
 		"showTemplateSpans"
   ),
   "dPprescription" => array (
-    "mode_readonly",
+		"easy_mode",
     "show_transmissions_form"
   ),
   "dPurgences" => array (

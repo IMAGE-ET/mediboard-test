@@ -13,7 +13,7 @@
 
 {{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
 function reloadPrescription(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'', null, false);
+  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
 }
 {{/if}}
 
@@ -54,7 +54,7 @@ Main.add(function () {
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
 	{{if $isPrescriptionInstalled && $dPconfig.dPcabinet.CPrescription.view_prescription}}
-	  <li onmousedown="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'', null, false);">
+	  <li onmousedown="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
 	    <a href="#prescription_sejour">Trait. et prescription</a>
 	  </li>
   {{/if}}

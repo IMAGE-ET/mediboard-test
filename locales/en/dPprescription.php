@@ -1373,4 +1373,7 @@ $locales['pref-show_transmissions_form'] = '';
 $locales['pref-show_transmissions_form-desc'] = '';
 $locales['pref-show_transmissions_form-0'] = '';
 $locales['pref-show_transmissions_form-1'] = '';
+$locales['pref-easy_mode'] = '';
+$locales['pref-easy_mode-0'] = '';
+$locales['pref-easy_mode-1'] = '';
 ?>

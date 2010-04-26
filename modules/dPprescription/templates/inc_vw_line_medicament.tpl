@@ -15,7 +15,7 @@
 
 <table class="tbl {{if $line->traitement_personnel}}traitement{{else}}med{{/if}}
              {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}} line_stopped{{/if}}
-             {{if ($full_line_guid == $line->_guid) && $readonly}}active{{/if}}" id="line_medicament_{{$line->_id}}">
+             {{if $full_line_guid == $line->_guid}}active{{/if}}" id="line_medicament_{{$line->_id}}">
 <tbody  class="hoverable">
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
@@ -79,8 +79,8 @@
             ({{$line->_count_substitution_lines}})
             </button>
         {{/if}}
-        {{if ($line->_guid == $full_line_guid) && $readonly}} 
-          <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
+        {{if $line->_guid == $full_line_guid}} 
+          <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '');"></button>
         {{/if}}
       </div>
       <a href="#produit{{$line->_id}}" onclick="Prescription.viewProduit(null,'{{$line->code_ucd}}','{{$line->code_cis}}');">

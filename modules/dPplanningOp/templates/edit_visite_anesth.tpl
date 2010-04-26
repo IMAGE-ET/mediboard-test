@@ -23,7 +23,7 @@ submitAnesth = function(oForm) {
 }
 
 reloadPrescription = function(prescription_id){
-  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
+  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
 }
 
 signVisiteAnesth = function(anesth_id) {
@@ -76,7 +76,7 @@ Main.add(function () {
 
 	{{if $isPrescriptionInstalled}}
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}});
+    Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null);
   }
   {{/if}}
 

@@ -112,7 +112,7 @@ Prescription = {
     oForm.object_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){
-        Prescription.reload(oFormElement.prescription_id.value, element_id, oForm.chapitre.value, null, null, null, false);
+        Prescription.reload(oFormElement.prescription_id.value, element_id, oForm.chapitre.value, null, null, null);
       } 
     });
   },
@@ -166,7 +166,7 @@ Prescription = {
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, null, chapitre, null, null, null, true);
+        Prescription.reload(oForm.prescription_id.value, null, chapitre, null, null, null);
       } 
     });
   },
@@ -197,7 +197,7 @@ Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg");
   },
-  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, readonly, lite, full_line_guid) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole, mode_pharma, line_id, full_line_guid) {
       // Select de choix du praticien
       if(document.selPratForPresc){
         var praticien_sortie_id = document.selPratForPresc.selPraticien.value;
@@ -214,15 +214,6 @@ Prescription = {
       urlPrescription.addParam("mode_pharma", mode_pharma);
       urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
       
-      if(!Object.isUndefined(readonly)){
-        urlPrescription.addParam("readonly", readonly?1:0);
-      }
-      if(!Object.isUndefined(lite)){
-        if(lite == '0'){
-          lite = false;
-        }
-  			urlPrescription.addParam("lite", lite?1:0);
-      }
       if(!Object.isUndefined(full_line_guid)){
         urlPrescription.addParam("full_line_guid", full_line_guid);
       }
@@ -260,8 +251,7 @@ Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, 
-                              operation_id, chir_id, anesth_id, readonly, lite, full_line_guid, pratSel_id, mode_sejour, praticien_for_prot_id){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, full_line_guid, pratSel_id, mode_sejour, praticien_for_prot_id){
     // pre-selection du praticien
     if(document.selPratForPresc){
       if(document.selPratForPresc.selPraticien.value){
@@ -293,8 +283,6 @@ Prescription = {
     url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.addParam("mode_anesth", mode_anesth);
     url.addParam("mode_protocole", "0");
-    url.addParam("readonly", readonly?1:0);
-    url.addParam("lite", lite?1:0);
     url.addParam("full_line_guid", full_line_guid);
     url.addParam("mode_sejour", mode_sejour);
     url.addParam("pratSel_id", pratSel_id);
@@ -305,14 +293,12 @@ Prescription = {
 			}
 		} } );
   },
-  reloadPrescPharma: function(prescription_id, readonly, lite){
+  reloadPrescPharma: function(prescription_id){
     var url = new Url("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("mode_pharma", "1");
     url.addParam("refresh_pharma", "1");
     url.addParam("mode_protocole", "0");
-    url.addParam("readonly", readonly?1:0);
-    url.addParam("lite", lite?1:0);
     url.requestUpdate("prescription_pharma");
   },
   reloadPrescPerf: function(prescription_id, mode_protocole, mode_pharma){
@@ -364,33 +350,15 @@ Prescription = {
   },
   refreshTabHeader: function(tabName, lineCount, lineCountNonSignee){
     // On cible le bon a href
-    tab = $('prescription_tab_group').select("a[href=#"+tabName+"]");
- 		link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
+    var tab = $('prescription_tab_group').select("a[href=#"+tabName+"]");
+ 		var link = tab[0];
 
-    if(lineCountNonSignee > 0){
-      link.addClassName("wrong");
-    } else {
-      link.removeClassName("wrong");
-    }
-    
-		if(lineCount == 0){
-		  link.addClassName("empty");
-		} else {
-		  link.removeClassName("empty");
-		}
+    lineCountNonSignee > 0 ? link.addClassName("wrong") : link.removeClassName("wrong");
+		lineCount == 0 ? link.addClassName("empty") : link.removeClassName("empty");
 		
-    if (tab = tab[0]) {
-      // On recupere le nom de l'onglet
-      tabSplit = tab.innerHTML.split(" ");
-      name_tab = tabSplit[0];
-      
-      // Si le nombre de ligne est > 0
-      if(lineCount > 0){
-      tab.innerHTML = name_tab+" ("+lineCount+")";
-      } else {
-        tab.innerHTML = name_tab;
-      }
-    }
+    var name_tab = link.innerHTML.split(" ")[0];
+    // Si le nombre de ligne est > 0
+    link.innerHTML = lineCount > 0 ? name_tab+" ("+lineCount+")" : link.innerHTML = name_tab;
   },
 	/*
   submitFormStop: function(oForm, object_id, object_class){

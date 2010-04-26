@@ -78,7 +78,7 @@
 	
 	{{if $isPrescriptionInstalled}}
 	function reloadPrescription(prescription_id){
-	  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');
+	  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'');
 	}
 	{{/if}}
 	
@@ -390,7 +390,7 @@
 		  <li><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
 		  {{if $isPrescriptionInstalled}}
-		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
+		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 			{{if $isImedsInstalled}}
         <li><a href="#Imeds">Labo</a></li>

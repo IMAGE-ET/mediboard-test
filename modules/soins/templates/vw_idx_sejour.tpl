@@ -69,7 +69,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 {{if $isPrescriptionInstalled}}
 	function reloadPrescription(prescription_id){
-	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}},'',null, false);
+	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false);
 	}
 {{/if}}
 
@@ -95,7 +95,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   // Affichage de la prescription
   {{if $isPrescriptionInstalled}}
     if($('prescription_sejour') && $('prescription_sejour').visible()){
-	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, null, null, false);
+	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false);
 	  }
   {{/if}}
   
@@ -489,7 +489,7 @@ printDossierComplet = function(){
         <li onmousedown="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         {{if $isPrescriptionInstalled}}
         <li onmousedown="Prescription.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">Soins</a></li>
-        <li onmousedown="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}, '', null, false);">
+        <li onmousedown="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>
         {{/if}}

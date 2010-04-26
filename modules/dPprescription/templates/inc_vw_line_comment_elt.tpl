@@ -74,8 +74,8 @@
 	       {{if $line->_can_view_form_signature_praticien}} 
 		       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 		     {{/if}}
-		     {{if ($line->_guid == $full_line_guid) && $readonly}} 
-	         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '{{$readonly}}', '{{$lite}}','');"></button>
+		     {{if $line->_guid == $full_line_guid}} 
+	         <button class="lock notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', '{{$div_refresh}}', '', '{{$mode_pharma}}', null, '');"></button>
 	       {{/if}}
        </div>
 	   </td>

@@ -42,8 +42,6 @@ if($pratSel_id){
 }
 	
 // Gestion du mode d'affichage
-$readonly            = CValue::getOrSession("readonly", 1);
-$lite                = CValue::getOrSession("lite", CAppUI::pref('mode_readonly') ? 0 : 1);
 $full_line_guid      = CValue::getOrSession("full_line_guid"); 
 $praticien_sortie_id = CValue::getOrSession("praticien_sortie_id");
 
@@ -514,8 +512,6 @@ $smarty->assign("prescriptions_sejour" , $prescriptions_sejour);
 $smarty->assign("dossier_medical"      , $dossier_medical);
 $smarty->assign("now_time"             , mbTime());
 $smarty->assign("mode_pack"            , "0");
-$smarty->assign("readonly"             , $readonly);
-$smarty->assign("lite"                 , $lite);
 $smarty->assign("perfusion"            , new CPerfusion());
 $smarty->assign("operation_id"         , $operation_id);
 $smarty->assign("pratSel_id"           , $pratSel_id);

@@ -135,9 +135,9 @@ viewEasyMode = function(mode_protocole, mode_pharma, chapitre){
   url.popup(900,500,"Mode grille");
 }
 
-refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma, readonly, lite) {
+refreshElementPrescription = function(chapitre, mode_protocole, mode_pharma) {
   if (!window[chapitre+'Loaded']) {
-    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null, readonly, lite);
+    Prescription.reload('{{$prescription->_id}}', null, chapitre, mode_protocole, mode_pharma, null);
     WaitingMessage.cover("div_"+chapitre);
     window[chapitre+'Loaded'] = true;
   }
@@ -397,6 +397,16 @@ toggleTypePerfusion = function(oForm){
 	}
 }
 
+toggleSearchOptions = function(formName, chap){
+  var oFormSearch = getForm(formName);
+  oFormSearch.favoris.toggle();
+  if(oFormSearch.tp){
+	  oFormSearch.tp.toggle();
+	}
+  $('addComment-'+chap).toggle();
+  $('searchButton-'+chap).toggle();
+}
+
 </script>
 
 {{include file="../../dPprescription/templates/js_functions.tpl"}}
@@ -450,12 +460,7 @@ toggleTypePerfusion = function(oForm){
   <li><a href="#div_medicament">Médicaments</a></li>
   {{/if}}
 	
-{{if $app->user_prefs.mode_readonly}}
-  {{assign var=_lite value=false}}
-{{else}}
-  {{assign var=_lite value=true}}
-{{/if}}
-
+{{assign var=easy_mode value=$app->user_prefs.easy_mode}}
 
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
@@ -465,16 +470,14 @@ toggleTypePerfusion = function(oForm){
 		  <script type="text/javascript">
         window['{{$_chapitre}}Loaded'] = false;
 				Main.add( function(){
-				  refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');
+				  refreshElementPrescription('{{$_chapitre}}', null, null, true);
 				} )
 		  </script>
 			{{/if}}
 			
 			{{if !($mode_protocole && $_chapitre == "dmi")}}
-		  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true,'{{$_lite}}');"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+		  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
 		  {{/if}}
-		
-  
   {{/foreach}}
 {{/if}}
 </ul>
@@ -491,6 +494,7 @@ toggleTypePerfusion = function(oForm){
   {{/if}}
 </div>
 {{/if}}
+
 
 {{if !$mode_pharma}}
   {{foreach from=$specs_chapitre->_list item=_chapitre}}

@@ -136,6 +136,7 @@ Main.add( function(){
 	  var url = new Url("dPprescription", "httpreq_vw_select_protocole");
 	  var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
 		  dropdown: true,
+			adaptDropdown: true,
 	    minChars: 1,
       valueElement: oFormProtocole.elements.pack_protocole_id,
 			updateElement: function(selectedElement) {
@@ -255,7 +256,10 @@ Main.add( function(){
        {{if $mode_pharma}}
          <button style="float: left" type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         {{/if}}
-			 <div style="float: right">
+			 
+      <div style="float: right; text-align: right;">
+      	<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
+        <br />
        	{{if !$is_praticien && !$mode_protocole && ($operation_id || $can->admin || $mode_pharma || $current_user->isInfirmiere())}}
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}} if($('protocole_prat_name')) { $('protocole_prat_name').update('Dr '+this.options[this.selectedIndex].text); }">
@@ -281,14 +285,16 @@ Main.add( function(){
 				  </select>
 				</form>
 				{{/if}}
-				<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
-				<br />
-				  <div id="antecedent_allergie" style="float: right">
-            {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-            {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-            {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-          </div>   
-        </div>
+				
+			  <br />
+			  <div id="antecedent_allergie" style="float: right">
+          {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+          {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+          {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+        </div>   
+      </div>
+			
+				
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
         <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_guid}}">
           <img title="Ecrire une note" src="images/icons/note_grey.png" />
@@ -309,7 +315,9 @@ Main.add( function(){
         {{if $prescription->type == "externe"}}
           {{$prescription->_ref_patient->_view}}   
         {{else}}
-           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">{{$prescription->_ref_object->_view}}</a>
+           <a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')">
+           	{{$prescription->_ref_object->_view}}
+					</a>
         {{/if}}
         {{if $prescription->_ref_patient->_age}}
            <br />({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
@@ -319,16 +327,22 @@ Main.add( function(){
   </tr>
   {{/if}}
   
-  <tr>
+	{{assign var=easy_mode value=$app->user_prefs.easy_mode}}
+	<tr>
   	<td colspan="3">
 			<ul id="header_prescription" class="control_tabs small">
 				{{if !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
 				<li><a href="#div_protocoles">Protocoles <span id="protocole_prat_name"></span></a></li>
 				{{/if}}
 				{{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
-				<li><a href="#div_ajout_lignes">Date de début de la ligne de prescription</a></li>
+				<li id="ajout_ligne" {{if $easy_mode && !$mode_pharma}}style="display: none"{{/if}}><a href="#div_ajout_lignes">Date de début de la ligne de prescription</a></li>
 				{{/if}}
-				<li><a href="#div_outils">Outils</a></li>
+				<li id="outils" {{if $easy_mode && !$mode_protocole && !$mode_pharma}}style="display: none"{{/if}}><a href="#div_outils">Outils</a></li>
+				
+				{{if $easy_mode && !$mode_protocole && !$mode_pharma}}
+				<li><a onclick="$('ajout_ligne').show(); $('outils').show(); this.up().hide();">+</a></li>
+				{{/if}}
+				
 				<li style="float: right; button">		
 					{{if $prescription->object_id && ($is_praticien || $mode_protocole || @$operation_id || $can->admin || $current_user->_is_infirmiere)}}
 		        {{if !$mode_pharma}}
@@ -359,7 +373,7 @@ Main.add( function(){
 	                <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	                <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 	                <button type="button" class="trash" style="margin:0px" onclick="if(confirm('Etes vous sur de vouloir supprimer vos lignes non signées ?')){
-	                  submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
+	                  submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}'); } } )
 	                }">Supprimer</button>
                </form>
 		          {{else}}
@@ -381,7 +395,7 @@ Main.add( function(){
                       {{/if}}
 		                  <input type="hidden" name="praticien_id" value="" />
 		                  <button type="button" class="trash" style="margin:0px" onclick="$V(this.form.praticien_id, $V(getForm('selPraticienLine').praticien_id)); if(confirm('Etes vous sur de vouloir supprimer les lignes non signées du praticien selectionné ?')){
-		                    submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}',null, null, null, null, null, null, true, {{if $app->user_prefs.mode_readonly}}false{{else}}true{{/if}}); } } )
+		                    submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reloadPrescSejour('{{$prescription->_id}}'); } } )
 		                  }">Supprimer</button>
 		               </form>
 								 {{/if}}
@@ -406,18 +420,22 @@ Main.add( function(){
 	      <input type="hidden" name="pratSel_id" value="" />
         
 	      <input type="hidden" name="pack_protocole_id" value="" />
-	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" size="20" class="autocomplete" />
+	      <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
 	      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
 	
  				{{if $prescription->type != "externe"}}
  				  {{if $prescription->_dates_dispo}}
-	 				  Intervention
+	 				  {{if $prescription->_dates_dispo|@count == 1}}
+						<input type="hidden" name="operation_id" value="{{$prescription->_dates_dispo|@array_keys|@reset}}" />
+						{{else}}
+						Intervention
 	 				  <select name="operation_id">
 	 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
 	 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:$dPconfig.datetime}}</option>
 	 				    {{/foreach}}
 							</select>
 						{{/if}}
+				  {{/if}}
  				{{else}}
  				  <!-- Prescription externe -->
 					{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
@@ -440,6 +458,7 @@ Main.add( function(){
   
   {{if !$mode_protocole && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
       <td id="div_ajout_lignes" colspan="3" style="display: none;">
+			  <strong>Début de la ligne</strong>
 		    <form name="selDateLine" action="?" method="get"> 
         {{if $prescription->type != "externe"}} 
 	        <select name="debut_date" onchange="changeManualDate();">

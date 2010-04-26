@@ -89,14 +89,14 @@
 	  {{/if}}
   </td>
   <td style="width: 10%;" class="text">
-    <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$_perfusion->_guid}}');"></button>
+    <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$_perfusion->_guid}}');"></button>
     {{if $_perfusion->duree}}
 		  {{mb_value object=$_perfusion field=duree}}h
 		{{/if}}
   </td>  
 	{{else}}
 	<td style="width: 20%" class="text">
-		<button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, true, true,'{{$_perfusion->_guid}}');"></button>
+		<button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$_perfusion->_guid}}');"></button>
     {{if $_perfusion->decalage_interv}}
 		A partir de I+{{mb_value object=$_perfusion field=decalage_interv}}h
 		{{/if}}
