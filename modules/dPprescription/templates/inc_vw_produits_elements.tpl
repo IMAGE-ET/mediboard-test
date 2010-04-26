@@ -399,6 +399,9 @@ toggleTypePerfusion = function(oForm){
 
 toggleSearchOptions = function(formName, chap){
   var oFormSearch = getForm(formName);
+	if(!oFormSearch){
+	  return;
+  }
   oFormSearch.favoris.toggle();
   if(oFormSearch.tp){
 	  oFormSearch.tp.toggle();

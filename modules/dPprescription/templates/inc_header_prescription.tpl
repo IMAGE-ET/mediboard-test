@@ -339,8 +339,8 @@ Main.add( function(){
 				{{/if}}
 				<li id="outils" {{if $easy_mode && !$mode_protocole && !$mode_pharma}}style="display: none"{{/if}}><a href="#div_outils">Outils</a></li>
 				
-				{{if $easy_mode && !$mode_protocole && !$mode_pharma}}
-				<li><a onclick="$('ajout_ligne').show(); $('outils').show(); this.up().hide();">+</a></li>
+				{{if $easy_mode && !$mode_protocole && !$mode_pharma && ($is_praticien || @$operation_id || $can->admin || $current_user->isInfirmiere())}}
+        <li><a onclick="$('ajout_ligne').show(); $('outils').show(); this.up().hide();">+</a></li>
 				{{/if}}
 				
 				<li style="float: right; button">		
