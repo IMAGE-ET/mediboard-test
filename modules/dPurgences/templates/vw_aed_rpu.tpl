@@ -8,7 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
 {{if !$group->service_urgences_id}}
   <div class="small-warning">{{tr}}dPurgences-no-service_urgences_id{{/tr}}</div>
 {{else}}
@@ -389,7 +388,7 @@
 		  {{if $app->user_prefs.ccam_sejour == 1 }}
 		  <li><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
-		  {{if $isPrescriptionInstalled}}
+			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
 		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 			{{if $isImedsInstalled}}
@@ -429,7 +428,7 @@
 		</div>
 		{{/if}}
 		
-		{{if $isPrescriptionInstalled}}
+		{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
 		<div id="prescription_sejour" style="display: none;">
 		  <div class="small-info">
 		    Aucune prescription

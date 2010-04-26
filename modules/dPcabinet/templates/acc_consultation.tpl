@@ -71,7 +71,7 @@ Main.add(function () {
   
   <li><a href="#AntTrait">Antécédents</a></li>
  
-  {{if $consult->sejour_id}}
+  {{if $consult->sejour_id && $modules.dPprescription->_can->read}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription Séjour
