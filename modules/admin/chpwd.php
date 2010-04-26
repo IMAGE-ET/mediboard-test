@@ -32,4 +32,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("user",    $user);
 $smarty->assign("message", $message);
 $smarty->display("change_password.tpl");
-?>

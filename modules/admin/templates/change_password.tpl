@@ -46,7 +46,7 @@
   <tr>
     <th>
       <label for="new_pwd2" title="{{tr}}Repeat New Password{{/tr}}">
-        {{tr}}Repeat New Password{{/tr}}
+        {{tr}}Repeat new password{{/tr}}
       </label>
     </th>
     <td>
