@@ -56,10 +56,10 @@ class CMedecin extends CMbObject {
     $specs["nom"]             = "str notNull confidential seekable|begin";
     $specs["prenom"]          = "str notNull confidential seekable|begin";
     $specs["jeunefille"]      = "str confidential";
-    $specs["adresse"]         = "text confidential";
-    $specs["ville"]           = "str confidential seekable";
-    $specs["cp"]              = "numchar maxLength|5 confidential";
-    $specs["tel"]             = "numchar length|10 confidential mask|$phone_number_format";
+    $specs["adresse"]         = "text".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential";
+    $specs["ville"]           = "str".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." confidential seekable";
+    $specs["cp"]              = "numchar".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." maxLength|5 confidential";
+    $specs["tel"]             = "numchar".(CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '')." length|10 confidential mask|$phone_number_format";
     $specs["fax"]             = "numchar length|10 confidential mask|$phone_number_format";
     $specs["portable"]        = "numchar length|10 confidential mask|$phone_number_format";
     $specs["email"]           = "str confidential";

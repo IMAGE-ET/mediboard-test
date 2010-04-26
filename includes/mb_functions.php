@@ -393,7 +393,6 @@ function mbEcartType($array) {
 /**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
- * in dPinterop
  * @todo : become a generic function
  **/
 
@@ -417,20 +416,14 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
         $line = str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
         $size = strlen($line)-3;
         $test1 = $line[$size] != "\"";
-        if(($fileName != "modules/dPinterop/doc_recus.txt") && ($fileName != "modules/dPinterop/chemin.txt"))
-          $test2 = $line[$size-1] == "\\";
-        else
-          $test2 = 0;
+        $test2 = 0;
         $test3 = (! feof( $file ));
         $test = ($test1 || (!$test1 && $test2)) && $test3;
         while($test) {
           $line .= str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
           $size = strlen($line)-3;
           $test1 = $line[$size] != "\"";
-          if($fileName != "modules/dPinterop/doc_recus.txt")
-            $test2 = $line[$size-1] == "\\";
-          else
-            $test2 = 0;
+          $test2 = 0;
           $test3 = (! feof( $file ));
           $test = ($test1 || (!$test1 && $test2)) && $test3;
         }

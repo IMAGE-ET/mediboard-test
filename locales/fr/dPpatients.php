@@ -1159,4 +1159,6 @@ $locales['CConstantesMedicales-redon_2-desc'] = 'Redon 2';
 $locales['CConstantesMedicales-redon_3'] = 'Redon 3';
 $locales['CConstantesMedicales-redon_3-court'] = 'Redon 3';
 $locales['CConstantesMedicales-redon_3-desc'] = 'Redon 3';
+$locales['config-dPpatients-CMedecin-medecin_strict'] = 'Données complètes du médecin';
+$locales['config-dPpatients-CMedecin-medecin_strict-desc'] = 'Données complètes du médecin (adresse, cp, ville)';
 ?>
