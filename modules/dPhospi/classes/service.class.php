@@ -47,6 +47,8 @@ class CService extends CMbObject {
 	  $backProps["config_moment"]          = "CConfigMomentUnitaire service_id";
 	  $backProps["config_service"]         = "CConfigService service_id";
     $backProps["endowments"]             = "CProductEndowment service_id";
+		$backProps["services_entree"]        = "CSejour service_entree_mutation_id";
+		$backProps["services_sortie"]        = "CSejour service_mutation_id";
 	  return $backProps;
 	}
 
