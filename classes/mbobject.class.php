@@ -117,7 +117,6 @@ class CMbObject {
   }
   
   function CMbObject() {
-
     $class = get_class($this);
    
     $in_cache = isset(self::$spec[$class]);
@@ -440,20 +439,20 @@ class CMbObject {
    * @param array $hash associative array of values to match with
    * @param bool $doStripSlashes true to strip slashes
    */
-
   function bind($hash, $doStripSlashes = true) {
     bindHashToObject($doStripSlashes ? stripslashes_deep($hash) : $hash, $this);
     return true;
   }
   
-  /**
-   * Object(s) Loaders
+  /** 
+   * Loads an object by its ID
+   * @param integer $id [optional] The object's ID
+   * @param boolean $strip [optional] 
+   * @return CMbObject|boolean The loaded object if found, false otherwise
    */
-
-  // One object by ID
-  function load($oid = null, $strip = true) {
-  	if ($oid) {
-      $this->_id = $oid;
+  function load($id = null, $strip = true) {
+  	if ($id) {
+      $this->_id = $id;
     }
 
     if (!$this->_id || !$this->_spec->table || !$this->_spec->key) {
@@ -463,7 +462,20 @@ class CMbObject {
     $sql = "SELECT * FROM `{$this->_spec->table}` WHERE `{$this->_spec->key}` = '$this->_id'";
     
     $object = $this->_spec->ds->loadObject($sql, $this);
-      
+    
+    /*
+    if (!$object && CModule::getInstalled("dPsante400")) {
+      $idex = new CIdSante400;
+      $idex->object_class = $this->_class_name;
+      $idex->id400 = $this->_id;
+      $idex->tag = "merged";
+      if ($idex->loadMatchingObject()) {
+        $this->load($idex->object_id, $strip);
+        return $this;
+      }
+    }
+    */
+    
     if (!$object) {
       $this->_id = null;
       return false;
@@ -497,6 +509,10 @@ class CMbObject {
     self::$objectCache[$this->_class_name][$this->_id] =& $this;
   }
   
+  /**
+   * Clears the internal CMbObject cache
+   * @return void
+   */
   public function clearCache(){
     self::$objectCount = 0;
     self::$cachableCounts = array();
@@ -504,11 +520,10 @@ class CMbObject {
   }
   
   /**
-   * Retrieve an already rigistered object from cache if available,
+   * Retrieve an already registered object from cache if available,
    * performs a standard load otherwise
-   *
-   * @param ref $id The actual object identifier
-   * @return the retrieved object
+   * @param integer $id The actual object identifier
+   * @return CMbObject the retrieved object
    */
   function getCached($id) {
     if (isset(self::$objectCache[$this->_class_name][$id])) {
@@ -521,9 +536,10 @@ class CMbObject {
   
   /**
    * Loads the first object matching defined properties
-   * @param string $order Order SQL statement
-   * @param string $group Group by SQL statement
-   * @param array leftjoin Left join SQL statement collection
+   * @param array|string $order Order SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @return integer The found object's ID
    */
   function loadMatchingObject($order = null, $group = null, $leftjoin = null) {
     $request = new CRequest;
@@ -540,16 +556,16 @@ class CMbObject {
     }
     
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
-    
     return $this->_id;
   }
   
   /**
-   * Loads the list which objects match defined properties
-   * @param string $order Order SQL statement
+   * Loads the list of objects matching the $this properties
+   * @param array|string $order Order SQL statement
    * @param string $limit Limit SQL statement
-   * @param string $group Group by SQL statement
-   * @param array leftjoin Left join SQL statement collection
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @return array The list of objects
    */
   function loadMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
     $request = new CRequest;
@@ -570,7 +586,12 @@ class CMbObject {
   }
   
   /**
-   * Object count of the list which objects match defined properties
+   * Size of the list of objects matching the $this properties
+   * @param array|string $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @return integer The count
    */
   function countMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
     $request = new CRequest;
@@ -591,6 +612,11 @@ class CMbObject {
   
   /**
    * Loads the first object matching the query
+   * @param array|string $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @return boolean True if the object was found
    */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
     $list = $this->loadList($where, $order, '0,1', $group, $leftjoin);
@@ -609,13 +635,12 @@ class CMbObject {
   
   /**
    * Object list by a request constructor
-   * @param $where array Array of where clauses
-   * @param $order array Array of order fields
-   * @param $limit string MySQL limit clause
-   * @param $group array Array of group by clauses
-   * @param $leftjoin array Array of left join clauses
-   * @param $forceindex array Array of key list  
-   * @return array[CMbObject] List of found objects, null if module is not installed
+   * @param array|string $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @param boolean $forceindex Add the forceindex SQL statement
+   * @return CMbObject[] List of found objects, null if module is not installed
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null, $forceindex = null) {
     if (!$this->_ref_module) {
@@ -629,10 +654,8 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
-
-    $result = $this->loadQueryList($request->getRequest($this));
     
-    return $result;
+    return $this->loadQueryList($request->getRequest($this));
   }
 
   /**
@@ -761,7 +784,6 @@ class CMbObject {
   /**
    * Load object view information 
    */
-  
   function loadView() {
     $this->loadAllFwdRefs();
   }
@@ -769,16 +791,13 @@ class CMbObject {
   /**
    * Load complete object view information 
    */
-  
   function loadComplete() {
     $this->loadRefs();
   }
   
-  
   /**
    * References loaders
    */
-
   function loadRefs() {
     if ($this->_id){  
       $this->loadRefsBack();
@@ -861,7 +880,7 @@ class CMbObject {
   function check() {
     $debug = CAppUI::conf("debug");
     
-    $msg = null;
+    $msg = "";
     
     // Property level checking
     foreach($this->_props as $propName => $propSpec) {
@@ -937,12 +956,12 @@ class CMbObject {
    * Prepare the user log before object persistence (store or delete)
    */
   private function prepareLog() {
-    // Si object non loggable
+    // If the object is not loggable
     if (!$this->_spec->loggable || $this->_purge) {
       return;
     }
 
-    // Analyse changes fields
+    // Find changed fields
     $fields = array();
     $db_fields = $this->getDBFields();
     
@@ -1101,7 +1120,7 @@ class CMbObject {
   
   /**
    * Merges an array of objects
-   * @param An array of CMbObject to merge
+   * @param array An array of CMbObject to merge
    * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    * @return CMbObject
    */
@@ -1127,16 +1146,8 @@ class CMbObject {
       $this->_merging[$object->_id] = $object;
     }
     
-    foreach ($objects as &$object) {
-      $msg = $fast ? 
-        $this->fastTransferBackRefsFrom($object) :
-        $this->transferBackRefsFrom($object);
-        
-    	if ($msg) return $msg;
-    	if ($msg = $object->delete()) return $msg;
-    }
-    
     // If external IDs are available, we save old objects' id as external IDs
+    // This must not be done after the objects deletion !
     if (CModule::getInstalled("dPsante400")) {
       foreach ($objects as $object) {
         $idex = new CIdSante400;
@@ -1146,6 +1157,15 @@ class CMbObject {
         $idex->last_update = mbDateTime();
         $idex->store();
       }
+    }
+    
+    foreach ($objects as &$object) {
+      $msg = $fast ? 
+        $this->fastTransferBackRefsFrom($object) :
+        $this->transferBackRefsFrom($object);
+        
+    	if ($msg) return $msg;
+    	if ($msg = $object->delete()) return $msg;
     }
     
     // Trigger after event
@@ -1341,7 +1361,6 @@ class CMbObject {
       $this->countBackRefs($backName);
     }
   }
-
   
   /**
    * Transfer all back refs from given object of same class using unchecked, unlogged SQL queries
@@ -1381,7 +1400,6 @@ class CMbObject {
 	    $this->_spec->ds->exec($query);
     }    
   }
-  
   
   /**
    * Transfer all back refs from given object of same class
@@ -1452,7 +1470,7 @@ class CMbObject {
     
   /**
    * Load named forward reference
-   * @return array[CMbObject] the collection
+   * @return void
    */
   function loadAllFwdRefs() {
     foreach ($this->_specs as $field => $spec) {
@@ -1463,7 +1481,7 @@ class CMbObject {
   /**
    * Check whether the object can be deleted.
    * Default behaviour counts for back reference without cascade 
-   * @return null if ok error message otherwise
+   * @return string|null null if ok, error message otherwise
    */
   function canDeleteEx() {
     // Empty object
@@ -1531,12 +1549,11 @@ class CMbObject {
 
   /**
    * Default delete method
-   * @return null|string null if successful otherwise returns and error message
+   * @return null|string null if successful, an error message otherwise
    */
   function delete() {
     // Préparation du log
     $this->loadOldObject();
-    
     
     // Delete checking
     if (!$this->_purge) {
@@ -2054,7 +2071,6 @@ class CMbObject {
     $this->_ref_first_log = end($this->_ref_logs);
     $this->_ref_last_log  = reset($this->_ref_logs);
   }
-
   
   function loadLastLogForField($fieldName = null){	
   	$where = array(

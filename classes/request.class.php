@@ -8,10 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-// Request
 class CRequest {
-  
-  // params
   var $select = array();
   var $table  = array();
   var $ljoin  = array();
@@ -185,7 +182,7 @@ class CRequest {
    * returns the SQL string
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getRequest($obj = null) {
+  function getRequest(CMbObject $obj = null) {
 
     $arraySelect = array();
     $arrayTable = array();
@@ -226,7 +223,7 @@ class CRequest {
    * returns the SQL string that count the number of rows
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
-  function getCountRequest($obj = null, $fields = array()) {
+  function getCountRequest(CMbObject $obj = null, $fields = array()) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
     if(is_array($fields) && count($fields)) {
@@ -251,7 +248,7 @@ class CRequest {
    * returns the SQL string that count the number of rows
    * @param CMbObject $object Object concerned
    */
-  function getIdsRequest($object) {
+  function getIdsRequest(CMbObject $object) {
     $query = "SELECT `{$object->_spec->key}`";
     return $query . $this->getRequestFrom($object->_spec->table);
   }
