@@ -33,9 +33,11 @@ class CSourceSOAP extends CExchangeSource {
   function send($evenement_name = null) {
   	if (!$evenement_name) {
   		$evenement_name = $this->evenement_name;
-			
-			CAppUI::stepAjax("Aucune méthode définie pour l'appel SOAP.", UI_MSG_ERROR);
   	}
+		
+		if (!$evenement_name) {
+			CAppUI::stepAjax("Aucune méthode définie pour l'appel SOAP.", UI_MSG_ERROR);
+		}
 		
 		$this->_client = CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange);
     if ($this->_client->soap_client_error) {
