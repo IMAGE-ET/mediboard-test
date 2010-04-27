@@ -71,6 +71,7 @@ $phpChrono = new Chronometer;
 $phpChrono->start();
 
 // Load AppUI from session
+require("./classes/app.class.php");
 require("./classes/ui.class.php");
 require("./includes/session.php");
 

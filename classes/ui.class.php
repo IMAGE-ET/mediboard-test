@@ -15,78 +15,6 @@ define("UI_MSG_WARNING", 3);
 define("UI_MSG_ERROR"  , 4);
 
 /**
- * The true application class
- */
-class CApp {
-  static $inPeace = false;
-  
-  /**
-   * Will trigger an error for logging purpose whenever the application dies unexpectedly
-   */
-  static function checkPeace() {
-    if (!self::$inPeace) {
-      trigger_error("Application died unexpectedly", E_USER_ERROR);      
-    }
-  }
-  
-  /**
-   * Make application die properly
-   */
-  static function rip() {
-    self::$inPeace = true;
-    die;
-  }
-  
-  /**
-   * Outputs JSON data after removing the Output Buffer, with a custom mime type
-   * @param object $data The data to output
-   * @param string $mimeType [optional] The mime type of the data, application/json by default
-   * @return void
-   */
-  static function json($data, $mimeType = "application/json") {
-    ob_clean();
-    header("Content-Type: $mimeType");
-    echo json_encode($data);
-    self::rip();
-  }
-  
-  /**
-   * 
-   * @param object $module The module name or the file path
-   * @param object $file [optional] The file of the module, or null
-   * @param object $arguments [optional] The GET arguments
-   * @return string The fetched content
-   */
-  static function fetch($module, $file = null, $arguments = array()) {
-    $save = array();
-    foreach($arguments as $_key => $_value) {
-      if (!isset($_GET[$_key])) continue;
-      $save[$_key] = $_GET[$_key];
-    }
-    
-    foreach($arguments as $_key => $_value) {
-      $_GET[$_key] = $_value;
-    }
-    
-    ob_start();
-    if (isset($file)) {
-      include("./modules/$module/$file.php");
-    }
-    else {
-      include($module);
-    }
-    $output = ob_get_clean();
-   
-    foreach($save as $_key => $_value) {
-      $_GET[$_key] = $_value;
-    }
-    
-    return $output;
-  }
-}
-
-
-/**
  * The Application UI weird Class
  * @TODO Is being split into CApp et CUI classes
  */
@@ -115,7 +43,11 @@ class CAppUI {
 
   /** @var string langage alert mask */
   static $locale_mask = "";
+
+  /** @var string langage alert mask */
+  static $unlocalized  = array();
   
+
   /** @var int Global unique id */
   static $unique_id = 0;
 
@@ -766,7 +698,15 @@ class CAppUI {
     if (isset($locales[$str]) && $locales[$str] !== "") {
       $str = $locales[$str];
     }
-    
+		// Other wise keep it in a stack...
+    else {
+    	self::$unlocalized[] = $str;
+			// ... and decorate
+	    if (self::$locale_mask) {
+        $str = sprintf(self::$locale_mask, $str);
+			}
+    }
+				
     if ($args) {
       if (!is_array($args)) {
         $args = func_get_args();
@@ -775,9 +715,6 @@ class CAppUI {
       $str = vsprintf($str, $args);
     }
     
-    if (self::$locale_mask) {
-      $str = sprintf(self::$locale_mask, $str);
-    }
     
     return nl2br($str);
   }
