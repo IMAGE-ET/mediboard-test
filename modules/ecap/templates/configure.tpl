@@ -38,6 +38,13 @@
 	
   {{mb_include module=system template=configure_handler class_handler=CEcObjectHandler}}
 
+  {{assign var=class value=CMouvSejourEcap}}
+  <tr>
+    <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+  </tr>
+
+  {{mb_include module=system template=inc_config_bool var=handle_dhe}}
+
   {{assign var=class value=dhe}}
   <tr>
     <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>

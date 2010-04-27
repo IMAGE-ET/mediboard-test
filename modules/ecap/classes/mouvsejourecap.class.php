@@ -72,7 +72,9 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     // Contenu du séjour
     $this->syncSej();
-    $this->syncDHE();
+		if (CAppUI::conf("ecap CMouvSejourEcap handle_dhe")) {
+      $this->syncDHE();
+		}
     $this->syncOperations();
     $this->syncNaissance();
   }
