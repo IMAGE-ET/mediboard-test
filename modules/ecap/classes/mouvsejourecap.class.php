@@ -519,8 +519,6 @@ class CMouvSejourEcap extends CMouvementEcap {
       $this->id400Sej->id400,
     );
         
-    $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
-
     $query = "SELECT * 
       FROM $this->base.ECATPF
       WHERE ATCIDC = ? AND ATCDIV = '01' AND ATCSDV = '01'
@@ -543,6 +541,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->id400DHE->tag = $tag;
         
     $this->sejour->_check_bounds = false;
+    $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
     $this->id400DHE->bindObject($this->sejour);
 
     $this->markStatus(self::STATUS_SEJOUR);
@@ -653,7 +652,6 @@ class CMouvSejourEcap extends CMouvementEcap {
         // Sejour de type urgence annulé, avec la même heure d'entrée
         if ($_sibling->type == "urg") {
           $_sibling->annule = "0";
-          mbTrace($_sibling->getDBFields(), "Sibling before storage");
           if ($msg = $_sibling->store()) {
             throw new Exception($msg);
           }
@@ -663,7 +661,6 @@ class CMouvSejourEcap extends CMouvementEcap {
           $rpu = $_sibling->_ref_rpu;
           if ($rpu->_id) {
             $rpu->mutation_sejour_id = $this->sejour->_id;
-            mbTrace($rpu->getDBFields(), "RPU before storage");
             if ($msg = $rpu->store()) {
               throw new Exception($msg);
             }

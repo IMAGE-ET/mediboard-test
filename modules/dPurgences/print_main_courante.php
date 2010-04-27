@@ -15,6 +15,7 @@ $offline = CValue::get("offline");
 // Chargement des rpu de la main courante
 $sejour = new CSejour;
 
+$where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 
 // Par date
@@ -22,12 +23,13 @@ $date = CValue::getOrSession("date", mbDate());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
-$where = array();
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 
 // RPUs
-$where[] = "sejour.type = 'urg' OR rpu.sejour_id";
+$where[] = CAppUI::conf("dPurgences show_missing_rpu") ? 
+  "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
+  "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 $order = "sejour.entree_reelle ASC";

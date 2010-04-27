@@ -34,7 +34,6 @@ $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after'
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 
 // RPU Existants
-$where[] = "sejour.type = 'urg' OR rpu.sejour_id";
 $where["rpu.rpu_id"] = "IS NOT NULL";
 
 if ($aff_sortie == "sortie"){

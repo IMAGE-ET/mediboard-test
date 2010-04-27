@@ -39,7 +39,9 @@ $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
-$where[] = "sejour.type = 'urg' OR rpu.sejour_id";
+$where[] = CAppUI::conf("dPurgences show_missing_rpu") ? 
+  "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
+  "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
 if ($selAffichage == "prendre_en_charge"){
