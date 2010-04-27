@@ -11,8 +11,9 @@
 global $AppUI, $can, $m;
 $can->needsRead();
 
-$element_prescription_id = CValue::get("element_prescription_id");
+$element_prescription_id = CValue::getOrSession("element_prescription_id");
 $category_id = CValue::getOrSession("category_prescription_id");
+$element_prescription_to_cdarr_id = CValue::getOrSession("element_prescription_to_cdarr_id");
 $mode_duplication = CValue::get("mode_duplication");
 
 $category = new CCategoryPrescription();
@@ -42,15 +43,19 @@ $category->loadElementsPrescription();
 
 $element_prescription = new CElementPrescription();
 $element_prescription->load($element_prescription_id);
+$element_prescription->loadBackRefs("cdarrs");
+
+$element_prescription_to_cdarr = new CElementPrescriptionToCdarr();
+$element_prescription_to_cdarr->load($element_prescription_to_cdarr_id);
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("groups"       , $groups);
 $smarty->assign("categories"   , $categories);
 $smarty->assign("category"     , $category);
 $smarty->assign("countElements", $countElements);
 $smarty->assign("element_prescription", $element_prescription);
+$smarty->assign("element_prescription_to_cdarr", $element_prescription_to_cdarr);
 $smarty->assign("mode_duplication", $mode_duplication);
 $smarty->display("vw_edit_category.tpl");
 

@@ -26,6 +26,16 @@ ColorSelector.init = function(form_name, color_view){
 
 Main.add( function(){
   categories_tab = new Control.Tabs.create('categories_tab', true);
+
+  if($('code_auto_complete')){
+	  var url = new Url("ssr", "httpreq_do_activite_autocomplete");
+	  url.autoComplete("editCdarr_code", "code_auto_complete", {
+	    minChars: 2,
+	    select: ".value"
+	  } );
+	}
+	ViewPort.SetAvlHeight('topLeftDiv', 0.5);
+	
 });
 	
 </script>
@@ -33,49 +43,90 @@ Main.add( function(){
 <table class="main">
 	<tr>
 	  <td class="halfPane">
-			<a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_prescription_id=0" class="button new">
-			  Créer une catégorie
-			</a>
-			<ul class="control_tabs" id="categories_tab">
-			{{foreach from=$categories key=chapitre item=_categories}}
-			   <li>
-			   	<a href="#div_{{$chapitre}}">
-			   	  {{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}} 
-						<small>({{$_categories|@count}} - {{$countElements.$chapitre}})</small>
-					</a>
-				</li>
-			{{/foreach}}
-			</ul>
-			<hr class="control_tabs" />
-
-			{{foreach from=$categories key=chapitre item=_categories}}
-			  <table class="tbl" id="div_{{$chapitre}}" style="display: none;">
-				  <tr>
-				  	<th>{{mb_label class=CCategoryPrescription field=nom}}</th>
-						<th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
-            <th></th>
-					</tr>
-				  {{foreach from=$_categories item=_cat}}
-					  <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}} >
-				      <td>
-			          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_prescription_id={{$_cat->_id}}">
-			            {{$_cat->nom}} ({{$_cat->_count_elements_prescription}})
-			          </a>
-			        </td>
-			        <td>
-			          {{if $_cat->group_id}}
-			            {{$_cat->_ref_group->_view}}
-			          {{else}}
-			            Tous
-			          {{/if}}
-			        </td>
-							<td style="width: 1em; {{if $_cat->color}}background-color: #{{$_cat->color}}{{/if}}">
-								
-							</td>
-			      </tr>
-			    {{/foreach}}
-				</table>
-			{{/foreach}}
+	  	
+		 <div id="topLeftDiv">
+				<a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_prescription_id=0" class="button new">
+				  Créer une catégorie
+				</a>
+				<ul class="control_tabs" id="categories_tab">
+				{{foreach from=$categories key=chapitre item=_categories}}
+				   <li>
+				   	<a href="#div_{{$chapitre}}">
+				   	  {{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}} 
+							<small>({{$_categories|@count}} - {{$countElements.$chapitre}})</small>
+						</a>
+					</li>
+				{{/foreach}}
+				</ul>
+				<hr class="control_tabs" />
+	
+				{{foreach from=$categories key=chapitre item=_categories}}
+				  <table class="tbl" id="div_{{$chapitre}}" style="display: none;">
+					  <tr>
+					  	<th>{{mb_label class=CCategoryPrescription field=nom}}</th>
+							<th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
+	            <th></th>
+						</tr>
+					  {{foreach from=$_categories item=_cat}}
+						  <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}} >
+					      <td>
+				          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_prescription_id={{$_cat->_id}}">
+				            {{$_cat->nom}} ({{$_cat->_count_elements_prescription}})
+				          </a>
+				        </td>
+				        <td>
+				          {{if $_cat->group_id}}
+				            {{$_cat->_ref_group->_view}}
+				          {{else}}
+				            Tous
+				          {{/if}}
+				        </td>
+								<td style="width: 1em; {{if $_cat->color}}background-color: #{{$_cat->color}}{{/if}}">
+									
+								</td>
+				      </tr>
+				    {{/foreach}}
+					</table>
+				{{/foreach}}
+		 </div>
+    
+		{{if $category->_id}}
+		<table class="tbl">
+      <tr>  
+        <th colspan="3" class="title text">
+            <button class="search" style="float: right" onclick="toggleCancelled();">
+              Afficher les annulés
+            </button> 
+            Elements de la catégorie '{{$category}}'
+          </th>
+        </tr>
+        <tr>
+          <th class="category">Libelle</th>
+          <th class="category">Description</th>
+          <th></th>
+        </tr>
+         {{foreach from=$category->_ref_elements_prescription item=_element}}
+          <tr {{if $_element->_id == $element_prescription->_id}}class="selected"{{/if}}
+              {{if $_element->cancelled}}class="cancelled" style="display: none; opacity: 0.5"{{/if}}>
+            <td class="text">
+              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id={{$_element->_id}}&amp;element_prescription_to_cdarr_id=0">
+                {{$_element->libelle}}
+              </a>
+            </td>
+            <td class="text">
+              {{$_element->description}}
+            </td>
+             <td style="width: 1em; {{if $_element->color}}background-color: #{{$_element->color}}{{/if}}">
+          </tr>
+        {{foreachelse}}
+         <tr>
+          <td colspan="3">
+            Aucun element dans cette catégorie
+          </td>
+         </tr>
+        {{/foreach}}
+      </table>
+			{{/if}}
 	  </td> 
     <td class="halfPane">
       <form name="editCategory" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -149,7 +200,7 @@ Main.add( function(){
 		  </table>
 			</form>
 			{{if $category->_id}}
-		      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="button new">
+		  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="button new">
         Créer un élément
       </a>
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;mode_duplication=1" class="button new">
@@ -218,7 +269,6 @@ Main.add( function(){
 	             <a href="#1" id="select_color_elt" style="background: #{{$element_prescription->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init('editElement','select_color_elt');">Cliquer pour changer</a>
 	             {{mb_field object=$element_prescription field="color" hidden=1}}
 	             <button type="button" class="cancel" onclick="$('select_color_elt').setStyle({ background: '' }); $V(this.form.color, '');">Vider</button>
-	             
 						 </td>
 	         </tr>
 					 <tr>
@@ -255,43 +305,78 @@ Main.add( function(){
            </tr>
          </table>
        </form> 
-			{{/if}} 
+				 
+			 {{if $element_prescription->_id && @$modules.ssr->mod_active}}
+			 <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id=0" class="button new">
+        Ajouter un code Cdarr
+       </a>
+      
+			 <form name="editCdarr" action="" method="post">
+				 <input type="hidden" name="m" value="ssr" />
+         <input type="hidden" name="dosql" value="do_element_prescription_to_cdarr_aed" />
+				 <input type="hidden" name="del" value="0" />
+				 <input type="hidden" name="element_prescription_id" value="{{$element_prescription->_id}}" />
+         <input type="hidden" name="element_prescription_to_cdarr_id" value="{{$element_prescription_to_cdarr->_id}}" />
+				 
+				 <table class="form">
+					 <tr>
+				 	   {{if $element_prescription_to_cdarr->_id}}
+						   <th class="title text modify" colspan="2">
+						     Modification du code Cdarr pour '{{$element_prescription->_view}}'
+               </th>
+						 {{else}}
+						   <th class="title text" colspan="2">
+						     Ajout d'un code Cdarr pour '{{$element_prescription->_view}}'
+               </th>
+						 {{/if}}
+						</tr>
+					  <tr>
+					 	  <th>{{mb_label object=$element_prescription_to_cdarr field="code"}}</th>
+						  <td>
+							  {{mb_field object=$element_prescription_to_cdarr field=code class="autocomplete"}}
+	              <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+						  </td>
+						</tr>
+						<tr>
+						 <th>{{mb_label object=$element_prescription_to_cdarr field="commentaire"}}</th>
+						 <td>{{mb_field object=$element_prescription_to_cdarr field="commentaire"}}</td>
+					 </tr>
+					 
+					 <tr>
+					 	<td class="button" colspan="2">
+					 		<button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+              <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'le code',objName:'{{$element_prescription_to_cdarr->code|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+						</td>
+					 </tr>
+					</table>
+				</form>
+				
 				<table class="tbl">
-				<tr>	
-					<th colspan="3" class="title text">
-	            <button class="search" style="float: right" onclick="toggleCancelled();">
-	              Afficher les annulés
-	            </button> 
-	            Elements de la catégorie '{{$category}}'
-	          </th>
-	        </tr>
-	        <tr>
-	          <th class="category">Libelle</th>
-	          <th class="category">Description</th>
-						<th></th>
-	        </tr>
-	         {{foreach from=$category->_ref_elements_prescription item=_element}}
-	          <tr {{if $_element->_id == $element_prescription->_id}}class="selected"{{/if}}
-						    {{if $_element->cancelled}}class="cancelled" style="display: none; opacity: 0.5"{{/if}}>
-	            <td class="text">
-	              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id={{$_element->_id}}">
-	                {{$_element->libelle}}
-	              </a>
-	            </td>
-	            <td class="text">
-	              {{$_element->description}}
-	            </td>
-							 <td style="width: 1em; {{if $_element->color}}background-color: #{{$_element->color}}{{/if}}">
-	          </tr>
-	        {{foreachelse}}
-	         <tr>
-	          <td colspan="2">
-	            Aucun element dans cette catégorie
-	          </td>
-	         </tr>
-	        {{/foreach}}
+				  {{if $element_prescription->_back.cdarrs|@count}}
+						<tr>
+						  <th colspan="2">Liste des codes Cdarr</th>
+						</tr>
+						<tr>
+						  <th>{{mb_label class=CElementPrescriptionToCdarr field=code}}</th>
+							<th>{{mb_label class=CElementPrescriptionToCdarr field=commentaire}}</th>
+						</tr>
+						{{foreach from=$element_prescription->_back.cdarrs item=_element_to_cdarr}}
+						  <tr>
+		            <td>
+		            	 <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id={{$_element_to_cdarr->_id}}">
+		            	 	{{mb_value object=$_element_to_cdarr field=code}}
+									 </a>
+								</td>
+								<td>{{mb_value object=$_element_to_cdarr field=commentaire}}</td>
+		          </tr>
+				    {{/foreach}}
+				  {{/if}}
 				</table>
 			{{/if}}
+		 {{/if}} 
+		{{/if}}
     </td>
   </tr>
 </table>

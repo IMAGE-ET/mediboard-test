@@ -22,6 +22,8 @@ class CActiviteCdARR extends CCdARRObject {
 	var $exclu   = null;
 	
 	var $_ref_type_activite = null;
+	var $_ref_elements = null;
+	var $_ref_elements_by_cat = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -54,6 +56,21 @@ class CActiviteCdARR extends CCdARRObject {
     $this->_ref_type_activite = new CTypeActiviteCdARR();
     $this->_ref_type_activite->load($this->type);
   }
+	
+	function loadRefsElements(){
+		$element_to_cdarr = new CElementPrescriptionToCdarr();
+		$element_to_cdarr->code = $this->code;
+		$this->_ref_elements = $element_to_cdarr->loadMatchingList();
+	}
+	
+	function loadRefsElementsByCat(){
+		$this->loadRefsElements();
+		foreach($this->_ref_elements as $_element){
+      $_element->loadRefElementPrescription();
+      $this->_ref_elements_by_cat[$_element->_ref_element_prescription->category_prescription_id][] = $_element;
+    }
+	}
+	
 	
 	/**
 	 * Get an instance from the code

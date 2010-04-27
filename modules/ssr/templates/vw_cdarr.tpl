@@ -25,7 +25,7 @@ function changePage(page){
           <th>{{mb_label object=$activite field=type}}</th>
           <td>
             <select name="type" onchange="this.form.current.value = 0">
-              <option value="">&mdash choisir un type</option>
+              <option value="">&mdash; Choisir un type</option>
               {{foreach from=$listTypes item=_type}}
               <option value="{{$_type->code}}" {{if $_type->code == $activite->type}}selected="selected"{{/if}}>
                 {{$_type->_view}}
@@ -55,16 +55,40 @@ function changePage(page){
           <th>{{mb_title object=$activite field=type}}</th>
           <th>{{mb_title object=$activite field=code}}</th>
           <th>{{mb_title object=$activite field=libelle}}</th>
+					<th style="width: 1%">Nb. éléments</th>
         </tr>
         {{foreach from=$listActivites item=_activite}}
         <tr>
           <td>{{$_activite->type}}</td>
           <td>{{$_activite->code}}</td>
           <td>{{$_activite->libelle}}</td>
+					<td style="text-align: center;">
+						{{if $_activite->_ref_elements}}
+						  <span onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-cdarr-{{$_activite->code}}")'>{{$_activite->_ref_elements|@count}}</span>
+							<table id="tooltip-content-cdarr-{{$_activite->code}}" style="display: none;" class="tbl">
+	              <tr>
+	                <th class="title">Eléments de prescription</th>
+								</tr>
+								{{foreach from=$_activite->_ref_elements_by_cat item=_elements_by_cat}}
+									{{foreach from=$_elements_by_cat item=_element name="foreach_elt"}}
+									  {{assign var=elt_prescription value=$_element->_ref_element_prescription}}
+			              {{if $smarty.foreach.foreach_elt.first}}
+										<tr>
+											<th>{{$elt_prescription->_ref_category_prescription->_view}}</th>
+									  </tr>
+										{{/if}}
+										<tr>
+			                <td>{{$elt_prescription->_view}}</td>
+			              </tr>
+									{{/foreach}}
+	              {{/foreach}}
+	            </table>
+						{{/if}}
+						</td>
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="3">{{tr}}CActiviteCdARR.none{{/tr}}</td>
+          <td colspan="4">{{tr}}CActiviteCdARR.none{{/tr}}</td>
         </tr>
         {{/foreach}}
       </table>

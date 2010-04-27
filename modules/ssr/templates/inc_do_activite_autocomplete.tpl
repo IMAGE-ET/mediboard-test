@@ -11,7 +11,7 @@
 <ul>
   {{foreach from=$activites item=_activite}}
     <li>
-      <span style="display: none">{{$_activite->code}}</span>
+      <span style="display: none" class="value">{{$_activite->code}}</span>
       {{$_activite->_view|emphasize:$needle}}
       <br />
       <small style="opacity: 0.7">

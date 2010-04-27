@@ -33,6 +33,7 @@ $limit = "$current, $step";
 $listActivites = $activite->loadList($where, "type, code", $limit);
 foreach($listActivites as &$_activite) {
   $_activite->loadRefTypeActivite();
+	$_activite->loadRefsElementsByCat();
 }
 
 // Création du template
@@ -47,6 +48,6 @@ $smarty->assign("current", $current);
 $smarty->assign("step"   , $step);
 $smarty->assign("total"  , $total);
 
-$smarty->display("vw_cdar.tpl");
+$smarty->display("vw_cdarr.tpl");
 
 ?>

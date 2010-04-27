@@ -10,8 +10,7 @@
 
 global $g;
 
-$needle = CValue::post("code_activite_cdarr", "aaa");
-
+$needle = CValue::post("code_activite_cdarr", CValue::post("code","aaa"));
 $activite = new CActiviteCdARR();
 
 $activites = $activite->seek($needle);

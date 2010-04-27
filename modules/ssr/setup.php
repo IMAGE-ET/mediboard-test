@@ -188,7 +188,20 @@ class CSetupssr extends CSetup {
               CHANGE `qty_sun` `qty_sun` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($sql);
 		
-    $this->mod_version = "0.12";
+		$this->makeRevision("0.12");
+		$sql = "CREATE TABLE `element_prescription_to_cdarr` (
+              `element_prescription_to_cdarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `element_prescription_id` INT (11) UNSIGNED NOT NULL,
+              `code` CHAR (4) NOT NULL,
+              `commentaire` VARCHAR (255)
+						) TYPE=MYISAM;";
+		$this->addQuery($sql);
+
+    $sql = "ALTER TABLE `element_prescription_to_cdarr` 
+              ADD INDEX (`element_prescription_id`);";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "0.13";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
