@@ -1011,4 +1011,20 @@ $locales['CSejour-sortie'] = '';
 $locales['CSejour-sortie-court'] = '';
 $locales['CSejour-sortie-desc'] = '';
 $locales['mod-dPplanningOp-tab-check_synchro_hours_sejour'] = '';
+$locales['mod_dPplanningOp-mob-home-long'] = 'Accueil';
+$locales['mod_dPplanningOp-mob-home-court'] = 'Accueil';
+$locales['mod_-mob-home-court'] = 'Accueil'; 
+$locales['mod_dPplanningOp-mob-creation_dhe-long'] = 'Création d\'une Demande d\'Hospitalisation Electronique';
+$locales['mod_dPplanningOp-mob-creation_dhe-court'] = 'Création DHE';
+$locales['mod_dPplanningOp-mob-intervention-court'] = 'Intervention';
+$locales['mod_dPplanningOp-mob-intervention-long'] = 'Création d\'une intervention dans une plage';
+$locales['mod_dPplanningOp-mob-hors_plage-long'] = 'Création d\'une intervention hors plage';
+$locales['mod_dPplanningOp-mob-hors_plage-court'] = 'Hors plage';
+$locales['mod_dPplanningOp-mob-sejour-court'] = 'Création d\'un séjour';
+$locales['mod_dPplanningOp-mob-sejour-long'] = 'Création d\'un séjour';
+$locales['mod_dPplanningOp-mob-consult_program-long'] = 'Consultation planning des interventions';
+$locales['mod_dPplanningOp-mob-consult_program-court'] = 'liste interventions';
+$locales['mod_dPplanningOp-mob-dPplanningOp-long'] = 'Planification de Sejours';
+$locales['mod_dPplanningOp-mob-dPplanningOp-court'] = 'Planif.Sejour';
+
 ?>
