@@ -10,22 +10,31 @@
 
 CCanDo::checkRead();
 
-$axe       = CValue::getOrSession('axe');
-$_date_min = CValue::getOrSession('_date_min');
-$_date_max = CValue::getOrSession('_date_max');
+$axe    = CValue::getOrSession('axe');
+$entree = CValue::getOrSession('entree', mbDate());
+$period = CValue::getOrSession('period', "MONTH");
+
+$xaxis_formats = array(
+  "DAY"   => '%d/%m/%Y',
+  "WEEK"  => '%d/%m/%Y',
+  "MONTH" => '%m/%Y',
+);
+
+$format = $xaxis_formats[$period];
 
 // Dates
 $dates = array();
-$date = $_date_min;
-$n = 120;
-while ($n-- && ($date <= $_date_max)) {
+$date = $entree;
+$n = 30;
+while ($n--) {
   $dates[] = $date;
-  $date = mbDate("+1 DAY", $date);
+  $date = mbDate("-1 $period", $date);
 }
+
+$dates = array_reverse($dates);
 
 $ljoin = array(
   'rpu' => 'sejour.sejour_id = rpu.sejour_id',
-  'patients' => 'patients.patient_id = sejour.patient_id',
 );
 
 $rpu = new CRPU();
@@ -45,6 +54,8 @@ switch ($axe) {
       'series' => array()
     );
     
+    $ljoin['patients'] = 'patients.patient_id = sejour.patient_id';
+    
     $series = &$data[$axe]['series'];
     $age_areas = array(0, 1, 15, 75, 85);
     foreach($age_areas as $key => $age) {
@@ -62,7 +73,8 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => "$label ans");
       
       foreach ($dates as $i => $_date) {
-        $where['sejour.entree'] = "LIKE '$_date%'";
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -78,6 +90,8 @@ switch ($axe) {
       "series" => array()
     );
     
+    $ljoin['patients'] = 'patients.patient_id = sejour.patient_id';
+    
     $series = &$data[$axe]['series'];
     $areas = array("m", "f");
     foreach($areas as $key => $value) {
@@ -86,7 +100,8 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $where['sejour.entree'] = "LIKE '$_date%'";
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -116,7 +131,8 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $where['sejour.entree'] = "LIKE '$_date%'";
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -140,7 +156,8 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $where['sejour.entree'] = "LIKE '$_date%'";
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
@@ -152,7 +169,7 @@ switch ($axe) {
 // Ticks
 $ticks = array();
 foreach ($dates as $i => $_date) {
-  $ticks[$i] = array($i, mbTransformTime(null, $_date, '%d/%m/%Y'));
+  $ticks[$i] = array($i, mbTransformTime(null, $_date, $format));
 }
 
 foreach($data as &$_data) {

@@ -11,13 +11,11 @@
 global  $can;
 $can->needsRead();
 
-$axe       = CValue::getOrSession('axe');
-$_date_min = CValue::getOrSession('_date_min', mbDate("-15 DAYS"));
-$_date_max = CValue::getOrSession('_date_max', mbDate());
+$axe    = CValue::getOrSession('axe');
+$entree = CValue::getOrSession('entree', mbDate());
 
-$filter = new CConsultation;
-$filter->_date_min = $_date_min;
-$filter->_date_max = $_date_max;
+$filter = new CSejour;
+$filter->entree = $entree;
 
 $axes = array(
   "age" => "Tranche d'âge",

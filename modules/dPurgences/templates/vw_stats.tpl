@@ -80,12 +80,18 @@ Main.add(function () {
       <td>
         <table class="main form" style="table-layout: fixed;">
           <tr>
-            <th>{{mb_label object=$filter field=_date_min}}</th>
-            <td>{{mb_field object=$filter field=_date_min register=true form="stats-filter"}}</td>
+            <th>Date</th>
+            <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="date"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$filter field=_date_max}}</th>
-            <td>{{mb_field object=$filter field=_date_max register=true form="stats-filter"}}</td>
+            <th>Période</th>
+            <td>
+              <select name="period" onchange="this.form.onsubmit()">
+                <option value="DAY">par jour</option>
+                <option value="WEEK">par semaine</option>
+                <option value="MONTH">par mois</option>
+              </select>
+            </td>
           </tr>
           <tr>
             <th>Mode</th>
