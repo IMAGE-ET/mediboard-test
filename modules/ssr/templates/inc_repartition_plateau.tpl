@@ -18,7 +18,7 @@
 			{{mb_include template=inc_repartition_kine kine_id=$_technicien->kine_id}}
 			</td>
 		{{foreachelse}}
-	    <td><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
+	    <td style="width: 180px;" class="text"><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
 	  {{/foreach}}
   </tr>	
 </table>

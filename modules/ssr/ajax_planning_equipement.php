@@ -8,13 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCando::checkRead();
+
+$date = CValue::getOrSession("date", mbDate());
 
 $equipement = new CEquipement;
 $equipement->load(CValue::get("equipement_id", 33));
 
-$planning = new CPlanningWeek;
+$planning = new CPlanningWeek($date);
 $planning->title = "Planning de l'équipement '$equipement->_view'";
 $planning->guid = $equipement->_guid;
 

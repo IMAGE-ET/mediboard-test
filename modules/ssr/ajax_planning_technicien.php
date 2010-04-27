@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCando::checkRead();
+
+$date = CValue::getOrSession("date", mbDate());
 
 $technicien = new CTechnicien;
 $technicien->load(CValue::get("technicien_id"));
@@ -18,7 +19,7 @@ $technicien->load(CValue::get("technicien_id"));
 $technicien->loadRefKine();
 $kine = $technicien->_ref_kine;
 
-$planning = new CPlanningWeek;
+$planning = new CPlanningWeek($date);
 $planning->title = "Planning du technicien '$kine->_view'";
 $planning->guid = $kine->_guid;
 
