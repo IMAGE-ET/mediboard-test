@@ -33,6 +33,11 @@ while ($n--) {
 
 $dates = array_reverse($dates);
 
+$where = array(
+  "sejour.entree" => null, // Doit toujours etre redefini
+  "sejour.type" => "= 'rpu'",
+);
+
 $ljoin = array(
   'rpu' => 'sejour.sejour_id = rpu.sejour_id',
 );
