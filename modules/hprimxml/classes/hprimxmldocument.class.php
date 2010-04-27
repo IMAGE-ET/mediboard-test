@@ -800,7 +800,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($adresse, "pays", str_pad($mbPatient->assure_pays_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $mbPatient->assure_cp);
     $dateNaissance = $this->addElement($personne, "dateNaissance");
-    $this->addElement($dateNaissance, "date", $mbPatient->assure_naissance ? $mbPatient->assure_naissance : $mbPatient->naissance);
+		$assureNaissance = $mbPatient->assure_naissance ? $mbPatient->assure_naissance : $mbPatient->naissance;
+    $this->addElement($dateNaissance, isLunarDate($assureNaissance) ? "dateLunaire" : "date", $assureNaissance);
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }

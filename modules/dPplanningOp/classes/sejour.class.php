@@ -1057,7 +1057,7 @@ class CSejour extends CCodable {
    * - Date de d'entree et de sortie équivalentes
    * @return Nombre d'occurences trouvées 
    */
-  function loadMatchingSejour($strict = null) {
+  function loadMatchingSejour($strict = null, $notCancel = false) {
     if ($strict && $this->_id) {
       $where["sejour_id"] = " != '$this->_id'";
     } 
@@ -1074,6 +1074,10 @@ class CSejour extends CCodable {
       $date_sortie = mbDate($this->_sortie); 
       $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
     }
+		
+		if ($notCancel) {
+			$where["annule"] = " = '0'";
+		}
     
     $this->loadObject($where);
     return $this->countList($where);

@@ -281,6 +281,16 @@ function mbMinutesRelative($from, $to) {
 }
 
 /**
+ * Returns is a lunar date
+ * @return boolean true or false
+ **/
+function isLunarDate($date) {
+	$fragments = explode("-", $date);
+
+  return ($fragments[2] > 31) || ($fragments[1] > 12);
+}
+
+/**
  * Date utility class
  */
 class CMbDate {

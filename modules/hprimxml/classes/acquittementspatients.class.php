@@ -14,10 +14,14 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   var $_sous_type_evt = null;
   var $_codes_erreurs = null;
   
+	static function getVersionAcquittementsPatients() {    
+    return "msgAcquittementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
+  } 
+	
   function __construct() {
     $this->evenement = "evt_patients";
      
-    parent::__construct("patients", "msgAcquittementsPatients105");
+    parent::__construct("patients", self::getVersionAcquittementsPatients());
   }
 
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {

@@ -234,7 +234,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
-            if ($newVenue->loadMatchingSejour()) {
+            if ($newVenue->loadMatchingSejour(null, true)) {
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
               $newVenue->loadNumDossier();

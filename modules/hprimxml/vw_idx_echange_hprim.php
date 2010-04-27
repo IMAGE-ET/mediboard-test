@@ -20,7 +20,7 @@ $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
 $type_evenement      = CValue::getOrSession("type_evenement");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max           = CValue::getOrSession('_date_max', mbDateTime());
+$_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 hour"));
 
 $observations = array();
 
