@@ -75,8 +75,7 @@ updateBilanId = function(bilan_id){
 }
 
 Main.add( function(){
-{{foreach from=$categories key=chap item=_categories}}
-  {{foreach from=$_categories item=_category}}
+  {{foreach from=$categories item=_category}}
 	  var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
 	  url.addParam("category", "{{$_category->chapitre}}");
 		url.addParam("category_id", "{{$_category->_id}}");
@@ -86,7 +85,6 @@ Main.add( function(){
 			updateElement: function(element) { updateFieldsElementSSR(element, getForm('search_{{$_category->_guid}}'), '{{$_category->_id}}') }
 	  } );
   {{/foreach}}
-{{/foreach}}
 } );
 
 </script>
@@ -137,41 +135,34 @@ Main.add( function(){
 				<tr>
 				  <th class="title" colspan="2">Prescription</th>
 				</tr>
-				{{foreach from=$categories key=chap item=_categories}}
-				
-			    <tr>
-			      <th colspan="2" class="category">{{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}</th>
-			    </tr>
-			    {{foreach from=$_categories item=_category}}
-			      {{assign var=category_id value=$_category->_id}}
-			      <tr>
-			        <th>
-			        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
-						  </th>
-			        <td>
-			          <form name="search_{{$_category->_guid}}" action="?">
-			            <input type="text" name="libelle" value="" class="autocomplete" />
-			            <div style="display:none;" class="autocomplete" id="{{$_category->_guid}}_auto_complete"></div>
-			          </form>
-			        </td>
-			      </tr>
-						<tbody  id="lines-{{$category_id}}">
-							{{assign var=full_line_id value=""}}
-                {{include file="inc_list_lines.tpl" nodebug=true}}
-						</tbody>
-				  {{foreachelse}}
-	        <tr>
-	          <td colspan="2">
-	          	<div class="small-info">Ce chapitre ne contient aucune catégorie</div>
-	          </td>
-	        </tr>
-					{{/foreach}}
+		    {{foreach from=$categories item=_category}}
+		      {{assign var=category_id value=$_category->_id}}
+		      <tr>
+		        <th>
+		        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+					  </th>
+		        <td>
+		          <form name="search_{{$_category->_guid}}" action="?">
+		            <input type="text" name="libelle" value="" class="autocomplete" />
+		            <div style="display:none;" class="autocomplete" id="{{$_category->_guid}}_auto_complete"></div>
+		          </form>
+		        </td>
+		      </tr>
+					<tbody  id="lines-{{$category_id}}">
+						{{assign var=full_line_id value=""}}
+              {{include file="inc_list_lines.tpl" nodebug=true}}
+					</tbody>
+			  {{foreachelse}}
+        <tr>
+          <td colspan="2">
+          	<div class="small-info">Ce chapitre ne contient aucune catégorie</div>
+          </td>
+        </tr>
 				{{/foreach}}
 			</table>
 		</td>
 		
     <td>
-    	
     	<form name="Edit-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="m" value="ssr" />
 			  <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
