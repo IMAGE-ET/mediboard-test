@@ -322,6 +322,8 @@ Main.add( function(){
 					 <tr>
 				 	   {{if $element_prescription_to_cdarr->_id}}
 						   <th class="title text modify" colspan="2">
+						   	 {{mb_include module=system template=inc_object_idsante400 object=$element_prescription_to_cdarr}}
+                 {{mb_include module=system template=inc_object_history object=$element_prescription_to_cdarr}}
 						     Modification du code Cdarr pour '{{$element_prescription->_view}}'
                </th>
 						 {{else}}
