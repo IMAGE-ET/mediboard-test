@@ -1974,7 +1974,7 @@ class CMbObject {
    * @param ref|CUser $user_id ID de l'utilisateur
    * @param string $needle Permet de filtrer les aides commançant par le filtre, si non null
    */
-  function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
+  function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null) {
     foreach ($this->_specs as $field => $spec) {
       if (isset($spec->helped)) {
         $this->_aides[$field] = array("no_enum" => null);
@@ -2008,6 +2008,10 @@ class CMbObject {
     if ($needle) {
       $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
     }
+		
+		if($object_field){
+		  $where["field"] = " = '$object_field'";
+		}
     
     // tri par user puis function puis group (ordre inversé pour avoir ce résultat)
     $order = "group_id, function_id, user_id, depend_value_1, depend_value_2, name, text";

@@ -10,6 +10,7 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
+$module->registerTab("vw_sejours_ssr"         , TAB_READ);
 $module->registerTab("vw_aed_sejour_ssr"      , TAB_READ);
 $module->registerTab("vw_idx_plateau"         , TAB_READ);
 $module->registerTab("vw_idx_repartition"     , TAB_READ);

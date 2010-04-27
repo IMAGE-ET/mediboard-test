@@ -1,3 +1,21 @@
+<script type="text/javascript">
+	
+Main.add(function () {
+  var oFormAutonomie = getForm("editFicheAutonomie");
+
+  new AideSaisie.AutoComplete(oFormAutonomie.soins_cutanes, {
+    objectClass: "CFicheAutonomie", 
+    userId: "{{$app->user_id}}"
+  });
+	
+	new AideSaisie.AutoComplete(oFormAutonomie.etat_psychique, {
+    objectClass: "CFicheAutonomie", 
+    userId: "{{$app->user_id}}"
+  });
+});
+
+</script>
+
 <form name="editFicheAutonomie" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />

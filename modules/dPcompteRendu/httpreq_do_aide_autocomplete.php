@@ -16,7 +16,7 @@ $depend_value_2 = CValue::post("depend_value_2", null);
 $needle         = CValue::post("_search");
 
 $object = new $object_class;
-$object->loadAides($user_id, $needle, $depend_value_1, $depend_value_2);
+$object->loadAides($user_id, $needle, $depend_value_1, $depend_value_2, $property);
 
 // Tableau de depend value
 @list($depend_field_1, $depend_field_2) = $object->_specs[$property]->helped;

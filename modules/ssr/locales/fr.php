@@ -546,5 +546,6 @@ $locales['CElementPrescriptionToCdarr.all'] = '';
 $locales['CElementPrescriptionToCdarr.none'] = '';
 $locales['CElementPrescriptionToCdarr.one'] = '';
 $locales['mod-ssr-tab-configure'] = '';
-$locales['mod-ssr-tab-vw_legende'] = '';
+$locales['mod-ssr-tab-vw_legende'] = 'Légende';
+$locales['mod-ssr-tab-vw_sejours_ssr'] = 'Séjours';
 ?>

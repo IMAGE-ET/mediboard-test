@@ -680,8 +680,8 @@ class CSejour extends CCodable {
    * @return array[CMbObject] List of found objects, null if module is not installed
    */
   static function loadListForDate($date, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $where[] = "IF (sejour.entree_reelle, sejour.entree_reelle, sejour.entree_prevue) <= '$date 23:59:59'";
-    $where[] = "IF (sejour.sortie_reelle, sejour.sortie_reelle, sejour.sortie_prevue) >= '$date 00:00:00'";
+    $where[] = "sejour.entree <= '$date 23:59:59'";
+    $where[] = "sejour.sortie >= '$date 00:00:00'";
     $sejour = new CSejour;
     return $sejour->loadList($where, $order, $limit, $group, $leftjoin);
   }
@@ -697,8 +697,8 @@ class CSejour extends CCodable {
    * @return array[CMbObject] List of found objects, null if module is not installed
    */
   static function loadListForDateTime($datetime, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    $where[] = "IF (sejour.entree_reelle, sejour.entree_reelle, sejour.entree_prevue) <= '$datetime'";
-    $where[] = "IF (sejour.sortie_reelle, sejour.sortie_reelle, sejour.sortie_prevue) >= '$datetime'";
+    $where[] = "sejour.entree <= '$datetime'";
+    $where[] = "sejour.sortie >= '$datetime'";
     $sejour = new CSejour;
     return $sejour->loadList($where, $order, $limit, $group, $leftjoin);
   }

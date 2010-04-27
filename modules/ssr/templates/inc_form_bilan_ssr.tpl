@@ -85,6 +85,18 @@ Main.add( function(){
 			updateElement: function(element) { updateFieldsElementSSR(element, getForm('search_{{$_category->_guid}}'), '{{$_category->_id}}') }
 	  } );
   {{/foreach}}
+	
+  var oFormBilanSSR = getForm("Edit-CBilanSSR");
+	
+  new AideSaisie.AutoComplete(oFormBilanSSR.entree, {
+    objectClass: "CBilanSSR", 
+    userId: "{{$app->user_id}}"
+  });
+  
+  new AideSaisie.AutoComplete(oFormBilanSSR.sortie, {
+    objectClass: "CBilanSSR", 
+    userId: "{{$app->user_id}}"
+  });
 } );
 
 </script>
@@ -177,41 +189,17 @@ Main.add( function(){
 	    	  <tr>
 				    <th class="category">{{mb_label object=$bilan field=entree}}</th>
 				  </tr>
-				  <tr>
-				    <td colspan="2" style="text-align : right">
-				     <select name="_helpers_entree" size="1" style="width: 80px;" onchange="pasteHelperContent(this)">
-				        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-				        {{html_options options=$bilan->_aides.entree.no_enum}}
-				      </select>
-				      <input type="hidden" name="_hidden_entree" value="" />
-				      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CBilanSSR', this.form._hidden_entree, 'entree')">
-				        {{tr}}New{{/tr}}
-				      </button>
-				    </td>
-					</tr>
 					<tr>
 					<td colspan="2">
-	          {{mb_field object=$bilan field=entree onchange="this.form.onsubmit()"}}
+	          {{mb_field object=$bilan field=entree onblur="this.form.onsubmit()"}}
 	        </td>
 					</tr>
 	        <tr>
 	          <th colspan="2" class="category">{{mb_label object=$bilan field=sortie}}</th>
 	        </tr>			
-					<tr>
-				    <td colspan="2" style="text-align : right">
-				      <select name="_helpers_sortie" size="1" style="width: 80px;" onchange="pasteHelperContent(this)">
-				        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-				        {{html_options options=$bilan->_aides.sortie.no_enum}}
-				      </select>
-				      <input type="hidden" name="_hidden_sortie" value="" />
-				      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CBilanSSR', this.form._hidden_sortie, 'sortie')">
-				        {{tr}}New{{/tr}}
-				      </button>
-				    </td>
-				  </tr>
 				  <tr>
 				    <td colspan="2">
-				      {{mb_field object=$bilan field=sortie onchange="this.form.onsubmit()"}}
+				      {{mb_field object=$bilan field=sortie onblur="this.form.onsubmit()"}}
 				    </td> 
 				  </tr>
 					<tr>
