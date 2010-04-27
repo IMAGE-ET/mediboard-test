@@ -14,16 +14,9 @@
 <table class="tbl">
   <tr>
     <td class="button">
-      <form name="editplage" action="?">
-        <input type="hidden" name="m" value="dPpersonnel"/>
-        <input type="hidden" name="tab" value="vw_idx_plages_vac"/>
-        <input type="hidden" name="plage_id" value="{{$plage->_id}}"/">
-        <input type="hidden" name="user_id" value="{{$plage->user_id}}"/">
-        {{$module}}
-        <button type="submit" class="edit">
-          {{tr}}Modify{{/tr}}
-        </button>
-      </form>
+      <button type="submit" class="edit" onclick="editPlageVac('{{$plage->_id}}','{{$plage->user_id}}')">
+        {{tr}}Modify{{/tr}}
+      </button>
     </td>
   </tr>
 </table>
