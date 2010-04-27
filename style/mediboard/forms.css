@@ -111,6 +111,7 @@ form hr {
 label:hover,
 *[onmouseover] {
   border-bottom: 1px dotted #bbb;
+  margin-bottom: -1px;
   cursor: help;
 }
 

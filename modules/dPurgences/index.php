@@ -20,4 +20,4 @@ if (isset(CModule::$active["dPstock"])) {
   $module->registerTab("vw_stock_order" , TAB_READ);
 }
 
-?>
+$module->registerTab("vw_stats"         , TAB_READ);
