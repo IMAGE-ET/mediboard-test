@@ -59,7 +59,11 @@
     <tr style="height:30px;">
       <td style="width: 100px"></td>
       {{foreach from=$tableau_periode item=_periode}}
-      <th>{{$_periode|date_format:"%a"}}<br/>{{$_periode|date_format:" %d"}}</th>
+			{{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
+      <th {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}>
+      	<big>{{$day}}</big>
+      	<br/>{{$_periode|date_format:"%d"}}
+			</th>
       {{/foreach}}
     </tr>
     <!-- Zone d'insertion des plages de vacances-->
@@ -109,9 +113,10 @@
         {{/foreach}}
         </div>
       </td>
-      {{foreach from=$tableau_periode item=td name=td_list}}
+      {{foreach from=$tableau_periode item=_periode name=td_list}}
         {{if !$smarty.foreach.td_list.first}}
-          <td></td>
+		      {{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
+		      <td {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}></td>
         {{/if}}
       {{/foreach}}
     </tr>
