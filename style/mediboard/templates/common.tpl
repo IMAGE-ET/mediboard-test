@@ -142,9 +142,3 @@
 	</table>
 </div>
 {{/if}}
-
-{{if $dPconfig.locale_warn}}
-	{{foreach from=$app|static:unlocalized item=_unlocalized}}
-	<div>{{$_unlocalized}}</div>
-	{{/foreach}}
-{{/if}}

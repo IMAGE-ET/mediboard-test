@@ -1,3 +1,11 @@
+{{if $dPconfig.locale_warn}}
+<!-- Local warns -->
+  {{foreach from=$app|static:unlocalized item=_unlocalized}}
+  <div>{{$_unlocalized}}</div>
+  {{/foreach}}
+{{/if}}
+
+
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : 
@@ -45,14 +53,6 @@
     </td>
   </tr>
 </table>
-
-{{if $dPconfig.demo_version && !$offline}}
-<div style="margin: 10px; float:right">
-  <a href="http://www.sourceforge.net/projects/mediboard/" title="Projet Mediboard sur Sourceforge">
-    <img src="http://www.sourceforge.net/sflogo.php?group_id=112072&amp;type=2" alt="Sourceforge Project Logo" />
-  </a>
-</div>
-{{/if}}
 
 </body>
 </html>
