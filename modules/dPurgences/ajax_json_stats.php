@@ -24,7 +24,7 @@ while ($n-- && ($date <= $_date_max)) {
 }
 
 $ljoin = array(
-  'sejour' => 'sejour.sejour_id = rpu.sejour_id',
+  'rpu' => 'sejour.sejour_id = rpu.sejour_id',
   'patients' => 'patients.patient_id = sejour.patient_id',
 );
 
@@ -63,7 +63,7 @@ switch ($axe) {
       
       foreach ($dates as $i => $_date) {
         $where['sejour.entree'] = "LIKE '$_date%'";
-        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -87,7 +87,7 @@ switch ($axe) {
       
       foreach ($dates as $i => $_date) {
         $where['sejour.entree'] = "LIKE '$_date%'";
-        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -117,7 +117,7 @@ switch ($axe) {
       
       foreach ($dates as $i => $_date) {
         $where['sejour.entree'] = "LIKE '$_date%'";
-        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -141,7 +141,7 @@ switch ($axe) {
       
       foreach ($dates as $i => $_date) {
         $where['sejour.entree'] = "LIKE '$_date%'";
-        $count = $rpu->countList($where, null, null, null, $ljoin);
+        $count = $sejour->countList($where, null, null, null, $ljoin);
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
