@@ -1,5 +1,3 @@
-<h2>Mouvements</h2>
-
 <table class="tbl">
   <tr>
     <th>Action</th>
@@ -19,8 +17,8 @@
 			
 			</script>
 
-      <button class="search" onclick="Marks.makeInternal()">
-        {{tr}}Config-Ecap-MakeInternal{{/tr}}
+      <button class="change" onclick="Marks.makeInternal()">
+        {{tr}}config-ecap-MakeInternal{{/tr}}
       </button>
     </td>
     

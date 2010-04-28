@@ -25,4 +25,11 @@ $locales['CMouvSejourEcap'] = 'Séjour e-Cap';
 $locales['CMouvInterventionECap'] = 'Internvention e-Cap';
 $locales['mod-ecap-tab-vw_ssr'] = 'Redirection SSR';
 $locales['mod-ecap-tab-configure'] = 'Configuration';
+$locales['CEcObjectHandler'] = 'Gestion d\'objets e-Cap';
+$locales['Config-Ecap-MakeInternal'] = '';
+$locales['config-ecap-CMouvSejourEcap'] = 'Trigger de séjours';
+$locales['config-ecap-CMouvSejourEcap-handle_dhe'] = 'Gestion des DHE dans les triggers du séjour';
+$locales['config-ecap-CMouvSejourEcap-handle_dhe-desc'] = 'Gestion des DHE dans les triggers du séjour, lequels peuvent écraser les valeurs de la table séjour';
+$locales['config-object_handlers-CEcObjectHandler'] = 'Activer le gestionnaire d\'objets e-Cap';
+$locales['config-ecap-MakeInternal'] = 'Rendre interne les anciennes marques sur les triggers';
 ?>
