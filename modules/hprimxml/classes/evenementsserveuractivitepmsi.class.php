@@ -10,8 +10,8 @@
 
 class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
 	static $evenements = array(
-    'evenementPMSI'        => "CHPrimXMLEvenementPmsi",
-    'evenementServeurActe' => "CHPrimXMLServeurActes",
+    'evenementPMSI'        => "CHPrimXMLEvenementsPmsi",
+    'evenementServeurActe' => "CHPrimXMLEvenementsServeurActes",
   );
 	
   function __construct($dirschemaname, $schemafilename = null) {

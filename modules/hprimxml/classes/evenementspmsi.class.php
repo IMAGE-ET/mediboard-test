@@ -10,7 +10,7 @@
 
 CAppUI::requireModuleClass("hprimxml", "evenementsserveuractivitepmsi");
 
-class CHPrimXMLEvenementPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
+class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
   function __construct() {
     $this->sous_type = "evenementPMSI";
     $this->evenement = "evt_pmsi";

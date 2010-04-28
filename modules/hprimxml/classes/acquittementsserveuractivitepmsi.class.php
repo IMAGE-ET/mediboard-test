@@ -67,10 +67,10 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
     if (is_array($codes)) {
       foreach ($codes as $code) {
-        $this->addReponse($reponses, $statut, $code, CAppUI::tr("sip-hprim-error-$code"), $commentaires, $mbObject);
+        $this->addReponse($reponses, $statut, $code, CAppUI::tr("hprimxml-error-$code"), $commentaires, $mbObject);
       }
     } else {
-      $this->addReponse($reponses, $statut, $codes, CAppUI::tr("sip-hprim-error-$codes"), $commentaires, $mbObject);
+      $this->addReponse($reponses, $statut, $codes, CAppUI::tr("hprimxml-error-$codes"), $commentaires, $mbObject);
     }   
   }
 

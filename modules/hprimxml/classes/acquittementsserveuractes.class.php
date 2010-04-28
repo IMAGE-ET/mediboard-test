@@ -17,7 +17,6 @@ class CHPrimXMLAcquittementsServeurActes extends CHPrimXMLAcquittementsServeurAc
      
     parent::__construct("msgAcquittementsServeurActes105");
   }
-
 }
 
 ?>

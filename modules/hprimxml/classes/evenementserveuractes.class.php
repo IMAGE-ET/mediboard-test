@@ -10,7 +10,7 @@
 
 CAppUI::requireModuleClass("hprimxml", "evenementsserveuractivitepmsi");
 
-class CHPrimXMLServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
+class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
   function __construct() {
 		$this->sous_type = "evenementServeurActe";
     $this->evenement = "evt_serveuractes";
@@ -54,5 +54,47 @@ class CHPrimXMLServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
     // Traitement final
     $this->purgeEmptyElements();
   }
+	
+	function getServeurActesXML() {
+		$data = array();    
+    $xpath = new CMbXPath($this, true);		
+
+    $entete = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:enteteMessage");
+		
+    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
+    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
+    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
+		
+    $evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
+		
+    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
+		$data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
+		
+		$data['venue']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
+		$data['idSourceVenue'] = $this->getIdSource($data['venue']);
+    $data['idCibleVenue']  = $this->getIdCible($data['venue']);
+		
+		$data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+		
+    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);    
+    
+    return $data;
+  }
+	
+	/**
+   * Enregistrement des actes CCAM
+   * @param CHPrimXMLAcquittementsServeurActes $domAcquittement
+   * @param CEchangeHprim $echange_hprim
+   * @param CPatient $newPatient
+   * @param array $data
+   * @return CHPrimXMLAcquittementsServeurActes $messageAcquittement 
+   **/
+  function serveurActes($domAcquittement, &$echange_hprim, &$newPatient, $data) {  
+	  mbTrace($domAcquittement, "acquittement", true);
+	  mbTrace($data, "data", true);
+	}
 }
 ?>

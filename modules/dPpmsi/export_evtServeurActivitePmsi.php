@@ -19,7 +19,7 @@ if (null == $typeObject = CValue::get("typeObject")) {
 switch ($typeObject) {
   case "op" :
 		$mbObject = new COperation();
-		$evenementActivitePMSI = new CHPrimXMLServeurActes();
+		$evenementActivitePMSI = new CHPrimXMLEvenementsServeurActes();
 
 		// Chargement de l'opération et génération du document
 		$operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
@@ -40,7 +40,7 @@ switch ($typeObject) {
 		break;
   case "sej" :
 		$mbObject = new CSejour();
-		$evenementActivitePMSI = new CHPrimXMLEvenementPmsi();
+		$evenementActivitePMSI = new CHPrimXMLEvenementsPmsi();
 				
 		// Chargement du séjour et génération du document
 		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
