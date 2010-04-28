@@ -14,13 +14,22 @@ $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $period = CValue::getOrSession('period', "MONTH");
 
-$xaxis_formats = array(
-  "DAY"   => '%d/%m/%Y',
-  "WEEK"  => '%d/%m/%Y',
-  "MONTH" => '%m/%Y',
-);
-
-$format = $xaxis_formats[$period];
+switch ($period) {
+  default: $period = "DAY";
+  case "DAY":
+  	$format = "%d/%m/%Y";
+    break;
+    
+  case "WEEK";
+    $format = "%W";
+    $entree = mbDate("+1 day last sunday", $entree);
+    break;
+    
+  case "MONTH";
+    $format = "%m/%Y";
+    $entree = mbDate("first day", $entree);
+    break;
+}
 
 // Dates
 $dates = array();
@@ -67,13 +76,17 @@ switch ($axe) {
       $limits = array($age, CValue::read($age_areas, $key+1));
       $label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
       
-      // Should be relative to the CSejour date
-      $min = mbDate("-{$limits[1]} YEARS");
-      $max = mbDate("-{$limits[0]} YEARS");
+      $min = $limits[0]*365.25;
+      $max = $limits[1]*365.25;
       
-      // Age calculation
-      $where["patients.naissance"] = " <= '$max' ".
-                 ($limits[1] != null ? " AND patients.naissance > '$min'" : "");
+      $where[100] = "TO_DAYS(sejour.entree) - TO_DAYS(patients.naissance) >= $min";
+      
+      if ($limits[1] != null) {
+        $where[101] = "TO_DAYS(sejour.entree) - TO_DAYS(patients.naissance) < $max";
+      }
+      else {
+        unset($where[101]);
+      }
       
       $series[$key] = array('data' => array(), 'label' => "$label ans");
       
