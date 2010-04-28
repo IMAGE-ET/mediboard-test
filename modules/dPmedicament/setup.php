@@ -73,7 +73,6 @@ class CSetupdPmedicament extends CSetup {
 		$this->addQuery($sql);
     
     $this->makeRevision("0.16");
-    $this->addDependency("bcb", "0.10");
 		
     $this->mod_version = "0.17";
   }  
