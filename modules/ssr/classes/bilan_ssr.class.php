@@ -20,13 +20,6 @@ class CBilanSSR extends CMbObject {
   var $kine_id = null;
   var $entree = null;
   var $sortie = null;
-//  var $kine   = null;
-//  var $ergo   = null;
-//  var $psy    = null;
-//  var $ortho  = null;
-//  var $diet   = null;
-//  var $social = null;
-//  var $apa    = null;
   var $_activites = array();
 	
   // References

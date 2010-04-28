@@ -11,15 +11,15 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Calendar.regField(getForm("selDate").date, null, {noView: true});
+  Calendar.regField(getForm("selDate").date, null, { noView: true} );
 });
 	
 </script>
 
 <table class="main tbl">
 	<tr>
-		<th class="title" colspan="4">
-			Séjours SSR du {{$date|date_format:$dPconfig.date}}
+		<th class="title" colspan="10">
+			Séjours SSR du {{$date|date_format:$dPconfig.longdate}}
 	    <form name="selDate" action="?" method="get">
 	      <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
@@ -27,25 +27,47 @@ Main.add(function () {
 	  </th>
 	</tr>
 	<tr>
-	  <th>{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
-    <th>{{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
-		<th>{{mb_title class="CSejour" field="entree"}}</th>
-		<th>{{mb_title class="CSejour" field="sortie"}}</th>
+    <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
+    <th style="width: 1%">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
+    <th style="width: 1%">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
+
+		<th style="width: 1%">{{mb_title class="CSejour" field="_num_dossier"}}</th>
+    <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
+    <th style="width: 1%;">{{mb_title class="CBilanSSR" field="kine_id"}}</th>
 	</tr>
-	{{foreach from=$sejours item=_sejour}}
+	
+	{{foreach from=$sejours key=sejour_id item=_sejour}}
 	<tr>
 		<td>
-		  <a href="?m={{$m}}&tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}">
-		  	{{mb_value object=$_sejour field="patient_id"}}
-		  </a>
+			{{assign var=link value="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"}}
+			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
 		</td>
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}</td>
-    <td>{{mb_value object=$_sejour field="entree"}}</td>
-    <td>{{mb_value object=$_sejour field="sortie"}}</td>
+
+    <td>{{mb_value object=$_sejour field=entree format=$dPconfig.date}}</td>
+    <td>{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}</td>
+		
+		<td>
+      <a>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+        </span>
+      </a>
+		</td>
+		
+    <td>
+    	{{mb_value object=$_sejour field=libelle}}
+      {{mb_include module=system template=inc_get_notes_image object=$_sejour mode=view float=right}}
+		</td>
+		
+    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
+    <td>
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$bilan->_fwd.kine_id}}
+		</td>
+		
 	</tr>
 	{{foreachelse}}
 	<tr>
-		<td colspan="4">
+		<td colspan="10">
 			{{tr}}CSejour.none{{/tr}}
 		</td>
 	</tr>

@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Plateaux disponibles
 $date = CValue::getOrSession("date", mbDate());
@@ -22,23 +21,36 @@ $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
 
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$ljoin["users"] = "sejour.praticien_id = users.user_id";
-
-if($order_col == "patient_id"){
+if ($order_col == "patient_id"){
   $order = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
-if($order_col == "praticien_id"){
+
+$ljoin["users"] = "sejour.praticien_id = users.user_id";
+if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
  
 foreach($sejours as $_sejour) {
-	$_sejour->loadRefPraticien();
   $_sejour->checkDaysRelative($date);
-  $_sejour->loadRefPatient();
-  $_sejour->loadRefBilanSSR();
+  $_sejour->loadNumDossier();
   $_sejour->loadRefPrescriptionSejour();
+  $_sejour->loadRefsNotes();
+
+  // Bilan SSR
+  $_sejour->loadRefBilanSSR();
+  $bilan =& $_sejour->_ref_bilan_ssr;
+	$bilan->loadFwdRef("kine_id");
+	
+	// Kine principal
+	$kine =& $bilan->_fwd["kine_id"];
+	$kine->loadRefFunction(); 
+	
+  // Patient
+  $_sejour->loadRefPatient();
+	$patient =& $_sejour->_ref_patient;
+	$patient->loadIPP();
 }
 
 // Création du template
