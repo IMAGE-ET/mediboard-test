@@ -79,7 +79,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
 		
 		$data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
 		
-    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);    
+    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);    
     
     return $data;
   }
@@ -93,8 +93,37 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
    * @return CHPrimXMLAcquittementsServeurActes $messageAcquittement 
    **/
   function serveurActes($domAcquittement, &$echange_hprim, &$newPatient, $data) {  
-	  mbTrace($domAcquittement, "acquittement", true);
-	  mbTrace($data, "data", true);
+	 // Traitement de la venue
+    $domVenuePatient = new CHPrimXMLVenuePatient();
+    $newVenue = new CSejour();
+    
+    $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, $newVenue);
+    if ($echange_hprim->statut_acquittement != "OK") {
+      return $messageAcquittement;
+    }
+
+    $domAcquittement = new CHPrimXMLAcquittementsServeurActes();
+    $domAcquittement->identifiant = $data['identifiantMessage'];
+    $domAcquittement->destinataire = $data['idClient'];
+    $domAcquittement->destinataire_libelle = $data['libelleClient'];
+    $domAcquittement->_sous_type_evt = $this->sous_type;
+		
+		 // Si CIP
+    if (!CAppUI::conf('sip server')) { 
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
+      $avertissement = null;
+		
+		}
+		
+		$echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
+    $echange_hprim->store();
+
+    return $messageAcquittement;
 	}
 }
 ?>
