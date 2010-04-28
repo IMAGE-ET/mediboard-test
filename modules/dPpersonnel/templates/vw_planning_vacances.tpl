@@ -140,6 +140,13 @@ toggleYear = function (form) {
   }
 }
 
+function editPlageVac(plage_id, user_id){
+    var url = new Url("dPpersonnel", "vw_idx_plages_vac");
+    url.addParam("plage_id", plage_id);
+    url.addParam("user_id", user_id);
+    url.redirect();
+}
+
 Main.add(function(){
   var form = getForm("searchplanning");
   var choixannee = $('annee');
