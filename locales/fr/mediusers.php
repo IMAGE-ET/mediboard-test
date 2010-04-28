@@ -273,5 +273,5 @@ $locales['CFunctions-consults_partagees'] = 'Consultations partagées';
 $locales['CFunctions-consults_partagees-court'] = 'Consult. part.';
 $locales['CFunctions-consults_partagees-desc'] = 'Visibilité de consultations par les autres utilisateurs';
 $locales['mod-mediusers-tab-color_selector'] = '';
-$locales['mod-mediusers-tab-edit_infos'] = '';
+$locales['mod-mediusers-tab-edit_infos'] = 'Gestion des congés';
 ?>
