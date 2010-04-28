@@ -440,7 +440,11 @@ Element.addMethods({
     function startDrag(e) {
       Event.stop(e);
       staticOffset = element.getHeight() - e.pointerY(); 
-      element.setOpacity(0.4);
+      
+      if (!Prototype.Browser.WebKit) {
+        element.setOpacity(0.4);
+      }
+      
       document.observe('mousemove', performDrag)
               .observe('mouseup', endDrag);
     }
@@ -462,7 +466,11 @@ Element.addMethods({
   
     function endDrag(e) {
       Event.stop(e);
-      element.setOpacity(1);
+      
+      if (!Prototype.Browser.WebKit) {
+        element.setOpacity(1);
+      }
+      
       document.stopObserving('mousemove', performDrag)
               .stopObserving('mouseup', endDrag);
 
