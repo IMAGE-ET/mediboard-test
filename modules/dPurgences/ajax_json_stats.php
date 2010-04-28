@@ -35,7 +35,7 @@ $dates = array_reverse($dates);
 
 $where = array(
   "sejour.entree" => null, // Doit toujours etre redefini
-  "sejour.type" => "= 'rpu'",
+  "sejour.type" => "= 'urg'",
 );
 
 $ljoin = array(
