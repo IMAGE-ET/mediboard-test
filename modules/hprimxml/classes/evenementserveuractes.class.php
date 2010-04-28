@@ -55,9 +55,9 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $this->purgeEmptyElements();
   }
 	
-	function getServeurActesXML() {
-		$data = array();    
-    $xpath = new CMbXPath($this, true);		
+	function getEnteteServeurActesXML() {
+		$data = array();
+    $xpath = new CMbXPath($this, true);   
 
     $entete = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:enteteMessage");
 		
@@ -65,24 +65,31 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
     $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
     $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
-		
-    $evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
-		
-    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
-		$data['idSourcePatient'] = $this->getIdSource($data['patient']);
-    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
-		
-		$data['venue']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
-		$data['idSourceVenue'] = $this->getIdSource($data['venue']);
-    $data['idCibleVenue']  = $this->getIdCible($data['venue']);
-		
-		$data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
-		
-    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);    
+    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);    
     
     return $data;
   }
+	
+	function getServeurActesXML() {
+		$data = array();
+    $xpath = new CMbXPath($this, true);   
+		
+		$evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
+    
+    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
+    
+    $data['venue']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
+    $data['idSourceVenue'] = $this->getIdSource($data['venue']);
+    $data['idCibleVenue']  = $this->getIdCible($data['venue']);
+    
+    $data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+    
+    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);  
+		
+		return $data; 
+	}
 	
 	/**
    * Enregistrement des actes CCAM

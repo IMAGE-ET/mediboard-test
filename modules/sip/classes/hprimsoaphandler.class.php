@@ -199,7 +199,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domGetEvenement->loadXML(utf8_decode($messageServeurActes));
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
-      $data = $domGetEvenement->getServeurActesXML();
+      $data = $domGetEvenement->getEnteteServeurActesXML();
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
@@ -237,7 +237,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "pmsi";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;
-        $echange_hprim->message        = $messagePatient;
+        $echange_hprim->message        = $messageServeurActes;
         $echange_hprim->message_valide = 1;
       }
       $echange_hprim->date_production = mbDateTime();
@@ -246,7 +246,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $newPatient = new CPatient();
       $newPatient->_hprim_initiator_id = $echange_hprim->_id;
       
-      $echange_hprim->id_permanent = $data['idSource'];
+			$data = array_merge($data, $domGetEvenement->getServeurActesXML());
+      $echange_hprim->id_permanent = $data['idSourceVenue'];
       $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $newPatient, $data);
      
       return $messageAcquittement;
