@@ -1,30 +1,10 @@
 <style type="text/css">
-.cal {
-	width: 300px;
-	border-collapse:collapse;
-	border: 1px solid #ccc;
-	margin: 1em auto;
-	table-layout: fixed;
-}
-
-.cal td,
-.cal th {
-	border: 1px solid #ddd;
-  padding: 4px !important;
-}
-
 .cal td {
-  padding: 4px !important;
-  background: #f6f6f6;
 	text-align: center;
 }
 
 .cal td.empty {
   background: #fff;
-}
-
-.cal th {
-  background-color: #fff;
 }
 
 .cal td.occuped {
@@ -40,7 +20,9 @@
   border-right: 2px solid #999;
 }
 </style>
+
 <script type="text/javascript">
+
 changemode = function(type, date, user_id) {
   var form = getForm("searchplanning");
   $V(form.choix, type);
@@ -59,11 +41,11 @@ changemode = function(type, date, user_id) {
 {{assign var="k" value=$k+1}}
 {{assign var="duree" value=$tab_start.$k}}
 {{assign var="k" value=$k+1}}
- {{if $j%3==1 }}
+ {{if $j%6==1 }}
  <tr>
 {{/if}}
  <td>
-   <table class="cal">
+   <table class="tbl cal">
    	<tr>
    		{{assign var=day value="01"}}
       {{assign var=month value=$j|pad:2:"0"}}
@@ -76,7 +58,7 @@ changemode = function(type, date, user_id) {
 		 <tr>
 		 	{{foreach from=1|range:7 item=_j}}
 			{{assign var=date_model value="2010-02-$_j"}}
-			<th >{{$date_model|date_format:"%a"}}</th>
+			<th>{{$date_model|date_format:"%A"|upper|substr:0:1}}</th>
 			{{/foreach}}
 		 </tr>
 		 {{if $duree+$start > 36}}
@@ -108,7 +90,7 @@ changemode = function(type, date, user_id) {
 			   <td>
 			 {{/if}}
 				 {{assign var=jour value=$i-$start+1}}
-				   <a href="#" onclick="changemode('semaine','{{$date}}',{{$filter->user_id}})">{{$jour}}</a>
+				   <a href="#Week-{{$date}}" onclick="changemode('semaine','{{$date}}',{{$filter->user_id}})">{{$jour}}</a>
 			  </td>
 			{{else}}
 			  <td class="empty"></td>
@@ -119,7 +101,7 @@ changemode = function(type, date, user_id) {
 		 {{/foreach}}
 	  </table>
    </td>
-{{if $j%3==0 }}
+{{if $j%6==0 }}
   </tr>
 {{/if}}
 {{/foreach}}

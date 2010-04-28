@@ -30,16 +30,17 @@
         </button>
         </td>
     </tr>
-    {{if $plagevac->plage_id}}
+    {{if $plagevac->_id}}
       <tr>
-        <th class = "title modify" colspan="6">
+        <th class = "title modify text" colspan="6">
+          {{mb_include module=system template=inc_object_notes   object=$plagevac}}
           {{mb_include module=system template=inc_object_history object=$plagevac}}
-          {{tr}}CPlageVacances-title-modify {{/tr}} {{$user->_user_last_name}} {{$user->_user_first_name}}
+          {{tr}}CPlageVacances-title-modify{{/tr}} {{$plagevac}}
         </th>
       </tr>
     {{else}}
       <tr>
-        <th class = "title" colspan="6">
+        <th class = "title text" colspan="6">
          {{tr}}CPlageVacances-title-create{{/tr}} {{tr}}For{{/tr}} {{$user->_user_last_name}} {{$user->_user_first_name}}
         </th>
       </tr>
@@ -71,7 +72,7 @@
     <tr>
       <td colspan="6" class="button">
         <button class = "submit" type="submit">{{tr}}Save{{/tr}}</button>
-        {{if $plagevac->plage_id}}
+        {{if $plagevac->_id}}
           <button class="trash" type="submit" onclick="confirmDeletion(this.form,{typeName:'la plage',objName:'{{$plagevac->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </td>

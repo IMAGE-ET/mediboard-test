@@ -48,13 +48,7 @@ class CPlageVacances extends CMbObject {
 	
 	function updateFormFields() {
 		parent::updateFormFields();
-		$this->_view = CAppUI::tr("Plage %s from %s to %s", $this->libelle, $this->date_debut, $this->date_fin);
-		if($this->date_debut == $this->date_fin) {
-		  $this->_shortview = CAppUI::tr("%s", $this->date_debut);
-		}
-		else {
-			$this->_shortview = CAppUI::tr("From %s to %s", $this->date_debut, $this->date_fin);
-		}
+		$this->_shortview = $this->_view = $this->libelle;
 	}
 	
 	function check() {

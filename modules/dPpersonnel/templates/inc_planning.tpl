@@ -56,8 +56,8 @@
     <td>
     <!-- Affichage du planning -->
    <table id="schedule">
-    <tr style="height:30px;">
-      <td style="width: 100px"></td>
+    <tr style="height: 2em;">
+      <td style="width: 12em;"></td>
       {{foreach from=$tableau_periode item=_periode}}
 			{{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
       <th {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}>
