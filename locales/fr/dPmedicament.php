@@ -112,4 +112,5 @@ $locales['CProduitPrescription-failed-libelle'] = 'Le libelle doit etre unique';
 $locales['CProduitPrescription-unite_dispensation'] = 'Unité de dispensation';
 $locales['CProduitPrescription-unite_dispensation-court'] = 'Unité dispensation';
 $locales['CProduitPrescription-unite_dispensation-desc'] = 'Unité de dispensation';
+$locales['mod-dPmedicament-tab-vw_produit'] = 'Monographie de médicament';
 ?>
