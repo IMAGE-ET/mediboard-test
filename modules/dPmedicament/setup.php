@@ -71,8 +71,11 @@ class CSetupdPmedicament extends CSetup {
 		$sql = "ALTER TABLE `produit_prescription` 
             ADD `unite_dispensation` VARCHAR (255) NOT NULL;";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("0.16");
+    $this->addDependency("bcb", "0.10");
 		
-    $this->mod_version = "0.16";
+    $this->mod_version = "0.17";
   }  
 }
 

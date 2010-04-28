@@ -254,7 +254,7 @@ class CSetup {
         // Move conf
         foreach ($this->config_moves[$currRevision] as $config) {
           $mbConfig->set($config[1], $mbConfig->get($config[0]));
-          $mbConfig->set($config[0], null); 
+          //$mbConfig->set($config[0], null); // FIXME : vide les DEUX parties
         }
         $mbConfig->update($mbConfig->values);
       }
