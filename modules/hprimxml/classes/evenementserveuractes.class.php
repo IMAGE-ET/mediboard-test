@@ -39,7 +39,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     // Ajout de la venue, c'est-à-dire le séjour
     $mbSejour =& $mbOp->_ref_sejour;
     $venue = $this->addElement($evenementServeurActe, "venue");
-		$this->addVenue($venue, $mbSejour);
+		$this->addVenue($venue, $mbSejour, null, true);
     
     // Ajout de l'intervention
     $intervention = $this->addElement($evenementServeurActe, "intervention");

@@ -298,7 +298,7 @@ $locales['CDestinataireHprim-_tag_mediusers-court'] = 'Tag utilisateurs';
 $locales['CDestinataireHprim-_tag_mediusers-desc'] = 'Tag utilisateurs';
 $locales['CDestinataireHprim.evenement.'] = '';
 $locales['CEchangeHprim.object_class.COperation'] = '';
-$locales['mod-hprimxml-tab-configure'] = '';
+$locales['mod-hprimxml-tab-configure'] = 'Configure';
 $locales['mod-hprimxml-tab-echangeviewer'] = '';
 $locales['mod-hprimxml-tab-testMvtStocks'] = '';
 ?>

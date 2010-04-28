@@ -172,6 +172,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $msg;
   }
   
+	function getIdSource($node) {
+    $xpath = new CMbXPath($this, true);
+    
+    $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
+    // Obligatoire pour MB
+    $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false);
+
+    return $xpath->queryTextNode("hprim:valeur", $emetteur);
+  }
+  
+  function getIdCible($node) {
+    $xpath = new CMbXPath($this, true);
+    
+    $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
+    $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
+    
+    return $xpath->queryTextNode("hprim:valeur", $recepteur);
+  }
+	
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
     $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
@@ -619,9 +638,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
     
-    if (!$light) {
-      $medecins = $this->addElement($elParent, "medecins");
-    
+		$medecins = $this->addElement($elParent, "medecins");
+		// Traitement du responsable du séjour
+    $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
+		
+    if (!$light) {    
       // Traitement du medecin traitant du patient
       $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
       if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
@@ -637,9 +658,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
           $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
         }
       }
-      
-      // Traitement du responsable du séjour
-      $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
       
       // Traitement des prescripteurs
       $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;

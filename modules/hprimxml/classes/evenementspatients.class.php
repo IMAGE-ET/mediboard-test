@@ -74,26 +74,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     
     return $xpath->queryAttributNode($query, $node, "action");    
   }
-  
-  function getIdSource($node) {
-    $xpath = new CMbXPath($this, true);
     
-    $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
-    // Obligatoire pour MB
-    $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false);
-
-    return $xpath->queryTextNode("hprim:valeur", $emetteur);
-  }
-  
-  function getIdCible($node) {
-    $xpath = new CMbXPath($this, true);
-    
-    $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
-    $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
-    
-    return $xpath->queryTextNode("hprim:valeur", $recepteur);
-  }
-  
   function isActionValide($action, $domAcquittement, $echange_hprim) {
     $messageAcquittement = null;
     
