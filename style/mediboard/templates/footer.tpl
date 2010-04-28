@@ -1,10 +1,4 @@
-{{if $dPconfig.locale_warn}}
-<!-- Local warns -->
-  {{foreach from=$app|static:unlocalized item=_unlocalized}}
-  <div>{{$_unlocalized}}</div>
-  {{/foreach}}
-{{/if}}
-
+{{mb_include template=../../../modules/dPdeveloppement/templates/inc_unlocalized_strings}}
 
 {{if $debugMode && !$offline}}
 <div id="performance">

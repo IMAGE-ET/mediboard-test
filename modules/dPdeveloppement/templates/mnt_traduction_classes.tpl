@@ -35,8 +35,6 @@ Main.add(function () {
 
 </script>
 
-
-
 <!-- Modification des items -->
 <form action="?m=dPdeveloppement" name="translate" method="post" class="prepared">
 

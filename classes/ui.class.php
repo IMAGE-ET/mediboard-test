@@ -47,7 +47,6 @@ class CAppUI {
   /** @var string langage alert mask */
   static $unlocalized  = array();
   
-
   /** @var int Global unique id */
   static $unique_id = 0;
 
@@ -700,7 +699,7 @@ class CAppUI {
     }
 		// Other wise keep it in a stack...
     else {
-    	self::$unlocalized[] = $str;
+    	self::$unlocalized[$str] = true;
 			// ... and decorate
 	    if (self::$locale_mask) {
         $str = sprintf(self::$locale_mask, $str);

@@ -25,4 +25,10 @@ $locales['mutex_tester-info2'] = '';
 $locales['test_mutex-dummy'] = '';
 $locales['test_mutex-process'] = '';
 $locales['mutex_tester-info3'] = '';
+$locales['dPdeveloppement-msg-unlocalized_warning'] = '';
+$locales['mod-dPdeveloppement-tab-benchmark'] = '';
+$locales['mod-dPdeveloppement-tab-check_zombie_objects'] = '';
+$locales['mod-dPdeveloppement-tab-css_test'] = '';
+$locales['mod-dPdeveloppement-tab-mnt_module_actions'] = '';
+$locales['dPdeveloppement-button-unlocalized_fix'] = '';
 ?>

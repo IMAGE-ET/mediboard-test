@@ -29,4 +29,6 @@ $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Objet Zombies';
 $locales['mod-dPdeveloppement-tab-mnt_module_actions'] = 'Documentation';
 $locales['mod-dPdeveloppement-tab-css_test'] = 'Testeur de CSS';
 $locales['mod-dPdeveloppement-tab-benchmark'] = 'Montée en charge';
+$locales['dPdeveloppement-msg-unlocalized_warning'] = 'Cette page contient des textes non traduits au nombre de';
+$locales['dPdeveloppement-button-unlocalized_fix'] = 'Mais je suis courageux et je le corrige maintenant !';
 ?>
