@@ -12,6 +12,7 @@ CCanDo::checkAdmin();
 
 $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
+$count  = CValue::getOrSession('count', 30);
 
 $filter = new CSejour;
 $filter->entree = $entree;
@@ -29,7 +30,10 @@ $axes = array(
 );
 
 $smarty = new CSmartyDP();
+
 $smarty->assign('filter', $filter);
 $smarty->assign('axe', $axe);
 $smarty->assign('axes', $axes);
+$smarty->assign('count', $count);
+
 $smarty->display('vw_stats.tpl');

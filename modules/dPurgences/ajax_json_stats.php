@@ -13,6 +13,7 @@ CCanDo::checkAdmin();
 $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $period = CValue::getOrSession('period', "MONTH");
+$count = CValue::getOrSession('count', 30);
 
 switch ($period) {
   default: $period = "DAY";
@@ -34,7 +35,7 @@ switch ($period) {
 // Dates
 $dates = array();
 $date = $entree;
-$n = 30;
+$n = min($count, 120);
 while ($n--) {
   $dates[] = $date;
   $date = mbDate("-1 $period", $date);
@@ -42,9 +43,12 @@ while ($n--) {
 
 $dates = array_reverse($dates);
 
+$group = CGroups::loadCurrent();
+
 $where = array(
   "sejour.entree" => null, // Doit toujours etre redefini
   "sejour.type" => "= 'urg'",
+  "sejour.group_id" => "= '$group->_id'",
 );
 
 $ljoin = array(
@@ -53,6 +57,7 @@ $ljoin = array(
 
 $rpu = new CRPU();
 $sejour = new CSejour();
+$total = 0;
 
 $data = array();
 
@@ -94,6 +99,7 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -121,6 +127,7 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -152,6 +159,7 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
@@ -177,18 +185,20 @@ switch ($axe) {
         $_date_next = mbDate("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
         $series[$key]['data'][$i] = array($i, intval($count));
       }
     }
     break;
 }
 
-
 // Ticks
 $ticks = array();
 foreach ($dates as $i => $_date) {
   $ticks[$i] = array($i, mbTransformTime(null, $_date, $format));
 }
+
+$group_view = utf8_encode($group->_view);
 
 foreach($data as &$_data) {
   $_data["options"] = CFlotrGraph::merge("bars", $_data["options"]);
@@ -202,6 +212,25 @@ foreach($data as &$_data) {
     'xaxis' => array('ticks' => $ticks, 'labelsAngle' => 45),
     'bars' => array('stacked' => true),
   ));
+  $_data["options"]["subtitle"] = "$group_view - Total: $total";
+  
+  $totals = array();
+  foreach($_data["series"] as $_series) {
+    foreach($_series["data"] as $key => $value) {
+      if (!isset($totals[$key][0]))  {
+        $totals[$key][0] = $key;
+        $totals[$key][1] = 0;
+      }
+      $totals[$key][1] += $value[1];
+    }
+  }
+  
+  $_data["series"][] = array(
+    "data" => $totals,
+    "bars" => array("show" => false),
+    "lines" => array("show" => false),
+    "markers" => array("show" => true),
+  );
 }
 
 CApp::json($data, "text/javascript");

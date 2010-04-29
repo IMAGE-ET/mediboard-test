@@ -43,6 +43,7 @@ function drawGraphs(data) {
   var mode = $V(getForm("stats-filter").mode);
   var container = $("graphs").update("");
   
+  
   $H(data).each(function(pair) {
     var d = pair.value;
     if (!d || !d.series) return;
@@ -53,7 +54,14 @@ function drawGraphs(data) {
     d.options = Object.merge(options, d.options);
     d.options = Object.merge(profiles[mode], d.options);
     
-    Flotr.draw($('stats-'+pair.key), d.series, d.options);
+    var series = d.series;
+    
+    if (mode != "bars") {
+      series = d.series.clone();
+      series.pop();
+    }
+    
+    Flotr.draw($('stats-'+pair.key), series, d.options);
   });
 }
 
@@ -67,7 +75,9 @@ function updateGraphs(form){
 }
 
 Main.add(function () {
-  updateGraphs(getForm('stats-filter'));
+  var form = getForm('stats-filter');
+  updateGraphs(form);
+  $(form.count).addSpinner({min: 0});
 });
 </script>
 
@@ -84,12 +94,13 @@ Main.add(function () {
             <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="date"}}</td>
           </tr>
           <tr>
-            <th>Période</th>
+            <th>Sur</th>
             <td>
+              <input type="text" name="count" value="{{$count}}" size="2" />
               <select name="period" onchange="this.form.onsubmit()">
-                <option value="DAY">par jour</option>
-                <option value="WEEK">par semaine</option>
-                <option value="MONTH">par mois</option>
+                <option value="DAY">jours</option>
+                <option value="WEEK">semaines</option>
+                <option value="MONTH">mois</option>
               </select>
             </td>
           </tr>
