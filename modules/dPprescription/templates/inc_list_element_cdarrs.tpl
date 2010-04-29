@@ -11,7 +11,7 @@
 <table class="tbl">
   {{if $element_prescription->_back.cdarrs|@count}}
     <tr>
-      <th colspan="2">Liste des codes Cdarr</th>
+      <th colspan="2">Liste des codes CdARR</th>
     </tr>
     <tr>
       <th>{{mb_label class=CElementPrescriptionToCdarr field=code}}</th>

@@ -42,7 +42,7 @@ foreach($evenements as $_evenement){
 	$important = ($_evenement->sejour_id == $sejour_id);
 	$_evenement->loadRefSejour();
 	$_evenement->_ref_sejour->loadRefPatient();
-	$title = $_evenement->_ref_sejour->_ref_patient->_view;
+	$title = $_evenement->_ref_sejour->_ref_patient->_view." - ".$_evenement->code;
 	$element_prescription =& $_evenement->_ref_element_prescription;
   $color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $element_prescription->_guid));

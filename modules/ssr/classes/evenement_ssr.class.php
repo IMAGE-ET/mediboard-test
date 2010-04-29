@@ -55,6 +55,11 @@ class CEvenementSSR extends CMbObject {
 		$this->_ref_sejour = new CSejour();
 		$this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
 	}
+	
+	function loadRefTherapeute(){
+	  $this->_ref_therapeute = new CMediusers();
+    $this->_ref_therapeute = $this->_ref_therapeute->getCached($this->therapeute_id);
+	}
 }
 
 ?>

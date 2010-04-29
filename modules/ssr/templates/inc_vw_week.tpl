@@ -64,12 +64,14 @@ Main.add(function() {
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
                   <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');"{{/if}} class="event {{$_event->css_class}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
-                    <div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
-                      {{$_event->start|date_format:"%H:%M"}}
+                    <!--
+										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+											{{$_event->start|date_format:"%H:%M"}}
                       {{if $_event->length}}
                        - {{$_event->end|date_format:"%H:%M"}}
                       {{/if}}
                     </div>
+										-->
                     <div class="body">
                       {{$_event->title|smarty:nodefaults}}
                     </div>

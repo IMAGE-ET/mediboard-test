@@ -71,8 +71,8 @@ refreshPlanningsSSR = function(){
 }
 
 addBorderEvent = function(){
-  $$(".event").invoke("setStyle", { border: '' } );
-  $$(".CElementPrescription-"+$V(oFormEvenementSSR._element_id)).invoke("setStyle", {border: '1px solid #000'} );
+  $$(".event").invoke("setStyle", { border: '', margin: null } );
+  $$(".CElementPrescription-"+$V(oFormEvenementSSR._element_id)).invoke("setStyle", {border: '1px solid #000', margin: '-1px'} );
 }
 
 var oFormEvenementSSR;
@@ -147,9 +147,10 @@ input.time[readonly]  {
                 jusqu'au {{mb_value object=$_line field="date_arret"}}
               {{/if}}
               </span>
-							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');">
-	              {{$_line->_view}}
-							</button>
+						  <label>
+						  <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
+              {{$_line->_view}}
+              </label>
 							<br />
 							{{if $smarty.foreach.category.last}}
 							  </div>
@@ -160,7 +161,7 @@ input.time[readonly]  {
 	    </td>
 	  </tr>
 	  <tr>
-	  	<th>Codes Cdarr</th>
+	  	<th>Codes CdARR</th>
 			<td>
 				{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	        {{foreach from=$_lines_by_chap item=_lines_by_cat}}

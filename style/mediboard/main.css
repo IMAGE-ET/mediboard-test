@@ -444,7 +444,7 @@ table#weeklyPlanning th.today {
 .planning .event:hover {
   margin: -1px;
   border: 1px solid #666;
-  z-index: 100;
+  z-index: 10;
 }
 
 .planning .event .time {

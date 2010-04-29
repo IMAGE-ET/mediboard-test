@@ -29,11 +29,12 @@ $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-	$_evenement->loadRefElementPrescription();
 	$important = ($_evenement->sejour_id == $sejour_id);
-	$_evenement->loadRefSejour();
+	$_evenement->loadRefElementPrescription();
+  $_evenement->loadRefSejour();
+	$_evenement->loadRefTherapeute();
   $_evenement->_ref_sejour->loadRefPatient();
-  $title = $_evenement->_ref_sejour->_ref_patient->_view;
+  $title = $_evenement->_ref_sejour->_ref_patient->_view." - ".$_evenement->_ref_therapeute->_shortview;
   $element_prescription =& $_evenement->_ref_element_prescription;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $element_prescription->_guid));
