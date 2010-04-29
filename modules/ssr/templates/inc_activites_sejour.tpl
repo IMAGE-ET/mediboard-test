@@ -64,6 +64,13 @@ submitSSR = function(){
 	}} );
 }
 
+refreshPlanningsSSR = function(){
+  Planification.refreshSejour('{{$bilan->sejour_id}}');
+	PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id));
+	if($V(oFormEvenementSSR.equipement_id)){
+	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id));
+	}
+}
 
 var oFormEvenementSSR;
 Main.add(function(){

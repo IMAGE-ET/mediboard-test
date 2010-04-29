@@ -24,15 +24,13 @@ $date_max = end(array_keys($planning->days));
 
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
-$where["debut"] = "BETWEEN '$date_min' AND '$date_max'";
+$where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "#ccc"));
-
 
 // Création du template
 $smarty = new CSmartyDP();

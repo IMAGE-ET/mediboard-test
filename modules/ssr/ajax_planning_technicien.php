@@ -34,13 +34,11 @@ $evenement_ssr = new CEvenementSSR();
 $where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where["therapeute_id"] = " = '$kine->_id'";
 $where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
-
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "#ccc"));
 
 // Création du template
 $smarty = new CSmartyDP();
