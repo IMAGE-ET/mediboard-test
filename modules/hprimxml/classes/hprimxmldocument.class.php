@@ -509,51 +509,17 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $reponse = $this->addElement($elParent, "reponse");
     $this->addAttribute($reponse, "statut", $statut);
     $this->addAttribute($reponse, "codeErreur", $code);
-    
-    if ($mbObject instanceof CSejour) {
-	    $mbPatient =& $mbObject->_ref_patient;
-	    $mbSejour  =& $mbObject;
-    }
+   
+		$intervention = $this->addElement($erreurAvertissement, $this->_sous_type_evt);
+    $identifiantPatient = $this->addElement($evenementPatients, "identifiantPatient");
+		
   	if ($mbObject instanceof COperation) {
-  		
     	$acteCCAM = $this->addElement($reponse, "acteCCAM");
     	
     	$this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
-    	
     }	
     
-    $dateHeureEvenementConcerne =  $this->addElement($erreurAvertissement, "dateHeureEvenementConcerne");
-    $this->addElement($dateHeureEvenementConcerne, "date", mbDate());
-    $this->addElement($dateHeureEvenementConcerne, "heure", mbTime());
-    
-    $evenementPatients = $this->addElement($erreurAvertissement, $this->_sous_type_evt);
-    $identifiantPatient = $this->addElement($evenementPatients, "identifiantPatient");
-    
-    if ($this->_sous_type_evt == "fusionPatient") {
-      $identifiantPatientElimine = $this->addElement($evenementPatients, "identifiantPatientElimine");
-    }
-    
-    if ($this->_sous_type_evt == "venuePatient") {
-      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
-    }
-    
-    if ($this->_sous_type_evt == "debiteursVenue") {
-      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
-      $debiteurs = $this->addElement($evenementPatients, "debiteurs");
-      $debiteur = $this->addElement($debiteurs, "debiteur");
-      $identifiantParticulier = $this->addElement($debiteur, "identifiantParticulier");
-    }
-    
-    if ($this->_sous_type_evt == "mouvementPatient") {
-      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
-      $identifiantMouvement = $this->addElement($evenementPatients, "identifiantMouvement");
-    }
-    
-    if ($this->_sous_type_evt == "fusionVenue") {
-      $identifiantVenue = $this->addElement($evenementPatients, "identifiantVenue");
-      $identifiantVenueEliminee = $this->addElement($evenementPatients, "identifiantVenueEliminee");
-    }
-    
+   
     $erreur = $this->addObservation($reponse, $code, $libelle, $commentaires);   
   }
   
@@ -638,45 +604,46 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
     
-		$medecins = $this->addElement($elParent, "medecins");
-		// Traitement du responsable du séjour
-    $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
+		if (!$light) {		
+		  $medecins = $this->addElement($elParent, "medecins");
+		  
+		  // Traitement du medecin traitant du patient
+		  $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
+		  if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
+		    if ($_ref_medecin_traitant->adeli) {
+		      $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
+		    }
+		  }
+		  
+		  // Traitement du medecin adressant
+		  $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
+		  if ($mbVenue->_adresse_par_prat) {
+		    if ($_ref_adresse_par_prat && $_ref_adresse_par_prat->adeli) {
+		      $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
+		    }
+		  }
 		
-    if (!$light) {    
-      // Traitement du medecin traitant du patient
-      $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
-      if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
-        if ($_ref_medecin_traitant->adeli) {
-          $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
-        }
-      }
-      
-      // Traitement du medecin adressant
-      $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
-      if ($mbVenue->_adresse_par_prat) {
-        if ($_ref_adresse_par_prat && $_ref_adresse_par_prat->adeli) {
-          $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
-        }
-      }
-      
-      // Traitement des prescripteurs
-      $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
-      if (is_array($_ref_prescripteurs)) {
-        foreach ($_ref_prescripteurs as $prescripteur) {
-          $this->addMedecin($medecins, $prescripteur, "prsc");
-        }
-      }
-      
-      // Traitement des intervenant (ayant effectués des actes)
-      $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
-      if (is_array($_ref_actes_ccam)) {
-        foreach ($_ref_actes_ccam as $acte_ccam) {
-          $intervenant = $acte_ccam->_ref_praticien;
-          $this->addMedecin($medecins, $intervenant, "intv");
-        }
-      }
-    }
-    
+		// Traitement du responsable du séjour
+		  $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
+		  
+		  // Traitement des prescripteurs
+		  $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
+		  if (is_array($_ref_prescripteurs)) {
+		    foreach ($_ref_prescripteurs as $prescripteur) {
+		      $this->addMedecin($medecins, $prescripteur, "prsc");
+		    }
+		  }
+		  
+		  // Traitement des intervenant (ayant effectués des actes)
+		  $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
+		  if (is_array($_ref_actes_ccam)) {
+		    foreach ($_ref_actes_ccam as $acte_ccam) {
+		      $intervenant = $acte_ccam->_ref_praticien;
+		      $this->addMedecin($medecins, $intervenant, "intv");
+		    }
+		  }
+		}
+		
     $sortie = $this->addElement($elParent, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_sortie));
