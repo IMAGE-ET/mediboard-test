@@ -33,7 +33,9 @@ $evenements = $evenement_ssr->loadList($where);
 foreach($evenements as $_evenement){
 	$_evenement->loadRefElementPrescription();
 	$title = $_evenement->_ref_element_prescription->_view ." - ".$_evenement->code;
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, null, true, $_evenement->_ref_element_prescription->_guid));
+	$element_prescription =& $_evenement->_ref_element_prescription;
+  $color = $element_prescription->_color ? "#".$element_prescription->_color : null;
+	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $element_prescription->_guid));
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
