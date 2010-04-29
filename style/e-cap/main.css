@@ -282,6 +282,15 @@ input:focus, select:focus, textarea:focus {
   background-color: #E0EAFF;
 }
 
+.textarea-container {
+  border: 1px #a5acb2 solid;
+  background-color: #fff;
+}
+
+.textarea-container textarea:focus {
+  background-color: #E0EAFF;
+}
+
 select {
   border: 1px #a5acb2 solid;
 }

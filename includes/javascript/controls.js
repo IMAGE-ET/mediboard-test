@@ -411,13 +411,11 @@ Element.addMethods({
   
     var staticOffset, 
         cookie = new CookieJar(),
-        grippie = new Element('div'); // the draggable element
+        container = new Element('div').addClassName("textarea-container"),
+        grippie = new Element('div', {title: "Glissez cette barre vers la bas pour agrandir la zone de texte"}); // the draggable element
     
     // We remove the margin between the textarea and the grippie
-    $(element).setStyle({
-      marginBottom: 0,
-      resize: 'none'
-    });
+    $(element).wrap(container);
     
     // grippie's class and style
     grippie.addClassName('grippie-h').setOpacity(0.5);

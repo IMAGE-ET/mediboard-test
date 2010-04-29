@@ -146,7 +146,9 @@ var ObjectTooltip = Class.create({
           ),
           DOM.tr({},
             DOM.td({className: "deco left"}),
-            eTarget = DOM.td({className: "content"}),
+            DOM.td({className: "container"},
+              eTarget = DOM.div({className: "content"})
+            ),
             DOM.td({className: "deco right"})
           ),
           DOM.tr({},
@@ -211,7 +213,7 @@ Object.extend(ObjectTooltip, {
     objectNotes: {
       module: "system",
       action: "httpreq_vw_object_notes",
-      sClass: "postit"
+      sClass: "tooltip postit"
     },
     dom: {
       sClass: "tooltip"

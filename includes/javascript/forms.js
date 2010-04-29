@@ -108,17 +108,21 @@ function $V (element, value, fire) {
 }
 
 function notNullOK(oEvent) {
-  var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
-  if (oLabel = Element.getLabel(oElement)) {
+  var oElement = oEvent.element ? oEvent.element() : oEvent,
+      oLabel = Element.getLabel(oElement);
+      
+  if (oLabel) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "notNull");
   }
 }
 
 function canNullOK(oEvent) {
-  var oLabel, oElement = oEvent.element ? oEvent.element() : oEvent;
-  if (oLabel = Element.getLabel(oElement)) {
+  var oElement = oEvent.element ? oEvent.element() : oEvent,
+      oLabel = Element.getLabel(oElement);
+      
+  if (oLabel) {
     oLabel.className = ($V(oElement.form[oElement.name]) ? "notNullOK" : "canNull");
-  } 
+  }
 }
 
 var bGiveFormFocus = true;

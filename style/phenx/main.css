@@ -98,20 +98,23 @@ legend {
 
 input, 
 select, 
-textarea {
+textarea,
+.textarea-container {
   background: #ffffff;
   border-color: #909090;
 }
 
 input:hover, 
 select:hover, 
-textarea:hover {
+textarea:hover,
+.textarea-container:hover {
   border-color: #333333;
 }
 
 input:focus, 
 select:focus, 
-textarea:focus {
+textarea:focus,
+.textarea-container:focus {
   border-color: #FF6600;
 }
 

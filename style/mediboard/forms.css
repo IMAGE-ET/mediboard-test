@@ -27,7 +27,7 @@ button.intermax-result {
   opacity: .4;
 }
 
-input, select, textarea, button {
+input, select, textarea, button, .textarea-container {
   margin: 1px;
   vertical-align: middle;
   font-family: inherit;
@@ -631,14 +631,32 @@ textarea#htmlarea {
   padding-right: 1.2em;
 }
 
+.textarea-container {
+  padding: 1px;
+  border: 1px #666 solid;
+  background-color: #efe;
+}
+
+.textarea-container textarea {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+}
+
+.textarea-container textarea:focus {
+  border: none;
+  outline: none;
+  background-color: #fff;
+}
+
 .grippie-h {
-  border: 1px solid #999;
   background: #CCC url(../../images/buttons/drag-n.gif) center center no-repeat;
   height: 7px;
-  margin: 0;
-  border-top: 0;
+  margin: -1px;
   cursor: n-resize;
-  margin-left: 1px;
 }
 
 span.highlight {

@@ -5,18 +5,25 @@
   cursor: pointer;
 }
 
-div.tooltip, 
-div.postit {
+div.tooltip {
   padding: 0px;
   margin-left: 20px;
   position: absolute;
   z-index: 30;
 }
 
-div.tooltip table.decoration,
-div.postit table.decoration {
+div.tooltip table.decoration {
   border-spacing: 0px;
   border: none;
+}
+
+div.tooltip table.decoration td {
+  padding: 0;
+}
+
+div.tooltip table.decoration td.container {
+  /* This background is needed because of the border radius */
+  background: url(images/pictures/container-background.png) bottom right no-repeat;
 }
 
 div.tooltip table.decoration td.deco {
@@ -48,75 +55,26 @@ div.tooltip table.decoration td.bottom-right {
 div.tooltip table.decoration td.right {
   width: 16px;
   height: 16px;
+  min-width: 16px;
   background: url(images/pictures/right.png) top left no-repeat;
 }
 
-div.tooltip table.tbl td{
+div.tooltip table.tbl td {
   vertical-align: top;
 }
 
-div.tooltip table.decoration td.content {
+div.tooltip table.decoration .content {
   white-space: nowrap;
   background: #fff;
-  border: 2px solid #777;
-	padding: 5px;
+  border: 2px solid #999;
+	padding: 2px;
 }
 
 /** Postit **/
-div.postit table.decoration td {
-  border: none;
-}
-
-div.postit table.decoration td.deco {
-	opacity: .7;
-}
-
-div.postit table.decoration td.top-right,
-div.postit table.decoration td.top-left,
-div.postit table.decoration td.bottom-left {
-  background: transparent;
-	opacity: 1;
-}
-
-div.postit table.decoration td.left,
-div.postit table.decoration td.top,
-div.postit table.decoration td.content {
-  background: #ff6;
-	opacity: 1;
-}
-
-div.postit table.decoration td.top-left {
-	width: 17px;
-	height: 15px;
-	background: url(images/pictures/note-top-left.png) top left no-repeat;
-	opacity: 1;
-}
-
-div.postit table.decoration td.bottom {
-  width: 16px;
-  height: 16px;
-  background: url(images/pictures/bottom.png) top left no-repeat;
-}
-
-div.postit table.decoration td.bottom-right {
-  width: 16px;
-  height: 16px;
-  background: url(images/pictures/bottom-right.png) top left no-repeat;
-}
-
-div.postit table.decoration td.right {
-  width: 16px;
-  height: 16px;
-  background: url(images/pictures/right.png) top left no-repeat;
-}
-
-div.postit table.decoration td.content {
-  border: none;
-  max-height: 40px;
-  overflow: auto;
-  padding-right: 10px;
-  padding-bottom: 10px;
-  white-space: nowrap;
+div.postit > table.decoration .content {
+  -moz-border-radius: 6px;
+  background: #FEFF7F;
+  padding: 4px;
 }
 
 /** Note **/
@@ -124,9 +82,10 @@ table.note {
   background: transparent;
   border-spacing: 0px;
   padding: 0px;
-  font-size: 0.9em;
   color: #000;
+  font-size: 0.9em;
   font-weight: normal;
+  min-width: 15em;
 }
 
 table.note th,
