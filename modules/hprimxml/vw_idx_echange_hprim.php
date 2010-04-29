@@ -21,7 +21,6 @@ $type_evenement      = CValue::getOrSession("type_evenement");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 hour"));
-$purge               = CValue::getOrSession("purge");
 
 $observations = array();
 
@@ -84,7 +83,7 @@ if($echange_hprim->_id) {
     $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
   }
   if ($_date_min && $_date_max) {
-    $where['date_echange'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
+    $where['date_production'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
   }
   if ($statut_acquittement) {
     $where["statut_acquittement"] = " = '".$statut_acquittement."'";
@@ -108,12 +107,12 @@ if($echange_hprim->_id) {
     $where["id_permanent"] = " = '$id_permanent'";
   }
 	
-	$where["purge"] = $purge ? "= '1'" : "= '0'";
   $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
   $total_echange_hprim = $itemEchangeHprim->countList($where);
-  $order = "date_production ASC";
+  $order = "date_production DESC";
   $forceindex[] = "date_production";
+
   $echangesHprim = $itemEchangeHprim->loadList($where, $order, "$page, 20", null, null, $forceindex);
     
   foreach($echangesHprim as $_echange) {
@@ -130,7 +129,6 @@ if($echange_hprim->_id) {
   $smarty->assign("statut_acquittement" , $statut_acquittement);
   $smarty->assign("msg_evenement"       , $msg_evenement);
   $smarty->assign("type_evenement"      , $type_evenement);
-	$smarty->assign("purge"               , $purge);
 }
 
 $evenements = array();
