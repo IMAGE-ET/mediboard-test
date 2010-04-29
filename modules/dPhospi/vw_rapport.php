@@ -77,8 +77,8 @@ $affectation = new CAffectation();
 $whereAffect = array();
 $ljoin = array();
 
-$whereAffect["entree"]                = "<= '$dateEntree'";
-$whereAffect["sortie"]                = ">= '$dateSortie'";
+$whereAffect["affectation.entree"] = "<= '$dateEntree'";
+$whereAffect["affectation.sortie"] = ">= '$dateSortie'";
 $whereAffect["affectation.sejour_id"] = "!= '0'";
 $whereAffect["sejour.group_id"]       = "= '".CGroups::loadCurrent()->_id."'";
 
