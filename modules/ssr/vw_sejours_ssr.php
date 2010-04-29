@@ -19,15 +19,19 @@ $order_col = CValue::getOrSession("order_col", "patient_id");
 $group_id = CGroups::loadCurrent()->_id;
 $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
+$order = null;
 
-$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-if ($order_col == "patient_id"){
-  $order = "patients.nom $order_way, patients.prenom, sejour.entree";
+if ($order_col == "entree") {
+  $order = "sejour.entree $order_way, patients.nom, patients.prenom";
 }
 
-$ljoin["users"] = "sejour.praticien_id = users.user_id";
-if ($order_col == "praticien_id"){
-  $order = "users.user_last_name $order_way, users.user_first_name";
+if ($order_col == "sortie") {
+  $order = "sejour.sortie $order_way, patients.nom, patients.prenom";
+}
+
+$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
+if ($order_col == "patient_id") {
+  $order = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
