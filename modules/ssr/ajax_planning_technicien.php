@@ -11,8 +11,8 @@
 CCando::checkRead();
 
 $date    = CValue::getOrSession("date", mbDate());
-$kine_id = CValue::get("kine_id");
-$surveillance = CValue::get("surveillance", false);
+$kine_id = CValue::getOrSession("kine_id");
+$surveillance = CValue::getOrSession("surveillance");
 
 $kine = new CMediusers();
 $kine->load($kine_id);

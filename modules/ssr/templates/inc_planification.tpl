@@ -8,6 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+	
+switchPlanningTech = function(){
+  var oFormSurvTech = getForm("surv_tech");
+	$V(oFormSurvTech.surveillance) != 1 ? $V(oFormSurvTech.surveillance, '1') : $V(oFormSurvTech.surveillance, '0');
+  PlanningTechnicien.show($V(getForm("editEvenementSSR").therapeute_id), $V(oFormSurvTech.surveillance));
+}
+
+	
+	
+</script>
 {{mb_include_script module=ssr script=planification}}
 
 <table class="main">
@@ -19,9 +30,15 @@
 	</tr>
   <tr>
   	<td style="padding: 3px;">
-			<div id="planning-technicien">
-				
+		<div style="position: relative;">
+		  <form name="surv_tech" action="?" method="">
+		    <input type="hidden" name="surveillance" value="0" />
+			</form>
+			<div style="position: absolute; top: 0px; right: 0px;">
+		    <button type="button" class="change notext" onclick="switchPlanningTech();"/>
 			</div>
+			<div id="planning-technicien"></div>
+	</div>
 		</td>
     <td style="padding: 3px;" id="planning-equipement"></td>
   </tr>

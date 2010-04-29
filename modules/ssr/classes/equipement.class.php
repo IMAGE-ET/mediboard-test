@@ -41,8 +41,6 @@ class CEquipement extends CMbObject {
     return $backProps;
   }
 	
-	
-  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;

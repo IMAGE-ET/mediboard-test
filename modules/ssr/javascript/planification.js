@@ -20,10 +20,13 @@ PlanningEquipement = {
 };
   
 PlanningTechnicien = {
-  show: function(id) {
-    new Url("ssr", "ajax_planning_technicien") .
-      addParam("kine_id", id || "11") .
-      requestUpdate("planning-technicien");
+  show: function(id, surveillance) {
+    var url = new Url("ssr", "ajax_planning_technicien");
+		url.addParam("kine_id", id);
+		if(surveillance){
+		  url.addParam("surveillance", surveillance);
+		}
+    url.requestUpdate("planning-technicien");
   },
   hide: function() {
     $("planning-technicien").update("");

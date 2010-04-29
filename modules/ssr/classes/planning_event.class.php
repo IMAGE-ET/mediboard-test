@@ -25,7 +25,7 @@ class CPlanningEvent  {
   var $offset = null;
   var $color = null;
   
-  function __construct ($guid, $date, $length = 0, $title = "", $color = "red") {
+  function __construct ($guid, $date, $length = 0, $title = "", $color = "#999") {
     $this->guid = $guid ? $guid : "id-".uniqid();
     $this->internal_id = "CPlanningEvent-".uniqid();
     
