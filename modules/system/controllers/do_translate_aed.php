@@ -46,15 +46,20 @@ foreach($localesDirs as $locale){
   // Données du fichier de langue  
   $translation = array();
   foreach($chaine as $key => $valChaine){
-    if($valChaine!=""){
+    if($valChaine != "" && $trans[$key][$locale] !== ""){
       $translation[$valChaine] = $trans[$key][$locale];
     }
+  }
+  
+  // FIXME: Required not to delete the file if the array is empty
+  if (count($translation) == 0) {
+    $translation[$valChaine] = "";
   }
   
   //Ecriture du fichier
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = ($in_module ? "modules/$module/locales/$locale.php" : "locales/$locale/$module.php");
-  $translateModule->update($translation, true);
+  $translateModule->update($translation, false);
   
   SHM::rem("locales-$locale");
 }

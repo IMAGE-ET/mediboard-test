@@ -1,33 +1,4 @@
 <?php
-$locales['module-dPcim10-court'] = '';
-$locales['module-dPcim10-long'] = '';
 $locales['CCodeCIM10'] = 'Code CIM10';
 $locales['CFavoricim10'] = 'Favoris CIM10';
-$locales['CFavoricim10-back-favoris_user'] = '';
-$locales['CFavoricim10-favoris_code'] = '';
-$locales['CFavoricim10-favoris_code-court'] = '';
-$locales['CFavoricim10-favoris_code-desc'] = '';
-$locales['CFavoricim10-favoris_user'] = '';
-$locales['CFavoricim10-favoris_user-court'] = '';
-$locales['CFavoricim10-favoris_user-desc'] = '';
-$locales['CFavoricim10.create'] = '';
-$locales['CFavoricim10.modify'] = '';
-$locales['CFavoricim10.more'] = '';
-$locales['CFavoricim10.none'] = '';
-$locales['CFavoricim10.one'] = '';
-$locales['mod-dPcim10-tab-vw_find_code'] = '';
-$locales['mod-dPcim10-tab-vw_full_code'] = '';
-$locales['mod-dPcim10-tab-vw_idx_chapter'] = '';
-$locales['mod-dPcim10-tab-vw_idx_favoris'] = '';
-$locales['CFavoricim10-favoris_id'] = '';
-$locales['CFavoricim10-favoris_id-court'] = '';
-$locales['CFavoricim10-favoris_id-desc'] = '';
-$locales['CFavoricim10-msg-create'] = '';
-$locales['CFavoricim10-msg-delete'] = '';
-$locales['CFavoricim10-msg-modify'] = '';
-$locales['CFavoricim10-title-create'] = '';
-$locales['CFavoricim10-title-modify'] = '';
-$locales['CFavoricim10.all'] = '';
-$locales['CFavoricim10.select'] = '';
-$locales['CUser-back-favoris_CIM10'] = '';
 ?>

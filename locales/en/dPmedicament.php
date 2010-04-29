@@ -1,34 +1,3 @@
 <?php
-$locales['config-bcb-niveauATC'] = '';
-$locales['config-bcb-niveauBCB'] = '';
-$locales['config-bcb-rechercheLivret'] = '';
-$locales['CProduitLivretTherapeutique-code_interne'] = '';
-$locales['CProduitLivretTherapeutique-code_interne-desc'] = '';
-$locales['CProduitLivretTherapeutique-commentaire'] = '';
-$locales['CProduitLivretTherapeutique-commentaire-desc'] = '';
-$locales['CProduitLivretTherapeutique-date_prix_hopital'] = '';
-$locales['CProduitLivretTherapeutique-date_prix_hopital-desc'] = '';
-$locales['CProduitLivretTherapeutique-date_prix_ville'] = '';
-$locales['CProduitLivretTherapeutique-date_prix_ville-desc'] = '';
-$locales['CProduitLivretTherapeutique-prix_hopital'] = '';
-$locales['CProduitLivretTherapeutique-prix_hopital-desc'] = '';
-$locales['CProduitLivretTherapeutique-prix_ville'] = '';
-$locales['CProduitLivretTherapeutique-prix_ville-desc'] = '';
-$locales['mod-dPmedicament-tab-vw_idx_livret'] = '';
-$locales['mod-dPmedicament-tab-vw_idx_recherche'] = '';
-$locales['module-dPmedicament-court'] = '';
 $locales['module-dPmedicament-long'] = '';
-$locales['BCBScripts-running_ok'] = '';
-$locales['BCBScripts-running_ko'] = '';
-$locales['BCBScripts-dirko'] = '';
-$locales['BCBScripts-dirok'] = '';
-$locales['BCBScripts-download_ok'] = '';
-$locales['BCBScripts-download_ko'] = '';
-$locales['BCBScripts-emptydir_ko'] = '';
-$locales['BCBScripts-emptydir_ok'] = '';
-$locales['BCBScripts-extract_ko'] = '';
-$locales['BCBScripts-extract_ok'] = '';
-$locales['BCBScripts-test'] = '';
-$locales['BCBScripts-install'] = '';
-$locales['BCBScripts_password'] = '';
 ?>
