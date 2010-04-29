@@ -11,6 +11,7 @@
 <script type="text/javascript">
 
 selectActivite = function(activite) {
+  $$("button.activite").invoke("setStyle", {borderWidth: "1px"} );
 	$("trigger-"+activite).setStyle( {borderWidth: "2px", borderColor: "#000"} );
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();

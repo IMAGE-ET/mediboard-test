@@ -10,6 +10,9 @@ submitFormEditSSR = function(oForm){
 
 Main.add(function(){
   Calendar.regField(getForm("editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}").debut, null, { noView: true, inline: true, container: null });
+	
+	
+	
 });
         
 </script>
@@ -27,9 +30,15 @@ Main.add(function(){
 				{{mb_label object=$evenement_ssr field="debut"}}
       </th>
 			<td>
-			  {{mb_field object=$evenement_ssr field="debut"}}
-			</td>
+        {{mb_value object=$evenement_ssr field="debut"}}
+				<img src="images/icons/calendar.gif" onclick="$('select_debut-{{$unique_id}}').show()" />
+      </td>
 		</tr>
+		<tr id="select_debut-{{$unique_id}}" style="display : none">
+			<td colspan="2">
+			  {{mb_field object=$evenement_ssr field="debut"}}
+      </td>
+		</tr>	
 		<tr>
 			<th>
 				{{mb_label object=$evenement_ssr field="duree"}}
