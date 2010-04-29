@@ -1,5 +1,5 @@
 <?php
-$locales['CCategoryPrescription'] = 'Categorie de prescription';
+$locales['CCategoryPrescription'] = 'Catégorie de prescription';
 $locales['CCategoryPrescription-back-'] = '';
 $locales['CCategoryPrescription-back-element_prescription'] = '';
 $locales['CCategoryPrescription-category_prescription_id'] = 'Catégorie de prescription';
@@ -1745,10 +1745,10 @@ $locales['CPrescriptionLineMedicament-injection_ide-court'] = 'Injection par IDE
 $locales['CPrescriptionLineMedicament-injection_ide-desc'] = 'Injection par IDE';
 $locales['CCategoryPrescription-color'] = 'Couleur';
 $locales['CCategoryPrescription-color-court'] = 'Couleur';
-$locales['CCategoryPrescription-color-desc'] = 'Couleur';
+$locales['CCategoryPrescription-color-desc'] = 'Couleur utilisée pour les éléments de prescriptions dans les plans de soins';
 $locales['CElementPrescription-color'] = 'Couleur';
 $locales['CElementPrescription-color-court'] = 'Couleur';
-$locales['CElementPrescription-color-desc'] = 'Couleur';
+$locales['CElementPrescription-color-desc'] = 'Couleur des éléménts de prescription dans les plans de soins.nSi aucune couleur n\'est spécifiée pour l\'élément, la couleur qui apparaitra sera celle de sa catégorie.';
 $locales['CPerfusion-duree_passage'] = 'Durée de passage';
 $locales['CPerfusion-duree_passage-court'] = 'Durée passage';
 $locales['CPerfusion-duree_passage-desc'] = 'Durée de passage';
