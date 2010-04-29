@@ -13,6 +13,7 @@ CCando::checkRead();
 $date    = CValue::getOrSession("date", mbDate());
 $kine_id = CValue::getOrSession("kine_id");
 $surveillance = CValue::getOrSession("surveillance");
+$sejour_id = CValue::getOrSession("sejour_id");
 
 $kine = new CMediusers();
 $kine->load($kine_id);
@@ -37,8 +38,10 @@ $where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
+	$important = ($_evenement->sejour_id == $sejour_id);
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code, null, $important));
 }
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -33,6 +33,7 @@ $evenements = $evenement_ssr->loadList($where);
 foreach($evenements as $_evenement){
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
 }
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
 // Création du template
 $smarty = new CSmartyDP();

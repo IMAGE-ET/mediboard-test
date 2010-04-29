@@ -24,10 +24,16 @@ class CPlanningEvent  {
   var $width = null;
   var $offset = null;
   var $color = null;
+	var $important = null;
   
-  function __construct ($guid, $date, $length = 0, $title = "", $color = "#999") {
-    $this->guid = $guid ? $guid : "id-".uniqid();
-    $this->internal_id = "CPlanningEvent-".uniqid();
+  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true) {
+    if(!$color){
+    	 $color = "#999";
+    }
+		//$this->guid = $guid ? $guid : "id-".uniqid();
+    $this->guid = $guid;
+		
+		$this->internal_id = "CPlanningEvent-".uniqid();
     
     $this->start = $date;
     $this->length = $length;
@@ -35,7 +41,8 @@ class CPlanningEvent  {
     
     $this->title = htmlentities($title);
     $this->color = $color;
-    
+    $this->important = $important;
+		
     $this->day = mbDate($date);
     $this->hour = mbTransformTime(null, $date, "%H");
     $this->minutes = mbTransformTime(null, $date, "%M");

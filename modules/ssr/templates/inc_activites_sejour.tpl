@@ -11,22 +11,18 @@
 <script type="text/javascript">
 
 selectActivite = function(activite) {
-	//$$("button.activite").invoke("setStyle", {borderWidth: "1px"} );
-  //$$("button.ressource").invoke("setStyle", {borderWidth: "1px"} );
 	$("trigger-"+activite).setStyle( {borderWidth: "2px", borderColor: "#000"} );
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
-  //PlanningEquipement.hide();
-  //PlanningTechnicien.hide();
 }
 
 selectTechnicien = function(kine_id) {
   $V(oFormEvenementSSR.therapeute_id, kine_id);	
   $$("button.ressource").invoke("setStyle", {borderWidth: "1px"} );
   $("technicien-"+kine_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
-  PlanningTechnicien.show(kine_id);
+  PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
-	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id));
+	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
 	}
 }
 
@@ -35,8 +31,7 @@ selectEquipement = function(equipement_id) {
 	$$("button.equipement").invoke("setStyle", {borderWidth: "1px"} );
   if(equipement_id){
 	  $("equipement-"+equipement_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
-		PlanningEquipement.show(equipement_id);
-	  //PlanningTechnicien.show();
+		PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
 	} else {
 	  PlanningEquipement.hide();
   }
@@ -58,7 +53,7 @@ submitSSR = function(){
 	}
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
 	  if($V(oFormEvenementSSR.equipement_id)){
-		  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id));
+		  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
     }
 	 	Planification.refresh($V(oFormEvenementSSR.sejour_id));
 	}} );
@@ -66,9 +61,9 @@ submitSSR = function(){
 
 refreshPlanningsSSR = function(){
   Planification.refreshSejour('{{$bilan->sejour_id}}');
-	PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id));
+	PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id), null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
-	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id));
+	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
 	}
 }
 

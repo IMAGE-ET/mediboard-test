@@ -11,7 +11,7 @@
 CCando::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
-
+$sejour_id = CValue::getOrSession("sejour_id");
 $equipement = new CEquipement;
 $equipement->load(CValue::get("equipement_id", 33));
 
@@ -29,8 +29,10 @@ $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
+	$important = ($_evenement->sejour_id == $sejour_id);
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code, null, $important));
 }
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -13,11 +13,9 @@
 switchPlanningTech = function(){
   var oFormSurvTech = getForm("surv_tech");
 	$V(oFormSurvTech.surveillance) != 1 ? $V(oFormSurvTech.surveillance, '1') : $V(oFormSurvTech.surveillance, '0');
-  PlanningTechnicien.show($V(getForm("editEvenementSSR").therapeute_id), $V(oFormSurvTech.surveillance));
+  PlanningTechnicien.show($V(getForm("editEvenementSSR").therapeute_id), $V(oFormSurvTech.surveillance), $V(getForm("editEvenementSSR").sejour_id));
 }
 
-	
-	
 </script>
 {{mb_include_script module=ssr script=planification}}
 
