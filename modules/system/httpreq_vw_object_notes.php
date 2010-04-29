@@ -14,6 +14,7 @@ $object->loadRefsNotes(PERM_READ);
 
 foreach ($object->_ref_notes as $note) {
   $note->_ref_user->loadRefsFwd();
+  $note->_date_relative = CMbDate::relative($note->date);
 }
 
 // Création du template

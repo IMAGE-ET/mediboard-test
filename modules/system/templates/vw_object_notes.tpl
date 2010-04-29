@@ -15,7 +15,10 @@
         <span style="float: right;">
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_note->_ref_user initials=true}}
         </span>
-        {{$curr_note->date|date_format:$dPconfig.datetime}}
+        
+        <label title="{{$curr_note->date|date_format:$dPconfig.datetime}}">
+          {{$curr_note->_date_relative.count}} {{tr}}{{$curr_note->_date_relative.unit}}{{if $curr_note->_date_relative.count > 1}}s{{/if}}{{/tr}}
+        </label>
       </th>
     </tr>
     <tr>
