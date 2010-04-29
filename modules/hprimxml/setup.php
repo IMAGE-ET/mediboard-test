@@ -25,8 +25,7 @@ class CSetuphprimxml extends CSetup {
                 `username` VARCHAR (255) NOT NULL,
                 `password` VARCHAR (50) NOT NULL,
                 `actif` ENUM ('0','1') NOT NULL DEFAULT 0,
-								`group_id` INT (11) UNSIGNED NOT NULL ,
-                `password` `password` VARCHAR (50) , 
+								`group_id` INT (11) UNSIGNED NOT NULL
               ) TYPE=MYISAM;";
      $this->addQuery($sql);
      
@@ -50,10 +49,10 @@ class CSetuphprimxml extends CSetup {
 								`message_valide` ENUM ('0','1'),
                 `acquittement_valide` ENUM ('0','1'),
 								`group_id` INT (11) UNSIGNED NOT NULL,
-								`id_permanent` VARCHAR (25)
+								`id_permanent` VARCHAR (25),
 								`object_id` INT (11) UNSIGNED DEFAULT NULL,
                 `object_class` VARCHAR (255) DEFAULT NULL,
-                `compressed` ENUM ('0','1') DEFAULT 0,
+                `compressed` ENUM ('0','1') DEFAULT 0
               ) TYPE=MYISAM;";
      $this->addQuery($sql);
 		 
