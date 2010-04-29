@@ -15,7 +15,8 @@ $can->needsRead();
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month = mbTransformTime("+ 0 day", $date, "%Y-%m-__");
+$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
+$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
@@ -33,7 +34,7 @@ $where = array();
 $where["consultation.patient_id"] = "IS NOT NULL";
 $where["consultation.annule"] = "= '0'";
 $where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($anesthesistes));
-$where["plageconsult.date"] = "like '$month'";
+$where["plageconsult.date"] = "BETWEEN '$month_min' AND '$month_max'";
 $order = "plageconsult.date";
 $groupby = "plageconsult.date";
 

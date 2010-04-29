@@ -55,7 +55,9 @@ foreach($blocs as $_bloc) {
 $where = array();
 $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
 $where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
-$where["date"] = "LIKE '".mbTransformTime(null, $date, "%Y-%m-__")."'";
+$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
+$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
+$where["date"] = "BETWEEN '$month_min' AND '$month_max'";
 if(!$resp_bloc) {
   $where[] = "date >= '".mbDate()."'";
 }

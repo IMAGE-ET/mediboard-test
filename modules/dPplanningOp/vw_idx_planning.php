@@ -124,21 +124,24 @@ if($selPraticien->isAnesth()) {
   }
   
   // Planning du mois
-  $sql = "SELECT plagesop.*, plagesop.date AS opdate," .
-      "\nSEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree," .
-      "\nCOUNT(operations.operation_id) AS total," .
-      "\nfunctions_mediboard.text AS nom_function, functions_mediboard.color as color_function" .
-      "\nFROM plagesop" .
-      "\nLEFT JOIN operations" .
-      "\nON plagesop.plageop_id = operations.plageop_id" .
-      "\nAND operations.annulee = '0'" .
-      "\nAND operations.chir_id = '$selPratLogin'" .
-      "\nLEFT JOIN functions_mediboard" .
-      "\nON functions_mediboard.function_id = plagesop.spec_id" .
-      "\nWHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs)).")" .
-      "\nAND plagesop.date LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'" .
-      "\nGROUP BY plagesop.plageop_id" .
-      "\nORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
+  $month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
+  $month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
+  
+  $sql = "SELECT plagesop.*, plagesop.date AS opdate,
+        SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
+        COUNT(operations.operation_id) AS total,
+        functions_mediboard.text AS nom_function, functions_mediboard.color as color_function
+      FROM plagesop
+      LEFT JOIN operations
+        ON plagesop.plageop_id = operations.plageop_id
+          AND operations.annulee = '0'
+          AND operations.chir_id = '$selPratLogin'
+      LEFT JOIN functions_mediboard
+        ON functions_mediboard.function_id = plagesop.spec_id
+      WHERE (plagesop.chir_id = '$selPratLogin' OR plagesop.spec_id = '$specialite' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs)).")
+        AND plagesop.date BETWEEN '$month_min' AND '$month_max'
+      GROUP BY plagesop.plageop_id
+      ORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
   if($selPratLogin) {
     $listPlages = $ds->loadList($sql);
   } else {
@@ -146,15 +149,15 @@ if($selPraticien->isAnesth()) {
   }
   
   // Urgences du mois
-  $sql = "SELECT operations.*, operations.date AS opdate," .
-      "\nSEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree," .
-      "\nCOUNT(operations.operation_id) AS total" .
-      "\nFROM operations" .
-      "\nWHERE operations.annulee = '0'" .
-      "\nAND operations.chir_id = '$selPratLogin'" .
-      "\nAND operations.date LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'" .
-      "\nGROUP BY operations.date" .
-      "\nORDER BY operations.date";
+  $sql = "SELECT operations.*, operations.date AS opdate,
+        SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
+        COUNT(operations.operation_id) AS total
+      FROM operations
+      WHERE operations.annulee = '0'
+        AND operations.chir_id = '$selPratLogin'
+        AND operations.date BETWEEN '$month_min' AND '$month_max'
+      GROUP BY operations.date
+      ORDER BY operations.date";
   if($selPratLogin) {
     $listUrgences = $ds->loadList($sql);
   } else {

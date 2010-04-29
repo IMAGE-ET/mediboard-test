@@ -15,7 +15,8 @@ $can->needsRead();
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month = mbTransformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
+$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
+$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 $selAdmis = CValue::getOrSession("selAdmis", "0");
@@ -25,34 +26,37 @@ $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
 // Liste des admissions par jour
-$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`" .
-    "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
-    "\nAND `sejour`.`type` != 'urg'" .
-    "\nGROUP BY `date`" .
-    "\nORDER BY `date`";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`
+    FROM `sejour`
+    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
+      AND `sejour`.`group_id` = '$g'
+      AND `sejour`.`type` != 'urg'
+    GROUP BY `date`
+    ORDER BY `date`";
 $list1 = $ds->loadlist($sql);
 
 // Liste des admissions non effectuées par jour
-$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
-    "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
-    "\nAND `sejour`.`entree_reelle` IS NULL" .
-    "\nAND `sejour`.`annule` = '0'" .
-    "\nAND `sejour`.`type` != 'urg'" .
-    "\nGROUP BY `date`" .
-    "\nORDER BY `date`";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`
+    FROM `sejour`
+    WHERE `sejour`.`entree_prevue` BETWEEN '$month_min' AND '$month_max'
+      AND `sejour`.`group_id` = '$g'
+      AND `sejour`.`entree_reelle` IS NULL
+      AND `sejour`.`annule` = '0'
+      AND `sejour`.`type` != 'urg'
+    GROUP BY `date`
+    ORDER BY `date`";
 $list2 = $ds->loadlist($sql);
 
 // Liste des admissions non préparées
-$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`" .
-    "\nFROM `sejour`" .
-    "\nWHERE `sejour`.`entree` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
-    "\nAND `sejour`.`saisi_SHS` = '0'" .
-    "\nAND `sejour`.`annule` = '0'" .
-    "\nAND `sejour`.`type` != 'urg'" .
-    "\nGROUP BY `date`" .
-    "\nORDER BY `date`";
+$sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`
+    FROM `sejour`
+    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
+      AND `sejour`.`group_id` = '$g'
+      AND `sejour`.`saisi_SHS` = '0'
+      AND `sejour`.`annule` = '0'
+      AND `sejour`.`type` != 'urg'
+    GROUP BY `date`
+    ORDER BY `date`";
 $list3 = $ds->loadlist($sql);
 
 // On met toutes les sommes d'intervention dans le même tableau
