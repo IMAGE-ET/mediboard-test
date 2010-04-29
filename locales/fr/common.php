@@ -194,4 +194,6 @@ $locales['Week'] = 'Semaine';
 $locales['Import-CSV'] = 'Importer un fichier CSV';
 $locales['thirty-first-results'] = '30 premiers résultats';
 $locales['msg-common-loading-soon'] = 'Chargement en attente';
+$locales['Stop'] = 'Stop';
+$locales['Purge'] = 'Purger';
 ?>
