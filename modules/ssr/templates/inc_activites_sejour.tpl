@@ -37,13 +37,17 @@ selectEquipement = function(equipement_id) {
   }
 }
 
-selectElement = function(line_id){
+selectElement = function(line_id, element_id){
 $V(oFormEvenementSSR.line_id, line_id);
   $$("button.line").invoke("setStyle", {borderWidth: "1px"} );
   $("line-"+line_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
   $$("div.cdarrs").invoke("hide");
 	$V(getForm("editEvenementSSR").cdarr, '');
 	$("cdarrs-"+line_id).show();
+	
+	// Mise en evidence des elements dans les plannings
+	$$(".event").invoke("setStyle", { border: '' } );
+  $$(".CElementPrescription-"+element_id).invoke("setStyle", {border: '2px solid #000'} );
 }
 
 submitSSR = function(){
@@ -138,7 +142,7 @@ input.time[readonly]  {
                 jusqu'au {{mb_value object=$_line field="date_arret"}}
               {{/if}}
               </span>
-							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="selectElement('{{$_line->_id}}');">
+							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="selectElement('{{$_line->_id}}','{{$_line->element_prescription_id}}');">
 	              {{$_line->_view}}
 							</button>
 							<br />

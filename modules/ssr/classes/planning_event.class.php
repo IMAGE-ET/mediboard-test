@@ -26,7 +26,7 @@ class CPlanningEvent  {
   var $color = null;
 	var $important = null;
   
-  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true) {
+  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null) {
     if(!$color){
     	 $color = "#999";
     }
@@ -42,7 +42,8 @@ class CPlanningEvent  {
     $this->title = htmlentities($title);
     $this->color = $color;
     $this->important = $important;
-		
+		$this->css_class = $css_class;
+    
     $this->day = mbDate($date);
     $this->hour = mbTransformTime(null, $date, "%H");
     $this->minutes = mbTransformTime(null, $date, "%M");
