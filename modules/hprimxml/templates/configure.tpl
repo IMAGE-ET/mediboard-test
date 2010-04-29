@@ -16,6 +16,8 @@
   <li><a href="#config-extract">{{tr}}config-hprimxml-extract{{/tr}}</a></li>
   <li><a href="#config-schema">{{tr}}config-hprimxml-schema{{/tr}}</a></li>
 	<li><a href="#config-treatment">{{tr}}config-hprimxml-treatment{{/tr}}</a></li>
+	<li><a href="#config-optimize">{{tr}}config-hprimxml-optimization-echange{{/tr}}</a></li>
+	<li><a href="#config-purge_echange">{{tr}}config-hprimxml-purge-echange{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -30,4 +32,12 @@
 
 <div id="config-treatment" style="display: none;">
   {{mb_include template=inc_config_treatment}}
+</div>
+
+<div id="config-optimize" style="display: none;">
+  {{mb_include template=inc_config_optimize_echange}}
+</div>
+
+<div id="config-purge_echange" style="display: none;">
+  {{mb_include template=inc_config_purge_echange}}
 </div>

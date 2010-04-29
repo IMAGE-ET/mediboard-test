@@ -11,7 +11,7 @@
 <script type="text/javascript">
   var stop = false;
   
-  function optimizeEchangeHprim(button){
+  function optimizeEchange(button){
     if(stop) {
       stop=false;
       return;
@@ -23,7 +23,7 @@
     var url = new Url("hprimxml", "ajax_optimize_echange");
     url.addParam("do_optimize", $V(button.form.elements.do_optimize) ? 1 : 0);
     url.requestUpdate("optimize-echange-messages", { onComplete:function() { 
-      optimizeEchangeHprim(button);
+      optimizeEchange(button);
     }} );
   }
 </script>
@@ -41,7 +41,7 @@
           </tr>
           <tr>
             <td>
-              <button type="button" class="change" onclick="optimizeEchangeHprim(this)">
+              <button type="button" class="change" onclick="optimizeEchange(this)">
                 {{tr}}CEchangeHprim-optimize-search{{/tr}}
               </button>
               <label><input type="checkbox" name="do_optimize" />{{tr}}Optimize{{/tr}}</label>

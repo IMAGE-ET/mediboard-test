@@ -91,8 +91,20 @@ class CSetuphprimxml extends CSetup {
      $sql = "ALTER TABLE `destinataire_hprim` 
                 CHANGE `evenement` `message` ENUM ('pmsi','patients','stock') DEFAULT 'patients';";
      $this->addQuery($sql); 
-		 	
-     $this->mod_version = "0.14";
+		 
+		 $this->makeRevision("0.14");
+     $this->setTimeLimit(3600);
+		  		 
+		 $sql = "UPDATE `echange_hprim` 
+		          SET `compressed` = '0' WHERE `compressed` = '1';";
+		 $this->addQuery($sql); 
+		 
+		 $sql = "ALTER TABLE `echange_hprim` 
+                CHANGE `compressed` `purge` ENUM ('0','1') DEFAULT 0,
+								CHANGE `message` `message` MEDIUMTEXT;";
+     $this->addQuery($sql);
+		 
+     $this->mod_version = "0.15";
   }
 }
 

@@ -35,7 +35,7 @@ class CEchangeHprim extends CMbMetaObject {
   var $message_valide       = null;
   var $acquittement_valide  = null;
   var $id_permanent				  = null;
-  var $compressed           = null;
+  var $purge                = null;
     
   var $_ref_notifications   = null;
   
@@ -70,14 +70,14 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["type"]                  = "str";
     $specs["sous_type"]             = "str";
     $specs["date_echange"]          = "dateTime";
-    $specs["message"]               = "xml notNull show|0";
+    $specs["message"]               = "xml show|0";
     $specs["acquittement"]          = "xml show|0";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
     $specs["statut_acquittement"]   = "str show|0";
     $specs["message_valide"]        = "bool show|0";
     $specs["acquittement_valide"]   = "bool show|0";
     $specs["id_permanent"]          = "str";
-    $specs["compressed"]            = "bool show|0";
+    $specs["purge"]                 = "bool show|0";
     $specs["object_id"]             = "ref class|CMbObject meta|object_class unlink";
     $specs["object_class"]          = "enum list|CPatient|CSejour|COperation show|0";
     
