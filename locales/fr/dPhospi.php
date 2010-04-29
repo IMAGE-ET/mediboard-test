@@ -349,4 +349,5 @@ $locales['CSejour-back-affectations.empty'] = '';
 $locales['CSejour-back-observations.empty'] = '';
 $locales['CSejour-back-transmissions.empty'] = '';
 $locales['CService-back-chambres.empty'] = '';
+$locales['mod-dPhospi-tab-vw_rapport'] = 'Rapport d\'hopistalisation';
 ?>
