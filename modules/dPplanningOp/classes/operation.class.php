@@ -272,7 +272,7 @@ class COperation extends CCodable {
     
     if($this->plageop_id !== null){
       if (!in_range(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
-   	    $msg .= "Intervention du ".mbDate($this->_datetime." en dehors du séjour (".mbDate($this->_ref_sejour->entree_prevue)." - ".mbDate($this->_ref_sejour->sortie_prevue)).")";
+   	    $msg .= "Intervention du ".mbDate($this->_datetime)." en dehors du séjour (".mbDate($this->_ref_sejour->entree_prevue)." - ".mbDate($this->_ref_sejour->sortie_prevue).")";
       }
     }
     
