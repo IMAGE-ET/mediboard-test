@@ -15,10 +15,28 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
+$date = CValue::getOrSessionAbs("date", mbDate());
+
+$monday = mbDate("last monday", mbDate("+1 day", $date));
+$sunday = mbDate("next sunday", $date);
+for ($i = 0; $i < 7; $i++) {
+	$_date = mbDate("+$i day", $monday);
+  $list_days[$_date] = mbTransformTime(null, $_date, "%a");
+}
+
 // Prescription
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;
 $prescription->loadRefsLinesElementByCat();
+
+// Chargements des codes cdarrs des elements de prescription
+foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_chap){
+  foreach ($_lines_by_chap as $_lines_by_cat){
+    foreach ($_lines_by_cat['element'] as $_line){
+    	$_line->_ref_element_prescription->loadBackRefs("cdarrs");
+    }
+	}
+}
 
 // Bilan
 $sejour->loadRefBilanSSR();
@@ -34,8 +52,12 @@ if ($technicien->kine_id = $bilan->kine_id) {
   $plateau->loadRefsTechniciens();
 }
 
+$evenement_ssr = new CEvenementSSR();
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("evenement_ssr", $evenement_ssr);
+$smarty->assign("list_days", $list_days);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("bilan"  , $bilan);
 $smarty->assign("plateau", $plateau);

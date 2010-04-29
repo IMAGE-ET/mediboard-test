@@ -48,6 +48,7 @@ class CElementPrescription extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps["prescription_lines"] = "CPrescriptionLineElement element_prescription_id";
 		$backProps["cdarrs"] = "CElementPrescriptionToCdarr element_prescription_id";
+		$backProps["evenements_ssr"] = "CEvenementSSR element_prescription_id";
     return $backProps;
   }
   

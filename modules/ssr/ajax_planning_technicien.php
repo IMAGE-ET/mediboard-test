@@ -10,23 +10,41 @@
 
 CCando::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date    = CValue::getOrSession("date", mbDate());
+$kine_id = CValue::get("kine_id");
+$surveillance = CValue::get("surveillance", false);
 
-$technicien = new CTechnicien;
-$technicien->load(CValue::get("technicien_id"));
-
-// Kine
-$technicien->loadRefKine();
-$kine = $technicien->_ref_kine;
+$kine = new CMediusers();
+$kine->load($kine_id);
 
 $planning = new CPlanningWeek($date);
-$planning->title = "Planning du technicien '$kine->_view'";
+if($surveillance){
+  $planning->title = "Planning de surveillance du technicien '$kine->_view'";
+} else {
+  $planning->title = "Planning du technicien '$kine->_view'";	
+}
+
 $planning->guid = $kine->_guid;
+
+$date_min = reset(array_keys($planning->days));
+$date_max = end(array_keys($planning->days));
+
+// Chargement des evenement SSR 
+$evenement_ssr = new CEvenementSSR();
+$where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where["therapeute_id"] = " = '$kine->_id'";
+$where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
+
+$evenements = $evenement_ssr->loadList($where);
+
+foreach($evenements as $_evenement){
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
+}
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "#ccc"));
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("planning", $planning);
 $smarty->display("inc_vw_week.tpl");
-
 
 ?>

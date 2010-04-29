@@ -34,6 +34,14 @@ class CEquipement extends CMbObject {
     $specs["nom"]        = "str notNull";
     return $specs;
   }
+	
+	 function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["evenements_ssr"]  = "CEvenementSSR equipement_id";
+    return $backProps;
+  }
+	
+	
   
   function updateFormFields() {
     parent::updateFormFields();

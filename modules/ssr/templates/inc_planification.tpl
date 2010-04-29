@@ -18,7 +18,11 @@
     <td style="padding: 3px;" id="activites-sejour"></td>
 	</tr>
   <tr>
-  	<td style="padding: 3px;" id="planning-technicien"></td>
+  	<td style="padding: 3px;">
+			<div id="planning-technicien">
+				
+			</div>
+		</td>
     <td style="padding: 3px;" id="planning-equipement"></td>
   </tr>
 </table>

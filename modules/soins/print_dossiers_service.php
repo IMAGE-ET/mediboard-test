@@ -98,5 +98,4 @@ $smarty->assign("outputs", $outputs);
 $smarty->assign("fiches_anesth", $fiches_anesth);
 $smarty->display("print_dossiers_service.tpl");
 
-
 ?>

@@ -11,7 +11,7 @@
 PlanningEquipement = {
   show: function(id) {
     new Url("ssr", "ajax_planning_equipement") .
-      addParam("equipement_d", id) .
+      addParam("equipement_id", id) .
       requestUpdate("planning-equipement");
   },
   hide: function() {
@@ -22,7 +22,7 @@ PlanningEquipement = {
 PlanningTechnicien = {
   show: function(id) {
     new Url("ssr", "ajax_planning_technicien") .
-      addParam("technicien_id", id || "11") .
+      addParam("kine_id", id || "11") .
       requestUpdate("planning-technicien");
   },
   hide: function() {

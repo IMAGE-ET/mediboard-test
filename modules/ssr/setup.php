@@ -201,7 +201,36 @@ class CSetupssr extends CSetup {
               ADD INDEX (`element_prescription_id`);";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "0.13";
+		$this->makeRevision("0.13");
+		$sql = "CREATE TABLE `evenement_ssr` (
+              `evenement_ssr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `element_prescription_id` INT (11) UNSIGNED NOT NULL,
+              `code` CHAR (4) NOT NULL,
+              `sejour_id` INT (11) UNSIGNED NOT NULL,
+              `debut` DATETIME NOT NULL,
+              `duree` INT (11) UNSIGNED NOT NULL,
+              `therapeute_id` INT (11) UNSIGNED NOT NULL,
+              `realise` ENUM ('0','1') DEFAULT '0'
+		) TYPE=MYISAM;";
+		$this->addQuery($sql);
+
+    $sql = "ALTER TABLE `evenement_ssr` 
+              ADD INDEX (`element_prescription_id`),
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`debut`),
+              ADD INDEX (`therapeute_id`);";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("0.14");
+		$sql = "ALTER TABLE `evenement_ssr` 
+              ADD `equipement_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `evenement_ssr` 
+              ADD INDEX (`equipement_id`);";
+    $this->addQuery($sql);
+		
+    $this->mod_version = "0.15";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
