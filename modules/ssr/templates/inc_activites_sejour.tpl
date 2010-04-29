@@ -37,7 +37,7 @@ selectEquipement = function(equipement_id) {
   }
 }
 
-selectElement = function(line_id, element_id){
+selectElement = function(line_id){
 $V(oFormEvenementSSR.line_id, line_id);
   $$("button.line").invoke("setStyle", {borderWidth: "1px"} );
   $("line-"+line_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
@@ -46,8 +46,7 @@ $V(oFormEvenementSSR.line_id, line_id);
 	$("cdarrs-"+line_id).show();
 	
 	// Mise en evidence des elements dans les plannings
-	$$(".event").invoke("setStyle", { border: '' } );
-  $$(".CElementPrescription-"+element_id).invoke("setStyle", {border: '2px solid #000'} );
+	addBorderEvent();
 }
 
 submitSSR = function(){
@@ -69,6 +68,11 @@ refreshPlanningsSSR = function(){
 	if($V(oFormEvenementSSR.equipement_id)){
 	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
 	}
+}
+
+addBorderEvent = function(){
+  $$(".event").invoke("setStyle", { border: '' } );
+  $$(".CElementPrescription-"+$V(oFormEvenementSSR._element_id)).invoke("setStyle", {border: '1px solid #000'} );
 }
 
 var oFormEvenementSSR;
@@ -96,6 +100,7 @@ input.time[readonly]  {
 	{{mb_field hidden=true object=$evenement_ssr field=equipement_id}}
 	{{mb_field hidden=true object=$evenement_ssr field=therapeute_id}}
 	<input type="hidden" name="line_id" value="" />
+	<input type="hidden" name="_element_id" value="" />
   
 	<table class="form">
 		<tr>
@@ -142,7 +147,7 @@ input.time[readonly]  {
                 jusqu'au {{mb_value object=$_line field="date_arret"}}
               {{/if}}
               </span>
-							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="selectElement('{{$_line->_id}}','{{$_line->element_prescription_id}}');">
+							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');">
 	              {{$_line->_view}}
 							</button>
 							<br />
