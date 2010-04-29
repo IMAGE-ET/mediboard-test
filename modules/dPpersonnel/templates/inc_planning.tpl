@@ -23,9 +23,7 @@
       date_courante.setMonth(date_courante.getMonth() + 1);
     }
   }
-	form.elements.date_debut.value = date_courante.toDATE();
-	var champs = date_courante.toDATE().split('-');
-  form.elements.date_debut_da.value = champs[2] + "/" + champs[1] + "/" + champs[0];
+  form.elements.date_debut.value = date_courante.toDATE();
   loadPlanning(form);
 }
 </script>
@@ -33,12 +31,12 @@
   <tr>
     <!-- Navigation par semaine ou mois-->
     <td colspan="2">
-       <button class="left" onclick="changedate('p')" style="float: left;">
-         {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
-       </button>
-       <button class="right rtl" onclick="changedate('n')" style="float: right;">
-         {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
-       </button>
+      <button class="left" onclick="changedate('p')" style="float: left;">
+        {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
+      </button>
+      <button class="right rtl" onclick="changedate('n')" style="float: right;">
+        {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
+      </button>
     </td>
   </tr>
   <tr>
@@ -56,79 +54,78 @@
     <td>
     <!-- Affichage du planning -->
    <table id="schedule">
-    <tr style="height: 2em;">
-      <td style="width: 12em;"></td>
-      {{foreach from=$tableau_periode item=_periode}}
-			{{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
-      <th {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}>
-      	<big>{{$day}}</big>
-      	<br/>{{$_periode|date_format:"%d"}}
-			</th>
-      {{/foreach}}
-    </tr>
-    <!-- Zone d'insertion des plages de vacances-->
-    {{assign var="indice" value="-1"}}
-    {{assign var="count" value="-1"}}
-    {{foreach from=$plagesvac item=_plage1}}
-    {{if $indice != $_plage1->user_id}}
-    {{assign var="userid" value=$_plage1->user_id}}
-    {{assign var="indice" value=$userid}}
-    {{assign var="count" value=$count+1}}
-    <tr class="ligne">
-      <th>
-         <div class="nom">
-        {{assign var=mediuser value=$_plage1->_ref_user}}
-         {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
-         </div>
-      </th>
-      <td>
-        <div class="insertion">
-        {{foreach from=$plagesvac item=_plage2}}
-          {{if $_plage2->user_id == $indice}}
-            <div id = "plage{{$_plage2->_id}}" class = "plage">
-              <div class="content">
+     <tr style="height: 2em;">
+       <td style="width: 12em;"></td>
+       {{foreach from=$tableau_periode item=_periode}}
+         {{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
+         <th {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}>
+      	   <big>{{$day}}</big>
+      	   <br/>{{$_periode|date_format:"%d"}}
+         </th>
+       {{/foreach}}
+     </tr>
+     <!-- Zone d'insertion des plages de vacances-->
+     {{assign var="indice" value="-1"}}
+     {{assign var="count" value="-1"}}
+     {{foreach from=$plagesvac item=_plage1}}
+       {{if $indice != $_plage1->user_id}}
+       {{assign var="userid" value=$_plage1->user_id}}
+       {{assign var="indice" value=$userid}}
+       {{assign var="count" value=$count+1}}
+       <tr class="ligne">
+         <th>
+           <div class="nom">
+             {{assign var=mediuser value=$_plage1->_ref_user}}
+             {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
+           </div>
+         </th>
+       <td>
+         <div class="insertion">
+         {{foreach from=$plagesvac item=_plage2}}
+           {{if $_plage2->user_id == $indice}}
+             <div id = "plage{{$_plage2->_id}}" class = "plage">
+               <div class="content">
                  {{$_plage2->_duree}}
-                {{if $_plage2->_duree == 1}}
-                  {{tr}}day{{/tr}}
-                {{else}}
-                  {{tr}}days{{/tr}}
-                {{/if}}
-                <br/>
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
-                {{$_plage2->libelle}}
-                </span>
-                  <script type="text/javascript">
-                    Main.add(function(){
-                      display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-                      new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
-
-                      Event.observe(window, "resize", function(){
-                        display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
-                      });
-                    });
-                   </script>
-                </div>
-              </div>
-          {{/if}}
-        {{/foreach}}
-        </div>
-      </td>
+                 {{if $_plage2->_duree == 1}}
+                   {{tr}}day{{/tr}}
+                 {{else}}
+                   {{tr}}days{{/tr}}
+                 {{/if}}
+                 <br/>
+                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
+                   {{$_plage2->libelle}}
+                 </span>
+                 <script type="text/javascript">
+                   Main.add(function(){
+                     display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
+                     new Draggable('plage{{$_plage2->_id}}', {constraint:"horizontal", snap: movesnap, onStart: savePosition, onEnd: DragDropPlage});
+                     Event.observe(window, "resize", function(){
+                       display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});
+                     });
+                   });
+                 </script>
+               </div>
+             </div>
+           {{/if}}
+         {{/foreach}}
+         </div>
+       </td>
       {{foreach from=$tableau_periode item=_periode name=td_list}}
         {{if !$smarty.foreach.td_list.first}}
-		      {{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
-		      <td {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}></td>
+          {{assign var=day value=$_periode|date_format:"%A"|upper|substr:0:1}}
+          <td {{if $day == "S" || $day == "D"}}style="background: #ddf;"{{/if}}></td>
         {{/if}}
       {{/foreach}}
-    </tr>
-    {{/if}}
-    {{foreachelse}}
-    <tr>
-      <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}">
-        {{tr}}CPlageVacances.none{{/tr}}
-      </td> 
-    </tr>
-    {{/foreach}}
-  </table>   
+      </tr>
+      {{/if}}
+      {{foreachelse}}
+      <tr>
+        <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}">
+          {{tr}}CPlageVacances.none{{/tr}}
+        </td> 
+      </tr>
+      {{/foreach}}
+      </table>   
     </td>
   </tr>
 </table>

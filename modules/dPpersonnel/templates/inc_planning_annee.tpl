@@ -32,7 +32,32 @@ changemode = function(type, date, user_id) {
 	$V(form.user_id, user_id);
 	loadPlanning(form);
 }
+changeannee = function (sens) {
+  var choix = {{$choix|@json}};
+  var form = getForm("searchplanning");
+  
+  var date_courante = Date.fromDATE(form.elements.date_debut.value); 
+  if(sens=='p') {
+    date_courante.addYears(-1);
+  }
+  else if(sens=='n'){
+    date_courante.addYears(1);
+  }
+  
+  form.elements.date_debut.value = date_courante.toDATE();
+  loadPlanning(form);
+}
 </script>
+<table class="main">
+  <td colspan="2">
+    <button class="left" onclick="changeannee('p')" style="float: left;">
+      {{tr}}Previous year{{/tr}}
+    </button>
+    <button class="right rtl" onclick="changeannee('n')" style="float: right;">
+      {{tr}}Next year{{/tr}}
+    </button>
+  </td>
+</table>
 <table class="main">
 {{assign var="k" value=1}}
 {{foreach from=1|range:12 item=j}}

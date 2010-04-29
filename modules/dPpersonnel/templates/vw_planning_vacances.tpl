@@ -11,7 +11,7 @@
 
 tableau_periode = {{$tableau_periode|@json}};
 nombreelem = tableau_periode.length;
-largeur_nom = 100;
+largeur_nom = 135;
 
 loadPlanning = function(form) {
   var url = new Url("dPpersonnel", "ajax_planning");
@@ -22,30 +22,28 @@ loadPlanning = function(form) {
 
 display_plage = function (plage_id, debut, fin) {
   var width = parseInt($("schedule").getWidth()) - largeur_nom;
- var plage = $("plage" + plage_id);
- var width_calc = (fin * (width/nombreelem).floor());
- var margin_calc = 0;
+  var plage = $("plage" + plage_id);
+  var width_calc = (fin * (width/nombreelem).floor());
+  var margin_calc = 0;
   
   if((debut*width/nombreelem).ceil() < 0) {
-  margin_calc = -(debut*width/nombreelem).ceil();
- }
- plage.setStyle({
-   left: (debut*width/nombreelem).ceil()+'px',
+    margin_calc = -(debut*width/nombreelem).ceil();
+  }
+  plage.setStyle({
+    left: (debut*width/nombreelem).ceil()+'px',
     width: width_calc - 2 +'px'
   });
  
- plage.down(".content").setStyle({
-   marginLeft: Math.max(2, margin_calc)+'px'
- }); 
+  plage.down(".content").setStyle({
+    marginLeft: Math.max(2, margin_calc)+'px'
+  }); 
 }
 
 movesnap = function(x, y, drag) {
   var table = $("schedule");
-  
   var columns = table.down("tr").next().select("td");
   var left, found = false;
   var widthsave = columns[0].getWidth();
- 
   var leftOffsets = [];
   var tableLeft = table.cumulativeOffset().left + largeur_nom;
   
@@ -105,7 +103,7 @@ DragDropPlage = function(draggable){
   date_fin = date_fin.toDATE();
   var plage_id = element.id.substring(5);
 
-  var url = new Url("dPpersonnel", "toto");
+  var url = new Url("dPpersonnel", "do_plagevac_aed");
   url.addParam("plage_id", plage_id);
   url.addParam("date_debut", date_debut);
   url.addParam("dosql","do_plagevac_aed");
@@ -117,11 +115,13 @@ DragDropPlage = function(draggable){
       if ($("systemMsg").select(".error").length > 0) {
         oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
       } else {
+        loadPlanning(getForm("searchplanning"));
         loadUser("{{$filter->user_id}}");
       }
     }
   });
 }
+
 
 savePosition = function(drag){
   window.oldDrag = {
@@ -223,47 +223,39 @@ Main.add(function(){
     <td colspan="2">
       <form name="searchplanning" method="get" onsubmit="return loadPlanning(this)">
         <input type="hidden" name="m" value="{{$m}}"/>
+        <input type="hidden" name="date_debut" value="{{$filter->date_debut}}"/>
         <table class="form">
         {{if $affiche_nom==1}}
           <tr>
             <th>{{mb_label object=$filter field="user_id"}}</th>
             <td>
-               <select name="user_id" onchange="toggleYear(this.form)">
+               <select name="user_id" onchange="toggleYear(this.form); getForm('searchplanning').onsubmit();">
                  <option value="">{{tr}}CMediusers.all{{/tr}}</option>
                  {{mb_include module=mediusers template=inc_options_mediuser list=$mediusers selected=$filter->user_id}}
                </select>
              </td>
            </tr>
          {{/if}}
+         
+
            <tr>
-             <th>{{mb_label class=CPlageVacances field="date_debut"}}</th>
-             <td>{{mb_field object=$filter field="date_debut" form="searchplanning" register=true}}</td>
-           </tr>
-           <tr>
-             <th>{{tr}}CPlageVacances-choix-periode{{/tr}}</th>
-             <td>
+             <th style="width: 50%;">{{tr}}CPlageVacances-choix-periode{{/tr}}</th>
+             <td style="width: 50%;">
                <label>
-                 <input type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}
+                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}
                </label>
-               <label>
-                 <input type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> {{tr}}month{{/tr}}
+               <label >
+                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> {{tr}}month{{/tr}}
                </label>
-               <label>
-                 <input id="annee" type="radio" hidden="true" name="choix" {{if $choix=="annee"}}checked="checked"{{/if}} value="annee" /> {{tr}}year{{/tr}}
+               <label >
+                 <input onclick="getForm('searchplanning').onsubmit();" id="annee" type="radio" hidden="true" name="choix" {{if $choix=="annee"}}checked="checked"{{/if}} value="annee" /> {{tr}}year{{/tr}}
                </label>
-             </td>
-           </tr>
-           <tr>
-             <td colspan="2" style="text-align:center" >
-               <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
              </td>
            </tr>
         </table>
       </form>
     </td>
   </tr>
-  
- 
   <tr>
     <td id="planning" colspan="2">
     </td>

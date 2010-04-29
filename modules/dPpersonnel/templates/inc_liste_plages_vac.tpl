@@ -12,7 +12,7 @@
     <th colspan="2"class="title">Plages pour {{mb_value object=$user field="_user_last_name"}} {{mb_value object=$user field="_user_first_name"}}</th>
   </tr>
   {{foreach from=$plages_vac item=_plagevac}}
-    <tr>
+    <tr id="p{{$_plagevac->_id}}" {{if $plage_id == $_plagevac->_id}} class="selected" {{/if}}>
       <td>
         <a href="#"
            onclick="editPlageVac({{$_plagevac->_id}},{{$user->_id}})">

@@ -14,7 +14,7 @@ global $can;
 $user_id = CValue::getorSession("user_id");
 $user = new CMediusers();
 $user->load($user_id);
-
+$plage_id = CValue::get("plage_id", 0);
 $plage_vac = new CPlageVacances();
 $plage_vac->user_id = $user_id;
 
@@ -28,5 +28,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("user",         $user);
 $smarty->assign("plages_vac",   $plages_vac);
 $smarty->assign("new_plagevac", $new_plagevac);
+$smarty->assign("plage_id",     $plage_id);
 $smarty->display("inc_liste_plages_vac.tpl");
 ?>

@@ -11,9 +11,9 @@
 <form name="editplage" action="" method="post"
       onsubmit="return onSubmitFormAjax(this, 
       { onComplete: function() {
-          loadUser({{$plagevac->user_id}}) ;
+          loadUser({{$plagevac->user_id}}, '{{$plagevac->plage_id}}') ;
           changedate('');
-          editPlageVac('{{$plagevac->plage_id}}',{{$plagevac->user_id}})
+          editPlageVac('{{$plagevac->plage_id}}',{{$plagevac->user_id}});
       }
 });">
   <input type="hidden" name="dosql" value="do_plagevac_aed" />
