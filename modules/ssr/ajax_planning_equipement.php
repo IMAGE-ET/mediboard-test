@@ -30,7 +30,10 @@ $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
 	$important = ($_evenement->sejour_id == $sejour_id);
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code, null, $important));
+	$_evenement->loadRefSejour();
+  $_evenement->_ref_sejour->loadRefPatient();
+  $title = $_evenement->_ref_sejour->_ref_patient->_view;
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, null, $important));
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 

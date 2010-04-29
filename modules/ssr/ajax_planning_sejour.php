@@ -31,7 +31,9 @@ $where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $_evenement->code));
+	$_evenement->loadRefElementPrescription();
+	$title = $_evenement->_ref_element_prescription->_view ." - ".$_evenement->code;
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title));
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 

@@ -71,7 +71,7 @@ Main.add(function() {
                       {{/if}}
                     </div>
                     <div class="body">
-                      {{$_event->title}}
+                      {{$_event->title|smarty:nodefaults}}
                     </div>
                   </div>
                 {{/if}}

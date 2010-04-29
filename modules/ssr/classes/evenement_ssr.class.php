@@ -23,6 +23,7 @@ class CEvenementSSR extends CMbObject {
   var $realise                 = null;
 	
 	var $_heure                  = null;
+	var $_ref_element_prescription = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,6 +45,16 @@ class CEvenementSSR extends CMbObject {
 		$props["_heure"]        = "time";
     return $props;
   }
+	
+  function loadRefElementPrescription() {
+    $this->_ref_element_prescription = new CElementPrescription();
+    $this->_ref_element_prescription = $this->_ref_element_prescription->getCached($this->element_prescription_id); 
+  }
+	
+	function loadRefSejour(){
+		$this->_ref_sejour = new CSejour();
+		$this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+	}
 }
 
 ?>
