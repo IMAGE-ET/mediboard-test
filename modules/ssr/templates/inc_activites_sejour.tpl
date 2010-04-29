@@ -143,17 +143,9 @@ input.time[readonly]  {
                 jusqu'au {{mb_value object=$_line field="date_arret"}}
               {{/if}}
               </span>
-
-
 							<button id="line-{{$_line->_id}}" type="button" class="search line" onclick="selectElement('{{$_line->_id}}');">
 	              {{$_line->_view}}
 							</button>
-							
-						
-
-
-							
-							
 							<br />
 							{{if $smarty.foreach.category.last}}
 							  </div>
