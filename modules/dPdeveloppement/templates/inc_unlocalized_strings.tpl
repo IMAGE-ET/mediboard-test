@@ -62,5 +62,7 @@ Localize = {
     </td>
   </tr>
 
-</table>  
+</table> 
+
+</form> 
 {{/if}}
