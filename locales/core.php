@@ -17,6 +17,7 @@ if (null == $locales = SHM::get($shared_name)) {
   foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
   	require_once($_path);
   }
+  $locales = array_filter($locales, "stringNotEmpty");
   SHM::put($shared_name, $locales);
 }
 
