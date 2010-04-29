@@ -40,6 +40,9 @@ $groups = $group->loadList();
 // Chargement de la category
 $category->load($category_id);
 $category->loadElementsPrescription();
+foreach ($category->_ref_elements_prescription as $_element) {
+	$_element->countBackRefs("cdarrs");
+}
 
 $element_prescription = new CElementPrescription();
 $element_prescription->load($element_prescription_id);
