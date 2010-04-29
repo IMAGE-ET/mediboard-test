@@ -8,30 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module="dPpersonnel" script="plage"}}
 <script type="text/javascript">
-function loadUser(plage_id, user_id){
-  var url = new Url("dPpersonnel", "ajax_plage_vac");
-  url.addParam("plage_id", plage_id);
-  url.addParam("user_id", user_id);
-  url.requestUpdate("vw_user");
-}
-
-function editPlageVac(plage_id, user_id){
-  var url = new Url("dPpersonnel", "ajax_edit_plage_vac");
-  url.addParam("plage_id", plage_id);
-  url.addParam("user_id", user_id);
-  url.requestUpdate("edit_plage");
-  if(plage_id != '') {
-    if($("p"+plage_id) != null) {
-      var plage = $("p"+plage_id);
-      var siblings = plage.siblings();
-      siblings.each(function(item) {
-      item.className = '';
-      });
-      plage.className = "selected";
-    }
-  }
-}
 
 function raz(form) {
   $(form).clear(true);
@@ -66,10 +44,10 @@ function raz(form) {
           </th>
 	      </tr>
         {{foreach from=$found_users item=mediuser}}
-        <tr>
+        <tr id="u{{$mediuser->_id}}" {{if $filter->user_id == $mediuser->_id}} class="selected" {{/if}}>
           <td>
             <a href="#{{$mediuser->_guid}}"
-						onclick="loadUser('', {{$mediuser->_id}});
+						onclick="loadUser({{$mediuser->_id}}, '');
 										   editPlageVac('',{{$mediuser->_id}});
 										 ">
             	{{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}</a>
@@ -81,7 +59,7 @@ function raz(form) {
         </tr> 
         {{foreachelse}}
         <script type='text/javascript'>
-          loadUser('',{{$filter->user_id}});
+          loadUser({{$filter->user_id}}, '');
 					editPlageVac('',{{$filter->user_id}});
         </script>
 				<tr>
@@ -97,7 +75,7 @@ function raz(form) {
 </table>
 {{if $filter->user_id}}
   <script type='text/javascript'>
-		loadUser('{{$filter->_id}}', {{$filter->user_id}});
+		loadUser({{$filter->user_id}}, '{{$filter->_id}}');
 		editPlageVac('{{$filter->_id}}',{{$filter->user_id}});
   </script>
 {{/if}}

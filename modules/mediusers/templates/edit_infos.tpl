@@ -1,33 +1,11 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
+{{mb_include_script module="dPpersonnel" script="plage"}}
 
 <script type="text/javascript">
 contentconge = function() {
   var url = new Url("dPpersonnel", "vw_planning_vacances");
    url.addParam("affiche_nom", 0);
    url.requestUpdate("planningvac");
-}
-
-loadUser=function(user_id, plage_id){
-  var url = new Url("dPpersonnel", "ajax_plage_vac");
-  url.addParam("plage_id", plage_id);
-  url.addParam("user_id", user_id);
-  url.requestUpdate("vw_user");
-}
-
-editPlageVac = function(plage_id, user_id){
-  var url = new Url("dPpersonnel", "ajax_edit_plage_vac");
-  url.addParam("plage_id", plage_id);
-  url.addParam("user_id", user_id);
-  url.requestUpdate("edit_plage");
-  if(plage_id != '') {
-    if($("p"+plage_id) != null) {
-      var plage = $("p"+plage_id); 
-      siblings.each(function(item) {
-      item.className = '';
-      });
-      plage.className = "selected";
-    }
-  }
 }
 
 Main.add(function () {
@@ -38,7 +16,7 @@ Main.add(function () {
 	{{if @$modules.dPpersonnel->mod_active}}
       var tabs = Control.Tabs.create('tab_edit_mediuser', true);
       contentconge();
-      loadUser("{{$user->_id}}");
+      loadUser("{{$user->_id}}", '');
       editPlageVac('',"{{$user->_id}}");
 	{{/if}}
 	

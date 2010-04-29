@@ -23,7 +23,7 @@ loadPlanning = function(form) {
 display_plage = function (plage_id, debut, fin) {
   var width = parseInt($("schedule").getWidth()) - largeur_nom;
   var plage = $("plage" + plage_id);
-  var width_calc = (fin * (width/nombreelem).floor());
+  var width_calc = (fin * (width/nombreelem + 0.4).floor());
   var margin_calc = 0;
   
   if((debut*width/nombreelem).ceil() < 0) {
@@ -116,7 +116,7 @@ DragDropPlage = function(draggable){
         oldDrag.drag.element.style.left = parseInt(oldDrag.left)+"px";
       } else {
         loadPlanning(getForm("searchplanning"));
-        loadUser("{{$filter->user_id}}");
+        loadUser("{{$filter->user_id}}", '');
       }
     }
   });
