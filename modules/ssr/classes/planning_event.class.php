@@ -10,6 +10,7 @@
 
 class CPlanningEvent  {
   var $guid   = null;
+  var $internal_id = null;
   
   var $title  = null;
   var $start  = null;
@@ -26,6 +27,7 @@ class CPlanningEvent  {
   
   function __construct ($guid, $date, $length = 0, $title = "", $color = "red") {
     $this->guid = $guid ? $guid : "id-".uniqid();
+    $this->internal_id = "CPlanningEvent-".uniqid();
     
     $this->start = $date;
     $this->length = $length;

@@ -63,7 +63,7 @@ Main.add(function() {
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->guid}}" class="event" style="background-color: {{$_event->color}};">
+                  <div id="{{$_event->internal_id}}" class="event" style="background-color: {{$_event->color}};">
                     <div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
                       {{$_event->start|date_format:"%H:%M"}}
                       {{if $_event->length}}

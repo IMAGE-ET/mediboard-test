@@ -26,7 +26,7 @@ WeekPlanning = Class.create({
   },
   updateEventsDimensions: function(){
     this.events.each(function(event, i){
-      var container = $(event.guid);
+      var container = $(event.internal_id);
       if (!container) return;
       
       var dimensions = container.up("td").getDimensions();
