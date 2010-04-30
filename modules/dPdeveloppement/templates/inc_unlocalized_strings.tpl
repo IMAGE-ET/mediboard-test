@@ -40,6 +40,7 @@ Localize = {
     <th>Module</th>
     <td>
       <select name="module">
+          <option value="common">&mdash; common</option>
         {{foreach from=$modules key=module_name item=_module}}
           <option value="{{$module_name}}" {{if $module_name == $m}} selected="selected" {{/if}}>
             {{$_module}}
