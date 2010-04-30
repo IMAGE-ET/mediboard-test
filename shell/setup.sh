@@ -31,15 +31,13 @@ SUB_DIR=$2
   if [ "$SUB_DIR" = "modules" ]
   then
     BASE_PATH="modules/*"
-    SUB_PATH="modules/*/templates_c/"
   else
     if [ "$SUB_DIR" = "style" ]
     then
       BASE_PATH="style/*"
-      SUB_PATH="style/*/templates_c/"
     else
       BASE_PATH="*"
-      SUB_PATH="lib/ tmp/ files/ includes/ modules/*/locales/ modules/*/templates_c/ style/*/templates_c/ modules/hprimxml/xsd/ locales/*/"
+      SUB_PATH="lib/ tmp/ files/ includes/ modules/*/locales/ modules/hprimxml/xsd/ locales/*/"
     fi
   fi
 

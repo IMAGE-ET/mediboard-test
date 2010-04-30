@@ -53,11 +53,11 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $fusionPatient);
     $data['patientElimine'] = $xpath->queryUniqueNode("hprim:patientElimine", $fusionPatient);
 
-    $data['idSource'] = $this->getIdSource($data['patient']);
-    $data['idCible'] = $this->getIdCible($data['patient']);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
-    $data['idSourceElimine'] = $this->getIdSource($data['patientElimine']);
-    $data['idCibleElimine'] = $this->getIdCible($data['patientElimine']);
+    $data['idSourcePatientElimine']= $this->getIdSource($data['patientElimine']);
+    $data['idCiblePatientElimine'] = $this->getIdCible($data['patientElimine']);
     
     return $data;
   }
@@ -81,7 +81,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $dest_hprim->loadMatchingObject();
 
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / patientElimine
-      if (!$data['idSource'] && !$data['idCible'] && !$data['idSourceElimine'] && !$data['idCibleElimine']) {
+      if (!$data['idSourcePatient'] && !$data['idCiblePatient'] && 
+			    !$data['idSourcePatientElimine'] && !$data['idCiblePatientElimine']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005", null, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
 				
@@ -93,9 +94,9 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       //Paramétrage de l'id 400
       $id400Patient->object_class = "CPatient";
       $id400Patient->tag = $dest_hprim->_tag_patient;
-      $id400Patient->id400 = $data['idSource'];
+      $id400Patient->id400 = $data['idSourcePatient'];
       $id400Patient->loadMatchingObject();
-      if ($mbPatient->load($data['idCible'])) {
+      if ($mbPatient->load($data['idCiblePatient'])) {
         if ($mbPatient->_id != $id400Patient->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire, $newPatient);
@@ -113,9 +114,9 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       //Paramétrage de l'id 400
       $id400PatientElimine->object_class = "CPatient";
       $id400PatientElimine->tag = $dest_hprim->_tag_patient;
-      $id400PatientElimine->id400 = $data['idSourceElimine'];
+      $id400PatientElimine->id400 = $data['idSourcePatientElimine'];
       $id400PatientElimine->loadMatchingObject();
-      if ($mbPatientElimine->load($data['idCibleElimine'])) {
+      if ($mbPatientElimine->load($data['idCiblePatientElimine'])) {
         if ($mbPatientElimine->_id != $id400PatientElimine->object_id) {
           $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E041", $commentaire, $newPatient);
@@ -195,7 +196,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
     }
     $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CPatient", $data['idCible']);
+    $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
     $echange_hprim->store();
 
     return $messageAcquittement;

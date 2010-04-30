@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPboard-tab-inc_board'] = 'Tableau de bord';
 $locales['mod-dPboard-tab-vw_bilan_prescription'] = 'Bilan des prescriptions';
 $locales['mod-dPboard-tab-vw_bilan_transmissions'] = 'Bilan des transmissions';
 $locales['mod-dPboard-tab-vw_day'] = 'Vue journée';

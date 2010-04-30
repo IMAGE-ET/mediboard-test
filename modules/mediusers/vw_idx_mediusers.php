@@ -18,6 +18,8 @@ $filter    = CValue::getOrSession("filter", "");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "function_id");
 
+$step = 25;
+
 // Récupération des fonctions
 $group = CGroups::loadCurrent();
 $group->loadFunctions();
@@ -67,7 +69,7 @@ if ($order_col == "function_id") {
 }
 
 $total_mediuser = $mediuser->countList($where, $order, null, null, $ljoin);
-$mediusers = $mediuser->loadList($where, $order, "$page, 25", null, $ljoin);
+$mediusers = $mediuser->loadList($where, $order, "$page, $step", null, $ljoin);
 foreach($mediusers as &$_mediuser) {
   $_mediuser->loadRefFunction();
   $_mediuser->loadRefProfile();
@@ -126,6 +128,7 @@ $smarty->assign("disciplines"   , $disciplines  );
 $smarty->assign("spec_cpam"     , $spec_cpam    );
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("order_col"     , $order_col);
+$smarty->assign("step"          , $step);
 
 $smarty->display("vw_idx_mediusers.tpl");
 

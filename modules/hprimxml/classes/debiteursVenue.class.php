@@ -66,8 +66,8 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $data['employeurs'] = $xpath->queryUniqueNode("hprim:employeurs", $debiteursVenue);
     $data['debiteurs'] = $xpath->queryUniqueNode("hprim:debiteurs", $debiteursVenue);
 
-    $data['idSource'] = $this->getIdSource($data['patient']);
-    $data['idCible'] = $this->getIdCible($data['patient']);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);
     $data['idCibleVenue'] = $this->getIdCible($data['venue']);

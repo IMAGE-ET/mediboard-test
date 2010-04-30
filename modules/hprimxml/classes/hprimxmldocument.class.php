@@ -515,12 +515,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 		
   	if ($mbObject instanceof COperation) {
     	$acteCCAM = $this->addElement($reponse, "acteCCAM");
-    	
     	$this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
     }	
     
-   
-    $erreur = $this->addObservation($reponse, $code, $libelle, $commentaires);   
+		if ($statut != "ok") {
+			$erreur = $this->addElement($elParent, "erreur");
+      $this->addElement($erreur, "code", substr($code, 0, 17));
+      $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
+      $this->addElement($erreur, "commentaire", substr($commentaires, 0, 4000)); 
+		}      
   }
   
   function getTypeEvenementPatient() {

@@ -17,6 +17,7 @@ $locales['CFavoriCCAM.none'] = 'Aucun favori disponible';
 $locales['CFavoriCCAM.one'] = 'Un favori CCAM';
 $locales['config-dPccam-CCodable-use_getMaxCodagesActes'] = 'Utiliser le test sur le nombre d\'actes codés';
 $locales['config-dPccam-CCodeCCAM-use_cache'] = 'Utiliser le cache';
+$locales['mod-dPccam-tab-configure'] = 'Configuration';
 $locales['mod-dPccam-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = 'Mes favoris';

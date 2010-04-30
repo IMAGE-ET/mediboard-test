@@ -44,8 +44,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $data['action']   = $this->getActionEvenement("hprim:mouvementPatient", $evenementPatient);
   
     $data['patient']  = $xpath->queryUniqueNode("hprim:patient", $mouvementPatient);
-    $data['idSource'] = $this->getIdSource($data['patient']);
-    $data['idCible']  = $this->getIdCible($data['patient']);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
     $data['venue']         = $xpath->queryUniqueNode("hprim:venue", $mouvementPatient);
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);

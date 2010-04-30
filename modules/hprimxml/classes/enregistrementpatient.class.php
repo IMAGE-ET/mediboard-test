@@ -57,8 +57,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $enregistrementPatient);
 
-    $data['idSource'] = $this->getIdSource($data['patient']);
-    $data['idCible'] = $this->getIdCible($data['patient']);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
     return $data;
   }
@@ -80,7 +80,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     // Si SIP
     if (CAppUI::conf('sip server')) {
       // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idSource'] && !$data['idCible']) {
+      if (!$data['idSourcePatient'] && !$data['idCiblePatient']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
 				
@@ -89,13 +89,13 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       }
         
       // Identifiant source non fourni et identifiant cible fourni
-      if (!$data['idSource'] && $data['idCible']) {
+      if (!$data['idSourcePatient'] && $data['idCiblePatient']) {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP->object_class = "CPatient";
         $IPP->tag = CAppUI::conf("mb_id");
 
-        $IPP->id400 = str_pad($data['idCible'], 6, '0', STR_PAD_LEFT);
+        $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
         // idCible connu
         if ($IPP->loadMatchingObject()) {
@@ -166,7 +166,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       //Paramétrage de l'id 400
       $id400->object_class = "CPatient";
       $id400->tag = $data['idClient'];
-      $id400->id400 = $data['idSource'];
+      $id400->id400 = $data['idSourcePatient'];
     
       // Cas 1 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
@@ -304,7 +304,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $id400Patient->object_class = "CPatient";
         $id400Patient->tag = $data['idClient'];
 
-        $id400Patient->id400 = $data['idSource'];
+        $id400Patient->id400 = $data['idSourcePatient'];
         
         $id400Patient->object_id = $newPatient->_id;
         $id400Patient->_id = null;
@@ -318,8 +318,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP->tag = CAppUI::conf("mb_id");
 
         // Cas idCible fourni
-        if ($data['idCible']) {
-          $IPP->id400 = str_pad($data['idCible'], 6, '0', STR_PAD_LEFT);
+        if ($data['idCiblePatient']) {
+          $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
           $mutex->acquire();
            
@@ -381,7 +381,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     // Si CIP
     else {
       // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idCible'] && !$data['idSource']) {
+      if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
 				
@@ -397,13 +397,13 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       //Paramétrage de l'id 400
       $IPP->object_class = "CPatient";
       $IPP->tag = $dest_hprim->_tag_patient;
-      $IPP->id400 = $data['idSource'];
+      $IPP->id400 = $data['idSourcePatient'];
       
       // idSource non connu
       if(!$IPP->loadMatchingObject()) {
         // idCible fourni
-        if ($data['idCible']) {
-          if ($newPatient->load($data['idCible'])) {
+        if ($data['idCiblePatient']) {
+          if ($newPatient->load($data['idCiblePatient'])) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
         
@@ -473,12 +473,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
                         
         // idCible non fourni
-        if (!$data['idCible']) {
+        if (!$data['idCiblePatient']) {
           $_code_IPP = "I023"; 
         } else {
           $tmpPatient = new CPatient();
           // idCible connu
-          if ($tmpPatient->load($data['idCible'])) {
+          if ($tmpPatient->load($data['idCiblePatient'])) {
             if ($tmpPatient->_id != $IPP->object_id) {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
@@ -522,7 +522,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CPatient", $data['idCible']);
+    $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
     $echange_hprim->store();
     
     return $messageAcquittement;

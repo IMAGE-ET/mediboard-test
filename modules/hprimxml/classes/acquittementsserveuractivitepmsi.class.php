@@ -46,7 +46,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   
   function addReponses($statut, $codes, $commentaires = null, $mbObject = null) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
-        
+    
+		$mbPatient = $mbSejour = null;    
     if ($mbObject instanceof CSejour) {
 	    $mbPatient =& $mbObject->_ref_patient;
 	    $mbSejour  =& $mbObject;
@@ -57,11 +58,14 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     }	
    	
     // Ajout du patient et de la venue
-    $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
-	  $this->addPatient($patient, $mbPatient, false, true);
-	  
-	  $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
-		$this->addVenue($venue, $mbSejour, false, true);
+		if ($mbPatient) {
+			$patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
+      $this->addPatient($patient, $mbPatient, false, true);
+		}
+    if ($mbSejour) {	  
+	    $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
+		  $this->addVenue($venue, $mbSejour, false, true);
+		}
 		
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");

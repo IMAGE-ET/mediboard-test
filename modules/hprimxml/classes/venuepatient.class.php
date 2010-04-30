@@ -94,8 +94,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $data['patient'] = $xpath->queryUniqueNode("hprim:patient", $venuePatient);
     $data['venue'] = $xpath->queryUniqueNode("hprim:venue", $venuePatient);
 
-    $data['idSource'] = $this->getIdSource($data['patient']);
-    $data['idCible'] = $this->getIdCible($data['patient']);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);
     $data['idCibleVenue'] = $this->getIdCible($data['venue']);
