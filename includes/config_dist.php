@@ -19,6 +19,12 @@ $dPconfig["instance_role"] = "qualif";
 $dPconfig["mb_id"]         = "";
 $dPconfig["alternative_mode"] = "0";
 
+// Mode migration
+$dPconfig["migration"]["active"] = "0";
+$dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";
+$dPconfig["migration"]["extranet_url"] = "http://extranet_server/mediboard/";
+$dPconfig["migration"]["limit_date"] = "1970-01-01";
+
 $dPconfig["date"]         = "%d/%m/%Y";
 $dPconfig["time"]         = "%Hh%M";
 $dPconfig["datetime"]     = "%d/%m/%Y %Hh%M";

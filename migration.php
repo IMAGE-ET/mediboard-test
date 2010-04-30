@@ -8,17 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/** Données à modifier **/
-$intranet_address = "http://www.openxtrem.com/";
-$extranet_address = "http://www.mediboard.org/";
-$limit_date = "1970-01-01";
-/************************/
-
 require("includes/mb_functions.php");
+require("includes/config_dist.php");
+require("includes/config.php");
+
+$config = $dPconfig["migration"];
 
 $ip = get_remote_address();
-$url = is_intranet_ip($ip["client"]) ? $intranet_address : $extranet_address;
-$limit_date = strtotime($limit_date);
+$url = is_intranet_ip($ip["client"]) ? $config["intranet_url"] : $config["extranet_url"];
+$limit_date = strtotime($config["limit_date"]);
 
 setlocale(LC_TIME, "fr_FR", "fr_FR@euro", "fr_FR.utf8", "fra");
 

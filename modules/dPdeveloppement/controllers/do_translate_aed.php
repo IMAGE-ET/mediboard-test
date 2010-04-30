@@ -8,10 +8,10 @@
 */
 
 function redirect() {
-	if (CValue::post("ajax")) {
+  if (CValue::post("ajax")) {
     echo CAppUI::getMsg();
     CApp::rip();
-	}
+  }
   CAppUI::redirect();
 }
 
@@ -28,16 +28,8 @@ $language = CValue::post("language", null);
 if(!$module || !$tableau || !is_array($tableau)){
   CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
   redirect();
-	return;
+  return;
 }
-
-foreach ($tableau as $key => $valChaine){
-    if ($valChaine){
-      	$tableau[$key] = stripslashes($tableau[$key]);
-    }
-}
-
-ksort($tableau);
 
 $translateModule = new CMbConfig;
 $translateModule->sourcePath = null;
@@ -51,11 +43,21 @@ if (is_file("locales/$language/$module.php")) {
 }
 
 if (!is_file($translateModule->targetPath)) {
-	CMbPath::forceDir(dirname($translateModule->targetPath));
-	file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = ""; ?>');
+  CMbPath::forceDir(dirname($translateModule->targetPath));
+  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = ""; ?>');
 }
 
-$error = $translateModule->update($tableau, true);
+$translateModule->load();
+
+foreach ($tableau as $key => $valChaine){
+  if ($valChaine && $tableau[$key] !== ""){
+    $translateModule->values[$key] = stripslashes($tableau[$key]);
+  }
+}
+
+ksort($translateModule->values);
+
+$error = $translateModule->update($translateModule->values, false);
 
 SHM::rem("locales-$language");
 

@@ -1,4 +1,12 @@
 <?php
+$locales['configure'] = 'Configurer';
+$locales['deleted'] = 'supprimé';
+$locales['disabled'] = 'Désactivé';
+$locales['install'] = 'Installer';
+$locales['Configure'] = 'Configurer';
+$locales['Deleted'] = 'Supprimé';
+$locales['Disabled'] = 'Désactivé';
+$locales['Install'] = 'Installer';
 $locales['Account'] = 'Compte';
 $locales['Action'] = 'Action';
 $locales['Actions'] = 'Actions';

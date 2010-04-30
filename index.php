@@ -56,6 +56,11 @@ if ($dPconfig["offline"]) {
   die("Le système est actuellement en cours de maintenance");
 }
 
+if ($dPconfig["migration"]["active"]) {
+  header("Location: migration.php");
+  exit;
+}
+
 // Check that the user has correctly set the root directory
 is_file ($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: Le répertoire racine est probablement mal configuré");
