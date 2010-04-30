@@ -41,18 +41,18 @@ class CPlanningWeek  {
     $sunday = mbDate("next sunday", $this->date);
     
     if ($date_min) 
-      $this->date_min = max($monday, $date_min);
+      $this->date_min = max($monday, mbDate($date_min));
     else
       $this->date_min = $monday;
     
     if ($date_max)
-      $this->date_max = min($sunday, $date_max);
+      $this->date_max = min($sunday, mbDate($date_max));
     else 
       $this->date_max = $sunday;
-      
+    
     // Days period
     for ($i = 0; $i < 7; $i++) {
-      $this->days[mbDate("+$i day", $this->date_min)] = array();
+      $this->days[mbDate("+$i day", $monday)] = array();
     }
   }
   
