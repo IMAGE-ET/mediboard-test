@@ -58,24 +58,22 @@ function raz(form) {
           </td>
         </tr> 
         {{foreachelse}}
-        <script type='text/javascript'>
-          loadUser({{$filter->user_id}}, '');
-					editPlageVac('',{{$filter->user_id}});
-        </script>
-				<tr>
+        <tr>
           <td colspan="2">{{tr}}CMediusers.none{{/tr}}</td>
         </tr>
         {{/foreach}}
 	    </table>
-	  </td>
-		<td>
-			<div id="vw_user"></div>
-		</td>
-  </tr>
+	   </td>
+       <td>
+         <div id="vw_user"></div>
+       </td>
+     </tr>
 </table>
 {{if $filter->user_id}}
   <script type='text/javascript'>
-		loadUser({{$filter->user_id}}, '{{$filter->_id}}');
-		editPlageVac('{{$filter->_id}}',{{$filter->user_id}});
+    Main.add( function() {
+      loadUser({{$filter->user_id}}, '{{$filter->_id}}');
+      editPlageVac('{{$filter->_id}}',{{$filter->user_id}});
+    });
   </script>
 {{/if}}
