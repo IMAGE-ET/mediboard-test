@@ -9,10 +9,7 @@ submitFormEditSSR = function(oForm){
 }
 
 Main.add(function(){
-  Calendar.regField(getForm("editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}").debut, null, { noView: true, inline: true, container: null });
-	
-	
-	
+  Calendar.regField(getForm("editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}").debut, null, { noView: true, inline: true, container: null, minInterval: 10 });
 });
         
 </script>

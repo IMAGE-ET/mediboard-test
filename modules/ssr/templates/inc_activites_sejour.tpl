@@ -88,8 +88,10 @@ Main.add(function(){
       minChars: 2,
       select: ".value"
     } );
-  } 
+  }
 	
+	// Initialisation du timePicker
+	Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
 });
 									
 </script>
@@ -236,7 +238,7 @@ input.time[readonly]  {
 		</tr>
 		<tr>
 			<th>Heure</th>
-      <td>{{mb_field object=$evenement_ssr field="_heure" form="editEvenementSSR"}}</td>
+      <td><input type="hidden" name="_heure" class="time" /></td>
 		</tr>
 		<tr>
 			<th>Durée (min)</th>
