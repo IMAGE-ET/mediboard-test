@@ -473,6 +473,14 @@ table#weeklyPlanning th.today {
   padding: 2px;
 }
 
+.planning .kine {
+  background: #aaa url(../../images/icons/evtKine.png) no-repeat top right;
+}
+
+.planning .equipement {
+  background: #aaa url(../../images/icons/evtEquipement.png) no-repeat top right;
+}
+
 .planning .hours td {
   height: 30px; 
   padding: 0;
