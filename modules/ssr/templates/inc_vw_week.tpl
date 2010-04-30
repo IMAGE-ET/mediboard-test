@@ -24,7 +24,7 @@ Main.add(function() {
 
 <div class="planning">
   <table class="tbl" style="table-layout: fixed;">
-    <col style="width: 3.5em;" />
+    <col style="width: 3.0em;" />
     <col span="7" />
     <col style="width: 16px;" />
     
@@ -46,7 +46,7 @@ Main.add(function() {
            {{assign var=unavail value=false}}
          {{/if}}
          
-         <th class="hour {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
+         <th class="day {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
            {{$_day|date_format:"%a %d"|nl2br}}
            
            {{if array_key_exists($_day, $planning->day_labels)}}
@@ -63,12 +63,14 @@ Main.add(function() {
   
   <div id="{{$planning->guid}}" style="overflow-y: scroll; overflow-x: hidden; height: 250px;">
     <table class="tbl hours" style="table-layout: fixed;">
-      <col style="width: 3.5em;" />
+      <col style="width: 3.0em;" />
       <col span="7" />
       
+      {{assign var=prev_pause value=false}}
+      
       {{foreach from=$planning->hours item=_hour}}
-        <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
-          <th class="hour">{{$_hour}}:00</th>
+        <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}} {{if $prev_pause}}pause-next{{/if}}">
+          <th class="hour">{{$_hour}}h</th>
           
           {{foreach from=$planning->days key=_day item=_events}}
             {{if $_day < $planning->date_min || $_day > $planning->date_max}}
@@ -104,6 +106,11 @@ Main.add(function() {
               {{/foreach}}
               </div>
             </td>
+            {{if in_array($_hour,$planning->pauses)}}
+              {{assign var=prev_pause value=true}}
+            {{else}}
+              {{assign var=prev_pause value=false}}
+            {{/if}}
           {{/foreach}}
           
         </tr>
