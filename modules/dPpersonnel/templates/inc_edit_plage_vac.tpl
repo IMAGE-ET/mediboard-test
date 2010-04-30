@@ -69,6 +69,19 @@
         {{mb_field object=$plagevac field="date_fin" form="editplage" register="true"}}
       </td>
     </tr>
+
+    <tr>
+      <th>
+        {{mb_label object=$plagevac field="replacer_id"}}
+      </th>
+      <td>
+	      <select name="replacer_id" class="{{$plagevac->_specs.replacer_id}}">
+	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	        {{mb_include module=mediusers template=inc_options_mediuser list=$replacers selected=$plagevac->replacer_id}}
+	      </select>
+      </td>
+    </tr>
+
     <tr>
       <td colspan="6" class="button">
         <button class = "submit" type="submit">{{tr}}Save{{/tr}}</button>

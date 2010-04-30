@@ -9,12 +9,17 @@
 *}}
 <table class="tbl">
   <tr>
-    <th colspan="2"class="title">Plages pour {{mb_value object=$user field="_user_last_name"}} {{mb_value object=$user field="_user_first_name"}}</th>
+    <th colspan="10"class="title">Plages pour {{mb_value object=$user field="_user_last_name"}} {{mb_value object=$user field="_user_first_name"}}</th>
+  </tr>
+  <tr>
+    <th>{{mb_title class=CPlageVacances field=libelle}}</th>
+    <th>{{tr}}Dates{{/tr}}</th>
+    <th>{{mb_title class=CPlageVacances field=replacer_id}}</th>
   </tr>
   {{foreach from=$plages_vac item=_plagevac}}
     <tr id="p{{$_plagevac->_id}}" {{if $plage_id == $_plagevac->_id}} class="selected" {{/if}}>
       <td>
-        <a href="#"
+        <a href="#Edit-{{$_plagevac->_guid}}"
            onclick="editPlageVac({{$_plagevac->_id}},{{$user->_id}})">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_plagevac->_guid}}')">
           {{mb_value object=$_plagevac field="libelle"}}
@@ -22,10 +27,11 @@
         </a>
       </td>
       <td>
-        {{assign var=date_deb value=$_plagevac->date_debut}}
-        {{assign var=date_f value=$_plagevac->date_fin}}
-        {{mb_include module=system template=inc_interval_date from=$date_deb to=$date_f}}
+        {{mb_include module=system template=inc_interval_date from=$_plagevac->date_debut to=$_plagevac->date_fin}}
       </td>
+			<td>
+				{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plagevac->_fwd.replacer_id}}
+			</td>
     </tr>
   {{foreachelse}}
     <tr>

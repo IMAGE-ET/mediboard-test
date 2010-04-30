@@ -14,14 +14,20 @@ global $can;
 $user_id = CValue::getorSession("user_id");
 $user = new CMediusers();
 $user->load($user_id);
-$plage_id = CValue::get("plage_id", 0);
+
+// Plages de congés pour l'utilisateur
 $plage_vac = new CPlageVacances();
 $plage_vac->user_id = $user_id;
-
-$plages_vac = array();
 $plages_vac = $plage_vac->loadMatchingList();
+foreach($plages_vac as $_plage) {
+	$_plage->loadFwdRef("replacer_id");
+	$replacer =& $_plage->_fwd["replacer_id"];
+	$replacer->loadRefFunction();
+}
 
 $new_plagevac = new CPlageVacances();
+
+$plage_id = CValue::get("plage_id");
 
 // Création du template
 $smarty = new CSmartyDP();

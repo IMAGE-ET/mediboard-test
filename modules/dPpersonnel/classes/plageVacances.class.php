@@ -12,10 +12,11 @@ class CPlageVacances extends CMbObject {
   var $plage_id = null;
   
   // DB Fields
-  var $date_debut = null;
-  var $date_fin   = null;
-  var $libelle    = null;
-  var $user_id    = null;
+  var $date_debut  = null;
+  var $date_fin    = null;
+  var $libelle     = null;
+  var $user_id     = null;
+	var $replacer_id = null;
 
   // Object References
   var $_ref_user  = null;
@@ -33,10 +34,11 @@ class CPlageVacances extends CMbObject {
   //spécification des propriétés
   function getProps() { 
     $specs = parent::getProps();
+    $specs["user_id"]     = "ref class|CMediusers notNull";
     $specs["date_debut"]  = "date notNull";
     $specs["date_fin"]    = "date moreEquals|date_debut notNull";
     $specs["libelle"]     = "str notNull";
-		$specs["user_id"]     = "ref class|CMediusers notNull";
+    $specs["replacer_id"] = "ref class|CMediusers";
 		$specs["_duree"]      = "num";
     return $specs;
   }
