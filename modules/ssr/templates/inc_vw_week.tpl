@@ -40,13 +40,7 @@ Main.add(function() {
            {{assign var=disabled value=false}}
          {{/if}}
              
-         {{if array_key_exists($_day, $planning->unavailabilities)}}
-           {{assign var=unavail value=true}}
-         {{else}}
-           {{assign var=unavail value=false}}
-         {{/if}}
-         
-         <th class="day {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
+         <th class="day {{if $disabled}}disabled{{/if}}">
            {{$_day|date_format:"%a %d"|nl2br}}
            
            {{if array_key_exists($_day, $planning->day_labels)}}

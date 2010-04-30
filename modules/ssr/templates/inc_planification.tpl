@@ -27,7 +27,7 @@ Main.add(Planification.showWeek);
 	</tr>
 	
   <tr>
-  	<td style="padding: 2px;">
+  	<td>
 			<div style="position: relative;">
 				<div style="position: absolute; top: 0px; right: 0px;">
 			    <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"/>

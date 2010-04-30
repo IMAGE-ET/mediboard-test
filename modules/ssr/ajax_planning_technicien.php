@@ -19,11 +19,9 @@ $kine = new CMediusers();
 $kine->load($kine_id);
 
 $planning = new CPlanningWeek($date);
-if($surveillance){
-  $planning->title = "Planning de surveillance du technicien '$kine->_view'";
-} else {
-  $planning->title = "Planning du technicien '$kine->_view'";	
-}
+$planning->title = $surveillance ?
+  "Planning de surveillance du technicien '$kine->_view'" :
+  "Planning du technicien '$kine->_view'";	
 
 $planning->guid = $kine->_guid;
 
@@ -42,11 +40,32 @@ foreach($evenements as $_evenement){
 	$important = ($_evenement->sejour_id == $sejour_id);
 	$_evenement->loadRefSejour();
 	$_evenement->_ref_sejour->loadRefPatient();
-	$title = $_evenement->_ref_sejour->_ref_patient->_view." - ".$_evenement->code;
+	$patient =  $_evenement->_ref_sejour->_ref_patient;
+	$title = "$patient->_civilite $patient->nom - $_evenement->code";
 	$element_prescription =& $_evenement->_ref_element_prescription;
-  $color = $element_prescription->_color ? "#".$element_prescription->_color : null;
-	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $element_prescription->_guid));
+  $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
+	$planning->addEvent(new CPlanningEvent(
+    $_evenement->_guid, 
+		$_evenement->debut, 
+		$_evenement->duree, 
+		$title, 
+		$color, 
+		$important, 
+		$element_prescription->_guid
+	));
 }
+
+foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {
+	$planning->addUnavailability($_plage->date_debut, $_plage->date_fin);
+	$replacer = $_plage->loadFwdRef("replacer_id");
+	if ($replacer->_id) {
+		for ($day = $_plage->date_debut; $day <= $_plage->date_fin; $day = mbDate("+1 DAY", $day)) {
+      $planning->addDayLabel($day, $replacer->_view);
+		}
+	}
+}
+
+// Heure courante
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
 // Création du template

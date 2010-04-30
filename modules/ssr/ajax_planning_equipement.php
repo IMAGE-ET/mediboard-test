@@ -34,7 +34,9 @@ foreach($evenements as $_evenement){
   $_evenement->loadRefSejour();
 	$_evenement->loadRefTherapeute();
   $_evenement->_ref_sejour->loadRefPatient();
-  $title = $_evenement->_ref_sejour->_ref_patient->_view." - ".$_evenement->_ref_therapeute->_shortview;
+	$therapeute = $_evenement->_ref_therapeute;
+  $patient =  $_evenement->_ref_sejour->_ref_patient;
+  $title = "$patient->_civilite $patient->nom - $therapeute->_shortview - $_evenement->code";
   $element_prescription =& $_evenement->_ref_element_prescription;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $element_prescription->_guid));
