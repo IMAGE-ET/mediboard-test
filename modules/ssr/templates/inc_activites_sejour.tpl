@@ -58,10 +58,13 @@ submitSSR = function(){
 		return false;
 	}
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
-	  if($V(oFormEvenementSSR.equipement_id)){
-		  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
-    }
-	 	Planification.refresh($V(oFormEvenementSSR.sejour_id));
+		refreshPlanningsSSR();
+	  $$(".days").each(function(e){
+		  $V(e, '');
+		});
+		$V(oFormEvenementSSR._heure, '');
+		$V(oFormEvenementSSR._heure_da, '');
+		$V(oFormEvenementSSR.duree, '');
 	}} );
 }
 
@@ -77,8 +80,6 @@ addBorderEvent = function(){
   $$(".event").invoke("removeClassName", "elt_selected");
   $$(".CElementPrescription-"+$V(oFormEvenementSSR._element_id)).invoke("addClassName", 'elt_selected');
 }
-
-
 
 var oFormEvenementSSR;
 Main.add(function(){
@@ -248,7 +249,7 @@ Main.add(function(){
 	          <tr>
 	            {{foreach from=$list_days key=_date item=_day}}
 	              <td>
-	                <label>{{$_day}}<br /><input type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+	                <label>{{$_day}}<br /><input class="days" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
 	                </label>
 	              </td>
 	            {{/foreach}}
@@ -257,12 +258,11 @@ Main.add(function(){
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>Heure</th>
-	      <td><input type="hidden" name="_heure" class="time" /></td>
-	    </tr>
-	    <tr>
-	      <th>Durée (min)</th>
-	      <td>{{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}</td>  
+	      <th>Heure / Durée (min)</th>
+	      <td>
+					{{mb_field object=$evenement_ssr field="_heure" form="editEvenementSSR"}}
+          {{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}
+				</td>
 	    </tr>
 	    <tr>
 	      <td colspan="2" class="button">
