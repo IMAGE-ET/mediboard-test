@@ -505,6 +505,17 @@ table#weeklyPlanning th.today {
   background: #ddd;
 }
 
+.planning td.unavailable,
+.planning th.unavailable {
+  background-image: url(./images/pictures/unavailable.png);
+}
+
+.planning th.hour label {
+  display: block;
+  font-size: 9px;
+  font-weight: normal;
+}
+
 div.tree-content {
   margin: 0; 
   padding-left: 25px;

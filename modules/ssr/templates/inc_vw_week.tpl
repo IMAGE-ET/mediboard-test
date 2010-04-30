@@ -34,12 +34,28 @@ Main.add(function() {
     <tr>
        <th></th>
     	 {{foreach from=$planning->days key=_day item=_events}}
-        {{if $_day < $planning->date_min || $_day > $planning->date_max}}
-          {{assign var=disabled value=true}}
-        {{else}}
-          {{assign var=disabled value=false}}
-        {{/if}}
-         <th class="hour {{if $disabled}}disabled{{/if}}">{{$_day|date_format:"%a %d"|nl2br}}</th>
+         {{if $_day < $planning->date_min || $_day > $planning->date_max}}
+           {{assign var=disabled value=true}}
+         {{else}}
+           {{assign var=disabled value=false}}
+         {{/if}}
+             
+         {{if array_key_exists($_day, $planning->unavailabilities)}}
+           {{assign var=unavail value=true}}
+         {{else}}
+           {{assign var=unavail value=false}}
+         {{/if}}
+         
+         <th class="hour {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
+           {{$_day|date_format:"%a %d"|nl2br}}
+           
+           {{if array_key_exists($_day, $planning->day_labels)}}
+             {{assign var=label value=$planning->day_labels.$_day}}
+             <label style="background: {{$label.color}};" title="{{$label.detail}}">
+               {{$label.text}}
+             </label>
+           {{/if}}
+         </th>
     	 {{/foreach}}
        <th></th>
     </tr>
@@ -61,7 +77,13 @@ Main.add(function() {
               {{assign var=disabled value=false}}
             {{/if}}
             
-            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}}">
+            {{if array_key_exists($_day, $planning->unavailabilities)}}
+              {{assign var=unavail value=true}}
+            {{else}}
+              {{assign var=unavail value=false}}
+            {{/if}}
+            
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}

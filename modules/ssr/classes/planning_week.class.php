@@ -22,6 +22,8 @@ class CPlanningWeek  {
   
   var $events = array();
   var $pauses = array("07", "12", "17");
+  var $unavailabilities = array();
+  var $day_labels = array();
   
   // Periods
   var $hours = array(
@@ -72,7 +74,7 @@ class CPlanningWeek  {
     
     $_event->offset = 0.0;
     $_event->width = 1.0;
-      
+    
     $count = count($colliding);
     
     if ($count) {
@@ -81,5 +83,40 @@ class CPlanningWeek  {
         $_event->offset = $_key * $_event->width;
       }
     }
+  }
+  
+  /**
+   * @param object $min The min date
+   * @param object $max [optional] The max date
+   * @return 
+   */
+  function addUnavailability($min, $max = null) {
+    $min = mbDate($min);
+    
+    $max = $max ? mbDate($max) : $min;
+    
+    if ($min > $max) {
+      list($min, $max) = array($max, $min);
+    }
+    
+    while ($min <= $max) {
+      $this->unavailabilities[$min] = true;
+      $min = mbDate("+1 DAY", $min);
+    }
+  }
+  
+  /**
+   * @param object $day The label's day
+   * @param object $text The label
+   * @param object $detail [optional] Details about the label
+   * @param object $color [optional] The label's color
+   * @return 
+   */
+  function addDayLabel($day, $text, $detail = null, $color = null) {
+    $this->day_labels[mbDate($day)] = array(
+      "text"   => $text, 
+      "detail" => $detail, 
+      "color"  => $color,
+    );
   }
 }
