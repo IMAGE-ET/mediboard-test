@@ -178,16 +178,18 @@ function cancelSejourSSR() {
     <tr>
       <td class="button" colspan="5">
         {{if $sejour->_id}}
-          <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
-          
-          <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
-             {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
-          </button>
-          
-          {{if $can->admin}}
-            <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
-              {{tr}}Delete{{/tr}}
-            </button>
+				  {{if 0}}
+		        <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
+		        
+		        <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
+		           {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
+		        </button>
+		        
+		        {{if $can->admin}}
+		          <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
+		            {{tr}}Delete{{/tr}}
+		          </button>
+		        {{/if}}
           {{/if}}
               
         {{else}}
