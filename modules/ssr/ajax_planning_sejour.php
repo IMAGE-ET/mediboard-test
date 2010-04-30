@@ -16,8 +16,9 @@ $sejour->loadRefPatient();
 
 $patient = $sejour->_ref_patient;
 
-//$planning = new CPlanningWeek("2010-04-07", "2010-04-05", "2010-04-10");
-$planning = new CPlanningWeek(mbDate(), null, null, true);
+// Initialisation du planning
+$date = CValue::getOrSession("date", mbDate());
+$planning = new CPlanningWeek($date, null, null, true);
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 
