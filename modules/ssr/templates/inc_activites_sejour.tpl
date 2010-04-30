@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $bilan->kine_id}} 
 <script type="text/javascript">
 
 selectActivite = function(activite) {
@@ -95,64 +96,70 @@ Main.add(function(){
 });
 									
 </script>
-
-<style type="text/css">
-
-input.time[readonly]  {
-  width:50px;
-}
+{{/if}}
 
 </style>
 
+{{if !$bilan->kine_id}} 
+<div class="small-warning">
+  Le patient n'a pas de 
+  {{mb_label object=$bilan field=kine_id}}
+	<a class="button search" href="?&m={{$m}}&amp;tab=vw_idx_repartition">
+	  Me rendre à la répartition des patients
+	</a>
+</div>
+{{else}}
+
 <form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
-	<input type="hidden" name="m" value="ssr" />
-	<input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
-	<input type="hidden" name="del" value="0" />
-	<input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
-	
-	{{mb_field hidden=true object=$evenement_ssr field=equipement_id}}
-	{{mb_field hidden=true object=$evenement_ssr field=therapeute_id}}
-	<input type="hidden" name="line_id" value="" />
-	<input type="hidden" name="_element_id" value="" />
+  <input type="hidden" name="m" value="ssr" />
+  <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
   
-	<table class="form">
-		<tr>
-			<th class="title" colspan="10">Boîte à activités</th>
-		</tr>
-	  <tr>
-	    <th>{{mb_label object=$bilan field=kine_id}}</th>
-	    <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
-	  </tr>
-		<tr>
-			<th>Activités</th>
-			<td>
-				{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-				  {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	  		    {{foreach from=$_lines_by_cat.element item=_line name=category}}
-	            {{if $smarty.foreach.category.first}}
-			          {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
-							  <button id="trigger-{{$category->_guid}}" class="search activite" type="button" onclick="selectActivite('{{$category->_guid}}')">
-							    {{$category}}
-							  </button>
-				      {{/if}}
-				    {{/foreach}}
-				  {{/foreach}}
-				{{/foreach}}
-	    </td>
-		</tr>
-		<tr>
-	    <th>Eléments</th>
-	    <td>
-	      {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	          {{foreach from=$_lines_by_cat.element item=_line name=category}}
-	            {{assign var=element value=$_line->_ref_element_prescription}}
-	            {{if $smarty.foreach.category.first}}
-	              {{assign var=category value=$element->_ref_category_prescription}}
-					      <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
-	            {{/if}}
-							
-							 <span style="float: right">
+  {{mb_field hidden=true object=$evenement_ssr field=equipement_id}}
+  {{mb_field hidden=true object=$evenement_ssr field=therapeute_id}}
+  
+  <input type="hidden" name="line_id" value="" />
+  <input type="hidden" name="_element_id" value="" />
+  
+  <table class="form">
+    <tr>
+      <th class="title" colspan="10">Boîte à activités</th>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$bilan field=kine_id}}</th>
+      <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
+    </tr>
+    <tr>
+      <th>Activités</th>
+      <td>
+        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+            {{foreach from=$_lines_by_cat.element item=_line name=category}}
+              {{if $smarty.foreach.category.first}}
+                {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
+                <button id="trigger-{{$category->_guid}}" class="search activite" type="button" onclick="selectActivite('{{$category->_guid}}')">
+                  {{$category}}
+                </button>
+              {{/if}}
+            {{/foreach}}
+          {{/foreach}}
+        {{/foreach}}
+      </td>
+    </tr>
+    <tr>
+      <th>Eléments</th>
+      <td>
+        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+            {{foreach from=$_lines_by_cat.element item=_line name=category}}
+              {{assign var=element value=$_line->_ref_element_prescription}}
+              {{if $smarty.foreach.category.first}}
+                {{assign var=category value=$element->_ref_category_prescription}}
+                <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
+              {{/if}}
+              
+               <span style="float: right">
               {{if $_line->debut}}
                 à partir du {{mb_value object=$_line field="debut"}}
               {{/if}}
@@ -160,94 +167,96 @@ input.time[readonly]  {
                 jusqu'au {{mb_value object=$_line field="date_arret"}}
               {{/if}}
               </span>
-						  <label>
-						  <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
+              <label>
+              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
               {{$_line->_view}}
               </label>
-							<br />
-							{{if $smarty.foreach.category.last}}
-							  </div>
-	            {{/if}}
-	          {{/foreach}}
-	        {{/foreach}}
-	      {{/foreach}}
-	    </td>
-	  </tr>
-	  <tr>
-	  	<th>Codes CdARR</th>
-			<td>
-				{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
-	        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
-	          {{foreach from=$_lines_by_cat.element item=_line}}
-						  <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
-							  {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
-								  <label title="{{$_cdarr->commentaire}}">
-								  	<input type="radio" name="cdarr" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
-								  </label>
-								{{/foreach}}
-								
-              </div>
-						{{/foreach}}
-					{{/foreach}}
-				{{/foreach}}	
-         
-				<div id="div_other_cdarr" style="display: none;">
-					<input type="radio" name="cdarr" value="other" onclick="$('other_cdarr').show();" /> Autre
-	        <span id="other_cdarr" style="display: none;">
-	          {{mb_field object=$evenement_ssr field=code class="autocomplete" canNull=true}}
-	           <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
-	        </span>
-			  </div>
-			</td>
-		</tr>	
-	  <tr>
-	    <th>Technicien</th>
-	    <td>
-	      {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-	      <button id="technicien-{{$_technicien->_ref_kine->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_technicien->_ref_kine->_id}}')">
-	        {{$_technicien}}
-	      </button>
-	      {{/foreach}}
-	    </td>
-	  </tr>
-	  <tr>
-	    <th>Equipement</th>
-	    <td>
-	      {{foreach from=$plateau->_ref_equipements item=_equipement}}
-	      <button id="equipement-{{$_equipement->_id}}" class="search equipement" type="button" onclick="selectEquipement('{{$_equipement->_id}}');">
-	        {{$_equipement}}
-	      </button>
-	      {{/foreach}}
-				<button type="button" class="cancel notext" onclick="selectEquipement('');"></button>
-	    </td>
-	  </tr>
+              <br />
+              {{if $smarty.foreach.category.last}}
+                </div>
+              {{/if}}
+            {{/foreach}}
+          {{/foreach}}
+        {{/foreach}}
+      </td>
+    </tr>
     <tr>
-    	<th style="vertical-align: middle;">Jour</th>
-			<td style="text-align: center;">
-			  <table>
-			  	<tr>
-			      {{foreach from=$list_days key=_date item=_day}}
+      <th>Codes CdARR</th>
+      <td>
+        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+            {{foreach from=$_lines_by_cat.element item=_line}}
+              <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
+                {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
+                  <label title="{{$_cdarr->commentaire}}">
+                    <input type="radio" name="cdarr" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
+                  </label>
+                {{/foreach}}
+                
+              </div>
+            {{/foreach}}
+          {{/foreach}}
+        {{/foreach}}  
+         
+        <div id="div_other_cdarr" style="display: none;">
+          <input type="radio" name="cdarr" value="other" onclick="$('other_cdarr').show();" /> Autre
+          <span id="other_cdarr" style="display: none;">
+            {{mb_field object=$evenement_ssr field=code class="autocomplete" canNull=true}}
+             <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+          </span>
+        </div>
+      </td>
+    </tr> 
+    <tr>
+      <th>Technicien</th>
+      <td>
+        {{foreach from=$plateau->_ref_techniciens item=_technicien}}
+        <button id="technicien-{{$_technicien->_ref_kine->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_technicien->_ref_kine->_id}}')">
+          {{$_technicien}}
+        </button>
+        {{/foreach}}
+      </td>
+    </tr>
+    <tr>
+      <th>Equipement</th>
+      <td>
+        {{foreach from=$plateau->_ref_equipements item=_equipement}}
+        <button id="equipement-{{$_equipement->_id}}" class="search equipement" type="button" onclick="selectEquipement('{{$_equipement->_id}}');">
+          {{$_equipement}}
+        </button>
+        {{/foreach}}
+        <button type="button" class="cancel notext" onclick="selectEquipement('');"></button>
+      </td>
+    </tr>
+    <tr>
+      <th style="vertical-align: middle;">Jour</th>
+      <td style="text-align: center;">
+        <table>
+          <tr>
+            {{foreach from=$list_days key=_date item=_day}}
               <td>
                 <label>{{$_day}}<br /><input type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
                 </label>
               </td>
             {{/foreach}}
-					</tr>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<th>Heure</th>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <th>Heure</th>
       <td><input type="hidden" name="_heure" class="time" /></td>
-		</tr>
-		<tr>
-			<th>Durée (min)</th>
+    </tr>
+    <tr>
+      <th>Durée (min)</th>
       <td>{{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}</td>  
-		</tr>
-		<tr>
-			<td colspan="2" class="button">
-				<button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
-			</td>
-		</tr>
-	</table>
+    </tr>
+    <tr>
+      <td colspan="2" class="button">
+        <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
 </form>
+{{/if}}
+

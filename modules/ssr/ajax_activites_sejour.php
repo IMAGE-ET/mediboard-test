@@ -19,6 +19,7 @@ $date = CValue::getOrSessionAbs("date", mbDate());
 
 $monday = mbDate("last monday", mbDate("+1 day", $date));
 $sunday = mbDate("next sunday", $date);
+
 for ($i = 0; $i < 7; $i++) {
 	$_date = mbDate("+$i day", $monday);
   $list_days[$_date] = mbTransformTime(null, $_date, "%a");
@@ -37,6 +38,7 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
     }
 	}
 }
+
 
 // Bilan
 $sejour->loadRefBilanSSR();
