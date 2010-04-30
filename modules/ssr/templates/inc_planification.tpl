@@ -8,32 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-	
-switchPlanningTech = function(){
-  var oFormSurvTech = getForm("surv_tech");
-	$V(oFormSurvTech.surveillance) != 1 ? $V(oFormSurvTech.surveillance, '1') : $V(oFormSurvTech.surveillance, '0');
-  PlanningTechnicien.show($V(getForm("editEvenementSSR").therapeute_id), $V(oFormSurvTech.surveillance), $V(getForm("editEvenementSSR").sejour_id));
-}
-
-</script>
 {{mb_include_script module=ssr script=planification}}
 
 <table class="main">
-  <col style="width: 60%;" />
+  <col style="width: 50%;" />
   
 	<tr>
 		<td style="padding: 3px;" id="planning-sejour"></td>
     <td style="padding: 3px;" id="activites-sejour"></td>
 	</tr>
+	
   <tr>
   	<td style="padding: 3px;">
 		<div style="position: relative;">
-		  <form name="surv_tech" action="?" method="">
-		    <input type="hidden" name="surveillance" value="0" />
-			</form>
 			<div style="position: absolute; top: 0px; right: 0px;">
-		    <button type="button" class="change notext" onclick="switchPlanningTech();"/>
+		    <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"/>
 			</div>
 			<div id="planning-technicien"></div>
 	</div>

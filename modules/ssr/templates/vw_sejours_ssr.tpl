@@ -10,7 +10,11 @@
 
 {{mb_include_script module=ssr script=sejours_ssr}}
 
-<table id="sejours-ssr" class="main tbl">
+<a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
+  Admettre un patient
+</a>
+  
+<table id="sejours-ssr" class="tbl">
 	<tr>
 		<th class="title" colspan="10">
 			Séjours SSR du {{$date|date_format:$dPconfig.longdate}}
@@ -47,8 +51,15 @@
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
 		</td>
 
-    <td>{{mb_value object=$_sejour field=entree format=$dPconfig.date}}</td>
-    <td>{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}</td>
+    <td style="text-align: center;">
+    	{{mb_value object=$_sejour field=entree format=$dPconfig.date}}
+      <div style="text-align: left; opacity: 0.6;">{{$_sejour->_entree_relative}}j</div>
+		</td>
+
+    <td style="text-align: center;">
+    	{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
+      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
+		</td>
 		
 		<td>
       <a>
