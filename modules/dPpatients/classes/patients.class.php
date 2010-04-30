@@ -679,9 +679,9 @@ class CPatient extends CMbObject {
     	$this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
     
-    $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? "($this->nom_jeune_fille)" : " ";
-    $this->_view     = "$this->_civilite $this->nom $nom_naissance $this->prenom";
-    $this->_longview = "$this->_civilite_long $this->nom $nom_naissance $this->prenom";
+    $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? " ($this->nom_jeune_fille)" : "";
+    $this->_view     = "$this->_civilite $this->nom$nom_naissance $this->prenom";
+    $this->_longview = "$this->_civilite_long $this->nom$nom_naissance $this->prenom";
 		
    // Navigation fields
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
