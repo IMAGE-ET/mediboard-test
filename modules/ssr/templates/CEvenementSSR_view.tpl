@@ -16,7 +16,7 @@ Main.add(function(){
 
 {{include file=CMbObject_view.tpl}}
 
-<form name="editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}" method="post" action="?" onsubmit="return submitFormEditSSR(this);">
+<form style="display: none;" name="editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}" method="post" action="?" onsubmit="return submitFormEditSSR(this);">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_evenement_ssr_aed" />
   <input type="hidden" name="del" value="0" />
