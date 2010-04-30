@@ -140,9 +140,6 @@ Main.add(function(){
 	  
 	  <table class="form">
 	    <tr>
-	      <th class="title" colspan="10">Boîte à activités</th>
-	    </tr>
-	    <tr>
 	      <th>{{mb_label object=$bilan field=kine_id}}</th>
 	      <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
 	    </tr>
@@ -310,11 +307,8 @@ Main.add(function(){
    
     <table class="form">
     	<tr>
-    	  <th class="title">Opérations sur les événements sélectionnés</th>
-			</tr>
-    	<tr>
     		<th class="category">
-    			Suppression des événements
+    			Suppression des événements sélectionnés
     		</th>
 			</tr>
 			<tr>
@@ -326,7 +320,7 @@ Main.add(function(){
     	</tr>
 		 <tr>
         <th class="category">
-          Modification
+          Modification des événements sélectionnés
         </th>
       </tr>
 			<tr>

@@ -12,7 +12,7 @@
   <tr>
     <td style="width: 12em; text-align: left;">
     	<button type="button" class="left" onclick="Planification.changeWeek('{{$prev_week}}')">
-    		Semaine précédente {{$prev_week}}
+    		Semaine précédente
 			</button>
     </td>
 		
@@ -26,7 +26,7 @@
           {{$planning->date|date_format:'%Y'}}
 				</strong>
 
-	      <form name="DateSelect" action="?" method="get" onsubmit="Planification.changeWeek('{{$prev_week}}')">
+	      <form name="DateSelect" action="?" method="get" onsubmit="return Planification.changeWeek($V(this.date))">
 	        <input type="hidden" name="m" value="{{$m}}" />
 	        <script type="text/javascript">
 	        Main.add(function () {
@@ -34,7 +34,7 @@
 	        });
 	        </script>
 	
-	        <input type="hidden" name="date" class="date" value="{{$planning->date}}" onchange="this.form.submit()" />
+	        <input type="hidden" name="date" class="date" value="{{$planning->date}}" onchange="this.form.onsubmit()" />
 	      </form>
 
 			</big>
@@ -43,7 +43,7 @@
 		
     <td style="width: 12em; text-align: right;">
       <button type="button" class="right rtl" onclick="Planification.changeWeek('{{$next_week}}')">
-      	Semaine suivante {{$next_week}}
+      	Semaine suivante
 			</button>
     </td>
   </tr>
