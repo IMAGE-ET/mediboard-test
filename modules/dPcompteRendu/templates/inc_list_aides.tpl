@@ -82,7 +82,7 @@
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="dosql" value="do_aide_aed" />
       {{mb_key object=$_aide}}
-      <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$_aide|smarty:nodefaults|JSAttribute}}'})">
+      <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide',objName:'{{$_aide->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
       </button>
     </form>
