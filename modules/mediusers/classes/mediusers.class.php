@@ -207,6 +207,7 @@ class CMediusers extends CMbObject {
     $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
     $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
     $backProps["protocoles"]                      = "CProtocole chir_id";
+    $backProps["remplacements"]                   = "CPlageVacances replacer_id";
     $backProps["sejours"]                         = "CSejour praticien_id";
     $backProps["tarifs"]                          = "CTarif chir_id";
     $backProps["techniciens"]                     = "CTechnicien kine_id";
