@@ -24,6 +24,11 @@ class CEvenementSSR extends CMbObject {
 	
 	var $_heure                  = null;
 	var $_ref_element_prescription = null;
+	var $_nb_decalage_min_debut = null;
+	var $_nb_decalage_heure_debut = null;
+  var $_nb_decalage_jour_debut = null;
+  
+	var $_nb_decalage_duree = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -43,6 +48,10 @@ class CEvenementSSR extends CMbObject {
 		$props["equipement_id"] = "ref class|CEquipement";
 		$props["realise"]       = "bool default|0";
 		$props["_heure"]        = "time";
+    $props["_nb_decalage_min_debut"]   = "num";
+		$props["_nb_decalage_heure_debut"] = "num";
+    $props["_nb_decalage_jour_debut"]  = "num";
+		$props["_nb_decalage_duree"]   = "num";
     return $props;
   }
 	

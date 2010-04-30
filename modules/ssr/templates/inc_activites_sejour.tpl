@@ -289,16 +289,72 @@ Main.add(function(){
 		  });
 	  }
 		
+		resetFormSSR = function(){
+		  var oForm = getForm('editSelectedEvent');
+		  $V(oForm.del, '0');
+      $V(oForm._nb_decalage_min_debut, '');
+      $V(oForm._nb_decalage_heure_debut, '');
+      $V(oForm._nb_decalage_jour_debut, '');
+      $V(oForm._nb_decalage_duree, '');
+		}
+		
 	</script>	
 
-	<form name="removeSelectedEvent" method="post" action="?">
+	<form name="editSelectedEvent" method="post" action="?" onsubmit="updateSelectedEvents(this.token_elts); 
+                                                                    return onSubmitFormAjax(this, { onComplete: function(){ 
+																																		    refreshPlanningsSSR(); resetFormSSR(); } } )">
 		<input type="hidden" name="m" value="ssr" />
 		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
 		<input type="hidden" name="token_elts" value="" />
-    <input type="hidden" name="del" value="1" />		
-    <button type="button" class="trash" onclick="updateSelectedEvents(this.form.token_elts); 
-		                                             return onSubmitFormAjax(this.form, { onComplete: refreshPlanningsSSR } )">Supprimer les évenements sélectionnés</button>
-	</form>
-	
+    <input type="hidden" name="del" value="0" />		
+   
+    <table class="form">
+    	<tr>
+    	  <th class="title">Opérations sur les événements sélectionnés</th>
+			</tr>
+    	<tr>
+    		<th class="category">
+    			Suppression des événements
+    		</th>
+			</tr>
+			<tr>
+    		<td class="button">
+          <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
+            Supprimer
+					</button>
+    		</td>
+    	</tr>
+		 <tr>
+        <th class="category">
+          Modification
+        </th>
+      </tr>
+			<tr>
+				<td>
+			    Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
+      	</td>
+			</tr>
+      <tr>
+        <td>
+          Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
+        </td>
+      </tr>	    		
+      <tr>
+        <td>
+          Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
+        </td>
+      </tr>
+			<tr>
+				<td>				 
+					Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2}} minutes
+			  </td>
+			</tr>
+			<tr>
+				<td class="button">
+					<button type="button" onclick="this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
+				</td>
+			</tr>			
+    </table>
+	</form> 
 </div>
 {{/if}}
