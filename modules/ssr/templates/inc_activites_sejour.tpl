@@ -292,7 +292,7 @@ Main.add(function(){
       $V(oForm._nb_decalage_min_debut, '');
       $V(oForm._nb_decalage_heure_debut, '');
       $V(oForm._nb_decalage_jour_debut, '');
-      $V(oForm._nb_decalage_duree, '');
+      $V(oForm._nb_decalage_duree, ''); 
 		}
 		
 	</script>	
@@ -304,20 +304,7 @@ Main.add(function(){
 		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
 		<input type="hidden" name="token_elts" value="" />
     <input type="hidden" name="del" value="0" />		
-   
     <table class="form">
-    	<tr>
-    		<th class="category">
-    			Suppression des événements sélectionnés
-    		</th>
-			</tr>
-			<tr>
-    		<td class="button">
-          <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
-            Supprimer
-					</button>
-    		</td>
-    	</tr>
 		 <tr>
         <th class="category">
           Modification des événements sélectionnés
@@ -340,15 +327,47 @@ Main.add(function(){
       </tr>
 			<tr>
 				<td>				 
-					Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2}} minutes
+					Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
 			  </td>
 			</tr>
 			<tr>
 				<td class="button">
 					<button type="button" onclick="this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
 				</td>
-			</tr>			
+			</tr>	
+			<tr>
+        <th class="category">
+          Suppression des événements sélectionnés
+        </th>
+      </tr>
+      <tr>
+        <td class="button">
+          <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
+            Supprimer
+          </button>
+        </td>
+      </tr>
     </table>
-	</form> 
+	</form>
+	
+	<form name="duplicateSelectedEvent" method="post" action="?" onsubmit="updateSelectedEvents(this.token_elts); 
+                                                                    return onSubmitFormAjax(this, { onComplete: function(){ 
+                                                                        refreshPlanningsSSR(); resetFormSSR(); } } )">
+    <input type="hidden" name="m" value="ssr" />
+    <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
+    <input type="hidden" name="token_elts" value="" /> 
+    <table class="form">
+    	<tr>
+        <th class="category">
+          Duplication des événements sélectionnés vers la semaine suivante
+        </th>
+      </tr>
+      <tr>
+        <td class="button">
+          <button type="button" class="submit" onclick="$V(this.form.duplicate, '1'); this.form.onsubmit();">Dupliquer</button>
+        </td>
+      </tr> 
+	  </table>
+	</form>
 </div>
 {{/if}}

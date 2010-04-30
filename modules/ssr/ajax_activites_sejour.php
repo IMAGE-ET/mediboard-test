@@ -15,7 +15,7 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
-$date = CValue::getOrSessionAbs("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 
 $monday = mbDate("last monday", mbDate("+1 day", $date));
 $sunday = mbDate("next sunday", $date);
