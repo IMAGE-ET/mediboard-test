@@ -39,7 +39,6 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
 	}
 }
 
-
 // Bilan
 $sejour->loadRefBilanSSR();
 $bilan =& $sejour->_ref_bilan_ssr;

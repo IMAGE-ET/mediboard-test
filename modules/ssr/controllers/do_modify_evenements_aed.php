@@ -14,6 +14,8 @@ $_nb_decalage_min_debut   = CValue::post("_nb_decalage_min_debut");
 $_nb_decalage_heure_debut = CValue::post("_nb_decalage_heure_debut");
 $_nb_decalage_jour_debut  = CValue::post("_nb_decalage_jour_debut");
 $_nb_decalage_duree       = CValue::post("_nb_decalage_duree");
+$kine_id                  = CValue::post("kine_id");
+$equipement_id            = CValue::post("equipement_id");
 
 $elts_id = explode("|", $token_elts);
 foreach($elts_id as $_elt_id){
@@ -38,7 +40,14 @@ foreach($elts_id as $_elt_id){
     }
     if($_nb_decalage_duree){
       $evenement_ssr->duree = $evenement_ssr->duree + $_nb_decalage_duree;
-    } 
+    }
+		if($equipement_id){
+		  $evenement_ssr->equipement_id = $equipement_id;
+    }
+		if($kine_id){
+      $evenement_ssr->therapeute_id = $kine_id;
+    }
+		
     $msg = $evenement_ssr->store();
 		CAppUI::displayMsg($msg, "CEvenementSSR-msg-store");
 	}

@@ -293,6 +293,8 @@ Main.add(function(){
       $V(oForm._nb_decalage_heure_debut, '');
       $V(oForm._nb_decalage_jour_debut, '');
       $V(oForm._nb_decalage_duree, ''); 
+			$V(oForm.kine_id, ''); 
+			$V(oForm.equipement_id, ''); 
 		}
 		
 	</script>	
@@ -306,7 +308,7 @@ Main.add(function(){
     <input type="hidden" name="del" value="0" />		
     <table class="form">
 		 <tr>
-        <th class="category">
+        <th class="category" colspan="2">
           Modification des événements sélectionnés
         </th>
       </tr>
@@ -314,34 +316,54 @@ Main.add(function(){
 				<td>
 			    Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
       	</td>
+				<td>
+					Transférer vers le planning 
+					<select name="kine_id">
+						<option value="">&mdash; Choix d'un kiné</option>
+						{{foreach from=$plateau->_ref_techniciens item=_technicien}}
+						  <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
+						{{/foreach}}
+					</select>
+				</td>
 			</tr>
       <tr>
         <td>
           Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
         </td>
+				<td>
+					Transférer vers le planning 
+				  <select name="equipement_id">
+				  	<option value="">&mdash; Choix d'un équipement</option>
+            {{foreach from=$plateau->_ref_equipements item=_equipement}}
+              <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+            {{/foreach}}
+          </select>
+				</td>
       </tr>	    		
       <tr>
         <td>
           Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
         </td>
+				<td></td>
       </tr>
 			<tr>
 				<td>				 
 					Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
 			  </td>
+				<td></td>
 			</tr>
 			<tr>
-				<td class="button">
+				<td class="button" colspan="2">
 					<button type="button" onclick="this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
 				</td>
 			</tr>	
 			<tr>
-        <th class="category">
+        <th class="category" colspan="2">
           Suppression des événements sélectionnés
         </th>
       </tr>
       <tr>
-        <td class="button">
+        <td class="button" colspan="2">
           <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
             Supprimer
           </button>
