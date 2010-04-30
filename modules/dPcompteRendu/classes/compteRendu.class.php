@@ -88,12 +88,12 @@ class CCompteRendu extends CDocumentItem {
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float min|0";
-    $specs["margin_top"]       = "float notNull min|0 default|2";
-    $specs["margin_bottom"]    = "float notNull min|0 default|2";
-    $specs["margin_left"]      = "float notNull min|0 default|2";
-    $specs["margin_right"]     = "float notNull min|0 default|2";
-    $specs["page_height"]      = "float notNull min|1 default|29.7";
-    $specs["page_width"]       = "float notNull min|1 default|21";
+    $specs["margin_top"]       = "float notNull min|0 default|2 show|0";
+    $specs["margin_bottom"]    = "float notNull min|0 default|2 show|0";
+    $specs["margin_left"]      = "float notNull min|0 default|2 show|0";
+    $specs["margin_right"]     = "float notNull min|0 default|2 show|0";
+    $specs["page_height"]      = "float notNull min|1 default|29.7 show|0";
+    $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
     
     $specs["_owner"]           = "enum list|prat|func|etab";
@@ -470,11 +470,12 @@ class CCompteRendu extends CDocumentItem {
           }
           if($footer) {
             $sizefooter = $sizefooter != '' ? $sizefooter : 50;
+            $padding_bottom = $sizeheader + 20;
             $style .= "
               <style type=\"text/css\">
                 @media print {
                   #body { 
-                    padding-bottom: {$sizefooter}px;
+                    padding-bottom: {$padding_bottom}px;
                   }
                   #footer {
                     height: {$sizefooter}px;
