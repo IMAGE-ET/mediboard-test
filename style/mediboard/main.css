@@ -27,8 +27,8 @@ tr.script {
   display: none;
 }
 
-div div.text {
-  white-space: normal;
+.text {
+  white-space: normal !important;
 }
 
 a.selected{

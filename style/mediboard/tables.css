@@ -115,10 +115,6 @@ table.main td.button {
   text-align: center;
 }
 
-table.main td.text {
-  white-space: normal;
-}
-
 table.main td.top {
   vertical-align: top;
 }
@@ -163,10 +159,6 @@ table.tbl a {
 
 table.tbl a.button {
   display: inline-block;
-}
-
-a.text {
-	white-space: normal;
 }
 
 a.actionPat {
@@ -305,11 +297,6 @@ div.tree-header:hover {
   background-color: #f8f8f8;
 }
 
-table.tbl th.text,
-table.tbl td.text {
-  white-space: normal;
-}
-
 table.tbl td.button {
   text-align: center;
   vertical-align: middle;
@@ -391,7 +378,6 @@ table.form th.category label {
 }
 
 table.form th.text {
-  white-space: normal;
   text-align: center;
 }
 
@@ -415,7 +401,6 @@ table.form td.compte_rendu {
   background-color: #ddd;
 }
 
-table.form td.text,
 table.form td.info {
   white-space: normal;
 }
