@@ -414,8 +414,9 @@ Element.addMethods({
         container = new Element('div').addClassName("textarea-container"),
         grippie = new Element('div', {title: "Glissez cette barre vers la bas pour agrandir la zone de texte"}); // the draggable element
     
+    $(element).insert({before: container});
     // We remove the margin between the textarea and the grippie
-    $(element).wrap(container);
+    $(container).insert(element);
     
     // grippie's class and style
     grippie.addClassName('grippie-h').setOpacity(0.5);
