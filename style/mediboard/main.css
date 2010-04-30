@@ -458,6 +458,17 @@ table#weeklyPlanning th.today {
   white-space: nowrap;
 }
 
+.planning .elt_selected {
+  margin: -1px;
+  border: 1px solid #000;
+}
+
+.planning .selected, .planning .selected:hover {
+  margin: -2px;
+  border: 2px dotted #000;
+  z-index: 10;
+	opacity: 0.7;
+}
 .planning .event .body {
   padding: 2px;
 }

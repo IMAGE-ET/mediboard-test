@@ -13,7 +13,8 @@ class CPlanningWeek  {
   var $title = null;
   
   var $date = null;
-  
+  var $selectable = null;
+	
   var $date_min = null;
   var $date_max = null;
   var $hour_min = "09";
@@ -32,9 +33,10 @@ class CPlanningWeek  {
 
   var $days = array();
 
-  function __construct($date, $date_min = null, $date_max = null) {
+  function __construct($date, $date_min = null, $date_max = null, $selectable = false) {
     $this->date = $date;
-    
+    $this->selectable = $selectable;
+		
     $monday = mbDate("last monday", mbDate("+1 day", $this->date));
     $sunday = mbDate("next sunday", $this->date);
     

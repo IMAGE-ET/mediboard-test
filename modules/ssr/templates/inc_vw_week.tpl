@@ -9,6 +9,7 @@
 *}}
 
 <script type="text/javascript">
+
 Main.add(function() {
   var planning = new WeekPlanning(
     '{{$planning->guid}}', 
@@ -18,6 +19,7 @@ Main.add(function() {
   );
   Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
 });
+
 </script>
 
 <div class="planning">
@@ -63,7 +65,7 @@ Main.add(function() {
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');"{{/if}} class="event {{$_event->css_class}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
+                  <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" {{if $planning->selectable}}onclick="this.toggleClassName('selected');"{{/if}}{{/if}} class="event {{$_event->css_class}} {{$_event->guid}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
                     <!--
 										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
 											{{$_event->start|date_format:"%H:%M"}}
