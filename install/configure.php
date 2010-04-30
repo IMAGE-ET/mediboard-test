@@ -50,11 +50,6 @@ showHeader();
     <th><label for="base_url" title="Url Racine pour le système">Url racine</label></th>
     <td><input type="text" size="40" name="base_url" value="<?php echo $dPconfig['base_url'] ?>" /></td>
   </tr>
-
-  <tr>
-    <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>
-    <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
-  </tr>
   
   <tr>
     <th><label for="instance_role" title="Instance">Rôle de l'instance</label></th>
@@ -64,6 +59,16 @@ showHeader();
         <option value="qualif" <?php if ($dPconfig['instance_role'] == 'qualif') { echo 'selected="selected"'; } ?> >Qualification</option>
       </select>
     </td>
+  </tr>
+
+  <tr>
+    <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>
+    <td><input type="text" size="1" maxlength="1" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
+  </tr>
+  
+  <tr>
+    <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateur">Mode migration</label></th>
+    <td><input type="text" size="1" maxlength="1" name="migration[active]" value="<?php echo @$dPconfig['migration']['active']; ?>" /></td>
   </tr>
 
   <tr>
