@@ -46,12 +46,24 @@ Main.add( function(){
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;mode_duplication=1" class="button new">
         Dupliquer des elements
       </a>
-			<div id="{{$category->_guid}}">
+			<div id="element-list">
 	      {{mb_include template=inc_list_elements}}
 	    </div>
-	    <script type="text/javascript">ViewPort.SetAvlHeight('{{$category->_guid}}', 0.6);</script>
+	    <script type="text/javascript">ViewPort.SetAvlHeight('element-list', 0.35);</script>
 			{{/if}}
-	  </td> 
+
+      {{if $element_prescription->_id && @$modules.ssr->mod_active}}
+      <hr />
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id=0" class="button new">
+        Ajouter un code CdARR
+      </a>
+      <div id="cdarr-list">
+        {{mb_include template=inc_list_element_cdarrs}}
+      </div>
+      <script type="text/javascript">ViewPort.SetAvlHeight('cdarr-list', 0.4);</script>
+      {{/if}}
+	  </td>
+		 
     <td class="halfPane">
       {{mb_include template=inc_form_category}}
 			
@@ -65,10 +77,8 @@ Main.add( function(){
 			  {{if $element_prescription->_id && @$modules.ssr->mod_active}}
         <hr />
 				{{mb_include template=inc_form_element_cdarr}}
-        {{mb_include template=inc_list_element_cdarrs}}
-
-			{{/if}}
-		 {{/if}} 
+    		{{/if}}
+		  {{/if}} 
 		{{/if}}
     </td>
   </tr>

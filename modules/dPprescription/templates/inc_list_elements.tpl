@@ -26,7 +26,8 @@
 			{{/if}}
       <th></th>
     </tr>
-   {{foreach from=$category->_ref_elements_prescription item=_element}}
+    
+		{{foreach from=$category->_ref_elements_prescription item=_element}}
     <tr class="
        {{if $_element->_id == $element_prescription->_id}}selected{{/if}}
        {{if $_element->cancelled}}cancelled{{/if}}"
@@ -56,4 +57,5 @@
       </td>
      </tr>
     {{/foreach}}
+		
   </table>

@@ -8,10 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id=0" class="button new">
-Ajouter un code CdARR
-</a>
-
 <form name="editCdarr" action="" method="post">
  <input type="hidden" name="m" value="ssr" />
  <input type="hidden" name="dosql" value="do_element_prescription_to_cdarr_aed" />
