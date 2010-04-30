@@ -104,12 +104,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
-        
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -129,11 +125,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
             $commentaire = "L'identifiant source fait référence au séjour : $id400Venue->object_id et l'identifiant cible au séjour : $mbVenue->_id.";
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
-            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-      
-            $echange_hprim->acquittement = $messageAcquittement;
-            $echange_hprim->statut_acquittement = "erreur";
-            $echange_hprim->store();
+            
+						$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
             return $messageAcquittement;
           }
         }
@@ -153,11 +146,8 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
           $commentaire = "L'identifiant source fait référence au séjour : $id400VenueEliminee->object_id et l'identifiant cible au séjour : $mbVenueEliminee->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E141", $commentaire);
           $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-    
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();
+					
+          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
           return $messageAcquittement;
         }
       }

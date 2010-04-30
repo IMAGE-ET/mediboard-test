@@ -81,14 +81,10 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     if (CAppUI::conf('sip server')) {
       // Acquittement d'erreur : identifiants source et cible non fournis
       if (!$data['idSource'] && !$data['idCible']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E05");
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
-      
+				
+				$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
         
@@ -248,6 +244,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
               $echange_hprim->acquittement = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
+							$echange_hprim->date_echange = mbDateTime();
               $echange_hprim->store();
               
               return $messageAcquittement;
@@ -387,13 +384,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       if (!$data['idCible'] && !$data['idSource']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->date_echange = mbDateTime();
-        $echange_hprim->store();
-      
+				
+				$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -491,11 +483,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-              $echange_hprim->acquittement = $messageAcquittement;
-              $echange_hprim->statut_acquittement = "erreur";
-              $echange_hprim->store();
+							
+							$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
             }
             $_code_IPP = "I024"; 

@@ -147,12 +147,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
-        
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -177,11 +173,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           	  $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-              $echange_hprim->acquittement = $messageAcquittement;
-              $echange_hprim->statut_acquittement = "erreur";
-              $echange_hprim->store();
+							
+              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;		
           	}
             
@@ -220,11 +213,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
-            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-            $echange_hprim->acquittement = $messageAcquittement;
-            $echange_hprim->statut_acquittement = "erreur";
-            $echange_hprim->store();   
+						
+            $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");   
             return $messageAcquittement;		
           }
           // Notifier les autres destinataires
@@ -263,11 +253,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
 			          $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
 			          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
 			          $doc_valid = $domAcquittement->schemaValidate();
-			          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-			        
-			          $echange_hprim->acquittement = $messageAcquittement;
-			          $echange_hprim->statut_acquittement = "erreur";
-			          $echange_hprim->store();   
+								
+			          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");   
 			          return $messageAcquittement;		
 			        }
               // Recherche d'un num dossier déjà existant pour cette venue 
@@ -333,11 +320,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
           $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();   
+					
+          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur"); 
           return $messageAcquittement;		
         }
         $newVenue->load($num_dossier->object_id);
@@ -356,11 +340,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au séjour : $num_dossier->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        
-              $echange_hprim->acquittement = $messageAcquittement;
-              $echange_hprim->statut_acquittement = "erreur";
-              $echange_hprim->store();
+							
+              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
             }
             $_code_NumDos = "I124"; 

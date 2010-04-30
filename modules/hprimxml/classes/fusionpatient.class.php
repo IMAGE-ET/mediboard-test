@@ -84,12 +84,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       if (!$data['idSource'] && !$data['idCible'] && !$data['idSourceElimine'] && !$data['idCibleElimine']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005", null, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-          
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
-        
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -104,11 +100,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "L'identifiant source fait référence au patient : $id400Patient->object_id et l'identifiant cible au patient : $mbPatient->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire, $newPatient);
           $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-    
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();
+					
+          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
           return $messageAcquittement;
         }
       } 
@@ -127,11 +120,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "L'identifiant source fait référence au patient : $id400PatientElimine->object_id et l'identifiant cible au patient : $mbPatientElimine->_id.";
           $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E041", $commentaire, $newPatient);
           $doc_valid = $domAcquittement->schemaValidate();
-          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-    
-          $echange_hprim->acquittement = $messageAcquittement;
-          $echange_hprim->statut_acquittement = "erreur";
-          $echange_hprim->store();
+					
+          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
           return $messageAcquittement;
         }
       }
@@ -143,11 +133,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E012", $commentaire, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-  
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -167,11 +154,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge";
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E010", $commentaire, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-  
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -179,11 +163,8 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "La fusion des données des patients a échoué : $msg";
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E011", $commentaire, $newPatient);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-  
-        $echange_hprim->acquittement = $messageAcquittement;
-        $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->store();
+				
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       

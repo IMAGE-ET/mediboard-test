@@ -134,6 +134,14 @@ class CEchangeHprim extends CMbMetaObject {
     $this->object_id = $object_id;
     $this->object_class = $object_class;
   }
+	
+	function setAckError($doc_valid, $messageAcquittement, $statut_acquittement) {
+		$this->acquittement_valide = $doc_valid ? 1 : 0;
+    $this->acquittement = $messageAcquittement;
+    $this->statut_acquittement = $statut_acquittement;
+    $this->date_echange = mbDateTime();
+    $this->store();
+	}
   
   function getObjectIdClass() {
     switch($this->sous_type) {
