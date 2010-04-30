@@ -27,7 +27,10 @@ tr.script {
   display: none;
 }
 
-.text {
+/** Must not apply it to every tag, or it will break textareas behavior */
+td.text,
+th.text,
+div.text {
   white-space: normal !important;
 }
 
