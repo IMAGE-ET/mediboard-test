@@ -45,13 +45,14 @@ $V(oFormEvenementSSR.line_id, line_id);
   $$("div.cdarrs").invoke("hide");
 	$V(getForm("editEvenementSSR").cdarr, '');
 	$("cdarrs-"+line_id).show();
-	
-	// Mise en evidence des elements dans les plannings
+	$('div_other_cdarr').show();
+
+  // Mise en evidence des elements dans les plannings
 	addBorderEvent();
 }
 
 submitSSR = function(){
-  if(!$V(oFormEvenementSSR.cdarr)){
+  if(!$V(oFormEvenementSSR.cdarr) && !$V(oFormEvenementSSR.code)){
 	  alert("Veuillez selectionner un code SSR");
 		return false;
 	}
@@ -80,6 +81,15 @@ var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
 	selectTechnicien('{{$bilan->kine_id}}');
+	
+	if($('code_auto_complete')){
+    var url = new Url("ssr", "httpreq_do_activite_autocomplete");
+    url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
+      minChars: 2,
+      select: ".value"
+    } );
+  } 
+	
 });
 									
 </script>
@@ -168,15 +178,24 @@ input.time[readonly]  {
 	        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	          {{foreach from=$_lines_by_cat.element item=_line}}
 						  <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
-						  {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
-							  <label title="{{$_cdarr->commentaire}}">
-							  	<input type="radio" name="cdarr" value="{{$_cdarr->code}}" /> {{$_cdarr->code}}
-							  </label>
-							{{/foreach}}
-							</div>
+							  {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
+								  <label title="{{$_cdarr->commentaire}}">
+								  	<input type="radio" name="cdarr" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
+								  </label>
+								{{/foreach}}
+								
+              </div>
 						{{/foreach}}
 					{{/foreach}}
 				{{/foreach}}	
+         
+				<div id="div_other_cdarr" style="display: none;">
+					<input type="radio" name="cdarr" value="other" onclick="$('other_cdarr').show();" /> Autre
+	        <span id="other_cdarr" style="display: none;">
+	          {{mb_field object=$evenement_ssr field=code class="autocomplete" canNull=true}}
+	           <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+	        </span>
+			  </div>
 			</td>
 		</tr>	
 	  <tr>

@@ -10,9 +10,14 @@
 
 $sejour_id     = CValue::post("sejour_id");
 $cdarr         = CValue::post("cdarr");
+$code          = CValue::post("code");
 $equipement_id = CValue::post("equipement_id");
 $therapeute_id = CValue::post("therapeute_id");
 $line_id       = CValue::post("line_id");
+
+if($cdarr == "other"){
+	$cdarr = $code;
+}
 
 $_days = CValue::post("_days");
 $_heure = CValue::post("_heure");
