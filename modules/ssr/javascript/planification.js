@@ -9,10 +9,18 @@
  */
 
 PlanningEquipement = {
+	equipement_id : null,
+	sejour_id : null,
+	
   show: function(equipement_id, sejour_id) {
-    new Url("ssr", "ajax_planning_equipement") .
-      addParam("equipement_id", equipement_id) .
-			addParam("sejour_id", sejour_id) .
+		this.equipement_id = equipement_id || this.equipement_id;
+    this.sejour_id = sejour_id || this.sejour_id; 
+    if(!this.equipement_id){
+			return;
+		}
+		new Url("ssr", "ajax_planning_equipement") .
+      addParam("equipement_id", this.equipement_id) .
+			addParam("sejour_id", this.sejour_id) .
       requestUpdate("planning-equipement");
   },
 	
@@ -27,12 +35,16 @@ PlanningTechnicien = {
 	sejour_id   : null,
 	
   show: function(kine_id, surveillance, sejour_id) {
-		this.kine_id = kine_id;
-		this.sejour_id = sejour_id; 
+		this.kine_id = kine_id || this.kine_id;
+		this.sejour_id = sejour_id || this.sejour_id ; 
+		this.surveillance = surveillance || this.surveillance ; 
+    if(!this.kine_id){
+      return;
+    }
     var url = new Url("ssr", "ajax_planning_technicien");
-		url.addParam("kine_id", kine_id);
-	  url.addParam("surveillance", surveillance);
-    url.addParam("sejour_id", sejour_id);
+		url.addParam("kine_id", this.kine_id);
+	  url.addParam("surveillance", this.surveillance);
+    url.addParam("sejour_id",  this.sejour_id);
     url.requestUpdate("planning-technicien");
   },
 	
@@ -43,7 +55,7 @@ PlanningTechnicien = {
 	toggle: function() {
 		this.surveillance = this.surveillance == 1 ? 0 : 1;
 	  PlanningTechnicien.show(this.kine_id, this.surveillance, this.sejour_id);
-	},
+	}
 };
 
 Planification = { 
@@ -61,9 +73,9 @@ Planification = {
 	},
 	
 	refreshSejour: function(sejour_id) {
-    this.sejour_id = sejour_id;
+    this.sejour_id = sejour_id || this.sejour_id;
 	  new Url("ssr", "ajax_planning_sejour") .
-	    addParam("sejour_id", sejour_id) .
+	    addParam("sejour_id", this.sejour_id) .
 	    requestUpdate("planning-sejour");
 	},
 	
@@ -78,11 +90,12 @@ Planification = {
     if (date) {
       url.addParam("date", date);
     }
-    url.requestUpdate("week-changer");
-  },
-  
-	changeWeek: function(date) {
-		Planification.showWeek(date);
-		Planification.refresh();
-	}
+    url.requestUpdate("week-changer", { onComplete: function(){
+			if(date){
+				Planification.refreshSejour();
+	      PlanningTechnicien.show();
+	      PlanningEquipement.show();
+		  }
+		}});
+  }
 };
