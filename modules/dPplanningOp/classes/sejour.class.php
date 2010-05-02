@@ -1366,5 +1366,21 @@ class CSejour extends CCodable {
       $_sejour->store();
     }
   }
+	
+	/**
+	 * Count evenement SSR for a given date;
+	 * @param date $date 
+	 * @return 
+	 */
+	function countEvenementsSSR($date) {
+		if (!$this->_id) {
+			return;
+		}
+		
+		$evenement = new CEvenementSSR;
+    $where["sejour_id"] = " = '$this->_id'";
+    $where["debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
+		return $this->_count_evenements_ssr = $evenement->countList($where);
+	}
 }
 ?>

@@ -24,7 +24,6 @@
 				Main.add(function () {
 				  Calendar.regField(getForm("selDate").date, null, { noView: true} );
 				});
-				  
 				</script>
 
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
@@ -32,16 +31,17 @@
 	  </th>
 	</tr>
 	<tr>
-    <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
+    <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
     <th style="width:   1%;">
       <input type="text" size="6" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
     </th>
-    <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
-    <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_sejours_ssr"}}</th>
+    <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
+    <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
 
 		<th style="width:  5em;">{{mb_title class="CSejour" field="_num_dossier"}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
     <th style="width: 12em;">{{mb_title class="CBilanSSR" field="kine_id"}}</th>
+    <th style="width:  4em;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
 	</tr>
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
@@ -74,11 +74,26 @@
     	{{mb_value object=$_sejour field=libelle}}
 		</td>
 		
-    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
     <td class="text">
+	    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
+	    {{assign var=kine  value=$bilan->_fwd.kine_id}}
+			{{if $kine->_id}}
     	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$bilan->_fwd.kine_id}}
+      {{/if}}
 		</td>
 		
+    <td style="text-align: right;">
+		  {{if $_sejour->_count_evenements_ssr}} 
+      {{$_sejour->_count_evenements_ssr}}
+		  {{/if}}
+    </td>
+
+    <td style="text-align: right;">
+      {{if $_sejour->_count.evenements_ssr}} 
+      {{$_sejour->_count.evenements_ssr}}
+      {{/if}}
+    </td>
+
 	</tr>
 	{{foreachelse}}
 	<tr>

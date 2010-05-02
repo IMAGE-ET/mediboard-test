@@ -41,6 +41,8 @@ foreach($sejours as $_sejour) {
   $_sejour->loadNumDossier();
   $_sejour->loadRefPrescriptionSejour();
   $_sejour->loadRefsNotes();
+	$_sejour->countBackRefs("evenements_ssr");
+	$_sejour->countEvenementsSSR($date);
 
   // Bilan SSR
   $_sejour->loadRefBilanSSR();
