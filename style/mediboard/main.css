@@ -439,7 +439,7 @@ table#weeklyPlanning th.today {
   border-radius: 3px;
   color: #fff;
   white-space: normal;
-  font-size: 9px;
+  font-size: 10px;
   overflow: hidden;
   cursor: pointer;
 }
