@@ -16,39 +16,47 @@ span.hilite {
 }
 
 @media screen {
-	#header,  #footer {
-		margin: 10px;
-		border: 2px dashed #ccc;
-		padding: 3px;
-	  opacity: 0.4;
-	  overflow: hidden;
-	}
-	
-	#footer {
-	  display: none;
-	}
-	
-	#header:hover, #footer:hover {
-	  opacity: 1;
-	}
+  #header,  #footer {
+    margin: 10px;
+    border: 2px dashed #ccc;
+    padding: 3px;
+	opacity: 0.4;
+	overflow: hidden;
+  }
 
-	html {
-		background: #eee;
-	}
-	
-	body {
-	  border: 1px solid #aaa;
-	  margin: 10px;
-	  padding: 2px;
-	  padding-right: 6px;
-	}
+  #footer {
+    display: none;
+  }
 
-	table {
-		border: 1px solid #888;
-		border-collapse: collapse;
-	}
-	
-	span.field,
+  #header:hover, #footer:hover {
+    opacity: 1;
+  }
+
+  html {
+    background: #eee;
+  }
+
+  body {
+    border: 1px solid #aaa;
+    margin: 10px;
+    padding: 2px;
+    padding-right: 6px;
+  }
+
+  table {
+    border: 1px solid #888;
+    border-collapse: collapse;
+    /* Pour le non heritage dans domPDF*/
+    text-align: left;
+    white-space: normal;
+    line-height: normal;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    font-variant: normal;
+  }
+
+  span.field,
   span.field * {
     background: #dde;
   }
@@ -82,29 +90,29 @@ span.hilite {
 }
 
 @media print {
-	#header, #footer {
-	  width: 100%;
-		position: fixed;
-	  overflow: hidden;
-		border: 0px solid #888;
-	}
+  #header, #footer {
+    width: 100%;
+    position: fixed;
+    overflow: hidden;
+    border: 0px solid #888;
+  }
 
-	#header {
-	  top: 0em;
-	  border-bottom-width: 1px;
-	}
-	
-	#footer {
-	  bottom: 0em;
-	  border-top-width: 1px;
-	}
-	
-	hr {
-		border: none;
-		border-top: 1px solid #999;
-		padding: 0;
-	}
-	
+  #header {
+    top: 0em;
+    border-bottom-width: 1px;
+  }
+
+  #footer {
+    bottom: 0em;
+    border-top-width: 1px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #999;
+    padding: 0;
+  }
+
   hr.pagebreak,
   hr.pageBreak {
     border: none;
@@ -112,5 +120,4 @@ span.hilite {
     margin: 0;
     page-break-before: always;
   }
-	
 }

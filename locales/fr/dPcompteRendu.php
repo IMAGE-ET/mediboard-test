@@ -178,6 +178,7 @@ $locales['CCompteRendu.type.'] = 'Indéterminé';
 $locales['CCompteRendu.type.body'] = 'Corps de texte';
 $locales['CCompteRendu.type.footer'] = 'Pied-de-page';
 $locales['CCompteRendu.type.header'] = 'Entête';
+$locales['CCompteRendu-empty-doc'] = "Compte-rendu vide";
 $locales['CDestinataire.tag.assure'] = 'Assuré';
 $locales['CDestinataire.tag.correspondant'] = 'Médecin correspondant';
 $locales['CDestinataire.tag.employeur'] = 'Employeur';

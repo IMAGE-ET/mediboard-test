@@ -126,9 +126,10 @@ if($file_id = CValue::get("file_id")) {
     header("MIME-Version: 1.0");
     header("Content-length: {$file->file_size}");
     header("Content-type: {$file->file_type}");
+
     header("Content-disposition: attachment; filename=\"".$file->file_name."\"");
     readfile($file->_file_path);
-    
+
   }
 } else {
   CAppUI::setMsg("fileIdError", UI_MSG_ERROR);

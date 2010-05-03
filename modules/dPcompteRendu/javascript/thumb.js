@@ -1,6 +1,6 @@
 var Thumb = {
   thumb_up2date: true,
-  choixaffiche: function() {
+  choixAffiche: function() {
     $("thumbs").toggle();
     $("thumbs_button").toggle();
     var editeur = $("editeur");
@@ -8,8 +8,18 @@ var Thumb = {
     colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
   },
 
-  refreshthumbs: function(first_time, compte_rendu_id, modele_id, user_id, mode) {
+  refreshThumbs: function(first_time, compte_rendu_id, modele_id, user_id, mode) {
     this.thumb_up2date = true;
+
+    // TODO: changez en classes CSS
+    if (first_time != 1) {
+      for (var i = 0; i < Thumb.nb_thumbs; i++) {
+        $("thumb_" + i).onclick = null;
+      }
+     $('mess').onclick = null;
+    }
+    
+    
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
@@ -40,7 +50,7 @@ var Thumb = {
   old: function() {
     if(!this.thumb_up2date) return;
     var on_click = function(){
-      Thumb.refreshthumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+      Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
     }
     $("thumbs").setOpacity(0.5);
 
@@ -51,13 +61,12 @@ var Thumb = {
 
     var mess = $('mess').show();
     mess.observe("click", on_click);
-    mess.down("button").observe("click", on_click);
     this.thumb_up2date = false;
   }
 }
 
 function FCKeditor_OnComplete(editorInstance) {
-  editorInstance.Events.AttachEvent('OnSelectionChange', loadold);
+  editorInstance.Events.AttachEvent('OnSelectionChange', loadOld);
   Thumb.content = editorInstance.GetHTML(false);
 
   editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
@@ -65,14 +74,15 @@ function FCKeditor_OnComplete(editorInstance) {
   var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
   fck_editing_area.style.height = '100.1%';
   setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
-  Thumb.refreshthumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+  Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
 }
 
-function loadold(editorInstance) {
+function loadOld(editorInstance) {
   if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
+    Thumb.content = editorInstance.GetHTML(false);
     Thumb.old();
   }
-	Thumb.content = editorInstance.GetHTML(false);
+	
 }
 
 function FCKeventChanger(editorInstance) {

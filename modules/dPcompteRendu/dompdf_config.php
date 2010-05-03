@@ -7,6 +7,8 @@
 * @author Romain Ollivier
 */
 
+ini_set("memory_limit", "128M");
+
 // Le type de @media accepté par DOMPDF  
 define("DOMPDF_DEFAULT_MEDIA_TYPE", "print");
 

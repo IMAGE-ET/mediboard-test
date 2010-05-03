@@ -369,7 +369,7 @@ Main.add(function () {
           <th class="category" colspan="2">
           	{{tr}}CCompteRendu-Pagelayout{{/tr}}
 					  <button class="hslip notext" type="button" title="Afficher / Masquer les vignettes"
-                    onclick = "Thumb.choixaffiche();"></button>	
+                    onclick = "Thumb.choixAffiche();"></button>	
 					</th>
         </tr>
 				<tr id="page_layout" style="display: none;">

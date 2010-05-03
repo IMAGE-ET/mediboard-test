@@ -31,6 +31,7 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_right,
                                              $compte_rendu->margin_bottom,
                                              $compte_rendu->margin_left));
+
 $files = null;
 $file = new CFile;
 
@@ -93,7 +94,7 @@ else {
   if (!count($files)) {
     $file = new CFile();
     $file->setObject($compte_rendu);
-    $file->file_name  = $compte_rendu->nom;
+    $file->file_name  = $compte_rendu->nom . ".pdf";
     $file->file_type  = "application/pdf";
     $file->file_owner = $user_id;
     $file->fillFields();
@@ -102,10 +103,11 @@ else {
   }
   else {
     $file = reset($files);
+    $file->file_name  = $compte_rendu->nom . ".pdf";
   }
 
   $htmltopdf = new CHtmlToPDF;
-  $htmltopdf->generate_pdf($content, $stream, $page_format, $orientation, $file->_file_path);
+  $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file->_file_path);
   $file->file_size = filesize($file->_file_path);
   $file->store();
 }

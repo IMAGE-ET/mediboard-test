@@ -2,9 +2,8 @@
 	Thumb.nb_thumbs = {{$nbpages}};
 </script>
 
-<div id="mess" style="position: fixed; width: 160px; font-size: 12pt; font-weight: bold; display: none;">
-  <br/><br/>Vignettes obsolètes : cliquez sur le bouton pour réactualiser.<br/>
-	<button type="button" class="change notext">Rafraîchir les vignettes</button>
+<div id="mess" style="position: fixed; width: 160px; font-size: 12pt; font-weight: bold; display: none; cursor: pointer;">
+  <br/><br/>Vignettes obsolètes : cliquez sur une vignette pour réactualiser.<br/>
 </div>
 
 {{assign var=i value=0}}
