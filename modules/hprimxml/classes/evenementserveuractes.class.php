@@ -86,7 +86,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     
     $data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
     
-    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);  
+    $data['actesCCAM']     = $xpath->getMultipleTextNodes("hprim:actesCCAM", $evenementServeurActe, false);  
     
     return $data; 
   }
@@ -102,12 +102,18 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $messageAcquittement = null;
     
      // Si pas Serveur d'Actes
-    if (!CAppUI::conf('pmsi server')) { 
+    if (!CAppUI::conf('dPpmsi server')) { 
       $dest_hprim = new CDestinataireHprim();
       $dest_hprim->nom = $data['idClient'];
       $dest_hprim->loadMatchingObject();
       
       $avertissement = null;
+			
+			// Mapping des actes CCAM
+			$actesCCAM = $this->mappingActesCCAM($data['actesCCAM']);
+			
+			
+			
 			
 			// Acquittement d'erreur : identifiants source du patient / séjour non fournis
       if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
@@ -180,10 +186,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement; 
-			}
-						
-			// Mapping des actes CCAM
-      // $newVenue = $this->mappingMouvements($data['mouvements'], $newVenue);
+			}			
 			
       //$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi($avertissement ? "avt" : "ok", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
     }

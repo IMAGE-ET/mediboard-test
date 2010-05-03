@@ -517,7 +517,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   function mappingMouvements($node, CSejour $mbVenue) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    // Penser a parcourir tous les mouvements par la suite
+    /* @FIXME Penser a parcourir tous les mouvements par la suite */
     $mouvement = $xpath->queryUniqueNode("hprim:mouvement", $node);
 
     if (!CAppUI::conf("hprimxml mvtComplet")) {
@@ -541,7 +541,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   
   function mappingDebiteurs($node, CPatient $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);
-    // Penser a parcourir tous les debiteurs par la suite
+    /* @FIXME Penser a parcourir tous les debiteurs par la suite */
     $debiteur = $xpath->queryUniqueNode("hprim:debiteur", $node);
 
     $mbPatient = $this->getAssurance($debiteur, $mbPatient);

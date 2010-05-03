@@ -24,6 +24,22 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
       parent::__construct("serveurActivitePmsi", $schemafilename."105");
     }   
   }
+	
+	function getDateInterv($node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+    
+    // Obligatoire pour MB
+    $debut = $xpath->queryUniqueNode("hprim:debut", $node, false);
+    
+    return $xpath->queryTextNode("hprim:date", $debut);
+  }
+  
+  function mappingActesCCAM($node) {
+    $xpath = new CMbXPath($node->ownerDocument, true);
+		
+		mbTrace($node, "node", true);
+  }
+	
 }
 
 ?>
