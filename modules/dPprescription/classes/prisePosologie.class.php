@@ -297,8 +297,11 @@ class CPrisePosologie extends CMbMetaObject {
   }
   
 	function calculPlanifs(){
+		// Chargement de la ligne de prescription
     $this->_ref_object = new $this->object_class;
     $this->_ref_object = $this->_ref_object->getCached($this->object_id);
+		
+		// Chargement de la prescription a partir de la ligne
     $this->_ref_object->loadRefPrescription();
 		
 		/*
@@ -308,12 +311,10 @@ class CPrisePosologie extends CMbMetaObject {
 		 *   - si plusieurs affectations, parcours des differents affectations
 		 */
 		
-		$object = $this->_ref_object->_ref_prescription->_ref_object;
-		if($this->_ref_object->_ref_prescription->type != "sejour"){
+		$sejour =& $this->_ref_object->_ref_prescription->_ref_object;
+    if(!$sejour->_id || $this->_ref_object->_ref_prescription->type != "sejour"){
 			return;
 		}
-		$sejour =& $this->_ref_object->_ref_prescription->_ref_object;
-		
 
 		$sejour->loadRefsAffectations();
   
