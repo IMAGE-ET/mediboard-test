@@ -86,9 +86,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $this->addReponses($statut, $codes, $commentaires, $mbObject);
 
     $this->saveTempFile();
-    $messageAcquittementServeurActivitePmsi = utf8_encode($this->saveXML());
+    $messageAckServeurActivitePmsi = utf8_encode($this->saveXML());
 
-    return $messageAcquittementServeurActivitePmsi;
+    return $messageAckServeurActivitePmsi;
   }
    
   function getStatutAcquittementServeurActivitePmsi() {

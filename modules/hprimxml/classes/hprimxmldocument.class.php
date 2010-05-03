@@ -510,13 +510,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($reponse, "statut", $statut);
     $this->addAttribute($reponse, "codeErreur", $code);
    
-		$intervention = $this->addElement($erreurAvertissement, $this->_sous_type_evt);
-    $identifiantPatient = $this->addElement($evenementPatients, "identifiantPatient");
+		$intervention = $this->addElement($reponse, $this->_sous_type_evt);
+    $this->addElement($intervention, "identifiant", $mbObject->_id);
 		
-  	if ($mbObject instanceof COperation) {
-    	$acteCCAM = $this->addElement($reponse, "acteCCAM");
-    	$this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
-    }	
+    $acteCCAM = $this->addElement($reponse, "acteCCAM");
+    $this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
     
 		if ($statut != "ok") {
 			$erreur = $this->addElement($elParent, "erreur");
@@ -793,6 +791,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }
+	
+	function getDateInterv($node) {
+		$xpath = new CMbXPath($this, true);
+    
+		// Obligatoire pour MB
+    $debut = $xpath->queryUniqueNode("hprim:debut", $node, false);
+    
+    return $xpath->queryTextNode("hprim:date", $debut);
+	}
 }
 
 ?>

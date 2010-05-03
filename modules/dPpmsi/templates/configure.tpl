@@ -1,34 +1,33 @@
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="m" value="system" />
-  <input type="hidden" name="dosql" value="do_configure" />
-  <table class="form"> 
-    <tr>
-      <th class="title" colspan="2">Systeme de facturation</th>
-    </tr>
-    <tr>
-      {{assign var="var" value="systeme_facturation"}}
-      <th>
-        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td >
-        <select class="enum list|siemens|t2a" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}">
-          <option value="">Aucun</option>
-          <option value="siemens" {{if $dPconfig.$m.$var == "siemens"}}selected="selected"{{/if}}>Siemens</option>
-          <option value="t2a" {{if $dPconfig.$m.$var == "t2a"}}selected="selected"{{/if}}>T2A</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td class="button" colspan="2">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
-  </table>
-</form>
+{{* $Id$ *}}
 
-{{mb_include template=inc_configure_ghs}}
+{{*
+ * @package Mediboard
+ * @subpackage pmsi
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
 
-{{mb_include template=inc_configure_facture_hprim}}
+<script type="text/javascript">
+Main.add(Control.Tabs.create.curry('tabs-configure', true));
+</script>'
 
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
+  <li><a href="#Export">{{tr}}GHS{{/tr}}</a></li>
+  <li><a href="#Repair">{{tr}}config_facture_hprim{{/tr}}</a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="PMSI" style="display: none;">
+{{mb_include template=inc_config_pmsi}}
+</div>
+
+<div id="Export" style="display: none;">
+{{mb_include template=inc_config_ghs}}
+</div>
+
+<div id="Repair" style="display: none;">
+{{mb_include template=inc_config_facture_hprim}}
+</div>

@@ -243,12 +243,9 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
   
-      $newPatient = new CPatient();
-      $newPatient->_hprim_initiator_id = $echange_hprim->_id;
-      
 			$data = array_merge($data, $domGetEvenement->getServeurActesXML());
       $echange_hprim->id_permanent = $data['idSourceVenue'];
-      $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $newPatient, $data);
+      $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $data);
      
       return $messageAcquittement;
       
