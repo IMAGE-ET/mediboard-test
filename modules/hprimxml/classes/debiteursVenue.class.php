@@ -137,7 +137,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
 
     $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CPatient", $data['idCible']);
+    $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
     $echange_hprim->store();
 
     return $messageAcquittement;
