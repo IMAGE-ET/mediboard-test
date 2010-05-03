@@ -98,8 +98,8 @@ class CAffectation extends CMbObject {
     //TODO: utiliser moreThan
     $this->completeField("entree");
     $this->completeField("sortie");
-    if ($this->sortie <= $this->entree) {
-      return "La date de sortie doit être supérieure à la date d'entrée";
+    if ($this->sortie < $this->entree) {
+      return "La date de sortie doit être supérieure ou égale à la date d'entrée";
     }
     
     if ($msg = $this->checkCollisions()) {
