@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 check_separator = function(element, next_element){
-  if(element.value.charAt(element.value.length-1)==' '){
+  if(element.value.charAt(element.value.length-1) == ' '){
     $(next_element).focus();
     element.value = element.value.substring(0,element.value.length-1);
     return false;
@@ -20,8 +20,7 @@ check_separator = function(element, next_element){
 }
 
 search_product = function(form){
-  var url = new Url;
-  url.setModuleAction("dmi", "httpreq_do_search_product");
+  var url = new Url("dmi", "httpreq_do_search_product");
   url.addParam("code", form.code.value);
   url.addParam("code_lot", form.code_lot.value);
   url.requestUpdate("product_description");
@@ -30,8 +29,7 @@ search_product = function(form){
 
 search_product_order_item_reception = function(){
   var form = getForm("dmi_delivery"); 
-  var url = new Url;
-  url.setModuleAction("dmi", "httpreq_do_search_product_order_item_reception");
+  var url = new Url("dmi", "httpreq_do_search_product_order_item_reception");
   url.addParam("product_id", form.product_id.value);
   url.requestUpdate("list_product_order_item_reception");
   return false;
@@ -39,13 +37,12 @@ search_product_order_item_reception = function(){
 
 Main.add(function () {
   var formDmiDelivery = getForm("dmi_delivery");
-  urlProduct = new Url();
-  urlProduct.setModuleAction("dPstock", "httpreq_do_product_autocomplete");
-  urlProduct.autoComplete(formDmiDelivery._view, formDmiDelivery._view.id+'_autocomplete', {
+  url = new Url("dPstock", "httpreq_do_product_autocomplete");
+  url.autoComplete(formDmiDelivery._view, formDmiDelivery._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
-      $V(formDmiDelivery._view, element.select(".view")[0].innerHTML);
+      $V(formDmiDelivery._view, element.select(".view")[0].innerHTML.stripTags());
       search_product_order_item_reception();
     },
     callback: function(input, queryString){
@@ -59,25 +56,22 @@ reloadListDMI = function(){
 }
 
 addDMI = function(product_id, order_item_reception_id){
-  oFormAddDMI = document.add_dmi;
+  var oFormAddDMI = getForm("add_dmi");
+  
   // si la liste des praticien est affichée, on utilise le praticien selectionné
   if(document.selPraticienLine) {
     oFormAddDMI.praticien_id.value = document.selPraticienLine.praticien_id.value;
   }
   oFormAddDMI.product_id.value = product_id;
   oFormAddDMI.order_item_reception_id.value = order_item_reception_id;
-  submitFormAjax(oFormAddDMI, "systemMsg", { onComplete: function(){
-    reloadListDMI();
-  } } );
+  return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 
 delLineDMI = function(line_dmi_id){
-  oFormAddDMI = document.add_dmi;
+  var oFormAddDMI = getForm("add_dmi");
   oFormAddDMI.prescription_line_dmi_id.value = line_dmi_id;
   oFormAddDMI.del.value = "1";
-  submitFormAjax(oFormAddDMI, "systemMsg", { onComplete: function(){
-    reloadListDMI();
-  } } );
+  return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 </script>
 
@@ -99,7 +93,7 @@ delLineDMI = function(line_dmi_id){
 	    <td>
 	      <table class="form">
 	        <tr>
-	          <th colspan="10" class="title">Recherche par code barre</th>
+	          <th colspan="10" class="category">Recherche par code barre</th>
 	        </tr>
 	        <tr>
 	          <th>Code produit</th>
@@ -110,8 +104,9 @@ delLineDMI = function(line_dmi_id){
 	          <td><input type="text" name="code_lot" /></td>
 	        </tr>
 	        <tr>
-	          <td colspan="2" style="text-align: center">
-	            <button type="button" class="search" onclick="this.form.onsubmit();">Rechercher</button>
+	          <th></th>
+	          <td>
+	            <button type="submit" class="search">Rechercher</button>
 	          </td>
 	        </tr>
 	        <tr>
@@ -123,7 +118,7 @@ delLineDMI = function(line_dmi_id){
 	    <td>
 	      <table class="form">
 	        <tr>
-	          <th colspan="10" class="title">Recherche par produit</th>
+	          <th colspan="10" class="category">Recherche par produit</th>
 	        </tr>
 	        <tr>
 	          <th>Produit</th>
