@@ -34,45 +34,39 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
     return $xpath->queryTextNode("hprim:date", $debut);
   }
   
-  function mappingActesCCAM($node) {
+  function mappingActesCCAM($data) {
+  	$node = $data['actesCCAM'];
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $actesCCAM = array();
     foreach ($node->childNodes as $_acteCCAM) {
-      $actesCCAM[] = $this->mappingActeCCAM($_acteCCAM);
+			$actesCCAM[]["idSourceIntervention"] = $data["idSourceIntervention"];
+			$actesCCAM[]["idCibleIntervention"]  = $data["idCibleIntervention"];
+			$actesCCAM[] = $this->mappingActeCCAM($_acteCCAM);
     }
-    mbTrace($actesCCAM, "actesCCAM", true);
+
     return $actesCCAM;
   }
   
   function mappingActeCCAM($node) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $idEmetteur       = $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
+    $idSource         = $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
+		$idCible          = $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node);
     $codeActe         = $xpath->queryTextNode("hprim:codeActe", $node);
     $codeActivite     = $xpath->queryTextNode("hprim:codeActivite", $node);
     $codePhase        = $xpath->queryTextNode("hprim:codePhase", $node);
-    $date             = $xpath->queryTextNode("hprim:execute/hprim:date", $node);
-    $heure            = mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
-    $execute          = "$date $heure";
-    $medecinExecutant = $xpath->queryUniqueNode("hprim:executant/hprim:medecins/hprim:medecinExecutant", $node);
-    $id400 = new CIdSante400();
-    $id400->object_class = "CMediusers";
-    $id400->tag = $this->getTagMediuser();
-    $id400->id400 = $xpath->queryTextNode("hprim:identification/hprim:code", $medecinExecutant);
-    mbTrace($id400, "id400", true);
-    $id400->loadMatchingObject();
-    $mediuser_id = $id400->object_id;
-    $codeAssociationNonPrevue = $xpath->queryTextNode("hprim:codeAssociationNonPrevue", $node);
-    
+    $executeDate      = $xpath->queryTextNode("hprim:execute/hprim:date", $node);
+    $executeHeure     = mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
+		
     return array (
-      "idEmetteur"   => $idEmetteur,
+      "idSource"     => $idSource,
+			"idCible"      => $idCible,
       "codeActe"     => $codeActe,
       "codeActivite" => $codeActivite,
       "codePhase"    => $codePhase,
-      "execute"      => $execute,
-      "mediuser_id"  => $mediuser_id,
-      "codeAssociationNonPrevue" => $codeAssociationNonPrevue
+      "executeDate"  => $executeDate,
+			"executeHeure" => $executeHeure,
     );
   }
   

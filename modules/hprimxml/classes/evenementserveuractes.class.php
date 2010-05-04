@@ -84,9 +84,11 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $data['idSourceVenue'] = $this->getIdSource($data['venue']);
     $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
-    $data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+    $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+		$data['idSourceIntervention'] = $this->getIdSource($data['intervention']);
+    $data['idCibleIntervention']  = $this->getIdCible($data['intervention']);
     
-    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);  
+    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);  
     
     return $data; 
   }
@@ -110,14 +112,11 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $avertissement = null;
       
       // Mapping des actes CCAM
-      $actesCCAM = $this->mappingActesCCAM($data['actesCCAM']);
-      
-      
-      
-      
+      $actesCCAM = $this->mappingActesCCAM($data);
+          
       // Acquittement d'erreur : identifiants source du patient / séjour non fournis
       if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E206");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E206", $actesCCAM);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -130,7 +129,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $IPP->tag = $dest_hprim->_tag_patient;
       $IPP->id400 = $data['idSourcePatient'];
       if(!$IPP->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013", $actesCCAM);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -147,7 +146,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $num_dos->tag = $dest_hprim->_tag_sejour;
       $num_dos->id400 = $data['idSourceVenue'];
       if(!$num_dos->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E014");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E014", $actesCCAM);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -160,7 +159,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       
       // Si patient H'XML est différent du séjour
       if ($sejour->patient_id != $patient->_id) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015", $actesCCAM);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -181,7 +180,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       
       /* @FIXME Penser à virer par la suite pour rattacher des actes à un séjour... */
       if (!$_operation) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201", $actesCCAM);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");

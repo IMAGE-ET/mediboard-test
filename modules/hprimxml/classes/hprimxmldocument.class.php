@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLDocument extends CMbXMLDocument {	
+class CHPrimXMLDocument extends CMbXMLDocument {  
   var $evenement              = null;
   var $finalpath              = null;
   var $documentfinalprefix    = null;
@@ -32,7 +32,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
     
-    $this->formatOutput = false;
+    //$this->formatOutput = false;
     
     $this->patharchiveschema = "modules/hprimxml/xsd";
     $this->schemapath = "$this->patharchiveschema/$dirschemaname";
@@ -145,9 +145,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $echg_hprim->id_permanent = $mbObject->_num_dossier;
       }
     }
-		if ($mbObject instanceof COperation) {
-			$echg_hprim->object_class = "COperation";
-		}
+    if ($mbObject instanceof COperation) {
+      $echg_hprim->object_class = "COperation";
+    }
     if ($initiateur) {
       $echg_hprim->initiateur_id = $initiateur;
     }
@@ -172,7 +172,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $msg;
   }
   
-	function getIdSource($node) {
+  function getIdSource($node) {
     $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
@@ -190,7 +190,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     return $xpath->queryTextNode("hprim:valeur", $recepteur);
   }
-	
+  
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
     $elValue = substr($elValue, 0, $elMaxSize);
     return $this->addElement($elParent, $elName, $elValue);
@@ -212,7 +212,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $agent = $this->addCodeLibelle($elParent, "agent", $code, $libelle);
     $this->addAttribute($agent, "categorie", $categorie);
     return $agent;
-    
   }
   
   function addIdentifiantPart($elParent, $partName, $partValue, $referent = null) {
@@ -236,13 +235,13 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $medecin = $this->addElement($elParent, "medecin");
     $this->addElement($medecin, "numeroAdeli", $mbMediuser->adeli);
     $identification = $this->addElement($medecin, "identification");
-		$id400 = new CIdSante400();
+    $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
     $id400->object_id    = $mbMediuser->_id;
     $id400->tag          = $this->getTagMediuser();
-		$id400->loadMatchingObject();
-		mbTrace($id400, "id400000", true);
-  	$this->addElement($identification, "code", $id400->_id ? $id400->id400 : $mbMediuser->_id);
+    $id400->loadMatchingObject();
+    mbTrace($id400, "id400000", true);
+    $this->addElement($identification, "code", $id400->_id ? $id400->id400 : $mbMediuser->_id);
     $this->addElement($identification, "libelle", $mbMediuser->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addElement($personne, "nomUsuel", $mbMediuser->_user_last_name);
@@ -301,28 +300,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $acteCCAM;
   }
   
-	function addActeCCAMAcquittement($elParent, $mbActeCCAM, $mbOp) {
+  function addActeCCAMAcquittement($elParent, $acteCCAM) {
     $this->addAttribute($elParent, "valide", "oui");
     
-		$intervention = $this->addElement($elParent, $this->_sous_type_evt);
-    $this->addElement($intervention, "identifiant", $mbOp->_id);
-		
+    $intervention = $this->addElement($elParent, "intervention");
+		$identifiant  = $this->addElement($intervention, "identifiant");
+    $this->addElement($identifiant, "emetteur", $acteCCAM["idCibleIntervention"]);
+		$this->addElement($identifiant, "recepteur", $acteCCAM["idSourceIntervention"]);
+    
     $identifiant = $this->addElement($elParent, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
-		
-    $this->addElement($elParent, "codeActe", $mbActeCCAM->code_acte);
-    $this->addElement($elParent, "codeActivite", $mbActeCCAM->code_activite);
-    $this->addElement($elParent, "codePhase", $mbActeCCAM->code_phase);
-
-    $mbOpDebut = CValue::first(
-      $mbOp->debut_op, 
-      $mbOp->entree_salle, 
-      $mbOp->time_operation
-    );
+    $this->addElement($identifiant, "emetteur",  $acteCCAM["idSource"]);
+		$this->addElement($identifiant, "recepteur", $acteCCAM["idCible"]);
+    
+    $this->addElement($elParent, "codeActe",  $acteCCAM["codeActe"]);
+    $this->addElement($elParent, "codeActivite",  $acteCCAM["codeActivite"]);
+    $this->addElement($elParent, "codePhase",  $acteCCAM["codePhase"]);
     
     $execute = $this->addElement($elParent, "execute");
-    $this->addElement($execute, "date", $mbOp->_ref_plageop->date);
-    $this->addElement($execute, "heure", $mbOpDebut);    
+    $this->addElement($execute, "date",  $acteCCAM["executeDate"]);
+    $this->addElement($execute, "heure", $acteCCAM["executeHeure"]);    
   }
   
   function addPatient($elParent, $mbPatient, $referent = false, $light = false) {
@@ -362,7 +358,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $lieuNaissance = $this->addElement($personnePhysique, "lieuNaissance");
     $this->addElement($lieuNaissance, "ville", $mbPatient->lieu_naissance);
     if ($mbPatient->pays_naissance_insee)
-    	$this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
+      $this->addElement($lieuNaissance, "pays", str_pad($mbPatient->pays_naissance_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($lieuNaissance, "codePostal", $mbPatient->cp_naissance);
   }
   
@@ -454,7 +450,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addTexte($adresse, "ligne", substr($personne['ligne'], 0, 35));
     $this->addTexte($adresse, "ville", $personne['ville']);
     if ($personne['pays'])
-    	$this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
+      $this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $personne['codePostal']);
 
     $telephones = $this->addElement($elParent, "telephones");
@@ -515,20 +511,29 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
   }
   
-  function addReponse($elParent, $statut, $code, $libelle, $commentaires = null, $mbObject = null) {
+  function addReponse($elParent, $statut, $codes, $acteCCAM, $commentaires = null, $mbObject = null) {
     $reponse = $this->addElement($elParent, "reponse");
     $this->addAttribute($reponse, "statut", $statut);
-    $this->addAttribute($reponse, "codeErreur", $code);
-   		
-    $acteCCAM = $this->addElement($reponse, "acteCCAM");
-    $this->addActeCCAMAcquittement($acteCCAM, "", $mbObject);
+      
+    $elActeCCAM = $this->addElement($reponse, "acteCCAM");
+    $this->addActeCCAMAcquittement($elActeCCAM, $acteCCAM);
     
-		if ($statut != "ok") {
-			$erreur = $this->addElement($elParent, "erreur");
+    if ($statut != "ok") {
+      $erreur = $this->addElement($elParent, "erreur");
+			$libelle = null;
+			if (is_array($codes)) {
+				$code = implode("", $codes);
+				foreach ($codes as $_code) {
+					$libelle .= CAppUI::tr("hprimxml-error-$_code");
+				}
+			} else {
+				$code = $codes;
+				$libelle = CAppUI::tr("hprimxml-error-$code");
+			}
       $this->addElement($erreur, "code", substr($code, 0, 17));
       $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
-      $this->addElement($erreur, "commentaire", substr($commentaires, 0, 4000)); 
-		}      
+      $this->addElement($erreur, "commentaire", substr("$libelle $commentaires", 0, 4000)); 
+    }      
   }
   
   function getTypeEvenementPatient() {
@@ -608,46 +613,46 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $this->addAttribute($modeEntree, "valeur", $mode);
     
-		if (!$light) {		
-		  $medecins = $this->addElement($elParent, "medecins");
-		  
-		  // Traitement du medecin traitant du patient
-		  $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
-		  if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
-		    if ($_ref_medecin_traitant->adeli) {
-		      $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
-		    }
-		  }
-		  
-		  // Traitement du medecin adressant
-		  $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
-		  if ($mbVenue->_adresse_par_prat) {
-		    if ($_ref_adresse_par_prat && $_ref_adresse_par_prat->adeli) {
-		      $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
-		    }
-		  }
-		
-		// Traitement du responsable du séjour
-		  $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
-		  
-		  // Traitement des prescripteurs
-		  $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
-		  if (is_array($_ref_prescripteurs)) {
-		    foreach ($_ref_prescripteurs as $prescripteur) {
-		      $this->addMedecin($medecins, $prescripteur, "prsc");
-		    }
-		  }
-		  
-		  // Traitement des intervenant (ayant effectués des actes)
-		  $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
-		  if (is_array($_ref_actes_ccam)) {
-		    foreach ($_ref_actes_ccam as $acte_ccam) {
-		      $intervenant = $acte_ccam->_ref_praticien;
-		      $this->addMedecin($medecins, $intervenant, "intv");
-		    }
-		  }
-		}
-		
+    if (!$light) {    
+      $medecins = $this->addElement($elParent, "medecins");
+      
+      // Traitement du medecin traitant du patient
+      $_ref_medecin_traitant = $mbVenue->_ref_patient->_ref_medecin_traitant;
+      if ($_ref_medecin_traitant && $_ref_medecin_traitant->_id) {
+        if ($_ref_medecin_traitant->adeli) {
+          $this->addMedecin($medecins, $_ref_medecin_traitant, "trt");
+        }
+      }
+      
+      // Traitement du medecin adressant
+      $_ref_adresse_par_prat = $mbVenue->_ref_adresse_par_prat;
+      if ($mbVenue->_adresse_par_prat) {
+        if ($_ref_adresse_par_prat && $_ref_adresse_par_prat->adeli) {
+          $this->addMedecin($medecins, $_ref_adresse_par_prat, "adrs");
+        }
+      }
+    
+    // Traitement du responsable du séjour
+      $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
+      
+      // Traitement des prescripteurs
+      $_ref_prescripteurs = $mbVenue->_ref_prescripteurs;
+      if (is_array($_ref_prescripteurs)) {
+        foreach ($_ref_prescripteurs as $prescripteur) {
+          $this->addMedecin($medecins, $prescripteur, "prsc");
+        }
+      }
+      
+      // Traitement des intervenant (ayant effectués des actes)
+      $_ref_actes_ccam = $mbVenue->_ref_actes_ccam;
+      if (is_array($_ref_actes_ccam)) {
+        foreach ($_ref_actes_ccam as $acte_ccam) {
+          $intervenant = $acte_ccam->_ref_praticien;
+          $this->addMedecin($medecins, $intervenant, "intv");
+        }
+      }
+    }
+    
     $sortie = $this->addElement($elParent, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_sortie));
@@ -687,9 +692,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
     }
   }
-	
-	function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
-		$identifiant = $this->addElement($elParent, "identifiant");
+  
+  function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
+    $identifiant = $this->addElement($elParent, "identifiant");
     $emetteur = $this->addElement($identifiant, "emetteur", $mbOp->operation_id);
     
     $mbOpDebut = CValue::first(
@@ -729,7 +734,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         
     // Libellé de l'opération
     $this->addTexte($elParent, "libelle", 80);
-	}
+  }
   
   function addDebiteurs($elParent, $mbPatient, $referent = null) {
     $debiteur = $this->addElement($elParent, "debiteur");
@@ -789,19 +794,19 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($adresse, "pays", str_pad($mbPatient->assure_pays_insee, 3, '0', STR_PAD_LEFT));
     $this->addElement($adresse, "codePostal", $mbPatient->assure_cp);
     $dateNaissance = $this->addElement($personne, "dateNaissance");
-		$assureNaissance = $mbPatient->assure_naissance ? $mbPatient->assure_naissance : $mbPatient->naissance;
+    $assureNaissance = $mbPatient->assure_naissance ? $mbPatient->assure_naissance : $mbPatient->naissance;
     $this->addElement($dateNaissance, isLunarDate($assureNaissance) ? "dateLunaire" : "date", $assureNaissance);
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }
-	
-	function getTagMediuser() {
-		$dest_hprim = new CDestinataireHprim();
+  
+  function getTagMediuser() {
+    $dest_hprim = new CDestinataireHprim();
     $dest_hprim->nom = $this->destinataire;
     $dest_hprim->loadMatchingObject();
-		
-		return $dest_hprim->_tag_mediuser;
-	}
+    
+    return $dest_hprim->_tag_mediuser;
+  }
 }
 
 ?>

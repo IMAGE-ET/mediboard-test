@@ -19,9 +19,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   function __construct($messageAcquittement) {     
     parent::__construct("serveurActivitePmsi", $messageAcquittement);
   }
-	
+  
   function generateEnteteMessageAcquittement($statut) {
-  	$acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
+    $acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
 
     $enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessageAcquittement");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
@@ -44,46 +44,42 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
   }
   
-  function addReponses($statut, $codes, $commentaires = null, $mbObject = null) {
+  function addReponses($statut, $codes, $actesCCAM, $commentaires = null, $mbObject = null) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
     
-		$mbPatient = $mbSejour = null;    
+    $mbPatient = $mbSejour = null;    
     if ($mbObject instanceof CSejour) {
-	    $mbPatient =& $mbObject->_ref_patient;
-	    $mbSejour  =& $mbObject;
+      $mbPatient =& $mbObject->_ref_patient;
+      $mbSejour  =& $mbObject;
     }
-  	if ($mbObject instanceof COperation) {
-    	$mbPatient =& $mbObject->_ref_sejour->_ref_patient;
-	    $mbSejour  =& $mbObject->_ref_sejour;
-    }	
-   	
+    if ($mbObject instanceof COperation) {
+      $mbPatient =& $mbObject->_ref_sejour->_ref_patient;
+      $mbSejour  =& $mbObject->_ref_sejour;
+    } 
+    
     // Ajout du patient et de la venue
-		if ($mbPatient) {
-			$patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
+    if ($mbPatient) {
+      $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
       $this->addPatient($patient, $mbPatient, false, true);
-		}
-    if ($mbSejour) {	  
-	    $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
-		  $this->addVenue($venue, $mbSejour, false, true);
-		}
-		
+    }
+    if ($mbSejour) {    
+      $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
+      $this->addVenue($venue, $mbSejour, false, true);
+    }
+    
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
-    if (is_array($codes)) {
-      foreach ($codes as $code) {
-        $this->addReponse($reponses, $statut, $code, CAppUI::tr("hprimxml-error-$code"), $commentaires, $mbObject);
-      }
-    } else {
-      $this->addReponse($reponses, $statut, $codes, CAppUI::tr("hprimxml-error-$codes"), $commentaires, $mbObject);
-    }   
+    foreach ($actesCCAM as $_acteCCAM) {
+			$this->addReponse($reponses, $statut, $codes, $actesCCAM, $commentaires, $mbObject);
+    }
   }
 
-  function generateAcquittementsServeurActivitePmsi($statut, $codes, $commentaires = null, $mbObject = null) {
+  function generateAcquittementsServeurActivitePmsi($statut, $codes, $actesCCAM, $commentaires = null, $mbObject = null) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
-    $this->addReponses($statut, $codes, $commentaires, $mbObject);
+    $this->addReponses($statut, $codes, $actesCCAM, $commentaires, $mbObject);
 
     $this->saveTempFile();
     $messageAckServeurActivitePmsi = utf8_encode($this->saveXML());
