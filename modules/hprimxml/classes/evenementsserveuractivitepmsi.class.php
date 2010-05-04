@@ -35,41 +35,40 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
   }
   
   function mappingActesCCAM($data) {
-  	$node = $data['actesCCAM'];
+    $node = $data['actesCCAM'];
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $actesCCAM = array();
     foreach ($node->childNodes as $_acteCCAM) {
-			$actesCCAM[]["idSourceIntervention"] = $data["idSourceIntervention"];
-			$actesCCAM[]["idCibleIntervention"]  = $data["idCibleIntervention"];
-			$actesCCAM[] = $this->mappingActeCCAM($_acteCCAM);
+      $actesCCAM[] = $this->mappingActeCCAM($_acteCCAM, $data);
     }
 
     return $actesCCAM;
   }
   
-  function mappingActeCCAM($node) {
+  function mappingActeCCAM($node, $data) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
     $idSource         = $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
-		$idCible          = $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node);
+    $idCible          = $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node);
     $codeActe         = $xpath->queryTextNode("hprim:codeActe", $node);
     $codeActivite     = $xpath->queryTextNode("hprim:codeActivite", $node);
     $codePhase        = $xpath->queryTextNode("hprim:codePhase", $node);
     $executeDate      = $xpath->queryTextNode("hprim:execute/hprim:date", $node);
     $executeHeure     = mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
-		
+    
     return array (
+      "idSourceIntervention" => $data['idSourceIntervention'],
+      "idCibleIntervention"  => $data['idCibleIntervention'],
       "idSource"     => $idSource,
-			"idCible"      => $idCible,
+      "idCible"      => $idCible,
       "codeActe"     => $codeActe,
       "codeActivite" => $codeActivite,
       "codePhase"    => $codePhase,
       "executeDate"  => $executeDate,
-			"executeHeure" => $executeHeure,
+      "executeHeure" => $executeHeure,
     );
   }
-  
 }
 
 ?>
