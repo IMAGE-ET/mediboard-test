@@ -29,7 +29,9 @@ Main.add(function() {
     <col style="width: 16px;" />
     
     <tr>
-    	 <th class="title" colspan="9">{{$planning->title}}</th>
+    	<th class="title" colspan="9" {{if $planning->selectable}}onclick="$('{{$planning->guid}}').select('.event').invoke('toggleClassName', 'selected');"{{/if}}>
+			{{$planning->title}}
+			</th>
     </tr>
     <tr>
        <th></th>
