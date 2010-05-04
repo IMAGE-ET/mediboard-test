@@ -153,7 +153,7 @@ Main.add(function () {
 		  	  {{/if}}
 				{{else}}
 				  <div class="small-warning">
-				  	Les {{tr}}{{$elt_class}}{{/tr}} ne sont liées à aucune catégorie
+				  	Les {{tr}}{{$elt_class}}{{/tr}} ne sont liés à aucune catégorie
 				  </div>
 				{{/if}}
 	  	</td>
