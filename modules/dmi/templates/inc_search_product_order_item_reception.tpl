@@ -10,8 +10,7 @@
 
 <script type="text/javascript">
 search_product = function(code, code_lot) {
-  var url = new Url;
-  url.setModuleAction("dmi", "httpreq_do_search_product");
+  var url = new Url("dmi", "httpreq_do_search_product");
   url.addParam("code", code);
   url.addParam("code_lot", code_lot);
   url.requestUpdate("product_reception");
