@@ -52,8 +52,8 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
 		$identifiant = $xpath->queryUniqueNode("hprim:identifiant", $data["intervention"]);
 		    
     return array (
-      "idSourceIntervention" => $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false),
-      "idCibleIntervention"  => $xpath->queryUniqueNode("hprim:recepteur", $identifiant),
+      "idSourceIntervention" => $xpath->queryTextNode("hprim:emetteur", $identifiant, false),
+      "idCibleIntervention"  => $xpath->queryTextNode("hprim:recepteur", $identifiant),
       "idSourceActeCCAM"     => $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node),
       "idCibleActeCCAM"      => $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node),
       "codeActe"             => $xpath->queryTextNode("hprim:codeActe", $node),
