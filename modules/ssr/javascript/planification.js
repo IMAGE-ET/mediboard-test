@@ -66,9 +66,9 @@ Planification = {
   },
 
 	refreshActivites: function(sejour_id) {
-		this.sejour_id = sejour_id;
+		 this.sejour_id = sejour_id || this.sejour_id;
 		new Url("ssr", "ajax_activites_sejour") .
-		  addParam("sejour_id", sejour_id) .
+		  addParam("sejour_id", this.sejour_id) .
 		  requestUpdate("activites-sejour");
 	},
 	
@@ -95,6 +95,7 @@ Planification = {
 				Planification.refreshSejour();
 	      PlanningTechnicien.show();
 	      PlanningEquipement.show();
+				Planification.refreshActivites();
 		  }
 		}});
   }
