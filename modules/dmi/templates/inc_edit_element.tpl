@@ -144,11 +144,18 @@ Main.add(function () {
   	<tr>
   		<th>{{mb_label object=$element field=in_livret}}</th>
   		<td>
-	  		{{if !$element->_id}}
-	  		  {{mb_field object=$element field=in_livret}}
-	  	  {{else}}
-	  	    {{mb_value object=$element field=in_livret}}
-	  	  {{/if}}
+  			{{assign var=elt_class value=$element->_class_name}}
+  			{{if $dPconfig.dmi.$elt_class.product_category_id}}
+				  {{if !$element->_id}}
+		  		  {{mb_field object=$element field=in_livret}}
+		  	  {{else}}
+		  	    {{mb_value object=$element field=in_livret}}
+		  	  {{/if}}
+				{{else}}
+				  <div class="small-warning">
+				  	Les {{tr}}{{$elt_class}}{{/tr}} ne sont liées à aucune catégorie
+				  </div>
+				{{/if}}
 	  	</td>
   	</tr>
   	<tr>

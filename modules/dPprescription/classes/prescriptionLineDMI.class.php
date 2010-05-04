@@ -42,6 +42,7 @@ class CPrescriptionLineDMI extends CMbObject {
   function loadRefPraticien(){
     $this->_ref_praticien = new CMediusers();
     $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
+		$this->_ref_praticien->loadRefFunction();
   }
   
   function loadRefProduct(){

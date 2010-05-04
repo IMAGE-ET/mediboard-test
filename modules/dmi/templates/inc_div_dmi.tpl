@@ -143,6 +143,7 @@ delLineDMI = function(line_dmi_id){
     <th>Produit</th>
     <th>Code produit</th>
     <th>Code lot</th>
+		<th style="width: 1%">Praticien</th>
   </tr>
 	{{foreach from=$prescription->_ref_lines_dmi item=_line_dmi}}
 	  <tr>
@@ -156,6 +157,9 @@ delLineDMI = function(line_dmi_id){
 	    <td>
 	    {{$_line_dmi->_ref_product_order_item_reception->code}}
 	    </td>
+			 <td>
+			 	  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
+      </td>
 	  </tr>
 	{{/foreach}}
 </table>
