@@ -34,6 +34,33 @@ class CPrescriptionLineDMI extends CMbObject {
     return $specs;
   }
   
+  function check(){
+    if (!$this->_id) {
+      $where = array(
+        "order_item_reception_id" => "= '$this->order_item_reception_id'"
+      );
+      $existing = $this->countList($where);
+      
+      $this->loadRefProductOrderItemReception();
+      $item = $this->_ref_product_order_item_reception;
+      
+      $item->loadRefOrderItem();
+      $item->_ref_order_item->loadRefsFwd();
+      
+      $ref = $item->_ref_order_item->_ref_reference;
+      $ref->loadRefsFwd();
+      
+      $product = $ref->_ref_product;
+      $product->loadRefStock();
+      
+      $quantity = $item->_ref_order_item->quantity * $ref->quantity * $product->quantity;
+      
+      if ($existing >= $quantity) 
+        return "Ce produit a atteint son nombre maximum de prescriptions";
+    }
+    return parent::check();
+  }
+  
   function loadRefPrescription(){
     $this->_ref_prescription = new CPrescription();
     $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);  
