@@ -84,7 +84,7 @@ function updatePrice(type, form) {
     <th>{{mb_label object=$reference field="quantity"}}</th>
     <td>
       {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity'); $('CReference-quantity').update(this.value);"}}
-      <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
+      <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;" onchange="this.form.packaging_2.value=this.value"/>
       <span id="equivalent_quantity"></span>
     </td>
   </tr>
@@ -92,7 +92,7 @@ function updatePrice(type, form) {
   <tr {{if !$dPconfig.dPstock.CProductReference.use_mdq}}style="display: none{{/if}}">
     <th>{{mb_label object=$reference field="mdq"}}</th>
     <td>{{mb_field object=$reference field="mdq" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity_mdq')"}}
-      <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
+      <input type="text" name="packaging_2" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;"/>
       <span id="equivalent_quantity_mdq"></span>
     </td>
   </tr>

@@ -26,14 +26,12 @@ class CCategoryDM extends CCategoryProduitPrescriptible {
 	  $backProps["dms"] = "CDM category_dm_id";
 	  return $backProps;
 	}
-	
-  function loadRefsElements() {
-    $this->_ref_elements = $this->loadBackRefs("dms", "nom");
-  }
   
 	function countElements(){
 	  $this->_count_elements = $this->countBackRefs("dms");
 	}
+  
+  function loadRefsElements() {
+    $this->_ref_elements = $this->loadBackRefs("dms", "nom");
+  }
 }
-
-?>

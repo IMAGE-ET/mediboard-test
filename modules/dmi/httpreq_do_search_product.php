@@ -14,6 +14,10 @@ $can->needsRead();
 $product_code = CValue::get('code');
 $product_code_lot = CValue::get('code_lot');
 
+if (!$product_code) {
+  CAppUI::stepAjax("Veuillez indique un code lot", UI_MSG_ERROR);
+}
+
 //chargement produit
 $product = new CProduct();
 $product->code = $product_code;

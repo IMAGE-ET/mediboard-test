@@ -15,6 +15,7 @@ class CCategoryProduitPrescriptible extends CMbObject {
   var $group_id    = null;
   
   // Form fields
+  var $_ref_elements = null;
   var $_count_elements = null;
   
   function getProps() {
@@ -30,5 +31,3 @@ class CCategoryProduitPrescriptible extends CMbObject {
     $this->_view = $this->nom;
   }
 }
-
-?>

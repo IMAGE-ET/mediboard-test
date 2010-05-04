@@ -939,6 +939,11 @@ class CPrescription extends CMbObject {
       $this->_counts_by_chapitre[$chapitre] = $nb_element + $nb_comment;
     }
     
+    if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
+      $this->loadRefsLinesDMI();
+      $this->_counts_by_chapitre["dmi"] = count($this->_ref_lines_dmi);
+    }
+    
     $where["signee"] = " = '0'";
     foreach ($chapitres as $chapitre) {
       $where["category_prescription.chapitre"] = " = '$chapitre'";

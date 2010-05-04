@@ -32,7 +32,7 @@
   </th>
   
   <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
-    <input class="str" name="{{$field}}" value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}} {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
+    <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}}" name="{{$field}}" value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}} {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
     {{if @$suffix}}{{$suffix}}{{/if}} 
   </td>
 </tr>

@@ -13,12 +13,6 @@ CAppUI::requireModuleClass('dmi', 'category_produit_prescriptible');
 class CDMICategory extends CCategoryProduitPrescriptible {
   // DB Table key
   var $category_id = null;
-
-  // Form Fields
-  var $_count_dmis = null;
-  
-  // Collections
-  var $_ref_dmis = null;
   
   function getSpec() {
     $spec = parent::getSpec();

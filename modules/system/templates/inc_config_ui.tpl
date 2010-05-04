@@ -11,7 +11,8 @@
 <form name="editConfig-ui" action="?m=system&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
-  <table class="form">
+  
+  <table class="form" style="table-layout: fixed;">
     {{mb_include module=system template=inc_config_str var=page_title}}
     
     {{mb_include module=system template=inc_config_str var=company_name}}

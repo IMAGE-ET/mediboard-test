@@ -20,7 +20,7 @@ Main.add(function(){
 <form name="editConfig-system" action="?m=system&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
-  <table class="form">
+  <table class="form" style="table-layout: fixed;">
     
     {{mb_include module=system template=inc_config_str var=root_dir}}
     {{mb_include module=system template=inc_config_enum var=instance_role values="prod|qualif"}}

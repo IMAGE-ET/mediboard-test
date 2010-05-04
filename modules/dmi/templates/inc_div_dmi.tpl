@@ -10,10 +10,12 @@
 
 <script type="text/javascript">
 
+barcodeSeparator = " ";
+
 check_separator = function(element, next_element){
-  if(element.value.charAt(element.value.length-1) == ' '){
+  if(element.value.charAt(element.value.length-1) == barcodeSeparator){
     $(next_element).focus();
-    element.value = element.value.substring(0,element.value.length-1);
+    element.value = element.value.substring(0, element.value.length-1);
     return false;
   }
   return true;
@@ -23,12 +25,19 @@ search_product = function(form){
   var url = new Url("dmi", "httpreq_do_search_product");
   url.addParam("code", form.code.value);
   url.addParam("code_lot", form.code_lot.value);
-  url.requestUpdate("product_description");
+  url.requestUpdate("product_description_code");
   return false;
 }
 
-search_product_order_item_reception = function(){
-  var form = getForm("dmi_delivery"); 
+search_product_code = function(code, code_lot) {
+  var url = new Url("dmi", "httpreq_do_search_product");
+  url.addParam("code", code);
+  url.addParam("code_lot", code_lot);
+  url.requestUpdate("product_reception_by_product");
+  return false;
+}
+
+search_product_order_item_reception = function(form){
   var url = new Url("dmi", "httpreq_do_search_product_order_item_reception");
   url.addParam("product_id", form.product_id.value);
   url.requestUpdate("list_product_order_item_reception");
@@ -36,19 +45,21 @@ search_product_order_item_reception = function(){
 }
 
 Main.add(function () {
-  var formDmiDelivery = getForm("dmi_delivery");
+  var formDmiDelivery = getForm("dmi_delivery_by_product");
   url = new Url("dPstock", "httpreq_do_product_autocomplete");
   url.autoComplete(formDmiDelivery._view, formDmiDelivery._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
       $V(formDmiDelivery._view, element.select(".view")[0].innerHTML.stripTags());
-      search_product_order_item_reception();
+      search_product_order_item_reception(formDmiDelivery);
     },
     callback: function(input, queryString){
       return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
   });
+  
+  Prescription.refreshTabHeader("div_dmi", {{$prescription->_ref_lines_dmi|@count}});
 });
 
 reloadListDMI = function(){
@@ -86,56 +97,61 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}">
 </form>
 
-<form name="dmi_delivery" method="post" action="" onsubmit="return search_product(this)">
-  <input type="hidden" name="product_id" value="" />
-	<table class="main">
-	  <tr>  
-	    <td>
+<table class="main" style="table-layout: fixed;">
+  <tr>
+    <td>
+      
+      <form name="dmi_delivery_by_code" method="get" action="" onsubmit="return search_product(this)">
+        <input type="hidden" name="product_id" value="" />
+        
 	      <table class="form">
 	        <tr>
-	          <th colspan="10" class="category">Recherche par code barre</th>
+	          <th colspan="2" class="category">Recherche par code barre</th>
 	        </tr>
 	        <tr>
-	          <th>Code produit</th>
-	          <td><input type="text" name="code" onkeyup="return check_separator(this,this.form.code_lot)"/></td>
-	        </tr>
-	        <tr>
-	          <th>Code lot</th>
-	          <td><input type="text" name="code_lot" /></td>
-	        </tr>
-	        <tr>
-	          <th></th>
+	          <th>
+	            <label for="code">Code produit</label> / 
+              <label for="code_lot">Code lot</label>
+            </th>
 	          <td>
-	            <button type="submit" class="search">Rechercher</button>
-	          </td>
+	            <input type="text" size="10" name="code" onkeyup="return check_separator(this,this.form.code_lot)"/>
+              <input type="text" size="10" name="code_lot" />
+              <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
+            </td>
 	        </tr>
 	        <tr>
-	          <th></th>
-	          <td id="product_description" colspan="10"></td>
+	          <td id="product_description_code" colspan="2"></td>
 	        </tr>
 	      </table>
-	    </td>
-	    <td>
+      
+      </form>
+      
+    </td>
+    <td>
+      
+      <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
+        <input type="hidden" name="product_id" value="" />
+        
 	      <table class="form">
 	        <tr>
-	          <th colspan="10" class="category">Recherche par produit</th>
+	          <th colspan="2" class="category">Recherche par produit</th>
 	        </tr>
 	        <tr>
 	          <th>Produit</th>
 	          <td>
-	            <input type="text" name="_view" size="30" value="" />
+	            <input type="text" name="_view" size="25" value="" />
 	            <div id="dmi_delivery__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
 	          </td>
 	        </tr>
 	        <tr>
-	          <th>Lot(s)</th>
-	          <td id="list_product_order_item_reception"></td>
+	          <td id="list_product_order_item_reception" colspan="2"></td>
 	        </tr>
 	      </table>
-	    </td>
-	  </tr>
-	</table>
-</form>
+      </form>
+      
+    </td>
+  </tr>
+</table>
 
 <table class="tbl">
   <!-- Affichage des lignes de DMI-->
@@ -149,16 +165,18 @@ delLineDMI = function(line_dmi_id){
 	  <tr>
 	    <td>
 	      <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
-	      {{$_line_dmi->_ref_product->name}}
+	      <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
+	        {{$_line_dmi->_ref_product}}
+        </span>
 	    </td>
 	    <td>
 	      {{$_line_dmi->_ref_product->code}}
 	    </td>
 	    <td>
-	    {{$_line_dmi->_ref_product_order_item_reception->code}}
+	      {{$_line_dmi->_ref_product_order_item_reception->code}}
 	    </td>
-			 <td>
-			 	  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
+			<td>
+			 	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
       </td>
 	  </tr>
 	{{/foreach}}

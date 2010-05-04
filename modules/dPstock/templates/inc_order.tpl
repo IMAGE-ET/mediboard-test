@@ -44,7 +44,6 @@ Main.add(function(){
     tab.removeClassName("empty");
   else 
     tab.addClassName("empty");
-    
 });
 </script>
 
@@ -80,12 +79,12 @@ Main.add(function(){
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: 'waiting'})">{{tr}}Refresh{{/tr}}</button>
 
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}
-       <form name="order-lock-{{$order->_id}}" action="?" method="post">
+      <form name="order-lock-{{$order->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="locked" value="1" />
-        <button type="button" class="tick" onclick="submitOrder(this.form, {close: false, confirm: true, onComplete: reloadOrders});">{{tr}}CProductOrder-_validate{{/tr}}</button>
+        <button type="button" class="tick" onclick="submitOrder(this.form, {close: false, confirm: true, onComplete: refreshLists});">{{tr}}CProductOrder-_validate{{/tr}}</button>
       </form>
       {{/if}}
     </td>

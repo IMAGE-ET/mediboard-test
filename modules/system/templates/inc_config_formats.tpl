@@ -8,10 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+ElementChecker.check.match = function(){
+  this.assertMultipleArgs("match");
+  if (!this.sValue.match(new RegExp(this.oProperties["match"])))
+    this.addError("match", "Doit contenir seulement des espaces et des chiffres 9");
+}.bind(ElementChecker);
+</script>
+
 <form name="editConfig-formats" action="?m=system&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
-  <table class="form">
+  <table class="form" style="table-layout: fixed;">
     {{mb_include module=system template=inc_config_date_format var=date}}
     
     {{mb_include module=system template=inc_config_date_format var=time}}
@@ -43,8 +51,17 @@
     </tr>
     
     {{assign var="m" value="system"}}
-    {{mb_include module=system template=inc_config_str var=phone_number_format maxlength=14 suffix="Le format ne doit contenir que des '9' et des espaces. Il doit y avoir au maximum 10 fois '9'. Un '9' correspond à un numéro de 0 à 9."}}
+    {{mb_include module=system template=inc_config_str var=phone_number_format maxlength=14 cssClass="str match|^9[9\\s]+9$"}}
     
+    <tr>
+      <th></th>
+      <td>
+        <div class="small-info">
+          Le format ne doit contenir que des '9' et des espaces.<br />
+          Il doit y avoir au maximum 10 fois '9'. Un '9' correspond à un numéro de 0 à 9.
+        </div>
+      </td>
+    </tr>
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
