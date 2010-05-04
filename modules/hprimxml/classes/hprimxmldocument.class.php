@@ -309,8 +309,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 		$this->addElement($identifiant, "recepteur", $acteCCAM["idSourceIntervention"]);
     
     $identifiant = $this->addElement($elParent, "identifiant");
-    $this->addElement($identifiant, "emetteur",  $acteCCAM["idSource"]);
-		$this->addElement($identifiant, "recepteur", $acteCCAM["idCible"]);
+    $this->addElement($identifiant, "emetteur",  $acteCCAM["idSourceActeCCAM"]);
+		$this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
     
     $this->addElement($elParent, "codeActe",  $acteCCAM["codeActe"]);
     $this->addElement($elParent, "codeActivite",  $acteCCAM["codeActivite"]);

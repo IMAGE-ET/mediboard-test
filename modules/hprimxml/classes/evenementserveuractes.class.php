@@ -85,8 +85,6 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $data['idCibleVenue']  = $this->getIdCible($data['venue']);
     
     $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
-		$data['idSourceIntervention'] = $this->getIdSource($data['intervention']);
-    $data['idCibleIntervention']  = $this->getIdCible($data['intervention']);
     
     $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);  
     

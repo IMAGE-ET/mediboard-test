@@ -49,24 +49,18 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
   function mappingActeCCAM($node, $data) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $idSource         = $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node);
-    $idCible          = $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node);
-    $codeActe         = $xpath->queryTextNode("hprim:codeActe", $node);
-    $codeActivite     = $xpath->queryTextNode("hprim:codeActivite", $node);
-    $codePhase        = $xpath->queryTextNode("hprim:codePhase", $node);
-    $executeDate      = $xpath->queryTextNode("hprim:execute/hprim:date", $node);
-    $executeHeure     = mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
-    
+		$identifiant = $xpath->queryUniqueNode("hprim:identifiant", $data["intervention"]);
+		    
     return array (
-      "idSourceIntervention" => $data['idSourceIntervention'],
-      "idCibleIntervention"  => $data['idCibleIntervention'],
-      "idSource"     => $idSource,
-      "idCible"      => $idCible,
-      "codeActe"     => $codeActe,
-      "codeActivite" => $codeActivite,
-      "codePhase"    => $codePhase,
-      "executeDate"  => $executeDate,
-      "executeHeure" => $executeHeure,
+      "idSourceIntervention" => $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false),
+      "idCibleIntervention"  => $xpath->queryUniqueNode("hprim:recepteur", $identifiant),
+      "idSourceActeCCAM"     => $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node),
+      "idCibleActeCCAM"      => $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node),
+      "codeActe"             => $xpath->queryTextNode("hprim:codeActe", $node),
+      "codeActivite"         => $xpath->queryTextNode("hprim:codeActivite", $node),
+      "codePhase"            => $xpath->queryTextNode("hprim:codePhase", $node),
+      "executeDate"          => $xpath->queryTextNode("hprim:execute/hprim:date", $node),
+      "executeHeure"         => mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S"),
     );
   }
 }

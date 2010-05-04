@@ -70,7 +70,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
     foreach ($actesCCAM as $_acteCCAM) {
-			$this->addReponse($reponses, $statut, $codes, $actesCCAM, $commentaires, $mbObject);
+			$this->addReponse($reponses, $statut, $codes, $_acteCCAM, $commentaires, $mbObject);
     }
   }
 
