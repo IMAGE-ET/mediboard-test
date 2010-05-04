@@ -94,6 +94,9 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
 
   foreach($ticks as $i => $tick) {
     $f = true;
+    if(!isset($nbInterventions[$i])) {
+      $nbInterventions[$i] = array("total" => 0);
+    }
     foreach($result as $r) {
       if($tick[1] == $r["mois"]) {
         $serieMoy['data'][] = array($i, $r["moyenne"]/(60));
