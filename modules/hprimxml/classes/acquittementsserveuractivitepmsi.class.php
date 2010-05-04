@@ -22,10 +22,10 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   
   function generateEnteteMessageAcquittement($statut) {
     $acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($acquittementsServeurActivitePmsi, "statut", $statut);
     $this->addAttribute($acquittementsServeurActivitePmsi, "version", CAppUI::conf("hprimxml $this->evenement version"));
     
 		$enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessageAcquittement");
+    $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
     $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
