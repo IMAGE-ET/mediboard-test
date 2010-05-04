@@ -86,7 +86,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     
     $data['intervention']  = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
     
-    $data['actesCCAM']     = $xpath->getMultipleTextNodes("hprim:actesCCAM", $evenementServeurActe, false);  
+    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe, false);  
     
     return $data; 
   }
@@ -108,14 +108,14 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $dest_hprim->loadMatchingObject();
       
       $avertissement = null;
-			
-			// Mapping des actes CCAM
-			$actesCCAM = $this->mappingActesCCAM($data['actesCCAM']);
-			
-			
-			
-			
-			// Acquittement d'erreur : identifiants source du patient / séjour non fournis
+      
+      // Mapping des actes CCAM
+      $actesCCAM = $this->mappingActesCCAM($data['actesCCAM']);
+      
+      
+      
+      
+      // Acquittement d'erreur : identifiants source du patient / séjour non fournis
       if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E206");
         $doc_valid = $domAcquittement->schemaValidate();
@@ -123,26 +123,26 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement;
       }
-			
-			// IPP non connu => message d'erreur
-			$IPP = new CIdSante400();
+      
+      // IPP non connu => message d'erreur
+      $IPP = new CIdSante400();
       $IPP->object_class = "CPatient";
       $IPP->tag = $dest_hprim->_tag_patient;
       $IPP->id400 = $data['idSourcePatient'];
       if(!$IPP->loadMatchingObject()) {
-      	$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013");
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013");
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
-        return $messageAcquittement;		
-			}
-			
-			// Chargement du patient
-			$patient = new CPatient();   
-			$patient->load($IPP->object_id);
-			
-			// Num dossier non connu => message d'erreur
-			$num_dos = new CIdSante400();
+        return $messageAcquittement;    
+      }
+      
+      // Chargement du patient
+      $patient = new CPatient();   
+      $patient->load($IPP->object_id);
+      
+      // Num dossier non connu => message d'erreur
+      $num_dos = new CIdSante400();
       $num_dos->object_class = "CSejour";
       $num_dos->tag = $dest_hprim->_tag_sejour;
       $num_dos->id400 = $data['idSourceVenue'];
@@ -153,41 +153,41 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement;    
       }
-			
-			// Chargement du séjour
-			$sejour = CSejour();
-			$sejour->load($num_dos->object_id);
-			
-			// Si patient H'XML est différent du séjour
-			if ($sejour->patient_id != $patient->_id) {
-				$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015");
+      
+      // Chargement du séjour
+      $sejour = CSejour();
+      $sejour->load($num_dos->object_id);
+      
+      // Si patient H'XML est différent du séjour
+      if ($sejour->patient_id != $patient->_id) {
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015");
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement;    
-			}
-						
-			// Récupération de la date de l'intervention
-			$dateInterv = $this->getDateInterv($data['intervention']);
-			
-			// Chargement des interventions du séjour
-      $sejour->loadRefsOperations();	
-			$operation = null;
-			foreach ($sejour->_ref_operations as $_operation) {
-				if (mbDate($_operation->_datetime)) {
-					$operation = $_operation;
-				}
-			}
-			
-			/* @FIXME Penser à virer par la suite pour rattacher des actes à un séjour... */
-			if (!$_operation) {
-				$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201");
+      }
+            
+      // Récupération de la date de l'intervention
+      $dateInterv = $this->getDateInterv($data['intervention']);
+      
+      // Chargement des interventions du séjour
+      $sejour->loadRefsOperations();  
+      $operation = null;
+      foreach ($sejour->_ref_operations as $_operation) {
+        if (mbDate($_operation->_datetime)) {
+          $operation = $_operation;
+        }
+      }
+      
+      /* @FIXME Penser à virer par la suite pour rattacher des actes à un séjour... */
+      if (!$_operation) {
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201");
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement; 
-			}			
-			
+      }     
+      
       //$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi($avertissement ? "avt" : "ok", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
     }
     

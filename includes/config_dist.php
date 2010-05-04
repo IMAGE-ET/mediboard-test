@@ -621,6 +621,10 @@ $dPconfig["hprimxml"] = array (
   "trash_numdos_sejour_cancel" => "0"
 );
 
+$dPconfig["mediusers"] = array (
+  "tag_mediuser" => ""
+);
+
 // Inclusion des fichiers de config de chaque module
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {

@@ -36,7 +36,7 @@ class CDestinataireHprim extends CMbObject {
   // Form fields
   var $_tag_patient     = null;
   var $_tag_sejour      = null;
-	var $_tag_mediusers   = null;
+	var $_tag_mediuser    = null;
 	var $_type_echange    = "hprimxml";
   
   function getSpec() {
@@ -56,7 +56,7 @@ class CDestinataireHprim extends CMbObject {
     
     $specs["_tag_patient"]   = "str";
     $specs["_tag_sejour"]    = "str";
-		$specs["_tag_mediusers"] = "str";
+		$specs["_tag_mediuser"]  = "str";
     return $specs;
   }
   
@@ -79,8 +79,9 @@ class CDestinataireHprim extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     		
-    $this->_tag_patient = str_replace('$g', $this->group_id, CAppUI::conf("dPpatients CPatient tag_ipp"));
-    $this->_tag_sejour  = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
+    $this->_tag_patient  = str_replace('$g', $this->group_id, CAppUI::conf("dPpatients CPatient tag_ipp"));
+    $this->_tag_sejour   = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
+		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
   }
 }
 ?>

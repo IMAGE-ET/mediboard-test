@@ -236,8 +236,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $medecin = $this->addElement($elParent, "medecin");
     $this->addElement($medecin, "numeroAdeli", $mbMediuser->adeli);
     $identification = $this->addElement($medecin, "identification");
-    $this->addElement($identification, "code", "prat$mbMediuser->user_id");
-    $this->addElement($identification, "libelle", $mbMediuser->_user_username);
+		$id400 = new CIdSante400();
+    $id400->object_class = "CMediusers";
+    $id400->object_id    = $mbMediuser->_id;
+    $id400->tag          = $this->getTagMediuser();
+		$id400->loadMatchingObject();
+		mbTrace($id400, "id400000", true);
+  	$this->addElement($identification, "code", $id400->_id ? $id400->id400 : $mbMediuser->_id);
+    $this->addElement($identification, "libelle", $mbMediuser->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addElement($personne, "nomUsuel", $mbMediuser->_user_last_name);
     $prenoms = $this->addElement($personne, "prenoms");
@@ -549,12 +555,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
     $id400->object_id    = $praticien->_id;
-    $id400->tag          = $this->destinataire;
-    if ($id400->loadMatchingObject()) {
-      $this->addElement($identification, "code", $id400->id400);
-    } else {
-      $this->addElement($identification, "code", $praticien->_id);
-    }
+    $id400->tag          = $this->getTagMediuser();
+    $this->addElement($identification, "code", $id400->loadMatchingObject() ? $id400->id400 : $praticien->_id);
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addPersonne($personne, $praticien);
@@ -792,6 +794,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
   }
+	
+	function getTagMediuser() {
+		$dest_hprim = new CDestinataireHprim();
+    $dest_hprim->nom = $this->destinataire;
+    $dest_hprim->loadMatchingObject();
+		
+		return $dest_hprim->_tag_mediuser;
+	}
 }
 
 ?>

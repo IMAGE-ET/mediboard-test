@@ -392,9 +392,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
     $id400 = new CIdSante400();
-    //Paramétrage de l'id 400
     $id400->object_class = "CMediusers";
-    $id400->tag = $this->destinataire;
+    $id400->tag = $this->getTagMediuser();
     $id400->id400 = $code;
     if ($id400->loadMatchingObject()) {
       $mediuser->_id = $id400->object_id;
