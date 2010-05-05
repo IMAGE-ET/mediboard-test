@@ -1,7 +1,6 @@
 /* ID: $Id */
 
 /* Body */
-
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #fff;
@@ -403,7 +402,7 @@ table.dialog #systemMsg {
 }
 
 /* Tooltips */
-div.tooltip table.decoration td.content {
+div.tooltip {
   border-color: #ccc;
 }
 

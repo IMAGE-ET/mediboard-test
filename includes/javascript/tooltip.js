@@ -19,8 +19,7 @@ var ObjectTooltip = Class.create({
     eTrigger = $(eTrigger);
     
     this.sTrigger = eTrigger.identify();
-    this.sDiv = null;
-    this.sTarget = null;
+    this.sTooltip = null;
     this.idTimeout = null;
     
     var appearenceTimeout = {
@@ -64,9 +63,9 @@ var ObjectTooltip = Class.create({
   },
   
   show: function() {
-    var eTarget = $(this.sTarget);
+    var eTooltip = $(this.sTooltip);
     
-    if (this.oOptions.popup || eTarget.empty()) {
+    if (this.oOptions.popup || eTooltip.empty()) {
       this.load();
     }
     
@@ -76,18 +75,18 @@ var ObjectTooltip = Class.create({
   },
   
   hide: function() {
-    $(this.sDiv).hide();
+    $(this.sTooltip).hide();
   },
   
   reposition: function() {
     var eTrigger = $(this.sTrigger),
-        eDiv = $(this.sDiv);
+        eTooltip = $(this.sTooltip);
 				
     if (!eTrigger || this.dontShow) return; // necessary, unless it throws an error some times (why => ?)
 
     var dim = eTrigger.getDimensions();
     
-    eDiv.show()
+    eTooltip.show()
         .setStyle({marginTop: 0, marginLeft: 0})
         .clonePosition(eTrigger, {
           offsetTop: dim.height, 
@@ -99,14 +98,14 @@ var ObjectTooltip = Class.create({
   },
   
   load: function() {
-    var eTarget = $(this.sTarget);
+    var eTooltip = $(this.sTooltip);
     
     if (this.oOptions.mode != 'dom') {
       var url = new Url(this.mode.module, this.mode.action);
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
       
       if(!this.oOptions.popup) {
-        url.requestUpdate(eTarget, { 
+        url.requestUpdate(eTooltip, { 
           waitingText: $T("Loading tooltip"),
           onComplete: this.reposition.bind(this)
         });
@@ -114,7 +113,7 @@ var ObjectTooltip = Class.create({
         url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       }
     } else {
-      eTarget.update($(this.oOptions.params.element).show());
+      eTooltip.update($(this.oOptions.params.element).show());
       this.reposition();
     }
   },
@@ -126,52 +125,25 @@ var ObjectTooltip = Class.create({
         .observe("mouseover", this.cancelHide.bind(this))
         .observe("mousedown", this.cancelShow.bind(this));
         
-    $(this.sDiv)
+    $(this.sTooltip)
         .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
         .observe("mouseover", this.cancelHide.bind(this));
   },
 
   createDiv: function(eTrigger) {
-    var eTarget;
+    var eTooltip = DOM.div({className: this.mode.sClass});
     
-    var eDiv = 
-    DOM.div({className: this.mode.sClass}, 
-      DOM.table({className: "decoration"},
-        DOM.tbody({}, // Necessary for IE7
-          DOM.tr({},
-            DOM.td({className: "deco top-left"}),
-            DOM.td({className: "deco top"}),
-            DOM.td({className: "deco top-right"})
-          ),
-          DOM.tr({},
-            DOM.td({className: "deco left"}),
-            DOM.td({className: "container"},
-              eTarget = DOM.div({className: "content"})
-            ),
-            DOM.td({className: "deco right"})
-          ),
-          DOM.tr({},
-            DOM.td({className: "deco bottom-left"}),
-            DOM.td({className: "deco bottom"}),
-            DOM.td({className: "deco bottom-right"})
-          )
-        )
-      )
-    );
-    
-    this.sDiv = eDiv.identify();
-    
-    $(eTrigger.up(".tooltip") || document.body).insert(eDiv.hide());
+    $(eTrigger.up(".tooltip") || document.body).insert(eTooltip.hide());
     
     if (!Prototype.Browser.IE) {
-      eTarget.setStyle({
+      eTooltip.setStyle({
         minWidth : this.mode.width+"px",
         minHeight: this.mode.height+"px"
       });
     }
     
-    this.sTarget = eTarget.identify();
+    this.sTooltip = eTooltip.identify();
   }
 } );
 
@@ -241,12 +213,12 @@ Object.extend(ObjectTooltip, {
     this.create(eTrigger, oOptions);
   },
   
-  createDOM: function(eTrigger, sTarget, oOptions) {
+  createDOM: function(eTrigger, sTooltip, oOptions) {
     oOptions = Object.extend( {
       params: {}
     }, oOptions);
     
-    oOptions.params.element = sTarget;
+    oOptions.params.element = sTooltip;
     oOptions.mode = "dom";
     
     this.create(eTrigger, oOptions);

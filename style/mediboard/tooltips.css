@@ -6,73 +6,38 @@
 }
 
 div.tooltip {
-  padding: 0px;
   margin-left: 20px;
   position: absolute;
-  z-index: 30;
-}
-
-div.tooltip table.decoration {
-  border-spacing: 0px;
-  border: none;
-}
-
-div.tooltip table.decoration td {
-  padding: 0;
-}
-
-div.tooltip table.decoration td.container {
-  /* This background is needed because of the border radius */
-  background: url(images/pictures/container-background.png) bottom right no-repeat;
-}
-
-div.tooltip table.decoration td.deco {
-	border: 0px;
-	opacity: .7;
-}
-
-div.tooltip table.decoration td.top-right,
-div.tooltip table.decoration td.top,
-div.tooltip table.decoration td.top-left,
-div.tooltip table.decoration td.left,
-div.tooltip table.decoration td.bottom-left {
-  background: transparent;
-	opacity: 1;
-}
-
-div.tooltip table.decoration td.bottom {
-  width: 12px;
-  height: 12px;
-  background: url(images/pictures/bottom.png) bottom left no-repeat;
-}
-
-div.tooltip table.decoration td.bottom-right {
-  width: 12px;
-  height: 12px;
-  background: url(images/pictures/bottom-right.png) bottom right no-repeat;
-}
-
-div.tooltip table.decoration td.right {
-  width: 12px;
-  height: 12px;
-  min-width: 12px;
-  background: url(images/pictures/right.png) top right no-repeat;
-}
-
-div.tooltip table.tbl td {
-  vertical-align: top;
-}
-
-div.tooltip table.decoration .content {
+  z-index: 1000;
   white-space: nowrap;
   background: #fff;
   border: 2px solid #999;
-	padding: 2px;
+  padding: 2px;
+  
+  /* The shadow */
+  -moz-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
+  box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
+  
+  /* Fun with box-shadows */
+  /*-moz-box-shadow:
+  0 0 20px black,
+  20px 15px 30px yellow,
+  -20px 15px 30px lime,
+  -20px -15px 30px blue,
+  20px -15px 30px red;*/
+  
+  /* IE specific shadow */
+  zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
 }
 
 /** Postit **/
-div.postit > table.decoration .content {
+div.postit {
   -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
   background: #FEFF7F;
   padding: 4px;
 }

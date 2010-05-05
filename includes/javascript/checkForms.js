@@ -203,7 +203,7 @@ Object.extend(ElementChecker, {
       iLength = parseInt(this.oProperties["length"], 10);
       
       if (iLength < 1 || iLength > 255)
-        Console.error(printf("Spécification de longueur invalide (longueur = %s)", iLength));
+        console.error(printf("Spécification de longueur invalide (longueur = %s)", iLength));
   
       if (this.sValue.length != iLength)
         this.addError("length", printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength));
@@ -215,7 +215,7 @@ Object.extend(ElementChecker, {
       iLength = parseInt(this.oProperties["minLength"], 10);
       
       if (iLength < 1 || iLength > 255)
-        Console.error(printf("Spécification de longueur minimale invalide (longueur = %s)", iLength));
+        console.error(printf("Spécification de longueur minimale invalide (longueur = %s)", iLength));
   
       if (this.sValue.length < iLength)
         this.addError("minLength", printf("N'atteint pas la bonne longueur (longueur souhaitée : %s)", iLength));
@@ -227,7 +227,7 @@ Object.extend(ElementChecker, {
       iLength = parseInt(this.oProperties["maxLength"], 10);
       
       if (iLength < 1 || iLength > 255)
-        Console.error(printf("Spécification de longueur maximale invalide (longueur = %s)", iLength));
+        console.error(printf("Spécification de longueur maximale invalide (longueur = %s)", iLength));
   
       if (this.sValue.length > iLength)
         this.addError("maxLength", printf("Dépasse la bonne longueur (longueur souhaitée : %s)", iLength));
@@ -359,7 +359,7 @@ Object.extend(ElementChecker, {
     // enum
     "enum": function() {
       if (!this.oProperties.list && !this.oProperties['class']) {
-        Console.error("Spécification 'list' ou 'class' manquante pour le champ " + this.sLabel);
+        console.error("Spécification 'list' ou 'class' manquante pour le champ " + this.sLabel);
         return;
       }
     },

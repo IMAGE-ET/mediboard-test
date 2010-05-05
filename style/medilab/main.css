@@ -1,7 +1,6 @@
 /* ID: $Id */
 
 /* Body */
-
 body {
   font-family: arial, sans-serif;
   background: #fff;
@@ -12,7 +11,6 @@ body {
 }
 
 /* Login */
-
 #login table {
   border: solid #000 3px;
   background: #fff;
@@ -276,7 +274,6 @@ textarea {
 }
 
 /* Standard table */
-
 table.tbl {
   background-color: #fff;
 }
@@ -326,7 +323,6 @@ table.titleblock td.titlecell {
 }
 
 /* Main table */
-
 table.main th.title {
   font-size: 14px;
   color: #fff;
@@ -350,7 +346,6 @@ table.main th.urgence.modify {
 }
 
 /* System message */
-
 #systemMsg {
   font-size: 80%;
   text-align: left;
@@ -369,8 +364,7 @@ div.message, div.loading, div.error, div.warning {
 }
 
 /* Tooltips */
-
-div.tooltip table.decoration td.content {
+div.tooltip {
   border-color: #ccc;
 }
 
@@ -384,7 +378,6 @@ table.note td {
 tr.catalogue-1 th {
   font-size: 160%;
   font-variant: small-caps;
-  
 }
 
 tr.catalogue-2 th {
@@ -399,9 +392,7 @@ tr.catalogue-3 th {
   background-color: transparent;
 }
 
-
 /* Différentiel Proxilab  */
-
 input[readonly],
 input[readonly]:focus {
 	background-color: #fff;
