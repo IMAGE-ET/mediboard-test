@@ -22,14 +22,17 @@ var profiles = {
     bars: {show: false},
     mouse: {track: true},
     grid: {verticalLines: true},
-    markers: {show: true}
+    markers: {show: true, labelFormatter: function(obj) {
+      var y = (Math.round(obj.y*100)/100);
+      return y === 0 ? "" : y;
+    }}
   },
   bars: {
     lines: {show: false},
     bars: {show: true},
     mouse: {track: false},
     grid: {verticalLines: false},
-    markers: {show: false}
+    markers: {show: false, labelFormatter: Flotr.defaultMarkerFormatter}
   }
 };
 
