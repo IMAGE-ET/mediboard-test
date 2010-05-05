@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI;
-
 CCanDo::checkRead();
 
 // Type d'affichage
@@ -26,6 +24,7 @@ $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
+global $AppUI;
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 $medicalView = $user->isMedical();
@@ -42,15 +41,17 @@ $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after'
 $where[] = CAppUI::conf("dPurgences show_missing_rpu") ? 
   "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
-$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["sejour.group_id"] = "= '$group->_id'";
 
 if ($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
-} else if($selAffichage == "presents"){
+} 
+else if($selAffichage == "presents"){
   $where["sejour.sortie_reelle"] = "IS NULL";
   $where["sejour.annule"] = " = '0'";
-} else if ($selAffichage == "annule_hospitalise") {
+} 
+else if ($selAffichage == "annule_hospitalise") {
 	$where["sejour.annule"] = " = '1'";
 }
 

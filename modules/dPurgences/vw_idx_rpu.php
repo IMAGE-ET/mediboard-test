@@ -12,13 +12,16 @@ CCanDo::checkRead();
 
 CAppUI::requireModuleFile("dPurgences", "redirect_barcode");
 
+// Parametre de tri
+$order_way = CValue::getOrSession("order_way", "ASC");
+$order_col = CValue::getOrSession("order_col", "_pec_transport");
+
 // Type d'affichage
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
 $today = mbDate();
-
 
 // Création du template
 $smarty = new CSmartyDP();
