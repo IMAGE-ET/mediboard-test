@@ -58,14 +58,10 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     } 
     
     // Ajout du patient et de la venue
-    if ($mbPatient) {
-      $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
-      $this->addPatient($patient, $mbPatient, false, true);
-    }
-    if ($mbSejour) {    
-      $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
-      $this->addVenue($venue, $mbSejour, false, true);
-    }
+    $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
+    $this->addPatient($patient, $mbPatient, false, true);
+    $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
+    $this->addVenue($venue, $mbSejour, false, true);
     
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");

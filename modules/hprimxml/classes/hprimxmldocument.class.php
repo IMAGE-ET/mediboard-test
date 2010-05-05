@@ -302,22 +302,22 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addActeCCAMAcquittement($elParent, $acteCCAM) {
     $this->addAttribute($elParent, "valide", "oui");
     
-    $intervention = $this->addElement($elParent, "intervention");
+    $intervention = $this->addElement($elParent,     "intervention");
 		$identifiant  = $this->addElement($intervention, "identifiant");
-    $this->addElement($identifiant, "emetteur", $acteCCAM["idCibleIntervention"]);
+    $this->addElement($identifiant, "emetteur",  $acteCCAM["idCibleIntervention"]);
 		$this->addElement($identifiant, "recepteur", $acteCCAM["idSourceIntervention"]);
     
     $identifiant = $this->addElement($elParent, "identifiant");
     $this->addElement($identifiant, "emetteur",  $acteCCAM["idSourceActeCCAM"]);
 		$this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
     
-    $this->addElement($elParent, "codeActe",  $acteCCAM["codeActe"]);
-    $this->addElement($elParent, "codeActivite",  $acteCCAM["codeActivite"]);
-    $this->addElement($elParent, "codePhase",  $acteCCAM["codePhase"]);
+    $this->addElement($elParent, "codeActe",     $acteCCAM["codeActe"]);
+    $this->addElement($elParent, "codeActivite", $acteCCAM["codeActivite"]);
+    $this->addElement($elParent, "codePhase",    $acteCCAM["codePhase"]);
     
     $execute = $this->addElement($elParent, "execute");
-    $this->addElement($execute, "date",  $acteCCAM["executeDate"]);
-    $this->addElement($execute, "heure", $acteCCAM["executeHeure"]);    
+    $this->addElement($execute, "date",     $acteCCAM["executeDate"]);
+    $this->addElement($execute, "heure",    $acteCCAM["executeHeure"]);    
   }
   
   function addPatient($elParent, $mbPatient, $referent = false, $light = false) {

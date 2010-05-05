@@ -52,7 +52,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     }
 
     // Traitement final
-    $this->purgeEmptyElements();
+   // $this->purgeEmptyElements();
   }
   
   function getEnteteServeurActesXML() {
