@@ -12,16 +12,23 @@
 <script type="text/javascript">
 
 selectActivite = function(activite) {
-  $$("button.activite").invoke("setStyle", {borderWidth: "1px"} );
-	$("trigger-"+activite).setStyle( {borderWidth: "2px", borderColor: "#000"} );
+  $V(oFormEvenementSSR.prescription_line_element_id, '');
+  $V(oFormEvenementSSR._element_id, '');
+
+  $$("button.activite").invoke("removeClassName", "selected");
+  $("trigger-"+activite).addClassName("selected");
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
+
+  // Mise en evidence des elements dans les plannings
+  addBorderEvent();
 }
 
 selectTechnicien = function(kine_id) {
   $V(oFormEvenementSSR.therapeute_id, kine_id);	
-  $$("button.ressource").invoke("setStyle", {borderWidth: "1px"} );
-  $("technicien-"+kine_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
+  $$("button.ressource").invoke("removeClassName", "selected");
+  $("technicien-"+kine_id).addClassName("selected");
+
   PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
 	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
@@ -30,20 +37,23 @@ selectTechnicien = function(kine_id) {
 
 selectEquipement = function(equipement_id) {
   $V(oFormEvenementSSR.equipement_id, equipement_id);
-	$$("button.equipement").invoke("setStyle", {borderWidth: "1px"} );
-  if(equipement_id){
-	  $("equipement-"+equipement_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
-		PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
+	$$("button.equipement").invoke("removeClassName", "selected");
+  $("equipement-"+equipement_id).addClassName("selected");
+	
+	if(equipement_id){
+  	PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
 	} else {
 	  PlanningEquipement.hide();
   }
 }
 
 selectElement = function(line_id){
-$V(oFormEvenementSSR.line_id, line_id);
-  $$("button.line").invoke("setStyle", {borderWidth: "1px"} );
-  $("line-"+line_id).setStyle( {borderWidth: "2px", borderColor: "#000"} );
-  $$("div.cdarrs").invoke("hide");
+  $V(oFormEvenementSSR.line_id, line_id);
+
+  $$("button.line").invoke("removeClassName", "selected" );
+  $("line-"+line_id).addClassName("selected");
+	
+	$$("div.cdarrs").invoke("hide");
 	$V(getForm("editEvenementSSR").cdarr, '');
 	$("cdarrs-"+line_id).show();
 	$('div_other_cdarr').show();
@@ -56,6 +66,10 @@ submitSSR = function(){
   if(!$V(oFormEvenementSSR.cdarr) && !$V(oFormEvenementSSR.code)){
 	  alert("Veuillez selectionner un code SSR");
 		return false;
+	}
+	if(!$$("button.equipement.selected").length){
+	  alert("Veuillez selectionner un equipement");
+    return false;
 	}
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
 		refreshPlanningsSSR();
@@ -77,8 +91,44 @@ refreshPlanningsSSR = function(){
 }
 
 addBorderEvent = function(){
-  $$(".event").invoke("removeClassName", "elt_selected");
-  $$(".CElementPrescription-"+$V(oFormEvenementSSR._element_id)).invoke("addClassName", 'elt_selected');
+  // Classe des evenements à selectionner
+  var category_id = $V(oFormEvenementSSR._category_id);
+	var element_id  = $V(oFormEvenementSSR._element_id);
+	var eventClass = (element_id) ? ".CElementPrescription-"+element_id : ".CCategoryPrescription-"+category_id;
+	var planning = $('planning-sejour');
+	
+	// On ne passe pas en selected les evenements qui possedent la classe tag_cat
+	if(element_id){ 
+	  var elements_tag = planning.select(".event.elt_selected"+eventClass+":not(.tag_cat)");
+		if(planning.select(".event.elt_selected"+eventClass+":not(.tag_cat).selected").length){
+		  elements_tag.invoke("removeClassName", 'selected');
+    } else {
+	    elements_tag.invoke("addClassName", 'selected');
+  	}
+  } else {
+	  var elements = $('planning-sejour').select(".event.elt_selected"+eventClass);
+		if($('planning-sejour').select(".event.elt_selected"+eventClass+".selected").length){
+		  elements.invoke("removeClassName", 'selected');
+		} else {
+		  elements.invoke("addClassName", 'selected');
+		}
+	}
+	
+	planning.select(".event.elt_selected:not("+eventClass+")").invoke("removeClassName", 'selected');
+
+	// Selection de tous les elements qui ont la classe spécifiée
+	planning.select(".event"+eventClass).invoke("addClassName", 'elt_selected');
+	
+	// Deselection de tous les elements deja selectionnés qui n'ont pas la bonne classe
+	planning.select(".event:not("+eventClass+")").invoke("removeClassName", 'elt_selected');
+  
+	// Suppression de la classe tag_cat de tous les evenements selectionnés
+	planning.select(".event"+eventClass).invoke("removeClassName", 'tag_cat');
+  
+	// Si la selection a eu lieu suite au choix d'une categorie, ajout d'une classe aux evenements
+	if(!element_id){
+    planning.select(".event.elt_selected"+eventClass).invoke("addClassName", 'tag_cat');
+  }
 }
 
 var oFormEvenementSSR;
@@ -138,7 +188,8 @@ Main.add(function(){
 	  {{mb_field hidden=true object=$evenement_ssr field=therapeute_id}}
 	  <input type="hidden" name="line_id" value="" />
 	  <input type="hidden" name="_element_id" value="" />
-	  
+	  <input type="hidden" name="_category_id" value="" />
+    
 	  <table class="form">
 	    <tr>
 	      <th>{{mb_label object=$bilan field=kine_id}}</th>
@@ -152,7 +203,8 @@ Main.add(function(){
 	            {{foreach from=$_lines_by_cat.element item=_line name=category}}
 	              {{if $smarty.foreach.category.first}}
 	                {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
-	                <button id="trigger-{{$category->_guid}}" class="search activite" type="button" onclick="selectActivite('{{$category->_guid}}')">
+	                <button id="trigger-{{$category->_guid}}" class="search activite" type="button" 
+									        onclick="$V(this.form._category_id, '{{$category->_id}}'); selectActivite('{{$category->_guid}}')">
 	                  {{$category}}
 	                </button>
 	              {{/if}}
@@ -182,7 +234,7 @@ Main.add(function(){
 	              {{/if}}
 	              </span>
 	              <label>
-	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" type="button" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
+	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
 	              {{$_line->_view}}
 	              </label>
 	              <br />
@@ -239,7 +291,7 @@ Main.add(function(){
 	          {{$_equipement}}
 	        </button>
 	        {{/foreach}}
-	        <button type="button" class="cancel notext" onclick="selectEquipement('');"></button>
+	        <button id="equipement-" type="button" class="cancel equipement" onclick="selectEquipement('');">Aucun</button>
 	      </td>
 	    </tr>
 	    <tr>

@@ -371,6 +371,10 @@ button.send-auto:before, a.button.send-auto:before {
   content: url(images/buttons/send-auto.png);
 }
 
+button.selected {
+	border: 2px solid #000;
+}
+
 optgroup.group {
   text-align: center;
   font-variant: small-caps;
