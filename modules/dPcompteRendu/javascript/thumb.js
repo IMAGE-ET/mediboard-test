@@ -32,7 +32,7 @@ var Thumb = {
     
     var content = (window.FCKeditorAPI && FCKeditorAPI.Instances.source.GetHTML()) ? FCKeditorAPI.Instances.source.GetHTML() : $V(form.source);
     
-    url.addParam("content", content);
+    url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", mode);
 		if (mode == "modele") {
 			url.addParam("type", $V(form.editFrm_type));
