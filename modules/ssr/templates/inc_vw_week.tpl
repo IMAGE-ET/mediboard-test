@@ -11,7 +11,7 @@
 <script type="text/javascript">
 
 Main.add(function() {
-  var planning = new WeekPlanning(
+  window["planning-{{$planning->guid}}"] = new WeekPlanning(
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
@@ -20,16 +20,21 @@ Main.add(function() {
   Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
 });
 
+
+
 </script>
 
-<div class="planning">
+<div class="planning" id="{{$planning->guid}}">
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
     <col span="7" />
     <col style="width: 16px;" />
     
     <tr>
-    	<th class="title" colspan="9" {{if $planning->selectable}}onclick="$('{{$planning->guid}}').select('.event').invoke('toggleClassName', 'selected');"{{/if}}>
+    	<th class="title" colspan="9" {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectAllEvents()"{{/if}}>
+    		<span class="nbSelectedEvents" style="float: left; font-size: smaller;">
+    			
+				</span>
 			{{$planning->title}}
 			</th>
     </tr>
@@ -57,7 +62,7 @@ Main.add(function() {
     </tr>
   </table>
   
-  <div id="{{$planning->guid}}" style="overflow-y: scroll; overflow-x: hidden; height: 250px;">
+  <div style="overflow-y: scroll; overflow-x: hidden; height: 250px;">
     <table class="tbl hours" style="table-layout: fixed;">
       <col style="width: 3.0em;" />
       <col span="7" />
@@ -85,7 +90,7 @@ Main.add(function() {
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" {{if $planning->selectable}}onclick="this.toggleClassName('selected');"{{/if}}{{/if}} class="event {{$_event->css_class}} {{$_event->guid}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
+                  <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents()"{{/if}}{{/if}} class="event {{$_event->css_class}} {{$_event->guid}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
                     <!--
 										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
 											{{$_event->start|date_format:"%H:%M"}}

@@ -129,6 +129,9 @@ addBorderEvent = function(){
 	if(!element_id){
     planning.select(".event.elt_selected"+eventClass).invoke("addClassName", 'tag_cat');
   }
+	
+	// Mise à jour du compteur
+	window["planning-"+$('planning-sejour').down('div.planning').id].updateNbSelectEvents();
 }
 
 var oFormEvenementSSR;

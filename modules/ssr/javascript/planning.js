@@ -41,5 +41,12 @@ WeekPlanning = Class.create({
         height: ((event.length * height) || 1)+"px"
       });
     }, this);
+  },
+	selectAllEvents: function(){
+		this.container.select('.event').invoke('toggleClassName','selected');
+		this.updateNbSelectEvents();
+	},
+	updateNbSelectEvents : function(){
+	  this.container.down('span.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
   }
 });
