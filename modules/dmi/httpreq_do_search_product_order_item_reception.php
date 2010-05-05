@@ -43,5 +43,5 @@ if(count($list) > 0) {
 	$smarty->display('inc_search_product_order_item_reception.tpl');
 }
 else {
-	CAppUI::stepAjax("Pas de reception pour ce produit", UI_MSG_ERROR);
+	CAppUI::stepAjax("Il n'existe aucun article enregistré pour le produit <strong>$product->_view</strong>", UI_MSG_ERROR);
 }

@@ -153,6 +153,7 @@ delLineDMI = function(line_dmi_id){
   </tr>
 </table>
 
+{{if $prescription->_ref_lines_dmi|@count}}
 <table class="tbl">
   <!-- Affichage des lignes de DMI-->
   <tr>
@@ -181,3 +182,7 @@ delLineDMI = function(line_dmi_id){
 	  </tr>
 	{{/foreach}}
 </table>
+
+{{else}}
+  <div class="small-info">Il n'y a aucun DMI dans cette prescription</div>
+{{/if}}

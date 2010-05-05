@@ -15,7 +15,7 @@ $product_code = CValue::get('code');
 $product_code_lot = CValue::get('code_lot');
 
 if (!$product_code) {
-  CAppUI::stepAjax("Veuillez indique un code lot", UI_MSG_ERROR);
+  CAppUI::stepAjax("Veuillez indiquer un code lot", UI_MSG_ERROR);
 }
 
 //chargement produit
@@ -44,7 +44,8 @@ else {
 }
 	
 if (!$product_order_item_reception->_id) {
-  CAppUI::stepAjax("Produit de code <strong>$product_code</strong> trouvé<br />Lot <strong>$product_code_lot</strong> non trouvé", UI_MSG_ERROR);
+  CAppUI::stepAjax("Produit de code <strong>$product_code</strong> trouvé", UI_MSG_OK);
+  CAppUI::stepAjax("Lot <strong>$product_code_lot</strong> non trouvé", UI_MSG_ERROR);
 }
 else {
   /*
