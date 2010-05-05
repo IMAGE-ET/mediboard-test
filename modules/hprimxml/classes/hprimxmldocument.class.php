@@ -518,7 +518,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addActeCCAMAcquittement($elActeCCAM, $acteCCAM);
     
     if ($statut != "ok") {
-      $erreur = $this->addElement($elParent, "erreur");
+      $erreur = $this->addElement($reponse, "erreur");
 			$libelle = null;
 			if (is_array($codes)) {
 				$code = implode("", $codes);

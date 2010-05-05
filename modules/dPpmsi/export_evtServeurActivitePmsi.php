@@ -102,7 +102,7 @@ foreach ($destinataires as $_destinataire) {
         $domGetAcquittement->loadXML(utf8_decode($acquittement));        
         $doc_valid = $domGetAcquittement->schemaValidate();
         
-        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+        $echange_hprim->statut_acquittement = $domGetAcquittement->getAcquittementsServeurActivitePmsi();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         $echange_hprim->acquittement = $acquittement;
     

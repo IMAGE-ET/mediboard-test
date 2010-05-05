@@ -24,7 +24,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
     $this->addAttribute($acquittementsServeurActivitePmsi, "version", CAppUI::conf("hprimxml $this->evenement version"));
     
-		$enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessageAcquittement");
+		$enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessage");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
     $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
@@ -71,7 +71,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
     foreach ($actesCCAM as $_acteCCAM) {
 			$this->addReponse($reponses, $statut, $codes, $_acteCCAM, $commentaires, $mbObject);
-    }
+    }		
   }
 
   function generateAcquittementsServeurActivitePmsi($statut, $codes, $actesCCAM, $commentaires = null, $mbObject = null) {
@@ -96,9 +96,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   function getAcquittementsServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
     
-    $statut = $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
+    $statut = $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessage", null, "statut"); 
     
-    $query = "/hprim:$this->evenement/hprim:enteteMessageAcquittement";
+    $query = "/hprim:$this->evenement/hprim:enteteMessage";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
     
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
