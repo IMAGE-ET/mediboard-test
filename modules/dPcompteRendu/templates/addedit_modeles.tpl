@@ -140,7 +140,7 @@ Main.add(function () {
 {{if $pdf_thumbnails == 1}}
   <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
     action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
-    onsubmit="PageFormat.completeForm(); this.submit();">
+    onsubmit="PageFormat.completeForm();">
     <input type="hidden" name="content" value="" />
     <input type="hidden" name="compte_rendu_id" value="{{$compte_rendu->_id}}"/>
     <input type="hidden" name="suppressHeaders" value="1" />
@@ -369,7 +369,7 @@ Main.add(function () {
           <th class="category" colspan="2">
           	{{tr}}CCompteRendu-Pagelayout{{/tr}}
 					  <button class="hslip notext" type="button" title="Afficher / Masquer les vignettes"
-                    onclick = "Thumb.choixAffiche();"></button>	
+                    onclick = "Thumb.choixAffiche(0);"></button>	
 					</th>
         </tr>
 				<tr id="page_layout" style="display: none;">
