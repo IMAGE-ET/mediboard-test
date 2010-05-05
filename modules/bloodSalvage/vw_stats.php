@@ -11,7 +11,19 @@
 global  $can;
 $can->needsRead();
 
-$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id');
+$mean_fields = array(
+  "age",
+  "wash_volume",
+  "saved_volume",
+  "transfused_volume",
+  "hgb_pocket",
+  "hgb_patient",
+);
+
+$possible_filters = array_merge(
+  array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id'),
+  $mean_fields
+);
 
 $filters          = CValue::getOrSession('filters', array());
 $months_count     = CValue::getOrSession('months_count', 12);
@@ -46,5 +58,6 @@ $smarty->assign('mode',            $mode);
 
 // Lists
 $smarty->assign('fields', $fields);
+$smarty->assign('mean_fields', $mean_fields);
 
 $smarty->display('vw_stats.tpl');

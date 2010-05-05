@@ -152,6 +152,26 @@ function updateTokenCcam(v) {
         <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}Search{{/tr}}</button>
         <button class="tick notext" type="button" onclick="oCcamField.add($V(this.form['_code_ccam']))">{{tr}}Add{{/tr}}</button>
       </td>
+      
+      <td rowspan="4" style="white-space: normal;">
+        {{foreach from=$mean_fields item=_field}}
+          <div style="display: block;">
+            <span class="comparison">
+              <input type="checkbox" value="1" name="filters[{{$_field}}]"  {{if @$filters.$_field}}checked="checked"{{/if}} />
+              <input type="radio" value="{{$_field}}" name="comparison_left" />
+              <input type="radio" value="{{$_field}}" name="comparison_right" />
+            </span>
+            
+            <label for="filters[{{$_field}}]">
+              {{if $_field == "age"}}
+                Par tranche d'âge
+              {{else}}
+                {{tr}}CBloodSalvage-{{$_field}}{{/tr}}
+              {{/if}}
+            </label>
+          </div>
+        {{/foreach}}
+      </td>
     </tr>
     
     <tr>
@@ -219,14 +239,7 @@ function updateTokenCcam(v) {
           {{/foreach}}
         </select>
       </td>
-      <th>
-        <label for="comparison[age]">Tranche d'age</label>
-        <span class="comparison">
-          <input type="checkbox" value="1" name="comparison[age]" />
-          <input type="radio" value="age" name="comparison_left" />
-          <input type="radio" value="age" name="comparison_right" />
-        </span>
-      </th>
+      <th></th>
       <td></td>
     </tr>
     

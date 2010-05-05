@@ -11,7 +11,18 @@
 global  $can;
 $can->needsRead();
 
-$possible_filters = array('chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id');
+$mean_fields = array(
+  "wash_volume",
+  "saved_volume",
+  "transfused_volume",
+  "hgb_pocket",
+  "hgb_patient",
+);
+
+$possible_filters = array_merge(
+  array('age', 'chir_id', 'anesth_id', 'codes_ccam', 'code_asa', 'cell_saver_id'),
+  $mean_fields
+);
 
 $filters          = CValue::get('filters', array());
 $months_count     = CValue::get('months_count', 12);
@@ -35,6 +46,28 @@ function fillData(&$where, $ljoin, &$serie, $dates) {
     $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
     $count = $bs->countList($where, null, null, null, $ljoin);
     $d[$i] = array($i, intval($count));
+    $i++;
+  }
+  unset($where[$pos]);
+}
+
+function computeMeanValue(&$where, &$ljoin, &$serie, $dates, $prop) {
+  $d = &$serie['data'];
+  $bs = new CBloodSalvage;
+  $pos = end(array_keys($where));
+  $i = 0;
+  
+  foreach ($dates as $month => $date) {
+    $where['plagesop.date'] = "BETWEEN '{$date['start']}' AND '{$date['end']}'";
+    $list = $bs->loadList($where, null, null, null, $ljoin);
+    
+    $total = 0;
+    foreach($list as $_bs) {
+      $total += $_bs->$prop;
+    }
+    $count = count($list);
+    $mean  = $count ? $total / $count : 0;
+    $d[$i] = array($i, $mean);
     $i++;
   }
   unset($where[$pos]);
@@ -157,14 +190,40 @@ if ($filters['codes_ccam']) {
 	}
 }
 
+// Volume de lavage
+$mean_props = array(
+  "wash_volume" => "ml", 
+  "saved_volume" => "ml",
+  "transfused_volume" => "ml",
+  "hgb_pocket" => "",
+  "hgb_patient" => "",
+);
+
+foreach($mean_props as $_prop => $_unit) {
+  $data[$_prop] = array(
+    'options' => array(
+      'title' => utf8_encode(CAppUI::tr("CBloodSalvage-$_prop").($_unit ? " ($_unit)" : ""))
+    ),
+    'data' => array()
+  );
+  $series = &$data[$_prop]['series'];
+  $series[] = array('data' => array());
+  computeMeanValue($where, $ljoin, $series[count($series)-1], $dates, $_prop);
+}
+
 // Cell savers
 $cell_saver = new CCellSaver;
-$list_cell_savers = $cell_saver->loadList(null, "marque, modele");
-$list_cell_savers[] = null;
+/*if ($filters['cell_saver_id']) {
+  $cell_saver->cell_saver_id = $filters['cell_saver_id'];
+}*/
+$list_cell_savers = $cell_saver->loadMatchingList("marque, modele");
+
+if (count($list_cell_savers) == 0)
+  $list_cell_savers[] = null;
 
 $data['cell_saver_id'] = array(
   'options' => array(
-    'title' => utf8_encode('Par cell-saver')
+    'title' => utf8_encode('Cell saver')
   ),
   'data' => array()
 );
@@ -172,7 +231,7 @@ $series = &$data['cell_saver_id']['series'];
 
 // array_values() to have contiguous keys
 foreach(array_values($list_cell_savers) as $key => $_cell_saver) {
-  if ($_cell_saver->_id)
+  if ($_cell_saver && $_cell_saver->_id)
     $where[] = "blood_salvage.cell_saver_id = $_cell_saver->_id";
   else
     $where[] = "blood_salvage.cell_saver_id IS NULL || blood_salvage.cell_saver_id = ''";
