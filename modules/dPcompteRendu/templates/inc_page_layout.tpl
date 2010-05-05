@@ -126,6 +126,7 @@ var PageFormat = {
       $V(dform.page_format, page_format);
       $V(dform.orientation, $V(this.form._orientation));
     {{/if}}
+    dform.submit();
   }
 };
 </script>

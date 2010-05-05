@@ -1,9 +1,14 @@
 var Thumb = {
   thumb_up2date: true,
-  choixAffiche: function() {
+  choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
-    $("thumbs_button").toggle();
-    var editeur = $("editeur");
+    if (isNotModele == 1) {
+      $("thumbs_button").toggle();
+      var editeur = $("editeur");
+    }
+    else {
+      var editeur = $("htmlarea");
+    }
     var colspan_editeur = editeur.readAttribute("colspan");
     colspan_editeur == '1' ? editeur.writeAttribute("colspan",'2') : editeur.writeAttribute("colspan",'1');
   },

@@ -156,7 +156,7 @@ document.observe('keydown', function(e){
         {{if $compte_rendu->_id != null}}
           &mdash;
           <button class="hslip" type="button" title="Afficher / Masquer les vignettes"
-                  onclick = "Thumb.choixAffiche();">Vignettes</button>
+                  onclick = "Thumb.choixAffiche(1);">Vignettes</button>
         {{/if}}
       
       <div id="page_layout" style="display: none;">

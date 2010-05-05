@@ -20,52 +20,54 @@ class CHtmlToPDF {
 
   var $display_elem = array (
 	  "inline" => array(
-		  "q",
-			"b", "strong",
-			"font",
-			"i",
-			"cite",
-			"em",
-			"var",
-			"dfn",
-			"tt",
-			"code",
-			"kbd",
-			"samp",
-			"u",
-			"ins",
+		  "b", "strong",
+      "big",
+      "blink",
+      "cite",
+      "code",
+      "del",
+      "dfn",
+      "em",
+      "font",
+      "i",
+      "ins",
+      "kbd",
+      "nobr",
+      "q",
 			"s",
+			"samp",
+      "small",
+      "span",
 			"strike",
-			"del",
-			"blink",
-			"big",
-			"small",
-			"sub",
-			"sup",
-			"nobr"),
+      "sub",
+      "sup",
+			"tt",
+			"u",
+			"var"
+      ),
 	  "block"  => array(
-		  "div",
-			"map",
-			"isindex",
-			"dt",
-      "isindex",
-			"p",
-			"dl",
-			"multicol",
-			"dd",
-			"blockquote",
-			"address",
-			"h1", "h2",	"h3",	"h4",	"h5", "h6",
+		  "address",
+      "blockquote",
+      "dd",
+      "dl",
+      "dt",
+      "div",
+      "dir",
+      "h1", "h2", "h3", "h4", "h5", "h6",
+      "hr",
 			"listing",
+      "isindex",
+      "map",
+      "menu",
+      "multicol",
+      "ol",
+			"p",
+      "pre",
 			"plaintext",
-			"xmp",
-			"pre",
+			"table",
 			"ul",
-			"menu",
-			"dir",
-			"ol",
-			"hr",
-			"table"));
+			"xmp",
+			));
       
   static $_font_size_lookup = array(
     // For basefont support
@@ -114,18 +116,57 @@ class CHtmlToPDF {
   // Expressions régulières provenant de FCKEditor
   // cf http://docs.cksource.com/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options/CleanWordKeepsStructure
   function cleanWord($str) {
-    $str = preg_replace("/<meta\s*[^>]*\s*>/",'',$str);
+    $str = preg_replace("/<meta\s*[^>]*\s*[^\/]>/", '',$str);
     $str = preg_replace("/(<\/meta>)+/i", '', $str);
     $str = preg_replace("/<o:p><\/o:p>/", '', $str);
+    $str = preg_replace("/<o:p>/", "<p>",$str);
+    $str = preg_replace("/<\/o:p>/", "</p>",$str);
+    $str = preg_replace("/<w:/", '<', $str);
+    $str = preg_replace("/<\/w:/", '</', $str);
+    $str = preg_replace("/<o:smarttagtype.*smarttagtype>/", '', $str);
+    $str = preg_replace("/<\/?\w+:[^>]*>/", '', $str);
     return $str;
   }
 
   function fixBlockElements($str) {
+
     $xml = new DOMDocument();
     
-    $str = $this->xmlEntities($str);
-    $str = $this->cleanWord($str);
+    // Inspiré de http://www.php.net/manual/fr/function.get-html-translation-table.php#77660
+    $trans = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
+    $trans[chr(130)] = '&sbquo;' ;    // Single Low-9 Quotation Mark
+    $trans[chr(131)] = '&fnof;'  ;    // Latin Small Letter F With Hook
+    $trans[chr(132)] = '&bdquo;' ;    // Double Low-9 Quotation Mark
+    $trans[chr(133)] = '&hellip;';    // Horizontal Ellipsis
+    $trans[chr(134)] = '&dagger;';    // Dagger
+    $trans[chr(135)] = '&Dagger;';    // Double Dagger
+    $trans[chr(136)] = '&circ;'  ;    // Modifier Letter Circumflex Accent
+    $trans[chr(137)] = '&permil;';    // Per Mille Sign
+    $trans[chr(138)] = '&Scaron;';    // Latin Capital Letter S With Caron
+    $trans[chr(139)] = '&lsaquo;';    // Single Left-Pointing Angle Quotation Mark
+    $trans[chr(140)] = '&OElig;' ;    // Latin Capital Ligature OE
+    $trans[chr(145)] = '&lsquo;' ;    // Left Single Quotation Mark
+    $trans[chr(146)] = '&rsquo;' ;    // Right Single Quotation Mark
+    $trans[chr(147)] = '&ldquo;' ;    // Left Double Quotation Mark
+    $trans[chr(148)] = '&rdquo;' ;    // Right Double Quotation Mark
+    $trans[chr(149)] = '&bull;'  ;    // Bullet
+    $trans[chr(150)] = '&ndash;' ;    // En Dash
+    $trans[chr(151)] = '&mdash;' ;    // Em Dash
+    $trans[chr(152)] = '&tilde;' ;    // Small Tilde
+    $trans[chr(153)] = '&trade;' ;    // Trade Mark Sign
+    $trans[chr(154)] = '&scaron;';    // Latin Small Letter S With Caron
+    $trans[chr(155)] = '&rsaquo;';    // Single Right-Pointing Angle Quotation Mark
+    $trans[chr(156)] = '&oelig;' ;    // Latin Small Ligature OE
+    $trans[chr(159)] = '&Yuml;'  ;    // Latin Capital Letter Y With Diaeresis
+    $trans[chr(167)] = '&clubs;' ;    // Club Suit Symbol
+    ksort($trans);
+    
+    foreach($trans as $a=>$b) {
+      $str = str_replace($b, '&#'.ord($a).';', $str);
+    }
 
+    $str = $this->cleanWord($str);
+    
     $xml->loadXML($str);
     
     $html =& $xml->getElementsByTagName("body")->item(0);
@@ -177,53 +218,5 @@ class CHtmlToPDF {
       $this->recursiveRemove($child);
     }
   }
-  
-  // Table extraite de :
-  // - http://www.sourcerally.net/Scripts/39-Convert-HTML-Entities-to-XML-Entities
-  // - http://yost.com/computers/htmlchars/html40charsbynumber.html
-  function xmlEntities($str) {
-    $xml =  array('&#34;'  , '&#38;'  , '&#60;'  , '&#62;'  , '&#160;' , '&#161;' , '&#162;' ,
-                  '&#163;' , '&#164;' , '&#165;' , '&#166;' , '&#167;' , '&#168;' , '&#169;' ,
-                  '&#170;' , '&#171;' , '&#172;' , '&#173;' , '&#174;' , '&#175;' , '&#176;' ,
-                  '&#177;' , '&#178;' , '&#179;' , '&#180;' , '&#181;' , '&#182;' , '&#183;' ,
-                  '&#184;' , '&#185;' , '&#186;' , '&#187;' , '&#188;' , '&#189;' , '&#190;' ,
-                  '&#191;' , '&#192;' , '&#193;' , '&#194;' , '&#195;' , '&#196;' , '&#197;' ,
-                  '&#198;' , '&#199;' , '&#200;' , '&#201;' , '&#202;' , '&#203;' , '&#204;' ,
-                  '&#205;' , '&#206;' , '&#207;' , '&#208;' , '&#209;' , '&#210;' , '&#211;' ,
-                  '&#212;' , '&#213;' , '&#214;' , '&#215;' , '&#216;' , '&#217;' , '&#218;' , 
-                  '&#219;' , '&#220;' , '&#221;' , '&#222;' , '&#223;' , '&#224;' , '&#225;' ,
-                  '&#226;' , '&#227;' , '&#228;' , '&#229;' , '&#230;' , '&#231;' , '&#232;' ,
-                  '&#233;' , '&#234;' , '&#235;' , '&#236;' , '&#237;' , '&#238;' , '&#239;' ,
-                  '&#240;' , '&#241;' , '&#242;' , '&#243;' , '&#244;' , '&#245;' , '&#246;' ,
-                  '&#247;' , '&#248;' , '&#249;' , '&#250;' , '&#251;' , '&#252;' , '&#253;' ,
-                  '&#254;' , '&#255;' , '&#338;' , '&#339;' ,
-                  '&#8194;', '&#8195;', '&#8211;', '&#8212;', '&#8216;', '&#8217;', '&#8218;',
-                  '&#8220;', '&#8221;', '&#8222;', '&#8230;', '&#8240;', '&#8242;', '&#8243;', '&#8364;',
-                  '&#8592;', '&#8593;', '&#8594;', '&#8595;', '&#8596;',
-                  '&#8727;', '&#9674;', '&#9824;', '&#9827;', '&#9829;', '&#9830;');
-
-    $html = array('&quot;'  , '&amp;'   , '&lt;'    , '&gt;'    , '&nbsp;'  , '&iexcl;' , '&cent;'  ,
-                  '&pound; ', '&curren;', '&yen;'   , '&brvbar;', '&sect;'  , '&uml;'   , '&copy;'  ,
-                  '&ordf;'  , '&laquo;' , '&not;'   , '&shy;'   , '&reg;'   , '&macr;'  , '&deg;'   ,
-                  '&plusmn;', '&sup2;'  , '&sup3;'  , '&acute;' , '&micro;' , '&para;'  , '&middot;',
-                  '&cedil;' , '&sup1;'  , '&ordm;'  , '&raquo;' , '&frac14;', '&frac12;', '&frac34;',
-                  '&iquest;', '&Agrave;', '&Aacute;', '&Acirc;' , '&Atilde;', '&Auml;'  , '&Aring;' ,
-                  '&AElig;' ,' &Ccedil;', '&Egrave;', '&Eacute;', '&Ecirc;' , '&Euml;'  , '&Igrave;',
-                  '&Iacute;',' &Icirc;' , '&Iuml;'  , '&ETH;'   , '&Ntilde;', '&Ograve;', '&Oacute;',
-                  '&Ocirc;' , '&Otilde;', '&Ouml;'  , '&times;' , '&Oslash;', '&Ugrave;', '&Uacute;',
-                  '&Ucirc;' , '&Uuml;'  , '&Yacute;', '&THORN;' , '&szlig;' , '&agrave;', '&aacute;',
-                  '&acirc;' , '&atilde;', '&auml;'  , '&aring;' , '&aelig;' , '&ccedil;', '&egrave;',
-                  '&eacute;', '&ecirc;' , '&euml;'  , '&igrave;', '&iacute;', '&icirc;' , '&iuml;'  ,
-                  '&eth;'   , '&ntilde;', '&ograve;', '&oacute;', '&ocirc;' , '&otilde;', '&ouml;'  ,
-                  '&divide;', '&oslash;',' &ugrave;', '&uacute;', '&ucirc;' , '&uuml;'  , '&yacute;',
-                  '&thorn;' , '&yuml;'  ,' &OElig;' , '&oelig;' ,
-                  '&ensp;'  , '&emsp;'  , '&ndash;' , '&mdash;' , '&lsquo;' , '&rsquo;' , '&sbquo;' ,
-                  '&ldquo;' , '&rdquo;' , '&bdquo;' , '&hellip;' ,'&permil;', '&prime;' , '&Prime;' , '&euro;'  ,
-                  '&larr;'  , '&uarr;'  , '&rarr;'  , '&darr;'  , '&harr;'  ,
-                  '&lowast;', '&loz;'   , '&spades;', '&clubs;' , '&hearts;', '&diams;');
-    $str = str_replace($html,$xml,$str);
-    $str = str_ireplace($html,$xml,$str);
-    return $str;
-  } 
 }
 ?>
