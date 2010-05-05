@@ -20,6 +20,20 @@
 {{if $sejour->_id && $can->edit}}
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tab-sejour'));
+
+var constantesMedicalesDrawn = false;
+refreshConstantesMedicales = function (force) {
+  if (!constantesMedicalesDrawn || force) {
+    var url = new Url();
+    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("patient_id", {{$sejour->_ref_patient->_id}});
+    url.addParam("context_guid", "{{$sejour->_guid}}");
+    url.addParam("selection[]", ["poids", "taille"]);
+    url.requestUpdate("constantes");
+    constantesMedicalesDrawn = true;
+  }
+};
+
 </script>
 
 <ul id="tab-sejour" class="control_tabs">
@@ -37,7 +51,8 @@ Main.add(Control.Tabs.create.curry('tab-sejour'));
   		Cotation
 		</a>
 	</li>
-  {{/if}} 
+  <li onmousedown="refreshConstantesMedicales();"><a href="#constantes">{{tr}}CConstantesMedicales{{/tr}}</a></li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />  
@@ -70,5 +85,8 @@ Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </div>
 
 <div id="cotation-rhs" style="display: none;">
+</div>
+
+<div id="constantes" style="display: none;">
 </div>
 {{/if}}

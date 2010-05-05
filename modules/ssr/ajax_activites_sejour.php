@@ -53,6 +53,15 @@ if ($technicien->kine_id = $bilan->kine_id) {
   $plateau->loadRefsTechniciens();
 }
 
+// Chargement de tous les plateaux et des equipements et techniciens associés
+$plateau_tech = new CPlateauTechnique();
+$plateau_tech->group_id = CGroups::loadCurrent()->_id;
+$plateaux = $plateau_tech->loadMatchingList();
+foreach($plateaux as $_plateau_tech){
+	$_plateau_tech->loadRefsEquipements();
+	$_plateau_tech->loadRefsTechniciens();
+}
+
 $evenement_ssr = new CEvenementSSR();
 
 // Création du template
@@ -63,6 +72,7 @@ $smarty->assign("sejour" , $sejour);
 $smarty->assign("bilan"  , $bilan);
 $smarty->assign("plateau", $plateau);
 $smarty->assign("prescription", $prescription);
+$smarty->assign("plateaux", $plateaux);
 $smarty->display("inc_activites_sejour.tpl");
 
 ?>

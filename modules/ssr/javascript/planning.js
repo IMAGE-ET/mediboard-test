@@ -22,7 +22,7 @@ WeekPlanning = Class.create({
     this.container.show().setStyle({ 
       height: bottom-top +"px"
     });*/
-    this.container.scrollTop = top;
+    this.container.down('.week-container').scrollTop = top;
   },
   updateEventsDimensions: function(){
     this.events.each(function(event, i){

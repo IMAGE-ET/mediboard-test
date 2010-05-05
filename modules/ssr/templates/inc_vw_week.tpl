@@ -11,19 +11,21 @@
 <script type="text/javascript">
 
 Main.add(function() {
-  window["planning-{{$planning->guid}}"] = new WeekPlanning(
+  var planning = new WeekPlanning(
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
     {{$planning->events|@json}}
   );
   Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
+	window["planning-{{$planning->guid}}"] = planning;
 });
-
-
 
 </script>
 
+{{if @!$height}}
+  {{assign var=height value=250}}
+{{/if}}
 <div class="planning" id="{{$planning->guid}}">
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
@@ -62,7 +64,7 @@ Main.add(function() {
     </tr>
   </table>
   
-  <div style="overflow-y: scroll; overflow-x: hidden; height: 250px;">
+  <div style="overflow-y: scroll; overflow-x: hidden; height: {{$height}}px;" class="week-container">
     <table class="tbl hours" style="table-layout: fixed;">
       <col style="width: 3.0em;" />
       <col span="7" />

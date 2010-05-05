@@ -194,6 +194,10 @@ Main.add(function(){
 	  <input type="hidden" name="_category_id" value="" />
     
 	  <table class="form">
+	  	<tr>
+	  	  <th>{{mb_label object=$bilan field=entree}}</th>
+				<td>{{mb_value object=$bilan field=entree}}</td>
+			</tr>
 	    <tr>
 	      <th>{{mb_label object=$bilan field=kine_id}}</th>
 	      <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
@@ -375,8 +379,12 @@ Main.add(function(){
 					Transférer vers le planning 
 					<select name="kine_id">
 						<option value="">&mdash; Choix d'un kiné</option>
-						{{foreach from=$plateau->_ref_techniciens item=_technicien}}
-						  <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
+						{{foreach from=$plateaux item=_plateau}}
+						  <optgroup label="{{$_plateau->_view}}">
+						  {{foreach from=$_plateau->_ref_techniciens item=_technicien}}
+                <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
+              {{/foreach}}
+							</optgroup>
 						{{/foreach}}
 					</select>
 				</td>
@@ -389,9 +397,13 @@ Main.add(function(){
 					Transférer vers le planning 
 				  <select name="equipement_id">
 				  	<option value="">&mdash; Choix d'un équipement</option>
-            {{foreach from=$plateau->_ref_equipements item=_equipement}}
-              <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
-            {{/foreach}}
+						{{foreach from=$plateaux item=_plateau}}
+              <optgroup label="{{$_plateau->_view}}">
+	            {{foreach from=$_plateau->_ref_equipements item=_equipement}}
+	              <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+	            {{/foreach}}
+							</optgroup>
+						{{/foreach}}
           </select>
 				</td>
       </tr>	    		
