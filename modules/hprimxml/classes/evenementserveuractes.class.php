@@ -52,7 +52,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     }
 
     // Traitement final
-   // $this->purgeEmptyElements();
+    $this->purgeEmptyElements();
   }
   
   function getEnteteServeurActesXML() {
@@ -108,13 +108,16 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $dest_hprim->loadMatchingObject();
       
       $avertissement = null;
-      
-      // Mapping des actes CCAM
+			
+			// Récupération de l'élément patient du message
+      $elPatient  = $data['patient'];
+			
+      // Mapping actes CCAM
       $actesCCAM = $this->mappingActesCCAM($data);
-          
+			    
       // Acquittement d'erreur : identifiants source du patient / séjour non fournis
       if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E206", $actesCCAM);
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E206", $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -127,7 +130,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $IPP->tag = $dest_hprim->_tag_patient;
       $IPP->id400 = $data['idSourcePatient'];
       if(!$IPP->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013", $actesCCAM);
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E013", $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -144,7 +147,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $num_dos->tag = $dest_hprim->_tag_sejour;
       $num_dos->id400 = $data['idSourceVenue'];
       if(!$num_dos->loadMatchingObject()) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E014", $actesCCAM);
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E014", $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -157,7 +160,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       
       // Si patient H'XML est différent du séjour
       if ($sejour->patient_id != $patient->_id) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015", $actesCCAM);
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E015", $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
@@ -178,7 +181,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       
       /* @FIXME Penser à virer par la suite pour rattacher des actes à un séjour... */
       if (!$_operation) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201", $actesCCAM);
+        $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("err", "E201", $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");

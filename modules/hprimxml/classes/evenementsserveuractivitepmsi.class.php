@@ -34,6 +34,36 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
     return $xpath->queryTextNode("hprim:date", $debut);
   }
   
+	function mappingServeurActes($data) {
+		// Mapping patient
+		$patient = $this->mappingPatient($data);
+		
+		// Mapping actes CCAM
+		$actesCCAM = $this->mappingActesCCAM($data);
+		
+		return array (
+		  "patient"   => $patient,
+		  "actesCCAM" => $actesCCAM
+		);  
+	}
+	
+	function mappingPatient($data) {
+		$node = $data['patient'];
+		$xpath = new CMbXPath($node->ownerDocument, true);
+		
+		$personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
+    $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
+    $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
+		
+		return array (
+      "idSourcePatient" => $data['idSourcePatient'],
+      "idCiblePatient"  => $data['idCiblePatient'],
+      "nom"             => $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique),
+      "prenom"          => $prenoms[0],
+      "naissance"       => $xpath->queryTextNode("hprim:date", $elementDateNaissance)
+    );
+	}
+	
   function mappingActesCCAM($data) {
     $node = $data['actesCCAM'];
     $xpath = new CMbXPath($node->ownerDocument, true);

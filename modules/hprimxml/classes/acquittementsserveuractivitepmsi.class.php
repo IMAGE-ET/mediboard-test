@@ -44,7 +44,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
   }
   
-  function addReponses($statut, $codes, $actesCCAM, $commentaires = null, $mbObject = null) {
+  function addReponses($statut, $codes, $actesCCAM, $elPatient, $mbObject = null, $commentaires = null) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
     
     $mbPatient = $mbSejour = null;    
@@ -58,24 +58,30 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
     } 
     
     // Ajout du patient et de la venue
-    $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
-    $this->addPatient($patient, $mbPatient, false, true);
-    $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
-    $this->addVenue($venue, $mbSejour, false, true);
+    if ($mbPatient) {
+      $patient = $this->addElement($acquittementsServeurActivitePmsi, "patient");
+      $this->addPatient($patient, $mbPatient, false, true);
+    } else {
+    	$acquittementsServeurActivitePmsi->appendChild($patient);
+    }
+    if ($mbSejour) {    
+      $venue = $this->addElement($acquittementsServeurActivitePmsi, "venue");
+      $this->addVenue($venue, $mbSejour, false, true);
+    }
     
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
     foreach ($actesCCAM as $_acteCCAM) {
-			$this->addReponse($reponses, $statut, $codes, $_acteCCAM, $commentaires, $mbObject);
+			$this->addReponse($reponses, $statut, $codes, $_acteCCAM, $patient, $mbObject, $commentaires);
     }		
   }
 
-  function generateAcquittementsServeurActivitePmsi($statut, $codes, $actesCCAM, $commentaires = null, $mbObject = null) {
+  function generateAcquittementsServeurActivitePmsi($statut, $codes, $actesCCAM, $elPatient, $mbObject = null, $commentaires = null) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
-    $this->addReponses($statut, $codes, $actesCCAM, $commentaires, $mbObject);
+    $this->addReponses($statut, $codes, $actesCCAM, $elPatient, $mbObject, $commentaires);
 
     $this->saveTempFile();
     $messageAckServeurActivitePmsi = utf8_encode($this->saveXML());
