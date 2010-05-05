@@ -702,7 +702,7 @@ class CConsultation extends CCodable {
       $datetime = $this->_datetime;
       $where = array();
       $where['patient_id']   = " = '$this->patient_id'";
-      $where[] = "`sejour`.`entree` <= '$datetime' `sejour`.`sortie` >= '$datetime'";
+      $where[] = "`sejour`.`entree` <= '$datetime' AND `sejour`.`sortie` >= '$datetime'";
       
       $sejour = new CSejour();
       $sejour->loadObject($where);
