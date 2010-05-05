@@ -22,11 +22,11 @@ function refreshLists() {
 
 function refreshOrders(){
   var url = new Url("soins", "httpreq_vw_stock_order");
-  var filterOrder = getForm("filter-order");
   url.addFormData(getForm("filter"));
   
+  var filterOrder = getForm("filter-order");
   if (filterOrder)
-    url.addFormData(getForm("filter-order"));
+    url.addFormData(filterOrder);
     
   url.requestUpdate("list-order");
 }
@@ -34,6 +34,11 @@ function refreshOrders(){
 function refreshReceptions(){
   var url = new Url("soins", "httpreq_vw_stock_reception");
   url.addFormData(getForm("filter"));
+  
+  var filterReception = getForm("filter-reception");
+  if (filterReception)
+    url.addFormData(filterReception);
+    
   url.requestUpdate("list-reception");
 }
 

@@ -15,9 +15,21 @@ printReceptionReport = function(service_id){
   url.addParam("mode", "print");
   url.popup(800, 600, "Rapport des commandes");
 }
+
+changeReceptionPage = function(start) {
+  $V(getForm('filter-reception').start, start); 
+}
 </script>
 
-<button class="print" onclick="printReceptionReport()">{{tr}}Print{{/tr}}</button>
+<button class="print" onclick="printReceptionReport({{$service_id}})" style="float: left;">{{tr}}Print{{/tr}}</button>
+
+{{mb_include module=system template=inc_pagination change_page="changeReceptionPage" 
+    total=$deliveries_count current=$start step=30}}
+    
+<form name="filter-reception" action="?" method="get" onsubmit="return (checkForm(this) && refreshReceptions())">
+  <input type="hidden" name="m" value="soins" />
+  <input type="hidden" name="start" value="{{$start}}" onchange="refreshReceptions()" />
+</form>
 
 <table class="tbl">
   <tr>
@@ -113,5 +125,5 @@ printReceptionReport = function(service_id){
 </table>
 
 <script type="text/javascript">
-  $$('a[href=#list-reception] small').first().update('({{$deliveries|@count}})');
+  $$('a[href=#list-reception] small').first().update('({{$deliveries_count}})');
 </script>

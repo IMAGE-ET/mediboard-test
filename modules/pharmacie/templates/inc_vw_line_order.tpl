@@ -61,7 +61,7 @@
       {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-stock-$id size=3}}
 
       <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
-      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); $V(this.form.stock_id, ''); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
+      <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); $V(this.form.stock_id, ''); this.form.product_id.className = ''; onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
     </form>
     {{/if}}
   </td>
