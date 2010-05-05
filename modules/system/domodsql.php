@@ -9,13 +9,49 @@
  * Activate or move a module entry
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $cmd      = CValue::get("cmd");
 $mod_id   = CValue::get("mod_id");
 $mod_name = CValue::get("mod_name");
+
+
+// If it we come from the installer script
+if ($cmd == "upgrade-core") {
+  // we deactivate errors under error
+  $old_er = error_reporting(E_ERROR);
+
+  $module = new CModule;
+  $module->mod_type = "core";
+  $list_modules = $module->loadMatchingList();
+  
+  foreach($list_modules as $module) {
+    $setupClass = "CSetup$module->mod_name";
+    $setup = new $setupClass;
+    
+    if ($module->mod_version = $setup->upgrade($module->mod_version)) {
+      $module->mod_type = $setup->mod_type;
+      $module->store();
+  
+      if ($setup->mod_version == $module->mod_version) {
+        CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
+      }
+      else {
+        CAppUI::setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+      }
+    }
+    else {
+      CAppUI::setMsg("Module '%s' non mis à jour", UI_MSG_WARNING, $module->mod_name);
+    }
+  }
+
+  // In case the setup has added some user prefs
+  CAppUI::reloadPrefs();
+  
+  error_reporting($old_er);
+  
+  CAppUI::redirect();
+}
 
 $module = new CModule();
 if ($mod_id) {
@@ -46,86 +82,80 @@ if (!$module->_files_missing) {
 switch ($cmd) {
 	case "moveup":
 	case "movedn":
-	$module->move($cmd);
-	CAppUI::setMsg("CModule-msg-reordered", UI_MSG_OK);
+  	$module->move($cmd);
+  	CAppUI::setMsg("CModule-msg-reordered", UI_MSG_OK);
 	break;
 		
 	case "toggle":
-	// just toggle the active state of the table entry
-	$module->mod_active = 1 - $module->mod_active;
-	$module->store();
-	CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
+  	// just toggle the active state of the table entry
+  	$module->mod_active = 1 - $module->mod_active;
+  	$module->store();
+  	CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
 	break;
 
 	case "toggleMenu":
-  // just toggle the active state of the table entry
-	$module->mod_ui_active = 1 - $module->mod_ui_active;
-	$module->store();
-   CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
+    // just toggle the active state of the table entry
+  	$module->mod_ui_active = 1 - $module->mod_ui_active;
+  	$module->store();
+    CAppUI::setMsg("CModule-msg-state-changed", UI_MSG_OK);
 	break;
 
 	case "remove":
-  if (!$module->_files_missing) {
-    $success = $setup->remove();
-  } else {
-    $success = true;
-  }
-  if($success !== null){
-    $module->remove();
-    CAppUI::setMsg("CModule-msg-removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
-  }
+    $success = ($module->_files_missing ? true : $setup->remove());
+    
+    if($success !== null){
+      $module->remove();
+      CAppUI::setMsg("CModule-msg-removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
+    }
   break;
 
   case "install":
-  if ($module->mod_version = $setup->upgrade($module->mod_version)) {
-    $module->mod_type = $setup->mod_type;
-    $module->install();
-    
-    if ($setup->mod_version == $module->mod_version) {
-      CAppUI::setMsg("Installation de '$module->mod_name' à la version $setup->mod_version", UI_MSG_OK, true);
-    }
+    if ($module->mod_version = $setup->upgrade($module->mod_version)) {
+      $module->mod_type = $setup->mod_type;
+      $module->install();
+      
+      if ($setup->mod_version == $module->mod_version) {
+        CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
+      }
+      else {
+        CAppUI::setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+      }
+    } 
     else {
-      CAppUI::setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+      CAppUI::setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
     }
-  } 
-  else {
-    CAppUI::setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
-  }
-  
-	// In case the setup has added some user prefs
-  CAppUI::reloadPrefs();
+    
+  	// In case the setup has added some user prefs
+    CAppUI::reloadPrefs();
   break;
 
   case "upgrade":
-  if ($module->mod_version = $setup->upgrade($module->mod_version)) {
-    $module->mod_type = $setup->mod_type;
-    $module->store();
-
-    if ($setup->mod_version == $module->mod_version) {
-      CAppUI::setMsg("Installation de '$module->mod_name' à la version $setup->mod_version", UI_MSG_OK, true);
-    }
-    else {
-      CAppUI::setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
-    }
-	} 
-	else {
-		CAppUI::setMsg("Module '$module->mod_name' non mis à jour", UI_MSG_ERROR, true);
-	}
-
-	// In case the setup has added some user prefs
-  CAppUI::reloadPrefs();
+    if ($module->mod_version = $setup->upgrade($module->mod_version)) {
+      $module->mod_type = $setup->mod_type;
+      $module->store();
+  
+      if ($setup->mod_version == $module->mod_version) {
+        CAppUI::setMsg("Installation de '%s' à la version %s", UI_MSG_OK, $module->mod_name, $setup->mod_version);
+      }
+      else {
+        CAppUI::setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+      }
+  	} 
+  	else {
+  		CAppUI::setMsg("Module '%s' non mis à jour", UI_MSG_WARNING, $module->mod_name);
+  	}
+  
+  	// In case the setup has added some user prefs
+    CAppUI::reloadPrefs();
 	break;
-
+  	
 	case "configure":
-	if (!$setup->configure()) { //returns true if configure succeeded
-		CAppUI::setMsg("CModule-msg-config-failed", UI_MSG_ERROR);
-	}
+  	if (!$setup->configure()) { //returns true if configure succeeded
+  		CAppUI::setMsg("CModule-msg-config-failed", UI_MSG_ERROR);
+  	}
 	break;
 
-	default:
-	CAppUI::setMsg("Unknown Command", UI_MSG_ERROR);
-	break;
+	default: CAppUI::setMsg("Unknown Command", UI_MSG_ERROR);
 }
 
 CAppUI::redirect();
-?>

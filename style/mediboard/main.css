@@ -634,20 +634,6 @@ table#weber td {
   margin: 20px;
 }
 
-.wizard .navigation a {
-  text-decoration: none;
-  border: 1px black solid;
-  font-weight: bold;
-  font-size: 12px;
-  background: #ddd;
-  margin: 0 2px;
-  padding: 2px 5px;
-}
-
-.wizard .navigation a:hover {
-  background: #bbb;
-}
-
 div.generated {
   margin: 5px;
   text-align: center;

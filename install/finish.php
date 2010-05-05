@@ -142,9 +142,9 @@ if (@$_POST["changePassword"] and $password != "admin") {
 </p>
 
 <div class="navigation">
-  <button class="tick" onclick="location.href='../index.php?m=system&amp;tab=view_modules'">
+  <a class="button tick" href="../?m=system&amp;a=domodsql&amp;cmd=upgrade-core">
     Me rendre à la page d'administration des modules
-  </button>
+  </a>
 </div>
 
 <?php showFooter(); ?>

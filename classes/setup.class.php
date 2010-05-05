@@ -193,12 +193,13 @@ class CSetup {
    */
   function upgrade($oldRevision) {
     if (array_key_exists($this->mod_version, $this->queries)) {
-      CAppUI::setMsg("Latest revision '$this->mod_version' should not have upgrade queries", UI_MSG_ERROR);
+      CAppUI::setMsg("Latest revision '%s' should not have upgrade queries", UI_MSG_ERROR, $this->mod_version);
       return;
     }
 
-    if (!array_key_exists($oldRevision, $this->queries) && !array_key_exists($oldRevision, $this->config_moves)) {
-      CAppUI::setMsg("No queries or config moves for '$this->mod_name' setup at revision '$oldRevision'", UI_MSG_ERROR);
+    if (!array_key_exists($oldRevision, $this->queries) && 
+        !array_key_exists($oldRevision, $this->config_moves)) {
+      CAppUI::setMsg("No queries or config moves for '%s' setup at revision '%s'", UI_MSG_WARNING, $this->mod_name, $oldRevision);
       return;
     }
     
@@ -214,7 +215,7 @@ class CSetup {
         $module = @CModule::getInstalled($dependency->module);
         if (!$module || $module->mod_version < $dependency->revision) {
           $depFailed = true;
-          CAppUI::setMsg("Failed module depency for '$dependency->module' at revision '$dependency->revision'", UI_MSG_WARNING, true);
+          CAppUI::setMsg("Failed module depency for '%s' at revision '%s'", UI_MSG_WARNING, $dependency->module, $dependency->revision);
         }
       }
         
@@ -232,10 +233,10 @@ class CSetup {
         list($query, $ignore_errors) = $_query;
         if (!$this->ds->exec($query)) {
           if ($ignore_errors) {
-            CAppUI::setMsg("Errors ignored for revision '$currRevision'", UI_MSG_OK);
+            CAppUI::setMsg("Errors ignored for revision '%s'", UI_MSG_OK, $currRevision);
             continue;
           }
-          CAppUI::setMsg("Error in queries for revision '$currRevision': see logs.", UI_MSG_ERROR);
+          CAppUI::setMsg("Error in queries for revision '%s': see logs", UI_MSG_ERROR, $currRevision);
           return $currRevision;
         }
       }
@@ -243,7 +244,7 @@ class CSetup {
       // Callback upgrading
       foreach ($this->functions[$currRevision] as $function) {
         if (!call_user_func($function)) {
-          CAppUI::setMsg("Error in function '$function' call back for revision '$currRevision': see logs.", UI_MSG_ERROR);
+          CAppUI::setMsg("Error in function '%s' call back for revision '%s': see logs", UI_MSG_ERROR, $function, $currRevision);
           return $currRevision;
         }
       }
@@ -292,7 +293,7 @@ class CSetup {
    * Should be handled in the template
    */
   function configure() {
-    CAppUI::redirect("m=$this->mod_name&a=configure" );
+    CAppUI::redirect("m=$this->mod_name&a=configure");
     return true;
   } 
   
