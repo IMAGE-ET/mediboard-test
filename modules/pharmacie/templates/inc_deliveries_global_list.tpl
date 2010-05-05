@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  Control.Tabs.create("global-deliveries-tabs", true);
+  deliveriesTabs = Control.Tabs.create("global-deliveries-tabs", true);
   $$('a[href=#list-globales] small')[0].update('({{$deliveries|@count}})');
 });
 </script>
@@ -55,7 +55,7 @@ Main.add(function(){
           <th>{{mb_title class=CProductDelivery field=quantity}}</th>
           <th>Stock service</th>
           <th>{{mb_title class=CProduct field=_unit_title}}</th>
-          <th><button type="button" onclick="deliverAll('list-globales')" class="tick">Tout délivrer</button></th>
+          <th><button type="button" onclick="deliverAll(deliveriesTabs.activeContainer.id)" class="tick">Tout délivrer</button></th>
         </tr>
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <tbody id="global-service-{{$service_id}}" style="display: none;">
