@@ -23,12 +23,13 @@ class CConsultAnesth extends CMbObject {
 
   var $groupe         = null;
   var $rhesus         = null;
+
+  // @todo A supprimer
   var $antecedents    = null;
   var $traitements    = null;
   var $tabac          = null;
   var $oenolisme      = null;
-  var $biologie       = null;
-  var $commande_sang  = null;
+
   var $ASA            = null;
   var $mallampati     = null;
   var $bouche         = null;
@@ -38,6 +39,10 @@ class CConsultAnesth extends CMbObject {
   var $examenPulmo    = null;
   var $conclusion     = null;
   var $position       = null;
+  var $premedication  = null;
+  var $prepa_preop    = null;
+  var $date_analyse   = null;	
+	
   var $rai            = null;
   var $hb             = null;
   var $tp             = null;
@@ -51,9 +56,6 @@ class CConsultAnesth extends CMbObject {
   var $ecbu           = null;
   var $ht             = null;
   var $ht_final       = null;
-  var $premedication  = null;
-  var $prepa_preop    = null;
-  var $date_analyse   = null;
 
   // Form fields
   var $_date_consult    = null;
@@ -107,8 +109,6 @@ class CConsultAnesth extends CMbObject {
     $specs["tabac"]            = "text helped";
     $specs["oenolisme"]        = "text helped";
     
-    $specs["biologie"]         = "enum list|?|NF|COAG|IONO show|0";
-    $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue show|0";
     $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
 
     // Données examens complementaires

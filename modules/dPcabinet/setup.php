@@ -1285,14 +1285,21 @@ class CSetupdPcabinet extends CSetup {
     $this->addPrefQuery("pratOnlyForConsult", "1");
     
     $this->makeRevision("1.19");
-    $sql = "ALTER TABLE `consultation_anesth` DROP `intubation`";
+    $sql = "ALTER TABLE `consultation_anesth` 
+		  DROP `intubation`";
     $this->addQuery($sql);
     
 		$this->makeRevision("1.20");
 		$sql = "UPDATE plageconsult SET fin = '23:59:59' WHERE fin = '00:00:00'";
 		$this->addquery($sql);
 		
-    $this->mod_version = "1.21";
+    $this->makeRevision("1.21");
+    $sql = "ALTER TABLE `consultation_anesth`
+		  DROP `biologie`,
+		  DROP `commande_sang`;";
+    $this->addquery($sql);
+		
+    $this->mod_version = "1.22";
   }
 }
 ?>
