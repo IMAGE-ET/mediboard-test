@@ -16,6 +16,7 @@ $locales['config-dPadmissions-fiche_admission-desc'] = 'Modèle d\'impression pou
 $locales['config-dPadmissions-show_dh'] = 'Afficher dépassement honoraire';
 $locales['config-dPadmissions-show_dh-desc'] = 'Afficher dépassement honoraire';
 $locales['mod-dPadmissions-tab-configure'] = 'Configuration';
+$locales['mod-dPadmissions-tab-httpreq_vw_admissions'] = 'Admissions du jour';
 $locales['mod-dPadmissions-tab-print_admission'] = 'Impression des séjours d\'admissions';
 $locales['mod-dPadmissions-tab-print_ambu'] = 'Impression des séjours ambulatoires';
 $locales['mod-dPadmissions-tab-print_depassement'] = 'Impression des dépassements';
