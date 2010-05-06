@@ -248,9 +248,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $data);
      
       return $messageAcquittement;
-      
     } catch (Exception $e) {
-      $domAcquittement = new CHPrimXMLAcquittementsServeurActes();
+      /*$domAcquittement = new CHPrimXMLAcquittementsServeurActes();
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
@@ -263,7 +262,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->date_echange = mbDateTime();
-      $echange_hprim->store();
+      $echange_hprim->store();*/
       
       return $messageAcquittement;
     }

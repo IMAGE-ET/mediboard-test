@@ -303,13 +303,13 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($elParent, "valide", "oui");
     
     $intervention = $this->addElement($elParent,     "intervention");
-		$identifiant  = $this->addElement($intervention, "identifiant");
+    $identifiant  = $this->addElement($intervention, "identifiant");
     $this->addElement($identifiant, "emetteur",  $acteCCAM["idCibleIntervention"]);
-		$this->addElement($identifiant, "recepteur", $acteCCAM["idSourceIntervention"]);
+    $this->addElement($identifiant, "recepteur", $acteCCAM["idSourceIntervention"]);
     
     $identifiant = $this->addElement($elParent, "identifiant");
     $this->addElement($identifiant, "emetteur",  $acteCCAM["idSourceActeCCAM"]);
-		$this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
+    $this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
     
     $this->addElement($elParent, "codeActe",     $acteCCAM["codeActe"]);
     $this->addElement($elParent, "codeActivite", $acteCCAM["codeActivite"]);
@@ -510,7 +510,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
   }
   
-  function addReponse($elParent, $statut, $codes, $acteCCAM, $commentaires = null, $mbObject = null) {
+  function addReponse($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
     $reponse = $this->addElement($elParent, "reponse");
     $this->addAttribute($reponse, "statut", $statut);
       
@@ -519,16 +519,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if ($statut != "ok") {
       $erreur = $this->addElement($reponse, "erreur");
-			$libelle = null;
-			if (is_array($codes)) {
-				$code = implode("", $codes);
-				foreach ($codes as $_code) {
-					$libelle .= CAppUI::tr("hprimxml-error-$_code");
-				}
-			} else {
-				$code = $codes;
-				$libelle = CAppUI::tr("hprimxml-error-$code");
-			}
+      $libelle = null;
+      if (is_array($codes)) {
+        $code = implode("", $codes);
+        foreach ($codes as $_code) {
+          $libelle .= CAppUI::tr("hprimxml-error-$_code");
+        }
+      } else {
+        $code = $codes;
+        $libelle = CAppUI::tr("hprimxml-error-$code");
+      }
       $this->addElement($erreur, "code", substr($code, 0, 17));
       $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
       $this->addElement($erreur, "commentaire", substr("$libelle $commentaires", 0, 4000)); 
