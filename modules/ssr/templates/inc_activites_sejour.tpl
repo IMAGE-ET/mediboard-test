@@ -83,7 +83,7 @@ submitSSR = function(){
 }
 
 refreshPlanningsSSR = function(){
-  Planification.refreshSejour('{{$bilan->sejour_id}}');
+  Planification.refreshSejour('{{$bilan->sejour_id}}', true);
 	PlanningTechnicien.show($V(oFormEvenementSSR.therapeute_id), null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
 	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id),'{{$bilan->sejour_id}}');
@@ -340,10 +340,12 @@ Main.add(function(){
 		  $V(input_elements, '');
 		  var tab_selected = new TokenField(input_elements); 
 		  $$(".event.selected").each(function(e){
-		    var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
-		    tab_selected.add(evt_id);
+		    if(e.className.match(/CEvenementSSR-([0-9]+)/)){
+		     var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
+		     tab_selected.add(evt_id);
+		    }
 		  });
-	  }
+		}
 		
 		resetFormSSR = function(){
 		  var oForm = getForm('editSelectedEvent');

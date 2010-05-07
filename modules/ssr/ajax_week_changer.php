@@ -11,6 +11,7 @@
 CCanDo::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
+
 $planning = new CPlanningWeek($date);
 $next_week = mbDate("+1 week", $date);
 $prev_week = mbDate("-1 week", $date);

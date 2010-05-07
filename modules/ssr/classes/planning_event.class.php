@@ -30,8 +30,7 @@ class CPlanningEvent  {
     if(!$color){
     	 $color = "#999";
     }
-		//$this->guid = $guid ? $guid : "id-".uniqid();
-    $this->guid = $guid;
+		$this->guid = $guid;
 		
 		$this->internal_id = "CPlanningEvent-".uniqid();
     
@@ -42,9 +41,10 @@ class CPlanningEvent  {
     $this->title = htmlentities($title);
     $this->color = $color;
     $this->important = $important;
-		$this->css_class = $css_class;
-    
-    $this->day = mbDate($date);
+		$this->css_class = is_array($css_class) ? join(" ", $css_class) : $css_class;
+		
+		
+		$this->day = mbDate($date);
     $this->hour = mbTransformTime(null, $date, "%H");
     $this->minutes = mbTransformTime(null, $date, "%M");
   }

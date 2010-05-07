@@ -14,21 +14,22 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
+$selectable = CValue::get("selectable");
 $patient = $sejour->_ref_patient;
 
 // Initialisation du planning
 $date = CValue::getOrSession("date", mbDate());
-$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, true);
+$nb_days_planning = $sejour->getNbJourPlanning($date);
+
+$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable);
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 
-$date_min = reset(array_keys($planning->days));
-$date_max = end(array_keys($planning->days));
-
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
+$where = array();
 $where["sejour_id"] = " = '$sejour->_id'";
-$where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
@@ -39,9 +40,14 @@ foreach($evenements as $_evenement){
   $title = $_evenement->_ref_element_prescription->_view ." - ".$_evenement->code;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	$class_evt = $_evenement->equipement_id ? "equipement" : "kine";
-	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, "$element_prescription->_guid  $category_prescription->_guid $class_evt"));
+
+  $css_classes = array($element_prescription->_guid, 
+                       $category_prescription->_guid, 
+                       $class_evt);
+  
+	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes));
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(),null, null, "red"));
 
 // Création du template
 $smarty = new CSmartyDP();

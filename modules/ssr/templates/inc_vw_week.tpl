@@ -23,20 +23,15 @@ Main.add(function() {
 
 </script>
 
-{{if @!$height}}
-  {{assign var=height value=250}}
-{{/if}}
 <div class="planning" id="{{$planning->guid}}">
+  {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
-    <col span="7" />
+    <col span="{{$nb_days}}" />
     <col style="width: 16px;" />
-    
     <tr>
-    	<th class="title" colspan="9" {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectAllEvents()"{{/if}}>
-    		<span class="nbSelectedEvents" style="float: left; font-size: smaller;">
-    			
-				</span>
+    	<th class="title" colspan="{{$nb_days+2}}" {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectAllEvents()"{{/if}}>
+    		<span class="nbSelectedEvents" style="float: left; font-size: smaller;"></span>
 			{{$planning->title}}
 			</th>
     </tr>
@@ -54,9 +49,9 @@ Main.add(function() {
            
            {{if array_key_exists($_day, $planning->day_labels)}}
              {{assign var=label value=$planning->day_labels.$_day}}
-             <label style="background: {{$label.color}};" title="{{$label.detail}}">
-               {{$label.text}}
-             </label>
+	             <label style="background: {{$label.color}};" title="{{$label.detail}}">
+	               {{$label.text}}
+	             </label>						 
            {{/if}}
          </th>
     	 {{/foreach}}
@@ -64,10 +59,10 @@ Main.add(function() {
     </tr>
   </table>
   
-  <div style="overflow-y: scroll; overflow-x: hidden; height: {{$height}}px;" class="week-container">
+  <div style="overflow-y: scroll; overflow-x: hidden; height: {{$planning->height}}px;" class="week-container">
     <table class="tbl hours" style="table-layout: fixed;">
       <col style="width: 3.0em;" />
-      <col span="7" />
+      <col span="{{$nb_days}}" />
       
       {{assign var=prev_pause value=false}}
       
@@ -88,11 +83,19 @@ Main.add(function() {
               {{assign var=unavail value=false}}
             {{/if}}
             
-            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} {{if $planning->large}}large{{/if}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->internal_id}}" {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents()"{{/if}}{{/if}} class="event {{$_event->css_class}} {{$_event->guid}}" style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
+                  <div id="{{$_event->internal_id}}" 
+									     {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
+									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
+												 ondblclick="if(window.onSelect){ onSelect('{{$_event->css_class}}'); }"
+												 {{/if}}
+											 {{/if}} 
+											 class="event {{$_event->css_class}} {{$_event->guid}}" 
+											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
+											 	
                     <!--
 										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
 											{{$_event->start|date_format:"%H:%M"}}

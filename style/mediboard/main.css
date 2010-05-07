@@ -482,8 +482,18 @@ table#weeklyPlanning th.today {
   background: #aaa url(../../images/icons/evtEquipement.png) no-repeat top right;
 }
 
+.planning .realise {
+	background-image: url(images/icons/ray.gif);
+}
+
 .planning .hours td {
-  height: 30px; 
+  height: 30px;
+  padding: 0;
+  vertical-align: top;
+}
+
+.planning .hours td.large {
+  height: 60px;
   padding: 0;
   vertical-align: top;
 }
@@ -504,6 +514,13 @@ table#weeklyPlanning th.today {
 .planning .hours .pause-next td,
 .planning .hours .pause-next th {
   height: 27px;
+}
+
+.planning .hours .pause td.large,
+.planning .hours .pause th.large,
+.planning .hours .pause-next td.large,
+.planning .hours .pause-next th.large {
+  height: 57px;
 }
 
 .planning .hour {

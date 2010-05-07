@@ -22,13 +22,17 @@ class CEvenementSSR extends CMbObject {
 	var $equipement_id           = null;
   var $realise                 = null;
 	
+	// Form Fields
 	var $_heure                  = null;
-	var $_ref_element_prescription = null;
 	var $_nb_decalage_min_debut = null;
 	var $_nb_decalage_heure_debut = null;
   var $_nb_decalage_jour_debut = null;
-  
-	var $_nb_decalage_duree = null;
+  var $_nb_decalage_duree = null;
+	
+	var $_ref_element_prescription = null;
+	var $_ref_equipement = null;
+	var $_ref_sejour = null;
+	var $_ref_therapeute = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,19 +67,20 @@ class CEvenementSSR extends CMbObject {
 		$this->_view = "$patient->_view - ". mbTransformTime(null, $this->debut, CAppUI::conf("datetime"));
 	}
 	
-  function loadRefElementPrescription() {
-    $this->_ref_element_prescription = new CElementPrescription();
-    $this->_ref_element_prescription = $this->_ref_element_prescription->getCached($this->element_prescription_id); 
+	function loadRefElementPrescription($cache = true) {
+    $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id", $cache); 
   }
 	
-	function loadRefSejour(){
-		$this->_ref_sejour = new CSejour();
-		$this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
+	function loadRefSejour($cache = true){
+		$this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
 	}
 	
-	function loadRefTherapeute(){
-	  $this->_ref_therapeute = new CMediusers();
-    $this->_ref_therapeute = $this->_ref_therapeute->getCached($this->therapeute_id);
+	function loadRefEquipement($cache = true){
+		$this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
+	}
+	
+	function loadRefTherapeute($cache = true){
+	  $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
 	}
 }
 

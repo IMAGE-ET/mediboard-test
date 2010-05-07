@@ -12,19 +12,21 @@ CCando::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
 $sejour_id = CValue::getOrSession("sejour_id");
+
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
 $equipement = new CEquipement;
 $equipement->load(CValue::get("equipement_id", 33));
 
-$planning = new CPlanningWeek($date);
+$nb_days_planning = $sejour->getNbJourPlanning($date);
+$planning = new CPlanningWeek($date, null, null, $nb_days_planning);
 $planning->title = "Planning de l'équipement '$equipement->_view'";
 $planning->guid = $equipement->_guid;
 
-$date_min = reset(array_keys($planning->days));
-$date_max = end(array_keys($planning->days));
-
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
-$where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
@@ -39,7 +41,9 @@ foreach($evenements as $_evenement){
   $title = "$patient->_civilite $patient->nom - $therapeute->_shortview - $_evenement->code";
   $element_prescription =& $_evenement->_ref_element_prescription;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
-  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $element_prescription->_guid));
+
+  $css_classes = array($element_prescription->_guid);
+  $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $css_classes));
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 

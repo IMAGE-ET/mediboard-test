@@ -10,49 +10,79 @@
 
 CCando::checkRead();
 
-$date    = CValue::getOrSession("date", mbDate());
-$kine_id = CValue::getOrSession("kine_id");
+$date         = CValue::getOrSession("date", mbDate());
+$kine_id      = CValue::getOrSession("kine_id");
 $surveillance = CValue::getOrSession("surveillance");
-$sejour_id = CValue::getOrSession("sejour_id");
+$sejour_id    = CValue::getOrSession("sejour_id");
+$height       = CValue::get("height");
+$selectable   = CValue::get("selectable");
+$large         = CValue::get("large");
 
 $kine = new CMediusers();
 $kine->load($kine_id);
 
-$planning = new CPlanningWeek($date);
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
+$nb_days_planning = $sejour->_id ? $sejour->getNbJourPlanning($date) : 7;
+$planning = new CPlanningWeek($date, null, null, $nb_days_planning, $selectable, $height, $large);
 $planning->title = $surveillance ?
   "Planning de surveillance du technicien '$kine->_view'" :
   "Planning du technicien '$kine->_view'";	
 
 $planning->guid = $kine->_guid;
 
-$date_min = reset(array_keys($planning->days));
-$date_max = end(array_keys($planning->days));
-
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
-$where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+$where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $where["therapeute_id"] = " = '$kine->_id'";
 $where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
 $evenements = $evenement_ssr->loadList($where);
 
+$ds = CSQLDataSource::get("std");
+$query = "SELECT SUM(duree) as total, DATE(debut) as date
+					FROM evenement_ssr
+					WHERE debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59' AND ";
+					
+$query .= $surveillance ? "equipement_id IS NULL" : "equipement_id IS NOT NULL";
+$query .= " GROUP BY DATE(debut)";
+					
+$duree_occupation = $ds->loadList($query);
+
 foreach($evenements as $_evenement){
-	$_evenement->loadRefElementPrescription();
-	$important = ($_evenement->sejour_id == $sejour_id);
-	$_evenement->loadRefSejour();
-	$_evenement->_ref_sejour->loadRefPatient();
-	$patient =  $_evenement->_ref_sejour->_ref_patient;
-	$title = "$patient->_civilite $patient->nom - $_evenement->code";
-	$element_prescription =& $_evenement->_ref_element_prescription;
+  $_evenement->loadRefElementPrescription();
+  $_evenement->loadRefSejour();
+  $_evenement->_ref_sejour->loadRefPatient();
+  $_evenement->loadRefEquipement();
+  
+	
+  $important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
+  
+  $patient =  $_evenement->_ref_sejour->_ref_patient;
+  $title = "$patient->_civilite $patient->nom - $_evenement->code";
+  $element_prescription =& $_evenement->_ref_element_prescription;
   $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
-	$planning->addEvent(new CPlanningEvent(
+  
+  $css_classes = array($element_prescription->_guid, 
+                       $_evenement->_ref_sejour->_guid, 
+                       $_evenement->_ref_equipement->_guid);
+	if($_evenement->realise && $selectable){
+		$css_classes[] = "realise";
+	}
+
+  $planning->addEvent(new CPlanningEvent(
     $_evenement->_guid, 
-		$_evenement->debut, 
-		$_evenement->duree, 
-		$title, 
-		$color, 
-		$important, 
-		$element_prescription->_guid
-	));
+    $_evenement->debut, 
+    $_evenement->duree, 
+    $title, 
+    $color, 
+    $important,
+    $css_classes
+  ));
+}
+
+foreach($duree_occupation as $_occupation){
+  $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn");
 }
 
 foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {
@@ -64,7 +94,7 @@ foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {
 		}
 	}
 }
-
+		
 // Heure courante
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 

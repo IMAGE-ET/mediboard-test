@@ -11,6 +11,15 @@
 {{mb_include_script module=ssr script=planification}}
 
 <script type="text/javascript">
+
+onCompleteShowWeek = function(){
+  Planification.refreshSejour();
+  PlanningTechnicien.show();
+  PlanningEquipement.show();
+  Planification.refreshActivites();
+}
+
+	
 Main.add(Planification.showWeek);
 </script>
 
