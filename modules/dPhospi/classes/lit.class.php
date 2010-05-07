@@ -79,7 +79,7 @@ class CLit extends CMbObject {
     $chambre =& $this->_ref_chambre;
     $chambre->loadRefsFwd();
     
-    $this->_view = "{$chambre->_ref_service->nom} - $chambre->nom - $this->nom";
+    $this->_view = "{$chambre->_ref_service->nom} $chambre->nom $this->nom";
     $this->_short_view = $this->nom;
   }
   
