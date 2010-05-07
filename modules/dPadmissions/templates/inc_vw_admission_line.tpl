@@ -97,9 +97,10 @@
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
-    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} {{$curr_adm->type|upper|truncate:1:"":true}}
+    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} 
     <br />
-    {{$curr_adm->_ref_operations|@count}} interv.
+		{{$curr_adm->type|upper|truncate:1:"":true}}
+    {{$curr_adm->_ref_operations|@count}} Int.
     </span>
   </a>
 </td>
@@ -115,12 +116,12 @@
       {{if $curr_adm->chambre_seule}}
         <input type="hidden" name="chambre_seule" value="0" />
         <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
-          Simple
+          Chambre simple
         </button>
       {{else}}
         <input type="hidden" name="chambre_seule" value="1" />
         <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
-          Double
+          Chambre double
         </button>
       {{/if}}
       </form>
