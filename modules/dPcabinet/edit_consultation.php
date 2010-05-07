@@ -59,8 +59,8 @@ if(isset($_GET["date"])) {
 
 // Test compliqué afin de savoir quelle consultation charger
 if (isset($_GET["selConsult"])) {
-  if($consult->load($selConsult) && $consult->patient_id) {
-    $consult->loadRefsFwd();
+  if ($consult->load($selConsult) && $consult->patient_id) {
+    $consult->loadRefPlageConsult();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     CValue::setSession("chirSel", $prat_id);
   } else {
@@ -68,9 +68,10 @@ if (isset($_GET["selConsult"])) {
     $selConsult = null;
     CValue::setSession("selConsult");
   }
-} else {
-  if($consult->load($selConsult) && $consult->patient_id) {
-    $consult->loadRefsFwd();
+} 
+else {
+  if ($consult->load($selConsult) && $consult->patient_id) {
+    $consult->loadRefPlageConsult();
     if($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
@@ -108,9 +109,9 @@ if ($consult->_id) {
   
   // Chargment de la consultation d'anesthésie
   $consultAnesth->loadAides($userSel->user_id);
-  if($consultAnesth->consultation_anesth_id) {
+  if ($consultAnesth->_id) {
     $consultAnesth->loadRefs();
-    if($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
+    if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
