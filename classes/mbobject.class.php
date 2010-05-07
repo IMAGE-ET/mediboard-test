@@ -1474,7 +1474,7 @@ class CMbObject {
    */
   function massLoadFwdRef($objects, $field) {
   	if (!count($objects)) {
-  		return;
+  		return array();
   	}
 
     $object = reset($objects);

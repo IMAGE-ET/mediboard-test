@@ -74,8 +74,6 @@ if ($order_col == "praticien_id"){
 
 $today = $today->loadGroupList($where, $order, null, null, $ljoin);
 
-$functions_filter = array();
-
 CMbObject::massLoadFwdRef($today, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($today, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
@@ -83,10 +81,9 @@ $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 foreach ($today as $sejour_id => $_sejour) {
   $_sejour->loadRefPraticien(1);
 	$praticien =& $_sejour->_ref_praticien;
-	$functions_filter[$praticien->function_id] = $praticien->_ref_function;
   
 	if ($filterFunction && $filterFunction != $praticien->function_id) {
-    unset($today[$_sejour_id]);
+    unset($today[$sejour_id]);
 	  continue;
   }
   
@@ -118,10 +115,10 @@ foreach ($today as $sejour_id => $_sejour) {
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if ($filterFunction && !array_key_exists($filterFunction, $functions_filter)){
+if ($filterFunction && !array_key_exists($filterFunction, $functions)){
 	$_function = new CFunctions();
 	$_function->load($filterFunction);
-	$functions_filter[$filterFunction] = $_function;
+	$functions[$filterFunction] = $_function;
 }
 
 // Création du template
@@ -143,7 +140,7 @@ $smarty->assign("prestations"  , $prestations );
 $smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
-$smarty->assign("functions_filter", $functions_filter);
+$smarty->assign("functions"    , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 $smarty->display("inc_vw_admissions.tpl");
 

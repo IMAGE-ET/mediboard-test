@@ -12,7 +12,7 @@
   <tr>
     <th class="title" colspan="4">
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
-      {{$date|date_format:"%B %Y"}}
+      {{$date|date_format:"%b %Y"}}
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
@@ -23,29 +23,30 @@
   </tr>
 
   <tr>
-    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions"     href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Toutes   </a></th>
+    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions"     href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Ttes   </a></th>
     <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non préparées"  href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Non prép.</a></th>
     <th class="text"><a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non effectuées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Non eff. </a></th>
   </tr>
 
-  {{foreach from=$list1 item=_list}}
-  <tr {{if $_list.date == $date}}class="selected"{{/if}}>
-    <td align="right">
-      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$_list.date|date_format:"%Y-%m-%d"}}">
+  {{foreach from=$days key=day item=counts}}
+  <tr {{if $day == $date}}class="selected"{{/if}}>
+    {{assign var=day_number value=$day|date_format:"%w"}}
+    <td align="right" {{if $day_number == '0' || $day_number == '6'}}style="background-color: #ccc;"{{/if}}>
+      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|date_format:"%Y-%m-%d"}}">
         <strong>
-	        {{$_list.date|date_format:"%A"|upper|substr:0:1}}
-	        {{$_list.date|date_format:"%d"}}
+	        {{$day|date_format:"%a"|upper|substr:0:1}}
+	        {{$day|date_format:"%d"}}
         </strong>
       </a>
     </td>
-    <td {{if $selAdmis=='0' && $selSaisis=='0' && $_list.date == $date}}style="font-weight: bold;"{{/if}}>
-      {{$_list.num}}
+    <td {{if $selAdmis=='0' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
     </td>
-    <td {{if $selAdmis=='0' && $selSaisis=='n' && $_list.date == $date}}style="font-weight: bold;"{{/if}}>
-      {{$_list.num3}}
+    <td {{if $selAdmis=='0' && $selSaisis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num3}}{{$counts.num3}}{{else}}-{{/if}}
     </td>
-    <td {{if $selAdmis=='n' && $selSaisis=='0' && $_list.date == $date}}style="font-weight: bold;"{{/if}}>
-      {{$_list.num2}}
+    <td {{if $selAdmis=='n' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
+      {{if $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
     </td>
   </tr>
   {{foreachelse}}
