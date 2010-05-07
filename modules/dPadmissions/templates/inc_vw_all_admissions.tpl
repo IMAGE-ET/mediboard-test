@@ -19,11 +19,10 @@
 		
   <tr>
     <th rowspan="2">Date</th>
-    <th colspan="3">Admissions</th>
   </tr>
 
   <tr>
-    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions"     href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Ttes   </a></th>
+    <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Toutes les admissions"     href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Adm.     </a></th>
     <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non préparées"  href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Non prép.</a></th>
     <th class="text"><a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} title="Admissions non effectuées" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Non eff. </a></th>
   </tr>
@@ -32,7 +31,7 @@
   <tr {{if $day == $date}}class="selected"{{/if}}>
     {{assign var=day_number value=$day|date_format:"%w"}}
     <td align="right" {{if $day_number == '0' || $day_number == '6'}}style="background-color: #ccc;"{{/if}}>
-      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|date_format:"%Y-%m-%d"}}">
+      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|date_format:"%Y-%m-%d"}}" title="{{$day|date_format:$dPconfig.longdate}}">
         <strong>
 	        {{$day|date_format:"%a"|upper|substr:0:1}}
 	        {{$day|date_format:"%d"}}
