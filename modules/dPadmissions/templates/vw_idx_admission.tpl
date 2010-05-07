@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="hprim21" script="pat_hprim_selector"}}
-{{mb_include_script module="hprim21" script="sejour_hprim_selector"}}
+{{mb_include_script module=hprim21 script=pat_hprim_selector}}
+{{mb_include_script module=hprim21 script=sejour_hprim_selector}}
+{{mb_include_script module=dPadmissions script=admissions}}
 
 <script type="text/javascript">
 

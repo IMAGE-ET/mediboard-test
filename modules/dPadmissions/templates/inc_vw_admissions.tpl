@@ -12,9 +12,9 @@
 Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 </script>
 
-<table class="tbl">
+<table class="tbl" id="admissions" >
   <tr>
-    <th class="title" colspan="9">
+    <th class="title" colspan="10">
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
       {{$date|date_format:$dPconfig.longdate}}
       <form name="changeDateAdmissions" action="?" method="get">
@@ -24,14 +24,12 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 			</form>
 			<a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
 			<br />
-      <em style="float: left">
-      {{if $selAdmis == "n"}}Admissions non effectuées
-      {{elseif $selSaisis == "n"}}Dossiers non préparés
-      {{else}}Toutes les admissions
-      {{/if}}
-      {{if $order_col == "patient_id"}}triées par patient
-      {{elseif $order_col == "praticien_id"}}triées par praticien
-      {{elseif $order_col == "entree_prevue"}}triées par heure d'entrée
+			
+      <em style="float: left; font-weight: normal;">
+			{{$today|@count}}
+      {{if $selAdmis == "n"}}admissions non effectuées
+      {{elseif $selSaisis == "n"}}dossiers non préparés
+      {{else}}admissions ce jour
       {{/if}}
       </em>
 	
@@ -43,17 +41,22 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       </select>
     </th>
   </tr>
+	
+	{{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
     <th>
-    {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
+    </th>
+    <th style="width: 1%;">
+      <input type="text" size="3" onkeyup="Admissions.filter(this)" id="filter-patient-name" />
+    </th>
+  
+    <th>
+    {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     
     <th>
-    {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
-    </th>
-    
-    <th>
-    {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     
     <th>Chambre</th>
@@ -81,9 +84,14 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     <th>DH</th>
     {{/if}}
   </tr>
+
   {{foreach from=$today item=curr_adm}}
-    <tr id="admission{{$curr_adm->sejour_id}}">
-      {{mb_include module=dPadmissions template="inc_vw_admission_line" nodebug=true}}
-    </tr>
+  <tr id="admission{{$curr_adm->sejour_id}}">
+    {{mb_include module=dPadmissions template="inc_vw_admission_line" nodebug=true}}
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="10"><em>{{tr}}None{{/tr}}</em></td>
+  </tr>
   {{/foreach}}
 </table>

@@ -19,12 +19,7 @@
 
 {{assign var="patient" value=$curr_adm->_ref_patient}}
 
-<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  {{if $canPatients->edit}}
-  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->patient_id}}">
-    <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
-  </a>
-  {{/if}}
+<td colspan="2" class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
     <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
@@ -87,8 +82,8 @@
   {{/if}}
   {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}
   <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
-    {{$patient->_view}}
+    <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+      {{$patient}}
     </span>
   </a>
 </td>
@@ -102,9 +97,9 @@
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
-    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} ({{$curr_adm->type|truncate:1:"":true}})
+    {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} {{$curr_adm->type|upper|truncate:1:"":true}}
     <br />
-    {{$curr_adm->_ref_operations|@count}} interv(s).
+    {{$curr_adm->_ref_operations|@count}} interv.
     </span>
   </a>
 </td>
@@ -120,12 +115,12 @@
       {{if $curr_adm->chambre_seule}}
         <input type="hidden" name="chambre_seule" value="0" />
         <button class="change" type="button" style="color: #f22" onclick="submitAdmission(this.form, 1);">
-          Chambre simple
+          Simple
         </button>
       {{else}}
         <input type="hidden" name="chambre_seule" value="1" />
         <button class="change" type="button" onclick="submitAdmission(this.form, 1);">
-          Chambre double
+          Double
         </button>
       {{/if}}
       </form>
@@ -147,9 +142,9 @@
       {{/if}}
     {{else}}
       {{if $curr_adm->chambre_seule}}
-        Chambre simple
+        Simple
       {{else}}
-        Chambre double
+        Double
       {{/if}}
       {{if $curr_adm->prestation_id && $prestations}}
         {{assign var=_prestation_id value=$curr_adm->prestation_id}}
