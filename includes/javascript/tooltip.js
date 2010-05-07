@@ -23,9 +23,9 @@ var ObjectTooltip = Class.create({
     this.idTimeout = null;
     
     var appearenceTimeout = {
-      "short": 0.3,
-      "medium": 0.6,
-      "long": 0.9
+      "short": 0.4,
+      "medium": 0.8,
+      "long": 1.2
     };
 
     this.oOptions = Object.extend( {
@@ -60,6 +60,11 @@ var ObjectTooltip = Class.create({
   cancelShow: function() {
     window.clearTimeout(this.idTimeout);
     this.dontShow = true;
+  },
+  
+  resetShow: function(){
+    window.clearTimeout(this.idTimeout);
+    this.idTimeout = this.show.bind(this).delay(this.oOptions.duration);
   },
   
   show: function() {
@@ -118,12 +123,13 @@ var ObjectTooltip = Class.create({
     }
   },
   
-  addHandlers: function() {
+  addHandlers: function(){
     $(this.sTrigger)
         .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
         .observe("mouseover", this.cancelHide.bind(this))
-        .observe("mousedown", this.cancelShow.bind(this));
+        .observe("mousedown", this.cancelShow.bind(this))
+        .observe("mousemove", this.resetShow.bind(this));
         
     $(this.sTooltip)
         .observe("mouseout", this.cancelShow.bind(this))
@@ -191,6 +197,7 @@ Object.extend(ObjectTooltip, {
       sClass: "tooltip"
     }
   },
+  
   create: function(eTrigger, oOptions) {
     if (!eTrigger.oTooltip) {
       eTrigger.oTooltip = new ObjectTooltip(eTrigger, oOptions);
