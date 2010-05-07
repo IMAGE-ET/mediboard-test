@@ -219,8 +219,11 @@ function changePage(page) {
 	          {{if $echange_hprim->acquittement}}
 	            {{mb_value object=$echange_hprim field="acquittement"}}
 	            
-	            <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur')}}error
-	                            {{elseif ($echange_hprim->statut_acquittement == 'avertissement')}}warning
+	            <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur') || 
+							                     ($echange_hprim->statut_acquittement == 'err')}}error
+	                            {{elseif ($echange_hprim->statut_acquittement == 'avertissement') || 
+															         ($echange_hprim->statut_acquittement == 'avt')
+															}}warning
 	                            {{else}}info{{/if}}">
 	              {{foreach from=$observations item=observation}}
 	                <strong>Code :</strong> {{$observation.code}} <br />

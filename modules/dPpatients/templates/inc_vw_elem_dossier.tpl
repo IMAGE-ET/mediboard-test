@@ -9,13 +9,6 @@
     <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
       <img src="images/icons/planning.png" alt="Planifier"/>
     </a>
-    <a
-       {{if $canAdmissions->view}}
-       href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$object->_date_entree_prevue}}#adm{{$object->_id}}"
-       {{else}}
-       href="#nothing"
-       {{/if}}
-    >
     {{/if}}
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$object->_num_dossier}}
     <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
@@ -24,9 +17,7 @@
       - ({{$object->_nb_files_docs}} Doc.)
     {{/if}}
     </span>
-    {{if $object->_canEdit}}
-    </a>
-    {{/if}}
+
   </td>
   <td style="text-align: left;" {{if $object->annule}}class="cancelled"{{/if}}>
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$object->_ref_praticien}}

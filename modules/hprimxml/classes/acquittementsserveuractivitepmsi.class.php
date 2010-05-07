@@ -85,7 +85,6 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
      
 		// Traitement final
     $this->purgeEmptyElements();
-mbTrace($this->saveXML(), "xml", true);
 
     $this->saveTempFile();
     $messageAckServeurActivitePmsi = utf8_encode($this->saveXML());
@@ -95,14 +94,14 @@ mbTrace($this->saveXML(), "xml", true);
    
   function getStatutAcquittementServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
-        
-    return $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
+
+    return $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
   }
   
   function getAcquittementsServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
     
-    $statut = $xpath->queryAttributNode("/hprim:$this->evenement/hprim:enteteMessage", null, "statut"); 
+    $statut = $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
     
     $query = "/hprim:$this->evenement/hprim:enteteMessage";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  
@@ -121,7 +120,7 @@ mbTrace($this->saveXML(), "xml", true);
   function getAcquittementReponsesServeurActivitePmsi() {
     $xpath = new CMbXPath($this, true);
     
-    $statut = $xpath->queryAttributNode("/hprim:a$this->evenement/hprim:enteteMessageAcquittement", null, "statut"); 
+    $statut = $xpath->queryAttributNode("/hprim:a$this->acquittement/hprim:enteteMessage", null, "statut"); 
     
     $query = "/hprim:$this->evenement/hprim:enteteMessageAcquittement";
     $enteteMessageAcquittement = $xpath->queryUniqueNode($query);  

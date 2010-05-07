@@ -98,8 +98,13 @@
 	<td class="{{if ($object->date_echange && !$object->acquittement)}}error{{/if}}">
 	  {{if $object->acquittement}}Oui{{else}}Non{{/if}}
 	</td>
-	<td class="{{if (!$object->statut_acquittement || ($object->statut_acquittement == 'erreur'))}}error{{elseif ($object->statut_acquittement == 'avertissement')}}warning{{/if}}">
-	 {{mb_value object=$object field="statut_acquittement"}}
+	<td class="{{if !$object->statut_acquittement || 
+	                ($object->statut_acquittement == 'erreur') || 
+                  ($object->statut_acquittement == 'err')}}error
+             {{elseif ($object->statut_acquittement == 'avertissement') || 
+                      ($object->statut_acquittement == 'avt')
+             }}warning{{/if}}">
+    {{mb_value object=$object field="statut_acquittement"}}
   </td>
   <td>
     {{foreach from=$object->_observations item=_observation}}
