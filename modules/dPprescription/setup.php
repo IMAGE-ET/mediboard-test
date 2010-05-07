@@ -1480,8 +1480,16 @@ class CSetupdPprescription extends CSetup {
 		
 		$this->makeRevision("0.99");
 		$this->addPrefQuery("easy_mode", "0");
+		
+		$this->makeRevision("1.00");
+		$sql = "ALTER TABLE `prescription_line_dmi` 
+              ADD `date` DATETIME NOT NULL;";
+		$this->addQuery($sql);
+        $sql = "ALTER TABLE `prescription_line_dmi` 
+              ADD INDEX (`date`);";
+		$this->addQuery($sql);
 
-		$this->mod_version = "1.00";
+		$this->mod_version = "1.01";
   }
 }
 

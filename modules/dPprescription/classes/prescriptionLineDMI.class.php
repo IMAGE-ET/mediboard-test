@@ -13,10 +13,11 @@ class CPrescriptionLineDMI extends CMbObject {
   var $prescription_line_dmi_id = null;
   
   // DB Fields
-  var $prescription_id = null;
-  var $praticien_id    = null;
-  var $product_id      = null;          // code produit
+  var $prescription_id         = null;
+  var $praticien_id            = null;
+  var $product_id              = null;          // code produit
   var $order_item_reception_id = null;  // code lot
+  var $date                    = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,6 +32,7 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs["praticien_id"]            = "ref notNull class|CMediusers";
     $specs["product_id"]              = "ref notNull class|CProduct";
     $specs["order_item_reception_id"] = "ref notNull class|CProductOrderItemReception";
+    $specs["date"]                    = "dateTime notNull";
     return $specs;
   }
   

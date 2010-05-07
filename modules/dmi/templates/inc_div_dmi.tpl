@@ -95,6 +95,7 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="order_item_reception_id" value="">
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}">
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}">
+  <input type="hidden" name="date" value="now">
 </form>
 
 <table class="main" style="table-layout: fixed;">
@@ -158,6 +159,7 @@ delLineDMI = function(line_dmi_id){
   <!-- Affichage des lignes de DMI-->
   <tr>
     <th>Produit</th>
+    <th>Date de pose</th>
     <th>Code produit</th>
     <th>Code lot</th>
 		<th style="width: 1%">Praticien</th>
@@ -171,14 +173,17 @@ delLineDMI = function(line_dmi_id){
         </span>
 	    </td>
 	    <td>
+	      {{mb_value object=$_line_dmi field="date"}}
+	    </td>
+	    <td>
 	      {{$_line_dmi->_ref_product->code}}
 	    </td>
 	    <td>
 	      {{$_line_dmi->_ref_product_order_item_reception->code}}
 	    </td>
-			<td>
+		<td>
 			 	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
-      </td>
+        </td>
 	  </tr>
 	{{/foreach}}
 </table>
