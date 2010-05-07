@@ -8,11 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
-
-// Initialisation de variables
+CCanDo::checkRead();
 
 // Type d'admission
 $type = CValue::getOrSession("type");
@@ -43,77 +39,86 @@ $today = new CSejour;
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
-if($type){ 
-  $where["type"] = " = '$type'";
-} else {
-  $where["type"] = "!= 'urg'";
-}
+$where["type"] = $type ? " = '$type'" :  "!= 'urg'";
+
+global $g;
 $where["group_id"] = "= '$g'";
 
 $where["sejour.entree"] = "BETWEEN '$date' AND '$next'";
 
-if($selAdmis != "0") {
+if ($selAdmis != "0") {
   $where[] = "(entree_reelle IS NULL OR entree_reelle = '0000-00-00 00:00:00')";
   $where["annule"] = "= '0'";
 }
-if($selSaisis != "0") {
+
+if ($selSaisis != "0") {
   $where["saisi_SHS"] = "= '0'";
   $where["annule"] = "= '0'";
 }
 
-if($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
+if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
 	$order_col = "patient_id";	
 }
 
-if($order_col == "patient_id"){
+if ($order_col == "patient_id"){
   $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
-if($order_col == "entree_prevue"){
+
+if ($order_col == "entree_prevue"){
   $order = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
 }
-if($order_col == "praticien_id"){
+
+if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
-  
 $today = $today->loadGroupList($where, $order, null, null, $ljoin);
 
 $functions_filter = array();
 
-foreach ($today as $keySejour => $valueSejour) {
-  $sejour =& $today[$keySejour];
-//  $sejour->loadRefs();
-  $sejour->loadRefPatient();
-  $sejour->_ref_patient->loadIPP();
-  $sejour->loadRefPraticien();
-	$functions_filter[$sejour->_ref_praticien->function_id] = $sejour->_ref_praticien->_ref_function;
+CMbObject::massLoadFwdRef($today, "patient_id");
+$praticiens = CMbObject::massLoadFwdRef($today, "praticien_id");
+$functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
+
+foreach ($today as $sejour_id => $_sejour) {
+  $_sejour->loadRefPraticien(1);
+	$praticien =& $_sejour->_ref_praticien;
+	$functions_filter[$praticien->function_id] = $praticien->_ref_function;
   
-	if ($filterFunction && $filterFunction != $sejour->_ref_praticien->function_id) {
-    unset($today[$keySejour]);
+	if ($filterFunction && $filterFunction != $praticien->function_id) {
+    unset($today[$_sejour_id]);
 	  continue;
   }
   
-  $whereSejour = array("annulee" => "= '0'");
-	$sejour->loadRefsOperations($whereSejour);
-  $sejour->loadRefsAffectations();
-  $sejour->loadNumDossier();
-  foreach($sejour->_ref_operations as $key_op => $curr_op) {
-    $sejour->_ref_operations[$key_op]->loadRefsConsultAnesth();
-    //$sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefsFwd();
-    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefConsultation();
-    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->loadRefPlageConsult();
-    $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_date_consult =& $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->_date;
+  // Chargement du patient
+  $_sejour->loadRefPatient(1);
+  $_sejour->_ref_patient->loadIPP();
+  
+  // Chargment du numéro de dossier
+  $_sejour->loadNumDossier();
+  $whereOperations = array("annulee" => "= '0'");
+
+  // Chargement des interventions
+	$_sejour->loadRefsOperations($whereOperations);
+  foreach ($_sejour->_ref_operations as $operation_id => $operation) {
+    $operation->loadRefsConsultAnesth();
+		$consult_anesth =& $operation->_ref_consult_anesth; 
+    $consult_anesth->loadRefConsultation();
+    $consult_anesth->_ref_consultation->loadRefPlageConsult(1);
+    $consult_anesth->_date_consult =& $consult_anesth->_ref_consultation->_date;
   }
-  $affectation =& $sejour->_ref_first_affectation;
- 
-  if ($affectation->affectation_id) {
-    $affectation->loadRefLit();
+
+  // Chargement de l'affectation
+  $_sejour->loadRefsAffectations();
+  $affectation =& $_sejour->_ref_first_affectation;
+  if ($affectation->_id) {
+    $affectation->loadRefLit(1);
     $affectation->_ref_lit->loadCompleteView();
   }
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if($filterFunction && !array_key_exists($filterFunction, $functions_filter)){
+if ($filterFunction && !array_key_exists($filterFunction, $functions_filter)){
 	$_function = new CFunctions();
 	$_function->load($filterFunction);
 	$functions_filter[$filterFunction] = $_function;

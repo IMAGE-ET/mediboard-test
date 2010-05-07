@@ -19,7 +19,7 @@ CAppUI::requireSystemClass("mbObjectSpec");
 class CMbObject {
   static $useObjectCache = true;
   static $objectCount = 0;
-  private static $objectCache = array();
+  static $objectCache = array();
   static $cachableCounts = array();
   static $handlers = null;
   
@@ -1467,7 +1467,34 @@ class CMbObject {
       return $this->_fwd[$field] = $fwd;
     }
   }
-    
+  
+  /**
+   * Load named forward reference
+   * @return CMbObject concrete loaded object 
+   */
+  function massLoadFwdRef($objects, $field) {
+  	if (!count($objects)) {
+  		return;
+  	}
+
+    $object = reset($objects);
+    $spec = $object->_specs[$field];
+    if (!$spec instanceof CRefSpec) {
+    	trigger_error("Can't mass load not ref '$field' for object class '$object->_class_name'", E_USER_WARNING);
+			return;
+		}
+
+    if ($spec->meta) {
+      trigger_error("Can't mass load (yet!) ref '$field' with meta field '$spec->meta' for object class '$object->_class_name'", E_USER_WARNING);
+      return;
+    }
+		
+    $fwd = new $spec->class;
+		$fwd_ids = CMbArray::pluck($objects, $field);
+		$where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
+		return $fwd->loadList($where);
+  }
+	  
   /**
    * Load named forward reference
    * @return void
