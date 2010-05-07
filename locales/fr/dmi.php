@@ -124,6 +124,7 @@ $locales['config-dmi-CDMI-product_category_id'] = 'Catégorie';
 $locales['config-dmi-CDMI-product_category_id-desc'] = 'Catégorie';
 $locales['delivered_quantity'] = 'Quantité deliverée';
 $locales['mod-dmi-tab-vw_categories'] = 'Catégories';
+$locales['mod-dmi-tab-vw_commandes'] = 'Commandes';
 $locales['mod-dmi-tab-vw_elements'] = 'Elements';
 $locales['module-dmi-court'] = 'DMI';
 $locales['module-dmi-long'] = 'Gestion des Dispositifs Médicaux Implantables';
