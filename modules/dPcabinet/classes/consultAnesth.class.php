@@ -170,10 +170,9 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefConsultation() {
-    $this->_ref_consultation = new CConsultation;
-    $this->_ref_consultation->load($this->consultation_id);
+  	// @todo For some weird reason cache to true breaks edit_consultation
+    $this->_ref_consultation = $this->loadFwdRef("consultation_id", false);
     $this->_view = $this->_ref_consultation->_view;
-    $this->_ref_consultation->loadRefsActesCCAM();
   }
   
   function loadRefChir() {
@@ -181,8 +180,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefOperation() {
-    $this->_ref_operation = new COperation;
-    $this->_ref_operation->load($this->operation_id);
+    $this->_ref_operation = $this->loadFwdRef("operation_id", true);
     
     // Chargement du séjour associé
     if ($this->_ref_operation->_id) {
@@ -227,7 +225,9 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_sejour->loadRefDossierMedical();
     $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
-     
+    
+		// Chargement des actes CCAM 
+		$this->_ref_consultation->loadRefsActesCCAM();
     foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
@@ -235,26 +235,30 @@ class CConsultAnesth extends CMbObject {
 
   function loadRefsFwd() {
     $this->loadRefChir();
+    
+		// Chargement operation/sejour
+		$this->loadRefOperation();
+    $this->_ref_operation->loadRefsFwd();
+    $this->_date_op =& $this->_ref_operation->_datetime;
+		
+		// Chargement consultation
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
-    $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
-    $this->loadRefOperation();
-    $this->_ref_operation->loadRefsFwd();
     $this->_date_consult =& $this->_ref_consultation->_date;
-    $this->_date_op =& $this->_ref_operation->_datetime;
 
     // Calcul de la Clairance créatinine
-    $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();
-    $const_med = $this->_ref_consultation->_ref_patient->_ref_constantes_medicales;
+		$patient =& $this->_ref_consultation->_ref_patient;
+    $patient->loadRefConstantesMedicales();
+    $const_med = $patient->_ref_constantes_medicales;
     $const_med->updateFormFields();
-    $age = intval($this->_ref_consultation->_ref_patient->_age);
+    $age = intval($patient->_age);
     if ($const_med->poids && $this->creatinine && 
         $age && $age >= 18 && $age <= 110 && 
         $const_med->poids >= 35 && $const_med->poids <= 120 && 
         $this->creatinine >= 6 && $this->creatinine <= 70) {
           $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
-      if ($this->_ref_consultation->_ref_patient->sexe != 'm') {
+      if ($patient->sexe != 'm') {
         $this->_clairance *= 0.85;
       }
       $this->_clairance = round($this->_clairance, 2);

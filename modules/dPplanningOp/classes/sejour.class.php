@@ -821,12 +821,8 @@ class CSejour extends CCodable {
     return $observation->countList($where);
   }
   
-  function loadRefPatient($cache = 0) {
-    if (!$this->_ref_patient) {
-      $this->_ref_patient = new CPatient();
-      $this->_ref_patient->load($this->patient_id);
-    }
-    
+  function loadRefPatient($cache = 1) {
+    $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
     $this->getDroitsCMU();
 
     // View

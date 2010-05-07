@@ -28,7 +28,7 @@ $affect_id = CValue::getOrSession("affect_id", 0);
 // Chargement de l'affectation sélectionnée
 $affectation = new CAffectationPersonnel();
 
-if($affect_id){
+if ($affect_id){
   $affectation->load($affect_id);
   $affectation->loadRefObject();
   $affectation->_ref_object->loadRefsFwd();

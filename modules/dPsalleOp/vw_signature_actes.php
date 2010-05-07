@@ -58,7 +58,7 @@ if($dialog){
 	
 	foreach($actes as $key => $_acte){
 		// Si l'operation n'est pas deja stockée, on la charge et on la stocke
-		if(!array_key_exists($_acte->object_id, $operations)){
+		if (!array_key_exists($_acte->object_id, $operations)){
 		  $_acte->loadRefObject();
 		  $operations[$_acte->object_id] = $_acte->_ref_object;
 	  }
