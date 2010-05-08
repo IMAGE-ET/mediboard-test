@@ -90,7 +90,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "") {
       foreach ($lit->_ref_affectations as $affectation_id => &$affectation) {
         if (!$affectation->effectue || $mode) {
           $affectation->loadRefSejour();
-          if($praticien_id){
+          if ($praticien_id){
           	if($affectation->_ref_sejour->praticien_id != $praticien_id){
           		unset($lit->_ref_affectations[$affectation_id]);
           		continue;

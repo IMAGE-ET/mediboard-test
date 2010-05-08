@@ -44,12 +44,17 @@ if(!$list_services){
 
 $where_service = "service_id IN (".join($list_services, ',').") OR service_id IS NULL"; 
 
+global $phpChrono;
+
 // Chargment des services
 foreach ($services as &$service) {
-  if(!in_array($service->_id, $list_services)){
-	continue;
+  if (!in_array($service->_id, $list_services)){
+    continue;
   }
+	
   loadServiceComplet($service, $date, $mode);
+	$phpChrono->stop("Load Service Complet : '$service->_view'");
+  $phpChrono->start();
   $totalLits += $service->_nb_lits_dispo;
 }
 
@@ -82,6 +87,8 @@ if($filterAdm == "csejour"){
 
 $sejour = new CSejour();
 $alerte = $sejour->countList($where, null, null, null, $leftjoin);
+$phpChrono->stop("Patient à placer dans la semaine");
+$phpChrono->start();
 
 // Liste des patients à placer
 $groupSejourNonAffectes = array();
@@ -120,6 +127,8 @@ if ($can->edit) {
 	$where[] = $whereFilter;
 	$where[] = $where_service;
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
+	$phpChrono->stop("Non affectés: veille");
+	$phpChrono->start();
   
   // Admissions du matin
   $where = array(
@@ -130,6 +139,8 @@ if ($can->edit) {
   $where[] = $whereFilter;
   $where[] = $where_service;
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
+  $phpChrono->stop("Non affectés: matin");
+  $phpChrono->start();
   
   // Admissions du soir
   $where = array(
@@ -140,6 +151,8 @@ if ($can->edit) {
   $where[] = $whereFilter;
   $where[] = $where_service;
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
+  $phpChrono->stop("Non affectés: soir");
+  $phpChrono->start();
   
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
@@ -153,6 +166,9 @@ if ($can->edit) {
   $where[] = $where_service;
 
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
+  $phpChrono->stop("Non affectés: avant");
+  $phpChrono->start();
+	
 }
 
 $functions_filter = array();
@@ -189,4 +205,10 @@ $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->assign("functions_filter"      , $functions_filter);
 
 $smarty->display("vw_affectations.tpl");
+
+if (CAppUI::pref("INFOSYSTEM")) {
+  mbTrace(CMbArray::pluck($phpChrono->report, "total"), "Rapport uniquement visible avec les informations système");
+}
+
+
 ?>
