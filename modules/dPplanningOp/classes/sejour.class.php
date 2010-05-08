@@ -856,13 +856,8 @@ class CSejour extends CCodable {
     return $this->_diagnostics_associes;
   }
   
-  function loadRefPrestation($cache = 0) {
-    $this->_ref_prestation = new CPrestation;
-    if($cache) {
-      $this->_ref_prestation = $this->_ref_prestation->getCached($this->prestation_id);
-    } else {
-      $this->_ref_prestation->load($this->prestation_id);
-    }
+  function loadRefPrestation() {
+    $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
   
   function loadRefsTransmissions(){

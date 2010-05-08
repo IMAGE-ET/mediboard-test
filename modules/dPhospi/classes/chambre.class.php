@@ -71,15 +71,13 @@ class CChambre extends CMbObject {
   	$this->_ref_service = $this->_ref_service->getCached($this->service_id);	
   }
 
-  function loadRefsBack() {
-    $where = array (
-      "chambre_id" => "= '$this->chambre_id'"
-    );
-    // A cause de l'inversion porte - fenêtre
+  function loadRefsLits() {
     $order = "lit.nom DESC";
-    
-    $this->_ref_lits = new CLit;
-    $this->_ref_lits = $this->_ref_lits->loadList($where, $order);
+    $this->_ref_lits = $this->loadBackRefs("lits", $order);
+  }
+
+  function loadRefsBack() {
+  	$this->loadRefsLits();
   }
   
   function getPerm($permType) {
