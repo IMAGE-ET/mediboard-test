@@ -869,21 +869,14 @@ class CConsultation extends CCodable {
   }
   
   function countDocs(){
-  	$this->loadRefConsultAnesth();
-    if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $select = "count(`compte_rendu_id`) AS `total`";  
-      $table  = "compte_rendu";
-      $where  = array();
-      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id')
-               || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
-      $sql = new CRequest();
-      $sql->addTable($table);
-      $sql->addSelect($select);
-      $sql->addWhere($where);
-      $nbDocs = $this->_spec->ds->loadResult($sql->getRequest());
-    }else{
-      $nbDocs = parent::countDocs();
+    $nbDocs = parent::countDocs();
+		
+    // Ajout des documents de la consultation d'anesthésie     
+   	$this->loadRefConsultAnesth();
+    if ($this->_ref_consult_anesth->_id) {
+      $nbDocs += $this->_ref_consult_anesth->countDocs();
     }
+
     return $nbDocs;
   }
 

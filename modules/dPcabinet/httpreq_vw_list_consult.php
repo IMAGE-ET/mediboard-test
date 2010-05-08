@@ -35,7 +35,7 @@ if (isset($_GET["selConsult"])) {
   }
 } else {
   if ($consult->load($selConsult)) {
-    $consult->loadRefsFwd(1);
+    $consult->loadRefPlageConsult(1);
     if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       CValue::setSession("selConsult");
@@ -57,7 +57,7 @@ if (!$userSel->isMedical()) {
 
 $canUserSel->needsEdit(array("chirSel"=>0));
 
-if($consult->consultation_id) {
+if ($consult->_id) {
   $date = $consult->_ref_plageconsult->date;
   CValue::setSession("date", $date);
 }
@@ -67,7 +67,7 @@ $listPlage = new CPlageconsult();
 $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $where["date"] = "= '$date'";
-if($plageconsult_id && $boardItem){
+if ($plageconsult_id && $boardItem) {
   $where["plageconsult_id"] =  $ds->prepare("= %", $plageconsult_id);
 }
 $order = "debut";
@@ -78,6 +78,12 @@ $vue = CValue::getOrSession("vue2", 0);
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
   $plage->loadRefsConsultations(true, !$vue);
+	
+	// Mass preloading
+	CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");
+  CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
+  CMbObject::massLoadFwdRef($plage->_ref_consultations, "categorie_id");
+
   foreach ($plage->_ref_consultations as &$consultation) {
     $consultation->loadRefPatient(1);
 		$consultation->loadRefSejour(1);
