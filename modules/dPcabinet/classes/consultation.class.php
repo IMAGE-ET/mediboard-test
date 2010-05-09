@@ -886,7 +886,7 @@ class CConsultation extends CCodable {
   }
   
   function loadRefsExamAudio(){
-  	// Ne pas utiliser la backref => ne fonctionne pas 
+  	// @todo Ne pas utiliser la backref => ne fonctionne pas 
   	//$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
 
   	$this->_ref_examaudio = new CExamAudio;
