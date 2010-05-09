@@ -41,7 +41,7 @@
 		<th style="width:  5em;">{{mb_title class="CSejour" field="_num_dossier"}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
     <th style="width: 12em;">{{mb_title class="CBilanSSR" field="kine_id"}}</th>
-    <th style="width:  4em;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
+    <th style="width:   1%;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
 	</tr>
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}

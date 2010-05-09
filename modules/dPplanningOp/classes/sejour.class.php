@@ -210,7 +210,7 @@ class CSejour extends CCodable {
     $props["praticien_id"]        = "ref notNull class|CMediusers seekable";
     $props["group_id"]            = "ref notNull class|CGroups";
     $props["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
-    $props["modalite"]            = "enum notNull list|office|libre|tiers default|libre";
+    $props["modalite"]            = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]              = "bool show|0";
     $props["chambre_seule"]       = "bool show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]         = "bool default|0";
