@@ -1472,13 +1472,14 @@ class CMbObject {
    * Load named forward reference
    * @return CMbObject concrete loaded object 
    */
-  function massLoadFwdRef($objects, $field) {
+  static function massLoadFwdRef($objects, $field) {
   	if (!count($objects)) {
   		return array();
   	}
 
     $object = reset($objects);
     $spec = $object->_specs[$field];
+		
     if (!$spec instanceof CRefSpec) {
     	trigger_error("Can't mass load not ref '$field' for object class '$object->_class_name'", E_USER_WARNING);
 			return;
@@ -1489,8 +1490,16 @@ class CMbObject {
       return;
     }
 		
+    // Trim real values
+    $fwd_ids = CMbArray::pluck($objects, $field);
+    $fwd_ids = array_unique($fwd_ids);
+		CMbArray::removeValue("", $fwd_ids);
+    if (!count($fwd_ids)) {
+      return array();
+    }
+
     $fwd = new $spec->class;
-		$fwd_ids = CMbArray::pluck($objects, $field);
+		
 		$where[$fwd->_spec->key] = CSQLDataSource::prepareIn($fwd_ids);
 		return $fwd->loadList($where);
   }
