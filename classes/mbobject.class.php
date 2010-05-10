@@ -505,9 +505,8 @@ class CMbObject {
       
       self::$cachableCounts[$this->_class_name]++;
     }
-    else {
-      self::$objectCache[$this->_class_name][$this->_id] = $this;
-    }
+	
+	  self::$objectCache[$this->_class_name][$this->_id] =& $this;
   }
   
   /**
