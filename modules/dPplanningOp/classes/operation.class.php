@@ -649,12 +649,7 @@ class COperation extends CCodable {
   }
   
   function loadRefSejour($cache = 0) {
-    $this->_ref_sejour = new CSejour();
-    if($cache) {
-      $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);
-    } else {
-      $this->_ref_sejour->load($this->sejour_id);
-    }
+    $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
 	 /*

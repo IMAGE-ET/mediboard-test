@@ -170,8 +170,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefConsultation() {
-  	// @todo For some weird reason cache to true breaks edit_consultation
-    $this->_ref_consultation = $this->loadFwdRef("consultation_id", false);
+    $this->_ref_consultation = $this->loadFwdRef("consultation_id", true);
     $this->_view = $this->_ref_consultation->_view;
   }
   
@@ -180,7 +179,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefOperation() {
-    $this->_ref_operation = $this->loadFwdRef("operation_id", false);
+    $this->_ref_operation = $this->loadFwdRef("operation_id", true);
     
     // Chargement du séjour associé
     if ($this->_ref_operation->_id) {

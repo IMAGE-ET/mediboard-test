@@ -481,9 +481,9 @@ class CMbObject {
       return false;
     }
 
-    $this->registerCache();
     $this->checkConfidential();
     $this->updateFormFields();
+    $this->registerCache();
         
     return $this;
   }
@@ -505,8 +505,9 @@ class CMbObject {
       
       self::$cachableCounts[$this->_class_name]++;
     }
-    
-    self::$objectCache[$this->_class_name][$this->_id] =& $this;
+    else {
+      self::$objectCache[$this->_class_name][$this->_id] = $this;
+    }
   }
   
   /**

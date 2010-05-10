@@ -20,13 +20,6 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listChir = $userSel->loadPraticiens(PERM_EDIT);
-} else {
-  $listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
-}
-
-
 if (!$userSel->isMedical()) {
   CAppUI::setMsg("Vous devez selectionner un professionnel de santé", UI_MSG_ALERT);
   CAppUI::redirect("m=dPcabinet&tab=0");
@@ -43,41 +36,43 @@ $consult->_ref_chir = $userSel;
 if ($selConsult) {
   $consult->load($selConsult);
   
+  // Vérification de droits
   $can->needsObject($consult);
   $canConsult = $consult->canDo();
   $canConsult->needsEdit();
   
   $consult->loadRefsFwd();
-  $consult->loadRefConsultAnesth();
 
-  if($consult->_ref_consult_anesth->_id) {
-    $consult->_ref_consult_anesth->loadRefs();
-    $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
-    $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
-    $consult->_ref_consult_anesth->_ref_sejour->loadRefPraticien();
+  // Chargment de la consult anesthésie
+  $consult->loadRefConsultAnesth();
+  $consultAnesth = $consult->_ref_consult_anesth;
+  if ($consultAnesth->_id) {
+    $consultAnesth->loadRefOperation();
+		$consultAnesth->_ref_operation->loadRefChir(true);
+    $consultAnesth->_ref_sejour->loadRefDossierMedical();
+    $consultAnesth->_ref_sejour->loadRefPraticien(true);
   }
   
   $patient =& $consult->_ref_patient;
   $patient->loadRefsSejours();
-  foreach ($patient->_ref_sejours as $key => $sejour) {
-    $patient->_ref_sejours[$key]->loadRefsOperations();
-    foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
-      $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+  foreach ($patient->_ref_sejours as $_sejour) {
+    $_sejour->loadRefsOperations();
+    foreach ($_sejour->_ref_operations as $_operation) {
+	    $_operation->loadRefPlageOp(true);
+	    $_operation->loadRefChir(true);
     }
   }
-} else {
+} 
+else {
   $consult->_ref_consult_anesth = new CConsultAnesth();
 }
 
 $consult_anesth =& $consult->_ref_consult_anesth;
 $nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
 
-$listChirs = new CMediusers;
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listChirs = $listChirs->loadPraticiens();
-} else {
-  $listChirs = $listChirs->loadProfessionnelDeSante();
-}
+$listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
+	$userSel->loadPraticiens() :
+  $userSel->loadProfessionnelDeSante();
 
 // Création du template
 $smarty = new CSmartyDP();
