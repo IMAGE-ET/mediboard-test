@@ -405,7 +405,8 @@ class CMouvSejourEcap extends CMouvementEcap {
     $rang = str_pad($pat400->consume("RBEN"), 2, "0", STR_PAD_LEFT);
     $this->patient->rang_beneficiaire = $rang;
     $this->patient->qual_beneficiaire = CValue::read(CPatient::$rangToQualBenef, $rang);
-
+    $this->patient->assure_civilite   = "guess";
+    
 //    $this->patient->pays              = $pat400->consume("ZPAY");
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
