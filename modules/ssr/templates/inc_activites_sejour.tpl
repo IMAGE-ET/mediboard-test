@@ -242,8 +242,10 @@ Main.add(function(){
 	              </span>
 	              <label>
 	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
-	              {{$_line->_view}}
-	              </label>
+	              <span class="mediuser" style="border-left-color: #{{$element->_color}};">
+								  {{$_line->_view}}
+                </span>
+								</label>
 	              <br />
 	              {{if $smarty.foreach.category.last}}
 	                </div>

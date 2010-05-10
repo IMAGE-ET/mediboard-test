@@ -15,8 +15,10 @@
                              onComplete: function(){ updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', ''); }
                            } )"></button>
 					<button type="button" class="lock notext" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '');">lock</button>
-	        
-					<strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');"> {{$_line->_view}}</strong>
+					
+	        <span class="mediuser" style="border-left-color: #{{$_line->_ref_element_prescription->_color}};">
+					  <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}');"> {{$_line->_view}}</strong>
+					</span>
 					<br />
 					{{mb_label object=$_line field="commentaire"}}
 					{{mb_field object=$_line field="commentaire" style="width: 20em" onchange="onSubmitFormAjax(this.form);"}}
