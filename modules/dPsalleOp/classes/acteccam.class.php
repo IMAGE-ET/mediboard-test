@@ -266,7 +266,7 @@ class CActeCCAM extends CActe {
   }
   
   function loadRefObject(){
-  	$this->loadTargetObject();
+  	$this->loadTargetObject(false);
   }
 
   function loadRefCodeCCAM() {
