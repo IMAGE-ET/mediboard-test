@@ -58,12 +58,14 @@ PlanningEvent = Class.create({
     return DateFormat.format(time.start, "HH:mm") + " - " + DateFormat.format(time.end, "HH:mm");
   },
   onChange: function(){
+    this.planning.scrollTop = this.planning.container.down('.week-container').scrollTop;
     return this.planning.onEventChange(this);
   }
 });
 
 WeekPlanning = Class.create({
-  initialize: function(guid, hour_min, hour_max, events, hour_divider) {
+  scrollTop: null,
+  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
@@ -71,13 +73,13 @@ WeekPlanning = Class.create({
     
     this.container = $(guid);
     this.events = events;
-    this.scroll(hour_min, hour_max);
+    this.scroll(hour_min, hour_max, scroll_top);
     this.hour_divider = hour_divider;
     this.updateEventsDimensions();
   },
-  scroll: function(hour_min, hour_max) {
+  scroll: function(hour_min, hour_max, scroll_top) {
     var top = this.container.down(".hour-"+hour_min).offsetTop;
-    this.container.down('.week-container').scrollTop = top;
+    this.container.down('.week-container').scrollTop = (typeof scroll_top != "undefined") ? scroll_top : top;
   },
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");

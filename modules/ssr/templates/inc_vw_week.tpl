@@ -16,9 +16,11 @@ Main.add(function() {
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
     {{$planning->events|@json}}, 
-    {{$planning->hour_divider}}
+    {{$planning->hour_divider}},
+    window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop
   );
   Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
+  
 	window["planning-{{$planning->guid}}"] = planning;
 });
 
@@ -112,7 +114,8 @@ Main.add(function() {
                     <div class="body">
                       {{$_event->title|smarty:nodefaults}}
                     </div>
-                    <div class="footer" style="position: absolute; bottom: 0; background: url(images/buttons/drag-n-white.png) no-repeat center center; width: 100%; height: 6px; cursor: s-resize;"></div>
+                    <div class="footer"></div>
+                    <div class="handle"></div>
                   </div>
                   
                   {{if $_event->draggable}}
@@ -161,7 +164,7 @@ Main.add(function() {
                      var parent = element.up("td");
                      var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
                      
-                     new Draggable(element, {snap: snap, change: onDragPosition, onEnd: onEndPosition});
+                     new Draggable(element, {snap: snap, handle: element.down(".handle"), change: onDragPosition, onEnd: onEndPosition});
                      new Draggable(element.down(".footer"), {constraint: "vertical", snap: snap, change: onDragSize, onEnd: onEndSize});
                    });
                    </script>
