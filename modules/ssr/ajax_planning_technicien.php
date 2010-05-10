@@ -42,7 +42,7 @@ $evenements = $evenement_ssr->loadList($where);
 $ds = CSQLDataSource::get("std");
 $query = "SELECT SUM(duree) as total, DATE(debut) as date
 					FROM evenement_ssr
-					WHERE debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59' AND ";
+					WHERE therapeute_id = '$kine->_id' AND debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59' AND ";
 					
 $query .= $surveillance ? "equipement_id IS NULL" : "equipement_id IS NOT NULL";
 $query .= " GROUP BY DATE(debut)";
