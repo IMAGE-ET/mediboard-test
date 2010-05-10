@@ -8,6 +8,8 @@
  */
 
 abstract class CRPUSender {
+  function loadExtractPassages(CExtractPassages &$extractPassages) {}
+
   function extract(CExtractPassages $extractPassages, $rpus) {}
     
   function encrypt(CExtractPassages $extractPassages) {}

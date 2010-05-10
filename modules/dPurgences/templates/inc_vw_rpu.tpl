@@ -29,30 +29,23 @@ function submitSejour(){
   submitFormAjax(oForm, 'systemMsg');
 }
 
-// Comportement broken avec l'annulation d'autorisation
-// Implémentation douteuse : A REVOIR
-var redirection = 0;
-function redir() {
-  return;
-	redirection++;
-  if (redirection == 3) { 
-	 document.location.href="?m=dPurgences&tab=vw_idx_rpu";
-  }
+function redirect() {
+	document.location.href="?m=dPurgences&tab=vw_idx_rpu";
 }
 
 function submitSejourWithSortieReelle(){
-  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : function(){ reloadSortieReelle(); redir(); }});
+  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : function(){ reloadSortieReelle();}});
 }
 
 function submitConsultWithChrono(chrono) {
   var oForm = document.editFrmFinish;
   oForm.chrono.value = chrono;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner(); redir(); }});
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner();}});
 }
 
 function submitRPU() {
 	var oForm = document.editSortieAutorise;
-	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle(); redir(); }});
+	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle();}});
 }
 
 function submitSejRpuConsult() {
@@ -60,6 +53,7 @@ function submitSejRpuConsult() {
 		submitSejourWithSortieReelle(); 
 		submitRPU();
 	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
+		redirect();
 	}
 }
 

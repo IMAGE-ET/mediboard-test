@@ -11,11 +11,16 @@
 {{mb_include_script module="dPcabinet" script="file"}}
 
 <script type="text/javascript">
-  
-function changePage(page) {
-  $V(getForm('listFilter').page,page);
-}
-
+  popupEchangeViewer = function(extract_passages_id) {
+    var url = new Url("dPurgences", "extract_viewer");
+    url.addParam("extract_passages_id", extract_passages_id);
+    url.popup(700, 550, "Message Passage");
+    return false;
+  }
+    
+  function changePage(page) {
+    $V(getForm('listFilter').page,page);
+  }
 </script>
 
 <div>
@@ -51,7 +56,9 @@ function changePage(page) {
   {{foreach from=$listPassages item=_passage}}
   <tr>
     <td style="width:0.1%">
-      {{$_passage->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+      <a href="#1" onclick="return popupEchangeViewer('{{$_passage->_id}}')" class="button search">
+       {{$_passage->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+      </a>
     </td>
     <td style="width:0.1%">
       {{if $can->admin}} 
