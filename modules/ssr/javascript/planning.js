@@ -36,11 +36,12 @@ PlanningEvent = Class.create({
     var divider = this.planning.hour_divider;
     var minutes = 60/divider;
     var cellHeight = this.planning.getCellHeight();
+    var cellWidth = element.up().getWidth();
     
     date = Date.fromDATETIME(date[1]+" "+date[2]+":00:00");
     
     var offset = {
-      date: Math.round(element.offsetLeft/parseInt(element.style.width)), 
+      date: Math.round(element.offsetLeft/parseInt(cellWidth)), 
       time: Math.round((element.offsetTop/cellHeight) * divider) / divider
     };
     
@@ -50,11 +51,11 @@ PlanningEvent = Class.create({
     var end = new Date(date);
     end.addMinutes((Math.round((element.getHeight() / cellHeight) * divider) / divider) * 60);
 
-    return [date, end];
+    return {start: date, end: end, length: (end - date) / (1000 * 60)};
   },
   getTimeString: function(){
     var time = this.getTime();
-    return DateFormat.format(time[0], "HH:mm") + " - " + DateFormat.format(time[1], "HH:mm");
+    return DateFormat.format(time.start, "HH:mm") + " - " + DateFormat.format(time.end, "HH:mm");
   },
   onChange: function(){
     return this.planning.onEventChange(this);

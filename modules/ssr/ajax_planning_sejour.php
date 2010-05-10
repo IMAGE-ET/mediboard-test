@@ -44,12 +44,13 @@ foreach($evenements as $_evenement){
   $css_classes = array($element_prescription->_guid, 
                        $category_prescription->_guid, 
                        $class_evt);
-  
-	$planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes));
+  $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes);
+  $event->draggable = true;
+	$planning->addEvent($event);
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(),null, null, "red"));
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("planning", $planning);
-$smarty->display("inc_vw_week.tpl");
+$smarty->display("inc_planning_sejour.tpl");

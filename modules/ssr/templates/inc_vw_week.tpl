@@ -52,7 +52,7 @@ Main.add(function() {
              {{assign var=label value=$planning->day_labels.$_day}}
 	             <label style="background: {{$label.color}};" title="{{$label.detail}}">
 	               {{$label.text}}
-	             </label>						 
+	             </label>
            {{/if}}
          </th>
     	 {{/foreach}}
