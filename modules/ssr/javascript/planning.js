@@ -76,10 +76,11 @@ WeekPlanning = Class.create({
     this.scroll(hour_min, hour_max, scroll_top);
     this.hour_divider = hour_divider;
     this.updateEventsDimensions();
+    this.container.addClassName("drawn");
   },
   scroll: function(hour_min, hour_max, scroll_top) {
     var top = this.container.down(".hour-"+hour_min).offsetTop;
-    this.container.down('.week-container').scrollTop = (scroll_top !== null ? scroll_top : top);
+    this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
   },
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");
