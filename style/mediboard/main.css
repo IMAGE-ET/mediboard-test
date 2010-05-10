@@ -1174,19 +1174,38 @@ ul li a.chapitre_signe.active{
   color: #A33;
 }
 
-table.tbl td.ssr_annule {
-	background-color: #f00;
+
+table.tbl tr.ssr-annule td {
+	background-color: #f88;
 }
 
-.ssr_fini {
+table.tbl tr.ssr-termine td {
   background-image: url(./images/icons/ray.gif); 
 }
 
-.ssr_non_debute {
-  color: #f00;
+table.tbl tr.ssr-prevu td {
+  background-color: #dfd;
 }
 
+table.tbl tr.ssr-kine-conges td {
+	text-align: center;
+  background-image: url("./images/pictures/unavailable.png");
+}
 
+div.ssr-sejour-bar {
+  position: absolute; 
+	top: 0px; 
+	right: 0px; 
+	border: 1px solid black; 
+	height: 5px; 
+	width: 20px;	
+}
+
+div.ssr-sejour-bar div {
+	opacity: 0.3 ;
+	background: #000;
+  height: 5px; 
+}
 
 table.tbl td.trans-data {
   background-image: url(../../images/icons/trans_data.png);

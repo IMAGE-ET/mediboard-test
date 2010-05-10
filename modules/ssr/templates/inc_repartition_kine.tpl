@@ -17,7 +17,18 @@
 			</script>
     	{{$_technicien}}
 		</th>
+	</tr>
+	
+	{{assign var=conge value=$_technicien->_ref_conge_date}}
+	{{if $conge->_id}} 
+  <tr>
+    <td class="ssr-kine-conges">
+    	<strong onmouseover="ObjectTooltip.createEx(this, '{{$conge->_guid}}')">
+    		{{$conge}}
+    	</strong>
+    </td>
   </tr>
+	{{/if}}
 	
 	<tbody id="sejours-kine-{{$kine_id}}">
 

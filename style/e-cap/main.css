@@ -403,7 +403,7 @@ table.dialog #systemMsg {
 
 /* Tooltips */
 div.tooltip {
-  border-color: #ccc;
+  border-color: #888;
 }
 
 table.note th,

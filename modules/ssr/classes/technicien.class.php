@@ -18,6 +18,9 @@ class CTechnicien extends CMbObject {
   // References
   var $plateau_id = null;
   var $kine_id = null;
+	
+	// Derived references
+	var $_ref_conge_date = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,6 +42,11 @@ class CTechnicien extends CMbObject {
 		$this->_ref_kine->loadRefFunction();
     $this->_view = $this->_ref_kine->_view;
   }
+	
+	function loadRefCongeDate($date) {
+		$this->_ref_conge_date = new CPlageVacances;
+		$this->_ref_conge_date->loadFor($this->kine_id, $date);
+	}
 }
 
 ?>

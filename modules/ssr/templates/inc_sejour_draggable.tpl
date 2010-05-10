@@ -16,20 +16,17 @@
 {{elseif $sejour->sortie_reelle}}
 {{assign var=ssr_class value=ssr-termine}}
 {{/if}}
-<tr>
+<tr class="{{$ssr_class}}">
 	<td class="text {{$ssr_class}}" style="border: 1px solid #aaa; border-width: 1px 0px; line-height: 120%;">
-		<div class="draggable" id="{{$sejour->_guid}}">
-			<script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
-			
-			{{assign var=patient value=$sejour->_ref_patient}}
-			<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-			  {{$patient}}        
-			</span> 
-			
-			<div style="text-indent: 1em; opacity: 0.8;">
-				{{mb_value object=$sejour field=libelle}}
-			</div>
-			 
-		</div>
+    {{if $remplacement}} 
+    <div>
+      {{mb_include template=inc_sejour_repartition}}       
+    </div>
+    {{else}}
+    <div class="draggable" id="{{$sejour->_guid}}">
+      <script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
+      {{mb_include template=inc_sejour_repartition}}       
+    </div>
+    {{/if}}
   </td>
 </tr>

@@ -43,11 +43,6 @@ class CPlageVacances extends CMbObject {
     return $specs;
   }
 
-  function loadRefsFwd() { 
-    $this->_ref_user = new CMediusers;
-    $this->_ref_user->load($this->user_id);
-  }
-	
 	function updateFormFields() {
 		parent::updateFormFields();
 		$this->_shortview = $this->_view = $this->libelle;
@@ -72,16 +67,36 @@ class CPlageVacances extends CMbObject {
     return parent::check();
   }
 	
+  function loadFor($user_id, $date) {
+  	$where["user_id"] = "= '$user_id'";
+		$where[] = "'$date' BETWEEN date_debut AND date_fin";
+		$this->loadObject($where);
+  }
+	
+	function loadRefsReplacementsFor($user_id, $date) {
+    $where["replacer_id"] = "= '$user_id'";
+    $where[] = "'$date' BETWEEN date_debut AND date_fin";
+    return $this->loadList($where);
+	}
+	
+	function loadRefUser() {
+    $this->_ref_user = $this->loadFwdRef("user_id");
+	}
+
+  function loadRefsFwd() {
+  	$this->loadRefUser(); 
+  }
+  
 	function getPerm($permType) {
     global $AppUI;
-		if($this->user_id == $AppUI->user_id) {
+		if ($this->user_id == $AppUI->user_id) {
       return true;
-    } else {
+    } 
+
 		if(!$this->_ref_user) {
       $this->loadRefsFwd();
     }
     return $this->_ref_user->getPerm($permType);
-		}
   }
 }
 ?>

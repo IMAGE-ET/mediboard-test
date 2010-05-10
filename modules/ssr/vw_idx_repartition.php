@@ -21,6 +21,9 @@ $plateau->group_id = $group->_id;
 $plateaux = $plateau->loadMatchingList();
 foreach ($plateaux as $_plateau) {
   $_plateau->loadRefsTechniciens();
+  foreach ($_plateau->_ref_techniciens as $_technicien) {
+    $_technicien->loadRefCongeDate($date);
+  }
 }
 
 // Création du template

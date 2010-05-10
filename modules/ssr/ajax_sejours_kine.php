@@ -15,15 +15,30 @@ $can->needsRead();
 $kine_id = CValue::get("kine_id");
 $date = CValue::getOrSession("date", mbDate());
 $sejours = CBilanSSR::loadSejoursSSRfor($kine_id, $date);
-foreach($sejours as $_sejour) {
+foreach ($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient();
-  $_sejour->loadRefBilanSSR();
-	$_sejour->loadRefPrescriptionSejour();
 }
+
+// Remplacements
+$plage = new CPlageVacances;
+$sejours_remplaces = array();
+$remplacements = $plage->loadRefsReplacementsFor($kine_id, $date);
+foreach ($remplacements as $_remplacement) {
+  $_remplacement->loadRefUser();
+	$_remplacement->_refs_sejours_remplaces = CBilanSSR::loadSejoursSSRfor($_remplacement->user_id, $date);
+	
+	// Détails des séjours remplacés
+	foreach ($_remplacement->_refs_sejours_remplaces as $_sejour) {
+	  $_sejour->checkDaysRelative($date);
+	  $_sejour->loadRefPatient();
+	}
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
+$smarty->assign("remplacements", $remplacements);
 $smarty->display("inc_sejours_kine.tpl");
 ?>
