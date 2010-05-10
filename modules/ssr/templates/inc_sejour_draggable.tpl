@@ -10,48 +10,26 @@
 
 {{assign var=ssr_class value=""}}
 {{if $sejour->annule == "1"}}
-{{assign var=ssr_class value=ssr_annule}}
+{{assign var=ssr_class value=ssr-annule}}
 {{elseif !$sejour->entree_reelle}}
-{{assign var=ssr_class value=ssr_non_debute}}
+{{assign var=ssr_class value=ssr-prevu}}
 {{elseif $sejour->sortie_reelle}}
-{{assign var=ssr_class value=ssr_fini}}
+{{assign var=ssr_class value=ssr-termine}}
 {{/if}}
 <tr>
-	<td class="text {{$ssr_class}}" style="border: 1px solid #aaa; border-width: 1px 0px;">
-                   
+	<td class="text {{$ssr_class}}" style="border: 1px solid #aaa; border-width: 1px 0px; line-height: 120%;">
 		<div class="draggable" id="{{$sejour->_guid}}">
-		<script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
-		
-		{{assign var=bilan value=$sejour->_ref_bilan_ssr}}
-		{{assign var=prescription value=$sejour->_ref_prescription_sejour}}
-    
-		<div style="float: right; text-align: right;">
-			{{if $bilan->_id}} 
-			  <span onmouseover="ObjectTooltip.createEx(this, '{{$bilan->_guid}}')">
-				  Bilan
-				</span> 
-			{{/if}}
+			<script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
 			
-		  {{if $prescription->_id}}
-				{{if $bilan->_id}}
-				<br />
-				{{/if}}
-				<span onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')">
-	        Presc.
-	      </span> 
-			{{/if}}
-    </div>
-		
-		{{assign var=patient value=$sejour->_ref_patient}}
-		<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-		  {{$patient}}        
-		</span> 
-		
-		<br/> 
-		<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-			<strong>pour {{$sejour->_duree}}j</strong> 
-		  (arrivée {{$sejour->_entree_relative}}j)
-		</span>
+			{{assign var=patient value=$sejour->_ref_patient}}
+			<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+			  {{$patient}}        
+			</span> 
+			
+			<div style="text-indent: 1em; opacity: 0.8;">
+				{{mb_value object=$sejour field=libelle}}
+			</div>
+			 
 		</div>
   </td>
 </tr>

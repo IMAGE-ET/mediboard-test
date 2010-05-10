@@ -41,7 +41,7 @@ if ($sejour->_id) {
   // Fiche autonomie  
   $fiche_autonomie->sejour_id = $sejour->_id;
   $fiche_autonomie->loadMatchingObject();
-  
+	
   // Bilan SSR  
   $bilan->sejour_id = $sejour->_id;
   $bilan->loadMatchingObject();
@@ -53,7 +53,7 @@ if ($sejour->_id) {
 	$prescription_SSR->loadMatchingObject();
 	
 	// Chargement des lignes de la prescription
-	if($prescription_SSR->_id){
+	if ($prescription_SSR->_id){
 		$line = new CPrescriptionLineElement();
 		$line->prescription_id = $prescription_SSR->_id;
 		$_lines = $line->loadMatchingList("debut ASC");
