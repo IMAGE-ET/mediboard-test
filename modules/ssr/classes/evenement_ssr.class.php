@@ -59,6 +59,19 @@ class CEvenementSSR extends CMbObject {
     return $props;
   }
 	
+	function check(){
+		$this->completeField("sejour_id");
+		$this->completeField("debut");
+    
+		$this->loadRefSejour();
+		
+		if($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie){
+		  return "Evenement SSR en dehors des dates du séjour";
+		}
+			
+		return parent::check();
+		
+	}
 	function loadView() {
 		parent::loadView();
 		$sejour = $this->loadFwdRef("sejour_id");
