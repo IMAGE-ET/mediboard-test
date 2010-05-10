@@ -21,6 +21,8 @@ Main.add(function() {
     $V(form.duree, time.length);
     onSubmitFormAjax(form, {onComplete: function(){
       Planification.refreshSejour("{{$planning->guid}}".split("-")[1], true);
+      PlanningTechnicien.show();
+      PlanningEquipement.show();
     }});
   }
 });
