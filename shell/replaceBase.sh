@@ -17,9 +17,9 @@ then
   echo " <source_database>  is the source database name, ie mediboard"
   echo " <target_directory> is the target directory location, /var/backup/"
   echo " <target_database>  is the target database name, ie target_mediboard"
-  echo " <with_restart> (optionnal) is restart the Mysql server (Warning), ie for InnoDB"
-  echo " <safe> (optionnal) is the copy source database "
-  echo " <port> (optionnal) is the ssh port af the target remote location, 22"
+  echo " [-r <with_restart>]  is restart the Mysql server (Warning), ie for InnoDB"
+  echo " [-s <safe>] is the copy source database "
+  echo " [-p <port>] is the ssh port af the target remote location, 22"
   exit 1
 fi
 
@@ -38,14 +38,24 @@ then
 else
   target_database=mediboard
 fi
-with_restart=$6
-safe=$7
-if [ $8 ]
-then
-  port=$8
-else
-  port=22
-fi
+
+port=22
+with_restart=0
+safe=0
+while getopts r:s:p: option
+do
+  case $option in
+    r)
+      with_restart=1
+      ;;
+    s)
+      safe=1
+      ;;
+    p)
+      port=$OPTARG
+      ;;
+  esac
+done
 
 if [ $with_restart ]
 then
@@ -82,7 +92,7 @@ dir_target=/var/lib/mysql/$target_database
 
 if [ $safe ]
 then
-  DATETIME=$(date +%Y-%m-%dT%H-%M-%S)
+  DATETIME=$(date +%Y_%m_%dT%H_%M_%S)
   # Copy database
   mv $dir_target ${dir_target}_$DATETIME
   check_errs $? "Move mysql target directory" "Succesfully move mysql target directory"

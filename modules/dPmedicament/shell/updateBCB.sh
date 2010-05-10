@@ -15,15 +15,24 @@ if [ "$#" -lt 1 ]
 then 
   echo "Usage: $0 <password> [--skip-download]"
   echo "  <password> is the Mediboard portal password to access bcb/ folder"
-  echo "  [--skip-download] to skip downloading the latest BCB dump"
+  echo "  [-s] to skip downloading the latest BCB dump"
   exit 1
 fi
 
 password=$1
 archive="$TMP_PATH/bcbdump_latest.zip"
 dump="$TMP_PATH/mysqldump.sql"
+while getopts s: option
+do
+  case $option in
+    s)
+      skip=1
+      ;;
+  esac
+done
 
-if [ "$2" = "--skip-download" ]
+
+if [ $skip -eq 1 ]
 then 
   echo "BCB latest dump download skipped!"
 else

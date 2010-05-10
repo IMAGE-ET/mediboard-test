@@ -17,21 +17,25 @@ then
   echo "  <password> is password for mysql, eg dbadmin"
   echo "  <database> is database, eg mediboard"
   echo "  <backup_path> is the backup path, eg /var/backup"
-  echo "  [<time>] is time of removal of files (day), default 7"
+  echo "  [-t <time>] is time of removal of files (day), default 7"
   exit 1
 fi
+
+time=7
+while getopts t: option
+do
+  case $option in
+    t)
+      time=$OPTARG
+      ;;
+  esac
+done
 
 method=$1
 username=$2
 password=$3
 database=$4
 backup_path=$5
-if [ $6 ]
-then
-  time=$6
-else
-  time=7
-fi
 
 ## Make complete path
 

@@ -15,19 +15,23 @@ then
   echo "  <source location>  is the remote location to be rsync-ed, ie root@oxmytto.homelinux.com"
   echo "  <source directory> is the remote directory to be rsync-ed, /home/root/"
   echo "  <destination>      is the target remote location, /var/backup/"
-  echo "  [<port>]           is the ssh port af the target remote location, 22"
+  echo "  [-p <port>]           is the ssh port af the target remote location, 22"
   exit 1
 fi
    
 location=$1
 directory=$2
 destination=$3
-if [ $4 ]
-then
-  port=$4
-else
-  port=22
-fi
+port=22
+
+while getopts r:s:p: option
+do
+  case $option in
+    p)
+      port=$OPTARG
+      ;;
+  esac
+done
 
 # Backups directory
 rsync -e "ssh -p $port" -avz $location:$directory $destination/$(echo $location | cut -d'@' -f2)

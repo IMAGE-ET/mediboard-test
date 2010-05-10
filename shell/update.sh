@@ -11,11 +11,11 @@ announce_script "Mediboard SVN updater"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <action> [<revision>]"
+  echo "Usage: $0 <action> [-r <revision>]"
   echo "  <action> The action to perform : info|real"
   echo "     info : Shows the update log"
   echo "     real : Performs the actual update"
-  echo "  <revision> The revision number you want to update to, HEAD by default"
+  echo "  -r <revision> The revision number you want to update to, HEAD by default"
   exit 1
 fi
    
@@ -28,10 +28,14 @@ prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 
 # Choose the target revision
-if [ "$#" -eq 2 ]
-then 
-  revision=$2
-fi
+while getopts r: option
+do
+  case $option in
+    r)
+     revision=$OPTARG
+      ;;
+  esac
+done
 
 case "$1" in
   info)

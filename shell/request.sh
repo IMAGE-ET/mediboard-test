@@ -16,8 +16,9 @@ then
   echo "  <username> is the name of the user requesting, ie cron"
   echo "  <password is the password of the user requesting, ie ****"
   echo "  <params> is the GET param string for request, ie m=dPpatients&tab=vw_medecins"
-  echo "  [<times>] is the number of repetition, ie 4"
-  echo "  [<delay>] is the time between each repetition, ie 2"
+  echo "  [-t <times>] is the number of repetition, ie 4"
+  echo "  [-d <delay>] is the time between each repetition, ie 2"
+  echo "  [-f <file>] is the file for the output, ie log.txt"
   exit 1
 fi
    
@@ -26,9 +27,24 @@ login="login=1"
 user=username=$2
 pass=password=$3
 params=$4
-times=$5
-delay=$6
+file=""
+times=1
 
+while getopts t:d:f: option
+do
+  case $option in
+    t)
+      times=$OPTARG
+      ;;
+    d)
+      delay=$OPTARG
+      ;;
+    f)
+      file='-O $OPTARG'
+      ;;
+  esac
+done
+echo $file
 url="$root_url/index.php?$login&$user&$pass&$params"
 
 # Make mediboard path
@@ -43,19 +59,20 @@ mediboard_request()
    wget $url\
         --append-output="$log"\
         --force-directories\
-        --no-check-certificate
+        --no-check-certificate\
+        file
    check_errs $? "Failed to request to Mediboard" "Mediboard requested!"   
    echo "wget URL : $url."
 }
 
-if [ "$#" -ne 6 ]
+if [ $times -gt 1 ]
 then
-  mediboard_request
+  while [ $times -gt 0 ]
+  do
+    times=$(($times - 1))
+    mediboard_request &
+    sleep $delay
+  done
 else
-while [ $times -gt 0 ]
-do
-  times=$(($times - 1))
-  mediboard_request &
-  sleep $delay
-done
+  mediboard_request
 fi
