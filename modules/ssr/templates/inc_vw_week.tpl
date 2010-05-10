@@ -92,7 +92,7 @@ Main.add(function() {
 									     {{if $_event->guid}}
                          onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
 									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
-												   ondblclick="if(window.onSelect){ onSelect('{{$_event->css_class}}'); }"
+												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
 												 {{/if}}
 											 {{/if}} 
 											 class="event {{if $_event->draggable}}draggable{{/if}} {{$_event->css_class}} {{$_event->guid}}" 

@@ -81,8 +81,21 @@ foreach($evenements as $_evenement){
   ));
 }
 
+$config = $surveillance ? CAppUI::conf("ssr occupation_surveillance") : CAppUI::conf("ssr occupation_technicien");
+
 foreach($duree_occupation as $_occupation){
-  $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn");
+	$duree_occupation = $_occupation["total"];
+	
+	if($duree_occupation < $config["faible"]){
+	  $color = "green";
+	}
+	if($duree_occupation > $config["eleve"]){
+    $color = "red";
+  }
+	if($duree_occupation >= $config["faible"] && $duree_occupation <= $config["eleve"]){
+		$color = "yellow";
+	}
+  $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn", null, $color);
 }
 
 foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {

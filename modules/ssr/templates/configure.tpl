@@ -14,13 +14,31 @@
 
   <table class="form">
     <tr>
-      <th class="title">Configuration générale
+      <th class="title" colspan="2">Configuration générale
     </tr>
+		<!--
     {{assign var=class value=CPlateauTechnique}}
   	<tr>
   		<th class="category">{{tr}}{{$class}}{{/tr}}
   	</tr>
+		-->
     {{* mb_include module=system template=inc_config_bool var=infinite_quantity *}}
+    
+		<tr>
+			<th colspan="2" class="category">
+				Occupation surveillance
+			</th>
+		</tr>
+		{{mb_include module=system template=inc_config_str  class="occupation_suveillance" var="faible"}}
+    {{mb_include module=system template=inc_config_str  class="occupation_suveillance" var="eleve"}}
+
+    <tr>
+      <th colspan="2" class="category">
+        Occupation technicien
+      </th>
+    </tr>  
+	 {{mb_include module=system template=inc_config_str  class="occupation_technicien" var="faible"}}
+   {{mb_include module=system template=inc_config_str  class="occupation_technicien" var="eleve"}}
     
     <tr>
       <td class="button" colspan="100">
