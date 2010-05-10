@@ -19,7 +19,6 @@ onCompleteShowWeek = function(){
   Planification.refreshActivites();
 }
 
-	
 Main.add(Planification.showWeek);
 </script>
 

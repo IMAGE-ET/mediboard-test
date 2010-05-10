@@ -11,13 +11,13 @@
 CCando::checkRead();
 
 $date = CValue::getOrSession("date", mbDate());
-$sejour_id = CValue::getOrSession("sejour_id");
+$sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
 $equipement = new CEquipement;
-$equipement->load(CValue::get("equipement_id", 33));
+$equipement->load(CValue::get("equipement_id"));
 
 $nb_days_planning = $sejour->getNbJourPlanning($date);
 $planning = new CPlanningWeek($date, null, null, $nb_days_planning);
@@ -31,7 +31,7 @@ $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-	$important = ($_evenement->sejour_id == $sejour_id);
+	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
 	$_evenement->loadRefElementPrescription();
   $_evenement->loadRefSejour();
 	$_evenement->loadRefTherapeute();

@@ -45,7 +45,16 @@
 	</tr>
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
-	<tr>
+	{{assign var=ssr_class value=""}}
+	{{if $_sejour->annule == "1"}}
+	{{assign var=ssr_class value=ssr-annule}}
+	{{elseif !$_sejour->entree_reelle}}
+	{{assign var=ssr_class value=ssr-prevu}}
+	{{elseif $_sejour->sortie_reelle}}
+	{{assign var=ssr_class value=ssr-termine}}
+	{{/if}}
+
+	<tr class="{{$ssr_class}}">
 		<td colspan="2" class="text">
 			{{assign var=link value="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"}}
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}

@@ -10,11 +10,12 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_kine_board"          , TAB_READ);
 $module->registerTab("vw_sejours_ssr"         , TAB_READ);
 $module->registerTab("vw_aed_sejour_ssr"      , TAB_READ);
-$module->registerTab("vw_idx_plateau"         , TAB_READ);
+$module->registerTab("vw_kine_board"          , TAB_READ);
 $module->registerTab("vw_idx_repartition"     , TAB_READ);
+$module->registerTab("vw_plateau_board"       , TAB_READ);
+$module->registerTab("vw_idx_plateau"         , TAB_READ);
 $module->registerTab("vw_cdarr"               , TAB_READ);
 $module->registerTab("edit_codes_intervenants", TAB_ADMIN);
 

@@ -12,6 +12,14 @@ PlanningEquipement = {
 	equipement_id : null,
 	sejour_id : null,
 	
+	showMany: function(equipement_ids) {
+		equipement_ids.each(function(equipement_id) {
+	    new Url("ssr", "ajax_planning_equipement") .
+	      addParam("equipement_id", equipement_id) .
+	      requestUpdate("planning-equipement-"+equipement_id);
+		} );
+	},
+	
   show: function(equipement_id, sejour_id) {
 		this.equipement_id = equipement_id || this.equipement_id;
     this.sejour_id = sejour_id || this.sejour_id; 
