@@ -19,6 +19,8 @@ $patient_ipp   = CValue::get("patient_ipp");
 $useVitale     = CValue::get("useVitale"  ); 
 
 $patVitale = null;
+$patient_name_search = null;
+$patient_firstName_search = null;
 
 $showCount = 30;
   
