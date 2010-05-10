@@ -105,7 +105,7 @@ div.dragged {
 .draggable:hover {
   cursor: move;
 	background-color: #fff;
-  outline: 4px solid #8f8;
+  outline: 3px solid #8f8;
 }
 
 /* tabbed boxes */
@@ -441,13 +441,36 @@ table#weeklyPlanning th.today {
   white-space: normal;
   font-size: 10px;
   overflow: hidden;
+}
+
+.planning .event.draggable {
   cursor: pointer;
+}
+
+.planning .event .footer {
+  display: none;
+}
+
+.planning .event.draggable .footer {
+  display: block;
 }
 
 .planning .event:hover {
   margin: -1px;
   border: 1px solid #666;
   z-index: 10;
+}
+
+.planning .event .time-preview {
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  background: #fff;
+  color: #000;
+  width: 100%;
+  bottom: 10px;
+  padding: 4px 0;
 }
 
 .planning .event .time {
@@ -492,7 +515,7 @@ table#weeklyPlanning th.today {
   vertical-align: top;
 }
 
-.planning .hours td.large {
+.planning.large .hours td {
   height: 60px;
   padding: 0;
   vertical-align: top;
@@ -516,10 +539,10 @@ table#weeklyPlanning th.today {
   height: 27px;
 }
 
-.planning .hours .pause td.large,
-.planning .hours .pause th.large,
-.planning .hours .pause-next td.large,
-.planning .hours .pause-next th.large {
+.planning.large .hours .pause td,
+.planning.large .hours .pause th,
+.planning.large .hours .pause-next td,
+.planning.large .hours .pause-next th {
   height: 57px;
 }
 

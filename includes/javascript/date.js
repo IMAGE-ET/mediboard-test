@@ -691,6 +691,9 @@ Class.extend(Date, {
 	addHours: function(iHours) {
     this.setHours(this.getHours() + iHours);
   },
+  addMinutes: function(iMinutes) {
+    this.setMinutes(this.getMinutes() + iMinutes);
+  },
   addYears: function(iYears) {
     this.setFullYear(this.getFullYear() + iYears);
   }

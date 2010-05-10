@@ -615,8 +615,8 @@ class CSmartyDP extends Smarty {
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time
-    if (!CAppUI::pref("showTemplateSpans") || 
-        isset($this->_tpl_vars['nodebug']) ||
+    if (isset($this->_tpl_vars['nodebug']) ||
+        !CAppUI::pref("showTemplateSpans") || 
         in_array(basename($resource_name), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;

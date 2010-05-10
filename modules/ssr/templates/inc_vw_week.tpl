@@ -15,7 +15,8 @@ Main.add(function() {
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
-    {{$planning->events|@json}}
+    {{$planning->events|@json}}, 
+    {{$planning->hour_divider}}
   );
   Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
 	window["planning-{{$planning->guid}}"] = planning;
@@ -23,7 +24,7 @@ Main.add(function() {
 
 </script>
 
-<div class="planning" id="{{$planning->guid}}">
+<div class="planning {{if $planning->large}}large{{/if}}" id="{{$planning->guid}}">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
@@ -83,31 +84,88 @@ Main.add(function() {
               {{assign var=unavail value=false}}
             {{/if}}
             
-            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} {{if $planning->large}}large{{/if}}">
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
                   <div id="{{$_event->internal_id}}" 
-									     {{if $_event->guid}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
+									     {{if $_event->guid}}
+                         onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
 									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
-												 ondblclick="if(window.onSelect){ onSelect('{{$_event->css_class}}'); }"
+												   ondblclick="if(window.onSelect){ onSelect('{{$_event->css_class}}'); }"
 												 {{/if}}
 											 {{/if}} 
-											 class="event {{$_event->css_class}} {{$_event->guid}}" 
+											 class="event {{if $_event->draggable}}draggable{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
 											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
 											 	
-                    <!--
-										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+                    <div class="time-preview" style="display: none;"></div>
+                    
+                    {{* 
+										<div class="time" style="display: none;" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
 											{{$_event->start|date_format:"%H:%M"}}
                       {{if $_event->length}}
                        - {{$_event->end|date_format:"%H:%M"}}
                       {{/if}}
                     </div>
-										-->
+                     *}}
+									  
                     <div class="body">
                       {{$_event->title|smarty:nodefaults}}
                     </div>
+                    <div class="footer" style="position: absolute; bottom: 0; background: url(images/buttons/drag-n-white.png) no-repeat center center; width: 100%; height: 6px; cursor: s-resize;"></div>
                   </div>
+                  
+                  {{if $_event->draggable}}
+                  <script type="text/javascript">
+                   Main.add(function(){
+                     var planning = window['planning-{{$planning->guid}}'];
+                     
+                     function showTime(elt, event){
+                       elt.down(".time-preview").update(event.getTimeString()).show();
+                     }
+                     function hideTime(elt){
+                       elt.down(".time-preview").hide();
+                     }
+                   
+                     function onDragSize(d){
+                       var grip = d.element;
+                       var e = grip.up();
+                       
+                       e.setStyle({
+                         height: (grip.offsetTop+grip.getHeight())+"px"
+                       });
+                       
+                       var event = planning.getEventById(e.id);
+                       showTime(e, event);
+                     }
+                     
+                     function onDragPosition(d){
+                       var event = planning.getEventById(d.element.id);
+                       showTime(d.element, event);
+                     }
+                     
+                     function onEndPosition(d){
+                       var event = planning.getEventById(d.element.id);
+                       hideTime(d.element);
+                       event.onChange();
+                     }
+                     
+                     function onEndSize(d){
+                       var element = d.element.up();
+                       var event = planning.getEventById(element.id);
+                       hideTime(element);
+                       event.onChange();
+                     }
+                     
+                     var element = $('{{$_event->internal_id}}');
+                     var parent = element.up("td");
+                     var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
+                     
+                     new Draggable(element, {snap: snap, change: onDragPosition, onEnd: onEndPosition});
+                     new Draggable(element.down(".footer"), {constraint: "vertical", snap: snap, change: onDragSize, onEnd: onEndSize});
+                   });
+                   </script>
+                   {{/if}}
                 {{/if}}
               {{/foreach}}
               </div>

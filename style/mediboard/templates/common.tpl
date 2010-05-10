@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{$localeInfo.alpha2}}" lang="{{$localeInfo.alpha2}}">
 
 <head>
+  <!-- Content-Type meta tags need to be the first in the page (even before title) -->
+  <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
+  
   <title>
     {{$dPconfig.page_title}} 
     &mdash; {{tr}}module-{{$m}}-court{{/tr}}
@@ -9,7 +12,7 @@
       &mdash; {{tr}}mod-{{$m}}-tab-{{if $tab}}{{$tab}}{{else}}{{$a}}{{/if}}{{/tr}}
     {{/if}}
   </title>
-  <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
+  
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   <meta http-equiv="X-UA-Compatible" content="IE=100" /> <!-- IE8+ mode -->
@@ -26,9 +29,11 @@
   <![endif]-->
   
   <script type="text/javascript">
+    
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
+    
     var Preferences = {{$app->user_prefs|@json}},
         User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}};
@@ -36,6 +41,19 @@
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
+    
+    /*if (Preferences.INFOSYTEM == 0) {
+      var disableBackButton = function(back){
+        dsHistory.addFunction(disableBackButton);
+      }
+      
+      // This need to be set here, not in a JS file, or it won't work.
+      window.onload = function(){
+        // This need to be called twice
+        dsHistory.addFunction(disableBackButton);
+        dsHistory.addFunction(disableBackButton);
+      }
+    }*/
   </script>
 </head>
 

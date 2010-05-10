@@ -209,6 +209,9 @@ class CBloodSalvage extends CMbObject {
 	}
 	
 	function fillLimitedTemplate(&$template) {
+        $this->loadRefCellSaver();
+        $this->loadRefTypeEi();
+    
 		$template->addProperty("Cell Saver - Appareil utilisé"                    , $this->_ref_cell_saver->_view);
 		$template->addDateTimeProperty("Cell Saver - Début de récupération"       , $this->recuperation_start);
 		$template->addDateTimeProperty("Cell Saver - Fin de récupération"         , $this->recuperation_end);

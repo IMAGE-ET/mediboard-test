@@ -286,9 +286,9 @@ table.layout {
   margin: 0 !important;
 }
 
-table.layout td,
-table.layout th {
-  border: none !important;
+table.layout > tbody > tr > td,
+table.layout > tbody > tr > th {
+  border: none;
 }
 
 tbody.hoverable:hover tr td,
