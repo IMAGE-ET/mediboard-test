@@ -482,9 +482,9 @@ class CMbObject {
     }
 
     $this->checkConfidential();
-    $this->updateFormFields();
     $this->registerCache();
-        
+    $this->updateFormFields();
+		
     return $this;
   }
   
