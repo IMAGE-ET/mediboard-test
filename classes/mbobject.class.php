@@ -1457,6 +1457,9 @@ class CMbObject {
     if ($spec instanceof CRefSpec) {
       $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
 			
+      if (!$class) 
+        return $this->_fwd[$field] = null;
+      
       $fwd = new $class;
       
       if ($cached)

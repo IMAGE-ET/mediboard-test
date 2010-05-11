@@ -14,6 +14,13 @@
 var reception_id = '{{$reception->_id}}';
 
 Main.add(function () {
+  window.onbeforeunload = window.onbeforeunload.wrap(function(old){
+    old();
+    if (window.opener) {
+      refreshLists();
+    }
+  });
+
   var form = getForm("orders-search");
   
   var url = new Url("dPstock", "httpreq_orders_autocomplete");

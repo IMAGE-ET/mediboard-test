@@ -55,7 +55,7 @@ foreach ($tableau as $key => $valChaine){
   }
 }
 
-ksort($translateModule->values);
+uksort($translateModule->values, "strnatcmp");
 
 $error = $translateModule->update($translateModule->values, false);
 

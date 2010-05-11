@@ -137,7 +137,7 @@
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}} /<br /> {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
     <th style="width: 1%;"></th>
@@ -193,7 +193,7 @@
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}} /<br /> {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>

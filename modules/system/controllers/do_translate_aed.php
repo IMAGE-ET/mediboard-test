@@ -56,6 +56,8 @@ foreach($localesDirs as $locale){
     $translation[$valChaine] = "";
   }
   
+  uksort($translation, "strnatcmp");
+  
   //Ecriture du fichier
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = ($in_module ? "modules/$module/locales/$locale.php" : "locales/$locale/$module.php");
