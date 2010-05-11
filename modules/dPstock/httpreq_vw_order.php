@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $order_id = CValue::get('order_id');
 
@@ -19,7 +18,10 @@ $order->load($order_id);
 $order->loadRefsBack();
 $order->loadRefsFwd();
 $order->updateCounts();
-$order->_ref_object->loadRefsFwd();
+
+if ($order->_ref_object) {
+  $order->_ref_object->loadRefsFwd();
+}
 
 // Smarty template
 $smarty = new CSmartyDP();

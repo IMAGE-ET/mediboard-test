@@ -103,27 +103,27 @@ function refreshOrderItem(order_item_id) {
 
 var orderTypes = ["waiting", "locked", "pending", "received", "cancelled"];
 
-function refreshListOrders(type, keywords, category_id) {
+function refreshListOrders(type, form) {
   var url = new Url("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
-  url.addParam("keywords", keywords);
-  url.addParam("category_id", category_id);
-  url.requestUpdate("list-orders-"+type);
   
+  if (form) url.addFormData(form);
+  
+  url.requestUpdate("list-orders-"+type);
   return false;
 }
 
-function refreshLists(keywords, category_id) {
+function refreshLists(form) {
   if (!window.opener) {
     // We load the visible one first
     orderTypes.each(function(type){
       if ($("list-orders-"+type).visible()) {
-        refreshListOrders(type, keywords, category_id);
+        refreshListOrders(type, form);
       }
     });
     orderTypes.each(function(type){
       if (!$("list-orders-"+type).visible()) {
-        refreshListOrders(type, keywords, category_id);
+        refreshListOrders(type, form);
       }
     });
   } else if (window.opener.refreshLists) {

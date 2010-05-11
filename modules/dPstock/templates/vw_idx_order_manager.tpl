@@ -28,19 +28,17 @@ Main.add(function () {
   </div>
 
   <!-- Filter -->
-  <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($V(this.keywords), $V(this.category_id));">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="text" name="keywords" onchange="this.form.onsubmit()" />
-    
+  <form name="orders-list-filter" action="?" method="get" onsubmit="return refreshLists(this)">
     <select name="category_id" onchange="this.form.onsubmit()">
       <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
     {{foreach from=$list_categories item=_category}}
       <option value="{{$_category->category_id}}" {{if $category_id==$_category->_id}}selected="selected"{{/if}}>{{$_category->name}}</option>
     {{/foreach}}
     </select>
+    <input type="text" name="keywords" onchange="this.form.onsubmit()" />
     
     <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-    <button type="button" class="cancel notext" onclick="$V(this.form.elements.keywords, '')">{{tr}}Empty{{/tr}}</button>
+    <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();">{{tr}}Empty{{/tr}}</button>
   </form>
 
   <!-- Tabs titles -->

@@ -14,17 +14,11 @@
 
   <table class="form">
     {{assign var="class" value="CProductOrder"}}
-    {{assign var="var" value="order_number_format"}}
-    <tr>
-      <th>
-        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-        </label>
-      </th>
-      <td>
-        <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="40" class="code product_order" />
-      </td>
-    </tr>
+    {{mb_include module=system template=inc_config_str var=order_number_format cssClass="code product_order"}}
+    {{mb_include module=system template=inc_config_bool var=order_number_contextual}}
+    
+    {{assign var="class" value="CProductReference"}}
+    {{mb_include module=system template=inc_config_bool var=use_mdq}}
     
     {{assign var="class" value="CProductStockGroup"}}
     {{mb_include module=system template=inc_config_bool var=unit_order}}
