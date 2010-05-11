@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsAdmin();
+$can->needsEdit();
 
 $now       = mbDateTime();
 $yesterday = mbDateTime("-1 DAY");
