@@ -40,6 +40,8 @@ class CCompteRendu extends CDocumentItem {
   var $_page_format      = null;
   var $_orientation      = null;
   
+  var $_list_classes     = null;
+  
   // Referenced objects
   var $_ref_chir         = null;
   var $_ref_category     = null;
@@ -84,7 +86,8 @@ class CCompteRendu extends CDocumentItem {
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0";
     $specs["type"]             = "enum list|header|body|footer default|body";
-    $specs["source"]           = "html helped|object_class";
+    $specs["source"]           = "html helped|_list_classes";
+    $specs["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float min|0";
