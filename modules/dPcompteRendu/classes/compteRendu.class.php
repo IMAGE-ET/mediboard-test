@@ -59,6 +59,8 @@ class CCompteRendu extends CDocumentItem {
     'legal'   => array(21.6 , 35.6),
     'tabloid' => array(27.9 , 43.2),
   );
+  
+  static $templated_classes = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -392,45 +394,46 @@ class CCompteRendu extends CDocumentItem {
       return;
     }
 
-    $this->completeField("nom");
-    $this->completeField("source");
+    $this->completeField("nom", "source");
     
-    if ($msg = parent::handleSend()) {
-      return $msg;
-    }
+    return parent::handleSend();
   }
 	
   static function getTemplatedClasses() {
-    $installed = getInstalledClasses();
+    if (self::$templated_classes !== null) {
+      return self::$templated_classes;
+    }
+    
     $classes = array();
+    
+    $installed = getInstalledClasses();
     foreach ($installed as $key=>$class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
         $classes[$class] = CAppUI::tr($class);
       }
     }
-    return $classes;
+    
+    return self::$templated_classes = $classes;
   }
 
-  function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = '', $sizeheader = 0, $footer = '', $sizefooter = 0, $margins = array()) {
-
-    $style = 
-      "<style type = \"text/css\">" .
-      file_get_contents("style/mediboard/htmlarea.css") .
+  function loadHTMLcontent($htmlcontent, $mode = "modele", $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $margins = array()) {
+    $style = file_get_contents("style/mediboard/htmlarea.css") .
       "@page {
-         margin-top:    ".$margins[0]."cm;
-         margin-bottom: ".$margins[2]."cm;
-         margin-left:   ".$margins[3]."cm;
-         margin-right:  ".$margins[1]."cm;
+         margin-top:    {$margins[0]}cm;
+         margin-right:  {$margins[1]}cm;
+         margin-bottom: {$margins[2]}cm;
+         margin-left:   {$margins[3]}cm;
        }
        body {
          margin:  0;
          padding: 0;
-       }
-       </style>";
+       }";
 
-    $content = '';
-    $position = array("header"=>"top",
-                      "footer"=>"bottom");
+    $content = "";
+    $position = array(
+      "header" => "top",
+      "footer" => "bottom"
+    );
                       
     if($mode == "modele") {
       switch($type) {
@@ -441,13 +444,11 @@ class CCompteRendu extends CDocumentItem {
           $hauteur_position = 0;
           
           $style .= "
-          <style type=\"text/css\">
             #{$type} {
               height: {$sizeheader}px;
               {$position}: 0cm;
               width: auto;
-            }
-          </style>";
+            }";
           
           $content =  "<div id=\"$type\">$htmlcontent</div>";
           break;
@@ -457,7 +458,6 @@ class CCompteRendu extends CDocumentItem {
             $padding_top = $sizeheader + 20;
             
             $style .= "
-              <style type=\"text/css\">
                 @media print {
                   #body { 
                     padding-top: {$padding_top}px;
@@ -466,8 +466,7 @@ class CCompteRendu extends CDocumentItem {
                     height: {$sizeheader}px;
                     top: 0cm;
                   }
-                }
-              </style>";
+                }";
               
             $content .= "<div id=\"header\">$header</div>";
           }
@@ -475,7 +474,6 @@ class CCompteRendu extends CDocumentItem {
             $sizefooter = $sizefooter != '' ? $sizefooter : 50;
             $padding_bottom = $sizeheader + 20;
             $style .= "
-              <style type=\"text/css\">
                 @media print {
                   #body { 
                     padding-bottom: {$padding_bottom}px;
@@ -484,8 +482,7 @@ class CCompteRendu extends CDocumentItem {
                     height: {$sizefooter}px;
                     bottom: 0cm;
                   }
-                }
-              </style>";
+                }";
             $content .= "<div id=\"footer\">$footer</div>";
           }
           $content .= "<div id=\"body\">$htmlcontent</div>";
