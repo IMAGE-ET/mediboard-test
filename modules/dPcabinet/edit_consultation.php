@@ -19,6 +19,8 @@ $hour  = mbTime(null);
 
 $now = mbDateTime();
 
+CMbObject::$useObjectCache = false;
+
 if(!isset($current_m)){
   $current_m = CValue::get("current_m", $m);
 }
