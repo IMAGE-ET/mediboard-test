@@ -107,7 +107,7 @@ else {
   }
 
   $htmltopdf = new CHtmlToPDF;
-  $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file->_file_path);
+  $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file);
   $file->file_size = filesize($file->_file_path);
   $file->store();
 }

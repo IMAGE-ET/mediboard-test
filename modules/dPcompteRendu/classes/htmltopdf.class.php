@@ -96,7 +96,7 @@ class CHtmlToPDF {
     $this->dompdf = new DOMPDF;
   }
 
-  function generatePDF($content, $stream, $format, $orientation, $path) {
+  function generatePDF($content, $stream, $format, $orientation, $file) {
     $this->content = $this->fixBlockElements($content);
     //mbTrace($this->content,'',1);
     $this->dompdf->set_paper($format, $orientation);
@@ -106,10 +106,10 @@ class CHtmlToPDF {
     $this->dompdf->render();
 
     if($stream) {
-      $this->dompdf->stream("temp.pdf", array("Attachment" => 0));
+      $this->dompdf->stream($file->file_name, array("Attachment" => 0));
     }
     else {
-      file_put_contents($path, $this->dompdf->output());
+      file_put_contents($file->_file_path, $this->dompdf->output());
       $this->nbpages = $this->dompdf->get_canvas()->get_page_count();
     }
     unset($this->dompdf);

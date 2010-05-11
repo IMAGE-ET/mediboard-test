@@ -56,7 +56,7 @@ if(!count($files)) {
   $file->forceDir();
 	
   $htmltopdf = new CHtmlToPDF;
-  $htmltopdf->generatePdf($content, 0, $page_format, $orientation,$file->_file_path);
+  $htmltopdf->generatePdf($content, 0, $page_format, $orientation, $file);
   $file->file_size = filesize($file->_file_path);
   $file->store();
 }
