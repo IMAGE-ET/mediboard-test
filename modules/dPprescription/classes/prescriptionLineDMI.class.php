@@ -15,9 +15,17 @@ class CPrescriptionLineDMI extends CMbObject {
   // DB Fields
   var $prescription_id         = null;
   var $praticien_id            = null;
-  var $product_id              = null;          // code produit
+  var $operation_id            = null;
+  var $product_id              = null;  // code produit
   var $order_item_reception_id = null;  // code lot
   var $date                    = null;
+  var $septic                  = null;
+  
+  var $_ref_prescription       = null;
+  var $_ref_praticien          = null;
+  var $_ref_operation          = null;
+  var $_ref_product            = null;
+  var $_ref_product_order_item_reception = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,9 +38,11 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs = parent::getProps();
     $specs["prescription_id"]         = "ref notNull class|CPrescription";
     $specs["praticien_id"]            = "ref notNull class|CMediusers";
+    $specs["operation_id"]            = "ref notNull class|COperation";
     $specs["product_id"]              = "ref notNull class|CProduct";
     $specs["order_item_reception_id"] = "ref notNull class|CProductOrderItemReception";
     $specs["date"]                    = "dateTime notNull";
+    $specs["septic"]                  = "bool notNull default|0";
     return $specs;
   }
   
@@ -57,37 +67,38 @@ class CPrescriptionLineDMI extends CMbObject {
       
       $quantity = $item->_ref_order_item->quantity * $ref->quantity * $product->quantity;
       
-      if ($existing >= $quantity) 
+      if ($existing >= $quantity)
         return "Ce produit a atteint son nombre maximum de prescriptions";
     }
     return parent::check();
   }
   
   function loadRefPrescription(){
-    $this->_ref_prescription = new CPrescription();
-    $this->_ref_prescription = $this->_ref_prescription->getCached($this->prescription_id);  
+    $this->_ref_prescription = $this->loadFwdRef("prescription_id");  
   }
   
   function loadRefPraticien(){
-    $this->_ref_praticien = new CMediusers();
-    $this->_ref_praticien = $this->_ref_praticien->getCached($this->praticien_id);
+    $this->_ref_praticien = $this->loadFwdRef("praticien_id");
 		$this->_ref_praticien->loadRefFunction();
   }
   
   function loadRefProduct(){
-    $this->_ref_product = new CProduct();
-    $this->_ref_product = $this->_ref_product->getCached($this->product_id);
+    $this->_ref_product = $this->loadFwdRef("product_id");
+  }
+  
+  function loadRefOperation(){
+    $this->_ref_operation = $this->loadFwdRef("product_id");
   }
   
   function loadRefProductOrderItemReception(){
-    $this->_ref_product_order_item_reception = new CProductOrderItemReception();
-    $this->_ref_product_order_item_reception = $this->_ref_product_order_item_reception->getCached($this->order_item_reception_id);
+    $this->_ref_product_order_item_reception = $this->loadFwdRef("order_item_reception_id");
   }
   
   function loadRefsFwd(){
     $this->loadRefPrescription();
     $this->loadRefPraticien();
     $this->loadRefProduct();
+    $this->loadRefOperation();
     $this->loadRefProductOrderItemReception(); 
   }
 }

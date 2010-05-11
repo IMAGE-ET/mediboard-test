@@ -83,7 +83,7 @@ function updatePrice(type, form) {
   <tr>
     <th>{{mb_label object=$reference field="quantity"}}</th>
     <td>
-      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity'); $('CReference-quantity').update(this.value);"}}
+      {{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=1 size=4 onchange="updateUnitQuantity(this, 'equivalent_quantity'); updatePrice('price', this.form);if($('CReference-quantity')) $('CReference-quantity').update(this.value);"}}
       <input type="text" name="packaging" readonly="readonly" value="{{$reference->_ref_product->packaging}}" style="border: none; background: transparent; width: 5em; color: inherit;" onchange="this.form.packaging_2.value=this.value"/>
       <span id="equivalent_quantity"></span>
     </td>

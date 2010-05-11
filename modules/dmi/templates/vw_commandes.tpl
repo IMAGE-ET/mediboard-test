@@ -47,8 +47,8 @@
           <form name="product-reference-{{$_line_dmi->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function() {alert('commandé');} })">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_order_item_aed" />
-            <input type="hidden" name="callback" value="alert('toto')" />
             <input type="hidden" name="_create_order" value="1" />
+            <input type="hidden" name="_context_guid" value="COperation-{{$_line_dmi->operation_id}}" />
             <input type="hidden" name="reception_id" value="" />
             <input type="hidden" name="quantity" value="1" />
             <select name="reference_id">

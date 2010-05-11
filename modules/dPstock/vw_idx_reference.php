@@ -16,7 +16,7 @@ $societe_id   = CValue::getOrSession('societe_id');
 $category_id  = CValue::getOrSession('category_id');
 $product_id   = CValue::getOrSession('product_id');
 $keywords     = CValue::getOrSession('keywords');
-$letter       = CValue::getOrSession('letter', "A");
+$letter       = CValue::getOrSession('letter', "%");
 $show_all     = CValue::getOrSession('show_all');
 
 $filter = new CProduct;

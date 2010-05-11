@@ -1485,11 +1485,19 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `prescription_line_dmi` 
               ADD `date` DATETIME NOT NULL;";
 		$this->addQuery($sql);
-        $sql = "ALTER TABLE `prescription_line_dmi` 
+    $sql = "ALTER TABLE `prescription_line_dmi` 
               ADD INDEX (`date`);";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("1.01");
+    $sql = "ALTER TABLE `prescription_line_dmi`
+              ADD `operation_id` INT (11) UNSIGNED NOT NULL,
+              ADD `septic` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_dmi` ADD INDEX (`operation_id`);";
+    $this->addQuery($sql);
 
-		$this->mod_version = "1.01";
+		$this->mod_version = "1.02";
   }
 }
 

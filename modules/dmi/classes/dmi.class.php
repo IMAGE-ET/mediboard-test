@@ -13,9 +13,10 @@ CAppUI::requireModuleClass('dmi', 'produit_prescriptible');
 class CDMI extends CProduitPrescriptible {
   // DB Table key
   var $dmi_id  = null;
-
+  
   // DB Fields
   var $category_id = null;
+  var $code_lpp    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -27,6 +28,7 @@ class CDMI extends CProduitPrescriptible {
   function getProps() {
   	$specs = parent::getProps();
     $specs["category_id"] = "ref notNull class|CDMICategory";
+    $specs["code_lpp"]    = "str protected";
     return $specs;
   }
        

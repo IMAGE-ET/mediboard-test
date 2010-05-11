@@ -27,7 +27,7 @@ refreshElement = function(element_id){
 
 {{if $element->_class_name == "CDM"}}
   generateCode = function(){
-	  var oForm = document.forms["editElement-{{$element->_class_name}}"];
+	  var oForm = getForm("editElement-{{$element->_class_name}}");
 	  var url = new Url("dmi", "httpreq_edit_element");
 	  url.addParam("generate_code", true);
 	  url.addParam("category_dm_id", oForm.category_dm_id.value);	  
@@ -39,8 +39,7 @@ refreshElement = function(element_id){
 {{/if}}
 
 Main.add(function () {
-  var oForm = document.forms["editElement-{{$element->_class_name}}"];
-  prepareForm(oForm);
+  var oForm = getForm("editElement-{{$element->_class_name}}");
   updateFieldsDM = function(selected) {
     var dn = selected.childElements();
     $V(oForm.code, dn[0].innerHTML);
@@ -51,10 +50,9 @@ Main.add(function () {
 	  url.autoComplete(oForm.produit, "produit_auto_complete", {
 	    minChars: 3,
 	    updateElement: updateFieldsDM,
-      callback: 
-        function(input, queryString){
-          return (queryString + "&hors_specialite=1"); 
-        }
+      callback: function(input, queryString){
+        return queryString + "&hors_specialite=1"; 
+      }
     } );
   }
 });
@@ -80,7 +78,7 @@ Main.add(function () {
   		</th>
   	</tr>
   	{{if $element->_class_name == "CDMI"}}
-  	<tr>
+    <tr>
       <th>{{mb_label object=$element field=category_id}}</th>
       <td>
         <select name="category_id" class="{{$element->_props.category_id}}">
@@ -96,9 +94,7 @@ Main.add(function () {
     {{/if}}
     {{if $element->_class_name == "CDM"}}
     <tr>
-      <th>
-        Recherche de DM
-      </th>
+      <th>Recherche de DM</th>
       <td>
         <input type="text" name="produit" />
         <div class="autocomplete" id="produit_auto_complete" style="display:none;"></div>
@@ -122,6 +118,12 @@ Main.add(function () {
   		<th>{{mb_label object=$element field=nom}}</th>
   		<td>{{mb_field object=$element field=nom}}</td>
   	</tr>
+    {{if $element->_class_name == "CDMI"}}
+    <tr>
+      <th>{{mb_label object=$element field=code_lpp}}</th>
+      <td>{{mb_field object=$element field=code_lpp}}</td>
+    </tr>
+    {{/if}}
   	<tr>
   		<th>{{mb_label object=$element field=description}}</th>
   		<td>{{mb_field object=$element field=description}}</td>
@@ -161,7 +163,7 @@ Main.add(function () {
   	<tr>
 		  <td colspan="2" class="button">
 		  	{{if $element->_id}}
-		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; submitFormAjax(this.form, 'systemMsg', { onComplete: function() { refreshElement('0') } } )">{{tr}}Delete{{/tr}}</button>
+		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; onSubmitFormAjax(this.form, { onComplete: function() { refreshElement('0') } } )">{{tr}}Delete{{/tr}}</button>
 			    <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ viewListElement('{{$category_class}}','{{$element->_id}}') } } );">{{tr}}Save{{/tr}}</button>
 			  {{else}}
 				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">{{tr}}Save{{/tr}}</button>

@@ -92,7 +92,17 @@ class CSetupdmi extends CSetup {
 	          CHANGE `dans_livret` `in_livret` ENUM ('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.06";
+    $this->makeRevision("0.06");
+    $sql = "ALTER TABLE `dmi` 
+              ADD `code_lpp` VARCHAR (255),
+              CHANGE `in_livret` `in_livret` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `dmi` 
+              ADD INDEX (`code_lpp`),
+              ADD INDEX (`code`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.07";
   }
 }
 ?>

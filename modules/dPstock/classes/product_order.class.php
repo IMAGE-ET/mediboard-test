@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CProductOrder extends CMbObject {
+class CProductOrder extends CMbMetaObject {
 	// DB Table key
 	var $order_id         = null;
 
@@ -72,6 +72,8 @@ class CProductOrder extends CMbObject {
 	  $specs['cancelled']       = 'bool show|0';
 	  $specs['deleted']         = 'bool show|0';
     $specs['received']        = 'bool';
+    $specs['object_id']       = 'ref class|CMbObject meta|object_class';
+    $specs['object_class']    = 'str show|0';
 		
     $specs['_total']          = 'currency show|1';
     $specs['_status']         = 'enum list|opened|locked|ordered|received|cancelled show|1';
@@ -234,6 +236,9 @@ class CProductOrder extends CMbObject {
     
     $leftjoin = array();
     $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
+    $leftjoin['product_order_item_reception'] = 'product_order_item.order_item_id = product_order_item_reception.order_item_id';
+    $leftjoin['product_reference'] = 'product_order_item.reference_id = product_reference.reference_id';
+    $leftjoin['product'] = 'product_reference.product_id = product.product_id';
     
     // if keywords have been provided
     if ($keywords) {
@@ -259,9 +264,6 @@ class CProductOrder extends CMbObject {
     $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 0";
     $where['product_order.date_ordered'] = "IS NULL";
-    
-    $leftjoin['product_order_item_reception'] = 
-          'product_order_item.order_item_id = product_order_item_reception.order_item_id';
     
     switch ($type) {
       case 'waiting': break;
@@ -306,18 +308,30 @@ class CProductOrder extends CMbObject {
       $orders_list = $list;
     }
     
+    foreach($orders_list as $_order) {
+      $_order->loadRefsFwd();
+    }
+    
     return $orders_list;
   }
   
   function getUniqueNumber() {
-  	$format = CAppUI::conf('dPstock CProductOrder order_number_format');
-  	
+  	$format     = CAppUI::conf('dPstock CProductOrder order_number_format');
+    $contextual = CAppUI::conf('dPstock CProductOrder order_number_contextual');
+    
     if (strpos($format, '%id') === false) {
       $format .= '%id';
     }
     
   	$format = str_replace('%id', str_pad($this->_id ? $this->_id : 0, 4, '0', STR_PAD_LEFT), $format);
-  	return mbTransformTime(null, null, $format);
+    $number = mbTransformTime(null, null, $format);
+    
+    if ($contextual) {
+      $this->completeField("object_class");
+      $number = ($this->object_class === "COperation" ? "BL" : "PH") . $number;
+    }
+ 
+  	return $number;
   }
 
 	function updateFormFields() {
@@ -451,6 +465,7 @@ class CProductOrder extends CMbObject {
 	}
 
 	function loadRefsFwd($cache = true){
+    parent::loadRefsFwd($cache);
     $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
     $this->_ref_group = $this->loadFwdRef("group_id", $cache);
 	}

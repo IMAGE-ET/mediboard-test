@@ -66,7 +66,7 @@ class CPlanningWeek  {
   function addEvent(CPlanningEvent $event) {
     if ($event->day < $this->date_min || $event->day > $this->date_max) 
       return;
-      
+    
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
     

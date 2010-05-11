@@ -13,12 +13,23 @@ $can->needsRead();
 
 $type = CValue::getOrSession('type');
 $keywords = CValue::getOrSession('keywords');
+$category_id = CValue::getOrSession('category_id');
+
+$where = array();
+
+if ($category_id) {
+  $where["product.category_id"] = "= '$category_id'";
+}
 
 $order = new CProductOrder;
-$orders_list = $order->search($type, $keywords, 30);
+$orders_list = $order->search($type, $keywords, 40, $where);
 
 foreach($orders_list as $_order) {
   $_order->updateCounts();
+  if ($_order->object_id) {
+    $_order->loadTargetObject();
+    $_order->_ref_object->loadRefsFwd();
+  }
 }
 
 // Smarty template

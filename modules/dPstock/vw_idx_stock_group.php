@@ -14,7 +14,7 @@ $can->needsEdit();
 $stock_id    = CValue::getOrSession('stock_id');
 $category_id = CValue::getOrSession('category_id');
 $product_id  = CValue::get('product_id');
-$letter      = CValue::getOrSession('letter', "A");
+$letter      = CValue::getOrSession('letter', "%");
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStockGroup();

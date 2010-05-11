@@ -584,16 +584,17 @@ var ViewPort = {
 
 /** Token field used to manage multiple enumerations easily.
  *  @param element The element used to get piped values : token1|token2|token3
- *  @param options Accepts the following keys : onChange, confirm, sProps
+ *  @param options Accepts the following keys : onChange, confirm, props, separator
  */
 var TokenField = Class.create({
   initialize: function(element, options) {
     this.element = $(element);
     
     this.options = Object.extend({
-      onChange: Prototype.emptyFunction,
-      confirm : null,
-      sProps  : null
+      onChange : Prototype.emptyFunction,
+      confirm  : null,
+      props    : null,
+      separator: "|"
     }, options);
   },
   onComplete: function(value) {
@@ -602,17 +603,17 @@ var TokenField = Class.create({
     return true;
   },
   add: function(value, multiple) {
-    if (!value) {
-      return false;
-    }
-    if(this.options.sProps) {
-      ElementChecker.prepare(new Element('input', {value: value, className: this.options.sProps}));
+    if (!value) return false;
+
+    if(this.options.props) {
+      ElementChecker.prepare(new Element('input', {value: value, className: this.options.props}));
       ElementChecker.checkElement();
       if(ElementChecker.oErrors.length) {
         alert(ElementChecker.getErrorMessage());
         return false;
       }
     }
+    
     var aToken = this.getValues();
     aToken.push(value);
     if(!multiple) aToken = aToken.uniq();
@@ -641,11 +642,11 @@ var TokenField = Class.create({
     if (asString) {
       return this.element.value;
     }
-    return this.element.value.split("|").without("");
+    return this.element.value.split(this.options.separator).without("");
   },
   setValues: function(values) {
     if (Object.isArray(values)) {
-      values = values.join("|");
+      values = values.join(this.options.separator);
     }
     this.onComplete(this.element.value = values);
     return values;

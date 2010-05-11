@@ -51,7 +51,7 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
-      $V(formDmiDelivery._view, element.select(".view")[0].innerHTML.stripTags());
+      $V(formDmiDelivery._view, element.down("small").innerHTML.stripTags());
       search_product_order_item_reception(formDmiDelivery);
     },
     callback: function(input, queryString){
@@ -66,7 +66,7 @@ reloadListDMI = function(){
   Prescription.reload('{{$prescription->_id}}', null, "dmi");
 }
 
-addDMI = function(product_id, order_item_reception_id){
+addDMI = function(product_id, order_item_reception_id, septic){
   var oFormAddDMI = getForm("add_dmi");
   
   // si la liste des praticien est affichée, on utilise le praticien selectionné
@@ -75,6 +75,7 @@ addDMI = function(product_id, order_item_reception_id){
   }
   oFormAddDMI.product_id.value = product_id;
   oFormAddDMI.order_item_reception_id.value = order_item_reception_id;
+  oFormAddDMI.septic.value = septic;
   return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 
@@ -94,8 +95,10 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="product_id" value="">
   <input type="hidden" name="order_item_reception_id" value="">
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}">
+  <input type="hidden" name="operation_id" value="{{$operation_id}}">
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}">
   <input type="hidden" name="date" value="now">
+  <input type="hidden" name="septic" value="">
 </form>
 
 <table class="main" style="table-layout: fixed;">
@@ -159,33 +162,37 @@ delLineDMI = function(line_dmi_id){
   <!-- Affichage des lignes de DMI-->
   <tr>
     <th>Produit</th>
+    <th>Déstérilisé</th>
     <th>Date de pose</th>
     <th>Code produit</th>
     <th>Code lot</th>
-		<th style="width: 1%">Praticien</th>
+    <th style="width: 1%">Praticien</th>
   </tr>
-	{{foreach from=$prescription->_ref_lines_dmi item=_line_dmi}}
-	  <tr>
-	    <td>
-	      <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
-	      <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
-	        {{$_line_dmi->_ref_product}}
+  {{foreach from=$prescription->_ref_lines_dmi item=_line_dmi}}
+    <tr>
+      <td>
+        <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
+          {{$_line_dmi->_ref_product}}
         </span>
-	    </td>
-	    <td>
-	      {{mb_value object=$_line_dmi field="date"}}
-	    </td>
-	    <td>
-	      {{$_line_dmi->_ref_product->code}}
-	    </td>
-	    <td>
-	      {{$_line_dmi->_ref_product_order_item_reception->code}}
-	    </td>
-		<td>
-			 	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
-        </td>
-	  </tr>
-	{{/foreach}}
+      </td>
+      <td {{if $_line_dmi->septic}}class="cancelled"{{/if}}>
+        {{mb_value object=$_line_dmi field="septic"}}
+      </td>
+      <td>
+        {{mb_value object=$_line_dmi field="date"}}
+      </td>
+      <td>
+        {{$_line_dmi->_ref_product->code}}
+      </td>
+      <td>
+        {{$_line_dmi->_ref_product_order_item_reception->code}}
+      </td>
+      <td>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
+      </td>
+    </tr>
+  {{/foreach}}
 </table>
 
 {{else}}

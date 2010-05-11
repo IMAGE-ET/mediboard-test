@@ -13,7 +13,7 @@ $can->needsEdit();
 
 $category_id = CValue::getOrSession('category_id');
 $societe_id  = CValue::getOrSession('societe_id');
-$letter      = CValue::getOrSession('letter', "A");
+$letter      = CValue::getOrSession('letter', "%");
 $_autofill   = CValue::get('_autofill');
 
 // Categories list

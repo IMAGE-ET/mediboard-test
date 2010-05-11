@@ -12,7 +12,7 @@ CCanDo::checkEdit();
 
 $keywords     = CValue::getOrSession('keywords');
 $start        = CValue::getOrSession('start');
-$letter       = CValue::getOrSession('letter');
+$letter       = CValue::getOrSession('letter', "%");
 
 // Smarty template
 $smarty = new CSmartyDP();

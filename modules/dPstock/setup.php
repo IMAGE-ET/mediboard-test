@@ -570,6 +570,16 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product` ADD `auto_dispensed` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.24";
+    $this->makeRevision("1.24");
+    $sql = "ALTER TABLE `product_order` 
+              ADD `object_id` INT (11) UNSIGNED,
+              ADD `object_class` VARCHAR (255);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_order`
+              ADD INDEX (`object_id`),
+              ADD INDEX (`object_class`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.25";
   }
 }

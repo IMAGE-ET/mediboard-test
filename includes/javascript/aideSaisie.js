@@ -137,6 +137,11 @@ var AideSaisie = {
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
           return query;
         },
+        onAfterShow: function(element, update){
+          if (update.select("li").length == 0) {
+            update.hide();
+          }
+        },
         afterUpdateElement: this.updateDependFields.bind(this)
       });
       

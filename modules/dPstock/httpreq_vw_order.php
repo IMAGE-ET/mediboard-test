@@ -17,7 +17,9 @@ $order_id = CValue::get('order_id');
 $order = new CProductOrder();
 $order->load($order_id);
 $order->loadRefsBack();
+$order->loadRefsFwd();
 $order->updateCounts();
+$order->_ref_object->loadRefsFwd();
 
 // Smarty template
 $smarty = new CSmartyDP();

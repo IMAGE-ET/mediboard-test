@@ -68,6 +68,7 @@
   <tr>
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
+    <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
     <th style="width: 1%;"></th>
@@ -84,6 +85,13 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
           {{$curr_order->_ref_societe->_view}}
         </span>
+      </td>
+      <td>
+        {{if $curr_order->_ref_object}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
+          {{$curr_order->_ref_object->_view}}
+        </span>
+        {{/if}}
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
@@ -128,6 +136,7 @@
   <tr>
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
+    <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
@@ -145,6 +154,13 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
           {{$curr_order->_ref_societe->_view}}
         </span>
+      </td>
+      <td>
+        {{if $curr_order->_ref_object}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
+          {{$curr_order->_ref_object->_view}}
+        </span>
+        {{/if}}
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
@@ -176,6 +192,7 @@
   <tr>
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
+    <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
@@ -194,6 +211,13 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
           {{$curr_order->_ref_societe->_view}}
         </span>
+      </td>
+      <td>
+        {{if $curr_order->_ref_object}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
+          {{$curr_order->_ref_object->_view}}
+        </span>
+        {{/if}}
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
@@ -226,6 +250,7 @@
   <tr>
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
+    <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
@@ -244,6 +269,13 @@
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_societe->_guid}}')">
           {{$curr_order->_ref_societe->_view}}
         </span>
+      </td>
+      <td>
+        {{if $curr_order->_ref_object}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
+          {{$curr_order->_ref_object->_view}}
+        </span>
+        {{/if}}
       </td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>

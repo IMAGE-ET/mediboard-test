@@ -64,7 +64,7 @@ if ($reception->_id) {
 	}
 }
 
-$pdf->WriteBarcodeGrid(8,8,210-16,297-16,4,10, $data);
+$pdf->WriteBarcodeGrid(8, 8, 210-16, 297-16, 3, 10, $data);
 
 // Nom du fichier: prescription-xxxxxxxx.pdf   / I : sortie standard
 $pdf->Output("barcodes.pdf","I");

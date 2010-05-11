@@ -16,8 +16,15 @@ if (!file_exists("style/$uistyle/templates/header.tpl")) {
 
 $scripts = array(
   mbLoadJSLocales(),
+  "includes/javascript/printf.js",
+  //"lib/dshistory/dshistory.js",
+  
   "lib/scriptaculous/lib/prototype.js",
   "lib/scriptaculous/src/scriptaculous.js",
+  
+  /*"lib/nwmatcher/nwmatcher.js",
+  "lib/nwmatcher/traversal.js",
+  "lib/nwmatcher/prototypejs.js",*/
 
   // We force the download of the dependencies 
   "lib/scriptaculous/src/builder.js",
@@ -56,7 +63,6 @@ $scripts = array(
   "includes/javascript/checkForms.js",
   "includes/javascript/aideSaisie.js",
 
-  "includes/javascript/printf.js",
   "includes/javascript/mbmail.js",
 );
 

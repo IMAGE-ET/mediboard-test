@@ -13,7 +13,7 @@ $can->needsEdit();
 
 $reception_id = CValue::get('reception_id');
 $order_id     = CValue::get('order_id');
-$letter       = CValue::getOrSession('letter', "A");
+$letter       = CValue::getOrSession('letter', "%");
 
 $reception = new CProductReception();
 

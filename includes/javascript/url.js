@@ -231,7 +231,7 @@ var Url = Class.create({
       valueElement: null,
 	    
       // Allows bigger width than input
-      onShow: function(element, update) { 
+      onShow: function(element, update) {
         update.style.position = 'absolute';
         
         update.clonePosition(element, {
@@ -255,6 +255,10 @@ var Url = Class.create({
           });
         }
         update.show().setOpacity(1).unoverflow();
+        
+        if (oOptions.onAfterShow) {
+          oOptions.onAfterShow(element, update);
+        }
       },
       
       onHide: function(element, update){ 

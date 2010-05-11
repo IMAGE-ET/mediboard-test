@@ -29,6 +29,12 @@ if(CValue::post("_create_order")) {
 	
 	$order = new CProductOrder;
 	$orders = $order->search("waiting", null, 1, $where);
+  
+  if ($context_guid = CValue::post("_context_guid")) {
+    $context = CMbObject::loadFromGuid($context_guid);
+    $order->setObject($context);
+    $order->locked = 1;
+  }
 
 	if (count($orders) == 0) {
     $order->societe_id = $reference->societe_id;
