@@ -391,7 +391,7 @@
 			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
 		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
-			{{if $isImedsInstalled}}
+		  {{if @$modules.dPImeds->mod_active}}
         <li><a href="#Imeds">Labo</a></li>
       {{/if}}
 		  <li><a href="#doc-items">Documents</a></li>
@@ -436,14 +436,14 @@
 		</div>
 		{{/if}}
 		
-		{{if $isImedsInstalled}}
-      <div id="Imeds" style="display: none;">
-        <div class="small-info">
-          Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
-          consulter les résultats de laboratoire disponibles pour le patient concerné.
-        </div>
+		{{if @$modules.dPImeds->mod_active}}
+    <div id="Imeds" style="display: none;">
+      <div class="small-info">
+        Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+        consulter les résultats de laboratoire disponibles pour le patient concerné.
       </div>
-      {{/if}}
+    </div>
+    {{/if}}
 			
 	  <div id="doc-items">
 	  	{{mb_include template=inc_rpu_docitems}}

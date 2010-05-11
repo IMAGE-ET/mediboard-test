@@ -9,9 +9,8 @@
 *}}
 
 <td class="warning" colspan="{{$colspan}}">
+  <strong>Mutation à {{$rpu->_ref_sejour->sortie|date_format:$dPconfig.time}}</strong> <br/>
   <span onmouseover="ObjectTooltip.createEx(this, 'CSejour-{{$rpu->mutation_sejour_id}}')">
-    <strong>Dossier de Mutation</strong>
-    <br/>
     {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
   </span> 
 </td>

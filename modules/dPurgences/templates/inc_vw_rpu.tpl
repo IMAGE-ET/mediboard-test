@@ -235,17 +235,17 @@ function showEtabEntreeTransfert(mode) {
 				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value); submitSejour();"}}
 				      {{if !$rpu->mutation_sejour_id}}
 							  <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
-								
-							  <div id="etablissement_sortie_transfert" {{if !$sejour->etablissement_transfert_id}}style="display:none;"{{/if}}>
-	                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-	              </div>
-				      {{else}}
+							{{else}}
 					      <strong>
 						      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
 						      	Hospitalisation dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$rpu->_ref_sejour_mutation->_num_dossier}}
 						     	</a> 
 					     	</strong>
 				      {{/if}}
+              <div id="etablissement_sortie_transfert" {{if !$sejour->etablissement_transfert_id}}style="display:none;"{{/if}}>
+                  {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+                </div>
+                
 							<div id="service_sortie_transfert" {{if !$sejour->service_mutation_id}}style="display:none;"{{/if}}>
                 {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
               </div>

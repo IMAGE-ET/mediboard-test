@@ -47,6 +47,12 @@ function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'', null, false);
 }
 
+function loadResultLabo(sejour_id) {
+  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate('Imeds');
+}
+
 Main.add(function () {
   var tabsConsult = Control.Tabs.create('tab-consult', false);
   {{if ($app->user_prefs.ccam_consultation == 1)}}
@@ -54,8 +60,15 @@ Main.add(function () {
 	    var tabsActes = Control.Tabs.create('tab-actes', false);
 	  {{/if}}
   {{/if}}
+	  
   {{if $consult->sejour_id && $rpu && !$mutation_id}}
   loadSuivi({{$rpu->sejour_id}});
+  {{/if}}
+
+  {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
+    if($('Imeds')){
+      loadResultLabo('{{$consult->sejour_id}}');
+    }
   {{/if}}
 });
 </script>
@@ -84,6 +97,10 @@ Main.add(function () {
   {{/if}}
   <li onmousedown="refreshConstantesMedicales();"><a href="#Constantes">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
+  
+  {{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
+    <li><a href="#Imeds">Labo</a></li>
+  {{/if}}
   
   {{if $app->user_prefs.ccam_consultation == 1}}
   <li><a href="#Actes">Actes</a></li>
@@ -127,6 +144,15 @@ Main.add(function () {
   {{mb_include module=dPcabinet template=inc_main_consultform}}
 </div>
 
+{{if @$modules.dPImeds->mod_active && $consult->sejour_id}}
+<div id="Imeds" style="display: none;">
+  <div class="small-info">
+    Veuillez sélectionner un séjour dans la liste de gauche pour pouvoir
+    consulter les résultats de laboratoire disponibles pour le patient concerné.
+  </div>
+</div>
+{{/if}}
+    
 {{if $app->user_prefs.ccam_consultation == 1 }}
 <div id="Actes" style="display: none;">
   {{if $mutation_id}}
