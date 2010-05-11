@@ -155,7 +155,7 @@ class CHtmlToPDF {
 
     $str = $xml->saveHTML();
 
-    mbTrace($str,'',true);
+    //mbTrace($str,'',true);
     return $str;
   }
 
