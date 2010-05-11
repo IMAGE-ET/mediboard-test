@@ -20,11 +20,11 @@ if(CValue::post("_create_order")) {
   }
   
 	$where = array(
-	  "product_reference.societe_id" => "= '$reference->societe_id'",
+	  "product_order.societe_id" => "= '$reference->societe_id'",
 	);
   
   if (CAppUI::conf("dPstock group_independent") == 0) {
-    $where["product_stock_group.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+    $where["product_order.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
   }
 	
 	$order = new CProductOrder;
