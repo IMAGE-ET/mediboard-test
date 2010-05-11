@@ -292,7 +292,9 @@ var VitaleVision = {
     }
   
     if(getNodeValue("naissance date", ident) != "") { // Si format FR
-      var dateNaissance = getNodeValue("naissance date", ident);
+      var dateNaissance = getNodeValue("naissance date", ident),
+          jour  = dateNaissance.substring(0, 2),
+          mois  = dateNaissance.substring(2, 4);
       
       if(dateNaissance.length == 8){
         var annee = dateNaissance.substring(4, 8);
