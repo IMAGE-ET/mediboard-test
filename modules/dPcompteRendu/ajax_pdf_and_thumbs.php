@@ -16,11 +16,11 @@ $compte_rendu->load($compte_rendu_id);
 
 $generate_thumbs = CValue::post("generate_thumbs");
 $mode        = CValue::post("mode","doc");
-$type        = CValue::post("type");
+$type        = CValue::post("type", $compte_rendu->type);
 $footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
 $header_id   = CValue::post("header_id", $compte_rendu->header_id);
 $stream      = CValue::post("stream");
-$content     = stripslashes(urldecode(CValue::post("content")));
+$content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->source)));
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
@@ -51,10 +51,10 @@ else if (count($files) && $first_time == 1 && file_get_contents($file->_file_pat
 }
 else {
   if($mode == "modele") {
-    $height = CValue::post("height",$compte_rendu->height);
     switch($type) {
       case "header":
       case "footer":
+      	$height = CValue::post("height",$compte_rendu->height);
         $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, '', $height, '', '', $margins);
         break;
       case "body":
