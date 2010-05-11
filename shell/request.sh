@@ -11,7 +11,7 @@ announce_script "Mediboard request launcher"
 
 if [ "$#" -lt 4 ]
 then 
-  echo "Usage: $0 <root_url> <username> <password> \"<param>\" \[times\] \[delay\]"
+  echo "Usage: $0 <root_url> <username> <password> \"<param>\" \[-t times\] \[-d delay\] \[-f file\]"
   echo "  <root_url> is root url for mediboard, ie https://localhost/mediboard"
   echo "  <username> is the name of the user requesting, ie cron"
   echo "  <password is the password of the user requesting, ie ****"
@@ -21,30 +21,30 @@ then
   echo "  [-f <file>] is the file for the output, ie log.txt"
   exit 1
 fi
-   
+
+times=1
+delay=1
+args=`getopt t:d:f: $*`
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
+set -- $args
+for i; do
+  case "$i" in
+    -t) times=$2; shift 2;;
+    -d) delay=$2; shift 2;;
+    -f) file="-O $2"; shift 2;;
+    --) shift; break ;;
+  esac
+done
+
 root_url=$1
 login="login=1"
 user=username=$2
 pass=password=$3
 params=$4
-file=""
-times=1
 
-while getopts t:d:f: option
-do
-  case $option in
-    t)
-      times=$OPTARG
-      ;;
-    d)
-      delay=$OPTARG
-      ;;
-    f)
-      file='-O $OPTARG'
-      ;;
-  esac
-done
-echo $file
 url="$root_url/index.php?$login&$user&$pass&$params"
 
 # Make mediboard path
@@ -60,7 +60,7 @@ mediboard_request()
         --append-output="$log"\
         --force-directories\
         --no-check-certificate\
-        file
+        $file
    check_errs $? "Failed to request to Mediboard" "Mediboard requested!"   
    echo "wget URL : $url."
 }

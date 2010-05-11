@@ -23,41 +23,32 @@ then
   exit 1
 fi
 
-source_location=$1
-source_directory=$2
-if [ $3 ]
-then
-  source_database=$3
-else
-  source_database=mediboard
-fi
-target_directory=$4
-if [ $5 ]
-then
-  target_database=$5
-else
-  target_database=mediboard
-fi
-
 port=22
 with_restart=0
 safe=0
-while getopts r:s:p: option
-do
-  case $option in
-    r)
-      with_restart=1
-      ;;
-    s)
-      safe=1
-      ;;
-    p)
-      port=$OPTARG
-      ;;
+args=`getopt p:rs $*`
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
+set -- $args
+for i; do
+  case "$i" in
+    -r) with_restart=1; shift;;
+    -s) safe=1; shift;;
+    -p) port=$2; shift 2;;
+    --) shift ; break ;;
   esac
 done
 
-if [ $with_restart ]
+source_location=$1
+source_directory=$2
+source_database=$3
+target_directory=$4
+target_database=$5
+
+if [ $with_restart -eq 1 ]
 then
 echo "Warning !!!!!!!!!!!! This will restart the MySQL server"
 fi
@@ -82,7 +73,7 @@ tar -xvf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
-if [ $with_restart ]
+if [ $with_restart -eq 1]
 then
 "$mysql_path" stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
@@ -90,7 +81,7 @@ fi
 
 dir_target=/var/lib/mysql/$target_database
 
-if [ $safe ]
+if [ $safe -eq 1]
 then
   DATETIME=$(date +%Y_%m_%dT%H_%M_%S)
   # Copy database
@@ -119,7 +110,7 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
-if [ $with_restart ]
+if [ $with_restart -eq 1]
 then
 "$mysql_path" start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"

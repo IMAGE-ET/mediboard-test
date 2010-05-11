@@ -22,12 +22,18 @@ then
 fi
 
 time=7
-while getopts t: option
-do
-  case $option in
-    t)
-      time=$OPTARG
-      ;;
+args=`getopt t: $*`
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
+set -- $args
+
+for i; do
+  case "$i" in
+    -t) time=$2; shift 2;;
+    --) shift ; break ;;
   esac
 done
 

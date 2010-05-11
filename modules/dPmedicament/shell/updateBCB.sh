@@ -22,15 +22,21 @@ fi
 password=$1
 archive="$TMP_PATH/bcbdump_latest.zip"
 dump="$TMP_PATH/mysqldump.sql"
-while getopts s: option
-do
-  case $option in
-    s)
-      skip=1
-      ;;
+args=`getopt s $*`
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
+set -- $args
+
+skip=0
+for i; do
+  case "$i" in
+    -s) skip=1; shift;;
+    --) shift; break;;
   esac
 done
-
 
 if [ $skip -eq 1 ]
 then 

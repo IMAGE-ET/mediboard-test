@@ -28,12 +28,20 @@ prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
 revision=HEAD
 
 # Choose the target revision
-while getopts r: option
-do
-  case $option in
-    r)
-     revision=$OPTARG
-      ;;
+
+args=`getopt r: $*`
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
+fi
+
+set -- $args
+
+for i; do
+  case "$i" in
+    -r) revision=$2; shift 2;;
+    --) shift ; break ;;
+    -*) echo "$0: error - unrecognized option $1" 1>&2; exit 1;;
   esac
 done
 
