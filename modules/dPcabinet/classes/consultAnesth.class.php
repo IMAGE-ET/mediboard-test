@@ -170,7 +170,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefConsultation() {
-    $this->_ref_consultation = $this->loadFwdRef("consultation_id", true);
+    $this->_ref_consultation = $this->loadFwdRef("consultation_id", false);
     $this->_view = $this->_ref_consultation->_view;
   }
   
@@ -179,7 +179,7 @@ class CConsultAnesth extends CMbObject {
   }
 
   function loadRefOperation() {
-    $this->_ref_operation = $this->loadFwdRef("operation_id", true);
+    $this->_ref_operation = $this->loadFwdRef("operation_id", false);
     
     // Chargement du séjour associé
     if ($this->_ref_operation->_id) {
