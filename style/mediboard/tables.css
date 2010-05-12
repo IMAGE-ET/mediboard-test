@@ -169,7 +169,7 @@ table.tbl a.action {
 table.tbl th {
   background-color: #bbb;
   padding: 2px;
-  border: solid #ccc 1px;
+  border: outset #ccc 1px;
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
@@ -186,20 +186,21 @@ table.tbl th.title {
 
 table.tbl td,
 div.tree-header {
+  background-color: #fff;
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
-  border: 1px solid #ddd;
+  border: 1px solid #999;
 }
 
-table.tbl tr,
+/*table.tbl tr,
 div.tree-header {
   background-color: #fff;
 }
 
 table.tbl tr:nth-of-type(2n+1) {
   background-color: #f3f3f3;
-}
+}*/
 
 table.tbl tr td.disabled,
 table.tbl tr th.disabled,
@@ -268,7 +269,7 @@ span.big-info {
   padding-left: 55px;
 }
 
-table.tbl tr.selected,
+table.tbl tr.selected td,
 div.selected {
   background-color: #ffc;
 }
@@ -285,10 +286,10 @@ table.layout > tbody > tr > th {
   border: none;
 }
 
-tbody.hoverable:hover tr,
-table.tbl tr:hover,
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
 div.tree-header:hover {
-  background-color: #FFF2DD;
+  background-color: #f8f8f8;
 }
 
 table.tbl td.button {

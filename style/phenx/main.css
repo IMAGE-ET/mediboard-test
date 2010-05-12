@@ -255,7 +255,7 @@ table.tbl td button {
   margin: 0;
 }
 
-table.tbl tr:nth-of-type(2n+1) {
+table.tbl tr:nth-of-type(2n+1) td {
   background-color: #f3f3f3;
 }
 
@@ -273,7 +273,7 @@ table.tbl th.title {
 	border: none
 }
 
-table.tbl tr.selected,
+table.tbl tr.selected td,
 div.selected {
   background-color: #FFE7B6;
 }
@@ -288,8 +288,8 @@ div.draggable {
   cursor: move;
 }
 
-tbody.hoverable:hover tr,
-table.tbl tr:hover,
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
 div.tree-header:hover {
   background-color: #FFF2DD;
 }

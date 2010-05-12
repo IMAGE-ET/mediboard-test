@@ -316,12 +316,8 @@ table.tbl {
 
 table.tbl td, 
 table.tbl th {
-  border-color: #eee;
-}
-
-table.tbl, 
-table.tbl {
-  background-color: #eee;
+  border-color: #ddd;
+	background-color: #eee;
 }
 
 table.tbl th {
@@ -346,15 +342,15 @@ table.tbl th.title {
   color: #fff;
 }
 
-tbody.hoverable:hover tr,
-table.tbl tr:hover,
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
 div.tree-header:hover {
   background-color: #fdd;
 }
 
 div.selected,
-table.tbl tr.selected,
-table.form tr.selected {
+table.tbl tr.selected td,
+table.form tr.selected td {
   background-color: #edb;
 }
 
