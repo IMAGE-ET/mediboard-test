@@ -89,7 +89,8 @@ class CCompteRendu extends CDocumentItem {
     $specs["nom"]              = "str notNull show|0";
     $specs["type"]             = "enum list|header|body|footer default|body";
     $specs["source"]           = "html helped|_list_classes";
-    $specs["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
+    $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
+    //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["height"]           = "float min|0";
@@ -100,7 +101,6 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_height"]      = "float notNull min|1 default|29.7 show|0";
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
-    
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
