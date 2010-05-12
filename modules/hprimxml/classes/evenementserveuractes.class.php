@@ -168,7 +168,10 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "err");
         return $messageAcquittement;    
       }
-            
+
+      // Chargement du patient du séjour
+      $sejour->loadRefPatient();
+      
       // Récupération de la date de l'intervention
       $dateInterv = $this->getDateInterv($data['intervention']);
       
@@ -193,9 +196,13 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $operation->loadRefsActesCCAM();
 			$mbActesCCAM = $operation->_ref_actes_ccam;
 			
-			
-      //$messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi($avertissement ? "avt" : "ok", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
-    }
+			/*mbTrace($actesCCAM, "actesCCAM", true);
+      mbTrace($mbActesCCAM, "mbActesCCAM", true);
+      foreach () {
+      
+      }*/
+      $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("ok", "I201", $actesCCAM, $elPatient, $sejour); 
+   }
     
     $echange_hprim->acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();

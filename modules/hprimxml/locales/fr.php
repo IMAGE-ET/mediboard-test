@@ -275,6 +275,7 @@ $locales['hprimxml-error-I122'] = 'Numéro dossier non connu, IC non fourni. Asso
 $locales['hprimxml-error-I123'] = 'Numéro dossier connu, IC non fourni.';
 $locales['hprimxml-error-I124'] = 'Numéro dossier connu, IC connu.';
 $locales['hprimxml-error-I125'] = 'Numéro dossier non connu, IC connu avec un numéro de dossier. Poubelle Numéro dossier.';
+$locales['hprimxml-error-I201'] = 'Intégration des actes effectuées.';
 $locales['hprimxml-evt-none'] = 'Inconnu';
 $locales['hprimxml-evt-none-desc'] = 'Inconnu';
 $locales['hprimxml-evt_patients-debiteursVenue'] = 'Debiteurs Venue';
