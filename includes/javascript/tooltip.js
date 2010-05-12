@@ -99,7 +99,7 @@ var ObjectTooltip = Class.create({
           setWidth: false, 
           setHeight: false
         })
-        .unoverflow();
+        .unoverflow(20);
   },
   
   load: function() {

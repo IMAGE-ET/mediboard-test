@@ -86,6 +86,7 @@ Class.extend(Autocompleter.Base, {
 
       this.stopIndicator();
       this.update.scrollTop = 0;
+      //this.index = -1;
       this.index = 0;
 
       if(this.entryCount==1 && this.options.autoSelect) {
@@ -175,7 +176,13 @@ Class.extend(Autocompleter.Base, {
       if (-1 != tp && tp < nextTokenPos) nextTokenPos = tp;
     }
     return (this.tokenBounds = [prevTokenPos + 1, nextTokenPos]);
-  }
+  }/*,
+  selectEntry: function() {
+    this.active = false;
+    if(this.index > -1){ 
+      this.updateElement(this.getCurrentEntry());
+    }
+  }*/
 });
 
 Element.addMethods({
@@ -232,26 +239,27 @@ Class.extend(Element.ClassNames, {
 
 // Makes an element to be in the viewport instead of overflow
 Element.addMethods({
-  unoverflow: function(element) {
+  unoverflow: function(element, offset) {
     var dim = element.getDimensions(); // Element dimensions
     var pos = element.cumulativeOffset(); // Element position
     var scroll = document.viewport.getScrollOffsets(); // Viewport offset
     var viewport = document.viewport.getDimensions(); // Viewport size
+    offset = offset || 0;
 
     pos.left -= scroll.left;
     pos.top -= scroll.top;
 
-    pos.right  = pos[2] = pos.left + dim.width;  // Element right position
+    pos.right  = pos[2] = pos.left + dim.width; // Element right position
     pos.bottom = pos[3] = pos.top + dim.height; // Element bottom position
     
     // If the element exceeds the viewport on the right
     if (pos.right > viewport.width) {
-      element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) + 'px';
+      element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) - offset + 'px';
     }
 
     // If the element exceeds the viewport on the bottom
     if (pos.bottom > viewport.height) {
-      element.style.top = parseInt(element.style.top) - (pos.bottom - viewport.height) + 'px';
+      element.style.top = parseInt(element.style.top) - (pos.bottom - viewport.height) - offset + 'px';
     }
     
     return element;
