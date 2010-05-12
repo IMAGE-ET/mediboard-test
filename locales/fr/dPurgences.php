@@ -381,4 +381,7 @@ $locales['pref-defaultRPUSort-_entree'] = 'Arrivée';
 $locales['pref-defaultRPUSort-_patient_id'] = 'Patient';
 $locales['pref-defaultRPUSort-ccmu'] = 'CCMU';
 $locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
+$locales['config-dPurgences-sibling_hours'] = 'Tolérance pour les séjours proches';
+$locales['config-dPurgences-sibling_hours-desc'] = 'Nombre d\'heures de tolérancepour essayer de rapprocher des séjour pour le même patient et le même établisssement';
+
 ?>

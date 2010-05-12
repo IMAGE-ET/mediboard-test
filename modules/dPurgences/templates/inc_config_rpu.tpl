@@ -8,6 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  Main.add(function() {
+    getForm("editConfig-RPU")["dPurgences[sibling_hours]"].addSpinner({min:1, max:24});
+  });
+</script>
+
 <form name="editConfig-RPU" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configure" />
@@ -20,6 +26,7 @@
     {{mb_include module=system template=inc_config_bool var=show_missing_rpu}}
     {{mb_include module=system template=inc_config_bool var=gerer_reconvoc}}
 	  {{mb_include module=system template=inc_config_bool var=gerer_hospi}}
+	  {{mb_include module=system template=inc_config_str var=sibling_hours size="2" suffix="h"}}
 
     <tr>
       <td class="button" colspan="2">

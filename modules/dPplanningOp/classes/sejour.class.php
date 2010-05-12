@@ -379,7 +379,6 @@ class CSejour extends CCodable {
    * @return array|CSejour
    */
 	function getSiblings($tolerance = 1) {
-		
 		$sejour = new CSejour;
 		$sejour->patient_id = $this->patient_id;
 		$sejour->group_id   = $this->group_id;
@@ -391,9 +390,8 @@ class CSejour extends CCodable {
         unset($siblings[$_sibling->_id]);
 				continue;
       }
-
-	    $entree_relative = abs(mbHoursRelative($this->_entree, $_sibling->_entree));
-      $sortie_relative = abs(mbHoursRelative($this->_sortie, $_sibling->_sortie));
+	    $entree_relative = abs(mbHoursRelative($this->entree, $_sibling->entree));
+      $sortie_relative = abs(mbHoursRelative($this->sortie, $_sibling->sortie));
 	    if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
 	      unset($siblings[$_sibling->_id]);
 	    }

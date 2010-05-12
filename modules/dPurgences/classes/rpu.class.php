@@ -192,7 +192,7 @@ class CRPU extends CMbObject {
     	$this->_mode_sortie = 9;
     }
     
-    $this->_sortie = $sejour->sortie_reelle;
+    $this->_sortie = $sejour->sortie;
     $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
 		$this->_service_entree_mutation_id = $sejour->service_entree_mutation_id;
@@ -308,30 +308,27 @@ class CRPU extends CMbObject {
   }
   
   function store() {
-  	// Recherche si un séjour n'éxiste pas déjà
     if (!$this->_id) {
-    	$where = array();
-			$where['type']   = " = 'urg'";
-      $where['patient_id']   = " = '$this->_patient_id'";
-			$sortie = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
-      $where[] = "(sejour.entree <= '$this->_entree') AND (sejour.sortie >= '$this->_entree') ";
-			
-    	$sejour = new CSejour();
-      $sejour->loadObject($where);
+      $sejour = new CSejour();
+      $sejour->patient_id = $this->_patient_id;
+      $sejour->type = "urg";
+      $sejour->entree = $this->_entree;
+      $sejour->sortie = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
+      // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
+      $siblings = $sejour->getSiblings(CAppUI::conf("dPurgences sibling_hours"));
+      if (count($siblings)) {
+        $sibling = reset($siblings);
+        $this->sejour_id = $sibling->_id;
+        $this->loadRefSejour();
+        $this->_ref_sejour->loadRefRPU();
+        // Si y'a un RPU déjà existant on alerte d'une erreur 
+        if ($this->_ref_sejour->_ref_rpu->_id) {
+          return CAppUI::tr("CRPU-already-exists");
+        }
+        $this->_bind_sejour = false;
+      }
+    }
 
-			if ($sejour->_id) {
-				$this->sejour_id = $sejour->_id;
-				$this->loadRefSejour();
-				$this->_ref_sejour->loadRefRPU();
-				$rpu = $this->_ref_sejour->_ref_rpu;
-				// Si y'a un RPU déjà existant on alerte d'une erreur 
-				if ($rpu->_id) {
-					return CAppUI::tr("CRPU-already-exists");
-				}
-				$this->_bind_sejour = false;
-			}
-    }   
-		
 		// Changement suivant le mode d'entrée
 		switch ($this->mode_entree) {
 			case 6:
