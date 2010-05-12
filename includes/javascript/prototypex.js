@@ -253,12 +253,12 @@ Element.addMethods({
     pos.bottom = pos[3] = pos.top + dim.height; // Element bottom position
     
     // If the element exceeds the viewport on the right
-    if (pos.right > viewport.width) {
+    if (pos.right > (viewport.width - offset)) {
       element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) - offset + 'px';
     }
 
     // If the element exceeds the viewport on the bottom
-    if (pos.bottom > viewport.height) {
+    if (pos.bottom > (viewport.height - offset)) {
       element.style.top = parseInt(element.style.top) - (pos.bottom - viewport.height) - offset + 'px';
     }
     
