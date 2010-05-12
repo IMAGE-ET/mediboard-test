@@ -12,7 +12,7 @@
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_configure" />
   <table class="form"> 
-		{{mb_include module=system template=inc_config_enum var=systeme_facturation values=siemens|t2a}}
+		{{mb_include module=system template=inc_config_enum var=systeme_facturation values=siemens|}}
 		
 		{{mb_include module=system template=inc_config_bool var=server}}
 		

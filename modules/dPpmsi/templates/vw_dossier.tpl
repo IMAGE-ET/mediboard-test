@@ -61,7 +61,7 @@ function exporterHPRIM(object_id, typeObject, oOptions) {
   oRequestOptions = {
     waitingText: oDefaultOptions.onlySentFiles ? 
   	  "Chargement des fichers envoyés" : 
-  	  "Export H'XML vers Sa@nté.com"
+  	  "Export H'XML"
   }
   
   url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
@@ -191,17 +191,17 @@ Main.add(function () {
       </form>
       {{if $patient->_id}}
       <div id="vwPatient">
-      {{include file="../../dPpatients/templates/inc_vw_patient.tpl"}}
+        {{mb_include module=dPpatients template=inc_vw_patient}}
       </div>
       {{/if}}
     </td>
     {{if $patient->_id}}
     <td>
       <table class="form">
-      {{if $patient->_ref_IPP}}
+        {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens") && $patient->_ref_IPP}}
         <tr>
           <td colspan="4" id="IPP">
-            {{include file="inc_ipp_form.tpl"}}
+            {{mb_include module=dPpmsi template=inc_ipp_form}}
           </td>
         </tr>
         {{/if}}
@@ -217,11 +217,13 @@ Main.add(function () {
           </td>
         </tr>
         <tbody class="effectSejour" id="sejour{{$_sejour->sejour_id}}">
+        {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens")}}
         <tr>
           <td colspan="4" id="Numdos{{$_sejour->sejour_id}}" class="text">
-            {{include file="inc_numdos_form.tpl"}}
+            {{mb_include module=dPpmsi template=inc_numdos_form}}
           </td>
         </tr>
+        {{/if}}
         <tr>
           <th class="category" colspan="4">
             <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
@@ -237,12 +239,12 @@ Main.add(function () {
           <td class="text halfPane" colspan="2">
             <div id="cim-{{$_sejour->_id}}">
             {{assign var="sejour" value=$_sejour}}
-            {{include file="inc_diagnostic.tpl"}}
+            {{mb_include module=dPpmsi template=inc_diagnostic}}
             </div>
           </td>
           <td class="text halfPane" colspan="2">
             <div id="GHM-{{$_sejour->_id}}">
-            {{include file="inc_vw_GHM.tpl"}}
+              {{mb_include module=dPpmsi template=inc_vw_GHM}}
             </div>
           </td>
         </tr>
@@ -257,7 +259,7 @@ Main.add(function () {
         <tr>
           <td class="text" colspan="2">
             <div id="cim-list-{{$_sejour->_id}}">
-              {{include file="inc_list_diags.tpl"}}
+              {{mb_include module=dPpmsi template=inc_list_diags}}
 		        </div>
           </td>
           <td class="text" colspan="2" {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}rowspan="3"{{/if}}>
@@ -430,6 +432,7 @@ Main.add(function () {
             {{include file="inc_confirm_actes_ccam.tpl"}}
           </td>
         </tr>
+        {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens")}}
         <tr>
           <td colspan="4">
             <form name="editOpFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -437,14 +440,12 @@ Main.add(function () {
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
- 
             <table class="form">
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Intervention
                 </th>
               </tr>
-
               <tr>
                 <th><label for="_cmca_uf_preselection" title="Choisir une pré-selection pour remplir les unités fonctionnelles">Pré-sélection</label></th>
                 <td>
@@ -466,7 +467,6 @@ Main.add(function () {
                   </select>
                 </td>
               </tr>
-
               <tr>
                 <th>
                   <label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct.</label>
@@ -475,7 +475,6 @@ Main.add(function () {
                   <input type="text" class="notNull {{$curr_op->_props.code_uf}}" name="code_uf" value="{{$curr_op->code_uf}}" size="10" maxlength="10" />
                 </td>
               </tr>
-
               <tr>
                 <th>
                   <label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct.</label>
@@ -484,20 +483,17 @@ Main.add(function () {
                   <input type="text" class="notNull {{$curr_op->_props.libelle_uf}}" name="libelle_uf" value="{{$curr_op->libelle_uf}}" size="20" maxlength="35" onchange="submitOpForm({{$curr_op->_id}})" />
                 </td>
               </tr>
-
               <tr>
                 <td colspan="2" id="updateOp{{$curr_op->operation_id}}" />
               </tr>
-
             </table>
-
             </form>
           </td>
         </tr>
-
+        {{/if}}
         <tr>
           <td colspan="2">
-            <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Export S@nté.com</button>
+            <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Export des actes</button>
           </td>
           <td colspan="2" class="text">
             {{if $curr_op->_nb_echange_hprim}}
