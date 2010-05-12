@@ -201,7 +201,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       foreach () {
       
       }*/
-      $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("ok", "I201", $actesCCAM, $elPatient, $sejour); 
+      $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("ok", "I201", $actesCCAM, $elPatient); 
    }
     
     $echange_hprim->acquittement = $messageAcquittement;
