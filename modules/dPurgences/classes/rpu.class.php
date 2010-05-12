@@ -192,7 +192,7 @@ class CRPU extends CMbObject {
     	$this->_mode_sortie = 9;
     }
     
-    $this->_sortie = $sejour->sortie;
+    $this->_sortie = $sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $sejour->etablissement_transfert_id;
 		$this->_etablissement_entree_transfert_id = $sejour->etablissement_entree_transfert_id;
 		$this->_service_entree_mutation_id = $sejour->service_entree_mutation_id;
@@ -313,7 +313,11 @@ class CRPU extends CMbObject {
       $sejour->patient_id = $this->_patient_id;
       $sejour->type = "urg";
       $sejour->entree = $this->_entree;
-      $sejour->sortie = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
+      $sejour->sortie = $this->_sortie ? 
+                          $this->_sortie : 
+                          (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? 
+                            mbDateTime("+1 DAY", $this->_entree) : 
+                            mbDate(null, $this->_entree)." 23:59:59";
       // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
       $siblings = $sejour->getSiblings(CAppUI::conf("dPurgences sibling_hours"));
       if (count($siblings)) {
