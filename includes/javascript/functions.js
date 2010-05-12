@@ -54,7 +54,6 @@ var WaitingMessage = {
     text.setStyle({
       top: (vpd.height - etd.height)/2 + "px",
       left: (vpd.width - etd.width)/2 + "px",
-      zIndex: 101,
       opacity: 0.8
     }).show();
     
@@ -64,7 +63,6 @@ var WaitingMessage = {
       left: 0,
       height: doc.clientHeight + "px",
       width: doc.clientWidth + "px",
-      zIndex: 100,
       opacity: 0.3,
       position: "fixed"
     }).show();
@@ -88,8 +86,7 @@ var WaitingMessage = {
       opacity: 0.4,
       position: 'absolute',
       top: -parseInt(receiver.getStyle("padding-top"))+"px",
-      left: -parseInt(receiver.getStyle("padding-left"))+"px",
-      zIndex: 500
+      left: -parseInt(receiver.getStyle("padding-left"))+"px"
     }).clonePosition(element, {setLeft: false, setTop: false});
     
     coverContainer.show();

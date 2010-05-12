@@ -58,6 +58,7 @@ div.loading {
   border: none;
   min-height: 16px;
   min-width: 16px;
+  z-index: 800;
 }
 
 div.small-success ,

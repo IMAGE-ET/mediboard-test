@@ -35,10 +35,7 @@ table.form th.category.cancelled {
 	text-align: center;
 }
 
-
-
 /* Title block */
-
 table.titleblock td {
   white-space: nowrap;
 }
@@ -52,7 +49,6 @@ table.titleblock td.titlecell {
 }
 
 /* Tab view table */
-
 table.tabview {
   border-spacing: 0px;
   border-collapse: collapse; /* Hack for IE */
@@ -143,7 +139,6 @@ th.title {
 }
 
 /* Standard table */
-
 table.tbl {
   width: 100%;
   border: 1px solid #eee;
@@ -174,7 +169,7 @@ table.tbl a.action {
 table.tbl th {
   background-color: #bbb;
   padding: 2px;
-  border: outset #ccc 1px;
+  border: solid #ccc 1px;
   font-weight: normal;
   text-align: center;
   vertical-align: middle;
@@ -191,21 +186,20 @@ table.tbl th.title {
 
 table.tbl td,
 div.tree-header {
-  background-color: #fff;
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
-  border: 1px solid #999;
+  border: 1px solid #ddd;
 }
 
-/*table.tbl tr:nth-of-type(2n+1) td {
-  background-color: #eee;
-}*/
+table.tbl tr,
+div.tree-header {
+  background-color: #fff;
+}
 
-/*table.tbl tr td {
-  background-image: url(images/pictures/bg-gradient.png);
-  background-position: center top;
-}*/
+table.tbl tr:nth-of-type(2n+1) {
+  background-color: #f3f3f3;
+}
 
 table.tbl tr td.disabled,
 table.tbl tr th.disabled,
@@ -274,7 +268,7 @@ span.big-info {
   padding-left: 55px;
 }
 
-table.tbl tr.selected td,
+table.tbl tr.selected,
 div.selected {
   background-color: #ffc;
 }
@@ -291,10 +285,10 @@ table.layout > tbody > tr > th {
   border: none;
 }
 
-tbody.hoverable:hover tr td,
-table.tbl tr:hover td,
+tbody.hoverable:hover tr,
+table.tbl tr:hover,
 div.tree-header:hover {
-  background-color: #f8f8f8;
+  background-color: #FFF2DD;
 }
 
 table.tbl td.button {

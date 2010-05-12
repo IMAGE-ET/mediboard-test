@@ -700,7 +700,7 @@ td.show {
   margin: 0;
   font-size: 0.8em;
   text-align: left;
-  z-index: 999;
+  z-index: 200;
 }
 
 .datepickerControl div.dropdown a {
@@ -724,14 +724,14 @@ td.show {
   width: 100%;
   position: absolute;
   background-color:#000;
-  z-index: 1000;
+  z-index: 899;
 }
 
 #waitingMsgText {
   width: 20%;
   min-width: 150px;
   position: fixed;
-  z-index: 101;
+  z-index: 900;
   font-size: 1.2em;
   background-color:#fff;
   color:#000;

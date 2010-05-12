@@ -9,6 +9,24 @@
 @import url(ui.css);
 @import url(dev.css);
 
+/** 
+z-index ordering (foreground to background) :
+ 1000 div#console
+  900 #waitingMsgText
+  899 #waitingMsgMask
+  800 .ajax-loading
+  500 div.tooltip
+  400 div.autocomplete
+  200 .datepickerControl div.dropdown
+  200 .select-tree
+  100 .planning .event:hover
+  100 .planning .selected, .planning .selected:hover
+  100 .dent-menu
+  100 .bargraph .threshold
+   20 .ajax-upload input[type="file"]
+   10 .ajax-upload .fakefile
+**/
+
 div.cancelled {
   color: #fff;
   background-color: #f00;
@@ -488,7 +506,7 @@ table#weeklyPlanning th.today {
 .planning .event:hover {
   margin: -1px;
   border: 1px solid #666;
-  z-index: 10;
+  z-index: 100;
 }
 
 .planning .event .time-preview {
@@ -518,7 +536,7 @@ table#weeklyPlanning th.today {
 .planning .selected, .planning .selected:hover {
   margin: -2px;
   border: 2px dotted #000;
-  z-index: 10;
+  z-index: 100;
 	opacity: 0.7;
 }
 .planning .event .body {
@@ -878,7 +896,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   height: 25%;
   opacity: .3;
   margin-top: 0;
-  z-index: 0;
+  z-index: 100;
 }
 
 .bargraph .value div, .bargraph .threshold div {
@@ -955,7 +973,7 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 
 .dent-menu {
   position: absolute;
-  z-index: 8;
+  z-index: 100;
   border: 1px solid #999;
   background: #fff;
 }
@@ -1045,6 +1063,7 @@ ul.select-tree {
   color: #000;
   font-weight: normal;
   font-size: 1.0em;
+  z-index: 200;
 }
 
 ul.select-tree ul {

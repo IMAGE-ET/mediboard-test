@@ -146,7 +146,8 @@ caption {
   border: none;
 }
 
-th.title.modify,th.category.modify {
+th.title.modify,
+th.category.modify {
   color: #f00;
 }
 
@@ -160,10 +161,6 @@ th.title.modify,th.category.modify {
 
 table.main {
   border-spacing: 0;
-}
-
-table.tbl td.text {
-  white-space: normal;
 }
 
 table.titleblock td.titlecell {
@@ -258,7 +255,7 @@ table.tbl td button {
   margin: 0;
 }
 
-table.tbl tr:nth-of-type(2n+1) td {
+table.tbl tr:nth-of-type(2n+1) {
   background-color: #f3f3f3;
 }
 
@@ -276,7 +273,7 @@ table.tbl th.title {
 	border: none
 }
 
-table.tbl tr.selected td,
+table.tbl tr.selected,
 div.selected {
   background-color: #FFE7B6;
 }
@@ -291,8 +288,8 @@ div.draggable {
   cursor: move;
 }
 
-tbody.hoverable:hover tr td,
-table.tbl tr:hover td,
+tbody.hoverable:hover tr,
+table.tbl tr:hover,
 div.tree-header:hover {
   background-color: #FFF2DD;
 }

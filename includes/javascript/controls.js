@@ -605,7 +605,7 @@ Element.addMethods('select', {
     
     var reposition = function () {
       updateCoordinates();
-      var style = {zIndex: 40, position: 'absolute', left: pos.left, top: pos.top};
+      var style = {zIndex: 200, position: 'absolute', left: pos.left, top: pos.top};
       tree.setStyle(style);
       list.setStyle(style);
     };
