@@ -1,4 +1,7 @@
-{{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{if @$modules.dPImeds->mod_active}}
+  {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{/if}}
+
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
