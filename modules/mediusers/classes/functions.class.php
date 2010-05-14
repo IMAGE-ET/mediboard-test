@@ -36,6 +36,9 @@ class CFunctions extends CMbObject {
   var $_ref_group = null;
   var $_ref_users = null;
 	
+  // Filter fields
+  var $_skipped = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'functions_mediboard';
