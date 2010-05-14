@@ -313,7 +313,7 @@ Main.add(function(){
       </select>
     {{/if}}
     </td>
-  <tr>
+  </tr>
   <tr>
     <th>
       {{mb_label object=$selOp field="rques_visite_anesth"}}
@@ -333,8 +333,8 @@ Main.add(function(){
         {{mb_field object=$selOp field="rques_visite_anesth"}}
       {{/if}}
     </td>
-  <tr>
   </tr>
+  <tr>
     <th>{{mb_label object=$selOp field="autorisation_anesth"}}</th>
     <td>
       {{if $selOp->date_visite_anesth}}

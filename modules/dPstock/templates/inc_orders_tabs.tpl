@@ -10,7 +10,7 @@ Main.add(function(){
 
 <ul class="control_tabs" id="orders-tabs">
 {{foreach from=$list_orders item=_order}}
-  <li>
+  <li onmousedown="$V(getForm('filter-references').societe_id, {{$_order->societe_id}})">
     <a href="#order-{{$_order->_id}}" {{if $_order->_count.order_items == 0}}class="empty"{{/if}}>
       {{$_order->_ref_societe}} <br />
       <small>{{$_order->order_number}}</small> 

@@ -22,22 +22,12 @@
             </table>
           </td>
           <td class="welcome">
-            <form name="ChangeGroup" action="" method="get">
-              <input type="hidden" name="m" value="{{$m}}" />
-              <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
-              {{$app->user_first_name}} {{$app->user_last_name}}
-              </span>
-              <br />
-					    {{mb_include module=mediboard template=svnstatus}}    
-              -
-              <select name="g" onchange="this.form.submit();">
-                {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-                <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-                  {{$currEtablissement->_view}}
-                </option>
-                {{/foreach}}
-              </select>
-            </form>
+            <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+            {{$app->user_first_name}} {{$app->user_last_name}}
+            </span>
+            {{mb_include module=mediboard template=svnstatus}}
+            <br />
+            {{mb_include module=mediboard template=change_group}}
           </td>
         </tr>
       </table>

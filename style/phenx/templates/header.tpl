@@ -23,23 +23,7 @@
           <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}"><img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" /></a>
         </div>
         
-        {{if $Etablissements|@count > 1}}
-        <form name="group" action="" method="get">
-          <input type="hidden" name="m" value="{{$m}}" />
-          <select name="g" onchange="this.form.submit();">
-            {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-            <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-              {{$currEtablissement->_view}}
-            </option>
-            {{/foreach}}
-          </select>
-        </form>
-        {{else}}
-          {{foreach from=$Etablissements item=currEtablissement}}
-            {{$currEtablissement->_view}}
-          {{/foreach}}
-        {{/if}}
-        
+        {{mb_include module=mediboard template=change_group}}
       </div>
       
       <ul id="nav">

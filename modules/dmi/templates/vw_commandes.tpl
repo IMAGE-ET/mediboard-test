@@ -1,23 +1,24 @@
 <form name="filterCommandes" action="?" method="get" onsubmit="return checkForm(this)">
-<input type="hidden" name="m" value="dmi" />
-<input type="hidden" name="tab" value="vw_commandes" />
-
-<table class="form">
-  <tr>
-    <th>Date</th>
-    <td>{{mb_field object=$DMI field="date" prop="date" register=true form="filterCommandes" onchange="this.form.submit()"}}</td>
-  </tr>
-</table>
-
+  <input type="hidden" name="m" value="dmi" />
+  <input type="hidden" name="tab" value="vw_commandes" />
+  
+  <table class="form">
+    <tr>
+      <th>Date</th>
+      <td>{{mb_field object=$DMI field="date" prop="date" register=true form="filterCommandes" onchange="this.form.submit()"}}</td>
+    </tr>
+  </table>
 </form>
 
 <table class="tbl">
   <tr>
     <th>Stock</th>
-    <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
-    <th>Praticien</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     <th>Patient</th>
@@ -38,6 +39,8 @@
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
       </td>
       <td>{{mb_value object=$_line_dmi field=date}}</td>
+      <td>{{mb_value object=$_line_dmi field=type}}</td>
+      <td>{{mb_value object=$_line_dmi field=septic}}</td>
       <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}</td>
       <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=lapsing_date}}</td>
       <td>

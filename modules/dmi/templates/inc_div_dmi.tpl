@@ -51,9 +51,10 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
-      $V(formDmiDelivery._view, element.down("small").innerHTML.stripTags());
+      $V(formDmiDelivery._view, element.down("small").innerHTML.stripTags().strip());
       search_product_order_item_reception(formDmiDelivery);
     },
+    dropdown: true,
     callback: function(input, queryString){
       return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
@@ -66,7 +67,7 @@ reloadListDMI = function(){
   Prescription.reload('{{$prescription->_id}}', null, "dmi");
 }
 
-addDMI = function(product_id, order_item_reception_id, septic){
+addDMI = function(product_id, order_item_reception_id, septic, type){
   var oFormAddDMI = getForm("add_dmi");
   
   // si la liste des praticien est affichée, on utilise le praticien selectionné
@@ -76,6 +77,7 @@ addDMI = function(product_id, order_item_reception_id, septic){
   oFormAddDMI.product_id.value = product_id;
   oFormAddDMI.order_item_reception_id.value = order_item_reception_id;
   oFormAddDMI.septic.value = septic;
+  oFormAddDMI.elements.type.value = type;
   return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 
@@ -99,6 +101,7 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}">
   <input type="hidden" name="date" value="now">
   <input type="hidden" name="septic" value="">
+  <input type="hidden" name="type" value="">
 </form>
 
 <table class="main" style="table-layout: fixed;">
@@ -161,9 +164,10 @@ delLineDMI = function(line_dmi_id){
 <table class="tbl">
   <!-- Affichage des lignes de DMI-->
   <tr>
-    <th>Produit</th>
-    <th>Déstérilisé</th>
-    <th>Date de pose</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>Code produit</th>
     <th>Code lot</th>
     <th style="width: 1%">Praticien</th>
@@ -176,21 +180,14 @@ delLineDMI = function(line_dmi_id){
           {{$_line_dmi->_ref_product}}
         </span>
       </td>
+      <td>{{mb_value object=$_line_dmi field=type}}</td>
       <td {{if $_line_dmi->septic}}class="cancelled"{{/if}}>
-        {{mb_value object=$_line_dmi field="septic"}}
+        {{mb_value object=$_line_dmi field=septic}}
       </td>
-      <td>
-        {{mb_value object=$_line_dmi field="date"}}
-      </td>
-      <td>
-        {{$_line_dmi->_ref_product->code}}
-      </td>
-      <td>
-        {{$_line_dmi->_ref_product_order_item_reception->code}}
-      </td>
-      <td>
-        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
-      </td>
+      <td>{{mb_value object=$_line_dmi field=date}}</td>
+      <td>{{mb_value object=$_line_dmi->_ref_product field=code}}</td>
+      <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}</td>
+      <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}</td>
     </tr>
   {{/foreach}}
 </table>

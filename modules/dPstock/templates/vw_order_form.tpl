@@ -44,10 +44,12 @@ table.grid th {
 }
 </style>
 
+{{assign var=label value=$order->object_id|ternary:"Bon de commande / facturation":"Bon de commande"}}
+
 <div class="header">
   <h1>
     <a href="#" onclick="window.print();">
-      Bon de commande - {{$order->_ref_group}}
+      {{$label}} - {{$order->_ref_group}}
     </a>
   </h1>
 </div>
@@ -57,7 +59,7 @@ table.grid th {
     {{$smarty.now|date_format:$dPconfig.datetime}}
   </span>
   
-  Bon de commande n°{{$order->order_number}}
+  {{$label}} n°{{$order->order_number}}
 </div>
 
 <table class="form" style="margin-top: 5em;">
@@ -74,10 +76,15 @@ table.grid th {
   </tr>
   
   <tr>
-    <th>{{mb_label object=$order field=comments}}</th>
-    <td>{{mb_value object=$order field=comments}}</td>
+    <th rowspan="2">{{mb_label object=$order field=comments}}</th>
+    <td rowspan="2">{{mb_value object=$order field=comments}}</td>
     <th>{{mb_label object=$order field=_customer_code}}</th>
     <td>{{mb_value object=$order field=_customer_code}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{if $order->object_id}}{{mb_label object=$order field=object_id}}{{/if}}</th>
+    <td>{{$order->_ref_object}}</td>
   </tr>
   
   <tr>

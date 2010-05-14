@@ -59,7 +59,7 @@ Main.add(function () {
 
 </script>
 
-<form name="editElement-{{$element->_class_name}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+<form name="editElement-{{$element->_class_name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -123,6 +123,10 @@ Main.add(function () {
       <th>{{mb_label object=$element field=code_lpp}}</th>
       <td>{{mb_field object=$element field=code_lpp}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$element field=type}}</th>
+      <td>{{mb_field object=$element field=type}}</td>
+    </tr>
     {{/if}}
   	<tr>
   		<th>{{mb_label object=$element field=description}}</th>
@@ -134,7 +138,7 @@ Main.add(function () {
   		  {{if !$element->_id}}
   		    {{if $element->_class_name == "CDM"}}
   		      {{mb_field object=$element field=code readonly="readonly"}}
-  		      <button type="button"  class="tick" onclick="generateCode();">Générer</button>
+  		      <button type="button" class="tick" onclick="generateCode();">Générer</button>
   		    {{else}}
   		      {{mb_field object=$element field=code}}
   		    {{/if}}
@@ -163,10 +167,16 @@ Main.add(function () {
   	<tr>
 		  <td colspan="2" class="button">
 		  	{{if $element->_id}}
-		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; onSubmitFormAjax(this.form, { onComplete: function() { refreshElement('0') } } )">{{tr}}Delete{{/tr}}</button>
-			    <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ viewListElement('{{$category_class}}','{{$element->_id}}') } } );">{{tr}}Save{{/tr}}</button>
+          <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$category_class}}','{{$element->_id}}') } );">
+            {{tr}}Save{{/tr}}
+          </button>
+		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement.curry('0') } )">
+		  	    {{tr}}Delete{{/tr}}
+          </button>
 			  {{else}}
-				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">{{tr}}Save{{/tr}}</button>
+				  <button type="submit" class="submit">
+				    {{tr}}Save{{/tr}}
+          </button>
 			  {{/if}}
 		  </td>
 		</tr>

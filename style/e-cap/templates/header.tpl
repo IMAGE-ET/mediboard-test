@@ -38,17 +38,7 @@ var Menu = {
   <img src="images/pictures/logo.png" width="140" />
   
   {{if !$offline}}
-  <!-- Changement d'établissement courant -->
-  <form name="ChangeGroup" action="?" method="get">
-    <input type="hidden" name="m" value="{{$m}}" />
-    <select name="g" style="width: 140px;" onchange="this.form.submit();">
-      {{foreach from=$Etablissements item=currEtablissement}}
-      <option value="{{$currEtablissement->_id}}" {{if $currEtablissement->_id == $g}}selected="selected"{{/if}}>
-        {{$currEtablissement->_view}}
-      </option>
-      {{/foreach}}
-    </select>
-  </form>
+  {{mb_include module=mediboard template=change_group style="width:140px;"}}
   
   <!-- Welcome -->
   <div>
@@ -138,24 +128,13 @@ var Menu = {
           </td>
           <td class="welcome">
             {{if !$offline}}
-				    {{mb_include module=mediboard template=svnstatus}}    
-            <form name="ChangeGroup" action="" method="get">
-
-            <input type="hidden" name="m" value="{{$m}}" />
-            <select name="g" onchange="this.form.submit();">
-              {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-              <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-                {{$currEtablissement->_view}}
-              </option>
-              {{/foreach}}
-            </select>
-            </form>
+  				    {{mb_include module=mediboard template=svnstatus}}
+              {{mb_include module=mediboard template=change_group}}
             {{/if}}
             <br />
             <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
             {{$app->user_first_name}} {{$app->user_last_name}}
             </span>
-
           </td>
         </tr>
       </table>

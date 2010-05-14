@@ -12,7 +12,7 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
 
-  <table class="form">
+  <table class="form" style="table-layout: fixed;">
     {{assign var="class" value="CProductOrder"}}
     {{mb_include module=system template=inc_config_str var=order_number_format cssClass="code product_order"}}
     {{mb_include module=system template=inc_config_bool var=order_number_contextual}}
@@ -41,12 +41,13 @@
     {{mb_include module=system template=inc_config_pagination_size class=CProductStockService}}
     
     <tr>
-      <td class="button" colspan="100">
+      <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
   </table>
 </form>
+
 <div class="big-info">
 Les caractères suivants sont utilisés pour spécifier le format du numéro de commande :
 <ul>

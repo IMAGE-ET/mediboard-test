@@ -1496,8 +1496,12 @@ class CSetupdPprescription extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `prescription_line_dmi` ADD INDEX (`operation_id`);";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.02");
+    $sql = "ALTER TABLE `prescription_line_dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
+    $this->addQuery($sql);
 
-		$this->mod_version = "1.02";
+    $this->mod_version = "1.03";
   }
 }
 

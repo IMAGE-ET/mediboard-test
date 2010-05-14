@@ -69,10 +69,14 @@ else {
     CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] renouvelable déjà consommé.",UI_MSG_ERROR);
   */
   
+  $dmi = new CDMI();
+  $dmi->code = $product_code;
+  $dmi->loadMatchingObject();
+  $product->_dmi_type = $dmi->type;
+    
   $smarty = new CSmartyDP();
-  $smarty->assign('product',$product);
+  $smarty->assign('product', $product);
   $smarty->assign('product_order_item_reception', $product_order_item_reception);
-  $smarty->assign('quantite_delivrable',$product_order_item_reception->quantity);
   //$smarty->assign('quantite_delivree',count($list_delivery));
   $smarty->display('inc_search_product.tpl');
 }

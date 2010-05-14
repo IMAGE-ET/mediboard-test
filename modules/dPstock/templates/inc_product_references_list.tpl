@@ -8,7 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  *}}
 
-<table class="tbl" id="tab-references" style="display: none;">
+<div id="tab-references" style="display: none;">
+
+<button class="new" type="button" onclick="location.href='?m=dPstock&amp;tab=vw_idx_reference&amp;product_id={{$product->_id}}'">
+  {{tr}}CProductReference-title-create{{/tr}}
+</button>
+
+<table class="tbl">
   <tr>
     <th style="width: 0.1%;">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_title class=CProductReference field=societe_id}}</th>
@@ -65,4 +71,5 @@
     <td colspan="10">{{tr}}CProductReference.none{{/tr}}</td>
   </tr>
   {{/foreach}}
- </table>
+</table>
+</div>

@@ -64,20 +64,13 @@ var Menu = {
     <td id="user">
       <button id="toggleIcons" class="vslip notext" onclick="Menu.toggle()" type="button" title="{{tr}}menu-toggleIcons{{/tr}}">{{tr}}menu-toggleIcons{{/tr}}</button>
       <script type="text/javascript">Menu.init();</script>
-      <form name="ChangeGroup" action="" method="get">
-        <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
-          {{$app->user_first_name}} {{$app->user_last_name}}
-        </span>
-        <input type="hidden" name="m" value="{{$m}}" />
-        <select name="g" onchange="this.form.submit();">
-          {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-          <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-            {{$currEtablissement->_view}}
-          </option>
-          {{/foreach}}
-        </select>
-		    {{mb_include module=mediboard template=svnstatus}}    
-      </form>
+      <span title="{{tr}}Last connection{{/tr}} : {{$app->user_last_login|date_format:$dPconfig.datetime}}">
+        {{$app->user_first_name}} {{$app->user_last_name}}
+      </span>
+      - 
+      {{mb_include module=mediboard template=change_group}}
+      {{mb_include module=mediboard template=svnstatus}} 
+      
       <div class="menu">
         <a title="{{tr}}portal-help{{/tr}}" href="{{$portal.help}}" target="_blank">
           <img src="style/{{$uistyle}}/images/icons/help.png" alt="{{tr}}portal-help{{/tr}}" />

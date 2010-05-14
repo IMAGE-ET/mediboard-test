@@ -67,18 +67,8 @@
       {{/if}}
     </td>
     <td class="end">
-	    {{mb_include module=mediboard template=svnstatus}}    
-
-      <form name="ChangeGroup" action="" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <select name="g" onchange="this.form.submit();">
-          {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
-          <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>
-          {{$currEtablissement->_view}}
-          </option>
-          {{/foreach}}
-        </select>
-      </form>
+      {{mb_include module=mediboard template=svnstatus}}
+      {{mb_include module=mediboard template=change_group}}
     </td>
   </tr>
 </table>

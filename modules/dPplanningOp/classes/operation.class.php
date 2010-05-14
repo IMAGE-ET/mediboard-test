@@ -228,20 +228,22 @@ class COperation extends CCodable {
     return ($code_activite == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
-	  $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
-	  $backProps["naissances"]               = "CNaissance operation_id";
-	  $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
-	  $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
-		$backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
-	  $backProps["perfusion"]                = "CPerfusion operation_id";
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["blood_salvages"]           = "CBloodSalvage operation_id";
+    $backProps["dossiers_anesthesie"]      = "CConsultAnesth operation_id";
+    $backProps["naissances"]               = "CNaissance operation_id";
+    $backProps["prescription_elements"]    = "CPrescriptionLineElement operation_id";
+    $backProps["prescription_medicaments"] = "CPrescriptionLineMedicament operation_id";
+  	$backProps["prescription_comments"]    = "CPrescriptionLineComment operation_id";
+    $backProps["prescription_dmis"]        = "CPrescriptionLineDMI operation_id";
+    $backProps["perfusion"]                = "CPerfusion operation_id";
     $backProps["check_lists"]              = "CDailyCheckList object_id";
-		$backProps["anesth_perops"]            = "CAnesthPerop operation_id";
-		$backProps["echanges_hprim"]           = "CEchangeHprim object_id";
-	  return $backProps;
-	}
+    $backProps["anesth_perops"]            = "CAnesthPerop operation_id";
+    $backProps["echanges_hprim"]           = "CEchangeHprim object_id";
+    $backProps["product_orders"]           = "CProductOrder object_id";
+    return $backProps;
+  }
 
   function getTemplateClasses(){
     $this->loadRefsFwd();

@@ -102,7 +102,11 @@ class CSetupdmi extends CSetup {
               ADD INDEX (`code`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.07";
+    $this->makeRevision("0.07");
+    $sql = "ALTER TABLE `dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.08";
   }
 }
 ?>

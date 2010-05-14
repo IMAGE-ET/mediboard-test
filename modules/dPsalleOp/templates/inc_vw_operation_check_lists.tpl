@@ -15,8 +15,9 @@
   
   <tr>
     <th colspan="10" class="title">
-       <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
-      Check list Sécurité du patient au bloc opératoire
+      <button class="down" onclick="$('check-lists').toggle(); $(this).toggleClassName('down').toggleClassName('up')">
+        Check list Sécurité du patient au bloc opératoire
+      </button>
     </th>
   </tr>
   

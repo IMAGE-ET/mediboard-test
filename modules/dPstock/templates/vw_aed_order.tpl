@@ -67,7 +67,6 @@ function createOrders(order_id) {
     <td class="halfPane">
       <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
         <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="societe_id" value="{{$societe_id}}" />
         <input type="hidden" name="mode" value="order" />
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />

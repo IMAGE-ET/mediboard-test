@@ -17,6 +17,7 @@ class CDMI extends CProduitPrescriptible {
   // DB Fields
   var $category_id = null;
   var $code_lpp    = null;
+  var $type        = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,6 +30,7 @@ class CDMI extends CProduitPrescriptible {
   	$specs = parent::getProps();
     $specs["category_id"] = "ref notNull class|CDMICategory";
     $specs["code_lpp"]    = "str protected";
+    $specs["type"]        = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
     return $specs;
   }
        

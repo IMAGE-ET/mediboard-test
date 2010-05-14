@@ -20,6 +20,7 @@ class CPrescriptionLineDMI extends CMbObject {
   var $order_item_reception_id = null;  // code lot
   var $date                    = null;
   var $septic                  = null;
+  var $type                    = null;
   
   var $_ref_prescription       = null;
   var $_ref_praticien          = null;
@@ -36,13 +37,14 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["prescription_id"]         = "ref notNull class|CPrescription";
-    $specs["praticien_id"]            = "ref notNull class|CMediusers";
-    $specs["operation_id"]            = "ref notNull class|COperation";
-    $specs["product_id"]              = "ref notNull class|CProduct";
+    $specs["prescription_id"] = "ref notNull class|CPrescription";
+    $specs["praticien_id"]    = "ref notNull class|CMediusers";
+    $specs["operation_id"]    = "ref notNull class|COperation";
+    $specs["product_id"]      = "ref notNull class|CProduct";
     $specs["order_item_reception_id"] = "ref notNull class|CProductOrderItemReception";
-    $specs["date"]                    = "dateTime notNull";
-    $specs["septic"]                  = "bool notNull default|0";
+    $specs["date"]            = "dateTime notNull";
+    $specs["septic"]          = "bool notNull default|0";
+    $specs["type"]            = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
     return $specs;
   }
   
