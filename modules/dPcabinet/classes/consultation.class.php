@@ -713,7 +713,11 @@ class CConsultation extends CCodable {
         $sejour->praticien_id = $this->_ref_chir->_id;
         $sejour->group_id = CGroups::loadCurrent()->_id;
         $sejour->type = "consult";  
-        $sejour->entree_prevue = "$this->_date $this->heure";
+        if ($this->chrono == self::PLANIFIE) {
+          $sejour->entree_prevue = "$this->_date $this->heure";
+        } else {
+          $sejour->entree_reelle = "$this->_date $this->heure";
+        }
         $sejour->sortie_prevue = "$this->_date 23:59:59";
         if ($msg = $sejour->store()) {
           return $msg;

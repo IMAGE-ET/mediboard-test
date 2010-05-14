@@ -49,7 +49,7 @@ foreach ($ds->loadHashList($sql) as $day => $num1) {
 }
 
 // Liste des admissions non effectuées par jour
-$sql = "SELECT DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+$sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
     FROM `sejour`
     WHERE `sejour`.`entree_prevue` BETWEEN '$month_min' AND '$month_max'
       AND `sejour`.`group_id` = '$g'
@@ -63,7 +63,7 @@ foreach ($ds->loadHashList($sql) as $day => $num2) {
 }
 
 // Liste des admissions non préparées
-$sql = "SELECT DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+$sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
     FROM `sejour`
     WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
       AND `sejour`.`group_id` = '$g'
