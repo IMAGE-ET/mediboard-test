@@ -98,18 +98,20 @@
       {{mb_value object=$object field="nationalite"}}
     </td>
     <td class="text">
+      <strong>{{mb_label object=$object field="email"}}</strong>
+      {{mb_value object=$object field="email"}}
+    </td>
+  </tr> 
+  <tr>
+    <td class="text">
       <strong>{{mb_label object=$object field="profession"}}</strong>
       {{mb_value object=$object field="profession"}}
     </td>
-  </tr>
-  {{if $object->rques}}
-  <tr>
-    <td class="text" colspan="2">
+    <td class="text">
       <strong>{{mb_label object=$object field="rques"}}</strong>
       {{mb_value object=$object field="rques"}}
     </td>
   </tr>
-  {{/if}}
   
   <tr>
     <th class="category" colspan="2">
