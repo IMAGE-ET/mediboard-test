@@ -421,20 +421,17 @@ $perfusion = new CPerfusion();
 
 $aides_prescription = array();
 if($prescription->_id){
-  // Si protocole
-  if(!$prescription->object_id){
-    $prescription->_praticiens = array();
-    $prescription->_praticiens[$AppUI->user_id] = "";
-  }
-  if($prescription->_praticiens){
-		foreach($prescription->_praticiens as $praticien_id => $praticien->_view){
-		  $prescriptionLineMedicament->loadAides($praticien_id);
-		  $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-		  $prescriptionLineElement->loadAides($praticien_id);
-		  $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
-		  $perfusion->loadAides($praticien_id);
-		  $aides_prescription[$praticien_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
-		}
+  $_users = $prescription->object_id ? $prescription->_praticiens : array($AppUI->user_id => "");
+  
+  if(count($_users)){
+    foreach($_users as $praticien_id => $praticien->_view){
+      $prescriptionLineMedicament->loadAides($praticien_id);
+      $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
+      $prescriptionLineElement->loadAides($praticien_id);
+      $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
+      $prescription_line_mix->loadAides($praticien_id);
+      $aides_prescription[$praticien_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
+    }
   }
 }
 
