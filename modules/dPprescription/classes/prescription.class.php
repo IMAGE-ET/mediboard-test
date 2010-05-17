@@ -1700,11 +1700,13 @@ class CPrescription extends CMbObject {
 	         if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin))){
 	           if($with_calcul){
 	           	 $_perfusion->calculPrisesPrevues($date);
-	             $_perfusion->calculAdministrations();
 	           }
 	           $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
 	         }
 				}
+        if($with_calcul){
+          $_perfusion->calculAdministrations();
+        }
 			}
     }
   }
