@@ -75,12 +75,7 @@ showHeader();
     <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
     <td>
       <div style="float: right">
-      <?php
-        $rootName = basename($dPconfig["root_dir"]);
-        require_once("../classes/ui.class.php");
-        require_once("../classes/sharedmemory.class.php");
-        require_once("../modules/system/httpreq_do_empty_shared_memory.php");
-      ?>
+      <?php require_once("empty_shared_memory.php"); ?>
       </div>
       <select name="shared_memory" size="1">
         <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Disque</option>
