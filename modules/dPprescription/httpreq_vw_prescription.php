@@ -429,8 +429,8 @@ if($prescription->_id){
       $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
       $prescriptionLineElement->loadAides($praticien_id);
       $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
-      $prescription_line_mix->loadAides($praticien_id);
-      $aides_prescription[$praticien_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
+      $perfusion->loadAides($praticien_id);
+      $aides_prescription[$praticien_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
     }
   }
 }
