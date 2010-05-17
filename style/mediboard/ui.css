@@ -1,5 +1,9 @@
 /* $Id: $ */
 
+td a.email {
+  display: inline;
+}
+
 /** Login page */
 #login {
   padding-top: 40px; 

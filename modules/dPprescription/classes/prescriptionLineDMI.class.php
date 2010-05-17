@@ -75,6 +75,34 @@ class CPrescriptionLineDMI extends CMbObject {
     return parent::check();
   }
   
+  function store(){
+    if (!$this->_id) {
+      if ($stock = $this->loadRefStockGroup()) {
+        $stock->quantity--;
+        if ($msg = $stock->store()){
+          return $msg;
+        }
+      }
+    }
+    return parent::store();
+  }
+  
+  function delete(){
+    if ($stock = $this->loadRefStockGroup()) {
+      $stock->quantity++;
+      if ($msg = $stock->store()){
+        return $msg;
+      }
+    }
+    return parent::delete();
+  }
+  
+  function loadRefStockGroup(){
+    $this->loadRefProduct();
+    $this->_ref_product->loadRefStock();
+    return $this->_ref_product->_ref_stock_group;
+  }
+  
   function loadRefPrescription(){
     $this->_ref_prescription = $this->loadFwdRef("prescription_id");  
   }
@@ -85,11 +113,14 @@ class CPrescriptionLineDMI extends CMbObject {
   }
   
   function loadRefProduct(){
-    $this->_ref_product = $this->loadFwdRef("product_id");
+    // load fwd ref doesn't work, and completeFieldis neede :/
+    $this->completeField("product_id");
+    $this->_ref_product = new CProduct;
+    $this->_ref_product = $this->_ref_product->load($this->product_id);
   }
   
   function loadRefOperation(){
-    $this->_ref_operation = $this->loadFwdRef("product_id");
+    $this->_ref_operation = $this->loadFwdRef("operation_id");
   }
   
   function loadRefProductOrderItemReception(){

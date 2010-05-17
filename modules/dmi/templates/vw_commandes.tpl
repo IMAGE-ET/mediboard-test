@@ -1,3 +1,5 @@
+{{mb_include_script module=dPprescription script=prescription}}
+
 <form name="filterCommandes" action="?" method="get" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dmi" />
   <input type="hidden" name="tab" value="vw_commandes" />
@@ -23,6 +25,7 @@
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     <th>Patient</th>
     <th style="width: 1%">Commander</th>
+    <th style="width: 1%"></th>
   </tr>
   {{foreach from=$listDMI item=_line_dmi}}
     <tr>
@@ -64,6 +67,7 @@
           <button class="add notext" type="submit" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
         </form>
       </td>
+      <td><button type="button" class="print notext" onclick="Prescription.printPrescription({{$_line_dmi->prescription_id}})"></button></td>
     </tr>
   {{/foreach}}
 </table>

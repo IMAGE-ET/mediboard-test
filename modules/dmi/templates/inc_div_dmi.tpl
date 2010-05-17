@@ -51,7 +51,7 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       $V(formDmiDelivery.product_id, element.id.split('-')[1]);
-      $V(formDmiDelivery._view, element.down("small").innerHTML.stripTags().strip());
+      $V(formDmiDelivery._view, element.down(".view").innerHTML.stripTags().strip());
       search_product_order_item_reception(formDmiDelivery);
     },
     dropdown: true,
@@ -82,9 +82,8 @@ addDMI = function(product_id, order_item_reception_id, septic, type){
 }
 
 delLineDMI = function(line_dmi_id){
-  var oFormAddDMI = getForm("add_dmi");
+  var oFormAddDMI = getForm("del_dmi");
   oFormAddDMI.prescription_line_dmi_id.value = line_dmi_id;
-  oFormAddDMI.del.value = "1";
   return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 </script>
@@ -102,6 +101,13 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="date" value="now">
   <input type="hidden" name="septic" value="">
   <input type="hidden" name="type" value="">
+</form>
+
+<form name="del_dmi" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription">
+  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed">
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="prescription_line_dmi_id" value="" />
 </form>
 
 <table class="main" style="table-layout: fixed;">

@@ -23,7 +23,7 @@ class CEmailSpec extends CMbFieldSpec {
     $propValue = $object->{$this->fieldName};
     
     return ($propValue !== null && $propValue !== "") ? 
-      "<a href=\"mailto:$propValue\">$propValue</a>" : 
+      "<a class=\"email\" href=\"mailto:$propValue\">$propValue</a>" : 
       "";
   }
   

@@ -27,7 +27,6 @@ span.smarty-include:hover {
 /**
  * Debug console
  */
-
 div#console {
   font-family: "lucida console", "courier new", courier, monospace;
   font-size: 10px;
@@ -41,7 +40,7 @@ div#console {
   position: fixed;
   bottom: 0px;
   border: none;
-  padding: 3px 20px;
+  padding: 3px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
@@ -50,20 +49,20 @@ div#console {
 
 div#console div {
   background: transparent;
-  padding: 0 2px;
+  padding: 0;
 }
 
 div#console div#console-title {
-  font-weight: bold;
   text-align: center;
+  border-bottom: 1px dotted #999;
+  margin-bottom: 4px;
 }
 
 div#console div#console-hide {
-  background: url(../../images/icons/cancel.png) no-repeat;
-  width: 20px;
-  height: 20px;
-  margin-left: -20px;
-  position: fixed;
+  font-weight: bold;
+  color: #f00;
+  cursor: pointer;
+  float: left;
 }
 
 div#console div.key {
@@ -71,8 +70,9 @@ div#console div.key {
   float: left;
 }
 
-div#console div.error {
-  color: #faa;
+div#console div.error,
+div#console div.warning {
+  color: #f99;
 }
 
 div#console div.value {

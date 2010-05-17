@@ -112,7 +112,7 @@
 <!-- Javascript Console -->
 <div id="console" style="display: none">
   <div id="console-title">
-    <div id="console-hide" onclick="Console.hide()"></div>
+    <div id="console-hide" onclick="Console.hide()">X</div>
     Javascript console
   </div>
 </div>

@@ -143,7 +143,7 @@ class CProduct extends CMbObject {
   // Loads the stock associated to the current group
   function loadRefStock() {
   	global $g;
-  	
+  	$this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = $g;
     $this->_ref_stock_group->product_id = $this->product_id;

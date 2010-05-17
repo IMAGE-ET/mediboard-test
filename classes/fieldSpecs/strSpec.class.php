@@ -47,13 +47,12 @@ class CStrSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $value = $object->{$this->fieldName};
     if ($this->class) {
-      return htmlspecialchars(CAppUI::tr($propValue));
+      return htmlspecialchars(CAppUI::tr($value));
     }
 
-    return $propValue;
+    return $value;
   }
 
   function checkProperty($object){

@@ -41,8 +41,7 @@ class CRefSpec extends CMbFieldSpec {
       return $ref->_view;
     }
  
-    $fieldName = $this->fieldName;
-    return $object->$fieldName;
+    return $object->{$this->fieldName};
   }
 
   function checkProperty($object){
@@ -84,30 +83,6 @@ class CRefSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", 25);
     return $this->getFormElementText($object, $params, $value, $className);
   }
-  
-/*  function getFormHtmlElement($object, $params, $value, $className) {
-    $formName = CMbArray::extract($params, "form");
-    
-    $html = mbLoadScript('modules/system/javascript/object_selector.js');
-    $ref = $object->loadFwdRef($this->fieldName);
-    if (!$ref) $ref = new $this->class;
-    $id = $this->fieldName.'-'.$ref->_guid;
-    $html .= '<input type="text" size="20" readonly="readonly" ondblclick="ObjectSelector[\'init'.$id.'\']()" name="selView'.$id.'" value="'.$ref->_view.'" />
-              <button type="button" onclick="ObjectSelector.init[\'init'.$id.'\']()" class="search notext">Rechercher</button>
-              <input type="hidden" name="selKey'.$id.'" value="'.$object->_id.'" />
-              <input type="hidden" name="selClass'.$id.'" value="'.$this->class.'" />
-              <script type="text/javascript">
-              ObjectSelector.init[\'init'.$id.'\'] = function(){
-                this.sForm     = "'.$formName.'";
-                this.sId       = "selKey'.$id.'";
-                this.sView     = "selView'.$id.'";
-                this.sClass    = "selClass'.$id.'";
-                this.onlyclass = true; 
-                this.pop();
-              }
-            </script>';
-    return $html;
-  }*/
 }
 
 ?>
