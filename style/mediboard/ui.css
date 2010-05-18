@@ -722,8 +722,6 @@ td.show {
 	outline: 2px solid #666666;
 }
 
-
-
 #waitingMsgMask {
   width: 100%;
   position: absolute;
@@ -737,11 +735,14 @@ td.show {
   position: fixed;
   z-index: 900;
   font-size: 1.2em;
-  background-color:#fff;
+  background-color: #fff;
   color:#000;
-  border: 1px solid #666;
+  border: 1px solid #999;
   padding: 20px 5px;
   text-align: center;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
 }
 
 #waitingMsgText .loading{

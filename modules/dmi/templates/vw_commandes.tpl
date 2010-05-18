@@ -69,5 +69,9 @@
       </td>
       <td><button type="button" class="print notext" onclick="Prescription.printPrescription({{$_line_dmi->prescription_id}})"></button></td>
     </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="20">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
 </table>

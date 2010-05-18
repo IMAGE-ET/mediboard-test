@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage dPstock
+ * @subpackage dmi
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -13,6 +13,10 @@
     <li id="match-{{$match->_id}}">
       <strong>{{$match->_view|emphasize:$keywords}}</strong><br />
       <small>
+        <span style="float: right; color: #666;">
+          {{$match->_available_quantity}} dispo
+        </span>
+        
         {{if $match->code}}
           {{$match->code|emphasize:$keywords}} - 
         {{/if}}

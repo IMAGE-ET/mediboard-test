@@ -213,7 +213,7 @@ var Console = {
       eDiv.setStyle({ marginLeft: nIndent + "em" });
     }
 
-    $(this.id).insert(eDiv);
+    $(this.id).down(".body").insert(eDiv);
     Console.scrollDown.defer();
   },
   

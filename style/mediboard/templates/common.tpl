@@ -110,11 +110,12 @@
 </div>
 
 <!-- Javascript Console -->
-<div id="console" style="display: none">
-  <div id="console-title">
-    <div id="console-hide" onclick="Console.hide()">X</div>
+<div id="console" style="display: none;">
+  <div class="title">
+    <div class="close" onclick="Console.hide()">X</div>
     Javascript console
   </div>
+  <div class="body"></div>
 </div>
 
 <!-- Mails -->

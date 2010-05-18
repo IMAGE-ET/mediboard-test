@@ -46,7 +46,7 @@ search_product_order_item_reception = function(form){
 
 Main.add(function () {
   var formDmiDelivery = getForm("dmi_delivery_by_product");
-  url = new Url("dPstock", "httpreq_do_product_autocomplete");
+  url = new Url("dmi", "httpreq_do_product_autocomplete");
   url.autoComplete(formDmiDelivery._view, formDmiDelivery._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
