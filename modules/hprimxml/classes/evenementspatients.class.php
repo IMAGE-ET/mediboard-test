@@ -159,8 +159,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPersonne->nom = $nom;
       $mbPersonne->_nom_naissance = $xpath->queryTextNode("hprim:nomNaissance", $node);
       $mbPersonne->prenom = $prenoms[0];
-      $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
-      $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
+      $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
+      $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
       $mbPersonne->adresse  = $ligne[0];
       if (isset($ligne[1]))
         $mbPersonne->adresse .= " $ligne[1]";
@@ -173,14 +173,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $pays->loadMatchingObject();
       $mbPersonne->pays = $pays->nom_fr;
       $mbPersonne->cp = $cp;
-      $mbPersonne->tel = isset($telephones[0]) ? $telephones[0] : "";
-      $mbPersonne->tel2 = isset($telephones[1]) ? $telephones[1] : "";
-      $mbPersonne->email = isset($emails[0]) ? $emails[0] : "";
+      $mbPersonne->tel = isset($telephones[0]) ? $telephones[0] : null;
+      $mbPersonne->tel2 = isset($telephones[1]) ? $telephones[1] : null;
+      $mbPersonne->email = isset($emails[0]) ? $emails[0] : null;
     } elseif ($mbPersonne instanceof CMediusers) {
       $mbPersonne->_user_last_name  = $nom;
       $mbPersonne->_user_first_name = $prenoms[0];
-      $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : "";
-      $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : "";
+      $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : null;
+      $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : null;
       if (is_array($ligne)) {
         $mbPersonne->_user_adresse    = $ligne[0];
         if (isset($ligne[1]))
@@ -198,7 +198,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   static function getActiviteSocioProfessionnelle($node, CPatient $mbPatient) {
     $xpath = new CMbXPath($node->ownerDocument, true);
     
-    $mbPatient->profession = $xpath->queryTextNode("hprim:activiteSocioProfessionnelle", $node); 
+    $activiteSocioProfessionnelle = $xpath->queryTextNode("hprim:activiteSocioProfessionnelle", $node);
+    
+    $mbPatient->profession = $activiteSocioProfessionnelle ? $activiteSocioProfessionnelle : null; 
     
     return $mbPatient;
   }
@@ -219,7 +221,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPatient->prevenir_cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
       
       $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $personnePrevenir);
-      $mbPatient->prevenir_tel = isset($telephones[0]) ? $telephones[0] : "";
+      $mbPatient->prevenir_tel = isset($telephones[0]) ? $telephones[0] : null;
     }
         
     return $mbPatient;
@@ -588,8 +590,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPatient->assure_nom = $xpath->queryTextNode("hprim:nomUsuel", $personne);
       $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personne);
       $mbPatient->assure_prenom = $prenoms[0];
-      $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : "";
-      $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : "";
+      $mbPatient->assure_prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
+      $mbPatient->assure_prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
       $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:naissance", $personne);
       $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personne);
       $mbPatient->assure_naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
