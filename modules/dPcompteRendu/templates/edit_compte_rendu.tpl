@@ -100,14 +100,18 @@ document.observe('keydown', function(e){
 		
 	Main.add(function(){
 	  PageFormat.init(getForm("editFrm")); 
-		Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
-    Thumb.modele_id = '{{$modele_id}}';
-    Thumb.user_id = '{{$user_id}}';
-		Thumb.mode = "doc";
-    
+      Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
+      Thumb.modele_id = '{{$modele_id}}';
+      Thumb.user_id = '{{$user_id}}';
+      Thumb.mode = "doc";
+	});
+
     FormObserver.onChanged = function(){
       // Empty the PDF
+      
+      alert("toto");
       var f = getForm("download-pdf-form");
+      
       var url = new Url();
       url.addParam("_do_empty_pdf", 1);
       url.addParam("dosql", "do_modele_aed");
@@ -115,7 +119,6 @@ document.observe('keydown', function(e){
       url.addParam("compte_rendu_id", f.compte_rendu_id.value);
       url.requestUpdate("systemMsg", {method: "post"});
     }
-	});
 {{else}}
 	var Thumb = {
 	  old: function(){}
