@@ -114,7 +114,7 @@ Element.addMethods('input', {
     });
     
     // The element size and maxlength are updated
-    element.size = mask.length;
+    element.size = Math.max(mask.length, element.size);
     element.maxLength = mask.length;
     
     // Add a placeholder
@@ -235,7 +235,8 @@ Element.addMethods('input', {
     }
     
     function writeBuffer() {
-      return element.value = buffer.join('');
+      element.value = buffer.join('');
+      return element.value;
     }
     
     function checkVal(fire) {
@@ -266,8 +267,11 @@ Element.addMethods('input', {
       else valid = true;
       
       if (fire) {
-        if (element.oldValue != s && element.onchange) {
-          element.onchange(element);
+        if (element.oldValue != s) {
+          //element.fire("ui:change");
+          
+          if (element.onchange)
+            element.onchange(element);
         }
         element.oldValue = element.value;
       }
@@ -280,9 +284,10 @@ Element.addMethods('input', {
       return mask.length;
     }
     
-    element.observe("focus", focusEvent);
-    element.observe("blur",  (function(){checkVal(true);}).bind(this));
-    element.observe("mask:check", checkVal);
+    element.observe("focus", focusEvent)
+           .observe("blur",  (function(){checkVal(true);}).bind(this))
+           .observe("mask:check", checkVal);
+           
     element.onkeydown  = keydownEvent;
     element.onkeypress = keypressEvent;
     
@@ -395,7 +400,8 @@ Element.addMethods({
     var htmlFor = "", match;
     
     if (!strict && /radio|checkbox/i.test(element.type)){
-      if (match = new RegExp("(\.*)_"+element.value+"$", "i").exec(element.id)) {
+      match = new RegExp("(\.*)_"+element.value+"$", "i").exec(element.id);
+      if (match) {
         htmlFor = "label[for='"+match[1]+"'], label[htmlFor='"+match[1]+"'], ";
       }
     }
@@ -613,7 +619,7 @@ Element.addMethods('select', {
     var makeTree = function (sel, ul) {
       updateCoordinates();
       var style = {width: dim.width+'px'};
-      select.setStyle(style).childElements().invoke('hide');
+      select.setStyle(style);//.childElements().invoke('hide');
       tree.setStyle(style);
       list.setStyle(style);
       search.setStyle({width: dim.width-4+'px'});

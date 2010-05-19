@@ -517,7 +517,8 @@ var Calendar = {
       weekNumber: true,
       container: $(document.body),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
-      center: window.Mobile
+      center: window.Mobile,
+      editable: false
     }, options);
     
 		options.captureKeys = !options.inline;
@@ -526,7 +527,8 @@ var Calendar = {
     var elementView;
     
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
-      elementView = new Element('input', {type: 'text', readonly: 'readonly', className: element.className || 'date'});
+      elementView = new Element('input', {type: 'text', readonly: 'readonly'});
+      elementView.className = (element.className || 'date');
       element.insert({before: elementView});
     }
     
@@ -543,6 +545,15 @@ var Calendar = {
     
     var datepicker = new Control.DatePicker(elementView, options);
     
+    if (options.editable) {
+      elementView.mask(datepicker.options.currentFormat.replace(/[a-z]/gi, "9"));
+      elementView.observe("ui:change", (function(){
+        var date = DateFormat.parse(this.altElement.value, this.options.currentFormat);
+        this.element.value = DateFormat.format(date, this.options.altFormat);
+      }).bindAsEventListener(datepicker));
+      elementView.writeAttribute("readonly", false);
+    }
+    
     if (options.inline) {
       Event.stopObserving(document, 'click', datepicker.hidePickerListener);
     }
@@ -555,12 +566,10 @@ var Calendar = {
     else {
       elementView.observe('click', Event.stop).observe('focus', function(e){
         datepicker.show.bind(datepicker)(e);
-        if (options.center) {
+        if (options.center)
           $(datepicker.datepicker.element).centerH();
-        }
-        else {
+        else
           $(datepicker.datepicker.element).unoverflow();
-        }
       });
     }
     
@@ -572,17 +581,15 @@ var Calendar = {
     
     if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
-        if (options.center) {
+        if (options.center)
           $(datepicker.datepicker.element).centerH();
-        }
-        else {
+        else
           $(datepicker.datepicker.element).unoverflow();
-        }
       });
     }
     
-    datepicker.element.observe('change', function(){oInput.fire("ui:change")});
-		element.addClassName('datepicker');
+    datepicker.element.observe('change', function(){elementView.fire("ui:change")});
+    element.addClassName('datepicker');
   },
   
   regProgressiveField: function(element, options) {
