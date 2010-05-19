@@ -21,32 +21,23 @@ $matches = $product->seek($keywords, $where, 30, false, null, "name");
 
 foreach($matches as $_product) {
   $ljoin = array(
-    "product_order_item" => "product_order_item.order_item_id = product_order_item.order_item_id",
+    "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
     "product_reference"  => "product_order_item.reference_id = product_reference.reference_id",
-    "product"            => "product_reference.product_id = product.product_id",
-    //"product_order_item_reception" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
   );
   
   $where = array(
-    "product.product_id" => "= '$_product->_id'"
+    "product_reference.product_id" => "= '$_product->_id'"
   );
   
   $reception = new CProductOrderItemReception;
-  $receptions = $reception->loadList($where, "date", null, null, $ljoin);
+  $receptions = $reception->loadList($where, null, null, null, $ljoin);
   
-  $total = 0;
+  $remaining = 0;
   foreach($receptions as $_reception) {
-    $item = $_reception->_ref_order_item;
-    $item->loadReference();
-    $reference = $item->_ref_reference;
-    $total += $item->quantity * $reference->quantity * $_product->quantity;
+    $remaining += $_reception->getQuantity() - $_reception->countBackRefs("lines_dmi");
   }
   
-  $line_dmi = new CPrescriptionLineDMI;
-  $line_dmi->product_id = $_product->_id;
-  $used = $line_dmi->countMatchingList();
-  
-  $_product->_available_quantity = $total - $used;
+  $_product->_available_quantity = $remaining;
 }
 
 // Création du template

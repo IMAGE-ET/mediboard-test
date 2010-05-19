@@ -84,7 +84,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="listInfosPat" style="width:200px;" rowspan="2">
+    <td id="listInfosPat" style="width:200px;">
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile('load'); return false;">
       <input type="hidden" name="selKey"   value="" />
       <input type="hidden" name="selClass" value="" />
@@ -98,10 +98,6 @@ Main.add(function () {
       
       {{include file="inc_vw_full_patients.tpl"}}
     </td>
-    <td class="greedyPane" id="item">
-    </td>
-  </tr>
-  <tr>
     <td class="greedyPane" id="listView">
       {{include file="../../dPpatients/templates/CPatient_complete.tpl"}}
     </td>

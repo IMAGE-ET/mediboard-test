@@ -102,7 +102,7 @@ $locales['CDMI.all'] = 'Tous les DMI';
 $locales['CDMI.none'] = 'Aucun DMI';
 $locales['CDMI.one'] = 'DMI';
 $locales['CDMI.select'] = 'Choisir un DMI';
-$locales['CDMI.type.deposit'] = 'Dépôy';
+$locales['CDMI.type.deposit'] = 'Dépôt';
 $locales['CDMI.type.loan'] = 'Prêt';
 $locales['CDMI.type.purchase'] = 'Achat';
 $locales['CDMICategory'] = 'Catégorie de DMI';
@@ -143,6 +143,7 @@ $locales['mod-dmi-tab-configure'] = 'Configuration';
 $locales['mod-dmi-tab-vw_categories'] = 'Catégories';
 $locales['mod-dmi-tab-vw_commandes'] = 'Commandes';
 $locales['mod-dmi-tab-vw_elements'] = 'Elements';
+$locales['mod-dmi-tab-vw_peremption'] = 'Produits périmés';
 $locales['module-dmi-court'] = 'DMI';
 $locales['module-dmi-long'] = 'Gestion des Dispositifs Médicaux Implantables';
 ?>

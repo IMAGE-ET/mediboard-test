@@ -106,7 +106,11 @@ class CSetupdmi extends CSetup {
     $sql = "ALTER TABLE `dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    $sql = "ALTER TABLE `dmi` CHANGE `type` `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'deposit'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.09";
   }
 }
 ?>

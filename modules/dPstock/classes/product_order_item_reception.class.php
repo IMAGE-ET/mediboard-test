@@ -85,6 +85,15 @@ class CProductOrderItemReception extends CMbObject {
     }
     return parent::delete();
   }
+  
+  function getQuantity(){
+    $this->loadRefOrderItem();
+    $item = $this->_ref_order_item;
+    $item->loadReference();
+    $reference = $item->_ref_reference;
+    $item->_ref_reference->loadRefProduct();
+    return $item->quantity * $reference->quantity * $item->_ref_reference->_ref_product->quantity;
+  }
 
   function store() {
     $this->completeField("reception_id");

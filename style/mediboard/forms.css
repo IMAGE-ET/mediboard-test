@@ -419,15 +419,15 @@ input[readonly]:focus {
   background: none;
 }
 
-input[readonly].date {
+input[type=text].date {
   width: 90px;
 }
 
-input[readonly].time {
+input[type=text].time {
   width: 60px;
 }
 
-input[readonly].dateTime {
+input[type=text].dateTime {
   width: 120px;
 }
 
