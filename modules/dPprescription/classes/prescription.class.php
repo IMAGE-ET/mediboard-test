@@ -40,7 +40,7 @@ class CPrescription extends CMbObject {
   var $_ref_prescription_lines_element        = null;
   var $_ref_prescription_lines_element_by_cat = null;
   var $_ref_prescription_lines_comment        = null;
-  var $_ref_perfusions                        = null;
+  var $_ref_prescription_line_mixes                        = null;
   var $_ref_lines_dmi                         = null;
   
   // Others Fields
@@ -64,7 +64,7 @@ class CPrescription extends CMbObject {
   var $_list_prises_med = null;
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
-  var $_ref_perfusions_for_plan = null;
+  var $_ref_prescription_line_mixes_for_plan = null;
   var $_ref_injections_for_plan = null;
   
   var $_scores = null; // Tableau de stockage des scores de la prescription 
@@ -112,7 +112,7 @@ class CPrescription extends CMbObject {
     $backProps["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
     $backProps["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
     $backProps["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
-    $backProps["perfusion"]                        = "CPerfusion prescription_id";
+    $backProps["prescription_line_mix"]                        = "CPrescriptionLineMix prescription_id";
     $backProps["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
     $backProps["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
     $backProps["prescription_line_dmi"]            = "CPrescriptionLineDMI prescription_id";
@@ -194,10 +194,10 @@ class CPrescription extends CMbObject {
       }
     }
     
-    // Chargement des perfusions
-    $this->loadRefsPerfusions();
-    if(count($this->_ref_perfusions)){
-      foreach($this->_ref_perfusions as $_perf){
+    // Chargement des prescription_line_mixes
+    $this->loadRefsPrescriptionLineMixes();
+    if(count($this->_ref_prescription_line_mixes)){
+      foreach($this->_ref_prescription_line_mixes as $_perf){
         $this->_chapter_view["perf"] = "$_perf->_view: ";
         $_perf->loadRefsLines();
         foreach($_perf->_ref_lines as $_perf_line){
@@ -235,9 +235,9 @@ class CPrescription extends CMbObject {
                               $hour_operation, $operation, $sejour){
     global $AppUI;
     
-    if($_line->_class_name == "CPerfusion"){
+    if($_line->_class_name == "CPrescriptionLineMix"){
       $_line->loadRefsLines();
-    // Gestion des perfusions
+    // Gestion des prescription_line_mixes
       $_line->loadRefPraticien();
       $_line->_id = "";
       $_line->prescription_id = $this->_id;
@@ -277,13 +277,13 @@ class CPrescription extends CMbObject {
       
       
       $msg = $_line->store();
-      CAppUI::displayMsg($msg, "CPerfusion-msg-create");
+      CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
       
       foreach($_line->_ref_lines as $_line_perf){
         $_line_perf->_id = "";
-        $_line_perf->perfusion_id = $_line->_id;
+        $_line_perf->prescription_line_mix_id = $_line->_id;
         $msg = $_line_perf->store();
-        CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
+        CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
       } 
     } else {
       $_line->loadRefsPrises();
@@ -448,10 +448,10 @@ class CPrescription extends CMbObject {
     $protocole->loadRefsLinesMed();
     $protocole->loadRefsLinesElementByCat();
     $protocole->loadRefsLinesAllComments();
-    $protocole->loadRefsPerfusions();
+    $protocole->loadRefsPrescriptionLineMixes();
     
-		foreach($protocole->_ref_perfusions as &$_perfusion){
-      $_perfusion->loadRefsLines(); 
+		foreach($protocole->_ref_prescription_line_mixes as &$_prescription_line_mix){
+      $_prescription_line_mix->loadRefsLines(); 
     }
     
     $operation = new COperation();
@@ -503,20 +503,20 @@ class CPrescription extends CMbObject {
       }
     }
   
-    // Parcours des perfusions
-    foreach($protocole->_ref_perfusions as &$_perfusion){
-      $_perfusion->loadRefsSubstitutionLines();
-      $_substitutions_perf = $_perfusion->_ref_substitution_lines;
+    // Parcours des prescription_line_mixes
+    foreach($protocole->_ref_prescription_line_mixes as &$_prescription_line_mix){
+      $_prescription_line_mix->loadRefsSubstitutionLines();
+      $_substitutions_perf = $_prescription_line_mix->_ref_substitution_lines;
       
 
-      $this->applyDateProtocole($_perfusion, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
+      $this->applyDateProtocole($_prescription_line_mix, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                 $date_operation, $hour_operation, $operation, $sejour);
       
   
       foreach($_substitutions_perf as $_line_subst_by_chap){
         foreach($_line_subst_by_chap as $_line_subst){
-          $_line_subst->substitute_for_id = $_perfusion->_id;
-          $_line_subst->substitute_for_class = $_perfusion->_class_name;
+          $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
+          $_line_subst->substitute_for_class = $_prescription_line_mix->_class_name;
           $this->applyDateProtocole($_line_subst, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, 
                                     $date_operation, $hour_operation, $operation, $sejour);
         }
@@ -590,7 +590,7 @@ class CPrescription extends CMbObject {
 		// Chargement de toutes les lignes
     $this->loadRefsLinesMed("1","1");
     $this->loadRefsLinesElementByCat("1");
-    $this->loadRefsPerfusions();
+    $this->loadRefsPrescriptionLineMixes();
 	}
 	
 	
@@ -705,23 +705,23 @@ class CPrescription extends CMbObject {
   }
   
   /*
-   * Chargement des perfusions
+   * Chargement des prescription_line_mixes
    */
-  function loadRefsPerfusions($with_child = 0, $emplacement = "", $with_subst_active = 1){
-    if($this->_ref_perfusions){
+  function loadRefsPrescriptionLineMixes($with_child = 0, $emplacement = "", $with_subst_active = 1){
+    if($this->_ref_prescription_line_mixes){
     	return;
     }
-    $perfusion = new CPerfusion();
-    $where = array();
+    $prescription_line_mix = new CPrescriptionLineMix();
+		$where = array();
     $where["prescription_id"] = " = '$this->_id'";
     if($with_child != 1){
-      $where["next_perf_id"] = "IS NULL";
+      $where["next_line_id"] = "IS NULL";
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '$with_subst_active'";
     
-    $this->_ref_perfusions = $perfusion->loadList($where);
-  }
+    $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
+	}
   
   /*
    * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
@@ -791,7 +791,7 @@ class CPrescription extends CMbObject {
     $where[] = "(object_class = 'CCategoryPrescription') OR 
                 (object_class = 'CPrescriptionLineElement') OR 
                 (object_class = 'CPrescriptionLineMedicament') OR 
-                (object_class = 'CPerfusion') OR libelle_ATC IS NOT NULL";
+                (object_class = 'CPrescriptionLineMix') OR libelle_ATC IS NOT NULL";
     $where["sejour_id"] = " = '$this->object_id'";
     $transmissions_by_class = $transmission->loadList($where);
     
@@ -901,14 +901,14 @@ class CPrescription extends CMbObject {
     $this->_counts_by_chapitre_non_signee["med"] = $line_med->countList($whereMed);
     $this->_counts_by_chapitre_non_signee["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
     
-    $perfusion_line  = new CPerfusionLine();
-    $ljoinPerf["perfusion"] = "perfusion_line.perfusion_id = perfusion.perfusion_id";
-    $wherePerf["perfusion.prescription_id"] = " = '$this->_id'";
-    $wherePerf["perfusion.next_perf_id"] = " IS NULL";
-    $wherePerf["perfusion.substitution_active"] = " = '1'";
-    $this->_counts_by_chapitre["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
+    $prescription_line_mix_item  = new CPrescriptionLineMixItem();
+    $ljoinPerf["prescription_line_mix"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
+    $wherePerf["prescription_line_mix.prescription_id"] = " = '$this->_id'";
+    $wherePerf["prescription_line_mix.next_line_id"] = " IS NULL";
+    $wherePerf["prescription_line_mix.substitution_active"] = " = '1'";
+    $this->_counts_by_chapitre["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
     $wherePerf["signature_prat"] = " = '0'";
-    $this->_counts_by_chapitre_non_signee["med"] += $perfusion_line->countList($wherePerf, null, null, null, $ljoinPerf);
+    $this->_counts_by_chapitre_non_signee["med"] += $prescription_line_mix_item->countList($wherePerf, null, null, null, $ljoinPerf);
     
     // Count sur les elements
     $ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
@@ -973,9 +973,9 @@ class CPrescription extends CMbObject {
             WHERE prescription_line_comment.prescription_id = '$this->_id'";
     $praticiens_comment = $ds->loadList($sql);
 
-    $sql = "SELECT DISTINCT perfusion.praticien_id
-            FROM perfusion
-            WHERE perfusion.prescription_id = '$this->_id'";
+    $sql = "SELECT DISTINCT prescription_line_mix.praticien_id
+            FROM prescription_line_mix
+            WHERE prescription_line_mix.prescription_id = '$this->_id'";
     $praticiens_perf = $ds->loadList($sql);
     
     foreach($praticiens_med as $_prats_med){
@@ -1057,10 +1057,10 @@ class CPrescription extends CMbObject {
       }
     }
     
-    // Parcours des lignes de perfusions
+    // Parcours des lignes de prescription_line_mixes
     $this->_count_recent_modif["perf"] = false;
-    foreach($this->_ref_perfusions as $_perfusion){
-      if($_perfusion->_recent_modification){
+    foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
+      if($_prescription_line_mix->_recent_modification){
         $this->_count_recent_modif["perf"] = true;
       }
     }
@@ -1526,7 +1526,7 @@ class CPrescription extends CMbObject {
     // Chargement de toutes les lignes
     $this->loadRefsLinesMedByCat("1","1");
     $this->loadRefsLinesElementByCat("1");
-    $this->loadRefsPerfusions();
+    $this->loadRefsPrescriptionLineMixes();
 		  
 	  // Paroucrs des lignes de medicaments
     foreach($this->_ref_prescription_lines as &$_line_med){
@@ -1557,9 +1557,9 @@ class CPrescription extends CMbObject {
       }
     }
 		
-		// Parcours des perfusions
-		foreach($this->_ref_perfusions as $_perfusion){
-			$_perfusion->calculPlanifsPerf();
+		// Parcours des prescription_line_mixes
+		foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
+			$_prescription_line_mix->calculPlanifsPerf();
 		}
   }
   
@@ -1689,24 +1689,24 @@ class CPrescription extends CMbObject {
       }
     }
   
-	  // Parcours des perfusions
-    if($this->_ref_perfusions){
-      foreach($this->_ref_perfusions as &$_perfusion){
-          if(!$_perfusion->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+	  // Parcours des prescription_line_mixes
+    if($this->_ref_prescription_line_mixes){
+      foreach($this->_ref_prescription_line_mixes as &$_prescription_line_mix){
+          if(!$_prescription_line_mix->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
            continue;  
          }
-				 $_perfusion->calculQuantiteTotal();
+				 $_prescription_line_mix->calculQuantiteTotal();
 				 foreach($dates as $date){
-	         if(($date >= mbDate($_perfusion->_debut)) && ($date <= mbDate($_perfusion->_fin))){
+	         if(($date >= mbDate($_prescription_line_mix->_debut)) && ($date <= mbDate($_prescription_line_mix->_fin))){
 	           if($with_calcul){
-	           	 $_perfusion->calculPrisesPrevues($date);
+	           	 $_prescription_line_mix->calculPrisesPrevues($date);
 	           }
-	           $this->_ref_perfusions_for_plan[$_perfusion->_id] = $_perfusion;
+	           $this->_ref_prescription_line_mixes_for_plan[$_prescription_line_mix->_id] = $_prescription_line_mix;
 	         }
 				}
-        if($with_calcul){
-          $_perfusion->calculAdministrations();
-        }
+				if($with_calcul){
+				  $_prescription_line_mix->calculAdministrations();
+				}
 			}
     }
   }

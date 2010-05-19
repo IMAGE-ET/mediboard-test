@@ -323,21 +323,21 @@ selectPeriode = function(element) {
 		  {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
 			  {{assign var=_date_time value="$date $hour:00:00"}}
 	      {{foreach from=$prises_by_type key=line_class item=prises name="foreach_unite"}}
-					{{if $line_class == "CPerfusion"}}
-						{{foreach from=$prises key=perfusion_id item=lines}}
-	          {{assign var=perfusion value=$list_lines.$line_class.$perfusion_id}}     
+					{{if $line_class == "CPrescriptionLineMix"}}
+						{{foreach from=$prises key=prescription_line_mix_id item=lines}}
+	          {{assign var=prescription_line_mix value=$list_lines.$line_class.$prescription_line_mix_id}}     
 	            <tr>
 							  <td>{{$hour}}h</td>
-							 	<td colspan="5"><strong>{{$perfusion->_view}}</strong></td>
+							 	<td colspan="5"><strong>{{$prescription_line_mix->_view}}</strong></td>
 							</tr>
 							
-							{{if !$perfusion->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
+							{{if !$prescription_line_mix->signature_prat && $dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
 								<tr>
 								  <td></td>
 		              <td class="text">
 		              	<ul>
 		              	{{foreach from=$lines key=perf_line_id item=_perf}}
-		                  {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+		                  {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
 		                  <li>{{$perf_line->_ucd_view}}</li>
 		                 {{/foreach}}
 										 </ul>
@@ -351,7 +351,7 @@ selectPeriode = function(element) {
 								</tr>
 							{{else}}
 	            {{foreach from=$lines key=perf_line_id item=_perf}}
-	              {{assign var=perf_line value=$list_lines.CPerfusionLine.$perf_line_id}}
+	              {{assign var=perf_line value=$list_lines.CPrescriptionLineMixItem.$perf_line_id}}
 						    <tr>
 						    	<td></td>
 						      <td class="text">

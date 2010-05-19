@@ -75,15 +75,15 @@
   {{/foreach}}
 
 	
-	{{if $prescription->_ref_perfusions|@count}}
+	{{if $prescription->_ref_prescription_line_mixes|@count}}
 	<tr>
 		<th>Perfusions</th>
 	</tr>
 	{{/if}}
-	{{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+	{{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
 	<tr>
 		<td>
-		  {{mb_include module="dPprescription" template="inc_print_perfusion" perf=$_perfusion nodebug=true}}
+		  {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
 	  </td>
 	</tr>
 	{{/foreach}}

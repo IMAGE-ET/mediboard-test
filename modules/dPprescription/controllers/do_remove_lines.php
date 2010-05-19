@@ -33,11 +33,11 @@ $line_element->praticien_id = $praticien_id;
 $line_element->prescription_id = $prescription_id;
 $lines["element"] = $line_element->loadMatchingList();
 
-$perfusion = new CPerfusion();
-$perfusion->signature_prat = 0;
-$perfusion->praticien_id = $praticien_id;
-$perfusion->prescription_id = $prescription_id;
-$lines["perfusion"] = $perfusion->loadMatchingList();
+$prescription_line_mix = new CPrescriptionLineMix();
+$prescription_line_mix->signature_prat = 0;
+$prescription_line_mix->praticien_id = $praticien_id;
+$prescription_line_mix->prescription_id = $prescription_id;
+$lines["prescription_line_mix"] = $prescription_line_mix->loadMatchingList();
 
 $current_user = new CMediusers();
 $current_user->load($AppUI->user_id);

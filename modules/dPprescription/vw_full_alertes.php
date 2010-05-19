@@ -73,10 +73,10 @@ foreach($lines as &$lines_by_type) {
 }
 
 $list_cip_perf = array();
-$prescription->loadRefsPerfusions();
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();
-  foreach($_perfusion->_ref_lines as $_perf_line){
+$prescription->loadRefsPrescriptionLineMixes();
+foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+  $_prescription_line_mix->loadRefsLines();
+  foreach($_prescription_line_mix->_ref_lines as $_perf_line){
   	if(!in_array($_perf_line->code_cip, $list_cip_perf)){
   		$list_cip_perf[] = $_perf_line->code_cip;
 	    if($prescription->object_id){

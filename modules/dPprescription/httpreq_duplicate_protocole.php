@@ -19,7 +19,7 @@ $protocole->load($protocole_id);
 $protocole->loadRefsLinesMed();
 $protocole->loadRefsLinesElement();
 $protocole->loadRefsLinesAllComments();
-$protocole->loadRefsPerfusions();
+$protocole->loadRefsPrescriptionLineMixes();
 
 // Creation du nouveau protocole
 $protocole->_id = "";
@@ -72,32 +72,32 @@ foreach($protocole->_ref_prescription_lines as $line){
 				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-			  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
+			  CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
         foreach($_line_subst->_ref_lines as $_perf_subst_line){
           $_perf_subst_line->_id = "";
-          $_perf_subst_line->perfusion_id = $_line_subst->_id;
+          $_perf_subst_line->prescription_line_mix_id = $_line_subst->_id;
           $msg = $_perf_subst_line->store();
-          CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
+          CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
         }
       }
     }
   }
 }
 
-// Parcours des perfusions
-foreach($protocole->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();
-	$_perfusion->loadVoies();
-  $_perfusion->loadRefsSubstitutionLines();
-  $_perfusion->prescription_id = $protocole->_id;
-  $_perfusion->_id = "";
-  $msg = $_perfusion->store();
-  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
+// Parcours des prescription_line_mixes
+foreach($protocole->_ref_prescription_line_mixes as $_prescription_line_mix){
+  $_prescription_line_mix->loadRefsLines();
+	$_prescription_line_mix->loadVoies();
+  $_prescription_line_mix->loadRefsSubstitutionLines();
+  $_prescription_line_mix->prescription_id = $protocole->_id;
+  $_prescription_line_mix->_id = "";
+  $msg = $_prescription_line_mix->store();
+  CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
   
   //Parcours des lignes de substitution
-  foreach($_perfusion->_ref_substitution_lines as $_lines_subst_by_type){
+  foreach($_prescription_line_mix->_ref_substitution_lines as $_lines_subst_by_type){
     foreach($_lines_subst_by_type as $_line_subst){
-      $_line_subst->substitute_for_id = $_perfusion->_id;
+      $_line_subst->substitute_for_id = $_prescription_line_mix->_id;
       $_line_subst->prescription_id = $protocole->_id;	    
 	    
       // Medicaments
@@ -122,23 +122,23 @@ foreach($protocole->_ref_perfusions as $_perfusion){
 				$_line_subst->loadVoies();
         $_line_subst->_id = "";
 			  $msg = $_line_subst->store();
-			  CAppUI::displayMsg($msg, "CPerfusion-msg-create");
+			  CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
         foreach($_line_subst->_ref_lines as $_perf_subst_line){
           $_perf_subst_line->_id = "";
-          $_perf_subst_line->perfusion_id = $_line_subst->_id;
+          $_perf_subst_line->prescription_line_mix_id = $_line_subst->_id;
           $msg = $_perf_subst_line->store();
-          CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
+          CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
         }
       }
     }
   }
   
-  // Parcours des lignes de perfusions
-  foreach($_perfusion->_ref_lines as $_perf_line){
+  // Parcours des lignes de prescription_line_mixes
+  foreach($_prescription_line_mix->_ref_lines as $_perf_line){
     $_perf_line->_id = "";
-    $_perf_line->perfusion_id = $_perfusion->_id;
+    $_perf_line->prescription_line_mix_id = $_prescription_line_mix->_id;
     $msg = $_perf_line->store();
-	  CAppUI::displayMsg($msg, "CPerfusionLine-msg-create");
+	  CAppUI::displayMsg($msg, "CPrescriptionLineMixItem-msg-create");
   }
 }
 

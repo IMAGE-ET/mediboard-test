@@ -23,8 +23,8 @@ Main.add( function(){
     {{include file="../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
   {{/foreach}}
   
-  <!-- Affichage des lignes de perfusions -->
-  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
+  <!-- Affichage des lignes de prescription_line_mixes -->
+  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
     {{include file="inc_vw_line_perf_pack.tpl"}}
   {{/foreach}}
   

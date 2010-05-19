@@ -188,18 +188,18 @@ if($prescription->_id){
 	  	}
 	  }
 		
-		// Chargement des perfusions
-	  $prescription->loadRefsPerfusions();  
-	  foreach($prescription->_ref_perfusions as $_perfusion){
-	    $_perfusion->loadRefPraticien();
-	    $_perfusion->loadRefsLines();
-	    $_perfusion->loadRefParentLine();
-	    $_perfusion->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
-			if($_perfusion->_guid == $full_line_guid){
-	      $_perfusion->loadRefsSubstitutionLines();
-	      $_perfusion->loadVoies();
-	      if($_perfusion->_ref_lines){
-	        foreach($_perfusion->_ref_lines as &$line_perf){
+		// Chargement des prescription_line_mixes
+	  $prescription->loadRefsPrescriptionLineMixes();  
+	  foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+	    $_prescription_line_mix->loadRefPraticien();
+	    $_prescription_line_mix->loadRefsLines();
+	    $_prescription_line_mix->loadRefParentLine();
+	    $_prescription_line_mix->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
+			if($_prescription_line_mix->_guid == $full_line_guid){
+	      $_prescription_line_mix->loadRefsSubstitutionLines();
+	      $_prescription_line_mix->loadVoies();
+	      if($_prescription_line_mix->_ref_lines){
+	        foreach($_prescription_line_mix->_ref_lines as &$line_perf){
 	          $line_perf->loadRefsFwd();
 	        }
 	      }
@@ -239,8 +239,8 @@ if($prescription->_id){
 	    $surdosage->setPrescription($prescription);
 	  
 			$list_cip_perf = array();
-		  foreach($prescription->_ref_perfusions as $_perfusion){
-		    foreach($_perfusion->_ref_lines as $_perf_line){
+		  foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+		    foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 		      if(!in_array($_perf_line->code_cip, $list_cip_perf)){
 						$list_cip_perf[] = $_perf_line->code_cip;
 						if($prescription->object_id){
@@ -293,8 +293,8 @@ if($prescription->_id){
       }
     }
 		
-	  foreach($prescription->_ref_perfusions as $_perfusion){
-	  	foreach($_perfusion->_ref_lines as $_perf_line){
+	  foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+	  	foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 	  	  if($prescription->object_id){
 	  	    $prescription->checkAllergies($alertesAllergies, $_perf_line->code_cip);
 	  	    $prescription->checkProfil($alertesProfil, $_perf_line->code_cip);
@@ -417,20 +417,19 @@ $prise->quantite = 1.0;
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
 $prescriptionLineElement = new CPrescriptionLineElement();
-$perfusion = new CPerfusion();
+$prescription_line_mix = new CPrescriptionLineMix();
 
 $aides_prescription = array();
 if($prescription->_id){
   $_users = $prescription->object_id ? $prescription->_praticiens : array($AppUI->user_id => "");
-  
   if(count($_users)){
     foreach($_users as $praticien_id => $praticien->_view){
       $prescriptionLineMedicament->loadAides($praticien_id);
       $aides_prescription[$praticien_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
       $prescriptionLineElement->loadAides($praticien_id);
       $aides_prescription[$praticien_id]["CPrescriptionLineElement"] = $prescriptionLineElement->_aides["commentaire"]["no_enum"];
-      $perfusion->loadAides($praticien_id);
-      $aides_prescription[$praticien_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
+      $prescription_line_mix->loadAides($praticien_id);
+      $aides_prescription[$praticien_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
     }
   }
 }
@@ -509,7 +508,7 @@ $smarty->assign("prescriptions_sejour" , $prescriptions_sejour);
 $smarty->assign("dossier_medical"      , $dossier_medical);
 $smarty->assign("now_time"             , mbTime());
 $smarty->assign("mode_pack"            , "0");
-$smarty->assign("perfusion"            , new CPerfusion());
+$smarty->assign("prescription_line_mix"            , new CPrescriptionLineMix());
 $smarty->assign("operation_id"         , $operation_id);
 $smarty->assign("pratSel_id"           , $pratSel_id);
 $smarty->assign("mode_sejour"          , $mode_sejour);

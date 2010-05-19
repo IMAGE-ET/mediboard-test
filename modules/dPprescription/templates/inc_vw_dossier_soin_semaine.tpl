@@ -72,7 +72,7 @@ Main.add(function () {
 	  <tr>
 	    <td style="width: 1%">
 			  <ul id="tab_categories_plan" class="control_tabs_vertical">
-				  {{if $prescription->_ref_perfusions_for_plan|@count}}
+				  {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
 				    <li><a href="#plan_perf">Perfusions</a></li>
 				  {{/if}}
 	  			
@@ -107,9 +107,9 @@ Main.add(function () {
 	        
 	        {{assign var=transmissions value=$prescription->_transmissions}}	  
 	        
-	        <!-- Affichage des perfusions -->
+	        <!-- Affichage des prescription_line_mixes -->
 	        <tbody id="plan_perf" style="display:none;">
-		        {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
+		        {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=_prescription_line_mix}}
 		          {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
 		        {{/foreach}}
 	        </tbody>

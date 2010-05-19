@@ -176,7 +176,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["accord_praticien"]       = "bool";
     $specs["substitution_line_id"]   = "ref class|CPrescriptionLineMedicament";
     $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPrescriptionLineMedicament";
+    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMedicament";
     $specs["substitution_active"]    = "bool";
     $specs["_unite_prise"]           = "str";
     $specs["voie"]                   = "str";
@@ -202,7 +202,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $backProps = parent::getBackProps();
     $backProps["prev_hist_line"] = "CPrescriptionLineMedicament substitution_line_id";
     $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
-    $backProps["substitutions_perfusion"]  = "CPerfusion substitute_for_id";
+    $backProps["substitutions_prescription_line_mix"]  = "CPrescriptionLineMix substitute_for_id";
     $backProps["parent_line"]    = "CPrescriptionLineMedicament child_id";  
     $backProps["transmissions"]   = "CTransmissionMedicale object_id";
     $backProps["administration"]  = "CAdministration object_id";
@@ -756,7 +756,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function loadRefsSubstitutionLines(){
     if(!$this->substitute_for_id){
 		  $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
-      $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
+      $this->_ref_substitution_lines["CPrescriptionLineMix"] = $this->loadBackRefs("substitutions_prescription_line_mix");  
       $this->_ref_substitute_for = $this;
     } else {
 	    $_base_line = new $this->substitute_for_class;
@@ -767,7 +767,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
 	  }
-		foreach($this->_ref_substitution_lines["CPerfusion"] as $_substitution_line){
+		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){
 		  $_substitution_line->loadRefsLines();
 	  }
   }
@@ -777,7 +777,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    */
   function countSubstitutionsLines(){
     if(!$this->substitute_for_id){
-      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_perfusion");
+      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_prescription_line_mix");
     } else {
       $object = new $this->substitute_for_class;
       $object->load($this->substitute_for_id);

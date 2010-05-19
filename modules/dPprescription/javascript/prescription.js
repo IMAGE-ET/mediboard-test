@@ -436,7 +436,7 @@ Prescription = {
     url.popup(800,400, "statistiques d'utilisation des posologies");
   },
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
-	  var url = new Url;
+		var url = new Url;
 	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
 	  url.addParam("sejour_id", sejour_id);
 	  url.addParam("date", date);
@@ -452,7 +452,7 @@ Prescription = {
     url.addParam("unite_prise", unite_prise);
     
     if(object_id && object_class){
-      if(object_class == 'CPerfusion'){
+      if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
           $("line_"+object_class+"-"+object_id).hide();
           moveDossierSoin($("line_"+object_class+"-"+object_id));

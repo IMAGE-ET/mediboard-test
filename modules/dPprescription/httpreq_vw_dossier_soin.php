@@ -154,7 +154,7 @@ if($object_id && $object_class){
     }
   }
     
-  if($line instanceof CPerfusion){
+  if($line instanceof CPrescriptionLineMix){
 	 	$line->countSubstitutionsLines();
 		$line->loadRefsSubstitutionLines();
     $line->loadRefsLines();
@@ -170,9 +170,9 @@ if($object_id && $object_class){
 		}
     $line->calculAdministrations();
     
-		// Chargement des transmissions de la perfusion
+		// Chargement des transmissions de la prescription_line_mix
   	$transmission = new CTransmissionMedicale();
-  	$transmission->object_class = "CPerfusion";
+  	$transmission->object_class = "CPrescriptionLineMix";
   	$transmission->object_id = $line->_id;
   	$transmission->sejour_id = $sejour->_id;
 	  $transmissions = $transmission->loadMatchingList();
@@ -201,22 +201,22 @@ else {
 				$_line_med->loadRefProduitPrescription();
 			}
     } elseif($chapitre == "perf") {
-      // Chargement des perfusions
-	    $prescription->loadRefsPerfusions("1", $line_type);
-		  foreach($prescription->_ref_perfusions as &$_perfusion){
-		    $_perfusion->countSubstitutionsLines();
-		    $_perfusion->loadRefsSubstitutionLines();
-		    $_perfusion->getRecentModification();
-		    $_perfusion->loadRefsLines();
-				$_perfusion->loadVoies();
-		    $_perfusion->loadRefPraticien();
-		    $_perfusion->loadRefLogSignaturePrat();
-				$_perfusion->calculVariations();
+      // Chargement des prescription_line_mixes
+	    $prescription->loadRefsPrescriptionLineMixes("1", $line_type);
+		  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
+		    $_prescription_line_mix->countSubstitutionsLines();
+		    $_prescription_line_mix->loadRefsSubstitutionLines();
+		    $_prescription_line_mix->getRecentModification();
+		    $_prescription_line_mix->loadRefsLines();
+				$_prescription_line_mix->loadVoies();
+		    $_prescription_line_mix->loadRefPraticien();
+		    $_prescription_line_mix->loadRefLogSignaturePrat();
+				$_prescription_line_mix->calculVariations();
     
 		  }
     } elseif (!$chapitre) {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
-      $prescription->loadRefsPerfusions("1", $line_type);
+      $prescription->loadRefsPrescriptionLineMixes("1", $line_type);
       $prescription->loadRefsLinesMedByCat("1","1",$line_type);
 	    
       // Chargement des lignes d'elements 
@@ -288,8 +288,8 @@ if($object_id && $object_class){
   // Affichage d'une ligne
   $smarty->assign("move_dossier_soin", true);
   $smarty->assign("nodebug", true);	 
-  if($line->_class_name == "CPerfusion"){
-    $smarty->assign("_perfusion", $line);
+  if($line->_class_name == "CPrescriptionLineMix"){
+    $smarty->assign("_prescription_line_mix", $line);
     $smarty->display("inc_vw_perf_dossier_soin.tpl");
   } else {
 	  if($line->_class_name == "CPrescriptionLineElement"){

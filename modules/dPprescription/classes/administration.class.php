@@ -46,7 +46,7 @@ class CAdministration extends CMbMetaObject {
   function getProps() {
   	$specs = parent::getProps();
     $specs["object_id"]         = "ref notNull class|CMbObject meta|object_class";
-    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement|CPerfusionLine";
+    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement|CPrescriptionLineMixItem";
     $specs["administrateur_id"] = "ref notNull class|CMediusers";
     $specs["prise_id"]          = "ref class|CPrisePosologie";
     $specs["quantite"]          = "float";

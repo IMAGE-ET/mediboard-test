@@ -29,7 +29,7 @@ class CPlanificationSysteme extends CMbMetaObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["object_id"]         = "ref notNull class|CMbObject meta|object_class cascade";
-    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement|CPerfusionLine";
+    $specs["object_class"]      = "enum notNull list|CPrescriptionLineMedicament|CPrescriptionLineElement|CPrescriptionLineMixItem";
     $specs["sejour_id"]         = "ref notNull class|CSejour cascade";
     $specs["prise_id"]          = "ref class|CPrisePosologie cascade";
     $specs["unite_prise"]       = "text";

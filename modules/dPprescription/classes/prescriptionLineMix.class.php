@@ -8,29 +8,29 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPerfusion extends CMbObject {
+class CPrescriptionLineMix extends CMbObject {
 	// DB Table key
-  var $perfusion_id = null;
+  var $prescription_line_mix_id = null;
   
   // DB Fields
   var $prescription_id  = null; // Prescription
-  var $type             = null; // Type de perfusion: seringue electrique / PCA
-  var $libelle          = null; // Libelle de la perfusion
+  var $type             = null; // Type de prescription_line_mix: seringue electrique / PCA
+  var $libelle          = null; // Libelle de la prescription_line_mix
   var $vitesse          = null; // Stockée en ml/h
   var $voie             = null; // Voie d'administration des produits
   var $date_debut       = null; // Date de debut
   var $time_debut       = null; // Heure de debut
   var $duree            = null; // Duree de la perf (en heures)
-  var $next_perf_id     = null; // Perfusion suivante (pour garder un historique lors de la modification de la perfusion)
-  var $praticien_id     = null; // Praticien responsable de la perfusion
-  var $creator_id       = null; // Createur de la perfusion
+  var $next_line_id     = null; // Perfusion suivante (pour garder un historique lors de la modification de la prescription_line_mix)
+  var $praticien_id     = null; // Praticien responsable de la prescription_line_mix
+  var $creator_id       = null; // Createur de la prescription_line_mix
   var $signature_prat   = null; // Signature par le praticien responsable
   var $signature_pharma = null; // Signature par le pharmacien
   var $validation_infir = null; // Validation par l'infirmiere
   var $date_arret       = null; // Date d'arret de la perf (si arret anticipé) 
   var $time_arret       = null; // Heure d'arret de la perf (si arret anticipe)
   var $accord_praticien = null;
-  var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de perfusions)
+  var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de prescription_line_mixes)
   var $operation_id     = null;
   var $commentaire      = null;
   
@@ -71,8 +71,8 @@ class CPerfusion extends CMbObject {
   var $_ref_lines        = null;
   
   // Form fields
-  var $_debut             = null; // Debut de la perfusion (dateTime)
-  var $_fin               = null; // Fin de la perfusion (dateTime)
+  var $_debut             = null; // Debut de la prescription_line_mix (dateTime)
+  var $_fin               = null; // Fin de la prescription_line_mix (dateTime)
   var $_protocole         = null; // Perfusion de protocole
   var $_add_perf_contigue = null;
   var $_count_parent_line = null;
@@ -95,14 +95,14 @@ class CPerfusion extends CMbObject {
 
   // Can fields
   var $_perm_edit                        = null;
-  var $_can_modify_perfusion             = null;
-  var $_can_modify_perfusion_line        = null;
+  var $_can_modify_prescription_line_mix             = null;
+  var $_can_modify_prescription_line_mix_item        = null;
   var $_can_vw_form_signature_praticien  = null;
   var $_can_vw_form_signature_pharmacien = null;
   var $_can_vw_form_signature_infirmiere = null;
   var $_can_vw_signature_praticien       = null;
-  var $_can_delete_perfusion             = null;
-  var $_can_delete_perfusion_line        = null;
+  var $_can_delete_prescription_line_mix             = null;
+  var $_can_delete_prescription_line_mix_item        = null;
   var $_can_vw_form_add_perf_contigue    = null;
   var $_can_vw_form_stop_perf            = null;
   
@@ -116,8 +116,8 @@ class CPerfusion extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'perfusion';
-    $spec->key   = 'perfusion_id';
+    $spec->table = 'prescription_line_mix';
+    $spec->key   = 'prescription_line_mix_id';
     return $spec;
   }
   
@@ -131,7 +131,7 @@ class CPerfusion extends CMbObject {
     $specs["date_debut"]             = "date";
     $specs["time_debut"]             = "time";
     $specs["duree"]                  = "num pos";
-    $specs["next_perf_id"]           = "ref class|CPerfusion"; 
+    $specs["next_line_id"]           = "ref class|CPrescriptionLineMix"; 
     $specs["praticien_id"]           = "ref class|CMediusers";
     $specs["creator_id"]             = "ref class|CMediusers";
     $specs["signature_prat"]         = "bool default|0";
@@ -153,7 +153,7 @@ class CPerfusion extends CMbObject {
     $specs["time_retrait"]           = "time";
     $specs["emplacement"]            = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["substitute_for_id"]      = "ref class|CMbObject meta|substitute_for_class cascade";
-    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPerfusion default|CPerfusion";
+    $specs["substitute_for_class"]   = "enum list|CPrescriptionLineMedicament|CPrescriptionLineMix default|CPrescriptionLineMix";
     $specs["substitution_active"]    = "bool";
     $specs["substitution_plan_soin"] = "bool";
     $specs["nb_tous_les"]            = "num";
@@ -171,7 +171,7 @@ class CPerfusion extends CMbObject {
     
     // Calcul de la view
     $this->_view = ($this->libelle) ? "$this->libelle " : "";
-    $this->_view .= ($this->type) ? " ".CAppUI::tr("CPerfusion.type.$this->type").", " : "";
+    $this->_view .= ($this->type) ? " ".CAppUI::tr("CPrescriptionLineMix.type.$this->type").", " : "";
     $this->_view .= $this->voie;
     $this->_view .= ($this->vitesse) ? " à $this->vitesse ml/h" : "";
     $this->_view .= ($this->nb_tous_les) ? " toutes les $this->nb_tous_les h" : "";
@@ -184,7 +184,7 @@ class CPerfusion extends CMbObject {
     }
     
     if($this->type == "PCA"){
-      $this->_view .= ($this->mode_bolus) ? ", mode PCA: ".CAppUI::tr("CPerfusion.mode_bolus.".$this->mode_bolus) : "";
+      $this->_view .= ($this->mode_bolus) ? ", mode PCA: ".CAppUI::tr("CPrescriptionLineMix.mode_bolus.".$this->mode_bolus) : "";
       $this->_view .= ($this->dose_bolus) ? ", bolus de $this->dose_bolus mg" : "";
       $this->_view .= ($this->periode_interdite) ? ", période interdite de $this->periode_interdite min" : "";
     }
@@ -196,10 +196,10 @@ class CPerfusion extends CMbObject {
       $this->_retrait = "$this->date_retrait $this->time_retrait";
     }
     
-    // Calcul du debut de la perfusion
+    // Calcul du debut de la prescription_line_mix
     $this->_debut = ($this->date_pose) ? "$this->date_pose $this->time_pose" : "$this->date_debut $this->time_debut";
 
-    // Calcul de la fin de la perfusion
+    // Calcul de la fin de la prescription_line_mix
     $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree HOURS", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
                                                            : ($this->date_retrait ? "$this->date_retrait $this->time_retrait" : $this->_date_fin); 
@@ -223,12 +223,12 @@ class CPerfusion extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["lines_perfusion"]  = "CPerfusionLine perfusion_id";
-    $backProps["prev_line"]     = "CPerfusion next_perf_id";
+    $backProps["lines_mix"]  = "CPrescriptionLineMixItem prescription_line_mix_id";
+    $backProps["prev_line"]     = "CPrescriptionLineMix next_line_id";
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
     $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
-    $backProps["substitutions_perfusion"]  = "CPerfusion substitute_for_id";
-		$backProps["variations"] = "CPerfusionVariation perfusion_id";
+    $backProps["substitutions_prescription_line_mix"]  = "CPrescriptionLineMix substitute_for_id";
+		$backProps["variations"] = "CPrescriptionLineMixVariation prescription_line_mix_id";
     return $backProps;
   }
   
@@ -262,10 +262,10 @@ class CPerfusion extends CMbObject {
 		}
     $this->_perm_edit = $perm_edit;
     
-    // Modification de la perfusion et des lignes des perfusions
+    // Modification de la prescription_line_mix et des lignes des prescription_line_mixes
     if($perm_edit){
-    	$this->_can_modify_perfusion = 1;
-    	$this->_can_modify_perfusion_line = 1;
+    	$this->_can_modify_prescription_line_mix = 1;
+    	$this->_can_modify_prescription_line_mix_item = 1;
     }
     if($this->signature_prat){
       $this->_can_vw_form_add_perf_contigue = 1;
@@ -291,8 +291,8 @@ class CPerfusion extends CMbObject {
 		
     // Suppression de la ligne
     if ($perm_edit || $this->_protocole){
-      $this->_can_delete_perfusion = 1;
-      $this->_can_delete_perfusion_line = 1;
+      $this->_can_delete_prescription_line_mix = 1;
+      $this->_can_delete_prescription_line_mix_item = 1;
   	}
 	}
   
@@ -308,13 +308,13 @@ class CPerfusion extends CMbObject {
 	}
 	
 	/*
-	 * Duplication d'une perfusion
+	 * Duplication d'une prescription_line_mix
 	 */
 	function duplicatePerf(){
     $this->_add_perf_contigue = false;
     
-	  // Creation de la nouvelle perfusion
-	  $new_perf = new CPerfusion();
+	  // Creation de la nouvelle prescription_line_mix
+	  $new_perf = new CPrescriptionLineMix();
     $new_perf->load($this->_id);
     $new_perf->loadRefsLines();
     $new_perf->_id = "";
@@ -324,10 +324,10 @@ class CPerfusion extends CMbObject {
       return $msg;
     }
     
-    // Copie des lignes dans la perfusion
+    // Copie des lignes dans la prescription_line_mix
     foreach($new_perf->_ref_lines as $_line){
       $_line->_id = "";
-      $_line->perfusion_id = $new_perf->_id;
+      $_line->prescription_line_mix_id = $new_perf->_id;
       if($msg = $_line->store()){
         return $msg;
       }
@@ -336,7 +336,7 @@ class CPerfusion extends CMbObject {
     // Arret de la ligne et creation de l'historique
     $this->date_arret = mbDate();
     $this->time_arret = mbTime();
-    $this->next_perf_id = $new_perf->_id;
+    $this->next_line_id = $new_perf->_id;
 	}
 
 	function loadRefsTransmissions(){
@@ -352,9 +352,9 @@ class CPerfusion extends CMbObject {
 		if(count($this->_ref_variations)){
 		  $this->_last_variation = end($this->_ref_variations);
 		} else {
-  		$this->_last_variation = new CPerfusionVariation();
+  		$this->_last_variation = new CPrescriptionLineMixVariation();
 			$this->_last_variation->debit = $this->vitesse;
-			$this->_last_variation->perfusion_id = $this->_id;
+			$this->_last_variation->prescription_line_mix_id = $this->_id;
   	}
 	}
 	
@@ -450,7 +450,7 @@ class CPerfusion extends CMbObject {
   }
 	
 	/*
-   * Calcul des prises prevues pour la perfusion
+   * Calcul des prises prevues pour la prescription_line_mix
    */
   function calculPrisesPrevues($date){
   	$line_perf = reset($this->_ref_lines);
@@ -504,7 +504,7 @@ class CPerfusion extends CMbObject {
 				$prec_variation = $this->_debut;
 				$prec_debit = $this->vitesse;
 				
-				$last_variation = new CPerfusionVariation();
+				$last_variation = new CPrescriptionLineMixVariation();
 				$last_variation->debit = 0;
 				$last_variation->dateTime = $this->_fin;
 				$this->_ref_variations[] = $last_variation;
@@ -540,7 +540,7 @@ class CPerfusion extends CMbObject {
 	            // Modification du volume total de la variation en fonction de ce qui est consommé
 							$volume_variation = $volume_variation - $qte_restante;
 							
-							// Calcul de la duree de la consommation en fonction du debit de la perfusion
+							// Calcul de la duree de la consommation en fonction du debit de la prescription_line_mix
 							$_duree = $qte_restante / $prec_debit;
 							
 							// Calcul de l'heure de la prise
@@ -549,7 +549,7 @@ class CPerfusion extends CMbObject {
 	              $current_date = mbDateTime("$increment minutes", $current_date);
 							}
 	            
-							// Si la quantité restant dans la perfusion est superieure au volume de la variation, on calcule le volume restant 
+							// Si la quantité restant dans la prescription_line_mix est superieure au volume de la variation, on calcule le volume restant 
 							if($volume_variation <= $qte_restante){
 								$volume_restant = $qte_restante - $volume_variation;                
 							}
@@ -630,13 +630,13 @@ class CPerfusion extends CMbObject {
   
   function delete(){
     // On supprime la ref vers la perf courante
-    $perfusion = new CPerfusion();
-    $perfusion->next_perf_id = $this->_id;
-    $perfusion->loadMatchingObject();
-    if($perfusion->_id){
+    $prescription_line_mix = new CPrescriptionLineMix();
+    $prescription_line_mix->next_line_id = $this->_id;
+    $prescription_line_mix->loadMatchingObject();
+    if($prescription_line_mix->_id){
       // On vide le child_id
-      $perfusion->next_perf_id = "";
-      if($msg = $perfusion->store()){
+      $prescription_line_mix->next_line_id = "";
+      if($msg = $prescription_line_mix->store()){
         return $msg;
       }
     }
@@ -656,7 +656,7 @@ class CPerfusion extends CMbObject {
   function loadRefsSubstitutionLines(){
     if(!$this->substitute_for_id){
 		  $this->_ref_substitution_lines["CPrescriptionLineMedicament"] = $this->loadBackRefs("substitutions_medicament"); 
-      $this->_ref_substitution_lines["CPerfusion"] = $this->loadBackRefs("substitutions_perfusion");  
+      $this->_ref_substitution_lines["CPrescriptionLineMix"] = $this->loadBackRefs("substitutions_prescription_line_mix");  
       $this->_ref_substitute_for = $this;
     } else {
 	    $_base_line = new $this->substitute_for_class;
@@ -667,7 +667,7 @@ class CPerfusion extends CMbObject {
 			unset($this->_ref_substitution_lines[$this->_class_name][$this->_id]);		
 		  $this->_ref_substitute_for = $_base_line;			  
 	  }
-		foreach($this->_ref_substitution_lines["CPerfusion"] as $_substitution_line){
+		foreach($this->_ref_substitution_lines["CPrescriptionLineMix"] as $_substitution_line){
       $_substitution_line->loadRefsLines();
     }
   }
@@ -677,7 +677,7 @@ class CPerfusion extends CMbObject {
    */
   function countSubstitutionsLines(){
     if(!$this->substitute_for_id){
-      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_perfusion");
+      $this->_count_substitution_lines = $this->countBackRefs("substitutions_medicament") + $this->countBackRefs("substitutions_prescription_line_mix");
     } else {
       $object = new $this->substitute_for_class;
       $object->load($this->substitute_for_id);
@@ -687,7 +687,7 @@ class CPerfusion extends CMbObject {
   }
   
   /*
-   * Chargement récursif des parents d'une perfusion
+   * Chargement récursif des parents d'une prescription_line_mix
    */
   function loadRefsParents($lines = array()) {
     if(!array_key_exists($this->_id, $lines)){
@@ -712,20 +712,20 @@ class CPerfusion extends CMbObject {
   }
   
   /*
-   * Chargement des lignes de la perfusion
+   * Chargement des lignes de la prescription_line_mix
    */
   function loadRefsLines(){
-    $this->_ref_lines = $this->loadBackRefs("lines_perfusion");  
+    $this->_ref_lines = $this->loadBackRefs("lines_mix");  
 		if(!$this->_short_view){
 		  foreach($this->_ref_lines as $_perf_line){
 		  	$this->_short_view .= $_perf_line->_ref_produit->libelle_abrege.", ";
 		  }
-			$this->_short_view .= "($this->voie - ".CAppUI::tr('CPerfusion.type.'.$this->type).")";
+			$this->_short_view .= "($this->voie - ".CAppUI::tr('CPrescriptionLineMix.type.'.$this->type).")";
 		}
 	}
   
   /*
-   * Chargement des differentes voies disponibles pour la perfusion
+   * Chargement des differentes voies disponibles pour la prescription_line_mix
    */
   function loadVoies(){
     foreach($this->_ref_lines as $_perf_line){
@@ -776,9 +776,9 @@ class CPerfusion extends CMbObject {
    * Calcul permettant de savoir si la ligne possède un historique
    */
   function countParentLine(){
-    $perfusion = new CPerfusion();
-    $perfusion->next_perf_id = $this->_id;
-    $this->_count_parent_line = $perfusion->countMatchingList(); 
+    $prescription_line_mix = new CPrescriptionLineMix();
+    $prescription_line_mix->next_line_id = $this->_id;
+    $this->_count_parent_line = $prescription_line_mix->countMatchingList(); 
   }
   
   /*

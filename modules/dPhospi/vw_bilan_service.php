@@ -45,7 +45,7 @@ CMbArray::removeValue("trans", $elts);
 $do_elements = (count($elts) > 0);
 $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
-$do_perfusions = (in_array("perf", $cats));
+$do_prescription_line_mixes = (in_array("perf", $cats));
 $do_trans = (in_array("trans", $cats));
 
 // Filtres sur l'heure des prises
@@ -126,7 +126,7 @@ foreach($trans_and_obs as &$trans_by_patients){
 	ksort($trans_by_patients);
 }
 
-if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_elements)) {
+if (CValue::get("do") && ($do_medicaments || $do_injections || $do_prescription_line_mixes || $do_elements)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();
@@ -153,8 +153,8 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 		if ($do_elements) {
 	    $_prescription->loadRefsLinesElementByCat("1","","service");
 	  }
-	  if($do_perfusions){
-	    $_prescription->loadRefsPerfusions();
+	  if($do_prescription_line_mixes){
+	    $_prescription->loadRefsPrescriptionLineMixes();
 	  }
 	  
 		// Calcul du plan de soin
@@ -171,15 +171,15 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 	  $patient =& $sejour->_ref_patient;
 	  $patient->loadRefConstantesMedicales();
 	  
-	  if($do_medicaments || $do_injections || $do_perfusions){
-	    if($do_perfusions){
-				// Parcours et stockage des perfusions
-		    if($_prescription->_ref_perfusions_for_plan){
-		      foreach($_prescription->_ref_perfusions_for_plan as $_perfusion){
-            $list_lines[$_perfusion->_class_name][$_perfusion->_id] = $_perfusion;
+	  if($do_medicaments || $do_injections || $do_prescription_line_mixes){
+	    if($do_prescription_line_mixes){
+				// Parcours et stockage des prescription_line_mixes
+		    if($_prescription->_ref_prescription_line_mixes_for_plan){
+		      foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
+            $list_lines[$_prescription_line_mix->_class_name][$_prescription_line_mix->_id] = $_prescription_line_mix;
 		        // Prises prevues
-		        if(is_array($_perfusion->_prises_prevues)){
-			        foreach($_perfusion->_prises_prevues as $_date => $_prises_prevues_by_hour){
+		        if(is_array($_prescription_line_mix->_prises_prevues)){
+			        foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_prevues_by_hour){
 			          foreach($_prises_prevues_by_hour as $_hour => $_prise_prevue){
                   $dateTimePrise = "$_date $_hour:00:00";
                   if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
@@ -188,7 +188,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			            $chambre = getCurrentChambre($sejour, $_date, $_hour, $chambres, $affectations);
 			            if(!$chambre) continue;
 									
-									foreach($_perfusion->_ref_lines as $_perf_line){
+									foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 										
 										$key1 = $by_patient ? $chambre->_id : "med";
 										$key2 = $by_patient ? "med" : $chambre->_id;
@@ -196,14 +196,14 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
 			              $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 										
 										// Plusieurs prises pdt la meme heure
-										$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
-										$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
+										$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
+										$lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["prevu"] = $_perf_line->_quantite_administration * $count_prises_by_hour;
 			            }
 			          }
 			        }
 		        }
 		        // Administrations effectuees
-		        foreach($_perfusion->_ref_lines as $_perf_line){
+		        foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 		        	$_perf_line->loadRefProduitPrescription();
 		          $list_lines[$_perf_line->_class_name][$_perf_line->_id] = $_perf_line;
 		          if(is_array($_perf_line->_administrations)){
@@ -219,7 +219,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions ||
                     $key1 = $by_patient ? $chambre->_id : "med";
                     $key2 = $by_patient ? "med" : $chambre->_id;
                     
-									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPerfusion'][$_perfusion->_id][$_perf_line->_id]["administre"] = $_adm;
+									  $lines_by_patient[$key1][$key2][$sejour->_id][$_date][$_hour]['CPrescriptionLineMix'][$_prescription_line_mix->_id][$_perf_line->_id]["administre"] = $_adm;
 				          }
 				        }
 		          }

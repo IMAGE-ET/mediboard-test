@@ -23,8 +23,9 @@ removeAdministrationPerf = function(administration_id){
 }
 
 refreshAdministrations = function(){
+  console.debug('refresh admini');
   var oFormClick = window.opener.document.click;
-  window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$perfusion->_id}}','{{$perfusion->_class_name}}','');
+  window.opener.Prescription.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value,'{{$mode_dossier}}','{{$prescription_line_mix->_id}}','{{$prescription_line_mix->_class_name}}','');
   window.close();
 }
 
@@ -39,9 +40,9 @@ refreshAdministrations = function(){
 
 <table class="form" id="administrations_perf">
   <tr>
-    <th class="category">Perfusion {{$perfusion->_view}}</th>
+    <th class="category">Perfusion {{$prescription_line_mix->_view}}</th>
   </tr>
-  {{foreach from=$perfusion->_ref_lines item=_perf_line}}
+  {{foreach from=$prescription_line_mix->_ref_lines item=_perf_line}}
   
   <tr>
 	  <th class="title text" colspan="2">Administration de {{$_perf_line->_view}} à {{$dateTime|date_format:$dPconfig.datetime}}</th>

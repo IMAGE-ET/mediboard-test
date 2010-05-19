@@ -196,21 +196,21 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.popup(500,400,"Administration");
 }
 
-addAdministrationPerf = function(perfusion_id, date, hour, time_prevue, mode_dossier, sejour_id){
+addAdministrationPerf = function(prescription_line_mix_id, date, hour, time_prevue, mode_dossier, sejour_id){
   var url = new Url("dPprescription", "httpreq_add_administration_perf");
-  url.addParam("perfusion_id", perfusion_id);
+  url.addParam("prescription_line_mix_id", prescription_line_mix_id);
   url.addParam("date", date);
   url.addParam("hour", hour);
   url.addParam("time_prevue", time_prevue);
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
   url.addParam("date_sel", "{{$date}}");
-  url.popup(500,400,"Administration d'une perfusion");
+  url.popup(500,400,"Administration d'une prescription_line_mix");
 }
 
-editPerf = function(perfusion_id, date, mode_dossier, sejour_id){
+editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
   var url = new Url("dPprescription", "edit_perf_dossier_soin");
-  url.addParam("perfusion_id", perfusion_id);
+  url.addParam("prescription_line_mix_id", prescription_line_mix_id);
   url.addParam("date", date);
   url.addParam("mode_dossier", mode_dossier);
   url.addParam("sejour_id", sejour_id);
@@ -221,7 +221,7 @@ submitPosePerf = function(oFormPerf){
   $V(oFormPerf.date_pose, 'current');
   $V(oFormPerf.time_pose, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
   } } )
 }
 
@@ -229,7 +229,7 @@ submitRetraitPerf = function(oFormPerf){
   $V(oFormPerf.date_retrait, 'current');
   $V(oFormPerf.time_retrait, 'current');
   submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.perfusion_id.value,'CPerfusion','');
+    Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
   } } )
 }
 
@@ -536,7 +536,7 @@ Main.add(function () {
 			 	 <tr>
 					 <td>
 					   <ul id="tab_categories" class="control_tabs_vertical">
-						    {{if $prescription->_ref_perfusions_for_plan|@count}}
+						    {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
 						      <li onmousedown="refreshDossierSoin(null, 'perf');">
 						        <a href="#_perf">Perfusions
 						          {{if $count_recent_modif.perf}}
@@ -593,7 +593,7 @@ Main.add(function () {
 				<table class="tbl" id="plan_soin">
 				<tbody id="tbody_date">
 				  {{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
-				  		 $prescription->_ref_perfusions_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
+				  		 $prescription->_ref_prescription_line_mixes_for_plan|@count || $prescription->_ref_injections_for_plan|@count}}
 					  <tr>
 					    <th rowspan="2" class="title">Catégorie</th>
 					    <th rowspan="2" class="title">Libellé</th>
@@ -650,7 +650,7 @@ Main.add(function () {
 			    {{/if}}
 				  </tbody>
 				  
-			    <!-- Affichage des perfusions -->
+			    <!-- Affichage des prescription_line_mixes -->
 					<tbody id="_perf" style="display:none;"></tbody>	
 				  <!-- Affichage des injectables -->
 				  <tbody id="_inj" style="display: none;"></tbody>

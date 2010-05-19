@@ -20,8 +20,8 @@
 				<input type="hidden" name="dosql" value="do_transmission_aed" />
 				<input type="hidden" name="del" value="0" />
 				<input type="hidden" name="m" value="dPhospi" />
-				<input type="hidden" name="object_class" value="CPerfusion" />
-				<input type="hidden" name="object_id" value="{{$perfusion->_id}}" />
+				<input type="hidden" name="object_class" value="CPrescriptionLineMix" />
+				<input type="hidden" name="object_id" value="{{$prescription_line_mix->_id}}" />
 				<input type="hidden" name="sejour_id" value="{{$sejour_id}}" />
 				<input type="hidden" name="user_id" value="{{$app->user_id}}" />
 				<input type="hidden" name="date" value="now" />

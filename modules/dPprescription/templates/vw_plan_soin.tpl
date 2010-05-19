@@ -93,7 +93,7 @@ ul {
 
 <table style="border-collapse: collapse; border: 1px solid #ccc" class="tbl">
 
-	{{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_perfusions_for_plan || $chapitre == ""}}
+	{{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_prescription_line_mixes_for_plan || $chapitre == ""}}
     {{include file="../../dPprescription/templates/inc_header_plan_soin.tpl" name="Médicaments" no_class=true}}
   {{/if}}
   
@@ -118,12 +118,12 @@ ul {
 	   {{/foreach}} 
 	  {{/foreach}}
   {{/if}}
-  <!-- Affichage des perfusions -->
-  {{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion}}
+  <!-- Affichage des prescription_line_mixes -->
+  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=_prescription_line_mix}}
     {{include file="../../dPprescription/templates/inc_vw_perf_plan_soin.tpl"}}
   {{/foreach}}
   
-  {{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_perfusions_for_plan}}
+  {{if $prescription->_ref_lines_med_for_plan || $prescription->_ref_injections_for_plan || $prescription->_ref_prescription_line_mixes_for_plan}}
     {{include file="../../dPprescription/templates/inc_footer_plan_soin.tpl" no_class=false last_screen_footer=false}}
   {{/if}}
   

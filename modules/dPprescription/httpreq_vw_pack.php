@@ -60,14 +60,14 @@ if($pack->_id){
 	      }
 	    }
     }
-    // Merge des perfusions
-    $_prescription->loadRefsPerfusions();
-    if($_prescription->_ref_perfusions){
-      foreach($_prescription->_ref_perfusions as $_perfusion){
-        $_perfusion->countSubstitutionsLines();
-        $_perfusion->loadRefsLines();
-				$_perfusion->loadVoies();
-        $prescription->_ref_perfusions[$_perfusion->_id] = $_perfusion;
+    // Merge des prescription_line_mixes
+    $_prescription->loadRefsPrescriptionLineMixes();
+    if($_prescription->_ref_prescription_line_mixes){
+      foreach($_prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+        $_prescription_line_mix->countSubstitutionsLines();
+        $_prescription_line_mix->loadRefsLines();
+				$_prescription_line_mix->loadVoies();
+        $prescription->_ref_prescription_line_mixes[$_prescription_line_mix->_id] = $_prescription_line_mix;
       }
     }
     

@@ -185,8 +185,8 @@ class CMediusers extends CMbObject {
     $backProps["operations_chir"]                 = "COperation chir_id";
     $backProps["operations_anesth"]               = "COperation anesth_id";
     $backProps["packs"]                           = "CPack chir_id";
-    $backProps["perfusions"]                      = "CPerfusion praticien_id";
-    $backProps["perfusions_0"]                    = "CPerfusion creator_id";
+    $backProps["prescription_line_mixes"]                      = "CPrescriptionLineMix praticien_id";
+    $backProps["prescription_line_mixes_0"]                    = "CPrescriptionLineMix creator_id";
     $backProps["personnels"]                      = "CPersonnel user_id";
     $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
     $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";

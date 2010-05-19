@@ -14,21 +14,21 @@ toggleTypePerfusion = function(oForm){
   if(!oForm.type){
     return;
   }
-	if(oForm.perfusion_id.value == ""){
+	if(oForm.prescription_line_mix_id.value == ""){
 	  oForm.type.show();
 	} else {
 	  oForm.type.hide();
 	}
 }
 
-// Si la perfusion n'est pas de type PCA, on vide toutes les catarteristiques specifiques
+// Si la prescription_line_mix n'est pas de type PCA, on vide toutes les catarteristiques specifiques
 resetBolus = function(oForm){
   $V(oForm.mode_bolus, 'sans_bolus');
   $V(oForm.dose_bolus, '');
   $V(oForm.periode_interdite, '');
 }
 
-// Modification de la perfusion en fonction du mode bolus
+// Modification de la prescription_line_mix en fonction du mode bolus
 changeModeBolus = function(oForm){
   //$("img_"+oForm.name+"_vitesse").show();
 
@@ -78,8 +78,8 @@ changeModeBolus = function(oForm){
 
 	submitEditPerfCommentaireSubst = function (object_id, commentaire) {
 	  var oForm = getForm("editCommentairePerf");
-	  oForm.dosql.value = "do_perfusion_aed";
-	  oForm.perfusion_id.value = object_id;
+	  oForm.dosql.value = "do_prescription_line_mix_aed";
+	  oForm.prescription_line_mix_id.value = object_id;
 	  oForm.commentaire.value = commentaire;
 	  submitFormAjax(oForm, 'systemMsg');
 	}
@@ -194,7 +194,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="commentaire" value="" />
 </form>
 
@@ -266,7 +266,7 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{else}}
-  {{assign var=dosql value="do_perfusion_aed"}}
+  {{assign var=dosql value="do_prescription_line_mix_aed"}}
 {{/if}}
 
 {{if !$mode_pack}}
@@ -321,13 +321,13 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
 	    	{{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_pack.tpl" line=$curr_line}}
 	      {{else}}
-	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_perf_pack.tpl" _perfusion=$curr_line}}
+	        {{include file="../../dPprescription/templates/../../dPprescription/templates/inc_vw_line_perf_pack.tpl" _prescription_line_mix=$curr_line}}
 	      {{/if}}
 	    {{else}}
 	      {{if $curr_line->_class_name == "CPrescriptionLineMedicament"}}
 	        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" mode_pharma=0 mode_substitution=1}}
 	      {{else}}
-	        {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" mode_pharma=0 _perfusion=$curr_line mode_substitution=1}}
+	        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" mode_pharma=0 _prescription_line_mix=$curr_line mode_substitution=1}}
 	      {{/if}}
 	    {{/if}}
 	  {{/foreach}}

@@ -1,4 +1,4 @@
-{{* $Id: CPerfusion_view.tpl 6146 2009-04-21 14:40:08Z alexis_granger $ *}}
+{{* $Id: CPrescriptionLineMix_view.tpl 6146 2009-04-21 14:40:08Z alexis_granger $ *}}
 
 {{*
  * @package Mediboard
@@ -24,7 +24,7 @@
     <td colspan="2" class="text">{{$_line_med->_view}}</td>
   </tr>
   {{/foreach}}
-  {{foreach from=$prescription->_ref_perfusions item=_perf}}
+  {{foreach from=$prescription->_ref_prescription_line_mixes item=_perf}}
   <tr>
     <td colspan="2" class="text">{{$_perf->_view}}</td>
   </tr>

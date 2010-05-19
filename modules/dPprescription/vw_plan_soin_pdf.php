@@ -55,12 +55,12 @@ if($prescription->_ref_prescription_lines){
 		$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
 	}
 }
-// Chargement des lignes de perfusions
+// Chargement des lignes de prescription_line_mixes
 if($chapitre == "perf" || $chapitre == "all_med" || $chapitre == ""){
-	$prescription->loadRefsPerfusions("1","service");
-	foreach($prescription->_ref_perfusions as $_perfusion){
-	  $_perfusion->loadRefsLines();  
-	  $_perfusion->loadRefPraticien();
+	$prescription->loadRefsPrescriptionLineMixes("1","service");
+	foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+	  $_prescription_line_mix->loadRefsLines();  
+	  $_prescription_line_mix->loadRefPraticien();
 	}
 }
 // Chargement du dernier pharmacien qui a validé une ligne

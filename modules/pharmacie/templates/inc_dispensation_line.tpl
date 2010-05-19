@@ -49,7 +49,7 @@
         {{/foreach}}
       {{else}}
         <tr>
-          <td>{{$_lines.$code_cis->_posologie}} {{$_lines.$code_cis->_ref_perfusion->_frequence}}</td>
+          <td>{{$_lines.$code_cis->_posologie}} {{$_lines.$code_cis->_ref_prescription_line_mix->_frequence}}</td>
         </tr>
       {{/if}}
     {{else}}

@@ -63,7 +63,7 @@ if (count($adm) > 0) {
 		      $tabs_refresh["med"] = "med";
 		    }
 		    break;
-		  case 'CPerfusion':
+		  case 'CPrescriptionLineMix':
 		    $tabs_refresh["perf"] = "perf";
 		    break;
 		  case 'CPrescriptionLineElement':

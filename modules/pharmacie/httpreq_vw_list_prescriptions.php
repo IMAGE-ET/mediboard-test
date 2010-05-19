@@ -38,7 +38,7 @@ $where = array();
 $ljoin = array();
 
 $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
-$ljoin["perfusion"] = "perfusion.prescription_id = prescription.prescription_id";
+$ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_id = prescription.prescription_id";
 $ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
   
 $where["prescription.object_class"] = " = 'CSejour'";
@@ -46,16 +46,16 @@ $where["prescription.type"] = " = 'sejour'";
   
 if($valide_pharma == 0){
   $where[] = "(prescription_line_medicament.valide_pharma != '1' AND prescription_line_medicament.substitution_active = '1') 
-	           OR (perfusion.signature_pharma != '1' AND perfusion.substitution_active = '1')";
+	           OR (prescription_line_mix.signature_pharma != '1' AND prescription_line_mix.substitution_active = '1')";
 } else {
-  $where[] = "prescription_line_medicament.substitution_active = '1' OR perfusion.substitution_active = '1'";
+  $where[] = "prescription_line_medicament.substitution_active = '1' OR prescription_line_mix.substitution_active = '1'";
 }
 
-$where[] = "prescription_line_medicament.child_id IS NULL AND perfusion.next_perf_id IS NULL";
+$where[] = "prescription_line_medicament.child_id IS NULL AND prescription_line_mix.next_line_id IS NULL";
 
 // Filtre sur le praticiens (lignes)
 if($praticien_id){
-  $where[] = "prescription_line_medicament.praticien_id = '$praticien_id' OR perfusion.praticien_id = '$praticien_id'";
+  $where[] = "prescription_line_medicament.praticien_id = '$praticien_id' OR prescription_line_mix.praticien_id = '$praticien_id'";
 }
 
 // Filtre sur le service, date des affectations

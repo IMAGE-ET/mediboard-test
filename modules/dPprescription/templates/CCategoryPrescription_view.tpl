@@ -1,4 +1,4 @@
-{{* $Id: CPerfusion_view.tpl 6146 2009-04-21 14:40:08Z alexis_granger $ *}}
+{{* $Id: CPrescriptionLineMix_view.tpl 6146 2009-04-21 14:40:08Z alexis_granger $ *}}
 
 {{*
  * @package Mediboard

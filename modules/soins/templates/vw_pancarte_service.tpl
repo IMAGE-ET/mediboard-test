@@ -183,11 +183,11 @@ Main.add(function () {
 		          		        </th>
 		          		      </tr>
 		          		      {{if $chapitre == "perf"}}
-		          		        {{foreach from=$quantites key=perfusion_id item=quantites_by_perf}}
+		          		        {{foreach from=$quantites key=prescription_line_mix_id item=quantites_by_perf}}
 		          		          <tr>
 		          		            <th colspan="5">
-		          		              {{assign var=perfusion value=$list_lines.perf.$perfusion_id}}
-		          		              {{$perfusion->_view}}
+		          		              {{assign var=prescription_line_mix value=$list_lines.perf.$prescription_line_mix_id}}
+		          		              {{$prescription_line_mix->_view}}
 		          		            </th>
 		          		          </tr>
 													{{foreach from=$quantites_by_perf key=perf_line_id item=_quantites}}

@@ -15,7 +15,7 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
 $prescription->loadRefsLinesMed();
-$prescription->loadRefsPerfusions();
+$prescription->loadRefsPrescriptionLineMixes();
 
 // Tableau d'historique des lignes
 $hist = array();
@@ -24,14 +24,14 @@ $lines = array();
 $med_lines = array();
 $med_lines["med"] = $prescription->_ref_prescription_lines;
 if($type == "historique"){
-  $med_lines["perf"] = $prescription->_ref_perfusions;
+  $med_lines["perf"] = $prescription->_ref_prescription_line_mixes;
 }
 
 // Chargement de l'historique de chaque ligne
 foreach($med_lines as $_type_line => $meds_by_cat){
 	if(is_array($meds_by_cat)){
 		foreach($meds_by_cat as &$line){
-		  if($line->_class_name == "CPerfusion"){
+		  if($line->_class_name == "CPrescriptionLineMix"){
 		    $parent_lines = $line->loadRefsParents();
         $lines["perf"][$line->_id]= $line;
 			  foreach($parent_lines as &$_parent_line){

@@ -62,14 +62,14 @@ updateSelectTP = function(patient_id, select){
   url.requestUpdate(select);
 }
 
-// Si la perfusion n'est pas de type PCA, on vide toutes les catarteristiques specifiques
+// Si la prescription_line_mix n'est pas de type PCA, on vide toutes les catarteristiques specifiques
 resetBolus = function(oForm){
   $V(oForm.mode_bolus, 'sans_bolus');
   $V(oForm.dose_bolus, '');
   $V(oForm.periode_interdite, '');
 }
 
-// Modification de la perfusion en fonction du mode bolus
+// Modification de la prescription_line_mix en fonction du mode bolus
 changeModeBolus = function(oForm){
   // Reactivation de la vitesse
   oForm.vitesse.writeAttribute("disabled",null);
@@ -158,9 +158,9 @@ setPrimaryKeyDosql = function (form, object_class, object_id) {
       field = "prescription_line_comment_id";
       dosql = "do_prescription_line_comment_aed";
       break;
-    case "CPerfusion": 
-      field = "perfusion_id";
-      dosql = "do_perfusion_aed";
+    case "CPrescriptionLineMix": 
+      field = "prescription_line_mix_id";
+      dosql = "do_prescription_line_mix_aed";
       break;  
   }
   form[field].value = object_id;
@@ -239,18 +239,18 @@ submitVoie = function(line_medicament_id, libelle_voie){
 }
 
 
-submitSignaturePraticien = function(perfusion_id, prescription_id, signature_praticien){
+submitSignaturePraticien = function(prescription_line_mix_id, prescription_id, signature_praticien){
   var oForm = getForm("perf_signature_prat");
-  oForm.perfusion_id.value = perfusion_id;
+  oForm.prescription_line_mix_id.value = prescription_line_mix_id;
   oForm.signature_prat.value = signature_praticien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
   	Prescription.reload(prescription_id, '', 'medicament');	
   } } );
 }
 
-submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_pharmacien){
+submitSignaturePharmacien = function(prescription_line_mix_id, prescription_id, signature_pharmacien){
   var oForm = getForm("perf_signature_pharma");
-  oForm.perfusion_id.value = perfusion_id;
+  oForm.prescription_line_mix_id.value = prescription_line_mix_id;
   oForm.signature_pharma.value = signature_pharmacien;
   return onSubmitFormAjax(oForm, { onComplete: function(){
     Prescription.reload(prescription_id, '', 'medicament','', '1');
@@ -258,9 +258,9 @@ submitSignaturePharmacien = function(perfusion_id, prescription_id, signature_ph
 }
 
 
-submitValidationInfir = function(perfusion_id, prescription_id, validation_infir){
+submitValidationInfir = function(prescription_line_mix_id, prescription_id, validation_infir){
   var oForm = getForm("perf_validation_infir");
-  oForm.perfusion_id.value = perfusion_id;
+  oForm.prescription_line_mix_id.value = prescription_line_mix_id;
   oForm.validation_infir.value = validation_infir;
   return onSubmitFormAjax(oForm, { onComplete: function(){
   	Prescription.reloadPrescSejour(prescription_id);	
@@ -313,7 +313,7 @@ changeColorPerf = function(perf_id, oForm){
   } else {
     var _fin = oForm.date_debut.value;
   }
-  var oTbody = $('perfusion-'+perf_id);
+  var oTbody = $('prescription_line_mix-'+perf_id);
   var oTh = $('th-perf-'+perf_id);
   if(_fin <= '{{$now}}'){
     oTh.addClassName("arretee");
@@ -390,7 +390,7 @@ toggleTypePerfusion = function(oForm){
   if(!oForm.type){
     return;
   }
-	if(oForm.perfusion_id.value == ""){
+	if(oForm.prescription_line_mix_id.value == ""){
 	  oForm.type.show();
 	} else {
 	  oForm.type.hide();
@@ -595,11 +595,11 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="commentaire" value="" />
 </form>
 
-<form name="addComment-CPerfusion" method="post" action="">
+<form name="addComment-CPrescriptionLineMix" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="commentaire" value="" />
 </form>
 
@@ -639,25 +639,25 @@ toggleSearchOptions = function(formName, chap){
 
 <form name="perf_signature_prat" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="signature_prat" value="" />
 </form>
 
 <form name="perf_signature_pharma" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="signature_pharma" value="" />
 </form>
 
 
 <form name="perf_validation_infir" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_perfusion_aed" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="perfusion_id" value="" />
+  <input type="hidden" name="prescription_line_mix_id" value="" />
   <input type="hidden" name="validation_infir" value="" />
 </form>

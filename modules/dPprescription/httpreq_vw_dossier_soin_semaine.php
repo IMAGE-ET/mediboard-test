@@ -31,11 +31,11 @@ if($prescription_id){
 		$_line_med->loadRefLogSignee();
 	}
   $prescription->loadRefsLinesElementByCat("1","","service");
-  $prescription->loadRefsPerfusions("1","service");
-  foreach($prescription->_ref_perfusions as &$_perfusion){
-    $_perfusion->loadRefsLines();
-    $_perfusion->loadRefPraticien();
-		$_perfusion->loadRefLogSignaturePrat();
+  $prescription->loadRefsPrescriptionLineMixes("1","service");
+  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
+    $_prescription_line_mix->loadRefsLines();
+    $_prescription_line_mix->loadRefPraticien();
+		$_prescription_line_mix->loadRefLogSignaturePrat();
   }
 
   // Chargement du poids et de la chambre du patient

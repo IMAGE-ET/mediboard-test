@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit("CPerfusion", "perfusion_id");
+$do = new CDoObjectAddEdit("CPrescriptionLineMixItem", "prescription_line_mix_item_id");
 $do->doIt();
 
 ?>

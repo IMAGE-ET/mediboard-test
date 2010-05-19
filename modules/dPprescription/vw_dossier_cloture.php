@@ -32,18 +32,18 @@ $list_lines = array();
 // Chargement des lignes
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElementByCat();
-$prescription->loadRefsPerfusions();
+$prescription->loadRefsPrescriptionLineMixes();
 
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefsLines();
-  $_perfusion->calculQuantiteTotal();
-  foreach($_perfusion->_ref_lines as $_perf_line){
-    $list_lines["perfusion"][$_perf_line->_id] = $_perf_line;
+foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+  $_prescription_line_mix->loadRefsLines();
+  $_prescription_line_mix->calculQuantiteTotal();
+  foreach($_prescription_line_mix->_ref_lines as $_perf_line){
+    $list_lines["prescription_line_mix"][$_perf_line->_id] = $_perf_line;
     $_perf_line->loadRefsAdministrations();
     foreach($_perf_line->_ref_administrations as $_administration_perf){
     	$_administration_perf->loadRefAdministrateur();
       if(!$_administration_perf->planification){
-        $dossier[mbDate($_administration_perf->dateTime)]["perfusion"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
+        $dossier[mbDate($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
       }
     }
   }

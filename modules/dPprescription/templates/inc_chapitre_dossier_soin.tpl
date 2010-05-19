@@ -47,8 +47,8 @@
 {{/if}}
 
 {{if $chapitre == "perf"}}
-	{{foreach from=$prescription->_ref_perfusions_for_plan item=_perfusion name=foreach_perfusion}}
-		<tr id="line_{{$_perfusion->_guid}}">
+	{{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=_prescription_line_mix name=foreach_prescription_line_mix}}
+		<tr id="line_{{$_prescription_line_mix->_guid}}">
 		  {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl" nodebug=true}}
 		</tr>
 	{{/foreach}}

@@ -154,7 +154,7 @@
 		
 	  {{if $line instanceof CPrescriptionLineMedicament}}
 	    {{if !$line->_count.administration}}
-		    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
+		    {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPrescriptionLineMix|@count) &&
 		    			$line->_ref_substitute_for->substitution_plan_soin}}
 			    <form action="?" method="post" name="changeLine-{{$line->_guid}}">
 			      <input type="hidden" name="m" value="dPprescription" />
@@ -166,7 +166,7 @@
 			        <option value="">Subst.</option>
 				      {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
 				          {{foreach from=$lines_subst_by_chap item=_line_subst}}
-									{{if $_line_subst->_class_name == "CPerfusion"}}
+									{{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
 									<option value="{{$_line_subst->_guid}}">{{$_line_subst->_short_view}}
 		              {{else}}
 				          <option value="{{$_line_subst->_guid}}">{{$_line_subst->_view}}

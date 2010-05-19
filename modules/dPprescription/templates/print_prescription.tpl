@@ -190,7 +190,7 @@ div.footer {
       {{if $line_medicament_element_no_ald->_class_name == "CPrescriptionLineMedicament"}}
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
       {{else}}
-        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald nodebug=true}}
+        {{include file="inc_print_prescription_line_mix.tpl" perf=$line_medicament_element_no_ald nodebug=true}}
       {{/if}} 
     {{/foreach}}
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
@@ -211,7 +211,7 @@ div.footer {
         {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald nodebug=true}}
         {{if !$prescription->object_id}}
 	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
-	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPerfusion|@count}}
+	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
 	        <strong>Substitutions possibles:</strong> 
@@ -220,7 +220,7 @@ div.footer {
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
-	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med nodebug=true}}
+	            {{include file="inc_print_prescription_line_mix.tpl" perf=$_subst_line_med nodebug=true}}
 	          {{/if}}
 	        {{/foreach}}
 	        {{/foreach}}
@@ -228,10 +228,10 @@ div.footer {
 	        {{/if}}  
         {{/if}}
       {{else}}
-        {{include file="inc_print_perfusion.tpl" perf=$line_medicament_element_no_ald}}
+        {{include file="inc_print_prescription_line_mix.tpl" perf=$line_medicament_element_no_ald}}
         {{if !$prescription->object_id}}
 	        {{if $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMedicament|@count
-	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPerfusion|@count}}
+	          || $line_medicament_element_no_ald->_ref_substitution_lines.CPrescriptionLineMix|@count}}
 	        <br />
 	        <ul style="margin-left: 15px;">
 	          <strong>Substitutions possibles:</strong> 
@@ -240,7 +240,7 @@ div.footer {
 	          {{if $_subst_line_med->_class_name == "CPrescriptionLineMedicament"}}
 	            {{include file="inc_print_medicament.tpl" med=$_subst_line_med nodebug=true}}
 	          {{else}}
-	            {{include file="inc_print_perfusion.tpl" perf=$_subst_line_med nodebug=true}}
+	            {{include file="inc_print_prescription_line_mix.tpl" perf=$_subst_line_med nodebug=true}}
 	          {{/if}}
 	        {{/foreach}}
 	        {{/foreach}}

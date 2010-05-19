@@ -1501,7 +1501,127 @@ class CSetupdPprescription extends CSetup {
     $sql = "ALTER TABLE `prescription_line_dmi` ADD `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'purchase'";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.03";
+    $this->makeRevision("1.03");
+		
+		// Renommage des tables et des champs
+    $sql = "ALTER TABLE `perfusion` RENAME `prescription_line_mix`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_mix`
+            CHANGE `perfusion_id` `prescription_line_mix_id`  INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($sql);
+   
+    $sql = "ALTER TABLE `prescription_line_mix`
+            CHANGE `next_perf_id` `next_line_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `perfusion_line` RENAME `prescription_line_mix_item`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_mix_item`
+            CHANGE `perfusion_line_id` `prescription_line_mix_item_id`  INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_mix_item`
+            CHANGE `perfusion_id` `prescription_line_mix_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `perfusion_variation` RENAME `prescription_line_mix_variation`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_mix_variation`
+            CHANGE `perfusion_variation_id` `prescription_line_mix_variation_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_mix_variation`
+            CHANGE `perfusion_id` `prescription_line_mix_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    // Ajout du nouveau champ dans l'enum
+    $sql = "ALTER TABLE `administration` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPerfusionLine','CPrescriptionLineMixItem') NOT NULL;";
+    $this->addQuery($sql);
+      
+    $sql = "ALTER TABLE `planification_systeme` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPerfusionLine','CPrescriptionLineMixItem') NOT NULL;";
+    $this->addQuery($sql);
+              
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+            CHANGE `substitute_for_class` `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMedicament'";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `prescription_line_mix` 
+            CHANGE `substitute_for_class` `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPerfusion','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMix'";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `transmission_medicale` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration','CPerfusion','CPrescriptionLineMix');";
+    $this->addQuery($sql);
+    
+    // Update des tables
+    $sql = "UPDATE administration
+            SET `object_class` = 'CPrescriptionLineMixItem'
+            WHERE `object_class` = 'CPerfusionLine'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE planification_systeme
+            SET `object_class` = 'CPrescriptionLineMixItem'
+            WHERE `object_class` = 'CPerfusionLine'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE prescription_line_medicament
+            SET `substitute_for_class` = 'CPrescriptionLineMix'
+            WHERE `substitute_for_class` = 'CPerfusion'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE prescription_line_mix
+            SET `substitute_for_class` = 'CPrescriptionLineMix'
+            WHERE `substitute_for_class` = 'CPerfusion'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE transmission_medicale
+            SET `object_class` = 'CPrescriptionLineMix'
+            WHERE `object_class` = 'CPerfusion'";
+    $this->addQuery($sql);
+    
+    // Modification de l'enum
+    $sql = "ALTER TABLE `administration` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPrescriptionLineMixItem') NOT NULL;";
+    $this->addQuery($sql);
+      
+    $sql = "ALTER TABLE `planification_systeme` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement','CPrescriptionLineMixItem') NOT NULL;";
+    $this->addQuery($sql);
+              
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+            CHANGE `substitute_for_class` `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMedicament'";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `prescription_line_mix` 
+            CHANGE `substitute_for_class` `substitute_for_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineMix') DEFAULT 'CPrescriptionLineMix'";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `transmission_medicale` 
+            CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration','CPrescriptionLineMix');";
+    $this->addQuery($sql);
+    
+    // Update des users log
+    $sql = "UPDATE user_log
+            SET object_class = 'CPrescriptionLineMix'
+            WHERE object_class = 'CPerfusion'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE user_log
+            SET object_class = 'CPrescriptionLineMixItem'
+            WHERE object_class = 'CPerfusionLine'";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE user_log
+            SET object_class = 'CPrescriptionLineMixVariation'
+            WHERE object_class = 'CPerfusionVariation'";
+    $this->addQuery($sql);
+		
+    $this->mod_version = "1.04";
   }
 }
 

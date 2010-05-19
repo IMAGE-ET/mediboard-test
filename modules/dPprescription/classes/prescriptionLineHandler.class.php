@@ -38,11 +38,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     $lines["med"] = $line_medicament->loadList($where);
     $lines["elt"] = $line_element->loadList($where);
     
-    $perfusion = new CPerfusion();
+    $prescription_line_mix = new CPrescriptionLineMix();
     $wherePerf = array();
     $wherePerf["prescription_id"] = " = '$prescription_sejour_id'";
     $wherePerf["decalage_interv"] = "IS NOT NULL";
-    $lines["perf"] = $perfusion->loadList($wherePerf);
+    $lines["perf"] = $prescription_line_mix->loadList($wherePerf);
     return $lines;
   }
   
@@ -171,17 +171,17 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 	    }
     }
     if($type == "perf"){
-      foreach($lines_by_type as $_perfusion){
-      	if($_perfusion->jour_decalage == "N"){
+      foreach($lines_by_type as $_prescription_line_mix){
+      	if($_prescription_line_mix->jour_decalage == "N"){
       		continue;
       	}
-	      if($_perfusion->operation_id){
+	      if($_prescription_line_mix->operation_id){
 	        $operation = new COperation();
-	        $operation->load($_perfusion->operation_id);
+	        $operation->load($_prescription_line_mix->operation_id);
 	        $operation->loadRefPlageOp();
 	      } else {     
 	        if($mbObject->_class_name == "COperation"){
-	          $_perfusion->operation_id = $mbObject->_id;
+	          $_prescription_line_mix->operation_id = $mbObject->_id;
 	          $operation =& $mbObject;
 	          $operation->loadRefPlageOp();
 	        } else {
@@ -193,15 +193,15 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 		    $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);
 		    $date_operation = $operation->_ref_plageop->date;
 	      
-		    if($_perfusion->decalage_interv == ""){
-		  	  $_perfusion->decalage_interv = 0;
+		    if($_prescription_line_mix->decalage_interv == ""){
+		  	  $_prescription_line_mix->decalage_interv = 0;
 		  	}
-		  	$signe = ($_perfusion->decalage_interv >= 0) ? "+" : "";
-		    $date_time_debut = mbDateTime("$signe $_perfusion->decalage_interv HOURS", "$date_operation $hour_operation");
-		  	$_perfusion->date_debut = mbDate($date_time_debut);
-		  	$_perfusion->time_debut = mbTime($date_time_debut);
+		  	$signe = ($_prescription_line_mix->decalage_interv >= 0) ? "+" : "";
+		    $date_time_debut = mbDateTime("$signe $_prescription_line_mix->decalage_interv HOURS", "$date_operation $hour_operation");
+		  	$_prescription_line_mix->date_debut = mbDate($date_time_debut);
+		  	$_prescription_line_mix->time_debut = mbTime($date_time_debut);
 		  	
-		  	 $_perfusion->store();
+		  	 $_prescription_line_mix->store();
 	    }
     }
   }

@@ -8,12 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPerfusionLine extends CMbObject {
+class CPrescriptionLineMixItem extends CMbObject {
 	// DB Table key
-  var $perfusion_line_id = null;
+  var $prescription_line_mix_item_id = null;
   
   // DB Fields
-  var $perfusion_id = null;
+  var $prescription_line_mix_id = null;
   var $code_cip     = null; 
   var $code_ucd     = null;
   var $code_cis     = null;
@@ -22,7 +22,7 @@ class CPerfusionLine extends CMbObject {
   var $solvant      = null;
 	
   // Object references
-  var $_ref_perfusion = null;
+  var $_ref_prescription_line_mix = null;
 
   // Form fields
   var $_debut = null;
@@ -49,14 +49,14 @@ class CPerfusionLine extends CMbObject {
 	
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'perfusion_line';
-    $spec->key   = 'perfusion_line_id';
+    $spec->table = 'prescription_line_mix_item';
+    $spec->key   = 'prescription_line_mix_item_id';
     return $spec;
   }
   
   function getProps() {
   	$specs = parent::getProps();
-    $specs["perfusion_id"] = "ref notNull class|CPerfusion cascade";
+    $specs["prescription_line_mix_id"] = "ref notNull class|CPrescriptionLineMix cascade";
     $specs["code_cip"]     = "numchar notNull length|7";
     $specs["code_ucd"]     = "numchar length|7";
     $specs["code_cis"]     = "numchar length|8";
@@ -78,8 +78,8 @@ class CPerfusionLine extends CMbObject {
     parent::updateFormFields();
     
     $this->loadRefPerfusion();
-    $this->_debut = $this->_ref_perfusion->_debut;
-    $this->_fin = $this->_ref_perfusion->_fin;
+    $this->_debut = $this->_ref_prescription_line_mix->_debut;
+    $this->_fin = $this->_ref_prescription_line_mix->_fin;
     
 		// Suppression de l'equivalence entre unite de prise à l'affichage
     if(!$this->_view_unite_prise){
@@ -111,15 +111,15 @@ class CPerfusionLine extends CMbObject {
     if($this->_ref_produit->_generique){
       $this->_can_vw_generique = 1;
     }
-    $this->_protocole = $this->_ref_perfusion->_protocole;
+    $this->_protocole = $this->_ref_prescription_line_mix->_protocole;
   }
   
   /*
-   * Chargement de la perfusion
+   * Chargement de la prescription_line_mix
    */
   function loadRefPerfusion(){
-    $this->_ref_perfusion = new CPerfusion();
-    $this->_ref_perfusion = $this->_ref_perfusion->getCached($this->perfusion_id);
+    $this->_ref_prescription_line_mix = new CPrescriptionLineMix();
+    $this->_ref_prescription_line_mix = $this->_ref_prescription_line_mix->getCached($this->prescription_line_mix_id);
   }
   
   /*
@@ -188,8 +188,8 @@ class CPerfusionLine extends CMbObject {
         
 				// Si l'unite de prise est en fonction du poids du patient, calcul du poids du patient
         if($_unite_prise != $this->unite){
-        	$this->_ref_perfusion->loadRefPrescription();
-        	$prescription =& $this->_ref_perfusion->_ref_prescription;
+        	$this->_ref_prescription_line_mix->loadRefPrescription();
+        	$prescription =& $this->_ref_prescription_line_mix->_ref_prescription;
 					$prescription->loadRefObject();
 					$object =& $prescription->_ref_object;
 					$object->loadRefPatient();
@@ -212,7 +212,7 @@ class CPerfusionLine extends CMbObject {
         }
 				
         if(isset($this->_ref_produit->rapport_unite_prise[$_unite_prise]["ml"])){
-          $this->_ref_perfusion->_quantite_totale += $this->_quantite_administration;
+          $this->_ref_prescription_line_mix->_quantite_totale += $this->_quantite_administration;
         }
         $produit =& $this->_ref_produit;   
         if(!$produit->libelle_unite_presentation){
@@ -242,12 +242,12 @@ class CPerfusionLine extends CMbObject {
 		
     if($calculPlanif || $mode_creation){
     	$this->loadRefPerfusion();
-			if($this->_ref_perfusion->_ref_prescription->type != "sejour"){
+			if($this->_ref_prescription_line_mix->_ref_prescription->type != "sejour"){
 				return;
 			}
-    	$this->_ref_perfusion->removePlanifSysteme();
-			 if($this->_ref_perfusion->substitution_active && (!$this->_ref_perfusion->conditionnel || ($this->_ref_perfusion->conditionnel && $this->_ref_perfusion->condition_active))){
-         $this->_ref_perfusion->calculPlanifsPerf();
+    	$this->_ref_prescription_line_mix->removePlanifSysteme();
+			 if($this->_ref_prescription_line_mix->substitution_active && (!$this->_ref_prescription_line_mix->conditionnel || ($this->_ref_prescription_line_mix->conditionnel && $this->_ref_prescription_line_mix->condition_active))){
+         $this->_ref_prescription_line_mix->calculPlanifsPerf();
 			 }
     }
 	}

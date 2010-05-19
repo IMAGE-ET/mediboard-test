@@ -39,7 +39,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   function getProps() {
   	$props = parent::getProps();
     $props["object_id"]    = "ref class|CMbObject meta|object_class cascade";
-  	$props["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPerfusion";
+  	$props["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPrescriptionLineMix";
     $props["sejour_id"]    = "ref notNull class|CSejour";
     $props["user_id"]      = "ref notNull class|CMediusers";
     $props["degre"]        = "enum notNull list|low|high default|low";
@@ -111,9 +111,9 @@ class CTransmissionMedicale extends CMbMetaObject {
         $cibles[$this->object_class][$this->object_id] = $this->_ref_object->_view;
       }
       
-      if($this->object_class == "CPerfusion"){
-        $this->_cible = "perfusion";
-        $cibles["perf"][0] = "perfusion";
+      if($this->object_class == "CPrescriptionLineMix"){
+        $this->_cible = "prescription_line_mix";
+        $cibles["perf"][0] = "prescription_line_mix";
       }
     }
     

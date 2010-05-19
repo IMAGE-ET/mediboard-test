@@ -63,13 +63,13 @@ if($prescription_id){
 $prescription_line_guid = CValue::post("prescription_line_guid");
 
 // Initalisation du tableau de lignes
-$lines = array("CPrescriptionLineMedicament" => array(), "CPerfusion" => array(), "CPrescriptionLineElement" => array(), "CPrescriptionLineComment" => array());
+$lines = array("CPrescriptionLineMedicament" => array(), "CPrescriptionLineMix" => array(), "CPrescriptionLineElement" => array(), "CPrescriptionLineComment" => array());
 
 /*
- * Signature d'une ligne (medicament ou perfusion)
+ * Signature d'une ligne (medicament ou prescription_line_mix)
  */
 if($prescription_line_guid){
-	// Chargement de la ligne de prescription (medicament ou perfusion)
+	// Chargement de la ligne de prescription (medicament ou prescription_line_mix)
 	$prescription_line = CMbObject::loadFromGuid($prescription_line_guid);
 	
 	// On rajoute la ligne passée au tableau des lignes à traiter
@@ -98,7 +98,7 @@ if($prescription_line_guid){
 
 
 /*
- * Signature de toutes les lignes de medicaments / perfusions
+ * Signature de toutes les lignes de medicaments / prescription_line_mixes
  */
 if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode_pharma){
 	// Chargement de toutes les lignes du user_courant non validées
@@ -124,14 +124,14 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
 		}
 	}
 
-	// Chargement des perfusions
-  $perfusion = new CPerfusion();
+	// Chargement des prescription_line_mixes
+  $prescription_line_mix = new CPrescriptionLineMix();
   $where = array();
   $where["prescription_id"] = " = '$prescription_id'";
   $where["praticien_id"] = " = '$praticien_id'";
   $where["signature_prat"] = " = '$search_value'";
   $where["substitution_active"] = " = '1'";
-  $lines_perf = $perfusion->loadList($where);
+  $lines_perf = $prescription_line_mix->loadList($where);
   foreach($lines_perf as $_line_perf){
   	$lines[$_line_perf->_class_name][$_line_perf->_id] = $_line_perf;
     $_line_perf->countSubstitutionsLines();
@@ -192,15 +192,15 @@ if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode
  */ 
 if($prescription->_id && $mode_pharma){
   $prescription->loadRefsLinesMed();
-  $prescription->loadRefsPerfusions();  
+  $prescription->loadRefsPrescriptionLineMixes();  
   foreach ($prescription->_ref_prescription_lines as &$_line_med) {
     if(!$_line_med->child_id && $_line_med->substitution_active){
       $lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
     }
   }
-  foreach($prescription->_ref_perfusions as &$_perfusion){
-    if(!$_perfusion->next_perf_id && $_perfusion->substitution_active){
-      $lines[$_perfusion->_class_name][$_perfusion->_id] = $_perfusion;
+  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
+    if(!$_prescription_line_mix->next_line_id && $_prescription_line_mix->substitution_active){
+      $lines[$_prescription_line_mix->_class_name][$_prescription_line_mix->_id] = $_prescription_line_mix;
     }
   }
 }
@@ -222,7 +222,7 @@ foreach($lines as $_type_line => $_lines){
 	        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 	
 				}
         break;
-			case "CPerfusion":
+			case "CPrescriptionLineMix":
 				$mode_pharma ? ($_line->signature_pharma = 1) : ($_line->signature_prat = $new_value);
 				if(!$mode_pharma && !$new_value){
           $_line->signature_pharma = '0';

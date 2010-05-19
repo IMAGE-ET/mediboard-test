@@ -43,7 +43,7 @@ function updateFieldMed($table, $mb_field, $bcb_field){
 // Remplissage des codes UCD et CIS
 updateFieldMed('prescription_line_medicament','code_ucd', 'CODE_UCD');
 updateFieldMed('prescription_line_medicament','code_cis', 'CODECIS');
-updateFieldMed('perfusion_line','code_ucd', 'CODE_UCD');
-updateFieldMed('perfusion_line','code_cis', 'CODECIS');
+updateFieldMed('prescription_line_mix_item','code_ucd', 'CODE_UCD');
+updateFieldMed('prescription_line_mix_item','code_cis', 'CODECIS');
 
 ?>

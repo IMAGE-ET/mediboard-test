@@ -97,7 +97,7 @@
 	    <td />
 	    <td>
 	      <div class="small-info">
-	      	<label title="Vous pouvez l'associer à une perfusion existante ou une nouvelle">
+	      	<label title="Vous pouvez l'associer à une prescription_line_mix existante ou une nouvelle">
 	      		Ce produit est injectable
 					</label>
 				  {{if $line->_ref_prescription->type != "sejour"}}
@@ -114,7 +114,7 @@
 	    </td>
 	    <td>
     		<form name="addPerfusionLine-{{$line->_id}}">
-	  		  <input type="hidden" name="dosql" value="do_line_to_perfusion_aed" />
+	  		  <input type="hidden" name="dosql" value="do_line_to_prescription_line_mix_aed" />
 	  		  <input type="hidden" name="m" value="dPprescription" />
 	  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
 	  		  <input type="hidden" name="prescription_line_medicament_id" value="{{$line->_id}}" />
@@ -122,35 +122,35 @@
 	  		  <input type="hidden" name="substitute_for_id" value="{{$line->substitute_for_id}}" />
 	  		  <input type="hidden" name="substitute_for_class" value="{{$line->substitute_for_class}}" />
 
-	  		  <select name="perfusion_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
+	  		  <select name="prescription_line_mix_id" onchange="toggleTypePerfusion(this.form);" style="width: 150px;">
 	  		    <option value="">Nouvelle perfusion</option>
 	  		  
 	  		  {{if $line->substitute_for_id}}
-		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-		  		    {{if ($line->substitute_for_id == $_perfusion->substitute_for_id) && ($line->substitute_for_class == $_perfusion->substitute_for_class)}}
-		  		    <option value="{{$_perfusion->_id}}">
-		  		    {{foreach from=$_perfusion->_ref_lines item=_perf_line name=foreach_perfusion}}
+		  		  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+		  		    {{if ($line->substitute_for_id == $_prescription_line_mix->substitute_for_id) && ($line->substitute_for_class == $_prescription_line_mix->substitute_for_class)}}
+		  		    <option value="{{$_prescription_line_mix->_id}}">
+		  		    {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=foreach_prescription_line_mix}}
 							  {{$_perf_line->_ref_produit->libelle_abrege}}
-								{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+								{{if !$smarty.foreach.foreach_prescription_line_mix.last}}, {{/if}}
 							{{/foreach}}
-							({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+							({{$_prescription_line_mix->voie}} - {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}})
               </option>
 		  		    {{/if}}
 		  		  {{/foreach}}
 	  		  {{else}}
-		  		  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-		  		    <option value="{{$_perfusion->_id}}">
-		  		    	{{foreach from=$_perfusion->_ref_lines item=_perf_line name="foreach_perfusion"}}
+		  		  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+		  		    <option value="{{$_prescription_line_mix->_id}}">
+		  		    	{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_prescription_line_mix"}}
                 {{$_perf_line->_ref_produit->libelle_abrege}}
-								{{if !$smarty.foreach.foreach_perfusion.last}}, {{/if}}
+								{{if !$smarty.foreach.foreach_prescription_line_mix.last}}, {{/if}}
               {{/foreach}}
-						  ({{$_perfusion->voie}} - {{tr}}CPerfusion.type.{{$_perfusion->type}}{{/tr}})
+						  ({{$_prescription_line_mix->voie}} - {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}})
               </option>
 		  		  {{/foreach}}
 	  		  {{/if}}
 	  		  
 	  		  </select>
-	  		  {{mb_field object=$perfusion field="type" defaultOption="&mdash; Type"}}
+	  		  {{mb_field object=$prescription_line_mix field="type" defaultOption="&mdash; Type"}}
 	  		  
 		  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
 		  		  onComplete: function() { 
@@ -299,7 +299,7 @@
 		      {{/if}}
 	    </form>
 			
-       {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPerfusion|@count) &&
+       {{if ($line->_ref_substitution_lines.CPrescriptionLineMedicament|@count || $line->_ref_substitution_lines.CPrescriptionLineMix|@count) &&
 			      !$line->_count.administration && $line->_ref_prescription->object_id && $line->_perm_edit && !$line->_protocole}}
         <form action="?" method="post" name="changeLine-{{$line->_guid}}">
           <input type="hidden" name="m" value="dPprescription" />
@@ -312,7 +312,7 @@
             {{foreach from=$line->_ref_substitution_lines item=lines_subst_by_chap}}
                 {{foreach from=$lines_subst_by_chap item=_line_subst}}
                 <option value="{{$_line_subst->_guid}}">
-                  {{if $_line_subst->_class_name == "CPerfusion"}}
+                  {{if $_line_subst->_class_name == "CPrescriptionLineMix"}}
                     {{$_line_subst->_short_view}}
                   {{else}}
                     {{$_line_subst->_view}}

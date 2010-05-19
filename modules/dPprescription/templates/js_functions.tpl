@@ -403,20 +403,20 @@ modifUniteDecal = function(oFieldJour, oFieldUnite){
 togglePerfDecalage = function(oForm){
   if($V(oForm.jour_decalage) == 'N'){
     $V(oForm.decalage_interv, '0');
-    $('decalage_interv-'+$V(oForm.perfusion_id)).hide();
+    $('decalage_interv-'+$V(oForm.prescription_line_mix_id)).hide();
   } else {
-    $('decalage_interv-'+$V(oForm.perfusion_id)).show();
+    $('decalage_interv-'+$V(oForm.prescription_line_mix_id)).show();
   }
 }
 
-toggleContinuitePerf = function(radioButton, perfusion_id){
+toggleContinuitePerf = function(radioButton, prescription_line_mix_id){
   if($V(radioButton) == "continue"){
-    $('discontinue-'+perfusion_id).hide();
+    $('discontinue-'+prescription_line_mix_id).hide();
   }
   if($V(radioButton) == "discontinue"){
-    $('continue-'+perfusion_id).hide();
+    $('continue-'+prescription_line_mix_id).hide();
   }
-  $($V(radioButton)+'-'+perfusion_id).show();
+  $($V(radioButton)+'-'+prescription_line_mix_id).show();
 }
 
 removeSolvant = function(checkbox){
@@ -432,22 +432,22 @@ removeSolvant = function(checkbox){
   );
 }
 
-updateSolvant = function(perfusion_id, line_id){
-  var checked = $('lines-'+perfusion_id).select('input[name=__solvant]:checked')[0];
+updateSolvant = function(prescription_line_mix_id, line_id){
+  var checked = $('lines-'+prescription_line_mix_id).select('input[name=__solvant]:checked')[0];
   if(!checked){
     return;
   }
 
   // Ligne de solvant
-  var perfusion_line_id = $V(checked.up('form').perfusion_line_id);
+  var prescription_line_mix_item_id = $V(checked.up('form').prescription_line_mix_item_id);
   
   var modif_qte_totale = 0;
-  if(line_id && perfusion_line_id == line_id){
+  if(line_id && prescription_line_mix_item_id == line_id){
     modif_qte_totale = 1;
   }
   
   var url = new Url("dPprescription", "httpreq_update_solvant");
-  url.addParam("perfusion_line_id", perfusion_line_id);
+  url.addParam("prescription_line_mix_item_id", prescription_line_mix_item_id);
   url.addParam("modif_qte_totale", modif_qte_totale);
   
   url.requestJSON(function(e){
@@ -455,10 +455,10 @@ updateSolvant = function(perfusion_id, line_id){
       return;
     }
     if(modif_qte_totale){
-      var oFormPerfusion = getForm("editPerf-"+perfusion_id);
+      var oFormPerfusion = getForm("editPerf-"+prescription_line_mix_id);
       $V(oFormPerfusion.quantite_totale, e, false);
     } else {
-      var oForm = getForm("editLinePerf-"+perfusion_line_id);
+      var oForm = getForm("editLinePerf-"+prescription_line_mix_item_id);
       $V(oForm.quantite, e);
       $V(oForm.unite, 'ml');
     }

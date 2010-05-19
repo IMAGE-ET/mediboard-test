@@ -295,7 +295,7 @@ transfertLineTP = function(line_id, sejour_id){
 <div id="med"></div>
 <div id="med_art"></div>
 
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_perfusions}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $prescription->_ref_prescription_line_mixes}}
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{if !$praticien_sortie_id || ($praticien_sortie_id == $curr_line->praticien_id)}}
@@ -310,7 +310,7 @@ transfertLineTP = function(line_id, sejour_id){
     {{/if}}
   {{/foreach}}
    
-  {{if $prescription->_ref_perfusions}}
+  {{if $prescription->_ref_prescription_line_mixes}}
 	<table class="tbl">
 	  <tr>
 	    <th colspan="7" class="title">Perfusions</th>
@@ -331,13 +331,13 @@ transfertLineTP = function(line_id, sejour_id){
 	</table>
 	{{/if}}
 
-  <!-- Parcours des perfusions -->
-  {{foreach from=$prescription->_ref_perfusions item=_perfusion}}
-    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_perfusion->praticien_id)}}
-      {{if $full_line_guid == $_perfusion->_guid}}
-        {{include file="../../dPprescription/templates/inc_vw_perfusion.tpl" prescription_reelle=$prescription}}
+  <!-- Parcours des prescription_line_mixes -->
+  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
+      {{if $full_line_guid == $_prescription_line_mix->_guid}}
+        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" prescription_reelle=$prescription}}
       {{else}}
-	       {{include file="../../dPprescription/templates/inc_vw_perfusion_lite.tpl" prescription_reelle=$prescription}} 
+	       {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" prescription_reelle=$prescription}} 
 	    {{/if}}
     {{/if}}
   {{/foreach}}

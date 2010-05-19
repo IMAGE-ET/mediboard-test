@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$perfusion_id = CValue::get("perfusion_id");
+$prescription_line_mix_id = CValue::get("prescription_line_mix_id");
 $date = CValue::get("date");
 $hour = CValue::get("hour");
 $time_prevue = CValue::get("time_prevue");
@@ -16,11 +16,11 @@ $mode_dossier = CValue::get("mode_dossier");
 $sejour_id = CValue::get("sejour_id");
 $date_sel  = CValue::get("date_sel");
 
-$perfusion = new CPerfusion();
-$perfusion->load($perfusion_id);
-$perfusion->loadRefsLines();
-$perfusion->loadVoies();
-$perfusion->calculQuantiteTotal();
+$prescription_line_mix = new CPrescriptionLineMix();
+$prescription_line_mix->load($prescription_line_mix_id);
+$prescription_line_mix->loadRefsLines();
+$prescription_line_mix->loadVoies();
+$prescription_line_mix->calculQuantiteTotal();
 
 if($time_prevue){
   $_hour = mbTransformTime(null, $time_prevue, '%H');
@@ -32,7 +32,7 @@ if($time_prevue){
 
 // Chargement des administrations deja effectuée pour l'heure donnée
 $administrations = array();
-foreach($perfusion->_ref_lines as $_perf_line){
+foreach($prescription_line_mix->_ref_lines as $_perf_line){
   $administration = new CAdministration();
   $where = array();
   $where["object_id"] = " = '$_perf_line->_id'";
@@ -49,7 +49,7 @@ foreach($administrations as $_administrations){
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("perfusion", $perfusion);
+$smarty->assign("prescription_line_mix", $prescription_line_mix);
 $smarty->assign("dateTime", $dateTime);
 $smarty->assign("administration", new CAdministration());
 $smarty->assign("administrations", $administrations);

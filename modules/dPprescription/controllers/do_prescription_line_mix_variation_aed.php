@@ -1,14 +1,14 @@
-<?php /* $Id$ */
+<?php /* $Id: $ */
 
 /**
  * @package Mediboard
  * @subpackage dPprescription
- * @version $Revision$
+ * @version $Revision:  $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit("CPerfusionLine", "perfusion_line_id");
+$do = new CDoObjectAddEdit("CPrescriptionLineMixVariation", "prescription_line_mix_variation_id");
 $do->doIt();
 
 ?>

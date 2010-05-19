@@ -23,7 +23,7 @@
       <strong>
         {{if $chap == "medicament"}}
           Médicament
-        {{elseif $chap == "perfusion"}}
+        {{elseif $chap == "prescription_line_mix"}}
           Perfusions
         {{else}}
           {{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}
@@ -40,10 +40,10 @@
            <span style="opacity: 0.7; font-size: 0.8em;">
            {{if $line->_forme_galenique}}({{$line->_forme_galenique}}){{/if}}
            </span>
-         {{elseif $line->_class_name == "CPerfusionLine"}}
+         {{elseif $line->_class_name == "CPrescriptionLineMixItem"}}
            {{$line->_ucd_view}}           
-           {{if $line->_class_name == "CPerfusionLine"}}
-             (Perfusion: {{$line->_ref_perfusion->_view}})
+           {{if $line->_class_name == "CPrescriptionLineMixItem"}}
+             (Perfusion: {{$line->_ref_prescription_line_mix->_view}})
            {{/if}}
          {{else}}
            {{$line->_view}}
@@ -58,7 +58,7 @@
              {{else}}
                {{$line->_ref_produit->libelle_unite_presentation}}
              {{/if}}
-           {{elseif $line->_class_name != "CPerfusionLine"}}
+           {{elseif $line->_class_name != "CPrescriptionLineMixItem"}}
              {{$line->_unite_prise}}
            {{else}}
              {{$line->_unite_administration}}

@@ -76,10 +76,10 @@ foreach($mediusers as $_mediuser){
 $prescription->loadRefsLinesMedComments("1", "debut ASC");
 $prescription->loadRefsLinesElementsComments("1","","debut ASC");
 
-// Chargement des perfusions
-$prescription->loadRefsPerfusions();
-foreach($prescription->_ref_perfusions as $curr_perfusion){
-  $curr_perfusion->loadRefsLines();
+// Chargement des prescription_line_mixes
+$prescription->loadRefsPrescriptionLineMixes();
+foreach($prescription->_ref_prescription_line_mixes as $curr_prescription_line_mix){
+  $curr_prescription_line_mix->loadRefsLines();
 }
 
 if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi')) {
@@ -173,30 +173,30 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	}
 }
 
-// Parcours des perfusions
-foreach($prescription->_ref_perfusions as $_perfusion){
-  $_perfusion->loadRefPraticien();
-  $_perfusion->loadRefsSubstitutionLines();
-  foreach($_perfusion->_ref_substitution_lines as $_subst_by_chap){
+// Parcours des prescription_line_mixes
+foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+  $_prescription_line_mix->loadRefPraticien();
+  $_prescription_line_mix->loadRefsSubstitutionLines();
+  foreach($_prescription_line_mix->_ref_substitution_lines as $_subst_by_chap){
     foreach($_subst_by_chap as &$_subst_perf){
       $_subst_perf->loadRefPraticien();
-			if($_subst_perf instanceof CPerfusion){
+			if($_subst_perf instanceof CPrescriptionLineMix){
         $_subst_perf->loadRefsLines();
 		  } else {
 		  	$_subst_perf->loadRefsPrises();
 		  }
     }
   }	   
-  if($prescription->object_id && $praticien->_id && $_perfusion->praticien_id != $praticien->_id){
+  if($prescription->object_id && $praticien->_id && $_prescription_line_mix->praticien_id != $praticien->_id){
 		continue;
 	}	
-	if($_perfusion->next_perf_id){
+	if($_prescription_line_mix->next_line_id){
 		continue;
 	}
-  if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_perfusion->signature_prat && $prescription->object_id){
+  if(!CAppUI::conf("dPprescription CPrescription show_unsigned_lines") && !$_prescription_line_mix->signature_prat && $prescription->object_id){
 	  continue;
   }
-  $lines["medicaments"]["med"]["no_ald"][] = $_perfusion;
+  $lines["medicaments"]["med"]["no_ald"][] = $_prescription_line_mix;
 }
 
 

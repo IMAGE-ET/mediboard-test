@@ -87,7 +87,7 @@ if($prescriptions) {
 	  }
 
     $_prescription->loadRefsLinesMed("1","1");
-	  $_prescription->loadRefsPerfusions();
+	  $_prescription->loadRefsPrescriptionLineMixes();
 
 	  // Calcul du plan de soin
     if(strlen($_selected_cis) == 8){
@@ -170,13 +170,13 @@ if($prescriptions) {
 	        }
 	      }
      }   
-	   if($_prescription->_ref_perfusions_for_plan){
-		  foreach($_prescription->_ref_perfusions_for_plan as $_perfusion){
-		    if(is_array($_perfusion->_prises_prevues)){
-			    foreach($_perfusion->_prises_prevues as $_date => $_prises_by_hour){
+	   if($_prescription->_ref_prescription_line_mixes_for_plan){
+		  foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
+		    if(is_array($_prescription_line_mix->_prises_prevues)){
+			    foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_by_hour){
 			      foreach($_prises_by_hour as $_hour => $_prise){
-			        foreach($_perfusion->_ref_lines as $_perf_line){   	
-								$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
+			        foreach($_prescription_line_mix->_ref_lines as $_perf_line){   	
+								$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
            
 					     	$_perf_line->loadRefProduitPrescription();
 								$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;

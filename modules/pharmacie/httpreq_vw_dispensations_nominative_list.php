@@ -74,7 +74,7 @@ if($prescription->_id){
 
   // Chargement des lignes
   $prescription->loadRefsLinesMed("1","1");
-  $prescription->loadRefsPerfusions();
+  $prescription->loadRefsPrescriptionLineMixes();
   
   $lines_med = array();
   
@@ -146,14 +146,14 @@ if($prescription->_id){
       }
     }
   }
-  // Parcours des prises prevues pour les perfusions
-  if($prescription->_ref_perfusions_for_plan){
-	  foreach($prescription->_ref_perfusions_for_plan as $_perfusion){
-	    foreach($_perfusion->_prises_prevues as $_date => $_prises_by_hour){
+  // Parcours des prises prevues pour les prescription_line_mixes
+  if($prescription->_ref_prescription_line_mixes_for_plan){
+	  foreach($prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
+	    foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_by_hour){
 	      foreach($_prises_by_hour as $_hour => $_prise){
-	        foreach($_perfusion->_ref_lines as $_perf_line){
+	        foreach($_prescription_line_mix->_ref_lines as $_perf_line){
 	        	
-						$count_prises_by_hour = count($_perfusion->_prises_prevues[$_date][$_hour]["real_hour"]);
+						$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
 						
 	        	$_perf_line->loadRefProduitPrescription();
             $_perf_line->loadRefProduit();

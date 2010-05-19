@@ -29,7 +29,7 @@ $object->loadRefPrescription();
 // Chargement des droits sur les lignes
 foreach($object->_ref_substitution_lines as $_lines){
 	foreach($_lines as $_line_sub){
-	  if($_line_sub->_class_name == "CPrescriptionLineMedicament"){
+	  if($_line_sub instanceof CPrescriptionLineMedicament){
 	    $_line_sub->loadRefsFwd();
 	    $_line_sub->loadRefsPrises();
       $_line_sub->_ref_produit->loadVoies();
@@ -48,22 +48,23 @@ foreach($object->_ref_substitution_lines as $_lines){
 }
 $prescription =& $object->_ref_prescription;
 
-// Chargement de toutes les perfusions qui ne sont pas actives
-$prescription->loadRefsPerfusions(0,null,0);
-foreach($prescription->_ref_perfusions as $_perfusion){
-	$_perfusion->loadRefsLines();
-	$_perfusion->loadVoies();
+// Chargement de toutes les prescription_line_mixes qui ne sont pas actives
+$prescription->loadRefsPrescriptionLineMixes(0,"",0);
+
+foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
+	$_prescription_line_mix->loadRefsLines();
+	$_prescription_line_mix->loadVoies();
 }
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
 // Chargement des aides
 $prescriptionLineMedicament = new CPrescriptionLineMedicament();
-$perfusion = new CPerfusion();
+$prescription_line_mix = new CPrescriptionLineMix();
 $prescriptionLineMedicament->loadAides($AppUI->user_id);
 $aides_prescription[$AppUI->user_id]["CPrescriptionLineMedicament"] = $prescriptionLineMedicament->_aides["commentaire"]["no_enum"];
-$perfusion->loadAides($AppUI->user_id);
-$aides_prescription[$AppUI->user_id]["CPerfusion"] = $perfusion->_aides["commentaire"]["no_enum"];
+$prescription_line_mix->loadAides($AppUI->user_id);
+$aides_prescription[$AppUI->user_id]["CPrescriptionLineMix"] = $prescription_line_mix->_aides["commentaire"]["no_enum"];
 
 
 // Création du template
@@ -75,7 +76,7 @@ $smarty->assign("prescription_reelle", $prescription);
 $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", 0);
 $smarty->assign("prise_posologie", new CPrisePosologie());
-$smarty->assign("perfusion", new CPerfusion());
+$smarty->assign("prescription_line_mix", new CPrescriptionLineMix());
 $smarty->assign("moments", $moments);
 $smarty->assign("mode_pack", $mode_pack);
 $smarty->assign("full_line_guid", "");

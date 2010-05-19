@@ -525,7 +525,7 @@ Main.add( function(){
         <button type="button" class="search" onclick="popupTransmission('{{$prescription->object_id}}');">Transmissions</button>
 			{{/if}}			
 			<button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}');" />Ordonnance</button>
-      {{if $prescription->object_id}}
+      {{if $prescription->object_id && $prescription->object_class == "CSejour"}}
 			<button type="button" class="print" onclick="printBons('{{$prescription->_id}}');" title="{{tr}}Print{{/tr}}">Bons</button>
       {{/if}}
 			
