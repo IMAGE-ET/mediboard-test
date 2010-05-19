@@ -15,7 +15,7 @@ $lock = CValue::post('lock');
 
 if ($lock) {
   $_SESSION['locked'] = true;
-  CApp::rip();
+  return;
 }
 else {
   $user = new CUser;
@@ -31,7 +31,7 @@ else {
   
   if ($msg = CAppUI::getMsg()) {
     echo $msg;
-    CApp::rip();
+    return;
   }
   else {
     CAppUI::callbackAjax('Session.unlock');

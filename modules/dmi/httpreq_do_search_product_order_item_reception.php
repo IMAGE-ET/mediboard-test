@@ -38,9 +38,21 @@ else {
 }
 
 if(count($list) > 0) {
-	$smarty = new CSmartyDP();
-	$smarty->assign("list",$list);
-	$smarty->display('inc_search_product_order_item_reception.tpl');
+  foreach ($list as $_id => $_reception) {
+    $remaining = $_reception->getQuantity() - $_reception->countBackRefs("lines_dmi");
+    if ($remaining < 1) {
+      unset($list[$_id]);
+    }
+  }
+  
+  if(count($list) == 0) {
+    CAppUI::stepAjax("Tous les articles <strong>$product->_view</strong> sont déjà consommés", UI_MSG_ERROR);
+  }
+  else {
+  	$smarty = new CSmartyDP();
+  	$smarty->assign("list", $list);
+  	$smarty->display('inc_search_product_order_item_reception.tpl');
+  }
 }
 else {
 	CAppUI::stepAjax("Aucun article enregistré pour le produit <strong>$product->_view</strong>", UI_MSG_ERROR);

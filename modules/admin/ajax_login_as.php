@@ -43,6 +43,6 @@ else {
 
 if ($msg = CAppUI::getMsg()) {
   echo $msg;
-  CApp::rip();
+  return;
 }
 else CAppUI::callbackAjax('UserSwitch.reload');
