@@ -248,6 +248,7 @@ $locales['hprimxml-error-E105'] = 'Identifiants source et cible de la venue non 
 $locales['hprimxml-error-E106'] = 'Numéro de dossier non fourni';
 $locales['hprimxml-error-E107'] = 'Aucun médecin responsable n\'est défini dans la venue. Il est nécessaire d\'en fournir un pour l\'enregistrement de la venue dans Mediboard.';
 $locales['hprimxml-error-E108'] = 'Impossible d\'annuler un dossier en cours.';
+$locales['hprimxml-error-E109'] = 'Impossible d\'annuler un dossier ayant une intervention en cours.';
 $locales['hprimxml-error-E141'] = 'Discordance entre l\'identifiant source et l\'identifiant cible de la venue a éliminer';
 $locales['hprimxml-error-E201'] = 'Intervention non trouvée, impossible de rattacher les actes pour la venue.';
 $locales['hprimxml-error-E206'] = 'IPP et/ou Numéro de dossier non fourni';

@@ -148,6 +148,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     $ville = $xpath->queryTextNode("hprim:ville", $adresse);
     $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
+    /* @todo getFirstNode */
     $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);    
     
     if ($mbPersonne instanceof CPatient) {
@@ -161,6 +162,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
       $mbPersonne->prenom = $prenoms[0];
       $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
       $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
+      /* @todo Mettre un implode sur le multiple */
       $mbPersonne->adresse  = $ligne[0];
       if (isset($ligne[1]))
         $mbPersonne->adresse .= " $ligne[1]";
@@ -600,6 +602,31 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
     }
     
     return $mbPatient;
+  }
+  
+  function doNotCancelVenue($venue, $domAcquittement, &$echange_hprim) {
+    // Impossible d'annuler un séjour en cours 
+    if ($newVenue->entree_reelle) {
+      $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
+      $doc_valid = $domAcquittement->schemaValidate();
+      
+      $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+      return $messageAcquittement;    
+    }
+    
+    // Impossible d'annuler un dossier ayant une intervention
+    $where = array();
+    $where['annulee'] = " = '0'";
+    $newVenue->loadRefsOperations($where);
+    if (count($newVenue->_ref_operations) > 0) {
+      $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E109", $commentaire);
+      $doc_valid = $domAcquittement->schemaValidate();
+      
+      $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+      return $messageAcquittement;    
+    }  
   }
 }
 ?>

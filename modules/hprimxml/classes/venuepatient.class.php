@@ -104,7 +104,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   }
   
   /**
-   * Stay recording 
+   * Coming recording 
    * @param CHPrimXMLAcquittementsPatients $domAcquittement
    * @param CEchangeHprim $echange_hprim
    * @param CPatient $newPatient
@@ -169,14 +169,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         // idCible fourni
         if ($data['idCibleVenue']) {
           if ($newVenue->load($data['idCibleVenue'])) {
-          	if ($cancel && $newVenue->entree_reelle) {
-          	  $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
-              $doc_valid = $domAcquittement->schemaValidate();
-							
-              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-              return $messageAcquittement;		
-          	}
+            // Dans le cas d'une annulation de la venue
+            if ($cancel) {
+              if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                return $messageAcquittement;
+              }
+            }
             
             // Recherche d'un num dossier déjà existant pour cette venue 
             // Mise en trash du numéro de dossier reçu
@@ -209,14 +207,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {
-        	if ($cancel && $newVenue->entree_reelle) {
-            $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
-            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
-            $doc_valid = $domAcquittement->schemaValidate();
-						
-            $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");   
-            return $messageAcquittement;		
+          // Dans le cas d'une annulation de la venue
+          if ($cancel) {
+            if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+              return $messageAcquittement;
+            }
           }
+            
           // Notifier les autres destinataires
           $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
           // Mapping du séjour
@@ -249,14 +246,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $collision = $newVenue->getCollisions();
             if (count($collision) == 1) {
               $newVenue = reset($collision);
-            	if ($cancel && $newVenue->entree_reelle) {
-			          $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
-			          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
-			          $doc_valid = $domAcquittement->schemaValidate();
-								
-			          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");   
-			          return $messageAcquittement;		
-			        }
+              // Dans le cas d'une annulation de la venue
+              if ($cancel) {
+                if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                  return $messageAcquittement;
+                }
+              }
+              
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
               $newVenue->loadNumDossier();
@@ -316,14 +312,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       } 
       // idSource connu
       else {
-        if ($cancel && $newVenue->entree_reelle) {
-          $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
-          $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
-          $doc_valid = $domAcquittement->schemaValidate();
-					
-          $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur"); 
-          return $messageAcquittement;		
+        // Dans le cas d'une annulation de la venue
+        if ($cancel) {
+          if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+            return $messageAcquittement;
+          }
         }
+          
         $newVenue->load($num_dossier->object_id);
         
         // Mapping du séjour
