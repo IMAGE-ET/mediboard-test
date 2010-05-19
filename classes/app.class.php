@@ -77,5 +77,14 @@ class CApp {
     
     return $output;
   }
+  
+  static function getBaseUrl(){
+    $scheme = "http".(isset($_SERVER["HTTPS"]) ? "s" : "");
+    $host = $_SERVER["SERVER_NAME"];
+    $port = ($_SERVER["SERVER_PORT"] == 80) ? null : $_SERVER["SERVER_PORT"];
+    $path = dirname($_SERVER["SCRIPT_NAME"]);
+    
+    return $scheme."://".$host.($port ? ":$port" : "").$path;
+  }
 }
 ?>
