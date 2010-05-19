@@ -108,10 +108,7 @@ document.observe('keydown', function(e){
 
     FormObserver.onChanged = function(){
       // Empty the PDF
-      
-      alert("toto");
       var f = getForm("download-pdf-form");
-      
       var url = new Url();
       url.addParam("_do_empty_pdf", 1);
       url.addParam("dosql", "do_modele_aed");
@@ -119,6 +116,8 @@ document.observe('keydown', function(e){
       url.addParam("compte_rendu_id", f.compte_rendu_id.value);
       url.requestUpdate("systemMsg", {method: "post"});
     }
+    
+    /*window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};*/
 {{else}}
 	var Thumb = {
 	  old: function(){}
