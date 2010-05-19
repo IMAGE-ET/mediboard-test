@@ -35,6 +35,9 @@ var WaitingMessage = {
       if(FormObserver.checkChanges()) {
         WaitingMessage.show();
       } else {
+        if (FormObserver.onChanged) {
+          FormObserver.onChanged();
+        }
         return $T("FormObserver-msg-confirm");
       }
     };

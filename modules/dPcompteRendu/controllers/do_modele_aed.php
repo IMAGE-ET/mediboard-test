@@ -12,6 +12,18 @@ global $AppUI, $m;
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
 $do->redirectDelete = "m=$m&new=1";
 
+if(isset($_POST["_do_empty_pdf"])) {
+  $compte_rendu_id = CValue::post("compte_rendu_id");
+  $compte_rendu = new CCompteRendu();
+  $compte_rendu->load($compte_rendu_id);
+  $file = new CFile;
+  $files = $file->loadFilesForObject($compte_rendu);
+  foreach($files as $_file) {
+    $_file->file_empty();
+  }
+  return;
+}
+
 if (isset($_POST["source"])) {
   // Application des listes de choix
   $fields = array();

@@ -455,7 +455,7 @@ class CCompteRendu extends CDocumentItem {
         case "body":
           if($header) {
             $sizeheader = $sizeheader != '' ? $sizeheader : 50;
-            $padding_top = $sizeheader + 20;
+            $padding_top = $sizeheader;
             
             $style .= "
                 @media print {
@@ -472,7 +472,7 @@ class CCompteRendu extends CDocumentItem {
           }
           if($footer) {
             $sizefooter = $sizefooter != '' ? $sizefooter : 50;
-            $padding_bottom = $sizeheader + 20;
+            $padding_bottom = $sizefooter;
             $style .= "
                 @media print {
                   #body { 

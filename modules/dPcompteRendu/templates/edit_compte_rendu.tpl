@@ -81,10 +81,19 @@ document.observe('keydown', function(e){
 		$V(PageFormat.form.page_height,   page_layout_save.page_height);
 		$V(PageFormat.form.page_width,    page_layout_save.page_width);
 		$V(PageFormat.form._orientation,  page_layout_save.orientation);
-		if(!Thumb.thumb_up2date) {
+
+		if(!Thumb.thumb_up2date && !Thumb.oldContent) {
+
 		  Thumb.thumb_up2date = true;
-		  $('mess').remove();
+		  $('mess').toggle();
 		  $('thumbs').setOpacity(1);
+      Thumb.init();
+      /*for(var i = 0; i < Thumb.nb_thumbs; i++) {
+        var thumbI = $("thumb_" + i);
+        //thumbI.onclick = null;
+        thumbI.stopObserving("click");
+        thumbI.observe("click", Thumb.oldOnclick[i]);
+      }*/
 		}
 		Control.Modal.close();
 	}
@@ -95,6 +104,17 @@ document.observe('keydown', function(e){
     Thumb.modele_id = '{{$modele_id}}';
     Thumb.user_id = '{{$user_id}}';
 		Thumb.mode = "doc";
+    
+    FormObserver.onChanged = function(){
+      // Empty the PDF
+      var f = getForm("download-pdf-form");
+      var url = new Url();
+      url.addParam("_do_empty_pdf", 1);
+      url.addParam("dosql", "do_modele_aed");
+      url.addParam("m", "dPcompteRendu");
+      url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+      url.requestUpdate("systemMsg", {method: "post"});
+    }
 	});
 {{else}}
 	var Thumb = {
@@ -106,7 +126,7 @@ document.observe('keydown', function(e){
 <form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
       onsubmit="completeLayout(); this.submit();">
   <input type="hidden" name="content" value=""/>
-  <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
+  <input type="hidden" name="compte_rendu_id" value='{{if $compte_rendu->_id != ''}}{{$compte_rendu->_id}}{{else}}{{$modele_id}}{{/if}}' />
   <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
   <input type="hidden" name="suppressHeaders" value="1"/>
   <input type="hidden" name="stream" value="1"/>
@@ -182,7 +202,7 @@ document.observe('keydown', function(e){
         {{/foreach}}
       </td>
     {{else}}
-      <td colspan="2"/>
+      <td colspan="2"></td>
 		{{/if}}
   </tr>
   {{if $lists|@count}}

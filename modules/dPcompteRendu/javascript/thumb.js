@@ -1,5 +1,9 @@
 var Thumb = {
   thumb_up2date: true,
+  oldContent: false,
+  hasRefresh: false,
+  compte_rendu_id: 0,
+  file_id: 0,
   choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
     if (isNotModele == 1) {
@@ -14,16 +18,16 @@ var Thumb = {
   },
 
   refreshThumbs: function(first_time, compte_rendu_id, modele_id, user_id, mode) {
+    this.oldContent = false;
     this.thumb_up2date = true;
-
+    this.hasRefresh = true;
     // TODO: changez en classes CSS
     if (first_time != 1) {
       for (var i = 0; i < Thumb.nb_thumbs; i++) {
-        $("thumb_" + i).onclick = null;
+        $("thumb_" + i).stopObserving("click");
       }
-     $('mess').onclick = null;
+     //$('mess').stopObserving("click");
     }
-    
     
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
@@ -50,23 +54,49 @@ var Thumb = {
                               form.margin_left.value]);
     url.addParam("orientation", $V(PageFormat.form._orientation));
     url.addParam("page_format", form._page_format.value);
-    url.requestUpdate("thumbs",{method: "post", getParameters: {m: "dPcompteRendu", a: "ajax_pdf_and_thumbs"}});
+    url.requestUpdate("thumbs",
+     {method: "post",
+      getParameters:
+        {m: "dPcompteRendu", a: "ajax_pdf_and_thumbs"},
+         onComplete: function() { Main.add(function() {
+           Thumb.hasRefresh = false;
+           if(Thumb.thumb_up2date == false) {
+             Thumb.thumb_up2date = true;
+             Thumb.old();
+           }
+           else {
+             Thumb.init();
+           }})}});
   },
   old: function() {
-    if(!this.thumb_up2date) return;
+    if ((!this.thumb_up2date && this.oldContent) || this.hasRefresh) {
+      this.thumb_up2date = false;
+      return;
+    }
     var on_click = function(){
       Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
     }
+    
     $("thumbs").setOpacity(0.5);
 
-    for(var i = 0; i < Thumb.nb_thumbs; i++) {
-      $("thumb_" + i).onclick = null;
-      $("thumb_" + i).observe("click", on_click);
-    }
+    $$(".thumb").each(function(t, i) {
+      t.stopObserving("click").
+        observe("click", on_click);
+    });
+
 
     var mess = $('mess').show();
+    mess.stopObserving("click");
     mess.observe("click", on_click);
     this.thumb_up2date = false;
+  },
+  init: function(){
+    $$(".thumb").each(function(t, i) {
+      t.stopObserving("click").
+        observe("click", function(){
+        (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id, 'CFile', Thumb.file_id, i);
+      });
+    });
   }
 }
 
@@ -86,6 +116,7 @@ function loadOld(editorInstance) {
   if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
     Thumb.content = editorInstance.GetHTML(false);
     Thumb.old();
+    Thumb.oldContent = true;
   }
 	
 }

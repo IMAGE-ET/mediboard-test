@@ -18,7 +18,6 @@ class CHtmlToPDF {
   var $nbpages = null;
   var $dompdf  = null;
   var $content = null;
-  var $timestart = null;
   var $display_elem = array (
 	  "inline" => array(
 		  "b", "strong",
@@ -96,9 +95,15 @@ class CHtmlToPDF {
     $this->dompdf = new DOMPDF;
   }
 
+  function __destruct() {
+    $this->dompdf = null;
+    unset($this->dompdf);
+    $this->content = null;
+    unset($this->content);
+  }
+
   function generatePDF($content, $stream, $format, $orientation, $file) {
     $this->content = $this->fixBlockElements($content);
-    //mbTrace($this->content,'',1);
     $this->dompdf->set_paper($format, $orientation);
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? $protocol = "https://" : $protocol = "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
@@ -112,7 +117,6 @@ class CHtmlToPDF {
       file_put_contents($file->_file_path, $this->dompdf->output());
       $this->nbpages = $this->dompdf->get_canvas()->get_page_count();
     }
-    unset($this->dompdf);
   }
 
   // Expressions régulières provenant de FCKEditor
@@ -127,8 +131,8 @@ class CHtmlToPDF {
     $str = preg_replace("/<\/w:/", '</', $str);
     $str = preg_replace("/<o:smarttagtype.*smarttagtype>/", '', $str);
     $str = preg_replace("/<\/?\w+:[^>]*>/", '', $str);
-    $str = preg_replace("/<tr>\s*<\/tr>/", ''/*<tr><td style="border: none;">&#160;</td></tr>'*/, $str);
-    $str = preg_replace("/<tr\/>/", ''/*"<tr><td style='border: none;'>&#160;</td></tr>"*/, $str);
+    $str = preg_replace("/<tr>\s*<\/tr>/", '', $str);
+    $str = preg_replace("/<tr\/>/", '', $str);
     return $str;
   }
 
