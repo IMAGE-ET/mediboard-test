@@ -23,6 +23,8 @@
 		
 		{{if $dompdf_installed}}
       {{mb_include module=system template=inc_config_bool}}
+      {{assign var="var" value="same_print"}}
+      {{mb_include module=system template=inc_config_bool}}
 	  {{else}}
 		  <tr>
 		  	<td colspan="2">
@@ -37,4 +39,6 @@
       </td>
     </tr>
   </table>
+  
+  {{*include file="benchmark_pdf.tpl"*}}
 </form>
