@@ -15,7 +15,9 @@ Main.add (function () {
       {{$selOp->_ref_sejour->_ref_patient->_view}} 
       &mdash; {{$selOp->_datetime|date_format:$dPconfig.longdate}}
       <br /> Chirurgien : Dr {{$selOp->_ref_chir->_view}}
-      <br /> Anesthésiste probable : Dr {{$selOp->_ref_anesth->_view}} 
+      {{if $selOp->_ref_anesth->_id}}
+        <br /> Anesthésiste probable : Dr {{$selOp->_ref_anesth->_view}}
+      {{/if}} 
     </th>
   </tr>
 

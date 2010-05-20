@@ -42,6 +42,7 @@ function setToNow(element) {
   </tr>
   <tr>
     <td class="text">
+    
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
         {{assign var="acte" value=$_phase->_connected_acte}}
@@ -63,7 +64,7 @@ function setToNow(element) {
         {{if !$confCCAM.tarif && $subject->_class_name != "CConsultation"}}
           <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
         {{/if}}
-  
+        
       	<!-- Couleur de l'acte -->
         {{if $acte->_id && ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso)}}
           {{assign var=bg_color value=9f9}}
@@ -72,31 +73,30 @@ function setToNow(element) {
         {{else}}
           {{assign var=bg_color value=f99}}
         {{/if}}
-  	
-        <div style="position: absolute; right: 24px; margin-top: 4px;">
-          {{if !$acte->_id}}
-          <button class="add" type="button" onclick="
-            {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
-            if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
-              document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
-              ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
-            }
-            {{/if}}
-            submitFormAjax(this.form, 'systemMsg',{onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">
-            Coder cet acte
-          </button>
-      
-          {{else}}
-          
-          <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
-            {{tr}}Delete{{/tr}} cet acte
-          </button>
-          {{/if}}
-        </div>
-
+  
         <table class="form">
           <tr id="acte{{$key}}-trigger">
             <td colspan="10" style="width: 100%; background-color: #{{$bg_color}}; border: 2px solid {{if $_activite->numero == 4}}#44f{{else}}#ff0{{/if}};">
+              <div style="float: right;">
+                {{if !$acte->_id}}
+                <button class="add" type="button" onclick="
+                  {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
+                  if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
+                    document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
+                    ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}');
+                  }
+                  {{/if}}
+                  submitFormAjax(this.form, 'systemMsg',{onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) });">
+                  Coder cet acte
+                </button>
+            
+                {{else}}
+                
+                <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
+                  {{tr}}Delete{{/tr}} cet acte
+                </button>
+                {{/if}}
+              </div>
               Activité {{$_activite->numero}} ({{$_activite->type}}) &mdash; 
               Phase {{$_phase->phase}} 
               <!-- {{$_phase->libelle}} -->
