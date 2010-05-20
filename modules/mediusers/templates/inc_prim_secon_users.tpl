@@ -32,9 +32,9 @@
         <table class="tbl">
           <tr>
             <td colspan="6">
-              <form name="listFilterPrimaryUsers" action="?m={{$m}}" method="get">
-                <input type="hidden" name="m" value="{{$m}}" />
-                <input type="hidden" name="tab" value="{{$tab}}" />
+              <form name="listFilterPrimaryUsers" action="?m=mediusers" method="get">
+                <input type="hidden" name="m" value="mediusers" />
+                <input type="hidden" name="tab" value="vw_idx_functions" />
                 <input type="hidden" name="page_userfunction" value="{{$page_userfunction}}" onchange="this.form.submit()"/>
                 
                 {{if $total_userfunctions != 0}}

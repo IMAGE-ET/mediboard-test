@@ -33,8 +33,13 @@ $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboa
 
 $where = array();
 $where["functions_mediboard.group_id"] = "= '$group->_id'";
+
+// FIXME: utiliser le seek
 if ($filter) {
-  $where[] = "functions_mediboard.text LIKE '%$filter%' OR users.user_last_name LIKE '$filter%' OR users.user_first_name LIKE '$filter%'";
+  $where[] = "functions_mediboard.text LIKE '%$filter%' OR 
+              users.user_last_name LIKE '$filter%' OR 
+              users.user_first_name LIKE '$filter%' OR 
+              users.user_username LIKE '$filter%'";
 }
 if ($pro_sante) {
 	$user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme");
@@ -93,7 +98,7 @@ $spec_cpam = $spec_cpam->loadList();
   
 // Récupération des profils
 $where = array (
-    "template" => "= '1'"
+  "template" => "= '1'"
 );
 $profiles = new CUser();
 $profiles = $profiles->loadList($where);
