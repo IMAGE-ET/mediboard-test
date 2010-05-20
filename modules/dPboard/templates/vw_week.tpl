@@ -28,7 +28,7 @@ function viewItem(oTd, guid, date) {
   Dom.cleanWhitespace($('viewTooltip'));
   $('viewTooltip').childElements().invoke('hide');
 
-  oElement = $(guid).show();
+  var oElement = $(guid).show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
     return;
@@ -66,7 +66,7 @@ function updateSemainier() {
 
 Main.add(function () {
   {{if $prat->_id}}
-		  updateSemainier();
+		updateSemainier();
   {{/if}}
   
   ViewPort.SetAvlHeight("semainier", 1);

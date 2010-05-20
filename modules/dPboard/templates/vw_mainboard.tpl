@@ -39,8 +39,7 @@ function viewItem(oTd, guid, date) {
     }
   });
 
-  oElement = $(guid);
-  oElement.show();
+  var oElement = $(guid).show();
   
   if(oElement.alt == "infos - cliquez pour fermer") {
     return;

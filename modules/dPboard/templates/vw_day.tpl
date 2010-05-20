@@ -117,7 +117,7 @@ Main.add(function () {
 
     <!--  Consultations -->
     <td class="viewport" style="width: 50%" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
-      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}" style="position:absolute" id="icon-consultations">
+      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}&amp;chirSel={{$prat->_id}}" style="position:absolute" id="icon-consultations">
         <img src="modules/dPcabinet/images/icon.png" height="24" width="24" />
       </a>
       <div id="consultations"></div>

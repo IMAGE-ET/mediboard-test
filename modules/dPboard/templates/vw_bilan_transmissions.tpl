@@ -11,16 +11,14 @@
 <script type="text/javascript">
 
 viewTransmissions = function(sejour_id, praticien_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  var url = new Url("dPprescription", "httpreq_vw_transmissions");
   url.addParam("sejour_id", sejour_id);
   url.addParam("praticien_id", document.selPraticien.praticien_id.value);
   url.requestUpdate("view_transmissions");
 }
 
 tri_transmissions = function(order_col, order_way){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_transmissions");
+  var url = new Url("dPprescription", "httpreq_vw_transmissions");
   url.addParam("praticien_id", document.selPraticien.praticien_id.value);
   url.addParam("order_col", order_col);
   url.addParam("order_way", order_way);
@@ -28,7 +26,7 @@ tri_transmissions = function(order_col, order_way){
 }
 
 function markAsSelected(element) {
-  $('list_patients').select('.selected').each(function (e) {e.removeClassName('selected')});
+  $('list_patients').select('.selected').invoke("removeClassName", "selected");
   $(element).up(1).addClassName('selected');
 }
 
