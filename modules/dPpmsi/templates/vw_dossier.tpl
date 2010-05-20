@@ -149,6 +149,14 @@ SejourHprimSelector.doSet = function(){
   }
 }
 
+printDossierComplet = function(sejour_id){
+  var url = new Url;
+  url.setModuleAction("soins", "print_dossier_soins");
+  url.addParam("sejour_id", sejour_id);
+  url.popup("850", "500", "Dossier complet");
+}
+
+
 Main.add(function () {
   PairEffect.initGroup("effectSejour");
 });
@@ -232,6 +240,8 @@ Main.add(function () {
             <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$_sejour->_id}}">
               <img src="images/icons/edit.png" alt="Planifier" />
             </a>
+						<button style="float: right" type="button" class="button print" onclick="printDossierComplet('{{$_sejour->_id}}');">Dossier complet</button>
+						 
             {{$_sejour->_view}}
           </th>
         </tr>
