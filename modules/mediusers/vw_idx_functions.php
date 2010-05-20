@@ -13,6 +13,7 @@ $can->needsRead();
 
 $page    = intval(CValue::get('page', 0));
 $inactif = CValue::get("inactif", array());
+$type    = CValue::get("type");
 $page_userfunction = intval(CValue::get('page_userfunction', 0));
 
 // Récupération des groupes
@@ -21,6 +22,9 @@ $order = "text";
 $groups = $group->loadListWithPerms(PERM_EDIT, null, $order);
 
 $function = new CFunctions();
+if ($type) {
+  $where["type"] = "= '$type'";
+}
 $where["actif"] = $inactif ? "!= '1'" : "= '1'";
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $total_functions = $function->countList($where);
@@ -66,6 +70,8 @@ $smarty->assign("page_userfunction"  , $page_userfunction);
 $smarty->assign("groups"             , $groups  );
 $smarty->assign("secondary_function" , new CSecondaryFunction());
 $smarty->assign("utypes"             , CUser::$types );
+$smarty->assign("type"               , $type );
+
 $smarty->display("vw_idx_functions.tpl");
 
 ?>

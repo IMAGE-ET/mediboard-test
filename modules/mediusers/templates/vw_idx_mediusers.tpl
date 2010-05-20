@@ -62,6 +62,11 @@ function changePage(page) {
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
         <table class="form">
+          <tr>
+            <th class="title" colspan="10">
+              {{tr}}Filter{{/tr}}
+            </th>
+          </tr>
         	<tr>
         		<th>Champ de recherche</th>
         		<td>
@@ -81,7 +86,7 @@ function changePage(page) {
           </tr>
         	<tr>
             <td colspan="2" style="text-align: center">
-              <button type="submit" class="search">Filtrer</button>
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
             </td>
           </tr>
         </table>        

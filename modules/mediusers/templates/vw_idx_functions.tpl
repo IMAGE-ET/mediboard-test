@@ -39,13 +39,27 @@ function changePage(page) {
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.submit()"/>
         <table class="form">
           <tr>
-            <td style="text-align: center">
+            <th class="title" colspan="10"> {{tr}}Filter{{/tr}} </th>
+          </tr>
+          <tr> 
+            <th>Type</th> 
+            <td>
+              <select name="type" onchange="$V(this.form.page, 0)"> 
+                <option value="" {{if !$type}}selected="selected"{{/if}}>Tous</option> 
+                <option value="administratif" {{if $type == "administratif"}}selected="selected"{{/if}}>Administratif</option> 
+                <option value="cabinet" {{if $type == "cabinet"}}selected="selected"{{/if}}>Cabinet</option> 
+              </select>
+            </td> 
+          </tr> 
+          <tr>
+            <th></th>
+            <td>
               <input onclick="$V(this.form.page, 0)" type="checkbox" name="inactif" {{if $inactif}}checked="checked"{{/if}} /> Inactif
             </td>
           </tr>
           <tr>
-            <td style="text-align: center">
-              <button type="submit" class="search">Filtrer</button>
+            <td colspan="2" style="text-align: center">
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
             </td>
           </tr>
         </table>  
