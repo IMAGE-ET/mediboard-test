@@ -23,23 +23,11 @@
     {{/if}}
     <tr>
       <th class="category" colspan="2">Connexion</th>
-      {{if $dPconfig.demo_version}}
-      <th class="category">Comptes disponibles</th>
-      {{/if}}
     </tr>
     
     <tr>
       <th><label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label></th>
       <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
-      {{if $dPconfig.demo_version}}
-      <td rowspan="3" class="category">
-        <strong>Administrateur</strong>: admin/admin<br />
-        <strong>Chirurgien</strong>: chir/chir<br />
-        <strong>PMSI</strong>: pmsi/pmsi<br />
-        <strong>Surveillante de bloc</strong>: survbloc/survbloc<br />
-        <strong>Hospitalisation</strong>: hospi/hospi
-      </td>
-      {{/if}}
     </tr>
     
     <tr>
