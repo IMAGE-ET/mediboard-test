@@ -19,19 +19,20 @@ then
   exit 1
 fi
    
+port=22
+
+args=`getopt p: $*`
+set -- $args
+for i; do
+  case "$i" in
+    -p) port=$2; shift 2;;
+    --) shift ; break ;;
+  esac
+done
+
 location=$1
 directory=$2
 destination=$3
-port=22
-
-while getopts r:s:p: option
-do
-  case $option in
-    p)
-      port=$OPTARG
-      ;;
-  esac
-done
 
 # Backups directory
 rsync -e "ssh -p $port" -avz $location:$directory $destination/$(echo $location | cut -d'@' -f2)

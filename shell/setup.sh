@@ -9,15 +9,31 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard directories groups and mods"
 
-if [ "$#" -lt 1 ]
-then 
-  echo "Usage: $0 <apache_group> <sub_dir>"
-  echo "  <apache_group> is the name of the primary group for Apache user"
-  echo "  <sub_dir> [modules|style] (optional) is the sub-directory you want to apply changes on"
-  exit 1
+#if [ "$#" -lt 1 ]
+#then 
+#  echo "Usage: $0 <sub_dir> [ -g <apache_group> ]"
+#  echo " [ -g <apache_group>] is the name of the primary group for Apache user"
+#  echo " [ -d <sub_dir> [modules|style] ] is the sub-directory you want to apply changes on"
+#  exit 1
+#fi
+
+APACHE_USER=`ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1`
+APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f3`
+
+args=`getopt g:d: $*`
+
+if [ $? != 0 ] ; then
+  echo "Invalid argument. Check your command line"; exit 0;
 fi
-   
-APACHE_GROUP=$1
+
+set -- $args
+for i; do
+  case "$i" in
+    -g) APACHE_GROUP=$2; shift 2;;
+    -d) sub_dir=$2; shift 2;;
+    --) shift ; break ;;
+  esac
+done
 
 grep $APACHE_GROUP: /etc/group >/dev/null
 if [ $? -ne "0" ]

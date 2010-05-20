@@ -76,7 +76,7 @@ showHeader();
   <br />
   Mediboard propose un script shell permettant d'établir ses permissions de façon 
   automatique. C'est le bon moment pour exécuter ce script si ce n'est pas déjà fait !
-  <pre>sh [racine/de/mediboard/]shell/setup.sh www-data</pre>
+  <pre>sh [racine/de/mediboard/]shell/setup.sh</pre>
 </div>
 
 <table class="tbl">
