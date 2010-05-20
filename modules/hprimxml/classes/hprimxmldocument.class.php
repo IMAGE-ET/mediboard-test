@@ -269,9 +269,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $mbOp->entree_salle, 
       $mbOp->time_operation
     );
-    
+
     $execute = $this->addElement($acteCCAM, "execute");
-    $this->addElement($execute, "date", $mbOp->_ref_plageop->date);
+    $this->addElement($execute, "date", $mbOp->date  ? $mbOp->date : $mbOp->_ref_plageop->date);
     $this->addElement($execute, "heure", $mbOpDebut);
 
     $mbExecutant = $mbActeCCAM->_ref_executant;
