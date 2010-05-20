@@ -16,10 +16,18 @@ var FCKMbPrintCommand = function() {
 }
 
 FCKMbPrintCommand.prototype.Execute = function() {
-  FCK.EditorWindow.focus();
-  FCK.EditorWindow.print();
-  if (window.parent.Preferences.saveOnPrint == 2 || confirm("Souhaitez-vous enregistrer ce document ?")){
-    FCKSaveCommand.prototype.Execute();
+  if (window.parent.same_print == 1) {
+    var content = FCKeditorAPI.Instances.source.GetHTML();
+    var form = window.parent.document.forms["download-pdf-form"];
+    form.elements.content.value = encodeURIComponent(content);
+    form.onsubmit();
+  }
+  else {
+    FCK.EditorWindow.focus();
+    FCK.EditorWindow.print();
+    if (window.parent.Preferences.saveOnPrint == 2 || confirm("Souhaitez-vous enregistrer ce document ?")) {
+      FCKSaveCommand.prototype.Execute();
+    }
   }
 }
 

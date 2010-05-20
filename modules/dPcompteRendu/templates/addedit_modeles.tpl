@@ -146,6 +146,8 @@ FormObserver.onChanged = function(){
   url.requestUpdate("systemMsg", {method: "post"});
 }
 
+window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
+
 </script>
 
 {{if $pdf_thumbnails == 1}}

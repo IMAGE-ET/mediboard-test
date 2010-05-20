@@ -14,4 +14,8 @@ define("DOMPDF_DEFAULT_MEDIA_TYPE", "print");
 
 // Urls pour les images acceptées
 define("DOMPDF_ENABLE_REMOTE", true);
+
+// Backend de DOMPDF
+define("DOMPDF_PDF_BACKEND", "CPDF");
+
 ?>

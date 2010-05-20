@@ -11,5 +11,6 @@
 $dPconfig["dPcompteRendu"] = array (
   "CCompteRendu" => array (
     "pdf_thumbnails" => '0',
+    "same_print" => '0',
   ),
 );
