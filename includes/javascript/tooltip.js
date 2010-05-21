@@ -80,7 +80,9 @@ var ObjectTooltip = Class.create({
   },
   
   hide: function() {
-    $(this.sTooltip).hide();
+    var eTooltip = $(this.sTooltip);
+    if (eTooltip)
+      eTooltip.hide();
   },
   
   reposition: function() {

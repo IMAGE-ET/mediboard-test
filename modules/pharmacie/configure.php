@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $day = 60*60*24;
 $monday = 4*$day;

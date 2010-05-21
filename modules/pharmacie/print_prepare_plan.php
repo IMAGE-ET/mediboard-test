@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Calcul de date_max et date_min
 $date_min   = CValue::getOrSession('_date_min');

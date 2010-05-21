@@ -8,8 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsRead();
+CCanDo::checkRead();
 
 $service_id = CValue::getOrSession('service_id');
 $patient_id = CValue::getOrSession('patient_id');

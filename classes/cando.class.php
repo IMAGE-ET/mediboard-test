@@ -28,7 +28,8 @@ class CCanDo {
     if($this->setValues){
       if(is_scalar($this->setValues)){
         CValue::setSession($this->setValues);
-      }else{
+      }
+      else{
         foreach($this->setValues as $key => $value){
           CValue::setSession($key, $value);
         }
@@ -41,20 +42,32 @@ class CCanDo {
     CAppUI::redirect("m=system&a=$a&dialog=$dialog&ajax=$ajax&suppressHeaders=$suppressHeaders".$params);
   }
   
+  /** 
+   * Check if the connected user has READ rights on the current page
+   * @return void
+   */
   function needsRead($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->read) {
       $this->redirect();
     }
   }
-
+  
+  /** 
+   * Check if the connected user has EDIT rights on the current page
+   * @return void
+   */
   function needsEdit($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->edit) {
       $this->redirect();
     }
   }
-
+  
+  /** 
+   * Check if the connected user has ADMIN rights on the current page
+   * @return void
+   */
   function needsAdmin($setValues = null) {
     $this->setValues = $setValues;
     if (!$this->admin) {
@@ -70,21 +83,30 @@ class CCanDo {
     }
   }
 	
+  /** 
+   * Check if the connected user has READ rights on the current page
+   * @return void
+   */
   static function checkRead() {
     global $can;
     $can->needsRead();
   }
-
+  
+  /** 
+   * Check if the connected user has EDIT rights on the current page
+   * @return void
+   */
   static function checkEdit() {
     global $can;
     $can->needsEdit();
   }
-
+  
+  /** 
+   * Check if the connected user has ADMIN rights on the current page
+   * @return void
+   */
   static function checkAdmin() {
     global $can;
     $can->needsAdmin();
   }
-
-	
 }
-?>

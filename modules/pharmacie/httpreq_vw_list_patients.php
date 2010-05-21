@@ -8,6 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
+
 $patients = array();
 $sejours = array();
 $patient_id = CValue::getOrSession('patient_id');

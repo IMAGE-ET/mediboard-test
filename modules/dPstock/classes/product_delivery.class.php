@@ -39,6 +39,7 @@ class CProductDelivery extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
     $spec->key   = 'delivery_id';
+    $spec->xor["service"] = array("service_id", "comments");
     return $spec;
   }
 
@@ -48,7 +49,7 @@ class CProductDelivery extends CMbObject {
     $specs['date_dispensation'] = 'dateTime notNull';
     $specs['date_delivery']     = 'dateTime';
     $specs['quantity']          = 'num notNull';
-    $specs['service_id']        = 'ref notNull class|CService';
+    $specs['service_id']        = 'ref class|CService';
     $specs['patient_id']        = 'ref class|CPatient';
     $specs['order']             = 'bool';
     $specs['comments']          = 'text';

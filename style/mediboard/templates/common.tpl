@@ -17,6 +17,11 @@
   <meta name="Version" content="{{$version.string}}" />
   <meta http-equiv="X-UA-Compatible" content="IE=100" /> <!-- IE8+ mode -->
   
+  <script type="text/javascript">
+    // This needs to be at the very beginning of the page
+    __loadStart = (new Date).getTime();
+  </script>
+  
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{if $uistyle != 'mediboard'}}
     {{$mediboardCommonStyle|smarty:nodefaults}}
@@ -29,7 +34,6 @@
   <![endif]-->
   
   <script type="text/javascript">
-    
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
