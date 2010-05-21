@@ -135,7 +135,11 @@ if (isset($_REQUEST["login"])) {
   if ($redirect) {
     CAppUI::redirect($redirect);
   }
-  CApp::emptyPostData();
+  
+  // Empty post data only if we login by POST (with the login page)
+  if (isset($_POST["login"])) {
+    CApp::emptyPostData();
+  }
 }
 
 // clear out main url parameters
