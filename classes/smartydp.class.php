@@ -386,15 +386,20 @@ function smarty_function_mb_colonne($params, &$smarty) {
  */
 function smarty_function_mb_include_script($params, &$smarty) {
   // Path provided
+  $extraPath = "";
   $path = CMbArray::extract($params, "path");
   $ajax = CMbArray::extract($params, "ajax");
 	
 	// Script name providied
   if ($script = CMbArray::extract($params, "script")) {
-  	$module = CMbArray::extract($params, "module");
-		$dir = $module ? "modules/$module/javascript" : "includes/javascript";
+    $module = CMbArray::extract($params, "module");
+  	
+    if(CMbArray::extract($params, "mobile")){
+      $extraPath = "mobile/";
+    }
+    $dir = $module ? $extraPath."modules/$module/javascript" : "includes/javascript";
   	$path = "$dir/$script.js";
-	}
+  }
 	
 	// Render HTML with build version
   if ($ajax && !empty($smarty->_tpl_vars["ajax"])) {
@@ -444,8 +449,9 @@ class CSmartyDP extends Smarty {
     $rootDir = CAppUI::conf("root_dir");
     $extraPath = self::$extraPath;
 
-    $root = $rootDir.$extraPath;
-    $tmpDir = "$root/tmp";
+    $root = $extraPath ? "$rootDir/$extraPath" : $rootDir;
+
+    $tmpDir = "$rootDir/tmp";
     
     if (!$dir) {
       $dir = "$root/modules/$m"; 
