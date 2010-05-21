@@ -96,6 +96,7 @@ header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");  // Date in the past
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
 header("Cache-Control: no-cache, no-store, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
+header("X-UA-Compatible: chrome=1");
 
 require("./includes/autoload.php");
 
@@ -134,6 +135,7 @@ if (isset($_REQUEST["login"])) {
   if ($redirect) {
     CAppUI::redirect($redirect);
   }
+  CApp::emptyPostData();
 }
 
 // clear out main url parameters
@@ -183,4 +185,4 @@ require("./includes/access_log.php");
 
 ob_end_flush();
 
-CApp::rip();
+CApp::emptyPostData();

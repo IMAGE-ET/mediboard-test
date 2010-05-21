@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global  $can;
+global $can;
 $can->needsRead();
 
 $mean_fields = array(
@@ -40,10 +40,13 @@ foreach ($possible_filters as $n) {
 $cell_saver = new CCellSaver;
 $cell_savers = $cell_saver->loadList(null, "marque, modele");
 
+$user = new CMediusers();
+$user->load(CAppUI::$instance->user_id);
+
 $mediuser = new CMediusers();
 $fields = array(
   "anesth_id"  => $mediuser->loadListFromType(array('Anesthésiste')),
-  "chir_id"    => $mediuser->loadListFromType(array('Chirurgien')),
+  "chir_id"    => $mediuser->loadListFromType(array('Chirurgien'), ($user->isAnesth() ? null : PERM_READ)),
   "codes_asa"  => range(1, 5),
   "cell_saver_id" => $cell_savers,
 );

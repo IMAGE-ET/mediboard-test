@@ -32,6 +32,18 @@ class CApp {
   }
   
   /**
+   * This will make a redirect to empty the POST data, so 
+   * that it is not posted back when refreshing the page.
+   * Use it instead of CApp::rip() directly
+   */
+  static function emptyPostData(){
+    if (!empty($_POST)) {
+      CAppUI::redirect();
+    }
+    self::rip();
+  }
+  
+  /**
    * Outputs JSON data after removing the Output Buffer, with a custom mime type
    * @param object $data The data to output
    * @param string $mimeType [optional] The mime type of the data, application/json by default

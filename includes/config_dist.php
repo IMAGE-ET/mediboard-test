@@ -14,9 +14,9 @@ $dPconfig["company_name"] = "mediboard.org";
 $dPconfig["page_title"]   = "Mediboard SIH";
 $dPconfig["base_url"]     = "http://localhost/mediboard/";
 
-$dPconfig["offline"]       = "0";
-$dPconfig["instance_role"] = "qualif";
-$dPconfig["mb_id"]         = "";
+$dPconfig["offline"]          = "0";
+$dPconfig["instance_role"]    = "qualif";
+$dPconfig["mb_id"]            = "";
 $dPconfig["alternative_mode"] = "0";
 
 // Mode migration
@@ -25,12 +25,12 @@ $dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";
 $dPconfig["migration"]["extranet_url"] = "http://extranet_server/mediboard/";
 $dPconfig["migration"]["limit_date"] = "1970-01-01";
 
-$dPconfig["date"]         = "%d/%m/%Y";
-$dPconfig["time"]         = "%Hh%M";
-$dPconfig["datetime"]     = "%d/%m/%Y %Hh%M";
-$dPconfig["longdate"]     = "%A %d %B %Y";
-$dPconfig["longtime"]     = "%H heures %M minutes";
-$dPconfig["timezone"]     = "Europe/Paris";
+$dPconfig["date"]     = "%d/%m/%Y";
+$dPconfig["time"]     = "%Hh%M";
+$dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
+$dPconfig["longdate"] = "%A %d %B %Y";
+$dPconfig["longtime"] = "%H heures %M minutes";
+$dPconfig["timezone"] = "Europe/Paris";
 
 // PHP config
 $dPconfig["php"] = array(
@@ -39,11 +39,11 @@ $dPconfig["php"] = array(
 
 // Standard database config
 $dPconfig["db"]["std"] = array(
-  "dbtype" => "mysql",      // Change to use another dbms
-  "dbhost" => "localhost",  // Change to connect to a distant Database
-  "dbname" => "mediboard",  // Change to match your Mediboard Database Name
-  "dbuser" => "mbadmin",    // Change to match your Username
-  "dbpass" => "adminmb",    // Change to match your Password
+  "dbtype" => "mysql",     // Change to use another dbms
+  "dbhost" => "localhost", // Change to connect to a distant Database
+  "dbname" => "", // Change to match your Mediboard Database Name
+  "dbuser" => "", // Change to match your Username
+  "dbpass" => "", // Change to match your Password
 );
 
 // Other databases config
@@ -106,9 +106,6 @@ $dPconfig["currency_symbol"]   = "&euro;";
 
 // Enable if you want to hide confidentials fields
 $dPconfig["hide_confidential"] = false;
-
-// Enable if you want to have a demo version interface
-$dPconfig["demo_version"]      = false;
 
 // Warn when a translation is not found (for developers and tranlators)
 $dPconfig["locale_warn"]       = false;

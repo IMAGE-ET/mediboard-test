@@ -276,11 +276,16 @@ foreach ($dates as $month => $date) {
 }
 
 foreach($data as &$_data) {
+  $ticks[] = array(count($ticks), "Total");
+  
   $_data["options"] = CFlotrGraph::merge("bars", $_data["options"]);
   $_data["options"] = CFlotrGraph::merge($_data["options"], array(
     'xaxis' => array('ticks' => $ticks, 'labelsAngle' => 45),
     'bars' => array('stacked' => true),
   ));
+  
+  CFlotrGraph::computeTotals($_data["series"], $_data["options"]);
 }
+
 
 CApp::json($data, "text/plain");

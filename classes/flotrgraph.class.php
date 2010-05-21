@@ -82,4 +82,54 @@ class CFlotrGraph {
     $base = $merge_with_base ? self::$profiles["base"] : array();
     return array_replace_recursive($base, $from, $options);
   }
+  
+  static function computeTotals(&$series, &$options) {
+    $serie = array();
+    
+    if (count($series) <= 1) {
+      $series[0]["markers"]["show"] = true;
+      return;
+    }
+    
+    $options["xaxis"]["min"] = -0.5;
+    $options["xaxis"]["max"] = count($series[0]["data"])-0.5;
+    
+    $options["yaxis"]["min"] = 0;
+    $options["yaxis"]["max"] = null;
+    
+    // X totals
+    foreach($series as $_index => &$_serie) {
+      $new_serie = array(count($series[$_index]["data"]), 0);
+      
+      foreach($_serie["data"] as $_key => $_data) {
+        $new_serie[1] += $_data[1];
+      }
+      
+      $series[$_index]["data"][] = $new_serie;
+    }
+    
+    // Y totals
+    foreach($series as $_index => &$_serie) {
+      foreach($_serie["data"] as $_key => $_data) {
+        if (!isset($serie[$_key])) $serie[$_key] = array($_data[0], 0);
+        $serie[$_key][1] += $_data[1];
+      }
+    }
+    
+    foreach($serie as $_key => $_value) {
+      if ($_key == count($serie)-1) break;
+      $options["yaxis"]["max"] = max($_value[1], $options["yaxis"]["max"]);
+    }
+    
+    $options["yaxis"]["max"] *= 1.1;
+    
+    $series[] = array(
+      "data" => $serie, 
+      "label" => "total", 
+      //"hide" => true, 
+      "markers" => array("show" => true), 
+      "bars" => array("show" => false), 
+      "lines" => array("show" => false),
+    );
+  }
 }
