@@ -29,8 +29,8 @@
 				Occupation surveillance
 			</th>
 		</tr>
-		{{mb_include module=system template=inc_config_str  class="occupation_suveillance" var="faible"}}
-    {{mb_include module=system template=inc_config_str  class="occupation_suveillance" var="eleve"}}
+		{{mb_include module=system template=inc_config_str  class="occupation_surveillance" var="faible"}}
+    {{mb_include module=system template=inc_config_str  class="occupation_surveillance" var="eleve"}}
 
     <tr>
       <th colspan="2" class="category">
