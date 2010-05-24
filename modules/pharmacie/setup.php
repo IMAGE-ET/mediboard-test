@@ -16,9 +16,7 @@ class CSetuppharmacie extends CSetup {
     $this->mod_name = 'pharmacie';
 
     $this->makeRevision('all');
-
-//    $sql = '';
-//    $this->addQuery($sql);
+    $this->addDependency("dPstock", "1.26");
     
     $this->mod_version = '0.1';
   }

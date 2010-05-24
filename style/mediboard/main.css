@@ -14,6 +14,7 @@ z-index ordering (foreground to background) :
  1000 div#console
   900 #waitingMsgText
   899 #waitingMsgMask
+  850 #systemMsg
   800 .ajax-loading
   500 div.tooltip
   400 div.autocomplete

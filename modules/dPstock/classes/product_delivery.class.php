@@ -39,7 +39,7 @@ class CProductDelivery extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
     $spec->key   = 'delivery_id';
-    $spec->xor["service"] = array("service_id", "comments");
+    //$spec->xor["service"] = array("service_id", "comments");
     return $spec;
   }
 
