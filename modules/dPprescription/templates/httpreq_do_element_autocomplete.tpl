@@ -14,7 +14,7 @@
       <small style="display: none;">{{$element->_id}}</small>
       <small style="display: none;">{{$element->_ref_category_prescription->chapitre}}</small>
       
-			<strong {{if $element->color}}class="mediuser" style="border-left-color: #{{$element->_color}};"{{/if}}>{{$element->libelle|emphasize:$libelle}}</strong><br />
+			<strong {{if $element->_color}}class="mediuser" style="border-left-color: #{{$element->_color}};"{{/if}}>{{$element->libelle|emphasize:$libelle}}</strong><br />
 			{{if !$category_id}}
 			  <span style="opacity: 0.7">
 			 	  {{$element->_ref_category_prescription}}
