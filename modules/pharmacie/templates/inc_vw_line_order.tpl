@@ -18,6 +18,7 @@
       {{$curr_delivery->_ref_service->_view}}
     {{/if}}
   </td>
+  <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
   <td>
     {{if $curr_delivery->_ref_stock->_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">

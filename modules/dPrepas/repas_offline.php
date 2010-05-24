@@ -41,25 +41,17 @@ if($indexFile){
                          "etatOffline"  => 0);
   
   $smarty = new CSmartyDP();
-  $smarty->template_dir = "modules/dPrepas/templates/";
-  $smarty->compile_dir  = "modules/dPrepas/templates_c/";
-  $smarty->config_dir   = "modules/dPrepas/configs/";
-  $smarty->cache_dir    = "modules/dPrepas/cache/";
   $smarty->assign("plats" , $plats);
   $smarty->assign("mediboardScriptStorage", mbLoadScriptsStorage());
   
   $smartyStyle = new CSmartyDP();
-  $smartyStyle->template_dir = "style/$uistyle/templates/";
-  $smartyStyle->compile_dir  = "style/$uistyle/templates_c/";
-  $smartyStyle->config_dir   = "style/$uistyle/configs/";
-  $smartyStyle->cache_dir    = "style/$uistyle/cache/";
   
   $smartyStyle->assign("offline"              , true);
   $smartyStyle->assign("localeInfo"           , $locale_info);
-  $smartyStyle->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
-  $smartyStyle->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
-  $smartyStyle->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-  $smartyStyle->assign("mediboardScript"      , mbLoadScripts());
+  $smartyStyle->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
+  $smartyStyle->assign("mediboardCommonStyle" , CCSSLoader::loadFile("style/mediboard/main.css", "all"));
+  $smartyStyle->assign("mediboardStyle"       , CCSSLoader::loadFile("style/$uistyle/main.css", "all"));
+  $smartyStyle->assign("mediboardScript"      , CJSLoader::loadFiles());
   $smartyStyle->assign("messages"             , $messages);
   $smartyStyle->assign("debugMode"            , CAppUI::pref("INFOSYSTEM"));
   $smartyStyle->assign("configOffline"        , $configOffline);

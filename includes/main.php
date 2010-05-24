@@ -8,14 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+$debug = CAppUI::pref("INFOSYSTEM");
+
 // Get the user's style
 $uistyle = CAppUI::pref("UISTYLE");
 if (!file_exists("style/$uistyle/templates/header.tpl")) {
   $uistyle = "mediboard";
 }
 
-$scripts = array(
-  mbLoadJSLocales(),
+CJSLoader::$files = array(
+  CJSLoader::getLocaleFile(),
   "includes/javascript/printf.js",
   //"lib/dshistory/dshistory.js",
   
@@ -25,6 +27,8 @@ $scripts = array(
   /*"lib/nwmatcher/nwmatcher.js",
   "lib/nwmatcher/traversal.js",
   "lib/nwmatcher/prototypejs.js",*/
+ 
+  "includes/javascript/console.js",
 
   // We force the download of the dependencies 
   "lib/scriptaculous/src/builder.js",
@@ -48,7 +52,7 @@ $scripts = array(
 
   // Flotr
   "lib/flotr/flotr.js",
-  array("lib/flotr/lib/excanvas.js", "IE"), // for IE
+  "lib/flotr/lib/excanvas.js",
   "lib/flotr/lib/base64.js",
   "lib/flotr/lib/canvas2image.js",
   "lib/flotr/lib/canvastext.js",
@@ -80,10 +84,10 @@ if (!CAppUI::$instance->user_id) {
   else {
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
-    $tplLogin->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
-    $tplLogin->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
-    $tplLogin->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-    $tplLogin->assign("mediboardScript"      , mbLoadScripts($scripts));
+    $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
+    $tplLogin->assign("mediboardCommonStyle" , CCSSLoader::loadFile("style/mediboard/main.css", "all"));
+    $tplLogin->assign("mediboardStyle"       , CCSSLoader::loadFile("style/$uistyle/main.css", "all"));
+    $tplLogin->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
     $tplLogin->assign("errorMessage"         , CAppUI::getMsg());
     $tplLogin->assign("time"                 , time());
     $tplLogin->assign("redirect"             , $redirect);
@@ -197,10 +201,10 @@ if (!$suppressHeaders) {
   $tplHeader->assign("nodebug"              , true);
   $tplHeader->assign("configOffline"        , null);
   $tplHeader->assign("localeInfo"           , $locale_info);
-  $tplHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico"));
-  $tplHeader->assign("mediboardCommonStyle" , mbLinkStyleSheet("style/mediboard/main.css", "all"));
-  $tplHeader->assign("mediboardStyle"       , mbLinkStyleSheet("style/$uistyle/main.css", "all"));
-  $tplHeader->assign("mediboardScript"      , mbLoadScripts($scripts));
+  $tplHeader->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
+  $tplHeader->assign("mediboardCommonStyle" , CCSSLoader::loadFile("style/mediboard/main.css", "all"));
+  $tplHeader->assign("mediboardStyle"       , CCSSLoader::loadFile("style/$uistyle/main.css", "all"));
+  $tplHeader->assign("mediboardScript"      , CJSLoader::loadFiles(!$debug));
   $tplHeader->assign("dialog"               , $dialog);
   $tplHeader->assign("messages"             , $messages);
   $tplHeader->assign("mails"                , $mails);
@@ -254,7 +258,7 @@ if (!$suppressHeaders) {
   
   $tplFooter = new CSmartyDP("style/$uistyle");
   $tplFooter->assign("offline"       , false);
-  $tplFooter->assign("debugMode"     , CAppUI::pref("INFOSYSTEM"));
+  $tplFooter->assign("debugMode"     , $debug);
   $tplFooter->assign("performance"   , $performance);
   $tplFooter->assign("userIP"        , $address["client"]);
   $tplFooter->assign("errorMessage"  , CAppUI::getMsg());

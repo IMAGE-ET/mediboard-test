@@ -468,60 +468,13 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
     fclose( $file );
 }
 
-/** Commentaires conditionnels pour IE :
-<!--[if IE]>Si IE<![endif]-->
-<!--[if gte IE 5]> pour réserver le contenu à IE 5.0 et version plus récentes (actuellement E5.5, IE6.0 et IE7.0) <![endif]-->
-<!--[if IE 5.0]> pour IE 5.0 <![endif]-->
-<!--[if IE 5.5000]> pour IE 5.5 <![endif]-->
-<!--[if IE 6]> pour IE 6.0 <![endif]-->
-<!--[if gte IE 5.5000]> pour IE5.5 et supérieur <![endif]-->
-<!--[if lt IE 6]> pour IE5.0 et IE5.5 <![endif]-->
-<!--[if lt IE 7]> pour IE inférieur à IE7 <![endif]-->
-<!--[if lte IE 6]> pour IE5.0, IE5.5 et IE6.0 mais pas IE7.0<![endif]-->
- */
-
-/**
- * Loads a javascript with build version postfix to prevent nasty cache effects
- * while updating the system.
- */
-function mbLoadScript($filepath, $conditionnalComments = "") {
-  global $version;
-  $build = $version["build"];
-  $tag = "\n<script type=\"text/javascript\" src=\"$filepath?build=$build\"></script>";
-  if ($conditionnalComments) {
-    $tag = "\n<!--[if $conditionnalComments]>$tag\n<![endif]-->";
-  }
-  return $tag;
-}
-
-/**
- * Links a style sheet with build version postfix to prevent nasty cache effects
- * Only to be called while in the HTML header.  */
-function mbLinkStylesheet($filepath, $media = "all") {
-  global $version;
-  $build = $version["build"];
-  return "\n<link rel=\"stylesheet\" type=\"text/css\" href=\"$filepath?build=$build\" media=\"$media\" />";
-}
-
-/**
- * Links a shotcut icon version postfix to prevent nasty cache effects 
- * Only to be called while in the HTML header.  */
-function mbLinkShortcutIcon($filepath = 0) {
-  global $version;
-  $build = $version["build"];
-  return "\n<link rel=\"shortcut icon\" type=\"image/ico\" href=\"$filepath?build=$build\" />";
-}
-
 /**
  * URL to the mediboard.org documentation page 
  * @return string: the link to mediboard.org  */
 function mbPortalURL($page = "Accueil", $tab = null) {
   $url = "http://www.mediboard.org/public/";
   
-  $url .= $page == "tracker" ?
-    "tiki-view_tracker.php?trackerId=4" :
-    "tiki-index.php?page=mod-$page";
-  
+  $url .= ($page == "tracker") ? "tracker4" : "mod-$page";
   $url .= $tab ? "-tab-$tab" : "";
   return $url;
 }
@@ -530,80 +483,13 @@ function stringNotEmpty($s){
   return $s !== "";
 }
 
-function mbWriteJSLocalesFile($language = null) {
-  global $version, $locales;
-  
-  $root_dir = CAppUI::conf("root_dir");
-  $current_locales = $locales;
-  
-  if (!$language) {
-    $languages = array();
-    foreach (glob("$root_dir/locales/*", GLOB_ONLYDIR) as $lng)
-      $languages[] = basename($lng);
-  }
-  else {
-    $languages = array($language);
-  }
-  
-  foreach($languages as $language) {
-    $localeFiles = array_merge(glob("$root_dir/locales/$language/*.php"), glob("$root_dir/modules/*/locales/$language.php"));
-    foreach ($localeFiles as $localeFile) {
-      if (basename($localeFile) != "meta.php") {
-        require $localeFile;
-      }
-    }
-    
-    $path = "$root_dir/tmp/locales.$language.js";
-  
-    if ($fp = fopen($path, 'w')) {
-      // The callback will filter on empty strings (without it, "0" will be removed too).
-      $locales = array_filter($locales, "stringNotEmpty");
-      // TODO: change the invalid keys (with accents) of the locales to simplify this
-      $keys = array_map('utf8_encode', array_keys($locales));
-      $values = array_map('utf8_encode', $locales);
-      $script = '//'.$version['build']."\nwindow.locales = ".json_encode(array_combine($keys, $values)).";";
-      fwrite($fp, $script);
-      fclose($fp);
-    }
-  }
-  
-  $locales = $current_locales;
-}
-
-function mbLoadJSLocales() {
-  global $version, $locales;
-  
-  $language = CAppUI::pref("LOCALE");
-  
-  $path = "tmp/locales.$language.js";
-
-  if (!is_file($path)) {
-    mbWriteJSLocalesFile($language);
-  }
-  
-  return $path;
-}
-
-/**
- * Loads all scripts
- */
-function mbLoadScripts($scripts) {
-  $affichageScript = "";
-  
-  foreach($scripts as $script) {
-    $affichageScript .= is_array($script) ? mbLoadScript($script[0], $script[1]) : mbLoadScript($script);
-  }
-  
-  return $affichageScript;
-}
-
 function mbLoadScriptsStorage(){
-  $affichageScript = '';
-  $affichageScript .= mbLoadScript("lib/dojo/dojo.js");
-  $affichageScript .= mbLoadScript("lib/dojo/src/io/__package__.js");
-  $affichageScript .= mbLoadScript("lib/dojo/src/html/__package__.js");
-  $affichageScript .= mbLoadScript("lib/dojo/src/lfx/__package__.js");
-  $affichageScript .= mbLoadScript("includes/javascript/storage.js");
+  $affichageScript = "";
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/dojo.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/io/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/html/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("lib/dojo/src/lfx/__package__.js");
+  $affichageScript .= CJSLoader::loadFile("includes/javascript/storage.js");
   return $affichageScript;
 }
 
@@ -897,8 +783,10 @@ function get_remote_address(){
   }
   
   // To handle weird IPs sent by iPhones, in the form "10.10.10.10, 10.10.10.10"
-  $address["proxy"]  = reset(explode(",", $address["proxy"]));
-  $address["client"] = reset(explode(",", $address["client"]));
+  $proxy  = explode(",", $address["proxy"]);
+  $client = explode(",", $address["client"]);
+  $address["proxy"]  = reset($proxy);
+  $address["client"] = reset($client);
   
   return $address;
 }

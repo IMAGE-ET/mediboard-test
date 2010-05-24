@@ -14,6 +14,7 @@
   <!-- Affichage des delivrances globales -->
   <tr>
     <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-comments{{/tr}}</th>
     {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}

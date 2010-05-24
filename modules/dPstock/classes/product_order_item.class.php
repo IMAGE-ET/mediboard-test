@@ -32,6 +32,7 @@ class CProductOrderItem extends CMbObject {
   var $_date_received     = null;
   var $_quantity_received = null;
   var $_quantity          = null;
+  var $_is_unit_quantity  = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -150,8 +151,11 @@ class CProductOrderItem extends CMbObject {
       $where['order_id']     = "= '$this->order_id'";
       $where['reference_id'] = "= '$this->reference_id'";
 
-      $duplicateKey = new CProductOrderItem();
+      if (isset($this->_is_unit_quantity)) {
+        $this->quantity /= ($this->_ref_reference->quantity * $this->_ref_reference->_ref_product->quantity);
+      }
       
+      $duplicateKey = new CProductOrderItem();
       if($duplicateKey->loadObject($where)) {
         $duplicateKey->loadRefsFwd();
         $this->_id = $duplicateKey->_id;

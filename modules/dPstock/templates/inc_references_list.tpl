@@ -53,12 +53,15 @@
             <input type="hidden" name="callback" value="orderItemCallback" />
             <input type="hidden" name="_create_order" value="1" />
             <input type="hidden" name="reception_id" value="" />
+            {{if !$dPconfig.dPstock.CProductReference.show_cond_price}}
+              <input type="hidden" name="_is_unit_quantity" value="1" />
+            {{/if}}
             {{mb_field object=$_reference 
               field=quantity 
               size=2
               form="product-reference-$id" 
               increment=true 
-              value=1
+              value=$dPconfig.dPstock.CProductReference.show_cond_price|ternary:1:$_reference->quantity*$_reference->_ref_product->quantity
               style="width: 2em;"
             }}
             <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>

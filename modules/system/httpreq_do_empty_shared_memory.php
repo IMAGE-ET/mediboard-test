@@ -48,5 +48,5 @@ if (!SHM::rem("class-paths")) {
 
 CAppUI::stepAjax("Table des classes supprimée", UI_MSG_OK);
 
-mbWriteJSLocalesFile();
+CJSLoader::writeLocaleFile();
 CAppUI::stepAjax("Fichiers de locales mis à jour", UI_MSG_OK);

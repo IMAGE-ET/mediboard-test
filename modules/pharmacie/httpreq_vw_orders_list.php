@@ -13,7 +13,7 @@ CCanDo::checkRead();
 $service_id = CValue::get('service_id');
 $start      = CValue::get('start', 0);
 
-$order_by = 'date_dispensation DESC';
+$order_by = 'date_dispensation ASC';
 $where = array (
  'order' => " = '1'"
 );
