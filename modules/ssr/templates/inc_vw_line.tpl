@@ -1,6 +1,8 @@
-{{if $_line->debut}}
-  A partir du {{mb_value object=$_line field="debut"}}
-{{/if}}
+<span style="float: right;">
+{{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
+</span>
+
+<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">Edit</button>
 
 {{assign var=element value=$_line->_ref_element_prescription}}
 {{assign var=category value=$element->_ref_category_prescription}}
@@ -10,13 +12,10 @@
   </span>
 </strong>
 <div id="details-{{$element->_guid}}" style="display: none;">
-<strong>{{mb_label object=$element field=description}}</strong>: 
-{{$element->description|default:'Aucune'|nl2br}}
+	<strong>{{mb_label object=$element field=description}}</strong>: 
+	{{$element->description|default:'Aucune'|nl2br}}
 </div>
 
-{{if $_line->date_arret}}
-  jusqu'au {{mb_value object=$_line field="date_arret"}}
-{{/if}}
 
 {{if $_line->commentaire}}
 <div style="margin-left: 2em;" class="warning">{{$_line->commentaire}}</div>

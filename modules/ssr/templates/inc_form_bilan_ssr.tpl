@@ -142,7 +142,7 @@ Main.add( function(){
 
 <table class="main">
 	<tr>
-		<td style="width: 50%">
+		<td style="width: 60%">
 			<table class="form">
 				<tr>
 				  <th class="title" colspan="2">Prescription</th>
@@ -150,7 +150,7 @@ Main.add( function(){
 		    {{foreach from=$categories item=_category}}
 		      {{assign var=category_id value=$_category->_id}}
 		      <tr>
-		        <th>
+		        <th style="width: 1%;">
 		        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
 					  </th>
 		        <td>

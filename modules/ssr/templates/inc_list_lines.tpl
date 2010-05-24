@@ -34,7 +34,6 @@
 		<tr>
 			<td />
 			<td>
-			<button class="edit notext" type="button" onclick="updateListLines('{{$category_id}}', '{{$_line->prescription_id}}', '{{$_line->_id}}');">Edit</button>
       {{mb_include template=inc_vw_line}}
 	   </td>
     </tr>

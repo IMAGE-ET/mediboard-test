@@ -39,7 +39,8 @@ refreshConstantesMedicales = function (force) {
 <ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
   <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
-  <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>
+  <li onmousedown="refreshConstantesMedicales();"><a href="#constantes">{{tr}}CConstantesMedicales{{/tr}}</a></li>
+{{*   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>  *}}
   <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
   <li onmousedown="Planification.refresh('{{$sejour->_id}}')">
   	<a href="#planification">
@@ -51,7 +52,6 @@ refreshConstantesMedicales = function (force) {
   		Cotation
 		</a>
 	</li>
-  <li onmousedown="refreshConstantesMedicales();"><a href="#constantes">{{tr}}CConstantesMedicales{{/tr}}</a></li>
   {{/if}}
 </ul>
 

@@ -193,7 +193,7 @@ Main.add(function(){
     
 	  <table class="form">
 	  	<tr>
-	  	  <th>{{mb_label object=$bilan field=entree}}</th>
+	  	  <th style="width: 1%">{{mb_label object=$bilan field=entree}}</th>
 				<td>{{mb_value object=$bilan field=entree}}</td>
 			</tr>
 	    <tr>
@@ -208,7 +208,7 @@ Main.add(function(){
 	            {{foreach from=$_lines_by_cat.element item=_line name=category}}
 	              {{if $smarty.foreach.category.first}}
 	                {{assign var=category value=$_line->_ref_element_prescription->_ref_category_prescription}}
-	                <button id="trigger-{{$category->_guid}}" class="search activite" type="button" 
+	                <button id="trigger-{{$category->_guid}}" class="none activite" type="button" 
 									        onclick="$V(this.form._category_id, '{{$category->_id}}'); selectActivite('{{$category->_guid}}')">
 	                  {{$category}}
 	                </button>
@@ -230,17 +230,12 @@ Main.add(function(){
 	                <div class="activite" id="activite-{{$category->_guid}}" style="display: none;">
 	              {{/if}}
 	              
-	               <span style="float: right">
-	              {{if $_line->debut}}
-	                à partir du {{mb_value object=$_line field="debut"}}
-	              {{/if}}
-	              {{if $_line->date_arret}}
-	                jusqu'au {{mb_value object=$_line field="date_arret"}}
-	              {{/if}}
+	              <span style="float: right">
+                  {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
 	              </span>
 	              <label>
 	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
-	              <span class="mediuser" style="border-left-color: #{{$element->_color}};">
+	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
 								  {{$_line->_view}}
                 </span>
 								</label>
@@ -378,9 +373,9 @@ Main.add(function(){
 			    Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
       	</td>
 				<td>
-					Transférer vers le planning 
+					Transférer vers 
 					<select name="kine_id">
-						<option value="">&mdash; Choix d'un kiné</option>
+						<option value="">&mdash; Rééducateur</option>
 						{{foreach from=$plateaux item=_plateau}}
 						  <optgroup label="{{$_plateau->_view}}">
 						  {{foreach from=$_plateau->_ref_techniciens item=_technicien}}
@@ -396,9 +391,9 @@ Main.add(function(){
           Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
         </td>
 				<td>
-					Transférer vers le planning 
+					Transférer vers 
 				  <select name="equipement_id">
-				  	<option value="">&mdash; Choix d'un équipement</option>
+				  	<option value="">&mdash; Equipement</option>
 						{{foreach from=$plateaux item=_plateau}}
               <optgroup label="{{$_plateau->_view}}">
 	            {{foreach from=$_plateau->_ref_equipements item=_equipement}}
