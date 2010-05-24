@@ -189,4 +189,4 @@ require("./includes/access_log.php");
 
 ob_end_flush();
 
-CApp::emptyPostData();
+CApp::emptyPostData($suppressHeaders);
