@@ -87,13 +87,13 @@ foreach($duree_occupation as $_occupation){
 	$duree_occupation = $_occupation["total"];
 	
 	if($duree_occupation < $config["faible"]){
-	  $color = "green";
+	  $color = "#8f8";
 	}
 	if($duree_occupation > $config["eleve"]){
-    $color = "red";
+    $color = "#f88";
   }
 	if($duree_occupation >= $config["faible"] && $duree_occupation <= $config["eleve"]){
-		$color = "yellow";
+		$color = "#ff4";
 	}
   $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn", null, $color);
 }
