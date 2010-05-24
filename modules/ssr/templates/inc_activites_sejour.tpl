@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $bilan->kine_id}} 
+{{if $bilan->technicien_id}} 
 <script type="text/javascript">
 
 selectActivite = function(activite) {
@@ -26,6 +26,7 @@ selectActivite = function(activite) {
 
 selectTechnicien = function(kine_id) {
   $V(oFormEvenementSSR.therapeute_id, kine_id);	
+	
   $$("button.ressource").invoke("removeClassName", "selected");
   $("technicien-"+kine_id).addClassName("selected");
 
@@ -137,7 +138,7 @@ addBorderEvent = function(){
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
-	selectTechnicien('{{$bilan->kine_id}}');
+	selectTechnicien('{{$bilan->_ref_technicien->kine_id}}');
 	
 	if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
@@ -148,21 +149,18 @@ Main.add(function(){
   }
 	
 	// Initialisation du timePicker
-	Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
-	
-	Main.add(function () {
-    Control.Tabs.create('tabs-activites', true);
-  });
+ Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
+	Control.Tabs.create('tabs-activites', true);
 });
 									
 </script>
 {{/if}}
 
 
-{{if !$bilan->kine_id}} 
+{{if !$bilan->technicien_id}} 
 <div class="small-warning">
   Le patient n'a pas de 
-  {{mb_label object=$bilan field=kine_id}}
+  {{mb_label object=$bilan field=technicien_id}}
 	<a class="button search" href="?&m={{$m}}&amp;tab=vw_idx_repartition">
 	  Me rendre à la répartition des patients
 	</a>
@@ -199,8 +197,8 @@ Main.add(function(){
 				<td>{{mb_value object=$bilan field=entree}}</td>
 			</tr>
 	    <tr>
-	      <th>{{mb_label object=$bilan field=kine_id}}</th>
-	      <td><strong>{{mb_value object=$bilan field=kine_id}}</strong></td>
+	      <th>{{mb_label object=$bilan field=technicien_id}}</th>
+	      <td><strong>{{mb_value object=$bilan field=technicien_id}}</strong></td>
 	    </tr>
 	    <tr>
 	      <th>Activités</th>

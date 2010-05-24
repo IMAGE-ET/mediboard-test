@@ -12,9 +12,15 @@ global $can;
 $can->needsRead();
 
 // Plateaux disponibles
-$kine_id = CValue::get("kine_id");
+$technicien_id = CValue::get("technicien_id");
 $date = CValue::getOrSession("date", mbDate());
-$sejours = CBilanSSR::loadSejoursSSRfor($kine_id, $date);
+
+$technicien = new CTechnicien();
+$technicien->load($technicien_id);
+$technicien->loadRefKine();
+$kine_id = $technicien->_ref_kine->_id;
+
+$sejours = CBilanSSR::loadSejoursSSRfor($technicien_id, $date);
 foreach ($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient();
@@ -40,5 +46,5 @@ foreach ($remplacements as $_remplacement) {
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
 $smarty->assign("remplacements", $remplacements);
-$smarty->display("inc_sejours_kine.tpl");
+$smarty->display("inc_sejours_technicien.tpl");
 ?>

@@ -9,24 +9,25 @@
  */
 
 Repartition = {
-  updateKine: function(kine_id) {
-    new Url('ssr', 'ajax_sejours_kine') .
-      addParam('kine_id', kine_id) . 
-      requestUpdate('sejours-kine-'+kine_id);
+  updateTechnicien: function(technicien_id) {
+    new Url('ssr', 'ajax_sejours_technicien') .
+      addParam('technicien_id', technicien_id) . 
+      requestUpdate('sejours-technicien-'+technicien_id);
   },
   
-  // Make kine droppable
-  droppableKine: function(kine_id) {
-    Droppables.add("kine-"+kine_id, { 
+  // Make technicien droppable
+  droppableTechnicien: function(technicien) {
+    Droppables.add("technicien-"+technicien, { 
       onDrop: Repartition.dropSejour,
       hoverclass:'dropover'
     });
   },
   
   // Launch initial plateau update
-  registerKine: function (kine_id) {
-    Main.add(Repartition.updateKine.curry(kine_id));
-    Repartition.droppableKine(kine_id)
+  registerTechnicien: function (technicien_id) {
+		console.debug(technicien_id);
+    Main.add(Repartition.updateTechnicien.curry(technicien_id));
+    Repartition.droppableTechnicien(technicien_id)
   },
   
 	// Make sejour draggable
@@ -35,18 +36,18 @@ Repartition = {
 	},
 	
 	// Link séjour to kiné
-	dropSejour: function(sejour, kine) {
+	dropSejour: function(sejour, technicien) {
     sejour.hide();
 		var sejour_id = sejour.id.split("-")[1];
-    var kine_id   = kine  .id.split("-")[1];
-		var former_kine_id = sejour.up(2).id.split("-")[2];
+    var technicien_id   = technicien  .id.split("-")[1];
+		var former_technicien_id = sejour.up(2).id.split("-")[2];
 
 		var form = document.forms['Edit-CBilanSSR'];
     $V(form.sejour_id, sejour_id);
-    $V(form.kine_id, kine_id);
+    $V(form.technicien_id, technicien_id);
 		onSubmitFormAjax(form, { onComplete: function() {
-      Repartition.updateKine(former_kine_id);
-      Repartition.updateKine(kine_id);
+      Repartition.updateTechnicien(former_technicien_id);
+      Repartition.updateTechnicien(technicien_id);
 		} } );
 		
 	}	

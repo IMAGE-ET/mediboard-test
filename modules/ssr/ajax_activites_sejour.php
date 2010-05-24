@@ -42,11 +42,13 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
 // Bilan
 $sejour->loadRefBilanSSR();
 $bilan =& $sejour->_ref_bilan_ssr;
+$bilan->loadRefTechnicien();
+$bilan->_ref_technicien->loadRefKine();
 
 // Technicien et plateau
 $technicien = new CTechnicien;
 $plateau = new CPlateauTechnique;
-if ($technicien->kine_id = $bilan->kine_id) {
+if ($technicien->_id = $bilan->technicien_id) {
 	$technicien->loadMatchingObject();
 	$plateau = $technicien->loadFwdRef("plateau_id");
 	$plateau->loadRefsEquipements();

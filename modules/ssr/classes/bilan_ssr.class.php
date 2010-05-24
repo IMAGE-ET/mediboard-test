@@ -17,13 +17,14 @@ class CBilanSSR extends CMbObject {
   
   // DB Fields
   var $sejour_id = null;
-  var $kine_id = null;
-  var $entree = null;
+  var $technicien_id = null;
+	var $entree = null;
   var $sortie = null;
   var $_activites = array();
 	
   // References
-
+  var $_ref_technicien = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "bilan_ssr";
@@ -35,22 +36,26 @@ class CBilanSSR extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["sejour_id"] = "ref notNull class|CSejour show|0";
-		$specs["kine_id"]   = "ref class|CMediusers";
+		$specs["technicien_id"]   = "ref class|CTechnicien";
     $specs["entree"] = "text helped";
     $specs["sortie"] = "text helped";
     return $specs;
   }
 	
 	/**
-	 * Load Sejour for kine at a date
+	 * Load Sejour for technicien at a date
 	 **/ 
-	static function loadSejoursSSRfor($kine_id, $date) {
+	static function loadSejoursSSRfor($technicien_id, $date) {
 		$group = CGroups::loadCurrent();
     $where["type"] = "= 'ssr'";
     $where["group_id"] = "= '$group->_id'";
-		$where["kine_id"] = $kine_id ? "= '$kine_id'" : "IS NULL";
+		$where["bilan_ssr.technicien_id"] = $technicien_id ? "= '$technicien_id'" : "IS NULL";
     $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
 		return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
+	}
+	
+	function loadRefTechnicien(){
+		$this->_ref_technicien = $this->loadFwdRef("technicien_id");
 	}
 }
 

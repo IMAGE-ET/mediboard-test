@@ -11,9 +11,9 @@
 <table class="tbl">
 
   <tr>
-    <th id="kine-{{$kine_id}}">
+    <th id="technicien-{{$technicien_id}}">
       <script type="text/javascript">
-        Repartition.registerKine('{{$kine_id}}')
+        Repartition.registerTechnicien('{{$technicien_id}}')
 			</script>
     	{{$_technicien}}
 		</th>
@@ -30,7 +30,7 @@
   </tr>
 	{{/if}}
 	
-	<tbody id="sejours-kine-{{$kine_id}}">
+	<tbody id="sejours-technicien-{{$technicien_id}}">
 
 	</tbody>
 

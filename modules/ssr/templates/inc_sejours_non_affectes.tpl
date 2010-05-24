@@ -11,15 +11,15 @@
 
 <table class="tbl">
   <tr>
-    <th id="kine-" class="title">
+    <th id="technicien-" class="title">
       <script type="text/javascript">
-        Repartition.registerKine('');
+        Repartition.registerTechnicien('');
       </script>
       Séjours non affectés
 		</th>
   </tr>
 	
-  <tbody id="sejours-kine-">
+  <tbody id="sejours-technicien-">
   </tbody>
 
 	

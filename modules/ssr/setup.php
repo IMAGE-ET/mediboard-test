@@ -230,7 +230,28 @@ class CSetupssr extends CSetup {
               ADD INDEX (`equipement_id`);";
     $this->addQuery($sql);
 		
-    $this->mod_version = "0.15";
+		$this->makeRevision("0.15");
+		$sql = "ALTER TABLE `bilan_ssr` 
+            ADD `technicien_id` INT (11) UNSIGNED;";
+	  $this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `bilan_ssr` 
+            ADD INDEX (`technicien_id`);";
+		$this->addQuery($sql);
+		
+		$sql = "UPDATE `bilan_ssr`
+		        SET technicien_id = 
+						  (SELECT technicien_id 
+							FROM technicien
+							WHERE kine_id = bilan_ssr.kine_id
+							LIMIT 1);";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `bilan_ssr` 
+		        DROP kine_id";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.16";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

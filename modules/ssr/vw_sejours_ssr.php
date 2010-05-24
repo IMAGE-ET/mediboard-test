@@ -47,11 +47,12 @@ foreach($sejours as $_sejour) {
   // Bilan SSR
   $_sejour->loadRefBilanSSR();
   $bilan =& $_sejour->_ref_bilan_ssr;
-	$bilan->loadFwdRef("kine_id");
+	$bilan->loadFwdRef("technicien_id");
 	
 	// Kine principal
-	$kine =& $bilan->_fwd["kine_id"];
-	$kine->loadRefFunction(); 
+	$technicien =& $bilan->_fwd["technicien_id"];
+	$technicien->loadRefKine();
+	$technicien->_ref_kine->loadRefFunction(); 
 	
   // Patient
   $_sejour->loadRefPatient();

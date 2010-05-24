@@ -26,8 +26,7 @@ class CTechnicien extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = 'technicien';
     $spec->key   = 'technicien_id';
-		$spec->uniques["technicien"] = array("kine_id");
-    return $spec;
+		return $spec;
   }
 
   function getProps() {
@@ -36,7 +35,7 @@ class CTechnicien extends CMbObject {
     $specs["kine_id"]    = "ref notNull class|CMediusers";
     return $specs;
   }
-  
+	
   function loadRefKine() {
     $this->_ref_kine = $this->loadFwdRef("kine_id", true);
 		$this->_ref_kine->loadRefFunction();

@@ -40,7 +40,7 @@
 
 		<th style="width:  5em;">{{mb_title class="CSejour" field="_num_dossier"}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
-    <th style="width: 12em;">{{mb_title class="CBilanSSR" field="kine_id"}}</th>
+    <th style="width: 12em;">{{mb_title class="CBilanSSR" field="technicien_id"}}</th>
     <th style="width:   1%;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
 	</tr>
 	
@@ -85,9 +85,10 @@
 		
     <td class="text">
 	    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
-	    {{assign var=kine  value=$bilan->_fwd.kine_id}}
+			{{assign var=technicien  value=$bilan->_fwd.technicien_id}}
+	    {{assign var=kine  value=$technicien->_ref_kine}}
 			{{if $kine->_id}}
-    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$bilan->_fwd.kine_id}}
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine}}
       {{/if}}
 		</td>
 		

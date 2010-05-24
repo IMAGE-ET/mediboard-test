@@ -33,7 +33,7 @@ Main.add(function () {
 
 {{mb_key object=$bilan}}
 {{mb_field object=$bilan field=sejour_id hidden=1}}
-{{mb_field object=$bilan field=kine_id hidden=1}}
+{{mb_field object=$bilan field=technicien_id hidden=1}}
 
 </form>
 
