@@ -141,27 +141,24 @@ delLineDMI = function(line_dmi_id){
       
     </td>
     <td>
-      
-      <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
-        <input type="hidden" name="product_id" value="" />
-        
-	      <table class="form">
-	        <tr>
-	          <th colspan="2" class="category">Recherche par produit</th>
-	        </tr>
-	        <tr>
-	          <th>Produit</th>
-	          <td>
+      <table class="form">
+        <tr>
+          <th colspan="2" class="category">Recherche par produit</th>
+        </tr>
+        <tr>
+          <th>Produit</th>
+          <td>
+            <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
+              <input type="hidden" name="product_id" value="" />
 	            <input type="text" name="_view" size="25" value="" />
 	            <div id="dmi_delivery__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
-	          </td>
-	        </tr>
-	        <tr>
-	          <td id="list_product_order_item_reception" colspan="2"></td>
-	        </tr>
-	      </table>
-      </form>
-      
+	          </form>
+          </td>
+        </tr>
+        <tr>
+          <td id="list_product_order_item_reception" colspan="2"></td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

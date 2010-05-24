@@ -46,14 +46,22 @@ if(count($list) > 0) {
   }
   
   if(count($list) == 0) {
-    CAppUI::stepAjax("Tous les articles <strong>$product->_view</strong> sont déjà consommés", UI_MSG_ERROR);
-  }
-  else {
-  	$smarty = new CSmartyDP();
-  	$smarty->assign("list", $list);
-  	$smarty->display('inc_search_product_order_item_reception.tpl');
+    CAppUI::stepAjax("Tous les articles <strong>$product->_view</strong> sont déjà consommés", UI_MSG_WARNING);
   }
 }
 else {
-	CAppUI::stepAjax("Aucun article enregistré pour le produit <strong>$product->_view</strong>", UI_MSG_ERROR);
+	CAppUI::stepAjax("Aucun article enregistré pour le produit <strong>$product->_view</strong>", UI_MSG_WARNING);
 }
+
+$reference = new CProductReference;
+$reference->product_id = $product->_id;
+$list_references = $reference->loadMatchingList();
+
+foreach($list_references as $_reference) {
+  $_reference->loadRefSociete();
+}
+
+$smarty = new CSmartyDP();
+$smarty->assign("list", $list);
+$smarty->assign("list_references", $list_references);
+$smarty->display('inc_search_product_order_item_reception.tpl');
