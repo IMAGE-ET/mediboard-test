@@ -1,3 +1,3 @@
 <?php
-$locales['pref-defaultRPUSort-_patient_id'] = '';
+$locales['pref-showMissingRPU-desc'] = '';
 ?>

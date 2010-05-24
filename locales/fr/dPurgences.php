@@ -355,6 +355,8 @@ $locales['config-dPurgences-rpu_xml_validation-desc'] = 'Validation schéma XML';
 $locales['config-dPurgences-sender'] = 'Protocole d\'envoi des RPU';
 $locales['config-dPurgences-show_missing_rpu'] = 'Affichage des RPU manquant';
 $locales['config-dPurgences-show_missing_rpu-desc'] = 'Affichage des RPU manquant';
+$locales['config-dPurgences-sibling_hours'] = 'Tolérance pour les séjours proches';
+$locales['config-dPurgences-sibling_hours-desc'] = 'Nombre d\'heures de tolérancepour essayer de rapprocher des séjour pour le même patient et le même établisssement';
 $locales['config-dPurgences-sortie_prevue'] = 'Initialiser la sortie prévue';
 $locales['config-dPurgences-sortie_prevue-desc'] = 'Initialiser la sortie prévue';
 $locales['config-dPurgences-sortie_prevue-h24'] = 'H +24';
@@ -381,7 +383,6 @@ $locales['pref-defaultRPUSort-_entree'] = 'Arrivée';
 $locales['pref-defaultRPUSort-_patient_id'] = 'Patient';
 $locales['pref-defaultRPUSort-ccmu'] = 'CCMU';
 $locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
-$locales['config-dPurgences-sibling_hours'] = 'Tolérance pour les séjours proches';
-$locales['config-dPurgences-sibling_hours-desc'] = 'Nombre d\'heures de tolérancepour essayer de rapprocher des séjour pour le même patient et le même établisssement';
-
+$locales['pref-showMissingRPU'] = 'Afficher les RPU manquants';
+$locales['pref-showMissingRPU-desc'] = 'Afficher les séjour de type Urgence n\'ayant pas de RPU';
 ?>

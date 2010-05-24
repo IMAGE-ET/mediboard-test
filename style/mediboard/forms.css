@@ -239,6 +239,10 @@ button[disabled]:hover, a.button[disabled]:hover {
   outline: none;
 }
 
+button.none {
+	text-indent: 2px;
+}
+
 button.edit:before, a.button.edit:before {
   content: url(images/buttons/edit.png);
 }

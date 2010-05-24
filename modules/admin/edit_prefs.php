@@ -104,6 +104,7 @@ $array_list_module_pref = array (
   ),
   "dPurgences" => array (
     "defaultRPUSort",
+    "showMissingRPU",
   )
 );
 

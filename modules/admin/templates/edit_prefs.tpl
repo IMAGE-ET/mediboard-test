@@ -86,7 +86,7 @@ Main.add(function () {
       <select name="pref[{{$var}}]" class="text" size="1">
         {{foreach from=$styles item=currStyles key=keyStyles}}
         <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{tr}}{{$currStyles}}{{/tr}}
+          {{$currStyles}}
         </option>
         {{/foreach}}
       </select>
@@ -124,18 +124,8 @@ Main.add(function () {
     </td>
   </tr>
   
-  {{assign var="var" value="touchscreen"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+
+  {{mb_include template=inc_pref_bool var=touchscreen}}
   
   {{assign var="var" value="tooltipAppearenceTimeout"}}
   <tr>
@@ -151,18 +141,7 @@ Main.add(function () {
     </td>
   </tr>
   
-  {{assign var="var" value="showLastUpdate"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_bool var=showLastUpdate}}
   
   </tbody>
   
@@ -181,18 +160,7 @@ Main.add(function () {
     </td>
   </tr>
 
-  {{assign var="var" value="GestionFSE"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_bool var=GestionFSE}}
 
   {{assign var="var" value="InterMaxDir"}}
   <tr>
@@ -218,20 +186,7 @@ Main.add(function () {
     </td>
   </tr>
   
-  {{assign var="var" value="VitaleVision"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="VitaleVision">
-        Préferer l'utilisation de Vitale Vision à LogicMax
-      </label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_bool var=VitaleVision}}
 
 	</tbody>
   {{/if}}
@@ -241,58 +196,11 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
   
-	{{assign var="var" value="AUTOADDSIGN"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-	
-  {{assign var="var" value="AFFCONSULT"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="MODCONSULT"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="dPcabinet_show_program"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
+  {{mb_include template=inc_pref_bool var=AUTOADDSIGN}}
+  {{mb_include template=inc_pref_enum var=AFFCONSULT values="0|1"}}
+  {{mb_include template=inc_pref_enum var=MODCONSULT values="0|1"}}
+  {{mb_include template=inc_pref_bool var=dPcabinet_show_program}}
+	  
   {{assign var="var" value="DossierCabinet"}}
   <tr>
     <th>
@@ -320,96 +228,14 @@ Main.add(function () {
     </td>
   </tr>
 
-  {{assign var="var" value="simpleCabinet"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=simpleCabinet values="0|1"}}
+  {{mb_include template=inc_pref_enum var=ccam_consultation values="0|1"}}
+  {{mb_include template=inc_pref_enum var=view_traitement values="0|1"}}
+  {{mb_include template=inc_pref_bool var=autoCloseConsult}}
+  {{mb_include template=inc_pref_bool var=resumeCompta}}
+  {{mb_include template=inc_pref_bool var=showDatesAntecedents}}
+  {{mb_include template=inc_pref_bool var=pratOnlyForConsult}}
 
-  {{assign var="var" value="ccam_consultation"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
-  {{assign var="var" value="view_traitement"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
-  {{assign var="var" value="autoCloseConsult"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
-  {{assign var="var" value="resumeCompta"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="showDatesAntecedents"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="pratOnlyForConsult"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
 
 	</tbody>
   {{/if}}
@@ -419,20 +245,8 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{assign var="var" value="saveOnPrint"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-        <option value="2" {{if $prefsUser.$module.$var == 2 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-2{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
+  {{mb_include template=inc_pref_enum var=saveOnPrint values="0|1|2"}}
+	  
   </tbody>
   {{/if}}
   
@@ -441,18 +255,7 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
   
-  {{assign var="var" value="ccam_sejour"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0" {{if $prefsUser.$module.$var == 0 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if $prefsUser.$module.$var == 1 }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=ccam_sejour values="0|1"}}
   
   </tbody>
   {{/if}}
@@ -462,31 +265,8 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{assign var="var" value="INFOSYSTEM"}}
-  <tr>
-  	<th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-  	<td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
-  {{assign var="var" value="showTemplateSpans"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_bool var=INFOSYSTEM}}
+  {{mb_include template=inc_pref_bool var=showTemplateSpans}}
     
   </tbody>
   {{/if}}
@@ -496,32 +276,9 @@ Main.add(function () {
   {{if $prefsUser.$module}}
 	<tbody style="display: none" id="{{$module}}">
 	  
-  {{assign var="var" value="mode_dhe"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=mode_dhe values="0|1"}}
+  {{mb_include template=inc_pref_bool var=dPplanningOp_listeCompacte}}
   
-  {{assign var="var" value="dPplanningOp_listeCompacte"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}bool.0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}bool.1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
   </tbody>
   {{/if}}
   
@@ -530,30 +287,9 @@ Main.add(function () {
 	<tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{assign var="var" value="easy_mode"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  {{assign var="var" value="show_transmissions_form"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="0"{{if $prefsUser.$module.$var == "0"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-0{{/tr}}</option>
-        <option value="1"{{if $prefsUser.$module.$var == "1"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-1{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=easy_mode values="0|1"}}
+  {{mb_include template=inc_pref_enum var=show_transmissions_form values="0|1"}}
+
   </tbody>
   {{/if}}
   
@@ -562,24 +298,12 @@ Main.add(function () {
   <tbody style="display: none" id="{{$module}}">
   <!-- Préférences pour le module {{$module}} -->
 
-  {{assign var=var value=defaultRPUSort}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="ccmu"       {{if $prefsUser.$module.$var == "ccmu"       }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-ccmu       {{/tr}}</option>
-        <option value="_patient_id"{{if $prefsUser.$module.$var == "_patient_id"}}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-_patient_id{{/tr}}</option>
-        <option value="_entree"    {{if $prefsUser.$module.$var == "_entree"    }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-_entree    {{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=defaultRPUSort values="ccmu|_patient_id|_entree"}}
+  {{mb_include template=inc_pref_bool var=showMissingRPU}}
 
   </tbody>
   {{/if}}
   
-
   <tr>
     <td class="button" colspan="2">
       <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>

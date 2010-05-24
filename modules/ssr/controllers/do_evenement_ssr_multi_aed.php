@@ -16,7 +16,7 @@ $therapeute_id = CValue::post("therapeute_id");
 $line_id       = CValue::post("line_id");
 
 if($cdarr == "other"){
-	$cdarr = $code;
+  $cdarr = $code;
 }
 
 $_days = CValue::post("_days");
@@ -28,37 +28,40 @@ $line_element = new CPrescriptionLineElement();
 $line_element->load($line_id);
 $element_prescription_id = $line_element->element_prescription_id;
 
-$kine = new CMediusers();
-$kine->load($therapeute_id);
-
-if(count($_days)){
-	foreach($_days as $_day){
-		if(!$_heure || !$duree){
-			continue;
-		}
-		$evenement_ssr = new CEvenementSSR();
-		$evenement_ssr->sejour_id = $sejour_id;
-		$evenement_ssr->code = $cdarr;
-	  $evenement_ssr->equipement_id = $equipement_id;
-	  $evenement_ssr->debut = "$_day $_heure";
-	  $evenement_ssr->duree = $duree;
-		$evenement_ssr->element_prescription_id = $element_prescription_id;
-		
-		$where = array();
-		$plage_vacances = new CPlageVacances();
-		$where["user_id"] = "= '$therapeute_id'";
-    $where[] = "'$_day' BETWEEN date_debut AND date_fin";
-		$plage_vacances->loadObject($where);
-		$replacer_id = "";
-		if($_day >= $plage_vacances->date_debut && $_day <= $plage_vacances->date_fin){
-			$replacer_id = $plage_vacances->replacer_id;
-		}
-		
-		$evenement_ssr->therapeute_id = $replacer_id ? $replacer_id : $therapeute_id;
+$sejour = new CSejour;
+$sejour->load($sejour_id);
+if (count($_days)){
+  foreach ($_days as $_day) {
+    $entree = mbDate($sejour->entree);
+    $sortie = mbDate($sejour->sortie);
+    if (!in_range($_day, $entree, $sortie)) {
+      CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
+      continue; 
+    }
     
-		$msg = $evenement_ssr->store();
-		CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
-	}
+    if (!$_heure || !$duree) {
+      continue;
+    }
+    
+    $evenement_ssr = new CEvenementSSR();
+    $evenement_ssr->sejour_id = $sejour_id;
+    $evenement_ssr->code = $cdarr;
+    $evenement_ssr->equipement_id = $equipement_id;
+    $evenement_ssr->therapeute_id = $therapeute_id;
+    $evenement_ssr->debut = "$_day $_heure";
+    $evenement_ssr->duree = $duree;
+    $evenement_ssr->element_prescription_id = $element_prescription_id;
+
+    // Remplacement automatique pendant des congés
+    $plage = new CPlageVacances;
+    $plage->loadFor($therapeute_id, $_day);
+    if ($plage->replacer_id) {
+      $evenement_ssr->therapeute_id = $plage->replacer_id;
+    }
+
+    $msg = $evenement_ssr->store();
+    CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
+  }
 }
 echo CAppUI::getMsg();
 CApp::rip();

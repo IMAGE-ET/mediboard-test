@@ -249,10 +249,10 @@ $locales['CTransmissionMedicale.none'] = 'Aucune transmission médicale';
 $locales['CTransmissionMedicale.object_class.'] = 'Pas de cible';
 $locales['CTransmissionMedicale.object_class.CAdministration'] = 'Administration';
 $locales['CTransmissionMedicale.object_class.CCategoryPrescription'] = 'Catégorie de prescription';
-$locales['CTransmissionMedicale.object_class.CPrescriptionLineMix'] = 'Perfusion';
 $locales['CTransmissionMedicale.object_class.CPrescriptionLineComment'] = 'Commentaire';
 $locales['CTransmissionMedicale.object_class.CPrescriptionLineElement'] = 'Ligne de prescription';
 $locales['CTransmissionMedicale.object_class.CPrescriptionLineMedicament'] = 'Medicament';
+$locales['CTransmissionMedicale.object_class.CPrescriptionLineMix'] = 'Perfusion';
 $locales['CTransmissionMedicale.one'] = 'Une transmission médicale';
 $locales['CTransmissionMedicale.type.'] = 'Aucun type';
 $locales['CTransmissionMedicale.type.action'] = 'Action';
@@ -284,4 +284,5 @@ $locales['mod-dPhospi-tab-vw_recherche'] = 'Etat des lits';
 $locales['mod-dPhospi-tab-vw_suivi_bloc'] = 'Suivi bloc';
 $locales['module-dPhospi-court'] = 'Hospitalisation';
 $locales['module-dPhospi-long'] = 'Gestion des hospitalisations';
+$locales['pref-ccam_sejour-desc'] = 'Gestion des actes CCAM des séjours';
 ?>
