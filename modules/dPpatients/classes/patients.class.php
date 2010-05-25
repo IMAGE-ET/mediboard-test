@@ -1100,10 +1100,12 @@ class CPatient extends CMbObject {
       $where = array();
       $where["favoris_user"] = "= '$user'";
       $order = "favoris_code";
-      $favoris = $favoris->loadList($where, $order);
-      foreach($favoris as $key => $value) {
-        $this->_static_cim10["favoris"][$value->favoris_code] = new CCodeCIM10($value->favoris_code, 1);
+      if ($favoris = $favoris->loadList($where, $order)) {
+	      foreach($favoris as $key => $value) {
+	        $this->_static_cim10["favoris"][$value->favoris_code] = new CCodeCIM10($value->favoris_code, 1);
+	      }
       }
+			
       $ds = CSQLDataSource::get("std");
       $sql = "SELECT DP, count(DP) as nb_code
         FROM `sejour`
