@@ -576,7 +576,6 @@ class CSetupdPprescription extends CSetup {
     function updateUnitePrise(){
 
      $ds_std = CSQLDataSource::get("std");
-     $ds_bcb = CBcbObject::getDataSource();
              
      // Recuperation de toutes les lignes de posologies ayant unite_prise à NULL et aucun numero de poso indiqué 
      $sql = "SELECT prise_posologie.prise_posologie_id, prescription_line_medicament.code_cip 
@@ -588,6 +587,7 @@ class CSetupdPprescription extends CSetup {
      $res_sans_poso = $ds_std->loadList($sql);
 
      foreach($res_sans_poso as $_prise){
+      $ds_bcb = CBcbObject::getDataSource();
      	// Recuperation de l'unite de prise
      	$sql = "SELECT `LIBELLE_UNITE_DE_PRISE_PLURIEL` 
                 FROM `POSO_UNITES_PRISE`,`POSO_PRODUITS` 
@@ -613,6 +613,7 @@ class CSetupdPprescription extends CSetup {
      $res_avec_poso = $ds_std->loadList($sql);
        
      foreach($res_avec_poso as $_prise){
+      $ds_bcb = CBcbObject::getDataSource();
      	// Recuperation de l'unite de prise
      	$sql = "SELECT `LIBELLE_UNITE_DE_PRISE_PLURIEL` 
               FROM `POSO_UNITES_PRISE`,`POSO_PRODUITS` 
