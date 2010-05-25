@@ -739,6 +739,14 @@ class CMediusers extends CMbObject {
   function isMedical() {
     return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Kinesitherapeute", "Sage Femme"));
   }
+	
+  /**
+   * Check whether user is a kine
+   * @return bool
+   */
+  function isKine() {
+    return $this->isFromType(array("Kinesitherapeute"));
+  }
 
   function isAdmin() {
     return $this->isFromType(array("Administrator"));

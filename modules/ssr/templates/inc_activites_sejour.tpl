@@ -17,9 +17,17 @@ selectActivite = function(activite) {
 
   $$("button.activite").invoke("removeClassName", "selected");
   $("trigger-"+activite).addClassName("selected");
+	
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
 
+  // On masque les techncien et on enleve le technicien selectionné
+  $$("div.techniciens").invoke("hide").invoke("removeClassName", "selected");
+  $$("button.ressource").invoke("removeClassName", "selected");
+	$V(oFormEvenementSSR.therapeute_id, '');  
+  
+	// Affichage des techniciens correspondants à l'activité selectionnée
+	$("techniciens-"+activite).show();
 
   // On masque les codes Cdarrs
   $$("div.cdarrs").invoke("hide");
@@ -28,7 +36,6 @@ selectActivite = function(activite) {
   $V(oFormEvenementSSR.code, '');
 	oFormEvenementSSR._cdarr.checked = false;
   
-	
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
 }
@@ -68,9 +75,17 @@ selectElement = function(line_id){
 	$("cdarrs-"+line_id).show();
 	$('div_other_cdarr').show();
 
+  // Deselection de tous les codes cdarrs
+  removeCdarrs();
 
   // Mise en evidence des elements dans les plannings
 	addBorderEvent();
+}
+
+removeCdarrs = function(){
+  oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
+    e.checked = false;
+  });
 }
 
 submitSSR = function(){
@@ -148,7 +163,8 @@ addBorderEvent = function(){
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
-	selectTechnicien('{{$bilan->_ref_technicien->kine_id}}');
+	
+	//selectTechnicien('{{$bilan->_ref_technicien->kine_id}}');
 	
 	if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
@@ -267,7 +283,7 @@ Main.add(function(){
 	              <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
 	                {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
 	                  <label title="{{$_cdarr->commentaire}}">
-	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
+	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> {{$_cdarr->code}}
 	                  </label>
 	                {{/foreach}}
 	              </div>
@@ -286,12 +302,31 @@ Main.add(function(){
 	    </tr> 
 	    <tr>
 	      <th>Technicien</th>
-	      <td>
-	        {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-	        <button id="technicien-{{$_technicien->_ref_kine->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_technicien->_ref_kine->_id}}')">
-	          {{$_technicien}}
-	        </button>
-	        {{/foreach}}
+	      <td class="text">
+	      	{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+	            {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
+	              {{assign var=element value=$_line->_ref_element_prescription}}
+	              {{if $smarty.foreach.foreach_category.first}}
+								  {{assign var=category value=$element->_ref_category_prescription}}
+                  {{assign var=category_id value=$category->_id}}
+								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
+                  {{if array_key_exists($category_id, $executants)}}
+                    {{foreach from=$executants.$category_id item=_user_executant}}
+										  <button id="technicien-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}')">
+                        {{$_user_executant}}
+											</button>
+                    {{/foreach}}
+                  {{else}}
+									<div class="small-warning">
+										Aucun exécutant n'est disponible pour cette catégorie
+									</div>
+									{{/if}}
+									</div>
+                {{/if}}
+							{{/foreach}}
+						{{/foreach}}
+          {{/foreach}}		
 	      </td>
 	    </tr>
 	    <tr>
