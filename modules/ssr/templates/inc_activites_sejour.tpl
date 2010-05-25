@@ -277,7 +277,7 @@ Main.add(function(){
 	    <tr>
 	      <th>Codes CdARR</th>
 	      <td>
-	      	<button type="button" class="add" onclick="$('remarque_ssr').toggle();" style="float: right">Remarque</button>
+	      	<button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line}}
