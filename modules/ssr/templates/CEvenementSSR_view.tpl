@@ -16,6 +16,17 @@ Main.add(function(){
 
 {{include file=CMbObject_view.tpl}}
 
+<table class="tbl tooltip">
+	<tr>
+		<td class="text">
+			<strong>Actes CdARR</strong> :
+			{{foreach from=$evenement_ssr->_ref_actes_cdarr item=_acte_cdarr}}
+			  {{$_acte_cdarr}}
+			{{/foreach}}
+		</td>
+	</tr>
+</table>
+
 <form style="display: none;" name="editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}" method="post" action="?" onsubmit="return submitFormEditSSR(this);">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_evenement_ssr_aed" />

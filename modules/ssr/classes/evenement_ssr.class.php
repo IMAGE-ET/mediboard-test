@@ -79,10 +79,12 @@ class CEvenementSSR extends CMbObject {
 	}
 	function loadView() {
 		parent::loadView();
-		$sejour = $this->loadFwdRef("sejour_id");
-		$sejour->loadRefPatient(1);
+		$this->loadRefSejour();
+		$sejour =& $this->_ref_sejour;
+		$sejour->loadRefPatient();
 		$patient = $sejour->_ref_patient;
 		$this->_view = "$patient->_view - ". mbTransformTime(null, $this->debut, CAppUI::conf("datetime"));
+		$this->loadRefsActesCdARR();
 	}
 	
 	function loadRefElementPrescription($cache = true) {
