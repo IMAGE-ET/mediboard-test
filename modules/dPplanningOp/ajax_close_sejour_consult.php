@@ -17,6 +17,7 @@ $yesterday = mbDateTime("-1 DAY");
 $sejour = new CSejour();
 $where['type']   = "= 'consult'";
 $where['entree'] = "BETWEEN '$yesterday' AND '$now'";
+$where['entree_reelle'] = "IS NOT NULL";
 $where['sortie_reelle'] = "IS NULL";
 $sejours = $sejour->loadList($where);
 
