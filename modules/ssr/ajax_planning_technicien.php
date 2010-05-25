@@ -51,7 +51,9 @@ $duree_occupation = $ds->loadList($query);
 
 foreach($evenements as $_evenement){
 	$_evenement->loadRefsActesCdARR();
-  $codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr) : '';
+  $codes = count($_evenement->_ref_actes_cdarr) ? 
+    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
+    '';
   
 	$_evenement->loadRefElementPrescription();
   $_evenement->loadRefSejour();
