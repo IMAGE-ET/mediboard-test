@@ -8,36 +8,43 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-autoOrder = function(service_id, date_min, date_max) {
-  var url = new Url('soins', 'ajax_auto_order');
-  url.addParam('service_id', service_id);
-  url.addParam('date_min', date_min);
-  url.addParam('date_max', date_max);
-  url.requestJSON(fillInputs);
-}
-
-fillInputs = function(data){
-  $('list-order').select('input.num[name=quantity]').each(function(e){
-    var stock_id = e.form.stock_id.value;
-    $V(e, data[stock_id] || 0, true);
+{{if !$single_line}}
+  <script type="text/javascript">
+  autoOrder = function(service_id, date_min, date_max) {
+    var url = new Url('soins', 'ajax_auto_order');
+    url.addParam('service_id', service_id);
+    url.addParam('date_min', date_min);
+    url.addParam('date_max', date_max);
+    url.requestJSON(fillInputs);
+  }
+  
+  fillInputs = function(data){
+    $('list-order').select('input.num[name=quantity]').each(function(e){
+      var stock_id = e.form.stock_id.value;
+      $V(e, data[stock_id] || 0, true);
+    });
+  }
+  
+  changeOrderPage = function(start) {
+    $V(getForm('filter-order').start, start); 
+  }
+  
+  {{if $only_service_stocks == 1 && !$endowment_id}}
+  Main.add(function(){
+    autoOrder({{$service->_id}}, '{{$delivrance->_date_min}}', '{{$delivrance->_date_max}}');
   });
-}
-
-changeOrderPage = function(start) {
-  $V(getForm('filter-order').start, start); 
-}
-
-{{if $only_service_stocks == 1 && !$endowment_id}}
-Main.add(function(){
-  autoOrder({{$service->_id}}, '{{$delivrance->_date_min}}', '{{$delivrance->_date_max}}');
-});
+  {{/if}}
+  </script>
 {{/if}}
-</script>
 
 {{assign var=infinite value=$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 {{assign var=infinite_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 
+{{if $single_line}}
+  {{foreach from=$stocks item=stock}}
+    {{include file="inc_stock_order_line.tpl" nodebug=true}}
+  {{/foreach}}
+{{else}}
 <form name="filter-order" action="?" method="get" onsubmit="return (checkForm(this) && refreshOrders())">
   <input type="hidden" name="m" value="soins" />
   <input type="hidden" name="start" value="{{$start}}" onchange="refreshOrders()" />
@@ -144,7 +151,7 @@ Main.add(function(){
   </tr>
   {{foreach from=$stocks item=stock}}
     <tbody id="stock-{{$stock->_id}}" style="width: 100%">
-    {{include file="inc_stock_order_line.tpl" nodebug=true}}
+      {{include file="inc_stock_order_line.tpl" nodebug=true}}
     </tbody>
   {{foreachelse}}
     <tr>
@@ -152,3 +159,5 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
+
+{{/if}}

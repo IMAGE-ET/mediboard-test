@@ -71,6 +71,8 @@ foreach($plateaux as $_plateau_tech){
 
 $evenement_ssr = new CEvenementSSR();
 
+$executants = array();
+
 // Chargement des executants en fonction des category de prescription
 $executants = array();
 foreach($categories as $_category){

@@ -33,7 +33,7 @@
 
   <!-- Formulaire de dispensation -->
   <td style="text-align: left;">
-    <form name="form-dispensation-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+    <form name="form-dispensation-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: {{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
       <input type="hidden" name="m" value="dPstock" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -79,7 +79,7 @@
       <tr>
         <td>
           {{if $dispensation->order == 1}}
-            <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:refreshLists})">
+            <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
               <input type="hidden" name="m" value="dPstock" />
               <input type="hidden" name="dosql" value="do_delivery_aed" />
               <input type="hidden" name="del" value="1" />

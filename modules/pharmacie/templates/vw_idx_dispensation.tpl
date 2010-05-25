@@ -134,7 +134,7 @@ Main.add(function () {
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
-  <li><a href="#list-orders" id="list-orders-title">Commandes <small>(0)</small></a></li>
+  <li><a href="#list-orders" id="list-orders-title">Commandes <span style="font-weight: normal">(tous les services)</span> <small>(0)</small></a></li>
   <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />

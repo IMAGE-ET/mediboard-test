@@ -623,6 +623,10 @@ table#weeklyPlanning th.today {
   background-image: url(./images/pictures/unavailable.png);
 }
 
+.planning .event.disabled {
+  background: url(./images/pictures/unavailable.png);
+}
+
 div.tree-content {
   margin: 0; 
   padding-left: 25px;

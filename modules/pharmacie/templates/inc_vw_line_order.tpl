@@ -18,7 +18,8 @@
       {{$curr_delivery->_ref_service->_view}}
     {{/if}}
   </td>
-  <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+  <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
+  <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
   <td>
     {{if $curr_delivery->_ref_stock->_id}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_guid}}')">
@@ -69,12 +70,18 @@
   <td class="text">{{$curr_delivery->comments}}</td>
   {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
   <td>
-    <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
-      {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
-    </a>
+    <table class="layout">
+      <tr>
+        <td style="width: 6em;">{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$curr_delivery->_ref_stock}}</td>
+        <td>
+          <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
+            {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
+          </a>
+        </td>
+      </tr>
+    </table>
   </td>
   {{/if}}
-  <td style="text-align: center;">{{mb_value object=$curr_delivery field=quantity}}</td>
   
   {{* 
   {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
@@ -87,12 +94,7 @@
   {{/if}}
   *}}
   
-  <td style="text-align: center;">
-    {{if $curr_delivery->_ref_stock->_id}}
-      {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
-    {{/if}}
-  </td>
-  <td>
+  <td title="Quantité d'origine: {{$curr_delivery->quantity}}">
     {{if $curr_delivery->_ref_stock->_id}}
     <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}}>
       <input type="hidden" name="m" value="dPstock" /> 
@@ -107,6 +109,11 @@
     </form>
     {{else}}
     
+    {{/if}}
+  </td>
+  <td>
+    {{if $curr_delivery->_ref_stock->_id}}
+      {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
     {{/if}}
   </td>
 </tr>

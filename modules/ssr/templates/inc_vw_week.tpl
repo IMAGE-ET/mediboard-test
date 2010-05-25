@@ -41,7 +41,7 @@ Main.add(function() {
     <tr>
        <th></th>
     	 {{foreach from=$planning->days key=_day item=_events}}
-         {{if $_day < $planning->date_min || $_day > $planning->date_max}}
+         {{if $_day < $planning->date_min_active || $_day > $planning->date_max_active}}
            {{assign var=disabled value=true}}
          {{else}}
            {{assign var=disabled value=false}}
@@ -74,7 +74,7 @@ Main.add(function() {
           <th class="hour">{{$_hour}}h</th>
           
           {{foreach from=$planning->days key=_day item=_events}}
-            {{if $_day < $planning->date_min || $_day > $planning->date_max}}
+            {{if $_day < $planning->date_min_active || $_day > $planning->date_max_active}}
               {{assign var=disabled value=true}}
             {{else}}
               {{assign var=disabled value=false}}
@@ -97,7 +97,7 @@ Main.add(function() {
 												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
 												 {{/if}}
 											 {{/if}} 
-											 class="event {{if $_event->draggable}}draggable{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
+											 class="event {{if $_event->draggable}}draggable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
 											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
 											 	
                     <div class="time-preview" style="display: none;"></div>

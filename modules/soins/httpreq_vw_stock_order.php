@@ -17,6 +17,7 @@ $only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
 $only_common         = CValue::getOrSession('only_common');
 $keywords            = CValue::getOrSession('keywords');
 $endowment_id        = CValue::getOrSession('endowment_id');
+$endowment_item_id   = CValue::get('endowment_item_id');
 
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
@@ -30,15 +31,28 @@ $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
 
 $group_id = CGroups::loadCurrent()->_id;
-
+$single_line = false;
+    
 if ($endowment_id) {
-  $endowment = new CProductEndowment;
-  $endowment->load($endowment_id);
-  $ljoin = array(
-    'product' => 'product.product_id = product_endowment_item.product_id'
-  );
-  $endowment_items = $endowment->loadBackRefs("endowment_items", 'product.name', "$start,20", null, $ljoin);
-
+  // Toute la liste
+  if (!$endowment_item_id) {
+    $endowment = new CProductEndowment;
+    $endowment->load($endowment_id);
+    $ljoin = array(
+      'product' => 'product.product_id = product_endowment_item.product_id'
+    );
+    $endowment_items = $endowment->loadBackRefs("endowment_items", 'product.name', "$start,20", null, $ljoin);
+    $count_stocks = $endowment->countBackRefs("endowment_items", null, null, null, $ljoin);
+  }
+  // Seulement une ligne
+  else {
+    $single_line = true;
+    $endowment_item = new CProductEndowmentItem;
+    $endowment_item->load($endowment_item_id);
+    $endowment_items = array($endowment_item->_id => $endowment_item);
+    $count_stocks = 1;
+  }
+  
   $stocks = array();
   foreach($endowment_items as $_item) {
     $_item->loadRefsFwd();
@@ -55,10 +69,9 @@ if ($endowment_id) {
     
     $stock->_ref_stock_service = $stock_service;
     $stock->quantity = $_item->quantity;
+    $stock->_endowment_item_id = $_item->_id;
     $stocks[] = $stock;
   }
-  
-  $count_stocks = $endowment->countBackRefs("endowment_items", null, null, null, $ljoin);
 }
 else if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
@@ -140,6 +153,7 @@ $service->loadBackRefs("endowments");
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign('single_line', $single_line);
 $smarty->assign('start', $start);
 $smarty->assign('stocks', $stocks);
 $smarty->assign('count_stocks', $count_stocks);

@@ -20,7 +20,7 @@ function refreshLists() {
   return false;
 }
 
-function refreshOrders(){
+function refreshOrders(endowment_item_id, stock_id){
   var url = new Url("soins", "httpreq_vw_stock_order");
   url.addFormData(getForm("filter"));
   
@@ -28,7 +28,13 @@ function refreshOrders(){
   if (filterOrder)
     url.addFormData(filterOrder);
     
-  url.requestUpdate("list-order");
+  if (endowment_item_id && stock_id) {
+    url.addParam("endowment_item_id", endowment_item_id);
+    url.requestUpdate("stock-"+stock_id);
+  }
+  else {
+    url.requestUpdate("list-order");
+  }
 }
 
 function refreshReceptions(){

@@ -18,6 +18,7 @@ class CPlanningEvent  {
   var $length = null;
   var $day    = null;
   var $draggable = false;
+  var $disabled = false;
   
   var $hour   = null;
   var $minutes = null;
@@ -42,8 +43,7 @@ class CPlanningEvent  {
     $this->title = htmlentities($title);
     $this->color = $color;
     $this->important = $important;
-		$this->css_class = is_array($css_class) ? join(" ", $css_class) : $css_class;
-		
+		$this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;
 		
 		$this->day = mbDate($date);
     $this->hour = mbTransformTime(null, $date, "%H");

@@ -60,7 +60,6 @@ updateDispensationUrgence = function(formUrgence) {
     <th>{{tr}}CProductStockService-product_id{{/tr}}</th>
     {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
     <th>{{tr}}CProductStockService{{/tr}}</th>
-    <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
     {{/if}}
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th>{{tr}}CProductDelivery{{/tr}}</th>
@@ -76,8 +75,14 @@ updateDispensationUrgence = function(formUrgence) {
         </a>
       </td>
       {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
-      <td>{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
-      <td style="text-align: center;">{{mb_value object=$stock field=quantity}}</td>
+      <td>
+        <table class="layout">
+          <tr>
+            <td style="width: 6em;">{{include file="../../dPstock/templates/inc_bargraph.tpl" stock=$stock}}</td>
+            <td>{{mb_value object=$stock field=quantity}}</td>
+          </tr>
+        </table>
+      </td>
       {{/if}}
       <td>{{mb_value object=$stock->_ref_product field=_unit_title}}</td>
       <td>
@@ -90,7 +95,7 @@ updateDispensationUrgence = function(formUrgence) {
           {{mb_field object=$list_dispensations.$id field=stock_id hidden=true}}
           <input type="hidden" name="date_dispensation" value="now" />
           {{mb_field object=$list_dispensations.$id field=quantity increment=1 form="dispensation-$id" size=3}}
-          <button type="submit" class="tick">Dispenser</button>
+          <button type="submit" class="tick notext">Dispenser</button>
         </form>
       </td>
       <td>

@@ -55,7 +55,12 @@
 {{if $endowment->_id}}
 <table class="main tbl">
   <tr>
-    <th class="category" colspan="2">{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
+    <th class="category" colspan="2">
+      <button style="float: right;" class="print notext" onclick="new Url('dPstock','print_endowment').addParam('endowment_id','{{$endowment->_id}}').popup()">
+        {{tr}}Print{{/tr}}
+      </button>
+      {{tr}}CProductEndowment-back-endowment_items{{/tr}}
+    </th>
   </tr>
   {{foreach from=$endowment->_back.endowment_items item=_item}}
     <tr>

@@ -17,8 +17,12 @@ class CPlanningWeek  {
 	var $height = null;
 	var $large   = null;
 	
-  var $date_min = null;
-  var $date_max = null;
+  var $date_min = null; // Monday
+  var $date_max = null; // Sunday
+  
+  var $date_min_active = null;
+  var $date_max_active = null;
+  
   var $hour_min = "09";
   var $hour_max = "18";
   var $hour_divider = 6;
@@ -49,10 +53,13 @@ class CPlanningWeek  {
 		$this->nb_days = $nb_days;
 		
     $monday = mbDate("last monday", mbDate("+1 day", $this->date));
-    $sunday = mbDate("next sunday", mbDate("- 1 DAY", $this->date));
+    $sunday = mbDate("next sunday", mbDate("-1 DAY", $this->date));
 		
-		$this->date_min = $date_min ? max($monday, mbDate($date_min)) : $monday;
-		$this->date_max = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
+		$this->date_min_active = $date_min ? max($monday, mbDate($date_min)) : $monday;
+		$this->date_max_active = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
+    
+    $this->date_min = $monday;
+    $this->date_max = $sunday;
     
     // Days period
     for ($i = 0; $i < $this->nb_days; $i++) {
@@ -66,6 +73,9 @@ class CPlanningWeek  {
   function addEvent(CPlanningEvent $event) {
     if ($event->day < $this->date_min || $event->day > $this->date_max) 
       return;
+      
+    if ($event->day < $this->date_min_active || $event->day > $this->date_max_active) 
+      $event->disabled = true;
     
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
@@ -77,8 +87,8 @@ class CPlanningWeek  {
       }
     }
     
-    $_event->offset = 0.0;
-    $_event->width = 1.0;
+    $event->offset = 0.0;
+    $event->width = 1.0;
     
     $count = count($colliding);
     
