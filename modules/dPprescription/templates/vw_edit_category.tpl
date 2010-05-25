@@ -39,7 +39,7 @@ Main.add( function(){
 	  	{{mb_include template=inc_list_categories}}
       <hr />
   		{{if $category->_id}}
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0" class="button new">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_id=0&amp;element_prescription_to_cdarr_id=0" class="button new">
         Créer un élément
       </a>
       

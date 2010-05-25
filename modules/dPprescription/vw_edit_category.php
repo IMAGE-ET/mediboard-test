@@ -37,19 +37,31 @@ ksort($categories);
 $group = new CGroups();
 $groups = $group->loadList();
 
+$element_prescription = new CElementPrescription();
+$element_prescription->load($element_prescription_id);
+
+$element_prescription_to_cdarr = new CElementPrescriptionToCdarr();
+$element_prescription_to_cdarr->load($element_prescription_to_cdarr_id);
+
+if(!$element_prescription_id && $element_prescription_to_cdarr_id != 0){
+	$element_prescription_to_cdarr->loadRefElementPrescription();
+  $element_prescription = $element_prescription_to_cdarr->_ref_element_prescription;
+	$element_prescription_id = $element_prescription->_id;
+}
+
+if(!$category->_id && $element_prescription_id != 0){
+  $element_prescription->loadRefCategory();
+  $category = $element_prescription->_ref_category_prescription;
+}
+
+$element_prescription->loadBackRefs("cdarrs");
+
 // Chargement de la category
 $category->load($category_id);
 $category->loadElementsPrescription();
 foreach ($category->_ref_elements_prescription as $_element) {
 	$_element->countBackRefs("cdarrs");
 }
-
-$element_prescription = new CElementPrescription();
-$element_prescription->load($element_prescription_id);
-$element_prescription->loadBackRefs("cdarrs");
-
-$element_prescription_to_cdarr = new CElementPrescriptionToCdarr();
-$element_prescription_to_cdarr->load($element_prescription_to_cdarr_id);
 
 // Création du template
 $smarty = new CSmartyDP();
