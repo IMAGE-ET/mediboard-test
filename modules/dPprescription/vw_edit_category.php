@@ -19,6 +19,7 @@ $mode_duplication = CValue::get("mode_duplication");
 $category = new CCategoryPrescription();
 $where["chapitre"] = $category->_spec->ds->prepareIn($category->_specs["chapitre"]->_list);
 $_categories = $category->loadList($where, "nom");
+$categories = array();
 $countElements = array();
 
 // Chargement et classement par chapitre
