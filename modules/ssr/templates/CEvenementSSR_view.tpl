@@ -1,3 +1,13 @@
+{{* $Id: $ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage ssr
+ * @version $Revision:  $
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
+
 {{assign var=evenement_ssr value=$object}}
 {{assign var=evenement_ssr_id value=$evenement_ssr->_id}}
 {{assign var=unique_id value=""|uniqid}}

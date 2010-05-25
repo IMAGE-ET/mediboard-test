@@ -18,6 +18,7 @@ class CElementPrescriptionToCdarr extends CMbObject {
 	var $commentaire = null;
 	
 	var $_ref_element_prescription = null;
+	var $_ref_activite_cdarr = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -46,6 +47,17 @@ class CElementPrescriptionToCdarr extends CMbObject {
 			return "Ce code n'est pas un code Cdarr valide";
 		}
 		return parent::check();
+	}
+	
+	function updateFormFields(){
+		parent::updateFormFields();
+		$this->_view = "Code CdARR ".$this->code;
+	}
+	
+	function loadView(){
+		parent::loadView();
+		$this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
+		$this->_ref_activite_cdarr->loadRefTypeActivite();
 	}
 }
 

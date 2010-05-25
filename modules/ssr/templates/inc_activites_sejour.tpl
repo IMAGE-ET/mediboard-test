@@ -284,7 +284,10 @@ Main.add(function(){
 	              <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
 	                {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
 	                  <label title="{{$_cdarr->commentaire}}">
-	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> {{$_cdarr->code}}
+	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> 
+											<span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
+											{{$_cdarr->code}}
+											</span>
 	                  </label>
 	                {{/foreach}}
 	              </div>
