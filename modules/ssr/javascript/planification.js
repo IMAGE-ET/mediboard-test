@@ -99,10 +99,12 @@ Planification = {
 	    addParam("sejour_id", this.sejour_id) .
 			addParam("selectable", this.selectable) .
 			addParam("height", this.height) .
+			addParam("print", print).
       requestUpdate("planning-sejour", { 
 			  onComplete: function(){
 					if(print){
 						$('planning-sejour').select(".planning col")[2].style.width = 0;
+						$('planning-sejour').select(".week-container")[0].style.overflowY = "visible";
 					}
 				}
 			});

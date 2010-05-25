@@ -18,6 +18,7 @@ $selectable = CValue::get("selectable");
 $patient = $sejour->_ref_patient;
 
 $height = CValue::get("height");
+$print = CValue::get("print");
 
 // Initialisation du planning
 $date = CValue::getOrSession("date", mbDate());
@@ -54,6 +55,15 @@ foreach($evenements as $_evenement){
   $element_prescription->loadRefCategory();
 	$category_prescription =& $element_prescription->_ref_category_prescription;
   $title = $_evenement->_ref_element_prescription->_view ." - ".$codes;
+	
+	if($print){
+		$_evenement->loadRefTherapeute();
+		$_evenement->loadRefEquipement();
+		$title .= " - ".$_evenement->_ref_therapeute->_view;
+		$title .= $_evenement->equipement_id ? " - ".$_evenement->_ref_equipement->_view : '';
+		$title .= $_evenement->remarque ? " - ".$_evenement->remarque : ''; 
+	}
+	
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	$class_evt = $_evenement->equipement_id ? "equipement" : "kine";
 
