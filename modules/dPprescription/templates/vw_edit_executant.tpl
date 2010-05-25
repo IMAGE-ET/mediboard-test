@@ -69,7 +69,7 @@ function removeFunction(function_category_id){
         <input type="hidden" name="category_prescription_id" value="{{$category_id}}" />
         <select name="function_id">
           {{foreach from=$functions item=function}}
-            <option value="{{$function->_id}}">{{$function->_view}}</option>
+            <option value="{{$function->_id}}" class="mediuser" style="border-left-color: #{{$function->color}};">{{$function->_view}}</option>
           {{/foreach}}
         </select>
         <button type="button" class="tick" onclick="this.form.submit();">Ajouter la fonction</button>

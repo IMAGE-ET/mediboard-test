@@ -36,7 +36,7 @@ $executant_prescription_line->load($executant_prescription_line_id);
 
 // Chargement de la liste des fonctions
 $function = new CFunctions();
-$functions = $function->loadListWithPerms(PERM_READ);
+$functions = $function->loadListWithPerms(PERM_READ, null, "text");
 
 // Chargement de la liste des functions associés à la catégorie selectionee
 $function_cat_prescription = new CFunctionCategoryPrescription();
