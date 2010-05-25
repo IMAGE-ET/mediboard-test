@@ -39,30 +39,47 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-	<th class="title" colspan="2">Planning du {{$date|date_format:$dPconfig.date}}
-		<form name="selDate" action="?" method="get">
-			<input type="hidden" name="m" value="{{$m}}" />
-		  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-		</form>
-		<button type="button" class="search" style="float: right" onclick="showLegende();">Legende</button>
-	</th>
+		<th colspan="2">
+			<big>Planning du {{$date|date_format:$dPconfig.date}}</big>
+			<form name="selDate" action="?" method="get">
+				<input type="hidden" name="m" value="{{$m}}" />
+			  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+			</form>
+			<button type="button" class="search" style="float: right" onclick="showLegende();">Legende</button>
+		</th>
 	</tr>
-  {{foreach from=$plateaux item=_plateau name=plateaux}}
+	
   <tr>
     <td>
+			<script type="text/javascript">
+			Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
+			</script>
+
+			<ul id="tabs-plateaux" class="control_tabs">
+			  {{foreach from=$plateaux item=_plateau}}
+			  <li>
+			    <a href="#{{$_plateau->_guid}}">
+			      {{$_plateau}}
+			    </a>
+			  </li>
+			  {{/foreach}}
+			</ul>
+			
+			<hr class="control_tabs" />
+
+
+      {{foreach from=$plateaux item=_plateau}}
     	{{mb_include template=inc_repartition_plateau plateau=$_plateau}}
+		  {{foreachelse}}
+		  <div class="small-warning">
+		  	{{tr}}CGroups-back-plateaux_techniques.empty{{/tr}}
+		  </div>
+		  {{/foreach}}
     </td>
 
-    {{if $smarty.foreach.plateaux.first}}
-    <td rowspan="100" style="width: 180px;">
+    <td style="width: 180px;">
       {{mb_include template=inc_sejours_non_affectes}}
     </td>
-    {{/if}}
   </tr>
-  {{foreachelse}}
-  <tr>
-    <td><em>{{tr}}CGroups-back-plateaux_techniques.empty{{/tr}}</em></th>
-  </tr>
-  {{/foreach}}
   
 </table>

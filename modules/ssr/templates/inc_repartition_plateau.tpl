@@ -8,10 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="main" style="border-spacing: 4px; border-collapse: separate; width: auto;">
-  <tr>
-    <th class="title" colspan="0">{{$plateau}}</th>
-  </tr>
+<table id="{{$plateau->_guid}}" class="main" style="border-spacing: 4px; border-collapse: separate; width: auto;">
   <tr>
 	  {{foreach from=$plateau->_ref_techniciens item=_technicien}}
       <td style="width: 180px;">
