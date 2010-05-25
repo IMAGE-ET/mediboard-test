@@ -123,7 +123,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
   }
   
   function addActeCCAM($elParent, $elValue) {
-    $this->addElement($elParent, "ACTE", $elValue);
+    $this->addElement($elParent, "ACTE", str_replace(" ", "", $elValue));
   }
 }
 
