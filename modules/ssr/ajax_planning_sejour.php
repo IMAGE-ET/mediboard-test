@@ -32,7 +32,16 @@ $where["sejour_id"] = " = '$sejour->_id'";
 $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $evenements = $evenement_ssr->loadList($where);
 
+$total_evenement = array();
+foreach($planning->days as $_day => $day){
+	$total_evenement[$_day]["duree"] = 0;
+	$total_evenement[$_day]["nb"] = 0;
+}
+
 foreach($evenements as $_evenement){
+  $total_evenement[mbDate($_evenement->debut)]["duree"] += $_evenement->duree;
+	$total_evenement[mbDate($_evenement->debut)]["nb"]++;
+  
 	$_evenement->loadRefsActesCdARR();
   $codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr) : '';
   
@@ -52,6 +61,26 @@ foreach($evenements as $_evenement){
 	$planning->addEvent($event);
 }
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(),null, null, "red"));
+
+foreach($total_evenement as $_date => $_total_evt){
+	$niveau = 0;
+	$text = "";
+	if($_total_evt["duree"] < 120){
+	  $niveau++;
+		$text .= "120 minutes minimum ";
+	}
+	if($_total_evt["nb"] < 1){
+    $niveau++;
+		if($niveau){
+			$text .= "et ";
+		}
+    $text .= "1 activité individuelle minimum";
+  }
+	if($niveau){
+	  $color = ($niveau == 2) ? "red" : "yellow";
+    $planning->addDayLabel($_date, "$niveau alerte(s)" , $text, $color);
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
