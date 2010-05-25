@@ -10,24 +10,24 @@
 
 
 <div>
-	<label style="visibility: hidden;" class="missing" title="Cacher les admissions">
-	  <input type="checkbox" onchange="Missing.toggle(this);" />
+	<label style="visibility: hidden;" class="veille" title="Cacher les admissions non-sorties des {{$dPconfig.dPurgences.date_tolerance}} derniers jours">
+	  <input type="checkbox" onchange="Veille.toggle(this);" />
 	  {{tr}}Hide{{/tr}}
-	  <span>0</span> admission(s) sans RPU
+	  <span>0</span> admission(s) antérieure(s) 
 	</label>
 </div>
 
 <script type="text/javascript">
-Missing = {
+Veille = {
   refresh: function() {
-    var label = $$("label.missing")[0];
-    var count = $$('tr.missing').length;
+    var label = $$("label.veille")[0];
+    var count = $$('tr.veille').length;
     label.setVisibility(count != 0);
     label.down("span").update(count);
 	},
 	
 	toggle: function(checkbox) {
-  	$$('tr.missing').invoke('setVisible', !checkbox.checked);
+  	$$('tr.veille').invoke('setVisible', !checkbox.checked);
 	}
 }
 </script>

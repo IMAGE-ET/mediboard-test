@@ -39,6 +39,7 @@ $locales['FormObserver-msg-confirm'] = 'Vous avez modifié certaines informations
 $locales['Function'] = 'Fonction';
 $locales['General'] = 'Général';
 $locales['Government'] = 'Gouvernement';
+$locales['Hide'] = 'Masquer';
 $locales['History'] = 'Historique';
 $locales['History.desc'] = 'Voir l\'historique';
 $locales['Hour'] = 'Heure';

@@ -23,7 +23,6 @@
     {{mb_include module=system template=inc_config_bool var=allow_change_patient}}
     {{mb_include module=system template=inc_config_enum var=sortie_prevue values="sameday|h24"}}
     {{mb_include module=system template=inc_config_bool var=only_prat_responsable}}
-    {{mb_include module=system template=inc_config_bool var=show_missing_rpu}}
     {{mb_include module=system template=inc_config_bool var=gerer_reconvoc}}
 	  {{mb_include module=system template=inc_config_bool var=gerer_hospi}}
 	  {{mb_include module=system template=inc_config_str var=sibling_hours size="2" suffix="h"}}

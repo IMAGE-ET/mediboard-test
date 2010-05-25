@@ -11,6 +11,7 @@
 <script type="text/javascript">
 Main.add(function() {
   Veille.refresh();
+  Missing.refresh();
   $$("a[href=#holder_main_courante] small")[0].update("({{$listSejours|@count}})");
 	{{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
@@ -61,7 +62,10 @@ Main.add(function() {
   {{mb_ternary var=rpu_link_param test=$rpu->_id value="rpu_id=$rpu_id" other="sejour_id=$sejour_id"}}
   {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
   
-  <tr {{if !$_sejour->sortie_reelle && $_sejour->_veille}}class="veille"{{/if}}>
+  <tr class="
+	 {{if !$_sejour->sortie_reelle && $_sejour->_veille}}veille{{/if}}
+   {{if !$rpu_id}}missing{{/if}}
+  ">
   	{{if $_sejour->annule}}
     <td class="cancelled">
       {{tr}}Cancelled{{/tr}}

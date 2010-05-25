@@ -27,7 +27,7 @@ $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after'
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 
 // RPUs
-$where[] = CAppUI::conf("dPurgences show_missing_rpu") ? 
+$where[] = CAppUI::pref("showMissingRPU") ? 
   "sejour.type = 'urg' OR rpu.rpu_id IS NOT NULL" :
   "rpu.rpu_id IS NOT NULL";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";

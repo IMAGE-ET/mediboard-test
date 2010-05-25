@@ -90,8 +90,9 @@ Main.add(function () {
 	      </a>
 	    </td>
 			
-	    <td style="text-align: right;">
-			  {{mb_include template=inc_hide_previous_rpus}}
+	    <td style="text-align: left; padding-left: 2em;">
+        {{mb_include template=inc_hide_missing_rpus}}
+        {{mb_include template=inc_hide_previous_rpus}}
 			</td>
 
 	    <td style="text-align: right">

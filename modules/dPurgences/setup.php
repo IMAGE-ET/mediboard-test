@@ -161,7 +161,10 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.25");
     $this->addPrefQuery("defaultRPUSort", "ccmu");
 
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+    $this->addPrefQuery("showMissingRPU", "0");
+
+    $this->mod_version = "0.27";
   }  
 }
 

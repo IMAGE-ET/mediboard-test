@@ -24,7 +24,6 @@ $dPconfig["dPurgences"] = array (
   "only_prat_responsable" => "0",
   "rpu_sender"            => "",
   "rpu_xml_validation"    => "1",
-  "show_missing_rpu"      => "0",
 	"gerer_hospi"           => "1",
 	"gerer_reconvoc"        => "1",
   "sibling_hours"         => "1",
