@@ -36,6 +36,12 @@ class CTechnicien extends CMbObject {
     return $specs;
   }
 	
+	function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["bilan_ssr"] = "CBilanSSR technicien_id";
+    return $backProps;
+  }
+	
   function loadRefKine() {
     $this->_ref_kine = $this->loadFwdRef("kine_id", true);
 		$this->_ref_kine->loadRefFunction();

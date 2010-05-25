@@ -50,16 +50,18 @@ $query .= " GROUP BY DATE(debut)";
 $duree_occupation = $ds->loadList($query);
 
 foreach($evenements as $_evenement){
-  $_evenement->loadRefElementPrescription();
+	$_evenement->loadRefsActesCdARR();
+  $codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr) : '';
+  
+	$_evenement->loadRefElementPrescription();
   $_evenement->loadRefSejour();
   $_evenement->_ref_sejour->loadRefPatient();
   $_evenement->loadRefEquipement();
   
-	
-  $important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
+	$important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
   
   $patient =  $_evenement->_ref_sejour->_ref_patient;
-  $title = "$patient->_civilite $patient->nom - $_evenement->code";
+  $title = "$patient->_civilite $patient->nom - $codes";
   $element_prescription =& $_evenement->_ref_element_prescription;
   $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
   

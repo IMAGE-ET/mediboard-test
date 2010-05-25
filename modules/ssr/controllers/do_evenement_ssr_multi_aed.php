@@ -9,14 +9,20 @@
  */
 
 $sejour_id     = CValue::post("sejour_id");
-$cdarr         = CValue::post("cdarr");
+$cdarrs         = CValue::post("cdarrs");
 $code          = CValue::post("code");
 $equipement_id = CValue::post("equipement_id");
 $therapeute_id = CValue::post("therapeute_id");
 $line_id       = CValue::post("line_id");
 
-if($cdarr == "other"){
-  $cdarr = $code;
+$codes_cdarrs = array();
+if(CValue::post("_cdarr") && $code){
+	$codes_cdarrs[] = $code;
+}
+if(is_array($cdarrs)){
+	foreach($cdarrs as $_code_cdarr){
+	  $codes_cdarrs[] = $_code_cdarr;
+	}
 }
 
 $_days = CValue::post("_days");
@@ -28,39 +34,52 @@ $line_element = new CPrescriptionLineElement();
 $line_element->load($line_id);
 $element_prescription_id = $line_element->element_prescription_id;
 
+$kine = new CMediusers();
+$kine->load($therapeute_id);
+
 $sejour = new CSejour;
 $sejour->load($sejour_id);
-if (count($_days)){
-  foreach ($_days as $_day) {
+
+if(count($_days)){
+	foreach($_days as $_day){
     $entree = mbDate($sejour->entree);
     $sortie = mbDate($sejour->sortie);
     if (!in_range($_day, $entree, $sortie)) {
       CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
       continue; 
     }
-    
+  
     if (!$_heure || !$duree) {
       continue;
-    }
-    
-    $evenement_ssr = new CEvenementSSR();
-    $evenement_ssr->sejour_id = $sejour_id;
-    $evenement_ssr->code = $cdarr;
-    $evenement_ssr->equipement_id = $equipement_id;
-    $evenement_ssr->therapeute_id = $therapeute_id;
-    $evenement_ssr->debut = "$_day $_heure";
-    $evenement_ssr->duree = $duree;
-    $evenement_ssr->element_prescription_id = $element_prescription_id;
-
-    // Remplacement automatique pendant des congés
-    $plage = new CPlageVacances;
-    $plage->loadFor($therapeute_id, $_day);
-    if ($plage->replacer_id) {
-      $evenement_ssr->therapeute_id = $plage->replacer_id;
-    }
-
-    $msg = $evenement_ssr->store();
-    CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
+    }	
+		
+		$evenement_ssr = new CEvenementSSR();
+		$evenement_ssr->sejour_id = $sejour_id;
+	  $evenement_ssr->equipement_id = $equipement_id;
+	  $evenement_ssr->debut = "$_day $_heure";
+	  $evenement_ssr->duree = $duree;
+		$evenement_ssr->element_prescription_id = $element_prescription_id;
+		
+		$where = array();
+		$plage_vacances = new CPlageVacances();
+		$where["user_id"] = "= '$therapeute_id'";
+    $where[] = "'$_day' BETWEEN date_debut AND date_fin";
+		$plage_vacances->loadObject($where);
+		$replacer_id = "";
+		if($_day >= $plage_vacances->date_debut && $_day <= $plage_vacances->date_fin){
+			$replacer_id = $plage_vacances->replacer_id;
+		}
+		$evenement_ssr->therapeute_id = $replacer_id ? $replacer_id : $therapeute_id;
+		$msg = $evenement_ssr->store();
+		CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
+		
+		foreach($codes_cdarrs as $_cdarr){
+		  $acte_cdarr = new CActeCdARR();
+	    $acte_cdarr->code = $_cdarr;
+	    $acte_cdarr->evenement_ssr_id = $evenement_ssr->_id;
+	    $msg = $acte_cdarr->store();
+	    CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+	  }
   }
 }
 echo CAppUI::getMsg();

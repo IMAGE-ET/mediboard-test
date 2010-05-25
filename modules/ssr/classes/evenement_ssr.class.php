@@ -14,7 +14,6 @@ class CEvenementSSR extends CMbObject {
 	
 	// DB Fields
 	var $element_prescription_id = null;
-	var $code                    = null; // Code Cdarr
 	var $sejour_id               = null;
 	var $debut                   = null; // DateTime
 	var $duree                   = null; // Durée en minutes
@@ -33,6 +32,7 @@ class CEvenementSSR extends CMbObject {
 	var $_ref_equipement = null;
 	var $_ref_sejour = null;
 	var $_ref_therapeute = null;
+	var $_ref_actes_cdarr = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,7 +44,6 @@ class CEvenementSSR extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["element_prescription_id"] = "ref notNull class|CElementPrescription";
-    $props["code"]          = "str notNull length|4";
     $props["sejour_id"]     = "ref notNull class|CSejour";
     $props["debut"]         = "dateTime notNull";
     $props["duree"]         = "num notNull min|0";
@@ -57,6 +56,12 @@ class CEvenementSSR extends CMbObject {
     $props["_nb_decalage_jour_debut"]  = "num";
 		$props["_nb_decalage_duree"]   = "num";
     return $props;
+  }
+	
+	function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["actes_cdarr"] = "CActeCdARR evenement_ssr_id";
+    return $backProps;
   }
 	
 	function check(){
@@ -94,6 +99,10 @@ class CEvenementSSR extends CMbObject {
 	
 	function loadRefTherapeute($cache = true){
 	  $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
+	}
+	
+	function loadRefsActesCdARR(){
+		$this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
 	}
 }
 

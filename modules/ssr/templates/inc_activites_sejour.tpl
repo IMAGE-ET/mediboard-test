@@ -20,6 +20,15 @@ selectActivite = function(activite) {
   $$("div.activite").invoke("hide");
   $("activite-"+activite).show();
 
+
+  // On masque les codes Cdarrs
+  $$("div.cdarrs").invoke("hide");
+  $('div_other_cdarr').hide(); 
+	$('other_cdarr').hide();
+  $V(oFormEvenementSSR.code, '');
+	oFormEvenementSSR._cdarr.checked = false;
+  
+	
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
 }
@@ -59,12 +68,13 @@ selectElement = function(line_id){
 	$("cdarrs-"+line_id).show();
 	$('div_other_cdarr').show();
 
+
   // Mise en evidence des elements dans les plannings
 	addBorderEvent();
 }
 
 submitSSR = function(){
-  if(!$V(oFormEvenementSSR.cdarr) && !$V(oFormEvenementSSR.code)){
+  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
 	  alert("Veuillez selectionner un code SSR");
 		return false;
 	}
@@ -149,7 +159,7 @@ Main.add(function(){
   }
 	
 	// Initialisation du timePicker
- Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
+  Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
 	Control.Tabs.create('tabs-activites', true);
 });
 									
@@ -257,19 +267,18 @@ Main.add(function(){
 	              <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
 	                {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
 	                  <label title="{{$_cdarr->commentaire}}">
-	                    <input type="radio" name="cdarr" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
+	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="$('other_cdarr').hide(); $V(this.form.code, '')" /> {{$_cdarr->code}}
 	                  </label>
 	                {{/foreach}}
-	                
 	              </div>
 	            {{/foreach}}
 	          {{/foreach}}
 	        {{/foreach}}  
 	         
 	        <div id="div_other_cdarr" style="display: none;">
-	          <input type="radio" name="cdarr" value="other" onclick="$('other_cdarr').show();" /> Autre
+	          <input type="checkbox" name="_cdarr" value="other" onclick="$('other_cdarr').toggle(); $V(this.form.code, '');" /> Autre
 	          <span id="other_cdarr" style="display: none;">
-	            {{mb_field object=$evenement_ssr field=code class="autocomplete" canNull=true}}
+						   <input type="text" name="code" class="autocomplete" canNull=true size="2" />
 	             <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
 	          </span>
 	        </div>

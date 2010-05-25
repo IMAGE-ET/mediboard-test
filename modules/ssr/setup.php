@@ -251,7 +251,28 @@ class CSetupssr extends CSetup {
 		        DROP kine_id";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.16";
+		$this->makeRevision("0.16");
+		$sql = "CREATE TABLE `acte_cdarr` (
+              `acte_cdarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `evenement_ssr_id` INT (11) UNSIGNED NOT NULL,
+              `code` CHAR (4) NOT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+		 
+    $sql = "ALTER TABLE `acte_cdarr` 
+              ADD INDEX (`evenement_ssr_id`);";
+		$this->addQuery($sql);
+		
+		$sql = "INSERT INTO `acte_cdarr` (`evenement_ssr_id`,`code`)
+		        SELECT `evenement_ssr_id`,`code`
+						FROM evenement_ssr";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `evenement_ssr` 
+              DROP `code`;";
+    $this->addQuery($sql);
+    
+		$this->mod_version = "0.17";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

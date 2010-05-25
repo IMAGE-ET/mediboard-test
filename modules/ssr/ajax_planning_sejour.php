@@ -33,11 +33,14 @@ $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planni
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
+	$_evenement->loadRefsActesCdARR();
+  $codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr) : '';
+  
 	$_evenement->loadRefElementPrescription();
 	$element_prescription =& $_evenement->_ref_element_prescription;
   $element_prescription->loadRefCategory();
 	$category_prescription =& $element_prescription->_ref_category_prescription;
-  $title = $_evenement->_ref_element_prescription->_view ." - ".$_evenement->code;
+  $title = $_evenement->_ref_element_prescription->_view ." - ".$codes;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	$class_evt = $_evenement->equipement_id ? "equipement" : "kine";
 
