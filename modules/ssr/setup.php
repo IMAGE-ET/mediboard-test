@@ -272,7 +272,12 @@ class CSetupssr extends CSetup {
               DROP `code`;";
     $this->addQuery($sql);
     
-		$this->mod_version = "0.17";
+		$this->makeRevision("0.17");
+		$sql = "ALTER TABLE `evenement_ssr` 
+            ADD `remarque` VARCHAR (255);";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.18";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

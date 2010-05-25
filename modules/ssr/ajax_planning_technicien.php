@@ -62,6 +62,9 @@ foreach($evenements as $_evenement){
   
   $patient =  $_evenement->_ref_sejour->_ref_patient;
   $title = "$patient->_civilite $patient->nom - $codes";
+	if(!$sejour_id){
+		$title .= " - ".$_evenement->remarque;
+	}
   $element_prescription =& $_evenement->_ref_element_prescription;
   $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
   

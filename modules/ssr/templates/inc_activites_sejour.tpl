@@ -175,7 +175,7 @@ Main.add(function(){
   }
 	
 	// Initialisation du timePicker
-  Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10 });
+  Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10, exactMinutes: false});
 	Control.Tabs.create('tabs-activites', true);
 });
 									
@@ -227,7 +227,7 @@ Main.add(function(){
 	      <td><strong>{{mb_value object=$bilan field=technicien_id}}</strong></td>
 	    </tr>
 	    <tr>
-	      <th>Activités</th>
+	      <th>Catégories</th>
 	      <td>
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -277,6 +277,7 @@ Main.add(function(){
 	    <tr>
 	      <th>Codes CdARR</th>
 	      <td>
+	      	<button type="button" class="add" onclick="$('remarque_ssr').toggle();" style="float: right">Remarque</button>
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line}}
@@ -300,8 +301,12 @@ Main.add(function(){
 	        </div>
 	      </td>
 	    </tr> 
+			<tr id="remarque_ssr" style="display: none;">
+        <th>Remarque</th>
+        <td>{{mb_field object=$evenement_ssr field=remarque}}</td>
+      </tr>
 	    <tr>
-	      <th>Technicien</th>
+	      <th>Rééducateur</th>
 	      <td class="text">
 	      	{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -313,8 +318,8 @@ Main.add(function(){
 								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                   {{if array_key_exists($category_id, $executants)}}
                     {{foreach from=$executants.$category_id item=_user_executant}}
-										  <button id="technicien-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}')">
-                        {{$_user_executant}}
+										  <button title="{{$_user_executant->_view}}" id="technicien-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}')">
+                        {{$_user_executant->_user_last_name}}
 											</button>
                     {{/foreach}}
                   {{else}}

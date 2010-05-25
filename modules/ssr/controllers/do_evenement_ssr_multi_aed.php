@@ -14,6 +14,7 @@ $code          = CValue::post("code");
 $equipement_id = CValue::post("equipement_id");
 $therapeute_id = CValue::post("therapeute_id");
 $line_id       = CValue::post("line_id");
+$remarque      = CValue::post("remarque");
 
 $codes_cdarrs = array();
 if(CValue::post("_cdarr") && $code){
@@ -59,6 +60,7 @@ if(count($_days)){
 	  $evenement_ssr->debut = "$_day $_heure";
 	  $evenement_ssr->duree = $duree;
 		$evenement_ssr->element_prescription_id = $element_prescription_id;
+		$evenement_ssr->remarque = $remarque;
 		
 		$where = array();
 		$plage_vacances = new CPlageVacances();

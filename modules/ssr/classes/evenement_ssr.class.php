@@ -20,6 +20,7 @@ class CEvenementSSR extends CMbObject {
 	var $therapeute_id           = null;
 	var $equipement_id           = null;
   var $realise                 = null;
+	var $remarque                = null;
 	
 	// Form Fields
 	var $_heure                  = null;
@@ -50,6 +51,7 @@ class CEvenementSSR extends CMbObject {
 		$props["therapeute_id"] = "ref notNull class|CMediusers";
 		$props["equipement_id"] = "ref class|CEquipement";
 		$props["realise"]       = "bool default|0";
+		$props["remarque"]      = "str";
 		$props["_heure"]        = "time";
     $props["_nb_decalage_min_debut"]   = "num";
 		$props["_nb_decalage_heure_debut"] = "num";
