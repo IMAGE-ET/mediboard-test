@@ -18,7 +18,7 @@
       <th>{{mb_label class=CElementPrescriptionToCdarr field=commentaire}}</th>
     </tr>
     {{foreach from=$element_prescription->_back.cdarrs item=_element_to_cdarr}}
-      <tr>
+      <tr {{if $element_prescription_to_cdarr->_id == $_element_to_cdarr->_id}}class="selected"{{/if}}>
         <td>
            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id={{$_element_to_cdarr->_id}}">
             {{mb_value object=$_element_to_cdarr field=code}}
