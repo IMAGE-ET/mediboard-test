@@ -25,7 +25,6 @@ Repartition = {
   
   // Launch initial plateau update
   registerTechnicien: function (technicien_id) {
-		console.debug(technicien_id);
     Main.add(Repartition.updateTechnicien.curry(technicien_id));
     Repartition.droppableTechnicien(technicien_id)
   },
