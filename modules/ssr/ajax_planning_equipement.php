@@ -36,7 +36,6 @@ foreach($evenements as $_evenement){
   $codes = count($_evenement->_ref_actes_cdarr) ? 
     join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
     "";
-
 	
 	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
 	$_evenement->loadRefElementPrescription();
