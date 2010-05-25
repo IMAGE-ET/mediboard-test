@@ -1,3 +1,3 @@
 <?php
-$locales['CPlateauTechnique'] = '';
+$locales['module-ssr-long'] = '';
 ?>

@@ -67,22 +67,16 @@ foreach($evenements as $_evenement){
 $planning->addEvent(new CPlanningEvent(null, mbDateTime(),null, null, "red"));
 
 foreach($total_evenement as $_date => $_total_evt){
-	$niveau = 0;
-	$text = "";
-	if($_total_evt["duree"] < 120){
-	  $niveau++;
-		$text .= "120 minutes minimum ";
+	$alerts = array();
+	if ($_total_evt["duree"] < 120) {
+		$alerts[] = "< 2h";
 	}
 	if($_total_evt["nb"] < 1){
-    $niveau++;
-		if($niveau){
-			$text .= "et ";
-		}
-    $text .= "1 activité individuelle minimum";
+    $alerts[] = "0 indiv. ";
   }
-	if($niveau){
-	  $color = ($niveau == 2) ? "red" : "yellow";
-    $planning->addDayLabel($_date, "$niveau alerte(s)" , $text, $color);
+	if($count = count($alerts)) {
+	  $color = ($count == 2) ? "#f88" : "#ff4";
+    $planning->addDayLabel($_date, implode(" / ", $alerts) , null, $color);
   }
 }
 

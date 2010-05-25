@@ -223,6 +223,7 @@ $locales['CEvenementSSR-evenement_ssr_id-court'] = 'Id';
 $locales['CEvenementSSR-evenement_ssr_id-desc'] = 'Identifiant interne';
 $locales['CEvenementSSR-msg-create'] = 'Evénement créé';
 $locales['CEvenementSSR-msg-delete'] = 'Evénement supprimé';
+$locales['CEvenementSSR-msg-failed-bounds'] = 'Evenement SSR en de hors des limites du séjour';
 $locales['CEvenementSSR-msg-modify'] = 'Evénement modifié';
 $locales['CEvenementSSR-realise'] = 'Réalisé';
 $locales['CEvenementSSR-realise-court'] = 'Réalisé';
