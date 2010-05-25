@@ -33,7 +33,10 @@ $evenements = $evenement_ssr->loadList($where);
 foreach($evenements as $_evenement){
 	
 	$_evenement->loadRefsActesCdARR();
-	$codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr) : '';
+  $codes = count($_evenement->_ref_actes_cdarr) ? 
+    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
+    "";
+
 	
 	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
 	$_evenement->loadRefElementPrescription();

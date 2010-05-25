@@ -43,7 +43,9 @@ foreach($evenements as $_evenement){
 	$total_evenement[mbDate($_evenement->debut)]["nb"]++;
   
 	$_evenement->loadRefsActesCdARR();
-  $codes = count($_evenement->_ref_actes_cdarr) ? join(" - ", $_evenement->_ref_actes_cdarr->_view) : '';
+  $codes = count($_evenement->_ref_actes_cdarr) ? 
+    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
+		"";
   
 	$_evenement->loadRefElementPrescription();
 	$element_prescription =& $_evenement->_ref_element_prescription;
