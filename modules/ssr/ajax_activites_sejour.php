@@ -72,6 +72,7 @@ foreach($plateaux as $_plateau_tech){
 $evenement_ssr = new CEvenementSSR();
 
 // Chargement des executants en fonction des category de prescription
+$executants = array();
 foreach($categories as $_category){
 	// Chargement des associations pour chaque catégorie
   $function_categorie = new CFunctionCategoryPrescription();
