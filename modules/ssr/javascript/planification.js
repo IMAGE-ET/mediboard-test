@@ -78,6 +78,7 @@ PlanningTechnicien = {
 Planification = { 
   sejour_id : null,
   selectable : null,
+	height: null,
   scroll: function() {
     $("planification").scrollTo();
   },
@@ -89,13 +90,22 @@ Planification = {
 		  requestUpdate("activites-sejour");
 	},
 	
-	refreshSejour: function(sejour_id, selectable) {
+	refreshSejour: function(sejour_id, selectable, height, print) {
     this.sejour_id = sejour_id || this.sejour_id;
 		this.selectable = selectable || this.selectable;
+		this.height = height || this.height;
+    
 	  new Url("ssr", "ajax_planning_sejour") .
 	    addParam("sejour_id", this.sejour_id) .
 			addParam("selectable", this.selectable) .
-	    requestUpdate("planning-sejour");
+			addParam("height", this.height) .
+      requestUpdate("planning-sejour", { 
+			  onComplete: function(){
+					if(print){
+						$('planning-sejour').select(".planning col")[2].style.width = 0;
+					}
+				}
+			});
 	},
 	
   refresh: function(sejour_id) {

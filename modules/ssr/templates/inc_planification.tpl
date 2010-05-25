@@ -20,6 +20,14 @@ onCompleteShowWeek = function(){
 }
 
 Main.add(Planification.showWeek);
+
+printPlanningSejour = function(){
+  var url = new Url("ssr", "print_planning_sejour");
+  url.addParam("sejour_id", "{{$sejour->_id}}");
+  url.popup("800","600","Planning du patient");
+}
+
+
 </script>
 
 <table class="main">
@@ -30,7 +38,14 @@ Main.add(Planification.showWeek);
   </tr>
 
 	<tr>
-		<td id="planning-sejour"></td>
+		<td>
+			<div style="position: relative;">
+			  <div style="position: absolute; top: 0px; right: 0px;">
+          <button type="button" class="print notext" onclick="printPlanningSejour();"/>
+        </div>
+				<div id="planning-sejour"></div>
+			</div>
+		</td>
     <td id="activites-sejour"></td>
 	</tr>
 	
