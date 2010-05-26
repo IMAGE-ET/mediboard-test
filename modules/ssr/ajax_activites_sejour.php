@@ -40,6 +40,14 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $_lines_by_cha
     	  $categories[$cat->_id] = $cat;
       }
     	$_line->_ref_element_prescription->loadBackRefs("cdarrs");
+			$_line->_ref_element_prescription->_ref_cdarrs_by_type = array();
+      
+			$cdarrs_by_type =& $_line->_ref_element_prescription->_ref_cdarrs_by_type;
+      foreach($_line->_ref_element_prescription->_back["cdarrs"] as $_acte_cdarr){
+			  $_acte_cdarr->loadRefActiviteCdarr();
+			  $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
+			  $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
+			}
     }
 	}
 }

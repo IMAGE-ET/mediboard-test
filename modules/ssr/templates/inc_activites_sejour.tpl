@@ -31,6 +31,8 @@ selectActivite = function(activite) {
 
   // On masque les codes Cdarrs
   $$("div.cdarrs").invoke("hide");
+	$$("div.type-cdarrs").invoke("hide");
+  
   $('div_other_cdarr').hide(); 
 	$('other_cdarr').hide();
   $V(oFormEvenementSSR.code, '');
@@ -38,6 +40,38 @@ selectActivite = function(activite) {
   
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
+}
+
+selectElement = function(line_id){
+  $V(oFormEvenementSSR.line_id, line_id);
+
+  $$("button.line").invoke("removeClassName", "selected");
+  $$(".button-type-cdarrs").invoke("removeClassName","selected");
+  $("line-"+line_id).addClassName("selected");
+  
+  $$("div.cdarrs").invoke("hide");
+	$$("div.type-cdarrs").invoke("hide");
+	
+  $V(getForm("editEvenementSSR").cdarr, '');
+  $("cdarrs-"+line_id).show();
+	$("type-cdarrs-"+line_id).show();
+  
+  $('div_other_cdarr').show();
+
+
+  // Deselection de tous les codes cdarrs
+  removeCdarrs();
+
+  // Mise en evidence des elements dans les plannings
+  addBorderEvent();
+}
+
+selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
+  $$('.cdarrs').invoke('hide'); 
+	$('cdarrs-'+line_id+'-'+type_cdarr).show();
+	
+	$$(".button-type-cdarrs").invoke("removeClassName","selected");
+	buttonSelected.addClassName("selected");
 }
 
 selectTechnicien = function(kine_id) {
@@ -64,23 +98,6 @@ selectEquipement = function(equipement_id) {
   }
 }
 
-selectElement = function(line_id){
-  $V(oFormEvenementSSR.line_id, line_id);
-
-  $$("button.line").invoke("removeClassName", "selected" );
-  $("line-"+line_id).addClassName("selected");
-	
-	$$("div.cdarrs").invoke("hide");
-	$V(getForm("editEvenementSSR").cdarr, '');
-	$("cdarrs-"+line_id).show();
-	$('div_other_cdarr').show();
-
-  // Deselection de tous les codes cdarrs
-  removeCdarrs();
-
-  // Mise en evidence des elements dans les plannings
-	addBorderEvent();
-}
 
 removeCdarrs = function(){
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
@@ -281,19 +298,43 @@ Main.add(function(){
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line}}
-	              <div class="cdarrs" id="cdarrs-{{$_line->_id}}" style="display : none;">
-	                {{foreach from=$_line->_ref_element_prescription->_back.cdarrs item=_cdarr}}
-	                  <label>
-	                    <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> 
-											<span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
-											{{$_cdarr->code}}
-											</span>
-	                  </label>
+							
+	              <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
+	                {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
+										<!-- Boutons de type de code cdarr-->
+										<button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">{{$type_cdarr}}</button>
 	                {{/foreach}}
 	              </div>
+								
 	            {{/foreach}}
 	          {{/foreach}}
 	        {{/foreach}}  
+					
+					{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat.element item=_line}}
+              
+                <div id="cdarrs-{{$_line->_id}}" style="display : none;">
+                  {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
+                  
+                  <!-- Affichage des codes cdarrs -->
+                  <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
+                  {{foreach from=$_cdarrs item=_cdarr}}
+                    <label>
+                      <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> 
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
+                      {{$_cdarr->code}}
+                      </span>
+                    </label>
+                    {{/foreach}}
+                    </div>
+                    
+                  {{/foreach}}
+                </div>
+                
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}  
 	         
 	        <div id="div_other_cdarr" style="display: none;">
 	          <input type="checkbox" name="_cdarr" value="other" onclick="$('other_cdarr').toggle(); $V(this.form.code, '');" /> Autre

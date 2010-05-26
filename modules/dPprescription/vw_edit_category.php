@@ -57,6 +57,15 @@ if(!$category->_id && $element_prescription_id){
 }
 
 $element_prescription->loadBackRefs("cdarrs");
+$cdarrs = array();
+if($element_prescription->_back["cdarrs"]){
+	foreach($element_prescription->_back["cdarrs"] as $_acte_cdarr){
+	  $_acte_cdarr->loadRefActiviteCdarr();
+	  $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
+	  $cdarrs[$_activite_cdarr->type][] = $_acte_cdarr;
+	}
+}
+ksort($cdarrs);
 
 // Chargement de la category
 $category->load($category_id);
@@ -74,6 +83,7 @@ $smarty->assign("countElements", $countElements);
 $smarty->assign("element_prescription", $element_prescription);
 $smarty->assign("element_prescription_to_cdarr", $element_prescription_to_cdarr);
 $smarty->assign("mode_duplication", $mode_duplication);
+$smarty->assign("cdarrs", $cdarrs);
 $smarty->display("vw_edit_category.tpl");
 
 ?>

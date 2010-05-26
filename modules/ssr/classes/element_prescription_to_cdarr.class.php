@@ -54,10 +54,14 @@ class CElementPrescriptionToCdarr extends CMbObject {
 		$this->_view = "Code CdARR ".$this->code;
 	}
 	
+	function loadRefActiviteCdarr(){
+    $this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
+    $this->_ref_activite_cdarr->loadRefTypeActivite();
+	}
+	
 	function loadView(){
 		parent::loadView();
-		$this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
-		$this->_ref_activite_cdarr->loadRefTypeActivite();
+    $this->loadRefActiviteCdarr();
 	}
 }
 

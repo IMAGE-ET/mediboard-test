@@ -26,6 +26,7 @@ class CElementPrescription extends CMbObject {
   // FwdRefs
   var $_ref_category_prescription = null;
   var $_color                     = null;
+	var $_ref_cdarrs_by_type        = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
