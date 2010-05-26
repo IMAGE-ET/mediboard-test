@@ -12,10 +12,6 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    <tr>
-      <th class="title" colspan="10">{{tr}}config-hprimxml-schema-desc{{/tr}}</th>
-    </tr>
-    
     {{mb_include module=system template=inc_config_bool var=mvtComplet}}
 
     <tr>

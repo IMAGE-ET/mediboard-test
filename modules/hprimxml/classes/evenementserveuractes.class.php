@@ -19,10 +19,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   }
 
   function generateEnteteMessage() {
-    $evenementsServeurActes = $this->addElement($this, "evenementsServeurActes", null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($evenementsServeurActes, "version", CAppUI::conf('hprimxml evt_serveuractes version'));
-    
-    $this->addEnteteMessage($evenementsServeurActes);
+    parent::generateEnteteMessage("evenementsServeurActes");
   }
   
   function generateFromOperation($mbOp) {
@@ -55,22 +52,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $this->purgeEmptyElements();
   }
   
-  function getEnteteServeurActesXML() {
-    $data = array();
-    $xpath = new CMbXPath($this, true);   
-
-    $entete = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:enteteMessage");
-    
-    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
-    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
-    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);    
-    
-    return $data;
-  }
-  
-  function getServeurActesXML() {
+  function getContentsXML() {
     $data = array();
     $xpath = new CMbXPath($this, true);   
     
@@ -80,13 +62,17 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     $data['idSourcePatient'] = $this->getIdSource($data['patient']);
     $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
-    $data['venue']         = $xpath->queryUniqueNode("hprim:venue", $evenementServeurActe);
-    $data['idSourceVenue'] = $this->getIdSource($data['venue']);
-    $data['idCibleVenue']  = $this->getIdCible($data['venue']);
+    $data['venue']           = $xpath->queryUniqueNode("hprim:venue", $evenementServeurActe);
+    $data['idSourceVenue']   = $this->getIdSource($data['venue']);
+    $data['idCibleVenue']    = $this->getIdCible($data['venue']);
     
     $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+    $data['idSourceIntervention'] = $this->getIdSource($data['intervention'], false);
+    $data['idCibleIntervention']  = $this->getIdCible($data['intervention'], false);
     
-    $data['actesCCAM']     = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);  
+    $data['actesCCAM']         = $xpath->queryUniqueNode("hprim:actesCCAM", $evenementServeurActe);  
+    $data['idSourceActesCCAM'] = $this->getIdSource($data['actesCCAM'], false);
+    $data['idCibleActesCCAM']  = $this->getIdCible($data['actesCCAM'], false);
     
     return $data; 
   }

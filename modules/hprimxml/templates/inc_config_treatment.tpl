@@ -12,10 +12,6 @@
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
   <table class="form">
-    <tr>
-      <th class="title" colspan="10">{{tr}}config-hprimxml-treatment-desc{{/tr}}</th>
-    </tr>
-
     {{mb_include module=system template=inc_config_str var=functionPratImport}}
     
     {{mb_include module=system template=inc_config_str var=medecinIndetermine}}

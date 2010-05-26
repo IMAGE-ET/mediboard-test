@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
+CAppUI::requireModuleClass("hprimxml", "evenements");
+
+class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   static $evenements = array(
     'enregistrementPatient' => "CHPrimXMLEnregistrementPatient",
     'fusionPatient'         => "CHPrimXMLFusionPatient",
@@ -44,29 +46,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLDocument {
   }
 
   function generateEnteteMessage() {
-    $evenementsPatients = $this->addElement($this, "evenementsPatients", null, "http://www.hprim.org/hprimXML");
-    // Retourne un message d'acquittement par le récepteur
-    $this->addAttribute($evenementsPatients, "acquittementAttendu", "oui");
-    
-    $this->addEnteteMessage($evenementsPatients);
-  }
-  
-  function getEvenementPatientXML() { 
-    $xpath = new CMbXPath($this, true);
-    
-    $data = array();
-    $data['acquittement'] = $xpath->queryAttributNode("/hprim:evenementsPatients", null, "acquittementAttendu");
-
-    $query = "/hprim:evenementsPatients/hprim:enteteMessage";
-    $entete = $xpath->queryUniqueNode($query);
-
-    $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
-    $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
-    $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
-    $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
-    
-    return $data;
+    parent::generateEnteteMessage("evenementsPatients");
   }
   
   static function getActionEvenement($query, $node) {

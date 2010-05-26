@@ -172,23 +172,33 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $msg;
   }
   
-  function getIdSource($node) {
+  function getIdSource($node, $valeur = true) {
     $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
-    // Obligatoire pour MB
-    $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false);
-
-    return $xpath->queryTextNode("hprim:valeur", $emetteur);
+    
+    if ($valeur) {
+      // Obligatoire pour MB
+      $emetteur = $xpath->queryUniqueNode("hprim:emetteur", $identifiant, false);
+  
+      return $xpath->queryTextNode("hprim:valeur", $emetteur);
+    } else {
+      return $xpath->queryTextNode("hprim:emetteur", $identifiant);
+    }
   }
   
-  function getIdCible($node) {
+  function getIdCible($node, $valeur = true) {
     $xpath = new CMbXPath($this, true);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
-    $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
     
-    return $xpath->queryTextNode("hprim:valeur", $recepteur);
+    if ($valeur) {
+      $recepteur = $xpath->queryUniqueNode("hprim:recepteur", $identifiant);
+      
+      return $xpath->queryTextNode("hprim:valeur", $recepteur);
+    } else {
+      return $xpath->queryTextNode("hprim:recepteur", $identifiant);
+    }
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {

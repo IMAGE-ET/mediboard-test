@@ -49,7 +49,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domGetEvenement->loadXML(utf8_decode($messagePatient));
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
-      $data = $domGetEvenement->getEvenementPatientXML();
+      $data = $domGetEvenement->getEnteteEvenementXML("evenementsPatients");
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
@@ -100,7 +100,7 @@ class CHprimSoapHandler extends CSoapHandler {
 
       // Enregistrement d'un patient avec son identifiant (ipp) dans le système
       if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
-        $data = array_merge($data, $domGetEvenement->getEnregistrementPatientXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourcePatient'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -109,7 +109,7 @@ class CHprimSoapHandler extends CSoapHandler {
       } 
       // Fusion de deux ipp
       else if($domGetEvenement instanceof CHPrimXMLFusionPatient) {
-        $data = array_merge($data, $domGetEvenement->getFusionPatientXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourcePatient'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -118,7 +118,7 @@ class CHprimSoapHandler extends CSoapHandler {
       } 
       // Venue d'un patient dans l'établissement avec son numéro de venue
       else if($domGetEvenement instanceof CHPrimXMLVenuePatient) {
-        $data = array_merge($data, $domGetEvenement->getVenuePatientXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -127,7 +127,7 @@ class CHprimSoapHandler extends CSoapHandler {
       } 
       // Fusion de deux venues
       else if($domGetEvenement instanceof CHPrimXMLFusionVenue) {
-        $data = array_merge($data, $domGetEvenement->getFusionVenueXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -136,7 +136,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }
       // Mouvement du patient dans une unité fonctionnelle ou médicale
       else if($domGetEvenement instanceof CHPrimXMLMouvementPatient) {
-        $data = array_merge($data, $domGetEvenement->getMouvementPatientXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourceVenue'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -145,7 +145,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }
       // Gestion des débiteurs d'une venue de patient
       else if($domGetEvenement instanceof CHPrimXMLDebiteursVenue) {
-        $data = array_merge($data, $domGetEvenement->getDebiteursVenueXML());
+        $data = array_merge($data, $domGetEvenement->getContentsXML());
         $echange_hprim->id_permanent = $data['idSourcePatient'];
         if ($messageAcquittement = $domGetEvenement->isActionValide($data['action'], $domAcquittement, $echange_hprim)) {
           return $messageAcquittement;
@@ -199,7 +199,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $domGetEvenement->loadXML(utf8_decode($messageServeurActes));
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
-      $data = $domGetEvenement->getEnteteServeurActesXML();
+      $data = $domGetEvenement->getEnteteEvenementXML("evenementsServeurActes");
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
@@ -243,7 +243,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
   
-			$data = array_merge($data, $domGetEvenement->getServeurActesXML());
+			$data = array_merge($data, $domGetEvenement->getContentsXML());
       $echange_hprim->id_permanent = $data['idSourceVenue'];
       $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $data);
      

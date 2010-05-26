@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenementMvtStock extends CHPrimXMLDocument {
+CAppUI::requireModuleClass("hprimxml", "evenements");
+
+class CHPrimXMLEvenementMvtStock extends CHPrimXMLEvenements {
   function __construct() {
     $this->evenement = "evt_mvtStock";
     

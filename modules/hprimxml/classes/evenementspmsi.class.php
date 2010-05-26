@@ -18,13 +18,10 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     parent::__construct("evenementPmsi", "msgEvenementsPmsi");
   }
   
-	function generateEnteteMessage() {
-		$evenementsPMSI = $this->addElement($this, "evenementsPMSI", null, "http://www.hprim.org/hprimXML");
-    $this->addAttribute($evenementsPMSI, "version", CAppUI::conf('hprimxml evt_serveuractes version'));
-    
-    $this->addEnteteMessage($evenementsPMSI);
+  function generateEnteteMessage() {
+    parent::generateEnteteMessage("evenementsPMSI");
   }
-
+  
   function generateFromOperation($mbSej) {
     $evenementsPMSI = $this->documentElement;
 
@@ -84,6 +81,22 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     // Traitement final
     $this->purgeEmptyElements();
   }
-   
+  
+  function getContentsXML() {
+    $data = array();
+    $xpath = new CMbXPath($this, true);   
+    
+    $evenementPMSI = $xpath->queryUniqueNode("/hprim:evenementsPMSI/hprim:evenementPMSI");
+    
+    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementPMSI);
+    $data['idSourcePatient'] = $this->getIdSource($data['patient']);
+    $data['idCiblePatient']  = $this->getIdCible($data['patient']);
+    
+    $data['venue']           = $xpath->queryUniqueNode("hprim:venue", $evenementPMSI);
+    $data['idSourceVenue']   = $this->getIdSource($data['venue']);
+    $data['idCibleVenue']    = $this->getIdCible($data['venue']);
+    
+    return $data; 
+  }
 }
 ?>

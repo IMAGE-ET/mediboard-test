@@ -33,7 +33,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     $this->purgeEmptyElements();
   }
   
-  function getMouvementPatientXML() {
+  function getContentsXML() {
     $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";

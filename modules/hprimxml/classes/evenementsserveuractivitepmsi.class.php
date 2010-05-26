@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
+CAppUI::requireModuleClass("hprimxml", "evenements");
+
+class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   static $evenements = array(
     'evenementPMSI'        => "CHPrimXMLEvenementsPmsi",
     'evenementServeurActe' => "CHPrimXMLEvenementsServeurActes",
@@ -78,9 +80,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
   
   function mappingActeCCAM($node, $data) {
     $xpath = new CMbXPath($node->ownerDocument, true);
-    
-		$identifiant = $xpath->queryUniqueNode("hprim:identifiant", $data["intervention"]);
-		    
+    		    
 		$acteCCAM = new CActeCCAM();
 		$acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);
 		$acteCCAM->code_activite = $xpath->queryTextNode("hprim:codeActivite", $node);
@@ -88,10 +88,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLDocument {
 		$acteCCAM->execution     = $xpath->queryTextNode("hprim:execute/hprim:date", $node)." ".mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
 				
     return array (
-      "idSourceIntervention" => $xpath->queryTextNode("hprim:emetteur", $identifiant, false),
-      "idCibleIntervention"  => $xpath->queryTextNode("hprim:recepteur", $identifiant),
-      "idSourceActeCCAM"     => $xpath->queryTextNode("hprim:identifiant/hprim:emetteur", $node),
-      "idCibleActeCCAM"      => $xpath->queryTextNode("hprim:identifiant/hprim:recepteur", $node),
+      "idSourceIntervention" => $data['idSourceIntervention'],
+      "idCibleIntervention"  => $data['idCibleIntervention'],
+      "idSourceActeCCAM"     => $data['idSourceActeCCAM'],
+      "idCibleActeCCAM"      => $data['idCibleActeCCAM'],
 			"acteCCAM"             => $acteCCAM
     );
   }

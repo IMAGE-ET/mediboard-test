@@ -51,7 +51,7 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
     $this->purgeEmptyElements();
   }
 
-  function getDebiteursVenueXML() {
+  function getContentsXML() {
     $xpath = new CMbXPath($this, true);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";

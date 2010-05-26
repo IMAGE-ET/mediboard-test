@@ -31,9 +31,6 @@
 </script>
 <table class="tbl">
   <tr>
-    <th class="title" colspan="10">{{tr}}config-hprimxml-extract-desc{{/tr}}</th>
-  </tr>
-  <tr>
     <th class="category">Evénement</th>
     <th class="category">Version</th>
     <th class="category">Status</th>

@@ -35,11 +35,6 @@
       <form name="echangeForm" action="?" method="get">
         <table class="form">
           <tr>
-            <th colspan="2" class="category">
-              {{tr}}CEchangeHprim-optimize{{/tr}}
-            </th>
-          </tr>
-          <tr>
             <td>
               <button type="button" class="change" onclick="optimizeEchange(this)">
                 {{tr}}CEchangeHprim-optimize-search{{/tr}}
