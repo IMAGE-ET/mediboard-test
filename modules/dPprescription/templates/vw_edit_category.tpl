@@ -21,15 +21,14 @@ ColorSelector.init = function(form_name, color_view){
 
 Main.add( function(){
   categories_tab = new Control.Tabs.create('categories_tab', true);
-
-  if($('code_auto_complete')){
-	  var url = new Url("ssr", "httpreq_do_activite_autocomplete");
-	  url.autoComplete("editCdarr_code", "code_auto_complete", {
-	    minChars: 2,
-	    select: ".value"
-	  } );
-	}	
 });
+
+refreshFormCdarr = function(element_prescription_id, element_prescription_to_cdarr_id){
+  var url = new Url("dPprescription", "httpreq_vw_form_element_cdarr");
+	url.addParam("element_prescription_id", element_prescription_id);
+  url.addParam("element_prescription_to_cdarr_id", element_prescription_to_cdarr_id);
+  url.requestUpdate("cdarr-form");
+}
 	
 </script>
 
@@ -54,9 +53,7 @@ Main.add( function(){
 
       {{if $element_prescription->_id && @$modules.ssr->mod_active}}
       <hr />
-      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;element_prescription_to_cdarr_id=0" class="button new">
-        Ajouter un code CdARR
-      </a>
+      
       <div id="cdarr-list">
         {{mb_include template=inc_list_element_cdarrs}}
       </div>
@@ -76,7 +73,9 @@ Main.add( function(){
 				
 			  {{if $element_prescription->_id && @$modules.ssr->mod_active}}
         <hr />
+				<div id="cdarr-form">
 				{{mb_include template=inc_form_element_cdarr}}
+				</div>
     		{{/if}}
 		  {{/if}} 
 		{{/if}}
