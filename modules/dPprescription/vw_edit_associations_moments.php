@@ -8,6 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+if(!CModule::getActive('bcb')){
+  CAppUI::stepMessage(UI_MSG_ERROR, "L'administration des moments est nécessaire seulement si une base de données de médicaments externe est installée");
+  return;
+}
+
 global $AppUI, $can, $m;
 
 // Recuperation des valeurs
