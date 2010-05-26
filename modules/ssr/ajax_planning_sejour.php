@@ -19,12 +19,13 @@ $patient = $sejour->_ref_patient;
 
 $height = CValue::get("height");
 $print = CValue::get("print");
+$large = CValue::get("large");
 
 // Initialisation du planning
 $date = CValue::getOrSession("date", mbDate());
 $nb_days_planning = $sejour->getNbJourPlanning($date);
 
-$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable, $height);
+$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable, $height, $large);
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 

@@ -13,7 +13,7 @@
 <script type="text/javascript">
 
 Main.add(function(){
-  Planification.refreshSejour("{{$sejour_id}}", false, 800, true);
+  Planification.refreshSejour("{{$sejour_id}}", false, 800, true, true);
 });
 
 

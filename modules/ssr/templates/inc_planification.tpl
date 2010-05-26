@@ -24,7 +24,7 @@ Main.add(Planification.showWeek);
 printPlanningSejour = function(){
   var url = new Url("ssr", "print_planning_sejour");
   url.addParam("sejour_id", "{{$sejour->_id}}");
-  url.popup("800","600","Planning du patient");
+  url.popup("700","700","Planning du patient");
 }
 
 

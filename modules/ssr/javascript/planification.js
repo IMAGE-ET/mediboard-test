@@ -90,7 +90,7 @@ Planification = {
 		  requestUpdate("activites-sejour");
 	},
 	
-	refreshSejour: function(sejour_id, selectable, height, print) {
+	refreshSejour: function(sejour_id, selectable, height, print, large) {
     this.sejour_id = sejour_id || this.sejour_id;
 		this.selectable = selectable || this.selectable;
 		this.height = height || this.height;
@@ -100,11 +100,20 @@ Planification = {
 			addParam("selectable", this.selectable) .
 			addParam("height", this.height) .
 			addParam("print", print).
+			addParam("large", large).
       requestUpdate("planning-sejour", { 
 			  onComplete: function(){
 					if(print){
 						$('planning-sejour').select(".planning col")[2].style.width = 0;
 						$('planning-sejour').select(".week-container")[0].style.overflowY = "visible";
+						
+						for(var i=0; i<7; i++){
+							$$('.hour-0'+i)[0].hide();
+            }
+						for(var i=19; i<24; i++){
+              $$('.hour-'+i)[0].hide();
+            }
+             
 					}
 				}
 			});
