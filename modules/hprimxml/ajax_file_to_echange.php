@@ -40,7 +40,8 @@ if (!$do_import) {
   }
 
   $files = CAppUI::readFiles($path);
-
+	
+	ini_set("memory_limit", "512M");
   set_time_limit(360);
   CMbObject::$useObjectCache = false;
   $counter = 0;
