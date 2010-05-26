@@ -57,10 +57,17 @@ if (count($deliveries)) {
   }
 }
 
-$deliveries_by_service = array_fill_keys(array_keys($services), array());
+$service_keys = array_keys($services);
+$deliveries_by_service = array_fill_keys($service_keys, array());
+$delivered_counts = array_fill_keys($service_keys, 0);
 
 foreach ($deliveries as $_delivery) {
-  $deliveries_by_service[$_delivery->service_id][$_delivery->_id] = $_delivery;
+  $service_id = $_delivery->service_id;
+  $deliveries_by_service[$service_id][$_delivery->_id] = $_delivery;
+        
+  if ($_delivery->isDelivered()) {
+    $delivered_counts[$service_id]++;
+  }
 }
 
 // Création du template
@@ -70,6 +77,7 @@ $smarty->assign('deliveries',     $deliveries);
 $smarty->assign('deliveries_by_service', $deliveries_by_service);
 $smarty->assign('stocks_service', $stocks_service);
 $smarty->assign('services',       $services);
+$smarty->assign('delivered_counts', $delivered_counts);
 
 if ($mode == "nominatif")
   $smarty->display('inc_deliveries_nominatif_list.tpl');

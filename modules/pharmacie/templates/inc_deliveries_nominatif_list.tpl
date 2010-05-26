@@ -28,16 +28,18 @@ Main.add(function(){
         <ul class="control_tabs_vertical" id="nominatif-deliveries-tabs">
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <li>
+            {{math assign="remaining" equation="x-y" x=$_deliveries|@count y=$delivered_counts.$service_id}}
+            
             <input type="checkbox" style="float: right; margin: 4px;" 
                    name="service_id[]" value="{{$service_id}}"
                    title="Cocher pour inclure ce service dans le plan de cueillette" />
                    
             <a href="#nominatif-service-{{$service_id}}"
                style="padding-right: 2em;" 
-              {{if $_deliveries|@count == 0}}class="empty"{{/if}}
+              {{if $remaining == 0}}class="empty"{{/if}}
               >
               {{$services.$service_id}} 
-              <small>({{$_deliveries|@count}})</small>
+              <small style="min-width: 4em; display: inline-block; text-align: right;">({{$remaining}}/{{$_deliveries|@count}})</small>
             </a>
           </li>
         {{/foreach}}
@@ -49,14 +51,13 @@ Main.add(function(){
         <tr>
           <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
           <th>{{tr}}CProduct{{/tr}}</th>
-          <th>{{mb_title class=CProductDelivery field=date_dispensation}}</th>
+          <th colspan="2">{{mb_title class=CProductDelivery field=date_dispensation}}</th>
           {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
             <th>Stock pharmacie</th>
           {{/if}}
-          <th>{{mb_title class=CProductDelivery field=quantity}}</th>
           <th>Stock service</th>
-          <th>{{mb_title class=CProduct field=_unit_title}}</th>
           <th><button type="button" onclick="deliverAll('list-nominatives')" class="tick">Tout délivrer</button></th>
+          <th>{{mb_title class=CProduct field=_unit_title}}</th>
         </tr>
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <tbody id="nominatif-service-{{$service_id}}" style="display: none;">

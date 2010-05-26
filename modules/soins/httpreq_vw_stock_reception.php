@@ -23,7 +23,7 @@ if ($service_id) {
 $where['date_delivery'] = "IS NULL";
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, intval($start).",30");
+$deliveries = $delivery->loadList($where, $order_by, $mode ? null : intval($start).",30");
 $deliveries_count = $delivery->countList($where);
 
 $deliveries_nominatif = array();

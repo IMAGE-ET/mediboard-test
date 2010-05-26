@@ -34,6 +34,7 @@ class CProductDelivery extends CMbObject {
   
   var $_date_min      = null;
   var $_date_max      = null;
+  var $_delivered     = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -81,7 +82,7 @@ class CProductDelivery extends CMbObject {
   }
   
   function isDelivered() {
-  	return $this->countDelivered() >= $this->quantity;
+  	return $this->_delivered = ($this->countDelivered() >= $this->quantity);
   }
   
   function isReceived() {

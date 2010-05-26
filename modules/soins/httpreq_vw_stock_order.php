@@ -16,7 +16,7 @@ $start               = intval(CValue::getOrSession('start', 0));
 $only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
 $only_common         = CValue::getOrSession('only_common');
 $keywords            = CValue::getOrSession('keywords');
-$endowment_id        = CValue::getOrSession('endowment_id');
+$endowment_id        = CValue::get('endowment_id');
 $endowment_item_id   = CValue::get('endowment_item_id');
 
 // Calcul de date_max et date_min

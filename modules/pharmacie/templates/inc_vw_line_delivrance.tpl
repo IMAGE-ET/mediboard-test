@@ -18,24 +18,21 @@
       {{$curr_delivery->_ref_stock->_view}}
     </span>
   </td>
-  <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+  <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
+  <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
   {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-  <td>
+  <td style="text-align: center;">
     <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
       {{mb_value object=$curr_delivery->_ref_stock field=quantity}}
     </a>
   </td>
   {{/if}}
-  <td style="text-align: center;">{{mb_value object=$curr_delivery field=quantity}}</td>
   <td style="text-align: center;">
     {{assign var=id value=$curr_delivery->_id}}
     {{assign var=stock value=$stocks_service.$id}}
     <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
       {{$stock->quantity}}
     </a>
-  </td>
-  <td style="text-align: center;">
-    {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>
   <td>
     <table class="layout">
@@ -69,14 +66,13 @@
       </tr>
     {{/foreach}}
     
-      {{assign var=_delivered value=$curr_delivery->isDelivered()}}
       <tr>
         <td>
-          <button type="button" class="add notext" onclick="$(this).up().next().down('form').toggle()" {{if !$_delivered}}style="visibility: hidden;"{{/if}}></button>
+          <button type="button" class="add notext" onclick="$(this).up().next().down('form').toggle()" {{if !$curr_delivery->_delivered}}style="visibility: hidden;"{{/if}}></button>
         </td>
-        <td colspan="10">
+        <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}">
           <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" 
-                onsubmit="return deliverLine(this)" {{if $_delivered}}style="display: none;"{{/if}}>
+                onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
             <input type="hidden" name="m" value="dPstock" /> 
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
@@ -89,5 +85,8 @@
         </td>
       </tr>
     </table>
+  </td>
+  <td>
+    {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
   </td>
 </tr>

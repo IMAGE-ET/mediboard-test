@@ -39,6 +39,9 @@
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="date_dispensation" value="now" />
+      {{if $endowment_id && $dPconfig.dPstock.CProductDelivery.auto_dispensation}}
+        <input type="hidden" name="date_delivery" value="now" />
+      {{/if}}
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="service_id" value="{{$service->_id}}" />
       <input type="hidden" name="order" value="1" />
@@ -55,18 +58,20 @@
       {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=0 value=$qty style=$style 
          onchange="this.form._quantity_package.value = this.value/$qty" class="num notNull min|1"}}
-       
-       (soit <input type="text" name="_quantity_package" value="{{if $qty}}1{{else}}0{{/if}}" size="2" 
-              onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
-       {{$stock->_ref_product->packaging}})
-       <script type="text/javascript">
-         getForm("form-dispensation-{{$stock->_id}}")._quantity_package.addSpinner({min:1});
-       </script>
       {{else}}
-        {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=2 min=1 style=$style}}
+        {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" increment=1 size=3 min=1 style=$style}}
       {{/if}}
-      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next('input').show().focus()"></button>
+      <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next('input[name=comments]').show().focus()"></button>
       <button type="submit" class="tick notext" title="Dispenser" style="{{$style}}">Dispenser</button>
+      
+      {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
+        (soit <input type="text" name="_quantity_package" value="{{if $qty}}1{{else}}0{{/if}}" size="2" 
+                     onchange="$V(this.form.quantity, Math.round($V(this)*{{$qty}}))" style="{{$style}}" />
+        {{$stock->_ref_product->packaging}})
+        <script type="text/javascript">
+          getForm("form-dispensation-{{$stock->_id}}")._quantity_package.addSpinner({min:1});
+        </script>
+      {{/if}}
       <br />
       <input type="text" name="comments" style="display: none; width: 100%;" />
     </form>

@@ -36,7 +36,7 @@ changeReceptionPage = function(start) {
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
     <th style="width: 0.1%;"></th>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th>Date commande</th>
+    <th colspan="2">Date commande</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
     <th><button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button></th>
@@ -69,16 +69,21 @@ changeReceptionPage = function(start) {
             {{/if}}
             {{$curr_delivery->_ref_stock->_ref_product->_quantity}}
           </div>
+          {{if $curr_delivery->_ref_stock->canEdit()}}
           <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$curr_delivery->_ref_stock->_id}}">
+          {{/if}}
             <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
               {{$curr_delivery->_ref_stock}}
             </span>
+          {{if $curr_delivery->_ref_stock->canEdit()}}
           </a>
+          {{/if}}
         {{else}}
           {{mb_value object=$curr_delivery field=comments}}
         {{/if}}
       </td>
-      <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+      <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
+      <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
       <td style="text-align: right">{{mb_value object=$curr_delivery field=quantity}}</td>
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>

@@ -15,7 +15,8 @@ $start      = CValue::get('start', 0);
 
 $order_by = 'date_dispensation ASC';
 $where = array (
- 'order' => " = '1'"
+ 'order' => " = '1'",
+ "date_delivery IS NULL OR date_delivery = ''"
 );
 
 $where['quantity'] = " > 0";

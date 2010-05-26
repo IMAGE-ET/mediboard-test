@@ -30,6 +30,9 @@
     {{assign var="class" value="CProductReference"}}
     {{mb_include module=system template=inc_config_bool var=show_cond_price}}
     {{mb_include module=system template=inc_config_bool var=use_mdq}}
+
+    {{assign var="class" value="CProductDelivery"}}
+    {{mb_include module=system template=inc_config_bool var=auto_dispensation}}
     
     <tr>
       <th colspan="2" class="category">Paginations</th>
