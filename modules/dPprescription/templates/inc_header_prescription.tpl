@@ -141,7 +141,7 @@ Main.add( function(){
       valueElement: oFormProtocole.elements.pack_protocole_id,
 			updateElement: function(selectedElement) {
 			  var node = $(selectedElement).down('.view');
-			  $V($("applyProtocole_libelle_protocole"), node.innerHTML);
+			  $V($("applyProtocole_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
 				if (autocompleter.options.afterUpdateElement)
 			    autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
 			},
