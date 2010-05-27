@@ -95,6 +95,9 @@ foreach($categories as $_category){
 		$function =& $_assoc->_ref_function;
 		$function->loadRefsUsers();
 		foreach($function->_ref_users as $_user){
+			 $executants[$_category->_id][] = $_user;
+      
+			/*
 			// On verifie sur le kine fait parti du plateau
 			if($_user->isKine()){
 				$technicien = new CTechnicien();
@@ -108,6 +111,7 @@ foreach($categories as $_category){
 			else {
 				$executants[$_category->_id][] = $_user;
       }
+      */
 		}
 	}
 }
