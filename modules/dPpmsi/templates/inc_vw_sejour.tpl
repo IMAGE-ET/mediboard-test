@@ -16,7 +16,7 @@
   {{assign var=patient value=$sejour->_ref_patient}}
   <table class="form">
     <tr>
-      <th class="title" colspan="4">
+      <th class="title">
         <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
           <img src="images/icons/planning.png" alt="Planifier" />
         </a>
@@ -31,13 +31,13 @@
     
     {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens") && $patient->_ref_IPP}}
     <tr>
-      <th colspan="4" id="IPP"> {{mb_include module=dPpmsi template=inc_ipp_form}} </th>
+      <th id="IPP"> {{mb_include module=dPpmsi template=inc_ipp_form}} </th>
     </tr>
     {{/if}}
   
     {{if ($dPconfig.dPpmsi.systeme_facturation == "siemens")}}
     <tr>
-      <td colspan="4" id="Numdos{{$sejour->sejour_id}}" class="text">
+      <td id="Numdos{{$sejour->sejour_id}}" class="text">
         {{mb_include module=dPpmsi template=inc_numdos_form}}
       </td>
     </tr>
@@ -46,17 +46,17 @@
   
   <ul id="tabs-pmsi" class="control_tabs">
     <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>
-    <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>{{tr}}Serveur d'actes{{/tr}}</a></li>
+    <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>Actes</a></li>
   </ul>
   
   <hr class="control_tabs" />
   
   <div id="PMSI" style="display: none;">
-  {{mb_include template=inc_vw_pmsi}}
+    {{mb_include template=inc_vw_pmsi}}
   </div>
   
   <div id="ServeurActes" style="display: none;">
-  {{mb_include template=inc_vw_serveur_actes}}
+    {{mb_include template=inc_vw_serveur_actes}}
   </div>
   
 {{else}}

@@ -23,6 +23,13 @@ CIM10Selector.initDP = function(sejour_id){
   this.pop();
 }
 
+CIM10Selector.initDR = function(sejour_id){
+  this.sForm = "editDR-"+sejour_id;
+  this.sView = "DR";
+  this.sChir = "_praticien_id";
+  this.pop();
+}
+
 CIM10Selector.initDAS = function(sejour_id){
   this.sForm = "editDossierMedical-"+sejour_id;
   this.sView = "_added_code_cim";
@@ -53,7 +60,7 @@ function imprimerDocument(doc_id) {
 }
 
 function exporterHPRIM(object_id, typeObject, oOptions) {
-  oDefaultOptions = {
+  var oDefaultOptions = {
   	onlySentFiles : false
   };
   
@@ -185,9 +192,7 @@ Main.add(function () {
             <td>
               <input type="hidden" name="m" value="dPpmsi" />
               <input type="hidden" name="pat_id" value="{{$patient->patient_id}}" onchange="this.form.submit()" />
-              <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
-            </td>
-            <td class="button">
+              <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" ondblclick="PatSelector.init()" />
               <button class="search" type="button" onclick="PatSelector.init()">Chercher</button>
               <script type="text/javascript">
               PatSelector.init = function(){
