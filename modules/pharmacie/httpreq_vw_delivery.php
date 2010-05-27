@@ -12,21 +12,13 @@ CCanDo::checkRead();
 
 $delivery_id = CValue::get('delivery_id');
 
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
-
 $delivery = new CProductDelivery();
 $delivery = $delivery->load($delivery_id);
-
-$stocks_service = array();
-
-// Creation d'un tableau de patient
 $delivery->loadRefsFwd();
 $delivery->loadRefsBack();
 $delivery->_ref_stock->loadRefsFwd();
 
+$stocks_service = array();
 $stocks_service[$delivery->_id] = CProductStockService::getFromCode($delivery->_ref_stock->_ref_product->code, $delivery->service_id);
 
 // Création du template

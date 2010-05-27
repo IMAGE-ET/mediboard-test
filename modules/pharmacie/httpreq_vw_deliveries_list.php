@@ -37,7 +37,7 @@ else
 $where['service_id'] = CSQLDataSource::prepareIn(array_keys($services));
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
-$where[] = "`order` != '1' OR `order` IS NULL";
+//$where[] = "`order` != '1' OR `order` IS NULL";
 
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 200);
