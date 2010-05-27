@@ -33,37 +33,35 @@ if ($patient->patient_id) {
   $patient->loadRefsConsultations();
   $patient->loadRefsSejours();
   $patient->loadIPP();
-  foreach($patient->_ref_sejours as &$sejour) {
-    $sejour->loadRefDossierMedical();
-    $sejour->_ref_dossier_medical->updateFormFields();
-    $sejour->_ref_dossier_medical->loadRefsAntecedents();
-    $sejour->_ref_dossier_medical->loadRefsTraitements();
-    $sejour->loadRefsAffectations();
-    $sejour->loadNumDossier();
-  }
   
   //Affectation
   $affectation =& $patient->_ref_curr_affectation;
   if ($affectation->affectation_id) {
-      $affectation->loadRefsFwd();
-      $affectation->_ref_lit->loadCompleteView();
-    }
+    $affectation->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
+  }
     
-    $affectation =& $patient->_ref_next_affectation;
-    if ($affectation->affectation_id) {
-      $affectation->loadRefsFwd();
-      $affectation->_ref_lit->loadCompleteView();
-    }
+  $affectation =& $patient->_ref_next_affectation;
+  if ($affectation->affectation_id) {
+    $affectation->loadRefsFwd();
+    $affectation->_ref_lit->loadCompleteView();
+  }
     
   // Consultation
-  foreach ($patient->_ref_consultations as &$consult) {
+  foreach ($patient->_ref_consultations as $consult) {
     $consult->loadRefsFwd(); //loadRefs();
     $consult->loadRefConsultAnesth();
     $consult->_ref_chir->loadRefFunction();
   }
 
   // Sejours
-  foreach ($patient->_ref_sejours as &$sejour) {
+  foreach ($patient->_ref_sejours as $sejour) {
+    $sejour->loadRefDossierMedical();
+    $sejour->_ref_dossier_medical->updateFormFields();
+    $sejour->_ref_dossier_medical->loadRefsAntecedents();
+    $sejour->_ref_dossier_medical->loadRefsTraitements();
+    $sejour->loadRefsAffectations();
+    
     $sejour->loadExtDiagnostics();
     $sejour->loadRefs();
     $sejour->countEchangeHprim();
@@ -71,23 +69,23 @@ if ($patient->patient_id) {
     $sejour->loadNumDossier();
     $sejour->canRead();
     $sejour->canEdit();
-    foreach ($sejour->_ref_operations as &$operation) {
-      $operation->loadRefsFwd();
-      $operation->countEchangeHprim();
-      $operation->countDocItems();
-      $operation->loadRefsActesCCAM();
-      $operation->canRead();
-      $operation->canEdit();
-      foreach ($operation->_ref_actes_ccam as &$acte) {
-        $acte->loadRefsFwd();
-        $acte->guessAssociation();
+    foreach ($sejour->_ref_operations as $_operation) {
+      $_operation->loadRefsFwd();
+      $_operation->countEchangeHprim();
+      $_operation->countDocItems();
+      $_operation->loadRefsActesCCAM();
+      $_operation->canRead();
+      $_operation->canEdit();
+      foreach ($_operation->_ref_actes_ccam as $_acte) {
+        $_acte->loadRefsFwd();
+        $_acte->guessAssociation();
       }
-      if($operation->plageop_id) {
-        $plage =& $operation->_ref_plageop;
+      if($_operation->plageop_id) {
+        $plage =& $_operation->_ref_plageop;
         $plage->loadRefsFwd();
       }
       
-      $consultAnest =& $operation->_ref_consult_anesth;
+      $consultAnest =& $_operation->_ref_consult_anesth;
       if ($consultAnest->consultation_anesth_id) {
         $consultAnest->loadRefsFwd();
         $consultAnest->_ref_plageconsult->loadRefsFwd();

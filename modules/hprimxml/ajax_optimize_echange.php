@@ -19,7 +19,7 @@ $itemEchangeHprim = new CEchangeHprim;
 
 // Requêtes
 $where = array();
-$where["compressed"] = "= '0'";
+$where["purge"] = "= '0'";
 
 if (!$do_optimize) {
   $count = $itemEchangeHprim->countList($where);

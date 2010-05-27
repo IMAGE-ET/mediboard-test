@@ -2,7 +2,7 @@
 
 {{*
  * @package Mediboard
- * @subpackage pmsi
+ * @subpackage dPpmsi
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tabs-configure', true));
-</script>'
+</script>
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#PMSI">{{tr}}PMSI{{/tr}}</a></li>

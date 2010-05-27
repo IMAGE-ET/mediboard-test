@@ -139,6 +139,16 @@ function mbDateTime($relative = null, $ref = null) {
 }
 
 /**
+ * Transforms absolute or relative time into XML DATETIME format
+ * @param string $relative Modifies the time (eg '+1 DAY')
+ * @param datetime The reference date time fo transforms
+ * @return string The transformed time 
+ **/
+function mbXMLDateTime($relative = null, $ref = null) {
+  return mbTransformTime($relative, $ref, CMbDate::$xmlDateTime);
+}
+
+/**
  * Converts an xs;duration XML duration into a DB friendly DATETIME
  * @param string $duration where format is P1Y2M3DT10H30M0S
  * @return string: the DATETIME, null if failed
@@ -303,7 +313,11 @@ class CMbDate {
     "minute" =>       60, // 60 
     "second" =>        1, // 1 
    );
-    
+
+   static $xmlDate     = "%Y-%m-%d";
+   static $xmlTime     = "%H:%M:%S";
+   static $xmlDateTime = null;
+   
   /** Compute real relative achieved gregorian durations in years and months
    * @param date $from Starting time
    * @param date $to Ending time, now if null
@@ -367,7 +381,7 @@ class CMbDate {
     );
   }
 }
-
+CMbDate::$xmlDateTime = CMbDate::$xmlDate."T".CMbDate::$xmlTime;
 /**
  * Return the std variance of an array
  * @return float: ecart-type

@@ -26,7 +26,7 @@ if ($sejour->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("_sejour"         , $sejour );
+$smarty->assign("sejour"         , $sejour );
 $smarty->assign("patient"         , $sejour->_ref_patient );
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
 

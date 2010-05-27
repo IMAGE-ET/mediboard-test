@@ -43,7 +43,7 @@
   {{/if}}
   <tr>
     <td class="button">
-      <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Export des diagnostics</button>
+      <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Export du PMSI</button>
     </td>
   </tr>
   <tr>
