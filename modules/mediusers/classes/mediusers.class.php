@@ -562,18 +562,13 @@ class CMediusers extends CMbObject {
   }
 
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
-    global $AppUI;
-    $functions = $this->loadFonctions($permType);
-
-    // Filter on a single function
-    if ($function_id) {
-      $functions = array_key_exists($function_id, $functions) ?
-      array($function_id => $functions[$function_id]) :
-      array();
+    
+  	$where = array();
+    
+  	if($function_id) {
+    	$where["function_id"] = "= '$function_id'";
     }
-
-    $where = array();
-    $where[] = "users_mediboard.function_id ".CSQLDataSource::prepareIn(array_keys($functions))." OR users_mediboard.user_id = '$AppUI->user_id'";
+    
     $where["users_mediboard.actif"] = "= '1'";
     
     // Filters on users values
