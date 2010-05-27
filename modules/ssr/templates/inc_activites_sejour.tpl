@@ -74,11 +74,11 @@ selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
 	buttonSelected.addClassName("selected");
 }
 
-selectTechnicien = function(kine_id) {
+selectTechnicien = function(kine_id, buttonSelected) {
   $V(oFormEvenementSSR.therapeute_id, kine_id);	
 	
   $$("button.ressource").invoke("removeClassName", "selected");
-  $("technicien-"+kine_id).addClassName("selected");
+  buttonSelected.addClassName("selected");
 
   PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
@@ -103,6 +103,7 @@ removeCdarrs = function(){
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
     e.checked = false;
   });
+	$$('.counts_cdarr').invoke('update','')
 }
 
 submitSSR = function(){
@@ -177,11 +178,18 @@ addBorderEvent = function(){
 	window["planning-"+$('planning-sejour').down('div.planning').id].updateNbSelectEvents();
 }
 
+updateCdarrCount = function(line_id, type_cdarr){
+  var countCdarr = ($('cdarrs-'+line_id+'-'+type_cdarr).select('input:checked')).length;  
+  if(countCdarr){
+    $('count-'+line_id+'-'+type_cdarr).update('('+countCdarr+')');
+	} else {
+    $('count-'+line_id+'-'+type_cdarr).update('');
+	}
+}
+
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
-	
-	//selectTechnicien('{{$bilan->_ref_technicien->kine_id}}');
 	
 	if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
@@ -302,7 +310,9 @@ Main.add(function(){
 	              <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
 	                {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
 										<!-- Boutons de type de code cdarr-->
-										<button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">{{$type_cdarr}}</button>
+										<button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">
+											{{$type_cdarr}} <span class="counts_cdarr" id="count-{{$_line->_id}}-{{$type_cdarr}}"></span>
+										</button>
 	                {{/foreach}}
 	              </div>
 								
@@ -321,7 +331,7 @@ Main.add(function(){
                   <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
                   {{foreach from=$_cdarrs item=_cdarr}}
                     <label>
-                      <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}"/> 
+                      <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
                       {{$_cdarr->code}}
                       </span>
@@ -362,7 +372,7 @@ Main.add(function(){
 								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                   {{if array_key_exists($category_id, $executants)}}
                     {{foreach from=$executants.$category_id item=_user_executant}}
-										  <button title="{{$_user_executant->_view}}" id="technicien-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}')">
+										  <button title="{{$_user_executant->_view}}" id="technicien-{{$_line->_id}}-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
                         {{$_user_executant->_user_last_name}}
 											</button>
                     {{/foreach}}
