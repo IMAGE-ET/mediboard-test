@@ -263,8 +263,8 @@ class CMediusers extends CMbObject {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
-      $this->_user_first_name = ucwords(mb_strtolower($user->user_first_name));
-      $this->_user_last_name  = mb_strtoupper($user->user_last_name) ;
+      $this->_user_first_name = CMbString::capitalize($user->user_first_name);
+      $this->_user_last_name  = CMbString::upper($user->user_last_name);
       $this->_user_email      = $user->user_email;
       $this->_user_phone      = $user->user_phone;
       $this->_user_adresse    = $user->user_address1;

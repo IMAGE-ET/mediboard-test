@@ -75,6 +75,7 @@ class CUserLog extends CMbMetaObject {
   function getOldValues() {
     if ($this->extra && ($this->type === "store" || $this->type === "merge")) {
       $this->_old_values = (array) json_decode($this->extra);
+      $this->_old_values = array_map("utf8_decode", $this->_old_values);
     }
   }
   

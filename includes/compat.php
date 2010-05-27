@@ -194,6 +194,17 @@ if (!function_exists('mb_strtolower')) {
   }
 }
 
+if (!function_exists('mb_convert_case')) {
+  function mb_ucwords($string) {
+    return ucwords($string);
+  }
+}
+else {
+  function mb_ucwords($string) {
+    return mb_convert_case($string, MB_CASE_TITLE, CApp::$encoding);
+  }
+}
+
 if (!defined('PHP_INT_MAX')) {
 	define('PHP_INT_MAX', pow(2, 31)-1);
 }

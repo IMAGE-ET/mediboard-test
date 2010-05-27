@@ -85,6 +85,18 @@ abstract class CMbString {
 	  }
 	  return $string;
 	}
+  
+  static function upper($string) {
+    return mb_strtoupper($string, CApp::$encoding);
+  }
+  
+  static function lower($string) {
+    return mb_strtolower($string, CApp::$encoding);
+  }
+  
+  static function capitalize($string) {
+    return mb_ucwords($string);
+  }
 
   /**
    * Convert a number to the deca-binary syntax

@@ -157,9 +157,12 @@ if (empty($locale_info["charset"])){
   $locale_info["charset"] = "UTF-8";
 }
 
+CApp::$encoding = $locale_info["charset"];
+// We don't use mb_internal_encoding as it may be redefined by libs
+
 // output the character set header
 if (!$suppressHeaders || $ajax) {
-  header("Content-type: text/html;charset=".$locale_info["charset"]);
+  header("Content-type: text/html;charset=".CApp::$encoding);
 }
 
 // Show errors to admin
@@ -189,4 +192,4 @@ require("./includes/access_log.php");
 
 ob_end_flush();
 
-CApp::emptyPostData($suppressHeaders);
+CApp::emptyPostData($suppressHeaders/*!$tab*/);

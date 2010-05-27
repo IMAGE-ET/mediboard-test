@@ -13,7 +13,8 @@
  */
 class CApp {
   static $inPeace = false;
-  
+  static $encoding = "utf-8";
+    
   /**
    * Will trigger an error for logging purpose whenever the application dies unexpectedly
    */
@@ -38,7 +39,7 @@ class CApp {
    */
   static function emptyPostData($dont_redirect = false){
     if (!$dont_redirect && !empty($_POST) && !headers_sent()) {
-      CAppUI::redirect();
+      CAppUI::redirect(/*CValue::read($_SERVER, "QUERY_STRING")*/);
     }
     self::rip();
   }
@@ -93,10 +94,10 @@ class CApp {
   static function getBaseUrl(){
     $scheme = "http".(isset($_SERVER["HTTPS"]) ? "s" : "");
     $host = $_SERVER["SERVER_NAME"];
-    $port = ($_SERVER["SERVER_PORT"] == 80) ? null : $_SERVER["SERVER_PORT"];
+    $port = ($_SERVER["SERVER_PORT"] == 80) ? "" : ":{$_SERVER['SERVER_PORT']}";
     $path = dirname($_SERVER["SCRIPT_NAME"]);
     
-    return $scheme."://".$host.($port ? ":$port" : "").$path;
+    return $scheme."://".$host.$port.$path;
   }
 }
 ?>
