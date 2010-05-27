@@ -58,8 +58,9 @@
       {{mb_value object=$object field="prenom_4"}} {{/if}}
     </td>
     <td class="text">
-      <strong>{{mb_label object=$object field="cp"}}</strong>
+      <strong>{{mb_label object=$object field="ville"}}</strong>
       {{mb_value object=$object field="cp"}}
+      {{mb_value object=$object field="ville"}}
     </td>
   </tr>
   <tr>
@@ -68,8 +69,8 @@
       {{mb_value object=$object field="nom_jeune_fille"}}
     </td>
     <td class="text">
-      <strong>{{mb_label object=$object field="ville"}}</strong>
-      {{mb_value object=$object field="ville"}}
+      <strong>{{mb_label object=$object field="tel"}}</strong>
+      {{mb_value object=$object field="tel"}}
     </td>
   </tr>
   <tr>
@@ -78,8 +79,8 @@
       {{mb_value object=$object field="naissance"}}
     </td>
     <td class="text">
-      <strong>{{mb_label object=$object field="tel"}}</strong>
-      {{mb_value object=$object field="tel"}}
+      <strong>{{mb_label object=$object field="tel2"}}</strong>
+      {{mb_value object=$object field="tel2"}}
     </td>
   </tr>
   <tr>
@@ -88,8 +89,8 @@
       {{mb_value object=$object field="sexe"}}
     </td>
     <td class="text">
-      <strong>{{mb_label object=$object field="tel2"}}</strong>
-      {{mb_value object=$object field="tel2"}}
+      <strong>{{mb_label object=$object field="tel_autre"}}</strong>
+      {{mb_value object=$object field="tel_autre"}}
     </td>
   </tr>
   <tr>

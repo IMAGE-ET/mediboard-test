@@ -38,22 +38,26 @@ abstract class CJSLoader extends CHTMLResourceLoader {
      * The total size of the JS goes down from 300kB to 230kB (gzipped).
      */
     if ($compress) {
-      $hash = md5(implode("", self::$files));
-      
-      $cachefile = "./tmp/$hash.js";
-      $uptodate = false;
+      $files = self::$files;
       $excluded = array();
+      $uptodate = false;
       
-      foreach(self::$files as $file) {
+      // We exclude files already in the tmp dir
+      foreach($files as $index => $file) {
         if (strpos($file, "/tmp/") !== false) {
           $excluded[] = $file;
+          unset($files[$index]);
         }
       }
       
+      $hash = md5(implode("", $files));
+      $cachefile = "./tmp/$hash.js";
+      
+      // If it exists, we check if it is up to date
       if (file_exists($cachefile)) {
         $uptodate = true;
         $last_update = filemtime($cachefile);
-        foreach(self::$files as $file) {
+        foreach($files as $file) {
           if (filemtime($file) > $last_update) {
             $uptodate = false;
             break;
@@ -63,9 +67,8 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       
       if (!$uptodate) {
         $all_scripts = "";
-        foreach(self::$files as $file) {
-          if (in_array($file, $excluded)) continue;
-          $all_scripts .= file_get_contents($file);
+        foreach($files as $file) {
+          $all_scripts .= file_get_contents($file)."\n";
         }
         file_put_contents($cachefile, JSMin::minify($all_scripts));
         $last_update = time();

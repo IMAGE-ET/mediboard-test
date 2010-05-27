@@ -88,6 +88,7 @@ class CPatient extends CMbObject {
   var $cp               = null;
   var $tel              = null;
   var $tel2             = null;
+  var $tel_autre        = null;
   var $email            = null;
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
@@ -276,6 +277,7 @@ class CPatient extends CMbObject {
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
     $specs["tel"]               = "numchar confidential length|10 mask|$phone_number_format";
     $specs["tel2"]              = "numchar confidential length|10 mask|$phone_number_format";
+    $specs["tel_autre"]         = "str maxLength|20";
     $specs["email"]             = "str confidential";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
@@ -1118,7 +1120,6 @@ class CPatient extends CMbObject {
       $cimStat = $ds->loadlist($sql);
       foreach($cimStat as $key => $value) {
         $this->_static_cim10["favoris"][$value["DP"]] = new CCodeCIM10($value["DP"], 1);
-        
       }
     }
     
@@ -1251,12 +1252,12 @@ class CPatient extends CMbObject {
     // Médecin traitant
     $this->_ref_medecin_traitant = new CMedecin();
     $this->_ref_medecin_traitant->load($this->medecin_traitant);
-		
-		// Autres correspondant
+    
+    // Autres correspondant
     $this->_ref_medecins_correspondants = $this->loadBackRefs("correspondants");
-	  foreach ($this->_ref_medecins_correspondants as &$corresp) {
-	  	$corresp->loadRefsFwd();
-	  }
+    foreach ($this->_ref_medecins_correspondants as &$corresp) {
+      $corresp->loadRefsFwd();
+    }
 
   	return $this->_ref_medecins_correspondants;
   }
@@ -1332,11 +1333,11 @@ class CPatient extends CMbObject {
   }
   
   function loadRefPhotoIdentite() {
- 	  $file = new CFile();
- 	  $file->setObject($this);
- 	  $file->file_name = 'identite.jpg';
- 	  $file->loadMatchingObject();
- 	  $this->_ref_photo_identite = $file;
+    $file = new CFile();
+    $file->setObject($this);
+    $file->file_name = 'identite.jpg';
+    $file->loadMatchingObject();
+    $this->_ref_photo_identite = $file;
   }
   
   function fillLimitedTemplate(&$template) {
@@ -1354,10 +1355,11 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - cp"                , $this->cp         );
     $template->addProperty("Patient - âge"               , $this->_age       );
     $template->addDateProperty("Patient - date de naissance", $this->naissance);
-		$template->addProperty("Patient - lieu de naissance", $this->lieu_naissance);
+    $template->addProperty("Patient - lieu de naissance", $this->lieu_naissance);
     $template->addProperty("Patient - numéro d'assuré"   , $this->matricule  );
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
+    $template->addProperty("Patient - téléphone autre"   , $this->tel_autre  );
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
     $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
@@ -1381,26 +1383,26 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin traitant - adresse");
     }
     
-		// Employeur
-		$template->addProperty("Patient - employeur - nom"    , $this->employeur_nom);
-	  $template->addProperty("Patient - employeur - adresse", $this->employeur_adresse);
-		$template->addProperty("Patient - employeur - cp"     , $this->employeur_cp);
-		$template->addProperty("Patient - employeur - ville"  , $this->employeur_ville);
-		$template->addProperty("Patient - employeur - tel"    , $this->employeur_tel);
-		$template->addProperty("Patient - employeur - urssaf" , $this->employeur_urssaf);
+    // Employeur
+    $template->addProperty("Patient - employeur - nom"    , $this->employeur_nom);
+    $template->addProperty("Patient - employeur - adresse", $this->employeur_adresse);
+    $template->addProperty("Patient - employeur - cp"     , $this->employeur_cp);
+    $template->addProperty("Patient - employeur - ville"  , $this->employeur_ville);
+    $template->addProperty("Patient - employeur - tel"    , $this->employeur_tel);
+    $template->addProperty("Patient - employeur - urssaf" , $this->employeur_urssaf);
     
     // Prevenir
-		$template->addProperty("Patient - prévenir - nom"    , $this->prevenir_nom);
-		$template->addProperty("Patient - prévenir - prénom" , $this->prevenir_prenom);
+    $template->addProperty("Patient - prévenir - nom"    , $this->prevenir_nom);
+    $template->addProperty("Patient - prévenir - prénom" , $this->prevenir_prenom);
     $template->addProperty("Patient - prévenir - adresse", $this->prevenir_adresse);
     $template->addProperty("Patient - prévenir - cp"     , $this->prevenir_cp);
     $template->addProperty("Patient - prévenir - ville"  , $this->prevenir_ville);
     $template->addProperty("Patient - prévenir - tel"    , $this->prevenir_tel);
     $template->addProperty("Patient - prévenir - parente", $this->prevenir_parente);
     
-    // confiance
-		$template->addProperty("Patient - confiance - nom"    , $this->confiance_nom);
-		$template->addProperty("Patient - confiance - prénom" , $this->confiance_prenom);
+    // Confiance
+    $template->addProperty("Patient - confiance - nom"    , $this->confiance_nom);
+    $template->addProperty("Patient - confiance - prénom" , $this->confiance_prenom);
     $template->addProperty("Patient - confiance - adresse", $this->confiance_adresse);
     $template->addProperty("Patient - confiance - cp"     , $this->confiance_cp);
     $template->addProperty("Patient - confiance - ville"  , $this->confiance_ville);

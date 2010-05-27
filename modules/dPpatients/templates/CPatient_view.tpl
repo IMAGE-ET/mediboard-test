@@ -4,11 +4,8 @@
   <tr>
     <th colspan="2" class="title text">
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
-
       {{mb_include module=system template=inc_object_history object=$patient}}
-
       {{mb_include module=system template=inc_object_notes object=$patient}}
-      
       {{$patient}}
     </th>
   </tr>
@@ -37,12 +34,13 @@
       {{mb_include module=system template=inc_field_view prop=ville}}
       {{mb_include module=system template=inc_field_view prop=tel}}
       {{mb_include module=system template=inc_field_view prop=tel2}}
+      {{mb_include module=system template=inc_field_view prop=tel_autre}}
       {{mb_include module=system template=inc_field_view prop=rques}}
     </td>
   </tr>
 	
 	<tr>
-		<td colspan="10" class="button">
+		<td colspan="2" class="button">
 			{{mb_include_script module="dPpatients" script="patient" ajax="true"}}
 
       {{if $can->edit}}

@@ -53,6 +53,12 @@ function toggleList(list, button) {
   	<th>{{mb_label object=$patient field=tel2}}</th>
 		<td>{{mb_value object=$patient field=tel2}}</td>
 	</tr>
+  {{if $patient->tel_autre}}
+  <tr>
+    <th>{{mb_label object=$patient field=tel_autre}}</th>
+    <td>{{mb_value object=$patient field=tel_autre}}</td>
+  </tr>
+  {{/if}}
 	
   <tr><th class="category" colspan="10">Bénéficiaire de soins</th></tr>
   <tr>

@@ -82,7 +82,7 @@ Main.add(function () {
       <input type="hidden" name="m" value="soins" />
     
       {{if $list_services|@count > 1}}
-        <select name="service_id" onchange="this.form.onsubmit()">
+        <select name="service_id" onchange="this.form.onsubmit()" style="margin-top: -2px;">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}

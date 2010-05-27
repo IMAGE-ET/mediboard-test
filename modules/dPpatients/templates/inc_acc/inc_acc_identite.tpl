@@ -209,6 +209,10 @@ Main.add(function() {
     <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}}</td>  
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="tel_autre"}}</th>
+    <td>{{mb_field object=$patient field="tel_autre"}}</td>  
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="email"}}</th>
     <td>{{mb_field object=$patient field="email"}}</td>  
   </tr>
@@ -238,7 +242,7 @@ Main.add(function() {
       </script>
     </td>
     <td class="text">
-    	<div class="big-info" id="copie-coordonnees">
+    	<div class="small-info" id="copie-coordonnees">
     	  Les champs de correspondance du patient sont <strong>systématiquement recopiés</strong> vers 
     	  les champs de correspondance de l'assuré.
     	</div>
