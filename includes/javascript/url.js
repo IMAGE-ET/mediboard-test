@@ -327,6 +327,7 @@ var Url = Class.create({
       // Hide the list
       var hideAutocomplete = function(e){
         autocompleter.onBlur(e);
+        //$$("div.autocomplete").invoke("hide");
       }.bindAsEventListener(this);
       
       // Show the list

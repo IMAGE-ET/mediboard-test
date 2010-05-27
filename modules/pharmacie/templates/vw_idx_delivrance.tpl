@@ -29,6 +29,15 @@ function refreshLists() {
   return false;
 }
 
+function refreshDeliveryLine(delivery_id) {
+  var form = getForm("filter");
+  var url = new Url("pharmacie", "httpreq_vw_delivery");
+  url.addParam("delivery_id", delivery_id);
+  url.addParam("date_min", $V(form.date_min));
+  url.addParam("date_max", $V(form.date_max));
+  url.requestUpdate("CProductDelivery-"+delivery_id);
+}
+
 function printPreparePlan(form) {
   var url = new Url("pharmacie", "print_prepare_plan");
   url.addFormData(form);
@@ -36,8 +45,12 @@ function printPreparePlan(form) {
   return false;
 }
 
-function deliverLine(form, dontRefresh) {
-  return onSubmitFormAjax(form, {onComplete: dontRefresh ? Prototype.emptyFunction : refreshLists});
+function deliverLine(form, dontRefresh, refreshAll) {
+  return onSubmitFormAjax(form, {
+    onComplete: 
+      dontRefresh ? Prototype.emptyFunction : 
+        refreshAll ? refreshLists : refreshDeliveryLine.curry($V(form.delivery_id) || $V(form._delivery_id))
+  });
 }
 
 function deliverAll(container) {
@@ -49,7 +62,7 @@ function deliverAll(container) {
   });
 
   for (i = 0; i < listForms.length; i++) {
-	  deliverLine(listForms[i], i != listForms.length-1);
+	  deliverLine(listForms[i], i != listForms.length-1, true);
   }
 }
 </script>

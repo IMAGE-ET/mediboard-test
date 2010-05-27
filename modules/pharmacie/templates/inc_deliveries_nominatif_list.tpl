@@ -62,7 +62,9 @@ Main.add(function(){
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <tbody id="nominatif-service-{{$service_id}}" style="display: none;">
             {{foreach from=$_deliveries item=_delivery}}
-              {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
+              <tr id="{{$_delivery->_guid}}">
+                {{include file="inc_vw_line_delivrance.tpl" curr_delivery=$_delivery}}
+              </tr>
             {{foreachelse}}
               <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
             {{/foreach}}
