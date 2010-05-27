@@ -341,8 +341,9 @@ class CMediusers extends CMbObject {
     $this->loadRefFunction();
     if($this->user_id == $AppUI->user_id) {
       return true;
-    } else {
-      return $this->_ref_function->getPerm($permType);
+    }
+    else {
+    	return CPermObject::getPermObject($this, $permType, $this->_ref_function);
     }
   }
 
@@ -596,7 +597,7 @@ class CMediusers extends CMbObject {
 
     // Get all users
     $mediuser = new CMediusers;
-    $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+    $mediusers = $mediuser->loadListWithPerms($permType, $where, $order, null, null, $ljoin);
 
     // Associate already loaded function
     foreach ($mediusers as $_mediuser) {

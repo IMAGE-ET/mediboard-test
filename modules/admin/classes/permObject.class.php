@@ -182,13 +182,12 @@ class CPermObject extends CMbObject {
 //    }
   }
   
-  static function getPermObject(CMbObject $object, $permType) {
+  static function getPermObject(CMbObject $object, $permType, $defaultObject = null) {
     if (CPermModule::$system_down) {
       return true;
     }
 
-//    mbTrace($permType, $object->_guid);
-		
+/* Don't know what this code was for
     if (is_array(self::$users_perms)) {
     	$perms = self::$users_perms[CAppUI::$user->_id];
     	$class = $object->_class_name;
@@ -196,30 +195,28 @@ class CPermObject extends CMbObject {
 			
     	if (!isset(self::$users_queries[$class][$id])) {
     		// query object permission and cache it
-//      $perm = 
-//        isset($perms[$class][id]    ? $perms[$class][id] :
-//        isset($perms[$class]["all"] ? $perms[$class]["all"] :
-//        CModule
+      $perm = 
+        isset($perms[$class][id]    ? $perms[$class][id] :
+        isset($perms[$class]["all"] ? $perms[$class]["all"] :
+        CModule
     	}
 			// return queried object permission
     }
-
+*/
     global $userPermsObjects;
 
-    $result = PERM_DENY;
+    $result       = PERM_DENY;
     $object_class = $object->_class_name;
     $object_id    = $object->_id;
-    if(isset($userPermsObjects[$object_class][0]) || isset($userPermsObjects[$object_class][$object_id])) {
-      if(isset($userPermsObjects[$object_class][0])) {
-        $result = $userPermsObjects[$object_class][0]->permission;
-      }
-      if(isset($userPermsObjects[$object_class][$object_id])) {
-        $result = $userPermsObjects[$object_class][$object_id]->permission;
-      }
-    } else {
-      return $object->_ref_module->getPerm($permType);
+    if(isset($userPermsObjects[$object_class][$object_id])) {
+      return $userPermsObjects[$object_class][$object_id]->permission >= $permType;
     }
-    return $result >= $permType;
+    if(isset($userPermsObjects[$object_class][0])) {
+      return $userPermsObjects[$object_class][0]->permission >= $permType;
+    }
+    return $defaultObject != null ?
+      $defaultObject->getPerm($permType) :
+      $object->_ref_module->getPerm($permType);
   }
   
   function check() {
