@@ -578,6 +578,11 @@ class CMediusers extends CMbObject {
     if ($name) {
       $where["users.user_last_name"] = "LIKE '$name%'";
     }
+    
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    // Filter on current group
+    $g = CGroups::loadCurrent();
+    $where["functions_mediboard.group_id"] = "= '$g->_id'";
 
     $utypes_flip = array_flip(CUser::$types);
     if (is_array($user_types)) {
