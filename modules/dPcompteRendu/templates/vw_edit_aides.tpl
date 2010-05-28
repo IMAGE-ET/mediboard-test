@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function submitFormAides(oForm){
   if(checkForm(oForm)){
-    onSubmitFormAjax(oForm, { onComplete : window.close });
+    onSubmitFormAjax(oForm, { onComplete : function() { window.close() } }); // the closure is required for IE
   }
   return false;
 }
