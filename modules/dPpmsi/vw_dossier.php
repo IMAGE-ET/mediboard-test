@@ -7,20 +7,20 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+CCanDo::checkEdit();
 
-$can->needsEdit();
-
-$pat_id = CValue::getOrSession("pat_id");
-
-// Chargement des praticiens
-$listPrat = new CMediusers;
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
-
+$pat_id    = CValue::getOrSession("pat_id");
+$sejour_id = CValue::getOrSession("sejour_id");
 
 // Chargement du dossier patient
 $patient = new CPatient;
 $patient->load($pat_id);
+
+$sejour = new CSejour;
+
+// Chargement des praticiens
+$listPrat = new CMediusers;
+$listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 if ($patient->patient_id) {
 	$patient->loadRefsFwd();
@@ -55,21 +55,25 @@ if ($patient->patient_id) {
   }
 
   // Sejours
-  foreach ($patient->_ref_sejours as $sejour) {
-    $sejour->loadRefDossierMedical();
-    $sejour->_ref_dossier_medical->updateFormFields();
-    $sejour->_ref_dossier_medical->loadRefsAntecedents();
-    $sejour->_ref_dossier_medical->loadRefsTraitements();
-    $sejour->loadRefsAffectations();
+  foreach ($patient->_ref_sejours as $_sejour) {
+    if ($_sejour->_id == $sejour_id) {
+      $sejour = $_sejour;
+    }
     
-    $sejour->loadExtDiagnostics();
-    $sejour->loadRefs();
-    $sejour->countEchangeHprim();
-    $sejour->loadRefGHM();
-    $sejour->loadNumDossier();
-    $sejour->canRead();
-    $sejour->canEdit();
-    foreach ($sejour->_ref_operations as $_operation) {
+    $_sejour->loadRefDossierMedical();
+    $_sejour->_ref_dossier_medical->updateFormFields();
+    $_sejour->_ref_dossier_medical->loadRefsAntecedents();
+    $_sejour->_ref_dossier_medical->loadRefsTraitements();
+    $_sejour->loadRefsAffectations();
+    
+    $_sejour->loadExtDiagnostics();
+    $_sejour->loadRefs();
+    $_sejour->countEchangeHprim();
+    $_sejour->loadRefGHM();
+    $_sejour->loadNumDossier();
+    $_sejour->canRead();
+    $_sejour->canEdit();
+    foreach ($_sejour->_ref_operations as $_operation) {
       $_operation->loadRefsFwd();
       $_operation->countEchangeHprim();
       $_operation->countDocItems();
@@ -105,8 +109,8 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
 
 $smarty->assign("patient" , $patient );
+$smarty->assign("sejour"  , $sejour  );
 $smarty->assign("listPrat", $listPrat);
-
 
 $smarty->display("vw_dossier.tpl");
 

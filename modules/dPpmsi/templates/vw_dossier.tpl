@@ -71,11 +71,11 @@ function exporterHPRIM(object_id, typeObject, oOptions) {
   url.addParam("typeObject", typeObject);
   url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
   
-  oRequestOptions = {
+  var oRequestOptions = {
     waitingText: oDefaultOptions.onlySentFiles ? 
   	  "Chargement des fichers envoyés" : 
   	  "Export H'XML"
-  }
+  };
   
   url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
 }
@@ -174,12 +174,12 @@ Main.add(function () {
 </script>
 
 <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier('load'); return false;">
-<input type="hidden" name="selKey"   value="" />
-<input type="hidden" name="selClass" value="" />
-<input type="hidden" name="selView"  value="" />
-<input type="hidden" name="keywords" value="" />
-<input type="hidden" name="file_id"  value="" />
-<input type="hidden" name="typeVue"  value="0" />
+  <input type="hidden" name="selKey"   value="" />
+  <input type="hidden" name="selClass" value="" />
+  <input type="hidden" name="selView"  value="" />
+  <input type="hidden" name="keywords" value="" />
+  <input type="hidden" name="file_id"  value="" />
+  <input type="hidden" name="typeVue"  value="0" />
 </form>
 
 <table class="main">
@@ -216,10 +216,10 @@ Main.add(function () {
         </tr>
         {{foreach from=$patient->_ref_sejours item=_sejour}}
           {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
-          <tr>
+          <tr {{if $_sejour->_id == $sejour->_id}}class="selected{{/if}}">
             <td class="text">
               {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
-              <a href="#{{$_sejour->_guid}}" onclick="viewSejour('{{$_sejour->_id}}')">
+              <a href="#{{$_sejour->_guid}}" onclick="viewSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
                   {{$_sejour->_shortview}}
                   {{if $_sejour->_nb_files_docs}}

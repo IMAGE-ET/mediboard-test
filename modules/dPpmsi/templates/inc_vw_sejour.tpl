@@ -12,7 +12,7 @@
   Main.add(Control.Tabs.create.curry('tabs-pmsi', true));
 </script>
 
-{{if @$sejour->_id}}
+{{if $sejour->_id}}
   {{assign var=patient value=$sejour->_ref_patient}}
   <table class="form">
     <tr>

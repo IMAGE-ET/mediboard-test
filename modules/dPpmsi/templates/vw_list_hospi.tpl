@@ -50,7 +50,7 @@ Main.add(function () {
 
     <td class="text">
       {{assign var=patient value=$_sejour->_ref_patient}}
-      <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}">
+      <a href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
           {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
           {{$patient}}
