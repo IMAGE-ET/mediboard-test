@@ -566,7 +566,7 @@ class CMediusers extends CMbObject {
   	$where = array();
     
   	if($function_id) {
-    	$where["function_id"] = "= '$function_id'";
+    	$where["users_mediboard.function_id"] = "= '$function_id'";
     }
     
     $where["users_mediboard.actif"] = "= '1'";
