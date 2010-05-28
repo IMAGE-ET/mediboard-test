@@ -22,25 +22,28 @@ Main.add(function(){
   <input type="hidden" name="m" value="system" />
   <table class="form" style="table-layout: fixed;">
     
-    {{mb_include module=system template=inc_config_str var=root_dir}}
+    {{mb_include module=system template=inc_config_str var=root_dir size=40}}
     {{mb_include module=system template=inc_config_enum var=instance_role values="prod|qualif"}}
-    {{mb_include module=system template=inc_config_bool var=alternative_mode}}
     {{mb_include module=system template=inc_config_str var=mb_id}}
+    {{mb_include module=system template=inc_config_bool var=debug}}
+    {{mb_include module=system template=inc_config_bool var=readonly}}
+    {{mb_include module=system template=inc_config_bool var=minify_javascript}}
+    {{mb_include module=system template=inc_config_bool var=alternative_mode}}
     
     {{assign var="m" value="system"}}
     {{mb_include module=system template=inc_config_str var=reverse_proxy}}
-    {{mb_include module=system template=inc_config_str var=website_url}}
+    {{mb_include module=system template=inc_config_str var=website_url size=40}}
     
-  <tr>
-    <th colspan="2" class="title">
-      Mode migration
-    </th>
-  </tr>
+    <tr>
+      <th colspan="2" class="title">
+        Mode migration
+      </th>
+    </tr>
   
     {{assign var="m" value="migration"}}
     {{mb_include module=system template=inc_config_bool var=active}}
-    {{mb_include module=system template=inc_config_str var=intranet_url}}
-    {{mb_include module=system template=inc_config_str var=extranet_url}}
+    {{mb_include module=system template=inc_config_str var=intranet_url size=40}}
+    {{mb_include module=system template=inc_config_str var=extranet_url size=40}}
     {{mb_include module=system template=inc_config_str var=limit_date}}
     
     <tr>

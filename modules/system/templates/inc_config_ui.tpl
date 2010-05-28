@@ -14,21 +14,11 @@
   
   <table class="form" style="table-layout: fixed;">
     {{mb_include module=system template=inc_config_str var=page_title}}
-    
     {{mb_include module=system template=inc_config_str var=company_name}}
-    
     {{mb_include module=system template=inc_config_str var=currency_symbol}}
-    
-    {{mb_include module=system template=inc_config_str var=hide_confidential}}
-    
-    {{mb_include module=system template=inc_config_str var=locale_warn}}
-    
+    {{mb_include module=system template=inc_config_bool var=hide_confidential}}
+    {{mb_include module=system template=inc_config_bool var=locale_warn}}
     {{mb_include module=system template=inc_config_str var=locale_alert}}
-    
-    {{mb_include module=system template=inc_config_str var=debug}}
-    
-    {{mb_include module=system template=inc_config_str var=readonly}}
-    
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

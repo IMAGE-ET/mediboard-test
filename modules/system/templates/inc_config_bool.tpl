@@ -35,6 +35,6 @@
     <label for="{{$field}}_1">{{tr}}bool.1{{/tr}}</label>
     <input type="radio" name="{{$field}}" value="1" {{if $value == "1"}}checked="checked"{{/if}} {{if @$onchange}}onchange="{{$onchange}}"{{/if}}/>
     <label for="{{$field}}_0">{{tr}}bool.0{{/tr}}</label>
-    <input type="radio" name="{{$field}}" value="0" {{if $value == "0"}}checked="checked"{{/if}} {{if @$onchange}}onchange="{{$onchange}}"{{/if}}/>
+    <input type="radio" name="{{$field}}" value="0" {{if $value == "0" || $value == ""}}checked="checked"{{/if}} {{if @$onchange}}onchange="{{$onchange}}"{{/if}}/>
   </td>
 </tr>

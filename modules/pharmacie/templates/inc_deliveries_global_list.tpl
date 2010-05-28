@@ -55,9 +55,9 @@ Main.add(function(){
           <th>{{tr}}CProduct{{/tr}}</th>
           <th colspan="2">{{mb_title class=CProductDelivery field=date_dispensation}}</th>
           {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-            <th>Stock pharmacie</th>
+            <th>Stock<br />pharmacie</th>
           {{/if}}
-          <th>Stock service</th>
+          <th>Stock<br />service</th>
           <th><button type="button" onclick="deliverAll(deliveriesTabs.activeContainer.id)" class="tick">Tout délivrer</button></th>
           <th>{{mb_title class=CProduct field=_unit_title}}</th>
         </tr>

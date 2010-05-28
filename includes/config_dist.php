@@ -9,15 +9,28 @@
  */
   
 // Global hosting settings
-$dPconfig["root_dir"]     = "/var/www/mediboard";  // No trailing slash, no backslashes for Win users (use slashes instead)
-$dPconfig["company_name"] = "mediboard.org";
-$dPconfig["page_title"]   = "Mediboard SIH";
-$dPconfig["base_url"]     = "http://localhost/mediboard/";
+$dPconfig["root_dir"]          = "/var/www/mediboard";  // No trailing slash, no backslashes for Win users (use slashes instead)
+$dPconfig["company_name"]      = "mediboard.org";
+$dPconfig["page_title"]        = "Mediboard SIH";
+$dPconfig["base_url"]          = "http://localhost/mediboard/";
 
-$dPconfig["offline"]          = "0";
-$dPconfig["instance_role"]    = "qualif";
-$dPconfig["mb_id"]            = "";
-$dPconfig["alternative_mode"] = "0";
+$dPconfig["offline"]           = "0";
+$dPconfig["instance_role"]     = "qualif"; // qualif|prod
+$dPconfig["mb_id"]             = "";
+$dPconfig["alternative_mode"]  = "0";
+$dPconfig["minify_javascript"] = "0";
+$dPconfig["currency_symbol"]   = "&euro;"; // Currency symbol (html entities allowed)
+$dPconfig["hide_confidential"] = "0";      // Enable if you want to hide confidentials fields
+$dPconfig["locale_warn"]       = "0";      // Warn when a translation is not found (for developers and tranlators)
+$dPconfig["locale_alert"]      = "^";      // The string appended to untranslated string or unfound keys
+$dPconfig["debug"]             = "1";      // Set to true to help analyse errors
+$dPconfig["readonly"]          = "0";      // Read-only mode : any store will fail
+$dPconfig["shared_memory"]     = "none";   // Shared memory handler [none|eaccelerator|apc]
+
+// Object handlers
+$dPconfig["object_handlers"]   = array (
+//  "CMyObjectHandler" => true,
+);
 
 // Mode migration
 $dPconfig["migration"]["active"] = "0";
@@ -25,6 +38,7 @@ $dPconfig["migration"]["intranet_url"] = "http://intranet_server/mediboard/";
 $dPconfig["migration"]["extranet_url"] = "http://extranet_server/mediboard/";
 $dPconfig["migration"]["limit_date"] = "1970-01-01";
 
+// Time format
 $dPconfig["date"]     = "%d/%m/%Y";
 $dPconfig["time"]     = "%Hh%M";
 $dPconfig["datetime"] = "%d/%m/%Y %Hh%M";
@@ -100,32 +114,6 @@ $dPconfig["db"]["Transit"] = array(
 //  "dbuser" => "dbuser",
 //  "dbpass" => "dbpass",
 //);
-
-// Currency symbol (html entities allowed)
-$dPconfig["currency_symbol"]   = "&euro;";
-
-// Enable if you want to hide confidentials fields
-$dPconfig["hide_confidential"] = false;
-
-// Warn when a translation is not found (for developers and tranlators)
-$dPconfig["locale_warn"]       = false;
-
-// The string appended to untranslated string or unfound keys
-$dPconfig["locale_alert"]      = "^";
-
-// Set to true to help analyse errors
-$dPconfig["debug"]             = true;
-
-// Use mediboard in a read-only mode
-$dPconfig["readonly"]          = false;
-
-// Choose shared memory handler [none|eaccelerator|apc]
-$dPconfig["shared_memory"]     = "none";
-
-// Object handlers
-$dPconfig["object_handlers"]   = array (
-//  "CMyObjectHandler" => true,
-);
 
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";

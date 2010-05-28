@@ -28,7 +28,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     $result = "";
     
     // FIXME: make advanced tests to remove this line
-    $compress = false;
+    $compress = CAppUI::conf("minify_javascript") == 1;
     
     /** 
      * There is a speed boost on the page load when using compression 
