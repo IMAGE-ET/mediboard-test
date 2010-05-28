@@ -56,16 +56,11 @@ if ($patient->patient_id) {
 
   // Sejours
   foreach ($patient->_ref_sejours as $_sejour) {
-    if ($_sejour->_id == $sejour_id) {
-      $sejour = $_sejour;
-    }
-    
     $_sejour->loadRefDossierMedical();
     $_sejour->_ref_dossier_medical->updateFormFields();
     $_sejour->_ref_dossier_medical->loadRefsAntecedents();
     $_sejour->_ref_dossier_medical->loadRefsTraitements();
     $_sejour->loadRefsAffectations();
-    
     $_sejour->loadExtDiagnostics();
     $_sejour->loadRefs();
     $_sejour->countEchangeHprim();
@@ -95,6 +90,10 @@ if ($patient->patient_id) {
         $consultAnest->_ref_plageconsult->loadRefsFwd();
       }
     }
+    
+    if ($_sejour->_id == $sejour_id) {
+      $sejour = $_sejour;
+    }
   }
 }
 
@@ -109,7 +108,7 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 $smarty->assign("hprim21installed", CModule::getActive("hprim21"));
 
 $smarty->assign("patient" , $patient );
-$smarty->assign("sejour"  , $sejour  );
+//$smarty->assign("sejour"  , $sejour  );
 $smarty->assign("listPrat", $listPrat);
 
 $smarty->display("vw_dossier.tpl");

@@ -71,7 +71,6 @@
   </div>
 </form>
 
-<br />
 {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
 <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post"
       onsubmit="return onSubmitFormAjax(this, { onComplete: reloadDiagnostic.curry({{$sejour->_id}}, 1) })">
