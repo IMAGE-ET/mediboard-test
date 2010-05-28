@@ -189,7 +189,7 @@ ul#nav-vert {
 
 .touchscreen input,
 .touchscreen option,
-.touchscreen label {
+.touchscreen form label {
   padding-top: 5px;
 }
 

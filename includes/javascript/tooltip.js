@@ -142,7 +142,7 @@ var ObjectTooltip = Class.create({
   createDiv: function(eTrigger) {
     var eTooltip = DOM.div({className: this.mode.sClass});
     
-    $(eTrigger.up(".tooltip") || document.body).insert(eTooltip.hide());
+    $((Prototype.Browser.IE ? document.body : eTrigger.up(".tooltip")) || document.body).insert(eTooltip.hide());
     
     if (!Prototype.Browser.IE) {
       eTooltip.setStyle({

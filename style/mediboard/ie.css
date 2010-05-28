@@ -26,6 +26,12 @@ button img {
   margin-left: 0;
 }
 
+input[type=checkbox]:focus,
+input[type=radio]:focus {
+  border: none;
+  background: transparent;
+}
+
 .touchscreen button.notext,
 .touchscreen button.notext:hover {
   font-size: 0;
