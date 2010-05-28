@@ -170,6 +170,9 @@ printDossierComplet = function(sejour_id){
 
 Main.add(function () {
   PairEffect.initGroup("effectSejour");
+  {{if $isSejourPatient}}
+    viewSejour({{$isSejourPatient}});
+  {{/if}}
 });
 </script>
 
