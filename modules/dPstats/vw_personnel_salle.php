@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsEdit();
+$can->needsRead();
 
 $deb_personnel  = CValue::getOrSession("deb_personnel" , mbDate("-1 WEEK"));
 $fin_personnel  = CValue::getOrSession("fin_personnel" , mbDate(""));

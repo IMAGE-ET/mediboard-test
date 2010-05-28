@@ -9,7 +9,7 @@
  */
 
 global $can;
-$can->needsEdit();
+$can->needsRead();
 
 //set_time_limit(180);
 //ini_set("memory_limit", "512M");

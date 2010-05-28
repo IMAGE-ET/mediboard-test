@@ -12,7 +12,7 @@ date_default_timezone_set("UTC");
 
 global $AppUI, $can, $m;
 
-$can->needsEdit();
+$can->needsRead();
 
 $typeVue        = CValue::getOrSession("typeVue"       , 2);
 $nb_sejour_mini = CValue::getOrSession("nb_sejour_mini", 3);

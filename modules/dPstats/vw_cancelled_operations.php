@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+$can->needsRead();
+
 $debut    = CValue::get("debut", mbDate("-1 YEAR"));
 $fin      = CValue::get("fin", mbDate());
 $prat_id  = CValue::get("prat_id");

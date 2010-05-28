@@ -10,7 +10,7 @@
 
 global $can, $m;
 
-$can->needsEdit();
+$can->needsRead();
 
 $filter = new COperation();
 

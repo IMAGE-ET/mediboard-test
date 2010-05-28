@@ -10,7 +10,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsEdit();
+$can->needsAdmin();
 
 $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 $user    = new CMediusers;
