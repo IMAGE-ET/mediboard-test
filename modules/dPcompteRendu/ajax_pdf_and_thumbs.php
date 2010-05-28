@@ -21,6 +21,7 @@ $footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
 $header_id   = CValue::post("header_id", $compte_rendu->header_id);
 $stream      = CValue::post("stream");
 $content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->source)));
+$save_content = $content;
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
 $first_time  = CValue::post("first_time");
@@ -104,6 +105,17 @@ else {
   else {
     $file = reset($files);
     $file->file_name  = $compte_rendu->nom . ".pdf";
+
+    // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
+    // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
+    $c1 = preg_replace("!\s!",'',$save_content);
+    $c2 = preg_replace("!\s!",'',$compte_rendu->source);
+
+    if ((md5($c1) == md5($c2)) && $stream == 1) {
+    	header("Content-type: $file->file_type");
+    	echo $file->_file_path;
+    	CApp::rip();
+    }
   }
 
   $htmltopdf = new CHtmlToPDF;
