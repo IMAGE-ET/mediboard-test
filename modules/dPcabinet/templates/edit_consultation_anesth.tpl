@@ -32,9 +32,11 @@ function submitOpConsult() {
 function submitAll() {
   var oForm;
   
+	/*
   oForm = getForm('edit-constantes-medicales');
   onSubmitFormAjax(oForm);
-  
+  */
+	
   oForm = getForm("editFrmIntubation");
   onSubmitFormAjax(oForm);
   
