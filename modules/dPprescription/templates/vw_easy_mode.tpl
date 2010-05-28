@@ -258,13 +258,16 @@ Main.add( function(){
 	    <table class="tbl">
 	    {{foreach from=$chapitre item=categorie}}
 	      <tr>
-	        <th colspan="{{$numCols*2}}">{{$categorie->_view}}
-	          {{assign var=categorie_id value=$categorie->_id}}
-	          <button  id="{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -16px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
-	          Ajouter tous les éléments de la catégorie
-	          </button>
+	        <th colspan="{{$numCols*2}}">
+            {{assign var=categorie_id value=$categorie->_id}}
+            <button id="{{$categorie->_id}}" class="cat tick" title="Ajouter cet élément"
+                    style="float: right; margin: -1px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);">
+              Ajouter tous les éléments de la catégorie
+            </button>
+            
+	          {{$categorie->_view}}
 	        </th>
-	       </tr>
+	      </tr>
 	      {{if $categorie->_ref_elements_prescription|@count}}
 	      <tr>
 	      {{/if}}
@@ -283,9 +286,13 @@ Main.add( function(){
 				  <td colspan="8"><div class="small-info">Aucun élément dans cette catégorie</div></td>
         {{/foreach}}
 	    {{foreachelse}}
-			  <div class="small-info">
-			    Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
-			  </div>
+        <tr>
+  			  <td>
+  			    <div class="small-info">
+    			    Aucun élément dans la catégorie {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
+    			  </div>
+          </td>
+        </tr>
 	    {{/foreach}}
 	    </table>
     </div>

@@ -52,7 +52,7 @@
     </tr>
     {{foreachelse}}
      <tr>
-      <td colspan="3">
+      <td colspan="4">
         Aucun element dans cette catégorie
       </td>
      </tr>

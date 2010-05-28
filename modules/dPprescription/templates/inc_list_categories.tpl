@@ -25,14 +25,14 @@
 
 {{foreach from=$categories key=chapitre item=_categories}}
   <div id="div_{{$chapitre}}" style="display: none;">
-    <table class="tbl" ">
+    <table class="tbl">
       <tr>
         <th>{{mb_label class=CCategoryPrescription field=nom}}</th>
         <th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
         <th></th>
       </tr>
       {{foreach from=$_categories item=_cat}}
-        <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}} >
+        <tr {{if $category->_id == $_cat->_id}}class="selected"{{/if}}>
           <td>
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;category_prescription_id={{$_cat->_id}}&amp;element_prescription_id=0&amp;element_prescription_to_cdarr_id=0">
               {{$_cat->nom}} ({{$_cat->_count_elements_prescription}})

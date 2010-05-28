@@ -34,7 +34,7 @@
 					à partir de 
 				{{/if}}
 				{{if $prescription->object_class == "CSejour"}}
-				  {{mb_field object=$line field=jour_decalage onchange="modifUniteDecal(this, this.form.unite_decalage); $onchange" defaultOption="&mdash Choix"}}
+				  {{mb_field object=$line field=jour_decalage onchange="modifUniteDecal(this, this.form.unite_decalage); $onchange" defaultOption="&mdash; Choix"}}
 				{{else}}
 				J
 				{{/if}}
@@ -49,7 +49,7 @@
 				{{if ($typeDate != "anapath" && $typeDate != "imagerie" && $typeDate != "consult") && $prescription->object_class == "CSejour"}}
 					{{if $typeDate == "mode_grille"}}<br />{{/if}}
 					Jusqu'à 
-					{{mb_field object=$line field=jour_decalage_fin onchange="modifUniteDecal(this, this.form.unite_decalage_fin); this.form.duree.value = ''; $onchange" defaultOption="&mdash Choix"}}
+					{{mb_field object=$line field=jour_decalage_fin onchange="modifUniteDecal(this, this.form.unite_decalage_fin); this.form.duree.value = ''; $onchange" defaultOption="&mdash; Choix"}}
 					{{mb_field showPlus=1 object=$line field=decalage_line_fin increment=1 form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange" size="3"}}
 					 {{mb_field showPlus=1 object=$line field=unite_decalage_fin onchange="$onchange"}} à 
 					{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			

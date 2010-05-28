@@ -67,13 +67,13 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							 				          				           }">
 							 	 <option value="other">Autre date</option>
 							   <optgroup label="Séjour">
-							   <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-							   <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+							     <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+							     <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
 							   </optgroup>
 							   <optgroup label="Intervention">
-							   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
-							   <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
-							   {{/foreach}}
+  							   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
+  							   <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+  							   {{/foreach}}
 								 </optgroup>					   
 							 </select>
 							 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
@@ -83,15 +83,14 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 				         {{/if}}
 				         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}
-				        
 				       </div>	       
 		       {{else}}
-		           {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
-				         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
-		           {{else}}
-		             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
-		           {{/if}}
-		           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}    
+	           {{if $typeDate != "mode_grille" && ($chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
+			         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
+	           {{else}}
+	             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
+	           {{/if}}
+	           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}    
 				   {{/if}} 
 	       </td>
 	       {{else}}
@@ -175,7 +174,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     
   </table>
  </form> 
- <div id="info_date_{{$line->_id}}"class="small-info" style="display: none;">
+ <div id="info_date_{{$line->_id}}" class="small-info" style="display: none;">
    Cette ligne de prescription est liée à l'intervention, elle est seulement appliquée le jour de l'intervention, le {{$line->debut|date_format:"%d/%m/%Y"}}
  </div>
   {{else}}
