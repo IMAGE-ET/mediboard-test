@@ -54,6 +54,8 @@ var Thumb = {
                               form.margin_left.value]);
     url.addParam("orientation", $V(PageFormat.form._orientation));
     url.addParam("page_format", form._page_format.value);
+    url.addParam("page_width", form.page_width.value);
+    url.addParam("page_height", form.page_height.value);
     url.requestUpdate("thumbs",
      {method: "post",
       getParameters:
@@ -94,7 +96,7 @@ var Thumb = {
     $$(".thumb").each(function(t, i) {
       t.stopObserving("click").
         observe("click", function(){
-        (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id, 'CFile', Thumb.file_id, i);
+        (new Url).ViewFilePopup('CCompteRendu', Thumb.compte_rendu_id || Thumb.modele_id, 'CFile', Thumb.file_id, i);
       });
     });
   }
