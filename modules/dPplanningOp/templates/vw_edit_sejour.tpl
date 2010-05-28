@@ -84,7 +84,7 @@ function toggleMode() {
   </tr>
   
   <tr>
-    <td>
+    <td style="width:60%">
       {{include file="js_form_sejour.tpl"}}
       {{include file="inc_form_sejour.tpl" mode_operation=false}}
     </td>

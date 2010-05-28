@@ -468,6 +468,9 @@ class CSejour extends CCodable {
       if ("transfert" != $this->mode_sortie) {
         $this->etablissement_transfert_id = "";
       }
+      if ("mutation" != $this->mode_sortie) {
+        $this->service_mutation_id = "";
+      }
     }
     
     // Annulation de la sortie réelle si on annule le mode de sortie

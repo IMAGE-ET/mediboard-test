@@ -22,28 +22,17 @@ function checkHeureSortie(){
   }
 }
 
-function loadTransfert(form, mode_sortie) {
-  // si Transfert, affichage du select
-  if (mode_sortie=="transfert"){
-    //Chargement de la liste des etablissement externes
-    var url = new Url("dPadmissions", "httpreq_vw_etab_externes");
-    url.requestUpdate('listEtabExterne');
-  } else {
-    // sinon, on vide le contenu de la div
-    $("listEtabExterne").innerHTML = "";
-  }
+function loadTransfert(mode_sortie){
+  $('listEtabExterne').setVisible(mode_sortie == "transfert");
 }
 
-function loadServiceMutation(form, mode_sortie) {
-  // si Transfert, affichage du select
-  if (mode_sortie=="mutation"){
-    //Chargement de la liste des services
-    var url = new Url("dPadmissions", "ajax_vw_services");
-    url.requestUpdate('services');
-  } else {
-    // sinon, on vide le contenu de la div
-    $("services").innerHTML = "";
-  }
+function loadServiceMutation(mode_sortie){
+  $('services').setVisible(mode_sortie == "mutation");
+}
+
+function changeModeSortie(mode_sortie){
+  loadTransfert(mode_sortie);
+  loadServiceMutation(mode_sortie);
 }
 
 function checkModeSortie(){
@@ -74,7 +63,6 @@ function checkPresta(){
     }
   } 
 }
-
 
 function checkChambreSejour(){
   var oForm = document.editSejour;
@@ -167,8 +155,6 @@ var Sejour = {
     for (sejour_id in sejours_collision){
       var entree = sejours_collision[sejour_id]["entree"];
       var sortie = sejours_collision[sejour_id]["sortie"];
-      //alert("plage : "+date_plage+", entree : "+entree+", sortie : "+sortie);
-      //Console.debug(sejours_collision[sejour_id]);
       if ((entree <= date_plage) && (sortie >= date_plage)) {
         if (sejour_courant_id != sejour_id){
           var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez-vous placer l'intervention dans ce séjour ?", 
@@ -236,7 +222,6 @@ Main.add( function(){
 
   var sValue = document.editSejour.praticien_id.value;
   refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_chir_id);
-  //refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_anesth_id);
   
   removePlageOp(false);
   
@@ -279,7 +264,10 @@ Main.add( function(){
 {{/if}}
 
 <table class="form">
-
+<col style="width:25%" />
+<col style="width:55%" />
+<col style="width:10%" />
+<col style="width:10%" />
 <tr>
   <th class="category" colspan="4">
     {{if $mode_operation && $sejour->_id}}
@@ -483,18 +471,17 @@ Main.add( function(){
   <td class="reanimation">
     {{mb_field object=$sejour field="reanimation"}}
     <script type="text/javascript">
-
-    function changeTypeHospi() {
-      var oForm = document.editSejour;
-      var sValue = $V(oForm.type);
-      if (sValue != "comp") {
-        $V(oForm.reanimation, '0');
+      function changeTypeHospi() {
+        var oForm = document.editSejour;
+        var sValue = $V(oForm.type);
+        if (sValue != "comp") {
+          $V(oForm.reanimation, '0');
+        }
+        
+        $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
       }
       
-      $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
-    }
-    
-    changeTypeHospi();
+      changeTypeHospi();
     </script>
   </td>
 </tr>
@@ -528,26 +515,20 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
   <td>
     {{if $can->view}}
-      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);loadServiceMutation(this.form, this.value);"}}
-      <span id="listEtabExterne">
-        {{if $sejour->_id}}
-          {{$sejour->_ref_etabExterne->_view}}
-        {{/if}}
-      </span>
-			<span id="services">
-        {{if $sejour->_id}}
-          {{$sejour->_ref_service_mutation->_view}}
-        {{/if}}
-      </span>
+      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="changeModeSortie(this.value);"}}
+      <div id="listEtabExterne" {{if !$sejour->etablissement_transfert_id}}style="display:none"{{/if}}>
+        {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true"}}
+      </div>
+      <div id="services" {{if !$sejour->service_mutation_id}}style="display:none"{{/if}}>
+        {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true"}}
+      </div>
     {{else}}
-    {{mb_value object=$sejour field=mode_sortie}}
-  {{/if}}    
+      {{mb_value object=$sejour field=mode_sortie}}
+    {{/if}}    
   </td>
   <th><strong>{{mb_label object=$sejour field=_sortie_autorisee}}</strong></th>
   <td><strong>{{mb_value object=$sejour field=_sortie_autorisee}}</strong></td>
 </tr>
-
-
 {{/if}}
 
 <tr id="correspondant_medical">

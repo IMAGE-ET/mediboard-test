@@ -76,22 +76,16 @@
 	}
 	
 	{{if $isPrescriptionInstalled}}
-	function reloadPrescription(prescription_id){
-	  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'');
-	}
+  	function reloadPrescription(prescription_id){
+  	  Prescription.reloadPrescSejour(prescription_id, '','', '1', null, null, null,'');
+  	}
 	{{/if}}
-	
-	function loadTransfert(mode_sortie, sejour_id){
-	  if(mode_sortie=="transfert"){
-	    var url = new Url();
-	    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
-	    url.requestUpdate('listEtabs-'+sejour_id);
-	  } else {
-	    // sinon, on vide le contenu de la div et l'etablissement de transfert du sejour
-	    $('listEtabs-'+sejour_id).innerHTML = "";
-	  }
-	}
-	
+
+  function changeModeEntree(mode_entree) {
+	  loadTransfert(mode_entree); 
+	  loadServiceMutation(mode_entree);
+  }
+  
 	function loadTransfert(mode_entree){
     $('etablissement_entree_transfert').setVisible(mode_entree == 7);
 	}
@@ -209,7 +203,7 @@
 	    </td>
 	    
 	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); loadTransfert(this.value); loadServiceMutation(this.value);"}}</td>
+	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
 	  </tr>
 	  
 	  <tr>
