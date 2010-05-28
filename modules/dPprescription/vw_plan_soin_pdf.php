@@ -57,7 +57,7 @@ if($prescription->_ref_prescription_lines){
 }
 // Chargement des lignes de prescription_line_mixes
 if($chapitre == "perf" || $chapitre == "all_med" || $chapitre == ""){
-	$prescription->loadRefsPrescriptionLineMixes("1","service");
+	$prescription->loadRefsPrescriptionLineMixes("","1");
 	foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
 	  $_prescription_line_mix->loadRefsLines();  
 	  $_prescription_line_mix->loadRefPraticien();

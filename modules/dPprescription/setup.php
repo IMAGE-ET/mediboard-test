@@ -1622,7 +1622,17 @@ class CSetupdPprescription extends CSetup {
             WHERE object_class = 'CPerfusionVariation'";
     $this->addQuery($sql);
 		
-    $this->mod_version = "1.04";
+		$this->makeRevision("1.04");
+		$sql = "ALTER TABLE `prescription_line_mix` 
+		        ADD `type_line` ENUM ('perfusion','aerosol','oxygene','alimentation') NOT NULL DEFAULT 'perfusion';";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("1.05");
+		$sql = "ALTER TABLE `prescription_line_mix` 
+            CHANGE `type` `type` ENUM ('classique','seringue','PCA','masque','lunettes','sonde');";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "1.06";
   }
 }
 

@@ -49,7 +49,7 @@ foreach($object->_ref_substitution_lines as $_lines){
 $prescription =& $object->_ref_prescription;
 
 // Chargement de toutes les prescription_line_mixes qui ne sont pas actives
-$prescription->loadRefsPrescriptionLineMixes(0,"",0);
+$prescription->loadRefsPrescriptionLineMixes("",0,0);
 
 foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
 	$_prescription_line_mix->loadRefsLines();

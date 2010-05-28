@@ -114,6 +114,19 @@ class CPrescriptionLineMixItem extends CMbObject {
     $this->_protocole = $this->_ref_prescription_line_mix->_protocole;
   }
   
+	
+	function updateDBFields(){
+    parent::updateDBFields();
+    
+		// Mise a jour des codes UCD et CIS
+    if(!$this->_id && $this->code_cip && !$this->code_ucd){
+      $produit = new CBcbProduit();
+      $produit->load($this->code_cip);
+      $this->code_ucd = $produit->code_ucd;
+      $this->code_cis = $produit->code_cis;
+    }
+  }
+	
   /*
    * Chargement de la prescription_line_mix
    */
@@ -168,14 +181,14 @@ class CPrescriptionLineMixItem extends CMbObject {
     }
     
     // Ajout de la presentation comme unite de prise
-	  foreach($produits as $_produit){
+		foreach($produits as $_produit){
 	    if ($_produit->libelle_presentation){
 	      $libelle_unite_presentation = $_produit->libelle_unite_presentation;
 		    $coef_adm = $_produit->rapport_unite_prise[$_produit->libelle_presentation][$libelle_unite_presentation];
 	      $this->_unites_prise[] = "{$_produit->libelle_presentation} ($coef_adm $libelle_unite_presentation)";
 	    }
     }
-    
+		
     if(is_array($this->_unites_prise)){
       $this->_unites_prise = array_unique($this->_unites_prise);
     }

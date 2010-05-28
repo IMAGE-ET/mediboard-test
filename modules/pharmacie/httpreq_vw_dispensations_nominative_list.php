@@ -151,40 +151,40 @@ if($prescription->_id){
   // Parcours des prises prevues pour les prescription_line_mixes
   if($prescription->_ref_prescription_line_mixes_for_plan){
 	  foreach($prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
-	    foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_by_hour){
-	      foreach($_prises_by_hour as $_hour => $_prise){
-	        foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-	        	
-						$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
-						
-	        	$_perf_line->loadRefProduitPrescription();
-            $_perf_line->loadRefProduit();
-	          $datetime = "$_date $_hour:00:00";
-						$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;
-						$_lines[$code] = $_perf_line;
-	          if ($datetime < $date_min || $datetime > $date_max){
-	            continue;
-	          }
-	          
-	          if(!isset($produits_cis[$code])){
-	           $produits_cis[$code] = $_perf_line;
-	          }      
-	          
-	          if(!isset($dispensations[$code])){
-	            $dispensations[$code]["quantite_administration"] = 0;
-	            $dispensations[$code]["quantite_dispensation"] = 0;
-	          }
-	          $dispensations[$code]["quantite_administration"] += ($_perf_line->_quantite_administration * $count_prises_by_hour);
-						
-				    if($_perf_line->_ref_produit_prescription->_id && ($_perf_line->_ref_produit_prescription->unite_prise != $_perf_line->_ref_produit_prescription->unite_dispensation)){
-              $quantite_dispensation = $_perf_line->_quantite_dispensation / ($_perf_line->_ref_produit_prescription->quantite * $_perf_line->_ref_produit_prescription->nb_presentation);
-            } else {
-              $quantite_dispensation = $_perf_line->_quantite_dispensation;
-            }
-	          $dispensations[$code]["quantite_dispensation"] += ($quantite_dispensation * $count_prises_by_hour);
-	        }
-	      }
-	    }
+	  	if(is_array($_prescription_line_mix->_prises_prevues)){
+		    foreach($_prescription_line_mix->_prises_prevues as $_date => $_prises_by_hour){
+		      foreach($_prises_by_hour as $_hour => $_prise){
+		        foreach($_prescription_line_mix->_ref_lines as $_perf_line){
+							$count_prises_by_hour = count($_prescription_line_mix->_prises_prevues[$_date][$_hour]["real_hour"]);
+		        	$_perf_line->loadRefProduitPrescription();
+	            $_perf_line->loadRefProduit();
+		          $datetime = "$_date $_hour:00:00";
+							$code = $_perf_line->code_cis ? $_perf_line->code_cis : $_perf_line->code_cip;
+							$_lines[$code] = $_perf_line;
+		          if ($datetime < $date_min || $datetime > $date_max){
+		            continue;
+		          }
+		          
+		          if(!isset($produits_cis[$code])){
+		           $produits_cis[$code] = $_perf_line;
+		          }      
+		          
+		          if(!isset($dispensations[$code])){
+		            $dispensations[$code]["quantite_administration"] = 0;
+		            $dispensations[$code]["quantite_dispensation"] = 0;
+		          }
+		          $dispensations[$code]["quantite_administration"] += ($_perf_line->_quantite_administration * $count_prises_by_hour);
+							
+					    if($_perf_line->_ref_produit_prescription->_id && ($_perf_line->_ref_produit_prescription->unite_prise != $_perf_line->_ref_produit_prescription->unite_dispensation)){
+	              $quantite_dispensation = $_perf_line->_quantite_dispensation / ($_perf_line->_ref_produit_prescription->quantite * $_perf_line->_ref_produit_prescription->nb_presentation);
+	            } else {
+	              $quantite_dispensation = $_perf_line->_quantite_dispensation;
+	            }
+		          $dispensations[$code]["quantite_dispensation"] += ($quantite_dispensation * $count_prises_by_hour);
+		        }
+		      }
+		    }
+      }
 	  }
   }
 }

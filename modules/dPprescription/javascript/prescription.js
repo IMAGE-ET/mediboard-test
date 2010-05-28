@@ -486,7 +486,12 @@ Prescription = {
       }
     } else {
       if(chapitre){
-        if(chapitre == "med" || chapitre == "perf" || chapitre == "inj"){
+				if(chapitre == "med" || 
+				   chapitre == "perfusion" || 
+					 chapitre == "oxygene" || 
+					 chapitre == "alimentation" ||
+					 chapitre == "aerosol" ||
+           chapitre == "inj"){
           chapitre = "_"+chapitre;
         } else {
           chapitre = "_cat-"+chapitre;

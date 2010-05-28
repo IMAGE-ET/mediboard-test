@@ -65,8 +65,11 @@ class CPrescription extends CMbObject {
   var $_ref_lines_med_for_plan = null;
   var $_ref_lines_elt_for_plan = null;
   var $_ref_prescription_line_mixes_for_plan = null;
-  var $_ref_injections_for_plan = null;
+	var $_ref_prescription_line_mixes_for_plan_by_type = null;
   
+  var $_ref_injections_for_plan = null;
+  var $_ref_prescription_line_mixes_by_type = null;
+	
   var $_scores = null; // Tableau de stockage des scores de la prescription 
   var $_score_prescription = null; // Score de la prescription, 0:ok, 1:alerte, 2:grave
   var $_alertes = null;
@@ -135,7 +138,7 @@ class CPrescription extends CMbObject {
     $specs["_score_prescription"] = "enum list|0|1|2";
     $specs["_date_plan_soin"] = "date";
     $specs["_type_alerte"] = "enum list|hors_livret|interaction|allergie|profil|IPC";
-    $specs["_chapitres"] = "enum list|med|inj|perf|anapath|biologie|consult|dmi|imagerie|kine|soin|dm";
+    $specs["_chapitres"] = "enum list|med|inj|perfusion|oxygene|alimentation|aerosol|anapath|biologie|consult|dmi|imagerie|kine|soin|dm";
     return $specs;
   }
   
@@ -707,20 +710,27 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des prescription_line_mixes
    */
-  function loadRefsPrescriptionLineMixes($with_child = 0, $emplacement = "", $with_subst_active = 1){
+  function loadRefsPrescriptionLineMixes($chapitre = "", $with_child = 0, $with_subst_active = 1){
     if($this->_ref_prescription_line_mixes){
     	return;
     }
     $prescription_line_mix = new CPrescriptionLineMix();
 		$where = array();
     $where["prescription_id"] = " = '$this->_id'";
-    if($with_child != 1){
+		if($chapitre){
+			$where["type_line"] = " = '$chapitre'";
+		}
+		if($with_child != 1){
       $where["next_line_id"] = "IS NULL";
     }
     // Permet de ne pas afficher les lignes de substitutions
     $where["substitution_active"] = " = '$with_subst_active'";
     
     $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
+		
+		foreach($this->_ref_prescription_line_mixes as $_line_mix){
+		  $this->_ref_prescription_line_mixes_by_type[$_line_mix->type_line][] = $_line_mix;
+	  }
 	}
   
   /*
@@ -1058,11 +1068,13 @@ class CPrescription extends CMbObject {
     }
     
     // Parcours des lignes de prescription_line_mixes
-    $this->_count_recent_modif["perf"] = false;
-    foreach($this->_ref_prescription_line_mixes as $_prescription_line_mix){
-      if($_prescription_line_mix->_recent_modification){
-        $this->_count_recent_modif["perf"] = true;
-      }
+    foreach($this->_ref_prescription_line_mixes_by_type as $type_mix => $_prescription_line_mixes){
+    	$this->_count_recent_modif[$type_mix] = false;
+      foreach($_prescription_line_mixes as $_prescription_line_mix){
+	      if($_prescription_line_mix->_recent_modification){
+	        $this->_count_recent_modif[$type_mix] = true;
+				}
+			}
     }
 
     // Parcours des lignes d'elements
@@ -1702,7 +1714,8 @@ class CPrescription extends CMbObject {
 	           	 $_prescription_line_mix->calculPrisesPrevues($date);
 	           }
 	           $this->_ref_prescription_line_mixes_for_plan[$_prescription_line_mix->_id] = $_prescription_line_mix;
-	         }
+	           $this->_ref_prescription_line_mixes_for_plan_by_type[$_prescription_line_mix->type_line][$_prescription_line_mix->_id] = $_prescription_line_mix;
+					 }
 				}
 				if($with_calcul){
 				  $_prescription_line_mix->calculAdministrations();

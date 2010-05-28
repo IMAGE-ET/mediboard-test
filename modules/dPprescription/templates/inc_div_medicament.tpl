@@ -310,37 +310,41 @@ transfertLineTP = function(line_id, sejour_id){
     {{/if}}
   {{/foreach}}
    
-  {{if $prescription->_ref_prescription_line_mixes}}
-	<table class="tbl">
-	  <tr>
-	    <th colspan="7" class="title">Perfusions</th>
-	  </tr>
-	  <tr>
-	    <th style="width: 8%;">Type</th>
-	    <th style="width: 44%;">Médicaments</th> 
-	    <th style="width: 8%;">Prat</th>
-	    <th style="width: 5%;">Débit</th>
-	    <th style="width: 15%;">Voie</th>
-			{{if $prescription->object_id}}
-		    <th style="width: 10%;">Début</th>
-	      <th style="width: 10%;">Durée</th>
-			{{else}}
-			  <th style="20%">Dates</th>
-			{{/if}}
-	  </tr>
-	</table>
-	{{/if}}
-
-  <!-- Parcours des prescription_line_mixes -->
-  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
-    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
-      {{if $full_line_guid == $_prescription_line_mix->_guid}}
-        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" prescription_reelle=$prescription}}
-      {{else}}
-	       {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" prescription_reelle=$prescription}} 
-	    {{/if}}
-    {{/if}}
-  {{/foreach}}
+	 
+	 {{foreach from=$prescription->_ref_prescription_line_mixes_by_type key=type_line item=_lines_mix_by_type}}
+			<table class="tbl">
+			  <tr>
+			    <th colspan="7" class="title">{{tr}}CPrescription._chapitres.{{$type_line}}{{/tr}}</th>
+			  </tr>
+			  <tr>
+			    <th style="width: 8%;">Type</th>
+			    <th style="width: 44%;">Médicaments</th> 
+			    <th style="width: 8%;">Prat</th>
+			    <th style="width: 5%;">Débit</th>
+			    <th style="width: 15%;">Voie</th>
+					{{if $prescription->object_id}}
+				    <th style="width: 10%;">Début</th>
+			      <th style="width: 10%;">Durée</th>
+					{{else}}
+					  <th style="20%">Dates</th>
+					{{/if}}
+			  </tr>
+			</table>
+			
+		
+		  <!-- Parcours des prescription_line_mixes -->
+		  {{foreach from=$_lines_mix_by_type item=_prescription_line_mix}}
+		    {{if !$praticien_sortie_id || ($praticien_sortie_id == $_prescription_line_mix->praticien_id)}}
+		      {{if $full_line_guid == $_prescription_line_mix->_guid}}
+		        {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix.tpl" prescription_reelle=$prescription}}
+		      {{else}}
+			       {{include file="../../dPprescription/templates/inc_vw_prescription_line_mix_lite.tpl" prescription_reelle=$prescription}} 
+			    {{/if}}
+		    {{/if}}
+		  {{/foreach}}
+		{{/foreach}}
+ 
+	
 
 <table class="tbl">
   {{if $prescription->_ref_lines_med_comments.comment|@count}}

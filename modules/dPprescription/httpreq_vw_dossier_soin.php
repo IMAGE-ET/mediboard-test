@@ -14,7 +14,6 @@ $can->needsRead();
 $sejour_id    = CValue::getOrSession("sejour_id");
 $date         = CValue::getOrSession("date");
 $nb_decalage  = CValue::get("nb_decalage", 2);
-$line_type    = CValue::get("line_type", "service");  // Bloc en salle d'op / service en hospi
 $mode_dossier = CValue::get("mode_dossier", "administration");
 $chapitre     = CValue::get("chapitre"); // Chapitre a rafraichir
 $object_id    = CValue::get("object_id");
@@ -192,7 +191,7 @@ else {
 	if($prescription->_id){
 		// Chargement des lignes de medicament
     if($chapitre == "med" || $chapitre == "inj"){
-		  $prescription->loadRefsLinesMedByCat("1","1",$line_type);
+		  $prescription->loadRefsLinesMedByCat("1","1");
       foreach($prescription->_ref_prescription_lines as &$_line_med){
 			  $_line_med->loadRefLogSignee();
 			  $_line_med->countSubstitutionsLines();
@@ -200,9 +199,9 @@ else {
 				$_line_med->loadRefsSubstitutionLines();
 				$_line_med->loadRefProduitPrescription();
 			}
-    } elseif($chapitre == "perf") {
+    } elseif($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
       // Chargement des prescription_line_mixes
-	    $prescription->loadRefsPrescriptionLineMixes("1", $line_type);
+	    $prescription->loadRefsPrescriptionLineMixes($chapitre,"1");
 		  foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
 		    $_prescription_line_mix->countSubstitutionsLines();
 		    $_prescription_line_mix->loadRefsSubstitutionLines();
@@ -212,22 +211,21 @@ else {
 		    $_prescription_line_mix->loadRefPraticien();
 		    $_prescription_line_mix->loadRefLogSignaturePrat();
 				$_prescription_line_mix->calculVariations();
-    
-		  }
+      }
     } elseif (!$chapitre) {
       // Parcours initial pour afficher les onglets utiles (pas de chapitre de specifié)
-      $prescription->loadRefsPrescriptionLineMixes("1", $line_type);
-      $prescription->loadRefsLinesMedByCat("1","1",$line_type);
+      $prescription->loadRefsPrescriptionLineMixes("","1");
+      $prescription->loadRefsLinesMedByCat("1","1");
 	    
-      // Chargement des lignes d'elements 
-		  $prescription->loadRefsLinesElementByCat("1",null,$line_type);
+      // Chargement des lignes d'elements
+		  $prescription->loadRefsLinesElementByCat("1",null);
 			
 		  // Calcul des modifications recentes par chapitre
 		  $prescription->countRecentModif();
 		  $prescription->countUrgence($date);
     } else {
       // Chargement des lignes d'elements  avec pour chapitre $chapitre
-		  $prescription->loadRefsLinesElementByCat("1",$chapitre,$line_type);
+		  $prescription->loadRefsLinesElementByCat("1",$chapitre);
     }
 		
     $with_calcul = $chapitre ? true : false; 
@@ -284,8 +282,8 @@ $smarty->assign("next_date"           , mbDate("+ 1 DAY", $date));
 $smarty->assign("today"               , mbDate());
 $smarty->assign("move_dossier_soin"   , false);
 
+// Affichage d'une ligne
 if($object_id && $object_class){
-  // Affichage d'une ligne
   $smarty->assign("move_dossier_soin", true);
   $smarty->assign("nodebug", true);	 
   if($line->_class_name == "CPrescriptionLineMix"){
@@ -304,10 +302,11 @@ if($object_id && $object_class){
 		$smarty->assign("unite_prise", $unite_prise);
 	  $smarty->display("inc_vw_content_line_dossier_soin.tpl");
   }
-} else {
+} 
+else {
   // Affichage d'un chapitre
   if($chapitre){
-    $smarty->assign("move_dossier_soin", false);
+	  $smarty->assign("move_dossier_soin", false);
     $smarty->assign("chapitre", $chapitre);
     $smarty->assign("nodebug", true);	 
     $smarty->display("inc_chapitre_dossier_soin.tpl");

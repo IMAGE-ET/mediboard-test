@@ -409,7 +409,7 @@ togglePerfDecalage = function(oForm){
   }
 }
 
-toggleContinuitePerf = function(radioButton, prescription_line_mix_id){
+toggleContinuiteLineMix = function(radioButton, prescription_line_mix_id){
   if($V(radioButton) == "continue"){
     $('discontinue-'+prescription_line_mix_id).hide();
   }

@@ -33,7 +33,8 @@ class CPrescriptionLineMix extends CMbObject {
   var $decalage_interv  = null; // Nb heures de decalage par rapport à l'intervention (utilisé pour les protocoles de prescription_line_mixes)
   var $operation_id     = null;
   var $commentaire      = null;
-  
+	var $type_line        = null;
+	
   var $date_pose   = null; // Date de la pose de la perf
   var $time_pose   = null; // Heure de la pose de la perf
   
@@ -113,7 +114,19 @@ class CPrescriptionLineMix extends CMbObject {
 	var $_continuite = null;  // continue, discontinue
 	var $_last_debit = null;
 	var $_variations = null;
-  
+	
+	static $type_by_line = array(
+	  "perfusion"    => array("classique", "seringue", "PCA"),
+		"oxygene"      => array("masque", "lunettes", "sonde"),
+		"aerosol"      => array(""),
+		"alimentation" => array("")
+	);
+	
+	static $unite_by_line = array(
+	  "perfusion" => "ml/h",
+		"oxygene"   => "l/min"
+	);
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_mix';
@@ -124,8 +137,9 @@ class CPrescriptionLineMix extends CMbObject {
   function getProps() {
   	$specs = parent::getProps();
   	$specs["prescription_id"]        = "ref class|CPrescription cascade";
-  	$specs["type"]                   = "enum notNull list|classique|seringue|PCA";
-    $specs["libelle"]                = "str";
+  	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
+    $specs["type"]                   = "enum notNull list|classique|seringue|PCA|masque|lunettes|sonde";
+		$specs["libelle"]                = "str";
     $specs["vitesse"]                = "num pos";
     $specs["voie"]                   = "str";
     $specs["date_debut"]             = "date";
@@ -220,11 +234,11 @@ class CPrescriptionLineMix extends CMbObject {
 			$this->_continuite = "discontinue";
 		}
   }
-  
+  	
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["lines_mix"]  = "CPrescriptionLineMixItem prescription_line_mix_id";
-    $backProps["prev_line"]     = "CPrescriptionLineMix next_line_id";
+    $backProps["lines_mix"] = "CPrescriptionLineMixItem prescription_line_mix_id";
+    $backProps["prev_line"] = "CPrescriptionLineMix next_line_id";
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
     $backProps["substitutions_medicament"] = "CPrescriptionLineMedicament substitute_for_id";
     $backProps["substitutions_prescription_line_mix"]  = "CPrescriptionLineMix substitute_for_id";
@@ -787,6 +801,53 @@ class CPrescriptionLineMix extends CMbObject {
   function loadRefLogSignaturePrat(){
     $this->_ref_log_signature_prat = $this->loadLastLogForField("signature_prat");
   }
+	
+	/*
+	 * Creation d'une ligne d'oxygene a partir des infos du médicament
+	 */
+	function bindOxygene($values = array()){
+		$prescription_id      = $values['prescription_id'];
+	  $praticien_id         = $values['praticien_id'];
+		$substitute_for_id    = $values['substitute_for_id'];
+    $code_cip             = $values['code_cip'];
+
+	  // Voir les types d'oxygene
+	  $this->type = "masque";
+	  $this->type_line = "oxygene";
+	  $this->prescription_id = $prescription_id;
+	  $this->creator_id = CAppUI::$user->_id;
+	  $this->praticien_id = $praticien_id;
+	  $this->substitute_for_id = $substitute_for_id;
+
+    if(isset($values['debut'])){
+      $this->debut = $values['debut'];
+    }
+    if(isset($values['time_debut'])){
+      $this->time_debut = $values['time_debut'];
+    }
+		if(isset($values['substitute_for_class'])){
+			$this->substitute_for_class = $values['substitute_for_class'];
+		}
+	  if($this->substitute_for_id){
+	    $this->substitution_active = 0;
+	  }
+	  
+		// Sauvegarde de la voie lors de la creation de la ligne
+    $produit = new CBcbProduit();
+		$produit->load($code_cip);
+    $produit->loadVoies();
+		$this->voie = $produit->voies[0];
+      
+    $msg = $this->store();
+	  CAppUI::stepAjax("CPrescriptionLineMix.aerosol-msg-create");
+    
+	  $prescription_line_mix_item = new CPrescriptionLineMixItem();
+	  $prescription_line_mix_item->prescription_line_mix_id = $this->_id;
+	  $prescription_line_mix_item->code_cip = $code_cip;
+	  
+		$msg = $prescription_line_mix_item->store();
+    CAppUI::stepAjax("CPrescriptionLineMixItem.aerosol-msg-create");
+	}
 }
   
 ?>

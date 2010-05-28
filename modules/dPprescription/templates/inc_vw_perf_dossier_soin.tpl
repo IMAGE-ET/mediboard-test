@@ -87,13 +87,13 @@
       {{if !$_prescription_line_mix->condition_active}}
       <!-- Activation -->
       <input type="hidden" name="condition_active" value="1" />
-      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perf', true); } });">
+      <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perfusion', true); } });">
         Activer
       </button>
       {{else}}
       <!-- Activation -->
       <input type="hidden" name="condition_active" value="0" />
-      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perf', true); } });">
+      <button class="cancel" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ refreshDossierSoin('','perfusion', true); } });">
         Désactiver
       </button>
        {{/if}}
@@ -209,7 +209,7 @@
 										{{else}}
 										ondblclick='addAdministrationPerf("{{$_prescription_line_mix->_id}}","{{$_date}}","{{$_hour}}", null,document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");'
 										{{/if}}
-                    class="administration {{$etat}} perf">
+                    class="administration {{$etat}} perfusion">
 										
 								 {{* Affichage des prises prevues et des administrations *}}
 								 {{if $nb_adm}}{{$nb_adm}}

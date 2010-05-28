@@ -50,9 +50,9 @@
             {{if !$mode_pharma}}
               {{if $prescription_reelle->type == "sejour"}}
 		            {{if $line->valide_pharma}}
-								 <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
+								  <img src="images/icons/signature_pharma.png" title="Signée par le pharmacien" />
 								{{else}}
-									 <img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
+									<img src="images/icons/signature_pharma_barre.png" title="Non signée par le pharmacien" />
 								{{/if}}
 							{{/if}}
 						{{/if}}
@@ -97,7 +97,7 @@
 	    <td />
 	    <td>
 	      <div class="small-info">
-	      	<label title="Vous pouvez l'associer à une prescription_line_mix existante ou une nouvelle">
+	      	<label title="Vous pouvez l'associer à une perfusion existante ou une nouvelle">
 	      		Ce produit est injectable
 					</label>
 				  {{if $line->_ref_prescription->type != "sejour"}}
@@ -138,7 +138,7 @@
 		  		    {{/if}}
 		  		  {{/foreach}}
 	  		  {{else}}
-		  		  {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+		  		  {{foreach from=$prescription->_ref_prescription_line_mixes_by_type.perfusion item=_prescription_line_mix}}
 		  		    <option value="{{$_prescription_line_mix->_id}}">
 		  		    	{{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_prescription_line_mix"}}
                 {{$_perf_line->_ref_produit->libelle_abrege}}
@@ -150,8 +150,17 @@
 	  		  {{/if}}
 	  		  
 	  		  </select>
-	  		  {{mb_field object=$prescription_line_mix field="type" defaultOption="&mdash; Type"}}
-	  		  
+					
+				 {{assign var=types value="CPrescriptionLineMix"|static:"type_by_line"}}
+         {{assign var=types_for_line value=$types.perfusion}}
+          
+					<select name="type">           
+					  <option value="">&mdash; Type</option>               
+	          {{foreach from=$types_for_line item=_type}}
+	            <option value="{{$_type}}">{{tr}}CPrescriptionLineMix.type.{{$_type}}{{/tr}}</option> 
+	          {{/foreach}}
+          </select>
+					
 		  		<button class="add" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
 		  		  onComplete: function() { 
 		  		    {{if @$mode_substitution}}
