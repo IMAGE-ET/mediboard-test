@@ -385,13 +385,19 @@ class CSejour extends CCodable {
 		$siblings = $sejour->loadMatchingList();
 
     $this->updateFormFields();
+		
+		// Entree et sortie ne sont pas forcément stored
+    $entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
+    $sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
+
 		foreach($siblings as $_sibling) {
       if ($_sibling->_id == $this->_id) {
         unset($siblings[$_sibling->_id]);
 				continue;
       }
-	    $entree_relative = abs(mbHoursRelative($this->entree, $_sibling->entree));
-      $sortie_relative = abs(mbHoursRelative($this->sortie, $_sibling->sortie));
+	    			
+	    $entree_relative = abs(mbHoursRelative($entree, $_sibling->entree));
+      $sortie_relative = abs(mbHoursRelative($sortie, $_sibling->sortie));
 	    if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
 	      unset($siblings[$_sibling->_id]);
 	    }
