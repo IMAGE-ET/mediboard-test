@@ -217,7 +217,7 @@ Main.add(function () {
         </tr>
         {{foreach from=$patient->_ref_sejours item=_sejour}}
           {{if $_sejour->group_id == $g || $dPconfig.dPpatients.CPatient.multi_group == "full"}}
-          <tr>
+          <tr {{if $_sejour->_id == $isSejourPatient}}class="selected{{/if}}">
             <td class="text">
               {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
               <a href="#{{$_sejour->_guid}}" onclick="viewSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">

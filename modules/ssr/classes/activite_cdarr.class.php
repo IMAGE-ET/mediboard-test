@@ -71,6 +71,13 @@ class CActiviteCdARR extends CCdARRObject {
     }
 	}
 	
+	static function getLibelle($type) {
+	  $found = new CActiviteCdARR();
+	  $found->type = $type;
+	  $found->loadMatchingObject();
+	  
+	  return $found->libelle;
+	}
 	
 	/**
 	 * Get an instance from the code

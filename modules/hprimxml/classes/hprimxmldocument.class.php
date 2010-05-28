@@ -107,7 +107,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $enteteMessage = $this->addElement($elParent, "enteteMessage");
     $this->addElement($enteteMessage, "identifiantMessage", $this->identifiant ? $this->identifiant : "ES{$this->now}");
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production ? $this->date_production : mbDateTime());
+    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production ? $this->date_production : mbXMLDateTime());
     
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
@@ -579,7 +579,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addPersonne($personne, $praticien);
   }
   
-  function addVenue($elParent, $mbVenue, $referent = null, $light = false) {
+  function addVenue($elParent, $mbVenue, $referent = false, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     if(!$referent) {
@@ -694,6 +694,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
     }
     
+    // @todo Voir comment intégrer le placement pour la v. 1.01 et v. 1.01
+    /*
     if (!$light) {
       $placement = $this->addElement($elParent, "Placement");
       $modePlacement = $this->addElement($placement, "modePlacement");
@@ -702,7 +704,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       
       $datePlacement = $this->addElement($placement, "datePlacement");
       $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
-    }
+    }*/
   }
   
   function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
@@ -748,14 +750,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addTexte($elParent, "libelle", 80);
   }
   
-  function addDebiteurs($elParent, $mbPatient, $referent = null) {
+  function addDebiteurs($elParent, CPatient $mbPatient, $referent = null) {
     $debiteur = $this->addElement($elParent, "debiteur");
     
     $assurance = $this->addElement($debiteur, "assurance");
     $this->addAssurance($assurance, $mbPatient, $referent);
   }
   
-  function addAssurance($elParent, $mbPatient, $referent = null) {
+  function addAssurance($elParent, CPatient $mbPatient, $referent = null) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     $this->addElement($elParent, "nom", $mbPatient->regime_sante);
@@ -781,7 +783,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
   }
   
-  function addAssure($elParent, $mbPatient) {
+  function addAssure($elParent, CPatient $mbPatient) {
     $this->addElement($elParent, "immatriculation", $mbPatient->matricule);     
     
     $personne = $this->addElement($elParent, "personne");
@@ -818,6 +820,165 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $dest_hprim->loadMatchingObject();
     
     return $dest_hprim->_tag_mediuser;
+  }
+  
+  function addSaisieDelocalisee($elParent, CSejour $mbSejour) {
+    $this->addAttribute($elParent, "action", "création");
+    $this->addDateTimeElement($elParent, "dateAction");
+    $dateHeureOptionnelle = $this->addElement($elParent, "dateHeureReference");
+    $this->addDateHeure($dateHeureOptionnelle);
+
+    $mbOp = reset($mbSejour->_ref_operations);
+    
+    // Identifiant de l'intervention
+    $identifiant = $this->addElement($elParent, "identifiant");
+    $this->addElement($identifiant, "emetteur", $mbOp->_id);
+    
+    $this->addUniteFonctionnelleResponsable($elParent, $mbOp);
+    
+    // Médecin responsable
+    $medecinResponsable = $this->addElement($elParent, "medecinResponsable");
+    $mbPraticien =& $mbSejour->_ref_praticien;
+    $this->addElement($medecinResponsable, "numeroAdeli", $mbPraticien->adeli);
+    $this->addAttribute($medecinResponsable, "lien", "rsp");
+    $this->addCodeLibelle($medecinResponsable, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
+    
+    // Diagnostics RUM
+    $diagnosticsRum = $this->addElement($elParent, "diagnosticsRum");
+    $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
+    $this->addElement($diagnosticPrincipal, "codeCim10", strtoupper($mbSejour->DP));
+    if($mbSejour->DR) {
+      $diagnosticRelie = $this->addElement($diagnosticsRum, "diagnosticRelie");
+      $this->addElement($diagnosticRelie, "codeCim10", strtoupper($mbSejour->DR));
+    }
+    if(count($mbSejour->_ref_dossier_medical->_codes_cim)) {
+      $diagnosticsSignificatifs = $this->addElement($diagnosticsRum, "diagnosticsSignificatifs");
+      foreach($mbSejour->_ref_dossier_medical->_codes_cim as $curr_code) {
+        $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
+        $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($curr_code));
+      }
+    }
+  }
+  
+  function addSsr($elParent, CSejour $mbSejour) {    
+    // Identifiant du séjour
+    $identifiant = $this->addElement($elParent, "identifiantSSR");
+    $this->addElement($identifiant, "emetteur", $mbSejour->_id);
+    
+    $mbRhss = CRHS::getAllRHSsFor($mbSejour);
+    foreach ($mbRhss as $_mbRhs) {
+      $_mbRhs->loadRefSejour();
+      $rhs = $this->addElement($elParent, "rhs");
+      $this->addRhs($rhs, $mbSejour, $_mbRhs);
+    }
+  }
+  
+  function addRhs($elParent, CSejour $mbSejour, CRHS $mbRhs) {    
+    $this->addAttribute($elParent, "action", "création");
+    $this->addAttribute($elParent, "version", "M01");
+    
+    $this->addElement($elParent, "dateAction", mbXMLDateTime());
+    
+    // Identifiant du séjour
+    $identifiant = $this->addElement($elParent, "identifiant");
+    $this->addElement($identifiant, "emetteur", $mbRhs->_id);
+    
+    $dateHeureOptionnelleLundi = $this->addElement($elParent, "dateHeureOptionnelleLundi");
+    $this->addElement($dateHeureOptionnelleLundi, "date", $mbRhs->date_monday);
+    
+    // @todo Voir pour mettre sur un plateau
+    $this->addCodeLibelle($elParent, "uniteMedicale", CGroups::loadCurrent()->_id, CGroups::loadCurrent()->_view); 
+    
+    $joursPresence = $this->addElement($elParent, "joursPresence");
+    if ($mbRhs->_in_bounds) {
+      $this->addJoursPresence($joursPresence, $mbRhs);
+    }
+    
+    $diagnostics = $this->addElement($elParent, "diagnostics");
+    
+    $actesReeducation = $this->addElement($elParent, "actesReeducation");
+    $this->addActesReeducation($actesReeducation, $mbRhs);
+    
+    $dependances = $this->addElement($elParent, "dependances");
+    $this->addDependances($dependances, $mbRhs);
+  }
+  
+  function addJoursPresence($elParent, CRHS $mbRhs) {
+    if ($mbRhs->_in_bounds_mon) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "lundi");
+    }
+    if ($mbRhs->_in_bounds_tue) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "mardi");
+    }
+    if ($mbRhs->_in_bounds_wed) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "mercredi");
+    }
+    if ($mbRhs->_in_bounds_thu) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "jeudi");
+    }
+    if ($mbRhs->_in_bounds_fri) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "vendredi");
+    }
+    if ($mbRhs->_in_bounds_sat) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "samedi");
+    }
+    if ($mbRhs->_in_bounds_sun) {
+      $jourPresence = $this->addElement($elParent, "jourPresence");
+      $this->addAttribute($jourPresence, "jour", "dimanche");
+    }
+  }
+  
+  function addDependances($elParent, CRHS $mbRhs) {
+    $mbRhs->loadRefDependances();
+    $dependances = $mbRhs->_ref_dependances;
+    $this->addElement($elParent, "habillage"   , $dependances->habillage);
+    $this->addElement($elParent, "deplacement" , $dependances->deplacement);
+    $this->addElement($elParent, "alimentation", $dependances->alimentation);
+    $this->addElement($elParent, "continence"  , $dependances->continence);
+    $this->addElement($elParent, "comportement"  , $dependances->comportement);
+    $this->addElement($elParent, "relation"    , $dependances->relation);
+  }
+  
+  function addActesReeducation($elParent, CRHS $mbRhs) {
+    $mbRhs->loadRefLignesActivites();
+    $lignes = $mbRhs->_ref_lignes_activites;
+    
+    // Ajout des actes de rééducation
+    foreach ($lignes as $_ligne) {
+      $this->addActeReeducation($elParent, $_ligne);
+    }
+    
+    // Ajout des chapitres de rééducation
+    //$this->addChapitreActeReeducation($elParent, $mbRhs);
+  }
+  
+  function addActeReeducation($elParent, CLigneActivitesRHS $ligneActiviteRhs) {
+    $acteReeducation = $this->addElement($elParent, "acteReeducation");
+
+    $this->addElement($acteReeducation, "codeCDARR", $ligneActiviteRhs->code_activite_cdarr);
+    $this->addElement($acteReeducation, "duree", $ligneActiviteRhs->_qty_total);
+  }
+  
+  function addChapitreActeReeducation($elParent, CRHS $mbRhs) {
+    $totauxType = array();
+    $totauxType = $mbRhs->countTypeActivite();
+    
+    foreach ($totauxType as $mnemonique => $_total_type) {
+      if ($_total_type) {
+        $chapitreActeReeducation = $this->addElement($elParent, "chapitreActeReeducation");
+    
+        $this->addAttribute($chapitreActeReeducation, "mnemonique", strtolower($mnemonique));
+        
+        $this->addElement($chapitreActeReeducation, "duree", $_total_type);
+        $this->addElement($chapitreActeReeducation, "commentaire", CActiviteCdARR::getLibelle($mnemonique));
+      }
+    }
   }
 }
 

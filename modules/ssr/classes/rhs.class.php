@@ -40,8 +40,9 @@ class CRHS extends CMbObject {
   var $_in_bounds_sun = null;
 	
   // Object References
-  var $_ref_sejour      = null;
-  var $_ref_dependances = null;
+  var $_ref_sejour           = null;
+  var $_ref_dependances      = null;
+  var $_ref_lignes_activites = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -188,6 +189,37 @@ class CRHS extends CMbObject {
     $this->_ref_dependances = new CDependancesRHS();
     $this->_ref_dependances->rhs_id = $this->_id;
     $this->_ref_dependances->loadMatchingObject($order);
+  }
+  
+  function loadRefLignesActivites() {
+    if ($this->_ref_lignes_activites) {
+      return;
+    }
+    
+    $ligneActivitesRHS = new CLigneActivitesRHS();
+    $ligneActivitesRHS->rhs_id = $this->_id;
+    $this->_ref_lignes_activites = $ligneActivitesRHS->loadMatchingList();
+  }
+  
+  function countTypeActivite() {
+    $totaux = array();
+    
+    $type_activite = new CTypeActiviteCdARR();
+    $types_activite = $type_activite->loadList();
+    foreach($types_activite as $_type) {
+      $totaux[$_type->code] = 0;
+    }
+    
+    $this->loadRefLignesActivites();
+    $lines = $this->_ref_lignes_activites;
+    foreach($lines as $_line) {
+      $_line->loadRefActiviteCdARR();
+      $_line->_ref_code_activite_cdarr->loadRefTypeActivite();
+      $type_activite = $_line->_ref_code_activite_cdarr->_ref_type_activite;
+      $totaux[$type_activite->code] += $_line->_qty_total;
+    }
+    
+    return $totaux;
   }
 }
 
