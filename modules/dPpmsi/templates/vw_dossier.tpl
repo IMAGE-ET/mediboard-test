@@ -167,13 +167,11 @@ printDossierComplet = function(sejour_id){
   url.popup("850", "500", "Dossier complet");
 }
 
-
+{{if $isSejourPatient}}
 Main.add(function () {
-  PairEffect.initGroup("effectSejour");
-  {{if $isSejourPatient}}
-    viewSejour({{$isSejourPatient}});
-  {{/if}}
+  viewSejour({{$isSejourPatient}});
 });
+{{/if}}
 </script>
 
 <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier('load'); return false;">

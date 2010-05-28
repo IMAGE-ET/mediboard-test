@@ -21,13 +21,17 @@ $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 
 $isSejourPatient = null;
-if ($patient->patient_id) {
+if ($patient->_id) {
 	$patient->loadRefsFwd();
 	$patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical();
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->loadRefsSejours();
   $patient->loadIPP();
+  
+  if (array_key_exists($sejour_id, $patient->_ref_sejours)) {
+    $isSejourPatient = $sejour_id;
+  }
   
   // Sejours
   foreach ($patient->_ref_sejours as $_sejour) {
@@ -39,10 +43,6 @@ if ($patient->patient_id) {
       $_operation->countDocItems();
       $_operation->canRead();
       $_operation->canEdit();
-    }
-    
-    if ($_sejour->_id == $sejour_id) {
-      $isSejourPatient = $sejour_id;
     }
   }
 }
