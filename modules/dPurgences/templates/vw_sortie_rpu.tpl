@@ -12,7 +12,7 @@
 var refreshExecuter;
 
 Main.add(function () {
-  Veille.refresh();
+	Missing.refresh();
   
   refreshExecuter = new PeriodicalExecuter(function(){
     getForm("changeDate").submit();
