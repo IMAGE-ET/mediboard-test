@@ -11,7 +11,7 @@
 <table class="tbl" id="plan_soin">
 	<tbody id="tbody_date">
 	{{if $prescription->_ref_lines_med_for_plan|@count || $prescription->_ref_lines_elt_for_plan|@count || 
-	     $prescription->_ref_prescription_line_mixes_for_plan_by_cat|@count || $prescription->_ref_injections_for_plan|@count}}
+	     $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count || $prescription->_ref_injections_for_plan|@count}}
 	  <tr>
 	    <th rowspan="2" class="title">Catégorie</th>
 	    <th rowspan="2" class="title">Libellé</th>

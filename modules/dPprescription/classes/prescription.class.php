@@ -1068,15 +1068,17 @@ class CPrescription extends CMbObject {
     }
     
     // Parcours des lignes de prescription_line_mixes
-    foreach($this->_ref_prescription_line_mixes_by_type as $type_mix => $_prescription_line_mixes){
-    	$this->_count_recent_modif[$type_mix] = false;
-      foreach($_prescription_line_mixes as $_prescription_line_mix){
-	      if($_prescription_line_mix->_recent_modification){
-	        $this->_count_recent_modif[$type_mix] = true;
+		if(is_array($this->_ref_prescription_line_mixes_by_type)){
+	    foreach($this->_ref_prescription_line_mixes_by_type as $type_mix => $_prescription_line_mixes){
+	    	$this->_count_recent_modif[$type_mix] = false;
+	      foreach($_prescription_line_mixes as $_prescription_line_mix){
+		      if($_prescription_line_mix->_recent_modification){
+		        $this->_count_recent_modif[$type_mix] = true;
+					}
 				}
-			}
-    }
-
+	    }
+		}
+		
     // Parcours des lignes d'elements
     foreach($this->_ref_prescription_lines_element_by_cat as $_chapitre_elt => $lines_by_cat){
       $this->_count_recent_modif[$_chapitre_elt] = false;
