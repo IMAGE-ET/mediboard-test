@@ -7,6 +7,10 @@ var Console = {
   hide: function() {
     $(this.id).hide();
   },
+
+  toggle: function() {
+    $(this.id).down(".body").toggle();
+  },
   
   trace: function(sContent, sClass, nIndent) {
     sClass = sClass || "label";

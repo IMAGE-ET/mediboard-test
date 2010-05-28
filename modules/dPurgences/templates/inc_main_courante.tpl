@@ -149,40 +149,40 @@ Main.add(function() {
 
     {{if $rpu->_id}}
       {{if $rpu->mutation_sejour_id}}
-			{{mb_include template=inc_dossier_mutation colspan=1}}
+			  {{mb_include template=inc_dossier_mutation colspan=1}}
       {{else}} 
-		  <td style="background-color: {{$background}}; text-align: center">
-		    {{if $consult && $consult->_id}}
-			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
-			      {{if $date != $consult->_ref_plageconsult->date}}
-			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
-			      {{/if}}
-			    </a>
-			    {{if !$_sejour->sortie_reelle}}
-			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
-			    {{else}}
-			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})
-			    {{/if}}
-		
-		    {{else}}
-		      {{include file="inc_attente.tpl" sejour=$_sejour}}
-	      {{/if}}
-	    </td>
+  		  <td style="background-color: {{$background}}; text-align: center">
+  		    {{if $consult && $consult->_id}}
+  			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+  			      Consultation à {{$consult->heure|date_format:$dPconfig.time}}
+  			      {{if $date != $consult->_ref_plageconsult->date}}
+  			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
+  			      {{/if}}
+  			    </a>
+  			    {{if !$_sejour->sortie_reelle}}
+  			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
+  			    {{else}}
+  			      (sortie à {{$_sejour->sortie_reelle|date_format:$dPconfig.time}})
+  			    {{/if}}
+  		
+  		    {{else}}
+  		      {{include file="inc_attente.tpl" sejour=$_sejour}}
+  	      {{/if}}
+  	    </td>
       {{/if}} 
     
 	    {{if $medicalView}}
-	    <td class="text" style="background-color: {{$background}};">
-				{{if $rpu->motif && $dPconfig.dPurgences.diag_prat_view}}
-				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
-				  </span>
-	      {{else}}
-				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-            {{$rpu->diag_infirmier|nl2br}}
-          </span>
-	      {{/if}}
-	    </td>
+  	    <td class="text" style="background-color: {{$background}};">
+  				{{if $rpu->motif && $dPconfig.dPurgences.diag_prat_view}}
+  				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+  				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
+  				  </span>
+  	      {{else}}
+  				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+              {{$rpu->diag_infirmier|nl2br}}
+            </span>
+  	      {{/if}}
+  	    </td>
 	    {{/if}}
 	
 	    <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
@@ -191,7 +191,7 @@ Main.add(function() {
 
 		{{else}}
 			<!-- Pas de RPU pour ce séjour d'urgence -->
-			<td colspan="6">
+			<td colspan="{{$medicalView|ternary:3:2}}">
 			  <div class="small-warning">
 			  	Ce séjour d'urgence n'est pas associé à un RPU.
 			  	<br />

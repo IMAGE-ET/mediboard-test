@@ -66,7 +66,8 @@ span.smarty-include:hover {
   padding: 3px;
 }
 
-#console .title .close {
+#console .title .close,
+#console .title .toggle {
   font-weight: bold;
   color: #fff;
   cursor: pointer;
@@ -75,7 +76,8 @@ span.smarty-include:hover {
   padding: 0 3px;
 }
 
-#console .title .close:hover {
+#console .title .close:hover,
+#console .title .toggle:hover {
   color: #f66;
 }
 

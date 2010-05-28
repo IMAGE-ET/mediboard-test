@@ -100,7 +100,7 @@ var AideSaisie = {
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView})
         ).hide(),
-        list = $(this.searchField.id + "_auto_complete").setStyle({marginTop: "-1px;"})
+        list = $(this.searchField.id + "_auto_complete").setStyle({marginTop: "-1px"})
       );
       
       container.

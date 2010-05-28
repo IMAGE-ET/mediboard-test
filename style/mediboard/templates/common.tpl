@@ -117,6 +117,7 @@
 <div id="console" style="display: none;">
   <div class="title">
     <div class="close" onclick="Console.hide()">X</div>
+    <div class="toggle" onclick="Console.toggle()">_</div>
     Javascript console
   </div>
   <div class="body"></div>
