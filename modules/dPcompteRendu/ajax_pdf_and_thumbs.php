@@ -91,7 +91,7 @@ else {
     $page_format = array(0, 0, $page_width, $page_height);
   }
 
-  // Création du CFile si inexistant
+  // Crï¿½ation du CFile si inexistant
   if (!count($files)) {
     $file = new CFile();
     $file->setObject($compte_rendu);
@@ -106,14 +106,24 @@ else {
     $file = reset($files);
     $file->file_name  = $compte_rendu->nom . ".pdf";
 
-    // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
+    // Si la source envoyï¿½e et celle prï¿½sente en base sont identique, on stream le PDF dï¿½jï¿½ gï¿½nï¿½rï¿½
     // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
     $c1 = preg_replace("!\s!",'',$save_content);
     $c2 = preg_replace("!\s!",'',$compte_rendu->source);
 
     if ((md5($c1) == md5($c2)) && $stream == 1) {
+    	header("Pragma: ");
+	    header("Cache-Control: ");
+	    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	    header("Cache-Control: no-store, no-cache, must-revalidate");  //HTTP/1.1
+	    header("Cache-Control: post-check=0, pre-check=0", false);
+	    // END extra headers to resolve IE caching bug
+	    header("MIME-Version: 1.0");
+	    header("Content-length: {$file->file_size}");
     	header("Content-type: $file->file_type");
-    	echo $file->_file_path;
+    	header("Content-disposition: attachment; filename=\"".$file->file_name."\"");
+    	echo file_get_contents($file->_file_path);
     	CApp::rip();
     }
   }
