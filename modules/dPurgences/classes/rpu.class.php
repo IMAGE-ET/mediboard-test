@@ -326,6 +326,7 @@ class CRPU extends CMbObject {
         $this->sejour_id = $sibling->_id;
         $this->loadRefSejour();
         $this->_ref_sejour->loadRefRPU();
+				
         // Si y'a un RPU déjà existant on alerte d'une erreur 
         if ($this->_ref_sejour->_ref_rpu->_id) {
           return CAppUI::tr("CRPU-already-exists");
