@@ -375,6 +375,10 @@ button.send-auto:before, a.button.send-auto:before {
   content: url(images/buttons/send-auto.png);
 }
 
+button.vcard:before, a.button.vcard:before {
+  content: url(images/buttons/vcard.png);
+}
+
 button.selected {
 	border: 2px solid #000;
 }

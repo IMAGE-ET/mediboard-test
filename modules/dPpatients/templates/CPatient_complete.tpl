@@ -20,6 +20,10 @@
         <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient" />
       </a>
       {{/if}}
+      
+      <a style="float:right;" href="#export-{{$object->_guid}}" onclick="Patient.exportVcard('{{$object->_id}}')">
+        <img src="images/icons/vcard.png" alt="export" title="Exporter le patient" />
+      </a>
 
       {{mb_include module=system template=inc_object_notes object=$object}}
 

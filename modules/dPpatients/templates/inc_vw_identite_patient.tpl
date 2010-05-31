@@ -144,7 +144,10 @@
         </button>
       </form>
       {{/if}}
-
+      
+      <button type="button" class="vcard" onclick="Patient.exportVcard('{{$patient->_id}}')">
+        {{tr}}Export{{/tr}}
+      </button>
     </td>
   </tr>
 </table>

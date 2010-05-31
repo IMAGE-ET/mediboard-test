@@ -56,6 +56,10 @@
       <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
         {{tr}}Print{{/tr}}
       </button>
+      
+      <button type="button" class="vcard" onclick="Patient.exportVcard('{{$patient->_id}}')">
+        {{tr}}Export{{/tr}}
+      </button>
 		</td>
 	</tr>
 </table>

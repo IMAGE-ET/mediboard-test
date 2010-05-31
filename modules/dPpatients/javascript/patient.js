@@ -27,5 +27,12 @@ Patient = Object.extend({
       addParam("patient_id", patient_id).
       addParam("use_vitale", use_vitale).
       redirectOpener();
+  },
+  
+  exportVcard: function(patient_id) {
+	  new Url("dPpatients", "ajax_export_vcard").
+      addParam("patient_id", patient_id).
+      addParam("suppressHeaders", 1).
+      pop(700, 550, "Patient");
   }
 }, window.Patient);
