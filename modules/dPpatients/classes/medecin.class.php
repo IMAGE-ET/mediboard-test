@@ -105,5 +105,14 @@ class CMedecin extends CMbObject {
 
     return $siblings;
   }
+  
+  function toVcard(CMbvCardExport $vcard) {
+    $vcard->addName($this->prenom, $this->nom, ucfirst($this->civilite));
+    $vcard->addPhoneNumber($this->tel     , 'WORK');
+    $vcard->addPhoneNumber($this->portable, 'CELL');
+    $vcard->addPhoneNumber($this->fax     , 'FAX');
+    $vcard->addEmail($this->email);
+    $vcard->addAddress($this->adresse, $this->ville, $this->cp, $this->pays, 'WORK');
+  }
 }
 ?>
