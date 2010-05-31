@@ -46,7 +46,8 @@ if ($product->load($product_id)) {
     $_reference->loadRefSociete();
   }
 }
-$product->loadRefStock();
+
+$product->getConsommation("-3 MONTHS");
 
 // Loads the required Category the complete list
 $category = new CProductCategory();

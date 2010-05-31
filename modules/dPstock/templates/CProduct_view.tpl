@@ -8,7 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+Main.add(function(){
+  var url = new Url("dPstock", "httpreq_vw_product_consumption_graph");
+  url.addParam("product_id", {{$object->_id}});
+  url.requestUpdate("product-consumption-{{$object->_id}}");
+})
+</script>
+
 {{mb_include module=system template=CMbObject_view}}
+
+<div id="product-consumption-{{$object->_id}}"></div>
 
 {{if $object->canEdit()}}
   <table class="main tbl">

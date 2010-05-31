@@ -35,6 +35,7 @@ class CProductDelivery extends CMbObject {
   var $_date_min      = null;
   var $_date_max      = null;
   var $_delivered     = null;
+  var $_auto_deliver  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -126,13 +127,23 @@ class CProductDelivery extends CMbObject {
     
     if (!$is_new) return;
     
-    $this->loadRefStock();
+    if ($this->_auto_deliver) {
+      $delivery_trace = new CProductDeliveryTrace;
+      $delivery_trace->delivery_id = $this->_id;
+      $delivery_trace->quantity = $this->quantity;
+      $delivery_trace->date_delivery = mbDateTime();
+      if ($msg = $delivery_trace->store()) {
+        return "La commande a été validée, mais elle n'a pas pu etre dispensée automatiquement pour la raison suivante: <br />$msg";
+      }
+    }
+    
+    /*$this->loadRefStock();
     $this->_ref_stock->loadRefsFwd();
     if ($this->_ref_stock->_ref_product->auto_dispensed) {
       $this->date_delivery = mbDateTime();
       $this->order = 0;
       return parent::store();
-    }
+    }*/
   }
 
   function getPerm($permType) {

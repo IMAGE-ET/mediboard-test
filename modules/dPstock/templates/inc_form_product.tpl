@@ -109,7 +109,7 @@ function duplicateObject(form) {
   </tr>
   <tr>
     <th>Conso. <strong>3 dern. mois</strong></th>
-    <td>{{$product->getConsommation("-3 MONTHS")}}</td>
+    <td>{{mb_value object=$product field="_consumption"}}</td>
   </tr>
   <tr>
     <th>{{tr}}CProduct-back-selections{{/tr}}</th>

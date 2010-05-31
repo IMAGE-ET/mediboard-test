@@ -282,7 +282,8 @@ function prepareForm(oForm) {
       oElement.buildTree();
     }
 
-    if (mask = props.mask) {
+    var mask = props.mask;
+    if (mask) {
       mask = mask.gsub('S', ' ').gsub('P', '|');
       oElement.mask(mask);
     }

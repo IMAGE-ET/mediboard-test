@@ -43,6 +43,7 @@ class CProduct extends CMbObject {
   var $_unit_quantity      = null;
   var $_unit_title         = null;
   var $_quantity           = null; // The quantity view
+  var $_consumption        = null;
   
   var $_unique_usage       = null;
   
@@ -90,6 +91,7 @@ class CProduct extends CMbObject {
     $specs['_unique_usage'] = 'bool';
     $specs['_unit_quantity']= 'float min|0';
     $specs['_quantity']     = 'str';
+    $specs['_consumption']  = 'num show|1';
     return $specs;
   }
 
@@ -157,8 +159,14 @@ class CProduct extends CMbObject {
     return $this->_ref_category->getPerm($permType);
   }
   
+  function loadView(){
+    parent::loadView();
+    $this->getConsommation("-3 MONTHS");
+  }
+  
   function getConsommation($since = "-1 MONTH"){
     $this->loadRefStock();
+    
     $where = array(
       "stock_id" => "= '{$this->_ref_stock_group->_id}'",
       "product_delivery_trace.date_delivery" => " > '".mbDate($since)."'",
@@ -174,7 +182,8 @@ class CProduct extends CMbObject {
     foreach($traces as $_trace) {
       $total += $_trace->quantity;
     }
-    return $total;
+    
+    return $this->_consumption = $total;
   }
   
   function store() {

@@ -40,7 +40,7 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="date_dispensation" value="now" />
       {{if $endowment_id && $dPconfig.dPstock.CProductDelivery.auto_dispensation}}
-        <input type="hidden" name="date_delivery" value="now" />
+        <input type="hidden" name="_auto_deliver" value="1" />
       {{/if}}
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="service_id" value="{{$service->_id}}" />
@@ -83,7 +83,7 @@
     {{foreach from=$stock->_ref_deliveries item=dispensation}}
       <tr>
         <td>
-          {{if $dispensation->order == 1}}
+          {{if $dispensation->order == 1 && !$dispensation->countBackRefs('delivery_traces')}}
             <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
               <input type="hidden" name="m" value="dPstock" />
               <input type="hidden" name="dosql" value="do_delivery_aed" />

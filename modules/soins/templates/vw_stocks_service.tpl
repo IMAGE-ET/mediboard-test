@@ -31,6 +31,7 @@ function refreshOrders(endowment_item_id, stock_id){
   if (endowment_item_id && stock_id) {
     url.addParam("endowment_item_id", endowment_item_id);
     url.requestUpdate("stock-"+stock_id);
+    refreshReceptions();
   }
   else {
     url.requestUpdate("list-order");

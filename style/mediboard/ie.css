@@ -39,6 +39,12 @@ input[type=radio]:focus {
   height: 24px;
 }
 
+select {
+  /* IE will cut off the options when a 
+  width is specified on the select tag */
+  width: auto !important;
+}
+
 #nav img {
   /* IE7 and below */
   *margin: 0;
