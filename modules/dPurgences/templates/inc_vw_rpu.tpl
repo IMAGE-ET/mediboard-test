@@ -16,14 +16,6 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function reloadSortieReelle() {
-	var url = new Url;
-	url.setModuleAction("dPurgences", "ajax_sortie_reelle");
-	url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
-	url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
-	url.requestUpdate('div_sortie_reelle');
-}
-
 function submitSejour(){
   var oForm = document.editSejour;
   submitFormAjax(oForm, 'systemMsg');
@@ -33,27 +25,36 @@ function redirect() {
 	document.location.href="?m=dPurgences&tab=vw_idx_rpu";
 }
 
-function submitSejourWithSortieReelle(){
-  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : function(){ reloadSortieReelle();}});
+function submitSejourWithSortieReelle(callback){
+  submitFormAjax(getForm('editSortieReelle'), 'systemMsg', { onComplete : callback });
 }
 
-function submitConsultWithChrono(chrono) {
+function reloadSortieReelle() {
+	  var url = new Url;
+	  url.setModuleAction("dPurgences", "ajax_sortie_reelle");
+	  url.addParam("sejour_id", getForm('editSortieReelle').elements.sejour_id.value);
+	  url.addParam("consult_id", getForm('ValidCotation').elements.consultation_id.value);
+	  url.requestUpdate('div_sortie_reelle');
+	}
+
+function submitConsultWithChrono(chrono, callback) {
   var oForm = document.editFrmFinish;
   oForm.chrono.value = chrono;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner();}});
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadFinishBanner(); if (callback) callback(); }});
 }
 
-function submitRPU() {
+function submitRPU(callback) {
 	var oForm = document.editSortieAutorise;
-	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle();}});
+	submitFormAjax(oForm, 'systemMsg', { onComplete : function(){ reloadSortieReelle(); if (callback) callback(); }});
 }
 
 function submitSejRpuConsult() {
 	if (checkForm(getForm("editRPU")) && checkForm(getForm("editRPUDest"))) {
-		submitSejourWithSortieReelle(); 
-		submitRPU();
-	  submitConsultWithChrono({{$consult|const:'TERMINE'}}); 
-		redirect();
+		submitSejourWithSortieReelle(
+		  submitRPU.curry(
+				submitConsultWithChrono.curry({{$consult|const:'TERMINE'}}, redirect)
+			)
+	  ); 
 	}
 }
 
