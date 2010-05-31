@@ -73,7 +73,7 @@ tar -xvf $archive
 check_errs $? "Failed to extract files" "Succesfully extracted files"
 
 # Stop mysql
-if [ $with_restart -eq 1]
+if [ $with_restart -eq 1 ]
 then
 "$mysql_path" stop
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
@@ -81,7 +81,7 @@ fi
 
 dir_target=/var/lib/mysql/$target_database
 
-if [ $safe -eq 1]
+if [ $safe -eq 1 ]
 then
   DATETIME=$(date +%Y_%m_%dT%H_%M_%S)
   # Copy database
@@ -110,7 +110,7 @@ chgrp mysql *
 check_errs $? "Failed to change owner and group" "Succesfully changed owner and group"
 
 # Start mysql
-if [ $with_restart -eq 1]
+if [ $with_restart -eq 1 ]
 then
 "$mysql_path" start
 check_errs $? "Failed to start mysql" "Succesfully start mysql"
