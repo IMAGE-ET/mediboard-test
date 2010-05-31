@@ -10,31 +10,8 @@
 
 class CMbvCardExport {
   var $version = "2.1";
-  var $patient = null;
   var $elements = array();
   var $name = 'no_name';
-  
-  function __construct(CPatient $patient) {
-    $this->patient = $patient;
-  }
-
-  function addPatient(){
-    $pat = $this->patient;
-
-    $this->addName($pat->prenom, $pat->nom, ucfirst($pat->civilite));
-    $this->addBirthDate($pat->naissance);
-    $this->addPhoneNumber($pat->tel, 'HOME');
-    $this->addPhoneNumber($pat->tel2, 'CELL');
-    $this->addPhoneNumber($pat->tel_autre, 'WORK');
-    $this->addEmail($pat->email);
-    $this->addAddress($pat->adresse, $pat->ville, $pat->cp, $pat->pays, 'HOME');
-    $this->addTitle(ucfirst($pat->profession));
-
-    $pat->loadRefPhotoIdentite();
-    if ($pat->_ref_photo_identite->_id) {
-      $this->addPicture($pat->_ref_photo_identite);
-    }
-  }
   
   function addTitle($title){
     $this->addElement("TITLE", $title);
@@ -84,10 +61,13 @@ class CMbvCardExport {
     $this->elements[$name] = $value;
   }
   
-  function toString(){
+  function toString($object){
+    if(!method_exists($object, "toVcard")) {
+    	return false;
+    }
     $this->addBegin();
     $this->addVersion();
-    $this->addPatient();
+    $object->toVcard($this);
     $this->addEnd();
     
     $o = "";
@@ -98,8 +78,10 @@ class CMbvCardExport {
     return $o;
   }
    
-  function saveVCard(){
-    $content = $this->toString();
+  function saveVCard($object){
+    if(!$content = $this->toString($object)) {
+    	return false;
+    }
     header("Content-Disposition: attachment; filename={$this->name}.vcf");
     header("Content-Type: text/x-vcard; charset=".CApp::$encoding);
     header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );

@@ -1473,6 +1473,22 @@ class CPatient extends CMbObject {
   function checkAnonymous() {
   	return $this->nom === "ANONYME" && $this->prenom === "Anonyme";
   }
+  
+  function toVcard(CMbvCardExport $vcard) {
+    $vcard->addName($this->prenom, $this->nom, ucfirst($this->civilite));
+    $vcard->addBirthDate($this->naissance);
+    $vcard->addPhoneNumber($this->tel, 'HOME');
+    $vcard->addPhoneNumber($this->tel2, 'CELL');
+    $vcard->addPhoneNumber($this->tel_autre, 'WORK');
+    $vcard->addEmail($this->email);
+    $vcard->addAddress($this->adresse, $this->ville, $this->cp, $this->pays, 'HOME');
+    $vcard->addTitle(ucfirst($this->profession));
+
+    $this->loadRefPhotoIdentite();
+    if ($this->_ref_photo_identite->_id) {
+      $vcard->addPicture($this->_ref_photo_identite);
+    }
+  }
 }
 
 ?>

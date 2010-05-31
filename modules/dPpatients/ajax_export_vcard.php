@@ -15,7 +15,7 @@ $patient_id = CValue::get("patient_id");
 $patient = new CPatient();
 $patient->load($patient_id);
 
-$vcard = new CMbvCardExport($patient);
-$vcard->saveVCard();
+$vcard = new CMbvCardExport();
+$vcard->saveVCard($patient);
 
 ?>
