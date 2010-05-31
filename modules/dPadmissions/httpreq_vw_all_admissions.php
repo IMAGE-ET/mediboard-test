@@ -16,8 +16,8 @@ $ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
 $date = CValue::getOrSession("date", mbDate());
-$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
-$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
+$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
+$month_max = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 $selAdmis = CValue::getOrSession("selAdmis", "0");
@@ -28,7 +28,7 @@ $demain = mbDate("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = mbDate("+1 DAY", $month_min); $day < $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
   $days[$day] = array(
     "num1" => "0",
     "num2" => "0",
