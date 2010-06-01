@@ -50,11 +50,6 @@ $query .= " GROUP BY DATE(debut)";
 $duree_occupation = $ds->loadList($query);
 
 foreach($evenements as $_evenement){
-	$_evenement->loadRefsActesCdARR();
-  $codes = count($_evenement->_ref_actes_cdarr) ? 
-    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
-    '';
-  
 	$_evenement->loadRefElementPrescription();
   $_evenement->loadRefSejour();
   $_evenement->_ref_sejour->loadRefPatient();
@@ -63,8 +58,8 @@ foreach($evenements as $_evenement){
 	$important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
   
   $patient =  $_evenement->_ref_sejour->_ref_patient;
-  $title = "$patient->_civilite $patient->nom - $codes";
-	if(!$sejour_id){
+  $title = $patient->nom;
+	if(!$sejour_id && $_evenement->remarque){
 		$title .= " - ".$_evenement->remarque;
 	}
   $element_prescription =& $_evenement->_ref_element_prescription;

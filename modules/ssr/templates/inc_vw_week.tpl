@@ -102,15 +102,15 @@ Main.add(function() {
 											 	
                     <div class="time-preview" style="display: none;"></div>
                     
-                    {{* 
-										<div class="time" style="display: none;" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+										{{if $planning->large}}
+										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
 											{{$_event->start|date_format:"%H:%M"}}
                       {{if $_event->length}}
                        - {{$_event->end|date_format:"%H:%M"}}
                       {{/if}}
                     </div>
-                     *}}
-									  
+                    {{/if}}
+										
                     <div class="body">
                       {{$_event->title|smarty:nodefaults}}
                     </div>

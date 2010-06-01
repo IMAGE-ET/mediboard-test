@@ -46,16 +46,11 @@ foreach($evenements as $_evenement){
   $total_evenement[mbDate($_evenement->debut)]["duree"] += $_evenement->duree;
 	$total_evenement[mbDate($_evenement->debut)]["nb"]++;
   
-	$_evenement->loadRefsActesCdARR();
-  $codes = count($_evenement->_ref_actes_cdarr) ? 
-    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
-		"";
-  
 	$_evenement->loadRefElementPrescription();
 	$element_prescription =& $_evenement->_ref_element_prescription;
   $element_prescription->loadRefCategory();
 	$category_prescription =& $element_prescription->_ref_category_prescription;
-  $title = $_evenement->_ref_element_prescription->_view ." - ".$codes;
+  $title = $_evenement->_ref_element_prescription->_view;
 	
 	if($print){
 		$_evenement->loadRefTherapeute();

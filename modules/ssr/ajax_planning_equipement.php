@@ -31,12 +31,6 @@ $where["equipement_id"] = " = '$equipement->_id'";
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-	
-	$_evenement->loadRefsActesCdARR();
-  $codes = count($_evenement->_ref_actes_cdarr) ? 
-    join(" - ", CMbArray::pluck($_evenement->_ref_actes_cdarr, "_view")) : 
-    "";
-	
 	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
 	$_evenement->loadRefElementPrescription();
   $_evenement->loadRefSejour();
@@ -44,7 +38,7 @@ foreach($evenements as $_evenement){
   $_evenement->_ref_sejour->loadRefPatient();
 	$therapeute = $_evenement->_ref_therapeute;
   $patient =  $_evenement->_ref_sejour->_ref_patient;
-  $title = "$patient->_civilite $patient->nom - $therapeute->_shortview - $codes";
+  $title = "$patient->_civilite $patient->nom - $therapeute->_shortview";
   $element_prescription =& $_evenement->_ref_element_prescription;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 
