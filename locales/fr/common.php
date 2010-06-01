@@ -167,6 +167,7 @@ $locales['module-all-court'] = 'Tous';
 $locales['month'] = 'mois';
 $locales['months'] = 'mois';
 $locales['msg-common-loading-soon'] = 'Chargement en attente';
+$locales['msg-purge'] = 'Purge effectuée';
 $locales['portal-help'] = 'Aide';
 $locales['portal-tracker'] = 'Suggérer une amélioration';
 $locales['pref-AUTOADDSIGN'] = 'Ajout automatique des éléments significatifs';

@@ -1663,16 +1663,14 @@ class CMbObject {
  	        if ($msg = $backRef->purge()) {
  	          return $msg;
  	        }
- 	        CAppUI::setMsg(CAppUI::tr("$backRef->_class_name-msg-delete"), UI_MSG_ALERT);
- 	        
         }
         else {
           $backRef->{$backSpec->field} = "";
  	        if ($msg = $backRef->store()) {
  	          return $msg;
  	        }
- 	        CAppUI::setMsg(CAppUI::tr($backRef->_class_name) . " " . CAppUI::tr("-msg-delete"), UI_MSG_ALERT);
         }
+        CAppUI::setMsg("$backRef->_class_name-msg-delete", UI_MSG_ALERT);
       }
     }
 

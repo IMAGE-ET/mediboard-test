@@ -51,6 +51,19 @@
           <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true, confirm: true});">{{tr}}CProductOrder-_validate{{/tr}}</button>
         </form>
         {{/if}}
+        
+        {{if $can->admin}}
+        <form name="order-purge-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <button type="button" class="cancel" onclick="confirmPurge(this, '{{$curr_order->_view|smarty:nodefaults|JSAttribute}}', '{{$type}}')">
+            {{tr}}Purge{{/tr}}
+          </button>
+        </form>
+        {{/if}}
 	   </td>
 	  </tr>
 	{{foreachelse}}
@@ -118,6 +131,19 @@
           <input type="hidden" name="cancelled" value="1" />
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
+        
+        {{if $can->admin}}
+        <form name="order-purge-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <button type="button" class="cancel" onclick="confirmPurge(this, '{{$curr_order->_view|smarty:nodefaults|JSAttribute}}', '{{$type}}')">
+            {{tr}}Purge{{/tr}}
+          </button>
+        </form>
+        {{/if}}
      </td>
     </tr>
   {{foreachelse}}
@@ -174,6 +200,19 @@
           <input type="hidden" name="cancelled" value="1" />
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
+        
+        {{if $can->admin}}
+        <form name="order-purge-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <button type="button" class="cancel" onclick="confirmPurge(this, '{{$curr_order->_view|smarty:nodefaults|JSAttribute}}', '{{$type}}')">
+            {{tr}}Purge{{/tr}}
+          </button>
+        </form>
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}
@@ -232,6 +271,19 @@
           <input type="hidden" name="_redo" value="1" />
           <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}CProductOrder-_redo{{/tr}}</button>
         </form>
+        
+        {{if $can->admin}}
+        <form name="order-purge-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <button type="button" class="cancel" onclick="confirmPurge(this, '{{$curr_order->_view|smarty:nodefaults|JSAttribute}}', '{{$type}}')">
+            {{tr}}Purge{{/tr}}
+          </button>
+        </form>
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}
@@ -296,6 +348,19 @@
           <input type="hidden" name="deleted" value="1" />
           <button type="button" class="remove" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Delete{{/tr}}</button>
         </form>
+        
+        {{if $can->admin}}
+        <form name="order-purge-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="_purge" value="0" />
+          <button type="button" class="cancel" onclick="confirmPurge(this, '{{$curr_order->_view|smarty:nodefaults|JSAttribute}}', '{{$type}}')">
+            {{tr}}Purge{{/tr}}
+          </button>
+        </form>
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}

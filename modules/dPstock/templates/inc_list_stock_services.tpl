@@ -24,7 +24,7 @@
       </td>
       
       <td>
-        <form name="CProductStockService-create-{{$_id}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshListStocksService.curry({{$_stock->product_id}})})">
+        <form name="CProductStockService-create-{{$_id}}" action="" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshListStocksService.curry({{$_stock->product_id}})})">
           <input type="hidden" name="m" value="dPstock" />
           <input type="hidden" name="dosql" value="do_stock_service_aed" />
           

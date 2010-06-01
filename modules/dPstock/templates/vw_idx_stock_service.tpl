@@ -57,7 +57,7 @@ ProductSelector.init = function(){
         <input type="text" name="keywords" value="" onchange="$V(this.form.start,0)" />
         
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()"></button>
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit()">{{tr}}Clear{{/tr}}</button>
       </form>
   
       <div id="list-stocks-service"></div>

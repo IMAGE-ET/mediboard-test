@@ -24,9 +24,9 @@ CJSLoader::$files = array(
   "lib/scriptaculous/lib/prototype.js",
   "lib/scriptaculous/src/scriptaculous.js",
   
-  /*"lib/nwmatcher/nwmatcher.js",
-  "lib/nwmatcher/traversal.js",
-  "lib/nwmatcher/prototypejs.js",*/
+  //"lib/nwmatcher/nwmatcher.js",
+  //"lib/nwmatcher/traversal.js",
+  //"lib/nwmatcher/prototypejs.js",
  
   "includes/javascript/console.js",
 

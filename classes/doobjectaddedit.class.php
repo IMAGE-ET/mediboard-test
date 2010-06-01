@@ -76,7 +76,7 @@ class CDoObjectAddEdit {
       }
       else {
         CValue::setSession($this->objectKey);
-        CAppUI::setMsg(CAppUI::tr("msg-purge"), UI_MSG_ALERT);
+        CAppUI::setMsg("msg-purge", UI_MSG_ALERT);
         if ($this->redirectDelete) {
           $this->redirect =& $this->redirectDelete;
         }

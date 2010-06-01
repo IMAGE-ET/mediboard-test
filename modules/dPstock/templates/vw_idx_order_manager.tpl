@@ -18,6 +18,20 @@ Main.add(function () {
   // Orders lists have to be shown
   refreshLists();
 });
+
+confirmPurge = function(element, view, type) {
+  var form = element.form;
+  if (confirm("ATTENTION : Vous êtes sur le point de supprimer une commande, ainsi que tous les objets qui s'y rattachent")) {
+    form._purge.value = 1;
+    confirmDeletion(form,  {
+      typeName:'la commande',
+      objName:view,
+      ajax: true
+    }, {
+      onComplete: refreshListOrders.curry(type, form)
+    });
+  }
+}
 </script>
 
 <div class="main">

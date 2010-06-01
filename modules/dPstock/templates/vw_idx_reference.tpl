@@ -67,7 +67,7 @@ function filterReferences(form) {
         <input type="text" name="keywords" value="{{$keywords}}" size="12" onchange="$V(this.form.start,0)" />
         
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>     
+        <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();">{{tr}}Clear{{/tr}}</button>     
         
         <br />
         <label>
