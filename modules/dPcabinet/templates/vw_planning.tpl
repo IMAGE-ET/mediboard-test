@@ -38,11 +38,6 @@ function goToDate(oForm, date) {
 
 Main.add(function () {
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
-  
-  PairEffect.initGroup("functionEffect", { 
-    bStoreInCookie: true,
-    sEffect: "appear"
-  });
 });
 
 </script>
@@ -151,19 +146,18 @@ Main.add(function () {
     <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
     <table class="form">
-      <tr id="editplage-trigger">
+      <tr>
         {{if !$plageSel->plageconsult_id}}
         <th class="title" colspan="4">Créer une plage</th>
 
         {{else}}
         <th class="title modify" colspan="4">
 		      {{mb_include module=system template=inc_object_idsante400 object=$plageSel}}
-		      {{mb_include module=system template=inc_object_history object=$plageSel}}
+		      {{mb_include module=system template=inc_object_history    object=$plageSel}}
           Modifier cette plage
         </th>
         {{/if}}
       </tr>
-      <tbody class="functionEffect" id="editplage" style="display:none;">
       <tr>
         <td>
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
@@ -313,7 +307,6 @@ Main.add(function () {
         {{/if}}        
         </td>
       </tr>
-      </tbody>
     </table>
     </td>
     <td>
@@ -325,6 +318,7 @@ Main.add(function () {
           <th class="title" colspan="10">
             <strong>
             {{if $plageSel->plageconsult_id}}
+            {{mb_include module=system template=inc_object_notes object=$plageSel}}
             Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
             {{tr}}CPlageconsult.none{{/tr}}

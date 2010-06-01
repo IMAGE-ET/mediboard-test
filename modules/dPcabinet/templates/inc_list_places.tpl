@@ -46,6 +46,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   {{if $plage->_id}}
   <tr>
     <th colspan="3">
+      {{if $online}}
+        {{mb_include module=system template=inc_object_notes object=$plage}}
+      {{/if}}
       Dr {{$plage->_ref_chir->_view}}
       <br />
       Plage du {{$plage->date|date_format:$dPconfig.longdate}}

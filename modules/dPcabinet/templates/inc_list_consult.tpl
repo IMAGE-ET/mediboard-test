@@ -64,6 +64,7 @@ Main.add( function () {
   {{if count($_plage->_ref_consultations)}}
   <tr>
     <th colspan="3">
+      {{mb_include module=system template=inc_object_notes object=$_plage}}
     	{{$_plage->debut|date_format:$dPconfig.time}} 
     	- {{$_plage->fin|date_format:$dPconfig.time}}
     	{{if $_plage->libelle}}: {{$_plage->libelle}}{{/if}}
