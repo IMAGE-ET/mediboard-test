@@ -64,8 +64,10 @@ foreach($evenements as $_evenement){
 	$class_evt = $_evenement->equipement_id ? "equipement" : "kine";
 
   $css_classes = array($element_prescription->_guid, 
-                       $category_prescription->_guid, 
-                       $class_evt);
+                       $category_prescription->_guid);
+	
+	$css_classes[] = ($_evenement->realise && !$print) ? "realise" : $class_evt;
+											 
   $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes);
   $event->draggable = true;
 	$planning->addEvent($event);

@@ -68,6 +68,7 @@ foreach($evenements as $_evenement){
   $css_classes = array($element_prescription->_guid, 
                        $_evenement->_ref_sejour->_guid, 
                        $_evenement->_ref_equipement->_guid);
+											 
 	if($_evenement->realise && $selectable){
 		$css_classes[] = "realise";
 	}
