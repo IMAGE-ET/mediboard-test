@@ -17,13 +17,12 @@ PlanningEvent = Class.create({
     var container = $(this.internal_id);
     if (!container) return;
 
-    var width = container.up("td").getWidth();
     var height = this.planning.getCellHeight() / 60;
    
     container.setStyle({
       top:    (this.minutes * height)+"px",
-      left:   (this.offset * width)+"px",
-      width:  (this.width * width - 1)+"px",
+      left:   (this.offset * 100)+"%",
+      width:  (this.width * 100)+"%",
       height: ((this.length * height) || 1)+"px"
     });
   },

@@ -19,7 +19,6 @@ Main.add(function() {
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop
   );
-  Event.observe(window, "resize", planning.updateEventsDimensions.bind(planning));
   
 	window["planning-{{$planning->guid}}"] = planning;
 });
