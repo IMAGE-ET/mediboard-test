@@ -20,13 +20,16 @@ $series = array();
 $ticks = array();
 $max = 1;
 
-for($i = 6; $i > 0; $i--) {
-  $from = mbDate("-$i MONTHS");
-  $to   = mbDate("-$i MONTHS +1 MONTH");
+$now = mbDate();
+$date = mbDate("-6 MONTHS");
+$i = 0;
+
+while($date < $now) {
+  $to = mbDate("+1 WEEK", $date);
   
   $where = array(
     "stock_id" => "= '{$product->_ref_stock_group->_id}'",
-    "product_delivery_trace.date_delivery" => "BETWEEN '$from' AND '$to'",
+    "product_delivery_trace.date_delivery" => "BETWEEN '$date' AND '$to'",
   );
   
   $ljoin = array(
@@ -42,18 +45,21 @@ for($i = 6; $i > 0; $i--) {
   }
   
   $max = max($max, $total);
-  $ticks[] = "$i mois";
+  $ticks[] = "Du ".mbDateToLocale($date)." au ".mbDateToLocale($to);
   $series[] = array(count($series), $total);
+  
+  $date = $to;
 }
 
 $data = array(
   "series" => array($series),
-  "options" => CFlotrGraph::merge("lines", array(
+  "options" => CFlotrGraph::merge("bars", array(
     "xaxis" => array("showLabels" => false, "ticks" => $ticks),
     "yaxis" => array(
       "ticks" => array(0 => "", $max => $max),
       "max" => $max * 1.5,
     ),
+    "mouse" => array("track" => true),
     "grid" => array("outlineWidth" => 1),
     "spreadsheet" => array("show" => false),
     "points" => array("show" => false),

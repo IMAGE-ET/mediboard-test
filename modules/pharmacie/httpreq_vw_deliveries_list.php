@@ -73,7 +73,7 @@ foreach ($deliveries as $_delivery) {
     $key = str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).$_delivery->date_dispensation;
   }
   else {
-    $key = $_delivery->date_dispensation.str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT);
+    $key = str_pad(mbDaysRelative($_delivery->date_dispensation, mbDate()), 20, " ", STR_PAD_RIGHT).str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT);
   }
   
   $deliveries_by_service[$service_id][$key] = $_delivery;
@@ -84,10 +84,7 @@ foreach ($deliveries as $_delivery) {
 }
 
 foreach($deliveries_by_service as &$_list) {
-  if ($order_by_product)
     ksort($_list);
-  else 
-    krsort($_list);
 }
 
 // Création du template
