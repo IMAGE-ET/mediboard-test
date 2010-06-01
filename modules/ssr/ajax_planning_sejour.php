@@ -50,7 +50,7 @@ foreach($evenements as $_evenement){
 	$element_prescription =& $_evenement->_ref_element_prescription;
   $element_prescription->loadRefCategory();
 	$category_prescription =& $element_prescription->_ref_category_prescription;
-  $title = $_evenement->_ref_element_prescription->_view;
+  $title = $category_prescription->_view;
 	
 	if($print){
 		$_evenement->loadRefTherapeute();

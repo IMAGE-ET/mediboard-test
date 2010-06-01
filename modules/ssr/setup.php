@@ -277,7 +277,12 @@ class CSetupssr extends CSetup {
             ADD `remarque` VARCHAR (255);";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.18";
+		$this->makeRevision("0.18");
+		$sql = "ALTER TABLE `bilan_ssr` 
+            ADD `brancardage` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.19";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

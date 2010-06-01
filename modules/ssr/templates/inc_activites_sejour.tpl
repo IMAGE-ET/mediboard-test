@@ -58,7 +58,6 @@ selectElement = function(line_id){
   
   $('div_other_cdarr').show();
 
-
   // Deselection de tous les codes cdarrs
   removeCdarrs();
 
@@ -230,6 +229,20 @@ Main.add(function(){
 <hr class="control_tabs" />
 
 <div id="add_ssr" style="display: none;">
+  <!-- Modification du bilan SSR, brancardage -->
+  <form name="editBilanSSR" method="post" action="?" onsubmit="return onSubmitFormAjax(this);">
+  	<input type="hidden" name="m" value="ssr" />
+    <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="bilan_id" value="{{$bilan->_id}}">
+	  <table class="form">
+	  	<tr>
+			  <th style="width: 94px">{{mb_label object=$bilan field=brancardage}}</th>
+			  <td>{{mb_field object=$bilan field=brancardage onchange="this.form.onsubmit();"}}</td>
+	    </tr> 
+	  </table>
+	</form>
+	
 	<form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
 	  <input type="hidden" name="m" value="ssr" />
 	  <input type="hidden" name="dosql" value="do_evenement_ssr_multi_aed" />
@@ -244,7 +257,7 @@ Main.add(function(){
     
 	  <table class="form">
 	  	<tr>
-	  	  <th style="width: 1%">{{mb_label object=$bilan field=entree}}</th>
+	  	  <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
 				<td>{{mb_value object=$bilan field=entree}}</td>
 			</tr>
 	    <tr>
@@ -306,7 +319,6 @@ Main.add(function(){
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line}}
-							
 	              <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
 	                {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
 										<!-- Boutons de type de code cdarr-->
@@ -315,15 +327,13 @@ Main.add(function(){
 										</button>
 	                {{/foreach}}
 	              </div>
-								
 	            {{/foreach}}
 	          {{/foreach}}
 	        {{/foreach}}  
-					
 					{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line}}
-              
+
                 <div id="cdarrs-{{$_line->_id}}" style="display : none;">
                   {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
                   

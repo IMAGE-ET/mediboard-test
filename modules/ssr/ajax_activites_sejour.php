@@ -96,22 +96,6 @@ foreach($categories as $_category){
 		$function->loadRefsUsers();
 		foreach($function->_ref_users as $_user){
 			 $executants[$_category->_id][] = $_user;
-      
-			/*
-			// On verifie sur le kine fait parti du plateau
-			if($_user->isKine()){
-				$technicien = new CTechnicien();
-				$technicien->kine_id = $_user->_id;
-				$technicien->plateau_id = $plateau->_id;
-			  if($technicien->countMatchingList()){
-			  	$executants[$_category->_id][] = $_user;
-			  }
-			} 
-			// Si le user n'est pas un kine, on le rajoute dans la liste
-			else {
-				$executants[$_category->_id][] = $_user;
-      }
-      */
 		}
 	}
 }

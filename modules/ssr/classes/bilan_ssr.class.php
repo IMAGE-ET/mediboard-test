@@ -20,6 +20,8 @@ class CBilanSSR extends CMbObject {
   var $technicien_id = null;
 	var $entree = null;
   var $sortie = null;
+	var $brancardage = null;
+	
   var $_activites = array();
 	
   // References
@@ -39,6 +41,7 @@ class CBilanSSR extends CMbObject {
 		$specs["technicien_id"]   = "ref class|CTechnicien";
     $specs["entree"] = "text helped";
     $specs["sortie"] = "text helped";
+		$specs["brancardage"] = "bool default|0";
     return $specs;
   }
 	
