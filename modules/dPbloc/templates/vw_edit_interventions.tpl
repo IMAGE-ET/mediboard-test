@@ -11,6 +11,7 @@
 <table class="main">
   <tr>
     <th colspan="2">
+      {{mb_include module=system template=inc_object_notes object=$plage}}
       <form name="editPlageTiming" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$plage->_spec}}">
         <input type="hidden" name="m" value="dPbloc" />
         <input type="hidden" name="dosql" value="do_plagesop_aed" />
