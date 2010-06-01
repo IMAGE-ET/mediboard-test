@@ -44,7 +44,7 @@ Main.add(function(){
               {{if $remaining == 0}}class="empty"{{/if}}
               >
               {{$services.$service_id}} 
-              <small style="min-width: 3em; display: inline-block; text-align: right;">({{$remaining}}{{if $dPconfig.pharmacie.show_totals_in_lists}}/{{$_deliveries|@count}}{{/if}})</small>
+              <small style="min-width: 3em; display: inline-block; text-align: right;">({{$remaining}}{{if $display_delivered}}/{{$_deliveries|@count}}{{/if}})</small>
             </a>
           </li>
         {{/foreach}}

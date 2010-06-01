@@ -39,22 +39,30 @@ $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:
 $where['quantity'] = " > 0";
 //$where[] = "`order` != '1' OR `order` IS NULL";
 
+if (!$display_delivered) {
+  //$where['date_delivery'] = "IS NULL";
+}
+
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 200);
 
-$stocks_service = array();
-
-// Creation d'un tableau de patient
-if (count($deliveries)) {
-  foreach($deliveries as $_delivery){
-  	//if ($display_delivered || !$_delivery->isDelivered()) {
-	    $_delivery->loadRefsFwd();
-	    $_delivery->loadRefsBack();
-	    $_delivery->_ref_stock->loadRefsFwd();
-      
-      $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_delivery->service_id);
-    //}
+foreach($deliveries as $_id => $_delivery) {
+  $delivered = /*$_delivery->date_delivery || */$_delivery->isDelivered();
+  if (!$delivered || ($delivered && $display_delivered)) {
+    // can't touch this !
   }
+  else {
+    unset($deliveries[$_id]);
+  }
+}
+
+$stocks_service = array();
+foreach($deliveries as $_delivery){
+  $_delivery->loadRefsFwd();
+  $_delivery->loadRefsBack();
+  $_delivery->_ref_stock->loadRefsFwd();
+  
+  $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_delivery->service_id);
 }
 
 $services["none"] = new CService;
@@ -73,18 +81,20 @@ foreach ($deliveries as $_delivery) {
     $key = str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).$_delivery->date_dispensation;
   }
   else {
-    $key = str_pad(mbDaysRelative($_delivery->date_dispensation, mbDate()), 20, " ", STR_PAD_RIGHT).str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT);
+    $key = str_pad(mbDaysRelative($_delivery->date_dispensation, mbDate())+1, 20, " ", STR_PAD_RIGHT).
+           str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).
+           $_delivery->_id;
+  }
+  
+  if (/*$_delivery->date_delivery || */$_delivery->isDelivered()) {
+    $delivered_counts[$service_id]++;
   }
   
   $deliveries_by_service[$service_id][$key] = $_delivery;
-  
-  if ($_delivery->isDelivered()) {
-    $delivered_counts[$service_id]++;
-  }
 }
 
 foreach($deliveries_by_service as &$_list) {
-    ksort($_list);
+  ksort($_list);
 }
 
 // Création du template
@@ -95,6 +105,7 @@ $smarty->assign('deliveries_by_service', $deliveries_by_service);
 $smarty->assign('stocks_service', $stocks_service);
 $smarty->assign('services',       $services);
 $smarty->assign('delivered_counts', $delivered_counts);
+$smarty->assign('display_delivered', $display_delivered);
 
 if ($mode == "nominatif")
   $smarty->display('inc_deliveries_nominatif_list.tpl');
