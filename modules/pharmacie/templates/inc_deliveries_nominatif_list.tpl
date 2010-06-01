@@ -11,13 +11,18 @@
 <script type="text/javascript">
 Main.add(function(){
   Control.Tabs.create("nominatif-deliveries-tabs", true);
-  $$('a[href=#list-nominatives] small')[0].update('({{$deliveries|@count}})');
+  $$('a[href=#list-nominatives] small')[0].update('({{$deliveries|@count}})'); 
+  
+  var tabs = $("nominatif-deliveries-tabs");
+  Event.observe(window, "scroll", function(){
+    tabs.setStyle({marginTop: document.viewport.getScrollOffsets().top+"px"});
+  });
 });
 </script>
 
 <table class="main layout">
   <tr>
-    <td style="width: 0.1%; white-space: nowrap;">
+    <td style="white-space: nowrap; width: 0.1%; ">
       <form name="print-plan-cueillette-nominatif" action="" method="get" onsubmit="return printPreparePlan(this)">
         <input type="hidden" name="m" value="pharmacie" />
         <input type="hidden" name="a" value="print_prepare_plan" />
@@ -25,12 +30,12 @@ Main.add(function(){
         
         <button type="submit" class="print" style="font-weight: normal;">Plan cueillette</button>
       
-        <ul class="control_tabs_vertical" id="nominatif-deliveries-tabs">
+        <ul class="control_tabs_vertical" id="nominatif-deliveries-tabs" style="font-size: 0.9em;">
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <li>
             {{math assign="remaining" equation="x-y" x=$_deliveries|@count y=$delivered_counts.$service_id}}
             
-            <input type="checkbox" style="float: right; margin: 4px;" 
+            <input type="checkbox" style="float: right; margin: 3px;" 
                    name="service_id[]" value="{{$service_id}}"
                    title="Cocher pour inclure ce service dans le plan de cueillette" />
                    
@@ -39,7 +44,7 @@ Main.add(function(){
               {{if $remaining == 0}}class="empty"{{/if}}
               >
               {{$services.$service_id}} 
-              <small style="min-width: 4em; display: inline-block; text-align: right;">({{$remaining}}/{{$_deliveries|@count}})</small>
+              <small style="min-width: 3em; display: inline-block; text-align: right;">({{$remaining}}{{if $dPconfig.pharmacie.show_totals_in_lists}}/{{$_deliveries|@count}}{{/if}})</small>
             </a>
           </li>
         {{/foreach}}
@@ -55,7 +60,9 @@ Main.add(function(){
           {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
             <th>Stock<br />pharmacie</th>
           {{/if}}
-          <th>Stock<br />service</th>
+          {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+            <th>Stock<br />service</th>
+          {{/if}}
           <th><button type="button" onclick="deliverAll('list-nominatives')" class="tick">Tout délivrer</button></th>
           <th>{{mb_title class=CProduct field=_unit_title}}</th>
         </tr>

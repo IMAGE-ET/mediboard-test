@@ -76,10 +76,10 @@ class CProduct extends CMbObject {
     $specs['code']          = 'str maxLength|32 seekable protected';
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
-    $specs['quantity']      = 'num notNull min|0';
-    $specs['item_title']    = 'str autocomplete';
-    $specs['unit_quantity'] = 'float min|0';
-    $specs['unit_title']    = 'str autocomplete';
+    $specs['quantity']      = 'num notNull min|0 show|0';
+    $specs['item_title']    = 'str autocomplete show|0';
+    $specs['unit_quantity'] = 'float min|0 show|0';
+    $specs['unit_title']    = 'str autocomplete show|0';
     $specs['packaging']     = 'str autocomplete';
     $specs['renewable']     = 'enum list|0|1|2';
     $specs['cancelled']     = 'bool default|0 show|0';
@@ -90,7 +90,7 @@ class CProduct extends CMbObject {
     $specs['_unit_title']   = 'str';
     $specs['_unique_usage'] = 'bool';
     $specs['_unit_quantity']= 'float min|0';
-    $specs['_quantity']     = 'str';
+    $specs['_quantity']     = 'str show|1';
     $specs['_consumption']  = 'num show|1';
     return $specs;
   }

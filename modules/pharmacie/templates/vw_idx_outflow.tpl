@@ -33,13 +33,14 @@ function checkOutflow(form) {
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="dosql" value="do_delivery_aed" />
   <input type="hidden" name="date_dispensation" value="now" />
+  <input type="hidden" name="manual" value="1" />
   
   <table class="table tbl">
     <tr>
       <th>{{mb_title class=CProductStockGroup field=product_id}}</th>
       <th>{{mb_title class=CProductDelivery field=quantity}}</th>
       <th>{{mb_title class=CProductDelivery field=date_delivery}}</th>
-      {{* <th>{{mb_title class=CProductDelivery field=service_id}}</th> *}}
+      <th>{{mb_title class=CProductDelivery field=service_id}}</th>
       <th>{{mb_title class=CProductDelivery field=comments}}</th>
       <th style="width: 0.1%;"></th>
     </tr>
@@ -53,11 +54,11 @@ function checkOutflow(form) {
         </td>
         <td>{{mb_value object=$_delivery field=quantity}}</td>
         <td>{{mb_value object=$_delivery field=date_delivery}}</td>
-        {{* <td>
+        <td>
           {{if $_delivery->service_id}}
             {{mb_value object=$_delivery field=service_id}}
           {{/if}}
-        </td> *}}
+        </td>
         <td>{{mb_value object=$_delivery field=comments}}</td>
         <td></td>
       </tr>
@@ -70,14 +71,14 @@ function checkOutflow(form) {
       <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true"}}</td>
       <td>{{mb_field object=$delivrance field=quantity increment=true form="newOutflow" size=2}}</td>
       <td>{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
-      {{* <td>
+      <td>
         <select name="service_id">
           <option value=""> &ndash {{tr}}CService{{/tr}}</option>
           {{foreach from=$list_services item=_service}}
             <option value="{{$_service->_id}}">{{$_service}}</option>
           {{/foreach}}
         </select>
-      </td> *}}
+      </td>
       <td>{{mb_field object=$delivrance field=comments prop="str"}}</td>
       <td><button class="tick" type="submit">{{tr}}Create{{/tr}}</button></td>
     </tr>

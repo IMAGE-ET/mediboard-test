@@ -22,7 +22,7 @@ $delivrance->date_delivery = mbDateTime();
 $date_max = mbDate("+1 DAY", $date_max);
 $where = array(
   "date_delivery" => "BETWEEN '$date_min' AND '$date_max'",
-  "service_id IS NULL OR service_id = 0",
+  "manual = '1'",
 );
 
 $list_outflows = $delivrance->loadList($where, "service_id, date_delivery");

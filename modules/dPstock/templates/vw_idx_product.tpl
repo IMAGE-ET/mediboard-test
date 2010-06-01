@@ -28,6 +28,8 @@ function filterReferences(form) {
 
 </script>
 
+{{assign var=infinite_stock_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="10">
@@ -108,9 +110,16 @@ function filterReferences(form) {
             {{/if}}
           </tr>
           <tr>
-            <th class="category" colspan="4">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
+            <th class="category" colspan="4">
+              {{if !$infinite_stock_service}}
+                {{tr}}CProduct-back-stocks_service{{/tr}}
+              {{else}}
+                {{tr}}CProduct-back-endowments{{/tr}}
+              {{/if}}
+            </th>
           </tr>
           {{foreach from=$product->_ref_stocks_service item=curr_stock}}
+            {{if !$infinite_stock_service}}
             <tr>
               <td>
                 <a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id={{$curr_stock->_id}}">
@@ -121,10 +130,11 @@ function filterReferences(form) {
               <td></td>
               <td>{{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
             </tr>
+            {{/if}}
             {{if $curr_stock->_ref_endowment_items|@count}}
               <tr>
                 <td colspan="10" style="padding-left: 2em;">
-                  Dotations:
+                  {{if !$infinite_stock_service}}Dotations:{{/if}}
                   {{foreach from=$curr_stock->_ref_endowment_items item=_endowment name=endowment}}
                     <strong>{{$_endowment->_ref_endowment->name}}</strong> ({{$_endowment->quantity}}){{$smarty.foreach.endowment.last|ternary:'':','}}
                   {{/foreach}}
@@ -133,7 +143,13 @@ function filterReferences(form) {
             {{/if}}
           {{foreachelse}}
             <tr>
-              <td colspan="4">{{tr}}CProductStockService.none{{/tr}}</td>
+              <td colspan="4">
+              {{if !$infinite_stock_service}}
+                {{tr}}CProductStockService.none{{/tr}}
+              {{else}}
+                {{tr}}CProductEndowment.none{{/tr}}
+              {{/if}}
+              </td>
             </tr>
           {{/foreach}}
         </table>

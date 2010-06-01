@@ -422,7 +422,8 @@ var ProgressiveCalendar = Class.create({
       left: pos.left+'px'
     });
     
-    if (container = $(this.options.container))
+    container = $(this.options.container);
+    if (container)
       container.insert(this.picker);
     else
       this.insert({after: this.picker});
@@ -546,11 +547,13 @@ var Calendar = {
     var datepicker = new Control.DatePicker(elementView, options);
     
     if (options.editable) {
-      elementView.mask(datepicker.options.currentFormat.replace(/[a-z]/gi, "9"));
-      elementView.observe("ui:change", (function(){
-        var date = DateFormat.parse(this.altElement.value, this.options.currentFormat);
+      var onChange = (function(){
+        var date = DateFormat.parse(elementView.value, this.options.currentFormat);
         this.element.value = DateFormat.format(date, this.options.altFormat);
-      }).bindAsEventListener(datepicker));
+      }).bindAsEventListener(datepicker);
+      
+      elementView.mask(datepicker.options.currentFormat.replace(/[a-z]/gi, "9"));
+      elementView.observe("ui:change", onChange).observe("focus", onChange);
       elementView.writeAttribute("readonly", false);
     }
     

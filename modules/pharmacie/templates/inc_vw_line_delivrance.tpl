@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=id value=$curr_delivery->_id}}
+  
 {{if $curr_delivery->patient_id}}
   <td>{{$curr_delivery->_ref_patient->_view}}</td>
 {{/if}}
@@ -16,9 +18,13 @@
   <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
     {{$curr_delivery->_ref_stock->_view}}
   </span>
+  {{if $curr_delivery->comments}}
+   - [{{$curr_delivery->comments}}]
+  {{/if}}
 </td>
 <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
 <td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
+
 {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 <td style="text-align: center;">
   <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_delivery->_ref_stock->_id}}" title="{{tr}}CProductStockGroup-title-modify{{/tr}}">
@@ -26,13 +32,16 @@
   </a>
 </td>
 {{/if}}
+
+{{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 <td style="text-align: center;">
-  {{assign var=id value=$curr_delivery->_id}}
   {{assign var=stock value=$stocks_service.$id}}
   <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$stock->_id}}" title="{{tr}}CProductStockService-title-modify{{/tr}}">
     {{$stock->quantity}}
   </a>
 </td>
+{{/if}}
+
 <td>
   <table class="layout">
   {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
@@ -79,13 +88,13 @@
           <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
           <input type="hidden" name="date_delivery" value="now" />
           {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=2 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
-          <input type="text" name="code" value="" size="12" />
+          <input type="text" name="code" value="" size="8" />
           <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
         </form>
       </td>
     </tr>
   </table>
 </td>
-<td>
+<td class="text">
   {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
 </td>

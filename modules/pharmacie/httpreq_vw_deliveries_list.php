@@ -34,7 +34,7 @@ if ($mode == "global")
 else
   $where['patient_id'] = "IS NOT NULL";
 
-$where['service_id'] = CSQLDataSource::prepareIn(array_keys($services));
+$where[] = 'service_id '.CSQLDataSource::prepareIn(array_keys($services))." OR service_id IS NULL OR service_id = ''";
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
 //$where[] = "`order` != '1' OR `order` IS NULL";
@@ -57,17 +57,37 @@ if (count($deliveries)) {
   }
 }
 
+$services["none"] = new CService;
+$services["none"]->_view = "";
+
 $service_keys = array_keys($services);
 $deliveries_by_service = array_fill_keys($service_keys, array());
 $delivered_counts = array_fill_keys($service_keys, 0);
 
+$order_by_product = false;
+
 foreach ($deliveries as $_delivery) {
-  $service_id = $_delivery->service_id;
-  $deliveries_by_service[$service_id][$_delivery->_id] = $_delivery;
-        
+  $service_id = $_delivery->service_id ? $_delivery->service_id : 'none';
+  
+  if ($order_by_product) {
+    $key = str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).$_delivery->date_dispensation;
+  }
+  else {
+    $key = $_delivery->date_dispensation.str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT);
+  }
+  
+  $deliveries_by_service[$service_id][$key] = $_delivery;
+  
   if ($_delivery->isDelivered()) {
     $delivered_counts[$service_id]++;
   }
+}
+
+foreach($deliveries_by_service as &$_list) {
+  if ($order_by_product)
+    ksort($_list);
+  else 
+    krsort($_list);
 }
 
 // Création du template
