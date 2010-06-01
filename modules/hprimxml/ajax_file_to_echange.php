@@ -78,10 +78,12 @@ if (!$do_import) {
     $object = new $echg_hprim->object_class;
     $object->load($echg_hprim->object_id);
     $object->facture = 1;
-    $object->store();
+    $msg = $object->store();
 
     // Suppression du fichier sur le disque
-    unlink("$path/$_file");
+    if (!$msg) {
+      unlink("$path/$_file");
+    }
     
     $counter++;
     
