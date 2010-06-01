@@ -25,6 +25,6 @@ if(!$element_prescription->_id && $element_prescription_id){
 $smarty = new CSmartyDP();
 $smarty->assign("element_prescription", $element_prescription);
 $smarty->assign("element_prescription_to_cdarr", $element_prescription_to_cdarr);
-$smarty->display("inc_form_element_cdarr.tpl");
+$smarty->display("inc_form_cdarr.tpl");
 
 ?>
