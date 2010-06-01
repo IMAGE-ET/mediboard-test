@@ -16,6 +16,10 @@
 <table class="form">
   <tr>
     <th class="category text" colspan="2">
+      {{mb_include module=system template=inc_object_notes object=$_plage}}
+      <script type="text/javascript">
+      initNotes();
+      </script>
       <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
         {{if $_plage->chir_id}}
         Chir : Dr {{$_plage->_ref_chir->_view}}

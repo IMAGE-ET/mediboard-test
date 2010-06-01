@@ -100,6 +100,7 @@ Main.add(function(){
       </form>
       
       <table id="planningBloc">
+      {{assign var=typeVuePlanning value="day"}}
       {{assign var=curr_day value=$date}}
       {{include file="inc_planning_day.tpl"}}
       </table>

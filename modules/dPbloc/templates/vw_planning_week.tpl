@@ -59,6 +59,7 @@ function showAlerte() {
   <tr>
     <td class="greedyPane">
       <table id="planningBloc">
+      {{assign var=typeVuePlanning value="week"}}
       {{foreach from=$listDays key=curr_day item=plagesPerDay}}
         {{include file="inc_planning_day.tpl"}}
       {{/foreach}}
