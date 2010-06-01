@@ -22,7 +22,7 @@ function submitSejour(){
 }
 
 function redirect() {
-	document.location.href="?m=dPurgences&tab=vw_idx_rpu";
+	//document.location.href="?m=dPurgences&tab=vw_idx_rpu";
 }
 
 function submitSejourWithSortieReelle(callback){
