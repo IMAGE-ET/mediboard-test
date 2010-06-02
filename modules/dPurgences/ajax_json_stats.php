@@ -49,6 +49,7 @@ $where = array(
   "sejour.entree" => null, // Doit toujours etre redefini
   "sejour.type" => "= 'urg'",
   "sejour.group_id" => "= '$group->_id'",
+  "rpu.rpu_id" => "IS NOT NULL",
 );
 
 $ljoin = array(
