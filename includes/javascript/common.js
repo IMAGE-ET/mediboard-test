@@ -106,6 +106,14 @@ var References = {
   }
 };
 
+/** l10n functions */
+function $T() {
+  var args = $A(arguments),
+      key = args[0];
+  args[0] = (window.locales ? (window.locales[key] || key) : key);
+  return printf.apply(null, args);
+}
+
 function closeWindowByEscape(e) {
   if(Event.key(e) == 27){
     e.stop();
