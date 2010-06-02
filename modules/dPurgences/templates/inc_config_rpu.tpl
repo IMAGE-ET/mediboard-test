@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
   Main.add(function() {
-    getForm("editConfig-RPU")["dPurgences[sibling_hours]"].addSpinner({min:1, max:24});
+    getForm("editConfig-RPU")["dPurgences[sibling_hours]"].addSpinner({min:0, max:24});
   });
 </script>
 
