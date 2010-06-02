@@ -728,9 +728,11 @@ class CPrescription extends CMbObject {
     
     $this->_ref_prescription_line_mixes = $prescription_line_mix->loadList($where);
 		
-		foreach($this->_ref_prescription_line_mixes as $_line_mix){
-		  $this->_ref_prescription_line_mixes_by_type[$_line_mix->type_line][] = $_line_mix;
-	  }
+		if(count($this->_ref_prescription_line_mixes)){
+			foreach($this->_ref_prescription_line_mixes as $_line_mix){
+			  $this->_ref_prescription_line_mixes_by_type[$_line_mix->type_line][] = $_line_mix;
+		  }
+		}
 	}
   
   /*
