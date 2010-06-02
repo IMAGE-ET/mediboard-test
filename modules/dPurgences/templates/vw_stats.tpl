@@ -64,6 +64,7 @@ function drawGraphs(data) {
       series.pop();
     }
     
+    $("graph-legend").update();
     Flotr.draw($('stats-'+pair.key), series, d.options);
   });
 }
