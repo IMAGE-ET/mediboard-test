@@ -700,14 +700,6 @@ var DOM = {
 
 DOM.tags.each(DOM.defineTag);
 
-/** l10n functions */
-function $T() {
-  var args = $A(arguments),
-      key = args[0];
-  args[0] = (window.locales ? (window.locales[key] || key) : key);
-  return printf.apply(null, args);
-}
-
 // Replacements for the javascript alert() and confirm()
 var Modal = {
   alert: function(message, options) {
