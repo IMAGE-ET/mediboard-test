@@ -191,6 +191,31 @@ switch ($axe) {
       }
     }
     break;
+    
+  // Séjour sans RPU
+  case "without_rpu":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Séjours d'urgence sans RPU")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array_merge(array(null));
+    foreach($areas as $key => $value) {
+      $where["rpu.rpu_id"] = "IS NULL";
+      $series[$key] = array('data' => array());
+      
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+    }
+    break;
 }
 
 // Ticks

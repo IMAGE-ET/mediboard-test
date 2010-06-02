@@ -27,6 +27,7 @@ $axes = array(
   "destination" => CAppUI::tr("CRPU-destination"),
   "orientation" => CAppUI::tr("CRPU-orientation"),
   "transport" => CAppUI::tr("CRPU-transport"),
+  "without_rpu" => "Séjour d'urgence sans RPU",
 );
 
 $smarty = new CSmartyDP();
