@@ -87,10 +87,15 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     return $result;
   }
   
-  static function writeLocaleFile($language = null) {
+  static function writeLocaleFile($language = null, $mobile_locales = null) {
     global $version, $locales;
+		
     
     $current_locales = $locales;
+		if($mobile_locales) {
+			$current_locales = $mobile_locales;
+			$locales = $mobile_locales;
+		} 
     
     if (!$language) {
       $languages = array();
@@ -100,13 +105,19 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     else {
       $languages = array($language);
     }
-    
-    foreach($languages as $language) {
-      $localeFiles = array_merge(
-        glob("./locales/$language/*.php"), 
-        glob("./modules/*/locales/$language.php")
-      );
-      
+    if ($mobile_locales) {
+    	 foreach($languages as $language) {
+         $localeFiles = glob(".mobile/modules/locales/$language.php") ;
+			 }
+    }
+	  else{
+      foreach($languages as $language) {
+        $localeFiles = array_merge(
+          glob("./locales/$language/*.php"), 
+          glob("./modules/*/locales/$language.php")
+        );
+		  }
+		}
       foreach ($localeFiles as $localeFile) {
         if (basename($localeFile) != "meta.php") {
           require $localeFile;
@@ -114,6 +125,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       }
       
       $path = "./tmp/locales.$language.js";
+			if($mobile_locales) $path = "./tmp/mobile_locales.$language.js";
     
       if ($fp = fopen($path, 'w')) {
         // The callback will filter on empty strings (without it, "0" will be removed too).
@@ -125,17 +137,21 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         fwrite($fp, $script);
         fclose($fp);
       }
-    }
     
-    $locales = $current_locales;
+		$locales = $current_locales;
+    
+		
   }
 
-  static function getLocaleFile() {
+  static function getLocaleFile($mobile_locales = null) {
+  	
     $language = CAppUI::pref("LOCALE");
-    $path = "./tmp/locales.$language.js";
+		$path = "./tmp/locales.$language.js";
+		if($mobile_locales) $path = "./tmp/mobile_locales.$language.js";
+    
   
     if (!is_file($path)) {
-      self::writeLocaleFile($language);
+      self::writeLocaleFile($language, $mobile_locales);
     }
     
     return $path;
