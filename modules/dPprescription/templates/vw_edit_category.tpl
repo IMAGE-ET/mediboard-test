@@ -62,17 +62,21 @@ onSelectCategory = function(category_prescription_id, selected_tr){
 }
 
 // Refresh elements
-refreshListElement = function(element_prescription_id, category_prescription_id, without_refresh_cdarr){
+refreshListElement = function(element_prescription_id, category_prescription_id, without_refresh_cdarr, without_refresh){
   var url = new Url("dPprescription", "httpreq_vw_list_element");
 	url.addParam("category_prescription_id", category_prescription_id);
 	url.addParam("element_prescription_id", element_prescription_id);
 	url.requestUpdate("elements-list", { onComplete: function(){
-	  refreshFormElement(element_prescription_id, category_prescription_id);
-		if(!without_refresh_cdarr){
-		  refreshListCdarr(null, element_prescription_id);
+    if(!without_refresh){
+		  refreshFormElement(element_prescription_id, category_prescription_id);
+			if(!without_refresh_cdarr){
+			  refreshListCdarr(null, element_prescription_id);
+			}
 		}
+		
 	} } );
 }
+
 
 refreshFormElement = function(element_prescription_id, category_prescription_id, mode_duplication){
   var url = new Url("dPprescription","httpreq_vw_form_element");
@@ -112,6 +116,39 @@ onSelectCdarr = function(element_prescription_to_cdarr_id, element_prescription_
   if(selected_tr){
     selected_tr.addUniqueClassName('selected');
   }
+}
+
+// refresh des executants
+refreshFormExecutantFunction = function(function_category_prescription_id, category_id){
+  var url = new Url("dPprescription", "httpreq_vw_form_executant_function");
+	url.addParam("function_category_prescription_id", function_category_prescription_id);
+	url.addParam("category_id", category_id);
+	url.requestUpdate("element-form", { 
+	  onComplete: function(){
+		  if($('tr-CFunctionCategoryPrescription-'+function_category_prescription_id)){
+			  $('tr-CFunctionCategoryPrescription-'+function_category_prescription_id).addUniqueClassName('selected');
+      }
+		  elements_executants_tab.setActiveTab('executants_function');
+			$("cdarr-form").update('');
+			$("cdarrs-list").update('');
+		}
+	});
+}
+
+refreshFormExecutant = function(executant_prescription_line_id, category_id){
+  var url = new Url("dPprescription", "httpreq_vw_form_executant");
+  url.addParam("executant_prescription_line_id", executant_prescription_line_id);
+  url.addParam("category_id", category_id);
+  url.requestUpdate("element-form", { 
+    onComplete: function(){
+      if($('tr-CExecutantPrescriptionLine-'+executant_prescription_line_id)){
+			  $('tr-CExecutantPrescriptionLine-'+executant_prescription_line_id).addUniqueClassName('selected');
+			}
+			elements_executants_tab.setActiveTab('executants');
+      $("cdarr-form").update('');
+      $("cdarrs-list").update('');
+    }
+  });
 }
 
 </script>
