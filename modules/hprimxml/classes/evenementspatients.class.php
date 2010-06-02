@@ -46,7 +46,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
 
   function generateEnteteMessage() {
-    parent::generateEnteteMessage("evenementsPatients");
+    parent::generateEnteteMessage("evenementsPatients", false);
   }
   
   static function getActionEvenement($query, $node) {

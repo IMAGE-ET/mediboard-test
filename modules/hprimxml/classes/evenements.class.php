@@ -9,10 +9,11 @@
  */
 
 class CHPrimXMLEvenements extends CHPrimXMLDocument {
-  function generateEnteteMessage($type) {
+  function generateEnteteMessage($type, $version = true) {
     $evenements = $this->addElement($this, $type, null, "http://www.hprim.org/hprimXML");
-    //$this->addAttribute($evenements, "version", CAppUI::conf("hprimxml $this->evenement version"));
-    //$this->addAttribute($evenements, "version", "1.05");
+    if ($version) {
+      $this->addAttribute($evenements, "version", CAppUI::conf("hprimxml $this->evenement version"));
+    }
     
     $this->addEnteteMessage($evenements);
   }
