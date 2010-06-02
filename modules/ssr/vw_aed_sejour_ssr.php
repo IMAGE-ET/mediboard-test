@@ -95,6 +95,17 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPplanningOp')->edit || 
   $AppUI->_ref_user->isFromType(array("Infirmière"));
 
+$can_edit_prescription = $AppUI->_ref_user->isPraticien() || $AppUI->_ref_user->isAdmin();
+
+// Suppression des categories vides
+if(!$can_edit_prescription){
+	foreach($categories as $_cat_id => $_category){
+		if(!array_key_exists($_cat_id, $lines)){
+		  unset($categories[$_cat_id]);	
+		}
+	}
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -110,6 +121,6 @@ $smarty->assign("prats"               , $prats);
 $smarty->assign("categories"          , $categories);
 $smarty->assign("prescription_SSR"    , $prescription_SSR);
 $smarty->assign("lines"               , $lines);
-
+$smarty->assign("can_edit_prescription", $can_edit_prescription);
 $smarty->display("vw_aed_sejour_ssr.tpl");
 ?>

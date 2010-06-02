@@ -266,7 +266,7 @@ Main.add(function(){
 	    </tr>
 	    <tr>
 	      <th>Catégories</th>
-	      <td>
+	      <td class="text">
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line name=category}}

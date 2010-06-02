@@ -75,16 +75,18 @@ updateBilanId = function(bilan_id){
 }
 
 Main.add( function(){
-  {{foreach from=$categories item=_category}}
-	  var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
-	  url.addParam("category", "{{$_category->chapitre}}");
-		url.addParam("category_id", "{{$_category->_id}}");
-	  url.autoComplete("search_{{$_category->_guid}}_libelle", "{{$_category->_guid}}_auto_complete", {
-		  dropdown: true,
-	    minChars: 2,
-			updateElement: function(element) { updateFieldsElementSSR(element, getForm('search_{{$_category->_guid}}'), '{{$_category->_id}}') }
-	  } );
-  {{/foreach}}
+  {{if $can_edit_prescription}}
+	  {{foreach from=$categories item=_category}}
+		  var url = new Url("dPprescription", "httpreq_do_element_autocomplete");
+		  url.addParam("category", "{{$_category->chapitre}}");
+			url.addParam("category_id", "{{$_category->_id}}");
+		  url.autoComplete("search_{{$_category->_guid}}_libelle", "{{$_category->_guid}}_auto_complete", {
+			  dropdown: true,
+		    minChars: 2,
+				updateElement: function(element) { updateFieldsElementSSR(element, getForm('search_{{$_category->_guid}}'), '{{$_category->_id}}') }
+		  } );
+	  {{/foreach}}
+	{{/if}}
 	
   var oFormBilanSSR = getForm("Edit-CBilanSSR");
 	
@@ -150,19 +152,28 @@ Main.add( function(){
 		    {{foreach from=$categories item=_category}}
 		      {{assign var=category_id value=$_category->_id}}
 		      <tr>
-		        <th style="width: 1%;">
-		        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
-					  </th>
-		        <td>
-		          <form name="search_{{$_category->_guid}}" action="?">
-		            <input type="text" name="libelle" value="" class="autocomplete" />
-		            <div style="display:none;" class="autocomplete" id="{{$_category->_guid}}_auto_complete"></div>
-		          </form>
-		        </td>
+		        {{if $can_edit_prescription}}
+	            <th style="width: 1%;">
+			        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+						  </th>
+			        <td>
+			        	<form name="search_{{$_category->_guid}}" action="?">
+			            <input type="text" name="libelle" value="" class="autocomplete" />
+			            <div style="display:none;" class="autocomplete" id="{{$_category->_guid}}_auto_complete"></div>
+			          </form>
+							</td>
+						{{else}}
+						  <td></td>
+							<th style="text-align: left;">
+							  <strong>
+						    <span onmouseover="ObjectTooltip.createEx(this, '{{$_category->_guid}}')">{{$_category->_view}}</span>
+								</strong>
+              </th>
+						{{/if}}
 		      </tr>
 					<tbody  id="lines-{{$category_id}}">
 						{{assign var=full_line_id value=""}}
-              {{include file="inc_list_lines.tpl" nodebug=true}}
+            {{include file="inc_list_lines.tpl" nodebug=true}}
 					</tbody>
 			  {{foreachelse}}
         <tr>
