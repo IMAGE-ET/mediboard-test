@@ -77,6 +77,13 @@ showHeader();
   Mediboard propose un script shell permettant d'établir ses permissions de façon 
   automatique. C'est le bon moment pour exécuter ce script si ce n'est pas déjà fait !
   <pre>sh [racine/de/mediboard/]shell/setup.sh</pre>
+  Si cette exécution pose problème, essayez de l'exécuter avec le paramètre suivant :
+  <pre>sh [racine/de/mediboard/]shell/setup.sh -g [groupe apache]</pre>
+  Exemples de valeurs pour [groupe apache] :
+  <ul>
+    <li>Sur Ubuntu : www-data</li>
+    <li>Sur Mac Os X : _www</li>
+  </ul>
 </div>
 
 <table class="tbl">
