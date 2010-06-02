@@ -107,7 +107,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
     if ($mobile_locales) {
     	 foreach($languages as $language) {
-         $localeFiles = glob(".mobile/modules/locales/$language.php") ;
+         $localeFiles = glob("./mobile/modules/locales/$language.php") ;
 			 }
     }
 	  else{
@@ -155,5 +155,5 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
     
     return $path;
-  }
+	}
 }
