@@ -86,8 +86,9 @@ Class.extend(Autocompleter.Base, {
 
       this.stopIndicator();
       this.update.scrollTop = 0;
-      //this.index = -1;
-      this.index = 0;
+      
+      // was "this.index = 0;"
+      this.index = this.options.dontSelectFirst ? -1 : 0;
 
       if(this.entryCount==1 && this.options.autoSelect) {
         this.selectEntry();
@@ -176,13 +177,13 @@ Class.extend(Autocompleter.Base, {
       if (-1 != tp && tp < nextTokenPos) nextTokenPos = tp;
     }
     return (this.tokenBounds = [prevTokenPos + 1, nextTokenPos]);
-  }/*,
+  },
   selectEntry: function() {
     this.active = false;
     if(this.index > -1){ 
       this.updateElement(this.getCurrentEntry());
     }
-  }*/
+  }
 });
 
 Element.addMethods({

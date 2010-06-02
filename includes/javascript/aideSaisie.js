@@ -100,10 +100,10 @@ var AideSaisie = {
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView})
         ).hide(),
-        list = $(this.searchField.id + "_auto_complete").setStyle({marginTop: "-1px"})
+        list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
       
-      container.
+      this.searchField.up().
         observe('mousemove', function(){toolbar.show()}).
         observe('mouseout',  function(){toolbar.hide()})/*.
         observe('click',     function(){toolbar.hide()}).
@@ -137,8 +137,9 @@ var AideSaisie = {
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
           return query;
         },
+        dontSelectFirst: true,
         onAfterShow: function(element, update){
-          if (update.select("li").length == 0) {
+          if (update.select("li[title]").length == 0) {
             update.hide();
           }
         },
@@ -162,13 +163,18 @@ var AideSaisie = {
       
       // Grid mode 
       var gridMode = function(e) {
-        var options = this.options, fragment = "", dependValue;
-        var url = new Url('dPcompteRendu', 'aides_saisie_grid');
+        var options = this.options, 
+            fragment = "", 
+            dependValue,
+            url = new Url('dPcompteRendu', 'aides_saisie_grid');
         
-        if (dependValue = $V(options.dependField1)) {
+        dependValue = $V(options.dependField1);
+        if (dependValue) {
           fragment += options.objectClass+"-"+dependValue;
         }
-        if (dependValue = $V(options.dependField2)) {
+        
+        dependValue = $V(options.dependField2);
+        if (dependValue) {
           fragment += (fragment ? "," : "") + options.objectClass+"-"+dependValue;
         }
         
@@ -216,8 +222,6 @@ var AideSaisie = {
       
       // We wrap the textarea with the new container
       this.searchField.insert({after: container});
-      
-      container.insert({top: this.searchField.next('div.grippie-h')}).insert({top: this.searchField});
       
       // We simulate the blur catch
       if (this.options.validateOnBlur) {

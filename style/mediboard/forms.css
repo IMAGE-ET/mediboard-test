@@ -546,8 +546,9 @@ div.dropdown-trigger div {
 
 .textarea-helped .toolbar {
   position: absolute;
-  bottom: 11px;
+  bottom: 0px;
   right: 0px;
+  margin: 2px;
   padding: 2px;
   vertical-align: middle;
   text-align: right;
@@ -576,7 +577,7 @@ div.dropdown-trigger div {
   position: absolute;
   height: 13px;
   width: 13px;
-  bottom: 6px;
+  bottom: 0px;
   margin: 4px;
   background-image: url(../../images/icons/throbber.gif);
   background-position: 100% -20px;
