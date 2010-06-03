@@ -1,14 +1,14 @@
-<?php /* $Id: httpreq_do_add_insee.php 2342 2007-07-19 14:24:59Z mytto $ */
+<?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision: 2342 $
-* @author SARL OpenXtrem
-*/
+ * @package Mediboard
+ * @subpackage dPpatients
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkRead();
 
 $patient_id = CValue::get("patient_id");
 
@@ -17,5 +17,3 @@ $patient->load($patient_id);
 
 $vcard = new CMbvCardExport();
 $vcard->saveVCard($patient);
-
-?>

@@ -187,6 +187,8 @@ Main.add(function () {
   </tr>
   
   {{mb_include template=inc_pref_bool var=VitaleVision}}
+  
+  {{mb_include template=inc_pref_bool var=vCardExport}}
 
 	</tbody>
   {{/if}}

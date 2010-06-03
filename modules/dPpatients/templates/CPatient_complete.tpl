@@ -21,9 +21,11 @@
       </a>
       {{/if}}
       
+      {{if $app->user_prefs.vCardExport}}
       <a style="float:right;" href="#export-{{$object->_guid}}" onclick="Patient.exportVcard('{{$object->_id}}')">
         <img src="images/icons/vcard.png" alt="export" title="Exporter le patient" />
       </a>
+      {{/if}}
 
       {{mb_include module=system template=inc_object_notes object=$object}}
 

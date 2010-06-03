@@ -1188,7 +1188,10 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` ADD `tel_autre` VARCHAR (20) AFTER `tel2`";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.04";
+    $this->makeRevision("1.04");
+    $this->addPrefQuery("vCardExport", "0");
+    
+    $this->mod_version = "1.05";
   }
 }
 

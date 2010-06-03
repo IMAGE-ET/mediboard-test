@@ -19,7 +19,7 @@
           {{if $_product->_is_valid}}
             {{if $_product->_in_livret}}
               <button type="button" class="cancel notext" 
-                      onclick="confirmDeletion(this.form,{ajax:true,typeName:'le produit du livret thérapeutique',objName:'{{$_product|smarty:nodefaults|JSAttribute}}'})">
+                      onclick="confirmDeletion(this.form,{ajax:true,typeName:'le produit du livret thérapeutique',objName:'{{$_product->_view|smarty:nodefaults|JSAttribute}}'})">
                 {{tr}}Delete{{/tr}}
               </button>
             {{else}}

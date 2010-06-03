@@ -145,9 +145,12 @@
       </form>
       {{/if}}
       
+      {{if $app->user_prefs.vCardExport}}
       <button type="button" class="vcard" onclick="Patient.exportVcard('{{$patient->_id}}')">
         {{tr}}Export{{/tr}}
       </button>
+      {{/if}}
+      
     </td>
   </tr>
 </table>

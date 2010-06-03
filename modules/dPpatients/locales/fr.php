@@ -934,4 +934,6 @@ $locales['module-dPpatients-court'] = 'Dossiers patient';
 $locales['module-dPpatients-long'] = 'Gestion des dossiers patient';
 $locales['pref-VitaleVision'] = 'Préférer VitaleVision';
 $locales['pref-VitaleVision-desc'] = 'Préférer VitaleVision à LogicMax';
+$locales['pref-vCardExport'] = 'Afficher les boutons d\'export vCard';
+$locales['pref-vCardExport-desc'] = 'Afficher les boutons d\'export vCard';
 ?>

@@ -111,6 +111,7 @@ Class.extend(Autocompleter.Base, {
            return;
          }
        case Event.KEY_RETURN:
+         if (this.index < 0) return; 
          this.selectEntry();
          Event.stop(event);
        case Event.KEY_ESC:

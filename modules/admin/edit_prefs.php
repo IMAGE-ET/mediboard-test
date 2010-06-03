@@ -68,6 +68,7 @@ $array_list_module_pref = array (
     "InterMaxDir",
     "VitaleVisionDir", 
     "VitaleVision",
+    "vCardExport",
   ),
   "dPcabinet" => array (
     "AFFCONSULT",

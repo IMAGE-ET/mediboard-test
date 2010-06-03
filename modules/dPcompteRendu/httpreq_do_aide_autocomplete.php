@@ -14,6 +14,7 @@ $property      = CValue::get("property");
 $depend_value_1 = CValue::post("depend_value_1", null);
 $depend_value_2 = CValue::post("depend_value_2", null);
 $needle         = CValue::post("_search");
+$hide_empty_list = CValue::post("hide_empty_list");
 
 $object = new $object_class;
 $object->loadAides($user_id, $needle, $depend_value_1, $depend_value_2, $property);
@@ -30,5 +31,6 @@ $smarty->assign("needle", $needle);
 $smarty->assign("nodebug", true);
 $smarty->assign("depend_field_1", $depend_field_1);
 $smarty->assign("depend_field_2", $depend_field_2);
+$smarty->assign("hide_empty_list", $hide_empty_list);
 
 $smarty->display("httpreq_do_aide_autocomplete.tpl");
