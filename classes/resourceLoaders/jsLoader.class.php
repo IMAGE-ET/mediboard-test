@@ -87,16 +87,10 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     return $result;
   }
   
-  static function writeLocaleFile($language = null, $mobile_locales = null) {
-    global $version, $locales;
-		
+  static function writeLocaleFile($language = null, $locales = null, $label = null) {
+    global $version;
     
-    $current_locales = $locales;
-		if($mobile_locales) {
-			$current_locales = $mobile_locales;
-			$locales = $mobile_locales;
-		} 
-    
+    // It will update all the locale files
     if (!$language) {
       $languages = array();
       foreach (glob("./locales/*", GLOB_ONLYDIR) as $lng)
@@ -105,55 +99,49 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     else {
       $languages = array($language);
     }
-    if ($mobile_locales) {
-    	 foreach($languages as $language) {
-         $localeFiles = glob("./mobile/modules/locales/$language.php") ;
-			 }
-    }
-	  else{
+
+    if (!$locales) {
       foreach($languages as $language) {
         $localeFiles = array_merge(
           glob("./locales/$language/*.php"), 
           glob("./modules/*/locales/$language.php")
         );
-		  }
-		}
+      }
+      
       foreach ($localeFiles as $localeFile) {
         if (basename($localeFile) != "meta.php") {
           require $localeFile;
         }
       }
-      
-      $path = "./tmp/locales.$language.js";
-			if($mobile_locales) $path = "./tmp/mobile_locales.$language.js";
+    }
     
-      if ($fp = fopen($path, 'w')) {
-        // The callback will filter on empty strings (without it, "0" will be removed too).
-        $locales = array_filter($locales, "stringNotEmpty");
-        // TODO: change the invalid keys (with accents) of the locales to simplify this
-        $keys = array_map('utf8_encode', array_keys($locales));
-        $values = array_map('utf8_encode', $locales);
-        $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
-        fwrite($fp, $script);
-        fclose($fp);
-      }
-    
-		$locales = $current_locales;
-    
-		
+    $path = self::getLocaleFilePath($language, $label);
+  
+    if ($fp = fopen($path, 'w')) {
+      // The callback will filter on empty strings (without it, "0" will be removed too).
+      $locales = array_filter($locales, "stringNotEmpty");
+      // TODO: change the invalid keys (with accents) of the locales to simplify this
+      $keys = array_map('utf8_encode', array_keys($locales));
+      $values = array_map('utf8_encode', $locales);
+      $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
+      fwrite($fp, $script);
+      fclose($fp);
+    }
   }
 
-  static function getLocaleFile($mobile_locales = null) {
-  	
+  static function getLocaleFile($locales = null, $label = null) {
     $language = CAppUI::pref("LOCALE");
-		$path = "./tmp/locales.$language.js";
-		if($mobile_locales) $path = "./tmp/mobile_locales.$language.js";
     
-  
+    $path = self::getLocaleFilePath($language, $label);
+    
     if (!is_file($path)) {
-      self::writeLocaleFile($language, $mobile_locales);
+      self::writeLocaleFile($language, $locales, $label);
     }
     
     return $path;
-	}
+  }
+  
+  static function getLocaleFilePath($language, $label = null) {
+    return "./tmp/locales".($label ? ".$label" : "").".$language.js";
+  }
 }
