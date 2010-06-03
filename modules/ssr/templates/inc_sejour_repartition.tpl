@@ -18,5 +18,9 @@
 </span> 
 
 <div style="text-indent: 1em; opacity: 0.8;">
+	<div style="float: right;">
+	  {{$patient->_age}} ans
+	</div>
   {{mb_value object=$sejour field=libelle}}
 </div>
+

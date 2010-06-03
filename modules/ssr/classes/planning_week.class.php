@@ -121,6 +121,15 @@ class CPlanningWeek  {
   }
   
   /**
+   * Tell wether given day is active in planning
+   * @param date $day ISO date
+   * @return bool
+   */
+  function isDayActive($day) {
+  	return in_range($day, $this->date_min_active, $this->date_max_active);
+  }
+
+  /**
    * @param object $day The label's day
    * @param object $text The label
    * @param object $detail [optional] Details about the label
