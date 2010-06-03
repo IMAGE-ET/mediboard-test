@@ -94,7 +94,8 @@ var References = {
         elements = obj.childElements(), 
         le = elements.length, la;
     for (j = 0; j < le; j++) {
-      if (e = elements[j]) {
+      e = elements[j];
+      if (e) {
         if (e.attributes) {
           la = e.attributes.length;
           for (i = 0; i < la; i++) {

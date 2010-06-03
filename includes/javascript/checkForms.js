@@ -48,19 +48,22 @@ var ElementChecker = {
   assertMultipleArgs: function(prop, multiplicity) {
     if (Object.isUndefined(this.oProperties[prop])) return false;
     Assert.that(this.oProperties[prop] !== true, '"'+prop+'" nécessite '+multiplicity+((multiplicity != null) ? multiplicity : 'un ou plusieurs')+' argument(s)');
-    return this.oProperties[prop] = [this.oProperties[prop]].flatten();
+    this.oProperties[prop] = [this.oProperties[prop]].flatten();
+    return this.oProperties[prop];
   },
   
   assertSingleArg: function(prop) {
     if (Object.isUndefined(this.oProperties[prop])) return false;
     Assert.that(((typeof this.oProperties[prop] != "boolean") && !Object.isArray(this.oProperties[prop])), '"'+prop+'" nécessite un et un seul argument');
-    return this.oProperties[prop] = [this.oProperties[prop]].flatten().reduce();
+    this.oProperties[prop] = [this.oProperties[prop]].flatten().reduce();
+    return this.oProperties[prop];
   },
   
   assertNoArg: function(prop) {
     if (Object.isUndefined(this.oProperties[prop])) return false;
     Assert.that(this.oProperties[prop] == true, '"'+prop+'" ne doit pas avoir d\'arguments');
-    return this.oProperties[prop] = true;
+    this.oProperties[prop] = true;
+    return this.oProperties[prop];
   },
   //---------------------------------------------------------------------------------
   
@@ -93,7 +96,7 @@ var ElementChecker = {
   },
 
   getErrorMessage: function() {
-    var msg = '';
+    var msg = "";
     this.oErrors.each(function (error) {
       msg += "   - "+error.message+"\n";
     });
@@ -117,7 +120,7 @@ var ElementChecker = {
     
     return this.oErrors;
   }
-}
+};
 
 Object.extend(ElementChecker, {
   check: {
@@ -138,7 +141,7 @@ Object.extend(ElementChecker, {
     
     // moreThan
     moreThan: function () {
-      sTargetElement = this.assertSingleArg("moreThan");
+      var sTargetElement = this.assertSingleArg("moreThan");
       this.addError("moreThan", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && (this.oCompare.source <= this.oCompare.target))
@@ -147,7 +150,7 @@ Object.extend(ElementChecker, {
     
     // moreEquals
     moreEquals: function () {
-      sTargetElement = this.assertSingleArg("moreEquals");
+      var sTargetElement = this.assertSingleArg("moreEquals");
       this.addError("moreEquals", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && (this.oCompare.source < this.oCompare.target))
@@ -156,7 +159,7 @@ Object.extend(ElementChecker, {
     
     // sameAs
     sameAs: function () {
-      sTargetElement = this.assertSingleArg("sameAs");
+      var sTargetElement = this.assertSingleArg("sameAs");
       this.addError("sameAs", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
@@ -168,7 +171,7 @@ Object.extend(ElementChecker, {
     
     // notContaining
     notContaining: function () {
-      sTargetElement = this.assertSingleArg("notContaining");
+      var sTargetElement = this.assertSingleArg("notContaining");
       this.addError("notContaining", this.castCompareValues(sTargetElement));
 
       if (this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
@@ -180,7 +183,7 @@ Object.extend(ElementChecker, {
     
     // notNear
     notNear: function () {
-      sTargetElement = this.assertSingleArg("notNear");
+      var sTargetElement = this.assertSingleArg("notNear");
       this.addError("notNear", this.castCompareValues(sTargetElement));
       
       if (this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
@@ -200,7 +203,7 @@ Object.extend(ElementChecker, {
     // length
     length: function () { 
       this.assertSingleArg("length");
-      iLength = parseInt(this.oProperties["length"], 10);
+      var iLength = parseInt(this.oProperties["length"], 10);
       
       if (iLength < 1 || iLength > 255)
         console.error(printf("Spécification de longueur invalide (longueur = %s)", iLength));
@@ -212,7 +215,7 @@ Object.extend(ElementChecker, {
     // minLength
     minLength: function () { 
       this.assertSingleArg("minLength");
-      iLength = parseInt(this.oProperties["minLength"], 10);
+      var iLength = parseInt(this.oProperties["minLength"], 10);
       
       if (iLength < 1 || iLength > 255)
         console.error(printf("Spécification de longueur minimale invalide (longueur = %s)", iLength));
@@ -224,7 +227,7 @@ Object.extend(ElementChecker, {
     // maxLength
     maxLength: function () { 
       this.assertSingleArg("maxLength");
-      iLength = parseInt(this.oProperties["maxLength"], 10);
+      var iLength = parseInt(this.oProperties["maxLength"], 10);
       
       if (iLength < 1 || iLength > 255)
         console.error(printf("Spécification de longueur maximale invalide (longueur = %s)", iLength));
@@ -247,7 +250,7 @@ Object.extend(ElementChecker, {
       this.assertSingleArg("min");
       this.toNumeric();
       
-      iMin = parseInt(this.oProperties["min"], 10);
+      var iMin = parseInt(this.oProperties["min"], 10);
       if (this.sValue < iMin)
         this.addError("min", printf("Doit avoir une valeur minimale de %s", iMin));
     },
@@ -257,7 +260,7 @@ Object.extend(ElementChecker, {
       this.assertSingleArg("max");
       this.toNumeric();
       
-      iMax = parseInt(this.oProperties["max"], 10);
+      var iMax = parseInt(this.oProperties["max"], 10);
       if (this.sValue > iMax)
         this.addError("max", printf("Doit avoir une valeur maximale de %s", iMax));
     },
@@ -289,10 +292,11 @@ Object.extend(ElementChecker, {
       if (this.sValue.match(/^([0-9]{7,8}[A-Z])$/i))
         return;
       
-      if (aMatches = this.sValue.match(/^([1278][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
-        
-        nCode = parseInt(aMatches[1].replace(/2A/i, '19').replace(/2B/i, '18'), 10);
-        nCle  = parseInt(aMatches[2], 10);
+      var aMatches = this.sValue.match(/^([1278][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i);
+      
+      if (aMatches) {
+        var nCode = parseInt(aMatches[1].replace(/2A/i, '19').replace(/2B/i, '18'), 10);
+        var nCle  = parseInt(aMatches[2], 10);
         if (97 - (nCode % 97) != nCle)
           this.addError("insee", "Matricule incorrect, la clé n'est pas valide");
         else return;
@@ -366,8 +370,8 @@ Object.extend(ElementChecker, {
     
     birthDate: function() {
       this.date();
-      var values = null;
-      if (values = this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
+      var values = this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (values) {
         if (parseInt(values[1]) < 1850) {
           this.addError("birthDate", "L'année est inférieure à 1850");
         }
@@ -525,11 +529,16 @@ function checkForm(oForm) {
   });
   
   // Check for form-level errors (xor)
-  var xorFields, re = /xor(?:\|(\S+))+/g;
+  var xorFields, 
+      re = /xor(?:\|(\S+))+/g;
+      
   while (xorFields = re.exec(oForm.className)) {
     xorFields = xorFields[1].split("|");
     
-    var n = 0, xorFieldsInForm = 0; listLabels = [];
+    var n = 0, 
+        xorFieldsInForm = 0,
+        listLabels = [];
+        
     xorFields.each(function(xorField){
       var element = $(oForm.elements[xorField]);
       if (!element) return;

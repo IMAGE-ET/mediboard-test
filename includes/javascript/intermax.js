@@ -43,16 +43,17 @@ var Intermax = {
     this.oContent = {};
     
     aContentLines.each(function(line) {
-      var aMatches;
+      var aMatches = line.match(/\[(\w*)\]/);
       
       // Create new category
-      if (aMatches = line.match(/\[(\w*)\]/)) {
+      if (aMatches) {
         sCurrentCategory = aMatches[1];
         Intermax.oContent[sCurrentCategory] = {};
       }
       
       // Fill a key-value pair in current category
-      if (aMatches = line.match(/(\w*)=(.*)/)) {
+      aMatches = line.match(/(\w*)=(.*)/);
+      if (aMatches) {
         Intermax.oContent[sCurrentCategory][aMatches[1]] = aMatches[2].replace(/,/g, '.');
       }
     } );
