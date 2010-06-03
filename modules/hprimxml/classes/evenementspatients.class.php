@@ -586,8 +586,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
   function doNotCancelVenue($venue, $domAcquittement, &$echange_hprim) {
     // Impossible d'annuler un séjour en cours 
-    if ($newVenue->entree_reelle) {
-      $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+    if ($venue->entree_reelle) {
+      $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E108", $commentaire);
       $doc_valid = $domAcquittement->schemaValidate();
       
@@ -598,9 +598,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     // Impossible d'annuler un dossier ayant une intervention
     $where = array();
     $where['annulee'] = " = '0'";
-    $newVenue->loadRefsOperations($where);
-    if (count($newVenue->_ref_operations) > 0) {
-      $commentaire = "La venue $newVenue->_id que vous souhaitez annuler est impossible.";
+    $venue->loadRefsOperations($where);
+    if (count($venue->_ref_operations) > 0) {
+      $commentaire = "La venue $venue->_id que vous souhaitez annuler est impossible.";
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E109", $commentaire);
       $doc_valid = $domAcquittement->schemaValidate();
       
