@@ -36,16 +36,7 @@ $where["sejour_id"] = " = '$sejour->_id'";
 $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $evenements = $evenement_ssr->loadList($where);
 
-$total_evenement = array();
-foreach($planning->days as $_day => $day){
-	$total_evenement[$_day]["duree"] = 0;
-	$total_evenement[$_day]["nb"] = 0;
-}
-
 foreach($evenements as $_evenement){
-  $total_evenement[mbDate($_evenement->debut)]["duree"] += $_evenement->duree;
-	$total_evenement[mbDate($_evenement->debut)]["nb"]++;
-  
 	$_evenement->loadRefElementPrescription();
 	$element_prescription =& $_evenement->_ref_element_prescription;
   $element_prescription->loadRefCategory();
@@ -72,9 +63,23 @@ foreach($evenements as $_evenement){
   $event->draggable = true;
 	$planning->addEvent($event);
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(),null, null, "red"));
+$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
 
-foreach($total_evenement as $_date => $_total_evt){
+// Alertes séjour
+$total_evenement = array();
+foreach($planning->days as $_day => $day) {
+	if ($planning->isDayActive($_day)) {
+	  $total_evenement[$_day]["duree"] = 0;
+	  $total_evenement[$_day]["nb"] = 0;
+	}
+}
+
+foreach($evenements as $_evenement){
+  $total_evenement[mbDate($_evenement->debut)]["duree"] += $_evenement->duree;
+  $total_evenement[mbDate($_evenement->debut)]["nb"]++;
+}
+
+foreach ($total_evenement as $_date => $_total_evt){
 	$alerts = array();
 	if ($_total_evt["duree"] < 120) {
 		$alerts[] = "< 2h";
