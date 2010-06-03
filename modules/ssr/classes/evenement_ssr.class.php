@@ -72,13 +72,52 @@ class CEvenementSSR extends CMbObject {
     
 		$this->loadRefSejour();
 		
-		if($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie){
+		if ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie){
 		  return "Evenement SSR en dehors des dates du séjour";
 		}
-			
-		return parent::check();
+    
+		// Cas de la réalisation des événements SSR
+	  $this->loadRefTherapeute();
+	  $therapeute = $this->_ref_therapeute;
+		if ($this->fieldModified("realise")) {
+		  // Si le thérapeute n'a pas d'identifiant CdARR
+		  if (!$therapeute->code_intervenant_cdarr) {
+		    return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
+		  }
+		  $therapeute->loadRefCodeIntervenantCdARR();
+      $code_intervenant_cdarr = $therapeute->_ref_code_intervenant_cdarr->code;
+      
+      $this->loadRefsActesCdARR();
+      $actes_cdarr = $this->_ref_actes_cdarr;
+		  $rhs = $this->getRHS();
+      if (!$rhs->_id) {
+        $rhs->store();
+      }
+          
+      foreach ($actes_cdarr as $_acte_cdarr) {
+        $ligne_activite_rhs = new CLigneActivitesRHS();
+        $where["rhs_id"]                 = "= '$rhs->_id'";
+        $where["executant_id"]           = "= '$therapeute->_id'";
+        $where["code_activite_cdarr"]    = "= '$_acte_cdarr->code'";
+        $where["code_intervenant_cdarr"] = "= '$code_intervenant_cdarr'";
+        $ligne_activite_rhs->loadObject($where);
+        
+        $this->realise ? $ligne_activite_rhs->incrementOrDecrementDay($this->debut, "inc") : $ligne_activite_rhs->incrementOrDecrementDay($this->debut, "dec");
+        
+        if (!$ligne_activite_rhs->_id) {
+          $ligne_activite_rhs->rhs_id                 = $rhs->_id;
+          $ligne_activite_rhs->executant_id           = $therapeute->_id;
+          $ligne_activite_rhs->code_activite_cdarr    = $_acte_cdarr->code;
+          $ligne_activite_rhs->code_intervenant_cdarr = $code_intervenant_cdarr;
+        }
+        
+        $ligne_activite_rhs->store();
+      }
+		}
 		
+		return parent::check();
 	}
+	
 	function loadView() {
 		parent::loadView();
 		$this->loadRefSejour();
@@ -107,6 +146,15 @@ class CEvenementSSR extends CMbObject {
 	
 	function loadRefsActesCdARR(){
 		$this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
+	}
+	
+	function getRHS() {
+	  $rhs = new CRHS();
+    $rhs->sejour_id = $this->sejour_id;
+    $rhs->date_monday = mbDate("last monday", mbDate("+1 day", mbDate($this->debut)));
+    $rhs->loadMatchingObject();
+    
+    return $rhs;
 	}
 }
 

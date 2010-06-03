@@ -22,6 +22,12 @@ CotationRHS = {
       requestUpdate('cotation-' + rhs_id);
   },
   
+  recalculatehRHS: function(rhs_id) {
+    new Url('ssr', 'ajax_recalculate_rhs') .
+      addParam('rhs_id', rhs_id) .
+      requestUpdate('cotation-' + rhs_id);
+  },
+  
   refreshTotaux: function(rhs_id) {
     new Url('ssr', 'ajax_totaux_rhs') .
       addParam('rhs_id', rhs_id) .

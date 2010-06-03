@@ -49,6 +49,10 @@ updateSelectedEvents = function(input_elements){
 }
 </script>
 
+{{if !$kine->code_intervenant_cdarr}}
+  <div class="small-warning">{{tr}}CMediusers-code_intervenant_cdarr-none{{/tr}}</div>
+{{/if}}
+
 <table class="main">
 	<tr>
     <td id="week-changer"></td>
@@ -75,42 +79,42 @@ updateSelectedEvents = function(input_elements){
 			</div>
 		</td>
 		<td>
-				<form name="editSelectedEvent" method="post" action="?" 
-              onsubmit="updateSelectedEvents(this.token_elts); if($V(this.token_elts) != ''){ return submitValidation(this); }">
-          <input type="hidden" name="m" value="ssr" />
-          <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-          <input type="hidden" name="token_elts" value="" />
-          <input type="hidden" name="del" value="0" />    
-          <input type="hidden" name="realise" value="0" />
-         		
-					<table class="form">
-					<tr>
-					  <th colspan="2" class="category">
-					  	Réaliser les événements sélectionnés
-					  </th>
-					</tr>
-					<tr>
-						<td colspan="2" class="button">
-					    <button type="button" class="tick" onclick="$V(this.form.realise, '1'); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
-              <button type="button" class="cancel" onclick="this.form.onsubmit();">{{tr}}Cancel{{/tr}}</button>
-          	</td>
-					</tr>
-					<tr>
-		        <th class="category" colspan="2">
-		          Suppression des événements sélectionnés
-		        </th>
-		      </tr>
-		      <tr>
-		        <td class="button" colspan="2">
-		          <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
-		            Supprimer
-		          </button>
-		        </td>
-		      </tr>
-					</table>
-				</form>
+  		<form name="editSelectedEvent" method="post" action="?" 
+            onsubmit="updateSelectedEvents(this.token_elts); if($V(this.token_elts) != ''){ return submitValidation(this); }">
+        <input type="hidden" name="m" value="ssr" />
+        <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
+        <input type="hidden" name="token_elts" value="" />
+        <input type="hidden" name="del" value="0" />    
+        <input type="hidden" name="realise" value="0" />
+       		
+  			<table class="form">
+  			<tr>
+  			  <th colspan="2" class="category">
+  			  	Réaliser les événements sélectionnés
+  			  </th>
+  			</tr>
+  			<tr>
+  				<td colspan="2" class="button">
+  			    <button type="button" class="tick" onclick="$V(this.form.realise, '1'); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
+            <button type="button" class="cancel" onclick="this.form.onsubmit();">{{tr}}Cancel{{/tr}}</button>
+        	</td>
+  			</tr>
+  			<tr>
+          <th class="category" colspan="2">
+            Suppression des événements sélectionnés
+          </th>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
+              {{tr}}Delete{{/tr}}
+            </button>
+          </td>
+        </tr>
+  			</table>
+  		</form>
 				
-				<table>
+		  <table>
 				<tr>
 				  <td id="planning-sejour"></td>
 				</tr>

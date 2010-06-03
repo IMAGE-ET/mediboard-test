@@ -444,6 +444,7 @@ $locales['CLigneActivitesRHS-title-create'] = 'Nouvelle ligne';
 $locales['CLigneActivitesRHS-title-modify'] = 'Modifier la ligne';
 $locales['CLigneActivitesRHS.all'] = 'Toutes les lignes';
 $locales['CLigneActivitesRHS.none'] = 'Aucune ligne';
+$locales['CLigneActivitesRHS.recalculate'] = 'Recalculer le RHS';
 $locales['CLigneActivitesRHS.one'] = 'la ligne';
 $locales['CMediusers-back-bilans_ssr'] = 'Séjours SSR sous responsabilité';
 $locales['CMediusers-back-bilans_ssr.empty'] = 'Pas de séjour SSR sous responsabilité';

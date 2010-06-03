@@ -109,6 +109,29 @@ class CLigneActivitesRHS extends CMbObject {
 	function loadRefRHS() {
 		$this->_ref_rhs = $this->loadFwdRef("rhs_id");
 	}
+	
+	function incrementOrDecrementDay($datetime, $action) {
+	  $day = mbTransformTime($datetime, null, "%u");
+	  
+	  if($day == 1) ($action == "inc") ? $this->qty_mon++ : $this->qty_mon--;
+    if($day == 2) ($action == "inc") ? $this->qty_tue++ : $this->qty_tue--;
+    if($day == 3) ($action == "inc") ? $this->qty_wed++ : $this->qty_wed--;
+    if($day == 4) ($action == "inc") ? $this->qty_thu++ : $this->qty_thu--;
+    if($day == 5) ($action == "inc") ? $this->qty_fri++ : $this->qty_fri--;
+    if($day == 6) ($action == "inc") ? $this->qty_sat++ : $this->qty_sat--;
+    if($day == 7) ($action == "inc") ? $this->qty_sun++ : $this->qty_sun--;
+	}
+	
+	function store() {
+	  $this->completeField("qty_mon", "qty_tue", "qty_wed",
+	    "qty_thu", "qty_thu", "qty_fri", "qty_sat", "qty_sun");
+	  $this->updateFormFields();
+	  if ($this->_id && $this->_qty_total == 0) {
+	    return $this->delete();
+	  }
+	  
+	  return parent::store();
+	}
 }
 
 ?>

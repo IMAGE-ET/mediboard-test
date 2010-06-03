@@ -1465,7 +1465,7 @@ class CPatient extends CMbObject {
   
   function updatePatNumPaysInsee($nomPays) {
     $pays = new CPaysInsee();
-    $pays->nom_fr = $nomPays;
+    $pays->nom_fr = $this->_spec->ds->escape($nomPays);
     $pays->loadMatchingObject();
     return $pays->numerique;
   }

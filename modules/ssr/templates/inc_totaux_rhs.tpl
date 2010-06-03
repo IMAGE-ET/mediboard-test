@@ -4,7 +4,7 @@
       {{mb_include module=system template=inc_object_notes      object=$rhs}}
       {{mb_include module=system template=inc_object_idsante400 object=$rhs}}
       {{mb_include module=system template=inc_object_history    object=$rhs}}
-      Totaux
+      Totaux RHS
     </th>
   </tr>
   {{foreach from=$types_activite item=_type name=liste_types}}

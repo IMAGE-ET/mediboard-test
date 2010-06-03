@@ -43,7 +43,6 @@ foreach($rhss as $_rhs) {
       $_rhs->_ref_dependances->store();
     }
     $_rhs->loadBackRefs("lines");
-    $_line = new CLigneActivitesRHS();
     foreach($_rhs->_back["lines"] as $_line) {
       $_line->loadRefActiviteCdARR();
       $_line->_ref_code_activite_cdarr->loadRefTypeActivite();

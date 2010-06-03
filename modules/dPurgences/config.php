@@ -26,7 +26,7 @@ $dPconfig["dPurgences"] = array (
   "rpu_xml_validation"    => "1",
 	"gerer_hospi"           => "1",
 	"gerer_reconvoc"        => "1",
-  "sibling_hours"         => "1",
+  "sibling_hours"         => "0",
 );
 
 

@@ -20,9 +20,11 @@ $kines = $mediuser->loadUsers();
 
 $kine = new CMediusers();
 $kine->load($kine_id);
+$kine->loadRefCodeIntervenantCdARR();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("kine", $kine);
 $smarty->assign("kines", $kines);
 $smarty->assign("kine_id", $kine_id);
 $smarty->display("vw_kine_board.tpl");

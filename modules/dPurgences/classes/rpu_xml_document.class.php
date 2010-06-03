@@ -80,10 +80,10 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "MODE_ENTREE", $mbObject->mode_entree);
     $this->addElement($elParent, "PROVENANCE", $mbObject->provenance);
     if ($mbObject->transport == "perso_taxi") {
-      $mbObject->transport = "PERSO";
+      $mbObject->transport = "perso";
     }
     if ($mbObject->transport == "ambu_vsl") {
-      $mbObject->transport = "AMBU";
+      $mbObject->transport = "ambu";
     }
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));

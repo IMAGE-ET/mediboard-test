@@ -155,6 +155,7 @@ $locales['CMediusers-banque_id-desc'] = 'Banque de l\'utilisateur';
 $locales['CMediusers-code_intervenant_cdarr'] = 'Code CdARR';
 $locales['CMediusers-code_intervenant_cdarr-court'] = 'Code CdARR';
 $locales['CMediusers-code_intervenant_cdarr-desc'] = 'Code CdARR de l\'intervenant';
+$locales['CMediusers-code_intervenant_cdarr-none'] = 'Aucun code CdARR définit pour l\'intervenant';
 $locales['CMediusers-commentaires'] = 'Commentaires';
 $locales['CMediusers-commentaires-court'] = 'Comm.';
 $locales['CMediusers-commentaires-desc'] = 'Commentaires sur l\'utilisateur';
