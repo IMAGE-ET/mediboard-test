@@ -32,7 +32,8 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
 };
 
 // TODO needs testing (doesn't throw console.error every time)
-//window.onerror = errorHandler;
+if (Prototype.Browser.IE)
+  window.onerror = errorHandler;
 
 /**
  * Main page initialization scripts

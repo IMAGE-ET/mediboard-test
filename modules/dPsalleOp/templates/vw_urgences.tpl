@@ -40,7 +40,7 @@ Main.add(function () {
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-        <select name="salle_id" onchange="submitFormAjax(this.form, 'systemMsg')">
+        <select name="salle_id" onchange="onSubmitFormAjax(this.form)">
           <option value="">&mdash; {{tr}}CSalle.select{{/tr}}</option>
           {{foreach from=$listBlocs item=curr_bloc}}
           <optgroup label="{{$curr_bloc->nom}}">
