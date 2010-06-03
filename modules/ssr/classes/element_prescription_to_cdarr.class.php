@@ -19,6 +19,7 @@ class CElementPrescriptionToCdarr extends CMbObject {
 	
 	var $_ref_element_prescription = null;
 	var $_ref_activite_cdarr = null;
+	var $_count_cdarr_by_type = null;
 	
   function getSpec() {
     $spec = parent::getSpec();

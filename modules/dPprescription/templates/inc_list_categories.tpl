@@ -38,13 +38,14 @@ Main.add( function(){
       <tr>
         <th>{{mb_label class=CCategoryPrescription field=nom}}</th>
         <th>{{mb_label class=CCategoryPrescription field=group_id}}</th>
+				<th style="width: 1%;">Eléments</th>
         <th></th>
       </tr>
       {{foreach from=$_categories item=_cat}}
         <tr {{if $category_prescription->_id == $_cat->_id}}class="selected"{{/if}} >
           <td>
             <a href="#1" onclick="onSelectCategory('{{$_cat->_id}}', this.up('tr'));">
-              {{$_cat->nom}} ({{$_cat->_count_elements_prescription}})
+              {{$_cat->nom}}
             </a>
           </td>
           <td>
@@ -54,6 +55,7 @@ Main.add( function(){
               Tous
             {{/if}}
           </td>
+					<td style="text-align: right;">{{$_cat->_count_elements_prescription}}</td>
           <td style="width: 1em; {{if $_cat->color}}background-color: #{{$_cat->color}}{{/if}}">
           </td>
         </tr>

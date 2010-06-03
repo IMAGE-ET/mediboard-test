@@ -26,8 +26,19 @@ if($element_prescription_id && !$category_prescription_id){
 
 if($category_prescription_id){
 	$category->loadElementsPrescription();
-	foreach ($category->_ref_elements_prescription as $_element) {
-	  $_element->countBackRefs("cdarrs");
+  foreach ($category->_ref_elements_prescription as $_element) {
+	  $_element->_count_cdarr_by_type = array();
+		$_element->loadBackRefs("cdarrs");
+		$_element->_count["cdarrs"] = count($_element->_back["cdarrs"]);
+		
+		foreach($_element->_back["cdarrs"] as $_acte_cdarr){
+	    $_acte_cdarr->loadRefActiviteCdarr();
+	    $_activite_cdarr =& $_acte_cdarr->_ref_activite_cdarr;
+	    if(!isset($_element->_count_cdarr_by_type[$_activite_cdarr->type])){
+	    	$_element->_count_cdarr_by_type[$_activite_cdarr->type] = 0;
+	    }
+			$_element->_count_cdarr_by_type[$_activite_cdarr->type]++;
+	  }
 	}
 	
 	// Chargement de la liste des functions associés à la catégorie selectionee
