@@ -105,10 +105,10 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
   }
   
   $dmi = new CDMI;
-  $dmi->code = $current_product->code;
+  $dmi->code = $current_product->_spec->ds->escape($current_product->code);
   if (!$dmi->loadMatchingObject()) {
     $dmi_category = new CDMICategory;
-    $dmi_category->loadObject();
+    $dmi_category->loadMatchingObject();
     
     $dmi->nom = $current_product->name;
     $dmi->category_id = $dmi_category->_id;
@@ -117,6 +117,8 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
       CAppUI::setMsg($msg, UI_MSG_WARNING);
     }
   }
+  
+  continue;
   
   // We look for a reference
   $reference = new CProductReference;
