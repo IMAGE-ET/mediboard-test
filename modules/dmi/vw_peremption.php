@@ -22,12 +22,13 @@ $where = array(
 );
 
 $reception = new CProductOrderItemReception;
-$receptions = $reception->loadList($where, "lapsing_date", 50, null, $ljoin);
+$receptions = $reception->loadList($where, "lapsing_date", 20, null, $ljoin);
 
 foreach($receptions as $_id => $_reception) {
-  $_reception->_total_quantity = $_reception->getQuantity();
+  $qty = $_reception->getQuantity();
+  $_reception->_total_quantity = $qty;
   $_reception->_used_quantity = $_reception->countBackRefs('lines_dmi');
-  $_reception->_remaining_quantity = $_reception->getQuantity() - $_reception->_used_quantity;
+  $_reception->_remaining_quantity = $qty - $_reception->_used_quantity;
   if ($_reception->_remaining_quantity < 1) {
     unset($receptions[$_id]);
   }
