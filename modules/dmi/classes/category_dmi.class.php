@@ -31,8 +31,8 @@ class CDMICategory extends CCategoryProduitPrescriptible {
 	  $this->_count_elements = $this->countBackRefs("dmis");
 	}
 	
-  function loadRefsElements() {
-    $this->_ref_elements = $this->loadBackRefs("dmis", "nom");
+  function loadRefsElements($order = "nom", $limit = null) {
+    $this->_ref_elements = $this->loadBackRefs("dmis", $order, $limit);
   }
 }
 

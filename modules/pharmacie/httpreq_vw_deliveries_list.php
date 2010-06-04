@@ -37,6 +37,7 @@ else
 $where[] = 'service_id '.CSQLDataSource::prepareIn(array_keys($services))." OR service_id IS NULL OR service_id = ''";
 $where[] = "date_dispensation BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
 $where['quantity'] = " > 0";
+$where['stock_id'] = "IS NOT NULL";
 //$where[] = "`order` != '1' OR `order` IS NULL";
 
 if (!$display_delivered) {

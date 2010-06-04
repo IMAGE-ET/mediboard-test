@@ -19,6 +19,14 @@ function startSyncProducts(category_id, object_class){
   }
 }
 
+function importData(object_class){
+  object_class = object_class || "CSociete";
+  
+  var url = new Url("dmi", "vw_import");
+  url.addParam("object_class", object_class);
+  url.pop(600, 400, "Import de "+$T(object_class));
+}
+
 Main.add(function(){
   new Control.Tabs("dmi-tabs");
 });
@@ -41,6 +49,21 @@ Main.add(function(){
     {{foreach from=$classes item=class}}
     	<tbody id="tab-{{$class}}" style="display: none;">
         {{mb_include module=system template=inc_config_bool var=active}}
+        
+        {{if $class == "CDMI"}}
+          <tr>
+            <th>
+              <button class="tick" type="button" onclick="importData('CSociete')">Importer les fournisseurs</button>
+            </th>
+            <td></td>
+          </tr>
+          <tr>
+            <th>
+              <button class="tick" type="button" onclick="importData('CDMI')">Importer les DMI</button>
+            </th>
+            <td></td>
+          </tr>
+        {{/if}}
         
         <tr>
           <th>

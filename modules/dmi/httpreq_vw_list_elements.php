@@ -11,15 +11,17 @@
 global $can, $g;
 $can->needsRead();
 
-// Recuperation des categories
 $category_class = CValue::getOrSession("category_class");
+$page           = intval(CValue::get("page", 0));
+
+// Recuperation des categories
 $category = new $category_class;
 $category->group_id = $g;
 $categories = $category->loadMatchingList();
 
 // Chargement de tous les dmis
 foreach ($categories as &$_category) {
-  $_category->loadRefsElements();
+  $_category->loadRefsElements(/*null, "$page, 30"*/);
   foreach ($_category->_ref_elements as &$_element) {
   	$_element->loadExtProduct();
   	$_element->_ext_product->loadRefsFwd();
