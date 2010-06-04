@@ -124,6 +124,9 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
 
 // Chargement des modules
 $modules = CPermModule::getVisibleModules();
+foreach ($modules as $module) {
+  include("./modules/$module->mod_name/index.php");
+}
 
 // Chargement des languages
 $locales = CAppUI::readDirs("locales");

@@ -104,10 +104,18 @@ if (!CAppUI::$instance->user_id) {
   CApp::rip();
 }
 
+$tab = 1;
+
 // Set the module and action from the url
 if (null == $m = CAppUI::checkFileName(CValue::get("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
-  $pref_module = CAppUI::pref("DEFMODULE");
+  $parts = explode("-", CAppUI::pref("DEFMODULE"), 2);
+  
+  if (count($parts) == 2) {
+    $tab = $parts[1];
+  }
+  
+  $pref_module = $parts[0];
   if ($pref_module && CPermModule::getViewModule(CModule::getInstalled($pref_module)->mod_id, PERM_READ)) {
     $m = $pref_module;
   }
@@ -131,7 +139,7 @@ $u     = CAppUI::checkFileName(CValue::get("u"     , ""));
 $dosql = CAppUI::checkFileName(CValue::post("dosql", ""));
 
 $tab = $a == "index" ? 
-  CValue::getOrSession("tab", 1) : 
+  CValue::getOrSession("tab", $tab) : 
   CValue::get("tab");
 
 // Check whether the password is strong enough

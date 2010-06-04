@@ -116,9 +116,17 @@ Main.add(function () {
     <td>
       <select name="pref[{{$var}}]" class="text" size="1">
         {{foreach from=$modules item=_module}}
-        <option value="{{$_module->mod_name}}" {{if $_module->mod_name==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{tr}}module-{{$_module->mod_name}}-court{{/tr}}
-        </option>
+          {{assign var=mod_name value=$_module->mod_name}}
+          
+          <option value="{{$mod_name}}" {{if $mod_name == $prefsUser.$module.$var}}selected="selected"{{/if}} style="font-weight: bold;">
+            {{tr}}module-{{$mod_name}}-court{{/tr}}
+          </option>
+          
+          {{foreach from=$_module->_tabs item=_tab}}
+            <option value="{{$mod_name}}-{{$_tab}}" {{if "$mod_name-$_tab" == $prefsUser.$module.$var}}selected="selected"{{/if}} style="padding-left: 1em;">
+              {{tr}}mod-{{$_module->mod_name}}-tab-{{$_tab}}{{/tr}}
+            </option>
+          {{/foreach}}
         {{/foreach}}
       </select>
     </td>

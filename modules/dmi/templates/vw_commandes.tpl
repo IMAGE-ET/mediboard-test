@@ -31,11 +31,9 @@
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
-    <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
-    <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     <th>Patient</th>
     <th style="width: 1%">Commander</th>
-    <th style="width: 1%">Déjà commandé</th>
+    <th style="width: 1%">Déjà comm.</th>
   </tr>
   {{foreach from=$lines_by_context key=_context_guid item=_lines}}
     <tr>
@@ -50,7 +48,7 @@
           {{mb_include module=dPstock template=inc_bargraph stock=$_line_dmi->_ref_product->_ref_stock_group}}
         </td>
         <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product_order_item_reception->_guid}}')">
             {{$_line_dmi->_ref_product}}
           </span>
         </td>
@@ -61,8 +59,6 @@
         <td>{{mb_value object=$_line_dmi field=date}}</td>
         <td>{{mb_value object=$_line_dmi field=type}}</td>
         <td>{{mb_value object=$_line_dmi field=septic}}</td>
-        <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}</td>
-        <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=lapsing_date}}</td>
         <td>
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_prescription->_guid}}')">
             {{$_line_dmi->_ref_prescription->_ref_patient}}
@@ -78,7 +74,7 @@
             <input type="hidden" name="quantity" value="1" />
             <select name="reference_id">
               {{foreach from=$_line_dmi->_ref_product->_back.references item=_reference}}
-              <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} - {{$_reference}}</option>
+              <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} (x{{$_reference->quantity}})</option>
               {{/foreach}}
             </select>
             <button class="add notext" type="submit" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
