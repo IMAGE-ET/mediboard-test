@@ -127,8 +127,6 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     }
   }
   
-  continue;
-  
   // We look for a reference
   $reference = new CProductReference;
   $reference->product_id = $current_product->_id;
