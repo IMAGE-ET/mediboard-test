@@ -96,6 +96,15 @@
             </ul>
           </td>
         </tr>
+        {{if $consult_anesth->_ref_operation->rques}}
+        <tr>
+          <td colspan="2" style="font-weight: bold;">
+            <div class="small-warning">
+              {{mb_value object=$consult_anesth->_ref_operation field=rques}}
+            </div>
+          </td>
+        </tr>
+        {{/if}}
       </table>    
     </td>
   </tr>
@@ -103,13 +112,8 @@
   {{assign var=const_med value=$patient->_ref_constantes_medicales}}
   {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
   {{assign var=ant value=$dossier_medical->_ref_antecedents}}
-  {{if !$ant}}
-    {{assign var=no_alle value=0}}
-  {{else}}
-    {{assign var=no_alle value=$ant&&!array_key_exists("alle",$ant)}}
-  {{/if}}
   <tr>
-    <td class="halfPane" {{if $no_alle}}colspan="2"{{/if}}>
+    <td class="halfPane" {{if !$dossier_medical->_count_allergies}}colspan="2"{{/if}}>
       <table width="100%">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
@@ -175,7 +179,7 @@
         </tr>
       </table>
     </td>
-    {{if !$no_alle}}
+    {{if $dossier_medical->_count_allergies}}
     <td class="halfPane">
       <table width="100%">
         <tr>

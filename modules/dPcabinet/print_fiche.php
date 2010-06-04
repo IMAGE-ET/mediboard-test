@@ -46,6 +46,7 @@ if ($consultation_id) {
   
   // Chargement des elements du dossier medical
   $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAllergies();
   $dossier_medical->loadRefsTraitements();
   $dossier_medical->loadRefsEtatsDents();
   $dossier_medical->loadRefPrescription();
