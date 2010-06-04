@@ -15,7 +15,7 @@ $service_id = CValue::getOrSession('service_id');
 $mode       = CValue::get('mode');
 $start      = CValue::get('start');
 
-$order_by = 'service_id, patient_id, date_dispensation DESC';
+$order_by = 'service_id, patient_id, date_dispensation ASC';
 $where = array();
 if ($service_id) {
   $where['service_id'] = " = $service_id";

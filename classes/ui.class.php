@@ -514,7 +514,7 @@ class CAppUI {
     // Test if remote connection is allowed
     self::$instance->_is_intranet = is_intranet_ip($_SERVER["REMOTE_ADDR"]) && ($_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy"));
     if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
-      self::setMsg("User has no remote access", UI_MSG_ERROR);
+      self::setMsg("Auth-failed-user-noremoteaccess", UI_MSG_ERROR);
       return false;
     }
 
