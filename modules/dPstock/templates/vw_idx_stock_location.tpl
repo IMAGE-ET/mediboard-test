@@ -80,6 +80,7 @@
       </table>
       </form>
       
+      {{if $stock_location->_id}}
       <table class="main tbl">
         <tr>
           <th class="category" colspan="10">
@@ -105,6 +106,7 @@
           </tr>
         {{/foreach}}
       </table>
+      {{/if}}
     </td>
   </tr>
 </table>
