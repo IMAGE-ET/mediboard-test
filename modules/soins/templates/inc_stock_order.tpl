@@ -86,10 +86,10 @@
         </th>
         <td>
           <select name="endowment_id" onchange="$V(this.form.start, 0); refreshOrders()">
-            <option value=""> &ndash; {{tr}}No{{/tr}}</option>
             {{foreach from=$service->_back.endowments item=_endowment}}
               <option value="{{$_endowment->_id}}" {{if $endowment_id == $_endowment->_id}}selected="selected"{{/if}}>{{$_endowment->name}}</option>
             {{/foreach}}
+            <option value="" {{if !$endowment_id}}selected="selected"{{/if}}> &ndash; {{tr}}No{{/tr}}</option>
           </select>
         </td>
       {{else}}

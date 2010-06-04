@@ -18,6 +18,7 @@ $only_common         = CValue::getOrSession('only_common', 1);
 $endowment_id        = CValue::getOrSession('endowment_id');
 $keywords            = CValue::getOrSession('keywords');
 
+$date = mbDate();
 $date_min = CValue::getOrSession('_date_min', $date);
 $date_max = CValue::getOrSession('_date_max', $date);
 
@@ -30,7 +31,7 @@ $where = array(
 );
 
 $service = new CService();
-$list_services = $service->loadListWithPerms(PERM_READ, $where);
+$list_services = $service->loadListWithPerms(PERM_READ, $where, "nom");
 
 if ($m == "dPurgences") {
   foreach($list_services as $_id => $_service) {
@@ -40,7 +41,6 @@ if ($m == "dPurgences") {
   } 
 }
 
-$date = mbDate();
 $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
