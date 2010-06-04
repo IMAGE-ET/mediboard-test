@@ -110,11 +110,15 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     $dmi_category = new CDMICategory;
     $dmi_category->loadMatchingObject();
     
+    $dmi->code = $current_product->code;
     $dmi->nom = $current_product->name;
     $dmi->category_id = $dmi_category->_id;
     $dmi->in_livret = 1;
     if ($msg = $dmi->store()){
       CAppUI::setMsg($msg, UI_MSG_WARNING);
+    }
+    else {
+      CAppUI::setMsg("CDMI-msg-create", UI_MSG_OK);
     }
   }
   
