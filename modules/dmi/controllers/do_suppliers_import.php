@@ -39,7 +39,7 @@ $map = array(
 );
 
 if (strtolower(CMbPath::getExtension($file["name"]) != 'csv')) 
-  CAppUI::stepAjax("Le fichier doit être de type CSV", UI_MSG_ERROR);
+  CAppUI::setMsg("Le fichier doit être de type CSV", UI_MSG_ERROR);
 
 $csv = fopen($file["tmp_name"], 'r');
 

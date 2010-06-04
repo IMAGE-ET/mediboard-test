@@ -36,8 +36,17 @@ $map = array(
   0 => "",
 );
 
-if (strtolower(CMbPath::getExtension($file["name"]) != 'csv')) 
-  CAppUI::stepAjax("Le fichier doit être de type CSV", UI_MSG_ERROR);
+if (strtolower(CMbPath::getExtension($file["name"]) != 'csv')) {
+  CAppUI::setMsg("Le fichier doit être de type CSV", UI_MSG_ERROR);
+  return;
+}
+
+$dmi_category = new CDMICategory;
+$dmi_category->loadMatchingObject();
+if (!$dmi_category->_id) {
+  CAppUI::setMsg("Au moins une catégorie de DMI doit exister", UI_MSG_ERROR);
+  return;
+}
 
 $csv = fopen($file["tmp_name"], 'r');
 
@@ -65,20 +74,19 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
   
   // Continue if no supplier
   if (!$current_supplier || !$current_supplier->_id) {
-    CAppUI::stepAjax("no supplier");
+    CAppUI::setMsg("Fournisseur non retrouvé");
     continue;
   }
   
   // Product
   if ($data[0]) {
-    $current_product = new CProduct;
+    if (!$data[1]) {
+      CAppUI::setMsg("Le produit <strong>{$data[0]}</strong> n'a pas de code, il ne peut pas être importé", UI_MSG_WARNING);
+      continue;
+    }
     
-    if ($data[1]) {
-      $current_product->code = $current_product->_spec->ds->escape($data[1]);
-    }
-    else {
-      $current_product->name = $current_product->_spec->ds->escape($data[0]);
-    }
+    $current_product = new CProduct;
+    $current_product->code = $current_product->_spec->ds->escape($data[1]);
     
     if (!$current_product->loadMatchingObject()) {
       $current_product->name = $data[0];
@@ -100,16 +108,13 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
   }
   
   if (!$current_product || !$current_product->_id) {
-    CAppUI::stepAjax("no product");
+    CAppUI::setMsg("Produit non retrouvé");
     continue;
   }
   
   $dmi = new CDMI;
   $dmi->code = $current_product->_spec->ds->escape($current_product->code);
   if (!$dmi->loadMatchingObject()) {
-    $dmi_category = new CDMICategory;
-    $dmi_category->loadMatchingObject();
-    
     $dmi->code = $current_product->code;
     $dmi->nom = $current_product->name;
     $dmi->category_id = $dmi_category->_id;

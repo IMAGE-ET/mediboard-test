@@ -52,23 +52,29 @@ class CProduitPrescriptible extends CMbObject {
    	$this->completeField("in_livret");
     // Creation du stock si le dmi est dans le livret Therapeutique
    	if (!$this->_id && CModule::getActive('dPstock') && $this->in_livret) {
+   	  
       $product = new CProduct();
       $product->code = $this->code;
-      $product->name = $this->nom;
-      $product->description = $this->description;
-      $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
-      $product->quantity = 1;
-      if ($msg = $product->store()){
-        return $msg;
+      if (!$product->loadMatchingObject()) {
+        $product->name = $this->nom;
+        $product->description = $this->description;
+        $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
+        $product->quantity = 1;
+        if ($msg = $product->store()){
+          return $msg;
+        }
       }
+      
       $stock = new CProductStockGroup();
       $stock->group_id = CGroups::loadCurrent()->_id;
       $stock->product_id = $product->_id;
-      $stock->quantity = 1;
-      $stock->order_threshold_min = 1;
-      $stock->order_threshold_max = 2;
-      if ($msg = $stock->store()){
-        return $msg;
+      if (!$stock->loadMatchingObject()) {
+        $stock->quantity = 1;
+        $stock->order_threshold_min = 1;
+        $stock->order_threshold_max = 2;
+        if ($msg = $stock->store()){
+          return $msg;
+        }
       }
     }
   	return parent::store();
