@@ -22,7 +22,7 @@ $where = array(
 );
 
 $reception = new CProductOrderItemReception;
-$receptions = $reception->loadList($where, "lapsing_date", null, null, $ljoin);
+$receptions = $reception->loadList($where, "lapsing_date", 50, null, $ljoin);
 
 foreach($receptions as $_id => $_reception) {
   $_reception->_total_quantity = $_reception->getQuantity();
