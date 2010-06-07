@@ -1315,7 +1315,7 @@ class CSejour extends CCodable {
    * Builds an array containing consults dates
    */
   function makeDatesConsultations() {
-    $this->_dates_operations = array();
+    $this->_dates_consultations = array();
     
     // On s'assure d'avoir les opérations
     if (!$this->_ref_consultations) {
