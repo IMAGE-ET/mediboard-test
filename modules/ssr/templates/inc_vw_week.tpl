@@ -50,12 +50,14 @@ Main.add(function() {
              
          <th class="day {{if $disabled}}disabled{{/if}} text">
            {{$_day|date_format:"%a %d"|nl2br}}
-           {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
-					 {{foreach from=$_labels_for_day item=_days_label}}
-	           <label style="background: {{$_days_label.color}};" title="{{$_days_label.detail}}">
-               {{$_days_label.text}}
-             </label>
-					 {{/foreach}}
+					 {{if array_key_exists($_day, $planning->day_labels)}}
+	           {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
+						 {{foreach from=$_labels_for_day item=_days_label}}
+		           <label style="background: {{$_days_label.color}};" title="{{$_days_label.detail}}">
+	               {{$_days_label.text}}
+	             </label>
+						 {{/foreach}}
+					 {{/if}}
 					</th>
     	 {{/foreach}}
        <th></th>
