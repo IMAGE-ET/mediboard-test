@@ -35,7 +35,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td>{{tr}}CPlageVacances.none{{/tr}}</td>
+      <td colspan="3">{{tr}}CPlageVacances.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

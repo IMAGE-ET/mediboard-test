@@ -13,7 +13,6 @@
       { onComplete: function() {
           loadUser({{$plagevac->user_id}}, '{{$plagevac->plage_id}}') ;
           changedate('');
-          editPlageVac('{{$plagevac->plage_id}}',{{$plagevac->user_id}});
       }
 });">
   <input type="hidden" name="dosql" value="do_plagevac_aed" />
@@ -22,6 +21,7 @@
   <input type="hidden" name="plage_id" value="{{$plagevac->plage_id}}" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
+  <input type="hidden" name="callback" value="editPlageVacCallback" />
   <table class="form">
     <tr>
       <td colspan="2">
@@ -84,9 +84,9 @@
 
     <tr>
       <td colspan="6" class="button">
-        <button class = "submit" type="submit">{{tr}}Save{{/tr}}</button>
+        <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
         {{if $plagevac->_id}}
-          <button class="trash" type="submit" onclick="confirmDeletion(this.form,{typeName:'la plage',objName:'{{$plagevac->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">{{tr}}Delete{{/tr}}</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la plage',objName:'{{$plagevac->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

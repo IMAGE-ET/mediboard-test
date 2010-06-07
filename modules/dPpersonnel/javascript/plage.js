@@ -2,7 +2,11 @@ editPlageVac = function(plage_id, user_id){
   var url = new Url("dPpersonnel", "ajax_edit_plage_vac");
   url.addParam("plage_id", plage_id);
   url.addParam("user_id", user_id);
-  url.requestUpdate("edit_plage");
+  url.requestUpdate("edit_plage", {
+    method: "post",
+    getParameters:
+        {m: "dPpersonnel", a: "ajax_edit_plage_vac"}
+  });
   if(plage_id != '') {
     if($("p"+plage_id) != null) {
       var plage = $("p"+plage_id); 
@@ -29,4 +33,8 @@ loadUser=function(user_id, plage_id){
     user.className = "selected";
   }
   
+}
+
+editPlageVacCallback = function(id) {
+  editPlageVac(id);
 }
