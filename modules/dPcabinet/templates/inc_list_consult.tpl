@@ -95,7 +95,7 @@ Main.add( function () {
 
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
     {{assign var=categorie value=$_consult->_ref_categorie}}
-    <td style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" rowspan="2" class="text">
+    <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" rowspan="2" class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
