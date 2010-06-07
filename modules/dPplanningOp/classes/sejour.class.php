@@ -140,6 +140,7 @@ class CSejour extends CCodable {
   
   // Distant fields
   var $_dates_operations          = null;
+  var $_dates_consultations       = null;
   var $_codes_ccam_operations     = null;
   var $_num_dossier               = null;
   var $_list_constantes_medicales = null;
@@ -306,15 +307,16 @@ class CSejour extends CCodable {
       if ($entree !== null && $sortie !== null) {
         $this->makeDatesOperations();
         foreach($this->_dates_operations as $operation_id => $date_operation){
-          $isCurrOp = $this->_curr_op_id == $operation_id;
-          if ($isCurrOp) {
-            $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
-          } 
-          else {
-            $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
-          }
+          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
           if (!$opInBounds) {
-             $msg.= "Interventions en dehors des nouvelles dates du séjour";  
+             $msg.= "Interventions en dehors des nouvelles dates du séjour.<br />";  
+          } 
+        }
+        $this->makeDatesConsultations();
+        foreach($this->_dates_consultations as $consultation_id => $date_consultation){
+        	$consultInBounds = $date_consultation >= mbDate($entree) && $date_consultation <= mbDate($sortie);
+          if (!$consultInBounds) {
+             $msg.= "Consultations en dehors des nouvelles dates du séjour.<br />";  
           } 
         }
       }
@@ -1306,6 +1308,31 @@ class CSejour extends CCodable {
       }
 
       $this->_dates_operations[$operation->_id] = mbDate($operation->_datetime);
+    }
+  }
+  
+  /**
+   * Builds an array containing consults dates
+   */
+  function makeDatesConsultations() {
+    $this->_dates_operations = array();
+    
+    // On s'assure d'avoir les opérations
+    if (!$this->_ref_consultations) {
+      $this->loadRefsConsultations();
+    }
+    
+    foreach ($this->_ref_consultations as &$consultation) {
+      if ($consultation->annulee){
+        continue;
+      }
+      
+      // On s'assure d'avoir les plages op
+      if (!$consultation->_ref_plageconsult) {
+        $consultation->loadRefPlageConsult();
+      }
+
+      $this->_dates_consultations[$consultation->_id] = mbDate($consultation->_datetime);
     }
   }
   
