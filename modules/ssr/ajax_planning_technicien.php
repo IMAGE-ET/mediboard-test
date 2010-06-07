@@ -34,20 +34,19 @@ $planning->guid = $kine->_guid;
 
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
+$where = array();
 $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $where["therapeute_id"] = " = '$kine->_id'";
 $where["equipement_id"] = $surveillance ? " IS NOT NULL" : " IS NULL";
 $evenements = $evenement_ssr->loadList($where);
 
-$ds = CSQLDataSource::get("std");
-$query = "SELECT SUM(duree) as total, DATE(debut) as date
-					FROM evenement_ssr
-					WHERE therapeute_id = '$kine->_id' AND debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59' AND ";
-					
-$query .= $surveillance ? "equipement_id IS NULL" : "equipement_id IS NOT NULL";
-$query .= " GROUP BY DATE(debut)";
-					
-$duree_occupation = $ds->loadList($query);
+// Chargement des evenements SSR de "charge"
+$where["equipement_id"] = $surveillance ? " IS NULL" : " IS NOT NULL";
+$evenements_charge = $evenement_ssr->loadList($where);
+
+foreach($evenements_charge as $_evenement){
+  $planning->addLoad($_evenement->debut, $_evenement->duree);
+}
 
 foreach($evenements as $_evenement){
 	$_evenement->loadRefElementPrescription();
@@ -85,6 +84,17 @@ foreach($evenements as $_evenement){
 }
 
 $config = $surveillance ? CAppUI::conf("ssr occupation_surveillance") : CAppUI::conf("ssr occupation_technicien");
+
+// Labels de charge sur la journée
+$ds = CSQLDataSource::get("std");
+$query = "SELECT SUM(duree) as total, DATE(debut) as date
+          FROM evenement_ssr
+          WHERE therapeute_id = '$kine->_id' AND debut BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59' AND ";
+          
+$query .= $surveillance ? "equipement_id IS NULL" : "equipement_id IS NOT NULL";
+$query .= " GROUP BY DATE(debut)";
+          
+$duree_occupation = $ds->loadList($query);
 
 foreach($duree_occupation as $_occupation){
 	$duree_occupation = $_occupation["total"];
