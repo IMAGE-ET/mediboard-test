@@ -88,8 +88,9 @@ selectTechnicien = function(kine_id, buttonSelected) {
 selectEquipement = function(equipement_id) {
   $V(oFormEvenementSSR.equipement_id, equipement_id);
 	$$("button.equipement").invoke("removeClassName", "selected");
-  $("equipement-"+equipement_id).addClassName("selected");
-	
+	if($("equipement-"+equipement_id)){
+    $("equipement-"+equipement_id).addClassName("selected");
+	}
 	if(equipement_id){
   	PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
 	} else {
@@ -110,7 +111,7 @@ submitSSR = function(){
 	  alert("Veuillez selectionner un code SSR");
 		return false;
 	}
-	if(!$$("button.equipement.selected").length){
+	if(!$$("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
 	  alert("Veuillez selectionner un equipement");
     return false;
 	}
@@ -407,6 +408,21 @@ Main.add(function(){
 	        </button>
 	        {{/foreach}}
 	        <button id="equipement-" type="button" class="cancel equipement" onclick="selectEquipement('');">Aucun</button>
+					
+					
+					<select name="_equipement_id" onchange="selectEquipement(this.value);">
+            <option value="">&mdash; Equipement</option>
+            {{foreach from=$plateaux item=_plateau}}
+						  {{if $_plateau->_id != $plateau->_id}}
+	              <optgroup label="{{$_plateau->_view}}">
+	              {{foreach from=$_plateau->_ref_equipements item=_equipement}}
+	                <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+	              {{/foreach}}
+	              </optgroup>
+							{{/if}}
+            {{/foreach}}
+          </select>
+					
 	      </td>
 	    </tr>
 	    <tr>
