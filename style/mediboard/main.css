@@ -451,6 +451,11 @@ table#weeklyPlanning th.today {
   background-color: #ffd;
 }
 
+.planning .event-container {
+  width: 100%;
+  position: absolute;
+}
+
 .planning .event {
   position: absolute;
   -moz-border-radius: 3px;
@@ -527,6 +532,32 @@ table#weeklyPlanning th.today {
   font-weight: bold;
   border-bottom: 1px dotted rgba(255,255,255,0.4);
   white-space: nowrap;
+}
+
+.planning.load .event-container {
+  width: 90%;
+}
+
+.planning .load-container {
+  right: 0;
+  width: 10%;
+  position: absolute;
+}
+
+.planning .load {
+  right: 0;
+  position: absolute;
+  background: #333;
+}
+
+.planning .load.low {
+  background: #49BF23;
+}
+.planning .load.medium {
+  background: #FFA200;
+}
+.planning .load.high {
+  background: #FF0000;
 }
 
 .planning .elt_selected {

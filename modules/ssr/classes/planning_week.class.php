@@ -26,11 +26,14 @@ class CPlanningWeek  {
   var $hour_min = "09";
   var $hour_max = "18";
   var $hour_divider = 6;
+  var $maximum_load = 6;
+  var $has_load = false;
   
   var $events = array();
   var $pauses = array("07", "12", "17");
   var $unavailabilities = array();
   var $day_labels = array();
+  var $load_data = array();
   
 	var $_date_min_planning = null;
 	var $_date_max_planning = null;
@@ -63,7 +66,9 @@ class CPlanningWeek  {
     
     // Days period
     for ($i = 0; $i < $this->nb_days; $i++) {
-      $this->days[mbDate("+$i day", $monday)] = array();
+      $_day = mbDate("+$i day", $monday);
+      $this->days[$_day] = array();
+      $this->load_data[$_day] = array();
     }
 		
 		$this->_date_min_planning = reset(array_keys($this->days));
@@ -134,7 +139,6 @@ class CPlanningWeek  {
    * @param object $text The label
    * @param object $detail [optional] Details about the label
    * @param object $color [optional] The label's color
-   * @return 
    */
   function addDayLabel($day, $text, $detail = null, $color = null) {
     $this->day_labels[mbDate($day)] = array(
@@ -142,5 +146,44 @@ class CPlanningWeek  {
       "detail" => $detail, 
       "color"  => $color,
     );
+  }
+  
+  /**
+   * Add a load event
+   * @param CPlanningEvent|date $start
+   * @param integer $length [optional]
+   */
+  function addLoad($start, $length = null) {
+    $this->has_load = true;
+    
+    if ($start instanceof CPlanningEvent) {
+      $event = $start;
+      $day = mbDate($event->day);
+    }
+    else {
+      $day = mbDate($start);
+      $event = new CPlanningEvent(null, $start, $length);
+    }
+    
+    $start = $event->start;
+    $end   = $event->end;
+    
+    $div_size = 60 / $this->hour_divider;
+    
+    for($i = 0; $i < $this->hour_divider * 24; $i++) {
+      $div_min = mbDateTime("+".($i*$div_size)." MINUTES", $day);
+      $div_max = mbDateTime("+".(($i+1)*$div_size)." MINUTES", $day);
+      
+      // FIXME: ameliorer ce calcul
+      if ($div_min >= $start && $div_min < $end) {
+        $hour = mbTransformTime(null, $div_min, "%H");
+        $min = mbTransformTime(null, $div_min, "%M");
+        
+        if (!isset($this->load_data[$day][$hour][$min])) {
+          $this->load_data[$day][$hour][$min] = 0;
+        }
+        $this->load_data[$day][$hour][$min]++;
+      }
+    }
   }
 }

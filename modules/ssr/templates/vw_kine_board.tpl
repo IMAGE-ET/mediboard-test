@@ -59,6 +59,7 @@ updateSelectedEvents = function(input_elements){
 		<td>
       <form name="selectKine" method="get" action="">
         <input type="hidden" name="m" value="ssr" />
+        <input type="hidden" name="tab" value="vw_kine_board" />
         <select name="kine_id" onchange="this.form.submit();">
           {{foreach from=$kines item=_kine}}
             <option value="{{$_kine->_id}}" class="mediuser"

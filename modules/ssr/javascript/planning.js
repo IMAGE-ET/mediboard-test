@@ -64,6 +64,8 @@ PlanningEvent = Class.create({
 
 WeekPlanning = Class.create({
   scrollTop: null,
+  load_data: [],
+  maximum_load: null,
   initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
@@ -99,5 +101,35 @@ WeekPlanning = Class.create({
   },
   onEventChange: function(e){
     console.debug(e.getTime());
+  },
+  setLoadData: function(load_data, maximum_load){
+    this.load_data = load_data;
+    this.maximum_load = maximum_load;
+    
+    if (!this.load_data) return;
+    
+    // Day
+    $H(this.load_data).each(function(day){
+      if (day.value.length === 0) return;
+      
+      // Hour
+      $H(day.value).each(function(hour){
+        
+        // Minute
+        $H(hour.value).each(function(load){
+          var container = $(this.container.id+"-"+day.key+"-"+hour.key+"-"+load.key);
+          
+          var cellHeight = this.getCellHeight();
+          var height = Math.ceil(cellHeight / this.hour_divider);
+          var top = Math.ceil(cellHeight * (load.key / this.hour_divider) / 10);
+          
+          container.setStyle({
+            top:    top+"px",
+            width:  100 * (load.value / maximum_load)+"%",
+            height: height+"px"
+          });
+        }, this);
+      }, this);
+    }, this);
   }
 });

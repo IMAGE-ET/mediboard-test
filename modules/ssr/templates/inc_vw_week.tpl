@@ -20,12 +20,14 @@ Main.add(function() {
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop
   );
   
+  planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
+  
 	window["planning-{{$planning->guid}}"] = planning;
 });
 
 </script>
 
-<div class="planning {{if $planning->large}}large{{/if}}" id="{{$planning->guid}}">
+<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" id="{{$planning->guid}}">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
@@ -87,6 +89,9 @@ Main.add(function() {
             
             <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
+              
+              <div class="event-container">
+              
               {{foreach from=$_events item=_event}}
                 {{if $_event->hour == $_hour}}
                   <div id="{{$_event->internal_id}}" 
@@ -170,6 +175,26 @@ Main.add(function() {
                    {{/if}}
                 {{/if}}
               {{/foreach}}
+              
+              </div>
+              
+              {{* Time range *}}
+              {{if array_key_exists($_day, $planning->load_data) && array_key_exists($_hour, $planning->load_data.$_day)}}
+                <div class="load-container">
+                  {{foreach from=$planning->load_data.$_day.$_hour item=_load key=_key}}
+                    {{math equation="x/y" x=$_load y=$planning->maximum_load assign=_load_ratio}}
+                    {{if $_load_ratio < 0.3}}
+                      {{assign var=level value=low}}
+                    {{elseif $_load_ratio < 0.7}}
+                      {{assign var=level value=medium}}
+                    {{else}}
+                      {{assign var=level value=high}}
+                    {{/if}}
+                    <div id="{{$planning->guid}}-{{$_day}}-{{$_hour}}-{{$_key}}" class="load {{$level}}"></div>
+                  {{/foreach}}
+                </div>
+              {{/if}}
+              
               </div>
             </td>
             {{if in_array($_hour,$planning->pauses)}}
