@@ -19,6 +19,15 @@ $keywords            = CValue::getOrSession('keywords');
 $endowment_id        = CValue::get('endowment_id');
 $endowment_item_id   = CValue::get('endowment_item_id');
 
+$service = new CService();
+$service->load($service_id);
+$service->loadBackRefs("endowments");
+
+if($endowment_id === null) {
+  $first = reset($service->_back["endowments"]);
+  $endowment_id = $first->_id;
+}
+
 // Calcul de date_max et date_min
 $date_min = CValue::getOrSession('_date_min');
 $date_max = CValue::getOrSession('_date_max');
@@ -145,10 +154,6 @@ foreach($stocks as &$stock) {
   $delivery = new CProductDelivery;
   $stock->_ref_deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
 }
-
-$service = new CService();
-$service->load($service_id);
-$service->loadBackRefs("endowments");
 
 // Création du template
 $smarty = new CSmartyDP();
