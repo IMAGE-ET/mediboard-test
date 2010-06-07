@@ -462,6 +462,7 @@ $locales['CConsultation.tiers_mode_reglement.autre'] = 'Autre';
 $locales['CConsultation.tiers_mode_reglement.cheque'] = 'Chèque';
 $locales['CConsultation.tiers_mode_reglement.especes'] = 'Espèces';
 $locales['CConsultation.tiers_mode_reglement.virement'] = 'Virement';
+$locales['CConsultation-denyDayChange'] = 'Impossible de changer la journée de la consultation car l\'admission est déjà effectuée';
 $locales['CConsultationCategorie'] = 'Catégorie de consultation';
 $locales['CConsultationCategorie-back-consultations'] = 'Consultations';
 $locales['CConsultationCategorie-back-consultations.empty'] = 'Aucune consultation';

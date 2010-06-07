@@ -726,6 +726,29 @@ class CConsultation extends CCodable {
       $this->sejour_id = $sejour->_id;
     }
     
+    // Changement de journée pour la consult 
+    $this->_ref_sejour->_adjust_sejour = false;
+    if ($this->sejour_id && $this->fieldModified("plageconsult_id")) {
+      $this->loadRefSejour();
+      $this->_ref_sejour->_adjust_sejour = true;
+      
+      // Pas le permettre si admission est déjà faite
+      if ($this->_ref_sejour->entree_reelle) {
+        return CAppUI::tr("CConsultation-denyDayChange");
+      }
+      
+      $this->loadRefPlageConsult();
+      $dateTimePlage = $this->_datetime;
+      $where = array();
+      $where['patient_id']   = " = '$this->patient_id'";
+      $where[] = "`sejour`.`entree` <= '$dateTimePlage' AND `sejour`.`sortie` >= '$dateTimePlage'";
+      
+      $sejour = new CSejour();
+      $sejour->loadObject($where);
+      
+      $this->adjustSejour($sejour, $dateTimePlage);
+    }
+    
     if ($this->_id && $this->sejour_id && $this->fieldModified("chrono", self::PATIENT_ARRIVE)) {
       $this->completeField("plageconsult_id");
       $this->loadRefPlageConsult();
@@ -743,6 +766,18 @@ class CConsultation extends CCodable {
     if ($msg = parent::store()) {
       return $msg;
     }
+
+    if ($this->_ref_sejour->_adjust_sejour && ($this->_ref_sejour->type == "consult") && $sejour->_id) {
+      $consultations = $this->_ref_sejour->loadBackRefs("consultations");
+      if (count($consultations) < 1) {
+        if ($msg = $this->_ref_sejour->delete()) {
+          $this->_ref_sejour->annule = 1;
+          if ($msg = $this->_ref_sejour->store()) {
+            return $msg;
+          }
+        }
+      }
+    }  
     
     // Gestion du tarif et precodage des actes
     if ($this->_bind_tarif && $this->_id){
@@ -1072,9 +1107,50 @@ class CConsultation extends CCodable {
     // Date dépassée
     $this->loadRefPlageConsult();
     if ($this->_ref_plageconsult->date < mbDate()) {
-      return "Imposible de supprimer une consultation passée";
+      return "Impossible de supprimer une consultation passée";
     }
     return parent::canDeleteEx();
+  }
+  
+  function adjustSejour($sejour, $dateTimePlage) {
+    if ($sejour->_id == $this->_ref_sejour->_id) {
+      return;
+    }
+    
+    // Journée dans lequel on déplace à déjà un séjour 
+    if ($sejour->_id) {
+      // Affecte à la consultation le nouveau séjour
+      $this->sejour_id = $sejour->_id;
+      
+      return;
+    }
+    
+    // Journée qui n'a pas de séjour en cible
+    $consultations = $this->_ref_sejour->loadBackRefs("consultations");
+    // On déplace les dates du séjour
+    if (($consultations == 1) && ($this->_ref_sejour->type == "consult")) {
+      $this->_ref_sejour->entree_prevue = $dateTimePlage;
+      $this->_ref_sejour->sortie_prevue = mbDate($dateTimePlage)." 23:59:59";
+      $this->_ref_sejour->_hour_entree_prevue = null;
+      $this->_ref_sejour->_hour_sortie_prevue = null;
+      if ($msg = $this->_ref_sejour->store()) {
+        return $msg;
+      }
+      
+      return;
+    } 
+    
+    // On créé le séjour de consultation
+    $sejour->patient_id = $this->patient_id;
+    $sejour->praticien_id = $this->_ref_chir->_id;
+    $sejour->group_id = CGroups::loadCurrent()->_id;
+    $sejour->type = "consult";
+    $sejour->entree_prevue = $dateTimePlage;
+    $sejour->sortie_prevue = mbDate($dateTimePlage)." 23:59:59";
+    if ($msg = $sejour->store()) {
+      return $msg;
+    }
+    $this->sejour_id = $sejour->_id; 
   }
 }
 
