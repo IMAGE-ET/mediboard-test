@@ -282,7 +282,22 @@ class CSetupssr extends CSetup {
             ADD `brancardage` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
 		
-		$this->mod_version = "0.19";
+		$this->makeRevision("0.19");
+		$sql = "CREATE TABLE `replacement` (
+              `replacement_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `sejour_id` INT (11) UNSIGNED NOT NULL,
+              `conge_id` INT (11) UNSIGNED NOT NULL,
+              `replacer_id` INT (11) UNSIGNED NOT NULL
+            ) TYPE=MYISAM;";
+		$this->addQuery($sql);
+
+    $sql = "ALTER TABLE `replacement` 
+              ADD INDEX (`sejour_id`),
+              ADD INDEX (`conge_id`),
+              ADD INDEX (`replacer_id`);";
+    $this->addQuery($sql);
+		
+		$this->mod_version = "0.20";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

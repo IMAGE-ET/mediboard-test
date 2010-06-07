@@ -17,6 +17,7 @@ $module->registerTab("vw_idx_repartition"     , TAB_READ);
 $module->registerTab("vw_plateau_board"       , TAB_READ);
 $module->registerTab("vw_idx_plateau"         , TAB_READ);
 $module->registerTab("vw_cdarr"               , TAB_READ);
+$module->registerTab("vw_aed_replacement"    , TAB_READ);
 $module->registerTab("edit_codes_intervenants", TAB_ADMIN);
 
 ?>

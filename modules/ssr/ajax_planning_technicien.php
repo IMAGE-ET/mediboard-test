@@ -113,12 +113,6 @@ foreach($duree_occupation as $_occupation){
 
 foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {
 	$planning->addUnavailability($_plage->date_debut, $_plage->date_fin);
-	$replacer = $_plage->loadFwdRef("replacer_id");
-	if ($replacer->_id) {
-		for ($day = $_plage->date_debut; $day <= $_plage->date_fin; $day = mbDate("+1 DAY", $day)) {
-      $planning->addDayLabel($day, $replacer->_view);
-		}
-	}
 }
 		
 // Heure courante

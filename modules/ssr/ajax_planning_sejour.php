@@ -93,6 +93,19 @@ foreach ($total_evenement as $_date => $_total_evt){
   }
 }
 
+
+$sejour->loadRefReplacement();
+if($sejour->_ref_replacement->_id){
+	$replacement =& $sejour->_ref_replacement;
+	$replacement->loadRefReplacer();
+  $replacement->loadRefConge();
+	$conge =& $sejour->_ref_replacement->_ref_conge;
+	
+	for ($day = $conge->date_debut; $day <= $conge->date_fin; $day = mbDate("+1 DAY", $day)) {
+    $planning->addDayLabel($day, $sejour->_ref_replacement->_ref_replacer->_view);
+  }	
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("planning", $planning);

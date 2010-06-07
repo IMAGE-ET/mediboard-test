@@ -131,6 +131,7 @@ class CSejour extends CCodable {
   var $_ref_prescripteurs     = null;
   var $_ref_adresse_par_prat  = null;
   var $_ref_prescription_sejour = null;
+	var $_ref_replacement        = null;
 	
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -201,7 +202,8 @@ class CSejour extends CCodable {
     $backProps["echanges_hprim"]       = "CEchangeHprim object_id";
     $backProps["planifications"]       = "CPlanificationSysteme sejour_id";
     $backProps["rhss"]                 = "CRHS sejour_id";
-		$backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";  
+		$backProps["evenements_ssr"]       = "CEvenementSSR sejour_id";
+		$backProps["replacement"]          = "CReplacement sejour_id";
     return $backProps;
   }
 
@@ -998,6 +1000,10 @@ class CSejour extends CCodable {
     }
   }
   
+	function loadRefReplacement(){
+		$this->_ref_replacement = $this->loadUniqueBackRef("replacement");
+	}
+	
   function loadListConstantesMedicales() {
     if ($this->_list_constantes_medicales) return;
     

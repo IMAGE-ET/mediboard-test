@@ -20,7 +20,8 @@ class CPlageVacances extends CMbObject {
 
   // Object References
   var $_ref_user  = null;
-
+  var $_ref_replacer = null;
+	
   // Form field
   var $_duree      = null;
 
@@ -41,6 +42,12 @@ class CPlageVacances extends CMbObject {
     $specs["replacer_id"] = "ref class|CMediusers";
 		$specs["_duree"]      = "num";
     return $specs;
+  }
+	
+	function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["replacement"]             = "CReplacement conge_id";
+    return $backProps;
   }
 
 	function updateFormFields() {
@@ -77,6 +84,10 @@ class CPlageVacances extends CMbObject {
     $where["replacer_id"] = "= '$user_id'";
     $where[] = "'$date' BETWEEN date_debut AND date_fin";
     return $this->loadList($where);
+	}
+	
+	function loadRefReplacer(){
+		$this->_ref_replacer = $this->loadUniqueBackRef("replacement");
 	}
 	
 	function loadRefUser() {
