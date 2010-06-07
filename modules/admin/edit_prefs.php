@@ -24,21 +24,13 @@ else{
   $user_id = $AppUI->user_id;
 }
 
-// Chargement User demandé
+// Load the preferences
 $user = null;
 if($user_id !== null){
   $user = new CUser;
   $user->load($user_id);
-  
-  $global_prefs = CPreferences::get(0);
-
-  if($user_id == $AppUI->user_id)
-    $prefs = array_merge($global_prefs, $AppUI->user_prefs);
-  else
-    $prefs = CPreferences::get($user_id);
+  $prefs = array_merge(CPreferences::get(0), CPreferences::get($user_id));
 }
-
-// load the preferences
 
 $prefsUser = array();
 
