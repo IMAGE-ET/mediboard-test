@@ -69,6 +69,7 @@ if(count($_days)){
     $where[] = "'$_day' BETWEEN date_debut AND date_fin";
     $plage_conge->loadObject($where);
     
+		$replacer_id = "";
 		if($plage_conge->_id){
 			$replacement = new CReplacement();
 			$replacement->conge_id = $plage_conge->_id;
@@ -77,7 +78,7 @@ if(count($_days)){
 			
 			$replacer_id = $replacement->replacer_id;
 		}
-		$evenement_ssr->therapeute_id = isset($replacer_id) ? $replacer_id : $therapeute_id;
+		$evenement_ssr->therapeute_id = $replacer_id ? $replacer_id : $therapeute_id;
 	
 		$msg = $evenement_ssr->store();
 		CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
