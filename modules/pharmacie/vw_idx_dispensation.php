@@ -15,7 +15,7 @@ $patient_id = CValue::getOrSession('patient_id');
 
 // Services list
 $service = new CService();
-$list_services = $service->loadGroupList();
+$list_services = $service->loadListWithPerms(PERM_READ);
 
 $day_min = mbDate("-1 DAY");
 $day_max = mbDate("+2 DAY");

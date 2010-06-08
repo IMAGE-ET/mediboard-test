@@ -153,6 +153,12 @@ foreach($stocks as &$stock) {
   
   $delivery = new CProductDelivery;
   $stock->_ref_deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
+  
+  $stock->_total_quantity = 0;
+  
+  foreach($stock->_ref_deliveries as $_deliv) {
+    $stock->_total_quantity += $_deliv->quantity;
+  }
 }
 
 // Création du template

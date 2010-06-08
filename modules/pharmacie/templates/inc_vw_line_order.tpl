@@ -10,12 +10,10 @@
 
 {{assign var=id value=$curr_delivery->_id}}
 
-<tr>
+<tr {{if $curr_delivery->isDelivered()}}style="opacity: 0.4; display: none;" class="done"{{/if}}>
   <td>
     {{if $curr_delivery->patient_id}}
       {{$curr_delivery->_ref_patient->_view}}
-    {{else}}
-      {{$curr_delivery->_ref_service->_view}}
     {{/if}}
   </td>
   <td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
@@ -96,7 +94,7 @@
   
   <td title="Quantité d'origine: {{$curr_delivery->quantity}}">
     {{if $curr_delivery->_ref_stock->_id}}
-    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}}>
+    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />

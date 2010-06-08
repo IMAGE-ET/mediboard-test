@@ -26,12 +26,8 @@ CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 
 // Services list
-$where = array(
-  "group_id" => "= '".CGroups::loadCurrent()->_id."'"
-);
-
 $service = new CService();
-$list_services = $service->loadListWithPerms(PERM_READ, $where, "nom");
+$list_services = $service->loadListWithPerms(PERM_READ);
 
 if ($m == "dPurgences") {
   foreach($list_services as $_id => $_service) {

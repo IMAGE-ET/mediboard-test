@@ -101,6 +101,10 @@ function refreshPatient(){
   url.requestUpdate("patients");
 }
 
+function selectOrderTab(select){
+  window.ordersTabs.setActiveTab("tab-CService-"+$V(select));
+}
+
 var tabs;
 Main.add(function () {
   tabs = Control.Tabs.create('tab_delivrances', true);
@@ -119,7 +123,7 @@ Main.add(function () {
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
       <td>{{mb_field object=$delivrance field=_date_max form=filter register=true onchange="refreshPatient()"}}</td>
       <td>
-        <select name="service_id" onchange="refreshPatient();">
+        <select name="service_id" onchange="refreshPatient(); selectOrderTab(this);">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
@@ -134,7 +138,7 @@ Main.add(function () {
 <ul id="tab_delivrances" class="control_tabs">
   <li><a href="#list-dispensations"><span id="list-dispensations-title">Nominatif reglobalisé</span> <small>(0)</small></a></li>
   <li><a href="#list-stocks" id="list-stocks-title">Global</a></li>
-  <li><a href="#list-orders" id="list-orders-title">Commandes <span style="font-weight: normal">(tous les services)</span> <small>(0)</small></a></li>
+  <li><a href="#list-orders" id="list-orders-title">Commandes <small>(0)</small></a></li>
   <li id="li-transmissions"><a href="#list-transmissions">Transmissions</a></li>
 </ul>
 <hr class="control_tabs" />

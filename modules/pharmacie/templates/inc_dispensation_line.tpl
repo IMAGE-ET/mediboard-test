@@ -150,9 +150,9 @@
        {{/if}}
        {{if $delivrance->quantity == 0}}
          {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
-           <script type="text/javascript">
-             getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tbody").hide().addClassName("done");
-           </script>
+         <script type="text/javascript">
+           getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
+         </script>
        {{else}}
          {{assign var=style value=""}}
        {{/if}}
@@ -203,7 +203,7 @@
          {{if $delivrance->quantity == 0}}
            {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
            <script type="text/javascript">
-             getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tbody").hide().addClassName("done");
+             getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
            </script>
          {{else}}
            {{assign var=style value=""}}

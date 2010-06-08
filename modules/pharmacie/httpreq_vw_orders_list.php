@@ -10,8 +10,10 @@
 
 CCanDo::checkRead();
 
-$service_id = CValue::get('service_id');
-$start      = CValue::get('start', 0);
+$start = CValue::get('start', 0);
+
+$service = new CService();
+$list_services = $service->loadListWithPerms(PERM_READ);
 
 $order_by = 'date_dispensation ASC';
 $where = array (
@@ -21,19 +23,26 @@ $where = array (
 
 $where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
-$deliveries = $delivery->loadList($where, $order_by, intval($start).",30");
-$total = $delivery->countList($where);
 
-$stocks_service = array();
-foreach($deliveries as $_delivery) {
-  if ($_delivery->_ref_stock->_id)
-    $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
+$total = 0;
+foreach($list_services as $_service) {
+  $where["service_id"] = "= '$_service->_id'";
+  
+  $_service->_ref_deliveries = $delivery->loadList($where, $order_by/*, intval($start).",30"*/);
+  $_service->_count_deliveries = $delivery->countList($where);
+  $_service->_ref_delivery_stocks = array();
+  
+  $total += $_service->_count_deliveries;
+  
+  foreach($_service->_ref_deliveries as $_delivery) {
+    if ($_delivery->_ref_stock->_id)
+      $_service->_ref_delivery_stocks[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_service->_id);
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('deliveries', $deliveries);
-$smarty->assign('stocks_service', $stocks_service);
+$smarty->assign('list_services', $list_services);
 $smarty->assign('total', $total);
 $smarty->assign('start', $start);
 $smarty->display('inc_orders_list.tpl');

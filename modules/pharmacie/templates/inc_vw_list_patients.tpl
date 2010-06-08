@@ -28,7 +28,7 @@ Main.add(function () {
 <select name="patient_id" onchange="editFieldPrescription($V(this))">
   <option value="">&mdash; Dispensations globales</option>
   {{foreach from=$patients item=_patient}}
-    <option value="{{$_patient->_id}}">Dispensation pour {{$_patient->_view}}</option>
+    <option value="{{$_patient->_id}}">{{$_patient->_view}}</option>
   {{/foreach}}
 </select>
 <input type="hidden" name="sejour_id" value="" />
