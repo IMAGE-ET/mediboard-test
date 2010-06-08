@@ -74,7 +74,7 @@ updateSelectedEvents = function(input_elements){
 		<td style="width: 65%">
 			<div style="position: relative">
 			  <div style="position: absolute; top: 0px; right: 0px;">
-          <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"/>
+          <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
         </div>
 				<div id="planning-technicien"></div>
 			</div>

@@ -31,28 +31,28 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="alimentation" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="alimentation" typeEnum="radio" separator="</td><td>"}}</td>
-			<td/>
+			<td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="toilette" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="toilette" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="habillage_haut" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="habillage_haut" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="habillage_bas" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="habillage_bas" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
@@ -65,28 +65,28 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="transfert_lit" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="transfert_lit" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="locomotion" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="locomotion" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="locomotion_materiel" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="locomotion_materiel" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="escalier" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="escalier" typeEnum="radio" separator="</td><td>"}}</td>
-      <td/>
+      <td></td>
     </tr>
 
     <tr>
@@ -96,14 +96,14 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="pansement" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="pansement" typeEnum="radio" separator="</td><td>" default=""}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="escarre" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="escarre" typeEnum="radio" separator="</td><td>" default=""}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
@@ -120,28 +120,28 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="comprehension" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="comprehension" typeEnum="radio" separator="</td><td>"}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="expression" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="expression" typeEnum="radio" separator="</td><td>"}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="memoire" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="memoire" typeEnum="radio" separator="</td><td>"}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
     <tbody class="hoverable">
     <tr>
       <th>{{mb_label object=$fiche_autonomie field="resolution_pb" typeEnum="radio"}}</th>
       <td>{{mb_field object=$fiche_autonomie field="resolution_pb" typeEnum="radio" separator="</td><td>"}}</td>
-      <td colspan="2" />
+      <td colspan="2"></td>
     </tr>
     </tbody>
 

@@ -2,7 +2,7 @@
   {{foreach from=$lines.$category_id item=_line}}
 	 {{if $_line->_id == $full_line_id}}
 		<tr>
-			<td />
+			<td></td>
 			<td style="border: 1px solid #aaa;">
 			  <form name="editLine-{{$_line->_id}}" action="?" method="post">
 			  	<input type="hidden" name="m" value="dPprescription" />

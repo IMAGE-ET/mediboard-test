@@ -41,7 +41,7 @@ printPlanningSejour = function(){
 		<td>
 			<div style="position: relative;">
 			  <div style="position: absolute; top: 0px; right: 0px;">
-          <button type="button" class="print notext" onclick="printPlanningSejour();"/>
+          <button type="button" class="print notext" onclick="printPlanningSejour();"></button>
         </div>
 				<div id="planning-sejour"></div>
 			</div>
@@ -53,7 +53,7 @@ printPlanningSejour = function(){
   	<td>
 			<div style="position: relative;">
 				<div style="position: absolute; top: 0px; right: 0px;">
-			    <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"/>
+			    <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
 				</div>
 				<div id="planning-technicien"></div>
 		  </div>
