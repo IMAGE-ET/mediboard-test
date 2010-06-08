@@ -24,7 +24,7 @@ var Menu = {
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  <img src="style/{{$uistyle}}/images/pictures/proxilab-140.jpg" alt="{{tr}}menu-logout{{/tr}}" />
+  <img src="images/pictures/logo.png" width="140" />
   
   {{if !$offline}}
     {{mb_include module=mediboard template=change_group}}
@@ -98,7 +98,7 @@ var Menu = {
       <table>
         <tr>
           <td class="logo" style="width:1%">
-            <img src="style/{{$uistyle}}/images/pictures/proxilab-140.jpg" alt="{{tr}}menu-logout{{/tr}}" />
+            <img src="images/pictures/logo.png" width="140" />
           </td>
           <td>
             {{if !$offline}}

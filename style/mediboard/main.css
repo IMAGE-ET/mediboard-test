@@ -534,32 +534,6 @@ table#weeklyPlanning th.today {
   white-space: nowrap;
 }
 
-.planning.load .event-container {
-  width: 90%;
-}
-
-.planning .load-container {
-  right: 0;
-  width: 10%;
-  position: absolute;
-}
-
-.planning .load {
-  right: 0;
-  position: absolute;
-  background: #333;
-}
-
-.planning .load.low {
-  background: #49BF23;
-}
-.planning .load.medium {
-  background: #FFA200;
-}
-.planning .load.high {
-  background: #FF0000;
-}
-
 .planning .elt_selected {
   margin: -1px;
   border: 1px solid #000;
@@ -656,6 +630,32 @@ table#weeklyPlanning th.today {
 
 .planning .event.disabled {
   background: url(./images/pictures/unavailable.png);
+}
+
+.planning.load .hours td {
+  padding-right: 15px;
+}
+
+.planning .load-container {
+  right: -15px;
+  width: 15px;
+  position: absolute;
+}
+
+.planning .load {
+  right: 0;
+  position: absolute;
+  background: #333;
+}
+
+.planning .load.low {
+  background: #49BF23;
+}
+.planning .load.medium {
+  background: #FFA200;
+}
+.planning .load.high {
+  background: #FF0000;
 }
 
 div.tree-content {

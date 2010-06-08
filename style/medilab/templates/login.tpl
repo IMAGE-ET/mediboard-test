@@ -10,7 +10,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="{{$dPconfig.system.website_url}}">
-          <img src="style/{{$uistyle}}/images/pictures/medilab.jpg" alt="MediLab logo" />
+          <img src="images/pictures/logo.png" width="140" />
         </a>
         <p>
           Plateforme de prescription d'analyses et dossier patient
@@ -47,7 +47,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
-          <img src="style/{{$uistyle}}/images/pictures/proxilab-360.jpg" alt="MediLab logo" />
+          <img src="images/pictures/logo.png" width="360" />
         </a>
       </td>
     </tr>

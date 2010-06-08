@@ -253,11 +253,11 @@ table.tabmenu td.selected {
 }
 
 table.tabmenu td.selected.left {
-  background: url(./images/icons/tabSelectedLeft.gif) no-repeat center right;
+  background: url(./images/icons/tabSelectedLeft.png) no-repeat center right;
 }
 
 table.tabmenu td.selected.right {
-  background: url(./images/icons/tabSelectedRight.gif) no-repeat center left;
+  background: url(./images/icons/tabSelectedRight.png) no-repeat center left;
 }
 
 /* Inputs */
@@ -392,7 +392,6 @@ tr.catalogue-3 th {
   background-color: transparent;
 }
 
-/* Différentiel Proxilab  */
 input[readonly],
 input[readonly]:focus {
 	background-color: #fff;
