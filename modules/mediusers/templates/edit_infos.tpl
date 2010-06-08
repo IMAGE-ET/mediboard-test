@@ -3,9 +3,9 @@
 
 <script type="text/javascript">
 contentconge = function() {
-  var url = new Url("dPpersonnel", "vw_planning_vacances");
+  var url = new Url("dPpersonnel", "vw_planning_conge");
    url.addParam("affiche_nom", 0);
-   url.requestUpdate("planningvac");
+   url.requestUpdate("planningconge");
 }
 
 Main.add(function () {
@@ -17,7 +17,7 @@ Main.add(function () {
       var tabs = Control.Tabs.create('tab_edit_mediuser', true);
       contentconge();
       loadUser("{{$user->_id}}", '');
-      editPlageVac('',"{{$user->_id}}");
+      editPlageConge('',"{{$user->_id}}");
 	{{/if}}
 	
 });
@@ -141,7 +141,7 @@ Main.add(function () {
 	    </td>
 	  </tr>
 	  <tr>
-	    <td colspan="2" id="planningvac"></td>
+	    <td colspan="2" id="planningconge"></td>
 	  </tr>
 	</table>
 </div>

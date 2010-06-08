@@ -64,10 +64,10 @@
          </th>
        {{/foreach}}
      </tr>
-     <!-- Zone d'insertion des plages de vacances-->
+     <!-- Zone d'insertion des plages de conge-->
      {{assign var="indice" value="-1"}}
      {{assign var="count" value="-1"}}
-     {{foreach from=$plagesvac item=_plage1}}
+     {{foreach from=$plagesconge item=_plage1}}
        {{if $indice != $_plage1->user_id}}
        {{assign var="userid" value=$_plage1->user_id}}
        {{assign var="indice" value=$userid}}
@@ -81,7 +81,7 @@
          </th>
        <td>
          <div class="insertion">
-         {{foreach from=$plagesvac item=_plage2}}
+         {{foreach from=$plagesconge item=_plage2}}
            {{if $_plage2->user_id == $indice}}
              <div id = "plage{{$_plage2->_id}}" class = "plage">
                <div class="content">
@@ -121,7 +121,7 @@
       {{foreachelse}}
       <tr>
         <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}">
-          {{tr}}CPlageVacances.none{{/tr}}
+          {{tr}}CPlageConge.none{{/tr}}
         </td> 
       </tr>
       {{/foreach}}

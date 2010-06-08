@@ -27,7 +27,7 @@ foreach ($sejours as $_sejour) {
 }
 
 // Remplacements
-$plage = new CPlageVacances;
+$plage = new CPlageConge;
 $sejours_remplaces = array();
 $remplacements = $plage->loadRefsReplacementsFor($kine_id, $date);
 foreach ($remplacements as $_remplacement) {

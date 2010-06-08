@@ -14,7 +14,7 @@
 <table class="tbl">
   <tr>
     <td class="button">
-      <button type="submit" class="edit" onclick="editPlageVac('{{$plage->_id}}','{{$plage->user_id}}')">
+      <button type="submit" class="edit" onclick="editPlageConge('{{$plage->_id}}','{{$plage->user_id}}')">
         {{tr}}Modify{{/tr}}
       </button>
     </td>

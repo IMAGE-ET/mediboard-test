@@ -14,9 +14,9 @@ $user     = new CMediusers();
 $user->load($user_id);
 
 // Chargement de la plage
-$plagevac = new CPlageVacances();
-$plagevac->user_id = $user_id;
-$plagevac->load($plage_id);
+$plageconge = new CPlageConge();
+$plageconge->user_id = $user_id;
+$plageconge->load($plage_id);
 
 // Remplaçants disponibles
 $replacers = $user->loadUsers();
@@ -25,7 +25,7 @@ unset($replacers[$user->_id]);
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user",      $user);
-$smarty->assign("plagevac",  $plagevac);
+$smarty->assign("plageconge",  $plageconge);
 $smarty->assign("replacers", $replacers);
-$smarty->display("inc_edit_plage_vac.tpl");
+$smarty->display("inc_edit_plage_conge.tpl");
 ?>

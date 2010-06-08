@@ -63,7 +63,7 @@ if(count($_days)){
 		$evenement_ssr->remarque = $remarque;
 		
 		// Chargement du remplacant s'il est specifié
-		$plage_conge = new CPlageVacances();
+		$plage_conge = new CPlageConge();
 		$where = array();
     $where["user_id"] = "= '$therapeute_id'";
     $where[] = "'$_day' BETWEEN date_debut AND date_fin";

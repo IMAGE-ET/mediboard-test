@@ -15,7 +15,7 @@ $type = CValue::getOrSession("type");
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$conge = new CPlageVacances();
+$conge = new CPlageConge();
 $conge->load($conge_id);
 
 // Chargement d'un remplacement

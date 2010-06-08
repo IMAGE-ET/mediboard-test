@@ -103,10 +103,10 @@ DragDropPlage = function(draggable){
   date_fin = date_fin.toDATE();
   var plage_id = element.id.substring(5);
 
-  var url = new Url("dPpersonnel", "do_plagevac_aed");
+  var url = new Url("dPpersonnel", "do_plageconge_aed");
   url.addParam("plage_id", plage_id);
   url.addParam("date_debut", date_debut);
-  url.addParam("dosql","do_plagevac_aed");
+  url.addParam("dosql","do_plageconge_aed");
   url.addParam("date_fin", date_fin);
   url.requestUpdate("systemMsg", {
     method: "post",
@@ -140,8 +140,8 @@ toggleYear = function (form) {
   }
 }
 
-function editPlageVac(plage_id, user_id){
-    var url = new Url("dPpersonnel", "vw_idx_plages_vac", "tab");
+function editPlageConge(plage_id, user_id){
+    var url = new Url("dPpersonnel", "vw_idx_plages_conge", "tab");
     url.addParam("plage_id", plage_id);
     url.addParam("user_id", user_id);
     url.redirect();
@@ -239,7 +239,7 @@ Main.add(function(){
          
 
            <tr>
-             <th style="width: 50%;">{{tr}}CPlageVacances-choix-periode{{/tr}}</th>
+             <th style="width: 50%;">{{tr}}CPlageConge-choix-periode{{/tr}}</th>
              <td style="width: 50%;">
                <label>
                  <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}

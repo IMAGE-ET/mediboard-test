@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-class CPlageVacances extends CMbObject {
+class CPlageConge extends CMbObject {
 	// DB Table key
   var $plage_id = null;
   
@@ -27,7 +27,7 @@ class CPlageVacances extends CMbObject {
 
   function getSpec() {
 		$specs = parent::getSpec();
-		$specs->table = "plageVacances";
+		$specs->table = "plageconge";
 		$specs->key   = "plage_id";
 		return $specs;
 	}
@@ -58,17 +58,17 @@ class CPlageVacances extends CMbObject {
 	function check() {
 		$this->completeField("date_debut", "date_fin", "user_id");
 		
-		$plage_vac  = new CPlageVacances();
-		$plage_vac->user_id = $this->user_id;
-		$plages_vac = $plage_vac->loadMatchingList();
-		unset($plages_vac[$this->_id]);
+		$plage_conge  = new CPlageConge();
+		$plage_conge->user_id = $this->user_id;
+		$plages_conge = $plage_conge->loadMatchingList();
+		unset($plages_conge[$this->_id]);
 		
-		foreach($plages_vac as $_plage){
+		foreach($plages_conge as $_plage){
 			$plageinbounds = (($this->date_debut < $_plage->date_debut) &&
 			                  ($this->date_fin < $_plage->date_debut))  ||
 											 (($this->date_debut > $_plage->date_fin));
 			if (!$plageinbounds) {
-        return CAppUI::tr("CPlageVacances-conflit %s", $_plage->_view);
+        return CAppUI::tr("CPlageConge-conflit %s", $_plage->_view);
 		  }
 	  }
     return parent::check();

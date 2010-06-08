@@ -30,7 +30,7 @@ class CReplacement extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["sejour_id"]   = "ref notNull class|CSejour";
-    $props["conge_id"]    = "ref notNull class|CPlageVacances";
+    $props["conge_id"]    = "ref notNull class|CPlageConge";
 		$props["replacer_id"] = "ref notNull class|CMediusers";
     return $props;
   }

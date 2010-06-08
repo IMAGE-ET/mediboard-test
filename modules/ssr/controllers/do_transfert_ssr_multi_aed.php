@@ -13,7 +13,7 @@ $sejour_id = CValue::post("sejour_id");
 $conge_id = CValue::post("conge_id");
 $replacer_id = CValue::post("replacer_id");
 
-$conge = new CPlageVacances();
+$conge = new CPlageConge();
 $conge->load($conge_id);
 
 $evenement = new CEvenementSSR();

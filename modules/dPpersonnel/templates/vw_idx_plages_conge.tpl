@@ -33,14 +33,14 @@ function raz(form) {
     <td>
 	    <table class="tbl">
         <tr>
-	        <th class="title" colspan="2">{{tr}}CPlageVacances-list{{/tr}}</th>
+	        <th class="title" colspan="2">{{tr}}CPlageConge-list{{/tr}}</th>
 	      </tr>
         <tr>
 		      <th class="category">
 	        {{tr}}CMediusers-_user_last_name{{/tr}} {{tr}}CMediusers-_user_first_name{{/tr}}
 	        </th>
 					<th class="category">
-          {{tr}}CPlageVacances-corresponding{{/tr}}
+          {{tr}}CPlageConge-corresponding{{/tr}}
           </th>
 	      </tr>
         {{foreach from=$found_users item=mediuser}}
@@ -48,7 +48,7 @@ function raz(form) {
           <td>
             <a href="#{{$mediuser->_guid}}"
 						onclick="loadUser({{$mediuser->_id}}, '');
-										   editPlageVac('',{{$mediuser->_id}});
+										   editPlageConge('',{{$mediuser->_id}});
 										 ">
             	{{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}</a>
           </td>
@@ -73,7 +73,7 @@ function raz(form) {
   <script type='text/javascript'>
     Main.add( function() {
       loadUser({{$filter->user_id}}, '{{$filter->_id}}');
-      editPlageVac('{{$filter->_id}}',{{$filter->user_id}});
+      editPlageConge('{{$filter->_id}}',{{$filter->user_id}});
     });
   </script>
 {{/if}}

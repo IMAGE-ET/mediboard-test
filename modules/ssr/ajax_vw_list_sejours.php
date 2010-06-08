@@ -15,11 +15,11 @@ $monday = mbDate("last monday", mbDate("+1 day", $date));
 $sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
 
 // Chargement des conges
-$plage_conge = new CPlageVacances();
+$plage_conge = new CPlageConge();
 $where = array();
-$where[] = "(plageVacances.date_debut BETWEEN '$monday' AND '$sunday') OR 
-            (plageVacances.date_fin BETWEEN '$monday' AND '$sunday') OR
-            (plageVacances.date_debut <= '$monday' AND plageVacances.date_fin >= '$sunday')";
+$where[] = "(plageconge.date_debut BETWEEN '$monday' AND '$sunday') OR 
+            (plageconge.date_fin BETWEEN '$monday' AND '$sunday') OR
+            (plageconge.date_debut <= '$monday' AND plageconge.date_fin >= '$sunday')";
 $plages_conge = $plage_conge->loadList($where);
 
 $group_id = CGroups::loadCurrent()->_id;

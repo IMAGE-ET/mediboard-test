@@ -12,7 +12,7 @@ global $can;
 //$can->needsRead();
 
 $choix = CValue::get("choix", "mois");
-$filter = new CPlageVacances();
+$filter = new CPlageConge();
 $filter->user_id = CValue::get("user_id", CAppUI::$user->_id);
 $filter->date_debut = CValue::get("date_debut",mbDate());
 
@@ -71,13 +71,13 @@ $where[] = "((date_debut >= '$debut_periode' AND date_debut <= '$fin_periode'" .
          "OR (date_debut <='$debut_periode' AND date_fin >= '$fin_periode'))";
 $where["user_id"] = CSQLDataSource::prepareIn(array_keys($mediusers), $filter->user_id);
 
-$plagevac = new CPlageVacances();
-$plagesvac = array();
+$plageconge = new CPlageConge();
+$plagesconge = array();
 $orderby="user_id";
-$plagesvac = $plagevac->loadList($where, $orderby);
+$plagesconge = $plageconge->loadList($where, $orderby);
 $tabUser_plage = array();
 $tabUser_plage_indices = array();
-foreach ($plagesvac as $_plage) {
+foreach ($plagesconge as $_plage) {
   $_plage->loadRefsFwd();
   $_plage->_ref_user->loadRefFunction();
   $_plage->_deb = mbDaysRelative($debut_periode,$_plage->date_debut);
@@ -89,7 +89,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("debut_periode",   $debut_periode);
 $smarty->assign("filter",          $filter);
-$smarty->assign("plagesvac",       $plagesvac);
+$smarty->assign("plagesconge",       $plagesconge);
 $smarty->assign("choix",           $choix);
 $smarty->assign("mediusers",       $mediusers);
 $smarty->assign("tableau_periode", $tableau_periode);

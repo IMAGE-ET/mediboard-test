@@ -148,7 +148,12 @@ class CSetupdPpersonnel extends CSetup {
       ADD INDEX (`replacer_id`);";
     $this->addQuery($query);
 
-		$this->mod_version = "0.21";
+		$this->makeRevision("0.21");
+		$query = "RENAME TABLE  `plageVacances` TO  `plageconge`;";
+		$this->addQuery($query);
+		
+    $this->mod_version = "0.22";
+		
   }
 }
     

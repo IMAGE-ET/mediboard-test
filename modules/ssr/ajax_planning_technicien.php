@@ -111,7 +111,7 @@ foreach($duree_occupation as $_occupation){
   $planning->addDayLabel($_occupation["date"], $_occupation["total"]." mn", null, $color);
 }
 
-foreach ($kine->loadBackRefs("plages_vacances") as $_plage) {
+foreach ($kine->loadBackRefs("plages_conge") as $_plage) {
 	$planning->addUnavailability($_plage->date_debut, $_plage->date_fin);
 }
 		

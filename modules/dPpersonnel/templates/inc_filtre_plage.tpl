@@ -22,7 +22,7 @@
 
   <table class="form">
     <tr>
-      <th  colspan="4" class="title">{{tr}}CPlageVacances-user-search{{/tr}}</th>
+      <th  colspan="4" class="title">{{tr}}CPlageConge-user-search{{/tr}}</th>
     </tr>
     <tr>
       <th>{{mb_label object=$filter field="user_id"}}</th>

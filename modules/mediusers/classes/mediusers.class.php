@@ -80,7 +80,7 @@ class CMediusers extends CMbObject {
   
   // Object references per day
   var $_ref_plages                 = null;
-	var $_ref_plages_vacances        = null;
+	var $_ref_plages_conge        = null;
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
   
@@ -190,7 +190,7 @@ class CMediusers extends CMbObject {
     $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
     $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
     $backProps["plages_consult"]                  = "CPlageconsult chir_id";
-    $backProps["plages_vacances"]                 = "CPlageVacances user_id";
+    $backProps["plages_conge"]                    = "CPlageCOnge user_id";
     $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
     $backProps["plages_ressource"]                = "CPlageressource prat_id";
     $backProps["prescriptions"]                   = "CPrescription praticien_id";
@@ -206,7 +206,7 @@ class CMediusers extends CMbObject {
     $backProps["prescription_protocole_packs"]    = "CPrescriptionProtocolePack praticien_id";
     $backProps["prescription_dmis"]               = "CPrescriptionLineDMI praticien_id";
     $backProps["protocoles"]                      = "CProtocole chir_id";
-    $backProps["remplacements"]                   = "CPlageVacances replacer_id";
+    $backProps["remplacements"]                   = "CPlageConge replacer_id";
     $backProps["sejours"]                         = "CSejour praticien_id";
     $backProps["tarifs"]                          = "CTarif chir_id";
     $backProps["techniciens"]                     = "CTechnicien kine_id";

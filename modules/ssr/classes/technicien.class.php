@@ -49,7 +49,7 @@ class CTechnicien extends CMbObject {
   }
 	
 	function loadRefCongeDate($date) {
-		$this->_ref_conge_date = new CPlageVacances;
+		$this->_ref_conge_date = new CPlageConge;
 		$this->_ref_conge_date->loadFor($this->kine_id, $date);
 	}
 }

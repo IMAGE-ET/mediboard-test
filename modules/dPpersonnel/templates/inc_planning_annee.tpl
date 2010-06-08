@@ -103,7 +103,7 @@ changeannee = function (sens) {
        {{assign var=month value=$j|pad:2:"0"}}
 		 	 {{assign var=date value="$year-$month-$day"}}
 			 {{assign var=open value=0}}
-			 {{foreach from=$plagesvac item=_plage}}
+			 {{foreach from=$plagesconge item=_plage}}
 			   {{assign var=date_debut value=$_plage->date_debut}}
 				 {{assign var=date_fin value=$_plage->date_fin}}
 				 {{if $date>=$date_debut && $date<=$date_fin }}
