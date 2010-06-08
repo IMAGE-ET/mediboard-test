@@ -32,6 +32,9 @@ foreach($plages_conge as $_plage_conge){
 	$_plage_conge->loadRefUser();
 	$_sejours = array();
 	
+	$date_debut = $_plage_conge->date_debut;
+  $date_fin = mbDate("+1 DAY", $_plage_conge->date_fin);
+	
 	if($type == "kine"){
 		$sejour = new CSejour();
 	  $ljoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
@@ -40,9 +43,9 @@ foreach($plages_conge as $_plage_conge){
 	  $where = array();
 	  $where["type"] = "= 'ssr'";
 	  $where["group_id"] = "= '$group_id'";
-	  $where[] = "(sejour.entree BETWEEN '$monday' AND '$sunday') OR 
-	              (sejour.sortie BETWEEN '$monday' AND '$sunday') OR
-	              (sejour.entree <= '$monday' AND sejour.sortie >= '$sunday')";
+	  $where[] = "(sejour.entree BETWEEN '$date_debut' AND '$date_fin') OR 
+	              (sejour.sortie BETWEEN '$date_debut' AND '$date_fin') OR
+	              (sejour.entree <= '$date_debut' AND sejour.sortie >= '$date_fin')";
 	              
 	  $where["technicien.kine_id"] = " = '$_plage_conge->user_id'";
 	  $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
@@ -51,17 +54,23 @@ foreach($plages_conge as $_plage_conge){
 	if($type == "reeducateur"){
 		$evenement = new CEvenementSSR();
 		$where = array();
-		$where["debut"] = " BETWEEN '$_plage_conge->date_debut' AND '$_plage_conge->date_fin'";
+		$where["debut"] = " BETWEEN '$date_debut' AND '$date_fin'";
     $where["therapeute_id"] = " = '$_plage_conge->user_id'";
 		$evenements = $evenement->loadList($where);
 
 		foreach($evenements as $_evenement){
 			$_evenement->loadRefSejour();
-			$_sejours[$_evenement->sejour_id] = $_evenement->_ref_sejour;
+			$sejour =& $_evenement->_ref_sejour;
+			$sejour->loadRefBilanSSR();
+			$bilan =& $sejour->_ref_bilan_ssr;
+			$bilan->loadRefTechnicien();
+			if ($bilan->_ref_technicien->kine_id != $_plage_conge->user_id) {
+        $_sejours[$_evenement->sejour_id] = $_evenement->_ref_sejour;
+			}
 		}
 	}
 	
-	if(count($_sejours)){
+	if (count($_sejours)){
 		foreach($_sejours as $_sejour){
 			
 			// On compte le nombre d'evenements SSR à transferer
@@ -69,7 +78,7 @@ foreach($plages_conge as $_plage_conge){
 			$where = array();
 			$where["sejour_id"] = " = '$_sejour->_id'";
 			$where["therapeute_id"] = " = '$_plage_conge->user_id'";
-      $where["debut"] = " BETWEEN '$_plage_conge->date_debut' AND '$_plage_conge->date_fin'";
+      $where["debut"] = " BETWEEN '$date_debut' AND '$date_fin'";
 			$count_evts["$_plage_conge->_id-$_sejour->_id"] = $evenement_ssr->countList($where);
 			
 			$_sejour->checkDaysRelative($date);

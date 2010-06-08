@@ -48,11 +48,13 @@ class CReplacement extends CMbObject {
     $sejour->_ref_bilan_ssr->loadRefTechnicien();
 		$kine_id = $sejour->_ref_bilan_ssr->_ref_technicien->kine_id;
 		
+	  $date_debut = $conge->date_debut;
+	  $date_fin = mbDate("+1 DAY", $conge->date_fin);
 		$evenement_ssr = new CEvenementSSR();
 		$where = array();
 		$where["therapeute_id"] = " = '$kine_id'";
 		$where["sejour_id"] = " = '$this->sejour_id'";
-		$where["debut"] = "BETWEEN '$conge->date_debut' AND '$conge->date_fin'";
+		$where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
 		$evenements = $evenement_ssr->loadList($where);
 
     foreach($evenements as $_evenement){
@@ -73,11 +75,13 @@ class CReplacement extends CMbObject {
 		$sejour->loadRefBilanSSR();
 	  $sejour->_ref_bilan_ssr->loadRefTechnicien();
 		
+    $date_debut = $conge->date_debut;
+    $date_fin = mbDate("+1 DAY", $conge->date_fin);
     $evenement_ssr = new CEvenementSSR();
     $where = array();
     $where["therapeute_id"] = " = '$this->replacer_id'";
     $where["sejour_id"] = " = '$this->sejour_id'";
-    $where["debut"] = "BETWEEN '$conge->date_debut' AND '$conge->date_fin'";
+    $where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
     $evenements = $evenement_ssr->loadList($where);
 		
 		foreach($evenements as $_evenement){
