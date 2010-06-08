@@ -26,6 +26,8 @@ div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
   padding-top: {{$header}}px;
   padding-bottom: {{$footer}}px;
 }
+	
+
 
 /* Partie variable */
 @media print {

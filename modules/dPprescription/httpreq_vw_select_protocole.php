@@ -23,6 +23,12 @@ $praticien->loadRefFunction();
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
+// Valeur de recherche par defaut
+if(!$prescription->_id){
+	$prescription->type = "sejour";
+	$prescription->object_class = "CSejour";
+}
+
 // Initialisations
 $packs_praticien = array();
 $packs_function = array();

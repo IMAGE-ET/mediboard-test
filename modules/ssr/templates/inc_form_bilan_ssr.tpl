@@ -30,7 +30,12 @@ updateFieldsElementSSR = function(selected, oFormElement, category_id) {
 
 updateFormLine = function(prescription_id){
   var oFormLineSSR = getForm("addLineSSR");
-	$V(oFormLineSSR.prescription_id, prescription_id);
+	$V(oFormLineSSR.prescription_id, prescription_id, $V(oFormLineSSR.element_prescription_id) ? true : false);
+
+	if(document.forms.applyProtocole){
+	  var oFormProt = getForm("applyProtocole");
+	  $V(oFormProt.prescription_id, prescription_id, $V(oFormProt.pack_protocole_id) ? true : false);
+	}
 }
 
 updateListLines = function(category_id, prescription_id, full_line_id){
@@ -99,7 +104,41 @@ Main.add( function(){
     objectClass: "CBilanSSR", 
     userId: "{{$app->user_id}}"
   });
+	
+	
+  var oFormProtocole = getForm("applyProtocole");
+  if(oFormProtocole){
+    var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+    var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
+      dropdown: true,
+      adaptDropdown: true,
+      minChars: 1,
+      valueElement: oFormProtocole.elements.pack_protocole_id,
+      updateElement: function(selectedElement) {
+        var node = $(selectedElement).down('.view');
+        $V($("applyProtocole_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        if (autocompleter.options.afterUpdateElement)
+          autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+      },
+			callback: 
+        function(input, queryString){
+          return (queryString + "&prescription_id={{$prescription_SSR->_id}}&praticien_id={{$app->user_id}}"); 
+        }
+    } );  
+  }
 } );
+
+submitProtocole = function(){
+  var oForm = getForm("applyProtocole");
+  return onSubmitFormAjax(oForm, { onComplete:  refreshFormBilanSSR });
+}
+
+refreshFormBilanSSR = function(){
+  var url = new Url("ssr", "ajax_form_bilan_ssr");
+	url.addParam("sejour_id", "{{$sejour->_id}}");
+	url.requestUpdate("bilan");
+}
+
 
 </script>
 
@@ -146,6 +185,25 @@ Main.add( function(){
 	<tr>
 		<td style="width: 60%">
 			<table class="form">
+				{{if $app->_ref_user->isPraticien()}}
+				  <tr>
+					  <td colspan="2">
+					  	<form name="applyProtocole" method="post" action="?" onsubmit="if(!this.prescription_id.value){ return onSubmitFormAjax(getForm('addPrescriptionSSR'))} else { return submitProtocole() };">
+				        <input type="hidden" name="m" value="dPprescription" />
+				        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+				        <input type="hidden" name="del" value="0" />
+				        <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
+				        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+				        <input type="hidden" name="pratSel_id" value="" />
+				        
+				        <input type="hidden" name="pack_protocole_id" value="" />
+				        <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+				        <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
+								<button type="submit" class="submit">Appliquer</button>
+              </form>
+					  </td>
+			    </tr>
+				{{/if}}
 				<tr>
 				  <th class="title" colspan="2">Prescription</th>
 				</tr>

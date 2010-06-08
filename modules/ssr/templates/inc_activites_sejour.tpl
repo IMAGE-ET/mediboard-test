@@ -403,12 +403,11 @@ Main.add(function(){
 	      <th>Equipement</th>
 	      <td>
 	        {{foreach from=$plateau->_ref_equipements item=_equipement}}
-	        <button id="equipement-{{$_equipement->_id}}" class="search equipement" type="button" onclick="selectEquipement('{{$_equipement->_id}}');">
+	        <button id="equipement-{{$_equipement->_id}}" class="search equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
 	          {{$_equipement}}
 	        </button>
 	        {{/foreach}}
-	        <button id="equipement-" type="button" class="cancel equipement" onclick="selectEquipement('');">Aucun</button>
-					
+	        <button id="equipement-" type="button" class="cancel equipement" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement(''); ">Aucun</button>
 					
 					<select name="_equipement_id" onchange="selectEquipement(this.value);">
             <option value="">&mdash; Equipement</option>
