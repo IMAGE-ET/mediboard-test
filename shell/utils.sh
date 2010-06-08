@@ -44,3 +44,16 @@ force_file()
   then touch $FILE
   fi
 }
+
+package_lib()
+{
+  # $1 : library name
+  # $2 : Url
+  # $3 : Version
+  
+  echo "Retrieve dompdf from $2";
+  svn co $2 tmp/$1;
+  tar cfz tmp/$1-$3.tar.gz --directory ./tmp/ $1 --exclude=.svn;
+  check_errs $? "Failed to package $1" "$1 packaged!";
+  mv ./tmp/$1-$3.tar.gz libpkg/;
+}
