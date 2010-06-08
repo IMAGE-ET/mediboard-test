@@ -114,11 +114,15 @@ foreach($array_list_module_pref as $modulename => $listPrefs){
   }
 }
 
+// Warning: user clone necessary!
+// Some module index change $user global
+$user_clone = $user;
 // Chargement des modules
 $modules = CPermModule::getVisibleModules();
 foreach ($modules as $module) {
   include("./modules/$module->mod_name/index.php");
 }
+$user = $user_clone;
 
 // Chargement des languages
 $locales = CAppUI::readDirs("locales");
