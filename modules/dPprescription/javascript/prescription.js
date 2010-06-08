@@ -252,7 +252,10 @@ Prescription = {
     }
   },
   reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth, operation_id, chir_id, anesth_id, full_line_guid, pratSel_id, mode_sejour, praticien_for_prot_id){
-    // pre-selection du praticien
+    if(!$('prescription_sejour')){
+			return;
+		}
+		// pre-selection du praticien
     if(document.selPratForPresc){
       if(document.selPratForPresc.selPraticien.value){
         pratSel_id = document.selPratForPresc.selPraticien.value;
