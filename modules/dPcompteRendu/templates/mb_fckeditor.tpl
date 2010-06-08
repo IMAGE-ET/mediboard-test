@@ -33,7 +33,7 @@ FCKConfig.ToolbarSets["Default"] = [
     ['Cut','Copy','Paste','PasteText','PasteWord','-', {{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint,'-','mbHeader','mbFooter'],
     ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
     ['Table','Rule','Image','SpecialChar','mbPageBreak'],
-    ['FitWindow','Source','About'],
+    ['FitWindow','Source','About', 'mbHelp'],
 	  '/',
   {{/if}}
   ['FontFormat',{{if !$templateManager->simplifyMode}}'FontName',{{/if}}'FontSize'],
@@ -129,9 +129,9 @@ for (var i = 0; i < aMbCombos.length; i++) {
 {{if !$templateManager->simplifyMode}}
   aToolbarSet.push(aMbToolbar);
 {{/if}}
-
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbhelp', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
 {{if $pdf_thumbnails == 1}}
   FCKConfig.Plugins.Add( 'mbprintPDF', 'en,fr', sMbPluginsPath );
@@ -139,3 +139,10 @@ FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbheader', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
 {{/if}}
+
+// Definition of custom keystrokes
+FCKConfig.Keystrokes[21] = [ CTRL + 72 /*H*/, "mbHeader" ];
+FCKConfig.Keystrokes[22] = [ CTRL + 79 /*O*/, "mbFooter" ];
+FCKConfig.Keystrokes[23] = [ CTRL + 75 /*K*/, "mbPageBreak" ];
+if (window.parent.pdf_thumbnails == 1)
+  FCKConfig.Keystrokes[24] = [ CTRL + 80 /*P*/, "mbPrintPDF" ];

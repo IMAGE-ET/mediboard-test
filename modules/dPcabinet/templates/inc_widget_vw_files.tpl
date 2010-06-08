@@ -14,7 +14,7 @@
   	<td class="text">
 	    <a href="#" class="action" 
 	    	 onclick="File.popup('{{$object->_class_name}}','{{$object->_id}}','{{$_file->_class_name}}','{{$_file->_id}}');"
-	    	 onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectViewHistory')">
+	    	 onmouseover="ObjectTooltip.createEx(this, '{{$_file->_guid}}', 'objectView')">
 	      {{$_file}}
 	    </a>
 	    <small>({{$_file->_file_size}})</small>

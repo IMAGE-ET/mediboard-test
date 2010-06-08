@@ -9,7 +9,6 @@
 
 global $AppUI, $can, $m;
 
-$can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 // Initialisation des variables

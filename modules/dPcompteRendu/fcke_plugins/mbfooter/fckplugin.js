@@ -14,7 +14,13 @@ var FCKMbFooterCommand = function() {
 
 FCKMbFooterCommand.prototype.Execute = function() {
 	var oFooter = FCK.EditorDocument.getElementById("footer");
-	oFooter.style.display = "block";
+  
+	if (oFooter.style.display == "block") {
+    oFooter.style.display = "none";
+  }
+  else {
+   oFooter.style.display = "block";
+  }
 	oMbFooterItem.RefreshState();
 }
 
@@ -24,8 +30,9 @@ FCKMbFooterCommand.prototype.GetState = function() {
 	if (oFooter == null) {
 	  return FCK_TRISTATE_DISABLED;
 	}
-	
-	return oFooter.style.display == "block" ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF;
+  
+	return  oFooter.style.display == "block" ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF;
+  
 }
 
 // Registers command object

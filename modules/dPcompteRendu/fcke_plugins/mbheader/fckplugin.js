@@ -14,7 +14,12 @@ var FCKMbHeaderCommand = function() {
 
 FCKMbHeaderCommand.prototype.Execute = function() {
 	var oHeader = FCK.EditorDocument.getElementById("header");
-	oHeader.style.display = "block";
+  if (oHeader.style.display == "block" || oHeader.style.display == "") {
+    oHeader.style.display = "none";
+  }
+  else {
+   oHeader.style.display = "block";
+  }
 	oMbHeaderItem.RefreshState();
 }
 

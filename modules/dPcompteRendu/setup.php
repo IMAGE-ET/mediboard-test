@@ -377,7 +377,12 @@ class CSetupdPcompteRendu extends CSetup {
               ADD `page_width`    FLOAT UNSIGNED NOT NULL DEFAULT '21'";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.50";
+    $this->makeRevision("0.50");
+    $sql = "ALTER TABLE `compte_rendu` 
+              ADD `private` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.51";
   }
 }
 ?>

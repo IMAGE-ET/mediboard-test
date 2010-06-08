@@ -1,6 +1,7 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 <script type="text/javascript">
-
+window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
+window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
@@ -104,25 +105,10 @@ function submitCompteRendu(){
   }).defer();
 }
 
-// Catches Ctrl+s and Command+s
-document.observe('keydown', function(e){
-  var keycode = Event.key(e);
-  if(keycode == 83 && (e.ctrlKey || e.metaKey)){
-    submitCompteRendu();
-    Event.stop(e);
-  }
-});
 
-{{if $pdf_thumbnails == 1}}
   </script>
 	{{mb_include_script module=dPcompteRendu script=thumb}}
 	<script>
-{{else}}
-
-var Thumb = {
-  old: function(){}
-};
-{{/if}}
 
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');
@@ -133,20 +119,8 @@ Main.add(function () {
 		Thumb.mode = "modele";
 		PageFormat.init(getForm("editFrm"));
   {{/if}}
+  resizeEditor(); 
 });
-
-FormObserver.onChanged = function(){
-  // Empty the PDF
-  var f = getForm("download-pdf-form");
-  var url = new Url();
-  url.addParam("_do_empty_pdf", 1);
-  url.addParam("dosql", "do_modele_aed");
-  url.addParam("m", "dPcompteRendu");
-  url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-  url.requestUpdate("systemMsg", {method: "post"});
-}
-
-window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
 
 </script>
 

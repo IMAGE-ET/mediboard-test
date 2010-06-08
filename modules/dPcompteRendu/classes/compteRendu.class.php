@@ -32,6 +32,7 @@ class CCompteRendu extends CDocumentItem {
   var $margin_right      = null;
   var $page_height       = null;
   var $page_width        = null;
+  var $private           = null;
 
   /// Form fields
   var $_is_document      = false;
@@ -101,6 +102,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_height"]      = "float notNull min|1 default|29.7 show|0";
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
+    $specs["private"]          = "bool notNull default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -160,6 +162,10 @@ class CCompteRendu extends CDocumentItem {
     
     if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
       $this->etat_envoi = "obsolete";
+    
+    if($this->private == "") {
+      $this->private = 0;
+    }
   }
   
   function loadComponents() {
@@ -334,6 +340,10 @@ class CCompteRendu extends CDocumentItem {
     }
     
     return $modeles;
+  }
+  
+  function loadView() {
+    $this->loadFile();
   }
     
   function getPerm($permType) {

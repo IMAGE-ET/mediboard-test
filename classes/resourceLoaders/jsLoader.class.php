@@ -99,7 +99,6 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     else {
       $languages = array($language);
     }
-
     if (!$locales) {
       foreach($languages as $language) {
         $localeFiles = array_merge(
@@ -115,17 +114,18 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       }
     }
     
-    $path = self::getLocaleFilePath($language, $label);
-  
-    if ($fp = fopen($path, 'w')) {
-      // The callback will filter on empty strings (without it, "0" will be removed too).
-      $locales = array_filter($locales, "stringNotEmpty");
-      // TODO: change the invalid keys (with accents) of the locales to simplify this
-      $keys = array_map('utf8_encode', array_keys($locales));
-      $values = array_map('utf8_encode', $locales);
-      $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
-      fwrite($fp, $script);
-      fclose($fp);
+    foreach($languages as $language) {
+      $path = self::getLocaleFilePath($language, $label);
+	    if ($fp = fopen($path, 'w')) {
+	      // The callback will filter on empty strings (without it, "0" will be removed too).
+	      $locales = array_filter($locales, "stringNotEmpty");
+	      // TODO: change the invalid keys (with accents) of the locales to simplify this
+	      $keys = array_map('utf8_encode', array_keys($locales));
+	      $values = array_map('utf8_encode', $locales);
+	      $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
+	      fwrite($fp, $script);
+	      fclose($fp);
+	    }
     }
   }
 

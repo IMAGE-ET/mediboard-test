@@ -1,6 +1,8 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 <script type="text/javascript">
+window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
+window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 {{if $compte_rendu->_id}}
 try {
 window.opener.Document.refreshList(
@@ -19,28 +21,11 @@ function submitCompteRendu(){
     }
   }).defer();
 }
+</script>
+{{mb_include_script module=dPcompteRendu script=thumb}}
 
-// Don't close the window with escape
-document.stopObserving('keydown', closeWindowByEscape);
-
-// Don't allow escape or alt+f4 to cancel the request
-document.observe('keydown', function(e){
-  var keycode = Event.key(e);
-  if(keycode == 27 || keycode == 115 && e.altKey){
-    return Event.stop(e);
-  }
-
-  // Catches Ctrl+s and Command+s
-  if(keycode == 83 && (e.ctrlKey || e.metaKey)){
-    submitCompteRendu();
-    Event.stop(e);
-  }
-});
-
+<script type="text/javascript">
 {{if $pdf_thumbnails == 1}}
-  </script>
-	  {{mb_include_script module=dPcompteRendu script=thumb}}
-	<script type="text/javascript">
 	togglePageLayout = function() {
 	  $("page_layout").toggle();
 	}
@@ -97,32 +82,18 @@ document.observe('keydown', function(e){
 		}
 		Control.Modal.close();
 	}
-		
+{{/if}}	
 	Main.add(function(){
-	  PageFormat.init(getForm("editFrm")); 
+	  resizeEditor();
+	  {{if $pdf_thumbnails}}
+	    PageFormat.init(getForm("editFrm")); 
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';
       Thumb.user_id = '{{$user_id}}';
       Thumb.mode = "doc";
+    {{/if}}
 	});
 
-    FormObserver.onChanged = function(){
-      // Empty the PDF
-      var f = getForm("download-pdf-form");
-      var url = new Url();
-      url.addParam("_do_empty_pdf", 1);
-      url.addParam("dosql", "do_modele_aed");
-      url.addParam("m", "dPcompteRendu");
-      url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-      url.requestUpdate("systemMsg", {method: "post"});
-    }
-    
-    /*window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};*/
-{{else}}
-	var Thumb = {
-	  old: function(){}
-	};
-{{/if}}
 </script>
 
 <form style="display: none;" name="download-pdf-form" target="_blank" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
@@ -245,14 +216,14 @@ document.observe('keydown', function(e){
   {{/if}}
 
   <tr>
-    <td style="height: 600px" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
+    <td class = "greedyPane" style="height: 600px" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
       <textarea id="htmlarea" name="source">
         {{$templateManager->document}}
       </textarea>
     </td>
     {{if $pdf_thumbnails == 1}}
       <td id="thumbs_button" style="width: 0.1%;">
-        <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; height: 580px; text-align: center; white-space: normal;">
+        <div id="thumbs" style="overflow: auto; overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
         </div>
       </td>
     {{/if}}

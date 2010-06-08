@@ -8,6 +8,7 @@
 
 global $AppUI;
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
+include_once "lib/phpThumb/phpThumb.config.php";
 //require_once("./lib/phpThumb/phpthumb.class.php");
 //trigger_error("Source is $file->_file");
 
@@ -88,7 +89,7 @@ if($file_id = CValue::get("file_id")) {
 //      $finUrl .= "&fltr[]=usm";
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: images/pictures/acroread.png");
-    } elseif(strpos($file->file_type, "csv") !== false) {
+    } /*elseif(strpos($file->file_type, "csv") !== false) {
       header("Location: images/pictures/spreadsheet.png");
     } elseif(strpos($file->file_type, "xls") !== false) {
       header("Location: images/pictures/spreadsheet.png");
@@ -100,8 +101,8 @@ if($file_id = CValue::get("file_id")) {
       header("Location: images/pictures/text.png");
     } elseif(strpos($file->file_type, "video") !== false) {
       header("Location: images/pictures/video.png");
-    } else {
-      header("Location: images/pictures/unknown.png");
+    } */else {
+      header("Location: images/pictures/medifile.png");
     }
     /*
     $thumb = new phpthumb;

@@ -153,24 +153,18 @@ class CHtmlToPDF {
 
     if ( is_null($html) ) {
       CAppUI::stepAjax(CAppUI::tr("CCompteRendu-empty-doc"));
+      CApp::rip();
     }
 
     $this->recursiveRemove($html);
 
     $str = $xml->saveHTML();
-
-    //mbTrace($str,'',true);
+    $str = preg_replace("/<br>/", "<br/>", $str);
     return $str;
   }
 
   function recursiveRemove(DomNode &$node) {
-    if ( !$node->hasChildNodes() ) {
-      /*mbTrace($node->nodeName,'',1);
-      if( $node->nodeName == "tr") {
-        $td = new DOMElement("td");
-        $td->setAttribute("style","border: none;");
-        $node->appendChild($td);
-      }*/
+    if (!$node->hasChildNodes()) {
       return;
     }
     foreach($node->childNodes as $child) {
@@ -241,8 +235,8 @@ class CHtmlToPDF {
                   '&acirc;' , '&atilde;', '&auml;'  , '&aring;' , '&aelig;' , '&ccedil;', '&egrave;',
                   '&eacute;', '&ecirc;' , '&euml;'  , '&igrave;', '&iacute;', '&icirc;' , '&iuml;'  ,
                   '&eth;'   , '&ntilde;', '&ograve;', '&oacute;', '&ocirc;' , '&otilde;', '&ouml;'  ,
-                  '&divide;', '&oslash;',' &ugrave;', '&uacute;', '&ucirc;' , '&uuml;'  , '&yacute;',
-                  '&thorn;' , '&yuml;'  ,' &OElig;' , '&oelig;' ,
+                  '&divide;', '&oslash;', '&ugrave;', '&uacute;', '&ucirc;' , '&uuml;'  , '&yacute;',
+                  '&thorn;' , '&yuml;'  , '&OElig;' , '&oelig;' ,
                   '&ensp;'  , '&emsp;'  , '&ndash;' , '&mdash;' , '&lsquo;' , '&rsquo;' , '&sbquo;' ,
                   '&ldquo;' , '&rdquo;' , '&bdquo;' , '&bull;'  , '&hellip;' ,'&permil;', '&prime;' , '&Prime;' , '&euro;'  ,
                   '&larr;'  , '&uarr;'  , '&rarr;'  , '&darr;'  , '&harr;'  ,
@@ -254,9 +248,9 @@ class CHtmlToPDF {
 
   // Hack de caractères non utf8
   // http://stackoverflow.com/questions/2507608/error-input-is-not-proper-utf-8-indicate-encoding-using-phps-simplexml-loa
-  function fix_latin1_mangled_with_utf8($str) {
+  function fix_latin1_mangled_with_utf8(&$str) {
     return preg_replace_callback(
-      '#[\\xA1-\\xFF](?![\\x80-\\xBF]{2,})#',
+      '#[\\xA0-\\xFF](?![\\x80-\\xBF]{2,})#',
       create_function('$m','return utf8_encode($m[0]);'), $str);
   }
 

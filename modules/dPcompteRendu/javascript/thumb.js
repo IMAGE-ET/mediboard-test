@@ -26,9 +26,9 @@ var Thumb = {
       for (var i = 0; i < Thumb.nb_thumbs; i++) {
         $("thumb_" + i).stopObserving("click");
       }
-     //$('mess').stopObserving("click");
+     $('mess').stopObserving("click");
     }
-    
+
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
@@ -71,26 +71,25 @@ var Thumb = {
            }})}});
   },
   old: function() {
-    if ((!this.thumb_up2date && this.oldContent) || this.hasRefresh) {
+    if (window.pdf_thumbnails == 1) {
+      if ((!this.thumb_up2date && this.oldContent) || this.hasRefresh) {
+        this.thumb_up2date = false;
+        return;
+      }
+      var on_click = function(){
+        Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+      }
+      
+      $("thumbs").setOpacity(0.5);
+      
+      $$(".thumb").each(function(t, i){
+        t.stopObserving("click").observe("click", on_click);
+      });
+      var mess = $('mess').show();
+      mess.stopObserving("click");
+      mess.observe("click", on_click);
       this.thumb_up2date = false;
-      return;
     }
-    var on_click = function(){
-      Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
-    }
-    
-    $("thumbs").setOpacity(0.5);
-
-    $$(".thumb").each(function(t, i) {
-      t.stopObserving("click").
-        observe("click", on_click);
-    });
-
-
-    var mess = $('mess').show();
-    mess.stopObserving("click");
-    mess.observe("click", on_click);
-    this.thumb_up2date = false;
   },
   init: function(){
     $$(".thumb").each(function(t, i) {
@@ -102,16 +101,63 @@ var Thumb = {
   }
 }
 
-function FCKeditor_OnComplete(editorInstance) {
+function FCKeditor_OnComplete(editorInstance){
+  var boutons = editorInstance.EditorWindow.parent.FCKToolbarItems.LoadedItems;
+  
+  // Rajout du raccourci clavier dans la tooltip des boutons de FCKEditor.
+  $A(editorInstance.Config.Keystrokes).each(function(k){
+    if (k[1] === true) 
+      return;
+    var key = k[0];
+    key -= 1000;
+    if (key > 2000) key -= 2000;
+    if (key > 4000) key -= 4000;
+    
+    if (boutons[k[1]] && ((boutons[k[1]]._UIButton.MainElement.title).match(/\(/i)) == null) {
+      var mac = navigator.userAgent.match(/mac/i);
+      if (mac) {
+        boutons[k[1]]._UIButton.MainElement.title += " (" + String.fromCharCode(8984) + String.fromCharCode(key) + ")";
+      } else {
+        boutons[k[1]]._UIButton.MainElement.title += " (Ctrl + " + String.fromCharCode(key) + ")";
+      }
+    }
+  });
   editorInstance.Events.AttachEvent('OnSelectionChange', loadOld);
   Thumb.content = editorInstance.GetHTML(false);
-
-  editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
+  
+  editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger);
+  
   var fck_iframe = document.getElementById('source___Frame');
   var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
   fck_editing_area.style.height = '100.1%';
-  setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
-  Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+  setTimeout(function(){
+    fck_editing_area.style.height = '100%'
+  }, 100);
+  
+  if (window.pdf_thumbnails == 1)
+    Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
+  
+  // Don't close the window with escape
+  document.stopObserving('keydown', closeWindowByEscape);
+  
+  // Don't allow escape or alt+f4 to cancel the request
+  document.observe('keydown', function(e){
+    var keycode = Event.key(e);
+    if (keycode == 27 || keycode == 115 && e.altKey) {
+      return Event.stop(e);
+    }
+    // Catches Ctrl+s and Command+s
+    if (keycode == 83 && (e.ctrlKey || e.metaKey)) {
+      submitCompteRendu();
+      Event.stop(e);
+    }
+    if (window.pdf_thumbnails == 1) {
+      if (keycode == 80 && (e.ctrlKey || e.metaKey)) {
+        editorInstance.Commands.GetCommand("mbPrintPDF").Execute();
+        Event.stop(e);
+      }
+    }
+  });
 }
 
 function loadOld(editorInstance) {
@@ -123,8 +169,31 @@ function loadOld(editorInstance) {
 	
 }
 
-function FCKeventChanger(editorInstance) {
-  if(editorInstance.LastOnChangeTimer) {
+function FCKeventChanger(editorInstance){
+  if (editorInstance.LastOnChangeTimer) {
     FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
   }
 }
+
+FormObserver.onChanged = function(){
+  // Empty the PDF
+  var f = getForm("download-pdf-form");
+  var url = new Url();
+  url.addParam("_do_empty_pdf", 1);
+  url.addParam("dosql", "do_modele_aed");
+  url.addParam("m", "dPcompteRendu");
+  url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+  url.requestUpdate("systemMsg", {method: "post"});
+}
+
+function resizeEditor() {
+  var dims = document.viewport.getDimensions();
+  var greedyPane = $$(".greedyPane")[0]; 
+  greedyPane.style.height = (dims["height"] - greedyPane.cumulativeOffset().top) +"px";
+  if (window.pdf_thumbnails == 1)
+    $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top) +"px";
+}
+
+Event.observe(window, "resize", function(e){
+  resizeEditor();
+});
