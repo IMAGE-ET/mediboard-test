@@ -327,7 +327,20 @@ class CCodable extends CMbObject {
 	  }
   }
   
+  function checkCodeCcam() {
+    $codes_ccam = explode("|", $this->codes_ccam);
+    foreach ($codes_ccam as $_code_ccam) {
+      if (!preg_match("/[A-Z]{4}[0-9]{3}/i", $_code_ccam)) {
+        return "Le code CCAM '$_code_ccam' n'est pas valide";
+      }
+    }
+  }
+  
   function check(){
+    if ($msg = $this->checkCodeCcam()) {
+      return $msg;
+    }
+    
   	//@todo: why not use $this->_old ?
     $oldObject = new $this->_class_name;
     if($this->_id) {
