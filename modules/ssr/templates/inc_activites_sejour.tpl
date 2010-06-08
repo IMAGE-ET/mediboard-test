@@ -202,6 +202,11 @@ Main.add(function(){
 	// Initialisation du timePicker
   Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10, exactMinutes: false});
 	Control.Tabs.create('tabs-activites', true);
+	
+	{{if $selected_cat}}
+	  selectActivite('{{$selected_cat->_guid}}');
+    $("technicien-{{$selected_cat->_id}}-{{$current_user_id}}").onclick();
+	{{/if}}
 });
 									
 </script>
@@ -383,7 +388,7 @@ Main.add(function(){
 								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                   {{if array_key_exists($category_id, $executants)}}
                     {{foreach from=$executants.$category_id item=_user_executant}}
-										  <button title="{{$_user_executant->_view}}" id="technicien-{{$_line->_id}}-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
+										  <button title="{{$_user_executant->_view}}" id="technicien-{{$category_id}}-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
                         {{$_user_executant->_user_last_name}}
 											</button>
                     {{/foreach}}

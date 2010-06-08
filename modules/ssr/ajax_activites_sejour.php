@@ -15,6 +15,8 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
+$current_user_id = CAppUI::$instance->user_id;
+
 $date = CValue::getOrSession("date", mbDate());
 
 $monday = mbDate("last monday", mbDate("+1 day", $date));
@@ -24,6 +26,7 @@ for ($i = 0; $i < 7; $i++) {
 	$_date = mbDate("+$i day", $monday);
   $list_days[$_date] = mbTransformTime(null, $_date, "%a");
 }
+
 
 // Prescription
 $sejour->loadRefPrescriptionSejour();
@@ -83,6 +86,7 @@ $executants = array();
 
 // Chargement des executants en fonction des category de prescription
 $executants = array();
+$selected_cat = "";
 foreach($categories as $_category){
 	// Chargement des associations pour chaque catégorie
   $function_categorie = new CFunctionCategoryPrescription();
@@ -95,6 +99,9 @@ foreach($categories as $_category){
 		$function =& $_assoc->_ref_function;
 		$function->loadRefsUsers();
 		foreach($function->_ref_users as $_user){
+			 if($_user->_id == $current_user_id && !$selected_cat){
+			 	 $selected_cat = $_category;
+			 }
 			 $executants[$_category->_id][] = $_user;
 		}
 	}
@@ -110,6 +117,8 @@ $smarty->assign("plateau", $plateau);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("executants", $executants);
+$smarty->assign("selected_cat", $selected_cat);
+$smarty->assign("current_user_id", $current_user_id);
 $smarty->display("inc_activites_sejour.tpl");
 
 ?>
