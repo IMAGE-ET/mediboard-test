@@ -128,9 +128,9 @@ else {
       "hr.pagebreak { 
             padding-top: {$header->height}px; 
           } 
-        }
-        </style>";
+        }";
       }
+      $style .= "</style>";
     
     $compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
     $compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
