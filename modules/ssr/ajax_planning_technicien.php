@@ -13,7 +13,7 @@ CCando::checkRead();
 $date         = CValue::getOrSession("date", mbDate());
 $kine_id      = CValue::getOrSession("kine_id");
 $surveillance = CValue::getOrSession("surveillance");
-$sejour_id    = CValue::getOrSession("sejour_id");
+$sejour_id    = CValue::get("sejour_id");
 $height       = CValue::get("height");
 $selectable   = CValue::get("selectable");
 $large         = CValue::get("large");
