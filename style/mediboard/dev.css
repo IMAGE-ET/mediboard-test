@@ -1,5 +1,10 @@
 /* $Id: $ */
 
+/* To put on elements visible only by admins */
+.admin-view {
+  outline: 1px dotted #DF3737;
+}
+
 span.smarty-include {
   background: #444;
   position: absolute;

@@ -17,6 +17,7 @@ $delivery = $delivery->load($delivery_id);
 $delivery->loadRefsFwd();
 $delivery->loadRefsBack();
 $delivery->_ref_stock->loadRefsFwd();
+$delivery->isDelivered();
 
 $stocks_service = array();
 $stocks_service[$delivery->_id] = CProductStockService::getFromCode($delivery->_ref_stock->_ref_product->code, $delivery->service_id);
@@ -26,5 +27,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('curr_delivery',  $delivery);
 $smarty->assign('stocks_service', $stocks_service);
+$smarty->assign('line_refresh', true);
 
 $smarty->display('inc_vw_line_delivrance.tpl');

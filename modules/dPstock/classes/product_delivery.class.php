@@ -143,7 +143,7 @@ class CProductDelivery extends CMbObject {
     $this->_ref_stock->loadRefsFwd();
     if ($this->_auto_deliver || $this->_ref_stock->_ref_product->auto_dispensed) {
       $this->date_dispensation = mbDateTime();
-      //$this->order = 0;
+      $this->order = 0;
       return parent::store();
     }
   }

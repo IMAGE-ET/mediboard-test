@@ -9,11 +9,22 @@
 *}}
 
 {{assign var=id value=$curr_delivery->_id}}
-  
+
 {{if $curr_delivery->patient_id}}
   <td>{{$curr_delivery->_ref_patient->_view}}</td>
 {{/if}}
 <td>
+  {{if @$line_refresh}}
+  <script type="text/javascript">
+    if (!$V(getForm("filter").display_delivered) && {{$curr_delivery->_delivered|ternary:1:0}}) {
+      $("CProductDelivery-{{$curr_delivery->_id}}").hide();
+      Main.add(function(){
+        $("CProductDelivery-{{$curr_delivery->_id}}").remove();
+      });
+    }
+  </script>
+  {{/if}}
+  
   <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
   <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
     {{$curr_delivery->_ref_stock->_view}}

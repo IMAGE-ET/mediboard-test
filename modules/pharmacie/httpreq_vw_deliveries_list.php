@@ -82,7 +82,7 @@ foreach ($deliveries as $_delivery) {
     $key = str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).$_delivery->date_dispensation;
   }
   else {
-    $key = str_pad(mbDaysRelative($_delivery->date_dispensation, mbDate())+1, 20, " ", STR_PAD_RIGHT).
+    $key = str_pad(mbMinutesRelative($_delivery->date_dispensation, mbDateTime())+1, 20, " ", STR_PAD_LEFT).
            str_pad($_delivery->_ref_stock->_ref_product->_view, 50, " ", STR_PAD_RIGHT).
            $_delivery->_id;
   }

@@ -148,8 +148,10 @@ class CProductOrderItem extends CMbObject {
     $this->loadRefsFwd();
     
     if($this->order_id && $this->reference_id && !$this->_id) {
-      $where['order_id']     = "= '$this->order_id'";
-      $where['reference_id'] = "= '$this->reference_id'";
+      $where = array(
+        'order_id'     => "= '$this->order_id'",
+        'reference_id' => "= '$this->reference_id'",
+      );
 
       if (isset($this->_is_unit_quantity)) {
         $this->quantity /= ($this->_ref_reference->quantity * $this->_ref_reference->_ref_product->quantity);
@@ -166,10 +168,10 @@ class CProductOrderItem extends CMbObject {
       }
     }
     
-    if ($stock = $this->getStock()) {
+    if (!$this->_id && ($stock = $this->getStock())) {
       $stock->loadRefOrders();
       if ($stock->_zone_future > 2) {
-        CAppUI::setMsg('Attention : le stock optimum risque d\'être dépassé', UI_MSG_WARNING);
+        CAppUI::setMsg("Attention : le stock optimum risque d'être dépassé", UI_MSG_WARNING);
       }
     }
     

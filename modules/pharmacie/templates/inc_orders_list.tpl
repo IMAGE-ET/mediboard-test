@@ -50,7 +50,7 @@ Main.add(function(){
           <tbody id="tab-{{$_service->_guid}}" style="display: none;">
             <!-- Affichage des delivrances globales -->
             <tr>
-              <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
+              <th style="width: 0.1%;">{{tr}}CProductDelivery-patient_id{{/tr}}</th>
               <th colspan="2">{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
               <th>
                 <label style="float: left; font-size: 0.8em;">
