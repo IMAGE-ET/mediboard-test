@@ -45,7 +45,8 @@ foreach($evenements as $_evenement){
   $css_classes = array($element_prescription->_guid);
   $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $css_classes));
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
+
+$planning->showNow();
 
 // Création du template
 $smarty = new CSmartyDP();

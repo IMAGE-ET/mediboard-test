@@ -105,6 +105,10 @@ class CPlanningWeek  {
     }
   }
   
+  function showNow($color = "red") {
+    $this->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, $color, null, "now"));
+  }
+  
   /**
    * @param object $min The min date
    * @param object $max [optional] The max date

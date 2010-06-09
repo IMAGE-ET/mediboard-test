@@ -114,9 +114,9 @@ foreach($duree_occupation as $_occupation){
 foreach ($kine->loadBackRefs("plages_conge") as $_plage) {
 	$planning->addUnavailability($_plage->date_debut, $_plage->date_fin);
 }
-		
+
 // Heure courante
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
+$planning->showNow();
 
 // Création du template
 $smarty = new CSmartyDP();

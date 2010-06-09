@@ -87,9 +87,13 @@ WeekPlanning = Class.create({
     this.events.invoke("updateDimensions");
   },
 	selectAllEvents: function(){
-		this.container.select('.event').invoke('toggleClassName','selected');
+		this.container.select('.event:not(.now)').invoke('toggleClassName','selected');
 		this.updateNbSelectEvents();
 	},
+  selectDayEvents: function(day){
+    this.container.select('.day-'+day+' .event:not(.now)').invoke('toggleClassName','selected');
+    this.updateNbSelectEvents();
+  },
 	updateNbSelectEvents : function(){
 	  this.container.down('span.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
   },

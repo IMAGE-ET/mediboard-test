@@ -63,7 +63,8 @@ foreach($evenements as $_evenement){
   $event->draggable = true;
 	$planning->addEvent($event);
 }
-$planning->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, "red"));
+
+$planning->showNow();
 
 // Alertes séjour
 $total_evenement = array();

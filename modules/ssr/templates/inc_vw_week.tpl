@@ -34,21 +34,22 @@ Main.add(function() {
     <col span="{{$nb_days}}" />
     <col style="width: 16px;" />
     <tr>
-    	<th class="title" colspan="{{$nb_days+2}}" {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectAllEvents()"{{/if}}>
+    	<th class="title {{if $planning->selectable}}selector{{/if}}" colspan="{{$nb_days+2}}" {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectAllEvents()"{{/if}}>
     		<span class="nbSelectedEvents" style="float: left; font-size: smaller;"></span>
-			{{$planning->title}}
+			  {{$planning->title}}
 			</th>
     </tr>
     <tr>
        <th></th>
-    	 {{foreach from=$planning->days key=_day item=_events}}
+    	 {{foreach from=$planning->days key=_day item=_events name=days}}
          {{if $_day < $planning->date_min_active || $_day > $planning->date_max_active}}
            {{assign var=disabled value=true}}
          {{else}}
            {{assign var=disabled value=false}}
          {{/if}}
              
-         <th class="day {{if $disabled}}disabled{{/if}} text">
+         <th class="day {{if $disabled}}disabled{{/if}} text day-{{$smarty.foreach.days.index}} {{if $planning->selectable}}selector{{/if}}"
+             {{if $planning->selectable}}onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})"{{/if}}>
            {{$_day|date_format:"%a %d"|nl2br}}
 					 {{if array_key_exists($_day, $planning->day_labels)}}
 	           {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
@@ -75,7 +76,7 @@ Main.add(function() {
         <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}} {{if $prev_pause}}pause-next{{/if}}">
           <th class="hour">{{$_hour}}h</th>
           
-          {{foreach from=$planning->days key=_day item=_events}}
+          {{foreach from=$planning->days key=_day item=_events name=days}}
             {{if $_day < $planning->date_min_active || $_day > $planning->date_max_active}}
               {{assign var=disabled value=true}}
             {{else}}
@@ -88,7 +89,7 @@ Main.add(function() {
               {{assign var=unavail value=false}}
             {{/if}}
             
-            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}}">
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}">
               <div><!-- <<< This div is necessary (relative positionning) -->
               
               <div class="event-container">

@@ -451,6 +451,11 @@ table#weeklyPlanning th.today {
   background-color: #ffd;
 }
 
+.planning .selector:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .planning .event-container {
   width: 100%;
   position: absolute;
