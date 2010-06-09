@@ -205,7 +205,7 @@ if ($list_constantes) {
       
       $i = count($d["series"][0]["data"]);
       foreach($fields as $n => $_field) {
-        if ($cst->$_field !== null && $cst->$_field !== "")
+        //if ($cst->$_field !== null && $cst->$_field !== "") // We have to show empty points too!
           $d["series"][$n]["data"][] = array($i, getValue($cst->$_field), $user_view);
       }
      
