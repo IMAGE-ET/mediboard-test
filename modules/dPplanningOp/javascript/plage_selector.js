@@ -57,7 +57,15 @@ PlageOpSelector = {
       if (bAdm == "veille") {
         dAdm.addDays(-1);
       }
-    
+      dateEntreeSej = $V(oSejourForm._date_entree_prevue);
+      dateSortieSej = $V(oSejourForm._date_sortie_prevue);
+      if(dateEntreeSej && dateSortieSej) {
+        dateEntreeSej = Date.fromDATE(dateEntreeSej);
+        dateSortieSej = Date.fromDATE(dateSortieSej);
+        if (bAdm == "aucune" && (dAdm > dateSortieSej || dAdm < dateEntreeSej)){
+          modalWindow = modal($("date_alert"));
+        }
+      }
       if (bAdm != "aucune") {
         dAdm.setHours(hour_entree);
         dAdm.setMinutes(min_entree);

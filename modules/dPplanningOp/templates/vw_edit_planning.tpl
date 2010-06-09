@@ -128,6 +128,15 @@ ProtocoleSelector.init = function(){
   
   this.pop();
 }
+
+modeExpertDisplay = function() {
+  if($("modeExpert").style.display == "none"){
+	  $("modeEasy").hide(); 
+	  $("modeExpert").show(); 
+	  $("modeExpert-trigger").show(); 
+		$("modeEasy-trigger").hide();
+	}
+}
 </script> 
 
 {{include file="js_form_operation.tpl"}}
@@ -272,3 +281,13 @@ ProtocoleSelector.init = function(){
   {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$op vue=complete}}
 </table>
 {{/if}}
+
+<!-- la modale qui s'affiche dans le cas où la date de l'intervention est en dehors de celle du séjour -->
+<div id="date_alert" style="display:none">
+	<div style="text-align:center">  L'intervention est en dehors du séjour, voulez-vous passer au mode expert pour modifier les dates du séjour?
+  </div>
+  <div style="text-align:center">
+    <button  class="tick" onclick="modalWindow.close();modeExpertDisplay();"> {{tr}}Yes{{/tr}}</button>
+    <button  class="cancel" onclick="modalWindow.close();"> {{tr}}No{{/tr}}</button>
+	</div>
+</div>
