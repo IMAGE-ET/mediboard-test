@@ -421,7 +421,7 @@ Main.add( function(){
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
   <td>
-    <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->sejour_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" size="4" onchange="updateSortiePrevue()" />
+    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue()" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
     nuits
   </td>
   <td id="dureeEst" colspan="2">

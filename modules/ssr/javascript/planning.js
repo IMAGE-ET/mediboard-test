@@ -101,7 +101,8 @@ WeekPlanning = Class.create({
     return this.eventsById[id];
   },
   getCellHeight: function(){
-    return this.container.down(".week-container table").getHeight() / 24;
+    var visibleLines = this.container.select(".week-container tr").filter(Element.visible).length;
+    return this.container.down(".week-container table").getHeight() / visibleLines;
   },
   onEventChange: function(e){
     console.debug(e.getTime());

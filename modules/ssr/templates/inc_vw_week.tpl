@@ -66,7 +66,7 @@ Main.add(function() {
   </table>
   
   <div style="overflow-y: scroll; overflow-x: hidden; height: {{$planning->height}}px;" class="week-container">
-    <table class="tbl hours" style="table-layout: fixed;">
+    <table class="tbl hours" style="table-layout: fixed; overflow: hidden;">
       <col style="width: 3.0em;" />
       <col span="{{$nb_days}}" />
       
