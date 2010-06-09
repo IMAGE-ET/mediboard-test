@@ -37,6 +37,7 @@ class CProductDelivery extends CMbObject {
   var $_date_max      = null;
   var $_delivered     = null;
   var $_auto_deliver  = null;
+  var $_make_delivery_trace = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -129,7 +130,7 @@ class CProductDelivery extends CMbObject {
     
     if (!$is_new) return;
     
-/*    if ($this->_auto_deliver) {
+    if ($this->manual) {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
@@ -137,7 +138,10 @@ class CProductDelivery extends CMbObject {
       if ($msg = $delivery_trace->store()) {
         return "La commande a été validée, mais elle n'a pas pu etre dispensée automatiquement pour la raison suivante: <br />$msg";
       }
-    }*/
+      else {
+        CAppUI::setMsg("CProductDeliveryTrace-msg-create");
+      }
+    }
     
     $this->loadRefStock();
     $this->_ref_stock->loadRefsFwd();

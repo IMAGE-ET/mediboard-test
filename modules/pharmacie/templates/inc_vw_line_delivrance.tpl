@@ -16,7 +16,7 @@
 <td>
   {{if @$line_refresh}}
   <script type="text/javascript">
-    if (!$V(getForm("filter").display_delivered) && {{$curr_delivery->_delivered|ternary:1:0}}) {
+    if (!$V(getForm("filter").display_delivered) && ({{$curr_delivery->_delivered|ternary:1:0}} || '{{$curr_delivery->date_delivery}}')) {
       $("CProductDelivery-{{$curr_delivery->_id}}").hide();
       Main.add(function(){
         $("CProductDelivery-{{$curr_delivery->_id}}").remove();
@@ -24,6 +24,16 @@
     }
   </script>
   {{/if}}
+  
+  <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
+        onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveryLine.curry($V(this.delivery_id))})">
+    <input type="hidden" name="m" value="dPstock" /> 
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="dosql" value="do_delivery_aed" />
+    {{mb_key object=$curr_delivery}}
+    <input type="hidden" name="date_delivery" value="now" />
+    <button type="submit" class="tick notext" title="Marquer comme reçu"></button>
+  </form>
   
   <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
   <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
@@ -91,7 +101,7 @@
         <button type="button" class="add notext" onclick="$(this).up().next().down('form').toggle()" {{if !$curr_delivery->_delivered}}style="visibility: hidden;"{{/if}}></button>
       </td>
       <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}">
-        <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" 
+        <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" class="deliver"
               onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
           <input type="hidden" name="m" value="dPstock" /> 
           <input type="hidden" name="del" value="0" />

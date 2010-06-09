@@ -55,7 +55,7 @@ function deliverLine(form, dontRefresh, refreshAll) {
 
 function deliverAll(container) {
   var i, listForms = [];
-  $(container).select("form").each(function(f) {
+  $(container).select("form.deliver").each(function(f) {
     if ((!f.del || $V(f.del) == "0") && $V(f.delivery_id) && $V(f.date_delivery) == 'now' && parseInt($V(f.quantity)) > 0) {
     	listForms.push(f);
     }

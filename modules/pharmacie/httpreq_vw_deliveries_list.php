@@ -41,14 +41,14 @@ $where['stock_id'] = "IS NOT NULL";
 //$where[] = "`order` != '1' OR `order` IS NULL";
 
 if (!$display_delivered) {
-  //$where['date_delivery'] = "IS NULL";
+  $where['date_delivery'] = "IS NULL";
 }
 
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 200);
 
 foreach($deliveries as $_id => $_delivery) {
-  $delivered = /*$_delivery->date_delivery || */$_delivery->isDelivered();
+  $delivered = $_delivery->date_delivery || $_delivery->isDelivered();
   if (!$delivered || ($delivered && $display_delivered)) {
     // can't touch this !
   }

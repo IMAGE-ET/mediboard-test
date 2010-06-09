@@ -34,7 +34,7 @@ foreach($list_services as $_service) {
   
   $total += $_service->_count_deliveries;
   
-  foreach($_service->_ref_deliveries as $_delivery) {
+  foreach($_service->_ref_deliveries as $_id => $_delivery) {
     if ($_delivery->_ref_stock->_id)
       $_service->_ref_delivery_stocks[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $_service->_id);
   }
