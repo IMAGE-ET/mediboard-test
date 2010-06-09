@@ -62,7 +62,7 @@ PlageOpSelector = {
       if(dateEntreeSej && dateSortieSej) {
         dateEntreeSej = Date.fromDATE(dateEntreeSej);
         dateSortieSej = Date.fromDATE(dateSortieSej);
-        if (bAdm == "aucune" && (dAdm > dateSortieSej || dAdm < dateEntreeSej)){
+        if (bAdm == "aucune" && (dAdm > dateSortieSej || dAdm < dateEntreeSej) && !$("modeExpert").visible()){
           modalWindow = modal($("date_alert"));
         }
       }
