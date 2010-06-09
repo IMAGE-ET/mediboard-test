@@ -297,7 +297,12 @@ class CSetupssr extends CSetup {
               ADD INDEX (`replacer_id`);";
     $this->addQuery($sql);
 		
-		$this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `fiche_autonomie` 
+		  ADD `toilettes` ENUM ('autonome','partielle','totale') NOT NULL";
+    $this->addQuery($sql);
+
+		$this->mod_version = "0.21";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

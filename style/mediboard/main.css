@@ -1281,6 +1281,32 @@ table.tbl tr.ssr-kine-conges td {
   background-image: url("./images/pictures/unavailable.png");
 }
 
+table.tbl tr  td.ssr-far {
+  text-align: center;
+}
+
+table.tbl tr td.ssr-close {
+  text-align: center;
+	font-weight: bold;
+}
+
+table.tbl tr td.ssr-today {
+  text-align: center;
+  font-weight: bold;
+  background: #ccc;
+}
+
+table.tbl tr td.ssr-today {
+  text-align: center;
+  font-weight: bold;
+  background: #ccc;
+}
+
+table.tbl tr td.ssr-today div {
+  display: none;
+}
+
+
 div.ssr-sejour-bar {
   position: absolute; 
 	top: 0px; 

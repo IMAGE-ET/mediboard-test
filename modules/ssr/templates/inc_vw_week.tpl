@@ -118,7 +118,7 @@ Main.add(function() {
                     {{/if}}
 										
                     <div class="body">
-                      {{$_event->title|smarty:nodefaults}}
+                      {{$_event->title|smarty:nodefaults|nl2br}}
                     </div>
                     <div class="footer"></div>
                     <div class="handle"></div>

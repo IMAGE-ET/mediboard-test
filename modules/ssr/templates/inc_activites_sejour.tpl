@@ -388,7 +388,7 @@ Main.add(function(){
 								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
                   {{if array_key_exists($category_id, $executants)}}
                     {{foreach from=$executants.$category_id item=_user_executant}}
-										  <button title="{{$_user_executant->_view}}" id="technicien-{{$category_id}}-{{$_user_executant->_id}}" class="search ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
+										  <button title="{{$_user_executant->_view}}" id="technicien-{{$category_id}}-{{$_user_executant->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
                         {{$_user_executant->_user_last_name}}
 											</button>
                     {{/foreach}}
@@ -406,16 +406,16 @@ Main.add(function(){
 	    </tr>
 	    <tr>
 	      <th>Equipement</th>
-	      <td>
+	      <td class="text">
 	        {{foreach from=$plateau->_ref_equipements item=_equipement}}
-	        <button id="equipement-{{$_equipement->_id}}" class="search equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
+	        <button id="equipement-{{$_equipement->_id}}" class="none equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
 	          {{$_equipement}}
 	        </button>
 	        {{/foreach}}
 	        <button id="equipement-" type="button" class="cancel equipement" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement(''); ">Aucun</button>
 					
-					<select name="_equipement_id" onchange="selectEquipement(this.value);">
-            <option value="">&mdash; Equipement</option>
+					<select name="_equipement_id" onchange="selectEquipement(this.value);" style="width: 6em;">
+            <option value="">&mdash; {{tr}}Other{{/tr}}</option>
             {{foreach from=$plateaux item=_plateau}}
 						  {{if $_plateau->_id != $plateau->_id}}
 	              <optgroup label="{{$_plateau->_view}}">

@@ -60,12 +60,24 @@
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
 		</td>
 
-    <td style="text-align: center;">
+	  {{assign var=distance_class value=ssr-far}}
+	  {{if $_sejour->_entree_relative == "-1"}}
+	  {{assign var=distance_class value=ssr-close}}
+	  {{elseif $_sejour->_entree_relative == "0"}}
+	  {{assign var=distance_class value=ssr-today}}
+	  {{/if}}
+    <td class="{{$distance_class}}">
     	{{mb_value object=$_sejour field=entree format=$dPconfig.date}}
       <div style="text-align: left; opacity: 0.6;">{{$_sejour->_entree_relative}}j</div>
 		</td>
 
-    <td style="text-align: center;">
+    {{assign var=distance_class value=ssr-far}}
+    {{if $_sejour->_sortie_relative == "1"}}
+    {{assign var=distance_class value=ssr-close}}
+    {{elseif $_sejour->_sortie_relative == "0"}}
+    {{assign var=distance_class value=ssr-today}}
+    {{/if}}
+    <td class="{{$distance_class}}">
     	{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
       <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		</td>

@@ -19,8 +19,11 @@
 
 {{if $sejour->_id && $can->edit}}
 <script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tab-sejour'));
 
+Main.add(function() {
+	var tabs = Control.Tabs.create('tab-sejour', true);
+	(tabs.activeLink.onmousedown || Prototype.emptyFunction)();
+} );
 var constantesMedicalesDrawn = false;
 refreshConstantesMedicales = function (force) {
   if (!constantesMedicalesDrawn || force) {
@@ -38,17 +41,33 @@ refreshConstantesMedicales = function (force) {
 
 <ul id="tab-sejour" class="control_tabs">
   {{if $can_view_dossier_medical}}
-  <li><a href="#autonomie">{{tr}}CFicheAutonomie{{/tr}}</a></li>
-  <li onmousedown="refreshConstantesMedicales();"><a href="#constantes">{{tr}}CConstantesMedicales{{/tr}}</a></li>
-{{*   <li><a href="#antecedents">{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s</a></li>  *}}
-  <li><a href="#bilan">{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}</a></li>
-  <li onmousedown="Planification.refresh('{{$sejour->_id}}')">
-  	<a href="#planification">
+  <li>
+  	<a href="#autonomie">
+  		{{tr}}CFicheAutonomie{{/tr}}
+		</a>
+	</li>
+  <li>
+  	<a href="#constantes" onmousedown="refreshConstantesMedicales();">
+  		{{tr}}CConstantesMedicales{{/tr}}
+		</a>
+	</li>
+  <li style="display: none;">
+  	<a href="#antecedents">
+  		{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s
+		</a>
+	</li>  
+  <li>
+  	<a href="#bilan">
+  		{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}
+		</a>
+	</li>
+  <li>
+  	<a href="#planification" onmousedown="Planification.refresh('{{$sejour->_id}}')">
   		Planification
 		</a>
 	</li>
-  <li onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
-  	<a href="#cotation-rhs">
+  <li>
+  	<a href="#cotation-rhs" onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
   		Cotation
 		</a>
 	</li>

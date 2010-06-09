@@ -43,12 +43,11 @@ foreach($evenements as $_evenement){
 	$category_prescription =& $element_prescription->_ref_category_prescription;
   $title = $category_prescription->_view;
 	
-	if($print){
-		$_evenement->loadRefTherapeute();
+	if ($print) {
 		$_evenement->loadRefEquipement();
-		$title .= " - ".$_evenement->_ref_therapeute->_view;
-		$title .= $_evenement->equipement_id ? " - ".$_evenement->_ref_equipement->_view : '';
-		$title .= $_evenement->remarque ? " - ".$_evenement->remarque : ''; 
+		$equipement = $_evenement->_ref_equipement;
+		$title .= $equipement->_id ? " - ". $equipement->_view : '';
+		$title .= $_evenement->remarque ? "\n ".$_evenement->remarque : ''; 
 	}
 	
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
@@ -60,7 +59,7 @@ foreach($evenements as $_evenement){
 	$css_classes[] = ($_evenement->realise && !$print) ? "realise" : $class_evt;
 											 
   $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes);
-  $event->draggable = true;
+  $event->draggable = !$_evenement->realise && !$print;
 	$planning->addEvent($event);
 }
 

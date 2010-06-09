@@ -45,8 +45,8 @@ class CEvenementSSR extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["element_prescription_id"] = "ref notNull class|CElementPrescription";
-    $props["sejour_id"]     = "ref notNull class|CSejour";
-    $props["debut"]         = "dateTime notNull";
+    $props["sejour_id"]     = "ref notNull class|CSejour show|0";
+    $props["debut"]         = "dateTime notNull show|0";
     $props["duree"]         = "num notNull min|0";
 		$props["therapeute_id"] = "ref notNull class|CMediusers";
 		$props["equipement_id"] = "ref class|CEquipement";
@@ -67,11 +67,16 @@ class CEvenementSSR extends CMbObject {
   }
 	
 	function check(){
-		$this->completeField("sejour_id");
-		$this->completeField("debut");
-    
-		$this->loadRefSejour();
-		
+		// Vérouillage d'un événement réalisé
+    $this->completeField("realise");
+		if ($this->realise && !$this->fieldModified("realise")) {
+			return "Evénément déjà réalisé";
+		}
+
+    // Evénement dans les bornes du séjour
+    $this->completeField("sejour_id");
+    $this->loadRefSejour();
+    $this->completeField("debut");
 		if ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie){
 		  return "Evenement SSR en dehors des dates du séjour";
 		}
@@ -87,14 +92,16 @@ class CEvenementSSR extends CMbObject {
 		  $therapeute->loadRefCodeIntervenantCdARR();
       $code_intervenant_cdarr = $therapeute->_ref_code_intervenant_cdarr->code;
       
-      $this->loadRefsActesCdARR();
-      $actes_cdarr = $this->_ref_actes_cdarr;
+			
+			// Création du RHS au besoins
 		  $rhs = $this->getRHS();
       if (!$rhs->_id) {
         $rhs->store();
       }
-          
-      foreach ($actes_cdarr as $_acte_cdarr) {
+      
+			// Complétion de la ligne RHS    
+      $this->loadRefsActesCdARR();
+      foreach ($this->_ref_actes_cdarr as $_acte_cdarr) {
         $ligne_activite_rhs = new CLigneActivitesRHS();
         $where["rhs_id"]                 = "= '$rhs->_id'";
         $where["executant_id"]           = "= '$therapeute->_id'";

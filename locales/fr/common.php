@@ -67,6 +67,7 @@ $locales['None'] = 'Aucun';
 $locales['No result'] = 'Aucun résultat';
 $locales['OK'] = 'OK';
 $locales['Optimize'] = 'Optimiser';
+$locales['Other'] = 'Autre';
 $locales['Owner'] = 'Propriétaire';
 $locales['Password'] = 'Mot de passe';
 $locales['Period.day'] = 'Quotidien';

@@ -18,6 +18,7 @@ class CFicheAutonomie extends CMbObject {
   var $toilette               = null;
   var $habillage_haut         = null;
   var $habillage_bas          = null;
+  var $toilettes              = null;
   var $utilisation_toilette   = null;
   var $transfert_lit          = null;
   var $locomotion             = null;
@@ -54,8 +55,9 @@ class CFicheAutonomie extends CMbObject {
     $specs["transfert_lit"]  = "enum notNull list|autonome|partielle|totale";
     $specs["locomotion"]     = "enum notNull list|autonome|partielle|totale";
     $specs["escalier"]       = "enum notNull list|autonome|partielle|totale";
-    $specs["utilisation_toilette"]   = "enum notNull list|sonde|couche|bassin|stomie";
-    $specs["locomotion_materiel"]    = "enum notNull list|canne|cadre|fauteuil";
+    $specs["toilettes"]      = "enum notNull list|autonome|partielle|totale";
+    $specs["utilisation_toilette"]   = "enum list|sonde|couche|bassin|stomie";
+    $specs["locomotion_materiel"]    = "enum list|canne|cadre|fauteuil";
     $specs["pansement"]              = "bool notNull";
     $specs["escarre"]                = "bool notNull";
     $specs["soins_cutanes"]          = "text";
