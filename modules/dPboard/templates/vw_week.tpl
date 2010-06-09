@@ -10,6 +10,8 @@
 
 <script type="text/javascript">
 function viewItem(oTd, guid, date) {
+  oTd = $(oTd);
+  
   // Mise en surbrillance de la plage survolée
   $$('td.selectedConsult').each(function(elem) { elem.className = "nonEmptyConsult";});
   $$('td.selectedOp').each(function(elem) { elem.className = "nonEmptyOp";});

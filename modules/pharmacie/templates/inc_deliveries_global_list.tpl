@@ -29,6 +29,7 @@ Main.add(function(){
         <input type="hidden" name="mode" value="global" />
         
         <button type="submit" class="print" style="font-weight: normal;">Plan cueillette</button>
+        <br /><!-- BR required (rendering bug in Chrome) -->
         
         <ul class="control_tabs_vertical" id="global-deliveries-tabs" style="font-size: 0.9em;">
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}

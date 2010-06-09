@@ -13,31 +13,25 @@
 
 <script type="text/javascript">
 function viewItem(oTd, guid, date) {
-
+  oTd = $(oTd);
+  
   // Mise en surbrillance de la plage survolée
+  $$('td.selectedConsult').each(function(elem) { elem.className = "nonEmptyConsult";});
+  $$('td.selectedOp').each(function(elem) { elem.className = "nonEmptyOp";});
   
-  aListConsult = $$('td.selectedConsult');
-  aListConsult.each(function(elem) { elem.className = "nonEmptyConsult";});
-  
-  aListConsult = $$('td.selectedOp');
-  aListConsult.each(function(elem) { elem.className = "nonEmptyOp";});
-  
+  var parts = guid.split('-'),
+      sClassName = parts[0],
+      id = parts[1];
+      
   if(sClassName == "CPlageconsult"){
-    oTd.parentNode.className = "selectedConsult";
+    oTd.up().className = "selectedConsult";
   }else if(sClassName == "CPlageOp"){
-    oTd.parentNode.className = "selectedOp";
+    oTd.up().className = "selectedOp";
   }
   
   // Affichage de la plage selectionnée et chargement si besoin
-  
   Dom.cleanWhitespace($('viewTooltip'));
-  var oDiv = $('viewTooltip').childNodes;
-
-  $H(oDiv).each(function (pair) {
-    if(typeof pair.value == "object"){
-      $(pair.value["id"]).hide();
-    }
-  });
+  $('viewTooltip').childElements().invoke('hide');
 
   var oElement = $(guid).show();
   
@@ -61,9 +55,8 @@ function viewItem(oTd, guid, date) {
     url.addParam("chirSel" , "{{$pratSel->_id}}");
     url.addParam("date"    , date);
     url.addParam("urgences", "0");
-  } else{
-    return;
-  }
+  } else return;
+  
   url.requestUpdate(oElement);
   oElement.alt = "infos - cliquez pour fermer";
 }

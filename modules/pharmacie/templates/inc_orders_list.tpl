@@ -53,7 +53,7 @@ Main.add(function(){
               <th style="width: 0.1%;">{{tr}}CProductDelivery-patient_id{{/tr}}</th>
               <th colspan="2">{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
               <th>
-                <label style="float: left; font-size: 0.8em;">
+                <label style="float: left;">
                   <input type="checkbox" onclick="$$('tr.done').invoke('setVisible', $V(this))"/> Afficher les commandes terminées
                 </label>
                 {{tr}}CProduct{{/tr}}
