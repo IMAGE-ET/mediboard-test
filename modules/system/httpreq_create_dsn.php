@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $dPconfig;
+global $dPconfig;
 
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 // Check params
 if (null == $dsn = CValue::get("dsn")) {
@@ -35,7 +35,7 @@ $dsConfig["dbuser"] = CValue::get("master_user");
 $dsConfig["dbpass"] = CValue::get("master_pass");
 $dsConfig["dbname"] = "";
 
-if (null == $ds = CSQLDataSource::get($dsn)) {
+if (null == $ds = @CSQLDataSource::get($dsn)) {
   CAppUI::stepAjax("Connexion en tant qu'administrateur échouée", UI_MSG_ERROR);
 }
 

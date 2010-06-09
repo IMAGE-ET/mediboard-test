@@ -12,9 +12,41 @@
  @param string $dsn
 *}}
 
+<script type="text/javascript">
+
+var DSN = {
+  create: function (sDSN) {
+    var oForm = document.forms["CreateDSN-" + sDSN];
+    
+    var url = new Url("system", "httpreq_create_dsn");
+    url.addParam("dsn", sDSN);
+    url.addElement(oForm.master_user);
+    url.addElement(oForm.master_pass);
+    url.requestUpdate("config-dsn-create-" + sDSN);
+  },
+  test: function (sDSN) {
+    var url = new Url("system", "httpreq_test_dsn");
+    url.addParam("dsn", sDSN);
+    url.requestUpdate("config-dsn-test-" + sDSN);
+  }
+};
+
+</script>
+
+<!-- Configure dsn '{{$dsn}}' -->
+{{assign var=section value="db"}}
+{{assign var=dsnConfig value=0}}
+
+{{if $dsn|array_key_exists:$dPconfig.$section}}
+  {{assign var=dsnConfig value=$dPconfig.$section.$dsn}}
+{{/if}} 
+
 <table class="main"> 
   <tr>
-    <td>
+    <th colspan="2" class="title">{{tr}}config-{{$section}}{{/tr}} '{{$dsn}}'</th>
+  </tr>
+  <tr>
+    <td style="width: 30%;">
 
 <form name="ConfigDSN-{{$dsn}}" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this)">
 
@@ -22,18 +54,11 @@
 <input type="hidden" name="m" value="system" />
 
 <table class="form">
+  <col style="width: 30%" />
 
-<!-- Configure dsn '{{$dsn}}' -->
-{{assign var="section" value="db"}}
 
 <tr>
-  <th class="title" colspan="100">
-    {{tr}}config-{{$section}}{{/tr}} '{{$dsn}}'
-    {{assign var=dsnConfig value=0}}
-    {{if $dsn|array_key_exists:$dPconfig.$section}}
-    {{assign var=dsnConfig value=$dPconfig.$section.$dsn}}
-    {{/if}} 
-  </th>
+  <th class="category" colspan="2">{{tr}}config-{{$section}}-connection{{/tr}}</th>
 </tr>
 
 <tr>
@@ -46,8 +71,9 @@
   <td>
     {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <select name="{{$section}}[{{$dsn}}][{{$var}}]">
-      <option value="mysql"  {{if "mysql"  == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-mysql{{/tr}}</option>
-      <option value="ingres" {{if "ingres" == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-ingres{{/tr}}</option>
+      {{foreach from="CSQLDataSource"|static:engines key=engine item=class}}
+        <option value="{{$engine}}" {{if $engine == $value}}selected="selected"{{/if}}>{{tr}}config-{{$section}}-{{$var}}-{{$engine}}{{/tr}}</option>
+      {{/foreach}}
     </select>
   </td>
 </tr>
@@ -105,10 +131,17 @@
 </tr>
 
 <tr>
+  <th>
+    <button type="button" class="search" onclick="DSN.test('{{$dsn}}');">
+      {{tr}}config-dsn-test{{/tr}}
+    </button>
+  </th>
+  <td id="config-dsn-test-{{$dsn}}"></td>
+</tr>
+
+<tr>
   <td class="button" colspan="2">
-    {{mb_ternary test=$dsnConfig var=button_text value=Modify other=Create}}
-    {{mb_ternary test=$dsnConfig var=button_class value=modify other=new}}
-    <button class="{{$button_class}}" type="submit">{{tr}}{{$button_text}}{{/tr}}</button>
+    <button class="{{$dsnConfig|@ternary:modify:new}}" type="submit">{{tr}}{{$dsnConfig|@ternary:Save:Create}}{{/tr}}</button>
   </td>
 </tr>
 
@@ -117,66 +150,37 @@
 </form>
 
     </td>
-		<td class="greedyPane">
+		<td>
 
-<script type="text/javascript">
+<form name="CreateDSN-{{$dsn}}" action="?" method="get">
 
-var DSN = {
-  create: function (sDSN) {
-    var oForm = document.forms["CreateDSN-" + sDSN];
+  <table class="form">
+    <col style="width: 30%" />
     
-    var url = new Url("system", "httpreq_create_dsn");
-    url.addParam("dsn", sDSN);
-    url.addElement(oForm.master_user);
-    url.addElement(oForm.master_pass);
-    url.requestUpdate("config-dsn-create-" + sDSN);
-  },
-  test: function (sDSN) {
-    var url = new Url("system", "httpreq_test_dsn");
-    url.addParam("dsn", sDSN);
-    url.requestUpdate("config-dsn-test-" + sDSN);
-  }
-}
+    <tr>
+      <th class="category" colspan="2">{{tr}}config-admin-dsn{{/tr}}</th>
+    </tr>
+    
+    <!-- Create DSN -->
+    <tr>
+      <th><label for="master_user">{{tr}}CreateDSN-master_user{{/tr}}</label></th>
+      <td><input name="master_user" type="text" /></td>
+    </tr>
+    <tr>
+      <th><label for="master_pass">{{tr}}CreateDSN-master_pass{{/tr}}</label></th>
+      <td><input name="master_pass" type="password" /></td>
+    </tr>
+    <tr>
+      <th>
+        <button type="button" class="modify" onclick="DSN.create('{{$dsn}}');">
+          {{tr}}config-dsn-create{{/tr}}
+        </button>
+      </th>
+      <td id="config-dsn-create-{{$dsn}}"></td>
+    </tr>
+  </table>
 
-</script>
-
-<table class="tbl">
-
-<tr>
-  <th class="title" colspan="100">
-    {{tr}}config-admin-dsn{{/tr}} '{{$dsn}}'
-  </th>
-</tr>
-
-<!-- Test DSN -->
-<tr>
-  <td>
-    <button type="button" class="search" onclick="DSN.test('{{$dsn}}');">
-      {{tr}}config-dsn-test{{/tr}}
-    </button>
-  </td>
-  <td id="config-dsn-test-{{$dsn}}" />
-</tr>
-
-<!-- Create DSN -->
-<tr>
-  <td>
-    <form name="CreateDSN-{{$dsn}}" action="?" method="get">
-      <label for="master_user">{{tr}}CreateDSN-master_user{{/tr}}</label>
-      <input name="master_user" type="text" />
-      <br/>
-      <label for="master_pass">{{tr}}CreateDSN-master_pass{{/tr}}</label>
-      <input name="master_pass" type="password" />
-      <br/>
-      <button type="button" class="modify" onclick="DSN.create('{{$dsn}}');">
-        {{tr}}config-dsn-create{{/tr}}
-      </button>
-    </form>
-  </td>
-  <td id="config-dsn-create-{{$dsn}}" />
-</tr>
-
-</table>
+</form>
 
 		</td>
 	</tr>
