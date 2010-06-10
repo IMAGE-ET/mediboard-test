@@ -309,16 +309,23 @@ class CSejour extends CCodable {
       if ($entree !== null && $sortie !== null) {
         $this->makeDatesOperations();
         foreach($this->_dates_operations as $operation_id => $date_operation){
-          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
+          $isCurrOp = $this->_curr_op_id == $operation_id;
+          if ($isCurrOp) {
+            $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+          } 
+          else {
+            $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
+          }
           if (!$opInBounds) {
-             $msg.= "Interventions en dehors des nouvelles dates du séjour.<br />";  
+             $msg.= "Interventions en dehors des nouvelles dates du séjour";  
           } 
         }
+
         $this->makeDatesConsultations();
         foreach($this->_dates_consultations as $consultation_id => $date_consultation){
-        	$consultInBounds = $date_consultation >= mbDate($entree) && $date_consultation <= mbDate($sortie);
+          $consultInBounds = $date_consultation >= mbDate($entree) && $date_consultation <= mbDate($sortie);
           if (!$consultInBounds) {
-             $msg.= "Consultations en dehors des nouvelles dates du séjour.<br />";  
+            $msg.= "Consultations en dehors des nouvelles dates du séjour.<br />";  
           } 
         }
       }
