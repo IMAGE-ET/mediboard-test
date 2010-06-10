@@ -258,11 +258,6 @@ class CConsultation extends CCodable {
     $this->_coded = $this->valide;
     
     $this->_exam_fields = self::getExamFields();
-    
-    if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-      $this->loadRefSejour();
-      $this->_forfait_se = $this->_ref_sejour->forfait_se;
-    }
   }
    
   function updateDBFields() {
