@@ -35,8 +35,8 @@
     <script type="text/javascript">
       quantitySubmit{{$id}} = function(element){
         submitOrderItem(element.form, {noRefresh: true, onComplete: function(){
-          refreshValue('CProductOrder-{{$order_id}}', '_total', function(v){$('order-{{$order_id}}').down('.total').update(v)});
-          refreshValue('CProductOrderItem-{{$id}}', '_price', function(v){$('order-item-{{$id}}-price').update(v)});
+          refreshValue('CProductOrder-{{$order_id}}', '_total', function(v){$('order-{{$order_id}}').down('.total').update(v)}, {dummy:1});
+          refreshValue('CProductOrderItem-{{$id}}', '_price', function(v){$('order-item-{{$id}}-price').update(v)}, {dummy:1});
         } });
       };
     </script>

@@ -57,11 +57,21 @@ $reference = new CProductReference;
 $reference->product_id = $product->_id;
 $list_references = $reference->loadMatchingList();
 
-foreach($list_references as $_reference) {
-  $_reference->loadRefSociete();
+$list_societes = array();
+
+if (count($list_references)) {
+  foreach($list_references as $_reference) {
+    $_reference->loadRefSociete();
+  }
+}
+else {
+  $societe = new CSociete;
+  $list_societes = $societe->loadList(null, "name");
 }
 
 $smarty = new CSmartyDP();
 $smarty->assign("list", $list);
 $smarty->assign("list_references", $list_references);
+$smarty->assign("list_societes", $list_societes);
+$smarty->assign("product", $product);
 $smarty->display('inc_search_product_order_item_reception.tpl');

@@ -43,10 +43,16 @@
       <td>{{mb_field class=CProductOrderItemReception field=lapsing_date prop="str notNull mask|99/99/9999" size=10 form=searchProductOrderItemReception}}</td>
       {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
       <td>
-        <select name="_reference_id" class="ref notNull">
-          {{foreach from=$list_references item=_reference}}
-            <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
-          {{/foreach}}
+        <select name="_reference_id" class="notNull">
+          {{if $list_references|@count}}
+            {{foreach from=$list_references item=_reference}}
+              <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
+            {{/foreach}}
+          {{else}}
+            {{foreach from=$list_societes item=_societe}}
+              <option value="{{$_societe->_id}}-{{$product->_id}}">{{$_societe}}</option>
+            {{/foreach}}
+          {{/if}}
         </select>
       </td>
     </tr>

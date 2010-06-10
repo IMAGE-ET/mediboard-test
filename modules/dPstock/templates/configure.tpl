@@ -19,6 +19,7 @@
     
     {{assign var="class" value="CProductReference"}}
     {{mb_include module=system template=inc_config_bool var=use_mdq}}
+    {{mb_include module=system template=inc_config_bool var=show_cond_price}}
     
     {{assign var="class" value="CProductStockGroup"}}
     {{mb_include module=system template=inc_config_bool var=unit_order}}
@@ -26,10 +27,6 @@
 
     {{assign var="class" value="CProductStockService"}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
-
-    {{assign var="class" value="CProductReference"}}
-    {{mb_include module=system template=inc_config_bool var=show_cond_price}}
-    {{mb_include module=system template=inc_config_bool var=use_mdq}}
 
     {{assign var="class" value="CProductDelivery"}}
     {{mb_include module=system template=inc_config_bool var=auto_dispensation}}

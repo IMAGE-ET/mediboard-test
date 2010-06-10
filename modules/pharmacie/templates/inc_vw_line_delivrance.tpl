@@ -26,6 +26,7 @@
   {{/if}}
   
   <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
+        {{if $curr_delivery->date_delivery}}style="visibility: hidden"{{/if}}
         onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveryLine.curry($V(this.delivery_id))})">
     <input type="hidden" name="m" value="dPstock" /> 
     <input type="hidden" name="del" value="0" />
@@ -64,7 +65,14 @@
 {{/if}}
 
 <td>
-  <table class="layout">
+  {{assign var=remaining value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
+  
+  {{if $remaining < 1}}
+    <button type="button" class="down notext" onclick="$(this).next('table').toggle()"></button> 
+    {{$remaining}} restants
+  {{/if}}
+  
+  <table class="layout" {{if $remaining < 1}}style="display: none"{{/if}}>
   {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
     <tr>
       <td class="button" style="width: 0.1%;">
@@ -83,7 +91,7 @@
         {{/if}}
       </td>
       <td style="width: 0.1%;">
-        <strong>{{$trace->quantity}} éléments</strong>
+        {{$trace->quantity}} éléments
       </td>
       <td>
         {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}
@@ -97,9 +105,6 @@
   {{/foreach}}
   
     <tr>
-      <td>
-        <button type="button" class="add notext" onclick="$(this).up().next().down('form').toggle()" {{if !$curr_delivery->_delivered}}style="visibility: hidden;"{{/if}}></button>
-      </td>
       <td colspan="10" title="Quantité d'origine: {{mb_value object=$curr_delivery field=quantity}}">
         <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" class="deliver"
               onsubmit="return deliverLine(this)" {{if $curr_delivery->_delivered}}style="display: none;"{{/if}}>
@@ -108,7 +113,7 @@
           <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
           <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
           <input type="hidden" name="date_delivery" value="now" />
-          {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=2 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
+          {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=2 value=$remaining}}
           <input type="text" name="code" value="" size="8" />
           <button type="submit" class="tick notext" title="Délivrer">Délivrer</button>
         </form>

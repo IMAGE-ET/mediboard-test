@@ -71,14 +71,14 @@ function createOrders(order_id) {
         <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
         <input type="hidden" name="letter" value="{{$letter}}" onchange="this.form.onsubmit()" />
         
-        <select name="category_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
+        <select name="category_id" style="max-width: 14em;" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
           <option value="" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
           {{foreach from=$list_categories item=curr_category}} 
             <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
         
-        <select name="societe_id" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
+        <select name="societe_id" style="max-width: 14em;" onchange="$V(this.form.start, 0, false); this.form.onsubmit();">
           <option value="" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
           {{foreach from=$list_societes item=_societe}} 
             <option value="{{$_societe->_id}}">{{$_societe}}</option>

@@ -52,6 +52,7 @@ $total = $reference->countList($where, null, null, null, $leftjoin);
 $list_references = $reference->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductReference pagination_size"), null, $leftjoin);
 foreach($list_references as $ref) {
   $ref->loadRefsFwd();
+  $ref->_ref_product->loadRefStock();
 }
 
 // Smarty template

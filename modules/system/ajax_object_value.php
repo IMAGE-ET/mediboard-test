@@ -15,7 +15,7 @@ $options = CValue::get("options");
 $object = CMbObject::loadFromGuid($guid);
 
 if (!$object || !$object->canRead())
-  CApp::rip();
+  return;
 
 $result = "";
 
@@ -24,6 +24,8 @@ if ($field) {
     $result = $object->getFormattedValue($field, $options);
   else
     $result = $object->$field;
+  
+  $result = utf8_encode($result);
 }
 else {
   $result = get_object_vars($object);
