@@ -116,15 +116,16 @@ class CProductOrderItem extends CMbObject {
   }
   
   function loadReference() {
-    $this->_ref_reference = $this->loadFwdRef("reference_id", true);
+    return $this->_ref_reference = $this->loadFwdRef("reference_id", true);
   }
   
-  function loadOrder() {
-    $this->_ref_order = $this->loadFwdRef("order_id", true);
+  function loadOrder($cache = true) {
+    $this->completeField("order_id");
+    return $this->_ref_order = $this->loadFwdRef("order_id", $cache);
   }  
   
   function loadRefsReceptions() {
-    $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
+    return $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
   }
 
   function loadRefsFwd() {
@@ -176,6 +177,18 @@ class CProductOrderItem extends CMbObject {
     }
     
     return parent::store();
+  }
+  
+  function delete(){
+    $order = $this->loadOrder(false);
+    
+    if ($msg = parent::delete()){
+      return $msg;
+    }
+    
+    if ($order->countBackRefs("order_items") == 0) {
+      return $order->delete();
+    }
   }
 }
 ?>

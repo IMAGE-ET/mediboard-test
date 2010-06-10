@@ -10,6 +10,10 @@
 
 {{* mb_include module=system template=CMbObject_view object=$order*}}
 
+{{assign var=uniq value=""|uniqid}}
+
+<span id="uniqid-{{$uniq}}"></span>
+
 <table class="main form">
   <tr>
     <td>
@@ -31,19 +35,30 @@
   </tr>
 </table>
 
+
 <script type="text/javascript">
 Main.add(function(){
-  if (!$("orders-tabs")) return;
-  
-  var tab = $$("a[href='#order-{{$order->_id}}']")[0], 
-      count = {{$order->_count.order_items}};
-  
-  tab.down(".count").update("("+count+")");
-  
-  if (count > 0)
-    tab.removeClassName("empty");
-  else 
-    tab.addClassName("empty");
+  {{if $order->_id}}
+    if (!$("orders-tabs")) return;
+    
+    var tab = $$("a[href='#order-{{$order->_id}}']")[0], 
+        count = "{{$order->_count.order_items}}";
+    
+    tab.down(".count").update("("+count+")");
+    
+    if (count > 0)
+      tab.removeClassName("empty");
+    else 
+      tab.addClassName("empty");
+  {{else}}
+    // container to remove
+    var toRemove = $("uniqid-{{$uniq}}").up();
+    $$("a[href='#"+toRemove.id+"']")[0].up().remove(); // tab
+    toRemove.remove(); // container
+    
+    tabs = Control.Tabs.create("orders-list");
+    tabs.setActiveTab(0);
+  {{/if}}
 });
 </script>
 

@@ -90,6 +90,7 @@ Main.add(function () {
         </select>
       {{else}}
         {{assign var=_service value=$list_services|@reset}}
+        <strong>{{$_service}}</strong>
         <input type="hidden" name="service_id" value="{{$_service->_id}}" />
       {{/if}}
     </form>

@@ -23,7 +23,7 @@ $service = new CService();
 $service->load($service_id);
 $service->loadBackRefs("endowments");
 
-if($endowment_id === null) {
+if(($endowment_id === null) && count($service->_back["endowments"])) {
   $first = reset($service->_back["endowments"]);
   $endowment_id = $first->_id;
 }
