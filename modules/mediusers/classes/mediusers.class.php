@@ -35,6 +35,13 @@ class CMediusers extends CMbObject {
   
   var $code_intervenant_cdarr      = null;
 
+  var $secteur = null;
+  // Champs utilisés pour l'affichage des ordonnances ALD
+  var $cab  = null;
+  var $conv = null;  
+  var $zisd = null;
+  var $ik   = null;
+
   // dotProject user fields
   var $_user_type                  = null;
   var $_user_username              = null;
@@ -112,8 +119,12 @@ class CMediusers extends CMbObject {
     $specs["spec_cpam_id"]           = "ref class|CSpecCPAM";
     $specs["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
     $specs["banque_id"]              = "ref class|CBanque show|0";
-    
     $specs["code_intervenant_cdarr"] = "str length|2";
+		$specs["secteur"]                = "enum list|1|2";
+    $specs["cab"]                    = "str";
+    $specs["conv"]                   = "str";  
+    $specs["zisd"]                   = "str";
+    $specs["ik"]                     = "str";
     
     $specs["_group_id"]              = "ref notNull class|CGroups";
     

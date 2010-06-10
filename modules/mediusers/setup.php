@@ -450,7 +450,16 @@ class CSetupmediusers extends CSetup {
               ADD `consults_partagees` ENUM ('0','1') NOT NULL DEFAULT '1' AFTER compta_partagee;";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.35";
+		 $this->makeRevision("0.35");
+		 $sql = "ALTER TABLE `users_mediboard` 
+              ADD `secteur` ENUM ('1','2'),
+              ADD `cab` VARCHAR (255),
+              ADD `conv` VARCHAR (255),
+              ADD `zisd` VARCHAR (255),
+              ADD `ik` VARCHAR (255);";
+		 $this->addQuery($sql);
+		 
+     $this->mod_version = "0.36";
   }
 }
 

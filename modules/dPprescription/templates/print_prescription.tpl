@@ -28,12 +28,24 @@ div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
 }
 	
 
+@media screen {
+	div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
+	  padding-top: {{$header}}px;
+	  padding-bottom: {{$footer}}px;
+  }
+}
+
 
 /* Partie variable */
 @media print {
   div.body, table.body, div.bodyWithoutPageBreak, table.bodyWithoutPageBreak {
     padding-top: {{$header+3}}px;
     padding-bottom: {{$footer+3}}px;
+  }
+	
+	* {
+    font-size: 12px;
+    font-family: Arial,Helvetica,sans-serif;
   }
 }
 
@@ -55,28 +67,59 @@ div.footer {
           <td class="left">
             <strong>Dr {{$praticien->_view}}</strong>
             <br />
-            {{$praticien->_ref_discipline->_view}}
+						{{mb_value object=$praticien field=spec_cpam_id}}
             <br />
-						{{mb_title object=$praticien field=adeli}}
-            {{mb_value object=$praticien field=adeli}}
-            <br />
-            {{mb_value object=$function field=adresse}}
-	          {{$function->cp}} {{$function->ville}}
-						<br />
-	          Tel: {{mb_value object=$function field=tel}}
-						{{if $function->fax}}
-	          / Fax: {{mb_value object=$function field=fax}}
-						{{/if}}
-          </td>
+            {{mb_value object=$etablissement field=adresse}}
+	          {{$etablissement->cp}} {{$etablissement->ville}}
+					  <br />
+            
+            <span style="float: right">
+					  {{mb_value object=$praticien field=secteur}}
+            </span>
+
+						<table style="width: 1%">
+							<tr>
+								<td style="white-space: nowrap;">
+								  {{mb_value object=$praticien field=adeli}}
+								</td>
+								{{if $praticien->cab}}
+								<td>
+			            <table style="width: 1%">
+			              <tr><td style="border-bottom: 1px solid black; text-align: center;">{{mb_value object=$praticien field=cab}}</td></tr>
+			              <tr><td>{{mb_label object=$praticien field=cab}}</td></tr>
+			            </table>
+								</td>
+								{{/if}}
+                {{if $praticien->conv}}
+                <td>
+                  <table style="width: 1%">
+                    <tr><td style="border-bottom: 1px solid black; text-align: center;">{{mb_value object=$praticien field=conv}}</td></tr>
+                    <tr><td>{{mb_label object=$praticien field=conv}}</td></tr>
+                  </table>
+                </td>
+                {{/if}}
+                {{if $praticien->zisd}}
+								<td>
+                  <table style="width: 1%">
+                    <tr><td style="border-bottom: 1px solid black; text-align: center;">{{mb_value object=$praticien field=zisd}}</td></tr>
+                    <tr><td>{{mb_label object=$praticien field=zisd}}</td></tr>
+                  </table>
+                </td>
+								{{/if}}
+								{{if $praticien->ik}}
+                <td>
+                  <table style="width: 1%">
+                    <tr><td style="border-bottom: 1px solid black; text-align: center;">{{mb_value object=$praticien field=ik}}</td></tr>
+                    <tr><td>{{mb_label object=$praticien field=ik}}</td></tr>
+                  </table>
+                </td>
+								{{/if}}
+							</tr>
+						</table>
+
+					</td>
           <td class="right">
-            le {{$date|date_format:"%d %B %Y"}}
-            <br />
-            A l'attention de 
-            <br />          
             <strong>{{$prescription->_ref_patient->_view}}</strong>
-            <br />
-            Age: {{$prescription->_ref_patient->_age}} ans<br />
-            Poids: {{$poids}} kg
           </td>
         </tr>
       </table>  

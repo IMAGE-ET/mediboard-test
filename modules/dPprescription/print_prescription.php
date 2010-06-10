@@ -270,6 +270,7 @@ if(!$_ald){
 	}
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_ald", $_ald);

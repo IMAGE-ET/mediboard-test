@@ -42,6 +42,32 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="secteur"}}</th>
+  <td>{{mb_field object=$object field="secteur" defaultOption="&mdash; Choix d'un secteur"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$object field="cab"}}</th>
+  <td>{{mb_field object=$object field="cab"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$object field="conv"}}</th>
+  <td>{{mb_field object=$object field="conv"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$object field="zisd"}}</th>
+  <td>{{mb_field object=$object field="zisd"}}</td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$object field="ik"}}</th>
+  <td>{{mb_field object=$object field="ik"}}</td>
+</tr>
+
+
+<tr>
   <th>{{mb_label object=$object field="titres"}}</th>
   <td>{{mb_field object=$object field="titres"}}</td>
 </tr>
