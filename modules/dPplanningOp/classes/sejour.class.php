@@ -1329,7 +1329,7 @@ class CSejour extends CCodable {
     }
     
     foreach ($this->_ref_consultations as &$consultation) {
-      if ($consultation->annulee){
+      if ($consultation->annule){
         continue;
       }
       

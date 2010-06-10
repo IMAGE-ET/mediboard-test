@@ -726,6 +726,14 @@ class CConsultation extends CCodable {
       $this->sejour_id = $sejour->_id;
     }
     
+    // Changement du patient pour la consult 
+    if ($this->sejour_id && $this->fieldModified("patient_id")) {
+      $this->loadRefSejour();
+      
+      $this->_ref_sejour->patient_id = $this->patient_id;
+      $this->_ref_sejour->store();
+    }
+    
     // Changement de journée pour la consult 
     $this->_ref_sejour->_adjust_sejour = false;
     if ($this->sejour_id && $this->fieldModified("plageconsult_id")) {
