@@ -68,6 +68,7 @@ class CSejour extends CCodable {
   var $adresse_par_prat_id = null;
   var $adresse_par_etab_id = null;
   var $libelle             = null;  
+  var $forfait_se          = null;
 	
   // Form Fields
   var $_entree             = null;
@@ -253,6 +254,7 @@ class CSejour extends CCodable {
     $props["adresse_par_etab_id"] = "ref class|CEtabExterne autocomplete|nom";
     $props["libelle"]             = "str seekable autocomplete dependsOn|praticien_id";
     $props["facture"]             = "bool default|0";
+    $props["forfait_se"]          = "bool default|0";
     
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
@@ -494,9 +496,22 @@ class CSejour extends CCodable {
     if($this->mode_sortie === ""){
       $this->sortie_reelle = "";
     }
+    
+    $patient_modified = $this->fieldModified("patient_id");
+    
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    if ($patient_modified) {
+      $consultations = $this->loadBackRefs("consultations");
+      foreach ($consultations as $_consult) {
+        if ($_consult->patient_id != $this->patient_id) {
+          $_consult->patient_id = $this->patient_id;
+          $_consult->store();
+        }
+      }
     }
 
     // Cas d'une annulation de séjour

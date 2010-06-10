@@ -110,6 +110,7 @@ class CConsultation extends CCodable {
   var $_reglements_total_patient = null;
   var $_du_tiers_restant         = null;
   var $_reglements_total_tiers   = null;
+  var $_forfait_se               = null;
   
   // Filter Fields
   var $_date_min	 	           = null;
@@ -191,6 +192,7 @@ class CConsultation extends CCodable {
     $specs["_reglements_total_tiers"  ] = "currency";
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
     $specs["_etat_reglement_tiers"  ]   = "enum list|reglee|non_reglee";
+    $specs["_forfait_se"]               = "bool default|0";
     
     $specs["_date"]             = "date";
     $specs["_datetime"]         = "dateTime show|1";
@@ -256,6 +258,11 @@ class CConsultation extends CCodable {
     $this->_coded = $this->valide;
     
     $this->_exam_fields = self::getExamFields();
+    
+    if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
+      $this->loadRefSejour();
+      $this->_forfait_se = $this->_ref_sejour->forfait_se;
+    }
   }
    
   function updateDBFields() {
@@ -726,14 +733,6 @@ class CConsultation extends CCodable {
       $this->sejour_id = $sejour->_id;
     }
     
-    // Changement du patient pour la consult 
-    if ($this->sejour_id && $this->fieldModified("patient_id")) {
-      $this->loadRefSejour();
-      
-      $this->_ref_sejour->patient_id = $this->patient_id;
-      $this->_ref_sejour->store();
-    }
-    
     // Changement de journée pour la consult 
     $this->_ref_sejour->_adjust_sejour = false;
     if ($this->sejour_id && $this->fieldModified("plageconsult_id")) {
@@ -770,9 +769,22 @@ class CConsultation extends CCodable {
       }
     }
     
+    $patient_modified = $this->fieldModified("patient_id");
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // Changement du patient pour la consult 
+    if ($this->sejour_id && $patient_modified) {
+      $this->loadRefSejour();
+           
+      // Si patient est différent alors le faire
+      if ($this->_ref_sejour->patient_id != $this->patient_id) {
+        $this->_ref_sejour->patient_id = $this->patient_id;
+        $this->_ref_sejour->store();
+      }
     }
 
     if ($this->_ref_sejour->_adjust_sejour && ($this->_ref_sejour->type == "consult") && $sejour->_id) {

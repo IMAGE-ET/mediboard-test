@@ -884,8 +884,13 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `sejour`
               ADD `service_entree_mutation_id` INT (11) UNSIGNED;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.08");
+    $sql = "ALTER TABLE `sejour`
+              ADD `forfait_se` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
 		 
-    $this->mod_version = "1.08";
+    $this->mod_version = "1.09";
   }
 }
 ?>
