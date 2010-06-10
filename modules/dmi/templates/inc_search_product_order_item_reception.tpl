@@ -14,12 +14,18 @@
   <input type="hidden" name="quantity" value="1" />
   <input type="hidden" name="date" value="now" />
   
+  {{if $list_references|@count == 0}}
+    <div class="small-info text">
+      Aucune référence n'est disponible, veuillez choisir le fournisseur de ce DMI pour créér une référence et un lot
+    </div>
+  {{/if}}
+        
   <table class="tbl">
   	<tr>
       <th style="width: 0.1%;"></th>
   		<th>{{mb_title class=CProductOrderItemReception field=code}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
-  		<th>{{mb_title class=CProductOrderItemReception field=date}}</th>
+  		<th>{{if $list_references|@count}}Date/Référence{{else}}Fournisseur{{/if}}</th>
   	</tr>
   	{{foreach from=$list item=_order_item_reception}}	
   	<tr>
@@ -49,6 +55,7 @@
               <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
             {{/foreach}}
           {{else}}
+            <option disabled="disabled" selected="selected"> &ndash; Fournisseur </option>
             {{foreach from=$list_societes item=_societe}}
               <option value="{{$_societe->_id}}-{{$product->_id}}">{{$_societe}}</option>
             {{/foreach}}

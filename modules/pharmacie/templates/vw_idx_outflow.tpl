@@ -80,7 +80,7 @@ function checkOutflow(form) {
         </select>
       </td>
       <td>{{mb_field object=$delivrance field=comments prop="str"}}</td>
-      <td><button class="tick" type="submit">{{tr}}Create{{/tr}}</button></td>
+      <td><button class="tick" type="submit">Délivrer</button></td>
     </tr>
   </table>
 </form>

@@ -10,7 +10,7 @@
 
 <div id="tab-references" style="display: none;">
 
-<button class="new" type="button" onclick="location.href='?m=dPstock&amp;tab=vw_idx_reference&amp;product_id={{$product->_id}}'">
+<button class="new" type="button" onclick="location.href='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id=0&amp;product_id={{$product->_id}}'">
   {{tr}}CProductReference-title-create{{/tr}}
 </button>
 
