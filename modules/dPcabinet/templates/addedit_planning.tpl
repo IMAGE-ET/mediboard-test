@@ -255,7 +255,14 @@ Main.add(function () {
             {{mb_field object=$consult field="adresse" hidden="hidden"}}
           </td>
         </tr>
-
+        
+        {{if $dPconfig.dPcabinet.CConsultation.attach_consult_sejour}}
+        <tr>
+          <th>{{mb_label object=$consult field="_forfait_se"}}</th>
+          <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
+        </tr>
+        {{/if}}
+        
         <tr>
           <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
           <td>

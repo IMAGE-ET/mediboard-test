@@ -71,7 +71,11 @@ else {
   
   $consult->loadRefs();
   $consult->_ref_plageconsult->loadRefs();  
-
+  
+  if ($consult->sejour_id) {
+    $consult->loadRefSejour();
+  }
+  
   $chir =& $consult->_ref_plageconsult->_ref_chir;
   $pat  =& $consult->_ref_patient;
 }

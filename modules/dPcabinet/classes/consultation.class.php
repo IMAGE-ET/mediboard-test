@@ -728,39 +728,54 @@ class CConsultation extends CCodable {
       $this->sejour_id = $sejour->_id;
     }
     
-    // Changement de journée pour la consult 
-    $this->_ref_sejour->_adjust_sejour = false;
-    if ($this->sejour_id && $this->fieldModified("plageconsult_id")) {
+  $this->_adjust_sejour = false;
+    if ($this->sejour_id) {
+      $forfait_se = $this->_forfait_se;
       $this->loadRefSejour();
-      $this->_ref_sejour->_adjust_sejour = true;
       
-      // Pas le permettre si admission est déjà faite
-      if ($this->_ref_sejour->entree_reelle) {
-        return CAppUI::tr("CConsultation-denyDayChange");
+      if ($forfait_se !== null && $this->_id && 
+           CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
+        $this->_ref_sejour->forfait_se = $forfait_se;
+        if ($msg = $this->_ref_sejour->store()) {
+          return $msg;
+        }
+        $this->_forfait_se = null;
       }
       
-      $this->loadRefPlageConsult();
-      $dateTimePlage = $this->_datetime;
-      $where = array();
-      $where['patient_id']   = " = '$this->patient_id'";
-      $where[] = "`sejour`.`entree` <= '$dateTimePlage' AND `sejour`.`sortie` >= '$dateTimePlage'";
-      
-      $sejour = new CSejour();
-      $sejour->loadObject($where);
-      
-      $this->adjustSejour($sejour, $dateTimePlage);
-    }
-    
-    if ($this->_id && $this->sejour_id && $this->fieldModified("chrono", self::PATIENT_ARRIVE)) {
-      $this->completeField("plageconsult_id");
-      $this->loadRefPlageConsult();
-      $this->_ref_chir->loadRefFunction();
-      $function = $this->_ref_chir->_ref_function;
-      if ($function->admission_auto) {
+      // Changement de journée pour la consult 
+      if ($this->fieldModified("plageconsult_id")) {
+        $this->_adjust_sejour = true;
+        
+        // Pas le permettre si admission est déjà faite
+        if ($this->_ref_sejour->entree_reelle) {
+          return CAppUI::tr("CConsultation-denyDayChange");
+        }
+        
+        $this->loadRefPlageConsult();
+        $dateTimePlage = $this->_datetime;
+        $where = array();
+        $where['patient_id']   = " = '$this->patient_id'";
+        $where[] = "`sejour`.`entree` <= '$dateTimePlage' AND `sejour`.`sortie` >= '$dateTimePlage'";
+        
         $sejour = new CSejour();
-        $sejour->load($this->sejour_id);
-        $sejour->entree_reelle = $this->arrivee;
-        $sejour->store();
+        $sejour->loadObject($where);
+        
+        $this->adjustSejour($sejour, $dateTimePlage);
+      }
+      
+      if ($this->_id && $this->fieldModified("chrono", self::PATIENT_ARRIVE)) {
+        $this->completeField("plageconsult_id");
+        $this->loadRefPlageConsult();
+        $this->_ref_chir->loadRefFunction();
+        $function = $this->_ref_chir->_ref_function;
+        if ($function->admission_auto) {
+          $sejour = new CSejour();
+          $sejour->load($this->sejour_id);
+          $sejour->entree_reelle = $this->arrivee;
+          if ($msg = $sejour->store()) {
+            return $msg;
+          }
+        }
       }
     }
     
@@ -778,11 +793,13 @@ class CConsultation extends CCodable {
       // Si patient est différent alors le faire
       if ($this->_ref_sejour->patient_id != $this->patient_id) {
         $this->_ref_sejour->patient_id = $this->patient_id;
-        $this->_ref_sejour->store();
+        if ($msg = $this->_ref_sejour->store()) {
+          return $msg;
+        }
       }
     }
 
-    if ($this->_ref_sejour->_adjust_sejour && ($this->_ref_sejour->type == "consult") && $sejour->_id) {
+    if ($this->_adjust_sejour && ($this->_ref_sejour->type == "consult") && $sejour->_id) {
       $consultations = $this->_ref_sejour->loadBackRefs("consultations");
       if (count($consultations) < 1) {
         if ($msg = $this->_ref_sejour->delete()) {
@@ -832,6 +849,10 @@ class CConsultation extends CCodable {
   function loadRefSejour($cache = 0){
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
+    
+    if (CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
+      $this->_forfait_se = $this->_ref_sejour->forfait_se;
+    }
   }
   
   function getActeExecution() {
