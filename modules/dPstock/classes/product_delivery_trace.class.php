@@ -74,19 +74,19 @@ class CProductDeliveryTrace extends CMbObject {
     }
     
     // If we want to deliver, just provide a delivery date
-    if ($this->date_delivery && !$infinite_group_stock) {
+    if ($this->date_delivery/* && !$infinite_group_stock*/) {
       $stock->quantity -= $this->quantity;
       if ($msg = $stock->store()) return $msg;
     }
     
     // Un-deliver
     else if ($this->_undeliver) {
-    	if (!$infinite_group_stock) {
+    	//if (!$infinite_group_stock) {
 	      $stock->quantity += $this->quantity;
 	      $this->_undeliver = null;
 	      
 	      if ($msg = $stock->store()) return $msg;
-      }
+      //}
       return $this->delete();
     }
     
@@ -116,7 +116,7 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_service->product_id = $stock->product_id;
       $stock_service->service_id = $this->_ref_delivery->service_id;
       
-      if ($stock_service->loadMatchingObject() && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0) {
+      if ($stock_service->loadMatchingObject()/* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
         $stock_service->quantity -= $this->quantity;
         if ($msg = $stock_service->store()) return $msg;
       }

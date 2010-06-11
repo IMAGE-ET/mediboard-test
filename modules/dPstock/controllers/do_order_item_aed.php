@@ -19,24 +19,37 @@ if(CValue::post("_create_order")) {
     CAppUI::setMsg("Impossible de créer l'article, la réference n'existe pas", UI_MSG_ERROR);
   }
   
-	$where = array(
-	  "product_order.societe_id" => "= '$reference->societe_id'",
-	);
+  $where = array(
+    "product_order.societe_id" => "= '$reference->societe_id'",
+    "product_order.object_class" => "IS NULL",
+  );
+  
+  // If a context is provided
+  if ($context_guid = CValue::post("_context_guid")) {
+    list($object_class, $object_id) = explode("-", $context_guid);
+    $where["product_order.object_class"] = "= '$object_class'";
+    $where["product_order.object_id"]    = "= '$object_id'";
+  }
   
   if (CAppUI::conf("dPstock group_independent") == 0) {
     $where["product_order.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
   }
 	
-	$order = new CProductOrder;
-	$orders = $order->search("waiting", null, 1, $where);
-  
-  if ($context_guid = CValue::post("_context_guid")) {
-    $context = CMbObject::loadFromGuid($context_guid);
-    $order->setObject($context);
-    $order->locked = 1;
+  $order = new CProductOrder;
+  $orders = $order->search("waiting", null, 1, $where);
+
+  if ($context_guid && count($orders) == 0) {
+    $orders = $order->search("locked", null, 1, $where);
   }
 
-	if (count($orders) == 0) {
+  // If no order found
+  if (count($orders) == 0) {
+    if ($context_guid) {
+      $context = CMbObject::loadFromGuid($context_guid);
+      $order->setObject($context);
+      $order->locked = 1;
+    }
+    
     $order->societe_id = $reference->societe_id;
     $order->group_id = CGroups::loadCurrent()->_id;
     
@@ -44,18 +57,17 @@ if(CValue::post("_create_order")) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
     
-		$order->order_number = $order->getUniqueNumber();
+    $order->order_number = $order->getUniqueNumber();
     
     if ($msg = $order->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
-	}
-	
-	else {
-		$order = reset($orders);
-	}
+  }
+  else {
+    $order = reset($orders);
+  }
   
-	$_POST["order_id"] = $order->_id;
+  $_POST["order_id"] = $order->_id;
 }
 
 $do->doIt();

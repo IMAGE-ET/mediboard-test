@@ -225,10 +225,10 @@ class CProductOrder extends CMbMetaObject {
   }
   
   /**
-   * @param object $type The type of orders we are looking for [waiting|locked|pending|received|cancelled]
-   * @param object $keywords [optional]
-   * @param object $limit = 30 [optional]
-   * @return The list of orders
+   * @param string $type The type of orders we are looking for [waiting|locked|pending|received|cancelled]
+   * @param string $keywords [optional]
+   * @param integer $limit = 30 [optional]
+   * @return array The list of orders
    */
   function search($type, $keywords = "", $limit = 30, $where = array()) {
     global $g;

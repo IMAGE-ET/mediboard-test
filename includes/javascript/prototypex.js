@@ -315,7 +315,7 @@ Element.addMethods({
 
     $w(element.className).each(function (value) {
       var params = value.split("|");
-      props[params.shift()] = (params.length == 0) ? true : params.reduce();
+      props[params.shift()] = (params.length == 0) ? true : (params.length > 1 ? params : params[0]);
     });
     return props;
   },

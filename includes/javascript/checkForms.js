@@ -55,7 +55,10 @@ var ElementChecker = {
   assertSingleArg: function(prop) {
     if (Object.isUndefined(this.oProperties[prop])) return false;
     Assert.that(((typeof this.oProperties[prop] != "boolean") && !Object.isArray(this.oProperties[prop])), '"'+prop+'" nécessite un et un seul argument');
-    this.oProperties[prop] = [this.oProperties[prop]].flatten().reduce();
+    
+    var val = [this.oProperties[prop]].flatten();
+    val = val.length > 1 ? val : val[0];
+    this.oProperties[prop] = val;
     return this.oProperties[prop];
   },
   

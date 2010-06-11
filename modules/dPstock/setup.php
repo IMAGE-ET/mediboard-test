@@ -594,6 +594,10 @@ class CSetupdPstock extends CSetup {
               `service_id` = '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.27";
+    $this->makeRevision("1.27");
+    $sql = "ALTER TABLE `product_stock_group` CHANGE `quantity` `quantity` INT( 11 ) NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.28";
   }
 }

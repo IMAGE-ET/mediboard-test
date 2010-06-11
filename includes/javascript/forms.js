@@ -99,7 +99,7 @@ function $V (element, value, fire) {
       });
       
       if (type.match(/^radio$/i)) {
-        ret = ret.reduce();
+        ret = (ret.length > 1 ? ret : ret[0]);
       }
       return (ret && ret.length > 0) ? ret : null;
     }
