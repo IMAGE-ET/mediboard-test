@@ -8,21 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
-// Chargement des receptions de l'etablissement
-$reception = new CProductReception();
-$reception->group_id = CGroups::loadCurrent()->_id;
-$receptions = $reception->loadMatchingList();
+$start = intval(CValue::get("start", 0));
 
-foreach($receptions as $_reception){
-	$_reception->countReceptionItems();
-}
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("reception", $reception);
-$smarty->assign("receptions", $receptions);
+$smarty->assign("start", $start);
 $smarty->display('vw_idx_reception.tpl');
-
-?>

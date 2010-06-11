@@ -26,6 +26,7 @@
   <tr>
     <th>Stock</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
@@ -52,6 +53,7 @@
             {{$_line_dmi->_ref_product}}
           </span>
         </td>
+        <td>{{mb_value object=$_line_dmi field=quantity}}</td>
         <td>{{mb_value object=$_line_dmi->_ref_product field=code}}</td>
         <td>
           {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}

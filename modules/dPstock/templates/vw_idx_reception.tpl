@@ -8,32 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+function changePage(page) {
+  $V(getForm("filter-receptions").start, page);
+}
+
+Main.add(function(){
+  getForm("filter-receptions").onsubmit();
+});
+</script>
+
 {{mb_include_script module=dPstock script=order_manager}}
 
-<table class="main tbl">
-	<tr>
-		<th class="title" colspan="5">Réceptions <small>({{$receptions|@count}})</small></th>
-	</tr>
-	<tr>
-    <th style="width: 1%">{{mb_title class=CProductReception field="reference"}}</th>
-    <th>{{mb_title class=CProductReception field="societe_id"}}</th>
-    <th>{{mb_title class=CProductReception field="date"}}</th>
-		<th>Nombre d'elements</th>
-		<th></th>
-  </tr>
-	{{foreach from=$receptions item=_reception}}
-	<tr>
-    <td>
-      <strong onmouseover="ObjectTooltip.createEx(this, '{{$_reception->_guid}}')">
-        {{mb_value object=$_reception field="reference"}}
-      </strong>
-    </td>
-    <td>{{mb_value object=$_reception field="societe_id"}}</td>
-	  <td>{{mb_value object=$_reception field="date"}}</td>
-		<td>{{$_reception->_count_reception_items}}</td>
-		<td style="width: 1%">
-		  <button type="button" class="print" onclick="printReception('{{$_reception->_id}}');">Bon de réception</button>
-    </td>
-	</tr>
-	{{/foreach}}
-</table>
+<form name="filter-receptions" method="get" action="" onsubmit="return Url.update(this, 'receptions_list')">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="a" value="httpreq_vw_receptions_list" />
+  <input type="hidden" name="start" value="{{$start}}" onchange="this.form.onsubmit()"/>
+</form>
+
+<div id="receptions_list"></div>

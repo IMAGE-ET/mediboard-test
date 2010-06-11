@@ -311,7 +311,7 @@ div.footer {
       {{assign var=exec value=$executants.$exec}}
     {{/if}}
      
-     {{if $smarty.foreach.foreachChap.last && $smarty.foreach.foreachExec.last}}
+     {{if $smarty.foreach.foreachChap.last && $smarty.foreach.foreachExec.last &&  !$linesDMI|@count}}
        <div class="bodyWithoutPageBreak">
      {{else}} 
        <div class="body">
@@ -394,17 +394,21 @@ div.footer {
 	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
-        </div>
+     </div>
   {{/foreach}}
 {{/foreach}}
 
 {{if $linesDMI|@count}}
-  <div class="body">
+  <div class="bodyWithoutPageBreak">
     <h1>DMI</h1>
     <ul>
     {{foreach from=$linesDMI item=_line_dmi}}
-      <li><strong>{{$_line_dmi->_ref_product->name}}</strong> (Code Produit: {{$_line_dmi->_ref_product->code}} / 
-      Code lot:{{$_line_dmi->_ref_product_order_item_reception->code}})
+      <li><strong>{{$_line_dmi->_ref_product->name}}</strong>:
+      <ul>
+        <li>Quantité: <strong>{{$_line_dmi->quantity}}</strong></li>
+        <li>Code produit: <strong>{{$_line_dmi->_ref_product->code}}</strong></li>
+        <li>Code lot: <strong>{{$_line_dmi->_ref_product_order_item_reception->code}}</strong></li>
+      </ul>
       </li>
     {{/foreach}}
     </ul>

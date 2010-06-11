@@ -21,6 +21,7 @@ class CPrescriptionLineDMI extends CMbObject {
   var $date                    = null;
   var $septic                  = null;
   var $type                    = null;
+  var $quantity                = null;
   
   var $_ref_prescription       = null;
   var $_ref_praticien          = null;
@@ -45,6 +46,7 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs["date"]            = "dateTime notNull";
     $specs["septic"]          = "bool notNull default|0";
     $specs["type"]            = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
+    $specs["quantity"]        = "num notNull min|1 default|1";
     return $specs;
   }
   
@@ -77,8 +79,10 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function store(){
     if (!$this->_id) {
+      if (!$this->quantity) $this->quantity = 1;
+      
       if ($stock = $this->loadRefStockGroup()) {
-        $stock->quantity--;
+        $stock->quantity -= $this->quantity;
         if ($msg = $stock->store()){
           return $msg;
         }
@@ -89,7 +93,9 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function delete(){
     if ($stock = $this->loadRefStockGroup()) {
-      $stock->quantity++;
+      $this->completeField("quantity");
+      
+      $stock->quantity += $this->quantity;
       if ($msg = $stock->store()){
         return $msg;
       }

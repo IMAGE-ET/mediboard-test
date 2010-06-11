@@ -1631,8 +1631,12 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `prescription_line_mix` 
             CHANGE `type` `type` ENUM ('classique','seringue','PCA','masque','lunettes','sonde');";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("1.06");
+    $sql = "ALTER TABLE `prescription_line_dmi` ADD `quantity` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
+    $this->addQuery($sql);
 		
-    $this->mod_version = "1.06";
+    $this->mod_version = "1.07";
   }
 }
 

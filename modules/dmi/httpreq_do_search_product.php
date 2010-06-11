@@ -73,10 +73,14 @@ else {
   $dmi->code = $product_code;
   $dmi->loadMatchingObject();
   $product->_dmi_type = $dmi->type;
+  
+  $prescription_line_dmi = new CPrescriptionLineDMI;
+  $prescription_line_dmi->quantity = 1;
     
   $smarty = new CSmartyDP();
   $smarty->assign('product', $product);
   $smarty->assign('product_order_item_reception', $product_order_item_reception);
+  $smarty->assign('prescription_line_dmi', $prescription_line_dmi);
   //$smarty->assign('quantite_delivree',count($list_delivery));
   $smarty->display('inc_search_product.tpl');
 }

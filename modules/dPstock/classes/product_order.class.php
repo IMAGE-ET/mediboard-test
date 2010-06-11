@@ -450,6 +450,14 @@ class CProductOrder extends CMbMetaObject {
   }
   
   function store () {
+    if (!$this->_id && $this->object_class && $this->object_id && empty($this->comments)) {
+      $this->loadTargetObject();
+      if ($this->object_class == "COperation") {
+        //$this->_ref_object->loadRefSejour();
+        $this->comments = "Numéro de séjour: {$this->_ref_object->sejour_id}";
+      }
+    }
+    
     if (!$this->_id && empty($this->order_number)) {
       $this->order_number = uniqid(rand());
       if ($msg = parent::store()) return $msg;

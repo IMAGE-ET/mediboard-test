@@ -67,7 +67,7 @@ reloadListDMI = function(){
   Prescription.reload('{{$prescription->_id}}', null, "dmi");
 }
 
-addDMI = function(product_id, order_item_reception_id, septic, type){
+addDMI = function(product_id, order_item_reception_id, septic, type, quantity){
   var oFormAddDMI = getForm("add_dmi");
   
   // si la liste des praticien est affichée, on utilise le praticien selectionné
@@ -78,6 +78,7 @@ addDMI = function(product_id, order_item_reception_id, septic, type){
   oFormAddDMI.order_item_reception_id.value = order_item_reception_id;
   oFormAddDMI.septic.value = septic;
   oFormAddDMI.elements.type.value = type;
+  oFormAddDMI.quantity.value = quantity;
   return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
 }
 
@@ -101,6 +102,7 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="date" value="now">
   <input type="hidden" name="septic" value="">
   <input type="hidden" name="type" value="">
+  <input type="hidden" name="quantity" value="">
 </form>
 
 <form name="del_dmi" method="post" action="">
@@ -168,6 +170,7 @@ delLineDMI = function(line_dmi_id){
   <!-- Affichage des lignes de DMI-->
   <tr>
     <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
@@ -183,6 +186,7 @@ delLineDMI = function(line_dmi_id){
           {{$_line_dmi->_ref_product}}
         </span>
       </td>
+      <td>{{mb_value object=$_line_dmi field=quantity}}</td>
       <td>{{mb_value object=$_line_dmi field=type}}</td>
       <td {{if $_line_dmi->septic}}class="cancelled"{{/if}}>
         {{mb_value object=$_line_dmi field=septic}}

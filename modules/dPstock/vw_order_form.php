@@ -22,6 +22,11 @@ if ($order_id) {
   $order->loadRefsFwd();
   $order->loadRefAddress();
   $order->updateCounts();
+  
+  if ($order->object_class) {
+    $order->_ref_object->updateFormFields();
+    $order->_ref_object->loadRefsFwd();
+  }
 }
 
 // Smarty template

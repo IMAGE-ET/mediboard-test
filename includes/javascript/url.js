@@ -562,3 +562,8 @@ Url.parse = function(url) {
 
   return c;
 };
+
+Url.update = function(form, element) {
+  new Url().addFormData(form).requestUpdate(element);
+  return false;
+};
