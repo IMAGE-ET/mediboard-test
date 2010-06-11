@@ -107,6 +107,9 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       <div {{$style|smarty:nodefaults}}>
         {{if !$_consultation->patient_id}}
           [PAUSE]
+          {{if $_consultation->motif}}
+          ({{$_consultation->motif|truncate:"20"}})
+          {{/if}}
         {{else}}
           {{$_consultation->_ref_patient->_view}}
           {{if $_consultation->motif}}
