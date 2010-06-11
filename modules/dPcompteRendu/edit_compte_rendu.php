@@ -93,12 +93,12 @@ else {
       <style type='text/css'>
       #header {
         height: {$header->height}px;
-        //DOMPDF//top: 0;
+        /*DOMPDF top: 0;*/
       }
 
       #footer {
         height: {$footer->height}px;
-        //DOMPDF//bottom: 0;
+        /*DOMPDF bottom: 0;*/
       }";
     
     if ($header->_id) {
@@ -119,18 +119,17 @@ else {
       @media print { 
         #body { 
           padding-top: {$header->height}px;
-          //DOMPDF//padding-bottom: {$footer->height}px;
+          /*DOMPDFpadding-bottom: {$footer->height}px;*/
         }"; 
 
     if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0 &&
        CAppUI::conf("dPcompteRendu CCompteRendu same_print") == 0) {
       $style .=
-      "hr.pagebreak { 
+      "hr.pagebreak {
             padding-top: {$header->height}px; 
-          } 
-        }";
-      }
-      $style .= "</style>";
+      }";
+    }
+    $style .= "}</style>";
     
     $compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
     $compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;

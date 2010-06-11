@@ -33,7 +33,7 @@ FCKConfig.ToolbarSets["Default"] = [
     ['Cut','Copy','Paste','PasteText','PasteWord','-', {{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint,'-','mbHeader','mbFooter'],
     ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
     ['Table','Rule','Image','SpecialChar','mbPageBreak'],
-    ['FitWindow','Source','About', 'mbHelp'],
+    ['FitWindow', {{if $can->admin}} 'Source' ,{{/if}} 'About', 'mbHelp'],
 	  '/',
   {{/if}}
   ['FontFormat',{{if !$templateManager->simplifyMode}}'FontName',{{/if}}'FontSize'],
@@ -144,5 +144,6 @@ FCKConfig.Plugins.Add( 'mbfooter', 'en,fr', sMbPluginsPath );
 FCKConfig.Keystrokes[21] = [ CTRL + 72 /*H*/, "mbHeader" ];
 FCKConfig.Keystrokes[22] = [ CTRL + 79 /*O*/, "mbFooter" ];
 FCKConfig.Keystrokes[23] = [ CTRL + 75 /*K*/, "mbPageBreak" ];
+FCKConfig.Keystrokes[24] = [ CTRL + ALT + 85 /*U*/, "Source" ];
 if (window.parent.pdf_thumbnails == 1)
-  FCKConfig.Keystrokes[24] = [ CTRL + 80 /*P*/, "mbPrintPDF" ];
+  FCKConfig.Keystrokes[25] = [ CTRL + 80 /*P*/, "mbPrintPDF" ];

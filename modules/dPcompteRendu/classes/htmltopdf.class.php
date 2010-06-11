@@ -34,19 +34,19 @@ class CHtmlToPDF {
       "kbd",
       "nobr",
       "q",
-			"s",
-			"samp",
+      "s",
+      "samp",
       "small",
       "span",
-			"strike",
+      "strike",
       "sub",
       "sup",
-			"tt",
-			"u",
-			"var"
+      "tt",
+      "u",
+      "var"
       ),
 	  "block"  => array(
-		  "address",
+      "address",
       "blockquote",
       "dd",
       "dl",
@@ -55,19 +55,19 @@ class CHtmlToPDF {
       "dir",
       "h1", "h2", "h3", "h4", "h5", "h6",
       /*"hr",*/
-			"listing",
+      "listing",
       "isindex",
       "map",
       "menu",
       "multicol",
       "ol",
-			"p",
+      "p",
       "pre",
-			"plaintext",
-			"table",
-			"ul",
-			"xmp",
-			));
+      "plaintext",
+      "table",
+      "ul",
+      "xmp",
+    ));
       
   static $_font_size_lookup = array(
     // For basefont support
@@ -109,7 +109,7 @@ class CHtmlToPDF {
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
     $this->dompdf->load_html($this->content);
     $this->dompdf->render();
-
+    mbTrace($this->content,'',1);
     if($stream) {
       $this->dompdf->stream($file->file_name, array("Attachment" => 0));
     }
@@ -220,7 +220,7 @@ class CHtmlToPDF {
                   '&#8194;', '&#8195;', '&#8211;', '&#8212;', '&#8216;', '&#8217;', '&#8218;',
                   '&#8220;', '&#8221;', '&#8222;', '&#8226;' ,'&#8230;', '&#8240;', '&#8242;', '&#8243;', '&#8364;',
                   '&#8592;', '&#8593;', '&#8594;', '&#8595;', '&#8596;',
-                  '&#8727;', '&#9674;', '&#9824;', '&#9827;', '&#9829;', '&#9830;');
+                  '&#8727;', '&#8804;', '&#8805;', '&#9674;', '&#9824;', '&#9827;', '&#9829;', '&#9830;');
 
     $html = array('&quot;'  , '&amp;'   , '&lt;'    , '&gt;'    , '&nbsp;'  , '&iexcl;' , '&cent;'  ,
                   '&pound; ', '&curren;', '&yen;'   , '&brvbar;', '&sect;'  , '&uml;'   , '&copy;'  ,
@@ -240,7 +240,7 @@ class CHtmlToPDF {
                   '&ensp;'  , '&emsp;'  , '&ndash;' , '&mdash;' , '&lsquo;' , '&rsquo;' , '&sbquo;' ,
                   '&ldquo;' , '&rdquo;' , '&bdquo;' , '&bull;'  , '&hellip;' ,'&permil;', '&prime;' , '&Prime;' , '&euro;'  ,
                   '&larr;'  , '&uarr;'  , '&rarr;'  , '&darr;'  , '&harr;'  ,
-                  '&lowast;', '&loz;'   , '&spades;', '&clubs;' , '&hearts;', '&diams;');
+                  '&lowast;', '&le;'    , '&ge;'    , '&loz;'   , '&spades;', '&clubs;' , '&hearts;', '&diams;');
     $str = str_replace($html,$xml,$str);
     $str = str_ireplace($html,$xml,$str);
     return $str;

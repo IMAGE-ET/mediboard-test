@@ -109,18 +109,31 @@ function FCKeditor_OnComplete(editorInstance){
     if (k[1] === true) 
       return;
     var key = k[0];
-    key -= 1000;
-    if (key > 2000) key -= 2000;
-    if (key > 4000) key -= 4000;
-    
-    if (boutons[k[1]] && ((boutons[k[1]]._UIButton.MainElement.title).match(/\(/i)) == null) {
-      var mac = navigator.userAgent.match(/mac/i);
-      if (mac) {
-        boutons[k[1]]._UIButton.MainElement.title += " (" + String.fromCharCode(8984) + String.fromCharCode(key) + ")";
+    var title = " (";
+    var mac = navigator.userAgent.match(/mac/i);
+    if (key > 4000){
+      key -= 4000;
+      title += "ALT + ";
+    }
+    if (key > 2000){
+      key -= 2000;
+      title += "SHIFT + ";
+    }
+    if (key > 1000) {
+      key -= 1000;
+      if(mac) {
+        title += String.fromCharCode(8984);
       } else {
-        boutons[k[1]]._UIButton.MainElement.title += " (Ctrl + " + String.fromCharCode(key) + ")";
+        title += "CTRL + ";
       }
     }
+    if (boutons[k[1]] && ((boutons[k[1]]._UIButton.MainElement.title).match(/\(/i)) == null) {
+      var char_from_key = String.fromCharCode(key) 
+      if (key == 13) {
+        char_from_key = "Entrée";            
+      }
+      boutons[k[1]]._UIButton.MainElement.title += title + char_from_key + ")";
+      }
   });
   editorInstance.Events.AttachEvent('OnSelectionChange', loadOld);
   Thumb.content = editorInstance.GetHTML(false);
@@ -183,15 +196,16 @@ FormObserver.onChanged = function(){
   url.addParam("dosql", "do_modele_aed");
   url.addParam("m", "dPcompteRendu");
   url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-  url.requestUpdate("systemMsg", {method: "post"});
+  url.requestJSON(function(){}, {method: "post"});
+  //url.requestUpdate("toto", {method: "post"});
 }
 
 function resizeEditor() {
   var dims = document.viewport.getDimensions();
   var greedyPane = $$(".greedyPane")[0]; 
-  greedyPane.style.height = (dims["height"] - greedyPane.cumulativeOffset().top) +"px";
+  greedyPane.style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
   if (window.pdf_thumbnails == 1)
-    $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top) +"px";
+    $("thumbs").style.height = (dims["height"] - greedyPane.cumulativeOffset().top - 10) +"px";
 }
 
 Event.observe(window, "resize", function(e){
