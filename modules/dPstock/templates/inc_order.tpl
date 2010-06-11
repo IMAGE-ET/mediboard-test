@@ -99,7 +99,7 @@ Main.add(function(){
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="locked" value="1" />
-        <button type="button" class="tick" onclick="submitOrder(this.form, {close: false, confirm: true, onComplete: function(){reloadOrders()}});">{{tr}}CProductOrder-_validate{{/tr}}</button>
+        <button type="button" class="tick" onclick="submitOrder(this.form, {close: false, confirm: true, onComplete: function(){reloadOrders(); refreshLists(); }});">{{tr}}CProductOrder-_validate{{/tr}}</button>
       </form>
       {{/if}}
     </td>
