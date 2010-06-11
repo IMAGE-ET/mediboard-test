@@ -28,16 +28,17 @@ class CPlageconsult extends CMbObject {
   var $libelle = null;
 
   // Form fields
-  var $_hour_deb  = null;
-  var $_min_deb   = null;
-  var $_hour_fin  = null;
-  var $_min_fin   = null;
-  var $_freq      = null;
-  var $_affected  = null;
-  var $_total     = null;
-  var $_fill_rate = null;
-  var $_nb_patients = null;
-  var $_colliding_plages = null;
+  var $_hour_deb             = null;
+  var $_min_deb              = null;
+  var $_hour_fin             = null;
+  var $_min_fin              = null;
+  var $_freq                 = null;
+  var $_affected             = null;
+  var $_total                = null;
+  var $_fill_rate            = null;
+  var $_nb_patients          = null;
+  var $_consult_by_categorie = null;
+  var $_colliding_plages     = null;
   
   // Field pour le calcul de collision (fin à 00:00:00)
   var $_fin = null;
@@ -132,16 +133,34 @@ class CPlageconsult extends CMbObject {
       return;
     }
 
-    $query = "SELECT SUM(duree) " .
-      "\nFROM `consultation` " .
-      "\nWHERE `plageconsult_id` = $this->_id" .
-      "\nAND `consultation`.`patient_id` IS NOT NULL && `annule` = '0'";
+    $query = "SELECT SUM(`consultation`.`duree`)
+              FROM `consultation`
+              WHERE `consultation`.`plageconsult_id` = $this->_id
+                AND `consultation`.`patient_id` IS NOT NULL
+                AND `consultation`.`annule` = '0'";
       
     $this->_affected = intval($this->_spec->ds->loadResult($query));
 
     if ($this->_total) {
       $this->_fill_rate= round($this->_affected/$this->_total*100);
     }
+  }
+  
+  function loadCategorieFill() {
+    if (!$this->_id) {
+      return;
+    }
+  	$query = "SELECT `consultation`.`categorie_id`, COUNT(`consultation`.`categorie_id`) as nb,
+  	                 `consultation_cat`.`nom_icone`, `consultation_cat`.`nom_categorie`
+              FROM `consultation`
+              LEFT JOIN `consultation_cat`
+                ON `consultation`.`categorie_id` = `consultation_cat`.`categorie_id`
+              WHERE `consultation`.`plageconsult_id` = $this->_id
+                AND `consultation`.`annule` = '0'
+                AND `consultation`.`categorie_id` IS NOT NULL
+              GROUP BY `consultation`.`categorie_id`
+              ORDER BY `consultation`.`categorie_id`";
+  	$this->_consult_by_categorie = $this->_spec->ds->loadList($query);
   }
   
   function loadRefs($withCanceled = true, $cache = 0) {

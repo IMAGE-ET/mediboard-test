@@ -97,7 +97,7 @@ Main.add(function () {
 </tr>
 
 <tr>
-  <td>
+  <td style="width: 50%">
     {{include file="inc_list_plages.tpl"}}
   </td>
   <td id="listPlaces">

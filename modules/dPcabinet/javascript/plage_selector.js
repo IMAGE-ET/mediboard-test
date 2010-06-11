@@ -9,8 +9,8 @@ var PlageConsultSelector = {
   sChir_id         : null,
   sFunction_id     : null,
   options : {
-    width : 800,
-    height: 600
+    width : 900,
+    height: 650
   },
 
   pop: function() {

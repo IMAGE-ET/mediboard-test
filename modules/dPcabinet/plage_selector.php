@@ -93,7 +93,7 @@ $listPlage = $listPlage->loadList($where, $order);
 if (!array_key_exists($plageconsult_id, $listPlage)) {
   $plage->_id = $plageconsult_id = null;
 }
-
+$currPlage = new CPlageconsult();
 foreach ($listPlage as $keyPlage => &$currPlage) {
   if (!$plageconsult_id && $date == $currPlage->date) {
     $plageconsult_id = $currPlage->plageconsult_id;
@@ -101,6 +101,7 @@ foreach ($listPlage as $keyPlage => &$currPlage) {
 
   $currPlage->_ref_chir =& $listPrat[$currPlage->chir_id];
   $currPlage->loadFillRate();
+  $currPlage->loadCategorieFill();
 }
 
 // Chargement des places disponibles
