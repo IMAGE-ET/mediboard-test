@@ -18,4 +18,6 @@ $module->registerTab("vw_edit_categories_group"    , TAB_ADMIN);
 $module->registerTab("vw_edit_associations_moments", TAB_ADMIN);
 $module->registerTab("vw_edit_moments_unitaires"   , TAB_ADMIN);
 $module->registerTab("vw_edit_config_service"      , TAB_ADMIN);
+$module->registerTab("vw_stats"                    , TAB_READ);
+
 ?>
