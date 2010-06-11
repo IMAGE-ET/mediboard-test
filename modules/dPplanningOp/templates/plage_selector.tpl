@@ -148,8 +148,8 @@ Main.add(function () {
                   }}ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"{{/if}}
                 >
                   {{$_plage->date|date_format:"%a %d"}} -
-                  {{$_plage->debut|date_format:"%Hh%M"}} -
-                  {{$_plage->fin|date_format:"%Hh%M"}}
+                  {{$_plage->debut|date_format:$dPconfig.time}} -
+                  {{$_plage->fin|date_format:$dPconfig.time}}
                   &mdash; {{$_plage->_ref_salle->_view}}
                   {{if $_plage->spec_id}}
                   <br />{{$_plage->_ref_spec->_view|truncate:50}}
@@ -157,15 +157,24 @@ Main.add(function () {
                 </label>
               </div>
             </div>
-            <div id="plage-{{$_plage->_id}}" style="display: none; width: 200px;">
+            <div id="plage-{{$_plage->_id}}" style="display: none; width: 250px;">
               <table class="tbl">
               	<tr>
-              		<th class="category">
-              			Plage de {{$_plage->debut|date_format:'%Hh%M'}}-{{$_plage->fin|date_format:'%Hh%M'}}
+              		<th class="category" colspan="2">
+              			Plage de {{$_plage->debut|date_format:$dPconfig.time}}-{{$_plage->fin|date_format:$dPconfig.time}}
               		</th>
               	</tr>
                 {{foreach from=$_plage->_ref_operations item=curr_op}}
                 <tr>
+                  <td>
+                    {{if $curr_op->time_operation && $curr_op->time_operation != "00:00:00"}}
+                      {{$curr_op->time_operation|date_format:$dPconfig.time}} (validé)
+                    {{elseif $curr_op->horaire_voulu && $curr_op->horaire_voulu != "00:00:00"}}
+                      {{$curr_op->horaire_voulu|date_format:$dPconfig.time}} (souhaité)
+                    {{else}}
+                      Pas d'horaire
+                    {{/if}}
+                  </td>
                   <td class="text">
                     {{if $curr_op->libelle}}
                       <em>{{$curr_op->libelle}}</em>
@@ -176,7 +185,7 @@ Main.add(function () {
                 </tr>
                 {{foreachelse}}
                 <tr>
-                  <td>Aucune intervention</td>
+                  <td colspan="2">Aucune intervention</td>
                 </tr>
                 {{/foreach}}
               </table>
