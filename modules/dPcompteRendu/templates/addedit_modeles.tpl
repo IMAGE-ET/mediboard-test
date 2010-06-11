@@ -118,8 +118,8 @@ Main.add(function () {
 		Thumb.user_id = {{$user_id}};
 		Thumb.mode = "modele";
 		PageFormat.init(getForm("editFrm"));
+		resizeEditor();
   {{/if}}
-  resizeEditor(); 
 });
 
 </script>

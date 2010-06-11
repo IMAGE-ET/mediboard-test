@@ -109,7 +109,6 @@ class CHtmlToPDF {
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
     $this->dompdf->load_html($this->content);
     $this->dompdf->render();
-    mbTrace($this->content,'',1);
     if($stream) {
       $this->dompdf->stream($file->file_name, array("Attachment" => 0));
     }
