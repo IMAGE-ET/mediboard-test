@@ -13,6 +13,7 @@ $can->needsRead();
 
 $service_id          = CValue::get('service_id');
 $start               = intval(CValue::getOrSession('start', 0));
+$letter              = CValue::getOrSession("letter", "");
 $only_service_stocks = CValue::getOrSession('only_service_stocks', 1);
 $only_common         = CValue::getOrSession('only_common');
 $keywords            = CValue::getOrSession('keywords');
@@ -45,13 +46,18 @@ $single_line = false;
 if ($endowment_id) {
   // Toute la liste
   if (!$endowment_item_id) {
-    $endowment = new CProductEndowment;
-    $endowment->load($endowment_id);
+    $endowment_item = new CProductEndowmentItem;
+    
+    $where = array(
+      "product_endowment_item.endowment_id" => "= '$endowment_id'",
+      "product.name " . ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
+    );
     $ljoin = array(
       'product' => 'product.product_id = product_endowment_item.product_id'
     );
-    $endowment_items = $endowment->loadBackRefs("endowment_items", 'product.name', "$start,20", null, $ljoin);
-    $count_stocks = $endowment->countBackRefs("endowment_items", null, null, null, $ljoin);
+    
+    $endowment_items = $endowment_item->seek($keywords, $where, "$start,20", true, $ljoin, 'product.name');
+    $count_stocks = $endowment_item->_totalSeek;
   }
   // Seulement une ligne
   else {
@@ -166,6 +172,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('single_line', $single_line);
 $smarty->assign('start', $start);
+$smarty->assign('letter', $letter);
 $smarty->assign('stocks', $stocks);
 $smarty->assign('count_stocks', $count_stocks);
 $smarty->assign('delivrance', $delivrance);

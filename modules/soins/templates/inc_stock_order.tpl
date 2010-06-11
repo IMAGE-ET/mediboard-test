@@ -28,6 +28,9 @@
   changeOrderPage = function(start) {
     $V(getForm('filter-order').start, start); 
   }
+  changeOrderPageAlpha = function(letter) {
+    $V(getForm('filter-order').letter, letter); 
+  }
   
   {{if $only_service_stocks == 1 && !$endowment_id}}
   Main.add(function(){
@@ -45,9 +48,10 @@
     {{include file="inc_stock_order_line.tpl" nodebug=true}}
   {{/foreach}}
 {{else}}
-<form name="filter-order" action="?" method="get" onsubmit="return (checkForm(this) && refreshOrders())">
+<form name="filter-order" action="?" method="get" onsubmit="checkForm(this); refreshOrders(); return false">
   <input type="hidden" name="m" value="soins" />
   <input type="hidden" name="start" value="{{$start}}" onchange="refreshOrders()" />
+  <input type="hidden" name="letter" value="{{$letter}}" onchange="refreshOrders()" />
   <table class="form" style="table-layout: fixed;">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
@@ -56,7 +60,10 @@
       <td>{{mb_field object=$delivrance field=_date_max form="filter-order" register=true onchange="\$V(this.form.start, 0); refreshOrders()"}}</td>
     </tr>
     <tr>
-      <th></th>
+      <td style="text-align: right;">
+        <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
+        <input type="text" name="keywords" value="{{$keywords}}" />
+      </td>
       <td>
         {{* 
         <button type="button" style="float: right;" class="tick" onclick="autoOrder({{$service->_id}}, '{{$delivrance->_date_min}}', '{{$delivrance->_date_max}}')">Commande auto</button>
@@ -109,7 +116,7 @@
 
 <hr />
 
-<form name="form-create-order" action="?" method="post" style="display: block; text-align: right;"
+<form name="form-create-order" action="?" method="post" style="float: right;"
       onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -130,6 +137,8 @@
     getForm("form-create-order").quantity.addSpinner({min:0});
   </script>
 </form>
+
+{{mb_include module=system template=inc_pagination_alpha change_page="changeOrderPageAlpha" current=$letter}}
 
 <hr />
 

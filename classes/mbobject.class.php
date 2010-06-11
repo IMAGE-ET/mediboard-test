@@ -1768,7 +1768,12 @@ class CMbObject {
         if (is_string($col)) {
           $col = str_replace('.', '`.`', $col);
         }
-        $query .= " AND `$col` $value";
+        if (is_numeric($col)) {
+          $query .= " AND $value";
+        }
+        else {
+          $query .= " AND `$col` $value";
+        }
       }
     }
     

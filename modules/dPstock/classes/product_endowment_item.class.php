@@ -31,7 +31,7 @@ class CProductEndowmentItem extends CMbObject {
     $specs = parent::getProps();
     $specs['quantity']     = 'num notNull min|0';
     $specs['endowment_id'] = 'ref notNull class|CProductEndowment autocomplete|name';
-    $specs['product_id']   = 'ref notNull class|CProduct autocomplete|name dependsOn|cancelled';
+    $specs['product_id']   = 'ref notNull class|CProduct autocomplete|name dependsOn|cancelled seekable';
     return $specs;
   }
 
