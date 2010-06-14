@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  var values = new CookieJar().get("filter-logs") || ["big-error", "big-warning", "big-info"];
+  var values = new CookieJar().get("filter-logs") || [".big-error", ".big-warning:not(.javascript)", ".big-info", ".javascript"];
   $V(getForm("filter-logs").filter, values);
   insertDeleteButtons();
   updateFilter();
@@ -33,16 +33,17 @@ function removeByHash(hash) {
 function updateFilter() {
   var elements = getForm('filter-logs').filter;
   $A(elements).each(function(e){
-    $('logs').select('.'+e.value).invoke('setVisible', e.checked);
+    $('logs').select(e.value).invoke('setVisible', e.checked);
   });
   new CookieJar().put("filter-logs", $V(elements));
 }
 </script>
 
 <form name="filter-logs" action="" method="get" onsubmit="return false">
-  <label><input type="checkbox" name="filter" value="big-error" checked="checked" onchange="updateFilter()" /> Error</label>
-  <label><input type="checkbox" name="filter" value="big-warning" checked="checked" onchange="updateFilter()" /> Warning</label>
-  <label><input type="checkbox" name="filter" value="big-info" checked="checked" onchange="updateFilter()" /> Info</label>
+  <label><input type="checkbox" name="filter" value=".big-error" checked="checked" onchange="updateFilter()" /> Error</label>
+  <label><input type="checkbox" name="filter" value=".big-warning:not(.javascript)" checked="checked" onchange="updateFilter()" /> Warning</label>
+  <label><input type="checkbox" name="filter" value=".big-info" checked="checked" onchange="updateFilter()" /> Info</label>
+  <label><input type="checkbox" name="filter" value=".javascript" checked="checked" onchange="updateFilter()" /> Javascript</label>
 </form>
 
 <div id="logs">

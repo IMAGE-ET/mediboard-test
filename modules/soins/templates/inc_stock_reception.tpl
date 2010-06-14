@@ -21,7 +21,10 @@ changeReceptionPage = function(start) {
 }
 </script>
 
-<button class="print" onclick="printReceptionReport({{$service_id}})" style="float: left;">{{tr}}Print{{/tr}}</button>
+<div style="float: left;">
+  <button class="print" onclick="printReceptionReport({{$service_id}})">{{tr}}Print{{/tr}}</button>
+  <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
+</div>
 
 {{mb_include module=system template=inc_pagination change_page="changeReceptionPage" 
     total=$deliveries_count current=$start step=30}}
@@ -39,7 +42,7 @@ changeReceptionPage = function(start) {
     <th colspan="2">Date commande</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th><button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button></th>
+    <th></th>
   </tr>
   {{foreach from=$deliveries item=curr_delivery}}
     <tr>

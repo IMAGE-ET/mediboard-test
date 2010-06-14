@@ -42,21 +42,23 @@ $delivrance->_date_max = $date_max;
 
 $group_id = CGroups::loadCurrent()->_id;
 $single_line = false;
-    
+$limit = "$start,20";
+
+$where = array(
+  "product.name " . ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
+);
+
 if ($endowment_id) {
   // Toute la liste
   if (!$endowment_item_id) {
     $endowment_item = new CProductEndowmentItem;
     
-    $where = array(
-      "product_endowment_item.endowment_id" => "= '$endowment_id'",
-      "product.name " . ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
-    );
+    $where["product_endowment_item.endowment_id"] = "= '$endowment_id'";
     $ljoin = array(
       'product' => 'product.product_id = product_endowment_item.product_id'
     );
     
-    $endowment_items = $endowment_item->seek($keywords, $where, "$start,20", true, $ljoin, 'product.name');
+    $endowment_items = $endowment_item->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
     $count_stocks = $endowment_item->_totalSeek;
   }
   // Seulement une ligne
@@ -92,15 +94,14 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
   $ljoin = array(
     'product' => 'product.product_id = product_stock_service.product_id'
   );
-  $where = array(
-    'product_stock_service.service_id' => "= '$service_id'"
-  );
+  $where['product_stock_service.service_id'] = "= '$service_id'";
   if ($only_common) {
     $where['product_stock_service.common'] = "= '1'";
   }
+  
   $stock = new CProductStockService;
-  $stocks_service = $stock->loadList($where, 'product.name', "$start,20", null, $ljoin);
-  $count_stocks   = $stock->countList($where, null, null, null, $ljoin);
+  $stocks_service = $stock->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
+  $count_stocks = $stock->_totalSeek;
   
   $stocks = array();
   if ($stocks_service) {
@@ -108,6 +109,7 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
       if ($stock_service->_ref_product->cancelled) {
         continue;
       }
+      
       //if (count($stocks) == 20) continue;
       $stock = new CProductStockGroup;
       $stock->product_id = $stock_service->_ref_product->_id;
@@ -123,31 +125,34 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
   }
 } 
 else {
+  $where["product_stock_group.group_id"] = "= '$group_id'";
   $ljoin = array(
     'product' => 'product.product_id = product_stock_group.product_id'
   );
-  $group        = CGroups::loadCurrent();
-  $stocks       = $group->loadBackRefs('product_stocks', 'product.name', "$start,20", null, $ljoin);
+  
+  $stock = new CProductStockGroup;
+  $stocks = $stock->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
+  $count_stocks = $stock->_totalSeek;
+  
   if ($stocks) {
-    foreach($stocks as $_id => $stock){
-      if ($stock->_ref_product->cancelled) {
+    foreach($stocks as $_id => $_stock){
+      if ($_stock->_ref_product->cancelled) {
         unset($stocks[$_id]);
       }
       else {
-        $stock->quantity = min($stock->quantity, $stock->getOptimumQuantity());
+        $_stock->quantity = min($_stock->quantity, $_stock->getOptimumQuantity());
       }
     }
   }
-  $count_stocks = $group->countBackRefs('product_stocks', null, null, null, $ljoin);
 }
 
 // Load the already ordered dispensations
-foreach($stocks as &$stock) {
-  $stock->loadRefsFwd();
+foreach($stocks as &$_stock) {
+  $_stock->loadRefsFwd();
   
   $where = array(
     'product_delivery.date_dispensation' => "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'",
-    'product_delivery.stock_id' => "= '$stock->_id'",
+    'product_delivery.stock_id' => "= '$_stock->_id'",
     'product_delivery.service_id' => "= '$service_id'",
     //'product.category_id' => "= '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'"
   );
@@ -158,12 +163,12 @@ foreach($stocks as &$stock) {
   );
   
   $delivery = new CProductDelivery;
-  $stock->_ref_deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
+  $_stock->_ref_deliveries = $delivery->loadList($where, 'date_dispensation', null, null, $ljoin);
   
-  $stock->_total_quantity = 0;
+  $_stock->_total_quantity = 0;
   
-  foreach($stock->_ref_deliveries as $_deliv) {
-    $stock->_total_quantity += $_deliv->quantity;
+  foreach($_stock->_ref_deliveries as $_deliv) {
+    $_stock->_total_quantity += $_deliv->quantity;
   }
 }
 

@@ -34,7 +34,7 @@ $divClasses = array (
   E_USER_ERROR => "big-error",
   E_USER_WARNING => "big-warning",
   E_USER_NOTICE => "big-info",
-  E_JS_ERROR => "big-warning",
+  E_JS_ERROR => "big-warning javascript",
 );
 
 // Pour BCB 

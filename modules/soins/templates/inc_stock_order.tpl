@@ -63,6 +63,7 @@
       <td style="text-align: right;">
         <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
         <input type="text" name="keywords" value="{{$keywords}}" />
+        <button type="submit" class="cancel notext" onclick="$V(this.form.keywords, '')">{{tr}}Reset{{/tr}}</button>
       </td>
       <td>
         {{* 
@@ -92,6 +93,12 @@
           </label>
         </th>
         <td>
+          {{if $endowment_id}}
+          <button style="float: right;" class="print notext" type="button" onclick="new Url('dPstock','print_endowment').addParam('endowment_id','{{$endowment_id}}').popup()">
+            {{tr}}Print{{/tr}}
+          </button>
+          {{/if}}
+          
           <select name="endowment_id" onchange="$V(this.form.start, 0); refreshOrders()">
             <option value=""> &ndash; {{tr}}No{{/tr}}</option>
             {{foreach from=$service->_back.endowments item=_endowment}}
