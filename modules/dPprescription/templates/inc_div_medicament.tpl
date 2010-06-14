@@ -64,12 +64,16 @@ transfertLineTP = function(line_id, sejour_id){
 	$V(oForm.prescription_line_medicament_id, line_id);
   
   if(oFormDate){
-    if(oFormDate.debut && oFormDate.debut.value){
-      $V(oForm.debut, oFormDate.debut.value);  
-    }
-    if(oFormDate.time_debut && oFormDate.time_debut.value){
-      $V(oForm.time_debut, oFormDate.time_debut.value);
-    }
+	  {{if $prescription->type == "sejour"}}
+      $V(oForm.debut, '{{$prescription->_ref_object->entree|date_format:'%Y-%m-%d'}}');
+		{{else}}
+	    if(oFormDate.debut && oFormDate.debut.value){
+	      $V(oForm.debut, oFormDate.debut.value);  
+	    }
+	    if(oFormDate.time_debut && oFormDate.time_debut.value){
+	      $V(oForm.time_debut, oFormDate.time_debut.value);
+	    }
+		{{/if}}    
     if(oFormDate.jour_decalage && oFormDate.jour_decalage.value){
       $V(oForm.jour_decalage, oFormDate.jour_decalage.value);
     }
