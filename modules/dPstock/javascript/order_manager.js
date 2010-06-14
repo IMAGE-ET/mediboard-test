@@ -126,7 +126,7 @@ function refreshLists(form) {
         refreshListOrders(type, form);
       }
     });
-  } else if (window.opener.refreshLists) {
+  } else if (window.opener != window && window.opener.refreshLists) {
     window.opener.refreshLists();
   }
   return false;

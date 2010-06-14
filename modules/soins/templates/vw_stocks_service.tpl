@@ -66,6 +66,11 @@ function receiveAll(container) {
   }
 }
 
+function terminateAll(container) {
+  var ids = $(container).select("form.force.valid input[name=delivery_id]").pluck("value");
+  //console.debug(ids);
+}
+
 var tabs;
 Main.add(function () {
   refreshLists();

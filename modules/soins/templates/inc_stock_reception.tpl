@@ -23,7 +23,6 @@ changeReceptionPage = function(start) {
 
 <div style="float: left;">
   <button class="print" onclick="printReceptionReport({{$service_id}})">{{tr}}Print{{/tr}}</button>
-  <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
 </div>
 
 {{mb_include module=system template=inc_pagination change_page="changeReceptionPage" 
@@ -37,12 +36,16 @@ changeReceptionPage = function(start) {
 <table class="tbl">
   <tr>
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
-    <th style="width: 0.1%;"></th>
+    <th style="width: 0.1%;">
+      {{* <button type="button" onclick="terminateAll('list-reception')" class="send notext">Tout marquer comme terminé (ne met pas à jour le stock du service)</button> *}}
+    </th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th colspan="2">Date commande</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
-    <th></th>
+    <th>
+      <button type="button" onclick="receiveAll('list-reception')" class="tick">Tout recevoir</button>
+    </th>
   </tr>
   {{foreach from=$deliveries item=curr_delivery}}
     <tr>
@@ -54,13 +57,15 @@ changeReceptionPage = function(start) {
         {{/if}}
       </td>
       <td>
-        <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptions})">
+        <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
+              class="force {{if $curr_delivery->_ref_delivery_traces|@count}}valid{{/if}}"
+              onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptions})">
           <input type="hidden" name="m" value="dPstock" /> 
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_delivery_aed" />
           {{mb_key object=$curr_delivery}}
           <input type="hidden" name="date_delivery" value="now" />
-          <button type="submit" class="tick notext" title="Marquer comme reçu"></button>
+          <button type="submit" class="send notext">Marquer comme terminé</button>
         </form>
       </td>
       <td>

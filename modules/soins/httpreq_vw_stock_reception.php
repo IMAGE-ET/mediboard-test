@@ -14,7 +14,6 @@ $can->needsRead();
 $service_id = CValue::getOrSession('service_id');
 $mode       = CValue::get('mode');
 $start      = CValue::get('start');
-$show_delivered_lines = CValue::get('show_delivered_lines');
 
 $order_by = 'service_id, patient_id, date_dispensation ASC';
 $where = array();
