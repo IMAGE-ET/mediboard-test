@@ -69,7 +69,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 {{if $isPrescriptionInstalled}}
 	function reloadPrescription(prescription_id){
-	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false);
+	  Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null,'',null, false, '0');
 	}
 {{/if}}
 
@@ -95,7 +95,7 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   // Affichage de la prescription
   {{if $isPrescriptionInstalled}}
     if($('prescription_sejour') && $('prescription_sejour').visible()){
-	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false);
+	    Prescription.reloadPrescSejour('', sejour_id, null, null, null, null, null, null, null, false, '0');
 	  }
   {{/if}}
   
