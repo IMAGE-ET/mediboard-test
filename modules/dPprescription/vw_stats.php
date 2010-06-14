@@ -13,6 +13,10 @@ $service_id   = CValue::getOrSession("service_id");
 $date_min     = CValue::getOrSession("date_min", mbDate("- 3 month"));
 $date_max     = CValue::getOrSession("date_max", mbDate());
 
+if($date_min > $date_max){
+	$date_min = mbDate("- 3 month", $date_max);
+}
+
 $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
 
@@ -52,15 +56,15 @@ if($service_id){
 
 $query .= " GROUP BY `period`
             ORDER BY `sejour`.`entree`";
-					 
+
+$results_sejours = array();
 // Initialisation du tableau pour afficher toutes les semaines
-$date_min = mbDate("first sunday", $date_min);
-for ($day = $date_min; $day <= $date_max; $day = mbDate("+1 week", $day)) {
+$_date_min = mbDate("first sunday", $date_min);
+for ($day = $_date_min; $day <= $date_max; $day = mbDate("+1 week", $day)) {
 	$period = mbTransformTime(null, $day, "%U");
 	$results_sejours[$period]["nb_sejours"] = 0;
 }
 
-	
 $_results_sejours = $ds->loadList($query);
 
 foreach($_results_sejours as $_result_sejour){
