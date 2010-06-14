@@ -39,7 +39,8 @@ if($service_id){
 }
 
 $query .= " WHERE DATE(`sejour`.`entree`) BETWEEN '$date_min' AND '$date_max'
-            AND `sejour`.`group_id` = '$group_id'";
+            AND `sejour`.`group_id` = '$group_id'
+						AND `sejour`.`annule` = '0'";
 					
 if($praticien_id && !$praticien->_is_anesth){
   $query .= " AND `sejour`.`praticien_id` = '$praticien_id'";	
@@ -90,6 +91,7 @@ if($service_id){
 }
 
 $query_presc .= " WHERE `sejour`.`group_id` = '$group_id'
+                 AND `sejour`.`annule` = '0'
                  AND DATE(`sejour`.`entree`) BETWEEN '$date_min' AND '$date_max'
                  AND (`prescription_line_medicament`.`prescription_line_medicament_id` IS NOT NULL
                  OR `prescription_line_element`.`prescription_line_element_id` IS NOT NULL
@@ -108,7 +110,7 @@ $query_presc .= " GROUP BY `period`
                  ORDER BY `sejour`.`entree`;";
 
 $_results_presc = $ds->loadList($query_presc);
-
+$results_presc = array();
 foreach($_results_presc as $_result_presc){
   $results_presc[$_result_presc["period"]] = $_result_presc["nb_sejours"];
 }
@@ -123,13 +125,12 @@ foreach($results_sejours as $_period => &$_result_sejour){
 $series = array();
 foreach($results_sejours as $period => $_result){
   $series[0]["data"][] = array(
-	  count($series[0]["data"]), 
+	  count(@$series[0]["data"]), 
 		intval($_result["nb_presc"]),
-		$_result["nb_presc"] / ($_result["nb_sejours"])
-		
+		$_result["nb_sejours"] ? $_result["nb_presc"] / ($_result["nb_sejours"]) : 0
   );
-  $series[1]["data"][] = array(count($series[1]["data"]), $_result["nb_sejours"] - $_result["nb_presc"]);
-	$series[2]["data"][] = array(count($series[2]["data"]), $_result["nb_sejours"]);
+  @$series[1]["data"][] = array(count($series[1]["data"]), $_result["nb_sejours"] - $_result["nb_presc"]);
+	@$series[2]["data"][] = array(count($series[2]["data"]), $_result["nb_sejours"]);
 }
 
 $series[0]["label"] = utf8_encode("Séjours avec prescriptions");
@@ -148,7 +149,6 @@ $options = CFlotrGraph::merge("bars", array(
 ));
 
 $smarty = new CSmartyDP();
-$smarty->assign("sejours", $sejours);
 $smarty->assign("series", $series);
 $smarty->assign("options", $options);
 $smarty->assign("praticiens", $praticiens);
