@@ -65,28 +65,30 @@ class CProductDeliveryTrace extends CMbObject {
     $stock->loadRefsFwd();
     
     $infinite_group_stock = CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '1';
+    $negative_allowed = CAppUI::conf('dPstock CProductStockGroup negative_allowed') == '1';
     
-    if ($this->date_delivery) {
-      if (!$infinite_group_stock && (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
-        $unit = $stock->_ref_product->_unit_title ? $stock->_ref_product->_unit_title : $stock->_ref_product->_view;
-        return "Impossible de délivrer ce nombre de $unit";
-      }
+    if ($this->date_delivery && 
+        !$negative_allowed && 
+        !$infinite_group_stock && 
+        (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
+      $unit = $stock->_ref_product->_unit_title ? $stock->_ref_product->_unit_title : $stock->_ref_product->_view;
+      return "Impossible de délivrer ce nombre de $unit";
     }
     
     // If we want to deliver, just provide a delivery date
-    if ($this->date_delivery/* && !$infinite_group_stock*/) {
+    if ($this->date_delivery && !$infinite_group_stock) {
       $stock->quantity -= $this->quantity;
       if ($msg = $stock->store()) return $msg;
     }
     
     // Un-deliver
     else if ($this->_undeliver) {
-    	//if (!$infinite_group_stock) {
+    	if (!$infinite_group_stock) {
 	      $stock->quantity += $this->quantity;
 	      $this->_undeliver = null;
 	      
 	      if ($msg = $stock->store()) return $msg;
-      //}
+      }
       return $this->delete();
     }
     

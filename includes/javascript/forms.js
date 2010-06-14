@@ -340,17 +340,22 @@ function prepareForm(oForm) {
 }
 
 function prepareForms(root) {
-  root = root || document.documentElement;
+  root = $(root || document.documentElement);
   
   try {
-    $(root).select("form:not(.prepared)").each(prepareForm);
+    root.select("form:not(.prepared)").each(prepareForm);
     
-    $(root).select("button.singleclick").each(function(button) {
+    root.select("button.singleclick").each(function(button) {
       button.observe('click', function(event) {
         var element = Event.element(event);
         Form.Element.disable(element);
         Form.Element.enable.delay(1, element);
       });
+    });
+    
+    // We set a title on the button if it is a .notext and if it hasn't one yet
+    root.select("button.notext:not([title])").each(function(button) {
+      button.title = (button.textContent || button.innerHTML).strip();
     });
   } catch (e) {}
 }

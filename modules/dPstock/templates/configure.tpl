@@ -24,6 +24,7 @@
     {{assign var="class" value="CProductStockGroup"}}
     {{mb_include module=system template=inc_config_bool var=unit_order}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
+    {{mb_include module=system template=inc_config_bool var=negative_allowed}}
 
     {{assign var="class" value="CProductStockService"}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}

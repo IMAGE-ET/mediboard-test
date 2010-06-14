@@ -17,7 +17,8 @@ $dPconfig["dPstock"] = array (
   "CProductStockGroup" => array (
     "infinite_quantity" => '0',
     "unit_order" => '0',
-    "pagination_size" => 30
+    "pagination_size" => 30,
+    "negative_allowed" => '1',
   ),
   "CProductStockService" => array (
     "infinite_quantity" => '0',

@@ -32,10 +32,12 @@
       <td>{{mb_value object=$curr_delivery->_ref_stock->_ref_product field=_unit_title}}</td>
       <td>
         {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
-          {{if !$trace->date_reception}}
+          {{if $trace->date_reception}}
             {{mb_value object=$trace field=quantity}} 
-            [{{mb_value object=$trace field=code}}]
-            {{mb_value object=$trace field=date_delivery}}
+            {{if $trace->code}}
+              - [{{mb_value object=$trace field=code}}]
+            {{/if}}
+            - {{mb_value object=$trace field=date_delivery}}
           {{else}}
             <b>{{mb_value object=$trace field=quantity}}</b>
           {{/if}}

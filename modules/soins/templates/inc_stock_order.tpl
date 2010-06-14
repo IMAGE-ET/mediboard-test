@@ -94,8 +94,8 @@
         </th>
         <td>
           {{if $endowment_id}}
-          <button style="float: right;" class="print notext" type="button" onclick="new Url('dPstock','print_endowment').addParam('endowment_id','{{$endowment_id}}').popup()">
-            {{tr}}Print{{/tr}}
+          <button style="float: right;" class="print" type="button" onclick="new Url('dPstock','print_endowment').addParam('endowment_id','{{$endowment_id}}').popup()">
+            Imprimer la dotation
           </button>
           {{/if}}
           

@@ -92,7 +92,7 @@ function refreshListStocksService(product_id) {
           <tr>
             <th>{{mb_label object=$stock field="quantity"}}</th>
             <td>
-              {{mb_field object=$stock field="quantity" form="edit_stock" size=4 increment=true min=0}}
+              {{mb_field object=$stock field="quantity" form="edit_stock" size=4 increment=true}}
               <input type="text" name="_unit_title" readonly="readonly" disabled="disabled" value="{{$stock->_ref_product->_unit_title}}" size="30" style="border: none; background: transparent; color: inherit;" />
             </td>
           </tr>
