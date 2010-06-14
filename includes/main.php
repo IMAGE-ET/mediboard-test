@@ -19,6 +19,7 @@ if (!file_exists("style/$uistyle/templates/header.tpl")) {
 CJSLoader::$files = array(
   CJSLoader::getLocaleFile(),
   "includes/javascript/printf.js",
+  "includes/javascript/stacktrace.js",
   //"lib/dshistory/dshistory.js",
   
   "lib/scriptaculous/lib/prototype.js",

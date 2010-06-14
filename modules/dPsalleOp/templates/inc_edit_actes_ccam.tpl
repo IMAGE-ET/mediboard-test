@@ -79,7 +79,7 @@ function setToNow(element) {
             <td colspan="10" style="width: 100%; background-color: #{{$bg_color}}; border: 2px solid {{if $_activite->numero == 4}}#44f{{else}}#ff0{{/if}};">
               <div style="float: right;">
                 {{if !$acte->_id}}
-                <button class="add" type="button" onclick="
+                <button class="add" type="button" onclick="Event.stop(event);
                   {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
                   if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
                     document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
@@ -92,7 +92,7 @@ function setToNow(element) {
             
                 {{else}}
                 
-                <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
+                <button class="remove" type="button" onclick="Event.stop(event); confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
                   {{tr}}Delete{{/tr}} cet acte
                 </button>
                 {{/if}}
