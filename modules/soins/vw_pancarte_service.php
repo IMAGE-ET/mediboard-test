@@ -170,14 +170,14 @@ foreach($prescriptions as $_prescription){
 		
 		if($_planif->_ref_object instanceof CPrescriptionLineMixItem){
       $_planif->_ref_object->updateQuantiteAdministration();
-			$list_lines["perf"][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
+			$list_lines["perfusion"][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
 			$time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
 			$date = mbDate($_planif->dateTime);
-			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"])){
-				$pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
+			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perfusion"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"])){
+				$pancarte[$_prescription->_id]["$date $time"]["perfusion"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
 			}
-      $pancarte[$_prescription->_id]["$date $time"]["perf"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] += $_planif->_ref_object->_quantite_administration;
+      $pancarte[$_prescription->_id]["$date $time"]["perfusion"][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] += $_planif->_ref_object->_quantite_administration;
   	}
 	}
 	
@@ -226,13 +226,13 @@ foreach($prescriptions as $_prescription){
       $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
       $date = mbDate($_administration->dateTime);			
 			
-			$list_lines["perf"][$_administration->_ref_object->_ref_prescription_line_mix->_id] = $_administration->_ref_object->_ref_prescription_line_mix;
+			$list_lines["perfusion"][$_administration->_ref_object->_ref_prescription_line_mix->_id] = $_administration->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_administration->_ref_object->_id] = $_administration->_ref_object; 
 			
-			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perf"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"])){
-        $pancarte[$_prescription->_id]["$date $time"]["perf"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] = 0;
+			if(!isset($pancarte[$_prescription->_id]["$date $time"]["perfusion"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"])){
+        $pancarte[$_prescription->_id]["$date $time"]["perfusion"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] = 0;
       }
-		  $pancarte[$_prescription->_id]["$date $time"]["perf"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] += $_administration->quantite;
+		  $pancarte[$_prescription->_id]["$date $time"]["perfusion"][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] += $_administration->quantite;
 		}
 	}																																		 											 
 
@@ -240,7 +240,7 @@ foreach($prescriptions as $_prescription){
   foreach($pancarte as $_prescription_id => $pancarte_by_prescription){
   	foreach($pancarte_by_prescription as $_dateTime => $prescription_by_datetime){
   		foreach($prescription_by_datetime as $_type => $presc_by_type){
-  			if($_type != "perf"){
+  			if($_type != "perfusion"){
 	  			foreach($presc_by_type as $prescription_by_object){
 	  				if(!isset($prescription_by_object["adm"])){
 	  					$prescription_by_object["adm"] = 0;

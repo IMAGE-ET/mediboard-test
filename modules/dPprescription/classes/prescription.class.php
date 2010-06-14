@@ -90,7 +90,7 @@ class CPrescription extends CMbObject {
   static $images = array(
 		"med"      => "modules/soins/images/medicaments.png",
 		"inj"      => "images/icons/anesth.png",
-		"perf"     => "modules/soins/images/perfusion.png",
+		"perfusion"=> "modules/soins/images/perfusion.png",
 		"anapath"  => "modules/soins/images/microscope.png",
 		"biologie" => "images/icons/labo.png",
 		"imagerie" => "modules/soins/images/radio.png",
