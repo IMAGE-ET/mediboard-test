@@ -33,13 +33,14 @@ Main.add(function(){
 	
 	<table class="form">
 		<tr>
-		  <th class="title" colspan="4">Statistiques d'utilisation de la prescription</th>
+		  <th class="title" colspan="5">Statistiques d'utilisation de la prescription</th>
 		</tr>
 		<tr>
 			<th class="category">Début</th>
 			<th class="category">Fin</th>
 			<th class="category">Praticien</th>
 			<th class="category">Service</th>
+			<th class="category">{{mb_title object=$sejour field="type"}}</th>
 		</tr>
 	  <tr>
 	  	<td>	
@@ -63,6 +64,9 @@ Main.add(function(){
 					<option value="{{$_service->_id}}" {{if $service_id == $_service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
 					{{/foreach}}
 				</select>
+			</td>
+			<td>
+				{{mb_field object=$sejour field="type" defaultOption="&mdash; Tous les types" onchange="this.form.submit();"}}
 			</td>
 		</tr>
 	</table>

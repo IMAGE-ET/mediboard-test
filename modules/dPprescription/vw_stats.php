@@ -12,6 +12,10 @@ $praticien_id = CValue::getOrSession("praticien_id");
 $service_id   = CValue::getOrSession("service_id");
 $date_min     = CValue::getOrSession("date_min", mbDate("- 3 month"));
 $date_max     = CValue::getOrSession("date_max", mbDate());
+$type         = CValue::getOrSession("type");
+
+$sejour = new CSejour();
+$sejour->type = $type;
 
 if($date_min > $date_max){
 	$date_min = mbDate("- 3 month", $date_max);
@@ -45,6 +49,10 @@ if($service_id){
 $query .= " WHERE DATE(`sejour`.`entree`) BETWEEN '$date_min' AND '$date_max'
             AND `sejour`.`group_id` = '$group_id'
 						AND `sejour`.`annule` = '0'";
+						
+if($type){
+	$query .= " AND `sejour`.`type` = '$type'";
+}
 					
 if($praticien_id && !$praticien->_is_anesth){
   $query .= " AND `sejour`.`praticien_id` = '$praticien_id'";	
@@ -101,6 +109,9 @@ $query_presc .= " WHERE `sejour`.`group_id` = '$group_id'
                  OR `prescription_line_element`.`prescription_line_element_id` IS NOT NULL
                  OR `prescription_line_mix`.`prescription_line_mix_id` IS NOT NULL)";
 
+if($type){
+  $query_presc .= " AND `sejour`.`type` = '$type'";
+}
 
 if($service_id){
   $query_presc .= " AND `service`.`service_id` = '$service_id'";
@@ -153,6 +164,7 @@ $options = CFlotrGraph::merge("bars", array(
 ));
 
 $smarty = new CSmartyDP();
+$smarty->assign("sejour", $sejour);
 $smarty->assign("series", $series);
 $smarty->assign("options", $options);
 $smarty->assign("praticiens", $praticiens);
