@@ -28,20 +28,19 @@ class CHPrimXPath extends CMbXPath {
     return $text;
   }
   
-  function queryMultilineTextNode($query, DOMNode $contextNode, $prefix = "", $implode = false) {
-    $text = "";
-    if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = utf8_decode($node->textContent);
-      if ($prefix) {
-        $text = str_replace($prefix, "", $text);
-      }
-    } 
+  function getMultipleTextNodes($query, DOMNode $contextNode, $implode = false) {
+    $array = array();
+    $query = utf8_encode($query);
+    $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
     
-    return $text;
+    foreach ($nodeList as $n) {
+      $array[] = utf8_decode($n->nodeValue);
+    }
+    return $implode ? implode(" ", $array) : $array;
   }
   
   function getFirstNode($query, DOMNode $contextNode) {
-    $textNodes = getMultipleTextNodes($query, $contextNode);
+    $textNodes = $this->getMultipleTextNodes($query, $contextNode);
     
     return isset($textNodes[0]) ? $textNodes[0] : null;
   }

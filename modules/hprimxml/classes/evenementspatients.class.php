@@ -124,7 +124,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $node);
     $adresses = $xpath->queryUniqueNode("hprim:adresses", $node);
     $adresse = $xpath->queryUniqueNode("hprim:adresse", $adresses);
-    $ligne = $xpath->getMultipleTextNodes("hprim:ligne", $adresse);
+    $ligne = $xpath->getMultipleTextNodes("hprim:ligne", $adresse, true);
     $ville = $xpath->queryTextNode("hprim:ville", $adresse);
     $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
@@ -143,11 +143,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
       $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
       /* @todo Mettre un implode sur le multiple */
-      $mbPersonne->adresse  = $ligne[0];
-      if (isset($ligne[1]))
-        $mbPersonne->adresse .= " $ligne[1]";
-      if (isset($ligne[2]))
-        $mbPersonne->adresse .= " $ligne[2]";
+      $mbPersonne->adresse  = $ligne;
       $mbPersonne->ville = $ville;
       $mbPersonne->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
       $pays = new CPaysInsee();
