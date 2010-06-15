@@ -300,7 +300,7 @@ function prepareForm(oForm) {
     }
     
     // Focus on first text input
-    if (bGiveFormFocus && oElement.clientWidth > 0 && 
+    if (bGiveFormFocus && oElement.clientWidth > 0 && !oElement.className.match(/autocomplete/) &&
         !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
         oElement.type === "text") {
       

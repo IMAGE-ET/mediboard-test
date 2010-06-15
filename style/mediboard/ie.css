@@ -39,6 +39,10 @@ input[type=radio]:focus {
   height: 24px;
 }
 
+div.dropdown {
+  display: inline;
+}
+
 select {
   /* IE will cut off the options when a 
   width is specified on the select tag */

@@ -43,7 +43,7 @@
       {{mb_value object=$examen field="type"}}
       {{if $examen->type == "num"}}
       : {{$examen->unite}}
-      ({{$examen->min}} &ndash {{$examen->max}})
+      ({{$examen->min}} &ndash; {{$examen->max}})
       {{/if}}
     </td>
   </tr>

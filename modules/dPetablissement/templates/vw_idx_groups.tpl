@@ -127,7 +127,7 @@
           <th>{{mb_label object=$usergroup field="service_urgences_id"}}</th>
           <td>
             <select name="service_urgences_id">
-              <option value="">&mdash Choisir le service d'urgences</option>
+              <option value="">&mdash; Choisir le service d'urgences</option>
               {{foreach from=$usergroup->_ref_functions item=_function}}
               <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
                 {{$_function}}
@@ -141,7 +141,7 @@
           <th>{{mb_label object=$usergroup field="pharmacie_id"}}</th>
           <td>
             <select name="pharmacie_id">
-              <option value="">&mdash Choisir la pharmacie</option>
+              <option value="">&mdash; Choisir la pharmacie</option>
               {{foreach from=$usergroup->_ref_functions item=_function}}
               <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}}" {{if $_function->_id == $usergroup->pharmacie_id}}selected="selected"{{/if}}>
                 {{$_function}}

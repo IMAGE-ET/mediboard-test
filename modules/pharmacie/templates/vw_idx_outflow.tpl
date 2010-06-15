@@ -60,7 +60,7 @@ function changePage(start) {
       <td>{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
       <td>
         <select name="service_id">
-          <option value=""> &ndash {{tr}}CService{{/tr}}</option>
+          <option value=""> &ndash; {{tr}}CService{{/tr}}</option>
           {{foreach from=$list_services item=_service}}
             <option value="{{$_service->_id}}">{{$_service}}</option>
           {{/foreach}}

@@ -21,10 +21,11 @@ hr.control_tabs {
 <script type="text/javascript">
 function processIE7Button(button) {
   if (button._processed || (window.Main && !Main.initialized)) return;
+  button.runtimeStyle.behavior = "none";
   button._processed = true;
   
   setTimeout(function(){
-    var className = $w(button.className).without("button", "notext")[0];
+    var className = $w(button.className).without("button", "notext", "ltr")[0];
   
     if (className)
       button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
