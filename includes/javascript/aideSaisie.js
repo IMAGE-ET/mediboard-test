@@ -135,7 +135,7 @@ var AideSaisie = {
         callback: function(input, query){
           query += options.dependField1 ? ("&depend_value_1="+($V(options.dependField1) || "")) : '';
           query += options.dependField2 ? ("&depend_value_2="+($V(options.dependField2) || "")) : '';
-          return query+"&hide_empty_list=1";
+          return query+"&hide_empty_list=1&hide_exact_match=1";
         },
         dontSelectFirst: true,
         onAfterShow: function(element, update){
