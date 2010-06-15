@@ -50,7 +50,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getActionEvenement($query, $node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->queryAttributNode($query, $node, "action");    
   }
@@ -82,7 +82,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getPersonnePhysique($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
 
     // Création de l'element personnePhysique
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
@@ -109,7 +109,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getPersonne($node, CMbObject $mbPersonne) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $civilite = $xpath->queryAttributNode("hprim:civiliteHprim", $node, "valeur");
     $civiliteHprimConversion = array (
@@ -129,7 +129,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
     /* @todo getFirstNode */
-    $emails = $xpath->getMultipleTextNodes("hprim:emails/*", $node);    
+    $email = $xpath->getFirstNode("hprim:emails/*", $node);    
     
     if ($mbPersonne instanceof CPatient) {
       if ($civilite) {
@@ -157,7 +157,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mbPersonne->cp = $cp;
       $mbPersonne->tel = isset($telephones[0]) ? $telephones[0] : null;
       $mbPersonne->tel2 = isset($telephones[1]) ? $telephones[1] : null;
-      $mbPersonne->email = isset($emails[0]) ? $emails[0] : null;
+      $mbPersonne->email = $email;
     } elseif ($mbPersonne instanceof CMediusers) {
       $mbPersonne->_user_last_name  = $nom;
       $mbPersonne->_user_first_name = $prenoms[0];
@@ -178,7 +178,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getActiviteSocioProfessionnelle($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $activiteSocioProfessionnelle = $xpath->queryTextNode("hprim:activiteSocioProfessionnelle", $node);
     
@@ -188,7 +188,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getPersonnesPrevenir($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $personnesPrevenir = $xpath->query("hprim:personnesPrevenir/*", $node);
     foreach ($personnesPrevenir as $personnePrevenir) {
@@ -210,7 +210,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function checkSimilarPatient(CPatient $mbPatient, $xmlPatient) {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
         
     // Création de l'element personnePhysique
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $xmlPatient);
@@ -222,7 +222,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function getIdSourceObject($query_evt, $query_type) { 
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
@@ -257,7 +257,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getAttributesVenue($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
         
     $attributes = array();
     $attributes['confidentiel'] = $xpath->getValueAttributNode($node, "confidentiel"); 
@@ -269,13 +269,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getEtatVenue($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     return $xpath->getValueAttributNode($node, "etat"); 
   }
   
   static function getNatureVenue($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     // Obligatoire pour MB
     $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur", "", false);
@@ -296,7 +296,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getEntree($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $entree = $xpath->queryUniqueNode("hprim:entree", $node);
   
@@ -316,7 +316,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function isVenuePraticien($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     
@@ -336,7 +336,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }  
   
   function getMedecins($node, CSejour $mbVenue) {    
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if (is_array($medecins)) {
@@ -371,7 +371,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function getMedecin($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $code = $xpath->queryTextNode("hprim:identification/hprim:code", $node);
     $mediuser = new CMediusers();
@@ -428,7 +428,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
 
   static function getPlacement($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $placement = $xpath->queryUniqueNode("hprim:Placement", $node);
     
@@ -440,7 +440,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getSortie($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
   
@@ -487,7 +487,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function getEtablissementTransfert($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $code = $xpath->queryUniqueNode("hprim:code", $node);
     
@@ -498,7 +498,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function mappingMouvements($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     /* @FIXME Penser a parcourir tous les mouvements par la suite */
     $mouvement = $xpath->queryUniqueNode("hprim:mouvement", $node);
@@ -511,7 +511,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   } 
   
   function getMedecinResponsable($node, CSejour $mbVenue) {
-    $xpath = new CMbXPath($node->ownerDocument, true);    
+    $xpath = new CHPrimXPath($node->ownerDocument);    
     
     $medecinResponsable = $xpath->queryUniqueNode("hprim:medecinResponsable", $node);
     
@@ -523,7 +523,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function mappingDebiteurs($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     /* @FIXME Penser a parcourir tous les debiteurs par la suite */
     $debiteur = $xpath->queryUniqueNode("hprim:debiteur", $node);
 
@@ -533,7 +533,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getAssurance($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);  
+    $xpath = new CHPrimXPath($node->ownerDocument);  
     
     $assurance = $xpath->queryUniqueNode("hprim:assurance", $node);
     
@@ -554,7 +554,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   static function getAssure($node, CPatient $mbPatient) {
-    $xpath = new CMbXPath($node->ownerDocument, true);  
+    $xpath = new CHPrimXPath($node->ownerDocument);  
     
     $immatriculation = $xpath->queryTextNode("hprim:immatriculation", $node);
     $mbPatient->matricule = $immatriculation;

@@ -52,7 +52,7 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
   
   function getContentsXML() {
     $data = array();
-    $xpath = new CMbXPath($this, true);   
+    $xpath = new CHPrimXPath($this);   
     
     $evenementPMSI = $xpath->queryUniqueNode("/hprim:evenementsPMSI/hprim:evenementPMSI");
     

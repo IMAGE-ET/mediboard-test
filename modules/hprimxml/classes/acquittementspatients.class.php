@@ -93,13 +93,13 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
    
   function getStatutAcquittementPatient() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
         
     return $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
   }
   
   function getAcquittementsPatients() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
     
@@ -118,7 +118,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
   
   function getAcquittementObservationPatients() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $statut = $xpath->queryAttributNode("/hprim:acquittementsPatients/hprim:enteteMessageAcquittement", null, "statut"); 
     

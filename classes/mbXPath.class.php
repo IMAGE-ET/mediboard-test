@@ -12,12 +12,8 @@
  * The CMbXPath class
  */
 class CMbXPath extends DOMXPath {
-  function __construct(DOMDocument $doc, $namespace = false) {
+  function __construct(DOMDocument $doc) {
     parent::__construct($doc);
-    
-    if ($namespace) {
-    	$this->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
-    }
   }
 
   function nodePath(DOMNode $node) {    

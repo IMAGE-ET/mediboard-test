@@ -45,7 +45,7 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
   }
   
   function getContentsXML() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
 
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 

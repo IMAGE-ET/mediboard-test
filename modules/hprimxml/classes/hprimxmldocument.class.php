@@ -66,7 +66,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     return true;
   }
-  
+    
   function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
   }
@@ -173,7 +173,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function getIdSource($node, $valeur = true) {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
     
@@ -188,7 +188,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function getIdCible($node, $valeur = true) {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $identifiant = $xpath->queryUniqueNode("hprim:identifiant", $node);
     
@@ -549,8 +549,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function getTypeEvenementPatient() {
-    $xpath = new CMbXPath($this);
-    $xpath->registerNamespace( "hprim", "http://www.hprim.org/hprimXML" );
+    $xpath = new CHPrimXPath($this);
         
     $evenementPatient = $xpath->query("/hprim:evenementsPatients/hprim:evenementPatient/*");
     $type = null;

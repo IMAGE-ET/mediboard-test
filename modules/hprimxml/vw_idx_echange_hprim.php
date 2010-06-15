@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $echange_hprim_id    = CValue::get("echange_hprim_id");
 $id_permanent        = CValue::getOrSession("id_permanent");

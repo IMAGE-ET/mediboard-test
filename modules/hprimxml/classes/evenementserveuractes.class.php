@@ -54,7 +54,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   
   function getContentsXML() {
     $data = array();
-    $xpath = new CMbXPath($this, true);   
+    $xpath = new CHPrimXPath($this);   
     
     $evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
     

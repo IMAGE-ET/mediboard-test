@@ -93,13 +93,13 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   }
    
   function getStatutAcquittementServeurActivitePmsi() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
 
     return $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
   }
   
   function getAcquittementsServeurActivitePmsi() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $statut = $xpath->queryAttributNode("/hprim:$this->acquittement/hprim:enteteMessage", null, "statut"); 
     
@@ -118,7 +118,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   }
   
   function getAcquittementReponsesServeurActivitePmsi() {
-    $xpath = new CMbXPath($this, true);
+    $xpath = new CHPrimXPath($this);
     
     $statut = $xpath->queryAttributNode("/hprim:a$this->acquittement/hprim:enteteMessage", null, "statut"); 
     

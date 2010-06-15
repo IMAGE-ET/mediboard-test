@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI;
+CCanDo::checkRead();
 
 $echange_hprim_id         = CValue::get("echange_hprim_id");
 $echange_hprim_classname  = CValue::get("echange_hprim_classname");

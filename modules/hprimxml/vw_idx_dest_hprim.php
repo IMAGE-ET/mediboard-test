@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
  
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $dest_hprim_id = CValue::get("dest_hprim_id");
 

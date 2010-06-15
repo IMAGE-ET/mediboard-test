@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $do_purge = CValue::get("do_purge");
 $date_min = CValue::get("date_min");

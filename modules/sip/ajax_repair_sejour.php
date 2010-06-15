@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
  
-global $can, $g;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 // Filtre sur les enregistrements
 $sejour = new CSejour();

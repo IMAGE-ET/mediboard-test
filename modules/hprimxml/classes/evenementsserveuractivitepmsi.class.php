@@ -28,7 +28,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   }
   
   function getDateInterv($node) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     // Obligatoire pour MB
     $debut = $xpath->queryUniqueNode("hprim:debut", $node, false);
@@ -51,7 +51,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
 	
 	function mappingPatient($data) {
 		$node = $data['patient'];
-		$xpath = new CMbXPath($node->ownerDocument, true);
+		$xpath = new CHPrimXPath($node->ownerDocument);
 		
 		$personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
@@ -68,7 +68,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
 	
   function mappingActesCCAM($data) {
     $node = $data['actesCCAM'];
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     
     $actesCCAM = array();
     foreach ($node->childNodes as $_acteCCAM) {
@@ -79,7 +79,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   }
   
   function mappingActeCCAM($node, $data) {
-    $xpath = new CMbXPath($node->ownerDocument, true);
+    $xpath = new CHPrimXPath($node->ownerDocument);
     		    
 		$acteCCAM = new CActeCCAM();
 		$acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);

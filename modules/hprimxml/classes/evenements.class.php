@@ -20,7 +20,7 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
   
   function getEnteteEvenementXML($type) {
     $data = array();
-    $xpath = new CMbXPath($this, true);   
+    $xpath = new CHPrimXPath($this);   
 
     $entete = $xpath->queryUniqueNode("/hprim:$type/hprim:enteteMessage");
     

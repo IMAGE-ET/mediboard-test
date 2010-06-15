@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CCanDo::checkAdmin();
+
 $evenement = CValue::get("evenement");
 $version = CAppUI::conf("hprimxml $evenement version");
 

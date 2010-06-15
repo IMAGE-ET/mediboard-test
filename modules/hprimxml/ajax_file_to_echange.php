@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $path      = CValue::get("path");
 $do_import = CValue::get("do_import");
