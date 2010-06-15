@@ -1,5 +1,7 @@
 {{* $Id$ *}}
 
+{{mb_include_script module="dPcompteRendu" script="document"}}
+
 <script type="text/javascript">
 	
 markAsSelected = function(element) {

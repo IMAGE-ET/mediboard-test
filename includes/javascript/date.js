@@ -568,12 +568,15 @@ var Calendar = {
     }
     else {
       elementView.observe('click', Event.stop).observe('focus', function(e){
-        datepicker.show.bind(datepicker)(e);
+        this.show.bind(datepicker)(e);
+        
+        if(!this.datepicker.element) return;
+        
         if (options.center)
-          $(datepicker.datepicker.element).centerH();
+          $(this.datepicker.element).centerH();
         else
-          $(datepicker.datepicker.element).unoverflow();
-      });
+          $(this.datepicker.element).unoverflow();
+      }.bindAsEventListener(datepicker));
     }
     
     // We update the view
@@ -584,11 +587,13 @@ var Calendar = {
     
     if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
+        var element = this.element || this.datepicker.element;
+        
         if (options.center)
-          $(datepicker.datepicker.element).centerH();
+          $(element).centerH();
         else
-          $(datepicker.datepicker.element).unoverflow();
-      });
+          $(element).unoverflow();
+      }.bindAsEventListener(datepicker));
     }
     
     datepicker.element.observe('change', function(){elementView.fire("ui:change")});
