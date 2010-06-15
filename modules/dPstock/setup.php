@@ -598,6 +598,31 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product_stock_group` CHANGE `quantity` `quantity` INT( 11 ) NOT NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.28";
+    $this->makeRevision("1.28");
+    
+    function updateOrdersReceivedStatus() {
+      $order = new CProductOrder;
+      
+      $where = array(
+        "product_order.received"  => " = '0'", // enum('0', '1')
+        "product_order.cancelled" => " = 0",
+        "product_order.deleted"   => " = 0",
+      );
+      
+      $orders = $order->loadList($where);
+      
+      foreach ($orders as $_order) {
+        if ($_order->countReceivedItems() >= $_order->countBackRefs("order_items")) {
+          $_order->received = 1;
+          $_order->store();
+          mbTrace($_order->_id, "Order is received", true);
+        }
+      }
+      
+      return true;
+    }
+    $this->addFunction("updateOrdersReceivedStatus");
+    
+    $this->mod_version = "1.29";
   }
 }

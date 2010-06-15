@@ -263,21 +263,27 @@ class CProductOrder extends CMbMetaObject {
     $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 0";
     $where['product_order.date_ordered'] = "IS NULL";
+    $where['product_order.received']     = " != '1'";
     
     switch ($type) {
       case 'waiting': break;
       case 'locked':
-        $where['product_order.locked'] = " = 1";
+        $where['product_order.locked']       = " = 1";
         break;
-      case 'pending': // pending or received are the same here but they are sorted thanks to PHP
-      case 'received':
-        $where['product_order.locked'] = " = 1";
+      case 'pending':
+        $where['product_order.locked']       = " = 1";
         $where['product_order.date_ordered'] = "IS NOT NULL";
+        break;
+      case 'received':
+        $where['product_order.locked']       = " = 1";
+        $where['product_order.date_ordered'] = "IS NOT NULL";
+        $where['product_order.received']     = " = '1'";
         break;
       default:
       case 'cancelled':
-        $where['product_order.cancelled'] = " = 1";
+        $where['product_order.cancelled']    = " = 1";
         unset($where['product_order.locked']);
+        unset($where['product_order.received']);
         unset($where['product_order.date_ordered']);
         break;
     }
@@ -287,7 +293,7 @@ class CProductOrder extends CMbMetaObject {
       
     $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
     
-    if ($type === 'pending') {
+    /*if ($type === 'pending') {
       $list = array();
       foreach ($orders_list as $_order) {
         if ($_order->countReceivedItems() < $_order->countBackRefs("order_items")) {
@@ -305,7 +311,7 @@ class CProductOrder extends CMbMetaObject {
         }
       }
       $orders_list = $list;
-    }
+    }*/
     
     foreach($orders_list as $_order) {
       $_order->loadRefsFwd();

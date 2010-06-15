@@ -98,10 +98,12 @@ class CProductOrderItemReception extends CMbObject {
   function store() {
     $this->completeField("reception_id");
     
-    if (!$this->_id && !$this->reception_id) {
-      $this->loadRefOrderItem();
-      $this->_ref_order_item->loadOrder();
+    $is_new = !$this->_id;
+    
+    $this->loadRefOrderItem();
+    $this->_ref_order_item->loadOrder();
       
+    if ($is_new && !$this->reception_id) {
       $reception = new CProductReception;
       $reception->date = mbDateTime();
       $reception->societe_id = $this->_ref_order_item->_ref_order->societe_id;
@@ -113,7 +115,6 @@ class CProductOrderItemReception extends CMbObject {
       $this->reception_id = $reception->_id;
     }
     
-    $this->loadRefOrderItem();
     $this->_ref_order_item->loadRefsFwd();
     $this->_ref_order_item->_ref_reference->loadRefsFwd();
     $this->_ref_order_item->_ref_reference->_ref_product->loadRefStock();
@@ -121,27 +122,41 @@ class CProductOrderItemReception extends CMbObject {
     $product = &$this->_ref_order_item->_ref_reference->_ref_product;
     $product->updateFormFields();
 
-    if ($product->loadRefStock()) {
-    	$stock = $product->_ref_stock_group;
-      $stock->quantity += $this->quantity * $product->_unit_quantity;
+    if ($is_new) {
+      if ($product->loadRefStock()) {
+      	$stock = $product->_ref_stock_group;
+        $stock->quantity += $this->quantity * $product->_unit_quantity;
+      }
+      else {
+        global $g;
+        $qty = $this->quantity * $product->_unit_quantity;
+        $stock = new CProductStockGroup();
+        $stock->product_id = $product->_id;
+        $stock->group_id = $g;
+        $stock->quantity = $qty;
+        $stock->order_threshold_min = $qty;
+        
+        CAppUI::setMsg("Un nouveau stock a été créé", UI_MSG_OK);
+        //CAppUI::setMsg("Un nouveau stock pour [%s] a été créé", UI_MSG_OK, $product->_view);
+      }
+      if ($msg = $stock->store()) {
+        return $msg;
+      }
     }
-    else {
-      global $g;
-      $qty = $this->quantity * $product->_unit_quantity;
-      $stock = new CProductStockGroup();
-      $stock->product_id = $product->_id;
-      $stock->group_id = $g;
-      $stock->quantity = $qty;
-      $stock->order_threshold_min = $qty;
-      
-      CAppUI::setMsg("Un nouveau stock a été créé", UI_MSG_OK);
-      //CAppUI::setMsg("Un nouveau stock pour [%s] a été créé", UI_MSG_OK, $product->_view);
-    }
-    if ($msg = $stock->store()) {
+    
+    if ($msg = parent::store()) {
       return $msg;
     }
     
-    return parent::store();
+    // If the order is reveived, we set the flag
+    if ($is_new) {
+      $order = $this->_ref_order_item->_ref_order;
+      $count_items = $order->countBackRefs("order_items");
+      if ($count_items && !$order->received && ($order->countReceivedItems() >= $count_items)) {
+        $order->received = 1;
+        $order->store();
+      }
+    }
   }
 }
 ?>

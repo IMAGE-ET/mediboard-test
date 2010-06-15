@@ -12,18 +12,27 @@
 function checkOutflow(form) {
   return checkForm(form) && ($V(form.comments) || $V(form.service_id) != 0);
 }
+
+Main.add(function(){
+  getForm("filter").onsubmit();
+});
+
+function changePage(start) {
+  $V(getForm("filter").start, start);
+}
 </script>
 
-<form name="filter" action="?" method="get" onsubmit="return checkForm(this)">
+<form name="filter" action="?" method="get" onsubmit="return Url.update(this, 'outflows-list')">
   <input type="hidden" name="m" value="pharmacie" />
-  <input type="hidden" name="tab" value="vw_idx_outflow" />
+  <input type="hidden" name="a" value="httpreq_vw_list_outflows" />
+  <input type="hidden" name="start" value="{{$start}}" onchange="this.form.onsubmit()" />
   
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1 onchange="this.form.submit()"}}</td>
+      <td>{{mb_field object=$delivrance field=_date_min form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1 onchange="this.form.submit()"}}</td>
+      <td>{{mb_field object=$delivrance field=_date_max form=filter register=1 onchange="this.form.onsubmit()"}}</td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>
@@ -45,28 +54,6 @@ function checkOutflow(form) {
       <th style="width: 0.1%;"></th>
     </tr>
     
-    {{foreach from=$list_outflows item=_delivery}}
-      <tr>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_delivery->_ref_stock->_guid}}')">
-            {{mb_value object=$_delivery->_ref_stock field=product_id}}
-          </span>
-        </td>
-        <td>{{mb_value object=$_delivery field=quantity}}</td>
-        <td>{{mb_value object=$_delivery field=date_delivery}}</td>
-        <td>
-          {{if $_delivery->service_id}}
-            {{mb_value object=$_delivery field=service_id}}
-          {{/if}}
-        </td>
-        <td>{{mb_value object=$_delivery field=comments}}</td>
-        <td></td>
-      </tr>
-    {{foreachelse}}
-      <tr>
-        <td colspan="10">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
-      </tr>
-    {{/foreach}}
     <tr>
       <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true"}}</td>
       <td>{{mb_field object=$delivrance field=quantity increment=true form="newOutflow" size=2}}</td>
@@ -79,8 +66,10 @@ function checkOutflow(form) {
           {{/foreach}}
         </select>
       </td>
-      <td>{{mb_field object=$delivrance field=comments prop="str"}}</td>
+      <td>{{mb_field object=$delivrance field=comments}}</td>
       <td><button class="tick" type="submit">Délivrer</button></td>
     </tr>
+    
+    <tbody id="outflows-list"></tbody>
   </table>
 </form>

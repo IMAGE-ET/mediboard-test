@@ -22,9 +22,9 @@ if ($category_id) {
 }
 
 $order = new CProductOrder;
-$orders_list = $order->search($type, $keywords, 200, $where);
+$orders = $order->search($type, $keywords, 200, $where);
 
-foreach($orders_list as $_order) {
+foreach($orders as $_order) {
   $_order->updateCounts();
   if ($_order->object_id) {
     $_order->loadTargetObject();
@@ -35,7 +35,7 @@ foreach($orders_list as $_order) {
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('orders', $orders_list);
+$smarty->assign('orders', $orders);
 $smarty->assign('type',   $type);
 
 $smarty->display('inc_orders_list.tpl');
