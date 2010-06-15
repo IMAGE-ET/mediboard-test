@@ -8,6 +8,7 @@ $locales['mod-dPboard-tab-vw_prescripteurs'] = 'Médecins traitants';
 $locales['mod-dPboard-tab-vw_sejours_interventions'] = 'Séjours et interventions';
 $locales['mod-dPboard-tab-vw_stats'] = 'Statistiques';
 $locales['mod-dPboard-tab-vw_stats_consultations'] = 'Consultations';
+$locales['mod-dPboard-tab-vw_stats_prescriptions'] = 'Prescriptions';
 $locales['mod-dPboard-tab-vw_trace_cotes'] = 'Vérification des côtés';
 $locales['mod-dPboard-tab-vw_week'] = 'Vue semaine';
 $locales['module-dPboard-court'] = 'Tableau de bord';

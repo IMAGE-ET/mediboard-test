@@ -50,12 +50,16 @@ Main.add(function(){
 	      <input type="hidden" name="date_max" value="{{$date_max}}" onchange="this.form.submit();" />
       </td>
 			<td>
-			  <select name="praticien_id" onchange="this.form.submit()">
-			  	  <option value="">&mdash; Choix d'un praticien</option>
-			  	{{foreach from=$praticiens item=_praticien}}
-				    <option value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};">{{$_praticien->_view}}</option>
-			  	{{/foreach}}
-				</select>
+				{{if $praticien->_id}}
+				  {{$praticien->_view}}
+				{{else}}
+				  <select name="praticien_id" onchange="this.form.submit()">
+				  	  <option value="">&mdash; Choix d'un praticien</option>
+				  	{{foreach from=$praticiens item=_praticien}}
+					    <option value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};">{{$_praticien->_view}}</option>
+				  	{{/foreach}}
+					</select>
+				{{/if}}
 	    </td>
 			<td>
 				<select name="service_id" onchange="this.form.submit();">

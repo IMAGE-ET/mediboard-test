@@ -1398,6 +1398,7 @@ $locales['mod-dPprescription-tab-vw_edit_prescription'] = 'Prescriptions';
 $locales['mod-dPprescription-tab-vw_edit_protocole'] = 'Protocoles';
 $locales['mod-dPprescription-tab-vw_stat_posologie'] = 'Statistiques';
 $locales['mod-dPprescription-tab-vw_stats'] = 'Statistiques';
+$locales['mod-dPprescription-tab-vw_stats_prescriptions'] = 'Statistiques';
 $locales['module-dPprescription-court'] = 'Prescriptions';
 $locales['module-dPprescription-long'] = 'Prescriptions informatisées';
 $locales['pref-easy_mode'] = 'Affichage simplifié de la prescription';

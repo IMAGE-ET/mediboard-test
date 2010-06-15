@@ -18,6 +18,7 @@ $stats = array(
   "vw_sejours_interventions",
   "vw_stats_consultations",
   "vw_prescripteurs",
+	"vw_stats_prescriptions"
 );
 
 if(CAppUI::conf("dPplanningOp COperation verif_cote")) {

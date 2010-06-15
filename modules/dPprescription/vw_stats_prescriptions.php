@@ -8,11 +8,18 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+global $prat;
+
 $praticien_id = CValue::getOrSession("praticien_id");
 $service_id   = CValue::getOrSession("service_id");
 $date_min     = CValue::getOrSession("date_min", mbDate("- 3 month"));
 $date_max     = CValue::getOrSession("date_max", mbDate());
 $type         = CValue::getOrSession("type");
+
+// Global $prat est 
+if(isset($prat)){
+	$praticien_id = $prat->_id;
+}
 
 $sejour = new CSejour();
 $sejour->type = $type;
@@ -163,7 +170,7 @@ $options = CFlotrGraph::merge("bars", array(
   'bars' => array('stacked' => true)
 ));
 
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPprescription");
 $smarty->assign("sejour", $sejour);
 $smarty->assign("series", $series);
 $smarty->assign("options", $options);
@@ -173,6 +180,7 @@ $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("date_min", $date_min);
 $smarty->assign("date_max", $date_max);
-$smarty->display("vw_stats.tpl");
+$smarty->assign("praticien", isset($prat) ? $prat : new CMediusers());
+$smarty->display("vw_stats_prescriptions.tpl");
 
 ?>

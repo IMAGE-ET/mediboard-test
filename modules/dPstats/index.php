@@ -17,6 +17,8 @@ $module->registerTab("vw_reveil"              , TAB_READ);
 $module->registerTab("vw_bloc2"               , TAB_READ);
 $module->registerTab("vw_time_op"             , TAB_READ);
 $module->registerTab("vw_personnel_salle"     , TAB_READ);
+if(CModule::getActive("dPprescription")){
+  $module->registerTab("vw_prescriptions"       , TAB_READ);
+}
 $module->registerTab("vw_users"               , TAB_ADMIN);
-
 ?>
