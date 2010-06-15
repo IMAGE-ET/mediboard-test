@@ -22,7 +22,7 @@ if ($category_id) {
 }
 
 $order = new CProductOrder;
-$orders_list = $order->search($type, $keywords, 40, $where);
+$orders_list = $order->search($type, $keywords, 200, $where);
 
 foreach($orders_list as $_order) {
   $_order->updateCounts();
