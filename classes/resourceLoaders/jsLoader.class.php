@@ -16,15 +16,15 @@ abstract class CJSLoader extends CHTMLResourceLoader {
   /**
    * Loads a javascript file
    */
-  static function loadFile($file, $cc = null, $build = null) {
+  static function loadFile($file, $cc = null, $build = null, $type = "text/javascript") {
     $tag = self::getTag("script", array(
-      "type" => "text/javascript",
+      "type" => $type ? $type : "text/javascript",
       "src"  => "$file?".self::getBuild($build),
     ), null, false);
     return self::conditionalComments($tag, $cc);
   }
   
-  static function loadFiles($compress = false) {
+  static function loadFiles($compress = false, $type = "text/javascript") {
     $result = "";
     
     // FIXME: make advanced tests to remove this line
@@ -75,13 +75,13 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       }
       
       foreach($excluded as $file) {
-        $result .= self::loadFile($file, null, filemtime($file))."\n";
+        $result .= self::loadFile($file, null, filemtime($file), $type)."\n";
       }
-      $result .= self::loadFile($cachefile, null, $last_update)."\n";
+      $result .= self::loadFile($cachefile, null, $last_update, $type)."\n";
     }
     else {
       foreach(self::$files as $file)
-        $result .= self::loadFile($file)."\n";
+        $result .= self::loadFile($file, null, null, $type)."\n";
     }
     
     return $result;
