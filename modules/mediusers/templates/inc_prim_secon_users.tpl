@@ -124,6 +124,7 @@
             <th>{{mb_title class=CUser field=user_type}}</th>
             <th>{{mb_title class=CUser field=profile_id}}</th>
             <th>{{mb_title class=CUser field=user_last_login}}</th>
+            <th></th>
           </tr>
           {{foreach from=$userfunction->_back.secondary_functions item=curr_function}}
           <tr>
@@ -144,10 +145,20 @@
               </label>
               {{/if}}
             </td>
+            <td class="button">
+              <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <input type="hidden" name="dosql" value="do_secondary_function_aed" />
+              <input type="hidden" name="secondary_function_id" value="{{$curr_function->secondary_function_id}}" />
+              <input type="hidden" name="del" value="1" />
+              <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur secondaire',objName:'{{$curr_function->_ref_user->_view|smarty:nodefaults|JSAttribute}}'})">
+                {{tr}}Delete{{/tr}}
+              </button>
+              </form>
+            </td>
           </tr>
           {{foreachelse}}
           <tr>
-            <td colspan="6">Aucun utilisateur secondaire</td>
+            <td colspan="7">Aucun utilisateur secondaire</td>
           </tr>
           {{/foreach}}
         </table>
