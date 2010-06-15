@@ -34,9 +34,9 @@ $where = array();
 // Praticiens sélectionnés
 $listPrat = new CMediusers;
 if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id);
+  $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id, null, true);
 } else {
-  $listPrat = $listPrat->loadProfessionnelDeSante(PERM_EDIT, $function_id);
+  $listPrat = $listPrat->loadProfessionnelDeSante(PERM_EDIT, $function_id, null, true);
 }
 
 $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);

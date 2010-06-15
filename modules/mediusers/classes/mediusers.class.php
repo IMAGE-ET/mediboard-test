@@ -573,18 +573,23 @@ class CMediusers extends CMbObject {
     }
   }
 
-  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
+  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
     
   	$where = array();
+    $ljoin = array();
     
   	if($function_id) {
-    	$where["users_mediboard.function_id"] = "= '$function_id'";
+  		if($secondary) {
+  			$ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
+  			$where[] = "`users_mediboard`.`function_id` = '$function_id' OR `secondary_function`.`function_id` = '$function_id'";
+  		} else {
+        $where["users_mediboard.function_id"] = "= '$function_id'";
+  		}
     }
     
     $where["users_mediboard.actif"] = "= '1'";
     
     // Filters on users values
-    $ljoin = array();
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
 
     if ($name) {
@@ -692,12 +697,12 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name);
   }
 
-  function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name);
+  function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name, $secondary);
   }
 
-  function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme"), $permType, $function_id, $name);
+  function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Kinesitherapeute", "Sage Femme"), $permType, $function_id, $name, $secondary);
   }
   
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
