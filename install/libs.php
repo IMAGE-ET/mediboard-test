@@ -248,7 +248,7 @@ $library->extraDir = "phpThumb";
 $library->sourceDir = "phpThumb";
 $library->targetDir = "phpThumb";
 $library->versionFile = "docs/phpthumb.changelog.txt";
-$library->versionString = "v1.7.5.1";
+$library->versionString = "v1.7.5b";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
