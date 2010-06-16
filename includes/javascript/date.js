@@ -511,7 +511,7 @@ var Calendar = {
       timePicker: false,
       altElement: element,
       altFormat: 'yyyy-MM-dd',
-      icon: "images/icons/calendar.gif",
+      icon: window.Mobile?"mobile/images/icons/calendar.gif":"images/icons/calendar.gif",
       locale: "fr_FR", 
       timePickerAdjacent: !window.Mobile, 
       use24hrs: true,
@@ -533,6 +533,10 @@ var Calendar = {
       element.insert({before: elementView});
     }
     
+    if(window.Mobile) {
+      elementView.disabled = "disabled";
+    }
+    
     if (element.hasClassName('dateTime')) {
       options.timePicker = true;
       options.altFormat = 'yyyy-MM-dd HH:mm:ss';
@@ -541,11 +545,10 @@ var Calendar = {
       options.timePicker = true;
       options.datePicker = false;
       options.altFormat = 'HH:mm:ss';
-      options.icon = "images/icons/time.png";
+      options.icon = window.Mobile ? "mobile/images/icons/time.png" : "images/icons/time.png";
     }
     
     var datepicker = new Control.DatePicker(elementView, options);
-    
     if (options.editable) {
       var onChange = (function(){
         var date = DateFormat.parse(elementView.value, this.options.currentFormat);
@@ -567,18 +570,36 @@ var Calendar = {
       if (datepicker.icon) datepicker.icon.style.position = 'relative';
     }
     else {
-      elementView.observe('click', Event.stop).observe('focus', function(e){
-        this.show.bind(datepicker)(e);
+      if(window.Mobile) {
         
-        if(!this.datepicker.element) return;
+        var div = new Element ('div',{style: 'position:absolute;opacity:0;'});
+        var parent = elementView.up();
+        // solution pour éviter de créer plusieurs div quand les pages sont chargées en ajax 
+        // les insertions se font sur "content" et "content" n'est pas rafraichi
+        // trouver un id 
+        parent.insert(div);
+        div.clonePosition(elementView);
         
-        if (options.center)
+        div.observe('click', function(e){
+          Event.stop(e);
+          this.show.bind(datepicker)(e);
+          
+          if(!this.datepicker.element) return;
           $(this.datepicker.element).centerH();
-        else
+
+        }.bindAsEventListener(datepicker));
+      } 
+      else {
+        elementView.observe('click', Event.stop).observe('focus', function(e){
+          this.show.bind(datepicker)(e);
+          if(!this.datepicker.element) return;
+          
           $(this.datepicker.element).unoverflow();
-      }.bindAsEventListener(datepicker));
+        }.bindAsEventListener(datepicker));
+      }
     }
-    
+   
+  
     // We update the view
     if (element.value && !elementView.value) {
       var date = DateFormat.parse(element.value, datepicker.options.altFormat);
@@ -587,7 +608,7 @@ var Calendar = {
     
     if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
-        var element = this.element || this.datepicker.element;
+        var element = this.datepicker ? this.datepicker.element : this.element;
         
         if (options.center)
           $(element).centerH();

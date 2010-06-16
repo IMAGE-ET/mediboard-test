@@ -271,14 +271,12 @@ Element.addMethods({
     element.setStyle({
       left: 0
     });
-  
     var viewport = document.viewport.getDimensions(); // Viewport size
     var dim = element.getDimensions(); // Element dimensions
-    
     element.setStyle({
-      left: (viewport.width - dim.width) / 2 + "px"
+      left: (viewport.width - dim.width) / 2 + "px",
+      width: dim.width - 10 +"px"
     });
-    
     return element;
   },
   
