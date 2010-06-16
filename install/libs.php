@@ -344,6 +344,18 @@ $library->versionString = "dompdf.php 223 2010-03-12";
 
 CLibrary::$all[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "RequireJS";
+$library->url = "http://requirejs.org/";
+$library->fileName = "requireJS.tar.gz";
+$library->description = "Chargement JavaScript en Ajax";
+$library->sourceDir = "requireJS";
+$library->targetDir = "requireJS";
+$library->versionFile = "require.js";
+$library->versionString = '0.11.0';
+
+CLibrary::$all[$library->name] = $library;
+
 /*
 $library = new CLibrary;
 $library->name = "dsHistory";
