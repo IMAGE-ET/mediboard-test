@@ -72,7 +72,7 @@ Main.add(function () {
 	
   {{else}}
   <tr>
-    <th class="title" colspan="8">
+    <th class="title" colspan="9">
       {{if $selPrat}}
         Dr {{$listPrat.$selPrat->_view}} -
       {{/if}}
@@ -83,14 +83,17 @@ Main.add(function () {
     <th>{{mb_label class=CSejour field=patient_id}}</th>
     <th>{{mb_label class=CSejour field=praticien_id}}</th>
     <th>{{mb_title class=CAffectation field=lit_id}}</th>
+		<!--
     <th colspan="2">
   	 {{tr}}CSejour{{/tr}} /
      {{mb_title class=CSejour field=_duree_prevue}}
 		</th>
+		-->
     <th colspan="2">
      {{tr}}CAffectation{{/tr}} /
      {{mb_title class=CAffectation field=_duree}}
 		</th>
+		<th>Motif</th>
     <th>Bornes<br/>GHM</th>
   </tr>
   {{foreach from=$listAff item=curr_aff}}
@@ -116,18 +119,30 @@ Main.add(function () {
     	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$praticien}}
     </td>
     <td class="text">{{$curr_aff->_view}}</td>
+		<!--
     <td class="text">
     	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
         {{mb_include module=system template=inc_interval_datetime from=$sejour->entree_prevue to=$sejour->sortie_prevue}}
       </span>
     </td>
     <td>{{$sejour->_duree_prevue}}</td>
+		-->
     <td class="text">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_aff->_guid}}')">
         {{mb_include module=system template=inc_interval_datetime from=$curr_aff->entree to=$curr_aff->sortie}}
       </span>
     </td>
     <td>{{$curr_aff->_duree}}</td>
+		
+		<td class="text">
+      {{if $sejour->libelle}}
+        {{$sejour->libelle}}
+      {{else}}
+        {{foreach from=$sejour->_ref_operations item=_operation}}
+          {{mb_include module=dPplanningOp template=inc_vw_operation operation=$_operation}}
+        {{/foreach}}
+      {{/if}}
+    </td>
 		
     <td style="text-align: center;">
       {{if $GHM->_DP}}

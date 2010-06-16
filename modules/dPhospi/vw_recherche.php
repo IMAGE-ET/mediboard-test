@@ -109,6 +109,9 @@ else if ($typeVue == 1) {
 
     $aff->loadRefLit();
     $aff->_ref_lit->loadCompleteView();
+		foreach($aff->_ref_sejour->_ref_operations as $_operation){
+			$_operation->loadExtCodesCCAM();
+		}
   }
 }
 
