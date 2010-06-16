@@ -192,4 +192,4 @@ require("./includes/access_log.php");
 
 ob_end_flush();
 
-CApp::emptyPostData($suppressHeaders/*!$tab*/);
+CApp::rip();
