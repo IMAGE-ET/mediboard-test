@@ -5,7 +5,7 @@
 
 <form name="editOpEasy" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
-<input type="hidden" name="_locked" value="1" />
+<!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
 <table class="form">
   {{if $op->annulee == 1}}

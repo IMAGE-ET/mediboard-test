@@ -43,7 +43,7 @@ CCAMSelector.init = function(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
-<input type="hidden" name="_locked" value="1" />
+<!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
 {{mb_field object=$op field="operation_id" hidden=1 prop=""}}
 {{mb_field object=$op field="sejour_id" hidden=1 prop=""}}

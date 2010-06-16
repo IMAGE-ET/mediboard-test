@@ -234,7 +234,7 @@ Main.add( function(){
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
 {{if $sejour->sortie_reelle && !$can->admin}}
-<input type="hidden" name="_locked" value="1" />
+<!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
