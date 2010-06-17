@@ -9,14 +9,17 @@
  */
 
 class CDestinataireHprim extends CMbObject {
+  // L'ajout du PMSI se fait en dehors de la classe car dépends de la config
 	static $messagesHprim = array(
     "patients" => array ( 
-      "evenementPatient" ),
-    "pmsi" => array ( 
-      "evenementPmsi" ,
-      "evenementServeurActe"),
+      "evenementPatient" 
+	  ),
+    "pmsi" => array(
+      "evenementServeurActe"
+	  ),
     "stock" => array ( 
-      "evenementMvtStocks")
+      "evenementMvtStocks"
+	  )
   );
 	
   // DB Table key
@@ -84,4 +87,8 @@ class CDestinataireHprim extends CMbObject {
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
   }
 }
+
+// Add
+CDestinataireHprim::$messagesHprim['pmsi'][] = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+                                                "evenementServeurEtatsPatient" : "evenementPMSI"; 
 ?>

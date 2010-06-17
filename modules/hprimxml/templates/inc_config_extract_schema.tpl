@@ -36,6 +36,7 @@
     <th class="category">Status</th>
     <th class="category">Action</th>
     <th class="category">Validation</th>
+    <th class="category">Acquittement</th>
   </tr>
     
   {{foreach from=$evenements key=_evt item=_versions}}  
@@ -70,6 +71,17 @@
         <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="1" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.validation == "1"}}checked="checked"{{/if}}/>
         <label for="validation_{{$_evt}}_0">{{tr}}bool.0{{/tr}}</label>
         <input type="radio" name="hprimxml[{{$_evt}}][validation]" value="0" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.validation == "0"}}checked="checked"{{/if}}/>
+      </form>
+    </td>
+    <td>
+      <form name="editConfig_send_ack" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="system" />
+        <input type="hidden" name="dosql" value="do_configure" />
+        
+        <label for="send_ack_{{$_evt}}_1">{{tr}}bool.1{{/tr}}</label>
+        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="1" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.send_ack == "1"}}checked="checked"{{/if}}/>
+        <label for="send_ack_{{$_evt}}_0">{{tr}}bool.0{{/tr}}</label>
+        <input type="radio" name="hprimxml[{{$_evt}}][send_ack]" value="0" onchange="this.form.onsubmit();" {{if $dPconfig.hprimxml.$_evt.send_ack == "0"}}checked="checked"{{/if}}/>
       </form>
     </td>
   </tr>

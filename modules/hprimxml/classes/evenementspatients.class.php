@@ -128,7 +128,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $ville = $xpath->queryTextNode("hprim:ville", $adresse);
     $cp = $xpath->queryTextNode("hprim:codePostal", $adresse);
     $telephones = $xpath->getMultipleTextNodes("hprim:telephones/*", $node);
-    /* @todo getFirstNode */
     $email = $xpath->getFirstNode("hprim:emails/*", $node);    
     
     if ($mbPersonne instanceof CPatient) {
@@ -142,7 +141,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mbPersonne->prenom = $prenoms[0];
       $mbPersonne->prenom_2 = isset($prenoms[1]) ? $prenoms[1] : null;
       $mbPersonne->prenom_3 = isset($prenoms[2]) ? $prenoms[2] : null;
-      /* @todo Mettre un implode sur le multiple */
       $mbPersonne->adresse  = $ligne;
       $mbPersonne->ville = $ville;
       $mbPersonne->pays_insee = $xpath->queryTextNode("hprim:pays", $adresse);
@@ -157,15 +155,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     } elseif ($mbPersonne instanceof CMediusers) {
       $mbPersonne->_user_last_name  = $nom;
       $mbPersonne->_user_first_name = $prenoms[0];
-      $mbPersonne->_user_email      = isset($emails[0]) ? $emails[0] : null;
+      $mbPersonne->_user_email      = $email;
       $mbPersonne->_user_phone      = isset($telephones[0]) ? $telephones[0] : null;
-      if (is_array($ligne)) {
-        $mbPersonne->_user_adresse    = $ligne[0];
-        if (isset($ligne[1]))
-          $mbPersonne->_user_adresse  .= " $ligne[1]";
-        if (isset($ligne[2]))
-          $mbPersonne->_user_adresse  .= " $ligne[2]";
-      }
+      $mbPersonne->_user_adresse    = $ligne;
       $mbPersonne->_user_cp         = $cp;
       $mbPersonne->_user_ville      = $ville;
     }

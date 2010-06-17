@@ -12,11 +12,12 @@ CAppUI::requireModuleClass("hprimxml", "evenements");
 
 class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   static $evenements = array(
-    'evenementPMSI'        => "CHPrimXMLEvenementsPmsi",
-    'evenementServeurActe' => "CHPrimXMLEvenementsServeurActes",
+    'evenementPMSI'                => "CHPrimXMLEvenementsPmsi",
+    'evenementServeurActe'         => "CHPrimXMLEvenementsServeurActes",
+    'evenementServeurEtatsPatient' => "CHPrimXMLEvenementsServeurEtatsPatient",
   );
   
-  function __construct($dirschemaname, $schemafilename = null) {
+  function __construct($dirschemaname = null, $schemafilename = null) {
     $this->type = "pmsi";
     
     $version = CAppUI::conf("hprimxml $this->evenement version");

@@ -40,7 +40,8 @@ switch ($typeObject) {
 		break;
   case "sej" :
 		$mbObject = new CSejour();
-		$evenementActivitePMSI = new CHPrimXMLEvenementsPmsi();
+		$evenementActivitePMSI =  (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
+		                             new CHPrimXMLEvenementsServeurEtatsPatient() : new CHPrimXMLEvenementsPmsi();
 				
 		// Chargement du séjour et génération du document
 		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));

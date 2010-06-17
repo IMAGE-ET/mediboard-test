@@ -33,6 +33,12 @@ if ($evenement == "evt_pmsi") {
   }
 }
 
+if ($evenement == "evt_serveuretatspatient") {
+  if ($version == "1.05") {
+    $file = $racine."serveurActivitePmsi/msgEvenementsServeurEtatsPatient105.xsd";
+  }
+}
+
 if ($evenement == "evt_patients") {
   $version = str_replace(".", "", $version);
   $file = $racine."patients/msgEvenementsPatients$version.xsd";

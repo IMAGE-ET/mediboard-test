@@ -29,6 +29,12 @@ switch ($evenement) {
       extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
     }
     break;
+
+  case "evt_serveuretatspatient":
+    if ($version == "1.05") {
+      extractFiles("serveurActivitePmsi" , "schemaServeurActivitePmsi_v105.zip");
+    }
+    break;
     
   case "evt_patients":
   	$version = str_replace(".", "", $version);

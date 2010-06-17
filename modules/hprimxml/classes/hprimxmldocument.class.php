@@ -693,7 +693,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
     }
     
-    // @todo Voir comment intégrer le placement pour la v. 1.01 et v. 1.01
+    // @todo Voir comment intégrer le placement pour la v. 1.01 et v. 1.05
     /*
     if (!$light) {
       $placement = $this->addElement($elParent, "Placement");
@@ -978,6 +978,26 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $this->addElement($chapitreActeReeducation, "commentaire", CActiviteCdARR::getLibelle($mnemonique));
       }
     }
+  }
+  
+  function addDiagnosticsEtat($elParent, CSejour $mbSejour) {
+    $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DP), "dp");
+    if($mbSejour->DR) {
+      $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DR), "dr");
+    }
+    if(count($mbSejour->_ref_dossier_medical->_codes_cim)) {
+      foreach($mbSejour->_ref_dossier_medical->_codes_cim as $_diag_significatif) {
+        $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
+      }
+    }
+  }
+  
+  function addDiagnosticEtat($elParent, $codeCim10, $typeDiagnostic) {
+    $diagnostic = $this->addElement($elParent, "diagnostic");
+    $this->addAttribute($diagnostic, "action", "création");
+    $this->addAttribute($diagnostic, "type", $typeDiagnostic);
+    
+    $this->addElement($diagnostic, "codeCim10", $codeCim10);
   }
 }
 

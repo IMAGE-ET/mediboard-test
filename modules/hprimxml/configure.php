@@ -12,10 +12,11 @@ CCanDo::checkAdmin();
 
 $status = 0;
 $evenements = array(
-  'evt_serveuractes' => array("1.01", "1.05"),
-  'evt_pmsi'         => array("1.01", "1.05"),
-  'evt_patients'     => array("1.05", "1.052"),
-  'evt_mvtStock'     => array("1.01", "1.02"),
+  'evt_serveuractes'        => array("1.01", "1.05"),
+  'evt_pmsi'                => array("1.01", "1.05"),
+  'evt_serveuretatspatient' => array("1.05"),
+  'evt_patients'            => array("1.05", "1.052"),
+  'evt_mvtStock'            => array("1.01", "1.02"),
 );
 
 // Création du template
