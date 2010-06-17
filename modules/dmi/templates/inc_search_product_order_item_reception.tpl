@@ -41,7 +41,7 @@
   	{{/foreach}}
     <tr>
       <td>
-        <button type="submit" class="tick notext">
+        <button type="button" class="tick notext">
           {{tr}}Select{{/tr}}
         </button>
       </td>

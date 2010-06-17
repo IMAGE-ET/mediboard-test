@@ -90,26 +90,26 @@ class CActeCCAM extends CActe {
    */
   function checkEnoughCodes() {
     $this->loadTargetObject();
-    if (!$this->_ref_object || !$this->_ref_object->_id) {
+    if ($this->_merging || !$this->_ref_object || !$this->_ref_object->_id) {
       return;
     }
     
-    $acte = new CActeCCAM();
     $where = array();
+    
+    // dans le cas de la modification
     if ($this->_id) {
-      // dans le cas de la modification
       $where["acte_id"]     = "<> '$this->_id'";  
     }
-    $this->completeField("code_acte");
-    $this->completeField("object_class");
-    $this->completeField("object_id");
-    $this->completeField("code_activite");
-    $this->completeField("code_phase");
+    
+    $this->completeField("code_acte", "object_class", "object_id", "code_activite", "code_phase");
+    
     $where["code_acte"]     = "= '$this->code_acte'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     $where["code_activite"] = "= '$this->code_activite'";
     $where["code_phase"]    = "= '$this->code_phase'";
+    
+    $acte = new CActeCCAM();
     $this->_ref_siblings = $acte->loadList($where);
 
     // retourne le nombre de code semblables
@@ -117,13 +117,14 @@ class CActeCCAM extends CActe {
     
     // compteur d'acte prevue ayant le meme code_acte dans l'intervention
     $nbCode = 0;
-    foreach ($this->_ref_object->_codes_ccam as $key => $code) {
+    foreach ($this->_ref_object->_codes_ccam as $code) {
       // si le code est sous sa forme complete, garder seulement le code
       $code = substr($code, 0, 7);
       if ($code == $this->code_acte) {
         $nbCode++;
       }
     }
+    
     if ($siblings >= $nbCode) {
       return "$this->_class_name-check-already-coded";
     }
@@ -133,13 +134,10 @@ class CActeCCAM extends CActe {
     parent::canDeleteEx();
    
     // Test si la consultation est validée
-    if ($msg = $this->checkCoded()){
-      return $msg;
-    }
+    return $this->checkCoded();
   }
 
   function check() {
-    
     // Test si la consultation est validée
     if ($msg = $this->checkCoded()){
       return $msg;
@@ -260,9 +258,7 @@ class CActeCCAM extends CActe {
     }
     
     // Standard store
-    if ($msg = parent::store()) {
-      return $msg;
-    }
+    return parent::store();
   }
   
   function loadRefObject(){
@@ -292,7 +288,6 @@ class CActeCCAM extends CActe {
         }
       }
     }
-    return;
   }
   
   function getFavoris($user_id, $class) {
@@ -303,8 +298,8 @@ class CActeCCAM extends CActe {
             group by code_acte
             order by nb_acte DESC
             limit 20";
-  	$codes = $this->_spec->ds->loadlist($sql);
-  	return $codes;
+
+  	return $this->_spec->ds->loadlist($sql);
   }
   
   function getPerm($permType) {

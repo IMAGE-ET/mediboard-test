@@ -212,12 +212,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-$library->fileName = "scriptaculous-js-1.8.2.tar.gz";
+$library->fileName = "scriptaculous-js-1.8.3.tar.gz";
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
-$library->sourceDir = "scriptaculous-js-1.8.2";
+$library->sourceDir = "scriptaculous-js-1.8.3";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.8.2*";
+$library->versionString = "*V1.8.3*";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";

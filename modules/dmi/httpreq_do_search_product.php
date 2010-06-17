@@ -11,8 +11,25 @@
 global $can;
 $can->needsRead();
 
-$product_code = CValue::get('code');
-$product_code_lot = CValue::get('code_lot');
+$code = CValue::get('code');
+
+$parts = explode(" ", $code);
+CMbArray::removeValue("", $parts);
+
+$product_code = null;
+$lot_code = null;
+
+switch (count($parts)) {
+  case 0: 
+    break;
+  case 1:
+  	$product_code = $parts[0]; 
+    break;
+  case 2:
+    $product_code = $parts[0];
+    $lot_code = $parts[1];
+    break;
+}
 
 if (!$product_code) {
   CAppUI::stepAjax("Veuillez indiquer un code lot", UI_MSG_ERROR);
@@ -30,7 +47,7 @@ else {
 	//chargement de la reception
   $where = array(
     "product.code" => "= '$product_code'",
-    "product_order_item_reception.code" => "= '$product_code_lot'"
+    "product_order_item_reception.code" => "= '$lot_code'"
   );
   
   $leftjoin = array(
@@ -45,7 +62,7 @@ else {
 	
 if (!$product_order_item_reception->_id) {
   CAppUI::stepAjax("Produit de code <strong>$product_code</strong> trouvé", UI_MSG_OK);
-  CAppUI::stepAjax("Lot <strong>$product_code_lot</strong> non trouvé", UI_MSG_ERROR);
+  CAppUI::stepAjax("Lot <strong>$lot_code</strong> non trouvé", UI_MSG_ERROR);
 }
 else {
   /*
@@ -59,14 +76,14 @@ else {
 	
 	if($product->_unique_usage && !$quantite_suffisante)//produit à usage unique déjà consommé; on bloque
 	{
-		CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] à usage unique déjà dispensé.",UI_MSG_ERROR);
+		CAppUI::stepAjax("Produit[".$product_code.";".$lot_code."] à usage unique déjà dispensé.",UI_MSG_ERROR);
 		return false;
 	}
   
 	if(!$product->_unique_usage && $product->renewable==0)//produit consammable en quantité insuffisante
-	  CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] entièrement consommé.",UI_MSG_ERROR);
+	  CAppUI::stepAjax("Produit[".$product_code.";".$lot_code."] entièrement consommé.",UI_MSG_ERROR);
   elseif($product->renewable==2) //produit renouvelable déjà consommé
-    CAppUI::stepAjax("Produit[".$product_code.";".$product_code_lot."] renouvelable déjà consommé.",UI_MSG_ERROR);
+    CAppUI::stepAjax("Produit[".$product_code.";".$lot_code."] renouvelable déjà consommé.",UI_MSG_ERROR);
   */
   
   $dmi = new CDMI();

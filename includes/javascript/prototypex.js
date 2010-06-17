@@ -371,6 +371,23 @@ Element.addMethods('form', {
 Object.extend(Event, {
   key: function(e){
     return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
+  },
+  isCapsLock: function(e){
+    var charCode = Event.key(e);
+    var shiftOn = false;
+    
+    if (e.shiftKey) {
+      shiftOn = e.shiftKey;
+    } else if (e.modifiers) {
+      shiftOn = !!(e.modifiers & 4);
+    }
+
+    if ((charCode >= 97 && charCode <= 122 && shiftOn) || 
+        (charCode >= 65 && charCode <= 90 && !shiftOn)) {
+      return true;
+    }
+
+    return false;
   }
 });
 

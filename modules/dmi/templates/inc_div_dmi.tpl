@@ -8,31 +8,38 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{* 
+
+Algo de lecture de code barre :
+
+Si code barre complet trouvé dans base MB
+  Produit OK
+  Lot     OK
+Sinon, Si seulement code produit trouvé
+  Lecture produit
+  Listage lots du produit
+  Affichage d'un champ de saisie de code lot
+  Si code lot trouvé
+    Séléction du lot
+  Sinon
+    "Lot non retrouvé"
+  FinSi
+FinSi
+
+*}}
+
 <script type="text/javascript">
-
-barcodeSeparator = " ";
-
-check_separator = function(element, next_element){
-  if(element.value.charAt(element.value.length-1) == barcodeSeparator){
-    $(next_element).focus();
-    element.value = element.value.substring(0, element.value.length-1);
-    return false;
-  }
-  return true;
-}
 
 search_product = function(form){
   var url = new Url("dmi", "httpreq_do_search_product");
   url.addParam("code", form.code.value);
-  url.addParam("code_lot", form.code_lot.value);
-  url.requestUpdate("product_description_code");
+  url.requestUpdate("product_description_code", {onComplete: function(){form.code.select()}});
   return false;
 }
 
-search_product_code = function(code, code_lot) {
+search_product_code = function(code) {
   var url = new Url("dmi", "httpreq_do_search_product");
   url.addParam("code", code);
-  url.addParam("code_lot", code_lot);
   url.requestUpdate("product_reception_by_product");
   return false;
 }
@@ -61,6 +68,16 @@ Main.add(function () {
   });
   
   Prescription.refreshTabHeader("div_dmi", {{$prescription->_ref_lines_dmi|@count}});
+  
+  var code = getForm("dmi_delivery_by_code").code;
+  code.focus();
+  
+  code.observe("keypress", function(e){
+    if (Event.isCapsLock(e)) 
+      ObjectTooltip.createDOM(this, 'capslock-alert', {duration: 0}); 
+    else if ($('capslock-alert').oTooltip)
+      $('capslock-alert').oTooltip.hide();
+  });
 });
 
 reloadListDMI = function(){
@@ -125,12 +142,14 @@ delLineDMI = function(line_dmi_id){
 	        </tr>
 	        <tr>
 	          <th>
-	            <label for="code">Code produit</label> / 
-              <label for="code_lot">Code lot</label>
+	            <label for="code">Code barre</label>
             </th>
 	          <td>
-	            <input type="text" size="10" name="code" onkeyup="return check_separator(this,this.form.code_lot)"/>
-              <input type="text" size="10" name="code_lot" />
+	            <div class="small-warning" id="capslock-alert" style="display: none;">
+	              Il semble que la touche <strong>Verr. Majuscules</strong> de votre clavier est activée, <br/>
+                veuillez la désactiver pour permettre une bonne lecture du code barre.
+	            </div>
+	            <input type="text" size="30" name="code" />
               <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
             </td>
 	        </tr>

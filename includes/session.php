@@ -54,11 +54,6 @@ if (!isset($_SESSION['browser'])) {
     'safari'  => '525.26', // 3.2
   );
   
-  if (isset($minimal_versions[$browser['name']]) && 
-      $browser['version'] < $minimal_versions[$browser['name']]) {
-    mbTrace($browser['useragent'], "old browser", true);
-  }
-  
   if (isset($_SERVER['HTTP_USER_AGENT'])) {
     $browser['useragent'] = $_SERVER['HTTP_USER_AGENT'];
     $user_agent = strtolower($browser['useragent']);
@@ -70,6 +65,11 @@ if (!isset($_SESSION['browser'])) {
         break;
       }
     }
+  }
+  
+  if (isset($minimal_versions[$browser['name']]) && 
+      $browser['version'] < $minimal_versions[$browser['name']]) {
+    mbTrace($browser['useragent'], "old browser", true);
   }
   
   $_SESSION['browser'] =& $browser; 
