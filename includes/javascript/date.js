@@ -31,30 +31,30 @@ Object.extend(DateFormat, {
 
 		// Convert real date parts into formatted versions
 		var value = {
-			y:   y+'',
-			yy:  y.substring(2,4),
-			yyyy:y,
-			M:   M,
-			MM:  DateFormat.LZ(M),
-			MMM: DateFormat.MONTH_NAMES[M-1],
-			NNN: DateFormat.MONTH_NAMES[M+11],
-			d:   d,
-			dd:  DateFormat.LZ(d),
-			E:   DateFormat.DAY_NAMES[E+7],
-			EE:  DateFormat.DAY_NAMES[E],
-			H:   H,
-			HH:  DateFormat.LZ(H),
-			h:   h,
-			hh:  DateFormat.LZ(h),
-			K:   H % 12,
-			KK:  DateFormat.LZ(H % 12),
-			k:   H + 1,
-			kk:  DateFormat.LZ(H + 1),
-			a:   H > 11 ? 'PM' : 'AM',
-			m:   m,
-			mm:  DateFormat.LZ(m),
-			s:   s,
-			ss:  DateFormat.LZ(s)
+			y:   y+'', // Année
+			yy:  y.substring(2,4), // Année sur 2 chiffres
+			yyyy:y, // Année sur 4 chiffres
+			M:   M, // Mois sur un chiffre quand < à 10
+			MM:  DateFormat.LZ(M), // Mois sur deux chiffres
+			MMM: DateFormat.MONTH_NAMES[M-1], // Nom du mois
+			NNN: DateFormat.MONTH_NAMES[M+11], // Nom du mois en abbrégé
+			d:   d, // Numéro du jour dans le mois sur un chiffre quand < à 10
+			dd:  DateFormat.LZ(d), // Numéro du jour dans le mois
+			E:   DateFormat.DAY_NAMES[E+7], // Nom du jour en abbrégé
+			EE:  DateFormat.DAY_NAMES[E], // Nom du jour
+			H:   H, // Heure sur 24h sur un chiffre quand < à 10
+			HH:  DateFormat.LZ(H), // Heure sur 24h
+			h:   h, // Heure sur 12h sur un chiffre quand < à 10
+			hh:  DateFormat.LZ(h), // Heure sur 12h
+			K:   H % 12, // Heure sur 12h sur 1 chiffre quand < à 10
+			KK:  DateFormat.LZ(H % 12), // Heure sur 12h sur 2 chiffres
+			k:   H + 1, // Heure sur 12h sur 1 chiffre plus 1
+			kk:  DateFormat.LZ(H + 1), // Heure sur 12h sur 2 chiffres pours 1
+			a:   H > 11 ? 'PM' : 'AM', // Méridien
+			m:   m, // Minutes sur 1 chiffre quand < à 10
+			mm:  DateFormat.LZ(m), // Minutes
+			s:   s, // Secondes sur 1 chiffre quand < à 10
+			ss:  DateFormat.LZ(s) // Secondes
 		};
 
 		while (i < format.length) {

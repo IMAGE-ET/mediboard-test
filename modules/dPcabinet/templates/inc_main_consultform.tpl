@@ -1,3 +1,4 @@
+{{assign var=aide_autocomplete value=$dPconfig.dPcabinet.CConsultation.aide_autocomplete}}
 {{if !@$readonly}}
   {{assign var=readonly value=0}}
 {{/if}}
@@ -6,10 +7,10 @@
 {{mb_include_script module="dPcabinet" script="exam_dialog"}}
 
 <script type="text/javascript">
-	{{if !$readonly}}
-  ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
+  {{if !$readonly}}
+    ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
   {{/if}}
-	 
+
   onExamComplete = function(){
     FormObserver.changes = 0;
   }
@@ -41,19 +42,32 @@
     <tr>
       <th class="category">
         {{if !$readonly}}
-        <button class="submit notext" style="float: left;" type="submit">
-          {{tr}}Save{{/tr}}
-        </button>
-        
-        <button class="new notext" title="Ajouter une aide à la saisie" style="float: right;" 
-                type="button" onclick="addHelp('CConsultation', this.form.{{$field}})">
-          Nouveau
-        </button>
-        <select name="_helpers_{{$field}}" style="width: 130px; float: right;" 
-                onchange="pasteHelperContent(this); this.form.onsubmit()">
-          <option value="">&mdash; Choisir une aide</option>
-          {{html_options options=$consult->_aides.$field.no_enum}}
-        </select>
+          <button class="submit notext" style="float: left;" type="submit" tabindex="1000">
+            {{tr}}Save{{/tr}}
+          </button>
+          {{if $aide_autocomplete == 1}}
+            <script type="text/javascript">
+              Main.add(function() {
+                new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
+                  objectClass: "{{$consult->_class_name}}",
+                  userId: "{{$consult->_ref_chir->_id}}",
+                  userView: "{{$consult->_ref_chir->_view}}",
+                  contextUserId: "{{$consult->_ref_chir->_id}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
+                });
+              });
+            </script>
+          {{else}}
+            <button class="new notext" title="Ajouter une aide à la saisie" style="float: right;" 
+                    type="button" onclick="addHelp('CConsultation', this.form.{{$field}})">
+              Nouveau
+            </button>
+            <select name="_helpers_{{$field}}" style="width: 130px; float: right;" 
+                    onchange="pasteHelperContent(this); this.form.onsubmit()">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult->_aides.$field.no_enum}}
+            </select>
+          {{/if}}
         {{/if}}
         {{mb_label object=$consult field=$field}}
       </th>

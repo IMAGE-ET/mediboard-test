@@ -21,10 +21,7 @@
       <span>{{$_aide->name|emphasize:$needle}}</span>
       <br/>
       
-<!-- The carriage return is here to append a carriage return 
-at the end of the selected element in the textareas. DO NOT REMOVE. -->
-<small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}
-</small>
+      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}</small>
       
     </li>
   {{foreachelse}}

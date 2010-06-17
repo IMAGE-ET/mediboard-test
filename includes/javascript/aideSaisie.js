@@ -98,7 +98,8 @@ var AideSaisie = {
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
-          buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView})
+          buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView}),
+          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png"}))
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
@@ -221,6 +222,13 @@ var AideSaisie = {
           $V(this.options.dependField2), 
           this.text
         );
+      }.bindAsEventListener(this));
+
+      buttons.timestamp.observe('click', function(){
+    	var timestamp = DateFormat.format(new Date(), this.options.timestamp);
+    	timestamp = timestamp.replace("%u", User.view);
+    	this.element.value += timestamp + "\n\n";
+    	this.element.scrollTop = this.element.scrollHeight;
       }.bindAsEventListener(this));
       
       // We wrap the textarea with the new container

@@ -184,6 +184,13 @@
 
   {{mb_include module=system template=inc_config_bool var=view_prescription}}
 
+  {{assign var="class" value="CConsultation"}}
+  <tr>
+    <th class="category" colspan="2">Autres paramètres</th>
+  </tr>
+  
+  {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}  
+
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
