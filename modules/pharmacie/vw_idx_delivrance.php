@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 $delivrance = new CProductDelivery();
 
-$date_min = CValue::getOrSession('_date_min', mbDate("-1 DAY"));
+$date_min = CValue::getOrSession('_date_min', mbDate("-30 DAY"));
 $date_max = CValue::getOrSession('_date_max', mbDate("+2 DAY"));
 
 CValue::setSession('_date_min', $date_min);

@@ -11,7 +11,7 @@
 global $can;
 $can->needsRead();
 
-$code = CValue::get('code');
+$code = trim(CValue::get('code'));
 
 $parts = explode(" ", $code);
 CMbArray::removeValue("", $parts);
@@ -61,8 +61,7 @@ else {
 }
 	
 if (!$product_order_item_reception->_id) {
-  CAppUI::stepAjax("Produit de code <strong>$product_code</strong> trouvé", UI_MSG_OK);
-  CAppUI::stepAjax("Lot <strong>$lot_code</strong> non trouvé", UI_MSG_ERROR);
+  CAppUI::stepAjax("Lot <strong>$lot_code</strong> non trouvé", UI_MSG_WARNING);
 }
 else {
   /*

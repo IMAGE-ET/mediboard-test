@@ -870,6 +870,10 @@ Element.addMethods('select', {
     textInput.value = selectedOption.disabled ? "" : selectedOption.text;
     element.insert({after: textInput}).insert({after: list}).hide();
     
+    textInput.observe("focus", function(e){
+      Event.element(e).select();
+    });
+    
     $A(element.options).each(function(e){
       if (e.disabled) return;
       views.push(e.text);

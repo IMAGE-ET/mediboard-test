@@ -28,6 +28,8 @@ FinSi
 
 *}}
 
+{{mb_include_script module=dmi script=dmi ajax=true}}
+
 <script type="text/javascript">
 
 search_product = function(form){
@@ -52,31 +54,57 @@ search_product_order_item_reception = function(form){
 }
 
 Main.add(function () {
+  Prescription.refreshTabHeader("div_dmi", {{$prescription->_ref_lines_dmi|@count}});
+  
   var formDmiDelivery = getForm("dmi_delivery_by_product");
-  url = new Url("dmi", "httpreq_do_product_autocomplete");
-  url.autoComplete(formDmiDelivery._view, formDmiDelivery._view.id+'_autocomplete', {
+  var searchField = formDmiDelivery._view;
+  
+  var url = new Url("dmi", "httpreq_do_product_autocomplete");
+  var autocompleter = url.autoComplete(searchField, formDmiDelivery._view.id+'_autocomplete', {
     minChars: 2,
     updateElement : function(element) {
-      $V(formDmiDelivery.product_id, element.id.split('-')[1]);
-      $V(formDmiDelivery._view, element.down(".view").innerHTML.stripTags().strip());
+      var id = element.id;
+      $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
+      $V(formDmiDelivery.product_id, id ? id.split('-')[1] : "");
       search_product_order_item_reception(formDmiDelivery);
     },
     dropdown: true,
+    autoSelect: true,
     callback: function(input, queryString){
       return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
   });
   
-  Prescription.refreshTabHeader("div_dmi", {{$prescription->_ref_lines_dmi|@count}});
+  searchField.goodCharsCount = 0;
+  searchField.stopObserving("click").stopObserving("focus");
+  searchField.focus();
   
-  var code = getForm("dmi_delivery_by_code").code;
-  code.focus();
+  /*searchField.observe("keypress", function(e){
+    var enterKey = Event.key(e) == 13;
+    autocompleter._selectElement = enterKey;
+    if (enterKey)
+      autocompleter.element.select();
+  });*/
   
-  code.observe("keypress", function(e){
-    if (Event.isCapsLock(e)) 
-      ObjectTooltip.createDOM(this, 'capslock-alert', {duration: 0}); 
-    else if ($('capslock-alert').oTooltip)
-      $('capslock-alert').oTooltip.hide();
+  // Checks if Caps Lock is activated
+  searchField.observe("keypress", function(e){
+    var trigger = Event.element(e);
+    var charCode = Event.key(e);
+    
+    if (Event.isCapsLock(e) || "&é\"'èçà".include(String.fromCharCode(charCode))) {
+      if (trigger.oTooltip)
+        trigger.oTooltip.show();
+      else 
+        ObjectTooltip.createDOM(this, 'capslock-alert', {duration: 0}); 
+        
+      trigger.goodCharsCount = 0;
+    }
+    else {
+      trigger.goodCharsCount++;
+      if(trigger.oTooltip && trigger.goodCharsCount > 4) {
+        trigger.oTooltip.hide();
+      }
+    }
   });
 });
 
@@ -129,10 +157,16 @@ delLineDMI = function(line_dmi_id){
   <input type="hidden" name="prescription_line_dmi_id" value="" />
 </form>
 
+<div class="small-warning" id="capslock-alert" style="display: none;">
+  Il semble que la touche <strong>Verr. Majuscules</strong> de votre clavier est activée, <br/>
+  veuillez la désactiver pour permettre une bonne lecture du code barre.
+</div>
+              
 <table class="main" style="table-layout: fixed;">
   <tr>
+    
+    {{* 
     <td>
-      
       <form name="dmi_delivery_by_code" method="get" action="" onsubmit="return search_product(this)">
         <input type="hidden" name="product_id" value="" />
         
@@ -145,27 +179,26 @@ delLineDMI = function(line_dmi_id){
 	            <label for="code">Code barre</label>
             </th>
 	          <td>
-	            <div class="small-warning" id="capslock-alert" style="display: none;">
-	              Il semble que la touche <strong>Verr. Majuscules</strong> de votre clavier est activée, <br/>
-                veuillez la désactiver pour permettre une bonne lecture du code barre.
-	            </div>
 	            <input type="text" size="30" name="code" />
               <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
             </td>
 	        </tr>
 	        <tr>
-	          <td id="product_description_code" colspan="2"></td>
+	          <td id="product_description_code" colspan="2" class="text"></td>
 	        </tr>
 	      </table>
       
       </form>
-      
     </td>
+    *}}
+    
     <td>
       <table class="form">
+        {{*  
         <tr>
           <th colspan="2" class="category">Recherche par produit</th>
         </tr>
+        *}}
         <tr>
           <th>Produit</th>
           <td>

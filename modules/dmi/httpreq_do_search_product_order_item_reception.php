@@ -17,7 +17,7 @@ $product = new CProduct();
 $product->load($product_id);
 
 if(!$product->_id) {
-  CAppUI::stepAjax("Produit de code <strong>$product_id</strong> non trouvé", UI_MSG_ERROR);
+  CAppUI::stepAjax("Produit non trouvé", UI_MSG_ERROR);
 }
 else {
 	$where = array(
@@ -48,9 +48,6 @@ if(count($list) > 0) {
   if(count($list) == 0) {
     CAppUI::stepAjax("Tous les articles <strong>$product->_view</strong> sont déjà consommés", UI_MSG_WARNING);
   }
-}
-else {
-	CAppUI::stepAjax("Aucun article enregistré pour le produit <strong>$product->_view</strong>", UI_MSG_WARNING);
 }
 
 $reference = new CProductReference;

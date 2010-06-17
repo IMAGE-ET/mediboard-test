@@ -386,6 +386,36 @@ Object.extend(Event, {
         (charCode >= 65 && charCode <= 90 && !shiftOn)) {
       return true;
     }
+    
+    // Keys from the top of a French keyboard
+    /*var keys = {
+      "0": "à",
+      "1": "&",
+      "2": "é",
+      "3": "\"",
+      "4": "'",
+      "5": "(",
+      "6": "-",
+      "7": "è",
+      "8": "_",
+      "9": "ç",
+      "°": ")",
+      "+": "=",
+      "¨": "^",
+      "£": "$",
+      "%": "ù",
+      "µ": "*",
+      "?": ",",
+      ".": ";",
+      "/": ":",
+      "§": "!",
+      ">": "<"
+    };
+    
+    var c = String.fromCharCode(charCode);
+    
+    if ( shiftOn && Object.values(keys).indexOf(c) != -1 ||
+        !shiftOn && keys[c]) return true;*/
 
     return false;
   }

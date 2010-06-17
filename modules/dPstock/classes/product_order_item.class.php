@@ -102,7 +102,7 @@ class CProductOrderItem extends CMbObject {
     $this->_price = $this->unit_price * $this->quantity;
     
     $this->_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
-    $this->_cond_price = $this->_price / $this->_quantity;
+    $this->_cond_price = $this->_quantity ? $this->_price / $this->_quantity : 0;
   }
   
   function updateDBFields() {

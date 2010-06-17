@@ -30,8 +30,10 @@ if(($endowment_id === null) && count($service->_back["endowments"])) {
 }
 
 // Calcul de date_max et date_min
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
+$date = mbDate();
+$date_min = CValue::getOrSession('_date_min', $date);
+$date_max = CValue::getOrSession('_date_max', $date);
+
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
 CValue::setSession('endowment_id', $endowment_id);

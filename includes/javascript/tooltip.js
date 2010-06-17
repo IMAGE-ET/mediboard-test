@@ -205,7 +205,8 @@ Object.extend(ObjectTooltip, {
       eTrigger.oTooltip = new ObjectTooltip(eTrigger, oOptions);
     }
 
-    eTrigger.oTooltip.launchShow();    
+    eTrigger.oTooltip.launchShow();
+    return eTrigger.oTooltip;
   },
 
   createEx: function(eTrigger, guid, mode, params) {
@@ -219,7 +220,7 @@ Object.extend(ObjectTooltip, {
       params: params
     };
     
-    this.create(eTrigger, oOptions);
+    return this.create(eTrigger, oOptions);
   },
   
   createDOM: function(eTrigger, sTooltip, oOptions) {
@@ -230,7 +231,7 @@ Object.extend(ObjectTooltip, {
     oOptions.params.element = sTooltip;
     oOptions.mode = "dom";
     
-    this.create(eTrigger, oOptions);
+    return this.create(eTrigger, oOptions);
   }
 });
 
