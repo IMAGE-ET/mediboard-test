@@ -143,15 +143,24 @@ a.button {
   vertical-align: middle;
   height: 20px;
   padding: 1px;
+  padding-right: 3px;
   margin: 1px;
   /*
   -moz-appearance: button;
   -webkit-appearance: button;*/
 }
 
+button::-moz-focus-inner, 
+a.button::-moz-focus-inner {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
 button:focus,
 a.button:focus {
   background-image: url(images/buttons/button-focus.png);
+  outline: 1px dotted #000;
 }
 
 form button[type="submit"],
@@ -160,25 +169,8 @@ form button:not([type]) {
 	font-weight: bold;
 }
 
-button {
-	padding: 0;
-  text-indent: -2px;
-  padding-right: 2px;
-	padding-bottom: 1px;
-}
-
-button.rtl {
-  text-align: right;
-  padding: 0;
-  padding-left: 2px;
-  padding-right: 0px;
-  padding-bottom: 1px;
-}
-
 a.button {
   height: 16px;
-  padding-left: 1px;
-  padding-right: 4px;
 }
 
 button.notext, 
@@ -205,24 +197,24 @@ a.button:before {
 	vertical-align: text-bottom;
 }
 
-/* <hack for="rtl"> is a bit messy, maybe should we use content after, that'd be way more symtrical */ 
+button.rtl,
 a.button.rtl {
-  height: 13px;
-  padding-top: 4px;
-  padding-left: 4px;
-  padding-right: 0px;
+  padding-left: 3px;
+  padding-right: 1px;
+  padding-top: 2px;
+}
+
+a.button.rtl {
+  height: 15px;
 }
 
 button.rtl:before,
 a.button.rtl:before {
 	float: right;
-  margin-left: 4px;
+  margin-right: 0px;
+  margin-left: 3px;
+  margin-top: -1px;
 }
-
-a.button.rtl:before {
-  margin-top: -3px;
-}
-/* </hack> */
 
 a.button:hover,
 button:hover {
