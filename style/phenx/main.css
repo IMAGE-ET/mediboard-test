@@ -137,6 +137,12 @@ input[readonly]:hover {
   background: none;
 }
 
+/** TODO: This may be the solution to better support buttons in Chrome : border: none */
+button::-moz-focus-inner, 
+a.button::-moz-focus-inner {
+  border-color: transparent;
+}
+
 th.title,
 caption {
   font-size: 1.2em;
@@ -574,7 +580,7 @@ table.form th.category {
 
 #main div.content {
   background: #FCFCFE;
-  border: 1px solid #919B9C;
+  border-top: 1px solid #919B9C;
 }
 
 #mainPane {

@@ -149,6 +149,11 @@ a.button {
   -webkit-appearance: button;*/
 }
 
+button:focus,
+a.button:focus {
+  background-image: url(images/buttons/button-focus.png);
+}
+
 form button[type="submit"],
 form button:not([type]) {
 	border-color: #000;

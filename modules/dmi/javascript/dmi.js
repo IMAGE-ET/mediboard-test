@@ -19,7 +19,6 @@ Barcode = {
       date = "20"+match[1]+"-"+match[2]+"-"+getLastDay(match[2], match[1]);
     }
     
-      console.debug(date);
     if (date && !iso) {
       date = Date.fromDATE(date).toLocaleDate();
     }

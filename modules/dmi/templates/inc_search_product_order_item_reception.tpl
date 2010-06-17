@@ -77,7 +77,7 @@ Main.add(function(){
         var visible = $("lot-list").select(".CProductOrderItemReception-view").filter(function(e){
           return e.up("tr").visible();
         });
-        console.debug(visible);
+        
         if (visible.length)
           visible[0].up("tr").down("button").focus();
         else
