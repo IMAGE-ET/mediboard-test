@@ -159,7 +159,6 @@ a.button::-moz-focus-inner {
 
 button:focus,
 a.button:focus {
-  background-image: url(images/buttons/button-focus.png);
   outline: 1px dotted #000;
 }
 

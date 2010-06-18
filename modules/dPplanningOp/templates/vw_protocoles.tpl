@@ -79,11 +79,10 @@ Main.add(function(){
               <select name="chir_id" onchange="reloadPage(this.form)">
                 <option value="" >&mdash; Tous les praticiens</option>
                 {{foreach from=$listPrat item=curr_prat}}
-                {{if $curr_prat->_ref_protocoles|@count}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_ref_protocoles|@count}}color: #999;{{/if}}"
+                        value="{{$curr_prat->user_id}}" {{if $chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
                   {{$curr_prat->_view}} ({{$curr_prat->_ref_protocoles|@count}})
                 </option>
-                {{/if}}
                 {{/foreach}}
               </select>
             </td>

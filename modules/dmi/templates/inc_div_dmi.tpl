@@ -205,8 +205,8 @@ delLineDMI = function(line_dmi_id){
           <td>
             <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
               <input type="hidden" name="product_id" value="" />
-	            <input type="text" name="_view" size="25" value="" />
-	            <div id="dmi_delivery__view_autocomplete" style="display: none; width: 300px;" class="autocomplete"></div>
+	            <input type="text" name="_view" size="30" value="" />
+	            <div id="dmi_delivery__view_autocomplete" style="display: none; width: 350px;" class="autocomplete"></div>
 	          </form>
           </td>
         </tr>
