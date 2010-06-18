@@ -157,18 +157,9 @@
 		      </button>
 		      {{/if}}
 	    </form>
-      {{if $category->chapitre == "soin"}}
-			<button type="button" onclick="$('addDM-{{$line->_guid}}').toggle();" class="down">Ajouter DM</button>
-			{{/if}}
     </td>   
   </tr>
-  <tr id="addDM-{{$line->_guid}}" {{if !$line->cip_dm}}style="display: none;"{{/if}}>
-		<td></td>
-		<td colspan="5" id="vw_dm-{{$line->_id}}">
-			{{mb_include module="dPprescription" template="inc_vw_element_dm"}}
-		</td>
-	</tr>
-  
+ 
 	{{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
   <tr>
   <td></td>
