@@ -64,7 +64,7 @@
             </button>
             <select name="_helpers_{{$field}}" style="width: 130px; float: right;" 
                     onchange="pasteHelperContent(this); this.form.onsubmit()">
-              <option value="">&mdash; Choisir une aide</option>
+              <option value="">&mdash; Aide</option>
               {{html_options options=$consult->_aides.$field.no_enum}}
             </select>
           {{/if}}

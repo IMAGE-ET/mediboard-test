@@ -549,11 +549,16 @@ div.dropdown-trigger div {
   padding: 2px;
   vertical-align: middle;
   text-align: right;
-  background-color: rgba(255,255,255,0.5);
+  background-color: #fff;
+	opacity: 0.6;
   border: 1px solid #ccc;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+}
+
+.textarea-helped .toolbar:hover {
+  opacity: 1;
 }
 
 .textarea-helped .toolbar a:hover img {

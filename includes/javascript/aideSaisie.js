@@ -104,7 +104,7 @@ var AideSaisie = {
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
       
-      this.searchField.setStyle({paddingBottom: "28px"}).up().
+      this.searchField.up().
         observe('mousemove', function(){toolbar.show()}).
         observe('mouseout',  function(){toolbar.hide()})/*.
         observe('click',     function(){toolbar.hide()}).
