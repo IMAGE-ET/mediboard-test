@@ -98,7 +98,7 @@ class CSejour extends CCodable {
   var $_etat               = null;
   var $_entree_relative    = null;
   var $_sortie_relative    = null;
-	var $_not_collides       = array ("urg", "consult"); // Séjour dont on ne test pas la collision
+	var $_not_collides       = array ("urg", "consult", "seances"); // Séjour dont on ne test pas la collision
   
   // Behaviour fields
   var $_check_bounds = true;

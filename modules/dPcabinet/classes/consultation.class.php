@@ -715,10 +715,12 @@ class CConsultation extends CCodable {
         $sejour->praticien_id = $this->_ref_chir->_id;
         $sejour->group_id = CGroups::loadCurrent()->_id;
         $sejour->type = "consult";  
+        $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
+        $datetime = mbDateTime("-$minutes_before_consult_sejour minute", "$this->_date $this->heure");
         if ($this->chrono == self::PLANIFIE) {
-          $sejour->entree_prevue = "$this->_date $this->heure";
+          $sejour->entree_prevue = $datetime;
         } else {
-          $sejour->entree_reelle = "$this->_date $this->heure";
+          $sejour->entree_reelle = $datetime;
         }
         $sejour->sortie_prevue = "$this->_date 23:59:59";
         if ($msg = $sejour->store()) {

@@ -9,8 +9,11 @@
   Main.add(function () {
     var nodeList = getForm('editConfig').elements["dPcabinet[CConsultation][attach_consult_sejour]"];
     showCreateSejour(nodeList[1-$V(nodeList)]);
+    
+    getForm("editConfig")["dPcabinet[CConsultation][minutes_before_consult_sejour]"].addSpinner({min:1, max:360});
   });
 </script>
+
 
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
@@ -63,8 +66,9 @@
 
   {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
   
-  {{assign var="class" value="CConsultation"}}
   {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}
+  
+  {{mb_include module=system template=inc_config_str var=minutes_before_consult_sejour size="3" suffix="min"}}
   
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
@@ -111,11 +115,11 @@
     </td>
   </tr>
   
-	{{mb_include module=system template=inc_config_bool var=show_mallampati}}
+  {{mb_include module=system template=inc_config_bool var=show_mallampati}}
   
-	
+  
   {{mb_include module=system template=inc_config_bool var=view_premedication}}
-	{{mb_include module=system template=inc_config_bool var=show_facteurs_risque}}
+  {{mb_include module=system template=inc_config_bool var=show_facteurs_risque}}
   
   <!-- CPlageconsult -->  
   {{assign var="class" value="CPlageconsult"}}
