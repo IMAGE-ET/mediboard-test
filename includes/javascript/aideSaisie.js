@@ -94,17 +94,17 @@ var AideSaisie = {
         DOM.div({className: "throbber-background"}),
         throbber = DOM.div({className: "throbber"}).hide(),
         toolbar = DOM.div({className: "toolbar"},
-          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/tick.png", title: "Valider"})).setVisible(this.options.validate),
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
           buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView}),
-          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png"}))
+          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png"})),
+          buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
       );
       
-      this.searchField.up().
+      this.searchField.setStyle({paddingBottom: "28px"}).up().
         observe('mousemove', function(){toolbar.show()}).
         observe('mouseout',  function(){toolbar.hide()})/*.
         observe('click',     function(){toolbar.hide()}).
@@ -226,9 +226,19 @@ var AideSaisie = {
 
       buttons.timestamp.observe('click', function(){
     	var timestamp = DateFormat.format(new Date(), this.options.timestamp);
-    	timestamp = timestamp.replace("%u", User.view);
-    	this.element.value += timestamp + "\n\n";
+    	var parts = User.view.split(" ");
+    	
+    	timestamp = timestamp.replace(/%p/g, parts[0]);
+    	timestamp = timestamp.replace(/%n/g, parts[1]);
+    	timestamp = timestamp.replace(/%i/g, parts[0].charAt(0) + ". " + parts[1].charAt(0) + ". ");
+    	
+    	if(this.element.value[this.element.value.length -1] != '\n' && this.element.value.length != 0) {
+    	  timestamp = '\n' + timestamp;
+    	}
+    	
+    	this.element.value += timestamp + '\n';
     	this.element.scrollTop = this.element.scrollHeight;
+    	this.element.focus();
       }.bindAsEventListener(this));
       
       // We wrap the textarea with the new container

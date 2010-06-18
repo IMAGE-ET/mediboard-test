@@ -63,6 +63,9 @@
 
   {{mb_include module=system template=inc_config_bool var=create_consult_sejour}}
   
+  {{assign var="class" value="CConsultation"}}
+  {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}
+  
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
     
@@ -183,13 +186,6 @@
   </tr>
 
   {{mb_include module=system template=inc_config_bool var=view_prescription}}
-
-  {{assign var="class" value="CConsultation"}}
-  <tr>
-    <th class="category" colspan="2">Autres paramètres</th>
-  </tr>
-  
-  {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}  
 
   <tr>
     <td class="button" colspan="6">

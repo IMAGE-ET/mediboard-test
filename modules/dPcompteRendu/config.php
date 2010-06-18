@@ -12,6 +12,6 @@ $dPconfig["dPcompteRendu"] = array (
   "CCompteRendu" => array (
     "pdf_thumbnails" => '0',
     "same_print" => '0',
-    "timestamp" => '-- %u - dd/MM/y HH:mm'
+    "timestamp" => '-- %n %p - dd/MM/y HH:mm'
   ),
 );

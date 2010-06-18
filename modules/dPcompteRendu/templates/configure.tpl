@@ -49,7 +49,10 @@
           <script type="text/javascript">
             var timestamp = getForm("editConfig")["dPcompteRendu[CCompteRendu][timestamp]"];
             var reloadfield = function() {
-              $('preview').innerHTML = DateFormat.format(new Date(), timestamp.value).replace(/%u/g, User.view);
+              var field = DateFormat.format(new Date(), timestamp.value).replace(/%p/g, User.view.split(" ")[0]);
+              field = field.replace(/%n/g, User.view.split(" ")[1]);
+              field = field.replace(/%i/g, User.view.split(" ")[0].charAt(0) + ". " + User.view.split(" ")[1].charAt(0) + ". ");
+              $('preview').innerHTML = field;
             };
             var addfield = function(name) {
               timestamp.value += name + " ";
@@ -71,7 +74,9 @@
             <tr><td><a href="#1" onclick="addfield('mm');">mm</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-minute{{/tr}}</td></tr>
             <tr><td><a href="#1" onclick="addfield('ss');">ss</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-second{{/tr}}</td></tr>
             <tr><td><a href="#1" onclick="addfield('a');" >a</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-meridian{{/tr}}</td></tr>
-            <tr><td><a href="#1" onclick="addfield('%u');">%u</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-name_firstname{{/tr}}</td></tr>
+            <tr><td><a href="#1" onclick="addfield('%p');">%p</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-name_firstname{{/tr}}</td></tr>
+            <tr><td><a href="#1" onclick="addfield('%n');">%n</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-name_lasttname{{/tr}}</td></tr>
+            <tr><td><a href="#1" onclick="addfield('%i');">%i</td><td>{{tr}}config-dPcompteRendu-CCompteRendu-name_initials{{/tr}}</td></tr>
           </table>
         </div>
       </td>
