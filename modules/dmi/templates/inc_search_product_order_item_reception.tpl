@@ -78,10 +78,14 @@ Main.add(function(){
           return e.up("tr").visible();
         });
         
-        if (visible.length)
-          visible[0].up("tr").down("button").focus();
-        else
-          Event.element(e).select();
+        $("lot-list").select("tr").invoke("removeClassName", "selected");
+        
+        if (visible.length) {
+          var tr = visible[0].up("tr");
+          tr.addClassName("selected");
+          tr.down("button").focus();
+        }
+        else Event.element(e).select();
       });
     });
     </script>

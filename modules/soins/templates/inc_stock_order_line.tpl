@@ -87,7 +87,7 @@
     {{foreach from=$stock->_ref_deliveries item=dispensation}}
       <tr>
         <td>
-          {{if $dispensation->order == 1 && !$dispensation->countBackRefs('delivery_traces')}}
+          {{if !$dispensation->countBackRefs('delivery_traces')}}
             <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
               <input type="hidden" name="m" value="dPstock" />
               <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -96,7 +96,7 @@
               <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
             </form>
           {{else}}
-            <img src="images/icons/tick.png" title="Dispensé" />
+            <img src="images/icons/tick.png" title="Délivré" />
           {{/if}}
         </td>
         <td>
