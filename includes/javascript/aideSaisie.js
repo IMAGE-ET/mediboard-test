@@ -90,10 +90,11 @@ var AideSaisie = {
           buttons = {};
       
       var container = 
-      DOM.div({className: "textarea-helped"},
-        DOM.div({className: "throbber-background"}),
-        throbber = DOM.div({className: "throbber"}).hide(),
+        DOM.div({className: "textarea-helped"},
         toolbar = DOM.div({className: "toolbar"},
+          
+          DOM.div({className: "throbber-background"}), 
+          throbber = DOM.div({className: "throbber"}).hide(),
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),

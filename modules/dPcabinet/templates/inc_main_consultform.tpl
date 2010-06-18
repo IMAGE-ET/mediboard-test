@@ -42,9 +42,6 @@
     <tr>
       <th class="category">
         {{if !$readonly}}
-          <button class="submit notext" style="float: left;" type="submit" tabindex="1000">
-            {{tr}}Save{{/tr}}
-          </button>
           {{if $aide_autocomplete == 1}}
             <script type="text/javascript">
               Main.add(function() {
@@ -53,11 +50,18 @@
                   userId: "{{$consult->_ref_chir->_id}}",
                   userView: "{{$consult->_ref_chir->_view}}",
                   contextUserId: "{{$consult->_ref_chir->_id}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  validate: function(){ getForm("editFrmExams").onsubmit(); },
+                  resetSearchField: false,
+                  resetDependFields: false,
+                  validateOnBlur: false
                 });
               });
             </script>
           {{else}}
+            <button class="submit notext" style="float: left;" type="submit" tabindex="1000">
+              {{tr}}Save{{/tr}}
+            </button>
             <button class="new notext" title="Ajouter une aide à la saisie" style="float: right;" 
                     type="button" onclick="addHelp('CConsultation', this.form.{{$field}})">
               Nouveau

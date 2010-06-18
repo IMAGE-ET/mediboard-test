@@ -579,7 +579,7 @@ div.dropdown-trigger div {
   position: absolute;
   height: 13px;
   width: 13px;
-  bottom: 0px;
+  left: -20px;
   margin: 4px;
   background-image: url(../../images/icons/throbber.gif);
   background-position: 100% -20px;
