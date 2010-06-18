@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
+CCanDo::checkAdmin();
 
-$can->needsAdmin();
+ini_set("memory_limit", "512M");
 
 $debut_selection = CValue::get("debut_selection");
 $fin_selection   = CValue::get("fin_selection");
