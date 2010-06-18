@@ -1,6 +1,8 @@
 <?php
 $locales['config-pharmacie-dispensation_schedule'] = 'Planning de préparation des dispensations';
 $locales['config-pharmacie-dispensation_schedule-desc'] = 'Jours auxquels la dispensation doit être faite';
+$locales['config-pharmacie-num_days_date_min'] = 'Nombre de jours pour les dates min des filtres';
+$locales['config-pharmacie-num_days_date_min-desc'] = 'Nombre de jours pour les dates min des filtres';
 $locales['config-pharmacie-show_totals_in_lists'] = 'Afficher le compte total dans les tabulations des listes';
 $locales['config-pharmacie-show_totals_in_lists-desc'] = 'Afficher le compte total dans les tabulations des listes';
 $locales['mod-pharmacie-tab-configure'] = 'Configuration';

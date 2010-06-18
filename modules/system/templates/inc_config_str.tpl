@@ -32,7 +32,20 @@
   </th>
   
   <td {{if @$tdcolspan}}colspan="{{$tdcolspan}}"{{/if}}>
-    <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}}" name="{{$field}}" value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}} {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
+    {{assign var=uid value=""|uniqid}}
+    {{assign var=uid value="uid-$uid"}}
+    
+    {{if @$numeric}}
+    <script type="text/javascript">
+      Main.add(function(){
+        $$(".{{$uid}}")[0].addSpinner({min: 0});
+      });
+    </script>
+    {{/if}}
+    
+    <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" name="{{$field}}" 
+           value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}}
+           {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
     {{if @$suffix}}{{$suffix}}{{/if}} 
   </td>
 </tr>

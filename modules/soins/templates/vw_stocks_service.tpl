@@ -93,7 +93,7 @@ Main.add(function () {
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
         </select>
-      {{else}}
+      {{elseif $list_services|@count == 1}}
         {{assign var=_service value=$list_services|@reset}}
         <strong>{{$_service}}</strong>
         <input type="hidden" name="service_id" value="{{$_service->_id}}" />

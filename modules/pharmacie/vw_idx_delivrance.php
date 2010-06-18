@@ -12,7 +12,8 @@ CCanDo::checkRead();
 
 $delivrance = new CProductDelivery();
 
-$date_min = CValue::getOrSession('_date_min', mbDate("-30 DAY"));
+$num_days_date_min = CAppUI::conf("pharmacie num_days_date_min");
+$date_min = CValue::getOrSession('_date_min', mbDate("-$num_days_date_min DAY"));
 $date_max = CValue::getOrSession('_date_max', mbDate("+2 DAY"));
 
 CValue::setSession('_date_min', $date_min);

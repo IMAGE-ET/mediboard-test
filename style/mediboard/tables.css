@@ -149,10 +149,11 @@ table.tbl {
 
 table.tbl a {
   display: block;
-  margin: 0 1px;
+  margin: 0;
 }
 
-table.tbl a.button {
+table.tbl a.button,
+table.tbl a.action {
   display: inline-block;
 }
 
@@ -160,10 +161,6 @@ a.actionPat {
   display: inline;
   float: right;
   margin: 0 1px;
-}
-
-table.tbl a.action {
-  display: inline;
 }
 
 table.tbl th {

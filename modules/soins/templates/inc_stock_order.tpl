@@ -34,7 +34,7 @@
   
   {{if $only_service_stocks == 1 && !$endowment_id}}
   Main.add(function(){
-    autoOrder({{$service->_id}}, '{{$delivrance->_date_min}}', '{{$delivrance->_date_max}}');
+    autoOrder('{{$service->_id}}', '{{$delivrance->_date_min}}', '{{$delivrance->_date_max}}');
   });
   {{/if}}
   </script>

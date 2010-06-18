@@ -18,9 +18,8 @@ $only_common         = CValue::getOrSession('only_common', 1);
 $endowment_id        = CValue::getOrSession('endowment_id');
 $keywords            = CValue::getOrSession('keywords');
 
-$date = mbDate();
-$date_min = CValue::getOrSession('_date_min', $date);
-$date_max = CValue::getOrSession('_date_max', $date);
+$date_min = CValue::getOrSession('_date_min', mbDate("-4 DAY"));
+$date_max = CValue::getOrSession('_date_max', mbDate());
 
 CValue::setSession('_date_min', $date_min);
 CValue::setSession('_date_max', $date_max);
@@ -40,6 +39,11 @@ if ($m == "dPurgences") {
 $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;
 $delivrance->_date_max = $date_max;
+
+if (count($list_services) == 0) {
+  CAppUI::stepMessage(UI_MSG_WARNING, "Vous n'avez accès à aucun service pour effectuer des commandes");
+  return;
+}
 
 // Création du template
 $smarty = new CSmartyDP("modules/soins");

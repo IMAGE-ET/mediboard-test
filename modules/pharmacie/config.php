@@ -11,4 +11,5 @@
 $dPconfig["pharmacie"] = array (
   "dispensation_schedule" => "024",
   "show_totals_in_lists" => "1",
+  "num_days_date_min" => 30,
 );

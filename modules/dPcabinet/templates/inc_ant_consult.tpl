@@ -202,6 +202,10 @@ Main.add(function () {
                   objectClass: "CAntecedent", 
                   userId: "{{$userSel->_id}}"
                 });
+                
+                $(elements._search).observe("blur", function(e){
+                  $V(Event.element(e), "");
+                });
               });
             </script>
           </td>
@@ -398,6 +402,10 @@ Main.add(function () {
                   searchField: elements._search, 
                   objectClass: "CTraitement", 
                   userId: "{{$userSel->_id}}"
+                });
+                
+                $(elements._search).observe("blur", function(e){
+                  $V(Event.element(e), "");
                 });
               });
             </script>

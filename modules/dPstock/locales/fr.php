@@ -827,6 +827,7 @@ $locales['config-dPstock-CProductStockService-infinite_quantity-desc'] = 'Les st
 $locales['config-dPstock-group_independent'] = 'Pharmacie globale pour toutes les cliniques';
 $locales['config-dPstock-group_independent-desc'] = 'La pharmacie est globale pour toutes les cliniques';
 $locales['mod-dPstock-tab-configure'] = 'Configuration';
+$locales['mod-dPstock-tab-print_endowment'] = 'Impression des dotations';
 $locales['mod-dPstock-tab-print_reception'] = 'Bon de réception';
 $locales['mod-dPstock-tab-print_reception_barcodes'] = 'Codes barre de réception';
 $locales['mod-dPstock-tab-print_stock_location'] = 'Emplacements de stocks';

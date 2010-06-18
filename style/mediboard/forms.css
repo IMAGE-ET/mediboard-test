@@ -165,8 +165,8 @@ a.button:focus {
 
 form button[type="submit"],
 form button:not([type]) {
-	border-color: #000;
-	font-weight: bold;
+  border-color: #000;
+  font-weight: bold;
 }
 
 a.button {
@@ -176,7 +176,7 @@ a.button {
 button.notext, 
 a.button.notext {
   font-size: 0;
-  color: transparent;
+  color: rgba(0,0,0,0);
   overflow: hidden;
 }
 
@@ -193,8 +193,8 @@ a.button.notext {
 button:before,
 a.button:before {
   line-height: 6px;
-  margin-right: 2px;
-	vertical-align: text-bottom;
+  margin-right: 1px;
+  vertical-align: text-bottom;
 }
 
 button.rtl,
@@ -210,7 +210,7 @@ a.button.rtl {
 
 button.rtl:before,
 a.button.rtl:before {
-	float: right;
+  float: right;
   margin-right: 0px;
   margin-left: 3px;
   margin-top: -1px;
@@ -219,7 +219,7 @@ a.button.rtl:before {
 a.button:hover,
 button:hover {
   background-image: url(images/buttons/button-over.png);
-	border-color: #333;
+  border-color: #333;
 /* Bug in firefox : 1 pixel between border and outline
  * outline: 1px solid #000;
  * -moz-outline-radius: 3px;
@@ -237,7 +237,7 @@ button[disabled]:hover, a.button[disabled]:hover {
 }
 
 button.none {
-	text-indent: 2px;
+  text-indent: 2px;
 }
 
 button.edit:before, a.button.edit:before {
@@ -377,7 +377,7 @@ button.vcard:before, a.button.vcard:before {
 }
 
 button.selected {
-	border: 2px solid #000;
+  border: 2px solid #000;
 }
 
 optgroup.group {
@@ -664,7 +664,7 @@ textarea#htmlarea {
 
 .grippie-h {
   background: #CCC url(../../images/buttons/drag-n.gif) center center no-repeat;
-  height: 7px;
+  height: 5px;
   margin: -1px;
   cursor: n-resize;
 }
