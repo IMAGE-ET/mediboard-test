@@ -95,7 +95,8 @@ $lines["medicaments"]["med"]["ald"] = array();
 $lines["medicaments"]["med"]["no_ald"] = array();
 $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
-
+$lines["medicaments"]["dm"]["ald"] = array();
+$lines["medicaments"]["dm"]["no_ald"] = array();
 $linesElt = array();
 
 // Initialisation du tableau
@@ -221,13 +222,21 @@ if(count($prescription->_ref_lines_elements_comments)){
 			    if($element->_ref_executant){
 			      $executant = $element->_ref_executant->_guid;
 			    }
-			    if($element->ald){
+					
+					if($element->ald){
 			    	$_ald = true;
 			    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
 			    } else {
 			      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
 			    }
-			  }
+				
+					// Affichage des DM dans la page des medicaments
+					if($prescription->type != 'sejour' && $element->cip_dm){
+						$element->loadRefDM();
+				    $libelle_ald = $element->ald ? "ald" : "no_ald";
+						$lines["medicaments"]["dm"][$libelle_ald][] = $element;
+        	}	
+				}
 			}
 	  }
 	}

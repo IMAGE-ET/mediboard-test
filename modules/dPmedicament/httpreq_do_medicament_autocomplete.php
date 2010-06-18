@@ -27,17 +27,22 @@ if($inLivret){
 	$dci->distObj->LivretTherapeutique = CGroups::loadCurrent()->_id;
 }
 
-$search_by_dci = $dci->searchProduits($tokens, 100, $search_by_cis);
-
+if(!$hors_specialite){
+  $search_by_dci = $dci->searchProduits($tokens, 100, $search_by_cis);
+} else {
+	$search_by_dci = array();
+}
 
 $produits = array();
 foreach($search_by_name as $key => $_produit){
 	$produits[$key] = $_produit;
 }
 
-foreach($search_by_dci as $key => $_produit){
-  if(!array_key_exists($key, $produits)){
-    $produits[$key] = $_produit;
+if(!$hors_specialite){
+	foreach($search_by_dci as $key => $_produit){
+	  if(!array_key_exists($key, $produits)){
+	    $produits[$key] = $_produit;
+		}
 	}
 }
 

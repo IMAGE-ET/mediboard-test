@@ -29,6 +29,9 @@
 	    {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
 		</span>
     <strong>{{$line->_ref_element_prescription->_view}}</strong>
+		{{if $line->cip_dm}}
+		<br /><small style="opacity: 0.7;">({{$line->_ref_dm->libelle}})</small>
+		{{/if}}
   </td>
   <td class="text" style="width:35%;">
     {{if $line->_ref_prises|@count}}

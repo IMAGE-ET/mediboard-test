@@ -1636,7 +1636,14 @@ class CSetupdPprescription extends CSetup {
     $sql = "ALTER TABLE `prescription_line_dmi` ADD `quantity` INT (11) UNSIGNED NOT NULL DEFAULT '1';";
     $this->addQuery($sql);
 		
-    $this->mod_version = "1.07";
+		$this->makeRevision("1.07");
+		$sql = "ALTER TABLE `prescription_line_element` 
+              ADD `ide_domicile` ENUM ('0','1') DEFAULT '0',
+              ADD `cip_dm` INT (7) UNSIGNED ZEROFILL,
+              ADD `quantite_dm` FLOAT;";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "1.08";
   }
 }
 

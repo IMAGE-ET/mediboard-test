@@ -364,6 +364,7 @@ if($prescription->_id){
 	          foreach($lines_by_type as $key => $_line){
 	          	if($_line->_class_name == "CPrescriptionLineElement"){
                 $_line->loadRefsPrises();
+								$_line->loadRefDM();
               }
 							$_line->getAdvancedPerms($is_praticien, $mode_protocole, $mode_pharma, $operation_id);
 							if($full_line_guid == $_line->_guid){

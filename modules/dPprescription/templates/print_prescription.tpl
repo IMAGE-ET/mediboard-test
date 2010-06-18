@@ -207,7 +207,7 @@ div.footer {
   <div class="bodyWithoutPageBreak">
   {{/if}}
   
-{{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald}}
+{{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald || $lines.medicaments.dm.ald}}
     <!-- Affichage des ald -->
    <div style="border: 1px dotted #555; padding-right: 10px; text-align: center;">
      <strong>Prescriptions relatives au traitement de l'affection de longue durée reconnue (liste ou hors liste)</strong>
@@ -222,6 +222,13 @@ div.footer {
       {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
 		      {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_ald nodebug=true}}
 	    {{/foreach}}
+			{{foreach from=$lines.medicaments.dm.ald item=line_medicament_dm_ald}}
+        <li>{{$line_medicament_dm_ald->_ref_dm->libelle}} 
+				{{if $line_medicament_dm_ald->quantite_dm}}
+				  ({{$line_medicament_dm_ald->quantite_dm}})
+				{{/if}}
+			  </li>
+			{{/foreach}}
     </ul>
     <div class="middle"></div>
     <!-- Affichage des no_ald -->
@@ -241,6 +248,14 @@ div.footer {
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
       {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
 	  {{/foreach}}
+		{{foreach from=$lines.medicaments.dm.no_ald item=line_medicament_dm_no_ald}}
+       <li>{{$line_medicament_dm_no_ald->_ref_dm->libelle}} 
+			 {{if $line_medicament_dm_no_ald->quantite_dm}}
+			   ({{$line_medicament_dm_no_ald->quantite_dm}})
+			 {{/if}}
+			 </li>
+     {{/foreach}}
+			
     </ul>
 <!-- Affichage en mode normal -->
 {{else}}
@@ -297,6 +312,14 @@ div.footer {
       {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
         {{include file="inc_print_commentaire.tpl" comment=$line_medicament_comment_no_ald nodebug=true}}
 	    {{/foreach}}
+			{{foreach from=$lines.medicaments.dm.no_ald item=line_medicament_dm_no_ald}}
+        <li>{{$line_medicament_dm_no_ald->_ref_dm->libelle}} 
+				{{if $line_medicament_dm_no_ald->quantite_dm}}
+				  ({{$line_medicament_dm_no_ald->quantite_dm}})
+				{{/if}}
+				</li>
+      {{/foreach}}
+			
     </ul>
 {{/if}}
  </div>

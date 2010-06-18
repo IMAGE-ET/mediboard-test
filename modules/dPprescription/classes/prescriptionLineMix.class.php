@@ -820,7 +820,7 @@ class CPrescriptionLineMix extends CMbObject {
 	  $this->substitute_for_id = $substitute_for_id;
 
     if(isset($values['debut'])){
-      $this->debut = $values['debut'];
+      $this->date_debut = $values['debut'];
     }
     if(isset($values['time_debut'])){
       $this->time_debut = $values['time_debut'];

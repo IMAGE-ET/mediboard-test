@@ -17,11 +17,17 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $executant_prescription_line_id = null; 
   var $user_executant_id              = null;
   
+	var $ide_domicile = null;
+	var $cip_dm = null;
+	var $quantite_dm = null;
+	
   // Object references
   var $_ref_element_prescription      = null;
   var $_ref_executant                 = null;
   var $_executant                     = null;
   
+	var $_ref_dm = null;
+	
   // Can fields
   var $_can_select_executant               = null;
   var $_can_delete_line                    = null;
@@ -29,6 +35,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $_can_view_form_signature_praticien  = null;
   var $_can_view_form_signature_infirmiere = null;
   var $_can_view_form_ald                  = null;
+	var $_can_view_form_ide                  = null;
   var $_can_view_form_conditionnel         = null;
   var $_can_modify_poso                    = null;
   var $_can_modify_comment                 = null;
@@ -46,6 +53,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $specs["element_prescription_id"]        = "ref notNull class|CElementPrescription";
     $specs["executant_prescription_line_id"] = "ref class|CExecutantPrescriptionLine";
     $specs["user_executant_id"]              = "ref class|CMediusers";
+		$specs["ide_domicile"]                   = "bool default|0";
+		$specs["cip_dm"]                         = "numchar length|7";
+    $specs["quantite_dm"]                    = "float";
     return $specs;
   }
   
@@ -178,7 +188,10 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   	}
   }
   
-  
+  function loadRefDM(){
+    $this->_ref_dm = CBcbProduit::get($this->cip_dm);
+  }
+	
   /*
    * Calcul des droits
    */
@@ -217,6 +230,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     // View ALD
     if($perm_edit){
     	$this->_can_view_form_ald = 1;
+			$this->_can_view_form_ide = 1;
     }
     // View Conditionnel
     if($perm_edit){

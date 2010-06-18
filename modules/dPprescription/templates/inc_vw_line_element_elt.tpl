@@ -14,6 +14,9 @@
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
 {{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
+
+{{assign var=line_guid value=$line->_guid}}
+
 <table class="tbl elt {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}} {{if $full_line_guid == $line->_guid}}active{{/if}}" id="line_element_{{$line->_id}}">
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
@@ -30,7 +33,10 @@
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
         <!-- Formulaire conditionnel -->
  		   {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
-      </div>    
+			 {{if $category->chapitre == "soin"}}
+			   {{include file="../../dPprescription/templates/line/inc_vw_form_ide_domicile.tpl"}} 
+			 {{/if}}
+      </div>
     <div class="div_signature mediuser" {{if !$line->_protocole}}style="border-color: #{{$line->_ref_praticien->_ref_function->color}};"{{/if}}>
         <!-- Affichage de la signature du praticien -->
         {{if $line->_can_view_signature_praticien}}
@@ -151,12 +157,19 @@
 		      </button>
 		      {{/if}}
 	    </form>
-	    
-      <!-- Formulaire de modification de l'emplacement -->
-      {{*include file="../../dPprescription/templates/line/inc_vw_form_emplacement.tpl"*}}
+      {{if $category->chapitre == "soin"}}
+			<button type="button" onclick="$('addDM-{{$line->_guid}}').toggle();" class="down">Ajouter DM</button>
+			{{/if}}
     </td>   
   </tr>
-  {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
+  <tr id="addDM-{{$line->_guid}}" {{if !$line->cip_dm}}style="display: none;"{{/if}}>
+		<td></td>
+		<td colspan="5" id="vw_dm-{{$line->_id}}">
+			{{mb_include module="dPprescription" template="inc_vw_element_dm"}}
+		</td>
+	</tr>
+  
+	{{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
   <tr>
   <td></td>
     <td>

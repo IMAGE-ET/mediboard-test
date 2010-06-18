@@ -169,10 +169,15 @@ setPrimaryKeyDosql = function (form, object_class, object_id) {
 
 submitALD = function(object_class, object_id, ald){
   var oForm = getForm("editLineALD-"+object_class);
-  
   setPrimaryKeyDosql(oForm, object_class, object_id);
-  
   oForm.ald.value = ald ? "1" : "0";
+  onSubmitFormAjax(oForm);
+}
+
+submitIDE = function(object_id, ide_domicile){
+  var oForm = getForm("editLineIDE");
+	oForm.prescription_line_element_id.value = object_id;
+  oForm.ide_domicile.value = ide_domicile ? "1" : "0";
   onSubmitFormAjax(oForm);
 }
 
@@ -548,6 +553,14 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="conditionnel" value="" />
+</form>
+
+<form name="editLineIDE" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="ide_domicile" value="" />
 </form>
 
 <form name="editLineConditionnel-CPrescriptionLineElement" action="?" method="post">

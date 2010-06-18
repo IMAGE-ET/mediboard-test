@@ -1668,6 +1668,11 @@ class CPrescription extends CMbObject {
                 if(!$_line_element->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
                   continue;  
                 }
+								
+								if($_line_element->cip_dm){
+									$_line_element->loadRefDM();
+								}
+								
                 // Chargement des administrations et des transmissions
                 if($with_calcul){
                 	foreach($dates as $date){

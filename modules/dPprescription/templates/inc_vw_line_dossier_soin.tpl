@@ -121,6 +121,10 @@
 	      {{else}}
 				  <div class="mediuser" style="border-color: #{{$line->_ref_element_prescription->_color}}">
 					  {{$line->_view}}
+						{{if $line->cip_dm}}
+						  <br />
+						  <span style="opacity: 0.7; font-size: 0.8em;">({{$line->_ref_dm->libelle}})</span>
+						{{/if}}
 					</div>
 				{{/if}} 
 	  </div>

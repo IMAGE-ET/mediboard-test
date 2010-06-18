@@ -117,6 +117,13 @@ changeModeBolus = function(oForm){
 	  submitFormAjax(oForm, 'systemMsg');
   }
 
+  submitIDE = function(object_id, ide_domicile){
+    var oForm = getForm("editIDE");
+    oForm.prescription_line_element_id.value = object_id;
+    oForm.ide_domicile.value = ide_domicile ? "1" : "0";
+    submitFormAjax(oForm, 'systemMsg');
+  }
+	
 	submitConditionnel = function(object_class, object_id, conditionnel){
 	  var oForm = getForm("editConditionnel");
     oForm.prescription_line_medicament_id.value = object_id;
@@ -221,6 +228,14 @@ modifFormDate = function(nb_prises, form_name, protocole,line_id){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_medicament_id" value="" />
   <input type="hidden" name="ald" value="" />
+</form>
+
+<form name="editIDE" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="ide_domicile" value="" />
 </form>
 
 <form name="editConditionnel" method="post" action="">

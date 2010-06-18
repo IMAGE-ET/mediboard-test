@@ -33,7 +33,9 @@
 					{{if $produit->dci}}
 					  DCI: {{$produit->dci|upper|emphasize:$tokens}} - 
 					{{/if}}
-					{{$produit->forme_galenique}}
+					{{if $produit->CodeUCD || $produit->code_cis}}
+					  {{$produit->forme_galenique}}
+					{{/if}}
 				</span>
 			</small>
 			{{* /if *}}
