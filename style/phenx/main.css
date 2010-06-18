@@ -92,6 +92,10 @@ legend {
   margin: 0 4px;
 }
 
+form hr {
+  border-color: #666;
+}
+
 .control {
   margin: 1px !important;
 }

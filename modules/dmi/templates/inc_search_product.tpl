@@ -24,38 +24,26 @@ Main.add(function(){
 });
 </script>
 
-<table class="tbl">
-  <tr>
-    <th>{{mb_title class=CProduct field=name}}</th>
-    <th>{{mb_title class=CProduct field=description}}</th>
-    <th>{{tr}}CProductOrderItemReception-received_quantity{{/tr}}</th>
-  </tr>
-  <tr>
-   <td>{{mb_value object=$product field=name}}</td>
-   <td>{{mb_value object=$product field=description}}</td>
-   <td>{{mb_value object=$product_order_item_reception field=quantity}}</td>
-  </tr>
-  <tr>
-    <td colspan="10" style="text-align: center;">
-      <button style="float: right;" type="button" class="trash"
-              onclick="addDMI('{{$product->_id}}','{{$product_order_item_reception->_id}}', 1, getTypeValue(this), getQtyValue(this))">
-        Déstérilisé
-      </button>
-      
-	    <button style="float: left;" type="button" class="submit" 
-              onclick="addDMI('{{$product->_id}}','{{$product_order_item_reception->_id}}', 0, getTypeValue(this), getQtyValue(this))">
-	      Poser
-      </button>
-      
-      <label>
-        <input type="checkbox" name="type" value="loan" {{if $product->_dmi_type == "loan"}}checked="checked"{{/if}} /> 
-        {{tr}}CPrescriptionLineDMI.type.loan{{/tr}}
-      </label>
-      
-      <label style="margin-left: 2em;">
-        {{tr}}CPrescriptionLineDMI-quantity-court{{/tr}}
-        {{mb_field object=$prescription_line_dmi field=quantity id=dmi_quantity size=2}}
-      </label>
-	  </td>
-  </tr>
-</table>
+<hr />
+
+<div style="text-align: center;">
+  <button style="float: right;" type="button" class="trash"
+          onclick="addDMI('{{$product->_id}}','{{$product_order_item_reception->_id}}', 1, getTypeValue(this), getQtyValue(this))">
+    Déstérilisé
+  </button>
+  
+  <button style="float: left;" type="button" class="submit" 
+          onclick="addDMI('{{$product->_id}}','{{$product_order_item_reception->_id}}', 0, getTypeValue(this), getQtyValue(this))">
+    Poser
+  </button>
+  
+  <label>
+    <input type="checkbox" name="type" value="loan" {{if $product->_dmi_type == "loan"}}checked="checked"{{/if}} /> 
+    {{tr}}CPrescriptionLineDMI.type.loan{{/tr}}
+  </label>
+  
+  <label style="margin-left: 2em;">
+    {{tr}}CPrescriptionLineDMI-quantity-court{{/tr}}
+    {{mb_field object=$prescription_line_dmi field=quantity id=dmi_quantity size=2}}
+  </label>
+</div>

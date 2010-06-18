@@ -44,7 +44,12 @@ Main.add(function(){
   <input type="hidden" name="quantity" value="1" />
   <input type="hidden" name="date" value="now" />
   
-  <h3>{{$product}}</h3>
+  <hr />
+  
+  <p style="font-weight: bold; font-size: 1.4em;">{{$product}}</p>
+  {{$product->description}}
+  
+  <hr />
   
   {{if $list|@count == 0}}
     <div class="small-info text">Aucun article enregistré, veuillez le créer ci-dessous</div>
@@ -82,7 +87,6 @@ Main.add(function(){
         
         if (visible.length) {
           var tr = visible[0].up("tr");
-          tr.addClassName("selected");
           tr.down("button").focus();
         }
         else Event.element(e).select();
@@ -119,21 +123,24 @@ Main.add(function(){
       <th>{{if $list_references|@count}}Date/Référence{{else}}Fournisseur{{/if}}</th>
   		<th>{{mb_title class=CProductOrderItemReception field=code}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
+      <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
   	</tr>
+    <tbody id="lot-list">
   	{{foreach from=$list item=_order_item_reception}}
-    <tbody class="hoverable" id="lot-list">
-      <tr>
+      <tr class="hoverable">
         <td>
-          <button type="button" class="tick notext" onclick="return search_product_code('{{$_order_item_reception->_ref_order_item->_ref_reference->_ref_product->code}} {{$_order_item_reception->code}}')">
+          <button type="button" class="tick notext" onfocus="$(this).up('tr').addClassName('selected')" onblur="$(this).up('tr').removeClassName('selected')"
+                  onclick="return search_product_code('{{$_order_item_reception->_ref_order_item->_ref_reference->_ref_product->code}} {{$_order_item_reception->code}}')">
             {{tr}}Select{{/tr}}
           </button>
         </td>
         <td>{{mb_value object=$_order_item_reception field=date}}</td>
     	  <td class="CProductOrderItemReception-view">{{mb_value object=$_order_item_reception field=code}}</td>
         <td>{{mb_value object=$_order_item_reception field=lapsing_date}}</td>
+        <td>{{mb_value object=$_order_item_reception field=quantity}}</td>
       </tr>
-    </tbody>
   	{{/foreach}}
+    </tbody>
     <tr>
       <td>
         <button type="submit" class="tick notext">
@@ -157,6 +164,7 @@ Main.add(function(){
       <td>{{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull"}}</td>
       <td>{{mb_field class=CProductOrderItemReception field=lapsing_date prop="str notNull" size=10}}</td>
       {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
+      <td></td>
     </tr>
   	<tr>
   	  <td id="product_reception_by_product" colspan="10"></td>

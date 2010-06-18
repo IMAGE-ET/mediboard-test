@@ -65,12 +65,13 @@ Main.add(function () {
     updateElement : function(element) {
       var id = element.id;
       $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
-      $V(formDmiDelivery.product_id, id ? id.split('-')[1] : "");
+      $V(formDmiDelivery.product_id, (id ? id.split('-')[1] : ""));
       search_product_order_item_reception(formDmiDelivery);
     },
     dropdown: true,
     autoSelect: true,
     callback: function(input, queryString){
+      input.select();
       return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
   });
@@ -209,13 +210,12 @@ delLineDMI = function(line_dmi_id){
 	          </form>
           </td>
         </tr>
-        <tr>
-          <td id="list_product_order_item_reception" colspan="2"></td>
-        </tr>
       </table>
     </td>
   </tr>
 </table>
+
+<div id="list_product_order_item_reception"></div>
 
 {{if $prescription->_ref_lines_dmi|@count}}
 <table class="tbl">

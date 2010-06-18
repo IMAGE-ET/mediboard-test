@@ -28,7 +28,5 @@
     </li>
   {{foreachelse}}
     <li></li>
-    <!-- Twice so that it doesn't autoSelect when only one -->
-    <li></li>
   {{/foreach}}
 </ul>
