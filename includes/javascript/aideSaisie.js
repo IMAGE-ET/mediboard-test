@@ -284,6 +284,11 @@ function pasteHelperContent(oHelpElement, fireOnchange) {
   
   oHelpElement.value = "";
   var caret = oAreaField.caret();
+  
+  if(caret.begin != 0 && oAreaField.value[caret.begin -1] != '\n' && oAreaField.value.length != 0) {
+    sValue = '\n' + sValue;
+  }
+
   oAreaField.caret(caret.begin, caret.end, sValue + '\n');
   oAreaField.caret(oAreaField.value.length);
   oAreaField.scrollTop = oAreaField.scrollHeight;
