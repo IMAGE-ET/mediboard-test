@@ -339,7 +339,7 @@ $library->fileName = "dompdf-06-21-10.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "text_renderer.cls.php";
+$library->versionFile = "include/text_renderer.cls.php";
 $library->versionString = "269 2010-06-21";
 
 CLibrary::$all[$library->name] = $library;
