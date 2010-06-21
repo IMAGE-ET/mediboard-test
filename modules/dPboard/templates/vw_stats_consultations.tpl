@@ -8,43 +8,40 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+{{if $prat->_id}}
 
-<table class="main">
-	{{if $prat->_id}}
-  <tr>
-    <td>
-      <form name="filters" action="?" method="get" onsubmit="return checkForm(this)">
+<script type="text/javascript">
+var graphs = {{$graphs|@json}};
+Main.add(function(){
+  graphs.each(function(g, i){
+    Flotr.draw($('graph-'+i), g.series, g.options);
+  });
+});
+</script>
 
-      <input type="hidden" name="m" value="dPboard" />
+<form name="filters" action="?" method="get" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPboard" />
+  
+  <table class="form">
+    <tr>
+      <th colspan="4" class="category">Statistiques de consultation</th>
+    </tr>
+    
+    <tr>
+      <th>{{mb_label object=$filterConsultation field="_date_min"}}</th>
+      <td>{{mb_field object=$filterConsultation field="_date_min" form="filters" register=true canNull="false"}} </td>
+      <th>{{mb_label object=$filterConsultation field="_date_max"}}</th>
+      <td>{{mb_field object=$filterConsultation field="_date_max" form="filters" register=true canNull="false"}} </td>
+    </tr>
+    
+    <tr>
+      <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
+    </tr>
+  </table>
+</form>
 
-      <table class="form">
-      
-        <tr>
-          <th colspan="4" class="category">Statistiques de consultation</th>
-        </tr>
+{{foreach from=$graphs item=graph key=key}}
+  <div style="width: 600px; height: 350px; float: left; margin: 1em;" id="graph-{{$key}}"></div>
+{{/foreach}}
 
-        <tr>
-          <td>{{mb_label object=$filterConsultation field="_date_min"}}</td>
-          <td>{{mb_field object=$filterConsultation field="_date_min" form="filters" register=true canNull="false"}} </td>
-          <td>{{mb_label object=$filterConsultation field="_date_max"}}</td>
-          <td>{{mb_field object=$filterConsultation field="_date_max" form="filters" register=true canNull="false"}} </td>
-        </tr>
-
-        <tr>
-          <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
-        </tr>
-
-        <tr>
-          <td colspan="4" class="button">
-            <img title="Nombre de consultations" src='?m=dPstats&amp;a=graph_consultations&amp;suppressHeaders=1&amp;debut={{$filterConsultation->_date_min}}&amp;fin={{$filterConsultation->_date_max}}&amp;prat_id={{$filterConsultation->praticien_id}}' />
-          </td>
-        </tr>
-        
-      </table>
-      
-      </form>
-    </td>
-  </tr>
-  {{/if}}
-</table>
+{{/if}}

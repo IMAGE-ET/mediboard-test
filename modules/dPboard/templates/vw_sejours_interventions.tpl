@@ -34,9 +34,9 @@ Main.add(function(){
   </tr>
 
   <tr>
-    <td>{{mb_label object=$filterSejour field="_date_min_stat"}}</td>
+    <th>{{mb_label object=$filterSejour field="_date_min_stat"}}</th>
     <td>{{mb_field object=$filterSejour field="_date_min_stat" form="filters" register=true canNull="false"}} </td>
-    <td>{{mb_label object=$filterSejour field="_date_max_stat"}}</td>
+    <th>{{mb_label object=$filterSejour field="_date_max_stat"}}</th>
     <td>{{mb_field object=$filterSejour field="_date_max_stat" form="filters" register=true canNull="false"}} </td>
   </tr>
 

@@ -10,6 +10,8 @@
 
 global $prat;
 
+CAppUI::requireModuleFile('dPstats', 'graph_consultations');
+
 $filterConsultation = new CConsultation();
 
 $filterConsultation->_date_min = CValue::getOrSession("_date_min", mbDate("-1 YEAR"));
@@ -22,14 +24,18 @@ $filterConsultation->_date_max = mbDate("-$rectif DAYS", $filterConsultation->_d
 $filterConsultation->_date_max = mbDate("+ 1 MONTH", $filterConsultation->_date_max);
 $filterConsultation->_date_max = mbDate("-1 DAY", $filterConsultation->_date_max);
 
-
 $filterConsultation->praticien_id = $prat->_id;
+
+$graphs = array(
+  graphConsultations($filterConsultation->_date_min, $filterConsultation->_date_max, $filterConsultation->praticien_id),
+);
 
 // Variables de templates
 $smarty = new CSmartyDP();
 
 $smarty->assign("filterConsultation", $filterConsultation);
 $smarty->assign("prat"              , $prat);
+$smarty->assign("graphs"            , $graphs);
 
 $smarty->display("vw_stats_consultations.tpl");
 
