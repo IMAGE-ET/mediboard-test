@@ -388,11 +388,11 @@ class CCompteRendu extends CDocumentItem {
     // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
     // alors pas d'enregistrement
     if (in_array($this->type, array("footer", "header"))) {
-      $docs = new CCompteRendu;
+      $doc = new CCompteRendu;
       $where = 'object_class != "'. $this->object_class.
           '" and ( header_id ="' . $this->_id .
           '" or footer_id ="' . $this->_id . '")';
-      $docs->loadList($where);
+      $docs=$doc->loadList($where);
       if(count($docs))
         return "Impossible d'enregistrer, car des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
     }
