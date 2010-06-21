@@ -31,6 +31,8 @@ FinSi
 {{mb_include_script module=dmi script=dmi ajax=true}}
 
 <script type="text/javascript">
+  
+Barcode.code128Prefixes = {{"CDMI"|static:code128_prefixes|@json}};
 
 search_product = function(form){
   var url = new Url("dmi", "httpreq_do_search_product");
@@ -46,10 +48,10 @@ search_product_code = function(code) {
   return false;
 }
 
-search_product_order_item_reception = function(form){
+search_product_order_item_reception = function(form, onComplete){
   var url = new Url("dmi", "httpreq_do_search_product_order_item_reception");
   url.addParam("product_id", form.product_id.value);
-  url.requestUpdate("list_product_order_item_reception");
+  url.requestUpdate("list_product_order_item_reception", {onComplete: onComplete});
   return false;
 }
 
@@ -64,9 +66,23 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       var id = element.id;
+      var lot_number = element.className.match(/lotnumber\|([^ ]*)/)[1];
+      
       $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
       $V(formDmiDelivery.product_id, (id ? id.split('-')[1] : ""));
-      search_product_order_item_reception(formDmiDelivery);
+      
+      var onComplete = (lot_number ? function(){
+        var field = getForm("searchProductOrderItemReception")._search_lot;
+        $V(field, lot_number);
+        
+        (function(lot_number, field){
+          filterByLotNumber(null, lot_number);
+          selectAvailableLine(null, field);
+        }).delay(0.1, lot_number, field); // argh
+        
+      } : Prototype.emptyFunction);
+      
+      search_product_order_item_reception(formDmiDelivery, onComplete);
     },
     dropdown: true,
     autoSelect: true,
@@ -108,6 +124,34 @@ Main.add(function () {
     }
   });
 });
+
+filterByLotNumber = function(e, term) {
+  var table = $("lot-list");
+  table.select("tr").invoke("show");
+  
+  term = term || $V(Event.element(e));
+  if (!term) return;
+  
+  table.select(".CProductOrderItemReception-view").each(function(e) {
+    if (!e.innerHTML.like(term)) {
+      e.up("tr").hide();
+    }
+  });
+}
+
+selectAvailableLine = function(e, element){
+  var visible = $("lot-list").select(".CProductOrderItemReception-view").filter(function(e){
+    return e.up("tr").visible();
+  });
+  
+  $("lot-list").select("tr").invoke("removeClassName", "selected");
+
+  if (visible.length) {
+    var tr = visible[0].up("tr");
+    tr.down("button").focus();
+  }
+  else (element || Event.element(e)).select();
+}
 
 reloadListDMI = function(){
   Prescription.reload('{{$prescription->_id}}', null, "dmi");

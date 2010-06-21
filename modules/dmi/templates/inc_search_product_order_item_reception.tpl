@@ -55,43 +55,17 @@ Main.add(function(){
     <div class="small-info text">Aucun article enregistré, veuillez le créer ci-dessous</div>
   {{else}}
     <script type="text/javascript">
-    Main.add(function(){
-      var field = getForm("searchProductOrderItemReception")._search_lot;
-      
-      field.focus();
-      
-      field.observe("keyup", function(e) {
-        var table = $("lot-list");
-        table.select("tr").invoke("show");
+      Main.add(function(){
+        var field = getForm("searchProductOrderItemReception")._search_lot;
         
-        var term = $V(Event.element(e));
-        if (!term) return;
-        
-        table.select(".CProductOrderItemReception-view").each(function(e) {
-          if (!e.innerHTML.like(term)) {
-            e.up("tr").hide();
-          }
+        field.focus();
+        field.observe("keyup", filterByLotNumber);
+        field.observe("keypress", function(e) {
+          if (Event.key(e) != 13) return;
+          Event.stop(e);
+          selectAvailableLine(e);
         });
       });
-      
-      field.observe("keypress", function(e) {
-        if (Event.key(e) != 13) return;
-        
-        Event.stop(e);
-        
-        var visible = $("lot-list").select(".CProductOrderItemReception-view").filter(function(e){
-          return e.up("tr").visible();
-        });
-        
-        $("lot-list").select("tr").invoke("removeClassName", "selected");
-        
-        if (visible.length) {
-          var tr = visible[0].up("tr");
-          tr.down("button").focus();
-        }
-        else Event.element(e).select();
-      });
-    });
     </script>
   {{/if}}
   

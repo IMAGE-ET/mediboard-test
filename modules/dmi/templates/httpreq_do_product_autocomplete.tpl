@@ -10,7 +10,7 @@
 
 <ul>
   {{foreach from=$matches item=match}}
-    <li id="match-{{$match->_id}}">
+    <li id="match-{{$match->_id}}" class="lotnumber|{{$lot_number}}">
       <strong>{{$match->_view|emphasize:$keywords}}</strong><br />
       <small>
         <span style="float: right; color: #666;">

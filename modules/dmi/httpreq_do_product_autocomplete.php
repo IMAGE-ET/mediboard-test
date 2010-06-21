@@ -8,16 +8,53 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$keywords    = CValue::post("_view");
+$keywords    = trim(CValue::post("_view"));
 $category_id = CValue::post("category_id");
 
-$where = array();
-if($category_id){
-  $where["category_id"] = " = '$category_id'";
+$is_code128 = preg_match('/^[0-9a-z]+@[0-9a-z]+[0-9a-z\@]*$/i', $keywords);
+
+$lot_number = null;
+
+if ($is_code128) {
+  $parts = explode("@", $keywords);
+  $composition = array();
+  
+  foreach($parts as $p) {
+    foreach(CDMI::$code128_prefixes as $code => $text) {
+      //if (strpos($p, $code) === 0) { // strpos won't work :(
+      if (substr($p, 0, strlen($code)) == $code) {
+        $composition[$code] = substr($p, strlen($code), strlen($p)-strlen($code));
+        break;
+      }
+    }
+  }
+  
+  $lot_number = CValue::read($composition, "10");
+  $lapsing_date = CValue::read($composition, "17");
+  
+  $product_reception = new CProductOrderItemReception;
+  $product_reception->code = $lot_number;
+  $receptions = $product_reception->loadMatchingList();
+  
+  $matches = array();
+  foreach($receptions as $_reception) {
+    $_reception->loadRefOrderItem();
+    $_reception->_ref_order_item->loadReference();
+    $_reception->_ref_order_item->_ref_reference->loadRefProduct();
+    $product = $_reception->_ref_order_item->_ref_reference->_ref_product;
+    $matches[$product->_id] = $product;
+  }
 }
 
-$product = new CProduct();
-$matches = $product->seek($keywords, $where, 30, false, null, "name");
+else {
+  $where = array();
+  if($category_id){
+    $where["category_id"] = " = '$category_id'";
+  }
+  
+  $product = new CProduct();
+  $matches = $product->seek($keywords, $where, 30, false, null, "name");
+}
 
 foreach($matches as $_product) {
   $ljoin = array(
@@ -46,5 +83,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("keywords", $keywords);
 $smarty->assign("matches", $matches);
 $smarty->assign("nodebug", true);
+$smarty->assign("lot_number", $lot_number);
 
 $smarty->display("httpreq_do_product_autocomplete.tpl");
