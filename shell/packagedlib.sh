@@ -34,9 +34,8 @@ case $lib_name in
  dompdf)
    version=`date +%m-%d-%y`;
    package_lib dompdf https://dompdf.googlecode.com/svn/branches/dompdf_0-6_test/dompdf $version
+   rm -rf ./tmp/dompdf
    break;;
  *)
    echo "Cette librairie ($lib_name) n'est pas disponible";;
 esac
-
-rm -rf dompdf

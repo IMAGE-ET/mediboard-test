@@ -335,12 +335,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "domPDF";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-06-08-10.tar.gz";
+$library->fileName = "dompdf-06-21-10.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "dompdf.php";
-$library->versionString = "dompdf.php 223 2010-03-12";
+$library->versionFile = "text_renderer.cls.php";
+$library->versionString = "269 2010-06-21";
 
 CLibrary::$all[$library->name] = $library;
 

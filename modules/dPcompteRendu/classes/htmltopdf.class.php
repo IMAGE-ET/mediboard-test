@@ -108,6 +108,7 @@ class CHtmlToPDF {
     $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? $protocol = "https://" : $protocol = "http://");
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
     $this->dompdf->load_html($this->content);
+    mbTrace($this->content,'',1);
     $this->dompdf->render();
     if($stream) {
       $this->dompdf->stream($file->file_name, array("Attachment" => 0));

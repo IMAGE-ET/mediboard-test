@@ -103,15 +103,19 @@ else {
     
     if ($header->_id) {
       $header->source = "<div id='header'>$header->source</div>";
-      //DOMPDF//$header->height += 50;
-      $header->height += 20;
+      
+      if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {      
+        $header->height += 20;
+      }
       $compte_rendu->header_id = null;
     }
     
     if ($footer->_id) {
       $footer->source = "<div id='footer'>$footer->source</div>";
-      //DOMPDF//$footer->height += 50;
-      $footer->height += 20;
+
+      if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {
+        $footer->height += 20;
+      }
       $compte_rendu->footer_id = null;
     }
     
@@ -119,14 +123,20 @@ else {
       @media print { 
         #body { 
           padding-top: {$header->height}px;
-          /*DOMPDFpadding-bottom: {$footer->height}px;*/
-        }"; 
+        }
+      }";
+    
+    $style .="
+      @media dompdf {
+        #body {
+          padding-bottom: {$footer->height}px;
+        }";
 
     if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0 &&
        CAppUI::conf("dPcompteRendu CCompteRendu same_print") == 0) {
       $style .=
       "hr.pagebreak {
-            padding-top: {$header->height}px; 
+            padding-top: {$header->height}px;
       }";
     }
     $style .= "}</style>";

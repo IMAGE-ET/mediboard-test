@@ -384,7 +384,36 @@ class CCompteRendu extends CDocumentItem {
         $_file->file_empty();
       }
     }
-   
+    
+    // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
+    // alors pas d'enregistrement
+    if (in_array($this->type, array("footer", "header"))) {
+      $docs = new CCompteRendu;
+      $where = 'object_class != "'. $this->object_class.
+          '" and ( header_id =' . $this->_id .
+          ' or footer_id =' . $this->_id . ')';
+      $docs->loadList($where);
+      if(count($docs))
+        return "Impossible d'enregistrer, car des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
+    }
+    // Si c'est un document dont le type de l'en-tête ou du pied de page ne correspond pas à son nouveau type
+    // alors pas d'enregistrement
+    if ($this->header_id) {
+      $header = new CCompteRendu;
+      $header->load($this->header_id);
+      if ($header->object_class != $this->object_class) {
+        return "Impossible de sauvegarder, le document n'est pas du même type que son entête";
+      }
+    }
+    
+    if ($this->footer_id) {
+      $header = new CCompteRendu;
+      $header->load($this->footer_id);
+      if ($header->object_class != $this->object_class) {
+        return "Impossible de sauvegarder, le document n'est pas du même type que son pied de page";
+      }
+    }
+    
     return parent::store();
   }
 	
