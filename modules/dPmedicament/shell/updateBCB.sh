@@ -13,7 +13,7 @@ announce_script "Mediboard BCB updater"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <password> [--skip-download]"
+  echo "Usage: $0 <password> [-s]"
   echo "  <password> is the Mediboard portal password to access bcb/ folder"
   echo "  [-s] to skip downloading the latest BCB dump"
   exit 1
