@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-updateFieldsMedicament = function(selected) {
+updateFieldsAutocompleteDM = function(selected) {
   var oFormProduit = getForm("editDM-{{$line_guid}}");
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
@@ -23,7 +23,7 @@ Main.add( function(){
 	  var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
 	  urlAuto.autoComplete("editDM-{{$line_guid}}_produit", "dm_auto_complete", {
 	    minChars: 3,
-	    updateElement: updateFieldsMedicament,
+	    updateElement: updateFieldsAutocompleteDM,
 	    callback: 
 	      function(input, queryString){
 	        return (queryString + "&hors_specialite=1"); 
