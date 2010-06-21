@@ -17,7 +17,7 @@
 {{assign var=nb_par_page value="25"}}	
 	
 <style type="text/css">
-{{include file=../../dPcompteRendu/css/print.css header=4 footer=2 nodebug=true}}
+{{include file=../../dPcompteRendu/css/print.css header=4 footer=3 nodebug=true}}
 
 table.print td {
   font-size: 11px;
@@ -55,11 +55,21 @@ table.grid th {
 </div>
 
 <div class="footer">
-  <span style="float: right;">
+  <span style="float: right; text-align: right;">
     {{$smarty.now|date_format:$dPconfig.datetime}}
+    
+    {{if $pharmacien->_id}}
+      <br />
+      Pharmacien : <strong>{{$pharmacien}}</strong>
+      {{if $pharmacien->commentaires}}
+        - {{$pharmacien->commentaires}}
+      {{/if}}
+    {{/if}}
   </span>
   
-  {{$label}} n°{{$order->order_number}}
+  {{$label}} n°<strong>{{$order->order_number}}</strong>
+  <br />
+  Responsable de la commande : <strong>{{$app->_ref_user}}</strong>
 </div>
 
 <table class="form" style="margin-top: 5em;">

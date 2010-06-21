@@ -29,9 +29,16 @@ if ($order_id) {
   }
 }
 
+$pharmacien = new CMediusers;
+$pharmaciens = $pharmacien->loadListFromType(array("Pharmacien"));
+if (count($pharmaciens)) {
+  $pharmacien = reset($pharmaciens);
+}
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign('order', $order);
+$smarty->assign('pharmacien', $pharmacien);
 $smarty->display('vw_order_form.tpl');
 
 ?>

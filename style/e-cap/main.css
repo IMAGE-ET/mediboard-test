@@ -304,11 +304,6 @@ a:hover.button {
   background-image: url(./images/buttons/button-over.png);
 }
 
-button:focus,
-a:focus.button {
-  background-image: url(./images/buttons/button-focus.png);
-}
-
 /* Standard table */
 table.tbl, table.form {
 	border-collapse: collapse;

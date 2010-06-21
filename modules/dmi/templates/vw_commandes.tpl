@@ -24,47 +24,38 @@
 
 <table class="tbl">
   <tr>
-    <th>Stock</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
+    <th colspan="2">{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
+    <th>Stock</th>
+    <th style="width: 1%">Commander</th>
+    <th style="width: 1%">Déjà comm.</th>
+  </tr>
+  <tr>
+    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
+    <th>Patient</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
-    <th>Patient</th>
-    <th style="width: 1%">Commander</th>
-    <th style="width: 1%">Déjà comm.</th>
   </tr>
   {{foreach from=$lines_by_context key=_context_guid item=_lines}}
     <tr>
-      <th colspan="20">
+      <th colspan="20" class="title">
         {{$contexts.$_context_guid}}
         <button type="button" class="print notext" onclick="Prescription.printPrescription({{$contexts.$_context_guid->prescription_id}})"></button>
       </th>
     </tr>
     {{foreach from=$_lines item=_line_dmi}}
+    <tbody class="hoverable">
       <tr>
-        <td>
-          {{mb_include module=dPstock template=inc_bargraph stock=$_line_dmi->_ref_product->_ref_stock_group}}
-        </td>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product_order_item_reception->_guid}}')">
+        <td colspan="2">
+          <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product_order_item_reception->_guid}}')">
             {{$_line_dmi->_ref_product}}
-          </span>
+          </strong>
         </td>
-        <td>{{mb_value object=$_line_dmi field=quantity}}</td>
         <td>{{mb_value object=$_line_dmi->_ref_product field=code}}</td>
         <td>
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
-        </td>
-        <td>{{mb_value object=$_line_dmi field=date}}</td>
-        <td>{{mb_value object=$_line_dmi field=type}}</td>
-        <td>{{mb_value object=$_line_dmi field=septic}}</td>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_prescription->_guid}}')">
-            {{$_line_dmi->_ref_prescription->_ref_patient}}
-          </span>
+          {{mb_include module=dPstock template=inc_bargraph stock=$_line_dmi->_ref_product->_ref_stock_group}}
         </td>
         <td>
           <form name="product-reference-{{$_line_dmi->_id}}" action="?m=dmi&amp;tab=vw_commandes" method="post" onsubmit="return orderProduct(this)">
@@ -76,10 +67,13 @@
             <input type="hidden" name="quantity" value="1" />
             <select name="reference_id">
               {{foreach from=$_line_dmi->_ref_product->_back.references item=_reference}}
-              <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} (x{{$_reference->quantity}})</option>
+                <option value="{{$_reference->_id}}" 
+                        {{if $_line_dmi->_ref_product_order_item_reception->_ref_order_item->reference_id == $_reference->_id}}selected="selected"{{/if}}>
+                  {{$_reference->_ref_societe}} (x{{$_reference->quantity}})
+                </option>
               {{/foreach}}
             </select>
-            <button class="add notext" type="submit" title="{{tr}}Add{{/tr}}">{{tr}}Add{{/tr}}</button>
+            <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
           </form>
         </td>
         <td>
@@ -90,6 +84,21 @@
           {{/foreach}}
         </td>
       </tr>
+      <tr>
+        <td>{{mb_value object=$_line_dmi field=quantity}}</td>
+        <td>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_prescription->_guid}}')">
+            {{$_line_dmi->_ref_prescription->_ref_patient}}
+          </span>
+        </td>
+        <td>
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
+        </td>
+        <td>{{mb_value object=$_line_dmi field=date}}</td>
+        <td>{{mb_value object=$_line_dmi field=type}}</td>
+        <td>{{mb_value object=$_line_dmi field=septic}}</td>
+      </tr>
+    </tbody>
     {{foreachelse}}
       <tr>
         <td colspan="20">{{tr}}CPrescriptionLineDMI.none{{/tr}}</td>
