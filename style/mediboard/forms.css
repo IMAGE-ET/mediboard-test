@@ -656,6 +656,7 @@ textarea#htmlarea {
   padding: 0;
   width: 100%;
   border: none;
+  overflow-x: hidden;
   background: transparent;
   resize: none;
 }
