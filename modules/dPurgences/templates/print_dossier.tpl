@@ -19,62 +19,9 @@
       <span style="font-size: 14px">par le Dr {{$consult->_ref_praticien}} le {{mb_value object=$consult field=_date}} - Dossier {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}</span>
     </th>
   </tr>
-  
-  <tr><th class="category" colspan="10">Dossier médical</th></tr>
-	
-	<tr>
-    <th>{{mb_label object=$consult field="_date"}}</th>
-    <td>{{mb_value object=$consult field="_date"}}</td>
-		
-		<th>{{mb_label object=$sejour field="_num_dossier"}}</th>
-    <td>{{mb_value object=$sejour field="_num_dossier"}}</td>
-  </tr>
-	
-	<tr>
-    <th>{{mb_label object=$consult field="heure"}}</th>
-    <td>{{mb_value object=$consult field="heure"}}</td>
-  </tr>
-	  
-	<tr>
-    <th>Patient</th>
-    <td>{{mb_value object=$patient field="_view"}} {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</td>
-		
-		<th>Né(e) le </th>
-    <td>{{mb_value object=$patient field=naissance}} </td>
-  </tr>
-	
-  <tr>
-  	<th>{{mb_label object=$patient field="sexe"}}</th>
-		<td>{{if $patient->sexe == "m"}} M {{else}} F {{/if}}</td>
-		
-    <th>{{mb_label object=$patient field="_age"}}</th>
-    <td>{{mb_value object=$patient field="_age"}} ans</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$patient field="adresse"}}</th>
-    <td>{{mb_value object=$patient field="adresse"}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$patient field="cp"}} - {{mb_label object=$patient field="ville"}}</th>
-    <td>{{mb_value object=$patient field="cp"}} {{mb_value object=$patient field="ville"}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$patient field="tel"}}</th>
-    <td>{{mb_value object=$patient field="tel"}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$patient field="tel2"}}</th>
-    <td>{{mb_value object=$patient field="tel2"}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$patient field="medecin_traitant"}}</th>
-    <td>{{mb_value object=$patient field="medecin_traitant"}}</td>
-  </tr>
+
+  {{mb_include module=dPcabinet template=print_inc_dossier_medical}}
+
 </table>
 
 <hr />
@@ -99,82 +46,7 @@
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
-	<tr>
-    <th>Antécédents</th>
-    <td>
-    	{{if $dossier_medical->_count_antecedents}}
-        {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-        {{foreach from=$list_antecedent item=_antecedent}}
-          {{if $_antecedent->type    }} {{mb_value object=$_antecedent field=type    }} {{/if}}
-          {{if $_antecedent->appareil}} {{mb_value object=$_antecedent field=appareil}} {{/if}}
-          {{if $_antecedent->date}}
-            [{{mb_value object=$_antecedent field=date}}] : 
-          {{/if}}
-          {{$_antecedent->rques}}
-          <br />
-        {{/foreach}}
-        {{/foreach}}
-      {{else}}
-         {{tr}}CAntecedent.unknown{{/tr}}
-      {{/if}}
-    </td>
-  </tr>
-  
-	<tr>
-    <th>Traitements</th>
-    <td>
-      {{if $dossier_medical->_ref_prescription}}
-        {{foreach from=$dossier_medical->_ref_prescription->_ref_prescription_lines item=_line}}    
-         {{$_line->_ucd_view}} ({{$_line->_forme_galenique}})
-				 <br />
-        {{/foreach}}
-        {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
-          {{$curr_trmt->traitement}}
-          <br />
-        {{foreachelse}}
-        {{if !($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_ref_prescription_lines|@count)}}
-          {{tr}}CTraitement.unknown{{/tr}}
-        {{/if}}
-        {{/foreach}}
-      {{/if}}
-    </td>
-  </tr>  
-	
-	<tr>
-    <th>Diagnostics CIM</th>
-    <td>
-      {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
-        {{$curr_code->code}} - {{$curr_code->libelle}}<br />
-      {{foreachelse}}
-        {{tr}}CDossierMedical-codes_cim.unknown{{/tr}} <br />
-      {{/foreach}}
-    </td>
-  </tr>     
-	
-	<tr>
-    <th>{{mb_label object=$consult field="histoire_maladie"}}</th>
-    <td>{{mb_value object=$consult field="histoire_maladie"}}</td>
-  </tr>
-					
-  <tr>
-    <th>{{mb_label object=$consult field="rques"}}</th>
-    <td>{{mb_value object=$consult field="rques"}}</td>
-  </tr>
-	
-	<tr>
-    <th>{{mb_label object=$consult field="examen"}}</th>
-    <td>{{mb_value object=$consult field="examen"}}</td>
-  </tr>
-	
-	<tr>
-    <th>{{mb_label object=$consult field="traitement"}}</th>
-    <td>{{mb_value object=$consult field="traitement"}}</td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$consult field="conclusion"}}</th>
-    <td>{{mb_value object=$consult field="conclusion"}}</td>
-  </tr>		
+	{{mb_include module=dPcabinet template=print_inc_constantes}}
 </table>
 
 {{if !@$offline}}
@@ -288,7 +160,7 @@
         {{/foreach}}
     </td>
   </tr>
-	
+  
   <tr>
     <th>{{mb_label object=$sejour field="mode_sortie"}}</th>
     <td>{{mb_value object=$sejour field="mode_sortie"}}</td>
@@ -311,7 +183,7 @@
     <td>{{mb_value object=$rpu field="destination"}}</td>
   </tr>
   
-<table>
+</table>
 
 <table class="{{$tbl_class}}">
   <tr><th class="category" colspan="10">Actes</th></tr>

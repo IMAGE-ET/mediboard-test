@@ -13,6 +13,13 @@ function reloadFinishBanner() {
   mainUrl.addParam("_is_anesth", "{{$_is_anesth}}");
   mainUrl.requestUpdate('finishBanner');
 }
+
+function printConsult() {
+  var url = new Url("dPcabinet", "print_consult");
+  url.addParam("consult_id", "{{$consult->_id}}");
+  url.popup(700, 550, "RPU");
+}
+
 </script>
 
 <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -40,7 +47,12 @@ function reloadFinishBanner() {
       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$consult->_ref_patient->_id}}">
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
       </a>
-      <div style="float:right"> 
+      <div style="float:right">
+        {{if $consult->_ref_sejour->_id}}
+          <button class="print" type="button" style="float: left;" onclick="printConsult();">
+            Imprimer la consultation
+          </button><br/>
+        {{/if}}
         <button class="print" type="button" onclick="printAllDocs()">
           Imprimer les documents
         </button> 
