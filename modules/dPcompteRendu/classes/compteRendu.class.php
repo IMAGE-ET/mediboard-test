@@ -390,8 +390,8 @@ class CCompteRendu extends CDocumentItem {
     if (in_array($this->type, array("footer", "header"))) {
       $docs = new CCompteRendu;
       $where = 'object_class != "'. $this->object_class.
-          '" and ( header_id =' . $this->_id .
-          ' or footer_id =' . $this->_id . ')';
+          '" and ( header_id ="' . $this->_id .
+          '" or footer_id ="' . $this->_id . '")';
       $docs->loadList($where);
       if(count($docs))
         return "Impossible d'enregistrer, car des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
