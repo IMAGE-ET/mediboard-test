@@ -187,7 +187,8 @@
         </tr>
         <tr>
           <td style="font-weight: bold; white-space: normal; font-size:130%;">
-          {{if $dossier_medical->_ref_antecedents}}
+          {{if $dossier_medical->_ref_antecedents && $dossier_medical->_ref_antecedents.alle|@count}}
+            <div class="small-warning">
             {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
               <ul>
                 <li> 
@@ -198,6 +199,7 @@
                 </li>
               </ul>
             {{/foreach}}
+            </div>
           {{else}}
             <ul>
               <li>Pas d'allergie saisie</li>

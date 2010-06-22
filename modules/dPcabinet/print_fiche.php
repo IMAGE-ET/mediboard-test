@@ -83,7 +83,7 @@ if ($consultation_id) {
 // Affichage des données
 $listChamps = array(
                 1=>array("date_analyse","hb","ht","ht_final","plaquettes"),
-                2=>array("creatinine","_clairance","na","k"),
+                2=>array("creatinine","_clairance","fibrinogene","na","k"),
                 3=>array("tp","tca","tsivy","ecbu")
                 );
 $cAnesth =& $consult->_ref_consult_anesth;
@@ -107,29 +107,30 @@ foreach($listChamps as $keyCol=>$aColonne){
 
 //Tableau d'unités
 $unites = array();
-$unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
-$unites["ht"]         = array("nom"=>"Ht","unit"=>"%");
-$unites["ht_final"]   = array("nom"=>"Ht final","unit"=>"%");
-$unites["plaquettes"] = array("nom"=>"Plaquettes","unit"=>"(x1000) /mm3");
-$unites["creatinine"] = array("nom"=>"Créatinine","unit"=>"mg/l");
-$unites["_clairance"] = array("nom"=>"Clairance de Créatinine","unit"=>"ml/min");
-$unites["na"]         = array("nom"=>"Na+","unit"=>"mmol/l");
-$unites["k"]          = array("nom"=>"K+","unit"=>"mmol/l");
-$unites["tp"]         = array("nom"=>"TP","unit"=>"%");
-$unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
-$unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
-$unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
+$unites["hb"]           = array("nom"=>"Hb","unit"=>"g/dl");
+$unites["ht"]           = array("nom"=>"Ht","unit"=>"%");
+$unites["ht_final"]     = array("nom"=>"Ht final","unit"=>"%");
+$unites["plaquettes"]   = array("nom"=>"Plaquettes","unit"=>"(x1000) /mm3");
+$unites["creatinine"]   = array("nom"=>"Créatinine","unit"=>"mg/l");
+$unites["_clairance"]   = array("nom"=>"Clairance de Créatinine","unit"=>"ml/min");
+$unites["fibrinogene"]  = array("nom"=>"Fibrinogène","unit"=>"g/l");
+$unites["na"]           = array("nom"=>"Na+","unit"=>"mmol/l");
+$unites["k"]            = array("nom"=>"K+","unit"=>"mmol/l");
+$unites["tp"]           = array("nom"=>"TP","unit"=>"%");
+$unites["tca"]          = array("nom"=>"TCA","unit"=>"s");
+$unites["tsivy"]        = array("nom"=>"TS Ivy","unit"=>"");
+$unites["ecbu"]         = array("nom"=>"ECBU","unit"=>"");
 $unites["date_analyse"] = array("nom"=>"Date","unit"=>"");
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPcabinet");
 
-$smarty->assign("offline", $offline);
+$smarty->assign("offline"   , $offline);
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
 $smarty->assign("etatDents" , $sEtatsDents);
-$smarty->assign("print", $print);
+$smarty->assign("print"     , $print);
 $smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_sejour->_ref_dossier_medical);
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 

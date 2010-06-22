@@ -167,7 +167,7 @@ function reloadListExamComp() {
         <tr>
           <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="groupe_ok" tabindex="103" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="groupe_ok" typeEnum="checkbox" tabindex="103" onchange="submitForm(this.form)"}}
           </td>
           <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
           <td>
