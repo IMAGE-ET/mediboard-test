@@ -51,7 +51,7 @@ search_product_code = function(code) {
 search_product_order_item_reception = function(form, onComplete){
   var url = new Url("dmi", "httpreq_do_search_product_order_item_reception");
   url.addParam("product_id", form.product_id.value);
-  url.requestUpdate("list_product_order_item_reception", {onComplete: onComplete});
+  url.requestUpdate("list_product_order_item_reception", {onComplete: onComplete || function(){} });
   return false;
 }
 
@@ -66,7 +66,8 @@ Main.add(function () {
     minChars: 2,
     updateElement : function(element) {
       var id = element.id;
-      var lot_number = element.className.match(/lotnumber\|([^ ]*)/)[1];
+      var lot_number = (element.className || "").match(/lotnumber\|([^ ]*)/);
+      if (lot_number) lot_number = lot_number[1];
       
       $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
       $V(formDmiDelivery.product_id, (id ? id.split('-')[1] : ""));

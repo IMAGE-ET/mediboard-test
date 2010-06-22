@@ -122,6 +122,9 @@ Main.add(function(){
         </button>
       </td>
       <td>
+        <label for="_reference_id" style="display: none;">
+          {{if $list_references|@count}}Date/Référence{{else}}Fournisseur{{/if}}
+        </label>
         <select name="_reference_id" class="notNull" style="width: 10em;">
           {{if $list_references|@count}}
             {{foreach from=$list_references item=_reference}}
@@ -135,13 +138,18 @@ Main.add(function(){
           {{/if}}
         </select>
       </td>
-      <td>{{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull"}}</td>
-      <td>{{mb_field class=CProductOrderItemReception field=lapsing_date prop="str notNull" size=10}}</td>
+      <td>
+        <label for="code" style="display: none;">{{tr}}CProductOrderItemReception-code{{/tr}}</label>
+        {{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull"}}
+      </td>
+      <td>
+        <label for="lapsing_date" style="display: none;">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label>
+        {{mb_field class=CProductOrderItemReception field=lapsing_date prop="str notNull" size=10}}
+      </td>
       {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
       <td></td>
     </tr>
-  	<tr>
-  	  <td id="product_reception_by_product" colspan="10"></td>
-  	</tr>
   </table>
+  
+  <div id="product_reception_by_product"></div>
 </form>

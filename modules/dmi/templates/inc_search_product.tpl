@@ -24,9 +24,7 @@ Main.add(function(){
 });
 </script>
 
-<hr />
-
-<div style="text-align: center;">
+<div style="text-align: center; outline: 2px solid #999; margin: 0.8em; padding: 0.5em;">
   <button style="float: right;" type="button" class="trash"
           onclick="addDMI('{{$product->_id}}','{{$product_order_item_reception->_id}}', 1, getTypeValue(this), getQtyValue(this))">
     Déstérilisé

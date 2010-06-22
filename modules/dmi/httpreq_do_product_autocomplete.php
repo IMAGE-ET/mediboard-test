@@ -12,12 +12,11 @@ $keywords    = trim(CValue::post("_view"));
 $category_id = CValue::post("category_id");
 
 $is_code128 = preg_match('/^[0-9a-z]+@[0-9a-z]+[0-9a-z\@]*$/i', $keywords);
-
 $lot_number = null;
+$composition = array();
 
 if ($is_code128) {
   $parts = explode("@", $keywords);
-  $composition = array();
   
   foreach($parts as $p) {
     foreach(CDMI::$code128_prefixes as $code => $text) {
@@ -28,7 +27,24 @@ if ($is_code128) {
       }
     }
   }
-  
+}
+else {
+  if (preg_match('/(10)([a-z0-9]{7,})(17)(\d{6})$/i', $keywords, $parts) ||
+      preg_match('/(17)(\d{6})(10)([a-z0-9]{7,})$/i', $keywords, $parts)) {
+    $prop = null;
+    foreach($parts as $p){
+      if (in_array($p, array("10", "17"))) {
+        $prop = $p;
+      }
+      else if ($prop) {
+        $composition[$prop] = $p;
+      }
+      else $prop = null;
+    }
+  }
+}
+
+if (count($composition)){
   $lot_number = CValue::read($composition, "10");
   $lapsing_date = CValue::read($composition, "17");
   
