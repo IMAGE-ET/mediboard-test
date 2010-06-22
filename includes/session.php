@@ -50,7 +50,7 @@ if (!isset($_SESSION['browser'])) {
     'firefox' => '3.0',
     'msie'    => '7.0',
     'opera'   => '9.6',
-    'chrome'  => '4.0',
+    'chrome'  => '3.0',
     'safari'  => '525.26', // 3.2
   );
   

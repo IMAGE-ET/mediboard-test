@@ -48,7 +48,7 @@ function printConsult() {
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
       </a>
       <div style="float:right">
-        {{if $consult->_ref_sejour->_id}}
+        {{if $consult->_id}}
           <button class="print" type="button" style="float: left;" onclick="printConsult();">
             Imprimer la consultation
           </button><br/>
