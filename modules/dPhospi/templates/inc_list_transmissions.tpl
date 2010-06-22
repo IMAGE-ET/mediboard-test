@@ -42,7 +42,6 @@ toggleTrans = function(trans_class){
     <th>{{tr}}Hour{{/tr}}</th>
     <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
     <th>{{mb_title class=CTransmissionMedicale field=text}}</th>
-    <th />
   </tr>  
   <tbody {{if !$without_del_form}}id="transmissions"{{/if}}>
   {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
