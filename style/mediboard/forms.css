@@ -484,7 +484,7 @@ div.autocomplete ul li small {
 
 input.autocomplete {
   background-image: url(../../images/icons/throbber.gif);
-  background-position: 100% 2px;
+  background-position: 100% 1px;
   background-repeat: no-repeat;
   padding-right: 17px;
 }

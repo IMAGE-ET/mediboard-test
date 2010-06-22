@@ -234,7 +234,7 @@ var Url = Class.create({
       onShow: function(element, update) {
         update.style.position = 'absolute';
         
-        update.clonePosition(element, {
+        update.show().clonePosition(element, {
           setWidth: true,
           setHeight: false, 
           setTop: false,
@@ -254,7 +254,7 @@ var Url = Class.create({
             maxWidth: "400px"
           });
         }
-        update.show().setOpacity(1).unoverflow();
+        update.setOpacity(1).unoverflow();
         
         if (oOptions.onAfterShow) {
           oOptions.onAfterShow(element, update);
@@ -486,14 +486,16 @@ var Url = Class.create({
       evalScripts: true,
       onComplete: Prototype.emptyFunction
     }, oOptions);
+		
+    var updater = new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
     
-    oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
+    updater.options.onComplete = updater.options.onComplete.wrap(function(onComplete) {
       prepareForms(element);
       initNotes();
       onComplete();
     });
-		
-    return new Ajax.PeriodicalUpdater(element, "index.php", oOptions);
+    
+    return updater;
   },
   
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){

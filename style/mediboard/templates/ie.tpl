@@ -16,6 +16,10 @@ hr.control_tabs {
   margin-top: -7px;
   margin-bottom: -7px;
 }
+
+div.dropdown {
+  display: inline;
+}
 </style>
 
 <script type="text/javascript">

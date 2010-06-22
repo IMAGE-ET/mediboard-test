@@ -552,13 +552,13 @@ class CMbFieldSpec {
 			  url.autoComplete(input, "'.$id.'_autocomplete", {
 			    minChars: '.$minChars.',
 			    method: "get",
-          select: ".view",
+          select: "view",
  			    dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
     	
     	if ($ref) {
 			  $sHtml .= ',
 		      afterUpdateElement: function(field,selected){
-		        $V(field.form["'.$field.'"], selected.getAttribute("id"));
+		        $V(field.form["'.$field.'"], selected.getAttribute("id").split("-")[2]);
           }';
     	}
       if ($this->dependsOn) {

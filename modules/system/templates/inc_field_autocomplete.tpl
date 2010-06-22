@@ -16,7 +16,7 @@
 
 <ul>
 {{foreach from=$matches item=match}}
-  <li id="{{$match->_id}}">
+  <li id="autocomplete-{{$match->_guid}}">
   {{if $template}}
     {{include file=$template nodebug=true}}
   {{else}}
