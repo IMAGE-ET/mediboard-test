@@ -23,72 +23,73 @@ $conge->load($conge_id);
 // Chargement d'un remplacement
 $sejour->loadRefReplacement();
 $replacement =& $sejour->_ref_replacement;
+if ($replacement->_id) {
+  $replacement->loadRefReplacer();
+	$replacer =& $replacement->_ref_replacer;
+	$replacer->loadRefFunction();
+}
 
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
 
-$replacements = new CReplacement();
-$ljoin["sejour"] = "sejour.sejour_id = replacement.sejour_id";
-$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-
-$where = array();
-$where["patients.patient_id"] = " = '$patient->_id'";
-$replacements = $replacements->loadList($where, null, null, null, $ljoin);
-
-foreach($replacements as $_replacement){
-	$_replacement->loadRefReplacer();
-	$_replacement->loadRefSejour();
-}
-
-if($replacement->_id){
-	if(isset($replacements[$replacement->_id])){
-		unset($replacements[$replacement->_id]);
-  }
-}
-
+$patient->loadRefsSejours();
+$sejours =& $patient->_ref_sejours;
 
 // Chargement des praticiens
 $user = new CMediusers();
-$users = $user->loadUsers();
+$user->load($conge->user_id);
+$user->loadRefFunction();
+$users = $user->loadUsers(PERM_READ, $user->function_id);
 
-if(!$replacement->_id){
+// Chargement
+$evenement = new CEvenementSSR();
+$where["sejour_id"    ] = CSQLDataSource::prepareIn(array_keys($sejours));
+$where["therapeute_id"] = CSQLDataSource::prepareIn(array_keys($users));
+foreach($evenement->loadList($where) as $_evenement) {
+	@$evenements_counts[$_evenement->sejour_id][$_evenement->therapeute_id]++;
+}
+
+if (!$replacement->_id) {
   $replacement->conge_id = $conge_id;
   $replacement->sejour_id = $sejour_id;
 }
 
-if($type == 'kine'){
-	// Chargement des evenements SSR dont le therapeute est le kine principal pendant sa periode de congé
+// Chargement des evenements SSR dont le therapeute est le kine principal pendant sa periode de congé
+if ($type == 'kine') {
 	$sejour->loadRefBilanSSR();
-	$bilan_ssr =& $sejour->_ref_bilan_ssr;
+	$bilan =& $sejour->_ref_bilan_ssr;
 	
-	$bilan_ssr->loadRefTechnicien();
-	$kine_id = $bilan_ssr->_ref_technicien->kine_id;
+	$bilan->loadRefTechnicien();
+	$kine_id = $bilan->_ref_technicien->kine_id;
 	
   $date_debut = $conge->date_debut;
   $date_fin = mbDate("+1 DAY", $conge->date_fin);
-	$evenement_ssr = new CEvenementSSR();
+	$evenement = new CEvenementSSR();
 	$where = array();
 	$where["therapeute_id"] = " = '$kine_id'";
 	$where["sejour_id"] = " = '$sejour->_id'";
 	$where["debut"] = "BETWEEN '$date_debut' AND '$date_fin'";
-	$evenements = $evenement_ssr->loadList($where);
+	$evenements = $evenement->loadList($where);
 }
 
-if($type == "reeducateur"){
   // Chargement des evenements SSR
-	$evenement_ssr = new CEvenementSSR();
-	$evenement_ssr->therapeute_id = $conge->user_id;
-	$evenement_ssr->sejour_id = $sejour_id;
-	$evenements = $evenement_ssr->loadMatchingList();
+if ($type == "reeducateur") {
+	$evenement = new CEvenementSSR();
+	$evenement->therapeute_id = $conge->user_id;
+	$evenement->sejour_id = $sejour_id;
+	$evenements = $evenement->loadMatchingList();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("replacements", $replacements);
+$smarty->assign("evenements_counts", $evenements_counts);
+$smarty->assign("sejours", $sejours);
+$smarty->assign("users", $users);
+
 $smarty->assign("sejour", $sejour);
 $smarty->assign("replacement", $replacement);
 $smarty->assign("conge_id", $conge_id);
-$smarty->assign("users", $users);
+$smarty->assign("user", $user);
 $smarty->assign("evenements", $evenements);
 $smarty->assign("type", $type);
 $smarty->display("inc_vw_replacement.tpl");

@@ -17,8 +17,46 @@ Main.add(function(){
 	}
 });
 
-	
 </script>
+
+<table class="tbl">
+  <tr>
+    <th class="title text" colspan="3">
+    	Rééducateurs de la fonction 
+			{{mb_include module=mediusers template=inc_vw_function function=$user->_ref_function}}
+		</th>
+  </tr> 
+  <tr>
+    <th>{{mb_title class=CEvenementSSR field=sejour_id    }}</th>
+    <th>{{mb_title class=CEvenementSSR field=therapeute_id}}</th>
+    <th>Evts SSR</th>
+  </tr>
+  
+	{{foreach from=$evenements_counts key=sejour_id item=_counts_by_sejour}}
+	<tbody class="hoverable">
+		
+  {{foreach from=$_counts_by_sejour key=therapeute_id item=_count name=therapeutes}}
+  <tr>
+  	{{if $smarty.foreach.therapeutes.first}} 
+    {{assign var=_sejour value=$sejours.$sejour_id}}
+    <td rowspan="{{$_counts_by_sejour|@count}}">
+    	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+    		{{$_sejour}}
+			</span>
+		</td>
+  	{{/if}}
+    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}}</td>
+    <td style="text-align: center;">{{$_count}}</td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="3"><em>{{tr}}None{{/tr}}</em></td>
+  </tr>
+  {{/foreach}}
+  {{/foreach}}
+  </tbody>
+</table>
+
 <form name="editReplacement" action="?" method="post" 
       onsubmit="return onSubmitFormAjax(this, { onComplete: 
 			  function(){ 
@@ -41,32 +79,7 @@ Main.add(function(){
     {{mb_field object=$replacement field=sejour_id hidden=1}}
     {{mb_field object=$replacement field=conge_id hidden=1}}
 
-	<table class="tbl">
-		<tr>
-			<th class="title" colspan="2">Anciens remplacants pour {{$sejour->_ref_patient->_view}}</th>
-		</tr>	
-		<tr>
-	    <th>
-	      {{mb_title class=CReplacement field=replacer_id}}
-	    </th>
-	    <th>
-	      {{mb_title class=CReplacement field=sejour_id}}
-	   </th>
-	  </tr>
-		{{foreach from=$replacements item=_replacement}}
-		<tr>
-		  <td>
-			  {{$_replacement->_ref_replacer->_view}}
-		  </td>
-			<td>
-				{{$_replacement->_ref_sejour->_view}}
-			</td>
-		</tr>
-		{{foreachelse}}
-		<tr>
-		  <td colspan="2"><em>{{tr}}None{{/tr}}</em></td>
-		</tr>
-		{{/foreach}}
+<table class="form">
 		<tr>
 			{{if $type == "kine"}}
 				{{if $replacement->_id}}
@@ -85,7 +98,8 @@ Main.add(function(){
 		<tr>
 	    <td colspan="2" class="button">
 	    	{{if $replacement->_id}}
-				  {{mb_value object=$replacement field=replacer_id}}
+				
+				  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
 				{{else}}
 		      <select name="replacer_id" onchange="refreshReplacerPlanning(this.value);">
 		        <option value="">&mdash; Utilisateur</option>

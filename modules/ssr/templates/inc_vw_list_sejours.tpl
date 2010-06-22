@@ -11,7 +11,7 @@
 <table class="tbl">
   {{foreach from=$sejours key=plage_conge_id item=_sejours}}
 	  <tr>
-	    <th colspan="5" class="title">
+	    <th colspan="5" class="title text">
 	    	{{assign var=plage_conge value=$plages_conge.$plage_conge_id}}
 			  Séjours pendant les congés de 
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
@@ -21,7 +21,7 @@
 	    <th colspan="2">{{mb_title class="CSejour" field="patient_id"}}</th>
 	    <th>{{mb_title class="CSejour" field="entree"}}</th>
 	    <th>{{mb_title class="CSejour" field="sortie"}}</th>
-			<th>Evt SSR</th>
+			<th>Evts SSR</th>
     </tr>
 	  {{foreach from=$_sejours item=_sejour}}
 		  {{assign var=sejour_id value=$_sejour->_id}}
@@ -43,7 +43,7 @@
 		      {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
 		      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		    </td>
-				<td>
+				<td style="text-align: center;">
 					{{assign var=sejour_id value=$_sejour->_id}}
 					{{assign var=key value="$plage_conge_id-$sejour_id"}}
 					{{$count_evts.$key}}

@@ -2014,9 +2014,9 @@ class CMbObject {
    * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
    *
    * @param ref|CUser $user_id ID de l'utilisateur
-   * @param string $needle Permet de filtrer les aides commançant par le filtre, si non null
+   * @param string $keywords Permet de filtrer les aides commançant par le filtre, si non null
    */
-  function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null) {
+  function loadAides($user_id, $keywords = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null) {
     foreach ($this->_specs as $field => $spec) {
       if (isset($spec->helped)) {
         $this->_aides[$field] = array("no_enum" => null);
@@ -2034,9 +2034,9 @@ class CMbObject {
     // Construction du Where
     $where = array();
 
-    $where[] = "user_id = '$user_id' OR 
-                function_id = '$user->function_id' OR 
-                group_id = '{$user->_ref_function->group_id}'";
+    $where[] = "(user_id = '$user_id' OR 
+      function_id = '$user->function_id' OR 
+      group_id = '{$user->_ref_function->group_id}')";
                 
     $where["class"]   = $ds->prepare("= %", $this->_class_name);
 
@@ -2046,9 +2046,6 @@ class CMbObject {
     
     if ($depend_value_2){
       $where["depend_value_2"] = " = '$depend_value_2'";
-    }
-    if ($needle) {
-      $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
     }
 		
 		if($object_field){
@@ -2060,7 +2057,7 @@ class CMbObject {
     
     // Chargement des Aides de l'utilisateur
     $aide = new CAideSaisie();
-    $aides = $aide->loadList($where,$order); 
+    $aides = $aide->seek($keywords, $where, 100, null, null, $order); 
     $this->orderAides($aides, $depend_value_1, $depend_value_2);
   }
   
@@ -2083,7 +2080,7 @@ class CMbObject {
         continue;
       }
       
-      // on passe un appareil, on trie par type
+      // ... et réciproquement 
       if ($depend_value_2){
         $depend_field_1 = $aide->_depend_field_1;
         $depend_1 = CAppUI::tr("$this->_class_name.$aide->_depend_field_1.$aide->depend_value_1");
