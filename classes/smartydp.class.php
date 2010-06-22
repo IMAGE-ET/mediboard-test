@@ -262,9 +262,13 @@ function smarty_function_mb_key($params, &$smarty) {
  */
 function smarty_function_mb_ditto($params, &$smarty) {
   static $cache = array();
-  $name   = CMbArray::extract($params, "name", null, true);
+  $name   = CMbArray::extract($params, "name",  null, true);
   $value  = CMbArray::extract($params, "value", null, true);
-  $old = CMbArray::get($cache, $name, "");
+  $reset  = CMbArray::extract($params, "reset", false, false);
+  $old = '';
+  if (!$reset) {
+    $old = CMbArray::get($cache, $name, "");
+  }
   $cache[$name] = $value;
   return $old != $value ? $value : "|";
 }
