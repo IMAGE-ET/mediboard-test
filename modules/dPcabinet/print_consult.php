@@ -30,6 +30,7 @@ $sejour = $consult->_ref_sejour;
 $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
 $sejour->loadNumDossier();
+$sejour->loadRefsTransmissions();
 $patient = $consult->_ref_patient;
 
 $patient->loadIPP();
