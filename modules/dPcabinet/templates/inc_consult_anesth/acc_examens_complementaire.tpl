@@ -165,6 +165,17 @@ function reloadListExamComp() {
           </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$consult_anesth field="groupe_ok"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="groupe_ok" tabindex="103" onchange="submitForm(this.form)"}}
+          </td>
+          <th>{{mb_label object=$consult_anesth field="fibrinogene"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="fibrinogene" tabindex="109" size="4" onchange="submitForm(this.form)"}}
+            g/l
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$consult_anesth field="rai"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="rai" tabindex="103" onchange="submitForm(this.form)"}}
@@ -235,6 +246,30 @@ function reloadListExamComp() {
           <th>{{mb_label object=$consult_anesth field="ecbu"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="ecbu" tabindex="116" onchange="submitForm(this.form)"}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            {{mb_label object=$consult_anesth field="result_ecg"}}
+            <select name="_helpers_result_ecg" size="1" onchange="pasteHelperContent(this)">
+              <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$consult_anesth->_aides.result_ecg.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_ecg, 'result_ecg')">{{tr}}New{{/tr}}</button>
+              
+            <input type="hidden" name="_hidden_result_ecg" value="" />
+            <textarea name="result_ecg" onblur="submitForm(this.form)"></textarea>
+          </td>
+          <td colspan="2">
+            {{mb_label object=$consult_anesth field="result_rp"}}
+            <select name="_helpers_result_rp" size="1" onchange="pasteHelperContent(this)">
+              <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$consult_anesth->_aides.result_rp.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_rp, 'result_rp')">{{tr}}New{{/tr}}</button>
+              
+            <input type="hidden" name="_hidden_result_rp" value="" />
+            <textarea name="result_rp" onblur="submitForm(this.form)"></textarea>
           </td>
         </tr>
       </table>    

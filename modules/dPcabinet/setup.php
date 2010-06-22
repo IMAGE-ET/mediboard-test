@@ -1298,8 +1298,16 @@ class CSetupdPcabinet extends CSetup {
 		  DROP `biologie`,
 		  DROP `commande_sang`;";
     $this->addquery($sql);
+    
+    $this->makeRevision("1.22");
+    $sql = "ALTER TABLE `consultation_anesth`
+              ADD `groupe_ok` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `groupe`,
+              ADD `fibrinogene` FLOAT AFTER `creatinine`,
+              ADD `result_ecg` TEXT AFTER `ht_final`,
+              ADD `result_rp` TEXT AFTER `result_ecg`;";
+    $this->addquery($sql);
 		
-    $this->mod_version = "1.22";
+    $this->mod_version = "1.23";
   }
 }
 ?>

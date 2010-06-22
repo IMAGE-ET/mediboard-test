@@ -23,6 +23,7 @@ class CConsultAnesth extends CMbObject {
 
   var $groupe         = null;
   var $rhesus         = null;
+  var $groupe_ok      = null;
 
   // @todo A supprimer
   var $antecedents    = null;
@@ -49,6 +50,7 @@ class CConsultAnesth extends CMbObject {
   var $tca            = null;
   var $tca_temoin     = null;
   var $creatinine     = null;
+  var $fibrinogene    = null;
   var $na             = null;
   var $k              = null;
   var $tsivy          = null;
@@ -56,6 +58,8 @@ class CConsultAnesth extends CMbObject {
   var $ecbu           = null;
   var $ht             = null;
   var $ht_final       = null;
+  var $result_ecg     = null;
+  var $result_rp      = null;
 
   // Form fields
   var $_date_consult    = null;
@@ -102,6 +106,7 @@ class CConsultAnesth extends CMbObject {
     $specs["libelle_interv"]   = "str";
     $specs["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
     $specs["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
+    $specs["groupe_ok"]        = "bool default|0 show|0";
     
     // @todo: Supprimer ces quatre champs
     $specs["antecedents"]      = "text confidential";
@@ -118,6 +123,7 @@ class CConsultAnesth extends CMbObject {
     $specs["tca"]              = "numchar maxLength|2 show|0";
     $specs["tca_temoin"]       = "numchar maxLength|2 show|0";
     $specs["creatinine"]       = "float show|0";
+    $specs["fibrinogene"]      = "float show|0";
     $specs["na"]               = "float min|0 show|0";
     $specs["k"]                = "float min|0 show|0";
     $specs["tsivy"]            = "time show|0";
@@ -125,6 +131,8 @@ class CConsultAnesth extends CMbObject {
     $specs["ecbu"]             = "enum list|?|NEG|POS default|? show|0";
     $specs["ht"]               = "float min|0 max|100 show|0";
     $specs["ht_final"]         = "float min|0 max|100 show|0";
+    $specs["result_ecg"]       = "text helped";
+    $specs["result_rp"]        = "text helped";
     $specs["premedication"]    = "text helped";
     $specs["prepa_preop"]      = "text helped";
     $specs["date_analyse"]     = "date show|0";

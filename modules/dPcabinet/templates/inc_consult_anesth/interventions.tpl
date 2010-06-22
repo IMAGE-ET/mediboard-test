@@ -136,7 +136,7 @@
     <tr>
       <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" onchange="this.form.onsubmit();">
+        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" style="max-width: 14em;" ="this.form.onsubmit();">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$listChirs item=curr_prat}}
           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $consult_anesth->chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
