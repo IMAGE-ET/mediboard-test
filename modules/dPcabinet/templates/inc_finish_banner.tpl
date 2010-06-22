@@ -48,17 +48,15 @@ function printConsult() {
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$consult->_ref_patient size=42}}
       </a>
       <div style="float:right">
-        {{if $consult->_id}}
-          <button class="print" type="button" style="float: left;" onclick="printConsult();">
-            Imprimer la consultation
-          </button><br/>
-        {{/if}}
         <button class="print" type="button" onclick="printAllDocs()">
           Imprimer les documents
         </button> 
         <br />
         {{if isset($consult->_ref_sejour->_id|smarty:nodefaults)}}
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_ref_sejour->_guid}}');">{{$consult->_ref_sejour->_view}} </span> 
+          <button class="print" type="button" onclick="printConsult();">
+            Imprimer la consultation
+          </button><br/> 
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_ref_sejour->_guid}}');">{{$consult->_ref_sejour->_view}} </span>          
         {{/if}}   
       </div>
       {{/if}}
