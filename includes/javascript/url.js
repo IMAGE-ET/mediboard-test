@@ -489,6 +489,7 @@ var Url = Class.create({
     
     oOptions.onComplete = oOptions.onComplete.wrap(function(onComplete) {
       prepareForms(element);
+      initNotes();
       onComplete();
     });
 		

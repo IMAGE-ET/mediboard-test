@@ -45,6 +45,15 @@ if ($product->load($product_id)) {
     $_reference->loadRefProduct();
     $_reference->loadRefSociete();
   }
+  
+  $product->loadRefStock();
+  $where = array(
+    "date_delivery" => "IS NULL OR date_delivery = ''",
+    "stock_id" => " = '{$product->_ref_stock_group->stock_id}'",
+  );
+  
+  $delivery = new CProductDelivery;
+  $product->_ref_deliveries = $delivery->loadList($where, "date_dispensation", 100);
 }
 
 $product->getConsommation("-3 MONTHS");

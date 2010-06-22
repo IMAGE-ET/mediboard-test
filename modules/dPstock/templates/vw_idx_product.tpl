@@ -76,6 +76,7 @@ function filterReferences(form) {
       <ul class="control_tabs" id="tabs-stocks-references">
         <li><a href="#tab-stocks" {{if $product->_ref_stocks_service|@count == 0}}class="empty"{{/if}}>{{tr}}CProductStock{{/tr}} <small>({{$product->_ref_stocks_service|@count}})</small></a></li>
         <li><a href="#tab-references" {{if $product->_ref_references|@count == 0}}class="empty"{{/if}}>{{tr}}CProduct-back-references{{/tr}} <small>({{$product->_ref_references|@count}})</small></a></li>
+        <li><a href="#tab-deliveries" {{if $product->_ref_deliveries|@count == 0}}class="empty"{{/if}}>{{tr}}CProductStockGroup-back-deliveries{{/tr}} <small>({{$product->_ref_deliveries|@count}})</small></a></li>
       </ul>
       <hr class="control_tabs" />
       
@@ -161,8 +162,27 @@ function filterReferences(form) {
       <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0&amp;product_id={{$product->_id}}'">
         Nouvelle référence pour ce produit
       </button>-->
+      
+      <table id="tab-deliveries" class="main tbl">
+        <tr>
+          <th>{{mb_title class=CProductDelivery field=service_id}}</th>
+          <th>{{mb_title class=CProductDelivery field=quantity}}</th>
+          <th>{{mb_title class=CProductDelivery field=date_dispensation}}</th>
+        </tr>
+        {{foreach from=$product->_ref_deliveries item=_delivery}}
+          <tr>
+            <td>{{mb_value object=$_delivery field=service_id}}</td>
+            <td>{{mb_value object=$_delivery field=quantity}}</td>
+            <td>{{mb_value object=$_delivery field=date_dispensation}}</td>
+          </tr>
+        {{foreachelse}}
+          <tr>
+            <td colspan="3">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
+          </tr>
+        {{/foreach}}
+      </table>
      
-       {{/if}}
+      {{/if}}
     </td>
   </tr>
 </table>

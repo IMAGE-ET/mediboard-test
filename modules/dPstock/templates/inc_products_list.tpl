@@ -20,7 +20,7 @@
     <th>{{mb_title class=CProduct field=societe_id}}</th>
     <th>{{mb_title class=CProduct field=quantity}}</th>
     <th>{{mb_label class=CProduct field=item_title}}</th>
-    <th>{{mb_title class=CProduct field=packaging}}</th>
+    <!--<th>{{mb_title class=CProduct field=packaging}}</th>-->
   </tr>
   {{foreach from=$list_products item=_product}}
     <tbody class="hoverable">
@@ -50,7 +50,7 @@
       <td>
         {{$_product->item_title|spancate:25}}
       </td>
-      <td>{{$_product->packaging}}</td>
+      <!--<td>{{$_product->packaging}}</td>-->
     </tr>
     </tbody>
   {{foreachelse}}
