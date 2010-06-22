@@ -21,7 +21,7 @@
       <span>{{$_aide->name|emphasize:$needle}}</span>
       <br/>
       
-      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|truncate:300|emphasize:$needle}}</small>
+      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|truncate:400|emphasize:$needle}}</small>
       
     </li>
   {{foreachelse}}
