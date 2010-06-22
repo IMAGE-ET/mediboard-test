@@ -15,7 +15,7 @@
 
   {{foreach name="constante_b" from=$csteByTime key=_time item=_cste_time}}
     <tr>
-      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime reset=true}}</td>
+      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime}}</td>
       {{assign var="i" value=1}}
       {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
         {{if $i == 11}}
@@ -37,15 +37,16 @@
     {{/foreach}}
   </tr>
   
+  {{assign var=reset_mb_ditto value=true}}
   {{foreach name="constante_b2" from=$csteByTime key=_time item=_cste_time}}
-    <tr>
-      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime reset=true}}</td>
+      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime reset=$reset_mb_ditto}}</td>
       {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
         {{if $smarty.foreach.constante_time.index > $save_cste_time}}
           <td style="text-align: right">{{$_constante_medicale}}</td>
         {{/if}}
       {{/foreach}}
     </tr>
+  {{assign var=reset_mb_ditto value=false}}
   {{/foreach}}
   
 </table>
