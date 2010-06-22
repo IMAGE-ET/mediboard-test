@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+CCanDo::checkRead();
 
-
-global $AppUI, $can, $m, $tab;
+global $AppUI, $m, $tab;
 
 $current = intval(CValue::get('current', 0));
 $step    = intval(CValue::get('step', 20));

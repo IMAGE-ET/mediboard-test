@@ -9,6 +9,7 @@
  */
 
 CCando::checkRead();
+
 global $AppUI;
 
 $date    = CValue::get("date", mbDate());

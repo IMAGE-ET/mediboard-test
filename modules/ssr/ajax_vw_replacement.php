@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
+
 $sejour_id = CValue::getOrSession("sejour_id");
 $conge_id = CValue::getOrSession("conge_id");
 $type = CValue::getOrSession("type");

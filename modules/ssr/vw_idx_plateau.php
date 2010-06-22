@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $plateau = new CPlateauTechnique;
 $plateau->group_id = CGroups::loadCurrent()->_id;

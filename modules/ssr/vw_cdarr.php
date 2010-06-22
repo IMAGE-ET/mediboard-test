@@ -9,8 +9,7 @@
  */
 
 
-
-global $AppUI, $can, $m, $tab;
+CCanDo::checkRead();
 
 $activite = new CActiviteCdARR();
 $activite->code = CValue::getOrSession("code");

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI;
+CCanDo::checkRead();
 
 $prescription_id = CValue::get("prescription_id");
 $category_id = CValue::get("category_id");
