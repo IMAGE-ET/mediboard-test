@@ -55,7 +55,7 @@ function changePage(start) {
     </tr>
     
     <tr>
-      <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true"}}</td>
+      <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true" style="width: 250px"}}</td>
       <td>{{mb_field object=$delivrance field=quantity increment=true form="newOutflow" size=2}}</td>
       <td>{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
       <td>

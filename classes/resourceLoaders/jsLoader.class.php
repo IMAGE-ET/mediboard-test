@@ -122,6 +122,11 @@ abstract class CJSLoader extends CHTMLResourceLoader {
 	      // TODO: change the invalid keys (with accents) of the locales to simplify this
 	      $keys = array_map('utf8_encode', array_keys($locales));
 	      $values = array_map('utf8_encode', $locales);
+        
+        foreach($values as &$_value) {
+          $_value = CMbString::unslash($_value);
+        }
+        
 	      $script = '//'.$version['build']."\nwindow.locales=".json_encode(array_combine($keys, $values)).";";
 	      fwrite($fp, $script);
 	      fclose($fp);

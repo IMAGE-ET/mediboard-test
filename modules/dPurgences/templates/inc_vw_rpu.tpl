@@ -177,7 +177,7 @@ function showEtabEntreeTransfert(mode) {
 				  <tr>
 				    <th>{{mb_label object=$rpu field="box_id"}}</th>
 				    <td>
-				      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$listServicesUrgence}}
+				      {{include file="../../dPhospi/templates/inc_select_lit.tpl" field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$listServicesUrgence}}
 						</td>
 				  </tr>
 
@@ -319,7 +319,7 @@ function showEtabEntreeTransfert(mode) {
 				
 				{{if $dPconfig.dPurgences.gerer_hospi == "1"}} 
 		      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
-		      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm('{{tr}}confirm-RPU-Hospitalisation{{/tr}}');">
+		      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm($T('confirm-RPU-Hospitalisation'));">
 		        <input type="hidden" name="dosql" value="do_transfert_aed" />
 		        <input type="hidden" name="m" value="dPurgences" />
 		        <input type="hidden" name="del" value="0" />

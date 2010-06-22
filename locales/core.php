@@ -18,6 +18,9 @@ if (null == $locales = SHM::get($shared_name)) {
   	require_once($_path);
   }
   $locales = array_filter($locales, "stringNotEmpty");
+  foreach($locales as &$_locale) {
+    $_locale = CMbString::unslash($_locale);
+  }
   SHM::put($shared_name, $locales);
 }
 

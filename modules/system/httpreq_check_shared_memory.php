@@ -25,6 +25,9 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   }
   
   $locales = array_filter($locales, "stringNotEmpty");
+  foreach($locales as &$_locale) {
+    $_locale = CMbString::unslash($_locale);
+  }
   
   $path = "./tmp/locales.$localeName.js";
   if (!is_file($path)) {

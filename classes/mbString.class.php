@@ -151,6 +151,13 @@ abstract class CMbString {
 	  return intval($value);
 	}
   
+  static function unslash($str) {
+    return strtr($str, array(
+      "\\n" => "\n",
+      "\\t" => "\t",
+    ));
+  }
+  
   /**
    * Encodes HTML entities from a string
    * @param string $string The string to encode
