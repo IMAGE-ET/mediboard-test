@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkEdit();
+
 $date = CValue::getOrSession("date", mbDate());
 $type = CValue::getOrSession("type");
 

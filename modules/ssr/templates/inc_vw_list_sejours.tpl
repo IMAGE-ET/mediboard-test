@@ -13,7 +13,8 @@
 	  <tr>
 	    <th colspan="5" class="title">
 	    	{{assign var=plage_conge value=$plages_conge.$plage_conge_id}}
-			  Séjours pendant les congés de {{$plage_conge->_ref_user->_view}}	
+			  Séjours pendant les congés de 
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
 			</th>
 		</tr>
 		<tr>
