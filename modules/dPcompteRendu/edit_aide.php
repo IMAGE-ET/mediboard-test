@@ -10,6 +10,7 @@
 global $AppUI, $can;
 $can->needsRead();
 
+$aide_id      = CValue::get("aide_id", CValue::post("aide_id", ''));
 $class        = CValue::get("class");
 $field        = CValue::get("field");
 $text         = utf8_decode(CValue::get("text"));
@@ -43,23 +44,47 @@ foreach ($helped as $i => $depend_field) {
   $dependValues[$key] = @$object->_specs[$depend_field]->_locales;
 }
 
-// Nouvelle Aide à la saisie
+// Liste des aides
+$user_id = CAppUI::$user->_id;
+$user = new CMediusers();
+$user->load($user_id);
+$user->loadRefFunction();
+$group = CGroups::loadCurrent();
+$aidebis = new CAideSaisie();
+$where[] = "field = '".$field."' and (user_id=" . $user_id . " or function_id=" . $user->function_id . " or group_id=" . $group->_id.")";
+$orderby = "name";
+$aides = $aidebis->loadList($where, $orderby);
+
 $aide = new CAideSaisie();
-$aide->class        = $class;
-$aide->field        = $field;
-$aide->text         = stripslashes($text);
-$aide->depend_value_1 = $depend_value_1;
-$aide->depend_value_2 = $depend_value_2;
-$aide->user_id = $AppUI->user_id;
+if($aide_id) {
+  // Chargement de l'aide
+  $aide->load($aide_id);
+} else {
+  // Nouvelle Aide à la saisie
+  $aide->class        = $class;
+  $aide->field        = $field;
+  $aide->text         = stripslashes($text);
+  $aide->depend_value_1 = $depend_value_1;
+  $aide->depend_value_2 = $depend_value_2;
+  switch(CAppUI::pref("choicepratcab")) {
+    case "prat":  $aide->user_id = $user_id; break;
+    case "cab":   $aide->function_id = CAppUI::$user->function_id; break;
+    case "group": $aide->group_id = $group->_id;
+  }
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("aide"     , $aide);
+$smarty->assign("aide_id"  , $aide_id);
 $smarty->assign("dependValues", $dependValues);
 $smarty->assign("listFunc" , $listFunc);
 $smarty->assign("listPrat" , $listPrat);
 $smarty->assign("listEtab" , $listEtab);
-
+$smarty->assign("aides"    , $aides);
+$smarty->assign("user"    ,  $user);
+$smarty->assign("group"    , $group);
 $smarty->display("vw_edit_aides.tpl");
 ?>

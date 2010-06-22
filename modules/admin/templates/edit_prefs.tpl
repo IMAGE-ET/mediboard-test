@@ -256,7 +256,9 @@ Main.add(function () {
   <!-- Préférences pour le module {{$module}} -->
 
   {{mb_include template=inc_pref_enum var=saveOnPrint values="0|1|2"}}
-	  
+  
+  {{mb_include template=inc_pref_enum var=choicepratcab values="prat|cab|group"}}
+  
   </tbody>
   {{/if}}
   

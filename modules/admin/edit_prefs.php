@@ -42,7 +42,7 @@ $array_list_pref_common = array (
   "DEFMODULE",
   "touchscreen",
   "tooltipAppearenceTimeout",
-  "showLastUpdate",
+  "showLastUpdate"
 );
 
 foreach ($array_list_pref_common as $namePref){
@@ -86,6 +86,7 @@ $array_list_module_pref = array (
   ),
   "dPcompteRendu" => array(
     "saveOnPrint",
+    "choicepratcab"
   ),
   "system" => array (
     "INFOSYSTEM",

@@ -382,7 +382,10 @@ class CSetupdPcompteRendu extends CSetup {
               ADD `private` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.51";
+    $this->makeRevision("0.51");
+    $this->addPrefQuery("choicepratcab", "prat");
+    
+    $this->mod_version = "0.52";
   }
 }
 ?>
