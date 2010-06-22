@@ -29,7 +29,7 @@ $consult->loadComplete();
 $sejour = $consult->_ref_sejour;
 $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
-
+$sejour->loadNumDossier();
 $patient = $consult->_ref_patient;
 
 $patient->loadIPP();
@@ -39,11 +39,6 @@ $dossier_medical = $patient->_ref_dossier_medical;
 $dossier_medical->countAntecedents();
 $dossier_medical->loadRefPrescription();
 $dossier_medical->loadRefsTraitements();
-
-
-foreach ($consult->_ref_actes_ccam as $_ccam) {
-  $_ccam->loadRefExecutant();
-}
 
 $csteByTime = array();
 foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
