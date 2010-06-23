@@ -75,13 +75,18 @@ var WaitingMessage = {
     element = $(element);
     
     var coverContainer = new Element("div", {style: "border:none;background:none;padding:0;margin:0;position:relative;"}).addClassName("cover-container").hide(),
-        cover = new Element("div").addClassName("ajax-loading"),
-        descendant = element.down();
+        cover = new Element("div").addClassName("ajax-loading");
 
     coverContainer.insert(cover);
     
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
-    var receiver = (descendant && /^tr$/i.test(element.tagName)) ? descendant : element;
+    var receiver = element;
+    
+    if (/^tr|tbody$/i.test(element.tagName)) {
+      var cell = element.down("td, th");
+      if (cell)
+        receiver = cell;
+    }
     
     receiver.insert({top: coverContainer});
     
@@ -672,7 +677,6 @@ var DOM = {
     var e, i, j, arg, length = args.length;
     try {
       e = new Element(tag, args[0]);
-      if (Prototype.Browser.IE && args[0] && args[0].className) e.addClassName(args[0].className); // Stupid IE bug
       for (i = 1; i < length; i++) {
         arg = args[i];
         if (arg == null) continue;

@@ -15,7 +15,7 @@
 		    var url = new Url("ssr", "httpreq_do_activite_autocomplete");
 		    url.autoComplete("editCdarr_code", "code_auto_complete", {
 		      minChars: 2,
-		      select: ".value"
+		      select: "value"
 		    } );
 		  } 
 		});

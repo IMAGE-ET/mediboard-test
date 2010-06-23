@@ -660,6 +660,7 @@ textarea#htmlarea {
   overflow-x: hidden;
   background: transparent;
   resize: none;
+  height: 3.8em;
 }
 
 .textarea-container textarea:focus {

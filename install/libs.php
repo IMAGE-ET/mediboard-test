@@ -197,27 +197,14 @@ $library->versionString = "Version 1.73";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "JSON-PHP";
-$library->url = "http://mike.teczno.com/json.html";
-$library->fileName = "JSON.tar.gz";
-$library->extraDir = "json";
-$library->description = "Composant PHP de genération de données JSON. Bientôt en package PEAR";
-$library->sourceDir = "json";
-$library->targetDir = "json";
-$library->versionFile = "JSON.php";
-$library->versionString = "JSON.php,v 1.30";
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-$library->fileName = "scriptaculous-js-1.8.2.tar.gz";
+$library->fileName = "scriptaculous-js-1.8.3.tar.gz";
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
-$library->sourceDir = "scriptaculous-js-1.8.2";
+$library->sourceDir = "scriptaculous-js-1.8.3";
 $library->targetDir = "scriptaculous";
 $library->versionFile = "CHANGELOG";
-$library->versionString = "*V1.8.2*";
+$library->versionString = "*V1.8.3*";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "scriptaculous";
