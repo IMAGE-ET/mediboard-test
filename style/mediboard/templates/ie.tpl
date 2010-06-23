@@ -4,6 +4,10 @@
   <a href="http://mediboard.org/public/Firefox" target="_blank">cliquez ici</a> 
   pour installer Firefox et profiter d'une meilleure expérience.
 </div>
+
+<script type="text/javascript">
+window.onerror = function(){};
+</script>
 <![endif]-->
 
 <!--[if IE 7]>
