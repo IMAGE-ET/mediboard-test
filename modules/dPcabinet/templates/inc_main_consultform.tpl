@@ -23,6 +23,9 @@
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 {{mb_key object=$consult}}
 
+{{assign var=exam_count value=$consult->_exam_fields|@count}}
+{{math assign=text_rows equation="12/round(c/2)" c=$exam_count}}
+
 <table class="main">
   {{foreach name=exam_fields from=$consult->_exam_fields key=current item=field}}
   {{assign var=last value=$smarty.foreach.exam_fields.last}}
@@ -81,7 +84,7 @@
         {{if $readonly}}
           {{mb_value object=$consult field=$field}}
         {{else}}
-          {{mb_field object=$consult field=$field rows="4" onchange="this.form.onsubmit()"}}
+          {{mb_field object=$consult field=$field rows=$text_rows onchange="this.form.onsubmit()"}}
         {{/if}}
       </td>
     </tr>

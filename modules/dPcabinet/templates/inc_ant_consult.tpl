@@ -210,7 +210,7 @@ Main.add(function () {
             </script>
           </td>
           <td rowspan="3">
-            <textarea name="rques" onblur="this.form.onsubmit();"></textarea>
+            <textarea name="rques" rows=4 onblur="this.form.onsubmit();"></textarea>
           </td>
         </tr>
 

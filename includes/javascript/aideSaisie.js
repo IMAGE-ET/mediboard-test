@@ -71,7 +71,6 @@ var AideSaisie = {
       
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
-      
       $V(this.element, data.text.strip());
       this.element.focus();
     },

@@ -587,8 +587,10 @@ class CMbFieldSpec {
 
   function getFormElementTextarea($object, &$params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
+    $rows         = CMbArray::extract($params, "rows", "3");
+
     $extra        = CMbArray::makeXmlAttributes($params);
-    $sHtml        = "<textarea name=\"$field\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
+    $sHtml        = "<textarea name=\"$field\" rows=\"$rows\" class=\"".htmlspecialchars(trim("$className $this->prop"))."\" $extra>".htmlspecialchars($value)."</textarea>";
     return $sHtml;
   }
 

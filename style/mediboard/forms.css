@@ -473,6 +473,8 @@ div.autocomplete ul li {
 	line-height: 100%;
   background-image: url(images/pictures/bg-gradient.png);
   background-position: center top;
+	max-height: 55px;
+	overflow: hidden;
 }
 
 /*div.autocomplete ul li:nth-of-type(2n+1) {
@@ -660,7 +662,6 @@ textarea#htmlarea {
   overflow-x: hidden;
   background: transparent;
   resize: none;
-  height: 3.8em;
 }
 
 .textarea-container textarea:focus {
