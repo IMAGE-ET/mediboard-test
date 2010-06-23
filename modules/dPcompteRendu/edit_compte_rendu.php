@@ -124,6 +124,9 @@ else {
         #body { 
           padding-top: {$header->height}px;
         }
+        hr.pagebreak {
+          padding-top: {$header->height}px;
+        }
       }";
     
     $style .="
@@ -132,13 +135,6 @@ else {
           padding-bottom: {$footer->height}px;
         }";
 
-    if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0 &&
-       CAppUI::conf("dPcompteRendu CCompteRendu same_print") == 0) {
-      $style .=
-      "hr.pagebreak {
-            padding-top: {$header->height}px;
-      }";
-    }
     $style .= "}</style>";
     
     $compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
