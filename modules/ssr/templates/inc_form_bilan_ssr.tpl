@@ -260,7 +260,7 @@ refreshFormBilanSSR = function(){
 				  </tr>
 					<tr>
 					<td colspan="2">
-	          {{mb_field object=$bilan field=entree onblur="this.form.onsubmit()"}}
+	          {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
 	        </td>
 					</tr>
 	        <tr>
@@ -268,7 +268,7 @@ refreshFormBilanSSR = function(){
 	        </tr>			
 				  <tr>
 				    <td colspan="2">
-				      {{mb_field object=$bilan field=sortie onblur="this.form.onsubmit()"}}
+				      {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
 				    </td> 
 				  </tr>
 					<tr>
