@@ -31,13 +31,24 @@
   	{{/if}}
   </td>
   {{/if}}
-  <td style="text-align: center;">{{mb_ditto name=user value=$_log->_ref_user->_view}}</td>
-  <td style="text-align: center;">{{mb_ditto name=date value=$_log->date|date_format:$dPconfig.date}}</td>
-  <td style="text-align: center;">{{mb_ditto name=time value=$_log->date|date_format:$dPconfig.time}}</td>
+  <td style="text-align: center;">
+    <label onmouseover="ObjectTooltip.createEx(this, '{{$_log->_ref_user->_guid}}');">
+      {{mb_ditto name=user value=$_log->_ref_user->_view}}
+    </label>
+  </td>
+  <td style="text-align: center;">
+    {{mb_ditto name=date value=$_log->date|date_format:$dPconfig.date}}
+  </td>
+  <td style="text-align: center;">
+    {{mb_ditto name=time value=$_log->date|date_format:$dPconfig.time}}
+  </td>
   <td>{{mb_value object=$_log field=type}}</td>
   <td class="text">
     {{foreach from=$_log->_fields item=curr_field name=field}}
-    <label title="{{$curr_field}}{{if isset($_log->_old_values.$curr_field|smarty:nodefaults)}} - {{$_log->_old_values.$curr_field}}{{/if}}">{{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}</label>{{if !$smarty.foreach.field.last}}, {{/if}}
+      <label title="{{$curr_field}}{{if isset($_log->_old_values.$curr_field|smarty:nodefaults)}} - {{$_log->_old_values.$curr_field}}{{/if}}">
+        {{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}
+      </label>
+      {{if !$smarty.foreach.field.last}},{{/if}}
     {{/foreach}}
   </td>
   
