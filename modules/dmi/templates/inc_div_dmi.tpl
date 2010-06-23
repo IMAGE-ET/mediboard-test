@@ -96,10 +96,11 @@ Main.add(function () {
     },
     onAfterShow: function(element, update){
       if (element.enterKeyPressed) {
-        update.hide();
         element.select();
-        if (update.select("li").length == 1)
+        if (update.select("li").length == 1) {
+          update.hide();
           autocompleter.selectEntry(0);
+        }
       }
     },
     //dropdown: true,
