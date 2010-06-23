@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<ul>
+<ul class="lotnumber|{{$lot_number}} is_code128|{{$is_code128}}">
   {{foreach from=$matches item=match}}
     <li id="match-{{$match->_id}}" class="lotnumber|{{$lot_number}}">
       <strong>{{$match->_view|emphasize:$keywords}}</strong><br />
@@ -27,6 +27,6 @@
       </span>
     </li>
   {{foreachelse}}
-    <li></li>
+    <li style="display: none;">{{$keywords}}</li>
   {{/foreach}}
 </ul>

@@ -50,7 +50,7 @@ search_product_code = function(code) {
 
 search_product_order_item_reception = function(form, onComplete){
   var url = new Url("dmi", "httpreq_do_search_product_order_item_reception");
-  url.addParam("product_id", form.product_id.value);
+  url.addFormData(form);
   url.requestUpdate("list_product_order_item_reception", {onComplete: onComplete || function(){} });
   return false;
 }
@@ -64,13 +64,18 @@ Main.add(function () {
   var url = new Url("dmi", "httpreq_do_product_autocomplete");
   var autocompleter = url.autoComplete(searchField, formDmiDelivery._view.id+'_autocomplete', {
     minChars: 2,
+    //frequency: 1.5,
     updateElement : function(element) {
       var id = element.id;
       var lot_number = (element.className || "").match(/lotnumber\|([^ ]*)/);
-      if (lot_number) lot_number = lot_number[1];
+      var is_code128 = element.up().className.match(/is_code128\|([^ ]?)/);
       
-      $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
+      if (lot_number) lot_number = lot_number[1];
+      if (is_code128) is_code128 = is_code128[1];
+      
       $V(formDmiDelivery.product_id, (id ? id.split('-')[1] : ""));
+      $V(formDmiDelivery._is_code128, is_code128);
+      $V(formDmiDelivery._lot_number, lot_number);
       
       var onComplete = (lot_number ? function(){
         var field = getForm("searchProductOrderItemReception")._search_lot;
@@ -84,17 +89,28 @@ Main.add(function () {
       } : Prototype.emptyFunction);
       
       search_product_order_item_reception(formDmiDelivery, onComplete);
+      
+      if (element.enterKeyPressed) {
+        $V(searchField, "" /*element.down(".view").innerHTML.stripTags().strip()*/);
+      }
     },
-    dropdown: true,
-    autoSelect: true,
+    onAfterShow: function(element, update){
+      if (element.enterKeyPressed) {
+        update.hide();
+        element.select();
+        if (update.select("li").length == 1)
+          autocompleter.selectEntry(0);
+      }
+    },
+    //dropdown: true,
+    //autoSelect: true,
     callback: function(input, queryString){
-      input.select();
       return (queryString + "&category_id={{$dPconfig.dmi.CDMI.product_category_id}}"); 
     }
   });
   
   searchField.goodCharsCount = 0;
-  searchField.stopObserving("click").stopObserving("focus");
+  //searchField.stopObserving("click").stopObserving("focus"); // used when dropdown: true
   searchField.focus();
   
   /*searchField.observe("keypress", function(e){
@@ -108,6 +124,8 @@ Main.add(function () {
   searchField.observe("keypress", function(e){
     var trigger = Event.element(e);
     var charCode = Event.key(e);
+    
+    trigger.enterKeyPressed = (charCode == 13);
     
     if (Event.isCapsLock(e) || "&é\"'èçà".include(String.fromCharCode(charCode))) {
       if (trigger.oTooltip)
@@ -124,6 +142,8 @@ Main.add(function () {
       }
     }
   });
+  
+  dmiAutocompleter = autocompleter;
 });
 
 filterByLotNumber = function(e, term) {
@@ -208,54 +228,21 @@ delLineDMI = function(line_dmi_id){
   veuillez la désactiver pour permettre une bonne lecture du code barre.
 </div>
               
-<table class="main" style="table-layout: fixed;">
+<table class="form">
+  {{*  
   <tr>
-    
-    {{* 
+    <th colspan="2" class="category">Recherche par produit</th>
+  </tr>
+  *}}
+  <tr>
+    <th>Produit / Code barre</th>
     <td>
-      <form name="dmi_delivery_by_code" method="get" action="" onsubmit="return search_product(this)">
+      <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
         <input type="hidden" name="product_id" value="" />
-        
-	      <table class="form">
-	        <tr>
-	          <th colspan="2" class="category">Recherche par code barre</th>
-	        </tr>
-	        <tr>
-	          <th>
-	            <label for="code">Code barre</label>
-            </th>
-	          <td>
-	            <input type="text" size="30" name="code" />
-              <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
-            </td>
-	        </tr>
-	        <tr>
-	          <td id="product_description_code" colspan="2" class="text"></td>
-	        </tr>
-	      </table>
-      
+        <input type="hidden" name="_is_code128" value="" />
+        <input type="text" name="_view" size="40" value="" style="font-size: 1.3em;" />
+        <div id="dmi_delivery__view_autocomplete" style="display: none; width: 350px;" class="autocomplete"></div>
       </form>
-    </td>
-    *}}
-    
-    <td>
-      <table class="form">
-        {{*  
-        <tr>
-          <th colspan="2" class="category">Recherche par produit</th>
-        </tr>
-        *}}
-        <tr>
-          <th>Produit</th>
-          <td>
-            <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
-              <input type="hidden" name="product_id" value="" />
-	            <input type="text" name="_view" size="30" value="" />
-	            <div id="dmi_delivery__view_autocomplete" style="display: none; width: 350px;" class="autocomplete"></div>
-	          </form>
-          </td>
-        </tr>
-      </table>
     </td>
   </tr>
 </table>

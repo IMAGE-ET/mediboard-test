@@ -12,14 +12,20 @@ global $can;
 $can->needsRead();
 
 $product_id = CValue::get('product_id');
+$keywords   = CValue::get('_view');
+$is_code128 = CValue::get('_is_code128');
+$lot_number = CValue::get('_lot_number');
 
 $product = new CProduct();
 $product->load($product_id);
 
-if(!$product->_id) {
-  CAppUI::stepAjax("Produit non trouvé", UI_MSG_ERROR);
-}
-else {
+$dmi = new CDMI;
+
+$list_societes = array();
+$list_references = array();
+$list_receptions = array();
+
+if($product->_id) {
 	$where = array(
     "product.product_id" => "= $product_id"
   );
@@ -31,30 +37,39 @@ else {
 	
   //chargement de la reception
   $product_order_item_reception = new CProductOrderItemReception();
-  $list = $product_order_item_reception->loadList($where,null,null,null,$leftjoin);
-  foreach ($list as $_poir) {
+  $list_receptions = $product_order_item_reception->loadList($where,null,null,null,$leftjoin);
+  foreach ($list_receptions as $_poir) {
   	$_poir->loadRefsFwd();
   }
 }
+else {
+  //$dmi->code = ($is_code128 ? "" : $keywords);
+  $dmi->_lot_number = $lot_number;
+  $dmi->in_livret = 1;
+  /*
+  $dmi_category = new CDMICategory;
+  $dmi_category->loadObject(); // FIXME: devrait etre en config
+  $dmi->category_id = $dmi_category->_id;*/
+}
 
-if(count($list) > 0) {
-  foreach ($list as $_id => $_reception) {
+if(count($list_receptions) > 0) {
+  foreach ($list_receptions as $_id => $_reception) {
     $remaining = $_reception->getQuantity() - $_reception->countBackRefs("lines_dmi");
     if ($remaining < 1) {
-      unset($list[$_id]);
+      unset($list_receptions[$_id]);
     }
   }
   
-  if(count($list) == 0) {
+  if(count($list_receptions) == 0) {
     CAppUI::stepAjax("Tous les articles <strong>$product->_view</strong> sont déjà consommés", UI_MSG_WARNING);
   }
 }
 
-$reference = new CProductReference;
-$reference->product_id = $product->_id;
-$list_references = $reference->loadMatchingList();
-
-$list_societes = array();
+if ($product->_id) {
+  $reference = new CProductReference;
+  $reference->product_id = $product->_id;
+  $list_references = $reference->loadMatchingList();
+}
 
 if (count($list_references)) {
   foreach($list_references as $_reference) {
@@ -67,8 +82,11 @@ else {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("list", $list);
+$smarty->assign("list", $list_receptions);
+$smarty->assign("dmi", $dmi);
 $smarty->assign("list_references", $list_references);
 $smarty->assign("list_societes", $list_societes);
 $smarty->assign("product", $product);
+$smarty->assign("keywords", $keywords);
+$smarty->assign("is_code128", $is_code128);
 $smarty->display('inc_search_product_order_item_reception.tpl');

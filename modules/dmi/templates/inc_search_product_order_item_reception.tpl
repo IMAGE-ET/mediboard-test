@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $product->_id}}
+
 <script type="text/javascript">
 Main.add(function(){
   var form = getForm("searchProductOrderItemReception");
@@ -37,23 +39,22 @@ Main.add(function(){
   });
 });
 </script>
-    
+
+<hr />
+<p style="font-weight: bold; font-size: 1.4em;">
+  [{{$product->code}}] - {{$product}}
+</p>
+{{$product->description}}
+
+<hr />
+  
 <form name="searchProductOrderItemReception" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){search_product_order_item_reception(getForm('dmi_delivery_by_product'))}})">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
   <input type="hidden" name="quantity" value="1" />
   <input type="hidden" name="date" value="now" />
   
-  <hr />
-  
-  <p style="font-weight: bold; font-size: 1.4em;">{{$product}}</p>
-  {{$product->description}}
-  
-  <hr />
-  
-  {{if $list|@count == 0}}
-    <div class="small-info text">Aucun article enregistré, veuillez le créer ci-dessous</div>
-  {{else}}
+  {{if $list|@count}}
     <script type="text/javascript">
       Main.add(function(){
         var field = getForm("searchProductOrderItemReception")._search_lot;
@@ -69,14 +70,22 @@ Main.add(function(){
     </script>
   {{/if}}
   
-  {{if $list_references|@count == 0}}
+  {{if $list_references|@count == 0 || $list|@count == 0}}
     <div class="small-info text">
-      Aucune référence n'est disponible, veuillez choisir le <strong>fournisseur</strong>
-      de ce DMI pour créér une référence et un lot
+      Aucun lot n'est actuellement enregistré, veuillez renseigner les points suivants:
+      <ul>
+        {{if $list_references|@count == 0}}
+          <li>aucune référence n'est disponible, veuillez choisir le <strong>laboratoire</strong></li>
+        {{/if}}
+        
+        {{if $list|@count == 0}}
+          <li>aucun lot enregistré, veuillez le créer ci-dessous</li>
+        {{/if}}
+      </ul>
     </div>
   {{/if}}
   
-  {{if $list|@count == 0 || $list_references|@count == 0}}
+  {{if $product->_id && ($list|@count == 0 || $list_references|@count == 0)}}
     <script type="text/javascript">
     Main.add(function(){
       getForm("searchProductOrderItemReception").code.focus();
@@ -125,7 +134,7 @@ Main.add(function(){
         <label for="_reference_id" style="display: none;">
           {{if $list_references|@count}}Date/Référence{{else}}Fournisseur{{/if}}
         </label>
-        <select name="_reference_id" class="notNull" style="width: 10em;">
+        <select name="_reference_id" class="notNull">
           {{if $list_references|@count}}
             {{foreach from=$list_references item=_reference}}
               <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
@@ -140,7 +149,7 @@ Main.add(function(){
       </td>
       <td>
         <label for="code" style="display: none;">{{tr}}CProductOrderItemReception-code{{/tr}}</label>
-        {{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull"}}
+        {{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull" value="toto"}}
       </td>
       <td>
         <label for="lapsing_date" style="display: none;">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label>
@@ -153,3 +162,57 @@ Main.add(function(){
   
   <div id="product_reception_by_product"></div>
 </form>
+
+{{else}}
+  <div class="small-info">
+    Produit non trouvé avec le code <strong>{{$keywords}}</strong>.
+    <br />Veuillez renseigner son libellé ainsi que sa référence produit.
+  </div>
+  
+  <script type="text/javascript">
+    updateProductId = function(id, object){
+      var form = getForm('dmi_delivery_by_product');
+      $V(form._view, object.code);
+      $V(form.product_id, "");
+      dmiAutocompleter.activate.bind(dmiAutocompleter)();
+      //search_product_order_item_reception(form);
+    }
+  </script>
+  
+  <form name="create-dmi" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
+    <input type="hidden" name="m" value="dmi" />
+    <input type="hidden" name="dosql" value="do_dmi_aed" />
+    <input type="hidden" name="callback" value="updateProductId" />
+    <input type="hidden" name="_lot_number" value="{{$dmi->_lot_number}}" />
+    
+    {{mb_key object=$dmi}}
+    {{mb_field object=$dmi field=in_livret hidden=true}}
+    
+    <table class="main form">
+      <tr>
+        <th>{{mb_label object=$dmi field=nom}}</th>
+        <td>{{mb_field object=$dmi field=nom}}</td>
+      </tr>
+      <tr>
+        <th>Référence produit</th>
+        <td>{{mb_field object=$dmi field=code}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$dmi field=type}}</th>
+        <td>{{mb_field object=$dmi field=type}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$dmi field=category_id}}</th>
+        <td>{{mb_field object=$dmi field=category_id form="create-dmi" autocomplete="true,1,50,true,true"}}</td>
+      </tr>
+      <tr>
+        <th></th>
+        <td>
+          <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+  
+  <hr />
+{{/if}}
