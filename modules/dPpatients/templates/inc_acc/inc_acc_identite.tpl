@@ -172,6 +172,10 @@ Main.add(function() {
     <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>
     <td>{{mb_field object=$patient field="qual_beneficiaire" onchange=showCopieIdentite()}}</td>
 	</tr>
+  <tr>
+    <th>{{mb_label object=$patient field="vip"}}</th>
+    <td>{{mb_field object=$patient field="vip" typeEnum="checkbox"}}</td>
+  </tr>
 </table>	
     
   </td>

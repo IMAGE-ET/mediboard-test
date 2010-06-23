@@ -2,6 +2,13 @@
   {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
   <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
   {{/if}}
+  {{if $_patient->vip && $can->admin}}
+  <td class="text" colspan="4">
+    <a href="#{{$_patient->_guid}}" onclick="reloadPatient('{{$_patient->_id}}', this);">
+      Patient confidentiel
+    </a>
+  </td>
+  {{else}}
   <td class="text">
     {{if $_patient->_id == $patVitale->_id}}
     <div style="float:right;">
@@ -29,4 +36,5 @@
       {{tr}}Show{{/tr}}
     </a>
   </td>
+  {{/if}}
 </tr>

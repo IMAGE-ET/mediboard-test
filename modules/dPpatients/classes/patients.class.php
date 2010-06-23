@@ -90,6 +90,8 @@ class CPatient extends CMbObject {
   var $tel2             = null;
   var $tel_autre        = null;
   var $email            = null;
+  var $vip              = null;
+  
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
   var $incapable_majeur = null;
@@ -214,17 +216,20 @@ class CPatient extends CMbObject {
   var $_hprim_initiateur_group_id  = null; // group initiateur du message HPRIM
   
   // Object References
-  var $_nb_docs              = null;
-  var $_ref_sejours          = null;
-  var $_ref_consultations    = null;
-  var $_ref_prescriptions    = null;
-  var $_ref_curr_affectation = null;
-  var $_ref_next_affectation = null;
-  var $_ref_medecin_traitant = null;
+  var $_nb_docs                     = null;
+  var $_ref_sejours                 = null;
+  var $_ref_consultations           = null;
+  var $_ref_prescriptions           = null;
+  var $_ref_curr_affectation        = null;
+  var $_ref_next_affectation        = null;
+  var $_ref_medecin_traitant        = null;
   var $_ref_medecins_correspondants = null;
-  var $_ref_dossier_medical  = null;
-  var $_ref_IPP              = null;
-  var $_ref_constantes_medicales = null;
+  var $_ref_dossier_medical         = null;
+  var $_ref_IPP                     = null;
+  var $_ref_constantes_medicales    = null;
+  
+  // Distant fields
+  var $_ref_praticiens = null; // Praticiens ayant participé à la pec du patient
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -279,6 +284,7 @@ class CPatient extends CMbObject {
     $specs["tel2"]              = "numchar confidential length|10 mask|$phone_number_format";
     $specs["tel_autre"]         = "str maxLength|20";
     $specs["email"]             = "str confidential";
+    $specs["vip"]               = "bool default|0";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     
@@ -1162,6 +1168,7 @@ class CPatient extends CMbObject {
   }
   
   function loadDossierComplet($permType = null) {
+  	$this->_ref_praticiens = array();
     $pat_id = $this->loadRefs();
     
     $this->canRead();
@@ -1202,6 +1209,7 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
       
       $consult->loadRefsFwd(1);
+      $this->_ref_praticiens[$consult->_ref_chir->user_id] = $consult->_ref_chir;
       $consult->getType();
       $consult->_ref_chir->loadRefFunction();
       $consult->_ref_chir->_ref_function->loadRefGroup();
@@ -1217,12 +1225,14 @@ class CPatient extends CMbObject {
       $sejour->loadRefsOperations();
       $sejour->countDocItems($permType);
       $sejour->loadRefsFwd(1);
+      $this->_ref_praticiens[$sejour->praticien_id] = $sejour->_ref_praticien;
       $sejour->canRead();
       $sejour->canEdit();
       $sejour->countDocItems($permType);
       foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
         $operation =& $sejour->_ref_operations[$keyOp];
         $operation->loadRefsFwd(1);
+        $this->_ref_praticiens[$operation->chir_id] = $operation->_ref_chir;
         $operation->countDocItems($permType);
         $operation->canRead();
         $operation->canEdit();

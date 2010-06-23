@@ -28,13 +28,30 @@ if ($patient->_id) {
   $patient->loadIdVitale();
 }
 
+$user_in_list_prat = 0;
+if($can->admin) {
+	$user_in_list_prat = 0;
+} elseif($patient->vip) {
+	foreach($patient->_ref_praticiens as $_prat) {
+		if($AppUI->user_id == $_prat->user_id) {
+			$user_in_list_prat = 1;
+		}
+	}
+}
+
+$vip = $patient->vip && !$user_in_list_prat;
+if($vip) {
+	CValue::setSession("patient_id", 0);
+}
+
 $user = new CMediusers();
 $listPrat = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("patient"         , $patient         );
-$smarty->assign("listPrat"        , $listPrat        );
+$smarty->assign("patient"         , $patient);
+$smarty->assign("vip"             , $vip);
+$smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));

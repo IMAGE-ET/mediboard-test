@@ -1191,7 +1191,11 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.04");
     $this->addPrefQuery("vCardExport", "0");
     
-    $this->mod_version = "1.05";
+    $this->makeRevision("1.05");
+    $sql = "ALTER TABLE `patients` ADD `vip` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `email`";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.06";
   }
 }
 

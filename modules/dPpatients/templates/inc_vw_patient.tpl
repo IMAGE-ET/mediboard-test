@@ -13,6 +13,14 @@ Document.refreshList = function() {
 
 </script>
 
+{{if $vip}}
+<div class="big-warning">
+  Vous n'avez pas accès à l'identité de ce patient.
+  Veuillez contacter un administrateur de la clinique
+  pour avoir plus d'information sur ce problème.
+</div>
+{{else}}
+
 {{mb_include module=dPpatients template=inc_vw_identite_patient}}
 
 <table class="form">
@@ -118,3 +126,4 @@ Document.refreshList = function() {
   {{/foreach}}
   {{/if}}
 </table>
+{{/if}}
