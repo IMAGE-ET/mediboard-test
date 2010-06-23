@@ -11,14 +11,15 @@ announce_script "Mediboard replace base"
 
 if [ "$#" -lt 5 ]
 then 
-  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> (<with_restart>) (<safe>) (<port>)"
+  echo "Usage: $0 <source_location> <source_directory> <source_database> <target_directory> <target_database> (-r <with_restart>) (-s <safe>) (-m <mysql_directory>)(-p <port>)"
   echo " <source_location>  is the remote location, ie root@oxmytto.homelinux.com"
   echo " <source_directory> is the remote directory, /var/backup/mediboard"
   echo " <source_database>  is the source database name, ie mediboard"
   echo " <target_directory> is the target directory location, /var/backup/"
   echo " <target_database>  is the target database name, ie target_mediboard"
   echo " [-r <with_restart>]  is restart the Mysql server (Warning), ie for InnoDB"
-  echo " [-s <safe>] is the copy source database "
+  echo " [-s <safe>] is the copy source database"
+  echo " [-m <mysql_directory>] is the directory where databases are stored, ie /var/lib/mysql"
   echo " [-p <port>] is the ssh port af the target remote location, 22"
   exit 1
 fi
@@ -26,7 +27,8 @@ fi
 port=22
 with_restart=0
 safe=0
-args=`getopt p:rs $*`
+args=`getopt m:p:rs $*`
+mysql_directory=/var/lib/mysql
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -38,6 +40,7 @@ for i; do
     -r) with_restart=1; shift;;
     -s) safe=1; shift;;
     -p) port=$2; shift 2;;
+    -m) mysql_directory=$2; shift 2;;
     --) shift ; break ;;
   esac
 done
@@ -79,7 +82,7 @@ then
 check_errs $? "Failed to stop mysql" "Succesfully stop mysql"
 fi
 
-dir_target=/var/lib/mysql/$target_database
+dir_target=$mysql_directory/$target_database
 
 if [ $safe -eq 1 ]
 then
