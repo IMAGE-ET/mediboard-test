@@ -1499,6 +1499,42 @@ class CPatient extends CMbObject {
       $vcard->addPicture($this->_ref_photo_identite);
     }
   }
+  
+  function isIPPConflict($ipp) {
+    // Pas de tag IPP => pas d'affichage d'IPP
+    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+      return;
+    }
+    
+    $id400 = new CIdSante400();
+    $id400->object_class= 'CPatient';
+    $id400->tag = $tag_ipp;
+    $id400->id400 = $ipp;
+    $id400->loadMatchingObject();
+
+    return $id400->_id;
+  }
+  
+  function countMatchingPatients() {
+    $ds = CSQLDataSource::get("std");
+
+    $res = $ds->query("SELECT COUNT(*) AS total,
+      CONVERT( GROUP_CONCAT(`patient_id` SEPARATOR '|') USING latin1 ) AS ids , 
+      LOWER( CONCAT_WS( '-', 
+        REPLACE( REPLACE( REPLACE( REPLACE( `nom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) , 
+        REPLACE( REPLACE( REPLACE( REPLACE( `prenom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) , 
+        `naissance`  
+        , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `nom_jeune_fille` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
+        , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `prenom_2` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
+        , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `prenom_3` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
+        , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `prenom_4` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
+      )) AS hash
+      FROM `patients`
+      GROUP BY hash
+      HAVING total > 1");
+    
+    return intval($ds->numRows($res));
+  }
 }
 
 ?>

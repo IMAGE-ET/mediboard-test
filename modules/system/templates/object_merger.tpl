@@ -178,11 +178,11 @@ Main.add(function () {
 
     <tr>
 	  	<td colspan="100" class="button">
-		    <button type="submit" class="change" onclick="return ObjectMerger.confirm('0')">
+		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('0')">
 		      {{tr}}Merge{{/tr}}
 		    </button>
 				{{if $modules.system->_can->admin}}
-		    <button type="submit" class="change" onclick="return ObjectMerger.confirm('1');">
+		    <button type="submit" class="merge" onclick="return ObjectMerger.confirm('1');">
 		      {{tr}}Merge{{/tr}} {{tr}}massively{{/tr}}
 		    </button>
 				{{/if}}

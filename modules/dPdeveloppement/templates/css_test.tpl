@@ -1,7 +1,7 @@
 <script type="text/javascript">
 Main.add(function(){
   var buttonClasses = $w("none edit hslip trash submit modify save new print cancel search lookup lock tick down "+
-    "up left left-disabled right right-disabled change add remove stop warning send send-cancel send-again send-problem send-auto");
+    "up left left-disabled right right-disabled change add remove stop warning send send-cancel send-again send-problem send-auto vcard merge");
                       
   var buttonsContainers = $$("#buttons td");
   buttonClasses.each(function(c){

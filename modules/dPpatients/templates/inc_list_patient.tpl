@@ -166,7 +166,7 @@ reloadPatient = function(patient_id, link){
   <tr>
     {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
     <th style="width: 0.1%;">
-    	<button type="submit" class="change notext" title="{{tr}}Merge{{/tr}}">
+    	<button type="submit" class="merge notext" title="{{tr}}Merge{{/tr}}">
     		{{tr}}Merge{{/tr}}
     	</button>
     </th>

@@ -7,6 +7,7 @@
 <table class="form">  
   {{mb_include module=system template=inc_config_str var=tag_ipp      }}
   {{mb_include module=system template=inc_config_str var=tag_ipp_trash}}
+  {{mb_include module=system template=inc_config_str var=tag_conflict_ipp}}
   
   {{mb_include module=system template=inc_config_bool var=merge_only_admin}}
   {{mb_include module=system template=inc_config_bool var=extended_print  }}

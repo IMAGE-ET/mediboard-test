@@ -1,19 +1,27 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-global $AppUI, $can, $m;
+ * @package Mediboard
+ * @subpackage dPpatients
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ */
 
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $patient_id = CValue::getOrSession("patient_id");
 
 // Patient à analyser
 $patient = new CPatient();
+
+$count_matching_patients = $patient->countMatchingPatients();
+
+$id400 = new CIdSante400();
+$id400->object_class = "CPatient";
+$id400->tag = CAppUI::conf("dPpatients CPatient tag_conflict_ipp").CAppUI::conf("dPpatients CPatient tag_ipp");
+$count_conflicts = $id400->countMatchingList();
+
 $patient->load($patient_id);
 
 // Liste des praticiens disponibles
@@ -26,8 +34,8 @@ if ($patient->_id) {
 }
 
 if ($patient->_id) {
-  foreach($patient->_ref_sejours as &$sejour){
-  	$sejour->loadNumDossier();
+  foreach($patient->_ref_sejours as &$_sejour){
+  	$_sejour->loadNumDossier();
   }
 }
 
@@ -37,12 +45,12 @@ $patient->loadIdVitale();
 
 // Liste des siblings
 $listSiblings = $patient->getSiblings();
-foreach ($listSiblings as &$curr_sib) {
-  $curr_sib->loadDossierComplet();
-  $curr_sib->loadIPP();
-  $curr_sib->loadIdVitale();
-  foreach($curr_sib->_ref_sejours as &$sejour){
-  	$sejour->loadNumDossier();
+foreach ($listSiblings as &$_sibling) {
+  $_sibling->loadDossierComplet();
+  $_sibling->loadIPP();
+  $_sibling->loadIdVitale();
+  foreach($_sibling->_ref_sejours as &$_sejour){
+  	$_sejour->loadNumDossier();
   }
 }
 
@@ -58,6 +66,9 @@ $smarty->assign("patient"     , $patient);
 $smarty->assign("listPrat"    , $listPrat);
 $smarty->assign("listSiblings", $listSiblings);
 
-$smarty->display("vw_siblings.tpl");
+$smarty->assign("count_matching_patients", $count_matching_patients);
+$smarty->assign("count_conflicts", $count_conflicts);
+
+$smarty->display("vw_identito_vigilance.tpl");
 
 ?>

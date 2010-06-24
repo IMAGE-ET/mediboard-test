@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $do_merge = CValue::get("do_merge");
 

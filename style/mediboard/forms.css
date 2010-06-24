@@ -375,6 +375,10 @@ button.vcard:before, a.button.vcard:before {
   content: url(images/buttons/vcard.png);
 }
 
+button.merge:before, a.button.merge:before {
+  content: url(images/buttons/merge.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
