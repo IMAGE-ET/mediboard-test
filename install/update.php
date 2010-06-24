@@ -82,7 +82,7 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
   <input type="hidden" name="action" value="info"/>
   <h3><button class="change" name="button_info" onclick="loadrequest('info_res');">Infos</button></h3>
 </form>
-<h2><iframe name="info_res" src='empty.html?arg' style="display: block; width: 100%; background: #fff; border: 1px solid #000;" ></iframe></h2>
+<h2><iframe name="info_res" style="display: block; width: 100%; background: #fff; border: 1px solid #000;" ></iframe></h2>
 
 <br/>
 
@@ -114,6 +114,6 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
     </tr>
   </table>
 </form>
-<iframe name="real_res" src='empty.html?arg' style="display: block; width: 100%; background: #fff; border: 1px solid #000;"></iframe>
+<iframe name="real_res" style="display: block; width: 100%; background: #fff; border: 1px solid #000;"></iframe>
 
 <?php showFooter(); ?>
