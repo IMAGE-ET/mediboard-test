@@ -41,9 +41,13 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $service = new CService;
 $order = "nom";
+
+$services = $service->loadListWithPerms(PERM_READ);
+/*
 $services = $praticien_id ?
   $service->loadList($where, $order) :
   $service->loadListWithPerms(PERM_READ);
+*/
   
 $changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
