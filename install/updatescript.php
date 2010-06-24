@@ -1,7 +1,7 @@
 <html>
 <head>
 </head>
-<body onload="this.style='background: #fff; opacity: 1;'">
+<body onload="var ebody = document.getElementsByTagName('body')[0]; ebody.style.background='#fff';">
 
 <?php /* $Id $ */
 
@@ -22,5 +22,6 @@ foreach($res as $_res) {
   echo utf8_decode("$_res<br/>");
 }
 ?>
+
 </body>
 </html>

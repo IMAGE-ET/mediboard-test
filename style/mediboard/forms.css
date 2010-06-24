@@ -200,11 +200,11 @@ button.rtl,
 a.button.rtl {
   padding-left: 3px;
   padding-right: 1px;
-  padding-top: 2px;
+  padding-top: 4px;
 }
 
 a.button.rtl {
-  height: 15px;
+  height: 13px;
 }
 
 button.rtl:before,
@@ -212,7 +212,7 @@ a.button.rtl:before {
   float: right;
   margin-right: 0px;
   margin-left: 3px;
-  margin-top: -1px;
+  margin-top: -3px;
 }
 
 a.button:hover,

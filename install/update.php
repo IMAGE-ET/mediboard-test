@@ -20,15 +20,29 @@ showHeader();
       return false;
     }
     else {
-      requestloading('real_res');
+      loadrequest('real_res');
       return true;
     }
   }
+  function pause(millis) {
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis)
+  }
 
-  function requestloading(name) {
+  function loadrequest(name) {
     var eIframe = document.getElementsByName(name)[0];
-    eIframe.contentWindow.document.getElementsByTagName("body")[0].style.background = "#777 url(../style/mediboard/images/icons/ajax-loading.gif) no-repeat center";
-    eIframe.contentWindow.document.getElementsByTagName("body")[0].style.height = "130px";
+    var eIframe_style = eIframe.style;
+    eIframe.contentWindow.document.documentElement.innerHTML =
+      '<div style="font-family: Arial, Helvetica, sans-serif; margin-top: 10px; margin-left: 10px;">Chargement en cours</div>';
+    eIframe_style.background = "#fff";
+  }
+
+  window.onload = function() {
+    if(document.getElementsByName("passwd")[0].value == "") {
+      document.getElementById("update").disabled="disabled";
+    }
   }
 </script>
 
@@ -49,7 +63,7 @@ showHeader();
       <pre>[nom de l'utilisateur Apache] ALL=(ALL) PASSWD: /bin/sh
 Defaults:[nom de l'utilisateur Apache] timestamp_timeout=0
 Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
-      Sauvez et quittez.</pre>
+      Sauvez et quittez.
     </li>
     <li>
       Entrez les commandes suivantes :
@@ -65,10 +79,10 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
 <h3>Infos sur le système</h3>
 
 <form name="info" action="updatescript.php" target="info_res" method="post">
-  <input type="hidden" name="action" value="info"></input>
-  <h3><button class="change" name="button_info" onclick="requestloading('info_res');">Infos</button></h3>
+  <input type="hidden" name="action" value="info"/>
+  <h3><button class="change" name="button_info" onclick="loadrequest('info_res');">Infos</button></h3>
 </form>
-<h2><iframe name="info_res" src='about:blank' style="display: block; width: 100%; background: #fff; border: 1px solid #000;" ></iframe></h2>
+<h2><iframe name="info_res" src='empty.html?arg' style="display: block; width: 100%; background: #fff; border: 1px solid #000;" ></iframe></h2>
 
 <br/>
 
@@ -79,15 +93,15 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
 <h3>Mise à jour</h3>
 
 <form name="real" target="real_res" action="updatescript.php" method="post" onsubmit="return checkmdp(this);">
-  <input type="hidden" name="action" value="real"></input>
-  <h3><button class="change" name="button_real">Mise à jour</button></h3>
+  <input type="hidden" name="action" value="real"/>
+  <h3><button class="change" id="update" name="button_real">Mise à jour</button></h3>
   <table>
     <tr>
       <td>
         <h3>Révision : </h3>
       </td>
       <td>
-        <input type="text" name="rev"></input>
+        <input type="text" name="rev"/>
       </td>
     </tr>
     <tr>
@@ -95,11 +109,11 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
         <h3>Mot de passe :</h3>
       </td>
       <td>
-        <input type="password" name="passwd"></input>
+        <input type="password" name="passwd" onkeyup="var bupdate = document.getElementById('update'); if(this.value.length == 0)  bupdate.disabled = 'disabled'; else bupdate.disabled = '';"/>
       </td>
     </tr>
   </table>
 </form>
-<iframe name="real_res" style="display: block; width: 100%; background: #fff; border: 1px solid #000;"></iframe>
+<iframe name="real_res" src='empty.html?arg' style="display: block; width: 100%; background: #fff; border: 1px solid #000;"></iframe>
 
 <?php showFooter(); ?>
