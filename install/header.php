@@ -28,6 +28,7 @@ $stepsText = array (
   "finish" => "Finalisation",
   "phpinfo" => "Infos PHP",
   "errorlog" => "Logs d'erreur",
+  "update"  => "Mise à jour du système"
 );
 
 $steps = array_keys($stepsText);

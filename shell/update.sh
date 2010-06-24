@@ -2,6 +2,7 @@
 
 BASH_PATH=$(dirname $0)
 . $BASH_PATH/utils.sh
+export LANG=fr_FR.utf-8
 
 ########
 # Mediboard SVN updater and user-oriented logger
