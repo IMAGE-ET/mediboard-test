@@ -156,7 +156,7 @@ Main.add(function () {
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
       {{if $compte_rendu->compte_rendu_id}}
       <button class="new" type="button" onclick="Modele.create()">
-        {{tr}}CAideSaisie.create{{/tr}}
+        {{tr}}CCompteRendu-title-create{{/tr}}
       </button>
       {{/if}}
       <table class="form">
