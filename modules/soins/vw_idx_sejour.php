@@ -42,7 +42,8 @@ $where["group_id"] = "= '$g'";
 $service = new CService;
 $order = "nom";
 
-$services = $service->loadListWithPerms(PERM_READ);
+// FIXME: le $where par defaut ne semble pas bien fonctionner
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 /*
 $services = $praticien_id ?
   $service->loadList($where, $order) :
