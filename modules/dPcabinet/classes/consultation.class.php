@@ -749,7 +749,9 @@ class CConsultation extends CCodable {
         $this->_adjust_sejour = true;
         
         // Pas le permettre si admission est déjà faite
-        if ($this->_ref_sejour->entree_reelle) {
+        $max_hours = CAppUI::conf("dPcabinet CConsultation hours_after_changing_prat");
+        if ($this->_ref_sejour->entree_reelle &&
+           (mbDateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < mbDateTime())) {
           return CAppUI::tr("CConsultation-denyDayChange");
         }
         

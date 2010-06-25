@@ -11,6 +11,7 @@
     showCreateSejour(nodeList[1-$V(nodeList)]);
     
     getForm("editConfig")["dPcabinet[CConsultation][minutes_before_consult_sejour]"].addSpinner({min:1, max:360});
+    getForm("editConfig")["dPcabinet[CConsultation][hours_after_changing_prat]"].addSpinner({min:0, max:48});
   });
 </script>
 
@@ -69,6 +70,8 @@
   {{mb_include module=system template=inc_config_bool var=aide_autocomplete}}
   
   {{mb_include module=system template=inc_config_str var=minutes_before_consult_sejour size="3" suffix="min"}}
+  
+  {{mb_include module=system template=inc_config_str var=hours_after_changing_prat size="3" suffix="h"}}
   
   <!-- CConsultAnesth -->  
   {{assign var="class" value="CConsultAnesth"}}
