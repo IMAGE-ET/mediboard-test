@@ -15,6 +15,18 @@ span.hilite {
   background: #f5f;
 }
 
+table.tbl {
+  border-spacing: 0;
+}
+
+table.tbl th {
+	background: #eee;
+}
+
+table.tbl td {
+	border: 1px solid #000;
+}
+
 @media screen {
   #header,  #footer {
     margin: 10px;
@@ -55,7 +67,6 @@ span.hilite {
     font-style: normal;
     font-variant: normal;
   }
-
   span.field,
   span.field * {
     background: #dde;

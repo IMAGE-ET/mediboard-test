@@ -1,5 +1,5 @@
 <table class="main tbl">
-  <tr><th colspan="100" class="title">Constantes</th></tr>
+  <tr><th colspan="11" class="title">Constantes</th></tr>
   <tr>
     <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
     {{assign var="i" value=1}}

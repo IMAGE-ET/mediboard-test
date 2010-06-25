@@ -1441,14 +1441,28 @@ class CPatient extends CMbObject {
     }
     
     $template->addProperty("Patient - médecin correspondants", implode(" - ", $noms));
-    
+
     $const_med = $this->_ref_constantes_medicales;
+    
+    $csteByTime = array();
+    $constante_med = new CConstantesMedicales();
+    $csteByTime[$const_med->datetime] = array();
+      foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+        $csteByTime[$const_med->datetime][$_constante] = $const_med->$_constante;
+    }
+    $smarty = new CSmartyDP("modules/dPpatients");
+    $smarty->assign("csteByTime", $csteByTime);
+    $constantes = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes = preg_replace('`([\\n\\r])`', '', $constantes); 
+
+    $template->addProperty("Patient - Constantes", $constantes);
     $template->addProperty("Patient - poids",  "$const_med->poids kg");
     $template->addProperty("Patient - taille", "$const_med->taille cm");
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
     $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
+
   }
   
   function fillTemplate(&$template) {
