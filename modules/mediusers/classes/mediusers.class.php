@@ -201,7 +201,7 @@ class CMediusers extends CMbObject {
     $backProps["plages_op_chir"]                  = "CPlageOp chir_id";
     $backProps["plages_op_anesth"]                = "CPlageOp anesth_id";
     $backProps["plages_consult"]                  = "CPlageconsult chir_id";
-    $backProps["plages_conge"]                    = "CPlageCOnge user_id";
+    $backProps["plages_conge"]                    = "CPlageConge user_id";
     $backProps["consults_anesth"]                 = "CConsultAnesth chir_id";
     $backProps["plages_ressource"]                = "CPlageressource prat_id";
     $backProps["prescriptions"]                   = "CPrescription praticien_id";

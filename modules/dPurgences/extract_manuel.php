@@ -15,8 +15,11 @@ $can->needsRead();
 $extractPassages = new CExtractPassages();
 
 // Création du template
+// Mettre car inclusion dans les modules externes
 $smarty = new CSmartyDP("modules/dPurgences");
+
 $smarty->assign("extractPassages", $extractPassages);
+$smarty->assign("types"          , $types);
 
 $smarty->display("extract_manuel.tpl");
 ?>

@@ -163,8 +163,14 @@ class CSetupdPurgences extends CSetup {
 
     $this->makeRevision("0.26");
     $this->addPrefQuery("showMissingRPU", "0");
-
-    $this->mod_version = "0.27";
+    
+    $this->makeRevision("0.27");
+    
+     $sql = "ALTER TABLE `extract_passages` 
+      ADD `type` ENUM ('rpu','urg') DEFAULT 'rpu';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.28";
   }  
 }
 

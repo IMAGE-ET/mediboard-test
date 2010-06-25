@@ -22,6 +22,7 @@ if (!$debut_selection || !$fin_selection) {
 
 $extractPassages = new CExtractPassages();
 $extractPassages->date_extract    = mbDateTime();
+$extractPassages->type            = "rpu";
 $extractPassages->debut_selection = $debut_selection;
 $extractPassages->fin_selection   = $fin_selection;
 $extractPassages->store();
@@ -59,7 +60,7 @@ $rpuSender = $extractPassages->getRPUSender();
 if (!$rpuSender) {
 	CAppUI::stepAjax("Aucun sender définit dans le module dPurgences.", UI_MSG_ERROR);
 }
-$extractPassages = $rpuSender->extract($extractPassages, $rpus);
+$extractPassages = $rpuSender->extractRPU($extractPassages, $rpus);
 
 CAppUI::stepAjax("Extraction de ".count($rpus)." RPUs du ".mbDateToLocale($debut_selection)." au ".mbDateToLocale($fin_selection)." terminée.", UI_MSG_OK);
 if (!$extractPassages->message_valide)

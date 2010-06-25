@@ -17,12 +17,13 @@ class CService extends CMbObject {
 	var $service_id = null;	
   
   // DB references
-  var $group_id = null;
+  var $group_id   = null;
 
   // DB Fields
-  var $nom = null;
+  var $nom         = null;
   var $description = null;
-  var $urgence = null;
+  var $urgence     = null;
+  var $uhcd        = null;
   
   // Object references
   var $_ref_chambres = null;
@@ -58,6 +59,7 @@ class CService extends CMbObject {
     $specs["nom"]         = "str notNull seekable";
     $specs["description"] = "text seekable";
     $specs["urgence"]     = "bool";
+    $specs["uhcd"]        = "bool";
     return $specs;
   }
   

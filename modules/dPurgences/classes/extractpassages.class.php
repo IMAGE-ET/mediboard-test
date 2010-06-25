@@ -20,9 +20,11 @@ class CExtractPassages extends CMbObject {
   var $nb_tentatives   = null;
   var $message         = null;
   var $message_valide  = null;
+  var $type            = null;
   
   // Form fields
-  var $_nb_rpus        = null; 
+  var $_nb_rpus        = null;
+  var $_nb_urgences    = null;  
       
   function getSpec() {
     $spec = parent::getSpec();
@@ -46,6 +48,7 @@ class CExtractPassages extends CMbObject {
     $specs["nb_tentatives"]   = "num";
     $specs["message"]         = "xml show|0";
     $specs["message_valide"]  = "bool";
+    $specs["type"]            = "enum list|rpu|urg default|rpu";
     
     $specs["_nb_rpus"]        = "num";
     return $specs;

@@ -247,8 +247,13 @@ class CSetupdPhospi extends CSetup {
     $sql = "ALTER TABLE `prestation` 
               ADD INDEX (`group_id`);";
     $this->addQuery($sql);
- 
-    $this->mod_version = "0.34";
+    
+    $this->makeRevision("0.34");
+    $sql = "ALTER TABLE `service`
+            ADD `uhcd` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.35";
   }
 }
 ?>

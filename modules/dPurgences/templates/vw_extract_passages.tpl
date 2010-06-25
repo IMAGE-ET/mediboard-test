@@ -44,6 +44,7 @@
   <tr>
     <th>{{mb_title object=$extractPassages field="extract_passages_id"}}</th>
     <th>{{tr}}Purge{{/tr}}</th>
+    <th>{{mb_title object=$extractPassages field="type"}}</th>
     <th>{{mb_title object=$extractPassages field="date_extract"}}</th>
     <th>{{mb_title object=$extractPassages field="debut_selection"}}</th>
     <th>{{mb_title object=$extractPassages field="fin_selection"}}</th>
@@ -87,6 +88,9 @@
       {{/if}}
     </td>
     <td style="width:0.1%">
+      {{mb_value object=$_passage field="type"}}
+    </td>
+    <td style="width:0.1%">
       <label title='{{mb_value object=$_passage field="date_extract"}}'>
         {{mb_value object=$_passage field="date_extract" format=relative}}
       </label>
@@ -97,8 +101,10 @@
     <td style="width:0.1%">
       {{mb_value object=$_passage field="fin_selection"}}
     </td>
-    <td style="width:0.1%">
-      {{mb_value object=$_passage field="_nb_rpus"}}
+    <td style="width:0.1%" {{if $_passage->type != "rpu"}}class="arretee"{{/if}}>
+      {{if $_passage->type == "rpu"}}
+       {{mb_value object=$_passage field="_nb_rpus"}}
+      {{/if}}
     </td>
     <td style="width:0.1%">
       <label title='{{mb_value object=$_passage field="date_echange"}}'>

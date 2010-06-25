@@ -92,7 +92,7 @@ foreach ($sejours as &$_sejour) {
 	  }
   }
 
-  // Statistiques de sortie
+  // Statistiques d'entrée
   if (mbDate($_sejour->entree) == $date) {
     $stats["entree"]["total"]++;
 

@@ -67,6 +67,11 @@
     <tr>
       <th>{{mb_label object=$serviceSel field=urgence}}</th>
       <td>{{mb_field object=$serviceSel field=urgence}}</td>
+    </tr> 
+    
+    <tr>
+      <th>{{mb_label object=$serviceSel field=uhcd}}</th>
+      <td>{{mb_field object=$serviceSel field=uhcd}}</td>
     </tr>    
 
     <tr>

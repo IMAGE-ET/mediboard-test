@@ -11,85 +11,83 @@
 <script type="text/javascript">
   var extract_passages_id;
   
-  function extract(form) {
+  function extractRPU(form) {
     if (!checkForm(form)) {
       return;
     }
-    var url = new Url("dPurgences", "ajax_extract_passages");
+    var url = new Url("dPurgences", "ajax_extract_passages_rpu");
     url.addParam("debut_selection", $V(form.debut_selection));
     url.addParam("fin_selection", $V(form.fin_selection));
-    url.requestUpdate('td_extract', { onComplete: function(){
-      if (!$('td_extract').select('.error, .warning').length) {
-         $('encrypt').disabled = false;
+    url.requestUpdate('td_extract_rpu', { onComplete: function(){
+      if (!$('td_extract_rpu').select('.error, .warning').length) {
+         $('encrypt_rpu').disabled = false;
       }
      }});
   }
+
+  {{if array_key_exists('urg', $types)}}
+  function extractURG(form) {
+    if (!checkForm(form)) {
+      return;
+    }
+    var url = new Url("dPurgences", "ajax_extract_passages_urg");
+    url.addParam("debut_selection", $V(form.debut_selection));
+    url.addParam("fin_selection", $V(form.fin_selection));
+    url.requestUpdate('td_extract_urg', { onComplete: function(){
+      if (!$('td_extract_urg').select('.error, .warning').length) {
+         $('encrypt_urg').disabled = false;
+      }
+     }});
+  }
+  {{/if}}
   
-  function encrypt() {
+  function encrypt(type) {
     var url = new Url("dPurgences", "ajax_encrypt_passages");
     url.addParam("extract_passages_id", extract_passages_id);
-    url.requestUpdate('td_encrypt', { onComplete: function(){
-      if (!$('td_encrypt').select('.error, .warning').length) {
-         $('transmit').disabled = false;
+    url.requestUpdate('td_encrypt_'+type, { onComplete: function(){
+      if (!$('td_encrypt_'+type).select('.error, .warning').length) {
+         $('transmit_'+type).disabled = false;
       }
      }});
   }
   
-  function transmit() {
+  function transmit(type) {
     var url = new Url("dPurgences", "ajax_transmit_passages");
     url.addParam("extract_passages_id", extract_passages_id);
-    url.requestUpdate('td_transmit');
+    url.requestUpdate('td_transmit_'+type);
   }
   
   Main.add(function () {
-    $('encrypt').disabled = true;
-    $('transmit').disabled = true;
+    $('encrypt_rpu').disabled = true;
+    $('transmit_rpu').disabled = true;
+    {{if array_key_exists('urg', $types)}}
+    $('encrypt_urg').disabled = true;
+    $('transmit_urg').disabled = true;
+    {{/if}}
   });
-  
+
+  Main.add(Control.Tabs.create.curry('tabs-extract', true));
 </script>
 
-<table class="main form">  
-  <tr>
-    <th class="category">Action</th>
-    <th class="category">Status</th>
-  </tr>
-  
-  <tr>
-    <td>
-       <form name="formExtraction" action="?" method="get">
-         <table class="form">
-           <tr>
-             <th>{{mb_label object=$extractPassages field="debut_selection"}}</th>
-             <td>
-               {{mb_field object=$extractPassages field="debut_selection" form="formExtraction" register="true"}} 
-               <button class="tick" type="button" onclick="extract(this.form)">Extraire</button>
-             </td>
-           </tr>
-           <tr>
-             <th>{{mb_label object=$extractPassages field="fin_selection"}}</th>
-             <td>{{mb_field object=$extractPassages field="fin_selection" form="formExtraction" register="true"}}</td>
-           </tr>
-         </table>
-       </form>
-    </td>
-    <td id="td_extract">
+<ul id="tabs-extract" class="control_tabs">
+  {{if array_key_exists('rpu', $types)}}
+    <li><a href="#RPU">{{tr}}extract-rpu{{/tr}}</a></li>
+  {{/if}}
+  {{if array_key_exists('urg', $types)}}
+    <li><a href="#URG">{{tr}}extract-urg{{/tr}}</a></li>
+  {{/if}}
+</ul>
 
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <button class="tick" type="button" id="encrypt" onclick="encrypt()">Chiffrer</button>
-    </td>
-    <td id="td_encrypt">
-      
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <button class="tick" type="button" id="transmit" onclick="transmit()">Transmission</button>
-    </td>
-    <td id="td_transmit">
-      
-    </td>
-  </tr>
-</table>
+<hr class="control_tabs" />
+
+{{if array_key_exists('rpu', $types)}}
+<div id="RPU" style="display: none;">
+  {{mb_include template=inc_extract_rpu}}
+</div>
+{{/if}}
+
+{{if array_key_exists('urg', $types)}}
+<div id="URG" style="display: none;">
+  {{mb_include template=inc_extract_urg}}
+</div>
+{{/if}}
