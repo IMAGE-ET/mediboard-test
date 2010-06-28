@@ -356,6 +356,24 @@ abstract class CSQLDataSource {
     $this->freeResult($cur);
     return $hashlist;
   }
+	
+  /**
+   * Returns a array as result of query
+   * where column 0 is key and all columns are values
+   * @param string $query
+   **/
+  function loadHashAssoc($query) {
+    $cur = $this->exec($query);
+    $cur or CApp::rip();
+    $hashlist = array();
+    while ($hash = $this->fetchAssoc($cur)) {
+    	$key = reset($hash);
+      $hashlist[$key] = $hash;
+    }
+    $this->freeResult($cur);
+    return $hashlist;
+  }
+	
 
   /**
    * Return a list of associative array as the query result
