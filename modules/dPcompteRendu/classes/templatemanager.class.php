@@ -102,8 +102,8 @@ class CTemplateManager {
     $this->addProperty($field, $value);
   }
   
-  function addDayProperty($field, $value) {
-    $value = ucwords(mbTransformTime(null, $value, "%A"));
+  function addLongDateProperty($field, $value) {
+    $value = ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate")));
     $this->addProperty($field, $value);
   }
   

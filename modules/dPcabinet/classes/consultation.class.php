@@ -121,6 +121,7 @@ class CConsultation extends CCodable {
   var $_type_affichage         = null;
   var $_coordonnees            = null;
   var $_plages_vides           = null;
+  //var $_non_pourvues           = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -201,6 +202,7 @@ class CConsultation extends CCodable {
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
+    //$specs["_non_pourvues"]     = "bool default|0";
     $specs["_prat_id"]          = "";
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
@@ -1127,8 +1129,8 @@ class CConsultation extends CCodable {
     $this->loadRefsFwd();
     
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
+    $template->addLongDateProperty("Consultation - date longue", $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
-    $template->addDayProperty("Consultation - Jour de la consultation", $this->_datetime);
     $tradExamFields = array(
       "motif"            => "motif",
       "rques"            => "remarques",
