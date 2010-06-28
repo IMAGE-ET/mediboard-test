@@ -62,8 +62,8 @@
         <tr>
           <th>{{mb_label object=$factureitem field="libelle"}} 
           <br />
-      	  <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)">
-        	<option value="">&mdash; Choisir une aide</option>
+      	  <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)" class="helper">
+        	<option value="">&mdash; Aide</option>
         	{{html_options options=$libelleItem->_aides.libelle.no_enum}}
           </select>
           <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CFactureItem', this.form.libelle)">{{tr}}New{{/tr}}</button>

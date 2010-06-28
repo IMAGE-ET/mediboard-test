@@ -177,7 +177,7 @@ Main.add(function () {
           
           <th id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
-            	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)">
+            	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
 							</select>
 						<input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
@@ -368,7 +368,7 @@ Main.add(function () {
           {{/if}}
           <th>
             {{mb_label object=$traitement field="traitement"}}
-            <select name="_helpers_traitement" size="1" style="width: 80px;" onchange="pasteHelperContent(this)">
+            <select name="_helpers_traitement" size="1" style="width: 80px;" onchange="pasteHelperContent(this)" class="helper">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{html_options options=$traitement->_aides.traitement.no_enum}}
             </select>

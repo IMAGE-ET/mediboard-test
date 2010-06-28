@@ -89,8 +89,8 @@ Main.add(function(){
         
 				{{mb_key object=$anesth_perop}}
 	      {{mb_label object=$anesth_perop field="libelle"}}
-	      <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)">
-	        <option value="">&mdash; Choisir une aide</option>
+	      <select name="_helpers_libelle" size="1" onchange="pasteHelperContent(this)" class="helper">
+	        <option value="">&mdash; Aide</option>
 	        {{html_options options=$anesth_perop->_aides.libelle.no_enum}}
 	      </select>
 	      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAnesthPerop', this.form._hidden_libelle, 'libelle')">{{tr}}New{{/tr}}</button><br />
@@ -319,7 +319,7 @@ Main.add(function(){
       {{mb_label object=$selOp field="rques_visite_anesth"}}
       {{if !$selOp->date_visite_anesth}}
       <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
-      <select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this)">
+      <select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
       </select>
 			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
 			  {{tr}}New{{/tr}}

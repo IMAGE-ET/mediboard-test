@@ -715,3 +715,7 @@ span.highlight {
   z-index: 20;
   right: 0;
 }
+
+select.helper {
+	max-width: 10em;
+}

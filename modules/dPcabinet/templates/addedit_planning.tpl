@@ -203,8 +203,8 @@ Main.add(function () {
         <tr>
           <th>
             {{mb_label object=$consult field="motif"}}<br />
-            <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)">
-              <option value="">&mdash; Choisir une aide</option>
+            <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this)" class="helper">
+              <option value="">&mdash; Aide</option>
               {{html_options options=$consult->_aides.motif.no_enum}}
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.motif)">{{tr}}New{{/tr}}</button>            
@@ -215,8 +215,8 @@ Main.add(function () {
         <tr>
           <th>
             {{mb_label object=$consult field="rques"}}<br />
-            <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)">
-              <option value="">&mdash; Choisir une aide</option>
+            <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this)" class="helper">
+              <option value="">&mdash; Aide</option>
               {{html_options options=$consult->_aides.rques.no_enum}}
             </select><br />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">{{tr}}New{{/tr}}</button>

@@ -147,7 +147,7 @@
       <form name="commentaire-{{$line->_guid}}">
 	      {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
 	        {{if $line->_perm_edit}}
-		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
+		      <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;" class="helper">
 		        <option value="">&mdash; Aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineElement}}
 		      </select>

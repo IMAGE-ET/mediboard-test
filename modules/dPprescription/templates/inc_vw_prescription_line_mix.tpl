@@ -594,7 +594,7 @@ Main.add( function(){
 					<input type="text" name="commentaire" value="{{$_prescription_line_mix->commentaire}}" size=60 
 					       onchange="{{if $_prescription_line_mix->substitute_for_id && !$_prescription_line_mix->substitution_active}}submitEditPerfCommentaireSubst('{{$_prescription_line_mix->_id}}',this.value);{{else}}submitAddComment('{{$_prescription_line_mix->_class_name}}', '{{$_prescription_line_mix->_id}}', this.value);{{/if}}" />
           
-					<select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
+					<select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;" class="helper">
 		        <option value="">&mdash; Aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMix}}
 		      </select>

@@ -294,8 +294,8 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
       </tr>
       <tr>
         <td style="text-align:left;">
-          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);" class="not-printable">
-            <option value="">&mdash; Choisir une aide</option>
+          <select name="_helpers_remarques" size="1" onchange="pasteHelperContent(this);" class="not-printable helper">
+            <option value="">&mdash; Aide</option>
             {{html_options options=$exam_audio->_aides.remarques.no_enum}}
           </select>
           <button class="new notext not-printable" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)">{{tr}}New{{/tr}}</button><br />

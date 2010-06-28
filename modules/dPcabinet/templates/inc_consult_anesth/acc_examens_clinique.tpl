@@ -16,8 +16,8 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-        <select name="_helpers_examenCardio" onchange="pasteHelperContent(this); this.form.examenCardio.onchange();">
-          <option value="">&mdash; Choisir une aide</option>
+        <select name="_helpers_examenCardio" onchange="pasteHelperContent(this); this.form.examenCardio.onchange();" class="helper">
+          <option value="">&mdash; Aide</option>
           {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
         </select>
         <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button>
@@ -31,8 +31,8 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
         {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-        <select name="_helpers_examenPulmo" onchange="pasteHelperContent(this); this.form.examenPulmo.onchange();">
-          <option value="">&mdash; Choisir une aide</option>
+        <select name="_helpers_examenPulmo" onchange="pasteHelperContent(this); this.form.examenPulmo.onchange();" class="helper">
+          <option value="">&mdash; Aide</option>
           {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
         </select>
         <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button>
@@ -49,8 +49,8 @@
         <input type="hidden" name="dosql" value="do_consultation_aed" />
         {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
         {{mb_label object=$consult field="examen"}}
-        <select name="_helpers_examen" onchange="pasteHelperContent(this); this.form.examen.onchange();">
-          <option value="">&mdash; Choisir une aide</option>
+        <select name="_helpers_examen" onchange="pasteHelperContent(this); this.form.examen.onchange();" class="helper">
+          <option value="">&mdash; Aide</option>
           {{html_options options=$consult->_aides.examen.no_enum}}
         </select>
         <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button>

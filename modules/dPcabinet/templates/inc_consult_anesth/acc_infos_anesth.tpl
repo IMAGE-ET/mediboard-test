@@ -39,8 +39,8 @@ function reloadListTech() {
       </select>
       <br />
       {{mb_label object=$consult_anesth->_ref_operation field="rques"}}
-      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
+      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();" class="helper">
+        <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_ref_operation->_aides.rques.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)">{{tr}}New{{/tr}}</button><br />
@@ -64,8 +64,8 @@ function reloadListTech() {
       {{if !$isPrescriptionInstalled || $dPconfig.dPcabinet.CConsultAnesth.view_premedication}}
       <br />
       {{mb_label object=$consult_anesth field="premedication"}}
-      <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
+      <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();" class="helper">
+        <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.premedication.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)">{{tr}}New{{/tr}}</button><br />
@@ -81,8 +81,8 @@ function reloadListTech() {
       
       <br />
       {{mb_label object=$consult_anesth field="prepa_preop"}}
-      <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
+      <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();" class="helper">
+        <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.prepa_preop.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)">{{tr}}New{{/tr}}</button><br />
@@ -97,8 +97,8 @@ function reloadListTech() {
       <input type="hidden" name="dosql" value="do_technique_aed" />
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
       {{mb_label object=$techniquesComp field="technique"}}
-      <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)">
-        <option value="">&mdash; Choisir une aide</option>
+      <select name="_helpers_technique" size="1" onchange="pasteHelperContent(this)" class="helper">
+        <option value="">&mdash; Aide</option>
         {{html_options options=$techniquesComp->_aides.technique.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')">{{tr}}New{{/tr}}</button><br />
@@ -120,8 +120,8 @@ function reloadListTech() {
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       {{mb_label object=$consult field="rques"}}
-      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
+      <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();" class="helper">
+        <option value="">&mdash; Aide</option>
         {{html_options options=$consult->_aides.rques.no_enum}}
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">{{tr}}New{{/tr}}</button><br />

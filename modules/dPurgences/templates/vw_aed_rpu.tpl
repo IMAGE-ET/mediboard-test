@@ -309,8 +309,8 @@
 	  {{if $can->edit}}
 	  <tr>
 	    <th>{{mb_label object=$rpu field="diag_infirmier"}} <br />
-	     <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);">
-	        <option value="">&mdash; Choisir une aide</option>
+	     <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);" class="helper">
+	        <option value="">&mdash; Aide</option>
 	        {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
 	     </select><br />
 	     <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
