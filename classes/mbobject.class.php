@@ -2057,7 +2057,7 @@ class CMbObject {
     
     // Chargement des Aides de l'utilisateur
     $aide = new CAideSaisie();
-    $aides = $aide->seek($keywords, $where, 100, null, null, $order); 
+    $aides = $aide->seek($keywords, $where, null, null, null, $order); // TODO: si on veut ajouter un $limit, il faudrait l'ajouter en argument de la fonction loadAides
     $this->orderAides($aides, $depend_value_1, $depend_value_2);
   }
   
