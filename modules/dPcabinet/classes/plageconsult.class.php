@@ -47,6 +47,7 @@ class CPlageconsult extends CMbObject {
   var $_date_min = null;
   var $_date_max = null;
   var $_function_id = null;
+  var $_other_function_id = null;
   
   // Object References
   var $_ref_chir          = null;
@@ -89,6 +90,7 @@ class CPlageconsult extends CMbObject {
       "_date_min"    => "date",
       "_date_max"    => "date moreThan|_date_min",
       "_function_id" => "ref class|CFunctions",
+      "_other_function_id" => "ref class|CFunctions",
       );
 
     return array_merge($parentSpecs, $specs);

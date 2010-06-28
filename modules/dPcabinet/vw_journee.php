@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+$mediuser->load(CAppUI::$instance->user_id);
 
 //Initialisations des variables
 $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
@@ -25,9 +23,9 @@ $board        = CValue::get("board", 1);
 $boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation();
 
-$cabinets = CMediusers::loadFonctions(PERM_EDIT, $g, "cabinet");
+$cabinets = CMediusers::loadFonctions(PERM_EDIT, null, "cabinet");
 
-if($mode_urgence){
+if ($mode_urgence) {
   $group = CGroups::loadCurrent();
   $cabinet_id = $group->service_urgences_id;
 }
@@ -35,11 +33,9 @@ if($mode_urgence){
 // Récupération de la liste des praticiens
 $praticiens = array();
 if ($cabinet_id) {
-  if(CAppUI::pref("pratOnlyForConsult", 1)) {
-    $praticiens = $mediuser->loadPraticiens(PERM_READ, $cabinet_id);
-  } else {
-    $praticiens = $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
-  }
+  $praticiens = CAppUI::pref("pratOnlyForConsult", 1) ? 
+	  $mediuser->loadPraticiens(PERM_READ, $cabinet_id) :
+    $mediuser->loadProfessionnelDeSante(PERM_READ, $cabinet_id);
 }
 
 if ($consult->_id) {

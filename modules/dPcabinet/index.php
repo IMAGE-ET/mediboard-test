@@ -19,6 +19,7 @@ $module->registerTab("vw_compta"                 , TAB_EDIT);
 $module->registerTab("vw_edit_tarifs"            , TAB_EDIT);
 $module->registerTab("vw_categories"             , TAB_EDIT);
 $module->registerTab("vw_banques"                , TAB_ADMIN);
+$module->registerTab("vw_stats"                  , TAB_ADMIN);
 $module->registerTab("offline_programme_consult" , TAB_ADMIN);
 
 if (CAppUI::pref("GestionFSE")) {
