@@ -8,7 +8,7 @@
   <tr>
     <th>Utilisateur</th>
     <th>Date</th>
-    <th>Action</th>
+    <th>{{tr}}Action{{/tr}}</th>
     <th>Propriétés</th>
   </tr>
   

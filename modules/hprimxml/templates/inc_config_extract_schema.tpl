@@ -33,8 +33,8 @@
   <tr>
     <th class="category">Evénement</th>
     <th class="category">Version</th>
-    <th class="category">Status</th>
-    <th class="category">Action</th>
+    <th class="category">{{tr}}Status{{/tr}}</th>
+    <th class="category">{{tr}}Action{{/tr}}</th>
     <th class="category">Validation</th>
     <th class="category">Acquittement</th>
   </tr>

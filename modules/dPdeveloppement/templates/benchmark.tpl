@@ -88,9 +88,9 @@ var Benchmark = {
 <table class="tbl">
   <tr>
 	<th>Module</th>
-	<th>Action</th>
+	<th>{{tr}}Action{{/tr}}</th>
 	<th>Fréquences</th>
-	<th>Action</th>
+	<th>{{tr}}Action{{/tr}}</th>
 	<th>Requêtes</th>
 	<th>Réponses</th>
 	<th>Dernière durée</th>

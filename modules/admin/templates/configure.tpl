@@ -68,8 +68,8 @@ function checkSiblings() {
 
 <table class="tbl">
   <tr>
-    <th>Action</th>
-    <th>Status</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>

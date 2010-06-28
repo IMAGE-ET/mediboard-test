@@ -85,8 +85,8 @@ function startNGAP(){
 
 <table class="tbl">
   <tr>
-    <th>Action</th>
-    <th>Status</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>
@@ -98,8 +98,8 @@ function startNGAP(){
 <h2>Import de la base de codes NGAP</h2>
 <table class="tbl">
   <tr>
-    <th>Action</th>
-    <th>Status</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>

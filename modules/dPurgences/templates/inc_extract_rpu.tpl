@@ -14,8 +14,8 @@
   </tr>
   
   <tr>
-    <th class="category">Action</th>
-    <th class="category">Status</th>
+    <th class="category">{{tr}}Action{{/tr}}</th>
+    <th class="category">{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>

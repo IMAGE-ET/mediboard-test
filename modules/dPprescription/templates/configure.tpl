@@ -285,8 +285,8 @@ function updateUCD(){
     <th class="title" colspan="2">Opération d'imports et exports</th>
   </tr>
   <tr>
-    <th>Action</th>
-    <th>Status</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{tr}}Status{{/tr}}</th>
   </tr>
   <tr>
     <td><button class="tick" onclick="startAssociation()" >Importer la table d'association</button></td>

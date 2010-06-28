@@ -89,8 +89,8 @@ var Process = {
 
 <table class="tbl">
 	<tr>
-	  <th colspan="3" style="width: 50%">Action</th>
-	  <th colspan="2" style="width: 50%">Status</th>
+	  <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+	  <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
 	</tr>
 	  
 	<tr>

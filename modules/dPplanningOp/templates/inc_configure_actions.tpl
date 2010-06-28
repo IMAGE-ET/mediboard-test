@@ -21,8 +21,8 @@ closeSejourConsult = function() {
 
 <table class="tbl">
   <tr>
-    <th style="width: 50%">Action</th>
-    <th style="width: 50%">Status</th>
+    <th style="width: 50%">{{tr}}Action{{/tr}}</th>
+    <th style="width: 50%">{{tr}}Status{{/tr}}</th>
   </tr>
   
   <tr>

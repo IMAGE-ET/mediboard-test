@@ -82,8 +82,8 @@ Main.add(function () {
       
       <table class="tbl">
         <tr>
-          <th>Action</th>
-          <th>Status</th>
+          <th>{{tr}}Action{{/tr}}</th>
+          <th>{{tr}}Status{{/tr}}</th>
         </tr>
         <tr>
           <td>
@@ -107,8 +107,8 @@ Main.add(function () {
   <div id="libs" style="display: none;">
     <table class="tbl">
       <tr>
-        <th>Action</th>
-        <th>Status</th>
+        <th>{{tr}}Action{{/tr}}</th>
+        <th>{{tr}}Status{{/tr}}</th>
       </tr>
       <tr>
         <td>

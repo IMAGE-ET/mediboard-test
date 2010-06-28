@@ -34,7 +34,7 @@ function doGHSAction(sType, bFollowed) {
 <table class="tbl">
   <tr>
     <th class="category" onclick="doGHSAction('extractFiles', true);"><button class="tick">Go</button></th>
-    <th class="category">Action</th>
+    <th class="category">{{tr}}Action{{/tr}}</th>
     <th class="category">Résultat</th>
   </tr>
   <tr>

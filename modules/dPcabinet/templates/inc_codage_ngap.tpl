@@ -103,7 +103,7 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
         {{if ($can->edit || $modif_operation)}}
-           <th class="category">Action</th>
+           <th class="category">{{tr}}Action{{/tr}}</th>
         {{/if}}
       {{/if}}
     </tr>

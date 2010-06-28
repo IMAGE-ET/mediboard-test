@@ -24,7 +24,7 @@ Documentation = {
 
 <table class="tbl">
   <tr>
-    <th>Action</th>
+    <th>{{tr}}Action{{/tr}}</th>
     <th>Locale</th>
     <th colspan="2">Documentation</th>
   </tr>
