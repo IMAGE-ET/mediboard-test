@@ -163,7 +163,7 @@ class CCompteRendu extends CDocumentItem {
     if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
       $this->etat_envoi = "obsolete";
     
-    if($this->private == "") {
+    if($this->private === "") {
       $this->private = 0;
     }
   }

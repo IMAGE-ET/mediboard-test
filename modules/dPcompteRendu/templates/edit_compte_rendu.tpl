@@ -151,7 +151,10 @@ function submitCompteRendu(){
           <button class="hslip" type="button" title="Afficher / Masquer les vignettes"
                   onclick = "Thumb.choixAffiche(1);">Vignettes</button>
         {{/if}}
-      
+        &mdash;
+        {{mb_label object=$compte_rendu field=private}}
+        {{mb_field object=$compte_rendu field=private}}
+
       <div id="page_layout" style="display: none;">
         {{include file="inc_page_layout.tpl" droit=1}}
         <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>

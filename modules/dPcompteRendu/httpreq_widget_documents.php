@@ -27,11 +27,6 @@ if (!$object->_id) {
 	return;
 }
 
-$object->loadRefsDocs();
-foreach($object->_ref_documents as $_document){
-  $_document->loadRefCategory();
-}
-
 // Praticien concerné
 if ($AppUI->_ref_user->isPraticien()) {
   $user = $AppUI->_ref_user;
@@ -44,6 +39,23 @@ else {
 $user->loadRefFunction();
 $user->_ref_function->loadRefGroup();
 $user->canDo();
+
+$object->loadRefsDocs();
+
+foreach($object->_ref_documents as $key=>$_document){
+
+  $_document->loadRefCategory();
+  $_document->loadLogs();
+  $current_user = $AppUI->_ref_user;
+  $current_user->loadRefFunction();
+  $author = new CMediusers();
+  $author = $author->load($_document->_ref_first_log->_ref_user->_id);
+  $author->loadRefFunction();
+
+  if($_document->private == 1 && $current_user->_ref_function->function_id != $author->_ref_function->function_id) {
+    unset($object->_ref_documents[$key]);
+  }
+}
 
 // Modèles du praticien
 $modelesByOwner = array();
