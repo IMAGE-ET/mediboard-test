@@ -115,7 +115,7 @@ function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_wo
  * @param float $value The value to format
  */
 function smarty_modifier_percent($value) {
-  return number_format($value*100, 2) . "%";
+  return  !is_null($value) ? number_format($value*100, 2) . "%" : "";
 }
 
 function smarty_modifier_const($object, $name) {
