@@ -19,6 +19,8 @@
       	{{mb_value object=$curr_plage field=date}}
       	- 
       	Dr {{$curr_plage->_ref_chir->_view}}
+        -
+        {{$curr_plage->libelle}}
       </h3>
     </td>
   </tr>
