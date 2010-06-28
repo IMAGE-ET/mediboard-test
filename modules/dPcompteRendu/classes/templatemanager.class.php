@@ -102,6 +102,11 @@ class CTemplateManager {
     $this->addProperty($field, $value);
   }
   
+  function addDayProperty($field, $value) {
+    $value = ucwords(mbTransformTime(null, $value, "%A"));
+    $this->addProperty($field, $value);
+  }
+  
   function addTimeProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("time")) : "";
     $this->addProperty($field, $value);

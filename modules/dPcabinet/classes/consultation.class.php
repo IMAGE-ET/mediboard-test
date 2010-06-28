@@ -1125,8 +1125,10 @@ class CConsultation extends CCodable {
   function fillLimitedTemplate(&$template) {
     $this->updateFormFields();
     $this->loadRefsFwd();
+    
     $template->addDateProperty("Consultation - date"  , $this->_ref_plageconsult->date);
     $template->addTimeProperty("Consultation - heure" , $this->heure);
+    $template->addDayProperty("Consultation - Jour de la consultation", $this->_datetime);
     $tradExamFields = array(
       "motif"            => "motif",
       "rques"            => "remarques",
