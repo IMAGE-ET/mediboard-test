@@ -1832,7 +1832,9 @@ class CMbObject {
       }
       $query .= "\n `{$this->_spec->table}`.`{$this->_spec->key}`";
     }
-    $query .= "\n LIMIT $limit";
+    
+    if ($limit)
+      $query .= "\n LIMIT $limit";
     
     return $this->loadQueryList("SELECT * $query");
   }
