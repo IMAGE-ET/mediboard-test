@@ -1,6 +1,6 @@
 {{if $can->admin}}
   <button class="hslip"
-          onclick="window.open('?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}{{foreach from=$aides item=_aide}}&amp;id[]={{$_aide->_id}}{{/foreach}}')">
+          onclick="window.open('?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}{{foreach from=$aides_ids item=_aide_id}}&amp;id[]={{$_aide_id}}{{/foreach}}')">
        Exporter au format CSV
   </button>
   

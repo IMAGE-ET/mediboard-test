@@ -35,13 +35,13 @@ Main.add(function(){
 <hr class="control_tabs" />
 
 <div id="owner-user" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel aides=$aides.user type=user}}
+  {{include file=inc_list_aides.tpl owner=$userSel aides=$aides.user type=user aides_ids=$aides.user_ids}}
 </div>
 
 <div id="owner-func" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aides.func type=func}}
+  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function aides=$aides.func type=func aides_ids=$aides.func_ids}}
 </div>
 
 <div id="owner-etab" style="display: none;">
-  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function->_ref_group aides=$aides.etab type=etab}}
+  {{include file=inc_list_aides.tpl owner=$userSel->_ref_function->_ref_group aides=$aides.etab type=etab aides_ids=$aides.etab_ids}}
 </div>

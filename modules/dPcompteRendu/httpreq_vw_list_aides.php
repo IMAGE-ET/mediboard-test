@@ -52,6 +52,7 @@ if ($userSel->user_id) {
   $_aide = new CAideSaisie();
   
   $where["user_id"] = "= '$userSel->user_id'";
+  $aides["user_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["user"] = $_aide->seek($keywords, $where, $start["user"].", 30", true);
   $aidesCount["user"] = $_aide->_totalSeek;
   foreach($aides["user"] as $aide) {
@@ -60,6 +61,7 @@ if ($userSel->user_id) {
   unset($where["user_id"]);
 
   $where["function_id"] = "= '$userSel->function_id'";
+  $aides["func_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["func"] = $_aide->seek($keywords, $where, $start["func"].", 30", true);
   $aidesCount["func"] = $_aide->_totalSeek;
   foreach($aides["func"] as $aide) {
@@ -68,6 +70,7 @@ if ($userSel->user_id) {
   unset($where["function_id"]);
 
   $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
+  $aides["etab_ids"] = array_keys($_aide->seek($keywords, $where, 1000));
   $aides["etab"] = $_aide->seek($keywords, $where, $start["etab"].", 30", true);
   $aidesCount["etab"] = $_aide->_totalSeek;
   foreach($aides["etab"] as $aide) {
