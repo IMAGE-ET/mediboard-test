@@ -30,6 +30,10 @@ changePraticien = function(praticien_id){
 	  var oFormAddLine = document.addLine;
     oFormAddLine.praticien_id.value = praticien_id;
   }
+  if(document.add_aerosol){
+    var oFormAddAerosol = document.add_aerosol;
+    oFormAddAerosol.praticien_id.value = praticien_id;
+  }
 	if(document.addLineCommentMed){
     var oFormAddLineCommentMed = document.addLineCommentMed;	
     oFormAddLineCommentMed.praticien_id.value = praticien_id;

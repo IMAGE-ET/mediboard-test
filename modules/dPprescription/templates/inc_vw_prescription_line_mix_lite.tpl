@@ -13,19 +13,19 @@
 <tr>
   <td style="width: 8%;" class="text {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}arretee{{/if}}">
 			     
-          {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
-           <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
-                <input type="hidden" name="m" value="dPprescription" />
-                <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
-                <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />
-                <input type="hidden" name="del" value="1" />
-                <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { 
-                  onComplete: function(){
-                      Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
-                  }        
-                } );"></button>
-              </form>
-              {{/if}}
+    {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
+     <form name="editPerf-{{$_prescription_line_mix->_id}}" action="" method="post">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+          <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />
+          <input type="hidden" name="del" value="1" />
+          <button type="button" class="trash notext" onclick="return onSubmitFormAjax(this.form, { 
+            onComplete: function(){
+                Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
+            }        
+          } );"></button>
+        </form>
+      {{/if}}
 							
 			{{if $_prescription_line_mix->_ref_parent_line->_id}}
         {{assign var=parent_perf value=$_prescription_line_mix->_ref_parent_line}}
@@ -35,8 +35,6 @@
       <a href=# onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}');" style="display: inline; font-weight: bold;">
         {{mb_value object=$_prescription_line_mix field=type}}
       </a>
-
-							
   </td>
   <td style="width: 44%" class="text">
     {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=lines}}
@@ -44,7 +42,6 @@
       <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="font-weight: bold; display: inline;">
         {{$_perf_line->_ucd_view}}
         
-				
 				{{if $_perf_line->_posologie}}
 				({{$_perf_line->_posologie}})
 				{{/if}}
@@ -77,10 +74,19 @@
 		   -
 		 {{/if}}
   </td>
-  <td style="width: 5%;" class="text">
-	{{$_prescription_line_mix->_frequence}}
-	</td>
-  <td style="width: 15%;" class="text">{{mb_value object=$_prescription_line_mix field=voie}}</td>
+  
+	{{if $_prescription_line_mix->type_line == "aerosol"}}
+	  <td style="width: 20%">
+	  	{{if $_prescription_line_mix->interface}}
+	  	  {{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}}
+			{{/if}}
+	  </td>
+	{{else}}
+		<td style="width: 5%;" class="text">
+		{{$_prescription_line_mix->_frequence}}
+		</td>
+	  <td style="width: 15%;" class="text">{{mb_value object=$_prescription_line_mix field=voie}}</td>
+	{{/if}}
 	{{if !$_prescription_line_mix->_protocole}}
   <td style="width: 10%;" class="text">
 	  {{mb_value object=$_prescription_line_mix field=date_debut}}
@@ -91,7 +97,7 @@
   <td style="width: 10%;" class="text">
     <button style="float: right;" class="edit notext" onclick="Prescription.reload('{{$prescription_reelle->_id}}', '', 'medicament', '', '{{$mode_pharma}}', null, '{{$_prescription_line_mix->_guid}}');"></button>
     {{if $_prescription_line_mix->duree}}
-		  {{mb_value object=$_prescription_line_mix field=duree}}h
+		  {{mb_value object=$_prescription_line_mix field=duree}} {{mb_value object=$_prescription_line_mix field="unite_duree"}}
 		{{/if}}
   </td>  
 	{{else}}

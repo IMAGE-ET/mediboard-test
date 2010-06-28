@@ -20,7 +20,6 @@
 	  </script>
   {{/if}}
   
-	
   {{if $_prescription_line_mix->_recent_modification}}
     <img style="float: right; margin: 2px;" src="images/icons/ampoule.png" title="Ligne recemment modifiée" />
   {{/if}}
@@ -36,10 +35,16 @@
      onmouseover="ObjectTooltip.createEx(this, '{{$_prescription_line_mix->_guid}}')" 
 	   onclick='editPerf("{{$_prescription_line_mix->_id}}","{{$date}}",document.mode_dossier_soin.mode_dossier.value, "{{$sejour->_id}}");
 	            addCibleTransmission("CPrescriptionLineMix","{{$_prescription_line_mix->_id}}","{{$_prescription_line_mix->_view}}");'>
-    {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} ({{$_prescription_line_mix->voie}})
+    {{tr}}CPrescriptionLineMix.type.{{$_prescription_line_mix->type}}{{/tr}} 
+		{{if $_prescription_line_mix->voie}}
+		  ({{$_prescription_line_mix->voie}})
+		{{/if}}
+		{{if $_prescription_line_mix->interface}}
+      ({{tr}}CPrescriptionLineMix.interface.{{$_prescription_line_mix->interface}}{{/tr}})
+    {{/if}}
   </div>
 	
-	{{if $_prescription_line_mix->vitesse}}
+	{{if $_prescription_line_mix->vitesse && $_prescription_line_mix->type_line != "oxygene"}}
 		<form style="white-space: nowrap" name="modifDebit-{{$prescription_line_mix_id}}" method="post" action="?" onsubmit="return onSubmitFormAjax(this, { onComplete: function() { 
                             Prescription.loadTraitement('{{$_prescription_line_mix->_ref_prescription->object_id}}','{{$date}}','','administration');} } )">
 		  <input type="hidden" name="m" value="dPprescription" />
@@ -52,7 +57,7 @@
 		</form>
 	{{/if}}
 	
-  {{if $_prescription_line_mix->_active}}
+  {{if $_prescription_line_mix->_active && $_prescription_line_mix->type_line == "perfusion"}}
 	  {{if $_prescription_line_mix->signature_prat || !$dPconfig.dPprescription.CPrescription.show_unsigned_med_msg}}
       <div style="text-align: center;">
 			<form name="editPerfusion-{{$_prescription_line_mix->_id}}" method="post" action="?" style="text-align: center;">
@@ -146,7 +151,8 @@
 	<span style="opacity: 0.5; white-space: nowrap;">
 	<small>
 	{{if $_prescription_line_mix->_frequence}}
-	  Débit initial: {{$_prescription_line_mix->_frequence}}
+	  {{if $_prescription_line_mix->type_line == "perfusion"}}Débit initial: {{/if}}
+		{{$_prescription_line_mix->_frequence}}
 	{{/if}}
 	</small>
 	</span>
@@ -251,7 +257,6 @@
 					    <div style="font-size: 0.8em; height: 1em; padding: 2px;"></div>
 					  {{/if}}
              
-						
 						{{if $_prescription_line_mix->vitesse}}
 						  {{if array_key_exists($_date_hour, $_prescription_line_mix->_variations)}}
 							   <table class="layout" style="width: 100%; margin: -2px; height: 2em;">

@@ -163,7 +163,7 @@ class CPrescriptionLineMixItem extends CMbObject {
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
       
       if($unite){
-	      $coef_adm = $this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
+	      $coef_adm = @$this->_ref_produit->rapport_unite_prise[$unite][$libelle_unite_presentation];
         if($_poso->p_kg) {
 	        // On ajoute la poso avec les /kg
 	          $_presentation = "";

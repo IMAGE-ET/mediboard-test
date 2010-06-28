@@ -18,9 +18,12 @@ class CPrescriptionLineMix extends CMbObject {
   var $libelle          = null; // Libelle de la prescription_line_mix
   var $vitesse          = null; // Stockée en ml/h
   var $voie             = null; // Voie d'administration des produits
+  var $interface        = null; // Interface d'administration
   var $date_debut       = null; // Date de debut
   var $time_debut       = null; // Heure de debut
   var $duree            = null; // Duree de la perf (en heures)
+  var $unite_duree      = null; 
+  
   var $next_line_id     = null; // Perfusion suivante (pour garder un historique lors de la modification de la prescription_line_mix)
   var $praticien_id     = null; // Praticien responsable de la prescription_line_mix
   var $creator_id       = null; // Createur de la prescription_line_mix
@@ -45,8 +48,8 @@ class CPrescriptionLineMix extends CMbObject {
   
 	
 	var $quantite_totale = null; // valeur en ml
-	var $duree_passage   = null; // valeur en minutes
-	
+	var $duree_passage   = null; // minutes
+	var $unite_duree_passage = null;
 	
   // Champs specifiques aux PCA
   var $mode_bolus          = null; // Mode de bolus 
@@ -114,12 +117,17 @@ class CPrescriptionLineMix extends CMbObject {
 	var $_continuite = null;  // continue, discontinue
 	var $_last_debit = null;
 	var $_variations = null;
+	var $_last_variation = null;
 	
 	static $type_by_line = array(
 	  "perfusion"    => array("classique", "seringue", "PCA"),
 		"oxygene"      => array("masque", "lunettes", "sonde"),
-		"aerosol"      => array(""),
+		"aerosol"      => array("nebuliseur_ultrasonique", "nebuliseur_pneumatique", "doseur", "inhalateur"),
 		"alimentation" => array("")
+	);
+	
+	static $interface_by_line = array(
+		"aerosol" => array("buccal", "nasal", "bucco_nasal", "masque_facial")
 	);
 	
 	static $unite_by_line = array(
@@ -138,13 +146,15 @@ class CPrescriptionLineMix extends CMbObject {
   	$specs = parent::getProps();
   	$specs["prescription_id"]        = "ref class|CPrescription cascade";
   	$specs["type_line"]              = "enum notNull list|perfusion|aerosol|oxygene|alimentation default|perfusion";
-    $specs["type"]                   = "enum notNull list|classique|seringue|PCA|masque|lunettes|sonde";
+    $specs["type"]                   = "enum list|classique|seringue|PCA|masque|lunettes|sonde|nebuliseur_ultrasonique|nebuliseur_pneumatique|doseur|inhalateur";
 		$specs["libelle"]                = "str";
     $specs["vitesse"]                = "num pos";
     $specs["voie"]                   = "str";
+		$specs["interface"]              = "str";
     $specs["date_debut"]             = "date";
     $specs["time_debut"]             = "time";
     $specs["duree"]                  = "num pos";
+		$specs["unite_duree"]            = "enum list|heure|jour default|heure";
     $specs["next_line_id"]           = "ref class|CPrescriptionLineMix"; 
     $specs["praticien_id"]           = "ref class|CMediusers";
     $specs["creator_id"]             = "ref class|CMediusers";
@@ -177,6 +187,7 @@ class CPrescriptionLineMix extends CMbObject {
     $specs["jour_decalage"]          = "enum list|I|N default|I"; // Permet de noter N comme jour de decalage
 	  $specs["quantite_totale"]        = "num";
 		$specs["duree_passage"]          = "num";
+		$specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
 		return $specs;
   }
 
@@ -214,7 +225,9 @@ class CPrescriptionLineMix extends CMbObject {
     $this->_debut = ($this->date_pose) ? "$this->date_pose $this->time_pose" : "$this->date_debut $this->time_debut";
 
     // Calcul de la fin de la prescription_line_mix
-    $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree HOURS", "$this->_debut") : $this->_debut;
+		$increment = ($this->type_line == "aerosol") ? "DAYS" : "HOURS";
+		
+    $this->_date_fin = $this->duree ? mbDateTime("+ $this->duree $increment", "$this->_debut") : $this->_debut;
     $this->_fin = ($this->date_arret && $this->time_arret) ? "$this->date_arret $this->time_arret" 
                                                            : ($this->date_retrait ? "$this->date_retrait $this->time_retrait" : $this->_date_fin); 
 
@@ -230,7 +243,7 @@ class CPrescriptionLineMix extends CMbObject {
 		if($this->vitesse){
 		  $this->_continuite = "continue";
 		}
-		if($this->nb_tous_les || $this->duree_passage){
+		if(($this->nb_tous_les || $this->duree_passage) && $this->type_line != "oxygene"){
 			$this->_continuite = "discontinue";
 		}
   }
@@ -467,6 +480,9 @@ class CPrescriptionLineMix extends CMbObject {
    * Calcul des prises prevues pour la prescription_line_mix
    */
   function calculPrisesPrevues($date){
+  	if(!$this->_ref_lines){
+  		return;
+  	}
   	$line_perf = reset($this->_ref_lines);
 		
 		$planif = new CPlanificationSysteme();
@@ -814,6 +830,8 @@ class CPrescriptionLineMix extends CMbObject {
 	  // Voir les types d'oxygene
 	  $this->type = "masque";
 	  $this->type_line = "oxygene";
+		$this->unite_duree = "heure";
+		$this->unite_duree_passage = "heure";
 	  $this->prescription_id = $prescription_id;
 	  $this->creator_id = CAppUI::$user->_id;
 	  $this->praticien_id = $praticien_id;
@@ -839,14 +857,14 @@ class CPrescriptionLineMix extends CMbObject {
 		$this->voie = $produit->voies[0];
       
     $msg = $this->store();
-	  CAppUI::stepAjax("CPrescriptionLineMix.aerosol-msg-create");
+	  CAppUI::stepAjax("CPrescriptionLineMix-msg-create");
     
 	  $prescription_line_mix_item = new CPrescriptionLineMixItem();
 	  $prescription_line_mix_item->prescription_line_mix_id = $this->_id;
 	  $prescription_line_mix_item->code_cip = $code_cip;
 	  
 		$msg = $prescription_line_mix_item->store();
-    CAppUI::stepAjax("CPrescriptionLineMixItem.aerosol-msg-create");
+    CAppUI::stepAjax("CPrescriptionLineMixItem-msg-create");
 	}
 }
   

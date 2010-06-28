@@ -1643,7 +1643,19 @@ class CSetupdPprescription extends CSetup {
               ADD `quantite_dm` FLOAT;";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "1.08";
+		$this->makeRevision("1.08");
+		$sql = "ALTER TABLE `prescription_line_mix` 
+							CHANGE `type` `type` ENUM ('classique','seringue','PCA','masque','lunettes','sonde','nebuliseur_ultrasonique','nebuliseur_pneumatique','doseur','inhalateur'),
+							ADD `interface` VARCHAR (255);";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("1.09");
+		$sql = "ALTER TABLE `prescription_line_mix`
+              ADD `unite_duree` ENUM ('heure','jour') DEFAULT 'heure',
+							ADD `unite_duree_passage` ENUM ('minute','heure') DEFAULT 'minute'";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "1.10";
   }
 }
 

@@ -24,6 +24,7 @@
       {{mb_value object=$perf field=voie}}
     </td>
   </tr>
+	{{if $perf->vitesse}}
   <tr>
     <td>
       {{mb_label object=$perf field=vitesse}} :
@@ -34,6 +35,7 @@
       {{/if}}
     </td>
   </tr>
+	{{/if}}
   <tr>
     <td>
       {{mb_label object=$perf field=date_debut}} : 
@@ -58,8 +60,8 @@
   {{/if}}
   <tr>
     <td>
-      {{mb_label object=$perf field=duree}}
-      {{mb_value object=$perf field=duree}} heures
+      {{mb_label object=$perf field=duree}} :
+      {{mb_value object=$perf field=duree}} {{mb_value object=$perf field=unite_duree}}
     </td>
   </tr>
   <tr>

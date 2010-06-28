@@ -334,10 +334,12 @@ moveTbodyElt = function(oTbody, cat_id){
 
 changePraticienMed = function(praticien_id){
   var oFormAddLine = document.forms.addLine;
+	var oFormAddAerosol = document.forms.add_aerosol;
   var oFormAddLineCommentMed = document.forms.addLineCommentMed;
 	var oFormTransfert = document.forms.transfert_line_TP;
 
   $V(oFormAddLine.praticien_id, praticien_id);
+  $V(oFormAddAerosol.praticien_id, praticien_id);
 	$V(oFormTransfert.praticien_id, praticien_id);
   $V(oFormAddLineCommentMed.praticien_id, praticien_id);
 }

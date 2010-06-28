@@ -91,6 +91,7 @@ class CPrescription extends CMbObject {
 		"med"      => "modules/soins/images/medicaments.png",
 		"inj"      => "images/icons/anesth.png",
 		"perfusion"=> "modules/soins/images/perfusion.png",
+		"aerosol"  => "modules/soins/images/aerosol.png",
 		"anapath"  => "modules/soins/images/microscope.png",
 		"biologie" => "images/icons/labo.png",
 		"imagerie" => "modules/soins/images/radio.png",

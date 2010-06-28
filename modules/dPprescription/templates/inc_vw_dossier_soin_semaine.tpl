@@ -72,10 +72,16 @@ Main.add(function () {
 	  <tr>
 	    <td style="width: 1%">
 			  <ul id="tab_categories_plan" class="control_tabs_vertical">
-				  {{if $prescription->_ref_prescription_line_mixes_for_plan|@count}}
-				    <li><a href="#plan_perf">Perfusions</a></li>
+					{{if $prescription->_ref_prescription_line_mixes_for_plan_by_type|@count}}
+				    {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type key=type_line_mix item=_lines_mix}}
+				    <li onmousedown="refreshDossierSoin(null, '{{$type_line_mix}}');">
+				      <a href="#plan_{{$type_line_mix}}">
+				        {{tr}}CPrescription._chapitres.{{$type_line_mix}}{{/tr}}
+				      </a>
+				    </li>
+				    {{/foreach}}
 				  {{/if}}
-	  			
+				  
 	  			{{if $prescription->_ref_injections_for_plan|@count}}
 					  <li><a href="#plan_inj">Injections</a></li>
 			    {{/if}}
@@ -107,14 +113,24 @@ Main.add(function () {
 	        
 	        {{assign var=transmissions value=$prescription->_transmissions}}	  
 	        
-	        <!-- Affichage des prescription_line_mixes -->
-	        <tbody id="plan_perf" style="display:none;">
-		        {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan item=_prescription_line_mix}}
-		          {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
-		        {{/foreach}}
-	        </tbody>
-	        
-	        
+					<tbody id="plan_aerosol" style="display:none;">
+					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.aerosol item=_prescription_line_mix}}
+              {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
+            {{/foreach}}
+					</tbody>
+					
+				  <tbody id="plan_oxygene" style="display:none;">
+					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.oxygene item=_prescription_line_mix}}
+              {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
+            {{/foreach}}
+					</tbody>
+					
+				  <tbody id="plan_perfusion" style="display:none;">
+					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.perfusion item=_prescription_line_mix}}
+              {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
+            {{/foreach}}
+					</tbody>
+					
 	        <!-- Affichage des injections -->
 				  <tbody id="plan_inj" style="display: none;">
 					  {{foreach from=$prescription->_ref_injections_for_plan key=_key_cat_ATC item=lines_unite_prise_cat name="foreach_line_cat"}}

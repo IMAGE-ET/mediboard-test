@@ -16,7 +16,9 @@ Main.add( function(){
 	  $("bolus-{{$_prescription_line_mix->_id}}").show();
 		changeModeBolus(editPerfForm);		
   {{/if}}
-	toggleContinuiteLineMix(editPerfForm.continuite_perf,'{{$_prescription_line_mix->_id}}');
+	{{if $_prescription_line_mix->type_line == "perfusion"}}
+	  toggleContinuiteLineMix(editPerfForm.continuite_perf,'{{$_prescription_line_mix->_id}}');
+  {{/if}}
 } );
 
 </script>
@@ -212,10 +214,11 @@ Main.add( function(){
 						<td style="border:none;">
              {{mb_label object=$_prescription_line_mix field=duree}}
              {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-               {{mb_field object=$_prescription_line_mix field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}heures
+               {{mb_field object=$_prescription_line_mix field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
              {{else}}
-               {{mb_value object=$_prescription_line_mix field=duree}}heures
-             {{/if}}    
+               {{mb_value object=$_prescription_line_mix field=duree}}
+             {{/if}}
+						 {{mb_value object=$_prescription_line_mix field=unite_duree}}
             </td>
 						
 						<td style="border:none;">
@@ -231,28 +234,44 @@ Main.add( function(){
 					
 				    <td style="border:none;">
 				      {{if $_prescription_line_mix->_perm_edit}}
-				        {{if $_prescription_line_mix->_voies}}
-					        <select name="voie" onchange="{{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
-					                                        Element.hide($('warning_voie_{{$_prescription_line_mix->_id}}')); 
-					                                        Element.hide($('last_option_{{$_prescription_line_mix->_id}}'));
-					                                      {{/if}}
-					                                      submitFormAjax(this.form, 'systemMsg');">
-					          {{foreach from=$_prescription_line_mix->_voies item=_voie}}
-					            <option value="{{$_voie}}" {{if $_prescription_line_mix->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
-					          {{/foreach}}
-					          {{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
-					            <option value="{{$_prescription_line_mix->voie}}" selected="selected" id="last_option_{{$_prescription_line_mix->_id}}">{{$_prescription_line_mix->voie}}</option>
-					          {{/if}}
-					        </select>
-					         {{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
-					         <div class="warning" id="warning_voie_{{$_prescription_line_mix->_id}}">
-					           Attention, la voie selectionnée n'est plus disponible
-					         </div>
-					         {{/if}}
-				        {{/if}}
+							  {{if $_prescription_line_mix->type_line == "aerosol"}}
+								 {{assign var=interfaces value="CPrescriptionLineMix"|static:"interface_by_line"}}
+				         {{assign var=interfaces_for_line value=$interfaces.aerosol}}
+				          
+				          <select name="interface" onchange="return onSubmitFormAjax(this.form);">           
+				            <option value="">&mdash; Interface</option>               
+				            {{foreach from=$interfaces_for_line item=_interface}}
+				              <option value="{{$_interface}}" {{if $_prescription_line_mix->interface == $_interface}}selected="selected"{{/if}}>{{tr}}CPrescriptionLineMix.interface.{{$_interface}}{{/tr}}</option> 
+				            {{/foreach}}
+				          </select>
+								{{else}}
+					        {{if $_prescription_line_mix->_voies}}
+						        <select name="voie" onchange="{{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
+						                                        Element.hide($('warning_voie_{{$_prescription_line_mix->_id}}')); 
+						                                        Element.hide($('last_option_{{$_prescription_line_mix->_id}}'));
+						                                      {{/if}}
+						                                      submitFormAjax(this.form, 'systemMsg');">
+						          {{foreach from=$_prescription_line_mix->_voies item=_voie}}
+						            <option value="{{$_voie}}" {{if $_prescription_line_mix->voie == $_voie}}selected="selected"{{/if}}>{{$_voie}}</option>
+						          {{/foreach}}
+						          {{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
+						            <option value="{{$_prescription_line_mix->voie}}" selected="selected" id="last_option_{{$_prescription_line_mix->_id}}">{{$_prescription_line_mix->voie}}</option>
+						          {{/if}}
+						        </select>
+						         {{if !in_array($_prescription_line_mix->voie, $_prescription_line_mix->_voies)}}
+						         <div class="warning" id="warning_voie_{{$_prescription_line_mix->_id}}">
+						           Attention, la voie selectionnée n'est plus disponible
+						         </div>
+						         {{/if}}
+					        {{/if}}
+							  {{/if}}
 				      {{else}}
-				        <strong>{{mb_value object=$_prescription_line_mix field="voie"}}</strong>
-              {{/if}}
+							  {{if $_prescription_line_mix->type_line == "aerosol"}}
+								  <strong>{{mb_value object=$_prescription_line_mix field="interface"}}</strong>
+              	{{else}}
+							    <strong>{{mb_value object=$_prescription_line_mix field="voie"}}</strong>
+              	{{/if}}
+				      {{/if}}
 	          </td>
 				    <td style="border:none;">
 				      {{if !$_prescription_line_mix->_protocole && $_prescription_line_mix->signature_prat}}
@@ -281,8 +300,9 @@ Main.add( function(){
 					<tr>
 					  <td style="border: none;"></td>
             <td style="border:none;">
-					    <label>
-							  <input type="radio" name="continuite_perf" 
+					    {{if $_prescription_line_mix->type_line != "aerosol"}}
+							<label>
+					      <input type="radio" name="continuite_perf" 
 								                    {{if !$_prescription_line_mix->_perm_edit}}disabled="disabled"{{/if}} 
 								                    {{if $_prescription_line_mix->_continuite != 'discontinue'}}checked="checked"{{/if}} 
 																		onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');
@@ -299,6 +319,7 @@ Main.add( function(){
 																		onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');" value="discontinue"/>
 								Discontinue		
 					    </label>
+							{{/if}}
 						</td>
 						<td style="border:none;" colspan="2">
 					    
@@ -316,14 +337,18 @@ Main.add( function(){
 	              </div>
 	
 	              <div style="display: none;" id="discontinue-{{$_prescription_line_mix->_id}}">
+								
+								
 	                {{if $_prescription_line_mix->type_line == "perfusion"}}
 	                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
 	                    A passer en
-	                   {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} minutes
+	                   {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}}
 	                  {{elseif $_prescription_line_mix->duree_passage}}
 	                    A passer en
-	                    {{mb_value object=$_prescription_line_mix field=duree_passage}} minutes
+	                    {{mb_value object=$_prescription_line_mix field=duree_passage}}
 	                  {{/if}}
+										<!-- duree de passage en minutes -->
+										{{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
 	                {{/if}}
 	                
 									 toutes les 
@@ -354,10 +379,13 @@ Main.add( function(){
 		                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
 		                  
 		                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-		                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
+		                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
 		                  {{elseif $_prescription_line_mix->duree_passage}}
-		                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}} heures
+		                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
 		                  {{/if}}
+											<!-- Duree de passage en heures -->
+											{{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
+											
 		                {{/if}}
 		                 toutes les 
 		                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
@@ -367,6 +395,23 @@ Main.add( function(){
 		                {{/if}}
 		              </span>
               {{/if}}
+							
+							{{if $_prescription_line_mix->type_line == "aerosol"}}
+							  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                  {{elseif $_prescription_line_mix->duree_passage}}
+                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
+                  {{/if}}
+									<!-- duree de passage en minutes -->
+                  {{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
+									
+                 toutes les 
+                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                  {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
+                {{else}}      
+                  {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
+                {{/if}}
+							{{/if}}
 
             </td>
           </tr>
@@ -389,11 +434,57 @@ Main.add( function(){
       </form>
     </td>
   </tr>
-	{{if $_prescription_line_mix->type_line == "perfusion"}}
-                     
+	
+	{{if $_prescription_line_mix->type_line == "perfusion" || $_prescription_line_mix->type_line == "aerosol"}}
   <tr>
     <td colspan="9">
       <table class="form group" id=lines-{{$_prescription_line_mix->_id}}>
+      	{{if $_prescription_line_mix->type_line == "aerosol"}}
+          <!-- Formulaire d'ajout de ligne dans l'aerosol -->
+					<tr>
+            <td>
+            	<script type="text/javascript">
+            		
+								updateFieldsAerosol = function(selected){
+								  var oFormProduit = getForm("addLineAerosol");
+								  Element.cleanWhitespace(selected);
+								  var dn = selected.childNodes;
+								  if(dn[0].className != 'informal'){
+								    $V(oFormProduit.code_cip, dn[0].firstChild.nodeValue);
+								  }
+								}
+								
+								Main.add( function(){
+								    // Autocomplete des DM
+								    var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+								    urlAuto.autoComplete("addLineAerosol_produit", "dm_auto_complete", {
+								      minChars: 3,
+								      updateElement: updateFieldsAerosol,
+								      callback: 
+								        function(input, queryString){
+								          return (queryString + "&hors_specialite=0"); 
+								        }
+								    } );
+								} );
+            	</script>
+            	
+							<form name="addLineAerosol" action="?" method="post">
+            		<input type="hidden" name="m" value="dPprescription" />
+                <input type="hidden" name="dosql" value="do_prescription_line_mix_item_aed" />
+								<input type="hidden" name="del" value="0" />
+                <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />
+                <input type="hidden" name="prescription_line_mix_item_id" value="" />
+                
+								Produit 
+								<input type="text" name="produit" value="" size="20" style="width: 300px;" class="autocomplete" />
+                <div style="display:none; width: 350px;" class="autocomplete" id="dm_auto_complete"></div>
+   						  <input type="hidden" name="code_cip" value="" onchange="onSubmitFormAjax(this.form, { onComplete: function(){ 
+								  Prescription.reload('{{$_prescription_line_mix->_ref_prescription->_id}}', '', 'medicament');
+								} } )" />
+	            </form>
+            </td>
+					</tr>
+				{{/if}}	
 	      {{foreach from=$_prescription_line_mix->_ref_lines item=line}}
 	        {{assign var=line_id value=$line->_id}}
 	        <tr>
@@ -447,7 +538,6 @@ Main.add( function(){
 												{{/if}}
                         </span>
 												
-										   		
 											{{mb_label object=$line field=quantite}}:
 					            {{if $_prescription_line_mix->_can_modify_prescription_line_mix_item}}
 												{{mb_field object=$line field=quantite size=4 increment=1 min=0 form="editLinePerf-$line_id" onchange="return onSubmitFormAjax(this.form, { onComplete: updateSolvant.curry($prescription_line_mix_id, $line_id) });"}}
@@ -469,8 +559,6 @@ Main.add( function(){
 												  (Solvant)
 												{{/if}}		            
 										  {{/if}}
-											
-											
 					     		  </td>
 			            </tr>
 		            </table>
@@ -478,16 +566,19 @@ Main.add( function(){
 	          </td>
 	        </tr>
 	      {{foreachelse}}
-          <tr>
+					<tr>
             <td colspan="20">
             	<div class="small-info">Aucun produit</div>
 						</td>
           </tr>
-	      {{/foreach}}
+				{{/foreach}}
       </table>
     </td>
   </tr>
 	{{/if}}
+	
+
+	
   {{if $_prescription_line_mix->_perm_edit || $_prescription_line_mix->commentaire}}
   <tr>
     <td colspan="9">
@@ -500,8 +591,10 @@ Main.add( function(){
 		      {{/if}}
 		      {{if $_prescription_line_mix->_perm_edit}}
 		      
-					<input type="text" name="commentaire" value="{{$_prescription_line_mix->commentaire}}" size=60 onchange="{{if $_prescription_line_mix->substitute_for_id && !$_prescription_line_mix->substitution_active}}submitEditPerfCommentaireSubst('{{$_prescription_line_mix->_id}}',this.value);{{else}}submitAddComment('{{$_prescription_line_mix->_class_name}}', '{{$_prescription_line_mix->_id}}', this.value);{{/if}}" />
-          <select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
+					<input type="text" name="commentaire" value="{{$_prescription_line_mix->commentaire}}" size=60 
+					       onchange="{{if $_prescription_line_mix->substitute_for_id && !$_prescription_line_mix->substitution_active}}submitEditPerfCommentaireSubst('{{$_prescription_line_mix->_id}}',this.value);{{else}}submitAddComment('{{$_prescription_line_mix->_class_name}}', '{{$_prescription_line_mix->_id}}', this.value);{{/if}}" />
+          
+					<select name="_helpers_commentaire" size="1" onchange="pasteHelperContent(this); this.form.commentaire.onchange();" style="width: 110px;">
 		        <option value="">&mdash; Aide</option>
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineMix}}
 		      </select>

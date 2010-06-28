@@ -13,7 +13,7 @@ $code_cip = CValue::post("code_cip");
 $prescription_line_medicament_id = CValue::post("prescription_line_medicament_id");
 
 
-$gestion_line_mix = false;
+$gestion_line_mix = true;
 
 if($gestion_line_mix){
 	// Creation d'une ligne d'oxygene

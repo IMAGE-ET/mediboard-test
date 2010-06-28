@@ -178,6 +178,15 @@ selectPeriode = function(element) {
                <input type="checkbox" value="perf" id="perf" onclick="oCatField.toggle(this.value, this.checked);" />
              </td>
            </tr>
+					 <tr>
+             <td>
+               <strong>{{tr}}CPrescription._chapitres.aerosol{{/tr}}</strong>
+             </td>
+             <td>
+               <input type="checkbox" value="aerosol" id="aerosol" onclick="oCatField.toggle(this.value, this.checked);" />
+             </td>
+           </tr>
+           
            {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
              {{if $categories_by_chap|@count}}
   	           <tr>

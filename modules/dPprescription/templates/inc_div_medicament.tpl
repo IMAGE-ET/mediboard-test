@@ -94,6 +94,13 @@ transfertLineTP = function(line_id, sejour_id){
 }
 
 
+addAerosol = function(){
+  var oFormAerosol = getForm("add_aerosol");
+	return onSubmitFormAjax(oFormAerosol, { onComplete: function(){
+    Prescription.reload('{{$prescription->_id}}',null,'medicament')
+	} });
+}
+
 </script>
 
 <form name="transfert_line_TP" action="?" method="post">
@@ -109,6 +116,20 @@ transfertLineTP = function(line_id, sejour_id){
   <input type="hidden" name="decalage_line" value="" />
   <input type="hidden" name="unite_decalage" value="" />
   <input type="hidden" name="operation_id" value="" />
+</form>
+
+<form name="add_aerosol" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+	<input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+	<input type="hidden" name="del" value="0" />
+	<input type="hidden" name="prescription_line_mix_id" value="" />
+	<input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+	<input type="hidden" name="type_line" value="aerosol" />
+	<input type="hidden" name="type" value="nebuliseur_ultrasonique" />
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
+	<input type="hidden" name="unite_duree" value="jour" />
+	<input type="hidden" name="unite_duree_passage" value="minute" />
 </form>
 
 <!-- Cas normal -->
@@ -221,7 +242,8 @@ transfertLineTP = function(line_id, sejour_id){
 					
 					<span id="addComment-med">
 			    <button  class="new" onclick="toggleFieldComment(this, $('add_line_comment_med'),'commentaire');" type="button">Ajouter commentaire</button>
-			    <br />
+			    <button  class="new" onclick="addAerosol();" type="button">Aérosol</button>
+          <br />
 					</span>
 			    <input type="text" name="produit" value="" size="20" style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete" 
 					       onclick="headerPrescriptionTabs.setActiveTab('div_ajout_lignes');" />
@@ -324,9 +346,13 @@ transfertLineTP = function(line_id, sejour_id){
 			    <th style="width: 8%;">Type</th>
 			    <th style="width: 44%;">Médicaments</th> 
 			    <th style="width: 8%;">Prat</th>
-			    <th style="width: 5%;">Débit</th>
-			    <th style="width: 15%;">Voie</th>
-					{{if $prescription->object_id}}
+					{{if $type_line == "aerosol"}}
+            <th style="width: 20%;">Interface</th>
+          {{else}}
+	          <th style="width: 5%;">Débit</th>
+	          <th style="width: 15%;">Voie</th>					
+					{{/if}}
+          {{if $prescription->object_id}}
 				    <th style="width: 10%;">Début</th>
 			      <th style="width: 10%;">Durée</th>
 					{{else}}

@@ -45,7 +45,9 @@ CMbArray::removeValue("trans", $elts);
 $do_elements = (count($elts) > 0);
 $do_medicaments = (in_array("med", $cats));
 $do_injections = (in_array("inj", $cats));
-$do_prescription_line_mixes = (in_array("perf", $cats));
+$do_perfusions = (in_array("perf", $cats));
+$do_aerosols   = (in_array("aerosol", $cats));
+
 $do_trans = (in_array("trans", $cats));
 
 // Filtres sur l'heure des prises
@@ -126,7 +128,7 @@ foreach($trans_and_obs as &$trans_by_patients){
 	ksort($trans_by_patients);
 }
 
-if (CValue::get("do") && ($do_medicaments || $do_injections || $do_prescription_line_mixes || $do_elements)) {
+if (CValue::get("do") && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols || $do_elements)) {
 	// Chargement de toutes les prescriptions
 	$where = array();
 	$ljoin = array();
@@ -153,7 +155,7 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_prescription_
 		if ($do_elements) {
 	    $_prescription->loadRefsLinesElementByCat("1","","service");
 	  }
-	  if($do_prescription_line_mixes){
+	  if($do_perfusions || $do_aerosols){
 	    $_prescription->loadRefsPrescriptionLineMixes();
 	  }
 	  
@@ -171,11 +173,21 @@ if (CValue::get("do") && ($do_medicaments || $do_injections || $do_prescription_
 	  $patient =& $sejour->_ref_patient;
 	  $patient->loadRefConstantesMedicales();
 	  
-	  if($do_medicaments || $do_injections || $do_prescription_line_mixes){
-	    if($do_prescription_line_mixes){
+	  if($do_medicaments || $do_injections || $do_perfusions || $do_aerosols){
+	    if($do_perfusions || $do_aerosols){
 				// Parcours et stockage des prescription_line_mixes
 		    if($_prescription->_ref_prescription_line_mixes_for_plan){
 		      foreach($_prescription->_ref_prescription_line_mixes_for_plan as $_prescription_line_mix){
+		      	if($_prescription_line_mix->type_line == "aerosol" && !$do_aerosols){
+		      		continue;
+		      	}
+						if($_prescription_line_mix->type_line == "perfusion" && !$do_perfusions){
+              continue;
+            }
+						if($_prescription_line_mix->type_line == "oxygene"){
+							continue;
+						}
+            
             $list_lines[$_prescription_line_mix->_class_name][$_prescription_line_mix->_id] = $_prescription_line_mix;
 		        // Prises prevues
 		        if(is_array($_prescription_line_mix->_prises_prevues)){
@@ -410,7 +422,7 @@ $token_cat = implode("|", $cats);
 
 $cat_used = array();
 foreach($cats as $_cat){
-  if($_cat === "med" || $_cat === "inj" || $_cat === "perf"){
+  if($_cat === "med" || $_cat === "inj" || $_cat === "perf" || $_cat == "aerosol"){
     $cat_used["med"][$_cat] = CAppUI::tr("CPrescription._chapitres.".$_cat);
   } else {
     if(!array_key_exists($_cat, $cat_used)){
