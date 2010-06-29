@@ -12,6 +12,22 @@ Main.add(function () {
   else {
     $V(editForm._toggle_fractionned, true);
   }
+  
+  var scc_code = $(editForm.scc_code);
+  scc_code.maxLength = 50;
+  scc_code.observe("keypress", function(e){
+    var charCode = Event.key(e);
+    
+    if (charCode == 13) {
+      if ($V(scc_code).length != 10) Event.stop(e);
+      
+      var parsed = Barcode.parseCode128($V(scc_code));
+      if (parsed && parsed["01"]) {
+        var code = parsed["01"].substr(3, 10);
+        $V(scc_code, code);
+      }
+    }
+  });
 });
 
 function toggleFractionnedAdministration(form, use) {
@@ -94,6 +110,10 @@ function duplicateObject(form) {
   <tr>
     <th>{{mb_label object=$product field="code"}}</th>
     <td>{{mb_field object=$product field="code"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$product field="scc_code"}}</th>
+    <td>{{mb_field object=$product field="scc_code"}}</td>
   </tr>
   <tr>
     <th>{{mb_label object=$product field="description"}}</th>

@@ -1,12 +1,13 @@
-<?php /* $Id $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
- * @subpackage system
- * @version $Revision: 6153 $
+ * @subpackage install
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 require_once("checkauth.php");
 require_once("header.php");
 showHeader();
@@ -14,36 +15,29 @@ showHeader();
 ?>
 
 <script type="text/javascript">
-  function checkmdp(form) {
-    if(form.elements.passwd.value == '') {
-      alert("Pas de mot de passe entré !");
-      return false;
-    }
-    else {
-      loadrequest('real_res');
-      return true;
-    }
+function checkPassword(form) {
+  if(form.elements.passwd.value == '') {
+    alert("Pas de mot de passe entré !");
+    return false;
   }
-  function pause(millis) {
-    var date = new Date();
-    var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis)
+  else {
+    loadRequest('real_res');
+    return true;
   }
+}
 
-  function loadrequest(name) {
-    var eIframe = document.getElementsByName(name)[0];
-    var eIframe_style = eIframe.style;
-    eIframe.contentWindow.document.documentElement.innerHTML =
-      '<div style="font-family: Arial, Helvetica, sans-serif; margin-top: 10px; margin-left: 10px;">Chargement en cours</div>';
-    eIframe_style.background = "#fff";
-  }
+function loadRequest(name) {
+  var eIframe = document.getElementsByName(name)[0];
+  eIframe.contentWindow.document.documentElement.innerHTML =
+    '<div style="margin: 10px;">Chargement en cours</div>';
+  eIframe.style.background = "#fff";
+}
 
-  window.onload = function() {
-    if(document.getElementsByName("passwd")[0].value == "") {
-      document.getElementById("update").disabled="disabled";
-    }
+window.onload = function() {
+  if(document.getElementsByName("passwd")[0].value == "") {
+    document.getElementById("update").disabled = "disabled";
   }
+}
 </script>
 
 <h2>Mise à jour du système</h2>
@@ -51,8 +45,8 @@ showHeader();
 <div class="big-info">
   Cette étape permet de :
   <ul>
-    <li>Connaître la révision actuelle du système, et affiche s'il existe une révision plus récente.</li>
-    <li>Mettre à jour le système à la révision la plus récente, ou à une révision spécifiée.</li>
+    <li>Connaître la révision actuelle du système, et affiche s'il existe une révision plus récente</li>
+    <li>Mettre à jour le système à la révision la plus récente, ou à une révision spécifiée</li>
   </ul>
   <br/>
   Concernant la mise à jour, les actions suivantes sont à faire au préalable dans un terminal (sous Linux ou MacOS X) :<br/>
@@ -75,45 +69,47 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
   </ul>
 </div>
 
-
-<h3>Infos sur le système</h3>
-
 <form name="info" action="updatescript.php" target="info_res" method="post">
-  <input type="hidden" name="action" value="info"/>
-  <h3><button class="change" name="button_info" onclick="loadrequest('info_res');">Infos</button></h3>
+  <input type="hidden" name="action" value="info" />
+    
+  <fieldset>
+    <legend>Informations de mise à jour</legend>
+    <button class="change" name="button_info" onclick="loadRequest('info_res');">Infos</button>
+  
+    <iframe name="info_res" src="updatescript.php"></iframe>
+  </fieldset>
 </form>
-<h2><iframe name="info_res" style="display: block; width: 100%; background: #fff; border: 1px solid #000;" ></iframe></h2>
 
-<br/>
-
-<div class="small-warning">
-  La mise à jour requiert le mot de passe de l'utilisateur Apache.  Le numéro de révision est optionnel.
-</div>
-
-<h3>Mise à jour</h3>
-
-<form name="real" target="real_res" action="updatescript.php" method="post" onsubmit="return checkmdp(this);">
-  <input type="hidden" name="action" value="real"/>
-  <h3><button class="change" id="update" name="button_real">Mise à jour</button></h3>
-  <table>
-    <tr>
-      <td>
-        <h3>Révision : </h3>
-      </td>
-      <td>
-        <input type="text" name="rev"/>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <h3>Mot de passe :</h3>
-      </td>
-      <td>
-        <input type="password" name="passwd" onkeyup="var bupdate = document.getElementById('update'); if(this.value.length == 0)  bupdate.disabled = 'disabled'; else bupdate.disabled = '';"/>
-      </td>
-    </tr>
-  </table>
+<form name="real" target="real_res" action="updatescript.php" method="post" onsubmit="return checkPassword(this)">
+  <input type="hidden" name="action" value="real" />
+  
+  <fieldset>
+    <legend>Mise à jour</legend>
+    
+    <table>
+      <tr>
+        <th>Révision</th>
+        <td>
+          <input type="text" name="rev" />
+        </td>
+        <td rowspan="2">
+          <div class="small-warning">
+            La mise à jour requiert le mot de passe de l'utilisateur Apache.  Le numéro de révision est optionnel.
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>Mot de passe</th>
+        <td>
+          <input type="password" name="passwd" onkeyup="var bupdate = document.getElementById('update'); if(this.value.length == 0) bupdate.disabled = 'disabled'; else bupdate.disabled = '';"/>
+        </td>
+      </tr>
+    </table>
+    
+    <button class="change" id="update" name="button_real">Mise à jour</button>
+    
+    <iframe name="real_res" src="updatescript.php"></iframe>
+  </fieldset>
 </form>
-<iframe name="real_res" style="display: block; width: 100%; background: #fff; border: 1px solid #000;"></iframe>
 
 <?php showFooter(); ?>

@@ -70,6 +70,8 @@ class CDMI extends CProduitPrescriptible {
   var $code_lpp    = null;
   var $type        = null;
   
+  var $_scc_code = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'dmi';
@@ -82,6 +84,7 @@ class CDMI extends CProduitPrescriptible {
     $specs["category_id"] = "ref notNull class|CDMICategory autocomplete|nom";
     $specs["code_lpp"]    = "str protected";
     $specs["type"]        = "enum notNull list|purchase|loan|deposit default|deposit"; // achat/pret/depot
+    $specs["_scc_code"]   = "str length|10";
     return $specs;
   }
        
@@ -111,6 +114,22 @@ class CDMI extends CProduitPrescriptible {
       }
     }
     return parent::check();
+  }
+  
+  function store() {
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($is_new && $this->_scc_code) {
+      $this->loadExtProduct();
+      if ($this->_ext_product->_id) {
+        $this->_ext_product->scc_code = $this->_scc_code;
+        $this->_ext_product->store();
+      }
+    }
   }
 }
 

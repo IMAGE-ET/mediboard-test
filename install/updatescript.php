@@ -1,26 +1,48 @@
 <html>
 <head>
+<style type="text/css">
+* {
+  font-family: monospace; 
+  font-size: 11px;
+}
+
+body.loaded {
+  background: #fff;
+}
+</style>
 </head>
-<body onload="var ebody = document.getElementsByTagName('body')[0]; ebody.style.background='#fff';">
+<body onload="document.getElementsByTagName('body')[0].className = 'loaded'">
 
 <?php /* $Id $ */
 
 /**
  * @package Mediboard
- * @subpackage system
+ * @subpackage install
  * @version $Revision: 6153 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
-$action = $_POST["action"];
-isset($_POST["passwd"]) ? $sudo = "echo {$_POST['passwd']}|sudo -S" : $sudo = '';
-isset($_POST["rev"]) && is_numeric($_POST["rev"]) ? $rev = " -r {$_POST['rev']}" : $rev = '';
 
-exec("$sudo sh ../shell/update.sh $action $rev",$res);
-
-foreach($res as $_res) {
-  echo utf8_decode("$_res<br/>");
+if (isset($_POST["action"])) {
+  $action = $_POST["action"];
+  
+  if (in_array($action, array("info", "real"))) {
+    $rev  = isset($_POST["rev"]) && is_numeric($_POST["rev"]) ? " -r {$_POST['rev']}" : "";
+    $sudo = isset($_POST["passwd"]) ? "echo {$_POST['passwd']}|sudo -S" : "";
+    
+    exec("$sudo sh ../shell/update.sh $action $rev", $res);
+    
+    if (empty($res)) {
+      echo "Une erreur s'est produite";
+    }
+    else {
+      foreach($res as $_res) {
+        echo utf8_decode("$_res<br/>");
+      }
+    }
+  }
 }
+
 ?>
 
 </body>

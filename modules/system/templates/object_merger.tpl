@@ -9,7 +9,6 @@
 *}}
 
 <script type="text/javascript">
-
 Main.add(function () {
   if (window.opener && window.opener.onMergeComplete) {
     window.opener.onMergeComplete();
@@ -18,7 +17,7 @@ Main.add(function () {
 </script>
 
 {{if !$dialog}}
-{{mb_include module=system template=inc_form_merger}}
+  {{mb_include module=system template=inc_form_merger}}
 {{/if}}
 
 {{if $result}}
@@ -43,7 +42,6 @@ Main.add(function () {
     Vous êtes en mode alternatif, vous ne pourrez fusionner que deux objets au maximum.
   </div>
 {{/if}}
-
 
 <table>
   <tr>

@@ -7,19 +7,22 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $m, $g;
 
-$can->needsRead();
-$date = CValue::getOrSession("date", mbDate());
-$pratSel = CValue::getOrSession("pratSel", $AppUI->user_id);
+CCanDo::checkRead();
+
+$date      = CValue::getOrSession("date", mbDate());
+$pratSel   = CValue::getOrSession("pratSel", $AppUI->user_id);
+$board     = CValue::get("board", 0);
+$boardItem = CValue::get("boardItem", 0);
+
 $userSel = new CMediusers;
 $userSel->load($pratSel);
-$board = CValue::get("board", 0);
-$boardItem = CValue::get("boardItem", 0);
 
 // Urgences du jour
 $listUrgences = array();
 $operation = new COperation();
+
 if($userSel->_id){
   $operation->date = $date;
   $operation->chir_id = $userSel->_id;
@@ -31,6 +34,7 @@ if($userSel->_id){
     $curr_urg->_ref_sejour->loadRefsDocs();
   }
 }
+
 // Liste des opérations du jour sélectionné
 $listDay = array();
 $plageOp = new CPlageOp();
@@ -44,8 +48,15 @@ if($userSel->_id){
   }
   $where = array();
   $where["date"] = "= '$date'";
-  $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
+  
+  $in = "";
+  if (count($secondary_specs)) {
+    $in = " OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
+  }
+  
+  $where[] = "plagesop.chir_id = '$userSel->_id' OR plagesop.spec_id = '$userSel->function_id' $in";
   $order = "debut, salle_id";
+  
   $listDay = $plageOp->loadList($where, $order);
   foreach ($listDay as &$curr_plage) {
     $curr_plage->loadRefs();

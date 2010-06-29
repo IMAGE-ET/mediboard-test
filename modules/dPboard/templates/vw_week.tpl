@@ -39,18 +39,17 @@ function viewItem(oTd, guid, date) {
   var url = new Url;
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
+  url.addParam("chirSel" , "{{$prat->_id}}");
+  url.addParam("date"    , date);
   
   if(sClassName == "CPlageconsult"){
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
-    url.addParam("date"           , date);
-    url.addParam("chirSel"        , "{{$prat->_id}}");
     url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
-  } else if(sClassName == "CPlageOp"){
+  } 
+  else if(sClassName == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-    url.addParam("chirSel" , "{{$prat->_id}}");
-    url.addParam("date"    , date);
     url.addParam("urgences", "0");
   } else return;
 

@@ -39,11 +39,10 @@ if($praticien && !$service_id && !$praticien_id) {
 // Récupération de la liste des services
 $where = array();
 $where["group_id"] = "= '$g'";
-$service = new CService;
-$order = "nom";
 
-// FIXME: le $where par defaut ne semble pas bien fonctionner
-$services = $service->loadListWithPerms(PERM_READ, $where, $order);
+$service = new CService;
+$services = $service->loadListWithPerms(PERM_READ);
+
 /*
 $services = $praticien_id ?
   $service->loadList($where, $order) :

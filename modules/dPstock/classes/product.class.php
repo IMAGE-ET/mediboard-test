@@ -16,6 +16,7 @@ class CProduct extends CMbObject {
   var $name              = null;
   var $description       = null;
   var $code              = null;
+  var $scc_code          = null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
   var $category_id       = null;
   var $societe_id        = null;
   var $quantity          = null;
@@ -74,6 +75,7 @@ class CProduct extends CMbObject {
     $specs['name']          = 'str notNull seekable';
     $specs['description']   = 'text seekable';
     $specs['code']          = 'str maxLength|32 seekable protected';
+    $specs['scc_code']      = 'numchar length|10 seekable protected'; // Manufacturer Code + Item Number
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
     $specs['quantity']      = 'num notNull min|0 show|0';

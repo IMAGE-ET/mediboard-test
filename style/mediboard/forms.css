@@ -108,6 +108,27 @@ form hr {
   margin: 2px;
 }
 
+fieldset, 
+fieldset legend {
+  border: 1px solid #999;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+fieldset {
+  background: #fff;
+  margin-top: 0.5em;
+}
+
+fieldset legend {
+	font-size: 1.2em;
+	font-weight: bold;
+  border: none;
+  background: #ddd;
+	padding: 0.5em 2em;
+}
+
 label:hover,
 *[onmouseover] {
   border-bottom: 1px dotted #bbb;

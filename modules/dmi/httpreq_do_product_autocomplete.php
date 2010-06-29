@@ -12,8 +12,12 @@ $keywords    = trim(CValue::post("_view"));
 $category_id = CValue::post("category_id");
 
 $is_code128 = preg_match('/^[0-9a-z]+@[0-9a-z]+[0-9a-z\@]*$/i', $keywords);
+
+$scc_code = null;
+$scc_code_part = null;
 $lot_number = null;
 $lapsing_date = null;
+
 $matches = array();
 $composition = array();
 
@@ -41,12 +45,12 @@ if ($is_code128) {
   }
 }
 else {
-  if (preg_match('/(10)([a-z0-9]{7,})(17)(\d{6})$/i', $keywords, $parts) ||
-      preg_match('/(17)(\d{6})(10)([a-z0-9]{7,})$/i', $keywords, $parts)) {
-    $is_code128 = true;
+  if (preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9]{7,})(17)(\d{6})$/i', $keywords, $parts) ||
+      preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9]{7,})$/i', $keywords, $parts) ||
+      preg_match('/^(01)(\d{14})$/i', $keywords, $parts)) {
     $prop = null;
     foreach($parts as $p){
-      if (in_array($p, array("10", "17"))) {
+      if (in_array($p, array("01", "10", "17"))) {
         $prop = $p;
       }
       else if ($prop) {
@@ -57,36 +61,63 @@ else {
   }
 }
 
+// EAN code (13 digits)
+if (!count($composition) && preg_match('/^(\d{13})$/i', $keywords, $parts)) {
+  $composition['01'] = "0".$parts[1];
+}
+
 if (count($composition)){
-  $lot_number = CValue::read($composition, "10");
-  $lapsing_date = CValue::read($composition, "17");
+  $scc_code      = CValue::read($composition, "01");
+  $scc_code_part = substr($scc_code, 3, 10);
+  $lot_number    = CValue::read($composition, "10");
+  $lapsing_date  = CValue::read($composition, "17");
 }
 else {
   $lot_number = $keywords;
 }
 
-$product_reception = new CProductOrderItemReception;
-$product_reception->code = $lot_number;
-$receptions = $product_reception->loadMatchingList();
-
-foreach($receptions as $_reception) {
-  $_reception->loadRefOrderItem();
-  $_reception->_ref_order_item->loadReference();
-  $_reception->_ref_order_item->_ref_reference->loadRefProduct();
-  $product = $_reception->_ref_order_item->_ref_reference->_ref_product;
-  $matches[$product->_id] = $product;
+// recherche par numero de lot
+if ($lot_number) {
+  $product_reception = new CProductOrderItemReception;
+  $product_reception->code = $lot_number;
+  $receptions = $product_reception->loadMatchingList();
+  
+  foreach($receptions as $_reception) {
+    $_reception->loadRefOrderItem();
+    $_reception->_ref_order_item->loadReference();
+    $_reception->_ref_order_item->_ref_reference->loadRefProduct();
+    $product = $_reception->_ref_order_item->_ref_reference->_ref_product;
+    $matches[$product->_id] = $product;
+  }
 }
 
-if (!count($matches)) {
+// recherche par code SCC
+if ($scc_code_part) {
+  $product = new CProduct;
+  $product->scc_code = $scc_code_part;
+  $matches = $product->loadMatchingList();
+}
+
+// recherche par mot clé
+if (count($matches) == 0) {
   $where = array();
   if($category_id){
     $where["category_id"] = " = '$category_id'";
   }
   $lot_number = null;
   $product = new CProduct();
-  $matches = $product->seek($keywords, $where, 30, false, null, "name");
+  
+  if ($scc_code) {
+    $sub_scc_code = substr($scc_code, 3, 10);
+    $where["scc_code"] = "= '$sub_scc_code'";
+    $matches = $product->loadList($where, "name", 30);
+  }
+  else {
+    $matches = $product->seek($keywords, $where, 30, false, null, "name");
+  }
 }
 
+// chargement des données des produits
 foreach($matches as $_product) {
   $ljoin = array(
     "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
@@ -114,7 +145,9 @@ $smarty = new CSmartyDP();
 $smarty->assign("keywords", $keywords);
 $smarty->assign("matches", $matches);
 $smarty->assign("nodebug", true);
-$smarty->assign("is_code128", $is_code128);
+
+$smarty->assign("scc_code_part", $scc_code_part);
+$smarty->assign("lapsing_date", $lapsing_date);
 $smarty->assign("lot_number", $lot_number);
 
 $smarty->display("httpreq_do_product_autocomplete.tpl");

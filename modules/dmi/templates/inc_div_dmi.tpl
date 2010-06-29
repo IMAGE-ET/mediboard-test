@@ -28,7 +28,7 @@ FinSi
 
 *}}
 
-{{mb_include_script module=dmi script=dmi ajax=true}}
+{{mb_include_script module=dPstock script=barcode ajax=true}}
 
 <script type="text/javascript">
   
@@ -67,15 +67,19 @@ Main.add(function () {
     //frequency: 1.5,
     updateElement : function(element) {
       var id = element.id;
-      var lot_number = (element.className || "").match(/lotnumber\|([^ ]*)/);
-      var is_code128 = element.up().className.match(/is_code128\|([^ ]?)/);
+      var className = element.up().className;
+      var lot_number    = className.match(/lot_number\|([^ ]*)/);
+      var scc_code_part = className.match(/scc_code_part\|([^ ]*)/);
+      var lapsing_date  = className.match(/lapsing_date\|([^ ]*)/);
       
       if (lot_number) lot_number = lot_number[1];
-      if (is_code128) is_code128 = is_code128[1];
+      if (scc_code_part) scc_code_part = scc_code_part[1];
+      if (lapsing_date) lapsing_date = lapsing_date[1];
       
       $V(formDmiDelivery.product_id, (id ? id.split('-')[1] : ""));
-      $V(formDmiDelivery._is_code128, is_code128);
       $V(formDmiDelivery._lot_number, lot_number);
+      $V(formDmiDelivery._scc_code_part, scc_code_part);
+      $V(formDmiDelivery._lapsing_date, lapsing_date);
       
       var onComplete = (lot_number ? function(){
         var field = getForm("searchProductOrderItemReception")._search_lot;
@@ -240,7 +244,9 @@ delLineDMI = function(line_dmi_id){
     <td>
       <form name="dmi_delivery_by_product" method="get" action="" onsubmit="return false">
         <input type="hidden" name="product_id" value="" />
-        <input type="hidden" name="_is_code128" value="" />
+        <input type="hidden" name="_scc_code_part" value="" />
+        <input type="hidden" name="_lot_number" value="" />
+        <input type="hidden" name="_lapsing_date" value="" />
         <input type="text" name="_view" size="40" value="" style="font-size: 1.3em;" />
         <div id="dmi_delivery__view_autocomplete" style="display: none; width: 350px;" class="autocomplete"></div>
       </form>

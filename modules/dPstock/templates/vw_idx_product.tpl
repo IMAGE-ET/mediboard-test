@@ -29,6 +29,7 @@ function filterReferences(form) {
 </script>
 
 {{assign var=infinite_stock_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
+{{mb_include_script module=dPstock script=barcode}}
 
 <table class="main">
   <tr>

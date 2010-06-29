@@ -17,6 +17,7 @@ class CSociete extends CMbObject {
   var $code            = null;
   var $distributor_code= null;
   var $customer_code   = null;
+  var $manufacturer_code= null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
   var $address         = null;
   var $postal_code     = null;
   var $city            = null;
@@ -65,6 +66,7 @@ class CSociete extends CMbObject {
     $specs['code']            = 'str maxLength|80 seekable protected';
     $specs['distributor_code']= 'str maxLength|80 seekable protected';
     $specs['customer_code']   = 'str maxLength|80';
+    $specs['manufacturer_code']= 'numchar length|5 seekable protected';
     $specs['address']         = 'text seekable';
     $specs['postal_code']     = 'str minLength|4 maxLength|5 seekable';
     $specs['city']            = 'str seekable';

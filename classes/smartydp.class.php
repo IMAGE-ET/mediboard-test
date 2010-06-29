@@ -10,7 +10,6 @@
 
 CAppUI::requireLibraryFile("smarty/libs/Smarty.class");
 CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.escape");
-CAppUI::requireLibraryFile("json/JSON");
 
 /**
  * Delegates the actual translation to CAppUI framework object

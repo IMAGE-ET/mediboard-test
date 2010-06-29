@@ -142,18 +142,18 @@ Main.add(function(){
           {{else}}
             <option disabled="disabled" selected="selected"> &ndash; Fournisseur </option>
             {{foreach from=$list_societes item=_societe}}
-              <option value="{{$_societe->_id}}-{{$product->_id}}">{{$_societe}}</option>
+              <option value="{{$_societe->_id}}-{{$product->_id}}" {{if $_societe->_id == $product->societe_id}}selected="selected"{{/if}}>{{$_societe}}</option>
             {{/foreach}}
           {{/if}}
         </select>
       </td>
       <td>
         <label for="code" style="display: none;">{{tr}}CProductOrderItemReception-code{{/tr}}</label>
-        {{mb_field class=CProductOrderItemReception field=code size=15 prop="str notNull" value="toto"}}
+        {{mb_field object=$lot field=code size=15 prop="str notNull"}}
       </td>
       <td>
         <label for="lapsing_date" style="display: none;">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label>
-        {{mb_field class=CProductOrderItemReception field=lapsing_date prop="str notNull" size=10}}
+        {{mb_field object=$lot field=lapsing_date prop="str notNull" size=10}}
       </td>
       {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
       <td></td>
@@ -184,6 +184,7 @@ Main.add(function(){
     <input type="hidden" name="dosql" value="do_dmi_aed" />
     <input type="hidden" name="callback" value="updateProductId" />
     <input type="hidden" name="_lot_number" value="{{$dmi->_lot_number}}" />
+    <input type="hidden" name="_lapsing_date" value="{{$dmi->_lapsing_date}}" />
     
     {{mb_key object=$dmi}}
     {{mb_field object=$dmi field=in_livret hidden=true}}
@@ -200,6 +201,10 @@ Main.add(function(){
       <tr>
         <th>{{mb_label object=$dmi field=type}}</th>
         <td>{{mb_field object=$dmi field=type}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$dmi field=_scc_code}}</th>
+        <td>{{mb_field object=$dmi field=_scc_code}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$dmi field=category_id}}</th>

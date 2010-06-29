@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
 <script type="text/javascript">
 function refreshSocietesList(){
   var url = new Url("dPstock", "httpreq_vw_societes_list");
@@ -23,8 +24,28 @@ function changePage(page){
 Main.add(function(){
   refreshSocietesList();
   Control.Tabs.create("societe-tabs", true);
+
+  var editForm = getForm("edit_societe");
+  var manufacturer_code = $(editForm.manufacturer_code);
+  manufacturer_code.maxLength = 50;
+  
+  manufacturer_code.observe("keypress", function(e){
+    var charCode = Event.key(e);
+    
+    if (charCode == 13) {
+      if ($V(manufacturer_code).length != 5) Event.stop(e);
+      
+      var parsed = Barcode.parseCode128($V(manufacturer_code));
+      if (parsed && parsed["01"]) {
+        var code = parsed["01"].substr(3, 5);
+        $V(manufacturer_code, code);
+      }
+    }
+  });
 });
 </script>
+
+{{mb_include_script module=dPstock script=barcode}}
 
 <table class="main">
   <tr>
@@ -95,6 +116,10 @@ Main.add(function(){
         <tr>
           <th>{{mb_label object=$societe field="customer_code"}}</th>
           <td>{{mb_field object=$societe field="customer_code"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$societe field="manufacturer_code"}}</th>
+          <td>{{mb_field object=$societe field="manufacturer_code"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="address"}}</th>

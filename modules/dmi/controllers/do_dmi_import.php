@@ -87,6 +87,7 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     
     $current_product = new CProduct;
     $current_product->code = $current_product->_spec->ds->escape($data[1]);
+    $current_product->societe_id = $current_supplier->_id;
     
     if (!$current_product->loadMatchingObject()) {
       $current_product->name = $data[0];

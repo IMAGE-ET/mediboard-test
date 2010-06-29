@@ -42,6 +42,7 @@ class CStrSpec extends CMbFieldSpec {
       'length'    => 'num',
       'minLength' => 'num',
       'maxLength' => 'num',
+      'protected' => 'bool',
       'class'     => 'class',
     );
   }

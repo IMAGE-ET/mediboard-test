@@ -54,14 +54,22 @@ Barcode = {
       });
     }
     else {
-      (parts = barcode.match(/(10)([a-z0-9]{7,})(17)(\d{6})$/i)) ||
-      (parts = barcode.match(/(17)(\d{6})(10)([a-z0-9]{7,})$/i));
+      (parts = barcode.match(/^(?:(01)(\d{14}))?(10)([a-z0-9]{7,})(17)(\d{6})$/i)) ||
+      (parts = barcode.match(/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9]{7,})$/i)) ||
+      (parts = barcode.match(/^(01)(\d{14})$/i));
+      
+      if (!parts) {
+        if (parts = barcode.match(/^(\d{13})$/i)) { // SCC code
+          parts[1] = "0"+parts[1];
+          parts.unshift("01");
+        }
+      }
       
       if (!parts) return;
       
       var prop = null;
       parts.each(function(p){
-        if (p.match(/^(10|17)$/)) {
+        if (p.match(/^(01|10|17)$/)) {
           prop = p;
         }
         else if (prop) {

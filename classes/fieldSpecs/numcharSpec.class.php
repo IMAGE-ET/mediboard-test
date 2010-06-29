@@ -13,6 +13,7 @@ CAppUI::requireSystemClass("fieldSpecs/numSpec");
 
 class CNumcharSpec extends CNumSpec {
   var $control = null;
+  var $protected = null;
   
   function getSpecType() {
     return "numchar";
@@ -41,7 +42,8 @@ class CNumcharSpec extends CNumSpec {
   
   function getOptions(){
     return parent::getOptions() + array(
-      'control'    => 'str',
+      'control'   => 'str',
+      'protected' => 'bool',
     );
   }
  

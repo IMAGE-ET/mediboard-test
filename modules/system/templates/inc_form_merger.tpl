@@ -44,6 +44,8 @@ Main.add(function() {
     addObjectField();
     addObjectField();
   {{/foreach}}
+  
+  $(getForm("objects-selector").objects_class).makeAutocomplete({width: "200px"});
 }); 
 </script>
 
@@ -61,7 +63,7 @@ Main.add(function() {
         {{else}}
           <select name="objects_class">
             {{foreach from=$list_classes item=class}}
-              <option value="{{$class}}" {{if $objects_class == $class}}selected="selected"{{/if}}>{{tr}}{{$class}}{{/tr}}</option>
+              <option value="{{$class}}" {{if $objects_class == $class}}selected="selected"{{/if}}>{{$class}} - {{tr}}{{$class}}{{/tr}}</option>
             {{/foreach}}
           </select>
         {{/if}}

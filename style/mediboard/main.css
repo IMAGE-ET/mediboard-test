@@ -762,6 +762,13 @@ table#weber td {
   margin: 20px;
 }
 
+.wizard iframe {
+  display: block; 
+	width: 100%; 
+	background: #fff; 
+	border: 1px solid #000;
+}
+
 div.generated {
   margin: 5px;
   text-align: center;

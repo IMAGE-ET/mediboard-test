@@ -623,6 +623,16 @@ class CSetupdPstock extends CSetup {
     }
     $this->addFunction("updateOrdersReceivedStatus");
     
-    $this->mod_version = "1.29";
+    $this->makeRevision("1.29");
+    $sql = "ALTER TABLE `product` ADD `scc_code` BIGINT (10) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product` ADD INDEX (`scc_code`)";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `societe` ADD `manufacturer_code` INT (5) UNSIGNED ZEROFILL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `societe` ADD INDEX (`manufacturer_code`)";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.30";
   }
 }

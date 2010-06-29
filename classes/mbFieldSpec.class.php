@@ -496,7 +496,7 @@ class CMbFieldSpec {
 
   function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
-    $protected    = $object->_id && isset($this->protected) && $this->protected;
+    $protected    = $value && $object->_id && isset($this->protected) && $this->protected;
     
     if ($protected) {
       $params["readonly"] = "readonly";

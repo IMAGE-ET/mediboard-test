@@ -14,14 +14,14 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   url.addParam("objectId", objectId);
   url.addParam("elementClass", elementClass);
   url.addParam("elementId", elementId);
-  if(sfn && sfn!=0){
+  if(sfn && sfn != 0){
     url.addParam("sfn", sfn);
   }
   url.requestUpdate('bigView');
 }
 
 function setObject(oObject){
-  var oForm = document.FrmClass;
+  var oForm = getForm("FrmClass");
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;
   oForm.selClass.value = oObject.objClass;
@@ -37,15 +37,18 @@ function setObject(oObject){
 }
 
 function reloadListFileDossier(sAction){
-  var sSelClass = document.FrmClass.selClass.value;
-  var sSelKey   = document.FrmClass.selKey.value;
+  var oForm = getForm("FrmClass");
+  var sSelClass = oForm.selClass.value;
+  var sSelKey   = oForm.selKey.value;
+  
   if($('tab-'+sSelClass+sSelKey)){
     return false;
   }
+  
   var url = new Url("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", sSelKey);
   url.addParam("selClass", sSelClass);  
-  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.addParam("typeVue", oForm.typeVue.value);
   url.addParam("accordDossier", 1);
   url.requestUpdate('File'+sSelClass+sSelKey);
 }
@@ -66,10 +69,12 @@ function reloadListFile(sAction){
   if(sAction == "delete" && file_preview == file_deleted){
     ZoomAjax("","","","", 0);
   }
+  
+  var oForm = getForm("FrmClass");
   var url = new Url("dPfiles", "httpreq_vw_listfiles");
-  url.addParam("selKey", document.FrmClass.selKey.value);
-  url.addParam("selClass", document.FrmClass.selClass.value);  
-  url.addParam("typeVue", document.FrmClass.typeVue.value);
+  url.addParam("selKey", oForm.selKey.value);
+  url.addParam("selClass", oForm.selClass.value);  
+  url.addParam("typeVue", oForm.typeVue.value);
   url.requestUpdate('listView');
 }
 

@@ -52,7 +52,7 @@
         {{/foreach}}
       </table>
       <div style="width:100px;">
-        Légende
+        Légende:
         <table id="weeklyPlanning" class="tbl">
           <tr>
             <td class="nonEmptyConsult">&nbsp;&nbsp;</td>
@@ -65,7 +65,7 @@
         </table>
       </div>
     </td>
-    <td id="viewTooltip" style="width: 300px; font-size: 0.8em;">
+    <td id="viewTooltip" style="min-width: 300px; width: 33%;">
       {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
         {{foreach from=$listMins|smarty:nodefaults item=curr_mins key=keyMins}}
         {{foreach from=$plagesConsult key=curr_day item=plagesPerDay}}

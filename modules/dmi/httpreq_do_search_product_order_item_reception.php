@@ -11,13 +11,34 @@
 global $can;
 $can->needsRead();
 
-$product_id = CValue::get('product_id');
-$keywords   = CValue::get('_view');
-$is_code128 = CValue::get('_is_code128');
-$lot_number = CValue::get('_lot_number');
+$product_id    = CValue::get('product_id');
+$keywords      = CValue::get('_view');
+
+$manufacturer_code = CValue::get('_manufacturer_code');
+$scc_code_part = CValue::get('_scc_code_part');
+$lot_number    = CValue::get('_lot_number');
+$lapsing_date  = CValue::get('_lapsing_date');
+
+if ($lapsing_date) {
+  // 2016-08
+  if (preg_match("/(\d{4})-(\d{2})/", $lapsing_date, $match)) {
+    $lapsing_date = mbDate("+1 MONTH -1 DAY", "$match[1]-$match[2]-01");
+  }
+  
+  // 130828
+  if (preg_match("/(\d{2})(\d{2})(\d{2})/", $lapsing_date, $match)) {
+    $lapsing_date = mbDate("+1 MONTH -1 DAY", "20$match[1]-$match[2]-01");
+  }
+}
 
 $product = new CProduct();
-$product->load($product_id);
+
+if ($product_id)
+  $product->load($product_id);
+else if ($scc_code_part) {
+  $product->scc_code = $scc_code_part;
+  $product->loadMatchingObject();
+}
 
 $dmi = new CDMI;
 
@@ -43,8 +64,9 @@ if($product->_id) {
   }
 }
 else {
-  //$dmi->code = ($is_code128 ? "" : $keywords);
   $dmi->_lot_number = $lot_number;
+  $dmi->_lapsing_date = $lapsing_date;
+  $dmi->_scc_code = $scc_code_part;
   $dmi->in_livret = 1;
   /*
   $dmi_category = new CDMICategory;
@@ -79,7 +101,17 @@ if (count($list_references)) {
 else {
   $societe = new CSociete;
   $list_societes = $societe->loadList(null, "name");
+  
+  if ($manufacturer_code) {
+    $societe->manufacturer_code = $manufacturer_code;
+    $societe->loadMatchingObject();
+    $product->societe_id = $societe->_id;
+  }
 }
+
+$lot = new CProductOrderItemReception();
+$lot->code = $lot_number;
+$lot->lapsing_date = $lapsing_date;
 
 $smarty = new CSmartyDP();
 $smarty->assign("list", $list_receptions);
@@ -88,5 +120,6 @@ $smarty->assign("list_references", $list_references);
 $smarty->assign("list_societes", $list_societes);
 $smarty->assign("product", $product);
 $smarty->assign("keywords", $keywords);
-$smarty->assign("is_code128", $is_code128);
+$smarty->assign("scc_code_part", $scc_code_part);
+$smarty->assign("lot", $lot);
 $smarty->display('inc_search_product_order_item_reception.tpl');

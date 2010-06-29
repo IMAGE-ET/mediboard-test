@@ -152,23 +152,6 @@ if(!function_exists('memory_get_usage')) {
   }
 }
 
-
-/**
- * (PHP 5 >= 5.2.0, PECL json:1.2.0-1.2.1)
- * json_encode Returns the JSON representation of a value
- * 
- * cf. http://php.net/json_encode
- */
-if(!function_exists('json_encode')) {
-  function json_encode($object) {
-    // create a new instance of Services_JSON
-    $json = new Services_JSON();
-    $sJson = html_entity_decode($json->encode($object), ENT_NOQUOTES);
-    
-    return str_replace("&quot;", "\\\"", $sJson);
-  }
-}
-
 /**
  * (PHP 5 >= 5.1.0)
  * timezone_identifiers_list - Returns numerically index array with all timezone identifiers
