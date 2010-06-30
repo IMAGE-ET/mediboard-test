@@ -25,10 +25,10 @@ $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
 
 // L'utilisateur est-il un praticien
-$chir = new CMediusers;
-$chir->load($AppUI->user_id);
-if ($chir->isPraticien() and !$chir_id) {
-  $chir_id = $chir->user_id;
+$curr_user = new CMediusers;
+$curr_user->load($AppUI->user_id);
+if ($curr_user->isPraticien() and !$chir_id) {
+  $chir_id = $curr_user->user_id;
 }
 
 // Chargement du praticien
@@ -51,7 +51,11 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 }
 
 // Vérification des droits sur les praticiens
-$listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+if($curr_user->isAnesth()) {
+  $listPraticiens = $chir->loadPraticiens(null);
+} else {
+  $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+}
 $categorie_prat = array();
 foreach($listPraticiens as &$_prat){
   $_prat->loadRefsFwd();

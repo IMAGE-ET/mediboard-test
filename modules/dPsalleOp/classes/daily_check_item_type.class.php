@@ -63,10 +63,9 @@ class CDailyCheckItemType extends CMbObject {
     $this->_ref_category = $this->loadFwdRef("category_id", true);
   }
 	
-  static function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
-  	$item_type = new self;
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $where['group_id'] = "= '".CGroups::loadCurrent()->_id."' OR group_id IS NULL";
-    return $item_type->loadList($where, $order, $limit, $groupby, $ljoin);
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 }
 ?>
