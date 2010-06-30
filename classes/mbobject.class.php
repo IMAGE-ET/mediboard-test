@@ -657,6 +657,24 @@ class CMbObject {
     
     return $this->loadQueryList($request->getRequest($this));
   }
+  
+  /**
+   * Object list for a given group
+   * @param array|string $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array|string $group Group by SQL statement
+   * @param array $leftjoin Left join SQL statement collection
+   * @param boolean $forceindex Add the forceindex SQL statement
+   * @return CMbObject[] List of found objects, null if module is not installed
+   */
+  function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
+  	if(property_exists($this, "group_id")) {
+      // Filtre sur l'établissement
+      $g = CGroups::loadCurrent();
+      $where["group_id"] = "= '$g->_id'";
+  	}
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
 
   /**
    * Object list by a request constructor
