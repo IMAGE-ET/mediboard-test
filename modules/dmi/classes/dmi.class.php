@@ -116,6 +116,7 @@ class CDMI extends CProduitPrescriptible {
     return parent::check();
   }
   
+  // FIXME: SCC pas toujours sauvegardé 
   function store() {
     $is_new = !$this->_id;
     

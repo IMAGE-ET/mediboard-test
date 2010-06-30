@@ -31,7 +31,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 
 </script>
 
-<table class="form">
+<table class="form" style="table-layout: fixed;">
   <tr>
     <th class="category">
       {{mb_include module=system template=inc_object_notes object=$patient}}
@@ -44,7 +44,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     </th>
     <th class="category">
     	Correspondants
-    	</th>
+    </th>
     <th class="category">
       {{mb_include module=system template=inc_object_idsante400 object=$consult}}
       {{mb_include module=system template=inc_object_history object=$consult}}
@@ -71,15 +71,15 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
 	      <script type="text/javascript">DHE.register("{{$consult->patient_id}}", "{{$consult->_praticien_id}}", "dhe");</script>
 	      {{else}}
 	      {{if $m != "dPurgences"}}
-	      <button style="margin: 1px;" class="new" type="button" onclick="newOperation      ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
+	      <button class="new" type="button" onclick="newOperation      ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle intervention</button>
 	      <br/>
-	      <button style="margin: 1px;" class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouveau séjour</button>
+	      <button class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouveau séjour</button>
 	      <br/>
 	      {{/if}}
 	    	{{/if}}
     	{{/if}}
     	{{if $m != "dPurgences"}}
-      <button style="margin: 1px;" class="new" type="button" onclick="newConsultation   ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
+      <button class="new" type="button" onclick="newConsultation   ({{$consult->_praticien_id}},{{$consult->patient_id}})">Nouvelle consultation</button>
       {{/if}}
     </td>
   </tr>

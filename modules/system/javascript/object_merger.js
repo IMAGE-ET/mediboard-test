@@ -39,14 +39,15 @@ ObjectMerger = {
 	    view = $(form.elements[field.name+'_da']);
 	    $V(view, value);
 	  }
-	
+
+    var label = Element.getLabel(source);
 	  if (props.ref) {
 	    view = $(form.elements["_"+field.name+'_view']);
-	    $V(view, Element.getLabel(source).textContent.strip());
+	    $V(view, (label.textContent || label.innerText).strip());
 	  }
 	
 	  if (props.mask) {
-	    $V(field, Element.getLabel(source).textContent.strip(), false);
+	    $V(field, (label.textContent || label.innerText).strip(), false);
 	  }
 	},
 

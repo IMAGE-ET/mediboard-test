@@ -57,11 +57,12 @@ var AideSaisie = {
     getSelectedData: function(selected){
       var oDepend1 = selected.down(".depend1");
       var oDepend2 = selected.down(".depend2");
+      var oText = selected.down(".text");
       
       return {
-        depend1: oDepend1 ? oDepend1.textContent : "",
-        depend2: oDepend2 ? oDepend2.textContent : "",
-        text: selected.down(".text").textContent
+        depend1: oDepend1 ? (oDepend1.textContent || oDepend1.innerText) : "",
+        depend2: oDepend2 ? (oDepend2.textContent || oDepend2.innerText) : "",
+        text: oText.textContent || oText.innerText
       };
     },
     
