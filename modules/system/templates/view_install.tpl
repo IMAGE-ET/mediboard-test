@@ -32,4 +32,13 @@
   <li>
     <a href="install/finish.php">Finalisation</a>
   </li>
+  <li>
+    <a href="install/phpinfo.php">Infos PHP</a>
+  </li>
+  <li>
+    <a href="install/errorlog.php">Logs d'erreur</a>
+  </li>
+  <li>
+    <a href="install/update.php">Mise à jour du système</a>
+  </li>
 </ol>
