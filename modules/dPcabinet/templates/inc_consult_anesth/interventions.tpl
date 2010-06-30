@@ -9,6 +9,15 @@
     $V(oForm.sejour_id, sejour_id);
     submitOpConsult();
   }
+  function newOperation(chir_id, pat_id) {
+	  var url = new Url;
+	  url.setModuleTab("dPplanningOp", "vw_edit_planning");
+	  url.addParam("chir_id", chir_id);
+	  url.addParam("pat_id", pat_id);
+	  url.addParam("operation_id", 0);
+	  url.addParam("sejour_id", 0);
+	  url.redirect();
+	}
   {{if !$consult_anesth->libelle_interv && !$consult_anesth->sejour_id && !$consult_anesth->operation_id && ($nextSejourAndOperation.COperation->_id || $nextSejourAndOperation.CSejour->_id)}}
   modalWindow = null;
   Main.add(function () {
@@ -53,7 +62,7 @@
 
   {{if !$consult_anesth->operation_id}}
   <!-- Choix du séjour -->
-  <select name="sejour_id" style="max-width: 250px;" onchange="submitOpConsult()">
+  <select name="sejour_id" style="width: 20em;" onchange="submitOpConsult()">
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <option value="{{$curr_sejour->_id}}"{{if $consult_anesth->sejour_id==$curr_sejour->_id}} selected="selected"{{/if}}>
@@ -67,7 +76,7 @@
   <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
-  <select name="operation_id" style="max-width: 250px;" onchange="submitOpConsult()">
+  <select name="operation_id" style="width: 20em;" onchange="submitOpConsult()">
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <optgroup label="Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
@@ -123,6 +132,11 @@
   <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
 </form>
 {{else}}
+{{if !$app->user_prefs.simpleCabinet && !@$modules.ecap->mod_active}}
+<button class="new" type="button" onclick="newOperation({{$consult_anesth->_ref_consultation->_praticien_id}},{{$consult_anesth->_ref_consultation->patient_id}})">
+  Nouvelle intervention
+</button>
+{{/if}}
 <form name="opInfoFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
@@ -136,7 +150,7 @@
     <tr>
       <th>{{mb_label object=$consult_anesth field="chir_id"}}</th>
       <td>
-        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" style="max-width: 14em;" ="this.form.onsubmit();">
+        <select name="chir_id" class="{{$consult_anesth->_props.chir_id}}" style="width: 14em;" ="this.form.onsubmit();">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           {{foreach from=$listChirs item=curr_prat}}
           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $consult_anesth->chir_id == $curr_prat->user_id}} selected="selected" {{/if}}>
