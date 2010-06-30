@@ -147,8 +147,8 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     else {
       $orderby .= "title";
     }
-    
-		$this->_ref_item_types = CDailyCheckItemType::loadGroupList($where, $orderby, null, null, $ljoin);
+    $itemType = new CDailyCheckItemType();
+		$this->_ref_item_types = $itemType->loadGroupList($where, $orderby, null, null, $ljoin);
 		foreach($this->_ref_item_types as $type) {
 			$type->loadRefsFwd();
 		}
