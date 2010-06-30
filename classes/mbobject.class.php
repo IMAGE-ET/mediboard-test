@@ -1726,8 +1726,7 @@ class CMbObject {
     if (!is_array($keywords)) {
       $regex = '/"([^"]+)"/';
       
-      // @fixme: there are slashes in the $keywords
-      $keywords = stripslashes($keywords);
+      $keywords = str_replace('\\"', '"', $keywords);
       
       if (preg_match_all($regex, $keywords, $matches)) { // Find quoted strings
         $keywords = preg_replace($regex, "", $keywords); // ... and remove them
