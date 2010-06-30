@@ -108,7 +108,8 @@ var ObjectTooltip = Class.create({
     var eTooltip = $(this.sTooltip);
     
     if (this.oOptions.mode != 'dom') {
-      var url = new Url(this.mode.module, this.mode.action);
+      var url = new Url;
+      url.setModuleAction(this.mode.module,this.mode.action); // needed here as it makes a bug with httrack in offline mode when in the constructor (???)
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
       
       if(!this.oOptions.popup) {
