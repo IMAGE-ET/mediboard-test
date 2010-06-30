@@ -453,6 +453,30 @@
       </table>
     </td>
   </tr>
+  {{if $consult->_ref_consult_anesth->result_ecg || $consult->_ref_consult_anesth->result_rp}}
+  <tr>
+    <td>
+      <table width="100%">
+        <tr>
+          <td width="50%">
+            {{if $consult->_ref_consult_anesth->result_ecg}}
+            <strong>{{mb_label object=$consult->_ref_consult_anesth field="result_ecg"}}</strong>
+            <br />
+            {{mb_value object=$consult->_ref_consult_anesth field="result_ecg"}}
+            {{/if}}
+          </td>
+          <td>
+            {{if $consult->_ref_consult_anesth->result_rp}}
+            <strong>{{mb_label object=$consult->_ref_consult_anesth field="result_rp"}}</strong>
+            <br />
+            {{mb_value object=$consult->_ref_consult_anesth field="result_rp"}}
+            {{/if}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td>
       <table width="100%">

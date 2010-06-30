@@ -256,7 +256,7 @@ function reloadListExamComp() {
                 {{html_options options=$consult_anesth->_aides.result_ecg.no_enum}}
             </select>
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_ecg, 'result_ecg')">{{tr}}New{{/tr}}</button>
-            <textarea name="result_ecg" onblur="submitForm(this.form)"></textarea>
+            <textarea name="result_ecg" onblur="submitForm(this.form)">{{$consult_anesth->result_ecg}}</textarea>
           </td>
           <td colspan="2">
             {{mb_label object=$consult_anesth field="result_rp"}}
@@ -265,7 +265,7 @@ function reloadListExamComp() {
                 {{html_options options=$consult_anesth->_aides.result_rp.no_enum}}
             </select>
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_rp, 'result_rp')">{{tr}}New{{/tr}}</button>
-            <textarea name="result_rp" onblur="submitForm(this.form)"></textarea>
+            <textarea name="result_rp" onblur="submitForm(this.form)">{{$consult_anesth->result_rp}}</textarea>
           </td>
         </tr>
       </table>    
