@@ -126,6 +126,12 @@ if (isset($_REQUEST["login"])) {
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
 
+  if ($_SESSION['browser']['deprecated']) {
+    $tpl = new CSmartyDP("style/mediboard");
+    $tpl->display("old_browser.tpl");
+    CApp::rip();
+  }
+  
   $redirect = CValue::request("redirect");
   parse_str($redirect, $parsed_redirect);
   if ($ok && $dialog && isset($parsed_redirect["login_info"])) {
@@ -181,7 +187,7 @@ CAppUI::requireSystemClass("smartydp");
 ob_start();
 
 // We check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") && preg_match("/mobi|phone|symbian/i", CValue::read($_SERVER, "HTTP_USER_AGENT"))) {
+if (is_file("./mobile/main.php") && $_SESSION['browser']['mobile']) {
   require("./mobile/main.php");
 }
 else {

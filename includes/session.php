@@ -38,7 +38,9 @@ if (!isset($_SESSION['browser'])) {
     'minorver'  => 0,
     'build'     => 0,
     'name'      => 'unknown',
-    'useragent' => ''
+    'mobile'    => false,
+    'deprecated'=> false,
+    'useragent' => '',
   );
   
   $browsers = array(
@@ -47,7 +49,7 @@ if (!isset($_SESSION['browser'])) {
   );
   
   $minimal_versions = array(
-    'firefox' => '3.0',
+    'firefox' => '2.0',
     'msie'    => '7.0',
     'opera'   => '9.6',
     'chrome'  => '3.0',
@@ -65,12 +67,15 @@ if (!isset($_SESSION['browser'])) {
         break;
       }
     }
+    
+    $browser['mobile'] = preg_match("/mobi|phone|symbian/i", $user_agent);
   }
   
-  if (isset($minimal_versions[$browser['name']]) && 
-      $browser['version'] < $minimal_versions[$browser['name']]) {
-    mbTrace($browser['useragent'], "old browser", true);
-  }
+  $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 
+                             $browser['version'] < $minimal_versions[$browser['name']];
+  
+  //trigger_error("Old browser: ".$browser['useragent'], E_USER_NOTICE);
+  //echo file_get_contents("style/mediboard/templates/old_browser.tpl");
   
   $_SESSION['browser'] =& $browser; 
 }
