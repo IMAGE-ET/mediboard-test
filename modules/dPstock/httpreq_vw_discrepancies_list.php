@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $service_id  = CValue::get('service_id');
 $keywords    = CValue::get('keywords');

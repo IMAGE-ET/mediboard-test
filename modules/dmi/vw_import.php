@@ -8,6 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkAdmin();
+
 $object_class = CValue::get("object_class", "CSociete");
 
 $dosql = ($object_class == "CSociete") ? "do_suppliers_import" : "do_dmi_import";

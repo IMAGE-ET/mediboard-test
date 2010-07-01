@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+mbTrace("permettre de mettre un numero de facture à un bon de commande");
+
 CCanDo::checkRead();
 
 $date = CValue::get("date", mbDate());

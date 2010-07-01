@@ -19,6 +19,7 @@ class CProductOrder extends CMbMetaObject {
   var $group_id         = null;
   var $locked           = null;
   var $order_number     = null;
+  var $bill_number      = null;
   var $cancelled        = null;
   var $deleted          = null;
   var $received         = null;
@@ -65,6 +66,7 @@ class CProductOrder extends CMbMetaObject {
     $specs = parent::getProps();
     $specs['date_ordered']    = 'dateTime seekable';
     $specs['order_number']    = 'str maxLength|64 seekable protected';
+    $specs['bill_number']     = 'str maxLength|64 protected';
     $specs['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
     $specs['group_id']        = 'ref notNull class|CGroups';
     $specs['comments']        = 'text';

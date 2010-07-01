@@ -10,7 +10,7 @@
 
 global $g;
 
-$do = new CDoObjectAddEdit('CProductOrder', 'order_id');
+$do = new CDoObjectAddEdit('CProductOrder');
 
 // New order
 if (CValue::post('order_id') == 0) {

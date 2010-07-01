@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can, $g;
-$can->needsRead();
+global $g;
+CCanDo::checkRead();
 
 $category_id         = CValue::get('category_id');
 $keywords            = CValue::get('keywords');

@@ -7,7 +7,9 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
- 
+
+CCanDo::checkRead();
+
 $product_id = CValue::get('product_id');
 
 $product = new CProduct();

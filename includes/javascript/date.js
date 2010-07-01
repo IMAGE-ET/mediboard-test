@@ -579,15 +579,19 @@ var Calendar = {
         // trouver un id 
         parent.insert(div);
         div.clonePosition(elementView);
+        var pos = elementView.cumulativeOffset();
         
+
         div.observe('click', function(e){
           Event.stop(e);
           this.show.bind(datepicker)(e);
           
           if(!this.datepicker.element) return;
-          $(this.datepicker.element).centerH();
+          $(this.datepicker.element).centerHV(pos.top);
+          Calendar.mobileHide(datepicker);
 
         }.bindAsEventListener(datepicker));
+       
       } 
       else {
         elementView.observe('click', Event.stop).observe('focus', function(e){
@@ -610,15 +614,24 @@ var Calendar = {
       datepicker.icon.observe("click", function(){
         var element = this.datepicker ? this.datepicker.element : this.element;
         
-        if (options.center)
-          $(element).centerH();
-        else
+        if (options.center){
+          var posIcon = datepicker.icon.cumulativeOffset();
+          $(element).centerHV(posIcon.top);
+          Calendar.mobileHide(datepicker);
+        }
+        else {
           $(element).unoverflow();
+        }
       }.bindAsEventListener(datepicker));
     }
     
     datepicker.element.observe('change', function(){elementView.fire("ui:change")});
     element.addClassName('datepicker');
+  },
+  mobileHide: function (picker){
+    document.observeOnce('touchend', function(e){
+      $(picker).hide();
+    });
   },
   
   regProgressiveField: function(element, options) {

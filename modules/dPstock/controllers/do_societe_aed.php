@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit('CSociete', 'societe_id');
+$do = new CDoObjectAddEdit('CSociete');
 $do->doIt();
 
 ?>

@@ -25,7 +25,7 @@ if (isset ($_POST['product_id'])) {
   }
 }
 
-$do = new CDoObjectAddEdit('CProductDelivery', 'delivery_id');
+$do = new CDoObjectAddEdit('CProductDelivery');
 $do->doIt();
 
 ?>

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit("CDMICategory", "category_id");
+$do = new CDoObjectAddEdit("CDMICategory");
 $do->doIt();
 
 ?>

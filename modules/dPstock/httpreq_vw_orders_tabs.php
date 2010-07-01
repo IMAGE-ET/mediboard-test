@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 $order = new CProductOrder;
 $list_orders = $order->search("waiting", null, 30);

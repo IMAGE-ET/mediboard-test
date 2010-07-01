@@ -77,7 +77,7 @@ class CAppUI {
     $dirs = array(
       "classes/*/*.class.php", // Require all global classes
       "classes/*.class.php", 
-      "modules/*/*.class.php", 
+      "*/*/*.class.php",
       "modules/*/classes/*.class.php", // Require all modules classes
       "modules/*/setup.php", // Require all modules setups 
     );

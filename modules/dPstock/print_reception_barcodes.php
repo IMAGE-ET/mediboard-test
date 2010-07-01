@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $reception_id = CValue::get('reception_id');
 $force_print  = CValue::get('force_print');

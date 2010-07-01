@@ -35,7 +35,7 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   }
 }
 
-$do = new CDoObjectAddEdit('CProductDeliveryTrace', 'delivery_trace_id');
+$do = new CDoObjectAddEdit('CProductDeliveryTrace');
 $do->doIt();
 
 ?>

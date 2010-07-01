@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
+
 $keywords    = trim(CValue::post("_view"));
 $category_id = CValue::post("category_id");
 

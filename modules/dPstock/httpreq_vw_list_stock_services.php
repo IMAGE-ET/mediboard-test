@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsEdit();
+global $g;
+CCanDo::checkEdit();
 
 $product_id = CValue::get('product_id');
 

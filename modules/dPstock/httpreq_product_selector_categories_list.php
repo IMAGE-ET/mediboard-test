@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
+
 $keywords = CValue::get('keywords');
 $category_id = CValue::get('category_id');
 $selected_category = CValue::get('selected_category');

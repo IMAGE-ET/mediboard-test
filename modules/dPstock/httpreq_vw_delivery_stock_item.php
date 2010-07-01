@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 $stock_id = CValue::getOrSession('stock_id');
 

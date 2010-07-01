@@ -267,15 +267,20 @@ Element.addMethods({
     return element;
   },
   
-  centerH : function(element) {
+  centerHV : function(element, pos) {
     element.setStyle({
       left: 0
     });
+    
     var viewport = document.viewport.getDimensions(); // Viewport size
     var dim = element.getDimensions(); // Element dimensions
+    
+    pos = parseInt(pos || 0)-(dim.height/2);
+    
     element.setStyle({
+      top: Math.min(pos, 100) + "px",
       left: (viewport.width - dim.width) / 2 + "px",
-      width: dim.width - 10 +"px"
+      width: dim.width - 10 + "px"
     });
     return element;
   },
@@ -341,6 +346,15 @@ Element.addMethods(['input', 'textarea'], {
     return Object.isUndefined(element.value) ?
       element.empty() : 
       !notWhiteSpace.test(element.value);
+  }
+});
+
+Element.addMethods(['input', 'textarea', 'select', 'button'], {
+  tryFocus: function (element) {
+    try {
+      element.focus();
+    } catch (e) {}
+    return element;
   }
 });
 

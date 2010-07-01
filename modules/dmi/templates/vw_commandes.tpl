@@ -24,19 +24,19 @@
 
 <table class="tbl">
   <tr>
+    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
+    <th>Patient</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
+    <th style="width: 1%">{{mb_title class=CPrescriptionLineDMI field=date}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
+    <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
+  </tr>
+  <tr>
     <th colspan="2">{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CProduct field=code}}</th>
     <th>Stock</th>
     <th style="width: 1%">Commander</th>
-    <th style="width: 1%">Déjà comm.</th>
-  </tr>
-  <tr>
-    <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
-    <th>Patient</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=date}}</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
-    <th>{{mb_title class=CPrescriptionLineDMI field=septic}}</th>
+    <th>Déjà comm.</th>
   </tr>
   {{foreach from=$lines_by_context key=_context_guid item=_lines}}
     <tr>
@@ -47,6 +47,20 @@
     </tr>
     {{foreach from=$_lines item=_line_dmi}}
     <tbody class="hoverable">
+      <tr>
+        <td>{{mb_value object=$_line_dmi field=quantity}}</td>
+        <td>
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_prescription->_guid}}')">
+            {{$_line_dmi->_ref_prescription->_ref_patient}}
+          </span>
+        </td>
+        <td>
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
+        </td>
+        <td>{{mb_value object=$_line_dmi field=date}}</td>
+        <td>{{mb_value object=$_line_dmi field=type}}</td>
+        <td>{{mb_value object=$_line_dmi field=septic}}</td>
+      </tr>
       <tr>
         <td colspan="2">
           <strong onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product_order_item_reception->_guid}}')">
@@ -64,16 +78,34 @@
             <input type="hidden" name="_create_order" value="1" />
             <input type="hidden" name="_context_guid" value="COperation-{{$_line_dmi->operation_id}}" />
             <input type="hidden" name="reception_id" value="" />
-            <input type="hidden" name="quantity" value="1" />
-            <select name="reference_id">
-              {{foreach from=$_line_dmi->_ref_product->_back.references item=_reference}}
-                <option value="{{$_reference->_id}}" 
-                        {{if $_line_dmi->_ref_product_order_item_reception->_ref_order_item->reference_id == $_reference->_id}}selected="selected"{{/if}}>
-                  {{$_reference->_ref_societe}} (x{{$_reference->quantity}})
-                </option>
-              {{/foreach}}
-            </select>
-            <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
+            
+            <table class="main form layout">
+              <tr>
+                <th>
+                  {{assign var=line_dmi_id value=$_line_dmi->_id}}
+                  {{mb_field object=$_line_dmi field=quantity size=1 increment=true form="product-reference-$line_dmi_id"}}
+                </th>
+                <td>
+                  <select name="reference_id">
+                    {{foreach from=$_line_dmi->_ref_product->_back.references item=_reference}}
+                      <option value="{{$_reference->_id}}" 
+                              {{if $_line_dmi->_ref_product_order_item_reception->_ref_order_item->reference_id == $_reference->_id}}selected="selected"{{/if}}>
+                        {{$_reference->_ref_societe}} (x{{$_reference->quantity}})
+                      </option>
+                    {{/foreach}}
+                  </select>
+                </td>
+                <td rowspan="2">
+                  <button class="add notext" type="submit">Commander</button>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: right;">Num. facture :</td>
+                <td>
+                  <input type="text" name="_bill_number" value="" />
+                </td>
+              </tr>
+            </table>
           </form>
         </td>
         <td>
@@ -83,20 +115,6 @@
             </span><br />
           {{/foreach}}
         </td>
-      </tr>
-      <tr>
-        <td>{{mb_value object=$_line_dmi field=quantity}}</td>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_prescription->_guid}}')">
-            {{$_line_dmi->_ref_prescription->_ref_patient}}
-          </span>
-        </td>
-        <td>
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}
-        </td>
-        <td>{{mb_value object=$_line_dmi field=date}}</td>
-        <td>{{mb_value object=$_line_dmi field=type}}</td>
-        <td>{{mb_value object=$_line_dmi field=septic}}</td>
       </tr>
     </tbody>
     {{foreachelse}}

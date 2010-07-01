@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$do = new CDoObjectAddEdit('CProductOrderItemReception', 'order_item_reception_id');
+$do = new CDoObjectAddEdit('CProductOrderItemReception');
 
 $reference_id = CValue::post("_reference_id");
 $quantity     = CValue::post("quantity");

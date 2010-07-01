@@ -8,11 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->display("vw_elements.tpl");
-
-?>

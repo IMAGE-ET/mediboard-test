@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsRead();
+global $g;
+CCanDo::checkRead();
 
 $category_class = CValue::getOrSession("category_class");
 $page           = intval(CValue::get("page", 0));

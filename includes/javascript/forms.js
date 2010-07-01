@@ -388,13 +388,19 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
  */
 function onSubmitFormAjax(oForm, oOptions) {
   oOptions = Object.extend({
-    method : oForm.method,
-    check  : checkForm
+    method: oForm.method,
+    check: checkForm,
+    useFormAction: false
   }, oOptions);
   
   // Check the form
   if (!oOptions.check(oForm)) {
     return false;
+  }
+  
+  if (oOptions.useFormAction) {
+    var action = oForm.getAttribute("action") || "";
+    oOptions.getParameters = action.toQueryParams();
   }
 
   // Build url

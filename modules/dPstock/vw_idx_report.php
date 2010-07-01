@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsRead();
+global $g;
+CCanDo::checkRead();
 
 $list_stocks = new CProductStockGroup();
 

@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Recuperation de la classe de la categorie
 $element_class = CValue::getOrSession("element_class");

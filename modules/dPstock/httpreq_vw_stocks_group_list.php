@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
  
-global $can, $g;
-$can->needsEdit();
+global $g;
+CCanDo::checkEdit();
 
 $category_id         = CValue::get('category_id');
 $stock_id            = CValue::getOrSession('stock_id');

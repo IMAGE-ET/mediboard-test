@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $AppUI;
-$can->needsAdmin();
+global $AppUI;
+CCanDo::checkAdmin();
 
 set_time_limit(360);
 ini_set('memory_limit', '128M');
