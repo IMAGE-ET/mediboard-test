@@ -44,6 +44,16 @@ function ClearRDV(){
   $V(oForm.heure, "");
 }
 
+function emptyprat() {
+  var oForm = document.editFrm;
+  $V(oForm.chir_id, "", true);
+}
+
+function emptycab() {
+  var oForm = document.editFrm;
+  $V(oForm._function_id, "", true);
+}
+
 function annuleConsult(oForm, etat) {
   if(etat) {
     if(confirm("Voulez-vous vraiment annuler cette consultation ?")) {
@@ -164,7 +174,7 @@ Main.add(function () {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); $V(this.form._function_id, '');">
+            <select name="chir_id" style="max-width: 150px" class="notNull" onChange="emptycab(); ClearRDV(); refreshListCategorie(this.value); $V(this.form._function_id, '');">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -318,7 +328,7 @@ Main.add(function () {
         <tr>
           <th>Choix par cabinet</th>
           <td>
-            <select name="_function_id" style="max-width: 130px;">
+            <select name="_function_id" style="max-width: 130px;" onchange="emptyprat();">
               <option value="">&mdash; choisir un cabinet</option>
               {{foreach from=$listFunctions item=_function}}
               <option value="{{$_function->_id}}" class="mediuser" style="border-color: #{{$_function->color}};">

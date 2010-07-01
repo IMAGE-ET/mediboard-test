@@ -56,7 +56,7 @@ foreach($listPlages as &$curr_month) {
     $curr_plage->_ref_chir =& $listPrat[$curr_plage->chir_id];
     $curr_plage->loadRefs(false);
 		$curr_plage->_ref_chir->loadRefFunction();
-    $curr_plage->_listPlaces = array();
+    $curr_plage->_listPlace = array();
     for ($i = 0; $i < $curr_plage->_total; $i++) {
       $minutes = $curr_plage->_freq * $i;
       $curr_plage->_listPlace[$i]["time"] = mbTime("+ $minutes minutes", $curr_plage->debut);
