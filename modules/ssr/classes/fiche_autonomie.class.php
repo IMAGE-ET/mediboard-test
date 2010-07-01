@@ -31,6 +31,8 @@ class CFicheAutonomie extends CMbObject {
   var $expression             = null;
   var $memoire                = null;
   var $resolution_pb          = null;
+  var $antecedents            = null;
+  var $traitements            = null;
   var $etat_psychique         = null;
   var $devenir_envisage       = null;
   
@@ -66,6 +68,8 @@ class CFicheAutonomie extends CMbObject {
     $specs["memoire"]                = "enum notNull list|intacte|alteree";
     $specs["resolution_pb"]          = "enum notNull list|intacte|alteree";
     $specs["etat_psychique"]         = "text";
+    $specs["antecedents"]            = "text";
+    $specs["traitements"]            = "text";
     $specs["devenir_envisage"]       = "text";
 
     return $specs;
