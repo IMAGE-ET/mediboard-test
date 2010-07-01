@@ -73,6 +73,8 @@ function addLocale($class, $cat, $name) {
   global $trans, $items, $completions, $language;
   $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
   
+  $items[$class][$cat][$name] = str_replace('\n', "\n", $items[$class][$cat][$name]);
+  
   // Stats
   @$completions[$class]["total"]++;
   if ($items[$class][$cat][$name]) {

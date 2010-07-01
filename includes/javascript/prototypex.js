@@ -346,6 +346,24 @@ Element.addMethods(['input', 'textarea'], {
     return Object.isUndefined(element.value) ?
       element.empty() : 
       !notWhiteSpace.test(element.value);
+  },
+  switchMultiline: function (element) {
+    var newElement;
+    
+    if (/^textarea$/i.test(element.tagName)) {
+      newElement = new Element("input", {type: "text", value: $V(element), style: "width: 100%"});
+    }
+    else {
+      newElement = new Element("textarea", {style: "width: 100%"}).update($V(element));
+    }
+    
+    newElement.className = element.className;
+    newElement.name = element.name;
+    newElement.id = element.id;
+    
+    element.insert({after: newElement});
+    element.remove();
+    return newElement;
   }
 });
 

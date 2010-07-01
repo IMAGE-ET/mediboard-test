@@ -119,9 +119,17 @@ Main.add(function () {
         {{foreach from=$tabTrad key=chaine item=trad name=trad}}
         <tr>
         	{{if $smarty.foreach.trad.first }} <td rowspan="{{$tabTrad|@count}}"> {{$nom}} </td> {{/if}}
-        	<td> {{$chaine}} </td>
-        	<td><input size="70" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" /></td>
-        	<td />
+        	<td>{{$chaine}}</td>
+        	<td>
+            {{if $trad|strpos:"\n"}}
+              <textarea name="tableau[{{$chaine}}]">{{$trad}}</textarea>
+            {{else}}
+              <input style="width: 100%" type="text" name="tableau[{{$chaine}}]" value="{{$trad}}" />
+            {{/if}}
+          </td>
+        	<td>
+            <button type="button" class="down notext" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+          </td>
         </tr>
         {{/foreach}}
         </tbody>	
