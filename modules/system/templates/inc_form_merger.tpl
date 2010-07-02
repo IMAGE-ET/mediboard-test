@@ -44,8 +44,10 @@ Main.add(function() {
     addObjectField();
     addObjectField();
   {{/foreach}}
-  
-  $(getForm("objects-selector").objects_class).makeAutocomplete({width: "200px"});
+
+  {{if !$readonly_class}}
+    $(getForm("objects-selector").objects_class).makeAutocomplete({width: "200px"});
+  {{/if}}
 }); 
 </script>
 

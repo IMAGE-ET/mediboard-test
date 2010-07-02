@@ -126,7 +126,7 @@ if (isset($_REQUEST["login"])) {
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
 
-  if ($_SESSION['browser']['deprecated']) {
+  if ($_SESSION['browser']['deprecated'] && !CValue::get("password")) { // If we are not connecting directly
     $tpl = new CSmartyDP("style/mediboard");
     $tpl->display("old_browser.tpl");
     CApp::rip();

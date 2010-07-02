@@ -99,10 +99,12 @@ hr {
   </tr>
 </table>
 
-<h1 style="text-align: center;"><a href="http://www.whatbrowser.org/fr/">Qu'est ce qu'un navigateur ?</a></h1>
+<h1 style="text-align: center;">
+  <a href="http://www.whatbrowser.org/fr/">Qu'est ce qu'un navigateur ?</a>
+</h1>
 
 <div style="text-align: right; margin-top: 3em;">
-  <a href="?">Accéder quand même à l'application &gt;&gt;</a>
+  <a href="?">Accéder malgré tout à l'application &gt;&gt;</a>
 </div>
 
 </body>
