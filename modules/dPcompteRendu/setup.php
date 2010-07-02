@@ -384,34 +384,44 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.51");
     $this->addPrefQuery("choicepratcab", "prat");
-    
-		
+
 		$this->makeRevision("0.52");
-		
+		$this->setTimeLimit(600);
     $sql = "CREATE TABLE `contenthtml` (
               `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
               `content` TEXT,
 						  `cr_id` INT
            ) TYPE=MYISAM;";
 	  $this->addQuery($sql);
-    $sql = "ALTER TABLE `compte_rendu` 
-              ADD `content_id` INT (11) UNSIGNED";
-		$this->addQuery($sql);
-		$sql = "ALTER TABLE `compte_rendu` 
-              ADD INDEX (`content_id`);";
-	  $this->addQuery($sql);
-		
 		
 		$sql = "INSERT INTO contenthtml (content, cr_id) SELECT source, compte_rendu_id FROM compte_rendu";
 	  $this->addQuery($sql);
-		$sql = "UPDATE compte_rendu c join contenthtml ch on c.compte_rendu_id = ch.cr_id
+	  
+	  $sql = "ALTER TABLE `compte_rendu` DROP `source`";
+    $this->addQuery($sql);
+
+	  $sql = "ALTER TABLE `compte_rendu` 
+              ADD `content_id` INT (11) UNSIGNED";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `compte_rendu` 
+              ADD INDEX (`content_id`);";
+    $this->addQuery($sql);
+    
+		$sql = "UPDATE compte_rendu c JOIN contenthtml ch ON c.compte_rendu_id = ch.cr_id
 		        SET c.content_id = ch.content_id";
 		$this->addQuery($sql);
-    $sql = "ALTER TABLE `compte_rendu` DROP `source`";
-		$this->addQuery($sql);
+		
 		$sql = "ALTER TABLE `contenthtml` DROP `cr_id`";
 		$this->addQuery($sql);
-    $this->mod_version = "0.53";
+
+		$this->makeRevision("0.53");
+		$sql = "RENAME TABLE `contenthtml` TO `content_html`";
+		$this->addQuery($sql);
+
+		$this->mod_version = "0.54";
+
+
   }
 }
 ?>

@@ -16,7 +16,7 @@ class CContentHTML extends CMbObject {
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'contenthtml';
+    $spec->table = 'content_html';
     $spec->key   = 'content_id';
     return $spec;
   }
