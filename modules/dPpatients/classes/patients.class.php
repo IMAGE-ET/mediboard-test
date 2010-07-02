@@ -692,7 +692,8 @@ class CPatient extends CMbObject {
     $this->_longview = "$this->_civilite_long $this->nom$nom_naissance $this->prenom";
 		
    // Navigation fields
-    $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
+    //$this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
+    $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix["dPpatients"] . $this->_id;
   }
   
   /**
