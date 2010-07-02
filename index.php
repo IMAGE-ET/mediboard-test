@@ -187,7 +187,7 @@ CAppUI::requireSystemClass("smartydp");
 ob_start();
 
 // We check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") && $_SESSION['browser']['mobile']) {
+if (is_file("./mobile/main.php") && isset($_SESSION['browser']['mobile']) && $_SESSION['browser']['mobile']) {
   require("./mobile/main.php");
 }
 else {
