@@ -386,7 +386,6 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addPrefQuery("choicepratcab", "prat");
 
 		$this->makeRevision("0.52");
-		$this->setTimeLimit(600);
     $sql = "CREATE TABLE `contenthtml` (
               `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
               `content` TEXT,

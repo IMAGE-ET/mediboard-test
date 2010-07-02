@@ -65,13 +65,13 @@ else {
         if($header_id) {
           $compte_rendu_h_f->load($header_id);
 					$compte_rendu_h_f->loadContent();
-          $header = $compte_rendu_h_f->source->content;
+          $header = $compte_rendu_h_f->_source;
           $sizeheader = $compte_rendu_h_f->height;
         }
         if($footer_id) {
           $compte_rendu_h_f->load($footer_id);
 					$compte_rendu_h_f->loadContent();
-          $footer = $compte_rendu_h_f->source->content;
+          $footer = $compte_rendu_h_f->_source;
           $sizefooter = $compte_rendu_h_f->height;
         }
         $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, $header, $sizeheader, $footer, $sizefooter, $margins);
