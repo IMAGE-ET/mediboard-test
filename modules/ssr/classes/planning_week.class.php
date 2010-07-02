@@ -16,6 +16,7 @@ class CPlanningWeek  {
   var $selectable = null;
 	var $height = null;
 	var $large   = null;
+	var $adapt_range = null;
 	
   var $date_min = null; // Monday
   var $date_max = null; // Sunday
@@ -48,12 +49,13 @@ class CPlanningWeek  {
 
   var $days = array();
 
-  function __construct($date, $date_min = null, $date_max = null, $nb_days = 7, $selectable = false, $height = 250, $large = false) {
+  function __construct($date, $date_min = null, $date_max = null, $nb_days = 7, $selectable = false, $height = "auto", $large = false, $adapt_range = false) {
 		$this->date = $date;
     $this->selectable = $selectable;
-		$this->height = $height ? $height : 250;
+		$this->height = $height ? $height : "auto";
 		$this->large = $large;
 		$this->nb_days = $nb_days;
+		$this->adapt_range = $adapt_range;
 		
     $monday = mbDate("last monday", mbDate("+1 day", $this->date));
     $sunday = mbDate("next sunday", mbDate("-1 DAY", $this->date));

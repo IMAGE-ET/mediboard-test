@@ -456,6 +456,14 @@ table#weeklyPlanning th.today {
   text-decoration: underline;
 }
 
+.planning .week-container {
+	height: 250px;
+}
+
+.planning .week-container table {
+  height: 800px;
+}
+
 .planning .event-container {
   width: 100%;
   position: absolute;
@@ -568,13 +576,13 @@ table#weeklyPlanning th.today {
 }
 
 .planning .hours td {
-  height: 30px;
+  /*height: 30px;*/
   padding: 0;
   vertical-align: top;
 }
 
 .planning.large .hours td {
-  height: 60px;
+  /*height: 60px;*/
   padding: 0;
   vertical-align: top;
 }
@@ -585,23 +593,6 @@ table#weeklyPlanning th.today {
 
 .planning .hours .pause {
   border-bottom: 3px solid #ccc;
-}
-.planning .hours .pause-next {
-  border-top: 3px solid #ccc;
-}
-
-.planning .hours .pause td,
-.planning .hours .pause th,
-.planning .hours .pause-next td,
-.planning .hours .pause-next th {
-  height: 27px;
-}
-
-.planning.large .hours .pause td,
-.planning.large .hours .pause th,
-.planning.large .hours .pause-next td,
-.planning.large .hours .pause-next th {
-  height: 57px;
 }
 
 .planning .hour {

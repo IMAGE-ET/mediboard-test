@@ -40,9 +40,7 @@ printPlanningSejour = function(){
 	<tr>
 		<td>
 			<div style="position: relative;">
-			  <div style="position: absolute; top: 0px; right: 0px;">
-          <button type="button" class="print notext" onclick="printPlanningSejour();"></button>
-        </div>
+			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="print notext" onclick="printPlanningSejour();">{{tr}}Print{{/tr}}</button>
 				<div id="planning-sejour"></div>
 			</div>
 		</td>
@@ -52,9 +50,7 @@ printPlanningSejour = function(){
   <tr>
   	<td>
 			<div style="position: relative;">
-				<div style="position: absolute; top: 0px; right: 0px;">
-			    <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
-				</div>
+			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
 				<div id="planning-technicien"></div>
 		  </div>
 		</td>

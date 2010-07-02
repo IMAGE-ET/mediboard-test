@@ -17,7 +17,8 @@ Main.add(function() {
     '{{$planning->hour_max}}', 
     {{$planning->events|@json}}, 
     {{$planning->hour_divider}},
-    window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop
+    window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
+    {{$planning->adapt_range|@json}}
   );
   
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
@@ -27,7 +28,7 @@ Main.add(function() {
 
 </script>
 
-<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" id="{{$planning->guid}}">
+<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" style="height: 300px;" id="{{$planning->guid}}">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
@@ -65,15 +66,13 @@ Main.add(function() {
     </tr>
   </table>
   
-  <div style="overflow-y: scroll; overflow-x: hidden; height: {{$planning->height}}px;" class="week-container">
+  <div style="overflow-y: scroll; overflow-x: hidden; {{if $planning->height}}height: {{$planning->height}}px;{{/if}}" class="week-container">
     <table class="tbl hours" style="table-layout: fixed; overflow: hidden;">
       <col style="width: 3.0em;" />
       <col span="{{$nb_days}}" />
       
-      {{assign var=prev_pause value=false}}
-      
       {{foreach from=$planning->hours item=_hour}}
-        <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}} {{if $prev_pause}}pause-next{{/if}}">
+        <tr class="hour-{{$_hour}} {{if in_array($_hour, $planning->pauses)}}pause{{/if}}">
           <th class="hour">{{$_hour}}h</th>
           
           {{foreach from=$planning->days key=_day item=_events name=days}}

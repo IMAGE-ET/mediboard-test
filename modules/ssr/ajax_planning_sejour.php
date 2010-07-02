@@ -25,7 +25,7 @@ $large = CValue::get("large");
 $date = CValue::getOrSession("date", mbDate());
 $nb_days_planning = $sejour->getNbJourPlanning($date);
 
-$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable, $height, $large);
+$planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable, $height, $large, !$print);
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 

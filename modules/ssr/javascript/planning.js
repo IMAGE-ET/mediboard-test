@@ -66,22 +66,47 @@ WeekPlanning = Class.create({
   scrollTop: null,
   load_data: [],
   maximum_load: null,
-  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top) {
+  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
     }
     
     this.container = $(guid);
+    this.hour_min = hour_min;
+    this.hour_max = hour_max;
     this.events = events;
-    this.scroll(hour_min, hour_max, scroll_top);
     this.hour_divider = hour_divider;
+    this.adapt_range = adapt_range;
+    
+    if (this.adapt_range) {
+      this.adaptRangeHeight(); 
+    }
+    
     this.updateEventsDimensions();
+    this.scroll(scroll_top);
+    
     this.container.addClassName("drawn");
   },
-  scroll: function(hour_min, hour_max, scroll_top) {
-    var top = this.container.down(".hour-"+hour_min).offsetTop;
+  scroll: function(scroll_top) {
+    var top = this.container.down(".hour-"+this.hour_min).offsetTop;
     this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
+  },
+  setPlanningHeight: function(height) {
+    var top = this.container.down("table").getHeight();
+    this.container.down('.week-container').setStyle({height: height - parseInt(top, 10) + "px"});
+    if (this.adapt_range) {
+      this.adaptRangeHeight(); 
+    }
+    this.updateEventsDimensions();
+  },
+  adaptRangeHeight: function(){
+    var weekContainer = this.container.down('.week-container table');
+    var viewportHeight = this.container.down('.week-container').getHeight();
+    var delta = parseInt(this.hour_max, 10) - parseInt(this.hour_min, 10) + 1;
+    var visibleLines = this.countVisibleLines();
+    
+    weekContainer.setStyle({height: (viewportHeight / delta) * visibleLines + "px"});
   },
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");
@@ -100,9 +125,11 @@ WeekPlanning = Class.create({
   getEventById: function(id) {
     return this.eventsById[id];
   },
+  countVisibleLines: function(){
+    return this.container.select(".week-container tr").filter(Element.visible).length;
+  },
   getCellHeight: function(){
-    var visibleLines = this.container.select(".week-container tr").filter(Element.visible).length;
-    return this.container.down(".week-container table").getHeight() / visibleLines;
+    return this.container.down(".week-container table").getHeight() / this.countVisibleLines();
   },
   onEventChange: function(e){
     console.debug(e.getTime());
