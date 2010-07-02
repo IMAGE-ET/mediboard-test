@@ -408,7 +408,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->patient->assure_civilite   = "guess";
     
 //    $this->patient->pays              = $pat400->consume("ZPAY");
-    $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
+//    $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
     $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
     $this->id400Pat->bindObject($this->patient);
@@ -435,6 +435,10 @@ class CMouvSejourEcap extends CMouvementEcap {
     // Praticien de la DHE prioritaire
     $CPRT = $dheECap->consume("CPRT");
     $this->syncPraticien($CPRT);
+
+    // Références principales
+    $this->sejour->group_id     = $this->etablissement->_id;
+    $this->sejour->patient_id   = $this->patient->_id;
     $this->sejour->praticien_id = $this->praticiens[$CPRT]->_id;
     
     // Cration du log de création du séjour

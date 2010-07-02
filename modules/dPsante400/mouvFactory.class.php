@@ -14,9 +14,9 @@ class CMouvFactory {
   static $matrix = array (
     "default" => array (),
     "medicap" => array (
-      "sejour" => "CMouvSejourEcap",
+      "sejour"       => "CMouvSejourEcap",
       "intervention" => "CMouvInterventionECap",
-//      "attendue" => "CMouvAttendueECap",
+      "attendue"     => "CMouvAttendueECap",
     ),
   );
 

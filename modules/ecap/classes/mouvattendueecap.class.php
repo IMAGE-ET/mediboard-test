@@ -26,22 +26,35 @@ class CMouvAttendueECap extends CMouvSejourEcap {
     $this->syncPatient();
     
 //    $this->syncSej();
-//    $this->syncDHE();
-//    $this->syncOperations();
-//    $this->syncNaissance();
+    $this->syncDHE();
+    $this->syncOperations();
+    $this->syncNaissance();
   }
       
   function syncDHE() {
-    $tag = "eCap DHE CIDC:{$this->id400Etab->id400}";
+
+    $tags[] = "eCap";
+		$tags[] = "DHE";
+		$tags[] = "CIDC:{$this->id400Etab->id400}";
+		
+    self::$consumeUnsets = false;
+    $IDAT = $this->consume("IDAT");
+    self::$consumeUnsets = true;
+
     $this->id400DHE = new CIdSante400();
     $this->id400DHE->id400 = $IDAT;
-    $this->id400DHE->tag = $tag;
+    $this->id400DHE->object_class = "CSejour";
+    $this->id400DHE->tag = join(" ", $tags);
+
+    $this->sejour = $this->id400DHE->getCachedObject(0);
+    $this->sejour->annule = $this->type == "S" ? '1' : '0';
+
+    // Recherche de la DHE
+    $this->mapDHE($this);
 
     $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
 
-    // Recherche de la DHE
-    $this->mapDHE($dheECap);
-
+    $this->sejour->_check_bounds = false;
     $this->id400DHE->bindObject($this->sejour);
 
     $this->markStatus(self::STATUS_SEJOUR);
@@ -56,11 +69,6 @@ class CMouvAttendueECap extends CMouvSejourEcap {
   }
 
   function syncSej() {
-    // Pas de NDOS, créer un séjour temporaire
-    if (!$this->data["NDOS"]) {
-      $this->sejour = new CSejour();
-      return;
-    }
     
     parent::syncSej();
   }
