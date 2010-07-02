@@ -50,9 +50,8 @@
               Main.add(function() {
                 new AideSaisie.AutoComplete(getForm("editFrmExams").elements.{{$field}}, {
                   objectClass: "{{$consult->_class_name}}",
-                  userId: "{{$consult->_ref_chir->_id}}",
-                  userView: "{{$consult->_ref_chir->_view}}",
                   contextUserId: "{{$consult->_ref_chir->_id}}",
+                  contextUserView: "{{$consult->_ref_chir->_view}}",
                   timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
                   validate: function(){ getForm("editFrmExams").onsubmit(); },
                   resetSearchField: false,
