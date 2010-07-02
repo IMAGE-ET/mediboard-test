@@ -13,13 +13,14 @@ mbTrace("permettre de mettre un numero de facture à un bon de commande");
 CCanDo::checkRead();
 
 $date = CValue::get("date", mbDate());
-$tomorow = mbDate("+1 DAY", $date);
+$date_min = mbDate("-1 DAY", $date);
+$date_max = mbDate("+1 DAY", $date);
 
 $dmi_line = new CPrescriptionLineDMI();
 $dmi_line->date = $date;
 
 $where = array();
-$where["date"] = "BETWEEN '$date' AND '$tomorow'";
+$where["date"] = "BETWEEN '$date_min' AND '$date_max'";
 
 $list_lines = $dmi_line->loadList($where, "date");
 
