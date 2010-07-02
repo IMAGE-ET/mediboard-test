@@ -28,8 +28,9 @@ for ($loop = 0; $loop < $loops; $loop++) {
   $starting = $loop*$trunk;
   $ds = $doc->_spec->ds;
   
-	$query = "SELECT `compte_rendu`.`compte_rendu_id`, `compte_rendu`.`source` 
-		FROM compte_rendu 
+	$query = "SELECT `compte_rendu`.`compte_rendu_id`, `contenthtml`.`content` 
+		FROM compte_rendu, contenthtml
+		WHERE compte_rendu.content_id = contenthtml.content_id
 		ORDER BY compte_rendu_id DESC
 		LIMIT $starting, $trunk";
   $docs = $ds->loadHashList($query);

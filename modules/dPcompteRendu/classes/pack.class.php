@@ -75,11 +75,12 @@ class CPack extends CMbObject {
       foreach ($modeles as $value) {
         $this->_modeles[$value] = new CCompteRendu;
         $this->_modeles[$value]->load($value);
+        $this->_modeles[$value]->loadContent();
         if (!$this->_object_class)
           $this->_object_class = $this->_modeles[$value]->object_class;
       }
       
-      $this->_source = implode('<hr class="pagebreak" />', CMbArray::pluck($this->_modeles, "source"));   
+      $this->_source = implode('<hr class="pagebreak" />', CMbArray::pluck($this->_modeles, "_source"));   
     }
     if (!$this->_object_class)
       $this->_object_class = "COperation";

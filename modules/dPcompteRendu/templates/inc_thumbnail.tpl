@@ -24,3 +24,4 @@
 {{/foreach}}
 
 <div id="toto" style="display: none;"></div>
+<div id="toto" style="display: none;"></div>

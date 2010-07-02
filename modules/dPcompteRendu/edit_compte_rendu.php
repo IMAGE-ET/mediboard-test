@@ -27,6 +27,7 @@ $compte_rendu = new CCompteRendu;
 // Modification d'un document
 if ($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
+  $compte_rendu->loadContent();
 }
 
 // Création à partir d'un modèle
@@ -35,6 +36,7 @@ else {
 	$footer = null;
 	
   $compte_rendu->load($modele_id);
+  $compte_rendu->loadContent();
   $compte_rendu->_id = null;
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
@@ -62,7 +64,7 @@ else {
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;
     $compte_rendu->object_class = $pack->object_class;
-    $compte_rendu->source = $pack->_source;
+    $compte_rendu->_source = $pack->_source;
     
     // Parcours des modeles du pack pour trouver le premier header et footer
     foreach($pack->_modeles as $mod) {
@@ -102,7 +104,8 @@ else {
       }";
     
     if ($header->_id) {
-      $header->source = "<div id='header'>$header->source</div>";
+    	$header->loadContent();
+      $header->_source = "<div id='header'>$header->_source</div>";
       
       if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {      
         $header->height += 20;
@@ -111,7 +114,8 @@ else {
     }
     
     if ($footer->_id) {
-      $footer->source = "<div id='footer'>$footer->source</div>";
+      $footer->loadContent();
+      $footer->_source = "<div id='footer'>$footer->_source</div>";
 
       if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {
         $footer->height += 20;
@@ -133,15 +137,18 @@ else {
       @media dompdf {
         #body {
           padding-bottom: {$footer->height}px;
-        }";
-
-    $style .= "}</style>";
+        }
+        hr.pagebreak {
+          padding-top: 0px;
+        }
+      }</style>";
     
-    $compte_rendu->source = "<div id='body'>$compte_rendu->source</div>";
-    $compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
+    $compte_rendu->_source = "<div id='body'>$compte_rendu->_source</div>";
+    $compte_rendu->_source = $style . $header->_source . $footer->_source . $compte_rendu->_source;
   }
 
   $compte_rendu->updateFormFields();
+  
 }
 
 $compte_rendu->loadRefsFwd();
@@ -170,7 +177,7 @@ $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 $templateManager = new CTemplateManager($_GET);
 
 $object->fillTemplate($templateManager);
-$templateManager->document = $compte_rendu->source;
+$templateManager->document = $compte_rendu->_source;
 $templateManager->loadHelpers($user->_id, $compte_rendu->object_class);
 $templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
@@ -202,6 +209,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
+//mbTrace($compte_rendu->_source, '', 1);
 $smarty->assign("modele_id"      , $modele_id);
 $smarty->assign("lists"          , $lists);
 $smarty->assign("destinataires"  , $destinataires);

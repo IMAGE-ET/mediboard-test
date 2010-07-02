@@ -47,6 +47,8 @@ $userCourant = $med->load($user_id);
 // Compte-rendu selectionné
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
+$compte_rendu->loadContent();
+
 if ($compte_rendu->object_id) {
   $compte_rendu = new CCompteRendu();
 }

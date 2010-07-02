@@ -13,14 +13,14 @@ CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 $compte_rendu_id = CValue::post("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
-
+$compte_rendu->loadContent();
 $generate_thumbs = CValue::post("generate_thumbs");
 $mode        = CValue::post("mode","doc");
 $type        = CValue::post("type", $compte_rendu->type);
 $footer_id   = CValue::post("footer_id", $compte_rendu->footer_id);
 $header_id   = CValue::post("header_id", $compte_rendu->header_id);
 $stream      = CValue::post("stream");
-$content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->source)));
+$content     = stripslashes(urldecode(CValue::post("content", $compte_rendu->_source)));
 $save_content = $content;
 $page_format = CValue::post("page_format",$compte_rendu->_page_format);
 $orientation = CValue::post("orientation",$compte_rendu->_orientation);
@@ -64,12 +64,14 @@ else {
         $footer = ''; $sizefooter = 0;
         if($header_id) {
           $compte_rendu_h_f->load($header_id);
-          $header = $compte_rendu_h_f->source;
+					$compte_rendu_h_f->loadContent();
+          $header = $compte_rendu_h_f->source->content;
           $sizeheader = $compte_rendu_h_f->height;
         }
         if($footer_id) {
           $compte_rendu_h_f->load($footer_id);
-          $footer = $compte_rendu_h_f->source;
+					$compte_rendu_h_f->loadContent();
+          $footer = $compte_rendu_h_f->source->content;
           $sizefooter = $compte_rendu_h_f->height;
         }
         $content = $compte_rendu->loadHTMLcontent($content, $mode, $type, $header, $sizeheader, $footer, $sizefooter, $margins);
@@ -109,7 +111,7 @@ else {
     // Si la source envoy�e et celle pr�sente en base sont identique, on stream le PDF d�j� g�n�r�
     // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
     $c1 = preg_replace("!\s!",'',$save_content);
-    $c2 = preg_replace("!\s!",'',$compte_rendu->source);
+    $c2 = preg_replace("!\s!",'',$compte_rendu->_source);
 
     if ((md5($c1) == md5($c2)) && $stream == 1) {
     	header("Pragma: ");

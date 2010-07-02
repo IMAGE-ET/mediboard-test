@@ -51,7 +51,7 @@ var Modele = {
   },
 
   generate_auto_height: function() {
-    var content = window.FCKeditorAPI ? FCKeditorAPI.Instances.source.GetHTML() : $V(form.source);
+    var content = window.FCKeditorAPI ? FCKeditorAPI.Instances._source.GetHTML() : $V(form.source);
     var container = new Element("div", {style: "width: 17cm; padding: 0; margin: 0; position: absolute; left: -1500px; bottom: 200px;"}).insert(content);
     $$('body')[0].insert(container);
     // Calcul approximatif de la hauteur
@@ -427,12 +427,12 @@ Main.add(function () {
         {{if !$droit}}
           <div class="big-info">
             Le présent modèle est en lecture seule. 
-            <br/>Il comporte en l'état {{$compte_rendu->source|count_words}} mots.
+            <br/>Il comporte en l'état {{$compte_rendu->_source|count_words}} mots.
             <br/>Vous pouvez le copier pour votre propre usage en cliquant sur <strong>Dupliquer</strong>. 
           </div>
           <hr/>
         {{/if}}
-        {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
+        {{mb_field object=$compte_rendu field="_source" id="htmlarea" name="_source"}}
       {{/if}}
     </td>
     {{if $pdf_thumbnails == 1 && $compte_rendu->_id}}

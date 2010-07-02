@@ -164,12 +164,12 @@ class CTemplateManager {
     assert($template instanceof CCompteRendu || $template instanceof CPack);
     
     if($template instanceof CCompteRendu) {
-    
+      
       if (!$this->valueMode) {
         $this->setFields($template->object_class);
       }
 
-      $this->renderDocument($template->source);
+      $this->renderDocument($template->_source);
     
     } else {
       /** FIXME: ?? */
@@ -304,7 +304,7 @@ class CTemplateManager {
     return self::$barcodeCache[$code][$size] = $image;
   }
   
-  function renderDocument($source) {
+  function renderDocument($_source) {
     $fields = array();
     $values = array();
     
@@ -326,7 +326,7 @@ class CTemplateManager {
     }
 	
     if (count($fields)) {
-      $this->document = str_ireplace($fields, $values, $source);
+      $this->document = str_ireplace($fields, $values, $_source);
     }
   }
   

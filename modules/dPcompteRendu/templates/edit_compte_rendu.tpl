@@ -223,7 +223,7 @@ function submitCompteRendu(){
 
   <tr>
     <td class = "greedyPane" style="height: 600px" {{if $pdf_thumbnails==0}} colspan="2" {{else}} colspan="1" {{/if}} id="editeur">
-      <textarea id="htmlarea" name="source">
+      <textarea id="htmlarea" name="_source">
         {{$templateManager->document}}
       </textarea>
     </td>

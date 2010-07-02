@@ -17,11 +17,11 @@ class CCompteRendu extends CDocumentItem {
   var $chir_id           = null; // not null when is a template associated to a user
   var $function_id       = null; // not null when is a template associated to a function
   var $group_id          = null; // not null when is a template associated to a group
+  var $content_id        = null;
   
   // DB fields
   var $nom               = null;
   var $type              = null;
-  var $source            = null;
   var $valide            = null;
   var $header_id         = null;
   var $footer_id         = null;
@@ -40,7 +40,7 @@ class CCompteRendu extends CDocumentItem {
   var $_owner            = null;
   var $_page_format      = null;
   var $_orientation      = null;
-  
+  var $_source           = null;
   var $_list_classes     = null;
   
   // Referenced objects
@@ -51,6 +51,7 @@ class CCompteRendu extends CDocumentItem {
   var $_ref_header       = null;
   var $_ref_footer       = null;
   var $_ref_file         = null;
+	var $_ref_content      = null;
 
   static $_page_formats = array(
     'a3'      => array(29.7 , 42),
@@ -86,10 +87,10 @@ class CCompteRendu extends CDocumentItem {
     $specs["function_id"]      = "ref class|CFunctions purgeable";
     $specs["group_id"]         = "ref class|CGroups purgeable";
     $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable";
+		$specs["content_id"]       = "ref class|CContenthtml show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0";
     $specs["type"]             = "enum list|header|body|footer default|body";
-    $specs["source"]           = "html helped|_list_classes";
     $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
     //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
     $specs["header_id"]        = "ref class|CCompteRendu";
@@ -106,11 +107,13 @@ class CCompteRendu extends CDocumentItem {
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
+    $specs["_source"]          = "text";
     return $specs;
   }
   
   function getContent() {
-    return $this->source;
+    $this->loadContent();
+		return $this->_source;
   }
   
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
@@ -160,7 +163,7 @@ class CCompteRendu extends CDocumentItem {
     parent::updateDBFields();
     $this->completeField("etat_envoi");
     
-    if($this->fieldModified("source") && ($this->etat_envoi == "oui"))
+    if(/*$this->fieldModified("source") &&*/ ($this->etat_envoi == "oui"))
       $this->etat_envoi = "obsolete";
     
     if($this->private === "") {
@@ -168,6 +171,14 @@ class CCompteRendu extends CDocumentItem {
     }
   }
   
+	function loadContent($store_source = true) {
+		$this->_ref_content = new CContentHTML();
+		$this->_ref_content->load($this->content_id);
+		if($store_source) {
+		  $this->_source = $this->_ref_content->content;
+		}
+	}
+	
   function loadComponents() {
     if (!$this->_ref_header) {
       $this->_ref_header = new CCompteRendu();
@@ -366,8 +377,10 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function store() {
-    $source_modified = 
-	  $this->fieldModified("source")  || 
+    $this->completeField("content_id", "_source");
+    $this->loadContent(false);
+		$source_modified = 
+		$this->_ref_content->content != $this->_source || 
 	  $this->fieldModified("margin_top") || 
 	  $this->fieldModified("margin_left") || 
 	  $this->fieldModified("margin_right") || 
@@ -384,7 +397,9 @@ class CCompteRendu extends CDocumentItem {
         $_file->file_empty();
       }
     }
-    
+
+    $this->_ref_content->content = $this->_source;
+
     // Si c'est un entête ou pied, et utilisé dans des documents dont le type ne correspond pas au nouveau
     // alors pas d'enregistrement
     if (in_array($this->type, array("footer", "header"))) {
@@ -413,18 +428,25 @@ class CCompteRendu extends CDocumentItem {
         return "Impossible de sauvegarder, le document n'est pas du même type que son pied de page";
       }
     }
-    
+
+    $this->_ref_content->store();
+
+    if (!$this->content_id )
+      $this->content_id = $this->_ref_content->_id;
+
     return parent::store();
   }
 	
   function delete() {
+    $this->completeField("content_id");
+    $this->loadContent(false);
     $file = new CFile();
     $files = $file->loadFilesForObject($this);
     
     foreach($files as $_file) {
       $_file->delete();
     }
-    
+    $this->_ref_content->delete();
     return parent::delete();
   }
 	
@@ -433,7 +455,7 @@ class CCompteRendu extends CDocumentItem {
       return;
     }
 
-    $this->completeField("nom", "source");
+    $this->completeField("nom", "_source");
     
     return parent::handleSend();
   }

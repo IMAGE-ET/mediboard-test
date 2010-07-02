@@ -112,7 +112,8 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
   }
 }
 elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_active){
-  $includeInfosFile = $fileSel->source;
+  $fileSel->loadContent();
+	$includeInfosFile = $fileSel->_source;
 }
 
 if ($pdf_active) {

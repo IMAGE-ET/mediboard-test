@@ -3,7 +3,7 @@
 <!-- Dialog -->
 {{if $dialog}}
 <div style="height: 500px">
-	<textarea id="htmlarea" name="source">
+	<textarea id="htmlarea" name="_source">
 	  {{$includeInfosFile}}
 	</textarea>
 </div>

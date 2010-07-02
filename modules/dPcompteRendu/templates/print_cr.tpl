@@ -4,7 +4,7 @@
 </div>
 
 <div style="height: 700px">
-	<textarea id="htmlarea" name="source">
-	  {{$source}}
+	<textarea id="htmlarea" name="_source">
+	  {{$_source}}
 	</textarea>
 </div>

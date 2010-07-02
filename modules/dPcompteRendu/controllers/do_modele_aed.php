@@ -24,7 +24,7 @@ if(isset($_POST["_do_empty_pdf"])) {
   return;
 }
 
-if (isset($_POST["source"])) {
+if (isset($_POST["_source"])) {
   // Application des listes de choix
   $fields = array();
   $values = array();
@@ -41,7 +41,7 @@ if (isset($_POST["source"])) {
 	  }
   }
   
-  $_POST["source"] = str_ireplace($fields, $values, $_POST["source"]);
+  $_POST["_source"] = str_ireplace($fields, $values, $_POST["_source"]);
 
   // Application des destinataires
   $destinataires = array();
@@ -60,13 +60,13 @@ if (isset($_POST["source"])) {
     $bodyTag = '<div id=\"body\">';
     
     // On sort l'en-tête et le pied de page
-    $posBody      = strpos($_POST["source"], $bodyTag);
+    $posBody      = strpos($_POST["_source"], $bodyTag);
     if($posBody) {
-      $headerfooter = substr($_POST["source"], 0, $posBody);
-      $body         = substr($_POST["source"], $posBody+strlen($bodyTag), -strlen("</div>"));
+      $headerfooter = substr($_POST["_source"], 0, $posBody);
+      $body         = substr($_POST["_source"], $posBody+strlen($bodyTag), -strlen("</div>"));
     } else {
       $headerfooter = "";
-      $body         = $_POST["source"];
+      $body         = $_POST["_source"];
     }
     // On crée les fichiers pour chaque destinataire
     $copyTo = "";
@@ -91,12 +91,12 @@ if (isset($_POST["source"])) {
     }
     // On concatène les en-tête, pieds de page et body's
     if($headerfooter) {
-      $_POST["source"] = $headerfooter;
-      $_POST["source"] .= "<div id=\"body\">";
-      $_POST["source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
-      $_POST["source"] .= "</div>";
+      $_POST["_source"] = $headerfooter;
+      $_POST["_source"] .= "<div id=\"body\">";
+      $_POST["_source"] .= implode("<hr class=\"pageBreak\" />", $allSources);
+      $_POST["_source"] .= "</div>";
     } else {
-      $_POST["source"] = implode("<hr class=\"pageBreak\" />", $allSources);
+      $_POST["_source"] = implode("<hr class=\"pageBreak\" />", $allSources);
     }
   }
   

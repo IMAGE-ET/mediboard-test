@@ -34,7 +34,7 @@ var Thumb = {
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
     url.addParam("compte_rendu_id", compte_rendu_id||modele_id);
     
-    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances.source.GetHTML()) ? FCKeditorAPI.Instances.source.GetHTML() : $V(form.source);
+    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances._source.GetHTML()) ? FCKeditorAPI.Instances._source.GetHTML() : $V(form.source);
     
     url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", mode);
@@ -102,6 +102,7 @@ var Thumb = {
 }
 
 function FCKeditor_OnComplete(editorInstance){
+
   var boutons = editorInstance.EditorWindow.parent.FCKToolbarItems.LoadedItems;
   
   // Rajout du raccourci clavier dans la tooltip des boutons de FCKEditor.
@@ -140,8 +141,10 @@ function FCKeditor_OnComplete(editorInstance){
   
   editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger);
   
-  var fck_iframe = document.getElementById('source___Frame');
+  var fck_iframe = document.getElementById('_source___Frame');
+
   var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
+  
   fck_editing_area.style.height = '100.1%';
   setTimeout(function(){
     fck_editing_area.style.height = '100%'
@@ -149,7 +152,7 @@ function FCKeditor_OnComplete(editorInstance){
   
   if (window.pdf_thumbnails == 1)
     Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
-  
+
   // Don't close the window with escape
   document.stopObserving('keydown', closeWindowByEscape);
   

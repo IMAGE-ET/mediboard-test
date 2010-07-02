@@ -99,11 +99,14 @@
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-	    <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;">
+	    <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
 	      <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
 	        {{$document}}
 	      </span>
 	    </a>
+      {{if $document->private}}
+        &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
+      {{/if}}
 	  </td>
 	  
 	  <td class="button" style="width: 1px">

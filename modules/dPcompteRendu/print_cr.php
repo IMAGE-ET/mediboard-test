@@ -34,13 +34,13 @@ if ($compte_rendu->header_id || $compte_rendu->footer_id) {
   }";
   
   if ($header->_id) {
-    $header->source = "<div id=\"header\">$header->source</div>";
+    $header->_source->content = "<div id=\"header\">$header->_source->content</div>";
     $header->height += 20;
     $compte_rendu->header_id = null;
   }
   
   if ($footer->_id) {
-    $footer->source = "<div id=\"footer\">$footer->source</div>";
+    $footer->_source->content = "<div id=\"footer\">$footer->_source->content</div>";
     $footer->height += 20;
     $compte_rendu->footer_id = null;
   }
@@ -51,14 +51,14 @@ if ($compte_rendu->header_id || $compte_rendu->footer_id) {
       padding-top: {$header->height}px; 
     }
 
-    hr.pagebreak { 
+    hr.pagebreak, hr.pageBreak { 
       padding-top: {$header->height}px; 
     }
   }
 </style>";
 
-  $compte_rendu->source = "<div id=\"body\">$compte_rendu->source</div>";
-  $compte_rendu->source = $style . $header->source . $footer->source . $compte_rendu->source;
+  $compte_rendu->_source = "<div id=\"body\">$compte_rendu->_source</div>";
+  $compte_rendu->_source = $style . $header->_source . $footer->_source . $compte_rendu->_source;
 }
 
 // Initialisation de FCKEditor
@@ -68,5 +68,5 @@ $templateManager->initHTMLArea();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("source", $compte_rendu->source);
+$smarty->assign("_source", $compte_rendu->_source);
 $smarty->display("print_cr.tpl");

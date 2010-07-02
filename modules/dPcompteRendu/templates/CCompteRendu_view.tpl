@@ -74,7 +74,7 @@ Main.add(function(){ displaythumb();})*/
         <tr>
           <td>
             <strong>{{tr}}CCompteRendu-count-words{{/tr}} :</strong>
-              {{$document->source|count_words}} {{tr}}CCompteRendu-words{{/tr}}
+              {{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}
 	        </td>
         </tr>
 

@@ -19,7 +19,7 @@ Main.add(initFCKEditor);
 // Readonly mode
 {{if $templateManager->printMode}}
 function readonlyFCKEditor() {
-	oFCKinstance = FCKeditorAPI.GetInstance('source');
+	oFCKinstance = FCKeditorAPI.GetInstance('_source');
 	if (document.all) {
 		oFCKinstance.EditorDocument.body.disabled = true;
 	}
@@ -36,7 +36,7 @@ setTimeout(readonlyFCKEditor, 2000);
 function FCKeditor_OnComplete(editorInstance) {
   editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
   
-  var fck_iframe = document.getElementById('source___Frame');
+  var fck_iframe = document.getElementById('_source___Frame');
   var fck_editing_area = fck_iframe.contentDocument.getElementById('xEditingArea');
   fck_editing_area.style.height = '100.1%';
   setTimeout(function() {fck_editing_area.style.height = '100%'}, 100); 
