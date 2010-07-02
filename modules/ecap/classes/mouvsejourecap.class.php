@@ -450,19 +450,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $log->loadMatchingObject();
 
     // Motifs d'hospitalisations
-    if ("0" != $CMOT = $dheECap->consume("CMOT")) {
-      $query = "SELECT * FROM $this->base.ECMOPF 
-        WHERE MOCMOT = ?";
-          
-      $values = array (
-        $CMOT
-      );
-      
-      $motECap = new CRecordSante400();
-      $motECap->loadOne($query, $values);
-      $LIMO = $motECap->consume("MOLIMO");
-      $this->sejour->rques = "Motif: $LIMO";
-    }
+    $this->sejour->libelle = $dheECap->consume("LIMO");
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("DTEN", "HREN");
