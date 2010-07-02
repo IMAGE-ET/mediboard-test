@@ -28,18 +28,26 @@ if ($patient->_id) {
   $patient->loadIdVitale();
 }
 
-$user_in_list_prat = 0;
-if($can->admin) {
+$vip = 0;
+if($patient->vip && !$can->admin) {
 	$user_in_list_prat = 0;
-} elseif($patient->vip) {
-	foreach($patient->_ref_praticiens as $_prat) {
+  $user_in_logs      = 0;
+  foreach($patient->_ref_praticiens as $_prat) {
 		if($AppUI->user_id == $_prat->user_id) {
-			$user_in_list_prat = 1;
-		}
-	}
+      $user_in_list_prat = 1;
+      mbTrace($prat->_view, "prat trouvé");
+    }
+  }
+  $patient->loadLogs();
+  foreach($patient->_ref_logs as $_log) {
+    if($AppUI->user_id == $_log->user_id) {
+      $user_in_logs = 1;
+      mbTrace($_log->_view, "log trouvé");
+    }
+  }
+  $vip = !$user_in_list_prat && !$user_in_logs;
 }
 
-$vip = $patient->vip && !$user_in_list_prat;
 if($vip) {
 	CValue::setSession("patient_id", 0);
 }
