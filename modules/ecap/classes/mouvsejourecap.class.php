@@ -454,8 +454,11 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("DTEN", "HREN");
+		mbTrace($entree, "Entrée");
     $duree = max(1, $dheECap->consume("DMSJ"));
+    mbTrace($duree, "Durée");
     $sortie = mbDateTime("+$duree days", $entree);
+    mbTrace($sortie, "Sortie");
     $this->sejour->entree_prevue = $entree;
     $this->sejour->sortie_prevue = $sortie;
 

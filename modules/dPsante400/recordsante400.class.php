@@ -208,7 +208,7 @@ class CRecordSante400 {
     }    
     
     $h = $array[1] % 24;
-    $m = $array[2];
+    $m = $array[2] % 60;
     return "$h:$m:00";
   }
 
