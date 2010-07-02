@@ -5,13 +5,13 @@
 {{mb_include_script module="dPpatients" script="patient"}}
 
 {{if $app->user_prefs.VitaleVision}}
-  {{include file="../../dPpatients/templates/inc_vitalevision.tpl"}}
-
+  {{mb_include template=inc_vitalevision}}
+  
 	<script type="text/javascript">
 		var lireVitale = VitaleVision.read;
 	</script>
 {{else}}
-  {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+  {{mb_include template=inc_intermax}}
 	
 	<script type="text/javascript">
 		Intermax.ResultHandler["Consulter Vitale"] =
@@ -52,7 +52,8 @@ function confirmCreation(oForm){
   if (!checkForm(oForm)) {
     return false;
   }
-  
+
+  SiblingsChecker.submit = true;
   SiblingsChecker.request(oForm);
   return false;
 }
@@ -88,7 +89,9 @@ Main.add(function () {
 </form>
 
 {{if $patient->_id}}
-<a class="button new" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a>
+<a class="button new" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">
+  {{tr}}CPatient-title-create{{/tr}}
+</a>
 {{/if}}
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
@@ -190,13 +193,23 @@ Main.add(function () {
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
         
-        <div id="identite"       style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
-        <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
-        <div id="assure"         style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
-        <div id="beneficiaire"   style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
+        <div id="identite" style="display: none;">
+          {{mb_include template=inc_acc/inc_acc_identite}}
+        </div>
+        <div id="correspondance" style="display: none;">
+          {{mb_include template=inc_acc/inc_acc_corresp}}
+        </div>
+        <div id="assure" style="display: none;">
+          {{mb_include template=inc_acc/inc_acc_assure}}
+        </div>
+        <div id="beneficiaire" style="display: none;">
+          {{mb_include template=inc_acc/inc_acc_beneficiaire}}   
+        </div>
       </form>
       
-      <div id="medecins" style="display: none;">{{include file="inc_acc/inc_acc_medecins.tpl"}}</div>
+      <div id="medecins" style="display: none;">
+        {{mb_include template=inc_acc/inc_acc_medecins}}
+      </div>
     </td>
   </tr>
   
@@ -239,7 +252,7 @@ Main.add(function () {
         {{/if}} 
 
       {{else}}
-        <button tabindex="400" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
+        <button tabindex="400" id="create-patient" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Create{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}

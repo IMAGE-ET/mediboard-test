@@ -42,7 +42,6 @@ $patientMatch->prenom_4   = $prenom_4;
 $patientMatch->naissance  = $naissance;
 
 $textMatching = $textSiblings = '';
-
 if (CAppUI::conf('dPpatients CPatient identitovigilence') == "doublons" ) {
   if($patientMatch->loadMatchingPatient(true) > 0) {
     $textMatching = "Doublons détectés.";
@@ -64,7 +63,7 @@ function patientGetSiblings($patientMatch) {
   if(count($siblings) != 0) {
     $textSiblings = "Risque de doublons :";
     foreach($siblings as $key => $value) {
-      $textSiblings .= "\n\t $value->nom $value->prenom ";
+      $textSiblings .= "\n\t - $value->nom $value->prenom ";
       if ($value->nom_jeune_fille)
         $textSiblings .= "($value->nom_jeune_fille)";
       
@@ -72,7 +71,6 @@ function patientGetSiblings($patientMatch) {
       "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
       "- $value->cp $value->ville";
     }
-    $textSiblings .= "\nVoulez-vous tout de même sauvegarder ?";
   }
   
   return $textSiblings;
