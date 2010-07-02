@@ -1,7 +1,18 @@
 <script type="text/javascript">
 function submitFormAides(oForm){
+  oForm.elements.function_id.type = "hidden";
+  oForm.elements.group_id.type = "hidden";
+  if(oForm.function_id.checked == true) {
+    $V(oForm.elements.function_id, {{$user->_ref_function->function_id|@json}});
+    $V(oForm.elements.group_id, '');
+    $V(oForm.elements.user_id, '');  
+  } else if(oForm.group_id.checked == true){
+    $V(oForm.elements.group_id, {{$group->_id|@json}});
+    $V(oForm.elements.user_id, '');
+    $V(oForm.elements.function_id, '');
+   }
   if(checkForm(oForm)){
-    onSubmitFormAjax(oForm);
+    onSubmitFormAjax(oForm, {check: function(){return true;}});
   }
   return false;
 }
@@ -9,21 +20,45 @@ function submitFormAides(oForm){
 Main.add(function () {
   Control.Tabs.create('tab-modules', false);
 });
-function editAide(aide_id, classname, field) {
+function editAide(aide_id, classname, field, user_id) {
   var url = new Url("dPcompteRendu","edit_aide");
   url.addParam("dialog", 1);
   url.addParam("aide_id", aide_id);
   url.addParam("class", classname);
   url.addParam("field", field);
+  url.addParam("user_id", user_id);
   url.redirect();
 }
 
 function editAideCallback(id) {
-  editAide(id, {{$aide->class|@json}}, {{$aide->field|@json}});
+  editAide(id, {{$aide->class|@json}}, {{$aide->field|@json}}, {{$user->_id|@json}});
+}
+
+function changeUser(user_id) {
+
+  var oFormc = getForm("change_user");
+  var oForm = getForm("editAides");
+  if(oForm.elements.aide_id.value == '') {
+    oFormc.text.value = unescape(encodeURIComponent(oForm.text.value));
+  }
+  oFormc.user_id.value = user_id;
+  oFormc.action+="&user_id="+user_id+"&class="+{{$aide->class|@json}}+"&field="+{{$aide->field|@json}};
+  oFormc.submit();
 }
 
 </script>
-
+{{mb_label object=$aide field="user_id"}}
+<form name="change_user" action="?m=dPcompteRendu&a=edit_aide&dialog=1" method="post">
+  <input type="hidden" name="text" value="" />
+  <select name="user_id" class="{{$aide->_props.user_id}}" onchange="changeUser(this.value);">
+    <option value="">&mdash; {{tr}}CAideSaisie.select-user{{/tr}} &mdash;</option>
+    {{foreach from=$listPrat item=curr_prat}}
+      <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $user->_id}} selected="selected" {{/if}}>
+        {{$curr_prat}}
+      </option>
+    {{/foreach}}
+  </select>
+</form>
 <ul id="tab-modules" class="control_tabs">
   <li>
     <a href="#edit">
@@ -41,8 +76,9 @@ function editAideCallback(id) {
 <hr class="control_tabs" />
 
 <div id="edit">
-  <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return submitFormAides(this)">
+  <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return submitFormAides(this);">
   <input type="hidden" name="dosql" value="do_aide_aed" />
+  <input type="hidden" name="user_id" value="{{$user->_id}}"/>
   <input type="hidden" name="m" value="dPcompteRendu" />
   <input type="hidden" name="aide_id" value="{{$aide_id}}" />
   <input type="hidden" name="callback" value="editAideCallback" />
@@ -53,49 +89,18 @@ function editAideCallback(id) {
   <table class="form">
     <tr>
       <td colspan="2">
-        <button class="new" type="button" onclick="editAide('','{{$aide->class}}','{{$aide->field}}')">Création d'une nouvelle aide</button>
-      </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$aide field="user_id"}}</th>
-      <td>
-        <select name="user_id" class="{{$aide->_props.user_id}}">
-          <option value="">&mdash; {{tr}}CAideSaisie.select-user{{/tr}} &mdash;</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($aide_id || $app->user_prefs.choicepratcab == "prat") && $curr_prat->user_id == $aide->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat}}
-            </option>
-          {{/foreach}}
-        </select>
+        <button class="new" type="button" onclick="editAide('','{{$aide->class}}','{{$aide->field}}', '{{$user->_id}}')">Création d'une nouvelle aide</button>
       </td>
     </tr>
     
     <tr>
-      <th>{{mb_label object=$aide field="function_id"}}</th>
+      <th>{{tr}}CAideSaisie-choose-func-etab{{/tr}}</th>
       <td>
-        <select name="function_id" class="{{$aide->_props.function_id}}">
-          <option value="">&mdash; {{tr}}CAideSaisie.select-function{{/tr}} &mdash;</option>
-          {{foreach from=$listFunc item=curr_func}}
-            <option class="mediuser" style="border-color: #{{$curr_func->color}};" 
-                    value="{{$curr_func->_id}}" {{if ($aide_id || $app->user_prefs.choicepratcab == "cab") && $curr_func->_id == $aide->function_id}}selected="selected"{{/if}}>
-              {{$curr_func}}
-            </option>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
-  
-    <tr>
-      <th>{{mb_label object=$aide field="group_id"}}</th>
-      <td>
-        <select name="group_id" class="{{$aide->_props.group_id}}">
-          <option value="">&mdash; {{tr}}CAideSaisie.select-etab{{/tr}} &mdash;</option>
-          {{foreach from=$listEtab item=curr_etab}}
-            <option value="{{$curr_etab->_id}}" {{if ($aide_id || $app->user_prefs.choicepratcab == "group") && $curr_etab->_id == $aide->group_id}}selected="selected"{{/if}}>
-              {{$curr_etab}}
-            </option>
-          {{/foreach}}
-        </select>
+        {{mb_label object=$aide field="function_id"}} ({{$user->_ref_function}})
+        <input type="checkbox" name="function_id" {{if $aide->function_id}}checked="checked"{{/if}}></input>
+
+        {{mb_label object=$aide field="group_id"}} ({{$group}})
+        <input type="checkbox" name="group_id" {{if $aide->group_id}}checked="checked"{{/if}}></input>
       </td>
     </tr>
   
@@ -151,7 +156,7 @@ function editAideCallback(id) {
       <td class="button" colspan="2">
         <button class="submit" type="submit">{{if $aide_id}}{{tr}}Save{{/tr}}{{else}}{{tr}}Create{{/tr}}{{/if}}</button>
         {{if $aide_id}}
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide à la saisie',objName:'{{$aide->_view|smarty:nodefaults|JSAttribute}}', callback: function(){ onSubmitFormAjax(getForm('editAides')); editAide('','{{$aide->class}}','{{$aide->field}}'); }})">{{tr}}Delete{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'aide à la saisie',objName:'{{$aide->_view|smarty:nodefaults|JSAttribute}}', callback: function(){ getForm('editAides').onsubmit(); /*editAide('','{{$aide->class}}','{{$aide->field}}', '{{$user->_id}}'); */}})">{{tr}}Delete{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -182,7 +187,7 @@ function editAideCallback(id) {
           {{/if}}
         </td>
         <td class="text">
-          <a href="#1" onclick="editAide('{{$_aide->_id}}', '{{$_aide->class}}', '{{$_aide->field}}');">
+          <a href="#1" onclick="editAide('{{$_aide->_id}}', '{{$_aide->class}}', '{{$_aide->field}}', '{{$user->_id}}');">
             <span>{{mb_value object=$_aide field="name"}}</span>
           </a>
         </td>

@@ -14,12 +14,18 @@ var AideSaisie = {
         userId: User.id,
         userView: User.view,
         contextUserId: null,
+        contextUserView: null,
         validate: null,//element.form.onsubmit.bind(element.form),
         validateOnBlur: true,
         resetSearchField: true,
-        resetDependFields: true
+        resetDependFields: true,
+        defaultUserId: null
       }, options);
-      
+      this.init();
+    },
+    init: function(){
+      this.options.defaultUserId = this.options.contextUserId;
+      this.options.defaultUserView = this.options.contextUserView;
       this.searchField = $(this.options.searchField || this.element);
       this.isContextOwner = this.options.userId == this.options.contextUserId;
       this.list = this.createListContainer();
@@ -27,7 +33,7 @@ var AideSaisie = {
       var url = new Url("dPcompteRendu", "httpreq_do_aide_autocomplete");
       url.addParam("property", this.element.name);
       url.addParam("object_class", this.options.objectClass);
-      url.addParam("user_id", this.options.userId);
+      url.addParam("user_id", this.options.defaultUserId);
       
       // If it is a textarea
       if (/^textarea$/i.test(this.searchField.tagName)) {
@@ -98,7 +104,7 @@ var AideSaisie = {
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
-          buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.userView}),
+          buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.defaultUserView}),
           buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png"})),
           buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
@@ -184,7 +190,7 @@ var AideSaisie = {
         }
         
         url.addParam('object_class', options.objectClass);
-        url.addParam('user_id', options.userId);
+        url.addParam('user_id', options.defaultUserId);
         url.addParam('property', this.element.name);
         url.setFragment(fragment);
         url.popup(900, 600, "Grille d'aides à la saisie");
@@ -196,11 +202,41 @@ var AideSaisie = {
       
       // Toolbar buttons actions
       if (!this.isContextOwner) {
-        buttons.owner.setOpacity(0.5);
-        buttons.owner.src = "images/icons/user.png";
+        buttons.owner.observe('click', function (e) {
+          if(this.options.defaultUserId == this.options.userId) {
+            this.options.defaultUserId = this.options.contextUserId;
+            this.options.defaultUserView = this.options.contextUserView;
+            buttons.owner.setOpacity(1.0);
+            buttons.owner.src = "images/icons/user-glow.png";
+            buttons.owner.title = this.options.contextUserView;
+          } else {
+            this.options.defaultUserId = this.options.userId;
+            this.options.defaultUserView = this.options.userView;
+            buttons.owner.src = "images/icons/user.png";
+            buttons.owner.setOpacity(0.5);
+            buttons.owner.title = this.options.userView;
+          }
+          var url = new Url("dPcompteRendu", "httpreq_do_aide_autocomplete");
+          url.addParam("property", this.element.name);
+          url.addParam("object_class", this.options.objectClass);
+          url.addParam("user_id", this.options.defaultUserId);
+          
+          // If it is a textarea
+          if (/^textarea$/i.test(this.searchField.tagName)) {
+            this.buildAdvancedUI(url);
+          }
+          else {
+            url.autoComplete(this.searchField, this.list, {
+              minChars: 2,
+              updateElement: this.update.bind(this),
+              paramName: "_search"
+            });
+          }
+        }.bind(this));
       }
       
       var activate = function(){
+        this.url = this.url.replace(/(user_id=)[0-9]*/, "$1"+$A(arguments)[0].options.defaultUserId);
         this.changed = false;
         this.hasFocus = true;
         // We save the default params, change it so that _search 
@@ -210,8 +246,8 @@ var AideSaisie = {
         this.getUpdatedChoices();
         this.options.defaultParams = oldDefaultParams;
       }.bind(autocomplete);
-
-      buttons.down.observe('click', activate);
+      
+      buttons.down.observe('click', activate.curry(this));
       //buttons.grid.observe('mousedown', gridMode);
       buttons.valid.observe('click', validate);
       buttons.create.observe('click', function(e){
@@ -221,14 +257,15 @@ var AideSaisie = {
           null, 
           $V(this.options.dependField1), 
           $V(this.options.dependField2), 
-          this.text
+          this.text,
+          this.options.defaultUserId
         );
       }.bindAsEventListener(this));
 
       buttons.timestamp.observe('click', function(){
     	var timestamp = DateFormat.format(new Date(), this.options.timestamp);
-    	var parts = User.view.split(" ");
-    	
+    	var parts = this.options.defaultUserView.split(" ");
+
     	timestamp = timestamp.replace(/%p/g, parts[0]);
     	timestamp = timestamp.replace(/%n/g, parts[1]);
     	timestamp = timestamp.replace(/%i/g, parts[0].charAt(0) + ". " + parts[1].charAt(0) + ". ");
@@ -262,8 +299,10 @@ var AideSaisie = {
     }
   }),
   
-  create: function (objectClass, field, name, dependValue1, dependValue2, text) {
+  create: function (objectClass, field, name, dependValue1, dependValue2, text, userId) {
     var url = new Url("dPcompteRendu", "edit_aide");
+    console.debug(this);
+    url.addParam("user_id"     , userId);
     url.addParam("class"       , objectClass);
     url.addParam("field"       , name || field.name);
     url.addParam("text"        , text || field.value);

@@ -13,7 +13,7 @@ $can->needsRead();
 $aide_id      = CValue::get("aide_id", CValue::post("aide_id", ''));
 $class        = CValue::get("class");
 $field        = CValue::get("field");
-$text         = utf8_decode(CValue::get("text"));
+$text         = utf8_decode(CValue::get("text", CValue::post("text", "")));
 $depend_value_1 = CValue::get("depend_value_1");
 $depend_value_2 = CValue::get("depend_value_2");
 
@@ -45,7 +45,7 @@ foreach ($helped as $i => $depend_field) {
 }
 
 // Liste des aides
-$user_id = CAppUI::$user->_id;
+$user_id = CValue::get("user_id");
 $user = new CMediusers();
 $user->load($user_id);
 $user->loadRefFunction();
