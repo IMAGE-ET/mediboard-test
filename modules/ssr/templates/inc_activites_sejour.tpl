@@ -77,8 +77,10 @@ selectTechnicien = function(kine_id, buttonSelected) {
   $V(oFormEvenementSSR.therapeute_id, kine_id);	
 	
   $$("button.ressource").invoke("removeClassName", "selected");
-  buttonSelected.addClassName("selected");
-
+  if(buttonSelected){
+	  buttonSelected.addClassName("selected");
+  }
+  	  
   PlanningTechnicien.show(kine_id, null, '{{$bilan->sejour_id}}');
 	if($V(oFormEvenementSSR.equipement_id)){
 	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
@@ -382,23 +384,39 @@ Main.add(function(){
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
 	            {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
 	              {{assign var=element value=$_line->_ref_element_prescription}}
-	              {{if $smarty.foreach.foreach_category.first}}
+	              
+								{{if $smarty.foreach.foreach_category.first}}
 								  {{assign var=category value=$element->_ref_category_prescription}}
                   {{assign var=category_id value=$category->_id}}
-								  <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
-                  {{if array_key_exists($category_id, $executants)}}
-                    {{foreach from=$executants.$category_id item=_user_executant}}
-										  <button title="{{$_user_executant->_view}}" id="technicien-{{$category_id}}-{{$_user_executant->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$_user_executant->_id}}', this)">
-                        {{$_user_executant->_user_last_name}}
-											</button>
-                    {{/foreach}}
-                  {{else}}
-									<div class="small-warning">
-										Aucun exécutant n'est disponible pour cette catégorie
+								  
+								   <div class="techniciens" id="techniciens-{{$category->_guid}}" style="display: none;">
+									   {{if array_key_exists($category_id, $executants)}}
+										   {{assign var=list_executants value=$executants.$category_id}}
+	                     {{if array_key_exists($current_user_id, $list_executants)}}
+											 
+											 {{assign var=current_user value=$list_executants.$current_user_id}}
+											 <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
+	                       {{$current_user->_user_last_name}}
+	                     </button>		 
+										 {{/if}}
+											 
+										 <select name="_technicien_id" onchange="selectTechnicien(this.value)">
+										 	  <option value="">&mdash; Rééducateur</option>
+	                      {{foreach from=$executants.$category_id item=_user_executant}}
+	                        <option value="{{$_user_executant->_id}}">
+	                          {{$_user_executant->_user_last_name}}
+	                        </option>
+	                      {{/foreach}}
+	                    </select>
+	
+										{{else}}
+											<div class="small-warning">
+		                    Aucun exécutant n'est disponible pour cette catégorie
+		                  </div>
+		                {{/if}}
 									</div>
-									{{/if}}
-									</div>
-                {{/if}}
+								{{/if}}
+								
 							{{/foreach}}
 						{{/foreach}}
           {{/foreach}}		

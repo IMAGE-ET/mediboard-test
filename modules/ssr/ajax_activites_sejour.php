@@ -102,7 +102,7 @@ foreach($categories as $_category){
 			 if($_user->_id == $current_user_id && !$selected_cat){
 			 	 $selected_cat = $_category;
 			 }
-			 $executants[$_category->_id][] = $_user;
+			 $executants[$_category->_id][$_user->_id] = $_user;
 		}
 	}
 }

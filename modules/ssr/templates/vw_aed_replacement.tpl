@@ -61,7 +61,7 @@ Main.add(function(){
 	  	<div id="toto">
 	  	  <ul id="tabs-replacement" class="control_tabs">
 				  <li>
-				    <a href="#kines">Remplacement des responsables</a>
+				    <a href="#kines">Remplacement des référents</a>
 				  </li>
 				  <li>
 				    <a href="#reeducateurs">Transfert des rééducateurs</a>

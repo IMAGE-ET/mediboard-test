@@ -58,6 +58,9 @@ foreach($evenements as $_evenement){
   
   $patient =  $_evenement->_ref_sejour->_ref_patient;
   $title = $patient->nom;
+	if($large){
+    $title .= substr($patient->prenom,0,2).".";		
+	}
 	if(!$sejour_id && $_evenement->remarque){
 		$title .= " - ".$_evenement->remarque;
 	}
