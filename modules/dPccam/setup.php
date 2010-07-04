@@ -45,7 +45,7 @@ class CSetupdPccam extends CSetup {
     // Data source query
     $query = "SELECT *
       FROM `actes`
-      WHERE CODE = 'DBLF001'";
+      WHERE CODE = 'GEQP002'";
     $this->addDatasource("ccamV2", $query);
   }
 }
