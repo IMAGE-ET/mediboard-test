@@ -161,7 +161,7 @@ class CCompteRendu extends CDocumentItem {
 
   function updateDBFields() {
     parent::updateDBFields();
-    $this->completeField("etat_envoi");
+    $this->completeField("etat_envoi", "private");
     
     if(/*$this->fieldModified("source") &&*/ ($this->etat_envoi == "oui"))
       $this->etat_envoi = "obsolete";
