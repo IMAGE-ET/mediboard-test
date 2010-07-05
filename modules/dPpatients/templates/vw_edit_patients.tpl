@@ -217,7 +217,7 @@ Main.add(function () {
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
       {{if $patient->_id}}
-        <button tabindex="400" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
+        <button tabindex="400" id="submit-patient" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Save{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}
@@ -252,7 +252,7 @@ Main.add(function () {
         {{/if}} 
 
       {{else}}
-        <button tabindex="400" id="create-patient" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
+        <button tabindex="400" id="submit-patient" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">
           {{tr}}Create{{/tr}}
           {{if $patient->_bind_vitale}}
           &amp; {{tr}}BindVitale{{/tr}}

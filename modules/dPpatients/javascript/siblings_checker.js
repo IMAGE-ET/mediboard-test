@@ -40,7 +40,7 @@ SiblingsChecker = {
   showMessage: function(){
     var db_warning = $('doublon-warning');
     var db_error   = $('doublon-error');
-    var create_pat = $('create-patient');
+    var create_pat = $('submit-patient');
     
     function nl2br(str){
       return str.replace(/\n/g, "<br />").replace(/\t/g, "&nbsp;&nbsp;&nbsp;");
