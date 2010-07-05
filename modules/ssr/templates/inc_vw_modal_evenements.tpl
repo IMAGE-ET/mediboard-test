@@ -23,8 +23,9 @@
 		{{/foreach}}
 	{{/foreach}}
 	<tr>
-		<td colspan="3" onclick="submitValidation(oFormSelectedEvents); modalWindow.close();">
-			<button type="button" class="submit">{{tr}}Validate{{/tr}}</button>
+		<td colspan="3" class="button">
+			<button type="button" class="submit" onclick="submitValidation(oFormSelectedEvents); modalWindow.close();">{{tr}}Validate{{/tr}}</button>
+			<button type="button" class="cancel" onclick="modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
 		</td>
 	</tr>
 </table>
