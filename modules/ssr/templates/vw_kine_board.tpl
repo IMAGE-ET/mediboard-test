@@ -47,6 +47,7 @@ onCompleteShowWeek = function(){
 }
 
 updateSelectedEvents = function(){
+$V(oFormSelectedEvents.token_elts, "");
   $$(".event.selected").each(function(e){
     if(e.className.match(/CEvenementSSR-([0-9]+)/)){
      var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
