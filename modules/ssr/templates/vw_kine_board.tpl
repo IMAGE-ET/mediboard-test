@@ -19,6 +19,11 @@ onSelect = function(oDiv, css_class){
 }
 
 submitValidation = function(oForm){
+  if(!$V(oForm.token_elts)){
+    $V(oForm.del, '0');
+    $V(oForm.realise, '0');
+	  return;
+	}
   return onSubmitFormAjax(oForm, { onComplete: function(){ 
 	  PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true);
 		$V(oForm.del, '0');
@@ -49,7 +54,7 @@ updateSelectedEvents = function(){
     }
   });
   // Rafraichissement du contenu de la modale	
-	if($V(oFormSelectedEvents.realise) == 1){
+	if($V(oFormSelectedEvents.realise) == 1 && $V(oFormSelectedEvents.token_elts)){
     updateModalEvenements();
 	}
 }
