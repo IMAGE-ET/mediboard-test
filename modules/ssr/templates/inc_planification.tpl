@@ -19,37 +19,41 @@ onCompleteShowWeek = function(){
   Planification.refreshActivites();
 }
 
-Main.add(Planification.showWeek);
+Main.add(function(){
+  Planification.showWeek();
+  var planning = $("planning");
+  var vp = document.viewport.getDimensions();
+  var top = planning.cumulativeOffset().top;
+  planning.setStyle({
+    height: (vp.height-top)+"px"
+  });
+});
 
 printPlanningSejour = function(){
   var url = new Url("ssr", "print_planning_sejour");
   url.addParam("sejour_id", "{{$sejour->_id}}");
   url.popup("700","700","Planning du patient");
 }
-
-
 </script>
 
-<table class="main">
+<div id="week-changer"></div>
+
+<table class="main" id="planning" style="table-layout: fixed;">
   <col style="width: 50%;" />
   
-  <tr>
-    <td id="week-changer" colspan="2"></td>
-  </tr>
-
-	<tr>
+	<tr style="height: 50%;">
 		<td>
-			<div style="position: relative;">
+			<div style="position: relative; height: 100%;">
 			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="print notext" onclick="printPlanningSejour();">{{tr}}Print{{/tr}}</button>
-				<div id="planning-sejour"></div>
+				<div id="planning-sejour" style="height: 100%;"></div>
 			</div>
 		</td>
     <td id="activites-sejour"></td>
 	</tr>
 	
-  <tr>
+  <tr style="height: 50%;">
   	<td>
-			<div style="position: relative;">
+			<div style="position: relative; height: 100%;">
 			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
 				<div id="planning-technicien"></div>
 		  </div>

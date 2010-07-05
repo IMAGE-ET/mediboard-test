@@ -85,8 +85,6 @@ WeekPlanning = Class.create({
     
     this.updateEventsDimensions();
     this.scroll(scroll_top);
-    
-    this.container.addClassName("drawn");
   },
   scroll: function(scroll_top) {
     var top = this.container.down(".hour-"+this.hour_min).offsetTop;

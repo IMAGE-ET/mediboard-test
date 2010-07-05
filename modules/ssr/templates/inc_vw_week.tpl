@@ -23,12 +23,16 @@ Main.add(function() {
   
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
   
+  planning.setPlanningHeight(planning.container.up().getHeight());
+  planning.scroll();
+  planning.container.addClassName("drawn");
+  
 	window["planning-{{$planning->guid}}"] = planning;
 });
 
 </script>
 
-<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" style="height: 300px;" id="{{$planning->guid}}">
+<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" id="{{$planning->guid}}">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />

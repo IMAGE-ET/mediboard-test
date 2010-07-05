@@ -451,6 +451,14 @@ table#weeklyPlanning th.today {
   background-color: #ffd;
 }
 
+.planning {
+  visibility: hidden;
+}
+
+.planning.drawn {
+  visibility: visible;
+}
+
 .planning .selector:hover {
   cursor: pointer;
   text-decoration: underline;
@@ -479,11 +487,6 @@ table#weeklyPlanning th.today {
   font-size: 10px;
   overflow: hidden;
   cursor: help;
-  visibility: hidden;
-}
-
-.planning.drawn .event {
-  visibility: visible;
 }
 
 .planning .event .footer {
