@@ -613,6 +613,7 @@ ul.control_tabs_vertical {
 
 ul.control_tabs li, 
 ul.control_tabs_vertical li {
+  display: -moz-inline-box;
   display: inline-block;
 	float: none;
   margin-left: 2px;

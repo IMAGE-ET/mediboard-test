@@ -12,7 +12,7 @@ mbTrace("permettre de mettre un numero de facture à un bon de commande");
 
 CCanDo::checkRead();
 
-$date = CValue::get("date", mbDate());
+$date = CValue::getOrSession("date", mbDate());
 $date_min = mbDate("-1 DAY", $date);
 $date_max = mbDate("+1 DAY", $date);
 

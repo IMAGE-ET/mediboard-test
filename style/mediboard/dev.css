@@ -77,6 +77,7 @@ span.smarty-include:hover {
   color: #fff;
   cursor: pointer;
   float: left;
+	display: -moz-inline-box;
   display: inline-block;
   padding: 0 3px;
 }

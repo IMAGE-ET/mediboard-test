@@ -67,6 +67,11 @@ if(CValue::post("_create_order")) {
     $order = reset($orders);
   }
   
+  if ($order->_id && !$order->bill_number) {
+    $order->bill_number = CValue::post("_bill_number");
+    $order->store();
+  }
+  
   $_POST["order_id"] = $order->_id;
 }
 

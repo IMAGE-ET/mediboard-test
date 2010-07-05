@@ -911,6 +911,7 @@ table.active {
 }
 
 .pagination .page {
+  display: -moz-inline-box;
   display: inline-block; 
   border: 1px solid #999; 
   padding: 1px 3px;

@@ -102,7 +102,12 @@
               <tr>
                 <td style="text-align: right;">Num. facture :</td>
                 <td>
-                  <input type="text" name="_bill_number" value="" />
+                  {{assign var=_first_order value=$_line_dmi->_orders|@reset}}
+                  {{if $_first_order && $_first_order->bill_number}}
+                    {{$_first_order->bill_number}}
+                  {{else}}
+                    <input type="text" name="_bill_number" value="" />
+                  {{/if}}
                 </td>
               </tr>
             </table>

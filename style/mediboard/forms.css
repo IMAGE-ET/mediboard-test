@@ -6,6 +6,7 @@
   padding: 0;
   position: relative;
   display: inline; /* IE */
+  display: -moz-inline-box;
   display: inline-block;
   vertical-align: middle;
   height: auto;
@@ -538,7 +539,8 @@ div.dropdown {
   margin:0;
   padding:0;
   position:relative;
-  display:inline-block;
+  display: -moz-inline-box;
+  display: inline-block;
   padding-right: 17px;
 }
 
@@ -634,6 +636,7 @@ textarea#htmlarea {
   border: none !important;
   border-collapse: collapse;
   border-spacing: 0;
+  display: -moz-inline-box;
   display: inline-block;
 }
 
