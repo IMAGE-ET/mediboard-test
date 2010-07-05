@@ -395,7 +395,7 @@ Main.add(function(){
 	                     {{if array_key_exists($current_user_id, $list_executants)}}
 											 
 											 {{assign var=current_user value=$list_executants.$current_user_id}}
-											 <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user->_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
+											 <button title="{{$current_user->_view}}" id="technicien-{{$category_id}}-{{$current_user_id}}" class="none ressource" type="button" onclick="selectTechnicien('{{$current_user->_id}}', this)">
 	                       {{$current_user->_user_last_name}}
 	                     </button>		 
 										 {{/if}}

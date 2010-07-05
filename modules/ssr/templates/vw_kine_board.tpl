@@ -23,12 +23,16 @@ submitValidation = function(oForm){
 	  PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true);
 		$V(oForm.del, '0');
 		$V(oForm.realise, '0');
+		$V(oForm.token_elts, '');
 	} });
 }
 
 Main.add(function(){
   Planification.showWeek(null, true);
   PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true, true);
+
+  oFormSelectedEvents = getForm("editSelectedEvent");
+  tab_selected = new TokenField(oFormSelectedEvents.token_elts); 
 });
 
 onCompleteShowWeek = function(){
@@ -37,21 +41,43 @@ onCompleteShowWeek = function(){
   $('planning-sejour').update('');
 }
 
-updateSelectedEvents = function(input_elements){
-  $V(input_elements, '');
-  var tab_selected = new TokenField(input_elements); 
+updateSelectedEvents = function(){
   $$(".event.selected").each(function(e){
     if(e.className.match(/CEvenementSSR-([0-9]+)/)){
      var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
      tab_selected.add(evt_id);
     }
   });
+  // Rafraichissement du contenu de la modale	
+	if($V(oFormSelectedEvents.realise) == 1){
+    updateModalEvenements();
+	}
 }
+
+updateModalEvenements = function(token_field_evts){
+  var oFormSelectedEvents = getForm("editSelectedEvent");
+
+  var url = new Url("ssr", "ajax_update_modal_evenements");
+	url.addParam("token_field_evts", $V(oFormSelectedEvents.token_elts));
+	url.requestUpdate("modal_evenements", { 
+	  onComplete: viewModalEvenements
+	});
+}
+
+viewModalEvenements = function(){
+  modalWindow = modal($('modal_evenements'), {
+    className: 'modal'
+  });
+}
+
 </script>
 
 {{if !$kine->code_intervenant_cdarr}}
   <div class="small-warning">{{tr}}CMediusers-code_intervenant_cdarr-none{{/tr}}</div>
 {{/if}}
+
+<!-- Affichage de la modale -->
+<div id="modal_evenements" style="display: none;"></div>
 
 <table class="main">
 	<tr>
@@ -80,8 +106,7 @@ updateSelectedEvents = function(input_elements){
 			</div>
 		</td>
 		<td>
-  		<form name="editSelectedEvent" method="post" action="?" 
-            onsubmit="updateSelectedEvents(this.token_elts); if($V(this.token_elts) != ''){ return submitValidation(this); }">
+  		<form name="editSelectedEvent" method="post" action="?">
         <input type="hidden" name="m" value="ssr" />
         <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
         <input type="hidden" name="token_elts" value="" />
@@ -96,8 +121,8 @@ updateSelectedEvents = function(input_elements){
   			</tr>
   			<tr>
   				<td colspan="2" class="button">
-  			    <button type="button" class="tick" onclick="$V(this.form.realise, '1'); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
-            <button type="button" class="cancel" onclick="this.form.onsubmit();">{{tr}}Cancel{{/tr}}</button>
+  			    <button type="button" class="tick" onclick="$V(this.form.realise, '1'); updateSelectedEvents();">{{tr}}Validate{{/tr}}</button>
+            <button type="button" class="cancel" onclick="updateSelectedEvents(); submitValidation(this.form);">{{tr}}Cancel{{/tr}}</button>
         	</td>
   			</tr>
   			<tr>
@@ -107,7 +132,7 @@ updateSelectedEvents = function(input_elements){
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
+            <button type="button" class="trash" onclick="$V(this.form.del, '1'); updateSelectedEvents(); submitValidation(this.form);">
               {{tr}}Delete{{/tr}}
             </button>
           </td>
