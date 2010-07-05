@@ -358,13 +358,13 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     // Gestion du cache
     $this->patient = $this->id400Pat->getCachedObject();
-    
+		
     if ($this->patient->_id) {
       $this->trace($this->patient->getDBFields(), "Patient depuis le cache");
       $this->markCache(self::STATUS_PATIENT);
       return;
     }
-    
+
     $pat400 = new CRecordSante400();
     $query = "SELECT * FROM $this->base.ECPAPF 
       WHERE PACIDC = ? AND PACDIV = '01' AND PACSDV = '01'
@@ -374,6 +374,7 @@ class CMouvSejourEcap extends CMouvementEcap {
       $DMED,
     );
     $pat400->query($query, $values);
+    
     if (!$pat400->data) {
       $this->setStatus(self::STATUS_PATIENT);
       $this->starStatus(self::STATUS_SEJOUR);
@@ -454,11 +455,8 @@ class CMouvSejourEcap extends CMouvementEcap {
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("DTEN", "HREN");
-		mbTrace($entree, "Entrée");
     $duree = max(1, $dheECap->consume("DMSJ"));
-    mbTrace($duree, "Durée");
     $sortie = mbDateTime("+$duree days", $entree);
-    mbTrace($sortie, "Sortie");
     $this->sejour->entree_prevue = $entree;
     $this->sejour->sortie_prevue = $sortie;
 

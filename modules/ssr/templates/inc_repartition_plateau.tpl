@@ -11,11 +11,11 @@
 <table id="{{$plateau->_guid}}" class="main" style="border-spacing: 4px; border-collapse: separate; width: auto;">
   <tr>
 	  {{foreach from=$plateau->_ref_techniciens item=_technicien}}
-      <td style="width: 180px;">
+      <td style="width: 150px;">
 			{{mb_include template=inc_repartition_technicien technicien_id=$_technicien->_id}}
 			</td>
 		{{foreachelse}}
-	    <td style="width: 180px;" class="text"><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
+	    <td style="width: 150px;" class="text"><em>{{tr}}CPlateauTechnique-back-techniciens.empty{{/tr}}</em></td>
 	  {{/foreach}}
   </tr>	
 </table>

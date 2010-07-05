@@ -70,17 +70,19 @@
       </td>
     </tr>
 
+    {{if $dPconfig.dPpersonnel.CPlageConge.show_replacer}} 
     <tr>
       <th>
         {{mb_label object=$plageconge field="replacer_id"}}
       </th>
       <td>
-	      <select name="replacer_id" class="{{$plageconge->_specs.replacer_id}}">
-	        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-	        {{mb_include module=mediusers template=inc_options_mediuser list=$replacers selected=$plageconge->replacer_id}}
-	      </select>
+        <select name="replacer_id" class="{{$plageconge->_specs.replacer_id}}">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_mediuser list=$replacers selected=$plageconge->replacer_id}}
+        </select>
       </td>
     </tr>
+    {{/if}}
 
     <tr>
       <td colspan="6" class="button">

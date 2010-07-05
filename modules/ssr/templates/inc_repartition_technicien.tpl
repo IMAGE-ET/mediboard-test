@@ -15,7 +15,7 @@
       <script type="text/javascript">
         Repartition.registerTechnicien('{{$technicien_id}}')
 			</script>
-    	{{$_technicien}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_technicien->_fwd.kine_id}}
 		</th>
 	</tr>
 	

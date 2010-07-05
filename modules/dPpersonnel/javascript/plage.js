@@ -38,3 +38,11 @@ loadUser=function(user_id, plage_id){
 editPlageCongeCallback = function(id) {
   editPlageConge(id);
 }
+
+PlageConge = {
+	showForUser: function(user_id) {
+    new Url("dPpersonnel", "ajax_plage_conge").
+      addParam("user_id", user_id).
+      popup(400, 300);
+	}
+}

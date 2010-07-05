@@ -77,7 +77,7 @@ Main.add(function () {
 		  {{/foreach}}
     </td>
 
-    <td style="width: 180px;">
+    <td style="width: 150px;">
       {{mb_include template=inc_sejours_non_affectes}}
     </td>
   </tr>
