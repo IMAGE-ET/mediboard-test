@@ -383,4 +383,12 @@ $locales['pref-defaultRPUSort-ccmu'] = 'CCMU';
 $locales['pref-defaultRPUSort-desc'] = 'Trai par défaut dans la main courante';
 $locales['pref-showMissingRPU'] = 'Afficher les RPU manquants';
 $locales['pref-showMissingRPU-desc'] = 'Afficher les séjour de type Urgence n\'ayant pas de RPU';
+$locales['extract-rpu'] = 'RPU';
+$locales['extract-rpu-desc'] = 'Extraction des données RPU';
+$locales['extract-urg'] = 'Urgences';
+$locales['extract-urg-desc'] = 'Extraction des données Urgences';
+$locales['CExtractPassages-type-court'] = 'Type';
+$locales['CExtractPassages-type-desc'] = 'Type de l\'extraction';
+$locales['CExtractPassages.type.rpu'] = 'RPU';
+$locales['CExtractPassages.type.urg'] = 'URG';
 ?>
