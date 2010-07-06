@@ -14,6 +14,7 @@ CCanDo::checkRead();
 $date = CValue::getOrSession("date", mbDate());
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
+$show = CValue::getOrSession("show", "all");
 
 // Chargement des sejours SSR pour la date selectionnée
 $group_id = CGroups::loadCurrent()->_id;
@@ -37,9 +38,14 @@ if ($order_col == "patient_id") {
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
  
 foreach ($sejours as $_sejour) {
+  $_sejour->loadRefPrescriptionSejour();
+	if ($show == "nopresc" && $_sejour->_ref_prescription_sejour->_id) {
+		unset($sejours[$_sejour->_id]);
+		continue;
+	}
+	
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
-  $_sejour->loadRefPrescriptionSejour();
   $_sejour->loadRefsNotes();
 	$_sejour->countBackRefs("evenements_ssr");
 	$_sejour->countEvenementsSSR($date);
@@ -61,6 +67,7 @@ foreach ($sejours as $_sejour) {
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("show", $show);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("order_col", $order_col);
 $smarty->display("vw_sejours_ssr.tpl");
