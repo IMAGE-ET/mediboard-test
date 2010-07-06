@@ -1425,6 +1425,19 @@ class CSejour extends CCodable {
 		return $this->_count_evenements_ssr = $evenement->countList($where);
 	}
 	
+	function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
+    if (!$this->_id) {
+      return;
+    }
+    
+    $evenement = new CEvenementSSR;
+    $where["sejour_id"] = " = '$this->_id'";
+		$where["therapeute_id"] = "= '$kine_id'";
+    $this->_count_evenements_ssr      = $evenement->countList($where);
+    $where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+		$this->_count_evenements_ssr_week = $evenement->countList($where);
+	}
+	
 	function getNbJourPlanning($date){
     $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
     $saturday = mbDate("-1 DAY", $sunday);

@@ -45,7 +45,7 @@
       {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
 		</th>
     
-    <th style="width:   1%;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
+    <th style="width:   1%;" colspan="2"><label title="Evénements planifiés pour ce patient (ce jour - pendant tout le séjour)">Evt.</label></th>
 	</tr>
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
@@ -111,17 +111,24 @@
       {{/if}}
 		</td>
 		
-    <td style="text-align: right;">
-		  {{if $_sejour->_count_evenements_ssr}} 
-      {{$_sejour->_count_evenements_ssr}}
-		  {{/if}}
-    </td>
-
-    <td style="text-align: right;">
-      {{if $_sejour->_count.evenements_ssr}} 
-      {{$_sejour->_count.evenements_ssr}}
-      {{/if}}
-    </td>
+		{{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+		{{if !$prescription->_id}} 
+	    <td colspan="2" style="text-align: center;">
+	    	<img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
+	    </td>
+		{{else}}
+	    <td style="text-align: right;">
+	      {{if $_sejour->_count_evenements_ssr}} 
+	      {{$_sejour->_count_evenements_ssr}}
+	      {{/if}}
+	    </td>
+	
+	    <td style="text-align: right;">
+	      {{if $_sejour->_count.evenements_ssr}} 
+	      {{$_sejour->_count.evenements_ssr}}
+	      {{/if}}
+	    </td>
+		{{/if}}
 
 	</tr>
 	{{foreachelse}}

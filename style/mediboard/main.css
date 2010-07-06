@@ -1291,13 +1291,8 @@ table.tbl tr td.ssr-close {
 	font-weight: bold;
 }
 
-table.tbl tr td.ssr-today {
-  text-align: center;
-  font-weight: bold;
-  background: #ccc;
-}
-
-table.tbl tr td.ssr-today {
+table.tbl tr td.ssr-today,
+table.tbl tr:hover td.ssr-today {
   text-align: center;
   font-weight: bold;
   background: #ccc;
@@ -1306,7 +1301,6 @@ table.tbl tr td.ssr-today {
 table.tbl tr td.ssr-today div {
   display: none;
 }
-
 
 div.ssr-sejour-bar {
   position: absolute; 
