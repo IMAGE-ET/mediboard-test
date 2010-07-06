@@ -18,23 +18,22 @@
 </tr>
 {{/foreach}}
 
-{{foreach from=$remplacements item=_remplacement}}
+
+{{if count($replacements)}}
 <tr>
-	<td style="text-align: center;">
-		<strong onmouseover="ObjectTooltip.createEx(this, '{{$_remplacement->_guid}}')">
-			Remplacement de '{{mb_value object=$_remplacement field=user_id}}'
-		</strong>
+  <th>{{tr}}CReplacement{{/tr}}s</th>
+</tr>
+{{/if}}
+{{foreach from=$replacements item=_replacement}}
+<tr>
+	<td>
+    {{assign var=conge value=$_replacement->_ref_conge}}
+    {{assign var=replaced  value=$conge->_ref_user}}
+		<span onmouseover="ObjectTooltip.createEx(this, '{{$conge->_guid}}')">
+			{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replaced}}
+		</span>
 	</td>
 </tr>
 
-{{foreach from=$_remplacement->_refs_sejours_remplaces item=_sejour}}
-{{mb_include template=inc_sejour_draggable remplacement=1 sejour=$_sejour}}
-{{foreachelse}}
-<tr>
-  <td >
-    <em>{{tr}}CSejour.none{{/tr}}</em>
-  </td>
-</tr>
-{{/foreach}}
-
+{{mb_include template=inc_sejour_draggable remplacement=1 sejour=$_replacement->_ref_sejour}}
 {{/foreach}}

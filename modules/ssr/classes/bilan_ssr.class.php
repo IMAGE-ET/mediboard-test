@@ -22,10 +22,16 @@ class CBilanSSR extends CMbObject {
   var $sortie = null;
 	var $brancardage = null;
 	
-  var $_activites = array();
-	
   // References
   var $_ref_technicien = null;
+
+  // Distant Fields
+  var $_kine_referent_id = null;
+  var $_kine_journee_id  = null;
+
+  // Distant references
+  var $_ref_kine_referent = null;
+  var $_ref_kine_journee  = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,6 +48,9 @@ class CBilanSSR extends CMbObject {
     $specs["entree"] = "text helped";
     $specs["sortie"] = "text helped";
 		$specs["brancardage"] = "bool default|0";
+
+    $specs["_kine_referent_id"]   = "ref class|CMediusers";
+    $specs["_kine_journee_id" ]   = "ref class|CMediusers";
     return $specs;
   }
 	
@@ -57,8 +66,43 @@ class CBilanSSR extends CMbObject {
 		return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);
 	}
 	
-	function loadRefTechnicien(){
+	function loadRefTechnicien() {
 		$this->_ref_technicien = $this->loadFwdRef("technicien_id");
+	}
+	
+	function loadRefKineReferent() {
+    $this->loadRefTechnicien();
+    $technicien =& $this->_ref_technicien;
+    $technicien->loadRefKine();
+    $this->_ref_kine_referent = $technicien->_ref_kine;
+		$this->_kine_referent_id = $this->_ref_kine_referent->_id;
+	}
+	
+	/**
+	 * Kine référent et kiné journée pour une date donné
+	 * @param date $date Date courante if null;
+	 * @return void
+	 */
+	function loadRefKineJournee($date = null) {
+    $this->loadRefKineReferent();
+    $this->_ref_kine_journee = $this->_ref_kine_referent;
+
+    // Recherche d'un remplacement
+		$sejour = $this->loadFwdRef("sejour_id", true);
+		$sejour->loadRefReplacement();
+    $replacement =& $sejour->_ref_replacement;
+		if ($replacement->_id) {
+			$replacement->loadRefConge();
+			$conge = $replacement->_ref_conge;
+			if (in_range(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
+        $replacement->loadRefReplacer();
+				$replacer =& $replacement->_ref_replacer;
+				$replacer->loadRefFunction();
+				$this->_ref_kine_journee = $replacement->_ref_replacer;
+			}
+	  }
+		
+		$this->_kine_journee_id = $this->_ref_kine_journee->_id;
 	}
 }
 

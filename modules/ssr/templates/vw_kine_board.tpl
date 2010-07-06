@@ -35,10 +35,16 @@ submitValidation = function(oForm){
 Main.add(function(){
   Planification.showWeek(null, true);
   PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true, true);
-
+  updateBoardSejours('{{$kine_id}}')
   oFormSelectedEvents = getForm("editSelectedEvent");
   tab_selected = new TokenField(oFormSelectedEvents.token_elts); 
 });
+
+updateBoardSejours = function(kine_id) {
+  new Url("ssr", "ajax_board_sejours") .
+    addParam("kine_id", kine_id) .
+		requestUpdate("board-sejours");
+}
 
 onCompleteShowWeek = function(){
   PlanningTechnicien.show(); 
@@ -102,61 +108,58 @@ viewModalEvenements = function(){
       </form>
   	</td>
   </tr>
+	
 	<tr>
-		<td style="width: 65%">
+		<td style="width: 60%" rowspan="2">
 			<div style="position: relative">
+				
+        <div style="position: absolute; top: 0px; left: 3em;">
+          <form name="editSelectedEvent" method="post" action="?">
+            <input type="hidden" name="m" value="ssr" />
+            <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
+            <input type="hidden" name="token_elts" value="" />
+            <input type="hidden" name="del" value="0" />    
+            <input type="hidden" name="realise" value="0" />
+            <button type="button" class="tick" onclick="$V(this.form.realise, '1'); updateSelectedEvents();">{{tr}}Validate{{/tr}}</button>
+            <button type="button" class="cancel notext" onclick="updateSelectedEvents(); submitValidation(this.form);">{{tr}}Cancel{{/tr}}</button>
+          </form>
+        </div>
+
 			  <div style="position: absolute; top: 0px; right: 0px;">
           <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
         </div>
+
 				<div id="planning-technicien"></div>
+
 			</div>
 		</td>
+
+    <td id="board-sejours" style="height: 320px;">
+    </td>
+	</tr>
+	
+	<tr>
 		<td>
-  		<form name="editSelectedEvent" method="post" action="?">
-        <input type="hidden" name="m" value="ssr" />
-        <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-        <input type="hidden" name="token_elts" value="" />
-        <input type="hidden" name="del" value="0" />    
-        <input type="hidden" name="realise" value="0" />
-       		
-  			<table class="form">
-  			<tr>
-  			  <th colspan="2" class="category">
-  			  	Réaliser les événements sélectionnés
-  			  </th>
-  			</tr>
-  			<tr>
-  				<td colspan="2" class="button">
-  			    <button type="button" class="tick" onclick="$V(this.form.realise, '1'); updateSelectedEvents();">{{tr}}Validate{{/tr}}</button>
-            <button type="button" class="cancel" onclick="updateSelectedEvents(); submitValidation(this.form);">{{tr}}Cancel{{/tr}}</button>
-        	</td>
-  			</tr>
-  			<tr>
-          <th class="category" colspan="2">
-            Suppression des événements sélectionnés
-          </th>
-        </tr>
-        <tr>
-          <td class="button" colspan="2">
-            <button type="button" class="trash" onclick="$V(this.form.del, '1'); updateSelectedEvents(); submitValidation(this.form);">
-              {{tr}}Delete{{/tr}}
-            </button>
-          </td>
-        </tr>
-  			</table>
-  		</form>
-				
-		  <table>
-				<tr>
-				  <td id="planning-sejour"></td>
-				</tr>
-				<tr>
-				<td><hr /></td>
-				</tr>
-				<tr>
-					<td id="planning-equipement"></td>
-				</tr>	
-			</table>
+			<script type="text/javascript">
+			Main.add(function () {
+			  Control.Tabs.create('tabs-subplannings', true);
+			});
+			</script>
+			
+			<ul id="tabs-subplannings" class="control_tabs">
+			  <li><a href="#planning-sejour">Planning Patient</a></li>
+			  <li><a href="#planning-equipement">Planning Equipement</a></li>
+			</ul>
+			
+			<hr class="control_tabs" />
+
+		  <div style="display: none;" id="planning-sejour">
+			  <div class="small-info">
+			  	Double-cliquer sur un évenement pour voir le planning du patient concerné
+				</div>
+			</div>
+      <div style="display: none;" id="planning-equipement">
+			</div>
 		</td>
 	</tr>
 </table>

@@ -163,6 +163,32 @@ class CEvenementSSR extends CMbObject {
     
     return $rhs;
 	}
+	
+  static function getNbJoursPlanning($user_id, $date){
+    $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
+    $saturday = mbDate("-1 DAY", $sunday);
+    
+    $_evt = new CEvenementSSR();
+    $where = array();
+    $where["debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
+    $where["therapeute_id"] = " = '$user_id'";
+    $count_event_sunday = $_evt->countList($where);
+    
+    $nb_days = 7;
+    
+    // Si aucun evenement le dimanche
+    if(!$count_event_sunday){
+      $nb_days = 6;
+      $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
+      $count_event_saturday= $_evt->countList($where);  
+      // Aucun evenement le samedi et aucun le dimanche
+      if(!$count_event_saturday){
+        $nb_days = 5;
+      }
+    }
+    return $nb_days;
+  }
+	
 }
 
 ?>

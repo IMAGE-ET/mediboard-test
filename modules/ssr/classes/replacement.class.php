@@ -102,9 +102,16 @@ class CReplacement extends CMbObject {
     $this->_ref_conge = $this->loadFwdRef("conge_id");
   }
 	
-  function loadRefReplacer(){
+  function loadRefReplacer() {
     $this->_ref_replacer = $this->loadFwdRef("replacer_id");
   }	
+	
+	function loadListFor($user_id, $date) {
+		$join["plageconge"] = "replacement.conge_id = plageconge.plage_id";
+		$where[] = "'$date' BETWEEN plageconge.date_debut AND plageconge.date_fin";
+    $where["replacement.replacer_id"] = "= '$user_id'";
+		return $this->loadList($where, null, null, null, $join);
+	}
 }
 
 ?>

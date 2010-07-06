@@ -419,6 +419,7 @@ $locales['CUserLog.select'] = 'Choisir un journal utilisateur';
 $locales['CUserLog.type.'] = ' ';
 $locales['CUserLog.type.create'] = 'Création';
 $locales['CUserLog.type.delete'] = 'Suppression';
+$locales['CUserLog.type.merge'] = 'Fusion';
 $locales['CUserLog.type.store'] = 'Modification';
 $locales['CreateDSN-master_pass'] = 'Mot de passe administrateur du serveur de données';
 $locales['CreateDSN-master_user'] = 'Nom administrateur du serveur de données';

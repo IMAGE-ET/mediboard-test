@@ -26,24 +26,26 @@ foreach ($sejours as $_sejour) {
 }
 
 // Remplacements
-$plage = new CPlageConge;
-$sejours_remplaces = array();
-$remplacements = $plage->loadRefsReplacementsFor($kine_id, $date);
-foreach ($remplacements as $_remplacement) {
-  $_remplacement->loadRefUser();
-	$_remplacement->_refs_sejours_remplaces = CBilanSSR::loadSejoursSSRfor($_remplacement->user_id, $date);
-	
-	// Détails des séjours remplacés
-	foreach ($_remplacement->_refs_sejours_remplaces as $_sejour) {
-	  $_sejour->checkDaysRelative($date);
-	  $_sejour->loadRefPatient();
-	}
-}
+$replacement = new CReplacement;
+$replacements = $replacement->loadListFor($kine_id, $date);
 
+$sejours_remplaces = array();
+foreach ($replacements as $_replacement) {
+  // Détail sur le congé
+  $_replacement->loadRefConge();
+  $_replacement->_ref_conge->loadRefUser();
+  $_replacement->_ref_conge->_ref_user->loadRefFunction();
+	
+  // Détails des séjours remplacés
+  $_replacement->loadRefSejour();
+	$sejour =& $_replacement->_ref_sejour;
+  $sejour->checkDaysRelative($date);
+  $sejour->loadRefPatient();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
-$smarty->assign("remplacements", $remplacements);
+$smarty->assign("replacements", $replacements);
 $smarty->display("inc_sejours_technicien.tpl");
 ?>

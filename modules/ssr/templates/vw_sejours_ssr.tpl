@@ -22,7 +22,7 @@
 	      <input type="hidden" name="m" value="{{$m}}" />
 				<script type="text/javascript">
 				Main.add(function () {
-				  Calendar.regField(getForm("selDate").date, null, { noView: true} );
+				  Calendar.regField(getForm("selDate").date, null, { noView: true } );
 				});
 				</script>
 
@@ -40,7 +40,11 @@
 
 		<th style="width:  5em;">{{mb_title class="CSejour" field="_num_dossier"}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
-    <th style="width: 12em;">{{mb_title class="CBilanSSR" field="technicien_id"}}</th>
+    <th style="width: 16em;">
+		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
+      {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
+		</th>
+    
     <th style="width:   1%;" colspan="2"><label title="Activités SSR planidifées pour ce patient (ce jour - pendant tout le séjour)">Act.</label></th>
 	</tr>
 	
@@ -97,10 +101,13 @@
 		
     <td class="text">
 	    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
-			{{assign var=technicien  value=$bilan->_fwd.technicien_id}}
-	    {{assign var=kine  value=$technicien->_ref_kine}}
-			{{if $kine->_id}}
-    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine}}
+      {{assign var=kine_referent value=$bilan->_ref_kine_referent}}
+			{{if $kine_referent->_id}}
+      	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_referent}}
+        {{assign var=kine_journee value=$bilan->_ref_kine_journee}}
+			  {{if $kine_journee->_id != $kine_referent->_id}}
+          / {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_journee}}
+				{{/if}}
       {{/if}}
 		</td>
 		

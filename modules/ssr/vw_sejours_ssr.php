@@ -36,7 +36,7 @@ if ($order_col == "patient_id") {
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
  
-foreach($sejours as $_sejour) {
+foreach ($sejours as $_sejour) {
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
   $_sejour->loadRefPrescriptionSejour();
@@ -47,12 +47,9 @@ foreach($sejours as $_sejour) {
   // Bilan SSR
   $_sejour->loadRefBilanSSR();
   $bilan =& $_sejour->_ref_bilan_ssr;
-	$bilan->loadFwdRef("technicien_id");
 	
-	// Kine principal
-	$technicien =& $bilan->_fwd["technicien_id"];
-	$technicien->loadRefKine();
-	$technicien->_ref_kine->loadRefFunction(); 
+	// Kinés référent et journée
+  $bilan->loadRefKineJournee($date);
 	
   // Patient
   $_sejour->loadRefPatient();

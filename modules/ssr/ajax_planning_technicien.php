@@ -24,7 +24,9 @@ $kine->load($kine_id);
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$nb_days_planning = $sejour->_id ? $sejour->getNbJourPlanning($date) : 7;
+$nb_days_planning = $sejour->_id ? 
+  $sejour->getNbJourPlanning($date) : 
+	CEvenementSSR::getNbJoursPlanning($kine_id, $date);
 $planning = new CPlanningWeek($date, null, null, $nb_days_planning, $selectable, $height, $large, true);
 $planning->title = $surveillance ?
   "Planning de surveillance du technicien '$kine->_view'" :
