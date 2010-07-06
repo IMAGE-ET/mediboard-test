@@ -152,7 +152,7 @@
 		        {{html_options options=$aides_prescription.$_line_praticien_id.CPrescriptionLineElement}}
 		      </select>
 		      <input type="hidden" name="_hidden_commentaire" value="" />
-		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineElement', this.form._hidden_commentaire, 'commentaire');">
+		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CPrescriptionLineElement', this.form._hidden_commentaire, 'commentaire', null, null, null, {{$userSel->_id}});">
 		        Nouveau
 		      </button>
 		      {{/if}}

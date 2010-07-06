@@ -68,7 +68,7 @@ function reloadListTech() {
         <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.premedication.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       {{else}}
       <br />

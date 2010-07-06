@@ -64,7 +64,7 @@ onSubmitTraitement = function (oForm) {
 
 easyMode = function() {
   var url = new Url("dPcabinet", "vw_ant_easymode");
-  url.addParam("user_id", "{{$userSel->_id}}");
+  url.addParam("user", "{{$userSel}}");
   url.addParam("patient_id", "{{$patient->_id}}");
   url.pop(900, 600, "Mode grille");
 }
@@ -180,7 +180,7 @@ Main.add(function () {
             	<select name="_helpers_rques" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
 							</select>
 						<input type="hidden" name="_hidden_rques" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value)">
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value, this.form.appareil.value, null, {{$userSel->_id}})">
               {{tr}}New{{/tr}}
             </button>
           </th>
@@ -200,7 +200,9 @@ Main.add(function () {
                   dependField1: elements.type, 
                   dependField2: elements.appareil, 
                   objectClass: "CAntecedent", 
-                  userId: "{{$userSel->_id}}"
+                  contextUserId: "{{$userSel->_id}}",
+                  contextUserView: "{{$userSel->_view}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
                 });
                 
                 $(elements._search).observe("blur", function(e){
@@ -373,7 +375,7 @@ Main.add(function () {
               {{html_options options=$traitement->_aides.traitement.no_enum}}
             </select>
             <input type="hidden" name="_hidden_traitement" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement')">
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTraitement', this.form._hidden_traitement, 'traitement', null, null, null, {{$userSel->_id}})">
               {{tr}}New{{/tr}}
             </button>
           </th>
@@ -401,7 +403,9 @@ Main.add(function () {
                 new AideSaisie.AutoComplete(elements.traitement, {
                   searchField: elements._search, 
                   objectClass: "CTraitement", 
-                  userId: "{{$userSel->_id}}"
+                  contextUserId: "{{$userSel->_id}}",
+                  contextUserView: "{{$userSel->_view}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
                 });
                 
                 $(elements._search).observe("blur", function(e){

@@ -93,7 +93,7 @@ Main.add(function(){
 	        <option value="">&mdash; Aide</option>
 	        {{html_options options=$anesth_perop->_aides.libelle.no_enum}}
 	      </select>
-	      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAnesthPerop', this.form._hidden_libelle, 'libelle')">{{tr}}New{{/tr}}</button><br />
+	      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAnesthPerop', this.form._hidden_libelle, 'libelle', null, null, null, {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
 	      <input type="hidden" name="_hidden_libelle" value="" />
 	      <textarea name="libelle" onblur="if(!$(this).emptyValue()){this.form.onsubmit();}"></textarea>
 	      <button class="submit" type="button">Ajouter</button>
@@ -321,7 +321,7 @@ Main.add(function(){
       <!-- Ajout des aides à la saisie : mais il faut les charger selon le praticien qu'on indique !! -->
       <select name="_helpers_rques_visite_anesth" style="width: 7em;" onchange="pasteHelperContent(this)" class="helper">
       </select>
-			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth)">
+			<button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques_visite_anesth, null, null, null, null, {{$userSel->_id}})">
 			  {{tr}}New{{/tr}}
 			</button>
       {{/if}}

@@ -135,7 +135,7 @@ class CDoObjectAddEdit {
     echo CAppUI::getMsg();
     if ($this->callBack) {
     	$fields = $this->_obj->getDBFields();
-    	$json = json_encode($fields);
+    	$json = @json_encode($fields);
       $id = $this->_obj->_id ? $this->_obj->_id : 0;
       echo "\n<script type=\"text/javascript\">{$this->callBack}($id, $json)</script>";
     }

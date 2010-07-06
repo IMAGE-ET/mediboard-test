@@ -9,11 +9,11 @@
 
 global $AppUI, $can;
 $can->needsRead();
-
-$aide_id      = CValue::get("aide_id", CValue::post("aide_id", ''));
-$class        = CValue::get("class");
-$field        = CValue::get("field");
-$text         = utf8_decode(CValue::get("text", CValue::post("text", "")));
+$choicepratcab = CAppUI::pref("choicepratcab");
+$aide_id       = CValue::get("aide_id", CValue::post("aide_id", ''));
+$class         = CValue::get("class");
+$field         = CValue::get("field");
+$text          = utf8_decode(CValue::get("text", CValue::post("text", "")));
 $depend_value_1 = CValue::get("depend_value_1");
 $depend_value_2 = CValue::get("depend_value_2");
 
@@ -66,13 +66,17 @@ if($aide_id) {
   $aide->text         = stripslashes($text);
   $aide->depend_value_1 = $depend_value_1;
   $aide->depend_value_2 = $depend_value_2;
-  switch(CAppUI::pref("choicepratcab")) {
-    case "prat":  $aide->user_id = $user_id; break;
-    case "cab":   $aide->function_id = CAppUI::$user->function_id; break;
-    case "group": $aide->group_id = $group->_id;
-  }
+  //switch(CAppUI::pref("choicepratcab")) {
+    /*case "prat":*/  $aide->user_id = $user_id; //break;
+    /*case "cab":*/   $aide->function_id = CAppUI::$user->function_id; //break;
+    /*case "group":*/ $aide->group_id = $group->_id;
+  //}
 }
 
+$fields = array(
+    "user_id" => $user_id,
+    "function_id" => $user->function_id,
+    "group_id" => $group->_id);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -86,5 +90,7 @@ $smarty->assign("listEtab" , $listEtab);
 $smarty->assign("aides"    , $aides);
 $smarty->assign("user"    ,  $user);
 $smarty->assign("group"    , $group);
+$smarty->assign("choicepratcab", $choicepratcab);
+$smarty->assign("fields", $fields);
 $smarty->display("vw_edit_aides.tpl");
 ?>

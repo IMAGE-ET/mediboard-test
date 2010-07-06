@@ -4,7 +4,7 @@ Main.add(function () {
   var oFormAutonomie = getForm("editFicheAutonomie");
 	var options = {
     objectClass: "CFicheAutonomie", 
-    userId: "{{$app->user_id}}"
+    contextUserId: "{{$app->user_id}}"
   }
 
   new AideSaisie.AutoComplete(oFormAutonomie.soins_cutanes , options);

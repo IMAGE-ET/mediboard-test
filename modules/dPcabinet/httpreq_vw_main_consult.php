@@ -54,7 +54,7 @@ if ($selConsult) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("consult", $consult);
-
+$smarty->assign("userSel", $userSel);
 $smarty->display("inc_main_consultform.tpl");
 
 ?>

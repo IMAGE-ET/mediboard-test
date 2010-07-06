@@ -97,12 +97,12 @@ Main.add( function(){
 	
   new AideSaisie.AutoComplete(oFormBilanSSR.entree, {
     objectClass: "CBilanSSR", 
-    userId: "{{$app->user_id}}"
+    contextUserId: "{{$app->user_id}}"
   });
   
   new AideSaisie.AutoComplete(oFormBilanSSR.sortie, {
     objectClass: "CBilanSSR", 
-    userId: "{{$app->user_id}}"
+    contextUserId: "{{$app->user_id}}",
   });
 	
 	

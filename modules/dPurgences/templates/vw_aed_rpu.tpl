@@ -313,7 +313,7 @@
 	        <option value="">&mdash; Aide</option>
 	        {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
 	     </select><br />
-	     <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
+	     <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier, null, null, null, null, {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
 	      </th> 
 	    <td colspan="3">
 	   

@@ -61,7 +61,7 @@ $smarty->assign("antecedent", $antecedent);
 $smarty->assign("traitement", $traitement);
 $smarty->assign("applied_antecedents", $applied_antecedents);
 $smarty->assign("applied_traitements", $applied_traitements);
-$smarty->assign("user_id", $user_id);
+$smarty->assign("user", $user);
 
 $smarty->display("vw_ant_easymode.tpl");
 ?>

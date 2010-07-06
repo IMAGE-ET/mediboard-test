@@ -36,6 +36,7 @@ $transmission->loadAides($AppUI->user_id);
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
+$sejour->loadRefPraticien();
 
 $cibles = array();
 $users = array();

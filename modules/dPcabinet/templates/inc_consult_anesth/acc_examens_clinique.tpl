@@ -20,7 +20,7 @@
           <option value="">&mdash; Aide</option>
           {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
         </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button>
+        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
         <br />
         {{mb_field object=$consult_anesth field="examenCardio" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
@@ -35,7 +35,7 @@
           <option value="">&mdash; Aide</option>
           {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
         </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button>
+        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
         <br />
         {{mb_field object=$consult_anesth field="examenPulmo" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
@@ -53,7 +53,7 @@
           <option value="">&mdash; Aide</option>
           {{html_options options=$consult->_aides.examen.no_enum}}
         </select>
-        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button>
+        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
         <br />
         {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>

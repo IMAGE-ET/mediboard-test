@@ -62,7 +62,9 @@ Main.add(function () {
               dependField1: elements.type, 
               dependField2: elements.appareil, 
               objectClass: "CAntecedent", 
-              userId: "{{$user_id}}"
+              contextUserId: "{{$user->_id}}",
+              contextUserView: "{{$user->_view}}",
+              timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
             });
 			    } );
 			  </script>

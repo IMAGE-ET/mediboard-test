@@ -176,7 +176,7 @@ Main.add( function(){
                 <option value="">&mdash; Aide</option>
                 {{html_options options=$transmission->_aides.text.no_enum}}
               </select>
-              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />      
             </div>
             {{mb_field object=$transmission field="degre"}}
             {{mb_field object=$transmission field="type" typeEnum=radio}}

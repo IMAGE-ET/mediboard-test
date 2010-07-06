@@ -88,7 +88,7 @@ function reloadListExamComp() {
               <option value="">&mdash; Aide</option>
                 {{html_options options=$examComp->_aides.examen.no_enum}}
               </select>
-              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen')">{{tr}}New{{/tr}}</button>
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamComp', this.form._hidden_examen, 'examen', '', '', '',{{$userSel->_id}})">{{tr}}New{{/tr}}</button>
           </td>
         </tr>
 				<tr>
@@ -255,7 +255,7 @@ function reloadListExamComp() {
               <option value="">&mdash; Aide</option>
                 {{html_options options=$consult_anesth->_aides.result_ecg.no_enum}}
             </select>
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_ecg, 'result_ecg')">{{tr}}New{{/tr}}</button>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_ecg, 'result_ecg', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
             <textarea name="result_ecg" onblur="submitForm(this.form)">{{$consult_anesth->result_ecg}}</textarea>
           </td>
           <td colspan="2">
@@ -264,7 +264,7 @@ function reloadListExamComp() {
               <option value="">&mdash; Aide</option>
                 {{html_options options=$consult_anesth->_aides.result_rp.no_enum}}
             </select>
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_rp, 'result_rp')">{{tr}}New{{/tr}}</button>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.result_rp, 'result_rp', '', '', '', {{$userSel}})">{{tr}}New{{/tr}}</button>
             <textarea name="result_rp" onblur="submitForm(this.form)">{{$consult_anesth->result_rp}}</textarea>
           </td>
         </tr>

@@ -158,7 +158,7 @@ Main.add(function () {
 <tr>
   <td class="greedyPane">
     
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=" class="button new">{{tr}}CAideSaisie-title-create{{/tr}}</a>
     
     <form name="filterFrm" action="?" method="get" onsubmit="return loadTabsAides(this)">
       <input type="hidden" name="m" value="{{$m}}" />

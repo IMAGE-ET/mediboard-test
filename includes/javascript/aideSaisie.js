@@ -13,13 +13,15 @@ var AideSaisie = {
         objectClass: null, 
         userId: User.id,
         userView: User.view,
-        contextUserId: null,
-        contextUserView: null,
+        contextUserId: User.id,
+        contextUserView: User.view,
         validate: null,//element.form.onsubmit.bind(element.form),
         validateOnBlur: true,
         resetSearchField: true,
         resetDependFields: true,
-        defaultUserId: null
+        defaultUserId: null,
+        defaultUserView: null,
+        timestamp: "-- %n %p - dd/MM/y HH:mm",
       }, options);
       this.init();
     },
@@ -104,8 +106,8 @@ var AideSaisie = {
           //buttons.grid   = DOM.a({href: "#1"}, DOM.img({src: "images/icons/grid.png", title: "Mode grille"})),
           buttons.create = DOM.a({href: "#1"}, DOM.img({src: "images/icons/new.png", title: "Nouvelle aide"})),
           buttons.down   = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/down.png", title: "Voir tous les choix"})),
-          buttons.owner  = DOM.img({src: "images/icons/user-glow.png", title: this.options.defaultUserView}),
-          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png"})),
+          buttons.owner  = DOM.a({href: "#1", title: this.options.defaultUserView}, DOM.img({src: "images/icons/user-glow.png"})),
+          buttons.timestamp = DOM.a({href: "#1"}, DOM.img({src: "images/icons/timestamp.png", title: "Ajouter un horodatage"})),
           buttons.valid  = DOM.a({href: "#1"}, DOM.img({src: "style/mediboard/images/buttons/submit.png", title: "Valider"})).setVisible(this.options.validate)
         ).hide(),
         list = $(this.searchField.id + "_auto_complete").setStyle({marginLeft: "-2px"})
@@ -206,37 +208,24 @@ var AideSaisie = {
           if(this.options.defaultUserId == this.options.userId) {
             this.options.defaultUserId = this.options.contextUserId;
             this.options.defaultUserView = this.options.contextUserView;
-            buttons.owner.setOpacity(1.0);
-            buttons.owner.src = "images/icons/user-glow.png";
+            buttons.owner.down().src = "images/icons/user-glow.png";
             buttons.owner.title = this.options.contextUserView;
           } else {
             this.options.defaultUserId = this.options.userId;
             this.options.defaultUserView = this.options.userView;
-            buttons.owner.src = "images/icons/user.png";
-            buttons.owner.setOpacity(0.5);
+            buttons.owner.down().src = "images/icons/user.png";
             buttons.owner.title = this.options.userView;
           }
-          var url = new Url("dPcompteRendu", "httpreq_do_aide_autocomplete");
-          url.addParam("property", this.element.name);
-          url.addParam("object_class", this.options.objectClass);
-          url.addParam("user_id", this.options.defaultUserId);
-          
-          // If it is a textarea
-          if (/^textarea$/i.test(this.searchField.tagName)) {
-            this.buildAdvancedUI(url);
-          }
-          else {
-            url.autoComplete(this.searchField, this.list, {
-              minChars: 2,
-              updateElement: this.update.bind(this),
-              paramName: "_search"
-            });
-          }
+
+          var params = autocomplete.url.toQueryParams();
+          params.user_id = this.options.defaultUserId;
+          autocomplete.url = "?"+Object.toQueryString(params);
+          autocomplete.hide();
+
         }.bind(this));
       }
       
       var activate = function(){
-        this.url = this.url.replace(/(user_id=)[0-9]*/, "$1"+$A(arguments)[0].options.defaultUserId);
         this.changed = false;
         this.hasFocus = true;
         // We save the default params, change it so that _search 
@@ -247,7 +236,7 @@ var AideSaisie = {
         this.options.defaultParams = oldDefaultParams;
       }.bind(autocomplete);
       
-      buttons.down.observe('click', activate.curry(this));
+      buttons.down.observe('click', activate);
       //buttons.grid.observe('mousedown', gridMode);
       buttons.valid.observe('click', validate);
       buttons.create.observe('click', function(e){
@@ -301,7 +290,6 @@ var AideSaisie = {
   
   create: function (objectClass, field, name, dependValue1, dependValue2, text, userId) {
     var url = new Url("dPcompteRendu", "edit_aide");
-    console.debug(this);
     url.addParam("user_id"     , userId);
     url.addParam("class"       , objectClass);
     url.addParam("field"       , name || field.name);
