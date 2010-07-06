@@ -10,9 +10,11 @@
 
 {{mb_include_script module=ssr script=sejours_ssr}}
 
+{{if $modules.dPplanningOp->_can->edit}} 
 <a class="button new" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id=0">
   Admettre un patient
 </a>
+{{/if}}
 
 <div style="float: right;">
    Affichage

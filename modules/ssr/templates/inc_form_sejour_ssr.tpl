@@ -85,7 +85,7 @@ function cancelSejourSSR() {
   <table class="form">
     <tr>
       {{if $sejour->_id}}
-      <th class="title modify text" colspan="5">
+      <th class="title modify text" colspan="6">
         {{mb_include module=system template=inc_object_notes      object=$sejour}}
         {{mb_include module=system template=inc_object_idsante400 object=$sejour}}
         {{mb_include module=system template=inc_object_history    object=$sejour}}
@@ -115,88 +115,100 @@ function cancelSejourSSR() {
     </tr>
     {{/if}}
     
-    <tr>
-      <th>{{mb_label object=$sejour field=praticien_id}}</th>
-      <td>
-        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" tabindex="1">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$prats item=_user}}
-          <option value="{{$_user->_id}}" class="mediuser" 
-            style="border-color: #{{$_user->_ref_function->color}}" {{if $_user->_id == $sejour->praticien_id}}selected="selected"{{/if}}>
-            {{$_user->_view}}
-          </option>
-          {{/foreach}}
-        </select>
-      </td>
+    {{if !$modules.dPplanningOp->_can->edit}} 
+			<tr>
+        <th>{{mb_label object=$sejour field=praticien_id}}</th>
+        <td>{{mb_value object=$sejour field=praticien_id}}</td>
+        <th>{{mb_label object=$sejour field=libelle}}</th>
+        <td>{{mb_value object=$sejour field=libelle}}</td>
+        <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
+        <td>{{mb_value object=$sejour field=_duree_prevue}} jours</td>
+			</tr>
+    {{else}}
+	    <tr>
+	      <th>{{mb_label object=$sejour field=praticien_id}}</th>
+	      <td>
+	        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" tabindex="1">
+	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	          {{foreach from=$prats item=_user}}
+	          <option value="{{$_user->_id}}" class="mediuser" 
+	            style="border-color: #{{$_user->_ref_function->color}}" {{if $_user->_id == $sejour->praticien_id}}selected="selected"{{/if}}>
+	            {{$_user->_view}}
+	          </option>
+	          {{/foreach}}
+	        </select>
+	      </td>
+	
+	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
+	      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="4" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	    </tr>
+	  
+	    <tr>
+	      <th>
+	        <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$sejour->patient_id}}" />
+	        {{mb_label object=$sejour field="patient_id"}}
+	      </th>
+	      <td>
+	        <input type="text" name="patient_view" size="20" value="{{$patient->_view}}" tabindex="2" 
+	          {{if !$sejour->_id || $app->user_type == 1}} 
+	          ondblclick="PatSelector.init()" 
+	          {{/if}}
+	          readonly="readonly" />
+	        {{if !$sejour->_id || $app->user_type == 1}} 
+	          <button type="button" class="search" onclick="PatSelector.init()">
+	            {{tr}}Choose{{/tr}}
+	          </button>
+	        {{/if}}
+	        <script type="text/javascript">
+	          PatSelector.init = function(){
+	            this.sForm = "editSejour";
+	            this.sId   = "patient_id";
+	            this.sView = "patient_view";
+	            this.pop();
+	          }
+	        </script>
+	      </td>
+	      
+	      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
+	      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+	    </tr>
+	    
+	    <tr>
+	      <th>{{mb_label object=$sejour field=libelle}}</th>
+	      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3"}}</td>
+	      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
+	      <td>
+	        <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" tabindex="6" size="4" onchange="updateSortiePrevue()" />
+	        nuits
+	      </td>
+	      <td id="dureeEst"></td>
+	    </tr>
+	    
+	    {{if !$dialog}} 
+	    <tr>
+	      <td class="button" colspan="5">
+	        {{if $sejour->_id}}
+	          {{if 0}}
+	            <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
+	            
+	            <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
+	               {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
+	            </button>
+	            
+	            {{if $can->admin}}
+	              <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
+	                {{tr}}Delete{{/tr}}
+	              </button>
+	            {{/if}}
+	          {{/if}}
+	              
+	        {{else}}
+	          <button class="submit default" tabindex="23" type="submit">{{tr}}Create{{/tr}}</button>
+	        {{/if}}
+	      </td>
+	    </tr>
+	    {{/if}}
+    {{/if}}
 
-      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
-      <td colspan="2">{{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="4" register=true canNull=false onchange="updateDureePrevue();"}}</td>
-    </tr>
-  
-    <tr>
-      <th>
-        <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$sejour->patient_id}}" />
-        {{mb_label object=$sejour field="patient_id"}}
-      </th>
-      <td>
-        <input type="text" name="patient_view" size="20" value="{{$patient->_view}}" tabindex="2" 
-          {{if !$sejour->_id || $app->user_type == 1}} 
-          ondblclick="PatSelector.init()" 
-          {{/if}}
-          readonly="readonly" />
-        {{if !$sejour->_id || $app->user_type == 1}} 
-          <button type="button" class="search" onclick="PatSelector.init()">
-          	{{tr}}Choose{{/tr}}
-					</button>
-        {{/if}}
-        <script type="text/javascript">
-          PatSelector.init = function(){
-            this.sForm = "editSejour";
-            this.sId   = "patient_id";
-            this.sView = "patient_view";
-            this.pop();
-          }
-        </script>
-      </td>
-      
-      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
-      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$sejour field=libelle}}</th>
-      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3"}}</td>
-      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
-      <td>
-        <input type="text" name="_duree_prevue" class="num min|0" value="{{if $sejour->_id}}{{$sejour->_duree_prevue}}{{else}}0{{/if}}" tabindex="6" size="4" onchange="updateSortiePrevue()" />
-        nuits
-      </td>
-      <td id="dureeEst"></td>
-    </tr>
-    
-    {{if !$dialog}} 
-    <tr>
-      <td class="button" colspan="5">
-        {{if $sejour->_id}}
-				  {{if 0}}
-		        <button class="modify default" type="submit" tabindex="21">{{tr}}Save{{/tr}}</button>
-		        
-		        <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="22" onclick="cancelSejourSSR();">
-		           {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
-		        </button>
-		        
-		        {{if $can->admin}}
-		          <button class="trash" type="button" tabindex="22" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
-		            {{tr}}Delete{{/tr}}
-		          </button>
-		        {{/if}}
-          {{/if}}
-              
-        {{else}}
-          <button class="submit default" tabindex="23" type="submit">{{tr}}Create{{/tr}}</button>
-        {{/if}}
-      </td>
-    </tr>
-		{{/if}}
   </table>
 </form>
