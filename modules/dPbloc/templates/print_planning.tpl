@@ -35,6 +35,9 @@ function popPlanning() {
   url.addElement(form.type);
   url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.addParam("_coordonnees", $V(form._coordonnees));
+	if(form.planning_perso.checked){// pour l'affichage du planning perso d'un anesthesiste
+	  url.addParam("planning_perso", true);
+	}
   url.popup(900, 550, 'Planning');
 }
 
@@ -67,6 +70,17 @@ function changeDateCal(minChanged){
       $V(minElement, maxElement.value);
       $V(minView, Date.fromDATE(minElement.value).toLocaleDate());
     }
+  }
+}
+//affiche ou cache le checkbox relatif à un anesthésiste
+function showCheckboxAnesth(element){
+  var form = getForm("paramFrm");
+  if ($(element.options[element.selectedIndex]).hasClassName('anesth')){
+	   $('perso').show();
+		 form.planning_perso.checked = "";
+	}
+  else {
+	 $('perso').hide();
   }
 }
 
@@ -143,14 +157,17 @@ function changeDateCal(minChanged){
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
-            <select name="_prat_id" onchange="this.form._specialite.value = '0';">
+            <select name="_prat_id" onchange="showCheckboxAnesth(this); this.form._specialite.value = '0';">
               <option value="0">&mdash; Tous les praticiens &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
+                <option {{if $curr_prat->isAnesth()}} class="mediuser anesth" {{else}} class="mediuser" {{/if}} style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
                   {{$curr_prat->_view}}
                 </option>
               {{/foreach}}
             </select>
+						<span id="perso" {{if !$praticien->isAnesth()}} style="display:none;"{{/if}}>
+						  Planning personnel <input type="checkbox" name="planning_perso" />
+						</span>
           </td>
         </tr>
         <tr>

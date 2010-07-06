@@ -10,6 +10,24 @@ delCibleTransmission = function() {
   oDiv.innerHTML = "";
 }
 
+showListTransmissions = function(page, total) {
+	  $$("div.list_trans").invoke("hide");
+	  $("list_"+page).show();
+	  if (!page){
+	    page = 0;
+	  }
+	  var url = new Url("system", "ajax_pagination");
+	  
+	  if (total){
+	    url.addParam("total",total);
+	  }
+	  url.addParam("step",'{{$page_step}}');
+	  url.addParam("page",page);
+	  url.addParam("change_page","showListTransmissions");
+	  url.requestUpdate("pagination");
+
+}
+
 function updateFieldsCible(selected) {
   var oForm = document.forms['editTrans'];
   Element.cleanWhitespace(selected);
@@ -23,13 +41,16 @@ function updateFieldsCible(selected) {
   $V(oForm.cible, '');
 }
 
+
 Main.add(function () {
   var url = new Url("dPprescription", "httpreq_cible_autocomplete");
   url.autoComplete("editTrans_cible", "cible_auto_complete", {
     minChars: 3,
     updateElement: updateFieldsCible
   } );
-	
+	if({{$count_trans}} > 0) {
+	  showListTransmissions(0, {{$count_trans}});
+	}
 	
   var options = {
     minHours: '{{$hour-1}}',
@@ -129,5 +150,19 @@ Main.add(function () {
     </td>
   </tr>
 </table>
-
-{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=false}}
+<div id="pagination"></div>
+{{assign var=start value=0}}
+{{assign var=end value=$page_step}}
+{{foreach from=$sejour->_ref_suivi_medical name=steps item=_item}}
+  {{if $smarty.foreach.steps.index % $page_step == 0}}
+    {{assign var=id value=$smarty.foreach.steps.index}}
+    <div class="list_trans" id="list_{{$id}}" style="display:none">
+	    {{assign var=start value=$smarty.foreach.steps.index}}
+	    {{if $start+$end > $count_trans}}
+	       {{assign var=end value=$count_trans-$start}}
+	    {{/if}}
+	    {{assign var=mini_list value=$sejour->_ref_suivi_medical|@array_slice:$start:$end}}
+	    {{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=false list_transmissions=$mini_list}}
+    </div>
+  {{/if}}
+{{/foreach}}

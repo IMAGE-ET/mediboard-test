@@ -31,7 +31,7 @@ $traitement->loadAides($AppUI->user_id);
 
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPcabinet");
 $smarty->assign("line", new CPrescriptionLineMedicament());
 $smarty->assign("current_m", "dPcabinet");
 $smarty->assign("sejour_id", $sejour->_id);

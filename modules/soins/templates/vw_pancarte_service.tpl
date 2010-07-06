@@ -182,11 +182,11 @@ Main.add(function () {
 		          		          <img src="{{$images.$chapitre}}" /><strong> {{tr}}CPrescription._chapitres.{{$chapitre}}{{/tr}}</strong>
 		          		        </th>
 		          		      </tr>
-		          		      {{if $chapitre == "perfusion" || $chapitre == "aerosol"}}
+		          		      {{if $chapitre == "perfusion"}}
 		          		        {{foreach from=$quantites key=prescription_line_mix_id item=quantites_by_perf}}
 		          		          <tr>
 		          		            <th colspan="5">
-		          		              {{assign var=prescription_line_mix value=$list_lines.$chapitre.$prescription_line_mix_id}}
+		          		              {{assign var=prescription_line_mix value=$list_lines.perfusion.$prescription_line_mix_id}}
 		          		              {{$prescription_line_mix->_view}}
 		          		            </th>
 		          		          </tr>

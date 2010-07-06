@@ -22,7 +22,7 @@ $classe_ATC = new CBcbClasseATC();
 $cibles["atc"] = $classe_ATC->searchClassesATC($libelle_cible);
 
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPprescription");
 $smarty->assign("libelle_cible", $libelle_cible);
 $smarty->assign("cibles", $cibles);
 $smarty->assign('nodebug', true);

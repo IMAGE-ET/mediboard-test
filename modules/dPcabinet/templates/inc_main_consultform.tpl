@@ -66,7 +66,7 @@
             </button>
             <button class="new notext" title="Ajouter une aide à la saisie" style="float: right;" 
                     type="button" onclick="addHelp('CConsultation', this.form.{{$field}}, null, null, null, null,{{$userSel->_id}})">
-              {{tr}}New{{/tr}}
+              Nouveau
             </button>
             <select name="_helpers_{{$field}}" style="width: 130px; float: right;" 
                     onchange="pasteHelperContent(this); this.form.onsubmit()" class="helper">

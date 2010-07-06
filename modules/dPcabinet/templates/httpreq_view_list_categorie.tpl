@@ -11,7 +11,7 @@
 	  </script>
 	   
 	  <select name="categorie_id" onchange="reloadIcone(this.value);">
-	    <option value="">&mdash; Choix d'une categorie</option>
+	    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 			{{foreach from=$categories item="categorie"}}
 			  <option class="categorieConsult" {{if $categorie_id == $categorie->_id}} selected="selected" {{/if}}style="background-image:url(./modules/dPcabinet/images/categories/{{$categorie->nom_icone}});background-repeat:no-repeat;" value="{{$categorie->_id}}">{{$categorie->_view}}</option>
 			{{/foreach}}

@@ -52,9 +52,13 @@ $listBlocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 foreach($listBlocs as &$bloc) {
   $bloc->loadRefsSalles();
 }
+
+$praticien = new CMediusers();
+$praticien->load($AppUI->user_id);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("praticien"    , $praticien);
 $smarty->assign("chir"         , $AppUI->user_id);
 $smarty->assign("filter"       , $filter);
 $smarty->assign("filterSejour" , $filterSejour);

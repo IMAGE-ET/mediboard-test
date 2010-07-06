@@ -92,19 +92,20 @@
   <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}}" {{if $_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
     {{mb_value object=$_suivi field=text}}
   </td>
-  {{if !$without_del_form}}
+  
   <td class="button" style="width: 1%">
-  {{if $_suivi->user_id == $app->user_id}}
-    <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_transmission_aed" />
-      <input type="hidden" name="del" value="1" />
-      <input type="hidden" name="m" value="dPhospi" />
-      <input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
-      <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
-      <button type="button" class="trash notext" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Delete{{/tr}}</button>
-    </form>
-    {{/if}}
+	  {{if !$without_del_form}}
+		  {{if $_suivi->user_id == $app->user_id}}
+	     <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+		     <input type="hidden" name="dosql" value="do_transmission_aed" />
+		     <input type="hidden" name="del" value="1" />
+		     <input type="hidden" name="m" value="dPhospi" />
+		     <input type="hidden" name="transmission_medicale_id" value="{{$_suivi->_id}}" />
+		     <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
+		     <button type="button" class="trash notext" onclick="submitSuivi(this.form, '{{$prescription->_id}}')">{{tr}}Delete{{/tr}}</button>
+	     </form>
+	    {{/if}}
+		{{/if}}
   </td>
-  {{/if}}
 </tr>
 {{/if}}

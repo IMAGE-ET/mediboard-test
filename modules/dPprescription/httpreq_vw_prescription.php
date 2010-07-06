@@ -498,7 +498,6 @@ $smarty->assign("prescription"         , $prescription);
 $smarty->assign("listPrats"            , $listPrats);
 $smarty->assign("favoris_praticien_id" , $favoris_praticien_id);
 $smarty->assign("category"             , $chapitre);
-$smarty->assign("categories"           , $categories);
 $smarty->assign("class_category"       , new CCategoryPrescription());
 $smarty->assign("refresh_pharma"       , $refresh_pharma);
 $smarty->assign("mode_pharma"          , $mode_pharma);

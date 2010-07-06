@@ -34,7 +34,7 @@ $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id);
                  
 // Création du template
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP("modules/dPhospi");
 
 $smarty->assign('constantes', $constantes);
 $smarty->assign('latest_constantes', $latest_constantes);

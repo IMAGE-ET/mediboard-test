@@ -25,7 +25,7 @@ $filter->_intervention = CValue::get("_intervention");
 $filter->_specialite   = CValue::get("_specialite");
 $filter->_codes_ccam   = CValue::get("_codes_ccam");
 $filter->_ccam_libelle = CValue::get("_ccam_libelle", 1);
-
+$filter->_planning_perso = CValue::get("planning_perso");
 $_coordonnees  = CValue::get("_coordonnees");
 
 $filterSejour = new CSejour;
@@ -50,7 +50,10 @@ $user->load($AppUI->user_id);
 
 $praticien = new CMediusers();
 $praticien->load($filter->_prat_id);
-if($praticien->isFromType(array("Anesthésiste"))) {
+
+//dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous 
+//les plannings sinon laisser son prat_id pour afficher son planning perso
+if($praticien->isFromType(array("Anesthésiste"))&& !$filter->_planning_perso) {
   $filter->_prat_id = null;
 }
 

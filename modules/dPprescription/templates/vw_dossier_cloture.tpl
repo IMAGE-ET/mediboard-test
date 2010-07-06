@@ -108,7 +108,7 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="6">Observations et Transmissions</th>
+    <th colspan="7">Observations et Transmissions</th>
   </tr>
   <tr>
     <th>{{mb_label class=CTransmissionMedicale field="type"}}</th>
@@ -117,6 +117,7 @@
     <th>{{tr}}Hour{{/tr}}</th>
     <th>{{mb_label class=CTransmissionMedicale field="object_id"}}</th>
     <th>{{mb_label class=CTransmissionMedicale field="text"}}</th>
+		<th />
   </tr>
   {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
  	  {{mb_include module=dPhospi template=inc_line_suivi _suivi=$_suivi show_patient=false nodebug=true without_del_form=true}}

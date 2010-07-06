@@ -148,12 +148,13 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds');
 }
 
-function loadSuivi(sejour_id, user_id) {
+function loadSuivi(sejour_id, user_id, cible) {
   if(!sejour_id) return;
   
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   urlSuivi.addParam("sejour_id", sejour_id);
   urlSuivi.addParam("user_id", user_id);
+	urlSuivi.addParam("cible", cible);
   urlSuivi.requestUpdate("dossier_suivi");
 }
 
@@ -192,6 +193,7 @@ function refreshConstantesMedicales(context_guid) {
   }
 }
 
+
 function printPatient(patient_id) {
   var url = new Url("dPpatients", "print_patient");
   url.addParam("patient_id", patient_id);
@@ -205,9 +207,21 @@ function updatePatientsListHeight() {
   scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
 }
 
+
+function filterSejour (type){
+  var listTR = $("list_sejours").select("tr");
+  listTR.invoke("show") ;	
+	listTR.each(function(e){
+	  if(type && e.className != type && e.className != ""){
+		  e.hide();
+		}
+	});
+}
+
 var tab_sejour = null;
 
 Main.add(function () {
+  filterSejour('{{$object->type}}');
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
   /* Tab initialization */
@@ -263,7 +277,7 @@ printDossierComplet = function(){
       </form>
       <table class="form" id="left-column" style="width:240px;">
         <tr>
-          <th class="title">
+          <th class="title" colspan="2">
             {{$date|date_format:$dPconfig.longdate}}
             <form action="?" name="changeDate" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
@@ -277,11 +291,12 @@ printDossierComplet = function(){
         </tr>
         {{if 1 || !$praticien || $anesthesiste}}
         <tr>
-          <td>
+          <th>
             <form name="selService" action="?m={{$m}}" method="get">
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
-
+           </th>
+					 <td>
               <select name="service_id" onchange="this.form.submit()">
                 <option value="">&mdash; Service</option>
                 {{foreach from=$services item=curr_service}}
@@ -292,14 +307,16 @@ printDossierComplet = function(){
               {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
                 <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
         			{{/if}}
-            </form>
-            <br />
-            <form name="selPraticien" action="?m={{$m}}" method="get">
-              <label for="praticien_id">Praticien</label>
-              <input type="hidden" name="m" value="{{$m}}" />
-              <input type="hidden" name="mode" value="0" />
-							<input type="hidden" name="sejour_id" value="" />
-              <select name="praticien_id" onchange="this.form.submit();"  style="width: 130px;">
+            </td>
+				 </tr>
+				 <tr>
+           <th>
+             <label for="praticien_id">Praticien</label>
+             <input type="hidden" name="m" value="{{$m}}" />
+						 <input type="hidden" name="sejour_id" value="" />
+					</th>
+						<td>
+              <select name="praticien_id" onchange="this.form.submit();"  style="width: 135px;">
                 <option value="">&mdash; Choix du praticien</option>
                 {{foreach from=$praticiens item=_prat}}
                   <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
@@ -307,25 +324,32 @@ printDossierComplet = function(){
                   </option>
                 {{/foreach}}
               </select>
-            </form>
-          </td>
-        </tr>
+							</td>
+					 </tr>
+					 <tr>
+						 <th>
+						   {{mb_label class=CSejour field="type"}}
+						 </th>
+						 <td>
+						   {{mb_field object=$object canNull=true field="type"  defaultOption="&mdash; Tous" onchange="filterSejour(this.value);" style="width:135px"}}
+						 </td>
+				</form>
+          </tr>
         {{/if}}
-        
         {{if $praticien && ($current_date == $date)}}
-        <tr>
-          <td class="button">
-            <script type="text/javascript">
-            function createNotifications(){
-							var sejours = {{$visites.non_effectuee|@json}};
-						  var url = new Url("soins", "httpreq_notifications_visite");
-						  url.addParam("sejours[]", sejours);
-						  url.requestUpdate("systemMsg", { onComplete: function() { 
-						    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
-						  } } );
-						}
-            </script>
-            
+          <tr>
+	          <td class="button">
+	            <script type="text/javascript">
+	            function createNotifications(){
+								var sejours = {{$visites.non_effectuee|@json}};
+							  var url = new Url("soins", "httpreq_notifications_visite");
+							  url.addParam("sejours[]", sejours);
+							  url.requestUpdate("systemMsg", { onComplete: function() { 
+							    $("tooltip-visite-{{$app->user_id}}-{{$date}}").update(DOM.div( {className: 'small-info'}, "Visites validées"));
+							  } } );
+							}
+	            </script>
+	            
             <a href="#Create-Notifications" class="button search" onmouseover='ObjectTooltip.createDOM(this, "tooltip-visite-{{$app->user_id}}-{{$date}}")'>
             	Mes visites
             </a>
@@ -365,9 +389,9 @@ printDossierComplet = function(){
         </tr>
         {{/if}}
         <tr>
-          <td style="padding: 0;">
+          <td style="padding: 0;" colspan="2">
             <div style="{{if $smarty.session.browser.name == "msie" && $smarty.session.browser.majorver < 8}}overflow:visible; overflow-x:hidden; overflow-y:auto; padding-right:15px;{{else}}overflow: auto;{{/if}} height: 500px;" class="scroller">
-            <table class="tbl">
+            <table class="tbl" id="list_sejours">
             {{foreach from=$sejoursParService key=_service_id item=service}}
               {{if array_key_exists($_service_id, $services)}}
               <tr>
@@ -384,7 +408,7 @@ printDossierComplet = function(){
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               {{if $curr_affectation->_ref_sejour->_id != ""}}
-              <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected"{{/if}}>
+              <tr {{if $object->_id == $curr_affectation->_ref_sejour->_id}}class="selected '{{$curr_affectation->_ref_sejour->type }}'" {{else}} class='{{$curr_affectation->_ref_sejour->type }}' {{/if}}>
                 <td style="padding: 0;">
                   <button class="lookup notext" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
                     {{tr}}Lookup{{/tr}}
