@@ -29,7 +29,7 @@ function changePage(page){
   <tr>
     <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mediuser}}</td>
     <td>
-      <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+      <form name="mediuser-{{$_mediuser->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
 
       <input type="hidden" name="m" value="mediusers" />
       <input type="hidden" name="dosql" value="do_mediusers_aed" />

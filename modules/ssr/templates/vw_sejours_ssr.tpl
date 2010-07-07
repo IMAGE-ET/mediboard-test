@@ -16,18 +16,17 @@
 </a>
 {{/if}}
 
-<div style="float: right;">
-   Affichage
-   <form name="Filter" action="?" method="get">
-      <input name="m" value="{{$m}}" type="hidden">
-      <input name="tab" value="{{$tab}}" type="hidden">
-      <select name="show" onchange="this.form.submit();">
-        <option value="all"     {{if $show == "all"    }} selected="selected"{{/if}}>Tous les séjours</option>
-        <option value="nopresc" {{if $show == "nopresc"}} selected="selected"{{/if}}>Séjours sans prescription</option>
-      </select>
-    </form>
-  </td>
+<form name="Filter" action="?" method="get" style="float: right;">
+  <input name="m" value="{{$m}}" type="hidden" />
+  <input name="tab" value="{{$tab}}" type="hidden" />
   
+  Affichage
+  <select name="show" onchange="this.form.submit();">
+    <option value="all"     {{if $show == "all"    }} selected="selected"{{/if}}>Tous les séjours</option>
+    <option value="nopresc" {{if $show == "nopresc"}} selected="selected"{{/if}}>Séjours sans prescription</option>
+  </select>
+</form>
+
 <table id="sejours-ssr" class="tbl">
 	<tr>
 		<th class="title" colspan="10">
