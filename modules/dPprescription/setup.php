@@ -1654,8 +1654,12 @@ class CSetupdPprescription extends CSetup {
               ADD `unite_duree` ENUM ('heure','jour') DEFAULT 'heure',
 							ADD `unite_duree_passage` ENUM ('minute','heure') DEFAULT 'minute'";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("1.10");
+    $sql = "ALTER TABLE `prescription_line_dmi` ADD `signed` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
 		
-    $this->mod_version = "1.10";
+    $this->mod_version = "1.11";
   }
 }
 

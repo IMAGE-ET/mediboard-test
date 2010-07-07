@@ -118,7 +118,7 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
 		    foreach($_line_med->_ref_substitution_lines as $_subst_lines_by_type){
 		      foreach($_subst_lines_by_type as $_subst_line){
 		        $lines[$_subst_line->_class_name][$_subst_line->_id] = $_subst_line;
-		      } 
+		      }
 		    }
 			}
 		}
@@ -184,6 +184,14 @@ if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode
   
   $prescription_line_comment = new CPrescriptionLineComment();
   $lines["CPrescriptionLineComment"] = $prescription_line_comment->loadList($where, null, null, null, $ljoinComment);
+  
+  // lignes de DMI
+  $where = array();
+  $where["prescription_id"] = " = '$prescription_id'";
+  $where["praticien_id"] = " = '$praticien_id'";
+  $where["signed"] = " = '$search_value'";
+  $prescription_line_dmi = new CPrescriptionLineDMI();
+  $lines["CPrescriptionLineDMI"] = $prescription_line_dmi->loadList($where);
 }
 
 
@@ -236,6 +244,11 @@ foreach($lines as $_type_line => $_lines){
 			  $msg = $_line->store();
         CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
       	break;
+      case "CPrescriptionLineDMI":
+        $_line->signed = $new_value;
+        $msg = $_line->store();
+        CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
+        break;
 		}
 	}
 }

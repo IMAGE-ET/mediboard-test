@@ -184,47 +184,62 @@ reloadListDMI = function(){
 }
 
 addDMI = function(product_id, order_item_reception_id, septic, type, quantity){
-  var oFormAddDMI = getForm("add_dmi");
+  var oFormDMI = getForm("add_dmi");
   
   // si la liste des praticien est affichée, on utilise le praticien selectionné
   if(document.selPraticienLine) {
-    oFormAddDMI.praticien_id.value = document.selPraticienLine.praticien_id.value;
+    oFormDMI.praticien_id.value = document.selPraticienLine.praticien_id.value;
   }
-  oFormAddDMI.product_id.value = product_id;
-  oFormAddDMI.order_item_reception_id.value = order_item_reception_id;
-  oFormAddDMI.septic.value = septic;
-  oFormAddDMI.elements.type.value = type;
-  oFormAddDMI.quantity.value = quantity;
-  return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
+  oFormDMI.product_id.value = product_id;
+  oFormDMI.order_item_reception_id.value = order_item_reception_id;
+  oFormDMI.septic.value = septic;
+  oFormDMI.elements.type.value = type;
+  oFormDMI.quantity.value = quantity;
+  return onSubmitFormAjax(oFormDMI, { onComplete: reloadListDMI } );
 }
 
 delLineDMI = function(line_dmi_id){
-  var oFormAddDMI = getForm("del_dmi");
-  oFormAddDMI.prescription_line_dmi_id.value = line_dmi_id;
-  return onSubmitFormAjax(oFormAddDMI, { onComplete: reloadListDMI } );
+  var oFormDMI = getForm("del_dmi");
+  oFormDMI.prescription_line_dmi_id.value = line_dmi_id;
+  return onSubmitFormAjax(oFormDMI, { onComplete: reloadListDMI } );
+}
+
+signLineDMI = function(line_dmi_id, value){
+  var oFormDMI = getForm("sign_dmi");
+  oFormDMI.prescription_line_dmi_id.value = line_dmi_id;
+  oFormDMI.signed.value = value;
+  return onSubmitFormAjax(oFormDMI, { onComplete: reloadListDMI } );
 }
 </script>
 
 <form name="add_dmi" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription">
-  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_line_dmi_id" value="" />
-  <input type="hidden" name="product_id" value="">
-  <input type="hidden" name="order_item_reception_id" value="">
-  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}">
-  <input type="hidden" name="operation_id" value="{{$operation_id}}">
-  <input type="hidden" name="praticien_id" value="{{$app->user_id}}">
-  <input type="hidden" name="date" value="now">
-  <input type="hidden" name="septic" value="">
-  <input type="hidden" name="type" value="">
-  <input type="hidden" name="quantity" value="">
+  <input type="hidden" name="product_id" value="" />
+  <input type="hidden" name="order_item_reception_id" value="" />
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+  <input type="hidden" name="operation_id" value="{{$operation_id}}" />
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="date" value="now" />
+  <input type="hidden" name="septic" value="" />
+  <input type="hidden" name="type" value="" />
+  <input type="hidden" name="quantity" value="" />
+  <input type="hidden" name="signed" value="0" />
 </form>
 
 <form name="del_dmi" method="post" action="">
-  <input type="hidden" name="m" value="dPprescription">
-  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
   <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="prescription_line_dmi_id" value="" />
+</form>
+
+<form name="sign_dmi" method="post" action="">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
+  <input type="hidden" name="signed" value="" />
   <input type="hidden" name="prescription_line_dmi_id" value="" />
 </form>
 
@@ -260,6 +275,7 @@ delLineDMI = function(line_dmi_id){
 <table class="tbl">
   <!-- Affichage des lignes de DMI-->
   <tr>
+    <th style="width: 16px;"></th>
     <th>{{mb_title class=CPrescriptionLineDMI field=product_id}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>
@@ -268,11 +284,16 @@ delLineDMI = function(line_dmi_id){
     <th>Code produit</th>
     <th>Code lot</th>
     <th style="width: 1%">Praticien</th>
+    <th style="width: 1%">Sign.</th>
   </tr>
   {{foreach from=$prescription->_ref_lines_dmi item=_line_dmi}}
     <tr>
       <td>
-        <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
+        {{if !$_line_dmi->signed}}
+          <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
+        {{/if}}
+      </td>
+      <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_line_dmi->_ref_product->_guid}}')">
           {{$_line_dmi->_ref_product}}
         </span>
@@ -286,6 +307,19 @@ delLineDMI = function(line_dmi_id){
       <td>{{mb_value object=$_line_dmi->_ref_product field=code}}</td>
       <td>{{mb_value object=$_line_dmi->_ref_product_order_item_reception field=code}}</td>
       <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}</td>
+      <td style="text-align: center;">
+        {{if $_line_dmi->_can_view_form_signature_praticien}}
+          {{if !$_line_dmi->signed}}
+            <button type="button" class="tick notext" onclick="signLineDMI('{{$_line_dmi->_id}}', 1);">Signer</button>
+          {{else}}
+            <button type="button" class="cancel notext" onclick="signLineDMI('{{$_line_dmi->_id}}', 0);">Annuler la signature</button>
+          {{/if}}
+        {{else}}
+          {{if $_line_dmi->signed}}
+            <img src="images/icons/tick.png" title="Signée par le praticien" />
+          {{/if}}
+        {{/if}}
+      </td>
     </tr>
   {{/foreach}}
 </table>

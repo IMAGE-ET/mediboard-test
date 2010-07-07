@@ -22,12 +22,15 @@ class CPrescriptionLineDMI extends CMbObject {
   var $septic                  = null;
   var $type                    = null;
   var $quantity                = null;
+  var $signed                  = null;
   
   var $_ref_prescription       = null;
   var $_ref_praticien          = null;
   var $_ref_operation          = null;
   var $_ref_product            = null;
   var $_ref_product_order_item_reception = null;
+  
+  var $_can_view_form_signature_praticien = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,6 +50,8 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs["septic"]          = "bool notNull default|0";
     $specs["type"]            = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
     $specs["quantity"]        = "num notNull min|1 default|1";
+    $specs["signed"]          = "bool notNull default|0";
+    $specs["_can_view_form_signature_praticien"] = "bool";
     return $specs;
   }
   
@@ -139,6 +144,15 @@ class CPrescriptionLineDMI extends CMbObject {
     $this->loadRefProduct();
     $this->loadRefOperation();
     $this->loadRefProductOrderItemReception(); 
+  }
+  
+  function updateFormFields(){
+    $app = CAppUI::$instance;
+    $this->completeField("praticien_id");
+    
+    // Affichage du formulaire de signature praticien
+    $this->_can_view_form_signature_praticien = 
+      ($app->_ref_user->isPraticien() && ($this->praticien_id == $app->user_id));
   }
 }
 
