@@ -45,7 +45,7 @@ foreach ($helped as $i => $depend_field) {
 }
 
 // Liste des aides
-$user_id = CValue::get("user_id");
+$user_id = CValue::get("user_id", CAppUI::$user->_id);
 $user = new CMediusers();
 $user->load($user_id);
 $user->loadRefFunction();
