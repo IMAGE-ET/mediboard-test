@@ -21,54 +21,63 @@ var Thumb = {
     this.oldContent = false;
     this.thumb_up2date = true;
     this.hasRefresh = true;
-    // TODO: changez en classes CSS
+    // TODO: changer en classes CSS
     if (first_time != 1) {
       for (var i = 0; i < Thumb.nb_thumbs; i++) {
         $("thumb_" + i).stopObserving("click");
       }
-     $('mess').stopObserving("click");
+      $('mess').stopObserving("click");
     }
 
     $("thumbs").setOpacity(1);
     var form = getForm("editFrm");
     var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-    url.addParam("compte_rendu_id", compte_rendu_id||modele_id);
+    url.addParam("compte_rendu_id", compte_rendu_id || modele_id);
     
-    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances._source.GetHTML()) ? FCKeditorAPI.Instances._source.GetHTML() : $V(form.source);
+    var content = (window.FCKeditorAPI && FCKeditorAPI.Instances._source.GetHTML()) ? FCKeditorAPI.Instances._source.GetHTML() : $V(form._source);
     
     url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", mode);
+    
 		if (mode == "modele") {
-			url.addParam("type", $V(form.editFrm_type));
-			url.addParam("header_id", $V(form.editFrm_header_id));
-			url.addParam("footer_id", $V(form.editFrm_footer_id));
-			url.addParam("height", $V(form.editFrm_height));
+			url.addParam("type",      $V(form.elements.type));
+			url.addParam("header_id", $V(form.elements.header_id));
+			url.addParam("footer_id", $V(form.elements.footer_id));
+			url.addParam("height",    $V(form.elements.height));
 		}
+    
     url.addParam("stream", 0);
     url.addParam("generate_thumbs", 1);
     url.addParam("first_time", first_time);
     url.addParam("user_id", user_id);
-    url.addParam("margins[]",[form.margin_top.value,
-                              form.margin_right.value,
-                              form.margin_bottom.value,
-                              form.margin_left.value]);
+    url.addParam("margins[]",[form.elements.margin_top.value,
+                              form.elements.margin_right.value,
+                              form.elements.margin_bottom.value,
+                              form.elements.margin_left.value]);
+                              
     url.addParam("orientation", $V(PageFormat.form._orientation));
-    url.addParam("page_format", form._page_format.value);
-    url.addParam("page_width", form.page_width.value);
-    url.addParam("page_height", form.page_height.value);
-    url.requestUpdate("thumbs",
-     {method: "post",
-      getParameters:
-        {m: "dPcompteRendu", a: "ajax_pdf_and_thumbs"},
-         onComplete: function() { Main.add(function() {
-           Thumb.hasRefresh = false;
-           if(Thumb.thumb_up2date == false) {
-             Thumb.thumb_up2date = true;
-             Thumb.old();
-           }
-           else {
-             Thumb.init();
-           }})}});
+    url.addParam("page_format", form.elements._page_format.value);
+    url.addParam("page_width",  form.elements.page_width.value);
+    url.addParam("page_height", form.elements.page_height.value);
+    
+    url.requestUpdate("thumbs", {
+      method: "post",
+      getParameters: {
+        m: "dPcompteRendu", 
+        a: "ajax_pdf_and_thumbs"
+      },
+      onComplete: function() { Main.add(function() {
+        Thumb.hasRefresh = false;
+        
+        if(!Thumb.thumb_up2date) {
+          Thumb.thumb_up2date = true;
+          Thumb.old();
+        }
+        else {
+          Thumb.init();
+        }
+      })}
+    });
   },
   old: function() {
     if (window.pdf_thumbnails == 1) {
@@ -102,7 +111,6 @@ var Thumb = {
 }
 
 function FCKeditor_OnComplete(editorInstance){
-
   var boutons = editorInstance.EditorWindow.parent.FCKToolbarItems.LoadedItems;
   
   // Rajout du raccourci clavier dans la tooltip des boutons de FCKEditor.
@@ -182,7 +190,6 @@ function loadOld(editorInstance) {
     Thumb.old();
     Thumb.oldContent = true;
   }
-	
 }
 
 function FCKeventChanger(editorInstance){
