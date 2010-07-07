@@ -8,11 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{* 
 <script type="text/javascript">
 function updateDays() {
-  var target = document.forms.editConfig['{{$m}}[dispensation_schedule]'];
-  target.value = [$V(document.forms.editConfigView.days)].flatten().join('');
+  var target = getForm("editConfig")['{{$m}}[dispensation_schedule]'];
+  target.value = [$V(getForm("editConfigView").days)].flatten().join('');
 }
 </script>
 
@@ -30,25 +29,14 @@ function updateDays() {
       </form>
     </td>
   </tr>
-  
-  {{mb_include module=system template=inc_config_bool var=show_totals_in_lists}}
-
-  <tr>
-    <td class="button" colspan="2">
-      <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_configure" />
-        <input type="hidden" name="m" value="system" />
-        <input type="hidden" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </form>
-    </td>
-  </tr>
 </table>
-*}}
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
   <input type="hidden" name="m" value="system" />
+  
+  {{assign var="var" value="dispensation_schedule"}}
+  <input type="hidden" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
   
   <table class="form">
     <col style="width: 50%" />

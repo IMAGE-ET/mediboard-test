@@ -46,16 +46,16 @@ function changePage(start) {
   
   <table class="table tbl">
     <tr>
-      <th>{{mb_title class=CProductStockGroup field=product_id}}</th>
-      <th>{{mb_title class=CProductDelivery field=quantity}}</th>
-      <th>{{mb_title class=CProductDelivery field=date_delivery}}</th>
-      <th>{{mb_title class=CProductDelivery field=service_id}}</th>
+      <th style="width: 0.1%;">{{mb_title class=CProductStockGroup field=product_id}}</th>
+      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=quantity}}</th>
+      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=date_delivery}}</th>
+      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=service_id}}</th>
       <th>{{mb_title class=CProductDelivery field=comments}}</th>
       <th style="width: 0.1%;"></th>
     </tr>
     
     <tr>
-      <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true" style="width: 250px"}}</td>
+      <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,50,false,true" style="width: 30em;"}}</td>
       <td>{{mb_field object=$delivrance field=quantity increment=true form="newOutflow" size=2}}</td>
       <td>{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
       <td>

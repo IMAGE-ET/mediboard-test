@@ -85,7 +85,6 @@ if ($endowment_id) {
     $stock->group_id = $group_id;
     $stock->loadMatchingObject();
     $stock->updateFormFields();
-    
     $stock->_ref_stock_service = $stock_service;
     $stock->quantity = $_item->quantity;
     $stock->_endowment_item_id = $_item->_id;

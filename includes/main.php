@@ -263,13 +263,13 @@ foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
 
 // Inclusion du footer
 if (!$suppressHeaders) {
-  $address = get_remote_address();
+  //$address = get_remote_address();
   
   $tplFooter = new CSmartyDP("style/$uistyle");
   $tplFooter->assign("offline"       , false);
   $tplFooter->assign("debugMode"     , $debug);
   $tplFooter->assign("performance"   , $performance);
-  $tplFooter->assign("userIP"        , $address["client"]);
+  //$tplFooter->assign("userIP"        , $address["client"]);
   $tplFooter->assign("errorMessage"  , CAppUI::getMsg());
   $tplFooter->display("footer.tpl");
 }

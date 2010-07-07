@@ -1853,7 +1853,7 @@ class CMbObject {
     if ($limit)
       $query .= "\n LIMIT $limit";
     
-    return $this->loadQueryList("SELECT * $query");
+    return $this->loadQueryList("SELECT `{$this->_spec->table}`.* $query");
   }
   
   /**
