@@ -22,6 +22,7 @@ class CEchangeSOAP extends CMbObject {
   var $input                = null;
   var $output               = null;
   var $soapfault            = null;
+  var $purge                = null;
     
   // Form fields
   var $_self_emetteur       = null;
@@ -47,13 +48,16 @@ class CEchangeSOAP extends CMbObject {
     $specs["date_echange"]          = "dateTime notNull";
     $specs["web_service_name"]      = "str";
     $specs["function_name"]         = "str notNull";
-    $specs["input"]                 = "php notNull";
+    $specs["input"]                 = "php";
     $specs["output"]                = "php";
     $specs["soapfault"]             = "bool";
+    $specs["purge"]                 = "bool";
+    
     $specs["_self_emetteur"]        = "bool";
     $specs["_self_destinataire"]    = "bool";
     $specs["_date_min"]             = "dateTime";
     $specs["_date_max"]             = "dateTime";
+    
     return $specs;
   }
   

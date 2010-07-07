@@ -13,10 +13,10 @@ global $can;
 $can->needsRead();
 
 $echange_soap_id = CValue::get("echange_soap_id");
-$page            = CValue::get('page', 1);
+$page            = CValue::get('page', 0);
 $now             = mbDate();
-$_date_min       = CValue::getOrSession('_date_min');
-$_date_max       = CValue::getOrSession('_date_max');
+$_date_min       = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
+$_date_max       = CValue::getOrSession('_date_max', mbDateTime("+1 hour"));
 
 $web_service     = CValue::getOrSession("web_service"); 
 $fonction        = CValue::getOrSession("fonction"); 
@@ -27,11 +27,11 @@ $doc_errors_msg = $doc_errors_ack = "";
 $echange_soap = new CEchangeSOAP();
 
 $echange_soap->load($echange_soap_id);
-if($echange_soap->_id) {
+if ($echange_soap->_id) {
   $echange_soap->loadRefs(); 
     
   $echange_soap->input  = unserialize($echange_soap->input);
-  if($echange_soap->soapfault != 1) {
+  if ($echange_soap->soapfault != 1) {
   	$echange_soap->output = unserialize($echange_soap->output);
   }
 }
@@ -50,15 +50,11 @@ if ($fonction) {
 $where["web_service_name"] = $web_service ? " = '".$web_service."'" : "IS NULL";
 
 $total_echange_soap = $itemEchangeSoap->countList($where);
-
-//Pagination
-$total_pages = ceil($total_echange_soap / 20);
-
-$limit = ($page == 1) ? 0 : $page * 10;
 $order = "date_echange DESC";
-$listEchangeSoap = $itemEchangeSoap->loadList($where, $order, intval($limit).',20');
+$forceindex[] = "date_echange";
+$echangesSoap = $itemEchangeSoap->loadList($where, $order, "$page, 20", null, null, $forceindex);
   
-foreach($listEchangeSoap as &$_echange_soap) {
+foreach($echangesSoap as &$_echange_soap) {
   $_echange_soap->loadRefs();
   
   $url = parse_url($_echange_soap->destinataire);
@@ -66,23 +62,23 @@ foreach($listEchangeSoap as &$_echange_soap) {
 }
 
 $methods = array();
-if(!$echange_soap->_id) {
-	$webservice = CAppUI::conf("webservices webservice");
-	$webservice_class = new $webservice(null, false);
-	foreach ($webservice_class->getServicesClasses($webservice) as $_service) {
-		$service_class = new $_service(false);
-		if ($service_class->service)
-		  $methods[$service_class->service] = $webservice_class->getClassMethods($_service, $webservice);
-	}
+if (!$echange_soap->_id) {
+  $webservice = CAppUI::conf("webservices webservice");
+  $webservice_class = new $webservice;
+  $services = $webservice_class->getServicesClasses($webservice);
+  foreach ($services as $_service) {
+    $service_class = new $_service(false);
+    if ($service_class->service)
+      $methods[$service_class->service] = $webservice_class->getClassMethods($_service, $webservice);
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("echange_soap"       , $echange_soap);
-$smarty->assign("listEchangeSoap"    , $listEchangeSoap);
-$smarty->assign("total_echange_soap" , intval($total_echange_soap));
-$smarty->assign("total_pages"        , $total_pages);
+$smarty->assign("echangesSoap"       , $echangesSoap);
+$smarty->assign("total_echange_soap" , $total_echange_soap);
 $smarty->assign("page"               , $page);
 
 $smarty->assign("web_service"        , $web_service);

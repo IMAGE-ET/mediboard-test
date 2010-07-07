@@ -32,13 +32,22 @@ class CSetupwebservices extends CSetup {
      $this->addQuery($sql);
      
      $this->makeRevision("0.11");
-     
      $sql = "ALTER TABLE `echange_soap` 
                ADD `soapfault` ENUM ('0','1') DEFAULT '0',
                ADD INDEX (`date_echange`);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.12";
+     $this->makeRevision("0.12");
+     $sql = "ALTER TABLE `echange_soap` 
+              ADD `purge` ENUM ('0','1') DEFAULT '0';";
+     $this->addQuery($sql); 
+     
+     $this->makeRevision("0.13");
+     $sql = "ALTER TABLE `echange_soap` 
+              CHANGE `input` `input` TEXT;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.14";
   }
 }
 ?>

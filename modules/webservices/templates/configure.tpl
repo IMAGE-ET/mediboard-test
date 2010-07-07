@@ -1,4 +1,4 @@
-{{* $Id:$ *}}
+{{* $Id: configure.tpl 6341 2009-05-21 11:52:48Z mytto $ *}}
 
 {{*
  * @package Mediboard
@@ -8,49 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<h1>Configuration du module {{tr}}{{$m}}{{/tr}}</h1>
-<hr />
+<script type="text/javascript">
+  Main.add(Control.Tabs.create.curry('tabs-configure', true));
+</script>'
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_configure" />
-  <input type="hidden" name="m" value="system" />
-  <table class="form">
-    <tr>
-      <th class="category" colspan="2">Configuration {{tr}}{{$m}}{{/tr}}</th>
-    </tr>
-    
-    <tr>
-      {{assign var="var" value="connection_timeout"}}
-      <th>
-        <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
-      </td>
-    </tr>
-		
-		<tr>
-	    {{assign var="var" value="webservice"}}
-	    <th>
-	      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-	        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
-	      </label>  
-	    </th>
-	    <td>
-	      <select class="str" name="{{$m}}[{{$var}}]">
-	        <option value="CWebservice" {{if "CWebservice" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Aucun</option>
-	        <option value="CSigems" {{if "CSigems" == $dPconfig.$m.$var}} selected="selected" {{/if}}>Sigems</option>
-	      </select>
-	    </td>
-	  </tr>  
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#config-webservices">{{tr}}config-webservices{{/tr}}</a></li>
+  <li><a href="#config-purge_echange">{{tr}}config-webservices-purge-echange{{/tr}}</a></li>
+</ul>
 
-        
-    <tr>
-      <td class="button" colspan="10">
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-      </td>
-    </tr>
-  </table>
-</form>
+<hr class="control_tabs" />
+
+<div id="config-webservices" style="display: none;">
+  {{mb_include template=inc_config_webservices}}
+</div>
+
+<div id="config-purge_echange" style="display: none;">
+  {{mb_include template=inc_config_purge_echange}}
+</div>
