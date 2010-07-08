@@ -45,7 +45,7 @@ Document.refreshList = function() {
 		    {{/if}}
 	    {{/if}}
 	
-	    {{if $canCabinet->edit}}
+	    {{if $canCabinet->read}}
 		    <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
 		      {{tr}}CConsultation{{/tr}}
 		    </a>
