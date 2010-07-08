@@ -13,13 +13,14 @@ class CCategoryPrescription extends CMbObject {
   var $category_prescription_id = null;
   
   // DB Fields
-  var $chapitre    = null;
-  var $nom         = null;
-  var $description = null;
-  var $header      = null;
-  var $group_id    = null;
-	var $color       = null;
-  
+  var $chapitre               = null;
+  var $nom                    = null;
+  var $description            = null;
+  var $header                 = null;
+  var $group_id               = null;
+	var $color                  = null;
+  var $prescription_executant = null;
+	
   // BackRefs
   var $_ref_elements_prescription = null;
 	var $_count_elements_prescription = null;
@@ -41,6 +42,7 @@ class CCategoryPrescription extends CMbObject {
     $specs["header"]      = "text";
     $specs["group_id"]    = "ref class|CGroups";
 		$specs["color"]       = "str length|6";
+		$specs["prescription_executant"] = "bool default|0";
 		
 		$_chapitres = array();
 		$conf_presc = CAppUI::conf("dPprescription CPrescription");

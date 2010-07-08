@@ -62,6 +62,10 @@
 	      </select>
 	    </td>
 	  </tr>
+		<tr>
+		  <th>{{mb_label object=$category field="prescription_executant"}}</th>
+      <td>{{mb_field object=$category field="prescription_executant"}}</td>
+		</tr>
 	  <tr>
 	    <td class="button" colspan="2">
 	    {{if $category->_id}}

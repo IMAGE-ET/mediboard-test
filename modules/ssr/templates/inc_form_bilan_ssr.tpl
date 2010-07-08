@@ -5,7 +5,7 @@ modalWindow = null;
 updateFieldsElementSSR = function(selected, oFormElement, category_id) {
   Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
-  
+	
 	if(dn[0].className != 'informal'){
 		// On vide l'autocomplete
 		$V(oFormElement.libelle, '');
@@ -152,7 +152,17 @@ refreshFormBilanSSR = function(){
   <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
   <input type="hidden" name="prescription_line_element_id" value=""/>
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="return onSubmitFormAjax(this.form, { onComplete: updateListLines } );"/>											
+  <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" 
+	       onchange="return onSubmitFormAjax(this.form, { 
+				   onComplete: function(){ 
+					   if(getForm('searchElement')){ 
+						   refreshFormBilanSSR();
+						} else { 
+						  updateListLines(); 
+						} 
+					}
+				 } );"/>											
+				 
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="element_prescription_id" value="" />
@@ -203,6 +213,41 @@ refreshFormBilanSSR = function(){
               </form>
 					  </td>
 			    </tr>
+				{{else}}
+				<tr>
+					<td colspan="2">
+						<script type="text/javascript">
+							Main.add( function(){
+							    var url = new Url("ssr", "ajax_autocomplete_prescription_executant");
+							    url.autoComplete("searchElement_libelle", "searchElement_auto_complete", {
+							      minChars: 2,
+							      updateElement: function(selected) { 
+										  Element.cleanWhitespace(selected);
+											var dn = selected.childNodes;
+										  var element_id = dn[0].firstChild.nodeValue;
+										
+                      var oForm = getForm("addLineSSR");
+											$V(oForm.element_prescription_id, element_id);
+                      
+											// si la prescription n'est pas encore créé, on l'a crée
+											if(!$V(oForm.prescription_id)){
+											  var oFormAddPrescription = getForm('addPrescriptionSSR');
+												onSubmitFormAjax(oFormAddPrescription);
+											} else {
+											  onSubmitFormAjax(oForm, { onComplete:  refreshFormBilanSSR });
+                      }
+										}
+							    } );
+						  } );
+						</script>	
+						
+						<form name="searchElement">	
+							<input type="text" name="libelle" value="" class="autocomplete"  style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+              <input type="hidden" name="element_id" onchange="" />
+              <div style="display:none;" class="autocomplete" id="searchElement_auto_complete"></div>
+						</form>
+					</td>
+				</tr>	
 				{{/if}}
 				<tr>
 				  <th class="title" colspan="2">Prescription</th>
@@ -236,7 +281,7 @@ refreshFormBilanSSR = function(){
 			  {{foreachelse}}
         <tr>
           <td colspan="2">
-          	<div class="small-info">Ce chapitre ne contient aucune catégorie</div>
+          	<div class="small-info">Aucune prescription</div>
           </td>
         </tr>
 				{{/foreach}}
