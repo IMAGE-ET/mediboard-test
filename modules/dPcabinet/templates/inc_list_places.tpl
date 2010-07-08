@@ -57,10 +57,10 @@ PlageConsult.addPlaceAfter = function(plage_id) {
   {{if $online}}
   <tr>
     <td class="button" colspan="3">
-      <button type="button" class="add" onclick="PlageConsult.addPlaceBefore()">
+      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceBefore()">
         Avant
       </button>
-      <button type="button" class="add" onclick="PlageConsult.addPlaceAfter()">
+      <button type="button" class="add singleclick" onclick="PlageConsult.addPlaceAfter()">
         Après
       </button>
     </td>
