@@ -64,8 +64,11 @@ onSubmitTraitement = function (oForm) {
 
 easyMode = function() {
   var url = new Url("dPcabinet", "vw_ant_easymode");
-  url.addParam("user", "{{$userSel}}");
+  url.addParam("user_id", "{{$userSel->_id}}");
   url.addParam("patient_id", "{{$patient->_id}}");
+  {{if isset($consult|smarty:nodefaults)}}
+    url.addParam("consult_id", "{{$consult->_id}}");
+  {{/if}}
   url.pop(900, 600, "Mode grille");
 }
 

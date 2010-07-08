@@ -1,3 +1,11 @@
+<h2>
+{{if $consult->_id}}
+  {{$consult}}
+{{elseif $patient->_id}}
+  {{$patient}}
+{{/if}}
+</h2>
+
 <script type="text/javascript">
 Main.add(function () {
   Control.Tabs.create('tab-main', false);

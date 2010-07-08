@@ -15,12 +15,19 @@ global $can;
 
 $user_id = CValue::getOrSession("user_id");
 $patient_id = CValue::get("patient_id");
+$consult_id = CValue::get("consult_id");
 
 // On charge le praticien
 $user = new CMediusers;
 $user->load($user_id);
 $user->loadRefs();
 $canUser = $user->canDo();
+
+$consult = new CConsultation;
+if ($consult_id) {
+  $consult->load($consult_id);
+  $consult->loadRefsFwd();
+}
 
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
@@ -62,6 +69,8 @@ $smarty->assign("traitement", $traitement);
 $smarty->assign("applied_antecedents", $applied_antecedents);
 $smarty->assign("applied_traitements", $applied_traitements);
 $smarty->assign("user", $user);
+$smarty->assign("patient", $patient);
+$smarty->assign("consult", $consult);
 
 $smarty->display("vw_ant_easymode.tpl");
 ?>
