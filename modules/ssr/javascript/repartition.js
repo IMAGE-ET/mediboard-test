@@ -24,9 +24,11 @@ Repartition = {
   },
   
   // Launch initial plateau update
-  registerTechnicien: function (technicien_id) {
+  registerTechnicien: function (technicien_id, readonly) {
     Main.add(Repartition.updateTechnicien.curry(technicien_id));
-    Repartition.droppableTechnicien(technicien_id)
+		if (!readonly) {
+	 	  Repartition.droppableTechnicien(technicien_id);
+	  }
   },
   
 	// Make sejour draggable

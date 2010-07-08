@@ -13,7 +13,7 @@
   <tr>
     <th id="technicien-" class="title">
       <script type="text/javascript">
-        Repartition.registerTechnicien('');
+        Repartition.registerTechnicien('','{{$readonly}}');
       </script>
       Séjours non affectés
 		</th>

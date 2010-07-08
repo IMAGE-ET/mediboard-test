@@ -13,6 +13,7 @@ CCanDo::checkRead();
 // Etablissement courant
 $group = CGroups::loadCurrent();
 $date = CValue::getOrSession("date", mbDate());
+$readonly = CValue::get("readonly", false);
 
 // Plateaux disponibles
 $plateau = new CPlateauTechnique;
@@ -30,6 +31,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("bilan", new CBilanSSR);
+$smarty->assign("readonly", $readonly);
 $smarty->display("vw_idx_repartition.tpl");
 
 

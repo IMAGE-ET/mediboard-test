@@ -43,6 +43,12 @@ refreshReplacerPlanning = function(replacer_id){
 	url.requestUpdate("replacer-planning");
 }
 
+printRepartition = function(){
+  var url = new Url("ssr", "vw_idx_repartition");
+	url.addParam("readonly", true);
+	url.popup("Repartition des patients");
+}
+
 Main.add(function(){
   Planification.showWeek();
 	onCompleteShowWeek();
@@ -66,6 +72,9 @@ Main.add(function(){
 				  <li>
 				    <a href="#reeducateurs">Transfert des rééducateurs</a>
 				  </li>
+					<li style="float: right;">
+						<button type="button" onclick="printRepartition();" class="print">Repartition patients</button>
+					</li>
 			  </ul>
 			   <hr class="control_tabs" />
       </div>

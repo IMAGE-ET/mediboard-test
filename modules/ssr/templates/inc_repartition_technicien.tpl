@@ -13,7 +13,7 @@
   <tr>
     <th id="technicien-{{$technicien_id}}">
       <script type="text/javascript">
-        Repartition.registerTechnicien('{{$technicien_id}}')
+        Repartition.registerTechnicien('{{$technicien_id}}','{{$readonly}}')
 			</script>
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_technicien->_fwd.kine_id}}
 		</th>

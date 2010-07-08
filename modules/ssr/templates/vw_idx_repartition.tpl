@@ -44,6 +44,9 @@ Main.add(function () {
 			<form name="selDate" action="?" method="get">
 				<input type="hidden" name="m" value="{{$m}}" />
 			  <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
+				<input type="hidden" name="dialog" value="{{$dialog}}" />
+				<input type="hidden" name="a" value="{{$a}}" />
+				<input type="hidden" name="readonly" value="{{$readonly}}" />
 			</form>
 			<button type="button" class="search" style="float: right" onclick="showLegende();">Legende</button>
 		</th>
@@ -54,7 +57,7 @@ Main.add(function () {
 			<script type="text/javascript">
 			Main.add(Control.Tabs.create.curry('tabs-plateaux', true));
 			</script>
-
+    
 			<ul id="tabs-plateaux" class="control_tabs">
 			  {{foreach from=$plateaux item=_plateau}}
 			  <li>
