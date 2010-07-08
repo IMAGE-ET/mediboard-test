@@ -44,7 +44,8 @@ Main.add(function () {
               {{if $dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
                 {{assign var="nomdoc" value=$_doc_item->nom}}
                 {{assign var="file_owner" value=$_doc_item->_ref_chir->_id}}
-                {{assign var="srcImg" value="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_ref_file->_id}}&amp;phpThumb=1&amp;w=64"}}
+                {{assign var="file_id" value=$_doc_item->_ref_file->_id}}
+                {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$file_id&phpThumb=1&w=64"}}
               {{else}}
 			          {{assign var="srcImg" value="images/pictures/medifile.png"}}
               {{/if}}

@@ -114,7 +114,7 @@ function showEtabEntreeTransfert(mode) {
 			          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 			          {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
 			        </select>
-			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier, null, null, null, null, {{$user_id}})">
+			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier, null, null, null, null, {{$userSel->_id}})">
 			        	{{tr}}New{{/tr}}
 			        </button>
 			        <br />  
