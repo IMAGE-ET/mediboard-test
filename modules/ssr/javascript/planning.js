@@ -19,12 +19,10 @@ PlanningEvent = Class.create({
 
     var height = this.planning.getCellHeight() / 60;
    
-    container.setStyle({
-      top:    (this.minutes * height)+"px",
-      left:   (this.offset * 100)+"%",
-      width:  (this.width * 100)+"%",
-      height: ((this.length * height) || 1)+"px"
-    });
+    container.style.top    = (this.minutes * height)+"px";
+    container.style.left   = (this.offset * 100)+"%";
+    container.style.width  = (this.width * 100)+"%";
+    container.style.height = ((this.length * height) || 1)+"px";
   },
   getElement: function(){
     return $(this.internal_id);
@@ -78,13 +76,6 @@ WeekPlanning = Class.create({
     this.events = events;
     this.hour_divider = hour_divider;
     this.adapt_range = adapt_range;
-    
-    if (this.adapt_range) {
-      this.adaptRangeHeight(); 
-    }
-    
-    this.updateEventsDimensions();
-    this.scroll(scroll_top);
   },
   scroll: function(scroll_top) {
     var top = this.container.down(".hour-"+this.hour_min).offsetTop;
@@ -92,10 +83,12 @@ WeekPlanning = Class.create({
   },
   setPlanningHeight: function(height) {
     var top = this.container.down("table").getHeight();
-    this.container.down('.week-container').setStyle({height: height - parseInt(top, 10) + "px"});
+    this.container.down('.week-container').style.height = height - parseInt(top, 10) + "px";
+    
     if (this.adapt_range) {
       this.adaptRangeHeight(); 
     }
+    
     this.updateEventsDimensions();
   },
   adaptRangeHeight: function(){
@@ -104,7 +97,8 @@ WeekPlanning = Class.create({
     var delta = parseInt(this.hour_max, 10) - parseInt(this.hour_min, 10) + 1;
     var visibleLines = this.countVisibleLines();
     
-    weekContainer.setStyle({height: (viewportHeight / delta) * visibleLines + "px"});
+    this._tableHeight = null;
+    weekContainer.style.height = (viewportHeight / delta) * visibleLines + "px";
   },
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");
@@ -127,7 +121,9 @@ WeekPlanning = Class.create({
     return this.container.select(".week-container tr").filter(Element.visible).length;
   },
   getCellHeight: function(){
-    return this.container.down(".week-container table").getHeight() / this.countVisibleLines();
+    var tableHeight = this._tableHeight || this.container.down(".week-container table").getHeight();
+    this._tableHeight = tableHeight;
+    return tableHeight / this.countVisibleLines();
   },
   onEventChange: function(e){
     console.debug(e.getTime());
@@ -138,28 +134,27 @@ WeekPlanning = Class.create({
     
     if (!this.load_data) return;
     
+    var cellHeight = this.getCellHeight();
+    var height = Math.ceil(cellHeight / this.hour_divider);
+    
     // Day
     $H(this.load_data).each(function(day){
       if (day.value.length === 0) return;
       
-      var cellHeight = this.getCellHeight();
-      var height = Math.ceil(cellHeight / this.hour_divider);
-          
       // Hour
       $H(day.value).each(function(hour){
         
         // Minute
         $H(hour.value).each(function(load){
           var container = $(this.container.id+"-"+day.key+"-"+hour.key+"-"+load.key);
-          
-          var width = container.up().getWidth();
+          var up = container.up();
+          var width = parseInt((up.currentStyle && up.currentStyle.width) || up.getWidth()); // optim.
           var top = Math.ceil(cellHeight * (load.key / this.hour_divider) / 10);
           
-          container.setStyle({
-            top:    top+"px",
-            width:  Math.round(width * (load.value / maximum_load))+"px",
-            height: height+"px"
-          });
+          // optim.
+          container.style.top    = top+"px";
+          container.style.width  = Math.round(width * (load.value / maximum_load))+"px";
+          container.style.height = height+"px";
         }, this);
       }, this);
     }, this);
