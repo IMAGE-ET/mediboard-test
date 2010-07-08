@@ -46,5 +46,6 @@ $smarty->assign("facture", $facture);
 $smarty->assign("factureitem", $factureitem);
 $smarty->assign("listFacture", $listFacture);
 $smarty->assign("libelleItem", $libelleItem);
+$smarty->assign("user_id", $AppUI->user_id);
 $smarty->display("vw_idx_factureitem.tpl");
 ?>

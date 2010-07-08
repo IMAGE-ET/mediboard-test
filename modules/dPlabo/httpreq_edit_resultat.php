@@ -38,7 +38,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("prescriptionItem", $prescriptionItem);
 $smarty->assign("siblingItems", $siblingItems);
-
+$smarty->assign("user_id", $AppUI->user_id);
 
 $smarty->display("inc_edit_resultat.tpl");
 ?>

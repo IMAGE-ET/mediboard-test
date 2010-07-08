@@ -91,6 +91,7 @@ $smarty->assign("consult"       , $consult       );
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("anesth"        , $anesth        );
 $smarty->assign("techniquesComp", $techniquesComp);
+$smarty->assign("userSel"       , $userSel);
 $smarty->display("inc_consult_anesth/acc_infos_anesth.tpl");
 
 ?>

@@ -393,7 +393,7 @@ Main.add(function () {
         <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
     </td>
   </tr>
@@ -405,7 +405,7 @@ Main.add(function () {
         <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion)">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
     </td>
   </tr>

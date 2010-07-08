@@ -33,6 +33,7 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 $smarty = new CSmartyDP();
 
 $smarty->assign("currUser"               , $currUser);
+$smarty->assign("user_id"                , $AppUI->user_id);
 $smarty->assign("listAnesths"            , $listAnesths);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));

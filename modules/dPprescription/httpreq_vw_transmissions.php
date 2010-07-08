@@ -126,7 +126,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("with_filter", $with_filter);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("order_col", $order_col);
-
+$smarty->assign("user_id"  , $AppUI->user_id);
 $smarty->assign("trans_and_obs", $trans_and_obs);
 $smarty->assign("addTrans", $addTrans);
 $smarty->assign("sejour_id", $sejour_id);

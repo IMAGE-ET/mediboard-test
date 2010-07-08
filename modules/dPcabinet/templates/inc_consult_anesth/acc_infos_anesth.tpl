@@ -85,7 +85,7 @@ function reloadListTech() {
         <option value="">&mdash; Aide</option>
         {{html_options options=$consult_anesth->_aides.prepa_preop.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
       
@@ -101,7 +101,7 @@ function reloadListTech() {
         <option value="">&mdash; Aide</option>
         {{html_options options=$techniquesComp->_aides.technique.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       <input type="hidden" name="_hidden_technique" value="" />
       <textarea name="technique" onblur="if(!$(this).emptyValue()){submitTech(this.form);}"></textarea>
       <button class="submit" type="button">Ajouter</button>
@@ -124,7 +124,7 @@ function reloadListTech() {
         <option value="">&mdash; Aide</option>
         {{html_options options=$consult->_aides.rques.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques)">{{tr}}New{{/tr}}</button><br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.rques, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult field="rques" onchange="submitFormAjax(this.form, 'systemMsg')"}}<br />
       </form>
     </td>

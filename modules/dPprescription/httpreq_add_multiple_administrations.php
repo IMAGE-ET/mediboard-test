@@ -107,6 +107,7 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("transmission", $transmission);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("tabs_refresh", $tabs_refresh);
+$smarty->assign("user_id", $AppUI->user_id);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

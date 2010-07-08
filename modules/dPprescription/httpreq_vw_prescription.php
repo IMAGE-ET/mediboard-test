@@ -513,7 +513,7 @@ $smarty->assign("operation_id"         , $operation_id);
 $smarty->assign("pratSel_id"           , $pratSel_id);
 $smarty->assign("mode_sejour"          , $mode_sejour);
 $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
-
+$smarty->assign("user_id"              , $AppUI->user_id);
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
   $smarty->assign("chir_id", $_chir_id);
