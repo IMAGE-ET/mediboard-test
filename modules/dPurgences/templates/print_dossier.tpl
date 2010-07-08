@@ -38,7 +38,7 @@
 	</tr>
 </table>
 
-{{include file="../../dPpatients/templates/print_constantes.tpl"}}
+{{mb_include module=dPpatients template=print_constantes}}
 
 <table class="{{$tbl_class}}">
   <tr>
@@ -46,7 +46,7 @@
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
-	{{mb_include module=dPcabinet template=print_inc_constantes}}
+	{{mb_include module=dPcabinet template=print_inc_antecents_traitements}}
 </table>
 
 {{if !@$offline}}
@@ -149,7 +149,7 @@
   </tr>
 </table>
 
-{{include file="../../dPhospi/templates/inc_list_transmissions.tpl" without_del_form=true}}
+{{mb_include module=dPhospi template=inc_list_transmissions without_del_form=true}}
 
 <table class="{{$tbl_class}}">
   <tr>
@@ -189,7 +189,7 @@
   <tr><th class="category" colspan="10">Actes</th></tr>
 </table>
 
-{{include file="../../dPcabinet/templates/print_actes.tpl" without_del_form=true}}
+{{mb_include module=dPcabinet template=print_actes without_del_form=true}}
 
 {{if !@$offline}}
 <table>
