@@ -21,9 +21,9 @@ Main.add(function() {
     {{$planning->adapt_range|@json}}
   );
   
+  planning.setPlanningHeight(planning.container.up().getHeight());
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
   
-  planning.setPlanningHeight(planning.container.up().getHeight());
   planning.scroll();
   planning.container.addClassName("drawn");
   

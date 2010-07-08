@@ -46,12 +46,23 @@ foreach ($helped as $i => $depend_field) {
 
 // Liste des aides
 $user_id = CValue::get("user_id", CAppUI::$user->_id);
+if (!$user_id) {
+  $user_id = CAppUI::$user->_id;
+}
+
 $user = new CMediusers();
 $user->load($user_id);
 $user->loadRefFunction();
+
 $group = CGroups::loadCurrent();
+
 $aidebis = new CAideSaisie();
-$where[] = "field = '".$field."' and (user_id=" . $user_id . " or function_id=" . $user->function_id . " or group_id=" . $group->_id.")";
+$where[] = "`field` = '".$field."' AND (
+  user_id     = " . $user_id . " OR 
+  function_id = " . $user->function_id . " OR 
+  group_id    = " . $group->_id . "
+)";
+
 $orderby = "name";
 $aides = $aidebis->loadList($where, $orderby);
 
