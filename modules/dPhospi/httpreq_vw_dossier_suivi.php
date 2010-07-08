@@ -61,6 +61,11 @@ foreach($sejour->_ref_suivi_medical as $_trans_or_obs) {
 $constantes = new CConstantesMedicales();
 $constantes->patient_id = $sejour->patient_id;
 $constantes = $constantes->loadMatchingList();
+foreach($constantes as $_const) {
+   if($_const->context_class != "CSejour" || $_const->context_id != $sejour->_id ){
+      unset($constantes[$_const->_id]);
+   }
+}
 
 //mettre les transmissions dans un tableau dont l'index est le datetime 
 
