@@ -44,7 +44,7 @@ PlanningTechnicien = {
 	height      : null,
 	selectable  : null,
 	large        : null,
-	show: function(kine_id, surveillance, sejour_id, height, selectable, large) {
+	show: function(kine_id, surveillance, sejour_id, height, selectable, large, print) {
 		this.kine_id = kine_id || this.kine_id;
 		this.sejour_id = sejour_id || this.sejour_id ; 
 		this.surveillance = surveillance || this.surveillance ; 
@@ -62,7 +62,24 @@ PlanningTechnicien = {
 		url.addParam("height", this.height);
 		url.addParam("selectable", this.selectable);
 		url.addParam("large", this.large);
-		url.requestUpdate("planning-technicien");
+		url.addParam("print", print);
+		url.requestUpdate("planning-technicien", {
+		onComplete: function(){
+				if (print) {
+					$('planning-technicien').select(".planning col")[2].style.width = 0;
+					$('planning-technicien').select(".week-container")[0].style.overflowY = "visible";
+					
+					for (var i = 0; i < 7; i++) {
+						$$('.hour-0' + i)[0].hide();
+					}
+					for (var i = 19; i < 24; i++) {
+						$$('.hour-' + i)[0].hide();
+					}
+			
+					}
+				}
+	    }
+		);
   },
 	
   hide: function() {

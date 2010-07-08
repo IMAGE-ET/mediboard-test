@@ -16,7 +16,8 @@ $surveillance = CValue::getOrSession("surveillance");
 $sejour_id    = CValue::get("sejour_id");
 $height       = CValue::get("height");
 $selectable   = CValue::get("selectable");
-$large         = CValue::get("large");
+$large        = CValue::get("large");
+$print        = CValue::get("print");
 
 $kine = new CMediusers();
 $kine->load($kine_id);
@@ -27,7 +28,7 @@ $sejour->load($sejour_id);
 $nb_days_planning = $sejour->_id ? 
   $sejour->getNbJourPlanning($date) : 
 	CEvenementSSR::getNbJoursPlanning($kine_id, $date);
-$planning = new CPlanningWeek($date, null, null, $nb_days_planning, $selectable, $height, $large, true);
+$planning = new CPlanningWeek($date, null, null, $nb_days_planning, $selectable, $height, $large, !$print);
 $planning->title = $surveillance ?
   "Planning de surveillance du technicien '$kine->_view'" :
   "Planning du technicien '$kine->_view'";	
