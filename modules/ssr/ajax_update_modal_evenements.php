@@ -18,7 +18,7 @@ foreach($_evenements as $_evenement_id){
 	$evenement->load($_evenement_id);
 	$evenement->loadRefSejour();
 	$evenement->_ref_sejour->loadRefPatient();
-	$evenement->loadRefElementPrescription();
+	$evenement->loadRefPrescriptionLineElement();
 	$evenements[$evenement->sejour_id][$evenement->_id] = $evenement;
 }
 

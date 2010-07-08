@@ -34,11 +34,13 @@ $evenements = $evenement_ssr->loadList($where);
 $elements = array();
 $intervenants = array();
 foreach($evenements as $_evenement){
-	$_evenement->loadRefElementPrescription();
+	$_evenement->loadRefPrescriptionLineElement();
 	$_evenement->loadRefTherapeute();
 
-  $elements[$_evenement->element_prescription_id] = $_evenement->_ref_element_prescription;
-	$intervenants[$_evenement->element_prescription_id][$_evenement->therapeute_id] = $_evenement->_ref_therapeute;
+  $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
+
+  $elements[$element_prescription->_id] = $element_prescription;
+	$intervenants[$element_prescription->_id][$_evenement->therapeute_id] = $_evenement->_ref_therapeute;
 }
 
 // Création du template

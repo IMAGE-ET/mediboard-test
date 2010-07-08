@@ -308,8 +308,26 @@ class CSetupssr extends CSetup {
       ADD `antecedents` TEXT,
       ADD `traitements` TEXT;";
     $this->addQuery($sql);
-
-		$this->mod_version = "0.22";
+		
+		$this->makeRevision("0.22");
+		$sql = "ALTER TABLE `evenement_ssr` 
+              ADD `prescription_line_element_id` INT (11) UNSIGNED NOT NULL";
+		$this->addQuery($sql);
+		
+		$sql = "UPDATE `evenement_ssr`
+		         SET `prescription_line_element_id` = (SELECT `prescription_line_element_id` 
+							                                     FROM `prescription_line_element`
+																									 LEFT JOIN `prescription` ON `prescription_line_element`.`prescription_id` = `prescription`.`prescription_id`
+	                                                 WHERE `prescription`.`type` = 'sejour'
+																									 AND `prescription`.`object_id` = `evenement_ssr`.`sejour_id`
+																									 AND `prescription_line_element`.`element_prescription_id` = `evenement_ssr`.`element_prescription_id`);";
+		$this->addQuery($sql);
+		
+    $sql = "ALTER TABLE `evenement_ssr` 
+              DROP `element_prescription_id`";
+		$this->addQuery($sql);
+    
+		$this->mod_version = "0.23";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

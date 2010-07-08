@@ -37,8 +37,8 @@ $where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planni
 $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
-	$_evenement->loadRefElementPrescription();
-	$element_prescription =& $_evenement->_ref_element_prescription;
+	$_evenement->loadRefPrescriptionLineElement();
+	$element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
   $element_prescription->loadRefCategory();
 	$category_prescription =& $element_prescription->_ref_category_prescription;
   $title = $category_prescription->_view;

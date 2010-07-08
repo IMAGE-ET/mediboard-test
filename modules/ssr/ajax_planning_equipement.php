@@ -32,14 +32,15 @@ $evenements = $evenement_ssr->loadList($where);
 
 foreach($evenements as $_evenement){
 	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
-	$_evenement->loadRefElementPrescription();
-  $_evenement->loadRefSejour();
+	
+	$_evenement->loadRefPrescriptionLineElement();
+	$_evenement->loadRefSejour();
 	$_evenement->loadRefTherapeute();
   $_evenement->_ref_sejour->loadRefPatient();
 	$therapeute = $_evenement->_ref_therapeute;
   $patient =  $_evenement->_ref_sejour->_ref_patient;
   $title = ucfirst(strtolower($patient->nom))."  $therapeute->_shortview";
-  $element_prescription =& $_evenement->_ref_element_prescription;
+  $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 
   $css_classes = array($element_prescription->_guid);

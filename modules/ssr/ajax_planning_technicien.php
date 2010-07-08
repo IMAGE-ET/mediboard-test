@@ -51,7 +51,7 @@ foreach($evenements_charge as $_evenement){
 }
 
 foreach($evenements as $_evenement){
-	$_evenement->loadRefElementPrescription();
+	$_evenement->loadRefPrescriptionLineElement();
   $_evenement->loadRefSejour();
   $_evenement->_ref_sejour->loadRefPatient();
   $_evenement->loadRefEquipement();
@@ -66,7 +66,7 @@ foreach($evenements as $_evenement){
 	if(!$sejour_id && $_evenement->remarque){
 		$title .= " - ".$_evenement->remarque;
 	}
-  $element_prescription =& $_evenement->_ref_element_prescription;
+  $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
   $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
   
   $css_classes = array($element_prescription->_guid, 

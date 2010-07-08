@@ -30,11 +30,6 @@ $_days = CValue::post("_days");
 $_heure = CValue::post("_heure");
 $duree = CValue::post("duree");
 
-// Chargement de la ligne et recuperation de l'id de l'element de prescription
-$line_element = new CPrescriptionLineElement();
-$line_element->load($line_id);
-$element_prescription_id = $line_element->element_prescription_id;
-
 $kine = new CMediusers();
 $kine->load($therapeute_id);
 
@@ -59,7 +54,7 @@ if(count($_days)){
 	  $evenement_ssr->equipement_id = $equipement_id;
 	  $evenement_ssr->debut = "$_day $_heure";
 	  $evenement_ssr->duree = $duree;
-		$evenement_ssr->element_prescription_id = $element_prescription_id;
+		$evenement_ssr->prescription_line_element_id = $line_id;
 		$evenement_ssr->remarque = $remarque;
 		
 		// Chargement du remplacant s'il est specifié

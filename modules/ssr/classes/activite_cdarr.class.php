@@ -42,7 +42,6 @@ class CActiviteCdARR extends CCdARRObject {
     $props["note"]    = "text";
     $props["inclu"]   = "text";
     $props["exclu"]   = "text";
-    
     return $props;
   }
   

@@ -13,7 +13,7 @@ class CEvenementSSR extends CMbObject {
 	var $evenement_ssr_id        = null;
 	
 	// DB Fields
-	var $element_prescription_id = null;
+	var $prescription_line_element_id = null;
 	var $sejour_id               = null;
 	var $debut                   = null; // DateTime
 	var $duree                   = null; // Durée en minutes
@@ -44,8 +44,8 @@ class CEvenementSSR extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["element_prescription_id"] = "ref notNull class|CElementPrescription";
-    $props["sejour_id"]     = "ref notNull class|CSejour show|0";
+    $props["prescription_line_element_id"] = "ref notNull class|CPrescriptionLineElement";
+		$props["sejour_id"]     = "ref notNull class|CSejour show|0";
     $props["debut"]         = "dateTime notNull show|0";
     $props["duree"]         = "num notNull min|0";
 		$props["therapeute_id"] = "ref notNull class|CMediusers";
@@ -135,9 +135,10 @@ class CEvenementSSR extends CMbObject {
 		$this->loadRefsActesCdARR();
 	}
 	
-	function loadRefElementPrescription($cache = true) {
-    $this->_ref_element_prescription = $this->loadFwdRef("element_prescription_id", $cache); 
-  }
+	function loadRefPrescriptionLineElement($cache = true){
+		$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
+		$this->_ref_prescription_line_element->loadRefElement();
+	}
 	
 	function loadRefSejour($cache = true){
 		$this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
@@ -188,7 +189,6 @@ class CEvenementSSR extends CMbObject {
     }
     return $nb_days;
   }
-	
 }
 
 ?>

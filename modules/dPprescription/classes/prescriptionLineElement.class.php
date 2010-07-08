@@ -66,6 +66,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $backProps["administration"]  = "CAdministration object_id";
     $backProps["prise_posologie"] = "CPrisePosologie object_id";
     $backProps["planifications"]  = "CPlanificationSysteme object_id";
+		$backProps["evenements_ssr"]  = "CEvenementSSR prescription_line_element_id";
     return $backProps;
   }
   
