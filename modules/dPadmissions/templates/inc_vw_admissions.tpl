@@ -12,7 +12,7 @@
 Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 </script>
 
-<table class="tbl" id="admissions" >
+<table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">
       <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
@@ -48,7 +48,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
     {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     <th style="width: 1%;">
-      <input type="text" size="3" onkeyup="Admissions.filter(this)" id="filter-patient-name" />
+      <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
     </th>
   
     <th>

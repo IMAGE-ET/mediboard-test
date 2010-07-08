@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="tbl">
+<table class="tbl" id="sortie-{{$mode}}">
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="7">
       {{if $mode == "ambu"}}
       <span style="float: right"><button type="button" class="search" onclick="printAmbu();">Impression Ambu</button></span>
       {{/if}}
@@ -28,6 +28,9 @@
     {{/if}}
     <th>
       {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
+    </th>
+    <th style="width: 1%;">
+      <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie-{{$mode}}')" id="filter-patient-name" />
     </th>
     <th>
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_sortie&date=$date&vue=$vue"}}
@@ -107,7 +110,7 @@
     </td>
     {{/if}}
     
-    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text CPatient-view" colspan="2" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{if $canPatients->edit}}
       <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
         <img src="images/icons/edit.png" title="{{tr}}Edit{{/tr}}" />
