@@ -7,6 +7,7 @@ toggleTrans = function(trans_class){
 }
 
 </script>
+
 <table class="tbl">
   <tr>
     <th colspan="7" class="title">

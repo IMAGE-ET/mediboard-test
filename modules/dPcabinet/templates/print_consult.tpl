@@ -38,7 +38,7 @@
   </tr>
 </table>
 
-{{mb_include module=dPhospi template=inc_list_transmissions without_del_form=true}}
+{{mb_include module=dPhospi template=inc_list_transmissions without_del_form=true list_transmissions=$sejour->_ref_suivi_medical}}
 
 <table class="{{$tbl_class}}">
   <tr>
