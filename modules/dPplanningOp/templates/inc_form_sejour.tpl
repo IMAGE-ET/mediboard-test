@@ -206,17 +206,19 @@ Main.add( function(){
   Calendar.regField(form.entree_reelle, dates);
   Calendar.regField(form.sortie_reelle, dates);
   
-  dates.limit = {
-    start: null,
-    stop: dates.spots.first()
-  };
+// Constraints make intervention moving fastidious
+//  dates.limit = {
+//    start: null,
+//    stop: dates.spots.first()
+//  };
   
   Calendar.regField(form._date_entree_prevue, dates);
   
-  dates.limit = {
-    start: dates.spots.last(),
-    stop: null 
-  };
+// Constraints make intervention moving fastidious
+//  dates.limit = {
+//    start: dates.spots.last(),
+//    stop: null 
+//  };
   
   Calendar.regField(form._date_sortie_prevue, dates);
 
