@@ -55,7 +55,7 @@ anonymous = function() {
 }
 
 checkDoublon = function() {
-	var oForm = document.editFrm.elements;
+	var oForm = document.editFrm;
 	
 	if ($V("editFrm_nom") && $V("editFrm_prenom") && $V("editFrm_naissance")) {
 		SiblingsChecker.submit = false;
