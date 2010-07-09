@@ -3,15 +3,6 @@
 <script type="text/javascript">
 window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
-{{if $compte_rendu->_id}}
-try {
-window.opener.Document.refreshList(
-  '{{$compte_rendu->object_class}}',
-	'{{$compte_rendu->object_id}}'	
-);
-}
-catch (e) {}
-{{/if}}
 
 function submitCompteRendu(){
   (function(){
@@ -91,6 +82,8 @@ function submitCompteRendu(){
       Thumb.modele_id = '{{$modele_id}}';
       Thumb.user_id = '{{$user_id}}';
       Thumb.mode = "doc";
+      Thumb.object_class = '{{$compte_rendu->object_class}}';
+      Thumb.object_id = '{{$compte_rendu->object_id}}';
     {{/if}}
 	});
 
@@ -141,9 +134,10 @@ function submitCompteRendu(){
       </select>
       
       &mdash;
-      {{mb_label object=$compte_rendu field=private}}
-      {{mb_field object=$compte_rendu field=private}}
-      
+      <label>
+        {{tr}}CCompteRendu-private{{/tr}}
+        {{mb_field object=$compte_rendu field=private typeEnum="checkbox"}}
+      </label>
       {{if $pdf_thumbnails}}
         &mdash;
         <button class="pagelayout" type="button" title="Mise en page"
