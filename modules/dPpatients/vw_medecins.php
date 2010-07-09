@@ -27,16 +27,21 @@ else if ($medecin->load($medecin_id)) {
   $medecin->countPatients();
 }
 
+$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
+$indexGroup = new CGroups;
+$indexGroup->load($g);
+
+
 // Récuperation des médecins recherchés
 if($dialog) {
   $medecin_nom    = CValue::get("medecin_nom"   , ""  );
   $medecin_prenom = CValue::get("medecin_prenom", ""  );
-  $medecin_cp     = CValue::get("medecin_cp"    , CAppUI::pref("DEPARTEMENT"));
+  $medecin_cp     = CValue::get("medecin_cp"    , $indexGroup->_cp_court);
   $medecin_type   = CValue::get("medecin_type"  , "medecin");
 } else {
   $medecin_nom    = CValue::getOrSession("medecin_nom");
   $medecin_prenom = CValue::getOrSession("medecin_prenom");
-  $medecin_cp     = CValue::getOrSession("medecin_cp", CAppUI::pref("DEPARTEMENT"));
+  $medecin_cp     = CValue::getOrSession("medecin_cp", $indexGroup->_cp_court);
   $medecin_type   = CValue::getOrSession("medecin_type", "medecin");
 }
 
@@ -58,7 +63,6 @@ $medecins = new CMedecin();
 $medecins = $medecins->loadList($where, $order, "0, 50");
 
 $list_types = $medecin->_specs['type']->_locales;
-
 // Création du template
 $smarty = new CSmartyDP();
 

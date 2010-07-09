@@ -137,7 +137,7 @@ Main.add(function () {
  	<tr>
  	  <td colspan="2" class="text">
 		  <div class="small-info">
-		    Veuillez créer la fiche patient avant de pouvoir ajoute ou supprimer ses médecins correspondants.
+		    Veuillez créer la fiche patient avant de pouvoir ajouter ou supprimer ses médecins correspondants.
 		  </div>
  	  </td>
  	</tr>

@@ -31,7 +31,7 @@ class CGroups extends CMbObject {
   var $pharmacie_id        = null;
   var $finess              = null;
   var $chambre_particuliere= null;
-
+  var $_cp_court = null;
   // Object References
   var $_ref_functions = null;
   var $_ref_blocs = null;
@@ -40,6 +40,7 @@ class CGroups extends CMbObject {
   var $_ref_services = null;
   var $_ref_pharmacie = null;
   var $_ref_service_urgences = null;
+  
   
   static $_ref_current = null;
   
@@ -111,7 +112,7 @@ class CGroups extends CMbObject {
     $specs["web"]                 = "str";
     $specs["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $specs["chambre_particuliere"]= "bool notNull default|0";
-    
+    $specs["_cp_court"]           = "numchar length|2";
     return $specs;
   }
   
@@ -119,6 +120,7 @@ class CGroups extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
+    $this->_cp_court = substr($this->cp,0,2);
   }
   
   function loadRefLivretTherapeutique($lettre = "%", $limit = 50, $full_mode = true){

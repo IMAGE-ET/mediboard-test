@@ -13,9 +13,13 @@ $keywords = CValue::post("_view");
 
 if($can->read && $keywords) {
   $medecin = new CMedecin();
-  $default_cp = str_pad(CAppUI::pref("DEPARTEMENT"), 2, "0", STR_PAD_LEFT);
+  $g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
+  $indexGroup = new CGroups;
+  $indexGroup->load($g);
+  
+  
   $where = array();
-  $where['cp'] = "LIKE '".$default_cp."___'";
+  if($indexGroup->_cp_court) $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'";
   $where[] = "nom LIKE '$keywords%' OR prenom LIKE '$keywords%'";
   $matches = $medecin->loadList($where, 'nom', 20);
   
