@@ -21,6 +21,7 @@ Main.add(function() {
     {{$planning->adapt_range|@json}}
   );
   
+  planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
   
@@ -32,7 +33,7 @@ Main.add(function() {
 
 </script>
 
-<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" id="{{$planning->guid}}">
+<div class="planning {{if $planning->large}}large{{/if}} {{if $planning->has_load}}load{{/if}}" id="{{$planning->guid}}" style="display: none;">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <col style="width: 3.0em;" />
