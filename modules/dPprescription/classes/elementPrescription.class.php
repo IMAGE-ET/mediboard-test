@@ -27,6 +27,7 @@ class CElementPrescription extends CMbObject {
   var $_ref_category_prescription = null;
   var $_color                     = null;
 	var $_ref_cdarrs_by_type        = null;
+	var $_ref_cdarrs                = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -89,6 +90,10 @@ class CElementPrescription extends CMbObject {
     $category = new CCategoryPrescription();
   	$this->_ref_category_prescription = $category->getCached($this->category_prescription_id);	
   }
+	
+	function loadRefsCdarrs(){
+		$this->_ref_cdarrs = $this->loadBackRefs("cdarrs");
+	}
 }
 
 ?>

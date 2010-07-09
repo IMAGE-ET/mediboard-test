@@ -189,6 +189,19 @@ updateCdarrCount = function(line_id, type_cdarr){
 	}
 }
 
+updateModalCdarr = function(){
+  var oFormEvents = getForm("form_list_cdarr");
+	var url = new Url("ssr", "ajax_update_modal_evts_modif");
+	url.addParam("token_evts", $V(oFormEvents.token_evts));
+	url.requestUpdate("modal-cdarr", { onComplete: function(){
+    if(!$("modal-cdarr").visible()){
+	    modalWindow = modal($('modal-cdarr'), {
+	      className: 'modal'
+	    });
+		}
+	} })
+}
+
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
@@ -606,5 +619,25 @@ Main.add(function(){
       </tr> 
 	  </table>
 	</form>
+	
+	<!-- TODO: utiliser le meme formulaire pour stocker le token d'evenements pour les differentes actions  -->
+	<form name="form_list_cdarr">
+		<input type="hidden" name="token_evts" />
+	</form>	
+	
+	<!-- Modal de modification des actes cdarrs -->
+	<div id="modal-cdarr" style="display: none;"></div>
+	
+	<table class="form">
+		<tr>
+			<th class="category">Modification des codes CdARR</td>
+		</tr>
+		<tr>
+			<td class="button">
+			  <button type="button" class="submit" onclick="updateSelectedEvents(getForm('form_list_cdarr').token_evts); updateModalCdarr();">Modifier les codes CdARR</button>
+      </td>
+		</tr>
+	</table>
+
 </div>
 {{/if}}
