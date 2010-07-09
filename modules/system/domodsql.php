@@ -157,5 +157,9 @@ switch ($cmd) {
 
 	default: CAppUI::setMsg("Unknown Command", UI_MSG_ERROR);
 }
+// en cas d'un appel en Ajax (mobile)
+if(CValue::get("ajax")) {
+  echo(CAppUI::getMsg());
+}
 
 CAppUI::redirect();
