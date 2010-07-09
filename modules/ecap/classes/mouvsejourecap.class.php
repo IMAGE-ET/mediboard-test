@@ -12,7 +12,7 @@ CAppUI::requireModuleClass("ecap", "mouvementecap");
 
 class CMouvSejourEcap extends CMouvementEcap {  
   const STATUS_ETABLISSEMENT = 0;
-  const STATUS_FONCSALL      = 1;
+  const STATUS_FONCSALLSERV      = 1;
   const STATUS_PRATICIEN     = 2;
   const STATUS_PATIENT       = 3;
   const STATUS_SEJOUR        = 4;
@@ -172,7 +172,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->fonction = $id400Func->getCachedObject();
     if ($this->fonction->_id) {
       $this->trace($this->fonction->getDBFields(), "Cabinet depuis le cache");
-      $this->markCache(self::STATUS_FONCSALL);
+      $this->markCache(self::STATUS_FONCSALLSERV);
       return;    
     } 
 
@@ -187,7 +187,7 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     $id400Func->bindObject($this->fonction);
     
-    $this->markStatus(self::STATUS_FONCSALL);
+    $this->markStatus(self::STATUS_FONCSALLSERV);
   }
   
   function syncSalle() {
@@ -199,7 +199,7 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->salle = $id400Salle->getCachedObject();
     if ($this->salle->_id) {
       $this->trace($this->salle->getDBFields(), "Salle depuis le cache");
-      $this->markCache(self::STATUS_FONCSALL);
+      $this->markCache(self::STATUS_FONCSALLSERV);
       return;
     } 
     $this->etablissement->loadBlocs();
@@ -212,9 +212,49 @@ class CMouvSejourEcap extends CMouvementEcap {
 
     $id400Salle->bindObject($this->salle);
     
-    $this->markStatus(self::STATUS_FONCSALL);
+    $this->markStatus(self::STATUS_FONCSALLSERV);
   }
   
+  function syncService() {
+    $id400Salle = new CIdSante400();
+    $id400Salle->id400 = $this->consume("IDSR");;
+    $id400Salle->tag = "eCap";
+    $id400Salle->object_class = "CService";
+
+    // Utilisation du cache
+    $this->service = $id400Salle->getCachedObject();
+    if ($this->service->_id) {
+      $this->trace($this->service->getDBFields(), "Service depuis le cache");
+      $this->markCache(self::STATUS_FONCSALLSERV);
+      return;
+    } 
+		
+		// Requête
+	  $query = "SELECT * FROM $this->base.ECSRPF 
+	    WHERE SRCIDC = ? AND SRCDIV = '01' AND SRCSDV = '01' 
+	    AND SRIDSR = ?";
+    $values = array (
+      $this->id400Etab->id400, 
+      $id400Salle->id400,
+    );
+	
+		// Chargement de l'objet trouvé
+    $prat400 = new CRecordSante400();
+    $prat400->loadOne($query, $values);
+    $prat400->valuePrefix = "SR";
+    
+		// Mapping de propriétés		
+    $this->trace($prat400->data, "Données service à importer");
+    $this->service->group_id = $this->etablissement->_id;
+    $this->service->nom = $prat400->consume("ZSER");
+    
+    // Enregistrement    
+    $this->trace($this->service->getDBFields(), "Service à enregistrer");
+    $id400Salle->bindObject($this->service);
+    
+    $this->markStatus(self::STATUS_FONCSALLSERV);
+  }
+
   function syncPraticien($CPRT) {
     if (array_key_exists($CPRT, $this->praticiens)) {
       return;

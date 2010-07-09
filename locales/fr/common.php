@@ -92,6 +92,7 @@ $locales['Remove'] = 'Supprimer';
 $locales['Resend'] = 'Renvoyer';
 $locales['Reset'] = 'Remise à zéro';
 $locales['Restore'] = 'Rétablir';
+$locales['Retry'] = 'Réessayer';
 $locales['Save'] = 'Enregistrer';
 $locales['Search'] = 'Rechercher';
 $locales['Select'] = 'Sélectionner';

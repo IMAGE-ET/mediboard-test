@@ -21,6 +21,7 @@ class CMouvAttendueECap extends CMouvSejourEcap {
     $this->syncEtablissement();
     $this->syncFonction();
     $this->syncSalle();
+    $this->syncService();
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
