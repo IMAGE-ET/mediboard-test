@@ -282,14 +282,17 @@ Main.add( function(){
       <img src="images/icons/edit.png" alt="modifier" />
      </a>
     {{/if}}
-    {{tr}}CSejour-msg-informations{{/tr}} {{if $mode_operation && $sejour->_num_dossier}}{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}{{/if}}
+    {{tr}}CSejour-msg-informations{{/tr}} 
+		{{if $mode_operation && $sejour->_num_dossier}}
+		{{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+		{{/if}}
   </th>
 </tr>
 
 {{if $sejour->annule}}
 <tr>
   <th class="category cancelled" colspan="4">
-  {{tr}}CSejour-annule{{/tr}}
+  {{tr}}CSejour-{{$sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
   </th>
 </tr>
 {{/if}}
@@ -395,6 +398,13 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="libelle"}}</th>
   <td colspan="3">{{mb_field object=$sejour field="libelle"}}</td>
 </tr>
+
+{{if $sejour->annule}}
+<tr>
+  <th>{{mb_label object=$sejour field="recuse"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="recuse"}}</td>
+</tr>
+{{/if}}
 
 <tr>
   <th class="category" colspan="4">Admission</th>

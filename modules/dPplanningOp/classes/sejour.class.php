@@ -28,13 +28,14 @@ class CSejour extends CCodable {
 	var $service_mutation_id               = null; // Service du séjour de mutation
   
   // DB Fields
-  var $type               = null; // remplace $op->type_adm
+  var $type               = null; 
   var $modalite           = null;
-  var $annule             = null; // complète $op->annule
-  var $chambre_seule      = null; // remplace $op->chambre
-  var $reanimation        = null; // Entrée en réanimation
-  var $zt                 = null; // Entrée en zone de très courte durée
-  var $service_id         = null; // Service du séjour
+  var $annule             = null; 
+  var $recuse             = null; 
+  var $chambre_seule      = null; 
+  var $reanimation        = null; 
+  var $zt                 = null; 
+  var $service_id         = null; 
 
   var $entree_prevue      = null;
   var $sortie_prevue      = null;
@@ -43,14 +44,14 @@ class CSejour extends CCodable {
   var $entree             = null;
   var $sortie             = null;
   
-  var $saisi_SHS          = null; // remplace $op->saisie
-  var $modif_SHS          = null; // remplace $op->modifiee
+  var $saisi_SHS          = null; 
+  var $modif_SHS          = null; 
 
   var $DP                 = null; 
   var $DR                 = null;
-  var $pathologie         = null; // remplace $operation->pathologie
-  var $septique           = null; // remplace $operation->septique
-  var $convalescence      = null; // remplace $operation->convalescence
+  var $pathologie         = null;
+  var $septique           = null;
+  var $convalescence      = null;
 
   var $rques              = null;
   var $ATNC               = null;
@@ -216,6 +217,7 @@ class CSejour extends CCodable {
     $props["type"]                = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
     $props["modalite"]            = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]              = "bool show|0";
+    $props["recuse"]              = "bool show|0";
     $props["chambre_seule"]       = "bool show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]         = "bool default|0";
     $props["zt"]                  = "bool default|0";
@@ -647,7 +649,13 @@ class CSejour extends CCodable {
 
 	
   function updateDBFields() {
+  	// Annulation / Récusation
+		$this->completeField("annule", "recuse");
+		if ($this->annule == "0") $this->recuse = "0";
+    if ($this->recuse == "1") $this->annule = "1";
 
+    // Détail heure d'entrée
+		// @todo Passer au TimePicker
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
       $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);
@@ -655,6 +663,8 @@ class CSejour extends CCodable {
       $this->entree_prevue.= ":00";
     }
     
+    // Détail heure de sortie
+    // @todo Passer au TimePicker
     if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
       $this->sortie_prevue = "$this->_date_sortie_prevue";
       $this->sortie_prevue.= " ".str_pad($this->_hour_sortie_prevue, 2, "0", STR_PAD_LEFT);

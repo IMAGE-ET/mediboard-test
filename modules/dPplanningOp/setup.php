@@ -890,7 +890,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD `forfait_se` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
 		 
-    $this->mod_version = "1.09";
+    $this->makeRevision("1.09");
+    $sql = "ALTER TABLE `sejour`
+              ADD `recuse` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.10";
   }
 }
 ?>
