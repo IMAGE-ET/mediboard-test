@@ -23,6 +23,7 @@ $locales['Complete'] = 'Terminé';
 $locales['Compute'] = 'Calculer';
 $locales['Configure'] = 'Configurer';
 $locales['Continue'] = 'Continuer';
+$locales['Count'] = 'Compter';
 $locales['Create'] = 'Créer';
 $locales['Date'] = 'Date';
 $locales['Dates'] = 'Dates';

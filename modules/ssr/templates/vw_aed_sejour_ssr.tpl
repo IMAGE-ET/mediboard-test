@@ -46,31 +46,40 @@ refreshConstantesMedicales = function (force) {
   		{{tr}}CFicheAutonomie{{/tr}}
 		</a>
 	</li>
-  <li>
-  	<a href="#constantes" onmousedown="refreshConstantesMedicales();">
-  		{{tr}}CConstantesMedicales{{/tr}}
-		</a>
-	</li>
-  <li style="display: none;">
-  	<a href="#antecedents">
-  		{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s
-		</a>
-	</li>  
-  <li>
-  	<a href="#bilan">
-  		{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}
-		</a>
-	</li>
-  <li>
-  	<a href="#planification" onmousedown="Planification.refresh('{{$sejour->_id}}')">
-  		Planification
-		</a>
-	</li>
-  <li>
-  	<a href="#cotation-rhs" onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
-  		Cotation
-		</a>
-	</li>
+	
+		{{if !$sejour->annule}}
+	  <li>
+	  	<a href="#constantes" onmousedown="refreshConstantesMedicales();">
+	  		{{tr}}CConstantesMedicales{{/tr}}
+			</a>
+		</li>
+
+	  <li style="display: none;">
+	  	<a href="#antecedents">
+	  		{{tr}}CAntecedent{{/tr}}s &amp; {{tr}}CTraitement{{/tr}}s
+			</a>
+		</li>  
+
+	  <li>
+	  	<a href="#bilan">
+	  		{{tr}}CPrescription{{/tr}} &amp; {{tr}}CBilanSSR{{/tr}}
+			</a>
+		</li>
+
+	  <li>
+	  	<a {{if !$bilan->planification}} class="empty" {{/if}}
+			  href="#planification" onmousedown="Planification.refresh('{{$sejour->_id}}')">
+	  		Planification
+			</a>
+		</li>
+	  <li>
+	  	<a {{if !$bilan->planification}} class="empty" {{/if}}
+		    href="#cotation-rhs" onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
+	  		Cotation
+			</a>
+		</li>
+		{{/if}}
+
   {{/if}}
 </ul>
 
@@ -88,7 +97,7 @@ function loadAntecedents(sejour_id){
   url.requestUpdate('antecedents')
 }
 
-Main.add(loadAntecedents.curry({{$sejour->_id}}));
+// Main.add(loadAntecedents.curry({{$sejour->_id}}));
 </script>
 
 <div id="antecedents" style="display: none;">

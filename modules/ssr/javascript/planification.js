@@ -102,13 +102,15 @@ Planification = {
   },
 
 	refreshActivites: function(sejour_id) {
-		 this.sejour_id = sejour_id || this.sejour_id;
+		if (!$("activites-sejour")) return;
+    this.sejour_id = sejour_id || this.sejour_id;
 		new Url("ssr", "ajax_activites_sejour") .
 		  addParam("sejour_id", this.sejour_id) .
 		  requestUpdate("activites-sejour", {coverIE: false});
 	},
 	
 	refreshSejour: function(sejour_id, selectable, height, print, large) {
+    if (!$("planning-sejour")) return;
     this.sejour_id = sejour_id || this.sejour_id;
 		this.selectable = selectable || this.selectable;
 		this.height = height || this.height;

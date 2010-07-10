@@ -327,7 +327,12 @@ class CSetupssr extends CSetup {
               DROP `element_prescription_id`";
 		$this->addQuery($sql);
     
-		$this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    $sql = "ALTER TABLE `bilan_ssr` 
+      ADD `planification` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+
+		$this->mod_version = "0.24";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

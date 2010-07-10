@@ -77,6 +77,10 @@ updateModal = function(){
 
 updateBilanId = function(bilan_id){
   $V(getForm("Edit-CBilanSSR").bilan_id, bilan_id);
+	var form = getForm("Planification-CBilanSSR");
+	if (form) {
+	  $V(form.bilan_id, bilan_id);
+	}
 }
 
 Main.add( function(){
@@ -300,31 +304,63 @@ refreshFormBilanSSR = function(){
           <tr>
             <th class="title" style="width: 50%">{{tr}}CBilanSSR{{/tr}}</th>
           </tr>
+
 	    	  <tr>
 				    <th class="category">{{mb_label object=$bilan field=entree}}</th>
 				  </tr>
 					<tr>
-					<td colspan="2">
-	          {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
-	        </td>
+						<td>
+		          {{mb_field object=$bilan field=entree rows=6 onblur="this.form.onsubmit()"}}
+		        </td>
 					</tr>
 	        <tr>
-	          <th colspan="2" class="category">{{mb_label object=$bilan field=sortie}}</th>
+	          <th class="category">{{mb_label object=$bilan field=sortie}}</th>
 	        </tr>			
 				  <tr>
-				    <td colspan="2">
+				    <td>
 				      {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
 				    </td> 
 				  </tr>
 					<tr>
-			      <td class="button" colspan="2">
-			        <button class="submit" type="button">
+			      <td class="button">
+			        <button class="submit" type="submit">
 			          {{tr}}Save{{/tr}}
 			        </button>
 			      </td>
 			    </tr>
 			  </table>
 			</form>
+
+      {{if $can->admin}}
+      <hr />
+      <form name="Planification-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+        <input type="hidden" name="m" value="ssr" />
+        <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_key object=$bilan}}
+        {{mb_field object=$bilan field=sejour_id hidden=1}}
+        {{mb_field object=$bilan field=planification hidden=1}}
+
+        <table class="form">
+
+          <tr>
+            <td class="button">
+            	{{if $bilan->planification}} 
+              <button type="button" class="cancel" onclick="$V(this.form.planification, '0'); this.form.submit();">
+                {{tr}}CBilanSSR-planification-turn-off{{/tr}}</th>
+              </button>
+            	{{else}}
+              <button type="button" class="change" onclick="$V(this.form.planification, '1'); this.form.submit();">
+                {{tr}}CBilanSSR-planification-turn-on{{/tr}}</th>
+              </button>
+            	{{/if}}
+						</td>
+          </tr>
+
+        </table>
+      </form>
+      {{/if}}
+
     </td>
   </tr>
 </table>

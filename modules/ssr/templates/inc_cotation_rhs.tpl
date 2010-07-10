@@ -8,6 +8,14 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
+{{if !$bilan->planification}} 
+<div class="small-info">
+  {{tr}}CBilanSSR-msg-cotation-off{{/tr}}
+  <br />
+  {{tr}}CBilanSSR-msg-planification-cf{{/tr}}
+</div>
+{{else}}
+
 <table class="main">
   <tr>
     <td style="width: 0.1%">
@@ -46,3 +54,5 @@ Main.add(Control.Tabs.create.curry('tabs-rhss', true));
     </td>
   </tr>
 </table>
+
+{{/if}}

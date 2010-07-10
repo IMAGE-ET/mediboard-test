@@ -10,6 +10,14 @@
 
 {{mb_include_script module=ssr script=planification}}
 
+{{if !$bilan->planification}} 
+<div class="small-info">
+  {{tr}}CBilanSSR-msg-planification-off{{/tr}}
+  <br />
+  {{tr}}CBilanSSR-msg-planification-cf{{/tr}}
+</div>
+{{else}}
+
 <script type="text/javascript">
 
 onCompleteShowWeek = function(){
@@ -61,3 +69,5 @@ printPlanningSejour = function(){
     <td id="planning-equipement"></td>
   </tr>
 </table>
+
+{{/if}}

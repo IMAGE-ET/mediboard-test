@@ -16,11 +16,12 @@ class CBilanSSR extends CMbObject {
   var $bilan_id = null;
   
   // DB Fields
-  var $sejour_id = null;
+  var $sejour_id     = null;
   var $technicien_id = null;
-	var $entree = null;
-  var $sortie = null;
-	var $brancardage = null;
+	var $entree        = null;
+  var $sortie        = null;
+  var $planification = null;
+  var $brancardage   = null;
 	
   // References
   var $_ref_technicien = null;
@@ -43,11 +44,12 @@ class CBilanSSR extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["sejour_id"] = "ref notNull class|CSejour show|0";
-		$specs["technicien_id"]   = "ref class|CTechnicien";
-    $specs["entree"] = "text helped";
-    $specs["sortie"] = "text helped";
-		$specs["brancardage"] = "bool default|0";
+    $specs["sejour_id"    ] = "ref notNull class|CSejour show|0";
+		$specs["technicien_id"] = "ref class|CTechnicien";
+    $specs["entree"       ] = "text helped";
+    $specs["sortie"       ] = "text helped";
+    $specs["planification"] = "bool default|1";
+    $specs["brancardage"  ] = "bool default|0";
 
     $specs["_kine_referent_id"]   = "ref class|CMediusers";
     $specs["_kine_journee_id" ]   = "ref class|CMediusers";

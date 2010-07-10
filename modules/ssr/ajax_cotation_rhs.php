@@ -23,6 +23,14 @@ if (!$sejour->_id) {
 	CAppUI::stepAjax("Séjour inexistant", UI_MSG_ERROR);
 }
 
+if ($sejour->type != "ssr") {
+  CAppUI::stepAjax("Le séjour sélectionné n'est pas un séjour de type SSR (%s)", UI_MSG_ERROR, $sejour->type);
+}
+
+// Chargment du bilan
+$sejour->loadRefBilanSSR();
+$bilan = $sejour->_ref_bilan_ssr;
+
 // Liste des catégories d'activité
 $type_activite = new CTypeActiviteCdARR();
 $types_activite = $type_activite->loadList();
@@ -68,6 +76,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("curr_user"     , $curr_user);
 $smarty->assign("types_activite", $types_activite);
+$smarty->assign("sejour"        , $sejour);
+$smarty->assign("bilan"         , $bilan);
 $smarty->assign("totaux"        , $totaux);
 $smarty->assign("rhss"          , $rhss);
 $smarty->assign("rhs_line"      , $rhs_line);
