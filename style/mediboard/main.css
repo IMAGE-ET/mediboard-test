@@ -1264,7 +1264,6 @@ ul li a.chapitre_signe.active{
   color: #A33;
 }
 
-
 table.tbl tr.ssr-annule td {
 	background-color: #f88;
 }
@@ -1275,6 +1274,12 @@ table.tbl tr.ssr-termine td {
 
 table.tbl tr.ssr-prevu td {
   background-color: #dfd;
+}
+
+table.tbl tr.ssr-annule  td.cancelled,
+table.tbl tr.ssr-termine td.cancelled, 
+table.tbl tr.ssr-prevu   td.cancelled {
+  background-color: #f00; 
 }
 
 table.tbl tr.ssr-kine-conges td {

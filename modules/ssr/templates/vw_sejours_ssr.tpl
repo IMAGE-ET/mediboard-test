@@ -39,7 +39,6 @@
 				});
 				</script>
 				
-
 	      <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
 	    </form>
 	  </th>
@@ -64,9 +63,7 @@
 	
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
 	{{assign var=ssr_class value=""}}
-	{{if $_sejour->annule == "1"}}
-	{{assign var=ssr_class value=ssr-annule}}
-	{{elseif !$_sejour->entree_reelle}}
+	{{if !$_sejour->entree_reelle}}
 	{{assign var=ssr_class value=ssr-prevu}}
 	{{elseif $_sejour->sortie_reelle}}
 	{{assign var=ssr_class value=ssr-termine}}
@@ -113,35 +110,42 @@
     	{{mb_value object=$_sejour field=libelle}}
 		</td>
 		
-    <td class="text">
-	    {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
-      {{assign var=kine_referent value=$bilan->_ref_kine_referent}}
-			{{if $kine_referent->_id}}
-      	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_referent}}
-        {{assign var=kine_journee value=$bilan->_ref_kine_journee}}
-			  {{if $kine_journee->_id != $kine_referent->_id}}
-          / {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_journee}}
-				{{/if}}
-      {{/if}}
+		{{if $_sejour->annule}}
+		<td colspan="3" class="cancelled">
+			{{tr}}CSejour-{{$_sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
 		</td>
-		
-		{{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
-		{{if !$prescription->_id}} 
-	    <td colspan="2" style="text-align: center;">
-	    	<img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
-	    </td>
+
 		{{else}}
-	    <td style="text-align: right;">
-	      {{if $_sejour->_count_evenements_ssr}} 
-	      {{$_sejour->_count_evenements_ssr}}
+	    <td class="text">
+	      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
+	      {{assign var=kine_referent value=$bilan->_ref_kine_referent}}
+	      {{if $kine_referent->_id}}
+	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_referent}}
+	        {{assign var=kine_journee value=$bilan->_ref_kine_journee}}
+	        {{if $kine_journee->_id != $kine_referent->_id}}
+	          / {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_journee}}
+	        {{/if}}
 	      {{/if}}
 	    </td>
-	
-	    <td style="text-align: right;">
-	      {{if $_sejour->_count.evenements_ssr}} 
-	      {{$_sejour->_count.evenements_ssr}}
-	      {{/if}}
-	    </td>
+	    
+	    {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+	    {{if !$prescription->_id}} 
+	      <td colspan="2" style="text-align: center;">
+	        <img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
+	      </td>
+	    {{else}}
+	      <td style="text-align: right;">
+	        {{if $_sejour->_count_evenements_ssr}} 
+	        {{$_sejour->_count_evenements_ssr}}
+	        {{/if}}
+	      </td>
+	  
+	      <td style="text-align: right;">
+	        {{if $_sejour->_count.evenements_ssr}} 
+	        {{$_sejour->_count.evenements_ssr}}
+	        {{/if}}
+	      </td>
+	    {{/if}}
 		{{/if}}
 
 	</tr>

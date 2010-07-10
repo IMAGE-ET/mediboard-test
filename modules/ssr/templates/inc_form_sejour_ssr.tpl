@@ -109,13 +109,14 @@ function cancelSejourSSR() {
   
     {{if $sejour->annule}}
     <tr>
-      <th class="category cancelled" colspan="5">
-      {{tr}}CSejour-annule{{/tr}}
+      <th class="category cancelled" colspan="6">
+        {{tr}}CSejour-{{$sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
       </th>
     </tr>
     {{/if}}
     
-    {{if !$modules.dPplanningOp->_can->edit}} 
+    {{if !$modules.dPplanningOp->_can->edit}}
+		  {{if $sejour->_id}}
 			<tr>
         <th>{{mb_label object=$sejour field=praticien_id}}</th>
         <td>{{mb_value object=$sejour field=praticien_id}}</td>
@@ -124,6 +125,17 @@ function cancelSejourSSR() {
         <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
         <td>{{mb_value object=$sejour field=_duree_prevue}} jours</td>
 			</tr>
+			{{else}}
+			<tr>
+				<td>
+		      <div class="small-warning">
+		        Vous ne pouvez pas créer de nouveaux séjours.
+		        <br>
+		        Merci d'en sélectionner un depuis la vue des séjours.
+		      </div>
+				</td>
+			</tr>
+			{{/if}}
     {{else}}
 	    <tr>
 	      <th>{{mb_label object=$sejour field=praticien_id}}</th>
