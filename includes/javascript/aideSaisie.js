@@ -21,7 +21,7 @@ var AideSaisie = {
         resetDependFields: true,
         defaultUserId: null,
         defaultUserView: null,
-        timestamp: "-- %n %p - dd/MM/y HH:mm",
+        timestamp: "-- %n %p - dd/MM/y HH:mm"
       }, options);
       this.init();
     },
