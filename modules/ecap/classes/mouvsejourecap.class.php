@@ -12,7 +12,7 @@ CAppUI::requireModuleClass("ecap", "mouvementecap");
 
 class CMouvSejourEcap extends CMouvementEcap {  
   const STATUS_ETABLISSEMENT = 0;
-  const STATUS_FONCSALLSERV      = 1;
+  const STATUS_FONCSALLSERV  = 1;
   const STATUS_PRATICIEN     = 2;
   const STATUS_PATIENT       = 3;
   const STATUS_SEJOUR        = 4;
@@ -31,6 +31,7 @@ class CMouvSejourEcap extends CMouvementEcap {
   public $etablissement = null;
   public $fonction      = null;
   public $salle         = null;
+  public $service       = null;
   public $patient       = null;
   public $praticiens = array();
   public $operations = array();
@@ -481,16 +482,13 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->sejour->group_id     = $this->etablissement->_id;
     $this->sejour->patient_id   = $this->patient->_id;
     $this->sejour->praticien_id = $this->praticiens[$CPRT]->_id;
+		
+		// Service
+		if ($this->service) {
+      $this->sejour->service_id = $this->service->_id;
+		}
     
-    // Cration du log de création du séjour
-    $log = new CUserLog();
-    $log->setObject($this->sejour);
-    $log->user_id = $this->praticiens[$CPRT]->_id;
-    $log->type = "create";
-    $log->date = mbDateTime($dheECap->consumeDate("DDHE"));
-    $log->loadMatchingObject();
-
-    // Motifs d'hospitalisations
+    // Motif d'hospitalisations
     $this->sejour->libelle = $dheECap->consume("LIMO");
     
     // Horodatage
@@ -531,19 +529,24 @@ class CMouvSejourEcap extends CMouvementEcap {
     // Champs étendus
     $TXCL = "0$IDAT"; // La clé demande 10 chiffres
     $OBSH = $this->loadExtensionField("ECATPF", "ATOBSH", $TXCL, $dheECap->consume("OBSH"));
-    $EXBI = $this->loadExtensionField("ECATPF", "ATEXBI", $TXCL, $dheECap->consume("EXBI"));
-    $TRPE = $this->loadExtensionField("ECATPF", "ATTRPE", $TXCL, $dheECap->consume("TRPE"));
     $REM  = $this->loadExtensionField("ECATPF", "ATREM" , $TXCL, $dheECap->consume("REM" ));
     
     $remarques = array (
       "Services: $OBSH",
       "Autre: $REM"
     );
-    
-    
+        
     $this->sejour->rques = join($remarques, "\n");
 
     // $TRPE et $EXBI à gérer
+//    $EXBI = $this->loadExtensionField("ECATPF", "ATEXBI", $TXCL, $dheECap->consume("EXBI"));
+//    $TRPE = $this->loadExtensionField("ECATPF", "ATTRPE", $TXCL, $dheECap->consume("TRPE"));
+
+    // Récusation
+    $STAT = $this->consume("STAT");
+    if ($STAT == "R") {
+      $this->sejour->recuse = "1";
+    }
 
     return $IDAT;
   }

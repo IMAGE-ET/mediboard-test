@@ -651,8 +651,8 @@ class CSejour extends CCodable {
   function updateDBFields() {
   	// Annulation / Récusation
 		$this->completeField("annule", "recuse");
-		if ($this->annule == "0") $this->recuse = "0";
-    if ($this->recuse == "1") $this->annule = "1";
+    if ($this->fieldModified("recuse", "1")) $this->annule = "1";
+    if ($this->fieldModified("annule", "0")) $this->recuse = "0";
 
     // Détail heure d'entrée
 		// @todo Passer au TimePicker
