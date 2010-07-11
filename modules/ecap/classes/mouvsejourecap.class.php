@@ -489,7 +489,12 @@ class CMouvSejourEcap extends CMouvementEcap {
 		}
     
     // Motif d'hospitalisations
-    $this->sejour->libelle = $dheECap->consume("LIMO");
+    try {
+      $this->sejour->libelle = $dheECap->consume("LIMO");
+    } 
+		// Présent seulement dans les triggers
+    catch (Exception $e) {
+    }
     
     // Horodatage
     $entree = $dheECap->consumeDateTime("DTEN", "HREN");
