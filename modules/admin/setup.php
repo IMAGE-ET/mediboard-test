@@ -226,8 +226,13 @@ class CSetupadmin extends CSetup {
               ADD INDEX (`user_last_login`),
               ADD INDEX (`profile_id`);";
     $this->addQuery($sql);
-    
-    $this->mod_version = "1.0.16";
+		
+    $this->makeRevision("1.0.16");
+    $sql = "ALTER TABLE `users` 
+		  CHANGE `user_address1` `user_address1` VARCHAR( 255 );";
+    $this->addQuery($sql);
+		
+    $this->mod_version = "1.0.17";
   }
 }
 ?>
