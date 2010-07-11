@@ -353,6 +353,8 @@ class CMouvSejourEcap extends CMouvementEcap {
     if (isset($prat400)) {
       $PROF = $prat400->consume("PROF");
       if ($PROF & self::PROFIL_MEDECIN)      $pratDefault->_user_type = 13;
+      if ($PROF & self::PROFIL_BIOLOGISTE)   $pratDefault->_user_type = 13;
+      if ($PROF & self::PROFIL_RADIOLOGUE)   $pratDefault->_user_type = 13;
       if ($PROF & self::PROFIL_CHIRURGIEN)   $pratDefault->_user_type = 3;
       if ($PROF & self::PROFIL_ANESTHESISTE) $pratDefault->_user_type = 4;
     }
