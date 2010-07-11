@@ -347,11 +347,11 @@ refreshFormBilanSSR = function(){
             <td class="button">
             	{{if $bilan->planification}} 
               <button type="button" class="cancel" onclick="$V(this.form.planification, '0'); this.form.submit();">
-                {{tr}}CBilanSSR-planification-turn-off{{/tr}}</th>
+                {{tr}}CBilanSSR-planification-turn-off{{/tr}}
               </button>
             	{{else}}
               <button type="button" class="change" onclick="$V(this.form.planification, '1'); this.form.submit();">
-                {{tr}}CBilanSSR-planification-turn-on{{/tr}}</th>
+                {{tr}}CBilanSSR-planification-turn-on{{/tr}}
               </button>
             	{{/if}}
 						</td>

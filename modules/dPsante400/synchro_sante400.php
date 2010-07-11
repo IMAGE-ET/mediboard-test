@@ -37,6 +37,7 @@ if ($rec = CValue::get("rec")) {
   $mouvs = $mouv->loadList($marked, $max);
 }
 
+
 // Proceed mouvements
 $procs = 0;
 foreach ($mouvs as $_mouv) {
