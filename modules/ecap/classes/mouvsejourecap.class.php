@@ -548,7 +548,7 @@ class CMouvSejourEcap extends CMouvementEcap {
 //    $TRPE = $this->loadExtensionField("ECATPF", "ATTRPE", $TXCL, $dheECap->consume("TRPE"));
 
     // Récusation
-    $STAT = $this->consume("STAT");
+    $STAT = $dheECap->consume("STAT");
     if ($STAT == "R") {
       $this->sejour->recuse = "1";
     }
