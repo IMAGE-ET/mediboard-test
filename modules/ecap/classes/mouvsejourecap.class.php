@@ -217,7 +217,7 @@ class CMouvSejourEcap extends CMouvementEcap {
   }
   
   function syncService() {
-  	if ('0' == $IDSR = $this->consume("IDSR") {
+  	if ('0' == $IDSR = $this->consume("IDSR")) {
   		$this->service = new CService;
 			return;
   	}
