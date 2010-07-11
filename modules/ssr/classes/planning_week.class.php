@@ -57,8 +57,15 @@ class CPlanningWeek  {
 		$this->nb_days = $nb_days;
 		$this->adapt_range = $adapt_range;
 		
+		$days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
+		$last_day = $days[$this->nb_days - 1];
+		
     $monday = mbDate("last monday", mbDate("+1 day", $this->date));
-    $sunday = mbDate("next sunday", mbDate("-1 DAY", $this->date));
+    $sunday = mbDate("next $last_day", mbDate("-1 DAY", $this->date));
+    
+    if (mbDaysRelative($monday, $sunday) > 7) {
+      $sunday = mbDate("-7 DAYS", $sunday);
+    }
 		
 		$this->date_min_active = $date_min ? max($monday, mbDate($date_min)) : $monday;
 		$this->date_max_active = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
