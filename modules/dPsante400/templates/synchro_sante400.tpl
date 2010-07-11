@@ -83,7 +83,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <th>Marque</th>
   <th>Etablissement</th>
   <th>Cabinet <br /> Salle <br /> Service</th>
-  <th>Chirurgien</th>
+  <th>Praticien</th>
   <th>Patient</th>
   <th>Sejour</th>
   <th>Intervention</th>

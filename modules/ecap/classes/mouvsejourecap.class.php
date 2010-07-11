@@ -217,13 +217,18 @@ class CMouvSejourEcap extends CMouvementEcap {
   }
   
   function syncService() {
-    $id400Salle = new CIdSante400();
-    $id400Salle->id400 = $this->consume("IDSR");;
-    $id400Salle->tag = "eCap";
-    $id400Salle->object_class = "CService";
+  	if ('0' == $IDSR = $this->consume("IDSR") {
+  		$this->service = new CService;
+			return;
+  	}
+		
+    $id400Service = new CIdSante400();
+    $id400Service->id400 = $IDSR;
+    $id400Service->tag = "eCap";
+    $id400Service->object_class = "CService";
 
     // Utilisation du cache
-    $this->service = $id400Salle->getCachedObject();
+    $this->service = $id400Service->getCachedObject();
     if ($this->service->_id) {
       $this->trace($this->service->getDBFields(), "Service depuis le cache");
       $this->markCache(self::STATUS_FONCSALLSERV);
@@ -236,22 +241,22 @@ class CMouvSejourEcap extends CMouvementEcap {
 	    AND SRIDSR = ?";
     $values = array (
       $this->id400Etab->id400, 
-      $id400Salle->id400,
+      $id400Service->id400,
     );
 	
 		// Chargement de l'objet trouvé
-    $prat400 = new CRecordSante400();
-    $prat400->loadOne($query, $values);
-    $prat400->valuePrefix = "SR";
+    $service400 = new CRecordSante400();
+    $service400->loadOne($query, $values);
+    $service400->valuePrefix = "SR";
     
 		// Mapping de propriétés		
-    $this->trace($prat400->data, "Données service à importer");
+    $this->trace($service400->data, "Données service à importer");
     $this->service->group_id = $this->etablissement->_id;
-    $this->service->nom = $prat400->consume("ZSER");
+    $this->service->nom = $service400->consume("ZSER");
     
     // Enregistrement    
     $this->trace($this->service->getDBFields(), "Service à enregistrer");
-    $id400Salle->bindObject($this->service);
+    $id400Service->bindObject($this->service);
     
     $this->markStatus(self::STATUS_FONCSALLSERV);
   }
