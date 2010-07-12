@@ -61,7 +61,7 @@ Main.add(function(){
 	        <input type="hidden" name="del" value="1" />
 	        <input type="hidden" name="prescription_id" value="{{$protocole->_id}}" />
 	        <input type="hidden" name="callback" value="Prescription.reloadDelProt" />
-	        <button class="trash notext" type="button" onclick="Protocole.remove(this.form)">Supprimer</button>
+	        <button class="trash notext" type="button" onclick="if (confirm('{{tr}}CPrescription-confirm-deletion{{/tr}}'))Protocole.remove(this.form)">Supprimer</button>
 	      </form>
       </div>
       <a href="#{{$protocole->_id}}" onclick="markAsSelected(this); Protocole.edit('{{$protocole->_id}}','{{$protocole->praticien_id}}','{{$protocole->function_id}}')">

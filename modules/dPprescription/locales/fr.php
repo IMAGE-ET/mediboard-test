@@ -1443,4 +1443,6 @@ $locales['pref-show_transmissions_form'] = 'Affichage par defaut du formulaire d
 $locales['pref-show_transmissions_form-0'] = 'Masquer';
 $locales['pref-show_transmissions_form-1'] = 'Afficher';
 $locales['pref-show_transmissions_form-desc'] = 'Affichage par defaut du formulaire de transmissions';
+$locales['CPrescription-confirm-deletion'] = 'Voulez-vous supprimer cette prescription?'
+
 ?>

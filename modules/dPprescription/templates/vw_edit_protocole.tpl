@@ -13,6 +13,7 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPprescription" script="protocole"}}
+{{mb_include_script module="dPcabinet" script="file"}}
 
 <script type="text/javascript">
 

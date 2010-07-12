@@ -82,6 +82,12 @@ updateBilanId = function(bilan_id){
 	  $V(form.bilan_id, bilan_id);
 	}
 }
+refreshFile = function(prot_id) {
+	var url = new Url("ssr", "ajax_vw_list_files");
+	url.addParam("object_id", prot_id.substr(5));
+	url.addParam("object_class", "CPrescription");
+	url.requestUpdate("files");
+}
 
 Main.add( function(){
   {{if $can_edit_prescription}}
@@ -203,18 +209,32 @@ refreshFormBilanSSR = function(){
 				  <tr>
 					  <td colspan="2">
 					  	<form name="applyProtocole" method="post" action="?" onsubmit="if(!this.prescription_id.value){ return onSubmitFormAjax(getForm('addPrescriptionSSR'))} else { return submitProtocole() };">
-				        <input type="hidden" name="m" value="dPprescription" />
-				        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
-				        <input type="hidden" name="del" value="0" />
-				        <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
-				        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-				        <input type="hidden" name="pratSel_id" value="" />
-				        <input type="hidden" name="date_sel" value="" />
-                
-				        <input type="hidden" name="pack_protocole_id" value="" />
-				        <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
-				        <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
-								<button type="submit" class="submit">Appliquer</button>
+
+				        <table>
+				          <tr>
+				            <td>
+				              <input type="hidden" name="m" value="dPprescription" />
+                      <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+                      <input type="hidden" name="del" value="0" />
+                      <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
+                      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+                      <input type="hidden" name="pratSel_id" value="" />
+                     <input type="hidden" name="pack_protocole_id" value="" onchange="refreshFile(this.value)"/>
+				            </td>
+				          </tr>
+				          <tr>
+				            <td>
+				              <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+                      <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>
+				            </td>
+				            <td>
+                      <div id="files" style="float:left"> {{mb_include module="ssr" template="inc_vw_list_files" count_object=0 }}</div>
+                    </td>
+                    <td>
+                      <button type="submit" class="submit">Appliquer</button>
+                    </td>
+                  </tr>
+                </table>
               </form>
 					  </td>
 			    </tr>

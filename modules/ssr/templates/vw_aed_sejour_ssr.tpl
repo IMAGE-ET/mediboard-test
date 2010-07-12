@@ -14,6 +14,8 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="ssr" script="cotation_rhs"}}
 {{mb_include_script module="ssr" script="planning"}}
+{{mb_include_script module="dPcabinet" script="file"}}
+
 
 {{mb_include module=ssr template=inc_form_sejour_ssr}}
 
