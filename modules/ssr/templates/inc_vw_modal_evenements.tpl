@@ -11,7 +11,7 @@
 		{{/if}}
 		<tr>
 			<td>
-				{{$_evenement->_ref_element_prescription->_view}}
+				{{$_evenement->_ref_prescription_line_element->_ref_element_prescription->_view}}
 			</td>
 			<td>
 			  {{mb_value object=$_evenement field="debut"}} - {{mb_value object=$_evenement field="duree"}} min

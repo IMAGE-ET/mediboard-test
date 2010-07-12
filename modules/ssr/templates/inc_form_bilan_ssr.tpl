@@ -226,6 +226,7 @@ refreshFormBilanSSR = function(){
 							    var url = new Url("ssr", "ajax_autocomplete_prescription_executant");
 							    url.autoComplete("searchElement_libelle", "searchElement_auto_complete", {
 							      minChars: 2,
+										dropdown: true,
 							      updateElement: function(selected) { 
 										  Element.cleanWhitespace(selected);
 											var dn = selected.childNodes;
