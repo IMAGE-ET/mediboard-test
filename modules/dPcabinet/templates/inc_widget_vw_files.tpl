@@ -18,6 +18,9 @@
 	      {{$_file}}
 	    </a>
 	    <small>({{$_file->_file_size}})</small>
+      {{if $_file->private}}
+        &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
+      {{/if}}
   	</td>
   	
 	  <td class="button" style="width: 1px">
