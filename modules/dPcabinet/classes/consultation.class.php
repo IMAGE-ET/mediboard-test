@@ -40,10 +40,11 @@ class CConsultation extends CCodable {
   var $histoire_maladie = null;
   var $conclusion       = null;
   
-  var $traitement      = null;
-  var $premiere        = null;
-  var $adresse         = null; // Le patient a-t'il été adressé ?
-  var $tarif           = null;
+  var $traitement          = null;
+  var $premiere            = null;
+  var $adresse             = null; // Le patient a-t'il été adressé ?
+  var $adresse_par_prat_id = null;
+  var $tarif               = null;
   
   var $arrivee         = null;
   var $categorie_id    = null;
@@ -121,7 +122,7 @@ class CConsultation extends CCodable {
   var $_type_affichage         = null;
   var $_coordonnees            = null;
   var $_plages_vides           = null;
-  //var $_non_pourvues           = null;
+  var $_non_pourvues           = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -168,11 +169,12 @@ class CConsultation extends CCodable {
     
     $specs["facture"]           = "bool default|0 show|0";
     
-    $specs["premiere"]          = "bool show|0";
-    $specs["adresse"]           = "bool show|0";
-    $specs["tarif"]             = "str show|0";
-    $specs["arrivee"]           = "dateTime show|0";
-    $specs["concerne_ALD"]      = "bool";
+    $specs["premiere"]            = "bool show|0";
+    $specs["adresse"]             = "bool show|0";
+    $specs["adresse_par_prat_id"] = "ref class|CMedecin";
+    $specs["tarif"]               = "str show|0";
+    $specs["arrivee"]             = "dateTime show|0";
+    $specs["concerne_ALD"]        = "bool";
 		
     $specs["patient_date_reglement"]    = "date show|0";
     $specs["tiers_date_reglement"]      = "date show|0";
@@ -202,7 +204,7 @@ class CConsultation extends CCodable {
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
-    //$specs["_non_pourvues"]     = "bool default|0";
+    $specs["_non_pourvues"]     = "bool default|0";
     $specs["_prat_id"]          = "";
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
@@ -1145,6 +1147,11 @@ class CConsultation extends CCodable {
     if(!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
     }
+    $medecin = new CMedecin();
+    $medecin->load($this->adresse_par_prat_id);
+    $nom = "{$medecin->nom} {$medecin->prenom}";
+    $template->addProperty("Consultation - adressé par", $nom);
+    $template->addProperty("Consultation - adressé par - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
   }
     
   function canDeleteEx() {

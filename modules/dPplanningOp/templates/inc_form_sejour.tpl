@@ -108,7 +108,8 @@ PatSelector.init = function(){
 checkCorrespondantMedical = function(form){
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
   url.addParam("patient_id", $V(form.patient_id));
-  url.addParam("sejour_id" , $V(form.sejour_id));
+  url.addParam("object_id" , $V(form.sejour_id));
+  url.addParam("object_class", '{{$sejour->_class_name}}');
   url.requestUpdate("correspondant_medical");
 }
 
@@ -544,6 +545,7 @@ Main.add( function(){
 {{/if}}
 
 <tr id="correspondant_medical">
+  {{assign var="object" value=$sejour}}
   {{include file="inc_check_correspondant_medical.tpl"}}
 </tr>
 <tr>

@@ -7,6 +7,21 @@
 
 <script type="text/javascript">
 
+Medecin = {
+  form: null,
+  edit : function() {
+    this.form = document.forms.editFrm;
+    var url = new Url("dPpatients", "vw_medecins");
+    url.popup(700, 450, "Medecin");
+  },
+  
+  set: function(id, view) {
+    $('_adresse_par_prat').show().update('Autres : '+view);
+    $V(this.form.adresse_par_prat_id, id);
+    $V(this.form._correspondants_medicaux, '', false);
+  }
+};
+
 function refreshListCategorie(praticien_id){
   var url = new Url("dPcabinet", "httpreq_view_list_categorie");
   url.addParam("praticien_id", praticien_id);
@@ -99,6 +114,15 @@ function printDocument(iDocument_id) {
   return false;
 }
 
+checkCorrespondantMedical = function(){
+  form = getForm("editFrm");
+  var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
+  url.addParam("patient_id", $V(form.patient_id));
+  url.addParam("object_id" , $V(form.consultation_id));
+  url.addParam("object_class", '{{$consult->_class_name}}');
+  url.requestUpdate("correspondant_medical");
+}
+
 Main.add(function () {
   var oForm = document.editFrm;
 
@@ -119,6 +143,7 @@ Main.add(function () {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
 {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+<input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
@@ -183,7 +208,7 @@ Main.add(function () {
           </th>
           <td>
           	{{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-          	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" />
+          	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
 						<button class="search" type="button" onclick="PatSelector.init()">Rechercher</button>
 	          <script type="text/javascript">
 	            PatSelector.init = function(){
@@ -200,6 +225,8 @@ Main.add(function () {
 					  </button>
 					</td>
         </tr>
+        
+        
         <tr>
           <th>
             {{mb_label object=$consult field="motif"}}<br />
@@ -233,15 +260,15 @@ Main.add(function () {
         <tr><th class="category" colspan="3">Rendez-vous</th></tr>
 
         <tr>
-          <th>{{mb_label object=$consult field="premiere"}}</th>
-          <td>
+          <th style="width: 35%;">{{mb_label object=$consult field="premiere"}}</th>
+          <td style="width: 65%;">
             <input type="checkbox" name="_check_premiere" value="1"
               {{if $consult->_check_premiere}} checked="checked" {{/if}}
               onchange="if (this.checked) {this.form.premiere.value = 1;} else {this.form.premiere.value = 0;}" />
             {{mb_field object=$consult field="premiere" hidden="hidden"}}
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
-          <td rowspan="6" class="button">
+          <td rowspan="7" class="button">
             <button class="search" type="button" onclick="PlageConsultSelector.init()">Choix de l'horaire</button>
           </td>
         </tr>
@@ -251,8 +278,29 @@ Main.add(function () {
           <td>
             <input type="checkbox" name="_check_adresse" value="1"
               {{if $consult->_check_adresse}} checked="checked" {{/if}}
-              onchange="if (this.checked) {this.form.adresse.value = 1;} else {this.form.adresse.value = 0;}" />
+              onchange="$('correspondant_medical').toggle();
+              $('_adresse_par_prat').toggle();
+              if (this.checked) {
+                this.form.adresse.value = 1;
+              } else {
+                this.form.adresse.value = 0;
+                this.form.adresse_par_prat_id.value = '';
+              }" />
             {{mb_field object=$consult field="adresse" hidden="hidden"}}
+          </td>
+        </tr>
+        
+        <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
+          {{assign var="object" value=$consult}}
+          {{mb_include module=dPplanningOp template=inc_check_correspondant_medical}}
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td colspan="3">
+            <div id="_adresse_par_prat" style="{{if !$medecin_adresse_par}}display:none{{/if}}; width: 300px;">
+              {{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}
+            </div>
           </td>
         </tr>
         

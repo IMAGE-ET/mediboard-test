@@ -1307,7 +1307,15 @@ class CSetupdPcabinet extends CSetup {
               ADD `result_rp` TEXT AFTER `result_ecg`;";
     $this->addquery($sql);
 		
-    $this->mod_version = "1.23";
+    $this->makeRevision("1.23");
+    $sql = "ALTER TABLE `consultation`
+              ADD `adresse_par_prat_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.24";
+    
+    
+    
   }
 }
 ?>

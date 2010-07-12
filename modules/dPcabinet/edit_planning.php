@@ -42,6 +42,9 @@ $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 $consultation_id = CValue::getOrSession("consultation_id");
 $plageconsult_id = CValue::get("plageconsult_id", null);
 
+$correspondantsMedicaux = array();
+$medecin_adresse_par = "";
+
 // Nouvelle consultation
 if (!$consultation_id) {
   // A t'on fourni une plage de consultation
@@ -78,6 +81,22 @@ else {
   
   $chir =& $consult->_ref_plageconsult->_ref_chir;
   $pat  =& $consult->_ref_patient;
+  
+  $pat->loadRefsFwd();
+  $pat->loadRefsCorrespondants();
+  
+  
+  if ($pat->_ref_medecin_traitant->_id) {
+    $correspondantsMedicaux["traitant"] = $pat->_ref_medecin_traitant;
+  }
+  foreach($pat->_ref_medecins_correspondants as $correspondant) {
+    $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
+  }
+
+  if ($consult->adresse_par_prat_id && ($consult->adresse_par_prat_id != $pat->_ref_medecin_traitant->_id)) {
+    $medecin_adresse_par = new CMedecin();
+    $medecin_adresse_par->load($consult->adresse_par_prat_id);
+  }
 }
 
 $categorie = new CConsultationCategorie();
@@ -114,7 +133,8 @@ $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
 $smarty->assign("listFunctions"     , $listFunctions     );
-
+$smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
+$smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 $smarty->display("addedit_planning.tpl");
 
 ?>

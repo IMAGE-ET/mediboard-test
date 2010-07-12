@@ -21,7 +21,7 @@
 
   {{mb_include module=dPcabinet template=print_inc_dossier_medical}}
 </table>
-{{mb_include module=dPpatients template=print_constantes.tpl}}
+{{mb_include module=dPpatients template=print_constantes}}
 
 <table class="{{$tbl_class}}">
   {{mb_include module=dPcabinet template=print_inc_antecents_traitements}}

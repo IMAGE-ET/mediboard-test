@@ -8,11 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-$patient_id = CValue::get("patient_id");
-$sejour_id  = CValue::get("sejour_id");
+$patient_id   = CValue::get("patient_id");
+$object_id    = CValue::get("object_id");
+$object_class = CValue::get("object_class");
 
-$sejour = new CSejour;
-$sejour->load($sejour_id);
+$object = new $object_class;
+$object->load($object_id);
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -33,7 +34,7 @@ $medecin_adresse_par = "";
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour", $sejour);
+$smarty->assign("object", $object);
 $smarty->assign("correspondantsMedicaux", $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
