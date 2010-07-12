@@ -16,7 +16,7 @@ $can->needsRead();
 $prescription_id   = CValue::post("prescription_id");
 $pack_protocole_id = CValue::post("pack_protocole_id");
 
-$date_sel        = CValue::post("debut", mbDate());
+$date_sel        = CValue::post("debut");
 $praticien_id    = CValue::post("praticien_id", $AppUI->user_id);
 $operation_id    = CValue::post("operation_id");
 $pratSel_id      = CValue::post("pratSel_id");

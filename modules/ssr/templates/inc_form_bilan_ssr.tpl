@@ -199,7 +199,7 @@ refreshFormBilanSSR = function(){
 	<tr>
 		<td style="width: 60%">
 			<table class="form">
-				{{if $app->_ref_user->isPraticien()}}
+				{{if $app->_ref_user->isPraticien() || $can->admin}}
 				  <tr>
 					  <td colspan="2">
 					  	<form name="applyProtocole" method="post" action="?" onsubmit="if(!this.prescription_id.value){ return onSubmitFormAjax(getForm('addPrescriptionSSR'))} else { return submitProtocole() };">
@@ -209,7 +209,8 @@ refreshFormBilanSSR = function(){
 				        <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
 				        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 				        <input type="hidden" name="pratSel_id" value="" />
-				        
+				        <input type="hidden" name="date_sel" value="" />
+                
 				        <input type="hidden" name="pack_protocole_id" value="" />
 				        <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
 				        <div style="display:none; width: 350px;" class="autocomplete" id="protocole_auto_complete"></div>

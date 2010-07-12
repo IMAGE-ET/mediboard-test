@@ -368,7 +368,9 @@ class CPrescription extends CMbObject {
           $_line->time_debut = mbTime($date_time_debut);
         }
       } else {
-        $_line->debut = mbDate($date_debut);
+      	if($date_debut){
+          $_line->debut = mbDate($date_debut);
+				}
       }
       // Calcul de la duree
       if($_line->jour_decalage_fin){
