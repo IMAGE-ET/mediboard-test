@@ -129,7 +129,11 @@ class CRequest {
     if ($this->ljoin) {
       assert(is_array($this->ljoin));
       foreach ($this->ljoin as $table => $condition) {
-        $sql .= "\nLEFT JOIN `$table` ON $condition";
+      	if(is_string($table)){
+          $sql .= "\nLEFT JOIN `$table` ON $condition";
+      	} else {
+					$sql .= "\nLEFT JOIN $condition";
+				}
       }
     }
 
