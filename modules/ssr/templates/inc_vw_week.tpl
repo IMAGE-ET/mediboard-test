@@ -21,12 +21,12 @@ Main.add(function() {
     {{$planning->adapt_range|@json}}
   );
   
+  planning.container.addClassName("drawn");
   planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
   
   planning.scroll();
-  planning.container.addClassName("drawn");
   
 	window["planning-{{$planning->guid}}"] = planning;
 });
@@ -94,114 +94,82 @@ Main.add(function() {
             {{/if}}
             
             <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}">
-              <div><!-- <<< This div is necessary (relative positionning) -->
-              
-              <div class="event-container">
-              
-              {{foreach from=$_events item=_event}}
-                {{if $_event->hour == $_hour}}
-                  <div id="{{$_event->internal_id}}" 
-									     {{if $_event->guid}}
-                         onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
-									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
-												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
-												 {{/if}}
-											 {{/if}} 
-											 class="event {{if $_event->draggable}}draggable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
-											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
-											 	
-                    <div class="time-preview" style="display: none;"></div>
-                    
-										{{if $planning->large}}
-										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
-											{{$_event->start|date_format:"%H:%M"}}
-                      {{if $_event->length}}
-                       - {{$_event->end|date_format:"%H:%M"}}
-                      {{/if}}
-                    </div>
-                    {{/if}}
-										
-                    <div class="body">
-                      {{$_event->title|smarty:nodefaults|nl2br}}
-                    </div>
-                    <div class="footer"></div>
-                    <div class="handle"></div>
-                  </div>
-                  
-                  {{if $_event->draggable}}
-                  <script type="text/javascript">
-                   Main.add(function(){
-                     var planning = window['planning-{{$planning->guid}}'];
-                     
-                     function showTime(elt, event){
-                       elt.down(".time-preview").update(event.getTimeString()).show();
-                     }
-                     function hideTime(elt){
-                       elt.down(".time-preview").hide();
-                     }
-                   
-                     function onDragSize(d){
-                       var grip = d.element;
-                       var e = grip.up();
-                       
-                       e.setStyle({
-                         height: (grip.offsetTop+grip.getHeight())+"px"
-                       });
-                       
-                       var event = planning.getEventById(e.id);
-                       showTime(e, event);
-                     }
-                     
-                     function onDragPosition(d){
-                       var event = planning.getEventById(d.element.id);
-                       showTime(d.element, event);
-                     }
-                     
-                     function onEndPosition(d){
-                       var event = planning.getEventById(d.element.id);
-                       hideTime(d.element);
-                       event.onChange();
-                     }
-                     
-                     function onEndSize(d){
-                       var element = d.element.up();
-                       var event = planning.getEventById(element.id);
-                       hideTime(element);
-                       event.onChange();
-                     }
-                     
-                     var element = $('{{$_event->internal_id}}');
-                     var parent = element.up("td");
-                     var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
-                     
-                     new Draggable(element, {snap: snap, handle: element.down(".handle"), change: onDragPosition, onEnd: onEndPosition});
-                     new Draggable(element.down(".footer"), {constraint: "vertical", snap: snap, change: onDragSize, onEnd: onEndSize});
-                   });
-                   </script>
-                   {{/if}}
-                {{/if}}
-              {{/foreach}}
-              
-              </div>
-              
-              {{* Time range *}}
-              {{if array_key_exists($_day, $planning->load_data) && array_key_exists($_hour, $planning->load_data.$_day)}}
-                <div class="load-container">
-                  {{foreach from=$planning->load_data.$_day.$_hour item=_load key=_key}}
-                    {{math equation="x/y" x=$_load y=$planning->maximum_load assign=_load_ratio}}
-                    {{if $_load_ratio < 0.3}}
-                      {{assign var=level value=low}}
-                    {{elseif $_load_ratio < 0.7}}
-                      {{assign var=level value=medium}}
-                    {{else}}
-                      {{assign var=level value=high}}
-                    {{/if}}
-                    <div id="{{$planning->guid}}-{{$_day}}-{{$_hour}}-{{$_key}}" class="load {{$level}}"></div>
-                  {{/foreach}}
-                </div>
+              {{if isset($planning->events_sorted.$_day.$_hour|smarty:nodefaults)}}
+                {{assign var=has_events value=true}} 
+              {{else}}
+                {{assign var=has_events value=false}} 
               {{/if}}
               
-              </div>
+              {{if isset($planning->load_data.$_day.$_hour|smarty:nodefaults)}}
+                {{assign var=has_load value=true}} 
+              {{else}}
+                {{assign var=has_load value=false}} 
+              {{/if}}
+              
+              {{if $has_events || $has_load}}
+                <div><!-- <<< This div is necessary (relative positionning) -->
+                
+                  {{if $has_events}}
+                    <div class="event-container">
+                    {{foreach from=$_events item=_event}}
+                      {{if $_event->hour == $_hour}}
+                        <div id="{{$_event->internal_id}}" 
+      									     {{if $_event->guid}}
+                               onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
+      									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
+      												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
+      												 {{/if}}
+      											 {{/if}} 
+      											 class="event {{if $_event->draggable}}draggable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
+      											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
+      										
+                          {{if $_event->draggable}}
+                            <div class="time-preview" style="display: none;"></div>
+                          {{/if}}
+                          
+      										{{if $planning->large}}
+      										<div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
+      											{{$_event->start|date_format:"%H:%M"}}
+                            {{if $_event->length}}
+                             - {{$_event->end|date_format:"%H:%M"}}
+                            {{/if}}
+                          </div>
+                          {{/if}}
+      										
+                          <div class="body">
+                            {{$_event->title|smarty:nodefaults|nl2br}}
+                          </div>
+                          
+                          {{if $_event->draggable}}
+                            <div class="footer"></div>
+                            <div class="handle"></div>
+                          {{/if}}
+                          
+                        </div>
+                      {{/if}}
+                    {{/foreach}}
+                    </div>
+                  {{/if}}
+                  
+                  {{* Time range *}}
+                  {{if $has_load}}
+                    <div class="load-container">
+                      {{foreach from=$planning->load_data.$_day.$_hour item=_load key=_key}}
+                        {{math equation="x/y" x=$_load y=$planning->maximum_load assign=_load_ratio}}
+                        {{if $_load_ratio < 0.3}}
+                          {{assign var=level value=low}}
+                        {{elseif $_load_ratio < 0.7}}
+                          {{assign var=level value=medium}}
+                        {{else}}
+                          {{assign var=level value=high}}
+                        {{/if}}
+                        <div id="{{$planning->guid}}-{{$_day}}-{{$_hour}}-{{$_key}}" class="load {{$level}}"></div>
+                      {{/foreach}}
+                    </div>
+                  {{/if}}
+                
+                </div>
+              {{/if}}
             </td>
             {{if in_array($_hour,$planning->pauses)}}
               {{assign var=prev_pause value=true}}

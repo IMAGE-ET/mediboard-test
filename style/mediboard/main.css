@@ -517,18 +517,19 @@ table#weeklyPlanning th.today {
   background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
 }
 
-.planning .event.draggable:hover {
-  outline: none;
-}
-
 .planning .event.draggable:hover .handle {
   display: block;
 }
 
 .planning .event:hover {
-  margin: -1px;
-  border: 1px solid #666;
+  /*margin: -1px;
+  border: 1px solid #666;*/
+  outline: 1px solid #666; /* Won't trigger redraw() on IE */
   z-index: 100;
+}
+
+.planning .event.selected:hover {
+  outline: none;
 }
 
 .planning .event .time-preview {

@@ -93,6 +93,7 @@ class CPlanningWeek  {
     
     $this->events[] = $event;
     $this->days[$event->day][] = $event;
+    $this->events_sorted[$event->day][$event->hour][] = $event;
     
     $colliding = array($event);
     foreach($this->days[$event->day] as $_event) {

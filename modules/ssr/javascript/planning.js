@@ -57,8 +57,61 @@ PlanningEvent = Class.create({
   onChange: function(){
     this.planning.scrollTop = this.planning.container.down('.week-container').scrollTop;
     return this.planning.onEventChange(this);
+  },
+  setDraggable: function(){
+    Main.add(function(){
+      var planning = this.planning;
+      var element = this.getElement();
+      var parent = element.up("td");
+      var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
+      
+      new Draggable(element, {
+        snap: snap, 
+        handle: element.down(".handle"), 
+        change: PlanningEvent.Drag.onDragPosition.bind(planning), 
+        onEnd: PlanningEvent.Drag.onEndPosition.bind(planning)
+      });
+      
+      new Draggable(element.down(".footer"), {
+        constraint: "vertical", 
+        snap: snap, 
+        change: PlanningEvent.Drag.onDragSize.bind(planning),
+        onEnd: PlanningEvent.Drag.onEndSize.bind(planning)
+      });
+    }.bind(this));
   }
 });
+
+PlanningEvent.Drag = {
+  showTime: function(elt, event){
+    elt.down(".time-preview").update(event.getTimeString()).show();
+  },
+  hideTime: function (elt){
+    elt.down(".time-preview").hide();
+  },
+  onDragSize: function (d){
+    var grip = d.element;
+    var e = grip.up();
+    e.style.height = (grip.offsetTop+grip.getHeight())+"px";
+    var event = this.getEventById(e.id);
+    PlanningEvent.Drag.showTime(e, event);
+  },
+  onDragPosition: function(d){
+    var event = this.getEventById(d.element.id);
+    PlanningEvent.Drag.showTime(d.element, event);
+  },
+  onEndPosition: function(d){
+    var event = this.getEventById(d.element.id);
+    PlanningEvent.Drag.hideTime(d.element);
+    event.onChange();
+  },
+  onEndSize: function(d){
+    var element = d.element.up();
+    var event = this.getEventById(element.id);
+    PlanningEvent.Drag.hideTime(element);
+    event.onChange();
+  }
+};
 
 WeekPlanning = Class.create({
   scrollTop: null,
@@ -68,6 +121,10 @@ WeekPlanning = Class.create({
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
+      
+      if (this.eventsById[events[i].internal_id].draggable) {
+        this.eventsById[events[i].internal_id].setDraggable();
+      }
     }
     
     this.container = $(guid);
