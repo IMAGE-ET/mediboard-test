@@ -37,7 +37,7 @@ if ($is_code128) {
   $parts = explode("@", $keywords);
   
   foreach($parts as $p) {
-    foreach(CDMI::$code128_prefixes as $code => $text) {
+    foreach(CBarcodeParser::$code128prefixes as $code => $text) {
       //if (strpos($p, $code) === 0) { // strpos won't work :(
       if (substr($p, 0, strlen($code)) == $code) {
         $composition[$code] = substr($p, strlen($code), strlen($p)-strlen($code));

@@ -16,6 +16,7 @@ class CProduct extends CMbObject {
   var $name              = null;
   var $description       = null;
   var $code              = null;
+  var $code_canonical    = null;
   var $scc_code          = null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
   var $category_id       = null;
   var $societe_id        = null;
@@ -75,6 +76,7 @@ class CProduct extends CMbObject {
     $specs['name']          = 'str notNull seekable';
     $specs['description']   = 'text seekable';
     $specs['code']          = 'str maxLength|32 seekable protected';
+    $specs['code_canonical']= 'str maxLength|32 seekable show|0';
     $specs['scc_code']      = 'numchar length|10 seekable protected'; // Manufacturer Code + Item Number
     $specs['category_id']   = 'ref notNull class|CProductCategory';
     $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
@@ -95,6 +97,15 @@ class CProduct extends CMbObject {
     $specs['_quantity']     = 'str show|1';
     $specs['_consumption']  = 'num show|1';
     return $specs;
+  }
+  
+  function updateDBFields(){
+    parent::updateDBFields();
+    
+    $this->completeField("code");
+    if (!$this->_id || $this->fieldModified("code")) {
+      $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
+    }
   }
 
   function updateFormFields() {

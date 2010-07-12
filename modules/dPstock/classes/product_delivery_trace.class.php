@@ -67,6 +67,11 @@ class CProductDeliveryTrace extends CMbObject {
     $infinite_group_stock = CAppUI::conf('dPstock CProductStockGroup infinite_quantity') == '1';
     $negative_allowed = CAppUI::conf('dPstock CProductStockGroup negative_allowed') == '1';
     
+    $stock_service = new CProductStockService();
+    $stock_service->product_id = $stock->product_id;
+    $stock_service->service_id = $this->_ref_delivery->service_id;
+    $stock_service->loadMatchingObject();
+    
     if ($this->date_delivery && 
         !$negative_allowed && 
         !$infinite_group_stock && 
@@ -114,18 +119,19 @@ class CProductDeliveryTrace extends CMbObject {
     
     // Un-receive
     else if ($this->_unreceive) {
-      $stock_service = new CProductStockService();
-      $stock_service->product_id = $stock->product_id;
-      $stock_service->service_id = $this->_ref_delivery->service_id;
-      
-      if ($stock_service->loadMatchingObject()/* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
+      if ($stock_service->_id/* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
         $stock_service->quantity -= $this->quantity;
-        if ($msg = $stock_service->store()) return $msg;
       }
       
       $this->_unreceive = null;
       $this->date_reception = '';
     }
+    
+    if (!$stock_service->_id) {
+      $stock_service->quantity = $this->quantity;
+      $stock_service->order_threshold_min = 0;
+    }
+    if ($msg = $stock_service->store()) return $msg;
 
     return parent::store();
   }

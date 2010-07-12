@@ -96,7 +96,7 @@ Main.add(function(){
   {{if $list|@count > 0}}
   <label>
     Code lot
-    <input type="text" size="20" name="_search_lot" />
+    <input type="text" size="20" name="_search_lot" class="barcode" />
   </label>
   {{/if}}
   
@@ -149,11 +149,11 @@ Main.add(function(){
       </td>
       <td>
         <label for="code" style="display: none;">{{tr}}CProductOrderItemReception-code{{/tr}}</label>
-        {{mb_field object=$lot field=code size=15 prop="str notNull"}}
+        {{mb_field object=$lot field=code size=15 prop="str notNull" class="barcode"}}
       </td>
       <td>
         <label for="lapsing_date" style="display: none;">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label>
-        {{mb_field object=$lot field=lapsing_date prop="str notNull" size=10}}
+        {{mb_field object=$lot field=lapsing_date prop="str notNull" class="barcode" size=10}}
       </td>
       {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
       <td></td>

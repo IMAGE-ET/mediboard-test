@@ -22,47 +22,59 @@ $day_min = mbDate("-$num_days_date_min DAY");
 $day_max = mbDate("+2 DAY");
 
 $schedule = str_split(CAppUI::conf('pharmacie dispensation_schedule'));
-$schedule2 = str_split(CAppUI::conf('pharmacie dispensation_schedule'));
 sort($schedule);
-$schedule = array_combine($schedule, $schedule);
-$schedule2 = $schedule;
-/*if (count($schedule)) {
-  $today = intval(mbTransformTime(null, null, '%l'));
+
+if (false && count($schedule)) {
+  $now = mbDate();
+  $tomorrow = mbDate("+1 DAY");
   $list_days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-  $array_next = $array_last = $schedule;
+  $selected_days = array_intersect_key($list_days, array_flip($schedule));
   
-  $curr = isset($schedule[6]) ? 6 : reset($schedule);
-  for($i = 6; $i > -1; $i--) {
-    if (isset($schedule[$i])) $curr = $i;
-    $array_last[$i] = $curr;
+  $relative_days = array_fill_keys($schedule, null);
+  foreach($selected_days as $_key => $_day) {
+    $last = mbDate("LAST $_day", $tomorrow);
+    $relative_days[$_key] = mbDaysRelative($tomorrow, $last);
   }
   
-  foreach($schedule as $key => $d) {
-  	$prev = prev($schedule);
-  	$schedule2[$key] = $prev ? $prev : end($schedule);
+  $min_key = 50;
+  $min_relative = 50;
+  $max_key = null;
+  $lower = false;
+  foreach($relative_days as $_key => $_relative) {
+    if ($_relative < $min_relative) {
+      $min_key = $_key;
+      $min_relative = $_relative;
+      $lower = true;
+    }
+    else {
+      if ($lower) {
+        $max_key = $_key;
+      }
+      $lower = false;
+    }
   }
-  //$schedule2 = array_reverse($schedule2, true);
   
-  foreach($array_last as $key => $d) {
-  	$array_next[$key] = $schedule2[$d];
-  }
-	
-	$day_min = mbTransformTime(($today != $array_last[$today] ? 'last '.$list_days[$array_last[$today]] : null), $day_min, '%Y-%m-%d');
-	$day_max = mbTransformTime(($today != $array_next[$today] ? 'next '.$list_days[$array_next[$today]] : null), $day_max, '%Y-%m-%d');
+  mbTrace($relative_days);
+  mbTrace($min_key);
+  mbTrace($max_key);
+  
+  /*if ($max_key === null) {
+    $keys = array_keys($relative_days);
+    $max_key = reset($keys);
+  }*/
+  
+  $min_rel = $relative_days[$min_key];
+  $max_rel = $relative_days[$max_key];
+  
+  $day_min = mbDate("+$min_rel DAYS");
+  $day_max = mbDate("+$max_rel DAYS");
+  
+  mbTrace($min_rel);
+  mbTrace($max_rel);
+  
+  mbTrace($day_min);
+  mbTrace($day_max);
 }
-
-ksort($array_last);
-ksort($array_next);
-
-mbTrace($schedule);
-mbTrace($schedule2);
-
-mbTrace($array_last);
-mbTrace($array_next);
-
-mbTrace($array_last[$today]);
-mbTrace($today);
-mbTrace($array_next[$today]);*/
 
 $date_min = CValue::getOrSession('_date_min', $day_min);
 $date_max = CValue::getOrSession('_date_max', $day_max);

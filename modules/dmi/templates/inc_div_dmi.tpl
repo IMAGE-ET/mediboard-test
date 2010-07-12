@@ -32,7 +32,7 @@ FinSi
 
 <script type="text/javascript">
   
-Barcode.code128Prefixes = {{"CDMI"|static:code128_prefixes|@json}};
+Barcode.code128Prefixes = {{"CBarcodeParser"|static:code128prefixes|@json}};
 
 search_product = function(form){
   var url = new Url("dmi", "httpreq_do_search_product");
@@ -262,7 +262,7 @@ signLineDMI = function(line_dmi_id, value){
         <input type="hidden" name="_scc_code_part" value="" />
         <input type="hidden" name="_lot_number" value="" />
         <input type="hidden" name="_lapsing_date" value="" />
-        <input type="text" name="_view" size="40" value="" style="font-size: 1.3em;" />
+        <input type="text" name="_view" class="barcode" size="40" value="" style="font-size: 1.3em;" />
         <div id="dmi_delivery__view_autocomplete" style="display: none; width: 350px;" class="autocomplete"></div>
       </form>
     </td>

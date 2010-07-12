@@ -636,7 +636,17 @@ class CSetupdPstock extends CSetup {
     $this->makeRevision("1.30");
     $sql = "ALTER TABLE `product_order` ADD `bill_number` VARCHAR (64)";
     $this->addQuery($sql);
+              
+    $this->makeRevision("1.31");
+    $sql = "ALTER TABLE `product` ADD `code_canonical` VARCHAR (32) AFTER `code`";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product` ADD INDEX (`code_canonical`)";
+    $this->addQuery($sql);
+    $chars = str_split('-+*/\\\'\"$_\.\ -()[]&|#@%!?;,:=`~');
+    $sql = "UPDATE `product` SET `code_canonical` = ".
+           CMySQLDataSource::getReplaceQuery($chars, "", '`code`');
+    $this->addQuery($sql);
 
-    $this->mod_version = "1.31";
+    $this->mod_version = "1.32";
   }
 }

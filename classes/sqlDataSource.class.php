@@ -632,5 +632,36 @@ abstract class CSQLDataSource {
     $str = implode(", ", $values);
     return "NOT IN ($str)";
   }
+  
+  static function getReplaceQuery($search, $replace, $subject) {
+    if (!is_array($search)) {
+      $search = array($search);
+    }
+    else {
+      $search = array_values($search); // to have contiguous keys
+    }
+    
+    if (!is_array($replace)) {
+      $replace = array($replace);
+    }
+    else {
+      $replace = array_values($replace); // to have contiguous keys
+    }
+    
+    $query = "";
+    
+    foreach($search as $_search) {
+      $query .= "REPLACE( \n";
+    }
+    
+    $query .= $subject; // can be of the form "foo" or foo or `foo`
+        
+    $replace_count = count($replace);
+    foreach($search as $i => $_search) {
+      $query .= ", '".addslashes($_search)."', '".addslashes($replace[$i % $replace_count])."') \n";
+    }
+    
+    return $query;
+  }
 }
 ?>

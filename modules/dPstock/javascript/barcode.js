@@ -11,7 +11,7 @@ Barcode = {
     }
     
     // 2016-08
-    if (match = barcode.match(/(\d{4})-(\d{2})/)) {
+    if (match = barcode.match(/(20\d{2})-(\d{2})/)) {
       date = match[1]+"-"+match[2]+"-"+getLastDay(match[2], match[1]);
     }
     
