@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-if(!$user->isPraticien() &&
+if(!$user->isMedical() &&
    !CModule::getCanDo('soins')->read && 
    !CModule::getCanDo('dPurgences')->read && 
     CModule::getCanDo('dPcabinet')->edit){
