@@ -33,7 +33,7 @@ Main.add(function(){
   var vp = document.viewport.getDimensions();
   var top = planning.cumulativeOffset().top;
   planning.setStyle({
-    height: (vp.height-top)+"px"
+    height: (vp.height-top-20)+"px"
   });
 });
 
@@ -50,7 +50,7 @@ printPlanningSejour = function(){
   <col style="width: 50%;" />
   
 	<tr style="height: 50%;">
-		<td>
+		<td style="height: 50%;">
 			<div style="position: relative; height: 100%;">
 			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="print notext" onclick="printPlanningSejour();">{{tr}}Print{{/tr}}</button>
 				<div id="planning-sejour" style="height: 100%;"></div>
@@ -60,13 +60,18 @@ printPlanningSejour = function(){
 	</tr>
 	
   <tr style="height: 50%;">
-  	<td>
+  	<td style="height: 50%;">
 			<div style="position: relative; height: 100%;">
 			  <button type="button" style="position: absolute; top: 0px; right: 0px;" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
-				<div id="planning-technicien"></div>
+				<div id="planning-technicien" style="height: 100%;"></div>
 		  </div>
 		</td>
-    <td id="planning-equipement"></td>
+    <td style="height: 50%;">
+      <!-- it's better to have the same dom here -->
+      <div style="position: relative; height: 100%;">
+        <div id="planning-equipement" style="height: 100%;"></div>
+      </div>
+    </td>
   </tr>
 </table>
 
