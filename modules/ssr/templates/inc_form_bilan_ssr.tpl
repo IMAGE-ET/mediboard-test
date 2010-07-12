@@ -199,7 +199,7 @@ refreshFormBilanSSR = function(){
 	<tr>
 		<td style="width: 60%">
 			<table class="form">
-				{{if $app->_ref_user->isPraticien()}}
+				{{if $app->_ref_user->isPraticien() || $can->admin}}
 				  <tr>
 					  <td colspan="2">
 					  	<form name="applyProtocole" method="post" action="?" onsubmit="if(!this.prescription_id.value){ return onSubmitFormAjax(getForm('addPrescriptionSSR'))} else { return submitProtocole() };">
