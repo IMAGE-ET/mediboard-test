@@ -209,7 +209,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
-//mbTrace($compte_rendu->_source, '', 1);
 $smarty->assign("modele_id"      , $modele_id);
 $smarty->assign("lists"          , $lists);
 $smarty->assign("destinataires"  , $destinataires);

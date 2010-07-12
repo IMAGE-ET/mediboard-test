@@ -14,13 +14,16 @@ $object_id        = CValue::getOrSession("object_id");
 $file_category_id = CValue::getOrSession("file_category_id", null);
 $file_rename      = CValue::getOrSession("file_rename", null);
 $uploadok         = CValue::get("uploadok", 0);
-
+$private          = CValue::getOrSession("private", 0);
+CValue::setSession("private", $private);
 $nb_files_upload = CMbArray::createRange(1, ($file_rename ? 1 : CAppUI::conf("dPfiles nb_upload_files")) ,true);
 
 $object = new $object_class;
 $object->load($object_id);
 $listCategory = CFilesCategory::listCatClass($object_class);
 
+$file = new CFile();
+$file->private = $private;
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -32,6 +35,6 @@ $smarty->assign("nb_files_upload" , $nb_files_upload);
 $smarty->assign("object"          , $object);
 $smarty->assign("listCategory"    , $listCategory);
 $smarty->assign("file_rename"     , $file_rename);
-
+$smarty->assign("file"            , $file);
 $smarty->display("upload_file.tpl");
 ?>

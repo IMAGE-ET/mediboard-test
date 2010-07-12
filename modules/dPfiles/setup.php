@@ -176,7 +176,12 @@ class CSetupdPfiles extends CSetup {
               ADD INDEX (`file_date`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    $sql = "ALTER TABLE `files_mediboard` 
+              ADD `private` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.24";
   }
 }
 ?>

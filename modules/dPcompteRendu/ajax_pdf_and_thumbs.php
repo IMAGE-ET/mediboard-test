@@ -93,10 +93,11 @@ else {
     $page_format = array(0, 0, $page_width, $page_height);
   }
 
-  // Crï¿½ation du CFile si inexistant
+  // Création du CFile si inexistant
   if (!count($files)) {
     $file = new CFile();
     $file->setObject($compte_rendu);
+    $file->private = 0;
     $file->file_name  = $compte_rendu->nom . ".pdf";
     $file->file_type  = "application/pdf";
     $file->file_owner = $user_id;
@@ -108,7 +109,7 @@ else {
     $file = reset($files);
     $file->file_name  = $compte_rendu->nom . ".pdf";
 
-    // Si la source envoyï¿½e et celle prï¿½sente en base sont identique, on stream le PDF dï¿½jï¿½ gï¿½nï¿½rï¿½
+    // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
     // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
     $c1 = preg_replace("!\s!",'',$save_content);
     $c2 = preg_replace("!\s!",'',$compte_rendu->_source);

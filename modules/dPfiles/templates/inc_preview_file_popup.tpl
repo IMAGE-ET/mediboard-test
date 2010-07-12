@@ -14,14 +14,19 @@ window.onbeforeunload= function () {
     <td style="width: 20%">
     {{if $filePrev && !$nonavig}}
     <a class="button left" href="{{$href}}&amp;elementClass={{$filePrev.elementClass}}&amp;elementId={{$filePrev.elementId}}">
-      {{tr}}CDocumentItem-next{{/tr}}
+      {{tr}}CDocumentItem-prev{{/tr}}
     </a>
     {{/if}}
     </td>
     <td style="width:60%; text-align: center; white-space: normal;">
 			<!-- Nom du fichier -->
       {{if $fileSel}}
-      <strong>{{$fileSel->_view}}</strong>
+      <strong>
+        {{$fileSel->_view}}
+        {{if $fileSel->private}}
+          &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
+        {{/if}}
+      </strong>
       
 			<!-- Category -->
       {{if $catFileSel->nom}}
@@ -39,13 +44,13 @@ window.onbeforeunload= function () {
      {{/if}}
     </td>
     
-    <th style="width:20%">
+    <td style="width:20%; text-align: right;">
     {{if $fileNext && !$nonavig}}
     <a class="button rtl right" href="{{$href}}&amp;elementClass={{$fileNext.elementClass}}&amp;elementId={{$fileNext.elementId}}">
       {{tr}}CDocumentItem-next{{/tr}}
 		</a>
     {{/if}}
-    </th>
+    </td>
   </tr>
   <tr>
     <td class="button" colspan="3">      

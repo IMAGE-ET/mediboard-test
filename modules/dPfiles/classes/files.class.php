@@ -20,6 +20,7 @@ class CFile extends CDocumentItem {
   var $file_owner         = null;
   var $file_date          = null;
   var $file_size          = null;
+  var $private            = null;
 
   // Form fields
   var $_extensioned  = null;
@@ -54,7 +55,7 @@ class CFile extends CDocumentItem {
     $specs["file_owner"]         = "ref notNull class|CMediusers";
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull show|0";
-
+    $specs["private"]            = "bool notNull default|0";
     // Form Fields
     $specs["_sub_dir"]      = "str";
     $specs["_absolute_dir"] = "str";
@@ -185,13 +186,24 @@ class CFile extends CDocumentItem {
   }
     
   static function loadFilesForObject(CMbObject $object){
+    global $can;
+
     $listFile = new CFile();
     $listFile->setObject($object);
     $listFile = $listFile->loadMatchingList();
+    $current_user = CAppUI::$user;
+    $current_user->loadRefFunction();
     
     foreach($listFile as $keyFile => $currFile) {
+      $author = new CMediusers();
       $listFile[$keyFile]->canRead();
-      if(!$listFile[$keyFile]->_canRead){
+      $listFile[$keyFile]->loadLogs();
+      $author->load($listFile[$keyFile]->_ref_first_log->_ref_user->_id);
+      $author->loadRefFunction();
+      if(!$listFile[$keyFile]->_canRead ||
+         ($listFile[$keyFile]->private == 1 && 
+         !$can->admin &&
+         $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
         unset($listFile[$keyFile]);
       }
     }
@@ -269,6 +281,7 @@ class CFile extends CDocumentItem {
   }
   
   static function loadDocItemsByObject(CMbObject $object) {
+    global $can;
     if (!$object->_ref_files){
       $object->loadRefsFiles();
     }
@@ -290,25 +303,21 @@ class CFile extends CDocumentItem {
         "items" => array(),
       );
     }
-    
+
     //Ajout des fichiers dans le tableau
-    foreach ($object->_ref_files as &$_file) {
-      if ($_file->canRead()) {
-      	$cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
-        $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
-        if (!isset($affichageFile[$cat_id]["name"]))
-          $affichageFile[$cat_id]["name"] = '';
-      }
+    foreach ($object->_ref_files as $keyFile=>&$_file) {
+    	$cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
+      $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
+      if (!isset($affichageFile[$cat_id]["name"]))
+        $affichageFile[$cat_id]["name"] = '';
     }
     
     //Ajout des document dans le tableau
-    foreach ($object->_ref_documents as &$_doc) {
-      if ($_doc->canRead()) {
-      	$cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
-        $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
-        if (!isset($affichageFile[$cat_id]["name"]))
-          $affichageFile[$cat_id]["name"] = '';
-      }
+    foreach ($object->_ref_documents as $keyDoc=>&$_doc) {
+    	$cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
+      $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
+      if (!isset($affichageFile[$cat_id]["name"]))
+        $affichageFile[$cat_id]["name"] = '';
     }
     
     // Classement des Fichiers et des document par Ordre alphabétique

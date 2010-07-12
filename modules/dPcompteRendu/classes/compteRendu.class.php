@@ -125,10 +125,27 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadDocuments($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    global $can;
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NOT NULL";
     }
     
+    $listDocs = parent::loadList($where, $order, $limit, $group, $leftjoin);
+    $current_user = CAppUI::$user;
+    $current_user->loadRefFunction();
+
+    foreach($listDocs as $key=>$_doc) {
+      $author = new CMediusers();
+      $_doc->loadLogs();
+      $author->load($_doc->_ref_first_log->_ref_user->_id);
+      $author->loadRefFunction();
+      if(!$listFile[$key]->_canRead ||
+         ($listFile[$key]->private == 1 && 
+         !$can->admin &&
+          $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
+        unset($listDocs[$key]);
+      }
+    }
     return parent::loadList($where, $order, $limit, $group, $leftjoin);
   }
   

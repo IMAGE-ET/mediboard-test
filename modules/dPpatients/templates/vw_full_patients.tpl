@@ -84,20 +84,22 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td id="listInfosPat" style="width:200px;">
+    <td style="display: none;">
       <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFile('load'); return false;">
-      <input type="hidden" name="selKey"   value="" />
-      <input type="hidden" name="selClass" value="" />
-      <input type="hidden" name="selView"  value="" />
-      <input type="hidden" name="keywords" value="" />
-      <input type="hidden" name="file_id"  value="" />
-      <input type="hidden" name="typeVue"  value="1" />
+        <input type="hidden" name="selKey"   value="" />
+        <input type="hidden" name="selClass" value="" />
+        <input type="hidden" name="selView"  value="" />
+        <input type="hidden" name="keywords" value="" />
+        <input type="hidden" name="file_id"  value="" />
+        <input type="hidden" name="typeVue"  value="1" />
       </form>
-      
-      {{assign var="href" value="?m=dPpatients&tab=vw_full_patients"}}
-      
+    </td>
+
+    <td id="listInfosPat" style="width:200px;">
+      {{assign var="href" value="?m=dPpatients&tab=vw_full_patients"}}      
       {{include file="inc_vw_full_patients.tpl"}}
     </td>
+
     <td class="greedyPane" id="listView">
       {{include file="../../dPpatients/templates/CPatient_complete.tpl"}}
     </td>

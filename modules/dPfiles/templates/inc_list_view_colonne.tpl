@@ -62,6 +62,9 @@ Main.add(function () {
           <td class="text" style="height: 35px; overflow: auto">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_doc_item->_guid}}');">
               {{$_doc_item->_view|truncate:60}}
+              {{if $_doc_item->private}}
+                &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
+              {{/if}}
             </span>
           </td>
 	

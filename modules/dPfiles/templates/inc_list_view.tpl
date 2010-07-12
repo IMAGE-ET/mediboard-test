@@ -61,7 +61,12 @@ Main.add(function () {
 
     </td>
     <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
-      <strong>{{$_doc_item}}</strong>
+      <strong>
+        {{$_doc_item}}
+        {{if $_file->private}}
+          &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
+        {{/if}}
+      </strong>
       <hr />
       {{include file=inc_file_toolbar.tpl notext=notext}}
     </td>

@@ -23,13 +23,20 @@ if (window.opener.File && window.opener.File.refresh) {
 
 <table class="form">
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="5">
       Ajouter un fichier pour {{$object->_view}}
     </th>
   </tr>
   <tr>
-    <td class="button" colspan="4">
+    
+    <td class="button">
       {{tr}}CFile-msg-maxsize{{/tr}} : {{$dPconfig.dPfiles.upload_max_filesize}}<br />
+    </td>
+    <td></td>
+    <td></td>
+    <th><label title="{{tr}}CFile-private-desc{{/tr}}" for="uploadFrm___private">{{tr}}CFile-private{{/tr}}</label></th>
+    <td>
+      {{mb_field object=$file field="private" typeEnum=checkbox}}
     </td>
   </tr>
   
@@ -50,15 +57,15 @@ if (window.opener.File && window.opener.File.refresh) {
         {{/foreach}}
       </select>
     </td>
-    
+
     <th><label for="formfile[{{$curr_nb_file}}]">{{tr}}CFile{{/tr}}</label></th>
-    <td>
+    <td colspan="2">
       <input type="file" name="formfile[{{$curr_nb_file}}]" size="0" />
     </td>
   </tr>
   {{/foreach}}
   <tr>
-    <td class="button" colspan="4">
+    <td class="button" colspan="6">
       <button class="submit" type="submit">{{tr}}Add{{/tr}}</button>
     </td>
   </tr>

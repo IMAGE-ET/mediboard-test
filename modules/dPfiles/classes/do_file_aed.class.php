@@ -80,7 +80,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         $obj->file_type = $file["type"];
         $obj->file_size = $file["size"];
         $obj->fillFields();
-        
+        $obj->private   = CValue::post("private");
         if (false == $res = $obj->moveTemp($file)) {
           CAppUI::setMsg("Fichier non envoyé", UI_MSG_ERROR);
           continue;
