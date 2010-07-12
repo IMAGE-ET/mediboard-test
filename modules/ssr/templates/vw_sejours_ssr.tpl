@@ -29,7 +29,7 @@
 
 <table id="sejours-ssr" class="tbl">
 	<tr>
-		<th class="title" colspan="10">
+		<th class="title" colspan="9">
 			Séjours SSR du {{$date|date_format:$dPconfig.longdate}}
 	    <form name="selDate" action="?" method="get">
 	      <input type="hidden" name="m" value="{{$m}}" />
@@ -51,7 +51,7 @@
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
 
-		<th style="width:  5em;">{{mb_title class="CSejour" field="_num_dossier"}}</th>
+		<th style="width:  5em;">n° DHE</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
     <th style="width: 16em;">
 		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
@@ -134,13 +134,13 @@
 	        <img src="images/icons/calendar-broken.png" title="Aucune prescription, planification impossible" />
 	      </td>
 	    {{else}}
-	      <td style="text-align: right;">
+	      <td style="text-align: right; width: 1%;">
 	        {{if $_sejour->_count_evenements_ssr}} 
 	        {{$_sejour->_count_evenements_ssr}}
 	        {{/if}}
 	      </td>
 	  
-	      <td style="text-align: right;">
+	      <td style="text-align: right; width: 1%;"">
 	        {{if $_sejour->_count.evenements_ssr}} 
 	        {{$_sejour->_count.evenements_ssr}}
 	        {{/if}}
