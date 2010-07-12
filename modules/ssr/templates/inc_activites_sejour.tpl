@@ -146,7 +146,7 @@ addBorderEvent = function(){
 	// On ne passe pas en selected les evenements qui possedent la classe tag_cat
 	if(element_id){ 
 	  var elements_tag = planning.select(".event.elt_selected"+eventClass+":not(.tag_cat)");
-		if(planning.select(".event.elt_selected"+eventClass+":not(.tag_cat).selected").length){
+		if(planning.select(".event.elt_selected"+eventClass+".selected:not(.tag_cat)").length){
 		  elements_tag.invoke("removeClassName", 'selected');
     } else {
 	    elements_tag.invoke("addClassName", 'selected');
@@ -318,12 +318,16 @@ Main.add(function(){
 	              <span style="float: right">
                   {{mb_include module=system template=inc_opened_interval_date from=$_line->debut to=$_line->date_arret}}
 	              </span>
+                
 	              <label>
-	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
-	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
-								  {{$_line->_view}}
-                </span>
-								</label>
+  	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
+                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
+  	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" 
+                        onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
+                    {{$_line->_view}}
+                  </span>
+                  </label>
+                
 	              <br />
 	              {{if $smarty.foreach.category.last}}
 	                </div>

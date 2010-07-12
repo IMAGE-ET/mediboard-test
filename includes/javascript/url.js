@@ -319,9 +319,12 @@ var Url = Class.create({
       trigger.insert(new Element("div"));
       
       if(oOptions.adaptDropdown) {
-        trigger.setStyle({
-          height: (input.getHeight()-2)+"px"
-        });
+        var height = input.getHeight();
+        if (height && height > 10) {
+          trigger.setStyle({
+            height: (height-2)+"px"
+          });
+        }
       }
       
       // Hide the list
