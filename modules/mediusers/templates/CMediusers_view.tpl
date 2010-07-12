@@ -8,11 +8,12 @@
     <td class="button">
       {{mb_include_script module=dPpersonnel script=plage ajax=true}}
     	
-      {{if $modules.dPpersonnel->_can->edit}}
-			<button type="button" class="search" onclick="PlageConge.showForUser('{{$mediuser->_id}}');">
-				Congés
-			</button>
+      {{if isset($modules.dPpersonnel|smarty:nodefaults) && $modules.dPpersonnel->_can->edit}}
+			  <button type="button" class="search" onclick="PlageConge.showForUser('{{$mediuser->_id}}');">
+				  Congés
+			  </button>
       {{/if}}
     </td>
   </tr>
 </table>
+
