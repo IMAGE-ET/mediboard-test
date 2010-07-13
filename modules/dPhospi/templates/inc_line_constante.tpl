@@ -1,6 +1,9 @@
 <tr>
   <td>{{tr}}{{$_constante->_class_name}}{{/tr}}</td>
   <td>
+    <div style="float: right">
+    {{mb_include module=system template=inc_object_history object=$_constante}}
+    </div>
   	{{$_constante->_ref_user}}
   </td>
   <td  style="text-align: center">

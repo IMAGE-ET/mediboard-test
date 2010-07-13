@@ -73,9 +73,9 @@ foreach($constantes as $_const) {
 foreach($constantes as $cst) {
   $user_ref_view = "";
 	$user_ref_id = "";
-  $cst->loadLastLog();
-  if ( $cst->_ref_last_log) {
-    $log = $cst->_ref_last_log;
+  $cst->loadFirstLog();
+  if ( $cst->_ref_first_log) {
+    $log = $cst->_ref_first_log;
 		$log->loadRefsFwd();
   }
   if($log->_ref_user) {
