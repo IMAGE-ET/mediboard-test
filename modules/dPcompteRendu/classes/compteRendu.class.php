@@ -572,7 +572,7 @@ class CCompteRendu extends CDocumentItem {
     $smarty = new CSmartyDP();
     $smarty->assign("style"  , $style);
     $smarty->assign("content", $content);
-    return $smarty->fetch("htmlheader.tpl");
+    return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
 }
 
