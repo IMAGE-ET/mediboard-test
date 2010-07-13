@@ -13,7 +13,8 @@ class CContentXML extends CMbObject {
   var $content_id = null;
   
   // DB Fields
-  var $content = null;
+  var $content   = null;
+  var $import_id = null;
 
   function getSpec() {
     $spec = parent::getSpec();
