@@ -40,6 +40,9 @@
 <table id="sejours-ssr" class="tbl">
 	<tr>
 		<th class="title" colspan="9">
+			<span style="text-align: left">
+				({{$sejours|@count}}) 
+			</span>
 			Séjours SSR du {{$date|date_format:$dPconfig.longdate}}
 	    <form name="selDate" action="?" method="get">
 	      <input type="hidden" name="m" value="{{$m}}" />
