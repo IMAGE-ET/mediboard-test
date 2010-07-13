@@ -8,6 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+if (!class_exists("SoapClient")) {
+  return;
+}
+
 /**
  * The CMbSOAPClient class
  */
