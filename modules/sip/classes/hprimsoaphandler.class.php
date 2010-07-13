@@ -65,8 +65,8 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "patients";
         $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
-        $echange_hprim->message = $messagePatient;
-        $echange_hprim->acquittement = $messageAcquittement;
+        $echange_hprim->_message = $messagePatient;
+        $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->message_valide = 0;
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
@@ -87,7 +87,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "patients";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;
-        $echange_hprim->message        = $messagePatient;
+        $echange_hprim->_message        = $messagePatient;
         $echange_hprim->message_valide = 1;
       }
       $echange_hprim->date_production = mbDateTime();
@@ -168,7 +168,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
-      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->_acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->date_echange = mbDateTime();
@@ -215,8 +215,8 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "pmsi";
         $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
-        $echange_hprim->message = $messageServeurActes;
-        $echange_hprim->acquittement = $messageAcquittement;
+        $echange_hprim->_message = $messageServeurActes;
+        $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
         $echange_hprim->message_valide = 0;
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
@@ -237,7 +237,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type           = "pmsi";
         $echange_hprim->sous_type      = $domGetEvenement->sous_type;
-        $echange_hprim->message        = $messageServeurActes;
+        $echange_hprim->_message        = $messageServeurActes;
         $echange_hprim->message_valide = 1;
       }
       $echange_hprim->date_production = mbDateTime();
@@ -258,7 +258,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
-      $echange_hprim->acquittement = $messageAcquittement;
+      $echange_hprim->_acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->date_echange = mbDateTime();

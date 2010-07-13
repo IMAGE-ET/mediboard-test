@@ -28,28 +28,29 @@ class CEchangeHprim extends CMbMetaObject {
   var $type                 = null;
   var $sous_type            = null;
   var $date_echange         = null;
-  var $message              = null;
-  var $acquittement         = null;
+  var $message_content_id      = null;
+  var $acquittement_content_id = null;
   var $statut_acquittement  = null;
   var $initiateur_id        = null;
   var $message_valide       = null;
   var $acquittement_valide  = null;
   var $id_permanent				  = null;
-  var $purge                = null;
     
   var $_ref_notifications   = null;
   
   // Form fields
-  var $_self_emetteur       = null;
-  var $_self_destinataire   = null;
-  var $_observations        = null;
+  var $_self_emetteur     = null;
+  var $_self_destinataire = null;
+  var $_observations      = null;
+  var $_message           = null;
+  var $_acquittement      = null;
   
   // Filter fields
-  var $_date_min            = null;
-  var $_date_max            = null;
+  var $_date_min          = null;
+  var $_date_max          = null;
   
   // Forward references
-  var $_ref_group = null;
+  var $_ref_group         = null;  
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -70,14 +71,13 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["type"]                  = "str";
     $specs["sous_type"]             = "str";
     $specs["date_echange"]          = "dateTime";
-    $specs["message"]               = "xml show|0";
-    $specs["acquittement"]          = "xml show|0";
+    $specs["message_content_id"]      = "ref class|CContentXML show|0";
+    $specs["acquittement_content_id"] = "ref class|CContentXML show|0";
     $specs["initiateur_id"]         = "ref class|CEchangeHprim";
     $specs["statut_acquittement"]   = "str show|0";
     $specs["message_valide"]        = "bool show|0";
     $specs["acquittement_valide"]   = "bool show|0";
     $specs["id_permanent"]          = "str";
-    $specs["purge"]                 = "bool show|0";
     $specs["object_id"]             = "ref class|CMbObject meta|object_class unlink";
     $specs["object_class"]          = "enum list|CPatient|CSejour|COperation show|0";
     
@@ -87,6 +87,10 @@ class CEchangeHprim extends CMbMetaObject {
     
     $specs["_date_min"]             = "dateTime";
     $specs["_date_max"]             = "dateTime";
+    
+    $specs["_message"]              = "xml";
+    $specs["_acquittement"]         = "xml";
+    
     return $specs;
   }
   
@@ -95,6 +99,16 @@ class CEchangeHprim extends CMbMetaObject {
     $backProps['notifications'] = "CEchangeHprim initiateur_id";
     
     return $backProps;
+  }
+  
+  function loadContent() {
+    $content = new CContentXML();
+    $content->load($this->message_content_id);
+    $this->_message = $content->content;
+    
+    $content = new CContentXML();
+    $content->load($this->acquittement_content_id);
+    $this->_acquittement = $content->content;
   }
   
   function loadRefNotifications(){
@@ -109,14 +123,37 @@ class CEchangeHprim extends CMbMetaObject {
   function updateFormFields() {
   	parent::updateFormFields();
   	
+  	// Chargement des contents 
+  	$this->loadContent();
+  	 
   	$this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
     $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
   }
   
+  function updateDBFields() {
+    if ($this->_message !== null) {
+      $content = new CContentXML();
+      $content->load($this->message_content_id);
+      $content->content = $this->_message;
+      if ($msg = $content->store()) {
+        return $msg;
+      }
+    }
+    
+    if ($this->_acquittement !== null) {
+      $content = new CContentXML();
+      $content->load($this->acquittement_content_id);
+      $content->content = $this->_acquittement;
+      if ($msg = $content->store()) {
+        return $msg;
+      }
+    }
+  }
+  
   function getObservations() {
-    if ($this->acquittement) {
+    if ($this->_acquittement) {
       $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-      $domGetAcquittement->loadXML(utf8_decode($this->acquittement));
+      $domGetAcquittement->loadXML(utf8_decode($this->_acquittement));
       $doc_valid = $domGetAcquittement->schemaValidate();
       if ($doc_valid) {    
         return $this->_observations = $domGetAcquittement->getAcquittementObservationPatients();
@@ -137,81 +174,10 @@ class CEchangeHprim extends CMbMetaObject {
 	
 	function setAckError($doc_valid, $messageAcquittement, $statut_acquittement) {
 		$this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->acquittement = $messageAcquittement;
+    $this->_acquittement = $messageAcquittement;
     $this->statut_acquittement = $statut_acquittement;
     $this->date_echange = mbDateTime();
     $this->store();
 	}
-  
-  function getObjectIdClass() {
-    switch($this->sous_type) {
-      case "enregistrementPatient" :
-        $this->object_class = "CPatient";
-        $this->loadObjectId("hprim:enregistrementPatient", "hprim:patient");
-        break;
-      case "fusionPatient" :
-        $this->object_class = "CPatient";
-        $this->loadObjectId("hprim:fusionPatient", "hprim:patient");
-        break;
-      case "venuePatient" :
-        $this->object_class = "CSejour"; 
-        $this->loadObjectId("hprim:venuePatient", "hprim:venue");
-        break;
-      case "mouvementPatient" :
-        $this->object_class = "CSejour";
-        $this->loadObjectId("hprim:mouvementPatient", "hprim:venue");
-        break;
-      case "fusionVenue" :
-        $this->object_class = "CSejour";
-        $this->loadObjectId("hprim:fusionVenue", "hprim:venue");
-        break;
-      case "debiteursVenue" :
-        $this->object_class = "CSejour";
-        $this->loadObjectId("hprim:debiteursVenue", "hprim:venue");
-        break;
-      default :       
-        $this->object_class = null;
-        $this->object_id = null;
-    }
-  }
-    
-  function loadObjectId($evtNode = null , $objectNode = null) {
-    if ($this->_self_emetteur) {
-      $domGetIdSourceObject = new CHPrimXMLEvenementsPatients();
-      @$domGetIdSourceObject->loadXML(utf8_decode($this->message));
-      $id_source = null;
-      try {
-        $id_source = $domGetIdSourceObject->getIdSourceObject($evtNode, $objectNode);
-      } catch (Exception $e) {}
-      $this->object_id = $id_source;
-      return;
-    }
-    
-    $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->nom = $this->emetteur;
-    $dest_hprim->loadMatchingObject();
-
-    // Recuperation de la valeur de l'id400
-    $id400 = new CIdSante400();
-    if ($this->object_class == "CPatient") {
-      $id400->tag = $dest_hprim->_tag_patient;
-    }
-    if ($this->object_class == "CSejour") {
-      $id400->tag = $dest_hprim->_tag_sejour;
-    }
-    $id400->object_class = $this->object_class;
-    if ($this->id_permanent) {
-      $id400->id400 = $this->id_permanent;
-      $id400->loadMatchingObject();
-    }
-    
-    // Si pas d'id400
-    if(!$id400->_id){
-      $this->object_id = null;
-    }
-    
-    $this->object_id = $id400->object_id;   
-    
-  }
 }
 ?>

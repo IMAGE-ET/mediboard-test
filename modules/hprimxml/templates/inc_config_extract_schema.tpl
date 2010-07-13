@@ -10,15 +10,13 @@
 
 <script type="text/javascript">
   function doAction(evenement) {
-    var url = new Url;
-    url.setModuleAction("hprimxml", "ajax_do_cfg_action");
+    var url = new Url("hprimxml", "ajax_do_cfg_action");
     url.addParam("evenement", evenement);
     url.requestUpdate('install_'+evenement, { onComplete: function(){checkSchemaFile(evenement);}});
   }
   
   function checkSchemaFile(evt) {
-    var url = new Url;
-    url.setModuleAction("hprimxml", "ajax_check_schema_file");
+    var url = new Url("hprimxml", "ajax_check_schema_file");
     url.addParam("evenement", evt);
     url.requestUpdate('status_'+evt);
   }

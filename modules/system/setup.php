@@ -255,7 +255,22 @@ class CSetupsystem extends CSetup {
     $sql = "DELETE FROM `modules` WHERE `mod_name` = 'dPmateriel'";
     $this->addQuery($sql, true);
 		
-    $this->mod_version = "1.0.28";
+    $this->makeRevision("1.0.28");
+    $sql = "CREATE TABLE IF NOT EXISTS `content_html` (
+              `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+              `content` TEXT,
+              `cr_id` INT
+           ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `content_xml` (
+              `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
+              `content` TEXT,
+              `import_id` INT
+           ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.29";
   }
 }
 ?>

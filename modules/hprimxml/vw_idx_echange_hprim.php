@@ -46,22 +46,22 @@ $smarty = new CSmartyDP();
 if($echange_hprim->_id) {
 	$echange_hprim->loadRefs();	
 
-	if ($echange_hprim->purge == 0) {
+	if ($echange_hprim->_message !== null && $echange_hprim->_acquittement !== null) {
 		$domGetEvenement = new CHPrimXMLEvenementsPatients();
-	  $domGetEvenement->loadXML(utf8_decode($echange_hprim->message));
+	  $domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
 	  $domGetEvenement->formatOutput = true;
 	  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
 	  
-	  $echange_hprim->message = utf8_encode($domGetEvenement->saveXML());
+	  $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
 	  
-	  if ($echange_hprim->acquittement) {
+	  if ($echange_hprim->_acquittement) {
 	    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-	    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->acquittement));
+	    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->_acquittement));
 	    $domGetAcquittement->formatOutput = true;
 	    $observations = $domGetAcquittement->getAcquittementObservationPatients();
 	    $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
 	    
-	    $echange_hprim->acquittement = utf8_decode($domGetAcquittement->saveXML());
+	    $echange_hprim->_acquittement = utf8_decode($domGetAcquittement->saveXML());
 	  }  
 		$smarty->assign("observations"  , $observations);
 	  $smarty->assign("doc_errors_msg", $doc_errors_msg);

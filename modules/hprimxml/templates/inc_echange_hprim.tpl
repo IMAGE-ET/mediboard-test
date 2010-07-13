@@ -95,8 +95,8 @@
   <td style="width:0.1%">
     <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">Retraiter</button>
   </td>
-	<td class="{{if ($object->date_echange && !$object->acquittement)}}error{{/if}}">
-	  {{if $object->acquittement}}Oui{{else}}Non{{/if}}
+	<td class="{{if ($object->date_echange && !$object->_acquittement)}}error{{/if}}">
+	  {{if $object->_acquittement}}Oui{{else}}Non{{/if}}
 	</td>
 	<td class="{{if !$object->statut_acquittement || 
 	                ($object->statut_acquittement == 'erreur') || 

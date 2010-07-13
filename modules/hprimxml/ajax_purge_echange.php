@@ -37,8 +37,8 @@ if (!$do_purge) {
   $count  = 0;
   foreach($echangesHprim as $_echange_hprim) {  
     // Suppression du champ message et acquittement de l'échange
-    $_echange_hprim->message = "";
-		$_echange_hprim->acquittement = "";
+    $_echange_hprim->_message = "";
+		$_echange_hprim->_acquittement = "";
 		
     $_echange_hprim->purge = 1;
     if ($msg = $_echange_hprim->store()) {

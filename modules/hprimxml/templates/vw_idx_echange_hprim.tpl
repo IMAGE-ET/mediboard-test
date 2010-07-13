@@ -11,8 +11,7 @@
 <script type="text/javascript">
 
 sendMessage = function(echange_hprim_id, echange_hprim_classname){
-  var url = new Url;
-  url.setModuleAction("hprimxml", "ajax_send_message");
+  var url = new Url("hprimxml", "ajax_send_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
 	url.requestUpdate("systemMsg", { onComplete:function() { 
@@ -20,8 +19,7 @@ sendMessage = function(echange_hprim_id, echange_hprim_classname){
 }
 
 reprocessing = function(echange_hprim_id, echange_hprim_classname){
-  var url = new Url;
-  url.setModuleAction("hprimxml", "ajax_reprocessing_message");
+  var url = new Url("hprimxml", "ajax_reprocessing_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
   url.requestUpdate("systemMsg", { onComplete:function() { 
@@ -29,8 +27,7 @@ reprocessing = function(echange_hprim_id, echange_hprim_classname){
 }
 
 refreshEchange = function(echange_hprim_id, echange_hprim_classname){
-  var url = new Url;
-  url.setModuleAction("hprimxml", "ajax_refresh_message");
+  var url = new Url("hprimxml", "ajax_refresh_message");
   url.addParam("echange_hprim_id", echange_hprim_id);
   url.addParam("echange_hprim_classname", echange_hprim_classname);
   url.requestUpdate("echange_"+echange_hprim_id);
@@ -167,7 +164,7 @@ function changePage(page) {
           <th>{{mb_title object=$echange_hprim field="sous_type"}}</th>
           <th>{{mb_title object=$echange_hprim field="date_echange"}}</th>
           <th>Retraitement</th>
-          <th>{{mb_title object=$echange_hprim field="acquittement"}}</th>
+          <th>{{mb_title object=$echange_hprim field="_acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="_observations"}}</th>
           <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>
@@ -193,7 +190,7 @@ function changePage(page) {
     </td>
   </tr>
   {{else}}
-	  {{if $echange_hprim->purge == 1}}
+	  {{if $echange_hprim->_message === null || $echange_hprim->_acquittement === null}}
 	    <div class="small-info">{{tr}}CEchangeHprim-purge-desc{{/tr}}</div>
 	  {{else}}
 	  <script type="text/javascript">
@@ -204,20 +201,20 @@ function changePage(page) {
 	  <tr>
 	    <td>
 	      <ul id="tabs-contenu" class="control_tabs">
-	        <li><a href="#message">{{mb_title object=$echange_hprim field="message"}}</a></li>
-	        <li><a href="#ack">{{mb_title object=$echange_hprim field="acquittement"}}</a></li>
+	        <li><a href="#message">{{mb_title object=$echange_hprim field="_message"}}</a></li>
+	        <li><a href="#ack">{{mb_title object=$echange_hprim field="_acquittement"}}</a></li>
 	      </ul>
 	      
 	      <hr class="control_tabs" />
 	      
 	      <div id="message" style="display: none;">
-	        {{mb_value object=$echange_hprim field="message"}}
+	        {{mb_value object=$echange_hprim field="_message"}}
 	      </div>
 	      
 	      <div id="ack" style="display: none;">
 	        {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
-	          {{if $echange_hprim->acquittement}}
-	            {{mb_value object=$echange_hprim field="acquittement"}}
+	          {{if $echange_hprim->_acquittement}}
+	            {{mb_value object=$echange_hprim field="_acquittement"}}
 	            
 	            <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur') || 
 							                     ($echange_hprim->statut_acquittement == 'err')}}error

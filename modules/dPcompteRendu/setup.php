@@ -386,14 +386,8 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addPrefQuery("choicepratcab", "prat");
 
 		$this->makeRevision("0.52");
-    $sql = "CREATE TABLE `contenthtml` (
-              `content_id` BIGINT NOT NULL auto_increment PRIMARY KEY,
-              `content` TEXT,
-						  `cr_id` INT
-           ) TYPE=MYISAM;";
-	  $this->addQuery($sql);
-		
-		$sql = "INSERT INTO contenthtml (content, cr_id) SELECT source, compte_rendu_id FROM compte_rendu";
+    
+		$sql = "INSERT INTO content_html (content, cr_id) SELECT source, compte_rendu_id FROM compte_rendu";
 	  $this->addQuery($sql);
 	  
 	  $sql = "ALTER TABLE `compte_rendu` DROP `source`";
@@ -407,16 +401,16 @@ class CSetupdPcompteRendu extends CSetup {
               ADD INDEX (`content_id`);";
     $this->addQuery($sql);
     
-		$sql = "UPDATE compte_rendu c JOIN contenthtml ch ON c.compte_rendu_id = ch.cr_id
+		$sql = "UPDATE compte_rendu c JOIN content_html ch ON c.compte_rendu_id = ch.cr_id
 		        SET c.content_id = ch.content_id";
 		$this->addQuery($sql);
 		
-		$sql = "ALTER TABLE `contenthtml` DROP `cr_id`";
+		$sql = "ALTER TABLE `content_html` DROP `cr_id`";
 		$this->addQuery($sql);
 
 		$this->makeRevision("0.53");
-		$sql = "RENAME TABLE `contenthtml` TO `content_html`";
-		$this->addQuery($sql);
+		
+		// Déplacement du contenthtml dans system
 
 		$this->mod_version = "0.54";
 

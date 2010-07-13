@@ -374,7 +374,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
     }
-    $echange_hprim->acquittement = $messageAcquittement;
+    $echange_hprim->_acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
     $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
     $echange_hprim->store();

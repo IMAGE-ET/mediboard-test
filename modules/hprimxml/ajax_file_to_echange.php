@@ -59,7 +59,7 @@ if (!$do_import) {
     $echg_hprim->destinataire    = $data['idClient'];
     $echg_hprim->type            = $domEvenement->type;
     $echg_hprim->sous_type       = $domEvenement->sous_type;
-    $echg_hprim->message         = utf8_encode($xmlfile);
+    $echg_hprim->_message         = utf8_encode($xmlfile);
     $doc_valid                   = $domEvenement->schemaValidate();
     $echg_hprim->message_valide  = $doc_valid ? 1 : 0;
     if ($type == "pmsi") {
