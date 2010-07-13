@@ -178,7 +178,7 @@
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
       {{foreach from=$intervals item=_interval}}
         <option value="{{$_interval}}" {{if $_interval == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>
-          {{$_interval|string_format:"%02d"}}
+          {{$_interval}}
         </option>
       {{/foreach}}
       </select>

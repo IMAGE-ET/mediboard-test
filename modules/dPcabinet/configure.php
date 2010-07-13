@@ -11,7 +11,7 @@ global $can;
 $can->needsAdmin();
 
 $hours = range(0, 23);
-$intervals = array("5","10","15","20","30");
+$intervals = array("05","10","15","20","30");
 
 // Création du template
 $smarty = new CSmartyDP();
