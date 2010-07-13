@@ -80,6 +80,7 @@ class CExtractPassages extends CMbObject {
     $file->file_size = strlen($filedata);
     $file->file_owner = CAppUI::$instance->user_id;
     $file->fillFields();
+    $file->private = 0;
     if (!$file->putContent($filedata)) {
       return false;
     }
