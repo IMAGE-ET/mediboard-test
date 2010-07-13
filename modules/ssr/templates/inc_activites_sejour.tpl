@@ -141,12 +141,26 @@ removeCdarrs = function(){
 }
 
 submitSSR = function(){
-  if(!$V(oFormEvenementSSR.seance_collective)){
-	  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
-		  alert("Veuillez selectionner un code SSR");
-			return false;
-		}
+  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
+	  alert("Veuillez selectionner un code SSR");
+		return false;
 	}
+
+	if(!$V(oFormEvenementSSR.seance_collective)){
+	  if((oFormEvenementSSR.select('input[name^="_days"]:checked').length == 0)){
+      alert("Veuillez selectionner au minimum un jour");
+      return false;
+    }
+		if(!$V(oFormEvenementSSR._heure)){
+	    alert("Veuillez selectionner une heure");
+	    return false;
+	  }
+    if(!$V(oFormEvenementSSR.duree)){
+      alert("Veuillez selectionner une durée");
+      return false;
+    }
+	}
+	
 	if(!$$("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
 	  alert("Veuillez selectionner un equipement");
     return false;
@@ -316,7 +330,7 @@ Main.add(function(){
 	  <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
 	  
 	  {{mb_field hidden=true object=$evenement_ssr field=equipement_id}}
-	  {{mb_field hidden=true object=$evenement_ssr field=therapeute_id}}
+	  {{mb_field hidden=true object=$evenement_ssr field=therapeute_id prop="ref notNull"}}
 	  <input type="hidden" name="line_id" value="" />
 	  <input type="hidden" name="_element_id" value="" />
 	  <input type="hidden" name="_category_id" value="" />

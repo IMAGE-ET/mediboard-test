@@ -1,4 +1,4 @@
-<div style="height: 300px; overflow-y:auto; overflow-x:hidden;">
+<div style="max-height: 300px; overflow-y:auto; overflow-x:hidden;">
 <table class="tbl" style="margin-right:10px" id="list-evenements-modal">
 	<tr>
 		<th colspan="7">Evenements</th>
