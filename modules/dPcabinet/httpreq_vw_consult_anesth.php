@@ -48,6 +48,8 @@ if ($selConsult) {
   $consultAnesth = $consult->_ref_consult_anesth;
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefOperation();
+    $consultAnesth->loadRefConsultation();
+    $consultAnesth->_ref_consultation->loadRefPraticien();
 		$consultAnesth->_ref_operation->loadRefChir(true);
     $consultAnesth->_ref_sejour->loadRefDossierMedical();
     $consultAnesth->_ref_sejour->loadRefPraticien(true);
