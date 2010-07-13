@@ -24,6 +24,7 @@ $filter->service_id = CValue::getOrSession("service_id");
 $group_id = CGroups::loadCurrent()->_id;
 $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
+$where["annule"] = "= '0'";
 $order = null;
 
 if ($order_col == "entree") {
