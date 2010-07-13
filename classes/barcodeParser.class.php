@@ -65,6 +65,7 @@ class CBarcodeParser {
     "01" => "scc",
     "10" => "lot",
     "17" => "per",
+    "21" => "sn",
   );
   
   private static $code39ext = array(
@@ -246,13 +247,14 @@ class CBarcodeParser {
 
     // code 128
     if (empty($comp) &&
-        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9]{7,})(17)(\d{6})$/ims', $barcode, $parts) ||
-        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9]{7,})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9]{7,20})(17)(\d{6})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9]{7,20})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{7,20})$/ims', $barcode, $parts) ||
         preg_match('/^(01)(\d{14})$/i', $barcode, $parts)) {
       $type = "code128";
       $prop = null;
       foreach($parts as $p){
-        if (in_array($p, array("01", "10", "17"))) {
+        if (in_array($p, array("01", "10", "17", "21"))) {
           $prop = $p;
         }
         else if ($prop) {
@@ -311,7 +313,6 @@ class CBarcodeParser {
       // +$11393812M  // $ or \v
       if (empty($comp) && preg_match('/^\+.(.+).{2}$/ms', $barcode, $parts)) {
         $comp["lot"] = $parts[1];
-        $comp["sn"]  = $parts[1];
       }
     }
     
@@ -320,7 +321,6 @@ class CBarcodeParser {
     if (preg_match('/^(\d{8})\/(\d{5})$/', $barcode, $parts)) {
       $type = "unkown";
       $comp["lot"] = $parts[1];
-      $comp["sn"]  = $parts[2];
     }
      
     // CIP
@@ -359,9 +359,9 @@ class CBarcodeParser {
     // __REF___ __SN__ __STE_ _ __PER_ _
     // 28081230 053653 100609 1 130630 1
     if (empty($comp) && preg_match('/^(\d{5}[0123]\d[05])(\d{6})([0123]\d[01]\d\d\d)1([0123]\d[01]\d\d\d)1$/', $barcode, $parts)) {
+      $type = "physiol";
       $comp["ref"] = $parts[1];
       $comp["sn"]  = $parts[2];
-      $comp["lot"] = $parts[2];
       $comp["per"] = $parts[4];
     }
     
@@ -374,7 +374,11 @@ class CBarcodeParser {
       $comp["scc-manuf"] = $parts[1];
       $comp["scc-part"]  = $parts[2];
       $comp["scc-prod"]  = $parts[1].$parts[2];
-    }  
+    }
+    
+    if (isset($comp["sn"]) && empty($comp["lot"])) {
+      $comp["lot"] = $comp["sn"];
+    }
     
     $comp["raw"] = $orig_barcode;
     

@@ -56,7 +56,7 @@ table.grid th {
     {{$smarty.now|date_format:$dPconfig.datetime}}
   </span>
   
-  Bon de récéption n°{{$reception->reference}}
+  Bon de réception n°{{$reception->reference}}
 </div>
 
 <table class="form" style="margin-top: 5em;">

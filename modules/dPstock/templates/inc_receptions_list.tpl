@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include module=system template=inc_pagination current=$start change_page=changePage}}
+{{mb_include module=system template=inc_pagination current=$start change_page=refreshReceptionsList}}
 
 <table class="main tbl">
   <tr>
@@ -34,3 +34,17 @@
   </tr>
   {{/foreach}}
 </table>
+
+<!-- The receptions count -->
+<script type="text/javascript">
+  tab = $$('a[href="#list-receptions"]')[0];
+  counter = tab.down("small");
+  count = {{$total}};
+  
+  if (count > 0)
+    tab.removeClassName("empty");
+  else
+    tab.addClassName("empty");
+    
+  counter.update("("+count+")");
+</script>

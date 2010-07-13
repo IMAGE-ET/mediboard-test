@@ -31,6 +31,6 @@
   </table>
 {{else}}
   <div class="small-info">
-    Effectuez la récéption d'une ligne de commande à gauche pour commencer le bon de réception
+    Effectuez la réception d'une ligne de commande à gauche pour commencer le bon de réception
   </div>
 {{/if}}

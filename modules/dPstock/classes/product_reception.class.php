@@ -45,7 +45,7 @@ class CProductReception extends CMbObject {
 	function getProps() {
 		$specs = parent::getProps();
     $specs['date']       = 'dateTime seekable';
-    $specs['societe_id'] = 'ref class|CSociete';
+    $specs['societe_id'] = 'ref class|CSociete seekable';
     $specs['group_id']   = 'ref notNull class|CGroups';
 	  $specs['reference']  = 'str notNull seekable';
     $specs['_total']     = 'currency';
@@ -64,30 +64,42 @@ class CProductReception extends CMbObject {
   }
   
   function findFromOrder($order_id) {
+    $receptions_prob = array();
     $receptions = array();
+    
     $order = new CProductOrder;
     $order->load($order_id);
     $order->loadBackRefs("order_items");
-   
+    
     foreach($order->_back["order_items"] as $order_item) {
       $r = $order_item->loadBackRefs("receptions");
       
       foreach($r as $_r) {
         if (!$_r->reception_id) continue;
         
-        if (!isset($receptions[$_r->reception_id])) {
-          $receptions[$_r->reception_id] = 0;
+        $receptions[$_r->reception_id] = $_r->reception_id;
+        
+        if (!isset($receptions_prob[$_r->reception_id])) {
+          $receptions_prob[$_r->reception_id] = 0;
         }
-        $receptions[$_r->reception_id]++;
+        $receptions_prob[$_r->reception_id]++;
       }
     }
     
-    if (!count($receptions)) return;
+    foreach($receptions as $_key => $_reception) {
+      $rec = new self;
+      $rec->load($_key);
+      $receptions[$_key] = $rec;
+    }
     
-    $reception_id = array_search(max($receptions), $receptions);
+    if (!count($receptions_prob)) return $receptions;
+    
+    $reception_id = array_search(max($receptions_prob), $receptions_prob);
     if ($reception_id) {
       $this->load($reception_id);
     }
+    
+    return $receptions;
   }
 
 	function updateFormFields() {

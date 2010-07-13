@@ -49,7 +49,7 @@ if ($reception->_id) {
         $d = &$data[$j];
         
 				$d[] = substr($reference->_ref_product->name, 0, 30);
-        $d[] = CMbString::truncate(substr($reference->_ref_product->name, 29, 30));
+        $d[] = CMbString::truncate(substr($reference->_ref_product->name, 30, 30));
 				$d[] = $reference->_ref_product->_ref_societe->_view;
 				$d[] = $item->lapsing_date;
 				

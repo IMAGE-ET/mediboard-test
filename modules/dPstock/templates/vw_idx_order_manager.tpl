@@ -16,8 +16,21 @@ Main.add(function () {
   var tabs = Control.Tabs.create('tab_orders', true);
   
   // Orders lists have to be shown
-  refreshLists();
+  refreshAll();
 });
+
+refreshAll = function(form) {
+  refreshLists(form);
+  refreshReceptionsList(0);
+  return false;
+}
+
+refreshReceptionsList = function(page){
+  var url = new Url("dPstock", "httpreq_vw_receptions_list");
+  url.addParam("start", page);
+  url.addParam("keywords", $V(getForm("orders-list-filter").keywords));
+  url.requestUpdate("list-receptions");
+}
 
 confirmPurge = function(element, view, type) {
   var form = element.form;
@@ -42,14 +55,14 @@ confirmPurge = function(element, view, type) {
   </div>
 
   <!-- Filter -->
-  <form name="orders-list-filter" action="?" method="get" onsubmit="return refreshLists(this)">
+  <form name="orders-list-filter" action="?" method="get" onsubmit="return refreshAll(this)">
     <select name="category_id" onchange="this.form.onsubmit()">
       <option value="" >&ndash; {{tr}}CProductCategory.all{{/tr}}</option>
     {{foreach from=$list_categories item=_category}}
       <option value="{{$_category->category_id}}" {{if $category_id==$_category->_id}}selected="selected"{{/if}}>{{$_category->name}}</option>
     {{/foreach}}
     </select>
-    <input type="text" name="keywords" onchange="this.form.onsubmit()" />
+    <input type="text" name="keywords" />
     
     <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
     <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();">{{tr}}Empty{{/tr}}</button>
@@ -62,6 +75,7 @@ confirmPurge = function(element, view, type) {
     <li><a href="#list-orders-pending" class="empty">A recevoir <small>(0)</small></a></li>
     <li><a href="#list-orders-received" class="empty">Reçues <small>(0)</small></a></li>
     <li><a href="#list-orders-cancelled" class="empty">Annulées <small>(0)</small></a></li>
+    <li style="margin-left: 4em;"><a href="#list-receptions" class="empty">Réceptions <small>(0)</small></a></li>
   </ul>
   <hr class="control_tabs" />
   
@@ -71,4 +85,5 @@ confirmPurge = function(element, view, type) {
   <div id="list-orders-pending" style="display: none;"></div>
   <div id="list-orders-received" style="display: none;"></div>
   <div id="list-orders-cancelled" style="display: none;"></div>
+  <div id="list-receptions" style="display: none;"></div>
 </div>

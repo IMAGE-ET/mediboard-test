@@ -104,10 +104,19 @@ class CProductOrderItemReception extends CMbObject {
     $this->_ref_order_item->loadOrder();
       
     if ($is_new && !$this->reception_id) {
+      $order = $this->_ref_order_item->_ref_order;
       $reception = new CProductReception;
       $reception->date = mbDateTime();
-      $reception->societe_id = $this->_ref_order_item->_ref_order->societe_id;
+      $reception->societe_id = $order->societe_id;
       $reception->group_id = CGroups::loadCurrent()->_id;
+      
+      // Recherche de receptions ayant un numero de reception similaire pour gerer l'increment
+      if ($order->order_number) {
+        $where = array("reference" => "LIKE '{$order->order_number}%'");
+        $number = $reception->countList($where) + 1;
+        $reception->reference = "{$order->order_number}-$number";
+      }
+      
       if ($msg = $reception->store()) {
         return $msg;
       }

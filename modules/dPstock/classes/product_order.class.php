@@ -27,6 +27,7 @@ class CProductOrder extends CMbMetaObject {
   // Object References
   //    Multiple
   var $_ref_order_items = null;
+  var $_ref_receptions  = null;
 
   //    Single
   var $_ref_societe     = null;
@@ -339,6 +340,14 @@ class CProductOrder extends CMbMetaObject {
     }
  
     return $number;
+  }
+  
+  function getReceptions(){
+    if (!$this->_id) 
+      return $this->_ref_receptions = array();
+      
+    $rec = new CProductReception;
+    return $this->_ref_receptions = $rec->findFromOrder($this->_id);
   }
 
   function updateFormFields() {

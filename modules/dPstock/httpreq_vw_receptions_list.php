@@ -10,13 +10,17 @@
  
 CCanDo::checkEdit();
 
-$start = intval(CValue::get("start", 0));
+$start    = intval(CValue::get("start", 0));
+$keywords = CValue::get("keywords");
 
 // Chargement des receptions de l'etablissement
 $reception = new CProductReception();
-$reception->group_id = CGroups::loadCurrent()->_id;
-$receptions = $reception->loadMatchingList("date DESC", "$start, 25");
-$total = $reception->countMatchingList();
+
+$where = array(
+  "group_id" => "='".CGroups::loadCurrent()->_id."'"
+);
+$receptions = $reception->seek($keywords, $where, "$start, 25", true, null, "date DESC");
+$total = $reception->_totalSeek;
 
 foreach($receptions as $_reception){
 	$_reception->countReceptionItems();
