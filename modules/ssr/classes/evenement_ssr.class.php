@@ -153,6 +153,13 @@ class CEvenementSSR extends CMbObject {
 		$sejour =& $this->_ref_sejour;
 		$sejour->loadRefPatient();
 		$patient = $sejour->_ref_patient;
+		
+		
+		if($this->seance_collective_id){
+			$this->loadRefSeanceCollective();
+			$this->debut = $this->_ref_seance_collective->debut;
+			$this->duree = $this->_ref_seance_collective->duree;
+		}
 		$this->_view = "$patient->_view - ". mbTransformTime(null, $this->debut, CAppUI::conf("datetime"));
 		$this->loadRefsActesCdARR();
 		

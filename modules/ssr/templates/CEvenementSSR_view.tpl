@@ -27,6 +27,7 @@ Main.add(function(){
 {{include file=CMbObject_view.tpl}}
 
 <table class="tbl tooltip">
+  {{if $evenement_ssr->sejour_id}}
 	<tr>
 		<td class="text">
 			<strong>Actes CdARR</strong> :
@@ -35,7 +36,7 @@ Main.add(function(){
 			{{/foreach}}
 		</td>
 	</tr>
-  {{if !$evenement_ssr->sejour_id}}
+	{{else}}
   <tr>
     <td class="text">
 		  <strong>{{mb_label object=$evenement_ssr field="seance_collective_id"}}</strong>
