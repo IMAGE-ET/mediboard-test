@@ -10,7 +10,7 @@
 
 $sejour_id            = CValue::post("sejour_id");
 $cdarrs               = CValue::post("cdarrs");
-$code                 = CValue::post("code");
+$_cdarrs               = CValue::post("_cdarrs");
 $equipement_id        = CValue::post("equipement_id");
 $therapeute_id        = CValue::post("therapeute_id");
 $line_id              = CValue::post("line_id");
@@ -19,13 +19,17 @@ $seance_collective    = CValue::post("seance_collective");    // Checkbox de la 
 $seance_collective_id = CValue::post("seance_collective_id"); // Id de la seance collective
 
 $codes_cdarrs = array();
-if(CValue::post("_cdarr") && $code){
-	$codes_cdarrs[] = $code;
-}
+
+//@TODO: array_merge
 if(is_array($cdarrs)){
 	foreach($cdarrs as $_code_cdarr){
 	  $codes_cdarrs[] = $_code_cdarr;
 	}
+}
+if(is_array($_cdarrs)){
+  foreach($_cdarrs as $_code_cdarr_manuel){
+    $codes_cdarrs[] = $_code_cdarr_manuel;
+  }
 }
 
 $_days = CValue::post("_days");

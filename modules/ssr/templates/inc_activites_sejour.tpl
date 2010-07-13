@@ -141,12 +141,11 @@ removeCdarrs = function(){
 }
 
 submitSSR = function(){
-  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
+  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input[name^="_cdarrs"]').length == 0){
 	  alert("Veuillez selectionner un code SSR");
 		return false;
 	}
-
-	if(!$V(oFormEvenementSSR.seance_collective)){
+	if(!$V(oFormEvenementSSR.seance_collective) || ($V(oFormEvenementSSR.seance_collective) && !$V(oFormEvenementSSR.seance_collective_id))){
 	  if((oFormEvenementSSR.select('input[name^="_days"]:checked').length == 0)){
       alert("Veuillez selectionner au minimum un jour");
       return false;
@@ -176,6 +175,7 @@ submitSSR = function(){
 		$V(oFormEvenementSSR.duree, '');
 		$V(oFormEvenementSSR.seance_collective, '');
     $V(oFormEvenementSSR.seance_collective_id, '');
+		oFormEvenementSSR.seance_collective_id.hide();
 	}} );
 }
 
@@ -610,7 +610,7 @@ Main.add(function(){
       var code_selected = selected.childElements()[0];
       $('other_cdarr').insert({bottom: 
         '<span>\
-           <input type="hidden" id="editEvenementSSR_cdarrs['+code_selected.innerHTML+']" type="checkbox" name="cdarrs['+code_selected.innerHTML+']" value="'+code_selected.innerHTML+'"\
+           <input type="hidden" id="editEvenementSSR__cdarrs['+code_selected.innerHTML+']" type="checkbox" name="_cdarrs['+code_selected.innerHTML+']" value="'+code_selected.innerHTML+'"\
            <button class="cancel notext" type="button" onclick="deleteCode(this);"></button>\
            <label>' +code_selected.innerHTML+ '</label>\
          </span>'});
