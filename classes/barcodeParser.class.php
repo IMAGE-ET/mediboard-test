@@ -354,7 +354,16 @@ class CBarcodeParser {
       $type = "arthrex";
       $comp["qty"] = $parts[1];
     }
-
+    
+    // Physiol
+    // __REF___ __SN__ __STE_ _ __PER_ _
+    // 28081230 053653 100609 1 130630 1
+    if (empty($comp) && preg_match('/^(\d{5}[0123]\d[05])(\d{6})([0123]\d[01]\d\d\d)1([0123]\d[01]\d\d\d)1$/', $barcode, $parts)) {
+      $comp["ref"] = $parts[1];
+      $comp["sn"]  = $parts[2];
+      $comp["lot"] = $parts[2];
+      $comp["per"] = $parts[4];
+    }
     
     if (isset($comp["per"])) {
       $comp["per"] = self::parsePeremptionDate($comp["per"]);

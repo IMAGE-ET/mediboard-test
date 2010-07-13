@@ -112,11 +112,13 @@ changeReceptionPage = function(start) {
                   <button type="submit" class="tick notext">Recevoir</button>
                 {{else}}
                   <button type="submit" class="cancel notext">Annuler</button>
-                  {{mb_value object=$trace field=date_reception}} - 
-                  <strong>{{mb_value object=$trace field=quantity}} éléments</strong>
-                  {{if $trace->code}}
-                    [{{mb_value object=$trace field=code}}]
-                  {{/if}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$trace->_guid}}')">
+                    {{mb_value object=$trace field=date_reception}} - 
+                    <strong>{{mb_value object=$trace field=quantity}} éléments</strong>
+                    {{if $trace->code}}
+                      [{{mb_value object=$trace field=code}}]
+                    {{/if}}
+                  </span>
                   <input type="hidden" name="_unreceive" value="1" />
                 {{/if}}
               </form>

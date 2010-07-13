@@ -22,6 +22,7 @@ class CProductDeliveryTrace extends CMbObject {
   // Object References
   //    Single
   var $_ref_delivery  = null;
+  var $_ref_service   = null;
   
   var $_date_min      = null;
   var $_date_max      = null;
@@ -40,6 +41,7 @@ class CProductDeliveryTrace extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
+    $specs[$this->_spec->key] .= " show|1";
     $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
     $specs['code']           = 'str maxLength|32';
     $specs['quantity']       = 'num notNull';
