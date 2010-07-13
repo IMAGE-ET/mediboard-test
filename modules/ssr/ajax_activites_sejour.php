@@ -27,7 +27,6 @@ for ($i = 0; $i < 7; $i++) {
   $list_days[$_date] = mbTransformTime(null, $_date, "%a");
 }
 
-
 // Prescription
 $sejour->loadRefPrescriptionSejour();
 $prescription =& $sejour->_ref_prescription_sejour;

@@ -22,18 +22,23 @@ class CEvenementSSR extends CMbObject {
   var $realise                 = null;
 	var $remarque                = null;
 	
-	// Form Fields
-	var $_heure                  = null;
-	var $_nb_decalage_min_debut = null;
-	var $_nb_decalage_heure_debut = null;
-  var $_nb_decalage_jour_debut = null;
-  var $_nb_decalage_duree = null;
-	
+	// Seances collectives
+	var $seance_collective_id    = null; // Evenement lié a une seance collective
 	var $_ref_element_prescription = null;
-	var $_ref_equipement = null;
-	var $_ref_sejour = null;
-	var $_ref_therapeute = null;
-	var $_ref_actes_cdarr = null;
+  //var $element_prescription_id = null; // Une seance est liée à un element de prescription et non pas une ligne d'element
+	
+	// Form Fields
+	var $_heure                   = null;
+	var $_nb_decalage_min_debut   = null;
+	var $_nb_decalage_heure_debut = null;
+  var $_nb_decalage_jour_debut  = null;
+  var $_nb_decalage_duree       = null;
+	
+	var $_ref_equipement        = null;
+	var $_ref_sejour            = null;
+	var $_ref_therapeute        = null;
+	var $_ref_actes_cdarr       = null;
+	var $_ref_evenements_seance = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,14 +49,15 @@ class CEvenementSSR extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["prescription_line_element_id"] = "ref notNull class|CPrescriptionLineElement";
-		$props["sejour_id"]     = "ref notNull class|CSejour show|0";
-    $props["debut"]         = "dateTime notNull show|0";
-    $props["duree"]         = "num notNull min|0";
-		$props["therapeute_id"] = "ref notNull class|CMediusers";
+    $props["prescription_line_element_id"] = "ref class|CPrescriptionLineElement";
+		$props["sejour_id"]     = "ref class|CSejour show|0";
+    $props["debut"]         = "dateTime show|0";
+    $props["duree"]         = "num min|0";
+		$props["therapeute_id"] = "ref class|CMediusers";
 		$props["equipement_id"] = "ref class|CEquipement";
 		$props["realise"]       = "bool default|0";
 		$props["remarque"]      = "str";
+		$props["seance_collective_id"] = "ref class|CEvenementSSR";
 		$props["_heure"]        = "time";
     $props["_nb_decalage_min_debut"]   = "num";
 		$props["_nb_decalage_heure_debut"] = "num";
@@ -63,6 +69,7 @@ class CEvenementSSR extends CMbObject {
 	function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["actes_cdarr"] = "CActeCdARR evenement_ssr_id";
+		$backProps["evenements_ssr"] = "CEvenementSSR seance_collective_id";
     return $backProps;
   }
 	
@@ -77,14 +84,26 @@ class CEvenementSSR extends CMbObject {
     $this->completeField("sejour_id");
     $this->loadRefSejour();
     $this->completeField("debut");
-		if ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie){
+		
+		if ($this->sejour_id && $this->debut && ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie)){
 		  return "Evenement SSR en dehors des dates du séjour";
 		}
     
 		// Cas de la réalisation des événements SSR
 	  $this->loadRefTherapeute();
-	  $therapeute = $this->_ref_therapeute;
-		if ($this->fieldModified("realise")) {
+		
+		// Si le therapeute n'est pas defini, c'est 
+		if($this->therapeute_id){
+		  $therapeute = $this->_ref_therapeute;
+    } else {
+			// Chargement du therapeute de la seance
+      $evt_seance = new CEvenementSSR();
+      $evt_seance->load($this->seance_collective_id);
+      $evt_seance->loadRefTherapeute();
+		  $therapeute = $evt_seance->_ref_therapeute;
+    }
+		
+	  if ($this->fieldModified("realise")) {
 		  // Si le thérapeute n'a pas d'identifiant CdARR
 		  if (!$therapeute->code_intervenant_cdarr) {
 		    return CAppUI::tr("CMediusers-code_intervenant_cdarr-none");
@@ -133,6 +152,14 @@ class CEvenementSSR extends CMbObject {
 		$patient = $sejour->_ref_patient;
 		$this->_view = "$patient->_view - ". mbTransformTime(null, $this->debut, CAppUI::conf("datetime"));
 		$this->loadRefsActesCdARR();
+		
+		if(!$this->sejour_id){
+		  $this->loadRefsEvenementsSeance();
+			foreach($this->_ref_evenements_seance as $_evt_seance){
+				$_evt_seance->loadRefSejour();
+				$_evt_seance->_ref_sejour->loadRefPatient();
+			}
+		}
 	}
 	
 	function loadRefPrescriptionLineElement($cache = true){
@@ -154,6 +181,10 @@ class CEvenementSSR extends CMbObject {
 	
 	function loadRefsActesCdARR(){
 		$this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
+	}
+	
+	function loadRefsEvenementsSeance(){
+		$this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
 	}
 	
 	function getRHS() {

@@ -332,7 +332,27 @@ class CSetupssr extends CSetup {
       ADD `planification` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($sql);
 
-		$this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+		$sql = "ALTER TABLE `evenement_ssr` 
+              CHANGE `sejour_id` `sejour_id` INT (11) UNSIGNED,
+              ADD `seance_collective_id` INT (11) UNSIGNED;";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `evenement_ssr` 
+              ADD INDEX (`prescription_line_element_id`),
+              ADD INDEX (`seance_collective_id`);";
+		$this->addQuery($sql);
+		
+		$this->makeRevision("0.25");
+		$sql = "ALTER TABLE `evenement_ssr` 
+              CHANGE `prescription_line_element_id` `prescription_line_element_id` INT (11) UNSIGNED,
+              CHANGE `debut` `debut` DATETIME,
+              CHANGE `duree` `duree` INT (11) UNSIGNED,
+              CHANGE `therapeute_id` `therapeute_id` INT (11) UNSIGNED,
+              CHANGE `realise` `realise` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+
+		$this->mod_version = "0.26";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

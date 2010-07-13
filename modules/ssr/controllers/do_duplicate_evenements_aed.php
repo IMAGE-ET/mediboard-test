@@ -16,6 +16,7 @@ foreach($elts_id as $_elt_id){
   $evenement_ssr->load($_elt_id);
   
 	$evenement_ssr->_id = "";
+	$evenement_ssr->realise = 0;
 	$evenement_ssr->debut = mbDateTime("7 days", $evenement_ssr->debut);
   $msg = $evenement_ssr->store();
   CAppUI::displayMsg($msg, "CEvenementSSR-msg-store");

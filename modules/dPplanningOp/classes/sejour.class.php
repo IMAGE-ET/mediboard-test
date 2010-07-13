@@ -1430,9 +1430,11 @@ class CSejour extends CCodable {
 		}
 		
 		$evenement = new CEvenementSSR;
-    $where["sejour_id"] = " = '$this->_id'";
-    $where["debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
-		return $this->_count_evenements_ssr = $evenement->countList($where);
+		$ljoin = array();
+    $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
+		$where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
+    $where["evenement_ssr.debut"] = "BETWEEN '$date 00:00:00' AND '$date 23:59:59'";
+		return $this->_count_evenements_ssr = $evenement->countList($where, null, null, null, $ljoin);
 	}
 	
 	function countEvenementsSSRWeek($kine_id, $date_min, $date_max) {
@@ -1441,11 +1443,13 @@ class CSejour extends CCodable {
     }
     
     $evenement = new CEvenementSSR;
-    $where["sejour_id"] = " = '$this->_id'";
-		$where["therapeute_id"] = "= '$kine_id'";
-    $this->_count_evenements_ssr      = $evenement->countList($where);
-    $where["debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
-		$this->_count_evenements_ssr_week = $evenement->countList($where);
+		$ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
+    $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
+		$where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
+    $this->_count_evenements_ssr      = $evenement->countList($where, null, null, null, $ljoin);
+		
+    $where["evenement_ssr.debut"] = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59'";
+		$this->_count_evenements_ssr_week = $evenement->countList($where, null, null, null, $ljoin);
 	}
 	
 	function getNbJourPlanning($date){
@@ -1453,25 +1457,26 @@ class CSejour extends CCodable {
     $saturday = mbDate("-1 DAY", $sunday);
     
     $_evt = new CEvenementSSR();
+		$ljoin = array();
+    $ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
     $where = array();
-    $where["debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
-    $where["sejour_id"] = " = '$this->_id'";
-    $count_event_sunday = $_evt->countList($where);
-    
+    $where["evenement_ssr.debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
+    $where[] = "(evenement_ssr.sejour_id = '$this->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$this->_id')";
+    $count_event_sunday = $_evt->countList($where, null, null, null, $ljoin);
+
     $nb_days = 7;
     
     // Si aucun evenement le dimanche
     if(!$count_event_sunday){
       $nb_days = 6;
-      $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
-      $count_event_saturday= $_evt->countList($where);  
+      $where["evenement_ssr.debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
+      $count_event_saturday= $_evt->countList($where, null, null, null, $ljoin);  
       // Aucun evenement le samedi et aucun le dimanche
       if(!$count_event_saturday){
         $nb_days = 5;
       }
     }
     return $nb_days;
-  }
-	
+	}
 }
 ?>

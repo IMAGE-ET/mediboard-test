@@ -25,6 +25,11 @@ selectActivite = function(activite) {
   $$("div.techniciens").invoke("hide").invoke("removeClassName", "selected");
   $$("button.ressource").invoke("removeClassName", "selected");
 	$V(oFormEvenementSSR.therapeute_id, '');  
+	
+	// Suppression des valeurs su select de technicien
+	$$("select._technicien_id").each(function(select_tech){
+	  $V(select_tech, '');
+	});
   
 	// Affichage des techniciens correspondants à l'activité selectionnée
 	$("techniciens-"+activite).show();
@@ -40,6 +45,7 @@ selectActivite = function(activite) {
   
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
+	refreshSelectSeances();
 }
 
 selectElement = function(line_id){
@@ -63,6 +69,7 @@ selectElement = function(line_id){
 
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
+	refreshSelectSeances();
 }
 
 selectTypeCdarr = function(type_cdarr, line_id, buttonSelected){
@@ -85,6 +92,7 @@ selectTechnicien = function(kine_id, buttonSelected) {
 	if($V(oFormEvenementSSR.equipement_id)){
 	  PlanningEquipement.show($V(oFormEvenementSSR.equipement_id), '{{$bilan->sejour_id}}');
 	}
+	refreshSelectSeances();
 }
 
 selectEquipement = function(equipement_id) {
@@ -98,8 +106,33 @@ selectEquipement = function(equipement_id) {
 	} else {
 	  PlanningEquipement.hide();
   }
+	refreshSelectSeances();
 }
 
+refreshSelectSeances = function(){  
+  if($V(oFormEvenementSSR.equipement_id) && 
+	   $V(oFormEvenementSSR.therapeute_id) &&
+		 $V(oFormEvenementSSR.line_id)){
+		 
+		console.debug("refresh seances"); 		
+		var url = new Url("ssr", "ajax_vw_select_seances");
+		url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
+		url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));
+    url.addParam("prescription_line_element_id", $V(oFormEvenementSSR.line_id));
+    url.requestUpdate("select-seances", { 
+		  onComplete: function(){ 
+			  $('seances').show();
+				if($V(oFormEvenementSSR.seance_collective)){
+				  oFormEvenementSSR.seance_collective_id.show();
+				}
+			}
+		});
+	} else {
+	  $('seances').hide();
+		$V(oFormEvenementSSR.seance_collective, false);
+		$V(oFormEvenementSSR.seance_collective_id, '');
+	}
+}
 
 removeCdarrs = function(){
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
@@ -109,14 +142,17 @@ removeCdarrs = function(){
 }
 
 submitSSR = function(){
-  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
-	  alert("Veuillez selectionner un code SSR");
-		return false;
+  if(!$V(oFormEvenementSSR.seance_collective)){
+	  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code)){
+		  alert("Veuillez selectionner un code SSR");
+			return false;
+		}
 	}
 	if(!$$("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
 	  alert("Veuillez selectionner un equipement");
     return false;
 	}
+	
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
 		refreshPlanningsSSR();
 	  $$(".days").each(function(e){
@@ -125,6 +161,8 @@ submitSSR = function(){
 		$V(oFormEvenementSSR._heure, '');
 		$V(oFormEvenementSSR._heure_da, '');
 		$V(oFormEvenementSSR.duree, '');
+		$V(oFormEvenementSSR.seance_collective, '');
+    $V(oFormEvenementSSR.seance_collective_id, '');
 	}} );
 }
 
@@ -200,6 +238,14 @@ updateModalCdarr = function(){
 	    });
 		}
 	} })
+}
+
+onchangeSeance = function(seance_id){
+  if(seance_id){
+	  $('date-evenements').hide();
+	} else {
+	  $('date-evenements').show();	
+	}
 }
 
 var oFormEvenementSSR;
@@ -337,7 +383,7 @@ Main.add(function(){
 	        {{/foreach}}
 	      </td>
 	    </tr>
-	    <tr>
+	    <tr id='tr-cdarrs'>
 	      <th>Codes CdARR</th>
 	      <td class="text">
 	      	<button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
@@ -417,7 +463,7 @@ Main.add(function(){
 	                     </button>		 
 										 {{/if}}
 											 
-										 <select name="_technicien_id" onchange="selectTechnicien(this.value)">
+										 <select class="_technicien_id" onchange="selectTechnicien(this.value)">
 										 	  <option value="">&mdash; Rééducateur</option>
 	                      {{foreach from=$executants.$category_id item=_user_executant}}
 	                        <option value="{{$_user_executant->_id}}">
@@ -464,28 +510,43 @@ Main.add(function(){
 					
 	      </td>
 	    </tr>
-	    <tr>
-	      <th style="vertical-align: middle;">Jour</th>
-	      <td style="text-align: center;">
-	        <table>
-	          <tr>
-	            {{foreach from=$list_days key=_date item=_day}}
-	              <td>
-	                <label>{{$_day}}<br /><input class="days" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
-	                </label>
-	              </td>
-	            {{/foreach}}
-	          </tr>
-	        </table>
-	      </td>
-	    </tr>
-	    <tr>
-	      <th>Heure / Durée (min)</th>
-	      <td>
-					{{mb_field object=$evenement_ssr field="_heure" form="editEvenementSSR"}}
-          {{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}
-				</td>
-	    </tr>
+			<tr id="seances" style="display: none;">
+        <th>{{mb_label object=$evenement_ssr field="seance_collective_id"}}</th>
+        <td>
+				  <table class="layout">
+					  <tr>
+						  <td>
+							  <input type="checkbox" name="seance_collective" value="true" onclick="getForm(editEvenementSSR).seance_collective_id.toggle(); "/>
+       	      </td>
+					   	<td id="select-seances"></td>
+					  </tr>
+					</table>
+        </td>
+      </tr>
+			<tbody id="date-evenements">
+		    <tr>
+		      <th style="vertical-align: middle;">Jour</th>
+		      <td style="text-align: center;">
+		        <table>
+		          <tr>
+		            {{foreach from=$list_days key=_date item=_day}}
+		              <td>
+		                <label>{{$_day}}<br /><input class="days" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+		                </label>
+		              </td>
+		            {{/foreach}}
+		          </tr>
+		        </table>
+		      </td>
+		    </tr>	
+		    <tr>
+		      <th>Heure / Durée (min)</th>
+		      <td>
+						{{mb_field object=$evenement_ssr field="_heure" form="editEvenementSSR"}}
+		        {{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}
+					</td>
+		    </tr>
+			</tbody>
 	    <tr>
 	      <td colspan="2" class="button">
 	        <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
@@ -530,6 +591,7 @@ Main.add(function(){
 		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
 		<input type="hidden" name="token_elts" value="" />
     <input type="hidden" name="del" value="0" />		
+		<input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
     <table class="form">
 		 <tr>
         <th class="category" colspan="2">

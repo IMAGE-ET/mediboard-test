@@ -578,6 +578,9 @@ table#weeklyPlanning th.today {
   background: #aaa url(../../images/icons/evtEquipement.png) no-repeat top right;
 }
 
+.planning .seance {
+	 background: #aaa url(../../images/icons/user-function.png) no-repeat top right;
+}
 .planning .realise {
   background-image: url(images/icons/ray.gif);
 }

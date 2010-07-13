@@ -60,7 +60,13 @@ foreach($evenements as $_evenement){
 	$important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
   
   $patient =  $_evenement->_ref_sejour->_ref_patient;
-  $title = $patient->nom;
+  
+	if($_evenement->sejour_id){
+	  $title = $patient->nom;
+  } else {
+		$_evenement->loadRefsEvenementsSeance();
+		$title = count($_evenement->_ref_evenements_seance)." patient(s)";
+	}
 	if($large){
     $title .= substr($patient->prenom,0,2).".";		
 	}

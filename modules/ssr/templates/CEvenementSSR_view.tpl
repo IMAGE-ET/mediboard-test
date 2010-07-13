@@ -35,6 +35,18 @@ Main.add(function(){
 			{{/foreach}}
 		</td>
 	</tr>
+  {{if !$evenement_ssr->sejour_id}}
+  <tr>
+    <td class="text">
+		  <strong>{{mb_label object=$evenement_ssr field="seance_collective_id"}}</strong>
+      <ul>
+			{{foreach from=$evenement_ssr->_ref_evenements_seance item=_evenement}}
+        <li>{{$_evenement->_ref_sejour->_ref_patient->_view}}</li>
+      {{/foreach}}
+			</ul>
+    </td>
+  </tr> 
+  {{/if}}
 </table>
 
 <form style="display: none;" name="editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}" method="post" action="?" onsubmit="return submitFormEditSSR(this);">

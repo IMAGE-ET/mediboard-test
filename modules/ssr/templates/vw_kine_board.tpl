@@ -83,7 +83,12 @@ updateModalEvenements = function(token_field_evts){
   var url = new Url("ssr", "ajax_update_modal_evenements");
 	url.addParam("token_field_evts", $V(oFormSelectedEvents.token_elts));
 	url.requestUpdate("modal_evenements", { 
-	  onComplete: viewModalEvenements
+	  onComplete: function(){
+		  $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox){
+			  tab_selected.add(checkbox.value);
+			});
+			viewModalEvenements();
+		}
 	});
 }
 
@@ -131,7 +136,7 @@ printPlanningTechnicien = function(){
       <form name="editSelectedEvent" method="post" action="?">
         <input type="hidden" name="m" value="ssr" />
         <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-        <input type="hidden" name="token_elts" value="" />
+        <input type="text" name="token_elts" value="" />
         <input type="hidden" name="del" value="0" />    
         <input type="hidden" name="realise" value="0" />
       </form>

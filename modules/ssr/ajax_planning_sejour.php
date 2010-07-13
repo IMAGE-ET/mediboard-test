@@ -29,20 +29,39 @@ $planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_
 $planning->title = "Planning du patient '$patient->_view'";
 $planning->guid = $sejour->_guid;
 
-// Chargement des evenement SSR 
+// Chargement des evenement SSR (ainsi que les seances collectives) 
 $evenement_ssr = new CEvenementSSR();
+$ljoin = array();
+$ljoin[] = "evenement_ssr AS evt_seance ON (evt_seance.seance_collective_id = evenement_ssr.evenement_ssr_id)";
 $where = array();
-$where["sejour_id"] = " = '$sejour->_id'";
-$where["debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
-$evenements = $evenement_ssr->loadList($where);
+$where[] = "(evenement_ssr.sejour_id = '$sejour->_id') OR (evenement_ssr.sejour_id IS NULL AND evt_seance.sejour_id = '$sejour->_id')";
+$where["evenement_ssr.debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
+$evenements = $evenement_ssr->loadList($where, null, null, null, $ljoin);
 
 foreach($evenements as $_evenement){
+	if(!$_evenement->sejour_id){
+	  
+		// Chargement de l'evenement pour ce sejour
+		$evt = new CEvenementSSR();
+		$evt->sejour_id = $sejour->_id;
+		$evt->seance_collective_id = $_evenement->_id;
+		$evt->loadMatchingObject();
+		
+		// On reaffecte les valeurs indispensables a l'affichage
+		$evt->debut = $_evenement->debut;
+		$evt->duree = $_evenement->duree;
+
+    // Remplacement de la seance collective par le bon evenement    
+		$_evenement = $evt;	
+	}
+		
 	$_evenement->loadRefPrescriptionLineElement();
 	$element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
-  $element_prescription->loadRefCategory();
-	$category_prescription =& $element_prescription->_ref_category_prescription;
-  $title = $category_prescription->_view;
 	
+	$element_prescription->loadRefCategory();
+  $category_prescription =& $element_prescription->_ref_category_prescription;
+  $title = $category_prescription->_view;
+
 	if ($print) {
 		$_evenement->loadRefEquipement();
 		$equipement = $_evenement->_ref_equipement;
@@ -51,13 +70,19 @@ foreach($evenements as $_evenement){
 	}
 	
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
-	$class_evt = $_evenement->equipement_id ? "equipement" : "kine";
+	
 
+
+  $class_evt = $_evenement->equipement_id ? "equipement" : "kine";
+  if($_evenement->seance_collective_id){
+    $class_evt = "seance";
+	}
+	
   $css_classes = array($element_prescription->_guid, 
                        $category_prescription->_guid);
 	
 	$css_classes[] = ($_evenement->realise && !$print) ? "realise" : $class_evt;
-											 
+	
   $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes);
   $event->draggable = !$_evenement->realise && !$print;
 	$planning->addEvent($event);
