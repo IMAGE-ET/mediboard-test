@@ -26,25 +26,21 @@ foreach($elts_id as $_elt_id){
 	
 	// Suppression des evenements SSR
 	if($del){
-		// Si l'evenement est une seance
-		if(!$evenement_ssr->sejour_id){
-			// Suppression du patient de la seance
-			$evt_ssr = new CEvenementSSR();
-			$evt_ssr->seance_collective_id = $evenement_ssr->_id;
-			$evt_ssr->sejour_id = $sejour_id;
-			$evt_ssr->loadMatchingObject();
+		$seance_collective_id = $evenement_ssr->seance_collective_id;
+		
+		// Suppression de l'evenement
+		$msg = $evenement_ssr->delete();
+    CAppUI::displayMsg($msg, "CEvenementSSR-msg-delete");
 			
-			$msg = $evt_ssr->delete();
-      CAppUI::displayMsg($msg, "CEvenementSSR-msg-delete");
+		if($seance_collective_id){
+			$seance = new CEvenementSSR();
+			$seance->load($seance_collective_id);
 			
-			// Si la seance ne contient plus de seances, on la supprime
-			if($evenement_ssr->countBackRefs("evenements_ssr") == 0){
-		  	$msg = $evenement_ssr->delete();
+			// Suppression de la seance si plus aucune backref
+			if($seance->countBackRefs("evenements_ssr") == 0){
+        $msg = $seance->delete();
         CAppUI::displayMsg($msg, "CEvenementSSR-msg-delete");
-		  }	
-		} else {
-		  $msg = $evenement_ssr->delete();
-      CAppUI::displayMsg($msg, "CEvenementSSR-msg-delete");
+      } 
 		}
 	}
 	// Modification des evenements SSR
@@ -80,7 +76,6 @@ foreach($elts_id as $_elt_id){
 			}
       $evenement_ssr->realise = $realise;
     }
-    
     $msg = $evenement_ssr->store();
 		CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");
 	}
