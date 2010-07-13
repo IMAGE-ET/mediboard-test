@@ -28,11 +28,12 @@ class CPlanningEvent  {
   var $color = null;
 	var $important = null;
   
-  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null) {
+  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null) {
     if(!$color){
     	 $color = "#999";
     }
 		$this->guid = $guid;
+		$this->draggable_guid = $draggable_guid;
 		
 		$this->internal_id = "CPlanningEvent-".uniqid();
     

@@ -51,8 +51,12 @@ foreach($evenements as $_evenement){
 		$evt->debut = $_evenement->debut;
 		$evt->duree = $_evenement->duree;
 
+    $draggable_guid = $_evenement->_guid;
+
     // Remplacement de la seance collective par le bon evenement    
 		$_evenement = $evt;	
+	} else {
+		$draggable_guid = $_evenement->_guid;
 	}
 		
 	$_evenement->loadRefPrescriptionLineElement();
@@ -81,7 +85,7 @@ foreach($evenements as $_evenement){
 	
 	$css_classes[] = ($_evenement->realise && !$print) ? "realise" : $class_evt;
 	
-  $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes);
+  $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes, $draggable_guid);
   $event->draggable = !$_evenement->realise && !$print;
 	$planning->addEvent($event);
 }

@@ -16,7 +16,7 @@ Main.add(function() {
   planning.onEventChange = function(e){
     var form = getForm("form-edit-planning-{{$planning->guid}}");
     var time = e.getTime();
-    $V(form.evenement_ssr_id, e.guid.split('-')[1]);
+    $V(form.evenement_ssr_id, e.draggable_guid.split('-')[1]);
     $V(form.debut, time.start.toDATETIME(true));
     $V(form.duree, time.length);
     onSubmitFormAjax(form, {onComplete: function(){

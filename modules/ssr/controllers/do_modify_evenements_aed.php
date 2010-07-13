@@ -45,24 +45,35 @@ foreach($elts_id as $_elt_id){
 	}
 	// Modification des evenements SSR
   else {
-	  if($_nb_decalage_min_debut){
-	  	$evenement_ssr->debut = mbDateTime("$_nb_decalage_min_debut minutes", $evenement_ssr->debut);
-	  }
-		if($_nb_decalage_heure_debut){
-      $evenement_ssr->debut = mbDateTime("$_nb_decalage_heure_debut hours", $evenement_ssr->debut);
-    }
-		if($_nb_decalage_jour_debut){
-      $evenement_ssr->debut = mbDateTime("$_nb_decalage_jour_debut days", $evenement_ssr->debut);
-    }
-    if($_nb_decalage_duree){
-      $evenement_ssr->duree = $evenement_ssr->duree + $_nb_decalage_duree;
-    }
-		if($equipement_id){
-		  $evenement_ssr->equipement_id = $equipement_id;
-    }
-		if($kine_id){
-      $evenement_ssr->therapeute_id = $kine_id;
-    }
+  	if($_nb_decalage_min_debut || $_nb_decalage_heure_debut || $_nb_decalage_jour_debut || $_nb_decalage_duree || $equipement_id || $kine_id) {
+  		if($evenement_ssr->seance_collective_id){
+  			$evenement_ssr->loadRefSeanceCollective();
+				$evenement_ssr =& $evenement_ssr->_ref_seance_collective;
+  		}
+	
+	    if($_nb_decalage_min_debut){
+	      $evenement_ssr->debut = mbDateTime("$_nb_decalage_min_debut minutes", $evenement_ssr->debut);
+	    }
+	    if($_nb_decalage_heure_debut){
+	      $evenement_ssr->debut = mbDateTime("$_nb_decalage_heure_debut hours", $evenement_ssr->debut);
+	    }
+	    if($_nb_decalage_jour_debut){
+	      $evenement_ssr->debut = mbDateTime("$_nb_decalage_jour_debut days", $evenement_ssr->debut);
+	    }
+	    if($_nb_decalage_duree){
+	      $evenement_ssr->duree = $evenement_ssr->duree + $_nb_decalage_duree;
+	    }
+	    if($equipement_id){
+	      $evenement_ssr->equipement_id = $equipement_id;
+	    }
+	    if($kine_id){
+	      $evenement_ssr->therapeute_id = $kine_id;
+	    }			
+      $msg = $evenement_ssr->store();
+      CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");	
+  	}
+		
+		// Realisation des actes CdARR
 		if($realise != ''){
 			if($realise == '0'){
 				if(!$evenement_ssr->sejour_id){
@@ -75,9 +86,9 @@ foreach($elts_id as $_elt_id){
 				}
 			}
       $evenement_ssr->realise = $realise;
-    }
-    $msg = $evenement_ssr->store();
-		CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");
+	    $msg = $evenement_ssr->store();
+	    CAppUI::displayMsg($msg, "CEvenementSSR-msg-modify");
+		}
 	}
 }
 
