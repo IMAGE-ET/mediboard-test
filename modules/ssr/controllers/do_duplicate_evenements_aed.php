@@ -18,8 +18,12 @@ foreach($elts_id as $_elt_id){
 	$evenement_ssr->_id = "";
 	$evenement_ssr->realise = 0;
 	$evenement_ssr->debut = mbDateTime("7 days", $evenement_ssr->debut);
-  $msg = $evenement_ssr->store();
-  CAppUI::displayMsg($msg, "CEvenementSSR-msg-store");
+	if($evenement_ssr->seance_collective_id){
+    CAppUI::displayMsg("Impossible de dupliquer des evenements qui sont dans des seances collectives", "CEvenementSSR-msg-store");
+	} else {
+	  $msg = $evenement_ssr->store();
+	  CAppUI::displayMsg($msg, "CEvenementSSR-msg-store");
+	}
 }
 
 echo CAppUI::getMsg();

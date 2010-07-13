@@ -71,8 +71,6 @@ foreach($evenements as $_evenement){
 	
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	
-
-
   $class_evt = $_evenement->equipement_id ? "equipement" : "kine";
   if($_evenement->seance_collective_id){
     $class_evt = "seance";

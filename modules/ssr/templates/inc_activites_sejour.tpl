@@ -113,8 +113,7 @@ refreshSelectSeances = function(){
   if($V(oFormEvenementSSR.equipement_id) && 
 	   $V(oFormEvenementSSR.therapeute_id) &&
 		 $V(oFormEvenementSSR.line_id)){
-		 
-		console.debug("refresh seances"); 		
+	
 		var url = new Url("ssr", "ajax_vw_select_seances");
 		url.addParam("therapeute_id", $V(oFormEvenementSSR.therapeute_id));
 		url.addParam("equipement_id", $V(oFormEvenementSSR.equipement_id));

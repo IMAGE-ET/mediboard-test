@@ -26,6 +26,8 @@ class CEvenementSSR extends CMbObject {
 	var $seance_collective_id    = null; // Evenement lié a une seance collective
 	var $_ref_element_prescription = null;
   //var $element_prescription_id = null; // Une seance est liée à un element de prescription et non pas une ligne d'element
+	var $_ref_seance_collective = null;
+	
 	
 	// Form Fields
 	var $_heure                   = null;
@@ -83,6 +85,7 @@ class CEvenementSSR extends CMbObject {
     // Evénement dans les bornes du séjour
     $this->completeField("sejour_id");
     $this->loadRefSejour();
+		
     $this->completeField("debut");
 		
 		if ($this->sejour_id && $this->debut && ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie)){
@@ -179,6 +182,10 @@ class CEvenementSSR extends CMbObject {
 	  $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
 	}
 	
+	function loadRefSeanceCollective($cache = true){
+    $this->_ref_seance_collective = $this->loadFwdRef("seance_collective_id", $cache);
+  }
+  
 	function loadRefsActesCdARR(){
 		$this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
 	}

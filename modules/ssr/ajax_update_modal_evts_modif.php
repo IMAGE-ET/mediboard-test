@@ -24,6 +24,14 @@ $evenements = array();
 foreach($_evenements as $_evenement_id){
 	$evenement = new CEvenementSSR();
   $evenement->load($_evenement_id);
+	
+	if($evenement->seance_collective_id){
+	  // Recuperation des informations de la seance collective
+		$evenement->loadRefSeanceCollective();
+		$evenement->debut = $evenement->_ref_seance_collective->debut;
+		$evenement->duree = $evenement->_ref_seance_collective->duree;
+	}
+	
   $evenement->loadRefSejour();
   $evenement->_ref_sejour->loadRefPatient();
   $evenement->loadRefPrescriptionLineElement();
