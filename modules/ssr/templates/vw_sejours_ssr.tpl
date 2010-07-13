@@ -19,8 +19,18 @@
 <form name="Filter" action="?" method="get" style="float: right;">
   <input name="m" value="{{$m}}" type="hidden" />
   <input name="tab" value="{{$tab}}" type="hidden" />
-  
-  Affichage
+
+  {{mb_label class=CSejour field=service_id}}
+  <select name="service_id" onchange="this.form.submit();">
+    <option value="">&mdash; {{tr}}All{{/tr}}</option>
+  	{{foreach from=$services item=_service}}
+    <option value="{{$_service->_id}}" {{if $_service->_id == $filter->service_id}}selected="selected"{{/if}}>
+      {{$_service}}
+    </option>
+    {{/foreach}}
+  </select>
+
+  Prescription
   <select name="show" onchange="this.form.submit();">
     <option value="all"     {{if $show == "all"    }} selected="selected"{{/if}}>Tous les séjours</option>
     <option value="nopresc" {{if $show == "nopresc"}} selected="selected"{{/if}}>Séjours sans prescription</option>
@@ -51,7 +61,7 @@
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
 
-		<th style="width:  5em;">n° DHE</th>
+		<th style="width:  5em;">DHE <br />{{mb_title class=CSejour field=service_id}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
     <th style="width: 16em;">
 		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
@@ -97,12 +107,13 @@
       <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		</td>
 		
-		<td>
-      <a>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-         {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
-        </span>
-      </a>
+		<td style="text-align: center;">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+      </span>
+			<div style="opacity: 0.6;">
+       {{mb_value object=$_sejour field=service_id}}
+			</div>
 		</td>
 		
     <td class="text">
@@ -140,7 +151,7 @@
 	        {{/if}}
 	      </td>
 	  
-	      <td style="text-align: right; width: 1%;"">
+	      <td style="text-align: right; width: 1%;">
 	        {{if $_sejour->_count.evenements_ssr}} 
 	        {{$_sejour->_count.evenements_ssr}}
 	        {{/if}}
