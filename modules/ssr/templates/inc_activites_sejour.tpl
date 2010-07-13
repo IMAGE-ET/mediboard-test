@@ -269,7 +269,8 @@ Main.add(function(){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
     url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
       minChars: 2,
-      select: "value"
+      select: "value",
+      updateElement: updateFieldCode
     } );
   }
 	
@@ -441,7 +442,10 @@ Main.add(function(){
           {{/foreach}}  
 	         
 	        <div id="div_other_cdarr" style="display: none;">
-	          <input type="checkbox" name="_cdarr" value="other" onclick="$('other_cdarr').toggle(); $V(this.form.code, '');" /> Autre
+            <label>
+	            <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
+            </label>
+            <br />
 	          <span id="other_cdarr" style="display: none;">
 						   <input type="text" name="code" class="autocomplete" canNull=true size="2" />
 	             <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
@@ -594,7 +598,31 @@ Main.add(function(){
 			$V(oForm.kine_id, ''); 
 			$V(oForm.equipement_id, ''); 
 		}
-		
+    
+    toggleOther = function(elem) {
+      $('other_cdarr').toggle(); 
+      $V(elem.form.code, '');
+      $(elem.form.code).tryFocus();
+      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = $V(elem) ? false : 'disabled';}, elem);
+    }
+
+    updateFieldCode = function(selected, input) {
+      var code_selected = selected.childElements()[0];
+      $('other_cdarr').insert({bottom: 
+        '<span>\
+           <input type="hidden" id="editEvenementSSR_cdarrs['+code_selected.innerHTML+']" type="checkbox" name="cdarrs['+code_selected.innerHTML+']" value="'+code_selected.innerHTML+'"\
+           <button class="cancel notext" type="button" onclick="deleteCode(this);"></button>\
+           <label>' +code_selected.innerHTML+ '</label>\
+         </span>'});
+      var input = $('editEvenementSSR_code');
+      input.value = '';
+      input.tryFocus();
+    }
+
+    deleteCode = function(elem) {
+      $(elem).up().remove();
+    }
+    
 	</script>	
 
 	<form name="editSelectedEvent" method="post" action="?" onsubmit="updateSelectedEvents(this.token_elts); 
