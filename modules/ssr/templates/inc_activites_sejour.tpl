@@ -384,11 +384,17 @@ Main.add(function(){
                          onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
   	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" 
                         onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
-                    {{$_line->_view}}
+                    {{$_line}}
                   </span>
-                  </label>
-                
-	              <br />
+                </label>
+								{{if $_line->commentaire}} 
+                <div class="warning text">
+                  {{$_line->commentaire}}
+                </div>
+								{{else}}
+                <br />
+								{{/if}}
+
 	              {{if $smarty.foreach.category.last}}
 	                </div>
 	              {{/if}}

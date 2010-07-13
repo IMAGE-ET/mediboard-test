@@ -18,5 +18,5 @@
 
 
 {{if $_line->commentaire}}
-<div style="margin-left: 2em;" class="warning">{{$_line->commentaire}}</div>
+<div style="margin-left: 2em;" class="text warning">{{$_line->commentaire}}</div>
 {{/if}}
