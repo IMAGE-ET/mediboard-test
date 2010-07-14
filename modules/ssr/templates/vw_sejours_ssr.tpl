@@ -161,7 +161,7 @@
 	        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_referent}}
 	        {{assign var=kine_journee value=$bilan->_ref_kine_journee}}
 	        {{if $kine_journee->_id != $kine_referent->_id}}
-	          / {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_journee}}
+	        <br/>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$kine_journee}}
 	        {{/if}}
 	      {{/if}}
 	    </td>
