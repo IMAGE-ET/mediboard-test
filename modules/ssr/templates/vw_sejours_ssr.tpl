@@ -39,7 +39,7 @@
 
 <table id="sejours-ssr" class="tbl">
 	<tr>
-		<th class="title" colspan="9">
+		<th class="title" colspan="10">
 			<span style="text-align: left">
 				({{$sejours|@count}}) 
 			</span>
@@ -66,6 +66,9 @@
 
 		<th style="width:  5em;">DHE <br />{{mb_title class=CSejour field=service_id}}</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
+    <th style="width: 12em;">
+      {{mb_title class="CSejour" field="praticien_id"}}
+    </th>
     <th style="width: 16em;">
 		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
       {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
@@ -125,11 +128,15 @@
 		</td>
 		
 		{{if $_sejour->annule}}
-		<td colspan="3" class="cancelled">
+		<td colspan="4" class="cancelled">
 			{{tr}}CSejour-{{$_sejour->recuse|ternary:"recuse":"annule"}}{{/tr}}
 		</td>
 
 		{{else}}
+      <td class="text">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+      </td>
+					
 	    <td class="text">
 	      {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
 	      {{assign var=kine_referent value=$bilan->_ref_kine_referent}}

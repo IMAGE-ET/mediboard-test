@@ -63,11 +63,11 @@ foreach ($sejours as $_sejour) {
 	}
 	
   $_sejour->checkDaysRelative($date);
+  $_sejour->loadRefPraticien(1);
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
 	$_sejour->countBackRefs("evenements_ssr");
 	$_sejour->countEvenementsSSR($date);
-	$_sejour->loadFwdRef("sejour_id", true);
 
   // Bilan SSR
   $_sejour->loadRefBilanSSR();
