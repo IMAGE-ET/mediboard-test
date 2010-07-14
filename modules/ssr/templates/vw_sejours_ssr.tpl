@@ -76,7 +76,7 @@
       {{mb_title class="CSejour" field="praticien_id"}}
 			<br />
 			<select name="praticien_id" onchange="$V(getForm('Filter').praticien_id, $V(this), true);">
-				<option value="">&mdash {{tr}}All{{/tr}}</option>
+				<option value="">&mdash; {{tr}}All{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$filter->praticien_id}}
 			</select>
     </th>
@@ -85,7 +85,7 @@
       {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
       <br />
       <select name="kine_id" onchange="$V(getForm('Filter').kine_id, $V(this), true);">
-        <option value="">&mdash {{tr}}All{{/tr}}</option>
+        <option value="">&mdash; {{tr}}All{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$kines selected=$filter->kine_id}}
       </select>
 
