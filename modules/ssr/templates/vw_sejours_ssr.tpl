@@ -20,15 +20,9 @@
   <input name="m" value="{{$m}}" type="hidden" />
   <input name="tab" value="{{$tab}}" type="hidden" />
 
-  {{mb_label class=CSejour field=service_id}}
-  <select name="service_id" onchange="this.form.submit();">
-    <option value="">&mdash; {{tr}}All{{/tr}}</option>
-  	{{foreach from=$services item=_service}}
-    <option value="{{$_service->_id}}" {{if $_service->_id == $filter->service_id}}selected="selected"{{/if}}>
-      {{$_service}}
-    </option>
-    {{/foreach}}
-  </select>
+  <input name="service_id"   value="{{$filter->service_id}}"      type="hidden" onchange="this.form.submit()" />
+  <input name="praticien_id" value="{{$filter->praticien_id}}" type="hidden" onchange="this.form.submit()" />
+  <input name="kine_id"      value="{{$filter->kine_id}}"      type="hidden" onchange="this.form.submit()" />
 
   Prescription
   <select name="show" onchange="this.form.submit();">
@@ -64,14 +58,37 @@
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="sortie"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sejours_ssr"}}</th>
 
-		<th style="width:  5em;">DHE <br />{{mb_title class=CSejour field=service_id}}</th>
+		<th style="width:  5em;">
+			DHE {{mb_title class=CSejour field=service_id}}
+			<br />
+		  <select name="service_id" onchange="$V(getForm('Filter').service_id, $V(this), true);">
+		    <option value="">&mdash; {{tr}}All{{/tr}}</option>
+		    {{foreach from=$services item=_service}}
+		    <option value="{{$_service->_id}}" {{if $_service->_id == $filter->service_id}}selected="selected"{{/if}}>
+		      {{$_service}}
+		    </option>
+		    {{/foreach}}
+		  </select>
+			
+		</th>
     <th style="width: 20em;">{{mb_title class="CSejour" field="libelle"}}</th>
     <th style="width: 12em;">
       {{mb_title class="CSejour" field="praticien_id"}}
+			<br />
+			<select name="praticien_id" onchange="$V(getForm('Filter').praticien_id, $V(this), true);">
+				<option value="">&mdash {{tr}}All{{/tr}}</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$filter->praticien_id}}
+			</select>
     </th>
     <th style="width: 16em;">
 		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
       {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
+      <br />
+      <select name="kine_id" onchange="$V(getForm('Filter').kine_id, $V(this), true);">
+        <option value="">&mdash {{tr}}All{{/tr}}</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$kines selected=$filter->kine_id}}
+      </select>
+
 		</th>
     
     <th style="width:   1%;" colspan="2"><label title="Evénements planifiés pour ce patient (ce jour - pendant tout le séjour)">Evt.</label></th>

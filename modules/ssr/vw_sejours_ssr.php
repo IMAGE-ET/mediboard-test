@@ -18,7 +18,9 @@ $show = CValue::getOrSession("show", "all");
 
 // Filtre
 $filter = new CSejour;
-$filter->service_id = CValue::getOrSession("service_id");
+$filter->service_id   = CValue::getOrSession("service_id");
+$filter->praticien_id = CValue::getOrSession("praticien_id");
+$filter->kine_id      = CValue::getOrSession("kine_id");
 
 // Chargement des sejours SSR pour la date selectionnée
 $group_id = CGroups::loadCurrent()->_id;
@@ -43,38 +45,59 @@ if ($order_col == "patient_id") {
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
  
 // Filtre sur les services
-$services = CMbObject::massLoadFwdRef($sejours, "service_id");
-if ($filter->service_id) {
-  $filter->loadFwdRef("service_id");
-  $services[$filter->service_id] = $filter->_fwd["service_id"];
-}
+$services = array();
+$praticiens = array();
+$kines = array();
 
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
+	// Filtre sur service
+	$service = $_sejour->loadFwdRef("service_id");
+  $services[$service->_id] = $service;
   if ($filter->service_id && $_sejour->service_id != $filter->service_id) {
     unset($sejours[$_sejour->_id]);
     continue;
 	}
 
+  // Filtre sur prescription
   $_sejour->loadRefPrescriptionSejour();
 	if ($show == "nopresc" && $_sejour->_ref_prescription_sejour->_id) {
 		unset($sejours[$_sejour->_id]);
 		continue;
 	}
-	
-  $_sejour->checkDaysRelative($date);
+
+  // Filtre sur praticien
   $_sejour->loadRefPraticien(1);
+  $praticien =& $_sejour->_ref_praticien;
+  $praticiens[$praticien->_id] = $praticien;
+  if ($filter->praticien_id && $_sejour->praticien_id != $filter->praticien_id) {
+    unset($sejours[$_sejour->_id]);
+    continue;
+  }
+	
+  // Bilan SSR
+  $_sejour->loadRefBilanSSR();
+  $bilan =& $_sejour->_ref_bilan_ssr;
+
+  // Kinés référent et journée
+  $bilan->loadRefKineJournee($date);
+  $kine_journee = $bilan->_ref_kine_journee;
+  if ($kine_journee->_id) $kines[$kine_journee->_id] = $kine_journee;
+  $kine_referent = $bilan->_ref_kine_referent;
+  if ($kine_referent->_id) $kines[$kine_referent->_id] = $kine_referent;
+  if ($filter->kine_id && $kine_referent->_id != $filter->kine_id && $kine_journee->_id != $filter->kine_id) {
+    unset($sejours[$_sejour->_id]);
+    continue;
+  }
+
+  $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
 	$_sejour->countBackRefs("evenements_ssr");
 	$_sejour->countEvenementsSSR($date);
 
-  // Bilan SSR
-  $_sejour->loadRefBilanSSR();
-  $bilan =& $_sejour->_ref_bilan_ssr;
+
 	
-	// Kinés référent et journée
-  $bilan->loadRefKineJournee($date);
 	
   // Patient
   $_sejour->loadRefPatient();
@@ -87,6 +110,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("filter", $filter);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("kines", $kines);
+$smarty->assign("praticiens", $praticiens);
 $smarty->assign("services", $services);
 $smarty->assign("show", $show);
 $smarty->assign("order_way", $order_way);
