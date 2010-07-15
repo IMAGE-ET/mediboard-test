@@ -315,7 +315,7 @@ Element.addMethods({
     pos = parseInt(pos || 0)-(dim.height/2);
     
     element.setStyle({
-      top: Math.min(pos, 100) + "px",
+      top: Math.max(pos, 100) + "px",
       left: (viewport.width - dim.width) / 2 + "px",
       width: dim.width - 10 + "px"
     });
