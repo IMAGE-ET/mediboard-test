@@ -381,7 +381,7 @@ Main.add(function(){
                 
 	              <label>
   	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
-                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}');" />
+                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); toggleOther(this.form._cdarr);" />
   	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" 
                         onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
                     {{$_line}}
@@ -605,21 +605,34 @@ Main.add(function(){
 			$V(oForm.equipement_id, ''); 
 		}
     
-    toggleOther = function(elem) {
-      $('other_cdarr').toggle(); 
+    toggleOther = function(elem, dontFocus) {
+      var toggle = $V(elem);
+      
+      $('other_cdarr').setVisible(toggle); 
       $V(elem.form.code, '');
       $(elem.form.code).tryFocus();
-      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = $V(elem) ? false : 'disabled';}, elem);
+      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = toggle ? false : 'disabled';}, elem);
     }
 
     updateFieldCode = function(selected, input) {
       var code_selected = selected.childElements()[0];
       $('other_cdarr').insert({bottom: 
-        '<span>\
-           <input type="hidden" id="editEvenementSSR__cdarrs['+code_selected.innerHTML+']" type="checkbox" name="_cdarrs['+code_selected.innerHTML+']" value="'+code_selected.innerHTML+'"\
-           <button class="cancel notext" type="button" onclick="deleteCode(this);"></button>\
-           <label>' +code_selected.innerHTML+ '</label>\
-         </span>'});
+        DOM.span({}, 
+          DOM.input({
+            type: 'hidden', 
+            id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
+            name:'_cdarrs['+code_selected.innerHTML+']',
+            value: code_selected.innerHTML
+          }),
+          DOM.button({
+            className: "cancel notext", 
+            type: "button",
+            onclick: "deleteCode(this)"
+          }),
+          DOM.label({}, code_selected.innerHTML)
+        )
+      });
+         
       var input = $('editEvenementSSR_code');
       input.value = '';
       input.tryFocus();

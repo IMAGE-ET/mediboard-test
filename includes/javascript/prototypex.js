@@ -144,6 +144,43 @@ Class.extend(Autocompleter.Base, {
     this.observer =
       setTimeout(this.onObserverEvent.bind(this), this.options.frequency*1000);
   },
+  onBlur: function(event) {
+    if (Prototype.Browser.IE && this.update.visible()) {  
+      // fix for IE: don't blur when clicking the vertical scrollbar (if there is one)
+      var verticalScrollbarWidth = this.update.offsetWidth - this.update.clientWidth -
+        this.update.clientLeft - (parseInt(this.update.currentStyle['borderRightWidth']) || 0);
+        
+      if (verticalScrollbarWidth) {
+        var x = event.clientX, 
+            y = event.clientY, 
+            parent = this.update.offsetParent,
+            sbLeft = this.update.offsetLeft + this.update.clientLeft + this.update.clientWidth,
+            sbTop = this.update.offsetTop + this.update.clientTop,
+            sbRight = sbLeft + verticalScrollbarWidth,
+            sbBottom = sbTop + this.update.clientHeight;
+            
+        while (parent) {
+          var offs = parent.offsetLeft + parent.clientLeft, scrollOffs = offs - parent.scrollLeft;
+          sbLeft = (sbLeft += scrollOffs) < offs ? offs : sbLeft;
+          sbRight = (sbRight += scrollOffs) < offs ? offs : sbRight;
+          offs = parent.offsetTop + parent.clientTop; scrollOffs = offs - parent.scrollTop;
+          sbTop = (sbTop += scrollOffs) < offs ? offs : sbTop;
+          sbBottom = (sbBottom += scrollOffs) < offs ? offs : sbBottom;
+          parent = parent.offsetParent;
+        }
+        
+        if (x >= sbLeft && x < sbRight && y >= sbTop && y < sbBottom) {
+          this.element.setActive();
+          return;
+        }
+      }
+    }
+    
+    setTimeout(this.hide.bind(this), 250);
+    this.hasFocus = false;
+    this.active = false;
+  },
+
   getTokenBounds: function() {
     if (!this.options.caretBounds && (null != this.tokenBounds)) return this.tokenBounds;
     var value = this.element.value;

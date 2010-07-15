@@ -14,6 +14,7 @@ PlanningEquipement = {
 	
 	showMany: function(equipement_ids) {
 		equipement_ids.each(function(equipement_id) {
+      $("planning-equipement-"+equipement_id).update("");
 	    new Url("ssr", "ajax_planning_equipement") .
 	      addParam("equipement_id", equipement_id) .
 	      requestUpdate("planning-equipement-"+equipement_id, {coverIE: false});
@@ -26,6 +27,7 @@ PlanningEquipement = {
     if(!this.equipement_id){
 			return;
 		}
+    $("planning-equipement").update("");
 		new Url("ssr", "ajax_planning_equipement") .
       addParam("equipement_id", this.equipement_id) .
 			addParam("sejour_id", this.sejour_id) .
@@ -55,6 +57,9 @@ PlanningTechnicien = {
 		if(!this.kine_id){
       return;
     }
+    
+    $("planning-technicien").update("");
+    
     var url = new Url("ssr", "ajax_planning_technicien");
 		url.addParam("kine_id", this.kine_id);
 	  url.addParam("surveillance", this.surveillance);
@@ -115,6 +120,8 @@ Planification = {
 		this.selectable = selectable || this.selectable;
 		this.height = height || this.height;
     
+    $("planning-sejour").update("");
+    
 	  new Url("ssr", "ajax_planning_sejour") .
 	    addParam("sejour_id", this.sejour_id) .
 			addParam("selectable", this.selectable) .
@@ -146,6 +153,8 @@ Planification = {
   },
   
   showWeek: function(date) {
+    $("week-changer").update("");
+    
     var url = new Url("ssr", "ajax_week_changer");
     if (date) {
       url.addParam("date", date);
