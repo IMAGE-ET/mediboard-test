@@ -496,6 +496,10 @@ table#weeklyPlanning th.today {
   display: none;
 }
 
+.planning .event.now {
+  border: none;
+}
+
 .planning .event.draggable .footer {
   display: block;
   position: absolute; 
