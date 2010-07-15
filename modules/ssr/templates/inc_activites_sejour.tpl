@@ -262,11 +262,13 @@ onchangeSeance = function(seance_id){
 }
 
 toggleAllDays = function(){
-  var toCheck = $V(oFormEvenementSSR.elements._select_week); 
   var days = oFormEvenementSSR.select('input[name^="_days["]');
-  days.each(function(e){
-    e.checked = toCheck;
+  days.slice(0,5).each(function(e){
+      e.checked = true;
   });
+  days.slice(5,7).each(function(e){
+    e.checked = false;
+});
 }
 
 removeWeek = function(){
@@ -277,7 +279,7 @@ removeWeek = function(){
 var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
-	
+	window.toCheck = false;
 	if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
     url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
@@ -573,8 +575,7 @@ Main.add(function(){
 		            {{/foreach}}
                 <td style="padding-left: 3em; text-align: center;">
                   <label style="float: right;">
-                    {{tr}}Week{{/tr}}<br/>
-                    <input type="checkbox" name="_select_week" onclick="toggleAllDays();"/>
+                    <button type="button" onclick="toggleAllDays();">{{tr}}Week{{/tr}}</button>
                   </label>
                 </td>
 		          </tr>
