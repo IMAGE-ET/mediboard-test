@@ -22,8 +22,18 @@
 	function changePage(page) {
 	  $V(getForm('filterEchange').page,page);
 	}
-</script>
 
+  /*function downloadEchange() {
+    var url = new Url();
+    
+    url.addParam("input", '{{$echange_soap->input|@json}}');
+    url.addParam("output",'{{$echange_soap->output|@json}}');
+    url.addParam("echange_id", "{{$echange_soap->echange_soap_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}");
+    url.addParam("function_name", "{{$echange_soap->function_name}}");
+    url.requestUpdate("empty_area", {method: "post", getParameters: {m: "webservices", a: "download_echange"}});
+  }*/
+</script>
+<div id="empty_area" style="display: none;"></div>
 <table class="main">
   {{if !$echange_soap->_id}}
   
@@ -101,6 +111,7 @@
         </tr>
         <tr>
           <th></th>
+          <th style="width:0.1px;"></th>
           <th>{{mb_title object=$echange_soap field="echange_soap_id"}}</th>
           <th>{{mb_title object=$echange_soap field="date_echange"}}</th>
           <th>{{mb_title object=$echange_soap field="emetteur"}}</th>
@@ -131,7 +142,7 @@
       <table class="form">
         <tr>
           <th class="title" colspan="2">
-            {{tr}}CEchangeSOAP{{/tr}} - {{$echange_soap->echange_soap_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
+            {{tr}}CEchangeSOAP{{/tr}} - {{$echange_soap->_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
             <br />
             {{mb_value object=$echange_soap field="function_name"}}
           </th>
@@ -146,6 +157,11 @@
           </td>
           <td>
             {{mb_value object=$echange_soap field="output" export=true}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align: center;">
+            <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1" class="button modify">Télécharger</a>
           </td>
         </tr>
       </table>

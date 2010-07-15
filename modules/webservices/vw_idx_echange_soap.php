@@ -21,6 +21,9 @@ $_date_max       = CValue::getOrSession('_date_max', mbDateTime("+1 hour"));
 $web_service     = CValue::getOrSession("web_service"); 
 $fonction        = CValue::getOrSession("fonction"); 
 
+CValue::setSession("_date_min", $_date_min);
+CValue::setSession("_date_max", $_date_max);
+
 $doc_errors_msg = $doc_errors_ack = "";
 
 // Chargement de l'échange SOAP demandé
@@ -41,6 +44,8 @@ $itemEchangeSoap = new CEchangeSOAP;
 
 $where = array();
 if ($_date_min && $_date_max) {
+  $echange_soap->_date_min = $_date_min;
+  $echange_soap->_date_max = $_date_max;
 	$where['date_echange'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
 }
 if ($fonction) {
