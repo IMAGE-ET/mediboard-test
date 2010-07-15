@@ -138,6 +138,9 @@ class CEchangeHprim extends CMbMetaObject {
       if ($msg = $content->store()) {
         return $msg;
       }
+      if (!$this->message_content_id) {
+        $this->message_content_id = $content->_id;
+      }
     }
     
     if ($this->_acquittement !== null) {
@@ -146,6 +149,9 @@ class CEchangeHprim extends CMbMetaObject {
       $content->content = $this->_acquittement;
       if ($msg = $content->store()) {
         return $msg;
+      }
+      if (!$this->acquittement_content_id) {
+        $this->acquittement_content_id = $content->_id;
       }
     }
   }
