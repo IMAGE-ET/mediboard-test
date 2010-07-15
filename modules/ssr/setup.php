@@ -351,8 +351,12 @@ class CSetupssr extends CSetup {
               CHANGE `therapeute_id` `therapeute_id` INT (11) UNSIGNED,
               CHANGE `realise` `realise` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
+		
+		$this->makeRevision("0.26");
+		$this->addPrefQuery("ssr_planning_dragndrop", "0");
+    $this->addPrefQuery("ssr_planning_resize", "0");
 
-		$this->mod_version = "0.26";
+		$this->mod_version = "0.27";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

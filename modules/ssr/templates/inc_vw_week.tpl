@@ -120,10 +120,10 @@ Main.add(function() {
       												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
       												 {{/if}}
       											 {{/if}} 
-      											 class="event {{if $_event->draggable}}draggable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
+      											 class="event {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}draggable{{/if}} {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}resizable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
       											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
       										
-                          {{if $_event->draggable}}
+                          {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
                           
@@ -140,8 +140,11 @@ Main.add(function() {
                             {{$_event->title|smarty:nodefaults|nl2br}}
                           </div>
                           
-                          {{if $_event->draggable}}
+                          {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}
                             <div class="footer"></div>
+                          {{/if}}
+                          
+                          {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
                             <div class="handle"></div>
                           {{/if}}
                           

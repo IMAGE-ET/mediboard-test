@@ -58,26 +58,30 @@ PlanningEvent = Class.create({
     this.planning.scrollTop = this.planning.container.down('.week-container').scrollTop;
     return this.planning.onEventChange(this);
   },
-  setDraggable: function(){
+  setDraggable: function(resizable){
     Main.add(function(){
       var planning = this.planning;
       var element = this.getElement();
       var parent = element.up("td");
       var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
       
+      // draggable
       new Draggable(element, {
         snap: snap, 
         handle: element.down(".handle"), 
         change: PlanningEvent.Drag.onDragPosition.bind(planning), 
         onEnd: PlanningEvent.Drag.onEndPosition.bind(planning)
       });
-      
-      new Draggable(element.down(".footer"), {
-        constraint: "vertical", 
-        snap: snap, 
-        change: PlanningEvent.Drag.onDragSize.bind(planning),
-        onEnd: PlanningEvent.Drag.onEndSize.bind(planning)
-      });
+
+      // resizable
+      if (resizable) {
+        new Draggable(element.down(".footer"), {
+          constraint: "vertical", 
+          snap: snap, 
+          change: PlanningEvent.Drag.onDragSize.bind(planning),
+          onEnd: PlanningEvent.Drag.onEndSize.bind(planning)
+        });
+      }
     }.bind(this));
   }
 });
@@ -122,8 +126,10 @@ WeekPlanning = Class.create({
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
       
-      if (this.eventsById[events[i].internal_id].draggable) {
-        this.eventsById[events[i].internal_id].setDraggable();
+      if (Preferences.ssr_planning_dragndrop == 1 &&this.eventsById[events[i].internal_id].draggable) {
+        this.eventsById[events[i].internal_id].setDraggable(
+          Preferences.ssr_planning_dragndrop == 1 && this.eventsById[events[i].internal_id].resizable
+        );
       }
     }
     

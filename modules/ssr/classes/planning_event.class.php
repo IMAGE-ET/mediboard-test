@@ -18,6 +18,7 @@ class CPlanningEvent  {
   var $length = null;
   var $day    = null;
   var $draggable = false;
+  var $resizable = false;
   var $disabled = false;
   
   var $hour   = null;
