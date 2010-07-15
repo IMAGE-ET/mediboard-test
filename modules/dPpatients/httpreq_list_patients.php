@@ -78,24 +78,31 @@ else {
 	$where        = array();
 	$whereSoundex = array();
 	$soundexObj   = new soundex2();
-	
-  if ($patient_nom = trim($patient_nom)) {
-    $patient_nom_soundex = $soundexObj->build($patient_nom);
-    $where[] = "`nom` LIKE '$patient_nom%' OR `nom_jeune_fille` LIKE '$patient_nom%'";
+  // Limitation du nombre de caractères
+  $patient_nom_search    = trim($patient_nom);
+  $patient_prenom_search = trim($patient_prenom);
+  if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
+    $patient_nom_search    = substr($patient_nom_search   , 0, $limit_char_search);
+    $patient_prenom_search = substr($patient_prenom_search, 0, $limit_char_search);
+  }
+  
+  if ($patient_nom_search) {
+    $patient_nom_soundex = $soundexObj->build($patient_nom_search);
+    $where[] = "`nom` LIKE '$patient_nom_search%' OR `nom_jeune_fille` LIKE '$patient_nom_search%'";
     $whereSoundex[] = "`nom_soundex2` LIKE '$patient_nom_soundex%' OR `nomjf_soundex2` LIKE '$patient_nom_soundex%'";
   }
   
-  if ($patient_prenom = trim($patient_prenom)) {
-    $patient_prenom_soundex = $soundexObj->build($patient_prenom);
-    $where["prenom"]                 = "LIKE '$patient_prenom%'";
+  if ($patient_prenom_search) {
+    $patient_prenom_soundex = $soundexObj->build($patient_prenom_search);
+    $where["prenom"]                 = "LIKE '$patient_prenom_search%'";
     $whereSoundex["prenom_soundex2"] = "LIKE '$patient_prenom_soundex%'";
   }
-
+  
   if ($patient_year || $patient_month || $patient_day) {
     $patient_naissance = 
-      CValue::first($patient_year, "%") . "-" .
+      CValue::first($patient_year , "%") . "-" .
       CValue::first($patient_month, "%") . "-" .
-      ($patient_day ? str_pad($patient_day, 2, "0", STR_PAD_LEFT) : "%");
+      CValue::first($patient_day  , "%");
     $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
   }
 	
@@ -128,6 +135,8 @@ $smarty->assign("prenom"         , $patient_prenom             );
 $smarty->assign("ville"          , $patient_ville              );
 $smarty->assign("cp"             , $patient_cp                 );
 $smarty->assign("naissance"      , $patient_naissance          );
+$smarty->assign("nom_search"     , $patient_nom_search         );
+$smarty->assign("prenom_search"  , $patient_prenom_search      );
 
 $smarty->assign("useVitale"      , $useVitale                  );
 $smarty->assign("patVitale"      , $patVitale                  );
