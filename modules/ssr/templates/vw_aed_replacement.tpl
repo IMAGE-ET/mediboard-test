@@ -81,19 +81,19 @@ Main.add(function(){
 	  </td>
 	</tr>
 	<tr id="kines">	
-		<td class="halfPane" id="sejours-kine"style="overflow: auto"></td>
-		<td id="replacement-kine">
-	    <script type="text/javascript">
-	    	ViewPort.SetAvlHeight("replacement-kine", 1);
-	    </script>
+		<td class="halfPane" id="sejours-kine" style="overflow: auto">
+      <script type="text/javascript">
+        ViewPort.SetAvlHeight("replacement-kine", 1);
+      </script>
 		</td>
+		<td id="replacement-kine"><td>
 	</tr>
   <tr id="reeducateurs">
-    <td class="halfPane" id="sejours-reeducateur" style="overflow: auto"></td>
-    <td id="replacement-reeducateur">
+    <td class="halfPane" id="sejours-reeducateur" style="overflow: auto">
       <script type="text/javascript">
         ViewPort.SetAvlHeight("replacement-reeducateur", 1);
       </script>
     </td>
+    <td id="replacement-reeducateur"></td>
   </tr>
 </table>
