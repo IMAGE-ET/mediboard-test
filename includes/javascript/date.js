@@ -564,6 +564,29 @@ var Calendar = {
       Event.stopObserving(document, 'click', datepicker.hidePickerListener);
     }
     
+    var showPicker = function(e){
+      Event.stop(e);
+      
+      // Focus will be triggered a second time when the date is selected
+      if (Prototype.Browser.IE) {
+        if (this._dontShow && e.type !== "click") {
+          this._dontShow = false;
+          return;
+        }
+        else {
+          this._dontShow = true;
+          setTimeout((function(){
+            //this._dontShow = false;
+          }).bind(this), 2000);
+        }
+      }
+      
+      this.show.bind(datepicker)(e);
+      if(!this.datepicker.element) return;
+      
+      $(this.datepicker.element).unoverflow();
+    }.bindAsEventListener(datepicker);
+    
     if (options.noView) {
       datepicker.element.setStyle({width: 0, height: 0, border: 'none'});
       datepicker.element.up().setStyle({width: "12px"});
@@ -571,7 +594,6 @@ var Calendar = {
     }
     else {
       if(window.Mobile) {
-        
         var div = new Element ('div',{style: 'position:absolute;opacity:0;'});
         var parent = elementView.up();
         // solution pour éviter de créer plusieurs div quand les pages sont chargées en ajax 
@@ -581,7 +603,6 @@ var Calendar = {
         div.clonePosition(elementView);
         var pos = elementView.cumulativeOffset();
         
-
         div.observe('click', function(e){
           Event.stop(e);
           this.show.bind(datepicker)(e);
@@ -589,17 +610,10 @@ var Calendar = {
           if(!this.datepicker.element) return;
           $(this.datepicker.element).centerHV(pos.top);
           Calendar.mobileHide(datepicker);
-
         }.bindAsEventListener(datepicker));
-       
       } 
       else {
-        elementView.observe('click', Event.stop).observe('focus', function(e){
-          this.show.bind(datepicker)(e);
-          if(!this.datepicker.element) return;
-          
-          $(this.datepicker.element).unoverflow();
-        }.bindAsEventListener(datepicker));
+        elementView.observe('click', showPicker).observe('focus', showPicker);
       }
     }
    
