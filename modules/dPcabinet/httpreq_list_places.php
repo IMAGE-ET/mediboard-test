@@ -25,6 +25,8 @@ if ($plageconsult_id) {
 
 // Chargement des places disponibles
 $listPlace = array();
+$listBefore  = array();
+$listAfter   = array();
 if ($plageconsult_id) {
   if (!$plage->plageconsult_id) {
     $plage->load($plageconsult_id);
@@ -44,6 +46,14 @@ if ($plageconsult_id) {
     $consultation->loadRefCategorie();
     
     $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
+  
+    if($keyPlace < 0) {
+      $listBefore[$keyPlace] =& $consultation;
+    }
+    
+    if($consultation->heure >= $plage->fin) {
+      $listAfter[$keyPlace] =& $consultation;
+    }
     
     for  ($i = 0;  $i < $consultation->duree; $i++) {
       if (isset($listPlace[($keyPlace + $i)])) {
@@ -58,6 +68,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("listPlace"      , $listPlace);
+$smarty->assign("listBefore"     , $listBefore);
+$smarty->assign("listAfter"      , $listAfter);
 $smarty->assign("online"         , true);
 
 $smarty->display("inc_list_places.tpl");

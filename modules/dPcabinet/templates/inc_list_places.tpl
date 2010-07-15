@@ -51,7 +51,7 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       {{/if}}
       Dr {{$plage->_ref_chir->_view}}
       <br />
-      Plage du {{$plage->date|date_format:$dPconfig.longdate}}
+      Plage du {{$plage->date|date_format:$dPconfig.longdate}} de {{$plage->debut|date_format:$dPconfig.time}} à {{$plage->fin|date_format:$dPconfig.time}}
     </th>
   </tr>
   {{if $online}}
@@ -76,6 +76,54 @@ PlageConsult.addPlaceAfter = function(plage_id) {
     <th colspan="3">Pas de plage le {{$date|date_format:$dPconfig.longdate}}</th>
   </tr>
   {{/if}}
+  {{foreach from=$listBefore item =_consultation}}
+  <tr>
+    <td>
+      <div style="float:left">
+        {{$_consultation->heure|date_format:$dPconfig.time}}
+      </div>
+      <div style="float:right">
+        {{if $_consultation->categorie_id}}
+          <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+        {{/if}}
+      </div>
+    </td>
+    <td>
+      {{if !$_consultation->patient_id}}
+        {{assign var="style" value="style='background: #ffa;'"}}
+      {{elseif $_consultation->premiere}}
+        {{assign var="style" value="style='background: #faa;'"}}
+      {{else}} 
+        {{assign var="style" value=""}}
+      {{/if}}
+      <div {{$style|smarty:nodefaults}}>
+        {{if !$_consultation->patient_id}}
+          [PAUSE]
+          {{if $_consultation->motif}}
+          ({{$_consultation->motif|truncate:"20"}})
+          {{/if}}
+        {{else}}
+          {{$_consultation->_ref_patient->_view}}
+          {{if $_consultation->motif}}
+          ({{$_consultation->motif|truncate:"20"}})
+          {{/if}}
+        {{/if}}
+      </div>
+    </td>
+    <td>
+      {{if !$_consultation->patient_id}}
+        {{assign var="style" value="style='background: #ffa;'"}}
+      {{elseif $_consultation->premiere}}
+        {{assign var="style" value="style='background: #faa;'"}}
+      {{else}} 
+        {{assign var="style" value=""}}
+      {{/if}}
+      <div {{$style|smarty:nodefaults}}>
+        {{$_consultation->duree}}
+      </div>
+    </td>
+  </tr>
+  {{/foreach}}
   {{foreach from=$listPlace item=_place}}
   <tr>
     <td>
@@ -132,6 +180,54 @@ PlageConsult.addPlaceAfter = function(plage_id) {
           {{$_consultation->duree}}
         </div>
       {{/foreach}}
+    </td>
+  </tr>
+  {{/foreach}}
+  {{foreach from=$listAfter item =_consultation}}
+  <tr>
+    <td>
+      <div style="float:left">
+        {{$_consultation->heure|date_format:$dPconfig.time}}
+      </div>
+      <div style="float:right">
+        {{if $_consultation->categorie_id}}
+          <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+        {{/if}}
+      </div>
+    </td>
+    <td>
+      {{if !$_consultation->patient_id}}
+        {{assign var="style" value="style='background: #ffa;'"}}
+      {{elseif $_consultation->premiere}}
+        {{assign var="style" value="style='background: #faa;'"}}
+      {{else}} 
+        {{assign var="style" value=""}}
+      {{/if}}
+      <div {{$style|smarty:nodefaults}}>
+        {{if !$_consultation->patient_id}}
+          [PAUSE]
+          {{if $_consultation->motif}}
+          ({{$_consultation->motif|truncate:"20"}})
+          {{/if}}
+        {{else}}
+          {{$_consultation->_ref_patient->_view}}
+          {{if $_consultation->motif}}
+          ({{$_consultation->motif|truncate:"20"}})
+          {{/if}}
+        {{/if}}
+      </div>
+    </td>
+    <td>
+      {{if !$_consultation->patient_id}}
+        {{assign var="style" value="style='background: #ffa;'"}}
+      {{elseif $_consultation->premiere}}
+        {{assign var="style" value="style='background: #faa;'"}}
+      {{else}} 
+        {{assign var="style" value=""}}
+      {{/if}}
+      <div {{$style|smarty:nodefaults}}>
+        {{$_consultation->duree}}
+      </div>
     </td>
   </tr>
   {{/foreach}}
