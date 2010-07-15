@@ -27,9 +27,9 @@
 		  {{assign var=sejour_id value=$_sejour->_id}}
       {{assign var=key value="$plage_conge_id-$sejour_id"}}
 			
-      <tr {{if $_sejour->_ref_replacement->_id && $type == "kine"}}style="opacity: 0.5;"{{/if}} id="replacement-{{$type}}-{{$_sejour->_id}}">
-		    <td colspan="2" class="text">
-		    	{{assign var=patient value=$_sejour->_ref_patient}}
+      <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
+		    <td colspan="2" class="text {{if $_sejour->_ref_replacement->_id && $type == "kine"}}arretee{{/if}}">
+					{{assign var=patient value=$_sejour->_ref_patient}}
 		      <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
 				  <big class="CPatient-view" onclick="refreshReplacement('{{$_sejour->_id}}','{{$plage_conge_id}}','{{$type}}'); this.up('tr').addUniqueClassName('selected');">{{$patient}}</big> 
 				  {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
