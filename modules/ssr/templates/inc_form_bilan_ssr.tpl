@@ -353,7 +353,7 @@ refreshFormBilanSSR = function(){
 			  </table>
 			</form>
 
-      {{if $can->admin}}
+      {{if $can->admin && $bilan->_id}}
       <hr />
       <form name="Planification-CBilanSSR" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="ssr" />

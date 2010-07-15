@@ -8,7 +8,7 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-{{if !$bilan->planification}} 
+{{if $bilan->_id && !$bilan->planification}} 
 <div class="small-info">
   {{tr}}CBilanSSR-msg-cotation-off{{/tr}}
   <br />

@@ -10,7 +10,7 @@
 
 {{mb_include_script module=ssr script=planification}}
 
-{{if !$bilan->planification}} 
+{{if $bilan->_id && !$bilan->planification}} 
 <div class="small-info">
   {{tr}}CBilanSSR-msg-planification-off{{/tr}}
   <br />

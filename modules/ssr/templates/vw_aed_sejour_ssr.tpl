@@ -69,13 +69,13 @@ refreshConstantesMedicales = function (force) {
 		</li>
 
 	  <li>
-	  	<a {{if !$bilan->planification}} class="empty" {{/if}}
+	  	<a {{if $bilan->_id && !$bilan->planification}} class="empty" {{/if}}
 			  href="#planification" onmousedown="Planification.refresh('{{$sejour->_id}}')">
 	  		Planification
 			</a>
 		</li>
 	  <li>
-	  	<a {{if !$bilan->planification}} class="empty" {{/if}}
+	  	<a {{if $bilan->_id && !$bilan->planification}} class="empty" {{/if}}
 		    href="#cotation-rhs" onmousedown="CotationRHS.refresh('{{$sejour->_id}}')">
 	  		Cotation
 			</a>
