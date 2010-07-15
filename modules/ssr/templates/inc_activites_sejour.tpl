@@ -684,6 +684,7 @@ Main.add(function(){
 					Transférer vers 
 				  <select name="equipement_id">
 				  	<option value="">&mdash; Equipement</option>
+            <option value="none">{{tr}}CEquipement.none{{/tr}}</option>
 						{{foreach from=$plateaux item=_plateau}}
               <optgroup label="{{$_plateau->_view}}">
 	            {{foreach from=$_plateau->_ref_equipements item=_equipement}}

@@ -63,8 +63,8 @@ foreach($elts_id as $_elt_id){
 	    if($_nb_decalage_duree){
 	      $evenement_ssr->duree = $evenement_ssr->duree + $_nb_decalage_duree;
 	    }
-	    if($equipement_id){
-	      $evenement_ssr->equipement_id = $equipement_id;
+	    if($equipement_id || $equipement_id == 'none'){
+	      $evenement_ssr->equipement_id = ($equipement_id == 'none') ? "" : $equipement_id;
 	    }
 	    if($kine_id){
 	      $evenement_ssr->therapeute_id = $kine_id;
