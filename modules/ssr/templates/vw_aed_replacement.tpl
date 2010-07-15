@@ -83,7 +83,7 @@ Main.add(function(){
 	<tr id="kines">	
 		<td class="halfPane" id="sejours-kine" style="overflow: auto">
       <script type="text/javascript">
-        ViewPort.SetAvlHeight("replacement-kine", 1);
+        ViewPort.SetAvlHeight("sejours-kine", 1);
       </script>
 		</td>
 		<td id="replacement-kine"><td>
@@ -91,7 +91,7 @@ Main.add(function(){
   <tr id="reeducateurs">
     <td class="halfPane" id="sejours-reeducateur" style="overflow: auto">
       <script type="text/javascript">
-        ViewPort.SetAvlHeight("replacement-reeducateur", 1);
+        ViewPort.SetAvlHeight("sejours-reeducateur", 1);
       </script>
     </td>
     <td id="replacement-reeducateur"></td>
