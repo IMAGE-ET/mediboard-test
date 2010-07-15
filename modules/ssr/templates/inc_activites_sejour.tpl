@@ -262,21 +262,16 @@ onchangeSeance = function(seance_id){
 }
 
 toggleAllDays = function(){
-  var toCheck = '';
-  oFormEvenementSSR.elements.week.checked == true ? toCheck = true : toCheck = false; 
-  var days = oFormEvenementSSR.select('input[name^="_days"]');
+  var toCheck = $V(oFormEvenementSSR.elements._select_week); 
+  var days = oFormEvenementSSR.select('input[name^="_days["]');
   days.each(function(e){
     e.checked = toCheck;
   });
 }
 
 removeWeek = function(){
-  var days = oFormEvenementSSR.select('input[name^="_days"]');
-  if (days.all(function(elem) { return elem.checked == true})) {
-    oFormEvenementSSR.elements.week.checked = true
-  } else {
-    oFormEvenementSSR.elements.week.checked = false;
-  }
+  var days = oFormEvenementSSR.select('input[name^="_days["]');
+  $V(oFormEvenementSSR.elements._select_week, days.all(function(elem){return elem.checked}));
 }
 
 var oFormEvenementSSR;
@@ -569,13 +564,6 @@ Main.add(function(){
 		      <th style="vertical-align: middle;">Jour</th>
 		      <td style="text-align: center;">
 		        <table>
-              <tr>
-                <td colspan="2">
-                  <label>{{tr}}Week{{/tr}}<br/>
-                    <input type="checkbox" name="week" onclick="toggleAllDays();"/>
-                  </label>
-                </td>
-              </tr>
 		          <tr>
 		            {{foreach from=$list_days key=_date item=_day}}
 		              <td>
@@ -583,6 +571,12 @@ Main.add(function(){
 		                </label>
 		              </td>
 		            {{/foreach}}
+                <td style="padding-left: 3em; text-align: center;">
+                  <label style="float: right;">
+                    {{tr}}Week{{/tr}}<br/>
+                    <input type="checkbox" name="_select_week" onclick="toggleAllDays();"/>
+                  </label>
+                </td>
 		          </tr>
 		        </table>
 		      </td>
