@@ -81,13 +81,17 @@ var AideSaisie = {
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
       $V(this.element, data.text.strip());
-      this.element.focus();
+      this.element.tryFocus();
     },
     
     // Update depend fields after selection
     updateDependFields: function(input, selected){
       var data = this.getSelectedData(selected);
       
+      if($V(input).charAt($V(input).length - 1) != '\n') {
+        $V(input, $V(input) + ' ');
+      }
+      input.tryFocus();
       $V(this.options.dependField1, data.depend1);
       $V(this.options.dependField2, data.depend2);
     },
@@ -265,7 +269,7 @@ var AideSaisie = {
     	
     	this.element.value += timestamp + '\n';
     	this.element.scrollTop = this.element.scrollHeight;
-    	this.element.focus();
+    	this.element.tryFocus();
       }.bindAsEventListener(this));
       
       // We wrap the textarea with the new container

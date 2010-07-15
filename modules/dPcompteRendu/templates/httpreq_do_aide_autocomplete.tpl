@@ -22,7 +22,8 @@
       <br/>
       
 			{{* Keep the one line formating here *}}
-      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}</small>
+      <small class="text" style="color: #666; margin-left: 1em;">{{$_aide->text|emphasize:$needle}}
+</small>
     </li>
   {{foreachelse}}
     {{if !@$hide_empty_list}}
