@@ -9,9 +9,10 @@
  */
 
 Repartition = {
-  updateTechnicien: function(technicien_id) {
+  updateTechnicien: function(technicien_id, service_id) {
     new Url('ssr', 'ajax_sejours_technicien') .
       addParam('technicien_id', technicien_id) . 
+      addParam('service_id', service_id) . 
       requestUpdate('sejours-technicien-'+technicien_id);
   },
   

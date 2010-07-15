@@ -8,6 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$technicien_id}} 
+<!-- Filtre sur service-->
+<tr>
+  <td>
+	  <select name="service_id" onchange="Repartition.updateTechnicien('', $V(this));">
+	    <option value="">&mdash; {{tr}}All{{/tr}} les services</option>
+	    {{foreach from=$services item=_service}}
+	    <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>
+	      {{$_service}}
+	    </option>
+	    {{/foreach}}
+	  </select>
+  </td>
+</tr>
+{{/if}}
+
+
 {{foreach from=$sejours item=_sejour}}
 {{mb_include template=inc_sejour_draggable remplacement=0 sejour=$_sejour}}
 {{foreachelse}}

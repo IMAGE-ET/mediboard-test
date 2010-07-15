@@ -63,6 +63,7 @@ class CBilanSSR extends CMbObject {
 		$group = CGroups::loadCurrent();
     $where["type"] = "= 'ssr'";
     $where["group_id"] = "= '$group->_id'";
+    $where["annule"] = "= '0'";
 		$where["bilan_ssr.technicien_id"] = $technicien_id ? "= '$technicien_id'" : "IS NULL";
     $leftjoin["bilan_ssr"] = "bilan_ssr.sejour_id = sejour.sejour_id";
 		return CSejour::loadListForDate($date, $where, "entree_reelle", null, null, $leftjoin);

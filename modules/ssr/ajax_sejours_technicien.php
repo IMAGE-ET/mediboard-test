@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 // Plateaux disponibles
 $technicien_id = CValue::get("technicien_id");
+$service_id = CValue::getOrSession("service_id");
 $date = CValue::getOrSession("date", mbDate());
 
 $technicien = new CTechnicien();
@@ -20,10 +21,26 @@ $technicien->loadRefKine();
 $kine_id = $technicien->_ref_kine->_id;
 
 $sejours = CBilanSSR::loadSejoursSSRfor($technicien_id, $date);
+$services = array();
+
 foreach ($sejours as $_sejour) {
+  // Filtre sur service
+  $service = $_sejour->loadFwdRef("service_id");
+  $services[$service->_id] = $service;
+  if (!$technicien_id && $service_id && $_sejour->service_id != $service_id) {
+    unset($sejours[$_sejour->_id]);
+    continue;
+  }
+	
   $_sejour->checkDaysRelative($date);
-  $_sejour->loadRefPatient();
+  $_sejour->loadRefPatient(1);
 }
+
+// Ajustements services
+$service = new CService;
+$service->load($service_id);
+$services[$service->_id] = $service;
+unset($services[""]);
 
 // Remplacements
 $replacement = new CReplacement;
@@ -45,7 +62,10 @@ foreach ($replacements as $_replacement) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("technicien_id", $technicien_id);
+$smarty->assign("service_id", $service_id);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("services", $services);
 $smarty->assign("replacements", $replacements);
 $smarty->display("inc_sejours_technicien.tpl");
 ?>
