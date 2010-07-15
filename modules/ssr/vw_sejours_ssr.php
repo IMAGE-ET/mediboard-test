@@ -20,7 +20,7 @@ $show = CValue::getOrSession("show", "all");
 $filter = new CSejour;
 $filter->service_id   = CValue::getOrSession("service_id");
 $filter->praticien_id = CValue::getOrSession("praticien_id");
-$filter->kine_id      = CValue::getOrSession("kine_id");
+$filter->referent_id  = CValue::getOrSession("referent_id");
 
 // Chargement des sejours SSR pour la date selectionnée
 $group_id = CGroups::loadCurrent()->_id;
@@ -82,10 +82,10 @@ foreach ($sejours as $_sejour) {
   // Kinés référent et journée
   $bilan->loadRefKineJournee($date);
   $kine_journee = $bilan->_ref_kine_journee;
-  if ($kine_journee->_id) $kines[$kine_journee->_id] = $kine_journee;
+  $kines[$kine_journee->_id] = $kine_journee;
   $kine_referent = $bilan->_ref_kine_referent;
-  if ($kine_referent->_id) $kines[$kine_referent->_id] = $kine_referent;
-  if ($filter->kine_id && $kine_referent->_id != $filter->kine_id && $kine_journee->_id != $filter->kine_id) {
+  $kines[$kine_referent->_id] = $kine_referent;
+  if ($filter->referent_id && $kine_referent->_id != $filter->referent_id && $kine_journee->_id != $filter->referent_id) {
     unset($sejours[$_sejour->_id]);
     continue;
   }
@@ -95,15 +95,25 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefsNotes();
 	$_sejour->countBackRefs("evenements_ssr");
 	$_sejour->countEvenementsSSR($date);
-
-
-	
 	
   // Patient
   $_sejour->loadRefPatient();
 	$patient =& $_sejour->_ref_patient;
 	$patient->loadIPP();
 }
+
+// Ajustements services
+$service = new CService;
+$service->load($filter->service_id);
+$services[$service->_id] = $service;
+unset($services[""]);
+
+// Ajustements kinés
+$kine = new CMediusers;
+$kine->load($filter->referent_id);
+$kines[$kine->_id] = $kine;
+unset($kines[""]);
+
 
 // Création du template
 $smarty = new CSmartyDP();

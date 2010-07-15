@@ -20,9 +20,9 @@
   <input name="m" value="{{$m}}" type="hidden" />
   <input name="tab" value="{{$tab}}" type="hidden" />
 
-  <input name="service_id"   value="{{$filter->service_id}}"      type="hidden" onchange="this.form.submit()" />
+  <input name="service_id"   value="{{$filter->service_id}}"   type="hidden" onchange="this.form.submit()" />
   <input name="praticien_id" value="{{$filter->praticien_id}}" type="hidden" onchange="this.form.submit()" />
-  <input name="kine_id"      value="{{$filter->kine_id}}"      type="hidden" onchange="this.form.submit()" />
+  <input name="referent_id"  value="{{$filter->referent_id}}"  type="hidden" onchange="this.form.submit()" />
 
   Prescription
   <select name="show" onchange="this.form.submit();">
@@ -84,9 +84,9 @@
 		  {{mb_title class="CBilanSSR" field="_kine_referent_id"}} /
       {{mb_title class="CBilanSSR" field="_kine_journee_id"}}
       <br />
-      <select name="kine_id" onchange="$V(getForm('Filter').kine_id, $V(this), true);">
+      <select name="referent_id" onchange="$V(getForm('Filter').referent_id, $V(this), true);">
         <option value="">&mdash; {{tr}}All{{/tr}}</option>
-        {{mb_include module=mediusers template=inc_options_mediuser list=$kines selected=$filter->kine_id}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$kines selected=$filter->referent_id}}
       </select>
 
 		</th>
