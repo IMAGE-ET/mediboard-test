@@ -107,7 +107,7 @@ Main.add(function() {
               {{/if}}
               
               {{if $has_events || $has_load}}
-                <div><!-- <<< This div is necessary (relative positionning) -->
+                <div>{{* <<< This div is necessary (relative positionning) *}}
                 
                   {{if $has_events}}
                     <div class="event-container">

@@ -487,6 +487,9 @@ table#weeklyPlanning th.today {
   font-size: 10px;
   overflow: hidden;
   cursor: help;
+  
+  margin: -1px;
+  border: 1px solid #ccc;
 }
 
 .planning .event .footer {
@@ -522,9 +525,8 @@ table#weeklyPlanning th.today {
 }
 
 .planning .event:hover {
-  /*margin: -1px;
-  border: 1px solid #666;*/
-  outline: 1px solid #666; /* Won't trigger redraw() on IE */
+  outline: none;
+  border-color: #666;
   z-index: 100;
 }
 
