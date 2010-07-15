@@ -82,8 +82,8 @@ Main.add(function(){
 	</tr>
 	<tr id="kines">	
 		<td class="halfPane" id="sejours-kine"></td>
-		<td id="replacement-kine">
-	    <script type="text/javascript" style="overflow: auto">
+		<td id="replacement-kine" style="overflow: auto">
+	    <script type="text/javascript">
 	    	ViewPort.SetAvlHeight("replacement-kine", 1);
 	    </script>
 		</td>
