@@ -302,13 +302,13 @@ Main.add(function () {
         
         <tr>
 				  <th>
-				    {{mb_label object=$protocole field="service_id_sejour"}}
+				    {{mb_label object=$protocole field="service_id"}}
 				  </th>
 				  <td>
-				    <select name="service_id_sejour" class="{{$protocole->_props.service_id_sejour}}" style="max-width: 150px;">
+				    <select name="service_id" class="{{$protocole->_props.service_id}}" style="max-width: 150px;">
 				      <option value="">&mdash; Choisir un service</option>
 				      {{foreach from=$listServices item=_service}}
-				      <option value="{{$_service->_id}}" {{if $protocole->service_id_sejour == $_service->_id}} selected="selected" {{/if}}>
+				      <option value="{{$_service->_id}}" {{if $protocole->service_id == $_service->_id}} selected="selected" {{/if}}>
 				        {{$_service->_view}}
 				      </option>
 				      {{/foreach}}

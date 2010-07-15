@@ -41,7 +41,7 @@ class CService extends CMbObject {
 	  $backProps = parent::getBackProps();
     $backProps["chambres"]               = "CChambre service_id";
     $backProps["sejours"]                = "CSejour service_id";
-    $backProps["protocoles"]             = "CProtocole service_id_sejour";
+    $backProps["protocoles"]             = "CProtocole service_id";
     $backProps["product_deliveries"]     = "CProductDelivery service_id";
 	  $backProps["product_stock_services"] = "CProductStockService service_id";
 	  $backProps["valid_repas"]            = "CValidationRepas service_id";

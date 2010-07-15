@@ -49,10 +49,10 @@ ProtocoleSelector = {
     // Champs de l'intervention
     if (oOpForm) {
       $V(oOpForm[this.sChir_id], protocole.chir_id, true);
-      $V(oOpForm[this.sServiceId], protocole.service_id_sejour, true);
+      $V(oOpForm[this.sServiceId], protocole.service_id, true);
       if(oOpFormEasy) {
         $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
-        $V(oOpFormEasy[this.sServiceId_easy] , protocole.service_id_sejour);
+        $V(oOpFormEasy[this.sServiceId_easy] , protocole.service_id);
         $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
         $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam);
       }
@@ -82,7 +82,7 @@ ProtocoleSelector = {
       oSejourForm[this.sType].value = protocole.type;
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value) {
-      $V(oSejourForm[this.sServiceId], protocole.service_id_sejour);
+      $V(oSejourForm[this.sServiceId], protocole.service_id);
     }
     if(!oSejourForm.sejour_id.value || !oSejourForm[this.sDP].value) {
       $V(oSejourForm[this.sDP], protocole.DP);

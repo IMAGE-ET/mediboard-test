@@ -26,7 +26,7 @@
     rques_operation  : "{{$_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
     protocole_prescription_anesth_id: "{{$_protocole->protocole_prescription_anesth_id}}",
     protocole_prescription_chir_id:   "{{$_protocole->protocole_prescription_chir_id}}",
-    service_id_sejour : "{{$_protocole->service_id_sejour}}"
+    service_id       : "{{$_protocole->service_id}}"
   };
   {{/foreach}}
 {{else}}
