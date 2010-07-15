@@ -294,27 +294,30 @@ class CAppUI {
       $params = !empty(self::$instance->state["SAVEDPLACE$hist"]) ? self::$instance->state["SAVEDPLACE$hist"] : self::$instance->defaultRedirect;
     }
     
-    if (CValue::get("dialog")) {
-      $params .= "&dialog=1";
+    if(!CValue::get("dontRedirect")) {
+      if (CValue::get("dialog")) {
+        $params .= "&dialog=1";
+      }
+      
+      if (CValue::get("ajax")) {
+        $params .= "&ajax=1";
+      }
+      
+      if (CValue::get("suppressHeaders")) {
+        $params .= "&suppressHeaders=1";
+      }
+      
+      // Fix to handle cookieless sessions
+      if ($session_id != "") {
+        if (!$params)
+          $params = $session_id;
+        else
+          $params .= "&" . $session_id;
+      }
+      
+      header("Location: index.php?$params");
+      CApp::rip();
     }
-    
-    if (CValue::get("ajax")) {
-      $params .= "&ajax=1";
-    }
-    
-    if (CValue::get("suppressHeaders")) {
-      $params .= "&suppressHeaders=1";
-    }
-    
-    // Fix to handle cookieless sessions
-    if ($session_id != "") {
-      if (!$params)
-        $params = $session_id;
-      else
-        $params .= "&" . $session_id;
-    }
-    header("Location: index.php?$params");
-    CApp::rip();
   }
   
   /**
