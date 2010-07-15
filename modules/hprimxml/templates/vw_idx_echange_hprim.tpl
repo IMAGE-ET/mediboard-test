@@ -147,7 +147,7 @@ function changePage(page) {
     <td class="halfPane" rowspan="3">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="17">ECHANGES HPRIM - {{$msg_evenement}}</th>
+          <th class="title" colspan="20">ECHANGES HPRIM - {{$msg_evenement}}</th>
         </tr>
         <tr>
           <th></th>
@@ -167,8 +167,8 @@ function changePage(page) {
           <th>{{mb_title object=$echange_hprim field="_acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="statut_acquittement"}}</th>
           <th>{{mb_title object=$echange_hprim field="_observations"}}</th>
-          <th>{{mb_title object=$echange_hprim field="message_valide"}}</th>
-          <th>{{mb_title object=$echange_hprim field="acquittement_valide"}}</th>
+          <th colspan="2">{{mb_title object=$echange_hprim field="message_valide"}}</th>
+          <th colspan="2">{{mb_title object=$echange_hprim field="acquittement_valide"}}</th>
         </tr>
         {{foreach from=$echangesHprim item=_echange}}
           <tbody id="echange_{{$_echange->_id}}">
@@ -209,13 +209,14 @@ function changePage(page) {
 	      
 	      <div id="message" style="display: none;">
 	        {{mb_value object=$echange_hprim field="_message"}}
+          <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$echange_hprim->_id}}&dialog=1&suppressHeaders=1&message=1" class="button modify">{{tr}}Save{{/tr}}</a>
 	      </div>
 	      
 	      <div id="ack" style="display: none;">
 	        {{if $echange_hprim->message_valide == 1 || $echange_hprim->acquittement_valide == 1}}
 	          {{if $echange_hprim->_acquittement}}
 	            {{mb_value object=$echange_hprim field="_acquittement"}}
-	            
+	            <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$echange_hprim->_id}}&dialog=1&suppressHeaders=1&ack=1" class="button modify">{{tr}}Save{{/tr}}</a>
 	            <div class="big-{{if ($echange_hprim->statut_acquittement == 'erreur') || 
 							                     ($echange_hprim->statut_acquittement == 'err')}}error
 	                            {{elseif ($echange_hprim->statut_acquittement == 'avertissement') || 

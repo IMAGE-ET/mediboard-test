@@ -116,7 +116,16 @@
   <td class="{{if !$object->message_valide}}error{{/if}}">
    {{mb_value object=$object field="message_valide"}}
   </td>
+  <td>
+    <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&message=1" class="button modify notext"></a>
+  </td>
   <td class="{{if !$object->acquittement_valide}}error{{/if}}">
    {{mb_value object=$object field="acquittement_valide"}}
   </td>
+  <td>
+    {{if $object->_acquittement}}
+      <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&message=1" class="button modify notext"></a>
+    {{/if}}
+  </td>
+  
 </tr>

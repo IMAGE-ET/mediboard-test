@@ -22,16 +22,6 @@
 	function changePage(page) {
 	  $V(getForm('filterEchange').page,page);
 	}
-
-  /*function downloadEchange() {
-    var url = new Url();
-    
-    url.addParam("input", '{{$echange_soap->input|@json}}');
-    url.addParam("output",'{{$echange_soap->output|@json}}');
-    url.addParam("echange_id", "{{$echange_soap->echange_soap_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}");
-    url.addParam("function_name", "{{$echange_soap->function_name}}");
-    url.requestUpdate("empty_area", {method: "post", getParameters: {m: "webservices", a: "download_echange"}});
-  }*/
 </script>
 <div id="empty_area" style="display: none;"></div>
 <table class="main">
@@ -161,7 +151,7 @@
         </tr>
         <tr>
           <td colspan="2" style="text-align: center;">
-            <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1" class="button modify">Télécharger</a>
+            <a target="blank" href="?m=webservices&a=download_echange&echange_soap_id={{$echange_soap->_id}}&dialog=1&suppressHeaders=1&message=1&acq=1" class="button modify">Télécharger</a>
           </td>
         </tr>
       </table>
