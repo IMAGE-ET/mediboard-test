@@ -32,7 +32,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
     
-    //$this->formatOutput = false;
+    $this->formatOutput = false;
     
     $this->patharchiveschema = "modules/hprimxml/xsd";
     $this->schemapath = "$this->patharchiveschema/$dirschemaname";

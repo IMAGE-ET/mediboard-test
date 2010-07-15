@@ -207,13 +207,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {
-          // Dans le cas d'une annulation de la venue
-          if ($cancel) {
-            if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
-              return $messageAcquittement;
-            }
-          }
-            
           // Notifier les autres destinataires
           $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
           // Mapping du séjour
@@ -222,6 +215,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
             if ($newVenue->loadMatchingSejour(null, true)) {
+              // Dans le cas d'une annulation de la venue
+              if ($cancel) {
+                if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                  return $messageAcquittement;
+                }
+              }
+              
               // Recherche d'un num dossier déjà existant pour cette venue 
               // Mise en trash du numéro de dossier reçu
               $newVenue->loadNumDossier();
@@ -312,14 +312,13 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       } 
       // idSource connu
       else {
+        $newVenue->load($num_dossier->object_id);
         // Dans le cas d'une annulation de la venue
         if ($cancel) {
           if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
             return $messageAcquittement;
           }
         }
-          
-        $newVenue->load($num_dossier->object_id);
         
         // Mapping du séjour
         $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
