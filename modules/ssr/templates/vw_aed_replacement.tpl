@@ -54,15 +54,20 @@ Main.add(function(){
 	onCompleteShowWeek();
 	
 	Control.Tabs.create('tabs-replacement', true);
+  
+  var kines = $("kines");
+  var height = (document.viewport.getHeight() - kines.cumulativeOffset().top - 10) + "px";
+  kines.down("td").style.height = height;
+  $("reeducateurs").down("td").style.height = height;
 });
 
 </script>
 
 <table class="main">
-	<tr>
+	<tr style="height: 0.1%;">
     <td id="week-changer" colspan="2"></td>
   </tr>
-	<tr>
+	<tr style="height: 0.1%;">
 	  <td colspan="2">
 	  	<div id="toto">
 	  	  <ul id="tabs-replacement" class="control_tabs">
@@ -81,18 +86,18 @@ Main.add(function(){
 	  </td>
 	</tr>
 	<tr id="kines">	
-		<td class="halfPane" id="sejours-kine" style="overflow: auto">
-      <script type="text/javascript">
-        ViewPort.SetAvlHeight("sejours-kine", 1);
-      </script>
+		<td class="halfPane" style="vertical-align: top;">
+      <div style="overflow: auto; height: 100%;">
+		    <div id="sejours-kine"></div>
+      </div>
 		</td>
 		<td id="replacement-kine"><td>
 	</tr>
   <tr id="reeducateurs">
-    <td class="halfPane" id="sejours-reeducateur" style="overflow: auto">
-      <script type="text/javascript">
-        ViewPort.SetAvlHeight("sejours-reeducateur", 1);
-      </script>
+    <td class="halfPane" style="vertical-align: top;">
+      <div style="overflow: auto; height: 100%;">
+        <div id="sejours-reeducateur"></div>
+      </div>
     </td>
     <td id="replacement-reeducateur"></td>
   </tr>

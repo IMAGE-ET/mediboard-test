@@ -56,7 +56,7 @@ if ($equipement->visualisable) {
   $smarty->display("inc_vw_week.tpl");
 }
 else {
-  CAppUI::stepMessage(UI_MSG_WARNING, "L'équipement <strong>$equipement->_view</strong> n'est pas visualisable");
+  echo "<div class='small-info'>L'équipement <strong>$equipement->_view</strong> n'est pas visualisable</div>";
   CApp::rip();
 }
 
