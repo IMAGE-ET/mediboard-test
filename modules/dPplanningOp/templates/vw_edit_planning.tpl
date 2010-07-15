@@ -122,7 +122,8 @@ ProtocoleSelector.init = function(){
   this.sServiceId_easy  = "service_id";
   this.sLibelle_easy    = "libelle";
   this.sCodes_ccam_easy = "codes_ccam";
-
+  this.sLibelle_sejour  = "libelle";
+  
   this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
   this.sProtoPrescChir   = "_protocole_prescription_chir_id";
   
