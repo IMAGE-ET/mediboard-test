@@ -124,7 +124,7 @@
   </td>
   <td>
     {{if $object->_acquittement}}
-      <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&message=1" class="button modify notext"></a>
+      <a target="blank" href="?m=hprimxml&a=download_echange&echange_hprim_id={{$object->_id}}&dialog=1&suppressHeaders=1&ack=1" class="button modify notext"></a>
     {{/if}}
   </td>
   
