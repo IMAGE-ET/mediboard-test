@@ -394,7 +394,7 @@ Main.add(function(){
                 
 	              <label>
   	              <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
-                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); toggleOther(this.form._cdarr);" />
+                         onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
   	              <span class="mediuser" style="border-left-color: #{{$element->_color}};" 
                         onmouseover="ObjectTooltip.createEx(this, '{{$element->_guid}}')">
                     {{$_line}}

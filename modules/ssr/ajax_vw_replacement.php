@@ -41,6 +41,8 @@ $user->load($conge->user_id);
 $user->loadRefFunction();
 $users = $user->loadUsers(PERM_READ, $user->function_id);
 
+$evenements_counts = array();
+
 // Chargement
 $evenement = new CEvenementSSR();
 $where["sejour_id"    ] = CSQLDataSource::prepareIn(array_keys($sejours));
