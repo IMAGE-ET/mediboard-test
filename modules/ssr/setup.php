@@ -355,8 +355,13 @@ class CSetupssr extends CSetup {
 		$this->makeRevision("0.26");
 		$this->addPrefQuery("ssr_planning_dragndrop", "0");
     $this->addPrefQuery("ssr_planning_resize", "0");
+    
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `equipement` 
+              ADD `visualisable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($sql);
 
-		$this->mod_version = "0.27";
+		$this->mod_version = "0.28";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

@@ -11,6 +11,7 @@
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CEquipement field=nom}}</th>
+    <th>{{mb_title class=CEquipement field=visualisable}}</th>
   </tr>
   {{foreach from=$plateau->_ref_equipements item=_equipement}}
   <tr {{if $equipement->_id == $_equipement->_id}}class="selected"{{/if}}>
@@ -19,10 +20,13 @@
         {{mb_value object=$_equipement field=nom}}
 			</a>
 		</td>
+    <td>
+      {{mb_value object=$_equipement field=visualisable}}
+    </td>
   </tr>   
   {{foreachelse}}
   <tr>
-    <td><em>{{tr}}None{{/tr}}</em></td>
+    <td colspan="2"><em>{{tr}}None{{/tr}}</em></td>
   </tr>   
   {{/foreach}}
 </table>

@@ -25,7 +25,6 @@
       {{mb_include module=system template=inc_object_idsante400 object=$equipement}}
       {{mb_include module=system template=inc_object_history    object=$equipement}}
 
-      
 	    {{tr}}CEquipement-title-modify{{/tr}} 
 			'{{$equipement}}'
     </th>
@@ -39,6 +38,10 @@
   <tr>
     <th>{{mb_label object=$equipement field=nom}}</th>
     <td>{{mb_field object=$equipement field=nom}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$equipement field=visualisable}}</th>
+    <td>{{mb_field object=$equipement field=visualisable}}</td>
   </tr>
 
   <tr>

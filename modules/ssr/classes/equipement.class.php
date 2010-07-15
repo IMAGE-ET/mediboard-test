@@ -20,6 +20,7 @@ class CEquipement extends CMbObject {
 
   // DB Fields
   var $nom      = null;
+  var $visualisable = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,8 +31,9 @@ class CEquipement extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["plateau_id"] = "ref notNull class|CPlateauTechnique";
-    $specs["nom"]        = "str notNull";
+    $specs["plateau_id"]   = "ref notNull class|CPlateauTechnique";
+    $specs["nom"]          = "str notNull";
+    $specs["visualisable"] = "bool notNull default|1";
     return $specs;
   }
 	
