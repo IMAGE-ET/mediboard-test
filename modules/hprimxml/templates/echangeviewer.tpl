@@ -10,9 +10,9 @@
 
 <table class="main">
 	<tr>
-		<th class="title">{{mb_title object=$echange_hprim field="message"}}</th>
+		<th class="title">{{mb_title object=$echange_hprim field="_message"}}</th>
 	</tr>
 	<tr>
-    <td>{{mb_value object=$echange_hprim field="message"}}</td>
+    <td>{{mb_value object=$echange_hprim field="_message"}}</td>
   </tr>
 </table>

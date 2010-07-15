@@ -190,7 +190,7 @@ function changePage(page) {
     </td>
   </tr>
   {{else}}
-	  {{if $echange_hprim->_message === null || $echange_hprim->_acquittement === null}}
+	  {{if $echange_hprim->_message === null && $echange_hprim->_acquittement === null}}
 	    <div class="small-info">{{tr}}CEchangeHprim-purge-desc{{/tr}}</div>
 	  {{else}}
 	  <script type="text/javascript">
