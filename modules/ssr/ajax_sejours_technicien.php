@@ -34,7 +34,7 @@ foreach ($sejours as $_sejour) {
 	
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient(1);
-}
+} 
 
 // Ajustements services
 $service = new CService;
@@ -57,7 +57,7 @@ foreach ($replacements as $_replacement) {
   $_replacement->loadRefSejour();
 	$sejour =& $_replacement->_ref_sejour;
   $sejour->checkDaysRelative($date);
-  $sejour->loadRefPatient();
+  $sejour->loadRefPatient(1);
 }
 
 // Création du template
