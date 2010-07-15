@@ -640,4 +640,8 @@ $locales['ssr-board-sejours-planned'] = 'Planifiés';
 $locales['ssr-board-sejours-referencable'] = 'Sans réf.';
 $locales['ssr-board-sejours-referenced'] = 'Référents';
 $locales['ssr-board-sejours-replaced'] = 'Remplacés';
+$locales['pref-ssr_planning_dragndrop'] = 'Drag and drop sur les événements des plannings (déplacement à la souris)';
+$locales['pref-ssr_planning_dragndrop-desc'] = 'Drag and drop sur les événements des plannings (déplacement à la souris)';
+$locales['pref-ssr_planning_resize'] = 'Redimensionnement des événements des plannings';
+$locales['pref-ssr_planning_resize-desc'] = 'Redimensionnement des événements des plannings à la souris';
 ?>

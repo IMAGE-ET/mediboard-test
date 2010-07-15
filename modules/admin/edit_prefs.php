@@ -99,7 +99,11 @@ $array_list_module_pref = array (
   "dPurgences" => array (
     "defaultRPUSort",
     "showMissingRPU",
-  )
+  ),
+  "ssr" => array (
+    "ssr_planning_dragndrop",
+    "ssr_planning_resize",
+  ),
 );
 
 foreach($array_list_module_pref as $modulename => $listPrefs){

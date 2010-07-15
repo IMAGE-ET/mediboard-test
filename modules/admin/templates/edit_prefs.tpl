@@ -316,6 +316,17 @@ Main.add(function () {
   </tbody>
   {{/if}}
   
+  {{assign var="module" value="ssr"}}
+  {{if $prefsUser.$module}}  
+  <tbody style="display: none" id="{{$module}}">
+  <!-- Préférences pour le module {{$module}} -->
+
+  {{mb_include template=inc_pref_bool var=ssr_planning_dragndrop}}
+  {{mb_include template=inc_pref_bool var=ssr_planning_resize}}
+
+  </tbody>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="2">
       <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
