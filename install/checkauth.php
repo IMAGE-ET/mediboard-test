@@ -8,9 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-require_once("header.php");
-require_once("mbdb.class.php");
 
+
+if (!(@include_once("header.php")) && !(@include_once("mbdb.class.php"))) {
+	include_once("./install/header.php");
+	include_once("./install/mbdb.class.php");
+}
 require_once("Auth.php");
 
 if (!@include_once($mbpath."includes/config.php")) { 
