@@ -141,12 +141,14 @@ removeCdarrs = function(){
 }
 
 submitSSR = function(){
-  if((oFormEvenementSSR.select('input[name^="cdarrs"]:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input[name^="_cdarrs"]').length == 0){
-	  alert("Veuillez selectionner un code SSR");
-		return false;
-	}
+  // Test de la presence d'au moins un code SSR
+	if((oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input.checkbox-other-cdarrs').length == 0){
+    alert("Veuillez selectionner un code SSR");
+    return false;
+  }
+
 	if(!$V(oFormEvenementSSR.seance_collective) || ($V(oFormEvenementSSR.seance_collective) && !$V(oFormEvenementSSR.seance_collective_id))){
-	  if((oFormEvenementSSR.select('input[name^="_days"]:checked').length == 0)){
+	  if((oFormEvenementSSR.select('input.days:checked').length == 0)){
       alert("Veuillez selectionner au minimum un jour");
       return false;
     }
@@ -262,18 +264,13 @@ onchangeSeance = function(seance_id){
 }
 
 toggleAllDays = function(){
-  var days = oFormEvenementSSR.select('input[name^="_days["]');
+  var days = oFormEvenementSSR.select('input.days');
   days.slice(0,5).each(function(e){
       e.checked = true;
   });
   days.slice(5,7).each(function(e){
     e.checked = false;
 });
-}
-
-removeWeek = function(){
-  var days = oFormEvenementSSR.select('input[name^="_days["]');
-  $V(oFormEvenementSSR.elements._select_week, days.all(function(elem){return elem.checked}));
 }
 
 var oFormEvenementSSR;
@@ -447,7 +444,7 @@ Main.add(function(){
                   <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
                   {{foreach from=$_cdarrs item=_cdarr}}
                     <label>
-                      <input type="checkbox" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
+                      <input type="checkbox" class="checkbox-cdarrs" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
                       {{$_cdarr->code}}
                       </span>
@@ -466,7 +463,7 @@ Main.add(function(){
             <label>
 	            <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
             </label>
-            <br />
+            
 	          <span id="other_cdarr" style="display: none;">
 						   <input type="text" name="code" class="autocomplete" canNull=true size="2" />
 	             <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
@@ -569,7 +566,7 @@ Main.add(function(){
 		          <tr>
 		            {{foreach from=$list_days key=_date item=_day}}
 		              <td>
-		                <label>{{$_day}}<br /><input class="days" type="checkbox" onclick="removeWeek();" name="_days[{{$_date}}]" value="{{$_date}}" />
+		                <label>{{$_day}}<br /><input class="days" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
 		                </label>
 		              </td>
 		            {{/foreach}}
@@ -642,7 +639,8 @@ Main.add(function(){
             type: 'hidden', 
             id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
             name:'_cdarrs['+code_selected.innerHTML+']',
-            value: code_selected.innerHTML
+            value: code_selected.innerHTML,
+						className: 'checkbox-other-cdarrs'
           }),
           DOM.button({
             className: "cancel notext", 
