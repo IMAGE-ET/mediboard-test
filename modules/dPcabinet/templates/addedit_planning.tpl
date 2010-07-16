@@ -4,7 +4,7 @@
 {{mb_include_script module="dPcabinet" script="plage_selector"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-
+{{assign var=attach_consult_sejour value=$dPconfig.dPcabinet.CConsultation.attach_consult_sejour}}
 <script type="text/javascript">
 
 Medecin = {
@@ -197,7 +197,7 @@ Main.add(function () {
               </option>
              {{/foreach}}
             </select>
-						<input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} />
+						<input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} {{if $attach_consult_sejour && $consult->_id}}disabled="disabled"{{/if}}/>
             <label for="_pause" title="Planification d'une pause">Pause</label>
           </td>
         </tr>
