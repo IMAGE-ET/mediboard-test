@@ -240,6 +240,8 @@ $dPconfig["dPfiles"] = array (
   "rooturl"             => "",
   "CFile"               => array(
     "upload_directory"  => "files",
+    //"active_oxoffice"   => "0",
+    //"path_oxoffice"     => ""
   ),
   "CFilesCategory"      => array(
     "show_empty" => "1",
@@ -493,11 +495,6 @@ $dPconfig["sip"] = array (
 	"repair_segment"    => "100",
   "repair_date_min"   => "",
   "repair_date_max"   => "",
-);
-
-$dPconfig["webservices"] = array (
-  "connection_timeout" => 5,
-  "webservice"         => "CWebservice",
 );
 
 $dPconfig["mediusers"] = array (

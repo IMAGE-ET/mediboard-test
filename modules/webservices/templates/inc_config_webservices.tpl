@@ -15,8 +15,6 @@
       
     {{mb_include module=system template=inc_config_str var=connection_timeout}}
     
-    {{mb_include module=system template=inc_config_enum var=webservice values=CWebservice|CSigems}}
-            
     <tr>
       <td class="button" colspan="10">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

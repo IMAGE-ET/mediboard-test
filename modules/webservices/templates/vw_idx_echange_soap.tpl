@@ -11,13 +11,30 @@
 <script type="text/javascript">
 	var methods = {{$methods|@json}};
 	
-	function fillSelect(source, dest) {
+	function fillSelectWeb(source, dest) {
 	  var selected = $V(source);
-		dest.update();
-		methods[selected].each(function(v){
-		  dest.insert(new Element('option', {value: v}).update(v));
-		});
+	  dest.update();
+    dest.insert("<option value=''>&mdash; Liste des web services</option>");
+    if(selected in methods) {
+		  for(web in methods[selected]) {
+        dest.insert(new Element('option', {value: web}).update(web));
+	  	}
+    }
+    var form = getForm("filterEchange");
+    fillSelectFunc(form.elements.web_service, form.elements.service, form.elements.fonction);
 	}
+
+  function fillSelectFunc(source, intermed, dest) {
+    var selectedA = $V(source);
+    var selectedB = $V(intermed);
+    dest.update();
+    dest.insert("<option value=''>&mdash; Liste des fonctions</option>");
+    if(selectedB in methods && selectedA in methods[selectedB]) {
+      methods[selectedB][selectedA].each(function(v){
+        dest.insert(new Element('option', {value: v}).update(v));
+      });
+    }
+  }
 
 	function changePage(page) {
 	  $V(getForm('filterEchange').page,page);
@@ -55,13 +72,30 @@
           <tr>
             <th colspan="2">Types de services</th>
             <td colspan="2">
-              <select class="str" name="web_service" onchange="fillSelect(this, this.form.elements.fonction)">
-                <option value="">&mdash; Liste des web services </option>
-                {{foreach from=$methods key=_service_name item=_methods}}
-								  <option value="{{$_service_name}}" {{if $web_service == $_service_name}}selected="selected"{{/if}}>
+              <select class="str" name="service" onchange="fillSelectWeb(this, this.form.elements.web_service)">
+                <option value="">&mdash; Liste des types de services</option>
+                {{foreach from=$methods key=_service_name item=_type}}
+                  <option value="{{$_service_name}}" {{if $service == $_service_name}} selected="selected"{{/if}}>
                     {{tr}}{{$_service_name}}{{/tr}}
                   </option>
-								{{/foreach}}
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2">Webservices</th>
+            <td colspan="2">
+              <select class="str" name="web_service" onchange="fillSelectFunc(this, this.form.elements.service, this.form.elements.fonction)">
+                <option value="">&mdash; Liste des web services</option>
+                {{if $web_service == '' || array_key_exists($web_service, $methods.$service)}}
+                  {{foreach from=$methods.$service key=_web_service_name item=_web_service}}
+                    <option value="{{$_web_service_name}}" {{if $web_service == $_web_service_name}}selected="selected"{{/if}}>
+                      {{$_web_service_name}}
+                    </option>
+                  {{/foreach}}
+                {{/if}}
+              </select>
+                
               </select>
             </td>
           </tr>
@@ -69,15 +103,14 @@
             <th colspan="2">Fonctions</th>
             <td colspan="2">
             	<select class="str" name="fonction">
-                <option value="">&mdash; Liste des fonctions </option>
-                {{if array_key_exists($web_service, $methods)}}
-  							  {{foreach from=$methods[$web_service] item=_method}}
+                <option value="">&mdash; Liste des fonctions</option>
+                {{if ($fonction == '' || in_array($fonction, $methods.$service.$web_service)) && $web_service != ''}}
+                  {{foreach from=$methods.$service.$web_service key=_method_name item=_method}}
                     <option value="{{$_method}}" {{if $fonction == $_method}}selected="selected"{{/if}}>
                       {{$_method}}
                     </option>
                   {{/foreach}}
                 {{/if}}
-              </select>
 						</td>
 				  </tr>
           <tr>
