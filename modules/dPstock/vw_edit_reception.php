@@ -23,6 +23,7 @@ else
   
 $reception->loadBackRefs("reception_items");
 
+
 // Categories list
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
@@ -30,6 +31,13 @@ $list_categories = $category->loadList(null, 'name');
 $order = new CProductOrder;
 $order->load($order_id);
 $order->updateCounts();
+
+foreach($order->_ref_order_items as $_item) {
+  $_item->loadRefsReceptions();
+  foreach($_item->_ref_receptions as $_reception) {
+    $_reception->loadRefReception();
+  }
+}
 
 $smarty = new CSmartyDP();
 

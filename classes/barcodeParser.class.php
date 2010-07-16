@@ -229,6 +229,13 @@ class CBarcodeParser {
     $comp = array();
     $type = "raw";
 
+    if (!$barcode) {
+      return array(
+        "type" => $type,
+        "comp" => $comp,
+      );
+    }
+    
     // code 128 with sepataror char
     if (preg_match('/^[0-9a-z]+'.self::$code128separator.'[0-9a-z]+[0-9a-z\\'.self::$code128separator.']*$/ims', $barcode)) {
       $type = "code128";

@@ -15,6 +15,9 @@ class CProductStockService extends CProductStock {
 
   // Object References
   //    Single
+  /**
+   * @var CService
+   */
   var $_ref_service = null;
   
   function getSpec() {

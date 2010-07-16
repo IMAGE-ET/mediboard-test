@@ -18,7 +18,7 @@ Main.add(function(){
 </script>
 
 <form name="parse-barcode" action="" method="get" onsubmit="return false">
-<input type="text" id="barcode" size="50" />
+<input type="text" id="barcode" size="50" class="barcode" />
 </form>
 
 <div id="parsed-barcode"></div> 

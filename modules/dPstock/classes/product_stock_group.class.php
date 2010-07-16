@@ -15,7 +15,13 @@ class CProductStockGroup extends CProductStock {
 
   // Object References
   //    Single
+  /**
+   * @var CGroups
+   */
   var $_ref_group               = null;
+  /**
+   * @var CProductStockLocation
+   */
 	var $_ref_location            = null;
 
   //    Multiple

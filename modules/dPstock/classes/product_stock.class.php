@@ -34,6 +34,9 @@ class CProductStock extends CMbObject {
 
   // Object References
   //    Single
+  /**
+   * @var CProduct
+   */
   var $_ref_product             = null;
 
   function getProps() {

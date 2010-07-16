@@ -33,7 +33,13 @@ class CProduct extends CMbObject {
 
   // Object References
   //    Single
+  /**
+   * @var CProductCategory
+   */
   var $_ref_category     = null;
+  /**
+   * @var CSociete
+   */
   var $_ref_societe      = null;
 
   //    Multiple

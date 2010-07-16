@@ -25,10 +25,13 @@ class CProductDelivery extends CMbObject {
 
   // Object References
   //    Single
-  /** 
+  /**
    * @var CProductStockGroup 
    */
   var $_ref_stock     = null;
+  /**
+   * @var CService
+   */
   var $_ref_service   = null;
   
   var $_ref_delivery_traces = null;

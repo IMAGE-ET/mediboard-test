@@ -30,7 +30,13 @@ class CProductOrder extends CMbMetaObject {
   var $_ref_receptions  = null;
 
   //    Single
+  /**
+   * @var CSociete
+   */
   var $_ref_societe     = null;
+  /**
+   * @var CGroups
+   */
   var $_ref_group       = null;
   var $_ref_address     = null;
 
@@ -419,7 +425,6 @@ class CProductOrder extends CMbMetaObject {
     if ($this->_ref_order_items && !$force) {
       return $this->_ref_order_items;
     }
-      
     return $this->_ref_order_items = $this->loadBackRefs('order_items');
   }
   
@@ -499,7 +504,8 @@ class CProductOrder extends CMbMetaObject {
     
     if (($items_count == 0) || !$this->date_ordered) {
       return parent::delete();
-    } else if ($this->date_ordered && !$this->_received) {
+    } 
+    else if ($this->date_ordered && !$this->_received) {
       
       // TODO: here : cancel order !!
       

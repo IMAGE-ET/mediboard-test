@@ -155,7 +155,11 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     $item_reception->code = $data[2];
     $item_reception->quantity = $data[3];
     $item_reception->date = mbDateFromLocale($data[4])." 00:00:00";
-    $item_reception->lapsing_date = mbDateFromLocale($data[5]);
+    
+    if ($data[5] !== "31/12/1899") {
+      $item_reception->lapsing_date = mbDateFromLocale($data[5]);
+    }
+    
     if ($msg = $item_reception->store()){
       CAppUI::setMsg($msg, UI_MSG_WARNING);
       continue;

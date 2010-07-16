@@ -21,7 +21,13 @@ class CProductDeliveryTrace extends CMbObject {
 
   // Object References
   //    Single
+  /**
+   * @var CProductDelivery
+   */
   var $_ref_delivery  = null;
+  /**
+   * @var CService
+   */
   var $_ref_service   = null;
   
   var $_date_min      = null;

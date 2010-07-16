@@ -91,11 +91,13 @@ table.grid th {
 
 <table class="grid print {{if $reception->_ref_reception_items|@count <= $nb_par_page}}bodyWithoutPageBreak{{else}}body{{/if}}">
   <col style="width: 0.1%;" />
+  <col style="width: 0.1%;" />
   <col />
   <col style="width: 0.1%;" />
   <col style="width: 0.1%;" />
   
   <tr>
+    <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
     <th class="category">{{mb_title class=CProductReference field=code}}</th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
     <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
@@ -112,6 +114,7 @@ table.grid th {
     {{assign var=iterations_restantes value=$smarty.foreach.foreach_products.total-$smarty.foreach.foreach_products.iteration}}
     <table class="grid print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
       <tr>
+        <th class="category">{{mb_title class=CProduct field=classe_comptable}}</th>
         <th class="category">{{mb_title class=CProductReference field=code}}</th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=order_item_id}}</th>
         <th class="category">{{mb_title class=CProductOrderItemReception field=quantity}}</th>
@@ -122,12 +125,13 @@ table.grid th {
   {{/if}}
   
   <tr>
+    <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference->_ref_product field=classe_comptable}}</td>
     <td>{{mb_value object=$curr_item->_ref_order_item->_ref_reference field=code}}</td>
   	<td>{{mb_value object=$curr_item field=order_item_id}}</td>
     <td style="text-align: center; width: 1%">{{mb_value object=$curr_item field=quantity}}</td>
     <td style="text-align: center; width: 1%">{{mb_value object=$curr_item field=code}}</td>
     <td style="width: 1%">{{mb_value object=$curr_item field=lapsing_date}}</td>
-    <td style="width: 1%">{{mb_value object=$curr_item->_ref_order_item field=_price}}</td>
+    <td style="width: 1%">{{mb_value object=$curr_item field=_price}}</td>
   </tr>
   
   {{if $smarty.foreach.foreach_products.last}}

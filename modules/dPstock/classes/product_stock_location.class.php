@@ -20,6 +20,9 @@ class CProductStockLocation extends CMbObject {
 
   // Object References
   var $_ref_group_stocks = null;
+  /**
+   * @var CGroups
+   */
 	var $_ref_group        = null;
 	
 	var $_before           = null;
