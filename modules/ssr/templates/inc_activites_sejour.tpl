@@ -141,7 +141,6 @@ removeCdarrs = function(){
 }
 
 submitSSR = function(){
-  Console.debug("Debut test submit SSR");
 	// Test de la presence d'au moins un code SSR
 	if((oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input.checkbox-other-cdarrs').length == 0){
     alert("Veuillez selectionner un code SSR");
@@ -163,11 +162,10 @@ submitSSR = function(){
     }
 	}
 	
-	if(!$$("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
+	if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
 	  alert("Veuillez selectionner un equipement");
     return false;
 	}
-	Console.debug("Fin test submit SSR");
   
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
 		refreshPlanningsSSR();
