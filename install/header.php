@@ -12,10 +12,11 @@ set_time_limit(180);
 
 $mbpath = "../";
 
-if (!@include_once($mbpath."classes/mbarray.class.php")){
-	$mbpath = "./";
-	include_once($mbpath."classes/mbarray.class.php");
+if (!file_exists($mbpath."classes/mbarray.class.php")){
+  $mbpath = "./";
 }
+
+require_once($mbpath."classes/mbarray.class.php");
 require_once($mbpath."classes/value.class.php");
 require_once($mbpath."includes/mb_functions.php");
 require_once($mbpath."includes/version.php");

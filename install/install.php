@@ -9,9 +9,13 @@
  */
 
 require_once("checkauth.php");
-if(!@include_once("../classes/mbpath.class.php")) {
-	include_once("./classes/mbpath.class.php");
+
+$mbpath = "../";
+if (!file_exists($mbpath."classes/mbpath.class.php")){
+  $mbpath = "./";
 }
+
+require_once($mbpath."classes/mbpath.class.php");
 require_once("libs.php");
 
 $install = @$_POST['install'];
