@@ -11,7 +11,18 @@
 {{if $reception->_id}}
   <button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
   <button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
-
+  
+  {{if !$reception->locked}}
+  <form name="lock-reception-{{$reception->_id}}" action="" onsubmit="return onSubmitFormAjax(this)">
+    <input type="hidden" name="m" value="dPstock" />
+    <input type="hidden" name="dosql" value="do_product_reception_aed" />
+    {{mb_key object=$reception}}
+    <input type="hidden" name="locked" value="1" />
+    
+    <button class="lock">Verrouiller</button>
+  </form>
+  {{/if}}
+  
   <table class="tbl">
     <tr>
       <th>{{mb_title class=CProductOrderItemReception field=date}}</th>

@@ -23,9 +23,17 @@ class CProductOrderItemReception extends CMbObject {
 
   // Object References
   //    Single
+  /**
+   * @var CProductOrderItem
+   */
   var $_ref_order_item    = null;
+  /**
+   * @var CProductReception
+   */
+  var $_ref_reception     = null;
   
   var $_cancel            = null;
+  var $_price             = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -39,10 +47,11 @@ class CProductOrderItemReception extends CMbObject {
     $specs['order_item_id'] = 'ref notNull class|CProductOrderItem';
     $specs['reception_id']  = 'ref notNull class|CProductReception';
     $specs['quantity']      = 'num notNull';
-    $specs['code']          = 'str';
-    $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
+    $specs['code']          = 'str seekable';
+    $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1 seekable';
     $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
+    $specs['_price']        = 'currency';
     return $specs;
   }
   
@@ -56,7 +65,8 @@ class CProductOrderItemReception extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefOrderItem();
-    $this->_view = "$this->quantity x $this->_ref_order_item";
+    $this->_view = "$this->quantity x {$this->_ref_order_item->_view}";
+    $this->_price = $this->quantity * $this->_ref_order_item->unit_price;
   }
   
   function loadRefOrderItem() {
@@ -75,24 +85,32 @@ class CProductOrderItemReception extends CMbObject {
   
   function delete(){
     $this->loadRefOrderItem();
-    $this->_ref_order_item->loadReference();
-    $this->_ref_order_item->_ref_reference->loadRefProduct();
-    $product = $this->_ref_order_item->_ref_reference->_ref_product;
+    $item = $this->_ref_order_item;
+    
+    $item->loadReference();
+    $reference = $item->_ref_reference;
+    
+    $reference->loadRefProduct();
+    $product = $reference->_ref_product;
+    
     if ($product->loadRefStock()) {
-      $this->completeField("quantity");
-      $product->_ref_stock_group->quantity -= $this->quantity;
+      mbTrace($this->getUnitQuantity());
+      $product->_ref_stock_group->quantity -= $this->getUnitQuantity();
       $product->_ref_stock_group->store();
     }
     return parent::delete();
   }
   
-  function getQuantity(){
+  function getUnitQuantity(){
+    $this->completeField("quantity");
+    
     $this->loadRefOrderItem();
     $item = $this->_ref_order_item;
+    
     $item->loadReference();
     $reference = $item->_ref_reference;
-    $item->_ref_reference->loadRefProduct();
-    return $item->quantity * $reference->quantity * $item->_ref_reference->_ref_product->quantity;
+    
+    return $this->quantity * $reference->_unit_quantity;
   }
 
   function store() {
@@ -134,7 +152,7 @@ class CProductOrderItemReception extends CMbObject {
     if ($is_new) {
       if ($product->loadRefStock()) {
       	$stock = $product->_ref_stock_group;
-        $stock->quantity += $this->quantity * $product->_unit_quantity;
+        $stock->quantity += $this->getUnitQuantity();
       }
       else {
         global $g;

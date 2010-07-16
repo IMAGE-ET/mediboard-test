@@ -646,7 +646,12 @@ class CSetupdPstock extends CSetup {
     $sql = "UPDATE `product` SET `code_canonical` = ".
            CMySQLDataSource::getReplaceQuery($chars, "", '`code`');
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.32");
+    $sql = "ALTER TABLE `product_reception` 
+              ADD `locked` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
 
-    $this->mod_version = "1.32";
+    $this->mod_version = "1.33";
   }
 }

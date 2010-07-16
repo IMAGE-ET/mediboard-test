@@ -226,7 +226,22 @@ class CBarcodeParser {
   
   static function parse($barcode) {
     $orig_barcode = $barcode;
-    $comp = array();
+    $comp = array(
+      "raw" => null,
+      "ref" => null,
+      "lot" => null,
+      "per" => null,
+      "sn" => null,
+      "scc" => null,
+      "scc_manuf" => null,
+      "scc_prod" => null,
+      "scc_part" => null,
+      "remb" => null,
+      "cip" => null,
+      "price" => null,
+      "key" => null,
+    );
+    
     $type = "raw";
 
     if (!$barcode) {
@@ -378,9 +393,9 @@ class CBarcodeParser {
     
     if (isset($comp["scc"])) {
       preg_match('/\d{3}(\d{5})(\d{5})\d/', $comp["scc"], $parts);
-      $comp["scc-manuf"] = $parts[1];
-      $comp["scc-part"]  = $parts[2];
-      $comp["scc-prod"]  = $parts[1].$parts[2];
+      $comp["scc_manuf"] = $parts[1];
+      $comp["scc_part"]  = $parts[2];
+      $comp["scc_prod"]  = $parts[1].$parts[2];
     }
     
     if (isset($comp["sn"]) && empty($comp["lot"])) {

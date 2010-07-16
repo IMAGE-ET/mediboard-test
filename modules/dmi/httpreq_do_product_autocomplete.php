@@ -135,7 +135,7 @@ foreach($matches as $_product) {
   
   $remaining = 0;
   foreach($receptions as $_reception) {
-    $remaining += $_reception->getQuantity() - $_reception->countBackRefs("lines_dmi");
+    $remaining += $_reception->getUnitQuantity() - $_reception->countBackRefs("lines_dmi");
   }
   
   $_product->_available_quantity = $remaining;

@@ -20,7 +20,13 @@ class CProductOrderItem extends CMbObject {
 
   // Object References
   //    Single
+  /**
+   * @var CProductOrder
+   */
   var $_ref_order         = null;
+  /**
+   * @var CProductReference
+   */
   var $_ref_reference     = null;
   
   //    Multiple
@@ -31,7 +37,7 @@ class CProductOrderItem extends CMbObject {
   var $_cond_price        = null;
   var $_date_received     = null;
   var $_quantity_received = null;
-  var $_quantity          = null;
+  var $_unit_quantity     = null;
   var $_is_unit_quantity  = null;
 
   function getSpec() {
@@ -50,7 +56,7 @@ class CProductOrderItem extends CMbObject {
     $specs['_cond_price']        = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
-    $specs['_quantity']          = 'num';
+    $specs['_unit_quantity']     = 'num';
     return $specs;
   }
 
@@ -96,22 +102,26 @@ class CProductOrderItem extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->updateReceived();
-    $this->loadReference();
+    $this->getUnitQuantity();
     
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
-    
-    $this->_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
-    $this->_cond_price = $this->_quantity ? $this->_price / $this->_quantity : 0;
+    $this->_cond_price = $this->_unit_quantity ? $this->_price / $this->_unit_quantity : 0;
+  }
+  
+  function getUnitQuantity(){
+    $this->completeField("quantity");
+    $this->loadReference();
+    return $this->_unit_quantity = $this->quantity * $this->_ref_reference->_unit_quantity;
   }
   
   function updateDBFields() {
     parent::updateDBFields();
     
-    if ($this->_quantity) {
+    if ($this->_unit_quantity) {
       $this->completeField("reference_id");
       $this->loadReference();
-      $this->quantity = $this->_quantity / $this->_ref_reference->_unit_quantity;
+      $this->quantity = $this->_unit_quantity / $this->_ref_reference->_unit_quantity;
     }
   }
   

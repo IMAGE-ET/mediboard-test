@@ -24,16 +24,19 @@ class CProductReference extends CMbObject {
   var $cancelled     = null;
 
   // Object References
-  //    Single
+  /**
+   * @var CProduct
+   */
   var $_ref_product  = null;
+  /**
+   * @var CSociete
+   */
   var $_ref_societe  = null;
 
   // Form fields
   var $_cond_price   = null;
   var $_unit_price   = null;
   var $_unit_quantity = null;
-
-  // Distant fields
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -62,13 +65,13 @@ class CProductReference extends CMbObject {
     return $specs;
   }
 
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
- 	  $backProps["order_items"] = "CProductOrderItem reference_id";
-	  return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["order_items"] = "CProductOrderItem reference_id";
+    return $backProps;
+  }
 
-	function updateFormFields() {
+  function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefProduct(false);
     
@@ -81,7 +84,12 @@ class CProductReference extends CMbObject {
       $this->_unit_price = round($this->_cond_price / $this->_ref_product->quantity, 5);
     }
     
-    $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
+    $this->getUnitQuantity();
+  }
+  
+  function getUnitQuantity(){
+    $this->loadRefProduct(false);
+    return $this->_unit_quantity = max($this->_ref_product->quantity, 1) * $this->quantity;
   }
 
   function loadRefsFwd($cache = true){
@@ -124,8 +132,7 @@ class CProductReference extends CMbObject {
   }
   
   function getPerm($permType) {
-    $this->loadRefProduct();
-    return $this->_ref_product->getPerm($permType);
+    return $this->loadRefProduct()->getPerm($permType);
   }
 }
 ?>

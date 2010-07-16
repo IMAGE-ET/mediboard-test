@@ -48,7 +48,7 @@
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
         {{mb_field object=$curr_item 
-          field=_quantity
+          field=_unit_quantity
           onchange="quantitySubmit$id(this)"
           form=form-item-quantity-$id 
           min=0
@@ -69,7 +69,7 @@
       {{/if}}
     </form>
     {{else}}
-      {{mb_value object=$curr_item field=$unit_order|ternary:_quantity:quantity}}
+      {{mb_value object=$curr_item field=$unit_order|ternary:_unit_quantity:quantity}}
     {{/if}}
   </td>
   <td style="text-align: right;">

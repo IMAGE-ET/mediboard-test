@@ -17,6 +17,7 @@ class CProductReception extends CMbObject {
 	var $societe_id       = null;
   var $group_id         = null;
   var $reference        = null;
+  var $locked           = null;
 
 	// Object References
 	//    Multiple
@@ -48,6 +49,7 @@ class CProductReception extends CMbObject {
     $specs['societe_id'] = 'ref class|CSociete seekable';
     $specs['group_id']   = 'ref notNull class|CGroups';
 	  $specs['reference']  = 'str notNull seekable';
+    $specs['locked']     = 'bool notNull default|0';
     $specs['_total']     = 'currency';
 		return $specs;
 	}
@@ -63,7 +65,7 @@ class CProductReception extends CMbObject {
   	return mbTransformTime(null, null, $format);
   }
   
-  function findFromOrder($order_id) {
+  function findFromOrder($order_id, $locked = false) {
     $receptions_prob = array();
     $receptions = array();
     
@@ -77,19 +79,16 @@ class CProductReception extends CMbObject {
       foreach($r as $_r) {
         if (!$_r->reception_id) continue;
         
-        $receptions[$_r->reception_id] = $_r->reception_id;
+        $_r->loadRefReception();
+        if (!$locked || $_r->_ref_reception->locked) continue;
         
         if (!isset($receptions_prob[$_r->reception_id])) {
           $receptions_prob[$_r->reception_id] = 0;
         }
+        
         $receptions_prob[$_r->reception_id]++;
+        $receptions[$_r->reception_id] = $_r->_ref_reception;
       }
-    }
-    
-    foreach($receptions as $_key => $_reception) {
-      $rec = new self;
-      $rec->load($_key);
-      $receptions[$_key] = $rec;
     }
     
     if (!count($receptions_prob)) return $receptions;
@@ -105,8 +104,16 @@ class CProductReception extends CMbObject {
 	function updateFormFields() {
 		parent::updateFormFields();
     $this->loadRefSociete();
-    $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe" : "");
+    $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe->_view" : "");
 	}
+  
+  function updateDBFields(){
+    if (!$this->_id && $this->locked === null) {
+      $this->locked = "0";
+    }
+    
+    return parent::updateDBFields();
+  }
   
   function store () {
     if (!$this->_id && empty($this->reference)) {
@@ -127,7 +134,7 @@ class CProductReception extends CMbObject {
     $total = 0;
     foreach($this->_ref_reception_items as $_item) {
       $_item->loadRefOrderItem();
-      $total += $_item->_ref_order_item->_price;
+      $total += $_item->_price;
     }
     $this->_total = $total;
   }

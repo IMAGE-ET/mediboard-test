@@ -32,7 +32,7 @@
         <th>{{mb_label class=CProductOrderItemReception field=quantity}}</th>
         <th>{{mb_label class=CProductOrderItemReception field=code}}</th>
         <th>{{mb_label class=CProductOrderItemReception field=lapsing_date}}</th>
-        <th></th>
+        <th colspan="2"></th>
       </tr>
       {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
         <tr>
@@ -41,7 +41,14 @@
           <td>{{mb_value object=$curr_reception field=code}}</td>
           <td>{{mb_value object=$curr_reception field=lapsing_date}}</td>
           <td>
-            <button type="button" class="cancel notext" onclick="cancelReception({{$curr_reception->_id}}, function() {refreshOrder({{$order->_id}}); refreshReception(reception_id); })">{{tr}}Cancel{{/tr}}</button>
+            {{if !$curr_reception->_ref_reception->locked}}
+              <button type="button" class="cancel notext" 
+                      onclick="cancelReception({{$curr_reception->_id}}, function() {refreshOrder({{$order->_id}}); refreshReception(reception_id); })">
+                {{tr}}Cancel{{/tr}}
+              </button>
+            {{/if}}
+          </td>
+          <td>
             <input type="checkbox" name="barcode_printed" {{if $curr_reception->barcode_printed == 1}}checked="checked"{{/if}} 
                    onclick="barcodePrintedReception({{$curr_reception->_id}},this.checked)" 
                    title="{{tr}}CProductOrderItemReception-barcode_printed-court{{/tr}}" />
@@ -54,11 +61,11 @@
       {{/foreach}}
     </table>
     
-		{{if $curr_item->_quantity_received}}
+    {{if $curr_item->_quantity_received}}
     <button class="search" type="button" onclick="ObjectTooltip.createDOM(this, 'item-received-{{$curr_item->_id}}', {duration:0})">
       {{$curr_item->_quantity_received}}
     </button>
-		{{/if}}
+    {{/if}}
   </td>
   
   <!-- Receive item -->

@@ -75,7 +75,7 @@ else {
 
 if(count($list_receptions) > 0) {
   foreach ($list_receptions as $_id => $_reception) {
-    $remaining = $_reception->getQuantity() - $_reception->countBackRefs("lines_dmi");
+    $remaining = $_reception->getUnitQuantity() - $_reception->countBackRefs("lines_dmi");
     if ($remaining < 1) {
       unset($list_receptions[$_id]);
     }

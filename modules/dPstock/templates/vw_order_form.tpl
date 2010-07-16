@@ -193,8 +193,8 @@ table.grid th {
     <td style="text-align: right;">{{mb_value object=$curr_item->_ref_reference field=supplier_code}}</td>
     <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
-      <td style="text-align: center; white-space: nowrap;">
-        {{$curr_item->quantity*$curr_item->_ref_reference->quantity*$curr_item->_ref_reference->_ref_product->quantity}}
+      <td style="text-align: right; white-space: nowrap;">
+        {{$curr_item->_unit_quantity}}
       </td>
       <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
     {{else}}
