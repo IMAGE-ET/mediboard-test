@@ -12,7 +12,6 @@
 
 Main.add(function () {
   var tabs = Control.Tabs.create('tab_dispositifs', false);
-  
   viewListCat('CDMICategory');
   viewCat('CDMICategory', '0');
 });
@@ -30,15 +29,6 @@ viewCat = function(category_class, category_id){
   url.requestUpdate("cat_"+category_class);
 }
 
-function markAsSelected(element) {
-  removeSelectedTr();
-  $(element).up(1).addClassName('selected');
-}
-
-function removeSelectedTr(){
-  $("div_categories").select('.selected').each(function (e) {e.removeClassName('selected')});
-}
-
 </script>
 
 <ul id="tab_dispositifs" class="control_tabs">
@@ -48,6 +38,7 @@ function removeSelectedTr(){
 <hr class="control_tabs" />
 
 <div id="div_categories">
+  
 <table class="main" id="dmi" style="display: none;">
  <tr>
    <td id="list_cat_CDMICategory"></td>

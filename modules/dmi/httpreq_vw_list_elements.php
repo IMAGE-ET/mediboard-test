@@ -11,36 +11,36 @@
 global $g;
 CCanDo::checkRead();
 
-$category_class = CValue::getOrSession("category_class");
-$page           = intval(CValue::get("page", 0));
+$object_class   = CValue::get("object_class", "CDMI");
+$category_id    = CValue::get("category_id");
+$start          = intval(CValue::get("start_$object_class", 0));
+$keywords       = CValue::get("keywords_$object_class", "%");
 
-// Recuperation des categories
-$category = new $category_class;
-$category->group_id = $g;
-$categories = $category->loadMatchingList();
+CValue::setSession("keywords_$object_class", $keywords);
+
+if (!$keywords) $keywords = "%";
+
+$element = new $object_class;
+
+$where = array();
 
 // Chargement de tous les dmis
-foreach ($categories as &$_category) {
-  $_category->loadRefsElements(/*null, "$page, 30"*/);
-  foreach ($_category->_ref_elements as &$_element) {
-  	$_element->loadExtProduct();
-  	$_element->_ext_product->loadRefsFwd();
-  }
+if ($category_id) {
+  $where["category_id"] = "= '$category_id'";
 }
 
-switch($category_class){
-  case 'CDMICategory':
-    $object_class = 'CDMI';
-    break;
-  case 'CCategoryDM':
-    $object_class = 'CDM';
-    break; 
+$list_elements = $element->seek($keywords, $where, "$start,30", true, null, "nom");
+$total = $element->_totalSeek;
+
+foreach ($list_elements as $_element) {
+	$_element->loadExtProduct();
+	$_element->_ext_product->loadRefsFwd();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("categories", $categories);
-$smarty->assign("category_class", $category_class);
+$smarty->assign("list_elements", $list_elements);
+$smarty->assign("total", $total);
+$smarty->assign("start", $start);
 $smarty->assign("object_class", $object_class);
 $smarty->display("inc_list_elements.tpl");
-?>

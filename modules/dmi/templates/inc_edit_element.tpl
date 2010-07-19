@@ -17,6 +17,10 @@
   {{assign var=category_class value="CCategoryDM"}}
 {{/if}}
 
+<button type="button" class="new" onclick="viewElement('{{$element->_class_name}}', '0')">
+  {{tr}}{{$element->_class_name}}-title-create{{/tr}}
+</button>
+
 <script type="text/javascript">
 
 // refresh apres une sauvegarde ou une suppression
@@ -40,21 +44,21 @@ refreshElement = function(element_id){
 
 Main.add(function () {
   var oForm = getForm("editElement-{{$element->_class_name}}");
-  updateFieldsDM = function(selected) {
-    var dn = selected.childElements();
-    $V(oForm.code, dn[0].innerHTML);
-    $V(oForm.nom, dn[3].innerHTML.stripTags().strip());
-  }
-  if($('produit_auto_complete')){
-	  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
-	  url.autoComplete(oForm.produit, "produit_auto_complete", {
-	    minChars: 3,
-	    updateElement: updateFieldsDM,
-      callback: function(input, queryString){
-        return queryString + "&hors_specialite=1"; 
-      }
-    } );
-  }
+  
+  if(!$('produit_auto_complete') || !oForm.elements.produit) return;
+  
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.autoComplete(oForm.elements.produit, "produit_auto_complete", {
+    minChars: 3,
+    updateElement: function(selected) {
+      var dn = selected.childElements();
+      $V(oForm.code, dn[0].innerHTML);
+      $V(oForm.nom, dn[3].innerHTML.stripTags().strip());
+    },
+    callback: function(input, queryString){
+      return queryString + "&hors_specialite=1"; 
+    }
+  } );
 });
 
 </script>

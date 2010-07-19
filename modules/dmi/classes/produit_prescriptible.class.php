@@ -25,7 +25,7 @@ class CProduitPrescriptible extends CMbObject {
   	$props = parent::getProps();
     $props["nom"]	     	      	= "str notNull seekable";
     $props["description"]	      = "text seekable";
-    $props["code"]		          = "str notNull";
+    $props["code"]		          = "str notNull seekable";
     $props["in_livret"]	        = "bool";
     $props["_produit_existant"] = "bool";
     return $props;
