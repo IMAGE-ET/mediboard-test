@@ -348,7 +348,7 @@ function prepareForms(root) {
     root.select("button.singleclick").each(function(button) {
       button.observe('click', function(event) {
         var element = Event.element(event);
-        Form.Element.disable(element);
+        Form.Element.disable.defer(element);
         Form.Element.enable.delay(1, element);
       });
     });
