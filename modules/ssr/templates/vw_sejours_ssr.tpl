@@ -61,6 +61,8 @@
 		</em>
 	</h1>
   {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
+{{else}}
+{{mb_include template=inc_sejours_ssr sejours=$sejours}}
 {{/if}}
 
 {{if $dialog}}
