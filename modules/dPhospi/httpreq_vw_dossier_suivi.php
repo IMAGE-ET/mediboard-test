@@ -73,20 +73,25 @@ foreach($constantes as $_const) {
 foreach($constantes as $cst) {
   $user_ref_view = "";
 	$user_ref_id = "";
-  $cst->loadFirstLog();
-  if ( $cst->_ref_first_log) {
-    $log = $cst->_ref_first_log;
-		$log->loadRefsFwd();
+  $cst->loadLogs();
+  $logs = $cst->_ref_logs;
+  $cst->_ref_user    = null;
+  $cst->_ref_user_id = null;
+  
+  foreach($logs as $_log) {
+  	if(!$cst->_ref_user_id &&
+  	   strpos($_log->fields, "patient_id")    === false &&
+  	   strpos($_log->fields, "context_class") === false &&
+  	   strpos($_log->fields, "context_id")    === false) {
+      $_log->loadRefsFwd();
+      $cst->_ref_user    = $_log->_ref_user->_view;
+      $cst->_ref_user_id = $_log->_ref_user->_id;
+      $users[$cst->_ref_user_id] = $_log->_ref_user;
+      if($user_id && $cst->_ref_user_id != $user_id) {
+        unset($constantes[$cst->_id]);
+      }
+  	}
   }
-  if($log->_ref_user) {
-    $user_ref_view = ($log->_ref_user->_view);
-		$user_ref_id = ($log->_ref_user->_id);
-  }
-  $cst->_ref_user = $user_ref_view;
-	$cst->_ref_user_id = $user_ref_id;
-	if($user_id && $cst->_ref_user_id != $user_id) {
-		unset($constantes[$cst->_id]);
-	}
 }
 if(!$cible){
   $sejour->_ref_suivi_medical = array_merge($constantes,$sejour->_ref_suivi_medical);

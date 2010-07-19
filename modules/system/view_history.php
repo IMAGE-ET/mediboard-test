@@ -25,6 +25,13 @@ $filter->object_id    = CValue::getOrSession("object_id");
 $filter->object_class = CValue::getOrSession("object_class");
 $filter->type         = CValue::getOrSession("type");
 
+$object = new CMbObject();
+if($filter->object_id && $filter->object_class) {
+	$object = new $filter->object_class;
+	$object->load($filter->object_id);
+	$object->loadHistory();
+}
+
 // Récupération de la liste des classes disponibles
 CAppui::getAllClasses();
 $listClasses = getChildClasses();
@@ -50,15 +57,12 @@ $list_count = $log->countList($where);
 
 $group_id = CGroups::loadCurrent()->_id;
 
-$item = "";
 foreach($list as $key => $log) {
   $log->loadRefsFwd();
   $log->_ref_user->loadRefMediuser();
   $mediuser = $log->_ref_user->_ref_mediuser;
   $mediuser->loadRefFunction();
   $log->getOldValues();
-  if (!$item)
-    $item = $log->_ref_object->_view;
   if (!$can->admin) {
     if ($mediuser->_ref_function->group_id != $group_id) {
       unset($list[$key]);
@@ -71,9 +75,9 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("dialog"      , $dialog      );
 $smarty->assign("filter"      , $filter      );
+$smarty->assign("object"      , $object      );
 $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
-$smarty->assign("item"        , $item        );
 $smarty->assign("list"        , $list        );
 $smarty->assign("start"       , $start       );
 $smarty->assign("list_count"  , $list_count  );

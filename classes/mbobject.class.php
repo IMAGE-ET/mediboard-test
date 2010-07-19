@@ -88,6 +88,7 @@ class CMbObject {
   var $_back           = null; // Back references collections
   var $_count          = null; // Back references counts
   var $_fwd            = null; // Forward references
+  var $_history        = null; // Array representation of the object's evolution
   var $_ref_module     = null; // Parent module
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
@@ -104,8 +105,8 @@ class CMbObject {
   var $_old            = null;
   
   // Behaviour fields
-  var $_merging = null;
-  var $_purge = null;
+  var $_merging           = null;
+  var $_purge             = null;
   var $_forwardRefMerging = null;
   
   function __construct() {
@@ -2155,6 +2156,23 @@ class CMbObject {
     }
     
     $this->_aides_new = $aides;
+  }
+  
+  /**
+   * Charge les différents états des champs de l'objet au cours du temps
+   *
+   */
+  function loadHistory() {
+  	$this->_history = array();
+  	$this->loadLogs();
+  	$clone = $this->getDBFields();
+  	foreach($this->_ref_logs as $_log) {
+      $this->_history[$_log->_id] = $clone;
+      $_log->getOldValues();
+      foreach($_log->_old_values as $_old_field => $_old_value) {
+      	$clone[$_old_field] = $_old_value;
+      }
+  	}
   }
   
   function loadLogs() {

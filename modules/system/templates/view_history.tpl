@@ -13,9 +13,13 @@
 {{/if}}
 
 <table class="tbl">
-  {{if $dialog}}
+  {{if $dialog && $object->_id}}
   <tr>
-    <th colspan="5" class="title">Historique de {{$item}}</th>
+    <th colspan="5" class="title">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
+        Historique de {{$object->_view}}
+      </span>
+    </th>
   </tr>
   {{/if}}
   

@@ -12,7 +12,7 @@
     <th>{{mb_title class=CUserLog field=fields}}</th>
   </tr>
   
-  {{include file=../../system/templates/inc_history_line.tpl logs=$patient->_ref_logs}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$patient->_ref_logs object=$patient}}
 
   {{if $patient->_ref_consultations}}  
   <tr>
@@ -32,7 +32,7 @@
     </th>
   </tr>
   
-  {{include file=../../system/templates/inc_history_line.tpl logs=$_consult->_ref_logs}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$_consult->_ref_logs object=$_consult}}
   {{/if}}
   {{/foreach}} 
 
@@ -51,7 +51,7 @@
     </th>
   </tr>  
 
-  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_object->_ref_logs}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_object->_ref_logs object=$curr_object}}
 
   {{foreach from=$curr_object->_ref_operations item=curr_operation}}
   <tr>
@@ -61,7 +61,7 @@
     </th>
   </tr> 
 
-  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_operation->_ref_logs}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_operation->_ref_logs object=$curr_operation}}
   {{/foreach}}
 
   {{foreach from=$curr_object->_ref_affectations item=curr_affect}}
@@ -73,7 +73,7 @@
     </th>
   </tr> 
 
-  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_affect->_ref_logs}}
+  {{include file=../../system/templates/inc_history_line.tpl logs=$curr_affect->_ref_logs object=$curr_affect}}
 
   {{/foreach}}  
   {{/foreach}}

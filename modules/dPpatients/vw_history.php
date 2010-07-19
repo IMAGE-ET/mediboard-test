@@ -20,30 +20,30 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadDossierComplet();
 
-$patient->loadLogs();
+$patient->loadHistory();
 
 // log pour les séjours
 foreach($patient->_ref_sejours as $sejour) {
-  $sejour->loadLogs();
+  $sejour->loadHistory();
   
   // log pour les opérations de ce séjour
   $sejour->loadRefsOperations();
   foreach($sejour->_ref_operations as $operation) {
   	$operation->loadRefsFwd();
-    $operation->loadLogs();
+    $operation->loadHistory();
   }
   
   // log pour les affectations de ce séjour
   $sejour->loadRefsAffectations();  
   foreach($sejour->_ref_affectations as $affectation) {
-    $affectation->loadLogs();
+    $affectation->loadHistory();
     $affectation->loadRefsFwd();
   }
 }
 
 // log pour les consultations
 foreach($patient->_ref_consultations as $consultation) {
-  $consultation->loadLogs();
+  $consultation->loadHistory();
 }
 
 // Création du template

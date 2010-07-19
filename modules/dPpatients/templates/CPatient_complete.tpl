@@ -6,10 +6,7 @@
     <th class="title" colspan="2">
     
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
-     
-      <a style="float:right;" href="#history-{{$object->_guid}}" onclick="Patient.history('{{$object->_id}}')">
-        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
-      </a>
+      {{mb_include module=system template=inc_object_history object=$patient}}
       
       <a style="float:right;" href="#print-{{$object->_guid}}" onclick="Patient.print('{{$object->_id}}')">
         <img src="images/icons/print.png" alt="imprimer" title="Imprimer la fiche patient" />

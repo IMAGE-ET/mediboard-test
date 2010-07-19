@@ -18,13 +18,13 @@
   	({{$_log->object_id}})
   </td>
   <td class="text">
-  	{{assign var=object value=$_log->_ref_object}}
-  	{{if $object->_id}} 
-      <label onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}');">
-        {{$object}}
+  	{{assign var=ref_object value=$_log->_ref_object}}
+  	{{if $ref_object->_id}} 
+      <label onmouseover="ObjectTooltip.createEx(this, '{{$ref_object->_guid}}');">
+        {{$ref_object}}
       </label>
   	{{else}}
-		  {{$object}}
+		  {{$ref_object}}
       {{if $_log->extra}}
         - {{$_log->extra}}
       {{/if}}
@@ -45,10 +45,24 @@
   <td>{{mb_value object=$_log field=type}}</td>
   <td class="text">
     {{foreach from=$_log->_fields item=curr_field name=field}}
+      {{if $object->_id}}
+      <label title="{{$curr_field}}{{if isset($_log->_old_values.$curr_field|smarty:nodefaults)}} - {{$_log->_old_values.$curr_field}}{{/if}}">
+        {{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}
+      </label>
+      {{if array_key_exists($curr_field,$_log->_old_values)}}
+      :
+      {{assign var=_old_value value=$_log->_id}}
+      de <strong>'{{$_log->_old_values.$curr_field}}'</strong>
+      {{assign var=log_id value=$_log->_id}}
+      à <strong>'{{$object->_history.$log_id.$curr_field}}'</strong>
+      {{/if}}
+      {{if !$smarty.foreach.field.last}}<br />{{/if}}
+      {{else}}
       <label title="{{$curr_field}}{{if isset($_log->_old_values.$curr_field|smarty:nodefaults)}} - {{$_log->_old_values.$curr_field}}{{/if}}">
         {{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}
       </label>
       {{if !$smarty.foreach.field.last}},{{/if}}
+      {{/if}}
     {{/foreach}}
   </td>
   
