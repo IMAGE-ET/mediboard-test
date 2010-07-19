@@ -417,11 +417,19 @@ function smarty_function_mb_include_script($params, &$smarty) {
 }
 
 function smarty_function_mb_include($params, &$smarty) {
-  // Dans le cas ou le path est fourni
-  $module   = CMbArray::extract($params, "module");
   $template = CMbArray::extract($params, "template");
   
-  $path = $module ? "../../$module/templates/$template.tpl" : "$template.tpl";
+  // Module précisé
+  if ($module = CMbArray::extract($params, "module")) {
+  	$template = "../../$module/templates/$template";
+  }
+
+  // Style précisé
+  if ($style = CMbArray::extract($params, "style")) {
+    $template = "../../../style/$style/templates/$template";
+  }
+
+  $path = "$template.tpl";
   
 	$tpl_vars = $smarty->_tpl_vars;
 	$smarty->_smarty_include(array(
@@ -447,7 +455,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($dir = null) {
-    global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
+    global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders, $uistyle;
     
     $rootDir = CAppUI::conf("root_dir");
     $extraPath = self::$extraPath;
@@ -511,6 +519,7 @@ class CSmartyDP extends Smarty {
     }
     
     // Standard data assignment
+    $this->assign("style", $uistyle);
     $this->assign("app", CAppUI::$instance);
     $this->assign("dPconfig", CAppUI::conf());
     $this->assign("user", CAppUI::$instance->user_id); // shouldn't be necessary

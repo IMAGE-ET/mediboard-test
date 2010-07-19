@@ -38,7 +38,7 @@ var Menu = {
   <img src="images/pictures/logo.png" width="140" />
   
   {{if !$offline}}
-  {{mb_include module=mediboard template=change_group style="width:140px;"}}
+  {{mb_include module=mediboard template=change_group}}
   
   <!-- Welcome -->
   <div>
