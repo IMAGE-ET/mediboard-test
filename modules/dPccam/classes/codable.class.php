@@ -189,7 +189,7 @@ class CCodable extends CMbObject {
   
   function getProps() {
   	$specs = parent::getProps();
-  	$specs["codes_ccam"]   = "str";
+  	$specs["codes_ccam"]   = "str show|0";
     $specs["facture"]     = "bool default|0";
   	$specs["_codes_ccam"]  = "";
   	$specs["_count_actes"] = "num min|0";
@@ -262,8 +262,8 @@ class CCodable extends CMbObject {
     foreach ($this->_ref_actes_ngap as $_acte_ngap){
       $this->_codes_ngap[] = $_acte_ngap->makeFullCode(); 
       $_acte_ngap->loadRefExecutant();
+      $_acte_ngap->getLibelle();
     }
-    
     $this->_tokens_ngap = implode("|", $this->_codes_ngap);
   }
   

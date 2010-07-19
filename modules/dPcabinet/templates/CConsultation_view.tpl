@@ -10,6 +10,7 @@
     </th>
   </tr>
   {{/if}}
+  <tr>
   
 {{if $can->edit}}
   <tr>
@@ -30,7 +31,10 @@
 
 <table class="tbl">
   {{mb_include module=dPcabinet template=inc_list_actes_ccam subject=$consultation vue=view}}
+  {{mb_include module=dPcabinet template=inc_list_actes_ngap subject=$consultation }}
 </table>
+
+ 
 
 {{assign var=examaudio value=$consultation->_ref_examaudio}}
 {{if $examaudio && $examaudio->_id}}

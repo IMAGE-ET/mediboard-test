@@ -326,6 +326,7 @@ $locales['CConsultation-_plages_vides-desc'] = 'Affichage des plages vides';
 $locales['CConsultation-_prat_id'] = 'Praticien';
 $locales['CConsultation-_prat_id-court'] = 'Prat.';
 $locales['CConsultation-_prat_id-desc'] = 'Praticien';
+$locales['CConsultation-_praticien_id'] = 'Praticien';
 $locales['CConsultation-_reglements_total_patient'] = 'Total patient';
 $locales['CConsultation-_reglements_total_patient-court'] = 'Total patient';
 $locales['CConsultation-_reglements_total_patient-desc'] = 'Total réglé par le patient';

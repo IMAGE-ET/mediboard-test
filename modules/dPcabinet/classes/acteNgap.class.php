@@ -19,6 +19,7 @@ class CActeNGAP extends CActe {
   var $coefficient = null;
   var $demi        = null;
   var $complement  = null;
+  var $libelle     = null;
   
   // Form fields
   var $_short_view = null;
@@ -28,8 +29,8 @@ class CActeNGAP extends CActe {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'acte_ngap';
-    $spec->key   = 'acte_ngap_id';
+    $spec->table  = 'acte_ngap';
+    $spec->key    = 'acte_ngap_id';
     return $spec;
   }
   
@@ -142,6 +143,23 @@ class CActeNGAP extends CActe {
     }
     
     return parent::canDeleteEx();
+  }
+  
+ function getLibelle() {
+    $ds = CSQLDataSource::get("ccamV2");
+    $query = $ds->prepare("SELECT * FROM codes_ngap WHERE CODE = % ", $this->code);
+    $result = $ds->exec($query);
+    if(mysql_num_rows($result) == 0) {
+      $this->code = "-";
+      //On rentre les champs de la table codes_ngap
+      $this->libelle = "Acte inconnu ou supprimé";
+      
+    } else {
+      $row = $ds->fetchArray($result);
+      //On rentre les champs de la table codes_ngap
+      $this->libelle = $row["libelle"];
+     
+    }
   }
 } 
 

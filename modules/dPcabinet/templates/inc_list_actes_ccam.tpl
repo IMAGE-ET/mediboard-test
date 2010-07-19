@@ -72,7 +72,7 @@
 <!-- Sinon, affichage des actes prevus -->
 {{elseif $subject->_ext_codes_ccam}}
 	<tr>
-	  <th class="category" colspan="2">{{tr}}{{$subject->_class_name}}-_ext_codes_ccam{{/tr}}</th>
+	  <th class="category" colspan="2">{{tr}}CActeCCAM{{/tr}}</th>
 	</tr>
 	{{foreach from=$subject->_ext_codes_ccam item=_code}}
 	<tr>

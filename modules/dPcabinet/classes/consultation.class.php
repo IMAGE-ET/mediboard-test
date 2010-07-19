@@ -150,9 +150,11 @@ class CConsultation extends CCodable {
   	$specs = parent::getProps();
     $specs["sejour_id"]         = "ref class|CSejour";
     $specs["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|0";
-    $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|0";
-    $specs["categorie_id"]      = "ref class|CConsultationCategorie";
-		
+    $specs["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
+    $specs["categorie_id"]      = "ref class|CConsultationCategorie show|0";
+		$specs["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
+    
+    $specs["motif"]             = "text helped seekable";
     $specs["heure"]             = "time notNull show|0";
     $specs["duree"]             = "numchar maxLength|1 show|0";
     $specs["secteur1"]          = "currency min|0 show|0";
@@ -160,9 +162,8 @@ class CConsultation extends CCodable {
     $specs["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $specs["annule"]            = "bool show|0";
     
-    $specs["motif"]             = "text helped seekable";
     $specs["rques"]             = "text helped seekable";
-    $specs["examen"]            = "text helped seekable";
+    $specs["examen"]            = "text helped seekable show|0";
     $specs["traitement"]        = "text helped seekable";
     $specs["histoire_maladie"]  = "text helped seekable";
     $specs["conclusion"]        = "text helped seekable";
@@ -205,11 +206,12 @@ class CConsultation extends CCodable {
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
     $specs["_non_pourvues"]     = "bool default|0";
-    $specs["_prat_id"]          = "";
+    
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";
     $specs["_somme"]            = "currency";		
     $specs["_type"]             = "enum list|urg|anesth";
+    $specs["_prat_id"]          = "";
     
     return $specs;
   }
@@ -257,7 +259,8 @@ class CConsultation extends CCodable {
     $this->_check_adresse = $this->adresse;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
-    
+    // pour récuperer le praticien depuis la plage consult
+    $this->loadRefPlageConsult();
     // si _coded vaut 1 alors, impossible de modifier la consultation
     $this->_coded = $this->valide;
     
@@ -339,6 +342,7 @@ class CConsultation extends CCodable {
   function loadView() {
   	parent::loadView();
     $this->loadRefsFichesExamen(); 
+    $this->loadRefsActesNGAP();
   }
 
   /**
@@ -425,6 +429,7 @@ class CConsultation extends CCodable {
     }
 
     // Precodage des actes NGAP avec information sérialisée complète
+    
     $this->_tokens_ngap = $tarif->codes_ngap;
     if ($msg = $this->precodeNGAP()){
       return $msg;
