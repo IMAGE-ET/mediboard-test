@@ -80,12 +80,13 @@ if($object_id && $object_class){
           $file->updateFormFields();
           $file->forceDir();
 
-          if($data->_page_format == "") {
+          if ($data->_page_format == "") {
             $page_width  = round((72 / 2.54) * $data->page_width, 2);
             $page_height = round((72 / 2.54) * $data->page_height, 2);
             $data->_page_format = array(0, 0, $page_width, $page_height);
           }
-          if($dPconfig["dPcompteRendu"]["CCompteRendu"]["pdf_thumbnails"] == 1) {
+
+          if (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
             $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
             $htmltopdf = new CHtmlToPDF;
             $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
