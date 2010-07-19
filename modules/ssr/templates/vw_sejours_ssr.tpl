@@ -48,14 +48,19 @@
 </form>
 
 {{if $group_by}} 
-	{{foreach from=$sejours_by_kine key=kine_id item=_sejours}}
-	  <h1>{{$kines.$kine_id}}</h1>
-    {{mb_include template=inc_sejours_ssr sejours=$_sejours}}
-	{{foreachelse}}
-	<em>{{tr}}CSejour.none{{/tr}}</em>
-	{{/foreach}}   
-{{else}}
-{{mb_include template=inc_sejours_ssr sejours=$sejours}}
+  {{foreach from=$kines item=_kine}}
+  	{{assign var=kine_id value=$_kine->_id}}
+    <h1>{{$_kine}}</h1>
+    {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
+  {{/foreach}}   
+
+  {{assign var=kine_id value=""}}
+  <h1>
+  	<em>
+  		&mdash; {{tr}}None{{/tr}} {{tr}}CBilanSSR-kine_id{{/tr}}
+		</em>
+	</h1>
+  {{mb_include template=inc_sejours_ssr sejours=$sejours_by_kine.$kine_id}}
 {{/if}}
 
 {{if $dialog}}

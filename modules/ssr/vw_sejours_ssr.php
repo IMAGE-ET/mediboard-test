@@ -123,6 +123,11 @@ $kine->load($filter->referent_id);
 $kines[$kine->_id] = $kine;
 unset($kines[""]);
 
+// Tris a posteriori : détruit les clés !
+array_multisort(CMbArray::pluck($kines     , "_view"), SORT_ASC, $kines);
+array_multisort(CMbArray::pluck($services  , "_view"), SORT_ASC, $services);
+array_multisort(CMbArray::pluck($praticiens, "_view"), SORT_ASC, $praticiens);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
