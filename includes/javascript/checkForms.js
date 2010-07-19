@@ -507,8 +507,12 @@ function checkForm(oForm) {
     if (!oElement || oElement.disabled) return;
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
     var oFirstElement = isArray ? oElement[0] : oElement;
-    
+
     if (oFirstElement.getAttribute("readonly")) return;
+    
+    if (!oFirstElement.className) return;
+
+    if (oFirstElement.hasClassName("nocheck")) return;
     
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);
