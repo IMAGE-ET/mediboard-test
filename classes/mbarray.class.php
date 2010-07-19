@@ -293,7 +293,7 @@ abstract class CMbArray {
 		$args = func_get_args();
 		if (count($args) > 2) {
 			$name = array_pop($args);
-			$array = call_user_func_array("CMbArray::pluck", $args);
+			$array = call_user_func_array(array("CMbArray", "pluck"), $args);
 		}
 		
     $values = array(); 
