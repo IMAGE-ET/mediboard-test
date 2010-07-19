@@ -85,13 +85,14 @@ if($object_id && $object_class){
             $page_height = round((72 / 2.54) * $data->page_height, 2);
             $data->_page_format = array(0, 0, $page_width, $page_height);
           }
-
-          $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
-          $htmltopdf = new CHtmlToPDF;
-          $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
-          $file->file_size = filesize($file->_file_path);
-          $file->store();
-          $data->_ref_file = $file;
+          if($dPconfig["dPcompteRendu"]["CCompteRendu"]["pdf_thumbnails"] == 1) {
+            $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
+            $htmltopdf = new CHtmlToPDF;
+            $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
+            $file->file_size = filesize($file->_file_path);
+            $file->store();
+            $data->_ref_file = $file;
+          }
         }
       }
     }
