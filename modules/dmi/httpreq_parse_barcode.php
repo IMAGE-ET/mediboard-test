@@ -23,10 +23,18 @@ $lot = isset($comp['lot']) ? $comp['lot'] : trim($comp['raw'], ".%\n\r\t +-");
 
 $object = new CProductOrderItemReception;
 $where = array(
-  "(lapsing_date > '".mbDate()."' OR lapsing_date IS NULL)",
-  "(code != '' AND code IS NOT NULL)",
+  "(product_order_item_reception.lapsing_date > '".mbDate()."' OR product_order_item_reception.lapsing_date IS NULL)",
+  "(product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL)",
+  "product.category_id" => "= '".CAppUI::conf("dmi CDMI product_category_id")."'",
 );
-$lots = $object->seek($lot, $where, 50);
+
+$ljoin = array(
+  "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
+  "product_reference"  => "product_order_item.reference_id = product_reference.reference_id",
+  "product"            => "product_reference.product_id = product.product_id",
+);
+
+$lots = $object->seek($lot, $where, 50, null, $ljoin);
 
 foreach($lots as $_lot) {
   $_lot->loadRefOrderItem();
@@ -55,16 +63,13 @@ if ( empty($products) ) {
   }
   
   $reception = new CProductOrderItemReception;
-  $ljoin = array(
-    "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
-    "product_reference" => "product_order_item.reference_id = product_reference.reference_id",
-  );
   
   foreach ($products as $_product) {
     $_product->loadRefsFwd();
     
     $where = array(
-      "product_reference.product_id"=>"= '$_product->_id'",
+      "product.product_id"  => "= '$_product->_id'",
+      "product.category_id" => "= '".CAppUI::conf("dmi CDMI product_category_id")."'",
       "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
     );
     

@@ -1,8 +1,22 @@
 {{assign var=debug value=false}}
 
+<style type="text/css">
+div.lots div:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+div.product:hover {
+  outline: 2px solid #ccc;
+}
+</style>
+
 <script type="text/javascript">
-selectProduct = function(element) {
+selectProduct = function(element, event) {
+  if (event) Event.stop(event);
   element.checked = true;
+  
+  $("apply-dmi").update();
   
   var container = element.up('div');
   container.addUniqueClassName('selected');
@@ -12,7 +26,20 @@ selectProduct = function(element) {
   var lots = container.select('input.lot');
   if (lots.length == 1) {
     lots[0].checked = true;
+    selectLot(lots[0]);
   }
+}
+
+selectLot = function(element, event){
+  if (event) Event.stop(event);
+  element.checked = true;
+  
+  var url = new Url("dmi", "httpreq_apply_dmi");
+  url.addParam("lot_id", element.value);
+  url.addParam("dmi_id", element.value);
+  url.addParam("prescription_id", window.DMI_prescription_id);
+  url.addParam("operation_id", window.DMI_operation_id);
+  url.requestUpdate("apply-dmi");
 }
 
 Main.add(function(){
@@ -24,10 +51,7 @@ Main.add(function(){
   }
   
   if (products.length == 1 && lots.length == 1) {
-    var url = new Url("dmi", "httpreq_apply_dmi");
-    url.addParam("lot_id", lots[0].value);
-    url.addParam("dmi_id", lots[0].value);
-    url.requestUpdate("apply-dmi");
+    selectLot(lots[0]);
   }
   else {
     $("apply-dmi").update();
@@ -51,9 +75,9 @@ Main.add(function(){
 {{/if}}
 
 {{foreach from=$products item=_product}}
-  <div class="product" style="padding: 3px;">
-    <label style="font-size: 1.3em;">
-      <input type="radio" name="product_id" value="{{$_product->_id}}" onclick="selectProduct(this)" />
+  <div class="product" style="padding: 3px;" onclick="selectProduct($(this).down('input[name=product_id]'), event)">
+    <label style="font-size: 1.2em;">
+      <input type="radio" name="product_id" value="{{$_product->_id}}" />
       <span style="font-weight: bold;">{{$_product}}</span>
       {{if $_product->societe_id}}
         - <small>{{$_product->_ref_societe}}</small>
@@ -62,7 +86,7 @@ Main.add(function(){
     
     <div class="lots" style="display: none; padding-left: 2em;">
       {{foreach from=$_product->_lots item=_lot}}
-        <div style="padding:5px;">
+        <div style="padding:5px;" onclick="selectLot($(this).down('input'), event)">
           <label>
             <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{if $_lot->_selected}}checked="checked"{{/if}} />
             <strong>{{$_lot->code}}</strong> &mdash; {{mb_value object=$_lot field=lapsing_date}}
@@ -70,6 +94,7 @@ Main.add(function(){
         </div>
       {{/foreach}}
       
+      <!--
       <hr />
       
       <button class="new" type="button" onclick="$(this).next('div').toggle()">
@@ -113,6 +138,7 @@ Main.add(function(){
           </table>
         </form>
       </div>
+      -->
     </div>
   </div>
 {{foreachelse}}

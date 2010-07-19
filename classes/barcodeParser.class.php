@@ -207,6 +207,10 @@ class CBarcodeParser {
       return $date;
     }
     
+    if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date)) {
+      return mbDateFromLocale($date);
+    }
+    
     if (preg_match('/^(20\d{2})(\d{2})$/', $date, $parts)){
       $date = mbDate("+1 MONTH", $parts[1]."-".$parts[2]."-01");
       return mbDate("-1 DAY", $date);
@@ -221,26 +225,13 @@ class CBarcodeParser {
       $date = mbDate("+1 MONTH", "20".$parts[2]."-".$parts[1]."-01");
       return mbDate("-1 DAY", $date);
     }
+    
     return null;
   }
   
   static function parse($barcode) {
     $orig_barcode = $barcode;
-    $comp = array(
-      "raw" => null,
-      "ref" => null,
-      "lot" => null,
-      "per" => null,
-      "sn" => null,
-      "scc" => null,
-      "scc_manuf" => null,
-      "scc_prod" => null,
-      "scc_part" => null,
-      "remb" => null,
-      "cip" => null,
-      "price" => null,
-      "key" => null,
-    );
+    $comp = array();
     
     $type = "raw";
 
@@ -403,6 +394,22 @@ class CBarcodeParser {
     }
     
     $comp["raw"] = $orig_barcode;
+    
+    $comp += array(
+      "raw"   => null,
+      "ref"   => null,
+      "lot"   => null,
+      "per"   => null,
+      "sn"    => null,
+      "scc"   => null,
+      "scc_manuf" => null,
+      "scc_prod"  => null,
+      "scc_part"  => null,
+      "remb"  => null,
+      "cip"   => null,
+      "price" => null,
+      "key"   => null,
+    );
     
     return array(
       "type" => $type,

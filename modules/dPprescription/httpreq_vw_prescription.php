@@ -560,7 +560,7 @@ if(!$refresh_pharma && !$mode_protocole){
       else {
         $smarty->assign("element", $chapitre);
         if (CAppUI::conf("dmi CDMI active") && CModule::getActive('dmi') && $chapitre == 'dmi') {
-        	$smarty->display("../../dmi/templates/inc_div_dmi.tpl");
+        	$smarty->display("../../dmi/templates/inc_prescription_dmi.tpl");
         }
         else {
           $smarty->display("inc_div_element.tpl");

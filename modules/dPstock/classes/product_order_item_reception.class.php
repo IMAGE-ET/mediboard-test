@@ -70,11 +70,11 @@ class CProductOrderItemReception extends CMbObject {
   }
   
   function loadRefOrderItem() {
-    $this->_ref_order_item = $this->loadFwdRef("order_item_id", true);
+    return $this->_ref_order_item = $this->loadFwdRef("order_item_id", true);
   }
   
   function loadRefReception() {
-    $this->_ref_reception = $this->loadFwdRef("reception_id", true);
+    return $this->_ref_reception = $this->loadFwdRef("reception_id", true);
   }
 
   function loadRefsFwd() {

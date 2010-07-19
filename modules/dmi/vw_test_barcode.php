@@ -12,4 +12,4 @@ CCanDo::checkAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->display("vw_test_barcode.tpl");
+$smarty->display("inc_prescription_dmi.tpl");

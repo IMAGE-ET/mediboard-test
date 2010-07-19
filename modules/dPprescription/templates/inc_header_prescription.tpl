@@ -117,7 +117,6 @@ printBons = function(prescription_id){
 }
 
 Main.add( function(){
-	File.refresh('{{$prescription->_id}}','{{$prescription->_class_name}}');
   var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
   initNotes();
@@ -160,6 +159,9 @@ Main.add( function(){
 	      }
 	  } );	
   }
+  
+  if (window.File)
+    File.refresh('{{$prescription->_id}}','{{$prescription->_class_name}}');
 } );
 
 </script>
