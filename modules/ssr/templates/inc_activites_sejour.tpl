@@ -444,7 +444,7 @@ Main.add(function(){
                   <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
                   {{foreach from=$_cdarrs item=_cdarr}}
                     <label>
-                      <input type="checkbox" class="checkbox-cdarrs" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
+                      <input type="checkbox" class="checkbox-cdarrs nocheck" name="cdarrs[{{$_cdarr->code}}]" value="{{$_cdarr->code}}" onclick="updateCdarrCount('{{$_line->_id}}','{{$type_cdarr}}');" /> 
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_cdarr->_guid}}')">
                       {{$_cdarr->code}}
                       </span>
@@ -566,7 +566,7 @@ Main.add(function(){
 		          <tr>
 		            {{foreach from=$list_days key=_date item=_day}}
 		              <td>
-		                <label>{{$_day}}<br /><input class="days" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
+		                <label>{{$_day}}<br /><input class="days nocheck" type="checkbox" name="_days[{{$_date}}]" value="{{$_date}}" />
 		                </label>
 		              </td>
 		            {{/foreach}}
