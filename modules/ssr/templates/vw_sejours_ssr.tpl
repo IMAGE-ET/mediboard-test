@@ -37,7 +37,7 @@
 	<label for="group_by">
 		Regrouper par kiné
 	</label>
-  <input type="checkbox" name="group_by" value="1" {{if $group_by}} checked="checked" {{/if}} onchange="this.form.submit();">
+  <input type="checkbox" name="group_by" value="1" {{if $group_by}} checked="checked" {{/if}} onclick="this.form.submit();">
 	{{/if}}
 
   Prescription
