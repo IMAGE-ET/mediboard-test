@@ -1333,6 +1333,7 @@ div.ssr-sejour-bar {
 	border: 1px solid black; 
 	height: 4px; 
 	width: 20px;	
+  background-color: #fff;
 }
 
 div.ssr-sejour-bar div {
