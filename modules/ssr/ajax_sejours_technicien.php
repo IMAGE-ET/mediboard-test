@@ -34,7 +34,10 @@ foreach ($sejours as $_sejour) {
 	
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient(1);
-} 
+}
+
+// Blows id keys
+array_multisort(CMbArray::pluck($sejours, "_ref_patient", "nom"), SORT_ASC, $sejours);
 
 // Ajustements services
 $service = new CService;

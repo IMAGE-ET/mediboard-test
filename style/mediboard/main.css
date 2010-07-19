@@ -1277,6 +1277,12 @@ ul li a.chapitre_signe.active{
   color: #A33;
 }
 
+table.tbl tr.ssr-annule  td,
+table.tbl tr.ssr-termine td,
+table.tbl tr.ssr-prevu   td {
+  border-width: 2px 0;
+}
+
 table.tbl tr.ssr-annule td {
 	background-color: #f88;
 }
