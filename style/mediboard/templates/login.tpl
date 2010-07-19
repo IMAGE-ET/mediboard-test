@@ -30,7 +30,7 @@
       <th>
         <label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label>
       </th>
-      <td><input type="text" class="notNull str" size="25" maxlength="20" name="username" /></td>
+      <td><input type="text" class="notNull str" size="15" maxlength="20" name="username" /></td>
       <td rowspan="2">
         <div id="systemMsg">
           {{$errorMessage|nl2br|smarty:nodefaults}}
@@ -39,7 +39,7 @@
     </tr>
     <tr>
       <th><label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label></th>
-      <td><input type="password" class="notNull str" size="25" maxlength="32" name="password" /></td>
+      <td><input type="password" class="notNull str" size="15" maxlength="32" name="password" /></td>
     </tr>
     <tr>
       <td colspan="10" class="button"><button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button></td>

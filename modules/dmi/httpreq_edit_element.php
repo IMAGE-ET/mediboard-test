@@ -17,6 +17,7 @@ $element_id = CValue::getOrSession("element_id");
 // Chargement de l'element selectionné
 $element = new $element_class;
 $element->load($element_id);
+$element->loadExtProduct();
 
 $generate_code = CValue::get("generate_code", false);
 if($generate_code){

@@ -267,6 +267,7 @@ span.big-info {
 }
 
 table.tbl tr.selected td,
+table.tbl tbody.selected td,
 div.selected {
   background-color: #ffc;
 }

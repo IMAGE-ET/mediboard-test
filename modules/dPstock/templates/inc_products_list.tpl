@@ -8,6 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+Main.add(function(){
+  selectProduct(getForm("edit_product").product_id.value);
+});
+</script>
+
 {{mb_include module=system template=inc_pagination change_page="changePage" 
     total=$total current=$start step=$dPconfig.dPstock.CProduct.pagination_size}}
 
@@ -23,15 +29,15 @@
     <!--<th>{{mb_title class=CProduct field=packaging}}</th>-->
   </tr>
   {{foreach from=$list_products item=_product}}
-    <tbody class="hoverable">
-    <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
+    <tbody class="hoverable product-{{$_product->_id}}">
+    <tr>
       <td colspan="10" style="font-weight: bold;">
-        <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$_product->_id}}">
+        <a href="#1" onclick="return editProduct({{$_product->_id}})">
           {{$_product->name|truncate:80}}
         </a>
       </td>
     </tr>
-    <tr {{if $_product->_id == $product_id}}class="selected"{{/if}}>
+    <tr>
       <td style="padding-left: 1em;" {{if $_product->cancelled}}class="cancelled"{{/if}}>
         {{if $_product->code}}
           {{mb_value object=$_product field=code}}

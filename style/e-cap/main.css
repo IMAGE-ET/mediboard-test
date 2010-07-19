@@ -350,7 +350,8 @@ div.tree-header:hover {
 
 div.selected,
 table.tbl tr.selected td,
-table.form tr.selected td {
+table.form tr.selected td,
+table.tbl tbody.selected td {
   background-color: #edb;
 }
 

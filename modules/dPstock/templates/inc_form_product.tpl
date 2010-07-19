@@ -1,7 +1,6 @@
 <script type="text/javascript">
 	
 Main.add(function () {
-  filterReferences(getForm("filter-products"));
   Control.Tabs.create("tabs-stocks-references", true);
   Control.Tabs.create("product-conditionnement-tabs", false);
   
@@ -160,7 +159,7 @@ function duplicateObject(form) {
     </td>
   </tr>
 
-  <tbody id="conditionnement" style="display: none;">
+  <tbody id="conditionnement">
     <tr>
       <th>{{mb_label object=$product field="quantity"}}</th>
       <td>{{mb_field object=$product field="quantity" form="edit_product" increment=true size=4}}</td>

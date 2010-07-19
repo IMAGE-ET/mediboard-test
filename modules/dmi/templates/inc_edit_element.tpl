@@ -120,7 +120,7 @@ Main.add(function () {
     {{/if}}
   	<tr>
   		<th>{{mb_label object=$element field=nom}}</th>
-  		<td>{{mb_field object=$element field=nom}}</td>
+  		<td>{{mb_field object=$element field=nom size=30}}</td>
   	</tr>
     {{if $element->_class_name == "CDMI"}}
     <tr>
@@ -148,6 +148,7 @@ Main.add(function () {
   		    {{/if}}
   		  {{else}}
   		    {{mb_value object=$element field=code}}
+          <button type="button" class="search notext" onclick="location.href='?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$element->_ext_product->_id}}'"></button>
   		  {{/if}}
   		</td>
   	</tr>

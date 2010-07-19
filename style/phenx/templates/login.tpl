@@ -18,7 +18,7 @@
           <label for="username" title="{{tr}}CUser-user_username-desc{{/tr}}">{{tr}}CUser-user_username{{/tr}}</label>
         </th>
         <td style="width: 1%;">
-          <input type="text" class="notNull str" size="20" name="username" />
+          <input type="text" class="notNull str" size="15" name="username" />
         </td>
       </tr>
       <tr>
@@ -26,7 +26,7 @@
           <label for="password" title="{{tr}}CUser-user_password-desc{{/tr}}">{{tr}}CUser-user_password{{/tr}}</label>
         </th>
         <td>
-          <input type="password" class="notNull str" size="20" name="password" />
+          <input type="password" class="notNull str" size="15" name="password" />
           <button class="tick" type="submit" name="login">{{tr}}Login{{/tr}}</button>
         </td>
       </tr>
