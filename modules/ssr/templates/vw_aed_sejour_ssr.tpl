@@ -16,7 +16,6 @@
 {{mb_include_script module="ssr" script="planning"}}
 {{mb_include_script module="dPcabinet" script="file"}}
 
-
 {{mb_include module=ssr template=inc_form_sejour_ssr}}
 
 {{if $sejour->_id && $can->edit}}

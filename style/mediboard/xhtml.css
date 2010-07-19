@@ -99,6 +99,7 @@ h1 {
   font-size: 1.6em;
   color: #444;
   margin: 10px 0px;
+	page-break-before: always;
 }
 
 h2 {

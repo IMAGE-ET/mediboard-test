@@ -15,6 +15,7 @@ $date = CValue::getOrSession("date", mbDate());
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
 $show = CValue::getOrSession("show", "all");
+$group_by = CValue::get("group_by");
 
 // Filtre
 $filter = new CSejour;
@@ -48,6 +49,7 @@ $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
 $services = array();
 $praticiens = array();
 $kines = array();
+$sejours_by_kine = array();
 
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
@@ -90,6 +92,13 @@ foreach ($sejours as $_sejour) {
     continue;
   }
 
+  // Regroupement par kine
+  $sejours_by_kine[$kine_referent->_id][] = $_sejour;
+  if ($kine_journee->_id && $kine_journee->_id != $kine_referent->_id) {
+  	$sejours_by_kine[$kine_journee->_id ][] = $_sejour;
+	}
+	
+  // Détail du séjour
   $_sejour->checkDaysRelative($date);
   $_sejour->loadNumDossier();
   $_sejour->loadRefsNotes();
@@ -114,16 +123,17 @@ $kine->load($filter->referent_id);
 $kines[$kine->_id] = $kine;
 unset($kines[""]);
 
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("filter", $filter);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("sejours_by_kine", $sejours_by_kine);
 $smarty->assign("kines", $kines);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("services", $services);
 $smarty->assign("show", $show);
+$smarty->assign("group_by", $group_by);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("order_col", $order_col);
 $smarty->display("vw_sejours_ssr.tpl");

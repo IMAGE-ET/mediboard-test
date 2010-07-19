@@ -4,6 +4,7 @@
 	  Main.add(window.print);
 	</script>
 	<button class="print not-printable" onclick="window.print()">{{tr}}Print{{/tr}}</button>
+
 	</td>
 	</tr>
   </table>
