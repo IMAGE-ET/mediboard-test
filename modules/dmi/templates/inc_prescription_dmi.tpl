@@ -12,6 +12,12 @@ reloadListDMI = function(){
   Prescription.reload('{{$prescription->_id}}', null, "dmi");
 }
 
+submitBarcode = function(){
+  var barcode = $("barcode");
+  parseBarcode(barcode.value);
+  barcode.select();
+}
+
 Main.add(function(){
   var barcode = $("barcode");
   
@@ -57,6 +63,7 @@ Main.add(function(){
 <div style="text-align: center; padding: 0.3em;">
   Produit / Code barre
   <input type="text" id="barcode" size="50" class="barcode" style="font-size: 1.3em;" autocomplete="off" placeholder="Code barre" />
+  <hr />
 </div>
 
 <div id="parsed-barcode"></div>
@@ -80,7 +87,13 @@ Main.add(function(){
     <tr>
       <td>
         {{if !$_line_dmi->signed}}
-          <button type="button" class="trash notext" onclick="delLineDMI('{{$_line_dmi->_id}}');"></button>
+          <form name="del-dmi-{{$_line_dmi->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadListDMI})">
+            <input type="hidden" name="m" value="dPprescription" />
+            <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="prescription_line_dmi_id" value="{{$_line_dmi->_id}}" />
+            <button type="submit" class="trash notext"></button>
+          </form>
         {{/if}}
       </td>
       <td>
@@ -99,11 +112,20 @@ Main.add(function(){
       <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_line_dmi->_ref_praticien}}</td>
       <td style="text-align: center;">
         {{if $_line_dmi->_can_view_form_signature_praticien}}
-          {{if !$_line_dmi->signed}}
-            <button type="button" class="tick notext" onclick="signLineDMI('{{$_line_dmi->_id}}', 1);">Signer</button>
-          {{else}}
-            <button type="button" class="cancel notext" onclick="signLineDMI('{{$_line_dmi->_id}}', 0);">Annuler la signature</button>
-          {{/if}}
+        
+          <form name="sign-dmi-{{$_line_dmi->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadListDMI})">
+            <input type="hidden" name="m" value="dPprescription" />
+            <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
+            <input type="hidden" name="prescription_line_dmi_id" value="{{$_line_dmi->_id}}" />
+          
+            {{if !$_line_dmi->signed}}
+              <input type="hidden" name="signed" value="1" />
+              <button type="submit" class="tick notext">Signer</button>
+            {{else}}
+              <input type="hidden" name="signed" value="0" />
+              <button type="submit" class="cancel notext">Annuler la signature</button>
+            {{/if}}
+          </form>
         {{else}}
           {{if $_line_dmi->signed}}
             <img src="images/icons/tick.png" title="Signée par le praticien" />

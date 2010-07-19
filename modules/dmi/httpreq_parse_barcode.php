@@ -91,7 +91,11 @@ foreach ($products as $_product) {
   $_product->_new_lot = $lot;
 }
 
+$societe = new CSociete;
+$list_societes = $societe->loadList(null, "name");
+
 $smarty = new CSmartyDP();
 $smarty->assign("parsed", $parsed);
 $smarty->assign("products", $products);
+$smarty->assign("list_societes", $list_societes);
 $smarty->display("inc_parse_barcode.tpl");

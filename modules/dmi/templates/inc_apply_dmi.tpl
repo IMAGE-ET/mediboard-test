@@ -32,7 +32,9 @@ Main.add(function(){
   <input type="hidden" name="signed" value="0" />
   <input type="hidden" name="septic" value="" />
 
-  <table class="layout" style="outline: 2px solid #999; margin: 0.8em; padding: 0.5em; width: 100%; table-layout: fixed;">
+  <div style="outline: 2px solid #999; margin: 0.8em; padding: 0.5em;">
+  
+  <table class="layout" style="width: 100%; table-layout: fixed;">
     <tr style="white-space: nowrap;">
       <td style="width: 40%; text-align:center;">
         <strong style="font-size: 1.4em; ">
@@ -69,4 +71,8 @@ Main.add(function(){
       </td>
     </tr>
   </table>
+  
+  </div>
 </form>
+  
+<hr />

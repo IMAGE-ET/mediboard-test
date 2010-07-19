@@ -1,7 +1,7 @@
 {{assign var=debug value=false}}
 
 <style type="text/css">
-div.lots div:hover {
+div.lots .lot:hover {
   background-color: #ddd;
   cursor: pointer;
 }
@@ -16,9 +16,12 @@ selectProduct = function(element, event) {
   if (event) Event.stop(event);
   element.checked = true;
   
+  var applyDMI = getForm("apply-dmi");
+  if (applyDMI && applyDMI.product_id.value == element.value) return;
+  
   $("apply-dmi").update();
   
-  var container = element.up('div');
+  var container = element.up('div.product');
   container.addUniqueClassName('selected');
   $$('div.lots').invoke('hide');
   container.down('.lots').show();
@@ -33,6 +36,9 @@ selectProduct = function(element, event) {
 selectLot = function(element, event){
   if (event) Event.stop(event);
   element.checked = true;
+  
+  var applyDMI = getForm("apply-dmi");
+  if (applyDMI && applyDMI.order_item_reception_id.value == element.value) return;
   
   var url = new Url("dmi", "httpreq_apply_dmi");
   url.addParam("lot_id", element.value);
@@ -75,26 +81,29 @@ Main.add(function(){
 {{/if}}
 
 {{foreach from=$products item=_product}}
-  <div class="product" style="padding: 3px;" onclick="selectProduct($(this).down('input[name=product_id]'), event)">
-    <label style="font-size: 1.2em;">
-      <input type="radio" name="product_id" value="{{$_product->_id}}" />
-      <span style="font-weight: bold;">{{$_product}}</span>
-      {{if $_product->societe_id}}
-        - <small>{{$_product->_ref_societe}}</small>
-      {{/if}}
-    </label>
+  <div class="product" style="padding-bottom: 3px;">
+    <div onclick="selectProduct($(this).down('input[name=product_id]'), event)" style="padding: 3px;">
+      <label style="font-size: 1.2em;">
+        <input type="radio" name="product_id" value="{{$_product->_id}}" />
+        <span style="font-weight: bold;">{{$_product}}</span>
+        {{if $_product->societe_id}}
+          - <small>{{$_product->_ref_societe}}</small>
+        {{/if}}
+      </label>
+    </div>
     
     <div class="lots" style="display: none; padding-left: 2em;">
       {{foreach from=$_product->_lots item=_lot}}
-        <div style="padding:5px;" onclick="selectLot($(this).down('input'), event)">
+        <div style="padding: 5px;" class="lot" onclick="selectLot($(this).down('input'), event)">
           <label>
             <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{if $_lot->_selected}}checked="checked"{{/if}} />
             <strong>{{$_lot->code}}</strong> &mdash; {{mb_value object=$_lot field=lapsing_date}}
           </label>
         </div>
+      {{foreachelse}}
+        <div>Aucun lot n'est disponible pour ce DMI</div>
       {{/foreach}}
       
-      <!--
       <hr />
       
       <button class="new" type="button" onclick="$(this).next('div').toggle()">
@@ -104,41 +113,51 @@ Main.add(function(){
       {{assign var=product_id value=$_product->_id}}
       
       <div style="display: none;">
-        <form name="create-lot-{{$_product->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
+        <form name="create-lot-{{$_product->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: submitBarcode})">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+          <input type="hidden" name="quantity" value="1" />
+          <input type="hidden" name="date" value="now" />
+          
           <table class="tbl">
             <tr>
-              <td>
-                <label for="_reference_id" style="display: none;">
-                  {{if $_product->_ref_references|@count}}Date/Référence{{else}}Fournisseur{{/if}}
-                </label>
-                <select name="_reference_id" class="notNull">
+              <th><label for="_reference_id">Référence / Fournisseur</label></th>
+              <th><label for="code">{{tr}}CProductOrderItemReception-code{{/tr}}</label></th>
+              <th><label for="lapsing_date">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label></th>
+              <th style="width: 0.1%;"></th>
+            </tr>
+            <tr>
+              <td style="text-align: center;">
+                <select name="_reference_id" class="notNull" style="width: 12em;">
                   {{if $_product->_ref_references|@count}}
-                    {{foreach from=$_product->_ref_references item=_reference}}
-                      <option value="{{$_reference->_id}}">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
-                    {{/foreach}}
-                  {{else}}
-                    <option disabled="disabled" selected="selected"> &ndash; Fournisseur </option>
-                    {{foreach from=$list_societes item=_societe}}
-                      <option value="{{$_societe->_id}}-{{$product->_id}}" {{if $_societe->_id == $product->societe_id}}selected="selected"{{/if}}>{{$_societe}}</option>
-                    {{/foreach}}
+                    <optgroup label="Références">
+                      {{foreach from=$_product->_ref_references item=_reference}}
+                        <option value="{{$_reference->_id}}" selected="selected">{{$_reference->_ref_societe}} ({{$_reference->quantity}})</option>
+                      {{/foreach}}
+                    </optgroup>
                   {{/if}}
+                  <optgroup label="Fournisseurs">
+                    <option value="" disabled="disabled" {{if !$_product->_ref_references|@count}}selected="selected"{{/if}}> &ndash; Choisir un fournisseur</option>
+                    {{foreach from=$list_societes item=_societe}}
+                      <option value="{{$_societe->_id}}-{{$_product->_id}}" {{if !$_product->_ref_references|@count && $_societe->_id == $_product->societe_id}}selected="selected"{{/if}}>{{$_societe}}</option>
+                    {{/foreach}}
+                  </optgroup>
                 </select>
               </td>
-              <td>
-                <label for="code" style="display: none;">{{tr}}CProductOrderItemReception-code{{/tr}}</label>
-                {{mb_field object=$_product->_new_lot field=code size=15 prop="str notNull" class="barcode"}}
+              <td style="text-align: center;">
+                {{mb_field object=$_product->_new_lot field=code size=15 prop="str notNull"}}
               </td>
-              <td>
-                <label for="lapsing_date" style="display: none;">{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}</label>
-                {{mb_field object=$_product->_new_lot field=lapsing_date prop="str notNull" class="barcode" size=10}}
+              <td style="text-align: center;">
+                {{mb_field object=$_product->_new_lot field=lapsing_date register=true form="create-lot-$product_id" prop="date notNull"}}
               </td>
               {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
-              <td></td>
+              <td>
+                <button type="submit" class="submit notext">{{tr}}Save{{/tr}}</button>
+              </td>
             </tr>
           </table>
         </form>
       </div>
-      -->
     </div>
   </div>
 {{foreachelse}}
