@@ -85,6 +85,12 @@ function submitCompteRendu(){
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
     {{/if}}
+    {{if $compte_rendu->_id && !$pdf_thumbnails}}
+      try {
+        setTimeout("window.opener.Document.refreshList(Thumb.object_class,Thumb.object_id)",100);
+       }
+      catch (e) {}
+    {{/if}}
 	});
 
 </script>

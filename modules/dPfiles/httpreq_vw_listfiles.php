@@ -64,11 +64,12 @@ if($object_id && $object_class){
     if (!isset($_cat["items"])) break;
 
     foreach($_cat["items"] as $data) {
-      if ($data->_class_name == "CCompteRendu") {
+      if ($data->_class_name == "CCompteRendu" && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
         $data->loadRefsFwd();
         $data->loadFile();
         $data->loadContent();
-        if(!isset($data->_ref_file->_id)) {
+
+        if (!isset($data->_ref_file->_id)) {
           $data->updateFormFields();
           $file = new CFile();
           $file->setObject($data);
@@ -86,14 +87,12 @@ if($object_id && $object_class){
             $data->_page_format = array(0, 0, $page_width, $page_height);
           }
 
-          if (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
-            $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
-            $htmltopdf = new CHtmlToPDF;
-            $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
-            $file->file_size = filesize($file->_file_path);
-            $file->store();
-            $data->_ref_file = $file;
-          }
+          $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
+          $htmltopdf = new CHtmlToPDF;
+          $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
+          $file->file_size = filesize($file->_file_path);
+          $file->store();
+          $data->_ref_file = $file;
         }
       }
     }
