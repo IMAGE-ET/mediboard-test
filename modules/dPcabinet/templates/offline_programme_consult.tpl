@@ -39,7 +39,7 @@ Main.add(function () {
           {{foreach from=$listPlage item=plage}}
           {{assign var="listPlace" value=$plage->_listPlace}}
           <div id="places-{{$plage->_id}}" style="display:none">
-            {{include file="inc_list_places.tpl" listBefore=array() listAfter=array()}}
+            {{include file="inc_list_places.tpl" listBefore=null listAfter=null}}
           </div>
           {{/foreach}}
         </td>
