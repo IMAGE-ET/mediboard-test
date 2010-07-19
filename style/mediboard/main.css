@@ -1325,14 +1325,30 @@ div.ssr-sejour-bar {
 	top: 0px; 
 	right: 0px; 
 	border: 1px solid black; 
-	height: 5px; 
+	height: 4px; 
 	width: 20px;	
 }
 
 div.ssr-sejour-bar div {
-	opacity: 0.3 ;
+	opacity: 0.3;
 	background: #000;
-  height: 5px; 
+  height: 4px; 
+}
+
+td.ssr-repartition {
+	border: 1px solid #aaa; 
+	border-width: 1px 0px; 
+	line-height: 110%;
+}
+
+td.ssr-repartition span {
+	font-weight: bold;
+}
+
+td.ssr-repartition div.motif {
+	opacity: 0.7;
+	font-size: 90%;
+  line-height: 110%;
 }
 
 table.tbl td.trans-data {

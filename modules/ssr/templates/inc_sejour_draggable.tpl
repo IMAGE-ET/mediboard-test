@@ -17,7 +17,7 @@
 {{assign var=ssr_class value=ssr-termine}}
 {{/if}}
 <tr class="{{$ssr_class}}">
-	<td class="text {{$ssr_class}}" style="border: 1px solid #aaa; border-width: 1px 0px; line-height: 110%;">
+	<td class="text ssr-repartition">
     {{if $remplacement}} 
     <div>
       {{mb_include template=inc_sejour_repartition}}      

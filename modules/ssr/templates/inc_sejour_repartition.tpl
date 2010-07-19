@@ -16,12 +16,12 @@
   
 {{assign var=patient value=$sejour->_ref_patient}}
 <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-  {{$patient}}        
+  {{$patient->nom}} {{$patient->prenom}}
 </span> 
 
-<div style="text-indent: 1em; opacity: 0.8;">
+<div class="motif">
 	<div style="float: right;">
-	  {{$patient->_age}} ans
+	  ({{$patient->_age}})
 	</div>
   {{mb_value object=$sejour field=libelle}}
 </div>
