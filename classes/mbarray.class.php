@@ -285,7 +285,17 @@ abstract class CMbArray {
    * @return array All plucked values
    */
   static function pluck($array, $name) {
-    if (!is_array($array)) return null;
+    if (!is_array($array)) {
+    	return null;
+		}
+		
+		// Recursive multi-dimensional call
+		$args = func_get_args();
+		if (count($args) > 2) {
+			$name = array_pop($args);
+			$array = call_user_func_array("CMbArray::pluck", $args);
+		}
+		
     $values = array(); 
     foreach ($array as $index => $value) {
       if (is_object($value)) {
