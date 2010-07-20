@@ -486,11 +486,11 @@ Main.add(function () {
 {{if $prescription_id}}
 	 <h1 style="text-align: center">
 	   <a href="#1" {{if $sejour->_entree|date_format:"%Y-%m-%d" < $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$prev_date}}');"{{/if}}>
-	     <img src="images/icons/prev.png" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
+	     <img src="images/icons/prev.png" {{if $sejour->_entree|date_format:"%Y-%m-%d" >= $date}}style="opacity: 0.5;"{{/if}} />
 	   </a>
 	   Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
 	   <a href="#1" {{if $sejour->_sortie|date_format:"%Y-%m-%d" > $date}}onclick="Prescription.loadTraitement('{{$sejour->_id}}','{{$next_date}}','','administration');"{{/if}}>
-	     <img src="images/icons/next.png" {{if $sejour->_sortie|date_format:"%Y-%m-%d" <= $date}}style="opacity: 0.5; -moz-opacity: 0.5;"{{/if}} />
+	     <img src="images/icons/next.png" {{if $sejour->_sortie|date_format:"%Y-%m-%d" <= $date}}style="opacity: 0.5;"{{/if}} />
 	   </a>
 	 </h1>
 	 

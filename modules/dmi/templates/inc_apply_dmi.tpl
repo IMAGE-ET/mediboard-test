@@ -31,16 +31,17 @@ Main.add(function(){
   <input type="hidden" name="date" value="now" />
   <input type="hidden" name="signed" value="0" />
   <input type="hidden" name="septic" value="" />
-
-  <div style="outline: 2px solid #999; margin: 0.8em; padding: 0.5em;">
   
-  <table class="layout" style="width: 100%; table-layout: fixed;">
+  <table class="main tbl">
+    <tr>
+      <th class="title" colspan="5" style="font-size: 1.5em;">
+        {{$lot->_ref_order_item->_ref_reference->_ref_product}} &ndash;
+        <small>[{{$lot->_ref_order_item->_ref_reference->_ref_product->code}}]</small>
+      </th>
+    </tr>
     <tr style="white-space: nowrap;">
-      <td style="width: 40%; text-align:center;">
-        <strong style="font-size: 1.4em; ">
-          {{$lot->_ref_order_item->_ref_reference->_ref_product}}
-        </strong>
-        <br />[{{$lot->code}}]
+      <td style="width: 40%; text-align: center; font-size: 1.4em;">
+        <strong>[{{$lot->code}}]</strong>
         {{if $lot->lapsing_date}}
           &mdash; {{mb_value object=$lot field=lapsing_date}}
         {{/if}}
@@ -71,8 +72,6 @@ Main.add(function(){
       </td>
     </tr>
   </table>
-  
-  </div>
 </form>
   
 <hr />

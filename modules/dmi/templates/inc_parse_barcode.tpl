@@ -85,6 +85,7 @@ Main.add(function(){
     <div onclick="selectProduct($(this).down('input[name=product_id]'), event)" style="padding: 3px;">
       <label style="font-size: 1.2em;">
         <input type="radio" name="product_id" value="{{$_product->_id}}" />
+        [{{$_product->code}}] &ndash; 
         <span style="font-weight: bold;">{{$_product}}</span>
         {{if $_product->societe_id}}
           - <small>{{$_product->_ref_societe}}</small>
@@ -97,7 +98,7 @@ Main.add(function(){
         <div style="padding: 5px;" class="lot" onclick="selectLot($(this).down('input'), event)">
           <label>
             <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{if $_lot->_selected}}checked="checked"{{/if}} />
-            <strong>{{$_lot->code}}</strong> &mdash; {{mb_value object=$_lot field=lapsing_date}}
+            <strong>[{{$_lot->code}}]</strong> &ndash; {{mb_value object=$_lot field=lapsing_date}}
           </label>
         </div>
       {{foreachelse}}

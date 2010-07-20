@@ -38,7 +38,6 @@ div.cancelled {
 
 li.cancelled {
   opacity: 0.4;
-  -moz-opacity: 0.4;
   background-color: #eee;
 }
 

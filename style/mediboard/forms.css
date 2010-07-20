@@ -249,15 +249,10 @@ a.button:hover,
 button:hover {
   background-image: url(images/buttons/button-over.png);
   border-color: #333;
-/* Bug in firefox : 1 pixel between border and outline
- * outline: 1px solid #000;
- * -moz-outline-radius: 3px;
- */
 }
 
 button[disabled], a.button[disabled] {
   opacity: 0.5;
-  -moz-opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -747,7 +742,6 @@ span.highlight {
 .ajax-upload input[type="file"] {
   position: relative;
   text-align: right;
-  -moz-opacity: 0;
   filter: alpha(opacity: 0);
   -ms-filter: "alpha(opacity: 0)";
   opacity: 0;

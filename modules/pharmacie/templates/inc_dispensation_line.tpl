@@ -149,7 +149,7 @@
        <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
        {{/if}}
        {{if $delivrance->quantity == 0}}
-         {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
+         {{assign var=style value="opacity: 0.5;"}}
          <script type="text/javascript">
            getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
          </script>
@@ -201,7 +201,7 @@
          <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
          {{/if}}
          {{if $delivrance->quantity == 0}}
-           {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
+           {{assign var=style value="opacity: 0.5;"}}
            <script type="text/javascript">
              getForm("form-dispensation-{{$code_cis}}-{{$code_cip}}").up("tr").hide().addClassName("done");
            </script>

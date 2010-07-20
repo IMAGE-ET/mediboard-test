@@ -70,6 +70,9 @@ Main.add(function(){
 
 {{if @$prescription->_ref_lines_dmi|@count}}
 <table class="tbl">
+  <tr>
+    <th colspan="10" class="title">Lignes de DMI</th>
+  </tr>
   <!-- Affichage des lignes de DMI-->
   <tr>
     <th style="width: 16px;"></th>

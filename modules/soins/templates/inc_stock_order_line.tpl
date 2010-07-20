@@ -47,7 +47,7 @@
       <input type="hidden" name="order" value="1" />
 
       {{*if $delivrance->quantity == 0}}
-        {{assign var=style value="opacity: 0.5; -moz-opacity: 0.5;"}}
+        {{assign var=style value="opacity: 0.5;"}}
       {{else*}}
         {{assign var=style value=""}}
       {{*/if*}}
