@@ -68,7 +68,15 @@ function receiveAll(container) {
 
 function terminateAll(container) {
   var ids = $(container).select("form.force.valid input[name=delivery_id]").pluck("value");
-  //console.debug(ids);
+  if (confirm("Confirmez-vous l'annulation de ces "+ids.length+" réceptions ?\n"+
+              "Notez que ce n'est pas une suppression au sens strict, mais un marquage comme \"Terminé\".\n"+
+              "Cette action n'a d'effet que sur les lignes reçues complètement, vous devrez valider les autres une par une.")) {
+    var url = new Url();
+    url.addParam("m", "dPstock");
+    url.addParam("dosql", "do_validate_delivery_lines");
+    url.addParam("list", ids.join('-'));
+    url.requestUpdate("systemMsg", {method: "post", onComplete: refreshReceptions});
+  }
 }
 
 var tabs;

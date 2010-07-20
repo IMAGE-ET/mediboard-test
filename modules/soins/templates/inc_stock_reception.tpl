@@ -37,7 +37,7 @@ changeReceptionPage = function(start) {
   <tr>
     <th>{{*tr}}CProductDelivery-service_id{{/tr*}}Pour</th>
     <th style="width: 0.1%;">
-      {{* <button type="button" onclick="terminateAll('list-reception')" class="send notext">Tout marquer comme terminé (ne met pas à jour le stock du service)</button> *}}
+      <button type="button" onclick="terminateAll('list-reception')" class="send notext">Tout marquer comme terminé (ne met pas à jour le stock du service)</button>
     </th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th colspan="2">Date commande</th>
@@ -58,7 +58,7 @@ changeReceptionPage = function(start) {
       </td>
       <td>
         <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
-              class="force {{if $curr_delivery->_ref_delivery_traces|@count}}valid{{/if}}"
+              class="force {{if $curr_delivery->isReceived()}}valid{{/if}}"
               onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptions})">
           <input type="hidden" name="m" value="dPstock" /> 
           <input type="hidden" name="del" value="0" />

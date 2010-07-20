@@ -139,7 +139,10 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_service->quantity = $this->quantity;
       $stock_service->order_threshold_min = 0;
     }
-    if ($msg = $stock_service->store()) return $msg;
+    
+    if ($this->_ref_delivery->service_id) {
+      if ($msg = $stock_service->store()) return $msg;
+    }
 
     return parent::store();
   }

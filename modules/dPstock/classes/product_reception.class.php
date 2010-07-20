@@ -104,7 +104,7 @@ class CProductReception extends CMbObject {
 	function updateFormFields() {
 		parent::updateFormFields();
     $this->loadRefSociete();
-    $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe->_view" : "");
+    $this->_view = $this->reference . ($this->societe_id ? " - {$this->_ref_societe->_view}" : "");
 	}
   
   function updateDBFields(){

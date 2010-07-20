@@ -84,6 +84,7 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function store(){
     if (!$this->_id) {
+      $this->completeField("quantity");
       if (!$this->quantity) $this->quantity = 1;
       
       if ($stock = $this->loadRefStockGroup()) {
