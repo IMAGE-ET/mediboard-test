@@ -12,18 +12,6 @@
 {{assign var=evenement_ssr_id value=$evenement_ssr->_id}}
 {{assign var=unique_id value=""|uniqid}}
 
-<script type="text/javascript">
-	
-submitFormEditSSR = function(oForm){
-  return onSubmitFormAjax(oForm, { onComplete: window.refreshPlanningsSSR || Prototype.emptyFunction} );
-}
-
-Main.add(function(){
-  Calendar.regField(getForm("editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}").debut, null, { noView: true, inline: true, container: null, minInterval: 10 });
-});
-        
-</script>
-
 {{include file=CMbObject_view.tpl}}
 
 <table class="tbl tooltip">
@@ -49,6 +37,22 @@ Main.add(function(){
   </tr> 
   {{/if}}
 </table>
+
+{{if 0}}
+
+<script type="text/javascript">
+  
+submitFormEditSSR = function(oForm){
+  return onSubmitFormAjax(oForm, { 
+     onComplete: window.refreshPlanningsSSR || Prototype.emptyFunction
+  } );
+}
+
+Main.add(function(){
+  Calendar.regField(getForm("editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}").debut, null, { noView: true, inline: true, container: null, minInterval: 10 });
+});
+    
+</script>
 
 <form style="display: none;" name="editEvenementSSR-{{$evenement_ssr_id}}-{{$unique_id}}" method="post" action="?" onsubmit="return submitFormEditSSR(this);">
   <input type="hidden" name="m" value="ssr" />
@@ -86,3 +90,5 @@ Main.add(function(){
 		</tr>
 	</table>
 </form>
+
+{{/if}}
