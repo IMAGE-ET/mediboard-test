@@ -200,7 +200,14 @@ table.grid th {
     {{else}}
       <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
     {{/if}}
-    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=unit_price}}</td>
+    
+    <td style="white-space: nowrap; text-align: right;">
+      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+        {{mb_value object=$curr_item->_ref_reference field=_unit_price}}
+      {{else}}
+        {{mb_value object=$curr_item field=unit_price}}
+      {{/if}}
+    </td>
     <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
   </tr>
 	

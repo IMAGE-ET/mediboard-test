@@ -589,7 +589,7 @@ Main.add(function(){
 			</tbody>
 	    <tr>
 	      <td colspan="2" class="button">
-	        <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
+	        <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>
 	      </td>
 	    </tr>
 	  </table>
