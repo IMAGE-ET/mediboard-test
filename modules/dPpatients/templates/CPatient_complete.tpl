@@ -6,7 +6,7 @@
     <th class="title" colspan="2">
     
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
-      {{mb_include module=system template=inc_object_history object=$patient}}
+      {{mb_include module=system template=inc_object_history object=$object}}
       
       <a style="float:right;" href="#print-{{$object->_guid}}" onclick="Patient.print('{{$object->_id}}')">
         <img src="images/icons/print.png" alt="imprimer" title="Imprimer la fiche patient" />
@@ -244,7 +244,7 @@
   <tr>
     <td class="text">
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
-      {{assign var=medecin value=$patient->_ref_medecin_traitant}}
+      {{assign var=medecin value=$object->_ref_medecin_traitant}}
       {{if $medecin->_id}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
           {{$medecin}}
