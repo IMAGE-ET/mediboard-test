@@ -18,28 +18,28 @@ if (!$echange_hprim_id) {
   if (!($limit = CAppUI::conf('sip batch_count'))) {
     return;
   }
-	$echange_hprim = new CEchangeHprim();
+  $echange_hprim = new CEchangeHprim();
   $where['statut_acquittement'] = "IS NULL";
-	$where['emetteur'] = " = '".CAppUI::conf("mb_id")."'";
-	$where['message_valide'] = " = '1'";
+  $where['emetteur'] = " = '".CAppUI::conf("mb_id")."'";
+  $where['message_valide'] = " = '1'";
   $where['acquittement_valide'] = "IS NULL"; 
-	
+  
   $notifications = $echange_hprim->loadList($where, null, $limit);
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
   // ce qui permet la gestion des doublons
   foreach ($notifications as $notification) {
-  	$notification->date_echange = mbDateTime();
+    $notification->date_echange = mbDateTime();
     $notification->store();
   }
   
   foreach ($notifications as $notification) {      
     $dest_hprim = new CDestinataireHprim();
-	  $dest_hprim->nom = $notification->destinataire;
-	  
-	  $dest_hprim->loadMatchingObject();
+    $dest_hprim->nom = $notification->destinataire;
+    
+    $dest_hprim->loadMatchingObject();
     
     if ($dest_hprim->actif) {
-      $source = CExchangeSource::get($dest_hprim->_guid);
+      $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($notification->_message);
       $source->send("evenementPatient");
       $acquittement = $source->receive();
@@ -60,16 +60,16 @@ if (!$echange_hprim_id) {
     }
   }
 } else {
-	// Chargement de l'objet
-	$echange_hprim = new $echange_hprim_classname;
-	$echange_hprim->load($echange_hprim_id);
+  // Chargement de l'objet
+  $echange_hprim = new $echange_hprim_classname;
+  $echange_hprim->load($echange_hprim_id);
+
+  $dest_hprim = new CDestinataireHprim();
+  $dest_hprim->nom = $echange_hprim->destinataire;
+  $dest_hprim->loadMatchingObject();
   
-	$dest_hprim = new CDestinataireHprim();
-	$dest_hprim->nom = $echange_hprim->destinataire;
-	$dest_hprim->loadMatchingObject();
-  
-  $source = CExchangeSource::get($dest_hprim->_guid);
-  $source->setData($echange_hprim->message);
+  $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
+  $source->setData($echange_hprim->_message);
   $source->send("evenementPatient");
   $acquittement = $source->receive();
   

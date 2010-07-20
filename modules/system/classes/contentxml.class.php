@@ -25,7 +25,7 @@ class CContentXML extends CMbObject {
   
   function getProps() { 
     $specs = parent::getProps();
-    $specs["content"]   = "xml";
+    $specs["content"]   = "xml show|0";
     $specs["import_id"] = "ref class|CMbObject";
     
     return $specs;

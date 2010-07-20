@@ -40,19 +40,19 @@
       </span>
     {{/if}}
 	</td>
-	<td>
+	<td style="width:0.1%">
 	  {{if $object->id_permanent}}
   	  <span onmouseover="ObjectTooltip.createEx(this, '{{$object->object_class}}-{{$object->object_id}}', 'identifiers');">
         {{$object->id_permanent|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
       </span>
     {{/if}}
 	</td>
-	<td>
+	<td style="width:0.1%">
 	  <label title='{{mb_value object=$object field="date_production"}}'>
       {{mb_value object=$object field="date_production" format=relative}}
     </label>
 	</td>
-	<td {{if $object->emetteur == "inconnu"}}class="error"{{/if}}>
+	<td {{if $object->emetteur == "inconnu"}}class="error"{{/if}} style="width:0.1%">
 	   {{if $object->_self_emetteur}}
 	   <label title='{{mb_value object=$object field="emetteur"}}' style="font-weight:bold">
 	     [SELF]
@@ -64,7 +64,7 @@
 	    : {{$object->identifiant_emetteur|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	   {{/if}}
 	</td>
-	<td>
+	<td style="width:0.1%">
     {{if $object->_self_destinataire}}
      <label title='{{mb_value object=$object field="destinataire"}}' style="font-weight:bold">
        [SELF]
@@ -73,8 +73,8 @@
        {{mb_value object=$object field="destinataire"}}
      {{/if}}
   </td>
-	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}}>{{mb_value object=$object field="sous_type"}}</td>
-	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}">
+	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}} style="width:0.1%">{{mb_value object=$object field="sous_type"}}</td>
+	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}" style="width:0.1%">
 	  {{if $object->initiateur_id}}
 	    {{if $dPconfig.sip.server == "1"}}
 	      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
@@ -95,15 +95,12 @@
   <td style="width:0.1%">
     <button class="change" onclick="reprocessing('{{$object->_id}}', '{{$object->_class_name}}')" type="button">Retraiter</button>
   </td>
-	<td class="{{if ($object->date_echange && !$object->_acquittement)}}error{{/if}}">
-	  {{if $object->_acquittement}}Oui{{else}}Non{{/if}}
-	</td>
 	<td class="{{if !$object->statut_acquittement || 
 	                ($object->statut_acquittement == 'erreur') || 
                   ($object->statut_acquittement == 'err')}}error
              {{elseif ($object->statut_acquittement == 'avertissement') || 
                       ($object->statut_acquittement == 'avt')
-             }}warning{{/if}}">
+             }}warning{{/if}}" style="width:0.1%">
     {{mb_value object=$object field="statut_acquittement"}}
   </td>
   <td>

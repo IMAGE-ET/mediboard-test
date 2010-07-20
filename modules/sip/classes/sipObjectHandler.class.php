@@ -41,8 +41,6 @@ class CSipObjectHandler extends CMbObjectHandler {
     if ($mbObject->_forwardRefMerging) {
       return;
     }
-
-    $dest_hprim = new CDestinataireHprim();
     
     // Traitement Patient
     if ($mbObject instanceof CPatient) {
@@ -52,52 +50,33 @@ class CSipObjectHandler extends CMbObjectHandler {
       
       // Si Serveur
       if (CAppUI::conf('sip server')) {
-        $listDest = $dest_hprim->loadList();
-  
-        foreach ($listDest as $_dest) {
-          // Recherche si le patient possède un identifiant externe sur le SIP
-          $id400 = new CIdSante400();
-          //Paramétrage de l'id 400
-          $id400->object_id = $mbObject->_id;
-          $id400->object_class = "CPatient";
-          $id400->tag = "$_dest->destinataire :$_dest->group_id";
-  
-          if($id400->loadMatchingObject())
-            $mbObject->_id400 = $id400->id400;
-          else
-            $mbObject->_id400 = null;
-  
-          if (!$mbObject->_IPP) {
-            $IPP = new CIdSante400();
-            //Paramétrage de l'id 400
-            $IPP->object_class = "CPatient";
-            $IPP->object_id = $mbObject->_id;
-            $IPP->tag = CAppUI::conf("mb_id");
-            $IPP->loadMatchingObject();
-  
-            $mbObject->_IPP = $IPP->id400;
-          }
+        $dest_hprim = new CDestinataireHprim();
+        $dest_hprim->message = "patients";
+        $destinataires = $dest_hprim->loadMatchingList();
+         
+        foreach ($destinataires as $_destinataire) {
+            $id400Patient = new CIdSante400();
+            $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
+            $mbObject->_id400 = $id400Patient->id400;
           
-          $domEvenement = new CHPrimXMLEnregistrementPatient();
-          $domEvenement->emetteur = CAppUI::conf('mb_id');
-          $domEvenement->destinataire = $_dest->destinataire;
-          $domEvenement->destinataire_libelle = " ";
-  
-          $echange_hprim = new CEchangeHprim();
+          /*$echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
   
-          $initiateur = ($_dest->destinataire == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
-  
-          $domEvenement->generateTypeEvenement($mbObject, true, $initiateur);
+          $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;*/
+          $initiateur = null;
+          
+          $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+          $domEvenementEnregistrementPatient->_dest_tag = $_destinataire->_tag_patient;
+          $this->generateEvenement($domEvenementEnregistrementPatient, $_destinataire, $mbObject, true, $initiateur);
         }
       }
       // Si Client
       else {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->message = "patients";
+        $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -196,7 +175,7 @@ class CSipObjectHandler extends CMbObjectHandler {
 
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->message = "patients";
+        $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
@@ -243,7 +222,7 @@ class CSipObjectHandler extends CMbObjectHandler {
       if (!CAppUI::conf('sip server')) {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->type = "sip";
-				$dest_hprim->message = "patients";
+        $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         
         $mbObject->_fusion = array();
@@ -335,12 +314,16 @@ class CSipObjectHandler extends CMbObjectHandler {
   
   function onAfterDelete(CMbObject &$mbObject) {}
   
-  function sendEvenement ($domEvenement, $dest_hprim, $mbObject) {
+  function generateEvenement($domEvenement, $dest_hprim, $mbObject, $referent = null, $initiateur = null) {
     $domEvenement->emetteur     = CAppUI::conf('mb_id');
     $domEvenement->destinataire = $dest_hprim->nom;
     $domEvenement->group_id     = $dest_hprim->group_id;
 
-    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject);
+    return $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
+  }
+  
+  function sendEvenement($domEvenement, $dest_hprim, $mbObject) {
+    $msgEvtVenuePatient = $this->generateEvenement($domEvenement, $dest_hprim, $mbObject);
 
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");

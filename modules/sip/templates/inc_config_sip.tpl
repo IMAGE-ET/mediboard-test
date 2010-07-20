@@ -8,6 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if $dPconfig.sip.server}}
+<script type="text/javascript">
+ElementChecker.check.dontMatch = function(){
+  this.assertMultipleArgs("dontMatch");
+  if (this.sValue.match(new RegExp(this.oProperties["dontMatch"])))
+    this.addError("dontMatch", "Doit pas contenir $g en mode SIP");
+}.bind(ElementChecker);
+</script>
+{{/if}}
 
 <form name="editConfigSip" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_configure" />
@@ -25,6 +34,11 @@
     </tr>
         
     {{mb_include module=system template=inc_config_bool var=server}}
+    
+    {{if $dPconfig.sip.server}}
+      {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}
+      {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
+    {{/if}}
     
     {{mb_include module=system template=inc_config_bool var=send_all_patients}}
 	    

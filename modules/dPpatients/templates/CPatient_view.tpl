@@ -10,12 +10,12 @@
     </th>
   </tr>
   <tr>
-    <th>Identité</th>
+    <th>Identité {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}</th>
     <th>Coordonnées</th>
   </tr>
   <tr>
     <td>
-      {{mb_include module=system template=inc_field_view prop=nom}}
+      {{mb_include module=system template=inc_field_view prop=nom}} 
       {{mb_include module=system template=inc_field_view prop=nom_jeune_fille}}
       {{mb_include module=system template=inc_field_view prop=prenom}}
       {{mb_include module=system template=inc_field_view prop=prenom_2}}

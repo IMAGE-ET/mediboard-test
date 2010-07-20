@@ -44,31 +44,32 @@ $echange_hprim->load($echange_hprim_id);
 $smarty = new CSmartyDP();
   
 if($echange_hprim->_id) {
-	$echange_hprim->loadRefs();	
+  $observations = $doc_errors_msg = $doc_errors_ack = array();
+  
+  $echange_hprim->loadRefs(); 
 
-	if ($echange_hprim->_message !== null && $echange_hprim->_acquittement !== null) {
-		$domGetEvenement = new CHPrimXMLEvenementsPatients();
-	  $domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
-	  $domGetEvenement->formatOutput = true;
-	  $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
-	  
-	  $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
-	  
-	  if ($echange_hprim->_acquittement) {
-	    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-	    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->_acquittement));
-	    $domGetAcquittement->formatOutput = true;
-	    $observations = $domGetAcquittement->getAcquittementObservationPatients();
-	    $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
-	    
-	    $echange_hprim->_acquittement = utf8_decode($domGetAcquittement->saveXML());
-	  }  
-		$smarty->assign("observations"  , $observations);
-	  $smarty->assign("doc_errors_msg", $doc_errors_msg);
-	  $smarty->assign("doc_errors_ack", $doc_errors_ack);
-	}
-
-  $smarty->assign("echange_hprim", $echange_hprim); 
+  if ($echange_hprim->_message !== null) {
+    $domGetEvenement = new CHPrimXMLEvenementsPatients();
+    $domGetEvenement->loadXML(utf8_decode($echange_hprim->_message));
+    $domGetEvenement->formatOutput = true;
+    $doc_errors_msg = @$domGetEvenement->schemaValidate(null, true, false);
+   
+    $echange_hprim->_message = utf8_encode($domGetEvenement->saveXML());
+  }  
+  if ($echange_hprim->_acquittement !== null) {
+    $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+    $domGetAcquittement->loadXML(utf8_decode($echange_hprim->_acquittement));
+    $domGetAcquittement->formatOutput = true;
+    $observations = $domGetAcquittement->getAcquittementObservationPatients();
+    $doc_errors_ack[] = @$domGetAcquittement->schemaValidate(null, true, false);
+    
+    $echange_hprim->_acquittement = utf8_decode($domGetAcquittement->saveXML());
+  } 
+   
+  $smarty->assign("observations"  , $observations);
+  $smarty->assign("doc_errors_msg", $doc_errors_msg);
+  $smarty->assign("doc_errors_ack", $doc_errors_ack);
+  $smarty->assign("echange_hprim" , $echange_hprim); 
 } else {
   // Récupération de la liste des echanges HPRIM
   $itemEchangeHprim = new CEchangeHprim;
@@ -86,9 +87,9 @@ if($echange_hprim->_id) {
   if ($statut_acquittement) {
     $where["statut_acquittement"] = " = '".$statut_acquittement."'";
   }
-	if ($msg_evenement) {
-		$where["type"] = " = '".$msg_evenement."'";
-	}
+  if ($msg_evenement) {
+    $where["type"] = " = '".$msg_evenement."'";
+  }
   if ($type_evenement) {
     $where["sous_type"] = " = '".$type_evenement."'";
   }
@@ -104,7 +105,7 @@ if($echange_hprim->_id) {
   if ($id_permanent) {
     $where["id_permanent"] = " = '$id_permanent'";
   }
-	
+  
   $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
   $total_echange_hprim = $itemEchangeHprim->countList($where);
@@ -117,7 +118,7 @@ if($echange_hprim->_id) {
     $_echange->loadRefNotifications();
     $_echange->getObservations();
   }
-	
+  
   $smarty->assign("echange_hprim"       , $echange_hprim);
   $smarty->assign("echangesHprim"       , $echangesHprim);
   $smarty->assign("total_echange_hprim" , $total_echange_hprim);
@@ -131,9 +132,9 @@ if($echange_hprim->_id) {
 
 $evenements = array();
 foreach (CEchangeHprim::$messages as $_message => $_evt_class) {
-	$class = new ReflectionClass($_evt_class);
+  $class = new ReflectionClass($_evt_class);
   $statics = $class->getStaticProperties();
-	$evenements[$_message] = $statics["evenements"];
+  $evenements[$_message] = $statics["evenements"];
 }
 $smarty->assign("evenements", $evenements);
 

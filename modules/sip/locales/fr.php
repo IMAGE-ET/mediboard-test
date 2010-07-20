@@ -1,5 +1,6 @@
 <?php
 $locales['CSipObjectHandler'] = 'Gestionnaire SIP';
+$locales['SIP'] = 'SIP';
 $locales['config-object_handlers-CSipObjectHandler'] = 'Activer le gestionnaire SIP';
 $locales['config-sip'] = 'Configuration mode SIP';
 $locales['config-sip-batch_count'] = 'Nombre de traitement';
@@ -27,6 +28,10 @@ $locales['config-sip-server'] = 'Mode Serveur';
 $locales['config-sip-server-desc'] = 'Mode Serveur';
 $locales['config-sip-soap-sip_name'] = 'Nom instance SIP';
 $locales['config-sip-soap-sip_name-desc'] = 'Nom de l\'instance SIP';
+$locales['config-sip-tag_dossier'] = 'Tag NumDos du SIP';
+$locales['config-sip-tag_dossier-desc'] = 'Tag NumDos du SIP';
+$locales['config-sip-tag_ipp'] = 'Tag IPP du SIP';
+$locales['config-sip-tag_ipp-desc'] = 'Tag IPP du SIP';
 $locales['config-traitement-sip'] = 'Traitement du mode SIP';
 $locales['mod-sip-tab-configure'] = 'Configuration';
 $locales['mod-sip-tab-mbCip'] = 'Client Identité Patient';

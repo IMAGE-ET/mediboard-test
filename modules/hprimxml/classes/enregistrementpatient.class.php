@@ -83,17 +83,21 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       if (!$data['idSourcePatient'] && !$data['idCiblePatient']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
-				
-				$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+        
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
-        
-      // Identifiant source non fourni et identifiant cible fourni
+
+      $dest_hprim = new CDestinataireHprim();
+      $dest_hprim->nom = $data['idClient'];
+      $dest_hprim->loadMatchingObject();
+      
+      // Identifiant source (IC) non fourni et identifiant cible fourni (IPP)
       if (!$data['idSourcePatient'] && $data['idCiblePatient']) {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP->object_class = "CPatient";
-        $IPP->tag = CAppUI::conf("mb_id");
+        $IPP->tag = $dest_hprim->_tag_patient;
 
         $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
@@ -102,7 +106,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $newPatient->load($IPP->object_id);
           
           if (!$this->checkSimilarPatient($newPatient, $data['patient'])) {
-            $commentaire = "Le nom et/ou le prénom sont très différents. "; 
+            $commentaire = "Le nom et/ou le prénom sont très différents."; 
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E016", $commentaire);
+            $doc_valid = $domAcquittement->schemaValidate();
+            
+            $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+            return $messageAcquittement;
           }
           
           // Mapping du patient
@@ -130,15 +139,16 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           if (is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
+             // Si serveur et pas d'IPP sur le patient
             $newPatient->_no_ipp = 1;
             $msgPatient = $newPatient->store();
             
             $IPP->object_id = $newPatient->_id;
-
             $IPP->last_update = mbDateTime();
             $msgIPP = $IPP->store();
             
             $newPatient->_IPP = $IPP->id400;
+            // Si serveur et on a un IPP sur le patient
             $newPatient->_no_ipp = 0;
             $msgPatient = $newPatient->store();
                       
@@ -146,17 +156,18 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             if ($msgPatient) {
               $avertissement = $msgPatient." ";
             } else {
-              $commentaire = substr("Patient créé : $newPatient->_id. IPP créé : $IPP->id400.", 0, 4000);
+              $commentaire = "Patient créé : $newPatient->_id. IPP créé : $IPP->id400.";
             }
           }
         }
         
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000));
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
           
         $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+        $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
         $echange_hprim->store();
         
         return $messageAcquittement;
@@ -167,13 +178,13 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       $id400->object_class = "CPatient";
       $id400->tag = $data['idClient'];
       $id400->id400 = $data['idSourcePatient'];
-    
+   
       // Cas 1 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
         // Cas 1.1 : Pas d'identifiant cible
-        if(!$data['idCible']) {
+        if(!$data['idCiblePatient']) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
@@ -182,7 +193,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $IPP = new CIdSante400();
             //Paramétrage de l'id 400
             $IPP->object_class = "CPatient";
-            $IPP->tag = CAppUI::conf("mb_id");
+            $IPP->tag = $dest_hprim->_tag_patient;
             $IPP->object_id = $idPatientSIP;
 
             $mutex->acquire();
@@ -215,7 +226,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             if ($msgPatient || $msgIPP) {
               $avertissement = $msgPatient." ".$msgIPP;
             } else {
-              $commentaire = substr("Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.", 0, 4000);
+              $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.";
             }
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
@@ -229,9 +240,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
           $IPP->object_class = "CPatient";
-          $IPP->tag = CAppUI::conf("mb_id");
+          $IPP->tag = $dest_hprim->_tag_patient;
 
-          $IPP->id400 = $data['idCible'];
+          $IPP->id400 = $data['idCiblePatient'];
           
           // Id cible connu
           if ($IPP->loadMatchingObject()) {
@@ -244,7 +255,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         
               $echange_hprim->_acquittement = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
-							$echange_hprim->date_echange = mbDateTime();
+              $echange_hprim->date_echange = mbDateTime();
+              $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
               $echange_hprim->store();
               
               return $messageAcquittement;
@@ -267,7 +279,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               if ($msgPatient) {
                 $avertissement = $msgPatient." ";
               } else {
-                $commentaire = substr("Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.", 0, 4000);
+                $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A03" : "I02", $avertissement ? $avertissement : $commentaire);
               
@@ -294,10 +306,31 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       else {
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-
-        $newPatient->_no_ipp = 1;
-        $msgPatient = $newPatient->store();
-
+        
+        // Patient retrouvé      
+        if ($newPatient->loadMatchingPatient()) {
+          // Mapping du patient
+          $newPatient = $this->mappingPatient($data['patient'], $newPatient);
+          // Si serveur et pas d'IPP sur le patient
+          $newPatient->_no_ipp = 1;
+          $msgPatient = $newPatient->store();
+      
+          $newPatient->loadLogs();
+          $modified_fields = "";
+          if (is_array($newPatient->_ref_last_log->_fields)) {
+            foreach ($newPatient->_ref_last_log->_fields as $field) {
+              $modified_fields .= "$field \n";
+            }
+          }
+          $_code_IPP = "A021";
+          $_code_Patient = true; 
+          $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+        } else {
+          $msgPatient = $newPatient->store();
+        
+          $commentaire = "Patient créé : $newPatient->_id. ";
+        }
+        
         // Création de l'identifiant externe TAG CIP + idSource
         $id400Patient = new CIdSante400();
         //Paramétrage de l'id 400
@@ -315,10 +348,10 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP->object_class = "CPatient";
-        $IPP->tag = CAppUI::conf("mb_id");
+        $IPP->tag = $dest_hprim->_tag_patient;
 
         // Cas idCible fourni
-        if ($data['idCiblePatient']) {
+        if ($data['idCiblePatient']) {mbTrace($data['idCiblePatient'], "idCiblePatient", true);
           $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
           $mutex->acquire();
@@ -350,7 +383,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
 
           $IPP->_id = null;
-           
+
           $_code_IPP = "I006";
         }
 
@@ -360,11 +393,12 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $msgIPP = $IPP->store();
 
         $mutex->release();
-
+        
         $newPatient->_IPP = $IPP->id400;
+        // Si serveur et on a un IPP sur le patient
         $newPatient->_no_ipp = 0;
         $msgPatient = $newPatient->store();
-
+        
         $codes = array ($msgPatient ? "A002" : "I001", $msgID400 ? "A004" : "I004", $msgIPP ? "A005" : $_code_IPP);
         if ($msgPatient || $msgID400 || $msgIPP) {
           $avertissement = $msgPatient." ".$msgID400." ".$msgIPP;
@@ -384,8 +418,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
         $doc_valid = $domAcquittement->schemaValidate();
-				
-				$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+        
+        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
       
@@ -483,8 +517,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E004", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-							
-							$echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+              
+              $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
             }
             $_code_IPP = "I024"; 
@@ -513,7 +547,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
         }
       }
-      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : substr($commentaire, 0, 4000)); 
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire); 
       $doc_valid = $domAcquittement->schemaValidate();
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         
