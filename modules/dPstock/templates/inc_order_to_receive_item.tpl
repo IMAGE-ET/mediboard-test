@@ -33,7 +33,7 @@
         <th>{{mb_label class=CProductOrderItemReception field=code}}</th>
         <th>{{mb_label class=CProductOrderItemReception field=lapsing_date}}</th>
         <th style="width: 0.1%;"></th>
-        <th style="width: 0.1%;"><img src="images/icons/print.png" /></th>
+        <th style="width: 0.1%;"><img src="style/mediboard/images/buttons/barcode.png" /></th>
       </tr>
       {{foreach from=$curr_item->_ref_receptions item=curr_reception}}
         <tr>

@@ -29,20 +29,31 @@ Main.add(function(){
   var manufacturer_code = $(editForm.manufacturer_code);
   manufacturer_code.maxLength = 50;
   
+  var manufacturer_code = $(editForm.manufacturer_code);
+  manufacturer_code.maxLength = 50;
   manufacturer_code.observe("keypress", function(e){
     var charCode = Event.key(e);
     
     if (charCode == 13) {
       if ($V(manufacturer_code).length != 5) Event.stop(e);
       
-      var parsed = Barcode.parseCode128($V(manufacturer_code));
-      if (parsed && parsed["01"]) {
-        var code = parsed["01"].substr(3, 5);
-        $V(manufacturer_code, code);
-      }
+      var url = new Url("dPstock", "httpreq_parse_barcode");
+      url.addParam("barcode", $V(manufacturer_code));
+      url.requestJSON(updateSCCcode);
     }
   });
 });
+
+function updateSCCcode(parsed) {
+  var editForm = getForm("edit_societe");
+  editForm.manufacturer_code.next("span").setVisible(!parsed.comp.scc_manuf);
+  
+  if (parsed.comp.scc_manuf) {
+    $V(editForm.manufacturer_code, parsed.comp.scc_manuf);
+  }
+  editForm.manufacturer_code.select();
+}
+
 </script>
 
 {{mb_include_script module=dPstock script=barcode}}
@@ -119,7 +130,10 @@ Main.add(function(){
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="manufacturer_code"}}</th>
-          <td>{{mb_field object=$societe field="manufacturer_code"}}</td>
+          <td>
+            {{mb_field object=$societe field="manufacturer_code"}}
+             <span style="display: none; color: red;">Ce n'est pas un code valide</span>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$societe field="address"}}</th>

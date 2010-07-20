@@ -20,14 +20,22 @@ Main.add(function () {
     if (charCode == 13) {
       if ($V(scc_code).length != 10) Event.stop(e);
       
-      var parsed = Barcode.parseCode128($V(scc_code));
-      if (parsed && parsed["01"]) {
-        var code = parsed["01"].substr(3, 10);
-        $V(scc_code, code);
-      }
+      var url = new Url("dPstock", "httpreq_parse_barcode");
+      url.addParam("barcode", $V(scc_code));
+      url.requestJSON(updateSCCcode);
     }
   });
 });
+
+function updateSCCcode(parsed) {
+  var editForm = getForm("edit_product");
+  editForm.scc_code.next("span").setVisible(!parsed.comp.scc_prod);
+  
+  if (parsed.comp.scc_prod) {
+    $V(editForm.scc_code, parsed.comp.scc_prod);
+  }
+  editForm.scc_code.select();
+}
 
 function toggleFractionnedAdministration(form, use) {
   var quantity = $(form.unit_quantity);
@@ -112,7 +120,10 @@ function duplicateObject(form) {
   </tr>
   <tr>
     <th>{{mb_label object=$product field="scc_code"}}</th>
-    <td>{{mb_field object=$product field="scc_code"}}</td>
+    <td>
+      {{mb_field object=$product field="scc_code"}} 
+      <span style="display: none; color: red;">Ce n'est pas un code valide</span>
+    </td>
   </tr>
   <tr>
     <th>{{mb_label object=$product field="description"}}</th>

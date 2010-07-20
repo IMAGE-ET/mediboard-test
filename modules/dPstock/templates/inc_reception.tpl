@@ -9,8 +9,8 @@
 *}}
 
 {{if $reception->_id}}
-  <button type="button" class="print" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
   <button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
+  <button type="button" class="barcode" onclick="printBarcodeGrid('{{$reception->_id}}')">Codes barres</button>
   
   {{if !$reception->locked}}
   <form name="lock-reception-{{$reception->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){location.reload()}})">

@@ -30,7 +30,7 @@
     <td>{{$_reception->_count_reception_items}}</td>
     <td style="width: 1%">
       <button type="button" class="print" onclick="printReception('{{$_reception->_id}}');">Bon de réception</button>
-      <button type="button" class="print" onclick="printBarcodeGrid('{{$_reception->_id}}');">Codes barre</button>
+      <button type="button" class="barcode" onclick="printBarcodeGrid('{{$_reception->_id}}');">Codes barre</button>
     </td>
   </tr>
   {{/foreach}}

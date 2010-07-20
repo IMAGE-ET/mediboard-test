@@ -404,6 +404,10 @@ button.merge:before, a.button.merge:before {
   content: url(images/buttons/merge.png);
 }
 
+button.barcode:before, a.button.barcode:before {
+  content: url(images/buttons/barcode.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }
