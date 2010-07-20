@@ -711,9 +711,11 @@ class CConsultation extends CCodable {
       // Recherche séjour englobant
       $this->loadRefPlageConsult();
       $datetime = $this->_datetime;
+      $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
       $where = array();
       $where['patient_id']   = " = '$this->patient_id'";
-      $where[] = "`sejour`.`entree` <= '$datetime' AND `sejour`.`sortie` >= '$datetime'";
+      $datetime_before = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
+      $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`entree` >= '$datetime' AND `sejour`.`sortie` >= '$datetime'";
 
       $sejour = new CSejour();
       $sejour->loadObject($where);
@@ -723,9 +725,8 @@ class CConsultation extends CCodable {
         $sejour->patient_id = $this->patient_id;
         $sejour->praticien_id = $this->_ref_chir->_id;
         $sejour->group_id = CGroups::loadCurrent()->_id;
-        $sejour->type = "consult";  
-        $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
-        $datetime = mbDateTime("-$minutes_before_consult_sejour minute", "$this->_date $this->heure");
+        $sejour->type = "consult";
+        $datetime = mbDateTime(/*"-$minutes_before_consult_sejour minute", */"$this->_date $this->heure");
         if ($this->chrono == self::PLANIFIE) {
           $sejour->entree_prevue = $datetime;
         } else {
@@ -743,6 +744,19 @@ class CConsultation extends CCodable {
     if ($this->sejour_id) {
       $forfait_se = $this->_forfait_se;
       $this->loadRefSejour();
+      $this->loadRefPlageConsult();
+      $datetime = $this->_ref_plageconsult->date. " ".$this->heure;
+
+      if ($datetime < $this->_ref_sejour->entree) {
+        $this->_ref_sejour->_hour_entree_prevue = null;
+        $this->_ref_sejour->_min_entree_prevue  = null;
+        $this->_ref_sejour->_hour_sortie_prevue = null;
+        $this->_ref_sejour->_min_sortie_prevue  = null;
+        $this->_ref_sejour->entree_reelle ?
+            $this->_ref_sejour->entree_reelle = $datetime:
+            $this->_ref_sejour->entree_prevue = $datetime;
+        $this->_ref_sejour->store();
+      }
       
       if ($forfait_se !== null && $this->_id && 
            CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
