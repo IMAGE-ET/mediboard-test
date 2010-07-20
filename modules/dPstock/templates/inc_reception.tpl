@@ -13,7 +13,7 @@
   <button type="button" class="print" onclick="printReception('{{$reception->_id}}');">Bon de réception</button>
   
   {{if !$reception->locked}}
-  <form name="lock-reception-{{$reception->_id}}" action="" onsubmit="return onSubmitFormAjax(this)">
+  <form name="lock-reception-{{$reception->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete: function(){location.reload()}})">
     <input type="hidden" name="m" value="dPstock" />
     <input type="hidden" name="dosql" value="do_product_reception_aed" />
     {{mb_key object=$reception}}
@@ -23,7 +23,12 @@
   </form>
   {{/if}}
   
+  <h3></h3>
+  
   <table class="tbl">
+    <tr>
+      <th colspan="4" class="title">{{$reception->reference}}</th>
+    </tr>
     <tr>
       <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
       <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>

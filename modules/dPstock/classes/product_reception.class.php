@@ -80,7 +80,7 @@ class CProductReception extends CMbObject {
         if (!$_r->reception_id) continue;
         
         $_r->loadRefReception();
-        if (!$locked || $_r->_ref_reception->locked) continue;
+        if ($locked || $_r->_ref_reception->locked) continue;
         
         if (!isset($receptions_prob[$_r->reception_id])) {
           $receptions_prob[$_r->reception_id] = 0;
