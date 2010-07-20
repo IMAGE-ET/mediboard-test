@@ -378,9 +378,14 @@ class CAppUI {
    */
   static function displayMsg($msg, $action) {
     $args = func_get_args();
-    $action = CAppUI::tr($action, array_slice($args, 2));
+    $action = self::tr($action, array_slice($args, 2));
+    if ($msg) {
+    	$msg = self::tr($msg);
+    	self::setMsg("$action: $msg", UI_MSG_ERROR);
+			return;
+    } 
 
-    $msg ? self::setMsg("$action: $msg", UI_MSG_ERROR) : self::setMsg($action, UI_MSG_OK);
+    self::setMsg($action, UI_MSG_OK);
   }
 
   /**
