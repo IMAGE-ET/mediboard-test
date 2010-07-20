@@ -34,6 +34,7 @@ class CProductOrderItemReception extends CMbObject {
   
   var $_cancel            = null;
   var $_price             = null;
+  var $_unit_quantity     = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -94,7 +95,6 @@ class CProductOrderItemReception extends CMbObject {
     $product = $reference->_ref_product;
     
     if ($product->loadRefStock()) {
-      mbTrace($this->getUnitQuantity());
       $product->_ref_stock_group->quantity -= $this->getUnitQuantity();
       $product->_ref_stock_group->store();
     }
@@ -110,7 +110,7 @@ class CProductOrderItemReception extends CMbObject {
     $item->loadReference();
     $reference = $item->_ref_reference;
     
-    return $this->quantity * $reference->_unit_quantity;
+    return $this->_unit_quantity = $this->quantity * $reference->_unit_quantity;
   }
 
   function store() {

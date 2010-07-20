@@ -29,6 +29,14 @@ popupOrderForm = function(order_id, width, height) {
     </td>
     <td colspan="5">{{mb_value object=$object->_ref_societe field=name}}</td>
   </tr>
+  {{if $object->object_id}}
+  <tr>
+    <td colspan="7">
+      {{$object->_ref_object->loadRefsFwd()}}
+      {{$object->_ref_object}}
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <th class="category">Code</th>
     <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
@@ -54,7 +62,13 @@ popupOrderForm = function(order_id, width, height) {
     {{else}}
       <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
     {{/if}}
-    <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=unit_price}}</td>
+    <td style="white-space: nowrap; text-align: right;">
+      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+        {{mb_value object=$curr_item->_ref_reference field=_unit_price}}
+      {{else}}
+        {{mb_value object=$curr_item field=unit_price}}
+      {{/if}}
+    </td>
     <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
   </tr>
   {{/foreach}}

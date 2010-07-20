@@ -56,7 +56,7 @@ class CPrescriptionLineDMI extends CMbObject {
   }
   
   function check(){
-    if (!$this->_id) {
+    if (false && !$this->_id) {
       $where = array(
         "order_item_reception_id" => "= '$this->order_item_reception_id'"
       );
