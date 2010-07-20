@@ -1345,6 +1345,7 @@ class CPatient extends CMbObject {
   }
   
   function loadRefPhotoIdentite() {
+    global $can;
     $file = new CFile();
     $file->setObject($this);
     $file->file_name = 'identite.jpg';
