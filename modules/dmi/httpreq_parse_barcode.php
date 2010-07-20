@@ -20,12 +20,13 @@ $products = array();
 $lots = array();
 
 $lot = isset($comp['lot']) ? $comp['lot'] : trim($comp['raw'], ".%\n\r\t +-");
+$dmi_category_id = CAppUI::conf("dmi CDMI product_category_id");
 
 $object = new CProductOrderItemReception;
 $where = array(
   "(product_order_item_reception.lapsing_date > '".mbDate()."' OR product_order_item_reception.lapsing_date IS NULL)",
   "(product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL)",
-  "product.category_id" => "= '".CAppUI::conf("dmi CDMI product_category_id")."'",
+  "product.category_id" => "= '$dmi_category_id'",
 );
 
 $ljoin = array(
@@ -58,21 +59,24 @@ if ( empty($products) ) {
   $keys = array("scc-prod", "ref", "cip", "raw");
   $values = array_intersect_key($comp, array_flip($keys));
   
-  foreach ($values as $field=>$value) {
-    $products += $object->seek($value, null, 50);
+  $where = array(
+    "product.category_id" => "= '$dmi_category_id'",
+  );
+  foreach ($values as $field => $value) {
+    if (!$value) continue;
+    $products += $object->seek($value, $where, 50);
   }
   
   $reception = new CProductOrderItemReception;
   
+  $where = array(
+    "product.category_id" => "= '$dmi_category_id'",
+    "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
+  );
+  
   foreach ($products as $_product) {
+    $where["product.product_id"] = "= '$_product->_id'";
     $_product->loadRefsFwd();
-    
-    $where = array(
-      "product.product_id"  => "= '$_product->_id'",
-      "product.category_id" => "= '".CAppUI::conf("dmi CDMI product_category_id")."'",
-      "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
-    );
-    
     $_product->_lots = $reception->loadList($where, null, null, null, $ljoin);
   }
 }
