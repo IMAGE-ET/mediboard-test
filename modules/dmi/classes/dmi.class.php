@@ -81,6 +81,13 @@ class CDMI extends CProduitPrescriptible {
       }
     }
   }
+  
+  static function getProduct($code){
+    $dmi = new self;
+    $dmi->code = $code;
+    $dmi->loadMatchingObject();
+    return $dmi;
+  }
 }
 
 ?>

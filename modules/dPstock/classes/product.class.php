@@ -46,6 +46,7 @@ class CProduct extends CMbObject {
   var $_ref_stocks_group   = null;
   var $_ref_stocks_service = null;
   var $_ref_references     = null;
+  var $_ref_lots           = null;
   
   // Undividable quantity
   var $_unit_quantity      = null;
@@ -176,6 +177,21 @@ class CProduct extends CMbObject {
       $this->loadRefsFwd();
     }
     return $this->_ref_category->getPerm($permType);
+  }
+  
+  function loadRefsLots(){
+    $ljoin = array(
+      "product_order_item" => "product_order_item_reception.order_item_id = product_order_item.order_item_id",
+      "product_reference"  => "product_order_item.reference_id = product_reference.reference_id",
+      "product"            => "product_reference.product_id = product.product_id",
+    );
+    
+    $where = array(
+      "product.product_id" => " = '$this->_id'",
+    );
+    
+    $lot = new CProductOrderItemReception;
+    return $this->_ref_lots = $lot->loadList($where, "date", null, null, $ljoin);
   }
   
   function loadView(){

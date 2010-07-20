@@ -15,6 +15,11 @@
           {{mb_value object=$_reception->_ref_order_item->_ref_reference field=product_id}}
         </span>
       </td>
+      <td>
+        {{if $_reception->_ref_dmi->_id}}
+          {{mb_value object=$_reception->_ref_dmi field=type}}
+        {{/if}}
+      </td>
       <td>{{mb_value object=$_reception field=code}}</td>
       <td {{if $_reception->lapsing_date|strtotime < $smarty.now}}class="error"{{/if}}>
         {{mb_value object=$_reception field=lapsing_date}}

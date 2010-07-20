@@ -187,3 +187,30 @@ Main.add(function () {
 		</tr>
   </table>
 </form>
+
+{{if $element->_ext_product && $element->_ext_product->_id}}
+<table class="main tbl">
+  <tr>
+    <th colspan="10" class="title">Lots</th>
+  </tr>
+  <tr>
+    <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
+    <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
+  </tr>
+  
+  {{foreach from=$element->_ext_product->_ref_lots item=_lot}}
+    <tr>
+      <td>{{mb_value object=$_lot field=quantity}}</td>
+      <td>{{mb_value object=$_lot field=date}}</td>
+      <td>{{mb_value object=$_lot field=code}}</td>
+      <td>{{mb_value object=$_lot field=lapsing_date}}</td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="10">{{tr}}CProductOrderItemReception.none{{/tr}}</td>
+    </tr>
+  {{/foreach}}
+</table>
+{{/if}}

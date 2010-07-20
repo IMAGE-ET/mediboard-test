@@ -20,6 +20,7 @@ $where = array(
   "product.product_id" => "IS NOT NULL",
   "product.code" => "IS NOT NULL",
   "product_reference.reference_id" => "IS NOT NULL",
+  "product_order_item_reception.lapsing_date" => "IS NOT NULL",
 );
 
 $reception = new CProductOrderItemReception;
@@ -30,8 +31,13 @@ foreach($receptions as $_id => $_reception) {
   $_reception->_total_quantity = $qty;
   $_reception->_used_quantity = $_reception->countBackRefs('lines_dmi');
   $_reception->_remaining_quantity = $qty - $_reception->_used_quantity;
+  
   if ($_reception->_remaining_quantity < 1) {
     unset($receptions[$_id]);
+  }
+  else {
+    $dmi = CDMI::getProduct($_reception->_ref_order_item->_ref_reference->_ref_product->code);
+    $_reception->_ref_dmi = $dmi;
   }
 }
 

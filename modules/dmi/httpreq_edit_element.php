@@ -18,6 +18,7 @@ $element_id = CValue::getOrSession("element_id");
 $element = new $element_class;
 $element->load($element_id);
 $element->loadExtProduct();
+$element->_ext_product->loadRefsLots();
 
 $generate_code = CValue::get("generate_code", false);
 if($generate_code){
