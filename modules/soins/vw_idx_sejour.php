@@ -20,6 +20,8 @@ $mode = CValue::getOrSession("mode", 0);
 $service_id   = CValue::getOrSession("service_id");
 $praticien_id = CValue::getOrSession("praticien_id");
 $_active_tab  = CValue::get("_active_tab");
+$type_admission = CValue::getOrSession("type");
+
 $tab_sejour = array();
 
 // Chargement de l'utilisateur courant
@@ -124,7 +126,7 @@ if($praticien_id && !$service_id){
 	$where["entree_prevue"] = " <= '$date 23:59:59'";
 	$where["sortie_prevue"] = " >= '$date 00:00:00'";
 	$where["annule"] = " = '0'";
-	$where[] = "type != 'urg' AND type != 'exte'";
+	$where[] = $type_admission ? "type = '$type_admission'" : "type != 'urg' AND type != 'exte'";
 	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
@@ -153,7 +155,6 @@ if($praticien_id && !$service_id){
     }
 	}
 }
-
 
 foreach ($sejoursParService as $key => $_service) {
   if($key != "NP"){
@@ -195,6 +196,7 @@ $sejour->loadRefs();
 $sejour->loadRefsPrescriptions();
 $sejour->loadRefsDocs();
 
+
 $medecin_adresse_par = new CMedecin();
 $medecin_adresse_par->load($sejour->adresse_par_prat_id);
 $sejour->_adresse_par_prat = $medecin_adresse_par->_view;
@@ -214,7 +216,7 @@ if($service_id){
 	  $dayBefore = mbDate("-1 days", $date);
 	  $where = array(
 		  "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
-		  "type" => "!= 'exte'",
+		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
 		  "annule" => "= '0'"
 		);
 		  
@@ -223,7 +225,7 @@ if($service_id){
 		// Admissions du matin
 		$where = array(
 		  "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
-		  "type" => "!= 'exte'",
+		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
 		  "annule" => "= '0'"
 		);
 		  
@@ -232,7 +234,7 @@ if($service_id){
 		// Admissions du soir
 		$where = array(
 		  "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
-		  "type" => "!= 'exte'",
+		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
 		  "annule" => "= '0'"
 		);
 		  
@@ -245,7 +247,7 @@ if($service_id){
 		  "sortie_prevue" => ">= '$date 00:00:00'",
 		  //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
 		  "annule" => "= '0'",
-		  "type" => "!= 'exte'"
+		  "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'"
 	  );
 		  
 		$groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
@@ -260,7 +262,7 @@ if($service_id){
 	  }
 	} else {
 	  $service->load($service_id);
-	  loadServiceComplet($service, $date, $mode, $praticien_id);
+	  loadServiceComplet($service, $date, $mode, $praticien_id, $type_admission);
 	}
 	
 	if($service->_id){
@@ -306,7 +308,10 @@ $can_view_dossier_medical =
   CModule::getCanDo('dPbloc')->edit ||
   CModule::getCanDo('dPplanningOp')->edit || 
   $AppUI->_ref_user->isFromType(array("Infirmière"));
-  
+
+if ($type_admission) {
+  $sejour->type = $type_admission;
+}
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_active_tab", $_active_tab);

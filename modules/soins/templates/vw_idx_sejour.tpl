@@ -207,21 +207,9 @@ function updatePatientsListHeight() {
   scroller.setStyle({height: (vpd.height - pos[1] - 6)+'px'});
 }
 
-
-function filterSejour (type){
-  var listTR = $("list_sejours").select("tr");
-  listTR.invoke("show") ;	
-	listTR.each(function(e){
-	  if(type && e.className != type && e.className != ""){
-		  e.hide();
-		}
-	});
-}
-
 var tab_sejour = null;
 
 Main.add(function () {
-  filterSejour('{{$object->type}}');
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 
   /* Tab initialization */
@@ -331,9 +319,17 @@ printDossierComplet = function(){
 						   {{mb_label class=CSejour field="type"}}
 						 </th>
 						 <td>
-						   {{mb_field object=$object canNull=true field="type"  defaultOption="&mdash; Tous" onchange="filterSejour(this.value);" style="width:135px"}}
+						   {{assign var=type_admission value=$object->_specs.type}} 
+               <select name="type" onchange="this.form.submit();" style="width: 135px;">
+                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                 {{foreach from=$type_admission->_locales key=key item=_type}} 
+                 {{if $key != "urg" && $key != "exte"}}
+                 <option value="{{$key}}" {{if $key == $object->type}}selected="selected"{{/if}}>{{$_type}}</option>
+                 {{/if}}
+                 {{/foreach}}
+               </select>
 						 </td>
-				</form>
+				     </form>
           </tr>
         {{/if}}
         {{if $praticien && ($current_date == $date)}}

@@ -77,7 +77,7 @@ function &getCachedLit($lit_id) {
 /**
  * Charge complètement un service pour l'affichage des affectations
  */
-function loadServiceComplet(&$service, $date, $mode, $praticien_id = "") {
+function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "") {
   $service->loadRefsBack();
   $service->_nb_lits_dispo = 0;
 
@@ -96,7 +96,12 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "") {
           		continue;
           	}
           }
-          
+         if ($type){
+            if($affectation->_ref_sejour->type != $type){
+              unset($lit->_ref_affectations[$affectation_id]);
+              continue;
+            }
+          }
           
           $affectation->loadRefsAffectations();
           $affectation->checkDaysRelative($date);

@@ -186,14 +186,14 @@ Main.add( function(){
 		  </th>
 	  </tr>
 	  <tr>
-	    <th>{{mb_title object=$prescription field=libelle}}</th>
+	    <th style="width:7em">{{mb_title object=$prescription field=libelle}}</th>
 	    <td>
         <input type="text" name="libelle" value="{{$prescription->libelle}}" onchange="refreshListProtocole(this.form);" />
         <button class="tick notext" type="button"></button>
 	    </td>
 	  </tr>
 	   <tr>
-	    <th>{{mb_title object=$prescription field=_owner}}</th>
+	    <th style="width:7em">{{mb_title object=$prescription field=_owner}}</th>
 	     <td>
          <!-- Modification du pratcien_id / user_id -->
          <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
@@ -224,7 +224,7 @@ Main.add( function(){
 		 </tr>
 		 {{if $prescription->type != "externe"}}
 		 <tr>
-			 <th>{{mb_label object=$protocole field="type"}}</th>
+			 <th style="width:7em">{{mb_label object=$protocole field="type"}}</th>
 			 <td>
 		      <select name="type" onchange="refreshListProtocole(this.form);">
 		        <option value="pre_admission" {{if $prescription->type == "pre_admission"}}selected="selected"{{/if}}>Pré-admission</option>
@@ -234,13 +234,16 @@ Main.add( function(){
 			  </td>
 		  </tr>
 	   {{/if}}
-	   <tr>
-	     <th>Fichiers</th>
-	     <td  id="files-{{$prescription->_id}}-CPrescription"></td>
-	   </tr>
   </table>
 </form>
+<table class="form">
+  <tr>
+    <th style="width:7em">Fichiers</th>
+    <td  id="files-{{$prescription->_id}}-CPrescription"></td>
+  </tr>
+</table>
 {{/if}}
+
 
 <form name="moment_unitaire">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  
