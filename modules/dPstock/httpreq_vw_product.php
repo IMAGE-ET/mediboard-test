@@ -41,10 +41,14 @@ if ($product->load($product_id)) {
   );
   
   $delivery = new CProductDelivery;
-  $product->_ref_deliveries = $delivery->loadList($where, "date_dispensation", 100);
+  $product->_ref_deliveries = $delivery->loadList($where, "date_dispensation DESC", 50);
+  
+  foreach($product->_ref_deliveries as $_delivery) {
+    $_delivery->loadRefsBack();
+  }
+  
+  $product->getConsommation("-3 MONTHS");
 }
-
-$product->getConsommation("-3 MONTHS");
 
 // Loads the required Category the complete list
 $category = new CProductCategory();

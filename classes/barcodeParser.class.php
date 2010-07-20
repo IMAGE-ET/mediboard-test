@@ -203,6 +203,8 @@ class CBarcodeParser {
   }
   
   static function parsePeremptionDate($date) {
+    // dates du type 18304 >> 18 octobre (304 = jour dans l'année)
+    
     if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
       return $date;
     }
@@ -322,6 +324,13 @@ class CBarcodeParser {
         $comp["lot"] = $parts[4];
       }
       
+      //      ___REF___  PER_ __LOT___
+      // +H7036307002101/1830461324862J09C
+      if (preg_match('/^h(\d{3})(\d+)(\d)\/(\d{5})(\d+)(.{4})$/ms', $barcode, $parts)) {
+        $comp["ref"] = $parts[2];
+        $comp["lot"] = $parts[5];
+      }
+      
       //   __SN___
       // +$11393812M  // $ or \v
       if (empty($comp) && preg_match('/^\+.(.+).{2}$/ms', $barcode, $parts)) {
@@ -371,7 +380,7 @@ class CBarcodeParser {
     // Physiol
     // __REF___ __SN__ __STE_ _ __PER_ _
     // 28081230 053653 100609 1 130630 1
-    if (empty($comp) && preg_match('/^(\d{5}[0123]\d[05])(\d{6})([0123]\d[01]\d\d\d)1([0123]\d[01]\d\d\d)1$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^(\d{4}[012]\d{3})(\d{6})([0123]\d[01]\d\d\d)\d([0123]\d[01]\d\d\d)\d$/', $barcode, $parts)) {
       $type = "physiol";
       $comp["ref"] = $parts[1];
       $comp["sn"]  = $parts[2];

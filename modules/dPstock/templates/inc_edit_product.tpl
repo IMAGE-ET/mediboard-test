@@ -16,7 +16,7 @@ Main.add(function(){
 <ul class="control_tabs" id="tabs-stocks-references">
   <li><a href="#tab-stocks" {{if $product->_ref_stocks_service|@count == 0}}class="empty"{{/if}}>{{tr}}CProductStock{{/tr}} <small>({{$product->_ref_stocks_service|@count}})</small></a></li>
   <li><a href="#tab-references" {{if $product->_ref_references|@count == 0}}class="empty"{{/if}}>{{tr}}CProduct-back-references{{/tr}} <small>({{$product->_ref_references|@count}})</small></a></li>
-  <li><a href="#tab-deliveries" {{if $product->_ref_deliveries|@count == 0}}class="empty"{{/if}}>{{tr}}CProductStockGroup-back-deliveries{{/tr}} <small>({{$product->_ref_deliveries|@count}})</small></a></li>
+  <li><a href="#tab-deliveries" {{if $product->_ref_deliveries|@count == 0}}class="empty"{{/if}}>Dispensations <small>({{$product->_ref_deliveries|@count}})</small></a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -105,19 +105,54 @@ Main.add(function(){
 
 <table id="tab-deliveries" class="main tbl">
   <tr>
+    <td colspan="4">
+      <div class="small-info">
+        Seules les 50 premières dispensations sont affichées
+      </div>
+    </td>
+  </tr>
+  <tr>
     <th>{{mb_title class=CProductDelivery field=service_id}}</th>
     <th>{{mb_title class=CProductDelivery field=quantity}}</th>
     <th>{{mb_title class=CProductDelivery field=date_dispensation}}</th>
+    <th>
+      {{mb_title class=CProductDeliveryTrace field=delivery_trace_id}} / 
+      {{mb_title class=CProductDeliveryTrace field=date_delivery}} /
+      {{mb_title class=CProductDeliveryTrace field=code}}
+    </th>
   </tr>
   {{foreach from=$product->_ref_deliveries item=_delivery}}
     <tr>
       <td>{{mb_value object=$_delivery field=service_id}}</td>
       <td>{{mb_value object=$_delivery field=quantity}}</td>
-      <td>{{mb_value object=$_delivery field=date_dispensation}}</td>
+      <td>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_delivery->_guid}}')">
+          {{mb_value object=$_delivery field=date_dispensation}}
+        </span>
+      </td>
+      <td>
+        {{foreach from=$_delivery->_ref_delivery_traces item=_trace}}
+          <table class="main layout">
+            <tr>
+              <td style="width: 20%;">
+                <span style="float: left;">[ {{$_trace->_id}} ]</span>
+              </td>
+              <td style="width: 60%; text-align: right;">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$_trace->_guid}}')">
+                  {{$_trace->quantity}} le {{mb_value object=$_trace field=date_delivery}}
+                </span>
+              </td>
+              <td style="width: 20%;">
+                {{$_trace->code}}
+              </td>
+            </tr>
+          </table>
+        {{/foreach}}  
+      </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
+      <td colspan="4">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
