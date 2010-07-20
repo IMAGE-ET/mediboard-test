@@ -30,9 +30,14 @@
 {{/if}}
 
 {{if $file->_id}}
-  {{assign var=id value=$file->_id}}
-  {{assign var=src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=$size&h=$size&zc=1"}}
-  {{assign var=_src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=200"}}
+  {{if !$file->private || $patient->_can_see_photo}}
+    {{assign var=id value=$file->_id}}
+    {{assign var=src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=$size&h=$size&zc=1"}}
+    {{assign var=_src value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$id&phpThumb=1&w=200"}}
+  {{else}}
+    {{assign var=src value="images/pictures/identity_anonymous.png"}}
+    {{assign var=_src value="images/pictures/identity_anonymous.png"}}
+  {{/if}}
 {{else}}
   {{if $patient->_age < $dPconfig.dPpatients.CPatient.adult_age && $patient->naissance && $patient->naissance != "0000-00-00"}}
     {{assign var=src value="images/pictures/identity_child.png"}}
@@ -59,7 +64,7 @@
   <br />
   {{if !$patient->_ref_photo_identite->_id}}
     <button type="button" class="search" onclick="uploadFile('{{$patient->_class_name}}', '{{$patient->_id}}', null, 'identite.jpg')">{{tr}}Browse{{/tr}}</button>
-  {{else}}
+  {{elseif $patient->_can_see_photo == 1}}
     <button onclick="deletePhoto({{$patient->_ref_photo_identite->_id}})" class="trash" type="button">{{tr}}Delete{{/tr}}</button>
   {{/if}}
 {{/if}}

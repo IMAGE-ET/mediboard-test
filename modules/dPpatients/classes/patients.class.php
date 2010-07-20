@@ -195,7 +195,8 @@ class CPatient extends CMbObject {
   var $_art115      = null;
   var $_type_exoneration = null;
   var $_exoneration = null;
-  
+  var $_can_see_photo = null;
+
   // Vitale behaviour
   var $_bind_vitale   = null;
   var $_update_vitale = null;
@@ -1349,6 +1350,18 @@ class CPatient extends CMbObject {
     $file->file_name = 'identite.jpg';
     $file->loadMatchingObject();
     $this->_ref_photo_identite = $file;
+    $this->_can_see_photo = 1;
+    if($this->_ref_photo_identite->_id) {
+      $this->_ref_photo_identite->loadLogs();
+    
+      $author = new CMediusers;
+      $author->load($this->_ref_photo_identite->_ref_first_log->_ref_user->_id);
+      $author->loadRefFunction();
+      
+      $current_user = CAppUI::$user;
+      $current_user->loadRefFunction();
+      $this->_can_see_photo = ($current_user->function_id == $author->function_id) || !($can->admin == ''); 
+    }
   }
   
   function fillLimitedTemplate(&$template) {
