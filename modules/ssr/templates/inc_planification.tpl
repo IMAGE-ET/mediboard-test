@@ -27,6 +27,12 @@ onCompleteShowWeek = function(){
   Planification.refreshActivites();
 }
 
+onKeyDelete = function(e) {
+  if (Event.key(e) == Event.KEY_DELETE) {
+    $("editSelectedEvent_delete").onclick();
+  }
+}
+
 Main.add(function(){
   Planification.showWeek();
   var planning = $("planning");
@@ -35,7 +41,9 @@ Main.add(function(){
   planning.setStyle({
     height: (vp.height-top-20)+"px"
   });
+  document.observe("keydown", onKeyDelete);
 });
+
 
 printPlanningSejour = function(){
   var url = new Url("ssr", "print_planning_sejour");

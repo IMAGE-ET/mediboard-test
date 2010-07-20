@@ -1,3 +1,3 @@
 <?php
-$locales['module-ssr-long'] = '';
+$locales['ssr-board-sejours-replaced'] = '';
 ?>

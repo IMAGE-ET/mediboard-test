@@ -25,6 +25,7 @@ Main.add(function() {
 	var tabs = Control.Tabs.create('tab-sejour', true);
 	(tabs.activeLink.onmousedown || Prototype.emptyFunction)();
 } );
+
 var constantesMedicalesDrawn = false;
 refreshConstantesMedicales = function (force) {
   if (!constantesMedicalesDrawn || force) {

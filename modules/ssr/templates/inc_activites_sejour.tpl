@@ -660,11 +660,32 @@ Main.add(function(){
       $(elem).up().remove();
     }
     
+		onSubmitSelectedEvents = function(form) {
+      updateSelectedEvents(form.token_elts);
+			var values = new TokenField(form.token_elts).getValues();
+			
+			// Sélection vide
+			if (!values.length) {
+			  alert($T('CEvenementSSR-alert-selection_empty'));
+				return;
+			}
+			
+			// Suppression multiple
+			if ($V(form.del) && values.length > 1) {
+			  if (!confirm($T('CEvenementSSR-msg-confirm-multidelete', values.length) + $T('confirm-ask-continue'))) {
+				  return;
+				}
+			}
+			
+			// Envoi du formulaire
+			return onSubmitFormAjax(form, { onComplete: function() {
+        refreshPlanningsSSR(); 
+				resetFormSSR(); 
+			} } );
+		}
 	</script>	
 
-	<form name="editSelectedEvent" method="post" action="?" onsubmit="updateSelectedEvents(this.token_elts); 
-                                                                    return onSubmitFormAjax(this, { onComplete: function(){ 
-																																		    refreshPlanningsSSR(); resetFormSSR(); } } )">
+	<form name="editSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
 		<input type="hidden" name="m" value="ssr" />
 		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
 		<input type="hidden" name="token_elts" value="" />
@@ -737,17 +758,16 @@ Main.add(function(){
       </tr>
       <tr>
         <td class="button" colspan="2">
-          <button type="button" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
-            Supprimer
+          <button type="button" name="delete" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
+            {{tr}}Delete{{/tr}}
           </button>
         </td>
       </tr>
     </table>
 	</form>
 	
-	<form name="duplicateSelectedEvent" method="post" action="?" onsubmit="updateSelectedEvents(this.token_elts); 
-                                                                    return onSubmitFormAjax(this, { onComplete: function(){ 
-                                                                        refreshPlanningsSSR(); resetFormSSR(); } } )">
+	<form name="duplicateSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
+		
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="token_elts" value="" /> 
@@ -759,7 +779,9 @@ Main.add(function(){
       </tr>
       <tr>
         <td class="button">
-          <button type="button" class="submit" onclick="$V(this.form.duplicate, '1'); this.form.onsubmit();">Dupliquer</button>
+          <button type="button" class="submit" onclick="$V(this.form.duplicate, '1'); this.form.onsubmit();">
+          	Dupliquer
+					</button>
         </td>
       </tr> 
 	  </table>

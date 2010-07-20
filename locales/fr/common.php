@@ -144,6 +144,7 @@ $locales['common-suggest-no-mediuser'] = 'Il est fortement conseillé d\'installe
 $locales['common-warning-no-mediuser'] = 'Vous n\'êtes pas relié à l\'organigramme, ce qui nuit au bon fonctionnement et réduit les fonctionnalités (vous êtes peut-être authentifié avec l\'utilisateur "admin")';
 $locales['config-interop-base_url'] = 'URL de la DHE distante';
 $locales['configure'] = 'Configurer';
+$locales['confirm-ask-continue'] = '\\n\\nVoulez-vous continuer ?';
 $locales['day'] = 'jour';
 $locales['days'] = 'jours';
 $locales['delete'] = 'supprimer';
