@@ -147,6 +147,19 @@ class CEvenementSSR extends CMbObject {
 		return parent::check();
 	}
 	
+	function canDeleteEx() {
+    if ($msg = parent::canDeleteEx()){
+      return $msg;
+    }
+  	
+		// Impossible de supprmier un événement réalisé	
+    $this->completeField("realise");
+		if ($this->realise) {
+			return "CEvenementSSR-msg-delete-failed-realise";
+		}
+		
+	}
+	
 	function loadView() {
 		parent::loadView();
 		$this->loadRefSejour();

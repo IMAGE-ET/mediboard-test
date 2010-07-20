@@ -245,6 +245,7 @@ $locales['CEvenementSSR-evenement_ssr_id-desc'] = 'Identifiant interne';
 $locales['CEvenementSSR-msg-confirm-multidelete'] = 'Vous êtes sur le point de supprimer %d événements.';
 $locales['CEvenementSSR-msg-create'] = 'Evénement créé';
 $locales['CEvenementSSR-msg-delete'] = 'Evénement supprimé';
+$locales['CEvenementSSR-msg-delete-failed-realise'] = 'Evénement déjà réalisé';
 $locales['CEvenementSSR-msg-failed-bounds'] = 'Evenement SSR en de hors des limites du séjour';
 $locales['CEvenementSSR-msg-modify'] = 'Evénement modifié';
 $locales['CEvenementSSR-prescription_line_element_id'] = 'Elément';
