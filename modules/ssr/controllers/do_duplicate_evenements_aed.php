@@ -9,6 +9,7 @@
  */
 
 $token_elts  = CValue::post("token_elts");
+$period      = CValue::post("period");
 
 $elts_id = explode("|", $token_elts);
 foreach($elts_id as $_elt_id){
@@ -19,7 +20,7 @@ foreach($elts_id as $_elt_id){
   // Duplication de l'événement  
 	$evenement_ssr->_id = "";
 	$evenement_ssr->realise = 0;
-	$evenement_ssr->debut = mbDateTime("7 days", $evenement_ssr->debut);
+	$evenement_ssr->debut = mbDateTime("+1 $period", $evenement_ssr->debut);
 	if ($evenement_ssr->seance_collective_id){
     CAppUI::displayMsg("Impossible de dupliquer des evenements qui sont dans des seances collectives", "CEvenementSSR-msg-store");
 	} 

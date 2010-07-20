@@ -694,7 +694,7 @@ Main.add(function(){
     <table class="form">
 		 <tr>
         <th class="category" colspan="2">
-          Modification des événements sélectionnés
+          Modification 
         </th>
       </tr>
 			<tr>
@@ -753,7 +753,7 @@ Main.add(function(){
 			</tr>	
 			<tr>
         <th class="category" colspan="2">
-          Suppression des événements sélectionnés
+          Suppression 
         </th>
       </tr>
       <tr>
@@ -771,17 +771,21 @@ Main.add(function(){
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="token_elts" value="" /> 
+    <input type="hidden" name="period" value="" /> 
     <table class="form">
     	<tr>
         <th class="category">
-          Duplication des événements sélectionnés vers la semaine suivante
+          Duplication
         </th>
       </tr>
       <tr>
         <td class="button">
-          <button type="button" class="submit" onclick="$V(this.form.duplicate, '1'); this.form.onsubmit();">
-          	Dupliquer
+          <button type="button" class="new" onclick="$V(this.form.period, 'week'); this.form.onsubmit();">
+          	Dupliquer la semaine suivante
 					</button>
+          <button type="button" class="new" onclick="$V(this.form.period, 'day'); this.form.onsubmit();">
+            Dupliquer le landemain
+          </button>
         </td>
       </tr> 
 	  </table>
@@ -797,7 +801,7 @@ Main.add(function(){
 	
 	<table class="form">
 		<tr>
-			<th class="category">Modification des codes CdARR</td>
+			<th class="category">Codes CdARR</td>
 		</tr>
 		<tr>
 			<td class="button">
