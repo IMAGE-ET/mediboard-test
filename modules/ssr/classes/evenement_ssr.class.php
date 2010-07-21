@@ -21,7 +21,7 @@ class CEvenementSSR extends CMbObject {
 	var $equipement_id           = null;
   var $realise                 = null;
 	var $remarque                = null;
-	
+
 	// Seances collectives
 	var $seance_collective_id    = null; // Evenement lié a une seance collective
 	var $_ref_element_prescription = null;
@@ -30,7 +30,8 @@ class CEvenementSSR extends CMbObject {
 	
 	
 	// Form Fields
-	var $_heure                   = null;
+  var $_heure_fin               = null; // Time
+	var $_heure_deb               = null; // Time
 	var $_nb_decalage_min_debut   = null;
 	var $_nb_decalage_heure_debut = null;
   var $_nb_decalage_jour_debut  = null;
@@ -51,16 +52,21 @@ class CEvenementSSR extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
+
     $props["prescription_line_element_id"] = "ref class|CPrescriptionLineElement";
-		$props["sejour_id"]     = "ref class|CSejour show|0";
+    $props["sejour_id"]     = "ref class|CSejour show|0";
     $props["debut"]         = "dateTime show|0";
+
+    $props["_heure_deb"] = "time show|1";
+    $props["_heure_fin"] = "time show|1";
     $props["duree"]         = "num min|0";
+
 		$props["therapeute_id"] = "ref class|CMediusers";
 		$props["equipement_id"] = "ref class|CEquipement";
 		$props["realise"]       = "bool default|0";
 		$props["remarque"]      = "str";
 		$props["seance_collective_id"] = "ref class|CEvenementSSR";
-		$props["_heure"]        = "time";
+		
     $props["_nb_decalage_min_debut"]   = "num";
 		$props["_nb_decalage_heure_debut"] = "num";
     $props["_nb_decalage_jour_debut"]  = "num";
@@ -75,6 +81,11 @@ class CEvenementSSR extends CMbObject {
     return $backProps;
   }
 	
+	function updateFormFields() {
+		parent::updateFormFields();
+    $this->_heure_deb = mbTime($this->debut);
+    $this->_heure_fin = mbTime("+ $this->duree MINUTES", $this->debut);
+	}
 	function check(){
 		// Vérouillage d'un événement réalisé
     $this->completeField("realise");
@@ -167,13 +178,12 @@ class CEvenementSSR extends CMbObject {
 		$sejour->loadRefPatient();
 		$patient = $sejour->_ref_patient;
 		
-		
-		if($this->seance_collective_id){
+		if ($this->seance_collective_id){
 			$this->loadRefSeanceCollective();
 			$this->debut = $this->_ref_seance_collective->debut;
 			$this->duree = $this->_ref_seance_collective->duree;
 		}
-		$this->_view = "$patient->_view - ". mbTransformTime(null, $this->debut, CAppUI::conf("datetime"));
+		$this->_view = "$patient->_view - ". mbDateToLocale(mbDate($this->debut));
 		$this->loadRefsActesCdARR();
 		
 		if(!$this->sejour_id){

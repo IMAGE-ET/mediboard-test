@@ -152,7 +152,7 @@ submitSSR = function(){
       alert("Veuillez selectionner au minimum un jour");
       return false;
     }
-		if(!$V(oFormEvenementSSR._heure)){
+		if(!$V(oFormEvenementSSR._heure_deb)){
 	    alert("Veuillez selectionner une heure");
 	    return false;
 	  }
@@ -172,8 +172,8 @@ submitSSR = function(){
 	  $$(".days").each(function(e){
 		  $V(e, '');
 		});
-		$V(oFormEvenementSSR._heure, '');
-		$V(oFormEvenementSSR._heure_da, '');
+		$V(oFormEvenementSSR._heure_deb, '');
+		$V(oFormEvenementSSR._heure_deb_da, '');
 		$V(oFormEvenementSSR.duree, '');
 		$V(oFormEvenementSSR.seance_collective, '');
     $V(oFormEvenementSSR.seance_collective_id, '');
@@ -287,7 +287,7 @@ Main.add(function(){
   }
 	
 	// Initialisation du timePicker
-  Calendar.regField(oFormEvenementSSR._heure, null, { minInterval: 10, exactMinutes: false});
+  Calendar.regField(oFormEvenementSSR._heure_deb, null, { minInterval: 10, exactMinutes: false});
 	Control.Tabs.create('tabs-activites', true);
 	
 	{{if $selected_cat}}
@@ -582,7 +582,7 @@ Main.add(function(){
 		    <tr>
 		      <th>Heure / Durée (min)</th>
 		      <td>
-						{{mb_field object=$evenement_ssr field="_heure" form="editEvenementSSR"}}
+						{{mb_field object=$evenement_ssr field="_heure_deb" form="editEvenementSSR"}}
 		        {{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}
 					</td>
 		    </tr>

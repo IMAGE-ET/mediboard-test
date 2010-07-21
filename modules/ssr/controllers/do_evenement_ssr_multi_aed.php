@@ -33,7 +33,7 @@ if(is_array($_cdarrs)){
 }
 
 $_days = CValue::post("_days");
-$_heure = CValue::post("_heure");
+$_heure_deb = CValue::post("_heure_deb");
 $duree = CValue::post("duree");
 
 $kine = new CMediusers();
@@ -76,13 +76,13 @@ else {
 	      continue; 
 	    }
 	  
-	    if (!$_heure || !$duree) {
+	    if (!$_heure_deb || !$duree) {
 	      continue;
 	    }	
 			
 			$evenement_ssr = new CEvenementSSR();
 		  $evenement_ssr->equipement_id = $equipement_id;
-		  $evenement_ssr->debut = "$_day $_heure";
+		  $evenement_ssr->debut = "$_day $_heure_deb";
 		  $evenement_ssr->duree = $duree;
 	    $evenement_ssr->remarque = $remarque;
 	    
