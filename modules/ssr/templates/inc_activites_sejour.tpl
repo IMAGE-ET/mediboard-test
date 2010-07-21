@@ -175,6 +175,8 @@ submitSSR = function(){
 		$V(oFormEvenementSSR._heure_deb, '');
 		$V(oFormEvenementSSR._heure_deb_da, '');
 		$V(oFormEvenementSSR.duree, '');
+    $V(oFormEvenementSSR._heure_fin, '');
+    $V(oFormEvenementSSR._heure_fin_da, '');
 		$V(oFormEvenementSSR.seance_collective, '');
     $V(oFormEvenementSSR.seance_collective_id, '');
 		oFormEvenementSSR.seance_collective_id.hide();
@@ -287,7 +289,6 @@ Main.add(function(){
   }
 	
 	// Initialisation du timePicker
-  Calendar.regField(oFormEvenementSSR._heure_deb, null, { minInterval: 10, exactMinutes: false});
 	Control.Tabs.create('tabs-activites', true);
 	
 	{{if $selected_cat}}
@@ -580,10 +581,33 @@ Main.add(function(){
 		      </td>
 		    </tr>	
 		    <tr>
-		      <th>Heure / Durée (min)</th>
+		      <th>
+            {{mb_label object=$evenement_ssr field=_heure_deb}} / 
+            {{mb_label object=$evenement_ssr field=duree}} /
+            {{mb_label object=$evenement_ssr field=_heure_fin}}
+					</th>
 		      <td>
-						{{mb_field object=$evenement_ssr field="_heure_deb" form="editEvenementSSR"}}
-		        {{mb_field object=$evenement_ssr field="duree" form="editEvenementSSR" increment=1 size=2 step=10}}
+		      	<script type="text/javascript">
+							updateDuree = function(form) {
+                if ($V(form._heure_deb) && $V(form._heure_fin)) {
+	                var timeDeb = Date.fromDATETIME("2001-01-01 " + $V(form._heure_deb));
+	                var timeFin = Date.fromDATETIME("2001-01-01 " + $V(form._heure_fin));
+                  $V(form.duree, (timeFin-timeDeb)/ Date.minute, false);
+								}
+							}
+
+              updateHeureFin = function(form) {
+                if ($V(form._heure_deb) && $V(form.duree)) {
+                  var time = Date.fromDATETIME("2001-01-01 " + $V(form._heure_deb));
+                  time.addMinutes($V(form.duree));
+                  $V(form._heure_fin   , time.toTIME(), false);
+                  $V(form._heure_fin_da, time.toLocaleTime(), false);
+                }
+              }
+		      	</script>
+						{{mb_field object=$evenement_ssr form=editEvenementSSR field=_heure_deb onchange="updateDuree(this.form)"}}
+		        {{mb_field object=$evenement_ssr form=editEvenementSSR field=duree increment=1 size=2 step=10 onchange="updateHeureFin(this.form)"}}
+            {{mb_field object=$evenement_ssr form=editEvenementSSR field=_heure_fin onchange="updateDuree(this.form)"}}
 					</td>
 		    </tr>
 			</tbody>
@@ -671,7 +695,7 @@ Main.add(function(){
 			}
 			
 			// Suppression multiple
-			if ($V(form.del) && values.length > 1) {
+			if ($V(form.del) == '1' && values.length > 1) {
 			  if (!confirm($T('CEvenementSSR-msg-confirm-multidelete', values.length) + $T('confirm-ask-continue'))) {
 				  return;
 				}
@@ -748,7 +772,7 @@ Main.add(function(){
 			</tr>
 			<tr>
 				<td class="button" colspan="2">
-					<button type="button" onclick="this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
+					<button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
 				</td>
 			</tr>	
 			<tr>

@@ -736,28 +736,34 @@ Class.extend(Date, {
   },
   
   toLocaleDate: function() {
-    var y = this.getFullYear(),
-        m = this.getMonth()+1, // Js months are 0-11!!
-        d = this.getDate();
+    var y = this.getFullYear();
+    var m = this.getMonth()+1; // Js months are 0-11!!
+    var d = this.getDate();
     return printf("%02d/%02d/%04d", d, m, y);
   },
   
   toLocaleDateTime: function () {
-    var h = this.getHours(),
-        m = this.getMinutes();
+    var h = this.getHours();
+    var m = this.getMinutes();
     return this.toLocaleDate() + printf(" %02d:%02d", h, m);
   },
   
+  toLocaleTime: function () {
+    var h = this.getHours();
+    var m = this.getMinutes();
+    return printf(" %02d:%02d", h, m);
+  },
+  
   addDays: function(iDays) {
-    this.setDate(this.getDate() + iDays);
+    this.setDate(this.getDate() + parseInt(iDays, 10));
   },
 	addHours: function(iHours) {
-    this.setHours(this.getHours() + iHours);
+    this.setHours(this.getHours() + parseInt(iHours, 10));
   },
   addMinutes: function(iMinutes) {
-    this.setMinutes(this.getMinutes() + iMinutes);
+    this.setMinutes(this.getMinutes() + parseInt(iMinutes, 10));
   },
   addYears: function(iYears) {
-    this.setFullYear(this.getFullYear() + iYears);
+    this.setFullYear(this.getFullYear() + parseInt(iYears, 10));
   }
 } );
