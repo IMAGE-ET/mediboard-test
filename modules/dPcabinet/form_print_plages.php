@@ -31,9 +31,9 @@ $month_fin  = mbDate("-1 day", $month_fin);
 // Liste des praticiens
 $mediusers = new CMediusers();
 if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listChir = $mediusers->loadPraticiens(PERM_EDIT);
+  $listChir = $mediusers->loadPraticiens(PERM_READ);
 } else {
-  $listChir = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
+  $listChir = $mediusers->loadProfessionnelDeSante(PERM_READ);
 }
 
 // Création du template
