@@ -25,7 +25,7 @@ var ElementChecker = {
     this.oElement = oElement;
     
     var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
-    oElement = $(isArray?oElement[0]:oElement);
+    oElement = $(isArray ? oElement[0] : oElement);
 
     this.oForm = oElement.form;
     this.oProperties = oElement.getProperties();
@@ -505,20 +505,19 @@ function checkForm(oForm) {
   // For each element in the form
   oForm.getElementsEx().each(function (oElement) {
     if (!oElement || oElement.disabled) return;
-    var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
+    
+    var isArray = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
     var oFirstElement = isArray ? oElement[0] : oElement;
 
-    if (oFirstElement.getAttribute("readonly")) return;
-    
-    if (!oFirstElement.className) return;
-
-    if (oFirstElement.hasClassName("nocheck")) return;
+    if (!oFirstElement.className ||
+        oFirstElement.getAttribute("readonly") ||
+        oFirstElement.hasClassName("nocheck")) return;
     
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);
     var sMsgFailed = ElementChecker.sLabel || printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
     var oErrors = ElementChecker.checkElement();
-    var oLabel = Element.getLabel(oFirstElement);
+    var oLabel = ElementChecker.oLabel;
     
     // If errors, we append them to the error object
     if (oErrors.length) {

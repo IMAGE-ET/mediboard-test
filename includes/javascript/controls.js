@@ -402,11 +402,11 @@ Element.addMethods({
     if (!strict && /radio|checkbox/i.test(element.type)){
       match = new RegExp("(\.*)_"+element.value+"$", "i").exec(element.id);
       if (match) {
-        htmlFor = "label[for='"+match[1]+"'], label[htmlFor='"+match[1]+"'], ";
+        htmlFor = "label[for='"+match[1]+"'], ";
       }
     }
     
-    return $(element.form).down(htmlFor+"label[for='"+element.id+"'], label[htmlFor='"+element.id+"']");
+    return $(element.form).down(htmlFor+"label[for='"+element.id+"']");
   },
   
   setResizable: function (element, options) {
