@@ -22,15 +22,18 @@
 		}
 		  
 		submitAndClose = function(){
-		  return onSubmitFormAjax(addForm, { onComplete: function(){ 
-			                                                   updateListLines(); resetField(); modalWindow.close(); }  
-																											});
+		  return onSubmitFormAjax(addForm, { onComplete: function() { 
+				updateListLines(); 
+				resetField(); 
+				modalWindow.close(); 
+			} } );
 		}
 	</script>
 	{{if $warning}}
 	Il est impossible de rajouter cette ligne, celle-ci est déjà présente dans la prescription
 	<div class="button">
-	<button onclick="modalWindow.close();" class="cancel">{{tr}}Close{{/tr}}</button>
+  <button onclick="stopLineSSR('{{$last_line->_id}}'); $V(addForm.debut, '{{$current_date}}'); submitAndClose();" class="tick">Ajouter à la suite</button>
+	<button onclick="modalWindow.close();" class="cancel">{{tr}}Cancel{{/tr}}</button>
 	</div>
 	{{else}}
 	Vous etes sur le point d'ajouter la ligne de prescription <strong>{{$element->_view}}</strong><br /><br />
