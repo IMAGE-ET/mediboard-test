@@ -63,11 +63,15 @@ foreach ($replacements as $_replacement) {
   $sejour->loadRefPatient(1);
 }
 
+// Nombre de séjours
+$sejours_count = count($sejours) + count($replacements);
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("technicien_id", $technicien_id);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("sejours_count", $sejours_count);
 $smarty->assign("services", $services);
 $smarty->assign("replacements", $replacements);
 $smarty->display("inc_sejours_technicien.tpl");

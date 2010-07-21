@@ -11,11 +11,12 @@
 
 <table class="tbl">
   <tr>
-    <th id="technicien-" class="title">
+    <th id="technicien-" class="title text">
       <script type="text/javascript">
         Repartition.registerTechnicien('','{{$readonly}}');
       </script>
-      Séjours non affectés
+      Séjours non-répartis
+      <small class="count">(-)</small>			
 		</th>
   </tr>
 	

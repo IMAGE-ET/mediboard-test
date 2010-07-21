@@ -1268,7 +1268,7 @@ ul li a.chapitre_signe.active{
   line-height: 1.2em; 
 }
 
-.septique{
+.septique {
   color: #3A3;
 }
 
@@ -1300,7 +1300,8 @@ table.tbl tr.ssr-prevu   td.cancelled {
   background-color: #f00; 
 }
 
-table.tbl tr.ssr-kine-conges td {
+table.tbl tr.ssr-kine-conges td,
+table.tbl tr.ssr-kine-conges th {
 	text-align: center;
   background-image: url("./images/pictures/unavailable.png");
 }

@@ -8,6 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script>
+	$('technicien-{{$technicien_id}}').down('small').update('({{$sejours_count}})');
+
+</script>
 {{if !$technicien_id}} 
 <!-- Filtre sur service-->
 <tr>
