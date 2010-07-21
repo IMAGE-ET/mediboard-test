@@ -68,7 +68,7 @@ if (!isset($_SESSION['browser'])) {
       }
     }
     
-    $browser['mobile'] = preg_match("/mobi|phone|symbian/i", $user_agent);
+    $browser['mobile'] = preg_match("/mobi|phone|symbian/i", $user_agent) && !preg_match("/ipad/i", $user_agent);
   }
   
   $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 
