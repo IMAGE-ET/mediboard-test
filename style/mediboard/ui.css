@@ -876,7 +876,7 @@ table.active {
 .modal {
 	min-width: 200px;
 	padding: 0.3em;
-	border: 1px solid #999;
+	border: 3px solid #fff;
   border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
