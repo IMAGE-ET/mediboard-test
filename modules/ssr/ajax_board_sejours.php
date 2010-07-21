@@ -25,6 +25,8 @@ $ds = CSQLDataSource::get("std");
 
 // Sejours pour lesquels le kine est référent
 $join = array();
+$join["patients"]  = "patients.patient_id = sejour.patient_id";
+$order = "nom, prenom";
 $join["bilan_ssr"]  = "bilan_ssr.sejour_id = sejour.sejour_id";
 $join["technicien"] = "technicien.technicien_id = bilan_ssr.technicien_id";
 $where = array();
@@ -33,10 +35,12 @@ $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
 $where["sejour.annule"] = "= '0'";
 $where["technicien.kine_id"] = "= '$kine_id'";
-$sejours["referenced"] = $sejour->loadList($where, null, null, null, $join);
+$sejours["referenced"] = $sejour->loadList($where, $order, null, null, $join);
 
 // Sejours pour lesquels le kine est remplaçant
 $join = array();
+$join["patients"]  = "patients.patient_id = sejour.patient_id";
+$order = "nom, prenom";
 $join["replacement"]  = "replacement.sejour_id = sejour.sejour_id";
 $where = array();
 $where["sejour.type"  ] = "= 'ssr'";
@@ -45,9 +49,12 @@ $where["sejour.sortie"] = ">= '$planning->date_min'";
 $where["sejour.annule"] = "= '0'";
 $where["replacement.replacement_id"] = "IS NOT NULL";
 $where["replacement.replacer_id"] = " = '$kine_id'";
-$sejours["replaced"] = $sejour->loadList($where, null, null, null, $join);
+$sejours["replaced"] = $sejour->loadList($where, $order, null, null, $join);
 
 // Sejours pour lesquels le rééducateur a des événements
+$join = array();
+$join["patients"]  = "patients.patient_id = sejour.patient_id";
+$order = "nom, prenom";
 $join["evenement_ssr"]  = "evenement_ssr.sejour_id = sejour.sejour_id";
 $where = array();
 $where["sejour.type"  ] = "= 'ssr'";
@@ -56,7 +63,7 @@ $where["sejour.sortie"] = ">= '$planning->date_min'";
 $where["sejour.annule"] = "= '0'";
 $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
 
-$sejours["planned"] = $sejour->loadList($where, null, null, null, $join);
+$sejours["planned"] = $sejour->loadList($where, $order, null, null, $join);
 
 // Sejours pour lesquels le rééducateur est exécutant pour des lignes prescrites mais n'a pas encore d'evenement planifiés
 $sejours["plannable"] = array();
@@ -103,7 +110,10 @@ $sejour_ids = $ds->loadColumn($query->getRequest());
 
 $where = array();
 $where["sejour_id"] = $ds->prepareIn($sejour_ids);
-$sejours["plannable"] = $sejour->loadList($where);
+$join = array();
+$join["patients"]  = "patients.patient_id = sejour.patient_id";
+$order = "nom, prenom";
+$sejours["plannable"] = $sejour->loadList($where, $order, null, null, $join);
 
 // Chargement des détails affichés de chaque séjour
 foreach ($sejours as &$_sejours) {
