@@ -643,7 +643,7 @@ var Calendar = {
     element.addClassName('datepicker');
   },
   mobileHide: function (picker){
-    document.observeOnce('touchend', function(e){
+    document.observeOnce('click', function(e){
       $(picker).hide();
     });
   },
