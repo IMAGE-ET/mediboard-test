@@ -276,16 +276,19 @@ class CMbObject {
       $this->_ref_documents = $document->loadMatchingList("nom");
 
       foreach($this->_ref_documents as $keyDoc=>$_doc) {
+        
         $author = new CMediusers();
         $_doc->loadlogs();
-        $author->load($this->_ref_documents[$keyDoc]->_ref_first_log->_ref_user->_id);
-        $author->loadRefFunction();
+        if (isset($_doc->_ref_first_log->_id)) {
+          $author->load($this->_ref_documents[$keyDoc]->_ref_first_log->_ref_user->_id);
+          $author->loadRefFunction();
         
-        if(($this->_ref_documents[$keyDoc]->private == 1 && 
-         !$can->admin &&
-         $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-           unset($this->_ref_documents[$keyDoc]);
-         }
+          if(($this->_ref_documents[$keyDoc]->private == 1 && 
+           !$can->admin &&
+           $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
+             unset($this->_ref_documents[$keyDoc]);
+          }
+        }
       }
       
       return count($this->_ref_documents);
