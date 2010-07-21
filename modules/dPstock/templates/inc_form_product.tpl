@@ -12,30 +12,8 @@ Main.add(function () {
     $V(editForm._toggle_fractionned, true);
   }
   
-  var scc_code = $(editForm.scc_code);
-  scc_code.maxLength = 50;
-  scc_code.observe("keypress", function(e){
-    var charCode = Event.key(e);
-    
-    if (charCode == 13) {
-      if ($V(scc_code).length != 10) Event.stop(e);
-      
-      var url = new Url("dPstock", "httpreq_parse_barcode");
-      url.addParam("barcode", $V(scc_code));
-      url.requestJSON(updateSCCcode);
-    }
-  });
+  BarcodeParser.watchInput(editForm.scc_code, {size: 10, field: "scc_prod"});
 });
-
-function updateSCCcode(parsed) {
-  var editForm = getForm("edit_product");
-  editForm.scc_code.next("span").setVisible(!parsed.comp.scc_prod);
-  
-  if (parsed.comp.scc_prod) {
-    $V(editForm.scc_code, parsed.comp.scc_prod);
-  }
-  editForm.scc_code.select();
-}
 
 function toggleFractionnedAdministration(form, use) {
   var quantity = $(form.unit_quantity);

@@ -26,33 +26,8 @@ Main.add(function(){
   Control.Tabs.create("societe-tabs", true);
 
   var editForm = getForm("edit_societe");
-  var manufacturer_code = $(editForm.manufacturer_code);
-  manufacturer_code.maxLength = 50;
-  
-  var manufacturer_code = $(editForm.manufacturer_code);
-  manufacturer_code.maxLength = 50;
-  manufacturer_code.observe("keypress", function(e){
-    var charCode = Event.key(e);
-    
-    if (charCode == 13) {
-      if ($V(manufacturer_code).length != 5) Event.stop(e);
-      
-      var url = new Url("dPstock", "httpreq_parse_barcode");
-      url.addParam("barcode", $V(manufacturer_code));
-      url.requestJSON(updateSCCcode);
-    }
-  });
+  BarcodeParser.watchInput(editForm.manufacturer_code, {size: 10, field: "scc_manuf"});
 });
-
-function updateSCCcode(parsed) {
-  var editForm = getForm("edit_societe");
-  editForm.manufacturer_code.next("span").setVisible(!parsed.comp.scc_manuf);
-  
-  if (parsed.comp.scc_manuf) {
-    $V(editForm.manufacturer_code, parsed.comp.scc_manuf);
-  }
-  editForm.manufacturer_code.select();
-}
 
 </script>
 

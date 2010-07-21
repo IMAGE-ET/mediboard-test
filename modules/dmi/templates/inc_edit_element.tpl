@@ -25,8 +25,8 @@
 
 // refresh apres une sauvegarde ou une suppression
 refreshElement = function(element_id){
-  viewListElement('{{$category_class}}', element_id);
-  viewElement('{{$element_class}}', element_id);
+  viewListElement('{{$element->_class_name}}', element_id);
+  viewElement('{{$element->_class_name}}', element_id);
 }
 
 {{if $element->_class_name == "CDM"}}
@@ -68,9 +68,8 @@ Main.add(function () {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
   <input type="hidden" name="{{$element->_spec->key}}" value="{{$element->_id}}" />
-  {{if !$element->_id}}
   <input type="hidden" name="callback" value="refreshElement" />
-  {{/if}}
+  
   <table class="form">
   	<tr>
   		<th class="title text {{if $element->_id}}modify{{/if}}" colspan="10">
@@ -172,7 +171,7 @@ Main.add(function () {
   	<tr>
 		  <td colspan="2" class="button">
 		  	{{if $element->_id}}
-          <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$category_class}}','{{$element->_id}}') } );">
+          <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$element->_class_name}}','{{$element->_id}}') } );">
             {{tr}}Save{{/tr}}
           </button>
 		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement.curry('0') } )">
