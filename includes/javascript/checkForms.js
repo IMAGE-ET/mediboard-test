@@ -516,8 +516,8 @@ function checkForm(oForm) {
     // Element checker preparing and error checking
     ElementChecker.prepare(oElement);
     var sMsgFailed = ElementChecker.sLabel || printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
-    var oErrors = ElementChecker.checkElement();
-    var oLabel = ElementChecker.oLabel;
+    var oLabel     = ElementChecker.oLabel;
+    var oErrors    = ElementChecker.checkElement(); // will reset all ElementChecker's properties
     
     // If errors, we append them to the error object
     if (oErrors.length) {
