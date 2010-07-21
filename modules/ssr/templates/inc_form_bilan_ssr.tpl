@@ -343,13 +343,6 @@ refreshFormBilanSSR = function(){
 				      {{mb_field object=$bilan field=sortie rows=6 onblur="this.form.onsubmit()"}}
 				    </td> 
 				  </tr>
-					<tr>
-			      <td class="button">
-			        <button class="submit" type="submit">
-			          {{tr}}Save{{/tr}}
-			        </button>
-			      </td>
-			    </tr>
 			  </table>
 			</form>
 
