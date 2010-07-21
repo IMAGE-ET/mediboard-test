@@ -85,14 +85,16 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
       continue;
     }
     
+    // PRODUIT
     $current_product = new CProduct;
     $current_product->code = $current_product->_spec->ds->escape($data[1]);
-    $current_product->societe_id = $current_supplier->_id;
     
+    // match CProduct
     if (!$current_product->loadMatchingObject()) {
       $current_product->name = $data[0];
       $current_product->code = $data[1];
       $current_product->quantity = 1;
+      $current_product->societe_id = $current_supplier->_id;
       $current_product->category_id = CAppUI::conf("dmi CDMI product_category_id");
       
       if ($msg = $current_product->store()) {
@@ -103,9 +105,6 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
         CAppUI::setMsg("CProduct-msg-create", UI_MSG_OK);
       }
     }
-    else {
-      CAppUI::setMsg("Produit retrouvé", UI_MSG_OK);
-    }
   }
   
   if (!$current_product || !$current_product->_id) {
@@ -113,9 +112,11 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     continue;
   }
   
-  $dmi = new CDMI;
-  $dmi->code = $current_product->_spec->ds->escape($current_product->code);
-  if (!$dmi->loadMatchingObject()) {
+  // DMI
+  $dmi = CDMI::getProduct($current_product->code);
+  
+  // match CDMI
+  if (!$dmi->_id) {
     $dmi->code = $current_product->code;
     $dmi->nom = $current_product->name;
     $dmi->category_id = $dmi_category->_id;
@@ -128,45 +129,56 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     }
   }
   
-  // We look for a reference
+  // REFERENCE
   $reference = new CProductReference;
   $reference->product_id = $current_product->_id;
-  $reference->quantity = 1;
+  $reference->societe_id = $current_supplier->_id;
   
+  // match CProductReference
   if (!$reference->loadMatchingObject()) {
-    $reference->societe_id = $current_supplier->_id;
+    $reference->quantity = 1;
     $reference->price = 0;
     if ($msg = $reference->store()){
       CAppUI::setMsg($msg, UI_MSG_WARNING);
       continue;
     }
   }
-  else {
+
+  // LOT
+  $item_reception = new CProductOrderItemReception;
+  $item_reception->code = $data[2];
+  $item_reception->quantity = $data[3];
+  $item_reception->date = mbDateFromLocale($data[4])." 00:00:00";
+  
+  if ($data[5] !== "31/12/1899") {
+    $item_reception->lapsing_date = mbDateFromLocale($data[5]);
+  }
+  
+  // match CProductOrderItemReception
+  if (!$item_reception->loadMatchingObject()) {
     $order_item = new CProductOrderItem;
     $order_item->reference_id = $reference->_id;
     $order_item->quantity = 1;
+    
     if ($msg = $order_item->store()){
       CAppUI::setMsg($msg, UI_MSG_WARNING);
       continue;
     }
-    
-    $item_reception = new CProductOrderItemReception;
+  
     $item_reception->order_item_id = $order_item->_id;
-    $item_reception->code = $data[2];
-    $item_reception->quantity = $data[3];
-    $item_reception->date = mbDateFromLocale($data[4])." 00:00:00";
-    
-    if ($data[5] !== "31/12/1899") {
-      $item_reception->lapsing_date = mbDateFromLocale($data[5]);
-    }
-    
-    if ($msg = $item_reception->store()){
-      CAppUI::setMsg($msg, UI_MSG_WARNING);
-      continue;
-    }
-    CAppUI::setMsg("CProductOrderItemReception-msg-create", UI_MSG_OK);
-    //break;
   }
+  
+  $reception_is_new = !$item_reception->_id;
+  if ($msg = $item_reception->store()){
+    CAppUI::setMsg($msg, UI_MSG_WARNING);
+    continue;
+  }
+  
+  if ($reception_is_new)
+    CAppUI::setMsg("CProductOrderItemReception-msg-create", UI_MSG_OK);
+  else
+    CAppUI::setMsg("Réception retrouvée", UI_MSG_OK);
+  //break;
 }
 
 fclose($csv);

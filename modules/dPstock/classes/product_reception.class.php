@@ -133,8 +133,7 @@ class CProductReception extends CMbObject {
     $this->loadRefsBack();
     $total = 0;
     foreach($this->_ref_reception_items as $_item) {
-      $_item->loadRefOrderItem();
-      $total += $_item->_price;
+      $total += $_item->computePrice();
     }
     $this->_total = $total;
   }

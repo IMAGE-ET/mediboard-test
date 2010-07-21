@@ -62,7 +62,7 @@ Main.add(function(){
 
 <div style="text-align: center; padding: 0.3em;">
   Produit / Code barre
-  <input type="text" id="barcode" size="50" class="barcode" style="font-size: 1.3em;" autocomplete="off" placeholder="Code barre" />
+  <input type="text" id="barcode" size="50" class="barcode" style="font-size: 1.4em;" autocomplete="off" placeholder="Code barre" />
   <hr />
 </div>
 

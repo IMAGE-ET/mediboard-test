@@ -156,9 +156,9 @@ class CProductOrderItem extends CMbObject {
   }
 
   function store() {
-    $this->loadRefsFwd();
-    
     if($this->order_id && $this->reference_id && !$this->_id) {
+      $this->loadRefsFwd();
+      
       $where = array(
         'order_id'     => "= '$this->order_id'",
         'reference_id' => "= '$this->reference_id'",

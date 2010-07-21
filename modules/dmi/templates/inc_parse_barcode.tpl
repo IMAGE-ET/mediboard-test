@@ -1,4 +1,4 @@
-{{assign var=debug value=false}}
+{{assign var=debug value=true}}
 
 <style type="text/css">
 div.lots .lot:hover {
@@ -65,19 +65,21 @@ Main.add(function(){
 });
 </script>
 
+<div style="float: right; width: 7px; height: 7px; background-color: #fc3;" onclick="$('debug-barcode').toggle()"></div>
+
 {{if $debug}}
-  <h1>{{$parsed.type}}</h1>
-
-  <table class="tbl">
-  {{foreach from=$parsed.comp key=key item=value}}
-    <tr>
-      <th style="width: 0.1%;">{{$key}}</th>
-      <td>{{$value}}</td>
-    </tr>
-  {{/foreach}}
-  </table>
-
-  <h1>Résultats</h1>
+  <div id="debug-barcode" style="display: none; border: 1px dotted orange; padding: 0.5em;">
+    <h1>{{$parsed.type}}</h1>
+  
+    <table class="tbl">
+    {{foreach from=$parsed.comp key=key item=value}}
+      <tr>
+        <th style="width: 0.1%;">{{$key}}</th>
+        <td>{{$value}}</td>
+      </tr>
+    {{/foreach}}
+    </table>
+  </div>
 {{/if}}
 
 {{foreach from=$products item=_product}}
@@ -97,7 +99,7 @@ Main.add(function(){
       {{foreach from=$_product->_lots item=_lot}}
         <div style="padding: 5px;" class="lot" onclick="selectLot($(this).down('input'), event)">
           <label>
-            <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{if $_lot->_selected}}checked="checked"{{/if}} />
+            <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{* if $_lot->_selected}}checked="checked"{{/if *}} />
             <strong>[{{$_lot->code}}]</strong> &ndash; {{mb_value object=$_lot field=lapsing_date}}
           </label>
         </div>

@@ -65,9 +65,15 @@ class CProductOrderItemReception extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_view = $this->quantity;
+    if ($this->code) {
+      $this->_view .= " [$this->code]";
+    }
+  }
+  
+  function computePrice(){
     $this->loadRefOrderItem();
-    $this->_view = "$this->quantity x {$this->_ref_order_item->_view}";
-    $this->_price = $this->quantity * $this->_ref_order_item->unit_price;
+    return $this->_price = $this->quantity * $this->_ref_order_item->unit_price;
   }
   
   function loadRefOrderItem() {
