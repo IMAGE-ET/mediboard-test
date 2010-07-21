@@ -15,7 +15,7 @@ class CFunctionCategoryPrescription extends CMbObject {
   // DB Fields
   var $function_id = null;
   var $category_prescription_id = null;
-  
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'function_category_prescription';
@@ -55,8 +55,7 @@ class CFunctionCategoryPrescription extends CMbObject {
   }
   
   function loadRefFunction(){
-    $this->_ref_function = new CFunctions();
-    $this->_ref_function->load($this->function_id);
+    $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
   
   function check(){

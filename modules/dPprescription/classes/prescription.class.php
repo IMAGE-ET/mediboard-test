@@ -116,7 +116,7 @@ class CPrescription extends CMbObject {
     $backProps["prescription_line_element"]        = "CPrescriptionLineElement prescription_id";
     $backProps["prescription_line_comment"]        = "CPrescriptionLineComment prescription_id";
     $backProps["prescription_protocole_pack_item"] = "CPrescriptionProtocolePackItem prescription_id";
-    $backProps["prescription_line_mix"]                        = "CPrescriptionLineMix prescription_id";
+    $backProps["prescription_line_mix"]            = "CPrescriptionLineMix prescription_id";
     $backProps["protocoles_op_chir"]               = "CProtocole protocole_prescription_chir_id";
     $backProps["protocoles_op_anesth"]             = "CProtocole protocole_prescription_anesth_id";
     $backProps["prescription_line_dmi"]            = "CPrescriptionLineDMI prescription_id";

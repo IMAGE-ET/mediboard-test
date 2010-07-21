@@ -21,15 +21,17 @@ $planning = new CPlanningWeek($date);
 // Sejour SSR
 $sejour = new CSejour;
 
-$order = "sejour.entree, sejour.sortie";
+$ds = CSQLDataSource::get("std");
 
 // Sejours pour lesquels le kine est référent
 $join = array();
 $join["bilan_ssr"]  = "bilan_ssr.sejour_id = sejour.sejour_id";
 $join["technicien"] = "technicien.technicien_id = bilan_ssr.technicien_id";
 $where = array();
+$where["sejour.type"  ] = "= 'ssr'";
 $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
+$where["sejour.annule"] = "= '0'";
 $where["technicien.kine_id"] = "= '$kine_id'";
 $sejours["referenced"] = $sejour->loadList($where, null, null, null, $join);
 
@@ -37,8 +39,10 @@ $sejours["referenced"] = $sejour->loadList($where, null, null, null, $join);
 $join = array();
 $join["replacement"]  = "replacement.sejour_id = sejour.sejour_id";
 $where = array();
+$where["sejour.type"  ] = "= 'ssr'";
 $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
+$where["sejour.annule"] = "= '0'";
 $where["replacement.replacement_id"] = "IS NOT NULL";
 $where["replacement.replacer_id"] = " = '$kine_id'";
 $sejours["replaced"] = $sejour->loadList($where, null, null, null, $join);
@@ -46,8 +50,10 @@ $sejours["replaced"] = $sejour->loadList($where, null, null, null, $join);
 // Sejours pour lesquels le rééducateur a des événements
 $join["evenement_ssr"]  = "evenement_ssr.sejour_id = sejour.sejour_id";
 $where = array();
+$where["sejour.type"  ] = "= 'ssr'";
 $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
+$where["sejour.annule"] = "= '0'";
 $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
 
 $sejours["planned"] = $sejour->loadList($where, null, null, null, $join);
@@ -55,55 +61,56 @@ $sejours["planned"] = $sejour->loadList($where, null, null, null, $join);
 // Sejours pour lesquels le rééducateur est exécutant pour des lignes prescrites mais n'a pas encore d'evenement planifiés
 $sejours["plannable"] = array();
 
+// Séjours élligibles
 $where = array();
+$where["sejour.type"  ] = "= 'ssr'";
 $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
-$_sejours = $sejour->loadList($where);
+$where["sejour.annule"] = "= '0'";
+$sejour_ids = $sejour->loadIds($where);
 
-foreach($_sejours as $_sejour){
-	$_sejour->loadRefBilanSSR();
-	$bilan_ssr =& $_sejour->_ref_bilan_ssr;
-	$bilan_ssr->loadRefTechnicien();
-	$kine_referent_id = $bilan_ssr->_ref_technicien->kine_id;
-	
-	if(($kine_referent_id == $kine_id) && !array_key_exists($_sejour->_id, $sejours["planned"])){
-    $sejours["plannable"][$_sejour->_id] = $_sejour;      		
-	}
+// Identifiants de catégorie de prescriptions disponibles
+$mediuser->loadRefFunction();
+$function =& $mediuser->_ref_function;
+$executants = $function->loadBackRefs("executants_prescription");
+$category_ids = CMbArray::pluck($executants, "category_prescription_id");
 
-	// Chargement de la prescrtiption su sejour
-	$_sejour->loadRefPrescriptionSejour();
-	$prescription =& $_sejour->_ref_prescription_sejour;
-	// Chargement des lignes de la prescription
-	$prescription->loadRefsLinesElementByCat();
-	// Parcours des lignes d'element
-	foreach($prescription->_ref_prescription_lines_element as $_line_element){
-		// Si le sejour est deja dans la liste des sejours
-		if(array_key_exists($_sejour->_id, $sejours["plannable"])){
-			continue;
-		}
-		
-		// Recuperation de la categorie de prescription de la ligne
-		$category_prescription_id = $_line_element->_ref_element_prescription->category_prescription_id;
-		
-		// Chargement des associations 
-		$function_categorie = new CFunctionCategoryPrescription();
-	  $function_categorie->category_prescription_id = $category_prescription_id;
-	  $functions_cat = $function_categorie->loadMatchingList();
-	  
-		$functions = array();
-		foreach($functions_cat as $function_cat){
-		  if(($mediuser->function_id == $function_cat->function_id) && !array_key_exists($_sejour->_id, $sejours["planned"])){
-		    $sejours["plannable"][$_sejour->_id] = $_sejour;      
-		  }	
-		}
-	}
-}
+// Recherche des lignes de prescriptions executables
+$line = new CPrescriptionLineElement;
+$join = array();
+$where = array();
+$join["element_prescription"] = "element_prescription.element_prescription_id = prescription_line_element.element_prescription_id";
+$where["element_prescription.category_prescription_id"] = $ds->prepareIn($category_ids);
+$join["prescription"] = "prescription.prescription_id = prescription_line_element.prescription_id";
+$where["prescription.type"] = "= 'sejour'";
+$where["prescription.object_class"] = "= 'CSejour'";
+$where["prescription.object_id"] = $ds->prepareIn($sejour_ids);
+$line_ids = $line->loadIds($where, null, null, null, $join);
 
+// Prescriptions exécutables
+$query = new CRequest;
+$query->addSelect("DISTINCT prescription_id");
+$query->addTable("prescription_line_element");
+$query->addWhereClause("prescription_line_element_id", $ds->prepareIn($line_ids));
+$prescription_ids = $ds->loadColumn($query->getRequest());
+
+// Séjours planifiables
+$query = new CRequest;
+$query->addSelect("DISTINCT object_id");
+$query->addTable("prescription");
+$query->addWhereClause("prescription_id", $ds->prepareIn($prescription_ids));
+$sejour_ids = $ds->loadColumn($query->getRequest());
+
+$where = array();
+$where["sejour_id"] = $ds->prepareIn($sejour_ids);
+$sejours["plannable"] = $sejour->loadList($where);
+
+// Chargement des détails affichés de chaque séjour
 foreach ($sejours as &$_sejours) {
-	foreach ($_sejours as $_sejour) {
-		$_sejour->loadRefPatient();
-		$_sejour->countEvenementsSSRWeek($kine_id, $planning->date_min, $planning->date_max);
-	}
+  foreach ($_sejours as $_sejour) {
+    $_sejour->loadRefPatient();
+    $_sejour->countEvenementsSSRWeek($kine_id, $planning->date_min, $planning->date_max);
+  }
 }
 
 // Création du template

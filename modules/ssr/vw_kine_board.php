@@ -10,14 +10,12 @@
 
 CCando::checkRead();
 
-global $AppUI;
-
 $date    = CValue::get("date", mbDate());
-$kine_id = CValue::getOrSession("kine_id", $AppUI->user_id);
+$kine_id = CValue::getOrSession("kine_id", CAppUI::$instance->user_id);
 
 // Chargement de la liste des utilisateurs
 $mediuser = new CMediusers();
-$kines = $mediuser->loadUsers();
+$kines = $mediuser->loadKines();
 
 $kine = new CMediusers();
 $kine->load($kine_id);
