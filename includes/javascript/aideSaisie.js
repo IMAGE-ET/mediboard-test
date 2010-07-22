@@ -174,8 +174,11 @@ var AideSaisie = {
       
       document.observe("click", function(e){
         // if click outside the container
-        if (!Event.element(e).descendantOf(container))
+        if (!Event.element(e).descendantOf(container)) {
+          autocomplete.hasFocus = false;
+          autocomplete.active = false;
           list.hide();
+        }
       });
       
       // Grid mode 
