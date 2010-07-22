@@ -1564,6 +1564,10 @@ class CPatient extends CMbObject {
     
     return intval($ds->numRows($res));
   }
+  
+  function loadView() {
+    $this->loadIPP();
+  }
 }
 
 ?>

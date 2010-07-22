@@ -53,19 +53,18 @@ class CSipObjectHandler extends CMbObjectHandler {
         $dest_hprim = new CDestinataireHprim();
         $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
-         
         foreach ($destinataires as $_destinataire) {
-            $id400Patient = new CIdSante400();
-            $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
-            $mbObject->_id400 = $id400Patient->id400;
-          
-          /*$echange_hprim = new CEchangeHprim();
+          $mbObject->_id400 = null;
+          $id400Patient = new CIdSante400();
+          $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
+          $mbObject->_id400 = $id400Patient->id400;
+
+          $echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
   
-          $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;*/
-          $initiateur = null;
+          $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
           $domEvenementEnregistrementPatient->_dest_tag = $_destinataire->_tag_patient;

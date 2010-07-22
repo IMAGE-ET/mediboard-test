@@ -41,7 +41,7 @@ if (!$echange_hprim_id) {
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($notification->_message);
-      $source->send("evenementPatient");
+      $source->send();
       $acquittement = $source->receive();
       
       if ($acquittement) {
@@ -70,7 +70,7 @@ if (!$echange_hprim_id) {
   
   $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
   $source->setData($echange_hprim->_message);
-  $source->send("evenementPatient");
+  $source->send();
   $acquittement = $source->receive();
   
   if ($acquittement) {

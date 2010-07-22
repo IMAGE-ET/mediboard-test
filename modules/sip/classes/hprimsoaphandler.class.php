@@ -18,9 +18,9 @@ class CHprimSoapHandler extends CSoapHandler {
   static $paramSpecs = array(
     "evenementPatient" => array ( 
       "messagePatient" => "string"),
-		"evenementServeurActes" => array ( 
+    "evenementServeurActes" => array ( 
       "messageServeurActes" => "string"),
-		"evenementPmsi" => array ( 
+    "evenementPmsi" => array ( 
       "messagePmsi" => "string"),
     "calculatorAuth" => array ( 
       "operation" => "string",
@@ -50,54 +50,54 @@ class CHprimSoapHandler extends CSoapHandler {
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
       $data = $domGetEvenement->getEnteteEvenementXML("evenementsPatients");
-      $domAcquittement->identifiant = $data['identifiantMessage'];
-      $domAcquittement->destinataire = $data['idClient'];
+      $domAcquittement->identifiant          = $data['identifiantMessage'];
+      $domAcquittement->destinataire         = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
-      $domAcquittement->_sous_type_evt = $domGetEvenement->sous_type;
+      $domAcquittement->_sous_type_evt       = $domGetEvenement->sous_type;
+      
+      $dest_hprim = new CDestinataireHprim();
+      if ($data['idClient']) {
+        $dest_hprim->nom = $data['idClient'];
+        $dest_hprim->loadMatchingObject();
+      }
       
       // Acquittement d'erreur d'un document XML recu non valide
       if ($doc_errors !== true) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->date_production = mbDateTime();
-        $echange_hprim->emetteur = $data['idClient'] ? $data['idClient'] : "inconnu";
-        $echange_hprim->destinataire = CAppUI::conf('mb_id');
-        $echange_hprim->group_id = CGroups::loadCurrent()->_id;
-        $echange_hprim->type = "patients";
-        $echange_hprim->sous_type = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
-        $echange_hprim->_message = $messagePatient;
-        $echange_hprim->_acquittement = $messageAcquittement;
+        $echange_hprim->date_production     = mbDateTime();
+        $echange_hprim->emetteur            = $data['idClient'] ? $data['idClient'] : "inconnu";
+        $echange_hprim->destinataire        = CAppUI::conf('mb_id');
+        $echange_hprim->group_id            = $dest_hprim->group_id;
+        $echange_hprim->type                = "patients";
+        $echange_hprim->sous_type           = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
+        $echange_hprim->_message            = $messagePatient;
+        $echange_hprim->_acquittement       = $messageAcquittement;
         $echange_hprim->statut_acquittement = "erreur";
-        $echange_hprim->message_valide = 0;
+        $echange_hprim->message_valide      = 0;
         $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
         $echange_hprim->store();
   
         return $messageAcquittement;
       }
     
-      // Récupère l'initiateur du message s'il existe
-      if (CAppUI::conf('sip server')) {
-        $echange_hprim->identifiant_emetteur = intval($data['identifiantMessage']);
-        $echange_hprim->loadMatchingObject();
-      }
       if (!$echange_hprim->_id) {
-        $echange_hprim->emetteur       = $data['idClient'];
-        $echange_hprim->destinataire   = CAppUI::conf('mb_id');
-        $echange_hprim->group_id       = CGroups::loadCurrent()->_id;
+        $echange_hprim->emetteur             = $data['idClient'];
+        $echange_hprim->destinataire         = CAppUI::conf('mb_id');
+        $echange_hprim->group_id             = $dest_hprim->group_id;
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
-        $echange_hprim->type           = "patients";
-        $echange_hprim->sous_type      = $domGetEvenement->sous_type;
-        $echange_hprim->_message        = $messagePatient;
-        $echange_hprim->message_valide = 1;
+        $echange_hprim->type                 = "patients";
+        $echange_hprim->sous_type            = $domGetEvenement->sous_type;
+        $echange_hprim->_message             = $messagePatient;
+        $echange_hprim->message_valide       = 1;
       }
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
-  
+
       $newPatient = new CPatient();
       $newPatient->_hprim_initiator_id = $echange_hprim->_id;
-  	  
+      
       // Un événement concernant un patient appartient à l'une des six catégories suivantes :
-
       // Enregistrement d'un patient avec son identifiant (ipp) dans le système
       if ($domGetEvenement instanceof CHPrimXMLEnregistrementPatient) {
         $data = array_merge($data, $domGetEvenement->getContentsXML());
@@ -163,8 +163,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
       $domAcquittement->destinataire_libelle = $data['libelleClient'];
-    	$domAcquittement->_sous_type_evt = "enregistrementPatient";
-    	
+      $domAcquittement->_sous_type_evt = "enregistrementPatient";
+      
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();
       
@@ -178,21 +178,21 @@ class CHprimSoapHandler extends CSoapHandler {
     }   
   }
   
-	/**
+  /**
    * Codage CCAM vers les systèmes de facturation
    * @param CHPrimXMLEvenementServeurActes messageServeurActes
    * @return CHPrimXMLAcquittementsServeurActes messageAcquittement 
    **/
   function evenementServeurActes($messageServeurActes) {
-  	// Création de l'échange
+    // Création de l'échange
     $echange_hprim = new CEchangeHprim();
     $messageAcquittement = null;
     $data = array();
     
     // Gestion de l'acquittement
     $domAcquittement = new CHPrimXMLAcquittementsServeurActes();
-		
-		$domGetEvenement = new CHPrimXMLEvenementsServeurActes();
+    
+    $domGetEvenement = new CHPrimXMLEvenementsServeurActes();
     
     try {
       // Récupération des informations du message XML
@@ -243,7 +243,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
   
-			$data = array_merge($data, $domGetEvenement->getContentsXML());
+      $data = array_merge($data, $domGetEvenement->getContentsXML());
       $echange_hprim->id_permanent = $data['idSourceVenue'];
       $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $data);
      
@@ -266,9 +266,9 @@ class CHprimSoapHandler extends CSoapHandler {
       
       return $messageAcquittement;
     }
-	}
-	
-	/**
+  }
+  
+  /**
    * Diagnostics CIM vers les systèmes de facturation
    * @param CHPrimXMLEvenementsPmsi messagePmsi
    * @return CHPrimXMLAcquittementsPmsi messageAcquittement 
@@ -286,7 +286,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     return $messageAcquittement;
   }
-	
+  
   function calculatorAuth($operation, $entier1, $entier2) {
     $result = 0;
 

@@ -74,7 +74,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
   function enregistrementPatient($domAcquittement, &$echange_hprim, &$newPatient, $data) {        
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
-    $_IPP_create = $_code_Patient = false;
+    $_IPP_create = $_modif_patient = false;
     $mutex = new CMbSemaphore("sip-ipp");
 
     // Si SIP
@@ -97,7 +97,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP->object_class = "CPatient";
-        $IPP->tag = $dest_hprim->_tag_patient;
+        $IPP->tag = CAppUI::conf("sip tag_ipp");
 
         $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
@@ -176,7 +176,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       $id400 = new CIdSante400();
       //Paramétrage de l'id 400
       $id400->object_class = "CPatient";
-      $id400->tag = $data['idClient'];
+      $id400->tag = $dest_hprim->_tag_patient;
       $id400->id400 = $data['idSourcePatient'];
    
       // Cas 1 : Patient existe sur le SIP
@@ -193,7 +193,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $IPP = new CIdSante400();
             //Paramétrage de l'id 400
             $IPP->object_class = "CPatient";
-            $IPP->tag = $dest_hprim->_tag_patient;
+            $IPP->tag = CAppUI::conf("sip tag_ipp");
             $IPP->object_id = $idPatientSIP;
 
             $mutex->acquire();
@@ -240,7 +240,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
           $IPP->object_class = "CPatient";
-          $IPP->tag = $dest_hprim->_tag_patient;
+          $IPP->tag = CAppUI::conf("sip tag_ipp");
 
           $IPP->id400 = $data['idCiblePatient'];
           
@@ -306,7 +306,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       else {
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-        
         // Patient retrouvé      
         if ($newPatient->loadMatchingPatient()) {
           // Mapping du patient
@@ -322,10 +321,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $modified_fields .= "$field \n";
             }
           }
-          $_code_IPP = "A021";
-          $_code_Patient = true; 
+          $_modif_patient = true; 
           $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
         } else {
+          // Si serveur et pas d'IPP sur le patient
+          $newPatient->_no_ipp = 1;
           $msgPatient = $newPatient->store();
         
           $commentaire = "Patient créé : $newPatient->_id. ";
@@ -335,10 +335,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $id400Patient = new CIdSante400();
         //Paramétrage de l'id 400
         $id400Patient->object_class = "CPatient";
-        $id400Patient->tag = $data['idClient'];
-
+        $id400Patient->tag = $dest_hprim->_tag_patient;
         $id400Patient->id400 = $data['idSourcePatient'];
-        
         $id400Patient->object_id = $newPatient->_id;
         $id400Patient->_id = null;
         $id400Patient->last_update = mbDateTime();
@@ -348,43 +346,52 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
         $IPP->object_class = "CPatient";
-        $IPP->tag = $dest_hprim->_tag_patient;
-
-        // Cas idCible fourni
-        if ($data['idCiblePatient']) {mbTrace($data['idCiblePatient'], "idCiblePatient", true);
+        $IPP->tag = CAppUI::conf("sip tag_ipp");
+        
+        $mutex->acquire();
+        // Cas IPP fourni
+        if ($data['idCiblePatient']) {
           $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
-          $mutex->acquire();
-           
-          // idCible fourni non connu
+          // IPP fourni non connu
           if (!$IPP->loadMatchingObject() && is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
             $_code_IPP = "A001";
           }
-          // idCible fourni connu
-          else {
-            $IPP->id400 = null;
+          // IPP fourni connu
+          else {  
+            // Si IPP est identique au patient retrouvé
+            if ($IPP->object_id == $newPatient->_id) {
+              $_code_IPP = "I025";
+            } else {
+              // Annule l'IPP envoyé          
+              $IPP->id400 = null;
+              $IPP->loadMatchingObject("id400 DESC");
+  
+              // Incrementation de l'id400
+              $IPP->id400++;
+              $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+              $IPP->_id = null;
+               
+              $_code_IPP = "I009";
+            }
+          }
+        } else { 
+          // Si le patient a été retrouvé on a déjà l'IPP
+          if ($_modif_patient) {
+            $IPP->object_id = $newPatient->_id;
+            $IPP->loadMatchingObject();
+            $_code_IPP = "I026";
+          } else {
             $IPP->loadMatchingObject("id400 DESC");
-
+  
             // Incrementation de l'id400
             $IPP->id400++;
             $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+  
             $IPP->_id = null;
-             
-            $_code_IPP = "I009";
-          }
-        } else {
-          $mutex->acquire();
-           
-          // Chargement du dernier id externe de prescription du praticien s'il existe
-          $IPP->loadMatchingObject("id400 DESC");
-
-          // Incrementation de l'id400
-          $IPP->id400++;
-          $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
-
-          $IPP->_id = null;
-
-          $_code_IPP = "I006";
+  
+            $_code_IPP = "I006";
+          }          
         }
 
         $IPP->object_id = $newPatient->_id;
@@ -399,7 +406,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $newPatient->_no_ipp = 0;
         $msgPatient = $newPatient->store();
         
-        $codes = array ($msgPatient ? "A002" : "I001", $msgID400 ? "A004" : "I004", $msgIPP ? "A005" : $_code_IPP);
+        $codes = array ($msgPatient ? ($_modif_patient ? "A003" : "A002") : "I001", $msgID400 ? "A004" : "I004", $msgIPP ? "A005" : $_code_IPP);
         if ($msgPatient || $msgID400 || $msgIPP) {
           $avertissement = $msgPatient." ".$msgID400." ".$msgIPP;
         } else {
@@ -453,7 +460,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               }
             }
             $_code_IPP = "I021";
-            $_code_Patient = true; 
+            $_modif_patient = true; 
             $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
           } else {
             $_code_IPP = "I020";
@@ -479,7 +486,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               }
             }
             $_code_IPP = "A021";
-            $_code_Patient = true; 
+            $_modif_patient = true; 
             $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
           } else {
             $msgPatient = $newPatient->store();
@@ -492,7 +499,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         $IPP->last_update = mbDateTime();
         $msgIPP = $IPP->store();
         
-        $codes = array ($msgPatient ? ($_code_Patient ? "A003" : "A002") : ($_code_Patient ? "I002" : "I001"), $msgIPP ? "A005" : $_code_IPP);
+        $codes = array ($msgPatient ? ($_modif_patient ? "A003" : "A002") : ($_modif_patient ? "I002" : "I001"), $msgIPP ? "A005" : $_code_IPP);
         
         if ($msgPatient || $msgIPP) {
           $avertissement = $msgPatient." ".$msgIPP;

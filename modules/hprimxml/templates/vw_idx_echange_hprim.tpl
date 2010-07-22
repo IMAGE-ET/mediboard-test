@@ -173,11 +173,6 @@ function changePage(page) {
           <tbody id="echange_{{$_echange->_id}}">
             {{include file="inc_echange_hprim.tpl" object=$_echange}}
           </tbody>
-          {{foreach from=$_echange->_ref_notifications item=_ref_notification}}
-            <tbody id="echange_{{$_ref_notification->_id}}">
-              {{include file="inc_echange_hprim.tpl" object=$_ref_notification}}
-            </tbody>
-          {{/foreach}}
         {{foreachelse}}
           <tr>
             <td colspan="17">
