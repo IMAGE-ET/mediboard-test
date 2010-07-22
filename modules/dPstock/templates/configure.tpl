@@ -32,6 +32,9 @@
     {{assign var="class" value="CProductDelivery"}}
     {{mb_include module=system template=inc_config_bool var=auto_dispensation}}
     
+    {{assign var="class" value="CProduct"}}
+    {{mb_include module=system template=inc_config_bool var=use_renewable}}
+    
     <tr>
       <th colspan="2" class="category">Paginations</th>
     </tr>

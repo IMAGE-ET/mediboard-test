@@ -832,6 +832,7 @@ $locales['config-dPstock-CProductStockService-infinite_quantity'] = 'Stocks des 
 $locales['config-dPstock-CProductStockService-infinite_quantity-desc'] = 'Les stocks de services ne sont pas comptabilisés';
 $locales['config-dPstock-group_independent'] = 'Pharmacie globale pour toutes les cliniques';
 $locales['config-dPstock-group_independent-desc'] = 'La pharmacie est globale pour toutes les cliniques';
+$locales['config-dPstock-CProduct-use_renewable'] = 'Produit renouvelable';
 $locales['mod-dPstock-tab-configure'] = 'Configuration';
 $locales['mod-dPstock-tab-print_endowment'] = 'Impression des dotations';
 $locales['mod-dPstock-tab-print_reception'] = 'Bon de réception';
@@ -861,4 +862,5 @@ $locales['mod-dPstock-tab-vw_product_overview'] = 'Vue globale d\'un produit';
 $locales['mod-dPstock-tab-vw_traceability'] = 'Traçabilité';
 $locales['module-dPstock-court'] = 'Stocks';
 $locales['module-dPstock-long'] = 'Gestionnaire de stocks';
+
 ?>
