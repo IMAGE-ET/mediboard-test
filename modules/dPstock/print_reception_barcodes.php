@@ -11,12 +11,15 @@
 CCanDo::checkRead();
 
 $reception_id = CValue::get('reception_id');
+$lot_id = CValue::get('lot_id');
 $force_print  = CValue::get('force_print');
 
 $reception = new CProductReception();
-$reception->load($reception_id);
-$reception->loadRefsFwd();
-$reception->loadRefsBack();
+if($reception_id) {
+  $reception->load($reception_id);
+  $reception->loadRefsFwd();
+  $reception->loadRefsBack();
+}
 
 $pdf = new CMbPdf(); 
 
@@ -31,34 +34,42 @@ $pdf->setPrintFooter(false);
 // Creation d'une nouvelle page
 $pdf->AddPage();
 
+if ($reception->_id) {
+  $lots = $reception->_ref_reception_items;
+}
+else {
+  $lot = new CProductOrderItemReception;
+  $lot->load($lot_id);
+  $lots = array($lot);
+}
+
 $data = array();
 $j = 0;
-if ($reception->_id) {
-	foreach ($reception->_ref_reception_items as &$item) {
-		$item->loadRefsBack();
-		$item->loadRefsFwd();
-		$item->_ref_order_item->loadReference();
-		
-		$reference = $item->_ref_order_item->_ref_reference;
-		$reference->loadRefsFwd();
-		$reference->_ref_product->loadRefsFwd();
-		
-		if(!$item->barcode_printed || $force_print) {
-			for ($i = 0; $i < $item->quantity; $i++) {
-        $data[$j] = array();
-        $d = &$data[$j];
-        
-				$d[] = substr($reference->_ref_product->name, 0, 30);
-        $d[] = CMbString::truncate(substr($reference->_ref_product->name, 30, 30));
-				$d[] = $reference->_ref_product->_ref_societe->_view;
-				$d[] = $item->lapsing_date;
-				
-				$d[] = array(
-				  'barcode' => "{$reference->_ref_product->code} $item->code",
-				  'type'    => 'C128B'
-				);
-				$j++;
-			}
+
+foreach ($lots as &$item) {
+	$item->loadRefsBack();
+	$item->loadRefsFwd();
+	$item->_ref_order_item->loadReference();
+	
+	$reference = $item->_ref_order_item->_ref_reference;
+	$reference->loadRefsFwd();
+	$reference->_ref_product->loadRefsFwd();
+	
+	if(!$item->barcode_printed || $force_print) {
+		for ($i = 0; $i < $item->quantity; $i++) {
+      $data[$j] = array();
+      $d = &$data[$j];
+      
+			$d[] = substr($reference->_ref_product->name, 0, 30);
+      $d[] = CMbString::truncate(substr($reference->_ref_product->name, 30, 30));
+			$d[] = $reference->_ref_product->_ref_societe->_view;
+			$d[] = $item->lapsing_date;
+			
+			$d[] = array(
+			  'barcode' => "{$reference->_ref_product->code} $item->code",
+			  'type'    => 'C128B'
+			);
+			$j++;
 		}
 	}
 }

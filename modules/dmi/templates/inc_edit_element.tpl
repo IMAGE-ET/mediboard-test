@@ -42,9 +42,14 @@ refreshElement = function(element_id){
 	}
 {{/if}}
 
+printBarcode = function (object_id) {
+	var url = new Url("dPstock", "print_reception_barcodes");
+	url.addParam("lot_id", object_id);
+	url.addParam("suppressHeaders", 1 );
+	url.popup(800, 800);
+}
 Main.add(function () {
   var oForm = getForm("editElement-{{$element->_class_name}}");
-  
   if(!$('produit_auto_complete') || !oForm.elements.produit) return;
   
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
@@ -59,6 +64,7 @@ Main.add(function () {
       return queryString + "&hors_specialite=1"; 
     }
   } );
+
 });
 
 </script>
@@ -197,6 +203,7 @@ Main.add(function () {
     <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
+    <th>{{tr}}Print{{/tr}}</th>
   </tr>
   
   {{foreach from=$element->_ext_product->_ref_lots item=_lot}}
@@ -205,6 +212,7 @@ Main.add(function () {
       <td>{{mb_value object=$_lot field=date}}</td>
       <td>{{mb_value object=$_lot field=code}}</td>
       <td>{{mb_value object=$_lot field=lapsing_date}}</td>
+      <td style="text-align:center"><button class="barcode" onclick="printBarcode('{{$_lot->id}}');"></button></td>
     </tr>
   {{foreachelse}}
     <tr>
