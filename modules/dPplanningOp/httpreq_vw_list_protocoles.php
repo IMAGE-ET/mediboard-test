@@ -35,7 +35,7 @@ if ($chir_id) {
 }
 
 if ($code_ccam) {
-	$where["codes_ccam"] = "= '$code_ccam'";
+	$where["codes_ccam"] = " LIKE '%$code_ccam%'";
 }
 
 if ($type == 'interv') {

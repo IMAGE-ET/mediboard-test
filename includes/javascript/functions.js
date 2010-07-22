@@ -933,6 +933,7 @@ Element.addMethods({
 BarcodeParser = {
   watchInput: function(input, options){
     input = $(input);
+    if (!input) return;
     
     options = Object.extend({
       size: null,
@@ -945,9 +946,12 @@ BarcodeParser = {
     
     this.options.onRead = this.options.onRead ||
       function(parsed) {
-        var message = input.next("span");
-        if (message)
-          message.setVisible(!parsed.comp[this.options.field]);
+        var message = input.next(".barcode-message");
+        if (!message) {
+          message = DOM.span({style: "color: red; display: none;", className: "barcode-message"}, "Ce n'est pas un code valide");
+          input.up().insert({bottom: message});
+        }
+        message.setVisible(!parsed.comp[this.options.field]);
         
         if (parsed.comp[this.options.field]) {
           $V(input, parsed.comp[this.options.field]);

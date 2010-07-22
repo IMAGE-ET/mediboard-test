@@ -93,6 +93,23 @@
       <input type="text" name="code" value="" size="6" title="{{tr}}CProductOrderItemReception-code{{/tr}}" />
       <input type="text" name="lapsing_date" value="" class="date mask|99/99/9999 format|$3-$2-$1" title="{{tr}}CProductOrderItemReception-lapsing_date{{/tr}}" />
       <button type="submit" class="tick notext">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
+      
+      <script type="text/javascript">
+        Main.add(function(){
+          var input = getForm("form-item-receive-{{$curr_item->_id}}").elements.code;
+          BarcodeParser.watchInput(input, {field: "lot", onAfterRead: function(parsed){
+            var dateView = "";
+            if (parsed.comp.per) {
+              dateView = Date.fromDATE(parsed.comp.per).toLocaleDate();
+            }
+            input.form.lapsing_date.value = dateView;
+            
+            if (!parsed.comp.per && parsed.comp.lot) {
+              input.form.lapsing_date.select();
+            }
+          }});
+        });
+      </script>
     </form>
   	{{/if}}
   </td>
