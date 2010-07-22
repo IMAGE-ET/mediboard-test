@@ -21,8 +21,10 @@ if ($order_id)
 else
   $reception->load($reception_id);
   
-$reception->loadBackRefs("reception_items");
-
+$reception->loadRefsBack();
+foreach($reception->_ref_reception_items as $_reception) {
+  $_reception->loadRefOrderItem();
+}
 
 // Categories list
 $category = new CProductCategory();

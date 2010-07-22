@@ -100,7 +100,7 @@ function duplicateObject(form) {
     <th>{{mb_label object=$product field="scc_code"}}</th>
     <td>
       {{mb_field object=$product field="scc_code"}} 
-      <span style="display: none; color: red;">Ce n'est pas un code valide</span>
+      <span style="display: none; color: red;" class="barcode-message">Ce n'est pas un code valide</span>
     </td>
   </tr>
   <tr>

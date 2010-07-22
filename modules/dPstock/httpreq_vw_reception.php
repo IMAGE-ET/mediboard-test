@@ -17,6 +17,10 @@ $reception = new CProductReception();
 $reception->load($reception_id);
 $reception->loadRefsBack();
 
+foreach($reception->_ref_reception_items as $_reception) {
+  $_reception->loadRefOrderItem();
+}
+
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign('reception', $reception);

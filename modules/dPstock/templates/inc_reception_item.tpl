@@ -10,9 +10,9 @@
 
 <tr>
   <td colspan="4">
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_guid}}')">
-      {{$curr_item->_view|truncate:80}}
-    </span>
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$curr_item->_guid}}')">
+      {{$curr_item->_ref_order_item->_view|truncate:80}}
+    </strong>
   </td>
 </tr>
 <tr>
