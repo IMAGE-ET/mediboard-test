@@ -349,7 +349,7 @@ function prepareForms(root) {
       button.observe('click', function(event) {
         var element = Event.element(event);
         Form.Element.disable.defer(element);
-        Form.Element.enable.delay(1, element);
+        Form.Element.enable.delay(2, element);
       });
     });
     
