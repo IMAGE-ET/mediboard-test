@@ -34,6 +34,7 @@ $planning->title = $surveillance ?
   "Planning du technicien '$kine->_view'";	
 
 $planning->guid = $kine->_guid;
+$planning->guid .= $surveillance ? "-surv" : "-tech";
 
 // Chargement des evenement SSR 
 $evenement_ssr = new CEvenementSSR();
