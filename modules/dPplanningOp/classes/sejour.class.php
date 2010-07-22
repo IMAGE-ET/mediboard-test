@@ -468,6 +468,8 @@ class CSejour extends CCodable {
   }
     
   function store() {
+    $this->completeField("entree_reelle", "entree");
+
     // Vérification de la validité des codes CIM
     if($this->DP != null) {
       $dp = new CCodeCIM10($this->DP, 1);
