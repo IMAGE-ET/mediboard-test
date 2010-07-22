@@ -39,6 +39,7 @@ foreach($list_lines as $_dmi) {
   $_dmi->_ref_product->loadBackRefs("references");
   $_dmi->_ref_product->loadRefStock();
   $_dmi->_ref_operation->loadRefsFwd();
+  $_dmi->_ref_product_order_item_reception->loadRefOrderItem();
   
   $product_order = new CProductOrder;
   $product_order->setObject($_dmi->_ref_operation);

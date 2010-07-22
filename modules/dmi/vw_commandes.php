@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 $date = CValue::getOrSession("date", mbDate("-2 DAY"));
-$type = CValue::getOrSession("type", "loan");
+$type = CValue::getOrSession("type");
 
 $dmi_line = new CPrescriptionLineDMI();
 $dmi_line->date = $date;
