@@ -93,3 +93,21 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
 </div>
+
+<script type="text/javascript">
+  launchConvert = function() {
+    var url = new Url("dPstock", "convert_product");
+    url.requestUpdate("convert");
+  }
+</script>
+
+<table class="form" style="table-layout: fixed;">
+  <tr>
+    <td>
+      <button type="button" class="tick" onclick="launchConvert();">Lancer conversion</button>
+    </td>
+    <td>
+      <div id="convert"></div>
+    </td>
+  </tr>
+</table>
