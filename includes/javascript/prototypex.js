@@ -41,7 +41,25 @@ Object.merge = function(src, dest){
 };
 
 /** TODO: Remove theses fixes */
-
+//fixes getDimensions bug which does not work with Android
+Object.extend(document.viewport,{
+  getDimensions: function() {
+    var dimensions = { }, B = Prototype.Browser;
+    $w('width height').each(function(d) {
+      var D = d.capitalize();
+      if (B.WebKit && !document.evaluate) {
+        // Safari <3.0 needs self.innerWidth/Height
+        dimensions[d] = self['inner' + D];
+      } else if (B.Opera && parseFloat(window.opera.version()) < 9.5) {
+        // Opera <9.5 needs document.body.clientWidth/Height
+        dimensions[d] = document.body['client' + D]
+      } else {
+        dimensions[d] = document.documentElement['client' + D];
+      }
+    });
+    return dimensions;
+  },
+});
 // Fixes a bug that scrolls the page when in an autocomplete 
 Class.extend(Autocompleter.Base, {
   markPrevious: function() {
