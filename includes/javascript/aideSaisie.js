@@ -257,11 +257,12 @@ var AideSaisie = {
 
       buttons.timestamp.observe('click', function(){
     	var timestamp = DateFormat.format(new Date(), this.options.timestamp);
-    	var parts = this.options.defaultUserView.split(" ");
+    	
+    	var parts = this.options.userView.split(" ");
 
-    	timestamp = timestamp.replace(/%p/g, parts[0]);
-    	timestamp = timestamp.replace(/%n/g, parts[1]);
-    	timestamp = timestamp.replace(/%i/g, parts[0].charAt(0) + ". " + parts[1].charAt(0) + ". ");
+    	timestamp = timestamp.replace(/%p/g, parts[1]);
+    	timestamp = timestamp.replace(/%n/g, parts[0]);
+    	timestamp = timestamp.replace(/%i/g, parts[1].charAt(0) + ". " + parts[0].charAt(0) + ". ");
     	
     	if(this.element.value[this.element.value.length -1] != '\n' && this.element.value.length != 0) {
     	  timestamp = '\n' + timestamp;

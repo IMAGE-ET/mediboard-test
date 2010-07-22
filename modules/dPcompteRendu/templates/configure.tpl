@@ -49,9 +49,9 @@
           <script type="text/javascript">
             var timestamp = getForm("editConfig")["dPcompteRendu[CCompteRendu][timestamp]"];
             var reloadfield = function() {
-              var field = DateFormat.format(new Date(), timestamp.value).replace(/%p/g, User.view.split(" ")[0]);
-              field = field.replace(/%n/g, User.view.split(" ")[1]);
-              field = field.replace(/%i/g, User.view.split(" ")[0].charAt(0) + ". " + User.view.split(" ")[1].charAt(0) + ". ");
+              var field = DateFormat.format(new Date(), timestamp.value).replace(/%p/g, User.view.split(" ")[1]);
+              field = field.replace(/%n/g, User.view.split(" ")[0]);
+              field = field.replace(/%i/g, User.view.split(" ")[1].charAt(0) + ". " + User.view.split(" ")[0].charAt(0) + ". ");
               $('preview').innerHTML = field;
             };
             var addfield = function(name) {
