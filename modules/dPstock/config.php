@@ -30,7 +30,8 @@ $dPconfig["dPstock"] = array (
     "pagination_size" => 15
 	),
   "CProduct" => array (
-    "pagination_size" => 15
+    "pagination_size" => 15,
+	  "use_renewable"   => 1
   ),
   "CProductDelivery" => array (
     "auto_dispensation" => 0
