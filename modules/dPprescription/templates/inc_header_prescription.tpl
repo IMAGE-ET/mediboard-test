@@ -53,8 +53,8 @@ submitProtocole = function(){
 	  }
   }
 	if(document.selPraticienLine){
-   oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
-	 oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value
+	  oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
+	  oForm.pratSel_id.value = document.selPraticienLine.praticien_id.value
   }	
   return onSubmitFormAjax(oForm, 'systemMsg');
 }
@@ -116,8 +116,8 @@ printBons = function(prescription_id){
   url.popup(900, 600, "Impression des bons");
 }
 
-Main.add( function(){
-  var oFormProtocole = getForm("applyProtocole");
+Main.add( function(){	
+	var oFormProtocole = getForm("applyProtocole");
   var praticien_id;
   initNotes();
   if(document.selPraticienLine){
@@ -160,8 +160,9 @@ Main.add( function(){
 	  } );	
   }
   
-  if (window.File)
-    File.refresh('{{$prescription->_id}}','{{$prescription->_class_name}}');
+  if($('files-{{$prescription->_id}}-CPrescription')){
+	  File.refresh('{{$prescription->_id}}','{{$prescription->_class_name}}');
+  }
 } );
 
 </script>
@@ -194,7 +195,7 @@ Main.add( function(){
 	  </tr>
 	   <tr>
 	    <th style="width:7em">{{mb_title object=$prescription field=_owner}}</th>
-	     <td>
+	     <td class="text">
          <!-- Modification du pratcien_id / user_id -->
          <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.group_id.value=''; refreshListProtocole(this.form)">
            <option value="">&mdash; Choix d'un praticien</option>
@@ -234,16 +235,19 @@ Main.add( function(){
 			  </td>
 		  </tr>
 	   {{/if}}
+		 <tr>
+		 	 <th>{{mb_label object=$prescription field="fast_access"}}</th>
+			 <td>{{mb_field object=$prescription field="fast_access" onchange="onSubmitFormAjax(this.form);"}}</td>
+		 </tr>
   </table>
 </form>
 <table class="form">
-  <tr>
-    <th style="width:7em">Fichiers</th>
-    <td  id="files-{{$prescription->_id}}-CPrescription"></td>
-  </tr>
+	<tr>
+    <th style="width: 101px;">Fichiers</th>
+    <td id="files-{{$prescription->_id}}-CPrescription"></td>
+   </tr>
 </table>
 {{/if}}
-
 
 <form name="moment_unitaire">
   <select name="moment_unitaire_id" style="width: 150px; display: none;">  

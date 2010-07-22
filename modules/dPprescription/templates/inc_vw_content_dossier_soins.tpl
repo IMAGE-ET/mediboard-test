@@ -16,16 +16,14 @@
 	    <th rowspan="2" class="title">Catégorie</th>
 	    <th rowspan="2" class="title">Libellé</th>
 	    <th rowspan="2" class="title">Posologie</th>
-	          
-	
+			
 	    {{foreach from=$tabHours key=_date item=_hours_by_moment}}
 	      {{foreach from=$_hours_by_moment key=moment_journee item=_dates}}
 	        <th class="{{$_date}}-{{$moment_journee}} title"
 	            colspan="{{if $moment_journee == 'soir'}}{{$count_soir}}{{/if}}
 	                     {{if $moment_journee == 'nuit'}}{{$count_nuit}}{{/if}}
 	                     {{if $moment_journee == 'matin'}}{{$count_matin}}{{/if}}">
-	          
-	               
+	                     
 	          <a href="#1" onclick="showBefore()" style="float: left" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
 	            <img src="images/icons/prev.png" alt="&lt;"/>
 	          </a>        

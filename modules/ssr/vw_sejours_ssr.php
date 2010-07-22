@@ -109,6 +109,10 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefPatient();
 	$patient =& $_sejour->_ref_patient;
 	$patient->loadIPP();
+
+  // Modification des prescription
+	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
+	$_sejour->_ref_prescription_sejour->countRecentModif();
 }
 
 // Ajustements services

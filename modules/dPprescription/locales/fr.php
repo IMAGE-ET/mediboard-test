@@ -435,6 +435,9 @@ $locales['CPrescription-object_id-desc'] = 'Contexte';
 $locales['CPrescription-praticien_id'] = 'Praticien';
 $locales['CPrescription-praticien_id-court'] = 'Praticien';
 $locales['CPrescription-praticien_id-desc'] = 'Praticien effectuant la prescription';
+$locales['CPrescription-fast_access'] = 'Acces rapide';
+$locales['CPrescription-fast_access-court'] = 'Acces rapide';
+$locales['CPrescription-fast_access-desc'] = 'Acces rapide';
 $locales['CPrescription-prescription_id'] = 'Identifiant';
 $locales['CPrescription-prescription_id-court'] = 'Id';
 $locales['CPrescription-prescription_id-desc'] = 'Identifiant interne';
@@ -1291,6 +1294,7 @@ $locales['CProduct-back-lines_dmi'] = 'Lignes de DMI';
 $locales['CProduct-back-lines_dmi.empty'] = 'Aucun DMI';
 $locales['CProductOrderItemReception-back-lines_dmi'] = 'Lignes de DMI';
 $locales['CProductOrderItemReception-back-lines_dmi.empty'] = 'Aucun DMI';
+$locales['CProtocole-confirm-deletion'] = 'Voulez-vous supprimer le protocole : ';
 $locales['CSejour-back-planifications'] = 'Planifications';
 $locales['CSejour-back-planifications.empty'] = 'Aucune planification';
 $locales['CService-back-config_moment'] = 'Config moment unitaire';
@@ -1443,6 +1447,4 @@ $locales['pref-show_transmissions_form'] = 'Affichage par defaut du formulaire d
 $locales['pref-show_transmissions_form-0'] = 'Masquer';
 $locales['pref-show_transmissions_form-1'] = 'Afficher';
 $locales['pref-show_transmissions_form-desc'] = 'Affichage par defaut du formulaire de transmissions';
-$locales['CProtocole-confirm-deletion'] = 'Voulez-vous supprimer le protocole : '
-
 ?>

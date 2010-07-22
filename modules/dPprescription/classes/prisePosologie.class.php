@@ -377,13 +377,14 @@ class CPrisePosologie extends CMbMetaObject {
     }
     
 		// Seulement Tous les avec comme unite les heures
-    if(!$this->moment_unitaire_id && $this->nb_tous_les && $this->unite_tous_les == "heure"){
-      $date_time_temp = $this->_ref_object->_debut_reel;
+    if(!$this->moment_unitaire_id && $this->nb_tous_les && ($this->unite_tous_les == "heure" || $this->unite_tous_les == "minute")){
+    	$date_time_temp = $this->_ref_object->_debut_reel;
       while($date_time_temp < $this->_ref_object->_fin_reelle){
       	if(($sejour->_entree <= $date_time_temp) && ($sejour->_sortie >= $date_time_temp)){
           $planifs[] = array("unite_prise" => "", "prise_id" => $this->_id, "dateTime" => $date_time_temp);
 				}
-			  $date_time_temp = mbDateTime("+ $this->nb_tous_les HOURS", $date_time_temp);
+				$type_increment = $this->unite_tous_les == "heure" ? "hours" : "minutes";
+			  $date_time_temp = mbDateTime("+ $this->nb_tous_les $type_increment", $date_time_temp);
       }
     }
 

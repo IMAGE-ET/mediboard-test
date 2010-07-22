@@ -17,10 +17,10 @@ Main.add( function(){
   }
   
   Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}","{{if $prescription->object_id}}{{$prescription->_counts_by_chapitre_non_signee.med}}{{else}}0{{/if}}");
-  
+ 
   if(document.forms.addLine && document.forms.searchProd){
     var oFormProduit = document.forms.searchProd;
-    
+		          
     // Autocomplete des medicaments
     var urlAuto = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
     urlAuto.addParam("produit_max", 40);
@@ -29,7 +29,9 @@ Main.add( function(){
       updateElement: updateFieldsMedicament,
       callback: 
         function(input, queryString){
-          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')); 
+          var praticien_id = document.selPraticienLine ? $V(document.selPraticienLine.praticien_id) : '{{$prescription->_ref_current_praticien->_id}}';
+          return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0'+"&praticien_id="+praticien_id
+					{{if $prescription->object_id && !$mode_pharma}}+"&fast_access='1'"{{/if}}));
         }
     } );
   }

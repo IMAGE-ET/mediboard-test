@@ -22,7 +22,9 @@ class CPrescription extends CMbObject {
   var $object_id       = null;
   var $libelle         = null;
   var $type            = null;
-  
+
+	var $fast_access    = null;
+	
   // Form fields
   var $_owner          = null;
   
@@ -85,6 +87,10 @@ class CPrescription extends CMbObject {
   var $_chapter_view = null;
   var $_purge_planifs_systemes = null;
 	var $_chapitres = null;
+	var $_count_recent_modif_presc = null;
+	
+	var $_ref_prescription_lines_by_cat = null;
+	
 	
 	static $cache_service = null;
   static $images = array(
@@ -132,7 +138,8 @@ class CPrescription extends CMbObject {
     $specs["object_class"]  = "enum notNull list|CSejour|CConsultation|CDossierMedical";
     $specs["libelle"]       = "str";
     $specs["type"]          = "enum notNull list|traitement|pre_admission|sejour|sortie|externe";
-    $specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
+    $specs["fast_access"]   = "bool default|0";
+		$specs["_type_sejour"]  = "enum notNull list|pre_admission|sejour|sortie";
     $specs["_dateTime_min"] = "dateTime";
     $specs["_dateTime_max"] = "dateTime";
     $specs["_owner"]        = "enum list|prat|func|group";
@@ -1059,19 +1066,23 @@ class CPrescription extends CMbObject {
    * Calcul des chapitres modifiés récemments
    */
   function countRecentModif(){
+  	$this->_count_recent_modif_presc = false;
     $this->_count_recent_modif["med"] = false;
     $this->_count_recent_modif["inj"] = false;
     
     // Parcours des lignes de medicaments
-    foreach($this->_ref_prescription_lines_by_cat as $cat_atc => $_lines_med){
-      foreach($_lines_med as $_line_med){
-        $chapitre = $_line_med->_is_injectable ? "inj" : "med";
-        if($_line_med->_recent_modification){
-          $this->_count_recent_modif[$chapitre] = true;
-        }
-      }
-    }
-    
+    if($this->_ref_prescription_lines_by_cat){
+			foreach($this->_ref_prescription_lines_by_cat as $cat_atc => $_lines_med){
+	      foreach($_lines_med as $_line_med){
+	        $chapitre = $_line_med->_is_injectable ? "inj" : "med";
+	        if($_line_med->_recent_modification){
+	          $this->_count_recent_modif[$chapitre] = true;
+	          $this->_count_recent_modif_presc = true;
+					}
+	      }
+	    }
+		}
+		
     // Parcours des lignes de prescription_line_mixes
 		if(is_array($this->_ref_prescription_line_mixes_by_type)){
 	    foreach($this->_ref_prescription_line_mixes_by_type as $type_mix => $_prescription_line_mixes){
@@ -1079,6 +1090,7 @@ class CPrescription extends CMbObject {
 	      foreach($_prescription_line_mixes as $_prescription_line_mix){
 		      if($_prescription_line_mix->_recent_modification){
 		        $this->_count_recent_modif[$type_mix] = true;
+					  $this->_count_recent_modif_presc = true;
 					}
 				}
 	    }
@@ -1092,7 +1104,8 @@ class CPrescription extends CMbObject {
           foreach($lines_elt as $_line_elt){
             if($_line_elt->_recent_modification){
               $this->_count_recent_modif[$_chapitre_elt] = true;
-            }
+              $this->_count_recent_modif_presc = true;
+						}
           }
         }
       }

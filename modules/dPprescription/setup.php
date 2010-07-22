@@ -1663,7 +1663,11 @@ class CSetupdPprescription extends CSetup {
 		$sql = "ALTER TABLE `category_prescription` ADD `prescription_executant` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);					
 							
-    $this->mod_version = "1.12";
+		$this->makeRevision("1.12");
+		$sql = "ALTER TABLE `prescription` ADD `fast_access` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "1.13";
   }
 }
 

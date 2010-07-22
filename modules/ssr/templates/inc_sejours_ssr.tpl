@@ -34,7 +34,7 @@
 	<tr>
 		{{assign var=url value="?m=$m&$actionType=$action&dialog=$dialog"}}
     <th style="width: 20em;">{{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}</th>
-    <th style="width:   1%;">
+    <th style="width: 1%;">
       <input type="text" size="6" onkeyup="SejoursSSR.filter(this)" id="filter-patient-name" />
     </th>
     <th style="width:  5em;">{{mb_colonne class="CSejour" field="entree"     order_col=$order_col order_way=$order_way url=$url}}</th>
@@ -96,6 +96,10 @@
 
 	<tr class="{{$ssr_class}}">
 		<td colspan="2" class="text">
+		  {{if $_sejour->_ref_prescription_sejour->_count_recent_modif_presc}}
+			<img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
+			{{/if}}
+		
 			{{assign var=link value="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"}}
 			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
 		</td>

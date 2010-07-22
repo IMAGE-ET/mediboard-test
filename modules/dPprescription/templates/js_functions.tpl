@@ -387,8 +387,16 @@ updateFieldsElement = function(selected, formElement, element) {
 updateFieldsMedicament = function(selected) {
 	Element.cleanWhitespace(selected);
   var dn = selected.childNodes;
-	if(dn[0].className != 'informal'){
-    Prescription.addLine(dn[0].firstChild.nodeValue);
+	
+	if(dn[0].className == 'protocole'){
+	  // Application d'un protocole par acces rapide
+		oFormProtocole = getForm("applyProtocole");
+		$V(oFormProtocole.pack_protocole_id, "prot-"+dn[0].firstChild.textContent);
+		submitProtocole();
+	} else {
+		if(dn[0].className != 'informal'){
+	    Prescription.addLine(dn[0].firstChild.nodeValue);
+		}
 	}
   $('searchProd_produit').value = "";
 }
