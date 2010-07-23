@@ -157,6 +157,10 @@ table.grid th {
 <table class="grid print bodyWithoutPageBreak">
 	<tr>
     <th class="category">Code</th>
+    {{if $order->object_id}}
+      <th class="category">Lot</th>
+      <th class="category">Date pér.</th>
+    {{/if}}
     <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
       <th class="category">Unités</th>
@@ -177,6 +181,10 @@ table.grid th {
 <table class="grid print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
   <tr>
     <th class="category">Code</th>
+    {{if $order->object_id}}
+      <th class="category">Lot</th>
+      <th class="category">Date pér.</th>
+    {{/if}}
     <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
       <th class="category">Unités</th>
@@ -191,6 +199,17 @@ table.grid th {
 	
 	<tr>
     <td style="text-align: right;">{{mb_value object=$curr_item->_ref_reference field=supplier_code}}</td>
+    
+    {{if $order->object_id}}
+      {{if $curr_item->_ref_lot}}
+        <td>{{mb_value object=$curr_item->_ref_lot field=code}}</td>
+        <td>{{mb_value object=$curr_item->_ref_lot field=lapsing_date}}</td>
+      {{else}}
+        <td></td>
+        <td></td>
+      {{/if}}
+    {{/if}}
+    
     <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
       <td style="text-align: right; white-space: nowrap;">

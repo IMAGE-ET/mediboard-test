@@ -17,6 +17,7 @@ class CProductOrderItem extends CMbObject {
   var $order_id           = null;
   var $quantity           = null;
   var $unit_price         = null; // In the case the reference price changes
+  var $lot_id             = null;
 
   // Object References
   //    Single
@@ -28,6 +29,7 @@ class CProductOrderItem extends CMbObject {
    * @var CProductReference
    */
   var $_ref_reference     = null;
+  var $_ref_lot           = null;
   
   //    Multiple
   var $_ref_receptions    = null;
@@ -53,6 +55,7 @@ class CProductOrderItem extends CMbObject {
     $specs['order_id']           = 'ref class|CProductOrder'; // can be null because of gifts
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency precise';
+    $specs['lot_id']             = 'ref class|CProductOrderItemReception';
     $specs['_cond_price']        = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
@@ -129,6 +132,10 @@ class CProductOrderItem extends CMbObject {
     return $this->_ref_reference = $this->loadFwdRef("reference_id", true);
   }
   
+  function loadRefLot() {
+    return $this->_ref_lot = $this->loadFwdRef("lot_id", false);
+  }
+  
   function loadOrder($cache = true) {
     $this->completeField("order_id");
     return $this->_ref_order = $this->loadFwdRef("order_id", $cache);
@@ -143,6 +150,7 @@ class CProductOrderItem extends CMbObject {
 
     $this->loadReference();
     $this->loadOrder();
+    $this->loadRefLot();
   }
   
   function getBackProps() {
@@ -163,6 +171,10 @@ class CProductOrderItem extends CMbObject {
         'order_id'     => "= '$this->order_id'",
         'reference_id' => "= '$this->reference_id'",
       );
+      
+      if ($this->lot_id) {
+        $where['lot_id'] = "= '$this->lot_id'";
+      }
 
       if (isset($this->_is_unit_quantity)) {
         $this->quantity /= ($this->_ref_reference->quantity * $this->_ref_reference->_ref_product->quantity);

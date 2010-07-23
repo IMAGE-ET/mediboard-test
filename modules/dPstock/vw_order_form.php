@@ -26,6 +26,10 @@ if ($order_id) {
     $order->_ref_object->updateFormFields();
     $order->_ref_object->loadRefsFwd();
   }
+  
+  foreach ($order->_ref_order_items as $_item) {
+    $_item->loadRefLot();
+  }
 }
 
 $pharmacien = new CMediusers;
