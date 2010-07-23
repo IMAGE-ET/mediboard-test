@@ -43,6 +43,20 @@ foreach ($sejours as $_sejour) {
 	$_sejour->loadRefPrescriptionSejour();
 	$_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
   $_sejour->_ref_prescription_sejour->countRecentModif();
+	
+  // Chargement des lignes de la prescription
+	$_sejour->_ref_prescription_sejour->loadRefsLinesElement();
+
+  // Chargement du planning du sejour
+  $args_planning = array();
+  $args_planning["sejour_id"] = $_sejour->_id;
+  $args_planning["large"] = 1;
+  $args_planning["print"] = 1;
+  $args_planning["height"] = 600;
+  $args_planning["date"] = $date;
+  
+  // Chargement du planning de technicien
+  $plannings[$_sejour->_id] = CApp::fetch("ssr", "ajax_planning_sejour", $args_planning);
 }
 
 // Création du template
@@ -51,6 +65,7 @@ $smarty->assign("sejours", $sejours);
 $smarty->assign("date", $date);
 $smarty->assign("order_col", "");
 $smarty->assign("order_way", "");
+$smarty->assign("plannings", $plannings);
 $smarty->display("offline_sejours.tpl");
 
 ?>

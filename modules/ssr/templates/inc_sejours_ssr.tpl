@@ -96,6 +96,10 @@
 
 	<tr class="{{$ssr_class}}">
 		<td colspan="2" class="text">
+			{{if @$offline}}
+        <button class="search notext" onclick="modalwindow = modal($('modal-view-{{$_sejour->_id}}'));" style="float: left;"></button>
+      {{/if}}
+			
 		  {{if $_sejour->_ref_prescription_sejour->_count_recent_modif_presc}}
 			<img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
 			{{/if}}
