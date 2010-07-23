@@ -159,19 +159,20 @@ Main.add(function(){
                   Main.add(function(){
                     var input = getForm("create-lot-{{$_product->_id}}").elements.code;
                     BarcodeParser.watchInput(input, {field: "lot", onAfterRead: function(parsed){
-                      $V(input.form.lapsing_date, parsed.comp.per);
+                      //$V(input.form.lapsing_date, parsed.comp.per);
                       
                       var dateView = "";
                       if (parsed.comp.per) {
                         dateView = Date.fromDATE(parsed.comp.per).toLocaleDate();
                       }
-                      input.form.lapsing_date_da.value = dateView;
+                      //input.form.lapsing_date_da.value = dateView;
+                      input.form.lapsing_date.value = dateView;
                     }});
                   });
                 </script>
               </td>
               <td style="text-align: center;">
-                {{mb_field object=$_product->_new_lot field=lapsing_date register=true form="create-lot-$product_id" prop="date notNull"}}
+                {{mb_field object=$_product->_new_lot field=lapsing_date register=true form="create-lot-$product_id" prop="str notNull mask|99/99/9999" size=10}}
               </td>
               {{* <td>{{mb_field class=CProductOrderItemReception field=date register=true form=searchProductOrderItemReception}}</td> *}}
               <td>
