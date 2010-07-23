@@ -307,33 +307,43 @@ class CBarcodeParser {
       $type = "code39";
       $barcode = self::decodeCode39($barcode);
       
-      //      __REF__
-      // +H920246020502   
-      if (preg_match('/^h(\d{3})(.+).{2}$/ms', $barcode, $parts)) {
-        $comp["ref"] = $parts[2];
+      //     _PER__ __LOT__
+      // +$$3130331 3414899 .
+      if (empty($comp) && preg_match('/^\+?\$\$[23456789](\d{6})(\d+).{2}$/ms', $barcode, $parts)) {
+        $comp["per"] = $parts[1];
+        $comp["lot"] = $parts[2];
       }
       
-      //     _PER_ __LOT__
-      // +$$31303313414899 .
+      //        _LOT__
       // +$$03151005377M
-      if (preg_match('/^\+?\$\$.(\d+)(\d{6}).{2}$/ms', $barcode, $parts)) {
+      //        __LOT___
+      // +$$01150910199AD6
+      if (empty($comp) && preg_match('/^\+?\$\$(\d{4})([A-Z0-9]+).{2}$/ms', $barcode, $parts)) {
         $comp["per"] = $parts[1];
         $comp["lot"] = $parts[2];
       }
       
       //       __REF___    PER_ __LOT__
-      // $$m423104003921/$$081309091602Y
-      if (preg_match('/^[a-z](\d{3})(\d+).\/\$\$(\d{4})(.+).$/ms', $barcode, $parts)) {
+      // +M423104003921/$$081309091602Y
+      if (empty($comp) && preg_match('/^[a-z](\d{3})(\d+).\/\$\$(\d{4})(.+).$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
         $comp["per"] = $parts[3];
         $comp["lot"] = $parts[4];
       }
       
       //      ___REF___  PER_ __LOT___
-      // +H7036307002101/1830461324862J09C // ^m703
-      if (preg_match('/^[a-z](\d{3})(\d+)(\d)\/(\d{5})([A-Z0-9]+)(.{4})$/ms', $barcode, $parts)) {
+      // +H7036307002101/1830461324862J09C
+      if (empty($comp) && preg_match('/^[a-z](\d{3})(\d+)(\d)\/(\d{5})([A-Z0-9]+)(.{4})$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
         $comp["lot"] = $parts[5];
+      }
+      
+      //      __REF__
+      // +H920246020502
+      //      ____REF____ 
+      // +M412RM51100004B1D
+      if (empty($comp) && preg_match('/^[a-z](\d{3})([A-Z0-9]+).{2}$/ms', $barcode, $parts)) {
+        $comp["ref"] = $parts[2];
       }
       
       //   __SN___
@@ -345,19 +355,19 @@ class CBarcodeParser {
     
     // __LOT___ _SN__
     // 09091602/00736
-    if (preg_match('/^(\d{8})\/(\d{5})$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^(\d{8})\/(\d{5})$/', $barcode, $parts)) {
       $type = "unkown";
       $comp["lot"] = $parts[1];
     }
      
     // CIP
-    if (preg_match('/^(\d{7})$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^(\d{7})$/', $barcode, $parts)) {
       $type = "cip";
       $comp["cip"] = $parts[1];
     }
      
     // Medicament
-    if (preg_match('/^([2459])(\d{7})(\d{6})(0[01])$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^([2459])(\d{7})(\d{6})(0[01])$/', $barcode, $parts)) {
       $type = "med";
       $comp["remb"]  = $parts[1];
       $comp["cip"]   = $parts[2];
@@ -367,17 +377,17 @@ class CBarcodeParser {
     
     // Arthrex specific
     // REF : PAR-1934BF-2   >>  AR-1934BF-2  (without leading P)
-    if (preg_match('/^P(AR-[A-Z0-9-]+)$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^P(AR-[A-Z0-9-]+)$/', $barcode, $parts)) {
       $type = "arthrex";
       $comp["ref"] = $parts[1];
     }
     // LOT : T314998   >>  314998  (without leading T)
-    if (preg_match('/^T(\d{4,9})$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^T(\d{4,9})$/', $barcode, $parts)) {
       $type = "arthrex";
       $comp["lot"] = $parts[1];
     }
     // QTY : Q1   >>  1  (without leading T)
-    if (preg_match('/^Q(\d{1})$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^Q(\d{1})$/', $barcode, $parts)) {
       $type = "arthrex";
       $comp["qty"] = $parts[1];
     }
