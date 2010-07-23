@@ -52,17 +52,20 @@ Main.add(function () {
   var oForm = getForm("editElement-{{$element->_class_name}}");
   BarcodeParser.watchInput(oForm.elements.code, {field: "ref"});
   
-  var codeInput = getForm("create-lot-{{$element->_class_name}}").elements.code;
-  BarcodeParser.watchInput(codeInput, {
-    field: "lot",
-    onAfterRead: function(parsed){
-      var dateView = "";
-      if (parsed.comp.per) {
-        dateView = Date.fromDATE(parsed.comp.per).toLocaleDate();
+  var lotForm = getForm("create-lot-{{$element->_class_name}}");
+  if (lotForm) {
+    var codeInput = lotForm.elements.code;
+    BarcodeParser.watchInput(codeInput, {
+      field: "lot",
+      onAfterRead: function(parsed){
+        var dateView = "";
+        if (parsed.comp.per) {
+          dateView = Date.fromDATE(parsed.comp.per).toLocaleDate();
+        }
+        codeInput.form.lapsing_date.value = dateView;
       }
-      codeInput.form.lapsing_date.value = dateView;
-    }
-  });
+    });
+  }
   
   {{if $element->_class_name == "CDM"}}
     var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
