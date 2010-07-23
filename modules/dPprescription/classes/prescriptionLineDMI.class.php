@@ -84,7 +84,12 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function store(){
     if (!$this->_id) {
-      $this->completeField("quantity");
+      if (!$this->type) {
+        $this->loadRefProduct();
+        $dmi = CDMI::getFromProduct($this->_ref_product);
+        $this->type = $dmi->type;
+      }
+      
       if (!$this->quantity) $this->quantity = 1;
       
       if ($stock = $this->loadRefStockGroup()) {
@@ -94,6 +99,7 @@ class CPrescriptionLineDMI extends CMbObject {
         }
       }
     }
+    
     return parent::store();
   }
   
