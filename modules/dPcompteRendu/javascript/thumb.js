@@ -198,16 +198,16 @@ function FCKeventChanger(editorInstance){
   }
 }
 
-FormObserver.onChanged = function(){
-  // Empty the PDF
-  var f = getForm("download-pdf-form");
-  var url = new Url();
-  url.addParam("_do_empty_pdf", 1);
-  url.addParam("dosql", "do_modele_aed");
-  url.addParam("m", "dPcompteRendu");
-  url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-  url.requestJSON(function(){}, {method: "post"});
-  //url.requestUpdate("toto", {method: "post"});
+function emptyPDFonChanged(){
+  FormObserver.onChanged = function(){
+    var f = getForm("download-pdf-form");
+    var url = new Url();
+    url.addParam("m", "dPcompteRendu");
+    url.addParam("dosql", "do_modele_aed");
+    url.addParam("_do_empty_pdf", 1);
+    url.addParam("compte_rendu_id", f.compte_rendu_id.value);
+    url.requestJSON(function(){}, {method: "post"});
+  }
 }
 
 function resizeEditor() {

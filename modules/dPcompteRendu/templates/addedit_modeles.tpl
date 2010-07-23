@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+
 <script type="text/javascript">
 window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
@@ -105,10 +106,15 @@ function submitCompteRendu(){
   }).defer();
 }
 
+</script>
 
-  </script>
-	{{mb_include_script module=dPcompteRendu script=thumb}}
-	<script>
+{{mb_include_script module=dPcompteRendu script=thumb}}
+
+<script type="text/javascript">
+
+{{if $pdf_thumbnails == 1}}
+  emptyPDFonChanged();
+{{/if}}
 
 Main.add(function () {
   loadObjectClass('{{$compte_rendu->object_class}}');

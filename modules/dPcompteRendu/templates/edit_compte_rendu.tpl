@@ -13,10 +13,13 @@ function submitCompteRendu(){
   }).defer();
 }
 </script>
+
 {{mb_include_script module=dPcompteRendu script=thumb}}
 
 <script type="text/javascript">
 {{if $pdf_thumbnails == 1}}
+  emptyPDFonChanged();
+  
 	togglePageLayout = function() {
 	  $("page_layout").toggle();
 	}
