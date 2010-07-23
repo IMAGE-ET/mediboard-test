@@ -744,9 +744,9 @@ class CConsultation extends CCodable {
     if ($this->sejour_id) {
       $forfait_se = $this->_forfait_se;
       $this->loadRefSejour();
+      $this->completeField("plageconsult_id");
       $this->loadRefPlageConsult();
-      $datetime = $this->_ref_plageconsult->date. " ".$this->heure;
-
+      $datetime = $this->_datetime;
       if ($datetime < $this->_ref_sejour->entree) {
         $this->_ref_sejour->_hour_entree_prevue = null;
         $this->_ref_sejour->_min_entree_prevue  = null;
