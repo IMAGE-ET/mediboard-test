@@ -28,7 +28,8 @@
     <tr>
       <th colspan="20" class="title">
         {{$contexts.$_context_guid}}
-        <button type="button" class="print notext" onclick="Prescription.printPrescription({{$contexts.$_context_guid->prescription_id}})"></button>
+        {{assign var=context value=$contexts.$_context_guid}}
+        <button type="button" class="print notext" onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}')"></button>
       </th>
     </tr>
     {{foreach from=$_lines item=_line_dmi}}
