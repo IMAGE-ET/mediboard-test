@@ -392,6 +392,17 @@ class CBarcodeParser {
       $comp["per"] = $parts[4];
     }
     
+    
+    // Mediboard
+    //   ___ID___
+    // MB01234567
+    if (empty($comp) && preg_match('/^MB(\d{8})$/', $barcode, $parts)) {
+      $type = "mb";
+      $comp["id"] = intval($parts[1]);
+    }
+    
+    
+    // final process
     if (isset($comp["per"])) {
       $comp["per"] = self::parsePeremptionDate($comp["per"]);
     }

@@ -36,7 +36,13 @@ $ljoin = array(
   "product"            => "product_reference.product_id = product.product_id",
 );
 
-$lots = $object->seek($lot, $where, 50, null, $ljoin);
+if (isset($comp['id'])) {
+  $lot = $object->load($comp['id']);
+  $lots = array($lot->_id => $lot);
+}
+else {
+  $lots = $object->seek($lot, $where, 50, null, $ljoin);
+}
 
 foreach($lots as $_lot) {
   $strict = true;
