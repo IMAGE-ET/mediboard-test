@@ -102,6 +102,10 @@ h1 {
 	page-break-before: always;
 }
 
+h1.no-break {
+  page-break-before: auto;
+}
+
 h2 {
   font-size: 1.4em;
   color: #444;

@@ -423,7 +423,7 @@ div.footer {
 
 {{if $linesDMI|@count}}
   <div class="bodyWithoutPageBreak">
-    <h1>DMI</h1>
+    <h1 class="no-break">DMI</h1>
     <ul>
     {{foreach from=$linesDMI item=_line_dmi}}
       <li><strong>{{$_line_dmi->_ref_product->name}}</strong>:
