@@ -12,7 +12,11 @@ CCanDo::checkAdmin();
 
 $object_class = CValue::get("object_class", "CSociete");
 
-$dosql = ($object_class == "CSociete") ? "do_suppliers_import" : "do_dmi_import";
+switch($object_class) {
+  case "CSociete":   $dosql = "do_suppliers_import";  break;
+  case "CProductReference": $dosql = "do_references_import"; break;
+  default:           $dosql = "do_dmi_import";        break;
+}
 
 // Création du template
 $smarty = new CSmartyDP();

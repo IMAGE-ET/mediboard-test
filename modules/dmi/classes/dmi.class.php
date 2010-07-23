@@ -56,7 +56,7 @@ class CDMI extends CProduitPrescriptible {
     return $dmi_list;
   }
   
-  function check(){
+  /*function check(){
     if(!$this->_id){
       $group_id = CGroups::loadCurrent()->_id;
       $dmi = new CDMI();
@@ -69,7 +69,7 @@ class CDMI extends CProduitPrescriptible {
       }
     }
     return parent::check();
-  }
+  }*/
   
   function loadRefsFwd(){
     $this->loadRefProduct();

@@ -32,10 +32,6 @@ $ignored = array(
 
 $delim = ",";
 
-$map = array(
-  0 => "",
-);
-
 if (strtolower(CMbPath::getExtension($file["name"]) != 'csv')) {
   CAppUI::setMsg("Le fichier doit être de type CSV", UI_MSG_ERROR);
   return;

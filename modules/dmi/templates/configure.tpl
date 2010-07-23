@@ -52,16 +52,20 @@ Main.add(function(){
         
         {{if $class == "CDMI"}}
           <tr>
-            <th>
-              <button class="tick" type="button" onclick="importData('CSociete')">Importer les fournisseurs</button>
-            </th>
-            <td></td>
+            <th colspan="2" class="category">Importation</th>
           </tr>
           <tr>
-            <th>
-              <button class="tick" type="button" onclick="importData('CDMI')">Importer les DMI</button>
-            </th>
             <td></td>
+            <td>
+              <ol>
+                <li><button class="tick" type="button" onclick="importData('CSociete')">Importer les fournisseurs</button></li>
+                <li><button class="tick" type="button" onclick="importData('CDMI')">Importer les DMI</button></li>
+                <li><button class="tick" type="button" onclick="importData('CProductReference')">Importer les références (+ familles)</button></li>
+              </ol>
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2" class="category">Synchronisation</th>
           </tr>
         {{/if}}
         
