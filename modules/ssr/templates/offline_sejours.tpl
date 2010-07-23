@@ -60,7 +60,7 @@
 					</th>
         </tr> 
 				<tr>
-					<td colspan="2">
+					<td colspan="2" style="text-align: left;">
 						{{mb_value object=$_sejour->_ref_bilan_ssr field="entree"}}
 			 	 </td>
 				</tr>
@@ -70,7 +70,7 @@
 					</th>
         </tr> 
 				<tr>
-					<td colspan="2">
+					<td colspan="2" style="text-align: left;">
 						{{mb_value object=$_sejour->_ref_bilan_ssr field="sortie"}}
 					</td>
 				</tr>
