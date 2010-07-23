@@ -236,11 +236,13 @@ class CBarcodeParser {
     $comp = array();
     
     $type = "raw";
+    $patt = "";
 
     if (!$barcode) {
       return array(
         "type" => $type,
         "comp" => $comp,
+        "patt" => $patt,
       );
     }
     
@@ -280,8 +282,10 @@ class CBarcodeParser {
     }
     
     // EAN code (13 digits)
-    if (empty($comp) && preg_match('/^(\d{13})$/ims', $barcode, $parts)) {
+    $pattern = '/^(\d{13})$/ims';
+    if (empty($comp) && preg_match($pattern, $barcode, $parts)) {
       $type = "ean13";
+      $patt = $pattern;
       $comp["scc"] = "0{$parts[1]}";
     }
     
@@ -311,7 +315,8 @@ class CBarcodeParser {
       
       //     _PER_ __LOT__
       // +$$31303313414899 .
-      if (preg_match('/^\+?\$\$.(\d{6})(.+).{2}$/ms', $barcode, $parts)) {
+      // +$$03141005377M
+      if (preg_match('/^\+?\$\$.(\d+)(\d{6}).{2}$/ms', $barcode, $parts)) {
         $comp["per"] = $parts[1];
         $comp["lot"] = $parts[2];
       }
