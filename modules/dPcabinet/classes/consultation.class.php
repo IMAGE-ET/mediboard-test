@@ -704,7 +704,7 @@ class CConsultation extends CCodable {
   }
   
   function store() {
-    $this->completeField('sejour_id');
+    $this->completeField('sejour_id', 'heure', 'plageconsult_id');
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
@@ -744,7 +744,6 @@ class CConsultation extends CCodable {
     if ($this->sejour_id) {
       $forfait_se = $this->_forfait_se;
       $this->loadRefSejour();
-      $this->completeField("plageconsult_id");
       $this->loadRefPlageConsult();
       $datetime = $this->_datetime;
       if ($datetime < $this->_ref_sejour->entree) {
@@ -897,7 +896,7 @@ class CConsultation extends CCodable {
     // Distant fields
     $this->_ref_chir =& $this->_ref_plageconsult->_ref_chir;
     $this->_date     = $this->_ref_plageconsult->date;
-    $this->_datetime = "$this->_date $this->heure";
+    $this->_datetime = mbAddDateTime($this->heure,$this->_date);
     $this->_acte_execution = $this->_datetime;
     $this->_is_anesth    = $this->_ref_chir->isFromType(array("Anesthésiste"));
     $this->_praticien_id = $this->_ref_chir->_id;
