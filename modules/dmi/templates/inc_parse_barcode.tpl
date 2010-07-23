@@ -69,6 +69,9 @@ Main.add(function(){
 
 {{if $debug}}
   <div id="debug-barcode" style="display: none; border: 1px dotted orange; padding: 0.5em;">
+  
+    {{$parsed.comp|@mbExport}}
+  
     <h1>{{$parsed.type}}</h1>
   
     <table class="tbl">

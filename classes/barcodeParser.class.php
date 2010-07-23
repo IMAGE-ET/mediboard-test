@@ -264,8 +264,8 @@ class CBarcodeParser {
 
     // code 128
     if (empty($comp) &&
-        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9]{7,20})(17)(\d{6})$/ims', $barcode, $parts) ||
-        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9]{7,20})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9\/-]{7,20})(17)(\d{6})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9\/-]{7,20})$/ims', $barcode, $parts) ||
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{7,20})$/ims', $barcode, $parts) ||
         preg_match('/^(01)(\d{14})$/i', $barcode, $parts)) {
       $type = "code128";
