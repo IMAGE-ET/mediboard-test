@@ -27,6 +27,11 @@
 		<div id="prescription-{{$sejour_id}}" style="display: none;">
 			<table class="tbl">
 				<tr>
+					<th colspan="2" class="title">
+						Prescription
+					</th>
+			  </tr>
+				<tr>
 					<th>
 						 {{mb_label class="CElementPrescription" field="category_prescription_id"}}
 					</th>
@@ -43,7 +48,32 @@
 						 {{mb_include template=inc_vw_line offline=1}}
 						</td>
 					</tr>
-				{{/foreach}}		
+				{{/foreach}}
+				<tr>
+					<th colspan="2" class="title">
+						Bilan SSR
+					</th>
+				</tr>		
+        <tr>
+          <th colspan="2">
+          	{{mb_label object=$_sejour->_ref_bilan_ssr field="entree"}}
+					</th>
+        </tr> 
+				<tr>
+					<td colspan="2">
+						{{mb_value object=$_sejour->_ref_bilan_ssr field="entree"}}
+			 	 </td>
+				</tr>
+        <tr>
+          <th colspan="2">
+          	{{mb_label object=$_sejour->_ref_bilan_ssr field="sortie"}}
+					</th>
+        </tr> 
+				<tr>
+					<td colspan="2">
+						{{mb_value object=$_sejour->_ref_bilan_ssr field="sortie"}}
+					</td>
+				</tr>
 	    </table>
 		</div>
     <div id="planning-{{$sejour_id}}" style="display: none;">
