@@ -48,9 +48,11 @@ printBarcode = function (object_id) {
 	url.addParam("suppressHeaders", 1 );
 	url.popup(800, 800);
 }
+
 Main.add(function () {
   var oForm = getForm("editElement-{{$element->_class_name}}");
-  BarcodeParser.watchInput(oForm.elements.code, {field: "ref"});
+  new BarcodeParser.inputWatcher(oForm.elements._product_code, {field: "ref"});
+  new BarcodeParser.inputWatcher(oForm.elements._scc_code, {field: "scc_prod"});
   
   var lotForm = getForm("create-lot-{{$element->_class_name}}");
   if (lotForm) {
@@ -189,6 +191,10 @@ Main.add(function () {
     <tr>
       <th>{{mb_label object=$element field=_product_code}}</th>
       <td>{{mb_field object=$element field=_product_code}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$element field=_scc_code}}</th>
+      <td>{{mb_field object=$element field=_scc_code}}</td>
     </tr>
     <tr>
       <th>{{mb_label object=$element field=code_lpp}}</th>
