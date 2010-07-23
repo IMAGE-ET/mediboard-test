@@ -47,12 +47,17 @@ foreach($list_lines as $_dmi) {
   
   foreach($orders as $_order_id => $_order) {
     $_order->loadRefsOrderItems();
+    
+    $found = false;
     foreach($_order->_ref_order_items as $_order_item) {
       $_order_item->loadReference();
-      if ($_order_item->_ref_reference->product_id != $_dmi->product_id) {
-        unset($orders[$_order_id]);
+      if ($_order_item->_ref_reference->product_id == $_dmi->product_id) {
+        $found = true;
         break;
       }
+    }
+    if (!$found) {
+      unset($orders[$_order_id]);
     }
   }
   
