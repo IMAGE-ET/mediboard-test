@@ -362,7 +362,7 @@ class CBarcodeParser {
     }
      
     // CIP
-    if (empty($comp) && preg_match('/^(\d{7})$/', $barcode, $parts)) {
+    if (empty($comp) && preg_match('/^(\[3569]d{6})$/', $barcode, $parts)) {
       $type = "cip";
       $comp["cip"] = $parts[1];
     }

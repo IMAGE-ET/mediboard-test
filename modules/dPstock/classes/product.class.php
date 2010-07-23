@@ -75,6 +75,7 @@ class CProduct extends CMbObject {
     $backProps['lines_dmi']      = 'CPrescriptionLineDMI product_id';
     $backProps['selections']     = 'CProductSelectionItem product_id';
     $backProps['endowments']     = 'CProductEndowmentItem product_id';
+    $backProps['dmis']           = 'CDMI product_id';
     return $backProps;
   }
 

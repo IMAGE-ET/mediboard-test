@@ -156,6 +156,7 @@ $locales['mod-dmi-tab-vw_commandes'] = 'Commandes';
 $locales['mod-dmi-tab-vw_elements'] = 'Elements';
 $locales['mod-dmi-tab-vw_import'] = 'Importation de DMI';
 $locales['mod-dmi-tab-vw_peremption'] = 'Produits périmés';
+$locales['mod-dmi-tab-vw_test_barcode_parser'] = 'Test analyseur codes barre';
 $locales['module-dmi-court'] = 'DMI';
 $locales['module-dmi-long'] = 'Gestion des Dispositifs Médicaux Implantables';
 ?>

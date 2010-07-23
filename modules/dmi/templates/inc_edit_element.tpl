@@ -266,25 +266,41 @@ Main.add(function () {
 {{if $element->_ref_product && $element->_ref_product->_id}}
 
 {{assign var=class_name value=$element->_class_name}}
+
+<script type="text/javascript">
+  refreshDMI = function(lot_id) {
+    refreshElement({{$element->_id}});
+  }
+  
+  deleteLot = function(lot_id) {
+    var form = getForm('delete-lot-{{$class_name}}');
+    $V(form.order_item_reception_id, lot_id);
+    confirmDeletion(form, {typeName:'', objName:'ce lot', ajax: true});
+  }
+</script>
+
+<form name="delete-lot-{{$class_name}}" action="" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="callback" value="refreshDMI" />
+  {{mb_key object=$lot}}
+</form>
+
 <form name="create-lot-{{$class_name}}" action="" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPstock" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
   <input type="hidden" name="date" value="now" />
-  
-  <script type="text/javascript">
-    refreshDMI = function(lot_id) {
-      refreshElement({{$element->_id}});
-    }
-  </script>
   <input type="hidden" name="callback" value="refreshDMI" />
-  
   
 <table class="main tbl">
   <tr>
     <th colspan="10" class="title">Lots</th>
   </tr>
   <tr>
+    <th style="width: 0.1%;"></th>
     <th>{{mb_title class=CProductOrderItemReception field=quantity}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=date}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
@@ -293,6 +309,7 @@ Main.add(function () {
   </tr>
   
   <tr>
+    <td></td>
     <td>{{mb_field object=$lot field=quantity increment=true form="create-lot-$class_name" size=1}}</td>
     <td>
       <select name="_reference_id" class="notNull" style="width: 12em;">
@@ -321,6 +338,7 @@ Main.add(function () {
   
   {{foreach from=$element->_ref_product->_ref_lots item=_lot}}
     <tr>
+      <td><button type="button" class="trash notext" onclick="deleteLot({{$_lot->_id}})"></button></td>
       <td>{{mb_value object=$_lot field=quantity}}</td>
       <td>{{mb_value object=$_lot field=date}}</td>
       <td>{{mb_value object=$_lot field=code}}</td>
