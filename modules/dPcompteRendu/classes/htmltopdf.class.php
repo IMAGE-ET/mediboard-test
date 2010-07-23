@@ -123,15 +123,16 @@ class CHtmlToPDF {
   function cleanWord($str) {
     $str = preg_replace("/<meta\s*[^>]*\s*[^\/]>/", '',$str);
     $str = preg_replace("/(<\/meta>)+/i", '', $str);
-    $str = preg_replace("/<o:p><\/o:p>/", '', $str);
-    $str = preg_replace("/<o:p>/", "<p>",$str);
-    $str = preg_replace("/<\/o:p>/", "</p>",$str);
-    $str = preg_replace("/<w:/", '<', $str);
-    $str = preg_replace("/<\/w:/", '</', $str);
+    $str = str_replace("<o:p></o:p>", '', $str);
+    $str = str_replace("<o:p>", "<p>",$str);
+    $str = str_replace("</o:p>", "</p>",$str);
+    $str = str_replace("<w:", '<', $str);
+    $str = str_replace("</w:", '</', $str);
     $str = preg_replace("/<o:smarttagtype.*smarttagtype>/", '', $str);
     $str = preg_replace("/<\/?\w+:[^>]*>/", '', $str);
     $str = preg_replace("/<tr>\s*<\/tr>/", '', $str);
-    $str = preg_replace("/<tr\/>/", '', $str);
+    $str = str_replace("<tr/>", '', $str);
+    $str = str_replace("text-align:=\"\"", '', $str);
     return $str;
   }
 
@@ -141,10 +142,9 @@ class CHtmlToPDF {
 
     $str = $this->xmlEntities($str);
     $str = $this->cleanWord($str);
-    $str = $this->fix_latin1_mangled_with_utf8($str);
 
-    $xml->loadXML($str);
-    
+    $xml->loadXML(utf8_encode($str));
+        
     $html =& $xml->getElementsByTagName("body")->item(0);
 
     if ( is_null($html) )
@@ -169,7 +169,12 @@ class CHtmlToPDF {
     foreach($node->childNodes as $child) {
       if(in_array($child->nodeName, $this->display_elem["block"]) &&
          in_array($node->nodeName, $this->display_elem["inline"])) {
-        
+
+         // On force le display: block pour les éléments en display:inline et qui imbriquent des élements
+         // en display: block.
+         $node->setAttribute("style", "display: block");
+
+     /* if($node->nodeName == "span") {
         foreach ( $node->attributes as $attr => $attr_node ) {
           $_attr = '';
           $_attr_value = '';
@@ -192,6 +197,7 @@ class CHtmlToPDF {
         }
         $old_child = $child->parentNode->removeChild($child);
         $node->parentNode->insertBefore($old_child, $node);
+        }*/
       }
       $this->recursiveRemove($child);
     }
@@ -243,14 +249,6 @@ class CHtmlToPDF {
     $str = str_replace($html,$xml,$str);
     $str = str_ireplace($html,$xml,$str);
     return $str;
-  }
-
-  // Hack de caractères non utf8
-  // http://stackoverflow.com/questions/2507608/error-input-is-not-proper-utf-8-indicate-encoding-using-phps-simplexml-loa
-  function fix_latin1_mangled_with_utf8(&$str) {
-    return preg_replace_callback(
-      '#[\\xA0-\\xFF](?![\\x80-\\xBF]{2,})#',
-      create_function('$m','return utf8_encode($m[0]);'), $str);
   }
 
   function html_validate() {
