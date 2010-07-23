@@ -182,6 +182,11 @@ $patch->sourceName = "cmb128bobject.php";
 $patch->targetDir = "barcode";
 $library->patches[] = $patch;
 
+$patch = new CLibraryPatch;
+$patch->dirName = "tcpdf";
+$patch->sourceName = "tcpdf.php";
+$library->patches[] = $patch;
+
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;

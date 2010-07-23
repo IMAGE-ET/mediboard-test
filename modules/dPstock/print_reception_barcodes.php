@@ -62,11 +62,11 @@ foreach ($lots as &$item) {
       
 			$d[] = substr($reference->_ref_product->name, 0, 30);
       $d[] = CMbString::truncate(substr($reference->_ref_product->name, 30, 30));
-			$d[] = $reference->_ref_product->_ref_societe->_view;
-			$d[] = $item->lapsing_date;
+			$d[] = $reference->_ref_product->code;
+			$d[] = "LOT $item->code  PER $item->lapsing_date";
 			
 			$d[] = array(
-			  'barcode' => "{$reference->_ref_product->code} $item->code",
+			  'barcode' => "MB".str_pad($lot->_id, 8, "0", STR_PAD_LEFT),
 			  'type'    => 'C128B'
 			);
 			$j++;

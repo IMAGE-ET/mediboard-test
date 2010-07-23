@@ -315,7 +315,7 @@ class CBarcodeParser {
       
       //     _PER_ __LOT__
       // +$$31303313414899 .
-      // +$$03141005377M
+      // +$$03151005377M
       if (preg_match('/^\+?\$\$.(\d+)(\d{6}).{2}$/ms', $barcode, $parts)) {
         $comp["per"] = $parts[1];
         $comp["lot"] = $parts[2];
