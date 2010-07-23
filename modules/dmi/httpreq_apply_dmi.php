@@ -18,9 +18,7 @@ $lot->load($lot_id);
 $lot->loadRefOrderItem()->loadReference()->loadRefProduct();
 $product = $lot->_ref_order_item->_ref_reference->_ref_product;
 
-$dmi = new CDMI;
-$dmi->code = $product->code;
-$dmi->loadMatchingObject();
+$dmi = CDMI::getFromProduct($product);
 
 $smarty = new CSmartyDP();
 $smarty->assign("lot", $lot);

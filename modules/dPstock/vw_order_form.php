@@ -15,6 +15,8 @@ $order_id    = CValue::getOrSession('order_id');
 // Loads the expected Order
 $order = new CProductOrder();
 
+$order->_is_loan = false;
+
 if ($order_id) {
   $order->load($order_id);
   $order->updateFormFields();
@@ -29,6 +31,11 @@ if ($order_id) {
   
   foreach ($order->_ref_order_items as $_item) {
     $_item->loadRefLot();
+    
+    $dmi = CDMI::getFromProduct($_item->_ref_reference->_ref_product);
+    if ($dmi->_id && $dmi->type == "loan") {
+      $order->_is_loan = true;
+    }
   }
 }
 

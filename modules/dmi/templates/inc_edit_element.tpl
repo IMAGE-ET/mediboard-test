@@ -187,6 +187,10 @@ Main.add(function () {
   	</tr>
     {{if $element->_class_name == "CDMI"}}
     <tr>
+      <th>{{mb_label object=$element field=_product_code}}</th>
+      <td>{{mb_field object=$element field=_product_code}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$element field=code_lpp}}</th>
       <td>{{mb_field object=$element field=code_lpp}}</td>
     </tr>

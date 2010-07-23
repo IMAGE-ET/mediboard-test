@@ -26,7 +26,7 @@
     	</a>
     </td>
     <td>
-    	{{mb_value object=$_element field=code}}
+    	{{mb_value object=$_element->_ref_product field=code}}
     </td>
     <td>
     	{{mb_value object=$_element field=in_livret}}

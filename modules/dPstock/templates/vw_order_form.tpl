@@ -44,7 +44,15 @@ table.grid th {
 }
 </style>
 
-{{assign var=label value=$order->object_id|ternary:"Bon de commande / facturation":"Bon de commande"}}
+{{if $order->object_id}}
+  {{if $order->_is_loan}}
+    {{assign var=label value="Demande facturation"}}
+  {{else}}
+    {{assign var=label value="Bon de commande / facturation"}}
+  {{/if}}
+{{else}}
+  {{assign var=label value="Bon de commande"}}
+{{/if}}
 
 <div class="header">
   <h1>
@@ -198,7 +206,13 @@ table.grid th {
   {{/if}}
 	
 	<tr>
-    <td style="text-align: right;">{{mb_value object=$curr_item->_ref_reference field=supplier_code}}</td>
+    <td style="text-align: right;">
+      {{if $order->object_id}}
+        {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
+      {{else}}
+        {{mb_value object=$curr_item->_ref_reference field=supplier_code}}
+      {{/if}}
+    </td>
     
     {{if $order->object_id}}
       {{if $curr_item->_ref_lot}}

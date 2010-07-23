@@ -21,6 +21,7 @@ class CDMI extends CProduitPrescriptible {
   var $type        = null;
   
   var $_scc_code = null;
+  var $_product_code = null;
   var $_ref_product = null;
   
   function getSpec() {
@@ -38,6 +39,7 @@ class CDMI extends CProduitPrescriptible {
     $specs["code"]        = "str show|0";
     $specs["type"]        = "enum notNull list|purchase|loan|deposit default|deposit"; // achat/pret/depot
     $specs["_scc_code"]   = "str length|10";
+    $specs["_product_code"] = "str maxLength|30";
     return $specs;
   }
        
@@ -73,6 +75,15 @@ class CDMI extends CProduitPrescriptible {
     $this->loadRefProduct();
   }
   
+  function updateFormFields(){
+    parent::updateFormFields();
+    
+    $this->loadRefProduct();
+    if ($this->_ref_product->_id) {
+      $this->_product_code = $this->_ref_product->code;
+    }
+  }
+  
   function loadRefProduct(){
     $product = new CProduct;
     $product->load($this->product_id);
@@ -83,17 +94,21 @@ class CDMI extends CProduitPrescriptible {
   
   // FIXME: SCC pas toujours sauvegardé 
   function store() {
-    if ($msg = parent::store()) {
-      return $msg;
-    }
-    
-    if ($this->_scc_code) {
+    if ($this->_scc_code || $this->_product_code) {
       $this->loadRefProduct();
+      
       if ($this->_ref_product->_id) {
-        $this->_ref_product->scc_code = $this->_scc_code;
+        if ($this->_scc_code)
+          $this->_ref_product->scc_code = $this->_scc_code;
+          
+        if ($this->_product_code)
+          $this->_ref_product->code = $this->_product_code;
+        
         $this->_ref_product->store();
       }
     }
+    
+    return parent::store();
   }
   
   static function getFromProduct(CProduct $product){
