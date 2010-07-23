@@ -325,8 +325,8 @@ class CBarcodeParser {
       }
       
       //      ___REF___  PER_ __LOT___
-      // +H7036307002101/1830461324862J09C
-      if (preg_match('/^[a-z](\d{3})(\d+)(\d)\/(\d{5})(\d+)(.{4})$/ms', $barcode, $parts)) {
+      // +H7036307002101/1830461324862J09C // ^m703
+      if (preg_match('/^[a-z](\d{3})(\d+)(\d)\/(\d{5})([A-Z0-9]+)(.{4})$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
         $comp["lot"] = $parts[5];
       }

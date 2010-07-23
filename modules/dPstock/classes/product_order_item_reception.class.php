@@ -49,7 +49,7 @@ class CProductOrderItemReception extends CMbObject {
     $specs['reception_id']  = 'ref notNull class|CProductReception';
     $specs['quantity']      = 'num notNull';
     $specs['code']          = 'str seekable';
-    $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1 seekable';
+    $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
     $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
     $specs['_price']        = 'currency';
