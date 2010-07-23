@@ -58,7 +58,7 @@ Object.extend(document.viewport,{
       }
     });
     return dimensions;
-  },
+  }
 });
 // Fixes a bug that scrolls the page when in an autocomplete 
 Class.extend(Autocompleter.Base, {

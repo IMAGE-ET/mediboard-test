@@ -939,7 +939,7 @@ BarcodeParser = {
       size: null,
       field: "scc_prod",
       onRead: null,
-      onAfterRead: function(parsed){},
+      onAfterRead: function(parsed){}
     }, options);
     
     this.options = options;
@@ -991,7 +991,7 @@ BarcodeParser.inputWatcher = Class.create({
       size: null,
       field: "scc_prod",
       onRead: null,
-      onAfterRead: function(parsed){},
+      onAfterRead: function(parsed){}
     }, options);
     
     this.options.onRead = this.options.onRead ||

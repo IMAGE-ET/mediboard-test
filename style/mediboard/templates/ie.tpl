@@ -30,11 +30,14 @@ div.dropdown {
 function processIE7Button(button) {
   if (button._processed || (window.Main && !Main.initialized)) return;
   button.runtimeStyle.behavior = "none";
+  button.runtimeStyle["; behavior"] = "none";
+  button.style.behavior = "none";
+  button.style["; behavior"] = "none";
   button._processed = true;
   
   setTimeout(function(){
-    var className = $w(button.className).without("button", "notext", "ltr")[0];
-  
+    var className = $w(button.className).without("button", "notext", "rtl")[0];
+    
     if (className)
       button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
   }, 0.1);
