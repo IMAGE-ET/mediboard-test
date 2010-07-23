@@ -76,23 +76,24 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $avertissement = $msgID400 = $msgIPP = "";
     $_IPP_create = $_modif_patient = false;
     $mutex = new CMbSemaphore("sip-ipp");
-
-    // Si SIP
-    if (CAppUI::conf('sip server')) {
-      // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idSourcePatient'] && !$data['idCiblePatient']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
-      }
-
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
+    
+    // Chargement du destinataire de l'échange
+    $dest_hprim = new CDestinataireHprim();
+    $dest_hprim->nom = $data['idClient'];
+    $dest_hprim->loadMatchingObject();
+    
+    // Acquittement d'erreur : identifiants source et cible non fournis
+    if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
+      $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
+      $doc_valid = $domAcquittement->schemaValidate();
       
-      // Identifiant source (IC) non fourni et identifiant cible fourni (IPP)
+      $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+      return $messageAcquittement;
+    }
+      
+    // Si SIP
+    if (CAppUI::conf('sip server')) {      
+      // Cas 1 : Identifiant source (IC) non fourni et identifiant cible fourni (IPP)
       if (!$data['idSourcePatient'] && $data['idCiblePatient']) {
         $IPP = new CIdSante400();
         //Paramétrage de l'id 400
@@ -101,7 +102,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
         $IPP->id400 = str_pad($data['idCiblePatient'], 6, '0', STR_PAD_LEFT);
 
-        // idCible connu
+        // Cas 1.1 : idCible connu
         if ($IPP->loadMatchingObject()) {
           $newPatient->load($IPP->object_id);
           
@@ -134,7 +135,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $commentaire .= "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
           }
         }
-        // idCible non connu
+        // Cas 1.2 : idCible non connu
         else {          
           if (is_numeric($IPP->id400) && (strlen($IPP->id400) <= 6)) {
             // Mapping du patient
@@ -179,11 +180,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       $id400->tag = $dest_hprim->_tag_patient;
       $id400->id400 = $data['idSourcePatient'];
    
-      // Cas 1 : Patient existe sur le SIP
+      // Cas 2 : Patient existe sur le SIP
       if($id400->loadMatchingObject()) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
-        // Cas 1.1 : Pas d'identifiant cible
+        // Cas 2.1 : Pas d'identifiant cible
         if(!$data['idCiblePatient']) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
@@ -235,7 +236,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
           }
         }
-        // Cas 1.2 : Identifiant cible envoyé
+        // Cas 2.2 : Identifiant cible envoyé
         else {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
@@ -420,20 +421,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       }
     } 
     // Si CIP
-    else {
-      // Acquittement d'erreur : identifiants source et cible non fournis
-      if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
-        $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E005");
-        $doc_valid = $domAcquittement->schemaValidate();
-        
-        $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
-        return $messageAcquittement;
-      }
-      
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
-      
+    else {      
       $IPP = new CIdSante400();
       //Paramétrage de l'id 400
       $IPP->object_class = "CPatient";
