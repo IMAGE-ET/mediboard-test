@@ -342,6 +342,7 @@ class CBarcodeParser {
       // +H920246020502
       //      ____REF____ 
       // +M412RM51100004B1D
+      // +M412RM45320004C1L
       if (empty($comp) && preg_match('/^[a-z](\d{3})([A-Z0-9]+).{2}$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
       }
