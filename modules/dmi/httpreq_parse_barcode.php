@@ -15,6 +15,7 @@ $barcode = CValue::get("barcode");
 
 $parsed = CBarcodeParser::parse($barcode);
 $comp = $parsed['comp'];
+$strict = false;
 
 $products = array();
 $lots = array();
@@ -38,6 +39,7 @@ $ljoin = array(
 $lots = $object->seek($lot, $where, 50, null, $ljoin);
 
 foreach($lots as $_lot) {
+  $strict = true;
   $_lot->loadRefOrderItem();
   $_lot->_ref_order_item->loadReference();
   $_lot->_ref_order_item->_ref_reference->loadRefProduct();
@@ -100,6 +102,7 @@ $list_societes = $societe->loadList(null, "name");
 
 $smarty = new CSmartyDP();
 $smarty->assign("parsed", $parsed);
+$smarty->assign("strict", $strict);
 $smarty->assign("products", $products);
 $smarty->assign("list_societes", $list_societes);
 $smarty->display("inc_parse_barcode.tpl");

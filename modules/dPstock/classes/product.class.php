@@ -191,7 +191,7 @@ class CProduct extends CMbObject {
     );
     
     $lot = new CProductOrderItemReception;
-    return $this->_ref_lots = $lot->loadList($where, "date", null, null, $ljoin);
+    return $this->_ref_lots = $lot->loadList($where, "date DESC", null, null, $ljoin);
   }
   
   function loadView(){

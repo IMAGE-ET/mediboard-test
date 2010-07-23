@@ -110,7 +110,16 @@ class CSetupdmi extends CSetup {
     $sql = "ALTER TABLE `dmi` CHANGE `type` `type` ENUM ('purchase','loan','deposit') NOT NULL DEFAULT 'deposit'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.09";
+    // ajout du product ID pour faire un lien "dur" plutot que par le code
+    $this->makeRevision("0.09");
+    $sql = "ALTER TABLE `dmi` ADD `product_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `dmi` ADD INDEX (`product_id`)";
+    $this->addQuery($sql);
+    $sql = "UPDATE `dmi` SET `product_id` = (SELECT `product`.`product_id` FROM `product` WHERE `product`.`code` = `dmi`.`code` LIMIT 1)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.10";
   }
 }
 ?>

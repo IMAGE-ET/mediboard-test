@@ -16,6 +16,7 @@ class CDM extends CProduitPrescriptible {
   
   // DB Fields
   var $category_dm_id = null;
+  var $_ref_product = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -28,6 +29,11 @@ class CDM extends CProduitPrescriptible {
   	$props = parent::getProps();
     $props["category_dm_id"] = "ref notNull class|CCategoryDM";
     return $props;
+  }
+  
+  function loadRefProduct(){
+    $this->loadExtProduct();
+    return $this->_ref_product = $this->_ext_product;
   }
   
   function loadGroupList() {

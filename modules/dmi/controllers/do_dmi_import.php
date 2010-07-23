@@ -113,7 +113,7 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
   }
   
   // DMI
-  $dmi = CDMI::getProduct($current_product->code);
+  $dmi = CDMI::getFromProduct($current_product);
   
   // match CDMI
   if (!$dmi->_id) {

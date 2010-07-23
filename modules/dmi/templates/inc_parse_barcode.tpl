@@ -27,7 +27,7 @@ selectProduct = function(element, event) {
   container.down('.lots').show();
   
   var lots = container.select('input.lot');
-  if (lots.length == 1) {
+  if (lots.length == 1 && '{{$strict}}') {
     lots[0].checked = true;
     selectLot(lots[0]);
   }
@@ -56,7 +56,7 @@ Main.add(function(){
     selectProduct(products[0]);
   }
   
-  if (products.length == 1 && lots.length == 1) {
+  if (products.length == 1 && lots.length == 1 && '{{$strict}}') {
     selectLot(lots[0]);
   }
   else {
@@ -79,6 +79,12 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     </table>
+  </div>
+{{/if}}
+
+{{if !$strict && $products|@count}}
+  <div class="small-warning">
+    Le lot exact <strong>n'a pas pu être retrouvé</strong>, mais seulement un ou plusieurs produits correspondants.
   </div>
 {{/if}}
 

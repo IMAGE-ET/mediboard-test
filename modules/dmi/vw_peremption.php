@@ -36,7 +36,7 @@ foreach($receptions as $_id => $_reception) {
     unset($receptions[$_id]);
   }
   else {
-    $dmi = CDMI::getProduct($_reception->_ref_order_item->_ref_reference->_ref_product->code);
+    $dmi = CDMI::getFromProduct($_reception->_ref_order_item->_ref_reference->_ref_product);
     $_reception->_ref_dmi = $dmi;
   }
 }

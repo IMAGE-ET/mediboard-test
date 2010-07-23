@@ -96,18 +96,20 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
 
 <script type="text/javascript">
   launchConvert = function() {
-    var url = new Url("dPstock", "convert_product");
-    url.requestUpdate("convert");
+    var url = new Url();
+    url.addParam("m", "dPstock");
+    url.addParam("dosql", "do_convert_product");
+    url.requestUpdate("convert-log", {method: "post"});
   }
 </script>
 
 <table class="form" style="table-layout: fixed;">
   <tr>
     <td>
-      <button type="button" class="tick" onclick="launchConvert();">Lancer conversion</button>
+      <button type="button" class="tick" onclick="launchConvert();">Lancer conversion produits Physiol</button>
     </td>
     <td>
-      <div id="convert"></div>
+      <div id="convert-log"></div>
     </td>
   </tr>
 </table>

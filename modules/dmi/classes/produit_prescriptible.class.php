@@ -63,6 +63,9 @@ class CProduitPrescriptible extends CMbObject {
         if ($msg = $product->store()){
           return $msg;
         }
+        if ($this->_class_name == "CDMI") {
+          $this->product_id = $product->_id;
+        }
       }
       
       $stock = new CProductStockGroup();

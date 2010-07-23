@@ -16,10 +16,12 @@ class CDMI extends CProduitPrescriptible {
   
   // DB Fields
   var $category_id = null;
+  var $product_id  = null;
   var $code_lpp    = null;
   var $type        = null;
   
   var $_scc_code = null;
+  var $_ref_product = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,7 +33,9 @@ class CDMI extends CProduitPrescriptible {
   function getProps() {
   	$specs = parent::getProps();
     $specs["category_id"] = "ref notNull class|CDMICategory autocomplete|nom";
+    $specs["product_id"]  = "ref class|CProduct autocomplete|name";
     $specs["code_lpp"]    = "str protected";
+    $specs["code"]        = "str show|0";
     $specs["type"]        = "enum notNull list|purchase|loan|deposit default|deposit"; // achat/pret/depot
     $specs["_scc_code"]   = "str length|10";
     return $specs;
@@ -65,26 +69,36 @@ class CDMI extends CProduitPrescriptible {
     return parent::check();
   }
   
+  function loadRefsFwd(){
+    $this->loadRefProduct();
+  }
+  
+  function loadRefProduct(){
+    $product = new CProduct;
+    $product->load($this->product_id);
+    $this->_ref_product = $product;
+    $this->_produit_existant = ($this->_ref_product->_id) ? 1 : 0;
+    return $this->_ref_product;
+  }
+  
   // FIXME: SCC pas toujours sauvegardé 
   function store() {
-    $is_new = !$this->_id;
-    
     if ($msg = parent::store()) {
       return $msg;
     }
     
-    if ($is_new && $this->_scc_code) {
-      $this->loadExtProduct();
-      if ($this->_ext_product->_id) {
-        $this->_ext_product->scc_code = $this->_scc_code;
-        $this->_ext_product->store();
+    if ($this->_scc_code) {
+      $this->loadRefProduct();
+      if ($this->_ref_product->_id) {
+        $this->_ref_product->scc_code = $this->_scc_code;
+        $this->_ref_product->store();
       }
     }
   }
   
-  static function getProduct($code){
+  static function getFromProduct(CProduct $product){
     $dmi = new self;
-    $dmi->code = $code;
+    $dmi->product_id = $product->_id;
     $dmi->loadMatchingObject();
     return $dmi;
   }

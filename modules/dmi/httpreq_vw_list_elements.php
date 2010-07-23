@@ -33,9 +33,10 @@ $list_elements = $element->seek($keywords, $where, "$start,30", true, null, "nom
 $total = $element->_totalSeek;
 
 foreach ($list_elements as $_element) {
-	$_element->loadExtProduct();
-	$_element->_ext_product->loadRefsFwd();
+  $_element->loadRefProduct();
+  $_element->_ref_product->loadRefsFwd();
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
