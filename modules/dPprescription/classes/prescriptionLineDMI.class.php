@@ -154,7 +154,7 @@ class CPrescriptionLineDMI extends CMbObject {
   }
   
   function updateFormFields(){
-    parent::updateFormField();
+    parent::updateFormFields();
     
     $app = CAppUI::$instance;
     $this->completeField("praticien_id");
