@@ -202,27 +202,37 @@ class CBarcodeParser {
     return self::checksum(substr($barcode, 0, -1)) == substr($barcode, -1);
   }
   
-  static function parsePeremptionDate($date) {
+  static function parsePeremptionDate($date, $alt = false) {
     // dates du type 18304 >> 18 octobre (304 = jour dans l'année)
     
+    // YYYY-MM-DD
     if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
       return $date;
     }
     
+    // DD/MM/YYYY
     if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date)) {
       return mbDateFromLocale($date);
     }
     
+    // YYYYMM
     if (preg_match('/^(20\d{2})(\d{2})$/', $date, $parts)){
       $date = mbDate("+1 MONTH", $parts[1]."-".$parts[2]."-01");
       return mbDate("-1 DAY", $date);
     }
     
+    // YYMMDD
     if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $date, $parts)){
-      $date = mbDate("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
+      if ($alt) {
+        $date = mbDate("+1 MONTH", "20".$parts[3]."-".$parts[1]."-01");
+      }
+      else {
+        $date = mbDate("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
+      }
       return mbDate("-1 DAY", $date);
     }
     
+    // MMYY
     if (preg_match('/^(\d{2})(\d{2})$/', $date, $parts)){
       $date = mbDate("+1 MONTH", "20".$parts[2]."-".$parts[1]."-01");
       return mbDate("-1 DAY", $date);
@@ -264,9 +274,9 @@ class CBarcodeParser {
 
     // code 128
     if (empty($comp) &&
-        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9\/-]{7,20})(17)(\d{6})$/ims', $barcode, $parts) ||
-        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9\/-]{7,20})$/ims', $barcode, $parts) ||
-        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{7,20})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9\/-]{6,20})(17)(\d{6})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9\/-]{6,20})$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{6,20})$/ims', $barcode, $parts) ||
         preg_match('/^(01)(\d{14})$/i', $barcode, $parts)) {
       $type = "code128";
       $prop = null;
@@ -357,10 +367,18 @@ class CBarcodeParser {
     // __LOT___ _SN__
     // 09091602/00736
     if (empty($comp) && preg_match('/^(\d{8})\/(\d{5})$/', $barcode, $parts)) {
-      $type = "unkown";
+      $type = "unknown";
       $comp["lot"] = $parts[1];
     }
-     
+    
+    // _PER__ _LOT__
+    // 032015 A00798
+    if (empty($comp) && preg_match('/^(\d{6})([A-Z]\d{5})$/', $barcode, $parts)) {
+      $type = "code39";
+      $comp["per"] = self::parsePeremptionDate($parts[1], true);
+      $comp["lot"] = $parts[2];
+    }
+    
     // CIP
     if (empty($comp) && preg_match('/^([3569]\d{6})$/', $barcode, $parts)) {
       $type = "cip";

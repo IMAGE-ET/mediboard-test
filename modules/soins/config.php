@@ -9,5 +9,5 @@
  */
 
 $dPconfig["soins"] = array (
-  "constantes_show" => "0"
+  "constantes_show" => "1"
 );
