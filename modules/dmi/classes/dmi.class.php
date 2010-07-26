@@ -81,6 +81,7 @@ class CDMI extends CProduitPrescriptible {
     $this->loadRefProduct();
     if ($this->_ref_product->_id) {
       $this->_product_code = $this->_ref_product->code;
+      $this->_scc_code = $this->_ref_product->scc_code;
     }
   }
   
