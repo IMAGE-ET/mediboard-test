@@ -8,4 +8,5 @@ $locales['mod-soins-tab-vw_pancarte_service'] = 'Pancarte des services';
 $locales['mod-soins-tab-vw_stocks_service'] = 'Commande / Réception';
 $locales['module-soins-court'] = 'Soins';
 $locales['module-soins-long'] = 'Soins';
+$locales['config-soins-constantes_show'] = 'Affichage des constantes avec les transmissions';
 ?>

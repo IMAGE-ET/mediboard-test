@@ -58,42 +58,42 @@ foreach($sejour->_ref_suivi_medical as $_trans_or_obs) {
 }
 
 //Ajout des constantes
-$constantes = new CConstantesMedicales();
-$constantes->patient_id = $sejour->patient_id;
-$constantes = $constantes->loadMatchingList();
-foreach($constantes as $_const) {
-   if($_const->context_class != "CSejour" || $_const->context_id != $sejour->_id ){
-      unset($constantes[$_const->_id]);
-   }
-}
+if(!$cible && CAppUI::conf("soins constantes_show")){
 
-//mettre les transmissions dans un tableau dont l'index est le datetime 
-
-// rechercher le user
-foreach($constantes as $cst) {
-  $user_ref_view = "";
-	$user_ref_id = "";
-  $cst->loadLogs();
-  $logs = $cst->_ref_logs;
-  $cst->_ref_user    = null;
-  $cst->_ref_user_id = null;
-  
-  foreach($logs as $_log) {
-  	if(!$cst->_ref_user_id &&
-  	   strpos($_log->fields, "patient_id")    === false &&
-  	   strpos($_log->fields, "context_class") === false &&
-  	   strpos($_log->fields, "context_id")    === false) {
-      $_log->loadRefsFwd();
-      $cst->_ref_user    = $_log->_ref_user->_view;
-      $cst->_ref_user_id = $_log->_ref_user->_id;
-      $users[$cst->_ref_user_id] = $_log->_ref_user;
-      if($user_id && $cst->_ref_user_id != $user_id) {
-        unset($constantes[$cst->_id]);
-      }
-  	}
+  $constantes = new CConstantesMedicales();
+  $constantes->patient_id = $sejour->patient_id;
+  $constantes = $constantes->loadMatchingList();
+  foreach($constantes as $_const) {
+     if($_const->context_class != "CSejour" || $_const->context_id != $sejour->_id ){
+        unset($constantes[$_const->_id]);
+     }
   }
-}
-if(!$cible){
+  
+  
+  // rechercher le user
+  foreach($constantes as $cst) {
+    $user_ref_view = "";
+  	$user_ref_id = "";
+    $cst->loadLogs();
+    $logs = $cst->_ref_logs;
+    $cst->_ref_user    = null;
+    $cst->_ref_user_id = null;
+    
+    foreach($logs as $_log) {
+    	if(!$cst->_ref_user_id &&
+    	   strpos($_log->fields, "patient_id")    === false &&
+    	   strpos($_log->fields, "context_class") === false &&
+    	   strpos($_log->fields, "context_id")    === false) {
+        $_log->loadRefsFwd();
+        $cst->_ref_user    = $_log->_ref_user->_view;
+        $cst->_ref_user_id = $_log->_ref_user->_id;
+        $users[$cst->_ref_user_id] = $_log->_ref_user;
+        if($user_id && $cst->_ref_user_id != $user_id) {
+          unset($constantes[$cst->_id]);
+        }
+    	}
+    }
+  }
   $sejour->_ref_suivi_medical = array_merge($constantes,$sejour->_ref_suivi_medical);
 }
 
@@ -115,6 +115,7 @@ $sejour->_ref_suivi_medical = $list_trans_const;
 $smarty = new CSmartyDP();
 $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->assign("page_step"           , 10);
+$smarty->assign("readOnly"            , CValue::get("readOnly",false));
 $smarty->assign("count_trans"         , $count_trans);
 $smarty->assign("observation"         , $observation);
 $smarty->assign("transmission"        , $transmission);
