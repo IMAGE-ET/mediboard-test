@@ -101,7 +101,7 @@
           {{$curr_order->_ref_societe->_view}}
         </span>
       </td>
-      <td>
+      <td class="text">
         {{if $curr_order->_ref_object}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
           {{$curr_order->_ref_object->_view}}
@@ -183,7 +183,7 @@
           {{$curr_order->_ref_societe->_view}}
         </span>
       </td>
-      <td>
+      <td class="text">
         {{if $curr_order->_ref_object}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
           {{$curr_order->_ref_object->_view}}
@@ -253,7 +253,7 @@
           {{$curr_order->_ref_societe->_view}}
         </span>
       </td>
-      <td>
+      <td class="text">
         {{if $curr_order->_ref_object}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
           {{$curr_order->_ref_object->_view}}
@@ -327,7 +327,7 @@
           {{$curr_order->_ref_societe->_view}}
         </span>
       </td>
-      <td>
+      <td class="text">
         {{if $curr_order->_ref_object}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_ref_object->_guid}}')">
           {{$curr_order->_ref_object->_view}}
