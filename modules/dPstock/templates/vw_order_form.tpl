@@ -45,11 +45,7 @@ table.grid th {
 </style>
 
 {{if $order->object_id}}
-  {{if $order->_is_loan}}
-    {{assign var=label value="Demande facturation"}}
-  {{else}}
-    {{assign var=label value="Bon de commande / facturation"}}
-  {{/if}}
+  {{assign var=label value="Bon de commande / Facturation"}}
 {{else}}
   {{assign var=label value="Bon de commande"}}
 {{/if}}
@@ -176,6 +172,9 @@ table.grid th {
     {{else}}
       <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
     {{/if}}
+    {{if $order->object_id}}
+      <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
+    {{/if}}
     <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
   </tr>
@@ -199,6 +198,9 @@ table.grid th {
       <th class="category"></th>
     {{else}}
       <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
+    {{/if}}
+    {{if $order->object_id}}
+      <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
     {{/if}}
     <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
@@ -232,6 +234,10 @@ table.grid th {
       <td style="white-space: nowrap;">{{$curr_item->_ref_reference->_ref_product->item_title}}</td>
     {{else}}
       <td style="text-align: center; white-space: nowrap;">{{mb_value object=$curr_item field=quantity}}</td>
+    {{/if}}
+    
+    {{if $order->object_id}}
+      <td>{{mb_value object=$curr_item field=renewal}}</td>
     {{/if}}
     
     <td style="white-space: nowrap; text-align: right;">

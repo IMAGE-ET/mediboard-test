@@ -657,7 +657,13 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `product_order_item` ADD INDEX (`lot_id`)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.34");
+    $sql = "ALTER TABLE `product_order_item` ADD `renewal` ENUM ('0','1') NOT NULL DEFAULT '1'";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `product_order_item` ADD INDEX (`renewal`)";
+    $this->addQuery($sql);
 
-    $this->mod_version = "1.34";
+    $this->mod_version = "1.35";
   }
 }

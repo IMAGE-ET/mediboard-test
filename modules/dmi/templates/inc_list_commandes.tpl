@@ -27,9 +27,10 @@
   {{foreach from=$lines_by_context key=_context_guid item=_lines}}
     <tr>
       <th colspan="20" class="title">
-        {{$contexts.$_context_guid}}
         {{assign var=context value=$contexts.$_context_guid}}
-        <button type="button" class="print notext" onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}')"></button>
+        <button type="button" class="print notext" style="float: left" onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}')"></button>
+        
+        {{$contexts.$_context_guid}}
       </th>
     </tr>
     {{foreach from=$_lines item=_line_dmi}}
@@ -59,6 +60,7 @@
           {{mb_include module=dPstock template=inc_bargraph stock=$_line_dmi->_ref_product->_ref_stock_group}}
         </td>
         <td>
+          {{if $_line_dmi->type != "purchase"}}
           <form name="product-reference-{{$_line_dmi->_id}}" action="?m=dmi&amp;tab=vw_commandes" method="post" onsubmit="return orderProduct(this)">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="dosql" value="do_order_item_aed" />
@@ -83,23 +85,31 @@
                     {{/foreach}}
                   </select>
                 </td>
-                <td rowspan="2">
+                <td>
                   <button class="add notext" type="submit">Commander</button>
                 </td>
               </tr>
               <tr>
-                <td style="text-align: right;">Num. facture :</td>
-                <td>
+                <td style="text-align: right;">Num. fact.:</td>
+                <td colspan="2">
+                  <label style="float: right;">
+                    {{tr}}CProductOrderItem-renewal-court{{/tr}}
+                    {{mb_field object=$_line_dmi->_new_order_item field=renewal typeEnum=checkbox}}
+                  </label>
+                  
                   {{assign var=_first_order value=$_line_dmi->_orders|@reset}}
                   {{if $_first_order && $_first_order->bill_number}}
                     {{$_first_order->bill_number}}
                   {{else}}
-                    <input type="text" name="_bill_number" value="" />
+                    <input type="text" name="_bill_number" value="" size="12" />
                   {{/if}}
                 </td>
               </tr>
             </table>
           </form>
+          {{else}}
+          
+          {{/if}}
         </td>
         <td>
           {{foreach from=$_line_dmi->_orders item=_order}}

@@ -18,6 +18,7 @@ class CProductOrderItem extends CMbObject {
   var $quantity           = null;
   var $unit_price         = null; // In the case the reference price changes
   var $lot_id             = null;
+  var $renewal            = null;
 
   // Object References
   //    Single
@@ -56,6 +57,7 @@ class CProductOrderItem extends CMbObject {
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency precise';
     $specs['lot_id']             = 'ref class|CProductOrderItemReception';
+    $specs['renewal']            = 'bool notNull default|1';
     $specs['_cond_price']        = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
@@ -125,6 +127,10 @@ class CProductOrderItem extends CMbObject {
       $this->completeField("reference_id");
       $this->loadReference();
       $this->quantity = $this->_unit_quantity / $this->_ref_reference->_unit_quantity;
+    }
+    
+    if (!$this->_id && $this->renewal === null) {
+      $this->renewal = true;
     }
   }
   

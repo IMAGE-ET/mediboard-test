@@ -24,7 +24,7 @@
 <script type="text/javascript">
 
 // refresh apres une sauvegarde ou une suppression
-refreshElement = function(element_id){
+refreshElement{{$element->_class_name}} = function(element_id){
   viewListElement('{{$element->_class_name}}', element_id);
   viewElement('{{$element->_class_name}}', element_id);
 }
@@ -112,7 +112,7 @@ Main.add(function () {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
   <input type="hidden" name="{{$element->_spec->key}}" value="{{$element->_id}}" />
-  <input type="hidden" name="callback" value="refreshElement" />
+  <input type="hidden" name="callback" value="refreshElement{{$element->_class_name}}" />
   
   <table class="form">
   	<tr>
@@ -138,7 +138,7 @@ Main.add(function () {
         </select>
       </td>
     </tr>
-    {{if !$element->_id}}
+    {{* if !$element->_id}}
       <tr>
         <td colspan="2">
           <div class="small-info text">
@@ -147,11 +147,7 @@ Main.add(function () {
           </div>
         </td>
       </tr>
-      <tr>
-        <th>{{mb_label object=$element field=code}}</th>
-        <td>{{mb_field object=$element field=code}}</td>
-      </tr>
-    {{/if}}
+    {{/if *}}
     <tr>
       <th>{{mb_label object=$element field=product_id}}</th>
       <td>
@@ -250,7 +246,7 @@ Main.add(function () {
           <button type="submit" class="submit" onclick="return onSubmitFormAjax(this.form, { onComplete: viewListElement.curry('{{$element->_class_name}}','{{$element->_id}}') } );">
             {{tr}}Save{{/tr}}
           </button>
-		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement.curry('0') } )">
+		  	  <button type="button" class="trash" onclick="this.form.del.value = 1; return onSubmitFormAjax(this.form, { onComplete: refreshElement{{$element->_class_name}}.curry('0') } )">
 		  	    {{tr}}Delete{{/tr}}
           </button>
 			  {{else}}
@@ -269,7 +265,7 @@ Main.add(function () {
 
 <script type="text/javascript">
   refreshDMI = function(lot_id) {
-    refreshElement({{$element->_id}});
+    refreshElement{{$element->_class_name}}({{$element->_id}});
   }
   
   deleteLot = function(lot_id) {

@@ -62,6 +62,8 @@ foreach($list_lines as $_dmi) {
   }
   
   $_dmi->_orders = $orders;
+  $_dmi->_new_order_item = new CProductOrderItem;
+  $_dmi->_new_order_item->renewal = ($_dmi->type == "deposit" ? "1" : "0");
     
   foreach($_dmi->_ref_product->_back["references"] as $_reference) {
   	$_reference->loadRefSociete();
