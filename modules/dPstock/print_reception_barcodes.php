@@ -66,7 +66,7 @@ foreach ($lots as &$item) {
 			$d[] = "LOT $item->code  PER $item->lapsing_date";
 			
 			$d[] = array(
-			  'barcode' => "MB".str_pad($lot->_id, 8, "0", STR_PAD_LEFT),
+			  'barcode' => "MB".str_pad($item->_id, 8, "0", STR_PAD_LEFT),
 			  'type'    => 'C128B'
 			);
 			$j++;
