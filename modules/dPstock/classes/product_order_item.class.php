@@ -128,10 +128,6 @@ class CProductOrderItem extends CMbObject {
       $this->loadReference();
       $this->quantity = $this->_unit_quantity / $this->_ref_reference->_unit_quantity;
     }
-    
-    if (!$this->_id && $this->renewal === null) {
-      $this->renewal = true;
-    }
   }
   
   function loadReference() {
@@ -195,6 +191,10 @@ class CProductOrderItem extends CMbObject {
       } else {
         $this->unit_price = $this->_ref_reference->price;
       }
+    }
+    
+    if (!$this->_id && $this->renewal === null) {
+      $this->renewal = "1";
     }
     
     if (!$this->_id && ($stock = $this->getStock())) {
