@@ -931,104 +931,57 @@ Element.addMethods({
 });
 
 BarcodeParser = {
-  watchInput: function(input, options){
-    input = $(input);
-    if (!input) return;
-    
-    options = Object.extend({
-      size: null,
-      field: "scc_prod",
-      onRead: null,
-      onAfterRead: function(parsed){}
-    }, options);
-    
-    this.options = options;
-    
-    this.options.onRead = this.options.onRead ||
-      function(parsed) {
-        var message = input.next(".barcode-message");
-        if (!message) {
-          message = DOM.span({style: "color: red; display: none;", className: "barcode-message"}, "Ce n'est pas un code valide");
-          input.up().insert({bottom: message});
-        }
-        message.setVisible(!parsed.comp[this.options.field]);
-        
-        if (parsed.comp[this.options.field]) {
-          $V(input, parsed.comp[this.options.field]);
-        }
-        
-        input.select();
-      }.bind(this);
-    
-    input.maxLength = 50;
-    input.addClassName("barcode");
-    input.observe("keypress", function(e){
-      var charCode = Event.key(e);
-      var input = Event.element(e);
+  inputWatcher: Class.create({
+    initialize: function(input, options) {
+      this.input = $(input);
+      if (!this.input) return;
       
-      if (charCode == 13) {
-        if (!this.options.size || ($V(input).length != this.options.size)) {
-          Event.stop(e);
-        }
+      this.options = Object.extend({
+        size: null,
+        field: "scc_prod",
+        onRead: null,
+        onAfterRead: function(parsed){}
+      }, options);
+      
+      this.options.onRead = this.options.onRead ||
+        function(parsed) {
+          var field = this.options.field;
+          var alert = (!parsed.comp[field] && field != "ref") || (field == "ref" && (parsed.comp.lot || parsed.comp.scc || parsed.comp.per));
+          var message = input.next(".barcode-message");
+          
+          if (!message) {
+            message = DOM.span({style: "color: red; display: none;", className: "barcode-message"}, "Ce n'est pas un code valide");
+            input.up().insert({bottom: message});
+          }
+          message.setVisible(alert);
+          
+          if (parsed.comp[this.options.field]) {
+            $V(input, parsed.comp[this.options.field]);
+          }
+          
+          input.select();
+        }.bind(this);
+      
+      input.maxLength = 50;
+      input.addClassName("barcode");
+      input.observe("keypress", function(e){
+        var charCode = Event.key(e);
+        var input = Event.element(e);
         
-        var url = new Url("dPstock", "httpreq_parse_barcode");
-        url.addParam("barcode", $V(input));
-        url.requestJSON(function(parsed){
-          this.options.onRead(parsed);
-          this.options.onAfterRead(parsed);
-        }.bind(this));
-      }
-    }.bindAsEventListener(this));
-  }
+        if (charCode == 13) {
+          if (!this.options.size || ($V(input).length != this.options.size)) {
+            Event.stop(e);
+          }
+          
+          var url = new Url("dPstock", "httpreq_parse_barcode");
+          url.addParam("barcode", $V(input));
+          url.requestJSON(function(parsed){
+            this.options.onRead(parsed);
+            this.options.onAfterRead(parsed);
+          }.bind(this));
+        }
+      }.bindAsEventListener(this));
+    }
+  })
 };
-
-BarcodeParser.inputWatcher = Class.create({
-  initialize: function(input, options) {
-    this.input = $(input);
-    if (!this.input) return;
-    
-    this.options = Object.extend({
-      size: null,
-      field: "scc_prod",
-      onRead: null,
-      onAfterRead: function(parsed){}
-    }, options);
-    
-    this.options.onRead = this.options.onRead ||
-      function(parsed) {
-        var message = input.next(".barcode-message");
-        if (!message) {
-          message = DOM.span({style: "color: red; display: none;", className: "barcode-message"}, "Ce n'est pas un code valide");
-          input.up().insert({bottom: message});
-        }
-        message.setVisible(!parsed.comp[this.options.field]);
-        
-        if (parsed.comp[this.options.field]) {
-          $V(input, parsed.comp[this.options.field]);
-        }
-        
-        input.select();
-      }.bind(this);
-    
-    input.maxLength = 50;
-    input.addClassName("barcode");
-    input.observe("keypress", function(e){
-      var charCode = Event.key(e);
-      var input = Event.element(e);
-      
-      if (charCode == 13) {
-        if (!this.options.size || ($V(input).length != this.options.size)) {
-          Event.stop(e);
-        }
-        
-        var url = new Url("dPstock", "httpreq_parse_barcode");
-        url.addParam("barcode", $V(input));
-        url.requestJSON(function(parsed){
-          this.options.onRead(parsed);
-          this.options.onAfterRead(parsed);
-        }.bind(this));
-      }
-    }.bindAsEventListener(this));
-  }
-});
 

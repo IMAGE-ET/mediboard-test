@@ -97,7 +97,7 @@
       <script type="text/javascript">
         Main.add(function(){
           var input = getForm("form-item-receive-{{$curr_item->_id}}").elements.code;
-          BarcodeParser.watchInput(input, {field: "lot", onAfterRead: function(parsed){
+          new BarcodeParser.inputWatcher(input, {field: "lot", onAfterRead: function(parsed){
             var dateView = "";
             if (parsed.comp.per) {
               dateView = Date.fromDATE(parsed.comp.per).toLocaleDate();

@@ -12,7 +12,7 @@ Main.add(function () {
     $V(editForm._toggle_fractionned, true);
   }
   
-  BarcodeParser.watchInput(editForm.scc_code, {size: 10, field: "scc_prod"});
+  new BarcodeParser.inputWatcher(editForm.scc_code, {size: 10, field: "scc_prod"});
 });
 
 function toggleFractionnedAdministration(form, use) {

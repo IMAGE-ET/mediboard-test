@@ -19,8 +19,6 @@ selectProduct = function(element, event) {
   var applyDMI = getForm("apply-dmi");
   if (applyDMI && applyDMI.product_id.value == element.value) return;
   
-  $("apply-dmi").update();
-  
   var container = element.up('div.product');
   container.addUniqueClassName('selected');
   $$('div.lots').invoke('hide');
@@ -30,6 +28,9 @@ selectProduct = function(element, event) {
   if (lots.length == 1 && '{{$strict}}') {
     lots[0].checked = true;
     selectLot(lots[0]);
+  }
+  else {
+    $("apply-dmi").update();
   }
 }
 
@@ -45,7 +46,9 @@ selectLot = function(element, event){
   url.addParam("dmi_id", element.value);
   url.addParam("prescription_id", window.DMI_prescription_id);
   url.addParam("operation_id", window.DMI_operation_id);
-  url.requestUpdate("apply-dmi");
+  url.requestUpdate("apply-dmi", {onComplete: function(){
+    $("apply-dmi").scrollTo();
+  }});
 }
 
 Main.add(function(){
@@ -106,7 +109,7 @@ Main.add(function(){
     
     <div class="lots" style="display: none; padding-left: 2em;">
       {{foreach from=$_product->_lots item=_lot}}
-        <div style="padding: 5px;" class="lot" onclick="selectLot($(this).down('input'), event)">
+        <div style="padding: 3px;" class="lot" onclick="selectLot($(this).down('input'), event)">
           <label>
             <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{* if $_lot->_selected}}checked="checked"{{/if *}} />
             <strong>[{{$_lot->code}}]</strong> &ndash; {{mb_value object=$_lot field=lapsing_date}}
@@ -161,7 +164,7 @@ Main.add(function(){
                 <script type="text/javascript">
                   Main.add(function(){
                     var input = getForm("create-lot-{{$_product->_id}}").elements.code;
-                    BarcodeParser.watchInput(input, {field: "lot", onAfterRead: function(parsed){
+                    new BarcodeParser.inputWatcher(input, {field: "lot", onAfterRead: function(parsed){
                       //$V(input.form.lapsing_date, parsed.comp.per);
                       
                       var dateView = "";

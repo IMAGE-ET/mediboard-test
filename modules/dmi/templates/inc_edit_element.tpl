@@ -57,7 +57,7 @@ Main.add(function () {
   var lotForm = getForm("create-lot-{{$element->_class_name}}");
   if (lotForm) {
     var codeInput = lotForm.elements.code;
-    BarcodeParser.watchInput(codeInput, {
+    new BarcodeParser.inputWatcher(codeInput, {
       field: "lot",
       onAfterRead: function(parsed){
         var dateView = "";

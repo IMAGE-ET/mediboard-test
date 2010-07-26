@@ -37,6 +37,7 @@ popupOrderForm = function(order_id, width, height) {
     </td>
   </tr>
   {{/if}}
+  
   <tr>
     <th class="category">Code</th>
     <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>

@@ -13,7 +13,9 @@ global $AppUI, $can;
 $can->needsRead();
 
 $praticien_sortie_id = CValue::get("praticien_sortie_id");
-$print = CValue::get("print", 0);
+$only_dmi            = CValue::get("only_dmi");
+$print               = CValue::get("print", 0);
+
 $linesDMI = array();
 
 // Chargement de l'etablissement
@@ -283,6 +285,7 @@ if(!$_ald){
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_ald", $_ald);
+$smarty->assign("only_dmi", $only_dmi);
 $smarty->assign("header", $header_height);
 $smarty->assign("footer", $footer_height);
 $smarty->assign("traduction"     , $traduction);

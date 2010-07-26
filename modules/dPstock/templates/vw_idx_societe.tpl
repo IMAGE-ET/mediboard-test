@@ -26,7 +26,7 @@ Main.add(function(){
   Control.Tabs.create("societe-tabs", true);
 
   var editForm = getForm("edit_societe");
-  BarcodeParser.watchInput(editForm.manufacturer_code, {size: 10, field: "scc_manuf"});
+  new BarcodeParser.inputWatcher(editForm.manufacturer_code, {size: 10, field: "scc_manuf"});
 });
 
 </script>

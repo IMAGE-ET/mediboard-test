@@ -14,6 +14,7 @@
     url.addParam("prescription_id", prescription_id);
     url.addParam("praticien_sortie_id", praticien_id);
     url.addParam("print", 1);
+    url.addParam("only_dmi", 1);
     url.popup(800, 600, "print_prescription");
   }
   

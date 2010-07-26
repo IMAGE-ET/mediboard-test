@@ -197,6 +197,10 @@ div.footer {
 </div>
 {{/if}}
 
+{{if $only_dmi}}
+  <div style="display: none;">
+{{/if}}
+
 <!-- Affichage en mode ALD -->
 {{if $lines.medicaments.med.ald || $lines.medicaments.med.no_ald ||
      $lines.medicaments.comment.ald || $lines.medicaments.comment.no_ald}}
@@ -420,6 +424,10 @@ div.footer {
      </div>
   {{/foreach}}
 {{/foreach}}
+
+{{if $only_dmi}}
+  </div>
+{{/if}}
 
 {{if $linesDMI|@count}}
   <div class="bodyWithoutPageBreak">
