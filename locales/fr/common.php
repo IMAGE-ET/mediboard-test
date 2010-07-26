@@ -114,6 +114,7 @@ $locales['Switch'] = 'Changer';
 $locales['Today'] = 'Aujourd\'hui';
 $locales['Type'] = 'Type';
 $locales['Unarchive'] = 'Désarchiver';
+$locales['Unavailable information'] = 'Information non disponible';
 $locales['Unknown'] = 'Inconnu';
 $locales['Unlock'] = 'Déverrouiller';
 $locales['Unsend'] = 'Annuler envoi';
