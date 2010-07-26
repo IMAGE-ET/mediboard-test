@@ -710,7 +710,7 @@ class CMouvSejourEcap extends CMouvementEcap {
           // Il faut un RPU
           $_sibling->loadRefRPU();
           $rpu = $_sibling->_ref_rpu;
-          if ($rpu->_id) {
+          if ($rpu->_id && $_sibling->_id != $this->sejour->_id) {
             $rpu->mutation_sejour_id = $this->sejour->_id;
             if ($msg = $rpu->store()) {
               throw new Exception($msg);
