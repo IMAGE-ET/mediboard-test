@@ -2,6 +2,7 @@
    
 <!-- S'il y a deja des actes codés, affichage seulement des actes codes -->
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}
+<table class="tbl">
 	<tr>
 	  <th class="title" colspan="10">
 	  	{{tr}}Codage des actes CCAM{{/tr}}
@@ -44,42 +45,47 @@
 	    </a>
 	  </td>  
 
-	  <td>{{mb_value object=$_acte field=code_activite}}</td>
-	  <td>{{mb_value object=$_acte field=code_phase}}</td>
-	  <td>{{mb_value object=$_acte field=modificateurs}}</td>
-	  <td>{{mb_value object=$_acte field=code_association}}</td>
+	  <td class="text">{{mb_value object=$_acte field=code_activite}}</td>
+	  <td class="text">{{mb_value object=$_acte field=code_phase}}</td>
+	  <td class="text">{{mb_value object=$_acte field=modificateurs}}</td>
+	  <td class="text">{{mb_value object=$_acte field=code_association}}</td>
 
-	  <td> 
+	  <td class="text"> 
 		  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_acte->_ref_executant}}
 	  </td>    
 
-	  <td>{{mb_value object=$_acte field=execution}}</td>
+	  <td class="text">{{mb_value object=$_acte field=execution}}</td>
 
     {{if @$extra == "comment"}}
-	  <td>{{mb_value object=$_acte field=commentaire}}</td>	  
+	  <td class="text">{{mb_value object=$_acte field=commentaire}}</td>	  
 	  {{/if}}
 
     {{if @$extra == "tarif"}}
-    <td style="text-align: right">{{mb_value object=$_acte field=montant_base}}</td>
-    <td style="text-align: right">{{mb_value object=$_acte field=montant_depassement}}</td>
-    <td style="text-align: right">{{mb_value object=$_acte field=_montant_facture}}</td>
+    <td class="text" style="text-align: right">{{mb_value object=$_acte field=montant_base}}</td>
+    <td  class="text" style="text-align: right">{{mb_value object=$_acte field=montant_depassement}}</td>
+    <td  class="text" style="text-align: right">{{mb_value object=$_acte field=_montant_facture}}</td>
 	  {{/if}}
 	  
 	</tr>
 	
 	{{/foreach}}
-	
+</table>	
 <!-- Sinon, affichage des actes prevus -->
+
 {{elseif $subject->_ext_codes_ccam}}
+<table class="tbl">
 	<tr>
 	  <th class="category" colspan="2">{{tr}}CActeCCAM{{/tr}}</th>
 	</tr>
 	{{foreach from=$subject->_ext_codes_ccam item=_code}}
 	<tr>
-	  <td class="text" colspan="2">
+	  <td>
 	    <a class="button search" href="#CodeCCAM-Show-{{$_code->code}}" onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class_name}}')">
 	    	{{$_code->code}}
 			</a>
+	
+		</td>
+		<td class="text" style="max-width:22em">
 	    {{$_code->libelleLong}}
 
 	    {{if @$view_tarif}}
@@ -94,4 +100,5 @@
 	  </td>
 	</tr>
 	{{/foreach}}
+</table>
 {{/if}}
