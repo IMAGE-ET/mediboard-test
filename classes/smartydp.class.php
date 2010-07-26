@@ -281,7 +281,8 @@ function smarty_function_mb_value($params, &$smarty) {
 	$object = $params["object"];
 	$spec = $params["object"]->_specs[$field];
 	
-	if ($value = CMbArray::extract($params, "value")) {
+	if (null !== $value = CMbArray::extract($params, "value")) {
+		
 		$object->$field = $value;
 		
 		// Empties cache for forward references

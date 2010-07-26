@@ -33,8 +33,10 @@
     <th colspan="2">{{mb_title class=CUserLog field=date}}</th>
     <th>{{mb_title class=CUserLog field=type}}</th>
     <th>{{mb_title class=CUserLog field=fields}}</th>
+    {{if $object->_id}}
     <th>{{tr}}CUserLog-values_before{{/tr}}</th>
     <th>{{tr}}CUserLog-values_after{{/tr}}</th>
+		{{/if}}
   </tr>
   
 {{mb_include module=system template=inc_history_line logs=$list}}

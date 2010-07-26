@@ -49,11 +49,12 @@
 	  <td rowspan="{{$field_count}}" {{if $_log->type != "store"}} colspan="4" {{/if}}>{{mb_value object=$_log field=type}}</td>
 		
     <!-- Valeurs de champs-->
-    {{foreach from=$_log->_fields item=_field name=field}}
-      {{if $object->_id}}
-		  <td class="text">
-		  	{{mb_label object=$object field=$_field}}
-			</td>
+    {{if $object->_id}}
+	    {{foreach from=$_log->_fields item=_field name=field}}
+			  <td class="text">
+			  	{{mb_label object=$object field=$_field}}
+				</td>
+	
 	      {{if array_key_exists($_field,$_log->_old_values)}}
 		      <td class="text">
 		      	{{assign var=old_value value=$_log->_old_values.$_field}}
@@ -62,15 +63,25 @@
 		      <td class="text">
    		      {{assign var=log_id value=$_log->_id}}
             {{assign var=new_value value=$object->_history.$log_id.$_field}}
-            {{mb_value object=$object field=$_field value=$new_value}}
+            <strong>
+            	{{mb_value object=$object field=$_field value=$new_value}}
+						</strong>
 		      </td>
 			  {{else}}
 				  <td colspan="3"><em>{{tr}}Unavailable information{{/tr}}</em></td>
 	      {{/if}}
-      {{/if}}
+	    {{if !$smarty.foreach.field.last}}</tr><tr>{{/if}}
+	    {{/foreach}}
+		{{else}}
+      <td class="text">
+      {{foreach from=$_log->_fields item=_field name=field}}
+        {{mb_label class=$_log->object_class field=$_field}}
+        {{if !$smarty.foreach.field.last}} - {{/if}}
+			{{/foreach}}
+      </td>
 
-    {{if !$smarty.foreach.field.last}}</tr><tr>{{/if}}
-    {{/foreach}}
+    {{/if}}
+
 	</tr>
 </tbody>
 {{foreachelse}}
