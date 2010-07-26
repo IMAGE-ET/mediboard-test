@@ -277,7 +277,19 @@ function smarty_function_mb_ditto($params, &$smarty) {
  */
 function smarty_function_mb_value($params, &$smarty) {
   if (empty($params["field"])) return $params["object"]->_view;
-  return $params["object"]->_specs[$params["field"]]->getValue($params["object"], $smarty, $params);
+	$field = $params["field"];
+	$object = $params["object"];
+	$spec = $params["object"]->_specs[$field];
+	
+	if ($value = CMbArray::extract($params, "value")) {
+		$object->$field = $value;
+		
+		// Empties cache for forward references
+		if (isset($object->_fwd[$field])) {
+      unset($object->_fwd[$field]);	
+		}
+	}
+  return $spec->getValue($object, $smarty, $params);
 }
 
 /**
