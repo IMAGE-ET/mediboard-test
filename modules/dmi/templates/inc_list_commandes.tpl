@@ -11,7 +11,7 @@
 <table class="tbl">
   <tr>
     <th>{{mb_title class=CPrescriptionLineDMI field=quantity}}</th>
-    <th>Patient</th>
+    <th>{{tr}}CPatient{{/tr}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=praticien_id}}</th>
     <th style="width: 1%">{{mb_title class=CPrescriptionLineDMI field=date}}</th>
     <th>{{mb_title class=CPrescriptionLineDMI field=type}}</th>

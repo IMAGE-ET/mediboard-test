@@ -35,7 +35,7 @@
       </td>
       <th>Type</th>
       <td>
-        {{mb_field object=$dmi_line field="type" typeEnum="select" onchange="this.form.onsubmit()" emptyLabel="Tous les types"}}
+        {{mb_field object=$dmi_line field="type" typeEnum="select" onchange="this.form.onsubmit()" emptyLabel="All"}}
       </td>
     </tr>
   </table>
