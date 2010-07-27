@@ -434,6 +434,7 @@ div.footer {
     <h1 class="no-break">DMI</h1>
     <ul>
     {{foreach from=$linesDMI item=_line_dmi}}
+      {{if !$_line_dmi->septic}}
       <li><strong>{{$_line_dmi->_ref_product->name}}</strong>:
       <ul>
         <li>Quantité: <strong>{{$_line_dmi->quantity}}</strong></li>
@@ -441,6 +442,7 @@ div.footer {
         <li>Code lot: <strong>{{$_line_dmi->_ref_product_order_item_reception->code}}</strong></li>
       </ul>
       </li>
+      {{/if}}
     {{/foreach}}
     </ul>
   </div>
