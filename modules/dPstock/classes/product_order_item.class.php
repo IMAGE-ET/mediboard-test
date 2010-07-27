@@ -19,6 +19,7 @@ class CProductOrderItem extends CMbObject {
   var $unit_price         = null; // In the case the reference price changes
   var $lot_id             = null;
   var $renewal            = null;
+  var $septic             = null;
 
   // Object References
   //    Single
@@ -42,6 +43,7 @@ class CProductOrderItem extends CMbObject {
   var $_quantity_received = null;
   var $_unit_quantity     = null;
   var $_is_unit_quantity  = null;
+  var $_id_septic         = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -58,6 +60,7 @@ class CProductOrderItem extends CMbObject {
     $specs['unit_price']         = 'currency precise';
     $specs['lot_id']             = 'ref class|CProductOrderItemReception';
     $specs['renewal']            = 'bool notNull default|1';
+    $specs['septic']             = 'bool notNull default|0';
     $specs['_cond_price']        = 'currency';
     $specs['_price']             = 'currency';
     $specs['_quantity_received'] = 'num';
@@ -108,7 +111,6 @@ class CProductOrderItem extends CMbObject {
     parent::updateFormFields();
     $this->updateReceived();
     $this->getUnitQuantity();
-    
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
     $this->_cond_price = $this->_unit_quantity ? $this->_price / $this->_unit_quantity : 0;
@@ -166,12 +168,21 @@ class CProductOrderItem extends CMbObject {
   }
 
   function store() {
+    $this->completeField("order_id", "reference_id", "renewal", "septic");
+    
+    if (!$this->_id) {
+      if ($this->renewal === null) $this->renewal = "1";
+      if ($this->septic  === null) $this->septic = "0";
+    }
+    
     if($this->order_id && $this->reference_id && !$this->_id) {
       $this->loadRefsFwd();
       
       $where = array(
         'order_id'     => "= '$this->order_id'",
         'reference_id' => "= '$this->reference_id'",
+        'renewal' => "= '$this->renewal'",
+        'septic' => "= '$this->septic'",
       );
       
       if ($this->lot_id) {
@@ -191,10 +202,6 @@ class CProductOrderItem extends CMbObject {
       } else {
         $this->unit_price = $this->_ref_reference->price;
       }
-    }
-    
-    if (!$this->_id && $this->renewal === null) {
-      $this->renewal = "1";
     }
     
     if (!$this->_id && ($stock = $this->getStock())) {

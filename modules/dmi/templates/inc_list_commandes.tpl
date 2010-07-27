@@ -68,6 +68,7 @@
             <input type="hidden" name="_context_guid" value="COperation-{{$_line_dmi->operation_id}}" />
             <input type="hidden" name="reception_id" value="" />
             <input type="hidden" name="lot_id" value="{{$_line_dmi->_ref_product_order_item_reception->_id}}" />
+            <input type="hidden" name="septic" value="{{$_line_dmi->septic}}" />
             
             <table class="main form layout">
               <tr>
