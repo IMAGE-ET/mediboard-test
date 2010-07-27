@@ -28,7 +28,19 @@
     <tr>
       <th colspan="20" class="title">
         {{assign var=context value=$contexts.$_context_guid}}
+        {{assign var=interv value=$intervs.$_context_guid}}
+        
         <button type="button" class="print notext" style="float: left" onclick="printOrdonnance('{{$contexts.$_context_guid->prescription_id}}', '{{$context->praticien_id}}')"></button>
+        
+        <span style="float: right;">
+          {{if    !$interv->entree_bloc   && !$interv->entree_salle}}  En attente d'entrée au bloc
+          {{elseif $interv->entree_bloc   && !$interv->entree_salle}}  Entré(e) au bloc
+          {{elseif $interv->entree_salle  && !$interv->sortie_salle}}  En salle d'op
+          {{elseif $interv->sortie_salle  && !$interv->entree_reveil}} En attente salle de réveil
+          {{elseif $interv->entree_reveil && !$interv->sortie_reveil}} En salle de réveil
+          {{else}}                                                     Sorti(e) du bloc
+          {{/if}}
+        </span>
         
         {{$contexts.$_context_guid}}
       </th>

@@ -32,6 +32,7 @@ $list_lines = $dmi_line->loadList($where, "date");
 
 $lines_by_context = array();
 $contexts = array();
+$intervs = array();
 
 foreach($list_lines as $_dmi) {
   $_dmi->loadRefsFwd();
@@ -70,6 +71,8 @@ foreach($list_lines as $_dmi) {
   	$_reference->loadRefSociete();
   }
   
+  $intervs[$_dmi->_ref_prescription->_guid] = $_dmi->_ref_operation;
+    
   if (!isset($lines_by_context[$_dmi->_ref_prescription->_guid])) {
     $lines_by_context[$_dmi->_ref_prescription->_guid] = array();
     $contexts[$_dmi->_ref_prescription->_guid] = $_dmi->_ref_prescription;
@@ -81,4 +84,5 @@ foreach($list_lines as $_dmi) {
 $smarty = new CSmartyDP();
 $smarty->assign("lines_by_context", $lines_by_context);
 $smarty->assign("contexts"        , $contexts);
+$smarty->assign("intervs"        , $intervs);
 $smarty->display("inc_list_commandes.tpl");
