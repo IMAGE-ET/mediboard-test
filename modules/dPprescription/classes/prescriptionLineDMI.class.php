@@ -23,14 +23,18 @@ class CPrescriptionLineDMI extends CMbObject {
   var $type                    = null;
   var $quantity                = null;
   var $signed                  = null;
+	
+	// Form fields
+	var $_patient_id             = null;
+  var $_can_view_form_signature_praticien = null;
   
+	// References
   var $_ref_prescription       = null;
   var $_ref_praticien          = null;
   var $_ref_operation          = null;
   var $_ref_product            = null;
   var $_ref_product_order_item_reception = null;
   
-  var $_can_view_form_signature_praticien = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -41,6 +45,8 @@ class CPrescriptionLineDMI extends CMbObject {
   
   function getProps() {
     $specs = parent::getProps();
+		
+		// DB Fields
     $specs["prescription_id"] = "ref notNull class|CPrescription";
     $specs["praticien_id"]    = "ref notNull class|CMediusers";
     $specs["operation_id"]    = "ref notNull class|COperation";
@@ -51,7 +57,11 @@ class CPrescriptionLineDMI extends CMbObject {
     $specs["type"]            = "enum notNull list|purchase|loan|deposit default|purchase"; // achat/pret/depot
     $specs["quantity"]        = "num notNull min|1 default|1";
     $specs["signed"]          = "bool notNull default|0";
+
+    // Form fields
     $specs["_can_view_form_signature_praticien"] = "bool";
+    $specs["_patient_id"]     = "ref class|CPatient";
+
     return $specs;
   }
   

@@ -141,6 +141,9 @@ $locales['CDMICategory.select'] = 'Choisir une catégorie';
 $locales['CGroups-back-category_DM'] = 'DMs';
 $locales['CGroups-back-category_DM.empty'] = 'Aucun DM';
 $locales['CGroups-back-dmi_categories'] = 'Catégories de DMI';
+$locales['CPrescriptionLineDMI-_patient_id'] = 'Patient';
+$locales['CPrescriptionLineDMI-_patient_id-court'] = 'Patient';
+$locales['CPrescriptionLineDMI-_patient_id-desc'] = 'Patient concerné par la prescription de DMI';
 $locales['config-dmi-CDM-active'] = 'Actif';
 $locales['config-dmi-CDM-active-desc'] = 'Actif';
 $locales['config-dmi-CDM-product_category_id'] = 'Catégorie';
@@ -157,6 +160,7 @@ $locales['mod-dmi-tab-vw_elements'] = 'Elements';
 $locales['mod-dmi-tab-vw_import'] = 'Importation de DMI';
 $locales['mod-dmi-tab-vw_peremption'] = 'Produits périmés';
 $locales['mod-dmi-tab-vw_test_barcode_parser'] = 'Test analyseur codes barre';
+$locales['mod-dmi-tab-vw_tracabilite'] = 'Traçabilité';
 $locales['module-dmi-court'] = 'DMI';
 $locales['module-dmi-long'] = 'Gestion des Dispositifs Médicaux Implantables';
 ?>
