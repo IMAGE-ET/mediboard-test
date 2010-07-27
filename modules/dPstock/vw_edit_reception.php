@@ -34,6 +34,12 @@ $order = new CProductOrder;
 $order->load($order_id);
 $order->updateCounts();
 
+foreach($order->_ref_order_items as $_id => $_item) {
+  if (!$_item->renewal) {
+    unset($order->_ref_order_items[$_id]);
+  }
+}
+
 foreach($order->_ref_order_items as $_item) {
   $_item->loadRefsReceptions();
   foreach($_item->_ref_receptions as $_reception) {

@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate("-2 DAY"));
+$date = CValue::getOrSession("date");
 $type = CValue::getOrSession("type");
 
 $dmi_line = new CPrescriptionLineDMI();

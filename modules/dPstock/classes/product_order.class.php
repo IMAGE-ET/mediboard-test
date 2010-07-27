@@ -112,6 +112,15 @@ class CProductOrder extends CMbMetaObject {
     }
     return $count;
   }
+  
+  function containsRenewalLines() {
+    $this->loadRefsOrderItems();
+    
+    foreach($this->_ref_order_items as $_item) {
+      if ($_item->renewal) return true;
+    }
+    return false;
+  }
 
   /** Marks every order's items as received */
   function receive() {
@@ -302,6 +311,17 @@ class CProductOrder extends CMbMetaObject {
       
     $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
     
+    // bons de facturation seulement
+    if ($type === 'locked') {
+      $list = array();
+      foreach ($orders_list as $_order) {
+        if ($_order->containsRenewalLines()) {
+          $list[] = $_order;
+        }
+      }
+      $orders_list = $list;
+    }
+    
     /*if ($type === 'pending') {
       $list = array();
       foreach ($orders_list as $_order) {
@@ -412,7 +432,8 @@ class CProductOrder extends CMbMetaObject {
     $this->loadRefsOrderItems();
     foreach ($this->_ref_order_items as $item) {
       $item->loadRefsReceptions();
-      $this->_date_received = isset($item->_ref_receptions[0]) ? $item->_ref_receptions[0]->date : null;
+      $rec = reset($item->_ref_receptions);
+      $this->_date_received = $rec ? $rec->date : null;
     }
     
     $items_count = count($this->_ref_order_items);

@@ -82,6 +82,7 @@ class CProductOrderItem extends CMbObject {
   }
   
   function isReceived() {
+    if ($this->renewal) return true;
     $this->updateReceived();
   	return $this->_quantity_received >= $this->quantity;
   }
