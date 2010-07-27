@@ -85,6 +85,18 @@ class CDMI extends CProduitPrescriptible {
     }
   }
   
+  function getUsedQuantity(CProductOrderItemReception $lot){
+    $sql = "SELECT
+              product_order_item_reception.quantity*product_reference.quantity*product.quantity AS tot
+            FROM product_order_item_reception
+            
+            LEFT JOIN product_order_item ON (product_order_item.order_item_id = product_order_item_reception.order_item_id)
+            LEFT JOIN product_reference ON (product_reference.reference_id = product_order_item.reference_id)
+            LEFT JOIN product ON (product.product_id = product_reference.product_id)
+            WHERE product_order_item_reception.order_item_reception_id = 151
+            ";
+  }
+  
   function loadRefProduct(){
     $product = new CProduct;
     $product->load($this->product_id);
@@ -95,7 +107,41 @@ class CDMI extends CProduitPrescriptible {
   
   // FIXME: SCC pas toujours sauvegardé 
   function store() {
-    if ($this->_scc_code || $this->_product_code) {
+    $this->completeField("in_livret");
+    
+    $is_new = false;
+    if (!$this->_id && CModule::getActive('dPstock') && $this->in_livret) {
+      $is_new = true;
+      $product = new CProduct();
+      $product->code = $this->_product_code;
+      
+      if (!$product->loadMatchingObject()) {
+        $product->name = $this->nom;
+        $product->scc_code = $this->_scc_code;
+        $product->description = $this->description;
+        $product->category_id = CAppUI::conf("dmi $this->_class_name product_category_id");
+        $product->quantity = 1;
+        if ($msg = $product->store()){
+          return $msg;
+        }
+      }
+      
+      $this->product_id = $product->_id;
+      
+      $stock = new CProductStockGroup();
+      $stock->group_id = CGroups::loadCurrent()->_id;
+      $stock->product_id = $product->_id;
+      if (!$stock->loadMatchingObject()) {
+        $stock->quantity = 1;
+        $stock->order_threshold_min = 1;
+        $stock->order_threshold_max = 2;
+        if ($msg = $stock->store()){
+          return $msg;
+        }
+      }
+    }
+    
+    if (!$is_new && ($this->_scc_code || $this->_product_code)) {
       $this->loadRefProduct();
       
       if ($this->_ref_product->_id) {
