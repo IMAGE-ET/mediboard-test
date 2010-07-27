@@ -1,6 +1,7 @@
 <table class="main tbl">
   <tr>
     <th>{{mb_title class=CProductReference field=product_id}}</th>
+    <th>{{mb_title class=CDMI field=type}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=code}}</th>
     <th>{{mb_title class=CProductOrderItemReception field=lapsing_date}}</th>
     <th>Quantité totale</th>
