@@ -63,7 +63,7 @@ Main.add(function () {
     <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
       <strong>
         {{$_doc_item}}
-        {{if $_file->private}}
+        {{if $_doc_item->private}}
           &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
         {{/if}}
       </strong>
