@@ -68,18 +68,22 @@ function refreshOrders(start) {
 }
 
 function dispenseAll(container, callback) {
-  var list = $(container).select("form");
+  var list = $(container).select("form.dispensation");
+  var post = {};
   list.each(function(f, i) {
     if ((!f.del || $V(f.del) == "0") && 
         (f.patient_id && $V(f.patient_id) || f.service_id && $V(f.service_id) || f.order && $V(f.order) == '0') && 
         $V(f.date_dispensation) == 'now' && parseInt($V(f.quantity)) > 0) {
-      if (i == list.length-1)
-        onSubmitFormAjax(f, {onComplete: callback});
-      else
-        onSubmitFormAjax(f);
-      submitted = true;
+      
+      post[$V(f.delivery_id)] = $V(f.quantity);
     }
   });
+  
+  var url = new Url();
+  url.addParam("m", "dPstock");
+  url.addParam("dosql", "do_validate_dispensation_lines");
+  url.addObjectParam("d", post);
+  url.requestUpdate("systemMsg", {onComplete: callback, method: "post"});
 }
 
 var oFormDispensation;

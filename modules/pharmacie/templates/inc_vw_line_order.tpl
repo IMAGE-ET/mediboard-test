@@ -94,13 +94,14 @@
   
   <td title="Quantité d'origine: {{$curr_delivery->quantity}}">
     {{if $curr_delivery->_ref_stock->_id}}
-    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post">
+    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" class="dispensation">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
       <input type="hidden" name="date_dispensation" value="now" />
       <input type="hidden" name="order" value="0" />
+      <!-- check do_validate_dispensation_lines !! -->
       {{mb_field object=$curr_delivery field=quantity increment=1 form=dispensation-validate-$id size=3 value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
       <button type="submit" class="tick notext" onclick="onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Dispenser">Dispenser</button>
       <button type="submit" class="cancel notext" onclick="$V(this.form.del, 1); onSubmitFormAjax(this.form, {onComplete: refreshOrders})" title="Refuser">Refuser</button>
