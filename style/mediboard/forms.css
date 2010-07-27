@@ -328,6 +328,10 @@ button.lock:before, a.button.lock:before {
   content: url(images/buttons/lock.png);
 }
 
+button.unlock:before, a.button.unlock:before {
+  content: url(images/buttons/unlock.png);
+}
+
 button.tick:before, a.button.tick:before {
   content: url(images/buttons/tick.png);
 }

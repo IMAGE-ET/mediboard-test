@@ -124,7 +124,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="_reset" value="1" />
-          <button type="button" class="change notext" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">Dévalider</button>
+          <button type="button" class="left notext" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">Remettre dans "A valider"</button>
         </form>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -195,6 +195,15 @@
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
       <td>
         <button type="button" class="tick" onclick="popupReception({{$curr_order->_id}});">{{tr}}Recevoir{{/tr}}</button>
+        
+        <form name="order-reset-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="date_ordered" value="" />
+          <button type="button" class="left notext" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">Remettre à "A passer"</button>
+        </form>
+        
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
@@ -351,7 +360,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="deleted" value="1" />
-          <button type="button" class="remove notext" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Delete{{/tr}}</button>
+          <button type="button" class="trash notext" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Delete{{/tr}}</button>
         </form>
         
         {{if $can->admin}}

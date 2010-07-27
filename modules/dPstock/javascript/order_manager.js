@@ -154,6 +154,15 @@ function popupReception(order_id, width, height) {
   url.popup(width, height, "Réception de commande");
 }
 
+function editReception(reception_id, width, height) {
+  width = width || 1000;
+  height = height || 800;
+
+  var url = new Url("dPstock", "vw_edit_reception");
+  url.addParam("reception_id", reception_id);
+  url.popup(width, height, "Réception de commande");
+}
+
 function popupOrderForm(order_id, width, height) {
   width = width || 1000;
   height = height || 800;

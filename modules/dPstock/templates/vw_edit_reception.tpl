@@ -47,9 +47,7 @@ function addOrder(id_reference){
       order = DOM.div({id: elementId, className: "order"}), 
       orderTab = DOM.li({}, DOM.a({href: "#"+elementId}, parts[2]));
   
-  if (!container.select(".order").length) {
-    container.update("");
-  }
+  $$(".no-order-warning").invoke("remove");
   
   container.insert(order);
   $$("a[href='#no-order']")[0].up().insert({before: orderTab});
@@ -198,7 +196,7 @@ function receptionCallback(){
         </div>
         
         {{if !$order->_id}}
-        <div class="small-info">
+        <div class="small-info no-order-warning">
           Veuillez chercher une commande à ajouter à la réception
         </div>
         {{else}}

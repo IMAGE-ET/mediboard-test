@@ -34,7 +34,7 @@
 	{{assign var=_product value=$_reference->_ref_product}}
   <tbody class="hoverable">
     <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
-      <td colspan="{{$dPconfig.dPstock.CProductReference.show_cond_price|ternary:6:5}}">
+      <td colspan="{{if $dPconfig.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}6{{else}}5{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
         {{if !$mode}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
         {{/if}}
@@ -109,7 +109,7 @@
 
 		  <td style="text-align: right;">
 			  {{mb_value object=$_reference field=price}}
-			 </td>
+      </td>
 			 
       {{if $dPconfig.dPstock.CProductReference.show_cond_price}}
 	 	  <td style="text-align: right;">

@@ -29,6 +29,16 @@
     <td>{{mb_value object=$_reception field="date"}}</td>
     <td>{{$_reception->_count_reception_items}}</td>
     <td style="width: 1%">
+      <button type="button" class="edit notext" {{if $_reception->locked}}disabled="disabled"{{/if}} onclick="editReception({{$_reception->_id}})">{{tr}}Edit{{/tr}}</button>
+      
+      <form name="reception-{{if $_reception->locked}}un{{/if}}lock-{{$_reception->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshReceptionsList})">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="dosql" value="do_product_reception_aed" />
+        {{mb_key object=$_reception}}
+        <input type="hidden" name="locked" value="{{$_reception->locked|ternary:0:1}}" />
+        <button type="submit" class="{{if $_reception->locked}}un{{/if}}lock notext" >{{if $_reception->locked}}Déverouiller{{else}}Vérrouiller{{/if}}</button>
+      </form>
+      
       <button type="button" class="print" onclick="printReception('{{$_reception->_id}}');">Bon de réception</button>
       <button type="button" class="barcode" onclick="printBarcodeGrid('{{$_reception->_id}}');">Codes barre</button>
     </td>
