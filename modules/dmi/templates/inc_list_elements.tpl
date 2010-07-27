@@ -15,7 +15,10 @@
   <tr>
     <th>{{mb_title class=$object_class field=nom}}</th>
     <th>{{mb_title class=$object_class field=code}}</th>
-    <th>{{mb_title class=$object_class field=in_livret}}</th>
+    {{if $object_class == "CDMI"}}
+      <th>{{mb_title class=$object_class field=code_lpp}}</th>
+      <th>{{mb_title class=$object_class field=type}}</th>
+    {{/if}}
     <th>{{mb_title class=$object_class field=_produit_existant}}</th>
   </tr>
 	{{foreach from=$list_elements item=_element}}
@@ -25,12 +28,11 @@
     	{{mb_value object=$_element field=nom}}
     	</a>
     </td>
-    <td>
-    	{{mb_value object=$_element->_ref_product field=code}}
-    </td>
-    <td>
-    	{{mb_value object=$_element field=in_livret}}
-    </td>
+    <td>{{mb_value object=$_element->_ref_product field=code}}</td>
+    {{if $object_class == "CDMI"}}
+      <td>{{mb_value object=$_element field=code_lpp}}</td>
+      <td>{{mb_value object=$_element field=type}}</td>
+    {{/if}}
     <td>
       {{assign var=_ref_product value=$_element->_ref_product}}
       

@@ -9,27 +9,36 @@
   *}}
 
 <table class="tbl">
-	<tr>
-    <th class="title" colspan="10">
-    	{{$line_count}} {{tr}}Results{{/tr}}
-		</th>
-	</tr>
-	
   <tr>
     <th>{{mb_title object=$filter field=_patient_id}}</th>
-    <th>{{mb_title object=$filter field=product_id}}</th>
-    <th>{{mb_title object=$filter field=order_item_reception_id}}</th>
+    
+    <th colspan="3">
+      {{mb_title object=$filter field=product_id}} /
+      {{mb_title class=CProduct field=code}}
+    </th>
+    
+    <th colspan="3">
+      {{mb_title object=$filter field=order_item_reception_id}} / 
+      {{mb_title class=CProductOrderItemReception field=lapsing_date}}
+    </th>
   </tr>	
 	
 	{{foreach from=$lines item=_line}}
-	<tr>
-    <td>{{mb_value object=$filter field=_patient_id}}</td>
-    <td>{{mb_value object=$filter field=product_id}}</td>
-    <td>{{mb_value object=$filter field=order_item_reception_id}}</td>
-  </tr>
-	
+  	<tr>
+      <td style="width: 15%;">{{mb_value object=$_line->_ref_operation->_ref_sejour field=patient_id}}</td>
+      
+      <th style="width: 1px;"></th>
+      <td style="width: 25%;">{{mb_value object=$_line->_ref_product field=name}}</td>
+      <td style="width: 25%;">{{mb_value object=$_line->_ref_product field=code}}</td>
+      
+      <th style="width: 1px;"></th>
+      <td style="width: 17%;">{{mb_value object=$_line->_ref_product_order_item_reception field=code}}</td>
+      <td style="width: 17%;">{{mb_value object=$_line->_ref_product_order_item_reception field=lapsing_date}}</td>
+    </tr>
 	{{foreachelse}}
-	<tr><em>{{tr}}None{{/tr}}</em></tr>
+  	<tr>
+  	  <td colspan="3">{{tr}}None{{/tr}}</td>
+    </tr>
 	{{/foreach}}
 
 </table>

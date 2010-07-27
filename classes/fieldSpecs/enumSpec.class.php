@@ -71,14 +71,15 @@ class CEnumSpec extends CMbFieldSpec {
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $defaultOption = CMbArray::extract($params, "defaultOption");
     $alphabet      = CMbArray::extract($params, "alphabet", false);
-    $extra         = CMbArray::makeXmlAttributes($params);
-    $locales       = $this->_locales;
-    $className     = htmlspecialchars(trim("$className $this->prop"));
-    $sHtml         = "";
     
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
       $defaultOption = "&mdash; ". CAppUI::tr($emptyLabel);
     }
+    
+    $extra         = CMbArray::makeXmlAttributes($params);
+    $locales       = $this->_locales;
+    $className     = htmlspecialchars(trim("$className $this->prop"));
+    $sHtml         = "";
     
     if ($alphabet) {
       asort($locales); 

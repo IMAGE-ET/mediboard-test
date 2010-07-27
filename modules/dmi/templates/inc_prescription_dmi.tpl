@@ -90,7 +90,7 @@ Main.add(function(){
     <tr>
       <td>
         {{if !$_line_dmi->signed}}
-          <form name="del-dmi-{{$_line_dmi->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadListDMI})">
+          <form name="del-dmi-{{$_line_dmi->_id}}" method="post" action="" onsubmit="return confirm('Voulez-vous vraiment supprimer cette ligne de DMI?') && onSubmitFormAjax(this, {onComplete: reloadListDMI})">
             <input type="hidden" name="m" value="dPprescription" />
             <input type="hidden" name="dosql" value="do_prescription_line_dmi_aed" />
             <input type="hidden" name="del" value="1" />
