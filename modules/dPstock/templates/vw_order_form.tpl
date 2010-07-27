@@ -174,7 +174,6 @@ table.grid th {
     {{/if}}
     {{if $order->object_id}}
       <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
-      <th class="category">{{mb_title class=CProductOrderItem field=septic}}</th>
     {{/if}}
     <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
@@ -202,7 +201,6 @@ table.grid th {
     {{/if}}
     {{if $order->object_id}}
       <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
-      <th class="category">{{mb_title class=CProductOrderItem field=septic}}</th>
     {{/if}}
     <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
@@ -228,7 +226,13 @@ table.grid th {
       {{/if}}
     {{/if}}
     
-    <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
+    <td>
+      {{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}
+      
+      {{if $curr_item->septic}}
+        (Déstérilisé)
+      {{/if}}
+    </td>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
       <td style="text-align: right; white-space: nowrap;">
         {{$curr_item->_unit_quantity}}
@@ -240,7 +244,6 @@ table.grid th {
     
     {{if $order->object_id}}
       <td>{{mb_value object=$curr_item field=renewal}}</td>
-      <td>{{mb_value object=$curr_item field=septic}}</td>
     {{/if}}
     
     <td style="white-space: nowrap; text-align: right;">
