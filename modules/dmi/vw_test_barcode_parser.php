@@ -219,6 +219,11 @@ $tests = array(
     'scc_part' => '71000',
     'scc_prod' => '8065571000',
   ),
+  
+  'SEM241320^P32072L' => array (
+    'ref' => '241320',
+    'lot' => 'P32072',
+  ),
 );
 
 $results = array();

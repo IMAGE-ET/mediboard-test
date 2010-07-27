@@ -379,6 +379,14 @@ class CBarcodeParser {
       $comp["lot"] = $parts[2];
     }
     
+    //    _REF__ _LOT__
+    // SEM241320^P32072L
+    if (empty($comp) && preg_match('/^SEM(\d{6,8})\^(P\d+)[A-Z]$/', $barcode, $parts)) {
+      $type = "sem";
+      $comp["ref"] = $parts[1];
+      $comp["lot"] = $parts[2];
+    }
+    
     // CIP
     if (empty($comp) && preg_match('/^([3569]\d{6})$/', $barcode, $parts)) {
       $type = "cip";
