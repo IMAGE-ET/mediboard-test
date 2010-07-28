@@ -92,7 +92,13 @@ updateModalEvenements = function(token_field_evts){
 		  $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox){
 			  tab_selected.add(checkbox.value);
 			});
-//			modalWindow.position();
+			
+			if (Prototype.Browser.IE && document.documentMode <= 8) {
+        modalWindow.position.bind(modalWindow).delay(0.2);
+			}
+			else {
+        modalWindow.position();
+			}
 		}
 	});
 }
@@ -116,7 +122,7 @@ printPlanningTechnicien = function(){
 {{/if}}
 
 <!-- Affichage de la modale -->
-<div id="modal_evenements" style="display: none;"></div>
+<div id="modal_evenements" style="width: 700px; display: none;"></div>
 
 <table class="main">
 	<tr>
