@@ -704,6 +704,11 @@ var DOM = {
 
 DOM.tags.each(DOM.defineTag);
 
+// To let the tooltips on top
+Control.Window.baseZIndex = 499;
+Control.Overlay.styles.zIndex = 498;
+Control.Overlay.ieStyles.zIndex = 498;
+
 // Replacements for the javascript alert() and confirm()
 var Modal = {
   alert: function(message, options) {
