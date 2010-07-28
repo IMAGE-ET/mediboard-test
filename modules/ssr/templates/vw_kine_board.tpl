@@ -65,12 +65,16 @@ onCompleteShowWeek = function(){
 
 updateSelectedEvents = function(){
   $V(oFormSelectedEvents.token_elts, "");
+	var event_ids = [];
   $$(".event.selected").each(function(e){
-    if(e.className.match(/CEvenementSSR-([0-9]+)/)){
-     var evt_id = e.className.match(/CEvenementSSR-([0-9]+)/)[1];
-     tab_selected.add(evt_id);
+	  var matches = e.className.match(/CEvenementSSR-([0-9]+)/);
+    if (matches) {
+      event_ids.push(matches[1]);
     }
   });
+	
+  $V(oFormSelectedEvents.token_elts, event_ids.join('|'));
+	
   // Rafraichissement du contenu de la modale	
 	if($V(oFormSelectedEvents.realise) == 1 && $V(oFormSelectedEvents.token_elts)){
     updateModalEvenements();
@@ -79,6 +83,7 @@ updateSelectedEvents = function(){
 
 updateModalEvenements = function(token_field_evts){
   var oFormSelectedEvents = getForm("editSelectedEvent");
+  viewModalEvenements();
 
   var url = new Url("ssr", "ajax_update_modal_evenements");
 	url.addParam("token_field_evts", $V(oFormSelectedEvents.token_elts));
@@ -87,7 +92,7 @@ updateModalEvenements = function(token_field_evts){
 		  $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox){
 			  tab_selected.add(checkbox.value);
 			});
-			viewModalEvenements();
+//			modalWindow.position();
 		}
 	});
 }

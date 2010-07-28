@@ -38,8 +38,8 @@ class CTypeActiviteCdARR extends CCdARRObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view      = $this->libelle . "(" . $this->code . ")";
-    $this->_shortview = $this->libelle_court . "(" . $this->code . ")";
+    $this->_view      = "($this->code) $this->libelle";
+    $this->_shortview = "($this->code) $this->libelle_court";
   }
 	
 	/**

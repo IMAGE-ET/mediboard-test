@@ -540,6 +540,7 @@ $locales['mod-system-tab-about'] = 'A propos...';
 $locales['mod-system-tab-access_denied'] = 'Accès refusé';
 $locales['mod-system-tab-configure'] = 'Configuration';
 $locales['mod-system-tab-edit_note'] = 'Note utilisateur';
+$locales['mod-system-tab-httpreq_vw_object'] = 'Infobulle d\'objet';
 $locales['mod-system-tab-login_ok'] = 'Connexion ok';
 $locales['mod-system-tab-module_missing'] = 'Module absent';
 $locales['mod-system-tab-object_merger'] = 'Fusion d\'objets';
