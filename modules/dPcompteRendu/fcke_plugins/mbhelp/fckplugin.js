@@ -17,7 +17,7 @@ var FCKMbHelpCommand = function() {
 }
   
 FCKMbHelpCommand.prototype.Execute = function() {
-  var url = window.open(FCKPlugins.Items["mbhelp"].Path+"help.html", FCKLang.mbHelp,"width=500,height=360");
+  var url = window.open(FCKPlugins.Items["mbhelp"].Path+"help.html", FCKLang.mbHelp.replace(/[ -]/gi, "_"), "width=500,height=360");
 }
 
 FCKMbHelpCommand.prototype.GetState = function() {

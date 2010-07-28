@@ -3,118 +3,128 @@
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
+    <title>Raccourcis clavier</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+    
     <style type="text/css">
       body {
         background: #f1f1e3;
-        font-family: Helvetica;
-      }
-    </style>
-  <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
-  <script type="text/javascript">
-    function onLoad(){
-      var mac = navigator.userAgent.match(/mac/i);
-      var list = document.getElementsByClassName(mac ? "win" : "mac");
-      for (var i = 0; i < list.length; i++) {
-          list[i].style.display = "none";
+        font-family: Helvetica, verdana, sans-serif;
       }
       
-    }
-  </script>
+      th {
+        text-align: left;
+      }
+    </style>
+    
+    <script type="text/javascript">
+      window.onload = function(){
+        var elements = document.getElementsByTagName("span");
+        var classToRemove = (navigator.userAgent.match(/mac/i) ? "win" : "mac");
+        
+        for (var i = 0; i < elements.length; i++) {
+          var element = elements[i];
+          if (element.className == classToRemove) {
+            element.style.display = "none";
+          }
+        }
+      }
+    </script>
   </head>
-  <body onload="onLoad()">
+  <body>
     <table>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>A :
-        </td>
+        </th>
         <td>
           Tout sélectionner
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>C :
-        </td>
+        </th>
         <td>
           Copier
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>V :
-        </td>
+        </th>
         <td>
           Coller
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>U :
-        </td>
+        </th>
         <td>
           Mettre en souligné
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>I :
-        </td>
+        </th>
         <td>
           Mettre en italique
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>B :
-        </td>
+        </th>
         <td>
           Mettre en gras
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>H :
-        </td>
+        </th>
         <td>
           Afficher / Masquer l'entête
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>O :
-        </td>
+        </th>
         <td>
           Afficher / Masquer le pied de page
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>K :
-        </td>
+        </th>
         <td>
           Insérer un saut de page
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>Z :
-        </td>
+        </th>
         <td>
           Annuler
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
           <span class="win">Ctrl + </span><span class="mac"><img src="images/cmd.png" width="16"/></span>Y :
-        </td>
+        </th>
         <td>
           Refaire
         </td>
       </tr>
       <tr>
-        <td>
+        <th>
 	  	    <span class="win">Ctrl</span><span class="mac"><img src="images/cmd.png" width="16"/></span> + Alt + U :
-        </td>
+        </th>
 		    <td>
 		     Afficher la source
 		    </td>
