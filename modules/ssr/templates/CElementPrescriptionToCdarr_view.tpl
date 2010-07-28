@@ -12,17 +12,14 @@
 
 {{assign var=element_prescription_to_cdarr value=$object}}
 
+{{assign var=activite_cdarr value=$element_prescription_to_cdarr->_ref_activite_cdarr}}
+
 <table class="tooltip tbl">
   <tr>
-    <td>
-      <strong>Libelle:</strong>
-      {{$element_prescription_to_cdarr->_ref_activite_cdarr->libelle}}
-    </td>
-  </tr>
-	<tr>
-		<td>
-			<strong>Type:</strong>
-      {{$element_prescription_to_cdarr->_ref_activite_cdarr->_ref_type_activite->_view}}
+  	<td>
+  		{{mb_include module=system template=inc_field_view object=$activite_cdarr prop=libelle}}
+			<strong>{{mb_label object=$activite_cdarr field=type}}</strong>:
+      {{$activite_cdarr->_ref_type_activite}}
 		</td>
 	</tr>
 </table>
