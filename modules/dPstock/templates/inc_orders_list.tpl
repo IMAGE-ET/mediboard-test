@@ -247,6 +247,7 @@
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
+    <th style="width: 1%;">{{tr}}CProductOrder-bill_number{{/tr}}</th>
     <th style="width: 1%;"></th>
   </tr>
   <tbody>
@@ -273,6 +274,15 @@
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
+      <td>
+        <form name="order-billnumber-{{$curr_order->_id}}" action="?" method="post" onsubmit="return submitOrder(this, {refreshLists: true})">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          {{mb_field object=$curr_order field=bill_number size=12}}
+          <button type="submit" class="save notext">{{tr}}CProductOrder-bill_number{{/tr}}</button>
+        </form>
+      </td>
       <td>
         <!--
       	<button type="button" class="barcode" onclick="printBarcodeGrid('{{$curr_order->_id}}')">Imprimer les codes barres</button>

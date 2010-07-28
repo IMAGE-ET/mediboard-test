@@ -199,38 +199,42 @@ table.tbl tr:nth-of-type(2n+1) {
   background-color: #f3f3f3;
 }*/
 
-table.tbl tr td.disabled,
-table.tbl tr th.disabled,
-table.tbl tr:hover td.disabled,
-table.tbl tbody:hover td.disabled,
+table.tbl td.disabled,
+table.tbl th.disabled,
 span.disabled {
-  color: #555;
-  font-style:italic;
+  color: #555 !important;
+  font-style:italic !important;
 }
 
-table.tbl tr td.error,
-table.tbl tr th.error,
-table.tbl tr:hover td.error,
-table.tbl tbody:hover td.error,
+table.tbl td.error,
+table.tbl th.error,
 span.error {
-  background-color: #f66;
+  background-color: #f66 !important;
 }
 
-table.tbl td.big-error,
-span.big-error {
-  background-image: url(images/icons/error.png);
-  background-repeat: no-repeat;
-  background-position: left;
-  background-color: #fee;
-  padding-left: 55px;
-}
-
-table.tbl tr td.warning,
-table.tbl tr th.warning,
-table.tbl tr:hover td.warning,
-table.tbl tbody:hover td.warning,
+table.tbl td.warning,
+table.tbl th.warning,
 span.warning {
-  background-color: #fc0;
+  background-color: #fc0 !important;
+}
+
+table.tbl td.ok,
+table.tbl th.ok,
+span.ok {
+  background-color: #afa !important;
+}
+
+table.tbl td.highlight,
+table.tbl th.highlight,
+td.highlight {
+  background-color: #ff5 !important;
+}
+
+table.tbl td.checked {
+	background-image : url(images/buttons/tick.png);
+	background-repeat: no-repeat;
+	background-position: 4px;
+	padding-left: 20px;
 }
 
 table.tbl td.big-warning,
@@ -242,19 +246,13 @@ span.big-warning {
   padding-left: 55px;
 }
 
-table.tbl tr td.ok,
-table.tbl tr th.ok,
-table.tbl tr:hover td.ok,
-table.tbl tbody:hover td.ok,
-span.ok {
-  background-color: #afa;
-}
-
-table.tbl td.checked {
-	background-image : url(images/buttons/tick.png);
-	background-repeat: no-repeat;
-	background-position: 4px;
-	padding-left: 20px;
+table.tbl td.big-error,
+span.big-error {
+  background-image: url(images/icons/error.png);
+  background-repeat: no-repeat;
+  background-position: left;
+  background-color: #fee;
+  padding-left: 55px;
 }
 
 table.tbl td.big-info,
@@ -269,7 +267,7 @@ span.big-info {
 table.tbl tr.selected td,
 table.tbl tbody.selected td,
 div.selected {
-  background-color: #ffc;
+  background-color: #ffc !important;
 }
 
 table.layout {
@@ -466,14 +464,6 @@ table.print td.halfPane {
   margin: 5px;
   border: #aaa 2px dotted;
 }
-
-table.tbl td.highlight,
-table.tbl:hover td.highlight,
-td.highlight {
-  background-color: #ff5;
-}
-
-
 
 table.main td.step {
 	background: url(images/pictures/background.png) left bottom;
