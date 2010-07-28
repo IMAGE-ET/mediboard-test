@@ -3,7 +3,7 @@
 {{if $dPconfig.locale_warn && $unloc_count}}
 
 <!-- Local warns -->
-<script>
+<script type="text/javascript">
 Localize = {
   showForm: function() {
 	  var form = getForm('UnlocForm');
