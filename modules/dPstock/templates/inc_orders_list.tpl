@@ -111,7 +111,7 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
       <td>
-        <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de commande</button>
+        <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de com.</button>
         <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
@@ -237,6 +237,13 @@
 
 
 {{elseif $type=="received"}}
+
+<div style="text-align: right;">
+  <label>
+    <input type="checkbox" onclick="$$('tr.bill').invoke('setVisible', this.checked)" /> Afficher les facturées
+  </label>
+</div>
+
 <!-- Received orders -->
 <table class="tbl">
   <tr>
@@ -252,7 +259,7 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr>
+    <tr {{if $curr_order->bill_number}}style="display: none;" class="bill"{{/if}}>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}

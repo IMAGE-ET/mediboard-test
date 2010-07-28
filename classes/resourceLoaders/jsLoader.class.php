@@ -26,9 +26,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
   
   static function loadFiles($compress = false, $type = "text/javascript") {
     $result = "";
-    
-    // FIXME: make advanced tests to remove this line
-    $compress = CAppUI::conf("minify_javascript") == 1;
+    $compress = CAppUI::conf("minify_javascript");
     
     /** 
      * There is a speed boost on the page load when using compression 
@@ -50,7 +48,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         }
       }
       
-      $hash = md5(implode("", $files));
+      $hash = md5(implode("", $files)."-level-$compress");
       $cachefile = "./tmp/$hash.js";
       
       // If it exists, we check if it is up to date
@@ -70,7 +68,12 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         foreach($files as $file) {
           $all_scripts .= file_get_contents($file)."\n";
         }
-        file_put_contents($cachefile, JSMin::minify($all_scripts));
+        
+        if($compress == 2) {
+          $all_scripts = JSMin::minify($all_scripts);
+        }
+        
+        file_put_contents($cachefile, $all_scripts);
         $last_update = time();
       }
       

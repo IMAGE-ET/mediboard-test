@@ -251,12 +251,16 @@ button:hover {
   border-color: #333;
 }
 
-button[disabled], a.button[disabled] {
+button[disabled], a.button.disabled,
+button[disabled="disabled"] { /* For IE */
+  cursor: not-allowed, no-drop;
   opacity: 0.5;
-  cursor: not-allowed;
+  filter: alpha(opacity: 50);
+  -ms-filter: "alpha(opacity: 50)";
 }
 
-button[disabled]:hover, a.button[disabled]:hover {
+button[disabled]:hover, a.button.disabled:hover,
+button[disabled="disabled"]:hover { /* For IE */
   outline: none;
 }
 

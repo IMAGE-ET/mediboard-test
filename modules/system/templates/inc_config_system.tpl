@@ -27,7 +27,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=mb_id}}
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
-    {{mb_include module=system template=inc_config_bool var=minify_javascript}}
+    {{mb_include module=system template=inc_config_enum var=minify_javascript values="0|1|2"}}
     {{mb_include module=system template=inc_config_bool var=alternative_mode}}
     
     {{assign var="m" value="system"}}

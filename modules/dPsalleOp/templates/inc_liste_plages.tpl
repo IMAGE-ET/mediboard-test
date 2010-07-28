@@ -19,7 +19,7 @@ showLegend = function() {
 	  </tr>
 	  <tr>
 	    <th>
-	      <label for="salle" title="Salle d'opération">Salle</label>
+	      <label for="salle" title="Salle d'opération">Salle</label><br />
 	      <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
 	    </th>
 	    <td>
@@ -40,7 +40,7 @@ showLegend = function() {
 	      <input type="hidden" name="hide_finished" value="{{$hide_finished}}" onchange="this.form.submit()" />
 	      <label>
 	        <input type="checkbox" name="_hide_finished" {{if $hide_finished}}checked="checked"{{/if}} onclick="$V(this.form.hide_finished, this.checked ? 1 : 0)" />
-	        Cacher les opérations terminées 
+	        Cacher les interv. terminées 
 	      </label>
 	    </td>
 	  </tr>

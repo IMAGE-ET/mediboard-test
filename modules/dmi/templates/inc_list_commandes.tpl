@@ -99,10 +99,11 @@
                   </select>
                 </td>
                 <td>
-                  <button class="add notext" type="submit">Commander</button>
+                  <button class="tick notext" type="submit">Commander</button>
                 </td>
               </tr>
               <tr>
+                {{* 
                 <td style="text-align: right;">Num. fact.:</td>
                 <td colspan="2">
                   <label style="float: right;">
@@ -116,6 +117,14 @@
                   {{else}}
                     <input type="text" name="_bill_number" value="" size="12" />
                   {{/if}}
+                </td>
+                 *}}
+                 
+                <td colspan="3">
+                  <label style="float: right;">
+                    {{tr}}CProductOrderItem-renewal-court{{/tr}}
+                    {{mb_field object=$_line_dmi->_new_order_item field=renewal typeEnum=checkbox}}
+                  </label>
                 </td>
               </tr>
             </table>

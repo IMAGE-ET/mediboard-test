@@ -221,6 +221,8 @@ function prepareForm(oForm) {
       element.observe("change", checkXOR)
              .observe("keyup", checkXOR)
              .observe("ui:change", checkXOR);
+             
+      element.fire("ui:change");
     });
   }
 
@@ -228,7 +230,8 @@ function prepareForm(oForm) {
   var i = 0, oElement;
   while (oElement = $(oForm.elements[i++])) {
     var sElementName = oElement.getAttribute("name"),
-        props = oElement.getProperties();
+        props = oElement.getProperties(),
+        UIchange = false;
 
     // Locked object
     if (oForm.lockAllFields) {
@@ -252,6 +255,7 @@ function prepareForm(oForm) {
     
     // Can null
     if (props.canNull) {
+      UIchange = true;
       oElement.observe("change", canNullOK)
               .observe("keyup",  canNullOK)
               .observe("ui:change", canNullOK);
@@ -259,6 +263,7 @@ function prepareForm(oForm) {
 
     // Not null
     if (props.notNull) {
+      UIchange = true;
       oElement.observe("change", notNullOK)
               .observe("keyup",  notNullOK)
               .observe("ui:change", notNullOK);
@@ -273,7 +278,7 @@ function prepareForm(oForm) {
     // ui:change is a custom event fired on the native onchange throwed by $V, 
     // because fire doesn't work with native events 
     // Fire it only if the element has a spec
-    if (oElement.className) {
+    if (UIchange) {
       oElement.fire("ui:change");
     }
 
