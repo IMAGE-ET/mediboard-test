@@ -633,6 +633,7 @@ $locales['config-ssr-occupation_technicien-moyen-desc'] = 'Moyen';
 $locales['mod-ssr-tab-ajax_board_sejours'] = 'Séjours de la journée rééducateur';
 $locales['mod-ssr-tab-ajax_sejours_technicien'] = 'Séjours de rééducateur';
 $locales['mod-ssr-tab-ajax_update_modal_evenements'] = 'Dialogue de validation des evénements SSR';
+$locales['mod-ssr-tab-ajax_update_modal_evts_modif'] = 'Dialogue de modification d\'actes CdARR';
 $locales['mod-ssr-tab-configure'] = 'Configuration';
 $locales['mod-ssr-tab-edit_codes_intervenants'] = 'Configuration Intervenants';
 $locales['mod-ssr-tab-print_planning_sejour'] = 'Impression du planning du patient';

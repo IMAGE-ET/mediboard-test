@@ -43,16 +43,24 @@
 			  strong: les actes presents sur tous les evenements (checked)
         opacity: les actes presents sur certains evenements
        *}}
-			{{foreach from=$actes item=_acte}}
+			{{foreach from=$actes key=_code item=_acte}}
 			   <span style="whitespace: nowrap; display: inline-block;">
-			   	{{if array_key_exists($_acte, $count_actes)}}
-					  {{if $count_actes.$_acte == $count_events}}
-					    <strong><input type="checkbox" checked="checked" onchange="changeCdarr(false, '{{$_acte}}');" /> {{$_acte}}</strong> 
+			   	{{if array_key_exists($_code, $count_actes)}}
+					  {{if $count_actes.$_code == $count_events}}
+              <input type="checkbox" checked="checked" onchange="changeCdarr(false, '{{$_code}}');" /> 
+					    <strong onmouseover="ObjectTooltip.createEx(this, '')">
+								{{$_code}}
+							</strong> 
 	      	  {{else}}
-						  <span style="opacity: 0.7"><input type="checkbox" checked="checked" onchange="changeCdarr(true, '{{$_acte}}');" /> {{$_acte}}</span> 
+              <input type="checkbox" checked="checked" onchange="changeCdarr(true, '{{$_code}}');" />
+						  <span onmouseover="ObjectTooltip.createEx(this, '')" style="opacity: 0.7">
+						  	 {{$_code}}
+							</span> 
 	          {{/if}}
 					{{else}}
-	            <input type="checkbox" onchange="changeCdarr(true, '{{$_acte}}');" /> {{$_acte}} 
+            <span onmouseover="ObjectTooltip.createEx(this, 'CActiviteCdARR-{{$_code}}')">
+	            <input type="checkbox" onchange="changeCdarr(true, '{{$_code}}');" /> {{$_code}} 
+            </span> 
 					{{/if}}
 				 </span>
 			{{foreachelse}}

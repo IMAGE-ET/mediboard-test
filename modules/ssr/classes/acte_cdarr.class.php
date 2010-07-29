@@ -15,6 +15,9 @@ class CActeCdARR extends CMbObject {
 	// DB Fields
   var $evenement_ssr_id = null;
 	var $code = null;
+	
+	// References
+	var $_ref_activite_cdarr = null;
  
   function getSpec() {
     $spec = parent::getSpec();
@@ -26,7 +29,7 @@ class CActeCdARR extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["evenement_ssr_id"] = "ref notNull class|CEvenementSSR cascade";
-    $props["code"]             = "str notNull length|4";
+    $props["code"]             = "str notNull length|4 show|0";
     return $props;
   }
 
@@ -38,6 +41,17 @@ class CActeCdARR extends CMbObject {
 	function loadRefEvenementSSR(){
 		$this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
 	}
+
+  function loadRefActiviteCdarr(){
+    $this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
+    $this->_ref_activite_cdarr->loadRefTypeActivite();
+  }
+  
+  function loadView(){
+    parent::loadView();
+    $this->loadRefActiviteCdarr();
+  }
+
 }
 
 ?>

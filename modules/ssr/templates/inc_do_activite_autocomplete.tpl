@@ -12,7 +12,8 @@
   {{foreach from=$activites item=_activite}}
     <li>
       <span style="display: none" class="value">{{$_activite->code}}</span>
-      {{$_activite->_view|emphasize:$needle}}
+      {{$_activite->code|emphasize:$needle}}
+      {{$_activite->libelle|emphasize:$needle}}
       <br />
       <small style="opacity: 0.7">
 			 	{{$_activite->_ref_type_activite->_view|emphasize:$needle}}

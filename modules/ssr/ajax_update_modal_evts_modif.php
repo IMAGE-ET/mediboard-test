@@ -40,7 +40,7 @@ foreach($_evenements as $_evenement_id){
   $evenement->loadRefsActesCdARR();
 	foreach($evenement->_ref_actes_cdarr as $_acte_cdarr){
 		$actes[$_acte_cdarr->code] = $_acte_cdarr->code;
-		if(!isset($count_actes[$_acte_cdarr->code])){
+		if (!isset($count_actes[$_acte_cdarr->code])){
 			$count_actes[$_acte_cdarr->code] = 0;
 		}
 		$count_actes[$_acte_cdarr->code]++;
