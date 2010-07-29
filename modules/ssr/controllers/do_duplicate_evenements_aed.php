@@ -11,31 +11,41 @@
 $token_elts  = CValue::post("token_elts");
 $period      = CValue::post("period");
 
+
 $elts_id = explode("|", $token_elts);
 foreach($elts_id as $_elt_id){
-  $evenement_ssr = new CEvenementSSR();
-  $evenement_ssr->load($_elt_id);
-  $evenement_ssr->loadRefsActesCdARR();
+  $evenement = new CEvenementSSR();
+  $evenement->load($_elt_id);
+  $evenement->loadRefsActesCdARR();
 
   // Duplication de l'événement  
-	$evenement_ssr->_id = "";
-	$evenement_ssr->realise = 0;
-	$evenement_ssr->debut = mbDateTime("+1 $period", $evenement_ssr->debut);
-	if ($evenement_ssr->seance_collective_id){
-    CAppUI::displayMsg("Impossible de dupliquer des evenements qui sont dans des seances collectives", "CEvenementSSR-msg-store");
+	$evenement->_id = "";
+	$evenement->realise = 0;
+	$evenement->debut = mbDateTime("+1 $period", $evenement->debut);
+
+  // Cas des séances collectives
+	if ($evenement->seance_collective_id){
+    CAppUI::displayMsg("Impossible de dupliquer des événements qui sont dans des seances collectives", "CEvenementSSR-msg-create");
+		continue;
 	} 
-	else {
-	  $msg = $evenement_ssr->store();
-	  CAppUI::displayMsg($msg, "CEvenementSSR-msg-store");
+
+  // Autres rééducateurs
+	global $can;
+	if ($evenement->therapeute_id !=  CAppUI::$instance->user_id && !$can->admin) {
+    CAppUI::displayMsg("Impossible de dupliquer les événements d'un autre rééducateur", "CEvenementSSR-msg-create");
+    continue;
 	}
 
+  $msg = $evenement->store();
+  CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
+
   // Duplication des codes CdARR
-	if ($evenement_ssr->_id) {
-		foreach ($evenement_ssr->_ref_actes_cdarr as $_acte_cdarr) {
+	if ($evenement->_id) {
+		foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr) {
 		  $_acte_cdarr->_id = "";
-		  $_acte_cdarr->evenement_ssr_id = $evenement_ssr->_id;
+		  $_acte_cdarr->evenement_ssr_id = $evenement->_id;
 	    $msg = $_acte_cdarr->store();
-	    CAppUI::displayMsg($msg, "CActeCdARR-msg-store");
+	    CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
 		}
 	}
 }
