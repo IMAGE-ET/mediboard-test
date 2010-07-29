@@ -96,11 +96,18 @@ class CEvenementSSR extends CMbObject {
     // Evénement dans les bornes du séjour
     $this->completeField("sejour_id");
     $this->loadRefSejour();
+		$sejour = $this->_ref_sejour;
 		
     $this->completeField("debut");
 		
-		if ($this->sejour_id && $this->debut && ($this->debut < $this->_ref_sejour->entree || $this->debut > $this->_ref_sejour->sortie)){
-		  return "Evenement SSR en dehors des dates du séjour";
+		// Vérifier seulement les jours car les sorties peuvent être imprécises pour les hospit de jours
+		if ($sejour->_id && $this->debut) {
+      $date_debut = mbDate($this->debut);
+      $date_entree = mbDate(mbDate($sejour->entree));
+      $date_sortie = mbDate(mbDate($sejour->sortie));
+			if (!in_range($date_debut, $date_entree, $date_sortie)) {
+        return "Evenement SSR en dehors des dates du séjour";
+			}
 		}
     
 		// Cas de la réalisation des événements SSR
