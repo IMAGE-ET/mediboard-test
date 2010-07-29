@@ -44,6 +44,7 @@ class CProductOrder extends CMbMetaObject {
   var $_total           = null;
   var $_status          = null;
   var $_count_received  = null;
+  var $_count_renewed   = null;
   var $_date_received   = null;
   var $_received        = null;
   var $_partial         = null;
@@ -110,7 +111,19 @@ class CProductOrder extends CMbMetaObject {
         $count++;
       }
     }
-    return $count;
+    return $this->_count_received = $count;
+  }
+  
+  function countRenewedItems(){
+    $this->loadRefsOrderItems();
+    $count = 0;
+    
+    foreach ($this->_ref_order_items as $item) {
+      if ($item->renewal) {
+        $count++;
+      }
+    }
+    return $this->_count_renewed = $count;
   }
   
   function containsRenewalLines() {
@@ -312,14 +325,12 @@ class CProductOrder extends CMbMetaObject {
     $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
     
     // bons de facturation seulement
-    if ($type === 'locked') {
-      $list = array();
-      foreach ($orders_list as $_order) {
-        if ($_order->containsRenewalLines()) {
-          $list[] = $_order;
+    if ($type === 'pending') {
+      foreach ($orders_list as $_id => $_order) {
+        if (!$_order->containsRenewalLines()) {
+          unset($orders_list[$_id]);
         }
       }
-      $orders_list = $list;
     }
     
     /*if ($type === 'pending') {
@@ -427,9 +438,9 @@ class CProductOrder extends CMbMetaObject {
   }
   
   function updateCounts(){
-    $this->_count_received = $this->countReceivedItems();
+    $this->countReceivedItems(); // makes loadRefsOrderItems
+    $this->countRenewedItems(); // makes loadRefsOrderItems
     
-    $this->loadRefsOrderItems();
     foreach ($this->_ref_order_items as $item) {
       $item->loadRefsReceptions();
       $rec = reset($item->_ref_receptions);
@@ -446,7 +457,7 @@ class CProductOrder extends CMbMetaObject {
     if ($this->_ref_order_items && !$force) {
       return $this->_ref_order_items;
     }
-    return $this->_ref_order_items = $this->loadBackRefs('order_items');
+    return $this->_ref_order_items = $this->loadBackRefs('order_items', "renewal");
   }
   
   function loadRefAddress(){
@@ -496,9 +507,14 @@ class CProductOrder extends CMbMetaObject {
     if (!$this->_id && $this->object_class && $this->object_id && empty($this->comments)) {
       $this->loadTargetObject();
       if ($this->object_class == "COperation") {
-        //$this->_ref_object->loadRefSejour();
         $this->comments = "Numéro de séjour: {$this->_ref_object->sejour_id}";
       }
+    }
+    
+    // gestion des bons de commandes n'ayant pas de lignes renouvelables
+    $this->completeField("object_id", "object_class");
+    if ($this->_order && $this->object_id && ($this->countRenewedItems() == 0)) {
+      $this->received = 1;
     }
     
     if (!$this->_id && empty($this->order_number)) {

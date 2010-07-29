@@ -190,7 +190,7 @@
         </span>
         {{/if}}
       </td>
-      <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
+      <td>{{$curr_order->_count_renewed}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>
       <td>
@@ -250,7 +250,7 @@
     <th style="width: 0.1%;">{{mb_title class=CProductOrder field=order_number}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
     <th>{{tr}}CProductOrder-object_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-items_count{{/tr}} /<br /> {{tr}}CProductOrder-_count_received{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
@@ -277,7 +277,7 @@
         </span>
         {{/if}}
       </td>
-      <td>{{$curr_order->_ref_order_items|@count}}</td>
+      <td>{{$curr_order->_count_renewed}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_date_received}}</td>
       <td class="currency" style="text-align: right;">{{mb_value object=$curr_order field=_total}}</td>

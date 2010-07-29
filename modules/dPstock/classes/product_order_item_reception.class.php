@@ -182,11 +182,13 @@ class CProductOrderItemReception extends CMbObject {
       return $msg;
     }
     
-    // If the order is reveived, we set the flag
+    // If the order is received, we set the flag
     if ($is_new) {
       $order = $this->_ref_order_item->_ref_order;
-      $count_items = $order->countBackRefs("order_items");
-      if ($count_items && !$order->received && ($order->countReceivedItems() >= $count_items)) {
+      $count_received = $order->countReceivedItems();
+      $count_renewed = $order->countRenewedItems();
+      
+      if ($count_renewed && !$order->received && ($count_received >= $count_renewed)) {
         $order->received = 1;
         $order->store();
       }
