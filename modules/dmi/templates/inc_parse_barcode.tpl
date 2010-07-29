@@ -9,6 +9,10 @@ div.lots .lot:hover {
 div.product:hover {
   outline: 2px solid #ccc;
 }
+
+.strict {
+  background-color: #DFFFCF;
+}
 </style>
 
 <script type="text/javascript">
@@ -68,7 +72,7 @@ Main.add(function(){
 });
 </script>
 
-<div style="float: right; width: 7px; height: 7px; background-color: #fc3;" onclick="$('debug-barcode').toggle()"></div>
+<div style="float: right; margin-top: -7px; width: 7px; height: 7px; background-color: #fc3;" onclick="$('debug-barcode').toggle()"></div>
 
 {{if $debug}}
   <div id="debug-barcode" style="display: none; border: 1px dotted orange; padding: 0.5em;">
@@ -95,7 +99,18 @@ Main.add(function(){
 {{/if}}
 
 {{foreach from=$products item=_product}}
-  <div class="product" style="padding-bottom: 3px;">
+  {{if isset($_product->_strict|smarty:nodefaults)}}
+    {{assign var=strict value=true}}
+  {{else}}
+    {{assign var=strict value=false}}
+  {{/if}}
+  
+  <div class="product{{if $strict}} strict{{/if}}" style="padding-bottom: 3px; margin-bottom: 2px;">
+      
+    {{if $strict}}
+      <strong style="float: right; padding: 3px;">Lot</strong>
+    {{/if}}
+    
     <div onclick="selectProduct($(this).down('input[name=product_id]'), event)" style="padding: 3px;">
       <label style="font-size: 1.2em;">
         <input type="radio" name="product_id" value="{{$_product->_id}}" />
@@ -112,22 +127,24 @@ Main.add(function(){
         <div style="padding: 3px;" class="lot" onclick="selectLot($(this).down('input'), event)">
           <label>
             <input type="radio" class="lot" name="_lot[{{$_product->_id}}]" value="{{$_lot->_id}}" {{* if $_lot->_selected}}checked="checked"{{/if *}} />
-            <strong>[{{$_lot->code}}]</strong> &ndash; {{mb_value object=$_lot field=lapsing_date}}
+            <strong>[{{$_lot->code}}]</strong>
+            {{if $_lot->lapsing_date}}
+              &ndash; {{mb_value object=$_lot field=lapsing_date}}
+            {{/if}}
           </label>
         </div>
       {{foreachelse}}
         <div>Aucun lot n'est disponible pour ce DMI</div>
       {{/foreach}}
       
-      <hr />
+      {{assign var=product_id value=$_product->_id}}
       
-      <button class="new" type="button" onclick="$(this).next('div').toggle()">
+      <button class="new" type="button" style="margin-top: -2em; float: right;" onclick="Event.stop(event); $(this).up('.product').down('.new-lot').show()">
         Nouveau lot
       </button>
       
-      {{assign var=product_id value=$_product->_id}}
-      
-      <div style="display: none;">
+      <div style="display: none;" class="new-lot">
+        <hr />
         <form name="create-lot-{{$_product->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: submitBarcode})">
           <input type="hidden" name="m" value="dPstock" />
           <input type="hidden" name="dosql" value="do_order_item_reception_aed" />

@@ -59,9 +59,11 @@ foreach($lots as $_lot) {
   }
   else 
     $products[$product->_id]->_lots[$_lot->_id] = $_lot;
+    
+  $products[$product->_id]->_strict = true;
 }
 
-if ( empty($products) ) {
+//if ( empty($products) ) {
   $object = new CProduct;
   
   $keys = array("scc-prod", "ref", "cip", "raw");
@@ -79,15 +81,20 @@ if ( empty($products) ) {
   
   $where = array(
     "product.category_id" => "= '$dmi_category_id'",
+    "dmi.product_id" => "IS NOT NULL",
     "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
   );
   
+  $ljoin['dmi'] = "dmi.product_id = product.product_id";
+  
   foreach ($products as $_product) {
+    if (isset($_product->_strict)) continue;
+    
     $where["product.product_id"] = "= '$_product->_id'";
     $_product->loadRefsFwd();
     $_product->_lots = $reception->loadList($where, null, null, null, $ljoin);
   }
-}
+//}
 
 foreach ($products as $_product) {
   foreach($_product->_lots as $_lot) {
