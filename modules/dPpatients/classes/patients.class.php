@@ -668,9 +668,9 @@ class CPatient extends CMbObject {
     parent::updateFormFields();
     
     // Noms
-    $this->nom = strtoupper($this->nom);
-    $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
-    $this->prenom = ucwords(strtolower($this->prenom));
+    $this->nom = CMbString::upper($this->nom);
+    $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
+    $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
@@ -751,17 +751,17 @@ class CPatient extends CMbObject {
   	 
     $soundex2 = new soundex2;
     if ($this->nom) {
-  	  $this->nom = strtoupper($this->nom);
+  	  $this->nom = CMbString::upper($this->nom);
       $this->nom_soundex2 = $soundex2->build($this->nom);
     }
     
     if ($this->nom_jeune_fille) {
-  	  $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
+  	  $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
       $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
     }
 
     if ($this->prenom) {
-      $this->prenom = ucwords(strtolower($this->prenom));
+      $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
     
@@ -770,15 +770,15 @@ class CPatient extends CMbObject {
     }
   	
     if ($this->assure_nom) {
-  	  $this->assure_nom = strtoupper($this->assure_nom);
+  	  $this->assure_nom = CMbString::upper($this->assure_nom);
     }
     
     if ($this->assure_nom_jeune_fille) {
-  	  $this->assure_nom_jeune_fille = strtoupper($this->assure_nom_jeune_fille);
+  	  $this->assure_nom_jeune_fille = CMbString::upper($this->assure_nom_jeune_fille);
     }
 
     if ($this->assure_prenom) {
-      $this->assure_prenom = ucwords(strtolower($this->assure_prenom));
+      $this->assure_prenom = CMbString::capitalize(CMbString::lower($this->assure_prenom));
     }
   	
     if ($this->assure_cp === "00000") {
