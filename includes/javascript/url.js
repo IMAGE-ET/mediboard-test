@@ -120,8 +120,8 @@ var Url = Class.create({
   },
   
   redirectOpener: function() {
-    if (window.opener) {
-      window.opener.location.href = this.make();
+    if (window.opener && !window.opener.closed) {
+      window.opener.location.assign(this.make());
     } 
 		else {
       this.redirect();

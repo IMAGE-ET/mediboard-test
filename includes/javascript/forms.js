@@ -379,7 +379,7 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   }
 
   oOptions = Object.extend({
-    method : oForm.method
+    method: oForm.method
   }, oOptions);
 
   url.requestUpdate(ioTarget, oOptions);
@@ -395,7 +395,8 @@ function onSubmitFormAjax(oForm, oOptions) {
   oOptions = Object.extend({
     method: oForm.method,
     check: checkForm,
-    useFormAction: false
+    useFormAction: false,
+    coverIE: false
   }, oOptions);
   
   // Check the form

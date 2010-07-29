@@ -115,6 +115,7 @@ var ObjectTooltip = Class.create({
       if(!this.oOptions.popup) {
         url.requestUpdate(eTooltip, { 
           waitingText: $T("Loading tooltip"),
+          coverIE: false,
           onComplete: this.reposition.bind(this)
         });
       } else {
@@ -244,6 +245,8 @@ function initNotes(refresh){
     element.addClassName("initialized");
     var url = new Url("system", "httpreq_get_notes_image");
     url.addParam("object_guid", element.className.split(" ")[1]);
-    url.requestUpdate(element);
+    url.requestUpdate(element, {
+      coverIE: false
+    });
   });
 }

@@ -2,10 +2,6 @@
   display: inline;
 }
 
-button {
-	padding: 1px 3px;
-}
-
 button, a.button {
   behavior: expression(processIE7Button(this));
   line-height: 1.0em;
