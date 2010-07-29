@@ -30,8 +30,8 @@ $nb_days_planning = $sejour->_id ?
 	CEvenementSSR::getNbJoursPlanning($kine_id, $date);
 $planning = new CPlanningWeek($date, null, null, $nb_days_planning, $selectable, $height, $large, !$print);
 $planning->title = $surveillance ?
-  "Planning de surveillance du technicien '$kine->_view'" :
-  "Planning du technicien '$kine->_view'";	
+  "Surveillance '$kine->_view'" :
+  "Rééducateur '$kine->_view'";	
 
 $planning->guid = $kine->_guid;
 $planning->guid .= $surveillance ? "-surv" : "-tech";

@@ -95,6 +95,12 @@ PlanningTechnicien = {
 	toggle: function() {
 		this.surveillance = this.surveillance == 1 ? 0 : 1;
 	  PlanningTechnicien.show(this.kine_id, this.surveillance, this.sejour_id);
+	},
+	
+	print: function(){
+	  var url = new Url("ssr", "print_planning_technicien");
+	  url.addParam("kine_id", this.kine_id);
+	  url.popup("700","700","Planning du rééducateur");
 	}
 };
 

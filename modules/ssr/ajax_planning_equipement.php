@@ -22,7 +22,7 @@ $equipement->load(CValue::get("equipement_id"));
 if ($equipement->visualisable) {
   $nb_days_planning = $sejour->getNbJourPlanning($date);
   $planning = new CPlanningWeek($date, null, null, $nb_days_planning, false, "auto", false, true);
-  $planning->title = "Planning de l'équipement '$equipement->_view'";
+  $planning->title = "Equipement '$equipement->_view'";
   $planning->guid = $equipement->_guid;
   
   // Chargement des evenement SSR 

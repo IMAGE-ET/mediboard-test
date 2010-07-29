@@ -175,7 +175,7 @@ WeekPlanning = Class.create({
     this.updateNbSelectEvents();
   },
 	updateNbSelectEvents : function(){
-	  this.container.down('span.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
+	  this.container.down('.nbSelectedEvents').update("("+this.container.select('.event.selected').length+")");
   },
   getEventById: function(id) {
     return this.eventsById[id];

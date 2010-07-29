@@ -636,6 +636,7 @@ $locales['mod-ssr-tab-ajax_update_modal_evenements'] = 'Dialogue de validation d
 $locales['mod-ssr-tab-configure'] = 'Configuration';
 $locales['mod-ssr-tab-edit_codes_intervenants'] = 'Configuration Intervenants';
 $locales['mod-ssr-tab-print_planning_sejour'] = 'Impression du planning du patient';
+$locales['mod-ssr-tab-print_planning_technicien'] = 'Impresion du planning de rééducateur';
 $locales['mod-ssr-tab-vw_aed_replacement'] = 'Remplacements';
 $locales['mod-ssr-tab-vw_aed_sejour_ssr'] = 'Détail Séjour ';
 $locales['mod-ssr-tab-vw_cdarr'] = 'Codes CdARR';

@@ -45,15 +45,6 @@ onCompleteShowWeek = function(){
 	PlanningEquipement.hide();
   $('planning-sejour').update('');
 }
-
-
-
-printPlanningTechnicien = function(){
-  var url = new Url("ssr", "print_planning_technicien");
-  url.addParam("kine_id", "{{$kine_id}}");
-  url.popup("700","700","Planning du rééducateur");
-}
-
 </script>
 
 {{if !$kine->code_intervenant_cdarr}}
