@@ -1,5 +1,6 @@
 {{mb_include_script module="ssr" script="planning"}}
 {{mb_include_script module="ssr" script="planification"}}
+{{mb_include_script module="ssr" script="modal_validation"}}
 
 <script type="text/javascript">
 	
@@ -18,20 +19,6 @@ onSelect = function(oDiv, css_class){
   oDiv.addClassName('elt_selected');
 }
 
-submitValidation = function(oForm){
-  if(!$V(oForm.token_elts)){
-    $V(oForm.del, '0');
-    $V(oForm.realise, '0');
-	  return;
-	}
-  return onSubmitFormAjax(oForm, { onComplete: function(){ 
-	  PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true);
-		$V(oForm.del, '0');
-		$V(oForm.realise, '0');
-		$V(oForm.token_elts, '');
-	} });
-}
-
 updatePlanningKineBoard = function(){
   var url = new Url("ssr", "ajax_vw_planning_kine_board");
   url.addParam("kine_id", '{{$kine_id}}');
@@ -40,12 +27,8 @@ updatePlanningKineBoard = function(){
 
 Main.add(function(){
   Planification.showWeek(null, true);
-  
 	updatePlanningKineBoard();
-
 	updateBoardSejours('{{$kine_id}}');
-  oFormSelectedEvents = getForm("editSelectedEvent");
-  tab_selected = new TokenField(oFormSelectedEvents.token_elts); 
 });
 
 updateBoardSejours = function(kine_id) {
@@ -63,51 +46,7 @@ onCompleteShowWeek = function(){
   $('planning-sejour').update('');
 }
 
-updateSelectedEvents = function(){
-  $V(oFormSelectedEvents.token_elts, "");
-	var event_ids = [];
-  $$(".event.selected").each(function(e){
-	  var matches = e.className.match(/CEvenementSSR-([0-9]+)/);
-    if (matches) {
-      event_ids.push(matches[1]);
-    }
-  });
-	
-  $V(oFormSelectedEvents.token_elts, event_ids.join('|'));
-	
-  // Rafraichissement du contenu de la modale	
-	if($V(oFormSelectedEvents.realise) == 1 && $V(oFormSelectedEvents.token_elts)){
-    updateModalEvenements();
-	}
-}
 
-updateModalEvenements = function(token_field_evts){
-  var oFormSelectedEvents = getForm("editSelectedEvent");
-  viewModalEvenements();
-
-  var url = new Url("ssr", "ajax_update_modal_evenements");
-	url.addParam("token_field_evts", $V(oFormSelectedEvents.token_elts));
-	url.requestUpdate("modal_evenements", { 
-	  onComplete: function(){
-		  $('list-evenements-modal').select('input[type="checkbox"]').each(function(checkbox){
-			  tab_selected.add(checkbox.value);
-			});
-			
-			if (Prototype.Browser.IE && document.documentMode <= 8) {
-        modalWindow.position.bind(modalWindow).delay(0.2);
-			}
-			else {
-        modalWindow.position();
-			}
-		}
-	});
-}
-
-viewModalEvenements = function(){
-  modalWindow = modal($('modal_evenements'), {
-    className: 'modal'
-  });
-}
 
 printPlanningTechnicien = function(){
   var url = new Url("ssr", "print_planning_technicien");
@@ -122,7 +61,7 @@ printPlanningTechnicien = function(){
 {{/if}}
 
 <!-- Affichage de la modale -->
-<div id="modal_evenements" style="width: 700px; display: none;"></div>
+<div id="modal_evenements" style="display: none;"></div>
 
 <table class="main">
 	<tr>

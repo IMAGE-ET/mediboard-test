@@ -13,7 +13,8 @@ CCanDo::checkRead();
 $token_field_evts = CValue::getOrSession("token_field_evts");
 
 $sejours = array();
-$_evenements = explode("|", $token_field_evts);
+$events = array();
+$_evenements = $token_field_evts ? explode("|", $token_field_evts) : array();
 foreach($_evenements as $_evenement_id){
 	$evenement = new CEvenementSSR();
 	$evenement->load($_evenement_id);
@@ -32,6 +33,7 @@ foreach($_evenements as $_evenement_id){
 }
 
 
+$evenements = array();
 foreach($events as $_event){
   $_event->loadRefsActesCdarr();
   $_event->loadRefSejour();

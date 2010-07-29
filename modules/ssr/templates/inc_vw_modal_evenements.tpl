@@ -9,7 +9,7 @@
     <tr>
       <th colspan="7">
         {{assign var=patient value=$sejour->_ref_patient}}
-        <button style="float: right" class="change notext" type="button" onclick="Console.debug('{{$sejour_id}}', 'toggle for séjour')">
+        <button style="float: right" class="change notext" type="button" onclick="ModalValidation.toggleSejour('{{$sejour_id}}');">
         	{{tr}}Change{{/tr}}
 				</button>
         <big onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
@@ -44,11 +44,13 @@
           {{mb_value object=$_evenement field="equipement_id"}}
         </td>
         <td>
-          <input class="{{$sejour->_guid}}" type="checkbox" checked="checked" onclick="tab_selected.toggle('{{$_evenement->_id}}');" value="{{$_evenement->_id}}" />
+          <input class="{{$sejour->_guid}}" type="checkbox" checked="checked" value="{{$_evenement->_id}}" />
         </td>
       </tr>
       {{/foreach}}
     {{/foreach}}
+  {{foreachelse}}
+	<tr><td><em>{{tr}}CEvenementSSR.none{{/tr}}</em></td></tr>
   {{/foreach}}
 </table>
 </div>
@@ -57,8 +59,8 @@
 <table class="form">
   <tr>
     <td colspan="7" class="button">
-      <button type="button" class="submit" onclick="submitValidation(oFormSelectedEvents); modalWindow.close();">{{tr}}Validate{{/tr}}</button>
-      <button type="button" class="cancel" onclick="modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+      <button type="button" class="submit singleclick" onclick="ModalValidation.submit();">{{tr}}Validate{{/tr}}</button>
+      <button type="button" class="cancel" onclick="ModalValidation.close();">{{tr}}Cancel{{/tr}}</button>
     </td>
   </tr>
 </table>

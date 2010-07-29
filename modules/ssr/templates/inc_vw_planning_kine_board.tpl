@@ -15,8 +15,8 @@ Main.add(function(){
 <div style="position: relative">
   <div style="position: absolute; top: 0px; left: 3em;">
 	  <button type="button" class="print notext" onclick="printPlanningTechnicien();">{{tr}}Print{{/tr}}</button>
-    <button type="button" class="tick" onclick="$V(oFormSelectedEvents.realise, '1'); updateSelectedEvents();">{{tr}}Validate{{/tr}}</button>
-    <button type="button" class="cancel notext" onclick="updateSelectedEvents(); submitValidation(oFormSelectedEvents);">{{tr}}Cancel{{/tr}}</button>
+    <button type="button" class="tick singleclick"          onclick="ModalValidation.set({realise: '1'}); ModalValidation.update();">{{tr}}Validate{{/tr}}</button>
+    <button type="button" class="cancel notext singleclick" onclick="ModalValidation.set({realise: '0'}); ModalValidation.submit();">{{tr}}Cancel{{/tr}}</button>
   </div>
   <div style="position: absolute; top: 0px; right: 0px;">
     <button type="button" class="change notext" onclick="PlanningTechnicien.toggle();"></button>
