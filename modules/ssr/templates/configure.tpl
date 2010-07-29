@@ -73,3 +73,25 @@ function startCdARR() {
     <td id="cdarr"></td>
   </tr>
 </table>
+
+<h2>Mode offline</h2>
+
+<table class="tbl">
+  <tr>
+    <td>
+    	<a class="button search" href="?m={{$m}}&amp;a=offline_plannings_equipements&amp;dialog=1">
+    		Plannings Equipements
+			</a>
+      <a class="button search" href="?m={{$m}}&amp;a=offline_plannings_techniciens&amp;dialog=1">
+        Plannings Rééducateurs
+      </a>
+      <a class="button search" href="?m={{$m}}&amp;a=offline_repartition&amp;dialog=1">
+        Répartition des patients
+      </a>
+      <a class="button search" href="?m={{$m}}&amp;a=offline_sejours&amp;dialog=1">
+        Séjours
+      </a>
+		</td>
+  </tr>
+  
+</table>

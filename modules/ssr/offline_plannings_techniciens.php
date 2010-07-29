@@ -14,7 +14,7 @@ CCanDo::checkRead();
 $mediuser = new CMediusers();
 $kines = $mediuser->loadKines();
 
-$date = mbDate();
+$date = CValue::get("date", mbDate());
 
 // Parcours des kines et chargement du planning
 foreach($kines as $_kine){

@@ -10,16 +10,20 @@
 	<div id="modal-view-{{$sejour_id}}" style="display: none; width: 700px;">
 		<script type="text/javascript">
 			Main.add(function(){
-			  Control.Tabs.create("tabs-sejour-{{$sejour_id}}");
+			  var tab = Control.Tabs.create("tabs-sejour-{{$sejour_id}}");
 			});
 		</script>
 		
 		<h1>{{$_sejour->_ref_patient->_view}}</h1>
 		
 		<ul id="tabs-sejour-{{$sejour_id}}" class="control_tabs">
-			<li><a href="#prescription-{{$sejour_id}}">Prescription & Bilan SSR</a></li>
-			<li onmouseup="$('{{$_sejour->_guid}}').down('.week-container').setStyle({height: '600px' });
-			                (function(){ window['planning-{{$_sejour->_guid}}'].updateEventsDimensions(); }).defer();"><a href="#planning-{{$sejour_id}}">Planning</a></li>
+			<li onmouseup="modalwindow.position();">
+				 <a href="#prescription-{{$sejour_id}}">Prescription & Bilan SSR</a>
+			</li>
+      <li onmouseup="$('{{$_sejour->_guid}}').down('.week-container').setStyle({height: '600px' });
+                      (function(){ window['planning-{{$_sejour->_guid}}'].updateEventsDimensions(); modalwindow.position() }).defer();">
+         <a href="#planning-{{$sejour_id}}">Planning</a>
+      </li>
 			<li style="float: right"><button class="cancel" onclick="modalwindow.close();">Fermer</button></li>
 		</ul>
 		<hr class="control_tabs" />
