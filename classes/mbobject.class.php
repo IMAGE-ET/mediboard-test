@@ -94,7 +94,7 @@ class CMbObject {
   var $_ref_first_log  = null;
   var $_ref_last_log   = null;
   var $_ref_last_id400 = null;
-  var $_ref_notes      = array(); // Notes
+  var $_ref_notes      = null; // Notes
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
   var $_ref_affectations_personnel  = null;
@@ -842,6 +842,7 @@ class CMbObject {
    * Load object view information 
    */
   function loadView() {
+  	$this->loadRefsNotes();
     $this->loadAllFwdRefs();
   }
   

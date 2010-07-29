@@ -1172,11 +1172,12 @@ class CPatient extends CMbObject {
   function loadDossierComplet($permType = null) {
   	$this->_ref_praticiens = array();
     $pat_id = $this->loadRefs();
-    
+        
     $this->canRead();
     $this->canEdit();
     $this->countDocItems($permType);
     $this->loadRefPhotoIdentite();
+    $this->loadRefsNotes();
     
     // Affectations courantes
     $affectation =& $this->_ref_curr_affectation;
@@ -1566,6 +1567,7 @@ class CPatient extends CMbObject {
   }
   
   function loadView() {
+  	parent::loadView();
     $this->loadIPP();
   }
 }
