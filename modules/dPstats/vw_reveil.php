@@ -52,12 +52,12 @@ if ($bloc->_id) {
 	}
 }
 
-$listDisciplines = new CDiscipline();
-$listDisciplines = $listDisciplines->loadUsedDisciplines();
+$discipline = new CDiscipline();
+$listDisciplines = $discipline->loadUsedDisciplines();
 
 $graphs = array(
-  graphPatRepartJour    ($debutact, $finact, $prat_id, $bloc_id, $codes_ccam),
-  graphPatParHeureReveil($debutact, $finact, $prat_id, $bloc_id, $codes_ccam),
+  graphPatRepartJour    ($debutact, $finact, $prat_id, $bloc_id, $discipline_id, $codes_ccam),
+  graphPatParHeureReveil($debutact, $finact, $prat_id, $bloc_id, $discipline_id, $codes_ccam),
 );
 
 // Création du template

@@ -80,10 +80,10 @@ if($type_view_bloc == "nbInterv") {
     $graphs[] = graphPraticienDiscipline($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
   }
 } else {
-  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi);
+  $listOccupation = graphOccupationSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
   $graphs[] = $listOccupation["total"];
   $graphs[] = $listOccupation["moyenne"];
-  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $codes_ccam, $type_hospi);
+  $graphs[] = graphPatJourSalle($debutact, $finact, $prat_id, $salle_id, $bloc_id, $discipline_id, $codes_ccam, $type_hospi);
 }
 
 // Création du template

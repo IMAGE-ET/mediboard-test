@@ -8,12 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $codeCCAM = '') {
+function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '') {
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
   $prat = new CMediusers();
   $prat->load($prat_id);
+  
+  $discipline = new CDiscipline;
+  $discipline->load($discipline_id);
 
   $ticks = array(array("0", "Dimanche"),
                  array("1", "Lundi"),
@@ -44,13 +47,15 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
     FROM operations
     INNER JOIN sallesbloc ON operations.salle_id = sallesbloc.salle_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE 
       sallesbloc.stats = '1' AND 
       plagesop.date BETWEEN '$debut' AND '$fin' AND
       operations.annulee = '0'";
     
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
-  if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
   if($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
@@ -77,9 +82,10 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
   // Set up the title for the graph
   $title = "Patients moyens / jour de la semaine";
   $subtitle = "Uniquement les jours d'activité";
-  if($prat_id)  $subtitle .= " - Dr $prat->_view";
-  if($bloc_id) $subtitle .= " - $bloc->_view";
-  if($codeCCAM) $subtitle .= " - CCAM : $codeCCAM";
+  if($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if($discipline_id) $subtitle .= " - $discipline->_view";
+  if($bloc_id)       $subtitle .= " - $bloc->_view";
+  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
 
   $options = array(
     'title' => utf8_encode($title),

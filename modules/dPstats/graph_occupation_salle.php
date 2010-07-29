@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $codeCCAM = "", $type_hospi = "") {
+function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = "", $type_hospi = "") {
   
   $ds = CSQLDataSource::get("std");
   
@@ -23,6 +23,9 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   $bloc = new CBlocOperatoire();
   $bloc->load($bloc_id);
+  
+  $discipline = new CDiscipline;
+  $discipline->load($discipline_id);
   
   $ticks = array();
   for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
@@ -46,14 +49,17 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   if($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
     GROUP BY mois ORDER BY orderitem";
@@ -76,14 +82,16 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   if($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
     AND operations.debut_op IS NOT NULL
@@ -127,14 +135,16 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   if($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
     AND operations.entree_salle IS NOT NULL
@@ -175,13 +185,15 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     FROM operations
     LEFT JOIN sejour ON operations.sejour_id = sejour.sejour_id
     LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+    LEFT JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   if($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $query .=  "\nAND (operations.date BETWEEN '$debut' AND '$fin'
       OR (operations.date IS NULL AND plagesop.date BETWEEN '$debut' AND '$fin'))
     AND operations.entree_reveil IS NOT NULL
@@ -219,8 +231,10 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
     DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem
     FROM plagesop
+    LEFT JOIN users_mediboard ON plagesop.chir_id = users_mediboard.user_id
     WHERE plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($prat_id) $query .= "\nAND plagesop.chir_id = '$prat_id'";
+  if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
+  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     GROUP BY mois ORDER BY orderitem";
   $result = $ds->loadList($query);
@@ -243,11 +257,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
 
   // Set up the title for the graph
   $subtitle = "";
-  if($prat_id)    $subtitle .= " - Dr $prat->_view";
-  if($salle_id)   $subtitle .= " - $salle->nom";
-  if($bloc_id)    $subtitle .= " - $bloc->nom";
-  if($codeCCAM)   $subtitle .= " - CCAM : $codeCCAM";
-  if($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if($discipline_id) $subtitle .= " - $discipline->_view";
+  if($salle_id)      $subtitle .= " - $salle->nom";
+  if($bloc_id)       $subtitle .= " - $bloc->nom";
+  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
 
   $optionsMoy = CFlotrGraph::merge("lines", array(
     'title'    => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),
