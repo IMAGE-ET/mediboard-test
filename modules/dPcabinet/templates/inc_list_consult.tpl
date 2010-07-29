@@ -95,7 +95,7 @@ Main.add( function () {
 
   <tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
     {{assign var=categorie value=$_consult->_ref_categorie}}
-    <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" rowspan="2" class="text">
+    <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
       {{if $canCabinet->view}}
         <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" style="float: right;">
           <img src="images/icons/planning.png" alt="modifier" />
@@ -137,7 +137,7 @@ Main.add( function () {
       {{/if}}
     </td>
 		
-    <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}} {{if !$destinations && !$_consult->motif}}rowspan="2"{{/if}}>
+    <td class="text" style="{{$style}}" {{if !$categorie->_id}}colspan="2"{{/if}}>
       {{if $patient->_id}}
 	      {{if $canCabinet->view}}
 	      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
@@ -157,8 +157,8 @@ Main.add( function () {
     </td>
 
     {{if $categorie->nom_icone}}
-    <td rowspan="2" style="{{$style}}">
-        <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}"/>
+    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}">
+      <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" title="{{$categorie->nom_categorie}}" />
     </td>
     {{/if}}
   </tr>

@@ -53,6 +53,10 @@ if(CValue::post("_create_order")) {
     $order->societe_id = $reference->societe_id;
     $order->group_id = CGroups::loadCurrent()->_id;
     
+    $product = $reference->loadRefProduct();
+    $count_dmi = $product->countBackRefs("dmis");
+    $order->_context_bl = $count_dmi > 0;
+    
     if ($msg = $order->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }

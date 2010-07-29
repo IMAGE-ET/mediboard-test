@@ -106,15 +106,6 @@ class CProduct extends CMbObject {
     $specs['_consumption']  = 'num show|1';
     return $specs;
   }
-  
-  function updateDBFields(){
-    parent::updateDBFields();
-    
-    $this->completeField("code");
-    if (!$this->_id || $this->fieldModified("code")) {
-      $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
-    }
-  }
 
   function updateFormFields() {
     parent::updateFormFields();
@@ -223,10 +214,14 @@ class CProduct extends CMbObject {
   }
   
   function store() {
-    $this->completeField('quantity', 'unit_quantity');
+    $this->completeField("code", 'quantity', 'unit_quantity');
     
     if(!$this->quantity)          $this->quantity = 1;
     if($this->unit_quantity == 0) $this->unit_quantity = '';
+    
+    if ($this->code !== null && (!$this->_id || $this->fieldModified("code"))) {
+      $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
+    }
     
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadBackRefs("references");

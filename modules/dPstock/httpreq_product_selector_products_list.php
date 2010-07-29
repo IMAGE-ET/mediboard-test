@@ -21,6 +21,7 @@ $count = null;
 $where_or = array();
 $order = 'name, code';
 
+//FIXME: changer en seek
 if ($keywords) {
 	foreach ($product->getSeekables() as $field => $spec) {
 	  $where_or[] = "`$field` LIKE '%$keywords%'";
@@ -38,7 +39,7 @@ if ($keywords) {
 	  $list_products = array();
 	} else {
 	  $category->load($category_id);
-	  $list_products = $category->loadBackRefs("products", $order);;
+	  $list_products = $category->loadBackRefs("products", $order);
 	  $total = count($list_products);
 	}
 }

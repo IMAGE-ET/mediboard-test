@@ -373,7 +373,8 @@ class CProductOrder extends CMbMetaObject {
     
     if ($contextual) {
       $this->completeField("object_class");
-      $number = ($this->object_class === "COperation" ? "BL" : "PH") . $number;
+      $bl = ($this->object_class === "COperation") || $this->_context_bl;
+      $number = ($bl ? "BL" : "PH") . $number;
     }
  
     return $number;
@@ -507,7 +508,10 @@ class CProductOrder extends CMbMetaObject {
     if (!$this->_id && $this->object_class && $this->object_id && empty($this->comments)) {
       $this->loadTargetObject();
       if ($this->object_class == "COperation") {
-        $this->comments = "Numéro de séjour: {$this->_ref_object->sejour_id}";
+        $this->_ref_object->loadRefSejour();
+        $this->_ref_object->_ref_sejour->loadNumDossier();
+        $num_dos = $this->_ref_object->_ref_sejour->_num_dossier;
+        $this->comments = "Numéro de séjour: $num_dos";
       }
     }
     
