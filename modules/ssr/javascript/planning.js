@@ -86,6 +86,10 @@ PlanningEvent = Class.create({
   }
 });
 
+Object.extend(PlanningEvent, {
+  onMouseOver: Prototype.emptyFunction
+});
+
 PlanningEvent.Drag = {
   showTime: function(elt, event){
     elt.down(".time-preview").update(event.getTimeString()).show();
@@ -121,7 +125,7 @@ WeekPlanning = Class.create({
   scrollTop: null,
   load_data: [],
   maximum_load: null,
-  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range) {
+  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
@@ -139,6 +143,20 @@ WeekPlanning = Class.create({
     this.events = events;
     this.hour_divider = hour_divider;
     this.adapt_range = adapt_range;
+		this.selectable = selectable;
+
+    // Event observation
+    if (this.selectable) {
+			this.observeEvent('click', function(event){
+				event.toggleClassName('selected');
+				this.updateNbSelectEvents();
+			}.bind(this));
+	  }
+		
+    this.observeEvent('mouseover', PlanningEvent.onMouseOver);
+    this.observeEvent('dblclick', PlanningEvent.onDblClic);
+
+
   },
   scroll: function(scroll_top) {
     var top = this.container.down(".hour-"+this.hour_min).offsetTop;
@@ -221,5 +239,15 @@ WeekPlanning = Class.create({
         }, this);
       }, this);
     }, this);
-  }
+  },
+	observeEvent: function(eventName, handler) {
+	  this.container.observe(eventName, function(event) {
+	    var element = event.element();
+	    if (element.tagName == "DIV") {
+	      var div = element.hasClassName("event") ? element : element.up("div.event");
+	      if (div) handler(div, event);
+	    }
+	  })
+		
+	}
 });

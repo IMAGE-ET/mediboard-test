@@ -3,22 +3,29 @@
 {{mb_include_script module="ssr" script="modal_validation"}}
 
 <script type="text/javascript">
-	
-onSelect = function(oDiv, css_class){
-  var sejour_id = css_class.match(/CSejour-([0-9]+)/)[1];
-	var _equipement_id = css_class.match(/CEquipement-([0-9]+)/);
-  var equipement_id = _equipement_id ? _equipement_id[1] : '';
 
-  // refresh du planning du patient concerné
-	Planification.refreshSejour(sejour_id, false);
-	
-	// refresh du planning de l'equipement concerné
-	equipement_id ? PlanningEquipement.show(equipement_id, sejour_id) : PlanningEquipement.hide();
-	
-	$('planning-technicien').select('.elt_selected').invoke('removeClassName', 'elt_selected');
-  oDiv.addClassName('elt_selected');
+PlanningEvent.onMouseOver = function(event) {
+  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
+  if (matches) {
+    ObjectTooltip.createEx(event, matches[0]);
+  }
 }
 
+PlanningEvent.onDblClic = function(event) {
+  var sejour_id = event.className.match(/CSejour-([0-9]+)/)[1];
+  var match_equipement_id = event.className.match(/CEquipement-([0-9]+)/);
+  var equipement_id = match_equipement_id ? match_equipement_id[1] : '';
+
+  // refresh du planning du patient concerné
+  Planification.refreshSejour(sejour_id, false);
+  
+  // refresh du planning de l'equipement concerné
+  equipement_id ? PlanningEquipement.show(equipement_id, sejour_id) : PlanningEquipement.hide();
+  
+  $('planning-technicien').select('.elt_selected').invoke('removeClassName', 'elt_selected');
+  oDiv.addClassName('elt_selected');
+}
+	
 updatePlanningKineBoard = function(){
   var url = new Url("ssr", "ajax_vw_planning_kine_board");
   url.addParam("kine_id", '{{$kine_id}}');

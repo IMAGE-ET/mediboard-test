@@ -18,7 +18,8 @@ Main.add(function() {
     {{$planning->events|@json}}, 
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
-    {{$planning->adapt_range|@json}}
+    {{$planning->adapt_range|@json}},
+		'{{$planning->selectable}}'
   );
   
   planning.container.addClassName("drawn");
@@ -113,14 +114,19 @@ Main.add(function() {
                     <div class="event-container">
                     {{foreach from=$_events item=_event}}
                       {{if $_event->hour == $_hour}}
+											
+											  {{assign var=draggable value=""}}
+												{{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
+												  {{assign var=draggable value=draggable}}
+												{{/if}}
+												
+                        {{assign var=resizable value=""}}
+                        {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}
+                          {{assign var=resizable value=resizable}}
+                        {{/if}}
+
                         <div id="{{$_event->internal_id}}" 
-      									     {{if $_event->guid}}
-                               onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}');" 
-      									       {{if $planning->selectable}}onclick="this.toggleClassName('selected'); window['planning-{{$planning->guid}}'].updateNbSelectEvents();"
-      												   ondblclick="if(window.onSelect){ onSelect(this, '{{$_event->css_class}}'); }"
-      												 {{/if}}
-      											 {{/if}} 
-      											 class="event {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}draggable{{/if}} {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}resizable{{/if}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
+      											 class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}}" 
       											 style="background-color: {{$_event->color}}; {{if !$_event->important}}opacity: 0.6{{/if}}">
       										
                           {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}

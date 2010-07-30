@@ -8,6 +8,13 @@ Main.add(function () {
 	tabs.activeLink.onmousedown();
 });
 
+PlanningEvent.onMouseOver = function(event) {
+  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
+  if (matches) {
+    ObjectTooltip.createEx(event, matches[0]);
+  }
+}
+
 onCompleteShowWeek = function() {
   tabs.activeLink.onmousedown();
 }
