@@ -77,7 +77,7 @@
 <table id="main" class="{{if $dialog}}dialog {{/if}}{{$m}}">
   <tr>
     <td class="tabox">
-  
+      {{mb_include module=mediboard template=obsolete_module}}
 {{if $dialog}}
 	  <!-- System messages -->
 	  <div id="systemMsg">

@@ -161,7 +161,7 @@ var Menu = {
 {{/if}}
 
 <td id="mainPane">
-
+  {{mb_include module=mediboard template=obsolete_module}}
 {{if $dialog}}
 <div class="dialog" id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}

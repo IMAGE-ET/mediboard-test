@@ -168,6 +168,16 @@ if ($dosql) {
   }
 }
 
+//obsolete module verification
+$obsolete_module = false;
+$user = CAppUI::$instance->_ref_user;
+if($m && $m != "system" && (!$user->_id || $user->isAdmin())){
+  $setupclass = "CSetup$m";
+  $setup = new $setupclass;
+  $module->compareToSetup($setup);
+  $obsolete_module = $module->_upgradable;
+}
+
 // Feed module with tabs
 include("./modules/{$module->mod_name}/index.php");
 if ($tab !== null) {
@@ -208,6 +218,7 @@ if (!$suppressHeaders) {
   
   $tplHeader->assign("offline"              , false);
   $tplHeader->assign("nodebug"              , true);
+  $tplHeader->assign("obsolete_module"      , $obsolete_module);
   $tplHeader->assign("configOffline"        , null);
   $tplHeader->assign("localeInfo"           , $locale_info);
   $tplHeader->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));

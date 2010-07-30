@@ -41,6 +41,7 @@
     </td>
     {{/if}}
     <td id="main" class="{{if $dialog}}dialog{{/if}} {{$m}}">
+      {{mb_include module=mediboard template=obsolete_module}}
       {{include file="../../mediboard/templates/message.tpl" nodebug=true}}
       
     	<div id="systemMsg">

@@ -53,6 +53,7 @@
 </table>
 {{/if}}
 
+{{mb_include module=mediboard template=obsolete_module}}
 <div id="systemMsg">
   {{$errorMessage|nl2br|smarty:nodefaults}}
 </div>

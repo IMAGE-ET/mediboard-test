@@ -99,6 +99,7 @@ var Menu = {
   {{/if}}
   <tr>
     <td style="vertical-align: top;">
+      {{mb_include module=mediboard template=obsolete_module}}
       <div id="systemMsg">
         {{$errorMessage|nl2br|smarty:nodefaults}}
       </div>
