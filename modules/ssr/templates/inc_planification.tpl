@@ -20,7 +20,14 @@
 
 <script type="text/javascript">
 
-onCompleteShowWeek = function(){
+PlanningEvent.onMouseOver = function(event) {
+  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
+  if (matches) {
+    ObjectTooltip.createEx(event, matches[0]);
+  }
+}
+
+Planification.onCompleteShowWeek = function() {
   Planification.refreshSejour();
   PlanningTechnicien.show();
   PlanningEquipement.show();
@@ -43,13 +50,6 @@ Main.add(function(){
   });
   document.observe("keydown", onKeyDelete);
 });
-
-PlanningEvent.onMouseOver = function(event) {
-  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
-  if (matches) {
-    ObjectTooltip.createEx(event, matches[0]);
-  }
-}
 
 printPlanningSejour = function(){
   var url = new Url("ssr", "print_planning_sejour");

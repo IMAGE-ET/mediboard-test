@@ -15,7 +15,7 @@ PlanningEvent.onMouseOver = function(event) {
   }
 }
 
-onCompleteShowWeek = function() {
+Planification.onCompleteShowWeek = function() {
   tabs.activeLink.onmousedown();
 }
 

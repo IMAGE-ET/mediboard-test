@@ -166,9 +166,11 @@ Planification = {
       url.addParam("date", date);
     }
     url.requestUpdate("week-changer", { onComplete: function(){
-			if(date){
-				onCompleteShowWeek();
+			if (date){
+				Planification.onCompleteShowWeek();
       }
 		}, coverIE: false});
-  }
+  },
+	
+	onCompleteShowWeek: Prototype.emptyFunction
 };

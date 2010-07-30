@@ -44,7 +44,7 @@ updateBoardSejours = function(kine_id) {
 		requestUpdate("board-sejours");
 }
 
-onCompleteShowWeek = function(){
+Planification.onCompleteShowWeek = function(){
   //PlanningTechnicien.show(); 
   updatePlanningKineBoard();
   updateBoardSejours('{{$kine_id}}')

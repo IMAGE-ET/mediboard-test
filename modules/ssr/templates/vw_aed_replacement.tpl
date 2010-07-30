@@ -12,7 +12,7 @@
 {{mb_include_script module="ssr" script="planning"}}
 <script type="text/javascript">
 
-onCompleteShowWeek = function(){
+Planification.onCompleteShowWeek = function(){
   refreshlistSejour('','kine');
   refreshlistSejour('','reeducateur');
   $('replacement-kine').update('');
@@ -51,7 +51,7 @@ printRepartition = function(){
 
 Main.add(function(){
   Planification.showWeek();
-	onCompleteShowWeek();
+	Planification.onCompleteShowWeek();
 	
 	Control.Tabs.create('tabs-replacement', true);
   
