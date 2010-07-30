@@ -128,7 +128,6 @@ var ObjectTooltip = Class.create({
   },
 
   createContainer: function() {
-  console.log("bah");
     var eTrigger = $(this.sTrigger);
     var eTooltip = DOM.div({className: this.mode.sClass}).hide();
     
