@@ -80,6 +80,7 @@ $op = new COperation;
 $op->load($operation_id);
 if ($op->_id){
   $op->loadRefs();
+  $op->loadRefsNotes();
   $op->_ref_chir->loadRefFunction();
   
   foreach($op->_ref_actes_ccam as $acte) {
@@ -109,13 +110,13 @@ if ($op->_id){
 
 CValue::setSession("chir_id", $chir->_id);
 
+// Compléments de chargement du séjour
 $sejour->makeDatesOperations();
-
-// Chargement du numero de dossier du sejour
 $sejour->loadNumDossier();
+$sejour->loadRefsNotes();
 
+// Chargements de chargement du patient
 $patient->loadRefsSejours();
-
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
 

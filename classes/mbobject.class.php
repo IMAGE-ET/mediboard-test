@@ -850,6 +850,7 @@ class CMbObject {
    * Load complete object view information 
    */
   function loadComplete() {
+    $this->loadRefsNotes();
     $this->loadRefs();
   }
   

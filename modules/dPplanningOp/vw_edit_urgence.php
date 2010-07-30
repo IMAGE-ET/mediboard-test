@@ -94,10 +94,14 @@ if ($op->_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+
+// Compléments de chargement du séjour
 $sejour->makeDatesOperations();
+$sejour->loadNumDossier();
+$sejour->loadRefsNotes();
 
+// Chargements de chargement du patient
 $patient->loadRefsSejours();
-
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
 

@@ -78,6 +78,7 @@ $vue = CValue::getOrSession("vue2", 0);
 foreach ($listPlage as &$plage) {
   $plage->_ref_chir =& $userSel;
   $plage->loadRefsConsultations(true, !$vue);
+	$plage->loadRefsNotes();
 	
 	// Mass preloading
 	CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");

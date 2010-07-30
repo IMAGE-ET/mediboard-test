@@ -83,10 +83,12 @@ if ($sejour_id) {
 }
 
 $sejour->makeDatesOperations();
+$sejour->loadRefsNotes();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
-$patient->loadRefsSejours();
 
+
+$patient->loadRefsSejours();
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
 
