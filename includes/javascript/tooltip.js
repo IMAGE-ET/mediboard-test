@@ -30,18 +30,20 @@ var ObjectTooltip = Class.create({
 
     this.oOptions = Object.extend( {
       mode: "objectView",
-      popup: false,
       duration: appearenceTimeout[Preferences.tooltipAppearenceTimeout] || 0.6,
       durationHide: 0.2,
       params: {}
     }, oOptions);
+        
+    eTrigger
+        .observe("mouseout", this.cancelShow.bind(this))
+        .observe("mouseleave", this.cancelShow.bind(this))
+        .observe("mouseout", this.launchHide.bind(this))
+        .observe("mouseover", this.cancelHide.bind(this))
+        .observe("mousedown", this.cancelShow.bind(this))
+        .observe("mousemove", this.resetShow.bind(this));
     
     this.mode = ObjectTooltip.modes[this.oOptions.mode];
-
-    if (!this.oOptions.popup) {
-      this.createDiv(eTrigger);
-      this.addHandlers();
-    }
   },
   
   launchShow: function() {
@@ -68,21 +70,22 @@ var ObjectTooltip = Class.create({
   },
   
   show: function() {
+    if (!this.sTooltip) {
+      this.createContainer();
+    }
+    
     var eTooltip = $(this.sTooltip);
     
-    if (this.oOptions.popup || eTooltip.empty()) {
+    if (eTooltip.empty()) {
       this.load();
     }
     
-    if (!this.oOptions.popup) {
-      this.reposition();
-    }
+    this.reposition();
   },
   
   hide: function() {
     var eTooltip = $(this.sTooltip);
-    if (eTooltip)
-      eTooltip.hide();
+    if (eTooltip) eTooltip.hide();
   },
   
   reposition: function() {
@@ -112,39 +115,24 @@ var ObjectTooltip = Class.create({
       url.setModuleAction(this.mode.module,this.mode.action); // needed here as it makes a bug with httrack in offline mode when in the constructor (???)
       $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
       
-      if(!this.oOptions.popup) {
-        url.requestUpdate(eTooltip, { 
-          waitingText: $T("Loading tooltip"),
-          coverIE: false,
-          onComplete: this.reposition.bind(this)
-        });
-      } else {
-        url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
-      }
-    } else {
+      url.requestUpdate(eTooltip, {
+        waitingText: $T("Loading tooltip"),
+        coverIE: false,
+        onComplete: this.reposition.bind(this)
+      });
+    }
+    else {
       eTooltip.update($(this.oOptions.params.element).show());
       this.reposition();
     }
   },
-  
-  addHandlers: function(){
-    $(this.sTrigger)
-        .observe("mouseout", this.cancelShow.bind(this))
-        .observe("mouseout", this.launchHide.bind(this))
-        .observe("mouseover", this.cancelHide.bind(this))
-        .observe("mousedown", this.cancelShow.bind(this))
-        .observe("mousemove", this.resetShow.bind(this));
-        
-    $(this.sTooltip)
-        .observe("mouseout", this.cancelShow.bind(this))
-        .observe("mouseout", this.launchHide.bind(this))
-        .observe("mouseover", this.cancelHide.bind(this));
-  },
 
-  createDiv: function(eTrigger) {
-    var eTooltip = DOM.div({className: this.mode.sClass});
+  createContainer: function() {
+  console.log("bah");
+    var eTrigger = $(this.sTrigger);
+    var eTooltip = DOM.div({className: this.mode.sClass}).hide();
     
-    $((Prototype.Browser.IE ? document.body : eTrigger.up(".tooltip")) || document.body).insert(eTooltip.hide());
+    $((Prototype.Browser.IE ? document.body : eTrigger.up(".tooltip")) || document.body).insert(eTooltip);
     
     if (!Prototype.Browser.IE) {
       eTooltip.setStyle({
@@ -152,6 +140,12 @@ var ObjectTooltip = Class.create({
         minHeight: this.mode.height+"px"
       });
     }
+        
+    eTooltip
+        .observe("mouseout", this.cancelShow.bind(this))
+        .observe("mouseleave", this.cancelShow.bind(this))
+        .observe("mouseout", this.launchHide.bind(this))
+        .observe("mouseover", this.cancelHide.bind(this));
     
     this.sTooltip = eTooltip.identify();
   }
