@@ -100,7 +100,10 @@ form hr {
   margin: 1px !important;
 }
 
-input, 
+input[type=text], 
+input[type=password], 
+input[type=file], 
+input[type=""],
 select, 
 textarea,
 .textarea-container {
@@ -108,14 +111,20 @@ textarea,
   border-color: #909090;
 }
 
-input:hover, 
+input[type=text]:hover, 
+input[type=password]:hover, 
+input[type=file]:hover, 
+input[type=""]:hover, 
 select:hover, 
 textarea:hover,
 .textarea-container:hover {
   border-color: #333333;
 }
 
-input:focus, 
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus, 
+input[type=""]:focus, 
 select:focus, 
 textarea:focus,
 .textarea-container:focus {

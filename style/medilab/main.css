@@ -260,19 +260,6 @@ table.tabmenu td.selected.right {
   background: url(./images/icons/tabSelectedRight.png) no-repeat center left;
 }
 
-/* Inputs */
-input,
-select,
-textarea {
-  border: 1px #a5acb2 solid;
-}
-
-input,
-select,
-textarea {
-  background: #fff;
-}
-
 /* Standard table */
 table.tbl {
   background-color: #fff;
@@ -392,22 +379,30 @@ tr.catalogue-3 th {
   background-color: transparent;
 }
 
-input[readonly],
-input[readonly]:focus {
-	background-color: #fff;
-}
-
-input, 
-select, 
+/* Inputs */
+input[type=text], 
+input[type=password], 
+input[type=file], 
+input[type=""],
+select,
 textarea {
   border: 1px solid #ae0040;
+  background: #fff;
 }
 
-input:focus, 
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus, 
+input[type=""]:focus, 
 select:focus, 
 textarea:focus {
   background-color: #fde0b6;
   border: 1px solid #ae0040;
+}
+
+input[readonly],
+input[readonly]:focus {
+  background-color: #fff;
 }
 
 label {

@@ -36,13 +36,16 @@
     <td>
       {{assign var=_ref_product value=$_element->_ref_product}}
       
-      <span {{if $_ref_product->_id}}onmouseover="ObjectTooltip.createEx(this, '{{$_ref_product->_guid}}')"{{/if}}> 
       {{if $_ref_product->_id}}
         <a href="?m=dPstock&amp;tab=vw_idx_product&amp;product_id={{$_ref_product->_id}}">
+      {{/if}}
+      
+      <span {{if $_ref_product->_id}}onmouseover="ObjectTooltip.createEx(this, '{{$_ref_product->_guid}}')"{{/if}}> 
         {{mb_value object=$_element field=_produit_existant}}
+      </span>
+        
+      {{if $_ref_product->_id}}
         </a>
-      {{else}}
-        {{mb_value object=$_element field=_produit_existant}}
       {{/if}}
       </span>
     </td>

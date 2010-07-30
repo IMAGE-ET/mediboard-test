@@ -270,13 +270,23 @@ table.tabmenu td.selected.right {
 }
 
 /* Inputs */
-input, select, textarea {
+input[type=text], 
+input[type=password], 
+input[type=file], 
+input[type=""], 
+select, 
+textarea {
   color: #082F54;
   background: #fff;
   border: 1px #a5acb2 solid;
 }
 
-input:focus, select:focus, textarea:focus {
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus, 
+input[type=""]:focus, 
+select:focus, 
+textarea:focus {
   border-style: inset;
   background-color: #E0EAFF;
 }

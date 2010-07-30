@@ -42,12 +42,23 @@ input,
 select, 
 textarea {
   padding: 1px;
-  border: 1px #666 solid;
   font-size: 1em;
+}
+
+input[type=text], 
+input[type=password], 
+input[type=file], 
+input[type=""], 
+select, 
+textarea {
+  border: 1px #666 solid;
   background-color: #efe;
 }
 
-input:focus, 
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus, 
+input[type=""]:focus, 
 select:focus, 
 textarea:focus {
   background-color: #fff;
@@ -96,12 +107,6 @@ option.checked {
 
 option[value=""] {
   font-style: italic;
-}
-
-input[type=checkbox],
-input[type=radio] {
-  border: none;
-  background: none;
 }
 
 form hr {
@@ -184,7 +189,7 @@ a.button:focus {
   outline: 1px dotted #000;
 }
 
-form button[type="submit"],
+form button[type=submit],
 form button:not([type]) {
   border-color: #000;
   font-weight: bold;

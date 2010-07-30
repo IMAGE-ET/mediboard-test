@@ -277,9 +277,11 @@ function prepareForm(oForm) {
 
     // ui:change is a custom event fired on the native onchange throwed by $V, 
     // because fire doesn't work with native events 
-    // Fire it only if the element has a spec
+    // Fire it only if necessary, because it slows down IE
     if (UIchange) {
-      oElement.fire("ui:change");
+      //(function(oElement){
+        oElement.fire("ui:change");
+      //}).defer(oElement);
     }
 
     // Select tree
@@ -305,9 +307,9 @@ function prepareForm(oForm) {
     }
     
     // Focus on first text input
-    if (bGiveFormFocus && oElement.clientWidth > 0 && !oElement.className.match(/autocomplete/) &&
-        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
-        oElement.type === "text") {
+    if (bGiveFormFocus && oElement.clientWidth > 0 && oElement.type === "text" && 
+        !oElement.className.match(/autocomplete/) &&
+        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly")) {
       
       oElement.writeAttribute("autofocus", "autofocus");
       
