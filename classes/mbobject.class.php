@@ -242,18 +242,18 @@ class CMbObject {
 
       foreach($this->_ref_files as $keyFile=>$_file) {
         $_file->loadlogs();
-        $author = new CMediusers();
-        $author->load($this->_ref_files[$keyFile]->_ref_first_log->_ref_user->_id);
-        $author->loadRefFunction();
-        if(!$this->_ref_files[$keyFile]->_canRead ||
-         ($this->_ref_files[$keyFile]->private == 1 && 
-         !$can->admin &&
-         $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-           unset($this->_ref_files[$keyFile]);
-         } else {
-         }
+        if (isset($_doc->_ref_first_log->_id)) {
+          $author = new CMediusers();
+          $author->load($this->_ref_files[$keyFile]->_ref_first_log->_ref_user->_id);
+          $author->loadRefFunction();
+          if(!$this->_ref_files[$keyFile]->_canRead ||
+           ($this->_ref_files[$keyFile]->private == 1 && 
+           !$can->admin &&
+           $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
+             unset($this->_ref_files[$keyFile]);
+           }
+        }
       }
-      
       return count($this->_ref_files);
     }
   }
