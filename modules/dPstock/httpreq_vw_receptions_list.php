@@ -12,13 +12,19 @@ CCanDo::checkEdit();
 
 $start    = intval(CValue::get("start", 0));
 $keywords = CValue::get("keywords");
+$without_supplier = CValue::get("without_supplier");
 
 // Chargement des receptions de l'etablissement
 $reception = new CProductReception();
 
 $where = array(
-  "group_id" => "='".CGroups::loadCurrent()->_id."'"
+  "group_id" => "='".CGroups::loadCurrent()->_id."'",
 );
+
+if (!$without_supplier) {
+  $where["societe_id"] = "IS NOT NULL";
+}
+
 $receptions = $reception->seek($keywords, $where, "$start, 25", true, null, "date DESC");
 $total = $reception->_totalSeek;
 
