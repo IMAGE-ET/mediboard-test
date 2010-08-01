@@ -20,11 +20,11 @@ function changePage(page){
       <input type="hidden" name="current" value="{{$current}}" />
       <table class="form">
         <tr>
-          <th>{{mb_label object=$activite field=code}}</th>
-          <td>{{mb_field object=$activite field=code canNull=true  onchange="this.form.current.value = 0"}}</td>
+          <th>{{tr}}Keywords{{/tr}}</th>
+          <td><input name="code" type="text" value="{{$activite->code}}" /></td>
           <th>{{mb_label object=$activite field=type}}</th>
           <td>
-            <select name="type" onchange="this.form.current.value = 0">
+            <select name="type">
               <option value="">&mdash; Choisir un type</option>
               {{foreach from=$listTypes item=_type}}
               <option value="{{$_type->code}}" {{if $_type->code == $activite->type}}selected="selected"{{/if}}>
@@ -59,9 +59,9 @@ function changePage(page){
         </tr>
         {{foreach from=$listActivites item=_activite}}
         <tr>
-          <td>{{$_activite->type}}</td>
-          <td>{{$_activite->code}}</td>
-          <td>{{$_activite->libelle}}</td>
+          <td>{{$_activite->type|emphasize:$activite->code:"u"}}</td>
+          <td>{{$_activite->code|emphasize:$activite->code:"u"}}</td>
+          <td>{{$_activite->libelle|emphasize:$activite->code:"u"}}</td>
 					<td style="text-align: center;">
 						{{if $_activite->_ref_elements}}
 						  <span onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-cdarr-{{$_activite->code}}")'>{{$_activite->_ref_elements|@count}}</span>

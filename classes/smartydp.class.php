@@ -168,7 +168,7 @@ function smarty_modifier_stripslashes($string){
  * @param string $text The text subject
  * @param array|string $tokens The string tokens to emphasize, space seperated if string
  */
-function smarty_modifier_emphasize($text, $tokens) {
+function smarty_modifier_emphasize($text, $tokens, $tag = "em") {
   if (!is_array($tokens)) {
     $tokens = explode(" ", $tokens);
   }
@@ -184,7 +184,7 @@ function smarty_modifier_emphasize($text, $tokens) {
   }
 
   $regexp = str_replace("/", "\\/", implode("|", $tokens));
-  return preg_replace("/($regexp)/i", "<em>$1</em>", $text);	
+  return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);	
 }
 
 /**

@@ -50,6 +50,7 @@ $locales['Impossible'] = 'Impossible';
 $locales['Infos'] = 'Infos';
 $locales['Install'] = 'Installer';
 $locales['Internal'] = 'Interne';
+$locales['Keywords'] = 'Mots clés';
 $locales['Last connection'] = 'Dernière connexion';
 $locales['Latest update'] = 'Màj il y a';
 $locales['Loading in progress'] = 'Chargement en cours';

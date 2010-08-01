@@ -23,13 +23,16 @@ $type_activite = new CTypeActiviteCdARR();
 $listTypes = $type_activite->loadList(null, "code");
 
 $where = array();
-$where["code"] = "LIKE '$activite->code%'";
 if($activite->type) {
   $where["type"] = "= '$activite->type'";
 }
-$total = $activite->countList($where);
+
 $limit = "$current, $step";
-$listActivites = $activite->loadList($where, "type, code", $limit);
+$order = "type, code";
+$listActivites = $activite->seek($activite->code, $where, $limit, true);
+$total = $activite->_totalSeek;
+
+
 foreach($listActivites as &$_activite) {
   $_activite->loadRefTypeActivite();
 	$_activite->loadRefsElementsByCat();
@@ -38,7 +41,6 @@ foreach($listActivites as &$_activite) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("activite"      , $activite);
 $smarty->assign("activite"      , $activite);
 $smarty->assign("listTypes"     , $listTypes);
 $smarty->assign("listActivites" , $listActivites);
