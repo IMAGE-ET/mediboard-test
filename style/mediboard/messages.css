@@ -36,7 +36,7 @@ div.warning, div.error, div.message, div.loading {
 }
 
 div.warning {
-  color: #666;
+  color: #c64;
   background-image: url(../../images/icons/warning.png);
 }
 
