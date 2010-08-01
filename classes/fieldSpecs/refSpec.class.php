@@ -36,7 +36,7 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-  	$ref = $object->loadFwdRef($this->fieldName);
+  	$ref = $object->loadFwdRef($this->fieldName, true);
     if ($ref->_id && $this->fieldName != $object->_spec->key) {
       return $ref->_view;
     }

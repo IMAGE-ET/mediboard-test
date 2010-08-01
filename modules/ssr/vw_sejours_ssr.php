@@ -54,7 +54,7 @@ $sejours_by_kine = array();
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
 	// Filtre sur service
-	$service = $_sejour->loadFwdRef("service_id");
+	$service = $_sejour->loadFwdRef("service_id", true);
   $services[$service->_id] = $service;
   if ($filter->service_id && $_sejour->service_id != $filter->service_id) {
     unset($sejours[$_sejour->_id]);
