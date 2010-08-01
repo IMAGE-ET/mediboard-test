@@ -450,12 +450,7 @@ class CPrescriptionLine extends CMbObject {
 
 		// modification recente si moins de 2 heures
     $nb_hours = CAppUI::conf("dPprescription CPrescription time_alerte_modification");
-    $min_datetime = mbDateTime("- $nb_hours HOURS");
-    $last_modif_date = $this->loadLastLogForField()->date;
-    
-    if($last_modif_date && $last_modif_date >= $min_datetime){
-      $this->_recent_modification = true;
-    }
+    $this->_recent_modification = $this->hasRecentLog($nb_hours);
   }
   
   /*

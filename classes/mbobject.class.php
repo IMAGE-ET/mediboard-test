@@ -2193,12 +2193,10 @@ class CMbObject {
   }
   
   function loadLastLogForField($fieldName = null){	
-  	$where = array(
-      "object_id"    => " = '$this->_id'",
-      "object_class" => " = '$this->_class_name'"
-    );
+    $where["object_id"   ] = " = '$this->_id'";
+    $where["object_class"] = " = '$this->_class_name'";
     
-  	if($fieldName){
+  	if ($fieldName){
   	  $where["fields"] = " LIKE '%$fieldName%'";
   	}
   	
@@ -2209,6 +2207,20 @@ class CMbObject {
   	  $log->loadRefsFwd();
   	}
   	return $log;
+  }
+	
+	/**
+	 * Check wether object has a log more recent than given hours
+	 * @param $nb_hours Number of hours
+	 * @return bool
+	 */ 
+	
+  function hasRecentLog($nb_hours = 1) {
+    $where["object_id"   ] = "= '$this->_id'";
+    $where["object_class"] = "= '$this->_class_name'";
+    $where["date"] = "> DATE_ADD(NOW(), INTERVAL -$nb_hours HOUR)";
+    $log = new CUserLog();
+    return $log->countList($where);
   }
   
   function loadLastLog() {
