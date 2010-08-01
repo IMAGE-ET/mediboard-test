@@ -10,15 +10,14 @@
 
 CCanDo::checkRead();
 
-global $AppUI;
-
 $sejour_id = CValue::getOrSession("sejour_id");
 
-$user = new CMediusers();
+$user = CAppUI::$instance->_ref_user;
 $prats = $user->loadPraticiens(PERM_READ);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
+$sejour->loadRefsNotes();
 
 if ($sejour_id && !$sejour->_id) {
   CAppUI::setMsg(CAppUI::tr("CSejour-unavailable"), UI_MSG_WARNING);
@@ -37,7 +36,7 @@ if ($sejour->_id) {
 
   // Chargement du patient
   $patient = $sejour->_ref_patient;
-  $patient->loadStaticCIM10($AppUI->user_id);
+  $patient->loadStaticCIM10($user->_id);
   $patient->loadIPP();
 
   // Fiche autonomie  
@@ -66,19 +65,19 @@ if ($sejour->_id) {
 } 
 else {
 	$sejour->group_id = CGroups::loadCurrent()->_id;
-  $sejour->praticien_id = $AppUI->user_id;
+  $sejour->praticien_id = $user->_id;
   $sejour->entree_prevue = mbDate()." 08:00:00";
   $sejour->sortie_prevue = mbDate()." 18:00:00";
 }
 
 // Aides à la saisie
-$sejour->loadAides($AppUI->user_id);
+$sejour->loadAides($user->_id);
 
 $traitement = new CTraitement();
-$traitement->loadAides($AppUI->user_id);
+$traitement->loadAides($user->_id);
 
 $antecedent = new CAntecedent();
-$antecedent->loadAides($AppUI->user_id);
+$antecedent->loadAides($user->_id);
 
 // Chargement des categories de prescription
 $categories = array();
@@ -92,11 +91,11 @@ $categories = $category->loadList($where, $order);
 
 // Dossier médical visibile ?
 $can_view_dossier_medical = 
-  $AppUI->_ref_user->isMedical();
+  $user->isMedical();
 
 $can_edit_prescription = 
-  $AppUI->_ref_user->isPraticien() || 
-	$AppUI->_ref_user->isAdmin();
+  $user->isPraticien() || 
+	$user->isAdmin();
 
 // Suppression des categories vides
 if(!$can_edit_prescription){
