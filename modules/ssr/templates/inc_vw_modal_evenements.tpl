@@ -1,6 +1,6 @@
 <div style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
 	
-<table class="tbl" style="margin-right: 10px" id="list-evenements-modal">
+<table class="tbl" style="margin-right: 10px; text-align: left;" id="list-evenements-modal">
   <tr>
     <th colspan="7" class="title">Evenements</th>
   </tr>
@@ -39,14 +39,17 @@
               {{$_acte}}
             </span> 
 					{{foreachelse}}
-					  <span class="warning">{{tr}}None{{/tr}}</span>	
+					  <div class="warning">{{tr}}CActeCdARR.none{{/tr}}</div>	
           {{/foreach}}
         </td> 
         <td>
-          {{mb_value object=$_evenement field="equipement_id"}}
+        	{{assign var=equipement value=$_evenement->_ref_equipement}}
+					{{if $equipement->_id}} 
+					  {{$equipement}}
+					{{/if}}
         </td>
         <td>
-          <input class="{{$sejour->_guid}}" type="checkbox" checked="checked" value="{{$_evenement->_id}}" />
+          <input class="{{$sejour->_guid}}" type="checkbox" {{if !count($_evenement->_ref_actes_cdarr)}} disabled="disabled" {{else}} checked="checked" {{/if}} value="{{$_evenement->_id}}" />
         </td>
       </tr>
       {{/foreach}}
@@ -58,6 +61,14 @@
 </div>
 
 <hr />
+
+{{if $count_zero_actes}} 
+<div class="small-warning">
+	{{tr}}CEvenementCdARR-msg-count_zero_actes{{/tr}} :
+	(<strong>{{$count_zero_actes}} {{tr}}CEvenementSSR{{/tr}} </strong>)
+</div>
+{{/if}}
+
 <table class="form">
   <tr>
     <td colspan="7" class="button">

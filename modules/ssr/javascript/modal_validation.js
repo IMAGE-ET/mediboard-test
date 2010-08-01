@@ -18,7 +18,9 @@ ModalValidation = {
 	
 	toggleSejour: function(sejour_id) {
 		$('list-evenements-modal').select('input.CSejour-'+sejour_id).each(function(checkbox) {
-      checkbox.checked = !checkbox.checked;
+			if (!checkbox.disabled) {
+        checkbox.checked = !checkbox.checked;
+			}
     });
 	},
   
@@ -85,7 +87,7 @@ ModalValidation = {
     if (Prototype.Browser.IE && document.documentMode <= 8) {
       $('modal_evenements').setStyle({
         width: '700px',
-        height: '350px'
+        height: '380px'
       })
     }
     

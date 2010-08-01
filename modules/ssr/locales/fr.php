@@ -214,6 +214,7 @@ $locales['CEquipement-visualisable-desc'] = 'Visualisable en planning';
 $locales['CEquipement.all'] = 'Tous les équipements';
 $locales['CEquipement.none'] = 'Aucun équipement';
 $locales['CEquipement.one'] = 'équipement';
+$locales['CEvenementCdARR-msg-count_zero_actes'] = 'Votre cotation contient plusieurs événements sans actes CdARR qui ne seront pas validés.';
 $locales['CEvenementSSR'] = 'Evénement SSR';
 $locales['CEvenementSSR-_heure_deb'] = 'Début';
 $locales['CEvenementSSR-_heure_deb-court'] = 'Début';

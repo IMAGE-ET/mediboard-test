@@ -21,7 +21,8 @@ foreach($_evenements as $_evenement_id){
 	
 	if($evenement->sejour_id){
 		$events[$evenement->_id] = $evenement;
-	} else {
+	} 
+	else {
 		$evenement->loadRefsEvenementsSeance();
 		foreach($evenement->_ref_evenements_seance as $_evt_seance){
 			$_evt_seance->debut = $evenement->debut;
@@ -33,9 +34,15 @@ foreach($_evenements as $_evenement_id){
 }
 
 
+$count_zero_actes = 0;
 $evenements = array();
 foreach($events as $_event){
   $_event->loadRefsActesCdarr();
+  $_event->loadRefEquipement();
+	if (!count($_event->_ref_actes_cdarr)) {
+		$count_zero_actes++;
+	}
+
   $_event->loadRefSejour();
   $_event->_ref_sejour->loadRefPatient();
   $sejours[$_event->sejour_id] = $_event->_ref_sejour;
@@ -53,6 +60,7 @@ foreach($evenements as &$evenements_by_sejour){
 $smarty = new CSmartyDP();
 $smarty->assign("evenements", $evenements);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("count_zero_actes", $count_zero_actes);
 $smarty->display("inc_vw_modal_evenements.tpl");
 
 ?>
