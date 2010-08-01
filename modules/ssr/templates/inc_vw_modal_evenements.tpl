@@ -38,6 +38,8 @@
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
               {{$_acte}}
             </span> 
+					{{foreachelse}}
+					  <span class="warning">{{tr}}None{{/tr}}</span>	
           {{/foreach}}
         </td> 
         <td>

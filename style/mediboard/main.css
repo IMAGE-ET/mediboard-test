@@ -576,15 +576,19 @@ table#weeklyPlanning th.today {
 }
 
 .planning .kine {
-  background: #aaa url(../../images/icons/evtKine.png) no-repeat top right;
+  background: #aaa url(../../images/icons/evtKine.png) no-repeat bottom right;
 }
 
 .planning .equipement {
-  background: #aaa url(../../images/icons/evtEquipement.png) no-repeat top right;
+  background: #aaa url(../../images/icons/evtEquipement.png) no-repeat bottom right;
+}
+
+.planning .zero-actes {
+  background: #aaa url(../../images/icons/evtWarning.png) no-repeat bottom right;
 }
 
 .planning .seance {
-	 background: #aaa url(../../images/icons/user-function.png) no-repeat top right;
+	 background: #aaa url(../../images/icons/user-function.png) no-repeat bottom right;
 }
 .planning .realise {
   background-image: url(images/icons/ray.gif);

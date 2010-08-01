@@ -40,7 +40,6 @@ $evenements = $evenement_ssr->loadList($where, null, null, null, $ljoin);
 
 foreach($evenements as $_evenement){
 	if(!$_evenement->sejour_id){
-	  
 		// Chargement de l'evenement pour ce sejour
 		$evt = new CEvenementSSR();
 		$evt->sejour_id = $sejour->_id;
@@ -59,6 +58,7 @@ foreach($evenements as $_evenement){
 		$draggable_guid = $_evenement->_guid;
 	}
 		
+	// Title 
 	$_evenement->loadRefPrescriptionLineElement();
 	$element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
 	
@@ -73,18 +73,30 @@ foreach($evenements as $_evenement){
 		$title .= $_evenement->remarque ? "\n ".$_evenement->remarque : ''; 
 	}
 	
+	// Color
 	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
 	
-  $class_evt = $_evenement->equipement_id ? "equipement" : "kine";
-  if($_evenement->seance_collective_id){
-    $class_evt = "seance";
+	// CSS Classes
+  $class = $_evenement->equipement_id ? "equipement" : "kine";
+  if ($_evenement->seance_collective_id){
+    $class = "seance";
 	}
 	
-  $css_classes = array($element_prescription->_guid, 
-                       $category_prescription->_guid);
+  if (!$_evenement->countBackRefs("actes_cdarr")  && !$print){
+    $class = "zero-actes";
+  }
 	
-	$css_classes[] = ($_evenement->realise && !$print) ? "realise" : $class_evt;
+  if ($_evenement->realise && !$print){
+    $class = "realise";
+  }
 	
+  $css_classes = array(
+    $class,
+    $element_prescription->_guid, 
+    $category_prescription->_guid
+  );
+	
+	// Instanciation
   $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes, $draggable_guid);
   $event->draggable = (CAppUI::pref("ssr_planning_dragndrop") == 1) && !$_evenement->realise && !$print;
   $event->resizable = (CAppUI::pref("ssr_planning_resize") == 1)    && !$_evenement->realise && !$print;

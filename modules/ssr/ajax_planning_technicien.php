@@ -77,14 +77,23 @@ foreach($evenements as $_evenement){
   $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
   $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
   
-  $css_classes = array($element_prescription->_guid, 
-                       $_evenement->_ref_sejour->_guid, 
-                       $_evenement->_ref_equipement->_guid);
-											 
-	if($_evenement->realise && $selectable){
-		$css_classes[] = "realise";
-	}
+  
+	$class= "";
+	if (!$_evenement->countBackRefs("actes_cdarr")) {
+    $class = "zero-actes";
+  }
+  
+  if ($_evenement->realise && $selectable){
+    $class = "realise";
+  }
 
+  $css_classes = array(
+	  $class,
+    $element_prescription->_guid, 
+    $_evenement->_ref_sejour->_guid, 
+    $_evenement->_ref_equipement->_guid
+	);
+                       
   $planning->addEvent(new CPlanningEvent(
     $_evenement->_guid, 
     $_evenement->debut, 
