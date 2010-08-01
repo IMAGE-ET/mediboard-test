@@ -51,16 +51,21 @@ $replacements = $replacement->loadListFor($kine_id, $date);
 
 $sejours_remplaces = array();
 foreach ($replacements as $_replacement) {
+  // Détails des séjours remplacés
+  $_replacement->loadRefSejour();
+  $sejour =& $_replacement->_ref_sejour;
+	if ($sejour->sortie < $date) {
+		unset($replacements[$_replacement->_id]);
+		continue;
+	}
+	
+  $sejour->checkDaysRelative($date);
+  $sejour->loadRefPatient(1);
+
   // Détail sur le congé
   $_replacement->loadRefConge();
   $_replacement->_ref_conge->loadRefUser();
-  $_replacement->_ref_conge->_ref_user->loadRefFunction();
-	
-  // Détails des séjours remplacés
-  $_replacement->loadRefSejour();
-	$sejour =& $_replacement->_ref_sejour;
-  $sejour->checkDaysRelative($date);
-  $sejour->loadRefPatient(1);
+  $_replacement->_ref_conge->_ref_user->loadRefFunction();	
 }
 
 // Nombre de séjours
