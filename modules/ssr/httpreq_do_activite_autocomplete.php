@@ -10,10 +10,13 @@
 
 CCanDo::checkRead();
 
-$needle = CValue::post("code_activite_cdarr", CValue::post("code","aaa"));
-$activite = new CActiviteCdARR();
+$needle = CValue::post("code_activite_cdarr", CValue::post("code"));
+if (!$needle) {
+	$needle = "%";
+}
 
-$activites = $activite->seek($needle);
+$activite = new CActiviteCdARR();
+$activites = $activite->seek($needle, null, 300);
 foreach($activites as $_activite) {
   $_activite->loadRefTypeActivite();
 }

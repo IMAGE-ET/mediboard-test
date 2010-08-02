@@ -282,6 +282,7 @@ Main.add(function(){
 	if($('code_auto_complete')){
     var url = new Url("ssr", "httpreq_do_activite_autocomplete");
     url.autoComplete("editEvenementSSR_code", "code_auto_complete", {
+      dropdown: true,
       minChars: 2,
       select: "value",
       updateElement: updateFieldCode
