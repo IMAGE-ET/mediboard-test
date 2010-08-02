@@ -217,7 +217,6 @@ WeekPlanning = Class.create({
     
     var cellHeight = this.getCellHeight();
     var height = Math.ceil(cellHeight / this.hour_divider);
-    var width;
     
     // Day
     $H(this.load_data).each(function(day){
@@ -225,18 +224,12 @@ WeekPlanning = Class.create({
       
       // Hour
       $H(day.value).each(function(hour){
-        width = 0;
         
         // Minute
         $H(hour.value).each(function(load){
           var container = $(this.container.id+"-"+day.key+"-"+hour.key+"-"+load.key);
-          var up = container.up();
-          width = width || parseInt((up.currentStyle && up.currentStyle.width) || up.getWidth()); // optim.
           var top = Math.ceil(cellHeight * (load.key / this.hour_divider) / 10);
-          
-          // optim.
           container.style.top    = top+"px";
-          container.style.width  = Math.round(width * (load.value / maximum_load))+"px";
           container.style.height = height+"px";
         }, this);
       }, this);

@@ -172,7 +172,7 @@ Main.add(function() {
                         {{else}}
                           {{assign var=level value=high}}
                         {{/if}}
-                        <div id="{{$planning->guid}}-{{$_day}}-{{$_hour}}-{{$_key}}" class="load {{$level}}"></div>
+                        <div id="{{$planning->guid}}-{{$_day}}-{{$_hour}}-{{$_key}}" class="load {{$level}}" style="width: {{$_load_ratio*100|round}}%;"></div>
                       {{/foreach}}
                     </div>
                   {{/if}}
