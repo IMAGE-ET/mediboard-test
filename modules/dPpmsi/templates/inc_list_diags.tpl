@@ -21,7 +21,7 @@
         <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
         <input type="hidden" name="_added_code_cim" value="{{$curr_code->code}}" />
         <button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
-          {{tr}}Ajouter{{/tr}}
+          {{tr}}Add{{/tr}}
         </button>
         </form>
       {{$curr_code->code}} : {{$curr_code->libelle}}

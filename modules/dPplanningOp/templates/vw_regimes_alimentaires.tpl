@@ -36,7 +36,7 @@ function syncParentRegime() {
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <button type="button" class="tick" onclick="window.close();">{{tr}}Valider{{/tr}}</button>
+      <button type="button" class="tick" onclick="window.close();">{{tr}}Validate{{/tr}}</button>
     </td>
   </tr>
 </table>

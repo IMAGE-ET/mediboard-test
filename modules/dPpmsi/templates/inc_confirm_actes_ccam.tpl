@@ -25,7 +25,7 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
       <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
-        {{tr}}Ajouter{{/tr}}
+        {{tr}}Add{{/tr}}
       </button>
       </form>
     </td>
