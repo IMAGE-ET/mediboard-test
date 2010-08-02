@@ -347,8 +347,8 @@ var Url = Class.create({
       
       // Bind the events
       trigger.observe("mousedown", showAutocomplete.bindAsEventListener(this));
-      input.observe("click", showAutocomplete.bindAsEventListener(this, true));
-      input.observe("focus", function(){
+      //input.observe("click", showAutocomplete.bindAsEventListener(this, true));
+      input.observe("click", function(){
         if (oOptions.valueElement && oOptions.valueElement.value == "")
           input.value = "";
         else try {

@@ -463,8 +463,8 @@ table.form th.category label.error {
 
 
 
-input[readonly],
-input[readonly]:focus {
+input[type=text][readonly],
+input[type=text][readonly]:focus {
   border: 1px dotted #333;
   background: none;
 }

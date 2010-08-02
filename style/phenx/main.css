@@ -143,9 +143,9 @@ a.button {
   color: #000;
 }
 
-input[readonly],
-input[readonly]:focus,
-input[readonly]:hover {
+input[type=text][readonly],
+input[type=text][readonly]:focus,
+input[type=text][readonly]:hover {
   border: 1px dotted #333;
   background: none;
 }

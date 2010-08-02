@@ -242,7 +242,7 @@ textarea:focus {
   background-color: #000;
 }
 
-input[readonly] {
+input[type=text][readonly] {
   border: 1px dotted #0f0;
 }
 
