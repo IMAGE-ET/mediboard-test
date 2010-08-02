@@ -264,7 +264,8 @@ if(!$_ald){
 	$prescription->fillTemplate($template_header);
 	$header = CPrescription::getPrescriptionTemplate("header", $praticien);
 	if($header->_id){
-	  $template_header->renderDocument($header->source);
+	  $header->loadContent();
+	  $template_header->renderDocument($header->_source);
 		$header_height = $header->height * 12;
 	}
 }
@@ -276,7 +277,8 @@ if(!$_ald){
 	$prescription->fillTemplate($template_footer);
 	$footer = CPrescription::getPrescriptionTemplate("footer", $praticien);
 	if($footer->_id){
-	  $template_footer->renderDocument($footer->source);
+	  $footer->loadContent();
+	  $template_footer->renderDocument($footer->_source);
 	  $footer_height = $footer->height * 12;
 	}
 }
