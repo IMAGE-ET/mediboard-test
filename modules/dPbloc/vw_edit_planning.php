@@ -81,6 +81,7 @@ $nbIntervNonPlacees = 0;
 // Détermination des bornes de chaque plage
 foreach($listPlages[$date] as &$plage){
   $plage->loadRefsFwd();
+	$plage->loadRefsNotes();
   $plage->_ref_chir->loadRefsFwd();
   $plage->getNbOperations();
   $nbIntervNonPlacees += $plage->_nb_operations - $plage->_nb_operations_placees;
