@@ -55,7 +55,7 @@
         <input type="text" size="10" name="_newCode" />
         
         <button class="tick" name="addCode" type="button" onclick="ActesCCAM.add('{{$subject->_id}}','{{$subject->_praticien_id}}')">
-          {{tr}}Ajouter{{/tr}}
+          {{tr}}Add{{/tr}}
         </button>        
       </td>
     </tr>

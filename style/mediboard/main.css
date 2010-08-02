@@ -552,8 +552,10 @@ table#weeklyPlanning th.today {
   padding: 1px;
   font-size: 8px;
   font-weight: bold;
-  border-bottom: 1px dotted rgba(255,255,255,0.4);
+  border-bottom: 1px dotted rgba(255,255,255,0.3);
   white-space: nowrap;
+	line-height: 90%;
+	text-align: right;
 }
 
 .planning .elt_selected {

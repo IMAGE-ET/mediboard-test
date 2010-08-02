@@ -39,7 +39,7 @@ onSubmitDiag = function(oForm) {
         }
       </script>
       <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
-      <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
+      <button class="tick notext" type="button">{{tr}}Validate{{/tr}}</button>
       </form>
     </td>
     
@@ -65,7 +65,7 @@ onSubmitDiag = function(oForm) {
         }
       </script>
       <input type="text" name="DR" value="{{$sejour->DR}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
-      <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
+      <button class="tick notext" type="button">{{tr}}Validate{{/tr}}</button>
       </form>
     </td>
   </tr>

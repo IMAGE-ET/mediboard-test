@@ -354,7 +354,7 @@ Main.add(function(){
   <tr>
     <td class="button" colspan="2">
       <button class="submit" type="submit">
-        {{tr}}Valider{{/tr}}
+        {{tr}}Validate{{/tr}}
       </button>
     </td>
   </tr>
