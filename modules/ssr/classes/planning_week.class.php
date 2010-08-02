@@ -184,7 +184,10 @@ class CPlanningWeek  {
     
     $div_size = 60 / $this->hour_divider;
     
-    for($i = 0; $i < $this->hour_divider * 24; $i++) {
+    $min = round(mbMinutesRelative($day, $start) / $div_size) - 1;
+    $max = round(mbMinutesRelative($day, $end)   / $div_size) + 1;
+
+    for($i = $min; $i <= $max; $i++) {
       $div_min = mbDateTime("+".($i*$div_size)." MINUTES", $day);
       $div_max = mbDateTime("+".(($i+1)*$div_size)." MINUTES", $day);
       
