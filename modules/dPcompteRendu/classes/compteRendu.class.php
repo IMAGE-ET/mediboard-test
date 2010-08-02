@@ -40,8 +40,10 @@ class CCompteRendu extends CDocumentItem {
   var $_owner            = null;
   var $_page_format      = null;
   var $_orientation      = null;
-  var $_source           = null;
   var $_list_classes     = null;
+
+  // Distant field
+  var $_source           = null;
   
   // Referenced objects
   var $_ref_chir         = null;
@@ -178,34 +180,24 @@ class CCompteRendu extends CDocumentItem {
 
   function updateDBFields() {
     parent::updateDBFields();
-    $this->completeField("etat_envoi", "private");
     
-    if(/*$this->fieldModified("source") &&*/ ($this->etat_envoi == "oui"))
-      $this->etat_envoi = "obsolete";
-    
+		// Valeir par défaut pour private
+    $this->completeField("private");
     if($this->private === "") {
       $this->private = 0;
     }
   }
   
 	function loadContent($store_source = true) {
-		$this->_ref_content = new CContentHTML();
-		$this->_ref_content->load($this->content_id);
-		if($store_source) {
+		$this->_ref_content = $this->loadFwdRef("content_id", true);
+		if ($store_source) {
 		  $this->_source = $this->_ref_content->content;
 		}
 	}
 	
   function loadComponents() {
-    if (!$this->_ref_header) {
-      $this->_ref_header = new CCompteRendu();
-      $this->_ref_header->load($this->header_id);
-    }
-    
-    if (!$this->_ref_footer) {
-      $this->_ref_footer = new CCompteRendu();
-      $this->_ref_footer->load($this->footer_id);
-    }
+    $this->_ref_header = $this->loadFwdRef("header_id", true);
+    $this->_ref_footer = $this->loadFwdRef("footer_id", true);
   }
 
   function loadFile() {
@@ -397,21 +389,26 @@ class CCompteRendu extends CDocumentItem {
     $this->completeField("content_id", "_source");
     $this->loadContent(false);
 		$source_modified = 
-		$this->_ref_content->content != $this->_source || 
-	  $this->fieldModified("margin_top") || 
-	  $this->fieldModified("margin_left") || 
-	  $this->fieldModified("margin_right") || 
-	  $this->fieldModified("margin_bottom") || 
-	  $this->fieldModified("page_height") || 
-	  $this->fieldModified("page_width") || 
-	  $this->fieldModified("header_id") || 
-	  $this->fieldModified("footer_id");
+			$this->_ref_content->content != $this->_source || 
+		  $this->fieldModified("margin_top") || 
+		  $this->fieldModified("margin_left") || 
+		  $this->fieldModified("margin_right") || 
+		  $this->fieldModified("margin_bottom") || 
+		  $this->fieldModified("page_height") || 
+		  $this->fieldModified("page_width") || 
+		  $this->fieldModified("header_id") || 
+		  $this->fieldModified("footer_id");
 	  
-    if($source_modified) {
-      $file = new CFile();
-      $files = $file->loadFilesForObject($this);
-      foreach($files as $_file) {
+    if ($source_modified) {
+    	// Empty PDF File
+      foreach($this->loadBackRefs("files") as $_file) {
         $_file->file_empty();
+      }
+			
+			// Send status to obsolete
+			$this->completeField("etat_envoi");
+      if ($source_modified && $this->etat_envoi == "oui") {
+        $this->etat_envoi = "obsolete";
       }
     }
 
@@ -423,9 +420,8 @@ class CCompteRendu extends CDocumentItem {
       $doc = new CCompteRendu;
       $where = 'object_class != "'. $this->object_class.
           '" and ( header_id ="' . $this->_id .
-          '" or footer_id ="' . $this->_id . '")';
-      $docs=$doc->loadList($where);
-      if(count($docs))
+          '" or footer_id ="' . $this->_id . '")';;
+      if ($doc->countList($where))
         return "Impossible d'enregistrer, car des documents sont rattachés à ce pied de page (ou entête) et ils ont un type différent";
     }
     // Si c'est un document dont le type de l'en-tête ou du pied de page ne correspond pas à son nouveau type
