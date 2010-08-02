@@ -275,6 +275,17 @@ abstract class CMbPath {
     }
     return $path;
   }
+	
+  /**
+   * Count the files under $path
+   * @param string The path to read
+   * @return string A number of the files
+   */
+  static function countFiles($path) {
+    return count(glob("$path/*")) - count(glob("$path/*", GLOB_ONLYDIR));
+  }
+
+	
 }
 
 ?>

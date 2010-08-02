@@ -17,7 +17,7 @@ $limit     = CValue::get("limit");
 
 $path = CAppUI::conf("dPfiles CFile upload_directory")."/$path";
 
-$count = CAppUI::countFiles($path);
+$count = CMbPath::countFiles($path);
 
 if (!$do_import) {
   CAppUI::stepAjax("$count fichiers '$type' à passer en échanges HPRIM");

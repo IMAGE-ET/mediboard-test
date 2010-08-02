@@ -227,15 +227,6 @@ class CAppUI {
     return $files;
   }
   
-  /**
-   * Utility function to count the files under $path
-   * @param string The path to read
-   * @return string A number of the files
-   */
-  static function countFiles($path) {
-    return count(glob("$path/*")) - count(glob("$path/*", GLOB_ONLYDIR));
-  }
-
 	/**
 	 * Utility function to check whether a file name is "safe"
 	 * Prevents from access to relative directories (eg ../../dealyfile.php)
