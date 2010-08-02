@@ -23,7 +23,7 @@
 	  <img src="images/icons/note_green.png" width="16" height="16" />
 	  {{/if}}
   {{elseif $mode == "edit"}}
-    <img src="images/icons/note_blue.png" width="16" height="16" />
+    <img src="images/icons/note_transparent.png" width="16" height="16" />
   {{/if}}
 </span>
 {{/if}}
