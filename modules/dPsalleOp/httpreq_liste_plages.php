@@ -51,6 +51,7 @@ if ($hide_finished == 1 && $salle->_ref_plages) {
 // Calcul du nombre d'actes codé dans les interventions
 if($salle->_ref_plages){
 	foreach($salle->_ref_plages as $_plageop){
+		$_plageop->loadRefsNotes();
 		foreach($_plageop->_ref_operations as $_operation){
 			$_operation->countActes();
 		}
