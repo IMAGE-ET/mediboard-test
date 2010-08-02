@@ -109,6 +109,7 @@ class CSalle extends CMbObject {
 		$this->_ref_plages = $plages->loadList($where, $order);
 		foreach ($this->_ref_plages as &$plage) {
 		  $plage->loadRefs(0);
+      $plage->loadRefsNotes();
 		  $plage->_unordered_operations = array();
 		  foreach ($plage->_ref_operations as &$operation) {
 		    $operation->loadRefChir();
