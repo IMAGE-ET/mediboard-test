@@ -7,38 +7,34 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
-
-
-<!-- Fermeture du tableau pour faire fonctionner le page-break -->
-    </td>
-  </tr>
-</table>
-
-{{assign var=nb_par_page value="25"}}	
 	
 <style type="text/css">
 {{include file=../../dPcompteRendu/css/print.css header=4 footer=3 nodebug=true}}
 
-table.print td {
+html {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.print td {
   font-size: 11px;
   font-family: Arial, Verdana, Geneva, Helvetica, sans-serif;
 }
 
-table.grid {
+.grid {
   border-collapse: collapse;
   border-spacing: 0;
   width: 99%;
   margin: auto;
 }
 
-table.grid td,
-table.grid th {
+.grid td,
+.grid th {
   border: 1px solid #ccc !important;
   padding: 2px;
   color: #000;
 }
 
-table.grid th {
+.grid th {
   width: 0.1%;
   font-size: 1.0em !important;
 }
@@ -50,33 +46,11 @@ table.grid th {
   {{assign var=label value="Bon de commande"}}
 {{/if}}
 
-<div class="header">
-  <h1>
-    <a href="#" onclick="window.print();">
-      {{$label}} - {{$order->_ref_group}}
-    </a>
-  </h1>
-</div>
-
-<div class="footer">
-  <span style="float: right; text-align: right;">
-    {{$smarty.now|date_format:$dPconfig.datetime}}
-    
-    {{if $pharmacien->_id}}
-      <br />
-      Pharmacien : <strong>{{$pharmacien}}</strong>
-      {{if $pharmacien->commentaires}}
-        - {{$pharmacien->commentaires}}
-      {{/if}}
-    {{/if}}
-  </span>
-  
-  {{$label}} n°<strong>{{$order->order_number}}</strong>
-  <br />
-  Responsable de la commande : <strong>{{$app->_ref_user}}</strong>
-</div>
-
-<table class="form" style="margin-top: 5em;">
+<table class="main">
+  <tr>
+    <td>
+<hr />
+<table class="form">
   <col style="width: 10%" />
   <col style="width: 40%" />
   <col style="width: 10%" />
@@ -155,64 +129,75 @@ table.grid th {
     </td>
   </tr>
 </table>
-
-<br />
-
-<table class="grid print bodyWithoutPageBreak">
-	<tr>
-    <th class="category">Code</th>
-    {{if $order->object_id}}
-      <th class="category">Lot</th>
-      <th class="category">Date pér.</th>
-    {{/if}}
-    <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
-      <th class="category">Unités</th>
-      <th class="category"></th>
-    {{else}}
-      <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
-    {{/if}}
-    {{if $order->object_id}}
-      <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
-    {{/if}}
-    <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
-    <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
+    </td>
   </tr>
-	
-	{{foreach from=$order->_ref_order_items item=curr_item name="foreach_products"}}
-	{{assign var=nb_pages value=$smarty.foreach.foreach_products.total/$nb_par_page}}
-	
-	{{if !$smarty.foreach.foreach_products.first && $smarty.foreach.foreach_products.index%$nb_par_page == 0}}
-</table>
-		{{assign var=iterations_restantes value=$smarty.foreach.foreach_products.total-$smarty.foreach.foreach_products.iteration}}
-<table class="grid print {{if $iterations_restantes >= $nb_par_page}}body{{else}}bodyWithoutPageBreak{{/if}}">
+  <thead>
+    <tr>
+      <td>
+        <h2>
+          <a href="#" onclick="window.print();">
+            {{$label}} - {{$order->_ref_group}}
+          </a>
+        </h2>
+      </td>
+    </tr>
+  </thead>
+  
+  <tfoot>
+    <tr>
+      <td>
+        <span style="float: right; text-align: right;">
+          {{$smarty.now|date_format:$dPconfig.datetime}}
+          
+          {{if $pharmacien->_id}}
+            <br />
+            Pharmacien : <strong>{{$pharmacien}}</strong>
+            {{if $pharmacien->commentaires}}
+              - {{$pharmacien->commentaires}}
+            {{/if}}
+          {{/if}}
+        </span>
+        
+        {{$label}} n°<strong>{{$order->order_number}}</strong>
+        <br />
+        Responsable de la commande : <strong>{{$app->_ref_user}}</strong>
+      </td>
+    </tr>
+  </tfoot>
+  
   <tr>
-    <th class="category">Code</th>
-    {{if $order->object_id}}
-      <th class="category">Lot</th>
-      <th class="category">Date pér.</th>
-    {{/if}}
-    <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
-    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
-      <th class="category">Unités</th>
-      <th class="category"></th>
-    {{else}}
-      <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
-    {{/if}}
-    {{if $order->object_id}}
-      <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
-    {{/if}}
-    <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
-    <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
-  </tr>
-  {{/if}}
+    <td>
+
+<table class="grid print">
+  <thead>
+  	<tr>
+      <th class="category">Code</th>
+      {{if $order->object_id}}
+        <th class="category">Lot</th>
+        <th class="category">Date pér.</th>
+      {{/if}}
+      <th class="category" style="width: auto;">{{mb_title class=CProduct field=name}}</th>
+      {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+        <th class="category">Unités</th>
+        <th class="category"></th>
+      {{else}}
+        <th class="category">{{mb_title class=CProductOrderItem field=quantity}}</th>
+      {{/if}}
+      {{if $order->object_id}}
+        <th class="category">{{mb_title class=CProductOrderItem field=renewal}}</th>
+      {{/if}}
+      <th class="category">{{mb_title class=CProductOrderItem field=unit_price}}</th>
+      <th class="category">{{mb_title class=CProductOrderItem field=_price}}</th>
+    </tr>
+  </thead>
 	
+	{{foreach from=$order->_ref_order_items item=curr_item}}
 	<tr>
     <td style="text-align: right;">
-      {{if $order->object_id}}
-        {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
-      {{else}}
+      {{if $curr_item->_ref_reference->supplier_code}}
         {{mb_value object=$curr_item->_ref_reference field=supplier_code}}
+      {{else}}
+        {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
       {{/if}}
     </td>
     
@@ -227,7 +212,7 @@ table.grid th {
     {{/if}}
     
     <td>
-      {{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}
+      <strong>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</strong>
       
       {{if $curr_item->septic}}
         (Déstérilisé)
@@ -255,9 +240,9 @@ table.grid th {
     </td>
     <td style="white-space: nowrap; text-align: right;">{{mb_value object=$curr_item field=_price}}</td>
   </tr>
-	
-	{{if $smarty.foreach.foreach_products.last}}
-	<tr>
+  {{/foreach}}
+  
+  <tr>
     <td colspan="10" style="padding: 0.5em; font-size: 1.1em;">
       <span style="float: right;">
         <strong>{{tr}}Total{{/tr}} : {{mb_value object=$order field=_total}}</strong><br />
@@ -265,11 +250,7 @@ table.grid th {
       </span>
     </td>
   </tr>
-	{{/if}}
-  {{/foreach}}
+  
 </table>
-
-<!-- re-ouverture du tableau -->
-<table>
-  <tr>
-    <td>
+</td>
+</table>

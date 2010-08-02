@@ -10,9 +10,9 @@
  
 CCanDo::checkRead();
 
-$type = CValue::getOrSession('type');
-$keywords = CValue::getOrSession('keywords');
-$category_id = CValue::getOrSession('category_id');
+$type = CValue::get('type');
+$keywords = CValue::get('keywords');
+$category_id = CValue::get('category_id');
 
 $where = array();
 

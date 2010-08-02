@@ -23,7 +23,7 @@ PlanningEvent.onDblClic = function(event) {
   equipement_id ? PlanningEquipement.show(equipement_id, sejour_id) : PlanningEquipement.hide();
   
   $('planning-technicien').select('.elt_selected').invoke('removeClassName', 'elt_selected');
-  oDiv.addClassName('elt_selected');
+  event.addClassName('elt_selected');
 }
 	
 updatePlanningKineBoard = function(){
