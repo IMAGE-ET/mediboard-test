@@ -33,6 +33,7 @@ class CCompteRendu extends CDocumentItem {
   var $page_height       = null;
   var $page_width        = null;
   var $private           = null;
+//  var $fast_edit         = null;
 
   /// Form fields
   var $_is_document      = false;
@@ -106,6 +107,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
     $specs["private"]          = "bool notNull default|0";
+//    $specs["fast_edit"]        = "bool notNull default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));
@@ -132,20 +134,13 @@ class CCompteRendu extends CDocumentItem {
       $where["object_id"] = "IS NOT NULL";
     }
     
-    $listDocs = parent::loadList($where, $order, $limit, $group, $leftjoin);
+    $docs = parent::loadList($where, $order, $limit, $group, $leftjoin);
     $current_user = CAppUI::$user;
     $current_user->loadRefFunction();
 
-    foreach($listDocs as $key=>$_doc) {
-      $author = new CMediusers();
-      $_doc->loadLogs();
-      $author->load($_doc->_ref_first_log->_ref_user->_id);
-      $author->loadRefFunction();
-      if(!$listFile[$key]->_canRead ||
-         ($listFile[$key]->private == 1 && 
-         !$can->admin &&
-          $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-        unset($listDocs[$key]);
+    foreach($docs as $_doc) {
+      if(!$docs[$key]->canRead()){
+        unset($docs[$_doc->_id]);
       }
     }
     return parent::loadList($where, $order, $limit, $group, $leftjoin);
@@ -181,7 +176,7 @@ class CCompteRendu extends CDocumentItem {
   function updateDBFields() {
     parent::updateDBFields();
     
-		// Valeir par défaut pour private
+		// Valeur par défaut pour private
     $this->completeField("private");
     if($this->private === "") {
       $this->private = 0;
@@ -570,6 +565,86 @@ class CCompteRendu extends CDocumentItem {
     $smarty->assign("style"  , $style);
     $smarty->assign("content", $content);
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
+  }
+  
+  function generateDocFromModel() {
+    $source = $this->_source;
+    
+    if ($this->header_id || $this->footer_id) {
+      $this->loadComponents();
+      
+      $header = $this->_ref_header;
+      $footer = $this->_ref_footer;
+    }
+    
+    if (isset($header) || isset($footer)) {
+      $header->height = isset($header->height) ? $header->height : 20;
+      $footer->height = isset($footer->height) ? $footer->height : 20;
+    
+      $style = "
+        <style type='text/css'>
+        #header {
+          height: {$header->height}px;
+          /*DOMPDF top: 0;*/
+        }
+  
+        #footer {
+          height: {$footer->height}px;
+          /*DOMPDF bottom: 0;*/
+        }";
+      
+      if ($header->_id) {
+        $header->loadContent();
+        $header->_source = "<div id='header'>$header->_source</div>";
+        
+        if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {      
+          $header->height += 20;
+        }
+      }
+    
+      if ($footer->_id) {
+        $footer->loadContent();
+        $footer->_source = "<div id='footer'>$footer->_source</div>";
+  
+        if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {
+          $footer->height += 20;
+        }
+      }
+    
+      $style.= "
+        @media print { 
+          #body { 
+            padding-top: {$header->height}px;
+          }
+          hr.pagebreak {
+            padding-top: {$header->height}px;
+          }
+        }";
+    
+      $style .="
+        @media dompdf {
+          #body {
+            padding-bottom: {$footer->height}px;
+          }
+          hr.pagebreak {
+            padding-top: 0px;
+          }
+        }</style>";
+      
+      $source = "<div id='body'>$source</div>";
+      $source = $style . $header->_source . $footer->_source . $source;
+    }
+    return $source;
+  }
+  
+  function replaceFreeTextFields($source, $textes_libres) {
+    $patterns = array();
+    
+    foreach ($textes_libres as $key=>$_texte) {
+      $patterns[] = "/\[\[Texte libre - $key\]\]/i";
+    }
+  
+    return preg_replace($patterns, $textes_libres, $source, 1);
   }
 }
 

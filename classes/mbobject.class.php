@@ -233,27 +233,9 @@ class CMbObject {
    */
   function loadRefsFiles() {
   	if (!$this->_id) return;
-  	global $can;
     $file = new CFile();
     if ($file->_ref_module) {
-      $current_user = CAppUI::$user;
-      $current_user->loadRefFunction();
       $this->_ref_files = CFile::loadFilesForObject($this);
-
-      foreach($this->_ref_files as $keyFile=>$_file) {
-        $_file->loadlogs();
-        if (isset($_doc->_ref_first_log->_id)) {
-          $author = new CMediusers();
-          $author->load($this->_ref_files[$keyFile]->_ref_first_log->_ref_user->_id);
-          $author->loadRefFunction();
-          if(!$this->_ref_files[$keyFile]->_canRead ||
-           ($this->_ref_files[$keyFile]->private == 1 && 
-           !$can->admin &&
-           $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-             unset($this->_ref_files[$keyFile]);
-           }
-        }
-      }
       return count($this->_ref_files);
     }
   }
@@ -264,33 +246,18 @@ class CMbObject {
    */
   function loadRefsDocs() {
   	if (!$this->_id) return;
-  	global $can;
     $document = new CCompteRendu();
 
     if ($document->_ref_module) {
-      $current_user = CAppUI::$user;
-      $current_user->loadRefFunction();
-
       $document->object_class = $this->_class_name;
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
 
-      foreach($this->_ref_documents as $keyDoc=>$_doc) {
-        
-        $author = new CMediusers();
-        $_doc->loadlogs();
-        if (isset($_doc->_ref_first_log->_id)) {
-          $author->load($this->_ref_documents[$keyDoc]->_ref_first_log->_ref_user->_id);
-          $author->loadRefFunction();
-        
-          if(($this->_ref_documents[$keyDoc]->private == 1 && 
-           !$can->admin &&
-           $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-             unset($this->_ref_documents[$keyDoc]);
-          }
+      foreach($this->_ref_documents as $_doc) {
+        if (!$_doc->canRead()){
+           unset($this->_ref_documents[$_doc->_id]);
         }
       }
-      
       return count($this->_ref_documents);
     }
   }

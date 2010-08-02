@@ -23,7 +23,8 @@ class CDocumentItem extends CMbMetaObject {
 
   // Distant field
   var $_send_problem = null;
-  
+  var $_ref_author = null;
+
   // Behavior Field
   var $_send = null; 
   
@@ -132,6 +133,27 @@ class CDocumentItem extends CMbMetaObject {
   
   function loadRefCategory() {
     $this->_ref_category = $this->loadFwdRef("file_category_id", true);
+  }
+  
+  function loadRefAuthor() {
+    if (!$this->_id) return;
+    $this->loadFirstLog();
+    if ($this->_ref_first_log->_id) {
+      $this->_ref_first_log->loadRefsFwd();
+      $this->_ref_first_log->_ref_user->loadRefMediuser();
+      $this->_ref_author = $this->_ref_first_log->_ref_user->_ref_mediuser;
+    }
+  }
+  
+  function canRead() {
+    
+    global $can;
+    
+    if (!$this->private) return parent::canRead();
+    $this->loadRefAuthor();
+    
+    if (!$this->_ref_author->_id) return parent::canRead();
+    return $this->_canRead = ($this->_ref_author->function_id == CAppUI::$user->function_id || $can->admin) && $this->getPerm(PERM_READ);
   }
 }
 

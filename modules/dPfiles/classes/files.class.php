@@ -142,6 +142,11 @@ class CFile extends CDocumentItem {
   }
   
   function delete() {
+    $file = new CFile;
+    $files = $file->loadFilesForObject($this);
+    foreach($files as $_file) {
+      $_file->delete();
+    }
     if ($msg = parent::delete()) {
       return $msg;
     }
@@ -188,26 +193,16 @@ class CFile extends CDocumentItem {
   static function loadFilesForObject(CMbObject $object){
     global $can;
 
-    $listFile = new CFile();
-    $listFile->setObject($object);
-    $listFile = $listFile->loadMatchingList();
-    $current_user = CAppUI::$user;
-    $current_user->loadRefFunction();
+    $file = new CFile();
+    $file->setObject($object);
+    $files = $file->loadMatchingList();
     
-    foreach($listFile as $keyFile => $currFile) {
-      $author = new CMediusers();
-      $listFile[$keyFile]->canRead();
-      $listFile[$keyFile]->loadLogs();
-      $author->load($listFile[$keyFile]->_ref_first_log->_ref_user->_id);
-      $author->loadRefFunction();
-      if(!$listFile[$keyFile]->_canRead ||
-         ($listFile[$keyFile]->private == 1 && 
-         !$can->admin &&
-         $current_user->_ref_function->function_id != $author->_ref_function->function_id)){
-        unset($listFile[$keyFile]);
+    foreach($files as $_file) {
+      if (!$_file->canRead()){
+        unset($files[$_file->_id]);
       }
     }
-    return $listFile;
+    return $files;
   }
   
   static function loadNbFilesByCategory(CMbObject $object){
@@ -247,6 +242,8 @@ class CFile extends CDocumentItem {
       $string_recherche = "/Count";
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
+
+      //return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
       
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
@@ -341,6 +338,35 @@ class CFile extends CDocumentItem {
   function file_empty() {
     file_put_contents($this->_file_path, '');
   }
+  
+  function convertToPDF($ext) {
+    $file = new CFile();
+    $file->setObject($this);
+    $file->private = $this->private;
+    $file->file_name  = $this->file_name . ".pdf";
+    $file->file_type  = "application/pdf";
+    $file->file_owner = CAppUI::$user->_id;
+    $file->fillFields();
+    $file->updateFormFields();
+    $file->forceDir();
+    $save_name = $this->_file_path;
+    rename($save_name, $save_name . $ext);
+    $file->store();
+
+    // Vérifier si openoffice est lancé
+    exec("sh shell/ooo_state.sh",$res);
+    
+    if ($res[0] == 0 ){
+      exec(CAppUI::conf("dPfiles CFile path_oxoffice") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
+      usleep(600000);
+    }
+
+    $res = exec("python ./modules/dPfiles/script/doctopdf.py {$this->_file_path}" . $ext ." {$file->_file_path}", $ret);
+    
+    rename($save_name . $ext, $save_name);
+    return $res;
+  }
+  
 }
 
 // We have to replace the backslashes with slashes because of PHPthumb on Windows
