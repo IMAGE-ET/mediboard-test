@@ -363,6 +363,7 @@ class CCompteRendu extends CDocumentItem {
   }
   
   function loadView() {
+  	parent::loadView();
     $this->loadFile();
   }
     

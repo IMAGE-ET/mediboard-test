@@ -59,6 +59,7 @@ if(!$plageSel->plageconsult_id) {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
 $plageSel->loadRefsFwd(1);
+$plageSel->loadRefsNotes();
 $plageSel->loadRefsBack();
 
 if ($plageSel->_affected) {
