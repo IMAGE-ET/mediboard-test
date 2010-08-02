@@ -313,9 +313,9 @@ Main.add(function(){
 {{else}}
 
 
-<ul id="tabs-activites" class="control_tabs">
+<ul id="tabs-activites" class="control_tabs small">
   <li>
-    <a href="#add_ssr">Boîte à activités</a>
+  	<a href="#add_ssr">Boîte à activités</a>
   </li>
   <li>
     <a href="#outils">Outils</a>
@@ -330,12 +330,22 @@ Main.add(function(){
     <input type="hidden" name="dosql" value="do_bilan_ssr_aed" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="bilan_id" value="{{$bilan->_id}}">
-	  <table class="form">
-	  	<tr>
-			  <th style="width: 94px">{{mb_label object=$bilan field=brancardage}}</th>
-			  <td>{{mb_field object=$bilan field=brancardage onchange="this.form.onsubmit();"}}</td>
-	    </tr> 
-	  </table>
+    <table class="form">
+      <tr>
+        <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
+        <td>
+        	<div style="float: right;">
+	          {{mb_field object=$bilan field=brancardage onchange="this.form.onsubmit();" typeEnum=checkbox}}
+	          {{mb_label object=$bilan field=brancardage}} 
+        	</div>
+        	{{mb_value object=$bilan field=entree}}
+				</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$bilan field=technicien_id}}</th>
+        <td><strong>{{mb_value object=$bilan field=technicien_id}}</strong></td>
+      </tr>
+    </table>
 	</form>
 	
 	<form name="editEvenementSSR" method="post" action="?" onsubmit="return submitSSR();">
@@ -351,16 +361,8 @@ Main.add(function(){
 	  <input type="hidden" name="_category_id" value="" />
     
 	  <table class="form">
-	  	<tr>
-	  	  <th style="width: 94px">{{mb_label object=$bilan field=entree}}</th>
-				<td>{{mb_value object=$bilan field=entree}}</td>
-			</tr>
 	    <tr>
-	      <th>{{mb_label object=$bilan field=technicien_id}}</th>
-	      <td><strong>{{mb_value object=$bilan field=technicien_id}}</strong></td>
-	    </tr>
-	    <tr>
-	      <th>Catégories</th>
+	      <th style="width: 94px">Catégories</th>
 	      <td class="text">
 	        {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
