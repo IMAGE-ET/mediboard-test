@@ -33,11 +33,12 @@ foreach($nbDoc as $compte_rendu_id => $nb_print){
   }
 }
 
-$source = "";
+$_source = "";
 foreach($documents as $doc) {
+	$doc->loadContent();
   // Suppression des headers et footers en trop (tous sauf le premier)
   $xml = new DOMDocument;
-  $_source = utf8_encode("<div>$doc->source</div>");
+  $_source = utf8_encode("<div>$doc->_source->content</div>");
   $_source = preg_replace("/&\w+;/i", "", $_source);
   
   @$xml->loadXML($_source);
@@ -61,7 +62,7 @@ foreach($documents as $doc) {
     $footerFound = true;
   }
     
-  $source .= $xml->saveHTML() . '<br style="page-break-after: always;" />';
+  $_source .= $xml->saveHTML() . '<br style="page-break-after: always;" />';
 }
 
 // Initialisation de FCKEditor
@@ -76,5 +77,5 @@ if (count($documents) == 0) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("source", $source);
+$smarty->assign("_source", $_source);
 $smarty->display("../../dPcompteRendu/templates/print_cr.tpl");
