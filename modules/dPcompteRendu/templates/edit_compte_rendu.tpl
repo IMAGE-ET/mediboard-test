@@ -90,7 +90,7 @@ function submitCompteRendu(){
     {{/if}}
     {{if $compte_rendu->_id && !$pdf_thumbnails}}
       try {
-        setTimeout("window.opener.Document.refreshList(Thumb.object_class,Thumb.object_id)",100);
+        window.opener.Document.refreshList('{{$compte_rendu->object_class}}', {{$compte_rendu->object_id}});
        }
       catch (e) {}
     {{/if}}
