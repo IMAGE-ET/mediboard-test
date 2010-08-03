@@ -107,24 +107,22 @@ $planning->showNow();
 
 // Alertes séjour
 $total_evenement = array();
-foreach($planning->days as $_day => $day) {
-	if ($planning->isDayActive($_day)) {
-	  $total_evenement[$_day]["duree"] = 0;
-	  $total_evenement[$_day]["nb"] = 0;
-	}
-}
-
 foreach($evenements as $_evenement){
-  $total_evenement[mbDate($_evenement->debut)]["duree"] += $_evenement->duree;
-  $total_evenement[mbDate($_evenement->debut)]["nb"]++;
+	$_date = mbDate($_evenement->debut);
+	if (!isset($total_evenement[$_date])) {
+    $total_evenement[$_date]["duree"] = 0;
+    $total_evenement[$_date]["nb"] = 0;
+	}
+  $total_evenement[$_date]["duree"] += $_evenement->duree;
+  $total_evenement[$_date]["nb"]++;
 }
 
-foreach ($total_evenement as $_date => $_total_evt){
+foreach ($total_evenement as $_date => $_total){
 	$alerts = array();
-	if ($_total_evt["duree"] < 120) {
+	if ($_total["duree"] < 120) {
 		$alerts[] = "< 2h";
 	}
-	if($_total_evt["nb"] < 1){
+	if($_total["nb"] < 1){
     $alerts[] = "0 indiv. ";
   }
 	if($count = count($alerts)) {
