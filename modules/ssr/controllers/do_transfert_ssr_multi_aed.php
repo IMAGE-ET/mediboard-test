@@ -16,8 +16,8 @@ $replacer_id = CValue::post("replacer_id");
 $conge = new CPlageConge();
 $conge->load($conge_id);
 
-$date_debut = $_plage_conge->date_debut;
-$date_fin = mbDate("+1 DAY", $_plage_conge->date_fin);
+$date_debut = $conge->date_debut;
+$date_fin = mbDate("+1 DAY", $conge->date_fin);
 
 $evenement = new CEvenementSSR();
 $where = array();

@@ -7,8 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 $ds = CSQLDataSource::get("std");
 
