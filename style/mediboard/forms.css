@@ -48,7 +48,6 @@ textarea {
 input[type=text], 
 input[type=password], 
 input[type=file], 
-input[type=""], 
 select, 
 textarea {
   border: 1px #666 solid;
@@ -58,7 +57,6 @@ textarea {
 input[type=text]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
-input[type=""]:focus, 
 select:focus, 
 textarea:focus {
   background-color: #fff;

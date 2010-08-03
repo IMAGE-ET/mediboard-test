@@ -9,24 +9,24 @@
 *}}
 
 <script type="text/javascript">
-function changePage(start) {
+changePageEndowment = function(start) {
   $V(getForm("filter-endowments").start, start);
 }
 
-function changeLetter(letter) {
+changeLetterEndowment = function(letter) {
   var form = getForm("filter-endowments");
   $V(form.start, 0, false);
   $V(form.letter, letter);
 }
 
-function filterEndowments(form) {
+filterEndowments = function(form) {
   var url = new Url("dPstock", "httpreq_vw_endowments_list");
   url.addFormData(form);
   url.requestUpdate("list-endowments");
   return false;
 }
 
-function loadEndowment(endowment_id, endowment_item) {
+loadEndowment = function(endowment_id, endowment_item) {
   if (endowment_item) {
     endowment_id = endowment_item.endowment_id;
   }
@@ -60,7 +60,7 @@ Main.add(function(){
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
         
-        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetterEndowment}}
       </form>
 
       <div id="list-endowments"></div>

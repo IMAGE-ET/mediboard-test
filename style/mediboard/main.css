@@ -935,7 +935,6 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   min-width: 4em;
 }
 
-
 .legend .value {
    font-weight: bold;
    border: none;
@@ -963,34 +962,49 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
   height: 100%;
 }
 
+.bargraph .value {
+  border-color: #999;
+}
+
 .bargraph .threshold div {
   float:left; 
 }
 
 .critical {
   background: #F00;
-  border-color: #F00;
 }
 
 .min {
   background: #FC3;
-  border-color: #FC3;
 }
 
 .optimum {
   background: #1D6;
-  border-color: #1D6;
 }
 
 .max {
   background: #06F;
+}
+
+.bargraph.advanced > .value.critical {
+  border-color: #F00;
+}
+
+.bargraph.advanced > .value.min {
+  border-color: #FC3;
+}
+
+.bargraph.advanced > .value.optimum {
+  border-color: #1D6;
+}
+
+.bargraph.advanced > .value.max {
   border-color: #06F;
 }
 
 .bargraph > .value {
   height: 60%;
-  border-width: 1px;
-  border-style: solid;
+  border: 1px solid #999;
   background: none;
 }
 

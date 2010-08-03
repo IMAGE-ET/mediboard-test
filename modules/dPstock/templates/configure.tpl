@@ -21,6 +21,9 @@
     {{mb_include module=system template=inc_config_bool var=use_mdq}}
     {{mb_include module=system template=inc_config_bool var=show_cond_price}}
     
+    {{assign var="class" value="CProductStock"}}
+    {{mb_include module=system template=inc_config_bool var=advanced_bargraph}}
+    
     {{assign var="class" value="CProductStockGroup"}}
     {{mb_include module=system template=inc_config_bool var=unit_order}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}

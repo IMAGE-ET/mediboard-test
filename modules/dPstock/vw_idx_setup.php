@@ -7,15 +7,20 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
-
+ 
 CCanDo::checkEdit();
 
-$stock_location = new CProductStockLocation;
-$list_locations = $stock_location->loadList(null, 'position,name');
+$tabs = array(
+  'vw_idx_societe', 
+  'vw_idx_stock_location',
+  'vw_idx_selection', 
+  'vw_idx_endowment',
+  'vw_idx_category', 
+);
 
-// Création du template
+// Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign('list_locations', $list_locations);
-$smarty->display('vw_idx_stock_location.tpl');
+$smarty->assign("tabs", $tabs);
+$smarty->display('vw_idx_setup.tpl');
 
 ?>

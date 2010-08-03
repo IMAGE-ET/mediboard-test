@@ -14,6 +14,9 @@ $dPconfig["dPstock"] = array (
     "order_number_format" => "%y%m%d%H%M%id",
     "order_number_contextual" => "0",
   ),
+  "CProductStock" => array (
+    "advanced_bargraph" => '0',
+  ),
   "CProductStockGroup" => array (
     "infinite_quantity" => '0',
     "unit_order" => '0',

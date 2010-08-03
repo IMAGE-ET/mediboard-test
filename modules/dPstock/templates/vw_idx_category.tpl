@@ -11,7 +11,6 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}CProductCategory-title-create{{/tr}}</a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CProductCategory{{/tr}}</th>
@@ -30,9 +29,13 @@
       </table>  
     </td>
     <td class="halfPane">
+      <a class="button new" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">
+        {{tr}}CProductCategory-title-create{{/tr}}
+      </a>
+
       <form name="edit_category" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_category_aed" />
-	  <input type="hidden" name="category_id" value="{{$category->_id}}" />
+      <input type="hidden" name="category_id" value="{{$category->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

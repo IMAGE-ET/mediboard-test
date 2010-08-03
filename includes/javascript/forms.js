@@ -245,6 +245,12 @@ function prepareForm(oForm) {
         oElement.id += "_" + oElement.value;
       }
     }
+    
+    // If not type is defined, default to "text"
+    // Accessing oElement.type directly returns the calculated type
+    if (oElement.tagName === "INPUT" && !oElement.getAttribute("type")) {
+      oElement.type = "text";
+    }
 
     // If the element has a mask and other properties, they may conflict
     if (Preferences.INFOSYSTEM && props.mask) {

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include module=system template=inc_pagination change_page="changePage" 
+{{mb_include module=system template=inc_pagination change_page="changePageEndowment" 
     total=$total current=$start step=20}}
 
 <table class="tbl">

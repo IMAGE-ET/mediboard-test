@@ -103,18 +103,16 @@ form hr {
 input[type=text], 
 input[type=password], 
 input[type=file], 
-input[type=""],
 select, 
 textarea,
 .textarea-container {
-  background: #ffffff;
+  background-color: #ffffff;
   border-color: #909090;
 }
 
 input[type=text]:hover, 
 input[type=password]:hover, 
 input[type=file]:hover, 
-input[type=""]:hover, 
 select:hover, 
 textarea:hover,
 .textarea-container:hover {
@@ -124,7 +122,6 @@ textarea:hover,
 input[type=text]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
-input[type=""]:focus, 
 select:focus, 
 textarea:focus,
 .textarea-container:focus {

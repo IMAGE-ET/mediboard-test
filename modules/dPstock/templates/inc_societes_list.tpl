@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include module=system template=inc_pagination change_page="changePage" total=$list_count current=$start step=30}}
+{{mb_include module=system template=inc_pagination change_page="changePageSociete" 
+             total=$list_count current=$start step=30}}
 
 <style type="text/css">
 .societe-type {
@@ -38,7 +39,7 @@
   {{foreach from=$list item=curr}}
   <tr>
     <td>
-      <a href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id={{$curr->_id}}">
+      <a href="#1" onclick="editSociete({{$curr->_id}})">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr->_guid}}')">
           {{$curr}}
         </span>

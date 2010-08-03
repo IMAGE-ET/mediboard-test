@@ -9,24 +9,24 @@
 *}}
 
 <script type="text/javascript">
-function changePage(start) {
+changePageSelection = function (start) {
   $V(getForm("filter-selections").start, start);
 }
 
-function changeLetter(letter) {
+changeLetterSelection = function (letter) {
   var form = getForm("filter-selections");
   $V(form.start, 0, false);
   $V(form.letter, letter);
 }
 
-function filterSelections(form) {
+filterSelections = function (form) {
   var url = new Url("dPstock", "httpreq_vw_selections_list");
   url.addFormData(form);
   url.requestUpdate("list-selections");
   return false;
 }
 
-function loadSelection(selection_id, selection_item) {
+loadSelection = function (selection_id, selection_item) {
   if (selection_item) {
     selection_id = selection_item.selection_id;
   }
@@ -40,7 +40,7 @@ function loadSelection(selection_id, selection_item) {
   return false;
 }
 
-function deleteSelectionItem(item_id) {
+deleteSelectionItem = function (item_id) {
   var form = getForm("edit_selection_item");
   var selection_id = $V(form.selection_id);
   $V(form.del, 1);
@@ -70,7 +70,7 @@ Main.add(function(){
         <button type="submit" class="search notext">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="$(this.form).clear(false); this.form.onsubmit();"></button>
         
-        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetter}}
+        {{mb_include module=system template=inc_pagination_alpha current=$letter change_page=changeLetterSelection}}
       </form>
 
       <div id="list-selections"></div>

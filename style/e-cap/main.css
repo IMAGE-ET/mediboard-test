@@ -273,18 +273,16 @@ table.tabmenu td.selected.right {
 input[type=text], 
 input[type=password], 
 input[type=file], 
-input[type=""], 
 select, 
 textarea {
   color: #082F54;
-  background: #fff;
+  background-color: #fff;
   border: 1px #a5acb2 solid;
 }
 
 input[type=text]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
-input[type=""]:focus, 
 select:focus, 
 textarea:focus {
   border-style: inset;

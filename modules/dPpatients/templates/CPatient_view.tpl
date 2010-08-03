@@ -53,6 +53,11 @@
         Dossier Complet
       </button>
       
+      <!-- Dossier résumé -->
+      <button class="search" onclick="new Url('dPcabinet', 'vw_resume').addParam('patient_id', '{{$patient->_id}}').popup(800, 500, '{{tr}}Summary{{/tr}}');">
+        {{tr}}Summary{{/tr}}
+      </button>
+      
       <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
         {{tr}}Print{{/tr}}
       </button>
