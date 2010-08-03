@@ -92,6 +92,7 @@ class CPlageConge extends CMbObject {
 	
 	function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id");
+		$this->_ref_user->loadRefFunction();
 	}
 
   function loadRefsFwd() {
