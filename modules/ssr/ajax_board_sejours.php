@@ -119,6 +119,7 @@ $sejours["plannable"] = $sejour->loadList($where, $order, null, null, $join);
 
 // Chargement des détails affichés de chaque séjour
 foreach ($sejours as &$_sejours) {
+	CMbObject::massLoadFwdRef($_sejours, "patient_id");
   foreach ($_sejours as $_sejour) {
     $_sejour->countEvenementsSSRWeek($kine_id, $planning->date_min, $planning->date_max);
 		if ($hide_noevents && !$_sejour->_count_evenements_ssr_week) {
