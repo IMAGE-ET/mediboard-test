@@ -14,28 +14,36 @@
 
   <table class="form" style="table-layout: fixed;">
     {{assign var="class" value="CProductOrder"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_str var=order_number_format cssClass="code product_order"}}
     {{mb_include module=system template=inc_config_bool var=order_number_contextual}}
     
     {{assign var="class" value="CProductReference"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=use_mdq}}
     {{mb_include module=system template=inc_config_bool var=show_cond_price}}
     
     {{assign var="class" value="CProductStock"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=advanced_bargraph}}
+    {{mb_include module=system template=inc_config_bool var=hide_bargraph}}
     
     {{assign var="class" value="CProductStockGroup"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=unit_order}}
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
     {{mb_include module=system template=inc_config_bool var=negative_allowed}}
 
     {{assign var="class" value="CProductStockService"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=infinite_quantity}}
 
     {{assign var="class" value="CProductDelivery"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=auto_dispensation}}
     
     {{assign var="class" value="CProduct"}}
+    <tr><th class="category" colspan="2">{{tr}}{{$class}}{{/tr}}</th></tr>
     {{mb_include module=system template=inc_config_bool var=use_renewable}}
     
     <tr>
@@ -96,23 +104,3 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
 </div>
-
-<script type="text/javascript">
-  launchConvert = function() {
-    var url = new Url();
-    url.addParam("m", "dPstock");
-    url.addParam("dosql", "do_convert_product");
-    url.requestUpdate("convert-log", {method: "post"});
-  }
-</script>
-
-<table class="form" style="table-layout: fixed;">
-  <tr>
-    <td>
-      <button type="button" class="tick" onclick="launchConvert();">Lancer conversion produits Physiol</button>
-    </td>
-    <td>
-      <div id="convert-log"></div>
-    </td>
-  </tr>
-</table>

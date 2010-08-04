@@ -93,8 +93,9 @@ class CDMI extends CProduitPrescriptible {
             LEFT JOIN product_order_item ON (product_order_item.order_item_id = product_order_item_reception.order_item_id)
             LEFT JOIN product_reference ON (product_reference.reference_id = product_order_item.reference_id)
             LEFT JOIN product ON (product.product_id = product_reference.product_id)
-            WHERE product_order_item_reception.order_item_reception_id = 151
+            WHERE product_order_item_reception.order_item_reception_id = '$lot->_id'
             ";
+    mbTrace($this->_spec->ds->loadHashAssoc($sql));
   }
   
   function loadRefProduct(){

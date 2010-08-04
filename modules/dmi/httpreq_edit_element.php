@@ -24,6 +24,11 @@ foreach ($element->_ref_product->_ref_references as $_ref) {
 }
 $element->_ref_product->loadRefsLots();
 
+/*foreach($element->_ref_product->_ref_lots as $_lot) {
+  $element->getUsedQuantity($_lot);
+  break;
+}*/
+
 $generate_code = CValue::get("generate_code", false);
 if($generate_code){
 	$element->category_dm_id = CValue::get("category_dm_id");

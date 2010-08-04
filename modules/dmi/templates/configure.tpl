@@ -27,6 +27,13 @@ function importData(object_class){
   url.pop(600, 400, "Import de "+$T(object_class));
 }
 
+launchConvert = function() {
+  var url = new Url();
+  url.addParam("m", "dPstock");
+  url.addParam("dosql", "do_convert_product");
+  url.requestUpdate("convert-log", {method: "post"});
+}
+
 Main.add(function(){
   new Control.Tabs("dmi-tabs");
 });
@@ -84,6 +91,18 @@ Main.add(function(){
         </tr>
     	</tbody>
     {{/foreach}}
+
+    <tr>
+      <th colspan="2" class="category">Conversion de codes produits</th>
+    </tr>
+    <tr>
+      <th>
+        <button type="button" class="tick" onclick="launchConvert();">Lancer conversion produits Physiol</button>
+      </th>
+      <td>
+        <div id="convert-log"></div>
+      </td>
+    </tr>
     
     <tr>
       <td colspan="2" class="button">

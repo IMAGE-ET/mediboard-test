@@ -14,6 +14,7 @@
 {{assign var=colors value=","|explode:"critical,min,optimum,max"}}
 {{assign var=zone value=$stock->_zone}}
 
+{{if $stock->order_threshold_critical || !$dPconfig.dPstock.CProductStock.hide_bargraph}}
 <div class="bargraph {{$dPconfig.dPstock.CProductStock.advanced_bargraph|ternary:'advanced':''}}" 
      onmouseover="ObjectTooltip.createEx(this, '{{$stock->_guid}}')">
   <div class="value {{$colors.$zone}}">
@@ -29,3 +30,4 @@
     </div>
   {{/if}}
 </div>
+{{/if}}
