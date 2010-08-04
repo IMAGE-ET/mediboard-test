@@ -25,13 +25,13 @@ class CPlanningWeek  {
   var $date_max_active = null;
   
   var $hour_min = "09";
-  var $hour_max = "18";
+  var $hour_max = "16";
   var $hour_divider = 6;
   var $maximum_load = 6;
   var $has_load = false;
   
   var $events = array();
-  var $pauses = array("07", "12", "17");
+  var $pauses = array("08", "12", "16");
   var $unavailabilities = array();
   var $day_labels = array();
   var $load_data = array();

@@ -30,6 +30,12 @@ Main.add(function () {
 
 <hr class="control_tabs" />
 
+
+<label>
+  <input name="hide_noevents" type="checkbox" {{if $hide_noevents}} checked="true" {{/if}} onclick="updateBoardSejours(this.checked)" />
+  Masquer les séjours sans planification cette semaine
+</label>
+
 {{foreach from=$sejours key=key item=_sejours}}
 <div style="display: none;" id="board-sejours-{{$key}}">
 <table class="tbl">
@@ -38,11 +44,12 @@ Main.add(function () {
     <th>{{mb_title class=CSejour field=libelle}}</th>
     <th style="width: 1%;">{{mb_title class=CSejour field=entree}}</th>
     <th style="width: 1%;">{{mb_title class=CSejour field=sortie}}</th>
-    <th style="width:   1%;" colspan="2"><label title="Evenements planifiés par le rééducateur (cette semaine - pendant tout le séjour)">Evt.</label></th>
+    <th style="width: 1%;" colspan="2"><label title="Evenements planifiés par le rééducateur (cette semaine - pendant tout le séjour)">Evt.</label></th>
   </tr>
+	
 {{foreach from=$_sejours item=_sejour}}
 {{assign var=patient value=$_sejour->_ref_patient}}
-  <tr>
+  <tr {{if $_sejour->_count_evenements_ssr_week}} style="font-weight: bold;" {{/if}}>
     <td class="text">
     	<a href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}#planification">
         {{mb_value object=$_sejour field=patient_id}}
@@ -54,15 +61,13 @@ Main.add(function () {
     <td>{{mb_value object=$_sejour field=sortie format=$dPconfig.date}}</td>
 
     <td style="text-align: right;">
-      {{if $_sejour->_count_evenements_ssr_week}} 
-      {{$_sejour->_count_evenements_ssr_week}}
-      {{/if}}
+		  {{assign var=count_evenements value=$_sejour->_count_evenements_ssr_week}}
+      {{$count_evenements|ternary:$count_evenements:"-"}}
     </td>
 
     <td style="text-align: right;">
-      {{if $_sejour->_count_evenements_ssr}} 
-      {{$_sejour->_count_evenements_ssr}}
-      {{/if}}
+      {{assign var=count_evenements value=$_sejour->_count_evenements_ssr}}
+      {{$count_evenements|ternary:$count_evenements:"-"}}
     </td>
   </tr>
 {{foreachelse}}

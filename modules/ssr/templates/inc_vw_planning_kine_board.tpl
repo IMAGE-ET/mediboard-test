@@ -1,7 +1,9 @@
 <script type="text/javascript">
 	
 Main.add(function(){
-  PlanningTechnicien.show('{{$kine_id}}', null, null, 650, true, true);
+  ViewPort.SetAvlHeight("planning-technicien", 1);
+  var height = $('planning-technicien').getDimensions().height - 50;
+  PlanningTechnicien.show('{{$kine_id}}', null, null, height, true, true);
 });
 	
 </script>

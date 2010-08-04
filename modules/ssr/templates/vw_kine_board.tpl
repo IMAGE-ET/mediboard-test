@@ -26,32 +26,37 @@ PlanningEvent.onDblClic = function(event) {
   event.addClassName('elt_selected');
 }
 	
+Planification.onCompleteShowWeek = function(){
+  updatePlanningKineBoard();
+  updateBoardSejours()
+
+  PlanningEquipement.hide();
+  $('planning-sejour').update('');
+}
+
 updatePlanningKineBoard = function(){
   var url = new Url("ssr", "ajax_vw_planning_kine_board");
   url.addParam("kine_id", '{{$kine_id}}');
-	url.requestUpdate("planning-kine");	
+  url.addParam("height", '500');
+  url.requestUpdate("planning-kine"); 
+}
+
+updateBoardSejours = function(hide_noevents) {
+  var url = new Url("ssr", "ajax_board_sejours");
+  url.addParam("kine_id", '{{$kine_id}}');
+  url.addParam("hide_noevents", hide_noevents ? '1' : '0');
+  url.requestUpdate("board-sejours");
 }
 
 Main.add(function(){
   Planification.showWeek(null, true);
 	updatePlanningKineBoard();
-	updateBoardSejours('{{$kine_id}}');
+	updateBoardSejours();
+	
+  ViewPort.SetAvlHeight("board-sejours", 0.5);
+  ViewPort.SetAvlHeight("subplannings" , 1);
 });
 
-updateBoardSejours = function(kine_id) {
-  new Url("ssr", "ajax_board_sejours") .
-    addParam("kine_id", kine_id) .
-		requestUpdate("board-sejours");
-}
-
-Planification.onCompleteShowWeek = function(){
-  //PlanningTechnicien.show(); 
-  updatePlanningKineBoard();
-  updateBoardSejours('{{$kine_id}}')
-
-	PlanningEquipement.hide();
-  $('planning-sejour').update('');
-}
 </script>
 
 {{if !$kine->code_intervenant_cdarr}}
@@ -64,7 +69,7 @@ Planification.onCompleteShowWeek = function(){
 <table class="main">
 	<tr>
     <td id="week-changer"></td>
-		<td>
+		<td class="viewport">
       <form name="selectKine" method="get" action="">
         <input type="hidden" name="m" value="ssr" />
         <input type="hidden" name="tab" value="vw_kine_board" />
@@ -90,30 +95,30 @@ Planification.onCompleteShowWeek = function(){
       </form>
       <div id="planning-kine"></div>
 		</td>
-    <td id="board-sejours" style="height: 320px;">
+    <td class="viewport" >
+    	<div id="board-sejours"></div>
     </td>
 	</tr>
 	
 	<tr>
-		<td>
-			<script type="text/javascript">
-			Main.add(function () {
-			  Control.Tabs.create('tabs-subplannings', true);
-			});
-			</script>
-			
-			<ul id="tabs-subplannings" class="control_tabs">
-			  <li><a href="#planning-sejour">Planning Patient</a></li>
-			  <li><a href="#planning-equipement">Planning Equipement</a></li>
-			</ul>
-			<hr class="control_tabs" />
-		  <div style="display: none;" id="planning-sejour">
-			  <div class="small-info">
-			  	Double-cliquer sur un évenement pour voir le planning du patient concerné
+		<td class="viewport">
+			<div id="subplannings">
+				<script type="text/javascript">
+				Main.add(Control.Tabs.create.curry('tabs-subplannings', true));
+				</script>
+				<ul id="tabs-subplannings" class="control_tabs">
+				  <li><a href="#planning-sejour">Planning Patient</a></li>
+				  <li><a href="#planning-equipement">Planning Equipement</a></li>
+				</ul>
+				<hr class="control_tabs" />
+			  <div style="display: none;" id="planning-sejour">
+				  <div class="small-info">
+				  	Double-cliquer sur un évenement pour voir le planning du patient concerné
+					</div>
 				</div>
-			</div>
-      <div style="display: none;" id="planning-equipement">
-			</div>
+	      <div style="display: none;" id="planning-equipement">
+				</div>
+      </div>
 		</td>
 	</tr>
 </table>

@@ -12,6 +12,7 @@ CCanDo::checkEdit();
 
 $date    = CValue::getOrSession("date", mbDate());
 $kine_id = CValue::getOrSession("kine_id");
+$hide_noevents = CValue::getOrSession("hide_noevents");
 
 $mediuser = new CMediusers();
 $mediuser->load($kine_id);
@@ -126,6 +127,7 @@ foreach ($sejours as &$_sejours) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
+$smarty->assign("hide_noevents", $hide_noevents);
 $smarty->display("inc_board_sejours.tpl");
 
 ?>

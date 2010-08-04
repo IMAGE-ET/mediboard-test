@@ -23,9 +23,9 @@ Main.add(function() {
 <form name="Merger" action="?">
 
 Voir les séjour :
-<input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);">
+<input name="see_mergeable" type="checkbox" {{if $see_mergeable}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
 <label for="see_mergeable">Seulement les suspects</label>
-<input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);">
+<input name="see_yesterday" type="checkbox" {{if $see_yesterday}}checked="true"{{/if}} onclick="IdentitoVigilance.start(0,100);" />
 <label for="see_yesterday">Egalement ceux de la veille</label>
 
 <table class="tbl">

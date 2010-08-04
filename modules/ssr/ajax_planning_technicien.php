@@ -69,7 +69,7 @@ foreach($evenements as $_evenement){
 		$title = count($_evenement->_ref_evenements_seance)." patient(s)";
 	}
 	if($large){
-    $title .= substr($patient->prenom,0,2).".";		
+    $title .= " ". substr($patient->prenom,0,2).".";		
 	}
 	if(!$sejour_id && $_evenement->remarque){
 		$title .= " - ".$_evenement->remarque;

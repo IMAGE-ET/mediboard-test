@@ -11,7 +11,7 @@
 <table style="width: 100%;">
   <tr>
     <td style="width: 12em; text-align: left;">
-    	<button type="button" class="left" onclick="Planification.showWeek('{{$prev_week}}')">
+    	<button type="button" class="left singleclick" onclick="Planification.showWeek('{{$prev_week}}')">
     		Semaine précédente
 			</button>
     </td>
@@ -42,7 +42,7 @@
 		</td>
 		
     <td style="width: 12em; text-align: right;">
-      <button type="button" class="right rtl" onclick="Planification.showWeek('{{$next_week}}')">
+      <button type="button" class="right rtl singleclick" onclick="Planification.showWeek('{{$next_week}}')">
       	Semaine suivante
 			</button>
     </td>
