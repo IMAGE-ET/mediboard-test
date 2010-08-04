@@ -80,7 +80,7 @@ Main.add(function () {
       
       </script>
       
-      <table class="tbl">
+      <table class="tbl" style="table-layout: fixed;">
         <tr>
           <th>{{tr}}Action{{/tr}}</th>
           <th>{{tr}}Status{{/tr}}</th>
@@ -105,7 +105,7 @@ Main.add(function () {
   </div>
   
   <div id="libs" style="display: none;">
-    <table class="tbl">
+    <table class="tbl" style="table-layout: fixed;">
       <tr>
         <th>{{tr}}Action{{/tr}}</th>
         <th>{{tr}}Status{{/tr}}</th>

@@ -88,21 +88,26 @@ var WaitingMessage = {
         receiver = cell;
     }
     
+    var isTopAligned = receiver.getStyle("vertical-align") === "top";
+    
     receiver.insert({top: coverContainer});
     
     cover.setStyle({
       opacity: 0.4,
       position: 'absolute',
-      top: -parseInt(receiver.getStyle("padding-top"))+"px",
       left: -parseInt(receiver.getStyle("padding-left"))+"px"
     }).clonePosition(element, {setLeft: false, setTop: false});
     
+    if (isTopAligned) {
+      cover.style.top = -parseInt(receiver.getStyle("padding-top"))+"px";
+    }
+    
     coverContainer.show();
     
-    if (receiver.getStyle("vertical-align") !== "top") {
+    if (!isTopAligned) {
       var offsetCover = coverContainer.cumulativeOffset();
       var offsetContainer = receiver.cumulativeOffset();
-      coverContainer.style.top = (- offsetCover.top + offsetContainer.top)+"px";
+      coverContainer.style.top = (offsetContainer.top - offsetCover.top)+"px";
     }
   }
 };
