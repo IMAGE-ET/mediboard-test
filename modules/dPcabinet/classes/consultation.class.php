@@ -260,7 +260,7 @@ class CConsultation extends CCodable {
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
     // pour récuperer le praticien depuis la plage consult
-    $this->loadRefPlageConsult();
+    $this->loadRefPlageConsult(true);
     // si _coded vaut 1 alors, impossible de modifier la consultation
     $this->_coded = $this->valide;
     
@@ -851,12 +851,7 @@ class CConsultation extends CCodable {
   }
   
   function loadRefCategorie($cache = 0) {
-    $this->_ref_categorie = new CConsultationCategorie();
-    if($cache) {
-      $this->_ref_categorie = $this->_ref_categorie->getCached($this->categorie_id);
-    } else {
-      $this->_ref_categorie->load($this->categorie_id);
-    }
+    $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
   }
   
   function loadComplete() {

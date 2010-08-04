@@ -81,7 +81,7 @@ foreach ($listPlage as &$plage) {
 	$plage->loadRefsNotes();
 	
 	// Mass preloading
-	CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");
+  CMbObject::massLoadFwdRef($plage->_ref_consultations, "patient_id");
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "sejour_id");
   CMbObject::massLoadFwdRef($plage->_ref_consultations, "categorie_id");
 
