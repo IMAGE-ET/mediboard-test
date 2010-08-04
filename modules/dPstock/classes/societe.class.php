@@ -62,7 +62,7 @@ class CSociete extends CMbObject {
   function getProps() {
     $phone_mask = str_replace(' ', 'S', CAppUI::conf("system phone_number_format"));
     $specs = parent::getProps();
-    $specs['name']            = 'str notNull maxLength|50 seekable';
+    $specs['name']            = 'str notNull maxLength|50 seekable show|0';
     $specs['code']            = 'str maxLength|80 seekable protected';
     $specs['distributor_code']= 'str maxLength|80 seekable protected';
     $specs['customer_code']   = 'str maxLength|80';

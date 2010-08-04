@@ -49,7 +49,7 @@ class CProductReference extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['product_id']  = 'ref notNull class|CProduct seekable';
+    $specs['product_id']  = 'ref notNull class|CProduct seekable show|0';
     $specs['societe_id']  = 'ref notNull class|CSociete autocomplete|name';
     $specs['quantity']    = 'num notNull pos';
     $specs['price']       = 'currency notNull';

@@ -15,7 +15,7 @@ Main.add(function () {
   new BarcodeParser.inputWatcher(editForm.scc_code, {size: 10, field: "scc_prod"});
 });
 
-function toggleFractionnedAdministration(form, use) {
+toggleFractionnedAdministration = function(form, use) {
   var quantity = $(form.unit_quantity);
   quantity.up("table").select(".arrows").invoke("setVisible", use);
   quantity.disabled = !use;
@@ -29,18 +29,41 @@ function toggleFractionnedAdministration(form, use) {
   if (!use) $V(title, "");
 }
 
-function changePage(start) {
+confirmCancel = function(element) {
+  var form = element.form;
+  var element = form.cancelled;
+  
+  // Cancel 
+  if ($V(element) != "1") {
+    if (confirm("Voulez-vous vraiment archiver ce produit ?")) {
+      $V(element, "1");
+      form.submit();
+      return;   
+    }
+  }
+      
+  // Restore
+  if ($V(element) == "1") {
+    if (confirm("Voulez-vous vraiment rétablir ce produit ?")) {
+      $V(element, "0");
+      form.submit();
+      return;
+    }
+  }
+}
+
+changePage = function (start) {
   $V(getForm("filter-products").start, start);
 }
 
-function filterReferences(form) {
+filterReferences = function (form) {
   var url = new Url("dPstock", "httpreq_vw_products_list");
   url.addFormData(form);
   url.requestUpdate("list-products");
   return false;
 }
 
-function duplicateObject(form) {
+duplicateObject = function (form) {
   $V(form.elements._duplicate, 1);
   form.submit();
 }
@@ -191,32 +214,6 @@ function duplicateObject(form) {
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       
 			{{mb_field object=$product field=cancelled hidden=1}}
-			<script type="text/javascript">
-				function confirmCancel(element) {
-          var form = element.form;
-				  var element = form.cancelled;
-				  
-				  // Cancel 
-				  if ($V(element) != "1") {
-            if (confirm("Voulez-vous vraiment archiver ce produit ?")) {
-				      $V(element, "1");
-				      form.submit();
-				      return;   
-				    }
-				  }
-				      
-				  // Restore
-				  if ($V(element) == "1") {
-				    if (confirm("Voulez-vous vraiment rétablir ce produit ?")) {
-              $V(element, "0");
-              form.submit();
-				      return;
-				    }
-				  }
-				}
-				
-			</script>
-			
 	    <button class="{{$product->cancelled|ternary:"change":"cancel"}}" type="button" onclick="confirmCancel(this);">
 	      {{tr}}{{$product->cancelled|ternary:"Restore":"Archive"}}{{/tr}}
 	    </button>

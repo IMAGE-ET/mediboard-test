@@ -41,7 +41,7 @@ class CProductStock extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['product_id']               = 'ref notNull class|CProduct autocomplete|name';
+    $specs['product_id']               = 'ref notNull class|CProduct autocomplete|name show|0';
     $specs['quantity']                 = 'num notNull';
     $specs['order_threshold_critical'] = 'num min|0';
     $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';

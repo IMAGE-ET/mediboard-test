@@ -47,31 +47,32 @@ $data = array();
 $j = 0;
 
 foreach ($lots as &$item) {
-	$item->loadRefsBack();
-	$item->loadRefsFwd();
-	$item->_ref_order_item->loadReference();
-	
-	$reference = $item->_ref_order_item->_ref_reference;
-	$reference->loadRefsFwd();
-	$reference->_ref_product->loadRefsFwd();
-	
-	if(!$item->barcode_printed || $force_print) {
-		for ($i = 0; $i < $item->quantity; $i++) {
+  $item->loadRefsBack();
+  $item->loadRefsFwd();
+  $item->_ref_order_item->loadReference();
+  
+  $reference = $item->_ref_order_item->_ref_reference;
+  $reference->loadRefsFwd();
+  $reference->_ref_product->loadRefsFwd();
+  
+  if(!$item->barcode_printed || $force_print) {
+    for ($i = 0; $i < $item->quantity; $i++) {
       $data[$j] = array();
       $d = &$data[$j];
       
-			$d[] = substr($reference->_ref_product->name, 0, 30);
-      $d[] = CMbString::truncate(substr($reference->_ref_product->name, 30, 30));
-			$d[] = $reference->_ref_product->code;
-			$d[] = "LOT $item->code  PER $item->lapsing_date";
-			
-			$d[] = array(
-			  'barcode' => "MB".str_pad($item->_id, 8, "0", STR_PAD_LEFT),
-			  'type'    => 'C128B'
-			);
-			$j++;
-		}
-	}
+      $lines = explode("\n", wordwrap($reference->_ref_product->name, 30, "\n", true));
+      $d[] = $lines[0];
+      $d[] = isset($lines[1]) ? $lines[1] : "";
+      $d[] = $reference->_ref_product->code;
+      $d[] = "LOT $item->code  PER $item->lapsing_date";
+      
+      $d[] = array(
+        'barcode' => "MB".str_pad($item->_id, 8, "0", STR_PAD_LEFT),
+        'type'    => 'C128B'
+      );
+      $j++;
+    }
+  }
 }
 
 $pdf->WriteBarcodeGrid(8, 8, 210-16, 297-16, 3, 10, $data);

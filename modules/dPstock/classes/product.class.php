@@ -81,7 +81,7 @@ class CProduct extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs['name']          = 'str notNull seekable';
+    $specs['name']          = 'str notNull seekable show|0';
     $specs['description']   = 'text seekable';
     $specs['code']          = 'str maxLength|32 seekable protected';
     $specs['code_canonical']= 'str maxLength|32 seekable show|0';
