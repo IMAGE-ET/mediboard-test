@@ -561,6 +561,7 @@ $locales['CReplacement'] = 'Remplacement';
 $locales['CReplacement-conge_id'] = 'Congé';
 $locales['CReplacement-conge_id-court'] = 'Congé';
 $locales['CReplacement-conge_id-desc'] = 'Congé';
+$locales['CReplacement-failed-same_user'] = 'Impossible de remplacer par la même personne';
 $locales['CReplacement-msg-create'] = 'Remplacement créé';
 $locales['CReplacement-msg-delete'] = 'Remplacement supprimé';
 $locales['CReplacement-msg-modify'] = 'Remplacement modifié';

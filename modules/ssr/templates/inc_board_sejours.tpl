@@ -52,7 +52,9 @@ Main.add(function () {
   <tr {{if $_sejour->_count_evenements_ssr_week}} style="font-weight: bold;" {{/if}}>
     <td class="text">
     	<a href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}#planification">
-        {{mb_value object=$_sejour field=patient_id}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+          {{mb_value object=$_sejour field=patient_id}}
+        </span>
 				({{mb_value object=$patient field=_age}})
     	</a>
 		</td>

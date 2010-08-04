@@ -34,9 +34,27 @@ class CReplacement extends CMbObject {
 		$props["replacer_id"] = "ref notNull class|CMediusers";
     return $props;
   }
+	
+	function check() {
+		if ($msg = parent::check()) {
+			return $msg;
+		}
+		
+		$this->completeField("conge_id", "replacer_id");
+		$this->loadRefConge();
+    mbTrace($this->_ref_conge->getValues(), "Congé");
+    mbTrace($this->getValues(), "Remplacement");
+		
+		if ($this->_ref_conge->user_id == $this->replacer_id) {
+      mbTrace( "$this->_class_name-failed-same_user");
+			return "$this->_class_name-failed-same_user";
+		}
+	}
 
-	function store(){
-	  parent::store();
+	function store() {
+		if ($msg = parent::store()) {
+			return $msg;
+		}
   
 	  // Lors de la creation du remplacement, on reaffecte les evenements du kine principal
     $this->completeField("sejour_id", "conge_id");
@@ -59,8 +77,8 @@ class CReplacement extends CMbObject {
 
     foreach($evenements as $_evenement){
     	$_evenement->therapeute_id = $this->replacer_id;
-			if($msg = $_evenement->store()){
-        return $msg;
+			if ($msg = $_evenement->store()){
+        CAppUI::setMsg($msg, UI_MSG_WARNING);
       }
 		}
 	}
@@ -86,8 +104,8 @@ class CReplacement extends CMbObject {
 		
 		foreach($evenements as $_evenement){
 			$_evenement->therapeute_id = $sejour->_ref_bilan_ssr->_ref_technicien->kine_id;
-		  if($msg = $_evenement->store()){
-				return $msg;
+		  if ($msg = $_evenement->store()) {
+				CAppUI::setMsg($msg, UI_MSG_WARNING);
 		  }
 		}
 		

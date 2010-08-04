@@ -60,7 +60,7 @@ Main.add(function(){
 <form name="editReplacement" action="?" method="post" 
       onsubmit="return onSubmitFormAjax(this, { onComplete: 
 			  function(){ 
-				  refreshReplacement('{{$sejour->_id}}','{{$conge_id}}','{{$type}}');
+				  refreshReplacement('{{$sejour->_id}}','{{$conge->_id}}','{{$type}}');
 					refreshlistSejour('{{$sejour->_id}}','{{$type}}');
 					{{if $type == "reeducateur"}}
 					$('replacement-reeducateur').update(''); 
@@ -96,17 +96,14 @@ Main.add(function(){
 		
 		{{if $type == "kine"}}
 		<tr>
-	    <td colspan="2" class="button">
+			<th>{{mb_label object=$replacement field=replacer_id}}</th>
+	    <td>
 	    	{{if $replacement->_id}}
-				
 				  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
 				{{else}}
 		      <select name="replacer_id" onchange="refreshReplacerPlanning(this.value);">
-		        <option value="">&mdash; Utilisateur</option>
-		        {{foreach from=$users item=_user}}
-		          <option value="{{$_user->_id}}" class="mediuser" style="border-color: #{{$_user->_ref_function->color}};" 
-							{{if $replacement->replacer_id == $_user->_id}}selected="selected"{{/if}}>{{$_user->_view}}</option>
-		        {{/foreach}}
+		        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$users disabled=$conge->user_id}}
 		      </select>
 				{{/if}}
 	    </td>			

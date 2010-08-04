@@ -74,7 +74,7 @@ if ($type == 'kine') {
 	$evenements = $evenement->loadList($where);
 }
 
-  // Chargement des evenements SSR
+// Chargement des evenements SSR
 if ($type == "reeducateur") {
 	$evenement = new CEvenementSSR();
 	$evenement->therapeute_id = $conge->user_id;
@@ -90,7 +90,7 @@ $smarty->assign("users", $users);
 
 $smarty->assign("sejour", $sejour);
 $smarty->assign("replacement", $replacement);
-$smarty->assign("conge_id", $conge_id);
+$smarty->assign("conge", $conge);
 $smarty->assign("user", $user);
 $smarty->assign("evenements", $evenements);
 $smarty->assign("type", $type);
