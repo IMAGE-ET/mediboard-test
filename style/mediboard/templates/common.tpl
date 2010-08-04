@@ -4,6 +4,7 @@
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- IE8+ mode -->
   
   <title>
     {{$dPconfig.page_title}} 
@@ -15,7 +16,6 @@
   
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
-  <meta http-equiv="X-UA-Compatible" content="IE=100" /> <!-- IE8+ mode -->
   
   <script type="text/javascript">
     // This needs to be at the very beginning of the page

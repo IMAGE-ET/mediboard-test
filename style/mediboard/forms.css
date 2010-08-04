@@ -256,7 +256,7 @@ button:hover {
 
 button[disabled], a.button.disabled,
 button[disabled="disabled"] { /* For IE */
-  cursor: not-allowed, no-drop;
+  cursor: not-allowed;
   opacity: 0.5;
   filter: alpha(opacity: 50);
   -ms-filter: "alpha(opacity: 50)";
