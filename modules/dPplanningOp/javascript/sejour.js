@@ -12,12 +12,12 @@ Sejour = {
       redirectOpener();
   },
   showSSR: function(sejour_id) {
-    new Url("ssr", "vw_aed_sejour_ssr").
+    new Url("ssr", "vw_aed_sejour_ssr", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
   },
   showUrgences: function(sejour_id) {
-    new Url("dPurgences", "vw_aed_rpu").
+    new Url("dPurgences", "vw_aed_rpu", "tab").
       addParam("sejour_id", sejour_id).
       redirectOpener();
   }
