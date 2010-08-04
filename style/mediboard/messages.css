@@ -36,18 +36,18 @@ div.warning, div.error, div.message, div.loading {
 }
 
 div.warning {
-  color: #c64;
+  color: #DF2500;
   background-image: url(../../images/icons/warning.png);
 }
 
 div.error {
   color: #f00;
-  background-image: url(../../images/icons/cancel.png);
+  background-image: url(../../images/icons/error.png);
 }
 
 div.message {
   color: #008;
-  background-image: url(../../images/icons/check.png);
+  background-image: url(../../images/icons/info.png);
 }
 
 div.loading {
