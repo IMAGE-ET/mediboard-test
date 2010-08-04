@@ -21,7 +21,7 @@ $ajax = CMbArray::extract($_POST, "ajax");
 $mbConfig = new CMbConfig;
 $mbConfig->update($_POST);
 $mbConfig->load();
-CAppUI::setMsg("Configuration modifiée");
+CAppUI::setMsg("Configure-msg_modify");
 
 $dPconfig = $mbConfig->values;
 
