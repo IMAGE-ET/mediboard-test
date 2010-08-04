@@ -20,6 +20,9 @@ table.dialog #systemMsg,
   position: absolute;
   right: 10px;
   z-index: 850;
+  -moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
 }
 
 #login #systemMsg {
@@ -30,6 +33,7 @@ table.dialog #systemMsg,
 
 div.warning, div.error, div.message, div.loading {
   min-height: 16px;
+  line-height: 16px;
   background: no-repeat center left;
   padding: 2px;
   padding-left: 20px;

@@ -226,15 +226,20 @@ optgroup, option {
   background-color: #000;
 }
 
-input,
+input[type=text], 
+input[type=password], 
+input[type=file],
 select,
-textarea {
+textarea,
+.textarea-container {
   color: #fff;
   border: 1px #0f0 solid;
   background-color: #000;
 }
 
-input:focus,
+input[type=text]:focus, 
+input[type=password]:focus, 
+input[type=file]:focus,
 select:focus,
 textarea:focus {
   color: #fff;
