@@ -63,13 +63,14 @@ $where["sejour.entree"] = "<= '$planning->date_max'";
 $where["sejour.sortie"] = ">= '$planning->date_min'";
 $where["sejour.annule"] = "= '0'";
 $where["evenement_ssr.therapeute_id"] = "= '$kine_id'";
-
-$sejours["planned"] = $sejour->loadList($where, $order, null, null, $join);
+$group = "sejour_id";
+$sejours["planned"] = $sejour->loadList($where, $order, null, $group, $join);
 
 // Sejours pour lesquels le rééducateur est exécutant pour des lignes prescrites mais n'a pas encore d'evenement planifiés
 $sejours["plannable"] = array();
 
 // Séjours élligibles
+
 $where = array();
 $where["sejour.type"  ] = "= 'ssr'";
 $where["sejour.entree"] = "<= '$planning->date_max'";
@@ -119,8 +120,12 @@ $sejours["plannable"] = $sejour->loadList($where, $order, null, null, $join);
 // Chargement des détails affichés de chaque séjour
 foreach ($sejours as &$_sejours) {
   foreach ($_sejours as $_sejour) {
-    $_sejour->loadRefPatient();
     $_sejour->countEvenementsSSRWeek($kine_id, $planning->date_min, $planning->date_max);
+		if ($hide_noevents && !$_sejour->_count_evenements_ssr_week) {
+			unset($_sejours[$_sejour->_id]);
+			continue;
+		}
+    $_sejour->loadRefPatient();
   }
 }
 
