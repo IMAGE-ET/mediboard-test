@@ -65,6 +65,13 @@ function deliverAll(container) {
 	  deliverLine(listForms[i], i != listForms.length-1, true);
   }
 }
+
+changeSort = function(order_col, order_way){
+  var form = getForm("filter");
+  $V(form.order_col, order_col);
+  $V(form.order_way, order_way);
+  form.onsubmit();
+}
 </script>
 
 <script type="text/javascript">
@@ -77,6 +84,9 @@ Main.add(function () {
 
 <form name="filter" action="?" method="get" onsubmit="if(window.loadSuivi) loadSuivi($V(this.sejour_id)); return (checkForm(this) && refreshLists())">
   <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="order_col" value="{{$order_col}}" />
+  <input type="hidden" name="order_way" value="{{$order_way}}" />
+  
   <table class="form">
     <tr>
       <th>{{mb_label object=$delivrance field=_date_min}}</th>

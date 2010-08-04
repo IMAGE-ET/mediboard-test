@@ -25,17 +25,6 @@
   </script>
   {{/if}}
   
-  <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
-        {{if $curr_delivery->date_delivery}}style="visibility: hidden"{{/if}}
-        onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveryLine.curry($V(this.delivery_id))})">
-    <input type="hidden" name="m" value="dPstock" /> 
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="dosql" value="do_delivery_aed" />
-    {{mb_key object=$curr_delivery}}
-    <input type="hidden" name="date_delivery" value="now" />
-    <button type="submit" class="tick notext" title="Marquer comme reçu"></button>
-  </form>
-  
   <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
   <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$curr_delivery->_id}}')">
     {{$curr_delivery->_ref_stock->_view}}
@@ -44,8 +33,8 @@
    - [{{$curr_delivery->comments}}]
   {{/if}}
 </td>
-<td style="text-align: center;">{{mb_ditto name=date value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
-<td style="text-align: center;">{{mb_ditto name=time value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
+<td style="text-align: center;">{{mb_ditto name="date-$service_id" value=$curr_delivery->date_dispensation|date_format:$dPconfig.date}}</td>
+<td style="text-align: center;">{{mb_ditto name="time-$service_id" value=$curr_delivery->date_dispensation|date_format:$dPconfig.time}}</td>
 
 {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
 <td style="text-align: center;">
@@ -63,6 +52,10 @@
   </a>
 </td>
 {{/if}}
+
+<td>
+  {{mb_value object=$curr_delivery->_ref_stock->_ref_location field=name}}
+</td>
 
 <td>
   {{assign var=remaining value=$curr_delivery->quantity-$curr_delivery->countDelivered()}}
@@ -123,4 +116,15 @@
 </td>
 <td class="text">
   {{$curr_delivery->_ref_stock->_ref_product->_unit_title}}
+</td>
+<td>
+  <form name="delivery-force-{{$curr_delivery->_id}}-receive" action="?" method="post" 
+        onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveryLine.curry($V(this.delivery_id))})">
+    <input type="hidden" name="m" value="dPstock" /> 
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="dosql" value="do_delivery_aed" />
+    {{mb_key object=$curr_delivery}}
+    <input type="hidden" name="date_delivery" value="{{if !$curr_delivery->date_delivery}}now{{/if}}" />
+    <button type="submit" class="{{$curr_delivery->date_delivery|ternary:'tick':'cancel'}} notext" title="Marquer comme{{$curr_delivery->date_delivery|ternary:' non':''}} reçu"></button>
+  </form>
 </td>

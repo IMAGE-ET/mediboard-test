@@ -44,8 +44,8 @@ Main.add(window.print);
   	<td>{{$disp->_ref_patient->_view}}</td>
 		{{/if}}
     <td>{{$disp->_ref_stock->_ref_product->code}}</td>
-    <td>{{$disp->_ref_stock->_ref_product->name}}</td>
-    <td>{{$disp->quantity}}</td>
+    <td><strong>{{$disp->_ref_stock->_ref_product->name}}</strong></td>
+    <td style="text-align: right;">{{$disp->quantity}}</td>
     <td>{{$disp->_ref_stock->_ref_product->_unit_title}}</td>
 		<td>{{$disp->_ref_stock->_ref_location->name}}</td>
     <td></td>

@@ -24,10 +24,11 @@ $date_max = "$date_max 23:59:59";
 
 $order_by = 'product_stock_location.position ASC, product.name ASC';
 
-$where = array (
+$where = array(
   "product_delivery.date_dispensation BETWEEN '$date_min' AND '$date_max'",
   'product_delivery.quantity' => " > 0",
-  'product_delivery.order = \'0\' OR product_delivery.order IS NULL'
+  'product_delivery.order = \'0\' OR product_delivery.order IS NULL',
+  'product_delivery.date_delivery IS NULL',
 );
 
 if($mode == "nominatif"){

@@ -56,16 +56,24 @@ Main.add(function(){
       <table class="tbl">
         <tr>
           <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
-          <th>{{tr}}CProduct{{/tr}}</th>
-          <th colspan="2">{{mb_title class=CProductDelivery field=date_dispensation}}</th>
+          <th>
+            {{mb_colonne class=CProductStockGroup field=product_id order_col=$order_col order_way=$order_way function=changeSort}}
+          </th>
+          <th colspan="2">
+            {{mb_colonne class=CProductDelivery field=date_dispensation order_col=$order_col order_way=$order_way function=changeSort}}
+          </th>
           {{if !$dPconfig.dPstock.CProductStockGroup.infinite_quantity}}
-            <th>Stock<br />pharmacie</th>
+            <th>Stock pharm.</th>
           {{/if}}
+          <th>
+            {{mb_colonne class=CProductStockGroup field=location_id order_col=$order_col order_way=$order_way function=changeSort}}
+          </th>
           {{if !$dPconfig.dPstock.CProductStockService.infinite_quantity}}
-            <th>Stock<br />service</th>
+            <th>Stock serv.</th>
           {{/if}}
-          <th><button type="button" onclick="deliverAll('list-nominatives')" class="tick">Tout délivrer</button></th>
+          <th style="width: 0.1%;"><button type="button" onclick="deliverAll('list-nominatives')" class="tick">Tout délivrer</button></th>
           <th>{{mb_title class=CProduct field=_unit_title}}</th>
+          <th style="width: 0.1%;"></th>
         </tr>
         {{foreach from=$deliveries_by_service item=_deliveries key=service_id}}
           <tbody id="nominatif-service-{{$service_id}}" style="display: none;">

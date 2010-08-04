@@ -103,7 +103,7 @@ Main.add(function(){
   Nouvelle référence pour ce produit
 </button>-->
 
-<table id="tab-deliveries" class="main tbl">
+<table id="tab-deliveries" class="main tbl" style="display: none;">
   <tr>
     <td colspan="4">
       <div class="small-info">
