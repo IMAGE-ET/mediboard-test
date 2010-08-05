@@ -50,21 +50,25 @@ window.onbeforeunload= function () {
 
 <script type="text/javascript">
 function rotateImage(direction) {
-  var src = $("thumb").src.toQueryParams();
+  var thumb = $("thumb");
+  var src = thumb.src.toQueryParams();
 
   src.ra = parseInt(src.ra) || 0;
   
   if(direction == "r") {
-    src["ra"] = (src.ra - 90)%360;
+    src.ra = (src.ra - 90)%360;
   } else {
-    src["ra"] = (src.ra + 90)%360;
+    src.ra = (src.ra + 90)%360;
   }
 
-  var temp = src.w;
-  src.w = src.h;
-  src.h = temp;
-
-  $("thumb").src = '?' + Object.toQueryString(src);
+  if (!Prototype.Browser.IE) {
+    WaitingMessage.cover(thumb.up('td'));
+    thumb.onload = function(){
+      $$(".cover-container").invoke("remove");
+    };
+  }
+  
+  thumb.src = '?' + Object.toQueryString(src);
 }
 </script>
 
