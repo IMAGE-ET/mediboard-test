@@ -94,15 +94,20 @@ if ($file_id = CValue::get("file_id")) {
     } elseif (strpos($file->file_type, "pdf") !== false) {
       if($hp){$finUrl.="&h=$hp";}
       if($wl){$finUrl.="&w=$wl";}
-      if($h){$finUrl.="&h=$h";}
-      if($w){$finUrl.="&w=$w";}
+      
       if($sfn){$finUrl.="&sfn=$sfn";}
       if($dpi){$finUrl.="&dpi=$dpi";}
-      if($ra == 0) {
+      
+      // Dans le cas de la tooltip, il faudrait aussi interchanger $w et $h.
+      // Mais cela rentre en conflit avec l'aperçu de CFiles
+      if($ra === "0") {
         $file->loadNbPages();
         $ra = $file->_rotate ? $file->_rotate : 0;
       }
+
       $finUrl .= "&ra=$ra";
+      if($h){$finUrl.="&h=$h";}
+      if($w){$finUrl.="&w=$w";}
       // Sharp filter to unblur raster
 //      $finUrl .= "&fltr[]=usm|80|5|1";
 //      $finUrl .= "&fltr[]=usm";
