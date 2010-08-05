@@ -72,13 +72,14 @@ if ($file_id = CValue::get("file_id")) {
     $hp = CValue::get("hp", "");
     $wl = CValue::get("wl", "");
     $f  = CValue::get("f" , "jpg");
-    $q  = CValue::get("q" , 100);
+    $q  = CValue::get("q" , 80);
     $dpi  = CValue::get("dpi" , 150);
     $sfn  = CValue::get("sfn" , 0);
     $ra   = CValue::get("ra", 0);
     //creation fin URL
     $finUrl="";
     if($ra){ $finUrl="&ra=$ra"; }
+    if($ra == 90 || $ra == 270) { $w = 1000;}
     if($f){ $finUrl.="&f=$f";}    
     if($q){ $finUrl.="&q=$q";}  
 

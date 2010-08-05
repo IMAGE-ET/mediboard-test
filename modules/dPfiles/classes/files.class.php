@@ -253,7 +253,6 @@ class CFile extends CDocumentItem {
       preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
       
       if ($matches[1] < "6.6") {
-         mbTrace("exact");
         if (preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
           $this->_rotate = 360 - $matches[1];
         }
