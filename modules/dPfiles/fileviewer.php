@@ -100,8 +100,9 @@ if ($file_id = CValue::get("file_id")) {
       if($dpi){$finUrl.="&dpi=$dpi";}
       if($ra == 0) {
         $file->loadNbPages();
-        $ra = $file->_rotate || 0;
+        $ra = $file->_rotate ? $file->_rotate : 0;
       }
+      $finUrl .= "&ra=$ra";
       // Sharp filter to unblur raster
 //      $finUrl .= "&fltr[]=usm|80|5|1";
 //      $finUrl .= "&fltr[]=usm";

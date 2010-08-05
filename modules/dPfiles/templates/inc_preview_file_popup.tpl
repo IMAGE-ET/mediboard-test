@@ -77,7 +77,7 @@ function rotateImage(direction) {
     {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages > 1 && !$acces_denied}}
         
       <button class="left" {{if $page_prev === null}}disabled="disabled"{{/if}}
-         onclick="location.href='{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}'">
+         onclick="location.href='{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}&amp;ra={{$fileSel->_rotate}}'">
         Page précédente
       </button>
       
