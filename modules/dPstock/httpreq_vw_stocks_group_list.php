@@ -42,6 +42,8 @@ $leftjoin['product'] = 'product.product_id = product_stock_group.product_id'; //
 if ($only_ordered_stocks) {
   $where['product_order.cancelled'] = '= 0'; // order not cancelled
   $where['product_order.deleted']   = '= 0'; // order not deleted
+  $where['product_order.date_ordered'] = 'IS NOT NULL'; // order not deleted
+  $where['product_order_item.renewal'] = '= 1'; // renewal line
   $leftjoin['product_reference']    = 'product_reference.product_id = product_stock_group.product_id'; // stock to reference
   $leftjoin['product_order_item']   = 'product_order_item.reference_id = product_reference.reference_id'; // reference to order item
   $leftjoin['product_order']        = 'product_order.order_id = product_order_item.order_id'; // order item to order
@@ -55,8 +57,18 @@ if ($only_ordered_stocks) {
 }
 
 $stock = new CProductStockGroup();
-$list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockGroup pagination_size"), null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockGroup pagination_size"), "product_stock_group.stock_id", $leftjoin);
+
+foreach($list_stocks as $_stock) {
+  $orders = $_stock->_ref_product->getPendingOrders(false);
+  foreach($orders as $order)
+    mbTrace($order->order_number);
+}
+
+if (!$only_ordered_stocks)
+  $list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
+else 
+  $list_stocks_count = count($stock->loadList($where, null, null, "product_stock_group.stock_id", $leftjoin));
 
 // Smarty template
 $smarty = new CSmartyDP();

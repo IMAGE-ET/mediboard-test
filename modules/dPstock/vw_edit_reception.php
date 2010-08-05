@@ -23,7 +23,7 @@ else
   
 $reception->loadRefsBack();
 foreach($reception->_ref_reception_items as $_reception) {
-  $_reception->loadRefOrderItem();
+  $_reception->getUnitQuantity();
 }
 
 // Categories list

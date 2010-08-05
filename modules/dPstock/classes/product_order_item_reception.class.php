@@ -53,6 +53,7 @@ class CProductOrderItemReception extends CMbObject {
     $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
     $specs['_price']        = 'currency';
+    $specs['_unit_quantity']= 'num pos';
     return $specs;
   }
   

@@ -145,7 +145,7 @@ function receptionCallback(){
   <tr>
     <th class="title">{{tr}}CProductOrder{{/tr}}</th>
     <th class="title">
-      {{tr}}CProductReception{{/tr}} - {{$reception->reference}}
+      {{tr}}CProductReception{{/tr}}
     </th>
   </tr>
   <tr>
