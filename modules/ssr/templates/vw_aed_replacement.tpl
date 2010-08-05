@@ -53,12 +53,7 @@ Main.add(function(){
   Planification.showWeek();
 	Planification.onCompleteShowWeek();
 	
-	Control.Tabs.create('tabs-replacement', true);
-  
-  var kines = $("kines");
-  var height = (document.viewport.getHeight() - kines.cumulativeOffset().top - 10) + "px";
-  kines.down("td").style.height = height;
-  $("reeducateurs").down("td").style.height = height;
+	Control.Tabs.create('tabs-replacement', true).activeLink.onmouseup();
 });
 
 </script>
@@ -69,36 +64,51 @@ Main.add(function(){
   </tr>
 	<tr style="height: 0.1%;">
 	  <td colspan="2">
-	  	<div id="toto">
-	  	  <ul id="tabs-replacement" class="control_tabs">
-				  <li>
-				    <a href="#kines">Remplacement des référents</a>
-				  </li>
-				  <li>
-				    <a href="#reeducateurs">Transfert des rééducateurs</a>
-				  </li>
-					<li style="float: right;">
-						<button type="button" onclick="printRepartition();" class="print">Repartition patients</button>
-					</li>
-			  </ul>
-			   <hr class="control_tabs" />
-      </div>
+  	  <ul id="tabs-replacement" class="control_tabs">
+			  <li>
+			    <a class="empty" href="#kines" onmouseup="ViewPort.SetAvlHeight.defer('sejours-kine', 1);">
+			    	Remplacement des référents
+						<small>(-)</small>
+					</a>
+			  </li>
+			  <li>
+			    <a class="empty" href="#reeducateurs" onmouseup="ViewPort.SetAvlHeight.defer('sejours-reeducateur', 1);">
+			    	Transfert des rééducateurs
+            <small>(-)</small>
+					</a>
+			  </li>
+        <li>
+          <a class="empty" href="#hors-bornes" onmouseup="ViewPort.SetAvlHeight.defer('sejours-hors-bornes', 1);">
+            Planifications hors-séjours
+            <small>(-)</small>
+          </a>
+        </li>
+				<li style="float: right;">
+					<button type="button" onclick="printRepartition();" class="print">Repartition patients</button>
+				</li>
+		  </ul>
+		   <hr class="control_tabs" />
 	  </td>
 	</tr>
 	<tr id="kines">	
 		<td class="halfPane" style="vertical-align: top;">
-      <div style="overflow: auto; height: 100%;">
-		    <div id="sejours-kine"></div>
-      </div>
+	    <div id="sejours-kine"></div>
 		</td>
-		<td id="replacement-kine"><td>
+		<td id="replacement-kine"></td>
 	</tr>
   <tr id="reeducateurs">
     <td class="halfPane" style="vertical-align: top;">
-      <div style="overflow: auto; height: 100%;">
-        <div id="sejours-reeducateur"></div>
-      </div>
+      <div id="sejours-reeducateur"></div>
     </td>
     <td id="replacement-reeducateur"></td>
   </tr>
+	
+  <tr id="hors-bornes">
+    <td class="halfPane" style="vertical-align: top;">
+      <div id="sejours-hors-bornes"></div>
+		</td>
+		<td>
+			
+		</td>
+  </tr>	
 </table>

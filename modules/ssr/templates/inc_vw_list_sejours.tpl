@@ -8,6 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+
+<script type="text/javascript">
+Main.add(function() {
+  var sejours_count = {{$sejours_count|json}};
+  var link = $('tabs-replacement').down('a[href=#{{$type}}s]');
+	link.down('small').update('('+sejours_count+')');
+	link.setClassName('wrong', sejours_count != 0);
+})
+</script>
+
 <table class="tbl">
   {{foreach from=$sejours key=plage_conge_id item=_sejours}}
 	  <tr>

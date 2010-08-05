@@ -408,7 +408,8 @@ var ViewPort = {
     // puis calcul de la taille de la div
     var pos       = element.cumulativeOffset()[1];
     var winHeight = window.getInnerDimensions().height;
-    element.style.overflow = "auto";
+    element.style.overflowY = "auto";
+    element.style.overflowX = "hidden";
     element.style.height = ((winHeight - pos) * pct - 10) + "px";
   },
   

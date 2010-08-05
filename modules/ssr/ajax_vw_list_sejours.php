@@ -28,6 +28,7 @@ $group_id = CGroups::loadCurrent()->_id;
 $sejours = array();
 $_sejours = array();
 $count_evts = array();
+$sejours_count = 0;
 
 // Pour chaque plage de conge, recherche 
 foreach($plages_conge as $_plage_conge){
@@ -85,6 +86,9 @@ foreach($plages_conge as $_plage_conge){
 			
 			$_sejour->checkDaysRelative($date);
 			$_sejour->loadRefReplacement();
+			if (!$_sejour->_ref_replacement->_id) {
+		    $sejours_count++;
+			}
 
 		  // Bilan SSR
 		  $_sejour->loadRefBilanSSR();
@@ -108,6 +112,7 @@ foreach($plages_conge as $_plage_conge){
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
+$smarty->assign("sejours_count", $sejours_count);
 $smarty->assign("plages_conge", $plages_conge);
 $smarty->assign("type", $type);
 $smarty->assign("count_evts", $count_evts);
