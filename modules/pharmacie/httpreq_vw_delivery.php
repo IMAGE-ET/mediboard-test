@@ -28,5 +28,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('curr_delivery',  $delivery);
 $smarty->assign('stocks_service', $stocks_service);
 $smarty->assign('line_refresh', true);
+$smarty->assign('service_id', $delivery->service_id);
 
 $smarty->display('inc_vw_line_delivrance.tpl');

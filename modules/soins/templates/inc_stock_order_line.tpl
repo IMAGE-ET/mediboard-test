@@ -78,35 +78,35 @@
   </td>
   
   <!-- Affichage des dispensations deja effectuées -->
-  <td style="text-align: left" class="text">
+  <td style="text-align: left" class="text" title="Dans {{$stock->_ref_deliveries|@count}} commandes">
     {{if $stock->_total_quantity}}
-    <button class="down notext" type="button" onclick="$(this).next('table').toggle()"></button>
-    {{$stock->_total_quantity}} dans {{$stock->_ref_deliveries|@count}} commandes
+      <button class="down notext" type="button" onclick="$(this).next('table').toggle()"></button>
+      {{$stock->_total_quantity}}
     
-    <table class="layout" style="display: none;">
-    {{foreach from=$stock->_ref_deliveries item=dispensation}}
-      <tr>
-        <td>
-          {{if !$dispensation->countBackRefs('delivery_traces')}}
-            <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
-              <input type="hidden" name="m" value="dPstock" />
-              <input type="hidden" name="dosql" value="do_delivery_aed" />
-              <input type="hidden" name="del" value="1" />
-              <input type="hidden" name="delivery_id" value="{{$dispensation->_id}}" />
-              <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
-            </form>
-          {{else}}
-            <img src="images/icons/tick.png" title="Délivré" />
-          {{/if}}
-        </td>
-        <td>
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$dispensation->_guid}}');">
-            {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}}
-          </span>
-        </td>
-      </tr>
-    {{/foreach}}
-    </table>
+      <table class="layout" style="display: none;">
+      {{foreach from=$stock->_ref_deliveries item=dispensation}}
+        <tr>
+          <td>
+            {{if !$dispensation->countBackRefs('delivery_traces')}}
+              <form name="form-dispensation-del-{{$dispensation->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete:{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}refreshOrders.curry({{$stock->_endowment_item_id}}, {{$stock->_id}}){{else}}refreshLists{{/if}}})">
+                <input type="hidden" name="m" value="dPstock" />
+                <input type="hidden" name="dosql" value="do_delivery_aed" />
+                <input type="hidden" name="del" value="1" />
+                <input type="hidden" name="delivery_id" value="{{$dispensation->_id}}" />
+                <button type="submit" class="cancel notext" title="{{tr}}Cancel{{/tr}}">{{tr}}Cancel{{/tr}}</button>
+              </form>
+            {{else}}
+              <img src="images/icons/tick.png" title="Délivré" />
+            {{/if}}
+          </td>
+          <td>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$dispensation->_guid}}');">
+              {{$dispensation->quantity}} le {{mb_value object=$dispensation field=date_dispensation}}
+            </span>
+          </td>
+        </tr>
+      {{/foreach}}
+      </table>
     {{/if}}
   </td>
   
