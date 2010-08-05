@@ -78,8 +78,8 @@ if ($file_id = CValue::get("file_id")) {
     $ra   = CValue::get("ra", 0);
     //creation fin URL
     $finUrl="";
-    if($ra){ $finUrl="&ra=$ra"; }
-    if($ra == 90 || $ra == 270) { $w = 1000;}
+
+    //if($ra == 90 || $ra == 270) { $w = 1000;}
     if($f){ $finUrl.="&f=$f";}    
     if($q){ $finUrl.="&q=$q";}  
 
@@ -98,6 +98,10 @@ if ($file_id = CValue::get("file_id")) {
       if($w){$finUrl.="&w=$w";}
       if($sfn){$finUrl.="&sfn=$sfn";}
       if($dpi){$finUrl.="&dpi=$dpi";}
+      if($ra == 0) {
+        $file->loadNbPages();
+        $ra = $file->_rotate || 0;
+      }
       // Sharp filter to unblur raster
 //      $finUrl .= "&fltr[]=usm|80|5|1";
 //      $finUrl .= "&fltr[]=usm";
