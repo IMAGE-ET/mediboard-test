@@ -3,7 +3,7 @@
 {{/if}}
 
 {{if !isset($disabled|smarty:nodefaults)}}
-  {{assign var=excluded value=null}}
+  {{assign var=disabled value=null}}
 {{/if}}
 
 {{foreach from=$list item=_mediuser}}

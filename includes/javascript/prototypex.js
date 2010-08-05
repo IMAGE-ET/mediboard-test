@@ -594,6 +594,34 @@ Ajax.PeriodicalUpdater.addMethods({
   }
 });
 
+/**
+ * Improves image resampling of big images in Firefox
+ * @param {Object} element
+ */
+Element.addMethods("img", {
+  resample: function(element){
+    if (!Prototype.Browser.Gecko || !element.getAttribute("width") && !element.getAttribute("height"))
+      return element;
+    
+    element.onload = function() {
+      if (element.naturalWidth < 500 && element.naturalHeight < 200) return;
+      
+      var canvas = document.createElement("canvas");
+      canvas.height = canvas.width * (element.height / element.width);
+      var ctx = canvas.getContext("2d");
+      
+      ctx.scale(0.5, 0.5);
+      ctx.drawImage(element, 0, 0);
+      element.src = canvas.toDataURL();
+      element.onload = null;
+    }
+    
+    if (element.complete) element.onload();
+    
+    return element;
+  }
+});
+
 PeriodicalExecuter.addMethods({
   resume: function() {
     if (!this.timer) this.registerCallback();

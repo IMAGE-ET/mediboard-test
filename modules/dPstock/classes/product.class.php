@@ -233,5 +233,35 @@ class CProduct extends CMbObject {
     
     return parent::store();
   }
+  
+  function getPendingOrders($count = true){
+    $leftjoin = array();
+    $leftjoin['product_order_item'] = 'product_order_item.order_id = product_order.order_id';
+    $leftjoin['product_reference']  = 'product_reference.reference_id = product_order_item.reference_id';
+    $leftjoin['product']            = 'product.product_id = product_reference.product_id';
+
+    $where = array(
+      "product.product_id"         => "= '$this->_id'",
+      "product_order.cancelled"    => '= 0', // order not cancelled
+      "product_order.deleted"      => '= 0', // order not deleted
+      "product_order.received"     => "IS NULL OR product_order.received = '0'", // ordered
+      "product_order.date_ordered" => 'IS NOT NULL', // ordered
+      "product_order_item.renewal" => "= '1'", // renewal line
+    );
+    
+    $where[] = 'product_order_item.order_item_id NOT IN (
+      SELECT product_order_item.order_item_id FROM product_order_item
+      LEFT JOIN product_order_item_reception ON product_order_item_reception.order_item_id = product_order_item.order_item_id
+      LEFT JOIN product_order ON product_order.order_id = product_order_item.order_id
+      WHERE product_order.deleted = 0 AND product_order.cancelled = 0
+      HAVING SUM(product_order_item_reception.quantity) < product_order_item.quantity
+    )';
+    
+    $order = new CProductOrder;
+    if ($count)
+      return $order->countList($where, null, null, null, $leftjoin);
+    else
+      return $order->loadList($where, "date_ordered ASC", null, "product_order.order_id", $leftjoin);
+  }
 }
 ?>
