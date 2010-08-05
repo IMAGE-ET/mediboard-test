@@ -22,10 +22,6 @@ var Menu = {
   }
 }
 
-Main.add(function(){
-  $("mediboard-logo").resample();
-});
-
 </script>
 
 {{if !$dialog}}
@@ -40,6 +36,11 @@ Main.add(function(){
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
   <img id="mediboard-logo" src="images/pictures/logo.png" width="140" />
+  <script type="text/javascript">
+    Main.add(function(){
+      $("mediboard-logo").resample();
+    });
+  </script>
   
   {{if !$offline}}
   {{mb_include module=mediboard template=change_group}}
