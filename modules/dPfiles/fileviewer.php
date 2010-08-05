@@ -105,7 +105,7 @@ if ($file_id = CValue::get("file_id")) {
       $ra += $file->_rotate;
       
       $finUrl .= "&ra=$ra";
-      if($file->_rotate == 90 || $file->_rotate == 270) { $w = 1000;} 
+      if(($file->_rotate == 90 || $file->_rotate == 270) && $w > 400 ) { $w = 700;}
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
       // Sharp filter to unblur raster
