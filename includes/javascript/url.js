@@ -519,7 +519,7 @@ var Url = Class.create({
     if(sfn != 0){
       this.addParam("sfn", sfn);
     }
-    this.popup(771, 600, "Fichier");
+    this.popup(775, 600, "Fichier");
   }
 } );
 
