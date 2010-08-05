@@ -46,6 +46,10 @@ $list_products = $product->loadList($where, $orderby, intval($start).",".CAppUI:
 
 foreach($list_products as $prod) {
 	$prod->loadRefs();
+  $prod->_in_order = $prod->getPendingOrderItems(false);
+  foreach($prod->_in_order as $_item) {
+    $_item->loadOrder();
+  }
 }
 
 // Smarty template

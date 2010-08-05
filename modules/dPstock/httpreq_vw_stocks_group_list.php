@@ -60,9 +60,10 @@ $stock = new CProductStockGroup();
 $list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockGroup pagination_size"), "product_stock_group.stock_id", $leftjoin);
 
 foreach($list_stocks as $_stock) {
-  $orders = $_stock->_ref_product->getPendingOrders(false);
-  foreach($orders as $order)
-    mbTrace($order->order_number);
+  $_stock->_in_order = $_stock->_ref_product->getPendingOrderItems(false);
+  foreach($_stock->_in_order as $_item) {
+    $_item->loadOrder();
+  }
 }
 
 if (!$only_ordered_stocks)

@@ -19,6 +19,7 @@ Main.add(function(){
 
 <table class="tbl">
   <tr>
+    <th rowspan="2" style="width: 16px;"></th>
     <th colspan="10">{{mb_title class=CProduct field=name}}</th>
   </tr>
   <tr>
@@ -31,6 +32,34 @@ Main.add(function(){
   {{foreach from=$list_products item=_product}}
     <tbody class="hoverable product-{{$_product->_id}}">
     <tr>
+      <td rowspan="2">
+        {{if $_product->_in_order}}
+          <table class="tbl" style="display: none;">
+            <tr>
+              <th colspan="10">{{$_product->_in_order|@count}} commandes en attente</th>
+            </tr>
+            <tr>
+              <th>Commande</th>
+              <th>Date</th>
+              <th>Qté.</th>
+            </tr>
+            {{foreach from=$_product->_in_order item=_item}}
+              <tr>
+                <td>{{$_item->_ref_order->order_number}}</td>
+                <td>{{mb_value object=$_item->_ref_order field=date_ordered}}</td>
+                <td>
+                  {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+                    {{$_item->_unit_quantity}}
+                  {{else}}
+                    {{$_item->quantity}}
+                  {{/if}}
+                </td>
+              </tr>
+            {{/foreach}}
+          </table>
+          <img src="images/icons/order.png" onmouseover="ObjectTooltip.createDOM(this, $(this).previous(), {duration:0})" />
+        {{/if}}
+      </td>
       <td colspan="10" style="font-weight: bold;">
         <a href="#1" onclick="return editProduct({{$_product->_id}})">
           {{$_product->name|truncate:80}}

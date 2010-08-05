@@ -234,9 +234,9 @@ class CProduct extends CMbObject {
     return parent::store();
   }
   
-  function getPendingOrders($count = true){
+  function getPendingOrderItems($count = true){
     $leftjoin = array();
-    $leftjoin['product_order_item'] = 'product_order_item.order_id = product_order.order_id';
+    $leftjoin['product_order']      = 'product_order.order_id = product_order_item.order_id';
     $leftjoin['product_reference']  = 'product_reference.reference_id = product_order_item.reference_id';
     $leftjoin['product']            = 'product.product_id = product_reference.product_id';
 
@@ -257,11 +257,11 @@ class CProduct extends CMbObject {
       HAVING SUM(product_order_item_reception.quantity) < product_order_item.quantity
     )';
     
-    $order = new CProductOrder;
+    $item = new CProductOrderItem;
     if ($count)
-      return $order->countList($where, null, null, null, $leftjoin);
+      return $item->countList($where, null, null, null, $leftjoin);
     else
-      return $order->loadList($where, "date_ordered ASC", null, "product_order.order_id", $leftjoin);
+      return $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
   }
 }
 ?>

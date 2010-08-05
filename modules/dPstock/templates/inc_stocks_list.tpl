@@ -15,6 +15,9 @@
 
 <table class="tbl">
   <tr>
+    {{if $class_name == 'CProductStockGroup'}}
+      <th style="width: 16px;"></th>
+    {{/if}}
     <th>{{mb_title object=$stock field=product_id}}</th>
     {{if $class_name == 'CProductStockService'}}
       <th>{{mb_title object=$stock field=service_id}}</th>
@@ -29,6 +32,36 @@
 {{foreach from=$list_stocks item=_stock}}
   {{assign var=product value=$_stock->_ref_product}}
   <tr {{if $stock_id == $_stock->_id}}class="selected"{{/if}}>
+    {{if $class_name == 'CProductStockGroup'}}
+      <td>
+        {{if $_stock->_in_order}}
+          <table class="tbl" style="display: none;">
+            <tr>
+              <th colspan="10">{{$_stock->_in_order|@count}} commandes en attente</th>
+            </tr>
+            <tr>
+              <th>Commande</th>
+              <th>Date</th>
+              <th>Qté.</th>
+            </tr>
+            {{foreach from=$_stock->_in_order item=_item}}
+              <tr>
+                <td>{{$_item->_ref_order->order_number}}</td>
+                <td>{{mb_value object=$_item->_ref_order field=date_ordered}}</td>
+                <td>
+                  {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+                    {{$_item->_unit_quantity}}
+                  {{else}}
+                    {{$_item->quantity}}
+                  {{/if}}
+                </td>
+              </tr>
+            {{/foreach}}
+          </table>
+          <img src="images/icons/order.png" onmouseover="ObjectTooltip.createDOM(this, $(this).previous(), {duration:0})" />
+        {{/if}}
+      </td>
+    {{/if}}
     <td>
     	{{if $class_name == 'CProductStockService'}}
 			{{assign var=tab value=vw_idx_stock_service&stock_service_id}}
