@@ -86,7 +86,7 @@ window.onbeforeunload= function () {
             {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
           <a target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}" title="Télécharger le fichier">
-            <img style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=500{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}&amp;ra={{$fileSel->_rotate}}" />
+            <img style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}&amp;ra={{$fileSel->_rotate}}" />
           </a> 
           {{/if}}
       {{/if}}
