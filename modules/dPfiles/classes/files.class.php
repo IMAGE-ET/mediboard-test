@@ -30,6 +30,9 @@ class CFile extends CDocumentItem {
   var $_file_path    = null;
   var $_nb_pages     = null;
   
+  // Distant fields
+  var $_rotate       = null;
+
   // References
   var $_ref_file_owner = null;
 
@@ -243,8 +246,18 @@ class CFile extends CDocumentItem {
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
 
-      //return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
+  //    return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
       
+      $matches = array();
+      exec("convert --version", $ret);
+      preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
+      
+      if ($matches[1] < "6.6") {
+         mbTrace("exact");
+        if (preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
+          $this->_rotate = 360 - $matches[1];
+        }
+      }
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
         $splitFile = preg_split("/obj\r<</", $dataFile);

@@ -42,19 +42,30 @@ if ($file_path) {
   }
 }
 
-if($file_id = CValue::get("file_id")) {
+if ($file_id = CValue::get("file_id")) {
   $file = new CFile();
   $file->load($file_id);
   $file->loadRefsFwd();
-  if(!is_file($file->_file_path)) {
+  if (!is_file($file->_file_path)) {
     header("Location: images/pictures/notfound.png");
     return;
-  } elseif(!$file->canRead()) {
+  } elseif (!$file->canRead()) {
     header("Location: images/pictures/accessdenied.png");
     return;
   }
-  
-  if(CValue::get("phpThumb")) {
+  // Liste des extensions dont la conversion PDF est possible
+  $file_types = array(
+    "cgm", "csv", "dbf", "dif", "doc", "docm", "docx", "dot", "dotm", "dotx",
+    "dxf", "emf", "eps", "fodg", "fodp", "fods", "fodt", "htm", "html", "hwp",
+    "lwp", "met", "mml", "odp", "odg", "ods", "otg", "odf", "odm", "odt", "oth",
+    "otp", "ots", "ott", "pct", "pict", "pot", "potm", "potx", "pps", "ppt", "pptm",
+    "pptx", "rtf", "sgf", "sgv", "slk", "stc", "std", "sti", "stw", "svg", "svm", "sxc",
+    "sxd", "sxg", "sxi", "sxm", "sxw", "txt", "uof", "uop", "uos", "uot", "wb2", "wk1", "wks",
+    "wmf", "wpd", "wpg", "wps", "xlc", "xlm", "xls", "xlsb", "xlsm", "xlsx", "xlt", "xltm",
+    "xltx", "xlw", "xml");
+  global $dPconfig;
+
+  if (CValue::get("phpThumb")) {
     $w  = CValue::get("w" , "");
     $h  = CValue::get("h" , "");
     $zc = CValue::get("zc" , "");
@@ -64,12 +75,14 @@ if($file_id = CValue::get("file_id")) {
     $q  = CValue::get("q" , 100);
     $dpi  = CValue::get("dpi" , 150);
     $sfn  = CValue::get("sfn" , 0);
+    $ra   = CValue::get("ra", 0);
     //creation fin URL
     $finUrl="";
+    if($ra){ $finUrl="&ra=$ra"; }
     if($f){ $finUrl.="&f=$f";}    
     if($q){ $finUrl.="&q=$q";}  
-    
-    if(strpos($file->file_type, "image") !== false) {
+
+    if (strpos($file->file_type, "image") !== false && strpos($file->file_type,"svg") == false) {
       if($hp){$finUrl.="&hp=$hp";}
       if($wl){$finUrl.="&wl=$wl";}
       if($h){$finUrl.="&h=$h";}
@@ -77,7 +90,7 @@ if($file_id = CValue::get("file_id")) {
       if($zc){$finUrl.="&zc=$zc";}
       //trigger_error("Source is $file->_file_path$finUrl");
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
-    } elseif(strpos($file->file_type, "pdf") !== false) {
+    } elseif (strpos($file->file_type, "pdf") !== false) {
       if($hp){$finUrl.="&h=$hp";}
       if($wl){$finUrl.="&w=$wl";}
       if($h){$finUrl.="&h=$h";}
@@ -89,7 +102,29 @@ if($file_id = CValue::get("file_id")) {
 //      $finUrl .= "&fltr[]=usm";
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: images/pictures/acroread.png");
-    } /*elseif(strpos($file->file_type, "csv") !== false) {
+    } elseif (in_array(substr(strrchr($file->file_name, '.'),1), $file_types) && $dPconfig["dPfiles"]["CFile"]["active_oxoffice"]) {
+      if($hp){$finUrl.="&h=$hp";}
+      if($wl){$finUrl.="&w=$wl";}
+      if($h){$finUrl.="&h=$h";}
+      if($w){$finUrl.="&w=$w";}
+      if($sfn){$finUrl.="&sfn=$sfn";}
+      if($dpi){$finUrl.="&dpi=$dpi";}
+      $fileb = new CFile();
+      $fileb->object_class = "CFile";
+      $fileb->object_id = $file->_id;
+      $success = 1;
+      $fileb->loadMatchingObject();
+      if (!$fileb->_id) {
+        $success = $file->convertToPDF(strrchr($file->file_name, '.'));
+      }
+      if ($success == 1) {
+        $fileb->loadMatchingObject();
+        header("Location: lib/phpThumb/phpThumb.php?src=$fileb->_file_path".$finUrl);
+      }
+      else {
+        header("Location: images/pictures/medifile.png");
+      }
+    }/*elseif(strpos($file->file_type, "csv") !== false) {
       header("Location: images/pictures/spreadsheet.png");
     } elseif(strpos($file->file_type, "xls") !== false) {
       header("Location: images/pictures/spreadsheet.png");
@@ -130,7 +165,6 @@ if($file_id = CValue::get("file_id")) {
 
     header("Content-disposition: attachment; filename=\"".$file->file_name."\"");
     readfile($file->_file_path);
-
   }
 } else {
   CAppUI::setMsg("fileIdError", UI_MSG_ERROR);
