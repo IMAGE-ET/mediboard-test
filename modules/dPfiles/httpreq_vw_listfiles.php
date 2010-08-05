@@ -64,6 +64,7 @@ if($object_id && $object_class){
     if (!isset($_cat["items"])) break;
 
     foreach($_cat["items"] as $data) {
+      $data->loadRefCategory();
       if ($data->_class_name == "CCompteRendu" && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
         $data->loadRefsFwd();
         $data->loadFile();

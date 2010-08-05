@@ -1432,3 +1432,9 @@ table.tbl td.trans-data p, table.tbl td.trans-action p, table.tbl td.trans-resul
 .mergeable big {
 	font-weight: bold;
 }
+
+img#thumb {
+	-moz-box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
+  -webkit-box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
+  box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
+}

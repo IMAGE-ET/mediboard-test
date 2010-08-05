@@ -343,6 +343,10 @@ button.tick:before, a.button.tick:before {
   content: url(images/buttons/tick.png);
 }
 
+button.pdf:before, a.button.pdf:before {
+  content: url(images/buttons/pdf.gif);
+}
+
 button.down:before, a.button.down:before {
   content: url(images/buttons/down.png);
 }
@@ -365,6 +369,14 @@ button.right:before, a.button.right:before {
 
 button.right-disabled:before, a.button.right-disabled:before {
   content: url(images/buttons/right-disabled.png);
+}
+
+button.rotate_left:before, a.button.rotate_left:before {
+	content: url(images/buttons/rotate-left.png);
+}
+
+button.rotate_right:before, a.button.rotate_right:before {
+  content: url(images/buttons/rotate-right.png);
 }
 
 button.change:before, a.button.change:before {

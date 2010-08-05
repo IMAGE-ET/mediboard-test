@@ -65,7 +65,13 @@ var Url = Class.create({
     return this;
   },
   
-  addParam: function(sName, sValue) {
+  addParam: function(sName, sValue, bAcceptArray) {
+    if (bAcceptArray && Object.isArray(sValue)) {
+      $A(sValue).each(function(elt, i) {
+        this.oParams[sName.replace(/\[([^\[]*)\]$/, "["+i+"]")] = elt;
+      }, this);
+      return this;
+    }
     this.oParams[sName] = sValue;
     return this;
   },
@@ -513,7 +519,7 @@ var Url = Class.create({
     if(sfn != 0){
       this.addParam("sfn", sfn);
     }
-    this.popup(750, 550, "Fichier");
+    this.popup(771, 600, "Fichier");
   }
 } );
 
