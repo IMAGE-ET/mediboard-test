@@ -111,8 +111,9 @@ function rotateImage(direction) {
   {{/if}}
 </div>
 
+{{*
 {{if $isConverted == 1}}
   <a class="button save" target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file_id_original}}">{{tr}}CFile.save_original{{/tr}}</a>
 {{/if}}
-  
+*}}
 </td></tr></table>
