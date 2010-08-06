@@ -62,9 +62,12 @@ Main.add(function(){
 			  function(){ 
 				  refreshReplacement('{{$sejour->_id}}','{{$conge->_id}}','{{$type}}');
 					refreshlistSejour('{{$sejour->_id}}','{{$type}}');
-					{{if $type == "reeducateur"}}
-					$('replacement-reeducateur').update(''); 
+					{{if $type == "kine"}}
+          refreshlistSejour('','reeducateur');
 					{{/if}}
+          {{if $type == "reeducateur"}}
+          $('replacement-reeducateur').update(''); 
+          {{/if}}
 				} });">
       	
 	<input type="hidden" name="m" value="ssr" />

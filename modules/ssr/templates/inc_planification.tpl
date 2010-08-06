@@ -21,13 +21,6 @@
 
 <script type="text/javascript">
 
-PlanningEvent.onMouseOver = function(event) {
-  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
-  if (matches) {
-    ObjectTooltip.createEx(event, matches[0]);
-  }
-}
-
 Planification.onCompleteShowWeek = function() {
   Planification.refreshSejour();
   PlanningTechnicien.show();

@@ -38,7 +38,7 @@ Main.add(function() {
       {{assign var=key value="$plage_conge_id-$sejour_id"}}
 			
       <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
-		    <td colspan="2" class="text {{if $_sejour->_ref_replacement->_id && $type == "kine"}}arretee{{/if}}">
+		    <td colspan="2" class="text {{if $_sejour->_ref_replacement->_id && $type == "kine"}} arretee {{/if}}">
 					{{assign var=patient value=$_sejour->_ref_patient}}
 				  <big class="CPatient-view" 
 					  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')" 

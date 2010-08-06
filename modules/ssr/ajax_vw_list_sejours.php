@@ -67,14 +67,12 @@ foreach($plages_conge as $_plage_conge){
 			$sejour->loadRefBilanSSR();
 			$bilan =& $sejour->_ref_bilan_ssr;
 			$bilan->loadRefTechnicien();
-			if ($bilan->_ref_technicien->kine_id != $_plage_conge->user_id) {
-        $_sejours[$_evenement->sejour_id] = $_evenement->_ref_sejour;
-			}
+      $_sejours[$_evenement->sejour_id] = $_evenement->_ref_sejour;
 		}
 	}
 	
 	if (count($_sejours)){
-		foreach($_sejours as $_sejour){
+		foreach($_sejours as $_sejour) {
 			
 			// On compte le nombre d'evenements SSR à transferer
 			$evenement_ssr = new CEvenementSSR();
@@ -86,7 +84,7 @@ foreach($plages_conge as $_plage_conge){
 			
 			$_sejour->checkDaysRelative($date);
 			$_sejour->loadRefReplacement();
-			if (!$_sejour->_ref_replacement->_id) {
+			if (!$_sejour->_ref_replacement->_id || $type == "reeducateur") {
 		    $sejours_count++;
 			}
 

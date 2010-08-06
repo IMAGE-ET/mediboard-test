@@ -42,8 +42,6 @@ class CReplacement extends CMbObject {
 		
 		$this->completeField("conge_id", "replacer_id");
 		$this->loadRefConge();
-    mbTrace($this->_ref_conge->getValues(), "Congé");
-    mbTrace($this->getValues(), "Remplacement");
 		
 		if ($this->_ref_conge->user_id == $this->replacer_id) {
       mbTrace( "$this->_class_name-failed-same_user");
