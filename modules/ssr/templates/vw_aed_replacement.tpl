@@ -9,14 +9,17 @@
 *}}
 
 {{mb_include_script module=ssr script=planification}}
-{{mb_include_script module="ssr" script="planning"}}
+{{mb_include_script module=ssr script=planning}}
+
 <script type="text/javascript">
 
 Planification.onCompleteShowWeek = function(){
   refreshlistSejour('','kine');
   refreshlistSejour('','reeducateur');
-  $('replacement-kine').update('');
-  $('replacement-reeducateur').update(''); 
+  refreshEvenementsHorsSejours();
+  $('replacement-kine').update();
+  $('replacement-reeducateur').update(); 
+  $('planning-sejour').update(); 
 }
 
 refreshlistSejour = function(selected_sejour_id, type){
@@ -27,6 +30,14 @@ refreshlistSejour = function(selected_sejour_id, type){
 		  $('replacement-'+type+'-'+selected_sejour_id).addUniqueClassName('selected');
 		}
 	});
+}
+
+refreshEvenementsHorsSejours = function(selected_sejour_id, type){
+  var url = new Url("ssr", "ajax_evenements_hors_sejours");
+  url.requestUpdate("evenements-hors-sejours", { 
+    onComplete: function(){
+    }
+  });
 }
 
 refreshReplacement = function(sejour_id, conge_id, type){
@@ -52,7 +63,6 @@ printRepartition = function(){
 Main.add(function(){
   Planification.showWeek();
 	Planification.onCompleteShowWeek();
-	
 	Control.Tabs.create('tabs-replacement', true).activeLink.onmouseup();
 });
 
@@ -78,7 +88,7 @@ Main.add(function(){
 					</a>
 			  </li>
         <li>
-          <a class="empty" href="#hors-bornes" onmouseup="ViewPort.SetAvlHeight.defer('sejours-hors-bornes', 1);">
+          <a class="empty" href="#hors-sejours" onmouseup="ViewPort.SetAvlHeight.defer('evenements-hors-sejours', 1);">
             Planifications hors-séjours
             <small>(-)</small>
           </a>
@@ -103,12 +113,11 @@ Main.add(function(){
     <td id="replacement-reeducateur"></td>
   </tr>
 	
-  <tr id="hors-bornes">
+  <tr id="hors-sejours">
     <td class="halfPane" style="vertical-align: top;">
-      <div id="sejours-hors-bornes"></div>
+      <div id="evenements-hors-sejours"></div>
 		</td>
-		<td>
-			
+		<td id="planning-sejour">
 		</td>
   </tr>	
 </table>

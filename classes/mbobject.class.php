@@ -451,12 +451,11 @@ class CMbObject {
   }
   
   /** 
-   * Loads an object by its ID
-   * @param integer $id [optional] The object's ID
-   * @param boolean $strip [optional] 
+   * Loads an object by its idendifier
+   * @param integer $id [optional] The object's identifier
    * @return CMbObject|boolean The loaded object if found, false otherwise
    */
-  function load($id = null, $strip = true) {
+  function load($id = null) {
   	if ($id) {
       $this->_id = $id;
     }
@@ -476,7 +475,7 @@ class CMbObject {
       $idex->id400 = $this->_id;
       $idex->tag = "merged";
       if ($idex->loadMatchingObject()) {
-        $this->load($idex->object_id, $strip);
+        $this->load($idex->object_id);
         return $this;
       }
     }
@@ -493,6 +492,16 @@ class CMbObject {
 		
     return $this;
   }
+	
+	/**
+	 * Load all objects for given identifiers
+	 * @params array $ids list of identifiers
+   * @return array list of objects
+	 */
+	function loadAll($ids) {
+		$where[$this->_spec->key] = CSQLDataSource::prepareIn($ids);
+		return $this->loadList($where);
+	}
   
   /**
    * Register the object into cache

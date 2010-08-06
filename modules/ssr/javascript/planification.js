@@ -159,8 +159,6 @@ Planification = {
   },
   
   showWeek: function(date) {
-//    $("week-changer").update("");
-    
     var url = new Url("ssr", "ajax_week_changer");
     if (date) {
       url.addParam("date", date);

@@ -253,7 +253,7 @@ class CRequest {
    * @param CMbObject $object Object concerned
    */
   function getIdsRequest(CMbObject $object) {
-    $query = "SELECT `{$object->_spec->key}`";
+    $query = "SELECT `{$object->_spec->table}`.`{$object->_spec->key}`";
     return $query . $this->getRequestFrom($object->_spec->table);
   }
 }

@@ -40,9 +40,13 @@ Main.add(function() {
       <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
 		    <td colspan="2" class="text {{if $_sejour->_ref_replacement->_id && $type == "kine"}}arretee{{/if}}">
 					{{assign var=patient value=$_sejour->_ref_patient}}
-		      <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
-				  <big class="CPatient-view" onclick="refreshReplacement('{{$_sejour->_id}}','{{$plage_conge_id}}','{{$type}}'); this.up('tr').addUniqueClassName('selected');">{{$patient}}</big> 
-				  {{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
+				  <big class="CPatient-view" 
+					  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')" 
+					  onclick="refreshReplacement('{{$_sejour->_id}}','{{$plage_conge_id}}','{{$type}}'); this.up('tr').addUniqueClassName('selected');" >
+						{{$patient}}
+					</big> 
+				  <br />
+					{{mb_include module=dPpatients template=inc_vw_ipp ipp=$patient->_IPP}}
           {{$patient->_age}} ans
 		    </td>
 		    <td style="text-align: center;">

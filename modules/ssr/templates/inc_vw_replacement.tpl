@@ -83,9 +83,9 @@ Main.add(function(){
 		<tr>
 			{{if $type == "kine"}}
 				{{if $replacement->_id}}
-				 <th class="title modify" colspan="2">Modification du remplacement du séjour<br /> {{$sejour->_view}}</th>
+				 <th class="text title modify" colspan="2">Modification du remplacement du séjour<br /> {{$sejour->_view}}</th>
 	      {{else}}
-				 <th class="title" colspan="2">Création d'un remplacement</th>
+				 <th class="text title" colspan="2">Création d'un remplacement</th>
 	    	{{/if}}
 			{{else}}
 			  <th class="title" colspan="2">
