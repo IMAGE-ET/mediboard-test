@@ -11,6 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
+
 // Initialisation des variables
 $plageconsult_id = CValue::get("plageconsult_id");
 
@@ -18,6 +19,7 @@ $plageconsult_id = CValue::get("plageconsult_id");
 $plage = new CPlageconsult;
 if ($plageconsult_id) {
   $plage->load($plageconsult_id);
+  $plage->loadRefsNotes();
   $date  = $plage->date;
 } else {
   $date  = CValue::get("date", mbDate());

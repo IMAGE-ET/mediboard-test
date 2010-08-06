@@ -8,6 +8,8 @@ var PlageConsult = {
     alert("Veuillez choisir une plage");
   },
   changePlage: function(plage_id) {
+    if (!plage_id) return;
+    
     if(this.currPlage) {
       $("plage-"+this.currPlage).removeClassName("selected");
     }
@@ -27,6 +29,7 @@ var PlageConsult = {
 
 Main.add(function () {
   Calendar.regField(getForm("Filter").date, null, {noView: true});
+  PlageConsult.changePlage({{$plageconsult_id}});
 });
 
 </script>
@@ -100,9 +103,7 @@ Main.add(function () {
   <td style="width: 50%">
     {{include file="inc_list_plages.tpl"}}
   </td>
-  <td id="listPlaces">
-    {{include file="inc_list_places.tpl"}}
-  </td>
+  <td id="listPlaces"></td>
 </tr>
 
 </table>
