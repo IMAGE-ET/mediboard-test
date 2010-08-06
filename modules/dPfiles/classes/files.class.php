@@ -21,7 +21,8 @@ class CFile extends CDocumentItem {
   var $file_date          = null;
   var $file_size          = null;
   var $private            = null;
-
+  var $rotation           = null;
+  
   // Form fields
   var $_extensioned  = null;
   var $_file_size    = null;
@@ -31,7 +32,8 @@ class CFile extends CDocumentItem {
   var $_nb_pages     = null;
   
   // Behavior fields
-  var $rotate       = null;
+  var $_rotate      = null;
+  
 
   // References
   var $_ref_file_owner = null;
@@ -59,13 +61,14 @@ class CFile extends CDocumentItem {
     $specs["file_type"]          = "str";
     $specs["file_name"]          = "str notNull show|0";
     $specs["private"]            = "bool notNull default|0";
+    $specs["rotation"]           = "enum list|0|90|180|270";
     // Form Fields
     $specs["_sub_dir"]      = "str";
     $specs["_absolute_dir"] = "str";
     $specs["_file_path"]    = "str";
     $specs["_file_size"]    = "str show|1";
 		// Behavior fields
-		$specs["rotate"]        = "num notNull default|0";
+		$specs["_rotate"]       = "enum list|left|right";
     return $specs;
   }
   
@@ -143,12 +146,27 @@ class CFile extends CDocumentItem {
       $this->moveFile($this->_old->_file_path);
     }
 
-    if (!$this->_id && $this->rotate === null) {
+    if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();
-      $this->rotate === null ? $this->rotate = 0 : $this->rotate = $this->rotate;
+      $this->rotation = $this->rotation === null ? 0 : $this->rotation;
     }
 
-    $this->rotate = $this->rotate % 360;
+    if ($this->_rotate !== null) {
+        $this->completeField("rotation");
+    }
+    if ($this->_rotate == "left") {
+      $this->rotation += 90;
+    }
+    if ($this->_rotate == "right") {
+      $this->rotation -= 90;
+    }
+    $this->rotation %= 360;
+    if ($this->rotation < 0) {
+      $this->rotation += 360;
+    }
+    
+    $this->rotation = $this->rotation % 360;
+    if ($this->rotation < 0) { $this->rotation += 360; }
     return parent::store();
   }
   

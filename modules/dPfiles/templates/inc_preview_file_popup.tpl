@@ -48,36 +48,27 @@ window.onbeforeunload= function () {
   {{/if}}
 </div>
 
-<script type="text/javascript">
-function rotateImage(direction) {
-  var thumb = $("thumb");
-  var src = thumb.src.toQueryParams();
-
-  src.ra = 0;
-  
-  if(direction == "r") {
-    src.ra = -90;
-  } else {
-    src.ra = 90;
+<div style="text-align: center;">
+  <script type="text/javascript">
+  function onSubmitRotate(element, rotate) {
+    var form = element.form;
+    $V(form._rotate, rotate);
+    return onSubmitFormAjax(form, {onComplete: function() { location.reload(); }});
   }
+  </script>
+  <form name="FileRotate" action="?dialog=1" method="post">
+    <input type="hidden" name="m" value="dPfiles"/>
+    <input type="hidden" name="a" value="preview_files"/>
+    <input type="hidden" name="dosql" value="do_file_aed"/>
+    {{mb_key object=$fileSel hidden=1}}
+    {{mb_field object=$fileSel field=_rotate hidden=1}}
+      
+    <button type="button" style="float: left;" class="rotate_left notext singleclick" onclick="onSubmitRotate(this, 'left')" title="{{tr}}CFile._rotate.left{{/tr}}"></button>
+    <button type="button" style="float: right;" class="rotate_right notext singleclick" onclick="onSubmitRotate(this, 'right')" title="{{tr}}CFile._rotate.right{{/tr}}"></button>
+       
+    </form>
+    {{if $fileSel}}
 
-  if (!Prototype.Browser.IE) {
-    WaitingMessage.cover(thumb.up('td'));
-    thumb.onload = function(){
-      $$(".cover-container").invoke("remove");
-    };
-  }
-  
-  thumb.src = '?' + Object.toQueryString(src);
-}
-</script>
-
- <div style="text-align: center;">
-
-    <button type="button" style="float: left;" class="rotate_left notext" onclick="rotateImage('l')" title="{{tr}}CFile.rotate_left{{/tr}}"></button>
-    <button type="button" style="float: right;" class="rotate_right notext" onclick="rotateImage('r')" title="{{tr}}CFile.rotate_right{{/tr}}"></button>
-
-  {{if $fileSel}}
     {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages > 1 && !$acces_denied}}
         
       <button class="left" {{if $page_prev === null}}disabled="disabled"{{/if}}
@@ -110,7 +101,7 @@ function rotateImage(direction) {
     {{else}}
       <a target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}" title="Télécharger le fichier">
         <img id="thumb" style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" />
-      </a> 
+      </a>
     {{/if}}
   {{/if}}
 </div>

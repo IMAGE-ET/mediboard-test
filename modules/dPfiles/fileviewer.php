@@ -98,16 +98,11 @@ if ($file_id = CValue::get("file_id")) {
       if($sfn){$finUrl.="&sfn=$sfn";}
       if($dpi){$finUrl.="&dpi=$dpi";}
       
-      if($ra = CValue::get("ra")) {
-        $file->rotate += $ra;
-        $file->store();
-      }
-
-      if($file->oldImageMagick() && ($file->rotate == 0 || $file->rotate == 180 || $file->rotate == -180)) {
+      if($file->oldImageMagick() && ($file->rotation % 180 == 90)) {
         $w = 1000;
       }
       
-      $finUrl .= "&ra={$file->rotate}";
+      $finUrl .= "&ra={$file->rotation}";
       
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
