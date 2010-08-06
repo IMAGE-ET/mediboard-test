@@ -53,12 +53,12 @@ function rotateImage(direction) {
   var thumb = $("thumb");
   var src = thumb.src.toQueryParams();
 
-  src.ra = parseInt(src.ra) || 0;
+  src.ra = 0;
   
   if(direction == "r") {
-    src.ra = (src.ra - 90)%360;
+    src.ra = -90;
   } else {
-    src.ra = (src.ra + 90)%360;
+    src.ra = 90;
   }
 
   if (!Prototype.Browser.IE) {
@@ -81,7 +81,7 @@ function rotateImage(direction) {
     {{if $fileSel->_class_name=="CFile" && $fileSel->_nb_pages > 1 && !$acces_denied}}
         
       <button class="left" {{if $page_prev === null}}disabled="disabled"{{/if}}
-         onclick="location.href='{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}&amp;ra={{$fileSel->_rotate}}'">
+         onclick="location.href='{{$href}}&amp;objectClass={{$objectClass}}&amp;objectId={{$objectId}}&amp;elementClass={{$elementClass}}&amp;elementId={{$elementId}}&amp;nonavig={{$nonavig}}&amp;sfn={{$page_prev}}'">
         Page précédente
       </button>
       
@@ -109,7 +109,7 @@ function rotateImage(direction) {
       {{include file="inc_preview_contenu_file.tpl"}}
     {{else}}
       <a target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}" title="Télécharger le fichier">
-        <img id="thumb" style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}&amp;ra={{$fileSel->_rotate}}" />
+        <img id="thumb" style="border: 1px solid #000;" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" />
       </a> 
     {{/if}}
   {{/if}}

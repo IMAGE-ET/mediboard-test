@@ -30,8 +30,8 @@ class CFile extends CDocumentItem {
   var $_file_path    = null;
   var $_nb_pages     = null;
   
-  // Distant fields
-  var $_rotate       = null;
+  // Behavior fields
+  var $rotate       = null;
 
   // References
   var $_ref_file_owner = null;
@@ -64,7 +64,8 @@ class CFile extends CDocumentItem {
     $specs["_absolute_dir"] = "str";
     $specs["_file_path"]    = "str";
     $specs["_file_size"]    = "str show|1";
-		
+		// Behavior fields
+		$specs["rotate"]        = "num notNull default|0";
     return $specs;
   }
   
@@ -141,6 +142,13 @@ class CFile extends CDocumentItem {
       $this->_old->updateFormFields();
       $this->moveFile($this->_old->_file_path);
     }
+
+    if (!$this->_id && $this->rotate === null) {
+      $this->loadNbPages();
+      $this->rotate === null ? $this->rotate = 0 : $this->rotate = $this->rotate;
+    }
+
+    $this->rotate = $this->rotate % 360;
     return parent::store();
   }
   
@@ -239,6 +247,12 @@ class CFile extends CDocumentItem {
     return $affichageNbFile;
   }
   
+  function oldImageMagick() {
+    exec("convert --version", $ret);
+    preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
+    return $matches[1] < "6.6";
+  }
+  
   function loadNbPages(){
     if(strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)){
       // Fichier PDF Tentative de récupération
@@ -246,17 +260,12 @@ class CFile extends CDocumentItem {
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
 
-  //    return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
-      
-      $matches = array();
-      exec("convert --version", $ret);
-      preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
-      
-      if ($matches[1] < "6.6") {
-        if (preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
-          $this->_rotate = 360 - $matches[1];
-        }
+      if ($this->oldImageMagick() && preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
+        $this->rotate = 360 - $matches[1];
       }
+      
+      //return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
+      
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
         $splitFile = preg_split("/obj\r<</", $dataFile);

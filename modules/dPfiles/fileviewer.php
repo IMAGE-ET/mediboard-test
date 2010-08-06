@@ -75,7 +75,6 @@ if ($file_id = CValue::get("file_id")) {
     $q  = CValue::get("q" , 80);
     $dpi = CValue::get("dpi" , 150);
     $sfn = CValue::get("sfn" , 0);
-    $ra  = CValue::get("ra", 0);
     
     //creation fin URL
     $finUrl="";
@@ -99,13 +98,17 @@ if ($file_id = CValue::get("file_id")) {
       if($sfn){$finUrl.="&sfn=$sfn";}
       if($dpi){$finUrl.="&dpi=$dpi";}
       
-      // Dans le cas de la tooltip, il faudrait aussi interchanger $w et $h.
-      // Mais cela rentre en conflit avec l'aperçu de CFiles
-      $file->loadNbPages();
-      $ra += $file->_rotate;
+      if($ra = CValue::get("ra")) {
+        $file->rotate += $ra;
+        $file->store();
+      }
+
+      if($file->oldImageMagick() && ($file->rotate == 0 || $file->rotate == 180 || $file->rotate == -180)) {
+        $w = 1000;
+      }
       
-      $finUrl .= "&ra=$ra";
-      if (($file->_rotate == 90 || $file_rotate == 270) && ($ra == 90 || $ra == 180) && $w > 400 ) { $w = 1000;}
+      $finUrl .= "&ra={$file->rotate}";
+      
       if($h){$finUrl.="&h=$h";}
       if($w){$finUrl.="&w=$w";}
       // Sharp filter to unblur raster

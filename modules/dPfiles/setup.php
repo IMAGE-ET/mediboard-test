@@ -181,7 +181,12 @@ class CSetupdPfiles extends CSetup {
               ADD `private` ENUM ('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `files_mediboard`
+             ADD `rotate` INT (11) NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.25";
   }
 }
 ?>
