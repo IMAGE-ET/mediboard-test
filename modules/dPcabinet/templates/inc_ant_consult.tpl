@@ -205,7 +205,7 @@ Main.add(function () {
                   objectClass: "CAntecedent", 
                   contextUserId: "{{$userSel->_id}}",
                   contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 
                 $(elements._search).observe("blur", function(e){
@@ -408,7 +408,7 @@ Main.add(function () {
                   objectClass: "CTraitement", 
                   contextUserId: "{{$userSel->_id}}",
                   contextUserView: "{{$userSel->_view}}",
-                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 
                 $(elements._search).observe("blur", function(e){

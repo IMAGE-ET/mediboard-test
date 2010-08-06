@@ -64,7 +64,7 @@ Main.add(function () {
               objectClass: "CAntecedent", 
               contextUserId: "{{$user->_id}}",
               contextUserView: "{{$user->_view}}",
-              timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+              timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
             });
 			    } );
 			  </script>
