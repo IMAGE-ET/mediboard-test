@@ -14,7 +14,13 @@
 <table class="tbl">
   <tr>
     <th style="width: 50%;"></th>
-    <th style="width: 0.1%; text-align: center;">{{mb_title class=CProductOrderItem field=quantity}}</th>
+    <th style="width: 0.1%; text-align: center;">
+    {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
+      {{mb_title class=CProductOrderItem field=_unit_quantity}}
+    {{else}}
+      {{mb_title class=CProductOrderItem field=quantity}}
+    {{/if}}
+    </th>
     <th style="width: 0.1%; text-align: center;">{{mb_title class=CProductOrderItem field=unit_price}}</th>
     <th style="width: 0.1%; text-align: center;">{{mb_title class=CProductOrderItem field=_price}}</th>
     <th style="width: 0.1%; text-align: center;">Déjà reçu</th>

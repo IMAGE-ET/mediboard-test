@@ -77,7 +77,7 @@ class CProductOrder extends CMbMetaObject {
     $specs['order_number']    = 'str maxLength|64 seekable protected';
     $specs['bill_number']     = 'str maxLength|64 protected';
     $specs['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
-    $specs['group_id']        = 'ref notNull class|CGroups';
+    $specs['group_id']        = 'ref notNull class|CGroups show|0';
     $specs['comments']        = 'text';
     $specs['locked']          = 'bool show|0';
     $specs['cancelled']       = 'bool show|0';

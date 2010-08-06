@@ -31,6 +31,7 @@ foreach($order->_ref_order_items as $_item) {
   $_item->loadRefsReceptions();
   foreach($_item->_ref_receptions as $_reception) {
     $_reception->loadRefReception();
+    $_reception->getUnitQuantity();
   }
 }
 

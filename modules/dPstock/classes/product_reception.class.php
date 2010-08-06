@@ -47,7 +47,7 @@ class CProductReception extends CMbObject {
 		$specs = parent::getProps();
     $specs['date']       = 'dateTime seekable';
     $specs['societe_id'] = 'ref class|CSociete seekable';
-    $specs['group_id']   = 'ref notNull class|CGroups';
+    $specs['group_id']   = 'ref notNull class|CGroups show|0';
 	  $specs['reference']  = 'str notNull seekable';
     $specs['locked']     = 'bool notNull default|0';
     $specs['_total']     = 'currency';
