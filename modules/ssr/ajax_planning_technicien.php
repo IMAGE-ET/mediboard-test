@@ -55,8 +55,8 @@ foreach($evenements_charge as $_evenement){
 foreach($evenements as $_evenement){
 	$_evenement->loadRefPrescriptionLineElement();
   $_evenement->loadRefSejour();
-  $_evenement->_ref_sejour->loadRefPatient();
   $_evenement->loadRefEquipement();
+  $_evenement->_ref_sejour->loadRefPatient();
   
 	$important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
   
@@ -83,6 +83,11 @@ foreach($evenements as $_evenement){
     $class = "zero-actes";
   }
   
+	$_sejour = $_evenement->_ref_sejour;
+	if (!in_range($_evenement->debut, mbDate($_sejour->entree), mbDate("+1 DAY", $_sejour->sortie))) {
+		$class = "disabled";
+	}
+	
   if ($_evenement->realise && $selectable){
     $class = "realise";
   }
