@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=ssr script=planification}}
 {{mb_include_script module=ssr script=planning}}
+{{mb_include_script module=ssr script=planification}}
 
 <script type="text/javascript">
 

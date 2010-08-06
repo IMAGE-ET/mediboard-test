@@ -1,15 +1,8 @@
-{{mb_include_script module="ssr" script="planning"}}
-{{mb_include_script module="ssr" script="planification"}}
-{{mb_include_script module="ssr" script="modal_validation"}}
+{{mb_include_script module=ssr script=planning}}
+{{mb_include_script module=ssr script=planification}}
+{{mb_include_script module=ssr script=modal_validation}}
 
 <script type="text/javascript">
-
-PlanningEvent.onMouseOver = function(event) {
-  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
-  if (matches) {
-    ObjectTooltip.createEx(event, matches[0]);
-  }
-}
 
 PlanningEvent.onDblClic = function(event) {
   var sejour_id = event.className.match(/CSejour-([0-9]+)/)[1];

@@ -1,5 +1,5 @@
-{{mb_include_script module="ssr" script="planning"}}
-{{mb_include_script module="ssr" script="planification"}}
+{{mb_include_script module=ssr script=planning}}
+{{mb_include_script module=ssr script=planification}}
 
 <script type="text/javascript">
 Main.add(function () {

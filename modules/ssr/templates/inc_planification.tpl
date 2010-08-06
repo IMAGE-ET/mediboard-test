@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=ssr script=planning}}
 {{mb_include_script module=ssr script=planification}}
 
 {{if $bilan->_id && !$bilan->planification}} 

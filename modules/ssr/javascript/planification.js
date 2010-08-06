@@ -172,3 +172,12 @@ Planification = {
 	
 	onCompleteShowWeek: Prototype.emptyFunction
 };
+
+// Warning: planning.js has to be included first
+PlanningEvent.onMouseOver = function(event) {
+  var matches = event.className.match(/CEvenementSSR-([0-9]+)/);
+  if (matches) {
+    ObjectTooltip.createEx(event, matches[0]);
+  }
+}
+

@@ -1,6 +1,6 @@
 {{mb_include_script module=ssr script=sejours_ssr}}
-{{mb_include_script module="ssr" script="planning"}}
-{{mb_include_script module="ssr" script="planification"}}
+{{mb_include_script module=ssr script=planning}}
+{{mb_include_script module=ssr script=planification}}
 
 <table class="main tbl">
 	{{mb_include template=inc_sejours_ssr sejours=$sejours offline=1}}
