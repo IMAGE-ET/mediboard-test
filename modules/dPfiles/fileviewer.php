@@ -99,7 +99,7 @@ if ($file_id = CValue::get("file_id")) {
       if($dpi){$finUrl.="&dpi=$dpi";}
       
       if($file->oldImageMagick() && ($file->rotation % 180 == 90)) {
-        $w = 1000;
+        $w = parseInt($w * sqrt(2));
       }
       
       $finUrl .= "&ra={$file->rotation}";
