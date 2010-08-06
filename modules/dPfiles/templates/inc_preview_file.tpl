@@ -35,7 +35,7 @@
     {{if $includeInfosFile}}
       {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
     {{else}}
-      <img class="preview" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}$amp;ra={{$fileSel->_rotate}}" title="Afficher le grand aperçu" border="0" />
+      <img class="preview" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
     {{/if}}
   </a>
 {{else}}

@@ -279,7 +279,7 @@ class CFile extends CDocumentItem {
       $nb_count = substr_count($dataFile, $string_recherche);
 
       if ($this->oldImageMagick() && preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
-        $this->rotate = 360 - $matches[1];
+        $this->rotation = 360 - $matches[1];
       }
       
       //return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
