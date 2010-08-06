@@ -17,6 +17,7 @@ var FCKMbPageBreakCommand = function() {
 }
   
 FCKMbPageBreakCommand.prototype.Execute = function() {
+  FCK.Focus();
   FCK.InsertHtml("<hr class='pagebreak' />");
 }
 

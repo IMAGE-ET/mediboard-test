@@ -33,21 +33,18 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_bottom,
                                              $compte_rendu->margin_left));
 
-$files = null;
 $file = new CFile;
 
 if($compte_rendu_id) {
-  $files = $file->loadFilesForObject($compte_rendu);
-}
-if (isset($files) && count($files)) {
-  $file = reset($files);
+  $compte_rendu->loadFile();
+  $file = $compte_rendu->_ref_file;
 }
 
-if (!isset($files) && !count($files) && $mode != "modele" && $first_time == 1 && !$compte_rendu->object_id) {
+if ((!$file || !$file->_id) && $mode != "modele" && $first_time == 1 && !$compte_rendu->object_id) {
   CAppUI::stepAjax(CAppUI::tr("CCompteRendu-no-pdf-generated"));
   return;
 }
-else if (count($files) && $first_time == 1 && file_get_contents($file->_file_path) != '') {
+else if ( $file && $file->_id && $first_time == 1 && file_get_contents($file->_file_path) != '') {
   // rien
 }
 else {
@@ -78,9 +75,13 @@ else {
       }
     }
   else {
+    if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
+      $compte_rendu->_source = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
+       $content = $compte_rendu->generateDocFromModel();
+    }
     $content = $compte_rendu->loadHTMLcontent($content, $mode,'','','','','',$margins);
   }
-
+  
   // Traitement du format de la page
   if($orientation == "landscape") {
     $a = $page_width;
@@ -94,7 +95,7 @@ else {
   }
 
   // Création du CFile si inexistant
-  if (!count($files)) {
+  if (!$file) {
     $file = new CFile();
     $file->setObject($compte_rendu);
     $file->private = 0;
@@ -106,15 +107,13 @@ else {
     $file->forceDir();
   }
   else {
-    $file = reset($files);
     $file->file_name  = $compte_rendu->nom . ".pdf";
-
+    
     // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
     // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
     $c1 = preg_replace("!\s!",'',$save_content);
     $c2 = preg_replace("!\s!",'',$compte_rendu->_source);
-
-    if ((md5($c1) == md5($c2)) && $stream == 1) {
+    if ((md5($c1) == md5($c2)) && $stream == 1 && !CValue::post("texte_libre")) {
     	header("Pragma: ");
 	    header("Cache-Control: ");
 	    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -125,12 +124,16 @@ else {
 	    header("MIME-Version: 1.0");
 	    header("Content-length: {$file->file_size}");
     	header("Content-type: $file->file_type");
-    	header("Content-disposition: attachment; filename=\"".$file->file_name."\"");
+    	if ($_SESSION['browser']['name'] == 'firefox') {
+    	  
+    	  header("Content-disposition: attachment; filename=\"".$file->file_name."\"");  
+    	} else {
+    	  header("Content-disposition: inline; filename=\"".$file->file_name."\"");
+    	}
     	echo file_get_contents($file->_file_path);
     	CApp::rip();
     }
   }
-
   $htmltopdf = new CHtmlToPDF;
   $htmltopdf->generatePDF($content, $stream, $page_format, $orientation, $file);
   $file->file_size = filesize($file->_file_path);

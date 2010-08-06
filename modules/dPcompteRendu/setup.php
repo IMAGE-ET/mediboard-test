@@ -412,7 +412,16 @@ class CSetupdPcompteRendu extends CSetup {
 		
 		// Déplacement du contenthtml dans system
 
-		$this->mod_version = "0.54";
+		$this->makeRevision("0.54");
+
+		$sql = "ALTER TABLE `compte_rendu`
+		        ADD `fast_edit` ENUM ('0','1') NOT NULL DEFAULT '0';";
+		$this->addQuery($sql);
+
+		$sql = "UPDATE `aide_saisie` SET `field` = '_source' WHERE `class` = 'CCompteRendu' AND `field` = 'source'";
+		$this->addQuery($sql);
+
+		$this->mod_version = "0.55";
 
 
   }

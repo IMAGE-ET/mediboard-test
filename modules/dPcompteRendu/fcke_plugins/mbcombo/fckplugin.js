@@ -22,11 +22,10 @@ for (var i = 0; i < aMbCombos.length; i++) {
     this.spanClass = oMbCombo.spanClass;
   }
   FCKMbComboCommand.prototype.Execute = function(itemId, item) {
-    var oSpan = FCK.CreateElement("span") ;
-    oSpan.className = this.spanClass;
-    oSpan.innerHTML = itemId;
-    FCK.InsertHtml("&nbsp;");
+    FCK.Focus();
+    FCK.InsertHtml("<span class=' " + this.spanClass + "'>" + itemId + "</span>&nbsp;");
   }
+  
   FCKMbComboCommand.prototype.GetState = function() {
     return FCK_TRISTATE_OFF ;
   }

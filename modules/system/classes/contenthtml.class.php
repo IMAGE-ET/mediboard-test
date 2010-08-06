@@ -23,7 +23,7 @@ class CContentHTML extends CMbObject {
   
   function getProps() { 
     $specs = parent::getProps();
-    $specs["content"] = "html";
+    $specs["content"] = "html helped|_list_classes";
     return $specs;
   }
 }

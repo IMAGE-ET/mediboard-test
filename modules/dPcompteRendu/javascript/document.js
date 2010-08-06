@@ -2,7 +2,7 @@ var Document = {
 	/**
 	 * @param ... A DECRIRE
 	 */
-  create: function(modele_id, object_id, target_id, target_class) {
+  create: function(modele_id, object_id, target_id, target_class, switch_mode, form) {
     if (!modele_id) return;
     
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
@@ -17,7 +17,20 @@ var Document = {
       url.addParam("target_class", target_class);
     }
     
+    if(switch_mode){
+      url.addParam("switch_mode", switch_mode);
+      /*form.select('.liste').each(function(select) {
+        var v=   $V(select);
+        if (!v || !v.length) return;
+        var s = select.name.substring(0, select.name.length-2);
+        url.addArrayParam(s, v);
+      });*/
+    }
     url.popup(800, 700, "Document");
+  },
+  
+  createFromFast: function(modele_id, object_id, target_id, target_class, switch_mode) {
+    
   },
   
   createPack: function(pack_id, object_id, target_id, target_class) {
@@ -36,6 +49,22 @@ var Document = {
     }
     
     url.popup(700, 700, "Document");
+  },
+  
+  fastMode: function(object_class, modele_id, object_id, target_id, target_class, object_guid) {
+    if (!modele_id) return;
+    var modaleWindow;
+    var fast = $('fast-'+object_guid);
+    if (fast) {
+      modaleWindow = modal(fast);
+    }
+    var url = new Url("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("object_guid" , object_guid);
+    url.addParam("modele_id"   , modele_id);
+    url.addParam("object_id"   , object_id);
+    url.addParam('object_class', object_class);
+    url.requestUpdate(fast, {onComplete: function(){if (modaleWindow) modaleWindow.position();}});
+    
   },
   
   edit: function(compte_rendu_id){

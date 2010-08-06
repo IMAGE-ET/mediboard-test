@@ -6,6 +6,11 @@
     </style>
   </head>
   <body>
+  <script type="text/javascript">
+    var pp = getPrintParams();
+    pp.interactive = pp.constants.interactionLevel.full;
+    print(pp);
+  </script>
     {{$content|smarty:nodefaults}}
   </body>
 </html>

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script type="text/javascript">
+	  var dialog = window.parent ;
+	  var oEditor = dialog.InnerDialogLoaded() ;
+	  var FCK = oEditor.FCK;
+	  var FCKTools  = oEditor.FCKTools ;
+	  var FCKConfig = oEditor.FCKConfig ;
+	  var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
+	
+	  window.onload = function () {
+	    document.getElementById("txtData").focus()
+	    dialog.SetOkButton( true ) ;
+	    dialog.SetAutoSize( true ) ;
+	  }
+	
+	  function Ok() {
+			
+	    // Before doing anything, save undo snapshot.
+	    oEditor.FCKUndo.SaveUndoStep() ;
+
+	    var sHtml ;
+	    var sPastingType = dialog.Args().CustomValue ;
+	    var content = oEditor.FCKTools.HTMLEncode( document.getElementById('txtData').value )
+	    
+			if (content == '') {
+	  	  document.getElementById('empty-name').style.display = "block";
+	  	  return false;
+	    }
+			
+			sHtml = "<span class='field'>[[Texte libre - " + content + "]]</span>&nbsp;";
+	    sHtml = FCKTools.ProcessLineBreaks( oEditor, FCKConfig, sHtml ) ;
+	    oEditor.FCK.InsertHtml( sHtml ) ;
+
+	    return true ;
+	  }
+
+  </script>
+
+</head>
+<body style="overflow: hidden">
+  <table cellspacing="0" cellpadding="0" width="100%" border="0">
+    <tr>
+      <td>
+          Veuillez donner un nom &agrave; la zone de texte libre : <input id="txtData" type="text"/> <br />
+      </td>
+    </tr>
+		<tr id="empty-name" style="display: none;">
+			<td>
+				<div style="font-weight: bold; color: #800;">Le nom doit contenir au moins un caract&egrave;re</div>
+			</td>
+		</tr>
+  </table>
+</body>
+</html>

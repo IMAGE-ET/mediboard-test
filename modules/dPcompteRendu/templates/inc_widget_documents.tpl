@@ -8,45 +8,66 @@
 {{assign var=object_class value=$object->_class_name}}
 {{assign var=object_id value=$object->_id}}
 
+<style type="text/css">
+.fast-edit {
+  background-image: url(images/buttons/pdf.png);
+  background-repeat: no-repeat;
+  background-position: -3% 0%;
+}
+</style>
+
 <form name="DocumentAdd-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">
   <tr>
     <td class="button">
     	{{if $praticien->_can->edit}}
-
-      <!-- Création via select classique -->
-      <select name="_choix_modele" style="width: 7em;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
-        <option value="">&mdash; Modèle</option>
-        {{foreach from=$modelesByOwner key=owner item=_modeles}}
-        {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
-        {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
-        {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
-        <optgroup label="{{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
-          {{foreach from=$_modeles item=_modele}}
-          <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
-          {{foreachelse}}
-          <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-          {{/foreach}}
-        </optgroup>
-        {{/foreach}}
-      </select>
       
-      <select name="_choix_pack" style="width: 7em;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
-        <option value="">&mdash; Pack</option>
-        {{foreach from=$packsByOwner key=owner item=_packs}}
-        {{if $owner == "user"}}{{assign var=ref_owner value=$praticien}}{{/if}}
-        {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
-        {{if $owner == "etab"}}{{assign var=ref_owner value=$praticien->_ref_function->_ref_group}}{{/if}}
-        <optgroup label="{{if $ref_owner}}{{$ref_owner->_view}}{{/if}}">
-          {{foreach from=$_packs item=_pack}}
-          <option value="{{$_pack->_id}}">{{$_pack->nom}}</option>
-          {{foreachelse}}
-          <option value="" disabled="disabled">{{tr}}None{{/tr}}</option>
-          {{/foreach}}
-        </optgroup>
-        {{/foreach}}
-      </select>
+      <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;"/>
+      
+      <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;"/>
+      <script tyle="text/javascript">
+      window.pdf_thumbnails = {{$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}};
+      Main.add(function() {
+        var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
+        url.addParam("user_id", "{{$praticien->_id}}");
+        url.addParam("function_id", "{{$praticien->function_id}}");
+        url.addParam("object_class", '{{$object->_class_name}}');
+        url.addParam("object_id", '{{$object->_id}}');
+        url.autoComplete('DocumentAdd-{{$object->_guid}}_keywords_modele', '', {
+            minChars: 1,
+            updateElement: createDoc,
+            dropdown: true,
+            width: "200px"
+        });
+
+        var url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
+        url.addParam("user_id", "{{$praticien->_id}}");
+        url.addParam("function_id", "{{$praticien->function_id}}");
+        url.addParam("object_class", '{{$object->_class_name}}');
+        url.addParam("object_id", '{{$object->_id}}');
+        url.autoComplete('DocumentAdd-{{$object->_guid}}_keywords_pack', '', {
+            minChars: 1,
+            updateElement: createPack,
+            dropdown: true,
+            width: "200px"
+        });
+        
+        function createDoc(selected) {
+          if (selected.select(".fast_edit").length && window.pdf_thumbnails) {
+            Document.fastMode('{{$object->_class_name}}', selected.select(".id")[0].innerHTML, '{{$object_id}}', null, null, '{{$object->_guid}}');
+          } else {
+            Document.create(selected.select(".id")[0].innerHTML, '{{$object_id}}');
+          }
+          $V(selected, '');
+        }
+
+        function createPack(selected) {
+          Document.createPack(selected.select(".id")[0].innerHTML, '{{$object_id}}');
+          $V(selected, '');
+        }
+      });
+      </script>
 
       {{/if}}
 
@@ -72,6 +93,8 @@
 </table>
 
 </form>
+
+<div id="fast-{{$object->_guid}}" style="display: none; width: 50%;"></div>
 
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{if $mode != "hide"}}

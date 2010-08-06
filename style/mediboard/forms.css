@@ -344,7 +344,7 @@ button.tick:before, a.button.tick:before {
 }
 
 button.pdf:before, a.button.pdf:before {
-  content: url(images/buttons/pdf.gif);
+  content: url(images/buttons/pdf.png);
 }
 
 button.down:before, a.button.down:before {

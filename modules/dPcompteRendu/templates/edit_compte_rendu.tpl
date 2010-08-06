@@ -20,52 +20,52 @@ function submitCompteRendu(){
 {{if $pdf_thumbnails == 1}}
   emptyPDFonChanged();
   
-	togglePageLayout = function() {
-	  $("page_layout").toggle();
-	}
-	
-	completeLayout = function() {
-	  var tab_margin = ["top", "right", "bottom", "left"];
-	  var form = getForm("editFrm");
-	  var dform = getForm('download-pdf-form');
-	  for(var i=0; i < 4; i++) {
-	    if ($("input_margin_"+tab_margin[i])) {
-	      $("input_margin_"+tab_margin[i]).remove();
-	    }
-	    dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
-	  }
-	  $V(dform.orientation, $V(form._orientation));
-	  $V(dform.page_format, form._page_format.value);
-	}
-	
-	save_page_layout = function() {
-	  page_layout_save = { 
-		  margin_top:    PageFormat.form.margin_top.value,
-			margin_left:   PageFormat.form.margin_left.value,
-			margin_right:  PageFormat.form.margin_right.value,
-			margin_bottom: PageFormat.form.margin_bottom.value,
-			page_format:   PageFormat.form._page_format.value,
-			page_width:    PageFormat.form.page_width.value,
-			page_height:   PageFormat.form.page_height.value,
-			orientation:   $V(PageFormat.form._orientation)
-	  };
-	}
-	
-	cancel_page_layout = function() {
-	  $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
-		$V(PageFormat.form.margin_left,   page_layout_save.margin_left);
-		$V(PageFormat.form.margin_right,  page_layout_save.margin_right);
-		$V(PageFormat.form.margin_bottom, page_layout_save.margin_bottom);
-		$V(PageFormat.form._page_format,  page_layout_save.page_format);
-		$V(PageFormat.form.page_height,   page_layout_save.page_height);
-		$V(PageFormat.form.page_width,    page_layout_save.page_width);
-		$V(PageFormat.form._orientation,  page_layout_save.orientation);
+  togglePageLayout = function() {
+    $("page_layout").toggle();
+  }
+  
+  completeLayout = function() {
+    var tab_margin = ["top", "right", "bottom", "left"];
+    var form = getForm("editFrm");
+    var dform = getForm('download-pdf-form');
+    for(var i=0; i < 4; i++) {
+      if ($("input_margin_"+tab_margin[i])) {
+        $("input_margin_"+tab_margin[i]).remove();
+      }
+      dform.insert({bottom: new Element("input",{id: "input_margin_"+tab_margin[i],type: 'hidden', name: 'margins[]', value: $("editFrm_margin_"+tab_margin[i]).value})});
+    }
+    $V(dform.orientation, $V(form._orientation));
+    $V(dform.page_format, form._page_format.value);
+  }
+  
+  save_page_layout = function() {
+    page_layout_save = { 
+      margin_top:    PageFormat.form.margin_top.value,
+      margin_left:   PageFormat.form.margin_left.value,
+      margin_right:  PageFormat.form.margin_right.value,
+      margin_bottom: PageFormat.form.margin_bottom.value,
+      page_format:   PageFormat.form._page_format.value,
+      page_width:    PageFormat.form.page_width.value,
+      page_height:   PageFormat.form.page_height.value,
+      orientation:   $V(PageFormat.form._orientation)
+    };
+  }
+  
+  cancel_page_layout = function() {
+    $V(PageFormat.form.margin_top,    page_layout_save.margin_top);
+    $V(PageFormat.form.margin_left,   page_layout_save.margin_left);
+    $V(PageFormat.form.margin_right,  page_layout_save.margin_right);
+    $V(PageFormat.form.margin_bottom, page_layout_save.margin_bottom);
+    $V(PageFormat.form._page_format,  page_layout_save.page_format);
+    $V(PageFormat.form.page_height,   page_layout_save.page_height);
+    $V(PageFormat.form.page_width,    page_layout_save.page_width);
+    $V(PageFormat.form._orientation,  page_layout_save.orientation);
 
-		if(!Thumb.thumb_up2date && !Thumb.oldContent) {
+    if(!Thumb.thumb_up2date && !Thumb.oldContent) {
 
-		  Thumb.thumb_up2date = true;
-		  $('mess').toggle();
-		  $('thumbs').setOpacity(1);
+      Thumb.thumb_up2date = true;
+      $('mess').toggle();
+      $('thumbs').setOpacity(1);
       Thumb.init();
       /*for(var i = 0; i < Thumb.nb_thumbs; i++) {
         var thumbI = $("thumb_" + i);
@@ -73,28 +73,36 @@ function submitCompteRendu(){
         thumbI.stopObserving("click");
         thumbI.observe("click", Thumb.oldOnclick[i]);
       }*/
-		}
-		Control.Modal.close();
-	}
-{{/if}}	
-	Main.add(function(){
-	  resizeEditor();
-	  {{if $pdf_thumbnails}}
-	    PageFormat.init(getForm("editFrm")); 
+    }
+    Control.Modal.close();
+  }
+{{/if}} 
+  Main.add(function(){
+    resizeEditor();
+    {{if $pdf_thumbnails}}
+      PageFormat.init(getForm("editFrm")); 
       Thumb.compte_rendu_id = '{{$compte_rendu->_id}}';
       Thumb.modele_id = '{{$modele_id}}';
       Thumb.user_id = '{{$user_id}}';
       Thumb.mode = "doc";
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
+      {{if !$compte_rendu->_id && $switch_mode}}
+        if (window.opener.linkFields) {
+  
+          from = window.opener.linkFields();
+          var to = getForm("editFrm");
+          if (from[0].any(function(elt){ return elt.size > 1; }))        
+            toggleOptions();
+          from.each(function(elt) {
+            elt.each(function(select) {
+              $V(to[select.name], $V(select));
+            })
+          });
+        }
+      {{/if}}
     {{/if}}
-    {{if $compte_rendu->_id && !$pdf_thumbnails}}
-      try {
-        window.opener.Document.refreshList('{{$compte_rendu->object_class}}', {{$compte_rendu->object_id}});
-       }
-      catch (e) {}
-    {{/if}}
-	});
+  });
 
 </script>
 
@@ -119,6 +127,8 @@ function submitCompteRendu(){
   <input type="hidden" name="function_id" value="" />
   <input type="hidden" name="chir_id" value="" />
   <input type="hidden" name="group_id" value="" />
+  <input type="hidden" name="fast_edit" value="0"/>
+  <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
 
   {{mb_key object=$compte_rendu}}
   {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
@@ -151,8 +161,8 @@ function submitCompteRendu(){
         &mdash;
         <button class="pagelayout" type="button" title="Mise en page"
                 onclick="save_page_layout(); modal($('page_layout'), {
-								closeOnClick: $('page_layout').down('button.tick')
-								});">
+                closeOnClick: $('page_layout').down('button.tick')
+                });">
         {{tr}}CCompteRendu-Pagelayout{{/tr}}
         </button>
         {{if $compte_rendu->_id != null}}
@@ -164,9 +174,9 @@ function submitCompteRendu(){
         <div id="page_layout" style="display: none;">
           {{include file="inc_page_layout.tpl" droit=1}}
           <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
-  				<button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
+          <button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
         </div>
-			{{/if}}
+      {{/if}}
     </th>
   </tr>
   <tr>
@@ -185,8 +195,9 @@ function submitCompteRendu(){
       </td>
     {{else}}
       <td colspan="2"></td>
-		{{/if}}
+    {{/if}}
   </tr>
+
   {{if $lists|@count}}
     <tr>
       <td id="liste" colspan="2">
@@ -203,10 +214,26 @@ function submitCompteRendu(){
         </div>
       </td>
     </tr>
+  {{/if}}
+  
+  {{if $noms_textes_libres|@count}}
+    <tr>
+      <td colspan="2">
+      {{foreach from=$noms_textes_libres item=_nom}}
+        <div style="width: 25%; max-width: 200px; height: 50px; display: inline-block;">    
+          {{$_nom}}
+          <textarea class="freetext" name="texte_libre[{{$_nom}}]"></textarea>
+          </div>
+        {{/foreach}}
+      </td>
+    </tr>
+  {{/if}}
+  
+  {{if $noms_textes_libres || $lists|@count}}
     <tr>
       <td class="button text" colspan="2">
         <div id="multiple-info" class="small-info" style="display: none;">
-				{{tr}}CCompteRendu-use-multiple-choices{{/tr}}
+          {{tr}}CCompteRendu-use-multiple-choices{{/tr}}
         </div>
         <script type="text/javascript">
           function toggleOptions() {
@@ -265,6 +292,6 @@ function submitCompteRendu(){
       </td>
     </tr>
   </table>
-{{/if}} 
+{{/if}}
 
 </form>

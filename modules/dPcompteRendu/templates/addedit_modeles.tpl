@@ -240,6 +240,13 @@ Main.add(function () {
         </tr>
         
         <tr>
+          <th>{{mb_label object=$compte_rendu field="fast_edit"}}</th>
+          <td>
+            {{mb_field object=$compte_rendu field="fast_edit"}}
+          </td>
+        </tr>
+        
+        <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
             {{if $droit}}

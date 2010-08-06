@@ -404,7 +404,8 @@ function onSubmitFormAjax(oForm, oOptions) {
     method: oForm.method,
     check: checkForm,
     useFormAction: false,
-    coverIE: false
+    coverIE: false,
+    useDollarV: false
   }, oOptions);
   
   // Check the form
@@ -419,13 +420,19 @@ function onSubmitFormAjax(oForm, oOptions) {
 
   // Build url
   var url = new Url, i = 0, oElement;
+  
   while (oElement = oForm.elements[i++]) {
     if (!oElement.disabled && ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked)) {
-      url.addParam(oElement.name, oElement.value);
+      if (oOptions.useDollarV) {
+        url.addParam(oElement.name, $V(oElement));
+      }
+      else
+        url.addParam(oElement.name, oElement.value);
     }
   }
 
   // Launch
+  
   url.requestUpdate(SystemMessage.id, oOptions);
   
   // return

@@ -33,7 +33,7 @@ class CCompteRendu extends CDocumentItem {
   var $page_height       = null;
   var $page_width        = null;
   var $private           = null;
-//  var $fast_edit         = null;
+  var $fast_edit         = null;
 
   /// Form fields
   var $_is_document      = false;
@@ -92,7 +92,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["object_id"]        = "ref class|CMbObject meta|object_class purgeable";
 		$specs["content_id"]       = "ref class|CContenthtml show|0";
     $specs["object_class"]     = "str notNull class show|0";
-    $specs["nom"]              = "str notNull show|0";
+    $specs["nom"]              = "str notNull show|0 seekable";
     $specs["type"]             = "enum list|header|body|footer default|body";
     $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
     //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
@@ -107,7 +107,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["page_width"]       = "float notNull min|1 default|21 show|0";
     $specs["valide"]           = "bool";
     $specs["private"]          = "bool notNull default|0";
-//    $specs["fast_edit"]        = "bool notNull default|0";
+    $specs["fast_edit"]        = "bool notNull default|0";
     $specs["_owner"]           = "enum list|prat|func|etab";
     $specs["_orientation"]     = "enum list|portrait|landscape";
     $specs["_page_format"]     = "enum list|".implode("|", array_keys(self::$_page_formats));

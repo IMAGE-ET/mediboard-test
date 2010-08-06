@@ -40,21 +40,15 @@ $user->loadRefFunction();
 $user->_ref_function->loadRefGroup();
 $user->canDo();
 
-$object->loadRefsDocs();
-
-// Modèles du praticien
-$modelesByOwner = array();
-$packsByOwner = array();
-if ($user->_can->edit) {
-  $modelesByOwner = CCompteRendu::loadAllModelesFor($user->_id, 'prat', $object_class, "body");
-  $packsByOwner = CPack::loadAllPacksFor($user->_id, 'user', $object_class);
+if ($object->loadRefsDocs()) {
+  foreach($object->_ref_documents as $_doc) {
+    $_doc->loadRefCategory();
+  }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $user);
 $smarty->assign("object"        , $object);
 $smarty->assign("mode"          , CValue::get("mode"));

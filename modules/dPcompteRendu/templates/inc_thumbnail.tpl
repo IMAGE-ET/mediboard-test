@@ -28,6 +28,3 @@
 	</p>
 	{{assign var=i value=$i+1}}
 {{/foreach}}
-
-<div id="toto" style="display: none;"></div>
-<div id="toto" style="display: none;"></div>

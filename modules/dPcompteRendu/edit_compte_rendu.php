@@ -17,6 +17,7 @@ $praticien_id    = CValue::get("praticien_id"      , 0);
 $type            = CValue::get("type"              , 0);
 $pack_id         = CValue::get("pack_id"           , 0);
 $object_id       = CValue::get("object_id"         , 0);
+$switch_mode     = CValue::get("switch_mode"       , 0);
 $target_id       = CValue::get("target_id");
 $target_class    = CValue::get("target_class");
 
@@ -86,69 +87,8 @@ else {
     $compte_rendu->page_width    = $first_modele->page_width;
 
   }
-  
-  if ($header || $footer) {
-  	$header->height = isset($header->height) ? $header->height : 20;
-  	$footer->height = isset($footer->height) ? $footer->height : 20;
-  	
-    $style = "
-      <style type='text/css'>
-      #header {
-        height: {$header->height}px;
-        /*DOMPDF top: 0;*/
-      }
-
-      #footer {
-        height: {$footer->height}px;
-        /*DOMPDF bottom: 0;*/
-      }";
-    
-    if ($header->_id) {
-    	$header->loadContent();
-      $header->_source = "<div id='header'>$header->_source</div>";
-      
-      if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {      
-        $header->height += 20;
-      }
-      $compte_rendu->header_id = null;
-    }
-    
-    if ($footer->_id) {
-      $footer->loadContent();
-      $footer->_source = "<div id='footer'>$footer->_source</div>";
-
-      if(CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 0) {
-        $footer->height += 20;
-      }
-      $compte_rendu->footer_id = null;
-    }
-    
-    $style.= "
-      @media print { 
-        #body { 
-          padding-top: {$header->height}px;
-        }
-        hr.pagebreak {
-          padding-top: {$header->height}px;
-        }
-      }";
-    
-    $style .="
-      @media dompdf {
-        #body {
-          padding-bottom: {$footer->height}px;
-        }
-        hr.pagebreak {
-          padding-top: 0px;
-        }
-      }</style>";
-    
-    $compte_rendu->_source = "<div id='body'>$compte_rendu->_source</div>";
-    $compte_rendu->_source = $style . $header->_source . $footer->_source . $compte_rendu->_source;
-  }
-
+  $compte_rendu->_source = $compte_rendu->generateDocFromModel();
   $compte_rendu->updateFormFields();
-  
 }
 
 $compte_rendu->loadRefsFwd();
@@ -201,18 +141,41 @@ if($isCourrier) {
   $destinataires = CDestinataire::$destByClass;
 }
 
-$templateManager->initHTMLArea();
-
+$noms_textes_libres = array();
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("listCategory"   , $listCategory);
-$smarty->assign("templateManager", $templateManager);
 $smarty->assign("compte_rendu"   , $compte_rendu);
 $smarty->assign("modele_id"      , $modele_id);
 $smarty->assign("lists"          , $lists);
 $smarty->assign("destinataires"  , $destinataires);
 $smarty->assign("user_id"        , $user->_id);
-$smarty->display("edit_compte_rendu.tpl");
 
+$smarty->assign("object_id"    , $object_id);
+$smarty->assign('object_class' , CValue::get("object_class"));
+
+preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
+$noms_textes_libres = $matches[2];
+$cr = new CCompteRendu;
+$cr->load($modele_id);
+$cr->loadFile();
+
+if (isset($cr->_ref_file->_id)) {
+  $smarty->assign("file", $cr->_ref_file);
+}
+
+
+$smarty->assign("noms_textes_libres", $noms_textes_libres);
+
+if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
+  $smarty->assign("object_guid", CValue::get("object_guid"));
+  $smarty->display("fast_mode.tpl");
+}
+else {
+  $templateManager->initHTMLArea();
+  $smarty->assign("switch_mode", CValue::get("switch_mode", 0));
+  $smarty->assign("templateManager", $templateManager);
+  $smarty->display("edit_compte_rendu.tpl");
+}
 ?>

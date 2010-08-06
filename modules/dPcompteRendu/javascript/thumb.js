@@ -1,9 +1,8 @@
 var Thumb = {
-  thumb_up2date: true,
-  oldContent: false,
-  hasRefresh: false,
   compte_rendu_id: 0,
   file_id: 0,
+  thumb_up2date: true,
+  thumb_refreshing: false,
   choixAffiche: function(isNotModele) {
     $("thumbs").toggle();
     if (isNotModele == 1) {
@@ -18,9 +17,7 @@ var Thumb = {
   },
 
   refreshThumbs: function(first_time, compte_rendu_id, modele_id, user_id, mode) {
-    this.oldContent = false;
-    this.thumb_up2date = true;
-    this.hasRefresh = true;
+    this.thumb_refreshing = true;
     // TODO: changer en classes CSS
     if (first_time != 1) {
       for (var i = 0; i < Thumb.nb_thumbs; i++) {
@@ -39,12 +36,12 @@ var Thumb = {
     url.addParam("content", encodeURIComponent(content));
     url.addParam("mode", mode);
     
-		if (mode == "modele") {
-			url.addParam("type",      $V(form.elements.type));
-			url.addParam("header_id", $V(form.elements.header_id));
-			url.addParam("footer_id", $V(form.elements.footer_id));
-			url.addParam("height",    $V(form.elements.height));
-		}
+    if (mode == "modele") {
+      url.addParam("type",      $V(form.elements.type));
+      url.addParam("header_id", $V(form.elements.header_id));
+      url.addParam("footer_id", $V(form.elements.footer_id));
+      url.addParam("height",    $V(form.elements.height));
+    }
     
     url.addParam("stream", 0);
     url.addParam("generate_thumbs", 1);
@@ -66,14 +63,14 @@ var Thumb = {
         m: "dPcompteRendu", 
         a: "ajax_pdf_and_thumbs"
       },
-      onComplete: function() { Main.add(function() {
-        Thumb.hasRefresh = false;
-        
-        if(!Thumb.thumb_up2date) {
-          Thumb.thumb_up2date = true;
-          Thumb.old();
-        }
-        else {
+      onComplete: function() {
+        Main.add(function() {
+          Thumb.thumb_refreshing = false;
+          if(!Thumb.thumb_up2date) {
+            Thumb.thumb_up2date = true;
+            Thumb.old();
+          }
+          else {
           Thumb.init();
         }
       })}
@@ -81,23 +78,25 @@ var Thumb = {
   },
   old: function() {
     if (window.pdf_thumbnails == 1) {
-      if ((!this.thumb_up2date && this.oldContent) || this.hasRefresh) {
+      if (this.thumb_refreshing) {
         this.thumb_up2date = false;
         return;
       }
+
       var on_click = function(){
+        FCKeditorAPI.GetInstance('_source').Events.AttachEvent('OnSelectionChange', loadOld);
         Thumb.refreshThumbs(0, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
       }
-      
-      $("thumbs").setOpacity(0.5);
-      
       $$(".thumb").each(function(t, i){
         t.stopObserving("click").observe("click", on_click);
       });
-      var mess = $('mess').show();
-      mess.stopObserving("click");
-      mess.observe("click", on_click);
-      this.thumb_up2date = false;
+      var mess = $('mess');
+      if (this.thumb_up2date && mess) {
+        $("thumbs").setOpacity(0.5);
+        mess.show();
+        mess.stopObserving("click");
+        mess.observe("click", on_click);
+      }
     }
   },
   init: function(){
@@ -144,10 +143,6 @@ function FCKeditor_OnComplete(editorInstance){
       boutons[k[1]]._UIButton.MainElement.title += title + char_from_key + ")";
       }
   });
-  editorInstance.Events.AttachEvent('OnSelectionChange', loadOld);
-  Thumb.content = editorInstance.GetHTML(false);
-  
-  editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger);
   
   var fck_iframe = document.getElementById('_source___Frame');
 
@@ -158,9 +153,12 @@ function FCKeditor_OnComplete(editorInstance){
     fck_editing_area.style.height = '100%'
   }, 100);
   
-  if (window.pdf_thumbnails == 1)
+  if (window.pdf_thumbnails == 1) {
+    Thumb.content = editorInstance.GetHTML(false);
     Thumb.refreshThumbs(1, Thumb.compte_rendu_id, Thumb.modele_id, Thumb.user_id, Thumb.mode);
-
+    editorInstance.Events.AttachEvent('OnSelectionChange', loadOld);
+    
+  }
   // Don't close the window with escape
   document.stopObserving('keydown', closeWindowByEscape);
   
@@ -185,16 +183,14 @@ function FCKeditor_OnComplete(editorInstance){
 }
 
 function loadOld(editorInstance) {
-  if (editorInstance.IsDirty() && editorInstance.GetHTML(false) != Thumb.content) {
-    Thumb.content = editorInstance.GetHTML(false);
+  if (!editorInstance.IsDirty()) return;
+  
+  var html = editorInstance.GetHTML(false);
+  if (html != Thumb.content) {
+    Thumb.content = html;
     Thumb.old();
-    Thumb.oldContent = true;
-  }
-}
-
-function FCKeventChanger(editorInstance){
-  if (editorInstance.LastOnChangeTimer) {
     FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
+    editorInstance.Events.FireEvent('OnSelectionChange', '');
   }
 }
 
