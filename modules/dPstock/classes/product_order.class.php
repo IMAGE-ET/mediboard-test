@@ -42,6 +42,7 @@ class CProductOrder extends CMbMetaObject {
 
   // Form fields
   var $_total           = null;
+  var $_total_tva       = null;
   var $_status          = null;
   var $_count_received  = null;
   var $_count_renewed   = null;
@@ -86,6 +87,7 @@ class CProductOrder extends CMbMetaObject {
     $specs['object_class']    = 'enum list|COperation show|0'; // only COperation for now
     
     $specs['_total']          = 'currency show|1';
+    $specs['_total_tva']      = 'currency show|1';
     $specs['_status']         = 'enum list|opened|locked|ordered|received|cancelled show|1';
     $specs['_count_received'] = 'num pos';
     $specs['_date_received']  = 'dateTime';
@@ -431,10 +433,12 @@ class CProductOrder extends CMbMetaObject {
   
   function updateTotal(){
     $this->_total = 0;
+    $this->_total_tva = 0;
     $this->loadRefsOrderItems();
     foreach ($this->_ref_order_items as $item) {
       $item->updateFormFields();
       $this->_total += $item->_price;
+      $this->_total_tva += $item->_price + ($item->_price * $item->tva / 100);
     }
   }
   

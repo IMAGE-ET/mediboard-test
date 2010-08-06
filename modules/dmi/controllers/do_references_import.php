@@ -118,6 +118,7 @@ while ((($data = fgetcsv($csv, null, $delim)) !== false)/* && $n--*/) {
     continue;
   }
 
+  $reference->tva = 5.5;
   $reference->price = str_replace(",", ".", $data[3]);
   if ($msg = $reference->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);

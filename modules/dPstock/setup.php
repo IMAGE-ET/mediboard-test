@@ -669,7 +669,15 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `product_order_item` ADD INDEX (`septic`)";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.36");
+    $sql = "ALTER TABLE `product_order_item` ADD `tva` FLOAT";
+    $this->addQuery($sql);
+    $sql = "UPDATE `product_order_item` 
+              LEFT JOIN `product_reference` ON `product_reference`.`reference_id` = `product_order_item`.`reference_id`
+              SET `product_order_item`.`tva` = `product_reference`.`tva`";
+    $this->addQuery($sql);
 
-    $this->mod_version = "1.36";
+    $this->mod_version = "1.37";
   }
 }

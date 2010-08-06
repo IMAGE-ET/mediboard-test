@@ -17,6 +17,7 @@ class CProductOrderItem extends CMbObject {
   var $order_id           = null;
   var $quantity           = null;
   var $unit_price         = null; // In the case the reference price changes
+  var $tva                = null; // In the case the reference tva changes
   var $lot_id             = null;
   var $renewal            = null;
   var $septic             = null;
@@ -58,6 +59,7 @@ class CProductOrderItem extends CMbObject {
     $specs['order_id']           = 'ref class|CProductOrder'; // can be null because of gifts
     $specs['quantity']           = 'num notNull pos';
     $specs['unit_price']         = 'currency precise';
+    $specs['tva']                = 'pct';
     $specs['lot_id']             = 'ref class|CProductOrderItemReception';
     $specs['renewal']            = 'bool notNull default|1';
     $specs['septic']             = 'bool notNull default|0';
@@ -200,8 +202,10 @@ class CProductOrderItem extends CMbObject {
         $this->_id = $duplicateKey->_id;
         $this->quantity += $duplicateKey->quantity;
         $this->unit_price = $duplicateKey->unit_price;
+        $this->tva = $duplicateKey->tva;
       } else {
         $this->unit_price = $this->_ref_reference->price;
+        $this->tva = $this->_ref_reference->tva;
       }
     }
     
