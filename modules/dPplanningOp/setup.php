@@ -904,7 +904,16 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`service_id`);";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.11";
+    $this->makeRevision("1.11");
+    $sql = "ALTER TABLE `protocole` 
+      CHANGE `service_id` `service_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    $sql = "UPDATE `protocole` 
+			SET service_id = NULL
+			WHERE service_id = '0'";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.12";
   }
 }
 ?>
