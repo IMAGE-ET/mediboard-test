@@ -843,25 +843,27 @@ class CPatient extends CMbObject {
     if(!$this->_ref_sejours) {
       $this->loadRefsSejours();
     }
-    foreach($this->_ref_sejours as $curr_sejour) {
-      if(!$curr_sejour->annule && $curr_sejour->entree_prevue >= $date) {
+    foreach($this->_ref_sejours as $_sejour) {
+      if(in_array($_sejour->type, array("ambu", "comp", "exte")) && !$_sejour->annule && $_sejour->entree_prevue >= $date) {
         if(!$sejour->_id) {
-          $sejour = $curr_sejour;
-        } else {
-          if($curr_sejour->entree_prevue < $sejour->entree_prevue) {
-            $sejour = $curr_sejour;
+          $sejour = $_sejour;
+        } 
+        else {
+          if($_sejour->entree_prevue < $sejour->entree_prevue) {
+            $sejour = $_sejour;
           }
         }
-        if(!$curr_sejour->_ref_operations) {
-          $curr_sejour->loadRefsOperations(array("annulee" => "= '0'"));
+        if(!$_sejour->_ref_operations) {
+          $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
         }
-        foreach($curr_sejour->_ref_operations as $curr_op) {
-          $curr_op->loadRefPlageOp();
+        foreach($_sejour->_ref_operations as $_op) {
+          $_op->loadRefPlageOp();
           if(!$op->_id) {
-            $op = $curr_op;
-          } else {
-            if($curr_op->_datetime < $op->_datetime) {
-              $op = $curr_op;
+            $op = $_op;
+          } 
+          else {
+            if($_op->_datetime < $op->_datetime) {
+              $op = $_op;
             }
           }
         }

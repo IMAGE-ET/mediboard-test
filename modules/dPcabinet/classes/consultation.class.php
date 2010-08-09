@@ -715,8 +715,8 @@ class CConsultation extends CCodable {
       $where = array();
       $where['patient_id']   = " = '$this->patient_id'";
       $datetime_before = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
-      $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`entree` >= '$datetime' AND `sejour`.`sortie` >= '$datetime'";
-
+      $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
+mbTrace($where, "where", true);
       $sejour = new CSejour();
       $sejour->loadObject($where);
 
