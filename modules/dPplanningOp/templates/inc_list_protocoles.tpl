@@ -40,7 +40,7 @@
 
 <table class="tbl">
   {{foreach from=$list_protocoles item=_protocole}}
-  <tr {{if $protSel->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
+  <tr {{if $protocole->_id == $_protocole->_id && !$dialog}}class="selected"{{/if}}>    
     <td class="text">
       {{if $dialog}}
         <a href="#1" onclick="setClose('{{$type}}', {{$_protocole->_id}})">

@@ -57,9 +57,9 @@ foreach ($list_protocoles as $_prot){
 }
 
 // Protocole selectionné
-$protSel = new CProtocole;
-if($protSel->load($protocole_id)) {
-  $protSel->loadRefs();
+$protocole = new CProtocole;
+if($protocole->load($protocole_id)) {
+  $protocole->loadRefs();
 }
 
 // Création du template
@@ -68,7 +68,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("list_protocoles", $list_protocoles);
 $smarty->assign("total_protocoles", $total_protocoles);
 $smarty->assign("page"      , $page      );
-$smarty->assign("protSel"   , $protSel   );
+$smarty->assign("protocole" , $protocole   );
 $smarty->assign("chir_id"   , $chir_id   );
 $smarty->assign("code_ccam" , $code_ccam );
 $smarty->assign("type"      , $type      );

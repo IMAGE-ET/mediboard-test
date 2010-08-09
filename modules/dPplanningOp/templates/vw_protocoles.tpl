@@ -29,7 +29,7 @@ refreshList = function(form, types, reset) {
   }
   
   var url = new Url("dPplanningOp","httpreq_vw_list_protocoles");
-  url.addParam("protocole_id", '{{$protSel->_id}}');
+  url.addParam("protocole_id", '{{$protocole->_id}}');
   url.addParam("page[interv]", $V(form["page[interv]"]));
   url.addParam("page[sejour]", $V(form["page[sejour]"]));
   url.addParam("chir_id", $V(form.chir_id));
@@ -126,7 +126,7 @@ Main.add(function(){
       <div style="display: none;" id="sejour"></div>
     </td>
     
-    {{if $protSel->_id && !$dialog}}
+    {{if $protocole->_id && !$dialog}}
       <td class="halfPane">
         {{include file=inc_details_protocole.tpl}}
       </td>

@@ -7,21 +7,18 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $dialog;
-
-if($dialog) {
-  $can->needsRead();
-} else {
-  $can->needsEdit();
+global $dialog;
+if ($dialog) {
+  CCanDo::checkRead();
+} 
+else {
+  CCanDo::checkEdit();
 }
 
-// L'utilisateur est-il chirurgien?
-$mediuser = new CMediusers;
-$mediuser->load($AppUI->user_id);
+// L'utilisateur est-il chirurgien ?
+$mediuser = CAppUI::$instance->_ref_user;
+$chir_id      = CValue::getOrSession("chir_id", $mediuser->isPraticien() ? $mediuser->user_id : null);
 
-$chir_id      = $mediuser->isPraticien() ? $mediuser->user_id : null;
-
-$chir_id      = CValue::getOrSession("chir_id", $chir_id);
 $protocole_id = CValue::getOrSession("protocole_id");
 $code_ccam    = CValue::getOrSession("code_ccam");
 $type         = CValue::getOrSession("type", "interv");
@@ -30,30 +27,24 @@ $page         = CValue::get("page", array(
   "interv" => 0,
 ));
 
-// Praticiens et protocoles disponibles
-$listPrat   = new CMediusers();
-$listPrat   = $listPrat->loadPraticiens(PERM_READ);
-
+// Praticiens, protocoles disponibles
+$listPrat   = $mediuser->loadPraticiens(PERM_READ);
 $listCodes  = array();
+foreach($listPrat as $_prat) {
+  $_prat->loadProtocoles();
 
-foreach($listPrat as $keyPrat => $valuePrat) {
-  $prat =& $listPrat[$keyPrat];
-  $prat->loadProtocoles();
-
-  foreach ($prat->_ref_protocoles as $keyProt => $valueProt) {
-    $protocole =& $prat->_ref_protocoles[$keyProt];
-
-    if(!$chir_id || ($prat->user_id == $chir_id))
-    foreach ($protocole->_codes_ccam as $code) {
+  foreach ($_prat->_ref_protocoles as $_protocole) {
+    if (!$chir_id || ($_prat->user_id == $chir_id))
+    foreach ($_protocole->_codes_ccam as $code) {
       @$listCodes[$code]++;
     }
   }
 }
 
 // Protocole selectionné
-$protSel = new CProtocole;
-if($protSel->load($protocole_id)) {
-  $protSel->loadRefs();
+$protocole = new CProtocole;
+if ($protocole->load($protocole_id)) {
+  $protocole->loadRefs();
 }
 
 // Création du template
@@ -62,7 +53,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("page"      , $page);
 $smarty->assign("listCodes" , $listCodes );
 $smarty->assign("listPrat"  , $listPrat  );
-$smarty->assign("protSel"   , $protSel   );
+$smarty->assign("protocole" , $protocole );
 $smarty->assign("chir_id"   , $chir_id   );
 $smarty->assign("code_ccam" , $code_ccam );
 $smarty->assign("mediuser"  , $mediuser  );

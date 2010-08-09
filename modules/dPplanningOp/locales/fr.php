@@ -332,6 +332,7 @@ $locales['CProtocole-materiel-court'] = 'Matériel';
 $locales['CProtocole-materiel-desc'] = 'Matériel à prévoir / examens per-opératoire';
 $locales['CProtocole-msg-create'] = 'Protocole créé';
 $locales['CProtocole-msg-delete'] = 'Protocole supprimé';
+$locales['CProtocole-msg-failed-noprat'] = 'Vous n\'êtes pas un praticien, vous ne pouvez pas dupliquer ce protocole.';
 $locales['CProtocole-msg-modify'] = 'Protocole modifié';
 $locales['CProtocole-pathologie'] = 'Pathologie';
 $locales['CProtocole-pathologie-court'] = 'Path.';
