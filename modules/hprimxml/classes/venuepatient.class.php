@@ -133,8 +133,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $avertissement = $msgID400 = $msgVenue = $msgNumDossier = "";
     $_code_Venue = false;
     
+    // Si SIP
+    if (CAppUI::conf('sip server')) {
+      
+    }
     // Si CIP
-    if (!CAppUI::conf('sip server')) {
+    else {
       $newVenue = new CSejour();
       $newVenue->patient_id = $newPatient->_id; 
       $newVenue->group_id = CGroups::loadCurrent()->_id;
