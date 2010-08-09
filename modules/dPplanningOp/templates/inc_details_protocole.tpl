@@ -150,7 +150,7 @@ function checkCopieProtocole(chir_id){
    <form name="modif" action="?" method="get">
      <input type="hidden" name="m" value="{{$m}}" />
      <input type="hidden" name="tab" value="vw_edit_protocole" />
-     {{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
+     {{mb_key object=$protocole}}
      <button class="edit" type="submit">{{tr}}Modify{{/tr}}</button>
   </form>
 
@@ -158,7 +158,7 @@ function checkCopieProtocole(chir_id){
   <form name="delProtocole" action="?m=dPplanningOp&amp;tab=vw_protocoles" method="post">
     <input type="hidden" name="dosql" value="do_protocole_aed" />
     <input type="hidden" name="del" value="1" />
-    <input type="hidden" name="protocole_id" value="{{$protocole->_id}}" />
+     {{mb_key object=$protocole}}
     <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
       {{tr}}Delete{{/tr}}
     </button>
