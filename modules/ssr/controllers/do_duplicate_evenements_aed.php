@@ -21,7 +21,7 @@ foreach($elts_id as $_elt_id){
   // Duplication de l'événement  
 	$evenement->_id = "";
 	$evenement->realise = 0;
-	$evenement->debut = mbDateTime("+1 $period", $evenement->debut);
+	$evenement->debut = mbDateTime($period, $evenement->debut);
 
   // Cas des séances collectives
 	if ($evenement->seance_collective_id){

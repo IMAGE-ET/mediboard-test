@@ -255,6 +255,7 @@ $locales['CSpecCPAM.none'] = 'Aucune spécialité CPAM';
 $locales['CSpecCPAM.one'] = 'Une spécialité CPAM';
 $locales['CUser-back-'] = 'Utilisateurs';
 $locales['Holidays'] = 'Congés';
+$locales['Show/Hide'] = 'Montrer/Masquer';
 $locales['config-mediusers'] = 'Configuration des Mediusers';
 $locales['config-mediusers-tag_mediuser'] = 'Tag Mediusers';
 $locales['config-mediusers-tag_mediuser-desc'] = 'Tag Mediusers';

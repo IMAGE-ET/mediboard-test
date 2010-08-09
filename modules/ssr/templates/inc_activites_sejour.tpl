@@ -729,17 +729,7 @@ Main.add(function(){
 			    Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
       	</td>
 				<td>
-					Transférer vers 
-					<select name="kine_id">
-						<option value="">&mdash; Rééducateur</option>
-						{{foreach from=$plateaux item=_plateau}}
-						  <optgroup label="{{$_plateau->_view}}">
-						  {{foreach from=$_plateau->_ref_techniciens item=_technicien}}
-                <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
-              {{/foreach}}
-							</optgroup>
-						{{/foreach}}
-					</select>
+          Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
 				</td>
 			</tr>
       <tr>
@@ -747,17 +737,16 @@ Main.add(function(){
           Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
         </td>
 				<td>
-					Transférer vers 
-				  <select name="equipement_id">
-				  	<option value="">&mdash; Equipement</option>
-            <option value="none">{{tr}}CEquipement.none{{/tr}}</option>
-						{{foreach from=$plateaux item=_plateau}}
+          Transférer vers 
+          <select name="kine_id" style="width: 12em;">
+            <option value="">&mdash; Rééducateur</option>
+            {{foreach from=$plateaux item=_plateau}}
               <optgroup label="{{$_plateau->_view}}">
-	            {{foreach from=$_plateau->_ref_equipements item=_equipement}}
-	              <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
-	            {{/foreach}}
-							</optgroup>
-						{{/foreach}}
+              {{foreach from=$_plateau->_ref_techniciens item=_technicien}}
+                <option value="{{$_technicien->_ref_kine->_id}}">{{$_technicien->_ref_kine->_view}}</option>
+              {{/foreach}}
+              </optgroup>
+            {{/foreach}}
           </select>
 				</td>
       </tr>	    		
@@ -765,14 +754,21 @@ Main.add(function(){
         <td>
           Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
         </td>
-				<td></td>
+				<td>
+          Transférer vers 
+          <select name="equipement_id" style="width: 12em;">
+            <option value="">&mdash; Equipement</option>
+            <option value="none">{{tr}}CEquipement.none{{/tr}}</option>
+            {{foreach from=$plateaux item=_plateau}}
+              <optgroup label="{{$_plateau->_view}}">
+              {{foreach from=$_plateau->_ref_equipements item=_equipement}}
+                <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+              {{/foreach}}
+              </optgroup>
+            {{/foreach}}
+          </select>
+				</td>
       </tr>
-			<tr>
-				<td>				 
-					Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
-			  </td>
-				<td></td>
-			</tr>
 			<tr>
 				<td class="button" colspan="2">
 					<button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">{{tr}}Modify{{/tr}}</button>
@@ -798,7 +794,6 @@ Main.add(function(){
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
     <input type="hidden" name="token_elts" value="" /> 
-    <input type="hidden" name="period" value="" /> 
     <table class="form">
     	<tr>
         <th class="category">
@@ -807,12 +802,14 @@ Main.add(function(){
       </tr>
       <tr>
         <td class="button">
-          <button type="button" class="new" onclick="$V(this.form.period, 'week'); this.form.onsubmit();">
-          	Dupliquer la semaine suivante
+          <select name="period">
+            <option value="+1 WEEK">{{tr}}Week-after{{/tr}}</option>
+            <option value="+1 DAY" >{{tr}}Day-after{{/tr}} </option>
+            <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
+          </select>
+          <button type="button" class="new" onclick="this.form.onsubmit();">
+          	{{tr}}Duplicate{{/tr}}
 					</button>
-          <button type="button" class="new" onclick="$V(this.form.period, 'day'); this.form.onsubmit();">
-            Dupliquer le landemain
-          </button>
         </td>
       </tr> 
 	  </table>
