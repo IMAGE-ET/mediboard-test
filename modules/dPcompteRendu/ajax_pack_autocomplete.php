@@ -20,6 +20,8 @@ $where["object_class"] = "= '$object_class'";
 $where[] = "(pack.chir_id = $user_id
   OR pack.function_id = $function_id
   OR pack.group_id = $group_id)";
+$where[] = "(pack.modeles IS NOT NULL 
+  AND pack.modeles != '')"; 
 
 $order = "nom";
 
