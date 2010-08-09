@@ -140,8 +140,8 @@ class CSetup {
       $pref = new CPreferences;
       $pref->user_id = 0;
       $pref->key = $name;
-      $pref->value = $default;
       if (!$pref->loadMatchingObject())
+	      $pref->value = $default;
         $pref->store();
     }
   }
