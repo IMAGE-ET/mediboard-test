@@ -8,11 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $can;
-
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $extract_passages_id = CValue::get("extract_passages_id");
+$view                = CValue::get("view", 0);
 
 if ($extract_passages_id) {
   $extractPassages = new CExtractPassages();
@@ -31,6 +30,16 @@ if (!$extractPassages->message_valide) {
 $rpuSender = $extractPassages->getRPUSender();
 $extractPassages = $rpuSender->encrypt($extractPassages);
 
-echo "<script type='text/javascript'>extract_passages_id = $extractPassages->_id;</script>";
+if ($view) {
+  $extractPassages->loadRefsFiles();
+  
+  // Création du template
+  $smarty = new CSmartyDP("modules/dPurgences");
+  $smarty->assign("_passage", $extractPassages);
+    
+  $smarty->display("inc_extract_file.tpl");
+} else {
+  echo "<script type='text/javascript'>extract_passages_id = $extractPassages->_id;</script>";
+}
 
 ?>
