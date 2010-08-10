@@ -65,13 +65,17 @@ Main.add(function() {
 		      {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
 		      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		    </td>
+        {{if $type == "kine"}}
         <td style="text-align: left;">
-        {{if $replacement->_id && $type == "kine"}}
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
-        {{else}}
-				  &mdash;
-        {{/if}}
+				  {{if $replacement->_id}} 
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
+				  {{/if}}
         </td>
+        {{else}}
+        <td style="text-align: center;">
+				  {{$count_evts.$key}}
+        </td>
+	      {{/if}}
 		  </tr>
 			
     {{/foreach}}
