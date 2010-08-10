@@ -24,11 +24,8 @@ Planification.purge = function(sejour_id) {
   url.addParam('sejour_id', sejour_id);
 	url.requestUpdate("systemMsg", {
 	  method: 'post',
-		onComplete : function() {
-		  refreshEvenementsHorsSejours();
-		  $('planning-sejour').update(); 
-		}
-	} )
+		onComplete : Planification.onCompleteShowWeek
+  } )
 }
 
 </script>

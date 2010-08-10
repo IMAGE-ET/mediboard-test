@@ -17,6 +17,16 @@ Main.add(function(){
 	}
 });
 
+onSubmitReplacement = function(form, sejour_id, conge_id, type) {
+  return onSubmitFormAjax(form, { onComplete: function() { 
+    refreshReplacement(sejour_id, conge_id, type);
+    refreshlistSejour(sejour_id, type);
+    if (type == 'kine'       ) refreshlistSejour('','reeducateur');
+    if (type == 'reeducateur') refreshlistSejour('','kine'       );
+    if (type == 'reeducateur') $('replacement-reeducateur').update(''); 
+  } } ); 
+}
+
 </script>
 
 <table class="tbl">
@@ -57,18 +67,7 @@ Main.add(function(){
   </tbody>
 </table>
 
-<form name="editReplacement" action="?" method="post" 
-      onsubmit="return onSubmitFormAjax(this, { onComplete: 
-			  function(){ 
-				  refreshReplacement('{{$sejour->_id}}','{{$conge->_id}}','{{$type}}');
-					refreshlistSejour('{{$sejour->_id}}','{{$type}}');
-					{{if $type == "kine"}}
-          refreshlistSejour('','reeducateur');
-					{{/if}}
-          {{if $type == "reeducateur"}}
-          $('replacement-reeducateur').update(''); 
-          {{/if}}
-				} });">
+<form name="editReplacement" action="?" method="post" onsubmit="return onSubmitReplacement(this, '{{$sejour->_id}}','{{$conge->_id}}','{{$type}}');">
       	
 	<input type="hidden" name="m" value="ssr" />
 	{{if $type == "kine"}}
