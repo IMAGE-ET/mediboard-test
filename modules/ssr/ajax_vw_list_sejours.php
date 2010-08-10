@@ -35,8 +35,8 @@ foreach($plages_conge as $_plage_conge){
 	$_plage_conge->loadRefUser();
 	$_sejours = array();
 	
-	$date_debut = $_plage_conge->date_debut;
-  $date_fin = mbDate("+1 DAY", $_plage_conge->date_fin);
+	$date_debut = max($monday, $_plage_conge->date_debut);
+  $date_fin   = min($sunday, mbDate("+1 DAY", $_plage_conge->date_fin));
 	
 	if($type == "kine"){
 		$sejour = new CSejour();

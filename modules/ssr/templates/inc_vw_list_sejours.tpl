@@ -25,6 +25,8 @@ Main.add(function() {
 	    	{{assign var=plage_conge value=$plages_conge.$plage_conge_id}}
 			  Séjours pendant les congés de 
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage_conge->_ref_user}}
+				<br />
+				{{mb_include module=system template=inc_interval_date from=$plage_conge->date_debut to=$plage_conge->date_fin}}
 			</th>
 		</tr>
 		<tr>
