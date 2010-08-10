@@ -32,7 +32,7 @@ FCKConfig.ToolbarSets["Default"] = [
   {{if !$templateManager->simplifyMode}}
     ['Cut','Copy','Paste','PasteText','PasteWord','-', {{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint,'-','mbHeader','mbFooter'],
     ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-    ['Table','Rule','Image','SpecialChar','mbPageBreak', 'mbFreeText'],
+    ['Table','Rule','Image','SpecialChar','mbPageBreak'],
     ['FitWindow', {{if $can->admin}} 'Source' ,{{/if}} 'About', 'mbHelp'],
 	  '/',
   {{/if}}
@@ -133,7 +133,7 @@ FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbhelp', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
-FCKConfig.Plugins.Add( 'mbfreetext', 'en,fr', sMbPluginsPath );
+// FCKConfig.Plugins.Add( 'mbfreetext', 'en,fr', sMbPluginsPath );
 {{if $pdf_thumbnails == 1}}
   FCKConfig.Plugins.Add( 'mbprintPDF', 'en,fr', sMbPluginsPath );
 {{/if}}
