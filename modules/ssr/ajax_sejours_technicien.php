@@ -49,7 +49,6 @@ unset($services[""]);
 $replacement = new CReplacement;
 $replacements = $replacement->loadListFor($kine_id, $date);
 
-$sejours_remplaces = array();
 foreach ($replacements as $_replacement) {
   // Détails des séjours remplacés
   $_replacement->loadRefSejour();
@@ -66,6 +65,15 @@ foreach ($replacements as $_replacement) {
   $_replacement->loadRefConge();
   $_replacement->_ref_conge->loadRefUser();
   $_replacement->_ref_conge->_ref_user->loadRefFunction();	
+}
+
+// Chargement du séjours potentiellement remplacés
+$technicien->loadRefCongeDate($date);
+$conge = $technicien->_ref_conge_date;
+if ($conge->_id) {
+	foreach($sejours as $_sejour) {
+		$_sejour->loadRefReplacement();
+	}
 }
 
 // Nombre de séjours

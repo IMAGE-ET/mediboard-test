@@ -17,7 +17,7 @@
 <tr>
   <td>
 	  <select name="service_id" onchange="Repartition.updateTechnicien('', $V(this));">
-	    <option value="">&mdash; {{tr}}All{{/tr}} les services</option>
+	    <option value="">&mdash; {{tr}}CService.all{{/tr}}</option>
 	    {{foreach from=$services item=_service}}
 	    <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>
 	      {{$_service}}

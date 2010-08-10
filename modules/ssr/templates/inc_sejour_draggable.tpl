@@ -17,16 +17,18 @@
 {{assign var=ssr_class value=ssr-termine}}
 {{/if}}
 <tr class="{{$ssr_class}}">
-	<td class="text ssr-repartition">
+  {{assign var=replacement value=$sejour->_ref_replacement}}
+  
+	<td class="text ssr-repartition {{if $replacement && $replacement->_id}}arretee{{/if}}">
     {{if $remplacement}} 
     <div>
-      {{mb_include template=inc_sejour_repartition}}      
+      {{mb_include template=inc_sejour_repartition}}
     </div>
     {{else}}
-    <div class="draggable" id="{{$sejour->_guid}}">
-      <script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
-      {{mb_include template=inc_sejour_repartition}}       
-    </div>
+	    <div class="draggable" id="{{$sejour->_guid}}">
+	      <script type="text/javascript">Repartition.draggableSejour('{{$sejour->_guid}}')</script>
+	      {{mb_include template=inc_sejour_repartition}}       
+	    </div>
     {{/if}}
   </td>
 </tr>
