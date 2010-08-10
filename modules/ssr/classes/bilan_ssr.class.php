@@ -70,7 +70,7 @@ class CBilanSSR extends CMbObject {
 	}
 	
 	function loadRefTechnicien() {
-		$this->_ref_technicien = $this->loadFwdRef("technicien_id", true);
+		return $this->_ref_technicien = $this->loadFwdRef("technicien_id", true);
 	}
 	
 	function loadRefKineReferent() {

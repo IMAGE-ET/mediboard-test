@@ -84,9 +84,14 @@ foreach($plages_conge as $_plage_conge){
 			
 			$_sejour->checkDaysRelative($date);
 			$_sejour->loadRefReplacement();
-			if (!$_sejour->_ref_replacement->_id || $type == "reeducateur") {
+			$replacement =& $_sejour->_ref_replacement;
+			if (!$replacement->_id || $type == "reeducateur") {
 		    $sejours_count++;
 			}
+
+      if ($replacement->_id || $type == "kine") {
+        $replacement->loadRefReplacer()->loadRefFunction();
+      }
 
 		  // Bilan SSR
 		  $_sejour->loadRefBilanSSR();

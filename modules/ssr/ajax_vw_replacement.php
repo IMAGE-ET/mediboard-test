@@ -32,8 +32,12 @@ if ($replacement->_id) {
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
 
+// Séjour du patient
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
+foreach($sejours as $_sejour) {
+	$_sejour->loadRefBilanSSR()->loadRefTechnicien();
+}
 
 // Chargement des praticiens
 $user = new CMediusers();

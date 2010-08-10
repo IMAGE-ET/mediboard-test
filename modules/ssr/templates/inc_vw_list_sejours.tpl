@@ -28,17 +28,25 @@ Main.add(function() {
 			</th>
 		</tr>
 		<tr>
-	    <th colspan="2">{{mb_title class="CSejour" field="patient_id"}}</th>
-	    <th>{{mb_title class="CSejour" field="entree"}}</th>
-	    <th>{{mb_title class="CSejour" field="sortie"}}</th>
-			<th>Evts SSR</th>
+	    <th colspan="2">{{mb_title class=CSejour field=patient_id}}</th>
+	    <th>{{mb_title class=CSejour field=entree}}</th>
+	    <th>{{mb_title class=CSejour field=sortie}}</th>
+			<th>
+			  {{if $type == "kine"}}
+			    {{mb_title class=CReplacement field=replacer_id}}
+			  {{else}}
+          Evts SSR
+			  {{/if}}
+			</th>
     </tr>
+		
 	  {{foreach from=$_sejours item=_sejour}}
 		  {{assign var=sejour_id value=$_sejour->_id}}
       {{assign var=key value="$plage_conge_id-$sejour_id"}}
+      {{assign var=replacement value=$_sejour->_ref_replacement}}
 			
       <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
-		    <td colspan="2" class="text {{if $_sejour->_ref_replacement->_id && $type == "kine"}} arretee {{/if}}">
+		    <td colspan="2" class="text {{if $replacement->_id && $type == "kine"}} arretee {{/if}}">
 					{{assign var=patient value=$_sejour->_ref_patient}}
 				  <big class="CPatient-view" 
 					  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')" 
@@ -57,11 +65,13 @@ Main.add(function() {
 		      {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
 		      <div style="text-align: right; opacity: 0.6;">{{$_sejour->_sortie_relative}}j</div>
 		    </td>
-				<td style="text-align: center;">
-					{{assign var=sejour_id value=$_sejour->_id}}
-					{{assign var=key value="$plage_conge_id-$sejour_id"}}
-					{{$count_evts.$key}}
-				</td>
+        <td style="text-align: left;">
+        {{if $replacement->_id && $type == "kine"}}
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$replacement->_ref_replacer}}
+        {{else}}
+				  &mdash;
+        {{/if}}
+        </td>
 		  </tr>
 			
     {{/foreach}}

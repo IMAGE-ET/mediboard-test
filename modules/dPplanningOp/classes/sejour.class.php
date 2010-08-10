@@ -938,7 +938,7 @@ class CSejour extends CCodable {
   }
   
   function loadRefBilanSSR() {
-    $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
+    return $this->_ref_bilan_ssr = $this->loadUniqueBackRef("bilan_ssr");
   }
   
   function loadRefAdresseParPraticien() {

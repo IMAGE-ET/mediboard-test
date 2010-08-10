@@ -55,7 +55,17 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
 			</span>
 		</td>
   	{{/if}}
-    <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}}</td>
+		{{assign var=technicien value=$_sejour->_ref_bilan_ssr->_ref_technicien}}
+    <td>
+    	{{if $technicien->kine_id == $therapeute_id}}
+			  <strong>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}} /
+				{{mb_value object=$technicien field=plateau_id}}
+				</strong>
+      {{else}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$therapeute_id}}
+      {{/if}}
+			</td>
     <td style="text-align: center;">{{$_count}}</td>
   </tr>
   {{foreachelse}}
@@ -81,11 +91,11 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
     {{mb_field object=$replacement field=sejour_id hidden=1}}
     {{mb_field object=$replacement field=conge_id hidden=1}}
 
-<table class="form">
+  <table class="form">
 		<tr>
 			{{if $type == "kine"}}
 				{{if $replacement->_id}}
-				 <th class="text title modify" colspan="2">Modification du remplacement du séjour<br /> {{$sejour->_view}}</th>
+				 <th class="text title modify" colspan="2">Modification du remplacement du séjour<br />'{{$sejour->_view}}'</th>
 	      {{else}}
 				 <th class="text title" colspan="2">Création d'un remplacement</th>
 	    	{{/if}}
@@ -114,9 +124,9 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
       <td colspan="2" class="button">
       	{{if $replacement->_id}}
 					<button class="trash" type="button" onclick="confirmDeletion(this.form, {
-	          typeName:'le remplacement ',
-	          objName:'{{$replacement->_view|smarty:nodefaults|JSAttribute}}',
-	          ajax: 1})">
+	          typeName: 'le remplacement ',
+	          objName: '{{$replacement->_view|smarty:nodefaults|JSAttribute}}',
+	          ajax: 1 } )">
 	          {{tr}}Delete{{/tr}}
 	        </button>
 				{{else}}

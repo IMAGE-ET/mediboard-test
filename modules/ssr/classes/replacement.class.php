@@ -119,7 +119,7 @@ class CReplacement extends CMbObject {
   }
 	
   function loadRefReplacer() {
-    $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
+    return $this->_ref_replacer = $this->loadFwdRef("replacer_id", true);
   }	
 	
 	function loadListFor($user_id, $date) {
