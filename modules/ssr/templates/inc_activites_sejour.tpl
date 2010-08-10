@@ -688,8 +688,8 @@ Main.add(function(){
     }
     
 		onSubmitSelectedEvents = function(form) {
-      updateSelectedEvents(form.token_elts);
-			var values = new TokenField(form.token_elts).getValues();
+      updateSelectedEvents(form.event_ids);
+			var values = new TokenField(form.event_ids).getValues();
 			
 			// Sélection vide
 			if (!values.length) {
@@ -715,7 +715,7 @@ Main.add(function(){
 	<form name="editSelectedEvent" method="post" action="?" onsubmit="return onSubmitSelectedEvents(this)">
 		<input type="hidden" name="m" value="ssr" />
 		<input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-		<input type="hidden" name="token_elts" value="" />
+		<input type="hidden" name="event_ids" value="" />
     <input type="hidden" name="del" value="0" />		
 		<input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
     <table class="form">
@@ -793,7 +793,7 @@ Main.add(function(){
 		
     <input type="hidden" name="m" value="ssr" />
     <input type="hidden" name="dosql" value="do_duplicate_evenements_aed" />
-    <input type="hidden" name="token_elts" value="" /> 
+    <input type="hidden" name="event_ids" value="" /> 
     <table class="form">
     	<tr>
         <th class="category">

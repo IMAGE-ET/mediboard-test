@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-$token_elts  = CValue::post("token_elts");
-$period      = CValue::post("period");
+$event_ids = CValue::post("event_ids");
+$period    = CValue::post("period");
 
 
-$elts_id = explode("|", $token_elts);
+$elts_id = explode("|", $event_ids);
 foreach($elts_id as $_elt_id){
   $evenement = new CEvenementSSR();
   $evenement->load($_elt_id);

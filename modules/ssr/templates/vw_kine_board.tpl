@@ -82,7 +82,7 @@ Main.add(function(){
       <form name="editSelectedEvent" method="post" action="?">
         <input type="hidden" name="m" value="ssr" />
         <input type="hidden" name="dosql" value="do_modify_evenements_aed" />
-        <input type="hidden" name="token_elts" value="" />
+        <input type="hidden" name="event_ids" value="" />
         <input type="hidden" name="del" value="0" />    
         <input type="hidden" name="realise" value="0" />
       </form>

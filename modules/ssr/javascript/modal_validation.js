@@ -34,8 +34,8 @@ ModalValidation = {
 	  });
 	  
     var form = this.form();
-	  $V(form.token_elts, event_ids.join('|'));
-    return $V(form.token_elts);
+	  $V(form.event_ids, event_ids.join('|'));
+    return $V(form.event_ids);
 	},
 	
 	selectCheckboxes: function() {
@@ -46,8 +46,8 @@ ModalValidation = {
 			}
     });
     var form = this.form();
-    $V(form.token_elts, event_ids.join('|'));
-    return $V(form.token_elts);
+    $V(form.event_ids, event_ids.join('|'));
+    return $V(form.event_ids);
 	},
 	
 	set: function(values) {
@@ -71,7 +71,7 @@ ModalValidation = {
 
     var form = this.form();
     var url = new Url("ssr", "ajax_update_modal_evenements");
-    url.addParam("token_field_evts", $V(form.token_elts));
+    url.addParam("token_field_evts", $V(form.event_ids));
     url.requestUpdate("modal_evenements", { 
       onComplete: function() {
         // Positioning takes a lot of time for big modals with IE8-

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-$token_elts               = CValue::post("token_elts");
+$event_ids                = CValue::post("event_ids");
 $del                      = CValue::post("del", 0);
 $_nb_decalage_min_debut   = CValue::post("_nb_decalage_min_debut");
 $_nb_decalage_heure_debut = CValue::post("_nb_decalage_heure_debut");
@@ -19,7 +19,7 @@ $equipement_id            = CValue::post("equipement_id");
 $realise                  = CValue::post("realise");
 $sejour_id                = CValue::post("sejour_id");
 
-$elts_id = explode("|", $token_elts);
+$elts_id = explode("|", $event_ids);
 foreach($elts_id as $_elt_id){
   $evenement = new CEvenementSSR();
   $evenement->load($_elt_id);
