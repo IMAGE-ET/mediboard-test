@@ -95,7 +95,13 @@ onSubmitReplacement = function(form, sejour_id, conge_id, type) {
 		<tr>
 			{{if $type == "kine"}}
 				{{if $replacement->_id}}
-				 <th class="text title modify" colspan="2">Modification du remplacement du séjour<br />'{{$sejour->_view}}'</th>
+          <th class="text title modify" colspan="2">
+				    {{mb_include module=system object=$replacement template=inc_object_idsante400}}
+				    {{mb_include module=system object=$replacement template=inc_object_history   }}
+				    {{mb_include module=system object=$replacement template=inc_object_notes     }}
+						
+ 				  	Modification du remplacement du séjour<br />'{{$sejour->_view}}'
+				  </th>
 	      {{else}}
 				 <th class="text title" colspan="2">Création d'un remplacement</th>
 	    	{{/if}}

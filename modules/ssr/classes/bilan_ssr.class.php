@@ -92,18 +92,19 @@ class CBilanSSR extends CMbObject {
 
     // Recherche d'un remplacement
 		$sejour = $this->loadFwdRef("sejour_id", true);
-		$sejour->loadRefReplacement();
-    $replacement =& $sejour->_ref_replacement;
-		if ($replacement->_id) {
-			$replacement->loadRefConge();
-			$conge = $replacement->_ref_conge;
-			if (in_range(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
-        $replacement->loadRefReplacer();
-				$replacer =& $replacement->_ref_replacer;
-				$replacer->loadRefFunction();
-				$this->_ref_kine_journee = $replacement->_ref_replacer;
-			}
-	  }
+		foreach ($sejour->loadRefReplacements() as $_replacement) {
+	    if ($_replacement->_id) {
+	      $_replacement->loadRefConge();
+	      $conge = $_replacement->_ref_conge;
+	      if (in_range(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
+	        $_replacement->loadRefReplacer();
+	        $replacer =& $_replacement->_ref_replacer;
+	        $replacer->loadRefFunction();
+	        $this->_ref_kine_journee = $_replacement->_ref_replacer;
+					break;
+	      }
+	    }
+		}
 		
 		$this->_kine_journee_id = $this->_ref_kine_journee->_id;
 	}

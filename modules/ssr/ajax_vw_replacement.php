@@ -21,10 +21,11 @@ $conge = new CPlageConge();
 $conge->load($conge_id);
 
 // Chargement d'un remplacement
-$sejour->loadRefReplacement();
+$sejour->loadRefReplacement($conge_id);
 $replacement =& $sejour->_ref_replacement;
 if ($replacement->_id) {
   $replacement->loadRefReplacer();
+  $replacement->loadRefsNotes();
 	$replacer =& $replacement->_ref_replacer;
 	$replacer->loadRefFunction();
 }

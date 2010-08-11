@@ -72,7 +72,7 @@ $technicien->loadRefCongeDate($date);
 $conge = $technicien->_ref_conge_date;
 if ($conge->_id) {
 	foreach($sejours as $_sejour) {
-		$_sejour->loadRefReplacement();
+		$_sejour->loadRefReplacement($conge);
 	}
 }
 

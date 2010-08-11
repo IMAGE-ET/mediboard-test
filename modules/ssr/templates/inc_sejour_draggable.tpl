@@ -19,7 +19,7 @@
 <tr class="{{$ssr_class}}">
   {{assign var=replacement value=$sejour->_ref_replacement}}
   
-	<td class="text ssr-repartition {{if $replacement && $replacement->_id}}arretee{{/if}}">
+	<td class="text ssr-repartition {{if $replacement && $replacement->_id}} arretee {{/if}}">
     {{if $remplacement}} 
     <div>
       {{mb_include template=inc_sejour_repartition}}

@@ -15,6 +15,8 @@ $replacer_id = CValue::post("replacer_id");
 
 $conge = new CPlageConge();
 $conge->load($conge_id);
+$conge->loadRefUser();
+$user =& $conge->_ref_user;
 
 $date_debut = $conge->date_debut;
 $date_fin = mbDate("+1 DAY", $conge->date_fin);
@@ -25,7 +27,6 @@ $where["therapeute_id"] = " = '$conge->user_id'";
 $where["sejour_id"] = " = '$sejour_id'";
 $where["debut"] = " BETWEEN '$date_debut' AND '$date_fin'";
 $evenements = $evenement->loadList($where);
-
 foreach($evenements as $_evenement){
 	$_evenement->therapeute_id = $replacer_id;
   $msg = $_evenement->store();

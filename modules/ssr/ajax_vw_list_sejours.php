@@ -73,7 +73,6 @@ foreach($plages_conge as $_plage_conge){
 	
 	if (count($_sejours)){
 		foreach($_sejours as $_sejour) {
-			
 			// On compte le nombre d'evenements SSR à transferer
 			$evenement_ssr = new CEvenementSSR();
 			$where = array();
@@ -83,7 +82,7 @@ foreach($plages_conge as $_plage_conge){
 			$count_evts["$_plage_conge->_id-$_sejour->_id"] = $evenement_ssr->countList($where);
 			
 			$_sejour->checkDaysRelative($date);
-			$_sejour->loadRefReplacement();
+			$_sejour->loadRefReplacement($_plage_conge->_id);
 			$replacement =& $_sejour->_ref_replacement;
 			if (!$replacement->_id || $type == "reeducateur") {
 		    $sejours_count++;
