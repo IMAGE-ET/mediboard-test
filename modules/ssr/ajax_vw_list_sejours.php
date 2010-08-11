@@ -22,7 +22,8 @@ $where = array();
 $where[] = "(plageconge.date_debut BETWEEN '$monday' AND '$sunday') OR 
             (plageconge.date_fin BETWEEN '$monday' AND '$sunday') OR
             (plageconge.date_debut <= '$monday' AND plageconge.date_fin >= '$sunday')";
-$plages_conge = $plage_conge->loadList($where);
+$order="plageconge.date_debut DESC, plageconge.date_fin DESC";
+$plages_conge = $plage_conge->loadList($where, $order);
 
 $group_id = CGroups::loadCurrent()->_id;
 $sejours = array();
