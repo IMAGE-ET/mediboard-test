@@ -1,4 +1,6 @@
 <?php
+$locales['CPermModule._owner.template'] = 'Profil';
+$locales['CPermModule._owner.user'] = 'Utilisateur';
 $locales['dPdeveloppement-button-unlocalized_fix'] = 'Mais je suis courageux et je le corrige maintenant !';
 $locales['dPdeveloppement-msg-unlocalized_warning'] = 'Cette page contient des textes non traduits au nombre de';
 $locales['mod-dPdeveloppement-tab-benchmark'] = 'Montée en charge';

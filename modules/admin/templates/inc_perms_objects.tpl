@@ -19,7 +19,7 @@ function cancelObject(oObject) {
 }
 
 Main.add(function(){
-  $(getForm('editPermObj').object_class).makeAutocomplete({width: '200px'});
+  $(getForm('editPermObj').object_class).makeAutocomplete({width: '300px'});
 });
 
 </script>
@@ -35,12 +35,13 @@ Main.add(function(){
 <table class="form">
   <tr>
     <th class="category" colspan="3">
-      Ajouter un droit sur :
+      Ajouter une permission sur la classe :
 			<span style="text-align: left; font-weight: normal; color:#000;">
       <select name="object_class">
-        {{foreach from=$listClasses|smarty:nodefaults item=class}}
-        <option value="{{$class}}">
-          {{tr}}{{$class}}{{/tr}} - {{$class}}
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{foreach from=$classes item=_class}}
+        <option value="{{$_class}}">
+          {{tr}}{{$_class}}{{/tr}} - {{$_class}}
         </option>
         {{/foreach}}
       </select>
@@ -69,14 +70,8 @@ Main.add(function(){
        </script>
     </td>
     <td class="button">
-      Permission :
-      <select name="permission">
-      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
-        <option value="{{$key_perm}}">
-          {{$curr_perm}}
-        </option>
-      {{/foreach}}
-      </select>
+      {{mb_label object=$permObject field=permission}}
+      {{mb_field object=$permObject field=permission}}
     </td>
     <td class="button">
       <button class="new" type="submit">Ajouter</button>
@@ -89,61 +84,65 @@ Main.add(function(){
     <th class="title" colspan="4">Droits existants</th>
   </tr>
   <tr>
-    <th>Classe</th>
-    <th>Objet</th>
-    <th>Type</th>
-    <th>Permission</th>
+    <th>{{mb_label object=$permObject field=object_class}}</th>
+    <th>{{mb_label object=$permObject field=object_id}}</th>
+    <th>{{mb_label object=$permObject field=_owner}}</th>
+    <th>{{mb_label object=$permObject field=permission}}</th>
   </tr>
   
   
-  {{foreach from=$listPermsObjectComplet item=object}}
-    <tbody class="hoverable">      
-    {{counter start=0 skip=1 assign="curr_counter"}}
-    {{foreach from=$object key="key" item="perm"}}
+  {{foreach from=$permsObject item=_permsObjectByClass}}
+    <tbody class="hoverable">
+    {{foreach from=$_permsObjectByClass item=_permsObject}}
+    {{foreach from=$_permsObject key=owner item=_perm name=owner}}
+		{{assign var=object value=$_perm->_ref_db_object}}
     <tr>
-      {{if $curr_counter==0}}
-      <td class="text" rowspan="{{$object|@count}}"> 
-        {{tr}}{{$perm->object_class}}{{/tr}}
+      {{if $smarty.foreach.owner.first}} 
+      <td class="text" rowspan="{{$_permsObject|@count}}"> 
+        <strong>{{tr}}{{$_perm->object_class}}{{/tr}}</strong>
       </td>
-      <td class="text" rowspan="{{$object|@count}}"> 
-        {{if $perm->object_id}}
-          {{tr}}{{$perm->_ref_db_object->_view}}{{/tr}}
+      <td class="text" rowspan="{{$_permsObject|@count}}">
+        {{if $object->_id}}
+				  <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+            {{$object}}
+				  </span>
         {{else}}
           <strong>Droits généraux</strong>
         {{/if}}      
       </td>
       {{/if}}
-      <td>
-        {{if $key == "user"}}
-        Utilisateur
-        {{elseif $key == "profil"}}
-        Profil
-        {{/if}}
-      </td>     
-      <td>
-      <form name="editPermObj{{$perm->perm_object_id}}" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+      <td>{{mb_value object=$_perm field=_owner}}</td>
+
+      <td style="{{if count($_permsObject) > 1 && $owner == "profil"}} text-decoration: line-through; {{/if}}">
+        <form name="Edit-{{$_perm->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
         <input type="hidden" name="dosql" value="do_perms_obj_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="perm_object_id" value="{{$perm->perm_object_id}}" />
-        <select name="permission" {{if $key != "user"}} disabled = "disabled"{{/if}}>
-          {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
-          <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
-          {{$curr_perm}}
-          </option>
-          {{/foreach}}
-        </select>
-        {{if $key == "profil" && $object|@count == "2"}}
-          <img src="images/icons/no.png" title="Profil desactivé" />
+        {{mb_key object=$_perm}}
+
+        <div style="width: 8em; display: inline-block;">
+        {{if $owner == "user"}}
+          {{mb_field object=$_perm field=permission}}
+        {{else}}
+          <span style="padding: 0 6px;">
+            {{mb_value object=$_perm field=permission}}
+          </span>
         {{/if}}
-        {{if $key == "user"}}
+        </div>
+
+        {{if $owner == "user"}}
+        <span style="margin: 0 1em;">
           <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
-        {{/if}}
-      </form>
-    </td>
-  </tr>
-  {{counter}}
-  {{/foreach}}
-  </tbody>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+        </span>
+				{{/if}}
+
+        </form>
+		  </td>
+		</tr>
+    {{/foreach}}
+    {{/foreach}}
+	  </tbody>
   {{/foreach}}
 </table>

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editPermMod" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="EditCPermModule" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 
 <input type="hidden" name="dosql" value="do_perms_mod_aed" />
@@ -34,27 +34,15 @@
   </tr>
   <tr>
     <td class="button">
-      Permission :
-      <select name="permission">
-      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
-        <option value="{{$key_perm}}">
-          {{$curr_perm}}
-        </option>
-      {{/foreach}}
-      </select>
+      {{mb_label object=$permModule field=permission}}
+      {{mb_field object=$permModule field=permission}}
     </td>
     <td class="button">
-      Visibilité :
-      <select name="view">
-      {{foreach from=$visibility|smarty:nodefaults key=key_view item=curr_view}}
-        <option value="{{$key_view}}">
-          {{$curr_view}}
-        </option>
-      {{/foreach}}
-      </select>
+      {{mb_label object=$permModule field=view}}
+      {{mb_field object=$permModule field=view}}
     </td>
     <td class="button">
-      <button class="new" type="submit">Ajouter</button>
+      <button class="new" type="submit">{{tr}}Add{{/tr}}</button>
     </td>
   </tr>
 </table>
@@ -65,67 +53,71 @@
     <th class="title" colspan="4">Droits existants</th>
   </tr>
   <tr>
-    <th>Module</th>
-    <th>Type</th>
-    <th>Permission - Visibilité</th>
+    <th>{{mb_label object=$permModule field=mod_id}}</th>
+    <th>{{mb_label object=$permModule field=_owner}}</th>
+    <th>
+      {{mb_label object=$permModule field=permission}} - 
+      {{mb_label object=$permModule field=view}} 
+		</th>
   </tr>
   
   
-  {{foreach from=$listPermsModuleComplet item="module"}}
-  <tbody class="hoverable">      
-  {{counter start=0 skip=1 assign="curr_counter"}}
-    {{foreach from=$module key="key" item="perm"}}
+  {{foreach from=$permsModule item=_permsModule}}
+  <tbody class="hoverable">
+    {{foreach from=$_permsModule key=owner item=_perm name=owner}}
     <tr>
-     {{if $curr_counter==0}}
-      <td class="text" rowspan="{{$module|@count}}"> 
-        {{if $perm->mod_id}}
-          <strong>{{tr}}module-{{$perm->_ref_db_module->mod_name}}-court{{/tr}}</strong>
+    	{{if $smarty.foreach.owner.first}} 
+      <td class="text" rowspan="{{$_permsModule|@count}}"> 
+        {{if $_perm->mod_id}}
+          {{assign var=module value=$_perm->_ref_db_module}}
+          <strong>{{tr}}module-{{$module->mod_name}}-court{{/tr}}</strong>
           <br />
-          {{tr}}module-{{$perm->_ref_db_module->mod_name}}-long{{/tr}}
+          {{tr}}module-{{$module->mod_name}}-long{{/tr}}
         {{else}}
-          <strong>Droits généraux</strong>
+          <strong>{{tr}}CModule.all{{/tr}}</strong>
         {{/if}}
       </td>
-      {{/if}}
-      <td>
-      {{if $key == "user"}}
-      Utilisateur
-      {{elseif $key == "profil"}}
-      Profil
-      {{/if}}
-      </td>
-      <td>
-      
-        <form name="editPermMod{{$perm->perm_module_id}}" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-          <input type="hidden" name="dosql" value="do_perms_mod_aed" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="perm_module_id" value="{{$perm->perm_module_id}}" />
-          <select name="permission" {{if $key != "user"}} disabled = "disabled"{{/if}}>
-          {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
-            <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
-             {{$curr_perm}}
-            </option>
-          {{/foreach}}
-          </select>
-          -
-          <select name="view" {{if $key != "user"}} disabled = "disabled"{{/if}}>
-            {{foreach from=$visibility|smarty:nodefaults key=key_view item=curr_view}}
-            <option value="{{$key_view}}" {{if $key_view == $perm->view}}selected="selected"{{/if}}>
-            {{$curr_view}}
-            </option>
-            {{/foreach}}
-          </select>
-          {{if $key == "profil" && $module|@count == "2"}}
-            <img src="images/icons/no.png" title="Profil desactivé" />
-          {{/if}}
-          {{if $key == "user"}}
+    	{{/if}}
+			
+      <td>{{mb_value object=$_perm field=_owner}}</td>
+			
+      <td style="{{if count($_permsModule) > 1 && $owner == "profil"}} text-decoration: line-through; {{/if}}">
+        <form name="Edit-{{$_perm->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  
+        <input type="hidden" name="dosql" value="do_perms_mod_aed" />
+        <input type="hidden" name="del" value="0" />
+				{{mb_key object=$_perm}}
+        
+				<div style="width: 8em; display: inline-block;">
+        {{if $owner == "user"}}
+          {{mb_field object=$_perm field=permission}}
+        {{else}}
+				  <span style="padding: 0 6px;">
+	          {{mb_value object=$_perm field=permission}}
+   			  </span>
+        {{/if}}
+				</div>
+
+        <div style="width: 8em; display: inline-block;">
+        {{if $owner == "user"}}
+          {{mb_field object=$_perm field=view}}
+        {{else}}
+          <span style="padding: 0 6px;">
+          {{mb_value object=$_perm field=view}}
+					</span>
+        {{/if}}
+        </div>
+
+        {{if $owner == "user"}}
+				<span style="margin: 0 1em;">
          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_module->mod_name|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+         <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$module->mod_name|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
+				</span>
         {{/if}}
+ 
        </form>
       </td>
      </tr>
-    {{counter}}
     {{/foreach}}
     </tbody>
   {{/foreach}}

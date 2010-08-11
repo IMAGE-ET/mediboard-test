@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
+global $AppUI, $m;
 
-$can->needsRead();
+CCanDo::checkEdit();
 
 $user_id = CValue::getOrSession("user_id", $AppUI->user_id);
 
@@ -21,9 +21,6 @@ if(!$user_id) {
 
 $modulesInstalled = CModule::getInstalled();
 $isAdminPermSet   = false;
-
-CAppUI::getAllClasses();
-$listClasses = getChildClasses("CMbObject");
 
 // Récuperation de l'utilisateur sélectionné
 $user = new CUser;
@@ -45,67 +42,53 @@ $whereProfil = array();
 $whereProfil["user_id"] = "= '$user->profile_id'";
 
 // DROITS SUR LES MODULES
-
-// Tabeau recapitulatif des droit sur les modules
-$listPermsModuleComplet = array();
-
-// Droits sur l'utilisateur
 $permModule = new CPermModule;
+$permsModule = array();
+$permsModuleCount = 0;
 
 // Droit du profil sur les modules
-$listPermsModulesProfil = $permModule->loadList($whereProfil, $order);
-foreach($listPermsModulesProfil as $keyMod => $mod) {
-  $listPermsModulesProfil[$keyMod]->loadRefDBModule();
-  $listPermsModuleComplet[$mod->mod_id]["profil"] = $mod;
+foreach ($permModule->loadList($whereProfil, $order) as $_perm) {
+	$permsModuleCount++;
+  $_perm->_owner = "template";
+  $_perm->loadRefDBModule();
+  $permsModule[$_perm->mod_id]["profil"] = $_perm;
 }
 
-
-$listPermsModulesUser = $permModule->loadList($whereUser, $order);
-foreach($listPermsModulesUser as $keyMod => $mod) {  
-  if(!$listPermsModulesUser[$keyMod]->mod_id) {
+foreach($permModule->loadList($whereUser, $order) as $_perm) {
+	$permsModuleCount++;
+  $_perm->_owner = "user";
+	$module = $_perm->loadRefDBModule();
+  if (!$module->_id) {
     $isAdminPermSet = true;
   }
-  $listPermsModulesUser[$keyMod]->loadRefDBModule();
-  $listPermsModuleComplet[$mod->mod_id]["user"] = $mod;
-  
-  if(isset($modulesInstalled[$mod->_ref_db_module->mod_name])) {
-    unset($modulesInstalled[$mod->_ref_db_module->mod_name]);
-  }
+	
+  $permsModule[$module->_id]["user"] = $_perm;
+  unset($modulesInstalled[$module->mod_name]);
 }
 
 // DROITS SUR LES OBJETS
-$listPermsObjectComplet = array();
-
-$listPermsObjectsUser = array();
-$listPermsObjectsProfil = array();
-$listPermsObjectsResultat = array();
-
-$order = "object_class";
 $permObject = new CPermObject;
-
+$permsObject = array();
+$permsObjectCount = 0;
+$order = "object_class, object_id";
 
 // Droit sur le profil
-$listPermsObjectsProfil = $permObject->loadList($whereProfil, $order);
-foreach($listPermsObjectsProfil as $keyObj => $obj) {
-  $listPermsObjectsProfil[$keyObj]->loadRefDBObject();
-  $listPermsObjectComplet[$obj->object_id.$obj->object_class]["profil"] = $obj;
+foreach($permObject->loadList($whereProfil, $order) as $_perm) {
+	$permsObjectCount++;
+  $_perm->_owner = "template";
+  $object = $_perm->loadRefDBObject();
+  $permsObject[$object->_class_name][$object->_id]["profil"] = $_perm;
 }
 
 // Droit sur l'utilisateur
-$listPermsObjectsUser = $permObject->loadList($whereUser, $order);
-foreach($listPermsObjectsUser as $keyObj => $obj) {
-  $listPermsObjectsUser[$keyObj]->loadRefDBObject();
-  $listPermsObjectComplet[$obj->object_id.$obj->object_class]["user"] = $obj;
+foreach($permObject->loadList($whereUser, $order) as $_perm) {
+  $permsObjectCount++;
+  $_perm->_owner = "user";
+  $object = $_perm->loadRefDBObject();
+  $permsObject[$object->_class_name][$object->_id]["user"] = $_perm;
 }
 
-$permission = array(PERM_DENY => "interdit",
-                     PERM_READ => "lecture",
-                     PERM_EDIT => "ecriture");
-
-$visibility = array(PERM_DENY => "caché",
-                    PERM_READ => "vue",
-                    PERM_EDIT => "administration");
-
+// Chargement des utilisateurs du profil courant ou de celui de l'utilisateur
 $profileUser = new CUser();
 $profilesList = array();
 if ($user->profile_id) {
@@ -123,15 +106,13 @@ $smarty = new CSmartyDP();
 $smarty->assign("user"                     , $user                     );
 $smarty->assign("modulesInstalled"         , $modulesInstalled         );
 $smarty->assign("isAdminPermSet"           , $isAdminPermSet           );
-$smarty->assign("listClasses"              , $listClasses              );
-$smarty->assign("listPermsModulesUser"     , $listPermsModulesUser     );
-$smarty->assign("listPermsModulesProfil"   , $listPermsModulesProfil   );
-$smarty->assign("listPermsObjectsUser"     , $listPermsObjectsUser     );
-$smarty->assign("listPermsObjectsProfil"   , $listPermsObjectsProfil   );
-$smarty->assign("listPermsModuleComplet"   , $listPermsModuleComplet   );
-$smarty->assign("listPermsObjectComplet"   , $listPermsObjectComplet   );
-$smarty->assign("permission"               , $permission               );
-$smarty->assign("visibility"               , $visibility               );
+$smarty->assign("classes"                  , getInstalledClasses());
+
+$smarty->assign("permsModule"      , $permsModule      );
+$smarty->assign("permsObject"      , $permsObject      );
+$smarty->assign("permModule"               , $permModule               );
+$smarty->assign("permObject"               , $permObject               );
+
 $smarty->assign("profile"                  , $profile                  );
 $smarty->assign("profilesList"             , $profilesList             );
 

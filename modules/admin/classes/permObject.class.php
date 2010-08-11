@@ -37,6 +37,9 @@ class CPermObject extends CMbObject {
   var $object_class = null;
   var $permission   = null;
   
+  // Distant fields
+  var $_owner = null;
+  
   // References
   var $_ref_db_user   = null;
   var $_ref_db_object = null;
@@ -53,18 +56,18 @@ class CPermObject extends CMbObject {
     $specs["user_id"]      = "ref notNull class|CUser cascade";
     $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
     $specs["object_class"] = "str notNull";
-    $specs["permission"]   = "numchar notNull maxLength|1";
+    $specs["permission"]   = "enum list|0|1|2";
+
+    $specs["_owner"]        = "enum list|user|template";
     return $specs;
   }
   
   function loadRefDBObject() {
-    $this->_ref_db_object = new $this->object_class;
-    $this->_ref_db_object->load($this->object_id);
+    return $this->_ref_db_object = $this->loadFwdRef("object_id");
   }
 
   function loadRefDBUser() {
-    $this->_ref_db_user = new CUser;
-    $this->_ref_db_user->load($this->user_id);
+    return $this->_ref_db_user = $this->loadFwdRef("user_id");
   }
   
   function loadRefsFwd() {

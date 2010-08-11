@@ -46,7 +46,7 @@ Main.add(function() {
   {{/foreach}}
 
   {{if !$readonly_class}}
-    $(getForm("objects-selector").objects_class).makeAutocomplete({width: "200px"});
+    $(getForm("objects-selector").objects_class).makeAutocomplete({width: "300px"});
   {{/if}}
 }); 
 </script>

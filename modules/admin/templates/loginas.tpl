@@ -15,7 +15,7 @@
 <input type="hidden" name="login" value="ok" />
 <input type="hidden" name="loginas" value="{{$loginas_user->user_username}}" />
 <button type="submit" class="tick">
-  {{tr}}Substituer{{/tr}}
+  {{tr}}Substitute{{/tr}}
 </button>
   
 </form>
