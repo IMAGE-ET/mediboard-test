@@ -221,7 +221,7 @@ modeExpertDisplay = function() {
   <!-- Mode easy -->
   <tr id="modeEasy" style="display:none;"> 
     <td>
-    {{include file="inc_form_operation_easy.tpl"}}
+    {{mb_include template=inc_form_operation_easy}}
     </td>
     <td class="text">
       <div class="big-info">
@@ -235,10 +235,10 @@ modeExpertDisplay = function() {
   <!-- Mode expert -->
   <tr id="modeExpert" style="display:none;">
     <td>
-      {{include file="inc_form_operation.tpl"}}
+      {{mb_include template=inc_form_operation}}
     </td>
     <td id="inc_form_sejour">
-      {{include file="inc_form_sejour.tpl" mode_operation=true}}
+      {{mb_include template=inc_form_sejour mode_operation=true}}
     </td>
   </tr>
   <tr>
@@ -271,8 +271,14 @@ modeExpertDisplay = function() {
 
 <!-- Documents -->
 {{if $op->_id}}
-<hr />
-{{include file=inc_documents_operation.tpl operation=$op}}
+  <hr />
+  {{mb_include template=inc_documents_operation operation=$op}}
+{{/if}}
+
+<!-- Files -->
+{{if $op->_id}}
+  <hr />
+  {{mb_include template=inc_files_operation operation=$op}}
 {{/if}}
     
 <!-- Actes -->

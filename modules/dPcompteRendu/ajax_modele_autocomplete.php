@@ -25,7 +25,7 @@ $where[] = "(compte_rendu.chir_id = $user_id
 $order = "nom";
 
 $modeles = $compte_rendu->seek($keywords, $where, null, null, null, $order);
-
+mbTrace($modeles, "modeles", true);
 $smarty = new CSmartyDP();
 
 $smarty->assign("modeles", $modeles);

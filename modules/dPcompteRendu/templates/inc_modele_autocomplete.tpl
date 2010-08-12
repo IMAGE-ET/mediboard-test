@@ -1,14 +1,14 @@
 <ul style="text-align: left;">
   {{foreach from=$modeles item=_modele}}
-    <li>
-      {{if $_modele->_owner == "user"}}
-        {{assign var=owner_icon value="user"}}
-      {{elseif $_modele->_owner == "func"}}
-        {{assign var=owner_icon value="user-function"}}
-      {{else}}
-        {{assign var=owner_icon value="group"}}
-      {{/if}}
+    {{if $_modele->_owner == "user"}}
+      {{assign var=owner_icon value="user"}}
+    {{elseif $_modele->_owner == "func"}}
+      {{assign var=owner_icon value="user-function"}}
+    {{else}}
+      {{assign var=owner_icon value="group"}}
+    {{/if}}
       
+    <li>  
       <img style="float: right; clear: both;" 
         src="images/icons/{{$owner_icon}}.png" />
       

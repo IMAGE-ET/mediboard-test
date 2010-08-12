@@ -26,8 +26,16 @@ class CContentXML extends CMbObject {
   function getProps() { 
     $specs = parent::getProps();
     $specs["content"]   = "xml show|0";
-    $specs["import_id"] = "ref class|CMbObject";
+    $specs["import_id"] = "num";
     
     return $specs;
+  }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['messages']      = "CEchangeHprim message_content_id";
+    $backProps['acquittements'] = "CEchangeHprim acquittement_content_id";
+    
+    return $backProps;
   }
 }
