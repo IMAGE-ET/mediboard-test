@@ -31,8 +31,10 @@ foreach($elts_id as $_elt_id){
 
   // Autres rééducateurs
 	global $can;
-	if ($evenement->therapeute_id !=  CAppUI::$instance->user_id && !$can->admin) {
-    CAppUI::displayMsg("Impossible de dupliquer les événements d'un autre rééducateur", "CEvenementSSR-msg-create");
+	$user = CAppUI::$instance->_ref_user;
+	$therapeute = $evenement->loadRefTherapeute();
+	if ($therapeute->function_id !=  $user->function_id && !$can->admin) {
+    CAppUI::displayMsg("Impossible de dupliquer les événements d'un rééducateur d'une autre spécialié", "CEvenementSSR-msg-create");
     continue;
 	}
 

@@ -116,7 +116,8 @@ class CEvenementSSR extends CMbObject {
 		// Si le therapeute n'est pas defini, c'est 
 		if($this->therapeute_id){
 		  $therapeute = $this->_ref_therapeute;
-    } else {
+    } 
+		else {
 			// Chargement du therapeute de la seance
       $evt_seance = new CEvenementSSR();
       $evt_seance->load($this->seance_collective_id);
@@ -205,22 +206,23 @@ class CEvenementSSR extends CMbObject {
 	function loadRefPrescriptionLineElement($cache = true){
 		$this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
 		$this->_ref_prescription_line_element->loadRefElement();
+		return $this->_ref_prescription_line_element;
 	}
 	
 	function loadRefSejour($cache = true){
-		$this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
+		return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
 	}
 	
 	function loadRefEquipement($cache = true){
-		$this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
+		return $this->_ref_equipement = $this->loadFwdRef("equipement_id", $cache);
 	}
 	
 	function loadRefTherapeute($cache = true){
-	  $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
+	  return $this->_ref_therapeute = $this->loadFwdRef("therapeute_id", $cache);
 	}
 	
 	function loadRefSeanceCollective($cache = true){
-    $this->_ref_seance_collective = $this->loadFwdRef("seance_collective_id", $cache);
+    return $this->_ref_seance_collective = $this->loadFwdRef("seance_collective_id", $cache);
   }
   
 	function loadRefsActesCdARR(){
