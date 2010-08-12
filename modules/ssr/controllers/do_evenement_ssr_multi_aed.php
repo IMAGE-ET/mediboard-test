@@ -44,21 +44,21 @@ $sejour->load($sejour_id);
 
 // Ajout d'un evenement dans la seance choisie
 if($seance_collective_id){
-	$evenement_ssr = new CEvenementSSR();
-	$evenement_ssr->sejour_id = $sejour_id;
-	$evenement_ssr->prescription_line_element_id = $line_id;
-	$evenement_ssr->seance_collective_id = $seance_collective_id;
+	$evenement = new CEvenementSSR();
+	$evenement->sejour_id = $sejour_id;
+	$evenement->prescription_line_element_id = $line_id;
+	$evenement->seance_collective_id = $seance_collective_id;
 	
-	$evenement_ssr->loadMatchingObject();
-	if($evenement_ssr->_id){
+	$evenement->loadMatchingObject();
+	if($evenement->_id){
 	  CAppUI::displayMsg("Patient déjà présent dans la séance", "CEvenementSSR-title-create");
 	} else {
-		$msg = $evenement_ssr->store();
+		$msg = $evenement->store();
 	  CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 	  foreach($codes_cdarrs as $_cdarr){
       $acte_cdarr = new CActeCdARR();
       $acte_cdarr->code = $_cdarr;
-      $acte_cdarr->evenement_ssr_id = $evenement_ssr->_id;
+      $acte_cdarr->evenement_ssr_id = $evenement->_id;
       $msg = $acte_cdarr->store();
       CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
     }
@@ -68,9 +68,15 @@ if($seance_collective_id){
 // Creation des evenements et eventuellement des seances si la checkbox est cochée
 else {
 	if(count($_days)){
+    $sejour->loadRefBilanSSR();
+    $entree = mbDate($sejour->entree);
+    $sortie = mbDate($sejour->sortie);
+
+		$bilan =& $sejour->_ref_bilan_ssr;
+		$bilan->loadRefKineReferent();
+		$referant =& $bilan->_ref_kine_referent;
+
 		foreach($_days as $_day){
-	    $entree = mbDate($sejour->entree);
-	    $sortie = mbDate($sejour->sortie);
 	    if (!in_range($_day, $entree, $sortie)) {
 	      CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
 	      continue; 
@@ -80,49 +86,57 @@ else {
 	      continue;
 	    }	
 			
-			$evenement_ssr = new CEvenementSSR();
-		  $evenement_ssr->equipement_id = $equipement_id;
-		  $evenement_ssr->debut = "$_day $_heure_deb";
-		  $evenement_ssr->duree = $duree;
-	    $evenement_ssr->remarque = $remarque;
-	    
-			// Chargement du remplacant s'il est specifié
-			$plage_conge = new CPlageConge();
-			$where = array();
-	    $where["user_id"] = "= '$therapeute_id'";
-	    $where[] = "'$_day' BETWEEN date_debut AND date_fin";
-	    $plage_conge->loadObject($where);
-	    
-			$replacer_id = "";
-			if($plage_conge->_id){
-				$replacement = new CReplacement();
-				$replacement->conge_id = $plage_conge->_id;
-				$replacement->sejour_id = $sejour->_id;
-				$replacement->loadMatchingObject();
-				
-				$replacer_id = $replacement->replacer_id;
-			}
-			$evenement_ssr->therapeute_id = $replacer_id ? $replacer_id : $therapeute_id;
-		
-		
+			$evenement = new CEvenementSSR();
+		  $evenement->equipement_id = $equipement_id;
+		  $evenement->debut         = "$_day $_heure_deb";
+		  $evenement->duree         = $duree;
+	    $evenement->remarque      = $remarque;
+			$evenement->therapeute_id = $therapeute_id;
+	          		
+      // Transfert kiné référent => kiné remplaçant si disponible
+      if ($therapeute_id == $referant->_id) {
+        $conge = new CPlageConge();
+        $conge->loadFor($therapeute_id, $_day);
+				// Référent en congés
+        if ($conge->_id){
+          $replacement = new CReplacement();
+          $replacement->conge_id = $conge->_id;
+          $replacement->sejour_id = $sejour->_id;
+          $replacement->loadMatchingObject();
+          if ($replacement->_id) {
+            $evenement->therapeute_id = $replacement->replacer_id;
+          }
+        }
+      }
+
+      // Transfert kiné remplacant => kiné référant si présent
+      if ($sejour->isReplacer($therapeute_id)) {
+        $conge = new CPlageConge();
+        $conge->loadFor($referant->_id, $_day);
+        // Référent présent
+        if (!$conge->_id){
+          $evenement->therapeute_id = $referant->_id;
+        }
+      }
+
 		  // Si l'evenement n'est pas une seance collective
 	    if(!$seance_collective){
-	      $evenement_ssr->prescription_line_element_id = $line_id;
-	      $evenement_ssr->sejour_id = $sejour_id;
+	      $evenement->prescription_line_element_id = $line_id;
+	      $evenement->sejour_id = $sejour_id;
 	    }
 	
 	    // Store de l'evenement ou de la nouvelle seance
-			$msg = $evenement_ssr->store();
+			$msg = $evenement->store();
 			CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 			
-			$evenement_id_for_cdarr = $evenement_ssr->_id;
+			$evenement_id_for_cdarr = $evenement->_id;
 						
 			// Si une seance a ete créée, on crée l'evenement lié a la seance, et on crée les code cdarr sur l'evenement
-      if($seance_collective){
+      if ($seance_collective){
         $evt_ssr = new CEvenementSSR();
         $evt_ssr->sejour_id = $sejour_id;
         $evt_ssr->prescription_line_element_id = $line_id;
-        $evt_ssr->seance_collective_id = $evenement_ssr->_id;
+        $evt_ssr->seance_collective_id = $evenement->_id;
         $msg = $evt_ssr->store();
         CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 				

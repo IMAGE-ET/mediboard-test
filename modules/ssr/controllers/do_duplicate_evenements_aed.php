@@ -36,6 +36,44 @@ foreach($elts_id as $_elt_id){
     continue;
 	}
 
+  // Chargements préparatoire au transferts automatiques de rééducateurs	
+	$sejour = new CSejour;
+  $sejour->load($evenement->sejour_id);
+  $sejour->loadRefBilanSSR();
+	
+  $bilan =& $sejour->_ref_bilan_ssr;
+  $bilan->loadRefKineReferent();
+  
+	$referant =& $bilan->_ref_kine_referent;
+	$_day = mbDate($evenement->debut);
+	$therapeute_id = $evenement->therapeute_id;
+	
+  // Transfert kiné référent => kiné remplaçant si disponible
+  if ($therapeute_id == $referant->_id) {
+    $conge = new CPlageConge();
+    $conge->loadFor($therapeute_id, $_day);
+    // Référent en congés
+    if ($conge->_id){
+      $replacement = new CReplacement();
+      $replacement->conge_id = $conge->_id;
+      $replacement->sejour_id = $sejour->_id;
+      $replacement->loadMatchingObject();
+      if ($replacement->_id) {
+        $evenement->therapeute_id = $replacement->replacer_id;
+      }
+    }
+  }
+
+  // Transfert kiné remplacant => kiné référant si présent
+  if ($sejour->isReplacer($therapeute_id)) {
+    $conge = new CPlageConge();
+    $conge->loadFor($referant->_id, $_day);
+    // Référent présent
+    if (!$conge->_id){
+      $evenement->therapeute_id = $referant->_id;
+    }
+  }
+	
   $msg = $evenement->store();
   CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 

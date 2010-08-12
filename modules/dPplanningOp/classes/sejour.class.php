@@ -1034,6 +1034,13 @@ class CSejour extends CCodable {
 		$this->_ref_replacement->conge_id = $conge_id;
     $this->_ref_replacement->loadMatchingObject();
   }
+	
+	function isReplacer($replacer_id) {
+		$replacement = new CReplacement;
+    $replacement->sejour_id   = $this->_id;
+    $replacement->replacer_id = $replacer_id;
+		return $replacement->countMatchingList();
+	}
   
   function loadListConstantesMedicales() {
     if ($this->_list_constantes_medicales) return;
