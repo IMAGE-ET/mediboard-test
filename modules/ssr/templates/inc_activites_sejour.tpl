@@ -503,14 +503,16 @@ Main.add(function(){
 	                     </button>		 
 										 {{/if}}
 											 
-										 <select class="_technicien_id" onchange="selectTechnicien(this.value)">
-										 	  <option value="">&mdash; Rééducateur</option>
-	                      {{foreach from=$executants.$category_id item=_user_executant}}
-	                        <option value="{{$_user_executant->_id}}">
-	                          {{$_user_executant->_user_last_name}}
-	                        </option>
-	                      {{/foreach}}
-	                    </select>
+                     {{if $can->admin}}
+	                     <select class="_technicien_id" onchange="selectTechnicien(this.value)">
+	                       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+	                       {{foreach from=$executants.$category_id item=_user_executant}}
+	                         <option value="{{$_user_executant->_id}}">
+	                           {{$_user_executant->_user_last_name}}
+	                         </option>
+	                       {{/foreach}}
+	                     </select>
+										 {{/if}}
 	
 										{{else}}
 											<div class="small-warning">
