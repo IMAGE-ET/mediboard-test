@@ -162,9 +162,11 @@ submitSSR = function(){
     }
 	}
 	
-	if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
-	  alert("Veuillez selectionner un equipement");
-    return false;
+	if (oFormEvenementSSR.equipement_id) {
+	  if(!oFormEvenementSSR.select("button.equipement.selected").length && !$V(oFormEvenementSSR.equipement_id)){
+	    alert("Veuillez selectionner un equipement");
+	    return false;
+	  }
 	}
   
   return onSubmitFormAjax(oFormEvenementSSR, { onComplete: function(){
@@ -354,7 +356,6 @@ Main.add(function(){
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
 	  
-	  {{mb_field hidden=true object=$evenement field=equipement_id}}
 	  {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
 	  <input type="hidden" name="line_id" value="" />
 	  <input type="hidden" name="_element_id" value="" />
@@ -524,31 +525,37 @@ Main.add(function(){
           {{/foreach}}		
 	      </td>
 	    </tr>
-	    <tr>
-	      <th>{{mb_label object=$evenement field=equipement_id}}</th>
-	      <td class="text">
-	        {{foreach from=$plateau->_ref_equipements item=_equipement}}
-	        <button id="equipement-{{$_equipement->_id}}" class="none equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
-	          {{$_equipement}}
-	        </button>
-	        {{/foreach}}
-	        <button id="equipement-" type="button" class="cancel equipement" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement(''); ">Aucun</button>
-					
-					<select name="_equipement_id" onchange="selectEquipement(this.value);" style="width: 6em;">
+			
+			{{if $app->user_prefs.ssr_planification_show_equipement}} 
+      <tr>
+        <th>
+        	{{mb_label object=$evenement field=equipement_id}}
+          {{mb_field object=$evenement field=equipement_id hidden=true}}
+				</th>
+        <td class="text">
+          {{foreach from=$plateau->_ref_equipements item=_equipement}}
+          <button id="equipement-{{$_equipement->_id}}" class="none equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
+            {{$_equipement}}
+          </button>
+          {{/foreach}}
+          <button id="equipement-" type="button" class="cancel equipement" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement(''); ">Aucun</button>
+          
+          <select name="_equipement_id" onchange="selectEquipement(this.value);" style="width: 6em;">
             <option value="">&mdash; {{tr}}Other{{/tr}}</option>
             {{foreach from=$plateaux item=_plateau}}
-						  {{if $_plateau->_id != $plateau->_id}}
-	              <optgroup label="{{$_plateau->_view}}">
-	              {{foreach from=$_plateau->_ref_equipements item=_equipement}}
-	                <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
-	              {{/foreach}}
-	              </optgroup>
-							{{/if}}
+              {{if $_plateau->_id != $plateau->_id}}
+                <optgroup label="{{$_plateau->_view}}">
+                {{foreach from=$_plateau->_ref_equipements item=_equipement}}
+                  <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+                {{/foreach}}
+                </optgroup>
+              {{/if}}
             {{/foreach}}
           </select>
-					
-	      </td>
-	    </tr>
+        </td>
+      </tr>
+			{{/if}}
+
 			<tr id="seances" style="display: none;">
         <th>{{mb_label object=$evenement field="seance_collective_id"}}</th>
         <td>

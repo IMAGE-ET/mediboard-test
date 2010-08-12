@@ -430,7 +430,7 @@ function smarty_function_mb_include_script($params, &$smarty) {
 }
 
 /**
- * Module/Style capable include alternative
+ * Module/Style aware include alternative
  * @param array params 
  * - module    : Module where template is located 
  * - style     : Style where template is located
