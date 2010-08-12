@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !isset($value_locale_prefix|smarty:nodefaults)}} 
-{{assign var=value_locale_prefix value="pref-$var-"}}
-{{/if}}
+{{mb_default var=value_locale_prefix value="pref-$var-"}}
 
 {{if !is_array($values)}} 
 {{assign var=values value='|'|explode:$values}}

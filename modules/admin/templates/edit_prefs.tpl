@@ -58,8 +58,6 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
 	<tbody style="display: none" id="{{$module}}">
 
   {{mb_include template=inc_pref_enum var=LOCALE values=$locales value_locale_prefix="language."}}
-  
-
   {{mb_include template=inc_pref_enum var=UISTYLE values=$styles value_locale_prefix="style."}}
   {{mb_include template=inc_pref_enum var=MenuPosition values="top|left"}}
     

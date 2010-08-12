@@ -429,6 +429,14 @@ function smarty_function_mb_include_script($params, &$smarty) {
   }
 }
 
+/**
+ * Module/Style capable include alternative
+ * @param array params 
+ * - module    : Module where template is located 
+ * - style     : Style where template is located
+ * - $template : Template name (no extension)
+ * @return void
+ */
 function smarty_function_mb_include($params, &$smarty) {
   $template = CMbArray::extract($params, "template");
   
@@ -450,6 +458,22 @@ function smarty_function_mb_include($params, &$smarty) {
 	  'smarty_include_vars' => $params
 	));
 	$smarty->_tpl_vars = $tpl_vars;
+}
+
+/**
+ * Assign a template var to default value if undefinied
+ * @param array params 
+ * - name  : Name of the var
+ * - value : Default value of the var
+ * @return void
+ */
+function smarty_function_mb_default($params, &$smarty) {
+  $var   = CMbArray::extract($params, "var"  , true);
+  $value = CMbArray::extract($params, "value", true);
+	
+	if (!isset($smarty->_tpl_vars[$var])) {
+		$smarty->assign($var, $value);
+	}
 }
 
 /**
@@ -503,6 +527,7 @@ class CSmartyDP extends Smarty {
     // Register mediboard functions
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_function("thumb"             , "thumb");
+    $this->register_function("mb_default"        , "smarty_function_mb_default");
     $this->register_function("mb_ditto"          , "smarty_function_mb_ditto");
     $this->register_function("mb_field"          , "smarty_function_mb_field");
     $this->register_function("mb_key"            , "smarty_function_mb_key");
