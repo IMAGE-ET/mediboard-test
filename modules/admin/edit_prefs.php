@@ -103,6 +103,8 @@ $array_list_module_pref = array (
   "ssr" => array (
     "ssr_planning_dragndrop",
     "ssr_planning_resize",
+    "ssr_planification_duree",
+    "ssr_planification_show_equipement",
   ),
 );
 

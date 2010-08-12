@@ -32,9 +32,7 @@
 </ul>
 
 <script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tab-modules', true);
-});
+Main.add(Control.Tabs.create.curry('tab-modules', true));
 </script>
 
     </td><td>
@@ -154,48 +152,13 @@ Main.add(function () {
   </tbody>
   
   {{assign var="module" value="dPpatients"}}
-  {{if $prefsUser.$module}}  
-	<tbody style="display: none" id="{{$module}}">
-  <!-- Préférences pour le module {{$module}} -->
-
-  {{assign var="var" value="DEPARTEMENT"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <input type="text" name="pref[{{$var}}]" value="{{$prefsUser.$module.$var}}" maxlength="3" size="4" class="num min|0 max|999"/>
-    </td>
-  </tr>
+  {{if $prefsUser.$module}}
+  <tbody style="display: none" id="{{$module}}">
 
   {{mb_include template=inc_pref_bool var=GestionFSE}}
-
-  {{assign var="var" value="InterMaxDir"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
-        {{tr}}pref-{{$var}}{{/tr}}
-      </label>
-    </th>
-    <td>
-      <input class="str" type="text" size="40" name="pref[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
-    </td>
-  </tr>
-  
-  {{assign var="var" value="VitaleVisionDir"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="VitaleVision">
-        Répertoire du fichier généré par Vitale Vision
-      </label>
-    </th>
-    <td>
-    <input class="str" type="text" size="40" name="pref[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
-    </td>
-  </tr>
-  
+  {{mb_include template=inc_pref_str var=InterMaxDir}}
+  {{mb_include template=inc_pref_str var=VitaleVisionDir}}
   {{mb_include template=inc_pref_bool var=VitaleVision}}
-  
   {{mb_include template=inc_pref_bool var=vCardExport}}
 
 	</tbody>
@@ -256,7 +219,6 @@ Main.add(function () {
   <!-- Préférences pour le module {{$module}} -->
 
   {{mb_include template=inc_pref_enum var=saveOnPrint values="0|1|2"}}
-  
   {{mb_include template=inc_pref_enum var=choicepratcab values="prat|cab|group"}}
   
   </tbody>
@@ -323,6 +285,8 @@ Main.add(function () {
 
   {{mb_include template=inc_pref_bool var=ssr_planning_dragndrop}}
   {{mb_include template=inc_pref_bool var=ssr_planning_resize}}
+  {{mb_include template=inc_pref_num  var=ssr_planification_duree}}
+  {{mb_include template=inc_pref_bool var=ssr_planification_show_equipement}}
 
   </tbody>
   {{/if}}
