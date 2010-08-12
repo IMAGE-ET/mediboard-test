@@ -8,16 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !isset($value_locale_prefix|smarty:nodefaults)}} 
+{{assign var=value_locale_prefix value="pref-$var-"}}
+{{/if}}
+
+{{if !is_array($values)}} 
+{{assign var=values value='|'|explode:$values}}
+{{/if}}
+
 <tr>
   <th>
     <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
   </th>
   <td>
     <select name="pref[{{$var}}]">
-      {{assign var=values value='|'|explode:$values}}
       {{foreach from=$values item=_value}}
-      <option value="{{$_value}}" {{if $prefsUser.$module.$var == $_value}}selected="selected"{{/if}}>
-      	{{tr}}pref-{{$var}}-{{$_value}}{{/tr}}
+      <option value="{{$_value}}" {{if $prefsUser.$module.$var == $_value}} selected="selected" {{/if}}>
+      	{{tr}}{{$value_locale_prefix}}{{$_value}}{{/tr}}
 			</option>
 			{{/foreach}}
     </select>

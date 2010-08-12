@@ -57,54 +57,11 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{assign var="module" value="common"}}
 	<tbody style="display: none" id="{{$module}}">
 
-  {{assign var="var" value="LOCALE"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}-desc{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]" class="text" size="1">
-        {{foreach from=$locales item=currLocale key=keyLocale}}
-        <option value="{{$keyLocale}}" {{if $keyLocale==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{tr}}language.{{$currLocale}}{{/tr}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
+  {{mb_include template=inc_pref_enum var=LOCALE values=$locales value_locale_prefix="language."}}
   
-  {{assign var="var" value="UISTYLE"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
-        {{tr}}pref-{{$var}}{{/tr}}{{tr}}{{/tr}}
-      </label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]" class="text" size="1">
-        {{foreach from=$styles item=currStyles key=keyStyles}}
-        <option value="{{$keyStyles}}" {{if $keyStyles==$prefsUser.$module.$var}}selected="selected"{{/if}}>
-          {{$currStyles}}
-        </option>
-        {{/foreach}}
-      </select>
-    </td>
-  </tr>
-  
-  {{assign var="var" value="MenuPosition"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
-        {{tr}}pref-{{$var}}{{/tr}}
-      </label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="top"  {{if $prefsUser.$module.$var == "top"  }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-top{{/tr}}</option>
-        <option value="left" {{if $prefsUser.$module.$var == "left" }}selected="selected"{{/if}}>{{tr}}pref-{{$var}}-left{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
+
+  {{mb_include template=inc_pref_enum var=UISTYLE values=$styles value_locale_prefix="style."}}
+  {{mb_include template=inc_pref_enum var=MenuPosition values="top|left"}}
     
   {{assign var="var" value="DEFMODULE"}}
   <tr>
@@ -132,21 +89,7 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   
 
   {{mb_include template=inc_pref_bool var=touchscreen}}
-  
-  {{assign var="var" value="tooltipAppearenceTimeout"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="short"  {{if $prefsUser.$module.$var == "short" }}selected="selected"{{/if}}>{{tr}}Short {{/tr}}</option>
-        <option value="medium" {{if $prefsUser.$module.$var == "medium"}}selected="selected"{{/if}}>{{tr}}Medium{{/tr}}</option>
-        <option value="long"   {{if $prefsUser.$module.$var == "long"  }}selected="selected"{{/if}}>{{tr}}Long  {{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-  
+  {{mb_include template=inc_pref_enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref_bool var=showLastUpdate}}
   
   </tbody>
@@ -156,8 +99,8 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   <tbody style="display: none" id="{{$module}}">
 
   {{mb_include template=inc_pref_bool var=GestionFSE}}
-  {{mb_include template=inc_pref_str var=InterMaxDir}}
-  {{mb_include template=inc_pref_str var=VitaleVisionDir}}
+  {{mb_include template=inc_pref_str  var=InterMaxDir}}
+  {{mb_include template=inc_pref_str  var=VitaleVisionDir}}
   {{mb_include template=inc_pref_bool var=VitaleVision}}
   {{mb_include template=inc_pref_bool var=vCardExport}}
 
@@ -174,33 +117,8 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref_enum var=MODCONSULT values="0|1"}}
   {{mb_include template=inc_pref_bool var=dPcabinet_show_program}}
 	  
-  {{assign var="var" value="DossierCabinet"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="dPcabinet" {{if $prefsUser.$module.$var == "dPcabinet" }}selected="selected"{{/if}}>{{tr}}module-dPcabinet-court{{/tr}}</option>
-        <option value="dPpatients"{{if $prefsUser.$module.$var == "dPpatients"}}selected="selected"{{/if}}>{{tr}}module-dPpatients-court{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="DefaultPeriod"}}
-  <tr>
-    <th>
-      <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
-    </th>
-    <td>
-      <select name="pref[{{$var}}]">
-        <option value="day"   {{if $prefsUser.$module.$var == "day"  }}selected="selected"{{/if}}>{{tr}}Period.day{{/tr}}</option>
-        <option value="week"  {{if $prefsUser.$module.$var == "week" }}selected="selected"{{/if}}>{{tr}}Period.week{{/tr}}</option>
-        <option value="month" {{if $prefsUser.$module.$var == "month"}}selected="selected"{{/if}}>{{tr}}Period.month{{/tr}}</option>
-      </select>
-    </td>
-  </tr>
-
+  {{mb_include template=inc_pref_enum var=DossierCabinet values="dPcabinet|dPpatients"}}
+  {{mb_include template=inc_pref_enum var=DefaultPeriod values="day|week|month" value_locale_prefix="Period."}}
   {{mb_include template=inc_pref_enum var=simpleCabinet values="0|1"}}
   {{mb_include template=inc_pref_enum var=ccam_consultation values="0|1"}}
   {{mb_include template=inc_pref_enum var=view_traitement values="0|1"}}
