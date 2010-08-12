@@ -79,8 +79,6 @@ foreach($plateaux as $_plateau_tech){
 	$_plateau_tech->loadRefsTechniciens();
 }
 
-$evenement_ssr = new CEvenementSSR();
-
 $executants = array();
 
 // Chargement des executants en fonction des category de prescription
@@ -106,9 +104,12 @@ foreach($categories as $_category){
 	}
 }
 
+$evenement = new CEvenementSSR();
+$evenement->duree = CAppUI::pref("ssr_planification_duree");
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("evenement_ssr", $evenement_ssr);
+$smarty->assign("evenement", $evenement);
 $smarty->assign("list_days", $list_days);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("bilan"  , $bilan);

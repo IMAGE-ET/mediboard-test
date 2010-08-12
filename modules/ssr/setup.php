@@ -361,7 +361,11 @@ class CSetupssr extends CSetup {
               ADD `visualisable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($sql);
 
-		$this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $this->addPrefQuery("ssr_planification_show_equipement", "1");
+    $this->addPrefQuery("ssr_planification_duree", "30");
+
+		$this->mod_version = "0.29";
     
     // Data source query
     $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";

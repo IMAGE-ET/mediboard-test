@@ -174,9 +174,9 @@ submitSSR = function(){
 		});
 		$V(oFormEvenementSSR._heure_deb, '');
 		$V(oFormEvenementSSR._heure_deb_da, '');
-		$V(oFormEvenementSSR.duree, '');
     $V(oFormEvenementSSR._heure_fin, '');
     $V(oFormEvenementSSR._heure_fin_da, '');
+    $V(oFormEvenementSSR.duree, $V($oFormEvenementSSR._default_duree));
 		$V(oFormEvenementSSR.seance_collective, '');
     $V(oFormEvenementSSR.seance_collective_id, '');
 		oFormEvenementSSR.seance_collective_id.hide();
@@ -354,8 +354,8 @@ Main.add(function(){
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="sejour_id" value="{{$bilan->sejour_id}}">
 	  
-	  {{mb_field hidden=true object=$evenement_ssr field=equipement_id}}
-	  {{mb_field hidden=true object=$evenement_ssr field=therapeute_id prop="ref notNull"}}
+	  {{mb_field hidden=true object=$evenement field=equipement_id}}
+	  {{mb_field hidden=true object=$evenement field=therapeute_id prop="ref notNull"}}
 	  <input type="hidden" name="line_id" value="" />
 	  <input type="hidden" name="_element_id" value="" />
 	  <input type="hidden" name="_category_id" value="" />
@@ -476,11 +476,11 @@ Main.add(function(){
 	      </td>
 	    </tr> 
 			<tr id="remarque_ssr" style="display: none;">
-        <th>Remarque</th>
-        <td>{{mb_field object=$evenement_ssr field=remarque}}</td>
+        <th>{{mb_label object=$evenement field=remarque}}</th>
+        <td>{{mb_field object=$evenement field=remarque}}</td>
       </tr>
 	    <tr>
-	      <th>Rééducateur</th>
+	      <th>{{mb_label object=$evenement field=therapeute_id}}</th>
 	      <td class="text">
 	      	{{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
 	          {{foreach from=$_lines_by_chap item=_lines_by_cat}}
@@ -525,7 +525,7 @@ Main.add(function(){
 	      </td>
 	    </tr>
 	    <tr>
-	      <th>Equipement</th>
+	      <th>{{mb_label object=$evenement field=equipement_id}}</th>
 	      <td class="text">
 	        {{foreach from=$plateau->_ref_equipements item=_equipement}}
 	        <button id="equipement-{{$_equipement->_id}}" class="none equipement" type="button" onclick="$V(getForm('editEvenementSSR')._equipement_id, ''); selectEquipement('{{$_equipement->_id}}');">
@@ -550,7 +550,7 @@ Main.add(function(){
 	      </td>
 	    </tr>
 			<tr id="seances" style="display: none;">
-        <th>{{mb_label object=$evenement_ssr field="seance_collective_id"}}</th>
+        <th>{{mb_label object=$evenement field="seance_collective_id"}}</th>
         <td>
 				  <table class="layout">
 					  <tr>
@@ -585,9 +585,9 @@ Main.add(function(){
 		    </tr>	
 		    <tr>
 		      <th>
-            {{mb_label object=$evenement_ssr field=_heure_deb}} / 
-            {{mb_label object=$evenement_ssr field=duree}} /
-            {{mb_label object=$evenement_ssr field=_heure_fin}}
+            {{mb_label object=$evenement field=_heure_deb}} / 
+            {{mb_label object=$evenement field=duree}} /
+            {{mb_label object=$evenement field=_heure_fin}}
 					</th>
 		      <td>
 		      	<script type="text/javascript">
@@ -595,7 +595,11 @@ Main.add(function(){
                 if ($V(form._heure_deb) && $V(form._heure_fin)) {
 	                var timeDeb = Date.fromDATETIME("2001-01-01 " + $V(form._heure_deb));
 	                var timeFin = Date.fromDATETIME("2001-01-01 " + $V(form._heure_fin));
-                  $V(form.duree, (timeFin-timeDeb)/ Date.minute, false);
+                  $V(form.duree, (timeFin-timeDeb) / Date.minute, false);
+								}
+								
+								if (!$V(form._heure_fin)) {
+								  updateHeureFin(form);
 								}
 							}
 
@@ -608,9 +612,10 @@ Main.add(function(){
                 }
               }
 		      	</script>
-						{{mb_field object=$evenement_ssr form=editEvenementSSR field=_heure_deb onchange="updateDuree(this.form)"}}
-		        {{mb_field object=$evenement_ssr form=editEvenementSSR field=duree increment=1 size=2 step=10 onchange="updateHeureFin(this.form)"}}
-            {{mb_field object=$evenement_ssr form=editEvenementSSR field=_heure_fin onchange="updateDuree(this.form)"}}
+            <input name="_default_duree" type="hidden" value="{{$evenement->duree}}"/>
+						{{mb_field object=$evenement form=editEvenementSSR field=_heure_deb onchange="updateDuree(this.form)"}}
+            {{mb_field object=$evenement form=editEvenementSSR field=duree increment=1 size=2 step=10 onchange="updateHeureFin(this.form)"}}
+            {{mb_field object=$evenement form=editEvenementSSR field=_heure_fin onchange="updateDuree(this.form)"}}
 					</td>
 		    </tr>
 			</tbody>
@@ -726,15 +731,15 @@ Main.add(function(){
       </tr>
 			<tr>
 				<td>
-			    Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
+			    Déplacer de {{mb_field object=$evenement field="_nb_decalage_min_debut" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
       	</td>
 				<td>
-          Modifier la durée de {{mb_field object=$evenement_ssr field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
+          Modifier la durée de {{mb_field object=$evenement field="_nb_decalage_duree" form="editSelectedEvent" increment=1 size=2 step=10}} minutes
 				</td>
 			</tr>
       <tr>
         <td>
-          Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
+          Déplacer de {{mb_field object=$evenement field="_nb_decalage_heure_debut" form="editSelectedEvent" increment=1 size=2}} heures
         </td>
 				<td>
           Transférer vers 
@@ -752,7 +757,7 @@ Main.add(function(){
       </tr>	    		
       <tr>
         <td>
-          Déplacer de {{mb_field object=$evenement_ssr field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
+          Déplacer de {{mb_field object=$evenement field="_nb_decalage_jour_debut" form="editSelectedEvent" increment=1 size=2}} jours
         </td>
 				<td>
           Transférer vers 
@@ -762,7 +767,7 @@ Main.add(function(){
             {{foreach from=$plateaux item=_plateau}}
               <optgroup label="{{$_plateau->_view}}">
               {{foreach from=$_plateau->_ref_equipements item=_equipement}}
-                <option value="{{$_equipement->_id}}">{{$_equipement->_view}}</option>
+                <option value="{{$_equipement->_id}}">{{$_equipement}}</option>
               {{/foreach}}
               </optgroup>
             {{/foreach}}
