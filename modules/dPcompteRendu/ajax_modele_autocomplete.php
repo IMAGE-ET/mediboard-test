@@ -7,24 +7,35 @@
 * @author Thomas Despoix
 */
 
-$user_id = CValue::get("user_id");
-$function_id = CValue::get("function_id");
-$etab = CGroups::loadCurrent();
-$group_id = $etab->_id;
+$user_id      = CValue::get("user_id");
 $object_class = CValue::get("object_class");
-$keywords = CValue::post("keywords_modele");
+$keywords     = CValue::post("keywords_modele");
+
+$user = new CMediusers();
+$user->load($user_id);
+$user->loadRefFunction();
 
 $compte_rendu = new CCompteRendu;
+$modeles      = array();
+$order        = "nom";
+
 $where = array();
 $where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
-$where[] = "(compte_rendu.chir_id = $user_id
-  OR compte_rendu.function_id = $function_id
-  OR compte_rendu.group_id = $group_id)";
+$where["chir_id"] = " = '$user->_id'";
+$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
-$order = "nom";
+$where = array();
+$where["object_class"] = "= '$object_class'";
+$where["type"] = "= 'body'";
+$where["function_id"] = " = '$user->function_id'";
+$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
-$modeles = $compte_rendu->seek($keywords, $where, null, null, null, $order);
+$where = array();
+$where["object_class"] = "= '$object_class'";
+$where["type"] = "= 'body'";
+$where["group_id"] = " = '$user->_group_id'";
+$modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 $smarty = new CSmartyDP();
 
