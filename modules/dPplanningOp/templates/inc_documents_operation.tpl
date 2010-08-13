@@ -6,13 +6,13 @@
 
 {{if @$preloaded}}
 	{{assign var=object value=$operation}}
-	<div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->chir_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
-	  {{mb_include module=dPcompteRendu template=inc_widget_documents mode="collapse" modelesByOwner=$modelesByOwner.COperation packsByOwner=$packsByOwner.COperation}}
+	<div class="documents-{{$object->_guid}} praticien-{{$object->chir_id}} mode-collapse" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
+	  {{mb_include module=dPcompteRendu template=inc_widget_documents mode=collapse modelesByOwner=$modelesByOwner.COperation packsByOwner=$packsByOwner.COperation}}
 	</div>
 	
 	{{assign var=object value=$operation->_ref_sejour}}
-	<div class="documents-{{$object->_class_name}}-{{$object->_id}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 260px; min-height: 50px; float: left; width: 50%;">
-	  {{mb_include module=dPcompteRendu template=inc_widget_documents mode="collapse" modelesByOwner=$modelesByOwner.CSejour packsByOwner=$packsByOwner.CSejour}}
+	<div class="documents-{{$object->_guid}} praticien-{{$object->praticien_id}} mode-collapse" style="min-width: 200px; min-height: 50px; float: left; width: 50%;">
+	  {{mb_include module=dPcompteRendu template=inc_widget_documents mode=collapse modelesByOwner=$modelesByOwner.CSejour packsByOwner=$packsByOwner.CSejour}}
 	</div>
 {{else}}
   {{assign var=object value=$operation}}
