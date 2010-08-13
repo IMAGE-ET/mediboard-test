@@ -4,6 +4,16 @@
 window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
+{{if $compte_rendu->_id}}
+try {
+window.opener.Document.refreshList(
+  '{{$compte_rendu->object_class}}',
+  '{{$compte_rendu->object_id}}'  
+);
+}
+catch (e) {}
+{{/if}}
+
 function submitCompteRendu(){
   (function(){
     var form = getForm("editFrm");
