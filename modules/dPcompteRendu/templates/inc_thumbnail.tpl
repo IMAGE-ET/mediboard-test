@@ -1,6 +1,7 @@
 <script type="text/javascript">
   Thumb.nb_thumbs = {{$nbpages}};
   Thumb.file_id = {{$file_id}};
+	// @FIXME: Pourquoi rafraichir la widget ici ???
   if(Thumb.compte_rendu_id) {
     try {
       window.opener.Document.refreshList(Thumb.object_class,Thumb.object_id);

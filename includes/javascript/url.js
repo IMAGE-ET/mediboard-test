@@ -245,22 +245,33 @@ var Url = Class.create({
           setHeight: false, 
           setTop: false,
           setLeft: true
-        }).setStyle({
-          marginTop: "-2px" // For the 1px borders
         });
         
+				// Default width behaviour
+        var style= {
+          width: "auto",
+          whiteSpace: "nowrap",
+          minWidth: element.getWidth()+"px",
+          maxWidth: "400px"
+        };
+
+        // Fixed width behaviour
         if (oOptions.width) {
-          update.style.width = oOptions.width;
+          style = {
+            width: oOptions.width
+          }
         }
-        else {
-          update.setStyle({
-            width: "auto",
-            whiteSpace: "nowrap",
-            minWidth: element.getWidth()+"px",
-            maxWidth: "400px"
-          });
-        }
-        update.setOpacity(1).unoverflow();
+        
+				if (update.cumulativeOffset().top + update.getHeight() > document.viewport.getHeight()) {
+					style.bottom = '0px';
+				}
+
+        update.setStyle(style);
+
+        // Open above when no room down
+				
+
+				update.setOpacity(1).unoverflow();
         
         if (oOptions.onAfterShow) {
           oOptions.onAfterShow(element, update);
