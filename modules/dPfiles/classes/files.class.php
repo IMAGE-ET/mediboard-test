@@ -220,8 +220,6 @@ class CFile extends CDocumentItem {
   }
     
   static function loadFilesForObject(CMbObject $object){
-    global $can;
-
     $file = new CFile();
     $file->setObject($object);
     $files = $file->loadMatchingList();

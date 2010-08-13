@@ -29,6 +29,7 @@ $compte_rendu = new CCompteRendu;
 if ($compte_rendu_id) {
   $compte_rendu->load($compte_rendu_id);
   $compte_rendu->loadContent();
+  $compte_rendu->loadFile();
 }
 
 // Création à partir d'un modèle
@@ -157,14 +158,10 @@ $smarty->assign('object_class' , CValue::get("object_class"));
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
 $noms_textes_libres = $matches[2];
-$cr = new CCompteRendu;
-$cr->load($modele_id);
-$cr->loadFile();
 
-if (isset($cr->_ref_file->_id)) {
-  $smarty->assign("file", $cr->_ref_file);
+if (isset($compte_rendu->_ref_file->_id)) {
+  $smarty->assign("file", $compte_rendu->_ref_file);
 }
-
 
 $smarty->assign("noms_textes_libres", $noms_textes_libres);
 

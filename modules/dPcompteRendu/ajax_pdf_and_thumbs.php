@@ -34,8 +34,7 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_left));
 
 $file = new CFile;
-
-if($compte_rendu_id) {
+if ($compte_rendu->_id) {
   $compte_rendu->loadFile();
   $file = $compte_rendu->_ref_file;
 }

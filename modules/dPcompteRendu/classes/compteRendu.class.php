@@ -196,11 +196,13 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadFile() {
-  	$files = new CFile;
-    $files = $files->loadFilesForObject($this);
-    if (count($files)) {
-      $this->_ref_file = reset($files);
+    if ($this->_id) {
+      return;
     }
+   
+  	$this->_ref_file = new CFile;
+    $this->_ref_file->setObject($this);
+    $this->_ref_file->loadMatchingObject();
   }
 	
   function loadRefsFwd() {
