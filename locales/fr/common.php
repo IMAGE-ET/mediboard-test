@@ -60,6 +60,7 @@ $locales['Loading tooltip'] = 'Chargement infobulle';
 $locales['Login'] = 'Me connecter';
 $locales['Logout'] = 'Déconnecter';
 $locales['Long'] = 'Long';
+$locales['Lookup'] = 'Chercher';
 $locales['Medium'] = 'Moyen';
 $locales['Merge'] = 'Fusionner';
 $locales['Modify'] = 'Modifier';

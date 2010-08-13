@@ -23,9 +23,9 @@
     <td class="button">
     	{{if $praticien->_can->edit}}
       
-      <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width:5em" />
+      <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4.5em;" />
       
-      <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width:5em"/>
+      <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 3.5em;"/>
       <script tyle="text/javascript">
       window.pdf_thumbnails = {{$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}};
       Main.add(function() {
@@ -77,7 +77,7 @@
 	      modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$object->_guid}}", null, "_modele_id", "_object_id");
 	    </script>
 
-      <button type="button" class="search" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
+      <button type="button" class="search notext" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
 	    	{{if $praticien->_can->edit}}
         Tous
 	    	{{else}}
