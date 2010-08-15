@@ -1953,6 +1953,7 @@ class CMbObject {
       "files"                  => "CFile object_id",
       "documents"              => "CCompteRendu object_id",
       "permissions"            => "CPermObject object_id",
+      "transmissions"          => "CTransmissionMedicale object_id",
       "logs"                   => "CUserLog object_id",
       "affectations_personnel" => "CAffectationPersonnel object_id",
       "contextes_constante"    => "CConstantesMedicales context_id",
