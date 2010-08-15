@@ -21,8 +21,8 @@ $service_id = CValue::get("service_id", 0                );
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
-$serviceSel = new CService;
-$serviceSel->load($service_id);
+$service = new CService;
+$service->load($service_id);
 
 $datax = array("ticks" => array(), "date" => array());
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
@@ -90,7 +90,7 @@ if($prat_id) {
   $subtitle .= "- Dr $pratSel->_view ";
 }
 if($service_id) {
-  $subtitle .= "- $serviceSel->nom ";
+  $subtitle .= "- $service->nom ";
 }
 if($subtitle) {
   $subtitle .= "-";

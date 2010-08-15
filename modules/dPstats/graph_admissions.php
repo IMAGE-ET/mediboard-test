@@ -21,8 +21,8 @@ $service_id = CValue::get("service_id", 0                );
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
-$serviceSel = new CSalle;
-$serviceSel->load($service_id);
+$service = new CSalle;
+$service->load($service_id);
 
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
