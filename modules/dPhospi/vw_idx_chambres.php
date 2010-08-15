@@ -20,24 +20,29 @@ $etablissements = CMediusers::loadEtablissements(PERM_READ);
 // Récupération de la chambre à ajouter/editer
 $chambre = new CChambre();
 $chambre->load($chambre_id);
-$chambre->loadRefsLits();
+$chambre->loadRefsNotes();
 $chambre->loadRefService();
+foreach ($chambre->loadRefsLits() as $_lit) {
+	$_lit->loadRefsNotes();
+}
 
 if (!$chambre->_id) {
   CValue::setSession("lit_id", 0);
 }
+
+// Chargement du service à ajouter/editer
+$group = CGroups::loadCurrent();
+$service = new CService();
+$service->group_id = $group->_id;
+$service->load($service_id);
+$service->loadRefsNotes();
 
 // Chargement du lit à ajouter/editer
 $lit = new CLit();
 $lit->load($lit_id);
 $lit->loadRefChambre();
 
-// Chargement du service à ajouter/editer
-$service = new CService();
-$service->load($service_id);
-
 // Récupération des chambres/services
-$group = CGroups::loadCurrent();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
@@ -50,7 +55,9 @@ foreach ($services as $_service) {
 
 // Chargement de la prestation
 $prestation = new CPrestation();
+$prestation->group_id = $group->_id;
 $prestation->load($prestation_id);
+$prestation->loadRefsNotes();
 
 // Récupération des prestations
 $order = "group_id, nom";

@@ -17,137 +17,161 @@ Main.add(function () {
 <tr>
   <td class="halfPane">
     <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id=0">
-      Créer un chambre
+      {{tr}}CChambre-title-create{{/tr}}
     </a>
+		
     <table class="tbl">   
     <tr>
-      <th colspan="4">Liste des chambres</th>
+      <th colspan="3" class="title">
+      	{{tr}}CChambre.all{{/tr}}
+			</th>
     </tr>  
     <tr>
-      <th>Intitulé</th>
-      <th>Caracteristiques</th>
-      <th>Lits disponibles</th>
-      <th>{{mb_title class=CChambre field=annule}}</th>
+      <th>{{mb_title class=CChambre field=nom}}</th>
+      <th>{{mb_title class=CChambre field=caracteristiques}}</th>
+      <th>{{tr}}CChambre-back-lits{{/tr}}</th>
     </tr> 
-	{{foreach from=$services item=curr_service}}
-	<tr id="service{{$curr_service->_id}}-trigger">
-	  <td colspan="4">{{$curr_service->_view}}</td>
+		
+	{{foreach from=$services item=_service}}
+	<tr id="{{$_service->_guid}}-trigger">
+	  <td colspan="4">{{$_service}}</td>
 	</tr>
-    <tbody class="serviceEffect" id="service{{$curr_service->_id}}">
-     {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-      <tr {{if $curr_chambre->_id == $chambre->_id}}class="selected"{{/if}}>
-        <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
-        <td class="text">{{$curr_chambre->caracteristiques|nl2br}}</td>
+    <tbody class="serviceEffect" id="{{$_service->_guid}}">
+     {{foreach from=$_service->_ref_chambres item=_chambre}}
+      <tr {{if $_chambre->_id == $chambre->_id}} class="selected" {{/if}}>
         <td>
-        {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->_id}}">
-            {{$curr_lit->nom}}
-          </a>
-        {{/foreach}}
+        	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_chambre->_id}}&amp;lit_id=0">
+        		{{$_chambre}}
+					</a>
+				</td>
+				
+        <td class="text">
+          {{mb_value object=$_chambre field=caracteristiques}}
+				</td>
+
+        {{if $_chambre->annule}} 
+        <td class="cancelled">
+          {{mb_title object=$_chambre field=annule}}
         </td>
+        {{else}}
         <td>
-          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->_id}}&amp;lit_id=0">
-            {{mb_value object=$curr_chambre field=annule}}
-          </a>
+          {{foreach from=$_chambre->_ref_lits item=_lit}}
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
+              {{$_lit}}
+            </a>
+          {{/foreach}}
         </td>
+        {{/if}}
+
       </tr>
       {{/foreach}}
     </tbody>
     {{/foreach}}   
     </table>
   </td>
+	
   <td class="halfPane">
-    <form name="editChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="Edit-CChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="dosql" value="do_chambre_aed" />
-    <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
     <input type="hidden" name="del" value="0" />
+		{{mb_key object=$chambre}}
+
     <table class="form">
     <tr>
       {{if $chambre->_id}}
-      <th class="title modify" colspan="2">
-	      {{mb_include module=system template=inc_object_idsante400 object=$chambre}}
-	      {{mb_include module=system template=inc_object_history object=$chambre}}
-        Modification de la chambre &lsquo;{{$chambre->nom}}&rsquo;
+      <th class="title modify text" colspan="2">
+        {{mb_include module=system object=$chambre template=inc_object_notes     }}
+        {{mb_include module=system object=$chambre template=inc_object_idsante400}}
+	      {{mb_include module=system object=$chambre template=inc_object_history   }}
+        {{tr}}CChambre-title-modify{{/tr}} '{{$chambre}}'
       {{else}}
-      <th class="title" colspan="2">
-        Création d'une chambre
+      <th class="title text" colspan="2">
+        {{tr}}CChambre-title-create{{/tr}}
       </th>
       {{/if}}
     </tr>
-    <tr>
-      <th>{{mb_label object=$chambre field="nom"}}</th>
-      <td>{{mb_field object=$chambre field="nom"}}</td>
+    
+	  <tr>
+      <th>{{mb_label object=$chambre field=nom}}</th>
+      <td>{{mb_field object=$chambre field=nom}}</td>
     </tr>
-	<tr>
-	 <th>{{mb_label object=$chambre field="service_id"}}</th>
-	  <td>
-        <select name="service_id" class="{{$chambre->_props.service_id}}">
-          <option value="">&mdash; Choisir un service &mdash;</option>
-        {{foreach from=$services item=curr_service}}
-          <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $chambre->service_id}}selected="selected"{{/if}}>
-            {{$curr_service->nom}}
-          </option>
-        {{/foreach}}
-        </select>
-	  </td>
-	</tr>    
-    <tr>
-      <th>{{mb_label object=$chambre field="caracteristiques"}}</th>
-      <td>{{mb_field object=$chambre field="caracteristiques"}}</td>
+		
+	  <tr>
+      <th>{{mb_label object=$chambre field=service_id}}</th>
+		  <td>{{mb_field object=$chambre field=service_id options=$services}}</td>
+    </tr>    
+    
+		<tr>
+      <th>{{mb_label object=$chambre field=caracteristiques}}</th>
+      <td>{{mb_field object=$chambre field=caracteristiques}}</td>
     </tr>
-    <tr>
-      <th>{{mb_label object=$chambre field="annule"}}</th>
-      <td>{{mb_field object=$chambre field="annule"}}</td>
+    
+		<tr>
+      <th>{{mb_label object=$chambre field=annule}}</th>
+      <td>{{mb_field object=$chambre field=annule}}</td>
     </tr>
-    <tr>
+    
+		<tr>
       <td class="button" colspan="2">
         {{if $chambre->_id}}
-        <button class="submit" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName:'{{$chambre->nom|smarty:nodefaults|JSAttribute}}'})">
-          Supprimer
+        <button class="submit" type="submit">{{tr}}Validate{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName: $V(this.form.nom) })">
+          {{tr}}Delete{{/tr}}
         </button>
         {{else}}
-        <button class="submit" name="btnFuseAction" type="submit">Créer</button>
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
     </table>
+		
 	</form>
-  {{if $chambre->chambre_id}}
+	
+  {{if $chambre->_id}}
   <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambre->_id}}&amp;lit_id=0">
-    Ajouter un lit
+    {{tr}}CLit-title-create{{/tr}}
   </a>
-  <form name="editLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_lit_aed" />
-  <input type="hidden" name="lit_id" value="{{$lit->_id}}" />
-  <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
-  <input type="hidden" name="del" value="0" />
-    <table class="form">
+	
+	<table class="tbl">
     <tr>
       <th class="category" colspan="2">
-        Lits
+        {{tr}}CChambre-back-lits{{/tr}}
       </th>
     </tr>
-    {{foreach from=$chambre->_ref_lits item=curr_lit}}
-    <tr>
-      <th>Lit</th>
+    {{foreach from=$chambre->_ref_lits item=_lit}}
+    <tr {{if $lit->_id == $_lit->_id}} class="selected" {{/if}}>
       <td>
-	      {{mb_include module=system template=inc_object_idsante400 object=$curr_lit}}
-	      {{mb_include module=system template=inc_object_history object=$curr_lit}}
-				<a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
+        {{mb_include module=system template=inc_object_notes object=$_lit}}
+        {{mb_include module=system template=inc_object_idsante400 object=$_lit}}
+        {{mb_include module=system template=inc_object_history    object=$_lit}}
+        <a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$_lit->chambre_id}}&amp;lit_id={{$_lit->_id}}">
+        	{{$_lit}}
+				</a>
+			</td>
     </tr>
-	  {{/foreach}}
+    {{/foreach}}
+	</table>
+  
+	<form name="Edit-CLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  	
+  <input type="hidden" name="dosql" value="do_lit_aed" />
+  <input type="hidden" name="del" value="0" />
+	{{mb_key object=$lit}}
+
+  <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
+
+    <table class="form">
     <tr>
-      <th>{{mb_label object=$lit field="nom"}}</th>
+      <th>{{mb_label object=$lit field=nom}}</th>
       <td>
-        {{mb_field object=$lit field="nom"}}
-        {{if $lit->lit_id}}
-        <button class="modify" type="submit">Modifier</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$lit->nom|smarty:nodefaults|JSAttribute}}'})">
-          Supprimer
+        {{mb_field object=$lit field=nom}}
+        {{if $lit->_id}}
+        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit', objName: $V(this.form.nom)})">
+          {{tr}}Delete{{/tr}}
         </button>
         {{else}}
-        <button class="submit" type="submit">Créer</button>
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
@@ -158,5 +182,11 @@ Main.add(function () {
 </tr>
 </table>
 </div>
-<div style="display: none;" id="services">{{include file="vw_idx_services.tpl"}}</div>
-<div style="display: none;" id="prestations">{{include file="vw_idx_prestations.tpl"}}</div>
+
+<div style="display: none;" id="services"   >
+  {{include file="vw_idx_services.tpl"}}
+</div>
+
+<div style="display: none;" id="prestations">
+  {{include file="vw_idx_prestations.tpl"}}
+</div>
