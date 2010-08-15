@@ -1,7 +1,7 @@
 <script type="text/javascript">
 Main.add(function () {
   PairEffect.initGroup("serviceEffect");
-  var chambresTabs = Control.Tabs.create('tabs-chambres', true);
+  Control.Tabs.create('tabs-chambres', true);
 });
 </script>
 
@@ -35,7 +35,7 @@ Main.add(function () {
 	</tr>
     <tbody class="serviceEffect" id="service{{$curr_service->_id}}">
      {{foreach from=$curr_service->_ref_chambres item=curr_chambre}}
-      <tr {{if $curr_chambre->_id == $chambreSel->_id}}class="selected"{{/if}}>
+      <tr {{if $curr_chambre->_id == $chambre->_id}}class="selected"{{/if}}>
         <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_chambre->_id}}&amp;lit_id=0">{{$curr_chambre->nom}}</a></td>
         <td class="text">{{$curr_chambre->caracteristiques|nl2br}}</td>
         <td>
@@ -59,15 +59,15 @@ Main.add(function () {
   <td class="halfPane">
     <form name="editChambre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="dosql" value="do_chambre_aed" />
-    <input type="hidden" name="chambre_id" value="{{$chambreSel->_id}}" />
+    <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
     <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
-      {{if $chambreSel->_id}}
+      {{if $chambre->_id}}
       <th class="title modify" colspan="2">
-	      {{mb_include module=system template=inc_object_idsante400 object=$chambreSel}}
-	      {{mb_include module=system template=inc_object_history object=$chambreSel}}
-        Modification de la chambre &lsquo;{{$chambreSel->nom}}&rsquo;
+	      {{mb_include module=system template=inc_object_idsante400 object=$chambre}}
+	      {{mb_include module=system template=inc_object_history object=$chambre}}
+        Modification de la chambre &lsquo;{{$chambre->nom}}&rsquo;
       {{else}}
       <th class="title" colspan="2">
         Création d'une chambre
@@ -75,16 +75,16 @@ Main.add(function () {
       {{/if}}
     </tr>
     <tr>
-      <th>{{mb_label object=$chambreSel field="nom"}}</th>
-      <td>{{mb_field object=$chambreSel field="nom"}}</td>
+      <th>{{mb_label object=$chambre field="nom"}}</th>
+      <td>{{mb_field object=$chambre field="nom"}}</td>
     </tr>
 	<tr>
-	 <th>{{mb_label object=$chambreSel field="service_id"}}</th>
+	 <th>{{mb_label object=$chambre field="service_id"}}</th>
 	  <td>
-        <select name="service_id" class="{{$chambreSel->_props.service_id}}">
+        <select name="service_id" class="{{$chambre->_props.service_id}}">
           <option value="">&mdash; Choisir un service &mdash;</option>
         {{foreach from=$services item=curr_service}}
-          <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $chambreSel->service_id}}selected="selected"{{/if}}>
+          <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $chambre->service_id}}selected="selected"{{/if}}>
             {{$curr_service->nom}}
           </option>
         {{/foreach}}
@@ -92,18 +92,18 @@ Main.add(function () {
 	  </td>
 	</tr>    
     <tr>
-      <th>{{mb_label object=$chambreSel field="caracteristiques"}}</th>
-      <td>{{mb_field object=$chambreSel field="caracteristiques"}}</td>
+      <th>{{mb_label object=$chambre field="caracteristiques"}}</th>
+      <td>{{mb_field object=$chambre field="caracteristiques"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$chambreSel field="annule"}}</th>
-      <td>{{mb_field object=$chambreSel field="annule"}}</td>
+      <th>{{mb_label object=$chambre field="annule"}}</th>
+      <td>{{mb_field object=$chambre field="annule"}}</td>
     </tr>
     <tr>
       <td class="button" colspan="2">
-        {{if $chambreSel->_id}}
+        {{if $chambre->_id}}
         <button class="submit" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName:'{{$chambreSel->nom|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la chambre',objName:'{{$chambre->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}
@@ -113,14 +113,14 @@ Main.add(function () {
     </tr>
     </table>
 	</form>
-  {{if $chambreSel->chambre_id}}
-  <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambreSel->_id}}&amp;lit_id=0">
+  {{if $chambre->chambre_id}}
+  <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$chambre->_id}}&amp;lit_id=0">
     Ajouter un lit
   </a>
   <form name="editLit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="dosql" value="do_lit_aed" />
-  <input type="hidden" name="lit_id" value="{{$litSel->_id}}" />
-  <input type="hidden" name="chambre_id" value="{{$chambreSel->_id}}" />
+  <input type="hidden" name="lit_id" value="{{$lit->_id}}" />
+  <input type="hidden" name="chambre_id" value="{{$chambre->_id}}" />
   <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
@@ -128,7 +128,7 @@ Main.add(function () {
         Lits
       </th>
     </tr>
-    {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
+    {{foreach from=$chambre->_ref_lits item=curr_lit}}
     <tr>
       <th>Lit</th>
       <td>
@@ -138,12 +138,12 @@ Main.add(function () {
     </tr>
 	  {{/foreach}}
     <tr>
-      <th>{{mb_label object=$litSel field="nom"}}</th>
+      <th>{{mb_label object=$lit field="nom"}}</th>
       <td>
-        {{mb_field object=$litSel field="nom"}}
-        {{if $litSel->lit_id}}
+        {{mb_field object=$lit field="nom"}}
+        {{if $lit->lit_id}}
         <button class="modify" type="submit">Modifier</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$litSel->nom|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le lit',objName:'{{$lit->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}

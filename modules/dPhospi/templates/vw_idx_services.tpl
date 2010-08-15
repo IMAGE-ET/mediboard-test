@@ -15,7 +15,7 @@
     </tr>
 
 		{{foreach from=$services item=curr_service}}
-    <tr {{if $curr_service->_id == $serviceSel->_id}}class="selected"{{/if}}>
+    <tr {{if $curr_service->_id == $service->_id}}class="selected"{{/if}}>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id={{$curr_service->_id}}">{{$curr_service->nom}}</a></td>
       <td class="text">{{$curr_service->description|nl2br}}</td>
       <td>{{$curr_service->_ref_group->text}}</td>
@@ -29,17 +29,17 @@
     <form name="Edit-CService" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_service_aed" />
-    <input type="hidden" name="service_id" value="{{$serviceSel->_id}}" />
+    <input type="hidden" name="service_id" value="{{$service->_id}}" />
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
     <tr>
-      {{if $serviceSel->_id}}
+      {{if $service->_id}}
       <th class="title modify" colspan="2">
-        {{mb_include module=system object=$serviceSel template=inc_object_notes}}
-        {{mb_include module=system object=$serviceSel template=inc_object_idsante400}}
-		    {{mb_include module=system object=$serviceSel template=inc_object_history }}
-        Modification du service '{{$serviceSel}}'
+        {{mb_include module=system object=$service template=inc_object_notes}}
+        {{mb_include module=system object=$service template=inc_object_idsante400}}
+		    {{mb_include module=system object=$service template=inc_object_history }}
+        Modification du service '{{$service}}'
       </th>
       {{else}}
       <th class="title" colspan="2">
@@ -49,42 +49,42 @@
     </tr>
 
     <tr>
-      <th>{{mb_label object=$serviceSel field="group_id"}}</th>
+      <th>{{mb_label object=$service field="group_id"}}</th>
       <td>
-        <select class="{{$serviceSel->_props.group_id}}" name="group_id">
+        <select class="{{$service->_props.group_id}}" name="group_id">
           <option>&mdash; Choisir un établissement</option>
           {{foreach from=$etablissements item=curr_etab}}
-          <option value="{{$curr_etab->group_id}}" {{if ($serviceSel->_id && $serviceSel->group_id==$curr_etab->_id) || (!$serviceSel->_id && $g==$curr_etab->_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+          <option value="{{$curr_etab->group_id}}" {{if ($service->_id && $service->group_id==$curr_etab->_id) || (!$service->_id && $g==$curr_etab->_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
           {{/foreach}}
         </select>
       </td>
     </tr>
 
     <tr>
-      <th>{{mb_label object=$serviceSel field=nom}}</th>
-      <td>{{mb_field object=$serviceSel field=nom}}</td>
+      <th>{{mb_label object=$service field=nom}}</th>
+      <td>{{mb_field object=$service field=nom}}</td>
     </tr>       
 
     <tr>
-      <th>{{mb_label object=$serviceSel field=urgence}}</th>
-      <td>{{mb_field object=$serviceSel field=urgence}}</td>
+      <th>{{mb_label object=$service field=urgence}}</th>
+      <td>{{mb_field object=$service field=urgence}}</td>
     </tr> 
     
     <tr>
-      <th>{{mb_label object=$serviceSel field=uhcd}}</th>
-      <td>{{mb_field object=$serviceSel field=uhcd}}</td>
+      <th>{{mb_label object=$service field=uhcd}}</th>
+      <td>{{mb_field object=$service field=uhcd}}</td>
     </tr>    
 
     <tr>
-      <th>{{mb_label object=$serviceSel field=description}}</th>
-      <td>{{mb_field object=$serviceSel field=description}}</td>
+      <th>{{mb_label object=$service field=description}}</th>
+      <td>{{mb_field object=$service field=description}}</td>
     </tr>    
 
     <tr>
       <td class="button" colspan="2">
-        {{if $serviceSel->service_id}}
+        {{if $service->service_id}}
         <button class="modify" type="submit">Valider</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le service ',objName:'{{$serviceSel->nom|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le service ',objName:'{{$service->nom|smarty:nodefaults|JSAttribute}}'})">
           Supprimer
         </button>
         {{else}}

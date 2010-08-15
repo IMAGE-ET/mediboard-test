@@ -18,8 +18,8 @@ if(!self.changeServiceId) {
 	<select name="service_mutation_id" onchange="changeServiceId(this.form);">
 		<option value="">&mdash; Serv. de mutation</option>
 		{{foreach from=$services item="_service"}}
-		<option value="{{$_service->_id}}" {{if $_service->_id == $serviceSelected}}selected="selected"{{/if}}>
-		  {{$_service->_view}}
+		<option value="{{$_service->_id}}" {{if $_service->_id == $service}}selected="selected"{{/if}}>
+		  {{$_service}}
 		</option>
 		{{/foreach}}
 	</select>
