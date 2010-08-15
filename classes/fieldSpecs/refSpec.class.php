@@ -80,8 +80,26 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
+  	if ($options = CMbArray::extract($params, "options")) {
+      $field         = htmlspecialchars($this->fieldName);
+      $className     = htmlspecialchars(trim("$className $this->prop"));
+	    $extra         = CMbArray::makeXmlAttributes($params);
+
+	    $html = "";
+      $html.= "\n<select name=\"$field\" class=\"$className\" $extra>";
+      $html.= "\n<option value=\"\">&mdash; Choose</option>";
+			foreach ($options as $_option) {
+				$selected = $value == $_option->_id ? "selected=\"selected\"" : "";
+        $html.= "\n<option value=\"$_option->_id\" $selected>$_option->_view</option>";
+			}
+			$html.= "\n</select>";
+  		
+  		return $html;
+  	}
+		
     CMbArray::defaultValue($params, "size", 25);
     return $this->getFormElementText($object, $params, $value, $className);
+
   }
 }
 
