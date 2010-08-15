@@ -50,7 +50,7 @@ Main.add(function() {
       <tr id="replacement-{{$type}}-{{$_sejour->_id}}">
 		    <td colspan="2" class="text {{if $replacement->_id && $type == "kine"}} arretee {{/if}}">
 					{{assign var=patient value=$_sejour->_ref_patient}}
-				  <big class="CPatient-view" 
+				  <big class="CPatient-view" style=""
 					  onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')" 
 					  onclick="refreshReplacement('{{$_sejour->_id}}','{{$plage_conge_id}}','{{$type}}'); this.up('tr').addUniqueClassName('selected');" >
 						{{$patient}}

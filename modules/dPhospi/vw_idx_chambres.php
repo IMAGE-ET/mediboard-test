@@ -7,26 +7,22 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $g;
+CCanDo::checkRead();
 
-$can->needsRead();
-$ds = CSQLDataSource::get("std");
+$prestation_id = CValue::getOrSession("prestation_id");
+$chambre_id    = CValue::getOrSession("chambre_id");
+$lit_id        = CValue::getOrSession("lit_id");
+$service_id    = CValue::getOrSession("service_id");
 
-$prestation_id = CValue::getOrSession("prestation_id", 0);
-$chambre_id    = CValue::getOrSession("chambre_id", 0);
-$lit_id        = CValue::getOrSession("lit_id", 0);
-$service_id    = CValue::getOrSession("service_id", 0);
-
-// Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
+// Liste des Etablissements
+$etablissements = CMediusers::loadEtablissements(PERM_READ);
 
 // Récupération de la chambre à ajouter/editer
 $chambreSel = new CChambre();
 $chambreSel->load($chambre_id);
 $chambreSel->loadRefs();
 
-if(!$chambreSel->_id) {
+if (!$chambreSel->_id) {
   CValue::setSession("lit_id", 0);
 }
 
@@ -39,30 +35,27 @@ $litSel->loadRefs();
 $serviceSel = new CService();
 $serviceSel->load($service_id);
 
+// Récupération des chambres/services
+$group = CGroups::loadCurrent();
+$where = array();
+$where["group_id"] = "= '$group->_id'";
+$order = "nom";
+$services = $serviceSel->loadListWithPerms(PERM_READ,$where, $order);
+foreach ($services as $_service) {
+  foreach ($_service->loadRefsChambres() as $_chambre) {
+	  $_chambre->loadRefs();
+	}
+}
+
 // Chargement de la prestation
 $prestation = new CPrestation();
 $prestation->load($prestation_id);
 
-// Récupération des chambres/services
-$services = new CService();
-$where = array();
-$where["group_id"] = "= '$g'";
-$order = "nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
-foreach ($services as $service_id => $service) {
-  $services[$service_id]->loadRefs();
-  $chambres =& $services[$service_id]->_ref_chambres;
-  foreach ($chambres as $chambre_id => $chambre) {
-	  $chambres[$chambre_id]->loadRefs();
-	}
-}
-
 // Récupération des prestations
 $order = "group_id, nom";
-$prestations = new CPrestation();
-$prestations = $prestations->loadList(null, $order);
-foreach($prestations as $keyPrestation=>$valPrestation){
-  $prestations[$keyPrestation]->loadRefGroup();
+$prestations = $prestation->loadList(null, $order);
+foreach($prestations as $_prestation){
+  $_prestation->loadRefGroup();
 }
 
 // Création du template

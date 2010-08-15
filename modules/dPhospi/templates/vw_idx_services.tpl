@@ -26,7 +26,7 @@
 
   <td class="halfPane">
   	<!-- Formulaire d'un service -->
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="Edit-CService" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
     <input type="hidden" name="dosql" value="do_service_aed" />
     <input type="hidden" name="service_id" value="{{$serviceSel->_id}}" />
@@ -36,9 +36,10 @@
     <tr>
       {{if $serviceSel->_id}}
       <th class="title modify" colspan="2">
-		    {{mb_include module=system template=inc_object_idsante400 object=$serviceSel}}
-		    {{mb_include module=system template=inc_object_history object=$serviceSel}}
-        Modification du service &lsquo;{{$serviceSel->_view}}&rsquo;
+        {{mb_include module=system object=$serviceSel template=inc_object_notes}}
+        {{mb_include module=system object=$serviceSel template=inc_object_idsante400}}
+		    {{mb_include module=system object=$serviceSel template=inc_object_history }}
+        Modification du service '{{$serviceSel}}'
       </th>
       {{else}}
       <th class="title" colspan="2">
@@ -87,7 +88,7 @@
           Supprimer
         </button>
         {{else}}
-        <button class="submit" name="btnFuseAction" type="submit">Créer</button>
+        <button class="submit" type="submit">Créer</button>
         {{/if}}
       </td>
     </tr>

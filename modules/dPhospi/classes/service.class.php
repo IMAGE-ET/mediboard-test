@@ -73,24 +73,26 @@ class CService extends CMbObject {
    */
   function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["group_id"] = "= '$g->_id'";
+		$group = CGroups::loadCurrent();
+		$where["group_id"] = "= '$group->_id'";
     
-    $list = $this->loadList($where, $order, $limit, $groupby, $ljoin);
-    return $list;
+    return $this->loadList($where, $order, $limit, $groupby, $ljoin);
+  }
+
+  function loadRefsChambres() {
+  	return $this->_ref_chambres = $this->loadBackRefs("chambres", "nom");
+  }
+
+  function loadRefGroup() {
+  	return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   function loadRefsBack() {
-    // Backward references
-    $where["service_id"] = "= '$this->service_id'";
-    $order = "nom";
-    $this->_ref_chambres = new CChambre;
-    $this->_ref_chambres = $this->_ref_chambres->loadList($where, $order);
+    $this->loadRefsChambres();
   }
 
   function loadRefsFwd(){
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+  	$this->loadRefGroup();
   }
   
   function getPerm($permType) {

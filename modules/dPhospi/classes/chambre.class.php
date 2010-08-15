@@ -65,15 +65,18 @@ class CChambre extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
+	
+	function loadRefService() {
+		return $this->_ref_service = $this->loadFwdRef("service_id", true);
+	}
   
   function loadRefsFwd() {
-    $this->_ref_service = new CService();
-  	$this->_ref_service = $this->_ref_service->getCached($this->service_id);	
+    $this->loadRefService();
   }
 
   function loadRefsLits() {
     $order = "lit.nom DESC";
-    $this->_ref_lits = $this->loadBackRefs("lits", $order);
+    return $this->_ref_lits = $this->loadBackRefs("lits", $order);
   }
 
   function loadRefsBack() {
@@ -81,9 +84,7 @@ class CChambre extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_service) {
-      $this->loadRefsFwd();
-    }
+    $this->loadRefService();
     return ($this->_ref_service->getPerm($permType));
   }
   

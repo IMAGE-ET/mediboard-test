@@ -44,9 +44,8 @@ class CPrestation extends CMbObject {
     $this->_view = $this->nom;
   }
   
-  function loadRefGroup(){
-  	$this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
   function loadRefsFwd(){
