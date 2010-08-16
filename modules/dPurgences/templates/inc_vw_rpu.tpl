@@ -253,6 +253,10 @@ function showEtabEntreeTransfert(mode) {
 		 		    </td>
 				   </tr>
 				   
+				   <!-- Diagnostic Principal -->
+				   <tr id="dp_{{$sejour->_id}}">
+              {{mb_include template=inc_diagnostic_principal}}
+            </tr>         
 		     </table>
 	     </form>
 	     
@@ -266,7 +270,7 @@ function showEtabEntreeTransfert(mode) {
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
 				    <td>{{mb_field object=$rpu field="gemsa" canNull=false defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
-				  </tr>
+				  </tr>				  
 				  
 		      {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>

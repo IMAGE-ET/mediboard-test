@@ -116,6 +116,7 @@ class CRPU extends CMbObject {
       "sortie_autorisee" => "bool",
       "accident_travail" => "date",
       
+      "_DP"              => "code cim10 show|0",
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"      => "ref notNull class|CPatient",
@@ -223,6 +224,10 @@ class CRPU extends CMbObject {
 	
 	function loadRefConsult() {
     // Chargement de la consultation ATU
+    if (!$this->_ref_sejour) {
+      $this->loadRefSejour();
+    }
+    
 		$sejour =& $this->_ref_sejour;
     $sejour->loadRefsConsultations();
     $this->_ref_consult = $this->_ref_sejour->_ref_consult_atu;
@@ -276,15 +281,13 @@ class CRPU extends CMbObject {
     if (!$this->_bind_sejour) {
       return;
     }
-    
-    global $g;
-    
+       
     $this->_bind_sejour = false;
     
     $this->loadRefsFwd();
     $sejour =& $this->_ref_sejour;
     $sejour->patient_id = $this->_patient_id;
-    $sejour->group_id = $g;
+    $sejour->group_id = CGroups::loadCurrent()->_id;
     $sejour->praticien_id = $this->_responsable_id;
     $sejour->type = "urg";
     $sejour->entree_prevue = $this->_entree;
@@ -369,21 +372,29 @@ class CRPU extends CMbObject {
   }
 
 	function fillLimitedTemplate(&$template) {
-	  $template->addProperty("RPU - Diagnostic infirmier" , $this->diag_infirmier);
-    $template->addProperty("RPU - Mode d'entrée"        , $this->getFormattedValue("mode_entree"));
-    $template->addProperty("RPU - Transport"            , $this->getFormattedValue("transport"));
-    $template->addProperty("RPU - PeC Transport"        , $this->getFormattedValue("pec_transport"));
-    $template->addProperty("RPU - Motif"                , $this->motif);
-    $template->addProperty("RPU - CCMU"                 , $this->getFormattedValue("ccmu"));
-    $template->addProperty("RPU - Code GEMSA"           , $this->getFormattedValue("gemsa"));
+	  $this->loadRefConsult();
+	  $this->_ref_consult->loadRefPraticien();
+	  $template->addProperty("RPU - Praticien - Consultation"     , "Dr ".$this->_ref_consult->_ref_praticien->_view);
+	  $template->addProperty("RPU - Diagnostic infirmier"         , $this->diag_infirmier);
+	  $template->addDateProperty("RPU - Date entrée"              , $this->_entree);
+    $template->addTimeProperty("RPU - Heure entrée"             , $this->_entree);
+    $template->addProperty("RPU - Mode d'entrée"                , $this->getFormattedValue("mode_entree"));
+    $template->addProperty("RPU - Transport"                    , $this->getFormattedValue("transport"));
+    $template->addProperty("RPU - PeC Transport"                , $this->getFormattedValue("pec_transport"));
+    $template->addProperty("RPU - Motif"                        , $this->motif);
+    $template->addProperty("RPU - CCMU"                         , $this->getFormattedValue("ccmu"));
+    $template->addProperty("RPU - Code GEMSA"                   , $this->getFormattedValue("gemsa"));
     $template->addDateTimeProperty("RPU - Départ Radio"         , $this->radio_debut);
     $template->addDateTimeProperty("RPU - Retour Radio"         , $this->radio_fin);
     $template->addDateTimeProperty("RPU - Dépôt Biologie"       , $this->bio_depart);
     $template->addDateTimeProperty("RPU - Réception Biologie"   , $this->bio_retour);
     $template->addDateTimeProperty("RPU - Attente spécialiste"  , $this->specia_att);
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
-		$template->addProperty("RPU - Sortie autorisée"     , $this->getFormattedValue("sortie_autorisee"));
-    $template->addProperty("RPU - Accident du travail"  , $this->getFormattedValue("accident_travail"));
+    $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
+    $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
+    $template->addDateProperty("RPU - Date sortie"              , $this->_sortie);
+    $template->addTimeProperty("RPU - Heure sortie"             , $this->_sortie);
+    $template->addProperty("RPU - Diagnostic Principal"         , $this->_DP);
       
 		if(CAppUI::conf("dPurgences old_rpu") == "1"){
 			if (CModule::getActive("sherpa")) {
@@ -391,12 +402,12 @@ class CRPU extends CMbObject {
 		    $template->addProperty("RPU - Soins pour trauma"  , $this->getFormattedValue("urtrau"));
 		    $template->addProperty("RPU - Cause du transfert" , $this->getFormattedValue("urmuta"));
 			}
-	    $template->addProperty("RPU - Type de pathologie" , $this->getFormattedValue("type_pathologie"));
+	    $template->addProperty("RPU - Type de pathologie"   , $this->getFormattedValue("type_pathologie"));
 	  } 
 		else {
-			$template->addProperty("RPU - Provenance"          , $this->getFormattedValue("provenance"));
-	    $template->addProperty("RPU - Orientation"         , $this->getFormattedValue("orientation"));
-	    $template->addProperty("RPU - Destination"         , $this->getFormattedValue("destination"));
+			$template->addProperty("RPU - Provenance"           , $this->getFormattedValue("provenance"));
+	    $template->addProperty("RPU - Orientation"          , $this->getFormattedValue("orientation"));
+	    $template->addProperty("RPU - Destination"          , $this->getFormattedValue("destination"));
 		}
   }
 }
