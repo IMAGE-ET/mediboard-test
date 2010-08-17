@@ -35,6 +35,33 @@ function mbGetObjectFromGet($class_key, $id_key, $guid_key = null) {
   return $object;
 }
 
+/**
+ * Returns the CMbObject with given GET or SESSION params keys, if it doesn't exist, a redirect is made
+ * @param string $class_key The class name of the object
+ * @param string $id_key The object ID
+ * @param string $guid_key The object GUID (classname-id)
+ * @return CMbObject The object loaded or nothing
+ **/
+function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
+  $object_class = CValue::getOrSession($class_key);
+  $object_id    = CValue::getOrSession($id_key);
+  $object_guid  = "$object_class-$object_id";
+
+  if ($guid_key) {
+    $object_guid = CValue::getOrSession($guid_key, $object_guid);
+  }
+
+  $object = CMbObject::loadFromGuid($object_guid);
+
+  // Redirection
+  if (!$object || !$object->_id) {
+    global $ajax;
+    CAppUI::redirect("ajax=$ajax&suppressHeaders=1&m=system&a=object_not_found&object_guid=$object_guid");
+  }
+  
+  return $object;
+}
+
 function toBool($value) {
   if (!$value) return false;
   return $value === true || preg_match('/^on|1|true|yes$/i', $value);

@@ -5,7 +5,7 @@ if (window.opener.reloadAfterUploadFile) {
 }
 
 if (window.opener.File && window.opener.File.refresh) {
-	window.opener.File.refresh("{{$object_id}}", "{{$object_class}}");
+	window.opener.File.refresh("{{$object->_id}}", "{{$object->_class_name}}");
 }
 </script>
 {{/if}}
@@ -16,8 +16,8 @@ if (window.opener.File && window.opener.File.refresh) {
 <input type="hidden" name="dialog" value="1" />
 <input type="hidden" name="dosql" value="do_file_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="object_class" value="{{$object_class}}" />
-<input type="hidden" name="object_id" value="{{$object_id}}" />
+<input type="hidden" name="object_class" value="{{$object->_class_name}}" />
+<input type="hidden" name="object_id" value="{{$object->_id}}" />
 <input type="hidden" name="file_category_id" value="{{$file_category_id}}" />
 <input type="hidden" name="file_rename" value="{{$file_rename}}" />
 

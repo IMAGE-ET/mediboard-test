@@ -140,6 +140,7 @@ $locales['mod-dPfiles-tab-files_integrity'] = 'Vérification fichiers';
 $locales['mod-dPfiles-tab-preview-files'] = 'Aperçu avant impression';
 $locales['mod-dPfiles-tab-preview_files'] = 'Prévisualisation du document';
 $locales['mod-dPfiles-tab-send_documents'] = 'Envoi de documents';
+$locales['mod-dPfiles-tab-upload_file'] = 'Televersement de fichier';
 $locales['mod-dPfiles-tab-vw_category'] = 'Gérer les catégories';
 $locales['mod-dPfiles-tab-vw_files'] = 'Visualiser les fichiers';
 $locales['mod-dPfiles-tab-vw_stats'] = 'Statistiques';

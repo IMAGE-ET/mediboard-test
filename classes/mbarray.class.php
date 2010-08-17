@@ -100,24 +100,6 @@ abstract class CMbArray {
 	  return $count;
 	}
 	
-  /**
-   * DEPRECATED ALIAS TO BUILT IN range() TO REMOVE
-   * 
-   * Build and array with ranged values
-   * @param str The string to split out
-   */
-	static function createRange($min, $max, $key_as_value = false, $step = 1){
-    $range = range($min, $max, $step);
-	  if ($key_as_value) {
-	    $tmp_range = array();
-      foreach ($range as $n) {
-	      $tmp_range[$n] = $n;
-	    }
-	    $range = $tmp_range;
-    }
-    return $range;
-	}
-	
 	/**
 	 * Get the previous and next key 
 	 * @param $arr The array to seek in

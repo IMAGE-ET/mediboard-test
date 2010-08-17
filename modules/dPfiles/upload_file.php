@@ -7,32 +7,27 @@
 * @author Sébastien Fillonneau
 */
 
-global $can;
+$object = mbGetObjectFromGetOrSession("object_class", "object_id", "object_guid");
 
-$object_class     = CValue::getOrSession("object_class");
-$object_id        = CValue::getOrSession("object_id");
 $file_category_id = CValue::getOrSession("file_category_id", null);
 $file_rename      = CValue::getOrSession("file_rename", null);
 $uploadok         = CValue::get("uploadok", 0);
 $private          = CValue::get("private", 0);
 
-$nb_files_upload = CMbArray::createRange(1, ($file_rename ? 1 : CAppUI::conf("dPfiles nb_upload_files")) ,true);
-
-$object = new $object_class;
-$object->load($object_id);
-$listCategory = CFilesCategory::listCatClass($object_class);
+$nb_files_upload = range(1, ($file_rename ? 1 : CAppUI::conf("dPfiles nb_upload_files")) ,true);
+mbTrace($nb_files_upload);
+$listCategory = CFilesCategory::listCatClass($object->_class_name);
 
 $file = new CFile();
 $file->private = $private;
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object_class"    , $object_class);
-$smarty->assign("object_id"       , $object_id);
+$smarty->assign("object"          , $object);
 $smarty->assign("file_category_id", $file_category_id);
 $smarty->assign("uploadok"        , $uploadok);
 $smarty->assign("nb_files_upload" , $nb_files_upload);
-$smarty->assign("object"          , $object);
 $smarty->assign("listCategory"    , $listCategory);
 $smarty->assign("file_rename"     , $file_rename);
 $smarty->assign("file"            , $file);
