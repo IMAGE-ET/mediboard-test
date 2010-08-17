@@ -430,12 +430,20 @@ div.footer {
 {{/if}}
 
 {{if $linesDMI|@count}}
-  <div class="bodyWithoutPageBreak">
-    <h1 class="no-break">DMI</h1>
+<div class="bodyWithoutPageBreak">
     <ul>
-    {{foreach from=$linesDMI item=_line_dmi}}
+      <h1 class="no-break">DMI</h1>
+    {{foreach from=$linesDMI item=_line_dmi name=dmis}}
+		  {{if !$smarty.foreach.dmis.first && $smarty.foreach.dmis.index%7 == 0}}
+         </ul>
+			 </div>
+       <div class="bodyWithoutPageBreak">
+         <ul>
+      {{/if}}
+		
       {{if !$_line_dmi->septic}}
-      <li><strong>{{$_line_dmi->_ref_product->name}}</strong>:
+    <li>
+		 <strong>{{$_line_dmi->_ref_product->name}}</strong>:
       <ul>
         <li>Quantité: <strong>{{$_line_dmi->quantity}}</strong></li>
         <li>Code produit: <strong>{{$_line_dmi->_ref_product->code}}</strong></li>
@@ -443,9 +451,9 @@ div.footer {
       </ul>
       </li>
       {{/if}}
-    {{/foreach}}
+		 {{/foreach}}
     </ul>
-  </div>
+	 </div>
 {{/if}}
 
 <!-- Re-ouverture des tableaux -->
