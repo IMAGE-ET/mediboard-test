@@ -1277,7 +1277,6 @@ class CSejour extends CCodable {
   }
   
   function fillLimitedTemplate(&$template) {
-    
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
@@ -1287,6 +1286,10 @@ class CSejour extends CCodable {
     $template->addProperty("Sejour - Numéro de dossier"       , $this->_num_dossier );
     $template->addBarcode ("Sejour - Code barre ID"           , "SID$this->_id"     );
     $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_num_dossier");
+    $template->addDateProperty("Sejour - Date entrée"         , $this->entree);
+    $template->addTimeProperty("Sejour - Heure entrée"        , $this->entree);
+    $template->addDateProperty("Sejour - Date sortie"         , $this->sortie);
+    $template->addTimeProperty("Sejour - Heure sortie"        , $this->sortie);
     
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
@@ -1326,6 +1329,7 @@ class CSejour extends CCodable {
 		
 		$this->loadRefRPU();
 		if($this->_ref_rpu) {
+		  // Ajout d'un fillTemplate du RPU
       $this->_ref_rpu->fillLimitedTemplate($template);
 		}
   }

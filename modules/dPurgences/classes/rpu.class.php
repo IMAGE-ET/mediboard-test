@@ -374,10 +374,9 @@ class CRPU extends CMbObject {
 	function fillLimitedTemplate(&$template) {
 	  $this->loadRefConsult();
 	  $this->_ref_consult->loadRefPraticien();
-	  $template->addProperty("RPU - Praticien - Consultation"     , "Dr ".$this->_ref_consult->_ref_praticien->_view);
+	  $template->addProperty("RPU - Consultation - Praticien nom "   , $this->_ref_consult->_ref_praticien->_user_first_name);
+	  $template->addProperty("RPU - Consultation - Praticien prénom ", $this->_ref_consult->_ref_praticien->_user_last_name);
 	  $template->addProperty("RPU - Diagnostic infirmier"         , $this->diag_infirmier);
-	  $template->addDateProperty("RPU - Date entrée"              , $this->_entree);
-    $template->addTimeProperty("RPU - Heure entrée"             , $this->_entree);
     $template->addProperty("RPU - Mode d'entrée"                , $this->getFormattedValue("mode_entree"));
     $template->addProperty("RPU - Transport"                    , $this->getFormattedValue("transport"));
     $template->addProperty("RPU - PeC Transport"                , $this->getFormattedValue("pec_transport"));
@@ -392,9 +391,10 @@ class CRPU extends CMbObject {
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
     $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
-    $template->addDateProperty("RPU - Date sortie"              , $this->_sortie);
-    $template->addTimeProperty("RPU - Heure sortie"             , $this->_sortie);
-    $template->addProperty("RPU - Diagnostic Principal"         , $this->_DP);
+
+    $this->_ref_sejour->loadExtDiagnostics();
+    $dp = $this->_DP ? "$this->_DP: {$this->_ref_sejour->_ext_diagnostic_principal->libelle}" : null;
+    $template->addProperty("RPU - Diagnostic Principal", $dp);
       
 		if(CAppUI::conf("dPurgences old_rpu") == "1"){
 			if (CModule::getActive("sherpa")) {
