@@ -430,7 +430,7 @@ div.footer {
 {{/if}}
 
 {{if $linesDMI|@count}}
-<div class="bodyWithoutPageBreak">
+<div class="{{if $linesDMI|@count <= 7}}bodyWithoutPageBreak{{else}}body{{/if}}">
     <ul>
       <h1 class="no-break">DMI</h1>
     {{foreach from=$linesDMI item=_line_dmi name=dmis}}
