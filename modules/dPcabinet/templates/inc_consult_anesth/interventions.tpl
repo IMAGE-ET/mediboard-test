@@ -120,11 +120,11 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_planning_aed" />
-  {{mb_field object=$operation field="operation_id" hidden=1 prop=""}}
-  <br />
+  {{mb_key object=$operation}}
+	
   {{if $dPconfig.dPplanningOp.COperation.verif_cote && ($operation->cote == "droit" || $operation->cote == "gauche")}}
-  {{mb_label object=$curr_op field="cote_consult_anesth"}} :
-  {{mb_field defaultOption="&mdash; choisir" object=$curr_op field="cote_consult_anesth" onchange="this.form.onsubmit();"}}
+  {{mb_label object=$operation field="cote_consult_anesth"}} :
+  {{mb_field emptyLabel="Choose" object=$operation field="cote_consult_anesth" onchange="this.form.onsubmit();"}}
   <br />
   {{/if}}
   {{mb_label object=$operation field="depassement_anesth"}}
@@ -132,6 +132,7 @@
   <button type="button" class="notext submit">{{tr}}Save{{/tr}}</button>
 </form>
 {{else}}
+
 {{if !$app->user_prefs.simpleCabinet && !@$modules.ecap->mod_active}}
 <button class="new" type="button" onclick="newOperation({{$consult_anesth->_ref_consultation->_praticien_id}},{{$consult_anesth->_ref_consultation->patient_id}})">
   Nouvelle intervention

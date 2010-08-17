@@ -282,7 +282,7 @@ Main.add(function () {
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-{{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+{{mb_key object=$consult_anesth}}
 
 <table class="form">
   <tr><th colspan="5" class="category">Condition d'intubation</th></tr>

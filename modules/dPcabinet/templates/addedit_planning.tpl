@@ -142,7 +142,8 @@ Main.add(function () {
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+{{mb_key object=$consult}}
+
 <input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
@@ -207,7 +208,7 @@ Main.add(function () {
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td>
-          	{{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
+          	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
           	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
 						<button class="search" type="button" onclick="PatSelector.init()">Rechercher</button>
 	          <script type="text/javascript">

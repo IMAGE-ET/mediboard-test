@@ -12,16 +12,17 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_audio_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$exam_audio field="examaudio_id" hidden=1 prop=""}}
-{{mb_field object=$exam_audio field="consultation_id" hidden=1 prop=""}}
+{{mb_key object=$exam_audio}}
 
+{{mb_field object=$exam_audio field=consultation_id hidden=1}}
 <table class="main" id="weber">
 
 <tr>
   <th class="title" colspan="2">
-    Consultation de <span style="color:#f00;">{{$exam_audio->_ref_consult->_ref_patient->_view}}</span>
-    le {{$exam_audio->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
-    par le Dr {{$exam_audio->_ref_consult->_ref_chir->_view}}
+  	{{assign var=consultation value=$exam_audio->_ref_consult}}
+    Consultation de <span style="color:#fd4;">{{$consultation->_ref_patient}}</span>
+    le {{$consultation->_date|date_format:$dPconfig.longdate}}
+    par le Dr {{$consultation->_ref_chir}}
   </th>
 </tr>
   
@@ -261,21 +262,21 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
         </tr>
         <tr>
           <th>Oreille droite</th>
-          {{foreach from=$pressions|smarty:nodefaults key=index item=pression}}
+          {{foreach from=$pressions key=index item=pression}}
           <td><input type="text" name="_droite_tympan[{{$index}}]" class="num min|-10 max|120" value="{{$exam_audio->_droite_tympan.$index}}" tabindex="{{$index+310}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
         <tr>
           <th>Oreille gauche</th>
-          {{foreach from=$pressions|smarty:nodefaults key=index item=pression}}
+          {{foreach from=$pressions key=index item=pression}}
           <td><input type="text" name="_gauche_tympan[{{$index}}]" class="num min|-10 max|120" value="{{$exam_audio->_gauche_tympan.$index}}" tabindex="{{$index+300}}" size="4" maxlength="4" /></td>
           {{/foreach}}
         </tr>
   
         <tr>
           <td class="button" colspan="9">
-            {{if $exam_audio->examaudio_id}}
-            <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTympan})">{{tr}}Save{{/tr}}</button>
+            {{if $exam_audio->_id}}
+            <button class="submit" type="button" onclick="this.onSubmitFormAjax(this.form, { onComplete : reloadGraphTympan})">{{tr}}Save{{/tr}}</button>
             {{else}}
             <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
             {{/if}}
