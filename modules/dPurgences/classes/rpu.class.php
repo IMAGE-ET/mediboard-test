@@ -391,10 +391,6 @@ class CRPU extends CMbObject {
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
     $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
-
-    $this->_ref_sejour->loadExtDiagnostics();
-    $dp = $this->_DP ? "$this->_DP: {$this->_ref_sejour->_ext_diagnostic_principal->libelle}" : null;
-    $template->addProperty("RPU - Diagnostic Principal", $dp);
       
 		if(CAppUI::conf("dPurgences old_rpu") == "1"){
 			if (CModule::getActive("sherpa")) {
