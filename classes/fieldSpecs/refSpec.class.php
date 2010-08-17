@@ -87,7 +87,8 @@ class CRefSpec extends CMbFieldSpec {
 
 	    $html = "";
       $html.= "\n<select name=\"$field\" class=\"$className\" $extra>";
-      $html.= "\n<option value=\"\">&mdash; Choose</option>";
+      $choose = CAppUI::tr("Choose");
+      $html.= "\n<option value=\"\">&mdash; $choose</option>";
 			foreach ($options as $_option) {
 				$selected = $value == $_option->_id ? "selected=\"selected\"" : "";
         $html.= "\n<option value=\"$_option->_id\" $selected>$_option->_view</option>";

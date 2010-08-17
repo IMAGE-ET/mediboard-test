@@ -34,6 +34,11 @@ class CTypeAnesth extends CMbObject {
     $backProps["operations"] = "COperation type_anesth";
     return $backProps;
   }
+	
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_view = $this->name;
+	}
   
   function countOperations() {
     $this->_count_operations = $this->countBackRefs("operations");
