@@ -19,7 +19,7 @@ $accordDossier = CValue::get("accordDossier"    , 0);
 $reloadlist = 1;
 
 // Liste des Class
-$listClass = getChildClasses("CMbObject", array("_ref_files"));
+$listClass = CApp::getChildClasses("CMbObject", array("_ref_files"));
 $listCategory = CFilesCategory::listCatClass($object_class);
 
 // Id de l'utilisateur courant

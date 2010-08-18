@@ -607,4 +607,5 @@ $locales['utilities-source-ftp-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-soap'] = 'Utilitaires SOAP';
 $locales['utilities-source-soap-connexion'] = 'Test de la connexion';
 $locales['utilities-source-soap-getFunctions'] = 'Liste des fonctions';
+$locales['config-choose-classes'] = 'Choisir une classe';
 ?>

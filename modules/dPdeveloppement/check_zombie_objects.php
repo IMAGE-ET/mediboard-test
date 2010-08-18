@@ -13,7 +13,7 @@ $objects_count = CValue::getOrSession('objects_count', 20);
 $count = 0;
 $zombies = array();
 $object = new $class_name;
-$installed_classes = getInstalledClasses();
+$installed_classes = CApp::getInstalledClasses();
 $ds = $object->_spec->ds;
 
 if ($object->_spec->table) {

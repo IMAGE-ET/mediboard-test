@@ -106,7 +106,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("user"                     , $user                     );
 $smarty->assign("modulesInstalled"         , $modulesInstalled         );
 $smarty->assign("isAdminPermSet"           , $isAdminPermSet           );
-$smarty->assign("classes"                  , getInstalledClasses());
+$smarty->assign("classes"                  , CApp::getInstalledClasses());
 
 $smarty->assign("permsModule"      , $permsModule      );
 $smarty->assign("permsObject"      , $permsObject      );

@@ -58,7 +58,10 @@
       <table class="form">
         <tr>
           {{if $dest_hprim->_id}}
-          <th class="title modify" colspan="2">
+          <th class="title modify text" colspan="2">
+            {{mb_include module=system template=inc_object_idsante400 object=$dest_hprim}}
+            {{mb_include module=system template=inc_object_history object=$dest_hprim}}
+            
             {{tr}}CDestinataireHprim-title-modify{{/tr}} '{{$dest_hprim->_view}}'
           </th>
           {{else}}

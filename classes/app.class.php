@@ -99,5 +99,100 @@ class CApp {
     
     return $scheme."://".$host.$port.$path;
   }
+  
+  /**
+   * Includes all the classes of the framework
+   * @return void
+   */
+  static function getAllClasses() {
+    $rootDir = CAppUI::conf("root_dir");
+    $dirs = array(
+      "classes/*/*.class.php", // Require all global classes
+      "classes/*.class.php", 
+      "*/*/*.class.php",
+      "modules/*/classes/*.class.php", // Require all modules classes
+      "modules/*/setup.php", // Require all modules setups 
+    );
+    
+    foreach ($dirs as $dir) {
+      $files = glob("$rootDir/$dir");
+      foreach ($files as $fileName) {
+        require_once($fileName);
+      }
+    }
+  }
+  
+  /**
+   * Return all child classe of a given class havin given properties
+   * @param array $properties No property checking if empty
+   * @return array
+   */
+  static function getChildClasses($parent = "CMbObject", $properties = array()) {
+    self::getAllClasses();
+    
+    $listClasses = get_declared_classes();
+    foreach ($listClasses as $key => $class) {
+      if ($parent and !is_subclass_of($class, $parent)) {
+        unset($listClasses[$key]);
+        continue;
+      }
+  
+      foreach($properties as $prop) {
+        if(!array_key_exists($prop, get_class_vars($class))) {
+          unset($listClasses[$key]);
+        }
+      }
+    }
+    sort($listClasses);
+    return $listClasses;
+  }
+  
+  /**
+   * Return all CMbObject child classes
+   * @param array $properties
+   * @return array
+   */
+  static function getMbClasses($properties = array()) {
+    $classes = self::getChildClasses("CMbObject", $properties);
+    foreach ($classes as $key => $class) {
+      // Escaped instanciation in case of DSN errors
+      $object = @new $class;
+      
+      // Classe instanciée ?
+      if (!$object->_class_name) {
+        unset($classes[$key]);
+        continue;
+      }
+    }
+    
+    return $classes;
+  }
+  
+  /**
+   * Return all storable classes which module is installed
+   * @param array $properties
+   * @return array
+   */
+  static function getInstalledClasses($properties = array()) {
+    $classes = self::getMbClasses();
+    foreach ($classes as $key => $class) {
+      // Escaped instanciation in case of DSN errors
+      $object = @new $class;
+      
+      // Installed module ?
+      if ($object->_ref_module === null) {
+        unset($classes[$key]);
+        continue;
+      }
+  
+      // Storable class ?
+      if (!$object->_spec->table) {
+        unset($classes[$key]);
+        continue;
+      }
+    }
+    
+    return $classes;
+  }
 }
 ?>

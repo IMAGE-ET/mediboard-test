@@ -33,8 +33,7 @@ if($filter->object_id && $filter->object_class) {
 }
 
 // Récupération de la liste des classes disponibles
-CAppui::getAllClasses();
-$listClasses = getChildClasses();
+$listClasses = CApp::getChildClasses();
 
 // Récupération de la liste des utilisateurs disponibles
 $user = new CUser;

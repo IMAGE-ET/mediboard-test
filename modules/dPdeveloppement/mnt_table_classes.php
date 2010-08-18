@@ -20,7 +20,7 @@ $class_name = CValue::getOrSession('class_name', null);
 $t          = CValue::getOrSession('types');
 
 // Liste des noms des classes installées
-$list_class_names = getInstalledClasses();
+$list_class_names = CApp::getInstalledClasses();
 
 $list_selected_classes = array(); // Liste des noms de classes selectionnées
 $list_classes = array(); // Liste des classes

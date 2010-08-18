@@ -67,28 +67,6 @@ class CAppUI {
   static function init(){
   	return self::$instance = new CAppUI;
   }
-
-  /**
-   * Includes all the classes of the framework
-   * @return void
-   */
-  static function getAllClasses() {
-    $rootDir = self::conf("root_dir");
-    $dirs = array(
-      "classes/*/*.class.php", // Require all global classes
-      "classes/*.class.php", 
-      "*/*/*.class.php",
-      "modules/*/classes/*.class.php", // Require all modules classes
-      "modules/*/setup.php", // Require all modules setups 
-    );
-    
-    foreach ($dirs as $dir) {
-      $files = glob("$rootDir/$dir");
-      foreach ($files as $fileName) {
-        require_once($fileName);
-      }
-    }
-  }
   
   /**
    * Used to load a php class file from its name

@@ -22,7 +22,7 @@ $user_id = CValue::getOrSession("user_id");
 $can->needsRead();
 
 // Récupération de la liste des classes disponibles
-$classes = getInstalledClasses();
+$classes = CApp::getInstalledClasses();
 
 $affect_id = CValue::getOrSession("affect_id", 0);
 // Chargement de l'affectation sélectionnée
@@ -39,7 +39,7 @@ if($affect_id == 0){
 }
 
 // Liste des classes disponibles
-$classes = getInstalledClasses();
+$classes = CApp::getInstalledClasses();
 
 // Liste des utilisateur faisant parti du personnel
 $personnel = new CPersonnel();

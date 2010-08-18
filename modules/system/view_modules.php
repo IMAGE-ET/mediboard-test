@@ -14,10 +14,9 @@ $can->needsEdit();
 
 require_once("install/libs.php");
 
-CAppUI::getAllClasses();
 CModule::loadModules();
 
-$setupClasses = getChildClasses("CSetup");
+$setupClasses = CApp::getChildClasses("CSetup");
 $mbmodules = array(
   "notInstalled" => array(),
   "installed" => array(),

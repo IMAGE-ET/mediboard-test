@@ -11,7 +11,7 @@ global $can;
 
 $can->needsRead();
 
-$classes = getMbClasses();
+$classes = CApp::getMbClasses();
 $classes[] = "CMbObject";
 
 // Looking for what is actually coded

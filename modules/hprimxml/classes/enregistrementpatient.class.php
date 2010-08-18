@@ -184,7 +184,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
       if($id400->loadMatchingObject()) {
         // Identifiant du patient sur le SIP
         $idPatientSIP = $id400->object_id;
-        // Cas 2.1 : Pas d'identifiant cible
+        // Cas 2.1 : Pas d'idCible
         if(!$data['idCiblePatient']) {
           if ($newPatient->load($idPatientSIP)) {
             // Mapping du patient
@@ -236,7 +236,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
           }
         }
-        // Cas 2.2 : Identifiant cible envoyé
+        // Cas 2.2 : idCible envoyé
         else {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
@@ -245,7 +245,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
 
           $IPP->id400 = $data['idCiblePatient'];
           
-          // Id cible connu
+          // Cas 2.2.1 : idCible connu
           if ($IPP->loadMatchingObject()) {
             // Acquittement d'erreur idSource et idCible incohérent
             if ($idPatientSIP != $IPP->object_id) {
@@ -287,7 +287,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
             }
           } 
-          // Id cible non connu
+          // Cas 2.2.2 : idCible non connu
           else {
             $commentaire = "L'identifiant source fait référence au patient : $idPatientSIP et l'identifiant cible n'est pas connu.";
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E003", $commentaire);
@@ -303,11 +303,11 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
         }
       }
-      // Cas 2 : Patient n'existe pas sur le SIP
+      // Cas 3 : Patient n'existe pas sur le SIP
       else {
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-        // Patient retrouvé      
+        // Cas 3.1 : Patient retrouvé  (nom, prénom et date de naissance)      
         if ($newPatient->loadMatchingPatient()) {
           // Mapping du patient
           $newPatient = $this->mappingPatient($data['patient'], $newPatient);
@@ -324,7 +324,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           }
           $_modif_patient = true; 
           $commentaire = "Patient modifiée : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
-        } else {
+        } 
+        // Cas 3.2 : Patient non retrouvé
+        else {
           // Si serveur et pas d'IPP sur le patient
           $newPatient->_no_ipp = 1;
           $msgPatient = $newPatient->store();

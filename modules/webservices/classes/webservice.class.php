@@ -12,8 +12,7 @@ class CWebservice {
 	var $services = array();
 	
 	public function getServicesClasses($class) {
-		CAppUI::getAllClasses();
-    $this->services = getChildClasses($class);
+    $this->services = CApp::getChildClasses($class);
 		
 		return $this->services;
 	}

@@ -70,9 +70,9 @@ class CModule extends CMbObject {
 	 * @param $module string Module name
 	 * @return array[string] Class names
 	 **/
-	function getClassesFor($module) {
+	static function getClassesFor($module) {
 		// Liste des Class
-		$listClass = getInstalledClasses();
+		$listClass = CApp::getInstalledClasses();
 		
 		$tabClass = array();
 		foreach ($listClass as $class) {

@@ -18,8 +18,7 @@ if (null == $classPaths = SHM::get("class-paths")) {
 
 /** Updates the PHP classes paths cache */
 function updateClassPathCache(){
-  CAppUI::getAllClasses();
-  $classNames = getChildClasses(null);
+  $classNames = CApp::getChildClasses(null);
   foreach ($classNames as $className) {
     $class = new ReflectionClass($className);
     $classPaths[$className] = $class->getFileName();

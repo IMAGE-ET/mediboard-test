@@ -225,4 +225,7 @@ $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';
 $locales['years'] = 'années';
+$locales['Default'] = 'Défaut';
+$locales['Name'] = 'Nom';
+$locales['Value'] = 'Valeur';
 ?>

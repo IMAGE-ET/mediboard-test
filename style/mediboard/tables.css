@@ -404,6 +404,10 @@ table.form td.button {
   vertical-align: middle;
 }
 
+table.form td.arretee {   
+  background-image: url(images/icons/ray.gif);
+}
+
 /* The admission table based on the form one */
 table.print {
   width: 100%;

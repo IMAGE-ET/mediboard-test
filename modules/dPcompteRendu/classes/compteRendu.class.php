@@ -478,7 +478,7 @@ class CCompteRendu extends CDocumentItem {
     
     $classes = array();
     
-    $installed = getInstalledClasses();
+    $installed = CApp::getInstalledClasses();
     foreach ($installed as $key=>$class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
         $classes[$class] = CAppUI::tr($class);

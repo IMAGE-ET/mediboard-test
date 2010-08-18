@@ -89,7 +89,7 @@ $smarty->assign("result",  $result);
 $smarty->assign("statuses",  $statuses);
 $smarty->assign("counts",  $counts);
 $smarty->assign("checkMerge", $checkMerge);
-$smarty->assign("list_classes", getInstalledClasses());
+$smarty->assign("list_classes", CApp::getInstalledClasses());
 $smarty->assign("alternative_mode", CAppUI::conf("alternative_mode"));
 $smarty->assign("readonly_class", $readonly_class);
 

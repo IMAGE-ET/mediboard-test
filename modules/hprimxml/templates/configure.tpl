@@ -9,8 +9,14 @@
 *}}
 
 <script type="text/javascript">
+  function refreshConfigClasses() {
+    var url = new Url("system", "ajax_config_classes");
+    url.addParam("module", "{{$m}}");
+    url.requestUpdate("object-config");
+	};
+	 
   Main.add(Control.Tabs.create.curry('tabs-configure', true));
-</script>'
+</script>
 
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#config-extract">{{tr}}config-hprimxml-extract{{/tr}}</a></li>
@@ -18,6 +24,8 @@
 	<li><a href="#config-treatment">{{tr}}config-hprimxml-treatment{{/tr}}</a></li>
 	<li><a href="#config-purge_echange">{{tr}}config-hprimxml-purge-echange{{/tr}}</a></li>
 	<li><a href="#config-file-to-echange">{{tr}}config-hprimxml-file-to-echange{{/tr}}</a></li>
+	<li onmousedown="refreshConfigClasses();">
+	  <a href="#object-config">{{tr}}config-hprimxml-object-config{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -40,4 +48,8 @@
 
 <div id="config-file-to-echange" style="display: none;">
   {{mb_include template=inc_config_file_to_echange}}
+</div>
+
+<div id="object-config" style="display: none;">
+  <div class="small-info">{{tr}}config-hprimxml-object-config-classes{{/tr}}</div>
 </div>

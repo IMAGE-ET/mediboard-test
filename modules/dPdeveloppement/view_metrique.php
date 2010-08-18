@@ -11,7 +11,7 @@ CCanDo::checkRead();
 
 $ds = CSQLDataSource::get("std");
 
-$listeClasses = getInstalledClasses();
+$listeClasses = CApp::getInstalledClasses();
 
 $result = array();
 foreach ($listeClasses as $class){

@@ -158,7 +158,25 @@ class CSetuphprimxml extends CSetup {
               SET import_id = NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "CREATE TABLE `destinataire_hprim_config` (
+              `dest_hprim_config_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `object_id` INT (11) UNSIGNED,
+              `send_sortie_prevue` ENUM ('0','1') DEFAULT '1',
+              `type_sej_hospi` VARCHAR (255),
+              `type_sej_ambu` VARCHAR (255),
+              `type_sej_urg` VARCHAR (255),
+              `type_sej_scanner` VARCHAR (255),
+              `type_sej_chimio` VARCHAR (255),
+              `type_sej_dialyse` VARCHAR (255)
+          ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `destinataire_hprim_config` 
+             ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.17";
   }
 }
 

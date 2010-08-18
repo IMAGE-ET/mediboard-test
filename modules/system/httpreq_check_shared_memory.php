@@ -57,8 +57,7 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
 }
 
 // Check class paths
-CAppUI::getAllClasses();
-$classNames = getChildClasses(null);
+$classNames = CApp::getChildClasses(null);
 foreach($classNames as $className) {
   $class = new ReflectionClass($className);
   $classPaths[$className] = $class->getFileName();

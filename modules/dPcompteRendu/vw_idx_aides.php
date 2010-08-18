@@ -18,7 +18,7 @@ $aide_id        = CValue::getOrSession("aide_id");
 $keywords       = CValue::getOrSession("keywords");
 $start          = CValue::getOrSession("start", array("user" => 0, "func" => 0, "etab" => 0));
 
-$classes = array_flip(getInstalledClasses());
+$classes = array_flip(CApp::getInstalledClasses());
 $listTraductions = array();
 
 // Chargement des champs d'aides a la saisie

@@ -22,8 +22,7 @@ $category->countDocItems();
 $categories = $category->loadList(null, "class, nom");
 
 // Liste des Classes disponibles
-CAppUI::getAllClasses();
-$listClass = getChildClasses();
+$listClass = CApp::getChildClasses();
 
 // Création du template
 $smarty = new CSmartyDP();

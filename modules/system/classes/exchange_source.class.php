@@ -45,9 +45,7 @@ class CExchangeSource extends CMbObject {
   }
    
   static function getExchangeClasses() {
-    CAppUI::getAllClasses();
-      
-    return getChildClasses("CExchangeSource");
+    return CApp::getChildClasses("CExchangeSource");
   }
   
   static function getObjects($name, $type = null, $type_echange = null) {

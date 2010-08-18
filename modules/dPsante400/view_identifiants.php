@@ -14,7 +14,7 @@ $can->needsRead();
 $canSante400 = CModule::getCanDo("dPsante400");
 
 // Récupération de la liste des classes disponibles
-$listClasses = getInstalledClasses();
+$listClasses = CApp::getInstalledClasses();
 
 // Chargement de l'IdSante400 courant
 $idSante400 = new CIdSante400;

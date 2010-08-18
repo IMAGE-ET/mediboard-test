@@ -69,6 +69,7 @@ class CMbObject {
   var $_specs         = array(); // Properties specifications as objects
   var $_backProps     = array(); // Back reference specification as string
   var $_backSpecs     = array(); // Back reference specification as objects
+  var $_configs       = array(); // Object configs
 
   static $spec          = array();
   static $props         = array();
@@ -98,6 +99,7 @@ class CMbObject {
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
   var $_ref_affectations_personnel  = null;
+  var $_ref_object_configs = null; // Object configs
   
   /**
    * @var CMbObject The object in database
@@ -165,6 +167,8 @@ class CMbObject {
     $this->_specs     =& self::$specs[$class];
     $this->_backProps =& self::$backProps[$class];
     $this->_backSpecs =& self::$backSpecs[$class];
+    
+    $this->_guid = "$this->_class_name-none";
   }
   
   private static function getModuleName($path) {
@@ -1869,7 +1873,7 @@ class CMbObject {
     
     if ($limit)
       $query .= "\n LIMIT $limit";
-    
+
     return $this->loadQueryList("SELECT `{$this->_spec->table}`.* $query");
   }
   
@@ -2262,6 +2266,72 @@ class CMbObject {
         }
       }
     }
+  }
+  
+  /**
+   * Load object config 
+   * @return array contains config of class and/or object
+   */
+  function loadConfigValues() {
+    $object_class = $this->_class_name."Config";
+    
+    if (!class_exists($object_class)) {
+      return;
+    }
+    
+    // Chargement des configs de la classe
+    $where = array();
+    $where["object_id"]    = " IS NULL";
+    $class_config = new $object_class;
+    $class_config->loadObject($where);
+
+    // Chargement des configs de l'objet
+    $object_config = $this->loadUniqueBackRef("object_configs");
+    $class_config->extendsWith($object_config);
+    
+    $this->_configs = $class_config->getConfigValues();
+  }
+  
+  /**
+   * Get value of the object config 
+   */
+  function getConfigValues() {
+    $configs = array();
+    
+    if (!$this->_id) {
+      return $configs;
+    }
+    
+    $fields = $this->getDBFields();
+    unset($fields[$this->_spec->key]);
+    unset($fields["object_id"]);
+    foreach($fields as $_name => $_value) {
+      $configs[$_name] = $_value;
+    }
+    
+    return $configs;
+  }
+  
+  /**
+   * Set defaults value
+   */
+  function valueDefaults() {
+    $fields = $this->getDBFields();
+    $specs  = $this->getSpecs();
+    
+    foreach($fields as $_name => $_value) {
+      $this->$_name = $specs[$_name]->default;
+    }
+  }
+  
+  /**
+   * Backward references
+   */
+  function loadRefObjectConfigs() {
+    $object_class = $this->_class_name."Config";
+    $class_config = new $object_class;
+    
+    $this->_ref_object_configs = $this->loadUniqueBackRef("object_configs");
   }
 }
 ?>

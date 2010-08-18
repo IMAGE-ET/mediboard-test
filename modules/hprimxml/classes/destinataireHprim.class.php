@@ -33,7 +33,7 @@ class CDestinataireHprim extends CMbObject {
   var $actif     = null;
 	
   // Forward references
-  var $_ref_group = null;
+  var $_ref_group             = null;
   var $_ref_exchanges_sources = null;
   
   // Form fields
@@ -63,6 +63,14 @@ class CDestinataireHprim extends CMbObject {
     return $specs;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
+    
+    return $backProps;
+  }
+  
+  
   function loadRefsFwd() {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
@@ -85,7 +93,7 @@ class CDestinataireHprim extends CMbObject {
     $this->_tag_patient  = str_replace('$g', $this->group_id, CAppUI::conf("dPpatients CPatient tag_ipp"));
     $this->_tag_sejour   = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
-  }
+  }  
 }
 
 // Add

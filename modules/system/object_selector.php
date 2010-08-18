@@ -15,7 +15,7 @@ $object_id = CValue::get("object_id");
 
 // Liste des classes
 $classes = array();
-foreach (getInstalledClasses() as $class) {
+foreach (CApp::getInstalledClasses() as $class) {
   $object = @new $class;
   $classes[$class] = array_keys($object->getSeekables());
 }
