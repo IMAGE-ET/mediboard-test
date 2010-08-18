@@ -9,28 +9,52 @@
  */
 
 $token_evts  = CValue::post("token_evts");
-$code        = CValue::post("code");
-$checked     = CValue::post("checked");
 $_evenements = explode("|", $token_evts);
 
-foreach($_evenements as $_evenement_id){
-	 $acte_cdarr = new CActeCdARR();
-   $acte_cdarr->evenement_ssr_id = $_evenement_id;
-   $acte_cdarr->code = $code;
-   $acte_cdarr->loadMatchingObject();
-		
-	// ajout de l'acte a tous les evenements si on coche la checkbox ou si on clique dessus et que seulement certains evts sont checked
-	if($checked){
-		if(!$acte_cdarr->_id){
-			$msg = $acte_cdarr->store();
-			CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
-		}
+// Recuperation des codes cdarrs a ajouter et a supprimer aux evenements
+$add_cdarrs = CValue::post("add_cdarrs") ? explode("|", CValue::post("add_cdarrs")) : '';
+$remove_cdarrs = CValue::post("remove_cdarrs") ? explode("|", CValue::post("remove_cdarrs")) : '';
+$other_cdarrs = CValue::post("_cdarrs");
+
+$cdarrs = array();
+if($add_cdarrs){
+	$cdarrs["add"] = $add_cdarrs;
+}
+if($remove_cdarrs){
+  $cdarrs["remove"] = $remove_cdarrs;
+}
+
+// Ajout des codes rajoutés depuis l'autocomplete
+if(count($other_cdarrs)){
+	foreach($other_cdarrs as $_other_cdarr){
+		$cdarrs["add"][] = $_other_cdarr;
 	}
-	// Suppression de l'acte pour tous les evenements
-	else {
-    if($acte_cdarr->_id){
-    	$msg = $acte_cdarr->delete();
-      CAppUI::displayMsg($msg, "CActeCdARR-msg-delete");
+}
+
+foreach($_evenements as $_evenement_id){
+	if(is_array($cdarrs)){
+		foreach($cdarrs as $action => $_cdarrs){
+			foreach($_cdarrs as $_cdarr){
+		  $acte_cdarr = new CActeCdARR();
+	    $acte_cdarr->evenement_ssr_id = $_evenement_id;
+	    $acte_cdarr->code = $_cdarr;
+	    $acte_cdarr->loadMatchingObject();
+		    
+		  // Ajout de l'acte a tous les evenements
+		  if($action == "add"){
+		    if(!$acte_cdarr->_id){
+		      $msg = $acte_cdarr->store();
+		      CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+		    }
+		  }
+		  // Suppression de l'acte pour tous les evenements
+		  else {
+		    if($acte_cdarr->_id){
+		      $msg = $acte_cdarr->delete();
+		      CAppUI::displayMsg($msg, "CActeCdARR-msg-delete");
+		    }
+		  }
+			}
 		}
 	}
 }

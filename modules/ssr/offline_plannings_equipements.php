@@ -21,15 +21,19 @@ $date = mbDate();
 
 foreach($plateaux as $_plateau){
 	$_plateau->loadRefsEquipements();
+	
 	foreach($_plateau->_ref_equipements as $_equipement){
+		if(!$_equipement->visualisable){
+		  unset($_plateau->_ref_equipements[$_equipement->_id]);
+			continue;
+		}
 		$equipements[$_equipement->_id] = $_equipement;
 	  $args_planning = array();
 	  $args_planning["equipement_id"] = $_equipement->_id;
 	  $args_planning["date"] = $date;
-	  $plannings[$_equipement->_id] = CApp::fetch("ssr", "ajax_planning_equipement", $args_planning); 
+	  $plannings[$_equipement->_id] = CApp::fetch("ssr", "ajax_planning_equipement", $args_planning);
 	}
 }
-
 $monday = mbDate("last monday", mbDate("+1 day", $date));
 $sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
     
