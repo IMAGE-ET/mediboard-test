@@ -174,14 +174,25 @@ submitSSR = function(){
 	  $$(".days").each(function(e){
 		  $V(e, '');
 		});
-		$V(oFormEvenementSSR._heure_deb, '');
+
+    // Suppression des actes cdarrs selectionnés
+    $V(oFormEvenementSSR._heure_deb, '');
 		$V(oFormEvenementSSR._heure_deb_da, '');
     $V(oFormEvenementSSR._heure_fin, '');
     $V(oFormEvenementSSR._heure_fin_da, '');
-    $V(oFormEvenementSSR.duree, $V($oFormEvenementSSR._default_duree));
+    $V(oFormEvenementSSR.duree, $V(oFormEvenementSSR._default_duree));
 		$V(oFormEvenementSSR.seance_collective, '');
-    $V(oFormEvenementSSR.seance_collective_id, '');
-		oFormEvenementSSR.seance_collective_id.hide();
+		$V(oFormEvenementSSR.seance_collective_id, '');
+		if(oFormEvenementSSR.seance_collective_id){
+		  oFormEvenementSSR.seance_collective_id.hide();
+		}
+
+    // Deselection des codes cdarrs
+    $V(oFormEvenementSSR._cdarr, false);
+    $$('#other_cdarr span').invoke('remove'); 
+    $('other_cdarr').hide();
+		
+		selectElement($V(oFormEvenementSSR.line_id));
 	}} );
 }
 
