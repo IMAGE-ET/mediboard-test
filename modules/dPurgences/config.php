@@ -27,6 +27,7 @@ $dPconfig["dPurgences"] = array (
 	"gerer_hospi"           => "1",
 	"gerer_reconvoc"        => "1",
   "sibling_hours"         => "0",
+  "pec_change_prat"       => "1",
 );
 
 

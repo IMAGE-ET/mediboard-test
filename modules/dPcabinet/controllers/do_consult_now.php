@@ -30,8 +30,10 @@ if ($sejour->type == "urg") {
   }
   
   // Changement de praticien pour le sejour
-  $sejour->praticien_id = $prat_id;
-  $sejour->store();
+  if (CAppUI::conf("dPurgences pec_change_prat")) {
+    $sejour->praticien_id = $prat_id;
+    $sejour->store();
+  }
 }
 
 
