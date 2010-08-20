@@ -594,11 +594,12 @@ abstract class CSQLDataSource {
       return "IS NULL AND '0' = '1'";
     }
     
-    foreach ($values as &$value) {
-      $value = "'$value'";
+		$quoted = array();
+    foreach ($values as $value) {
+      $quoted[] = "'$value'";
     }
     
-    $str = implode(", ", $values);
+    $str = implode(", ", $quoted);
     return "IN ($str)";
   }
 

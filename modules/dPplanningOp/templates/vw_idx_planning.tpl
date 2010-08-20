@@ -20,7 +20,7 @@ Main.add(function () {
 
 </script>
 <table class="main">
-	
+  
   <tr>
     <td style="height: 16px;">
       <form action="?" name="selection" method="get">
@@ -39,13 +39,13 @@ Main.add(function () {
     </td>
     <td rowspan="3" class="greedyPane" style="vertical-align:top;">
       <div id="operations">
-      	<div class="small-info">
-      		Cette vue affiche la liste des interventions pour le jour sélectionné.
-      	</div>
+        <div class="small-info">
+          Cette vue affiche la liste des interventions pour le jour sélectionné.
+        </div>
       </div>
     </td>
   </tr>
-	
+  
   <tr>
     <th style="height: 16px;">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
@@ -54,9 +54,9 @@ Main.add(function () {
     </th>
   </tr>
   
-	<tr>
+  <tr>
     <td>
-    	
+      
       <table class="tbl">
         <tr>
           <th>Date</th>
