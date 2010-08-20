@@ -53,8 +53,13 @@
 				  this.sColorView = "color-view";
 				  this.pop();
 				}
-				</script>      	
-        <a href="#CFunction-color" class="color-view" id="color-view" style="background: #{{$function->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init()">Cliquer pour changer</a>
+				</script>
+        <span class="color-view" id="color-view" style="background: #{{$function->color}};">
+				  {{tr}}Choose{{/tr}}
+				</span>
+				<button type="button" class="search notext" onclick="ColorSelector.init()">
+					{{tr}}Choose{{/tr}}
+				</button>
         {{mb_field object=$function field="color" hidden=1}}
       </td>
     </tr>

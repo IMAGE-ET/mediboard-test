@@ -785,3 +785,9 @@ span.highlight {
 select.helper {
 	max-width: 10em;
 }
+
+.color-view {
+	padding: 0 3px; 
+	margin: 0 3px;
+	border: 1px solid #aaa;
+}

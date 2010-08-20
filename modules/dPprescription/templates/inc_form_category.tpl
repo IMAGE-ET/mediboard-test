@@ -18,8 +18,9 @@
 	  <tr>
 	    {{if $category->_id}}
 	    <th class="title text modify" colspan="2">
-	      {{mb_include module=system template=inc_object_idsante400 object=$category}}
-	      {{mb_include module=system template=inc_object_history object=$category}}
+        {{mb_include module=system template=inc_object_notes      object=$category}}
+        {{mb_include module=system template=inc_object_idsante400 object=$category}}
+	      {{mb_include module=system template=inc_object_history    object=$category}}
 	      Modification de la catégorie &lsquo;{{$category}}&rsquo;
 	    {{else}}
 	    <th class="title text" colspan="2">
@@ -29,7 +30,7 @@
 	  </tr>
 	  <tr>
 	    <th>{{mb_label object=$category field="chapitre"}}</th>
-	    <td>{{mb_field object=$category field="chapitre" defaultOption="&mdash; Sélection d'un chapitre"}}</td>
+	    <td>{{mb_field object=$category field="chapitre" emptyLabel="Choose"}}</td>
 	  </tr>
 	  <tr>
 	    <th>{{mb_label object=$category field="nom"}}</th>
@@ -46,9 +47,16 @@
 	  <tr>
 	    <th>{{mb_label object=$category field="color"}}</th>
 	    <td>
-	      <a href="#1" id="select_color_cat" style="background: #{{$category->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init('editCategory','select_color_cat')">Cliquer pour changer</a>
-	      {{mb_field object=$category field="color" hidden=1}}
-	      <button type="button" class="cancel" onclick="$('select_color_cat').setStyle({ background: '' }); $V(this.form.color, '');">Vider</button>
+        <span class="color-view" id="select_color_cat" style="background: #{{$category->color}};">
+          {{tr}}Choose{{/tr}}
+        </span>
+        <button type="button" class="search notext" onclick="ColorSelector.init('editCategory','select_color_cat')">
+          {{tr}}Choose{{/tr}}
+        </button>
+	      <button type="button" class="cancel notext" onclick="$('select_color_cat').setStyle({ background: '' }); $V(this.form.color, '');">
+	      	{{tr}}Empty{{/tr}}
+	      </button>
+        {{mb_field object=$category field="color" hidden=1}}
 	    </td>
 	  </tr>
 	  <tr>

@@ -22,8 +22,9 @@
 		 <tr>
 		   {{if $element_prescription->_id}}
 			   <th class="title text modify" colspan="2">
-			     {{mb_include module=system template=inc_object_idsante400 object=$element_prescription}}
-			     {{mb_include module=system template=inc_object_history object=$element_prescription}}
+           {{mb_include module=system template=inc_object_notes      object=$element_prescription}}
+           {{mb_include module=system template=inc_object_idsante400 object=$element_prescription}}
+			     {{mb_include module=system template=inc_object_history    object=$element_prescription}}
 			     Modification de l'element &lsquo;{{$element_prescription->libelle}}&rsquo;
 		   {{else}}
 			   <th class="title text" colspan="2">
@@ -42,9 +43,16 @@
 		 <tr>
 		   <th>{{mb_label object=$element_prescription field="color"}}</th>
 		   <td class="text">
-		     <a href="#1" id="select_color_elt" style="background: #{{$element_prescription->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init('editElement','select_color_elt');">Cliquer pour changer</a>
-		     {{mb_field object=$element_prescription field="color" hidden=1}}
-		     <button type="button" class="cancel" onclick="$('select_color_elt').setStyle({ background: '' }); $V(this.form.color, '');">Vider</button>
+        <span class="color-view" id="select_color_elt" style="background: #{{$element_prescription->color}};">
+          {{tr}}Choose{{/tr}}
+        </span>
+        <button type="button" class="search notext" onclick="ColorSelector.init('editElement','select_color_elt')">
+          {{tr}}Choose{{/tr}}
+        </button>
+        <button type="button" class="cancel notext" onclick="$('select_color_elt').setStyle({ background: '' }); $V(this.form.color, '');">
+          {{tr}}Empty{{/tr}}
+        </button>
+        {{mb_field object=$element_prescription field="color" hidden=1}}
 		   </td>
 		 </tr>
 		 <tr>
