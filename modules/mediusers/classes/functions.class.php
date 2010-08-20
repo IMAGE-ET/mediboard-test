@@ -106,8 +106,7 @@ class CFunctions extends CMbObject {
   }
   
   function loadRefGroup() {
-    $this->_ref_group = new CGroups();
-    $this->_ref_group->load($this->group_id);
+    $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
   // Backward references

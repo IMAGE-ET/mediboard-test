@@ -3,13 +3,6 @@
 
 <script type="text/javascript">
 
-ColorSelector.init = function(){
-  this.sForm  = "editFrm";
-  this.sColor = "color";
-	this.sColorView = "select_color";
-  this.pop();
-}
-
 showFunction = function(function_id, element){
   element.up('tr').addUniqueClassName('selected');
   var url = new Url("mediusers", "ajax_edit_function");

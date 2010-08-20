@@ -5,7 +5,7 @@
     <th>Utilisateurs</th>
   </tr>
   {{foreach from=$functions item=_function}}
-  <tr {{if $_function->_id == $userfunction->_id}}class="selected"{{/if}}>
+  <tr {{if $_function->_id == $function->_id}}class="selected"{{/if}}>
     <td>
       <a href="#" onclick="showFunction('{{$_function->_id}}', this)">
         {{$_function->text}}

@@ -9,16 +9,17 @@
 <form name="editFrm" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
   <input type="hidden" name="m" value="mediusers" />
   <input type="hidden" name="dosql" value="do_functions_aed" />
-  <input type="hidden" name="function_id" value="{{$userfunction->function_id}}" />
   <input type="hidden" name="del" value="0" />
+  {{mb_key object=$function}}
+
   <table class="form">
     <tr>
-      {{if $userfunction->_id}}
+      {{if $function->_id}}
       <th class="title modify text" colspan="2">
-        {{mb_include module=system template=inc_object_idsante400 object=$userfunction}}
-        {{mb_include module=system template=inc_object_history object=$userfunction}}
-        
-        {{tr}}CFunctions-title-modify{{/tr}} '{{$userfunction}}'
+        {{mb_include module=system template=inc_object_notes      object=$function}}
+        {{mb_include module=system template=inc_object_idsante400 object=$function}}
+        {{mb_include module=system template=inc_object_history    object=$function}}
+        {{tr}}CFunctions-title-modify{{/tr}} '{{$function}}'
       </th>
       {{else}}
       <th class="title" colspan="2">
@@ -27,78 +28,77 @@
       {{/if}}
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="text"}}</th>
-      <td>{{mb_field object=$userfunction field="text"}}</td>
+      <th>{{mb_label object=$function field="text"}}</th>
+      <td>{{mb_field object=$function field="text"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="soustitre"}}</th>
-      <td>{{mb_field object=$userfunction field="soustitre"}}</td>
+      <th>{{mb_label object=$function field="soustitre"}}</th>
+      <td>{{mb_field object=$function field="soustitre"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="group_id"}}</th>
+      <th>{{mb_label object=$function field="group_id"}}</th>
+      <td>{{mb_field object=$function field="group_id" options=$groups}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$function field="type"}}</th>
+      <td>{{mb_field object=$function field="type"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$function field="color"}}</th>
       <td>
-        <select name="group_id" class="{{$userfunction->_props.group_id}}">
-          <option value="">&mdash; {{tr}}CGroups.select{{/tr}}</option>
-          {{foreach from=$groups item=_group}}
-          <option value="{{$_group->group_id}}" {{if $_group->group_id == $userfunction->group_id}} selected="selected" {{/if}}>
-            {{$_group->text}}
-          </option>
-          {{/foreach}}
-        </select>
+				<script type="text/javascript">
+				ColorSelector.init = function(){
+				  this.sForm  = "editFrm";
+				  this.sColor = "color";
+				  this.sColorView = "color-view";
+				  this.pop();
+				}
+				</script>      	
+        <a href="#CFunction-color" class="color-view" id="color-view" style="background: #{{$function->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init()">Cliquer pour changer</a>
+        {{mb_field object=$function field="color" hidden=1}}
       </td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="type"}}</th>
-      <td>{{mb_field object=$userfunction field="type"}}</td>
+      <th>{{mb_label object=$function field="adresse"}}</th>
+      <td>{{mb_field object=$function field="adresse"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="color"}}</th>
-      <td>
-        <a href="#1" id="select_color" style="background: #{{$userfunction->color}}; padding: 0 3px; border: 1px solid #aaa;" onclick="ColorSelector.init()">Cliquer pour changer</a>
-        {{mb_field object=$userfunction field="color" hidden=1}}
-      </td>
+      <th>{{mb_label object=$function field="cp"}}</th>
+      <td>{{mb_field object=$function field="cp"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="adresse"}}</th>
-      <td>{{mb_field object=$userfunction field="adresse"}}</td>
+      <th>{{mb_label object=$function field="ville"}}</th>
+      <td>{{mb_field object=$function field="ville"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="cp"}}</th>
-      <td>{{mb_field object=$userfunction field="cp"}}</td>
+      <th>{{mb_label object=$function field="tel"}}</th>
+      <td>{{mb_field object=$function field="tel"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="ville"}}</th>
-      <td>{{mb_field object=$userfunction field="ville"}}</td>
+      <th>{{mb_label object=$function field="fax"}}</th>
+      <td>{{mb_field object=$function field="fax"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="tel"}}</th>
-      <td>{{mb_field object=$userfunction field="tel"}}</td>
+      <th>{{mb_label object=$function field="actif"}}</th>
+      <td>{{mb_field object=$function field="actif"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="fax"}}</th>
-      <td>{{mb_field object=$userfunction field="fax"}}</td>
+      <th>{{mb_label object=$function field="compta_partagee"}}</th>
+      <td>{{mb_field object=$function field="compta_partagee"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="actif"}}</th>
-      <td>{{mb_field object=$userfunction field="actif"}}</td>
+      <th>{{mb_label object=$function field="consults_partagees"}}</th>
+      <td>{{mb_field object=$function field="consults_partagees"}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$userfunction field="compta_partagee"}}</th>
-      <td>{{mb_field object=$userfunction field="compta_partagee"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$userfunction field="consults_partagees"}}</th>
-      <td>{{mb_field object=$userfunction field="consults_partagees"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$userfunction field="admission_auto"}}</th>
-      <td>{{mb_field object=$userfunction field="admission_auto"}}</td>
+      <th>{{mb_label object=$function field="admission_auto"}}</th>
+      <td>{{mb_field object=$function field="admission_auto"}}</td>
     </tr>
     <tr>
       <td class="button" colspan="2">
-      {{if $userfunction->function_id}}
+      {{if $function->function_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fonction',objName:'{{$userfunction->text|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la fonction',objName:'{{$function->text|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}
         </button>
       {{else}}

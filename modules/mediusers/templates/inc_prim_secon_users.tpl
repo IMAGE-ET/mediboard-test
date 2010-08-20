@@ -4,24 +4,24 @@
   });
   
   function changePagePrimaryUsers(page) {
-    $V(getForm('listFilterPrimaryUsers').page_userfunction,page);
+    $V(getForm('listFilterPrimaryUsers').page_function,page);
   }
 
 </script>
 
-{{if $userfunction->function_id}}
+{{if $function->_id}}
 <table style="width:100%">
   <tr>
     <td>
       <ul id="tab_user" class="control_tabs">
         <li>
-          <a {{if !$total_userfunctions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
-            Utilisateurs principaux <small>({{$total_userfunctions}})</small>
+          <a {{if !$total_functions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
+            Utilisateurs principaux <small>({{$total_functions}})</small>
           </a>
         </li>
         <li>
-          <a {{if !$userfunction->_back.secondary_functions|@count}}class="empty"{{/if}} href="#list-secondary-users" id="list-secondary-users-title">
-            Utilisateurs secondaires <small>({{$userfunction->_back.secondary_functions|@count}})</small>
+          <a {{if !$function->_back.secondary_functions|@count}}class="empty"{{/if}} href="#list-secondary-users" id="list-secondary-users-title">
+            Utilisateurs secondaires <small>({{$function->_back.secondary_functions|@count}})</small>
           </a>
         </li>
       </ul>
@@ -35,10 +35,10 @@
               <form name="listFilterPrimaryUsers" action="?m=mediusers" method="get">
                 <input type="hidden" name="m" value="mediusers" />
                 <input type="hidden" name="tab" value="vw_idx_functions" />
-                <input type="hidden" name="page_userfunction" value="{{$page_userfunction}}" onchange="this.form.submit()"/>
+                <input type="hidden" name="page_function" value="{{$page_function}}" onchange="this.form.submit()"/>
                 
-                {{if $total_userfunctions != 0}}
-                  {{mb_include module=system template=inc_pagination total=$total_userfunctions current=$page_userfunction change_page='changePagePrimaryUsers'}}
+                {{if $total_functions != 0}}
+                  {{mb_include module=system template=inc_pagination total=$total_functions current=$page_function change_page='changePagePrimaryUsers'}}
                 {{/if}}
               </form>
             </td>
@@ -82,7 +82,7 @@
         <form name="addSecUser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_secondary_function_aed" />
         <input type="hidden" name="secondary_function_id" value="" />
-        <input type="hidden" name="function_id" value="{{$userfunction->_id}}" />
+        <input type="hidden" name="function_id" value="{{$function->_id}}" />
         <input type="hidden" name="del" value="0" />
         <table class="form">
           <tr>
@@ -126,7 +126,7 @@
             <th>{{mb_title class=CUser field=user_last_login}}</th>
             <th></th>
           </tr>
-          {{foreach from=$userfunction->_back.secondary_functions item=curr_function}}
+          {{foreach from=$function->_back.secondary_functions item=curr_function}}
           <tr>
             {{assign var=user_id value=$curr_function->_ref_user->_id}}
             {{assign var="href" value="?m=mediusers&tab=vw_idx_mediusers&user_id=$user_id"}}
