@@ -21,9 +21,13 @@
       <table border="0" cellpadding="0" cellspacing="0" style="height: 100%; vertical-aligne: top;">
         {{foreach from=$hex item=h}}
           {{assign var=rgb value="$h$h$h"}}
-          <tr><td style="background-color: #{{$rgb}}; width: 12px; height: 24px; cursor: pointer; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
-                      onclick="selectColor('{{$rgb}}', this);" 
-                      title="{{$rgb}}"/></tr>
+          <tr>
+          	<td style="background-color: #{{$rgb}}; width: 12px; height: 24px; cursor: pointer; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+              onclick="selectColor('{{$rgb}}', this);"
+              ondblclick="selectColor('{{$rgb}}', this); setClose();"
+              title="{{$rgb}}"
+						/>
+					</tr>
         {{/foreach}}
       </table>
     </td>
@@ -41,8 +45,10 @@
                 {{assign var=b_color value=$hex.$b}}
                 {{assign var=rgb value="$r_color$g_color$b_color"}}
                 <td style="background-color: #{{$rgb}}; width: 12px; height: 12px; cursor: pointer; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
-                    onclick="selectColor('{{$rgb}}', this);" 
-                    title="{{$rgb}}"/>
+                  onclick="selectColor('{{$rgb}}', this);" 
+                  ondblclick="selectColor('{{$rgb}}', this); setClose();"
+                  title="{{$rgb}}"
+								/>
               {{/foreach}}
              </tr>
             {{/foreach}}
