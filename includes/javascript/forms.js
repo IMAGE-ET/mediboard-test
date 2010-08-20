@@ -475,7 +475,8 @@ Object.extend(Form, {
     $H(object).each(function (pair) {
       $V(form.elements[pair.key], pair.value);
     });
-  }
+  },
+	onSubmitComplete: Prototype.emptyFunction
 });
 
 // Form getter

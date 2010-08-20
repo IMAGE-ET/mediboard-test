@@ -133,12 +133,16 @@ class CDoObjectAddEdit {
   
   function doCallback(){
     echo CAppUI::getMsg();
+    $fields = $this->_obj->getDBFields();
+    $json = @json_encode($fields);
+    $id = $this->_obj->_id ? $this->_obj->_id : 0;
     if ($this->callBack) {
-    	$fields = $this->_obj->getDBFields();
-    	$json = @json_encode($fields);
-      $id = $this->_obj->_id ? $this->_obj->_id : 0;
       echo "\n<script type=\"text/javascript\">{$this->callBack}($id, $json)</script>";
     }
+		else {
+			$guid = "$this->className-$id";
+      echo "\n<script type=\"text/javascript\">Form.onSubmitComplete('$guid', $json)</script>";
+		}
     CApp::rip();
   }
 
