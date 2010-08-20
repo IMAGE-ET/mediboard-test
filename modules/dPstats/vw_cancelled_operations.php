@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $debut    = CValue::get("debut", mbDate("-1 YEAR"));
 $fin      = CValue::get("fin", mbDate());
