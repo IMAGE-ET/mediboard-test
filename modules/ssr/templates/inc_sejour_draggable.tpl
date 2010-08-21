@@ -16,6 +16,7 @@
 {{elseif $sejour->sortie_reelle}}
 {{assign var=ssr_class value=ssr-termine}}
 {{/if}}
+
 <tr class="{{$ssr_class}}">
   {{assign var=replacement value=$sejour->_ref_replacement}}
   

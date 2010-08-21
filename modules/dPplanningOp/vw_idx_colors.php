@@ -9,6 +9,7 @@
 
 CCanDo::checkAdmin();
 
+// Tous les libelllés
 $query = new CRequest;
 $query->addTable("sejour");
 $query->addColumn("COUNT(libelle)", "libelle_count");

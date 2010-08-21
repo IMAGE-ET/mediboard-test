@@ -23,6 +23,7 @@ $kine_id = $technicien->_ref_kine->_id;
 $sejours = CBilanSSR::loadSejoursSSRfor($technicien_id, $date);
 $services = array();
 
+$all_sejours = array();
 foreach ($sejours as $_sejour) {
   // Filtre sur service
   $service = $_sejour->loadFwdRef("service_id");
@@ -32,6 +33,7 @@ foreach ($sejours as $_sejour) {
     continue;
   }
 	
+	$all_sejours[] = $_sejour;
   $_sejour->checkDaysRelative($date);
   $_sejour->loadRefPatient(1);
 }
@@ -58,6 +60,7 @@ foreach ($replacements as $_replacement) {
 		continue;
 	}
 	
+  $all_sejours[] = $sejour;
   $sejour->checkDaysRelative($date);
   $sejour->loadRefPatient(1);
 
@@ -79,10 +82,14 @@ if ($conge->_id) {
 // Nombre de séjours
 $sejours_count = count($sejours) + count($replacements);
 
+// Couleurs
+$colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($all_sejours, "libelle"));
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("technicien_id", $technicien_id);
 $smarty->assign("service_id", $service_id);
+$smarty->assign("colors", $colors);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("sejours_count", $sejours_count);
 $smarty->assign("services", $services);

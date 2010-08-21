@@ -110,11 +110,11 @@ class CReplacement extends CMbObject {
 	}
 	
   function loadRefSejour(){
-  	$this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
+  	return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
 
   function loadRefConge(){
-    $this->_ref_conge = $this->loadFwdRef("conge_id", true);
+    return $this->_ref_conge = $this->loadFwdRef("conge_id", true);
   }
 	
   function loadRefReplacer() {

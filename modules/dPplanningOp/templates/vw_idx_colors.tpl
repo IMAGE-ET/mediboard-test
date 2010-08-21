@@ -35,6 +35,7 @@ Form.onSubmitComplete = function (guid, properties) {
   <td class="text">{{$libelle}}</td>
   <td>{{$count}}</td>
   <td>
+    {{assign var=libelle value=$libelle|upper}}
   	{{assign var=color value=$colors.$libelle}}
 		{{assign var=index value=$smarty.foreach.color.index}}
     <form name="Edit-Color-{{$index}}" action="?" onsubmit="return onSubmitFormAjax(this);">

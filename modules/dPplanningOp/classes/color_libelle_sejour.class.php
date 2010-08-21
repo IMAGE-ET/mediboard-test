@@ -29,7 +29,7 @@ class CColorLibelleSejour extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["libelle"] = "str notNull";
-    $specs["color"]   = "str length|6 default|ffffff";
+    $specs["color"]   = "str length|6";
     return $specs;
   }
 
@@ -42,7 +42,9 @@ class CColorLibelleSejour extends CMbObject {
 	}
 	
 	static function loadAllFor($libelles) {
-    // Initialisation du retour
+    $libelles = array_map("strtoupper", $libelles);
+		
+    // Initialisation du tableau
 		$colors_by_libelle = array();
     foreach ($libelles as $_libelle) {
       $color = new self;
@@ -52,7 +54,8 @@ class CColorLibelleSejour extends CMbObject {
 
 		$color = new self;
 		$where = array();
-		$where["libelle"] = CSQLDataSource::prepareIn(array_map("addslashes", $libelles));
+    $libelles = array_map("addslashes", $libelles);
+		$where["libelle"] = CSQLDataSource::prepareIn($libelles);
 		foreach($color->loadList($where) as $_color) {
 			$colors_by_libelle[$_color->libelle] = $_color;
 		}
