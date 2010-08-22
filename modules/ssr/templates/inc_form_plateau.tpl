@@ -27,8 +27,6 @@
       {{mb_include module=system template=inc_object_notes      object=$plateau}}
       {{mb_include module=system template=inc_object_idsante400 object=$plateau}}
       {{mb_include module=system template=inc_object_history    object=$plateau}}
-
-      
 	    {{tr}}CPlateauTechnique-title-modify{{/tr}} 
 			'{{$plateau}}'
     </th>
