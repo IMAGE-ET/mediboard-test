@@ -1,36 +1,36 @@
 <table class="form">
-  {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
+  {{foreach from=$consult->_types_examen key=_type item=_examens}}
   <tr>
     <th class="category">
-      {{tr}}CExamComp.realisation.{{$curr_type}}{{/tr}}
+      {{tr}}CExamComp.realisation.{{$_type}}{{/tr}}
     </th>
   </tr>  
   <tr>
     <td>
-      <ul>
-        {{foreach from=$list_exams item=curr_examcomp}}
-        <li>
-          <form name="delExamCompFrm{{$curr_examcomp->exam_id}}" action="?m=dPcabinet" method="post">
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_examcomp_aed" />
-          {{mb_field object=$curr_examcomp field="exam_id" hidden=1 prop=""}}
-          {{mb_field object=$curr_examcomp field="fait" hidden=1 prop=""}}
-          <button class="trash notext" type="button" onclick="delExamComp(this.form)">
-            {{tr}}Delete{{/tr}}
-          </button>
-          {{$curr_examcomp->examen}}
-          {{if !$curr_examcomp->fait}}
-            <button class="tick" type="button" onclick="modifEtatExamComp(this.form);">Fait</button>
-          {{else}}
-            <button class="cancel" type="button" onclick="modifEtatExamComp(this.form);">Annuler</button>
-          {{/if}}
-          </form>
-        </li>
-			  {{foreachelse}}
-			  <li><em>{{tr}}CExamComp.none{{/tr}}</em></li>
-        {{/foreach}}
-      </ul>
+      {{foreach from=$_examens item=_examen}}
+        <form name="Del-{{$_examen->_guid}}" action="?m=dPcabinet" method="post">
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_examcomp_aed" />
+        {{mb_key object=$_examen}}
+				
+        {{mb_field object=$_examen field=fait hidden=1}}
+				
+        <button class="trash notext" type="button" onclick="ExamComp.del(this.form)">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{$_examen}}
+        {{if !$_examen->fait}}
+          <button class="tick" type="button" onclick="ExamComp.toggle(this.form);">{{tr}}Done{{/tr}}</button>
+        {{else}}
+          <button class="cancel notext" type="button" onclick="ExamComp.toggle(this.form);">{{tr}}Cancel{{/tr}}</button>
+        {{/if}}
+        </form>
+
+        <br />
+		  {{foreachelse}}
+			  <em>{{tr}}CExamComp.none{{/tr}}</em>
+      {{/foreach}}
     </td>
   </tr>
   {{/foreach}}

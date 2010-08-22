@@ -1,3 +1,5 @@
+{{mb_include_script module=dPcabinet script=exam_comp}}
+
 <script type="text/javascript">
 function calculClairance () {
   var oFormExam  = document.forms["editExamCompFrm"];
@@ -35,35 +37,6 @@ function calculPSA () {
   }
 }
 
-function delExamComp(oForm){
-  oForm.del.value = "1";
-  submitExamComp(oForm);
-}
-
-function modifEtatExamComp(oForm){
-  oForm.fait.value = (oForm.fait.value == 1) ? 0 : 1;
-  submitExamComp(oForm);
-}
-
-function submitExamComp(oForm) {
-  if (oForm.examen) {
-    var examen = oForm.examen.value;
-    var realisation = oForm.realisation.value;
-  }
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadListExamComp});
-  oForm.reset();
-  if(oForm.examen){
-    oForm._hidden_examen.value = examen;
-    oForm.realisation.value = realisation;
-  }
-}
-
-function reloadListExamComp() {
-  var UrllistExamComp= new Url;
-  UrllistExamComp.setModuleAction("dPcabinet", "httpreq_vw_list_exam_comp");
-  UrllistExamComp.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  UrllistExamComp.requestUpdate('listExamComp');
-}
 </script>
 
 <table class="form">
@@ -94,7 +67,7 @@ function reloadListExamComp() {
 				<tr>
           <td>
             <input type="hidden" name="_hidden_examen" value="" />
-            <textarea name="examen" onblur="if(!$(this).emptyValue()){submitExamComp(this.form);}"></textarea>
+            <textarea name="examen" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}"></textarea>
           </td>
 			  </tr>
         <tr>

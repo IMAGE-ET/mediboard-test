@@ -34,6 +34,7 @@ $locales['Default'] = 'Défaut';
 $locales['Delete'] = 'Supprimer';
 $locales['Deleted'] = 'Supprimé';
 $locales['Disabled'] = 'Désactivé';
+$locales['Done'] = 'Fait';
 $locales['Draft'] = 'Brouillon';
 $locales['Duplicate'] = 'Dupliquer';
 $locales['Edit'] = 'Modifier';

@@ -30,26 +30,27 @@ class CExamComp extends CMbObject {
   }
   
   function getProps() {
-  	$specsParent = parent::getProps();
-    $specs = array (
-      "consultation_id" => "ref notNull class|CConsultation",
-      "examen"          => "text helped",
-      "realisation"     => "enum notNull list|avant|pendant",
-      "fait"            => "num min|0 max|1"
-    );
-    return array_merge($specsParent, $specs);
+  	$props = parent::getProps();
+		
+    $props["consultation_id"] = "ref notNull class|CConsultation";
+		$props["examen"]          = "text helped";
+		$props["realisation"]     = "enum notNull list|avant|pendant";
+    $props["fait"]            = "num min|0 max|1";
+
+    return $props;
   }
   
-  function loadRefsFwd() {
-    $this->_ref_consult = new CConsultation;
-    $this->_ref_consult->load($this->consultation_id);
+	function updateFormFields() {
+		parent::updateFormFields();
+		$this->_view = $this->examen;
+	}
+	
+  function loadRefConsult() {
+    return $this->_ref_consult = $this->loadFwdRef("consultation_id", true);
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_consult) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consult->getPerm($permType);
+    return $this->loadRefConsult()->getPerm($permType);
   }
 }
 
