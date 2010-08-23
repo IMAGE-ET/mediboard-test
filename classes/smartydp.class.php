@@ -461,7 +461,7 @@ function smarty_function_mb_include($params, &$smarty) {
 }
 
 /**
- * Assign a template var to default value if undefinied
+ * Assign a template var to default value if undefined
  * @param array params 
  * - name  : Name of the var
  * - value : Default value of the var
@@ -474,6 +474,17 @@ function smarty_function_mb_default($params, &$smarty) {
 	if (!isset($smarty->_tpl_vars[$var])) {
 		$smarty->assign($var, $value);
 	}
+}
+
+/**
+ * Assigns a unique id to a variable
+ * @param array params 
+ * - var: Name of the var
+ * @return void
+ */
+function smarty_function_unique_id($params, &$smarty) {
+  $var = CMbArray::extract($params, "var", null, true);
+  $smarty->assign($var, uniqid());
 }
 
 /**
@@ -527,6 +538,7 @@ class CSmartyDP extends Smarty {
     // Register mediboard functions
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_function("thumb"             , "thumb");
+    $this->register_function("unique_id"         , "smarty_function_unique_id");
     $this->register_function("mb_default"        , "smarty_function_mb_default");
     $this->register_function("mb_ditto"          , "smarty_function_mb_ditto");
     $this->register_function("mb_field"          , "smarty_function_mb_field");

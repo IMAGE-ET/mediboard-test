@@ -13,8 +13,7 @@
         src="images/icons/{{$owner_icon}}.png" />
       
       {{if $_modele->fast_edit}}
-        <img style="float:right;"
-          src = "images/buttons/pdf.png"/>
+        <img style="float: right;" src="images/buttons/pdf.png"/>
       {{/if}}
       
       <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>

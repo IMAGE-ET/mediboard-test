@@ -8,15 +8,9 @@
 {{assign var=object_class value=$object->_class_name}}
 {{assign var=object_id value=$object->_id}}
 
-<style type="text/css">
-.fast-edit {
-  background-image: url(images/buttons/pdf.png);
-  background-repeat: no-repeat;
-  background-position: -3% 0%;
-}
-</style>
+{{unique_id var=unique_id}}
 
-<form name="DocumentAdd-{{$object->_guid}}" action="?m={{$m}}" method="post">
+<form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">
   <tr>
@@ -34,7 +28,7 @@
         url.addParam("function_id", "{{$praticien->function_id}}");
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
-        url.autoComplete('DocumentAdd-{{$object->_guid}}_keywords_modele', '', {
+        url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_modele', '', {
             minChars: 1,
             updateElement: createDoc,
             dropdown: true,
@@ -46,7 +40,7 @@
         url.addParam("function_id", "{{$praticien->function_id}}");
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
-        url.autoComplete('DocumentAdd-{{$object->_guid}}_keywords_pack', '', {
+        url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_pack', '', {
             minChars: 1,
             updateElement: createPack,
             dropdown: true,
@@ -74,7 +68,7 @@
 			<!-- Création via ModeleSelector -->
 
 	    <script type="text/javascript">
-	      modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$object->_guid}}", null, "_modele_id", "_object_id");
+	      modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
 	    </script>
 
       <button type="button" class="search notext" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
