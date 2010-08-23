@@ -19,6 +19,8 @@ submitBarcode = function(){
 }
 
 Main.add(function(){
+  Prescription.refreshTabHeader("div_dmi", {{$prescription->_ref_lines_dmi|@count}});
+  
   var barcode = $("barcode");
   
   barcode.goodCharsCount = 0;
