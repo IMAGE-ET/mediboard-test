@@ -16,7 +16,7 @@ $endowment = new CProductEndowment();
 $endowment->load($endowment_id);
 $endowment->loadRefsFwd();
 $endowment->updateFormFields();
-$endowment->loadBackRefs("endowment_items");
+$endowment->loadRefsBack();
 
 // Création du template
 $smarty = new CSmartyDP();
