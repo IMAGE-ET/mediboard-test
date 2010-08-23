@@ -71,8 +71,8 @@ Main.add(function () {
 	var oFormTrans = getForm("editTrans");
   new AideSaisie.AutoComplete(oFormTrans.text, {
             objectClass: "CTransmissionMedicale", 
-            contextUserId: "{{$sejour->_ref_praticien->_id}}",
-            contextUserView: "{{$sejour->_ref_praticien->_view}}",
+            //contextUserId: "{{$sejour->_ref_praticien->_id}}",
+            //contextUserView: "{{$sejour->_ref_praticien->_view}}",
             timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
 						dependField1: oFormTrans.type,
 						//dependField2: oFormTrans.degre,
@@ -84,8 +84,8 @@ Main.add(function () {
 	if(oFormObs){
 	  new AideSaisie.AutoComplete(oFormObs.text, {
 	            objectClass: "CObservationMedicale", 
-	            contextUserId: "{{$sejour->_ref_praticien->_id}}",
-              contextUserView: "{{$sejour->_ref_praticien->_view}}",
+	            //contextUserId: "{{$sejour->_ref_praticien->_id}}",
+              //contextUserView: "{{$sejour->_ref_praticien->_view}}",
               timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
 	            dependField1: oFormObs.degre,
 	            dependField2: '',
