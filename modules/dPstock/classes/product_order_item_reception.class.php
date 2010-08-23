@@ -186,8 +186,8 @@ class CProductOrderItemReception extends CMbObject {
     // If the order is received, we set the flag
     if ($is_new) {
       $order = $this->_ref_order_item->_ref_order;
-      $count_received = $order->countReceivedItems();
       $count_renewed = $order->countRenewedItems();
+      $count_received = $order->countReceivedItems() - (count($order->_ref_order_items) - $count_renewed);
       
       if ($count_renewed && !$order->received && ($count_received >= $count_renewed)) {
         $order->received = 1;
