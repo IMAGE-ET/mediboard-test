@@ -3,7 +3,6 @@
 </button>
 {{if $can->edit}}
 
-{{mb_include_script module="dPpatients" script="autocomplete"}}
 <script type="text/javascript">
 Main.add(function () {
   Control.Tabs.create("societe-tabs", true);

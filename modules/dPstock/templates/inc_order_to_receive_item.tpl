@@ -28,7 +28,13 @@
   </td>
 </tr>
 <tr>
-  <td></td>
+  <td>
+    {{if $curr_item->_ref_reference->code}}
+      {{mb_value object=$curr_item->_ref_reference field=code}}
+    {{else}}
+      {{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}
+    {{/if}}
+  </td>
   <td>
     {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
       {{mb_value object=$curr_item field=_unit_quantity}}

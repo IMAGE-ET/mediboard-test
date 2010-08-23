@@ -13,7 +13,7 @@ CCanDo::checkEdit();
 $societe_id = CValue::getOrSession('societe_id');
 $suppliers = CValue::getOrSession('suppliers', 1);
 $manufacturers = CValue::getOrSession('manufacturers', 1);
-$inactive = CValue::getOrSession('inactive');
+$inactive = CValue::getOrSession('inactive', 1);
 
 // Loads the expected Societe
 $societe = new CSociete();

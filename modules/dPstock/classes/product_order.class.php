@@ -50,6 +50,7 @@ class CProductOrder extends CMbMetaObject {
   var $_received        = null;
   var $_partial         = null;
   var $_customer_code   = null;
+  var $_context_bl      = null;
   
   // actions
   var $_order           = null;

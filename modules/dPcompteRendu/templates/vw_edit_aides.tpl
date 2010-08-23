@@ -1,26 +1,9 @@
 
 <script type="text/javascript">
-function submitFormAides(oForm){
-  if(oForm.prat_func_group[0].checked) {
-    $V(oForm.elements.function_id, "");
-    $V(oForm.elements.group_id, "");
-  } else if (oForm.prat_func_group[1].checked){
-    $V(oForm.elements.user_id, "");
-    $V(oForm.elements.group_id, "");
-  } else {
-    $V(oForm.elements.user_id, "");
-    $V(oForm.elements.function_id, "");
-  }
-
-  if(checkForm(oForm)){
-    onSubmitFormAjax(oForm, {check: function(){return true;}});
-  }
-  return false;
-}
-
 Main.add(function () {
   Control.Tabs.create('tab-modules', false);
 });
+
 function editAide(aide_id, classname, field, user_id) {
   var url = new Url("dPcompteRendu","edit_aide");
   url.addParam("dialog", 1);
@@ -36,18 +19,20 @@ function editAideCallback(id) {
 }
 
 function changeUser(user_id) {
-
   var oFormc = getForm("change_user");
   var oForm = getForm("editAides");
+  
   if(oForm.elements.aide_id.value == '') {
     oFormc.text.value = unescape(encodeURIComponent(oForm.text.value));
   }
+  
   oFormc.user_id.value = user_id;
   oFormc.action+="&user_id="+user_id+"&class="+{{$aide->class|@json}}+"&field="+{{$aide->field|@json}};
   oFormc.submit();
 }
 
 </script>
+
 {{mb_label object=$aide field="user_id"}}
 <form name="change_user" action="?m=dPcompteRendu&a=edit_aide&dialog=1" method="post">
   <input type="hidden" name="text" value="" />
@@ -60,6 +45,7 @@ function changeUser(user_id) {
     {{/foreach}}
   </select>
 </form>
+
 <ul id="tab-modules" class="control_tabs">
   <li>
     <a href="#edit">
@@ -67,7 +53,7 @@ function changeUser(user_id) {
     </a>
   </li>
   <li>
-    <a href="#list" {{if $aides|@count == 0 }}class="empty"{{/if}}>
+    <a href="#list" {{if $aides|@count == 0}}class="empty"{{/if}}>
       Liste des aides
       <small>({{$aides|@count}})</small>
     </a>
@@ -76,18 +62,16 @@ function changeUser(user_id) {
 
 <hr class="control_tabs" />
 
-<div id="edit">
-  <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return submitFormAides(this);">
+<div id="edit" style="display: none;">
+  <form name="editAides" action="?" method="post" class="{{$aide->_spec}}" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_aide_aed" />
-  <input type="hidden" name="user_id" value="{{$fields.user_id}}"/>
   <input type="hidden" name="m" value="dPcompteRendu" />
-  <input type="hidden" name="aide_id" value="{{$aide_id}}" />
-  <input type="hidden" name="function_id" value="{{$fields.function_id}}" />
-  <input type="hidden" name="group_id" value="{{$fields.group_id}}" />
+  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="editAideCallback" />
+  
+  {{mb_key object=$aide}}
   {{mb_field object=$aide field="class" hidden=1 prop=""}}
   {{mb_field object=$aide field="field" hidden=1 prop=""}}
-  <input type="hidden" name="del" value="0" />
   
   <table class="form">
     <tr>
@@ -97,26 +81,38 @@ function changeUser(user_id) {
     </tr>
     
     <tr>
-      <th><label title="{{tr}}CAideSaisie-user_id-desc{{/tr}}" for="editAides_prat_func_group_user_id">{{tr}}CAideSaisie-user_id{{/tr}}</label></th>
+      <th><label title="{{tr}}CAideSaisie-user_id-desc{{/tr}}" for="user_id">{{tr}}CAideSaisie-user_id{{/tr}}</label></th>
       <td>
-        <input type="radio" name="prat_func_group" value="user_id" {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}checked="checked"{{/if}} "/>
-        <label for="editAides_prat_func_group_user_id">{{$user->_ref_user}}</label>
+        <input type="hidden" name="user_id" value="{{$fields.user_id}}" />
+        <label>
+          <input type="radio" name="_owner_id" value="{{$fields.user_id}}" onclick="$V(this.form.user_id, this.value); $(this.form.user_id).fire('ui:change')"
+          {{if (!$aide->_id && $choicepratcab == "prat" && $aide->user_id) || ($aide->_id && $aide->user_id)}}checked="checked"{{/if}} />
+          {{$user->_ref_user}}
+        </label>
       </td>
     </tr>
     
     <tr>
-      <th><label title="{{tr}}CAideSaisie-function_id-desc{{/tr}}" for="editAides_prat_func_group_function_id">{{tr}}CAideSaisie._owner.func{{/tr}}</label></th>
+      <th><label title="{{tr}}CAideSaisie-function_id-desc{{/tr}}" for="function_id">{{tr}}CAideSaisie._owner.func{{/tr}}</label></th>
       <td>
-        <input type="radio" name="prat_func_group" value="function_id" {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}checked="checked"{{/if}}/>
-        <label for="editAides_prat_func_group_function_id">{{$user->_ref_function}}</label
+        <input type="hidden" name="function_id" value="{{$fields.function_id}}" />
+        <label>
+          <input type="radio" name="_owner_id" value="{{$fields.function_id}}" onclick="$V(this.form.function_id, this.value); $(this.form.function_id).fire('ui:change')"
+          {{if (!$aide->_id && $choicepratcab == "cab" && $aide->function_id) || ($aide->_id && $aide->function_id)}}checked="checked"{{/if}} />
+          {{$user->_ref_function}}
+        </label>
       </td>
     </tr>
     
     <tr>
-      <th><label title="{{tr}}CAideSaisie-group_id-desc{{/tr}}" for="editAides_prat_func_group_group_id">{{tr}}CAideSaisie-group_id{{/tr}}</label></th>
+      <th><label title="{{tr}}CAideSaisie-group_id-desc{{/tr}}" for="group_id">{{tr}}CAideSaisie-group_id{{/tr}}</label></th>
       <td>
-        <input type="radio" name="prat_func_group" value="group_id" {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}checked="checked"{{/if}} />
-        <label for="editAides_prat_func_group_group_id">{{$group}}</label>
+        <input type="hidden" name="group_id" value="{{$fields.group_id}}" />
+        <label>
+          <input type="radio" name="_owner_id" value="{{$fields.group_id}}" onclick="$V(this.form.group_id, this.value); $(this.form.group_id).fire('ui:change')"
+          {{if (!$aide->_id && $choicepratcab == "group" && $aide->group_id) || ($aide->_id && $aide->group_id)}}checked="checked"{{/if}} />
+          {{$group}}
+        </label>
       </td>
     </tr>
 
@@ -180,7 +176,8 @@ function changeUser(user_id) {
   
   </form>
 </div>
-<div id="list">
+
+<div id="list" style="display: none;">
   <table class="tbl">
     <tr>
       <th/>

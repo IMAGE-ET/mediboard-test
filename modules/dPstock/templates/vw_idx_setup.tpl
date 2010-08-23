@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module="dPpatients" script="autocomplete"}}
+
 <script type="text/javascript">
 Main.add(function () {
   var tabs = Control.Tabs.create('tab_setup', true);

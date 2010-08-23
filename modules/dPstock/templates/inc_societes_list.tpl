@@ -26,6 +26,10 @@
   background-color: #73BF2F;
   color: #000;
 }
+
+td.inactive .societe-type {
+  background-color: #FFD6BF;
+}
 </style>
 
 <table class="tbl">
@@ -47,7 +51,7 @@
     </td>
     <td>{{mb_value object=$curr field=contact_name}}</td>
     <td>{{mb_value object=$curr field=phone}}</td>
-    <td>
+    <td {{if !$curr->_count.products && !$curr->_count.product_references}}class="inactive"{{/if}}>
       <span class="societe-type {{if $curr->_count.products}}active{{/if}}" title="Fabricant">F</span>
       <span class="societe-type {{if $curr->_count.product_references}}active{{/if}}" title="Distributeur">D</span>
     </td>
