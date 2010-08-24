@@ -72,7 +72,11 @@ html {
   
   <tr>
     <th>{{if $order->object_id}}{{mb_label object=$order field=object_id}}{{/if}}</th>
-    <td>{{$order->_ref_object}}</td>
+    <td>
+      {{if !$septic}}
+        {{$order->_ref_object}}
+      {{/if}}
+    </td>
   </tr>
   
   <tr>
@@ -194,7 +198,7 @@ html {
 	
 	{{foreach from=$order->_ref_order_items item=curr_item}}
 	<tr>
-    <td style="text-align: right;">
+    <td style="text-align: right; white-space: nowrap;">
       {{if $curr_item->_ref_reference->supplier_code}}
         {{mb_value object=$curr_item->_ref_reference field=supplier_code}}
       {{else}}

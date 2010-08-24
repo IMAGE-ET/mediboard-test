@@ -14,6 +14,7 @@ $order_id    = CValue::getOrSession('order_id');
 
 // Loads the expected Order
 $order = new CProductOrder();
+$septic = false;
 
 if ($order_id) {
   $order->load($order_id);
@@ -28,6 +29,7 @@ if ($order_id) {
   }
   
   foreach ($order->_ref_order_items as $_item) {
+    if ($_item->septic) $septic = true;
     $_item->loadRefLot();
   }
 }
@@ -41,6 +43,7 @@ if (count($pharmaciens)) {
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign('order', $order);
+$smarty->assign('septic', $septic);
 $smarty->assign('pharmacien', $pharmacien);
 $smarty->display('vw_order_form.tpl');
 

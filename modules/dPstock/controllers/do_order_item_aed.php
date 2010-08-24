@@ -24,11 +24,17 @@ if(CValue::post("_create_order")) {
     "product_order.object_class" => "IS NULL",
   );
   
+  $septic = null;
+  
   // If a context is provided
   if ($context_guid = CValue::post("_context_guid")) {
     list($object_class, $object_id) = explode("-", $context_guid);
     $where["product_order.object_class"] = "= '$object_class'";
     $where["product_order.object_id"]    = "= '$object_id'";
+    if ($septic = CValue::post("septic")) {
+      unset($_POST["context_guid"]);
+      $where["product_order_item.septic"] = "= '$septic'";
+    }
   }
   
   if (CAppUI::conf("dPstock group_independent") == 0) {
@@ -56,6 +62,7 @@ if(CValue::post("_create_order")) {
     $product = $reference->loadRefProduct();
     $count_dmi = $product->countBackRefs("dmis");
     $order->_context_bl = $count_dmi > 0;
+    $order->_septic = $septic;
     
     if ($msg = $order->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
