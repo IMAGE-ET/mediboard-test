@@ -832,7 +832,7 @@ Main.add(function(){
             <option value="+1 DAY" >{{tr}}Day-after{{/tr}} </option>
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
-          <button type="button" class="new" onclick="this.form.onsubmit();">
+          <button type="button" class="new singleclick" onclick="this.form.onsubmit();">
           	{{tr}}Duplicate{{/tr}}
 					</button>
         </td>
