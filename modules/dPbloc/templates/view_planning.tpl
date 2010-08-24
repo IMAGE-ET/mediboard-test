@@ -26,6 +26,9 @@ function printAdmission(id) {
         {{if $filter->_date_min != $filter->_date_max}}
         au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
         {{/if}}
+      -
+      {{$numOp}} intervention(s)
+      {{if $operations|@count}}(dont {{$operations|@count}} hors plage){{/if}}
       </a>
     </th>
   </tr>

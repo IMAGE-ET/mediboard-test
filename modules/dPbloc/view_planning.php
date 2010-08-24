@@ -35,7 +35,9 @@ $filterSejour->type = CValue::get("type");
 //  date - salle - horaires
 
 $plagesop   = new CPlageOp();
-$operations = new COperation();
+$operation = new COperation();
+
+$numOp = 0;
 
 $affectations_plage = array();
 
@@ -140,7 +142,7 @@ if($filterSejour->type) {
 
 $orderOperations = "date, salle_id, chir_id";
 
-$operations = $operations->loadList($whereOperations, $orderOperations, null, null, $ljoin);
+$operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
 
 $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
@@ -171,6 +173,7 @@ foreach($plagesop as &$plage) {
     unset($plagesop[$plage->_id]);
   }
   $plage->_ref_operations = $listOp;
+  $numOp += count($listOp);
   
   // Chargement des affectation de la plage
   $plage->loadAffectationsPersonnel();
@@ -203,6 +206,8 @@ foreach($operations as &$curr_op) {
   $listDates[$curr_op->date]["hors_plage"][] = $curr_op;
 }
 
+$numOp += count($operations);
+
 ksort($listDates);
 
 // Création du template
@@ -212,6 +217,8 @@ $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"            , $filter);
 $smarty->assign("_coordonnees"      , $_coordonnees);
 $smarty->assign("listDates"         , $listDates);
+$smarty->assign("operations"        , $operations);
+$smarty->assign("numOp"             , $numOp);
 
 $smarty->display("view_planning.tpl");
 
