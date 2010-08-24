@@ -13,12 +13,23 @@
  * Correspond à une cotation d'actes de réadaptation pour une semaine
  */
 class CRHS extends CMbObject {
+  static $days = array(
+    "1" => "mon",
+    "2" => "tue",
+    "3" => "wed",
+    "4" => "thu",
+    "5" => "fri",
+    "6" => "sat",
+    "7" => "sun",
+  );
+     
   // DB Table key
   var $rhs_id = null;
  
   // DB Fields
   var $sejour_id   = null;
   var $date_monday = null;
+  var $facture     = null;
   
 	// Form Field
 	var $_date_tuesday   = null;
@@ -56,8 +67,9 @@ class CRHS extends CMbObject {
     $props = parent::getProps();
 		
     // DB Fields
-    $props["sejour_id"]    = "ref notNull class|CSejour";
+    $props["sejour_id"]     = "ref notNull class|CSejour";
     $props["date_monday"]   = "date notNull";
+    $props["facture"]       = "bool default|0";
 
     // Form Field
     $props["_date_tuesday"]   = "date";
@@ -112,6 +124,7 @@ class CRHS extends CMbObject {
 
   function loadRefSejour() {
   	$this->_ref_sejour = $sejour = $this->loadFwdRef("sejour_id", true);
+  	$sejour->loadRefPatient();
     
   	$this->_in_bounds = 
 		  $this->date_monday <= mbDate(null, $sejour->_sortie) && 

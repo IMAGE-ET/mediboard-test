@@ -21,7 +21,7 @@
       <th class="title" colspan="2">{{tr}}CDependancesRHS{{/tr}}</th>
     </tr>
     <tr>
-      <th class="category">Categorie</th>
+      <th class="category">Catégorie</th>
       <th class="category">Degré</th>
     </tr>
     <tr>

@@ -33,7 +33,18 @@ CotationRHS = {
       addParam('rhs_id', rhs_id) .
       requestUpdate('totaux-' + rhs_id);
   },
-    
+  
+  printRHS: function(rhs_date_monday) {
+    var oForm = getForm('editRHS-'+rhs_date_monday);
+	new Url("ssr", "print_sejour_rhs_no_charge") .
+	  addParam("rhs_ids[]", oForm.select('input.rhs:checked').pluck('value'), true) .
+	  popup(700, 500, "Impression RHS à facturer");
+  },
+
+  chargeRHS: function(rhs_date_monday) {
+    getForm('editRHS-'+rhs_date_monday).onsubmit();
+  },
+  
   onSubmitRHS: function(oForm) {
     return onSubmitFormAjax(oForm, { 
       onComplete: CotationRHS.refresh.curry($V(oForm.sejour_id))
@@ -91,5 +102,18 @@ CotationRHS = {
     } else {
       $V(oForm.code_activite_cdarr, dn[0].firstChild.nodeValue);
     }
+  }
+};
+
+Charged = {
+  refresh: function(rhs_date_monday) {
+    var label = getForm('editRHS-'+rhs_date_monday).down("label.rhs-charged");
+    var count = getForm('editRHS-'+rhs_date_monday).select('tr.charged').length;
+    label.setVisibility(count != 0);
+    label.down("span").update(count);
+  },
+  
+  toggle: function(checkbox) {
+    $$('tr.charged').invoke('setVisible', !checkbox.checked);
   }
 };

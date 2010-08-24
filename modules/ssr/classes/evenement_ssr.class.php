@@ -86,6 +86,7 @@ class CEvenementSSR extends CMbObject {
     $this->_heure_deb = mbTime($this->debut);
     $this->_heure_fin = mbTime("+ $this->duree MINUTES", $this->debut);
 	}
+	
 	function check(){
 		// Vérouillage d'un événement réalisé
     $this->completeField("realise");
@@ -138,6 +139,10 @@ class CEvenementSSR extends CMbObject {
 		  $rhs = $this->getRHS();
       if (!$rhs->_id) {
         $rhs->store();
+      }
+      
+      if ($rhs->facture == 1) {
+        CAppUI::stepAjax(CAppUI::tr("CRHS.charged"), UI_MSG_WARNING);
       }
       
 			// Complétion de la ligne RHS    
