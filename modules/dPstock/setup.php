@@ -677,7 +677,11 @@ class CSetupdPstock extends CSetup {
               LEFT JOIN `product_reference` ON `product_reference`.`reference_id` = `product_order_item`.`reference_id`
               SET `product_order_item`.`tva` = `product_reference`.`tva`";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.37");
+    $sql = "ALTER TABLE `product` CHANGE `scc_code` `scc_code` VARCHAR( 10 )";
+    $this->addQuery($sql);
 
-    $this->mod_version = "1.37";
+    $this->mod_version = "1.38";
   }
 }

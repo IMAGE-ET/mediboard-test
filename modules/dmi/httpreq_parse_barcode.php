@@ -66,7 +66,7 @@ foreach($lots as $_lot) {
 //if ( empty($products) ) {
   $object = new CProduct;
   
-  $keys = array("scc-prod", "ref", "cip", "raw");
+  $keys = array("scc_prod", "ref", "cip", "raw");
   $values = array_intersect_key($comp, array_flip($keys));
   
   $where = array(
