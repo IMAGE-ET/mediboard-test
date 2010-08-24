@@ -255,7 +255,7 @@ function showEtabEntreeTransfert(mode) {
 				   
 				   <!-- Diagnostic Principal -->
 				   <tr id="dp_{{$sejour->_id}}">
-              {{mb_include template=inc_diagnostic_principal}}
+              {{mb_include module=dPurgences template=inc_diagnostic_principal}}
             </tr>         
 		     </table>
 	     </form>
