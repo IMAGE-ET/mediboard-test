@@ -107,7 +107,7 @@
           <small>{{$_line->_ref_code_intervenant_cdarr->_view}}</small>
         </td>
         {{foreach from=$days key=day item=litteral_day}}
-          {{mb_include template="inc_line_rhs"}}
+          {{mb_include template="inc_line_rhs" rhs=$_rhs}}
         {{/foreach}}
       </tr>
     {{foreachelse}}
@@ -119,6 +119,8 @@
 
 <br style="page-break-after: always;" />
 
+{{foreachelse}}
+<div class="small-info">Aucun RHS de sélectionné</div>
 {{/foreach}}
 
 <!-- Re-ouverture des tableaux -->
