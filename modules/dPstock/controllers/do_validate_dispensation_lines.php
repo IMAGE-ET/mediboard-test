@@ -13,7 +13,10 @@ $list = CValue::post("d", array());
 foreach($list as $_id => $_qty) {
   $delivery = new CProductDelivery;
   $delivery->load($_id);
-  $delivery->date_dispensation = mbDateTime();
+  
+  if (!$delivery->date_dispensation)
+    $delivery->date_dispensation = mbDateTime();
+    
   $delivery->order = 0;
   if ($msg = $delivery->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);
