@@ -4,6 +4,12 @@ Main.add(function(){
 });
 </script>
 
+<style type="text/css">
+  #tab-deliveries .delivered {
+    color: #999;
+  }
+</style>
+
 {{assign var=infinite_stock_service value=$dPconfig.dPstock.CProductStockService.infinite_quantity}}
 
 <button class="new" onclick="editProduct(0)">{{tr}}CProduct-title-create{{/tr}}</button>
@@ -107,7 +113,10 @@ Main.add(function(){
   <tr>
     <td colspan="4">
       <div class="small-info">
-        Seules les 50 premières dispensations sont affichées
+        <button type="button" class="change" style="float: right;" onclick="$(this).up('table').select('.delivered').invoke('toggle')">
+          Afficher les délivrées
+        </button>
+        Seules les 50 premières dispensations sont affichées.
       </div>
     </td>
   </tr>
@@ -122,7 +131,7 @@ Main.add(function(){
     </th>
   </tr>
   {{foreach from=$product->_ref_deliveries item=_delivery}}
-    <tr>
+    <tr {{if $_delivery->date_delivery}} class="delivered" style="display: none;" {{/if}}>
       <td>{{mb_value object=$_delivery field=service_id}}</td>
       <td>{{mb_value object=$_delivery field=quantity}}</td>
       <td>

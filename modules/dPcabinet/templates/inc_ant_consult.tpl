@@ -203,8 +203,9 @@ Main.add(function () {
                   dependField1: elements.type, 
                   dependField2: elements.appareil, 
                   objectClass: "CAntecedent", 
-                  contextUserId: "{{$userSel->_id}}",
-                  contextUserView: "{{$userSel->_view}}",
+                  // Probleme dans dPurgence si on prend l'utilisateur de la consult
+                  //contextUserId: "{{$userSel->_id}}",
+                  //contextUserView: "{{$userSel->_view}}",
                   timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 
@@ -406,8 +407,9 @@ Main.add(function () {
                 new AideSaisie.AutoComplete(elements.traitement, {
                   searchField: elements._search, 
                   objectClass: "CTraitement", 
-                  contextUserId: "{{$userSel->_id}}",
-                  contextUserView: "{{$userSel->_view}}",
+                  // Probleme dans dPurgence si on prend l'utilisateur de la consult
+                  //contextUserId: "{{$userSel->_id}}",
+                  //contextUserView: "{{$userSel->_view}}",
                   timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}"
                 });
                 

@@ -36,12 +36,12 @@ if ($product->load($product_id)) {
   
   $product->loadRefStock();
   $where = array(
-    "date_delivery" => "IS NULL OR date_delivery = ''",
+    //"date_delivery" => "IS NULL OR date_delivery = ''",
     "stock_id" => " = '{$product->_ref_stock_group->stock_id}'",
   );
   
   $delivery = new CProductDelivery;
-  $product->_ref_deliveries = $delivery->loadList($where, "date_dispensation DESC", 50);
+  $product->_ref_deliveries = $delivery->loadList($where, "date_dispensation DESC, date_delivery DESC", 50);
   
   foreach($product->_ref_deliveries as $_delivery) {
     $_delivery->loadRefsBack();

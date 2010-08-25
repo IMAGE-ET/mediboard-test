@@ -195,11 +195,11 @@ class CProduct extends CMbObject {
     $this->loadRefStock();
     
     $where = array(
-      "stock_id" => "= '{$this->_ref_stock_group->_id}'",
+      "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
       "product_delivery_trace.date_delivery" => " > '".mbDate($since)."'",
     );
     $ljoin = array(
-      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_trace_id"
+      "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
     );
     
     $trace = new CProductDeliveryTrace;
