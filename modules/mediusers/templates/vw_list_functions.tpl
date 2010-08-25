@@ -1,8 +1,8 @@
 <table class="tbl">
   <tr>
-    <th>Etablissement - {{$total_functions}} fonction(s)</th>
-    <th>Type</th>
-    <th>Utilisateurs</th>
+    <th>{{mb_colonne class="CFunctions" field="text" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+    <th>{{mb_colonne class="CFunctions" field="type" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+    <th>{{tr}}CFunctions-back-users{{/tr}}</th>
   </tr>
   {{foreach from=$functions item=_function}}
   <tr {{if $_function->_id == $function->_id}}class="selected"{{/if}}>

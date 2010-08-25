@@ -9,10 +9,15 @@
 
 CCanDo::checkRead();
 
-$page    = intval(CValue::get('page', 0));
-$inactif = CValue::get("inactif", array());
-$type    = CValue::get("type");
+$page          = intval(CValue::get('page', 0));
+$inactif       = CValue::get("inactif", array());
+$type          = CValue::get("type");
 $page_function = intval(CValue::get('page_function', 0));
+$order_way     = CValue::getOrSession("order_way", "ASC");
+$order_col     = CValue::getOrSession("order_col", "text");
+
+$step              = 25;
+$step_sec_function = 10;
 
 // Récupération des groupes
 $group = new CGroups;
@@ -27,8 +32,14 @@ $where["actif"] = $inactif ? "!= '1'" : "= '1'";
 $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $total_functions = $function->countList($where);
 
-$order = "text ASC";
-$functions = $function->loadList($where, $order, "$page, 35");
+
+$order = "";
+if ($order_col == "text") {
+  $order = "text $order_way";
+} elseif ($order_col == "type") {
+  $order = "type $order_way, text ASC";
+}
+$functions = $function->loadList($where, $order, "$page, $step");
 foreach($functions as $_function) {
   $_function->loadRefs();
 }
@@ -38,12 +49,12 @@ $function = new CFunctions;
 $function->load(CValue::getOrSession("function_id", 0));
 $function->loadRefsNotes();
 $primary_users       = array();
-$total_functions = null;
+$total_sec_function = null;
 if($function->_id) {
   $function->loadRefsFwd();
   $function->loadBackRefs("users");
-  $total_functions = $function->countBackRefs("users");
-  $primary_users = $function->loadBackRefs("users", null, "$page_function, 20");
+  $total_sec_function = $function->countBackRefs("users");
+  $primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
   foreach($primary_users as $_user) {
     $_user->loadRefProfile();
   }
@@ -62,14 +73,18 @@ $smarty->assign("functions"          , $functions);
 $smarty->assign("total_functions"    , $total_functions);
 $smarty->assign("page"               , $page);
 $smarty->assign("canSante400"        , CModule::getCanDo("dPsante400"));
-$smarty->assign("function"       , $function);
+$smarty->assign("function"           , $function);
 $smarty->assign("primary_users"      , $primary_users);
-$smarty->assign("total_functions", $total_functions);
-$smarty->assign("page_function"  , $page_function);
+$smarty->assign("total_functions"    , $total_functions);
+$smarty->assign("total_sec_function" , $total_sec_function);
+$smarty->assign("page_function"      , $page_function);
 $smarty->assign("groups"             , $groups  );
 $smarty->assign("secondary_function" , new CSecondaryFunction());
 $smarty->assign("utypes"             , CUser::$types );
 $smarty->assign("type"               , $type );
+$smarty->assign("order_way"          , $order_way);
+$smarty->assign("order_col"          , $order_col);
+$smarty->assign("step"               , $step);
 
 $smarty->display("vw_idx_functions.tpl");
 

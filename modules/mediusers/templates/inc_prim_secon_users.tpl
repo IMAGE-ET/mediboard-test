@@ -16,7 +16,7 @@
       <ul id="tab_user" class="control_tabs">
         <li>
           <a {{if !$total_functions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
-            Utilisateurs principaux <small>({{$total_functions}})</small>
+            Utilisateurs principaux <small>({{$total_sec_function}})</small>
           </a>
         </li>
         <li>
@@ -38,7 +38,7 @@
                 <input type="hidden" name="page_function" value="{{$page_function}}" onchange="this.form.submit()"/>
                 
                 {{if $total_functions != 0}}
-                  {{mb_include module=system template=inc_pagination total=$total_functions current=$page_function change_page='changePagePrimaryUsers'}}
+                  {{mb_include module=system template=inc_pagination total=$total_sec_function current=$page_function change_page='changePagePrimaryUsers'}}
                 {{/if}}
               </form>
             </td>
