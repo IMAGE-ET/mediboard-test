@@ -41,7 +41,9 @@ if ($order_col == "text") {
 }
 $functions = $function->loadList($where, $order, "$page, $step");
 foreach($functions as $_function) {
-  $_function->loadRefs();
+  //$_function = new CFunctions();
+	$_function->loadRefs();
+  $_function->loadBackRefs("secondary_functions");
 }
    
 // Récupération de la fonction selectionnée
@@ -49,11 +51,11 @@ $function = new CFunctions;
 $function->load(CValue::getOrSession("function_id", 0));
 $function->loadRefsNotes();
 $primary_users       = array();
-$total_sec_function = null;
+$total_sec_functions = null;
 if($function->_id) {
   $function->loadRefsFwd();
   $function->loadBackRefs("users");
-  $total_sec_function = $function->countBackRefs("users");
+  $total_sec_functions = $function->countBackRefs("users");
   $primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
   foreach($primary_users as $_user) {
     $_user->loadRefProfile();
@@ -76,7 +78,7 @@ $smarty->assign("canSante400"        , CModule::getCanDo("dPsante400"));
 $smarty->assign("function"           , $function);
 $smarty->assign("primary_users"      , $primary_users);
 $smarty->assign("total_functions"    , $total_functions);
-$smarty->assign("total_sec_function" , $total_sec_function);
+$smarty->assign("total_sec_functions" , $total_sec_functions);
 $smarty->assign("page_function"      , $page_function);
 $smarty->assign("groups"             , $groups  );
 $smarty->assign("secondary_function" , new CSecondaryFunction());

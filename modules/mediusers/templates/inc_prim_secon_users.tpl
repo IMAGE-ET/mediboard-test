@@ -15,8 +15,8 @@
     <td>
       <ul id="tab_user" class="control_tabs">
         <li>
-          <a {{if !$total_functions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
-            Utilisateurs principaux <small>({{$total_sec_function}})</small>
+          <a {{if !$total_sec_functions}}class="empty"{{/if}} href="#list-primary-users" id="list-primary-users-title">
+            Utilisateurs principaux <small>({{$total_sec_functions}})</small>
           </a>
         </li>
         <li>
@@ -37,8 +37,8 @@
                 <input type="hidden" name="tab" value="vw_idx_functions" />
                 <input type="hidden" name="page_function" value="{{$page_function}}" onchange="this.form.submit()"/>
                 
-                {{if $total_functions != 0}}
-                  {{mb_include module=system template=inc_pagination total=$total_sec_function current=$page_function change_page='changePagePrimaryUsers'}}
+                {{if $total_sec_functions != 0}}
+                  {{mb_include module=system template=inc_pagination total=$total_sec_functions current=$page_function change_page='changePagePrimaryUsers'}}
                 {{/if}}
               </form>
             </td>

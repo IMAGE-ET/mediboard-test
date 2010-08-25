@@ -17,6 +17,7 @@
     <td style="background: #{{$_function->color}}">
       <a href="#" onclick="showFunction('{{$_function->_id}}', this)">
         {{$_function->_ref_users|@count}}
+        (+ {{$_function->_back.secondary_functions|@count}})
       </a>
     </td>
   </tr>

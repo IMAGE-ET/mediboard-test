@@ -11,6 +11,7 @@ CCanDo::checkRead();
 
 $function_id = CValue::getOrSession("function_id");
 $page_function = intval(CValue::get('page_function', 0));
+$step_sec_function = 10;
 
 // Récupération des groupes
 $group = new CGroups;
@@ -22,13 +23,13 @@ $function = new CFunctions;
 $function->load($function_id);
 
 $primary_users = array();
-$total_functions = null;
+$total_sec_functions = null;
 if($function->_id) {
   $function->loadRefsNotes();
   $function->loadRefsFwd();
   $function->loadBackRefs("users");
-  $total_functions = $function->countBackRefs("users");
-  $primary_users = $function->loadBackRefs("users", null, "$page_function, 20");
+  $total_sec_functions = $function->countBackRefs("users");
+  $primary_users = $function->loadBackRefs("users", null, "$page_function, $step_sec_function");
   foreach($primary_users as $_user) {
     $_user->loadRefProfile();
   }
@@ -42,10 +43,10 @@ if($function->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("function"       , $function);
+$smarty->assign("function"           , $function);
 $smarty->assign("primary_users"      , $primary_users);
-$smarty->assign("total_functions", $total_functions);
-$smarty->assign("page_function"  , $page_function);
+$smarty->assign("total_sec_functions", $total_sec_functions);
+$smarty->assign("page_function"      , $page_function);
 $smarty->assign("groups"             , $groups  );
 $smarty->assign("secondary_function" , new CSecondaryFunction());
 $smarty->assign("utypes"             , CUser::$types );
