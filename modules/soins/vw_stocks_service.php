@@ -18,7 +18,7 @@ $only_common         = CValue::getOrSession('only_common', 1);
 $endowment_id        = CValue::getOrSession('endowment_id');
 $keywords            = CValue::getOrSession('keywords');
 
-$date_min = CValue::getOrSession('_date_min', mbDate("-4 DAY"));
+$date_min = CValue::getOrSession('_date_min', mbDate("-0 DAY"));
 $date_max = CValue::getOrSession('_date_max', mbDate());
 
 CValue::setSession('_date_min', $date_min);
