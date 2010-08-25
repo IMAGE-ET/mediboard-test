@@ -25,7 +25,6 @@ FCKMbHelpCommand.prototype.GetState = function() {
 }
 
 // Registers command object
-//console.debug(FCKPlugins.Items["mbhelp"].Path);
 //FCKLang.mbHelp,FCKPlugins.Items["mbhelp"].Path
 //FCKCommands.RegisterCommand("mbHelp",
 

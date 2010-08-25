@@ -21,7 +21,6 @@
 var checkListTypes = ["normal", "endoscopie"];
 
 function showCheckListType(element, type) {
-console.debug(type);
   checkListTypes.each(function(t){
     if (t != type)
       element.select('tr.'+t).invoke("hide");

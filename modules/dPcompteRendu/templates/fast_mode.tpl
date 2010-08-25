@@ -33,12 +33,12 @@ printFast = function() {
 
 linkFields = function(ref) {
   var tab = $('fast-edit-table-{{$object_guid}}');
-  console.log(tab);
-  return new Array(
-      tab.select('.liste'),
-      tab.select(".freetext"),
-      tab.select(".destinataires"),
-      new Array($("editFrm_nom"), $("editFrm_file_category_id"), $("editFrm___private")));
+  return [
+    tab.select(".liste"),
+    tab.select(".freetext"),
+    tab.select(".destinataires"),
+    [$("editFrm_nom"), $("editFrm_file_category_id"), $("editFrm___private")]
+  ];
 }
 
 {{if !$lists|@count && !$noms_textes_libres|@count}}
