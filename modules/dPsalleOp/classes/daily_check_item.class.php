@@ -31,19 +31,21 @@ class CDailyCheckItem extends CMbObject {
     $specs = parent::getProps();
     $specs['list_id']      = 'ref notNull class|CDailyCheckList';
     $specs['item_type_id'] = 'ref notNull class|CDailyCheckItemType';
-    $specs['checked']      = 'bool';
+    $specs['checked']      = 'enum notNull list|yes|no|nr|na';
     return $specs;
   }
   
   function getAnswer(){
-    $this->loadRefsFwd();
+    /* $this->loadRefsFwd();
     
     switch ($this->_ref_item_type->attribute) {
       default:
-      case "normal":         return CAppUI::tr($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'No'));
-      case "notrecommended": return CAppUI::tr($this->checked === null ? 'N/R' : ($this->checked != 0 ? 'Yes' : 'No'));
-      case "notapplicable":  return CAppUI::tr($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'N/A'));
-    }
+      case "normal":         $value = ($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'No')); break;
+      case "notrecommended": $value = ($this->checked === null ? 'N/R' :     ($this->checked != 0 ? 'Yes' : 'No')); break;
+      case "notapplicable":  $value = ($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'N/A')); break;
+    }*/
+    
+    return $this->getFormattedValue("checked");
   }
 
   function updateFormFields() {

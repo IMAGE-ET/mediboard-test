@@ -317,8 +317,156 @@ class CSetupdPsalleOp extends CSetup {
               ADD INDEX (`operation_id`),
               ADD INDEX (`datetime`);";
 		$this->addQuery($sql);
+    
+    $this->makeRevision("0.34");
+    $query = "ALTER TABLE `daily_check_item` CHANGE 
+                `checked` `checked` ENUM ('0','1','yes','no','na','nr')";
+    $this->addQuery($query);
+    
+    // yes
+    $query = "UPDATE `daily_check_item` SET `checked` = 'yes' WHERE `checked` = '1'";
+    $this->addQuery($query);
+    
+    // no
+    $query = "UPDATE `daily_check_item` 
+                LEFT JOIN `daily_check_item_type` ON `daily_check_item_type`.`daily_check_item_type_id` = `daily_check_item`.`item_type_id`
+                SET `daily_check_item`.`checked` = 'no' 
+                WHERE `daily_check_item`.`checked` = '0' AND (
+                  `daily_check_item_type`.`attribute` = 'normal' OR 
+                  `daily_check_item_type`.`attribute` = 'notrecommended'
+                )";
+    $this->addQuery($query);
+    
+    // nr
+    $query = "UPDATE `daily_check_item`
+                LEFT JOIN `daily_check_item_type` ON `daily_check_item_type`.`daily_check_item_type_id` = `daily_check_item`.`item_type_id`
+                SET `checked` = 'nr' 
+                WHERE `daily_check_item`.`checked` IS NULL AND 
+                  `daily_check_item_type`.`attribute` = 'notrecommended'";
+    $this->addQuery($query);
+    
+    // na
+    $query = "UPDATE `daily_check_item`
+                LEFT JOIN `daily_check_item_type` ON `daily_check_item_type`.`daily_check_item_type_id` = `daily_check_item`.`item_type_id`
+                SET `checked` = 'na' 
+                WHERE `daily_check_item`.`checked` = '0' AND
+                  `daily_check_item_type`.`attribute` = 'notapplicable'";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `daily_check_item` CHANGE 
+                `checked` `checked` ENUM ('yes','no','na','nr') NOT NULL";
+    $this->addQuery($query);
+    
+    $changes = array(
+      array('04', 1, "preanesth", "notapplicable"),
+      array('05', 1, "preanesth", "notapplicable"),
+      array('06', 4, "preop", "normal"),
+      array('07', 1, "preop", "notapplicable"),
+      array('10', 0, "postop", "normal"),
+    );
+    
+    foreach($changes as $_change) {
+      $libelle = $categories[$_change[0]][2][$_change[1]][0];
+      $query = "UPDATE `daily_check_item_type` 
+      LEFT JOIN `daily_check_item_category` ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
+      SET `daily_check_item_type`.`attribute` = '{$_change[3]}'
+      WHERE 
+        `daily_check_item_category`.`target_class` = 'COperation' AND 
+        `daily_check_item_category`.`type` = '{$_change[2]}' AND
+        `daily_check_item_category`.`title` = '{$_change[0]}' AND 
+        `daily_check_item_type`.`title` = '".addslashes($libelle)."'"; 
+      $this->addQuery($query);
+    }
+    
+    $query = "ALTER TABLE `daily_check_list` 
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie')";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `daily_check_item_category` 
+                CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie');";
+    $this->addQuery($query);
+    
+    // Liste des points de check liste d'endoscopie digestive spécifiés par la HAS (au 24/08/2010)
+    $categories = array(
+      '01' => array('preendoscopie', 'Identité du patient', 
+        array(
+          array('le patient a décliné son nom, sinon, par défaut, autre moyen de vérification de son identité', 'normal'),
+        ),
+      ),
+      
+      '02' => array('preendoscopie', null, 
+        array(
+          array('Le type de l\'endoscopie est confirmé par le patient et dans tous les cas par le dossier', 'normal'),
+        ),
+      ),
+      
+      '03' => array('preendoscopie', 'Le matériel nécessaire pour l\'intervention est opérationnel', 
+        array(
+          array('pour la partie endoscopique', 'normal'),
+          array('pour la partie anesthésique', 'notapplicable'),
+        ),
+      ),
+      
+      '04' => array('preendoscopie', 'Vérification croisée par l\'équipe de points critiques et des mesures adéquates à prendre', 
+        array(
+          array('allergie du patient', 'normal'),
+          array('risque d\'inhalation, de difficulté d\'intubation ou de ventilation au masque', 'normal'),
+          array('risque de saignement important', 'normal'),
+        ),
+      ),
+      
+      '05' => array('preendoscopie', null, 
+        array(
+          array('Patient à jeun', 'normal'),
+        ),
+      ),
+      
+      '06' => array('preendoscopie', null, 
+        array(
+          array('La préparation adéquate (coloscopie, gastrostomie) a été mise en oeuvre', 'notapplicable'),
+        ),
+      ),
+      
+      '07' => array('preendoscopie', null, 
+        array(
+          array('Vérification croisée de situations spécifiques entre les membres de l\'équipe médico-soignante '.
+                'concernant notamment la gestion des antiagrégants plaquettaires et/ou des anticoagulants', 'notapplicable'),
+        ),
+      ),
+      
+      '08' => array('preendoscopie', null, 
+        array(
+          array('Antibioprophylaxie effectuée', 'notapplicable'),
+        ),
+      ),
+      
+      '09' => array('postendoscopie', null, 
+        array(
+          array('Confirmation orale par le personnel auprès de l\'équipe de l\'étiquetage des prélèvements, pièces opératoires, etc.', 'notapplicable'),
+        ),
+      ),
+      
+      '10' => array('postendoscopie', null, 
+        array(
+          array('Les prescriptions pour les suites immédiates de l\'endoscopie sont faites de manière conjointe', 'normal'),
+        ),
+      ),
+    );
+    
+    foreach($categories as $title => $cat) {
+      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
+                               (%1, %2, 'COperation', %3)", $title, $cat[1], $cat[0]);
+      $this->addQuery($query);
+      
+      foreach($cat[2] as $type) {
+        $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES
+                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = 'COperation' AND `type` = %4))", 
+                     $type[0], $type[1], $title, $cat[0]);
+        $this->addQuery($query);
+      }
+    }
 		
-    $this->mod_version = "0.34";
+    $this->mod_version = "0.35";
   }
 }
 ?>

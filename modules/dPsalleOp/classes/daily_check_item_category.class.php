@@ -31,7 +31,7 @@ class CDailyCheckItemCategory extends CMbObject {
     $specs = parent::getProps();
     $specs['title'] = 'str notNull';
     $specs['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation notNull default|CSalle';
-    $specs['type']  = 'enum list|preanesth|preop|postop';
+    $specs['type']  = 'enum list|preanesth|preop|postop|preendoscopie|postendoscopie';
     $specs['desc']  = 'text';
     return $specs;
   }

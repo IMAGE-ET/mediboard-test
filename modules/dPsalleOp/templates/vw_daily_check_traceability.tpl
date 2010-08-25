@@ -46,9 +46,13 @@
 				</tr>
 				{{foreach from=$list_check_lists item=curr_list}}
 				<tr>
-          <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">{{mb_value object=$curr_list field=date}}</a></td>
-          <td>{{mb_value object=$curr_list field=object_class}}</td>
           <td>
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;check_list_id={{$curr_list->_id}}">
+              {{mb_value object=$curr_list field=date}}
+            </a>
+          </td>
+          <td>{{mb_value object=$curr_list field=object_class}}</td>
+          <td class="text">
             <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_list->_ref_object->_guid}}')">
               {{$curr_list->_ref_object}}
             </span>
@@ -113,7 +117,7 @@
                     {{mb_value object=$curr_type field=title}}
                     <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
                   </td>
-                  <td class="text" {{if $_item->checked == 0 && $_item->checked !== null}}style="color: red; font-weight: bold;"{{/if}}>
+                  <td class="text" {{if $_item->checked == "no"}}style="color: red; font-weight: bold;"{{/if}}>
                     {{$_item->getAnswer()}}
                   </td>
                 </tr>

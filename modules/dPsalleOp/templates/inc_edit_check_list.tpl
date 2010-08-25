@@ -126,24 +126,31 @@ Main.add(function(){
         </td>
         <td>
           {{assign var=attr value=$curr_type->attribute}}
+          
           <label style="white-space: nowrap;">
-            <input type="radio" name="_items[{{$curr_type->_id}}]" value="1" {{if $curr_type->_checked == 1}}checked="checked"{{/if}} />
-            {{tr}}Yes{{/tr}}
+            <input type="radio" name="_items[{{$curr_type->_id}}]" value="yes" {{if $curr_type->_checked == "yes"}}checked="checked"{{/if}} />
+            {{tr}}CDailyCheckItem.checked.yes{{/tr}}
           </label>
+          
           <label style="white-space: nowrap;">
-            <input type="radio" name="_items[{{$curr_type->_id}}]" value="0" {{if $curr_type->_checked === null || $curr_type->_checked != 1}}checked="checked"{{/if}} />
-            {{if (!$attr || $attr == "normal") || $attr == "notrecommended"}}
-              {{tr}}No{{/tr}}
-            {{else}}
-              {{tr}}N/A{{/tr}}
-            {{/if}}
+            <input type="radio" name="_items[{{$curr_type->_id}}]" value="no" {{if $curr_type->_checked == "no" || $curr_type->_checked === null}}checked="checked"{{/if}} />
+            {{tr}}CDailyCheckItem.checked.no{{/tr}}
           </label>
+          
           {{if $attr == "notrecommended"}}
-          <br />
-          <label style="white-space: nowrap;">
-            <input type="radio" name="_items[{{$curr_type->_id}}]" value="" {{if $curr_type->_checked === null}}checked="checked"{{/if}} />
-            {{tr}}N/R{{/tr}}
-          </label>
+            <br />
+            <label style="white-space: nowrap; float: right;">
+              <input type="radio" name="_items[{{$curr_type->_id}}]" value="nr" {{if $curr_type->_checked == "nr"}}checked="checked"{{/if}} />
+              {{tr}}CDailyCheckItem.checked.nr{{/tr}}
+            </label>
+          {{/if}}
+          
+          {{if $attr == "notapplicable"}}
+            <br />
+            <label style="white-space: nowrap; float: right;">
+              <input type="radio" name="_items[{{$curr_type->_id}}]" value="na" {{if $curr_type->_checked == "na"}}checked="checked"{{/if}} />
+              {{tr}}CDailyCheckItem.checked.na{{/tr}}
+            </label>
           {{/if}}
         </td>
       </tr>
