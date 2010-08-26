@@ -265,7 +265,7 @@ Main.add(function () {
           <td style="width: 65%;">
             <input type="checkbox" name="_check_premiere" value="1"
               {{if $consult->_check_premiere}} checked="checked" {{/if}}
-              onchange="if (this.checked) {this.form.premiere.value = 1;} else {this.form.premiere.value = 0;}" />
+              onchange="this.form.premiere.value = this.checked ? 1 : 0;" />
             {{mb_field object=$consult field="premiere" hidden="hidden"}}
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
@@ -303,6 +303,11 @@ Main.add(function () {
               {{if $medecin_adresse_par}}Autres : {{$medecin_adresse_par->_view}}{{/if}}
             </div>
           </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult field="si_desistement"}}</th>
+          <td>{{mb_field object=$consult field="si_desistement" typeEnum="checkbox"}}</td>
         </tr>
         
         {{if $dPconfig.dPcabinet.CConsultation.attach_consult_sejour}}

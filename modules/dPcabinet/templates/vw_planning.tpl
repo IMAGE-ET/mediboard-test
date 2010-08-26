@@ -36,6 +36,12 @@ function goToDate(oForm, date) {
   $V(oForm.debut, date);
 }
 
+function showConsultSiDesistement(){
+  var url = new Url("dPcabinet", "vw_list_consult_si_desistement");
+  url.addParam("chir_id", {{$chirSel}});
+  url.pop(500, 500, "test");
+}
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 });
@@ -44,7 +50,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <th>
+    <th style="width: 60%;">
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -60,7 +66,7 @@ Main.add(function () {
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
       </form>
     </th>
-    <td>
+    <td style="min-width: 350px;">
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
@@ -79,6 +85,20 @@ Main.add(function () {
           <option value="1"{{if $vue}}selected="selected"{{/if}}>Cacher les payés</option>
         </select>
       </form>
+      
+      <br />
+      
+      {{if $chirSel && $chirSel != -1}}
+        <button type="button" class="lookup" style="float: right;" 
+                {{if !$count_si_desistement}}disabled="disabled"{{/if}}
+                onclick="showConsultSiDesistement()">
+          {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})
+        </button>
+      {{/if}}
+      
+      {{if $plageSel->plageconsult_id}}
+        <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
+      {{/if}}
     </td>
   </tr>
   <tr>
@@ -172,13 +192,14 @@ Main.add(function () {
           <table class="form">
             <tr>
               <th>{{mb_label object=$plageSel field="chir_id"}}</th>
-              <td><select name="chir_id" class="{{$plageSel->_props.chir_id}}">
-                <option value="">&mdash; Choisir un praticien</option>
-                {{foreach from=$listChirs item=curr_chir}}
-                  <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-                  {{$curr_chir->_view}}
-                  </option>
-                {{/foreach}}
+              <td>
+                <select name="chir_id" class="{{$plageSel->_props.chir_id}}" style="width: 14em;">
+                  <option value="">&mdash; Choisir un praticien</option>
+                  {{foreach from=$listChirs item=curr_chir}}
+                    <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
+                    {{$curr_chir->_view}}
+                    </option>
+                  {{/foreach}}
                 </select>
               </td>
               <th>{{mb_label object=$plageSel field="libelle"}}</th>
@@ -254,7 +275,8 @@ Main.add(function () {
                   <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
                   <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
                   <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
-               </select> minutes</td>
+               </select> minutes
+              </td>
               <th>
                 <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>
               </th>
@@ -290,7 +312,7 @@ Main.add(function () {
           <table class="form">
 	        <tr>
 	          <th class="title modify" colspan="2">Supprimer cette plage</th>
-            </tr>
+          </tr>
 	        <tr>
 	          <th>Supprimer cette plage pendant</th>
 	          <td><input type='text' name='_repeat' size="1" value='1' /> semaine(s)</td>
@@ -310,9 +332,6 @@ Main.add(function () {
     </table>
     </td>
     <td>
-      {{if $plageSel->plageconsult_id}}
-      <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
-      {{/if}}
       <table class="tbl">
         <tr>
           <th class="title" colspan="10">
@@ -328,7 +347,7 @@ Main.add(function () {
         </tr>
 
         <tr>
-          <th>Heure</th>
+          <th style="width: 0.1%;">Heure</th>
           <th>Nom</th>
           <th>Motif</th>
           <th>Remarques</th>
@@ -427,6 +446,10 @@ Main.add(function () {
             {{/if}}
           </td>
           <td {{$style|smarty:nodefaults}}>{{if $patient->_id}}{{$_consult->_etat}}{{/if}}</td>
+        </tr>
+        {{foreachelse}}
+        <tr>
+          <td colspan="6"><em>{{tr}}CConsultation.none{{/tr}}</em></td>
         </tr>
         {{/foreach}}
       </table>

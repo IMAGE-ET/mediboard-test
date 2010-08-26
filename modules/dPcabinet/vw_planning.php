@@ -96,8 +96,6 @@ if(CAppUI::pref("pratOnlyForConsult", 1)) {
   $listChirs = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
 }
 
-
-
 $listDays = array();
 $listDaysSelect = array();
 for($i = 0; $i < 7; $i++) {
@@ -106,7 +104,18 @@ for($i = 0; $i < 7; $i++) {
   $listDaysSelect[$dateArr] = $dateArr;    
 }
 
-
+// Liste des consultations a avancer si desistement
+$now = mbDate();
+$where = array(
+  "plageconsult.date" => " > '$now'",
+  "plageconsult.chir_id" => "= '$chirSel'",
+  "consultation.si_desistement" => "= '1'",
+);
+$ljoin = array(
+  "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
+);
+$consultation_desist = new CConsultation;
+$count_si_desistement = $consultation_desist->countList($where, null, null, null, $ljoin);
 
 // Création du tableau de visualisation
 $affichages = array();
@@ -120,7 +129,7 @@ foreach ($listDays as $keyDate=>$valDate){
   }
 }
 	
- $listPlages = array();
+$listPlages = array();
  
 // Variable permettant de compter les jours pour la suppression du samedi et du dimanche
 $i = 0;
@@ -193,8 +202,6 @@ foreach($listDays as $keyDate=>$valDate){
 }
 
 
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -217,6 +224,7 @@ $smarty->assign("suiv"              , $suiv);
 $smarty->assign("listHours"         , CPlageconsult::$hours);
 $smarty->assign("listMins"          , CPlageconsult::$minutes);
 $smarty->assign("nb_intervals_hour" , intval(60/CPlageconsult::$minutes_interval));
+$smarty->assign("count_si_desistement", $count_si_desistement);
 
 $smarty->display("vw_planning.tpl");
 

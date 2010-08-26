@@ -1295,8 +1295,8 @@ class CSetupdPcabinet extends CSetup {
 		
     $this->makeRevision("1.21");
     $sql = "ALTER TABLE `consultation_anesth`
-		  DROP `biologie`,
-		  DROP `commande_sang`;";
+              DROP `biologie`,
+              DROP `commande_sang`;";
     $this->addquery($sql);
     
     $this->makeRevision("1.22");
@@ -1312,10 +1312,11 @@ class CSetupdPcabinet extends CSetup {
               ADD `adresse_par_prat_id` INT (11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.24";
+    $this->makeRevision("1.24");
+    $sql = "ALTER TABLE `consultation` ADD `si_desistement` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
     
-    
-    
+    $this->mod_version = "1.25";
   }
 }
 ?>

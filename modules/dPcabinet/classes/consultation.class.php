@@ -49,6 +49,7 @@ class CConsultation extends CCodable {
   var $arrivee         = null;
   var $categorie_id    = null;
   var $valide          = null; // Cotation validée
+  var $si_desistement  = null;
  
   var $total_assure    = null;
   var $total_amc       = null; 
@@ -189,6 +190,7 @@ class CConsultation extends CCodable {
     $specs["total_assure"]      = "currency show|0";
 
     $specs["valide"]            = "bool show|0";
+    $specs["si_desistement"]    = "bool notNull default|0";
 
     $specs["_du_patient_restant"]       = "currency";
     $specs["_du_tiers_restant"]         = "currency";
