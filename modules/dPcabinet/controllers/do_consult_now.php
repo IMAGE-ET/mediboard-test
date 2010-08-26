@@ -25,14 +25,15 @@ $sejour->load(CValue::post("sejour_id"));
 if ($sejour->type == "urg") {
 	$sejour->loadRefsConsultations();
 	if ($sejour->_ref_consult_atu->_id) {
-    CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_WARNING);
-    CAppUI::redirect();
+    CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_ERROR);
   }
   
   // Changement de praticien pour le sejour
   if (CAppUI::conf("dPurgences pec_change_prat")) {
     $sejour->praticien_id = $prat_id;
-    $sejour->store();
+    if($msg = $sejour->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
   }
 }
 
@@ -40,8 +41,7 @@ if ($sejour->type == "urg") {
 $chir = new CMediusers;
 $chir->load($prat_id);
 if(!$chir->_id) {
-  CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_WARNING);
-  CAppUI::redirect();
+  CAppUI::setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_ERROR);
 }
 
 $day_now = strftime("%Y-%m-%d");
@@ -91,7 +91,9 @@ if(!$plage->plageconsult_id) {
     $plage->libelle = "automatique";
   }
   $plage->updateFormFields();
-  $plage->store();
+  if($msg = $plage->store()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
 }
 
 $plage->loadRefsFwd();
@@ -124,7 +126,11 @@ else {
   $consult->motif = "Consultation immédiate";
 }
 
-$consult->store();
+if($msg = $consult->store()) {
+  CAppUI::setMsg($msg, UI_MSG_ERROR);
+}
+
+CAppUI::setMsg(CAppUI::tr("CConsultation-msg-create"), UI_MSG_OK);
 
 if ($ref_chir->isFromType(array("Anesthésiste"))) {
   // Un Anesthesiste a été choisi 
@@ -134,7 +140,9 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
   $consultAnesth->loadObject($where);  
   $consultAnesth->consultation_id = $consult->consultation_id;
   $consultAnesth->operation_id = $_operation_id;      
-  $consultAnesth->store();
+  if($msg = $consultAnesth->store()) {
+    CAppUI::setMsg($msg, UI_MSG_WARNING);
+  }
 }
 
 // Redirect final
@@ -148,4 +156,5 @@ if($current_m = CValue::post("_m_redirect")) {
   $current_m = ($sejour->type == "urg") ? "dPurgences" : "dPcabinet";
   CAppUI::redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 }
+
 ?>

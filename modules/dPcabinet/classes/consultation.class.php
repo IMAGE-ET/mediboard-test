@@ -748,6 +748,7 @@ class CConsultation extends CCodable {
       $this->loadRefSejour();
       $this->loadRefPlageConsult();
       $datetime = $this->_datetime;
+      /* Code douteux à dégager à terme
       if ($datetime < $this->_ref_sejour->entree) {
         $this->_ref_sejour->_hour_entree_prevue = null;
         $this->_ref_sejour->_min_entree_prevue  = null;
@@ -758,7 +759,7 @@ class CConsultation extends CCodable {
             $this->_ref_sejour->entree_reelle = $datetime;
         $this->_ref_sejour->store();
       }
-      
+      */
       if ($forfait_se !== null && $this->_id && 
            CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
         $this->_ref_sejour->forfait_se = $forfait_se;
