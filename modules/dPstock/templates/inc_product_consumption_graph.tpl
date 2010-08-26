@@ -1,15 +1,17 @@
+{{unique_id var=graph_id}}
+
 <script type="text/javascript">
 Main.add(function(){
   var data = {{$data|@json}};
   
   data.options.mouse.trackFormatter = function(obj) {
-    return data.options.xaxis.ticks[obj.index] + " : " + parseInt(obj.y);
+    return parseInt(obj.y);
   }
 
-  var container = $("consumption-graph-{{$product->_guid}}");
+  var container = $("consumption-graph-{{$graph_id}}");
   
   Flotr.draw(container, data.series, data.options);
 });
 </script>
 
-<div style="width: 300px; height: 50px;" id="consumption-graph-{{$product->_guid}}"></div>
+<div style="width: 300px; height: 80px;" id="consumption-graph-{{$graph_id}}"></div>
