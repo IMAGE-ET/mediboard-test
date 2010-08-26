@@ -484,7 +484,8 @@ function smarty_function_mb_default($params, &$smarty) {
  */
 function smarty_function_unique_id($params, &$smarty) {
   $var = CMbArray::extract($params, "var", null, true);
-  $smarty->assign($var, uniqid());
+  // The dot is removed to get valide CSS ID identifiers
+  $smarty->assign($var, str_replace(".", "", uniqid("", true)));
 }
 
 /**

@@ -31,6 +31,27 @@
   changeOrderPageAlpha = function(letter) {
     $V(getForm('filter-order').letter, letter); 
   }
+    
+  showCustomOrders = function(element){
+    var url = new Url("soins", "httpreq_vw_custom_orders");
+    url.addParam("service_id", '{{$service->_id}}');
+    url.requestUpdate($("custom-orders").show());
+  }
+  
+  removeCustomOrder = function(button, delivery_id){
+    var form = button.form;
+    form.del.value = 1; 
+    form.delivery_id.value = delivery_id;
+    form.comments.className = "";
+    onSubmitFormAjax(form, {onComplete: showCustomOrders});
+  }
+  
+  Main.add(function(){
+    document.observe("mousedown", function(e){
+      if (!Event.element(e).up("#custom-orders"))
+        $("custom-orders").hide();
+    });
+  });
   
   {{if $only_service_stocks == 1 && !$endowment_id}}
   Main.add(function(){
@@ -131,6 +152,7 @@
   <input type="hidden" name="date_dispensation" value="now" />
   <input type="hidden" name="service_id" value="{{$service->_id}}" />
   <input type="hidden" name="order" value="1" />
+  <input type="hidden" name="delivery_id" value="" />
   
   <label for="quantity">Faire une demande</label> :
   <input type="text" name="quantity" value="1" size="2" />
@@ -138,8 +160,15 @@
   <label for="comments">Produit</label>
   <input type="text" name="comments" size="40" class="notNull" />
   
-  <button type="submit" class="tick notext" title="Faire la demande">Faire la demande</button>
+  <button type="submit" class="tick notext">Faire la demande</button>
 
+  <button type="button" class="down notext" onclick="showCustomOrders(this)">Voir les demandes en cours</button>
+  
+  <div style="position: relative; right: 2em;">
+    <div id="custom-orders" class="tooltip" 
+         style="right: 0; width: 100%; max-width: 300px; display: none;"></div>
+  </div>
+  
   <script type="text/javascript">
     getForm("form-create-order").quantity.addSpinner({min:0});
   </script>
