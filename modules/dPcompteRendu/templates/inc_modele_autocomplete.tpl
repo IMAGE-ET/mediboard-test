@@ -1,6 +1,6 @@
 <ul style="text-align: left;">
   {{foreach from=$modeles item=_modele}}
-    {{if $_modele->_owner == "user"}}
+    {{if $_modele->_owner == "prat"}}
       {{assign var=owner_icon value="user"}}
     {{elseif $_modele->_owner == "func"}}
       {{assign var=owner_icon value="user-function"}}
