@@ -17,11 +17,12 @@
     <td class="button">
     	{{if $praticien->_can->edit}}
       
-      <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4.5em;" />
+      <input type="text" value="&mdash; Modèle" name="keywords_modele" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 5em;" />
+      <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 4em;"/>
       
-      <input type="text" value="&mdash; Pack" name="keywords_pack" class="autocomplete str" autocomplete="off" onclick="this.value = ''; this.onclick=null;" style="width: 3.5em;"/>
       <script tyle="text/javascript">
       window.pdf_thumbnails = {{$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}};
+      
       Main.add(function() {
         var url = new Url("dPcompteRendu", "ajax_modele_autocomplete");
         url.addParam("user_id", "{{$praticien->_id}}");
@@ -29,10 +30,10 @@
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
         url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_modele', '', {
-            minChars: 1,
-            updateElement: createDoc,
-            dropdown: true,
-            width: "200px"
+          minChars: 1,
+          afterUpdateElement: createDoc,
+          dropdown: true,
+          width: "250px"
         });
 
         var url = new Url("dPcompteRendu", "ajax_pack_autocomplete");
@@ -41,24 +42,27 @@
         url.addParam("object_class", '{{$object->_class_name}}');
         url.addParam("object_id", '{{$object->_id}}');
         url.autoComplete('DocumentAdd-{{$unique_id}}-{{$object->_guid}}_keywords_pack', '', {
-            minChars: 1,
-            updateElement: createPack,
-            dropdown: true,
-            width: "200px"
+          minChars: 1,
+          afterUpdateElement: createPack,
+          dropdown: true,
+          width: "250px"
         });
         
-        function createDoc(selected) {
+        function createDoc(input, selected) {
+          var id = selected.down(".id").innerHTML;
+           
           if (selected.select(".fast_edit").length && window.pdf_thumbnails) {
-            Document.fastMode('{{$object->_class_name}}', selected.select(".id")[0].innerHTML, '{{$object_id}}', null, null, '{{$object->_guid}}');
+            Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$object->_guid}}');
           } else {
-            Document.create(selected.select(".id")[0].innerHTML, '{{$object_id}}');
+            Document.create(id, '{{$object_id}}');
           }
-          $V(selected, '');
+          
+          $V(input, '');
         }
 
-        function createPack(selected) {
-          Document.createPack(selected.select(".id")[0].innerHTML, '{{$object_id}}');
-          $V(selected, '');
+        function createPack(input, selected) {
+          Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
+          $V(input, '');
         }
       });
       </script>

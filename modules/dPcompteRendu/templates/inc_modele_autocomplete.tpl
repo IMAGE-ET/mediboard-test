@@ -9,7 +9,7 @@
     {{/if}}
       
     <li>  
-      <img style="float: right; clear: both;" 
+      <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
       
       {{if $_modele->fast_edit}}
@@ -19,9 +19,12 @@
       <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>
         {{$_modele->nom|emphasize:$keywords}}
       </div>
-      <small style="color: #666; margin-left: 1em;" class="text">
-        {{mb_value object=$_modele field=file_category_id}}
-      </small>
+      
+      <!--{{if $_modele->file_category_id}}
+        <small style="color: #666; margin-left: 1em;" class="text">
+          {{mb_value object=$_modele field=file_category_id}}
+        </small>
+      {{/if}}-->
       
       <div style="display: none;" class="id">{{$_modele->_id}}</div>
     </li>
