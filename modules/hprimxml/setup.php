@@ -224,9 +224,15 @@ class CSetuphprimxml extends CSetup {
              ADD `libelle` VARCHAR (255) AFTER `nom`;";
     $this->addQuery($sql);
     
+    $this->makeRevision("0.20");
+    
+    $sql = "ALTER TABLE `destinataire_hprim_config` 
+             `receive_ack` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+    
     // Prochain upgrade supprimer les champs : destinataire et emetteur
     
-    $this->mod_version = "0.20";
+    $this->mod_version = "0.21";
   }
 }
 
