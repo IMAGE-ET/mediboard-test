@@ -76,9 +76,7 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
       $mbPatientElimine = new CPatient();
       $mbPatient = new CPatient();
      
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
+      $dest_hprim = $echange_hprim->_ref_emetteur;
 
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / patientElimine
       if (!$data['idSourcePatient'] && !$data['idCiblePatient'] && 

@@ -52,11 +52,12 @@ if (!$do_import) {
     $echg_hprim = new CEchangeHprim();
     $data = $domEvenement->getEnteteEvenementXML($evt);
     $data = array_merge($data, $domEvenement->getContentsXML());
+    $dest_hprim = new CDestinataireHprim();
+    $dest_hprim->register($data['idClient']);
     $echg_hprim->date_production = $data['dateHeureProduction'];
     $echg_hprim->date_echange    = date("Y-m-d H:m:s", filemtime("$path/$_file"));
-    $echg_hprim->emetteur        = CAppUI::conf("mb_id");
     $echg_hprim->group_id        = CGroups::loadCurrent()->_id;
-    $echg_hprim->destinataire    = $data['idClient'];
+    $echg_hprim->destinataire_id = $dest_hprim->_id;
     $echg_hprim->type            = $domEvenement->type;
     $echg_hprim->sous_type       = $domEvenement->sous_type;
     $echg_hprim->_message         = utf8_encode($xmlfile);

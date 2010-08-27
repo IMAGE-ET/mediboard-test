@@ -52,25 +52,27 @@
       {{mb_value object=$object field="date_production" format=relative}}
     </label>
 	</td>
-	<td {{if $object->emetteur == "inconnu"}}class="error"{{/if}} style="width:0.1%">
+	{{assign var=emetteur value=$object->_ref_emetteur}}
+	<td {{if $object->emetteur_id == "0"}}class="error"{{/if}} style="width:0.1%">
 	   {{if $object->_self_emetteur}}
-	   <label title='{{mb_value object=$object field="emetteur"}}' style="font-weight:bold">
+	   <label title='[SELF]' style="font-weight:bold">
 	     [SELF]
 	   </label>
 	   {{else}}
-	     {{mb_value object=$object field="emetteur"}}
+	     {{mb_value object=$emetteur field="nom"}}
 	   {{/if}}
 	   {{if $object->identifiant_emetteur}}
 	    : {{$object->identifiant_emetteur|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	   {{/if}}
 	</td>
+	{{assign var=destinataire value=$object->_ref_destinataire}}
 	<td style="width:0.1%">
     {{if $object->_self_destinataire}}
-     <label title='{{mb_value object=$object field="destinataire"}}' style="font-weight:bold">
+     <label title='[SELF]' style="font-weight:bold">
        [SELF]
      </label>
      {{else}}
-       {{mb_value object=$object field="destinataire"}}
+       {{mb_value object=$destinataire field="nom"}}
      {{/if}}
   </td>
 	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}} style="width:0.1%">{{mb_value object=$object field="sous_type"}}</td>

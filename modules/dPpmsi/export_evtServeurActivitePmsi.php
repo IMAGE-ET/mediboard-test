@@ -66,14 +66,10 @@ $dest_hprim->message = "pmsi";
 $destinataires = $dest_hprim->loadMatchingList();
         
 foreach ($destinataires as $_destinataire) {
-	$evenementActivitePMSI->emetteur     = CAppUI::conf('mb_id');
-  $evenementActivitePMSI->destinataire = $_destinataire->nom;
-  $evenementActivitePMSI->group_id     = $_destinataire->group_id;
-
+  $evenementActivitePMSI->_ref_destinataire = $_destinataire;
 	$msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
 	
-	$echange_hprim = new CEchangeHprim();
-  $echange_hprim->load($evenementActivitePMSI->identifiant);
+	$echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;
   if ($doc_valid = $echange_hprim->message_valide) {
     $mbObject->facture = true;
     $mbObject->store();
@@ -100,7 +96,8 @@ foreach ($destinataires as $_destinataire) {
 						$domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
 						break;
 				}
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
+        $domGetAcquittement->loadXML(utf8_decode($acquittement));
+        $domGetAcquittement->_ref_echange_hprim = $echange_hprim;       
         $doc_valid = $domGetAcquittement->schemaValidate();
         
         $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementServeurActivitePmsi();

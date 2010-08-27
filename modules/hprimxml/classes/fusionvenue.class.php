@@ -86,19 +86,16 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
     }
     
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $data['idClient'];
-    $domAcquittement->destinataire_libelle = $data['libelleClient'];
-    $domAcquittement->_sous_type_evt = $this->sous_type;
+    $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
+    $domAcquittement->_sous_type_evt        = $this->sous_type;
+    $domAcquittement->_ref_echange_hprim    = $echange_hprim;
     
      // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbVenueEliminee = new CSejour();
       $mbVenue = new CSejour();
      
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
+      $dest_hprim = $echange_hprim->_ref_emetteur;
       
       // Acquittement d'erreur : identifiants source et cible non fournis pour le venue / venueEliminee
       if (!$data['idSourceVenue'] && !$data['idCibleVenue'] && !$data['idSourceVenueEliminee'] && !$data['idCibleVenueEliminee']) {

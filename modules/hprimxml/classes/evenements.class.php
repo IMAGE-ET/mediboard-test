@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLEvenements extends CHPrimXMLDocument {
+class CHPrimXMLEvenements extends CHPrimXMLDocument {  
   function generateEnteteMessage($type, $version = true) {
     $evenements = $this->addElement($this, $type, null, "http://www.hprim.org/hprimXML");
     if ($version) {

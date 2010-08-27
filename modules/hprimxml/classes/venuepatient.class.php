@@ -24,7 +24,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     parent::__construct();
   }
   
-  function generateFromOperation($mbVenue, $referent) {  
+  function generateFromOperation(CSejour $mbVenue, $referent) {  
     $evenementsPatients = $this->documentElement;
     $evenementPatient = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -112,7 +112,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, $newVenue = null) {
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
@@ -121,10 +121,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $data['idClient'];
-    $domAcquittement->destinataire_libelle = $data['libelleClient'];
-    $domAcquittement->_sous_type_evt = $this->sous_type;
+    $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
+    $domAcquittement->_sous_type_evt        = $this->sous_type;
+    $domAcquittement->_ref_echange_hprim    = $echange_hprim;
     
     // Traitement de la venue
     $mutexSej = new CMbSemaphore("sip-numdos"); 
@@ -139,14 +138,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     // Si CIP
     else {
+      $dest_hprim = $echange_hprim->_ref_emetteur;
+      
       $newVenue = new CSejour();
       $newVenue->patient_id = $newPatient->_id; 
-      $newVenue->group_id = CGroups::loadCurrent()->_id;
-       
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
-    
+      $newVenue->group_id = $dest_hprim->group_id;
+
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
@@ -210,12 +207,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         } else {
           $_code_NumDos = "I122";  
         }
-        if (!$newVenue->_id) {
-          // Notifier les autres destinataires
-          $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
-          // Mapping du séjour
-          $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-            
+        if (!$newVenue->_id) {            
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
             if ($newVenue->loadMatchingSejour(null, true)) {
@@ -232,6 +224,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               if ($newVenue->_num_dossier) {
                 $num_dossier->_trash = true;
               } else {
+                // Notifier les autres destinataires
+                $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
+                // Mapping du séjour
+                $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
+                
                 $msgVenue = $newVenue->store();
 
                 $newVenue->loadLogs();

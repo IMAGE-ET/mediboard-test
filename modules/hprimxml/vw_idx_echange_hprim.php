@@ -18,7 +18,7 @@ $msg_evenement       = CValue::getOrSession("msg_evenement", "patients");
 $type_evenement      = CValue::getOrSession("type_evenement");
 $page                = CValue::get('page', 0);
 $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 hour"));
+$_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 
 $observations = array();
 
@@ -47,6 +47,7 @@ if($echange_hprim->_id) {
   $observations = $doc_errors_msg = $doc_errors_ack = array();
   
   $echange_hprim->loadRefs(); 
+  $echange_hprim->loadRefsDestinataireHprim();
 
   if ($echange_hprim->_message !== null) {
     $domGetEvenement = new CHPrimXMLEvenementsPatients();
@@ -76,10 +77,10 @@ if($echange_hprim->_id) {
   
   $where = array();
   if (isset($t["emetteur"])) {
-    $where["emetteur"] = " = '".CAppUI::conf('mb_id')."'";
+    $where["emetteur_id"] = " IS NULL";
   }
   if (isset($t["destinataire"])) {
-    $where["destinataire"] = " = '".CAppUI::conf('mb_id')."'";
+    $where["destinataire_id"] = " IS NULL";
   }
   if ($_date_min && $_date_max) {
     $where['date_production'] = " BETWEEN '".$_date_min."' AND '".$_date_max."' "; 
@@ -117,6 +118,7 @@ if($echange_hprim->_id) {
   foreach($echangesHprim as $_echange) {
     $_echange->loadRefNotifications();
     $_echange->getObservations();
+    $_echange->loadRefsDestinataireHprim();
   }
   
   $smarty->assign("echange_hprim"       , $echange_hprim);

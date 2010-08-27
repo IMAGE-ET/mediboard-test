@@ -77,10 +77,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     $_IPP_create = $_modif_patient = false;
     $mutex = new CMbSemaphore("sip-ipp");
     
-    // Chargement du destinataire de l'échange
-    $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->nom = $data['idClient'];
-    $dest_hprim->loadMatchingObject();
+    $dest_hprim = $echange_hprim->_ref_emetteur;
     
     // Acquittement d'erreur : identifiants source et cible non fournis
     if (!$data['idCiblePatient'] && !$data['idSourcePatient']) {
@@ -282,7 +279,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               } else {
                 $commentaire = "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A03" : "I02", $avertissement ? $avertissement : $commentaire);
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A003" : "I002", $avertissement ? $avertissement : $commentaire);
               
               $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
             }

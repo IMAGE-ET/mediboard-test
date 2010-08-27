@@ -176,7 +176,57 @@ class CSetuphprimxml extends CSetup {
              ADD INDEX (`object_id`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.17";
+    $this->makeRevision("0.17");
+    
+    $sql = "ALTER TABLE `destinataire_hprim`
+             DROP `url`,
+             DROP `username`,
+             DROP `password`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.18");
+    
+    $sql = "ALTER TABLE `echange_hprim` 
+             ADD `emetteur_id` INT (11) UNSIGNED AFTER `emetteur`,
+             ADD `destinataire_id` INT (11) UNSIGNED AFTER `destinataire`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim` 
+             ADD INDEX (`emetteur_id`),
+             ADD INDEX (`destinataire_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `echange_hprim` 
+             SET `emetteur_id` = (SELECT `destinataire_hprim`.dest_hprim_id
+             FROM `destinataire_hprim` 
+             WHERE `echange_hprim`.emetteur = `destinataire_hprim`.nom);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `echange_hprim` 
+             SET `emetteur_id` = NULL
+             WHERE `echange_hprim`.emetteur = '".CAppUI::conf("mb_id")."';";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `echange_hprim` 
+             SET `destinataire_id` = (SELECT `destinataire_hprim`.dest_hprim_id
+             FROM `destinataire_hprim` 
+             WHERE `echange_hprim`.destinataire = `destinataire_hprim`.nom);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `echange_hprim` 
+             SET `destinataire_id` = NULL
+             WHERE `echange_hprim`.destinataire = '".CAppUI::conf("mb_id")."';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.19");
+    
+    $sql = "ALTER TABLE `destinataire_hprim` 
+             ADD `libelle` VARCHAR (255) AFTER `nom`;";
+    $this->addQuery($sql);
+    
+    // Prochain upgrade supprimer les champs : destinataire et emetteur
+    
+    $this->mod_version = "0.20";
   }
 }
 

@@ -38,10 +38,7 @@ class CHprimSoapHandler extends CSoapHandler {
     $echange_hprim = new CEchangeHprim();
     $messageAcquittement = null;
     $data = array();
-    
-    // Gestion de l'acquittement
-    $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    
+        
     $domGetEvenement = CHPrimXMLEvenementsPatients::getHPrimXMLEvenementsPatients($messagePatient);
     
     try {
@@ -50,25 +47,26 @@ class CHprimSoapHandler extends CSoapHandler {
       $doc_errors = $domGetEvenement->schemaValidate(null, true);
     
       $data = $domGetEvenement->getEnteteEvenementXML("evenementsPatients");
-      $domAcquittement->identifiant          = $data['identifiantMessage'];
-      $domAcquittement->destinataire         = $data['idClient'];
-      $domAcquittement->destinataire_libelle = $data['libelleClient'];
-      $domAcquittement->_sous_type_evt       = $domGetEvenement->sous_type;
       
       $dest_hprim = new CDestinataireHprim();
-      if ($data['idClient']) {
-        $dest_hprim->nom = $data['idClient'];
-        $dest_hprim->loadMatchingObject();
-      }
+      $dest_hprim->register($data['idClient']);
+      
+      // Gestion de l'acquittement
+      $domAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
+      $domAcquittement->_sous_type_evt        = $domGetEvenement->sous_type;
       
       // Acquittement d'erreur d'un document XML recu non valide
       if ($doc_errors !== true) {
+        $echange_hprim->date_production     = mbDateTime();
+        $echange_hprim->group_id            = $dest_hprim->group_id;
+        $echange_hprim->store();
+       
+        $domAcquittement->_ref_echange_hprim = $echange_hprim;
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->date_production     = mbDateTime();
-        $echange_hprim->emetteur            = $data['idClient'] ? $data['idClient'] : "inconnu";
-        $echange_hprim->destinataire        = CAppUI::conf('mb_id');
-        $echange_hprim->group_id            = $dest_hprim->group_id;
+        
+        $echange_hprim->emetteur_id         = $data['idClient'] ? $dest_hprim->_id : 0;
         $echange_hprim->type                = "patients";
         $echange_hprim->sous_type           = $domGetEvenement->sous_type ? $domGetEvenement->sous_type : "inconnu";
         $echange_hprim->_message            = $messagePatient;
@@ -82,8 +80,7 @@ class CHprimSoapHandler extends CSoapHandler {
       }
     
       if (!$echange_hprim->_id) {
-        $echange_hprim->emetteur             = $data['idClient'];
-        $echange_hprim->destinataire         = CAppUI::conf('mb_id');
+        $echange_hprim->emetteur_id          = $dest_hprim->_id;
         $echange_hprim->group_id             = $dest_hprim->group_id;
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];
         $echange_hprim->type                 = "patients";
@@ -93,7 +90,11 @@ class CHprimSoapHandler extends CSoapHandler {
       }
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
+      $echange_hprim->loadRefsDestinataireHprim();
 
+      $domGetEvenement->_ref_echange_hprim = $echange_hprim;
+      $domAcquittement->_ref_echange_hprim = $echange_hprim;
+      
       $newPatient = new CPatient();
       $newPatient->_hprim_initiator_id = $echange_hprim->_id;
       
@@ -210,7 +211,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
         $echange_hprim->date_production = mbDateTime();
-        $echange_hprim->emetteur = $data['idClient'] ? $data['idClient'] : "inconnu";
+        $echange_hprim->emetteur = $data['idClient'] ? $dest_hprim->_id : 0;
         $echange_hprim->destinataire = CAppUI::conf('mb_id');
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
         $echange_hprim->type = "pmsi";
@@ -231,7 +232,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->loadMatchingObject();
       }
       if (!$echange_hprim->_id) {
-        $echange_hprim->emetteur       = $data['idClient'];
+        $echange_hprim->emetteur       = $dest_hprim->_id;
         $echange_hprim->destinataire   = CAppUI::conf('mb_id');
         $echange_hprim->group_id       = CGroups::loadCurrent()->_id;
         $echange_hprim->identifiant_emetteur = $data['identifiantMessage'];

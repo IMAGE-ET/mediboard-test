@@ -73,7 +73,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $messageAcquittement;
   }
   
-  function mappingPatient($node, CPatient $mbPatient) {    
+  function mappingPatient($node, CPatient $mbPatient) {   
     $mbPatient = $this->getPersonnePhysique($node, $mbPatient);
     $mbPatient = $this->getActiviteSocioProfessionnelle($node, $mbPatient);
     //$mbPatient = $this->getPersonnesPrevenir($node, $mbPatient);
@@ -265,6 +265,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   static function getNatureVenue($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
+    $destinataire = $this->_ref_echange_hprim->_ref_emetteur;
+    $destinataire->loadConfigValues();
+
     // Obligatoire pour MB
     $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur", "", false);
     $attrNatureVenueHprim = array (
@@ -272,6 +275,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "cslt" => "consult",
       "sc"   => "seances",
     );
+    
     if (!$mbVenue->type) {
 	    if ($nature) {
 	      $mbVenue->type =  $attrNatureVenueHprim[$nature];
@@ -279,6 +283,30 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 	      $mbVenue->type = "hsp";
 	    }
     }  
+    
+    if (preg_match($destinataire->_configs["type_sej_hospi"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "hsp";
+    }
+    
+    if (preg_match($destinataire->_configs["type_sej_ambu"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "ambu";
+    }
+    
+    if (preg_match($destinataire->_configs["type_sej_urg"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "urg";
+    }
+    
+    if (preg_match($destinataire->_configs["type_sej_scanner"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "seances";
+    }
+      
+    if (preg_match($destinataire->_configs["type_sej_chimio"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "seances";
+    }
+    
+    if (preg_match($destinataire->_configs["type_sej_dialyse"], $mbVenue->_num_dossier)) {
+      $mbVenue->type = "seances";
+    }
     
     return $mbVenue;
   }

@@ -23,8 +23,10 @@ class CEchangeHprim extends CMbMetaObject {
   var $group_id             = null;
   var $date_production      = null;
   var $emetteur             = null;
+  var $emetteur_id          = null;
   var $identifiant_emetteur = null;
   var $destinataire         = null;
+  var $destinataire_id      = null;
   var $type                 = null;
   var $sous_type            = null;
   var $date_echange         = null;
@@ -35,9 +37,7 @@ class CEchangeHprim extends CMbMetaObject {
   var $message_valide       = null;
   var $acquittement_valide  = null;
   var $id_permanent				  = null;
-    
-  var $_ref_notifications   = null;
-  
+
   // Form fields
   var $_self_emetteur     = null;
   var $_self_destinataire = null;
@@ -50,7 +50,10 @@ class CEchangeHprim extends CMbMetaObject {
   var $_date_max          = null;
   
   // Forward references
-  var $_ref_group         = null;  
+  var $_ref_group         = null;
+  var $_ref_notifications = null;
+  var $_ref_emetteur      = null;
+  var $_ref_destinataire  = null;  
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,33 +66,35 @@ class CEchangeHprim extends CMbMetaObject {
   function getProps() {
     $specs = parent::getProps();
     
-    $specs["date_production"]       = "dateTime notNull";
-    $specs["group_id"]              = "ref notNull class|CGroups";
-    $specs["emetteur"]              = "str";
-    $specs["identifiant_emetteur"]  = "str";
-    $specs["destinataire"]          = "str notNull";
-    $specs["type"]                  = "str";
-    $specs["sous_type"]             = "str";
-    $specs["date_echange"]          = "dateTime";
+    $specs["date_production"]         = "dateTime notNull";
+    $specs["group_id"]                = "ref notNull class|CGroups";
+    $specs["emetteur"]                = "str";
+    $specs["emetteur_id"]             = "ref class|CDestinataireHprim";
+    $specs["identifiant_emetteur"]    = "str";
+    $specs["destinataire"]            = "str";
+    $specs["destinataire_id"]         = "ref class|CDestinataireHprim";
+    $specs["type"]                    = "str";
+    $specs["sous_type"]               = "str";
+    $specs["date_echange"]            = "dateTime";
     $specs["message_content_id"]      = "ref class|CContentXML show|0";
     $specs["acquittement_content_id"] = "ref class|CContentXML show|0";
-    $specs["initiateur_id"]         = "ref class|CEchangeHprim";
-    $specs["statut_acquittement"]   = "str show|0";
-    $specs["message_valide"]        = "bool show|0";
-    $specs["acquittement_valide"]   = "bool show|0";
-    $specs["id_permanent"]          = "str";
-    $specs["object_id"]             = "ref class|CMbObject meta|object_class unlink";
-    $specs["object_class"]          = "enum list|CPatient|CSejour|COperation show|0";
+    $specs["initiateur_id"]           = "ref class|CEchangeHprim";
+    $specs["statut_acquittement"]     = "str show|0";
+    $specs["message_valide"]          = "bool show|0";
+    $specs["acquittement_valide"]     = "bool show|0";
+    $specs["id_permanent"]            = "str";
+    $specs["object_id"]               = "ref class|CMbObject meta|object_class unlink";
+    $specs["object_class"]            = "enum list|CPatient|CSejour|COperation show|0";
     
-    $specs["_self_emetteur"]        = "bool";
-    $specs["_self_destinataire"]    = "bool notNull";
-    $specs["_observations"]         = "str";
+    $specs["_self_emetteur"]          = "bool";
+    $specs["_self_destinataire"]      = "bool notNull";
+    $specs["_observations"]           = "str";
     
-    $specs["_date_min"]             = "dateTime";
-    $specs["_date_max"]             = "dateTime";
+    $specs["_date_min"]               = "dateTime";
+    $specs["_date_max"]               = "dateTime";
     
-    $specs["_message"]              = "xml";
-    $specs["_acquittement"]         = "xml";
+    $specs["_message"]                = "xml";
+    $specs["_acquittement"]           = "xml";
     
     return $specs;
   }
@@ -120,14 +125,24 @@ class CEchangeHprim extends CMbMetaObject {
     $this->_ref_group->load($this->group_id);
   }
   
+  function loadRefGroups() {
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
+  }
+  
+  function loadRefsDestinataireHprim() {
+    $this->_ref_emetteur     = $this->loadFwdRef("emetteur_id");
+    $this->_ref_destinataire = $this->loadFwdRef("destinataire_id");
+  }
+  
   function updateFormFields() {
   	parent::updateFormFields();
   	
   	// Chargement des contents 
   	$this->loadContent();
   	 
-  	$this->_self_emetteur = $this->emetteur == CAppUI::conf('mb_id');
-    $this->_self_destinataire = $this->destinataire == CAppUI::conf('mb_id');
+  	$this->_self_emetteur     = $this->emetteur_id     === null;
+    $this->_self_destinataire = $this->destinataire_id === null;
   }
   
   function updateDBFields() {
@@ -171,6 +186,24 @@ class CEchangeHprim extends CMbMetaObject {
     parent::loadView();
     
     $this->getObservations();
+  }
+  
+  function setObjectClassIdPermanent($mbObject) {
+    if ($mbObject instanceof CPatient) {
+      $this->object_class = "CPatient";
+      if ($mbObject->_IPP) {
+        $this->id_permanent = $mbObject->_IPP;
+      }
+    }
+    if ($mbObject instanceof CSejour) {
+      $this->object_class = "CSejour";
+      if ($mbObject->_num_dossier) {
+        $this->id_permanent = $mbObject->_num_dossier;
+      }
+    }
+    if ($mbObject instanceof COperation) {
+      $this->object_class = "COperation";
+    }
   }
   
   function setObjectIdClass($object_class, $object_id) {

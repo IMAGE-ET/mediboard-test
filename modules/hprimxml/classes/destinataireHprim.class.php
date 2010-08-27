@@ -27,6 +27,7 @@ class CDestinataireHprim extends CMbObject {
   
   // DB Fields
   var $nom       = null;
+  var $libelle   = null;
   var $group_id  = null;
   var $type      = null;
 	var $message   = null;
@@ -52,6 +53,7 @@ class CDestinataireHprim extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["nom"]       = "str notNull";
+    $specs["libelle"]   = "str";
     $specs["group_id"]  = "ref notNull class|CGroups";
     $specs["type"]      = "enum notNull list|cip|sip default|cip";
 		$specs["message"]   = "enum list|pmsi|patients|stock default|patient";
@@ -94,6 +96,11 @@ class CDestinataireHprim extends CMbObject {
     $this->_tag_sejour   = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
   }  
+  
+  function register($idClient) {
+    $this->nom = $idClient;
+    $this->loadMatchingObject();
+  }
 }
 
 // Add

@@ -13,14 +13,18 @@ CAppUI::requireModuleClass("hprimxml", "hprimxmldocument");
 class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLDocument {
   var $acquittement = null;
   
-  var $_sous_type_evt = null;
-  var $_codes_erreurs = null;
+  var $_identifiant_acquitte = null;
+  var $_sous_type_evt        = null;
+  var $_codes_erreurs        = null;
   
   function __construct($messageAcquittement) {     
     parent::__construct("serveurActivitePmsi", $messageAcquittement);
   }
   
   function generateEnteteMessageAcquittement($statut) {
+    $echg_hprim      = $this->_ref_echange_hprim;
+    $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
+    
     $acquittementsServeurActivitePmsi = $this->addElement($this, $this->acquittement, null, "http://www.hprim.org/hprimXML");
     $this->addAttribute($acquittementsServeurActivitePmsi, "version", CAppUI::conf("hprimxml $this->evenement version"));
     

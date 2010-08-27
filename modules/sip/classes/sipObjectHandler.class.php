@@ -67,8 +67,8 @@ class CSipObjectHandler extends CMbObjectHandler {
           $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
-          $domEvenementEnregistrementPatient->_dest_tag = $_destinataire->_tag_patient;
-          $this->generateEvenement($domEvenementEnregistrementPatient, $_destinataire, $mbObject, true, $initiateur);
+          $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
+          $this->generateEvenement($domEvenementEnregistrementPatient, $mbObject, true, $initiateur);
         }
       }
       // Si Client
@@ -96,8 +96,8 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
-          $domEvenementEnregistrementPatient->_dest_tag = $_destinataire->_tag_patient;
-          $this->sendEvenement($domEvenementEnregistrementPatient, $_destinataire, $mbObject);
+          $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
+          $this->sendEvenement($domEvenementEnregistrementPatient, $mbObject);
           
           $mbObject->_IPP = null;
         }
@@ -142,8 +142,8 @@ class CSipObjectHandler extends CMbObjectHandler {
           $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
-          $domEvenementVenuePatient->_dest_tag = $_destinataire->_tag_sejour;
-          $this->generateEvenement($domEvenementVenuePatient, $_destinataire, $mbObject, true, $initiateur);
+          $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
+          $this->generateEvenement($domEvenementVenuePatient, $mbObject, true, $initiateur);
         }        
       }
       // Si Client
@@ -171,12 +171,13 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
-          $domEvenementVenuePatient->_dest_tag = $_destinataire->_tag_sejour;
-          $this->sendEvenement($domEvenementVenuePatient, $_destinataire, $mbObject);
+          $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
+          $this->sendEvenement($domEvenementVenuePatient, $mbObject);
           
           if ($mbObject->_ref_patient->code_regime) {
             $domEvenementDebiteursVenue = new CHPrimXMLDebiteursVenue();
-            $this->sendEvenement($domEvenementDebiteursVenue, $_destinataire, $mbObject);
+            $domEvenementDebiteursVenue->_ref_destinataire = $_destinataire;
+            $this->sendEvenement($domEvenementDebiteursVenue, $mbObject);
           }
           
           $mbObject->_num_dossier = null;
@@ -269,21 +270,23 @@ class CSipObjectHandler extends CMbObjectHandler {
          
           // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
           if ((!$patient1_ipp && $patient2_ipp) || ($patient1_ipp && !$patient2_ipp)) {
-            $domEvenement = new CHPrimXMLEnregistrementPatient();
+            $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+            $domEvenementEnregistrementPatient->_ref_destinataire = $dest_hprim;
             
             if ($patient2_ipp)
               $patient->_IPP = $patient2_ipp;
               
-            $this->sendEvenement($domEvenement, $dest_hprim, $patient);
+            $this->sendEvenement($domEvenementEnregistrementPatient, $patient);
             continue;
           }
           
           // Cas 2 IPPs : Message de fusion
           if ($patient1_ipp && $patient2_ipp) {
-            $domEvenement = new CHPrimXMLFusionPatient();
+            $domEvenementFusionPatient = new CHPrimXMLFusionPatient();
+            $domEvenementFusionPatient->_ref_destinataire = $dest_hprim;
                           
             $patient->_patient_elimine = $patient_eliminee;
-            $this->sendEvenement($domEvenement, $dest_hprim, $patient);
+            $this->sendEvenement($domEvenementFusionPatient, $patient);
             continue;
           }
         }        
@@ -293,17 +296,10 @@ class CSipObjectHandler extends CMbObjectHandler {
   
   function onAfterDelete(CMbObject &$mbObject) {}
   
-  function generateEvenement($domEvenement, $dest_hprim, $mbObject, $referent = null, $initiateur = null) {
-    $domEvenement->emetteur     = CAppUI::conf('mb_id');
-    $domEvenement->destinataire = $dest_hprim->nom;
-    $domEvenement->group_id     = $dest_hprim->group_id;
-
-    return $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
-  }
-  
-  function sendEvenement($domEvenement, $dest_hprim, $mbObject) {
-    $msgEvtVenuePatient = $this->generateEvenement($domEvenement, $dest_hprim, $mbObject);
-
+  function sendEvenement($domEvenement, $mbObject, $referent = null, $initiateur = null) {
+    $msgEvtVenuePatient = $domEvenement->generateTypeEvenement($mbObject, $referent, $initiateur);
+    
+    $dest_hprim = $domEvenement->_ref_destinataire;
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($msgEvtVenuePatient);
@@ -311,12 +307,12 @@ class CSipObjectHandler extends CMbObjectHandler {
       $acquittement = $source->receive();
       
       if ($acquittement) {
-        $echange_hprim = new CEchangeHprim();
-        $echange_hprim->load($domEvenement->identifiant);
+        $echange_hprim = $domEvenement->_ref_echange_hprim;
         $echange_hprim->date_echange = mbDateTime();
         
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));        
+        $domGetAcquittement->loadXML(utf8_decode($acquittement));
+        $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
         $doc_valid = $domGetAcquittement->schemaValidate();
         
         $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();

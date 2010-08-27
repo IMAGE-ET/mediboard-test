@@ -11,8 +11,9 @@
 CAppUI::requireModuleClass("hprimxml", "hprimxmldocument");
 
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
-  var $_sous_type_evt = null;
-  var $_codes_erreurs = null;
+  var $_identifiant_acquitte = null;
+  var $_sous_type_evt        = null;
+  var $_codes_erreurs        = null;
   
 	static function getVersionAcquittementsPatients() {    
     return "msgAcquittementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
@@ -25,13 +26,15 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
 
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
-
+    $echg_hprim      = $this->_ref_echange_hprim;
+    $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
+    
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
     $enteteMessageAcquittement = $this->addElement($acquittementsPatients, "enteteMessageAcquittement");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
 
     $emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
@@ -41,11 +44,15 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $group->loadLastId400();
     $this->addAgent($agents, "système", $this->emetteur, $group->text);
 
+    $echg_hprim->loadRefsDestinataireHprim();
+    // Pour un acquittement l'emetteur du message devient destinataire
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
+    $this->addAgent($agents, "application", $echg_hprim->_ref_emetteur->nom, $echg_hprim->_ref_emetteur->libelle);
+    /* @todo Doit-on gérer le système du destinataire ? */
+    //$this->addAgent($agents, "système", $group->_id, $group->text);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant_acquitte);
     
     if ($statut == "OK") {
       if (is_array($codes)) {

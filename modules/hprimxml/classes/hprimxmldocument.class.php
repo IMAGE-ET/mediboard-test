@@ -15,19 +15,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $documentfinalfilename  = null;
   var $sentFiles              = array();
   
-  var $identifiant           = null;
-  var $date_production       = null;
-  var $emetteur              = null;
-  var $identifiant_emetteur  = null;
-  var $destinataire          = null;
-  var $destinataire_libelle  = null;
-  var $group_id              = null;
+  var $group_id  = null;
   
-  var $type                  = null;
-  var $sous_type             = null;
+  var $type      = null;
+  var $sous_type = null;
   
   // Behaviour fields
-  var $_dest_tag             = null;
+  var $_ref_emetteur      = null;
+  var $_ref_destinataire  = null;
+  var $_ref_echange_hprim = null;
   
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();
@@ -104,57 +100,47 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addEnteteMessage($elParent) {
     global $AppUI;
-
-    $enteteMessage = $this->addElement($elParent, "enteteMessage");
-    $this->addElement($enteteMessage, "identifiantMessage", $this->identifiant ? $this->identifiant : "ES{$this->now}");
-    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $this->date_production ? $this->date_production : mbXMLDateTime());
     
+    $echg_hprim      = $this->_ref_echange_hprim;
+    $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
+    $date_production = $echg_hprim->_id ? $echg_hprim->date_production : mbXMLDateTime();    
+    
+    $enteteMessage = $this->addElement($elParent, "enteteMessage");
+    $this->addElement($enteteMessage, "identifiantMessage", $identifiant);
+    $this->addDateTimeElement($enteteMessage, "dateHeureProduction", $date_production);
+    
+    /* @todo MB toujours l'emetteur ? */
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
-    $this->addAgent($agents, "système", $this->emetteur ? $this->emetteur : CAppUI::conf('mb_id'), $group->text);
+    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
     
+    $echg_hprim->loadRefsDestinataireHprim();
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
-    $this->addAgent($agents, "système", $group->_id, $group->text);
+    $this->addAgent($agents, "application", $this->_ref_destinataire->nom, $this->_ref_destinataire->libelle);
+    /* @todo Doit-on gérer le système du destinataire ? */
+    //$this->addAgent($agents, "système", $group->_id, $group->text);
   }
   
   function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
     $echg_hprim = new CEchangeHprim();
-    $this->date_production    = $echg_hprim->date_production = mbDateTime();
-    $echg_hprim->emetteur     = $this->emetteur;
-    $echg_hprim->group_id     = $this->group_id;
-    $echg_hprim->destinataire = $this->destinataire;
-    $echg_hprim->type         = $this->type;
-    $echg_hprim->sous_type    = $this->sous_type;
-    $echg_hprim->object_id    = $mbObject->_id;
-    $echg_hprim->_message = utf8_encode($this->saveXML());
-    if ($mbObject instanceof CPatient) {
-      $echg_hprim->object_class = "CPatient";
-      if ($mbObject->_IPP) {
-        $echg_hprim->id_permanent = $mbObject->_IPP;
-      }
-    }
-    if ($mbObject instanceof CSejour) {
-      $echg_hprim->object_class = "CSejour";
-      if ($mbObject->_num_dossier) {
-        $echg_hprim->id_permanent = $mbObject->_num_dossier;
-      }
-    }
-    if ($mbObject instanceof COperation) {
-      $echg_hprim->object_class = "COperation";
-    }
-    if ($initiateur) {
-      $echg_hprim->initiateur_id = $initiateur;
-    }
-    
+    $echg_hprim->date_production = mbDateTime();
+    $echg_hprim->emetteur_id     = $this->_ref_emetteur ? $this->_ref_emetteur->_id     : null;
+    $echg_hprim->destinataire_id = $this->_ref_destinataire->_id;
+    $echg_hprim->group_id        = $this->_ref_destinataire->group_id;
+    $echg_hprim->type            = $this->type;
+    $echg_hprim->sous_type       = $this->sous_type;
+    $echg_hprim->object_id       = $mbObject->_id;
+    $echg_hprim->_message        = utf8_encode($this->saveXML());
+    $echg_hprim->initiateur_id   = $initiateur;
+    $echg_hprim->setObjectClassIdPermanent($mbObject);
     $echg_hprim->store();
-
-    $this->identifiant = str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT);
+    
+    $this->_ref_echange_hprim = $echg_hprim;
             
     $this->generateEnteteMessage();
     $this->generateFromOperation($mbObject, $referent);
@@ -199,6 +185,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     } else {
       return $xpath->queryTextNode("hprim:recepteur", $identifiant);
     }
+  }
+  
+  function getTagMediuser() {
+    $this->_ref_echange_hprim->loadRefsDestinataireHprim();
+    
+    return $this->_ref_echange_hprim->_ref_destinataire->_tag_mediuser;
   }
   
   function addTexte($elParent, $elName, $elValue, $elMaxSize = 35) {
@@ -578,7 +570,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addPersonne($personne, $praticien);
   }
   
-  function addVenue($elParent, $mbVenue, $referent = false, $light = false) {
+  function addVenue($elParent, CSejour $mbVenue, $referent = false, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
     
     if(!$referent) {
@@ -608,8 +600,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $entree = $this->addElement($elParent, "entree");
     
     $dateHeureOptionnelle = $this->addElement($entree, "dateHeureOptionnelle");
-    $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_entree));
-    $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_entree));
+    $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->entree));
+    $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->entree));
     
     $modeEntree = $this->addElement($entree, "modeEntree");
     // mode d'entrée inconnu
@@ -643,7 +635,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         }
       }
     
-    // Traitement du responsable du séjour
+      // Traitement du responsable du séjour
       $this->addMedecin($medecins, $mbVenue->_ref_praticien, "rsp");
       
       // Traitement des prescripteurs
@@ -666,8 +658,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $sortie = $this->addElement($elParent, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
-    $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->_sortie));
-    $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->_sortie)); 
+    $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->sortie));
+    $this->addElement($dateHeureOptionnelle, "heure", mbTime($mbVenue->sortie)); 
     
     if ($mbVenue->mode_sortie) {
       $modeSortieHprim = $this->addElement($sortie, "modeSortieHprim");
@@ -702,7 +694,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($modePlacement, "libelle", substr($mbVenue->_view, 0, 80));   
       
       $datePlacement = $this->addElement($placement, "datePlacement");
-      $this->addElement($datePlacement, "date", mbDate($mbVenue->_entree));
+      $this->addElement($datePlacement, "date", mbDate($mbVenue->entree));
     }*/
   }
   
@@ -811,14 +803,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($dateNaissance, isLunarDate($assureNaissance) ? "dateLunaire" : "date", $assureNaissance);
     
     $this->addElement($elParent, "lienAssure", $mbPatient->rang_beneficiaire);
-  }
-  
-  function getTagMediuser() {
-    $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->nom = $this->destinataire;
-    $dest_hprim->loadMatchingObject();
-    
-    return $dest_hprim->_tag_mediuser;
   }
   
   function addSaisieDelocalisee($elParent, CSejour $mbSejour) {

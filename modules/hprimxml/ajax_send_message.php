@@ -34,10 +34,8 @@ if (!$echange_hprim_id) {
   
   foreach ($notifications as $notification) {      
     $dest_hprim = new CDestinataireHprim();
-    $dest_hprim->nom = $notification->destinataire;
-    
-    $dest_hprim->loadMatchingObject();
-    
+    $dest_hprim->load($notification->destinataire_id);
+        
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
       $source->setData($notification->_message);
@@ -63,10 +61,9 @@ if (!$echange_hprim_id) {
   // Chargement de l'objet
   $echange_hprim = new $echange_hprim_classname;
   $echange_hprim->load($echange_hprim_id);
-
+  
   $dest_hprim = new CDestinataireHprim();
-  $dest_hprim->nom = $echange_hprim->destinataire;
-  $dest_hprim->loadMatchingObject();
+  $dest_hprim->load($echange_hprim->destinataire_id);
   
   $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
   $source->setData($echange_hprim->_message);
