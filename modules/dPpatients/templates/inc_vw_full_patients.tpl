@@ -78,7 +78,7 @@ function popEtatSejour(sejour_id) {
         <button class="lookup notext" onclick="popEtatSejour({{$_sejour->_id}});">{{tr}}Lookup{{/tr}}</button>
       </td>
 			<td>   
-        <a href="#" onclick="{{if @$can_view_dossier_medical}}viewDossierSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
+        <a href="#" onclick="{{if $can_view_dossier_medical}}viewDossierSejour('{{$_sejour->_id}}');{{else}}viewCompleteItem('{{$_sejour->_guid}}');{{/if}} ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{$_sejour->_shortview}} 
           </span>
