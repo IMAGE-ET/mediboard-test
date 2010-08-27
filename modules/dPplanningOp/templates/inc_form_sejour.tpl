@@ -470,12 +470,10 @@ Main.add( function(){
     <select name="type" onchange="changeTypeHospi()">
     {{assign var=specType value=$sejour->_specs.type}}
     {{foreach from=$specType->_locales item="curr_type" key="key"}}
-      {{if $key != 'urg' || $urgInstalled}}
       <option value="{{$key}}"
         {{if $sejour->type == $key || (!$sejour->type && $key == $specType->default)}}selected="selected"{{/if}}>
         {{$curr_type}}
       </option>
-      {{/if}}
     {{/foreach}}
     </select>
   </td>
