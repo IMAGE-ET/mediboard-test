@@ -359,9 +359,9 @@ Prescription = {
     lineCountNonSignee > 0 ? link.addClassName("wrong") : link.removeClassName("wrong");
 		lineCount == 0 ? link.addClassName("empty") : link.removeClassName("empty");
 		
-    var name_tab = link.innerHTML.split(" ")[0];
+    var name_tab = link.innerHTML.split("  ")[0];
     // Si le nombre de ligne est > 0
-    link.innerHTML = lineCount > 0 ? name_tab+" ("+lineCount+")" : link.innerHTML = name_tab;
+    link.innerHTML = lineCount > 0 ? name_tab+"  ("+lineCount+")" : link.innerHTML = name_tab;
   },
 	/*
   submitFormStop: function(oForm, object_id, object_class){
