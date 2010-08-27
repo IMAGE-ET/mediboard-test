@@ -208,7 +208,10 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         } else {
           $_code_NumDos = "I122";  
         }
-        if (!$newVenue->_id) {            
+        if (!$newVenue->_id) {   
+          // Mapping du séjour si pas de numéro de dossier
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
+          
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
             if ($newVenue->loadMatchingSejour(null, true)) {
