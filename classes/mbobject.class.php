@@ -2293,7 +2293,7 @@ class CMbObject {
     $object_config = $this->loadUniqueBackRef("object_configs");
 
     $class_config->extendsWith($object_config);
-    
+
     $this->_configs = $class_config->getConfigValues();
   }
   
@@ -2302,10 +2302,6 @@ class CMbObject {
    */
   function getConfigValues() {
     $configs = array();
-    
-    if (!$this->_id) {
-      return $configs;
-    }
     
     $fields = $this->getDBFields();
     unset($fields[$this->_spec->key]);
