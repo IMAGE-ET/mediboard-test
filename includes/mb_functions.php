@@ -194,7 +194,9 @@ function mbDateTimeFromXMLDuration($duration) {
 
 /**
  * Transforms absolute or relative time into DB friendly DATE format
- * @return string: the transformed time 
+ * @param String $relative The relative time against the $ref (ex: "-1 MONTH")
+ * @param Date $ref The reference date
+ * @return Date The transformed time
  **/
 function mbDate($relative = null, $ref = null) {
   return mbTransformTime($relative, $ref, "%Y-%m-%d");

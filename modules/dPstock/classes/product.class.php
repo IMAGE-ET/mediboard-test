@@ -53,7 +53,7 @@ class CProduct extends CMbObject {
   var $_unit_title         = null;
   var $_quantity           = null; // The quantity view
   var $_consumption        = null;
-  
+  var $_supply             = null;
   var $_unique_usage       = null;
   
   // This group's stock id
@@ -188,16 +188,30 @@ class CProduct extends CMbObject {
   
   function loadView(){
     parent::loadView();
-    $this->getConsommation("-3 MONTHS");
+    $this->getConsumption("-3 MONTHS");
   }
   
-  function getConsommation($since = "-1 MONTH"){
+  /** Computes this product's consumption between two dates
+   * @param Date $since [optional]
+   * @param Date $date_max [optional]
+   * @return Number
+   */
+  function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null){
     $this->loadRefStock();
     
     $where = array(
       "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
-      "product_delivery_trace.date_delivery" => " > '".mbDate($since)."'",
+      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
     );
+    
+    if ($date_max) {
+      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
+    }
+    
+    if ($service_id) {
+      $where["product_delivery.service_id"] = "= '$service_id'";
+    }
+    
     $ljoin = array(
       "product_delivery" => "product_delivery.delivery_id = product_delivery_trace.delivery_id"
     );
@@ -211,6 +225,38 @@ class CProduct extends CMbObject {
     }
     
     return $this->_consumption = $total;
+  }
+  
+  /** Computes this product's supply between two dates
+   * @param Date $since [optional]
+   * @param Date $date_max [optional]
+   * @return Number
+   */
+  function getSupply($since = "-1 MONTH", $date_max = null){
+    $where = array(
+      "product.product_id" => "= '{$this->_id}'",
+      "product_order_item_reception.date > '".mbDate($since)."'",
+    );
+    
+    if ($date_max) {
+      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+    }
+    
+    $ljoin = array(
+      "product_order_item" => "product_order_item.order_item_id = product_order_item_reception.order_item_id",
+      "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
+      "product" => "product.product_id = product_reference.product_id",
+    );
+    
+    $lot = new CProductOrderItemReception;
+    $lots = $lot->loadList($where, null, null, null, $ljoin);
+    
+    $total = 0;
+    foreach($lots as $_lot) {
+      $total += $_lot->getUnitQuantity();
+    }
+    
+    return $this->_supply = $total;
   }
   
   function store() {

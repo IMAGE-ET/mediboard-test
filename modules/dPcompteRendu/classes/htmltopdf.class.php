@@ -20,54 +20,17 @@ class CHtmlToPDF {
   var $content = null;
   var $display_elem = array (
 	  "inline" => array(
-		  "b", "strong",
-      "big",
-      "blink",
-      "cite",
-      "code",
-      "del",
-      "dfn",
-      "em",
-      "font",
-      "i",
-      "ins",
-      "kbd",
-      "nobr",
-      "q",
-      "s",
-      "samp",
-      "small",
-      "span",
-      "strike",
-      "sub",
-      "sup",
-      "tt",
-      "u",
-      "var"
-      ),
+		  "b", "strong", "big", "blink", "cite", "code", "del", "dfn",
+      "em", "font", "i", "ins", "kbd", "nobr", "q", "s", "samp", "small",
+      "span", "strike", "sub", "sup", "tt", "u", "var"
+    ),
 	  "block"  => array(
-      "address",
-      "blockquote",
-      "dd",
-      "dl",
-      "dt",
-      "div",
-      "dir",
-      "h1", "h2", "h3", "h4", "h5", "h6",
-      /*"hr",*/
-      "listing",
-      "isindex",
-      "map",
-      "menu",
-      "multicol",
-      "ol",
-      "p",
-      "pre",
-      "plaintext",
-      "table",
-      "ul",
-      "xmp",
-    ));
+      "address", "blockquote", "dd", "dl", "dt", "div", "dir",
+      "h1", "h2", "h3", "h4", "h5", "h6", /*"hr",*/
+      "listing", "isindex", "map", "menu", "multicol", "ol",
+      "p", "pre", "plaintext", "table", "ul", "xmp",
+    )
+  );
       
   static $_font_size_lookup = array(
     // For basefont support
@@ -151,7 +114,7 @@ class CHtmlToPDF {
       $html =& $xml->firstChild;
 
     if ( is_null($html) ) {
-      CAppUI::stepAjax(CAppUI::tr("CCompteRendu-empty-doc"));
+      CAppUI::stepAjax("CCompteRendu-empty-doc");
       CApp::rip();
     }
 

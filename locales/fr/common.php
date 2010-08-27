@@ -61,6 +61,7 @@ $locales['Last connection'] = 'Dernière connexion';
 $locales['Latest update'] = 'Màj il y a';
 $locales['Loading in progress'] = 'Chargement en cours';
 $locales['Loading tooltip'] = 'Chargement infobulle';
+$locales['Locales file saved'] = 'Fichier de traduction sauvegardé';
 $locales['Login'] = 'Me connecter';
 $locales['Logout'] = 'Déconnecter';
 $locales['Long'] = 'Long';

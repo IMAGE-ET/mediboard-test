@@ -7,6 +7,7 @@ $locales['config-pharmacie-show_totals_in_lists'] = 'Afficher le compte total da
 $locales['config-pharmacie-show_totals_in_lists-desc'] = 'Afficher le compte total dans les tabulations des listes';
 $locales['mod-pharmacie-tab-configure'] = 'Configuration';
 $locales['mod-pharmacie-tab-print_prepare_plan'] = 'Plan de cueillette';
+$locales['mod-pharmacie-tab-vw_idx_balance'] = 'Bilans';
 $locales['mod-pharmacie-tab-vw_idx_delivrance'] = 'Délivrance';
 $locales['mod-pharmacie-tab-vw_idx_destockage_service'] = 'Déstockages';
 $locales['mod-pharmacie-tab-vw_idx_dispensation'] = 'Dispensation';

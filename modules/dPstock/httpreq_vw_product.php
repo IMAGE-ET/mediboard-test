@@ -47,7 +47,7 @@ if ($product->load($product_id)) {
     $_delivery->loadRefsBack();
   }
   
-  $product->getConsommation("-3 MONTHS");
+  $product->getConsumption("-3 MONTHS");
 }
 
 // Loads the required Category the complete list

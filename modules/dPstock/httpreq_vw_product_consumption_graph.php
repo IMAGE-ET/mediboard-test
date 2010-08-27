@@ -96,7 +96,7 @@ $data = array(
       "labelsAngle" => 0,
     ),
     "yaxis" => array(
-      "showLabels" => true,
+      "showLabels" => false,
       "ticks" => array(array(0,  ""), array($max, "$max")),
       "max" => $max * 1.4, // 1.5 when markers
     ),
