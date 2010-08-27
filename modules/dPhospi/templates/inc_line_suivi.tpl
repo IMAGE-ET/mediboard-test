@@ -1,3 +1,6 @@
+{{if !@$line_guid}}
+  {{assign var=line_guid value=""}}
+{{/if}}
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
