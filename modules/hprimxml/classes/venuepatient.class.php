@@ -209,9 +209,9 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $_code_NumDos = "I122";  
         }
         if (!$newVenue->_id) {   
-          // Mapping du séjour si pas de numéro de dossier
+          // Mapping du séjour
           $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-          
+                    
           // Séjour retrouvé
           if (CAppUI::conf("hprimxml strictSejourMatch")) {
             if ($newVenue->loadMatchingSejour(null, true)) {
@@ -282,6 +282,12 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           }
           if (!$newVenue->_id && !isset($num_dossier->_trash)) {
+            $newVenue->_num_dossier = $num_dossier->id400;
+            // Notifier les autres destinataires
+            $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
+            // Mapping du séjour
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
+          
             $msgVenue = $newVenue->store();
             $commentaire = "Séjour créé : $newVenue->_id. ";
           }
