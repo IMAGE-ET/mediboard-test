@@ -76,7 +76,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     if ($echange_hprim->statut_acquittement != "OK") {
       return $messageAcquittement;
     }
-
+    
+    $messageAcquittement = null;
     $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
     $domAcquittement->_sous_type_evt        = $this->sous_type;
     $domAcquittement->_ref_echange_hprim    = $echange_hprim;
