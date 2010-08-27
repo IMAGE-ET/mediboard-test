@@ -279,37 +279,34 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     if (!$mbVenue->type) {
 	    if ($nature) {
-	      $mbVenue->type =  $attrNatureVenueHprim[$nature];
+	      $mbVenue->type = $attrNatureVenueHprim[$nature];
 	    } else {
 	      $mbVenue->type = "hsp";
 	    }
     }  
     
-    if (preg_match($destinataire->_configs["type_sej_hospi"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "hsp";
-    }
-    
-    if (preg_match($destinataire->_configs["type_sej_ambu"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "ambu";
-    }
-    
-    if (preg_match($destinataire->_configs["type_sej_urg"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "urg";
-    }
-    
-    if (preg_match($destinataire->_configs["type_sej_scanner"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "seances";
-    }
-      
-    if (preg_match($destinataire->_configs["type_sej_chimio"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "seances";
-    }
-    
-    if (preg_match($destinataire->_configs["type_sej_dialyse"], $mbVenue->_num_dossier)) {
-      $mbVenue->type = "seances";
-    }
+    $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
     
     return $mbVenue;
+  }
+  
+  static function getVenueType($destinataire, $num_dossier) {
+    $types = array(
+      "type_sej_hospi"   => "hsp",
+      "type_sej_ambu"    => "ambu",
+      "type_sej_urg"     => "urg",
+      "type_sej_scanner" => "sc",
+      "type_sej_chimio"  => "sc",
+      "type_sej_dialyse" => "sc",
+    );
+    
+    foreach($types as $config => $type) {
+      if (!$destinataire->_configs[$type]) continue;
+      
+      if (preg_match($destinataire->_configs[$type], $num_dossier)) {
+        return $types[$type];
+      }
+    }
   }
   
   static function getEntree($node, CSejour $mbVenue) {
