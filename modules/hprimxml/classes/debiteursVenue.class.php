@@ -87,21 +87,20 @@ class CHPrimXMLDebiteursVenue extends CHPrimXMLEvenementsPatients {
   function debiteursVenue($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
+    $domEnregistrementPatient->_ref_echange_hprim = $echange_hprim;
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $echange_hprim, $newPatient, $data);
     if ($echange_hprim->statut_acquittement != "OK") {
       return $messageAcquittement;
     }
     
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
-    $domAcquittement->identifiant = $data['identifiantMessage'];
-    $domAcquittement->destinataire = $data['idClient'];
-    $domAcquittement->destinataire_libelle = $data['libelleClient'];
+    $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
+    $domAcquittement->_sous_type_evt        = $this->sous_type;
+    $domAcquittement->_ref_echange_hprim    = $echange_hprim;
     
     // Si CIP
     if (!CAppUI::conf('sip server')) { 
-      $dest_hprim = new CDestinataireHprim();
-      $dest_hprim->nom = $data['idClient'];
-      $dest_hprim->loadMatchingObject();
+      $dest_hprim = $echange_hprim->_ref_emetteur;
       
       $avertissement = null;
       
