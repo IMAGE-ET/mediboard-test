@@ -121,7 +121,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       return $messageAcquittement;
     }
     
-    $messageAcquittement = null;
     $domAcquittement = new CHPrimXMLAcquittementsPatients();
     $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
     $domAcquittement->_sous_type_evt        = $this->sous_type;

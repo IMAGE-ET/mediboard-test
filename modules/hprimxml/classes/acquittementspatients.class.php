@@ -42,7 +42,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "système", $this->emetteur, $group->text);
+    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
 
     $echg_hprim->loadRefsDestinataireHprim();
     // Pour un acquittement l'emetteur du message devient destinataire
@@ -83,9 +83,6 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
   }
 
   function generateAcquittementsPatients($statut, $codes, $commentaires = null, $mbObject = null) {
-    $this->emetteur = CAppUI::conf('mb_id');
-    $this->date_production = mbDateTime();
-
     if ($statut != "OK") {
       $this->generateEnteteMessageAcquittement($statut);
       $this->addErreursAvertissements($statut, $codes, $commentaires, $mbObject);
