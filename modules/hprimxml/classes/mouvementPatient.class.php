@@ -68,9 +68,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    * @return string acquittement 
    **/
   function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
-    $newVenue = new CSejour();
-    
     // Traitement de la venue
+    $newVenue        = new CSejour();
     $domVenuePatient = new CHPrimXMLVenuePatient();
     $domVenuePatient->_ref_echange_hprim = $echange_hprim;
     $messageAcquittement = $domVenuePatient->venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, $newVenue);
@@ -95,18 +94,19 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
       $msgVenue = $newVenue->store();
       
-      $newVenue->loadLogs();
-      $modified_fields = "";
-      if (is_array($newVenue->_ref_last_log->_fields)) {
-        foreach ($newVenue->_ref_last_log->_fields as $field) {
-          $modified_fields .= "$field \n";
-        }
-      }
       $codes = array ($msgVenue ? "A103" : "I102");
       
       if ($msgVenue) {
         $avertissement = $msgVenue." ";
       } else {
+        $newVenue->loadLogs();
+        $modified_fields = "";
+        if (is_array($newVenue->_ref_last_log->_fields)) {
+          foreach ($newVenue->_ref_last_log->_fields as $field) {
+            $modified_fields .= "$field \n";
+          }
+        }
+      
         $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
       
