@@ -27,8 +27,8 @@ class CTransmissionMedicale extends CMbMetaObject {
   var $_ref_user   = null;
   var $_ref_cible  = null;
   
-  var $_cible = null;
-  
+  var $_cible      = null;
+    
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'transmission_medicale';
@@ -68,6 +68,12 @@ class CTransmissionMedicale extends CMbMetaObject {
   	$this->_view = "Transmission de ".$this->_ref_user->_view;
   }
   
+	function canEdit(){
+		$nb_hours = CAppUI::conf("dPprescription CPrescription max_time_modif_suivi_soins");
+    $datetime_max = mbDateTime("+ $nb_hours HOURS", $this->date);
+		return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
+	}
+	
   function calculCibles(&$cibles = array()){
     if($this->object_id && $this->object_class){
       // Ligne de medicament, cible => classe ATC
@@ -124,7 +130,6 @@ class CTransmissionMedicale extends CMbMetaObject {
       }
     }
   }
-  
   
   function getPerm($perm) {
     if(!isset($this->_ref_sejour->_id)) {

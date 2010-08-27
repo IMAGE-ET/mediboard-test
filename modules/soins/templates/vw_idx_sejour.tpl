@@ -158,7 +158,7 @@ function loadSuivi(sejour_id, user_id, cible) {
   urlSuivi.requestUpdate("dossier_suivi");
 }
 
-function submitSuivi(oForm, prescription_id) {
+function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
     loadSuivi(sejour_id); 
@@ -169,7 +169,7 @@ function submitSuivi(oForm, prescription_id) {
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
-        calculSoinSemaine('{{$date}}', prescription_id);
+        calculSoinSemaine('{{$date}}');
       }  
     }  
   } });

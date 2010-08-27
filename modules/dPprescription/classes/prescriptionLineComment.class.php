@@ -61,6 +61,12 @@ class CPrescriptionLineComment extends CPrescriptionLine {
     $this->loadRefsFwd();
   }
   
+  function canEdit(){
+    $nb_hours = CAppUI::conf("dPprescription CPrescription max_time_modif_suivi_soins");
+    $datetime_max = mbDateTime("+ $nb_hours HOURS", "$this->debut $this->time_debut");
+		return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->praticien_id);
+  }
+	
   function updateDBFields(){
     parent::updateDBFields();
     if($this->_executant !== null){

@@ -16,11 +16,12 @@
 
 <script type="text/javascript">
 
-function loadSuivi(sejour_id, user_id) {
+function loadSuivi(sejour_id, user_id, line_guid) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
+		urlSuivi.addParam("line_guid", line_guid);
     urlSuivi.requestUpdate("suivisoins");
   }
 }
@@ -84,7 +85,7 @@ Main.add(function () {
   
   <li><a href="#AntTrait">Antécédents</a></li>
  
-  {{if $consult->sejour_id && $modules.dPprescription->_can->read}}
+  {{if $consult->sejour_id && $modules.dPprescription->_can->read && !$dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription Séjour

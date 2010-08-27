@@ -39,6 +39,15 @@ function updateUCD(){
   var url = new Url("dPprescription", "httpreq_update_ucd");
   url.requestUpdate("update_ucd");
 }
+
+/*
+function onchangeMed(radioButton, other_field){
+  var oForm = getForm("editConfig");
+	if(radioButton.value){
+	  $V(oForm.elements["dPprescription[CPrescription]["+other_field+"]"], "0", false);
+  }
+}
+*/
 </script>
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
@@ -58,12 +67,37 @@ function updateUCD(){
 		{{mb_include module=system template=inc_config_bool var=show_unsigned_med_msg}}
 		{{mb_include module=system template=inc_config_bool var=add_element_category}}
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
-		<tr>
+		{{mb_include module=system template=inc_config_bool var=prescription_suivi_soins}}
+		
+
+	 {{assign var="var" value="max_time_modif_suivi_soins"}}
+    <tr> 
+		  <th>
+		    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+        </label>
+			</th>	 
+      <td colspan="2">
+        <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+        {{foreach from=$listHours item=_hour}}
+          <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+            {{$_hour}}
+          </option>
+        {{/foreach}}
+        </select>
+        heures
+      </td>             
+    </tr>
+		
+		
+    <tr>
       <th class="title" colspan="2">
         Chapitres visibles dans la prescription
       </th>
     </tr>
-    {{mb_include module=system template=inc_config_bool var=show_chapter_med}}
+    {{mb_include module=system template=inc_config_bool var=show_chapter_med onchange="onchangeMed(this, 'show_chapter_med_elt')"}}
+		{{mb_include module=system template=inc_config_bool var=show_chapter_med_elt onchange="onchangeMed(this, 'show_chapter_med')"}}
+		
     {{mb_include module=system template=inc_config_bool var=show_chapter_anapath}}
     {{mb_include module=system template=inc_config_bool var=show_chapter_biologie}}
     {{mb_include module=system template=inc_config_bool var=show_chapter_imagerie}}
@@ -78,6 +112,8 @@ function updateUCD(){
       </th>
     </tr>
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_med}}
+		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_med_elt}}
+    
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_anapath}}
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_biologie}}
 		{{mb_include module=system template=inc_config_bool var=droits_infirmiers_imagerie}}
@@ -94,9 +130,6 @@ function updateUCD(){
 	      </label>    
 	    </th>
 	  </tr>
-		
-		
-		
 	  <tr>  
 	    <td colspan="2" style="text-align: center">
 	      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">

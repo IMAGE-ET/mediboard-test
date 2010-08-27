@@ -51,7 +51,7 @@ function loadSuivi(sejour_id, user_id) {
   }
 }
 
-function submitSuivi(oForm, prescription_id) {
+function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
     loadSuivi(sejour_id); 

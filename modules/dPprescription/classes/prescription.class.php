@@ -245,8 +245,8 @@ class CPrescription extends CMbObject {
   function applyDateProtocole(&$_line, $praticien_id, $date_sel, $operation_id, $debut_sejour, $fin_sejour, $date_operation, 
                               $hour_operation, $operation, $sejour){
     global $AppUI;
-    
-    if($_line->_class_name == "CPrescriptionLineMix"){
+        
+		if($_line->_class_name == "CPrescriptionLineMix"){
       $_line->loadRefsLines();
     // Gestion des prescription_line_mixes
       $_line->loadRefPraticien();
@@ -406,6 +406,17 @@ class CPrescription extends CMbObject {
           $_line->time_fin = "";
         }
       }
+			
+			// Cas specifique des prescriptions aux urgences dans le suivi de soins      
+			if($this->_ref_object instanceof CSejour && $this->_ref_object->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
+	      if($_line instanceof CPrescriptionLineMedicament || $_line instanceof CPrescriptionLineMix){
+	      	return;
+	      }
+				$_line->debut = mbDate();
+	      $_line->time_debut = mbTime();  
+				$_line->duree = "";
+      }
+    
       $msg = $_line->store();
       CAppUI::displayMsg($msg, "{$_line->_class_name}-msg-create");  
 

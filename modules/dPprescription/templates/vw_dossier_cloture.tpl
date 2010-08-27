@@ -120,7 +120,9 @@
 		<th />
   </tr>
   {{foreach from=$sejour->_ref_suivi_medical item=_suivi}}
- 	  {{mb_include module=dPhospi template=inc_line_suivi _suivi=$_suivi show_patient=false nodebug=true without_del_form=true}}
+	  <tr id="{{$_suivi->_guid}}" {{if $_suivi instanceof CTransmissionMedicale}}class="{{$_suivi->_cible}}"{{/if}}>
+ 	    {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true without_del_form=true}}
+		</tr>
   {{foreachelse}}
 	  <tr>
 	  	<td colspan="6">Aucune transmission</td>

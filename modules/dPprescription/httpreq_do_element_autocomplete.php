@@ -17,7 +17,9 @@ $libelle = CValue::post("libelle", "aaa");
 if(!$category_id){
 	// Chargement de la liste des categories
 	$category_prescription = new CCategoryPrescription();
-	$where["chapitre"] = "= '$chapitre'";
+	if($chapitre){
+	  $where["chapitre"] = "= '$chapitre'";
+	}
 	$where[] = "group_id = '$g' OR group_id IS NULL";
 	$categories = $category_prescription->loadList($where);
 }

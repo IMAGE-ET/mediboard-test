@@ -8,6 +8,10 @@ toggleTrans = function(trans_class){
 
 </script>
 
+{{if !@$line_guid}}
+  {{assign var=line_guid value=""}}
+{{/if}}
+
 <table class="tbl">
   <tr>
     <th colspan="7" class="title">
@@ -32,7 +36,7 @@ toggleTrans = function(trans_class){
 			    {{/if}}
 		    </div>
 	    {{/if}}
-	    Observations et Transmissions 
+	    Suivi de soins
     </th>
   </tr>
   <tr>
@@ -46,11 +50,12 @@ toggleTrans = function(trans_class){
   </tr>  
   <tbody {{if !$without_del_form}} id="transmissions"{{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
-		{{if $_suivi instanceof CTransmissionMedicale || $_suivi instanceof CObservationMedicale}}
- 	    {{mb_include module=dPhospi template=inc_line_suivi _suivi=$_suivi show_patient=false nodebug=true}}
-		{{else}}
-		   {{mb_include module=dPhospi template=inc_line_constante _constante=$_suivi nodebug=true}}
-		{{/if}}
+	<tr {{if !$without_del_form}}id="{{$_suivi->_guid}}"{{/if}} {{if $_suivi instanceof CTransmissionMedicale}}class="{{$_suivi->_cible}} {{if $_suivi->object_id}}{{$_suivi->_ref_object->_guid}}{{/if}}"{{/if}}
+	    {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
+			  onmouseover="highlightTransmissions('{{$_suivi->_guid}}');" onmouseout="removeHighlightTransmissions();"
+			{{/if}}>
+ 	  {{mb_include module=dPhospi template=inc_line_suivi show_patient=false nodebug=true}}
+		</tr>
   {{foreachelse}}
   </tbody>
     <tr>

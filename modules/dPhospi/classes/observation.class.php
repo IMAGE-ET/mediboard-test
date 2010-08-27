@@ -46,7 +46,13 @@ class CObservationMedicale extends CMbObject {
     $specs["text"]         = "text helped|degre";
     return $specs;
   }
-    
+
+  function canEdit(){
+    $nb_hours = CAppUI::conf("dPprescription CPrescription max_time_modif_suivi_soins");
+    $datetime_max = mbDateTime("+ $nb_hours HOURS", $this->date);
+    return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);  
+  }
+	
   function loadRefSejour(){
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour = $this->_ref_sejour->getCached($this->sejour_id);

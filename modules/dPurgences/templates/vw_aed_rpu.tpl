@@ -22,11 +22,12 @@
 	
 	ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 	
-	function loadSuivi(sejour_id, user_id) {
+	function loadSuivi(sejour_id, user_id, line_guid) {
 	  if(sejour_id) {
 	    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
 	    urlSuivi.addParam("sejour_id", sejour_id);
 	    urlSuivi.addParam("user_id", user_id);
+			urlSuivi.addParam("libe_guid", line_guid);
 	    urlSuivi.requestUpdate("suivisoins");
 	  }
 	}
@@ -382,7 +383,7 @@
 		  {{if $app->user_prefs.ccam_sejour == 1 }}
 		  <li><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
-			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
+			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
 		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 		  {{if @$modules.dPImeds->mod_active}}

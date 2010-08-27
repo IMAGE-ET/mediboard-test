@@ -25,7 +25,7 @@ class CCategoryPrescription extends CMbObject {
   var $_ref_elements_prescription = null;
 	var $_count_elements_prescription = null;
   
-	static $chapitres_elt = array('anapath','biologie','imagerie','consult','kine','soin','dm','dmi');
+	static $chapitres_elt = array('anapath','biologie','imagerie','consult','kine','soin','dm','dmi','med_elt');
 	
   function getSpec() {
     $spec = parent::getSpec();

@@ -287,6 +287,8 @@ $dPconfig["dPprescription"] = array (
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
     "time_alerte_modification" => "2",
+		"prescription_suivi_soins" => "0",
+		"max_time_modif_suivi_soins" => "12",
     "scores" => array(
       "interaction" => array(
         "niv1" => "1",
@@ -317,6 +319,7 @@ $dPconfig["dPprescription"] = array (
       "hors_livret" => "1"
     ),
 	  "droits_infirmiers_med"      => "0",
+		"droits_infirmiers_med_elt" => "0",
 		"droits_infirmiers_anapath"  => "0",
 		"droits_infirmiers_biologie" => "0",
 		"droits_infirmiers_imagerie" => "0",
@@ -326,6 +329,7 @@ $dPconfig["dPprescription"] = array (
 		"droits_infirmiers_dm"       => "0",
 		"droits_infirmiers_dmi"      => "0",
 		"show_chapter_med"      => "1",
+		"show_chapter_med_elt" => "0",
     "show_chapter_anapath"  => "1",
     "show_chapter_biologie" => "1",
     "show_chapter_imagerie" => "1",
@@ -369,6 +373,10 @@ $dPconfig["dPprescription"] = array (
     "dm" => array(
       "phrase"      => "Délivrer",
       "unite_prise" => "dispositif(s)"
+    ),
+		"med_elt" => array(
+		  "phrase"      => "",
+      "unite_prise" => ""
     ),
     "show_description" => "0",
     "show_header" => "0"
