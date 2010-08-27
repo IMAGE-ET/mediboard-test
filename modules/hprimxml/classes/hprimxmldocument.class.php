@@ -211,7 +211,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addCodeLibelle($elParent, $nodeName, $code, $libelle) {
     $codeLibelle = $this->addElement($elParent, $nodeName);
     $this->addTexte($codeLibelle, "code", $code, 10);
-    $this->addTexte($codeLibelle, "libelle", $libelle, 35);
+    if ($libelle) {
+      $this->addTexte($codeLibelle, "libelle", $libelle, 35);
+    }
     return $codeLibelle;
   }
   
