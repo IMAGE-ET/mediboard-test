@@ -38,7 +38,7 @@ function goToDate(oForm, date) {
 
 function showConsultSiDesistement(){
   var url = new Url("dPcabinet", "vw_list_consult_si_desistement");
-  url.addParam("chir_id", {{$chirSel}});
+  url.addParam("chir_id", '{{$chirSel}}');
   url.pop(500, 500, "test");
 }
 
