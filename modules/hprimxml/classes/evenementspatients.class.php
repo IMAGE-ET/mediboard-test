@@ -301,10 +301,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
     
     foreach($types as $config => $type) {
-      if (!$destinataire->_configs[$type]) continue;
+      if (!$destinataire->_configs[$config]) continue;
       
-      if (preg_match($destinataire->_configs[$type], $num_dossier)) {
-        return $types[$type];
+      if (preg_match($destinataire->_configs[$config], $num_dossier)) {
+        return $type;
       }
     }
   }
