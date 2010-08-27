@@ -229,7 +229,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       
       return $mbVenue;
     } 
-    $mbVenue = self::getNatureVenue($node, $mbVenue);
+    
+    $mbVenue = $this->getNatureVenue($node, $mbVenue);
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = self::getPlacement($node, $mbVenue);
@@ -262,7 +263,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $xpath->getValueAttributNode($node, "etat"); 
   }
   
-  static function getNatureVenue($node, CSejour $mbVenue) {
+  function getNatureVenue($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $destinataire = $this->_ref_echange_hprim->_ref_emetteur;
