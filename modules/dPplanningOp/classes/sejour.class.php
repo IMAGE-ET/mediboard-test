@@ -1111,6 +1111,10 @@ class CSejour extends CCodable {
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
     
+    if (!$this->_entree && !$this->_sortie) {
+      return;
+    }
+    
     if ($this->_entree){
       $date_entree = mbDate($this->_entree); 
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
