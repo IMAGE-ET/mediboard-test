@@ -112,7 +112,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, $newVenue = null) {
+  function venuePatient($domAcquittement, $echange_hprim, $newPatient, $data, &$newVenue = null) {
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $domEnregistrementPatient->_ref_echange_hprim = $echange_hprim;
@@ -279,11 +279,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           }
           if (!$newVenue->_id && !isset($num_dossier->_trash)) {
-            // Notifier les autres destinataires
-            $newVenue->_hprim_initiateur_group_id = $dest_hprim->group_id;
-            // Mapping du séjour
-            $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
-                
             $msgVenue = $newVenue->store();
             $commentaire = "Séjour créé : $newVenue->_id. ";
           }
