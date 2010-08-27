@@ -662,7 +662,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     // Cas dans lequel on transmet pas de sortie tant que l'on a pas la sortie réelle
-    if (!$mbVenue->sortie_reelle && ($dest->_configs["send_sortie_prevue"] == 0)) {
+    if (!$mbVenue->sortie_reelle && ($this->_ref_destinataire->_configs["send_sortie_prevue"] == 0)) {
       return;
     }  
     
