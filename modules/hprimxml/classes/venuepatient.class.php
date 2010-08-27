@@ -323,6 +323,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       } 
       // idSource connu
       else {
+        $newVenue->_num_dossier = $num_dossier->id400;
         $newVenue->load($num_dossier->object_id);
         // Dans le cas d'une annulation de la venue
         if ($cancel) {
@@ -330,6 +331,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             return $messageAcquittement;
           }
         }
+        
         
         // Mapping du séjour
         $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
