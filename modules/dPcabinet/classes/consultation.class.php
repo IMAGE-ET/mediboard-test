@@ -706,7 +706,12 @@ class CConsultation extends CCodable {
   }
   
   function store() {
-    $this->completeField('sejour_id', 'heure', 'plageconsult_id');
+    $this->completeField('sejour_id', 'heure', 'plageconsult_id', 'si_desistement');
+    
+    if ($this->si_desistement === null) {
+      $this->si_desistement = 0;
+    }
+    
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id && 
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {
