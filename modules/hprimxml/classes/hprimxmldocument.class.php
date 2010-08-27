@@ -102,8 +102,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     global $AppUI;
     
     $echg_hprim      = $this->_ref_echange_hprim;
+    $dest            = $this->_ref_destinataire;
     $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
     $date_production = $echg_hprim->_id ? $echg_hprim->date_production : mbXMLDateTime();    
+    
+    $this->addAttribute($elParent, "acquittementAttendu", $dest->_configs["receive_ack"] ? "oui" : "non");
     
     $enteteMessage = $this->addElement($elParent, "enteteMessage");
     $this->addElement($enteteMessage, "identifiantMessage", $identifiant);
@@ -118,10 +121,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
     $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
     
-    $echg_hprim->loadRefsDestinataireHprim();
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $this->_ref_destinataire->nom, $this->_ref_destinataire->libelle);
+    $this->addAgent($agents, "application", $dest->nom, $dest->libelle);
     /* @todo Doit-on gérer le système du destinataire ? */
     //$this->addAgent($agents, "système", $group->_id, $group->text);
   }
@@ -139,6 +141,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->initiateur_id   = $initiateur;
     $echg_hprim->setObjectClassIdPermanent($mbObject);
     $echg_hprim->store();
+    
+    // Chargement des configs du destinataire
+    $this->_ref_destinataire->loadConfigValues();
     
     $this->_ref_echange_hprim = $echg_hprim;
             
@@ -656,6 +661,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       }
     }
     
+    // Cas dans lequel on transmet pas de sortie tant que l'on a pas la sortie réelle
+    if (!$mbVenue->sortie_relle && ($dest->_configs["send_sortie_prevue"] == 0)) {
+      return;
+    }  
+    
     $sortie = $this->addElement($elParent, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addElement($dateHeureOptionnelle, "date", mbDate($mbVenue->sortie));
@@ -683,7 +693,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addElement($modeSortieHprim, "libelle", $mbVenue->mode_sortie);
       
       $this->addAttribute($modeSortieHprim, "valeur", $modeSortieEtablissementHprim);
-    }
+    }      
     
     // @todo Voir comment intégrer le placement pour la v. 1.01 et v. 1.05
     /*
