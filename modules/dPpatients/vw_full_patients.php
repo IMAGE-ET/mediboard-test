@@ -59,14 +59,14 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("consultation_id"   , $consultation_id    );
-$smarty->assign("sejour_id"         , $sejour_id          );
+$smarty->assign("consultation_id"         , $consultation_id);
+$smarty->assign("sejour_id"               , $sejour_id);
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
-$smarty->assign("operation_id"      , $operation_id       );
-$smarty->assign("patient"           , $patient            );
-$smarty->assign("listPrat"          , $listPrat           );
-$smarty->assign("object"            , $patient            );
-$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
+$smarty->assign("operation_id"            , $operation_id);
+$smarty->assign("patient"                 , $patient);
+$smarty->assign("listPrat"                , $listPrat);
+$smarty->assign("object"                  , $patient);
+$smarty->assign("isImedsInstalled"        , CModule::getActive("dPImeds"));
 
 $smarty->display("vw_full_patients.tpl");
 

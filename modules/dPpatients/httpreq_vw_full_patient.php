@@ -40,14 +40,21 @@ foreach($patient->_ref_consultations as $keyConsult => $consult){
   }
 }
 
+$can_view_dossier_medical = 
+  CModule::getCanDo('dPcabinet')->edit ||
+  CModule::getCanDo('dPbloc')->edit ||
+  CModule::getCanDo('dPplanningOp')->edit || 
+  $AppUI->_ref_user->isFromType(array("Infirmière"));
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("listPrat"           , $listPrat          );
-$smarty->assign("patient"            , $patient           );
-$smarty->assign("isImedsInstalled"   , CModule::getActive("dPImeds"));
+$smarty->assign("listPrat"                , $listPrat);
+$smarty->assign("patient"                 , $patient);
+$smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
+$smarty->assign("isImedsInstalled"        , CModule::getActive("dPImeds"));
 
 $smarty->display("inc_vw_full_patients.tpl");
 ?>
