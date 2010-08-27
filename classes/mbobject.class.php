@@ -2284,9 +2284,14 @@ class CMbObject {
     $where["object_id"]    = " IS NULL";
     $class_config = new $object_class;
     $class_config->loadObject($where);
-
+    
+    if (!$class_config->_id) {
+      $class_config->valueDefaults();
+    }
+    
     // Chargement des configs de l'objet
     $object_config = $this->loadUniqueBackRef("object_configs");
+
     $class_config->extendsWith($object_config);
     
     $this->_configs = $class_config->getConfigValues();
@@ -2316,9 +2321,11 @@ class CMbObject {
    * Set defaults value
    */
   function valueDefaults() {
-    $fields = $this->getDBFields();
     $specs  = $this->getSpecs();
     
+    $fields = $this->getDBFields();
+    unset($fields[$this->_spec->key]);
+    unset($fields["object_id"]);
     foreach($fields as $_name => $_value) {
       $this->$_name = $specs[$_name]->default;
     }
