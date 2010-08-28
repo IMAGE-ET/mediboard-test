@@ -280,12 +280,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if (!$mbVenue->type) {
 	    if ($nature) {
 	      $mbVenue->type = $attrNatureVenueHprim[$nature];
-	    } else {
-	      $mbVenue->type = "hsp";
 	    }
     }  
     
+    // Détermine le type de venue depuis la config des numéros de dossier 
     $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
+    if (!$mbVenue->type) {
+      $mbVenue->type = "hsp";
+    }
     
     return $mbVenue;
   }
