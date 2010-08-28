@@ -286,7 +286,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     // Détermine le type de venue depuis la config des numéros de dossier 
     $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
     if (!$mbVenue->type) {
-      $mbVenue->type = "hsp";
+      $mbVenue->type = "comp";
     }
     
     return $mbVenue;
@@ -294,12 +294,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
   static function getVenueType($destinataire, $num_dossier) {
     $types = array(
-      "type_sej_hospi"   => "hsp",
+      "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
       "type_sej_urg"     => "urg",
-      "type_sej_scanner" => "sc",
-      "type_sej_chimio"  => "sc",
-      "type_sej_dialyse" => "sc",
+      "type_sej_scanner" => "seances",
+      "type_sej_chimio"  => "seances",
+      "type_sej_dialyse" => "seances",
     );
     
     foreach($types as $config => $type) {
