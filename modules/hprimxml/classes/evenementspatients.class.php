@@ -281,13 +281,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 	    if ($nature) {
 	      $mbVenue->type = $attrNatureVenueHprim[$nature];
 	    }
-    }  
-    
-    // Détermine le type de venue depuis la config des numéros de dossier 
-    $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
-    if (!$mbVenue->type) {
-      $mbVenue->type = "comp";
-    }
+	    
+	    // Détermine le type de venue depuis la config des numéros de dossier 
+      $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
+      if (!$mbVenue->type) {
+        $mbVenue->type = "comp";
+      }
+    }      
     
     return $mbVenue;
   }
