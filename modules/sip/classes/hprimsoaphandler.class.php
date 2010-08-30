@@ -161,8 +161,9 @@ class CHprimSoapHandler extends CSoapHandler {
       
     } catch (Exception $e) {
       $domAcquittement = new CHPrimXMLAcquittementsPatients();
+      $domAcquittement->_sous_type_evt = "inconnu";
+      $domAcquittement->_identifiant_acquitte = $data['identifiantMessage'];
       $domAcquittement->_ref_echange_hprim = $echange_hprim;
-      $domAcquittement->_sous_type_evt = "enregistrementPatient";
       
       $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E009", $e->getMessage());
       $doc_valid = $domAcquittement->schemaValidate();

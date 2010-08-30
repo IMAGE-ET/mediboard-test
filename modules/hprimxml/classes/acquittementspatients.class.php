@@ -27,7 +27,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLDocument {
 
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
     $echg_hprim      = $this->_ref_echange_hprim;
-    $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
+    $identifiant     = isset($echg_hprim->_id) ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
     
     $acquittementsPatients = $this->addElement($this, "acquittementsPatients", null, "http://www.hprim.org/hprimXML");
 
