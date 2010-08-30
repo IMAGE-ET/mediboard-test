@@ -13,6 +13,7 @@
 
 <table class="tbl">
   <tr>
+    <th style="width: 16px;"></th>
     <th style="width: 1%;">{{mb_title class=CProductReference field=code}}</th>
     <th>{{mb_label class=CProductReference field=societe_id}}</th>
     <th style="width: 1%;">{{mb_title class=CProductReference field=price}}</th>
@@ -33,7 +34,10 @@
   {{foreach from=$list_references item=_reference}}
 	{{assign var=_product value=$_reference->_ref_product}}
   <tbody class="hoverable">
-    <tr {{if $_reference->_id == $reference_id}}class="selected"{{/if}}>
+    <tr class="{{if $_reference->_id == $reference_id}}selected{{/if}}">
+      <td rowspan="2" {{if $_product->_in_order}}class="ok"{{/if}}>
+        {{mb_include module=dPstock template=inc_product_in_order product=$_product}}
+      </td>
       <td colspan="{{if $dPconfig.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}6{{else}}5{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
         {{if !$mode}}
           <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >

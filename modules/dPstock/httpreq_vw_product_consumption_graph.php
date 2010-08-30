@@ -61,7 +61,7 @@ while($date < $now) {
   
   // Output //////////////////
   $where = array(
-    "stock_id" => "= '{$product->_ref_stock_group->_id}'",
+    "product_delivery.stock_id" => "= '{$product->_ref_stock_group->_id}'",
     "product_delivery_trace.date_delivery" => "BETWEEN '$date' AND '$to'",
   );
   

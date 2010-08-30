@@ -56,6 +56,8 @@ class CProduct extends CMbObject {
   var $_supply             = null;
   var $_unique_usage       = null;
   
+  var $_in_order           = null;
+  
   // This group's stock id
   var $_ref_stock_group    = null;
   
@@ -305,9 +307,19 @@ class CProduct extends CMbObject {
     
     $item = new CProductOrderItem;
     if ($count)
-      return $item->countList($where, null, null, null, $leftjoin);
+      $list = $item->countList($where, null, null, null, $leftjoin);
     else
-      return $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
+      $list =  $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
+      
+    $this->_in_order = $list;
+    
+    if ($list) {
+      foreach($this->_in_order as $_item) {
+        $_item->loadOrder();
+      }
+    }
+    
+    return $this->_in_order;
   }
 }
 ?>

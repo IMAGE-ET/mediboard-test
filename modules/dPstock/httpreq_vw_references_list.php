@@ -52,6 +52,7 @@ $list_references = $reference->loadList($where, $orderby, intval($start).",".CAp
 foreach($list_references as $ref) {
   $ref->loadRefsFwd();
   $ref->_ref_product->loadRefStock();
+  $ref->_ref_product->getPendingOrderItems(false);
 }
 
 // Smarty template
