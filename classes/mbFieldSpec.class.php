@@ -553,6 +553,7 @@ class CMbFieldSpec {
 			    minChars: '.$minChars.',
 			    method: "get",
           select: "view",
+          adaptDropdown: true,
  			    dropdown: '.(!$ref || $dropdown ? 'true' : 'false');
     	
     	if ($ref) {

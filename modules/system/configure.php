@@ -30,7 +30,7 @@ $php_config_important = array(
   "default_socket_timeout",
   "max_execution_time",
   "mysql.connect_timeout",
-  "session.cache_expire",
+  "session.gc_maxlifetime",
 );
 $php_config_tree = array(
   "general" => array()

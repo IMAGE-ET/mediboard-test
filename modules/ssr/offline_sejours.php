@@ -18,6 +18,8 @@ $where["type"] = "= 'ssr'";
 $where["group_id"] = "= '$group_id'";
 $where["annule"] = "= '0'";
 $sejours = CSejour::loadListForDate($date, $where);
+
+$plannings = array();
  
 // Chargement du détail des séjour
 foreach ($sejours as $_sejour) {
