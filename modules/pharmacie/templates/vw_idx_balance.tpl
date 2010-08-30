@@ -27,12 +27,15 @@ Main.add(function(){
 <ul class="control_tabs" id="balance-tabs">
   <li><a href="#year">Bilan annuel</a></li>
   <li><a href="#month">Bilan mensuel</a></li>
+  <li><a href="#rotation">Rotation des stocks</a></li>
 </ul>
 <hr class="control_tabs" />
 
 {{math equation="1/(x-1)" x=$services|@count assign=width}}
 
-<table class="main tbl" id="year" style="display: none;">
+{{foreach from=$flows item=_flows key=key}}
+
+<table class="main tbl" id="{{$key}}" style="display: none;">
   <tr>
     <th></th>
     
@@ -43,13 +46,13 @@ Main.add(function(){
     <th>Total</th>
   </tr>
   
-  {{foreach from=$year_flows.out item=_flow key=_date}}
+  {{foreach from=$_flows.0.out item=_flow key=_date}}
     <tr {{if $_date == "total"}}style="font-weight: bold"{{/if}}>
       <th style="width: 0.1%;">
         {{if $_date == "total"}}
           Total
         {{else}}
-          {{$_date|date_format:"%b"}}
+          {{$_date|date_format:$_flows.1}}
         {{/if}}
       </th>
       
@@ -61,9 +64,27 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
+{{/foreach}}
 
-<table class="main tbl" id="month" style="display: none;">
+<table class="main tbl" id="rotation" style="display: none;">
   <tr>
-    <td><div class="small-info">Bientôt disponible</div></td>
+    <th></th>
+    
+    <th style="width: 33%">Entrée</th>
+    <th style="width: 33%">Sortie</th>
+    <th style="width: 33%">Balance</th>
   </tr>
+  
+  {{foreach from=$balance.in key=_date item=_balance}}
+    <tr>
+      <th style="width: 0.1%;">
+        {{$_date|date_format:"%b"}}
+      </th>
+      
+      <td style="text-align: center;">{{$balance.in.$_date}}</td>
+      <td style="text-align: center;">{{$balance.out.$_date}}</td>
+      <td style="text-align: center;">{{$balance.diff.$_date}}</td>
+    </tr>
+  {{/foreach}}
 </table>
+
