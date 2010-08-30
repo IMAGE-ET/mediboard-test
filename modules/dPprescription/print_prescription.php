@@ -233,7 +233,7 @@ if(count($prescription->_ref_lines_elements_comments)){
 			    }
 				
 					// Affichage des DM dans la page des medicaments
-					if($prescription->type != 'sejour' && $element->cip_dm){
+					if($prescription->type != 'sejour' && ($element instanceof CPrescriptionLineElement) && $element->cip_dm){
 						$element->loadRefDM();
 				    $libelle_ald = $element->ald ? "ald" : "no_ald";
 						$lines["medicaments"]["dm"][$libelle_ald][] = $element;
