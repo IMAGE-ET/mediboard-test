@@ -73,7 +73,9 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
 	        if($produit->code_cip){
 		        if($livret->distObj->Insert() >= 0){
 		          CAppUI::setMsg("Element inséré");
-		        }
+						}
+	        } else {
+	        	 CAppUI::setMsg("Aucun produit ne correspond au code CIP [$identifiant]", UI_MSG_WARNING);
 	        }
 	      }
       }
