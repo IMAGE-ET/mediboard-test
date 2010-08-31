@@ -59,6 +59,9 @@ if ($endowment_id) {
     $ljoin = array(
       'product' => 'product.product_id = product_endowment_item.product_id'
     );
+    if ($keywords) {
+      $where['product.name'] = $stock->_spec->ds->prepareLike("%$keywords%");
+    }
     
     $endowment_items = $endowment_item->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
     $count_stocks = $endowment_item->_totalSeek;
@@ -92,6 +95,8 @@ if ($endowment_id) {
   }
 }
 else if ($only_service_stocks == 1 || $only_common == 1) {
+  $stock = new CProductStockService;
+  
   $ljoin = array(
     'product' => 'product.product_id = product_stock_service.product_id'
   );
@@ -99,8 +104,10 @@ else if ($only_service_stocks == 1 || $only_common == 1) {
   if ($only_common) {
     $where['product_stock_service.common'] = "= '1'";
   }
+  if ($keywords) {
+    $where['product.name'] = $stock->_spec->ds->prepareLike("%$keywords%");
+  }
   
-  $stock = new CProductStockService;
   $stocks_service = $stock->seek($keywords, $where, $limit, true, $ljoin, 'product.name');
   $count_stocks = $stock->_totalSeek;
   

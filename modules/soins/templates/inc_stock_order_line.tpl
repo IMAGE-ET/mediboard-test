@@ -62,7 +62,7 @@
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" prop="num notNull min|1" increment=1 size=3 min=1 style=$style}}
       {{/if}}
       <button type="button" class="down notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).next('input[name=comments]').show().focus()"></button>
-      <button type="submit" class="tick notext" title="Dispenser" style="{{$style}}">Dispenser</button>
+      <button type="submit" class="tick notext singleclick" title="Dispenser" style="{{$style}}">Dispenser</button>
       
       {{if $stock->_ref_product->packaging && $qty && !$endowment_id}}
         (soit <input type="text" name="_quantity_package" value="{{if $qty}}1{{else}}0{{/if}}" size="2" 

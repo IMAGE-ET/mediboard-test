@@ -160,7 +160,7 @@
   <label for="comments">Produit</label>
   <input type="text" name="comments" size="40" class="notNull" />
   
-  <button type="submit" class="tick notext">Faire la demande</button>
+  <button type="submit" class="tick notext singleclick">Faire la demande</button>
 
   <button type="button" class="down notext" onclick="showCustomOrders(this)">Voir les demandes en cours</button>
   
