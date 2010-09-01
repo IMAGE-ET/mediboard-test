@@ -21,6 +21,17 @@ changeReceptionPage = function(start) {
 }
 </script>
 
+<!-- #help -->
+<div class="big-info">
+  <strong>Une fois votre commande reçue</strong> avec le bouton <button type="button" class="tick notext"></button>, 
+  vous devez la marquer comme terminée avec le bouton <button type="button" class="cancel notext"></button> 
+  sur la colonne de droite pour l'enlever de cet écran.<br />
+  
+  Ce même bouton agit <strong>aussi sur les lignes non reçues</strong>, qui par exemple ne seront jamais à recevoir.<br />
+  
+  Notez que vous pouvez aussi effectuer cette action de <strong>"Terminer la ligne" par lot</strong> en cliquant sur le même bouton en haut de la colonne de droite.
+</div>
+
 <div style="float: left;">
   <button class="print" onclick="printReceptionReport({{$service_id}})">{{tr}}Print{{/tr}}</button>
 </div>

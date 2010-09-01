@@ -168,10 +168,12 @@ if ($dosql) {
   }
 }
 
-//obsolete module verification
+// Checks if the current module is obsolete
 $obsolete_module = false;
 $user = CAppUI::$instance->_ref_user;
-if($m && $m != "system" && (!$user->_id || $user->isAdmin())){
+
+// We check only when not in the "system" module, and not in an "action" (ajax, etc)
+if($m && $m != "system" && !$a && (!$user->_id || $user->isAdmin())){
   $setupclass = "CSetup$m";
   $setup = new $setupclass;
   $module->compareToSetup($setup);

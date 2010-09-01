@@ -29,7 +29,9 @@
     $V(getForm('filter-order').start, start); 
   }
   changeOrderPageAlpha = function(letter) {
-    $V(getForm('filter-order').letter, letter); 
+    var form = getForm('filter-order');
+    $V(form.start, 0, false); 
+    $V(form.letter, letter); 
   }
     
   showCustomOrders = function(element){
@@ -83,7 +85,7 @@
     <tr>
       <td style="text-align: right;">
         <button type="submit" class="search notext">{{tr}}Search{{/tr}}</button>
-        <input type="text" name="keywords" value="{{$keywords}}" />
+        <input type="text" name="keywords" value="{{$keywords}}" onchange="$V(this.form.start, 0, false); " />
         <button type="submit" class="cancel notext" onclick="$V(this.form.keywords, '')">{{tr}}Reset{{/tr}}</button>
       </td>
       <td>
@@ -92,7 +94,7 @@
          *}}
         
         <div style="display: none">
-          <input type="hidden" name="only_service_stocks" value="1{{* $only_service_stocks*}}" onchange="$V(this.form.start, 0); refreshOrders()" />
+          <input type="hidden" name="only_service_stocks" value="1{{* $only_service_stocks*}}" onchange="$V(this.form.start, 0, false); refreshOrders()" />
           <label style="font-weight: normal;">
             <input type="checkbox" {{if $only_service_stocks == 1}}checked="checked"{{/if}} onchange="$V(this.form.only_service_stocks, this.checked ? 1 : 0)"/>
             Seulement les stocks du service 
@@ -100,7 +102,7 @@
           <br />
         </div>
         
-        <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0); refreshOrders()" />
+        <input type="hidden" name="only_common" value="{{$only_common}}" onchange="$V(this.form.start, 0, false); refreshOrders()" />
         <label style="font-weight: normal;">
           <input type="checkbox" {{if $only_common == 1}}checked="checked"{{/if}} onchange="$V(this.form.only_common, this.checked ? 1 : 0)" />
           Seulement les stocks couramment utilisés
