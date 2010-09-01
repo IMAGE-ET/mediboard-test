@@ -136,6 +136,16 @@
     <td>{{$operation->_ref_sejour->_duree_prevue}} nuits</td>
   </tr>
   
+	<tr>
+		<th>Adresse</th>
+		<td>
+      {{$sejour->_ref_group->text}}<br />
+      {{$sejour->_ref_group->adresse}}<br />
+      {{$sejour->_ref_group->cp}}
+      {{$sejour->_ref_group->ville}}
+		</td>
+	</tr>
+	
   {{if $operation->forfait}}
   <tr>
     <th>Forfait clinique</th>
