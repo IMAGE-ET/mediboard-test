@@ -38,7 +38,7 @@ Form.onSubmitComplete = function (guid, properties) {
     {{assign var=libelle value=$libelle|upper}}
   	{{assign var=color value=$colors.$libelle}}
 		{{assign var=index value=$smarty.foreach.color.index}}
-    <form name="Edit-Color-{{$index}}" action="?" onsubmit="return onSubmitFormAjax(this);">
+    <form name="Edit-Color-{{$index}}" action="?" onsubmit="return onSubmitFormAjax(this);" method="post">
 			<input type="hidden" name="m" value="dPplanningOp" />
 			<input type="hidden" name="dosql" value="do_color_libelle_sejour_aed" />
 			<input type="hidden" name="del" value="0" />
