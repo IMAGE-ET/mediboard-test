@@ -145,6 +145,14 @@ else {
 	}
 }
 
+foreach($patients as $_patient) {
+	$_patient->loadView();
+}
+
+foreach($patientsSoundex as $_patient) {
+  $_patient->loadView();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 

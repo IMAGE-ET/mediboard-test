@@ -13,6 +13,9 @@
   {{assign var="nbSejours" value=$_patient->_ref_sejours|@count}}
   {{assign var="rowspan" value=$nbConsults+$nbSejours+1}}
   <td rowspan="{{$rowspan}}">
+    <div style="float:right;">
+      {{mb_include module=system template=inc_object_notes object=$_patient}}
+    </div>
     {{if $patVitale && $_patient->_id == $patVitale->_id}}
     <div style="float:right;">
       <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />

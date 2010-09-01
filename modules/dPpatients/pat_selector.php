@@ -22,13 +22,14 @@ $patVitale = null;
 $patient_name_search = null;
 $patient_firstName_search = null;
 
+$patients = array();
+$patientsSoundex = array();
+
 $showCount = 30;
   
 // Recherhche par IPP
 if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   // Initialisation dans le cas d'une recherche par IPP
-  $patients = array();
-  $patientsSoundex = array();
   $patientsCount = 0;
   $patientsSoundexCount = 0;
   
@@ -137,6 +138,14 @@ else {
   loadConsultationsDuJour($patientsSoundex);
   loadAdmissionsDuJour($patients);
   loadAdmissionsDuJour($patientsSoundex);
+}
+
+foreach($patients as $_patient) {
+  $_patient->loadView();
+}
+
+foreach($patientsSoundex as $_patient) {
+  $_patient->loadView();
 }
 
 // Création du template
