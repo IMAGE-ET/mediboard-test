@@ -134,9 +134,9 @@
           {{/if}}
         </td>
         <td>
-          {{foreach from=$_line_dmi->_orders item=_order}}
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_order->_guid}}')">
-              {{$_order->order_number}}
+          {{foreach from=$_line_dmi->_order_items item=_order_item}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_order_item->_ref_order->_guid}}')">
+              {{$_order_item->_ref_order->order_number}}
             </span><br />
           {{/foreach}}
         </td>

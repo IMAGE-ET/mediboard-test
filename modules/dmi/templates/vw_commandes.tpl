@@ -15,7 +15,7 @@
     url.addParam("praticien_sortie_id", praticien_id);
     url.addParam("print", 1);
     url.addParam("only_dmi", 1);
-    url.popup(800, 600, "print_prescription");
+    url.popup(800, 1000, "print_prescription");
   }
   
   Main.add(function(){
@@ -36,6 +36,9 @@
       <th>Type</th>
       <td>
         {{mb_field object=$dmi_line field="type" typeEnum="select" onchange="this.form.onsubmit()" emptyLabel="All"}}
+      </td>
+      <td>
+        <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
       </td>
     </tr>
   </table>
