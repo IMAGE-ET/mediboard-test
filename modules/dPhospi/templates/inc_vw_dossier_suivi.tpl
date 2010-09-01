@@ -119,7 +119,7 @@ addTransmissionAdm = function(line_id, line_class){
   var oFormTransmission = getForm("editTrans");
 	$V(oFormTransmission.object_id, line_id);
 	$V(oFormTransmission.object_class, line_class);
-  $V(oFormTransmission.text, "Administration effectuée");
+  $V(oFormTransmission.text, "Réalisé");
 	return onSubmitFormAjax(oFormTransmission, { onComplete: loadSuivi.curry('{{$sejour->_id}}') } );
 }
 

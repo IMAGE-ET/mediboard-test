@@ -145,8 +145,8 @@
   <td>
     {{$_suivi->_ref_user}}
   </td>
-  <td  style="text-align: center">
-     {{mb_ditto name=datetime value=$_suivi->datetime|date_format:$dPconfig.date}}
+  <td style="text-align: center">
+     {{mb_ditto name=date value=$_suivi->datetime|date_format:$dPconfig.date}}
   </td>
   <td>{{$_suivi->datetime|date_format:$dPconfig.time}}</td>
   <td colspan="2">
@@ -162,7 +162,9 @@
 {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
   <td>Prescription</td>
 	<td>{{mb_value object=$_suivi field="praticien_id"}}</td>
-  <td>{{mb_value object=$_suivi field="debut"}}</td>
+  <td style="text-align: center">
+  	{{mb_ditto name=date value=$_suivi->debut|date_format:$dPconfig.date}}
+	</td>
 	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
 	<td></td>
   <td>
