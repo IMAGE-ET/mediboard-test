@@ -314,6 +314,13 @@ var Url = Class.create({
     
     var autocompleter = new Ajax.Autocompleter(input, populate, this.make(), oOptions);
     
+    // Pour "eval" les scripts inserés (utile pour lancer le onDisconnected
+    autocompleter.options.onComplete = function(request) {
+      var content = request.responseText;
+      content.evalScripts.bind(content).defer();
+      this.updateChoices(content);
+    }.bind(autocompleter);
+    
     autocompleter.startIndicator = function(){
       if(this.options.indicator) Element.show(this.options.indicator);
       input.addClassName("throbbing");
