@@ -326,6 +326,10 @@ class CProductOrder extends CMbMetaObject {
     if ($g)
       $where['product_order.group_id'] = " = $g";
       
+    if ($type === 'pending') {
+      $limit = 200;
+    }
+    
     $orders_list = $this->loadList($where, $orderby, $limit, null, $leftjoin);
     
     // bons de facturation seulement
@@ -448,10 +452,19 @@ class CProductOrder extends CMbMetaObject {
     $this->countReceivedItems(); // makes loadRefsOrderItems
     $this->countRenewedItems(); // makes loadRefsOrderItems
     
+    // we guess the reception date by geeting the latest reception item's date
     foreach ($this->_ref_order_items as $item) {
       $item->loadRefsReceptions();
       $rec = reset($item->_ref_receptions);
       $this->_date_received = $rec ? $rec->date : null;
+    }
+    
+    // if no reception item, we get the last log for the "received" field
+    if (!$this->_date_received && $this->received) {
+      $log = $this->loadLastLogForField("received");
+      if ($log && $log->_id) {
+        $this->_date_received = $log->date;
+      }
     }
     
     $items_count = count($this->_ref_order_items);

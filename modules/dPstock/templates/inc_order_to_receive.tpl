@@ -8,9 +8,30 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+closeOrder = function(form) {
+  if (confirm('Etes-vous sûr de vouloir clôturer cette commande ?\nCeci aura pour effet de marquer cette commande comme reçue, sans recevoir les articles non encore reçus.')) {
+    onSubmitFormAjax(form, {onComplete: function(){window.close()}});
+  }
+  return false;
+}
+</script>
+
 {{mb_include module=system template=CMbObject_view object=$order}}
 
 <hr />
+
+<form name="closeOrder-{{$order->_id}}" method="post" action="?" onsubmit="return closeOrder(this)">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_order_aed" />
+  <input type="hidden" name="received" value="1" />
+  {{mb_key object=$order}}
+  
+  <button type="submit" class="cancel" style="float: right;">
+    Clôturer la réception de cette commande
+  </button>
+</form>
+
 <table class="tbl">
   <tr>
     <th style="width: 50%;"></th>
