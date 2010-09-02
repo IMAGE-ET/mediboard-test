@@ -29,14 +29,15 @@
     <em>Aucune fiche complémentaire</em>
   </li>
   {{/if}}
-  {{if $consult->_ref_examaudio->_id}}
+	{{assign var=examaudio value=$consult->_ref_examaudio}}
+  {{if $examaudio->_id}}
   <li>    
-    <form name="delFrm{{$consult->_ref_examaudio->_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+    <form name="Delete-{{$examaudio->_guid}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_exam_audio_aed" />
       <input type="hidden" name="del" value="1" />
-      {{mb_field object=$consult->_ref_examaudio field="_view" hidden=1 prop=""}}
-      {{mb_field object=$consult->_ref_examaudio field="examaudio_id" hidden=1 prop=""}}
+      {{mb_key   object=$examaudio}}
+      {{mb_field object=$examaudio field="_view" hidden=1}}
       <input type="hidden" name="_conduction" value="" />
       <input type="hidden" name="_oreille" value="" />
       <button class="trash notext" type="button" onclick="ExamDialog.remove(this,'{{$consult->_id}}')">{{tr}}Delete{{/tr}}</button>
