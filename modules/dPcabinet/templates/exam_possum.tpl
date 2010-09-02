@@ -1,8 +1,9 @@
+{{assign var=consultation value=$exam_possum->_ref_consult}}
+
 <script type="text/javascript">
 
 // Lancement du reload
-window.opener.ExamDialog.reload('{{$exam_possum->consultation_id}}');
-
+window.opener.ExamDialog.reload('{{$consultation->_id}}');
 
 var listScorePhysio = {{$exam_possum->_score_possum_physio|@json}};
 var listScoreOper   = {{$exam_possum->_score_possum_oper|@json}};
@@ -18,16 +19,28 @@ var scoreOper   = {{$exam_possum->_score_oper}};
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="dosql" value="do_exam_possum_aed" />
 <input type="hidden" name="del" value="0" />
-{{mb_field object=$exam_possum field="exampossum_id" hidden=1 prop=""}}
-{{mb_field object=$exam_possum field="consultation_id" hidden=1 prop=""}}
+{{mb_key   object=$exam_possum}}
+{{mb_field object=$exam_possum field="consultation_id" hidden=1}}
 
 <table class="form">
   <tr>
-    <th class="title" colspan="6">
-      Consultation de <span style="color:#f00;">{{$exam_possum->_ref_consult->_ref_patient->_view}}</span>
-      le {{$exam_possum->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
-      par le Dr {{$exam_possum->_ref_consult->_ref_chir->_view}}
-    </th>
+    {{if $exam_possum->_id}} 
+      <th class="title modify text" colspan="6">
+        {{mb_include module=system template=inc_object_idsante400 object=$exam_possum}}
+        {{mb_include module=system template=inc_object_history    object=$exam_possum}}
+        {{mb_include module=system template=inc_object_notes      object=$exam_possum}}
+
+        Consultation de '{{$consultation->_ref_patient}}'<br />
+        le {{$consultation->_date|date_format:$dPconfig.longdate}}
+        par le Dr {{$consultation->_ref_chir}}
+      </th>
+    {{else}}
+      <th class="title text" colspan="6">
+        Consultation de '{{$consultation->_ref_patient}}'<br />
+        le {{$consultation->_date|date_format:$dPconfig.longdate}}
+        par le Dr {{$consultation->_ref_chir}}
+      </th>
+    {{/if}}
   </tr>
 
   <tr>
@@ -160,9 +173,9 @@ var scoreOper   = {{$exam_possum->_score_oper}};
   </tr>
   <tr>
     <td class="button" colspan="6">
-      {{if $exam_possum->exampossum_id}}
+      {{if $exam_possum->_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen complementaire',target:'systemMsg'})">{{tr}}Delete{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen complementaire'})">{{tr}}Delete{{/tr}}</button>
       {{else}}
         <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
       {{/if}}

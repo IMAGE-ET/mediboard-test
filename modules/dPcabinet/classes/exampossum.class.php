@@ -217,6 +217,8 @@ class CExamPossum extends CMbObject {
   }
   
   function updateFormFields(){
+  	parent::updateFormFields();
+		
     // Calcul Glasgow
     $this->_glasgow = 0;
     if($this->ouverture_yeux){
