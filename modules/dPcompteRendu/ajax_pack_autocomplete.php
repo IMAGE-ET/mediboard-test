@@ -7,28 +7,28 @@
 * @author Thomas Despoix
 */
 
-$user_id = CValue::get("user_id");
-$function_id = CValue::get("function_id");
-$etab = CGroups::loadCurrent();
-$group_id = $etab->_id;
+$user_id      = CValue::get("user_id");
+$function_id  = CValue::get("function_id");
+$etab         = CGroups::loadCurrent();
+$group_id     = $etab->_id;
 $object_class = CValue::get("object_class");
-$keywords = CValue::post("keywords_pack");
+$keywords     = CValue::post("keywords_pack");
 
-$pack = new CPack();
 $where = array();
 $where["object_class"] = "= '$object_class'";
-$where[] = "(pack.chir_id = $user_id
-  OR pack.function_id = $function_id
-  OR pack.group_id = $group_id)";
-$where[] = "(pack.modeles IS NOT NULL 
-  AND pack.modeles != '')"; 
+$where[] = "(
+  pack.chir_id = '$user_id' OR 
+  pack.function_id = '$function_id' OR 
+  pack.group_id = '$group_id'
+)";
+$where[] = "(pack.modeles IS NOT NULL AND pack.modeles != '')"; 
 
 $order = "nom";
 
+$pack = new CPack();
 $packs = $pack->seek($keywords, $where, null, null, null, $order);
 
 $smarty = new CSmartyDP();
-
 $smarty->assign("packs", $packs);
 $smarty->assign("nodebug", true);
 $smarty->assign("keywords", $keywords);

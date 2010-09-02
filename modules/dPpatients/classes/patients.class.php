@@ -196,6 +196,9 @@ class CPatient extends CMbObject {
   var $_type_exoneration = null;
   var $_exoneration = null;
   var $_can_see_photo = null;
+  
+  var $_age_min       = null;
+  var $_age_max       = null;
 
   // Vitale behaviour
   var $_bind_vitale   = null;
@@ -388,6 +391,10 @@ class CPatient extends CMbObject {
     $specs["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
     $specs["_age"]                        = "num show|1";
     $specs["_age_assure"]                 = "num";
+    
+    $specs["_age_min"]                    = "num min|0";
+    $specs["_age_max"]                    = "num min|0";
+    
     $specs["_IPP"]                        = "str";
     
     return $specs;

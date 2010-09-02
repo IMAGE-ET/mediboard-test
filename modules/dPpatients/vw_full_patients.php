@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $can, $m, $g;
+global $AppUI;
 
-$can->needsRead();
+CCanDo::checkRead();
 
 $patient_id = CValue::getOrSession("patient_id", 0);
 

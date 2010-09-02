@@ -36,6 +36,14 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   }
 }
 
+function script_main($params, $content, &$smarty, &$repeat){
+  // Let the whitespace around $content
+  return "
+    <script type=\"text/javascript\">
+      Main.add(function(){ $content });
+    </script>";
+}
+
 /**
  * Render an image using phpThumb
  */
@@ -538,6 +546,7 @@ class CSmartyDP extends Smarty {
     
     // Register mediboard functions
     $this->register_block   ("tr"                , "do_translation"); 
+    $this->register_block   ("main"              , "script_main"); 
     $this->register_function("thumb"             , "thumb");
     $this->register_function("unique_id"         , "smarty_function_unique_id");
     $this->register_function("mb_default"        , "smarty_function_mb_default");
