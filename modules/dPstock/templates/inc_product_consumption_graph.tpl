@@ -14,4 +14,4 @@ Main.add(function(){
 });
 </script>
 
-<div style="width: 300px; height: 80px;" id="consumption-graph-{{$graph_id}}"></div>
+<div style="width: {{$width}}px; height: {{$height}}px; margin: 1em auto;" id="consumption-graph-{{$graph_id}}"></div>

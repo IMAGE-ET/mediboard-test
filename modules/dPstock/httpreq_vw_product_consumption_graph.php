@@ -10,7 +10,9 @@
  
 CCanDo::checkRead();
 
-$product_id  = CValue::get('product_id');
+$product_id = CValue::get('product_id');
+$width      = CValue::get('width', 300);
+$height     = CValue::get('height', 80);
 
 $product = new CProduct();
 $product = $product->load($product_id);
@@ -112,4 +114,6 @@ $data = array(
 $smarty = new CSmartyDP();
 $smarty->assign('data', $data);
 $smarty->assign('product', $product);
+$smarty->assign('width', $width);
+$smarty->assign('height', $height);
 $smarty->display('inc_product_consumption_graph.tpl');

@@ -1,6 +1,14 @@
 <script type="text/javascript">
 Main.add(function(){
   selectProduct({{$product->_id}});
+  
+  {{if $product->_id}}
+    var url = new Url("dPstock", "httpreq_vw_product_consumption_graph");
+    url.addParam("product_id", {{$product->_id}});
+    url.addParam("width", 500);
+    url.addParam("height", 200);
+    url.requestUpdate("conso");
+  {{/if}}
 });
 </script>
 
@@ -23,6 +31,7 @@ Main.add(function(){
   <li><a href="#tab-stocks" {{if $product->_ref_stocks_service|@count == 0}}class="empty"{{/if}}>{{tr}}CProductStock{{/tr}} <small>({{$product->_ref_stocks_service|@count}})</small></a></li>
   <li><a href="#tab-references" {{if $product->_ref_references|@count == 0}}class="empty"{{/if}}>{{tr}}CProduct-back-references{{/tr}} <small>({{$product->_ref_references|@count}})</small></a></li>
   <li><a href="#tab-deliveries" {{if $product->_ref_deliveries|@count == 0}}class="empty"{{/if}}>Dispensations <small>({{$product->_ref_deliveries|@count}})</small></a></li>
+  <li><a href="#tab-consumption">Conso.</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -165,5 +174,7 @@ Main.add(function(){
     </tr>
   {{/foreach}}
 </table>
+
+<div id="conso"></div>
 
 {{/if}}

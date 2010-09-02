@@ -60,11 +60,21 @@ function createOrders(order_id) {
     reloadOrders(order_id);
   }
 }
+
+function showProductDetails(product_id) {
+  if (!product_id) return;
+  
+  var url = new Url("dPstock", "httpreq_vw_product_consumption_graph");
+  url.addParam("product_id", product_id);
+  url.addParam("width", 400);
+  url.addParam("height", 150);
+  url.requestUpdate("conso");
+}
 </script>
 
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" rowspan="2">
       <form action="?" name="filter-references" method="post" onsubmit="return filterReferences(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="mode" value="order" />
@@ -96,6 +106,14 @@ function createOrders(order_id) {
 
     <td class="halfPane" id="orders-list">
       {{mb_include module=dPstock template=inc_orders_tabs}}
+    </td>
+  </tr>
+  
+  <tr>
+    <td id="conso" style="height: 1%;">
+      <div class="small-info">
+        Cliquez sur une référence pour avoir un aperçu de la consommation du produit
+      </div>
     </td>
   </tr>
 </table>

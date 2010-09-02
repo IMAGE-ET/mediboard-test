@@ -39,15 +39,11 @@
         {{mb_include module=dPstock template=inc_product_in_order product=$_product}}
       </td>
       <td colspan="{{if $dPconfig.dPstock.CProductReference.show_cond_price}}{{if $mode == 'order'}}6{{else}}5{{/if}}{{else}}{{if $mode == 'order'}}5{{else}}4{{/if}}{{/if}}">
-        {{if !$mode}}
-          <a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}" >
-        {{/if}}
-        <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">
-          {{$_product->_view|truncate:60}}
-        </strong>
-        {{if !$mode}}
-          </a>
-        {{/if}}
+        <a href="{{if !$mode}}?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$_reference->_id}}{{else}}#1{{/if}}">
+          <strong onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')" {{if $mode}}onclick="showProductDetails({{$_product->_id}})"{{/if}}>
+            {{$_product->_view|truncate:60}}
+          </strong>
+        </a>
       </td>
       
       {{if $mode}}
