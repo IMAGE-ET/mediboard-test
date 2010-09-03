@@ -37,5 +37,15 @@ var Reglement = {
     $V(oForm.reglement_id, reglement_id);
     confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, { onComplete : Reglement.reload.curry(false) } );
     return false;
+  },
+  updateBanque: function(mode) {
+    var banque_id = mode.form.banque_id;
+    if ($V(mode) == "cheque") {
+      banque_id.show();
+    }
+    else {
+      banque_id.hide();
+      $V(banque_id, "");
+    }
   }
 };

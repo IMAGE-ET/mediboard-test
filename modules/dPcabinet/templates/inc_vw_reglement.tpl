@@ -372,7 +372,7 @@ Main.add( function(){
                     <tr>
                       <td>
                       	{{mb_value object=$_reglement field=mode}}
-                        {{if $_reglement->_ref_banque}}
+                        {{if $_reglement->_ref_banque->_id}}
                           ({{$_reglement->_ref_banque}})
                         {{/if}}
 											</td>
@@ -390,19 +390,7 @@ Main.add( function(){
                     {{if $reglement->montant > 0}}
                     <tr>
                       <td>
-                      	<script type="text/javascript">
-                      	updateBanque = function(mode) {
-												  var banque_id = mode.form.banque_id;
-													if ($V(mode) == "cheque") {
-													  banque_id.show();
-													}
-													else {
-                            banque_id.hide();
-														$V(banque_id, "");
-													}
-												}
-                      	</script>
-                      	{{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
+                      	{{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
 												{{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
 											</td>
                       <td>{{mb_field object=$reglement field=montant}}</td>

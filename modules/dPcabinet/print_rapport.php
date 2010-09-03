@@ -135,9 +135,10 @@ foreach($listConsults as $consult) {
   $consult->loadRefsReglements();
 
   $consult->_new_patient_reglement = new CReglement();
-  $consult->_new_patient_reglement->mode = "especes";
+  $consult->_new_patient_reglement->consultation_id = $consult->_id;
   $consult->_new_patient_reglement->montant = $consult->_du_patient_restant;
   $consult->_new_tiers_reglement = new CReglement();
+  $consult->_new_tiers_reglement->consultation_id = $consult->_id;
   $consult->_new_tiers_reglement->mode = "virement";
   $consult->_new_tiers_reglement->montant = $consult->_du_tiers_restant;
 

@@ -99,8 +99,8 @@ onSubmitReglement = function(form) {
         <input type="hidden" name="dosql" value="do_reglement_aed" />
         <input type="hidden" name="date" value="now" />
         <input type="hidden" name="emetteur" value="tiers" />
-        {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
-        <button class="add notext" type="submit">+</button>
+        {{mb_field object=$_consult field="consultation_id" hidden=1}}
+        <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
         {{mb_field object=$_consult->_new_tiers_reglement field="montant"}}
         {{mb_field object=$_consult->_new_tiers_reglement field="mode"}}
       </form>
