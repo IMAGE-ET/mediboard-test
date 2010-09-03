@@ -83,8 +83,8 @@ linkFields = function(ref) {
   <input type="hidden" name="modele_id" value="{{$modele_id}}" />
   <input type="hidden" name="compte_rendu_id" value="" />
   <input type="hidden" name="fast_edit" value="1" />
-  {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
-  {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
+  {{mb_field object=$compte_rendu field="object_id" hidden=1}}
+  {{mb_field object=$compte_rendu field="object_class" hidden=1}}
 
   <table id="fast-edit-table-{{$object_guid}}" class="form" style="width: 100%; min-height: 200px;">
     <tr>

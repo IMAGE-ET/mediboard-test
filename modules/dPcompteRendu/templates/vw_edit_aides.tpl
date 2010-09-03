@@ -70,8 +70,8 @@ function changeUser(user_id) {
   <input type="hidden" name="callback" value="editAideCallback" />
   
   {{mb_key object=$aide}}
-  {{mb_field object=$aide field="class" hidden=1 prop=""}}
-  {{mb_field object=$aide field="field" hidden=1 prop=""}}
+  {{mb_field object=$aide field="class" hidden=1}}
+  {{mb_field object=$aide field="field" hidden=1}}
   
   <table class="form">
     <tr>

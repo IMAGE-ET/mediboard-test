@@ -141,8 +141,8 @@ function submitCompteRendu(){
   <input type="hidden" name="switch_mode" value='{{$switch_mode}}'/>
 
   {{mb_key object=$compte_rendu}}
-  {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
-  {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
+  {{mb_field object=$compte_rendu field="object_id" hidden=1}}
+  {{mb_field object=$compte_rendu field="object_class" hidden=1}}
   <table class="form">
     <tr>
     <th class="category" colspan="2">

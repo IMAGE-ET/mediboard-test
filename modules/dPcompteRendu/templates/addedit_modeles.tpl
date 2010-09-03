@@ -160,8 +160,8 @@ Main.add(function () {
       <input type="hidden" name="dosql" value="do_modele_aed" />
 			<input type="hidden" name="private" value="0"/>
       {{mb_key object=$compte_rendu}}
-      {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
-      {{if $compte_rendu->compte_rendu_id}}
+      {{mb_field object=$compte_rendu field="object_id" hidden=1}}
+      {{if $compte_rendu->_id}}
       <button class="new" type="button" onclick="Modele.create()">
         {{tr}}CCompteRendu-title-create{{/tr}}
       </button>
