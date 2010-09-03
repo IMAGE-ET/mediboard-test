@@ -765,14 +765,6 @@ class CConsultation extends CCodable {
         $this->_ref_sejour->store();
       }
       */
-      if ($forfait_se !== null && $this->_id && 
-           CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
-        $this->_ref_sejour->forfait_se = $forfait_se;
-        if ($msg = $this->_ref_sejour->store()) {
-          return $msg;
-        }
-        $this->_forfait_se = null;
-      }
       
       // Changement de journée pour la consult 
       if ($this->fieldModified("plageconsult_id")) {
@@ -818,6 +810,15 @@ class CConsultation extends CCodable {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // Forfait SE. A laisser apres le store()
+    if ($this->sejour_id && $forfait_se !== null && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {
+      $this->_ref_sejour->forfait_se = $forfait_se;
+      if ($msg = $this->_ref_sejour->store()) {
+        return $msg;
+      }
+      $this->_forfait_se = null;
     }
     
     // Changement du patient pour la consult 
