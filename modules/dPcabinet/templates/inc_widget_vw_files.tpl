@@ -30,7 +30,7 @@
       <input type="hidden" name="dosql" value="do_file_aed" />
       <input type="hidden" name="del" value="1" />
       {{mb_key object=$_file}}
-      {{mb_field object=$_file field="_view" hidden=1 prop=""}}
+      {{mb_field object=$_file field="_view" hidden=1}}
       <button class="trash notext" type="button" onclick="File.remove(this, '{{$object->_id}}', '{{$object->_class_name}}')">
         {{tr}}Delete{{/tr}}
       </button>
