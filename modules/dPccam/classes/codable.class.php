@@ -123,6 +123,20 @@ class CCodable extends CMbObject {
       array();
   }
   
+  function getProps() {
+    $props = parent::getProps();
+    $props["codes_ccam"]   = "str show|0";
+    $props["facture"]      = "bool default|0";
+
+    $props["_tokens_ccam"] = "";
+    $props["_tokens_ngap"] = "";
+    $props["_codes_ccam"]  = "";
+    $props["_codes_ngap"]  = "";
+
+    $props["_count_actes"] = "num min|0";
+    return $props;
+  }
+  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["actes_ngap"]    = "CActeNGAP object_id";
@@ -185,15 +199,6 @@ class CCodable extends CMbObject {
   function updateDBFields() {
     // Should update codes CCAM. Very sensible, test a lot before uncommenting
     // $this->updateDBCodesCCAMField();
-  }
-  
-  function getProps() {
-  	$specs = parent::getProps();
-  	$specs["codes_ccam"]   = "str show|0";
-    $specs["facture"]     = "bool default|0";
-  	$specs["_codes_ccam"]  = "";
-  	$specs["_count_actes"] = "num min|0";
-  	return $specs;
   }
   
   function preparePossibleActes() {

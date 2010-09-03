@@ -23,6 +23,6 @@ $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = 'Mes favoris';
 $locales['module-dPccam-court'] = 'CCAM';
 $locales['module-dPccam-long'] = 'Aide au codage CCAM';
-$locales['pref-ccam_consultation'] = 'Gestion des actes CCAM des consultations';
-$locales['pref-ccam_sejour'] = 'Gestion des actes CCAM des séjours';
+$locales['pref-ccam_consultation'] = 'Cotation des consultations (actes CCAM, NGAP, diagnistics CIM)';
+$locales['pref-ccam_sejour'] = 'Cotation des séjours (actes CCAM, NGAP, diagnistics CIM)';
 ?>

@@ -7,9 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-  
-$can->needsEdit();
+CCanDo::checkEdit();
+
+global $can, $AppUI;  
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = CValue::getOrSession("chirSel", 0);
@@ -109,6 +109,7 @@ $consult->loadRefsReglements();
 
 // Reglement vide pour le formulaire
 $reglement = new CReglement();
+$reglement->consultation_id = $consult->_id;
 $reglement->montant = round($consult->_du_patient_restant, 2);
 
 // Codes et actes NGAP

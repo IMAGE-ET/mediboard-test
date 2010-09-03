@@ -254,15 +254,15 @@ Main.add( function(){
         	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
                   {{/if}}
                   {{if $consult->patient_date_reglement}}
-                    {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}
-                    {{mb_field object=$consult field="du_tiers" hidden=1 prop=""}}
-                    {{mb_field object=$consult field="patient_date_reglement" hidden=1 prop=""}}
+                    {{mb_field object=$consult field="du_patient" hidden=1}}
+                    {{mb_field object=$consult field="du_tiers" hidden=1}}
+                    {{mb_field object=$consult field="patient_date_reglement" hidden=1}}
                   {{/if}}
                 </td>
               </tr>
               <tr>
                 <th>Codes CCAM</th>
-                <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
+                <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1}}
                   {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
                   	<span onmouseover="ObjectTooltip.createEx(this, '{{$acte_ccam->_guid}}');">{{$acte_ccam->_shortview}}</span>
                   {{/foreach}}
@@ -270,7 +270,7 @@ Main.add( function(){
               </tr>
               <tr>
                 <th>Codes NGAP</th>
-                <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
+                <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1}}
                   {{foreach from=$consult->_ref_actes_ngap item=acte_ngap}}
                   	<span onmouseover="ObjectTooltip.createEx(this, '{{$acte_ngap->_guid}}');">{{$acte_ngap->_shortview}}</span>
                   {{/foreach}}
@@ -350,52 +350,64 @@ Main.add( function(){
                  <input type="hidden" name="m" value="dPcabinet" />
                  <input type="hidden" name="del" value="0" />
                  <input type="hidden" name="dosql" value="do_reglement_aed" />
+                 {{mb_key object=$reglement}}
+
                  <input type="hidden" name="date" value="now" />
                  <input type="hidden" name="emetteur" value="patient" />
-                {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+                 {{mb_field object=$reglement field="consultation_id" hidden=1}}
                 
                  <table style="width: 100%;">
                     <tr>
-                      <th class="category">{{mb_label object=$reglement field=mode}}</th>
-                      <th class="category">{{mb_label object=$reglement field=montant}}</th>
-                      <th class="category">{{mb_label object=$reglement field=banque_id}}</th>
-                      <th class="category">{{mb_label object=$reglement field=date}}</th>
-                      <th class="category"></th>
+                      <th class="category">
+											  {{mb_label object=$reglement field=mode}}
+												({{mb_label object=$reglement field=banque_id}})
+											</th>
+                      <th class="category" style="width: 6em;">{{mb_label object=$reglement field=montant}}</th>
+                      <th class="category" style="width: 6em;">{{mb_label object=$reglement field=date}}</th>
+                      <th class="category" style="width: 0em;"></th>
                     </tr>
                     
                     <!--  Liste des reglements deja effectués -->
-                    {{foreach from=$consult->_ref_reglements item=curr_reglement}}
+                    {{foreach from=$consult->_ref_reglements item=_reglement}}
                     <tr>
-                      <td>{{mb_value object=$curr_reglement field=mode}}</td>
-                      <td>{{mb_value object=$curr_reglement field=montant}}</td>
                       <td>
-                      {{if $curr_reglement->_ref_banque}}
-                        {{mb_value object=$curr_reglement->_ref_banque field=_view}}
-                      {{/if}}
-                      </td>
+                      	{{mb_value object=$_reglement field=mode}}
+                        {{if $_reglement->_ref_banque}}
+                          ({{$_reglement->_ref_banque}})
+                        {{/if}}
+											</td>
+                      <td>{{mb_value object=$_reglement field=montant}}</td>
                       <td>
-                      	<label title="{{mb_value object=$curr_reglement field=date}}">
-												{{$curr_reglement->date|date_format:$dPconfig.date}}
+                      	<label title="{{mb_value object=$_reglement field=date}}">
+												{{$_reglement->date|date_format:$dPconfig.date}}
 											</td>
                       <td>
-                        <a class="button remove notext" href="" onclick="return Reglement.cancel({{$curr_reglement->_id}});"></a>
+                        <a class="button remove notext" href="" onclick="return Reglement.cancel({{$_reglement->_id}});"></a>
                       </td>
                     </tr>
                     {{/foreach}}
                    
                     {{if $reglement->montant > 0}}
                     <tr>
-                      <td>{{mb_field object=$reglement field="mode" defaultOption="&mdash; Mode"}}</td>
-                      <td>{{mb_field object=$reglement field="montant"}}</td>
-                      <td colspan="2">
-                        <select name="banque_id">
-                           <option value="">&mdash; {{tr}}CReglement-banque_id{{/tr}} &mdash;</option> 
-                           {{foreach from=$banques item=banque}}
-                             <option value="{{$banque->_id}}">{{$banque->_view}}</option>
-                           {{/foreach}}
-                        </select>
-                      </td>
-                      <td><button class="add notext" type="submit" onclick="return this.form.onsubmit();">+</button></td>
+                      <td>
+                      	<script type="text/javascript">
+                      	updateBanque = function(mode) {
+												  var banque_id = mode.form.banque_id;
+													if ($V(mode) == "cheque") {
+													  banque_id.show();
+													}
+													else {
+                            banque_id.hide();
+														$V(banque_id, "");
+													}
+												}
+                      	</script>
+                      	{{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
+												{{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
+											</td>
+                      <td>{{mb_field object=$reglement field=montant}}</td>
+                      <td></td>
+                      <td><button class="add notext" type="submit" onclick="return this.form.onsubmit();">{{tr}}Add{{/tr}}</button></td>
                     </tr>
                     {{/if}}
                     <tr>
