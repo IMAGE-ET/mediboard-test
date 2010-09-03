@@ -17,9 +17,9 @@
       Traduction
       <select name="module" onchange="this.form.submit()">
       {{foreach from=$modules item=curr_module}}
-      <option value="{{$curr_module}}" {{if $curr_module == $module}} selected="selected" {{/if}}>
-        {{$curr_module}}
-      </option>
+        <option value="{{$curr_module}}" {{if $curr_module == $module}} selected="selected" {{/if}}>
+          {{$curr_module}}
+        </option>
       {{/foreach}}
       </select>
     </th>
@@ -41,11 +41,12 @@
   
   {{if $curr_data is div by 20}}
   <tr>
-    <th class="category">Chaîne</th>
+    <th class="category" style="width: 0.1%;">Chaîne</th>
     {{foreach from=$locales item=curr_lang}}
-    <th class="category">{{tr}}language.{{$curr_lang}}{{/tr}}</th>
+      <th class="category">{{tr}}language.{{$curr_lang}}{{/tr}}</th>
+      <th class="category" style="width: 0.1%;"></th>
     {{/foreach}}
-    <th class="category">
+    <th class="category" style="width: 0.1%;">
       <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
     </th>
   </tr>
@@ -53,22 +54,37 @@
   
   {{if $curr_data==0}}
   <tr>
-    <td><input size="40" type="text" name="chaine[0]" value="" /></td>
-    {{foreach from=$locales item=curr_lang}}
-    <td><input size="40" type="text" name="trans[0][{{$curr_lang}}]" value="" /></td>
-    {{/foreach}}
-    <td class="button">
-      <button type="submit" class="submit notext">{{tr}}Save{{/tr}}</button>
+    <td>
+      <input size="40" type="text" name="chaine[0]" value="" />
     </td>
+    {{foreach from=$locales item=curr_lang}}
+      <td>
+        <input style="width: 100%" type="text" name="trans[0][{{$curr_lang}}]" value="" />
+      </td>
+      <td>
+        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+      </td>
+    {{/foreach}}
+    <td class="button"></td>
   </tr>
   {{/if}}
+  
   {{counter}}
   <tr>
-    <td><input size="40" type="text" name="chaine[{{$curr_data}}]" value="{{$keyTrans}}" /></td>
-    {{foreach from=$locales item=curr_lang}}
     <td>
-      <input size="40" type="text" name="trans[{{$curr_data}}][{{$curr_lang}}]" value="{{$currTrans.$curr_lang}}" />
+      <input size="40" type="text" name="chaine[{{$curr_data}}]" value="{{$keyTrans}}" />
     </td>
+    {{foreach from=$locales item=curr_lang}}
+      <td>
+        {{if $currTrans.$curr_lang|strpos:"\n"}}
+          <textarea name="trans[{{$curr_data}}][{{$curr_lang}}]">{{$currTrans.$curr_lang}}</textarea>
+        {{else}}
+          <input style="width: 100%" type="text" name="trans[{{$curr_data}}][{{$curr_lang}}]" value="{{$currTrans.$curr_lang}}" />
+        {{/if}}
+      </td>
+      <td>
+        <button type="button" class="down notext" tabindex="10000" onclick="$(this).up().previous().down('input,textarea').switchMultiline()"></button>
+      </td>
     {{/foreach}}
     <td></td>
   </tr>

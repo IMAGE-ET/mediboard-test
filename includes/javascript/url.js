@@ -259,19 +259,19 @@ var Url = Class.create({
         if (oOptions.width) {
           style = {
             width: oOptions.width
-          }
+          };
         }
         
-				if (update.cumulativeOffset().top + update.getHeight() > document.viewport.getHeight()) {
-					style.bottom = '0px';
-				}
-
+        update.style.top = null;
+        update.style.marginTop = null;
+        
+        if (update.cumulativeOffset().top + update.getHeight() > document.viewport.getHeight()) {
+          style.top = update.cumulativeOffset().top-update.getHeight()-parseInt(input.getHeight()) + "px";
+          style.marginTop = 0;
+        }
+        
         update.setStyle(style);
-
-        // Open above when no room down
-				
-
-				update.setOpacity(1).unoverflow();
+        update.setOpacity(1).unoverflow();
         
         if (oOptions.onAfterShow) {
           oOptions.onAfterShow(element, update);
