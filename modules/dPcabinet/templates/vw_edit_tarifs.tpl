@@ -93,24 +93,19 @@ Main.add(function () {
           <th>{{mb_label object=$tarif field="_type"}}</th>
           <td>
             {{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
-			      {{mb_field object=$prat field="function_id" hidden=1 prop=""}}
+			      {{mb_field object=$tarif field="function_id" hidden=1}}
 			      <input type="hidden" name="chir_id" value="{{$prat->user_id}}" />
 						
             <select name="_type" onchange="changeOwner(this.value);">
-              <option value="chir" {{if $tarif->chir_id}} selected="selected" {{/if}}>Tarif personnel</option>
+              <option value="chir"     {{if $tarif->chir_id}}     selected="selected" {{/if}}>Tarif personnel</option>
               <option value="function" {{if $tarif->function_id}} selected="selected" {{/if}}>Tarif de cabinet</option>
             </select>
             
             {{else}}
 			      <input  type="hidden" name="function_id" value="" />
             <select name="chir_id">
-              <option value="">&mdash; Choisir un praticien</option>
-              {{foreach from=$listPrat item=_prat}}
-              <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-                {{if $_prat->_id == $prat->_id}}selected="selected"{{/if}}>
-                {{$_prat->_view}}
-              </option>
-              {{/foreach}}
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$prat->_id}}
             </select>
             {{/if}}
           </td>
