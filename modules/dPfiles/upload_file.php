@@ -15,7 +15,6 @@ $uploadok         = CValue::get("uploadok", 0);
 $private          = CValue::get("private", 0);
 
 $nb_files_upload = range(1, ($file_rename ? 1 : CAppUI::conf("dPfiles nb_upload_files")) ,true);
-mbTrace($nb_files_upload);
 $listCategory = CFilesCategory::listCatClass($object->_class_name);
 
 $file = new CFile();
