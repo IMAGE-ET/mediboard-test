@@ -96,7 +96,7 @@ Main.add(function () {
         </button>
       {{/if}}
       
-      {{if $plageSel->plageconsult_id}}
+      {{if $plageSel->_id}}
         <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
     </td>
@@ -162,12 +162,12 @@ Main.add(function () {
         {{/foreach}}
       </table>
       
-    {{if $plageSel->plageconsult_id}}
+    {{if $plageSel->_id}}
     <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
     <table class="form">
       <tr>
-        {{if !$plageSel->plageconsult_id}}
+        {{if !$plageSel->_id}}
         <th class="title" colspan="4">Créer une plage</th>
 
         {{else}}
@@ -183,8 +183,7 @@ Main.add(function () {
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
           <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
           <input type='hidden' name='del' value='0' />
-					
-          {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
+          {{mb_key object=$plageSel}}
           
 					<input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
           <input type='hidden' name='_firstconsult_time' value='{{$_firstconsult_time}}' />
@@ -194,12 +193,8 @@ Main.add(function () {
               <th>{{mb_label object=$plageSel field="chir_id"}}</th>
               <td>
                 <select name="chir_id" class="{{$plageSel->_props.chir_id}}" style="width: 14em;">
-                  <option value="">&mdash; Choisir un praticien</option>
-                  {{foreach from=$listChirs item=curr_chir}}
-                    <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-                    {{$curr_chir->_view}}
-                    </option>
-                  {{/foreach}}
+                  <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+									{{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$chirSel}}
                 </select>
               </td>
               <th>{{mb_label object=$plageSel field="libelle"}}</th>
@@ -271,7 +266,7 @@ Main.add(function () {
                 <select name="_freq">
                   <option value="05" {{if ($plageSel->_freq == "05")}} selected="selected" {{/if}}>05</option>
                   <option value="10" {{if ($plageSel->_freq == "10")}} selected="selected" {{/if}}>10</option>
-                  <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->plageconsult_id)}} selected="selected" {{/if}}>15</option>
+                  <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->_id)}} selected="selected" {{/if}}>15</option>
                   <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
                   <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
                   <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
@@ -295,20 +290,21 @@ Main.add(function () {
               </td>
             </tr>
             <tr>
-              {{if !$plageSel->plageconsult_id}}
-              <td class="button" colspan="4"><button type="submit" class="submit">Créer</button></td>
+              {{if !$plageSel->_id}}
+              <td class="button" colspan="4"><button type="submit" class="submit">{{tr}}Create{{/tr}}</button></td>
               {{else}}
-              <td class="button" colspan="4"><button type="submit" class="modify">Modifier</button></td>
+              <td class="button" colspan="4"><button type="submit" class="modify">{{tr}}Modify{{/tr}}</button></td>
               {{/if}}
             </tr>
           </table>
           </form>
       
-          {{if $plageSel->plageconsult_id}}
+          {{if $plageSel->_id}}
 	      <form name='removeFrm' action='?m=dPcabinet' method='post'>
       	  <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
-	      <input type='hidden' name='del' value='1' />
-	      {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
+	        <input type='hidden' name='del' value='1' />
+	        {{mb_key object=$plageSel}}
+					
           <table class="form">
 	        <tr>
 	          <th class="title modify" colspan="2">Supprimer cette plage</th>
@@ -336,7 +332,7 @@ Main.add(function () {
         <tr>
           <th class="title" colspan="10">
             <strong>
-            {{if $plageSel->plageconsult_id}}
+            {{if $plageSel->_id}}
             {{mb_include module=system template=inc_object_notes object=$plageSel}}
             Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
@@ -420,7 +416,7 @@ Main.add(function () {
             <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+            {{mb_key object=$_consult}}
             <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
@@ -428,7 +424,7 @@ Main.add(function () {
             <form name="cancelFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            {{mb_field object=$_consult field="consultation_id" hidden=1 prop=""}}
+            {{mb_key object=$_consult}}
             <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>
