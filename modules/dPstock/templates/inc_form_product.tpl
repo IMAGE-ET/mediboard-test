@@ -1,7 +1,6 @@
 <script type="text/javascript">
 	
 Main.add(function () {
-  Control.Tabs.create("tabs-stocks-references", true);
   Control.Tabs.create("product-conditionnement-tabs", false);
   
   var editForm = getForm("edit_product");
