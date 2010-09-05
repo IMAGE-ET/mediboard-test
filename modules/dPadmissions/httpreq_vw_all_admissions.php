@@ -39,7 +39,7 @@ for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
 
 // filtre sur les types d'admission
 if($type == "ambucomp") {
-  $filterType = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+  $filterType = "(`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp')";
 } elseif($type) {
   $filterType = "`sejour`.`type` = '$type'";
 } else {
@@ -54,6 +54,8 @@ $sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejo
       AND $filterType
     GROUP BY `date`
     ORDER BY `date`";
+
+mbTrace($sql);
 foreach ($ds->loadHashList($sql) as $day => $num1) {
 	$days[$day]["num1"] = $num1;
 }
