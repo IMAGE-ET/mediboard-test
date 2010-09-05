@@ -157,9 +157,6 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
 
   $where["sejour.group_id"] = "= '$g'";
   
-  // On enleve de l'affichage les urgences
-  $where["sejour.type"] = " != 'urg'";
-  
   $where[] = "affectation.affectation_id IS NULL";
   
   if($order == null){

@@ -34,6 +34,10 @@ $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 
 switch($type){
+  case 'preop':
+    $where["entree_salle"] = "IS NULL";
+    $order = "time_operation";
+    break;
 	case 'encours':
 		$where["entree_salle"] = "IS NOT NULL";
     $where["sortie_salle"] = "IS NULL";
@@ -68,6 +72,7 @@ foreach($listOperations as $key => &$op) {
   }
 	
 	$op->loadRefChir(1);
+	$op->_ref_chir->loadRefFunction();
   $op->loadRefPlageOp(1);
 	$op->loadRefPatient(1);
 	$op->loadAffectationsPersonnel();

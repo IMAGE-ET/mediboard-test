@@ -39,7 +39,13 @@ $today = new CSejour;
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
-$where["type"] = $type ? " = '$type'" :  "!= 'urg'";
+if($type == "ambucomp") {
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($type) {
+  $where["sejour.type"] = " = '$type'";
+} else {
+  $where["sejour.type"] = "!= 'urg'";
+}
 
 global $g;
 $where["group_id"] = "= '$g'";

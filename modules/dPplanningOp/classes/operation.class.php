@@ -51,18 +51,20 @@ class COperation extends CCodable {
   var $annulee = null;
   
   // Timings enregistrés
-  var $entree_bloc     = null;
-  var $entree_salle    = null;
-  var $pose_garrot     = null;
-  var $debut_op        = null;
-  var $fin_op          = null;
-  var $retrait_garrot  = null;
-  var $sortie_salle    = null;
-  var $entree_reveil   = null;
-  var $sortie_reveil   = null;
-  var $induction_debut = null;
-  var $induction_fin   = null;
-  var $horaire_voulu   = null;
+  var $debut_prepa_preop = null;
+  var $fin_prepa_preop   = null;
+  var $entree_bloc       = null;
+  var $entree_salle      = null;
+  var $pose_garrot       = null;
+  var $debut_op          = null;
+  var $fin_op            = null;
+  var $retrait_garrot    = null;
+  var $sortie_salle      = null;
+  var $entree_reveil     = null;
+  var $sortie_reveil     = null;
+  var $induction_debut   = null;
+  var $induction_fin     = null;
+  var $horaire_voulu     = null;
   
   // Vérification du côté
   var $cote_admission      = null;
@@ -161,6 +163,8 @@ class COperation extends CCodable {
     $specs["libelle"]            = "str seekable";
     $specs["cote"]               = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
     $specs["temp_operation"]     = "time show|0";
+    $specs["debut_prepa_preop"]  = "time show|0";
+    $specs["fin_prepa_preop"]    = "time show|0";
     $specs["entree_salle"]       = "time show|0";
     $specs["sortie_salle"]       = "time show|0";
     $specs["time_operation"]     = "time show|0";

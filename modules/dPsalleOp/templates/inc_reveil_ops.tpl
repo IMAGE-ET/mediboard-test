@@ -31,29 +31,34 @@ submitOperationForm = function(oFormOperation) {
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr>    
-  {{foreach from=$listOperations item=curr_op}}
+  {{foreach from=$listOperations item=_operation}}
   <tr>
-    <td>{{$curr_op->_ref_salle->nom}}</td>
-    <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
+    <td>{{$_operation->_ref_salle->_shortview}}</td>
     <td class="text">
-    	<a href="?m={{$m}}&amp;tab=vw_soins_reveil&amp;operation_id={{$curr_op->_id}}" title="Soins">
-    		{{$curr_op->_ref_sejour->_ref_patient->_view}}
-		  </a>
-		</td>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
+    </td>
+    <td class="text">
+      <a href="?m={{$m}}&amp;tab=vw_soins_reveil&amp;operation_id={{$_operation->_id}}">
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+        {{$_operation->_ref_patient->_view}}
+      </span>
+      </a>
+    </td>
     {{if $isbloodSalvageInstalled}}
       <td>
-        {{if $curr_op->blood_salvage->_id}}
+        {{if $_operation->blood_salvage->_id}}
         <div style="float:left ; display:inline">
-          <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$curr_op->_id}});">         
+          <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$_operation->_id}});">         
           <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo">
-          {{if $curr_op->blood_salvage->totaltime > "00:00:00"}}  
-            Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:$dPconfig.time}}
+          {{if $_operation->blood_salvage->totaltime > "00:00:00"}}  
+            Débuté à {{$_operation->blood_salvage->_recuperation_start|date_format:$dPconfig.time}}
           {{else}}
             Non débuté
           {{/if}} 
         </a>
         </div>
-        {{if $curr_op->blood_salvage->totaltime|date_format:$dPconfig.time > "05:00"}} 
+        {{if $_operation->blood_salvage->totaltime|date_format:$dPconfig.time > "05:00"}} 
         <div style="float:right; display:inline">
         
         <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
@@ -66,29 +71,29 @@ submitOperationForm = function(oFormOperation) {
     {{/if}}
     <td>
       {{if $can->edit}}
-      <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-      	{{assign var=operation_id value=$curr_op->_id}}
+      <form name="editSortieBlocFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
+      	{{assign var=_operation_id value=$_operation->_id}}
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
+        <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$curr_op field="sortie_salle" register=true form="editSortieBlocFrm$operation_id"}}
+        {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocFrm$_operation_id"}}
         <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
-      {{mb_value object=$curr_op field="sortie_salle"}}
+      {{mb_value object=$_operation field="sortie_salle"}}
       {{/if}}
     </td>
     <td>
       {{if $can->edit || $modif_operation}}
       
       {{if $personnels !== null}}
-      <form name="selPersonnel{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+      <form name="selPersonnel{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPpersonnel" />
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="object_id" value="{{$curr_op->_id}}" />
-        <input type="hidden" name="object_class" value="{{$curr_op->_class_name}}" />
+        <input type="hidden" name="object_id" value="{{$_operation->_id}}" />
+        <input type="hidden" name="object_class" value="{{$_operation->_class_name}}" />
         <input type="hidden" name="tag" value="reveil" />
         <input type="hidden" name="realise" value="0" />
         <select name="personnel_id" style="max-width: 120px;">
@@ -100,16 +105,16 @@ submitOperationForm = function(oFormOperation) {
       </form>
       {{/if}}
       
-      <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
+        <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="entree_reveil" value="" /> 
-        <button class="tick notext" type="button" onclick="checkPersonnel(document.selPersonnel{{$curr_op->_id}}, this.form);">{{tr}}Modify{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="checkPersonnel(document.selPersonnel{{$_operation->_id}}, this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       
-      {{foreach from=$curr_op->_ref_affectations_personnel.reveil item=curr_affectation}}
+      {{foreach from=$_operation->_ref_affectations_personnel.reveil item=curr_affectation}}
         <br />
         <form name="delPersonnel{{$curr_affectation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPpersonnel" />
@@ -128,10 +133,10 @@ submitOperationForm = function(oFormOperation) {
     </td>
     <td class="button">
       {{if $can->edit || $modif_operation}}
-      <form name="editEntreeReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+        <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="sortie_reveil" value="" />
         <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil, 'current') ; submitOperationForm(this.form)">

@@ -20,8 +20,12 @@ $where = array();
 $where[] = "DATE(sejour.entree_prevue) = '". $date ."'";
 $where["sejour.annule"] = "= '0'";
 
-if ($type) {
-  $where["type"] = " = '$type'";  
+if($type == "ambucomp") {
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($type) {
+  $where["sejour.type"] = " = '$type'";
+} else {
+  $where["sejour.type"] = "!= 'urg'";
 }
 
 $ljoin = array();

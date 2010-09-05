@@ -15,7 +15,12 @@ Main.add(function () {
       </div>
       {{if $alerte}}
       <div class="warning">
-        <a href="#1" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
+        <a href="#1" onclick="showAlerte('{{$emptySejour->_type_admission}}')">
+          Il y a {{$alerte}} patient(s) non placés dans la semaine qui vient
+          {{if $emptySejour->_type_admission}}
+          ({{tr}}CSejour._type_admission.{{$emptySejour->_type_admission}}{{/tr}})
+          {{/if}}
+        </a>
       </div>
       {{else}}
       <div class="message">
@@ -79,14 +84,8 @@ Main.add(function () {
         <input type="hidden" name="m" value="{{$m}}" />
         <table class="form">
           <tr>
-            <th><label for="filterAdm" title="Admissions à afficher">Admissions</label></th>
-            <td>
-              <select name="filterAdm" onchange="this.form.submit()">
-                <option value="tout" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash; Tout afficher</option>
-                <option value="ambu" {{if $filterAdm == "ambu"}}selected="selected"{{/if}}>Ambulatoires</option>
-                <option value="comp" {{if $filterAdm == "comp"}}selected="selected"{{/if}}>Hospi. complètes</option>
-                <option value="csejour" {{if $filterAdm == "csejour"}}selected="selected"{{/if}}>Courts séjours</option>
-              </select>
+            <td class="button" colspan="2">
+              {{mb_field object=$emptySejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="this.form.submit()"}}
             </td>
           </tr>
           <tr>

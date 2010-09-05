@@ -1046,8 +1046,14 @@ class CSetupdPplanningOp extends CSetup {
       `color` CHAR (6) NOT NULL DEFAULT 'ffffff'
     ) TYPE=MYISAM;";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.13");
+    $query = "ALTER TABLE `operations` 
+              ADD `debut_prepa_preop` TIME,
+              ADD `fin_prepa_preop` TIME";
+    $this->addQuery($query);
 		
-    $this->mod_version = "1.13";
+    $this->mod_version = "1.14";
   }
 }
 ?>

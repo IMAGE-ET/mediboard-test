@@ -19,12 +19,15 @@ $ds = CSQLDataSource::get("std");
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
-$date      = CValue::getOrSession("date", mbDate()); 
-$mode      = CValue::getOrSession("mode", 0); 
-$triAdm    = CValue::getOrSession("triAdm", "praticien");
-$list_services    = CValue::getOrSession("list_services");
-$filterAdm = CValue::getOrSession("filterAdm", "tout");
-$filterFunction = CValue::getOrSession("filterFunction");
+$date            = CValue::getOrSession("date", mbDate()); 
+$mode            = CValue::getOrSession("mode", 0); 
+$triAdm          = CValue::getOrSession("triAdm", "praticien");
+$list_services   = CValue::getOrSession("list_services");
+$_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
+$filterFunction  = CValue::getOrSession("filterFunction");
+
+$emptySejour = new CSejour;
+$emptySejour->_type_admission = $_type_admission;
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -61,28 +64,25 @@ foreach ($services as &$service) {
 // Nombre de patients à placer pour la semaine qui vient (alerte)
 $today   = mbDate()." 01:00:00";
 $endWeek = mbDateTime("+7 days", $today);
-$where = array(
-  "type" => "NOT IN ('exte', 'urg', 'seances')",
-  "annule" => "= '0'"
-);
-$where["sejour.entree"] = "BETWEEN '$today' AND '$endWeek'";
+
+$where["annule"]          = "= '0'";
+$where["sejour.entree"]   = "BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
-$where[] = "affectation.affectation_id IS NULL";
-$where[] = $where_service;
-$leftjoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+if($_type_admission == "ambucomp") {
+  $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($_type_admission) {
+  $where["sejour.type"] = " = '$_type_admission'";
+} else {
+  $where["sejour.type"] = "!= 'urg'";
+}
+$where[]                  = "affectation.affectation_id IS NULL";
+$where[]                  = $where_service;
+$leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
 if($filterFunction){
 	$leftjoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
   $where["users_mediboard.function_id"] = " = '$filterFunction'";
-}
-
-// Filtre sur les types d'admission
-if($filterAdm == "comp" || $filterAdm == "ambu"){
-  $where["type"] = " = '$filterAdm'";
-}
-if($filterAdm == "csejour"){
-  $where[] = "HOUR(TIMEDIFF(sejour.sortie_prevue, sejour.entree_prevue)) <= 48";
 }
 
 $sejour = new CSejour();
@@ -94,6 +94,10 @@ $phpChrono->start();
 $groupSejourNonAffectes = array();
 
 if ($can->edit) {
+	$where = array();
+	$where["sejour.annule"] = "= '0'";
+  $where[] = $where_service;
+	
   switch ($triAdm) {
     case "date_entree" :
       $order = "entree_prevue ASC";
@@ -103,67 +107,39 @@ if ($can->edit) {
       break;
   }
   
-  switch ($filterAdm) {
-    case "ambu" :
-      $whereFilter = "type = 'ambu'";
+  switch ($_type_admission) {
+    case "ambucomp" :
+      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
       break;
-    case "csejour" :
-      $whereFilter = "HOUR(TIMEDIFF(sejour.sortie_prevue, sejour.entree_prevue)) <= 48";
-      break;
-    case "comp" :
-      $whereFilter = "type = 'comp'";
-      break;
+    case "0" :
+    	break;
     default :
-      $whereFilter = "1 = 1";
+    	$where["sejour.type"] = "= '$_type_admission'"; 
   }
   
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
-  $where = array(
-    "type" => "NOT IN ('exte', 'urg', 'seances')",
-    "annule" => "= '0'"
-  );
 	$where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
-	$where[] = $whereFilter;
-	$where[] = $where_service;
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
 	$phpChrono->stop("Non affectés: veille");
 	$phpChrono->start();
   
   // Admissions du matin
-  $where = array(
-    "type" => "NOT IN ('exte', 'urg', 'seances')",
-    "annule" => "= '0'"
-  );
   $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
-  $where[] = $whereFilter;
-  $where[] = $where_service;
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
   $phpChrono->stop("Non affectés: matin");
   $phpChrono->start();
   
   // Admissions du soir
-  $where = array(
-    "type" => "NOT IN ('exte', 'urg', 'seances')",
-    "annule" => "= '0'"
-  );  
   $where["sejour.entree"] = "BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
-  $where[] = $whereFilter;
-  $where[] = $where_service;
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
   $phpChrono->stop("Non affectés: soir");
   $phpChrono->start();
   
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
-  $where = array(
-    "annule" => "= '0'",
-    "type" => "NOT IN ('exte', 'urg', 'seances')",
-  );
   $where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
   $where["sejour.sortie"] = ">= '$date 00:00:00'";
-  $where[] = $whereFilter;
-  $where[] = $where_service;
 
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
   $phpChrono->stop("Non affectés: avant");
@@ -195,7 +171,7 @@ $smarty->assign("date"                  , $date);
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);
-$smarty->assign("filterAdm"             , $filterAdm);
+$smarty->assign("emptySejour"           , $emptySejour);
 $smarty->assign("filterFunction"        , $filterFunction);
 $smarty->assign("triAdm"                , $triAdm);
 $smarty->assign("totalLits"             , $totalLits);

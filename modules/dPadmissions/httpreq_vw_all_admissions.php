@@ -20,8 +20,9 @@ $month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
 $month_max = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
-$selAdmis = CValue::getOrSession("selAdmis", "0");
+$selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
+$type      = CValue::getOrSession("type", "ambucomp");
 
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -36,12 +37,21 @@ for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
   );
 }
 
+// filtre sur les types d'admission
+if($type == "ambucomp") {
+  $filterType = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
+} elseif($type) {
+  $filterType = "`sejour`.`type` = '$type'";
+} else {
+  $filterType = "`sejour`.`type` != 'urg'";
+}
+
 // Liste des admissions par jour
 $sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
     FROM `sejour`
     WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$month_max'
       AND `sejour`.`group_id` = '$g'
-      AND `sejour`.`type` != 'urg'
+      AND $filterType
     GROUP BY `date`
     ORDER BY `date`";
 foreach ($ds->loadHashList($sql) as $day => $num1) {
@@ -55,7 +65,7 @@ $sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejo
       AND `sejour`.`group_id` = '$g'
       AND `sejour`.`entree_reelle` IS NULL
       AND `sejour`.`annule` = '0'
-      AND `sejour`.`type` != 'urg'
+      AND $filterType
     GROUP BY `date`
     ORDER BY `date`";
 foreach ($ds->loadHashList($sql) as $day => $num2) {
@@ -69,7 +79,7 @@ $sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejo
       AND `sejour`.`group_id` = '$g'
       AND `sejour`.`saisi_SHS` = '0'
       AND `sejour`.`annule` = '0'
-      AND `sejour`.`type` != 'urg'
+      AND $filterType
     GROUP BY `date`
     ORDER BY `date`";
 foreach ($ds->loadHashList($sql) as $day => $num3) {

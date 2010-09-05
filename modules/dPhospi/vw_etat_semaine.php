@@ -11,6 +11,8 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
+$type_admission = CValue::getOrSession("type_admission", "ambucomp");
+
 // Liste des chirurgiens
 $listChirs = array();
 $listPats = array();
@@ -41,10 +43,17 @@ $list = array();
 for($i = 1; $i <= 7; $i++) {
   $from = mbDateTime("+1 second", $to);
   $to = mbDateTime("+1 day", $to);
-  $where = array(
-    "type" => "!= 'exte'",
-    "annule" => "= '0'"
-  );
+  $where = array();
+  $where["annule"] = "= '0'";
+  switch ($type_admission) {
+    case "ambucomp" :
+      $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
+      break;
+    case "0" :
+      break;
+    default :
+      $where["sejour.type"] = "= '$type_admission'"; 
+  }
   $where["sejour.entree"] = "BETWEEN '$from' AND '$to'";
   $list[$from] = loadSejourNonAffectes($where);
 }
@@ -54,6 +63,7 @@ $smarty = new CSmartyDP();
 
 
 $smarty->assign("list" , $list);
+$smarty->assign("type_admission" , $type_admission);
 
 $smarty->display("vw_etat_semaine.tpl");
 

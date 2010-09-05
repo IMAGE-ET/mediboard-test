@@ -141,8 +141,9 @@ function showLegend() {
   url.popup(500, 500, "Legend");
 }
 
-function showAlerte() {
+function showAlerte(sType_admission) {
   var url = new Url("dPhospi", "vw_etat_semaine");
+  url.addParam("type_admission", sType_admission);
   url.popup(500, 250, "Alerte");
 }
 

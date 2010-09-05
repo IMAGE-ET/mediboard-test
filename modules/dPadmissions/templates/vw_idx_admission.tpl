@@ -39,6 +39,14 @@ function printDepassement(id) {
   url.popup(700, 550, "Depassement");
 }
 
+function reloadFullAdmissions(type, filterFunction) {
+  var admUrl = new Url("dPadmissions", "httpreq_vw_all_admissions");
+  admUrl.addParam("date", "{{$date}}");
+  admUrl.addParam("type", type);
+  admUrl.requestUpdate('allAdmissions');
+	reloadAdmission(type, filterFunction);
+}
+
 function reloadAdmission(type, filterFunction) {
   var admUrl = new Url("dPadmissions", "httpreq_vw_admissions");
   admUrl.addParam("selAdmis", "{{$selAdmis}}");
@@ -143,7 +151,7 @@ Main.add(function () {
   </td>
   <td style="float: right">
     <form action="?" name="selType">
-      {{mb_field object=$sejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="reloadAdmission(this.value)"}}
+      {{mb_field object=$sejour field="_type_admission" defaultOption="&mdash; Toutes les admissions" onchange="reloadFullAdmissions(this.value)"}}
     </form>
     <a href="#" onclick="printPlanning()" class="button print">Imprimer</a>
   </td>

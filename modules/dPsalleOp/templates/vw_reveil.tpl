@@ -16,6 +16,9 @@ Main.add(function () {
   url.addParam("date", "{{$date}}");
 	
 	// Laisser la variable updater_encours, utile dans inc_edit_check_list.tpl
+  url.addParam("type", "preop");
+  url.periodicalUpdate("preop", { frequency: 90 });  
+  
   url.addParam("type", "encours");
   url.periodicalUpdate("encours", { frequency: 90 });  
 
@@ -34,6 +37,9 @@ function refreshTabsReveil() {
 	
 	url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
+  
+  url.addParam("type", "preop");
+  url.requestUpdate("preop");
 	
   url.addParam("type", "encours");
   url.requestUpdate("encours");
@@ -48,15 +54,23 @@ function refreshTabsReveil() {
   url.requestUpdate("out");
 }
 
+codageCCAM = function(operation_id){
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_codage_actes_reveil");
+  url.addParam("operation_id", operation_id);
+  url.popup(700,500,"Actes CCAM");
+}
+
 </script>
 
 		 
 	<ul id="reveil_tabs" class="control_tabs">
 	  {{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
+      <li><a href="#preop">{{tr}}SSPI.Preop{{/tr}}     (<span id="lipreop">0</span>)</a>  </li>
 		  <li><a href="#encours">{{tr}}SSPI.Encours{{/tr}} (<span id="liencours">0</span>)</a></li>
-	  	<li><a href="#ops">{{tr}}SSPI.Attente{{/tr}} (<span id="liops">0</span>)</a></li>
-	  	<li><a href="#reveil">{{tr}}SSPI.Reveil{{/tr}} (<span id="lireveil">0</span>)</a></li>
-	  	<li><a href="#out">{{tr}}SSPI.Sortie{{/tr}} (<span id="liout">0</span>)</a></li>
+	  	<li><a href="#ops">{{tr}}SSPI.Attente{{/tr}}     (<span id="liops">0</span>)</a>    </li>
+	  	<li><a href="#reveil">{{tr}}SSPI.Reveil{{/tr}}   (<span id="lireveil">0</span>)</a> </li>
+	  	<li><a href="#out">{{tr}}SSPI.Sortie{{/tr}}      (<span id="liout">0</span>)</a>    </li>
 	  {{else}}
 	  	<li><a href="#all">{{tr}}SSPI.Encours{{/tr}} / {{tr}}SSPI.Attente{{/tr}} / {{tr}}SSPI.Reveil{{/tr}} / {{tr}}SSPI.Sortie{{/tr}}</a></li>
 	  {{/if}}
@@ -83,6 +97,7 @@ function refreshTabsReveil() {
 	<hr class="control_tabs" />
 	
 	{{if $dPconfig.dPsalleOp.CReveil.multi_tabs_reveil == 1}}
+    <div id="preop" style="display:none"></div>
 		<div id="encours" style="display:none"></div>
 		<div id="ops" style="display:none"></div>
 		<div id="reveil" style="display:none"></div>

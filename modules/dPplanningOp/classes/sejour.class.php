@@ -271,7 +271,7 @@ class CSejour extends CCodable {
     $props["_horodatage"]     = "enum list|entree_prevue|entree_reelle|sortie_prevue|sortie_reelle";
     $props["_admission"]      = "text";
     $props["_service"]        = "text";
-    $props["_type_admission"] = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
+    $props["_type_admission"] = "enum notNull list|ambucomp|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
     $props["_specialite"]     = "text";
     $props["_date_min_stat"]  = "date";
     $props["_date_max_stat"]  = "date moreEquals|_date_min_stat";
