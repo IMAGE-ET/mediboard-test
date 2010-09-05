@@ -25,7 +25,7 @@ if($type == "ambucomp") {
 } elseif($type) {
   $where["sejour.type"] = " = '$type'";
 } else {
-  $where["sejour.type"] = "!= 'urg'";
+  $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 $ljoin = array();

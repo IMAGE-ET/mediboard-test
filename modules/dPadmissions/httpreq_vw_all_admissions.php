@@ -22,7 +22,7 @@ $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 $selAdmis  = CValue::getOrSession("selAdmis", "0");
 $selSaisis = CValue::getOrSession("selSaisis", "0");
-$type      = CValue::getOrSession("type", "ambucomp");
+$type      = CValue::getOrSession("type", "0");
 
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -43,7 +43,7 @@ if($type == "ambucomp") {
 } elseif($type) {
   $filterType = "`sejour`.`type` = '$type'";
 } else {
-  $filterType = "`sejour`.`type` != 'urg'";
+  $filterType = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
 // Liste des admissions par jour

@@ -19,7 +19,7 @@ $selSaisis = CValue::getOrSession("selSaisis", "0");
 $order_way = CValue::getOrSession("order_way", "ASC");
 $order_col = CValue::getOrSession("order_col", "patient_id");
 $date = CValue::getOrSession("date", mbDate());
-$type = CValue::getOrSession("type", "ambucomp");
+$type = CValue::getOrSession("type", "0");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
