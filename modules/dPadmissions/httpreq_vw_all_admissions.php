@@ -54,8 +54,6 @@ $sql = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejo
       AND $filterType
     GROUP BY `date`
     ORDER BY `date`";
-
-mbTrace($sql);
 foreach ($ds->loadHashList($sql) as $day => $num1) {
 	$days[$day]["num1"] = $num1;
 }
