@@ -457,7 +457,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
   function getSortie($node, CSejour $mbVenue) {
     // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
-    if (!$mbVenue->sortie_reelle && ($this->_ref_emetteur->_configs["send_sortie_prevue"] == 0)) {
+    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    if (!$mbVenue->sortie_reelle && ($emetteur->_configs["send_sortie_prevue"] == 0)) {
       return $mbVenue;
     } 
     

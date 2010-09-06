@@ -207,7 +207,7 @@ class CEchangeHprim extends CMbMetaObject {
   }
   
   function setObjectIdClass($object_class, $object_id) {
-    $this->object_id = $object_id;
+    $this->object_id    = $object_id;
     $this->object_class = $object_class;
   }
 	
