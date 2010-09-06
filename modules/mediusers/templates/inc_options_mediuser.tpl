@@ -1,10 +1,5 @@
-{{if !isset($selected|smarty:nodefaults)}}
-  {{assign var=selected value=null}}
-{{/if}}
-
-{{if !isset($disabled|smarty:nodefaults)}}
-  {{assign var=disabled value=null}}
-{{/if}}
+{{mb_default var=selected value=null}}
+{{mb_default var=disabled value=null}}
 
 {{foreach from=$list item=_mediuser}}
   {{assign var=color value=$_mediuser->_ref_function->color}}

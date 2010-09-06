@@ -41,45 +41,52 @@ class CListeChoix extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["chir_id"]         = "ref class|CMediusers";
-    $specs["function_id"]     = "ref class|CFunctions";
-    $specs["group_id"]        = "ref class|CGroups";
-    $specs["nom"]             = "str notNull";
-    $specs["valeurs"]         = "text confidential";
-    $specs["compte_rendu_id"] = "ref class|CCompteRendu";
-    return $specs;
+  	$props = parent::getProps();
+    $props["chir_id"]         = "ref class|CMediusers";
+    $props["function_id"]     = "ref class|CFunctions";
+    $props["group_id"]        = "ref class|CGroups";
+    $props["nom"]             = "str notNull";
+    $props["valeurs"]         = "text confidential";
+    $props["compte_rendu_id"] = "ref class|CCompteRendu";
+		
+    $props["_owner"]           = "enum list|prat|func|etab";
+    return $props;
   }
   
-  function check() {
-    if ($this->chir_id and $this->function_id and $this->group_id) {
-      return "Une liste ne peut pas appartenir qu'a un utilisateur, une fonction ou un établissement";
-    }
-    
-    if (!($this->chir_id or $this->function_id or $this->group_id)) {
-      return "Une liste doit appartenir à un utilisateur, une fonction ou un établissement";
-    }
-    return parent::check();
+  function loadRefUser() {
+    return $this->_ref_user = $this->loadFwdRef("chir_id", true);
   }
   
-  function loadRefsFwd() {
-    // Owner
-    $this->_ref_chir = new CMediusers;
-    $this->_ref_chir->load($this->chir_id);
-    $this->_ref_function = new CFunctions;
-    $this->_ref_function->load($this->function_id);
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
-    
-    $this->_ref_modele = new CCompteRendu;
-    $this->_ref_modele->load($this->compte_rendu_id);
+  function loadRefFunction() {
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
   
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
+  }
+  
+	function loadRefOwner() {
+		return CValue::first(
+		  $this->loadRefUser(),
+			$this->loadRefFunction(),
+			$this->loadRefGroup()
+		);
+	}
+	
+	function loadRefModele() {
+		return $this->_ref_modele = $this->loadFwdRef("compte_rendu_id", true);
+	}
+	
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
     $this->_valeurs = $this->valeurs != "" ? explode("|", $this->valeurs) : array();
     natcasesort($this->_valeurs);
+
+    if ($this->chir_id    ) $this->_owner = "prat";
+    if ($this->function_id) $this->_owner = "func";
+    if ($this->group_id   ) $this->_owner = "etab";
+
   }
   
   function updateDBFields() {
@@ -100,16 +107,19 @@ class CListeChoix extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!($this->_ref_chir || $this->_ref_function || $this->_ref_group)) {
-      $this->loadRefsFwd();
-    }
-    if ($this->_ref_chir->_id) {
-      return $this->_ref_chir->getPerm($permType);
-    } else if ($this->_ref_function->_id) {
-      return $this->_ref_function->getPerm($permType);
-    } else {
-      return $this->_ref_group->getPerm($permType);
-    }
+    $owner = $this->loadRefsOwner();
+		return $owner->getPerm($permType);
+  }
+	
+  static function loadAllFor($user_id) {
+		$user = new CMediusers;
+		$user->load($user_id);
+
+    $listes = array();
+		foreach ($user->getOwners() as $type => $owner) {
+			$listes[$type] = $owner->loadBackRefs("listes_choix", "nom");
+		}
+		return $listes;
   }
 }
 

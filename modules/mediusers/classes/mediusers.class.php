@@ -91,6 +91,10 @@ class CMediusers extends CMbObject {
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
   
+	static function getCurrent() {
+		return CAppUI::$instance->_ref_user;
+	}
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users_mediboard';
@@ -310,30 +314,32 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
   }
 
-  function loadRefBanque(){
-    $this->_ref_banque = $this->loadFwdRef("banque_id", true);
+  function loadRefBanque() {
+    return $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
 
   function loadRefProfile(){
-    $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
+    return $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
   }
   
   function loadRefFunction() {
     $this->_ref_function = $this->loadFwdRef("function_id", true);
     $this->_group_id     = $this->_ref_function->group_id;
+		return $this->_ref_function;
   }
 
   function loadRefDiscipline() {
-    $this->_ref_discipline = $this->loadFwdRef("discipline_id", true);
+    return $this->_ref_discipline = $this->loadFwdRef("discipline_id", true);
   }
   
   function loadRefSpecCPAM(){
-    $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
+    return $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
   }
   
   function loadRefCodeIntervenantCdARR() {
     $this->_ref_code_intervenant_cdarr = new CIntervenantCdARR();
     $this->_ref_code_intervenant_cdarr->load($this->code_intervenant_cdarr);
+		return $this->_ref_code_intervenant_cdarr;
   }
   
   function loadRefsFwd() {
@@ -364,6 +370,16 @@ class CMediusers extends CMbObject {
     $protocoles = new CProtocole;
     $this->_ref_protocoles = $protocoles->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
+  
+	function getOwners() {
+		$func = $this->loadRefFunction();
+    $etab = $func->loadRefGroup();
+    return array(
+		  "prat" => $this,
+			"func" => $func,
+			"etab" => $etab,
+		);
+	}
 
   /**
    * Lie une numéro de lecture de CPS au Mediuser

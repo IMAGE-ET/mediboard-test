@@ -2,73 +2,77 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  if(oForm = document.addFrm)
+  if(oForm = document.addFrm) {
     document.addFrm._new.focus();
-  
-  Control.Tabs.create("tabs-owner", true);
+	}
 });
 </script>
 
 <table class="main">
 
 <tr>
-  <td class="greedyPane">
+  <td>
     
     <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new">{{tr}}CListeChoix-title-create{{/tr}}</a> 
 
-    <form name="filterFrm" action="?" method="get">
+    <form name="Filter" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
-          <th class="category" colspan="10">Filtrer les listes</th>
+          <th class="category" colspan="10">{{tr}}Filter{{/tr}}</th>
         </tr>
         <tr>
           <th><label for="filter_user_id">Utilisateur</label></th>
           <td>
             <select name="filter_user_id" onchange="this.form.submit()">
-              <option value="0">&mdash; Choisir un utilisateur</option>
-              {{foreach from=$users item=curr_user}}
-              <option class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}};" value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}} selected="selected" {{/if}}>
-                {{$curr_user->_view}}
-              </option>
-              {{/foreach}}
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+							{{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
             </select>
           </td>
         </tr>
       </table>
     </form>
     
-    <ul id="tabs-owner" class="control_tabs">
-      <li><a href="#owner-user">{{$userSel}} <small>({{$listesUser|@count}})</small></a></li>
-      <li><a href="#owner-func">{{$userSel->_ref_function}} <small>({{$listesFunc|@count}})</small></a></li>
-      <li><a href="#owner-etab">{{$userSel->_ref_function->_ref_group}} <small>({{$listesEtab|@count}})</small></a></li>
-    </ul>
-    <hr class="control_tabs" />
-    
+		{{main}}Control.Tabs.create("tabs-owner", true);{{/main}}
+
+	  <ul id="tabs-owner" class="control_tabs">
+		  {{foreach from=$listes key=owner item=_listes}}
+		  <li>
+		    <a href="#owner-{{$owner}}" {{if !$_listes|@count}} class="empty" {{/if}}>
+		      {{$owners.$owner}} 
+		      <small>({{$_listes|@count}})</small>
+		    </a>
+		  </li>
+		  {{/foreach}}
+	  </ul>
+	  <hr class="control_tabs" />
+
     <table class="tbl">
     
     <tr>
-      <th>Nom</th>
-      <th>Valeurs</th>
-      <th>Compte-rendu associé</th>
+      <th>{{mb_title class=CListeChoix field=nom}}</th>
+      <th>{{mb_title class=CListeChoix field=valeurs}}</th>
+      <th>{{mb_title class=CListeChoix field=compte_rendu_id}}</th>
     </tr>
     
-    <tbody id="owner-user" style="display: none;">
-      {{foreach from=$listesUser item=curr_liste}}
-      <tr>
-        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
-        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
+    {{foreach from=$listes key=owner item=_listes}}
+    <tbody id="owner-{{$owner}}" style="display: none;">
+      {{foreach from=$_listes item=_liste}}
+      <tr {{if $_liste->_id == $liste->_id}} class="selected" {{/if}}>
         <td class="text">
-          <a href="{{$href}}">{{$curr_liste->nom}}</a>
+          <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id={{$_liste->_id}}">
+          	{{mb_value object=$_liste field=nom}}
+					</a>
         </td>
         <td>
-          <a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a>
+          {{$_liste->_valeurs|@count}}
         </td>
         <td class="text">
-          {{if $curr_liste->_ref_modele->compte_rendu_id}}
-          <a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a>
+        	{{assign var=modele value=$_liste->_ref_modele}}
+          {{if $modele->_id}}
+            {{$modele}} ({{tr}}{{$modele->object_class}}{{/tr}})
           {{else}}
-          <a href="{{$href}}">&mdash; Tous &mdash;</a>
+            &mdash; {{tr}}All{{/tr}}
           {{/if}}
         </td>
       </tr>
@@ -77,158 +81,81 @@ Main.add(function () {
         <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
       </tr>
       {{/foreach}}
-    </tbody>
-    
-    <tbody id="owner-func" style="display: none;">
-      {{foreach from=$listesFunc item=curr_liste}}
-      <tr>
-        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
-        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
-        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
-        {{if $curr_liste->_ref_modele->compte_rendu_id}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
-        {{else}}
-        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
-        {{/if}}
-      </tr>
-      {{foreachelse}}
-      <tr>
-        <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
-      </tr>
-      {{/foreach}}    
-    </tbody>
-    
-    <tbody id="owner-etab" style="display: none;">
-      {{foreach from=$listesEtab item=curr_liste}}
-      <tr>
-        {{assign var="liste_id" value=$curr_liste->liste_choix_id}}
-        {{assign var="href" value="?m=$m&tab=$tab&liste_id=$liste_id"}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->nom}}</a></td>
-        <td><a href="{{$href}}">{{$curr_liste->_valeurs|@count}}</a></td>
-        {{if $curr_liste->_ref_modele->compte_rendu_id}}
-        <td class="text"><a href="{{$href}}">{{$curr_liste->_ref_modele->nom}} ({{tr}}{{$curr_liste->_ref_modele->object_class}}{{/tr}})</a></td>
-        {{else}}
-        <td><a href="{{$href}}">&mdash; Tous &mdash;</a></td>
-        {{/if}}
-      </tr>
-      {{foreachelse}}
-      <tr>
-        <td colspan="10">{{tr}}CListeChoix.none{{/tr}}</td>
-      </tr>
-      {{/foreach}}
-    </tbody>
+		</tbody>
+    {{/foreach}}
+		
     </table>
-   </form>
   </td>
   
   <td>
 
-    <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$liste->_spec}}">
+    <form name="Edit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$liste->_spec}}">
 
+    <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_liste_aed" />
     {{mb_key object=$liste}}
-    <input type="hidden" name="del" value="0" />
 
     <table class="form">
 
-    <tr>
-      <th class="title {{if $liste->_id}}modify{{/if}}" colspan="2">
-      {{if $liste->_id}}
-        {{mb_include module=system template=inc_object_history object=$liste}}
-        {{tr}}CListeChoix-title-modify{{/tr}} '{{$liste->_view}}'
-      {{else}}
-        {{tr}}CListeChoix-title-create{{/tr}}
-      {{/if}}
-      </th>
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$liste}}
   
     <tr>
-      <th>{{mb_label object=$liste field="chir_id"}}</th>
+      <th>{{mb_label object=$liste field=chir_id}}</th>
       <td>
         <select name="chir_id" class="{{$liste->_props.chir_id}}" style="width: 12em;">
-          <option value="">&mdash; Associer &mdash;</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if ($liste->liste_choix_id && ($curr_prat->user_id == $liste->chir_id)) || (!$liste->liste_choix_id && ($curr_prat->user_id == $user_id))}}selected="selected"{{/if}}>
-              {{$curr_prat->_view}}
-            </option>
-          {{/foreach}}
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+					{{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->chir_id}}
         </select>
       </td>
     </tr>
   
     <tr>
-      <th>{{mb_label object=$liste field="function_id"}}</th>
+      <th>{{mb_label object=$liste field=function_id}}</th>
       <td>
         <select name="function_id" class="{{$liste->_props.function_id}}" style="width: 12em;">
-          <option value="">&mdash; Associer &mdash;</option>
-          {{foreach from=$listFunc item=curr_func}}
-            <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $liste->function_id}} selected="selected" {{/if}}>
-              {{$curr_func->_view}}
-            </option>
-          {{/foreach}}
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_function list=$funcs selected=$liste->function_id}}
         </select>
       </td>
     </tr>
     
     <tr>
-      <th>{{mb_label object=$liste field="group_id"}}</th>
-      <td>
-        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
-          <option value="">&mdash; Associer &mdash;</option>
-          {{foreach from=$listEtab item=curr_group}}
-            <option value="{{$curr_group->_id}}" {{if $curr_group->_id == $liste->group_id}} selected="selected" {{/if}}>
-              {{$curr_group->_view}}
-            </option>
-          {{/foreach}}
-        </select>
-      </td>
+      <th>{{mb_label object=$liste field=group_id}}</th>
+      <td>{{mb_field object=$liste field=group_id}}</td>
     </tr>
 
     <tr>
-      <th>{{mb_label object=$liste field="nom"}}</th>
-      <td><input type="text" class="{{$liste->_props.nom}}" name="nom" value="{{$liste->nom}}" /></td>
+      <th>{{mb_label object=$liste field=nom}}</th>
+      <td>{{mb_field object=$liste field=nom}}</td>
     </tr>
     
     <tr>
-      <th>{{mb_label object=$liste field="compte_rendu_id"}}</th>
+      <th>{{mb_label object=$liste field=compte_rendu_id}}</th>
       <td>
-        <select name="compte_rendu_id" style="width: 12em;">
-          <option value="">&mdash; Tous</option>
+        <select name="compte_rendu_id" >
+          <option value="">&mdash; {{tr}}All{{/tr}}</option>
           
-          <optgroup label="CR de l'utilisateur">
-            {{foreach from=$listCrUser item=curr_cr}}
-            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
-              {{$curr_cr->nom}}
+          {{foreach from=$modeles key=owner item=_modeles}}
+          <optgroup label="{{$owners.$owner}}">
+            {{foreach from=$_modeles item=_modele}}
+            <option value="{{$_modele->_id}}" {{if $liste->compte_rendu_id == $_modele->_id}} selected="selected" {{/if}}>
+              {{$_modele->nom}} ({{tr}}{{$_modele->object_class}}{{/tr}})
             </option>
+            {{foreachelse}}
+            <option disabled="disabled">{{tr}}None{{/tr}}</option>
             {{/foreach}}
           </optgroup>
-          
-          <optgroup label="CR de la fonction">
-            {{foreach from=$listCrFunc item=curr_cr}}
-            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
-              {{$curr_cr->nom}}
-            </option>
-            {{/foreach}}
-          </optgroup>
-          
-          <optgroup label="CR de l'établissement">
-            {{foreach from=$listCrEtab item=curr_cr}}
-            <option value="{{$curr_cr->_id}}" {{if $liste->compte_rendu_id == $curr_cr->_id}}selected="selected"{{/if}}>
-              {{$curr_cr->nom}}
-            </option>
-            {{/foreach}}
-          </optgroup>
+          {{/foreach}}
         </select>
       </td>
     </tr>
     <tr>
       <td class="button" colspan="2">
-        {{if $liste->liste_choix_id}}
+        {{if $liste->_id}}
         <button class="modify" type="submit">
           {{tr}}Save{{/tr}}
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:'{{$liste->nom|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:$V(this.form.nom)})">
           {{tr}}Delete{{/tr}}
         </button>
         {{else}}
@@ -249,19 +176,17 @@ Main.add(function () {
     {{if $liste->_valeurs|@count}}
     <table class="tbl">
       <tr><th class="category" colspan="2">Choix disponibles</th></tr>
-      {{foreach from=$liste->_valeurs item=curr_valeur name=choix}}
+      {{foreach from=$liste->_valeurs item=_valeur name=choix}}
       <tr>
-        <td class="text">{{$curr_valeur|nl2br}}</td>
+        <td class="text">{{$_valeur|nl2br}}</td>
         <td style="width: 1%">
           <form name="DelChoix-{{$smarty.foreach.choix.iteration}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
           <input type="hidden" name="dosql" value="do_liste_aed" />
-          {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
           <input type="hidden" name="del" value="0" />
-          {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
-          {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
-          {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
-          {{mb_field object=$liste field="group_id" hidden=1 prop=""}}
-          <input type="hidden" name="_del" value="{{$curr_valeur}}" />
+          {{mb_key object=$liste}}
+
+          {{mb_field object=$liste field=valeurs hidden=1}}
+          <input type="hidden" name="_del" value="{{$_valeur}}" />
           <button class="remove notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>
         </td>
@@ -273,12 +198,10 @@ Main.add(function () {
     <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     
     <input type="hidden" name="dosql" value="do_liste_aed" />
-    {{mb_field object=$liste field="liste_choix_id" hidden=1 prop=""}}
     <input type="hidden" name="del" value="0" />
-    {{mb_field object=$liste field="valeurs" hidden=1 prop=""}}
-    {{mb_field object=$liste field="chir_id" hidden=1 prop=""}}
-    {{mb_field object=$liste field="function_id" hidden=1 prop=""}}
-    {{mb_field object=$liste field="group_id" hidden=1 prop=""}}
+    {{mb_key object=$liste}}
+
+    {{mb_field object=$liste field=valeurs hidden=1}}
 
     <table class="form">
       <tr>

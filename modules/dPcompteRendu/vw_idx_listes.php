@@ -7,124 +7,56 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
+CCanDo::checkRead();
 
-$can->needsRead();
+// Utilisateurs disponibles
+$user = CMediusers::getCurrent();
+$users = $user->loadUsers(PERM_EDIT);
 
-// Liste des utilisateurs accessibles
-$userSel = new CMediusers();
-$listUser = $userSel->loadUsers(PERM_EDIT);
 
-$listFunc = new CFunctions();
-$listFunc = $listFunc->loadSpecialites(PERM_EDIT);
+// Functions disponibles
+$func = new CFunctions();
+$funcs = $func->loadSpecialites(PERM_EDIT);
 
-$listEtab = array(CGroups::loadCurrent());
+// Etablissements disponibles
+$etabs = array(CGroups::loadCurrent());
 
-// Liste des comptes-rendus persos
-$user_id = CValue::getOrSession("filter_user_id", $AppUI->user_id);
-if(!$user_id){
-	CValue::setSession("filter_user_id", $AppUI->user_id);
-  $user_id = $AppUI->user_id;
+$user->load(CValue::getOrSession("filter_user_id", $user->_id));
+
+$owners  = $user->getOwners();
+$modeles = CCompteRendu::loadAllModelesFor($user->_id);
+$listes  = CListeChoix::loadAllFor($user->_id);
+
+// Modèles associés
+foreach($listes as $_listes) {
+	foreach($_listes as $_liste) {
+		$_liste->loadRefModele();
+	}
 }
 
-$userSel->load($user_id);
-$userSel->loadRefFunction();
-$userSel->_ref_function->loadRefGroup();
-
-$listCrUser = array();
-$listCrFunc = array();
-$listCrEtab = array();
-
-$listesFunc = array();
-$listesUser = array();
-$listesEtab = array();
-
-if($user_id){
-  $where = array();
-  $where["chir_id"] = "= '$user_id'";
-  $order = "chir_id ASC, nom ASC";
-  
-  $listesUser = new CListeChoix();
-  $listesUser = $listesUser->loadList($where, $order);
-  foreach($listesUser as $key => $value) {
-    $listesUser[$key]->loadRefsFwd();
-  }
-  
-  // Liste des comptes-rendus de cabinet
-  $where = array();
-  $where["function_id"] = "= '$userSel->function_id'"; 
-  $order = "function_id ASC, nom ASC";
-  
-  $listesFunc = new CListeChoix();
-  $listesFunc = $listesFunc->loadList($where, $order);
-  foreach($listesFunc as $key => $value) {
-    $listesFunc[$key]->loadRefsFwd();
-  }
-  
-  // Liste des comptes-rendus d'etablissement
-  $where = array();
-  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'"; 
-  $order = "group_id ASC, nom ASC";
-  
-  $listesEtab = new CListeChoix();
-  $listesEtab = $listesEtab->loadList($where, $order);
-  foreach($listesEtab as $key => $value) {
-    $listesEtab[$key]->loadRefsFwd();
-  }
-  
-  // Liste des compte-rendus selectionnables
-    // Praticien
-  $where = array();
-  $where["chir_id"] = "= '$user_id'";
-  $order = "object_class, nom";
-  $listCrUser = new CCompteRendu;
-  $listCrUser = $listCrUser->loadList($where, $order);
-  
-    // Cabinet
-  $where = array();
-  $where["function_id"] = "= '$userSel->function_id'";
-  $order = "object_class, nom";
-  $listCrFunc = new CCompteRendu;
-  $listCrFunc = $listCrFunc->loadList($where, $order);
-  
-    // Etablissement
-  $where = array();
-  $where["group_id"] = "= '{$userSel->_ref_function->group_id}'";
-  $order = "object_class, nom";
-  $listCrEtab = new CCompteRendu;
-  $listCrEtab = $listCrEtab->loadList($where, $order);
-}
-
-// liste sélectionnée
-$liste_id = CValue::getOrSession("liste_id");
+// Liste sélectionnée
 $liste = new CListeChoix();
-$liste->load($liste_id); 
-$liste->loadRefsFwd();
-
-//if (!$liste_id) {
-//  $liste->chir_id = $AppUI->user_id;
-//}
+$liste->chir_id = $user->_id;
+$liste->load(CValue::getOrSession("liste_id")); 
+$liste->loadRefOwner();
+$liste->loadRefModele();
+$liste->loadRefsNotes();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("users"     , $listUser  );
-$smarty->assign("user_id"   , $user_id   );
-$smarty->assign("userSel"   , $userSel   );
+$smarty->assign("users"  , $users);
 
-$smarty->assign("listPrat"  , $listUser  );
-$smarty->assign("listFunc"  , $listFunc  );
-$smarty->assign("listEtab"  , $listEtab  );
+$smarty->assign("prats"  , $users);
+$smarty->assign("funcs"  , $funcs);
+$smarty->assign("etabs"  , $etabs);
 
-$smarty->assign("listCrUser", $listCrUser);
-$smarty->assign("listCrFunc", $listCrFunc);
-$smarty->assign("listCrEtab", $listCrEtab);
+$smarty->assign("owners" , $owners);
+$smarty->assign("modeles", $modeles);
+$smarty->assign("listes" , $listes);
 
-$smarty->assign("listesUser", $listesUser);
-$smarty->assign("listesFunc", $listesFunc);
-$smarty->assign("listesEtab", $listesEtab);
-
-$smarty->assign("liste"     , $liste);
+$smarty->assign("user"   , $user );
+$smarty->assign("liste"  , $liste);
 
 $smarty->display("vw_idx_listes.tpl");
 

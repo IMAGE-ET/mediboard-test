@@ -60,7 +60,7 @@ class CFunctions extends CMbObject {
 	  $backProps["fiches_compta"]                  = "CGestionCab function_id";
 	  $backProps["services_urgence_pour"]          = "CGroups service_urgences_id";
     $backProps["pharmacie_pour"]                 = "CGroups pharmacie_id";
-	  $backProps["liste_choix"]                    = "CListeChoix function_id";
+	  $backProps["listes_choix"]                    = "CListeChoix function_id";
 	  $backProps["paiements"]                      = "CModePaiement function_id";
 	  $backProps["pack_examens"]                   = "CPackExamensLabo function_id";
 	  $backProps["plages_op"]                      = "CPlageOp spec_id";
@@ -106,7 +106,7 @@ class CFunctions extends CMbObject {
   }
   
   function loadRefGroup() {
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
   
   // Backward references
