@@ -91,6 +91,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->date_production = mbDateTime();
       $echange_hprim->store();
       $echange_hprim->loadRefsDestinataireHprim();
+      // Chargement des configs de l'émetteur
+      $this->_ref_emetteur->loadConfigValues();
 
       $domGetEvenement->_ref_echange_hprim = $echange_hprim;
       $domAcquittement->_ref_echange_hprim = $echange_hprim;

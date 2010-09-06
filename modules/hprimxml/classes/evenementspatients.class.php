@@ -234,7 +234,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = self::getPlacement($node, $mbVenue);
-    $mbVenue = self::getSortie($node, $mbVenue);
+    $mbVenue = $this->getSortie($node, $mbVenue);
 
     /* TODO Supprimer ceci après l'ajout des times picker */
     $mbVenue->_hour_entree_prevue = null;
@@ -455,7 +455,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  static function getSortie($node, CSejour $mbVenue) {
+  function getSortie($node, CSejour $mbVenue) {
+    // Cas dans lequel on ne récupère pas de sortie tant que l'on a pas la sortie réelle
+    if (!$mbVenue->sortie_reelle && ($this->_ref_emetteur->_configs["send_sortie_prevue"] == 0)) {
+      return $mbVenue;
+    } 
+    
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
@@ -466,7 +471,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 			$dateHeure = "$date $heure";
 		}
     elseif (!$date && !$mbVenue->sortie_prevue) {
-      $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
+      $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", 
+                    $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
     } 
     else {
     	$dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
