@@ -115,12 +115,12 @@ table.tbl td {
 
   #header {
     top: 0em;
-    border-bottom-width: 1px;
+    /*border-bottom-width: 1px;*/
   }
 
   #footer {
     bottom: 0em;
-    border-top-width: 1px;
+    /*border-top-width: 1px;*/
   }
 
   hr {

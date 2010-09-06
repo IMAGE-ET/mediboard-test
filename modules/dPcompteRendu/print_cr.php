@@ -12,13 +12,17 @@ $compte_rendu_id = CValue::get("compte_rendu_id", 0);
 
 $compte_rendu = new CCompteRendu;
 $compte_rendu->load($compte_rendu_id);
+$compte_rendu->getContent();
 
 // Utilisation des headers/footers
 if ($compte_rendu->header_id || $compte_rendu->footer_id) {
   $compte_rendu->loadComponents();
   
   $header = $compte_rendu->_ref_header;
+  $header->getContent();
+  
   $footer = $compte_rendu->_ref_footer;
+  $footer->getContent();
   
   $header->height = isset($header->height) ? $header->height : 20;
   $footer->height = isset($footer->height) ? $footer->height : 20;
