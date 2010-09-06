@@ -68,11 +68,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $num_dossier = new CIdSante400();
       //Paramétrage de l'id 400
       $num_dossier->object_class = "CSejour";
-      $num_dossier->tag = $this->_dest_tag;
+      $num_dossier->tag = $this->_ref_emetteur->_tag_sejour;
       $num_dossier->id400 = $mbVenue->_num_dossier;
       
       if ($num_dossier->loadMatchingObject()) {
-        $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_dest_tag;
+        $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_ref_emetteur->_tag_sejour;
         $num_dossier->store();
       }
     }
