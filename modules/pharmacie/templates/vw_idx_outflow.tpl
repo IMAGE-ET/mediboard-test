@@ -20,7 +20,25 @@ Main.add(function(){
 function changePage(start) {
   $V(getForm("filter").start, start);
 }
+
+function removeOutflow(delivery_id, view) {
+  var form = getForm("outflow-delete");
+  $V(form.delivery_id, delivery_id);
+  confirmDeletion(form,{typeName: 'la sortie manuelle de', ajax: true, objName: view}, {
+    onComplete: function(){
+      getForm("filter").onsubmit();
+    }
+  });
+}
 </script>
+
+
+<form name="outflow-delete" method="post" action="?">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_delivery_aed" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="delivery_id" value="" />
+</form>
 
 <form name="filter" action="?" method="get" onsubmit="return Url.update(this, 'outflows-list')">
   <input type="hidden" name="m" value="pharmacie" />

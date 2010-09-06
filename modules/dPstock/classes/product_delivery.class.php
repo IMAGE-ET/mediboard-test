@@ -166,5 +166,18 @@ class CProductDelivery extends CMbObject {
     }
     return true;
   }
+  
+  function delete(){
+    $this->completeField("manual");
+    
+    if ($this->manual) {
+      $traces = $this->loadBackRefs("delivery_traces");
+      foreach($traces as $_trace) {
+        $_trace->delete();
+      }
+    }
+    
+    return parent::delete();
+  }
 }
 ?>

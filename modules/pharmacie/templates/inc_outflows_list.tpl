@@ -19,7 +19,9 @@
       {{/if}}
     </td>
     <td>{{mb_value object=$_delivery field=comments}}</td>
-    <td></td>
+    <td>
+      <button type="button" class="cancel notext" onclick="removeOutflow('{{$_delivery->_id}}', '{{$_delivery->_ref_stock}}')">{{tr}}Supprimer{{/tr}}</button>
+    </td>
   </tr>
 {{foreachelse}}
   <tr>
