@@ -246,14 +246,15 @@ modeExpertDisplay = function() {
     {{if $op->_id}}
     {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit || $modules.dPhospi->_can->edit}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
-			{{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
-      <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
-			{{/if}}
-      {{if $op->annulee}}
+			{{if $op->annulee}}
       <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
       {{else}}
       <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
       {{/if}}
+      {{if !$dPconfig.dPplanningOp.COperation.delete_only_admin || $can->admin}}
+      <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
+			{{/if}}
+      
       <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
     {{else}}
       <div class="big-info">

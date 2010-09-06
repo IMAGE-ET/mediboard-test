@@ -702,17 +702,18 @@ Main.add( function(){
   {{if $sejour->sejour_id}}
   {{if !$sejour->sortie_reelle || $can->admin}}
     <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
+    {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
+    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+    <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
+      {{tr}}{{$annule_text}}{{/tr}}
+    </button>
     {{if !$dPconfig.dPplanningOp.CSejour.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}
-    {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
-    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+    
     <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
-    <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
-      {{tr}}{{$annule_text}}{{/tr}}
-    </button>
   {{else}}
     <div class="big-info">
       Les informations sur le séjour ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
