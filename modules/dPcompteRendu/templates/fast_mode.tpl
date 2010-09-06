@@ -1,4 +1,5 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+{{unique_id var=uid_fast_mode}}
 
 <script type="text/javascript">
 toggleOptions = function() {
@@ -17,14 +18,8 @@ document.observe('keydown', function(e){
   }
 });
 printFast = function() {
-  var url = new Url("dPcompteRendu", "ajax_pdf_and_thumbs");
-  url.addParam("compte_rendu_id", '{{$modele_id}}');
-  url.addParam("suppressHeaders", 1);
-  url.addParam("stream", 1);
-  url.addParam("generate_thumbs", 0);
-
-  var from = $("fast-edit-table-{{$object_guid}}").select(".freetext");
-  var to = getForm("download-pdf-form");
+  var from = $("fast-edit-table-{{$uid_fast_mode}}").select(".freetext");
+  var to = getForm("download-pdf-form-{{$uid_fast_mode}}");
   
   from.each(function(textarea) {
     $V(to[textarea.name], $V(textarea));
@@ -32,47 +27,64 @@ printFast = function() {
 }
 
 linkFields = function(ref) {
-  var tab = $('fast-edit-table-{{$object_guid}}');
+  var tab = $('fast-edit-table-{{$uid_fast_mode}}');
+  var form = getForm("fastModeForm");
+  
   return [
     tab.select(".liste"),
     tab.select(".freetext"),
     tab.select(".destinataires"),
-    [$("editFrm_nom"), $("editFrm_file_category_id"), $("editFrm___private")]
+    [form.nom, form.file_category_id, form._private]
   ];
 }
 
+generatePdf = function(id) {
+	var form = getForm('download-pdf-form-{{$uid_fast_mode}}'); 
+	$V(form.compte_rendu_id, id);
+	form.onsubmit();
+}
+
+streamOrNotStream = function(form) {
+	if ($V(form.stream) == 1)
+	  form.submit();
+	else
+	  onSubmitFormAjax(form);
+
+  Document.refreshList('{{$object_class}}', '{{$object_id}}');
+}
+
 {{if !$lists|@count && !$noms_textes_libres|@count}}
+Main.add(function() {
   Control.Modal.close();
-  getForm('download-pdf-form').onsubmit();
-  getForm('editFrm').onsubmit();
+  $V(getForm('download-pdf-form-{{$uid_fast_mode}}').stream, 1);
+  getForm('fastModeForm').onsubmit();
+});
 {{/if}}
+
 </script>
 
-
-<iframe style='width: 1px; height: 1px;' name="downloadpdf"></iframe>
+<iframe style='width: 0px; height: 0px;' border="0" frameborder="no" name="downloadpdf-{{$uid_fast_mode}}"></iframe>
   
-<form style="display: none;" name="download-pdf-form" target="downloadpdf" method="post" action="?m=dPcompteRendu&amp;a=ajax_pdf_and_thumbs"
-      onsubmit="printFast(); this.submit();">
-  <input type="hidden" name="compte_rendu_id" value='{{$modele_id}}' />
-  <input type="hidden" name="object_id" value="{{$compte_rendu->object_id}}"/>
-  <input type="hidden" name="suppressHeaders" value="1"/>
-  <input type="hidden" name="stream" value="1"/>
-  <input type="hidden" name="generate_thumbs" value="0"/>
+<form style="display: none;" name="download-pdf-form-{{$uid_fast_mode}}" method="post" action="?" target="_blank"
+      onsubmit="printFast(); streamOrNotStream(this);">
+  <input type="hidden" name="compte_rendu_id" value='' />
+	<input type="hidden" name="m" value="dPcompteRendu" />
+	<input type="hidden" name="dosql" value="do_pdf_cfile_aed" />
+  <input type="hidden" name="stream" value="0" />
   {{if $noms_textes_libres}}
     {{foreach from=$noms_textes_libres item=_nom}}
        <input class="freetext" type="hidden" name="texte_libre[{{$_nom}}]"/>
     {{/foreach}}
   {{/if}}
+  
+  <!-- the div is needed (textarea-container) -->
+  <div style="display: none;">
+	  <textarea name="content">{{$_source}}</textarea>
+  </div>
 </form>
 
-<form name="editFrm" action="?m={{$m}}" method="post"
-      onsubmit="if (checkForm(this) && User.id) {
-        return onSubmitFormAjax(this, 
-          { onComplete: function() {
-              Document.refreshList('{{$object_class}}', '{{$object_id}}'); },
-           useDollarV: true})
-          }
-          return false;"
+<form name="fastModeForm" action="?m={{$m}}" method="post"
+      onsubmit="if (checkForm(this) && User.id) {return onSubmitFormAjax(this, { useDollarV: true })}; return false;"
       class="{{$compte_rendu->_spec}}">
   <input type="hidden" name="m" value="dPcompteRendu" />
   <input type="hidden" name="del" value="0" />
@@ -83,10 +95,18 @@ linkFields = function(ref) {
   <input type="hidden" name="modele_id" value="{{$modele_id}}" />
   <input type="hidden" name="compte_rendu_id" value="" />
   <input type="hidden" name="fast_edit" value="1" />
-  {{mb_field object=$compte_rendu field="object_id" hidden=1}}
-  {{mb_field object=$compte_rendu field="object_class" hidden=1}}
-
-  <table id="fast-edit-table-{{$object_guid}}" class="form" style="width: 100%; min-height: 200px;">
+	<input type="hidden" name="callback" value="generatePdf" />
+	<input type="hidden" name="suppressHeaders" value="1"/>
+	<input type="hidden" name="dialog" value="1"/>
+  {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
+  {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
+  
+  <!-- the div is needed (textarea-container) -->
+  <div style="display: none;">
+    <textarea name="_source">{{$_source}}</textarea>
+  </div>
+  
+  <table id="fast-edit-table-{{$uid_fast_mode}}" class="form" style="width: 100%; min-height: 200px;">
     <tr>
       <th class="category" colspan="2">
         {{if $compte_rendu->_id}}
@@ -114,7 +134,7 @@ linkFields = function(ref) {
     </tr>
     <tr>
       <td colspan="2">
-        <button class="hslip" onclick="Control.Modal.close(); Document.create('{{$modele_id}}','{{$object_id}}', null, null, 1, getForm('editFrm'));" type="button">{{tr}}CCompteRendu.switchEditor{{/tr}}</button>
+        <button class="hslip" onclick="Control.Modal.close(); Document.create('{{$modele_id}}','{{$object_id}}', null, null, 1, getForm('fastModeForm'));" type="button">{{tr}}CCompteRendu.switchEditor{{/tr}}</button>
       </td>
     </tr>
     <tr>
@@ -169,16 +189,16 @@ linkFields = function(ref) {
           
           <tr>
             <td colspan="2" style="text-align: center;">
-              <button class="tick" onclick="Control.Modal.close(); $('fast').update();">{{tr}}Save{{/tr}}</button>
-              <button class="print" onclick="Control.Modal.close(); getForm('download-pdf-form').onsubmit();">{{tr}}Save{{/tr}} {{tr}}And{{/tr}} {{tr}}Print{{/tr}}</button>
-              <button class="cancel" onclick="Control.Modal.close();$('fast').update();" type="button">{{tr}}Cancel{{/tr}}</button>
+              <button class="tick" onclick="Control.Modal.close();">{{tr}}Save{{/tr}}</button>
+              <button class="print" onclick="Control.Modal.close(); $V(getForm('download-pdf-form-{{$uid_fast_mode}}').stream, 1);">{{tr}}Save{{/tr}} {{tr}}and{{/tr}} {{tr}}Print{{/tr}}</button>
+              <button class="cancel" onclick="Control.Modal.close();$('fast-{{$object_class}}-{{$object_id}}').update();" type="button">{{tr}}Cancel{{/tr}}</button>
             </td>
           </tr>
         </table>
       </td>
       <td id="thumbs_button" style="width: 100px;">
         <div id="thumbs" style="overflow-x: hidden; width: 160px; text-align: center; white-space: normal;">
-          {{if $file->_id}}
+          {{if isset($file|smarty:nodefaults) && $file->_id}}
             <img class="thumbnail" src="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id={{$file->_id}}&phpThumb=1&wl=200&hp=200"
                  onclick="(new Url).ViewFilePopup('CCompteRendu', '{{$modele_id}}', 'CFile', '{{$file->_id}}');"/>
           {{else}}

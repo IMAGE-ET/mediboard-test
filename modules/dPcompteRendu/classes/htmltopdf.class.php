@@ -72,12 +72,13 @@ class CHtmlToPDF {
     $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
     $this->dompdf->load_html($this->content);
     $this->dompdf->render();
+    	
+    file_put_contents($file->_file_path, $this->dompdf->output());
+    
+    $this->nbpages = $this->dompdf->get_canvas()->get_page_count();
+
     if($stream) {
       $this->dompdf->stream($file->file_name, array("Attachment" => 1));
-    }
-    else {
-      file_put_contents($file->_file_path, $this->dompdf->output());
-      $this->nbpages = $this->dompdf->get_canvas()->get_page_count();
     }
   }
 

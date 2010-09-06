@@ -202,7 +202,19 @@ function emptyPDFonChanged(){
     url.addParam("dosql", "do_modele_aed");
     url.addParam("_do_empty_pdf", 1);
     url.addParam("compte_rendu_id", f.compte_rendu_id.value);
-    url.requestJSON(function(){}, {method: "post"});
+    url.requestJSON(function(){}, {
+      method: "post", 
+      onComplete: function() {
+        try {
+          if (Thumb.compte_rendu_id) {
+            window.opener.Document.refreshList(
+              '{{$compte_rendu->object_class}}',
+              '{{$compte_rendu->object_id}}'  
+            );
+          }
+        } catch (e) {}
+      }
+    });
   }
 }
 

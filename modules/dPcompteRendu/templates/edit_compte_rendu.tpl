@@ -1,10 +1,12 @@
 {{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
+{{mb_include_script module=dPcompteRendu script=thumb}}
+
 <script type="text/javascript">
 window.same_print = {{$dPconfig.dPcompteRendu.CCompteRendu.same_print}};
 window.pdf_thumbnails = {{$pdf_thumbnails|@json}};
 
-{{if $compte_rendu->_id}}
+{{if $compte_rendu->_id && $pdf_thumbnails == 0}}
 try {
 window.opener.Document.refreshList(
   '{{$compte_rendu->object_class}}',
@@ -15,6 +17,9 @@ catch (e) {}
 {{/if}}
 
 function submitCompteRendu(){
+	{{if $pdf_thumbnails == 1}}
+	  FormObserver.onChanged();
+	{{/if}}
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {
@@ -24,12 +29,10 @@ function submitCompteRendu(){
 }
 </script>
 
-{{mb_include_script module=dPcompteRendu script=thumb}}
-
 <script type="text/javascript">
 {{if $pdf_thumbnails == 1}}
-  emptyPDFonChanged();
-  
+   emptyPDFonChanged();
+
   togglePageLayout = function() {
     $("page_layout").toggle();
   }
@@ -77,12 +80,6 @@ function submitCompteRendu(){
       $('mess').toggle();
       $('thumbs').setOpacity(1);
       Thumb.init();
-      /*for(var i = 0; i < Thumb.nb_thumbs; i++) {
-        var thumbI = $("thumb_" + i);
-        //thumbI.onclick = null;
-        thumbI.stopObserving("click");
-        thumbI.observe("click", Thumb.oldOnclick[i]);
-      }*/
     }
     Control.Modal.close();
   }
@@ -97,7 +94,7 @@ function submitCompteRendu(){
       Thumb.mode = "doc";
       Thumb.object_class = '{{$compte_rendu->object_class}}';
       Thumb.object_id = '{{$compte_rendu->object_id}}';
-      {{if !$compte_rendu->_id && $switch_mode}}
+      {{if !$compte_rendu->_id && $switch_mode == 1}}
         if (window.opener.linkFields) {
   
           from = window.opener.linkFields();
@@ -106,7 +103,9 @@ function submitCompteRendu(){
             toggleOptions();
           from.each(function(elt) {
             elt.each(function(select) {
-              $V(to[select.name], $V(select));
+              if (select) {
+                $V(to[select.name], $V(select));
+              }
             })
           });
         }

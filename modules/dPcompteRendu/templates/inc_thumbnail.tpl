@@ -2,12 +2,14 @@
   Thumb.nb_thumbs = {{$nbpages}};
   Thumb.file_id = {{$file_id}};
 	// @FIXME: Pourquoi rafraichir la widget ici ???
+  Main.add(function() {
   if(Thumb.compte_rendu_id) {
     try {
       window.opener.Document.refreshList(Thumb.object_class,Thumb.object_id);
      }
     catch (e) {}
   }
+  });
 </script>
 
 <div id="mess" style="position: fixed; width: 160px; font-size: 12pt; font-weight: bold; display: none; cursor: pointer;">

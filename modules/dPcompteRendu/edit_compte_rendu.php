@@ -38,6 +38,7 @@ else {
 	$footer = null;
 	
   $compte_rendu->load($modele_id);
+	$compte_rendu->loadFile();
   $compte_rendu->loadContent();
   $compte_rendu->_id = null;
   $compte_rendu->chir_id = $praticien_id;
@@ -166,7 +167,8 @@ if (isset($compte_rendu->_ref_file->_id)) {
 $smarty->assign("noms_textes_libres", $noms_textes_libres);
 
 if ($compte_rendu->fast_edit && !$compte_rendu_id && !$switch_mode && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
-  $smarty->assign("object_guid", CValue::get("object_guid"));
+  $smarty->assign("_source", $templateManager->document);
+	$smarty->assign("object_guid", CValue::get("object_guid"));
   $smarty->display("fast_mode.tpl");
 }
 else {

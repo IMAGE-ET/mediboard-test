@@ -36,6 +36,17 @@ if($selClass && $selKey){
   $affichageFile = CFile::loadDocItemsByObject($object);
 }
 
+foreach($affichageFile as $_cat) {
+  if (!isset($_cat["items"])) break;
+  
+  foreach($_cat["items"] as $_item) {
+    $_item->loadRefCategory();
+    if ($_item->_class_name === "CCompteRendu") {
+      $_item->makePDFpreview();
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("affichageFile"  , $affichageFile);

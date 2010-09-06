@@ -1,3 +1,5 @@
+{{assign var=pdf_thumbnails value=$dPconfig.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
+
 <ul style="text-align: left;">
   {{foreach from=$modeles item=_modele}}
     {{if $_modele->_owner == "prat"}}
@@ -12,11 +14,11 @@
       <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
       
-      {{if $_modele->fast_edit}}
+      {{if $_modele->fast_edit && $pdf_thumbnails == 1}}
         <img style="float: right;" src="images/buttons/pdf.png"/>
       {{/if}}
-      
-      <div {{if $_modele->fast_edit}}class="fast_edit"{{/if}}>
+
+      <div {{if $_modele->fast_edit && $pdf_thumbnails == 1}}class="fast_edit"{{/if}}>
         {{$_modele->nom|emphasize:$keywords}}
       </div>
       

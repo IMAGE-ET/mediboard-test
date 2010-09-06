@@ -9,43 +9,31 @@
 
 global $AppUI, $m;
 
-$do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
-$do->redirectDelete = "m=$m&new=1";
-
-if(isset($_POST["_do_empty_pdf"])) {
+if( isset($_POST["_do_empty_pdf"])) {
   $compte_rendu_id = CValue::post("compte_rendu_id");
   $compte_rendu = new CCompteRendu();
   $compte_rendu->load($compte_rendu_id);
   $file = new CFile;
   $files = $file->loadFilesForObject($compte_rendu);
+  
   foreach($files as $_file) {
     $_file->file_empty();
   }
-  return;
+  CApp::rip();
 }
+
+$do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
+$do->redirectDelete = "m=$m&new=1";
 
 // Remplacement des zones de texte libre
 if (isset($_POST["texte_libre"])) {
   $compte_rendu = new CCompteRendu();
-  $source = null;
-  if (isset($_POST["_source"])) {
-    $source = $_POST["_source"];
-  } else {
-    $modele_id = CValue::post("modele_id");
-    $compte_rendu->load($modele_id);
-    $compte_rendu->loadContent();
-    $source = $compte_rendu->generateDocFromModel();
-  }
-
-  CMbArray::removeValue('', $_POST["texte_libre"]);
-
-  $_POST["_source"] = $compte_rendu->replaceFreeTextFields($source, $_POST["texte_libre"]);
+	CMbArray::removeValue('', $_POST["texte_libre"]);
+  $_POST["_source"] = $compte_rendu->replaceFreeTextFields($_POST["_source"], $_POST["texte_libre"]);
   $_POST["texte_libre"] = null;
 }
 
 if (isset($_POST["_source"])) {
-  
-  
   // Application des listes de choix
   $fields = array();
   $values = array();

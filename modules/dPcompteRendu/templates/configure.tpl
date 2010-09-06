@@ -33,8 +33,9 @@
       </td>
     </tr>
   {{/if}}
-  {{assign var=aide_autocomplete value=$dPconfig.dPcabinet.CConsultation.aide_autocomplete}}
-  {{if $aide_autocomplete == 1}}
+  {{if isset($dPconfig.dPcabinet.CConsultation.aide_autocomplete|smarty:nodefaults)}}
+    {{assign var=aide_autocomplete value=$dPconfig.dPcabinet.CConsultation.aide_autocomplete}}
+    {{if $aide_autocomplete == 1}}
     <tr>
       <th class="category" colspan="2">
         Horodatage pour les aides à la saisie
@@ -81,7 +82,8 @@
         </div>
       </td>
     </tr>
-  {{/if}}
+    {{/if}}
+	{{/if}}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

@@ -196,7 +196,7 @@ class CCompteRendu extends CDocumentItem {
   }
 
   function loadFile() {
-    if ($this->_id) {
+    if (!$this->_id) {
       return;
     }
    
@@ -569,9 +569,49 @@ class CCompteRendu extends CDocumentItem {
     return $smarty->fetch("../../dPcompteRendu/templates/htmlheader.tpl");
   }
   
-  function generateDocFromModel() {
+  function makePDFpreview(){
+    if (!CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) return;
+  
+    $this->loadRefsFwd();
+    $this->loadFile();
+    $this->loadContent();
+
+    if (!isset($this->_ref_file->_id) || file_get_contents($this->_ref_file->_file_path) == '') {
+      if (!isset($this->_ref_file->_id)){
+        $file = new CFile();
+        $file->setObject($this);
+        $file->private = 0;
+        $file->file_name  = $this->nom . ".pdf";
+        $file->file_type  = "application/pdf";
+        $file->file_owner = CAppUI::$user->_id;
+        $file->fillFields();
+        $file->updateFormFields();
+        $file->forceDir();
+      } else {
+        $file = $this->_ref_file;
+      }
+         
+      if ($this->_page_format == "") {
+        $page_width  = round((72 / 2.54) * $this->page_width, 2);
+        $page_height = round((72 / 2.54) * $this->page_height, 2);
+        $this->_page_format = array(0, 0, $page_width, $page_height);
+      }
+      
+      $content = $this->loadHTMLcontent($this->_source, '','','','','','', array($this->margin_top, $this->margin_right, $this->margin_bottom, $this->margin_left));
+      $htmltopdf = new CHtmlToPDF;
+      $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
+      $file->file_size = filesize($file->_file_path);
+      $file->store();
+      $this->_ref_file = $file;
+    }
+  }
+  
+  function generateDocFromModel($other_source = null) {
     $source = $this->_source;
-    
+    if ($other_source) {
+    	$source = $other_source;
+    }
+
     if ($this->header_id || $this->footer_id) {
       $this->loadComponents();
       
@@ -648,6 +688,7 @@ class CCompteRendu extends CDocumentItem {
   
     return preg_replace($patterns, $textes_libres, $source, 1);
   }
+
 }
 
 ?>

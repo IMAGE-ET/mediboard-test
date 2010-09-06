@@ -34,7 +34,7 @@ Main.add(function(){ displaythumb();})*/
 
 <table class="tbl">
   <tr>
-  {{if $document->object_id && $pdf_thumbnails == 1 && $document->_ref_file}}
+  {{if $document->object_id && $pdf_thumbnails == 1 && isset($document->_ref_file|smarty:nodefaults) && $document->_ref_file->_id}}
     <td id="thumbnail-{{$document->_id}}" style="text-align: center; background: #fff url(style/mediboard/images/icons/loading.gif) center center no-repeat;">
       <!-- <img src="?m=dPcompteRendu&amp;a=ajax_display_first_thumb&amp;suppressHeaders=1&amp;compte_rendu_id={{$document->_id}}&amp;nomdoc={{$document->nom}}&amp;user_id={{$document->_ref_chir->_id}}"
            style="border: 1px solid #666;"/>-->

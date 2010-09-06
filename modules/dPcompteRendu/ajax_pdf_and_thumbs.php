@@ -43,7 +43,7 @@ if ((!$file || !$file->_id) && $mode != "modele" && $first_time == 1 && !$compte
   CAppUI::stepAjax(CAppUI::tr("CCompteRendu-no-pdf-generated"));
   return;
 }
-else if ( $file && $file->_id && $first_time == 1 && file_get_contents($file->_file_path) != '') {
+else if ( $file && $file->_id && $first_time == 1 && is_file($file->_file_path) && file_get_contents($file->_file_path) != '') {
   // rien
 }
 else {
@@ -65,6 +65,7 @@ else {
           $sizeheader = $compte_rendu_h_f->height;
         }
         if($footer_id) {
+        	$compte_rendu_h_f = new CCompteRendu;
           $compte_rendu_h_f->load($footer_id);
 					$compte_rendu_h_f->loadContent();
           $footer = $compte_rendu_h_f->_source;
@@ -76,7 +77,6 @@ else {
   else {
     if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
       $compte_rendu->_source = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
-       $content = $compte_rendu->generateDocFromModel();
     }
     $content = $compte_rendu->loadHTMLcontent($content, $mode,'','','','','',$margins);
   }
@@ -94,7 +94,7 @@ else {
   }
 
   // Création du CFile si inexistant
-  if (!$file) {
+  if (!$file->_id) {
     $file = new CFile();
     $file->setObject($compte_rendu);
     $file->private = 0;
@@ -107,6 +107,12 @@ else {
   }
   else {
     $file->file_name  = $compte_rendu->nom . ".pdf";
+    
+    // Le fichier en lui-même peut ne pas exister. Dans ce cas, on s'assure de l'arborescence.
+    if  (!is_file($file->_file_path)) {
+    	$file->forceDir();
+    	$file->updateFormFields();
+    }
     
     // Si la source envoyée et celle présente en base sont identique, on stream le PDF déjà généré
     // Suppression des espaces, tabulations, retours chariots et sauts de lignes pour effectuer le md5
@@ -140,15 +146,13 @@ else {
 }
 
 // Traitement des vignettes
-$file->loadNbPages();
-
 if($generate_thumbs){
   $thumbs = new phpthumb();
   $thumbs->setSourceFilename($file->_file_path);
-
   $vignettes = array();
-  for($i = 0; $i < $file->_nb_pages ; $i++) {
+	$file->loadNbPages();
 
+  for($i = 0; $i < $file->_nb_pages ; $i++) {
     $thumbs->sfn=$i ;
     $thumbs->w = 138;
     $thumbs->GenerateThumbnail();

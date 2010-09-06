@@ -76,6 +76,7 @@ class CTemplateManager {
       "value"     => $value,
       "fieldHTML" => htmlentities("[{$field}]"),
       "valueHTML" => $value,
+  	  "shortview" => $section . " - " . $item,
       "options"   => $options
     );
     

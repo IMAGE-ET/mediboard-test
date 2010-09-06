@@ -18,4 +18,10 @@ define("DOMPDF_ENABLE_REMOTE", true);
 // Backend de DOMPDF
 define("DOMPDF_PDF_BACKEND", "CPDF");
 
+// Police par défaut
+define("DOMPDF_DEFAULT_FONT", "sans-serif");
+
+// PHP inline desactivé
+define("DOMPDF_ENABLE_PHP", false);
+
 ?>

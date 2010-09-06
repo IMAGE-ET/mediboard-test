@@ -63,43 +63,15 @@ if($object_id && $object_class){
   foreach($affichageFile as $_cat) {
     if (!isset($_cat["items"])) break;
 
-    foreach($_cat["items"] as $data) {
-      $data->loadRefCategory();
-      if ($data->_class_name == "CCompteRendu" && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
-        $data->loadRefsFwd();
-        $data->loadFile();
-        $data->loadContent();
-
-        if (!isset($data->_ref_file->_id)) {
-          $data->updateFormFields();
-          $file = new CFile();
-          $file->setObject($data);
-          $file->private = 0;
-          $file->file_name  = $data->nom . ".pdf";
-          $file->file_type  = "application/pdf";
-          $file->file_owner = $user_id;
-          $file->fillFields();
-          $file->updateFormFields();
-          $file->forceDir();
-
-          if ($data->_page_format == "") {
-            $page_width  = round((72 / 2.54) * $data->page_width, 2);
-            $page_height = round((72 / 2.54) * $data->page_height, 2);
-            $data->_page_format = array(0, 0, $page_width, $page_height);
-          }
-
-          $content = $data->loadHTMLcontent($data->_source, '','','','','','', array($data->margin_top, $data->margin_right, $data->margin_bottom, $data->margin_left));
-          $htmltopdf = new CHtmlToPDF;
-          $htmltopdf->generatePDF($content, 0, $data->_page_format, $data->_orientation, $file);
-          $file->file_size = filesize($file->_file_path);
-          $file->store();
-          $data->_ref_file = $file;
-        }
+    foreach($_cat["items"] as $_item) {
+      $_item->loadRefCategory();
+      
+      if ($_item->_class_name === "CCompteRendu") {
+        $_item->makePDFpreview();
       }
     }
   }
 }
-
 // Création du template
 $smarty = new CSmartyDP();
 

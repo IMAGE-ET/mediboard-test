@@ -51,20 +51,23 @@ var Document = {
     url.popup(700, 700, "Document");
   },
   
-  fastMode: function(object_class, modele_id, object_id, target_id, target_class, object_guid) {
+  fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
     if (!modele_id) return;
-    var modaleWindow;
-    var fast = $('fast-'+object_guid);
-    if (fast) {
-      modaleWindow = modal(fast);
-    }
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("object_guid" , object_guid);
-    url.addParam("modele_id"   , modele_id);
-    url.addParam("object_id"   , object_id);
-    url.addParam('object_class', object_class);
-    url.requestUpdate(fast, {onComplete: function(){if (modaleWindow) modaleWindow.position();}});
     
+    var fast = $('fast-'+unique_id);
+    
+    if (fast) {
+      var url = new Url("dPcompteRendu", "edit_compte_rendu");
+      url.addParam("modele_id"   , modele_id);
+      url.addParam("object_id"   , object_id);
+      url.addParam('object_class', object_class);
+      url.requestUpdate(fast, {onComplete: function(){
+        if (fast.select(".freetext").length) {
+          var modaleWindow = modal(fast);
+          modaleWindow.position();
+        }
+      }});
+    }
   },
   
   edit: function(compte_rendu_id){

@@ -32,7 +32,7 @@ FCKConfig.ToolbarSets["Default"] = [
   {{if !$templateManager->simplifyMode}}
     ['Cut','Copy','Paste','PasteText','PasteWord','-', {{if $pdf_thumbnails == 1}}'mbPrintPDF',{{/if}} textForPrint,'-','mbHeader','mbFooter'],
     ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
-    ['Table','Rule','Image','SpecialChar','mbPageBreak'],
+    ['Table','Rule','Image','SpecialChar','mbPageBreak', 'mbFreeText'],
     ['FitWindow', {{if $can->admin}} 'Source' ,{{/if}} 'About', 'mbHelp'],
 	  '/',
   {{/if}}
@@ -70,7 +70,8 @@ aMbCombos.push({
         {{else}}
           "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]" 
         {{/if}}
-      {{/if}}
+      {{/if}} ,
+     shortview: '{{$property.shortview|utf8_encode|smarty:nodefaults|escape:"javascript"}}'
     });
 {{/foreach}}
 {{/foreach}}
@@ -89,7 +90,7 @@ aMbCombos.push({
 {{foreach from=$templateManager->lists item=list}}
   aOptions.push( { 
     view: "{{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
-    item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]"
+    item: "[Liste - {{$list.name|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]",
     });
 {{/foreach}}
 {{/if}}
@@ -133,7 +134,7 @@ FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbhelp', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
-// FCKConfig.Plugins.Add( 'mbfreetext', 'en,fr', sMbPluginsPath );
+ FCKConfig.Plugins.Add( 'mbfreetext', 'en,fr', sMbPluginsPath );
 {{if $pdf_thumbnails == 1}}
   FCKConfig.Plugins.Add( 'mbprintPDF', 'en,fr', sMbPluginsPath );
 {{/if}}

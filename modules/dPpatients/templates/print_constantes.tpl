@@ -1,4 +1,4 @@
-<table class="main tbl">
+<table class="main tbl" style="width: 100%;">
   <tr><th colspan="11" class="title">Constantes</th></tr>
   <tr>
     <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>

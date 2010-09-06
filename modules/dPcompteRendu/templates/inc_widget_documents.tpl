@@ -52,7 +52,7 @@
           var id = selected.down(".id").innerHTML;
            
           if (selected.select(".fast_edit").length && window.pdf_thumbnails) {
-            Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$object->_guid}}');
+            Document.fastMode('{{$object->_class_name}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
           } else {
             Document.create(id, '{{$object_id}}');
           }
@@ -92,7 +92,7 @@
 
 </form>
 
-<div id="fast-{{$object->_guid}}" style="display: none; width: 50%;"></div>
+<div id="fast-{{$unique_id}}" style="display: none; width: 50%;"></div>
 
 {{assign var=doc_count value=$object->_ref_documents|@count}}
 {{if $mode != "hide"}}

@@ -4,6 +4,7 @@ $locales['Action'] = 'Action';
 $locales['Actions'] = 'Actions';
 $locales['Add'] = 'Ajouter';
 $locales['All'] = 'Tous';
+$locales['and'] = 'et';
 $locales['Archive'] = 'Archiver';
 $locales['Associate'] = 'Associer';
 $locales['Browse'] = 'Parcourir';
