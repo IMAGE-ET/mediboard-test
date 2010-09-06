@@ -30,6 +30,7 @@ $whereSalle = array("bloc_id" => " = '$bloc_id'");
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
 $where = array();
+$where["annulee"] = "= '0'";
 $where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 
