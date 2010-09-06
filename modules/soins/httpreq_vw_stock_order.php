@@ -30,12 +30,19 @@ if(($endowment_id === null) && count($service->_back["endowments"])) {
 }
 
 // Calcul de date_max et date_min
-$date = mbDate();
-$date_min = CValue::getOrSession('_date_min', $date);
-$date_max = CValue::getOrSession('_date_max', $date);
+$date_min = CValue::get('_date_min');
+$date_max = CValue::get('_date_max');
 
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
+if (!$date_min) {
+  $date_min = CValue::session('_date_delivrance_min', mbDate("-1 DAY"));
+}
+if (!$date_max) {
+  $date_max = CValue::session('_date_delivrance_max', mbDate());
+}
+
+CValue::setSession('_date_delivrance_min', $date_min);
+CValue::setSession('_date_delivrance_max', $date_max);
+
 CValue::setSession('endowment_id', $endowment_id);
 
 $delivrance = new CProductDelivery();
