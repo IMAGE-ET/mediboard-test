@@ -74,7 +74,7 @@
 	    											$V(document.forms.editTrans.object_class, '{{$_suivi->object_class}}'); }">
 	    	{{$_suivi->_ref_object->_view}}
 				
-			  {{if $_suivi->_ref_object->commentaire && $_suivi->_ref_object instanceof CPrescriptionLineElement}}
+			  {{if $_suivi->_ref_object instanceof CPrescriptionLineElement && $_suivi->_ref_object->commentaire}}
 				  ({{$_suivi->_ref_object->commentaire}})
 				{{/if}}
 
