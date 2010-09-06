@@ -36,7 +36,7 @@ Main.add(function () {
     <select name="object_class" onchange="this.form.submit()">
       <option value="">&mdash; {{tr}}CCompteRendu-type-all{{/tr}}</option>
       {{foreach from=$_spec->_locales item=_locale key=_object_class}}
-        <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}}selected="selected"{{/if}}>{{$_locale}}</option>
+        <option value="{{$_object_class}}" {{if $filtre->object_class == $_object_class}} selected="selected" {{/if}}>{{$_locale}}</option>
       {{/foreach}}
     </select>
 	</td>
@@ -52,23 +52,22 @@ Main.add(function () {
 {{if $user->_id}}
 
   <ul id="tabs-owner" class="control_tabs">
-    <li><a href="#owner-prat">{{$user->_view}} <small>({{$modeles.prat|@count}})</small></a></li>
-    <li><a href="#owner-func">{{$user->_ref_function->_view}} <small>({{$modeles.func|@count}})</small></a></li>
-    <li><a href="#owner-etab">{{$user->_ref_function->_ref_group->_view}} <small>({{$modeles.etab|@count}})</small></a></li>
+  	{{foreach from=$modeles key=owner item=_modeles}}
+    <li>
+    	<a href="#owner-{{$owner}}" {{if !$_modeles|@count}} class="empty" {{/if}}>
+    	  {{$owners.$owner}} 
+			  <small>({{$_modeles|@count}})</small>
+			</a>
+		</li>
+  	{{/foreach}}
   </ul>
   <hr class="control_tabs" />
   
-  <div id="owner-prat" style="display: none;">
-  {{include file=inc_modeles.tpl modeles=$modeles.prat}}
-  </div>
-  
-  <div id="owner-func" style="display: none;">
-  {{include file=inc_modeles.tpl modeles=$modeles.func}}
-  </div>
-  
-  <div id="owner-etab" style="display: none;">
-  {{include file=inc_modeles.tpl modeles=$modeles.etab}}
-  </div>
+  {{foreach from=$modeles key=owner item=_modeles}}
+	  <div id="owner-{{$owner}}" style="display: none;">
+	  {{include file=inc_modeles.tpl modeles=$modeles.$owner}}
+	  </div>
+  {{/foreach}}
   
 {{else}}
 
