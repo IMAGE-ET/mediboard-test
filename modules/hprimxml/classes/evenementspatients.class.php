@@ -276,18 +276,23 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       "cslt" => "consult",
       "sc"   => "seances",
     );
-    
+
+    // Détermine le type de venue depuis la config des numéros de dossier 
+    $type_config = self::getVenueType($destinataire, $mbVenue->_num_dossier);
+    mbTrace($type_config, "type_config", true);
     if (!$mbVenue->type) {
 	    if ($nature) {
 	      $mbVenue->type = $attrNatureVenueHprim[$nature];
 	    }
 	    
-	    // Détermine le type de venue depuis la config des numéros de dossier 
-      $mbVenue->type = self::getVenueType($destinataire, $mbVenue->_num_dossier);
-      if (!$mbVenue->type) {
-        $mbVenue->type = "comp";
-      }
-    }      
+	    if ($type_config) {
+	      $mbVenue->type = $type_config;
+	    }
+    } 
+
+    if (!$mbVenue->type) {      
+      $mbVenue->type = "comp";
+    }
     
     return $mbVenue;
   }
