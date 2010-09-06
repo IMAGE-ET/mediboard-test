@@ -257,8 +257,8 @@ $library->fileName = "FCKeditor_2.6.3.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "fckeditor";
 $library->targetDir = "fckeditor";
-$library->versionFile = "_whatsnew.html";
-$library->versionString = "Version 2.6.3";
+$library->versionFile = "editor/fckeditor.html";
+$library->versionString = "html{min-height:100%}@media screen{";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";

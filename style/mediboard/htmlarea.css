@@ -32,8 +32,8 @@ table.tbl td {
     margin: 10px;
     border: 2px dashed #ccc;
     padding: 3px;
-	opacity: 0.4;
-	overflow: hidden;
+    opacity: 0.4;
+    overflow: hidden;
   }
 
   #footer {
@@ -53,6 +53,11 @@ table.tbl td {
     margin: 10px;
     padding: 2px;
     padding-right: 6px;
+    -moz-box-shadow: 4px 4px 6px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 4px 4px 6px rgba(0,0,0,0.4);
+    box-shadow: 4px 4px 6px rgba(0,0,0,0.4);
+    /*width: 21cm;
+    margin: 10px auto;*/
   }
 
   table {
