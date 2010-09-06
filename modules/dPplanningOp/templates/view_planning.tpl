@@ -28,7 +28,7 @@
   </tr>
   
   <tr>
-    <th>Chirurgien </th>
+    <th>Praticien </th>
     <td>
     {{if $operation->_id}}
 	    {{if $operation->_ref_chir}}
@@ -106,51 +106,49 @@
       {{tr}}CSejour.type.{{$sejour->type}}{{/tr}}
     </td>
   </tr>
+  <tr>
+    <th>Chambre particulière </th>
+    <td>{{tr}}CSejour.chambre_seule.{{$sejour->chambre_seule}}{{/tr}}</td>
+  </tr>
   
   {{if $operation->_id}}
-	  <tr>
-	    <th>Chambre particulière </th>
-	    <td>{{tr}}CSejour.chambre_seule.{{$operation->_ref_sejour->chambre_seule}}{{/tr}}</td>
-	  </tr>
-  
-  
-	  <tr>
-	    <th>Date d'intervention :</th>
-	    <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
-	  </tr>
+  <tr>
+    <th>Date d'intervention :</th>
+    <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
+  </tr>
 	
-	  {{if $operation->libelle}}
-	  <tr>
-	    <th>Libellé </th>
-	    <td class="text"><em>{{$operation->libelle}}</em></td>
-	  </tr>
-	  {{/if}}
-	
-	  <tr>
-	    <th>Actes</th>
-	    <td class="text">
-	      {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
-	      {{if $ext_code_ccam->code != "-"}}
-	      {{$ext_code_ccam->libelleLong}}<br />
-	      {{/if}}
-	      {{/foreach}}
-	    </td>
-	  </tr>
-	  
-	  <tr>
-	    <th>Côté </th>
-	    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
-	  </tr>
-	
-	  <tr>
-	    <th>Durée prévue d'hospitalisation </th>
-	    <td>{{$operation->_ref_sejour->_duree_prevue}} nuits</td>
-	  </tr>
+  {{if $operation->libelle}}
+  <tr>
+    <th>Libellé </th>
+    <td class="text"><em>{{$operation->libelle}}</em></td>
+  </tr>
   {{/if}}
+
+  <tr>
+    <th>Actes</th>
+    <td class="text">
+      {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
+      {{if $ext_code_ccam->code != "-"}}
+      {{$ext_code_ccam->libelleLong}}<br />
+      {{/if}}
+      {{/foreach}}
+    </td>
+  </tr>
   
-	<tr>
-		<th>Adresse</th>
-		<td>
+  <tr>
+    <th>Côté </th>
+    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
+  </tr>
+  {{/if}}
+	
+  <tr>
+    <th>Durée prévue d'hospitalisation </th>
+    <td>{{$sejour->_duree_prevue}} nuits</td>
+  </tr>
+ 
+  <tr>
+    <th>Adresse</th>
+    <td>
       {{$sejour->_ref_group->text}}<br />
       {{$sejour->_ref_group->adresse}}<br />
       {{$sejour->_ref_group->cp}}
@@ -158,42 +156,47 @@
 		</td>
 	</tr>
 	
-  {{if $operation->_id && $operation->forfait}}
+  {{if $operation->_id}}
+  {{if $operation->forfait}}
+  <tr>
+    <th>Forfait clinique</th>
+    <td>{{$operation->forfait}} euros</td>
+  </tr>
+	{{/if}}  
+  {{if $operation->fournitures}}
 	  <tr>
-	    <th>Forfait clinique</th>
-	    <td>{{$operation->forfait}} euros</td>
+	    <th>Fournitures</th>
+	    <td>{{$operation->fournitures}} euros</td>
 	  </tr>
-	  
-	  
-	  {{if $operation->fournitures}}
-		  <tr>
-		    <th>Fournitures</th>
-		    <td>{{$operation->fournitures}} euros</td>
-		  </tr>
-	  {{/if}}
+  {{/if}}
 
-    <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>
+  <tr>
+    <th class="category" colspan="2">Rendez vous d'anesthésie</th>
+  </tr>
 	  
-	  <tr>
-	    <td class="text" colspan="2">
-	      Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
-	      avant votre intervention.
-	     {{if $sejour->_ref_group->tel_anesth}}
-	       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
-	     {{/if}}
-	    </td>
-	  <tr>
+  <tr>
+    <td class="text" colspan="2">
+      Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
+      avant votre intervention.
+     {{if $sejour->_ref_group->tel_anesth}}
+       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
+     {{/if}}
+    </td>
+  <tr>
   {{/if}}
   
-  <tr><td class="info" colspan="2"><b>Pour votre hospitalisation, prière de vous munir de :</b>
-  <ul>
-    <li>
-      Carte Vitale et attestation de sécurité sociale, 
-      carte de mutuelle accompagnée de la prise en charge le cas échéant.
-    </li>
-    <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
-    <li>Prévoir linge et nécessaire de toilette.</li>
-    <li>Vos médicaments éventuellement</li>
-  </ul>
-  </td></tr>
+  <tr>
+    <td class="info" colspan="2">
+      <b>Pour votre hospitalisation, prière de vous munir de :</b>
+      <ul>
+        <li>
+          Carte Vitale et attestation de sécurité sociale, 
+          carte de mutuelle accompagnée de la prise en charge le cas échéant.
+        </li>
+        <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
+        <li>Prévoir linge et nécessaire de toilette.</li>
+        <li>Vos médicaments éventuellement</li>
+      </ul>
+    </td>
+  </tr>
 </table>
