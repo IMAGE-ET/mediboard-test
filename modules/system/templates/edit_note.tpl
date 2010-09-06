@@ -22,7 +22,8 @@ function submitNote(){
 <input type="hidden" name="dosql" value="do_note_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="m" value="system" />
-{{mb_field object=$note field="note_id" hidden=1 prop=""}}
+{{mb_key object=$note}}
+
 {{mb_field object=$note field="object_id" hidden=1}}
 {{mb_field object=$note field="object_class" hidden=1}}
 

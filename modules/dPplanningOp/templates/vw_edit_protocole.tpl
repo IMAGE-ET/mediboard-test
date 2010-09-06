@@ -160,35 +160,26 @@ Main.add(function () {
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_class_name_" value="COperation" />
+{{mb_key object=$protocole}}
 
 {{if $dialog}}
   <input type="hidden" name="postRedirect" value="m=dPplanningOp&a=vw_protocoles&dialog=1" />
 {{/if}}
 
-{{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
 
 <table class="main" style="border-spacing: 0px;">
   {{if $protocole->protocole_id}}
   <tr>
     <td colspan="2">
-       <a class="button new" href="?m={{$m}}&amp;protocole_id=0">Créer un nouveau protocole</a>
+      <a class="button new" href="?m={{$m}}&amp;protocole_id=0">
+       	Créer un nouveau protocole
+			</a>
     </td>
   </tr>
   {{/if}}
 
-  <tr>
-    {{if $protocole->_id}}
-    <th colspan="2" class="title modify">
-      {{mb_include module=system template=inc_object_idsante400 object=$protocole}}
-      {{mb_include module=system template=inc_object_history object=$protocole}}
-      Modification du {{$protocole->_view}}
-    </th>
-    {{else}}
-    <th colspan="2" class="title"> 
-      Création d'un protocole
-    </th>
-    {{/if}}
-  </tr>
+  {{mb_include module=system template=inc_form_table_header object=$protocole}}
+	
   <tr>
     <td colspan="2" style="padding: 2px; text-align: center;">
       {{mb_label object=$protocole field="chir_id"}}
@@ -254,7 +245,7 @@ Main.add(function () {
         <tr>
           <th>
             Liste des codes CCAM
-            {{mb_field object=$protocole field="codes_ccam" hidden=1 prop=""}}
+            {{mb_field object=$protocole field="codes_ccam" hidden=1}}
           </th>
           <td colspan="2" class="text" id="listCodesCcam"></td>
         </tr>

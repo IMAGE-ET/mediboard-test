@@ -34,6 +34,7 @@ $protocole = new CProtocole;
 if($protocole_id) {
   $protocole->load($protocole_id);
   $protocole->loadRefs();
+  $protocole->loadRefsNotes();
 
   // On vérifie que l'utilisateur a les droits sur l'operation
   if (!array_key_exists($protocole->chir_id, $listPraticiens)) {

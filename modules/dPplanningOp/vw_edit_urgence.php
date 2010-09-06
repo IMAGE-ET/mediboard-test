@@ -74,6 +74,7 @@ $op = new COperation;
 $op->load($operation_id);
 if ($op->_id) {
   $op->loadRefs();
+  $op->loadRefsNotes();
   $op->_ref_chir->loadRefFunction();
 
   // On vérifie que l'utilisateur a les droits sur l'operation

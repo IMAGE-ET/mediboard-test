@@ -42,13 +42,14 @@ CCAMSelector.init = function(){
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="del" value="0" />
+{{mb_key object=$op}}
+
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
-{{mb_field object=$op field="operation_id" hidden=1 prop=""}}
-{{mb_field object=$op field="sejour_id" hidden=1 prop=""}}
-{{mb_field object=$op field="commande_mat" hidden=1 prop=""}}
-{{mb_field object=$op field="rank" hidden=1 prop=""}}
+{{mb_field object=$op field="sejour_id" hidden=1}}
+{{mb_field object=$op field="commande_mat" hidden=1}}
+{{mb_field object=$op field="rank" hidden=1}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
 
@@ -108,7 +109,7 @@ CCAMSelector.init = function(){
   <tr>
     <th>
       Liste des codes CCAM
-      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('expert');" hidden=1 prop=""}}
+      {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('expert');" hidden=1}}
     </th>
     <td colspan="2" class="text" id="listCodesCcam">
     </td>

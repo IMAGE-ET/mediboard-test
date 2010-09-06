@@ -177,14 +177,14 @@ Main.add(function () {
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="_purge" value="0" />
+        {{mb_key object=$patient}}
+
         {{if $patient->_bind_vitale}}
         <input type="hidden" name="_bind_vitale" value="1" />
         {{/if}}
         
         <button type="submit" style="display: none;">&nbsp;</button>
-        
-        {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
-        
+                
         {{if !$patient->_id}}
 				{{mb_field object=$patient field="medecin_traitant" hidden=1}}
 				{{/if}}

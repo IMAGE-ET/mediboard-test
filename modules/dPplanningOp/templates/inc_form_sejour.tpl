@@ -255,8 +255,8 @@ Main.add( function(){
   <input type="hidden" name="_curr_op_date" value="" />
 {{/if}}
 
-{{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
-{{mb_field object=$sejour field="modif_SHS" hidden=1 prop=""}}
+{{mb_field object=$sejour field="saisi_SHS" hidden=1}}
+{{mb_field object=$sejour field="modif_SHS" hidden=1}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
 <input type="hidden" name="septique" value="{{$sejour->septique|default:"0"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />

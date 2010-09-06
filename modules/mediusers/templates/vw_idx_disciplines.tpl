@@ -37,11 +37,12 @@
       {{if $can->edit}}
       <form name="editSpeMed" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_discipline_aed" />
-      {{mb_field object=$specialite field="discipline_id" hidden=1 prop=""}}
+      {{mb_key object=$specialite}}
+
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $specialite->discipline_id}}
+          {{if $specialite->_id}}
           <th class="title modify" colspan="2">{{$specialite->_view}}</th>
           {{else}}
           <th class="title" colspan="2">Création d'une spécialité Médicale</th>

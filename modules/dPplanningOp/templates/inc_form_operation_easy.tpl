@@ -62,7 +62,7 @@
   <!-- Liste des codes ccam -->
   <tr>
     <th>Liste des codes CCAM
-    {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1 prop=""}}
+    {{mb_field object=$op field="codes_ccam" onchange="refreshListCCAM('easy');" hidden=1}}
     </th>
     <td colspan="2" class="text" id="listCodesCcamEasy">
   </td>
@@ -96,14 +96,14 @@
         modifSejour(); $V(this.form._date, this.value);">
         {{if $op->operation_id}}
         <option value="{{$op->_datetime|date_format:"%Y-%m-%d"}}" selected="selected">
-          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
+          {{$op->_datetime|date_format:$dPconfig.date}} (inchangée)
         </option>
         {{/if}}
         <option value="{{$today}}">
-          {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
+          {{$today|date_format:$dPconfig.date}} (aujourd'hui)
         </option>
         <option value="{{$tomorow}}">
-          {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
+          {{$tomorow|date_format:$dPconfig.date}} (demain)
         </option>
       </select>
     </td>
