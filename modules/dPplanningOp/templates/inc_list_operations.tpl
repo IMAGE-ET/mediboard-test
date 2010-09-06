@@ -113,7 +113,7 @@
       </a>
     </td>
     <td class="text top">
-      <a href="?m={{$m}}&amp;tab=w_edit_urgence&amp;operation_id={{$_operation->_id}}">
+      <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
       	{{if $_operation->salle_id}}Déplacé en salle {{$_operation->_ref_salle}}{{/if}}
         {{mb_include template=inc_vw_operation}}   
       </a>
