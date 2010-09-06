@@ -1,4 +1,6 @@
-{{assign var="sejour" value=$operation->_ref_sejour}}
+{{if !$sejour->_id}}
+  {{assign var="sejour" value=$operation->_ref_sejour}}
+{{/if}}
 <table class="print">
   <tr>
     <th class="title" colspan="2">
@@ -28,8 +30,14 @@
   <tr>
     <th>Chirurgien </th>
     <td>
-    {{if $operation->_ref_chir}}
-      Dr {{$operation->_ref_chir->_view}}
+    {{if $operation->_id}}
+	    {{if $operation->_ref_chir}}
+	      Dr {{$operation->_ref_chir->_view}}
+	    {{/if}}
+    {{else}}
+      {{if $sejour->_ref_praticien}}
+        Dr {{$sejour->_ref_praticien->_view}}
+      {{/if}}
     {{/if}}
     </td>
   </tr>
@@ -38,7 +46,8 @@
     <th class="category" colspan="2">Renseignements concernant le patient</th>
   </tr>
   
-  {{assign var="patient" value=$operation->_ref_sejour->_ref_patient}}
+  {{assign var="patient" value=$sejour->_ref_patient}}
+  
   <tr>
     <th>Nom / Prénom </th>
     <td>{{$patient->_view}}</td>
@@ -98,43 +107,46 @@
     </td>
   </tr>
   
-  <tr>
-    <th>Chambre particulière </th>
-    <td>{{tr}}CSejour.chambre_seule.{{$operation->_ref_sejour->chambre_seule}}{{/tr}}</td>
-  </tr>
- 
-  <tr>
-    <th>Date d'intervention :</th>
-    <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
-  </tr>
-
-  {{if $operation->libelle}}
-  <tr>
-    <th>Libellé </th>
-    <td class="text"><em>{{$operation->libelle}}</em></td>
-  </tr>
-  {{/if}}
-
-  <tr>
-    <th>Actes</th>
-    <td class="text">
-      {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
-      {{if $ext_code_ccam->code != "-"}}
-      {{$ext_code_ccam->libelleLong}}<br />
-      {{/if}}
-      {{/foreach}}
-    </td>
-  </tr>
+  {{if $operation->_id}}
+	  <tr>
+	    <th>Chambre particulière </th>
+	    <td>{{tr}}CSejour.chambre_seule.{{$operation->_ref_sejour->chambre_seule}}{{/tr}}</td>
+	  </tr>
   
-  <tr>
-    <th>Côté </th>
-    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
-  </tr>
-
-  <tr>
-    <th>Durée prévue d'hospitalisation </th>
-    <td>{{$operation->_ref_sejour->_duree_prevue}} nuits</td>
-  </tr>
+  
+	  <tr>
+	    <th>Date d'intervention :</th>
+	    <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
+	  </tr>
+	
+	  {{if $operation->libelle}}
+	  <tr>
+	    <th>Libellé </th>
+	    <td class="text"><em>{{$operation->libelle}}</em></td>
+	  </tr>
+	  {{/if}}
+	
+	  <tr>
+	    <th>Actes</th>
+	    <td class="text">
+	      {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
+	      {{if $ext_code_ccam->code != "-"}}
+	      {{$ext_code_ccam->libelleLong}}<br />
+	      {{/if}}
+	      {{/foreach}}
+	    </td>
+	  </tr>
+	  
+	  <tr>
+	    <th>Côté </th>
+	    <td>{{tr}}COperation.cote.{{$operation->cote}}{{/tr}}</td>
+	  </tr>
+	
+	  <tr>
+	    <th>Durée prévue d'hospitalisation </th>
+	    <td>{{$operation->_ref_sejour->_duree_prevue}} nuits</td>
+	  </tr>
+  {{/if}}
   
 	<tr>
 		<th>Adresse</th>
@@ -146,31 +158,32 @@
 		</td>
 	</tr>
 	
-  {{if $operation->forfait}}
-  <tr>
-    <th>Forfait clinique</th>
-    <td>{{$operation->forfait}} euros</td>
-  </tr>
+  {{if $operation->_id && $operation->forfait}}
+	  <tr>
+	    <th>Forfait clinique</th>
+	    <td>{{$operation->forfait}} euros</td>
+	  </tr>
+	  
+	  
+	  {{if $operation->fournitures}}
+		  <tr>
+		    <th>Fournitures</th>
+		    <td>{{$operation->fournitures}} euros</td>
+		  </tr>
+	  {{/if}}
+
+    <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>
+	  
+	  <tr>
+	    <td class="text" colspan="2">
+	      Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
+	      avant votre intervention.
+	     {{if $sejour->_ref_group->tel_anesth}}
+	       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
+	     {{/if}}
+	    </td>
+	  <tr>
   {{/if}}
-  
-  {{if $operation->fournitures}}
-  <tr>
-    <th>Fournitures</th>
-    <td>{{$operation->fournitures}} euros</td>
-  </tr>
-  {{/if}}
-  
-  <tr><th class="category" colspan="2">Rendez vous d'anesthésie</th></tr>
-  
-  <tr>
-    <td class="text" colspan="2">
-      Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
-      avant votre intervention.
-     {{if $sejour->_ref_group->tel_anesth}}
-       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
-     {{/if}}
-    </td>
-  <tr>
   
   <tr><td class="info" colspan="2"><b>Pour votre hospitalisation, prière de vous munir de :</b>
   <ul>

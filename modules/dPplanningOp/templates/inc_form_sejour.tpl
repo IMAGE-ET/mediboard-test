@@ -91,6 +91,14 @@ function checkChambreSejourEasy(){
   }
 }
 
+function printFormSejour() {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "view_planning"); 
+  url.addParam("sejour_id", $V(getForm("editSejour").sejour_id));
+  url.popup(700, 500, "printSejour");
+  return;
+}
+
 PatSelector.init = function(){
   bOldPat = document.editSejour.patient_id.value;
   this.sForm     = "editSejour";
@@ -701,6 +709,7 @@ Main.add( function(){
     {{/if}}
     {{mb_ternary var=annule_text test=$sejour->annule value="Restore" other="Cancel"}}
     {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+    <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{tr}}{{$annule_text}}{{/tr}}
     </button>
