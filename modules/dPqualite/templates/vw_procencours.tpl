@@ -241,12 +241,13 @@ function popFile(objectClass, objectId, elementClass, elementId){
         </tr>
         <!-- Nouvelle procédure, procédure terminée ou demandée -->
         {{if $docGed->etat==$docGed|const:'TERMINE' || $docGed->etat==$docGed|const:'DEMANDE' || !$docGed->doc_ged_id}}
-          {{if $docGed->doc_ged_id && $docGed->etat!=$docGed|const:'TERMINE'}}
           <tr>
             <th>{{tr}}Date{{/tr}}</th>
-            <td>{{$docGed->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}</td>
+            <td>
+              {{assign var=lastentry value=$docGed->_lastentry}}
+              {{mb_field object=$lastentry field=date form="ProcEditFrm" register="true"}}
+            </td>
           </tr>
-          {{/if}}
           <tr>
             <th>{{tr}}CDocGedSuivi-doc_ged_suivi_id-court{{/tr}}</th>
             <td>
@@ -335,6 +336,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <th><label for="formfile">{{tr}}CFile{{/tr}}</label></th>
             <td>
               <input type="file" name="formfile" size="0" class="notNull str" />
+              <input type="hidden" name="private" value="0" />
             </td>
           </tr>
           <tr>

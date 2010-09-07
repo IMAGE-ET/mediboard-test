@@ -181,6 +181,7 @@ class CDocGed extends CMbObject {
   function loadLastEntry(){
     // Récupération derniere entrée
     $this->_lastentry = new CDocGedSuivi;
+    if (!$this->_id) { $this->_lastentry->date = mbDateTime(); return; }
     $this->_lastentry->doc_ged_id = $this->doc_ged_id;
     $this->_lastentry->loadMatchingObject("date DESC");
     $this->_lastentry->loadRefsFwd();

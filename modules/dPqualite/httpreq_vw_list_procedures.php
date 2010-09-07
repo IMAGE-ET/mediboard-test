@@ -66,8 +66,9 @@ if ($count_procedures >= 20)
   $pages = range(0, $count_procedures, 20);
 else 
   $pages = array();
-  
-array_pop($pages);
+
+if (count($pages) > 2)
+  array_pop($pages);
 
 // Création du template
 $smarty = new CSmartyDP();
