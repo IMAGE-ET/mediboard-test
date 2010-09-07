@@ -94,7 +94,8 @@
   
   <td title="Quantité d'origine: {{$curr_delivery->quantity}}">
     {{if $curr_delivery->_ref_stock->_id}}
-    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" action="?" method="post" class="dispensation">
+    <form name="dispensation-validate-{{$curr_delivery->_id}}" onsubmit="return false" 
+          action="?" method="post" class="{{if !$curr_delivery->isDelivered()}}dispensation{{/if}}">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />

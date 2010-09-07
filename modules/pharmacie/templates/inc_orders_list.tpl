@@ -71,8 +71,11 @@ Main.add(function(){
               
               <th style="width: 0.1%;">
                 <button type="button" onclick="dispenseAll('tab-{{$_service->_guid}}', refreshOrders)" class="tick">
-                  Disp. les {{$_service->_ref_deliveries|@count}} visibles
+                  Disp. les <span id="count-orders-{{$_service->_guid}}"></span> visibles
                 </button>
+                {{main}}
+                  $("count-orders-{{$_service->_guid}}").update($("tab-{{$_service->_guid}}").select("form.dispensation").length);
+                {{/main}}
               </th>
               <th>{{tr}}CProduct-_unit_title{{/tr}}</th>
             </tr>
