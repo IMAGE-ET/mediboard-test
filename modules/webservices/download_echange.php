@@ -14,7 +14,11 @@ $echange_soap->load($echange_soap_id);
 $echange_soap->loadRefs();
 
 $input  = print_r(unserialize($echange_soap->input), true);
-$output = print_r(unserialize($echange_soap->output), true);
+
+if ($echange_soap->soapfault == 1)
+  $output = print_r($echange_soap->output, true);
+else 
+  $output = print_r(unserialize($echange_soap->output), true);
 
 $function_name = $echange_soap->function_name;
 $content = "Parametres :\n
