@@ -18,7 +18,10 @@ catch (e) {}
 
 function submitCompteRendu(){
 	{{if $pdf_thumbnails == 1}}
-	  FormObserver.onChanged();
+	  if (Thumb.modele_id > 0) {
+		  FormObserver.changes = 0;
+	    FormObserver.onChanged();
+	  }
 	{{/if}}
   (function(){
     var form = getForm("editFrm");

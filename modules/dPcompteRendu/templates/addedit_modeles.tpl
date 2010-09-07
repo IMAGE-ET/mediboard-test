@@ -98,6 +98,12 @@ function loadCategory(value) {
 }
 
 function submitCompteRendu(){
+	{{if $pdf_thumbnails == 1}}
+    if (Thumb.modele_id > 0) {
+      FormObserver.changes = 0;
+      FormObserver.onChanged();
+    }
+  {{/if}}
   (function(){
     var form = getForm("editFrm");
     if(checkForm(form) && User.id) {

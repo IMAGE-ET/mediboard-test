@@ -26,7 +26,7 @@ FCKMbPrintCommand.prototype.Execute = function() {
     FCK.EditorWindow.focus();
     FCK.EditorWindow.print();
     if (window.parent.Preferences.saveOnPrint == 2 || confirm("Souhaitez-vous enregistrer ce document ?")) {
-      FCKSaveCommand.prototype.Execute();
+      window.parent.submitCompteRendu();
     }
   }
 }
