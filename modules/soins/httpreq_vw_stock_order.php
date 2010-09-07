@@ -67,7 +67,7 @@ if ($endowment_id) {
       'product' => 'product.product_id = product_endowment_item.product_id'
     );
     if ($keywords) {
-      $where['product.name'] = $stock->_spec->ds->prepareLike("%$keywords%");
+      $where['product.name'] = $endowment_item->_spec->ds->prepareLike("%$keywords%");
     }
     
     $endowment_items = $endowment_item->seek($keywords, $where, $limit, true, $ljoin, 'product.name');

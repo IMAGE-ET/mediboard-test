@@ -11,6 +11,10 @@
 $where = array();
 $ljoin = array();
 
+$user_id = CValue::get("user_id");
+CValue::setSession("user_id", $user_id);
+$start = intval(CValue::get("start", 0));
+
 $patient = new CPatient;
 $ds = $patient->_spec->ds;
 
@@ -22,22 +26,34 @@ $fields = array(
     "_age_max" => null, 
     "medecin_traitant" => "=",
   ),
-  "CDossierMedical" => array(
-    "codes_cim" => null, 
+  "CAntecedent" => array(
+    "rques" => "LIKE", 
+  ),
+  "CTraitement" => array(
+    "traitement" => "LIKE", 
+  ),
+  "CConsultation" => array(
+    "motif" => "LIKE", 
+    "_rques_consult" => null,
+    "_examen_consult" => null,
+    //"_traitement_consult" => null,
+    "conclusion" => "LIKE",
   ),
   "CSejour" => array(
     "type" => "=", 
     "convalescence" => "LIKE", 
-    "rques" => "LIKE",
-    "entree_reelle" => null,
-    "sortie_reelle" => null,
+    "_rques_sejour" => null,
+    "entree" => null,
+    "sortie" => null,
+    "libelle" => "LIKE",
   ),
   "COperation" => array(
     "materiel" => "LIKE", 
     "examen" => "LIKE", 
     //"rques" => "LIKE",
-    "libelle" => "LIKE",
-    "codes_ccam" => "LIKE",
+    "_libelle_interv" => null,
+    "codes_ccam" => null,
+    "_rques_interv" => null,
   ),
 );
 
@@ -64,6 +80,22 @@ foreach($fields as $_class => $_fields) {
   }
 }
 
+
+$sejour_data = $data["CSejour"];
+if (!empty($sejour_data["entree"]) || !empty($sejour_data["sortie"])) {
+  if (!empty($sejour_data["entree"])) {
+    $where[] = "sejour.entree >=  '{$sejour_data['entree']}'";
+    $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
+                plagesop.date >= '{$sejour_data['entree']}'";
+  }
+  
+  if (!empty($sejour_data["sortie"])) {
+    $where[] = "sejour.entree <  '{$sejour_data['sortie']}'";
+    $where[] = "operations.date  < '{$sejour_data['sortie']}' OR 
+                plagesop.date < '{$sejour_data['sortie']}'";
+  }
+}
+
 // CPatient ---------------------------
 if (!empty($data["CPatient"]["_age_min"])) {
   $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data['CPatient']['_age_min']}";
@@ -74,39 +106,27 @@ if (!empty($data["CPatient"]["_age_max"])) {
   //$where[] = "patients.naissance > '".mbDate("-".$data["CPatient"]["_age_max"]. "YEARS")."'";
 }
 
-// CDossierMedical ---------------------------
-$dm_data = $data["CDossierMedical"];
-if (!empty($dm_data["codes_cim"])) {
-  $codes = preg_split("/[\s,]+/", $dm_data["codes_cim"]);
-  
-  $where_code = array();
-  foreach($codes as $_code) {
-    $where_code[] = "dossier_medical.codes_cim ".$ds->prepareLike("%$_code%");
-  }
-  
-  $where[] = implode(" AND ", $where_code);
-}
+// CAntecedent ---------------------------
+$dm_data = $data["CAntecedent"];
 $where[] = "
   dossier_medical.object_class = 'CPatient' OR
   dossier_medical.dossier_medical_id IS NULL
 ";
 
+
+// CConsultation ---------------------------
+$consult_data = $data["CConsultation"];
+if (!empty($consult_data["_rques_consult"])) {
+  $where["consultation.rques"] = $ds->prepareLike("%{$consult_data['_rques_consult']}%");
+}
+if (!empty($consult_data["_examen_consult"])) {
+  $where["consultation.examen"] = $ds->prepareLike("%{$consult_data['_examen_consult']}%");
+}
+
+
 // CSejour ----------------------------
-$sejour_data = $data["CSejour"];
-if (!empty($sejour_data["entree_reelle"]) || !empty($sejour_data["sortie_reelle"])) {
-  if (!empty($sejour_data["entree_reelle"])) {
-    $where[] = "
-      sejour.entree_reelle >  '{$sejour_data['entree_reelle']}' OR
-      sejour.entree_reelle <= '{$sejour_data['entree_reelle']}' AND sejour.sortie_reelle > '{$sejour_data['entree_reelle']}'
-    ";
-  }
-  
-  if (!empty($sejour_data["sortie_reelle"])) {
-    $where[] = "
-      sejour.sortie_reelle <  '{$sejour_data['sortie_reelle']}' OR
-      sejour.sortie_reelle >= '{$sejour_data['sortie_reelle']}' AND sejour.entree_reelle < '{$sejour_data['sortie_reelle']}'
-    ";
-  }
+if (!empty($sejour_data["_rques_sejour"])) {
+  $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
 }
 
 // COperations ---------------------------
@@ -121,17 +141,38 @@ if (!empty($interv_data["codes_ccam"])) {
   
   $where[] = implode(" AND ", $where_code);
 }
+if (!empty($interv_data["_rques_interv"])) {
+  $where["operations.rques"] = $ds->prepareLike("%{$interv_data['_rques_interv']}%");
+}
+if (!empty($interv_data["_libelle_interv"])) {
+  $where["operations.libelle"] = $ds->prepareLike("%{$interv_data['_libelle_interv']}%");
+}
+$where["operations.chir_id"] = "= '$user_id'";
+$where["operations.annulee"] = "= '0'";
 
+//mbTrace($where);
+
+$ljoin["consultation"] = "consultation.patient_id = patients.patient_id";
 $ljoin["sejour"] = "sejour.patient_id = patients.patient_id";
 $ljoin["dossier_medical"] = "dossier_medical.object_id = patients.patient_id";
+$ljoin["antecedent"] = "antecedent.dossier_medical_id = dossier_medical.dossier_medical_id";
+$ljoin["traitement"] = "traitement.dossier_medical_id = dossier_medical.dossier_medical_id";
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
-$list_patient = $patient->loadList($where, "patients.nom, patients.prenom", 50, "patients.patient_id", $ljoin);
-$count_patient = $patient->countList($where, null, null, null, $ljoin);
+$list_patient = array();
+$count_patient = array();
+
+if ($one_field) {
+  $list_patient = $patient->loadList($where, "patients.nom, patients.prenom", "$start,30", "patients.patient_id", $ljoin);
+  $count_patient = count($patient->countMultipleList($where, null, null, "patients.patient_id", $ljoin));
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("one_field", $one_field);
+$smarty->assign("start", $start);
+$smarty->assign("user_id", $user_id);
 $smarty->assign("list_patient", $list_patient);
 $smarty->assign("count_patient", $count_patient);
 $smarty->display("inc_recherche_dossier_clinique_results.tpl");

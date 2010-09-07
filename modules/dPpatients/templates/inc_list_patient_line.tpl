@@ -9,7 +9,7 @@
     </a>
   </td>
   {{else}}
-  <td class="text">
+  <td>
     <div style="float:right;">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
     </div>
@@ -24,18 +24,18 @@
     </a>
     
   </td>
-  <td class="text">
+  <td>
   	<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
       {{mb_value object=$_patient field="naissance"}}
   	</span>
   </td>
   <td class="text">
-    {{$_patient->adresse|spancate:30}} -
-    {{$_patient->cp}}
-    {{$_patient->ville|spancate:20}}
+    <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}} - </span>
+    <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
   </td>
   <td>
-    <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" title="Afficher le dossier complet">
+    <a class="button search notext" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$_patient->_id}}" 
+       title="Afficher le dossier complet" style="margin: -1px;">
       {{tr}}Show{{/tr}}
     </a>
   </td>

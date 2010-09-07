@@ -20,6 +20,10 @@ define("UI_MSG_ERROR"  , 4);
  */
 class CAppUI {
   static $instance = null;
+  
+  /** 
+   * @var CMediusers
+   */
   static $user = null;
   
   var $user_id = 0;

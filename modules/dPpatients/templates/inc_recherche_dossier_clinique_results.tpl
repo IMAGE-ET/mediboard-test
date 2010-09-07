@@ -14,13 +14,15 @@
   </div>
 {{else}}
 
-<h3>{{$count_patient}} dossiers trouvés (50 affichés)</h3>
+{{mb_include module=system template=inc_pagination 
+     total=$count_patient change_page="changePage" step=30 current=$start}}
 
 <table class="main tbl">
   <tr>
     <th></th>
-    <th>{{mb_title class=CPatient field=naissance}}</th>
+    <th style="width: 1%;">{{mb_title class=CPatient field=naissance}}</th>
     <th>{{mb_title class=CPatient field=adresse}}</th>
+    <th style="width: 1%;"></th>
   </tr>
     
   {{foreach from=$list_patient item=_patient}}
@@ -36,6 +38,15 @@
         {{$_patient->cp}}
         {{$_patient->ville|spancate:20}}
       </td>
+      <td>
+        <button type="button" class="search notext" onclick="Patient.view({{$_patient->_id}})" style="margin: -1px;">
+          Dossier complet
+        </button>
+      </td>
+    </tr>
+  {{foreachelse}}
+    <tr>
+      <td colspan="4">Aucun dossier</td>
     </tr>
   {{/foreach}}
 </table>
