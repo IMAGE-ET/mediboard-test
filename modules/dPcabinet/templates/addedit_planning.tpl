@@ -419,7 +419,7 @@ Main.add(function () {
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
-            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
+            <button class="print" type="button" {{if !$consult->patient_id}}disabled="disabled"{{/if}}onclick="printForm();">{{tr}}Print{{/tr}}</button>
           {{else}}
             <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}
