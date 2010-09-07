@@ -111,7 +111,7 @@ if ($file_id = CValue::get("file_id")) {
 //      $finUrl .= "&fltr[]=usm";
       header("Location: lib/phpThumb/phpThumb.php?src=$file->_file_path".$finUrl);
       //header("Location: images/pictures/acroread.png");
-    } elseif (in_array(substr(strrchr($file->file_name, '.'),1), $file_types)) {
+    } /*elseif (in_array(substr(strrchr($file->file_name, '.'),1), $file_types)) {
       if($hp){$finUrl.="&h=$hp";}
       if($wl){$finUrl.="&w=$wl";}
       if($h){$finUrl.="&h=$h";}
@@ -133,7 +133,7 @@ if ($file_id = CValue::get("file_id")) {
       else {
         header("Location: images/pictures/medifile.png");
       }
-    }/*elseif(strpos($file->file_type, "csv") !== false) {
+    }*//*elseif(strpos($file->file_type, "csv") !== false) {
       header("Location: images/pictures/spreadsheet.png");
     } elseif(strpos($file->file_type, "xls") !== false) {
       header("Location: images/pictures/spreadsheet.png");
