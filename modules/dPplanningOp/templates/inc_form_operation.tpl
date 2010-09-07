@@ -47,7 +47,7 @@ CCAMSelector.init = function(){
 {{if $op->_id && $op->_ref_sejour->sortie_reelle && !$modules.dPbloc->_can->edit}}
 <!-- <input type="hidden" name="_locked" value="1" /> -->
 {{/if}}
-{{mb_field object=$op field="sejour_id" hidden=0 canNull=true}}
+{{mb_field object=$op field="sejour_id" hidden=1 canNull=true}}
 {{mb_field object=$op field="commande_mat" hidden=1}}
 {{mb_field object=$op field="rank" hidden=1}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
