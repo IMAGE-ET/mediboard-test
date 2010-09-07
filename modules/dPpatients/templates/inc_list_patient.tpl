@@ -30,6 +30,17 @@
 	    url.redirect();
 	  }
 	}
+  
+  window.checkedMerge = [];
+  checkOnlyTwoSelected = function(checkbox) {
+    checkedMerge = checkedMerge.without(checkbox);
+    
+    if (checkbox.checked)
+      checkedMerge.push(checkbox);
+    
+    if (checkedMerge.length > 2)
+      checkedMerge.shift().checked = false;
+  }
 	</script>
 {{/if}}
 

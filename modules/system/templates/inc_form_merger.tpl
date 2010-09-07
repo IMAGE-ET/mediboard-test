@@ -27,7 +27,9 @@ var emptyObjectField = '<div class="object readonly">';
 emptyObjectField += '<input type="hidden" name="objects_id[%KEY]" value="%ID" />';
 emptyObjectField += '<input type="text" size="40" name="objects_view[%KEY]" readonly="readonly" value="%VIEW" ondblclick="ObjectSelector.init(%KEY)" />';
 emptyObjectField += '<button type="button" onclick="ObjectSelector.init(%KEY)" class="search notext">{{tr}}Search{{/tr}}</button>';
-emptyObjectField += '<button type="button" onclick="this.up().remove();" class="remove notext">{{tr}}Remove{{/tr}}</button>';
+{{if !$alternative_mode}}
+  emptyObjectField += '<button type="button" onclick="this.up().remove();" class="remove notext">{{tr}}Remove{{/tr}}</button>';
+{{/if}}
 emptyObjectField += '</div>';
 var key = 0;
 
@@ -80,7 +82,11 @@ Main.add(function() {
         <button type="submit" class="hslip">{{tr}}Comparer{{/tr}}</button>
       </td>
       <th />
-      <td><button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button></td>
+      <td>
+        {{if !$alternative_mode}}
+          <button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button>
+        {{/if}}
+      </td>
     </tr>
  </table>
 </form>

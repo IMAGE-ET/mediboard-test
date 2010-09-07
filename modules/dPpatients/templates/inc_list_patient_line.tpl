@@ -1,6 +1,9 @@
 <tr {{if $patient->_id == $_patient->_id}}class="selected"{{/if}}>
   {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
-  <td style="text-align: center;"><input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" /></td>
+    <td style="text-align: center;">
+      <input type="checkbox" name="objects_id[]" value="{{$_patient->_id}}" class="merge"
+             {{if $dPconfig.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
+    </td>
   {{/if}}
   {{if $_patient->vip && $can->admin}}
   <td class="text" colspan="4">
