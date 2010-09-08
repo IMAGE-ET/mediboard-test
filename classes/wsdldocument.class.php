@@ -106,7 +106,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $definitions->appendChild($partie6);
     
     $binding = $this->addElement($definitions, "binding");
-    $this->addAttribute($binding, "name", "MediboardBinding");
+    $this->addAttribute($binding, "name", "typens:MediboardBinding");
     $this->addAttribute($binding, "type", "typens:MediboardPort");
     
     $soap = $this->addElement($binding, "soap:binding", null, "http://schemas.xmlsoap.org/wsdl/soap/");
