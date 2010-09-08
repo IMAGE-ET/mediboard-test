@@ -1397,6 +1397,8 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - téléphone autre"   , $this->tel_autre  );
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
+    $template->addProperty("Patient - Qualité bénéficiaire", $this->qual_beneficiaire);
+    $template->addProperty("Patient - Numéro de sécurité sociale", $this->matricule);
     $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
     $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
     
