@@ -18,13 +18,13 @@
 
 <table class="main">
   <tr>
-    <td style="width:30%" rowspan="5">
+    <td style="width:30%" rowspan="6">
       <a class="button new" href="?m=hprimxml&amp;tab=vw_idx_dest_hprim&amp;dest_hprim_id=0">
       	{{tr}}CDestinataireHprim-title-create{{/tr}}
       </a>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="5">{{tr}}CDestinataireHprim{{/tr}}</th>
+          <th class="title" colspan="6">{{tr}}CDestinataireHprim{{/tr}}</th>
         </tr>
         <tr>
           <th>{{mb_title object=$dest_hprim field="nom"}}</th>
@@ -32,6 +32,7 @@
           <th>{{mb_title object=$dest_hprim field="type"}}</th>
 					<th>{{mb_title object=$dest_hprim field="message"}}</th>
           <th>{{mb_title object=$dest_hprim field="actif"}}</th>
+          <th>{{mb_title object=$dest_hprim field="register"}}</th>
         </tr>
         {{foreach from=$listDestHprim item=_dest_hprim}}
         <tr {{if $_dest_hprim->_id == $dest_hprim->_id}}class="selected"{{/if}}>
@@ -44,6 +45,7 @@
           <td>{{mb_value object=$_dest_hprim field="type"}}</td>
 					<td>{{mb_value object=$_dest_hprim field="message"}}</td>
           <td>{{mb_value object=$_dest_hprim field="actif"}}</td>
+          <td>{{mb_value object=$_dest_hprim field="register"}}</td>
         </tr>
         {{/foreach}}
       </table>
@@ -100,6 +102,10 @@
         <tr>
           <th>{{mb_label object=$dest_hprim field="actif"}}</th>
           <td>{{mb_field object=$dest_hprim field="actif"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$dest_hprim field="register"}}</th>
+          <td>{{mb_field object=$dest_hprim field="register"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

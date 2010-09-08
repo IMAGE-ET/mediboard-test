@@ -21,6 +21,7 @@ class CDestinataireHprimConfig extends CMbObject {
   var $type_sej_chimio    = null;
   var $type_sej_dialyse   = null;
   var $receive_ack        = null;
+  var $send_all_patients  = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,6 +43,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $specs["type_sej_chimio"]    = "str";
     $specs["type_sej_dialyse"]   = "str";
     $specs["receive_ack"]        = "bool default|1";
+    $specs["send_all_patients"]  = "bool default|1";
     
     return $specs;
   }

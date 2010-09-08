@@ -230,9 +230,19 @@ class CSetuphprimxml extends CSetup {
              ADD `receive_ack` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($sql);
     
+    $this->makeRevision("0.21");
+    
+    $sql = "ALTER TABLE `destinataire_hprim_config` 
+             ADD `send_all_patients` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `destinataire_hprim` 
+             ADD `register` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($sql);
+    
     // Prochain upgrade supprimer les champs : destinataire et emetteur
     
-    $this->mod_version = "0.21";
+    $this->mod_version = "0.22";
   }
 }
 

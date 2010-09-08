@@ -32,10 +32,6 @@ class CColorLibelleSejour extends CMbObject {
     $specs["color"]   = "str length|6";
     return $specs;
   }
-
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-  }
 	
 	function updateFormFields() {
 		parent::updateFormFields();

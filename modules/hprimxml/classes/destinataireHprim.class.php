@@ -32,6 +32,7 @@ class CDestinataireHprim extends CMbObject {
   var $type      = null;
 	var $message   = null;
   var $actif     = null;
+  var $register  = null;
 	
   // Forward references
   var $_ref_group             = null;
@@ -58,6 +59,7 @@ class CDestinataireHprim extends CMbObject {
     $specs["type"]      = "enum notNull list|cip|sip default|cip";
 		$specs["message"]   = "enum list|pmsi|patients|stock default|patient";
     $specs["actif"]     = "bool notNull";
+    $specs["register"]  = "bool notNull default|1";
     
     $specs["_tag_patient"]   = "str";
     $specs["_tag_sejour"]    = "str";
@@ -68,6 +70,8 @@ class CDestinataireHprim extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
+    $backProps['emetteurs'] = "CEchangeHprim emetteur_id";
+    $backProps['destinataires'] = "CEchangeHprim destinataire_id";
     
     return $backProps;
   }
@@ -100,6 +104,11 @@ class CDestinataireHprim extends CMbObject {
   function register($idClient) {
     $this->nom = $idClient;
     $this->loadMatchingObject();
+    
+    // Enregistrement automatique d'un destinataire
+    if (!$this->_id) {
+
+    }
   }
 }
 
