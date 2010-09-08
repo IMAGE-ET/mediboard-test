@@ -123,15 +123,15 @@
                     </span>
                   
                     <span {{if $curr_field.db.unsigned != $curr_field.object.db_spec.unsigned}}class="warning"{{/if}}>
-                      {{if $curr_field.db.unsigned}}UNSIGNED{{else}}&nbsp;{{/if}}
+                      {{if $curr_field.db.unsigned}}UNSIGNED{{/if}}
                     </span>
                     
                     <span {{if $curr_field.db.zerofill != $curr_field.object.db_spec.zerofill}}class="warning"{{/if}}>
-                      {{if $curr_field.db.zerofill}}ZEROFILL{{else}}&nbsp;{{/if}}
+                      {{if $curr_field.db.zerofill}}ZEROFILL{{/if}}
                     </span>
                     
                     <span {{if $curr_field.db.null != $curr_field.object.db_spec.null}}class="warning"{{/if}}>
-                      {{if !$curr_field.db.null}}NOT NULL{{else}}&nbsp;{{/if}}
+                      {{if !$curr_field.db.null}}NOT NULL{{/if}}
                     </span>
   
                   {{else}}

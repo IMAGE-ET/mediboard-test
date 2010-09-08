@@ -128,7 +128,7 @@ foreach ($list_selected_classes as $curr_class_name) {
           $default = "NULL";
         }
         else if ($spec->default !== null) {
-          $default = "'{$spec->default}'";
+          $default = "{$spec->default}";
         }
       }
       
@@ -300,7 +300,7 @@ function get_query_for_class($class, $errors = array()) {
          ($spec_obj['unsigned'] ? ' UNSIGNED' : '').
          ($spec_obj['zerofill'] ? ' ZEROFILL' : '').
          ($spec_obj['null']     ? '' : ' NOT NULL').
-         ($spec_obj['default'] !== null ? " DEFAULT {$spec_obj['default']}" : '').
+         ($spec_obj['default'] !== null ? " DEFAULT '{$spec_obj['default']}'" : '').
          ($spec_obj['extra']    ? " {$spec_obj['extra']}" : '').
          (($name == $class['key']) ? ' PRIMARY KEY' : '');
     }
