@@ -7,6 +7,12 @@
 * @author Romain Ollivier
 */
 
+// we don't allow anybody to change his user type or profile
+if (!CAppUI::$user->isAdmin() && !CModule::getCanDo("admin")->admin) {
+  unset($_POST['_user_type']);
+  unset($_POST['_profile_id']);
+}
+
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");

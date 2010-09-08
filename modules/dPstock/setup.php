@@ -600,6 +600,8 @@ class CSetupdPstock extends CSetup {
     
     $this->makeRevision("1.28");
     
+    // @todo ce callback pourra etre supprimé, car devenu inutile
+    // (toutes les cliniques l'ont passé et a l'install il n'existe aucune commande)
     function updateOrdersReceivedStatus() {
       $order = new CProductOrder;
       
