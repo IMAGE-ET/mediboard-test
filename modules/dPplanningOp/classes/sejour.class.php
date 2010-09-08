@@ -1066,6 +1066,7 @@ class CSejour extends CCodable {
     parent::loadComplete();
     foreach ($this->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
+      $operation->_ref_chir->loadRefsFwd();
     }
     foreach ($this->_ref_affectations as &$affectation) {
       $affectation->loadRefLit();

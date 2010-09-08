@@ -125,104 +125,54 @@
         </tr>
         
         <tr>
-          <th>Entrée en salle</th>
-          <td class="halfPane">
-            {{if $operation->entree_salle}}
-              {{$operation->entree_salle|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=debut_prepa_preop}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=debut_prepa_preop}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$operation field=fin_prepa_preop}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=fin_prepa_preop}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$operation field=entree_salle}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=entree_salle}}</td>
         </tr>
         <tr>
-          <th>Debut d'induction</th>
-          <td class="halfPane">
-            {{if $operation->induction_debut}}
-              {{$operation->induction_debut|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=induction_debut}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=induction_debut}}</td>
         </tr>
         <tr>
-          <th>Fin d'induction</th>
-          <td class="halfPane">
-            {{if $operation->induction_fin}}
-              {{$operation->induction_fin|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=induction_fin}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=induction_fin}}</td>
         </tr>
         <tr>
-          <th>Pose du garrot</th>
-          <td class="halfPane">
-            {{if $operation->pose_garrot}}
-              {{$operation->pose_garrot|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=pose_garrot}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=pose_garrot}}</td>
         </tr>
         <tr>
-          <th>Début de l'intervention</th>
-          <td class="halfPane">
-            {{if $operation->debut_op}}
-              {{$operation->debut_op|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=debut_op}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=debut_op}}</td>
         </tr>
         <tr>
-          <th>Fin de l'intervention</th>
-          <td class="halfPane">
-            {{if $operation->fin_op}}
-              {{$operation->fin_op|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=fin_op}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=fin_op}}</td>
         </tr>
         <tr>
-          <th>Retrait du garrot</th>
-          <td class="halfPane">
-            {{if $operation->retrait_garrot}}
-              {{$operation->retrait_garrot|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=retrait_garrot}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=retrait_garrot}}</td>
         </tr>
         <tr>
-          <th>Sortie de salle</th>
-          <td class="halfPane">
-            {{if $operation->sortie_salle}}
-              {{$operation->sortie_salle|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=sortie_salle}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=sortie_salle}}</td>
         </tr>
         <tr>
-          <th>Entrée salle réveil</th>
-          <td class="halfPane">
-            {{if $operation->entree_reveil}}
-              {{$operation->entree_reveil|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=entree_reveil}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=entree_reveil}}</td>
         </tr>
         <tr>
-          <th>Sortie salle de réveil</th>
-          <td class="halfPane">
-            {{if $operation->sortie_reveil}}
-              {{$operation->sortie_reveil|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=sortie_reveil}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=sortie_reveil}}</td>
         </tr>
       </table>    
       
@@ -231,24 +181,12 @@
           <th class="category" colspan="2">Durées</th>
         </tr>
         <tr>
-          <th>Présence en salle</th>
-          <td class="halfPane">
-            {{if $operation->_presence_salle}}
-              {{$operation->_presence_salle|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=_presence_salle}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=_presence_salle}}</td>
         </tr>
         <tr>
-          <th>Durée d'intervention</th>
-          <td class="halfPane">
-            {{if $operation->_duree_interv}}
-              {{$operation->_duree_interv|date_format:$dPconfig.time}}
-            {{else}}
-            &mdash;
-            {{/if}}
-          </td>
+          <th>{{mb_label object=$operation field=_duree_interv}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=_duree_interv}}</td>
         </tr>
       </table>      
     </td>

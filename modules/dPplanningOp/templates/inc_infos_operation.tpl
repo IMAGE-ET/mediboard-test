@@ -1,12 +1,20 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-printFiche = function(consultation_id) {
+printFicheAnesth = function(consultation_id, operation_id) {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_fiche"); 
   url.addParam("consultation_id", consultation_id);
-  url.popup(700, 500, "printFiche");
+  url.addParam("operation_id", operation_id);
+  url.popup(700, 500, "printFicheAnesth");
 }
+
+printFicheBloc = function(operation_id) {
+    var url = new Url;
+    url.setModuleAction("dPsalleOp", "print_feuille_bloc"); 
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheBloc");
+  }
 </script>
 
 {{if $sejour->_canRead}}
@@ -14,7 +22,7 @@ printFiche = function(consultation_id) {
 	  <tr>
 	    <th class="title" colspan="4">
 	      {{if $sejour->_ref_consult_anesth->_id && !$sejour->_ref_consult_anesth->operation_id}}
-	        <button style="float: right" class="print" type="button" onclick="printFiche('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche</button>
+	        <button style="float: right" class="print" type="button" onclick="printFiche('{{$sejour->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche d'anesthésie</button>
 	      {{/if}}
 	      {{tr}}CSejour-back-operations{{/tr}}
 	    </th>
@@ -28,9 +36,7 @@ printFiche = function(consultation_id) {
 	  {{foreach from=$sejour->_ref_operations item=_operation name=operation}}
 	  <tr>
 	    <td>
-	      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
-	        {{$_operation->_ref_chir->_view}}
-	      </a>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
 	    </td>
 	    <td>{{$_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
 	    {{if $_operation->annulee}}
@@ -42,9 +48,9 @@ printFiche = function(consultation_id) {
 	    	{{mb_include module=dPplanningOp template=inc_vw_operation}}
 	    </td>
 	    <td style="width: 1%;">
-	      {{if $_operation->_ref_consult_anesth->_id}}
-	        <button class="print" type="button" onclick="printFiche('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">Fiche</button>
-	      {{/if}}
+	      <button class="print" style="width:11em;" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">Fiche d'anesthésie</button>
+        <br />
+        <button class="print" style="width:11em;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">Feuille de bloc</button>
 	    </td>
 	    {{/if}}
 	  </tr>

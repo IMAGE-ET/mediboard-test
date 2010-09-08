@@ -19,10 +19,52 @@ $print = CValue::getOrSession("print", false);
 $today = mbDate();
 
 $consultation_id = CValue::get("consultation_id");
+$operation_id    = CValue::get("operation_id");
 $offline = CValue::get("offline");
 
 // Consultation courante
 $consult = new CConsultation();
+
+if(!$consultation_id) {
+
+  $selOp = new COperation();
+  $selOp->load($operation_id);
+  $selOp->loadRefsFwd();
+  $selOp->_ref_sejour->loadRefsFwd();
+  $selOp->_ref_sejour->loadRefsConsultAnesth();
+  $selOp->_ref_sejour->_ref_consult_anesth->loadRefsFwd();
+  
+  $patient = new CPatient();
+  $patient = $selOp->_ref_sejour->_ref_patient;
+  $patient->loadRefsConsultations();
+  
+  // Chargement des praticiens
+  $listAnesths = new CMediusers;
+  $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+  
+  foreach ($patient->_ref_consultations as $consultation) {
+    $consultation->loadRefConsultAnesth();
+    $consult_anesth =& $consultation->_ref_consult_anesth;
+    if ($consult_anesth->_id) {
+      $consultation->loadRefPlageConsult();
+      $consult_anesth->loadRefOperation();
+    }
+  }
+  
+  $onSubmit = "return onSubmitFormAjax(this, { onComplete : function() {window.opener.loadSejour.defer(".$selOp->_ref_sejour->_id."); window.close();} })";
+
+  $smarty = new CSmartyDP("modules/dPcabinet");
+  
+  $smarty->assign("selOp"      , $selOp);
+  $smarty->assign("patient"    , $patient);
+  $smarty->assign("listAnesths", $listAnesths);
+  $smarty->assign("onSubmit"   , $onSubmit);
+
+  $smarty->display("inc_choose_dossier_anesth.tpl");
+  
+  return;
+}
+
 if ($consultation_id) {
   $consult->load($consultation_id);
   $consult->loadRefsDocs();
