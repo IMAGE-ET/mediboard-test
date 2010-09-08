@@ -43,6 +43,7 @@ $ljoin["doc_categories"] = "doc_ged.doc_categorie_id = doc_categories.doc_catego
 
 $group = "doc_ged.doc_ged_id";
 if ($sort_by == 'ref') {
+	$sort_way = "ASC";
   if(CAppUI::conf("dPqualite CDocGed _reference_doc")) {
     $sort_by = $group = "doc_categories.code, doc_chapitre_id, doc_ged.num_ref";
   } else {
@@ -50,13 +51,20 @@ if ($sort_by == 'ref') {
   }
 }
 else {
-	$sort_by = "doc_ged_suivi.$sort_by";
+	// Tri par date
+	$sort_way = "DESC";
+	$sort_by = " doc_ged_suivi.$sort_by";
+	$where[] = "date >= (SELECT max(date) FROM doc_ged_suivi d1 WHERE d1.doc_ged_id = doc_ged.doc_ged_id AND actif = '1')";
 }
 
 $procedure = new CDocGed;
+
+
 $list_procedures = $procedure->loadList($where, "$sort_by $sort_way", "$first,20", $group, $ljoin);
+
+ 
 foreach($list_procedures as &$curr_proc){
-  $curr_proc->loadRefs();
+	$curr_proc->loadRefs();
   $curr_proc->loadLastActif();
 }
 
