@@ -171,11 +171,24 @@ abstract class CMbString {
       chr(147) => '&#8220;',
       chr(148) => '&#8221;',
       chr(150) => '&#8211;',
-      chr(151) => '&#8212;'
+      chr(151) => '&#8212;',
     );
     
     $string = htmlentities($string);
     return strtr($string, $ent);
   }
+	
+	/**
+	 * Remove a token in the string
+	 * @param string $string The string to reduce
+	 * @param string $glue Implode/explode like glue
+	 * @param string $token Token ton remove
+	 * @return string
+	 */
+	static function removeToken($string, $glue, $token) {
+		$tokens = explode($glue, $string);
+		CMbArray::removeValue($token, $tokens);
+		return implode($glue, $tokens);
+	}
 }
 ?>
