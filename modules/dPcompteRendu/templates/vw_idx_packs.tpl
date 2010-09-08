@@ -238,7 +238,6 @@ Main.add(function () {
             <input type="hidden" name="dosql" value="do_pack_aed" />
             {{mb_key object=$pack}}
             <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
             <input type="hidden" name="_del" value="{{$key_modele}}" />
             <button class="trash notext" type="submit">{{tr}}Delete{{/tr}}</button>
           </form>

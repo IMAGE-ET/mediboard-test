@@ -18,7 +18,6 @@ class CPack extends CMbObject {
 
   // DB fields
   var $nom           = null;
-  var $modeles       = null;
   var $object_class  = null;
   
   // Form fields
@@ -48,7 +47,6 @@ class CPack extends CMbObject {
     $specs["function_id"]  = "ref class|CFunctions";
     $specs["group_id"]     = "ref class|CGroups";
     $specs["nom"]          = "str notNull confidential";
-    $specs["modeles"]      = "text";
     $specs["object_class"] = "enum notNull list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation";
     $specs["_owner"]       = "enum list|user|func|etab";
     return $specs;
@@ -68,36 +66,23 @@ class CPack extends CMbObject {
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
     
-  	$this->_modeles = array();
+  	$modeletopack = new CModeleToPack;
+  	$modeles = $modeletopack->loadAllModelesFor($this->_id);
+    
     $this->_source = "";
-    if($this->modeles != "") {
-      $modeles = explode("|", $this->modeles);
-      foreach ($modeles as $value) {
-        $this->_modeles[$value] = new CCompteRendu;
-        $this->_modeles[$value]->load($value);
-        $this->_modeles[$value]->loadContent();
+    if(count($modeles) > 0) {
+      foreach ($modeles as $key=>$value) {
+        $this->_modeles[$value->modele_id] = new CCompteRendu;
+        $this->_modeles[$value->modele_id]->load($value->modele_id);
+        $this->_modeles[$value->modele_id]->loadContent();
         if (!$this->_object_class)
-          $this->_object_class = $this->_modeles[$value]->object_class;
+          $this->_object_class = $this->_modeles[$value->modele_id]->object_class;
       }
-      
       $this->_source = implode('<hr class="pagebreak" />', CMbArray::pluck($this->_modeles, "_source"));   
     }
+
     if (!$this->_object_class)
       $this->_object_class = "COperation";
-  }
-  
-  function updateDBFields() {
-    if ($this->_new !== null) {
-      $this->updateFormFields();
-      $this->_modeles[$this->_new] = new CCompteRendu;
-      $this->_modeles[$this->_new]->load($this->_new);
-      $this->modeles = implode("|", array_keys($this->_modeles));
-    }
-    if ($this->_del !== null) {
-      $this->updateFormFields();
-      unset($this->_modeles[$this->_del]);
-      $this->modeles = implode("|", array_keys($this->_modeles));
-    }
   }
   
   /**

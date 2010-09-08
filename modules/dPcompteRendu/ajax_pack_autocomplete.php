@@ -21,7 +21,7 @@ $where[] = "(
   pack.function_id = '$function_id' OR 
   pack.group_id = '$group_id'
 )";
-$where[] = "(pack.modeles IS NOT NULL AND pack.modeles != '')"; 
+$where[] = "pack.pack_id IN ( SELECT pack_id FROM modele_to_pack)";
 
 $order = "nom";
 

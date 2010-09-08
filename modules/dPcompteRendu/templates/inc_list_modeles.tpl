@@ -2,7 +2,6 @@
   {{mb_key object=$pack}}
   <input type="hidden" name="dosql" value="do_pack_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
   <label for="_new" title="{{tr}}CCompteRendu.select{{/tr}}" />
   <select name="_new" class="notNull ref" onchange="this.form.submit()" style="width: 20em;">
     <option value="">&mdash; {{tr}}CCompteRendu.select{{/tr}}</option>

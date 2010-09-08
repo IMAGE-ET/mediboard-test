@@ -420,8 +420,59 @@ class CSetupdPcompteRendu extends CSetup {
 
 		$sql = "UPDATE `aide_saisie` SET `field` = '_source' WHERE `class` = 'CCompteRendu' AND `field` = 'source'";
 		$this->addQuery($sql);
+    
+		$this->makeRevision("0.55");
+		
+		$sql = "CREATE TABLE `modele_to_pack` (
+              `modele_to_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `modele_id` INT (11) UNSIGNED,
+              `pack_id` INT (11) UNSIGNED
+					 ) TYPE=MYISAM;";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `modele_to_pack` 
+              ADD INDEX (`modele_id`),
+              ADD INDEX (`pack_id`);
+           ";
+		$this->addQuery($sql);
+		
+   
+		// Insertion des modèles par référence pour les packs
+		function setup_addmodeles() {
+			$ds = CSQLDataSource::get("std");
+		  $sql = "SELECT * from pack;";	
+	    $packs = $ds->loadList($sql);
 
-		$this->mod_version = "0.55";
+	    foreach($packs as $_pack) {
+	    	if ($_pack['modeles'] == '') continue;
+	    	
+	    	$modeles = explode("|", $_pack['modeles']);
+	    	$compterendu = new CCompteRendu;
+
+    		foreach($modeles as $_modele) {
+    			if (!$compterendu->load($_modele)) continue;
+
+    			$modeletopack = new CModeleToPack;
+          $modeletopack->modele_id = $_modele;
+          $modeletopack->pack_id = $_pack['pack_id'];
+          
+          if ($msg = $modeletopack->store()) {
+          	CAppUI::setMsg( $msg, UI_MSG_ALERT);
+          }
+    		}
+	    }
+	    return true;
+		}
+		
+		$this->addFunction("setup_addmodeles");
+		
+		$this->makeRevision("0.56");
+		
+    $sql = "ALTER TABLE `pack`
+              DROP `modeles`";
+    $this->addQuery($sql);
+    
+		$this->mod_version = "0.57";
 
 
   }
