@@ -152,7 +152,7 @@ class CWsdlDocument extends CMbXMLDocument {
     $service->appendChild($partie8);
     $port = $this->addElement($service, "port");
     $this->addAttribute($port, "name", "MediboardPort");
-    $this->addAttribute($port, "binding", "MediboardBinding");
+    $this->addAttribute($port, "binding", "typens:MediboardBinding");
     
     $soapaddress = $this->addElement($port, "soap:address", null, "http://schemas.xmlsoap.org/wsdl/soap/");
     $this->addAttribute($soapaddress, "location", CApp::getBaseUrl()."/index.php?login=1&username=$username&password=$password&m=$module&a=$tab&suppressHeaders=1");
