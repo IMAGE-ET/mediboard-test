@@ -1,273 +1,15 @@
+
+{{mb_include_script module=dPcabinet script=intubation}}
+
 <script type="text/javascript">
-function verifIntubDifficileAndSave(oForm){
-  if(oForm.mallampati[2].checked || oForm.mallampati[3].checked
-    || oForm.bouche[0].checked || oForm.bouche[1].checked
-    || oForm.distThyro[0].checked){
-  
-    // Avertissement d'intubatino difficile
-    $('divAlertIntubDiff').style.visibility = "visible";
-  }else{
-    $('divAlertIntubDiff').style.visibility = "hidden";
-  }
-  
-  submitFormAjax(oForm, 'systemMsg');
-  
-  for (var i = 0; i < 4; i++) {
-    var o = oForm.mallampati[i];
-    var bg = $('mallampati_bg_classe'+(i+1));
-    
-    if (o.checked) {
-      bg.addClassName('mallampati-selected');
-    }
-    else {
-      bg.removeClassName('mallampati-selected');
-    }
-  }
-}
-
-var SchemaDentaire = {
-  sId: null,
-  oListEtats: {{$list_etat_dents|@json}},
-  aStates: null,
-  fAlpha: 0.5,
-  iSelectedDent: null,
-  aDentsId: null,
-	sPaint: null,
-  aDentsNumbers: [
-    // Adulte
-    10,
-    11, 12, 13, 14, 15, 16, 17, 18, // haut droite
-    21, 22, 23, 24, 25, 26, 27, 28, // haut gauche
-    30,
-    31, 32, 33, 34, 35, 36, 37, 38, // bas gauche
-    41, 42, 43, 44, 45, 46, 47, 48, // bas droite
-    
-    // Enfant
-    50,
-    51, 52, 53, 54, 55, // haut droite
-    61, 62, 63, 64, 65, // haut gauche
-    70,
-    71, 72, 73, 74, 75, // bas gauche
-    81, 82, 83, 84, 85  // bas droite
-  ],
-  
-  initialize: function(id, states) {
-    // Class attributes
-    this.sId = id;
-    this.aStates = states;
-    
-    // Elements
-    var oSchema = $(this.sId),
-		    oMap = $(this.sId+"-map"),
-				oImage = $(this.sId+"-image");
-				
-    oSchema.addClassName('schema-dentaire');
-    
-    if (true || Prototype.Browser.Gecko || Prototype.Browser.WebKit) {
-    // Clone the image's size to the container
-    var img = new Image();
-    img.src = oImage.src;
-
-    if (img.width != 0) {
-      oSchema.setStyle({width: img.width+'px'});
-    } else {
-      oSchema.setStyle({width: '407px'});
-    }
-    
-    // Menu initialization
-    var oMenu = new Element('div', {id: this.sId+'-menu'}).addClassName('dent-menu'),
-		    oLegend = new Element('div', {id: this.sId+'-legend'}).addClassName('dent-legend');
-    
-    // Buttons initialization
-    var oActions = new Element('div').addClassName('dent-buttons'),
-		    oButton = new Element('a', {href: '#1'}).addClassName('button cancel').update("Réinitialiser").observe('click', this.reset.bindAsEventListener(this));
-    oActions.insert({top: oButton});
-    
-    // For each possible state, we add a link in the menu and an item in the legend
-    var oClose = new Element('a').addClassName('cancel').update('x').observe('click', this.closeMenu.bindAsEventListener(this));
-    oMenu.insert({bottom: oClose});
-    
-    // Options and legend items
-    states.each (function (o) {
-      var oOption = new Element('a');
-      
-			var className = o || 'none',
-			    label = o ? o.capitalize() : 'Aucun';
-			var oItem = new Element('a', {href: '#1', style: 'display: block;'}).addClassName(className).update(label).observe('click', (function(){this.setPaint(className)}).bindAsEventListener(this));
-      oLegend.insert({bottom: oItem});
-
-      oOption.addClassName(className).update(label);
-				
-      oOption.observe('click', this.onSelectState.bindAsEventListener(this));
-      oMenu.insert({bottom: oOption});
-    }, this);
-    
-    oSchema.insert({bottom: oMenu.hide()})
-		       .insert({top: oLegend})
-		       .insert({top: oActions});
-    
-    this.aDentsId = [];
-    
-    /* For each area in the map */
-    oMap.childElements().each(
-      function (o) {
-        // We parse the coords attribute to get coordinates and radius of the circle area
-        var area = o.coords.split(','),
-				    x = parseInt(area[0]),
-						y = parseInt(area[1]),
-						r = parseInt(area[2]);
-        
-        // New div for the tooth
-        var oDent = new Element('div');
-        oDent.addClassName('dent');
-        oDent.setStyle({
-          top: y-r+'px',
-          left: x-r+'px',
-          width: r*2+'px',
-          height: r*2+'px'
-        });
-        oSchema.insert({top: oDent});
-        
-        var id = parseInt(o.id.substr(5)), etat;
-        oDent.id = this.sId+'-dent-'+id;
-        oDent.dentId = id;
-        this.aDentsId[id] = oDent.id;
-        
-        if (etat = this.oListEtats[oDent.dentId]) {
-          this.setState(oDent.dentId, etat, true);
-        }
-        
-        // Callbacks on the tooth
-        oDent.observe('mouseover', this.onMouseOver.bindAsEventListener(this))
-				     .observe('mouseout', this.onMouseOut.bindAsEventListener(this))
-						 .observe('click', this.onClick.bindAsEventListener(this));
-      }
-    , this);
-    } else {
-      oSchema.innerHTML = '' + oSchema.innerHTML;
-    }
-  },
-	
-	setPaint: function(state) {
-		$('dents-schema-legend').childElements().invoke('removeClassName', 'active');
-		if (this.sPaint != state) {
-			this.sPaint = state;
-			$('dents-schema-legend').select('.'+state).first().addClassName('active');
-		}
-		else {
-			this.sPaint = null;
-		}
-	},
-  
-  getDent: function (id) {
-    return $(this.sId+'-dent-'+id);
-  },
-  
-  // Change the state of a tooth
-  setState: function (id, state, displayOnly) {
-    var dent = this.getDent(id);
-    if (dent) {
-      dent.setOpacity(this.fAlpha);
-      dent.className = 'dent';
-      
-      if (state)
-        dent.addClassName(state);
-      else
-        dent.setOpacity(1);
-      
-      if (!displayOnly) {
-        var oForm = document.forms['etat-dent-edit'];
-        if (oForm) {
-	        $V(oForm.dent, id);
-	        $V(oForm.etat, (((state != 'none') && state) ? state : ''));
-	        submitFormAjax(oForm, 'systemMsg');
-        }
-      }
-    }
-  },
-  
-  onMouseOver: function (e) {
-    var el = e.element().addClassName('hover'), 
-		style = {
-      width: parseInt(el.getStyle('width'))-1, 
-      height: parseInt(el.getStyle('height'))-1
-    };
-
-    el.setStyle({
-      width: style.width+'px',
-      height: style.height+'px'
-    });
-  },
-  
-  onMouseOut: function (e) {
-    var el = e.element().removeClassName('hover'),
-		style = {
-      width: parseInt(el.getStyle('width'))+1, 
-      height: parseInt(el.getStyle('height'))+1
-    };
-    
-    el.setStyle({
-      width: style.width+'px',
-      height: style.height+'px'
-    });
-  },
-  
-  // Show the menu
-  onClick: function (e) {
-    var dent = e.element(),
-		    menu = $(this.sId+'-menu');
-
-		if (!this.sPaint) {
-			if (this.iSelectedDent) {
-	      this.getDent(this.iSelectedDent).removeClassName('focus');
-	    }
-	    dent.addClassName('focus');
-	    menu.setStyle({
-	     top: dent.getStyle('top'),
-	     left: (parseInt(dent.getStyle('left')) + dent.getWidth() + 4) + 'px'
-	    }).show();
-	    
-	    this.iSelectedDent = dent.dentId;
-		}
-		else {
-			this.setState(dent.dentId, this.sPaint);
-		}
-  },
-  
-  // Selection of a new state in the menu
-  onSelectState: function (e) {
-    this.setState(this.iSelectedDent, Event.element(e).className);
-    this.closeMenu();
-  },
-  
-    // Close the menu
-  closeMenu: function (e) {
-    $(this.sId+'-menu').hide();
-    this.getDent(this.iSelectedDent).removeClassName('focus');
-    this.iSelectedDent = null;
-  },
-  
-  // Reset the teeth state
-  reset: function () {
-    this.aDentsId.each(function (name, key) {
-      key = this.aDentsNumbers[key];
-      var oDent = $(name);
-      this.aStates.each(function (state) {
-        if (oDent.hasClassName(state)) {
-          this.setState(key, null);
-          return;
-        }
-      }, this);
-    }, this);
-    return false;
-  }
-};
+SchemaDentaire.oListEtats = {{$list_etat_dents|@json}};
 
 Main.add(function () {
   var states = [0, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
 } );
 </script>
+
 <form name="etat-dent-edit" action="?" method="post">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
@@ -285,10 +27,12 @@ Main.add(function () {
 {{mb_key object=$consult_anesth}}
 
 <table class="form">
-  <tr><th colspan="5" class="category">Condition d'intubation</th></tr>
+  <tr>
+    <th colspan="2" class="category">Condition d'intubation</th>
+  </tr>
   
   <tr>
-    <td class="button" rowspan="20" style="width: 1%;">
+    <td style="width: 1%;">
       <div id="dents-schema" style="position: relative;">
         <img id="dents-schema-image" src="images/pictures/dents.png?build={{$version.build}}" border="0" usemap="#dents-schema-map" /> 
         <map id="dents-schema-map" name="dents-schema-map">
@@ -352,66 +96,76 @@ Main.add(function () {
       </div>
     </td>
     
-    <td colspan="2">
-      <table style="width: 100%">
+    <td>
+      <table class="main" style="border: 1px dotted #666666;">
         <tr>
-          {{foreach from=$consult_anesth->_specs.mallampati->_locales key=curr_mallampati item=trans_mallampati}}
-          <td class="button">
-            <div id="mallampati_bg_{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
-            <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
-              <img src="images/pictures/{{$curr_mallampati}}.png?build={{$version.build}}" />
-              <br />
-              <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
-              {{$trans_mallampati}}
-            </label>
-            </div>
+          <td colspan="2">
+            <button class="cancel" type="button" style="float: right;" onclick="resetIntubation(this.form)">{{tr}}Reset{{/tr}}</button>
+            <table style="width: 100%">
+              <tr>
+                {{foreach from=$consult_anesth->_specs.mallampati->_locales key=curr_mallampati item=trans_mallampati}}
+                <td class="button">
+                  <div id="mallampati_bg_{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
+                  <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
+                    <img src="images/pictures/{{$curr_mallampati}}.png?build={{$version.build}}" />
+                    <br />
+                    <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+                    {{$trans_mallampati}}
+                  </label>
+                  </div>
+                </td>
+                {{/foreach}}
+              </tr>
+            </table>
+            <input type="radio" style="display: none;" name="mallampati" value="" {{if !$consult_anesth->mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
           </td>
-          {{/foreach}}
+        </tr>
+  
+        <tr>
+          <th style="width: 1%;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+            <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+          </td>
+        </tr>
+      
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+            <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+          </td>
+        </tr>
+      
+        <tr>
+          <th>
+            {{mb_label object=$consult_anesth field="etatBucco"}}<br />
+            <select name="_helpers_etatBucco" style="width: 8em;" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();" class="helper">
+              <option value="">&mdash; Aide</option>
+              {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
+          </th>
+          <td>{{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}</td>
+        </tr>
+      
+        <tr>
+          <th>
+            {{mb_label object=$consult_anesth field="conclusion"}}<br />
+            <select name="_helpers_conclusion" style="width: 8em;" onchange="pasteHelperContent(this);this.form.conclusion.onchange();" class="helper">
+              <option value="">&mdash; Aide</option>
+              {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button>
+          </th>
+          <td>{{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}</td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
+          </td>
         </tr>
       </table>
-    </td>
-  </tr>
-  
-  <tr>
-    <th style="width: 1%;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
-    <td>
-      {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-    </td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
-    <td>
-      {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-    </td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$consult_anesth field="etatBucco"}}</th>
-    <td>
-      <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-    </td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$consult_anesth field="conclusion"}}</th>
-    <td>
-      <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();" class="helper">
-        <option value="">&mdash; Aide</option>
-        {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion, '', '', '', '', {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" class="button">
-      <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
     </td>
   </tr>
 </table>

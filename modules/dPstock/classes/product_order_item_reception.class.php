@@ -61,7 +61,7 @@ class CProductOrderItemReception extends CMbObject {
     $backProps = parent::getBackProps();
     $backProps['lines_dmi']  = 'CPrescriptionLineDMI order_item_reception_id';
     $backProps['bill_items'] = 'CProductReceptionBillItem reception_item_id';
-    $backProps['lots']       = 'CProductOrderItem lot_id';
+    $backProps['order_items']= 'CProductOrderItem lot_id';
     return $backProps;
   }
   
