@@ -17,13 +17,18 @@ class CService extends CMbObject {
 	var $service_id = null;	
   
   // DB references
-  var $group_id   = null;
+  var $group_id       = null;
+  var $responsable_id = null;
 
   // DB Fields
   var $nom         = null;
+  var $type_sejour = null;
   var $description = null;
+  var $cancelled   = null;
+  var $hospit_jour = null;
   var $urgence     = null;
   var $uhcd        = null;
+	
   
   // Object references
   var $_ref_chambres = null;
@@ -54,13 +59,21 @@ class CService extends CMbObject {
 	}
 
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["group_id"]    = "ref notNull class|CGroups";
-    $specs["nom"]         = "str notNull seekable";
-    $specs["description"] = "text seekable";
-    $specs["urgence"]     = "bool";
-    $specs["uhcd"]        = "bool";
-    return $specs;
+  	$props = parent::getProps();
+    $props["group_id"]       = "ref notNull class|CGroups";
+    $props["responsable_id"] = "ref notNull class|CMediusers";
+
+    $sejour = new CSejour;
+    $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
+
+    $props["nom"]         = "str notNull seekable";
+    $props["description"] = "text seekable";
+    $props["urgence"]     = "bool";
+    $props["uhcd"]        = "bool";
+    $props["hospit_jour"] = "bool";
+    $props["cancelled"  ] = "bool";
+
+    return $props;
   }
   
   function updateFormFields() {

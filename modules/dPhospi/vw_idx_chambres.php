@@ -66,6 +66,8 @@ foreach ($prestations as $_prestation){
   $_prestation->loadRefGroup();
 }
 
+$praticiens = CAppUI::$user->loadPraticiens();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -75,6 +77,7 @@ $smarty->assign("service"  , $service);
 $smarty->assign("services" , $services);
 $smarty->assign("prestation" , $prestation);
 $smarty->assign("prestations", $prestations);
+$smarty->assign("praticiens", $praticiens);
 
 $smarty->assign("etablissements", $etablissements);
 

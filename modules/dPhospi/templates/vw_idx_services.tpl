@@ -42,21 +42,8 @@
 		{{mb_key object=$service}}
 
     <table class="form">
-    <tr>
-      {{if $service->_id}}
-      <th class="title modify text" colspan="2">
-        {{mb_include module=system object=$service template=inc_object_notes     }}
-        {{mb_include module=system object=$service template=inc_object_idsante400}}
-		    {{mb_include module=system object=$service template=inc_object_history   }}
-        {{tr}}CService-msg-modify{{/tr}} '{{$service}}'
-      </th>
-      {{else}}
-      <th class="title" colspan="2">
-        {{tr}}CService-msg-create{{/tr}}
-      </th>
-      {{/if}}
-    </tr>
-
+    {{mb_include module=system template=inc_form_table_header object=$service}}	
+			
     <tr>
       <th>{{mb_label object=$service field=group_id}}</th>
       <td>{{mb_field object=$service field=group_id options=$etablissements}}</td>
@@ -68,6 +55,21 @@
     </tr>       
 
     <tr>
+      <th>{{mb_label object=$service field=responsable_id}}</th>
+      <td>
+        <select name="responsable_id">
+          <option value="">&mdash; {{tr}}None{{/tr}}</option>
+          {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$service->responsable_id}}
+        </select>
+			</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=type_sejour}}</th>
+      <td>{{mb_field object=$service field=type_sejour}}</td>
+    </tr> 
+    
+    <tr>
       <th>{{mb_label object=$service field=urgence}}</th>
       <td>{{mb_field object=$service field=urgence}}</td>
     </tr> 
@@ -77,6 +79,16 @@
       <td>{{mb_field object=$service field=uhcd}}</td>
     </tr>    
 
+    <tr>
+      <th>{{mb_label object=$service field=hospit_jour}}</th>
+      <td>{{mb_field object=$service field=hospit_jour}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$service field=cancelled}}</th>
+      <td>{{mb_field object=$service field=cancelled}}</td>
+    </tr>
+		    
     <tr>
       <th>{{mb_label object=$service field=description}}</th>
       <td>{{mb_field object=$service field=description}}</td>
