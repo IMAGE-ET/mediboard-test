@@ -67,39 +67,13 @@
     <td>{{mb_value object=$patient field="tel_autre"}}</td>
   </tr>
   
-  {{if $patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count}}
+  {{if $patient->rques}}
   <tr>
-    <th class="category" colspan="5">Correspondants médicaux</th>
-  </tr>
-  
-  <tr>
-    <td colspan="5" class="text">
-      {{assign var=medecin value=$patient->_ref_medecin_traitant}}
-      {{if $medecin->_id}}
-      <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
-        <strong>{{$medecin}}</strong> ;
-      </span>
-      {{/if}}
-      {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
-        {{assign var=medecin value=$curr_corresp->_ref_medecin}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
-          {{$medecin}} ;
-        </span>
-      {{/foreach}}
-    </td>
+    <th colspan="2">{{mb_label object=$patient field="rques"}}</th>
+    <td colspan="4" class="text">{{mb_value object=$patient field="rques"}}</td>
   </tr>
   {{/if}}
 
-  {{if $patient->rques}}
-  <tr>
-    <th colspan="5" class="category">{{mb_label object=$patient field="rques"}}</th>
-  </tr>
-  
-  <tr>
-    <td colspan="5" class="text">{{mb_value object=$patient field="rques"}}</td>
-  </tr>
-  {{/if}}
-  
   <tr>
     <td class="button" colspan="10">
       <button type="button" class="search" onclick="Patient.view('{{$patient->_id}}')">
@@ -150,7 +124,29 @@
         {{tr}}Export{{/tr}}
       </button>
       {{/if}}
-      
     </td>
   </tr>
+
+  {{if $patient->medecin_traitant || $patient->_ref_medecins_correspondants|@count}}
+  <tr>
+    <th class="category" colspan="5">Correspondants médicaux</th>
+  </tr>
+  
+  <tr>
+    <td colspan="5" class="text">
+      {{assign var=medecin value=$patient->_ref_medecin_traitant}}
+      {{if $medecin->_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+        <strong>{{$medecin}}</strong> ;
+      </span>
+      {{/if}}
+      {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
+        {{assign var=medecin value=$curr_corresp->_ref_medecin}}
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
+          {{$medecin}} ;
+        </span>
+      {{/foreach}}
+    </td>
+  </tr>
+  {{/if}}
 </table>
