@@ -78,7 +78,7 @@
               {{if !$curr_field.object.spec}}
                 <td class="warning text">Aucune spec<br />&nbsp;</td>
               {{else}}
-                <td class="text" title="{{$curr_field.object.spec}}">{{$curr_field.object.spec}}<br />&nbsp;</td>
+                <td class="text" title="{{$curr_field.object.spec}}">{{$curr_field.object.spec|replace:'|':' | '}}<br />&nbsp;</td>
               {{/if}}
               
               <td class="text">
