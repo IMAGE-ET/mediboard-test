@@ -223,6 +223,7 @@ class CMediusers extends CMbObject {
     $backProps["protocoles"]                      = "CProtocole chir_id";
     $backProps["remplacements"]                   = "CPlageConge replacer_id";
     $backProps["sejours"]                         = "CSejour praticien_id";
+    $backProps["services"]                        = "CService responsable_id";
     $backProps["tarifs"]                          = "CTarif chir_id";
     $backProps["techniciens"]                     = "CTechnicien kine_id";
     $backProps["temps_hospi"]                     = "CTempsHospi praticien_id";
