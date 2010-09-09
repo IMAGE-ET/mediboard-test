@@ -68,7 +68,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
           $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
-          $this->generateEvenement($domEvenementEnregistrementPatient, $mbObject, true, $initiateur);
+          $domEvenementEnregistrementPatient->generateTypeEvenement($mbObject, true, $initiateur);
         }
       }
       // Si Client
@@ -144,7 +144,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
-          $this->generateEvenement($domEvenementVenuePatient, $mbObject, true, $initiateur);
+          $domEvenementVenuePatient->generateTypeEvenement($mbObject, true, $initiateur);
         }        
       }
       // Si Client
