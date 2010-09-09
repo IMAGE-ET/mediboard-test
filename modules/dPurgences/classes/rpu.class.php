@@ -391,12 +391,10 @@ class CRPU extends CMbObject {
     $template->addDateTimeProperty("RPU - Arrivée spécialiste"  , $this->specia_arr);
     $template->addProperty("RPU - Accident du travail"          , $this->getFormattedValue("accident_travail"));
     $template->addProperty("RPU - Sortie autorisée"             , $this->getFormattedValue("sortie_autorisee"));
-    
-    if ($this->box_id) {
-    	$lit = new CLit;
-    	$lit->load($this->box_id);
-      $template->addProperty("RPU - Box"                          , $lit->_view);
-    }
+   	$lit = new CLit;
+    if ($this->box_id) 
+      $lit->load($this->box_id);
+    $template->addProperty("RPU - Box"                          , $lit->_view);
     
 		if(CAppUI::conf("dPurgences old_rpu") == "1"){
 			if (CModule::getActive("sherpa")) {
