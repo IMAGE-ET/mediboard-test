@@ -11,11 +11,13 @@
 <script type="text/javascript">
 
 syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
-  if(!checkForm(oForm)){
-    return;
-  }
+
   syncDate(oForm, curr_line_id, fieldName, type, object_class, cat_id);
   if(!curr_line_id){
+    return;
+  } 
+  
+  if(!checkForm(oForm)){
     return;
   }
   submitFormAjax(oForm, 'systemMsg');
