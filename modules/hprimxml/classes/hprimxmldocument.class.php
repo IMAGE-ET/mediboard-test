@@ -458,7 +458,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     $adresses = $this->addElement($elParent, "adresses");
     $adresse = $this->addElement($adresses, "adresse");
-    $this->addTexte($adresse, "ligne", substr(preg_replace("/[^a-z0-9]/i", "", $personne['ligne']), 0, 35));
+    $this->addTexte($adresse, "ligne", substr(preg_replace("/[^a-z0-9]/i", " ", $personne['ligne']), 0, 35));
     $this->addTexte($adresse, "ville", $personne['ville']);
     if ($personne['pays'])
       $this->addElement($adresse, "pays", str_pad($personne['pays'], 3, '0', STR_PAD_LEFT));
