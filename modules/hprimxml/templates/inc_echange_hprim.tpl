@@ -17,6 +17,20 @@
 	 {{/if}}
 	</td>
 	<td style="width:0.1%">
+	  <form name="delEchange" action = "" method="post">
+	    <input type="hidden" name="m" value="hprimxml" />
+	    <input type="hidden" name="dosql" value="do_echangehprim_aed" />
+	    <input type="hidden" name="del" value="1" />
+	    {{mb_key object=$_echange}}
+
+	    <button class="cancel notext" onclick="confirmDeletion(this.form, {
+          typeName:'l\'échange',
+          objName:'{{$_echange|smarty:nodefaults|JSAttribute}}'
+        })">
+      </button>
+	  </form>
+	</td>
+	<td style="width:0.1%">
 	  <a href="?m=hprimxml&amp;tab=vw_idx_echange_hprim&amp;echange_hprim_id={{$object->_id}}" class="button search">
 	   {{$object->echange_hprim_id|str_pad:6:'0':$smarty.const.STR_PAD_LEFT}}
 	  </a>

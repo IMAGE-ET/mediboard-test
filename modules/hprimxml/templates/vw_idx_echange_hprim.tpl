@@ -151,6 +151,7 @@ function changePage(page) {
         </tr>
         <tr>
           <th></th>
+          <th>{{tr}}CEchangeHprim.purge{{/tr}}</th>
           <th>{{mb_title object=$echange_hprim field="echange_hprim_id"}}</th>
           {{if $dPconfig.sip.server}}
           <th>{{mb_title object=$echange_hprim field="initiateur_id"}}</th>

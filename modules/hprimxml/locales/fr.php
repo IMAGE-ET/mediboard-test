@@ -218,6 +218,7 @@ $locales['CEchangeHprim.object_class.COperation'] = 'Intervention';
 $locales['CEchangeHprim.object_class.CPatient'] = 'Patient';
 $locales['CEchangeHprim.object_class.CSejour'] = 'Séjour';
 $locales['CEchangeHprim.one'] = 'echange H\'XML';
+$locales['CEchangeHprim.purge'] = 'Purge';
 $locales['CEchangeHprim.select'] = 'Choisissez un echange H\'XML';
 $locales['CGroups-back-'] = 'Etablissements';
 $locales['CGroups-back-destinataires_hprim'] = 'Destinataires H\'XML';
