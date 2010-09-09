@@ -21,7 +21,7 @@
 	    <input type="hidden" name="m" value="hprimxml" />
 	    <input type="hidden" name="dosql" value="do_echangehprim_aed" />
 	    <input type="hidden" name="del" value="1" />
-	    {{mb_key object=$_echange}}
+	    {{mb_key object=$object}}
 
 	    <button class="cancel notext" onclick="confirmDeletion(this.form, {
           typeName:'l\'échange',
@@ -91,16 +91,8 @@
   </td>
 	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}} style="width:0.1%">{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}" style="width:0.1%">
-	  {{if $object->initiateur_id}}
-	    {{if $dPconfig.sip.server == "1"}}
-	      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
-	    {{/if}}
-	  {{else}}
-	    {{if !$object->date_echange || ($dPconfig.sip.server == "1")}}
-		    {{if $dPconfig.mb_id == $object->emetteur}}
-	        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
-	      {{/if}}
-      {{/if}}
+    {{if !$object->date_echange}}
+      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
     {{/if}}
 	  <span>
 	    <label title='{{mb_value object=$object field="date_echange"}}'>
