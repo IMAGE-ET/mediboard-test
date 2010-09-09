@@ -27,6 +27,7 @@ $sejour->canRead();
 $sejour->loadRefPatient();
 $patient =& $sejour->_ref_patient;
 $patient->loadComplete();
+$patient->loadIPP();
 
 // Chargement des constantes medicales
 $patient->loadRefDossierMedical();

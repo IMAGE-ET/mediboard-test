@@ -49,7 +49,8 @@ printDossier = function(rpu_id) {
         </a>
       </div>
 
-      {{$object}} {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+      {{$object}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     </th>
   </tr>
   {{/if}}

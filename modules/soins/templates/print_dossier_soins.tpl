@@ -20,6 +20,7 @@
 	<tr>
 		<th class="title">
 			{{$object->_view}}
+      {{mb_include module=dPpatients template=inc_vw_ipp ipp=$object->_IPP}}
 		</th>
 	</tr>
 </table>
@@ -32,6 +33,7 @@
   <tr>
     <th class="title">
       {{$object->_view}}
+      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
     </th>
   </tr>
 </table>
