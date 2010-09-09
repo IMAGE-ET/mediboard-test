@@ -54,7 +54,14 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
     {{/foreach}}
     <tr>
       <td class="button" colspan="4">
-        <button class="submit singleclick" type="submit">{{tr}}Save{{/tr}}</button>
+        {{if $object->_id}}
+          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
+            {{tr}}Delete{{/tr}}
+          </button>
+        {{else}}
+           <button class="submit singleclick" type="submit">{{tr}}Create{{/tr}}</button>
+        {{/if}}
       </td>
     </tr>
   </table>
