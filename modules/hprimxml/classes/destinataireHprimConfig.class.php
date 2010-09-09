@@ -43,7 +43,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $specs["type_sej_chimio"]    = "str";
     $specs["type_sej_dialyse"]   = "str";
     $specs["receive_ack"]        = "bool default|1";
-    $specs["send_all_patients"]  = "bool default|1";
+    $specs["send_all_patients"]  = "bool default|0";
     
     return $specs;
   }

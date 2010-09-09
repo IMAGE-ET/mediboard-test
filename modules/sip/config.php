@@ -10,7 +10,6 @@ $dPconfig["sip"] = array (
   "export_date_max"   => "",
   "batch_count"       => "10",
   "pat_no_ipp"        => "0",
-  "send_all_patients" => "1",
   "sej_no_numdos"     => "0",
   "send_sej_pa"       => "1",
   "verify_repair"     => "1",

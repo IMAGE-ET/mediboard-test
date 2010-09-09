@@ -68,7 +68,8 @@ foreach ($patients as $patient) {
 	$dest_hprim->message = "patients";
   $dest_hprim->type = "sip";
   $dest_hprim->loadMatchingObject();
-
+  $dest_hprim->loadConfigValues();
+  
   if (!$patient->_IPP) {
     $IPP = new CIdSante400();
     //Paramétrage de l'id 400
@@ -81,7 +82,7 @@ foreach ($patients as $patient) {
   }
 
   if ((CAppUI::conf("sip pat_no_ipp") && $patient->_IPP  && ($patient->_IPP != "-")) || 
-      (!CAppUI::conf("sip send_all_patients") && empty($patient->_ref_sejours))) {
+      (!$dest_hprim->_configs["send_all_patients"] && empty($patient->_ref_sejours))) {
   	continue;
   }
 

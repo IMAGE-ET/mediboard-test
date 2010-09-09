@@ -79,6 +79,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         $destinataires = $dest_hprim->loadMatchingList();
         
         foreach ($destinataires as $_destinataire) {
+          $_destinataire->loadConfigValues();
           if ($mbObject->_hprim_initiateur_group_id) {
             return;
           }
@@ -91,7 +92,7 @@ class CSipObjectHandler extends CMbObjectHandler {
           }
 
           // Envoi pas les patients qui n'ont pas d'IPP
-          if (!CAppUI::conf("sip send_all_patients") && !$mbObject->_IPP) {
+          if (!$_destinataire->_configs["send_all_patients"] && !$mbObject->_IPP) {
             continue;
           }
           
