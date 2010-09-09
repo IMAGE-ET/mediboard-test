@@ -71,7 +71,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return CHPrimXMLAcquittementsPatients $messageAcquittement 
    **/
-  function enregistrementPatient($domAcquittement, &$echange_hprim, &$newPatient, $data) {        
+  function enregistrementPatient($domAcquittement, &$newPatient, $data) {
+    $echange_hprim = $this->_ref_echange_hprim;        
+    
     // Traitement du message des erreurs
     $avertissement = $msgID400 = $msgIPP = "";
     $_IPP_create = $_modif_patient = false;

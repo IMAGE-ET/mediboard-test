@@ -63,8 +63,8 @@ class CSipObjectHandler extends CMbObjectHandler {
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
-  
-          $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
+
+          $initiateur = ($_destinataire->_id == $echange_hprim->emetteur_id) ? $echange_hprim->_id : null;
           
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
           $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
@@ -140,7 +140,7 @@ class CSipObjectHandler extends CMbObjectHandler {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
           }
   
-          $initiateur = ($_destinataire->nom == $echange_hprim->emetteur) ? $echange_hprim->_id : null;
+          $initiateur = ($_destinataire->_id == $echange_hprim->emetteur_id) ? $echange_hprim->_id : null;
           
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;

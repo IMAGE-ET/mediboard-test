@@ -91,8 +91,14 @@
   </td>
 	<td {{if $object->sous_type == "inconnu"}}class="error"{{/if}} style="width:0.1%">{{mb_value object=$object field="sous_type"}}</td>
 	<td class="{{if $object->date_echange}}ok{{else}}warning{{/if}}" style="width:0.1%">
-    {{if !$object->date_echange}}
-      <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
+	  {{if $object->initiateur_id}}
+      {{if $dPconfig.sip.server == "1"}}
+        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
+      {{/if}}
+    {{else}}
+      {{if !$object->date_echange}}
+        <button class="change" onclick="sendMessage('{{$object->_id}}', '{{$object->_class_name}}')" type="button" style="float:right">Envoyer</button>
+      {{/if}}
     {{/if}}
 	  <span>
 	    <label title='{{mb_value object=$object field="date_echange"}}'>

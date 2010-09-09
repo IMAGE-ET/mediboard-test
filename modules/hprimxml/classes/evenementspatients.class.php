@@ -55,8 +55,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $xpath->queryAttributNode($query, $node, "action");    
   }
     
-  function isActionValide($action, $domAcquittement, $echange_hprim) {
+  function isActionValide($action, $domAcquittement) {
     $messageAcquittement = null;
+    $echange_hprim = $this->_ref_echange_hprim;
     
     if (array_key_exists($action, $this->actions)) {
       return $messageAcquittement;
@@ -284,9 +285,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     }
       
     if (!$mbVenue->type) {
-	    if ($nature) {
-	      $mbVenue->type = $attrNatureVenueHprim[$nature];
-	    }
+      if ($nature) {
+        $mbVenue->type = $attrNatureVenueHprim[$nature];
+      }
     } 
 
     if (!$mbVenue->type) {      
@@ -326,11 +327,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     $dateHeure = "$date $heure";
 
-  	if($mbVenue->entree_reelle) {
-  		$mbVenue->entree_reelle = $dateHeure;
-		} else {
-			$mbVenue->entree_prevue = $dateHeure;
-		}
+    if($mbVenue->entree_reelle) {
+      $mbVenue->entree_reelle = $dateHeure;
+    } else {
+      $mbVenue->entree_prevue = $dateHeure;
+    }
        
     return $mbVenue;
   }
@@ -362,7 +363,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
       foreach ($medecin as $_med) {
-     		$mediuser_id = $this->getMedecin($_med);
+        $mediuser_id = $this->getMedecin($_med);
                 
         $lien = $xpath->getValueAttributNode($_med, "lien");
         if ($lien == "rsp") {
@@ -443,8 +444,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     } else {
       $mediuser->store();
     }
-  	
-  	return $mediuser->_id;
+    
+    return $mediuser->_id;
   }
 
   static function getPlacement($node, CSejour $mbVenue) {
@@ -476,22 +477,22 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
     $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
-		if ($date) {
-			$dateHeure = "$date $heure";
-		}
+    if ($date) {
+      $dateHeure = "$date $heure";
+    }
     elseif (!$date && !$mbVenue->sortie_prevue) {
       $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", 
                     $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
     } 
     else {
-    	$dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
+      $dateHeure = $mbVenue->sortie_reelle ? $mbVenue->sortie_reelle : $mbVenue->sortie_prevue;
     }
 
-  	if ($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
-  		$mbVenue->sortie_reelle = $dateHeure;
-		} else {
-			$mbVenue->sortie_prevue = $dateHeure;
-		}
+    if ($mbVenue->sortie_reelle && CAppUI::conf("hprimxml notifier_sortie_reelle")) {
+      $mbVenue->sortie_reelle = $dateHeure;
+    } else {
+      $mbVenue->sortie_prevue = $dateHeure;
+    }
     
     $modeSortieHprim = $xpath->queryAttributNode("hprim:modeSortieHprim", $sortie, "valeur");
     if ($modeSortieHprim) {

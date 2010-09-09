@@ -67,7 +67,9 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return string acquittement 
    **/
-  function mouvementPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
+  function mouvementPatient($domAcquittement, $newPatient, $data) {
+    $echange_hprim = $this->_ref_echange_hprim;
+    
     // Traitement de la venue
     $newVenue        = new CSejour();
     $domVenuePatient = new CHPrimXMLVenuePatient();

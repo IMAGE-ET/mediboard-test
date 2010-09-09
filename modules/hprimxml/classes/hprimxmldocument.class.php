@@ -24,6 +24,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   var $_ref_emetteur      = null;
   var $_ref_destinataire  = null;
   var $_ref_echange_hprim = null;
+  var $_ref_acquittement  = null;
   
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();

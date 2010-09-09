@@ -70,7 +70,9 @@ class CHPrimXMLFusionPatient extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return string acquittement 
    **/
-  function fusionPatient($domAcquittement, $echange_hprim, $newPatient, $data) {
+  function fusionPatient($domAcquittement, $newPatient, $data) {
+    $echange_hprim = $this->_ref_echange_hprim;
+    
     // Si CIP
     if (!CAppUI::conf('sip server')) {
       $mbPatientElimine = new CPatient();

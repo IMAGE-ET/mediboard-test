@@ -77,7 +77,9 @@ class CHPrimXMLFusionVenue extends CHPrimXMLEvenementsPatients {
    * @param array $data
    * @return string acquittement 
    **/
-  function fusionVenue($domAcquittement, $echange_hprim, $newPatient, $data) {
+  function fusionVenue($domAcquittement, $newPatient, $data) {
+    $echange_hprim = $this->_ref_echange_hprim;
+    
     // Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $domEnregistrementPatient->_ref_echange_hprim = $echange_hprim;
