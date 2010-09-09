@@ -120,7 +120,16 @@ class CProductOrderItemReception extends CMbObject {
     
     return $this->_unit_quantity = $this->quantity * $reference->_unit_quantity;
   }
-
+ 
+  function getUsedQuantity(){
+    $query = "SELECT SUM(prescription_line_dmi.quantity) 
+              FROM prescription_line_dmi
+              WHERE prescription_line_dmi.order_item_reception_id = $this->_id";
+    $ds = $this->_spec->ds;
+    $row = $ds->fetchRow($ds->query($query));
+    return intval(reset($row));
+  }
+  
   function store() {
     $this->completeField("reception_id");
     

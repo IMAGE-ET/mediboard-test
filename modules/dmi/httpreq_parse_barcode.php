@@ -44,7 +44,12 @@ else {
   $lots = $object->seek($lot, $where, 50, null, $ljoin);
 }
 
-foreach($lots as $_lot) {
+foreach($lots as $_id => $_lot) {
+  if($_lot->getUsedQuantity() >= $_lot->quantity) {
+    unset($lots[$_id]); 
+    continue;
+  }
+  
   $strict = true;
   $_lot->loadRefOrderItem();
   $_lot->_ref_order_item->loadReference();
@@ -96,8 +101,19 @@ foreach($lots as $_lot) {
   }
 //}
 
-foreach ($products as $_product) {
-  foreach($_product->_lots as $_lot) {
+foreach ($products as $_id_product => $_product) {
+  foreach($_product->_lots as $_id => $_lot) {
+    // Si lot consommé
+    if($_lot->getUsedQuantity() >= $_lot->quantity) {
+      unset($_product->_lots[$_id]);
+      
+      // Si tous les lots du produit sont consommés
+      /*if (count($_product->_lots) == 0) {
+        unset($products[$_id_product]);
+        continue 2;
+      }*/
+      continue;
+    }
     $_lot->_selected = isset($comp['lot']) && $comp['lot'] && ($_lot->code === $comp['lot']);
   }
   
