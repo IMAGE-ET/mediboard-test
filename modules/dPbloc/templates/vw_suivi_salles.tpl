@@ -13,7 +13,7 @@ Main.add(function () {
   Calendar.regField(getForm("changeDate").date_suivi, null, {noView: true});
 });
 
-function printFeuilleBloc(oper_id) {
+function printFicheBloc(oper_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
   url.addParam("operation_id", oper_id);
   url.popup(700, 600, 'FeuilleBloc');

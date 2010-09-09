@@ -117,10 +117,18 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   popFile(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function printFeuilleBloc(oper_id) {
+printFicheBloc = function(oper_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
   url.addParam("operation_id", oper_id);
   url.popup(700, 600, 'FeuilleBloc');
+}
+
+printFicheAnesth = function(consultation_id, operation_id) {
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "print_fiche"); 
+    url.addParam("consultation_id", consultation_id);
+    url.addParam("operation_id", operation_id);
+    url.popup(700, 500, "printFicheAnesth");
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {
@@ -144,7 +152,7 @@ function reloadListActes(operation_id) {
   urlActes.requestUpdate("modifActes-"+operation_id);
 }
 
-function viewSejour(sejour_id) {
+function loadSejour(sejour_id) {
 	var url = new Url("dPpmsi", "ajax_vw_sejour");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("sejour");
@@ -169,7 +177,7 @@ printDossierComplet = function(sejour_id){
 
 {{if $isSejourPatient}}
 Main.add(function () {
-  viewSejour({{$isSejourPatient}});
+  loadSejour({{$isSejourPatient}});
 });
 {{/if}}
 </script>
@@ -220,7 +228,7 @@ Main.add(function () {
           <tr {{if $_sejour->_id == $isSejourPatient}}class="selected{{/if}}">
             <td class="text">
               {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
-              <a href="#{{$_sejour->_guid}}" onclick="viewSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">
+              <a href="#{{$_sejour->_guid}}" onclick="loadSejour('{{$_sejour->_id}}'); $(this).up('tr').addUniqueClassName('selected')">
                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
                   {{$_sejour->_shortview}}
                   {{if $_sejour->_nb_files_docs}}

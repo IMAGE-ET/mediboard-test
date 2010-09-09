@@ -16,7 +16,7 @@
       &mdash; {{$curr_op->_datetime|date_format:$dPconfig.longdate}}
       &mdash; 
       {{if $curr_op->salle_id}}
-        {{$curr_op->_ref_salle->nom}}
+        {{$curr_op->_ref_salle->_view}}
       {{else}}
         Salle inconnue
       {{/if}}
@@ -67,10 +67,12 @@
   {{/if}}
   <tr>
     <td class="button" colspan="4">
-      <button class="print" onclick="printFeuilleBloc({{$curr_op->operation_id}})">
-        Imprimer la feuille de bloc
+        <button {{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
+          Fiche d'anesthésie
+        </button>
+      <button class="print" onclick="printFicheBloc({{$curr_op->operation_id}})">
+        Feuille de bloc
       </button>
-      <br />
       <a class="button edit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
         Modifier les actes
       </a>

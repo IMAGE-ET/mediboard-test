@@ -75,7 +75,7 @@
   {{else}}
   <td class="text">
 	  {{if $vueReduite}}
-	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
+	    <button style="float:right" class="print notext" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
 	  {{/if}}
     <a href="?m=bloodSalvage&amp;tab=vw_bloodSalvage&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
       {{$_operation->_ref_patient->_view}}

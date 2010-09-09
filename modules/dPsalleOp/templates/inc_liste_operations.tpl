@@ -72,7 +72,7 @@
   {{else}}
   <td class="text">
   	{{if $vueReduite}}
-  	  <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
+  	  <button style="float:right" class="print notext" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
   	{{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"

@@ -14,7 +14,7 @@ printFicheBloc = function(operation_id) {
     url.setModuleAction("dPsalleOp", "print_feuille_bloc"); 
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheBloc");
-  }
+}
 </script>
 
 {{if $sejour->_canRead}}
@@ -48,7 +48,9 @@ printFicheBloc = function(operation_id) {
 	    	{{mb_include module=dPplanningOp template=inc_vw_operation}}
 	    </td>
 	    <td style="width: 1%;">
-	      <button {{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">Fiche d'anesthésie</button>
+	      <button {{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');">
+          Fiche d'anesthésie
+        </button>
         <br />
         <button class="print" style="width:11em;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">Feuille de bloc</button>
 	    </td>
