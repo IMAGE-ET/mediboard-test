@@ -95,7 +95,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->_ref_emetteur->loadConfigValues();
 
       $domGetEvenement->_ref_echange_hprim = $echange_hprim;
-      $domGetEvenement->_ref_acquittement  = $domAcquittement;
+      $domAcquittement->_ref_echange_hprim = $echange_hprim;
       
       $newPatient = new CPatient();
       $newPatient->_hprim_initiator_id = $echange_hprim->_id;
