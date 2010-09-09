@@ -1398,6 +1398,9 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
     $template->addProperty("Patient - Qualité bénéficiaire", $this->qual_beneficiaire);
+
+    $this->guessExoneration();
+    $template->addProperty("Patient - Qualité bénéficiaire - Libellé", $this->libelle_exo);
     $template->addProperty("Patient - Numéro de sécurité sociale", $this->matricule);
     $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
     $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
@@ -1469,6 +1472,22 @@ class CPatient extends CMbObject {
     
     $template->addProperty("Patient - médecin correspondants", implode(" - ", $noms));
 
+    //Liste des séjours du patient
+    $this->loadRefsSejours();
+    $sejours = "<table class='main>'";
+    $smarty = new CSmartyDP("modules/dPpatients");
+    if (is_array($this->_ref_sejours)){
+    	foreach($this->_ref_sejours as $_sejour) {
+    		$_sejour->loadRefPraticien();
+    	}
+	    $smarty->assign("sejours", $this->_ref_sejours);
+	    $sejours = $smarty->fetch("print_sejours.tpl",'','',0);
+	    $sejours = preg_replace('`([\\n\\r])`', '', $sejours); 
+	   } else {
+    	$sejours = CAppUI::tr("CSejour.none");
+    }
+    $template->addProperty("Patient - liste des séjours", $sejours);
+    
     $const_med = $this->_ref_constantes_medicales;
     
     $csteByTime = array();
@@ -1477,7 +1496,7 @@ class CPatient extends CMbObject {
       foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
         $csteByTime[$const_med->datetime][$_constante] = $const_med->$_constante;
     }
-    $smarty = new CSmartyDP("modules/dPpatients");
+
     $smarty->assign("csteByTime", $csteByTime);
     $constantes = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes = preg_replace('`([\\n\\r])`', '', $constantes); 
@@ -1489,6 +1508,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
     $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
+    
 
   }
   
