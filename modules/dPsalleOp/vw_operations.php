@@ -243,6 +243,8 @@ $smarty->assign("anesth_id"              , $anesth_id);
 $smarty->assign("anesth"                 , $anesth);
 $smarty->assign("hide_finished"          , $hide_finished);
 $smarty->assign("user_id"                , $AppUI->user_id);
+$smarty->assign("create_dossier_anesth"  , 1);
+
 // Check lists
 $smarty->assign("daily_check_list"               , $daily_check_list);
 $smarty->assign("daily_check_item_categories"    , $daily_check_item_categories);

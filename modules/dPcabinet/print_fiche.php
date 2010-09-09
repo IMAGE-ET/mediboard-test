@@ -18,8 +18,9 @@ $date = CValue::getOrSession("date", mbDate());
 $print = CValue::getOrSession("print", false);
 $today = mbDate();
 
-$consultation_id = CValue::get("consultation_id");
-$operation_id    = CValue::get("operation_id");
+$consultation_id       = CValue::get("consultation_id");
+$operation_id          = CValue::get("operation_id");
+$create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
 $offline = CValue::get("offline");
 
 // Consultation courante
@@ -55,10 +56,11 @@ if(!$consultation_id) {
 
   $smarty = new CSmartyDP("modules/dPcabinet");
   
-  $smarty->assign("selOp"      , $selOp);
-  $smarty->assign("patient"    , $patient);
-  $smarty->assign("listAnesths", $listAnesths);
-  $smarty->assign("onSubmit"   , $onSubmit);
+  $smarty->assign("selOp"                , $selOp);
+  $smarty->assign("patient"              , $patient);
+  $smarty->assign("listAnesths"          , $listAnesths);
+  $smarty->assign("onSubmit"             , $onSubmit);
+  $smarty->assign("create_dossier_anesth", $create_dossier_anesth);
 
   $smarty->display("inc_choose_dossier_anesth.tpl");
   

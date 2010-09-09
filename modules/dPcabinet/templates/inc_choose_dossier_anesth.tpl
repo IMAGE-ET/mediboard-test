@@ -90,7 +90,7 @@
     <td><em>Aucun dossier d'anesthésie existant pour ce patient</em></td>
   </tr>
   {{/foreach}}
-
+  {{if $create_dossier_anesth == 1}}
   <tr>
     <th colspan="3" class="category">Créer un nouveau dossier</th>
   </tr>
@@ -119,5 +119,6 @@
 
     </td>
   </tr>
+  {{/if}}
 </table>
 {{/if}}
