@@ -22,7 +22,10 @@
   {{foreach from=$prefsUser key=module item=prefs}}
   {{if $prefs}}  
   <li>
-  	<a href="#{{$module}}">
+  	<a href="#{{$module}}" style="line-height: 24px;">
+      {{if $module != "common"}}
+        <img src="modules/{{$module}}/images/icon.png" width="24" style="float: left;" />
+      {{/if}}
 	  	{{tr}}module-{{$module}}-court{{/tr}}
 	  	<small>({{$prefs|@count}})</small> 
 	  </a>

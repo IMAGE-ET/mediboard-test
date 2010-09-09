@@ -59,7 +59,9 @@ Main.add(function () {
 			  <button class="search" type="button" onclick="this.form.submit();">Afficher</button> 
       </form>
     </td>
-    {{include file="inc_mode_hospi.tpl"}}
+    <td>
+      {{include file="inc_mode_hospi.tpl"}}
+    </td>
   </tr>
 
   <tr>

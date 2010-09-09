@@ -723,10 +723,12 @@ function get_server_var($var_name) {
 function get_remote_address(){
   $address = array(
     "proxy" => null, 
-    "client" => null
+    "client" => null, 
+    "remote" => null,
   );
   
   $address["client"] = ($client = get_server_var("HTTP_CLIENT_IP")) ? $client : get_server_var("REMOTE_ADDR");
+  $address["remote"] = $address["client"];
   
   $forwarded = array(
     "HTTP_X_FORWARDED_FOR",
@@ -756,8 +758,11 @@ function get_remote_address(){
   // To handle weird IPs sent by iPhones, in the form "10.10.10.10, 10.10.10.10"
   $proxy  = explode(",", $address["proxy"]);
   $client = explode(",", $address["client"]);
+  $remote = explode(",", $address["remote"]);
+  
   $address["proxy"]  = reset($proxy);
   $address["client"] = reset($client);
+  $address["remote"] = reset($remote);
   
   return $address;
 }

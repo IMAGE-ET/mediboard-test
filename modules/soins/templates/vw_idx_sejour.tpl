@@ -275,7 +275,10 @@ printDossierComplet = function(){
           </th>
         </tr>
         <tr>
-          {{include file="../../dPhospi/templates/inc_mode_hospi.tpl"}}
+          <th></th>
+          <td>
+            {{include file="../../dPhospi/templates/inc_mode_hospi.tpl"}}
+          </td>
         </tr>
         {{if 1 || !$praticien || $anesthesiste}}
         <tr>

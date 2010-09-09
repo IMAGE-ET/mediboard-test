@@ -1063,7 +1063,7 @@ class CMbObject {
     $log->user_id = CAppUI::$instance->user_id;
     $log->object_id = $object_id;
     $log->object_class = $this->_class_name;
-    $log->ip_address = $address["client"] ? inet_pton($address["client"]) : null;
+    $log->ip_address = $address["remote"] ? inet_pton($address["remote"]) : null;
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
