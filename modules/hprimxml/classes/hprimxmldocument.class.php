@@ -386,7 +386,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       
     if ($mbPersonne instanceof CPatient) {
       $personne['nom'] = $mbPersonne->nom;
-      $personne['nomNaissance'] = $mbPersonne->_nom_naissance;
+      $personne['nomNaissance'] = $mbPersonne->nom_jeune_fille;
       if (isset($mbPersonne->_prenoms)) {
         foreach ($mbPersonne->_prenoms as $mbKey => $mbPrenom) {
           if ($mbKey < 3) {
