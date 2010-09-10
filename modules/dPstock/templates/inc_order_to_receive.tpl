@@ -15,6 +15,24 @@ closeOrder = function(form) {
   }
   return false;
 }
+
+receiveOrderItems = function(form, container) {
+  if (!confirm('Etes-vous sûr de vouloir effectuer la réception de toute cette commande ?')) {
+    return false;
+  }
+  
+  var data = [];
+  var forms = $(container).select("form");
+
+  forms.each(function(f){
+    var d = $(f).serialize(true);
+    data.push(d);
+  });
+  
+  $V(form._order_items, Object.toJSON(data));
+  
+  return onSubmitFormAjax(form);
+}
 </script>
 
 {{mb_include module=system template=CMbObject_view object=$order}}
@@ -27,12 +45,24 @@ closeOrder = function(form) {
   <input type="hidden" name="received" value="1" />
   {{mb_key object=$order}}
   
-  <button type="submit" class="cancel" style="float: right;">
+  <button type="submit" class="cancel" style="float: left;">
     Clôturer la réception de cette commande
   </button>
 </form>
 
-<table class="tbl">
+<form name="receiveOrder-{{$order->_id}}" method="post" action="?" onsubmit="return receiveOrderItems(this, 'order-items-{{$order->_id}}')">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_order_receive_aed" />
+  <input type="hidden" name="_order_items" value="" />
+  <input type="hidden" name="callback" value="location.reload" />
+  {{mb_key object=$order}}
+  
+  <button type="submit" class="tick" style="float: right;">
+    Recevoir toute cette commande
+  </button>
+</form>
+
+<table class="tbl" id="order-items-{{$order->_id}}">
   <tr>
     <th style="width: 50%;"></th>
     <th style="width: 0.1%; text-align: center;">

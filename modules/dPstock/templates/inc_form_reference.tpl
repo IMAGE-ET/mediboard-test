@@ -1,7 +1,8 @@
 <script type="text/javascript">
 Main.add(function () {
-  updateUnitQuantity(getForm("edit_reference").quantity, "equivalent_quantity");
-  updateUnitQuantity(getForm("edit_reference").mdq, "equivalent_quantity_mdq");
+  var form = getForm("edit_reference");
+  updateUnitQuantity(form.quantity, "equivalent_quantity");
+  updateUnitQuantity(form.mdq, "equivalent_quantity_mdq");
 });
 
 function updateUnitQuantity(element, view) {
@@ -11,7 +12,7 @@ function updateUnitQuantity(element, view) {
 function updatePrice(type, form) {
   var value = form[type].value,
       quantity = form.quantity.value || 1,
-      product_quantity = {{$reference->_ref_product->quantity}};
+      product_quantity = "{{$reference->_ref_product->quantity}}" || 0;
   
   switch (type) {
     case "price": 
