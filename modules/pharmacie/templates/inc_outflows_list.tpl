@@ -4,9 +4,11 @@
   <input type="hidden" name="dosql" value="do_delivery_aed" />
   <input type="hidden" name="date_dispensation" value="now" />
   <input type="hidden" name="manual" value="1" />
+  <input type="hidden" name="cancelled" value="0" />
   
   <table class="table tbl">
     <tr>
+      <th rowspan="2" style="width: 16px;"></th>
       <th colspan="3" style="width: 0.1%;">{{mb_title class=CProductStockGroup field=product_id}}</th>
       <th rowspan="2">{{mb_title class=CProductDelivery field=comments}}</th>
       <th rowspan="2" style="width: 0.1%;"></th>
@@ -21,6 +23,7 @@
     
     <tbody class="hoverable">
       <tr>
+        <td rowspan="2"></td>
         <td colspan="3">
           {{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,100,false,true" style="width: 35em;"}}
         </td>
@@ -44,7 +47,7 @@
     </tbody>
     
     <tr>
-      <td colspan="6">
+      <td colspan="7">
         {{mb_include module=system template=inc_pagination total=$total_outflows change_page=changePage current=$start}}
       </td>
     </tr>
@@ -52,6 +55,9 @@
     {{foreach from=$list_outflows item=_delivery}}
       <tbody class="hoverable" style="border-top: 2px solid #ccc;">
         <tr>
+          <td rowspan="2" {{if $_delivery->_ref_stock->_ref_product->_in_order}}class="ok"{{/if}}>
+            {{mb_include module=dPstock template=inc_product_in_order product=$_delivery->_ref_stock->_ref_product}}
+          </td>
           <td colspan="3">
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$_delivery->_ref_stock->_guid}}')">
               {{mb_value object=$_delivery->_ref_stock field=product_id}}

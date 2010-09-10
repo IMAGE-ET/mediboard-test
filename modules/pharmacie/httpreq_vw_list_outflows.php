@@ -27,6 +27,10 @@ $delivrance->date_delivery = mbDateTime();
 $list_outflows = $delivrance->loadList($where, "date_delivery DESC, service_id", "$start, 30");
 $total_outflows = $delivrance->countList($where);
 
+foreach($list_outflows as $_outflow) {
+  $_outflow->_ref_stock->_ref_product->getPendingOrderItems(false);
+}
+
 $service = new CService;
 $list_services = $service->loadListWithPerms(PERM_READ);
 

@@ -309,7 +309,7 @@ class CProduct extends CMbObject {
     if ($count)
       $list = $item->countList($where, null, null, null, $leftjoin);
     else
-      $list =  $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
+      $list = $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
       
     $this->_in_order = $list;
     
