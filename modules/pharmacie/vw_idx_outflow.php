@@ -21,14 +21,10 @@ $delivrance->_date_max = $date_max;
 $delivrance->quantity = 1;
 $delivrance->date_delivery = mbDateTime();
 
-$service = new CService;
-$list_services = $service->loadListWithPerms(PERM_READ);
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('delivrance',    $delivrance);
-$smarty->assign('list_services', $list_services);
 $smarty->assign('start', $start);
 
 $smarty->display('vw_idx_outflow.tpl');

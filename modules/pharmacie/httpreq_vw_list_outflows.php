@@ -21,13 +21,21 @@ $where = array(
 );
 
 $delivrance = new CProductDelivery;
+$delivrance->quantity = 1;
+$delivrance->date_delivery = mbDateTime();
+
 $list_outflows = $delivrance->loadList($where, "date_delivery DESC, service_id", "$start, 30");
 $total_outflows = $delivrance->countList($where);
+
+$service = new CService;
+$list_services = $service->loadListWithPerms(PERM_READ);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('start', $start);
+$smarty->assign('delivrance',    $delivrance);
+$smarty->assign('list_services', $list_services);
 $smarty->assign('list_outflows', $list_outflows);
 $smarty->assign('total_outflows', $total_outflows);
 

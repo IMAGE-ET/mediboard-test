@@ -10,7 +10,10 @@
 
 <script type="text/javascript">
 function checkOutflow(form) {
-  return checkForm(form) && ($V(form.comments) || $V(form.service_id) != 0);
+  if (!($V(form.comments) || $V(form.service_id))) return false;
+  return onSubmitFormAjax(form, {onComplete: function(){
+    getForm("filter").onsubmit();
+  }});
 }
 
 Main.add(function(){
@@ -40,7 +43,7 @@ function removeOutflow(delivery_id, view) {
   <input type="hidden" name="delivery_id" value="" />
 </form>
 
-<form name="filter" action="?" method="get" onsubmit="return Url.update(this, 'outflows-list')">
+<form name="filter" action="?" method="get" onsubmit="return Url.update(this, 'outflows')">
   <input type="hidden" name="m" value="pharmacie" />
   <input type="hidden" name="a" value="httpreq_vw_list_outflows" />
   <input type="hidden" name="start" value="{{$start}}" onchange="this.form.onsubmit()" />
@@ -56,38 +59,4 @@ function removeOutflow(delivery_id, view) {
   </table>
 </form>
 
-<form name="newOutflow" method="post" action="?m={{$m}}&amp;tab={{$tab}}" onsubmit="return checkOutflow(this)">
-  <input type="hidden" name="m" value="dPstock" />
-  <input type="hidden" name="dosql" value="do_delivery_aed" />
-  <input type="hidden" name="date_dispensation" value="now" />
-  <input type="hidden" name="manual" value="1" />
-  
-  <table class="table tbl">
-    <tr>
-      <th style="width: 0.1%;">{{mb_title class=CProductStockGroup field=product_id}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=quantity}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=date_delivery}}</th>
-      <th style="width: 0.1%;">{{mb_title class=CProductDelivery field=service_id}}</th>
-      <th>{{mb_title class=CProductDelivery field=comments}}</th>
-      <th style="width: 0.1%;"></th>
-    </tr>
-    
-    <tr>
-      <td>{{mb_field class=CProductStockGroup field=product_id form="newOutflow" autocomplete="true,1,100,false,true" style="width: 30em;"}}</td>
-      <td>{{mb_field object=$delivrance field=quantity increment=true form="newOutflow" size=2}}</td>
-      <td>{{mb_field object=$delivrance field=date_delivery form="newOutflow" register=1}}</td>
-      <td>
-        <select name="service_id">
-          <option value=""> &ndash; {{tr}}CService{{/tr}}</option>
-          {{foreach from=$list_services item=_service}}
-            <option value="{{$_service->_id}}">{{$_service}}</option>
-          {{/foreach}}
-        </select>
-      </td>
-      <td>{{mb_field object=$delivrance field=comments}}</td>
-      <td><button class="tick" type="submit">Délivrer</button></td>
-    </tr>
-    
-    <tbody id="outflows-list"></tbody>
-  </table>
-</form>
+<div id="outflows"></div>
