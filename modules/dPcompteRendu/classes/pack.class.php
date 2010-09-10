@@ -52,6 +52,12 @@ class CPack extends CMbObject {
     return $specs;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["modele_links"] = "CModeleToPack pack_id";
+    return $backProps;
+  }
+  
   function loadRefsFwd($cached = false) {
     $this->_ref_chir = $this->loadFwdRef("chir_id", $cached);
     $this->_ref_function = $this->loadFwdRef("function_id", $cached);
@@ -66,23 +72,28 @@ class CPack extends CMbObject {
     if ($this->function_id) $this->_owner = "func";
     if ($this->group_id   ) $this->_owner = "etab";
     
-  	$modeletopack = new CModeleToPack;
-  	$modeles = $modeletopack->loadAllModelesFor($this->_id);
-    
-    $this->_source = "";
-    if(count($modeles) > 0) {
-      foreach ($modeles as $key=>$value) {
-        $this->_modeles[$value->modele_id] = new CCompteRendu;
-        $this->_modeles[$value->modele_id]->load($value->modele_id);
-        $this->_modeles[$value->modele_id]->loadContent();
-        if (!$this->_object_class)
-          $this->_object_class = $this->_modeles[$value->modele_id]->object_class;
-      }
-      $this->_source = implode('<hr class="pagebreak" />', CMbArray::pluck($this->_modeles, "_source"));   
-    }
-
     if (!$this->_object_class)
       $this->_object_class = "COperation";
+  }
+  
+  function loadContent() {
+    $this->_source = "";
+    $this->loadBackRefs("modele_links");
+
+    if (count($this->_back['modele_links']) > 0) {
+    	$last_key = end(array_keys($this->_back['modele_links']));
+      foreach ($this->_back['modele_links'] as $key => $_modeletopack) {
+        $_modeletopack->_ref_modele->loadContent();
+        if (!$this->_object_class)
+          $this->_object_class = $_modeletopack->_ref_modele->object_class;
+
+        $this->_source .= $_modeletopack->_ref_modele->_source ;
+        
+        // Si on est au dernier modèle, pas de page break
+        if ($key === $last_key) break;
+        $this->_source .= '<hr class="pagebreak" />';
+      }
+    }
   }
   
   /**

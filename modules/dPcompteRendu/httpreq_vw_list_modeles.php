@@ -8,12 +8,11 @@
 * @abstract Permet de choisir des modèles pour constituer des packs
 */
 
-global $AppUI, $can;
-$can->needsRead();
+CCanDo::checkRead();
 
 // Chargement du user
 $user = new CMediusers;
-$user->load(CValue::getOrSession("user_id", $AppUI->user_id));
+$user->load(CValue::get("user_id", CAppUI::$user->_id));
 $user->loadRefs();
 
 // Chargement du pack
@@ -23,17 +22,17 @@ if ($pack->load(CValue::getOrSession("pack_id"))) {
 } else {
   $pack->chir_id = $user->user_id;
 }
-
 // Modèles de l'utilisateur
-$object_class = CValue::getOrSession("object_class");
-$modeles = CCompteRendu::loadAllModelesFor($user->_id);
+$filter_class = CValue::get("filter_class", '');
+
+$modeles = CCompteRendu::loadAllModelesFor($user->_id, 'prat', $filter_class);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("modeles", $modeles);
 $smarty->assign("pack"   , $pack   );
+$smarty->assign("user_id", $user->_id);
+$smarty->assign("filter_class", $filter_class);
 
 $smarty->display("inc_list_modeles.tpl");
-
-?>

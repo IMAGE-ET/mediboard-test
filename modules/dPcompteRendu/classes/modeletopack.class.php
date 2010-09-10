@@ -13,6 +13,9 @@ class CModeleToPack extends CMbObject {
   // DB References
   var $modele_id       = null;
   var $pack_id         = null;
+  
+  // Referenced objects
+  var $_ref_modele     = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -25,25 +28,23 @@ class CModeleToPack extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["modele_id"]   = "ref class|CCompteRendu";
-    $specs["pack_id"]     = "ref class|CPack";
+    $specs["pack_id"]     = "ref class|CPack cascade";
     return $specs;
   }
   
-  function loadAllModelesFor($pack_id) {
-  	$modeles = array();
-  	$where = array();
-  	$where["pack_id"] = " = $pack_id";
-  	$modeles = $this->loadList($where);
-  	return $modeles;
+  function updateFormFields(){
+    parent::updateFormFields();
+    $this->_view = $this->loadRefModele()->nom;
   }
   
-  function deleteAllModelesFor($pack_id) {
-  	$modelestopack = $this->loadAllModelesFor($pack_id);
-  	foreach($modelestopack as $_modele) {
-      if ($msg = $_modele->delete()) {
-  		 CAppUI::setMsg( $msg, UI_MSG_ERROR );
-      }
-  	}
+  function loadRefModele(){
+    return $this->_ref_modele = $this->loadFwdRef("modele_id", true);
+  }
+  
+  function loadAllModelesFor($pack_id) {
+  	$where = array();
+  	$where["pack_id"] = " = $pack_id";
+  	return $this->loadList($where);
   }
 }
 ?>

@@ -78,9 +78,10 @@ class CCompteRendu extends CDocumentItem {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["listes_choix"] = "CListeChoix compte_rendu_id";
+    $backProps["listes_choix"]   = "CListeChoix compte_rendu_id";
     $backProps["modeles_headed"] = "CCompteRendu header_id";
     $backProps["modeles_footed"] = "CCompteRendu footer_id";
+    $backProps["pack_links"]     = "CModeleToPack modele_id";
     return $backProps;
   }
   

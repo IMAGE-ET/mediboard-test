@@ -445,20 +445,15 @@ class CSetupdPcompteRendu extends CSetup {
 
 	    foreach($packs as $_pack) {
 	    	if ($_pack['modeles'] == '') continue;
-	    	
 	    	$modeles = explode("|", $_pack['modeles']);
+	    	if (count($modeles) == 0) continue;
+	    	
 	    	$compterendu = new CCompteRendu;
-
     		foreach($modeles as $_modele) {
     			if (!$compterendu->load($_modele)) continue;
-
-    			$modeletopack = new CModeleToPack;
-          $modeletopack->modele_id = $_modele;
-          $modeletopack->pack_id = $_pack['pack_id'];
-          
-          if ($msg = $modeletopack->store()) {
-          	CAppUI::setMsg( $msg, UI_MSG_ALERT);
-          }
+          $sql = "INSERT INTO modele_to_pack (modele_id, pack_id)
+                  VALUES ($_modele, {$_pack['pack_id']})";
+          $ds->exec($sql);
     		}
 	    }
 	    return true;

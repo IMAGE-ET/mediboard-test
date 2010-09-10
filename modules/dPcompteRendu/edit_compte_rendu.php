@@ -62,31 +62,32 @@ else {
   
   // A partir d'un pack
   if ($pack_id) {
-
     $pack = new CPack;
     $pack->load($pack_id);
+    
+    $pack->loadContent();
     $compte_rendu->nom = $pack->nom;
     $compte_rendu->object_class = $pack->object_class;
     $compte_rendu->_source = $pack->_source;
     
     // Parcours des modeles du pack pour trouver le premier header et footer
-    foreach($pack->_modeles as $mod) {
-    	if ($mod->header_id || $mod->footer_id) {
-    		$mod->loadComponents();
+    foreach($pack->_back['modele_links'] as $mod) {
+    	if ($mod->_ref_modele->header_id || $mod->_ref_modele->footer_id) {
+    		$mod->_ref_modele->loadComponents();
     	}
-    	if (!isset($header)) $header = $mod->_ref_header;
-    	if (!isset($footer)) $footer = $mod->_ref_footer;
+    	if (!isset($header)) $header = $mod->_ref_modele->_ref_header;
+    	if (!isset($footer)) $footer = $mod->_ref_modele->_ref_footer;
     	if ($header && $footer) break;
     }
 
     // Marges et format
-    $first_modele = reset($pack->_modeles);
-    $compte_rendu->margin_top    = $first_modele->margin_top;
-    $compte_rendu->margin_left   = $first_modele->margin_left;
-    $compte_rendu->margin_right  = $first_modele->margin_right;
-    $compte_rendu->margin_bottom = $first_modele->margin_bottom;
-    $compte_rendu->page_height   = $first_modele->page_height;
-    $compte_rendu->page_width    = $first_modele->page_width;
+    $first_modele = reset($pack->_back['modele_links']);
+    $compte_rendu->margin_top    = $first_modele->_ref_modele->margin_top;
+    $compte_rendu->margin_left   = $first_modele->_ref_modele->margin_left;
+    $compte_rendu->margin_right  = $first_modele->_ref_modele->margin_right;
+    $compte_rendu->margin_bottom  = $first_modele->_ref_modele->margin_bottom;
+    $compte_rendu->page_height   = $first_modele->_ref_modele->page_height;
+    $compte_rendu->page_width    = $first_modele->_ref_modele->page_width;
 
   }
   $compte_rendu->_source = $compte_rendu->generateDocFromModel();
