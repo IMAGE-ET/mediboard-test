@@ -44,7 +44,7 @@ if ($order_col == "patient_id") {
 }
 
 $sejours = CSejour::loadListForDate($date, $where, $order, null, null, $ljoin);
- 
+
 // Filtre sur les services
 $services = array();
 $praticiens = array();
@@ -132,10 +132,14 @@ array_multisort(CMbArray::pluck($kines     , "_view"), SORT_ASC, $kines);
 array_multisort(CMbArray::pluck($services  , "_view"), SORT_ASC, $services);
 array_multisort(CMbArray::pluck($praticiens, "_view"), SORT_ASC, $praticiens);
 
+// Couleurs
+$colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("filter", $filter);
+$smarty->assign("colors", $colors);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("sejours_by_kine", $sejours_by_kine);
 $smarty->assign("kines", $kines);
