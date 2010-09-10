@@ -70,6 +70,7 @@ if ($sejour_id) {
   
   foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefsFwd();
+    $operation->_ref_chir->loadRefsFwd();
   }
 
   foreach ($sejour->_ref_affectations as &$affectation) {
