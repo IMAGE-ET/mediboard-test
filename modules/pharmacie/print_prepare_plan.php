@@ -11,13 +11,18 @@
 CCanDo::checkRead();
 
 // Calcul de date_max et date_min
-$date_min   = CValue::getOrSession('_date_min');
-$date_max   = CValue::getOrSession('_date_max');
 $mode       = CValue::get("mode");
 $service_selection = CValue::get("service_id");
 
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
+$date_min = CValue::get('_date_min');
+$date_max = CValue::get('_date_max');
+
+if (!$date_min) {
+  $date_min = CValue::session('_date_delivrance_min');
+}
+if (!$date_max) {
+  $date_max = CValue::session('_date_delivrance_max');
+}
 
 $date_min = "$date_min 00:00:00";
 $date_max = "$date_max 23:59:59";

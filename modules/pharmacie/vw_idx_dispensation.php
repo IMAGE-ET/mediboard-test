@@ -76,11 +76,18 @@ if (false && count($schedule)) {
   mbTrace($day_max);
 }
 
-$date_min = CValue::getOrSession('_date_min', $day_min);
-$date_max = CValue::getOrSession('_date_max', $day_max);
+$date_min = CValue::get('_date_min');
+$date_max = CValue::get('_date_max');
 
-CValue::setSession('_date_min', $date_min);
-CValue::setSession('_date_max', $date_max);
+if (!$date_min) {
+  $date_min = CValue::session('_date_delivrance_min', mbDate("-$num_days_date_min DAY"));
+}
+if (!$date_max) {
+  $date_max = CValue::session('_date_delivrance_max', mbDate("+2 DAY"));
+}
+
+CValue::setSession('_date_delivrance_min', $date_min);
+CValue::setSession('_date_delivrance_max', $date_max);
 
 $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date_min;

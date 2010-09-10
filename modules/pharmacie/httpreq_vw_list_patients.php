@@ -14,8 +14,19 @@ $patients = array();
 $sejours = array();
 $patient_id = CValue::getOrSession('patient_id');
 $service_id = CValue::getOrSession('service_id');
-$date_min = CValue::getOrSession('_date_min').' 00:00:00';
-$date_max = CValue::getOrSession('_date_max').' 23:59:59';
+
+$date_min = CValue::get('_date_min');
+$date_max = CValue::get('_date_max');
+
+if (!$date_min) {
+  $date_min = CValue::session('_date_delivrance_min');
+}
+if (!$date_max) {
+  $date_max = CValue::session('_date_delivrance_max');
+}
+
+$date_min = "$date_min 00:00:00";
+$date_max = "$date_max 23:59:59";
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();

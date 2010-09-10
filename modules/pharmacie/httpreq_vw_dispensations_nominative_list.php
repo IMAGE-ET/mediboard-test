@@ -15,8 +15,19 @@ $patient_id      = CValue::getOrSession('patient_id');
 $prescription_id = CValue::getOrSession('prescription_id');
 $_selected_cis   = CValue::get("_selected_cis");
 
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
+// Calcul de date_max et date_min
+$date_min = CValue::get('_date_min');
+$date_max = CValue::get('_date_max');
+
+if (!$date_min) {
+  $date_min = CValue::session('_date_delivrance_min');
+}
+if (!$date_max) {
+  $date_max = CValue::session('_date_delivrance_max');
+}
+
+CValue::setSession('_date_delivrance_min', $date_min);
+CValue::setSession('_date_delivrance_max', $date_max);
 
 $date_min_orig = $date_min;
 $date_max_orig = $date_max;
@@ -384,8 +395,8 @@ $smarty->assign('stocks_pharmacie'   , $stocks_pharmacie);
 $smarty->assign('service_id'         , $service_id);
 $smarty->assign('prescription'       , $prescription);
 $smarty->assign('mode_nominatif'     , "1");
-$smarty->assign("date_min", mbDate(CValue::getOrSession('_date_min')));
-$smarty->assign("date_max", mbDate(CValue::getOrSession('_date_max')));
+$smarty->assign("date_min", $date_min_orig);
+$smarty->assign("date_max", $date_max_orig);
 $smarty->assign("now", mbDate());
 
 if($_selected_cis){
