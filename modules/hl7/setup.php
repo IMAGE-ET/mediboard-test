@@ -15,9 +15,7 @@ class CSetuphl7 extends CSetup {
     
     $this->mod_name = "hl7";
     $this->makeRevision("all");
-          
-    // Déplacement des requêtes dans le module H'XML     
-     
+               
     $this->mod_version = "0.01";
   }
 }
