@@ -60,6 +60,7 @@ $locales['CFraisDiversType-code-desc'] = 'Code';
 $locales['CFraisDiversType-facturable'] = 'Facturable';
 $locales['CFraisDiversType-facturable-court'] = 'Facturable';
 $locales['CFraisDiversType-facturable-desc'] = 'Facturable';
+$locales['CFraisDiversType-failed-code'] = 'Un type existe déjà avec le même code';
 $locales['CFraisDiversType-frais_divers_type_id'] = 'Id';
 $locales['CFraisDiversType-frais_divers_type_id-court'] = 'Id';
 $locales['CFraisDiversType-frais_divers_type_id-desc'] = 'Id';

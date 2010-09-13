@@ -21,6 +21,7 @@ class CFraisDiversType extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "frais_divers_type";
     $spec->key   = "frais_divers_type_id";
+    $spec->uniques["code"] = array("code");
     return $spec;
   }
   

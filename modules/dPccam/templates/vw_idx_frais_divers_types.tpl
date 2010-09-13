@@ -11,6 +11,10 @@
 <table class="main">
   <tr>
     <td style="width: 60%">
+      <a class="button new" style="float: right;" href="?m=dPccam&tab={{$tab}}&frais_divers_type_id=0">
+        {{tr}}CFraisDiversType-title-create{{/tr}}
+      </a>
+      
       <table class="main tbl">
         <tr>
           <th>{{mb_title class=CFraisDiversType field=code}}</th>
