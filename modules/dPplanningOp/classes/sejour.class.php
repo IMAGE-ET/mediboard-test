@@ -398,6 +398,10 @@ class CSejour extends CCodable {
 		$sejour = new CSejour;
 		$sejour->patient_id = $this->patient_id;
 		$sejour->group_id   = $this->group_id;
+		
+		// Si on veut rechercher pour un type de séjour donné
+    $sejour->type   = $this->type;
+    
 		$siblings = $sejour->loadMatchingList();
 
     $this->updateFormFields();
