@@ -235,6 +235,7 @@ class CMediusers extends CMbObject {
     $backProps["evenements_ssr"]                  = "CEvenementSSR therapeute_id";
 		$backProps["activites_rhs"]                   = "CLigneActivitesRHS executant_id";
 		$backProps["replacement"]                     = "CReplacement replacer_id";
+    $backProps["frais_divers"]                    = "CFraisDivers executant_id";
     return $backProps;
   }
    
