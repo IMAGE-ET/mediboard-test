@@ -146,6 +146,8 @@
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
         <option value="04"  {{if "04" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
         <option value="24" {{if "24" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
+        <option value="48" {{if "48" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h</option>
+        <option value="72" {{if "72" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h</option>
       </select>
     </td>
   </tr>
