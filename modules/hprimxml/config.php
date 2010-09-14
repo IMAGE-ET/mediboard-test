@@ -16,6 +16,11 @@ $dPconfig["hprimxml"] = array (
     "version"    => "1.05",
     "send_ack"   => "1" 
   ),
+  "evt_frais_divers" => array(
+    "validation" => "0",
+    "version"    => "1.05",
+    "send_ack"   => "1" 
+  ),
   "evt_patients" => array(
     "validation" => "0",
     "version"    => "1.05",

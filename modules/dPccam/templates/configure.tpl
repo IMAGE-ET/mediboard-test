@@ -8,63 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
-
-<input type="hidden" name="m" value="system" />
-<input type="hidden" name="dosql" value="do_configure" />
-
-<table class="form">
-
-	<!-- CCodeCCAM -->  
-	{{assign var=class value=CCodeCCAM}}
-	  
-	<tr>
-	  <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
-	</tr>
-	
-	<tr>
-	  {{assign var=var value=use_cache}}
-	  <th>
-	    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-	      {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-	    </label>  
-	  </th>
-	  <td>
-	    <select class="bool" name="{{$m}}[{{$class}}][{{$var}}]">
-	      <option value="0" {{if "0" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
-	      <option value="1" {{if "1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
-	    </select>
-	  </td>
-	</tr>
-	
-		{{assign var=class value=CCodable}}
-		<tr>
-	  {{assign var=var value=use_getMaxCodagesActes}}
-	  <th>
-	    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-	      {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-	    </label>  
-	  </th>
-	  <td>
-	    <select class="bool" name="{{$m}}[{{$class}}][{{$var}}]">
-	      <option value="0" {{if "0" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
-	      <option value="1" {{if "1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
-	    </select>
-	  </td>
-	</tr>
-	
-	
-  <tr>
-    <td class="button" colspan="6">
-      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    </td>
-  </tr>
-</table>
-
-</form>
-
-{{include file="../../system/templates/configure_dsn.tpl" dsn=ccamV2}}
-
 <script type="text/javascript">
 
 function startCCAM() {
@@ -78,32 +21,26 @@ function startNGAP(){
   NGAPUrl.setModuleAction("dPccam", "httpreq_do_add_ngap");
   NGAPUrl.requestUpdate("ngap");
 }
+	
+Main.add(Control.Tabs.create.curry('tabs-configure', true));
+</script>'
 
-</script>
+<ul id="tabs-configure" class="control_tabs">
+  <li><a href="#CCAM">{{tr}}CCAM{{/tr}}</a></li>
+  <li><a href="#NGAP">{{tr}}NGAP{{/tr}}</a></li>
+  <li><a href="#FraisDivers">{{tr}}CFraisDivers{{/tr}}</a></li>
+</ul>
 
-<h2>Import de la base de données CCAM</h2>
+<hr class="control_tabs" />
 
-<table class="tbl">
-  <tr>
-    <th>{{tr}}Action{{/tr}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <td><button class="tick" onclick="startCCAM()" >Importer la base de données CCAM</button></td>
-    <td id="ccam"></td>
-  </tr>
-</table>
+<div id="CCAM" style="display: none;">
+{{mb_include template=inc_config_ccam}}
+</div>
 
-<h2>Import de la base de codes NGAP</h2>
-<table class="tbl">
-  <tr>
-    <th>{{tr}}Action{{/tr}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
-  </tr>
-  
-  <tr>
-    <td><button class="tick" onclick="startNGAP()" >Importer la base de codes NGAP</button></td>
-    <td id="ngap"></td>
-  </tr>
-</table>
+<div id="NGAP" style="display: none;">
+{{mb_include template=inc_config_ngap}}
+</div>
+
+<div id="FraisDivers" style="display: none;">
+{{mb_include template=inc_config_frais_divers}}
+</div>

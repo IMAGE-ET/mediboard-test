@@ -76,8 +76,8 @@ class CEchangeHprim extends CMbMetaObject {
     $specs["type"]                    = "str";
     $specs["sous_type"]               = "str";
     $specs["date_echange"]            = "dateTime";
-    $specs["message_content_id"]      = "ref class|CContentXML show|0";
-    $specs["acquittement_content_id"] = "ref class|CContentXML show|0";
+    $specs["message_content_id"]      = "ref class|CContentXML show|0 cascade";
+    $specs["acquittement_content_id"] = "ref class|CContentXML show|0 cascade";
     $specs["initiateur_id"]           = "ref class|CEchangeHprim";
     $specs["statut_acquittement"]     = "str show|0";
     $specs["message_valide"]          = "bool show|0";

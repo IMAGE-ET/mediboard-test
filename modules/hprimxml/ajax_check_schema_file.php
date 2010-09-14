@@ -39,6 +39,12 @@ if ($evenement == "evt_serveuretatspatient") {
   }
 }
 
+if ($evenement == "evt_frais_divers") {
+  if ($version == "1.05") {
+    $file = $racine."serveurActivitePmsi/msgEvenementsFraisDivers105.xsd";
+  }
+}
+
 if ($evenement == "evt_patients") {
   $version = str_replace(".", "", $version);
   $file = $racine."patients/msgEvenementsPatients$version.xsd";

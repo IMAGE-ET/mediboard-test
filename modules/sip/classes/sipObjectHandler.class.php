@@ -303,24 +303,26 @@ class CSipObjectHandler extends CMbObjectHandler {
     $dest_hprim = $domEvenement->_ref_destinataire;
     if ($dest_hprim->actif) {
       $source = CExchangeSource::get("$dest_hprim->_guid-evenementPatient");
-      $source->setData($msgEvtVenuePatient);
-      $source->send();
-      $acquittement = $source->receive();
+      if ($source->_id) {
+        $source->setData($msgEvtVenuePatient);
+        $source->send();
+        $acquittement = $source->receive();
+        
+        if ($acquittement) {
+          $echange_hprim = $domEvenement->_ref_echange_hprim;
+          $echange_hprim->date_echange = mbDateTime();
+          
+          $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
+          $domGetAcquittement->loadXML(utf8_decode($acquittement));
+          $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
+          $doc_valid = $domGetAcquittement->schemaValidate();
+          
+          $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
+          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          $echange_hprim->_acquittement = $acquittement;
       
-      if ($acquittement) {
-        $echange_hprim = $domEvenement->_ref_echange_hprim;
-        $echange_hprim->date_echange = mbDateTime();
-        
-        $domGetAcquittement = new CHPrimXMLAcquittementsPatients();
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));
-        $domGetAcquittement->_ref_echange_hprim = $echange_hprim;
-        $doc_valid = $domGetAcquittement->schemaValidate();
-        
-        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementPatient();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        $echange_hprim->_acquittement = $acquittement;
-    
-        $echange_hprim->store();
+          $echange_hprim->store();
+        } 
       }      
     }
   }

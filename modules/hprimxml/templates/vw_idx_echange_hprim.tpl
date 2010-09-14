@@ -36,11 +36,12 @@ refreshEchange = function(echange_hprim_id, echange_hprim_classname){
 var evenements = {{$evenements|@json}};
 function fillSelect(source, dest) {
   var selected = $V(source);
-  console.debug(selected);
   dest.update();
+  dest.insert(new Element('option', {value: ''}).update('&mdash; Liste des messages'));
+  dest.insert(new Element('option', {value: 'inconnu'}).update($T('hprimxml-evt-none')));
   $H(evenements[selected]).each(function(pair){
     var v = pair.key;
-    dest.insert(new Element('option', {value: v}).update(v));
+    dest.insert(new Element('option', {value: v}).update($T('hprimxml-evt_'+selected+'-'+v)));
   });
 }
   

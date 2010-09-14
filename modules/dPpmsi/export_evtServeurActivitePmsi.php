@@ -78,35 +78,37 @@ foreach ($destinataires as $_destinataire) {
 	$logs = array();
 	if ($_destinataire->actif) {
     $source = CExchangeSource::get("$_destinataire->_guid-$evenementActivitePMSI->sous_type");
-		$sent_files = CValue::get("sent_files");
-		if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
-		  $source->setData($msgEvtActivitePMSI);
-		  if ($source->send()) {
-        $echange_hprim->date_echange = mbDateTime();
-        $echange_hprim->store();
-		    $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard";
-		  }
-			$acquittement = $source->receive();
-      if ($acquittement) {
-      	switch ($typeObject) {
-          case "op" :
-						$domGetAcquittement = new CHPrimXMLAcquittementsServeurActes();
-				    break;
-          case "sej" :
-						$domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
-						break;
-				}
-        $domGetAcquittement->loadXML(utf8_decode($acquittement));
-        $domGetAcquittement->_ref_echange_hprim = $echange_hprim;       
-        $doc_valid = $domGetAcquittement->schemaValidate();
-        
-        $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementServeurActivitePmsi();
-        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-        $echange_hprim->_acquittement = $acquittement;
-    
-        $echange_hprim->store();				
-			}
-		}
+    if ($source->_id) {
+      $sent_files = CValue::get("sent_files");
+      if (isset($_POST["hostname"]) or ($doc_valid and !$sent_files)) {
+        $source->setData($msgEvtActivitePMSI);
+        if ($source->send()) {
+          $echange_hprim->date_echange = mbDateTime();
+          $echange_hprim->store();
+          $logs[] = "Archivage du fichier envoyé sur le serveur Mediboard";
+        }
+        $acquittement = $source->receive();
+        if ($acquittement) {
+          switch ($typeObject) {
+            case "op" :
+              $domGetAcquittement = new CHPrimXMLAcquittementsServeurActes();
+              break;
+            case "sej" :
+              $domGetAcquittement = new CHPrimXMLAcquittementsPMSI();
+              break;
+          }
+          $domGetAcquittement->loadXML(utf8_decode($acquittement));
+          $domGetAcquittement->_ref_echange_hprim = $echange_hprim;       
+          $doc_valid = $domGetAcquittement->schemaValidate();
+          
+          $echange_hprim->statut_acquittement = $domGetAcquittement->getStatutAcquittementServeurActivitePmsi();
+          $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          $echange_hprim->_acquittement = $acquittement;
+      
+          $echange_hprim->store();        
+        }
+      }
+    }
   }
 }
 

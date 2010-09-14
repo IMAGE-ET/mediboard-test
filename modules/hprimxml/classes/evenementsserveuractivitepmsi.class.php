@@ -15,6 +15,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     'evenementPMSI'                => "CHPrimXMLEvenementsPmsi",
     'evenementServeurActe'         => "CHPrimXMLEvenementsServeurActes",
     'evenementServeurEtatsPatient' => "CHPrimXMLEvenementsServeurEtatsPatient",
+    'evenementFraisDivers'         => "CHPrimXMLEvenementsFraisDivers"
   );
   
   function __construct($dirschemaname = null, $schemafilename = null) {

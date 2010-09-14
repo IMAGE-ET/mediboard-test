@@ -104,7 +104,7 @@ Main.add(function () {
   {{/if}}
   
   {{if $app->user_prefs.ccam_consultation == 1}}
-  <li><a href="#Actes">Actes</a></li>
+  <li><a href="#Actes">Cotation</a></li>
   {{/if}}
   
   <li><a href="#fdrConsult">Docs et Règlements</a></li>
@@ -166,7 +166,10 @@ Main.add(function () {
 	    <li><a href="#ccam">Actes CCAM</a></li>
 	    <li><a href="#ngap">Actes NGAP</a></li>
 	    {{if $sejour && $sejour->_id}}
-	    <li><a href="#cim">Diagnostics</a></li>
+	    <li><a href="#cim">Diagnostics</a></li>	    
+	    {{/if}}
+	    {{if $dPconfig.dPccam.CCodable.use_frais_divers.CConsultation}}
+	    <li><a href="#fraisdivers">Frais divers</a></li>
 	    {{/if}}
     </ul>
     <hr class="control_tabs"/>
@@ -190,6 +193,12 @@ Main.add(function () {
 	    {{mb_include module=dPsalleOp template=inc_diagnostic_principal modeDAS="1"}}
 	  </div>
 	  {{/if}}
+	  
+	  {{if $dPconfig.dPccam.CCodable.use_frais_divers.CConsultation}}     
+    <div id="fraisdivers" style="display: none;">
+      {{mb_include module=dPccam template=inc_frais_divers object=$consult}}
+    </div>
+    {{/if}}
 	{{/if}}
 </div>
 {{/if}}

@@ -87,7 +87,6 @@ Main.add(function () {
     <li><a href="#ngap">Actes NGAP</a></li>
     {{if $consult->sejour_id}}
       <li><a href="#cim">Diagnostics</a></li>
-      <li><a href="#fraisdivers">Frais divers</a></li>
     {{/if}}
   </ul>
   <hr class="control_tabs"/>
@@ -110,10 +109,7 @@ Main.add(function () {
       {{assign var="sejour" value=$consult->_ref_sejour}}
       {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}
     </div>
-    
-    <div id="fraisdivers" style="display: none;">
-      {{mb_include module=dPccam template=inc_frais_divers object=$consult->_ref_sejour}}
-    </div>
+
   {{/if}}
 </div>
 {{/if}}

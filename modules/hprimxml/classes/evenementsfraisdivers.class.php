@@ -27,15 +27,38 @@ class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActiviteP
 
     $evenementFraisDivers = $this->addElement($evenementsFraisDivers, "evenementFraisDivers");
 
-    // Ajout du patient
+    // Ajout du patient (light)
     $mbPatient =& $mbSejour->_ref_patient;
     $patient = $this->addElement($evenementFraisDivers, "patient");
     $this->addPatient($patient, $mbPatient, false, true);
     
-    // Ajout de la venue, c'est-à-dire le séjour
+    // Ajout de la venue, c'est-à-dire le séjour (light)
     $venue = $this->addElement($evenementFraisDivers, "venue");
     $this->addVenue($venue, $mbSejour, false, true);
 
+    // Ajout des frais divers
+    $mbSejour->loadRefsFraisDivers();
+    foreach ($mbSejour->_ref_frais_divers as $_mb_frais_divers) {
+      $_mb_frais_divers->loadRefType();
+      $_mb_frais_divers->loadRefExecutant();
+      $_mb_frais_divers->loadExecution();
+      
+      $this->addFraisDivers($evenementFraisDivers, $_mb_frais_divers);
+    }
+    
+    if ($mbSejour->_ref_consultations) {
+      foreach ($mbSejour->_ref_consultations as $_consultation) {
+        $_consultation->loadRefsFraisDivers();
+        foreach ($_consultation->_ref_frais_divers as $_mb_frais_divers) {
+          $_mb_frais_divers->loadRefType();
+          $_mb_frais_divers->loadExecution();
+          $_mb_frais_divers->loadRefExecutant();
+          
+          $this->addFraisDivers($evenementFraisDivers, $_mb_frais_divers);
+        }
+      }
+    }
+        
     // Traitement final
     $this->purgeEmptyElements();
   }

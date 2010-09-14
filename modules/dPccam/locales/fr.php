@@ -1,5 +1,7 @@
 <?php
 $locales['CActeCCAM-title-modify'] = 'Modification Acte CCAM';
+$locales['CCAM'] = 'CCAM';
+$locales['CCodable'] = 'Codable';
 $locales['CCodeCCAM'] = 'Code CCAM';
 $locales['CCodeCCAM.remboursement.1'] = 'Remboursable';
 $locales['CCodeCCAM.remboursement.2'] = 'Non remboursable';
@@ -77,8 +79,14 @@ $locales['CFraisDiversType-title-create'] = 'Nouveau type de frais divers';
 $locales['CFraisDiversType-title-modify'] = 'Modifier le type de frais divers';
 $locales['CFraisDiversType.none'] = 'Aucun type';
 $locales['CFraisDiversType.one'] = 'type de frais divers';
+$locales['NGAP'] = 'NGAP';
+$locales['config-dPccam-CCodable-use_frais_divers-CConsultation'] = 'Frais divers pour une consultation';
+$locales['config-dPccam-CCodable-use_frais_divers-COperation'] = 'Frais divers pour une opération';
+$locales['config-dPccam-CCodable-use_frais_divers-CSejour'] = 'Frais divers pour un séjour';
 $locales['config-dPccam-CCodable-use_getMaxCodagesActes'] = 'Utiliser le test sur le nombre d\'actes codés';
+$locales['config-dPccam-CCodable-use_getMaxCodagesActes-desc'] = 'Utiliser le test sur le nombre d\'actes codés';
 $locales['config-dPccam-CCodeCCAM-use_cache'] = 'Utiliser le cache';
+$locales['config-dPccam-CCodeCCAM-use_cache-desc'] = 'Utiliser le cache';
 $locales['mod-dPccam-tab-configure'] = 'Configuration';
 $locales['mod-dPccam-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';

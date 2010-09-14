@@ -241,9 +241,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addProfessionnelSante($elParent, $mbMediuser) {
-    $medecin = $this->addElement($elParent, "medecin");
-    $this->addElement($medecin, "numeroAdeli", $mbMediuser->adeli);
-    $identification = $this->addElement($medecin, "identification");
+    $this->addElement($elParent, "numeroAdeli", $mbMediuser->adeli);
+    $identification = $this->addElement($elParent, "identification");
     $id400 = new CIdSante400();
     $id400->object_class = "CMediusers";
     $id400->object_id    = $mbMediuser->_id;
@@ -251,11 +250,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $id400->loadMatchingObject();
     $this->addElement($identification, "code", $id400->_id ? $id400->id400 : "prat$mbMediuser->user_id");
     $this->addElement($identification, "libelle", $mbMediuser->_view);
-    $personne = $this->addElement($medecin, "personne");
+    $personne = $this->addElement($elParent, "personne");
     $this->addElement($personne, "nomUsuel", $mbMediuser->_user_last_name);
     $prenoms = $this->addElement($personne, "prenoms");
     $this->addElement($prenoms, "prenom", $mbMediuser->_user_first_name);
-    return $medecin;
   }
   
   function addActeCCAM($elParent, $mbActeCCAM, $mbOp) {
@@ -288,7 +286,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $medecins = $this->addElement($executant, "medecins");
     $medecinExecutant = $this->addElement($medecins, "medecinExecutant");
     $this->addAttribute($medecinExecutant, "principal", "oui");
-    $this->addProfessionnelSante($medecinExecutant, $mbExecutant);
+    $medecin = $this->addElement($medecinExecutant, "medecin");
+    $this->addProfessionnelSante($medecin, $mbExecutant);
     $this->addUniteFonctionnelle($executant, $mbOp);
     
     $modificateurs = $this->addElement($acteCCAM, "modificateurs");
@@ -746,7 +745,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $participants = $this->addElement($elParent, "participants");
     foreach ($mbParticipants as $mbParticipant) {
       $participant = $this->addElement($participants, "participant");
-      $this->addProfessionnelSante($participant, $mbParticipant);
+      $medecin = $this->addElement($participant, "medecin");
+      $this->addProfessionnelSante($medecin, $mbParticipant);
     }
         
     // Libellé de l'opération
@@ -994,6 +994,46 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($diagnostic, "type", $typeDiagnostic);
     
     $this->addElement($diagnostic, "codeCim10", $codeCim10);
+  }
+  
+  function addFraisDivers($elParent, CFraisDivers $mbFraisDivers) {
+    $fraisDivers = $this->addElement($elParent, "FraisDivers");
+    
+    // Action réalisée
+    $this->addAttribute($fraisDivers, "action", "création");
+    //Produit facturable
+    $this->addAttribute($fraisDivers, "facturable", "oui");
+    
+    // Date de l'événement
+    $this->addDateTimeElement($fraisDivers, "dateAction");
+    
+    // Acteur déclencheur de cet action dans l'application créatrice.
+    $mbExecutant = $mbFraisDivers->_ref_executant;
+    $acteur = $this->addElement($fraisDivers, "acteur");
+    $this->addProfessionnelSante($acteur, $mbExecutant);
+    
+    // Correspond à l'identification de la ligne de saisie
+    $identifiant = $this->addElement($fraisDivers, "identifiant");
+    $emetteur = $this->addElement($identifiant, "emetteur", "$mbFraisDivers->_id");
+    
+    // Lettre clé
+    $this->addElement($fraisDivers, "lettreCle"  , $mbFraisDivers->_ref_type->code);
+    // Coefficient
+    $this->addElement($fraisDivers, "coefficient", $mbFraisDivers->coefficient);
+    // Quantité de produits
+    $this->addElement($fraisDivers, "quantite"   , $mbFraisDivers->quantite);
+
+    // Date d'execution
+    $execute = $this->addElement($fraisDivers, "execute");
+    $this->addDateHeure($execute, $mbFraisDivers->_execution);
+
+    // Montant des frais
+    $montant = $this->addElement($fraisDivers, "montant");
+    $this->addTypeMontant($montant, $mbFraisDivers);
+  }
+  
+  function addTypeMontant($elParent, CFraisDivers $mbFraisDivers) {
+    $this->addElement($elParent, "total", $mbFraisDivers->montant_base);
   }
 }
 

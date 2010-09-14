@@ -411,16 +411,28 @@
 		{{if $app->user_prefs.ccam_sejour == 1 }}
 		<div id="actes" style="display: none;">
 		  <ul id="tab-actes" class="control_tabs">
-		    <li><a href="#one">Actes NGAP</a></li>
+		    <li><a href="#ngap">Actes NGAP</a></li>
+		    {{if $dPconfig.dPccam.CCodable.use_frais_divers.CSejour}}
+        <li><a href="#fraisdivers">Frais divers</a></li>
+        {{/if}}
 		  </ul>
 		  <hr class="control_tabs" />
 		  
 		  <table class="form">
-		    <tr id="one" style="display: none;">
+		    <tr id="ngap" style="display: none;">
 		      <td id="listActesNGAP"> </td>
 		    </tr>
 		  </table>
-		</div>
+		  
+		  
+		  {{if $dPconfig.dPccam.CCodable.use_frais_divers.CSejour}}   
+		  <table class="form">
+        <tr id="fraisdivers" style="display: none;">
+          <td id="listFraisDivers">{{mb_include module=dPccam template=inc_frais_divers object=$sejour}}</td>
+        </tr>
+      </table>  
+      {{/if}}
+		</div>    
 		{{/if}}
 		
 		{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read}}
