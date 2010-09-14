@@ -561,7 +561,6 @@ class CPrescription extends CMbObject {
       }
 			
       $msg = $line_comment->store();
-			mbTRace($msg);
       CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-create");
     
     }
