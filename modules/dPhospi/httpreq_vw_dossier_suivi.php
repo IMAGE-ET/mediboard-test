@@ -111,17 +111,12 @@ if($sejour->type == "urg" && CAppUI::conf("dPprescription CPrescription prescrip
 	// Chargement des lignes de prescriptions d'elements
 	$prescription->loadRefsLinesElement();
 	
-	// Chargement des lignes de commentaire de medicament
-	$prescription->loadRefsLinesComment("medicament");
+	$prescription->loadRefsLinesAllComments();
 	
-	foreach($prescription->_ref_prescription_lines_comment as $_comments_by_cat){
-		foreach($_comments_by_cat as $_comments){
-		  foreach($_comments["comment"] as $_comment){
-		  	$_comment->canEdit();
-				$_comment->countBackRefs("transmissions");
-				$list_trans_const["$_comment->debut $_comment->time_debut $_comment->_guid"] = $_comment;
-      }
-		}
+	foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+		$_comment->canEdit();
+		$_comment->countBackRefs("transmissions");
+		$list_trans_const["$_comment->debut $_comment->time_debut $_comment->_guid"] = $_comment;
 	}
   
 	// Ajout des lignes de prescription dans la liste du suivi de soins

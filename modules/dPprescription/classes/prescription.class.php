@@ -554,7 +554,14 @@ class CPrescription extends CMbObject {
       $line_comment->prescription_id = $this->_id;
       $line_comment->praticien_id = $praticien_id;
       $line_comment->creator_id = $AppUI->user_id;
+			
+			if($this->_ref_object instanceof CSejour && $this->_ref_object->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")){
+        $line_comment->debut = mbDate();
+        $line_comment->time_debut = mbTime();  
+      }
+			
       $msg = $line_comment->store();
+			mbTRace($msg);
       CAppUI::displayMsg($msg, "CPrescriptionLineComment-msg-create");
     
     }
