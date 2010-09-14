@@ -134,7 +134,7 @@ var Url = Class.create({
     }
   },
 	
-  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {
+  pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters) {
     this.addParam("dialog", 1);
   
     var iLeft = 50;
@@ -157,11 +157,25 @@ var Url = Class.create({
   
     // Forbidden characters for IE
     sWindowName = sWindowName.replace(/[ -]/gi, "_");
-    this.oWindow = window.open(sBaseUrl + this.make(), sWindowName, sFeatures);  
+    this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make()), sWindowName, sFeatures);  
     window.children[sWindowName] = this.oWindow;
 		
     if (!this.oWindow)
       return this.showPopupBlockerAlert(sWindowName);
+    
+    if (oPostParameters) {
+      var form = DOM.form({
+        method: "post", 
+        action: sBaseUrl + this.make(), 
+        target: sWindowName
+      });
+      
+      $(document.documentElement).insert(form);
+      
+      Form.fromObject(form, oPostParameters, true);
+      form.submit();
+      form.remove();
+    }
     
     // Prefixed window collection
     if (sPrefix) {
@@ -201,8 +215,8 @@ var Url = Class.create({
     return this;
   },
   
-  popup: function(iWidth, iHeight, sWindowName, sPrefix) {
-    this.pop(iWidth, iHeight, sWindowName, null, sPrefix);
+  popup: function(iWidth, iHeight, sWindowName, sPrefix, oPostParameters) {
+    this.pop(iWidth, iHeight, sWindowName, null, sPrefix, oPostParameters);
   
     // Prefixed window collection
     if (sPrefix) {

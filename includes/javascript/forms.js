@@ -471,8 +471,11 @@ Object.extend(Form, {
     });
     return object;
   },
-  fromObject: function(form, object){
+  fromObject: function(form, object, createFields){
     $H(object).each(function (pair) {
+      if (createFields && !form.elements[pair.key]) {
+        form.insert(new Element("input", {type: "hidden", name: pair.key, value: pair.value}));
+      }
       $V(form.elements[pair.key], pair.value);
     });
   },
