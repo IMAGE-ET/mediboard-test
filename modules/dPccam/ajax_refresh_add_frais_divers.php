@@ -16,6 +16,7 @@ $object->loadRefsFraisDivers();
 $frais_divers = new CFraisDivers;
 $frais_divers->loadListExecutants();
 $frais_divers->setObject($object);
+$frais_divers->quantite = 1;
 $frais_divers->coefficient = 1;
 
 // Création du template

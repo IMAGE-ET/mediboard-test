@@ -35,6 +35,16 @@ Main.add(function(){
   });
 });
 
+updateMontant = function(form){
+  var oldValue = $V(form._last_coefficient);
+  var newValue = $V(form.coefficient);
+  
+  if (oldValue)
+    $V(form.montant_base, $V(form.montant_base) / oldValue * newValue);
+    
+  $V(form._last_coefficient, newValue);
+}
+
 removeFraisDivers = function(id, form) {
   if (!confirm("Voulez vous réelement supprimer de frais divers ?")) return;
   
@@ -49,6 +59,8 @@ removeFraisDivers = function(id, form) {
   <input type="hidden" name="m" value="dPccam" />
   <input type="hidden" name="dosql" value="do_frais_divers_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="_last_coefficient" value="{{$frais_divers->coefficient}}" />
+  
   {{mb_field object=$frais_divers field=object_id hidden=true}}
   {{mb_field object=$frais_divers field=object_class hidden=true}}
   {{mb_key object=$frais_divers}}
@@ -70,7 +82,7 @@ removeFraisDivers = function(id, form) {
         <input type="text" name="type_id_autocomplete_view" class="autocomplete" />
         {{mb_field object=$frais_divers field=type_id hidden=true}}
       </td>
-      <td>{{mb_field object=$frais_divers field=coefficient increment=true form=formAddFraisDivers size=2}}</td>
+      <td>{{mb_field object=$frais_divers field=coefficient increment=true form=formAddFraisDivers size=2 onchange="updateMontant(this.form)"}}</td>
       <td>{{mb_field object=$frais_divers field=facturable typeEnum=select}}</td>
       <td>{{mb_field object=$frais_divers field=montant_base}}</td>
       <td>
