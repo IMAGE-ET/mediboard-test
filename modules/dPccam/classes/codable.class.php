@@ -284,6 +284,14 @@ class CCodable extends CMbObject {
       }
     }
   }
+  
+  function loadRefsFraisDivers(){
+    $this->_ref_frais_divers = $this->loadBackRefs("frais_divers");
+    foreach($this->_ref_frais_divers as $_frais) {
+      $_frais->loadRefType();
+    }
+    return $this->_ref_frais_divers;
+  }
 
   function getMaxCodagesActes() {
     if(!$this->_id || $this->codes_ccam === null || $this->_forwardRefMerging) {
