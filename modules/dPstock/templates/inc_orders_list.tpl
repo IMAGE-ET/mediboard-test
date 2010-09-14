@@ -240,7 +240,8 @@
 
 <div style="text-align: right;">
   <label>
-    <input type="checkbox" onclick="$$('tr.bill').invoke('setVisible', this.checked)" /> Afficher les facturées
+    <input type="checkbox" {{if $invoiced}} checked="checked" {{/if}}
+           onclick="refreshListOrders('received', getForm('orders-list-filter'), this.checked)" /> Afficher les facturées
   </label>
 </div>
 
@@ -259,7 +260,7 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr {{if $curr_order->bill_number}}style="display: none;" class="bill"{{/if}}>
+    <tr {{if $curr_order->bill_number}}class="bill"{{/if}}>
       <td>
         <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_order->_guid}}')">
           {{$curr_order->order_number}}

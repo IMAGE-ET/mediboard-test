@@ -10,9 +10,10 @@
  
 CCanDo::checkRead();
 
-$type = CValue::get('type');
-$keywords = CValue::get('keywords');
+$type        = CValue::get('type');
+$keywords    = CValue::get('keywords');
 $category_id = CValue::get('category_id');
+$invoiced    = CValue::get('invoiced');
 
 $where = array();
 
@@ -20,8 +21,13 @@ if ($category_id) {
   $where["product.category_id"] = "= '$category_id'";
 }
 
+if (($type == "received") && !$invoiced) {
+  $where["bill_number"] = "IS NULL";
+}
+
+// @todo faire de la pagination
 $order = new CProductOrder;
-$orders = $order->search($type, $keywords, 200, $where);
+$orders = $order->search($type, $keywords, 500, $where);
 
 foreach($orders as $_order) {
   $_order->updateCounts();
@@ -36,5 +42,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('orders', $orders);
 $smarty->assign('type',   $type);
+$smarty->assign('invoiced', $invoiced);
 
 $smarty->display('inc_orders_list.tpl');
