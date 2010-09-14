@@ -105,17 +105,38 @@ function reloadPrescription(prescription_id){
         {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
       </a>
       <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
+        <img src="images/icons/edit.png" />
  			</a>
+      
       {{$patient->_view}}
       ({{$patient->_age}} ans
       {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
       &mdash; Dr {{$selOp->_ref_chir->_view}}
       {{if $sejour->_ref_curr_affectation->_id}}- {{$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view}}{{/if}}
       <br />
+      
       {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
       {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
       &mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
+      <br />
+      
+      {{tr}}CSejour{{/tr}}
+      du {{mb_value object=$sejour field=entree}}
+      au 
+      {{if $sejour->canEdit()}}
+      {{assign var=sejour_guid value=$sejour->_guid}}
+      <form name="editSortiePrevue-{{$sejour_guid}}" method="post" action="?"
+            style="font-size: 0.9em;" onsubmit="return onSubmitFormAjax(this)">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_sejour_aed" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_key object=$sejour}}
+        {{mb_field object=$sejour field=entree_prevue hidden=true}}
+        {{mb_field object=$sejour field=sortie_prevue register=true form="editSortiePrevue-$sejour_guid" onchange="this.form.onsubmit()"}}
+      </form>
+      {{else}}
+        {{mb_value object=$sejour field=sortie_prevue}}
+      {{/if}}
     </th>
   </tr>
   
