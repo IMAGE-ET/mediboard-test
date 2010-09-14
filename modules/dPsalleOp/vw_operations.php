@@ -219,6 +219,8 @@ if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
 }
 
+$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
+
 $smarty->assign("anesth_perop", $anesth_perop);
 $smarty->assign("unites"                 , $unites);
 $smarty->assign("acte_ngap"              , $acte_ngap);
@@ -233,7 +235,7 @@ $smarty->assign("selOp"                  , $selOp);
 $smarty->assign("timing"                 , $timing);
 $smarty->assign("date"                   , $date);
 $smarty->assign("modif_operation"        , $modif_operation);
-$smarty->assign("listValidateurs"        , CPersonnel::loadListPers("op"));
+$smarty->assign("listValidateurs"        , $listValidateurs);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));

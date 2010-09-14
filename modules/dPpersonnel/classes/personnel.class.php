@@ -82,9 +82,17 @@ class CPersonnel extends CMbObject {
    * @param bool $actif
    * @return array[CPersonnel] 
    */
-  static function loadListPers($emplacement, $actif = true){
+  static function loadListPers($emplacement, $actif = true, $groupByUser = false){
     $personnel = new CPersonnel();
-    $where["emplacement"] = "= '$emplacement'";
+    
+    $where = array();
+    
+    if (is_array($emplacement)) {
+      $where["emplacement"] = $personnel->_spec->ds->prepareIn($emplacement);
+    }
+    else {
+      $where["emplacement"] = "= '$emplacement'";
+    }
     
     // Could have been ambiguous with CMediusers.actif
     if ($actif) {
@@ -93,7 +101,9 @@ class CPersonnel extends CMbObject {
     
     $ljoin["users"] = "personnel.user_id = users.user_id";
     $order = "users.user_last_name";
-    $listPers = $personnel->loadGroupList($where, $order, null, null, $ljoin);
+    $group = $groupByUser ? "personnel.user_id" : null;
+    
+    $listPers = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
     foreach($listPers as $pers){
       $pers->loadRefUser();
     }
