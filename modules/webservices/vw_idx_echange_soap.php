@@ -78,21 +78,14 @@ foreach($echangesSoap as &$_echange_soap) {
   $_echange_soap->destinataire = $url['host'];
 }
 
-$methods = array();
+$services = array();
+
 if (!$echange_soap->_id) {
   $echange_soap = new CEchangeSOAP;
   $ds = CSQLDataSource::get("std");
-  $types = $ds->query("SELECT type FROM echange_soap GROUP BY type");
-  while($l = $ds->fetchAssoc($types)){
-    $dsb = CSQLDataSource::get("std");
-    $resb = $dsb->query("SELECT web_service_name FROM echange_soap WHERE type = '{$l['type']}' GROUP BY web_service_name");
-    while($lb = $dsb->fetchAssoc($resb)){
-      $dsc = CSQLDataSource::get("std");
-      $resc = $dsc->query("SELECT function_name FROM echange_soap WHERE type = '{$l['type']}' AND web_service_name = '{$lb['web_service_name']}' GROUP BY function_name");
-      while($lc = $dsc->fetchAssoc($resc)){
-        $methods[$l["type"]][$lb["web_service_name"]][] = $lc["function_name"];
-      }
-    }
+  $res = $ds->query("SELECT type FROM echange_soap GROUP BY type");
+  while ($l = $ds->fetchAssoc($res)) {
+  	$services[] = $l['type'];
   }
 }
 
@@ -107,7 +100,7 @@ $smarty->assign("page"               , $page);
 $smarty->assign("service"            , $service);
 $smarty->assign("web_service"        , $web_service);
 $smarty->assign("fonction"           , $fonction);
-$smarty->assign("methods"            , $methods);
+$smarty->assign("services"           , $services);
 
 $smarty->display("vw_idx_echange_soap.tpl");
 ?>
