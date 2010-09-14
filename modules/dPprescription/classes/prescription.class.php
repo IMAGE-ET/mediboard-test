@@ -248,7 +248,8 @@ class CPrescription extends CMbObject {
         
 		if($_line->_class_name == "CPrescriptionLineMix"){
       $_line->loadRefsLines();
-    // Gestion des prescription_line_mixes
+			
+      // Gestion des prescription_line_mixes
       $_line->loadRefPraticien();
       $_line->_id = "";
       $_line->prescription_id = $this->_id;
@@ -286,7 +287,6 @@ class CPrescription extends CMbObject {
         $_line->time_debut = mbTime();
       }
       
-      
       $msg = $_line->store();
       CAppUI::displayMsg($msg, "CPrescriptionLineMix-msg-create");
       
@@ -302,7 +302,7 @@ class CPrescription extends CMbObject {
       $_line->unite_duree = "jour";
       $_line->debut = "";
       $time_debut = "";
-              
+      
       // Calcul de la date d'entree
       switch($_line->jour_decalage){
         case 'E': 
@@ -489,11 +489,12 @@ class CPrescription extends CMbObject {
       if($operation->_id){
         $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);
       }
-      if($this->_ref_object->_class_name === "CSejour"){
-        $sejour =& $this->_ref_object;
-      }
     }
   
+    if($this->_ref_object instanceof CSejour){
+      $sejour =& $this->_ref_object;
+    }
+		
     // Parcours des lignes de medicaments
     foreach($protocole->_ref_prescription_lines as &$_line_med){      
         // Chargement des lignes de substitutions de la ligne de protocole
