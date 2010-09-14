@@ -768,9 +768,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $assure = $this->addElement($elParent, "assure");
     $this->addAssure($assure, $mbPatient);
     
-    $dates = $this->addElement($elParent, "dates");
-    $this->addElement($dates, "dateDebutDroit", mbDate($mbPatient->deb_amo));
-    $this->addElement($dates, "dateFinDroit", mbDate($mbPatient->fin_amo));
+    if ($mbPatient->deb_amo && $mbPatient->fin_amo) {
+      $dates = $this->addElement($elParent, "dates");
+      $this->addElement($dates, "dateDebutDroit", mbDate($mbPatient->deb_amo));
+      $this->addElement($dates, "dateFinDroit", mbDate($mbPatient->fin_amo));
+    }
     
     $obligatoire = $this->addElement($elParent, "obligatoire");
     $this->addElement($obligatoire, "grandRegime", $mbPatient->code_regime);
