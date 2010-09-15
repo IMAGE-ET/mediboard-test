@@ -542,6 +542,17 @@ var Url = Class.create({
   },
   
   ViewFilePopup: function(objectClass, objectId, elementClass, elementId, sfn){
+    var popupName = "Fichier";
+    popupName += "-"+elementClass+"-"+elementId;
+    
+    /*
+    var event = Function.getEvent();
+    if (event) {
+      Event.stop(event);
+      if (event.shiftKey)
+        popupName += "-"+objectClass+"-"+objectId;
+    }*/
+    
     this.setModuleAction("dPfiles", "preview_files");
     this.addParam("popup", 1);
     this.addParam("objectClass", objectClass);
@@ -551,7 +562,7 @@ var Url = Class.create({
     if(sfn != 0){
       this.addParam("sfn", sfn);
     }
-    this.popup(785, 600, "Fichier");
+    this.popup(785, 600, popupName);
   }
 } );
 

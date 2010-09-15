@@ -631,3 +631,13 @@ PeriodicalExecuter.addMethods({
 document.observeOnce = function(event_name, outer_callback){
   $(document.documentElement).observeOnce(event_name, outer_callback);
 };
+
+Function.getEvent = function(){
+  var caller = arguments.callee.caller;
+  
+  while(caller = caller.caller) {
+    if(caller.arguments[0] instanceof Event) {
+      return caller.arguments[0];
+    }
+  }
+}
