@@ -43,14 +43,8 @@ $where = array();
 $where["prescription.object_class"] = " = 'CSejour'";
 $where["prescription.type"]         = " = 'sejour'";
 $where["service.service_id"]        = " = '$service_id'";
-
-
-//$where["sejour.entree_prevue"]      = " < '$date 23:59:59'";
-//$where["sejour.sortie_prevue"]      = " > '$date 00:00:00'";
 $where["affectation.entree"]      = " < '$date 23:59:59'";
 $where["affectation.sortie"]      = " > '$date 00:00:00'";	
-
-
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
 
 // Chargement des configs de services
@@ -93,7 +87,7 @@ if($date == mbDate()){
   }
   if(in_array($time, $nuit)){
     $date_min = mbDate("- 1 DAY", $date)." ".reset($matin).":00:00";
-    $dates = array($date => array("nuit" => $nuit), mbDate("+ 1 DAY", $date) => array("matin" => $matin));
+    $dates = array(mbDate("- 1 DAY", $date) => array("nuit" => $nuit), $date => array("matin" => $matin));
   }
 } else {
   $date_min = "$date 00:00:00"; 
@@ -121,7 +115,6 @@ foreach($dates as $curr_date => $_date){
 }
 $date_max = "$date_reelle $_hour:00:00";
 
-
 foreach($prescriptions as $_prescription){
   $_prescription->loadRefPatient();
   $patients[$_prescription->_ref_patient->_id] = $_prescription->_ref_patient;
@@ -135,15 +128,15 @@ foreach($prescriptions as $_prescription){
 	
 	$_prescription->calculAllPlanifSysteme();
   
-	// Chargement des prises prevues entre les dates prevues
+	// Chargement des planifications systemes
 	$planif = new CPlanificationSysteme();
 	$where = array();
   $where["sejour_id"] = " = '$_prescription->object_id'";
 	$where["dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
-  $planifs = $planif->loadList($where);
+  $planifs_systeme = $planif->loadList($where);
 	
-	
-	foreach($planifs as $_planif){
+	// Parcours et stockage des planifications systeme dans la pancarte
+	foreach($planifs_systeme as $_planif){
 		// Chargement et stockage de la ligne
 		$_planif->loadTargetObject();
 
@@ -158,14 +151,14 @@ foreach($prescriptions as $_prescription){
 	    }
 			$list_lines[$type][$_planif->_ref_object->_id] = $_planif->_ref_object;
 			
-			if($_planif->_ref_prise->_quantite_administrable){			
-	      $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
-	      $date = mbDate($_planif->dateTime);
-			  if(!isset($pancarte[$_prescription->_id][$_planif->dateTime][$type][$_planif->object_id]["prevue"])){
-				  $pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] = 0;
-				}
-				$pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] += $_planif->_ref_prise->_quantite_administrable;
+			$qte_adm = $_planif->_ref_prise->_quantite_administrable ? $_planif->_ref_prise->_quantite_administrable : 1; 
+			
+		  $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
+      $date = mbDate($_planif->dateTime);
+		  if(!isset($pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"])){
+			  $pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] = 0;
 			}
+			$pancarte[$_prescription->_id]["$date $time"][$type][$_planif->object_id]["prevue"] += $qte_adm;			
 		}
 		
 		if($_planif->_ref_object instanceof CPrescriptionLineMixItem){
@@ -209,6 +202,11 @@ foreach($prescriptions as $_prescription){
 	$administrations = $administration->loadList($where, null, null, null, $ljoin);
 	
 	foreach($administrations as $_administration){
+		$time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
+    $date = mbDate($_administration->dateTime);
+			
+		$type_adm = $_administration->planification ? "prevue" : "adm";
+			
 		$_administration->loadTargetObject();
 		if($_administration->_ref_object instanceof CPrescriptionLineMedicament || $_administration->_ref_object instanceof CPrescriptionLineElement){
 			if($_administration->_ref_object instanceof CPrescriptionLineMedicament){
@@ -220,12 +218,27 @@ foreach($prescriptions as $_prescription){
 	    $_administration->_ref_object->_unite_administration = $_administration->unite_prise;
 	    $list_lines[$type][$_administration->_ref_object->_id] = $_administration->_ref_object;
 	    
-	    if(!isset($pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"])){
-	      $pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"] = 0;
+	    if(!isset($pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm])){
+	      $pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm] = 0;
 	    }
-	    $pancarte[$_prescription->_id][$_administration->dateTime][$type][$_administration->object_id]["adm"] += $_administration->quantite;
+	    $pancarte[$_prescription->_id]["$date $time"][$type][$_administration->object_id][$type_adm] += $_administration->quantite;
+			
+			// Suppression d'une planification systeme replanifiée
+	    if($type_adm == "prevue"){
+	      if($_administration->original_dateTime){
+	        $original_time = mbTransformTime($_administration->original_dateTime,null,"%H").":00:00";
+          $original_date = mbDate($_administration->original_dateTime);
+					
+					if(isset( $pancarte[$_prescription->_id]["$original_date $original_time"][$type][$_administration->object_id][$type_adm])){
+		        $pancarte[$_prescription->_id]["$original_date $original_time"][$type][$_administration->object_id][$type_adm] -= $_administration->quantite;
+		        $values =& $pancarte[$_prescription->_id]["$original_date $original_time"][$type][$_administration->object_id];
+						if($values["prevue"] == 0 && !@$values["adm"]){
+							unset($_administration->object_id, $pancarte[$_prescription->_id]["$original_date $original_time"][$type]);
+						}
+					}
+				}
+	    }
     }
-		
 		
 		if($_administration->_ref_object instanceof CPrescriptionLineMixItem){
 			$type_line = $_administration->_ref_object->_ref_prescription_line_mix->type_line;
@@ -241,10 +254,10 @@ foreach($prescriptions as $_prescription){
 			$list_lines[$type_line][$_administration->_ref_object->_ref_prescription_line_mix->_id] = $_administration->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_administration->_ref_object->_id] = $_administration->_ref_object; 
 			
-			if(!isset($pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"])){
-        $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] = 0;
+			if(!isset($pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm])){
+        $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] = 0;
       }
-		  $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id]["adm"] += $_administration->quantite;
+		  $pancarte[$_prescription->_id]["$date $time"][$type_line][$prescription_line_mix_item->prescription_line_mix_id][$_administration->object_id][$type_adm] += $_administration->quantite;
 		}
 	}																																		 											 
 
@@ -283,6 +296,7 @@ foreach($prescriptions as $_prescription){
   	}
   }
 }
+
 // Classement par lit
 ksort($lits);
 $_prescriptions = array();

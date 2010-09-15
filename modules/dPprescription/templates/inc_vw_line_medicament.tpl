@@ -113,7 +113,7 @@
 				</div>
 	    </td>
 	    <td>
-    		<form name="addPerfusionLine-{{$line->_id}}">
+    		<form name="addPerfusionLine-{{$line->_id}}" action="?" method="post">
 	  		  <input type="hidden" name="dosql" value="do_line_to_prescription_line_mix_aed" />
 	  		  <input type="hidden" name="m" value="dPprescription" />
 	  		  <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />

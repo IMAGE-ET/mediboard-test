@@ -353,15 +353,12 @@ Prescription = {
   },
   refreshTabHeader: function(tabName, lineCount, lineCountNonSignee){
     // On cible le bon a href
-    var tab = $('prescription_tab_group').select("a[href=#"+tabName+"]");
- 		var link = tab[0];
+    var link = $('prescription_tab_group').select("a[href=#"+tabName+"]")[0];
 
     lineCountNonSignee > 0 ? link.addClassName("wrong") : link.removeClassName("wrong");
 		lineCount == 0 ? link.addClassName("empty") : link.removeClassName("empty");
 		
-    var name_tab = link.innerHTML.split("  ")[0];
-    // Si le nombre de ligne est > 0
-    link.innerHTML = lineCount > 0 ? name_tab+"  ("+lineCount+")" : link.innerHTML = name_tab;
+    link.select('span')[0].innerHTML = lineCount > 0 ? " ("+lineCount+")" : "";
   },
 	/*
   submitFormStop: function(oForm, object_id, object_class){

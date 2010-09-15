@@ -465,7 +465,7 @@ toggleSearchOptions = function(formName, chap){
 <ul id="prescription_tab_group" class="control_tabs">
 	
 	{{if $dPconfig.dPprescription.CPrescription.show_chapter_med}}
-  <li><a href="#div_medicament">Médicaments</a></li>
+  <li><a href="#div_medicament">Médicaments <span></span></a></li>
   {{/if}}
 	
 {{assign var=easy_mode value=$app->user_prefs.easy_mode}}
@@ -484,7 +484,11 @@ toggleSearchOptions = function(formName, chap){
 			{{/if}}
 			
 			{{if !($mode_protocole && $_chapitre == "dmi")}}
-		  <li><a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+			  <li>
+			  	<a href="#div_{{$_chapitre}}" {{if !$mode_pack}}onmouseup="refreshElementPrescription('{{$_chapitre}}', null, null, true);"{{/if}}>
+			  		{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}} <span></span>
+					</a>
+				</li>
 		  {{/if}}
   {{/foreach}}
 {{/if}}

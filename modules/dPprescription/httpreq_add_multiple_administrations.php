@@ -10,9 +10,12 @@
 
 global $AppUI;
 
-$adm = CValue::get("adm");
+$adm = CValue::post("adm");
 $list_administrations = array();
 $mode_dossier = CValue::get("mode_dossier");
+$refresh_popup = CValue::get("refresh_popup", "0");
+
+$adm = json_decode(stripslashes(utf8_encode($adm)), true);
 
 $sejour = new CSejour();
 $date_sel = null;
@@ -26,6 +29,9 @@ if (count($adm) > 0) {
 		
 		$ad['key_tab'] = str_replace('/', '-', $ad['key_tab']);
 		
+		$date = mbDate($ad['dateTime']);
+		$time = mbTime($ad['dateTime']);
+    
 		// Un peu d'initialisation lourde ...
 	  if (!isset($list_administrations[$ad['line_id']])) {
 	    $list_administrations[$ad['line_id']] = array();
@@ -33,14 +39,14 @@ if (count($adm) > 0) {
 	  if (!isset($list_administrations[$ad['line_id']][$ad['key_tab']])) {
 	    $list_administrations[$ad['line_id']][$ad['key_tab']] = array();
 	  }
-	  if (!isset($list_administrations[$ad['line_id']][$ad['key_tab']][$ad['date']])) {
-	    $list_administrations[$ad['line_id']][$ad['key_tab']][$ad['date']] = array();
+	  if (!isset($list_administrations[$ad['line_id']][$ad['key_tab']][$date])) {
+	    $list_administrations[$ad['line_id']][$ad['key_tab']][$date] = array();
 	  }
-	  if (!isset($list_administrations[$ad['line_id']][$ad['key_tab']][$ad['date']][$ad['heure']])) {
-	    $list_administrations[$ad['line_id']][$ad['key_tab']][$ad['date']][$ad['heure']] = array();
+	  if (!isset($list_administrations[$ad['line_id']][$ad['key_tab']][$date][$time])) {
+	    $list_administrations[$ad['line_id']][$ad['key_tab']][$date][$time] = array();
 	  }
 
-	  $curr_adm = &$list_administrations[$ad['line_id']][$ad['key_tab']][$ad['date']][$ad['heure']];
+	  $curr_adm = &$list_administrations[$ad['line_id']][$ad['key_tab']][$date][$time];
 	
 		// Si une prise est specifiée (pas de moment unitaire), on charge la prise pour stocker l'unite de prise
 		$curr_adm['unite_prise'] = $ad['unite_prise'];
@@ -72,7 +78,7 @@ if (count($adm) > 0) {
 		    break;
 		}
 		
-		if($line->_class_name == "CPrescriptionLineMedicament"){
+		if($line instanceof CPrescriptionLineMedicament){
 		  $line->_ref_produit->loadConditionnement();
 		  $line->loadRefProduitPrescription();
 		}
@@ -80,10 +86,8 @@ if (count($adm) > 0) {
 		$curr_adm['prise'] = new CPrisePosologie();
 		$curr_adm['prise']->quantite = $ad['quantite'];
 		$curr_adm['prise_id'] = $ad['prise_id'];
-		
-		$curr_adm['dateTime'] = $ad['date'].' '.$ad['heure'].':00:00';
-		
-		$curr_adm['notToday'] = ($ad['date'] != mbDate());
+		$curr_adm['dateTime'] = "$date $time";
+		$curr_adm['notToday'] = ($date != mbDate());
 		
 		if (!$date_sel)  $date_sel  = isset($ad['date_sel']) ? $ad['date_sel'] : null;
 		if (!$sejour->_id) {
@@ -108,6 +112,7 @@ $smarty->assign("transmission", $transmission);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("tabs_refresh", $tabs_refresh);
 $smarty->assign("user_id", $AppUI->user_id);
+$smarty->assign("refresh_popup", $refresh_popup);
 $smarty->display("inc_vw_add_multiple_administrations.tpl");
 
 ?>

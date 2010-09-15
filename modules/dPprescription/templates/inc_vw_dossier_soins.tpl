@@ -177,22 +177,36 @@ addCibleTransmission = function(object_class, object_id, view, libelle_ATC) {
   oForm.text.focus();
 }
 
-addAdministration = function(line_id, quantite, key_tab, object_class, date, heure, administrations, planification_id) {
-  // On ne permet pas de faire des planifications sur des lignes de medicament
+addAdministration = function(line_id, quantite, key_tab, object_class, dateTime, administrations, planification_id, multiple_adm) {
+  /*
+	 Dans le cas des administrations multiples, si on clique sur la case principale, 
+	 on selectionne toutes les administrations et on lance la fenetre d'administrations multiples
+	*/
+	if(multiple_adm == 1){
+	  var date_time = dateTime.replace(' ', '_').substring(0,13);
+	  $('subadm_'+line_id+'_'+object_class+'_'+key_tab+'_'+date_time).select('div').each(function(e){
+		  e.onclick.bind(e)();
+		});
+		applyAdministrations();
+    return;
+	}
+	
+	// On ne permet pas de faire des planifications sur des lignes de medicament
 	if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification")){
 	  return;
 	}
+	
   var url = new Url("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
   url.addParam("quantite", quantite);
   url.addParam("key_tab", key_tab);
   url.addParam("object_class", object_class);
-  url.addParam("date", date);
-  url.addParam("heure", heure);
-  url.addParam("administrations", administrations);
+	url.addParam("dateTime", dateTime);
+	url.addParam("administrations", administrations);
   url.addParam("planification_id", planification_id);
   url.addParam("date_sel", "{{$date}}");
   url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
+	url.addParam("multiple_adm", multiple_adm);
   url.popup(500,400,"Administration");
 }
 
@@ -233,9 +247,15 @@ submitRetraitPerf = function(oFormPerf){
   } } )
 }
 
-toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, date, heure, administrations) {
+toggleSelectForAdministration = function (element, line_id, quantite, key_tab, object_class, dateTime) {	
   element = $(element);
-  if (element._administration) {
+
+  // si la case est une administration multiple, on selectionne tous les elements à l'interieur
+	if(element.hasClassName('multiple_adm')){
+	  element.next('div').select('div').invoke('onclick');
+	}
+	
+	if (element._administration) {
     element.removeClassName('administration-selected');
     element._administration = null;
   }
@@ -246,25 +266,29 @@ toggleSelectForAdministration = function (element, line_id, quantite, key_tab, o
       quantite: quantite,
       key_tab: key_tab,
       object_class: object_class,
-      date: date,
-      heure: heure/*,
-      administrations: administrations*/,
-      date_sel: '{{$date}}'
+      dateTime: dateTime,
+			date_sel: '{{$date}}'
     };
   }
 }
 
 applyAdministrations = function () {
   var administrations = {};
-  $('plan_soin').select('div.administration-selected').each(function(element) {
-    var adm = element._administration;
-    administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.date+'_'+adm.heure] = adm;
-  });
+   
+	$$('div.administration-selected').each(function(element) { 
+	  if(!element.hasClassName('multiple_adm')){
+		  var adm = element._administration;
+      administrations[adm.line_id+'_'+adm.key_tab+'_'+adm.dateTime] = adm; 
+		}
+	});
+	
+	$V(getForm("adm_multiple")._administrations, Object.toJSON(administrations));
+	
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_multiple_administrations");
-  url.addObjectParam("adm", administrations);
   url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
-  url.popup(700, 600, "Administrations multiples");
+	url.addParam("refresh_popup", "1");
+  url.popup(700, 600, "Administrations multiples", { onComplete: function(){ alert('titi'); } });
 }
 
 viewLegend = function(){
@@ -414,9 +438,19 @@ Main.add(function () {
     tabs = Control.Tabs.create('tab_categories', true);
   }
   refreshTabState();
+	
+  document.observe("mousedown", function(e){
+    if (!Event.element(e).up(".tooltip")){
+		  $$(".tooltip").invoke("hide");
+  	}
+  });
 });
 
 </script>
+
+<form name="adm_multiple">
+  <input type="hidden" name="_administrations">
+</form>
 
 <form name="click">
   <input type="hidden" name="nb_decalage" value="{{$nb_decalage}}" />

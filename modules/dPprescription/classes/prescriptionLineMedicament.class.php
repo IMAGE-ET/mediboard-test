@@ -218,8 +218,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 		$this->loadRefProduit();
     $this->_view = $this->_ref_produit->libelle;
     $this->_commercial_view = $this->_ref_produit->nom_commercial;
-    //$this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
-    if($this->code_ucd){
+    
+		if($this->code_ucd){
       $this->_ucd_view = "{$this->_ref_produit->libelle_abrege} {$this->_ref_produit->dosage}";
     } else {
       $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
@@ -245,7 +245,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 
     // Calcul de la fin reelle de la ligne
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
-    $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";    	
+	
+    // Si l'unite de duree est l'heure
+		if($this->unite_duree == "heure" || $this->unite_duree == "minute"){
+			$_unite = ($this->unite_duree == "heure") ? "HOURS" : "MINUTES";
+		  $this->_fin_reelle = mbDateTime("+ $this->duree $_unite", $this->_debut_reel);
+    } else {
+      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";      
+		}
 
     if($this->date_arret){
     	$this->_fin_reelle = $this->date_arret;
@@ -272,12 +279,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $mode_protocole = 0, $mode_pharma = 0, $operation_id = 0) {
-  	
-  	/*
-  	 * Une infirmiere peut remplir entierement une ligne si elle l'a créée.
-  	 * Une fois que la ligne est validé par la praticien ou par le pharmacien, l'infirmiere ne peut plus y toucher
-  	 */
-  	
 		global $AppUI, $can;
 	
     // Cas d'une ligne de protocole  

@@ -146,17 +146,17 @@ function checkTransmission(quantite_prevue, quantite_saisie){
   <input type="hidden" name="callback" value="submitTransmission" />
 	<table class="form">
 	  <tr>
-	    <th class="title" colspan="2">Administration de {{$line->_view}}</th>
+	    <th class="title" colspan="2">Administration de {{$line->_view}}<br />{{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}</th>
 	  </tr>
 	  <tr>
 	    <td>
         {{if $notToday}}
           <div class="small-info">
             {{if $mode_plan}}
-              Attention, vous êtes sur le point d'administrer pour le {{$date|date_format:"%d/%m/%Y"}}, 
+              Attention, vous êtes sur le point d'administrer pour le {{$dateTime|date_format:"%d/%m/%Y"}}, 
 	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
 	          {{else}}
-	            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %Hh"}}, 
+	            Attention, cette prise est pour le {{$dateTime|date_format:"%d/%m/%Y à %H:%M"}}, 
 	            or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
             {{/if}}
           </div>
@@ -164,7 +164,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      {{mb_label object=$prise field=quantite}}
 	      {{mb_field object=$prise field=quantite min=0 increment=1 form=addAdministration}}
 	      
-	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	      {{if $line instanceof CPrescriptionLineMedicament}}
 				  {{if $line->_ref_produit_prescription->_id}}
 					  {{$line->_ref_produit_prescription->unite_prise}}
 					{{else}}

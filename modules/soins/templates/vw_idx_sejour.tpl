@@ -527,7 +527,7 @@ printDossierComplet = function(){
         <li onmousedown="DossierMedical.reloadDossierSejour();"><a href="#antecedents">Antécédents</a></li>
         {{/if}} 
 				<li style="float: right">
-          <button type="button" class="button print" onclick="printDossierComplet();">Dossier complet</button>
+          <button type="button" class="button print" onclick="printDossierComplet();">Dossier soins</button>
         </li>
       </ul>
 			

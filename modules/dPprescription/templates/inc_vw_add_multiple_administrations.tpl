@@ -19,19 +19,14 @@ function submitAllAdministrations() {
 	if (transForm.text.value) {
 	  submitFormAjax(transForm, 'systemMsg');
 	}
-	
+		
 	for (var i = 0; i < submitForms.length; i++) {
     var f = submitForms[i];  
     if (f != transForm) {
-	      if (($V(f.quantite_prevue)-0 != $V(f.quantite)-0) && !transForm.text.value) {
-	        alert('Veuillez ajouter une transmission');
-	        (transForm.text).focus();
-	        return false;
-	      }
       if (!checkForm(f)) return false;
       if(i == (submitForms.length - 2)) {
         submitFormAjax(f, 'systemMsg', { onComplete: function(){ 
-          closeApplyAdministrations();
+          closeApplyAdministrations.delay(1);
         } } );
       } else {
         submitFormAjax(f, 'systemMsg'); 
@@ -51,7 +46,7 @@ function submitAllPlanifications(){
     if (!checkForm(f)) return false;
     if(i == (submitForms.length - 1)){
       submitFormAjax(f, 'systemMsg', { onComplete: function(){ 
-        closeApplyAdministrations();
+        closeApplyAdministrations.delay(1);
       } } );
     } else {
       submitFormAjax(f, 'systemMsg');
@@ -80,9 +75,17 @@ function closeApplyAdministrations(dontClose) {
 // Initialisation des onglets
 Main.add( function(){
   menuTabs = Control.Tabs.create('administrations_multiple_tab_group', false);
+	
+  {{if $refresh_popup == 1}}
+	  $V(getForm("all_adm").adm, $V(window.opener.getForm('adm_multiple')._administrations));
+  {{/if}}
 } );
 
 </script>
+
+<form name="all_adm" method='post' action='?m={{$m}}&a={{$a}}&dialog={{$dialog}}&refresh_popup=0&mode_dossier={{$mode_dossier}}'>
+	<input type="hidden" name="adm" value="" onchange="this.form.submit();"/>
+</form>
 
 {{if $sejour->_id}}
 		<h2>
@@ -145,7 +148,7 @@ Main.add( function(){
 		              </form>
 		            {{else}}
 		              <div class="small-info">
-		                Attention, cette prise de {{mb_value object=$by_hour.prise field=quantite}} {{$unite_prise}} est pour le {{$date|date_format:"%d/%m/%Y"}} à {{$hour}}h, 
+		                Attention, cette prise de {{mb_value object=$by_hour.prise field=quantite}} {{$unite_prise}} est pour le {{$date|date_format:"%d/%m/%Y"}} à {{$hour|date_format:"%Hh%M"}}, 
 		                or nous sommes le {{$smarty.now|date_format:"%d/%m/%Y"}}.
 		              </div>
 		            {{/if}}

@@ -67,8 +67,9 @@ Main.add(function(){
 	</select>
   
   <span id="foisPar{{$type}}{{$line->_id}}" style="display: none;">
-    {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPrise$type$line_id}} fois par 
-    {{mb_field object=$prise_posologie field=unite_fois}}
+    {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPrise$type$line_id}} fois par jour
+		<input type="hidden" name="unite_fois" value="jour" /> 
+		{{* mb_field object=$prise_posologie field=unite_fois *}}
   </span>
   
   <span id="tousLes{{$type}}{{$line->_id}}" style="display: none;">

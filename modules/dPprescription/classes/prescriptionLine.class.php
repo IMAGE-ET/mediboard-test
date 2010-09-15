@@ -494,7 +494,18 @@ class CPrescriptionLine extends CMbObject {
       }
       // Administrations
       else {
-        if(!isset($administrations['quantite'])){
+        // Stockage des administrations en fonction de l'heure
+				$minute = mbTransformTime(null, $_administration->dateTime, "%M");
+				if(!isset($administrations["adm_in_hour"][$minute])){
+					$administrations["adm_in_hour"][$minute] = 0;
+				}
+				$administrations["adm_in_hour"][$minute] += $_administration->quantite;
+			
+			  
+			
+			
+			
+			  if(!isset($administrations['quantite'])){
           $administrations['quantite'] = '';
           $administrations['administrations'][$_administration->_id] = '';
         }
@@ -504,7 +515,7 @@ class CPrescriptionLine extends CMbObject {
         
         // Permet de stocker les administrations par unite de prise / type de prise
         $administrations['quantite'] += $_administration->quantite;
-        
+
         // Stockage de la liste des administrations en fonction de la date et de l'heure sous la forme d'un token field
         if(!isset($administrations['list'])){
           $administrations['list'] = $_administration->_id;
@@ -545,6 +556,7 @@ class CPrescriptionLine extends CMbObject {
         }
       } 
     }
+		
     if(!$this->_ref_prises){
       $this->loadRefsPrises();
     }
@@ -567,13 +579,10 @@ class CPrescriptionLine extends CMbObject {
       }
     }
 			
-		// Tableau de stockage des planifs
-		$all_planifs = array();
-		
 		if(!$this->_ref_prises){
 		  $this->loadRefsPrises();
 		}
-    // Parcours des prises
+		
     foreach($this->_ref_prises as &$_prise) {
     	$_prise->calculPlanifs();
     }
@@ -590,7 +599,7 @@ class CPrescriptionLine extends CMbObject {
     $where["object_id"] = " = '$this->_id'";
     $where["object_class"] = " = '$this->_class_name'";
     $where["dateTime"] = " LIKE '$date%'";
-    $planifs = $planif->loadList($where);
+    $planifs = $planif->loadList($where, "dateTime");
 		
     foreach($this->_ref_prises as &$_prise) {
     	// Mise a jour de la quantite (en fonction du poids et de l'unite d'administration)
@@ -623,6 +632,7 @@ class CPrescriptionLine extends CMbObject {
         if($_planif->prise_id != $_prise->_id){
           continue;
         }
+				
         $_heure = substr(mbTime($_planif->dateTime), 0, 2);
 				
         if(!isset($line_plan_soin[$_heure])){
@@ -630,10 +640,15 @@ class CPrescriptionLine extends CMbObject {
         }
         $line_plan_soin[$_heure]["total"] += $_prise->_quantite_administrable;
         $line_plan_soin[$_heure]["total_disp"] += $_prise->_quantite_dispensation;
-        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure);
-        $total_day += $_prise->_quantite_administrable;
+        $line_plan_soin[$_heure][] = array("quantite" => $_prise->_quantite_administrable, "heure_reelle" => $_heure, "full_hour" => substr(mbTime($_planif->dateTime), 0, 5));
+        
+				if(!isset($line_plan_soin[$_heure]["nb_adm"])){
+					$line_plan_soin[$_heure]["nb_adm"] = 0;
+				}
+				$line_plan_soin[$_heure]["nb_adm"]++;
+				$total_day += $_prise->_quantite_administrable;
       }
-            
+			      
       // Stockage du libelle de l'unite de prise
       if($_prise->moment_unitaire_id || $_prise->heure_prise){
         $this->_prises_for_plan[$_prise->unite_prise][$_prise->_id] = $_prise;
