@@ -102,8 +102,8 @@ Main.add(function () {
         {{if array_key_exists("formfields", $_params)}}
           {{if $real_context}}
             <td>
-              {{mb_field object=$constantes field=$_params.formfields.0 size="2" increment=true form="edit-constantes-medicales"}} /
-              {{mb_field object=$constantes field=$_params.formfields.1 size="2" increment=true form="edit-constantes-medicales"}}
+              {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:2em;" increment=true form="edit-constantes-medicales"}} /
+              {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:2em;" increment=true form="edit-constantes-medicales"}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
@@ -143,7 +143,7 @@ Main.add(function () {
 				</td>
 				<td>
 				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
-				    <button type="button" class="trash notext" onclick="emptyAndSubmit('{{$_constante}}');"></button> 
+				    <button type="button" class="trash notext" style="margin: -1px;" onclick="emptyAndSubmit('{{$_constante}}');"></button> 
 				  {{/if}}
 				</td>
       </tr>
