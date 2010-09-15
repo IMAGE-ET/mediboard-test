@@ -467,9 +467,37 @@ class CSetupdPcompteRendu extends CSetup {
               DROP `modeles`";
     $this->addQuery($sql);
     
-		$this->mod_version = "0.57";
+    $this->makeRevision("0.57");
+    
+    // Modification des user logs :
+    // - remplacement de source par content
+    // - remplacement de CCompteRendu par CContentHTML
+    // - mise à jour de l'object_id
+    function change_user_log() {
+	    $ds = CSQLDataSource::get("std");
+	    $sql = "SELECT user_log.object_id, content_id
+	            FROM user_log, compte_rendu
+	            WHERE fields = 'source'
+	            AND user_log.object_class = 'CCompteRendu'
+	            AND compte_rendu.compte_rendu_id = user_log.object_id;";
+	    $res = $ds->query($sql);
 
+	    while ($row = $ds->fetchAssoc($res)) {
+	      $sql = "UPDATE user_log 
+	              SET fields = 'content',
+	                  object_class = 'CContentHTML',
+	                  object_id = {$row['content_id']}
+	              WHERE object_id = {$row['object_id']}";
+	      $ds->query($sql);
+	    }
+	    return true;
+    }
+    
+    $this->addFunction("change_user_log");
+    
+		$this->mod_version = "0.58";
 
+    
   }
 }
 ?>

@@ -270,7 +270,12 @@ class CSetupsystem extends CSetup {
            ) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.29";
+    $this->makeRevision("1.0.29");
+    $sql = "ALTER TABLE `content_html`
+            CHANGE `content` `content` mediumtext NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.30";
   }
 }
 ?>
