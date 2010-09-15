@@ -18,7 +18,8 @@
   </tr>
   <tr>
     <th>{{tr}}Date{{/tr}}</th>
-    <td>{{$docGed->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}</td>
+    {{assign var=lastentry value=$docGed->_lastentry}}
+    <td>{{mb_field object=$lastentry field=date form="ProcEditFrm" register="true"}}</td>
   </tr>
   <tr>
     <th>{{tr}}CDocGedSuivi-doc_ged_suivi_id-court{{/tr}}</th>
