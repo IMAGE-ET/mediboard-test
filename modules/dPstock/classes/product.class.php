@@ -298,10 +298,15 @@ class CProduct extends CMbObject {
     );
     
     $where[] = 'product_order_item.order_item_id NOT IN (
-      SELECT product_order_item.order_item_id FROM product_order_item
+      SELECT product_order_item.order_item_id 
+      FROM product_order_item
       LEFT JOIN product_order_item_reception ON product_order_item_reception.order_item_id = product_order_item.order_item_id
       LEFT JOIN product_order ON product_order.order_id = product_order_item.order_id
-      WHERE product_order.deleted = 0 AND product_order.cancelled = 0
+      WHERE 
+        product_order.deleted = 0 AND
+        product_order.cancelled = 0 AND
+        product_order.date_ordered IS NOT NULL AND
+        product_order_item.renewal = \'1\'
       HAVING SUM(product_order_item_reception.quantity) < product_order_item.quantity
     )';
     
