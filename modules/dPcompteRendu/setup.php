@@ -469,35 +469,30 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.57");
     
-    // Modification des user logs :
+    // Modification des user logs, seulement pour ceux qui ne font 
+    // reference qu'au champ "source" des compte rendus. Dans le cas où d'autres 
+    // champs sont listés, il faudrait splitter le user_log en deux : 
+    // un pour le CR et un pour le ContentHTML
+    // Actions effectuées : 
     // - remplacement de source par content
     // - remplacement de CCompteRendu par CContentHTML
     // - mise à jour de l'object_id
-    function change_user_log() {
-	    $ds = CSQLDataSource::get("std");
-	    $sql = "SELECT user_log.object_id, content_id
-	            FROM user_log, compte_rendu
-	            WHERE fields = 'source'
-	            AND user_log.object_class = 'CCompteRendu'
-	            AND compte_rendu.compte_rendu_id = user_log.object_id;";
-	    $res = $ds->query($sql);
-
-	    while ($row = $ds->fetchAssoc($res)) {
-	      $sql = "UPDATE user_log 
-	              SET fields = 'content',
-	                  object_class = 'CContentHTML',
-	                  object_id = {$row['content_id']}
-	              WHERE object_id = {$row['object_id']}";
-	      $ds->query($sql);
-	    }
-	    return true;
-    }
+    $query = "
+    UPDATE user_log 
+    LEFT JOIN compte_rendu ON compte_rendu.compte_rendu_id = user_log.object_id
+    LEFT JOIN content_html ON content_html.content_id = compte_rendu.content_id
     
-    $this->addFunction("change_user_log");
+    SET 
+      user_log.object_class = 'CContentHTML',
+      user_log.object_id = compte_rendu.content_id,
+      user_log.fields = 'content'
+      
+    WHERE user_log.object_class = 'CCompteRendu'
+      AND user_log.object_id = compte_rendu.compte_rendu_id
+      AND user_log.fields = 'source'";
+    $this->addQuery($query);
     
 		$this->mod_version = "0.58";
-
-    
   }
 }
 ?>
