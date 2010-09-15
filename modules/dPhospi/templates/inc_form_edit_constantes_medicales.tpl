@@ -33,6 +33,12 @@ calculImcVst = function(form) {
   }
 }
 
+emptyAndSubmit = function(const_name) {
+  var form = getForm("edit-constantes-medicales");
+	$V(form[const_name], '');
+  return submitConstantesMedicales(form);
+}
+
 Main.add(function () {
   var oForm = getForm('edit-constantes-medicales');
 
@@ -77,6 +83,7 @@ Main.add(function () {
       <th class="category">Constantes</th>
       {{if $real_context}}<th class="category">Nouvelles</th>{{/if}}
       <th class="category" colspan="2">Dernières</th>
+      <th class="category"></th>
     </tr>
     
     {{assign var=all_constantes value="CConstantesMedicales"|static:"list_constantes"}}
@@ -134,6 +141,11 @@ Main.add(function () {
             <input type="checkbox" name="checkbox-constantes-medicales-{{$_constante}}" onchange="$('constantes-medicales-{{$_constante}}').setVisible(this.checked)" tabIndex="100" />
           {{/if}}
 				</td>
+				<td>
+				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
+				    <button type="button" class="trash notext" onclick="emptyAndSubmit('{{$_constante}}');"></button> 
+				  {{/if}}
+				</td>
       </tr>
       
       {{if $_constante == "_imc"}}
@@ -148,11 +160,11 @@ Main.add(function () {
       {{if $constantes->datetime}}
       <tr>
         <th>{{mb_title object=$constantes field=datetime}}</th>
-        <td colspan="3">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
+        <td colspan="4">{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
       </tr>
       {{/if}}
       <tr>      
-        <td colspan="4" class="button">
+        <td colspan="5" class="button">
           <button class="modify" onclick="return submitConstantesMedicales(this.form);">
             {{if !$constantes->datetime}}
               {{tr}}Create{{/tr}}
@@ -165,7 +177,7 @@ Main.add(function () {
               {{tr}}Create{{/tr}}
             </button>
             <button class="trash" type="button" onclick="if (confirm('Etes-vous sûr de vouloir supprimer ce relevé ?')) {$V(this.form.del, 1); return submitConstantesMedicales(this.form);}">
-              {{tr}}Delete{{/tr}}
+              {{tr}}CConstantesMedicales.delete_all{{/tr}}
             </button>
           {{/if}}
         </td>
@@ -174,7 +186,7 @@ Main.add(function () {
     
     {{if $at_least_one_hidden}}
     <tr>
-      <td colspan="4" class="button">
+      <td colspan="5" class="button">
         <button class="down" type="button" onclick="$$('.constantes .secondary').invoke('toggle')">Afficher toutes les valeurs</button>
       </td>
     </tr>
