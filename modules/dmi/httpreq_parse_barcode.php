@@ -25,6 +25,7 @@ $dmi_category_id = CAppUI::conf("dmi CDMI product_category_id");
 
 $object = new CProductOrderItemReception;
 $where = array(
+  "product_order_item_reception.cancelled" => "= '0'",
   "(product_order_item_reception.lapsing_date > '".mbDate()."' OR product_order_item_reception.lapsing_date IS NULL)",
   "(product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL)",
   "product.category_id" => "= '$dmi_category_id'",
@@ -88,6 +89,7 @@ foreach($lots as $_id => $_lot) {
     "product.category_id" => "= '$dmi_category_id'",
     "dmi.product_id" => "IS NOT NULL",
     "product_order_item_reception.code != '' AND product_order_item_reception.code IS NOT NULL",
+    "product_order_item_reception.cancelled" => "= '0'",
   );
   
   $ljoin['dmi'] = "dmi.product_id = product.product_id";

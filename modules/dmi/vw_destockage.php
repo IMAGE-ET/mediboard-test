@@ -18,6 +18,7 @@ $ljoin = array(
 
 $where = array(
   "product_order_item_reception.lapsing_date" => "IS NOT NULL",
+  "product_order_item_reception.cancelled" => "='0'",
 );
 
 $reception = new CProductOrderItemReception;

@@ -273,13 +273,29 @@ Main.add(function () {
     $V(form.order_item_reception_id, lot_id);
     confirmDeletion(form, {typeName:'', objName:'ce lot', ajax: true});
   }
+  
+  cancelLot = function(lot_id, cancel) {
+    var form = getForm('cancel-lot-{{$class_name}}');
+    if (!cancel || confirm("Etes-vous sûr de vouloir annuler ce lot?")) {
+      $V(form.order_item_reception_id, lot_id);
+      $V(form.cancelled, cancel);
+      onSubmitFormAjax(form);
+    }
+  }
 </script>
 
 <form name="delete-lot-{{$class_name}}" action="" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="m" value="dPstock" />
-  <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
   <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="callback" value="refreshDMI" />
+  {{mb_key object=$lot}}
+</form>
+
+<form name="cancel-lot-{{$class_name}}" action="" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPstock" />
+  <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+  <input type="hidden" name="cancelled" value="1" />
   <input type="hidden" name="callback" value="refreshDMI" />
   {{mb_key object=$lot}}
 </form>
@@ -334,7 +350,14 @@ Main.add(function () {
   
   {{foreach from=$element->_ref_product->_ref_lots item=_lot}}
     <tr>
-      <td><button type="button" class="trash notext" onclick="deleteLot({{$_lot->_id}})"></button></td>
+      <td {{if $_lot->cancelled}}class="error"{{/if}}>
+        <button type="button" class="trash notext" onclick="deleteLot({{$_lot->_id}})">{{tr}}Delete{{/tr}}</button>
+        {{if $_lot->cancelled}}
+          <button type="button" class="change notext" onclick="cancelLot({{$_lot->_id}}, 0)">{{tr}}Reset{{/tr}}</button>
+        {{else}}
+          <button type="button" class="cancel notext" onclick="cancelLot({{$_lot->_id}}, 1)">{{tr}}Cancel{{/tr}}</button>
+        {{/if}}
+      </td>
       <td>{{mb_value object=$_lot field=quantity}}</td>
       <td>{{mb_value object=$_lot field=date}}</td>
       <td>{{mb_value object=$_lot field=code}}</td>

@@ -32,7 +32,7 @@
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop"}}
+    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie"}}
     <tr>
       <td colspan="10">
         <strong>Commentaires:</strong><br />
@@ -162,7 +162,7 @@ Main.add(function(){
       </tr>
     {{/foreach}}
     
-    {{if $check_list->object_class != "COperation" || $check_list->type == "postop"}}
+    {{if $check_list->object_class != "COperation" || $check_list->type == "postop" || $check_list->type == "postendoscopie"}}
     <tr>
       <td colspan="10" style="white-space: normal;">
         {{mb_label object=$check_list field=comments}}<br />

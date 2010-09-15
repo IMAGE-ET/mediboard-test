@@ -10,11 +10,49 @@
 
 <script type="text/javascript">
 function changePage(page){
-  $V(getForm("Filter").elements.start, page);
+  $V(getForm("tracabiliteFilter").elements.start, page);
 }
+
+Main.add(function(){
+  var form = getForm("tracabiliteFilter");
+  
+  var url = new Url("system", "ajax_seek_autocomplete");
+  url.addParam("object_class", "CPatient");
+  url.addParam("field", "_patient_id");
+  url.addParam("input_field", "_patient_view");
+  url.autoComplete(form.elements._patient_view, null, {
+    minChars: 3,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field,selected){
+      $V(field.form._patient_id, selected.getAttribute("id").split("-")[2]);
+      if ($V(field.form.elements._patient_view) == "") {
+        $V(field.form.elements._patient_view, selected.down('.view').innerHTML);
+      }
+    }
+  });
+  
+  var url = new Url("system", "ajax_seek_autocomplete");
+  url.addParam("object_class", "CProduct");
+  url.addParam("field", "product_id");
+  url.addParam("input_field", "_product_view");
+  url.autoComplete(form.elements._product_view, null, {
+    minChars: 3,
+    method: "get",
+    select: "view",
+    dropdown: true,
+    afterUpdateElement: function(field,selected){
+      $V(field.form.product_id, selected.getAttribute("id").split("-")[2]);
+      if ($V(field.form.elements._product_view) == "") {
+        $V(field.form.elements._product_view, selected.down('.view').innerHTML);
+      }
+    }
+  });
+});
 </script>
 
-<form class="not-printable" name="Filter" action="?" method="get">
+<form class="not-printable" name="tracabiliteFilter" action="?" method="get">
   <input name="m" value="{{$m}}" type="hidden" />
   <input name="{{$actionType}}" value="{{$action}}" type="hidden" />
   <input name="dialog" value="{{$dialog}}" type="hidden" />
@@ -23,11 +61,25 @@ function changePage(page){
   <table class="form">
   	<tr>
       <th>{{mb_label object=$filter field=_patient_id}}</th>
-      <td>{{mb_field object=$filter field=_patient_id}}</td>
+      <td>
+        {{mb_field object=$filter field=_patient_id hidden=true}}
+        <input name="_patient_view" value="{{$filter->_ref_patient}}" size="35" />
+        <button type="button" class="cancel notext" onclick="$V(this.form._patient_id,'');$V(this.form._patient_view,'');">{{tr}}Reset{{/tr}}</button>
+      </td>
+      
       <th>{{mb_label object=$filter field=product_id}}</th>
-      <td>{{mb_field object=$filter field=product_id canNull=true}}</td>
+      <td>
+        {{mb_field object=$filter field=product_id canNull=true hidden=true}}
+        <input name="_product_view" value="{{$filter->_ref_product}}" size="35" />
+        <button type="button" class="cancel notext" onclick="$V(this.form.product_id,'');$V(this.form._product_view,'');">{{tr}}Reset{{/tr}}</button>
+      </td>
+        
       <th>{{mb_label object=$filter field=order_item_reception_id}}</th>
-      <td>{{mb_field object=$filter field=order_item_reception_id canNull=true}}</td>
+      <td><input type="text" name="lot" value="{{$lot}}" /></td>
+      
+      <td>
+        <button type="submit" class="search">{{tr}}Search{{/tr}}</button>
+      </td>
   	</tr>
   </table>
 </form>

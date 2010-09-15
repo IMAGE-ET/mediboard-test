@@ -33,6 +33,7 @@ class CPrescriptionLineDMI extends CMbObject {
   var $_ref_praticien          = null;
   var $_ref_operation          = null;
   var $_ref_product            = null;
+  var $_ref_patient            = null;
   var $_ref_product_order_item_reception = null;
   
 
@@ -138,6 +139,10 @@ class CPrescriptionLineDMI extends CMbObject {
   function loadRefPraticien(){
     $this->_ref_praticien = $this->loadFwdRef("praticien_id");
 		$this->_ref_praticien->loadRefFunction();
+  }
+  
+  function loadRefPatient(){
+    $this->_ref_patient = $this->loadFwdRef("_patient_id");
   }
   
   function loadRefProduct(){

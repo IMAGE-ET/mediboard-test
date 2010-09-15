@@ -684,6 +684,11 @@ class CSetupdPstock extends CSetup {
     $sql = "ALTER TABLE `product` CHANGE `scc_code` `scc_code` VARCHAR( 10 )";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.38";
+    $this->makeRevision("1.38");   
+    $sql = "ALTER TABLE `product_order_item_reception` 
+              ADD `cancelled` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.39";
   }
 }

@@ -9,6 +9,7 @@
     <th style="width: 0.1%">Qté<br /> restante</th>
     <th>Recommande</th>
     <th>Commandes<br /> existantes</th>
+    <th>Suppr.</th>
   </tr>
   
   {{foreach from=$receptions item=_lot}}
@@ -81,6 +82,16 @@
           </span>
           <br />
         {{/foreach}}
+      </td>
+      <td style="width: 1%;">
+        <form name="lot-cancel-{{$_lot->_id}}" action="?m=dmi&amp;tab=vw_destockage" method="post"
+              onsubmit="return confirm('Etes-vous sûr de vouloir annuler ce lot ?')">
+          <input type="hidden" name="m" value="dPstock" />
+          <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
+          <input type="hidden" name="cancelled" value="1" />
+          <input type="hidden" name="order_item_reception_id" value="{{$_lot->_id}}" />
+          <button class="cancel notext" type="submit">Annuler le lot</button>
+        </form>
       </td>
     </tr>
   {{/foreach}}

@@ -73,8 +73,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
   
   function isReadonly() {
-    $this->completeField("validator_id");
-    $this->completeField("date");
+    $this->completeField("validator_id", "date");
     return $this->_readonly = ($this->_id && $this->validator_id && $this->date);
   }
   

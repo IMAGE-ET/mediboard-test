@@ -20,6 +20,7 @@ class CProductOrderItemReception extends CMbObject {
   var $lapsing_date       = null;
   var $date               = null;
   var $barcode_printed    = null;
+  var $cancelled          = null;
 
   // Object References
   //    Single
@@ -52,6 +53,7 @@ class CProductOrderItemReception extends CMbObject {
     $specs['lapsing_date']  = 'date mask|99/99/9999 format|$3-$2-$1';
     $specs['date']          = 'dateTime notNull';
     $specs['barcode_printed'] = 'bool';
+    $specs['cancelled']     = 'bool notNull default|0';
     $specs['_price']        = 'currency';
     $specs['_unit_quantity']= 'num pos';
     return $specs;
@@ -134,6 +136,10 @@ class CProductOrderItemReception extends CMbObject {
     $this->completeField("reception_id");
     
     $is_new = !$this->_id;
+    
+    if ($is_new && $this->cancelled === null) {
+      $this->cancelled = 0;
+    }
     
     $this->loadRefOrderItem();
     $this->_ref_order_item->loadOrder();
