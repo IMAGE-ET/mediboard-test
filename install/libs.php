@@ -155,18 +155,6 @@ $library->patches[] = $patch;
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
-$library->name = "FPDF";
-$library->url = "http://www.fpdf.org/";
-$library->fileName = "fpdf153.tgz";
-$library->description = "Composant de génération de fichiers PDF";
-$library->sourceDir = "fpdf153";
-$library->targetDir = "fpdf";
-$library->versionFile = "histo.htm";
-$library->versionString = "v1.53";
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
 $library->name = "TCPDF";
 $library->url = "http://sourceforge.net/projects/tcpdf/";
 $library->fileName = "tcpdf_1_53_0_TC034.zip";
@@ -303,12 +291,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "Flotr plotting library";
 $library->url = "http://solutoire.com/flotr/";
-$library->fileName = "flotr.r152.tar.gz";
+$library->fileName = "flotr.r171.tar.gz";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flotr";
 $library->targetDir = "flotr";
 $library->versionFile = "flotr.js";
-$library->versionString = '$Id: flotr.js 152';
+$library->versionString = '$Id: flotr.js 171';
 
 CLibrary::$all[$library->name] = $library;
 

@@ -11,8 +11,8 @@
 CCanDo::checkRead();
 
 $product_id = CValue::get('product_id');
-$width      = CValue::get('width', 300);
-$height     = CValue::get('height', 80);
+$width      = CValue::get('width', 400);
+$height     = CValue::get('height', 100);
 
 $product = new CProduct();
 $product = $product->load($product_id);
@@ -91,6 +91,7 @@ $series = array_reverse($series);
 $data = array(
   "series" => $series,
   "options" => CFlotrGraph::merge("bars", array(
+    "fontSize" => 7,
     "bars" => array("barWidth" => 0.8),
     "xaxis" => array(
       "showLabels" => true, 
