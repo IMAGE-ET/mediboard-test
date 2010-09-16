@@ -316,6 +316,12 @@ class CProduct extends CMbObject {
     else
       $list = $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
       
+    foreach($list as $_id => $_item) {
+      if ($_item->isReceived()) {
+        unset($list[$_id]);
+      }
+    }
+    
     $this->_in_order = $list;
     
     if ($list) {
