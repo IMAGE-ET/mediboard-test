@@ -162,6 +162,7 @@ class CConsultation extends CCodable {
     $specs["secteur2"]          = "currency show|0";
     $specs["chrono"]            = "enum notNull list|16|32|48|64 show|0";
     $specs["annule"]            = "bool show|0";
+    $specs["_etat"]             = "str";
     
     $specs["rques"]             = "text helped seekable";
     $specs["examen"]            = "text helped seekable show|0";

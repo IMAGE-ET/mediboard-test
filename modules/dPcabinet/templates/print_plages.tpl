@@ -2,11 +2,15 @@
 
 <table class="tbl">
   <tr class="clear">
-    <th colspan="6">
+    <th colspan="10">
       <a href="#" onclick="window.print()">
+        {{if $filter->_id}}
+        Plage du {{mb_value object=$filter field=_date}}
+        {{else}}
         Rapport du {{mb_value object=$filter field=_date_min}}
         {{if $filter->_date_min != $filter->_date_max}}
         au {{mb_value object=$filter field=_date_max}}
+        {{/if}}
         {{/if}}
       </a>
     </th>

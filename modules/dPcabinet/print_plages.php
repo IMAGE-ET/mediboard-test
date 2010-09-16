@@ -13,8 +13,9 @@ $can->needsRead();
 $now = mbDate();
 
 $filter = new CConsultation;
-$filter->_date_min = CValue::get("_date_min"    , "$now");
-$filter->_date_max = CValue::get("_date_max"    , "$now");
+$filter->_id = CValue::get("plage_id"       , null);
+$filter->_date_min = CValue::get("_date_min", "$now");
+$filter->_date_max = CValue::get("_date_max", "$now");
 $filter->_coordonnees = CValue::get("_coordonnees");
 $filter->_plages_vides = CValue::get("_plages_vides");
 
@@ -23,17 +24,22 @@ $chir = CValue::getOrSession("chir");
 // On selectionne les plages
 $listPlage = new CPlageconsult;
 $where = array();
-$where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-
-// Liste des praticiens
-$mediusers = new CMediusers();
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $mediusers->loadPraticiens(PERM_EDIT);
+if($filter->_id) {
+	$filter->load($filter->_id);
+  $filter->loadRefsFwd();
+	$where["plageconsult_id"] = "= '$filter->_id'";
 } else {
-  $listPrat = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
+  $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+  
+  // Liste des praticiens
+  $mediusers = new CMediusers();
+  if(CAppUI::pref("pratOnlyForConsult", 1)) {
+    $listPrat = $mediusers->loadPraticiens(PERM_EDIT);
+  } else {
+    $listPrat = $mediusers->loadProfessionnelDeSante(PERM_EDIT);
+  }
+  $where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
 }
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir);
-
 $order = array();
 $order[] = "date";
 $order[] = "chir_id";
@@ -60,11 +66,11 @@ foreach ($listPlage as $plage_id => &$plage) {
 
 // Suppression des plages vides
 if (!$filter->_plages_vides) {
-	foreach ($listPlage as $plage_id => $plage) {
-	  if (!count($plage->_ref_consultations)) {
-	    unset($listPlage[$plage_id]);
-	  }
-	}
+  foreach ($listPlage as $plage_id => $plage) {
+    if (!count($plage->_ref_consultations)) {
+      unset($listPlage[$plage_id]);
+    }
+  }
 }
 
 

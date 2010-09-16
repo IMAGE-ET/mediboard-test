@@ -42,6 +42,14 @@ function showConsultSiDesistement(){
   url.pop(500, 500, "test");
 }
 
+function printPlage(plage_id) {
+    var form = document.paramFrm;
+    var url = new Url;
+    url.setModuleAction("dPcabinet", "print_plages");
+    url.addParam("plage_id", plage_id);
+    url.popup(700, 550, "Planning");
+  }
+
 Main.add(function () {
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
 });
@@ -333,6 +341,7 @@ Main.add(function () {
           <th class="title" colspan="10">
             <strong>
             {{if $plageSel->_id}}
+            <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
             {{mb_include module=system template=inc_object_notes object=$plageSel}}
             Consultations du {{$plageSel->date|date_format:$dPconfig.longdate}}
             {{else}}
@@ -343,12 +352,12 @@ Main.add(function () {
         </tr>
 
         <tr>
-          <th style="width: 0.1%;">Heure</th>
-          <th>Nom</th>
-          <th>Motif</th>
-          <th>Remarques</th>
+          <th style="width: 0.1%;">{{mb_title class=CConsultation field=heure}}</th>
+          <th>{{mb_title class=CConsultation field=patient_id}}</th>
+          <th>{{mb_title class=CConsultation field=motif}}</th>
+          <th>{{mb_title class=CConsultation field=rques}}</th>
           <th>RDV</th>
-          <th>Etat</th>
+          <th>{{mb_title class=CConsultation field=_etat}}</th>
         </tr>
         {{foreach from=$plageSel->_ref_consultations item=_consult}}
         <tr>
@@ -372,7 +381,7 @@ Main.add(function () {
             {{if $patient->_id}}
               <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->heure|date_format:$dPconfig.time}}</a>
             {{else}}
-              {{$_consult->heure|date_format:$dPconfig.time}}
+              {{mb_value object=$_consult field=heure}}
             {{/if}}
             </div>
             
