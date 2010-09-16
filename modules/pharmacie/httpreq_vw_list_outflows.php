@@ -28,7 +28,8 @@ $list_outflows = $delivrance->loadList($where, "date_delivery DESC, service_id",
 $total_outflows = $delivrance->countList($where);
 
 foreach($list_outflows as $_outflow) {
-  $_outflow->_ref_stock->_ref_product->getPendingOrderItems(false);
+  if ($_outflow->stock_id)
+    $_outflow->_ref_stock->_ref_product->getPendingOrderItems(false);
 }
 
 $service = new CService;
