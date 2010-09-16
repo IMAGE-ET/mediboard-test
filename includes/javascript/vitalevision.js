@@ -107,8 +107,6 @@ var VitaleVision = {
     // For the patient selector TODO: change the field names !
     $V(form.elements.name, getNodeValue("nomUsuel", ident));  
     $V(form.elements.firstName, getNodeValue("prenomUsuel", ident));  
-    
-    form.insert({bottom: new Element('input', {type: 'hidden', name: '_update_vitale', value: '1'})});
 
     if(getNodeValue("naissance date", ident) != "") { // Si format FR
       var dateNaissance = getNodeValue("naissance date", ident),
@@ -153,6 +151,8 @@ var VitaleVision = {
         amo = benef.getElementsByTagName("amo")[0];
         cmu = benef.getElementsByTagName("cmu")[0];
   
+    form.insert(DOM.input({type: 'hidden', name: 'date_lecture_vitale', value: 'now'}));
+    
     $V(form.nom, getNodeValue("nomUsuel", ident));  
     $V(form.prenom, getNodeValue("prenomUsuel", ident));  
     
