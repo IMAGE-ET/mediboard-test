@@ -309,6 +309,21 @@ class CConstantesMedicales extends CMbObject {
   }
   
   function store () {
+  	// S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
+  	// alors on supprime la constante.
+  	if ($this->_id) {
+  		$ok = false;
+	    foreach (CConstantesMedicales::$list_constantes as $const => $params) {
+	      $this->completeField($const);
+	      if ($this->$const !== "" && $this->$const !== null) {
+	        $ok = true;
+	        break;
+	      }
+	    }
+	    if (!$ok)
+	  	  return parent::delete();
+    }
+    
     if (!$this->_id && !$this->_new_constantes_medicales) {
       $this->updateDBFields();
       $constante = new CConstantesMedicales();
