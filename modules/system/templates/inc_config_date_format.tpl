@@ -9,7 +9,7 @@
 *}}
 
 <tr>
-  <th>
+  <th style="width: 50%">
     <label for="{{$var}}" title="{{tr}}config-{{$var}}-desc{{/tr}}">
       {{tr}}config-{{$var}}{{/tr}}
     </label>  

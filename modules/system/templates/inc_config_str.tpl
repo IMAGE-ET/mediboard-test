@@ -25,7 +25,7 @@
 {{/if}}
 
 <tr>
-  <th {{if @$thcolspan}}colspan="{{$thcolspan}}"{{/if}}>
+  <th {{if @$thcolspan}}colspan="{{$thcolspan}}"{{else}}style="width: 50%"{{/if}}>
     <label for="{{$field}}" title="{{tr}}{{$locale}}-desc{{/tr}}">
       {{tr}}{{$locale}}{{/tr}}
     </label>  

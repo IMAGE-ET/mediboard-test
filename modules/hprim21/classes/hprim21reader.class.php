@@ -1,11 +1,12 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CHPrim21Reader {
   
@@ -34,44 +35,70 @@ class CHPrim21Reader {
   var $date                       = null;
   
   // Nombre d'éléments
-   var $nb_patients = null;
+   var $nb_patients  = null;
   
   // Log d'erreur
-  var $error_log = array();
+  var $error_log     = array();
   
-  function readFile($fileName) {
-    $file = fopen( $fileName, 'rw' );
-    if(!$file) {
-      $this->error_log[] = "Fichier non trouvé";
-      return false;
+  var $_echange_hprim21 = null;
+  
+  function bindEchange($fileName = null) {
+    $this->_echange_hprim21->date_production   = mbDateTime($this->date);
+    $this->_echange_hprim21->version           = $this->version;
+    $this->_echange_hprim21->type              = $this->type;
+    $this->_echange_hprim21->nom_fichier       = $this->nom_fichier;
+    $this->_echange_hprim21->id_emetteur       = $this->id_emetteur;
+    $this->_echange_hprim21->emetteur_desc     = $this->id_emetteur_desc;
+    $this->_echange_hprim21->adresse_emetteur  = $this->adresse_emetteur;
+    $this->_echange_hprim21->id_destinataire   = $this->id_recepteur;
+    $this->_echange_hprim21->destinataire_desc = $this->id_recepteur_desc;
+    $this->_echange_hprim21->type_message      = $this->type_message;
+    $this->_echange_hprim21->date_echange      = mbDateTime();
+    if ($fileName)
+      $this->_echange_hprim21->message           = file_get_contents($fileName);
+    
+    return $this->_echange_hprim21;
+  }
+  
+  function readFile($fileName = null, $file = null) {
+    if ($fileName) {
+      $file = fopen( $fileName, 'rw' );
     }
+    
+    if (!$file) {
+      $this->error_log[] = "Fichier non trouvé";
+      return;
+    }
+    
     $i = 0;
     $lines = array();
-    while(!feof($file)){
-      if(!$i) {
+    while (!feof($file)){
+      if (!$i) {
         $header = trim(fgets($file, 1024));
         $i++;
       } else {
-        $curr_line = trim(fgets($file, 1024));
-        if($curr_line) {
+        $_line = trim(fgets($file, 1024));
+        if ($_line) {
           // On vérifie si la ligne est un Addendum
-          if(substr($curr_line, 0, 2) == "A|") {
-            $lines[$i-1] .= substr($curr_line, 2);
+          if (substr($_line, 0, 2) == "A|") {
+            $lines[$i-1] .= substr($_line, 2);
           } else {
-            $lines[$i] = $curr_line;
+            $lines[$i] = $_line;
             $i++;
           }
         }
       }
     }
+
+    fclose($file);
     
     // Lecture de l'en-tête
-    if(!$this->segmentH($header)) {
-      return false;
-    }
+    if (!$this->segmentH($header)) {
+      return;
+    }    
     
     // Lecture du message
-    switch($this->type_message) {
+    switch ($this->type_message) {
       // De demandeur (d'analyses ou d'actes de radiologie) à exécutant
       case "ADM" :
         // Transfert de données d'admission
@@ -106,22 +133,21 @@ class CHPrim21Reader {
   }
   
   // Fonction de prise en charge des messages
-  
   function messageADM($lines) {
     $nbLine = count($lines);
     $i = 1;
-    while($i <= $nbLine && $this->getTypeLine($lines[$i]) == "P") {
+    while ($i <= $nbLine && $this->getTypeLine($lines[$i]) == "P") {
       $patient = new CHprim21Patient();
       if(!$this->segmentP($lines[$i], $patient)) {
         return false;
       }
       $i++;
-      if($i < $nbLine && $this->getTypeLine($lines[$i]) == "AP") {
+      if ($i < $nbLine && $this->getTypeLine($lines[$i]) == "AP") {
         if(!$this->segmentAP($lines[$i], $patient)) {
           return false;
         }
         $i++;
-        while($i < $nbLine && $this->getTypeLine($lines[$i]) == "AC") {
+        while ($i < $nbLine && $this->getTypeLine($lines[$i]) == "AC") {
           $complementaire = new CHprim21Complementaire();
           if(!$this->segmentAC($lines[$i], $complementaire, $patient)) {
             return false;
@@ -130,35 +156,39 @@ class CHPrim21Reader {
         }
       }
     }
-    if(!isset($lines[$i]) || $this->getTypeLine($lines[$i]) != "L") {
+    if (!isset($lines[$i]) || $this->getTypeLine($lines[$i]) != "L") {
       $this->error_log[] = "Erreur dans la suite des segments du message ADM";
       return false;
     }
     return $this->segmentL($lines[$i]);
   }
+  
   function messageORM($lines) {
     $this->error_log[] = "Message ORM non pris en charge";
     return false;
   }
+  
   function messageREG($lines) {
     $this->error_log[] = "Message REG non pris en charge";
     return false;
   }
+  
   function messageORU($lines) {
     $this->error_log[] = "Message ORU non pris en charge";
     return false;
   }
+  
   function messageFAC($lines) {
     $this->error_log[] = "Message FAC non pris en charge";
     return false;
   }
+  
   function messageERR($lines) {
     $this->error_log[] = "Message ERR non pris en charge";
     return false;
   }
   
   // Fonctions de prise en charge des segments
-
   function getTypeLine($line) {
     $lines = explode($this->separateur_champ, $line);
     $type = reset($lines);
@@ -166,7 +196,7 @@ class CHPrim21Reader {
   }
   
   function segmentH($line) {
-    if(strlen($line) < 6) {
+    if (strlen($line) < 6) {
       $this->error_log[] = "Segment header trop court";
       return false;
     }
@@ -177,7 +207,7 @@ class CHPrim21Reader {
     $this->separateur_sous_sous_champ = $line[5];
     $line = substr($line, 7);
     $champs = explode($this->separateur_champ, $line);
-    if(count($champs) < 12) {
+    if (count($champs) < 12) {
       $this->error_log[] = "Champs manquant dans le segment header";
       return false;
     }
@@ -200,78 +230,90 @@ class CHPrim21Reader {
     $this->type              = $version_type[1];
     $this->date              = $champs[11];
     $this->has_header        = true;
+    
     return true;
   }
+  
   function segmentP($line, &$patient) {
-    if(!$this->has_header) {
+    if (!$this->has_header) {
       return false;
     }
-    if(!$patient->bindToLine($line, $this)) {
+   
+    if (!$patient->bindToLine($line, $this)) {
       return false;
     }
     $patient->store();
     $medecin = new CHprim21Medecin();
-    if($medecin->bindToLine($line, $this)) {
-      if($medecin->external_id) {
+    if ($medecin->bindToLine($line, $this)) {
+      if ($medecin->external_id) {
         $medecin->store();
       }
     }
     $sejour = new CHprim21Sejour();
-    if($sejour->bindToLine($line, $this, $patient, $medecin)) {
-      if($sejour->external_id) {
+    if ($sejour->bindToLine($line, $this, $patient, $medecin)) {
+      if ($sejour->external_id) {
         $sejour->store();
       }
     }
     return true;
   }
+  
   function segmentOBR($line) {
     mbTrace($line, "Demande d'analyses ou d'actes");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentOBX($line) {
     mbTrace($line, "Résultat d'un test");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentC($line) {
     mbTrace($line, "Commentaire");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentL($line) {
     if(!$this->has_header) {
       return false;
     }
     return true;
   }
+  
   function segmentA($line) {
     mbTrace($line, "Addendum");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentFAC($line) {
     mbTrace($line, "En-tête de facture");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentACT($line) {
     mbTrace($line, "Ligne de facture");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentREG($line) {
     mbTrace($line, "Elément de règlement");
     if(!$this->has_header) {
       return false;
     }
   }
+  
   function segmentAP($line, &$patient) {
     if(!$this->has_header) {
       return false;
@@ -280,6 +322,7 @@ class CHPrim21Reader {
     $patient->store();
     return true;
   }
+  
   function segmentAC($line, &$complementaire, $patient) {
     if(!$this->has_header) {
       return false;
@@ -288,6 +331,7 @@ class CHPrim21Reader {
     $complementaire->store();
     return true;
   }
+  
   function segmentERR($line) {
     mbTrace($line, "Message d'erreur");
     if(!$this->has_header) {

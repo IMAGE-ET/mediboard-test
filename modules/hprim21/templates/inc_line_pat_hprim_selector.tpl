@@ -1,4 +1,12 @@
-<!-- $Id$ -->
+{{* $Id$ *}}
+
+{{*
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+*}}
 
 <tbody class="hoverable">
 {{assign var="trClass" value=""}}

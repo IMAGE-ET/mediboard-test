@@ -1,11 +1,12 @@
-<?php
+<?php /* $Id $ */
 
 /**
  * @package Mediboard
  * @subpackage hprim21
  * @version $Revision$
- * @author Romain Ollivier
-*/
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ */
 
 class CSetuphprim21 extends CSetup {
   
@@ -195,6 +196,69 @@ class CSetuphprim21 extends CSetup {
               ADD INDEX (`fin_droits`);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $sql = "CREATE TABLE `echange_hprim21` (
+              `echange_hprim21_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `date_production` DATETIME NOT NULL,
+              `version` VARCHAR (255),
+              `type` VARCHAR (255),
+              `nom_fichier` VARCHAR (255),
+              `id_emetteur` VARCHAR (255),
+              `emetteur_desc` VARCHAR (255),
+              `adresse_emetteur` VARCHAR (255),
+              `id_destinataire` VARCHAR (255),
+              `destinataire_desc` VARCHAR (255),
+              `type_message` VARCHAR (255),
+              `date_echange` DATETIME,
+              `message` TEXT,
+              `message_valide` ENUM ('0','1'),
+              `id_permanent` VARCHAR (255),
+              `object_id` INT (11) UNSIGNED,
+              `object_class` ENUM ('CPatient','CSejour','CMediusers')
+          ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `echange_hprim21` 
+              ADD INDEX (`group_id`),
+              ADD INDEX (`date_production`),
+              ADD INDEX (`date_echange`),
+              ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `hprim21_complementaire` 
+              ADD `echange_hprim21_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_complementaire` 
+              ADD INDEX (`echange_hprim21_id`)";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_sejour` 
+              ADD `echange_hprim21_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_sejour` 
+              ADD INDEX (`echange_hprim21_id`)";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_patient` 
+              ADD `echange_hprim21_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_patient` 
+              ADD INDEX (`echange_hprim21_id`)";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_medecin` 
+              ADD `echange_hprim21_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `hprim21_medecin` 
+              ADD INDEX (`echange_hprim21_id`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }
 }

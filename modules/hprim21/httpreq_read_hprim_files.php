@@ -1,12 +1,14 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
 
 /**
  * @package Mediboard
  * @subpackage hprim21
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
+CCanDo::checkRead();
 
 // Envoi à la source créée 'HPRIM21' (FTP)
 $exchange_source = CExchangeSource::get("hprim21");
@@ -15,23 +17,39 @@ $extension = $exchange_source->fileextension;
 $ftp = new CFTP();
 $ftp->init($exchange_source);
 $ftp->connect();
-$list = $ftp->getListFiles("./");
 
-if(!$list) {
-  return;
+if (!$list = $ftp->getListFiles("./")) {
+  CAppUI::stepAjax("Le répertoire ne contient aucun fichier", UI_MSG_ERROR);
 }
 
 foreach($list as $filepath) {
-  if(substr($filepath, -(strlen($extension))) == $extension) {
+  if (substr($filepath, -(strlen($extension))) == $extension) {
     $filename = basename($filepath);
     $hprimFile = $ftp->getFile($filepath, "tmp/hprim21/$filename");
+    
+    // Création de l'échange
+    $echg_hprim21 = new CEchangeHprim21();
+    $echg_hprim21->group_id        = CGroups::loadCurrent()->_id;
+    $echg_hprim21->date_production = mbDateTime();
+    $echg_hprim21->store();
+    
     $hprimReader = new CHPrim21Reader();
+    $hprimReader->_echange_hprim21 = $echg_hprim21;
     $hprimReader->readFile($hprimFile);
-    if(!count($hprimReader->error_log)) {
+    
+    // Mapping de l'échange
+    $echg_hprim21 = $hprimReader->bindEchange($hprimFile);
+    
+    if (!count($hprimReader->error_log)) {
+      $echg_hprim21->message_valide = true;
       $ftp->delFile($filepath);
     } else {
-      mbTrace($hprimReader->error_log, "Erreur(s) pour le fichier '$filepath'");
+      $echg_hprim21->message_valide = false;
+      CAppUI::stepAjax("Erreur(s) pour le fichier '$filepath' : $hprimReader->error_log", UI_MSG_WARNING);
     }
+    $msg = $echg_hprim21->store();
+    $msg ? CAppUI::stepAjax("Erreur lors de la création de l'échange", UI_MSG_WARNING) : 
+           CAppUI::stepAjax("L'échange '$echg_hprim21->_id' a été créé.");
     unlink($hprimFile);
   } else {
     $ftp->delFile($filepath);

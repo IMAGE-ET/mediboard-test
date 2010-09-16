@@ -1,10 +1,11 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPinterop
- *	@version $Revision$
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 /**
@@ -13,28 +14,40 @@
 class CHprim21Object extends CMbObject {
 	
   // DB Fields
-  var $emetteur_id          = null;
-  var $external_id          = null;
+  var $emetteur_id        = null;
+  var $external_id        = null;
+  var $echange_hprim21_id = null;
+
+  // Back reference
+  var $_ref_echange_hprim21 = null;
   
   function getProps() {
-  	$specsParent = parent::getProps();
-    $specs = array (
-      "emetteur_id" => "str notNull",
-      "external_id" => "str",
-    );
-    return array_merge($specsParent, $specs);
+    $specs = parent::getProps();
+    
+    $specs["emetteur_id"]        = "str notNull";
+    $specs["external_id"]        = "str";
+    $specs["echange_hprim21_id"] = "ref class|CEchangeHprim21";
+    
+    return $specs;
   }
   
   function updateFormFields() {
   	parent::updateFormFields();
+  	
     $this->_view = $this->emetteur_id." : ".$this->external_id;
   }
   
-  function setEmetteur($reader) {
-    $this->emetteur_id = $reader->id_emetteur;
+  function loadRefEchangeHprim21() {
+    $this->_ref_echange_hprim21 = new CEchangeHprim21();
+    $this->_ref_echange_hprim21->load($this->echange_hprim21_id);
   }
   
-  function bindToLine($line, &$reader) {
+  function setHprim21ReaderVars(CHPrim21Reader $hprim21_reader) {
+    $this->emetteur_id        = $hprim21_reader->id_emetteur;
+    $this->echange_hprim21_id = $hprim21_reader->_echange_hprim21->_id;
+  }
+  
+  function bindToLine($line, CHPrim21Reader &$reader) {
     return "Bind de $this->_class_name non pris en charge";
   }
   

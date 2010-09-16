@@ -1,10 +1,11 @@
-<?php /* $Id$ */
+<?php /* $Id $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPinterop
- *	@version $Revision$
- *  @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CAppUI::requireModuleClass("hprim21", "hprim21object");
@@ -59,7 +60,7 @@ class CHprim21Medecin extends CHprim21Object {
 	}  
   
 	function bindToLine($line, &$reader) {
-    $this->setEmetteur($reader);
+    $this->setHprim21ReaderVars($reader);
     
     $elements = explode($reader->separateur_champ, $line);
   
