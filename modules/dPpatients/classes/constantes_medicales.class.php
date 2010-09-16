@@ -263,14 +263,28 @@ class CConstantesMedicales extends CMbObject {
   }
   
   function updateDBFields() {
+  	// TODO: Utiliser les specs
     if (!empty($this->_ta_systole) && !empty($this->_ta_diastole)) {
       $this->ta = "$this->_ta_systole|$this->_ta_diastole";
     }
+    if ($this->_ta_systole === '' && $this->_ta_diastole === '') {
+    	$this->ta = '';
+    }
+    
+    
     if (!empty($this->_ta_droit_systole) && !empty($this->_ta_droit_diastole)) {
       $this->ta_droit = "$this->_ta_droit_systole|$this->_ta_droit_diastole";
     }
+    if ($this->_ta_droit_systole === '' && $this->_ta_droit_diastole === '') {
+      $this->ta_droit = '';
+    }
+    
+    
     if (!empty($this->_inj) && !empty($this->_inj_essai)) {
       $this->injection = "$this->_inj|$this->_inj_essai";
+    }
+    if ($this->_inj === '' && $this->_inj_essai === '') {
+      $this->injection = '';
     }
   }
   

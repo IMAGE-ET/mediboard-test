@@ -35,7 +35,7 @@ calculImcVst = function(form) {
 
 emptyAndSubmit = function(const_name) {
   var form = getForm("edit-constantes-medicales");
-	$V(form[const_name], '');
+	const_name.each(function(elem) {$V(form[elem], '');});
   return submitConstantesMedicales(form);
 }
 
@@ -143,7 +143,11 @@ Main.add(function () {
 				</td>
 				<td>
 				  {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
-				    <button type="button" class="trash notext" style="margin: -1px;" onclick="emptyAndSubmit('{{$_constante}}');"></button> 
+				    {{if array_key_exists("formfields", $_params)}}
+				      <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+				    {{else}}
+				      <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
+				    {{/if}} 
 				  {{/if}}
 				</td>
       </tr>
