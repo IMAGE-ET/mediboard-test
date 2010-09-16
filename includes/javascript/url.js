@@ -437,6 +437,7 @@ var Url = Class.create({
       prepareForms(element);
       initNotes();
       onComplete();
+      Element.warnDuplicates();
     });
     
     // Empty holder gets a div for load notifying
@@ -536,6 +537,7 @@ var Url = Class.create({
       prepareForms(element);
       initNotes();
       onComplete();
+      Element.warnDuplicates();
     });
     
     return updater;

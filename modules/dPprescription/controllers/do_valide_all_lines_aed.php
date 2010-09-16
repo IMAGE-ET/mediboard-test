@@ -244,11 +244,12 @@ foreach($lines as $_type_line => $_lines){
 			  $msg = $_line->store();
         CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
       	break;
+      /* // Les lignes de DMI n'ont pas toujours interet à etre signées
       case "CPrescriptionLineDMI":
         $_line->signed = $new_value;
         $msg = $_line->store();
         CAppUI::displayMsg($msg, "$_line->_class_name-msg-modify"); 
-        break;
+        break;*/
 		}
 	}
 }

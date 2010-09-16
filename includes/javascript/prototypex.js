@@ -641,3 +641,38 @@ Function.getEvent = function(){
     }
   }
 }
+
+Element.findDuplicates = function(attr, tag) {
+  var ids = $$((tag || "*")+"["+attr+"]").sort(function(e){return e[attr]});
+  var results = [],
+      len = ids.length - 1;
+      
+  for (var i = 0; i < len; i++) {
+    if (ids[i][attr] === "") continue;
+    
+    if (ids[i + 1][attr] == ids[i][attr]) {
+      if (results.indexOf(ids[i]) == -1) {
+        results.push(ids[i]);
+      }
+      results.push(ids[i + 1]);
+    }
+  }
+  
+  return results;
+}
+
+Element.warnDuplicates = function(){
+  if (!(console.firebug || console._inspectorCommandLineAPI)) return;
+  
+  var dups;
+  
+  dups = Element.findDuplicates("id");
+  if (dups.length) {
+    console.warn("Duplicates *[id]: ", dups);
+  }
+  
+  dups = Element.findDuplicates("name", "form");
+  if (dups.length) {
+    console.warn("Duplicates form[name]: ", dups);
+  }
+}

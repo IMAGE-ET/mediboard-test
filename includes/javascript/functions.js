@@ -15,6 +15,7 @@ function main() {
     SystemMessage.init();
     WaitingMessage.init();
     initNotes();
+    Element.warnDuplicates();
     Main.init();
   }
   catch (e) {
@@ -221,6 +222,11 @@ var SystemMessage = {
     
     var element = $(this.id);
     delay = delay || 5;
+    
+    if (element.empty()) {
+      element.hide();
+      return;
+    }
     
     // Ensure visible        
     element.show().setOpacity(1);
