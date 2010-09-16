@@ -14,6 +14,11 @@ $del = CValue::post("del");
 $moment_unitaire_id = CValue::post("moment_unitaire_id");
 $mode_checkbox = false;
 
+$nb_fois = CValue::post("nb_fois");
+if($nb_fois){
+	$_POST["unite_fois"] = "jour";
+}
+
 //Traitement specifique pour la gestion des checkBox
 $list_checkbox = array("matin", "midi", "soir");
 foreach($list_checkbox as $_checkbox){

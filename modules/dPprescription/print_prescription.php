@@ -126,7 +126,6 @@ if(count($prescription->_ref_lines_elements_comments)){
   }
 }
 
-
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
 	  $line_medicament->loadRefsFwd();
@@ -175,6 +174,21 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		}
 	}
 }
+
+
+// Tri des medicaments par ordre alphabetique pour l'impression des protocoles
+if (!$prescription->object_id){
+	function compareMed($line1, $line2){
+    return strcmp($line1->_ucd_view, $line2->_ucd_view);
+  }
+
+	foreach($lines["medicaments"] as &$meds_by_key){
+		foreach($meds_by_key as &$meds_by_ald){
+			usort($meds_by_ald, "compareMed");
+		}
+	}
+}
+
 
 // Parcours des prescription_line_mixes
 foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
@@ -244,6 +258,22 @@ if(count($prescription->_ref_lines_elements_comments)){
 	}
 }
 
+// Tri des elements par ordre alphabetique pour l'impression des protocoles
+if (!$prescription->object_id){
+	function compareElt($line1, $line2){
+	  return strcmp($line1->_view, $line2->_view);
+	}
+	foreach($linesElt as &$lines_by_chap){
+		foreach($lines_by_chap as &$lines_by_exec){
+			foreach($lines_by_exec as &$lines_elt_by_ald){
+	      foreach($lines_elt_by_ald as &$lines_elt_by_cat){
+					usort($lines_elt_by_cat, "compareElt");
+				}
+			}
+		}
+	}
+}
+			  	
 if(count($prescription->_ref_lines_dmi)){
   foreach($prescription->_ref_lines_dmi as $_line_dmi){
     $_line_dmi->loadRefsFwd();
@@ -282,7 +312,6 @@ if(!$_ald){
 	  $footer_height = $footer->height * 12;
 	}
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

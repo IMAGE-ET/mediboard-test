@@ -23,7 +23,8 @@ Main.add(function(){
 	  <input name="typePrise" type="radio" value="moment{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" checked="checked" /><label for="typePrise_moment{{$type}}" title="Moment de la journée"> Moment</label>
 	  <input name="typePrise" type="radio" value="foisPar{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}" title="x fois par y"> Fréquence</label>
 	  <input name="typePrise" type="radio" value="tousLes{{$type}}" onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}" title="Tous les x y"> Répétition</label>
-	  {{if $line->_protocole}}
+	  
+    {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
 	  <input name="typePrise" type="radio" value="decalage_intervention{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_decalage_intervention{{$type}}"> I + x heures</label>
 	  {{/if}}
 	</form>
@@ -68,9 +69,8 @@ Main.add(function(){
   
   <span id="foisPar{{$type}}{{$line->_id}}" style="display: none;">
     {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPrise$type$line_id}} fois par jour
-		<input type="hidden" name="unite_fois" value="jour" /> 
-		{{* mb_field object=$prise_posologie field=unite_fois *}}
-  </span>
+		<input type="hidden" name="unite_fois" value="" />  
+	</span>
   
   <span id="tousLes{{$type}}{{$line->_id}}" style="display: none;">
     <br />tous les
@@ -79,7 +79,7 @@ Main.add(function(){
     (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPrise$type$line_id}})
   </span>
   
-  {{if $line->_protocole}}
+  {{if $line->_protocole && $line->_ref_prescription->type!="externe"}}
   <span id="decalage_intervention{{$type}}{{$line->_id}}" style="display: none;">
   à I {{mb_field object=$prise_posologie showPlus="1" field=decalage_intervention size=3 increment=1 form=addPrise$type$line_id}} heures
   </span>
