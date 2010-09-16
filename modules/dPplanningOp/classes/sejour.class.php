@@ -394,13 +394,15 @@ class CSejour extends CCodable {
    * @param $tolerance int Tolérance en heures
    * @return array|CSejour
    */
-	function getSiblings($tolerance = 1) {
+	function getSiblings($tolerance = 1, $use_type = false) {
 		$sejour = new CSejour;
 		$sejour->patient_id = $this->patient_id;
 		$sejour->group_id   = $this->group_id;
 		
 		// Si on veut rechercher pour un type de séjour donné
-    $sejour->type   = $this->type;
+		if ($use_type) {
+		  $sejour->type   = $this->type;
+		}   
     
 		$siblings = $sejour->loadMatchingList();
 

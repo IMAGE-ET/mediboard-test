@@ -323,7 +323,7 @@ class CRPU extends CMbObject {
       $sejour->sortie_prevue = $this->_sortie ? $this->_sortie : $sortie_prevue;
 
       // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour
-      $siblings = $sejour->getSiblings(CAppUI::conf("dPurgences sibling_hours"));
+      $siblings = $sejour->getSiblings(CAppUI::conf("dPurgences sibling_hours"), $sejour->type);
       if (count($siblings)) {
         $sibling = reset($siblings);
         $this->sejour_id = $sibling->_id;
