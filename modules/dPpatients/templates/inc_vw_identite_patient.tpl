@@ -1,9 +1,9 @@
 <table class="form">
   <tr>
     <th class="title text" colspan="5">
-      {{if $patient->_id_vitale}}
+      {{if $patient->date_lecture_vitale}}
       <div style="float: right;">
-        <img src="images/icons/carte_vitale.png" title="Bénéficiaire associé à une carte Vitale" />
+        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
       </div>
       {{/if}}
 

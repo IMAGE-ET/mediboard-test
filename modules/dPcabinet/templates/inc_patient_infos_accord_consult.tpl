@@ -35,9 +35,9 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
   <tr>
     <th class="category">
       {{mb_include module=system template=inc_object_notes object=$patient}}
-      {{if $patient->_id_vitale}}
-      <div style="float:right;">
-	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
+      {{if $patient->date_lecture_vitale}}
+      <div style="float: right;">
+        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
       </div>
       {{/if}}
       Patient

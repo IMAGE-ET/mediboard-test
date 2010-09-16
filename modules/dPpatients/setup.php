@@ -1195,7 +1195,11 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` ADD `vip` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `email`";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.06";
+    $this->makeRevision("1.06");
+    $sql = "ALTER TABLE `patients` ADD `date_lecture_vitale` DATETIME";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.07";
   }
 }
 

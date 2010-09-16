@@ -179,6 +179,7 @@ class CPatient extends CMbObject {
   var $assure_matricule             = null;
   
   // Other fields
+  var $date_lecture_vitale          = null;
   var $_static_cim10                = null;
   var $_pays_naissance_insee        = null;
   var $_assure_pays_naissance_insee = null;
@@ -371,7 +372,7 @@ class CPatient extends CMbObject {
     $specs["assure_profession"]           = "str autocomplete";
     $specs["assure_rques"]                = "text";
     $specs["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
-    
+    $specs["date_lecture_vitale"]         = "dateTime";
     $specs["_id_vitale"]                  = "num";
     $specs["_pays_naissance_insee"]       = "str";
     $specs["_assure_pays_naissance_insee"]= "str";
@@ -523,7 +524,7 @@ class CPatient extends CMbObject {
     if ($this->_update_vitale) {
       $patient_vitale = new CPatient;
       $patient_vitale->getValuesFromVitale();
-
+      $patient_vitale->date_lecture_vitale = mbDateTime();
       foreach (array_keys($this->getDBFields()) as $field) {
         $vitale_value = $patient_vitale->$field;
         if ($vitale_value || $vitale_value === "0") {
@@ -1518,6 +1519,16 @@ class CPatient extends CMbObject {
     // Dossier médical
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->fillTemplate($template);
+  }
+  
+  function getLabelTable() {
+    return
+        array ("[NOM]"        => $this->nom,
+               "[PRENOM]"     => $this->prenom,
+               "[SEXE]"       => $this->sexe,
+               "[NOM JF]"     => $this->nom_jeune_fille,
+               "[DATE NAISS]" => $this->naissance,
+               "[NUM SECU]"   => $this->matricule);
   }
   
   function updateNomPaysInsee() {

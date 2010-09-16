@@ -566,6 +566,7 @@ $locales['CPatient-fin_validite_vitale-desc'] = 'Fin de validité de la carte Vit
 $locales['CPatient-incapable_majeur'] = 'Incapable majeur';
 $locales['CPatient-incapable_majeur-court'] = 'IM';
 $locales['CPatient-incapable_majeur-desc'] = 'Etat d\'incapacité majeure du patient';
+$locales['CPatient-date-lecture-vitale'] = 'Dernière lecture de carte vitale';
 $locales['CPatient-libelle_exo'] = 'Libellé Exo';
 $locales['CPatient-libelle_exo-court'] = 'Exo';
 $locales['CPatient-libelle_exo-desc'] = 'Libellé Exo';

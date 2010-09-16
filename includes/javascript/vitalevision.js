@@ -108,6 +108,8 @@ var VitaleVision = {
     $V(form.elements.name, getNodeValue("nomUsuel", ident));  
     $V(form.elements.firstName, getNodeValue("prenomUsuel", ident));  
     
+    form.insert({bottom: new Element('input', {type: 'hidden', name: '_update_vitale', value: '1'})});
+
     if(getNodeValue("naissance date", ident) != "") { // Si format FR
       var dateNaissance = getNodeValue("naissance date", ident),
           jour  = dateNaissance.substring(0, 2),
