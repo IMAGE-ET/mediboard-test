@@ -8,14 +8,24 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
-<script type="text/javascript">
-//Main.add(window.print);
-</script>
-
 <!-- Fermeture des tableaux -->
     </td>
   </tr>
 </table>
+
+
+<div class="not-printable">
+	<button type="button" class="print not-printable" onclick="window.print()">
+	  {{tr}}Print{{/tr}}
+	  {{$sejours_rhs|@count}} {{tr}}CRHS{{/tr}}
+	</button>
+
+  {{assign var=url value="m=$m&$actionType=$action&dialog=$dialog"}}
+  <form name="Filter" action="{{$url}}>
+	  <input type="checkbox" name="all_rhs" action="?m${{$m}}&amp;{{$actionType}}={{$action}}" method="GET"/>
+	  <label for="all_rhs">Inclure les RHS suivants</label>
+  </form>
+</div>
 
 {{assign var=days value="CRHS"|static:days}}
 
@@ -23,7 +33,14 @@
 {{assign var=sejour value=$_rhs->_ref_sejour}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="11" style="cursor: pointer"><a href="#" onclick="window.print()">{{$sejour}}</a></th>
+    <th class="title" colspan="11">
+    	<big>
+    		{{$sejour}}<br/>
+        {{tr}}CRHS{{/tr}} {{$_rhs}}
+				&mdash;
+        {{mb_include module=system template=inc_interval_date from=$_rhs->date_monday to=$_rhs->_date_sunday}}
+			</big>
+		</th>
   </tr>
 
   {{assign var=dependance value=$_rhs->_ref_dependances}}

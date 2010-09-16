@@ -104,8 +104,9 @@
 			<img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
 			{{/if}}
 		
-			{{assign var=link value="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"}}
-			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
+			{{mb_include template=inc_view_patient patient=$_sejour->_ref_patient
+			  link="?m=$m&tab=vw_aed_sejour_ssr&sejour_id=$sejour_id"
+			}}
 		</td>
 
 	  {{assign var=distance_class value=ssr-far}}

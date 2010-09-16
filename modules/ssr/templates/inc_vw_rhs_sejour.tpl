@@ -10,23 +10,27 @@
 
 <script type="text/javascript">
   Main.add(function(){	  
-	  $$('a[href=#rhs-no-charge-{{$rhs_date_monday}}]')[0].down("span.count").update("({{$count_sej_rhs_no_charge}})");
-
+	  var anchor = $$('a[href=#rhs-no-charge-{{$rhs_date_monday}}]')[0];
+		var count = {{$count_sej_rhs_no_charge}};
+		anchor.down("small.count").update('('+count+')');
+    anchor.setClassName("empty", !count);
 	  Charged.refresh('{{$rhs_date_monday}}');
 	});
 </script>
 
 {{assign var=days value="CRHS"|static:days}}
 
-<button type="button" class="print" onclick="CotationRHS.printRHS('{{$rhs_date_monday}}')">{{tr}}Print{{/tr}}</button>
-<button type="button" class="tick" onclick="CotationRHS.chargeRHS('{{$rhs_date_monday}}')">{{tr}}Charge{{/tr}}</button>
-
-<form name="editRHS-{{$rhs_date_monday}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshSejour.curry('{{$rhs_date_monday}}')})">
+<form class="prepared" name="editRHS-{{$rhs_date_monday}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshSejour.curry('{{$rhs_date_monday}}')})">
   <input type="hidden" name="m" value="ssr" />
   <input type="hidden" name="dosql" value="do_facture_rhss_aed" />
   <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="facture" value="1" />
   
-  <div style="float:right">
+	<button type="button" class="print" onclick="CotationRHS.printRHS('{{$rhs_date_monday}}')">{{tr}}Print{{/tr}}</button>
+	<button type="button" class="tick"  onclick="CotationRHS.chargeRHS('{{$rhs_date_monday}}')">{{tr}}Charge{{/tr}}</button>
+  <button type="button" class="cancel"onclick="CotationRHS.restoreRHS('{{$rhs_date_monday}}')">{{tr}}Restore{{/tr}}</button>
+
+  <div style="float: right">
     <label style="visibility: hidden;" class="rhs-charged" title="Cacher les RHS déjà facturés">
       <input type="checkbox" checked="checked" onchange="Charged.toggle(this);" />
       {{tr}}Hide{{/tr}} <span>0</span> RHS facturé(s)
@@ -35,23 +39,46 @@
 
   <table class="tbl">
     <tr>
-      <th class="title"></th>
-      <th class="title">Séjours</th>
+      <th  style="width:  1%">
+      	<button type="button" class="add notext" onclick="Charged.addSome('{{$rhs_date_monday}}')">
+      	 	{{tr}}Add{{/tr}}
+				</button>
+				 
+			</th>
+      <th>{{mb_title class=CSejour field=patient_id}}</th>
+      <th>{{mb_title class=CSejour field=entree}}</th>
+      <th>{{mb_title class=CSejour field=sortie}}</th>
+      <th>{{mb_title class=CSejour field=service_id}}</th>
     </tr>
     {{foreach from=$sejours_rhs item=_rhs}}
-      {{if $_rhs->facture == 1}}
-      <tr class="charged" style="display:none">
-        <td style="width:1%" class="arretee"></td>
-        <td class="arretee">{{$_rhs->_ref_sejour}}</td>
-      </tr>
-      {{else}}
-      <tr>
-        <td style="width:1%">
+		  {{assign var=arretee value=$_rhs->facture|ternary:"arretee":""}}
+      <tr {{if $_rhs->facture}} class="charged" style="display: none"{{/if}}>
+        <td class="{{$arretee}}">
           <input type="checkbox" class="rhs" name="rhs_ids[{{$_rhs->_id}}]" value="{{$_rhs->_id}}"/>       
+ 				</td>
+				{{assign var=_sejour value=$_rhs->_ref_sejour}}
+
+		    <td class="{{$arretee}} text">
+		      {{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}
+		    </td>
+
+		    <td class="{{$arretee}}">
+		      {{mb_value object=$_sejour field=entree format=$dPconfig.date}}
+		    </td>
+        <td class="{{$arretee}}">
+          {{mb_value object=$_sejour field=sortie format=$dPconfig.date}}
         </td>
-        <td>{{$_rhs->_ref_sejour}}</td>
+		    
+		    <td class="{{$arretee}}" style="text-align: center;">
+		      <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+		       {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$_sejour->_num_dossier}}
+		      </span>
+		      <div style="opacity: 0.6;">
+		       {{mb_value object=$_sejour field=service_id}}
+		      </div>
+		    </td>
+
       </tr>
-      {{/if}}
     {{/foreach}}
   </table>
 </form>

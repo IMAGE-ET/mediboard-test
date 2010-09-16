@@ -101,11 +101,10 @@ class CRHS extends CMbObject {
 	}
   
 	function check() {
-		return parent::check();
-		
-		if ($this->date_monday && strftime($this->date_monday != "1")) {
+		if ($this->date_monday && mbTransformTime(null, $this->date_monday, "%w") != "1") {
 			return CAppUI::tr("CRHS-failed-monday", $this->date_monday);
 		}
+    return parent::check();
 	}
 	
 	function updateFormFields() {
@@ -157,6 +156,8 @@ class CRHS extends CMbObject {
     $this->_in_bounds_sun = 
 		  $this->_date_sunday <= mbDate($sejour->_sortie) && 
       $this->_date_sunday >= mbDate($sejour->_entree);
+			
+		return $this->_ref_sejour;
   }
 	
 	/**

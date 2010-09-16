@@ -14,7 +14,7 @@ foreach($rhs_ids as $_rhs_id) {
   $rhs = new CRHS();
   $rhs->load($_rhs_id);
   // Passage à facturer
-  $rhs->facture = 1;
+  $rhs->facture = CValue::post("facture");
   $msg = $rhs->store();
   CAppUI::displayMsg($msg, "CRHS-msg-modify"); 
 }

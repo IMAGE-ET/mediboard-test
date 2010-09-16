@@ -1377,9 +1377,9 @@ td.ssr-repartition div.libelle {
   line-height: 110%;
 }
 
-td.ssr-repartition div.libelle div.color {
+.ssr div.motif-color {
 	float: left;
-	width: 50px;
+	width: 70%;
 	height: 5px;
   margin-top: 4px;
   margin-left: 2px;

@@ -44,6 +44,12 @@ CotationRHS = {
   chargeRHS: function(rhs_date_monday) {
     getForm('editRHS-'+rhs_date_monday).onsubmit();
   },
+
+  restoreRHS: function(rhs_date_monday) {
+		var form = getForm('editRHS-'+rhs_date_monday);
+		$V(form.facture, '0');
+    form.onsubmit();
+  },
   
   onSubmitRHS: function(oForm) {
     return onSubmitFormAjax(oForm, { 
@@ -107,12 +113,24 @@ CotationRHS = {
 
 Charged = {
   refresh: function(rhs_date_monday) {
-    var label = getForm('editRHS-'+rhs_date_monday).down("label.rhs-charged");
-    var count = getForm('editRHS-'+rhs_date_monday).select('tr.charged').length;
+		var form = getForm('editRHS-'+rhs_date_monday);
+    var label = form.down("label.rhs-charged");
+    var count = form.select('tr.charged').length;
     label.setVisibility(count != 0);
     label.down("span").update(count);
   },
   
+	addSome: function(rhs_date_monday) {
+    var form = getForm('editRHS-'+rhs_date_monday);
+		var max = 10;
+		form.select('input.rhs').each(function (checkbox) {
+			if (!checkbox.checked && $(checkbox).up('tr').visible()) {
+				if (--max > 0) {
+					checkbox.checked = true;
+				}
+			}
+		});
+  },
   toggle: function(checkbox) {
     $$('tr.charged').invoke('setVisible', !checkbox.checked);
   }

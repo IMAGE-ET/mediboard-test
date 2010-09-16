@@ -18,41 +18,38 @@
   }
    
   Main.add(function(){
-	  {{if $rhss_no_charge}}
+	  {{if $rhs_counts}}
 	    Control.Tabs.create('tabs-rhss_no_charge', true).activeLink.up().onmousedown();
     {{/if}}
   });
 </script>
 
-{{if !$rhss_no_charge}}
-  <div class="small-info">{{tr}}no-rhs-to-charge{{/tr}}</div>
+{{if !$rhs_counts}}
+  <div class="small-info">{{tr}}CRHS-none{{/tr}}</div>
 {{else}}
   <table class="main">
     <tr>
       <td style="width: 0.1%">
         <ul id="tabs-rhss_no_charge" class="control_tabs_vertical" style="width: 14em;">
-          {{foreach from=$rhss_no_charge key=rhs_date_monday item=_rhss}}
-            {{foreach from=$_rhss item=_rhs name=rhs}}
-              {{if $smarty.foreach.rhs.first}}
-              <li onmousedown="refreshSejour('{{$rhs_date_monday}}')">
-                <a href="#rhs-no-charge-{{$rhs_date_monday}}">
-                  {{$_rhs}} <span class="count">({{$_rhss|@count}})</span>
-                  <br />
-                  <small>
-                    du {{mb_value object=$_rhs field=date_monday}}
-                    au {{mb_value object=$_rhs field=_date_sunday}}
-                  </small>
-                </a>
-              </li>
-              {{/if}}
-            {{/foreach}}
+          {{foreach from=$rhs_counts item=_rhs_count}}
+          <li onmousedown="refreshSejour('{{$_rhs_count.mondate}}')">
+            <a href="#rhs-no-charge-{{$_rhs_count.mondate}}">
+              {{tr}}Week{{/tr}} {{$_rhs_count.mondate|date_format:"%U"}}
+							<small class="count">({{$_rhs_count.count}})</small>
+              <br />
+              <small>
+                du {{$_rhs_count.mondate|date_format:$dPconfig.date}}
+								<br />
+                au {{$_rhs_count.sundate|date_format:$dPconfig.date}}
+              </small>
+            </a>
+          </li>
           {{/foreach}}
         </ul>
       </td>
       <td>
-        {{foreach from=$rhss_no_charge key=rhs_date_monday item=_rhss}}
-        <div id="rhs-no-charge-{{$rhs_date_monday}}" style="display: none;">
-  
+        {{foreach from=$rhs_counts item=_rhs_count}}
+        <div id="rhs-no-charge-{{$_rhs_count.mondate}}" style="display: none;">
         </div>
         {{/foreach}}
       </td>

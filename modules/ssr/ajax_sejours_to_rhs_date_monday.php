@@ -12,13 +12,14 @@ CCanDo::checkRead();
 
 $rhs_date_monday = CValue::get('rhs_date_monday');
 
+$date = mbDate();
 $rhs = new CRHS();
-
 $where = array();
 $where['date_monday'] = " = '$rhs_date_monday'";
 $sejours_rhs = $rhs->loadList($where);
 foreach ($sejours_rhs as $_rhs) {
-  $_rhs->loadRefSejour();
+  $sejour = $_rhs->loadRefSejour();
+	$sejour->_ref_patient->loadIPP();
 }
 
 $where['facture'] = " = '0'";

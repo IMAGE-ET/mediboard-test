@@ -8,8 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{assign var=patient_guid value=$patient->_guid}}
+{{mb_default var=link value="#$patient_guid"}}
 <a href="{{$link}}">
-  <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}};')">
+  <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient_guid}};')">
     <big class="CPatient-view">{{$patient}}</big> 
   </strong>
 </a>

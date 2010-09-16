@@ -26,8 +26,8 @@
 	
   {{assign var=libelle value=$sejour->libelle|upper}}
 	{{assign var=color value=$colors.$libelle}}
-	{{if $color->_id}}
-	  <div class="color" style="background-color: #{{$color->color}};" title="{{$sejour->libelle}}"></div>
+	{{if $color->color}}
+	  <div class="motif-color" style="background-color: #{{$color->color}};" title="{{$sejour->libelle}}"></div>
 	{{else}}
     {{mb_value object=$sejour field=libelle}}
 	{{/if}}
