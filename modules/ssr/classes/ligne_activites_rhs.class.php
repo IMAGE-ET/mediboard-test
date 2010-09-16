@@ -97,13 +97,11 @@ class CLigneActivitesRHS extends CMbObject {
   }
   
   function loadRefActiviteCdARR() {
-    $this->_ref_code_activite_cdarr = new CActiviteCdARR();
-    $this->_ref_code_activite_cdarr->load($this->code_activite_cdarr);
+    $this->_ref_code_activite_cdarr = CActiviteCdARR::get($this->code_activite_cdarr);
   }
   
   function loadRefIntervenantCdARR() {
-    $this->_ref_code_intervenant_cdarr = new CIntervenantCdARR();
-    $this->_ref_code_intervenant_cdarr->load($this->code_intervenant_cdarr);
+    return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
 	
 	function loadRefRHS() {

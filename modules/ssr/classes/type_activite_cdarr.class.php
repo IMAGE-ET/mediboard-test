@@ -18,6 +18,8 @@ class CTypeActiviteCdARR extends CCdARRObject {
 	var $libelle       = null;
 	var $libelle_court = null;
 	
+	static $cached = array();
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'type_activite';
@@ -47,11 +49,16 @@ class CTypeActiviteCdARR extends CCdARRObject {
 	 * @param $code string
 	 * @return CTypeActiviteCdARR
 	 **/
-	static function get($code) {
-		$found = new CTypeActiviteCdARR();
-    $found->load($code);
-		return $found;
-	}
+  static function get($code) {
+    if (!isset(self::$cached[$code])) {
+      $type = new CTypeActiviteCdARR();
+      if ($type->load($code)) {
+        self::$cached[$code] = $type;
+      }
+    }
+    return self::$cached[$code];
+  }
+
 }
 
 ?>

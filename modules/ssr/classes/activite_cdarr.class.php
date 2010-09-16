@@ -25,6 +25,8 @@ class CActiviteCdARR extends CCdARRObject {
 	var $_ref_elements = null;
 	var $_ref_elements_by_cat = null;
 	
+	static $cached = array();
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'activite';
@@ -52,8 +54,7 @@ class CActiviteCdARR extends CCdARRObject {
   }
   
   function loadRefTypeActivite() {
-    $this->_ref_type_activite = new CTypeActiviteCdARR();
-    $this->_ref_type_activite->load($this->type);
+    $this->_ref_type_activite = CTypeActiviteCdARR::get($this->type);
   }
 	
 	function loadView(){
@@ -88,11 +89,15 @@ class CActiviteCdARR extends CCdARRObject {
 	 * @param $code string
 	 * @return CActiviteCdARR
 	 **/
-	static function get($code) {
-		$found = new CActiviteCdARR();
-    $found->load($code);
-		return $found;
-	}
+  static function get($code) {
+    if (!isset(self::$cached[$code])) {
+      $activite = new CActiviteCdARR();
+      if ($activite->load($code)) {
+        self::$cached[$code] = $activite;
+      }
+    }
+    return self::$cached[$code];
+  }
 }
 
 ?>

@@ -42,7 +42,7 @@ class CActeCdARR extends CMbObject {
 		$this->_ref_evenement_ssr = $this->loadFwdRef("evenement_ssr_id", true);
 	}
 
-  function loadRefActiviteCdarr(){
+  function loadRefActiviteCdarr() {
     $this->_ref_activite_cdarr = CActiviteCdARR::get($this->code);
     $this->_ref_activite_cdarr->loadRefTypeActivite();
   }

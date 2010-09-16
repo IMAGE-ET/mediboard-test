@@ -17,6 +17,8 @@ class CIntervenantCdARR extends CCdARRObject {
   var $code    = null;
 	var $libelle = null;
 	
+	static $cached = array();
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table       = 'intervenant';
@@ -45,11 +47,15 @@ class CIntervenantCdARR extends CCdARRObject {
 	 * @param $code string
 	 * @return CIntervenantCdARR
 	 **/
-	static function get($code) {
-		$found = new CIntervenantCdARR();
-    $found->load($code);
-		return $found;
-	}
+  static function get($code) {
+    if (!isset(self::$cached[$code])) {
+      $intervennant = new CIntervenantCdARR();
+      if ($intervennant->load($code)) {
+        self::$cached[$code] = $intervennant;
+      }
+    }
+    return self::$cached[$code];
+  }
 }
 
 ?>
