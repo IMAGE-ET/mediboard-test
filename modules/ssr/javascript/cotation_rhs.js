@@ -35,10 +35,12 @@ CotationRHS = {
   },
   
   printRHS: function(rhs_date_monday) {
-    var oForm = getForm('editRHS-'+rhs_date_monday);
-	new Url("ssr", "print_sejour_rhs_no_charge") .
-	  addParam("rhs_ids[]", oForm.select('input.rhs:checked').pluck('value'), true) .
-	  popup(700, 500, "Impression RHS à facturer");
+    var form = getForm('editRHS-'+rhs_date_monday);
+		var url = new Url("ssr", "print_sejour_rhs_no_charge");
+    url.addParam("sejour_ids", form.select('input.rhs:checked').pluck('value').join("-"));
+    url.addParam("all_rhs", $V(form.all_rhs) ? "1" : "0");
+    url.addElement(form.date_monday);
+		url.popup(700, 500, "Impression RHS à facturer");
   },
 
   chargeRHS: function(rhs_date_monday) {
@@ -125,7 +127,7 @@ Charged = {
 		var max = 10;
 		form.select('input.rhs').each(function (checkbox) {
 			if (!checkbox.checked && $(checkbox).up('tr').visible()) {
-				if (--max > 0) {
+				if (max-- > 0) {
 					checkbox.checked = true;
 				}
 			}

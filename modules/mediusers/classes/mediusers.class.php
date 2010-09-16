@@ -339,9 +339,7 @@ class CMediusers extends CMbObject {
   }
   
   function loadRefCodeIntervenantCdARR() {
-    $this->_ref_code_intervenant_cdarr = new CIntervenantCdARR();
-    $this->_ref_code_intervenant_cdarr->load($this->code_intervenant_cdarr);
-		return $this->_ref_code_intervenant_cdarr;
+    return $this->_ref_code_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
   
   function loadRefsFwd() {

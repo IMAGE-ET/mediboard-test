@@ -25,12 +25,16 @@
   <input type="hidden" name="dosql" value="do_facture_rhss_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="facture" value="1" />
+  <input type="hidden" name="date_monday" value="{{$rhs_date_monday}}" />
   
 	<button type="button" class="print" onclick="CotationRHS.printRHS('{{$rhs_date_monday}}')">{{tr}}Print{{/tr}}</button>
 	<button type="button" class="tick"  onclick="CotationRHS.chargeRHS('{{$rhs_date_monday}}')">{{tr}}Charge{{/tr}}</button>
   <button type="button" class="cancel"onclick="CotationRHS.restoreRHS('{{$rhs_date_monday}}')">{{tr}}Restore{{/tr}}</button>
 
-  <div style="float: right">
+  <input type="checkbox" name="all_rhs" id="editRHS-all_rhs" value="1" />
+  <label for="editRHS-all_rhs">Inclure les RHS suivants</label>
+
+  <div style="float: right;">
     <label style="visibility: hidden;" class="rhs-charged" title="Cacher les RHS déjà facturés">
       <input type="checkbox" checked="checked" onchange="Charged.toggle(this);" />
       {{tr}}Hide{{/tr}} <span>0</span> RHS facturé(s)
@@ -53,10 +57,10 @@
     {{foreach from=$sejours_rhs item=_rhs}}
 		  {{assign var=arretee value=$_rhs->facture|ternary:"arretee":""}}
       <tr {{if $_rhs->facture}} class="charged" style="display: none"{{/if}}>
+        {{assign var=_sejour value=$_rhs->_ref_sejour}}
         <td class="{{$arretee}}">
-          <input type="checkbox" class="rhs" name="rhs_ids[{{$_rhs->_id}}]" value="{{$_rhs->_id}}"/>       
+          <input type="checkbox" class="rhs" name="sejour_ids[{{$_sejour->_id}}]" value="{{$_sejour->_id}}"/>       
  				</td>
-				{{assign var=_sejour value=$_rhs->_ref_sejour}}
 
 		    <td class="{{$arretee}} text">
 		      {{mb_include template=inc_view_patient patient=$_sejour->_ref_patient}}

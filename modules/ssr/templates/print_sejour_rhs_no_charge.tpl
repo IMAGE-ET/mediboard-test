@@ -19,12 +19,6 @@
 	  {{tr}}Print{{/tr}}
 	  {{$sejours_rhs|@count}} {{tr}}CRHS{{/tr}}
 	</button>
-
-  {{assign var=url value="m=$m&$actionType=$action&dialog=$dialog"}}
-  <form name="Filter" action="{{$url}}>
-	  <input type="checkbox" name="all_rhs" action="?m${{$m}}&amp;{{$actionType}}={{$action}}" method="GET"/>
-	  <label for="all_rhs">Inclure les RHS suivants</label>
-  </form>
 </div>
 
 {{assign var=days value="CRHS"|static:days}}
@@ -114,7 +108,8 @@
       {{/if}}
       <tr>
         <td class="text">
-          {{$activite->_view}}
+          <strong>{{$activite}}</strong> :
+					{{$activite->libelle}}
           <br />
           <small>{{$activite->_ref_type_activite->_view}}</small>
         </td>
