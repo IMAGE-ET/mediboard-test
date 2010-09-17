@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 class CEcapTypeDocument {
   var $level = 0;

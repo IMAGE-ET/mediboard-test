@@ -26,8 +26,8 @@ class CEcDocumentSender extends CDocumentSender {
     return array(
       "aLoginApplicatif"       => $source->user,
       "aPasswordApplicatif"    => $source->password,
-      "aTypeIdentifiantActeur" => 1,
-      "aIdentifiantActeur"     => "pr1",
+      "aTypeIdentifiantActeur" => "LoginUser",
+      "aIdentifiantActeur"     => CAppUI::conf("ecap WebServices user_login_prefix").$idExt->id400,
       "aIdClinique"            => $idExt->id400,
     );
   }

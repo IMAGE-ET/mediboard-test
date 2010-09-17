@@ -1,5 +1,29 @@
 {{* $id: $ *}}
 
+<form name="Config-Sources" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
+<table class="form">
+
+  {{assign var=m value=ecap}}
+  {{assign var=class value=WebServices}}
+  <tr>
+    <th class="category" colspan="10">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+  </tr>
+
+  {{mb_include module=system template=inc_config_str var=user_login_prefix}}
+
+  <tr>
+    <td class="button" colspan="10">
+      <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+    </td>
+  </tr>
+</table>
+
+</form>
+
 <script type="text/javascript">
   Main.add(Control.Tabs.create.curry('tabs-ecap-source', true));
 </script>
