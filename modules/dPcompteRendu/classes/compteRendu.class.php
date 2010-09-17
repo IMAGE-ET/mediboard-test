@@ -119,12 +119,14 @@ class CCompteRendu extends CDocumentItem {
   function getContent() {
     $this->loadContent();
     return $this->_source;
-//	  $file = $this->loadFile();
-//		return $file->_id ? $file->getContent() : $this->_source;
+	  $file = $this->loadFile();
+		return $file->_id ? $file->getContent() : $this->_source;
   }
   
   function getExtensioned() {
     $file = $this->loadFile();
+		return $this->_extensioned;
+		
 		if ($file->_id) {
 			$this->_extensioned = $file->_extensioned;
 		}
