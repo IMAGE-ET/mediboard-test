@@ -125,16 +125,30 @@ class CEcDocumentSender extends CDocumentSender {
     $params["aIdPatient"      ] = $ecPatient;
     $params["aTypeObjet"      ] = $ecTypeObjet;
     $params["aIdTypeDocument" ] = $ecTypeDocument;
-    $params["aCommentaire"    ] = "Commentaire pas si facultatif ?";
+    $params["aCommentaire"    ] = "Pas de commentaire";
     $params["aIdObjet"        ] = $ecObject;
-    $params["aLibelleDocument"] = utf8_encode($docItem->_extensioned);
-    $params["aNomFichier"     ] = utf8_encode($docItem->_extensioned);
-    $params["aFichierByte"    ] = $docItem->getContent();
+		
+		$extensioned = $docItem->getExtensioned();
+    $params["aLibelleDocument"] = utf8_encode($extensioned);
+    $params["aNomFichier"     ] = utf8_encode($extensioned);
+    $params["aTypeIdentifiantResponsableLegal"] = "texteLibre";
     
+		$responsable = "Indéterminé";
+		$codable = $docItem->_ref_object;
+		if ($codable instanceof CCodable) {
+			$codable->loadRefPraticien();
+			$responsable = utf8_encode($codable->_ref_praticien->_view);
+		}
+		
+		$params["aIdentifiantResponsableLegal"] = $responsable;
+    $params["aTexteResponsableLegal"] = $responsable;
+		
+    $params["aFichierByte"    ] = $docItem->getContent();
+		
     $source = CExchangeSource::get("ecap_files");
     $source->setData($params);
-    $source->send("DeposerDocument");
-    $result = simplexml_load_string($source->receive()->DeposerDocumentResult->any);
+    $source->send("DeposerDocumentPatient");
+    $result = simplexml_load_string($source->receive()->DeposerDocumentPatientResult->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
 		if ($result->codeRetour != "0") {
 	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);
@@ -184,8 +198,8 @@ class CEcDocumentSender extends CDocumentSender {
     
     $source = CExchangeSource::get("ecap_files");
     $source->setData($params);
-    $source->send("InvaliderDocument");
-    $result = simplexml_load_string($source->receive()->InvaliderDocumentResult->any);
+    $source->send("InvaliderDocumentPatient");
+    $result = simplexml_load_string($source->receive()->InvaliderDocumentPatientResult->any);
 		$result->descriptionRetour = utf8_decode($result->descriptionRetour);
 		if ($result->codeRetour != "0") {
 	    trigger_error("ecDocumentSender SOAP error [$result->codeRetour] for '$docItem->_guid': $result->descriptionRetour", E_USER_WARNING);

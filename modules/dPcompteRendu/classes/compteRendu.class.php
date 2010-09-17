@@ -118,9 +118,19 @@ class CCompteRendu extends CDocumentItem {
   
   function getContent() {
     $this->loadContent();
-		return $this->_source;
+    return $this->_source;
+//	  $file = $this->loadFile();
+//		return $file->_id ? $file->getContent() : $this->_source;
   }
   
+  function getExtensioned() {
+    $file = $this->loadFile();
+		if ($file->_id) {
+			$this->_extensioned = $file->_extensioned;
+		}
+    return parent::getExtensioned();
+  }
+	
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";
@@ -204,6 +214,7 @@ class CCompteRendu extends CDocumentItem {
   	$this->_ref_file = new CFile;
     $this->_ref_file->setObject($this);
     $this->_ref_file->loadMatchingObject();
+		return $this->_ref_file;
   }
 	
   function loadRefsFwd() {

@@ -49,6 +49,14 @@ class CDocumentItem extends CMbMetaObject {
   }
 
   /**
+   * Retrieve extensioned like file name
+   * @return binary Content
+   */
+  function getExtensioned() {
+  	return $this->_extensioned;
+  }
+
+  /**
    * Try and instanciate document sender according to module configuration
    * @return CDocumentSender sender or null on error
    */
