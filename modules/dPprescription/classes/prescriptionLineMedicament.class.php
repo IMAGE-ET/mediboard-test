@@ -224,6 +224,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     } else {
       $this->_ucd_view = substr($this->_ref_produit->libelle, 0, strrpos($this->_ref_produit->libelle, ' ')+1);
     }
+		
+	  if (CAppUI::conf("dPprescription CPrescription use_libelle_livret")){
+			$this->_ref_produit->updateLibelleProduit();
+			if($this->_ref_produit->_libelle_livret){
+			  $this->_ucd_view = $this->_ref_produit->_libelle_livret;
+			}
+		}
+		
     $this->_forme_galenique = $this->_ref_produit->forme;
     $this->_duree_prise = "";
     

@@ -338,7 +338,8 @@ $dPconfig["dPprescription"] = array (
     "show_chapter_soin"     => "1",
     "show_chapter_dm"       => "1",
     "show_chapter_dmi"      => "1",
-		"preselect_livret"           => "1",
+		"preselect_livret"      => "1",
+		"use_libelle_livret"    => "0"
   ),
   
   "CCategoryPrescription" => array (

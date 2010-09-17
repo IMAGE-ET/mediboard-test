@@ -68,9 +68,8 @@ function onchangeMed(radioButton, other_field){
 		{{mb_include module=system template=inc_config_bool var=add_element_category}}
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
 		{{mb_include module=system template=inc_config_bool var=prescription_suivi_soins}}
-		
-
-	 {{assign var="var" value="max_time_modif_suivi_soins"}}
+		{{mb_include module=system template=inc_config_bool var=use_libelle_livret}}
+	  {{assign var="var" value="max_time_modif_suivi_soins"}}
     <tr> 
 		  <th>
 		    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
