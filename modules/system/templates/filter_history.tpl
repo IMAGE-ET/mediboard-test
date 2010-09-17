@@ -22,6 +22,8 @@ Main.add(function(){
       $V(form.start, 0);
     });
   });
+  
+  $(form.object_class).makeAutocomplete({width: "200px"});
 });
 </script>
 
