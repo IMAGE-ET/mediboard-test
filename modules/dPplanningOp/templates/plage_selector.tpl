@@ -190,8 +190,8 @@ Main.add(function () {
                 {{/foreach}}
               </table>
             </div>
-          </td>
-          <td style="width: 1%;">
+         	 </td>
+          <td style="width: 1%; text-align: center;">
             {{if $resp_bloc ||
               (
                (!$over || !$dPconfig.dPbloc.CPlageOp.locked)
@@ -202,6 +202,14 @@ Main.add(function () {
             <input type="radio" name="list" value="{{$_plage->plageop_id}}"
                ondblclick="setClose('{{$_plage->date}}', '{{$_plage->salle_id}}')"
                onclick="document.frmSelector._date.value='{{$_plage->date}}'; document.frmSelector._salle_id.value='{{$_plage->salle_id}}';"/>
+            {{else}}
+              <img src="images/icons/warning.png" 
+                {{if $_plage->max_intervention && $_plage->_nb_operations >= $_plage->max_intervention}}
+                  title="Nombre d'interventions maximum atteint ({{$_plage->_nb_operations}}/{{$_plage->max_intervention}})"
+                {{elseif $_plage->date < $date_min}}
+                  title="Impossible de planifier à cette date"
+                {{/if}}
+              />
             {{/if}}
           </td>
         </tr>

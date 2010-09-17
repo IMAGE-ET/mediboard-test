@@ -243,6 +243,8 @@ class CBarcodeParser {
   
   static function parse($barcode) {
     $orig_barcode = $barcode;
+    $barcode = str_replace("    ", "\t", $barcode);
+    
     $comp = array();
     
     $type = "raw";
