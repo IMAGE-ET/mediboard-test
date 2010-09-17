@@ -1960,6 +1960,7 @@ class CMbObject {
       "logs"                   => "CUserLog object_id",
       "affectations_personnel" => "CAffectationPersonnel object_id",
       "contextes_constante"    => "CConstantesMedicales context_id",
+      "modeles_etiquettes"       => "CModeleEtiquette object_id"
     );
   }
   

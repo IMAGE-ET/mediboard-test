@@ -285,7 +285,26 @@ class CSetupdPhospi extends CSetup {
       ADD INDEX (`responsable_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.36";
+    
+    $this->makeRevision("0.36");
+    $query = "CREATE TABLE `modele_etiquette` (
+              `modele_etiquette_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `nom` VARCHAR (255),
+              `texte` TEXT,
+              `largeur_page` FLOAT DEFAULT '21',
+              `hauteur_page` FLOAT DEFAULT '29.7',
+              `nb_lignes` INT (11) DEFAULT '8',
+              `nb_colonnes` INT (11) DEFAULT '4',
+              `marge_horiz` FLOAT DEFAULT '0.3',
+              `marge_vert` FLOAT DEFAULT '1.3',
+              `hauteur_ligne` FLOAT DEFAULT '8',
+              `object_id` INT (11) DEFAULT NULL,
+              `object_class` VARCHAR (255) DEFAULT NULL,
+              `font` TEXT DEFAULT NULL
+            ) TYPE=MYISAM;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.37";
   }
 }
 ?>
