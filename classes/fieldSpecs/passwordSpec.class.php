@@ -12,6 +12,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CPasswordSpec extends CMbFieldSpec {
   var $minLength = null;
+  var $revealable = null;
   
   function getSpecType() {
     return "password";
@@ -24,6 +25,7 @@ class CPasswordSpec extends CMbFieldSpec {
   function getOptions(){
     return parent::getOptions() + array(
       'minLength' => 'num',
+      'revealable' => 'bool',
     );
   }
   
@@ -76,7 +78,18 @@ class CPasswordSpec extends CMbFieldSpec {
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = '<input type="password" name="'.$field.'"';    
-    $sHtml       .= ' class="'.htmlspecialchars(trim($className.' '.$this->prop)).'" '.$extra.' />';
+    $sHtml       .= ' class="'.htmlspecialchars(trim($className.' '.$this->prop)).'" ';
+    
+    if ($this->revealable) {
+      $sHtml       .= ' value="'.htmlspecialchars($value).'" ';
+    }
+    
+    $sHtml       .= $extra.' />';
+    
+    if ($this->revealable) {
+      $sHtml       .= '<button class="lookup notext" type="button" onclick="var i=$(this).previous(\'input\');i.type=(i.type==\'password\')?\'text\':\'password\'"></button>';
+    }
+    
     $sHtml       .= '<span id="'.$field.'_message"></span>';
     return $sHtml;
   }

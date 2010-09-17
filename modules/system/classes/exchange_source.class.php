@@ -36,7 +36,7 @@ class CExchangeSource extends CMbObject {
     $specs["role"]     = "enum list|prod|qualif default|qualif notNull";
     $specs["host"]     = "text notNull";
     $specs["user"]     = "str";
-    $specs["password"] = "password";
+    $specs["password"] = "password revealable";
 		$specs["type_echange"] = "str protected";
     
     $specs["_incompatible"] = "bool";
