@@ -10,6 +10,8 @@
 
 class CBarcodeParser {
   public static $code128separator = "@";
+  
+  // http://www.ciax.com/manuals/jitsap/uccean128.htm
   public static $code128prefixes = array(
     "00"  => "Serial Shipping Container Code",
     "01"  => "Shipping Container Code",
@@ -66,6 +68,7 @@ class CBarcodeParser {
     "10" => "lot",
     "17" => "per",
     "21" => "sn",
+    "30" => "qty",
   );
   
   private static $code39ext = array(
@@ -203,7 +206,7 @@ class CBarcodeParser {
   }
   
   static function parsePeremptionDate($date, $alt = false) {
-    // dates du type 18304 >> 18 octobre (304 = jour dans l'année)
+    // dates du type 18304 >> octobre 2018 (304 = jour dans l'année)
     
     // YYYY-MM-DD
     if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
@@ -229,6 +232,12 @@ class CBarcodeParser {
       else {
         $date = mbDate("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
       }
+      return mbDate("-1 DAY", $date);
+    }
+    
+    // YYNNN
+    if (preg_match('/^(\d{2})(\d{3})$/', $date, $parts)){
+      $date = mbDate("+{$parts[2]} DAYS", "20{$parts[1]}-01-01");
       return mbDate("-1 DAY", $date);
     }
     
@@ -278,12 +287,13 @@ class CBarcodeParser {
     if (empty($comp) &&
         preg_match('/^(?:(01)(\d{14}))?(10)([a-z0-9\/-]{4,20})[^a-z0-9\/-]?(17)(\d{6})$/ims', $barcode, $parts) ||
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(10)([a-z0-9\/-]{4,20})[^a-z0-9\/-]?$/ims', $barcode, $parts) ||
+        preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{6,20})(30)(\d{1,2})$/ims', $barcode, $parts) ||
         preg_match('/^(?:(01)(\d{14}))?(17)(\d{6})(21)([a-z0-9]{6,20})$/ims', $barcode, $parts) ||
         preg_match('/^(01)(\d{14})$/i', $barcode, $parts)) {
       $type = "code128";
       $prop = null;
       foreach($parts as $p){
-        if (in_array($p, array("01", "10", "17", "21"))) {
+        if (array_key_exists($p, self::$code128table)) {
           $prop = $p;
         }
         else if ($prop) {
@@ -358,6 +368,13 @@ class CBarcodeParser {
       // +M412RM45320004C1L
       if (empty($comp) && preg_match('/^[a-z](\d{3})([A-Z0-9]+).{2}$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
+      }
+      
+      //  _PER_ ____LOT___
+      // +1512021009296068W$
+      if (empty($comp) && preg_match('/^\+(\d{5})(\d{4,}).\$$/ms', $barcode, $parts)) {
+        $comp["per"] = self::parsePeremptionDate($parts[1], true);
+        $comp["lot"] = $parts[2];
       }
       
       //   __SN___
@@ -474,6 +491,7 @@ class CBarcodeParser {
       "cip"   => null,
       "price" => null,
       "key"   => null,
+      "qty"   => null,
     );
     
     return array(
