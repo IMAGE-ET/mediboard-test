@@ -1,4 +1,33 @@
 <?php
+$locales['CHL7v2MessageException-1'] = 'Impossible d\'analyser le fichier. Il est NULL ou trop court.';
+$locales['CHL7v2MessageException-2'] = 'Le format du séparateur est invalide.';
+$locales['CHL7v2MessageException-3'] = '';
+$locales['CHL7v2MessageException-4'] = '';
+$locales['CHL7v2MessageException-5'] = '';
+$locales['CHL7v2MessageException-6'] = '';
+$locales['CHL7v2MessageException-7'] = '';
+$locales['CHL7v2MessageException-8'] = '';
+$locales['CHL7v2MessageException-9'] = '';
+$locales['CHL7v2MessageException-10'] = '';
+$locales['CHL7v2MessageException-11'] = '';
+$locales['CHL7v2MessageException-12'] = '';
+$locales['CHL7v2MessageException-13'] = '';
+$locales['CHL7v2MessageException-14'] = '';
+$locales['CHL7v2MessageException-15'] = '';
+$locales['CHL7v2MessageException-16'] = '';
+$locales['CHL7v2MessageException-17'] = '';
+$locales['CHL7v2MessageException-18'] = '';
+$locales['CHL7v2MessageException-19'] = '';
+$locales['HL7-v.2.1'] = 'HL7 version 2.1';
+$locales['HL7-v.2.2'] = 'HL7 version 2.2';
+$locales['HL7-v.2.3'] = 'HL7 version 2.3';
+$locales['HL7-v.2.3_1'] = 'HL7 version 2.3.1';
+$locales['HL7-v.2.4'] = 'HL7 version 2.4';
+$locales['HL7-v.2.5'] = 'HL7 version 2.5';
+$locales['config-hl7v2-extract'] = 'Extraction des specs HL7 v.2.x';
+$locales['config-hl7v2-source'] = 'Source d\'échange';
+$locales['mod-hl7-tab-configure'] = 'Configurer';
+$locales['mod-hl7-tab-vw_read_hl7v2_files'] = 'Lecture fichier HL7';
 $locales['module-hl7-court'] = 'HL7';
 $locales['module-hl7-long'] = 'HL7';
 ?>
