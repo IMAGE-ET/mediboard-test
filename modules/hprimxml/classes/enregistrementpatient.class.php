@@ -152,7 +152,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $newPatient->_no_ipp = 0;
             $msgPatient = $newPatient->store();
                       
-            $codes = array ($msgPatient ? "A002" : "I01", $msgIPP ? "A005" : "A001");
+            $codes = array ($msgPatient ? "A002" : "I001", $msgIPP ? "A005" : "A001");
             if ($msgPatient) {
               $avertissement = $msgPatient." ";
             } else {
@@ -167,7 +167,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           
         $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
-        $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
+        $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id);
         $echange_hprim->store();
         
         return $messageAcquittement;
@@ -256,7 +256,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $echange_hprim->_acquittement = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->date_echange = mbDateTime();
-              $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient']);
+              $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id);
               $echange_hprim->store();
               
               return $messageAcquittement;

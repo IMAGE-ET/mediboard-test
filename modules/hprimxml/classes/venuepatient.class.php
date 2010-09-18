@@ -115,7 +115,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   function venuePatient($domAcquittement, $newPatient, $data, &$newVenue = null) {
     $echange_hprim = $this->_ref_echange_hprim;
     
-    // Traitement du patient
+    // Cas 1 : Traitement du patient
     $domEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
     $domEnregistrementPatient->_ref_echange_hprim = $echange_hprim;
     $messageAcquittement = $domEnregistrementPatient->enregistrementPatient($domAcquittement, $newPatient, $data);
@@ -128,22 +128,180 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $domAcquittement->_sous_type_evt        = $this->sous_type;
     $domAcquittement->_ref_echange_hprim    = $echange_hprim;
     
-    // Traitement de la venue
+    // Traitement du message des erreurs
+    $avertissement = $msgID400 = $msgVenue = $msgNumDossier = "";    
+    $_code_Venue = $_code_NumDos = false;
     $mutexSej = new CMbSemaphore("sip-numdos"); 
     
-     // Traitement du message des erreurs
-    $avertissement = $msgID400 = $msgVenue = $msgNumDossier = "";
-    $_code_Venue = false;
+    $dest_hprim = $echange_hprim->_ref_emetteur;
+    
+    if (!$newVenue) {
+      $newVenue = new CSejour();
+    }
     
     // Si SIP
     if (CAppUI::conf('sip server')) {
+      // Cas 2 : idSource non fourni, idCible fourni
+      if (!$data['idSourceVenue'] && $data['idCibleVenue']) {
+        $num_dossier = new CIdSante400();
+        //Paramétrage de l'id 400
+        $num_dossier->object_class = "CSejour";
+        $num_dossier->tag = CAppUI::conf("sip tag_dossier");
+        $num_dossier->id400 = str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT);
+        
+        // Cas 2.1 : idCible connu
+        if ($num_dossier->loadMatchingObject()) {
+          $newVenue->load($num_dossier->object_id);
+          $newVenue->loadRefPatient();
+          
+          /* @todo Voir comment faire !!! */
+          /*if (!$this->checkSimilarSejour($newVenue, $data['venue'])) {
+            $commentaire = "Le patient et/ou praticien et/ou date d'entrée sont très différents."; 
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E116", $commentaire);
+            $doc_valid = $domAcquittement->schemaValidate();
+            
+            $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
+            return $messageAcquittement;
+          }*/
+          
+          // Mapping de la venue
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+          $newVenue->_num_dossier = $num_dossier->id400;
+          $msgVenue = $newVenue->store();
+          $newVenue->loadLogs();
+
+          $modified_fields = "";
+          if (is_array($newVenue->_ref_last_log->_fields)) {
+            foreach ($newVenue->_ref_last_log->_fields as $field) {
+              $modified_fields .= "$field \n";
+            }
+          } 
+          
+          $codes = array ($msgVenue ? "A103" : "I102", "I103");
+          if ($msgVenue) {
+            $avertissement = $msgVenue." ";
+          } else {
+            $commentaire .= "Venue modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Num dossier associé : $num_dossier->id400.";
+          }
+        }
+        
+        // Cas 2.2 : idCible non connu 
+        else {
+          if (is_numeric($num_dossier->id400) && (strlen($num_dossier->id400) <= 6)) {
+            // Mapping de la venue
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+             // Si serveur et pas de num_dos sur la venue
+            $newVenue->_no_num_dos = 1;
+            $msgVenue = $newVenue->store();
+            
+            $num_dossier->object_id = $newVenue->_id;
+            $num_dossier->last_update = mbDateTime();
+            $msgNumDossier = $num_dossier->store();
+            
+            $newVenue->_num_dossier = $num_dossier->id400;
+            // Si serveur et on a un num_dos sur la venue
+            $newVenue->_no_num_dos = 0;
+            $msgVenue = $newVenue->store();
+                      
+            $codes = array ($msgVenue ? "A102" : "I101", $msgNumDossier ? "A105" : "A101");
+            if ($msgVenue) {
+              $avertissement = $msgVenue." ";
+            } else {
+              $commentaire = "Venue créé : $newVenue->_id. Numéro de dossier créé : $num_dossier->id400.";
+            }
+          }
+        }
+        
+        $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+        $doc_valid = $domAcquittement->schemaValidate();
+        $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+          
+        $echange_hprim->_acquittement = $messageAcquittement;
+        $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+        $echange_hprim->setObjectIdClass("CSejour", $data['idSourceVenue'] ? $data['idSourceVenue'] : $newVenue->_id);
+        $echange_hprim->store();
+        
+        return $messageAcquittement;
+      }
       
+      $id400 = new CIdSante400();
+      //Paramétrage de l'id 400
+      $id400->object_class = "CSejour";
+      $id400->tag          = $dest_hprim->_tag_sejour;
+      $id400->id400        = $data['idSourceVenue'];
+      
+      // Cas 3 : idSource fourni et retrouvé : la venue existe sur le SMP
+      if($id400->loadMatchingObject()) {
+        // Identifiant de la venue sur le SMP
+        $idVenueSMP = $id400->object_id;
+        // Cas 3.1 : idCible non fourni
+        if(!$data['idCibleVenue']) {
+          if ($newVenue->load($idVenueSMP)) {
+            // Mapping de la venue
+            $newVenue = $this->mappingVenue($data['patient'], $newVenue);
+
+            // Création de l'IPP
+            $IPP = new CIdSante400();
+            //Paramétrage de l'id 400
+            $IPP->object_class = "CPatient";
+            $IPP->tag = CAppUI::conf("sip tag_dossier");
+            $IPP->object_id = $idVenueSMP;
+
+            $mutex->acquire();
+            // Chargement du dernier IPP s'il existe
+            if (!$IPP->loadMatchingObject("id400 DESC")) {
+              // Incrementation de l'id400
+              $IPP->id400++;
+              $IPP->id400 = str_pad($IPP->id400, 6, '0', STR_PAD_LEFT);
+
+              $IPP->_id = null;
+              $IPP->last_update = mbDateTime();
+              $msgIPP = $IPP->store();
+                
+              $_IPP_create = true;
+            }
+            $mutex->release();
+
+            $newVenue->_IPP = $IPP->_id;
+            $msgPatient = $newVenue->store();
+            $newVenue->loadLogs();
+
+            $modified_fields = "";
+            if (is_array($newVenue->_ref_last_log->_fields)) {
+              foreach ($newVenue->_ref_last_log->_fields as $field) {
+                $modified_fields .= "$field \n";
+              }
+            }
+             
+            $codes = array ($msgPatient ? "A003" : "I002", $msgIPP ? "A005" : $_IPP_create ? "I006" : "I008");
+            if ($msgPatient || $msgIPP) {
+              $avertissement = $msgPatient." ".$msgIPP;
+            } else {
+              $commentaire = "Patient modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.";
+            }
+            $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+            $doc_valid = $domAcquittement->schemaValidate();
+            $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+              
+            $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
+          }
+        }
+        // Cas 3.2 : idCible fourni
+        else {
+          // Cas 3.2.1 : idCible connu
+          
+          // Cas 3.2.2 : idCible non connu
+        }
+      }    
+      // Cas 4 : Venue n'existe pas sur le SMP
+      else {
+        // Cas 4.1 : Venue retrouvé  (patient, date d'entrée, date de sortie)
+        
+        // Cas 4.2 : Venue non retrouvé
+      }
     }
     // Si CIP
-    else {
-      $dest_hprim = $echange_hprim->_ref_emetteur;
-      
-      $newVenue = new CSejour();
+    else {      
       $newVenue->patient_id = $newPatient->_id; 
       $newVenue->group_id = $dest_hprim->group_id;
 

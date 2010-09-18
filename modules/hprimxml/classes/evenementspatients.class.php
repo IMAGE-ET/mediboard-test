@@ -210,6 +210,14 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbPatient->checkSimilar($nom, $prenom);
   }
   
+  function checkSimilarSejour(CPatient $mbPatient, CSejour $mbVenue, $xmlVenue) {
+    $xpath = new CHPrimXPath($this);
+    
+    
+    
+    return $mbVenue->checkSimilar();
+  }
+  
   function getIdSourceObject($query_evt, $query_type) { 
     $xpath = new CHPrimXPath($this);
     
