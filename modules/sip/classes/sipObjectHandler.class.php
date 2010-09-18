@@ -30,7 +30,9 @@ class CSipObjectHandler extends CMbObjectHandler {
     }
 
     // Si serveur et pas d'IPP sur le patient
-    if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && CAppUI::conf('sip server')) {
+    if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && 
+        isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1) &&
+        CAppUI::conf('sip server')) {
       return;
     }
     
@@ -132,7 +134,7 @@ class CSipObjectHandler extends CMbObjectHandler {
         foreach ($destinataires as $_destinataire) {
           $mbObject->_id400 = null;
           $id400Patient = new CIdSante400();
-          $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
+          $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_sejour);
           $mbObject->_id400 = $id400Patient->id400;
 
           $echange_hprim = new CEchangeHprim();
