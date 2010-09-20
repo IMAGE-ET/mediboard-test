@@ -31,7 +31,10 @@ class CHtmlToPDF {
       "p", "pre", "plaintext", "table", "ul", "xmp",
     )
   );
-      
+
+  static $_width_page = 595.28;
+  static $_marges = 2;
+  
   static $_font_size_lookup = array(
     // For basefont support
     -3 => "4pt", 
@@ -118,9 +121,19 @@ class CHtmlToPDF {
       CAppUI::stepAjax("CCompteRendu-empty-doc");
       CApp::rip();
     }
+    
+    $xpath = new DOMXpath($xml);
+
+    $elements = $xpath->query("*/div[@id='body']");
+    if (!is_null($elements)) {
+      foreach($elements as $_element)
+        CHtmlToPDF::removeAlign($_element);
+    }
 
     $this->recursiveRemove($html);
     $this->recursiveRemoveNestedFont($html);
+    $this->resizeTable($html);
+    
     $str = $xml->saveHTML();
     $str = preg_replace("/<br>/", "<br/>", $str);
     return $str;
@@ -173,7 +186,48 @@ class CHtmlToPDF {
       $this->recursiveRemove($child);
     }
   }
-
+  
+  // Transformation des tailles des tableaux de pixels en pourcentages
+  // Feuille A4
+  //   largeur en cm : 21
+  //   largeur en pixels : 595.28
+  function resizeTable(DomNode &$node) {
+  	if (!$node->hasChildNodes()) {
+      return;
+    }
+    
+    foreach($node->childNodes as $_child) {
+    	if ($_child->nodeName == "table") {
+	    	$width = $_child->getAttribute("width");
+	    	$width_without_marges = CHtmlToPDF::$_width_page - (CHtmlToPDF::$_marges / CHtmlToPDF::$_width_page) * 100;
+	    	if (!strrpos($width, "%")) {
+		  		if ($width > $width_without_marges) {
+		    	  $_child->setAttribute("width", "100%");
+		    	} else if ($width <= $width_without_marges & $width > 0) {
+		    		
+		    	  $new_width = ($width * 100) / ($width_without_marges - CHtmlToPDF::$_marges * 2 );
+		        $_child->setAttribute("width", "$new_width%");
+		    	}
+    	  }
+    	}
+    	CHtmlToPDF::resizeTable($_child);
+    }
+  }
+  
+  function removeAlign(DomNode &$node) {
+    if (!$node->hasChildNodes()) {
+      return;
+    }
+    foreach($node->childNodes as $_child) {
+      if ($_child->nodeName == "table")
+        if ($_child->getAttribute("align") == "left" || $_child->getAttribute("align") == "right")
+          $_child->removeAttribute("align");
+      
+      CHtmlToPDF::removeAlign($_child);
+    }
+  }
+  
+  // Suppression des balises fonts imbriquées
   function recursiveRemoveNestedFont(DomNode &$node) {
     if (!$node->hasChildNodes()) {
       return;
