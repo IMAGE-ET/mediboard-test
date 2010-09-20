@@ -367,6 +367,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getMedecins($node, CSejour $mbVenue) {    
     $xpath = new CHPrimXPath($node->ownerDocument);
     
+    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
@@ -385,7 +387,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     if (!$mbVenue->praticien_id) {
       $user = new CUser();
       $mediuser = new CMediusers();
-      $user->user_last_name = CAppUI::conf("hprimxml medecinIndetermine");
+      $user->user_last_name = CAppUI::conf("hprimxml medecinIndetermine").$emetteur->group_id;
       if (!$user->loadMatchingObject()) {
         $mediuser->_user_last_name = $user->user_last_name;
         $mediuser->_id = $this->createPraticien($mediuser);
