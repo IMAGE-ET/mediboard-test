@@ -15,6 +15,7 @@ $locales['mod-pharmacie-tab-vw_idx_dispensation_nominative'] = 'Dispensation nom
 $locales['mod-pharmacie-tab-vw_idx_outflow'] = 'Sorties';
 $locales['mod-pharmacie-tab-vw_idx_prescriptions_sejour'] = 'Prescriptions de séjour';
 $locales['mod-pharmacie-tab-vw_idx_restockage_service'] = 'Réception dans les services';
+$locales['mod-pharmacie-tab-vw_idx_stupefiant'] = 'Stupéfiants';
 $locales['module-pharmacie-court'] = 'Pharmacie';
 $locales['module-pharmacie-long'] = 'Pharmacie';
 ?>

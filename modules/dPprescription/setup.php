@@ -1672,7 +1672,25 @@ class CSetupdPprescription extends CSetup {
               CHANGE `chapitre` `chapitre` ENUM ('anapath','biologie','imagerie','consult','kine','soin','dm','dmi','med_elt') NOT NULL";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "1.14";
+		$this->makeRevision("1.14");
+		$sql = "ALTER TABLE `prescription_line_element` 
+             ADD `perop` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `prescription_line_medicament` 
+              ADD `perop` ENUM ('0','1') DEFAULT '0',
+							ADD `stupefiant` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `prescription_line_mix` 
+              ADD `perop` ENUM ('0','1') DEFAULT '0';";
+	  $this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `prescription_line_mix_item` 
+              ADD `stupefiant` ENUM ('0','1') DEFAULT '0';";
+		$this->addQuery($sql);
+		
+    $this->mod_version = "1.15";
   }
 }
 

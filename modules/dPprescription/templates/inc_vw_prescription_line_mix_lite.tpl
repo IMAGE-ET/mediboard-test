@@ -39,6 +39,22 @@
   <td style="width: 44%" class="text">
     {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name=lines}}
       {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl" line=$_perf_line}}
+	    {{if $_perf_line->_can_vw_livret_therapeutique}}
+	      <img src="images/icons/livret_therapeutique_barre.gif" title="Produit non présent dans le livret Thérapeutique" />
+	    {{/if}} 
+	    {{if $_perf_line->stupefiant}}
+	      <img src="images/icons/stup.png" title="Produit stupéfiant" />
+	    {{/if}} 
+	    {{if !$_perf_line->_ref_produit->inT2A}}
+	      <img src="images/icons/T2A_barre.gif" title="Produit hors T2A" />
+	    {{/if}}
+	    {{if $_perf_line->_can_vw_generique}}
+	      <img src="images/icons/generiques.gif" title="Produit générique" />
+	    {{/if}} 
+	    {{if $_perf_line->_ref_produit->_supprime}}
+	      <img src="images/icons/medicament_barre.gif" title="Produit supprimé" />
+	    {{/if}}
+			
       <a href="#produit{{$_perf_line->_id}}" onclick="Prescription.viewProduit(null,'{{$_perf_line->code_ucd}}','{{$_perf_line->code_cis}}');" style="font-weight: bold; display: inline;">
         {{$_perf_line->_ucd_view}}
         

@@ -37,7 +37,8 @@ class CPrescriptionLine extends CMbObject {
   var $operation_id        = null;
   var $emplacement         = null;
   var $commentaire         = null;
-  
+  var $perop               = null;
+	
   // Form Fields
   var $_fin                = null;
   var $_protocole          = null;
@@ -102,6 +103,7 @@ class CPrescriptionLine extends CMbObject {
     $specs["commentaire"]       = "str helped";
     $specs["emplacement"]       = "enum notNull list|service|bloc|service_bloc default|service";
     $specs["operation_id"]      = "ref class|COperation";
+    $specs["perop"]             = "bool default|0"; 
     $specs["_fin"]              = "date moreEquals|debut";
     $specs["_fin_reelle"]       = "date";
     return $specs;

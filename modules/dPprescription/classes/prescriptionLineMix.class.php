@@ -66,6 +66,7 @@ class CPrescriptionLineMix extends CMbObject {
 	var $condition_active = null;
 	
 	var $jour_decalage = null;
+	var $perop         = null;
 	
 	// Fwd Refs
   var $_ref_prescription = null;
@@ -188,6 +189,7 @@ class CPrescriptionLineMix extends CMbObject {
 	  $specs["quantite_totale"]        = "num";
 		$specs["duree_passage"]          = "num";
 		$specs["unite_duree_passage"]    = "enum list|minute|heure default|minute";
+		$specs["perop"]                  = "bool default|0"; 
 		return $specs;
   }
 

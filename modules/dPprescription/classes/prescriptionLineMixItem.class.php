@@ -20,7 +20,8 @@ class CPrescriptionLineMixItem extends CMbObject {
   var $quantite     = null; // Quantite de produit
   var $unite        = null;
   var $solvant      = null;
-	
+	var $stupefiant   = null;
+		
   // Object references
   var $_ref_prescription_line_mix = null;
 
@@ -63,6 +64,7 @@ class CPrescriptionLineMixItem extends CMbObject {
     $specs["quantite"]     = "num";
     $specs["unite"]        = "str";
 		$specs["solvant"]      = "bool default|0";
+		$specs["stupefiant"]   = "bool default|0";
     return $specs;
   }
   
@@ -248,6 +250,17 @@ class CPrescriptionLineMixItem extends CMbObject {
 	function store(){
 		$calculPlanif =  ($this->fieldModified("quantite") || $this->fieldModified("unite"));
     $mode_creation = !$this->_id;
+		
+    // Stockage du stupefiant lors de la creation de la ligne
+    if(!$this->_id){
+      $this->completeField("code_cip");
+      $this->loadRefProduit();
+      $this->_ref_produit->loadRefMonographie();
+      
+      if (preg_match("/Stup[éa-z&;]+fiant/i", $this->_ref_produit->_ref_monographie->condition_delivrance)){
+        $this->stupefiant = 1;
+      }
+    }
 		
 	  if($msg = parent::store()){
 	  	return $msg;

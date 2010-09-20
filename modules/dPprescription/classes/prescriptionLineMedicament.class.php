@@ -34,6 +34,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $substitution_plan_soin = null;
   var $traitement_personnel = null;
 	var $injection_ide = null;
+	var $stupefiant = null;
   
   var $_most_used_poso = null;
   
@@ -183,6 +184,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs["substitution_plan_soin"] = "bool";
     $specs["traitement_personnel"]   = "bool";
 		$specs["injection_ide"]          = "bool";
+		$specs["stupefiant"]             = "bool default|0";
     return $specs;
   }
   
@@ -523,8 +525,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   function store(){
-
-    // Sauvegarde de la voie lors de la creation de la ligne
+		// Sauvegarde de la voie lors de la creation de la ligne
     if(!$this->_id && !$this->voie){
     	$this->loadRefProduitPrescription();
 			if($this->_ref_produit_prescription->_id && $this->_ref_produit_prescription->voie){
@@ -559,6 +560,18 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 											$this->fieldModified("date_arret") || 
 											$this->fieldModified("substitution_line_id"));
   
+	
+	  // Stockage du stupefiant lors de la creation de la ligne
+    if(!$this->_id){
+      $this->completeField("code_cip");
+      $this->loadRefProduit();
+      $this->_ref_produit->loadRefMonographie();
+
+      if (preg_match("/Stup[éa-z&;]+fiant/i", $this->_ref_produit->_ref_monographie->condition_delivrance)){
+        $this->stupefiant = 1;
+      }
+    }
+		
   	if($msg = parent::store()){
   		return $msg;
   	}

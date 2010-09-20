@@ -47,17 +47,11 @@
 						    <img src="images/icons/gris.gif" />
 						  {{else}}
 						    {{if isset($_prescription_line_mix->_prises_prevues.$_date.$_hour|smarty:nodefaults)}}
-			
-								  
 							    {{foreach from=$_prescription_line_mix->_ref_lines item=_perf_line name="foreach_perf_line"}}
-						<div style="padding: 10px 0px">
-								    {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}
-								 </div>
-								 
-								 
-								   
+						        <div style="padding: 10px 0px">
+								      {{$_perf_line->_quantite_administration}} {{$_perf_line->_unite_administration}}
+								   </div>
 								  {{/foreach}}
-								 
 							  {{/if}}
 						  {{/if}}
 				    </td>
