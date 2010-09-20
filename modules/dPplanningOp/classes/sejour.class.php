@@ -1339,7 +1339,7 @@ class CSejour extends CCodable {
     }
 		
 		$this->loadRefRPU();
-		if ($this->_ref_rpu || !$this->_id) {
+		if ($this->_ref_rpu) {
 		  // Ajout d'un fillTemplate du RPU
       $this->_ref_rpu->fillLimitedTemplate($template);
 		}
