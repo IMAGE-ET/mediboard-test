@@ -17,7 +17,8 @@ $filter->_id = CValue::get("plage_id"       , null);
 $filter->_date_min = CValue::get("_date_min", "$now");
 $filter->_date_max = CValue::get("_date_max", "$now");
 $filter->_coordonnees = CValue::get("_coordonnees");
-$filter->_plages_vides = CValue::get("_plages_vides");
+$filter->_plages_vides = CValue::get("_plages_vides", 1);
+$filter->_non_pourvues = CValue::get("_non_pourvues", 1);
 
 $chir = CValue::getOrSession("chir");
 
@@ -48,12 +49,24 @@ $listPlage = $listPlage->loadList($where, $order);
 
 // Pour chaque plage on selectionne les consultations
 foreach ($listPlage as $plage_id => &$plage) {
+  $plage->listPlace = array();
+  $plage->listBefore  = array();
+  $plage->listAfter   = array();
   $listPlage[$plage_id]->loadRefs(false, 1);
-  foreach($listPlage[$plage_id]->_ref_consultations as &$consult) {
-    $consult->loadRefPatient(1);
-    $consult->loadRefCategorie(1);
-    $consult->loadRefConsultAnesth();
-    $consult_anesth =& $consult->_ref_consult_anesth;
+  
+  for ($i = 0; $i < $plage->_total; $i++) {
+    $minutes = $plage->_freq * $i;
+    $plage->listPlace[$i]["time"] = mbTime("+ $minutes minutes", $plage->debut);
+    $plage->listPlace[$i]["consultations"] = array();
+  }
+  
+  foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
+    $consultation =& $plage->_ref_consultations[$keyConsult];
+    $consultation->loadRefPatient(1);
+    // Chargement de la categorie
+    $consultation->loadRefCategorie(1);
+    $consultation->loadRefConsultAnesth();
+    $consult_anesth =& $consultation->_ref_consult_anesth;
     if($consult_anesth->operation_id){
       $consult_anesth->loadRefOperation();
       $consult_anesth->_ref_operation->loadRefPraticien(true);
@@ -61,6 +74,22 @@ foreach ($listPlage as $plage_id => &$plage) {
       $consult_anesth->_ref_operation->loadExtCodesCCAM();
       $consult_anesth->_date_op =& $consult_anesth->_ref_operation->_ref_plageop->date;
     } 
+    
+    $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
+  
+    if($keyPlace < 0) {
+      $plage->listBefore[$keyPlace] =& $consultation;
+    }
+    
+    if($consultation->heure >= $plage->fin) {
+      $plage->listAfter[$keyPlace] =& $consultation;
+    }
+    
+    for  ($i = 0;  $i < $consultation->duree; $i++) {
+      if (isset($plage->listPlace[($keyPlace + $i)])) {
+        $plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
+      }
+    }
   }
 }
 

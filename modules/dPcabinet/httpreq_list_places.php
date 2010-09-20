@@ -26,7 +26,7 @@ if ($plageconsult_id) {
 }
 
 // Chargement des places disponibles
-$listPlace = array();
+$listPlace   = array();
 $listBefore  = array();
 $listAfter   = array();
 if ($plageconsult_id) {

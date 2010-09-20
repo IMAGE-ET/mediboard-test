@@ -123,6 +123,7 @@ class CConsultation extends CCodable {
   var $_type_affichage         = null;
   var $_coordonnees            = null;
   var $_plages_vides           = null;
+  var $_empty_places           = null;
   var $_non_pourvues           = null;
   
   function getSpec() {
@@ -208,7 +209,7 @@ class CConsultation extends CCodable {
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_plages_vides"]     = "bool default|1";
-    $specs["_non_pourvues"]     = "bool default|0";
+    $specs["_non_pourvues"]     = "bool default|1";
     
     $specs["_check_premiere"]   = "";
     $specs["_check_adresse"]    = "";

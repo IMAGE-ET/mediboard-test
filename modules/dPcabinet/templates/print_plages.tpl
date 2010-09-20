@@ -46,99 +46,57 @@
     <th style="width: 25%;">Remarques</th>
     <th>Durée</th>
   </tr>
-  
-  {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
+
+  {{foreach from=$curr_plage->listBefore item =curr_consult}}
   <tbody class="hoverable">
-  
   <tr>
     {{assign var=categorie value=$curr_consult->_ref_categorie}}
     <td rowspan="2" {{if !$categorie->_id}}colspan="2"{{/if}} style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
       {{mb_value object=$curr_consult field=heure}}
-		</td>
-
-    {{if $categorie->_id}}
-		<td rowspan="2" style="{{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
-      <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
     </td>
-		{{/if}}
-    
-    {{if $curr_consult->patient_id}}
-    {{assign var=patient value=$curr_consult->_ref_patient}}
-    <td rowspan="2">
-    	{{$patient->_view}}
-    </td>
-    
-	    {{if $coordonnees}}
-	    <td rowspan="2" class="text">
-	      {{mb_value object=$patient field=adresse}}
-	      <br />
-	      {{mb_value object=$patient field=cp}} 
-	      {{mb_value object=$patient field=ville}}
-	    </td>
-	    
-	    <td rowspan="2">
-	      {{mb_value object=$patient field=tel}}
-	      <br />
-	      {{mb_value object=$patient field=tel2}}
-	    </td>
-	    {{/if}}
-
-    <td rowspan="2" style="text-align: center; ">
-      {{$patient->_age}} ans
-      {{if $patient->_age != "??"}}
-        <br />
-        ({{mb_value object=$patient field="naissance"}})
-      {{/if}}
-    </td>
-    
-    {{else}}
-    <td rowspan="2" colspan="{{if $coordonnees}}4{{else}}2{{/if}}">
-      [PAUSE]
-    </td>
-    {{/if}}
-    
-    {{assign var=consult_anesth value=$curr_consult->_ref_consult_anesth}}
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text">
-	    {{mb_value object=$curr_consult field=motif}}
-    </td>
-    
-    <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text">
-      {{mb_value object=$curr_consult field=rques}}
-    </td>
-    
-    <td rowspan="2">
-      {{if $curr_consult->duree !=  1}}
-    	{{$curr_consult->duree}} x 
-			{{/if}}
-    	{{$curr_plage->freq|date_format:"%M"}}min
-    </td>
+    {{mb_include template=inc_print_plages_line}}
   </tr>
-  
-  <tr>
-    {{* Keep table row out of condition *}}
-    {{if $consult_anesth->operation_id}}
-    <td colspan="2" class="text">
-	    <div style="border-left: 4px solid #aaa; padding-left: 5px;">
-	    {{assign var=operation value=$consult_anesth->_ref_operation}}
-	
-	    Intervention le {{$operation->_datetime|date_format:$dPconfig.date}}
-	    - Dr {{$operation->_ref_praticien->_view}}<br />
-	    {{if $operation->libelle}}
-	      <em>[{{$operation->libelle}}]</em>
-	      <br />
-	    {{/if}}
-	    {{foreach from=$operation->_ext_codes_ccam item=curr_code}}
-	      {{if !$curr_code->_code7}}<strong>{{/if}}
-	      <small>{{$curr_code->code}} : {{$curr_code->libelleLong}}</small>
-	      {{if !$curr_code->_code7}}</strong>{{/if}}
-	      <br/>
-	    {{/foreach}}
-	    </div>
-	    {{/if}}
-    </td>
-  </tr>
-  
   </tbody>
+  {{/foreach}}
+
+  {{foreach from=$curr_plage->listPlace item =_place}}
+  {{if $_place.consultations|@count}}
+  {{foreach from=$_place.consultations item=curr_consult}}
+  <tbody class="hoverable">
+  <tr>
+    {{assign var=categorie value=$curr_consult->_ref_categorie}}
+    <td rowspan="2" {{if !$categorie->_id}}colspan="2"{{/if}} style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
+      {{mb_value object=$curr_consult field=heure}}
+    </td>
+    {{mb_include template=inc_print_plages_line}}
+  </tr>
+  </tbody>
+  {{/foreach}}
+  {{elseif $filter->_non_pourvues}}
+  <tbody class="hoverable">
+  <tr>
+    <td colspan="2"style="text-align: center;">
+      {{$_place.time|date_format:$dPconfig.time}}
+    </td>
+    <td colspan="7"></td>
+  </tr>
+  </tbody>
+  {{/if}}
+  {{/foreach}}
+
+  {{foreach from=$curr_plage->listAfter item =curr_consult}}
+  <tbody class="hoverable">
+  <tr>
+    {{assign var=categorie value=$curr_consult->_ref_categorie}}
+    <td rowspan="2" {{if !$categorie->_id}}colspan="2"{{/if}} style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
+      {{mb_value object=$curr_consult field=heure}}
+    </td>
+    {{mb_include template=inc_print_plages_line}}
+  </tr>
+  </tbody>
+  {{/foreach}}
+  
+  {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
     
   {{foreachelse}}
   <tr>

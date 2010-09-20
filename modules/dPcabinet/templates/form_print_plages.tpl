@@ -88,6 +88,10 @@ function changeDateCal(){
           <th>{{mb_label object=$filter field="_plages_vides"}}</th>
           <td>{{mb_field object=$filter field="_plages_vides"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_non_pourvues"}}</th>
+          <td>{{mb_field object=$filter field="_non_pourvues"}}</td>
+        </tr>
       </table>
 
     </td>
