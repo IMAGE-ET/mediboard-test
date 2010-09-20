@@ -142,7 +142,7 @@ class CEcDocumentSender extends CDocumentSender {
 		
 		$params["aIdentifiantResponsableLegal"] = $responsable;
     $params["aTexteResponsableLegal"] = $responsable;
-		
+		mbTrace($params);
     $params["aFichierByte"    ] = $docItem->getContent();
 		
     $source = CExchangeSource::get("ecap_files");

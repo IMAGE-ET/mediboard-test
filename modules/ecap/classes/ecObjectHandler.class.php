@@ -60,6 +60,7 @@ class CEcObjectHandler extends CMbObjectHandler {
 			trigger_error("Couldn't use Exchange source");
       return;
 		}
+
 		
 		$acq_fiches = simplexml_load_string($acquittement->SaveFicheMedicaleSaisieResult->any);
 		$acq_fiche = $acq_fiches->Fiche;
