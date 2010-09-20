@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-CCanDo::checkRead();
-
 $patient_id    = CValue::get("patient_id");
 $patient = new CPatient;
 if($patient_id) {
