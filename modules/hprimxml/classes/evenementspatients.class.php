@@ -275,8 +275,8 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   function getNatureVenue($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
-    $destinataire = $this->_ref_echange_hprim->_ref_emetteur;
-    $destinataire->loadConfigValues();
+    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    $emetteur->loadConfigValues();
 
     // Obligatoire pour MB
     $nature = $xpath->queryAttributNode("hprim:natureVenueHprim", $node, "valeur", "", false);
@@ -427,9 +427,11 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
   
   function createPraticien(CMediusers $mediuser) {
+    $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
+    
     $functions = new CFunctions();
     $functions->text = CAppUI::conf("hprimxml functionPratImport");
-    $functions->group_id = CGroups::loadCurrent()->_id;
+    $functions->group_id = $emetteur->group_id;
     $functions->loadMatchingObject();
     if (!$functions->loadMatchingObject()) {
       $functions->type = "cabinet";
