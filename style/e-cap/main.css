@@ -110,6 +110,10 @@ td#mainHeader td.welcome {
   font-style: italic;
 }
 
+#change-group_g {
+	width: 12em;
+}
+
 #menubar {
   text-align: right;
   border: 2px solid #000;
