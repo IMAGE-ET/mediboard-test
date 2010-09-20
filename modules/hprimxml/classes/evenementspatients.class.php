@@ -287,7 +287,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
 
     // Détermine le type de venue depuis la config des numéros de dossier 
-    $type_config = self::getVenueType($destinataire, $mbVenue->_num_dossier);
+    $type_config = self::getVenueType($emetteur, $mbVenue->_num_dossier);
     if ($type_config) {
       $mbVenue->type = $type_config;
     }
@@ -305,7 +305,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  static function getVenueType($destinataire, $num_dossier) {
+  static function getVenueType($emetteur, $num_dossier) {
     $types = array(
       "type_sej_hospi"   => "comp",
       "type_sej_ambu"    => "ambu",
@@ -316,9 +316,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     );
     
     foreach($types as $config => $type) {
-      if (!$destinataire->_configs[$config]) continue;
+      if (!$emetteur->_configs[$config]) continue;
       
-      if (preg_match($destinataire->_configs[$config], $num_dossier)) {
+      if (preg_match($emetteur->_configs[$config], $num_dossier)) {
         return $type;
       }
     }
@@ -368,7 +368,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $emetteur = $this->_ref_echange_hprim->_ref_emetteur;
-    
     $medecins = $xpath->queryUniqueNode("hprim:medecins", $node);
     if (is_array($medecins)) {
       $medecin = $medecins->childNodes;
@@ -441,10 +440,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $functions->store();
     }
     $mediuser->function_id = $functions->_id;
-    $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name);
+    $mediuser->makeUsernamePassword($mediuser->_user_first_name, $mediuser->_user_last_name, null, true);
     $mediuser->_user_type = 13; // Medecin
     $mediuser->actif = CAppUI::conf("hprimxml medecinActif") ? 1 : 0; 
-    
     $user = new CUser();
     $user->user_last_name = $mediuser->_user_last_name;
     $user->user_first_name  = $mediuser->_user_first_name;
