@@ -635,6 +635,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $commentaire = "Sejour non récupéré. Impossible d'associer le numéro de dossier.";
         }
         
+        if ($cancel) {
+          $codes[] = "A130";
+          $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$dest_hprim->_tag_sejour;
+        }
+        
         $num_dossier->object_id = $newVenue->_id;
         $num_dossier->last_update = mbDateTime();
         $msgNumDossier = $num_dossier->store();
@@ -642,10 +647,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         if (!isset($num_dossier->_trash)) { 
           $codes = array ($msgVenue ? ($_code_Venue ? "A103" : "A102") : ($_code_Venue ? "I102" : "I101"), 
                         $msgNumDossier ? "A105" : $_code_NumDos);
-        }
-        
-        if ($cancel) {
-          $codes[] = "A130";
         }
         
         if ($msgVenue || $msgNumDossier) {
@@ -705,12 +706,16 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           }
         }
         $codes = array($msgVenue ? "A103" : "I102", $_code_NumDos);
+        
         if ($cancel) {
           $codes[] = "A130";
+          $num_dossier->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$dest_hprim->_tag_sejour;
+          $num_dossier->last_update = mbDateTime();
+          $msgNumDossier = $num_dossier->store();
         }
-        
-        if ($msgVenue) {
-          $avertissement = $msgVenue." ";
+
+        if ($msgVenue || $msgNumDossier) {
+          $avertissement = $msgVenue." ".$msgNumDossier;
         } else {
           $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro dossier associé : $num_dossier->id400.";
         }
