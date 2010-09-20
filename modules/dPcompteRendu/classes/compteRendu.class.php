@@ -471,8 +471,8 @@ class CCompteRendu extends CDocumentItem {
     foreach($files as $_file) {
       $_file->delete();
     }
-    $this->_ref_content->delete();
-    return parent::delete();
+    if ($msg = parent::delete()) { return $msg; }
+    return $this->_ref_content->delete();
   }
 	
   function handleSend() {

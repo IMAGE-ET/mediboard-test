@@ -8,7 +8,8 @@
 */
 global $can;
 
-CAppUI::requireLibraryFile("phpThumb/phpthumb.config");
+
+CAppUI::requireLibraryFile("phpThumb/phpThumb.config");
 CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 
 $compte_rendu_id = CValue::post("compte_rendu_id");
@@ -157,7 +158,6 @@ if($generate_thumbs){
     $thumbs->sfn=$i ;
     $thumbs->w = 138;
     $thumbs->GenerateThumbnail();
-	  mbTrace($thumbs, "Page '$i'", true);
 
     $vignettes[$i] = base64_encode($thumbs->IMresizedData);
   }
