@@ -70,7 +70,9 @@ class CPrescriptionLine extends CMbObject {
   var $_prises_for_plan   = null;
 
   var $_nb_prises_interv = null; // Nombre de prises qui dependent de l'intervention
-
+  var $_update_planif_systeme = null; // Permet de forcer le calcul des planifs systemes pour une ligne
+  var $_count_locked_planif = null;
+	
   // Can fields
   var $_perm_edit = null;
   var $_dates_urgences = null;
@@ -274,6 +276,16 @@ class CPrescriptionLine extends CMbObject {
     $this->_count_prises_line = $prise->countMatchinglist();  
   }
   
+	function countLockedPlanif(){
+     // Chargement des planifications sur la ligne
+    $planification = new CPlanificationSysteme();
+    $where = array();
+    $where["object_id"] = " = '$this->_id'";
+    $where["object_class"] = " = '$this->_class_name'";
+    $where["administration_id"] = " IS NOT NULL";
+    $this->_count_locked_planif = $count_planifications = $planification->countList($where);
+  }
+	
   /*
    * Chargement de la ligne precedent la ligne courante
    */

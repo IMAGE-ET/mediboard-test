@@ -109,7 +109,7 @@ Main.add(function () {
 			    {{assign var=signe_decalage_intervention value=""}}
 			  {{/if}}
 			  à {{if $line->_protocole}}
-			  	I {{$signe_decalage_intervention}}{{mb_value object=$prise showPlus="true" field=decalage_intervention}} heures 
+			  	I {{$signe_decalage_intervention}}{{mb_value object=$prise showPlus="true" field=decalage_intervention}} {{mb_value object=$prise showPlus="true" field=unite_decalage_intervention}} 
 			 	{{else}}
 			 	  {{mb_value object=$prise field="heure_prise"}}
 			 	{{/if}}

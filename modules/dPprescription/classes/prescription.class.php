@@ -434,7 +434,8 @@ class CPrescription extends CMbObject {
           }
           $signe_decalage_intervention = ($prise->decalage_intervention >= 0) ? "+" : "";
           if($time_operation){
-            $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention HOURS", $time_operation);
+          	$unite_decalage_intervention = ($prise->unite_decalage_intervention == "heure") ? "HOURS" : "MINUTES";
+            $prise->heure_prise = mbTime("$signe_decalage_intervention $prise->decalage_intervention $unite_decalage_intervention", $time_operation);
           }
         }
         if($prise->urgence_datetime){
@@ -1634,6 +1635,9 @@ class CPrescription extends CMbObject {
     // Parcours des lignes de smedicaments
     if(count($this->_ref_prescription_lines)){
       foreach($this->_ref_prescription_lines as &$_line_med){
+      	if($_line_med->perop){
+      		continue;
+      	}
         if(!$_line_med->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
           continue;  
         }
@@ -1699,6 +1703,9 @@ class CPrescription extends CMbObject {
           foreach($elements_chap as $name_cat => $elements_cat){
             foreach($elements_cat as &$_elements){
               foreach($_elements as &$_line_element){
+              	if($_line_element->perop){
+				          continue;
+				        }
                 if(!$_line_element->signee && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
                   continue;  
                 }
@@ -1747,7 +1754,10 @@ class CPrescription extends CMbObject {
 	  // Parcours des prescription_line_mixes
     if($this->_ref_prescription_line_mixes){
       foreach($this->_ref_prescription_line_mixes as &$_prescription_line_mix){
-          if(!$_prescription_line_mix->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
+         if($_prescription_line_mix->perop){
+           continue;
+         }
+         if(!$_prescription_line_mix->signature_prat && !CAppUI::conf("dPprescription CPrescription show_unsigned_lines")){
            continue;  
          }
 				 $_prescription_line_mix->calculQuantiteTotal();

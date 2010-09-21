@@ -512,6 +512,7 @@ Main.add(function () {
 <ul id="tab_dossier_soin" class="control_tabs">
   <li onmousedown="Prescription.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med'); refreshTabState();"><a href="#jour">Administration</a></li>
   <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Plan</a></li>
+	<li onmousedown="Prescription.updatePerop('{{$sejour->_id}}');"><a href="#perop">Per-opératoire</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -586,5 +587,6 @@ Main.add(function () {
 {{/if}}
 </div>
 <div id="semaine" style="display:none"></div>
+<div id="perop" style="display: none;"></div>
 <hr />
 <div id="dossier_suivi"></div>

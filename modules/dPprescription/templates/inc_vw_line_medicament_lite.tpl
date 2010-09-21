@@ -71,9 +71,6 @@
 	    {{if $line->_ref_prises|@count}}
 	      {{foreach from=$line->_ref_prises item=_prise name=prises}}
 	        {{$_prise->_view}} 
-					{{if $line->_protocole}}
-					 {{if $_prise->decalage_intervention != null}}à I{{if $_prise->decalage_intervention >= 0}}+{{/if}}{{$_prise->decalage_intervention}}h{{/if}}
-					{{/if}}
 					{{if !$smarty.foreach.prises.last}}, {{/if}}
 	      {{/foreach}}
 	    {{else}}

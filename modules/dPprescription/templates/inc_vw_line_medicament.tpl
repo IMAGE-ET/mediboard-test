@@ -37,6 +37,16 @@
           {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
         {{/if}}	       
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
+				
+				{{if $line->_perm_edit}}
+			    <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />
+			    {{mb_label object=$line field="perop"}}
+			  {{elseif !$line->_protocole}}
+			    {{mb_label object=$line field="perop"}}:
+			    {{if $line->perop}}Oui{{else}}Non{{/if}} 
+			  {{/if}}
+				
+      
 		    {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
         {{if $line->_can_vw_form_traitement}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}

@@ -141,18 +141,20 @@ class CPrescriptionLineElement extends CPrescriptionLine {
                       $this->fieldModified("time_debut") || 
                       $this->fieldModified("duree") || 
                       $this->fieldModified("unite_duree")|| 
-                      $this->fieldModified("time_fin")) ? true : false;
+                      $this->fieldModified("time_fin") ||
+											$this->_update_planif_systeme) ? true : false;
     
     if($msg = parent::store()){
   		return $msg;
   	}
     
-		if($calcul_planif){
-			if($this->_ref_prescription->type == "sejour"){
-	      $this->removePlanifSysteme();
-	      $this->calculPlanifSysteme();	
+		if($calcul_planif && $this->_ref_prescription->type == "sejour"){
+		  $this->countLockedPlanif();
+			if($this->_count_locked_planif == 0){
+		    $this->removePlanifSysteme();
+		    $this->calculPlanifSysteme();	
 			}
-    }
+	  }
 		
   	// On met en session le dernier guid créé
     if($mode_creation){

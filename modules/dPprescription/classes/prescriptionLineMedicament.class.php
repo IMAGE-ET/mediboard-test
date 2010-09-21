@@ -523,6 +523,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->code_cis = $produit->code_cis;
     }
   }
+	
+	
   
   function store(){
 		// Sauvegarde de la voie lors de la creation de la ligne
@@ -558,7 +560,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
 											$this->fieldModified("condition_active") ||
 											$this->fieldModified("substitution_active") ||
 											$this->fieldModified("date_arret") || 
-											$this->fieldModified("substitution_line_id"));
+											$this->fieldModified("substitution_line_id") ||
+											$this->_update_planif_systeme);
   
 	
 	  // Stockage du stupefiant lors de la creation de la ligne
@@ -576,8 +579,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   		return $msg;
   	}
 
-    if($calcul_planif){
-    	if($this->_ref_prescription->type == "sejour"){
+    if($calcul_planif && $this->_ref_prescription->type == "sejour"){
+  		$this->countLockedPlanif();
+	
+			// Si aucune planification n'est associée à une administration, on peut les supprimer
+			if($this->_count_locked_planif == 0){
 				$this->removePlanifSysteme();
 				if(!$this->substitution_line_id && $this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
 					$this->calculPlanifSysteme();

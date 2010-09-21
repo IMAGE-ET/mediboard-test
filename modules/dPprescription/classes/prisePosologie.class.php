@@ -30,6 +30,7 @@ class CPrisePosologie extends CMbMetaObject {
 
   // I +/- X heures
   var $decalage_intervention = null;  // decalage en heures par rapport à l'intervention
+  var $unite_decalage_intervention = null;
   var $heure_prise           = null;  // heure calculée
 
   var $_type                 = null; // Type de prise
@@ -69,7 +70,8 @@ class CPrisePosologie extends CMbMetaObject {
     $specs["unite_prise"]        = "text";
     $specs["decalage_intervention"] = "num";
     $specs["heure_prise"]           = "time";
-    $specs["urgence_datetime"]   = "dateTime";            
+    $specs["urgence_datetime"]   = "dateTime";          
+		$specs["unite_decalage_intervention"] = "enum list|minute|heure default|heure";  
     $specs["_urgent"] = "bool";
     return $specs;
   }
@@ -241,6 +243,16 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
       $this->_short_view .= " à ". mbTransformTime(null, $this->heure_prise, "%Hh%M");
     }
+		
+		if(!$this->_ref_object->_ref_prescription->object_id){
+			if($this->decalage_intervention){
+				$signe_decalage = "";
+				if($this->decalage_intervention >= 0){
+					$signe_decalage = "+";
+				}
+				$this->_view .= " à I $signe_decalage $this->decalage_intervention $this->unite_decalage_intervention(s)";
+			}
+		}
   }
   
   /*

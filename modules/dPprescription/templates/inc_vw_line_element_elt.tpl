@@ -31,6 +31,15 @@
       <div style="position: absolute">
         <!-- Formulaire ALD -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
+				
+				{{if $line->_perm_edit}}
+          <input name="perop" type="checkbox" {{if $line->perop}}checked="checked"{{/if}} onchange="submitPerop('{{$line->_class_name}}','{{$line->_id}}',this.checked)"  />
+          {{mb_label object=$line field="perop"}}
+        {{elseif !$line->_protocole}}
+          {{mb_label object=$line field="perop"}}:
+          {{if $line->perop}}Oui{{else}}Non{{/if}} 
+        {{/if}}
+				
         <!-- Formulaire conditionnel -->
  		   {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}} 
 			 {{if $category->chapitre == "soin"}}

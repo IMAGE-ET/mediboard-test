@@ -119,6 +119,7 @@ class CPrescriptionLineMix extends CMbObject {
 	var $_last_debit = null;
 	var $_variations = null;
 	var $_last_variation = null;
+	var $_count_locked_planif = null;
 	
 	static $type_by_line = array(
 	  "perfusion"    => array("classique", "seringue", "PCA"),
@@ -329,6 +330,20 @@ class CPrescriptionLineMix extends CMbObject {
 	  $nb_hours = CAppUI::conf("dPprescription CPrescription time_alerte_modification");
     $this->_recent_modification = $this->hasRecentLog($nb_hours);
 	}
+	
+	function countLockedPlanif(){
+   // Chargement des planifications sur la ligne
+    $planification = new CPlanificationSysteme();
+   
+    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = planification_systeme.object_id";
+    $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";  
+    
+	  $where = array();
+    $where["prescription_line_mix.prescription_line_mix_id"] = " = '$this->_id'";
+    $where["object_class"] = " = 'CPrescriptionLineMixItem'";
+    $where["administration_id"] = " IS NOT NULL";
+    $this->_count_locked_planif = $count_planifications = $planification->countList($where, null, null, null, $ljoin);
+  }
 	
 	/*
 	 * Duplication d'une prescription_line_mix
@@ -639,12 +654,16 @@ class CPrescriptionLineMix extends CMbObject {
   		return $msg;
     }
 
-		if($calculPlanif){
-			if($this->_ref_prescription->type == "sejour"){
-			  $this->removePlanifSysteme();
-				if($this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
-					$this->calculPlanifsPerf();
-				}
+		if($calculPlanif && $this->_ref_prescription->type == "sejour"){
+			$this->countLockedPlanif();
+			
+			if($this->_count_locked_planif == 0){
+			
+		  $this->removePlanifSysteme();
+			if($this->substitution_active && (!$this->conditionnel || ($this->conditionnel && $this->condition_active))){
+				$this->calculPlanifsPerf();
+			}
+			
 			}
 		}
 		

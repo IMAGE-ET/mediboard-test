@@ -15,8 +15,10 @@ class CPlanificationSysteme extends CMbMetaObject {
   var $unite_prise              = null;
   var $prise_id                 = null;
   var $sejour_id                = null; 
-  
-	var $_ref_prise = null;
+  var $administration_id        = null;
+	
+	var $_ref_prise               = null;
+	var $_ref_administration      = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,6 +36,7 @@ class CPlanificationSysteme extends CMbMetaObject {
     $specs["prise_id"]          = "ref class|CPrisePosologie cascade";
     $specs["unite_prise"]       = "text";
     $specs["dateTime"]          = "dateTime";
+		$specs["administration_id"] = "ref class|CAdministration";
     return $specs;
   }
 	
@@ -41,6 +44,11 @@ class CPlanificationSysteme extends CMbMetaObject {
     $this->_ref_prise = new CPrisePosologie();
 		$this->_ref_prise = $this->_ref_prise->getCached($this->prise_id);
 		$this->_ref_prise->updateQuantite();
+	}
+	
+	function loadRefAdministration(){
+		$this->_ref_administration = new CAdministration();
+		$this->_ref_administration = $this->_ref_administration->getCached($this->administration_id);	
 	}
 }
 

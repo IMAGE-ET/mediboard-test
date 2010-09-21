@@ -435,6 +435,11 @@ Prescription = {
     url.addParam("praticien_id", praticien_id);
     url.popup(800,400, "statistiques d'utilisation des posologies");
   },
+	updatePerop: function(sejour_id){
+		var url = new Url("dPprescription", "httpreq_vw_perop");
+		url.addParam("sejour_id", sejour_id);
+		url.requestUpdate("perop");
+	},
 	loadTraitement: function(sejour_id, date, nb_decalage, mode_dossier, object_id, object_class, unite_prise, chapitre) {
 		var url = new Url;
 	  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");

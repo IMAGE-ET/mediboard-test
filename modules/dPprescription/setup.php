@@ -1690,7 +1690,21 @@ class CSetupdPprescription extends CSetup {
               ADD `stupefiant` ENUM ('0','1') DEFAULT '0';";
 		$this->addQuery($sql);
 		
-    $this->mod_version = "1.15";
+		$this->makeRevision("1.15");
+		$sql = "ALTER TABLE `planification_systeme` 
+              ADD `administration_id` INT (11) UNSIGNED;";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `planification_systeme` 
+              ADD INDEX (`administration_id`);";
+	  $this->addQuery($sql);
+		
+		$this->makeRevision("1.16");
+		$sql = "ALTER TABLE `prise_posologie` 
+              ADD `unite_decalage_intervention` ENUM ('minute','heure') DEFAULT 'heure';";
+		$this->addQuery($sql);
+				
+    $this->mod_version = "1.17";
   }
 }
 

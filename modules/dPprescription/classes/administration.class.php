@@ -40,6 +40,7 @@ class CAdministration extends CMbMetaObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
+		$backProps["planification"] = "CPlanificationSysteme administration_id";
     return $backProps;
   }
   
@@ -105,6 +106,18 @@ class CAdministration extends CMbMetaObject {
     $this->_ref_log->loadMatchingObject();
     $this->_ref_log->loadRefsFwd();
   }
+	
+	function delete(){
+		$planif = $this->loadUniqueBackRef("planification");
+		if($planif->_id){
+			$planif->administration_id = "";
+			$msg = $planif->store();
+			if($msg){
+				return $msg;
+			}
+		}
+		return parent::delete();
+	}
 }
 
 ?>

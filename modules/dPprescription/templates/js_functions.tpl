@@ -115,6 +115,8 @@ selDivPoso = function(type, line_id, type_elt){
     break;
     case "decalage_intervention"+type_elt: 
       oFormPrise.decalage_intervention.enable().show();
+			oFormPrise.unite_decalage_intervention.enable().show();
+      
       oDivFoisPar.hide();
       oDivTousLes.hide();
       oDivMoment.hide();

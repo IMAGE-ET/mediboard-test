@@ -38,6 +38,15 @@ Main.add( function(){
 				      {{mb_field object=$_prescription_line_mix field=conditionnel onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
 				      {{mb_label object=$_prescription_line_mix field="conditionnel"}}
 						</form>
+						
+						<form name="editPeropPerf-{{$_prescription_line_mix->_id}}">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+              <input type="hidden" name="prescription_line_mix_id" value="{{$_prescription_line_mix->_id}}" />
+              {{mb_field object=$_prescription_line_mix field=perop onchange="submitFormAjax(this.form, 'systemMsg');" typeEnum=checkbox}}
+              {{mb_label object=$_prescription_line_mix field="perop"}}
+            </form>
+            
 					{{else}}
 				    {{mb_label object=$_prescription_line_mix field="conditionnel"}}:
 				    {{if $_prescription_line_mix->conditionnel}}Oui{{else}}Non{{/if}} 

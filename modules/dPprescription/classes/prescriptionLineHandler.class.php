@@ -87,6 +87,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
    foreach($lines as $type => $lines_by_type){
      if($type == "med" || $type == "elt") {
 	     foreach($lines_by_type as $_line){
+	     	 $_line->countLockedPlanif();
+				 if($_line->_count_locked_planif > 0){
+				 	 continue;
+				 }
+				
 	       if(!$_line->decalage_line){
 	         $_line->decalage_line = 0;
 	       }
@@ -161,8 +166,10 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
 		        $_line->loadRefsPrises();
 		        foreach($_line->_ref_prises as &$_prise){
 				      if($_prise->decalage_intervention != NULL){
+				      	$_line->_update_planif_systeme = true;
 								$signe_decalage_intervention = ($_prise->decalage_intervention >= 0) ? "+" : "";
-							  $_prise->heure_prise = mbTime("$signe_decalage_intervention $_prise->decalage_intervention HOURS", $hour_operation);	  
+								$unite_decalage_intervention = ($_prise->unite_decalage_intervention == "heure") ? "HOURS" : "MINUTES";
+							  $_prise->heure_prise = mbTime("$signe_decalage_intervention $_prise->decalage_intervention $unite_decalage_intervention", $hour_operation);	  
 							  $_prise->store();
 				      }
 		        }
@@ -172,6 +179,11 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     }
     if($type == "perf"){
       foreach($lines_by_type as $_prescription_line_mix){
+      	 $_prescription_line_mix->countLockedPlanif();
+         if($_prescription_line_mix->_count_locked_planif > 0){
+           continue;
+         }
+				 
       	if($_prescription_line_mix->jour_decalage == "N"){
       		continue;
       	}

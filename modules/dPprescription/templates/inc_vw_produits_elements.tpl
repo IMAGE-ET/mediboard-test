@@ -174,6 +174,13 @@ submitALD = function(object_class, object_id, ald){
   onSubmitFormAjax(oForm);
 }
 
+submitPerop = function(object_class, object_id, ald){
+  var oForm = getForm("editLinePerop-"+object_class);
+  setPrimaryKeyDosql(oForm, object_class, object_id);
+  oForm.perop.value = ald ? "1" : "0";
+  onSubmitFormAjax(oForm);
+}
+
 submitIDE = function(object_id, ide_domicile){
   var oForm = getForm("editLineIDE");
 	oForm.prescription_line_element_id.value = object_id;
@@ -549,6 +556,22 @@ toggleSearchOptions = function(formName, chap){
   <input type="hidden" name="prescription_line_comment_id" value="" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="ald" value="" />
+</form>
+
+<form name="editLinePerop-CPrescriptionLineMedicament" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_medicament_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perop" value="" />
+</form>
+
+<form name="editLinePerop-CPrescriptionLineElement" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="" />
+  <input type="hidden" name="prescription_line_element_id" value="" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="perop" value="" />
 </form>
 
 <form name="editLineConditionnel-CPrescriptionLineMedicament" action="?" method="post">
