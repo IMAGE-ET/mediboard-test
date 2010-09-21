@@ -36,9 +36,12 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
+  	$tooltip = CMbArray::extract($params, "tooltip");
   	$ref = $object->loadFwdRef($this->fieldName, true);
     if ($ref->_id && $this->fieldName != $object->_spec->key) {
-      return $ref->_view;
+    	return $tooltip ?
+			  "<span onmouseover=\"ObjectTooltip.createEx(this, '$ref->_guid')\">$ref->_view</span>" :
+        $ref->_view;
     }
  
     return $object->{$this->fieldName};
