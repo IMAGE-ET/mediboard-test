@@ -359,7 +359,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         // Mapping de la venue
         $newVenue = $this->mappingVenue($data['venue'], $newVenue);
         // Cas 4.1 : Venue retrouvé  (patient, date d'entrée, date de sortie)     
-        if ($newVenue->loadMatchingPatient()) {
+        if ($newVenue->loadMatchingSejour()) {
           // Mapping de la venue
           $newVenue = $this->mappingVenue($data['venue'], $newVenue);
           // Si serveur et pas de numéro de dossier sur la venue
