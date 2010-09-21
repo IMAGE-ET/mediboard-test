@@ -29,9 +29,9 @@ class CSipObjectHandler extends CMbObjectHandler {
       return;
     }
 
-    // Si serveur et pas d'IPP sur le patient
-    if (isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1) && 
-        isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1) &&
+    // Si serveur et pas d'IPP sur le patient ou de numéro de dossier sur le séjour
+    if ((isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1)) ||
+        (isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) &&
         CAppUI::conf('sip server')) {
       return;
     }
