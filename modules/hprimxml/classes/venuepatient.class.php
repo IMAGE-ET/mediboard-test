@@ -249,7 +249,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $num_dossier->tag = CAppUI::conf("sip tag_dossier");
             $num_dossier->object_id = $idVenueSMP;
 
-            $mutex->acquire();
+            $mutexSej->acquire();
             // Chargement du dernier numéro de dossier s'il existe
             if (!$num_dossier->loadMatchingObject("id400 DESC")) {
               // Incrementation de l'id400
@@ -262,7 +262,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
                 
               $_num_dos_create = true;
             }
-            $mutex->release();
+            $mutexSej->release();
 
             $newVenue->_num_dossier = $num_dossier->_id;
             $msgVenue = $newVenue->store();
@@ -402,7 +402,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $num_dossier->object_class = "CSejour";
         $num_dossier->tag = CAppUI::conf("sip tag_dossier");
         
-        $mutex->acquire();
+        $mutexSej->acquire();
         // Cas num dossier fourni
         if ($data['idCibleVenue']) {
           $num_dossier->id400 = str_pad($data['idCibleVenue'], 6, '0', STR_PAD_LEFT);
@@ -453,7 +453,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $num_dossier->last_update = mbDateTime();
         $msgVenue = $num_dossier->store();
 
-        $mutex->release();
+        $mutexSej->release();
         
         $newVenue->_IPP = $num_dossier->id400;
         // Si serveur et on a un num dossier sur la venue
