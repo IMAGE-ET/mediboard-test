@@ -28,6 +28,9 @@ $axes = array(
   "orientation" => CAppUI::tr("CRPU-orientation"),
   "transport" => CAppUI::tr("CRPU-transport"),
   "without_rpu" => "Séjours d'urgence sans RPU",
+  "specialist_count" => "Nombre d'attentes spécialiste",
+  "specialist_time" => "Temps d'attente spécialiste (moy.)",
+  "transfers_count" => "Nombre de transferts",
 );
 
 $smarty = new CSmartyDP();

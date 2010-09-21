@@ -89,10 +89,10 @@ Main.add(function () {
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="m" value="dPurgences" />
   
-  <table class="main form" style="table-layout: fixed;">
+  <table class="main form">
     <tr>
       <td>
-        <table class="main form" style="table-layout: fixed;">
+        <table class="main form">
           <tr>
             <th>Date</th>
             <td>{{mb_field object=$filter field=entree register=true form="stats-filter" prop="date"}}</td>
@@ -123,7 +123,7 @@ Main.add(function () {
       </td>
       <td style="white-space: normal;">
         {{foreach from=$axes key=_axis item=_label}}
-          <label style="width: 15em; display: inline-block;">
+          <label style="width: 18em; display: inline-block;">
             <input type="radio" name="axe" value="{{$_axis}}" {{if $_axis == $axe}}checked="checked"{{/if}} onchange="this.form.onsubmit()" /> {{$_label}}
           </label>
         {{/foreach}}

@@ -216,6 +216,107 @@ switch ($axe) {
       }
     }
     break;
+    
+  // Séjours avec attente spécialiste
+  case "specialist_count":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Nombre d'attentes spécialiste")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array_merge(array(null));
+    foreach($areas as $key => $value) {
+      $where["rpu.specia_att"] = "IS NOT NULL";
+      $series[$key] = array('data' => array());
+      
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+    }
+    break;
+    
+  // Temps d'attente spécialiste
+  case "specialist_time":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Temps d'attente spécialiste (moy.)")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    $areas = array_merge(array(null));
+    foreach($areas as $key => $value) {
+      $where["rpu.specia_att"] = "IS NOT NULL";
+      $where["rpu.specia_arr"] = "IS NOT NULL";
+      $series[$key] = array('data' => array());
+      
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
+        // FIXME
+        
+        $count = 0;
+        foreach($_sejours as $_sejour) {
+          $_sejour->loadRefRPU();
+          $_rpu = $_sejour->_ref_rpu;
+          $count += mbMinutesRelative($_rpu->specia_att, $_rpu->specia_arr);
+        }
+        $total += count($_sejours) ? $count / count($_sejours) : 0;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+    }
+    break;
+    
+  // Nombre de transferts
+  case "transfers_count":
+    $data[$axe] = array(
+      "options" => array(
+        "title" => utf8_encode("Nombre de transferts")
+      ),
+      "series" => array()
+    );
+    
+    $series = &$data[$axe]['series'];
+    
+    $etab_externe = new CEtabExterne;
+    $etabs = $etab_externe->loadList(null, "nom");
+    
+    $key = 0;
+    foreach($etabs as $_id => $_etab) {
+      $where["sejour.etablissement_transfert_id"] = "IS NOT NULL";
+      $series[$key] = array('data' => array(), 'label' => utf8_encode($_etab->_view));
+      
+      $sub_total = 0;
+      foreach ($dates as $i => $_date) {
+        $_date_next = mbDate("+1 $period", $_date);
+        $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
+        $where['sejour.etablissement_transfert_id'] = "= '$_id'";
+        $count = $sejour->countList($where, null, null, null, $ljoin);
+        $total += $count;
+        $sub_total += $count;
+        $series[$key]['data'][$i] = array($i, intval($count));
+      }
+      $series[$key]['subtotal'] = $sub_total;
+      $key++;
+    }
+    
+    // suppression des series vides
+    foreach($series as $_key => $_serie) {
+      if ($_serie['subtotal'] == 0) {
+        unset($series[$_key]);
+      }
+    }
+    $series = array_values($series);
+    break;
 }
 
 // Ticks
