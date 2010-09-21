@@ -37,7 +37,6 @@ class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActiviteP
     $this->addVenue($venue, $mbSejour, false, true);
 
     // Ajout des frais divers
-    $mbSejour->loadRefsFraisDivers();
     foreach ($mbSejour->_ref_frais_divers as $_mb_frais_divers) {
       $_mb_frais_divers->loadRefType();
       $_mb_frais_divers->loadRefExecutant();
@@ -48,7 +47,6 @@ class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActiviteP
     
     if ($mbSejour->_ref_consultations) {
       foreach ($mbSejour->_ref_consultations as $_consultation) {
-        $_consultation->loadRefsFraisDivers();
         foreach ($_consultation->_ref_frais_divers as $_mb_frais_divers) {
           $_mb_frais_divers->loadRefType();
           $_mb_frais_divers->loadExecution();
