@@ -57,14 +57,14 @@
 	
 	      {{if array_key_exists($_field,$_log->_old_values)}}
 		      <td class="text">
-		      	{{assign var=old_value value=$_log->_old_values.$_field}}
-						{{mb_value object=$object field=$_field value=$old_value}}
+            {{assign var=old_value value=$_log->_old_values.$_field}}
+            {{mb_value object=$object field=$_field value=$old_value tooltip=1}}
 		      </td>
 		      <td class="text">
    		      {{assign var=log_id value=$_log->_id}}
             {{assign var=new_value value=$object->_history.$log_id.$_field}}
             <strong>
-            	{{mb_value object=$object field=$_field value=$new_value}}
+            	{{mb_value object=$object field=$_field value=$new_value tooltip=1}}
 						</strong>
 		      </td>
 			  {{else}}
