@@ -15,7 +15,8 @@ class CDestinataireHprim extends CMbObject {
       "evenementPatient" 
 	  ),
     "pmsi" => array(
-      "evenementServeurActe"
+      "evenementServeurActe",
+	    "evenementFraisDivers"
 	  ),
     "stock" => array ( 
       "evenementMvtStocks"
