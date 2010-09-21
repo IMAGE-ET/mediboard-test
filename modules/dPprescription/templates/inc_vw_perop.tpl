@@ -66,28 +66,27 @@ submitPlanif = function(administration_id){
         {{/if}}
 				
 				{{if $can_adm}}
+				
 				<script type="text/javascript">
-					{{if !$_planif->administration_id}}
-						var oForm = getForm("addAdministrationPerop-{{$_planif->_id}}");
-						//Calendar.regField(oForm.dateTime);
-			      oForm.quantite.addSpinner({min:0});
-					{{/if}}
+					var oForm = getForm("addAdministrationPerop-{{$_planif->_id}}");
+          {{if $_planif->administration_id}}  
+					  Calendar.regField(oForm.dateTime);
+          {{else}}
+				    oForm.quantite.addSpinner({min:0});
+        	{{/if}}
 				</script>
 				
 				<form name="addAdministrationPerop-{{$_planif->_id}}" action="?" method="post">
 					<input type="hidden" name="m" value="dPprescription" />
 					<input type="hidden" name="dosql" value="do_administration_aed" />
-					
-					{{if $_planif->administration_id}}
-					  <input type="hidden" name="del" value="1" />
-						
-						<button type="button" class="cancel notext" onclick="return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') })">Annuler</button>
-            {{$_planif->_ref_administration->quantite}} {{$unite}} à {{$_planif->_ref_administration->dateTime|date_format:$dPconfig.time}}
+					<input type="hidden" name="del" value="0" />
+            
+          {{if $_planif->administration_id}}
+					  <button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') })">Annuler</button>
+            {{$_planif->_ref_administration->quantite}} {{$unite}} {{mb_field object=$_planif->_ref_administration field="dateTime" onchange="return onSubmitFormAjax(this.form);"}}
 						<input type="hidden" name="administration_id" value="{{$_planif->administration_id}}" />
 					{{else}}
-						<input type="hidden" name="del" value="0" />
-	          
-	          <input type="hidden" name="object_id" value="{{$_planif->object_id}}" />
+						<input type="hidden" name="object_id" value="{{$_planif->object_id}}" />
 	          <input type="hidden" name="object_class" value="{{$_planif->object_class}}" />
 	          <input type="hidden" name="unite_prise" value="{{$_planif->unite_prise}}" />
 	          <input type="hidden" name="prise_id" value="{{$_planif->prise_id}}" />
