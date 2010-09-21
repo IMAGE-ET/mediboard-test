@@ -28,7 +28,7 @@
 			  {{assign var=prescription value=$_line->_ref_prescription_line_mix->_ref_prescription}}
 				{{assign var=line_debut value=$_line->_ref_prescription_line_mix->date_debut}}
 			{{/if}}
-			<a href="#" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
+			<a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
 			  {{$prescription->_ref_object->_view}}	
 			</a>
 		</td>

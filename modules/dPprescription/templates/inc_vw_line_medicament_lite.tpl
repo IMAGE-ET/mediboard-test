@@ -64,6 +64,7 @@
         </span>
       </a>
       {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
+			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
       {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
       {{if $line->traitement_personnel}}Traitement personnel&nbsp;{{/if}}
     </td>

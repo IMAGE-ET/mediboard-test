@@ -50,6 +50,7 @@ foreach($lines_med as $_line_med){
 }
 
 foreach($lines_mix_item as $_line_mix_item){
+	$_line_mix_item->_ref_prescription_line_mix->_ref_prescription->_ref_object->loadRefsFwd();
   $lines[$_line_mix_item->_view.$_line_mix_item->_guid] = $_line_mix_item;
 }
 

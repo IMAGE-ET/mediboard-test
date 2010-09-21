@@ -20,7 +20,7 @@
 		</td>
 		<td class="text">{{$_administration->quantite}} {{$_administration->_unite_prise}}</td>
 		<td class="text">
-			<a href="#" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
+			<a href="#" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_object->_guid}}')" onclick="viewDossierSoin('{{$prescription->_ref_object->_id}}','{{$line_debut}}');">
 				{{$prescription->_ref_object->_ref_patient->_view}}
 			</a>
 		</td>

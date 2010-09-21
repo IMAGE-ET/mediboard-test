@@ -27,6 +27,7 @@
 		<span style="float: right">
 	    {{if $line->conditionnel}}{{mb_label object=$line field="conditionnel"}}&nbsp;{{/if}}
 	    {{if $line->ald}}{{mb_label object=$line field="ald"}}&nbsp;{{/if}}
+			{{if $line->perop}}{{mb_label object=$line field="perop"}}&nbsp;{{/if}}
 		</span>
     <strong>{{$line->_ref_element_prescription->_view}}</strong>
 		{{if $line->cip_dm}}
