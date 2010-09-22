@@ -45,23 +45,23 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 	{{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
     <th>
-    {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="patient_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     <th style="width: 1%;">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
     </th>
   
     <th>
-    {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url=$url}}
+      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     
     <th>
     {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
     </th>
     
-    <th>Chambre</th>
-    <th>Admis</th>
-    <th>
+    <th style="width: 1%;">Chambre</th>
+    <th style="width: 1%;">Admis</th>
+    <th style="width: 1%;">
       {{if $canAdmissions->edit}}
       <form name="editAllAdmFrm" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />

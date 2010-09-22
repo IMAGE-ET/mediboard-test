@@ -19,7 +19,7 @@
 
 {{assign var="patient" value=$curr_adm->_ref_patient}}
 
-<td colspan="2" class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="2" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
     <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
