@@ -296,7 +296,7 @@ class CPlageOp extends CMbObject {
     $this->_minutefin    = substr($this->fin, 3, 2);
     $this->_min_inter_op = substr($this->temps_inter_op, 3, 2);
     $this->_duree_prevue = mbTimeRelative($this->debut, $this->fin);
-    $this->_view = "Plage du ".mbDate(null, $this->date);
+    $this->_view = "Plage du ".$this->getFormattedValue("date");
   }
   
   function updateDBFields() {
