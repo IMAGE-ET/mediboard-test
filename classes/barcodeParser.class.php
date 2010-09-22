@@ -449,6 +449,13 @@ class CBarcodeParser {
       $comp["per"] = $parts[4];
     }
     
+    // Invent (Karl Zeiss)
+    //             _REF__
+    // +M303INVENT-ZO24.0124
+    if (empty($comp) && preg_match('/^[a-z]\d{3}INVENT-ZO(\d{2}\.\d)\d{3}$/i', $barcode, $parts)) {
+      $type = "karl_zeiss";
+      $comp["ref"] = "invent zo +$parts[1]";
+    }
     
     // Mediboard
     //   ___ID___
@@ -457,7 +464,6 @@ class CBarcodeParser {
       $type = "mb";
       $comp["id"] = intval($parts[1]);
     }
-    
     
     // final process
     if (isset($comp["per"])) {
