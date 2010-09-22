@@ -76,6 +76,7 @@ class CConsultation extends CCodable {
   var $_ref_patient      = null; // Declared in CCodable
   var $_ref_sejour       = null; // Declared in CCodable
   var $_ref_plageconsult = null;
+  var $_ref_adresse_par_prat = null;
   
   // FSE
   var $_bind_fse       = null;
@@ -988,7 +989,6 @@ class CConsultation extends CCodable {
     return $nbDocs;
   }
 
-  
   function loadRefConsultAnesth() {
   	$this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
   }
