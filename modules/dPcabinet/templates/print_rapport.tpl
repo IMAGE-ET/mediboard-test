@@ -225,17 +225,30 @@ PlageConsult = {
           <td>{{mb_value object=$_consultation field=secteur2}}</td>
           <td>{{mb_value object=$_consultation field=_somme}}</td>
           <td>
-            {{foreach from=$_consultation->_ref_reglements_patient item=_reglement}}
-              <form name="reglement-del-{{$_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+            {{foreach name=reglement_patient from=$_consultation->_ref_reglements_patient item=_reglement}}
+              {{assign var=_reglement_id value=$_reglement->_id}}
+              <form name="reglement-del-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
               <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
-							<span style="min-width: 60px; display: inline-block;">{{mb_value object=$_reglement field=mode}}</span>
-							{{$_reglement->date|date_format:$dPconfig.date}}
+							{{mb_value object=$_reglement field=mode}}
               </form>
               <br />
+              <form name="reglement-chdate-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_reglement_aed" />
+              {{mb_key object=$_reglement}}
+              {{mb_field object=$_reglement field=consultation_id hidden=1}}
+              {{mb_field object=$_reglement field=montant         hidden=1}}
+              {{mb_field object=$_reglement field=mode            hidden=1}}
+              {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
+              </form>
+              {{if !$smarty.foreach.reglement_patient.last}}
+              <hr />
+              {{/if}}
             {{/foreach}}
 						
             {{if $_consultation->_du_patient_restant > 0}}
@@ -256,17 +269,30 @@ PlageConsult = {
           </td>
 					
           <td>
-            {{foreach from=$_consultation->_ref_reglements_tiers item=_reglement}}
-              <form name="reglement-del-{{$_reglement->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+            {{foreach name=reglement_tier from=$_consultation->_ref_reglements_tiers item=_reglement}}
+              {{assign var=_reglement_id value=$_reglement->_id}}
+              <form name="reglement-del-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
               <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
-              <span style="min-width: 60px; display: inline-block;">{{mb_value object=$_reglement field=mode}}</span>
-              {{$_reglement->date|date_format:$dPconfig.date}}
+              {{mb_value object=$_reglement field=mode}}
               </form>
               <br />
+              <form name="reglement-chdate-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_reglement_aed" />
+              {{mb_key object=$_reglement}}
+              {{mb_field object=$_reglement field=consultation_id hidden=1}}
+              {{mb_field object=$_reglement field=montant         hidden=1}}
+              {{mb_field object=$_reglement field=mode            hidden=1}}
+              {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
+              </form>
+              {{if !$smarty.foreach.reglement_tier.last}}
+              <hr />
+              {{/if}}
             {{/foreach}}
 						
             {{if $_consultation->_du_tiers_restant > 0}}
