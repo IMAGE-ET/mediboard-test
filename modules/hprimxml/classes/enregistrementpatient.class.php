@@ -131,7 +131,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           if ($msgPatient) {
             $avertissement = $msgPatient." ";
           } else {
-            $commentaire .= "Patient modifiée : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP associé : $IPP->id400.";
+            $commentaire .= "Patient : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP : $IPP->id400.";
           }
         }
         // Cas 1.2 : idCible non connu
@@ -226,7 +226,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             if ($msgPatient || $msgIPP) {
               $avertissement = $msgPatient." ".$msgIPP;
             } else {
-              $commentaire = "Patient modifié : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP créé : $IPP->id400.";
+              $commentaire = "Patient : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields. IPP : $IPP->id400.";
             }
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
@@ -279,7 +279,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               if ($msgPatient) {
                 $avertissement = $msgPatient." ";
               } else {
-                $commentaire = "Patient modifié : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+                $commentaire = "Patient : $newPatient->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgPatient ? "A003" : "I002", $avertissement ? $avertissement : $commentaire);
               
@@ -323,7 +323,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             }
           }
           $_modif_patient = true; 
-          $commentaire = "Patient modifié : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+          $commentaire = "Patient : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
         } 
         // Cas 3.2 : Patient non retrouvé
         else {
@@ -413,7 +413,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         if ($msgPatient || $msgID400 || $msgIPP) {
           $avertissement = $msgPatient." ".$msgID400." ".$msgIPP;
         } else {
-          $commentaire = "Patient créé : $newPatient->_id. Identifiant externe créé : $id400Patient->id400. IPP créé : $IPP->id400.";
+          $commentaire = "Patient : $newPatient->_id. Identifiant externe : $id400Patient->id400. IPP : $IPP->id400.";
         }
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();

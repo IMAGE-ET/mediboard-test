@@ -19,8 +19,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
   );
   
   function __construct() {    
-  	$this->sous_type = "venuePatient";
-  	        
+    $this->sous_type = "venuePatient";
+            
     parent::__construct();
   }
   
@@ -139,6 +139,17 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $newVenue = new CSejour();
     }
     
+    // Cas d'une annulation
+    $cancel = false;
+    if ($data['action'] == "suppression") {
+      $cancel = true;
+    }
+      
+    // Affectation du patient
+    $newVenue->patient_id = $newPatient->_id; 
+    // Affectation de l'établissement
+    $newVenue->group_id = $dest_hprim->group_id;
+    
     // Si SIP
     if (CAppUI::conf('sip server')) {
       // Cas 2 : idSource non fourni, idCible fourni
@@ -166,12 +177,19 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             return $messageAcquittement;
           }*/
           
+          // Dans le cas d'une annulation de la venue
+          if ($cancel) {
+            if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+              return $messageAcquittement;
+            }
+          }
+          
           // Mapping de la venue
-          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
           $newVenue->_num_dossier = $num_dossier->id400;
           $msgVenue = $newVenue->store();
+          
           $newVenue->loadLogs();
-
           $modified_fields = "";
           if (is_array($newVenue->_ref_last_log->_fields)) {
             foreach ($newVenue->_ref_last_log->_fields as $field) {
@@ -179,11 +197,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           } 
           
-          $codes = array ($msgVenue ? "A103" : "I102", "I103");
+          $codes = array ($msgVenue ? "A103" : "I102", "I103", $cancel ? "A130" : null);
           if ($msgVenue) {
             $avertissement = $msgVenue." ";
           } else {
-            $commentaire .= "Venue modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Num dossier associé : $num_dossier->id400.";
+            $commentaire .= "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Num dossier : $num_dossier->id400.";
           }
         }
         
@@ -191,25 +209,33 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         else {
           if (is_numeric($num_dossier->id400) && (strlen($num_dossier->id400) <= 6)) {
             // Mapping de la venue
-            $newVenue = $this->mappingVenue($data['venue'], $newVenue);
-             // Si serveur et pas de num_dos sur la venue
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
+            
+            // Dans le cas d'une annulation de la venue
+            if ($cancel) {
+              if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                return $messageAcquittement;
+              }
+            }
+          
+            // Si serveur et pas de num_dos sur la venue
             $newVenue->_no_num_dos = 1;
             $msgVenue = $newVenue->store();
             
             $num_dossier->object_id = $newVenue->_id;
             $num_dossier->last_update = mbDateTime();
             $msgNumDossier = $num_dossier->store();
-            
+        
             $newVenue->_num_dossier = $num_dossier->id400;
             // Si serveur et on a un num_dos sur la venue
             $newVenue->_no_num_dos = 0;
             $msgVenue = $newVenue->store();
                       
-            $codes = array ($msgVenue ? "A102" : "I101", $msgNumDossier ? "A105" : "A101");
+            $codes = array ($msgVenue ? "A102" : "I101", $msgNumDossier ? "A105" : "A101", $cancel ? "A130" : null);
             if ($msgVenue) {
               $avertissement = $msgVenue." ";
             } else {
-              $commentaire = "Venue créé : $newVenue->_id. Numéro de dossier créé : $num_dossier->id400.";
+              $commentaire = "Venue : $newVenue->_id. Numéro de dossier : $num_dossier->id400.";
             }
           }
         }
@@ -239,8 +265,15 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         // Cas 3.1 : idCible non fourni
         if(!$data['idCibleVenue']) {
           if ($newVenue->load($idVenueSMP)) {
+            // Dans le cas d'une annulation de la venue
+            if ($cancel) {
+              if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                return $messageAcquittement;
+              }
+            }
+          
             // Mapping de la venue
-            $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
 
             // Création du numéro de dossier
             $num_dossier = new CIdSante400();
@@ -266,8 +299,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
 
             $newVenue->_num_dossier = $num_dossier->_id;
             $msgVenue = $newVenue->store();
-            $newVenue->loadLogs();
 
+            $newVenue->loadLogs();
             $modified_fields = "";
             if (is_array($newVenue->_ref_last_log->_fields)) {
               foreach ($newVenue->_ref_last_log->_fields as $field) {
@@ -275,11 +308,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               }
             }
              
-            $codes = array ($msgVenue ? "A103" : "I102", $msgNumDossier ? "A105" : $_num_dos_create ? "I106" : "I108");
+            $codes = array ($msgVenue ? "A103" : "I102", $msgNumDossier ? "A105" : $_num_dos_create ? "I106" : "I108", $cancel ? "A130" : null);
             if ($msgVenue || $msgNumDossier) {
               $avertissement = $msgVenue." ".$msgNumDossier;
             } else {
-              $commentaire = "Venue modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro de dosser créé : $num_dossier->id400.";
+              $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields. Numéro de dossier : $num_dossier->id400.";
             }
             $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
             $doc_valid = $domAcquittement->schemaValidate();
@@ -298,7 +331,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           $num_dossier->id400 = $data['idCibleVenue'];
           // Cas 3.2.1 : idCible connu
           if ($num_dossier->loadMatchingObject()) {
-          // Acquittement d'erreur idSource et idCible incohérent
+            // Acquittement d'erreur idSource et idCible incohérent
             if ($idVenueSMP != $num_dossier->object_id) {
               $commentaire = "L'identifiant source fait référence à la venue : $idVenueSMP et l'identifiant cible à la venue : $num_dossier->object_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
@@ -314,27 +347,35 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               return $messageAcquittement;
             } else {
               $newVenue->load($num_dossier->object_id);
-
-              // Mapping du patient
-              $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+              
+              // Dans le cas d'une annulation de la venue
+              if ($cancel) {
+                if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+                  return $messageAcquittement;
+                }
+              }
+          
+              // Mapping de la venue
+              $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
               $newVenue->_num_dossier = $num_dossier->id400;
               $msgVenue = $newVenue->store();
+              
               $newVenue->loadLogs();
-               
               $modified_fields = "";
               if (is_array($newVenue->_ref_last_log->_fields)) {
                 foreach ($newVenue->_ref_last_log->_fields as $field) {
                   $modified_fields .= "$field \n";
                 }
               }
-               
+              $codes = array ($msgVenue ? "A103" : "I102", $cancel ? "A130" : null);
               if ($msgVenue) {
                 $avertissement = $msgVenue." ";
               } else {
-                $commentaire = "Venue modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
+                $commentaire = "Venue : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
               }
-              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $msgVenue ? "A103" : "I102", $avertissement ? $avertissement : $commentaire);
-              
+              $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
+              $doc_valid = $domAcquittement->schemaValidate();
+              $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
               $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
             }
           }
@@ -360,12 +401,19 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $newVenue = $this->mappingVenue($data['venue'], $newVenue);
         // Cas 4.1 : Venue retrouvé  (patient, date d'entrée, date de sortie)     
         if ($newVenue->loadMatchingSejour()) {
+          // Dans le cas d'une annulation de la venue
+          if ($cancel) {
+            if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+              return $messageAcquittement;
+            }
+          }
+          
           // Mapping de la venue
-          $newVenue = $this->mappingVenue($data['venue'], $newVenue);
+          $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
           // Si serveur et pas de numéro de dossier sur la venue
           $newVenue->_no_num_dos = 1;
           $msgVenue = $newVenue->store();
-      
+
           $newVenue->loadLogs();
           $modified_fields = "";
           if (is_array($newVenue->_ref_last_log->_fields)) {
@@ -374,15 +422,24 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             }
           }
           $_modif_venue = true; 
-          $commentaire = "Venue modifiée : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
+          $commentaire = "Venue : $newVenue->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
         } 
         // Cas 4.2 : Venue non retrouvé
         else {
+          // Dans le cas d'une annulation de la venue
+          if ($cancel) {
+            if ($messageAcquittement = $this->doNotCancelVenue($newVenue, $domAcquittement, $echange_hprim)) {
+              return $messageAcquittement;
+            }
+            
+            $newVenue = $this->mappingVenue($data['venue'], $newVenue, $cancel);
+          }
+          
           // Si serveur et pas de numéro de dossier sur la venue
           $newVenue->_no_num_dos = 1;
           $msgVenue = $newVenue->store();
         
-          $commentaire = "Venue créée : $newVenue->_id. ";
+          $commentaire = "Venue : $newVenue->_id. ";
         }
         
         // Création de l'identifiant externe TAG CIP + idSource
@@ -460,13 +517,18 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
         $newVenue->_no_num_dos = 0;
         $msgVenue = $newVenue->store();
         
+        if ($cancel) {
+          $codes[] = "A130";
+        }
+        
         $codes = array ($msgVenue ? ($_modif_venue ? "A103" : "A102") : "I101", 
                         $msgID400 ? "A104" : "I104", 
-                        $msgNumDossier ? "A105" : $_code_NumDos);
+                        $msgNumDossier ? "A105" : $_code_NumDos, 
+                        $cancel ? "A130" : null);
         if ($msgVenue || $msgID400 || $msgNumDossier) {
           $avertissement = $msgVenue." ".$msgID400." ".$msgNumDossier;
         } else {
-          $commentaire = "Venue créée : $newVenue->_id. Identifiant externe créé : $id400Venue->id400. IPP créé : $num_dossier->id400.";
+          $commentaire = "Venue : $newVenue->_id. Identifiant externe : $id400Venue->id400. IPP : $num_dossier->id400.";
         }
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaire);
         $doc_valid = $domAcquittement->schemaValidate();
@@ -477,14 +539,11 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     // Si CIP
     else {      
-      $newVenue->patient_id = $newPatient->_id; 
-      $newVenue->group_id = $dest_hprim->group_id;
-
       // Acquittement d'erreur : identifiants source et cible non fournis pour le patient / venue
       if (!$data['idSourceVenue'] && !$data['idCibleVenue']) {
         $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E100");
         $doc_valid = $domAcquittement->schemaValidate();
-				
+        
         $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
         return $messageAcquittement;
       }
@@ -494,12 +553,6 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
       $num_dossier->object_class = "CSejour";
       $num_dossier->tag = $dest_hprim->_tag_sejour;
       $num_dossier->id400 = $data['idSourceVenue'];
-      
-      // Cas d'une annulation
-      $cancel = false;
-      if ($data['action'] == "suppression") {
-        $cancel = true;
-      }
       
       // idSource non connu
       if(!$num_dossier->loadMatchingObject()) {
@@ -683,7 +736,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $commentaire = "L'identifiant source fait référence au séjour : $num_dossier->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
               $messageAcquittement = $domAcquittement->generateAcquittementsPatients("erreur", "E104", $commentaire);
               $doc_valid = $domAcquittement->schemaValidate();
-							
+              
               $echange_hprim->setAckError($doc_valid, $messageAcquittement, "erreur");
               return $messageAcquittement;
             }
