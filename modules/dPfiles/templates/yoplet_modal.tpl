@@ -15,39 +15,66 @@
     
     <table class="tbl">
       <tr>
-        <td colspan="3">Liste des fichiers</td>
+        <th class="title" colspan="4">
+        	Fichiers disponibles dans : 
+					<br />
+ 					{{$app->user_prefs.directory_to_watch}}
+				</th>
       </tr>
+			<tr>
+        <th>{{mb_title class=CFile field=file_name}}</th>
+        <th style="width: 2em;">
+				  <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
+				</th>
+        <th style="width: 2em;">
+          <img src="style/mediboard/images/buttons/merge.png" title="{{tr}}Link{{/tr}}"/>
+				</th>
+        <th style="width: 2em;">
+          <img src="style/mediboard/images/buttons/trash.png" title="{{tr}}Delete{{/tr}}"/>
+				</th>
+			</tr>
+      <tbody id="file-list">
+      </tbody>
+		</table>
+		
+		<hr />
+		
+		<table class="form">
       <tr>
-        <td colspan="3">
-          <table id="file-list">
-          </table>
+        <th style="width: 1px;">
+          {{mb_label class=CFile field=_rename}}
+        </th>
+				<td>
+          <input type="text" name="file_rename" value="" />
         </td>
       </tr>
       <tr>
-        <td colspan="3">
-          <input type="hidden" name="file_rename" value="" />
-          {{tr}}CFile-file_category_id{{/tr}} :
+        <th>
+          {{mb_label class=CFile field=file_category_id}}
+        </th>
+        <td>
           <select name="file_category_id">
-            <option value="">&mdash; Choisissez une catégorie</option>
-            {{foreach from=$categories item=_category key=_category_id}}
-              <option value="{{$_category_id}}">{{$_category}}</option>
-            {{/foreach}}
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
           </select>
         </td>
       </tr>
       <tr>
-        <td colspan="3">Supprimer les fichiers après envoi <input
-          type="checkbox" name="delete_auto" checked=true/></td>
+        <td colspan="2">
+				  <input type="checkbox" name="delete_auto" checked="true" />
+					<label for="delete_auto">{{tr}}Delete after send{{/tr}}</label>
+				</td>
       </tr>
       <tr>
-        <td colspan="3">
-        <button type="button" class="tick"
-          onclick="File.applet.closeModal();">
-        {{tr}}Ok{{/tr}}</button>
-        <button type="button" class="cancel"
-          onclick="File.applet.cancelModal();">{{tr}}Cancel{{/tr}}</button>
-        <button type="button" class="tick uploadinmodal"
-          onclick="this.disabled = 'disabled'; File.applet.uploadFiles();">Upload</button>
+        <td class="button" colspan="2">
+	        <button type="button" class="cancel" onclick="File.applet.cancelModal();">
+	        	{{tr}}Cancel{{/tr}}
+					</button>
+	        <button type="button" class="change uploadinmodal" onclick="this.disabled = 'disabled'; File.applet.uploadFiles();">
+	          {{tr}}Upload{{/tr}}
+					</button>
+	        <button type="button" class="tick" onclick="File.applet.closeModal();">
+	          {{tr}}Close{{/tr}}
+	        </button>
         </td>
       </tr>
     </table>

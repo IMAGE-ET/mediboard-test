@@ -136,21 +136,13 @@ if (!window.File.applet) {
 	      });
 	     if (nb_files > 0) {
 			 	 this.found_files = 1;
-	       list_files.insert({top:
-				   DOM.tr({},
-					   DOM.td({}, "Nom du fichier"),
-						 DOM.td({}, "Envoi"),
-						 DOM.td({}, "Association"),
-						 DOM.td({}, "Suppression"))
-		     });
-       // On active tous les boutons upload disponibles
+         // On active tous les boutons upload disponibles
 	       $$(".yopletbutton").each(function(button) {
 				 	  button.disabled = "";
             button.style.border = "3px solid #080";
 				 });
 	     } else {
-			 	
-	        setTimeout("File.applet.watchDirectory()", 2000);
+         setTimeout("File.applet.watchDirectory()", 2000);
 	     }
 	  },
 	  handleDeletionOK: function(result) {

@@ -33,7 +33,7 @@ class CFile extends CDocumentItem {
   
   // Behavior fields
   var $_rotate      = null;
-  
+	var $_rename      = null; // @todo A utiliser dans le do_aed
 
   // References
   var $_ref_file_owner = null;
@@ -68,7 +68,8 @@ class CFile extends CDocumentItem {
     $specs["_file_path"]    = "str";
     $specs["_file_size"]    = "str show|1";
 		// Behavior fields
-		$specs["_rotate"]       = "enum list|left|right";
+    $specs["_rotate"]       = "enum list|left|right";
+    $specs["_rename"]       = "str";
     return $specs;
   }
   

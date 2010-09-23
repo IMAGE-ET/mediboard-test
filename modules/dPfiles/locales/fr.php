@@ -120,6 +120,7 @@ $locales['CFilesCategory.select'] = 'Choisir une catégorie';
 $locales['CMbObject-back-files'] = 'Fichiers';
 $locales['CMediusers-back-files'] = 'Fichiers';
 $locales['CMediusers-back-owned_files'] = 'Fichiers ajoutés';
+$locales['Delete after send'] = 'Supprimer après envoi';
 $locales['config-dPfiles-CFile-ooo_preview_active'] = 'Openoffice installé';
 $locales['config-dPfiles-CFile-ooo_preview_active-desc'] = 'Openoffice est installé';
 $locales['config-dPfiles-CFile-ooo_preview_path'] = 'Chemin Openoffice';
