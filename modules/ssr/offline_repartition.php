@@ -15,6 +15,7 @@ $group = CGroups::loadCurrent();
 $date = mbDate();
 
 // Chargement des plateaux disponibles
+$all_sejours = array();
 $plateau = new CPlateauTechnique;
 $plateau->group_id = $group->_id;
 $plateaux = $plateau->loadMatchingList();
@@ -32,6 +33,7 @@ foreach ($plateaux as $_plateau) {
     foreach($sejours[$_technicien->_id] as $_sejour){
 		  $_sejour->checkDaysRelative($date);
 		  $_sejour->loadRefPatient(1);
+      $all_sejours[] = $_sejour;
     }
 		
 		// Chargement de ses remplacements
@@ -49,15 +51,20 @@ foreach ($plateaux as $_plateau) {
 		  $sejour =& $_replacement->_ref_sejour;
 		  $sejour->checkDaysRelative($date);
 		  $sejour->loadRefPatient(1);
+      $all_sejours[] = $_sejour;
 		}
   }
 }
+
+// Couleurs
+$colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($all_sejours, "libelle"));
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date", $date);
 $smarty->assign("plateaux", $plateaux);
 $smarty->assign("sejours", $sejours);
+$smarty->assign("colors", $colors);
 $smarty->assign("replacements", $replacements);
 $smarty->display("offline_repartition.tpl");
 

@@ -61,9 +61,13 @@ foreach ($sejours as $_sejour) {
   $plannings[$_sejour->_id] = CApp::fetch("ssr", "ajax_planning_sejour", $args_planning);
 }
 
+// Couleurs
+$colors = CColorLibelleSejour::loadAllFor(CMbArray::pluck($sejours, "libelle"));
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
+$smarty->assign("colors", $colors);
 $smarty->assign("date", $date);
 $smarty->assign("order_col", "");
 $smarty->assign("order_way", "");
