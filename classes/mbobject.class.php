@@ -22,6 +22,7 @@ class CMbObject {
   static $objectCache = array();
   static $cachableCounts = array();
   static $handlers = null; // must be null at the beginning @see self::makeHandlers
+  static $ignoredHandlers = array();
   
   /**
    * @var string The object's class name
@@ -190,7 +191,7 @@ class CMbObject {
     // Static initialisations
     self::$handlers = array();
     foreach (CAppUI::conf("object_handlers") as $handler => $active) {
-      if ($active) {
+      if ($active && !isset(self::$ignoredHandlers[$handler])) {
         self::$handlers[$handler] = new $handler;
       }
     }
@@ -202,6 +203,7 @@ class CMbObject {
    * @return void
    */
   static final function ignoreHandler($handler) {
+    self::$ignoredHandlers[$handler] = $handler;
     unset(self::$handlers[$handler]);
   }
 
