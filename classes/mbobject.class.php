@@ -186,13 +186,23 @@ class CMbObject {
     if (self::$handlers) {
       return;
     }
+    
     // Static initialisations
     self::$handlers = array();
     foreach (CAppUI::conf("object_handlers") as $handler => $active) {
       if ($active) {
-        self::$handlers[] = new $handler;
+        self::$handlers[$handler] = new $handler;
       }
     }
+  }
+  
+  /**
+   * Ignore a specific handler
+   * @param string $handler The handler's class name
+   * @return void
+   */
+  static final function ignoreHandler($handler) {
+    unset(self::$handlers[$handler]);
   }
 
   /**
