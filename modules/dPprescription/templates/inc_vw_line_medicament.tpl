@@ -348,8 +348,7 @@
       {{/if}}
 
        <!-- Si seulement 1 voie possible ou affichage bloqué-->
-      {{if $line->voie || $line->_ref_produit_prescription->voie}}
-        {{if $line->_ref_produit->voies|@count == 1 || !$line->_perm_edit}}
+        {{if !$line->_perm_edit}}
 				  {{if $line->voie}}
 					  {{$line->voie}}
           {{elseif $line->_ref_produit_prescription->voie}}
@@ -357,15 +356,17 @@
           {{/if}}
         {{else}}
           <select name="voie-{{$line->_id}}" 
-                  onchange="{{if !in_array($line->voie, $line->_ref_produit->voies)}}
+                  onchange="{{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies)}}
                               $('warning-voie-{{$line->_id}}').hide();
                               $('warning-voie-option-{{$line->_id}}').hide();
                             {{/if}}
                             return submitVoie('{{$line->_id}}',this.value);">
+              <option value="">Voie non définie</option>
             {{foreach from=$line->_ref_produit->voies item=libelle_voie}}
               <option value="{{$libelle_voie}}" {{if $libelle_voie == $line->voie}}selected="selected"{{/if}}>{{$libelle_voie}}</option>
             {{/foreach}}
-            {{if !in_array($line->voie, $line->_ref_produit->voies)}}
+						
+            {{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies)}}
               <script type="text/javascript">
                 $('warning-voie-{{$line->_id}}').show();
               </script>
@@ -375,12 +376,11 @@
             {{/if}}
           </select>
         {{/if}}
+				{{if $line->voie && !in_array($line->voie, $line->_ref_produit->voies)}}
         <div id="warning-voie-{{$line->_id}}" class="small-warning" style="display:none;">
           Attention, la voie <strong>"{{$line->voie}}"</strong> n'est plus proposée pour ce médicament
         </div>
-      {{else}}
-      Aucune voie
-      {{/if}}
+				{{/if}}
  	  </td>
   </tr>
 	
