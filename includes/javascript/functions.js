@@ -762,9 +762,9 @@ var DOM = {
   },
   
   tags: [
-    'a', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
+    'a', 'applet', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
     'h1', 'h2', 'h3', 'h4', 'h5', 'hr', 'img', 'input', 'label', 
-    'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'pre', 
+    'legend', 'li', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 
     'select', 'span', 'strong', 'table', 'tbody', 'td', 'textarea',
     'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
   ]

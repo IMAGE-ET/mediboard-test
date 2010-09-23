@@ -4,6 +4,11 @@
 			<button class="new" type="button" onclick="File.upload('{{$object->_class_name}}','{{$object->_id}}', '')" >
 			  {{tr}}Add{{/tr}}
 			</button>
+			{{if $app->user_prefs.directory_to_watch != ''}} 
+      <button class="new yopletbutton" type="button" disabled="disabled" onclick="File.applet.modalOpen('{{$object->_guid}}')">
+        Upload
+      </button>
+    {{/if}}
 		</td>
 	</tr>
 </table>

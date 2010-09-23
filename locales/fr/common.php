@@ -207,6 +207,7 @@ $locales['pref-DEFMODULE'] = 'Module/onglet par défaut';
 $locales['pref-DEFMODULE-desc'] = 'Veuillez choisir le module ou l\'onglet par défaut à afficher';
 $locales['pref-DEPARTEMENT'] = 'Veuillez choisir le numéro du département par défaut à utiliser';
 $locales['pref-DEPARTEMENT-desc'] = 'N° du département par défaut';
+$locales['pref-directory_to_watch'] = "Répertoire à surveiller";
 $locales['pref-INFOSYSTEM'] = 'Afficher les informations système';
 $locales['pref-INFOSYSTEM-desc'] = 'Afficher les informations système';
 $locales['pref-LOCALE'] = 'Langage';

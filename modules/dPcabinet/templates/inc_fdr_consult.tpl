@@ -1,5 +1,17 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
+{{mb_include_script module="dPcabinet" script="file"}}
+
+{{if $app->user_prefs.directory_to_watch != ''}}
+	{{main}}
+	  File.applet.directory = "{{$app->user_prefs.directory_to_watch}}";
+	  File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif");
+	  File.applet.watchDirectory();
+	{{/main}}
+{{/if}}
+
+<!-- Modale pour l'applet --> 
+{{mb_include module=dPfiles template=yoplet_modal}}
 
 <table style="width: 100%">
   <!-- 1ere ligne -->
@@ -19,8 +31,7 @@
       	</tr>
       	
       	<tr>
-      		<td>
-            {{mb_include_script module="dPcabinet" script="file"}}
+      		<td>            
             <div id="files">
             <script type="text/javascript">
               File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files');

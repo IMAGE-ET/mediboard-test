@@ -42,7 +42,8 @@ $array_list_pref_common = array (
   "DEFMODULE",
   "touchscreen",
   "tooltipAppearenceTimeout",
-  "showLastUpdate"
+  "showLastUpdate",
+  "directory_to_watch"
 );
 
 foreach ($array_list_pref_common as $namePref){

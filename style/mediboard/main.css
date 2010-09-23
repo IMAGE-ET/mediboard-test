@@ -1446,3 +1446,17 @@ img#thumb {
   -webkit-box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
   box-shadow: 6px 6px 10px rgba(0,0,0,0.4);
 }
+
+td.tick {
+  background: url(images/buttons/tick.png) no-repeat 12px;
+}
+
+td.warning {
+	background: url(images/buttons/cancel.png) no-repeat 12px;
+}
+
+td.loading {
+	background: url(images/icons/loading.gif) no-repeat 12px;
+}
+
+}

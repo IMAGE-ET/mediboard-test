@@ -93,6 +93,8 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref_enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref_bool var=showLastUpdate}}
   
+  {{mb_include template=inc_pref_str var=directory_to_watch}}
+  
   </tbody>
   
   {{assign var="module" value="dPpatients"}}
