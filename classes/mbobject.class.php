@@ -21,7 +21,7 @@ class CMbObject {
   static $objectCount = 0;
   static $objectCache = array();
   static $cachableCounts = array();
-  static $handlers = null;
+  static $handlers = null; // must be null at the beginning @see self::makeHandlers
   
   /**
    * @var string The object's class name
@@ -183,7 +183,7 @@ class CMbObject {
    * @return void
    */
   private static final function makeHandlers() {
-    if (self::$handlers) {
+    if (is_array(self::$handlers)) {
       return;
     }
     
