@@ -1448,15 +1448,15 @@ img#thumb {
 }
 
 td.tick {
-  background: url(images/buttons/tick.png) no-repeat 12px;
+  background: url(images/buttons/tick.png) no-repeat 6px;
 }
 
 td.warning {
-	background: url(images/buttons/cancel.png) no-repeat 12px;
+	background: url(images/buttons/cancel.png) no-repeat 6px;
 }
 
 td.loading {
-	background: url(images/icons/loading.gif) no-repeat 12px;
+	background: url(images/icons/loading.gif) no-repeat 6px;
 }
 
 }

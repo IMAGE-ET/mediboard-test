@@ -21,15 +21,18 @@
     <input type="hidden" name="_file_path" value="" />
     <input type="hidden" name="_checksum" value="" />
     
+		<div style="max-height: 400px; overflow: auto;">
+			
     <table class="tbl">
       <tr>
-        <th class="title" colspan="4">
+        <th class="title" colspan="5">
         	Fichiers disponibles dans : 
 					<br />
  					{{$app->user_prefs.directory_to_watch}}
 				</th>
       </tr>
 			<tr>
+        <th style="width: 1%"></th>
         <th>{{mb_title class=CFile field=file_name}}</th>
         <th style="width: 2em;">
 				  <img src="style/mediboard/images/buttons/change.png" title="{{tr}}Send{{/tr}}"/>
@@ -45,6 +48,7 @@
       </tbody>
 		</table>
 		
+		</div>
 		<hr />
 		
 		<table class="form">

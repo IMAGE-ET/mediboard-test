@@ -121,15 +121,19 @@ if (!window.File.applet) {
 	    var nb_files = 0;
 			var nb_files_total = 0;
 	    result.files.each(function(res, index) {
-		    nb_files_total ++;
+          var base_name = res.path.slice(Preferences.directory_to_watch.length+1)
+  		    nb_files_total ++;
 	        // Si le fichier n'est pas dans la liste sauvegardée
 	        if (File.applet.listFiles.indexOf(res.path) == -1) {
 	          // Ajout du fichier dans la liste et dans la modale
 	          list_files.insert(
 						  DOM.tr({},
-							  DOM.td({},
-								  DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'}),
-									DOM.span({}, res.path)),
+                DOM.td({},
+                  DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'})
+								),
+                DOM.td({},
+									DOM.span({}, base_name)
+								),
 							  DOM.td({className: "upload"}),
 								DOM.td({className: "assoc"}),
 								DOM.td({className: "delete"})));
