@@ -71,7 +71,10 @@ if (!window.File.applet) {
 		watchDirectory: function() {
 	    // Lister les nouveaux fichiers
       this.executer = new PeriodicalExecuter(function(){
-        File.applet.uploader.listFiles(File.applet.directory, "false");
+				try {
+					File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif pdf"); // case sensitive !
+					File.applet.uploader.listFiles(File.applet.directory, "false");
+				} catch(e) { console.debug("applet non existante"); }
       }, 2);
     },
 		uploadFiles: function() {
@@ -110,9 +113,15 @@ if (!window.File.applet) {
 	    fast_file_form.onsubmit();
 	  },
 	  handleListFiles: function(result) {
+			$$(".yopletbutton").each(function(button) {
+        button.disabled = "";
+      });
 	    var list_files = $("file-list");
+			list_files.update();
 	    var nb_files = 0;
+			var nb_files_total = 0;
 	    result.files.each(function(res, index) {
+		    nb_files_total ++;
 	        // Si le fichier n'est pas dans la liste sauvegardée
 	        if (File.applet.listFiles.indexOf(res.path) == -1) {
 	          // Ajout du fichier dans la liste et dans la modale
@@ -130,8 +139,8 @@ if (!window.File.applet) {
 	          nb_files ++;
 	        }
 	      });
-				
-	     if (nb_files > 0) {
+			
+	     if (nb_files_total > 0) {
 			 	 this.found_files = 1;
 				 //console.log($$(".yopletbutton"));
          // On active tous les boutons upload disponibles
@@ -139,7 +148,11 @@ if (!window.File.applet) {
 				 	  button.disabled = "";
             button.style.border = "3px solid #080";
 				 });
-	     }
+	     } else {
+				 	$$(".yopletbutton").each(function(button) {
+	            button.style.border = "1px solid #888";
+	        });
+			 }
 	  },
 	  handleDeletionOK: function(result) {
 	    var elem = $$("input:checked").detect(function(n) { return n.value == result.path });
@@ -200,18 +213,10 @@ if (!window.File.applet) {
 
 				// S'ils sont tous associés, alors on peut lancer la suppression 		    
 				if (this.current_list_status.all(function(n){ return n[1] == 1;})) {
-					// Si la suppression auto est cochée
 					
+					// Si la suppression auto est cochée
 					if (getForm("addFastFile").delete_auto.checked) {
 						File.applet.uploader.performDelete(Object.toJSON(this.current_list_status.pluck("0")));
-					}
-					else {
-						if (confirm("Voulez-vous supprimer les fichiers qui ont été envoyés sur le serveur ?")) {
-              File.applet.uploader.performDelete(Object.toJSON(this.current_list_status.pluck("0")));
-						}
-						else {
-							td_el.up("tr").down(".delete").className = 'warning';
-						}
 					}
 				}
 		  } else {
@@ -233,7 +238,6 @@ if (!window.File.applet) {
       var opname = operation.name;
       switch (opname) {
         case 'init':
-                File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif pdf"); // case sensitive !
                 File.applet.watchDirectory();
                 break;
         case 'listfiles':
