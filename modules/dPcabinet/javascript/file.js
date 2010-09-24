@@ -74,7 +74,7 @@ if (!window.File.applet) {
 				try {
 					File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif pdf"); // case sensitive !
 					File.applet.uploader.listFiles(File.applet.directory, "false");
-				} catch(e) { console.debug("applet non existante"); }
+				} catch(e) { }
       }, 2);
     },
 		uploadFiles: function() {
