@@ -41,7 +41,12 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$extension = strrchr($file_name, '.');
     	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
     	$file_path = "tmp/". $this->request['_checksum'];
-
+      
+    	if ($this->request['_checksum'] != crc32(file_get_contents($file_path))) {
+    	  CAppUI::setMsg("Fichier corrompu", UI_MSG_ERROR);
+      	header("HTTP/1.0 500 internal Server Error");
+        return $this->doCallback();
+      }
     	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
     	$obj->file_size = filesize($file_path);
     	$obj->file_owner = CAppUI::$user->_id;

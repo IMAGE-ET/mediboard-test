@@ -116,6 +116,8 @@ if (!window.File.applet) {
       });
 	    var list_files = $("file-list");
 			list_files.update();
+			File.applet.current_list = [];
+			File.applet.current_list_status = [];
 	    var nb_files = 0;
 
 	    result.files.each(function(res, index) {
@@ -195,10 +197,9 @@ if (!window.File.applet) {
         return n.value.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\"); // vieux hack des sous bois
       });
       if (!elem) return; //warning
-      
-		  var td_el = elem.up("tr").down(".assoc");
-		  
-      if (id) {
+      var td_el = elem.up("tr").down(".assoc");
+
+      if (id > 0 ) {
 		    td_el.className = 'tick';
 		    var file = this.current_list.detect(function(n) { return n.path.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\")});
 		    file = file.path;
