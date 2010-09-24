@@ -166,11 +166,12 @@ class CFile extends CDocumentItem {
 	      $last_point = strrpos($this->file_name, '.');
 	      $base_name = substr($this->file_name, 0, $last_point);
 	      $extension = substr($this->file_name, $last_point+1);
-        $indice = 0;
+        $indice = 1;
 
 				do {
 					$indice++;
-          $file_name = "$base_name$indice.$extension";
+					$suffixe = sprintf(" %02s", $indice);
+          $file_name = "$base_name$suffixe.$extension";
           $where["file_name"] = $ds->prepare("= %", $file_name);
 					
 				} 
