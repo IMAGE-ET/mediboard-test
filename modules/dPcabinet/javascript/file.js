@@ -65,7 +65,7 @@ if (!window.File.applet) {
 							    DOM.param({name: 'action', value: ''}),
 									DOM.param({name: 'url', value: document.location.href.substr(0, document.location.href.indexOf("mediboard")+10)+"modules/dPfiles/ajax_yoplet_upload.php"}),
 									DOM.param({name: 'content', value: 'a'})),
-			start: function() {
+		start: function() {
       // Ajouter l'url du script comme paramètre
       document.body.insert(this.appletCode);
       this.uploader = $('uploader');

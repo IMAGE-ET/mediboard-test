@@ -4,7 +4,7 @@
 
 {{if $app->user_prefs.directory_to_watch != ''}}
 	{{main}}
-	  File.applet.directory = "{{$app->user_prefs.directory_to_watch}}";
+	  File.applet.directory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
 	  File.applet.start();
 	{{/main}}
 {{/if}}
