@@ -38,7 +38,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$file_name = basename(str_replace('\\', '/', $this->request['_file_path']));
     	$extension = strrchr($file_name, '.');
     	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
-    	$file_path = "/var/www/mediboard/tmp/". $this->request['_checksum'];
+    	$file_path = "tmp/". $this->request['_checksum'];
 
     	$obj->file_name = /*$file_rename == 'upload' ? */$file_name /*: $file_rename . $extension*/;
     	$obj->file_size = filesize($file_path);
@@ -52,7 +52,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
     		$obj->forceDir();
     	  $obj->moveFile($file_path);
     	}
-      mbTrace("ok",'',1);
     	return parent::doStore();
     }
     

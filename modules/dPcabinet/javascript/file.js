@@ -63,9 +63,8 @@ if (!window.File.applet) {
 	  appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
 		                        code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
 							    DOM.param({name: 'action', value: ''}),
-									DOM.param({debug: true}),
-									DOM.param({name: 'url', value: 'http://192.168.1.16/mediboard/modules/dPfiles/ajax_yoplet_upload.php'}),
-									DOM.param({name: 'content', value: 'a'})),													
+									DOM.param({name: 'url', value: document.location.href.substr(0, document.location.href.indexOf("mediboard")+10)+"modules/dPfiles/ajax_yoplet_upload.php"}),
+									DOM.param({name: 'content', value: 'a'})),
 			start: function() {
       // Ajouter l'url du script comme paramètre
       document.body.insert(this.appletCode);

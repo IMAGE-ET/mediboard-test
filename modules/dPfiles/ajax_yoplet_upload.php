@@ -14,6 +14,6 @@ $file_name = $_GET["checksum"];
 // Récupération des données directement sur php://input
 $content = file_get_contents("php://input");
 
-file_put_contents("/var/www/mediboard/tmp/".$file_name, $content);
+file_put_contents("../../tmp/".$file_name, $content);
 
 ?>
