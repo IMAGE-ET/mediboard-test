@@ -1451,7 +1451,7 @@ td.tick {
   background: url(images/buttons/tick.png) no-repeat 6px;
 }
 
-td.warning {
+#modal-yoplet td.warning {
 	background: url(images/buttons/cancel.png) no-repeat 6px;
 }
 
