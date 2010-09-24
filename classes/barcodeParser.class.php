@@ -361,6 +361,16 @@ class CBarcodeParser {
         $comp["lot"] = $parts[5];
       }
       
+    
+      // Alcon SN60
+      //      ___REF___
+      // +H530SN60WF170P1W
+      // +H530SN60WF230P1T
+      if (empty($comp) && preg_match('/^h\d{3}SN60WF(\d{3})P\d[a-z]$/i', $barcode, $parts)) {
+        $type = "alcon";
+        $comp["ref"] = "SN60WF.$parts[1]";
+      }
+    
       //      __REF__
       // +H920246020502
       //      ____REF____ 

@@ -27,7 +27,7 @@ class CRefSpec extends CMbFieldSpec {
   
   function getOptions(){
     return parent::getOptions() + array(
-      'class'     => 'str',
+      'class'     => 'class',
       'cascade'   => 'bool',
       'unlink'    => 'bool',
       'meta'      => 'field',

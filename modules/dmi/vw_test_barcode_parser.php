@@ -252,8 +252,11 @@ $tests = array(
     'lot' => '21009296068',
   ),
   '+H530SN60WF170P1W' => array(
-    'ref' => 'SN60WF170',
-  )
+    'ref' => 'SN60WF.170',
+  ),
+  '+H530SN60WF230P1T' => array(
+    'ref' => 'SN60WF.230',
+  ),
 );
 
 $results = array();
