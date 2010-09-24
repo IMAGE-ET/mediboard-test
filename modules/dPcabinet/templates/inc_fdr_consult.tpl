@@ -5,8 +5,7 @@
 {{if $app->user_prefs.directory_to_watch != ''}}
 	{{main}}
 	  File.applet.directory = "{{$app->user_prefs.directory_to_watch}}";
-	  File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif");
-	  File.applet.watchDirectory();
+	  File.applet.start();
 	{{/main}}
 {{/if}}
 

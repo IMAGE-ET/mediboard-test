@@ -133,8 +133,10 @@ if (!window.File.applet) {
 	          nb_files ++;
 	        }
 	      });
+				
 	     if (nb_files > 0) {
 			 	 this.found_files = 1;
+				 //console.log($$(".yopletbutton"));
          // On active tous les boutons upload disponibles
 	       $$(".yopletbutton").each(function(button) {
 				 	  button.disabled = "";
@@ -182,6 +184,7 @@ if (!window.File.applet) {
       setTimeout("File.applet.watchDirectory();", 2000);
 		},
 		addfile_callback: function(id, args) {
+			
 		  var file_name = args["file_name"];
 		  var elem = $$("input").detect(function(n) { return (n.value.indexOf(file_name) != -1 && n.checked )});
 		  var td_el = elem.up().next().next();
@@ -221,8 +224,12 @@ if (!window.File.applet) {
 	    var operation = args.evalJSON();
 	    var opname = operation.name;
 	    switch (opname) {
+        case 'init':
+                File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif");
+                File.applet.watchDirectory();
+                break;
 	      case 'listfiles':
-	             File.applet.handleListFiles(operation.result);
+	              File.applet.handleListFiles(operation.result);
 	              break;
 	      case 'uploadok':
 	              File.applet.handleUploadOk(operation.result);
@@ -244,5 +251,4 @@ if (!window.File.applet) {
 	      alert('could not parse callback message');
 	  }
 	}
-	File.applet.start();
 }

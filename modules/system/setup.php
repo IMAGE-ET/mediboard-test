@@ -275,7 +275,11 @@ class CSetupsystem extends CSetup {
             CHANGE `content` `content` mediumtext NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.30";
+    $this->makeRevision("1.0.30");
+    $this->addPrefQuery("directory_to_watch", "");
+    
+    $this->mod_version = "1.0.31";
+    
   }
 }
 ?>
