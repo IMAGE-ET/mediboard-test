@@ -214,7 +214,7 @@ function reloadPrescription(prescription_id){
 		{{/if}}
 		
 		{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
-      <li onmouseup="reloadAnesth('{{$selOp->_id}}');"><a href="#anesth_tab">Anesth.</a></li>
+      <li onmouseup="reloadAnesth('{{$selOp->_id}}'); Prescription.updatePerop('{{$selOp->sejour_id}}');"><a href="#anesth_tab">Anesth.</a></li>
 		{{/if}}
     {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
       <li><a href="#dossier_tab">Chir.</a></li>

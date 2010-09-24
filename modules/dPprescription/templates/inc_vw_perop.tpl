@@ -8,22 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-	
-submitPlanif = function(administration_id){
-  var planif_id = $V(getForm("callbackForm").planif_id);
 
-  var editPlanif = getForm("editPlanif-"+planif_id);
-  $V(editPlanif.administration_id, administration_id);
-	return onSubmitFormAjax(editPlanif, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}')});
-}
-
-</script>
 {{assign var=images value="CPrescription"|static:"images"}}
-
-<form name="callbackForm" action="?" method="">
-  <input type="hidden" id="planif_id" />
-</form>
 
 <table class="tbl">
 	<tr>
@@ -67,45 +53,51 @@ submitPlanif = function(administration_id){
 				
 				{{if $can_adm}}
 				
-				<script type="text/javascript">
-					var oForm = getForm("addAdministrationPerop-{{$_planif->_id}}");
-          {{if $_planif->administration_id}}  
-					  Calendar.regField(oForm.dateTime);
-          {{else}}
-				    oForm.quantite.addSpinner({min:0});
-        	{{/if}}
-				</script>
-				
-				<form name="addAdministrationPerop-{{$_planif->_id}}" action="?" method="post">
-					<input type="hidden" name="m" value="dPprescription" />
-					<input type="hidden" name="dosql" value="do_administration_aed" />
-					<input type="hidden" name="del" value="0" />
-            
-          {{if $_planif->administration_id}}
-					  <button type="button" class="cancel notext" onclick="$V(this.form.del, '1'); return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') })">Annuler</button>
-            {{$_planif->_ref_administration->quantite}} {{$unite}} {{mb_field object=$_planif->_ref_administration field="dateTime" onchange="return onSubmitFormAjax(this.form);"}}
-						<input type="hidden" name="administration_id" value="{{$_planif->administration_id}}" />
-					{{else}}
+					<script type="text/javascript">
+						var oForm = getForm("addAdministrationPerop-{{$_planif->_id}}");
+	          oForm.quantite.addSpinner({min:0});
+					</script>
+					
+					<!-- Formulaire de creation d'une administration -->
+					<form name="addAdministrationPerop-{{$_planif->_id}}" action="?" method="post">
+						<input type="hidden" name="m" value="dPprescription" />
+						<input type="hidden" name="dosql" value="do_administration_aed" />
+						<input type="hidden" name="del" value="0" />
+	          <input type="hidden" name="planification_systeme_id" value="{{$_planif->_id}}" />
 						<input type="hidden" name="object_id" value="{{$_planif->object_id}}" />
 	          <input type="hidden" name="object_class" value="{{$_planif->object_class}}" />
 	          <input type="hidden" name="unite_prise" value="{{$_planif->unite_prise}}" />
 	          <input type="hidden" name="prise_id" value="{{$_planif->prise_id}}" />
 	          <input type="hidden" name="administrateur_id" value="{{$app->user_id}}" />
-	          
 	          <input type="hidden" name="dateTime" value="current" />
-	          <input type="text" name="quantite" value="{{$quantite}}" size=3/>
-	          <input type="hidden" name="callback" value="submitPlanif" />
-	          <button type="button" class="tick notext" onclick="$V(getForm('callbackForm').planif_id, '{{$_planif->_id}}'); return onSubmitFormAjax(this.form);">Administrer</button>
-					{{/if}}
-				</form>
-				
-				<form name="editPlanif-{{$_planif->_id}}" action="?" method="post">
-					<input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_planification_systeme_aed" />
-          <input type="hidden" name="del" value="0" />
-					<input type="hidden" name="planification_systeme_id" value="{{$_planif->_id}}" />
-					<input type="hidden" name="administration_id" value="" />
-				</form>
+						
+						{{if $quantite > $_planif->_quantite_adm}}
+						  {{assign var=qte value=$quantite-$_planif->_quantite_adm}}
+						{{else}}
+						  {{assign var=qte value=0}}
+	          {{/if}}
+	          <input type="text" name="quantite" value="{{$qte}}" size=3/>
+	          <button type="button" class="tick notext" onclick="return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });">Administrer</button>
+					</form>
+		
+					<!-- Parcours des administrations -->
+					<br />
+					{{foreach from=$_planif->_ref_administrations item=_adm}}
+					  <script type="text/javascript">
+	          var oForm = getForm("editAdm-{{$_adm->_id}}");
+	          Calendar.regField(oForm.dateTime);
+	          </script>
+	        
+					  <form name="editAdm-{{$_adm->_id}}" method="post" action="?">
+					    <input type="hidden" name="m" value="dPprescription" />
+	            <input type="hidden" name="dosql" value="do_administration_aed" />
+	            <input type="hidden" name="del" value="0" />
+						  <input type="hidden" name="administration_id" value="{{$_adm->_id}}" />
+					    {{$_adm->quantite}} {{$unite}} {{mb_field object=$_adm field="dateTime" onchange="return onSubmitFormAjax(this.form);"}}
+							<button type="button" class="cancel notext" onclick="$V(this.form.del, 1); return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });"></button>
+						</form>
+						<br />
+					{{/foreach}}
 				{{else}}
 				<div class="small-info">
 					Ligne non signée

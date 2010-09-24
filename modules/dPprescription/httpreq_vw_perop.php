@@ -40,7 +40,11 @@ if($prescription_id){
 	foreach($meds as $_med){
 		$_med->loadBackRefs("planifications");
 		foreach($_med->_back["planifications"] as $_planif){
-			$_planif->loadRefAdministration();
+			$_planif->_quantite_adm = 0;
+			$_planif->loadRefsAdministrations();
+			foreach($_planif->_ref_administrations as $_adm){
+				$_planif->_quantite_adm += $_adm->quantite;
+			}
 			$_planif->loadRefPrise();
 			$_planif->_ref_object = $_med;
 	    $lines["$_planif->dateTime-$_med->_guid"] = $_planif;
@@ -50,7 +54,11 @@ if($prescription_id){
 	foreach($elts as $_elt){
 		$_elt->loadBackRefs("planifications");
 		foreach($_elt->_back["planifications"] as $_planif){
-			$_planif->loadRefAdministration();
+			$_planif->_quantite_adm = 0;
+			$_planif->loadRefsAdministrations();
+			foreach($_planif->_ref_administrations as $_adm){
+        $_planif->_quantite_adm += $_adm->quantite;
+      }
 	    $_planif->loadRefPrise();
 			$_planif->_ref_object = $_elt;
 	    $lines["$_planif->dateTime-$_elt->_guid"] = $_planif;
@@ -62,7 +70,11 @@ if($prescription_id){
 		foreach($_mix->_ref_lines as $_mix_item){
 			$_mix_item->loadbackRefs("planifications");
 			foreach($_mix_item->_back["planifications"] as $_planif){
-				$_planif->loadRefAdministration();
+				$_planif->_quantite_adm = 0;
+				$_planif->loadRefsAdministrations();
+				foreach($_planif->_ref_administrations as $_adm){
+          $_planif->_quantite_adm += $_adm->quantite;
+        }
 	      $_planif->loadRefPrise();
 		    $_planif->_ref_object = $_mix_item;
 		    $lines["$_planif->dateTime-$_mix_item->_guid"] = $_planif;

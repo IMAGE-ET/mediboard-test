@@ -332,19 +332,18 @@ class CPrescriptionLineMix extends CMbObject {
 	}
 	
 	function countLockedPlanif(){
-   // Chargement des planifications sur la ligne
-    $planification = new CPlanificationSysteme();
-   
-    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = planification_systeme.object_id";
-    $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";  
+    $administration = new CAdministration();
+    $ljoin["planification_systeme"] = "planification_systeme.planification_systeme_id = administration.planification_systeme_id";
+    $ljoin["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_item_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineMixItem'";
+    $ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_line_mix_id = prescription_line_mix_item.prescription_line_mix_id";
     
-	  $where = array();
+    // Chargement des planifications sur la ligne
+    $planification = new CPlanificationSysteme();
+    $where = array();
     $where["prescription_line_mix.prescription_line_mix_id"] = " = '$this->_id'";
-    $where["object_class"] = " = 'CPrescriptionLineMixItem'";
-    $where["administration_id"] = " IS NOT NULL";
-    $this->_count_locked_planif = $count_planifications = $planification->countList($where, null, null, null, $ljoin);
+    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, null, null, $ljoin);
   }
-	
+  	
 	/*
 	 * Duplication d'une prescription_line_mix
 	 */

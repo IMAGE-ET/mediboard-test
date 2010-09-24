@@ -524,7 +524,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
 	
-	
+	function countLockedPlanif(){
+    $administration = new CAdministration();
+    $ljoin["planification_systeme"] = "planification_systeme.planification_systeme_id = administration.planification_systeme_id";
+    $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_line_medicament_id = planification_systeme.object_id AND planification_systeme.object_class = 'CPrescriptionLineMedicament'";
+    
+    // Chargement des planifications sur la ligne
+    $planification = new CPlanificationSysteme();
+    $where = array();
+    $where["prescription_line_medicament.prescription_line_medicament_id"] = " = '$this->_id'";
+    $this->_count_locked_planif = $count_planifications = $administration->countList($where, null, null, null, $ljoin);
+  }
   
   function store(){
 		// Sauvegarde de la voie lors de la creation de la ligne

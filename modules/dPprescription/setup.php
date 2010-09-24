@@ -1704,7 +1704,19 @@ class CSetupdPprescription extends CSetup {
               ADD `unite_decalage_intervention` ENUM ('minute','heure') DEFAULT 'heure';";
 		$this->addQuery($sql);
 				
-    $this->mod_version = "1.17";
+		$this->makeRevision("1.17");
+		$sql = "ALTER TABLE `administration`
+              ADD `planification_systeme_id` INT (11) UNSIGNED;";
+		$this->addQuery($sql);
+		
+		$sql = "ALTER TABLE `administration` 
+              ADD INDEX (`planification_systeme_id`);";
+		$this->addQuery($sql);			
+
+    $sql = "ALTER TABLE `planification_systeme` DROP `administration_id`;";
+		$this->addQuery($sql);				
+										
+    $this->mod_version = "1.18";
   }
 }
 

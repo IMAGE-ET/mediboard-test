@@ -17,7 +17,8 @@ class CAdministration extends CMbMetaObject {
   var $unite_prise       = null;  // Info sur la prise
   var $commentaire       = null;  // Commentaire sur l'administration
   var $prise_id          = null;
-  
+  var $planification_systeme_id  = null;
+	
   // Gestion des replanifications
   var $planification     = null;  // Flag permettant de gerer les plannifications
   var $original_dateTime = null;  // Champ permettant de stocker la date d'origine de la prise prevue replanifiée
@@ -29,7 +30,8 @@ class CAdministration extends CMbMetaObject {
   var $_ref_administrateur = null;
   var $_ref_transmissions  = null;
   var $_ref_log   = null;
-  
+  var $_ref_planification_systeme = null;
+	
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'administration';
@@ -40,7 +42,6 @@ class CAdministration extends CMbMetaObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["transmissions"] = "CTransmissionMedicale object_id";
-		$backProps["planification"] = "CPlanificationSysteme administration_id";
     return $backProps;
   }
   
@@ -56,6 +57,7 @@ class CAdministration extends CMbMetaObject {
     $specs["commentaire"]       = "text";
     $specs["planification"]     = "bool default|0";
     $specs["original_dateTime"] = "dateTime";
+    $specs["planification_systeme_id"] = "ref class|CPlanificationSysteme";
     return $specs;
   }
 
@@ -106,18 +108,6 @@ class CAdministration extends CMbMetaObject {
     $this->_ref_log->loadMatchingObject();
     $this->_ref_log->loadRefsFwd();
   }
-	
-	function delete(){
-		$planif = $this->loadUniqueBackRef("planification");
-		if($planif->_id){
-			$planif->administration_id = "";
-			$msg = $planif->store();
-			if($msg){
-				return $msg;
-			}
-		}
-		return parent::delete();
-	}
 }
 
 ?>
