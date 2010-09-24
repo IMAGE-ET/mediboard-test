@@ -88,7 +88,7 @@ if (!window.File.applet) {
 					File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif pdf"); // case sensitive !
 					File.applet.uploader.listFiles(File.applet.directory, "false");
 				} catch(e) { }
-      }, 2);
+      }, 1);
     },
 		uploadFiles: function() {
 	    var files_to_upload = $$(".upload-file:checked");

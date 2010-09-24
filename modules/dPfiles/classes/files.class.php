@@ -255,7 +255,7 @@ class CFile extends CDocumentItem {
   static function loadFilesForObject(CMbObject $object){
     $file = new CFile();
     $file->setObject($object);
-    $files = $file->loadMatchingList();
+    $files = $file->loadMatchingList("file_name");
     
     foreach($files as $_file) {
       if (!$_file->canRead()){

@@ -7,14 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-  
-$object_id = CValue::get("object_id");
-$object_class = CValue::get("object_class");
-
-// Chargement de l'objet
-$object = new $object_class;
-$object->load($object_id);
+$object = mbGetObjectFromGet("object_class", "object_id", "object_guid");  
 
 // Chargement des fichiers
 $object->loadRefsFiles();

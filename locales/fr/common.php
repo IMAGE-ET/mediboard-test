@@ -36,6 +36,7 @@ $locales['Day-before'] = 'Le jour précédent';
 $locales['Day view'] = 'Vue de la journée';
 $locales['Default'] = 'Défaut';
 $locales['Delete'] = 'Supprimer';
+$locales['Delete-all'] = 'Tout supprimer';
 $locales['Deleted'] = 'Supprimé';
 $locales['Disabled'] = 'Désactivé';
 $locales['Done'] = 'Fait';

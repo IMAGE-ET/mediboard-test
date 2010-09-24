@@ -41,7 +41,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$file_path = "tmp/". $this->request['_checksum'];
 
     	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
-      $obj->_old_file_path = $this->request['_file_path'];    	
+      $obj->_old_file_path = $this->request['_file_path'];
     	$obj->file_size = filesize($file_path);
     	$obj->file_owner = CAppUI::$user->_id;
       $obj->fillFields();
