@@ -28,39 +28,74 @@ $rpu->loadRefSejour();
 $sejour_rpu =& $rpu->_ref_sejour;
 
 // Creation du nouveau sejour et pre-remplissage des champs
-$sejour = new CSejour();
-$sejour->patient_id   = $sejour_rpu->patient_id;
-$sejour->praticien_id = $sejour_rpu->praticien_id;
-$sejour->group_id     = $sejour_rpu->group_id;
-$sejour->entree_prevue = mbDateTime();
-$sejour->sortie_prevue = mbDateTime("+ 1 day");
-$sejour->entree_reelle = $sejour_rpu->entree_reelle;
-$sejour->chambre_seule = "0";
-$sejour->type = "comp";
-$sejour->DP = $sejour_rpu->DP;
-$sejour->DR = $sejour_rpu->DR;
-$sejour->rques  = "";
-$sejour->_en_mutation = $sejour_rpu->_id;
-
-$sejour->service_id  = $sejour_rpu->service_id;
-
-if ($rpu->diag_infirmier){ 
-  $sejour->rques .= "Diagnostic infirmier: $rpu->diag_infirmier\n";
-}
-
-if ($rpu->motif){
-  $sejour->rques .= "Motif de recours aux urgences: $rpu->motif";
-}
-
-$sejour->updateDBFields();
-$msg = $sejour->store();
-viewMsg($msg, "CSejour-title-create");
-
-$rpu->_ref_sejour->loadRefsConsultations();
-foreach ($rpu->_ref_sejour->_ref_consultations as $_consult) {
-  $_consult->sejour_id = $sejour->_id;      
-  $msg = $_consult->store();
-  viewMsg($msg, "CConsultation-title-modify");
+if (!CAppUI::conf("dPurgences create_sejour_hospit")) {
+  $sejour = new CSejour();
+  $sejour->patient_id   = $sejour_rpu->patient_id;
+  $sejour->praticien_id = $sejour_rpu->praticien_id;
+  $sejour->group_id     = $sejour_rpu->group_id;
+  $sejour->entree_prevue = mbDateTime();
+  $sejour->sortie_prevue = mbDateTime("+ 1 day");
+  $sejour->entree_reelle = $sejour_rpu->entree_reelle;
+  $sejour->chambre_seule = "0";
+  $sejour->type = "comp";
+  $sejour->DP = $sejour_rpu->DP;
+  $sejour->DR = $sejour_rpu->DR;
+  $sejour->rques  = "";
+  $sejour->_en_mutation = $sejour_rpu->_id;
+  
+  $sejour->service_id  = $sejour_rpu->service_id;
+  
+  if ($rpu->diag_infirmier){ 
+    $sejour->rques .= "Diagnostic infirmier: $rpu->diag_infirmier\n";
+  }
+  
+  if ($rpu->motif){
+    $sejour->rques .= "Motif de recours aux urgences: $rpu->motif";
+  }
+  
+  $sejour->updateDBFields();
+  $msg = $sejour->store();
+  viewMsg($msg, "CSejour-title-create");
+  
+  $rpu->_ref_sejour->loadRefsConsultations();
+  foreach ($rpu->_ref_sejour->_ref_consultations as $_consult) {
+    $_consult->sejour_id = $sejour->_id;      
+    $msg = $_consult->store();
+    viewMsg($msg, "CConsultation-title-modify");
+  }
+    
+  // Sauvegarde du sejour
+  $sejour_rpu->sortie_reelle = mbDateTime();
+  $sejour_rpu->mode_sortie = "mutation";
+  $sejour_rpu->etablissement_transfert_id = "";
+  $msg = $sejour_rpu->store();
+  viewMsg($msg, "CSejour-title-close", "(Urgences)");
+  
+  // Chargement des prescriptions liées au RPU
+  $rpu->_ref_sejour->loadRefsPrescriptions();
+  foreach($rpu->_ref_sejour->_ref_prescriptions as $_prescription){
+    if($_prescription->_id){
+      $_prescription->object_id = $sejour->_id;
+      $msg = $_prescription->store();
+      viewMsg($msg, "CPrescription-msg-modify");  
+    }
+  }
+  
+  // Transfert des transmissions et observations
+  $rpu->_ref_sejour->loadSuiviMedical();
+  foreach($rpu->_ref_sejour->_ref_suivi_medical as $_suivi){
+    $_suivi->sejour_id = $sejour->_id;
+    $msg = $_suivi->store();
+    viewMsg($msg, "$_suivi->_class_name-msg-modify");  
+  }
+} 
+// Pas de création d'un nouveau séjour lors d'une hospitalisation mais d'un changement du type d'admission 
+else {
+  $sejour = $sejour_rpu;
+  $sejour->type = "comp";
+  $sejour->_en_mutation = $sejour_rpu->_id;
+  $msg = $sejour->store();
+  viewMsg($msg, "CSejour-title-modify");
 }
 
 // Sauvegarde du RPU
@@ -70,31 +105,6 @@ $rpu->sortie_autorisee = true;
 $rpu->gemsa = "4";
 $msg = $rpu->store();
 viewMsg($msg, "CRPU-title-close");
-
-// Sauvegarde du sejour
-$sejour_rpu->sortie_reelle = mbDateTime();
-$sejour_rpu->mode_sortie = "mutation";
-$sejour_rpu->etablissement_transfert_id = "";
-$msg = $sejour_rpu->store();
-viewMsg($msg, "CSejour-title-close", "(Urgences)");
-
-// Chargement des prescriptions liées au RPU
-$rpu->_ref_sejour->loadRefsPrescriptions();
-foreach($rpu->_ref_sejour->_ref_prescriptions as $_prescription){
-  if($_prescription->_id){
-	  $_prescription->object_id = $sejour->_id;
-	  $msg = $_prescription->store();
-	  viewMsg($msg, "CPrescription-msg-modify");  
-  }
-}
-
-// Transfert des transmissions et observations
-$rpu->_ref_sejour->loadSuiviMedical();
-foreach($rpu->_ref_sejour->_ref_suivi_medical as $_suivi){
-  $_suivi->sejour_id = $sejour->_id;
-  $msg = $_suivi->store();
-	viewMsg($msg, "$_suivi->_class_name-msg-modify");  
-}
 
 CAppUI::redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
 
