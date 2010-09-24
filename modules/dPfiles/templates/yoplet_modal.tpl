@@ -5,7 +5,15 @@
   <param name="url" value="{{$base_url}}/modules/dPfiles/ajax_yoplet_upload.php">
   <param name="content" value="a">
 </applet>
-
+{{main}}
+  var url = new Url("dPfiles", "ajax_category_autocomplete");
+  url.addParam("object_class", '{{$object->_class_name}}');
+  url.autoComplete('addFastFile_keywords_category', '', {
+          minChars: 1,
+          dropdown: true,
+          width: "100px"
+        });
+{{/main}}
 <div id="modal-yoplet" style="display: none;">
   <form name="addFastFile" method="post" action="?"
     onsubmit="return onSubmitFormAjax(this);">
@@ -65,9 +73,8 @@
           {{mb_label class=CFile field=file_category_id}}
         </th>
         <td>
-          <select name="file_category_id">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          </select>
+          <input type="text" value="&mdash; Catégorie" name="keywords_category" class="autocomplete str" autocomplete="off" onclick="this.value = '';" style="width: 5em;" />
+          <input type="hidden" name="file_category_id" value="" />
         </td>
       </tr>
       <tr>

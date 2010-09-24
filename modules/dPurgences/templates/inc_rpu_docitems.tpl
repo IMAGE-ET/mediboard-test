@@ -11,15 +11,13 @@
 {{mb_include_script module=dPcabinet script=file}}
 
 {{if $app->user_prefs.directory_to_watch != ''}}
-  <script type="text/javascript">
-  Main.add(function(){
+  {{main}}
     File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
-  });
-</script>
+  {{/main}}
+  <!-- Modale pour l'applet --> 
+  {{mb_include module=dPfiles template=yoplet_modal object=$sejour}}
 {{/if}}
 
-<!-- Modale pour l'applet --> 
-{{mb_include module=dPfiles template=yoplet_modal}}
 
 <table class="form">
 

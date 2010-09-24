@@ -24,13 +24,13 @@ class CFile extends CDocumentItem {
   var $rotation           = null;
   
   // Form fields
-  var $_extensioned  = null;
-  var $_file_size    = null;
-  var $_sub_dir      = null;
-  var $_absolute_dir = null;
-  var $_file_path    = null;
-  var $_nb_pages     = null;
-  
+  var $_extensioned   = null;
+  var $_file_size     = null;
+  var $_sub_dir       = null;
+  var $_absolute_dir  = null;
+  var $_file_path     = null;
+  var $_nb_pages      = null;
+  var $_old_file_path = null;
   // Behavior fields
   var $_rotate      = null;
 	var $_rename      = null; // @todo A utiliser dans le do_aed
@@ -67,6 +67,7 @@ class CFile extends CDocumentItem {
     $specs["_absolute_dir"] = "str";
     $specs["_file_path"]    = "str";
     $specs["_file_size"]    = "str show|1";
+    $specs["_old_file_path"]= "str";
 		// Behavior fields
     $specs["_rotate"]       = "enum list|left|right";
     $specs["_rename"]       = "str";
@@ -150,7 +151,28 @@ class CFile extends CDocumentItem {
       $this->_old->updateFormFields();
       $this->moveFile($this->_old->_file_path);
     }
+    if (!$this->_id) {
+    	
+    	$file = new CFile;
+    	$last_point = strrpos($this->file_name, '.');
+    	
+    	$where["file_name"] = " = '{$this->file_name}'";
+    	$files = $file->loadlist($where);
+    	
+    	if (count($files)) {
+	    	$files = array(0 => "0");
+	    	$indice = '';
 
+	    	while (count($files) != 0) {
+	    		$where["file_name"] = " LIKE '" . substr($this->file_name, 0, $last_point) .$indice . substr($this->file_name, $last_point) ."'";
+	    	  $files = $file->loadList($where);
+	    	  if (count($files) == 0) break;
+	    	  $indice == '' ? $indice = 1 :	$indice++;
+	    	}
+	    	$this->file_name = substr($this->file_name, 0, $last_point) . 
+	    	                   $indice . substr($this->file_name, $last_point);
+    	}
+    }
     if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();
       $this->rotation = $this->rotation === null ? 0 : $this->rotation;
@@ -271,7 +293,7 @@ class CFile extends CDocumentItem {
   function oldImageMagick() {
     exec("convert --version", $ret);
     preg_match("/ImageMagick ([0-9\.-]+)/", $ret[0], $matches);
-    return $matches[1] < "6.6";
+    return $matches[1] < "6.5.8";
   }
   
   function loadNbPages(){
@@ -285,7 +307,7 @@ class CFile extends CDocumentItem {
         $this->rotation = 360 - $matches[1];
       }
       
-      //return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
+//      return $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
       
       if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
         // Fichier PDF 1.4 avec plusieurs occurence
@@ -399,12 +421,12 @@ class CFile extends CDocumentItem {
     exec("sh shell/ooo_state.sh",$res);
     
     if ($res[0] == 0 ){
-      exec(CAppUI::conf("dPfiles CFile path_oxoffice") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
+//      exec(CAppUI::conf("dPfiles CFile openoffice_path") . "/soffice -accept=\"socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" -no-logo -headless -nofirststartwizard -no-restore >> /dev/null", $ret);
       usleep(600000);
     }
 
     $res = exec("python ./modules/dPfiles/script/doctopdf.py {$this->_file_path}" . $ext ." {$file->_file_path}", $ret);
-    
+//    mbTrace($this->_file_path,'',1);
     rename($save_name . $ext, $save_name);
     return $res;
   }

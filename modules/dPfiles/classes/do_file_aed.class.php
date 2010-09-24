@@ -36,13 +36,16 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$obj = $this->_obj;
     	
     	$file_name = basename(str_replace('\\', '/', $this->request['_file_path']));
+
+    	$obj->_old_file_path = $this->request['_file_path'];
     	$extension = strrchr($file_name, '.');
     	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
     	$file_path = "tmp/". $this->request['_checksum'];
 
-    	$obj->file_name = /*$file_rename == 'upload' ? */$file_name /*: $file_rename . $extension*/;
+    	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
     	$obj->file_size = filesize($file_path);
     	$obj->file_owner = CAppUI::$user->_id;
+    	$obj->file_category_id = $this->request['file_category_id'];
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);

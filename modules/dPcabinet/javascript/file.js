@@ -57,11 +57,9 @@ if (!window.File.applet) {
     uploader: null,
     executer: null,
 		url: null,
-		listFiles: [],
 		current_list: [],
 		current_list_status: [],
     modaleWindow: null,
-		found_files: false,
 /*	  appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
 		                        code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
 	    DOM.param({name: 'action', value: ''}),
@@ -119,33 +117,27 @@ if (!window.File.applet) {
 	    var list_files = $("file-list");
 			list_files.update();
 	    var nb_files = 0;
-			var nb_files_total = 0;
+
 	    result.files.each(function(res, index) {
-          var base_name = res.path.slice(Preferences.directory_to_watch.length+1)
-  		    nb_files_total ++;
-	        // Si le fichier n'est pas dans la liste sauvegardée
-	        if (File.applet.listFiles.indexOf(res.path) == -1) {
-	          // Ajout du fichier dans la liste et dans la modale
-	          list_files.insert(
-						  DOM.tr({},
-                DOM.td({},
-                  DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'})
-								),
-                DOM.td({},
-									DOM.span({}, base_name)
-								),
-							  DOM.td({className: "upload"}),
-								DOM.td({className: "assoc"}),
-								DOM.td({className: "delete"})));
-	          File.applet.listFiles.push(res.path);
-	          File.applet.current_list.push(res);
-						File.applet.current_list_status.push([res.path, 0]);
-	          nb_files ++;
-	        }
-	      });
+        var base_name = res.path.slice(Preferences.directory_to_watch.length+1)
+          // Ajout du fichier dans la liste et dans la modale
+          list_files.insert(
+					  DOM.tr({},
+              DOM.td({},
+                DOM.input({className: "upload-file", type: "checkbox", value: res.path, checked: 'checked'})
+							),
+              DOM.td({},
+								DOM.span({}, base_name)
+							),
+						  DOM.td({className: "upload"}),
+							DOM.td({className: "assoc"}),
+							DOM.td({className: "delete"})));
+          File.applet.current_list.push(res);
+					File.applet.current_list_status.push([res.path, 0]);
+          nb_files ++;
+      });
 			
-	     if (nb_files_total > 0) {
-			 	 this.found_files = 1;
+	     if (nb_files > 0) {
 				 //console.log($$(".yopletbutton"));
          // On active tous les boutons upload disponibles
 	       $$(".yopletbutton").each(function(button) {
@@ -170,8 +162,9 @@ if (!window.File.applet) {
 	    elem.up("tr").down(".delete").className = "warning";
 	  },
 		cancelModal: function() {
-		  Control.Modal.close();
-	    // Ferme la modale en cliquant sur annuler,
+		  // Ferme la modale en cliquant sur annuler,
+			Control.Modal.close();
+			this.executer.resume();
 		},
 		modalOpen: function(object_guid) {
 		  this.modaleWindow = modal($("modal-yoplet"));
@@ -181,7 +174,6 @@ if (!window.File.applet) {
       this.executer.stop();
 		},
 		closeModal: function() {
-			this.found_files = false;
 			Control.Modal.close();
 			// Clique sur Ok dans la modale,
       // alors on vide la liste des fichiers dans la modale
@@ -198,9 +190,9 @@ if (!window.File.applet) {
       this.executer.resume();
 		},
 		addfile_callback: function(id, args) {
-		  var file_name = args["file_name"];
-		  var elem = this.modaleWindow.container.select("input:checked").detect(function(n){ 
-        return n.value.replace(/[^\x00-\xFF]/g, "?").indexOf(file_name) != -1; // vieux hack des sous bois
+		  var file_name = args["_old_file_path"];
+		  var elem = this.modaleWindow.container.select("input:checked").detect(function(n){
+        return n.value.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\"); // vieux hack des sous bois
       });
       if (!elem) return; //warning
       
@@ -208,11 +200,10 @@ if (!window.File.applet) {
 		  
       if (id) {
 		    td_el.className = 'tick';
-		    this.listFiles
-		    var file = this.current_list.detect(function(n) { return n.path.replace(/[^\x00-\xFF]/g, "?").indexOf(file_name) != -1});
+		    var file = this.current_list.detect(function(n) { return n.path.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\")});
 		    file = file.path;
 				// Ajouter le status associé dans la liste des fichiers.
-				var cur_status = this.current_list_status.detect(function(n) { return n[0].replace(/[^\x00-\xFF]/g, "?").indexOf(file_name) != -1});
+				var cur_status = this.current_list_status.detect(function(n) { return n[0].replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\")});
 				cur_status[1] = 1;
 
 				// S'ils sont tous associés, alors on peut lancer la suppression 		    
