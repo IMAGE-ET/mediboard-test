@@ -8,6 +8,19 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_include_script module=dPcabinet script=file}}
+
+{{if $app->user_prefs.directory_to_watch != ''}}
+  <script type="text/javascript">
+  Main.add(function(){
+    File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
+  });
+</script>
+{{/if}}
+
+<!-- Modale pour l'applet --> 
+{{mb_include module=dPfiles template=yoplet_modal}}
+
 <table class="form">
 
 <tr>
@@ -21,7 +34,7 @@
 
 <tr>
   <td id="files-CSejour">
-		{{mb_include_script module=dPcabinet script=file}}
+		
 		<script type="text/javascript">
 		  File.register('{{$sejour->_id}}','{{$sejour->_class_name}}', 'files-CSejour');
 		</script>
