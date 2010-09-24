@@ -79,9 +79,11 @@ if (!window.File.applet) {
 	    var files_to_upload = $$(".upload-file:checked");
 	    var files = files_to_upload.pluck("value");
 			
+			// Ajouter chaque fichier à uploader dans la liste current_list_status
 			// Mettre la case Envoi en loading pour les fichiers
-			files_to_upload.each(function(elem) {				
-				elem.up("tr").down(".upload").addClassName("loading");
+			files_to_upload.each(function(elem) {
+        File.applet.current_list_status.push([elem.value, 0]);
+        elem.up("tr").down(".upload").addClassName("loading");
 			});
       
 	    var json = Object.toJSON(files);
@@ -135,7 +137,7 @@ if (!window.File.applet) {
 							DOM.td({className: "assoc"}),
 							DOM.td({className: "delete"})));
           File.applet.current_list.push(res);
-					File.applet.current_list_status.push([res.path, 0]);
+					
           nb_files ++;
       });
 			
@@ -182,7 +184,6 @@ if (!window.File.applet) {
       // et on désactive les boutons upload
 			File.applet.current_list = [];
 			File.applet.current_list_status = [];
-			File.applet.listFiles = [];
 			$('file-list').update();
 			$$('.yopletbutton').each(function(elem) {
           elem.disabled='disabled';
