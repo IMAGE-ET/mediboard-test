@@ -151,27 +151,33 @@ class CFile extends CDocumentItem {
       $this->_old->updateFormFields();
       $this->moveFile($this->_old->_file_path);
     }
+		
+		// Make sure filename is unique for an object
     if (!$this->_id) {
-    	
-    	$file = new CFile;
-    	$last_point = strrpos($this->file_name, '.');
-    	
-    	$where["file_name"] = " = '{$this->file_name}'";
-    	$files = $file->loadlist($where);
-    	
-    	if (count($files)) {
-	    	$files = array(0 => "0");
-	    	$indice = '';
+    	$this->completeField("file_name");
+      $this->completeField("object_class");
+      $this->completeField("object_id");
 
-	    	while (count($files) != 0) {
-	    		$where["file_name"] = " LIKE '" . substr($this->file_name, 0, $last_point) .$indice . substr($this->file_name, $last_point) ."'";
-	    	  $files = $file->loadList($where);
-	    	  if (count($files) == 0) break;
-	    	  $indice == '' ? $indice = 1 :	$indice++;
-	    	}
-	    	$this->file_name = substr($this->file_name, 0, $last_point) . 
-	    	                   $indice . substr($this->file_name, $last_point);
+      $ds = $this->_spec->ds;
+      $where["object_class"] = " = '$this->object_class'";
+      $where["object_id"   ] = " = '$this->object_id'";
+    	$where["file_name"]    = $ds->prepare("= %", $this->file_name);
+    	if ($this->countlist($where)) {
+	      $last_point = strrpos($this->file_name, '.');
+	      $base_name = substr($this->file_name, 0, $last_point);
+	      $extension = substr($this->file_name, $last_point+1);
+        $indice = 0;
+
+				do {
+					$indice++;
+          $file_name = "$base_name$indice.$extension";
+          $where["file_name"] = $ds->prepare("= %", $file_name);
+					
+				} 
+				while ($this->countList($where));
+        $this->file_name = $file_name;
     	}
+    	
     }
     if (!$this->_id && $this->rotation === null) {
       $this->loadNbPages();

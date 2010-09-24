@@ -1,14 +1,31 @@
 <table class="form">
 	<tr>
 		<td class="button" colspan="10">
+      {{if $can->admin}}
+      <form name="DeleteAll-{{$object->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+      <input type="hidden" name="m" value="dPfiles" />
+      <input type="hidden" name="dosql" value="do_file_multi_delete" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="object_guid" value="{{$object->_guid}}">
+     
+		  <button class="trash" type="button" style="float: right;" onclick="File.removeAll(this, '{{$object->_guid}}')">
+        {{tr}}Delete-all{{/tr}}
+      </button>
+      
+      </form>
+      {{/if}}
+
 			<button class="new" type="button" onclick="File.upload('{{$object->_class_name}}','{{$object->_id}}', '')" >
 			  {{tr}}Add{{/tr}}
 			</button>
-			{{if $app->user_prefs.directory_to_watch != ''}} 
+
+			{{if $app->user_prefs.directory_to_watch}} 
       <button class="new yopletbutton" type="button" disabled="disabled" onclick="File.applet.modalOpen('{{$object->_guid}}')">
-        Upload
+        {{tr}}Upload{{/tr}}
       </button>
-    {{/if}}
+      {{/if}}
+		
 		</td>
 	</tr>
 </table>

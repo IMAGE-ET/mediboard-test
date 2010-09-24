@@ -25,6 +25,21 @@ var File = {
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
   },
   
+  removeAll: function(oButton, object_guid){
+    var oOptions = {
+      typeName: 'tous les fichiers',
+      objName: '',
+      ajax: 1,
+      target: 'systemMsg'
+    };
+		
+		object_guid = object_guid.split('-');
+    var oAjaxOptions = {
+      onComplete: function() { File.refresh(object_guid[1], object_guid[0]); } 
+    };
+    confirmDeletion(oButton.form, oOptions, oAjaxOptions);
+  },
+  
   refresh: function(object_id, object_class) {
   	var div_id = printf("files-%s-%s", object_id, object_class);
   	

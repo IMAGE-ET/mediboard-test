@@ -36,21 +36,13 @@ class CFileAddEdit extends CDoObjectAddEdit {
     	$obj = $this->_obj;
     	
     	$file_name = basename(str_replace('\\', '/', $this->request['_file_path']));
-
-    	$obj->_old_file_path = $this->request['_file_path'];
     	$extension = strrchr($file_name, '.');
     	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
     	$file_path = "tmp/". $this->request['_checksum'];
-      
-    	if ($this->request['_checksum'] != crc32(file_get_contents($file_path))) {
-    	  CAppUI::setMsg("Fichier corrompu", UI_MSG_ERROR);
-      	header("HTTP/1.0 500 internal Server Error");
-        return $this->doCallback();
-      }
-    	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
+
+    	$obj->file_name = /*$file_rename == 'upload' ? */$file_name /*: $file_rename . $extension*/;
     	$obj->file_size = filesize($file_path);
     	$obj->file_owner = CAppUI::$user->_id;
-    	$obj->file_category_id = $this->request['file_category_id'];
       $obj->fillFields();
       $obj->updateFormFields();
       $obj->file_type = CMbPath::guessMimeType($file_name);
@@ -143,17 +135,5 @@ class CFileAddEdit extends CDoObjectAddEdit {
       parent::doStore();
     }
   }  
-  
-  function doRedirect() {
-    $cat_id = intval(CValue::post("file_category_id"));
-    
-    if ($this->ajax) {
-      $this->doCallback();
-    }
-    
-    if ($this->redirect !== null) {
-      CAppUI::redirect($this->redirect);
-    }
-  }
 }
 ?>
