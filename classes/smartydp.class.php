@@ -595,6 +595,7 @@ class CSmartyDP extends Smarty {
     $this->assign("dialog", $dialog);
     $this->assign("ajax", $ajax);
     $this->assign("modules", $modules);
+    $this->assign("base_url", CApp::getBaseUrl());
   }
   
   /**

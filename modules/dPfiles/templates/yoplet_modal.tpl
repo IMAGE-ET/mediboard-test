@@ -1,3 +1,11 @@
+<applet id="uploader" name="yopletuploader" width="0" height="0"
+        code="org.yoplet.Yoplet.class" archive="includes/applets/yoplet2.jar">
+  <param name="debug" value="false">
+  <param name="action" value="">
+  <param name="url" value="{{$base_url}}/modules/dPfiles/ajax_yoplet_upload.php">
+  <param name="content" value="a">
+</applet>
+
 <div id="modal-yoplet" style="display: none;">
   <form name="addFastFile" method="post" action="?"
     onsubmit="return onSubmitFormAjax(this);">

@@ -3,10 +3,11 @@
 {{mb_include_script module="dPcabinet" script="file"}}
 
 {{if $app->user_prefs.directory_to_watch != ''}}
-	{{main}}
-	  File.applet.directory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
-	  File.applet.start();
-	{{/main}}
+	<script type="text/javascript">
+  Main.add(function(){
+	  File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
+  });
+</script>
 {{/if}}
 
 <!-- Modale pour l'applet --> 
