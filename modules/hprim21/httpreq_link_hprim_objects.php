@@ -13,10 +13,8 @@ CCanDo::checkRead();
 $date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;
 
-$tag_ipp = CPatient::getTagIPP();
-
-$tag_sejour = CAppUI::conf("dPplanningOp CSejour tag_dossier");
-$tag_sejour = str_replace('$g', $g, $tag_sejour);
+$tag_ipp    = CPatient::getTagIPP();
+$tag_sejour = CSejour::getTagNumDossier();
 
 // Gestion des médecins
 $hprimMedecin = new CHprim21Medecin();

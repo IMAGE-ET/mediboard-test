@@ -98,7 +98,7 @@ class CDestinataireHprim extends CMbObject {
     parent::updateFormFields();
     	
     $this->_tag_patient  = CPatient::getTagIPP($this->group_id);		
-    $this->_tag_sejour   = str_replace('$g', $this->group_id, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
+    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
 		
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
   }  

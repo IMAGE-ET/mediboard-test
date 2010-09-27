@@ -31,19 +31,19 @@
   
   {{assign var="class" value="CSejour"}}
   {{assign var="var"   value="easy_service"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_chambre_simple"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   
   {{assign var="class" value="COperation"}}
   {{assign var="var"   value="easy_horaire_voulu"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_materiel"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_remarques"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var"   value="easy_regime"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -60,23 +60,23 @@
   </tr>
   
   {{assign var="var" value="verif_cote"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="horaire_voulu"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="delete_only_admin"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   
   {{assign var="var" value="duree_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="duree_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="hour_urgence_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="hour_urgence_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   
   {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$intervals_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals_piped skip_locales=true}}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
@@ -93,24 +93,24 @@
   </tr>
 
   {{assign var="var" value="patient_id"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="modif_SHS"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
 
   {{assign var="var" value="heure_deb"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="heure_fin"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   
   {{assign var="var" value="min_intervalle"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$intervals_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$intervals_piped skip_locales=true}}
 
   {{assign var="var" value="service_id_notNull"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
 	{{assign var="var" value="delete_only_admin"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool var=$var }}
   {{assign var="var" value="max_cancel_time"}}
-  {{mb_include module=system template=inc_config_str  var=$var class=$class size="2" suffix="h"}}
+  {{mb_include module=system template=inc_config_str  var=$var  size="2" suffix="h"}}
   
   <tr>
     <th class="title" colspan="2">Heure par defaut du séjour</th>
@@ -119,16 +119,16 @@
     <th class="category" colspan="2">Heure d'entree</th>
   </tr>
   {{assign var="var" value="heure_entree_veille"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="heure_entree_jour"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   <tr>
     <th class="category" colspan="2">Heure de sortie</th>
   </tr>
   {{assign var="var" value="heure_sortie_ambu"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   {{assign var="var" value="heure_sortie_autre"}}
-  {{mb_include module=system template=inc_config_enum var=$var class=$class values=$hours_piped skip_locales=true}}
+  {{mb_include module=system template=inc_config_enum var=$var  values=$hours_piped skip_locales=true}}
   
   {{assign var="var" value="sortie_prevue"}}
   <tr>
@@ -144,7 +144,7 @@
     </th>
     <td>
       <select class="num" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]">
-        <option value="04"  {{if "04" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
+        <option value="04" {{if "04" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 04h</option>
         <option value="24" {{if "24" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 24h</option>
         <option value="48" {{if "48" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 48h</option>
         <option value="72" {{if "72" == $dPconfig.$m.$class.$var.$type}}selected="selected"{{/if}}>+ 72h</option>
@@ -166,13 +166,8 @@
     <th class="title" colspan="2">Blocage des objets</th>
   </tr>
   
-  {{assign var="class" value="COperation"}}
-  {{assign var="var" value="locked"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
-
-  {{assign var="class" value="CSejour"}}
-  {{assign var="var" value="locked"}}
-  {{mb_include module=system template=inc_config_bool var=$var class=$class}}
+  {{mb_include module=system template=inc_config_bool class=COperation var=locked }}
+  {{mb_include module=system template=inc_config_bool class=CSejour    var=locked }}
   
   <tr>
     <td class="button" colspan="2">
@@ -188,14 +183,11 @@
     <th class="title" colspan="2">Tag pour les numéros de dossier</th>
   </tr>
   
-  {{assign var="var" value="tag_dossier"}}
-  {{mb_include module=system template=inc_config_str var=$var class=$class}}
-  {{assign var="var" value="tag_dossier_pa"}}
-  {{mb_include module=system template=inc_config_str var=$var class=$class}}
-  {{assign var="var" value="tag_dossier_cancel"}}
-  {{mb_include module=system template=inc_config_str var=$var class=$class}}
-  {{assign var="var" value="tag_dossier_trash"}}
-  {{mb_include module=system template=inc_config_str var=$var class=$class}}
+  {{mb_include module=system template=inc_config_str var=tag_dossier           }}
+  {{mb_include module=system template=inc_config_str var=tag_dossier_group_idex}}
+  {{mb_include module=system template=inc_config_str var=tag_dossier_pa        }}
+  {{mb_include module=system template=inc_config_str var=tag_dossier_cancel    }}
+  {{mb_include module=system template=inc_config_str var=tag_dossier_trash     }}
   <tr>
     <td class="button" colspan="2">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

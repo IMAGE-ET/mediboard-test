@@ -165,6 +165,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_sortie_autre"  => "8",
   "locked"              => "0",
   "tag_dossier"         => "",
+  "tag_dossier_group_idex"=> "",
   "tag_dossier_pa"      => "pa_",
   "tag_dossier_cancel"  => "cancel_",
   "tag_dossier_trash"   => "trash_",

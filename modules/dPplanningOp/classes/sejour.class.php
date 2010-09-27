@@ -1139,27 +1139,48 @@ class CSejour extends CCodable {
     return $this->countList($where);
   }
   
+  /**
+   * Construit le tag NDOS en fonction des variables de configuration
+   * @param $group_id Permet de charger le NDOS pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagNumDossier($group_id = null) {
+    // Pas de tag Num dossier
+    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
+      return;
+    }
+
+    // Permettre des IPP en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    // Préférer un identifiant externe de l'établissement
+    if ($tag_group_idex = CAppUI::conf("dPplanningOp CSejour tag_dossier_group_idex")) {
+      $idex = new CIdSante400();
+      $idex->loadLatestFor($group, $tag_group_idex);
+      $group_id = $idex->id400;
+    }
+    
+    return str_replace('$g', $group_id, $tag_dossier);
+  }
   
   function loadNumDossier() {
-    // Aucune configuration de numéro de dossier
-    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
-      $this->_num_dossier = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
-      return;
-    }  
-    
     // Objet inexistant
     if (!$this->_id) {
       return "-";
     }
     
-    // sinon, $_num_dossier = valeur id400
-    // creation du tag de l'id Externe
-    global $g;
-    $tag = str_replace('$g',$g, $tag_dossier);
-
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_dossier = $this->getTagNumDossier()) {
+      $this->_num_dossier = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
+      return;
+    }  
+    
     // Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag);
+    $id400->loadLatestFor($this, $tag_dossier);
     
     // Stockage de la valeur de l'id400
     $this->_ref_numdos  = $id400;
@@ -1167,11 +1188,10 @@ class CSejour extends CCodable {
   }
   
   function loadFromNumDossier($num_dossier) {
-    global $g;
-    $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier");
-    if (null == $tag_dossier = str_replace('$g',$g, $tag_dossier)) {
+    // Aucune configuration de numéro de dossier
+    if (null == $tag_dossier = $this->getTagNumDossier()) {
       return;
-    }
+    }  
     
     $idDossier = new CIdSante400();
     $idDossier->id400 = $num_dossier;

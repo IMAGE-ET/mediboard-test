@@ -38,18 +38,14 @@ if($nb_etabs > 1) {
 	$ljoin= array();
 	
 	// - Nombre de séjours
-	$sejour = new CSejour;
-	$tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier");
-	$tag_dossier = str_replace('$g', $current_group, $tag_dossier);
+	$tag_dossier = CSejour::getTagNumDossier($current_group);
 	$where["tag"] = " = '$tag_dossier'";
 	$where["object_class"] = " = 'CSejour'";
 	$id400 = new CIdSante400;
 	$res_current_etab["CSejour-_num_dossier"] = $id400->countList($where);
 	
 	// - Patients IPP
-	$where = array();
-	$tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp");
-	$tag_ipp = str_replace('$g', $current_group, $tag_ipp);
+	$tag_ipp = CPatient::getTagIPP($current_group);
 	$where["tag"] = " = '$tag_ipp'";
 	$where["object_class"] = " = 'CPatient'";
 	$id400 = new CIdSante400;
