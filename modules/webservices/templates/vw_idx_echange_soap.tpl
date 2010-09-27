@@ -8,6 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$echange_soap->_id}}
 <script type="text/javascript">
 	function fillSelect(select, dest) {
     var url = new Url("webservices", "ajax_filter_web_func");
@@ -29,10 +30,13 @@
 	  $V(getForm('filterEchange').page, page);
 	}
 </script>
+{{/if}}
 
-{{main}}
-  fillSelect($V(getForm('filterEchange').service), 'web_service');
-{{/main}}
+{{if !$echange_soap->_id}}
+  {{main}}
+    fillSelect($V(getForm('filterEchange').service), 'web_service');
+  {{/main}}
+{{/if}}
 
 <div id="empty_area" style="display: none;"></div>
 <table class="main">
@@ -94,7 +98,7 @@
 				  </tr>
           <tr>
             <td colspan="4" style="text-align: center">
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+              <button type="submit" class="search" onclick="$V(getForm('filterEchange').page, 0);">{{tr}}Filter{{/tr}}</button>
             </td>
           </tr>
         </table>
