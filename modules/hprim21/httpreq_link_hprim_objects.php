@@ -13,9 +13,8 @@ CCanDo::checkRead();
 $date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;
 
-$g = CGroups::loadCurrent()->_id;
-$tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp");
-$tag_ipp = str_replace('$g', $g, $tag_ipp);
+$tag_ipp = CPatient::getTagIPP();
+
 $tag_sejour = CAppUI::conf("dPplanningOp CSejour tag_dossier");
 $tag_sejour = str_replace('$g', $g, $tag_sejour);
 

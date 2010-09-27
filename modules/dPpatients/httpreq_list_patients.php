@@ -60,16 +60,12 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $patientsCount = 0;
   $patientsSoundexCount = 0;
   
-  $idsante = new CIdSante400();
-  $idsante->tag = str_replace('$g', $g, CAppUI::conf("dPpatients CPatient tag_ipp"));
-  $idsante->id400 = $patient_ipp;
-  $idsante->object_class = "CPatient";
-  $idsante->loadMatchingObject();
-  
-  if($idsante->object_id){
-   $patient = new CPatient();
-   $patient->load($idsante->object_id);
-   $patients[$patient->_id] = $patient; 
+  $patient = new CPatient;
+  $patient->_IPP = $patient_ipp;
+  $patient->loadFromIPP();
+  if ($patient->_id) {
+    CValue::setSession("patient_id", $patient->_id);
+    $patients[$patient->_id] = $patient; 
   }
 } 
 

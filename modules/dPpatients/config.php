@@ -3,6 +3,7 @@
 $dPconfig["dPpatients"] = array (
   "CPatient"    => array (
     "tag_ipp"           => "",
+    "tag_ipp_group_idex"=> "",
     "tag_ipp_trash"     => "trash_",
     "tag_conflict_ipp"  => "conflict_",
     "identitovigilence" => "nodate",

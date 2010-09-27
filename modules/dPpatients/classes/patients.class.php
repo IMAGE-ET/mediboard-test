@@ -1284,6 +1284,33 @@ class CPatient extends CMbObject {
 
   	return $this->_ref_medecins_correspondants;
   }
+	
+	/**
+	 * Construit le tag IPP en fonction des variables de configuration
+   * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
+	 * @return string
+	 */
+	static function getTagIPP($group_id = null) {
+    // Pas de tag IPP => pas d'affichage d'IPP
+    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+      return;
+    }
+
+    // Permettre des IPP en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    // Préférer un identifiant externe de l'établissement
+    if ($tag_group_idex = CAppUI::conf("dPpatients CPatient tag_ipp_group_idex")) {
+      $idex = new CIdSante400();
+      $idex->loadLatestFor($group, $tag_group_idex);
+      $group_id = $idex->id400;
+    }
+    
+    return str_replace('$g', $group_id, $tag_ipp);
+	}
 
   /**
    * Charge l'IPP du patient pour l'établissement courant
@@ -1300,31 +1327,23 @@ class CPatient extends CMbObject {
     }
     
   	// Pas de tag IPP => pas d'affichage d'IPP
-  	if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+  	if (null == $tag_ipp = $this->getTagIPP($group_id)) {
   		$this->_IPP = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
     	return;
     }
-
-    // Permettre des IPP en fonction de l'établissement
-    if (!$group_id) {
-      global $g;
-      $group_id = $g;
-  	}
-  	
-    $tag_ipp = str_replace('$g', $group_id, $tag_ipp);
 
     // Récupération du premier IPP créé, utile pour la gestion des doublons
     $order = "id400 ASC";
   	
   	// Recuperation de la valeur de l'id400
-  	$id400 = new CIdSante400();
-  	$id400->setObject($this);
-  	$id400->tag = $tag_ipp;
-  	$id400->loadMatchingObject($order);
+  	$idex = new CIdSante400();
+  	$idex->setObject($this);
+  	$idex->tag = $tag_ipp;
+  	$idex->loadMatchingObject($order);
   	
     // Stockage de la valeur de l'id400
-    $this->_ref_IPP = $id400;
-    $this->_IPP     = $id400->id400;
+    $this->_ref_IPP = $idex;
+    $this->_IPP     = $idex->id400;
   }
 
   function loadFromIPP($group_id = null) {
@@ -1333,26 +1352,18 @@ class CPatient extends CMbObject {
     }
     
     // Pas de tag IPP => pas d'affichage d'IPP
-    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+    if (null == $tag_ipp = $this->getTagIPP($group_id)) {
       return;
     }
-    
-    // Permettre des IPP en fonction de l'établissement
-    if (!$group_id) {
-      global $g;
-      $group_id = $g;
-    }
-    
-    $tag_ipp = str_replace('$g',$group_id, $tag_ipp);
-    
+		
     // Recuperation de la valeur de l'id400
-    $id400 = new CIdSante400();
-    $id400->object_class= 'CPatient';
-    $id400->tag = $tag_ipp;
-    $id400->id400 = $this->_IPP;
-    $id400->loadMatchingObject();
+    $idex = new CIdSante400();
+    $idex->object_class= 'CPatient';
+    $idex->tag = $tag_ipp;
+    $idex->id400 = $this->_IPP;
+    $idex->loadMatchingObject();
 
-    $this->load($id400->object_id);
+    $this->load($idex->object_id);
   }
   
   function loadRefPhotoIdentite() {
@@ -1578,13 +1589,13 @@ class CPatient extends CMbObject {
       return;
     }
     
-    $id400 = new CIdSante400();
-    $id400->object_class= 'CPatient';
-    $id400->tag = $tag_ipp;
-    $id400->id400 = $ipp;
-    $id400->loadMatchingObject();
+    $idex = new CIdSante400();
+    $idex->object_class= 'CPatient';
+    $idex->tag = $tag_ipp;
+    $idex->id400 = $ipp;
+    $idex->loadMatchingObject();
 
-    return $id400->_id;
+    return $idex->_id;
   }
   
   function countMatchingPatients() {
