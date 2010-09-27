@@ -208,7 +208,7 @@ if (!window.File.applet) {
       this.executer.resume();
 		},
 		addfile_callback: function(id, args) {
-		  var file_name = args["_old_file_path"];
+		  var file_name = args["_old_file_path"].replace(/\\("|'|\\)/g, "$1");
 		  var elem = this.modaleWindow.container.select("input:checked").detect(function(n){
         return n.value.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\"); // vieux hack des sous bois
       });

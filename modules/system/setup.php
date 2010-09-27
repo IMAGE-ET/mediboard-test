@@ -278,7 +278,10 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.0.30");
     $this->addPrefQuery("directory_to_watch", "");
     
-    $this->mod_version = "1.0.31";
+    $this->makeRevision("1.0.31");
+    $this->addPrefQuery("debug_yoplet", "0");
+    
+    $this->mod_version = "1.0.32";
     
   }
 }

@@ -94,6 +94,7 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref_bool var=showLastUpdate}}
   
   {{mb_include template=inc_pref_str var=directory_to_watch}}
+  {{mb_include template=inc_pref_bool var=debug_yoplet}}
   
   </tbody>
   

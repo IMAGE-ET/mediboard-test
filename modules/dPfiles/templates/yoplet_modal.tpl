@@ -1,10 +1,12 @@
-<applet id="uploader" name="yopletuploader" width="0" height="0"
+<applet id="uploader" name="yopletuploader" width="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}0{{/if}}"
+        height="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}0{{/if}}"
         code="org.yoplet.Yoplet.class" archive="includes/applets/yoplet2.jar">
-  <param name="debug" value="false">
+  <param name="debug" value="true">
   <param name="action" value="">
   <param name="url" value="{{$base_url}}/modules/dPfiles/ajax_yoplet_upload.php">
   <param name="content" value="a">
 </applet>
+
 {{main}}
   var url = new Url("dPfiles", "ajax_category_autocomplete");
   url.addParam("object_class", '{{$object->_class_name}}');

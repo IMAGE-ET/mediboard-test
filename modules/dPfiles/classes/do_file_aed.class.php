@@ -34,12 +34,20 @@ class CFileAddEdit extends CDoObjectAddEdit {
 
     if (CValue::POST("_from_yoplet") == 1) {
     	$obj = $this->_obj;
+    	$array_file_name = array();
     	
-    	$file_name = basename(str_replace('\\', '/', $this->request['_file_path']));
+    	// On retire les backslashes d'escape
+    	$file_name = stripslashes($this->request['_file_path']);
+    	
+    	// Récupération du nom de l'image en partant de la fin de la chaîne
+    	// et en rencontrant le premier \ ou /
+    	preg_match('@[\\\/]([^\\\/]*)$@i', $file_name, $array_file_name);
+    	$file_name = $array_file_name[1];
+    	
     	$extension = strrchr($file_name, '.');
     	$file_rename = $this->request['file_rename'] ? $this->request['file_rename'] : 'upload';
     	$file_path = "tmp/". $this->request['_checksum'];
-
+      
     	$obj->file_name = $file_rename == 'upload' ? $file_name : $file_rename . $extension;
       $obj->_old_file_path = $this->request['_file_path'];
     	$obj->file_size = filesize($file_path);

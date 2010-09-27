@@ -43,7 +43,8 @@ $array_list_pref_common = array (
   "touchscreen",
   "tooltipAppearenceTimeout",
   "showLastUpdate",
-  "directory_to_watch"
+  "directory_to_watch",
+  "debug_yoplet"
 );
 
 foreach ($array_list_pref_common as $namePref){
