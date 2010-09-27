@@ -166,11 +166,16 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.27");
     
-     $sql = "ALTER TABLE `extract_passages` 
+    $sql = "ALTER TABLE `extract_passages` 
       ADD `type` ENUM ('rpu','urg') DEFAULT 'rpu';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.28";
+    $this->makeRevision("0.28");
+    $sql = "ALTER TABLE `rpu`
+      ADD `pec_douleur` TEXT";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.29";
   }  
 }
 

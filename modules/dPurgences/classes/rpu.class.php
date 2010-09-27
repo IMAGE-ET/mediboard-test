@@ -23,6 +23,7 @@ class CRPU extends CMbObject {
   var $provenance      = null;
   var $transport       = null;
   var $pec_transport   = null;
+  var $pec_douleur     = null;
   var $motif           = null;
   var $ccmu            = null;
   var $gemsa           = null;
@@ -95,6 +96,7 @@ class CRPU extends CMbObject {
     $specs = array (
       "sejour_id"        => "ref notNull class|CSejour cascade",
       "diag_infirmier"   => "text helped",
+      "pec_douleur"      => "text helped",
       "mode_entree"      => "enum list|6|7|8 notNull",
       "provenance"       => "enum list|1|2|3|4|5|8",
       "transport"        => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
@@ -384,6 +386,7 @@ class CRPU extends CMbObject {
 	  $template->addProperty("RPU - Consultation - Traitement"       , $this->_ref_consult->traitement);
 	  
 	  $template->addProperty("RPU - Diagnostic infirmier"         , $this->diag_infirmier);
+	  $template->addProperty("RPU - Prise en charge douleur"      , $this->pec_douleur);
     $template->addProperty("RPU - Mode d'entrée"                , $this->getFormattedValue("mode_entree"));
     $template->addProperty("RPU - Transport"                    , $this->getFormattedValue("transport"));
     $template->addProperty("RPU - PeC Transport"                , $this->getFormattedValue("pec_transport"));

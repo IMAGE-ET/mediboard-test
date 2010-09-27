@@ -108,23 +108,45 @@ function showEtabEntreeTransfert(mode) {
 				  </tr> 
 				  
 				  <tr>
-				    <td colspan="2">{{mb_label object=$rpu field="diag_infirmier"}}
-				    <!-- Aide a la saisie -->
-			        <select name="_helpers_diag_infirmier" style="width: 80px;" size="1" onchange="pasteHelperContent(this); this.form.diag_infirmier.onchange();" class="helper">
-			          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-			          {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
-			        </select>
-			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier, null, null, null, null, {{$userSel->_id}})">
-			        	{{tr}}New{{/tr}}
-			        </button>
-			        <br />  
-			        </td>
+				    <td>
+              {{mb_label object=$rpu field="diag_infirmier"}}  
+			      </td>
+			      <td>
+			        {{mb_label object=$rpu field="pec_douleur"}}
+			      </td>
 				  </tr>
 				  
 				  <tr>
-				    <td colspan="2">
-				      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();"}}
+				    <td>
+				      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}
 			      </td>
+			      <td>
+              {{mb_field object=$rpu field="pec_douleur" onchange="this.form.onsubmit();" class="autocomplete"}}
+              <script type="text/javascript">
+                Main.add(function() {
+                    new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
+                        objectClass: "{{$rpu->_class_name}}",
+                        contextUserId: "{{$userSel->_id}}",
+                        contextUserView: "{{$userSel->_view}}",
+                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                        validate: function(){ getForm("editRPU").onsubmit(); },
+                        resetSearchField: false,
+                        resetDependFields: false,
+                        validateOnBlur: false
+                      });
+                    new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
+                        objectClass: "{{$rpu->_class_name}}",
+                        contextUserId: "{{$userSel->_id}}",
+                        contextUserView: "{{$userSel->_view}}",
+                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                        validate: function(){ getForm("editRPU").onsubmit(); },
+                        resetSearchField: false,
+                        resetDependFields: false,
+                        validateOnBlur: false
+                      });
+                  });
+              </script>
+            </td>
 				  </tr>
 				  
 				  <tr>

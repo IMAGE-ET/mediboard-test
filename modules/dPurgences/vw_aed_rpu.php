@@ -99,6 +99,7 @@ $smarty->assign("patient"             , $patient);
 $smarty->assign("listResponsables"    , $listResponsables);
 $smarty->assign("listPrats"           , $listPrats);
 $smarty->assign("listEtab"            , $listEtab);
+$smarty->assign("praticien"           , $praticien);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , CModule::getActive("dPImeds"));
 $smarty->display("vw_aed_rpu.tpl");

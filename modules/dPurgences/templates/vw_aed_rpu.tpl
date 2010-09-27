@@ -321,18 +321,37 @@
 	
 	  {{if $can->edit}}
 	  <tr>
-	    <th>{{mb_label object=$rpu field="diag_infirmier"}} <br />
-	     <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);" class="helper">
-	        <option value="">&mdash; Aide</option>
-	        {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
-	     </select><br />
-	     <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier, null, null, null, null, {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />
-	      </th> 
-	    <td colspan="3">
-	   
-	      <!-- Aide a la saisie -->
-	     {{mb_field object=$rpu field="diag_infirmier"}}
-	      </td>
+	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
+	    <td>
+	      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}
+	    </td>
+	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
+	    <td>
+	     {{mb_field object=$rpu field="pec_douleur" onchange="this.form.onsubmit();" class="autocomplete"}}
+	     <script type="text/javascript">
+          Main.add(function() {
+              new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
+                  objectClass: "{{$rpu->_class_name}}",
+                  contextUserId: "{{$praticien->_id}}",
+                  contextUserView: "{{$praticien->_view}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  resetSearchField: false,
+                  resetDependFields: false,
+                  validateOnBlur: false
+                });
+              new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
+                  objectClass: "{{$rpu->_class_name}}",
+                  contextUserId: "{{$praticien->_id}}",
+                  contextUserView: "{{$praticien->_view}}",
+                  timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                  resetSearchField: false,
+                  resetDependFields: false,
+                  validateOnBlur: false
+                });
+            });
+        </script>
+	    </td>
+	    
 	  </tr>
 	  {{/if}}
 	  
