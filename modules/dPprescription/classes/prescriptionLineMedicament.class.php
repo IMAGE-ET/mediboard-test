@@ -156,6 +156,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ratio_administration_dispensation  = null;
   var $_quantite_administration            = null;
   var $_quantite_dispensation              = null;
+  var $_unite_prise                        = null;
   
   var $_long_view = null;
   

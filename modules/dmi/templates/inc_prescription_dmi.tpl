@@ -47,7 +47,7 @@ Main.add(function(){
       }
     }
 
-    if (input.enterKeyPressed && input.value.length > 2) {
+    if (input.enterKeyPressed && input.value.length > 1) {
       parseBarcode(input.value);
       input.select();
     }
