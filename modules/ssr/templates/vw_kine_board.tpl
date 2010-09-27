@@ -21,7 +21,7 @@ PlanningEvent.onDblClic = function(event) {
 	
 Planification.onCompleteShowWeek = function(){
   updatePlanningKineBoard();
-  updateBoardSejours()
+  BoardSejours.update()
 
   PlanningEquipement.hide();
   $('planning-sejour').update('');
@@ -34,17 +34,25 @@ updatePlanningKineBoard = function(){
   url.requestUpdate("planning-kine"); 
 }
 
-updateBoardSejours = function(hide_noevents) {
-  var url = new Url("ssr", "ajax_board_sejours");
-  url.addParam("kine_id", '{{$kine_id}}');
-  url.addParam("hide_noevents", hide_noevents ? '1' : '0');
-  url.requestUpdate("board-sejours");
+BoardSejours = {
+	update: function(hide_noevents) {
+	  var url = new Url("ssr", "ajax_board_sejours");
+	  url.addParam("kine_id", '{{$kine_id}}');
+	  url.addParam("hide_noevents", hide_noevents ? '1' : '0');
+	  url.requestUpdate("board-sejours");
+	},
+  updateTab: function(mode) {
+    var url = new Url("ssr", "ajax_board_sejours");
+    url.addParam("mode", mode);
+    url.requestUpdate("board-sejours-"+ mode);
+  }
 }
+
 
 Main.add(function(){
   Planification.showWeek(null, true);
 	updatePlanningKineBoard();
-	updateBoardSejours();
+	BoardSejours.update();
 	
   ViewPort.SetAvlHeight("board-sejours", 0.5);
   ViewPort.SetAvlHeight("subplannings" , 1);
