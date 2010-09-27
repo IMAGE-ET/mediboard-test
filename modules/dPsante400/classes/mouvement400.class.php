@@ -85,6 +85,7 @@ class CMouvement400 extends CRecordSante400 {
     $query = "SELECT * FROM $this->base.$this->table";
     $query.= $this->getNewMarkedClause($marked);
     $query.= $this->getFilterClause();
+		$query.= "\n ORDER BY $this->idField";
  
     $mouvs = CRecordSante400::multipleLoad($query, array(), $max, get_class($this));
 

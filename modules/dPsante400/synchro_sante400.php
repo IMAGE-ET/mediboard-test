@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can;
-$can->needsEdit();
+CCanDo::checkEdit();
 
 set_time_limit(90);
 
@@ -33,10 +32,10 @@ if ($rec = CValue::get("rec")) {
   } catch (Exception $e) {
     trigger_error("Mouvement with id '$rec'has been deleted : " . $e->getMessage(), E_USER_ERROR);
   }
-} else {
+} 
+else {
   $mouvs = $mouv->loadList($marked, $max);
 }
-
 
 // Proceed mouvements
 $procs = 0;
