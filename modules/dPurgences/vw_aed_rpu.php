@@ -32,7 +32,8 @@ if ($rpu_id && !$rpu->load($rpu_id)) {
 if ($sejour_id = CValue::get("sejour_id")) {
   $rpu = new CRPU;
   $rpu->sejour_id = $sejour_id;
-	$rpu->loadMatchingObject();
+  $rpu->loadMatchingObject();
+  $rpu->loadRefsNotes();
   $rpu->updateFormFields();
 }
 
@@ -57,6 +58,7 @@ else {
   $rpu->_entree         = mbDateTime();
   $sejour               = new CSejour;
   $patient              = new CPatient;
+	$praticien            = new CMediusers;
 }
 
 // Gestion des traitements, antecedents, diagnostics
