@@ -107,7 +107,11 @@
 	  url.addParam("rpu_id", id);
 	  url.popup(700, 550, "RPU");
 	}
-  
+
+  function printEtiquettes(id) {
+	  getForm("download_etiq").submit();
+  }
+	  
 	function loadResultLabo(sejour_id) {
 	  var url = new Url("dPImeds", "httpreq_vw_sejour_results");
 	  url.addParam("sejour_id", sejour_id);
@@ -142,6 +146,14 @@
 	});
 	
 	</script>
+
+  <form name="download_etiq" style="display: none;" action="?" target="_blank" method="get">
+    <input type="hidden" name="m" value="dPurgences" />
+    <input type="hidden" name="a" value="print_etiquettes" />
+    <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+    <input type="hidden" name="suppressHeaders" value="1" />
+    <input type="hidden" name="dialog" value="1" />
+  </form>
 
 	<form name="editRPU" action="?m={{$m}}{{if !$can->edit}}&amp;tab=vw_idx_rpu{{/if}}" method="post" onsubmit="return checkForm(this)">
 	
@@ -343,6 +355,10 @@
 					
 					<button type="button" class="print" onclick="printDossier({{$rpu->_id}})">
 		        {{tr}}Print{{/tr}} dossier
+		      </button>
+		      
+		      <button type="button" class="print" onclick="printEtiquettes({{$rpu->_id}})">
+		        {{tr}}CModeleEtiquette.print_labels{{/tr}}
 		      </button>
 					    
 		    {{else}}

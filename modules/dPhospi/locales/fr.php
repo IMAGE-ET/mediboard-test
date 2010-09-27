@@ -193,6 +193,7 @@ $locales['CModeleEtiquette.new'] = 'Créer un modèle d\'étiquette';
 $locales['CModeleEtiquette.none'] = 'Pas de modèle d\'étiquette';
 $locales['CModeleEtiquette.one'] = 'Un modèle d\'étiquette';
 $locales['CModeleEtiquette.other_fields'] = 'Autres champs';
+$locales['CModeleEtiquette.print_labels'] = 'Imprimer les étiquettes';
 $locales['CObservationMedicale'] = 'Observation';
 $locales['CObservationMedicale-date'] = 'Date';
 $locales['CObservationMedicale-date-court'] = 'Date';

@@ -1510,5 +1510,12 @@ class CSejour extends CCodable {
     }
     return $nb_days;
 	}
+	
+  function completeLabelFields() {
+  	$this->loadRefPraticien();
+  	$this->loadNumDossier();
+    return array("[DATE ENT]" => mbDateToLocale($this->entree), "[PRAT RESPONSABLE]" => $this->_ref_praticien->_view,
+                 "[NDOS]"     => $this->_num_dossier); 
+  }
 }
 ?>

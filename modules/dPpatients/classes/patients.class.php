@@ -1612,6 +1612,14 @@ class CPatient extends CMbObject {
   	parent::loadView();
     $this->loadIPP();
   }
+  
+  function completeLabelFields() {
+  	$this->loadIPP();
+    return array("[DATE NAISS]" => mbDateToLocale($this->naissance), "[IPP]"    => $this->_IPP,
+                 "[NOM]"        => $this->nom,       "[NOM JF]" => $this->nom_jeune_fille,
+                 "[NUM SECU]"   => $this->matricule, "[PRENOM]" => $this->prenom,
+                 "[SEXE]"       => $this->sexe);
+  }
 }
 
 ?>

@@ -26,10 +26,10 @@ class CModeleEtiquette extends CMbMetaObject {
   var $font          = null;
   
   static $fields = array("CPatient" =>
-      array("[DATE NAISS]", "[DMED]", "[NDOS]", 
+      array("[DATE NAISS]", "[IPP]", 
             "[NOM]", "[NOM JF]",  "[NUM SECU]",
             "[PRENOM]", "[SEXE]"),
-      "CSejour" => array("[DATE ENT]", "[PRAT RESPONSABLE]"));
+      "CSejour" => array("[NDOS]", "[DATE ENT]", "[PRAT RESPONSABLE]"));
   
   static $listfonts =
       array("dejavusansmono" => "DejaVu Sans Mono",
@@ -67,7 +67,7 @@ class CModeleEtiquette extends CMbMetaObject {
   
   function replaceFields($array_fields) {
   	foreach($array_fields as $_key=>$_field) {
-  		str_replace($_key, $_field, $this->text);
+  		$this->texte = str_replace($_key, $_field, $this->texte);
   	}
   }
   
