@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+Main.add(function() {
+  var count = {{$sejours|@count}};
+  var link = $('tabs-sejours').down('a[href=#board-sejours-{{$mode}}]');
+  link.down('small').update('('+count+')');
+  link.setClassName('empty', count == 0);
+})	
+</script>
 <table class="tbl">
   <tr>
     <th colspan="2">

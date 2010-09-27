@@ -176,5 +176,6 @@ foreach ($sejours as $_sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejours", $sejours);
+$smarty->assign("mode", $mode);
 $smarty->display("inc_board_list_sejours.tpl");
 ?>
