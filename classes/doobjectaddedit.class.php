@@ -135,7 +135,7 @@ class CDoObjectAddEdit {
     echo CAppUI::getMsg();
     
     $fields = $this->_obj->getValues();
-    $fields = array_map("utf8_encode", $fields);
+    $fields = array_map_recursive("utf8_encode", $fields);
     $json = @json_encode($fields);
     
     $id = $this->_obj->_id ? $this->_obj->_id : 0;
