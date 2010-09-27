@@ -29,8 +29,7 @@ reloadDocumentsAnesth = function () {
 }
 
 refreshAnesthPerops = function(operation_id){
-  var url = new Url;
-	url.setModuleAction("dPsalleOp", "httpreq_vw_anesth_perop");
+  var url = new Url("dPsalleOp", "httpreq_vw_anesth_perop");
 	url.addParam("operation_id", operation_id);
 	url.requestUpdate("list_perops_"+operation_id);
 }
@@ -49,10 +48,10 @@ Main.add(function(){
 	
   {{if !$selOp->date_visite_anesth}}
 	  var dates = {};
-	  dates.limit = {
-	    start: '{{$smarty.now|@date_format:"%Y-%m-%d"}}',
-	    stop: '{{$smarty.now|@date_format:"%Y-%m-%d"}}'
-	  };
+	  /*dates.limit = {
+	    start: '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}',
+	    stop: '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}'
+	  };*/
 	  Calendar.regField(oFormVisiteAnesth.date_visite_anesth, dates);
 	  
 	  // Initialisation du champ date
@@ -80,7 +79,7 @@ Main.add(function(){
 
 <ul id="anesth_tab_group" class="control_tabs">
 	<li><a href="#tab_preanesth">Pré-anesthésie</a></li>
-	<li refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Per-opératoire</a></li>
+	<li onmousedown="refreshAnesthPerops('{{$selOp->_id}}');"><a href="#tab_perop">Per-opératoire</a></li>
 </ul>
 <hr class="control_tabs" />
 

@@ -361,6 +361,12 @@ class CBarcodeParser {
         $comp["lot"] = $parts[5];
       }
       
+      // Medacta
+      //      ___REF____
+      // +EMIN012654MBTL15
+      if (empty($comp) && preg_match('/^eMIN(\d{6}MBTL)(\d{2})$/ms', $barcode, $parts)) {
+        $comp["ref"] = $parts[1];
+      }
     
       // Alcon SN60
       //      ___REF___
