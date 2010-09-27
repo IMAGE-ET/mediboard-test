@@ -44,7 +44,7 @@ if($type == "AUTHOR" || ($can->edit && !$can->admin)){
 }
 
 if ($evenements) {
-  $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false);
+  $listeFiches = CFicheEi::loadFichesEtat($type, $user_id, $where, 0, false, null, true);
   $item = new CEiItem;
   $item->ei_categorie_id = $evenements;
   $listTypes = array_keys($item->loadMatchingList());
@@ -55,6 +55,7 @@ if ($evenements) {
     }
   }
   $countFiches = count($listeFiches);
+  $listeFiches = array_slice($listeFiches, intval($first), 20, true); // PHP's LIMIT
 }
 
 else {

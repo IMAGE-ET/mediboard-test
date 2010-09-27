@@ -217,7 +217,7 @@ class CFicheEi extends CMbObject {
               $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
-  static function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0){
+  static function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0, $countOnly = false, $first = 0, $noLimit = false){
     $where = array();
     $where["annulee"] = "= '$annule'";
     
@@ -272,7 +272,7 @@ class CFicheEi extends CMbObject {
       return $listFiches->loadGroupList($where, null, null, null, null, true);
     }
     else {
-      $listFiches = $listFiches->loadGroupList($where, $order, ($first+0).',20');
+      $listFiches = $listFiches->loadGroupList($where, $order, $noLimit ? null : ($first+0).',20');
       foreach($listFiches as &$fiche){
         $fiche->loadRefsFwd();
       }
