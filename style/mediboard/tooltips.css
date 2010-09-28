@@ -13,7 +13,7 @@ div.tooltip {
   background: #fff;
   border: 2px solid #999;
   padding: 2px;
-  
+
   /* The shadow */
   -moz-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
   -webkit-box-shadow: 8px 8px 10px rgba(0,0,0,0.4);
@@ -26,11 +26,6 @@ div.tooltip {
   -20px 15px 30px lime,
   -20px -15px 30px blue,
   20px -15px 30px red;*/
-  
-  /* IE specific shadow */
-  zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6);
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
 }
 
 /** Postit **/

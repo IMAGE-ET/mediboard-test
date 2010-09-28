@@ -12,6 +12,37 @@ window.onerror = function(){};
 </script>
 <![endif]-->
 
+
+<!-- Needed to work with IE8 in IE7 mode -->
+<!--[if lte IE 8]>
+<script type="text/javascript">
+function processIE7Button(button) {
+  if (button._processed || (window.Main && !Main.initialized)) return;
+  button.runtimeStyle.behavior = "none";
+  button.runtimeStyle["; behavior"] = "none";
+  button.style.behavior = "none";
+  button.style["; behavior"] = "none";
+  button._processed = true;
+  
+  setTimeout(function(){
+    var className = $w(button.className).without("button", "notext", "rtl")[0];
+    
+    if (className)
+      button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
+  }, 0.1);
+}
+</script>
+
+<style type="text/css">
+div.tooltip {
+  /* IE specific shadow */
+  zoom: 1;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
+}
+</style>
+<![endif]-->
+
 <!--[if IE 7]>
 <style type="text/css">
 hr {
@@ -29,22 +60,6 @@ div.dropdown {
 </style>
 
 <script type="text/javascript">
-function processIE7Button(button) {
-  if (button._processed || (window.Main && !Main.initialized)) return;
-  button.runtimeStyle.behavior = "none";
-  button.runtimeStyle["; behavior"] = "none";
-  button.style.behavior = "none";
-  button.style["; behavior"] = "none";
-  button._processed = true;
-  
-  setTimeout(function(){
-    var className = $w(button.className).without("button", "notext", "rtl")[0];
-    
-    if (className)
-      button.insertAdjacentHTML("afterBegin", '<img src="./style/mediboard/images/buttons/'+className+'.png" width="16" />');
-  }, 0.1);
-}
-
 var cookiejar = new CookieJar();
 Main.add(function () {
   if (cookiejar.get('IE7WarningClosed') != 'closed') {

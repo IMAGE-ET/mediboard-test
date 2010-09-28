@@ -382,17 +382,18 @@ class CBarcodeParser {
       //      ____REF____ 
       // +M412RM51100004B1D
       // +M412RM45320004C1L
-      if (empty($comp) && preg_match('/^[a-z](\d{3})([A-Z0-9]+).{2}$/ms', $barcode, $parts)) {
+      if (empty($comp) && preg_match('/^[a-z](\d{3})([A-Z0-9]+)\s?.{2}$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[2];
       }
       
       //  _PER_ ____LOT___
       // +1512021009296068W$
-      if (empty($comp) && preg_match('/^\+(\d{5})(\d{4,}).\$$/ms', $barcode, $parts)) {
+      // +1530460548095J06RE
+      if (empty($comp) && preg_match('/^\+(\d{5})(\d{4,})[A-Z0-9\$]{2,5}$/ms', $barcode, $parts)) {
         $comp["per"] = self::parsePeremptionDate($parts[1], true);
         $comp["lot"] = $parts[2];
       }
-      
+
       //   __SN___
       // +$11393812M  // $ or \v
       if (empty($comp) && preg_match('/^\+.(.+).{2}$/ms', $barcode, $parts)) {
