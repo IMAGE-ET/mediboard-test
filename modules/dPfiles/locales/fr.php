@@ -121,6 +121,7 @@ $locales['CMbObject-back-files'] = 'Fichiers';
 $locales['CMediusers-back-files'] = 'Fichiers';
 $locales['CMediusers-back-owned_files'] = 'Fichiers ajoutés';
 $locales['Delete after send'] = 'Supprimer après envoi';
+$locales['config-dPfiles-extensions_yoplet'] = 'Extensions de fichiers prises en charge pour l\'enregistrement en masse de fichiers';
 $locales['config-dPfiles-CFile-ooo_preview_active'] = 'Openoffice installé';
 $locales['config-dPfiles-CFile-ooo_preview_active-desc'] = 'Openoffice est installé';
 $locales['config-dPfiles-CFile-ooo_preview_path'] = 'Chemin Openoffice';
@@ -151,6 +152,4 @@ $locales['pref-directory_to_watch'] = 'Répertoire à surveiller pour l\'enregistr
 $locales['pref-directory_to_watch-desc'] = 'Répertoire à surveiller';
 $locales['pref-debug_yoplet'] = 'Débogage de yoplet';
 $locales['pref-debug_yoplet-desc'] = 'Débogage de yoplet';
-$locales['pref-extensions_yoplet'] = 'Extensions de fichiers prises en charge';
-$locales['pref-extensions_yoplet-desc'] = 'Extensions prises en charge pour l\'enregistrement de masse de fichiers';
 ?>

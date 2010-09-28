@@ -149,7 +149,6 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
 	  <!-- Préférences pour le module {{$module}} -->
 	    {{mb_include template=inc_pref_str var=directory_to_watch}}
 	    {{mb_include template=inc_pref_bool var=debug_yoplet}}
-	    {{mb_include template=inc_pref_str var=extensions_yoplet}}
 	  </tbody>
   {{/if}}
 

@@ -74,6 +74,7 @@ if (!window.File.applet) {
 		url: null,
 		current_list: [],
 		current_list_status: [],
+		extensions: null,
     modaleWindow: null,
 /*	  appletCode: DOM.applet({id: 'uploader', name: 'yopletuploader', width: 0, height: 0,
 		                        code: 'org.yoplet.Yoplet.class', archive: 'includes/applets/yoplet2.jar'},
@@ -85,7 +86,6 @@ if (!window.File.applet) {
 	    // Lister les nouveaux fichiers
       this.executer = new PeriodicalExecuter(function(){
 				try {
-					File.applet.uploader.setFileFilters(Preferences.extensions_yoplet); // case sensitive !
 					File.applet.uploader.listFiles(File.applet.directory, "false");
 				} catch(e) { }
       }, 1);
@@ -243,6 +243,7 @@ if (!window.File.applet) {
     if (!File.applet.uploader) {
       File.applet.uploader = document.applets.yopletuploader;
       File.applet.directory = File.appletDirectory;
+			File.applet.uploader.setFileFilters(File.applet.extensions); // case sensitive !
     }
     
     if (args) {

@@ -147,6 +147,20 @@ class CSetup {
   }
   
   /**
+   * Del a preference query 
+   * @param string $name Name of the preference
+   */
+  function delPrefQuery($name) {
+  	$pref = new CPreferences;
+    $where = array();
+    $where['key'] = " = '$name'";
+    foreach ($pref->loadList($where) as $_pref) {
+      if ($msg = $_pref->delete())
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+  }
+  
+  /**
    * Registers a table in the module
    * @param string $table Table name
    */

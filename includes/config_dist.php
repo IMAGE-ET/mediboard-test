@@ -235,14 +235,15 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
 );
 
 $dPconfig["dPfiles"] = array (
+  "extensions_yoplet" => "gif jpeg jpg pdf png",
   "nb_upload_files"     => "1",
   "upload_max_filesize" => "2M",
   "system_sender"       => "",
   "rooturl"             => "",
   "CFile"               => array(
     "upload_directory"  => "files",
-    //"active_oxoffice"   => "0",
-    //"path_oxoffice"     => ""
+    //"openoffice_active"   => "0",
+    //"openoffice_path"     => ""
   ),
   "CFilesCategory"      => array(
     "show_empty" => "1",

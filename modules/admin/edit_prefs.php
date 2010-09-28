@@ -92,7 +92,6 @@ $array_list_module_pref = array (
   ),
   "dPfiles" => array(
     "directory_to_watch",
-    "extensions_yoplet",
     "debug_yoplet"
   ),
   "system" => array (

@@ -192,11 +192,14 @@ class CSetupdPfiles extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.26");
-    
     $this->addPrefQuery("directory_to_watch", "");
     $this->addPrefQuery("debug_yoplet"      , "0");
     $this->addPrefQuery("extensions_yoplet" , "gif jpeg jpg pdf png");
-    $this->mod_version = "0.27";
+    
+    $this->makeRevision("0.27");
+    $this->delPrefQuery("extensions_yoplet");
+    
+    $this->mod_version = "0.28";
   }
 }
 ?>
