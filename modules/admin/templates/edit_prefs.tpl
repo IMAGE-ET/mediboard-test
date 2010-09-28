@@ -93,9 +93,6 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref_enum var=tooltipAppearenceTimeout values="short|medium|long" value_locale_prefix=""}}
   {{mb_include template=inc_pref_bool var=showLastUpdate}}
   
-  {{mb_include template=inc_pref_str var=directory_to_watch}}
-  {{mb_include template=inc_pref_bool var=debug_yoplet}}
-  
   </tbody>
   
   {{assign var="module" value="dPpatients"}}
@@ -145,7 +142,17 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   
   </tbody>
   {{/if}}
-  
+
+  {{assign var="module" value="dPfiles"}}
+  {{if $prefsUser.$module}}
+	  <tbody style="display: none" id="{{$module}}">
+	  <!-- Préférences pour le module {{$module}} -->
+	    {{mb_include template=inc_pref_str var=directory_to_watch}}
+	    {{mb_include template=inc_pref_bool var=debug_yoplet}}
+	    {{mb_include template=inc_pref_str var=extensions_yoplet}}
+	  </tbody>
+  {{/if}}
+
   {{assign var="module" value="dPhospi"}}
   {{if $prefsUser.$module}}  
 	<tbody style="display: none" id="{{$module}}">

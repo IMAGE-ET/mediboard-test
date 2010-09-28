@@ -147,4 +147,10 @@ $locales['mod-dPfiles-tab-vw_files'] = 'Visualiser les fichiers';
 $locales['mod-dPfiles-tab-vw_stats'] = 'Statistiques';
 $locales['module-dPfiles-court'] = 'Fichiers';
 $locales['module-dPfiles-long'] = 'Gestion de fichiers';
+$locales['pref-directory_to_watch'] = 'Répertoire à surveiller pour l\'enregistrement de fichiers';
+$locales['pref-directory_to_watch-desc'] = 'Répertoire à surveiller';
+$locales['pref-debug_yoplet'] = 'Débogage de yoplet';
+$locales['pref-debug_yoplet-desc'] = 'Débogage de yoplet';
+$locales['pref-extensions_yoplet'] = 'Extensions de fichiers prises en charge';
+$locales['pref-extensions_yoplet-desc'] = 'Extensions prises en charge pour l\'enregistrement de masse de fichiers';
 ?>

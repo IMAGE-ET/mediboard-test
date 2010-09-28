@@ -85,7 +85,7 @@ if (!window.File.applet) {
 	    // Lister les nouveaux fichiers
       this.executer = new PeriodicalExecuter(function(){
 				try {
-					File.applet.uploader.setFileFilters("bmp gif jpeg jpg png tif pdf"); // case sensitive !
+					File.applet.uploader.setFileFilters(Preferences.extensions_yoplet); // case sensitive !
 					File.applet.uploader.listFiles(File.applet.directory, "false");
 				} catch(e) { }
       }, 1);
