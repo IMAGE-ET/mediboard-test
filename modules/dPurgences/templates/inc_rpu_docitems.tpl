@@ -12,7 +12,7 @@
 
 {{if $app->user_prefs.directory_to_watch != ''}}
   {{main}}
-    File.extensions = "{{$dPconfig.dPfiles.extensions_yoplet}}";
+    File.applet.extensions = "{{$dPconfig.dPfiles.extensions_yoplet}}";
     File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
   {{/main}}
   <!-- Modale pour l'applet --> 
@@ -59,7 +59,6 @@
 
 <tr>
   <td id="files-CConsultation">
-    {{mb_include_script module=dPcabinet script=file}}
     <script type="text/javascript">
       File.register('{{$consult->_id}}','{{$consult->_class_name}}', 'files-CConsultation');
     </script>
