@@ -1,14 +1,14 @@
-<table class="main tbl" style="width: 100%;">
+<table style="width: 100%; font-size: small">
   <tr><th colspan="11" class="title">Constantes</th></tr>
   <tr>
-    <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
+    <th style="width: 9%;">{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
     {{assign var="i" value=1}}
     {{foreach name="constante" from="CConstantesMedicales"|static:"list_constantes" key=_constante item=_params}}
       {{if $i == 11}}
         {{assign var=save_constante value=$smarty.foreach.constante.index}}
         {{php}}break{{/php}}
       {{/if}}
-      <th>{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
+      <th style="width: 9%;">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
       {{assign var="i" value=$i+1}}
     {{/foreach}}
   </tr>

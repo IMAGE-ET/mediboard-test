@@ -1487,7 +1487,9 @@ class CPatient extends CMbObject {
     //Liste des séjours du patient
     $this->loadRefsSejours();
     $sejours = "<table class='main>'";
+    
     $smarty = new CSmartyDP("modules/dPpatients");
+    
     if (is_array($this->_ref_sejours)){
     	foreach($this->_ref_sejours as $_sejour) {
     		$_sejour->loadRefPraticien();
@@ -1502,26 +1504,59 @@ class CPatient extends CMbObject {
     
     $const_med = $this->_ref_constantes_medicales;
     
+    // Version complète du tableau de constantes
     $csteByTime = array();
     $constante_med = new CConstantesMedicales();
     $csteByTime[$const_med->datetime] = array();
-      foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
-        $csteByTime[$const_med->datetime][$_constante] = $const_med->$_constante;
+    foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+      $csteByTime[$const_med->datetime][$_constante] = $const_med->$_constante;
     }
 
-    $smarty->assign("csteByTime", $csteByTime);
-    $constantes = $smarty->fetch("print_constantes.tpl",'','',0);
-    $constantes = preg_replace('`([\\n\\r])`', '', $constantes); 
+    // Version minimale du tableau de constantes
+    $conf_constantes = explode("|", CAppUI::conf("dPpatients CConstantesMedicales important_constantes"));
+    $selection = array_flip($conf_constantes);
 
-    $template->addProperty("Patient - Constantes", $constantes);
+    $csteByTimeMin = array();
+    $constante_med = new CConstantesMedicales();
+    $csteByTimeMin[$const_med->datetime] = array();
+    $constantes_min = array();
+    foreach (CConstantesMedicales::$list_constantes as $_constante => $_params) {
+      if (array_key_exists($_constante, $selection) || $const_med->$_constante != '') {
+      	$constantes_min[] = $_constante;
+        $csteByTimeMin[$const_med->datetime][$_constante] = $const_med->$_constante;
+      }
+    }
+
+    $smarty->assign("csteByTime", $csteByTime);    
+    $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
+    $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz); 
+
+    $smarty->assign("csteByTimeMin" , $csteByTimeMin);
+    $smarty->assign("constantes_min", $constantes_min);
+    $constantes_minimal_horiz = $smarty->fetch("print_constantes_min_horiz.tpl",'','',0);
+    $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
+    
+    $smarty->assign("csteByTime", $csteByTime);
+    $smarty->assign("datetime", $const_med->datetime);
+    $constantes_complet_vert  = $smarty->fetch("print_constantes_comp_vert.tpl",'','',0);
+    $constantes_complet_vert  = preg_replace('`([\\n\\r])`', '', $constantes_complet_vert);
+
+    $smarty->assign("csteByTimeMin" , $csteByTimeMin);
+    $smarty->assign("constantes_min", $constantes_min);
+    $smarty->assign("datetime", $const_med->datetime);
+    $constantes_minimal_vert  = $smarty->fetch("print_constantes_min_vert.tpl",'','',0);
+    $constantes_minimal_vert  = preg_replace('`([\\n\\r])`', '', $constantes_minimal_vert);
+    
+    $template->addProperty("Patient - Constantes mode complet horizontal", $constantes_complet_horiz);
+    $template->addProperty("Patient - Constantes mode minimal horizontal", $constantes_minimal_horiz);
+    $template->addProperty("Patient - Constantes mode complet vertical"  , $constantes_complet_vert);
+    $template->addProperty("Patient - Constantes mode minimal vertical"  , $constantes_minimal_vert);
     $template->addProperty("Patient - poids",  "$const_med->poids kg");
     $template->addProperty("Patient - taille", "$const_med->taille cm");
     $template->addProperty("Patient - Pouls",  $const_med->pouls);
     $template->addProperty("Patient - IMC",    $const_med->_imc);
     $template->addProperty("Patient - VST",    $const_med->_vst);
-    $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
-    
-
+    $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));   
   }
   
   function fillTemplate(&$template) {

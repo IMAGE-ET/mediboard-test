@@ -1,0 +1,60 @@
+{{assign var=save_constante value=0}}
+{{assign var=nb_col value=$constantes_min|@count}}
+{{math equation="100 / ($nb_col+1)" assign=percent}}
+
+<table style="width: 100%; font-size: small">
+  <tr><th colspan="11" class="title">Constantes</th></tr>
+  <tr>
+    <th style="width: {{$percent}}%;">{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
+    {{assign var="i" value=1}}
+    {{foreach name="constante" from=$constantes_min item=_constante}}
+      {{if $i == 11}}
+        {{assign var=save_constante value=$smarty.foreach.constante.index}}
+        {{php}}break{{/php}}
+      {{/if}}
+      <th style="width: {{$percent}}%;">{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
+      {{assign var="i" value=$i+1}}
+    {{/foreach}}
+  </tr>
+  {{assign var=reset_mb_ditto value=true}}
+  {{foreach name="constante_b" from=$csteByTimeMin key=_time item=_cste_time}}
+    <tr>
+      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime reset=$reset_mb_ditto}}</td>
+      {{assign var="i" value=1}}
+      {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
+        {{if $i == 11}}
+          {{assign var="save_cste_time" value=$smarty.foreach.constante_time.index}}
+          {{php}}break{{/php}}
+        {{/if}}
+        <td style="text-align: right">{{$_constante_medicale}}</td>
+        {{assign var="i" value=$i+1}}
+      {{/foreach}}
+    </tr>
+  {{/foreach}}
+  {{assign var=reset_mb_ditto value=false}}
+  
+  {{if $save_constante > 0}}
+	  <tr>
+	    <th>{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
+	    {{foreach name="constante2" from=$constantes_min item=_constante}}
+	      {{if $smarty.foreach.constante2.index > $save_constante }}
+	        <th>{{tr}}CConstantesMedicales-{{$_constante}}-court{{/tr}}</th>
+	      {{/if}}
+	    {{/foreach}}
+	  </tr>
+	  
+	  {{assign var=reset_mb_ditto value=true}}
+	  {{foreach name="constante_b2" from=$csteByTimeMin key=_time item=_cste_time}}
+	    <tr>
+	      <td style="text-align: center;">{{mb_ditto name="datetime" value=$_time|date_format:$dPconfig.datetime}}</td>
+	      {{foreach name="constante_time" from=$_cste_time item=_constante_medicale}}
+	        {{if $smarty.foreach.constante_time.index > $save_cste_time}}
+	          <td style="text-align: right">{{$_constante_medicale}}</td>
+	        {{/if}}
+	      {{/foreach}}
+	    </tr>
+	  {{assign var=reset_mb_ditto value=false}}
+	  {{/foreach}}
+	{{/if}}
+  
+</table>
