@@ -32,8 +32,14 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
 };
 
 // TODO needs testing (doesn't throw console.error every time)
-if (Prototype.Browser.IE)
-  window.onerror = errorHandler;
+if (Prototype.Browser.IE) {
+  (function(){
+    var ieVersion = IEVersion();
+    // If DocMode is the same as the browser version (IE8 not in Compat mode)
+    if (ieVersion.Version == ieVersion.DocMode)
+      window.onerror = errorHandler;
+  })();
+}
 
 /**
  * Main page initialization scripts

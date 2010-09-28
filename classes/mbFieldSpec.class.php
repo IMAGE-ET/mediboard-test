@@ -666,7 +666,7 @@ class CMbFieldSpec {
                  isset($this->index)) ? "INDEX" : '',*/
      'extra' => $is_key ? 'auto_increment' : null,
      'default' => (isset($this->default) ? 
-                     "DEFAULT ('$this->default')" : 
+                     "DEFAULT '$this->default'" : 
                      (isset($this->defaultOption) ?
                        "DEFAULT ('$this->defaultOption')" :
                        ''))

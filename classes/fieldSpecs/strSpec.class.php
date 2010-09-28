@@ -15,7 +15,8 @@ class CStrSpec extends CMbFieldSpec {
   var $minLength = null;
   var $maxLength = null;
   var $protected = null;
-  var $class = null;
+  var $class     = null;
+  var $delimiter = null;
   
   function getSpecType() {
     return "str";
@@ -23,18 +24,18 @@ class CStrSpec extends CMbFieldSpec {
   
   function getDBSpec(){
     if ($this->maxLength) {
-      return "VARCHAR($this->maxLength)";
+      return "VARCHAR ($this->maxLength)";
     } 
     
     if ($this->length) {
-      return "CHAR($this->length)";
+      return "CHAR ($this->length)";
     }
 		
     if ($this->class) {
       return "VARCHAR (80)";
     }
 		
-    return "VARCHAR(255)";
+    return "VARCHAR (255)";
   }
   
   function getOptions(){
@@ -44,6 +45,7 @@ class CStrSpec extends CMbFieldSpec {
       'maxLength' => 'num',
       'protected' => 'bool',
       'class'     => 'class',
+      'delimiter' => 'num',
     );
   }
   
@@ -91,7 +93,18 @@ class CStrSpec extends CMbFieldSpec {
         return "N'a pas la bonne longueur '$propValue' (longueur maximale souhaitée : $length)'";
       }
     }
+    
+    // delimiter
+    if($this->delimiter){
+      $delim = chr(intval($this->delimiter));
+      $values = explode($delim, $propValue);
+      
+      if (array_search("", $values, true) !== false) {
+        return "Contient des valeurs vides '$propValue'";
+      }
+    }
 		
+    // class
     if ($this->class) {
       $object = @new $propValue;
       if (!$object) {

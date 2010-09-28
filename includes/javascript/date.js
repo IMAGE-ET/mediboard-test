@@ -588,9 +588,15 @@ var Calendar = {
     }.bindAsEventListener(datepicker);
     
     if (options.noView) {
-      datepicker.element.setStyle({width: 0, height: 0, border: 'none'});
-      datepicker.element.up().setStyle({width: "12px"});
-      if (datepicker.icon) datepicker.icon.style.position = 'relative';
+      // @todo: Passer ça en classe CSS
+      datepicker.element.setStyle({width: 0, border: 'none', background: 'none', position: 'absolute'});
+      datepicker.element.up().setStyle({width: '16px'});
+      if (datepicker.icon) {
+        datepicker.icon.setStyle({
+          position: 'relative',
+          right: 0
+        });
+      }
     }
     else {
       if(window.Mobile) {

@@ -239,6 +239,14 @@ Object.extend(ElementChecker, {
         this.addError("maxLength", printf("Dépasse la bonne longueur (longueur souhaitée : %s)", iLength));
     },
     
+    // delimiter
+    delimiter: function () { 
+      this.assertSingleArg("delimiter");
+      var sDelimiter = String.fromCharCode(parseInt(this.oProperties["maxLength"], 10));
+      if (this.sValue.split(sDelimiter).indexOf("") != -1)
+        this.addError("delimiter", printf("Contient des valeurs vides '%s'", this.sValue));
+    },
+    
     // pos
     pos: function () {
       this.assertNoArg("pos");
