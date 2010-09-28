@@ -173,7 +173,7 @@ function changePage(page) {
         </tr>
         {{foreach from=$echangesHprim item=_echange}}
           <tbody id="echange_{{$_echange->_id}}">
-            {{include file="inc_echange_hprim.tpl" object=$_echange}}
+            {{mb_include template=inc_echange_hprim object=$_echange}}
           </tbody>
         {{foreachelse}}
           <tr>

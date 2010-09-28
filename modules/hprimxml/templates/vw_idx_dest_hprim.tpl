@@ -77,6 +77,10 @@
           <td>{{mb_field object=$dest_hprim field="nom"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$dest_hprim field="libelle"}}</th>
+          <td>{{mb_field object=$dest_hprim field="libelle"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$dest_hprim field="group_id"}}</th>
           <td>
             <select name="group_id" class="{{$dest_hprim->_props.group_id}}" style="width: 17em;">

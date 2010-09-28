@@ -76,8 +76,7 @@ class CDestinataireHprim extends CMbObject {
     
     return $backProps;
   }
-  
-  
+    
   function loadRefsFwd() {
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
@@ -96,7 +95,9 @@ class CDestinataireHprim extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    	
+
+    $this->_view = $this->libelle ? $this->libelle : $this->nom;
+    
     $this->_tag_patient  = CPatient::getTagIPP($this->group_id);		
     $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
 		
