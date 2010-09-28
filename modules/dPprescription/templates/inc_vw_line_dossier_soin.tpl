@@ -21,64 +21,68 @@
 {{/if}}
 
 <tr id="line_{{$line_class}}_{{$line_id}}_{{$unite_prise|regex_replace:'/[^a-z0-9_-]/i':'_'}}">
-  {{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
-    {{if $line_class == "CPrescriptionLineMedicament"}}
-      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
-      <!-- Cas d'une ligne de medicament -->
-      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
-          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
-	      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
-          {{$libelle_ATC|smarty:nodefaults}}
-        </span>
-        <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
-       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
-  		      <ul>
-  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
-  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
-  			  {{/foreach}}
-  		      </ul>
-  			  {{else}}
-  			    Aucune transmission
-  			  {{/if}}
-		    </div>
-		  
-	      {{if $line->_ref_produit->_ref_fiches_ATC}}
-	        <img src="images/icons/search.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$_key_cat_ATC}}")' />
-	      {{/if}}
-	      
-	      <div id="tooltip-content-{{$_key_cat_ATC}}" style="display: none;">
-	          <strong>Fiches disponibles</strong><br />
-	          <ul>
-	          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
-	            <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}');">Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
-	          {{/foreach}}
-	          </ul>
-	      </div>
-			</th>
-    {{else}}
-        <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
-        {{assign var=categorie_id value=$categorie->_id}}
-        <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
-            rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
-            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
-            {{$categorie->nom}}
-          </span>
-          <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
-       		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
-  		      <ul>
-  			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
-  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
-  			  {{/foreach}}
-  		      </ul>
-  			{{else}}
-  			  Aucune transmission
-  			{{/if}}
-		  </div>
-	    </th>
-    {{/if}}
+  {{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
+		{{if $smarty.foreach.$first_foreach.first && $smarty.foreach.$last_foreach.first}}
+	    {{if $line_class == "CPrescriptionLineMedicament"}}
+	      {{assign var=libelle_ATC value=$line->_ref_produit->_ref_ATC_2_libelle}}
+	      <!-- Cas d'une ligne de medicament -->
+	      <th class="text {{if @$transmissions.ATC.$libelle_ATC|@count}}transmission{{else}}transmission_possible{{/if}}" rowspan="{{$prescription->_nb_produit_by_cat.$type.$_key_cat_ATC}}" 
+	          onclick="addCibleTransmission('','','{{$libelle_ATC}}','{{$libelle_ATC}}');">
+		      <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$libelle_ATC}}')">
+	          {{$libelle_ATC|smarty:nodefaults}}
+	        </span>
+	        <div id="tooltip-content-{{$libelle_ATC}}" style="display: none; color: black; text-align: left">
+	       		{{if @is_array($transmissions.ATC.$libelle_ATC)}}
+	  		      <ul>
+	  			  {{foreach from=$transmissions.ATC.$libelle_ATC item=_trans}}
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			  {{/foreach}}
+	  		      </ul>
+	  			  {{else}}
+	  			    Aucune transmission
+	  			  {{/if}}
+			    </div>
+			  
+		      {{if $line->_ref_produit->_ref_fiches_ATC}}
+		        <img src="images/icons/search.png" onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-{{$_key_cat_ATC}}")' />
+		      {{/if}}
+		      
+		      <div id="tooltip-content-{{$_key_cat_ATC}}" style="display: none;">
+		          <strong>Fiches disponibles</strong><br />
+		          <ul>
+		          {{foreach from=$line->_ref_produit->_ref_fiches_ATC item=_fiche_ATC}}
+		            <li><a href="#{{$_fiche_ATC->_id}}" onclick="viewFicheATC('{{$_fiche_ATC->_id}}');">Fiche ATC {{if $_fiche_ATC->libelle}}{{$_fiche_ATC->libelle}}{{/if}}</a></li>
+		          {{/foreach}}
+		          </ul>
+		      </div>
+				</th>
+	    {{else}}
+	        <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
+	        {{assign var=categorie_id value=$categorie->_id}}
+	        <th class="text {{if @$transmissions.CCategoryPrescription.$name_cat|@count}}transmission{{else}}transmission_possible{{/if}}" 
+	            rowspan="{{$prescription->_nb_produit_by_cat.$name_cat}}" 
+	            onclick="addCibleTransmission('CCategoryPrescription','{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
+	          <span onmouseover="ObjectTooltip.createDOM(this, 'tooltip-content-{{$name_cat}}')">
+	            {{$categorie->nom}}
+	          </span>
+	          <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
+	       		{{if @is_array($transmissions.CCategoryPrescription.$name_cat)}}
+	  		      <ul>
+	  			  {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
+	  			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:$dPconfig.datetime}}:<br /> {{$_trans->text}}</li>
+	  			  {{/foreach}}
+	  		      </ul>
+	  			{{else}}
+	  			  Aucune transmission
+	  			{{/if}}
+			  </div>
+		    </th>
+	    {{/if}}
+	  {{/if}}
   {{/if}}
-  
+	
+	
+	
   {{if $smarty.foreach.$last_foreach.first}}
   <td class="text" rowspan="{{$nb_line}}" {{if $line instanceof CPrescriptionLineMedicament && $line->traitement_personnel}}style="background-color: #BDB"{{/if}}>
  

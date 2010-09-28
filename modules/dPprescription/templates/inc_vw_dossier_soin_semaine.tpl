@@ -100,7 +100,9 @@ Main.add(function () {
 	    <td>
 	      <table class="tbl">  
 				  <tr>
+				  	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
 				    <th class="title">Catégorie</th>
+						{{/if}}
 				    <th class="title">Libelle</th>
 				    <th class="title">Posologie</th>
 				    {{foreach from=$dates item=date}}
@@ -113,23 +115,13 @@ Main.add(function () {
 	        
 	        {{assign var=transmissions value=$prescription->_transmissions}}	  
 	        
-					<tbody id="plan_aerosol" style="display:none;">
-					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.aerosol item=_prescription_line_mix}}
+					{{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type key=type_mix item=lines_mix}}
+					<tbody id="plan_{{$type_mix}}" style="display:none;">
+            {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.$type_mix item=_prescription_line_mix}}
               {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
             {{/foreach}}
-					</tbody>
-					
-				  <tbody id="plan_oxygene" style="display:none;">
-					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.oxygene item=_prescription_line_mix}}
-              {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
-            {{/foreach}}
-					</tbody>
-					
-				  <tbody id="plan_perfusion" style="display:none;">
-					  {{foreach from=$prescription->_ref_prescription_line_mixes_for_plan_by_type.perfusion item=_prescription_line_mix}}
-              {{include file="../../dPprescription/templates/inc_vw_perf_dossier_soin_semaine.tpl"}}
-            {{/foreach}}
-					</tbody>
+          </tbody>
+          {{/foreach}}
 					
 	        <!-- Affichage des injections -->
 				  <tbody id="plan_inj" style="display: none;">

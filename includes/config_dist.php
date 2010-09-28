@@ -285,6 +285,7 @@ $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
     "show_unsigned_lines" => "1",
 		"show_unsigned_med_msg"   => "0",
+		"show_categories_plan_soins" => "1",
     "add_element_category" => "0",
     "time_print_ordonnance" => "2",
     "time_alerte_modification" => "2",
@@ -385,7 +386,14 @@ $dPconfig["dPprescription"] = array (
   ),
   
   "CMomentUnitaire" => array(
-    "principaux" => "0"
+    "principaux" => "0",
+		"poso_lite" => array(
+		  "matin" => "1",
+			"midi" => "1",
+			"apres_midi" => "0",
+			"soir" => "1",
+			"coucher" => "0"
+		)
   ),
     
   "CPrisePosologie" => array(

@@ -65,6 +65,7 @@ function onchangeMed(radioButton, other_field){
     </tr>
 		{{mb_include module=system template=inc_config_bool var=show_unsigned_lines}}
 		{{mb_include module=system template=inc_config_bool var=show_unsigned_med_msg}}
+		{{mb_include module=system template=inc_config_bool var=show_categories_plan_soins}}
 		{{mb_include module=system template=inc_config_bool var=add_element_category}}
     {{mb_include module=system template=inc_config_bool var=preselect_livret}}
 		{{mb_include module=system template=inc_config_bool var=prescription_suivi_soins}}
@@ -278,6 +279,87 @@ function onchangeMed(radioButton, other_field){
 	      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
 	    </td>             
 	  </tr>
+
+		{{assign var="var" value="poso_lite"}}
+		<tr>
+		  <th class="title" colspan="2">
+        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+        </label>    
+      </th>	
+		</tr>
+			
+		{{assign var="var_item" value="matin"}}
+    <tr>  
+		  <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+        </label>    
+		  </th>
+      <td>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
+		{{assign var="var_item" value="midi"}}
+    <tr>  
+      <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+        </label>    
+      </th>
+      <td>
+      	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
+		{{assign var="var_item" value="apres_midi"}}
+    <tr>  
+      <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+        </label>    
+      </th>
+      <td>  
+		    <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
+		{{assign var="var_item" value="soir"}}
+    <tr>  
+      <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+        </label>    
+      </th>
+      <td>
+      	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
+		{{assign var="var_item" value="coucher"}}
+    <tr>  
+      <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+        </label>    
+      </th>
+      <td>
+      	<label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Oui</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="1" {{if $dPconfig.$m.$class.$var.$var_item == "1"}}checked="checked"{{/if}}/> 
+        <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]">Non</label>
+        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="0" {{if $dPconfig.$m.$class.$var.$var_item == "0"}}checked="checked"{{/if}}/> 
+      </td>             
+    </tr>
+		
 	  <tr>
 	    <th class="title" colspan="10">Affichage des voies disponibles</th>
 	  </tr>

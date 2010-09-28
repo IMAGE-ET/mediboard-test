@@ -56,9 +56,16 @@ Main.add(function(){
   
   <span id="moment{{$type}}{{$line->_id}}" style="display: none; clear: both;">
     {{if $type != "mode_grille"}}
-	  <input type="checkbox" name="matin" /><label for="matin"> Matin</label>
-	  <input type="checkbox" name="midi" /><label for="midi"> Midi</label>
-	  <input type="checkbox" name="soir" /><label for="soir"> Soir</label>
+		
+		{{foreach from=$dPconfig.dPprescription.CMomentUnitaire.poso_lite key=_moment_unitaire item=_show_moment}}
+		  {{if $_show_moment}}
+			<input type="checkbox" name="{{$_moment_unitaire}}" class="moment_poso_lite" />
+			<label for="{{$_moment_unitaire}}">
+				{{tr}}config-dPprescription-CMomentUnitaire-poso_lite-{{$_moment_unitaire}}{{/tr}}
+			</label>
+			{{/if}}
+    {{/foreach}}
+	  
     <input type="checkbox" name="_urgent" onchange="changeUrgence(this.form, this.checked);" /><label for="_urgent"> Urg.</label>
 	  {{/if}}
   </span>

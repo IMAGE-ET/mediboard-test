@@ -20,11 +20,16 @@ if($nb_fois){
 }
 
 //Traitement specifique pour la gestion des checkBox
-$list_checkbox = array("matin", "midi", "soir");
-foreach($list_checkbox as $_checkbox){
-  if(isset($_POST[$_checkbox])){
+$list_checkbox = array("matin" => "le matin", 
+                       "midi" => "le midi",
+											 "soir" => "le soir", 
+											 "apres_midi" => "l'après-midi", 
+											 "coucher" => "au coucher");
+											 
+foreach($list_checkbox as $key_moment => $_checkbox_libelle){
+  if(isset($_POST[$key_moment])){
 	  $moment_unitaire = new CMomentUnitaire();
-	  $moment_unitaire->libelle = "le $_checkbox";
+	  $moment_unitaire->libelle = addslashes($_checkbox_libelle);
 	  $moment_unitaire->loadMatchingObject();
 	  
 	  $prise_poso = new CPrisePosologie();

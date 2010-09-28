@@ -26,22 +26,23 @@ completeSelect = function(oSelect, line_id, type_elt){
 }
 
 refreshCheckbox = function(oForm){
-  $V(oForm.matin, false);
-  $V(oForm.midi, false);
-  $V(oForm.soir, false);
+  oForm.select('input.moment_poso_lite').each(function(e){
+    $V(e, false);
+  });
 }
 
 changeUrgence = function(oForm, checked){
   if(checked == true){
    refreshCheckbox(oForm);
-    oForm.matin.disable();
-    oForm.midi.disable();
-    oForm.soir.disable();
+	
+	 oForm.select('input.moment_poso_lite').each(function(e){
+     e.disable();
+   });
   } else {
-   oForm.matin.enable();
-   oForm.midi.enable();
-   oForm.soir.enable();
-  }
+	  oForm.select('input.moment_poso_lite').each(function(e){
+     e.enable();
+    });
+	}
 }
 
 // Affichage des div d'ajout de posologies
@@ -87,9 +88,11 @@ selDivPoso = function(type, line_id, type_elt){
     case "moment"+type_elt: 
       oDivMoment.show();
       if(type_elt != "mode_grille"){
-        oFormPrise.matin.enable().show();
-        oFormPrise.midi.enable().show();
-        oFormPrise.soir.enable().show();
+			
+				$$('input.moment_poso_lite').each(function(e){
+				  e.enable().show();
+				});
+      
         if(oFormPrise._urgent){
 	        oFormPrise._urgent.enable().show();
 	        changeUrgence(oFormPrise, oFormPrise._urgent.checked);

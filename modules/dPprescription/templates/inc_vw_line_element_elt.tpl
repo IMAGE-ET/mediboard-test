@@ -97,7 +97,7 @@
       {{if $line->_can_modify_poso}}
 	      <table style="width: 100%">
 	       <tr>
-			    <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left;">
+			    <td style="border:none; border-right: 1px solid #999; width:50%; text-align: left;" class="text">
 			      {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Soin"}}
 			    </td>
 			    <td style="border:none">

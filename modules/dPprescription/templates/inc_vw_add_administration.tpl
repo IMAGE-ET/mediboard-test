@@ -13,9 +13,18 @@
 var oFormClick = window.opener.document.click;
 
 function submitAdmission(){
-  oFormAdministration = document.addAdministration;
+  oFormAdministration = getForm("addAdministration");
   checkForm(oFormAdministration);
-  submitFormAjax(oFormAdministration, 'systemMsg');
+  return onSubmitFormAjax(oFormAdministration);
+}
+
+function submitCancelAdm(){
+  oFormTransmission   = getForm("editTrans");
+  $V(oFormTransmission.text, "Administration annulée");
+  
+	oFormAdministration = getForm("addAdministration");
+  $V(oFormAdministration.quantite, '0');
+  return onSubmitFormAjax(oFormAdministration);
 }
 
 function submitPlanification(){
@@ -32,7 +41,7 @@ function submitPlanification(){
 
 // Fonction appelée en callback du formulaire d'administration
 function submitTransmission(administration_id){
-  oFormTransmission   = document.editTrans;
+  oFormTransmission   = getForm("editTrans");
   oFormTransmission.object_class.value = "CAdministration";
   oFormTransmission.object_id.value = administration_id;
   if(oFormTransmission.text.value != ''){
@@ -217,6 +226,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	<tr>
 	  <td>
 	  <button type="button" class="add" onclick="submitAdmission()">{{tr}}Add{{/tr}}</button>
+		<button type="button" class="cancel" onclick="submitCancelAdm();">{{tr}}Cancel{{/tr}}</button>
 	  </td>
 	</tr>
 </table>

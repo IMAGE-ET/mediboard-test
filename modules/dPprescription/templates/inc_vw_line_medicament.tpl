@@ -241,7 +241,7 @@
     <td colspan="3">
       <table style="width:100%">
         <tr>
-          <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left; width: 50%">
+          <td style="border:none; border-right: 1px solid #999; text-align: left; width: 50%;" class="text">
 			      <!-- Selection des posologies statistiques -->
 			      {{if $line->_ref_prescription->object_id && $line->_unites_prise|@count}}
 			      {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}

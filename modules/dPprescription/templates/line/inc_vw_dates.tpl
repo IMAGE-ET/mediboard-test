@@ -11,7 +11,6 @@
 <script type="text/javascript">
 
 syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
-
   syncDate(oForm, curr_line_id, fieldName, type, object_class, cat_id);
   if(!curr_line_id){
     return;
@@ -54,8 +53,12 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     {{if !$line->fin}}
 	     <tr>
 	       <td style="border:none">
-	         {{mb_label object=$line field=debut}}
-	       </td>    
+           {{if $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie"}}
+					   Date
+					 {{else}}
+					   {{mb_label object=$line field=debut}}
+           {{/if}}
+    	   </td>    
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	       <td style="border:none; {{if $typeDate == 'mode_grille'}}width: 190px;{{/if}}">
 	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}

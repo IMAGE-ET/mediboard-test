@@ -10,9 +10,11 @@
 
 {{assign var=prescription_line_mix_id value=$_prescription_line_mix->_id}}
 <tr>
+	{{if $dPconfig.dPprescription.CPrescription.show_categories_plan_soins}}
   <td style="text-align: center">
    - 
   </td>
+	{{/if}}
  	<td class="text">
  	  <div onclick='addCibleTransmission("CPrescriptionLineMix","{{$_prescription_line_mix->_id}}","{{$_prescription_line_mix->_view}}");' 
 	       class="{{if @$transmissions.CPrescriptionLineMix.$prescription_line_mix_id|@count}}transmission{{else}}transmission_possible{{/if}}">

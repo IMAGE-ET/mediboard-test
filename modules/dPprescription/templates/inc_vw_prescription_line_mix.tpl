@@ -29,6 +29,18 @@ Main.add( function(){
   <tr>
     <th colspan="9" id="th-perf-{{$_prescription_line_mix->_id}}" class="text element {{if $_prescription_line_mix->_fin < $now && !$_prescription_line_mix->_protocole}}arretee{{/if}}">
       <div style="float: left">
+      	{{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
+          <button type="button" class="trash notext" onclick="$V(getForm('editPerf-{{$_prescription_line_mix->_id}}').del,'1'); return onSubmitFormAjax(getForm('editPerf-{{$_prescription_line_mix->_id}}'), { 
+            onComplete: function(){
+              {{if @$mode_substitution}}
+                Prescription.viewSubstitutionLines('{{$_prescription_line_mix->substitute_for_id}}','{{$_prescription_line_mix->substitute_for_class}}');
+              {{else}}
+                Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
+              {{/if}}
+            }        
+          } );"></button>
+        {{/if}}
+				
 				{{if $_prescription_line_mix->_ref_prescription->type != "externe"}}
 				  {{if $_prescription_line_mix->_perm_edit}}
 					  <form name="editCondPerf-{{$_prescription_line_mix->_id}}">
@@ -114,7 +126,8 @@ Main.add( function(){
 					{{/if}}
 				</div>
 			{{/if}}
-      <!-- Siganture du praticien -->
+			
+      <!-- Signature du praticien -->
       {{if $_prescription_line_mix->_can_vw_signature_praticien}}
         <div class="mediuser" style="float: right; border-color: #{{$_prescription_line_mix->_ref_praticien->_ref_function->color}};">	
           {{$_prescription_line_mix->_ref_praticien->_view}}
@@ -152,47 +165,7 @@ Main.add( function(){
         <input type="hidden" name="del" value="0" />
         <table class="form">
           <tr>
-            <td style="border:none;" rowspan="2">
-              {{if $_prescription_line_mix->_can_delete_prescription_line_mix}}
-	              <button type="button" class="trash notext" onclick="$V(this.form.del,'1'); return onSubmitFormAjax(this.form, { 
-	                onComplete: function(){
-             		    {{if @$mode_substitution}}
-					  		      Prescription.viewSubstitutionLines('{{$_prescription_line_mix->substitute_for_id}}','{{$_prescription_line_mix->substitute_for_class}}');
-					  		    {{else}}
-					  			    Prescription.reloadPrescPerf('{{$_prescription_line_mix->prescription_id}}','{{$_prescription_line_mix->_protocole}}','{{$mode_pharma}}');
-                    {{/if}}
-			            }        
-	              } );"></button>
-              {{/if}}
-            </td>
-            <td style="border: none;">
-			        {{mb_label object=$_prescription_line_mix field="type"}}:
-							{{if $_prescription_line_mix->_perm_edit}}
-							  {{assign var=types value="CPrescriptionLineMix"|static:"type_by_line"}}
-								{{assign var=types_for_line value=$types.$type_line}}
-								<select name="type" 
-								        onchange="{{if $_prescription_line_mix->type_line == "perfusion"}}
-												          if(this.value == 'PCA'){ 
-												            $('bolus-{{$prescription_line_mix_id}}').show(); 
-																		changeModeBolus(this.form);
-																	} else { 
-																	  resetBolus(this.form); 
-																		$('bolus-{{$prescription_line_mix_id}}').hide(); 
-																	}; 
-																	{{/if}}
-																	return onSubmitFormAjax(this.form);">
-																		
-																		
-								  {{foreach from=$types_for_line item=_type}}
-								    <option value="{{$_type}}" {{if $_type == $_prescription_line_mix->type}}selected="selected"{{/if}}>{{tr}}CPrescriptionLineMix.type.{{$_type}}{{/tr}}</option>	
-									{{/foreach}}
-								</select>
-							{{else}}
-							  {{mb_value object=$_prescription_line_mix field="type"}}
-              {{/if}}
-						
-						</td>
-						
+            <!-- Début -->
 						{{if $_prescription_line_mix->_protocole}}
               <td style="border:none;">
               <script type="text/javascript">
@@ -219,16 +192,165 @@ Main.add( function(){
                 {{/if}} 
               </td>       
             {{/if}} 
-						
-						<td style="border:none;">
+      
+			      <!-- Durée -->
+			      <td style="border:none;">
              {{mb_label object=$_prescription_line_mix field=duree}}
              {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
                {{mb_field object=$_prescription_line_mix field=duree size=1 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
              {{else}}
                {{mb_value object=$_prescription_line_mix field=duree}}
              {{/if}}
-						 {{mb_value object=$_prescription_line_mix field=unite_duree}}
+             {{mb_value object=$_prescription_line_mix field=unite_duree}}
             </td>
+            
+						<!-- Continuite -->
+						<td style="border:none;">
+              {{if $_prescription_line_mix->type_line != "aerosol"}}
+              <label>
+                <input type="radio" name="continuite_perf" 
+                                    {{if !$_prescription_line_mix->_perm_edit}}disabled="disabled"{{/if}} 
+                                    {{if $_prescription_line_mix->_continuite != 'discontinue'}}checked="checked"{{/if}} 
+                                    onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');
+                                    {{if $_prescription_line_mix->type_line == 'oxygene'}}
+                                      this.form.nb_tous_les.value = ''; 
+                                      this.form.duree_passage.value = '';
+                                    {{/if}}" value="continue"/> 
+                Continue
+              </label>
+              <label>
+                <input type="radio" name="continuite_perf"
+                                    {{if !$_prescription_line_mix->_perm_edit}}disabled="disabled"{{/if}} 
+                                    {{if $_prescription_line_mix->_continuite == 'discontinue'}}checked="checked"{{/if}} 
+                                    onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');" value="discontinue"/>
+                Discontinue   
+              </label>
+              {{/if}}
+            </td>
+            <td style="border:none;" colspan="2">
+              
+              {{if $_prescription_line_mix->type_line == "perfusion"}}
+                <div style="display: none;" id="continue-{{$_prescription_line_mix->_id}}">
+                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
+                  Débit
+                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                    {{mb_field object=$_prescription_line_mix field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}}
+                  {{else}}
+                    {{mb_value object=$_prescription_line_mix field="vitesse"}}
+                  {{/if}}
+                  <!-- Affichage de l'unite de prise -->
+                  {{$types.$type_line}}
+                </div>
+  
+                <div style="display: none;" id="discontinue-{{$_prescription_line_mix->_id}}">
+                
+                
+                  {{if $_prescription_line_mix->type_line == "perfusion"}}
+                    {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                      A passer en
+                     {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}}
+                    {{elseif $_prescription_line_mix->duree_passage}}
+                      A passer en
+                      {{mb_value object=$_prescription_line_mix field=duree_passage}}
+                    {{/if}}
+                    <!-- duree de passage en minutes -->
+                    {{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
+                  {{/if}}
+                  
+                   toutes les 
+                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                    {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} heures
+                  {{else}}      
+                    {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
+                  {{/if}}
+                </div>
+              {{/if}}
+							
+							             {{if $_prescription_line_mix->type_line == "oxygene"}}
+                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
+                  Débit
+                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                    {{mb_field object=$_prescription_line_mix field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                  {{else}}
+                    {{mb_value object=$_prescription_line_mix field="vitesse"}}
+                  {{/if}}
+                  
+                  <!-- Affichage de l'unite de prise -->
+                  {{$types.$type_line}}
+              
+                  <span style="display: none;" id="continue-{{$_prescription_line_mix->_id}}"></span>
+                  
+                  <span style="display: none;" id="discontinue-{{$_prescription_line_mix->_id}}">
+                    {{if $_prescription_line_mix->type_line == "oxygene"}}
+                      {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
+                      
+                      {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                       pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                      {{elseif $_prescription_line_mix->duree_passage}}
+                       pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
+                      {{/if}}
+                      <!-- Duree de passage en heures -->
+                      {{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
+                      
+                    {{/if}}
+                     toutes les 
+                    {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                      {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
+                    {{else}}      
+                      {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
+                    {{/if}}
+                  </span>
+              {{/if}}
+              
+              {{if $_prescription_line_mix->type_line == "aerosol"}}
+                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
+                  {{elseif $_prescription_line_mix->duree_passage}}
+                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
+                  {{/if}}
+                  <!-- duree de passage en minutes -->
+                  {{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
+                  
+                 toutes les 
+                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
+                  {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
+                {{else}}      
+                  {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
+                {{/if}}
+              {{/if}}
+
+							
+							
+							
+	         </tr>
+					 <tr>					
+			      <td style="border: none;">
+			        {{mb_label object=$_prescription_line_mix field="type"}}:
+							{{if $_prescription_line_mix->_perm_edit}}
+							  {{assign var=types value="CPrescriptionLineMix"|static:"type_by_line"}}
+								{{assign var=types_for_line value=$types.$type_line}}
+								<select name="type" 
+								        onchange="{{if $_prescription_line_mix->type_line == "perfusion"}}
+												          if(this.value == 'PCA'){ 
+												            $('bolus-{{$prescription_line_mix_id}}').show(); 
+																		changeModeBolus(this.form);
+																	} else { 
+																	  resetBolus(this.form); 
+																		$('bolus-{{$prescription_line_mix_id}}').hide(); 
+																	}; 
+																	{{/if}}
+																	return onSubmitFormAjax(this.form);">
+																		
+								  {{foreach from=$types_for_line item=_type}}
+								    <option value="{{$_type}}" {{if $_type == $_prescription_line_mix->type}}selected="selected"{{/if}}>{{tr}}CPrescriptionLineMix.type.{{$_type}}{{/tr}}</option>	
+									{{/foreach}}
+								</select>
+							{{else}}
+							  {{mb_value object=$_prescription_line_mix field="type"}}
+              {{/if}}
+						
+						</td>
+						
 						
 						<td style="border:none;">
 						  {{if $_prescription_line_mix->type_line == "perfusion"}}
@@ -305,137 +427,18 @@ Main.add( function(){
 					        {{/if}}
 				      {{/if}}
 				    </td>   
-					</tr>
-					<tr>
-					  <td style="border: none;"></td>
-            <td style="border:none;">
-					    {{if $_prescription_line_mix->type_line != "aerosol"}}
-							<label>
-					      <input type="radio" name="continuite_perf" 
-								                    {{if !$_prescription_line_mix->_perm_edit}}disabled="disabled"{{/if}} 
-								                    {{if $_prescription_line_mix->_continuite != 'discontinue'}}checked="checked"{{/if}} 
-																		onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');
-																		{{if $_prescription_line_mix->type_line == 'oxygene'}}
-																		  this.form.nb_tous_les.value = ''; 
-																			this.form.duree_passage.value = '';
-																		{{/if}}" value="continue"/> 
-								Continue
-							</label>
-							<label>
-								<input type="radio" name="continuite_perf"
-                                    {{if !$_prescription_line_mix->_perm_edit}}disabled="disabled"{{/if}} 
-								                    {{if $_prescription_line_mix->_continuite == 'discontinue'}}checked="checked"{{/if}} 
-																		onchange="toggleContinuiteLineMix(this, '{{$_prescription_line_mix->_id}}');" value="discontinue"/>
-								Discontinue		
-					    </label>
-							{{/if}}
-						</td>
-						<td style="border:none;" colspan="2">
-					    
-							{{if $_prescription_line_mix->type_line == "perfusion"}}
-								<div style="display: none;" id="continue-{{$_prescription_line_mix->_id}}">
-	                {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
-	                Débit
-	                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-	                  {{mb_field object=$_prescription_line_mix field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.nb_tous_les.value = ''; this.form.duree_passage.value = ''; return onSubmitFormAjax(this.form);"}}
-	                {{else}}
-	                  {{mb_value object=$_prescription_line_mix field="vitesse"}}
-	                {{/if}}
-	                <!-- Affichage de l'unite de prise -->
-	                {{$types.$type_line}}
-	              </div>
-	
-	              <div style="display: none;" id="discontinue-{{$_prescription_line_mix->_id}}">
-								
-								
-	                {{if $_prescription_line_mix->type_line == "perfusion"}}
-	                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-	                    A passer en
-	                   {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}}
-	                  {{elseif $_prescription_line_mix->duree_passage}}
-	                    A passer en
-	                    {{mb_value object=$_prescription_line_mix field=duree_passage}}
-	                  {{/if}}
-										<!-- duree de passage en minutes -->
-										{{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
-	                {{/if}}
-	                
-									 toutes les 
-	                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-	                  {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="this.form.vitesse.value = ''; return onSubmitFormAjax(this.form);"}} heures
-	                {{else}}      
-	                  {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
-	                {{/if}}
-	              </div>
-							{{/if}}
-							
-							{{if $_prescription_line_mix->type_line == "oxygene"}}
-						      {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
-                  Débit
-                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-                    {{mb_field object=$_prescription_line_mix field="vitesse" size="3" increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-                  {{else}}
-                    {{mb_value object=$_prescription_line_mix field="vitesse"}}
-                  {{/if}}
-									
-                  <!-- Affichage de l'unite de prise -->
-                  {{$types.$type_line}}
-							
-		              <span style="display: none;" id="continue-{{$_prescription_line_mix->_id}}"></span>
-		              
-		              <span style="display: none;" id="discontinue-{{$_prescription_line_mix->_id}}">
-		                {{if $_prescription_line_mix->type_line == "oxygene"}}
-		                  {{assign var=types value="CPrescriptionLineMix"|static:"unite_by_line"}}
-		                  
-		                  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-		                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-		                  {{elseif $_prescription_line_mix->duree_passage}}
-		                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
-		                  {{/if}}
-											<!-- Duree de passage en heures -->
-											{{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
-											
-		                {{/if}}
-		                 toutes les 
-		                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-		                  {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
-		                {{else}}      
-		                  {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
-		                {{/if}}
-		              </span>
-              {{/if}}
-							
-							{{if $_prescription_line_mix->type_line == "aerosol"}}
-							  {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-                   pendant {{mb_field object=$_prescription_line_mix size=2 field=duree_passage increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}}
-                  {{elseif $_prescription_line_mix->duree_passage}}
-                   pendant {{mb_value object=$_prescription_line_mix field=duree_passage}}
-                  {{/if}}
-									<!-- duree de passage en minutes -->
-                  {{mb_value object=$_prescription_line_mix field=unite_duree_passage}}
-									
-                 toutes les 
-                {{if $_prescription_line_mix->_can_modify_prescription_line_mix}}
-                  {{mb_field object=$_prescription_line_mix field=nb_tous_les size=2 increment=1 min=0 form="editPerf-$prescription_line_mix_id" onchange="return onSubmitFormAjax(this.form);"}} heures
-                {{else}}      
-                  {{mb_value object=$_prescription_line_mix field="nb_tous_les"}} heures
-                {{/if}}
-							{{/if}}
-
-            </td>
           </tr>
 				  <tr id="bolus-{{$_prescription_line_mix->_id}}" style="display: none;">
-				    <td style="border: none;" />
 				    <td style="border: none;">
-				    	{{mb_label object=$_prescription_line_mix field="mode_bolus"}}:
+				    	{{mb_label object=$_prescription_line_mix field="mode_bolus"}}
 							{{mb_field object=$_prescription_line_mix field="mode_bolus" onchange="changeModeBolus(this.form); return onSubmitFormAjax(this.form);"}}
 				    </td>
 				    <td style="border: none;">
-				    	{{mb_label object=$_prescription_line_mix field="dose_bolus"}}:
+				    	{{mb_label object=$_prescription_line_mix field="dose_bolus"}}
 							{{mb_field object=$_prescription_line_mix field="dose_bolus" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} mg
 				    </td>
 				    <td style="border: none;">
-				    	{{mb_label object=$_prescription_line_mix field="periode_interdite"}}:
+				    	{{mb_label object=$_prescription_line_mix field="periode_interdite"}}
 							{{mb_field object=$_prescription_line_mix field="periode_interdite" onchange="return onSubmitFormAjax(this.form);" size="2" increment=1 min=0 form="editPerf-$prescription_line_mix_id"}} min
 						</td>
 				  </tr>
