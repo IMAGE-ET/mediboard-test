@@ -494,6 +494,8 @@ $dPconfig["mediusers"] = array (
 
 // Inclusion des fichiers de config de chaque module
 $config_files = glob("./modules/*/config.php");
+
+global $dPconfig; // Needed, or the config won't be well loaded
 foreach ($config_files as $file) {
   require_once($file);
 }
