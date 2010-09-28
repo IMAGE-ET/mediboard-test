@@ -303,8 +303,13 @@ class CSetupdPhospi extends CSetup {
               `font` TEXT DEFAULT NULL
             ) TYPE=MYISAM;";
     $this->addQuery($query);
+
+    $this->makeRevision("0.37");
+    $query = "ALTER TABLE `service` 
+      CHANGE `responsable_id` `responsable_id` INT (11) UNSIGNED";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.37";
+    $this->mod_version = "0.38";
   }
 }
 ?>
