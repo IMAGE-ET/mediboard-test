@@ -1,16 +1,16 @@
 <script type="text/javascript">
 
-function signeActes(oForm) {
+function signeActes(oForm, subject_id, praticien_id) {
 	{{if $dialog}}
-  return onSubmitFormAjax(oForm, {onComplete: reloadAll} );
+  return onSubmitFormAjax(oForm, {onComplete: function() { reloadAll(subject_id, praticien_id); } } );
   {{else}}
   oForm.submit();
   {{/if}}
 }
 
-function reloadAll() {
+function reloadAll(subject_id, praticien_id) {
   if(window.opener) {
-    window.opener.location.reload();
+    window.opener.ActesCCAM.refreshList(subject_id, praticien_id);
   }
   window.location.reload();
   
@@ -105,7 +105,7 @@ function reloadAll() {
 				        </td>
 				        <td colspan="2" style="text-align: right">
 				        {{$_praticien->_view}}
-				          <form name="signature_acte-{{$_praticien->_id}}-{{$_operation->_id}}" action="?" method="post" onsubmit="return signeActes(this);">
+				          <form name="signature_acte-{{$_praticien->_id}}-{{$_operation->_id}}" action="?" method="post" onsubmit="return signeActes(this, '{{$_operation->_id}}', '{{$_praticien->_id}}');">
 							      <input type="hidden" name="dosql" value="do_signature_actes_aed" />
 							      <input type="hidden" name="m" value="dPsalleOp" />
 							      <input type="hidden" name="del" value="0" />

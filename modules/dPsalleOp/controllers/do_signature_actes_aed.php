@@ -30,7 +30,7 @@ $object_class = CValue::post("object_class");
 $password = CValue::post("password");
 
 if($dialog){
-  $redirectUrl = "m=dPsalleOp&a=vw_signature_actes&object_id=$object_id&object_class=$object_class&dialog=1";
+  $redirectUrl = null;
 } else {
   $redirectUrl = "m=dPsalleOp&tab=vw_signature_actes&date=$date";
 }
@@ -45,13 +45,21 @@ $user->user_username = $praticien->_user_username;
 $user->_user_password = $password;
 
 if(!$user->_user_password) {
-  viewMsg("Veuillez saisir votre mot de passe", "Signature des actes", $redirectUrl);
+  CAppUI::setMsg("Veuillez saisir votre mot de passe", UI_MSG_ERROR );
+  if($redirectUrl) {
+    CAppUI::redirect($redirectUrl);
+  }
+  CApp::rip();
 }
 
 $user->loadMatchingObject();
 
 if(!$user->_id){
-  viewMsg("Mot de passe incorrect", "Signature des actes", $redirectUrl);
+  CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR );
+  if($redirectUrl) {
+    CAppUI::redirect($redirectUrl);
+  }
+  CApp::rip();
 }
 
 // Chargement des actes CCAM à modifier
@@ -66,9 +74,15 @@ $actes_ccam = $acte_ccam->loadMatchingList();
 foreach($actes_ccam as $key => $_acte_ccam){
   $_acte_ccam->signe = 1;
   $msg = $_acte_ccam->store();
-  viewMsg($msg, "CActeCCAM-title-modify", $redirectUrl);
+  if($msg) {
+  	CAppUI::setMsg($msg, UI_MSG_ERROR );
+  }
 }
 
-CAppUI::redirect($redirectUrl);
+if($redirectUrl) {
+  CAppUI::redirect($redirectUrl);
+}
+
+CApp::rip();
 
 ?>
