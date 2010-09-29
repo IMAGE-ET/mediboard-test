@@ -7,19 +7,6 @@
 * @author Alexis Granger
 */
 
-
-function viewMsg($msg, $action, $redirect = "", $txt = ""){
-  global $AppUI, $m, $tab;
-  $action = CAppUI::tr($action);
-  if($msg){
-    CAppUI::setMsg("$action: $msg", UI_MSG_ERROR );
-    CAppUI::redirect($redirect);
-    return;
-  }
-  CAppUI::setMsg("$action $txt", UI_MSG_OK );
-}
-
-
 global $AppUI, $m;
 
 $date = CValue::post("date");
