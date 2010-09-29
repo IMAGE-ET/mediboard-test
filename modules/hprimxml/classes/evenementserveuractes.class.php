@@ -45,6 +45,9 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     // Ajout des actes CCAM
     $actesCCAM = $this->addElement($evenementServeurActe, "actesCCAM");
     foreach ($mbOp->_ref_actes_ccam as $mbActe) {
+      if ((CAppUI::conf("dPpmsi transmission_actes") == "signature") && !$mbActe->signe) {
+        continue;
+      }
       $this->addActeCCAM($actesCCAM, $mbActe, $mbOp);
     }
 

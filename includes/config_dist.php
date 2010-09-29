@@ -470,6 +470,7 @@ $dPconfig["hprim21"] = array (
 $dPconfig["dPpmsi"] = array(
   "systeme_facturation" => "",
 	"server"              => "0",
+  "transmission_actes"  => "pmsi",
 ); 
 
 $dPconfig["bloodSalvage"] = array (

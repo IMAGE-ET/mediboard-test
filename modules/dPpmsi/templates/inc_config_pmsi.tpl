@@ -16,6 +16,8 @@
 		
 		{{mb_include module=system template=inc_config_bool var=server}}
 		
+		{{mb_include module=system template=inc_config_enum var=transmission_actes values=pmsi|signature}}
+		
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
