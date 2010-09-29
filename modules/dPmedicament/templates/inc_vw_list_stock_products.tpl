@@ -1,10 +1,10 @@
-{{mb_include module=system template=inc_pagination total=$total current=$start change_page='changePageProducts' step=20}}
+{{mb_include module=system template=inc_pagination total=$total current=$start change_page='changePageProducts' step=25}}
 
 <table class="main tbl">
   <tr>
     <th style="width: 0.1%;"></th>
+    <th style="width: 0.1%;">{{mb_title class=CProduct field=code}}</th>
     <th>{{mb_title class=CProduct field=name}}</th>
-    <th>Dans le LT</th>
   </tr>
   {{foreach from=$list_products item=_product}}
     <tr>
@@ -12,24 +12,28 @@
         <form action="?m=dPmedicament" method="post" name="addProduit-{{$_product->_id}}" onsubmit="return onSubmitFormAjax(this, {onComplete: filterProducts.curry(this)})">
           <input type="hidden" name="m" value="dPmedicament" />
           <input type="hidden" name="dosql" value="do_produit_livret_aed" />
-          <input type="hidden" name="del" value="0" />
           <input type="hidden" name="group_id" value="{{$g}}"/>
           <input type="hidden" name="code_cip" value="{{$_product->code}}"/>
+          <input type="hidden" name="del" value="0"/>
           
           {{if $_product->_is_valid}}
             {{if $_product->_in_livret}}
-              <button type="button" class="cancel notext" 
-                      onclick="confirmDeletion(this.form,{ajax:true,typeName:'le produit du livret thérapeutique',objName:'{{$_product->_view|smarty:nodefaults|JSAttribute}}'})">
-                {{tr}}Delete{{/tr}}
-              </button>
+              <label title="Supprimer le produit du LT">
+                <input type="checkbox" checked="checked" 
+                       onclick="confirmDeletion(this.form,{ajax:true,typeName:'le produit du livret thérapeutique',objName:'{{$_product->_view|smarty:nodefaults|JSAttribute}}'})" />
+              </label>
             {{else}}
-              <button type="submit" class="add notext">{{tr}}Add{{/tr}}</button>
+              <label title="{{tr}}Add{{/tr}}">
+                <input type="checkbox" onclick="this.form.onsubmit()" />
+              </label>
             {{/if}}
+          {{else}}
+            <img src="./images/icons/warning.png" title="Ce produit n'a pas un code CIP valide ({{$_product->code}})"/>
           {{/if}}
         </form>
       </td>
+      <td>{{mb_value object=$_product field=code}}</td>
       <td>{{mb_value object=$_product field=name}}</td>
-      <td>{{tr}}bool.{{$_product->_in_livret}}{{/tr}}</td>
     </tr>
   {{foreachelse}}
     <tr>

@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $g;
+global $g;
 
 $livret = new CBcbProduitLivretTherapeutique();
 
@@ -27,9 +27,9 @@ if($del == 1){
   // Suppression du produit
   if($livret->distObj->Delete($g, $code_cip) < 0){
     // Affichage de l'erreur
-    CAppUI::setMsg("Produit supprimé".$livret->distObj->GetLastError(), UI_MSG_ERROR );
+    CAppUI::setMsg("Produit supprimé du livret thérapeutique".$livret->distObj->GetLastError(), UI_MSG_ERROR );
   } else {
-    CAppUI::setMsg("Produit supprimé", UI_MSG_OK );
+    CAppUI::setMsg("Produit supprimé du livret thérapeutique", UI_MSG_OK );
   }  
 } else {
   $produitLivret = new CBcbProduitLivretTherapeutique();

@@ -8,6 +8,8 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkRead();
+
 $keywords     = CValue::getOrSession("keywords");
 $letter       = CValue::getOrSession("letter", "");
 $start = intval(CValue::getOrSession("start", 0));
@@ -18,11 +20,12 @@ if (!$keywords) {
 
 $where = array(
   "code" => "IS NOT NULL",
-  "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'")
+  "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'"),
+  "category_id" => "= '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'",
 );
 
 $product = new CProduct;
-$list_products = $product->seek($keywords, $where, "$start, 20", true);
+$list_products = $product->seek($keywords, $where, "$start, 25", true);
 
 foreach($list_products as $_product) {
   $_bcb_product = CBcbProduit::get($_product->code, false);

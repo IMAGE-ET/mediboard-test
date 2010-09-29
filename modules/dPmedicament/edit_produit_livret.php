@@ -8,7 +8,7 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $g;
+CCanDo::checkEdit();
 
 $lettre = CValue::get("lettre");
 $codeATC = CValue::get("codeATC");

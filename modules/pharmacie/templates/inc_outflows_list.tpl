@@ -78,7 +78,7 @@
       </tbody>
     {{foreachelse}}
       <tr>
-        <td colspan="6">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
+        <td colspan="9">{{tr}}CProductDeliveryTrace.none{{/tr}}</td>
       </tr>
     {{/foreach}}
   </table>
