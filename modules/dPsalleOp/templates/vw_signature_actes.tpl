@@ -1,3 +1,20 @@
+<script type="text/javascript">
+
+function signeActes(oForm) {
+  return onSubmitFormAjax(oForm, {onComplete: reloadAll} );
+}
+
+function reloadAll() {
+  return true;
+  if(window.opener) {
+    window.opener.location.reload();
+  }
+  window.location.reload();
+  
+}
+
+</script>
+
 <table class="main">
   {{if !$dialog}}
   <tr>
@@ -85,7 +102,7 @@
 				        </td>
 				        <td colspan="2" style="text-align: right">
 				        {{$_praticien->_view}}
-				          <form name="signature_acte-{{$_praticien->_id}}-{{$_operation->_id}}" action="?" method="post">
+				          <form name="signature_acte-{{$_praticien->_id}}-{{$_operation->_id}}" action="?" method="post" onsubmit="return signeActes(this);">
 							      <input type="hidden" name="dosql" value="do_signature_actes_aed" />
 							      <input type="hidden" name="m" value="dPsalleOp" />
 							      <input type="hidden" name="del" value="0" />
@@ -95,7 +112,7 @@
 							      <input type="hidden" name="object_class" value="{{$_operation->_class_name}}" />
 							      <input type="hidden" name="praticien_id" value="{{$_praticien->_id}}" />
 							      <input type="password"  class="notNull str" size="10" maxlength="32" name="password" />
-						        <button type="submit" class="submit">Signer</button>
+						        <button type="button" class="submit" onclick="this.form.onsubmit();">Signer</button>
 							    </form>
 				        </td>
 				      </tr>

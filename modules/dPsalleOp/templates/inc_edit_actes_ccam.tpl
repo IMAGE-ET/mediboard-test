@@ -53,6 +53,9 @@ function setToNow(element) {
         <input type="hidden" name="dosql" value="do_acteccam_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="acte_id" value="{{$acte->_id}}" />
+        {{if $acte->signe && !$can->admin}}
+        <input type="hidden" name="_locked" value="1" />
+        {{/if}}
         <!-- Variable _calcul_montant_base permettant de la lancer la sauvegarde du montant de base dans le store de l'acte ccam -->
         <input type="hidden" name="_calcul_montant_base" value="1" />
         <input type="hidden" name="object_id" class="{{$acte->_props.object_id}}" value="{{$subject->_id}}" />
@@ -92,9 +95,16 @@ function setToNow(element) {
             
                 {{else}}
                 
+                {{if $acte->signe && !$can->admin}}
+                  <div class="message">Acte signé</div>
+                {{else}}
+                {{if $acte->signe}}
+                  <div class="message">Acte signé</div>
+                {{/if}}
                 <button class="remove" type="button" onclick="Event.stop(event); confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, { onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}}) } )">
                   {{tr}}Delete{{/tr}} cet acte
                 </button>
+                {{/if}}
                 {{/if}}
               </div>
               Activité {{$_activite->numero}} ({{$_activite->type}}) &mdash; 
