@@ -1,4 +1,4 @@
-<table style="width: 100%; font-size: small">
+<table class="tbl" style="width: 100%; font-size: small">
   <tr><th colspan="11" class="title">Constantes</th></tr>
   <tr>
     <th style="width: 9%;">{{tr}}CConstantesMedicales-datetime-court{{/tr}}</th>
