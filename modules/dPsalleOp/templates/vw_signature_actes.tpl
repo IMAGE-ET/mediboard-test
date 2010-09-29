@@ -1,7 +1,11 @@
 <script type="text/javascript">
 
 function signeActes(oForm) {
+	{{if $dialog}}
   return onSubmitFormAjax(oForm, {onComplete: reloadAll} );
+  {{else}}
+  oForm.submit();
+  {{/if}}
 }
 
 function reloadAll() {
