@@ -9,7 +9,6 @@ function signeActes(oForm) {
 }
 
 function reloadAll() {
-  return true;
   if(window.opener) {
     window.opener.location.reload();
   }
