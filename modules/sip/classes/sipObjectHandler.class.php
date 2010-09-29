@@ -56,11 +56,6 @@ class CSipObjectHandler extends CMbObjectHandler {
         $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         foreach ($destinataires as $_destinataire) {
-          $mbObject->_id400 = null;
-          $id400Patient = new CIdSante400();
-          $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
-          $mbObject->_id400 = $id400Patient->id400;
-
           $echange_hprim = new CEchangeHprim();
           if (isset($mbObject->_hprim_initiator_id)) {
             $echange_hprim->load($mbObject->_hprim_initiator_id);
@@ -68,6 +63,15 @@ class CSipObjectHandler extends CMbObjectHandler {
 
           $initiateur = ($_destinataire->_id == $echange_hprim->emetteur_id) ? $echange_hprim->_id : null;
           
+          if (!$initiateur && !CAppUI::conf('sip notify_all_destinataires')) {
+            continue;
+          }
+          
+          $mbObject->_id400 = null;
+          $id400Patient = new CIdSante400();
+          $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_patient);
+          $mbObject->_id400 = $id400Patient->id400;
+ 
           $domEvenementEnregistrementPatient = new CHPrimXMLEnregistrementPatient();
           $domEvenementEnregistrementPatient->_ref_destinataire = $_destinataire;
           $domEvenementEnregistrementPatient->generateTypeEvenement($mbObject, true, $initiateur);
@@ -132,18 +136,22 @@ class CSipObjectHandler extends CMbObjectHandler {
         $dest_hprim->message = "patients";
         $destinataires = $dest_hprim->loadMatchingList();
         foreach ($destinataires as $_destinataire) {
+        $echange_hprim = new CEchangeHprim();
+          if (isset($mbObject->_hprim_initiator_id)) {
+            $echange_hprim->load($mbObject->_hprim_initiator_id);
+          }
+
+          $initiateur = ($_destinataire->_id == $echange_hprim->emetteur_id) ? $echange_hprim->_id : null;
+          
+          if (!$initiateur && !CAppUI::conf('sip notify_all_destinataires')) {
+            continue;
+          }
+          
           $mbObject->_id400 = null;
           $id400Patient = new CIdSante400();
           $id400Patient->loadLatestFor($mbObject, $_destinataire->_tag_sejour);
           $mbObject->_id400 = $id400Patient->id400;
 
-          $echange_hprim = new CEchangeHprim();
-          if (isset($mbObject->_hprim_initiator_id)) {
-            $echange_hprim->load($mbObject->_hprim_initiator_id);
-          }
-  
-          $initiateur = ($_destinataire->_id == $echange_hprim->emetteur_id) ? $echange_hprim->_id : null;
-          
           $domEvenementVenuePatient = new CHPrimXMLVenuePatient();
           $domEvenementVenuePatient->_ref_destinataire = $_destinataire;
           $domEvenementVenuePatient->generateTypeEvenement($mbObject, true, $initiateur);

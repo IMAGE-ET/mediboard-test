@@ -18,6 +18,7 @@ $dPconfig["sip"] = array (
   "repair_date_max"   => "",
   "tag_ipp"           => "",
   "tag_dossier"       => "",
+  "notify_all_destinataires" => "1",
 );
 
 ?>

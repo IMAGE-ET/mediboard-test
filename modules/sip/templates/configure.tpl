@@ -15,7 +15,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 <ul id="tabs-configure" class="control_tabs">
   <li><a href="#SIP">{{tr}}SIP{{/tr}}</a></li>
   <li><a href="#Export">{{tr}}Export{{/tr}}</a></li>
-	<li><a href="#Repair">{{tr}}Repair{{/tr}}</a></li>
+	<li><a href="#Repair" style="display: none;">{{tr}}Repair{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />

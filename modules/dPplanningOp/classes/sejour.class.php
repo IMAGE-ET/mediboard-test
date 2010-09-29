@@ -1163,6 +1163,10 @@ class CSejour extends CCodable {
       $group_id = $idex->id400;
     }
     
+    if (CAppUI::conf('sip server')) {
+      $tag_dossier = CAppUI::conf('sip tag_dossier');
+    }
+    
     return str_replace('$g', $group_id, $tag_dossier);
   }
   

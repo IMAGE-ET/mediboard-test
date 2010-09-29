@@ -38,6 +38,8 @@ ElementChecker.check.dontMatch = function(){
     {{if $dPconfig.sip.server}}
       {{mb_include module=system template=inc_config_str var=tag_ipp cssClass="str dontMatch"}}
       {{mb_include module=system template=inc_config_str var=tag_dossier cssClass="str dontMatch"}}
+      
+      {{mb_include module=system template=inc_config_bool var=notify_all_destinataires"}}
     {{/if}}
     	    
     <tr>
