@@ -10,8 +10,6 @@
 
 CCanDo::checkRead();
 
-global $g;
-
 // Chargement de la liste des praticiens
 $mediuser = new CMediusers();
 $praticiens = $mediuser->loadPraticiens();
@@ -80,6 +78,10 @@ if($service_id){
               (sejour.sortie_prevue BETWEEN '$min' AND '$max') OR
               (sejour.entree_prevue <= '$min' AND sejour.sortie_prevue >= '$max')";
 }
+
+// filtre sur l'etablissement
+$group_id = CGroups::loadCurrent()->_id;
+$where["sejour.group_id"] = " = '$group_id'";
 
 $prescriptions = new CPrescription();
 $prescriptions = $prescriptions->loadList($where, null, null, "prescription_id", $ljoin);
