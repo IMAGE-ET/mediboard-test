@@ -95,6 +95,15 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object_class ==
   foreach ($destinataires as $_destinataire) {
     $evenementActivitePMSI->_ref_destinataire = $_destinataire;
     $msgEvtActivitePMSI = $evenementActivitePMSI->generateTypeEvenement($mbObject);
+    
+    // Flag les actes CCAM en envoyés
+    foreach ($actes_ccam as $key => $_acte_ccam){
+      $_acte_ccam->sent = 1;
+      $msg = $_acte_ccam->store();
+      if ($msg) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR );
+      }
+    }
 
     $echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;
     if ($doc_valid = $echange_hprim->message_valide) {

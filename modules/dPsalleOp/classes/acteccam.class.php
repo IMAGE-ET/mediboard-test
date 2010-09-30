@@ -37,6 +37,7 @@ class CActeCCAM extends CActe {
   var $regle               = null;
   var $regle_dh            = null;
   var $signe               = null;
+  var $sent                = null;
   
   // Form fields
   var $_modificateurs     = array();
@@ -78,6 +79,7 @@ class CActeCCAM extends CActe {
     $specs["regle"]               = "bool default|0";
     $specs["regle_dh"]            = "bool default|0";
     $specs["signe"]               = "bool default|0";
+    $specs["sent"]                = "bool default|0";
 
     $specs["_rembex"]             = "bool";
     

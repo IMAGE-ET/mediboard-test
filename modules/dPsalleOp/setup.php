@@ -465,8 +465,14 @@ class CSetupdPsalleOp extends CSetup {
         $this->addQuery($query);
       }
     }
-		
-    $this->mod_version = "0.35";
+    
+    $this->makeRevision("0.35");
+    
+    $sql = "ALTER TABLE `acte_ccam` 
+              ADD `sent` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.36";
   }
 }
 ?>
