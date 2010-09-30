@@ -29,6 +29,12 @@ $do->redirectDelete = "m=$m&new=1";
 if (isset($_POST["texte_libre"])) {
   $compte_rendu = new CCompteRendu();
 	CMbArray::removeValue('', $_POST["texte_libre"]);
+	
+	// Remplacement des \n par des <br>
+	foreach($_POST["texte_libre"] as $key=>$_texte_libre) {
+		$_POST["texte_libre"][$key] = nl2br($_texte_libre);
+	}
+	
   $_POST["_source"] = $compte_rendu->replaceFreeTextFields($_POST["_source"], $_POST["texte_libre"]);
   $_POST["texte_libre"] = null;
 }
