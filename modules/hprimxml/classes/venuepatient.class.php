@@ -246,7 +246,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
           
         $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
-        $echange_hprim->setObjectIdClass("CSejour", $data['idSourceVenue'] ? $data['idSourceVenue'] : $newVenue->_id);
+        $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
         $echange_hprim->store();
         
         return $messageAcquittement;
@@ -341,7 +341,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
               $echange_hprim->_acquittement = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->date_echange = mbDateTime();
-              $echange_hprim->setObjectIdClass("CSejour", $data['idSourceSejour'] ? $data['idSourceSejour'] : $newVenue->_id);
+              $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
               $echange_hprim->store();
               
               return $messageAcquittement;
@@ -389,6 +389,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
             $echange_hprim->statut_acquittement = "erreur";
             $echange_hprim->_acquittement = $messageAcquittement;
             $echange_hprim->date_echange = mbDateTime();
+            $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
             $echange_hprim->store();
     
             return $messageAcquittement;
@@ -781,7 +782,7 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
     $echange_hprim->_acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
-    $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue'] ? $data['idCibleVenue'] : $newVenue->_id);
+    $echange_hprim->setObjectIdClass("CSejour", $newVenue->_id);
     $echange_hprim->store();
 
     return $messageAcquittement;

@@ -167,7 +167,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           
         $echange_hprim->_acquittement = $messageAcquittement;
         $echange_hprim->statut_acquittement = $avertissement ? "avertissement" : "OK";
-        $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id);
+        $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
         $echange_hprim->store();
         
         return $messageAcquittement;
@@ -256,7 +256,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               $echange_hprim->_acquittement = $messageAcquittement;
               $echange_hprim->statut_acquittement = "erreur";
               $echange_hprim->date_echange = mbDateTime();
-              $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id);
+              $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
               $echange_hprim->store();
               
               return $messageAcquittement;
@@ -296,7 +296,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $echange_hprim->statut_acquittement = "erreur";
             $echange_hprim->_acquittement = $messageAcquittement;
             $echange_hprim->date_echange = mbDateTime();
-            $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id);
+            $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
             $echange_hprim->store();
     
             return $messageAcquittement; 
@@ -553,9 +553,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     
     $echange_hprim->_acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
-    CAppUI::conf('sip server') ?
-      $echange_hprim->setObjectIdClass("CPatient", $data['idSourcePatient'] ? $data['idSourcePatient'] : $newPatient->_id) :
-      $echange_hprim->setObjectIdClass("CPatient", $data['idCiblePatient'] ? $data['idCiblePatient'] : $newPatient->_id);
+    $echange_hprim->setObjectIdClass("CPatient", $newPatient->_id);
     $echange_hprim->store();
     
     return $messageAcquittement;
