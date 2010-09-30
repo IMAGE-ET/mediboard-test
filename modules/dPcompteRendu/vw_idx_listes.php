@@ -21,6 +21,7 @@ $funcs = $func->loadSpecialites(PERM_EDIT);
 // Etablissements disponibles
 $etabs = array(CGroups::loadCurrent());
 
+$user = new CMediusers();
 $user->load(CValue::getOrSession("filter_user_id", $user->_id));
 
 $owners  = $user->getOwners();

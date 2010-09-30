@@ -121,7 +121,16 @@ Main.add(function () {
     
     <tr>
       <th>{{mb_label object=$liste field=group_id}}</th>
-      <td>{{mb_field object=$liste field=group_id}}</td>
+      <td>
+        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$etabs item=curr_etab}}
+            <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $liste->group_id}} selected="selected" {{/if}}>
+              {{$curr_etab->_view}}
+            </option>
+         {{/foreach}}
+        </select>
+      </td>
     </tr>
 
     <tr>
