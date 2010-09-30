@@ -93,13 +93,57 @@ class CDestinataireHprim extends CMbObject {
 		}
 	}
   
+  function getTagIPP($group_id = null) {
+    // Pas de tag IPP => pas d'affichage d'IPP
+    if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
+      return;
+    }
+
+    // Permettre des IPP en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    // Préférer un identifiant externe de l'établissement
+    if ($tag_group_idex = CAppUI::conf("dPpatients CPatient tag_ipp_group_idex")) {
+      $idex = new CIdSante400();
+      $idex->loadLatestFor($group, $tag_group_idex);
+      $group_id = $idex->id400;
+    }
+   
+    return str_replace('$g', $group_id, $tag_ipp);
+  }
+  
+  function getTagNumDossier($group_id = null) {
+    // Pas de tag Num dossier
+    if (null == $tag_dossier = CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
+      return;
+    }
+
+    // Permettre des IPP en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    // Préférer un identifiant externe de l'établissement
+    if ($tag_group_idex = CAppUI::conf("dPplanningOp CSejour tag_dossier_group_idex")) {
+      $idex = new CIdSante400();
+      $idex->loadLatestFor($group, $tag_group_idex);
+      $group_id = $idex->id400;
+    }
+
+    return str_replace('$g', $group_id, $tag_dossier);
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->_view = $this->libelle ? $this->libelle : $this->nom;
     
-    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);		
-    $this->_tag_sejour   = CSejour::getTagNumDossier($this->group_id);
+    $this->_tag_patient  = $this->getTagIPP($this->group_id);		
+    $this->_tag_sejour   = $this->getTagNumDossier($this->group_id);
 		
 		
 		$this->_tag_mediuser = str_replace('$g', $this->group_id, CAppUI::conf("mediusers tag_mediuser"));
