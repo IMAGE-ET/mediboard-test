@@ -72,7 +72,19 @@ foreach ($destinataires as $_destinataire) {
 	$echange_hprim = $evenementActivitePMSI->_ref_echange_hprim;
   if ($doc_valid = $echange_hprim->message_valide) {
     $mbObject->facture = true;
-    $mbObject->store();
+    $msg = $mbObject->store();
+    if ($msg) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR );
+    }
+      
+    // Flag les actes CCAM en envoyés
+    foreach ($mbObject->_ref_actes_ccam as $acte_ccam) {
+      $acte_ccam->sent = 1;
+      $msg = $acte_ccam->store();
+      if ($msg) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR );
+      }
+    }
   }
 		
 	$logs = array();
