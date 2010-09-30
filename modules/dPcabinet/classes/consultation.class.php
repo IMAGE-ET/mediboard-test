@@ -253,7 +253,7 @@ class CConsultation extends CCodable {
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;
-    if($this->patient_date_reglement == "0000-00-00") {
+    if($this->patient_date_reglement === "0000-00-00") {
       $this->patient_date_reglement = null;
     }
     $this->du_patient = round($this->du_patient, 2);
@@ -278,7 +278,7 @@ class CConsultation extends CCodable {
     }
     
     // Nom de tarif manuel
-    if ($this->tarif == "manuel") {
+    if ($this->tarif === "manuel") {
 			// Get all acts
       $this->loadRefsActes();
       foreach ($this->_ref_actes as $acte) {
@@ -810,6 +810,17 @@ class CConsultation extends CCodable {
     }
     
     $patient_modified = $this->fieldModified("patient_id");
+        
+    // Si le patient est modifié et qu'il y a plus d'une consult dans le sejour, on empeche le store
+    if ($this->sejour_id && $patient_modified) {
+      $this->loadRefSejour();
+      
+      $consultations = $this->_ref_sejour->countBackRefs("consultations");
+      if ($consultations > 1) {
+        mbTrace($consultations);
+        return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
+      }
+    }
     
     // Standard store
     if ($msg = parent::store()) {
@@ -828,8 +839,8 @@ class CConsultation extends CCodable {
     // Changement du patient pour la consult 
     if ($this->sejour_id && $patient_modified) {
       $this->loadRefSejour();
-           
-      // Si patient est différent alors le faire
+      
+      // Si patient est différent alors on met a jour le sejour
       if ($this->_ref_sejour->patient_id != $this->patient_id) {
         $this->_ref_sejour->patient_id = $this->patient_id;
         if ($msg = $this->_ref_sejour->store()) {
@@ -838,9 +849,9 @@ class CConsultation extends CCodable {
       }
     }
 
-    if ($this->_adjust_sejour && ($this->_ref_sejour->type == "consult") && $sejour->_id) {
-      $consultations = $this->_ref_sejour->loadBackRefs("consultations");
-      if (count($consultations) < 1) {
+    if ($this->_adjust_sejour && ($this->_ref_sejour->type === "consult") && $sejour->_id) {
+      $consultations = $this->_ref_sejour->countBackRefs("consultations");
+      if ($consultations < 1) {
         if ($msg = $this->_ref_sejour->delete()) {
           $this->_ref_sejour->annule = 1;
           if ($msg = $this->_ref_sejour->store()) {
@@ -1188,7 +1199,7 @@ class CConsultation extends CCodable {
     return parent::canDeleteEx();
   }
   
-  function adjustSejour($sejour, $dateTimePlage) {
+  private function adjustSejour(CSejour $sejour, $dateTimePlage) {
     if ($sejour->_id == $this->_ref_sejour->_id) {
       return;
     }
@@ -1197,14 +1208,14 @@ class CConsultation extends CCodable {
     if ($sejour->_id) {
       // Affecte à la consultation le nouveau séjour
       $this->sejour_id = $sejour->_id;
-      
       return;
     }
     
     // Journée qui n'a pas de séjour en cible
-    $consultations = $this->_ref_sejour->loadBackRefs("consultations");
+    $count_consultations = $this->_ref_sejour->countBackRefs("consultations");
+    
     // On déplace les dates du séjour
-    if (($consultations == 1) && ($this->_ref_sejour->type == "consult")) {
+    if (($count_consultations == 1) && ($this->_ref_sejour->type === "consult")) {
       $this->_ref_sejour->entree_prevue = $dateTimePlage;
       $this->_ref_sejour->sortie_prevue = mbDate($dateTimePlage)." 23:59:59";
       $this->_ref_sejour->_hour_entree_prevue = null;
