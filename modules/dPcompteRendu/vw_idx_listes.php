@@ -9,10 +9,16 @@
 
 CCanDo::checkRead();
 
+$filter_user_id = CValue::getOrSession("filter_user_id");
+$liste_id = CValue::getOrSession("liste_id");
+
+if (!$filter_user_id) {
+  $filter_user_id = CAppUI::$user->_id;
+}
+
 // Utilisateurs disponibles
 $user = CMediusers::getCurrent();
 $users = $user->loadUsers(PERM_EDIT);
-
 
 // Functions disponibles
 $func = new CFunctions();
@@ -22,7 +28,7 @@ $funcs = $func->loadSpecialites(PERM_EDIT);
 $etabs = array(CGroups::loadCurrent());
 
 $user = new CMediusers();
-$user->load(CValue::getOrSession("filter_user_id", $user->_id));
+$user->load($filter_user_id);
 
 $owners  = $user->getOwners();
 $modeles = CCompteRendu::loadAllModelesFor($user->_id);
@@ -38,7 +44,7 @@ foreach($listes as $_listes) {
 // Liste sélectionnée
 $liste = new CListeChoix();
 $liste->chir_id = $user->_id;
-$liste->load(CValue::getOrSession("liste_id")); 
+$liste->load($liste_id); 
 $liste->loadRefOwner();
 $liste->loadRefModele();
 $liste->loadRefsNotes();

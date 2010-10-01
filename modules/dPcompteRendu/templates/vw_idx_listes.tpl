@@ -11,7 +11,7 @@ Main.add(function () {
 <table class="main">
 
 <tr>
-  <td>
+  <td style="width: 40%;">
     
     <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new">{{tr}}CListeChoix-title-create{{/tr}}</a> 
 

@@ -147,10 +147,13 @@ class CSetup {
   }
   
   /**
-   * Del a preference query 
+   * Delete a user preference
    * @param string $name Name of the preference
    */
   function delPrefQuery($name) {
+    return; 
+    // FIXME: les fonctions addPrefQuery et delPrefQuery sont EXECUTEES
+    // a CHAQUE fois quon va sur la page de setup !
   	$pref = new CPreferences;
     $where = array();
     $where['key'] = " = '$name'";

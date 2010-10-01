@@ -18,7 +18,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
  */
 class CBirthDateSpec extends CMbFieldSpec {
   function getSpecType() {
-    return "birthdate";
+    return "birthDate";
   }
   
   function getDBSpec(){

@@ -47,7 +47,7 @@ class CListeChoix extends CMbObject {
     $props["group_id"]        = "ref class|CGroups";
     $props["nom"]             = "str notNull";
     $props["valeurs"]         = "text confidential";
-    $props["compte_rendu_id"] = "ref class|CCompteRendu";
+    $props["compte_rendu_id"] = "ref class|CCompteRendu cascade";
 		
     $props["_owner"]           = "enum list|prat|func|etab";
     return $props;
