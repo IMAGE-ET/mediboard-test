@@ -29,6 +29,7 @@ $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
 $where = array();
 $group = CGroups::loadCurrent();
+$where["group_id"] = " = '$group->_id'";
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 
@@ -43,9 +44,7 @@ $order_col = "_pec_transport";
 $order = "consultation.heure $order_way";
 
 $sejour = new CSejour;
-CSQLDataSource::$trace = true;
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
-CSQLDataSource::$trace = false;
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
