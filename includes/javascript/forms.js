@@ -329,16 +329,17 @@ function prepareForm(oForm) {
             
         function waitForApplet() {
           inactiveApplets = applets.length;
-          
           for(i = 0; i < applets.length; i++) {
-            if (Prototype.Browser.IE || applets[i].isActive && applets[i].isActive()) inactiveApplets--;
+            if (Prototype.Browser.IE || "isActive" in applets[i] && 
+						    Object.isFunction(applets[i].isActive) && 
+								applets[i].isActive()) inactiveApplets--;
             else break;
           }
           if (inactiveApplets == 0) {
             window._focusElement.focus();
             return;
           }
-          else if (tries--) setTimeout(waitForApplet, 100);
+          else if (tries--) setTimeout(waitForApplet, 200);
         }
 
         waitForApplet();

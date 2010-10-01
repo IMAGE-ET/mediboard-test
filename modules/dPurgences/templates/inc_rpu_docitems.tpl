@@ -8,18 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_include_script module=dPcabinet script=file}}
-
-{{if $app->user_prefs.directory_to_watch != ''}}
-  {{main}}
-    File.applet.extensions = "{{$dPconfig.dPfiles.extensions_yoplet}}";
-    File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
-  {{/main}}
-  <!-- Modale pour l'applet --> 
-  {{mb_include module=dPfiles template=yoplet_modal object=$sejour}}
-{{/if}}
-
-
 <table class="form">
 
 <tr>

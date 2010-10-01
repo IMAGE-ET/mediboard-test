@@ -19,8 +19,28 @@ function printConsult() {
   url.addParam("consult_id", "{{$consult->_id}}");
   url.popup(700, 550, "RPU");
 }
-
 </script>
+
+{{mb_include_script module="dPcabinet" script="file"}}
+
+{{if $app->user_prefs.directory_to_watch != ''}}
+	<script type="text/javascript">
+	  File.applet.extensions = '{{$dPconfig.dPfiles.extensions_yoplet}}';
+	  File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
+	</script>
+	
+	<!-- Modale pour l'applet --> 
+	{{mb_include module=dPfiles template=yoplet_modal object=$consult}}
+
+	<applet id="uploader" name="yopletuploader" width="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
+	        height="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
+	        code="org.yoplet.Yoplet.class" archive="includes/applets/yoplet2.jar">
+	  <param name="debug" value="true">
+	  <param name="action" value="">
+	  <param name="url" value="{{$base_url}}/modules/dPfiles/ajax_yoplet_upload.php">
+	  <param name="content" value="a">
+	</applet>
+{{/if}}
 
 <form class="watch" name="editFrmFinish" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 

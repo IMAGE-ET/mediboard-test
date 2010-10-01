@@ -138,7 +138,14 @@ if (!window.File.applet) {
 	    var nb_files = 0;
 
 	    result.files.each(function(res, index) {
-        var base_name = res.path.slice(Preferences.directory_to_watch.length+1)
+          var truncate = Preferences.directory_to_watch.length + 1;
+
+          // Si le répertoire à surveiller n'a que 2 caractères, il faut prendre en compte le slash
+          // exemple : C:\
+          if (Preferences.directory_to_watch.length == 3)
+            truncate --; 
+
+          var base_name = res.path.slice(truncate);
           // Ajout du fichier dans la liste et dans la modale
           list_files.insert(
 					  DOM.tr({},
@@ -237,21 +244,31 @@ if (!window.File.applet) {
 		}
 	};
   
+	function watching() {
+		if (File.applet.uploader) {
+		  if (File.applet.uploader.isActive() == false)
+  	  	setTimeout("watching()", 50);
+  	  else {
+				File.applet.uploader.setFileFilters(File.applet.extensions); // case sensitive !
+	    	File.applet.watchDirectory();
+	    }
+	  }
+		else {
+      File.applet.uploader = document.applets.yopletuploader;
+      File.applet.directory = File.appletDirectory;
+			watching();
+    }
+	} 
+	
   // La fonction appletCallBack ne peut pas être incluse dans l'objet File.applet
   function appletCallBack(args) {
     // Ajouter l'url du script comme paramètre
-    if (!File.applet.uploader) {
-      File.applet.uploader = document.applets.yopletuploader;
-      File.applet.directory = File.appletDirectory;
-			File.applet.uploader.setFileFilters(File.applet.extensions); // case sensitive !
-    }
-    
     if (args) {
       var operation = args.evalJSON();
       var opname = operation.name;
       switch (opname) {
-        case 'init':
-                File.applet.watchDirectory();
+				case 'init': 
+				        watching();
                 break;
         case 'listfiles':
                 File.applet.handleListFiles(operation.result);

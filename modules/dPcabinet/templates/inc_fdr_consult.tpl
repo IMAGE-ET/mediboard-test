@@ -1,17 +1,5 @@
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
-{{mb_include_script module="dPcabinet" script="file"}}
-
-{{if $app->user_prefs.directory_to_watch != ''}}
-  {{main}}
-    File.applet.extensions = '{{$dPconfig.dPfiles.extensions_yoplet}}';
-    File.appletDirectory = "{{$app->user_prefs.directory_to_watch|addslashes}}";
-  {{/main}}
-  <!-- Modale pour l'applet --> 
-  {{mb_include module=dPfiles template=yoplet_modal}}
-{{/if}}
-
-
 
 <table style="width: 100%">
   <!-- 1ere ligne -->

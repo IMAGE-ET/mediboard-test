@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
-{{mb_include_script module="dPfiles" script="files"}}
 
 <script type="text/javascript">
 
