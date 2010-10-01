@@ -9,16 +9,116 @@
 *}}
 
 
+<script type="text/javascript">
+
+submitAllAdmPerop = function(){
+  var cpt = 0;
+  $('list-perop').select("form.admPerop").each(function(e){
+	  onSubmitFormAjax(e, {
+		  onComplete: function(){
+        cpt++;
+				if (cpt == ($('list-perop').select("form.admPerop")).length){
+				  Prescription.updatePerop('{{$sejour_id}}');
+				}
+			}
+		});
+	});
+}
+
+updateFormLinePerop = function(prescription_id){
+  var oFormProt = getForm("applyProtocolePerop");
+  $V(oFormProt.prescription_id, prescription_id, $V(oFormProt.pack_protocole_id) ? true : false);
+}
+
+
+submitProtocolePerop = function(){
+  return onSubmitFormAjax(getForm("applyProtocolePerop"), { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });
+}
+
+
+Main.add( function(){
+  var oFormProtocole = getForm("applyProtocolePerop");
+  if(oFormProtocole){
+    var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+    var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_perop_auto_complete", {
+      dropdown: true,
+      adaptDropdown: true,
+      minChars: 1,
+      valueElement: oFormProtocole.elements.pack_protocole_id,
+      updateElement: function(selectedElement) {
+        var node = $(selectedElement).down('.view');
+        $V($("applyProtocolePerop_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+        if (autocompleter.options.afterUpdateElement)
+          autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+      },
+      callback: 
+        function(input, queryString){
+          return (queryString + "&prescription_id={{$prescription_id}}&praticien_id={{$app->user_id}}&perop=true"); 
+        }
+    } );  
+  }
+} );
+
+
+</script>
+
 {{assign var=images value="CPrescription"|static:"images"}}
 
-<table class="tbl">
+<table class="tbl" id="list-perop">
+	{{if $app->_ref_user->isPraticien()}}
+  <tr>
+    <td colspan="6">
+    	
+			{{if $prescription_id}}
+			<form name="signaturePrescription" method="post" action="">
+        <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="prescription_id" value="{{$prescription_id}}" />
+        <input type="hidden" name="chapitre" value="all" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+				<input type="hidden" name="only_perop" value="true" />
+        <button type="button" class="tick" onclick="return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });" 
+				        style="float: right;">Tout signer</button>
+      </form>
+			{{/if}}		
+								
+    	<!-- Formulaire d'ajout de prescription -->
+			<form action="?" method="post" name="addPrescriptionPerop" onsubmit="return checkForm(this);">
+			  <input type="hidden" name="m" value="dPprescription" />
+			  <input type="hidden" name="dosql" value="do_prescription_aed" />
+			  <input type="hidden" name="del" value="0" />
+			  <input type="hidden" name="prescription_id" value=""/>
+			  <input type="hidden" name="object_id" value="{{$sejour_id}}" />
+			  <input type="hidden" name="object_class" value="CSejour" />
+			  <input type="hidden" name="type" value="sejour" />
+			  <input type="hidden" name="callback" value="updateFormLinePerop" />
+			</form>
+
+    	<form name="applyProtocolePerop" method="post" action="?" onsubmit="if(!this.prescription_id.value){ return onSubmitFormAjax(getForm('addPrescriptionPerop'))} else { return submitProtocolePerop() };">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="prescription_id" value="{{$prescription_id}}" onchange="this.form.onsubmit();"/>
+        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+        <input type="hidden" name="pratSel_id" value="" />
+        <input type="hidden" name="pack_protocole_id" value="" />
+        <input type="text" name="libelle_protocole" value="&mdash; Choisir un protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 300px;"/>
+        <div style="display:none; width: 350px;" class="autocomplete" id="protocole_perop_auto_complete"></div>
+				<input type="hidden" name="operation_id" value="{{$operation_id}}" />
+        <button type="submit" class="submit">Appliquer le protocole</button>
+      </form>
+		
+    </td>
+	</tr>
+	{{/if}}
 	<tr>
 	  <th>Date</th>
 		<th>Heure<br />prévue</th>
 		<th>Soin</th>
 		<th>Quantité<br /> prévue</th>
 		<th>Unité</th>
-		<th>Administration</th>
+		<th>Administration <button type="button" class="tick notext" onclick="submitAllAdmPerop();"></button></th>
 	</tr>	
 	{{foreach from=$lines item=_planif}}
 	  <tr>
@@ -59,7 +159,7 @@
 					</script>
 					
 					<!-- Formulaire de creation d'une administration -->
-					<form name="addAdministrationPerop-{{$_planif->_id}}" action="?" method="post">
+					<form {{if $_planif->_ref_administrations|@count == 0}}class="admPerop"{{/if}} name="addAdministrationPerop-{{$_planif->_id}}" action="?" method="post">
 						<input type="hidden" name="m" value="dPprescription" />
 						<input type="hidden" name="dosql" value="do_administration_aed" />
 						<input type="hidden" name="del" value="0" />
@@ -93,8 +193,9 @@
 	            <input type="hidden" name="dosql" value="do_administration_aed" />
 	            <input type="hidden" name="del" value="0" />
 						  <input type="hidden" name="administration_id" value="{{$_adm->_id}}" />
-					    {{$_adm->quantite}} {{$unite}} {{mb_field object=$_adm field="dateTime" onchange="return onSubmitFormAjax(this.form);"}}
-							<button type="button" class="cancel notext" onclick="$V(this.form.del, 1); return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });"></button>
+					     <button type="button" class="cancel notext" onclick="$V(this.form.del, 1); return onSubmitFormAjax(this.form, { onComplete: Prescription.updatePerop.curry('{{$sejour_id}}') });"></button>
+            
+							{{mb_field object=$_adm field="dateTime" onchange="return onSubmitFormAjax(this.form);"}} <strong>{{$_adm->quantite}} {{$unite}}</strong>
 						</form>
 						<br />
 					{{/foreach}}

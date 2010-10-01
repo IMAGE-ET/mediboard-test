@@ -18,6 +18,7 @@ $chapitre = CValue::post("chapitre", "medicament");
 $annulation = CValue::request("annulation", "0");
 $search_value = $annulation ? 1 : 0;
 $new_value = $annulation ? 0 : 1;
+$only_perop = CValue::post("only_perop", false);
 
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
@@ -108,6 +109,9 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
 	$where["praticien_id"] = " = '$praticien_id'";
 	$where["signee"] = " = '$search_value'";
   $where["substitution_active"] = " = '1'";
+	if($only_perop){
+	  $where["perop"] = " = '1'";
+  }
 	$lines_med = $prescriptionLineMedicament->loadList($where);
 	foreach($lines_med as $_line_med){
 		$lines[$_line_med->_class_name][$_line_med->_id] = $_line_med;
@@ -131,6 +135,9 @@ if($prescription_id && ($chapitre=="medicament" || $chapitre == "all") && !$mode
   $where["praticien_id"] = " = '$praticien_id'";
   $where["signature_prat"] = " = '$search_value'";
   $where["substitution_active"] = " = '1'";
+  if($only_perop){
+    $where["perop"] = " = '1'";
+  }
   $lines_perf = $prescription_line_mix->loadList($where);
   foreach($lines_perf as $_line_perf){
   	$lines[$_line_perf->_class_name][$_line_perf->_id] = $_line_perf;
@@ -179,8 +186,14 @@ if($prescription_id && ($chapitre!="medicament" || $chapitre == "all") && !$mode
   if($chapitre != "all"){
     $where["category_prescription.chapitre"] = " = '$chapitre'";
   }
+	if($only_perop){
+    $where["perop"] = " = '1'";
+  }
   $prescription_line_element = new CPrescriptionLineElement();
   $lines["CPrescriptionLineElement"] = $prescription_line_element->loadList($where, null, null, null, $ljoinElement);
+	
+  // Un commentaire ne peut pas etre perop
+	unset($where["perop"]);
   
   $prescription_line_comment = new CPrescriptionLineComment();
   $lines["CPrescriptionLineComment"] = $prescription_line_comment->loadList($where, null, null, null, $ljoinComment);

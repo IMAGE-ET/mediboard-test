@@ -9,6 +9,7 @@
  */
 
 $sejour_id = CValue::get("sejour_id");
+$operation_id = CValue::getOrSession("operation_id");
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);
@@ -89,6 +90,8 @@ ksort($lines);
 $smarty = new CSmartyDP();
 $smarty->assign("lines", $lines);
 $smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("prescription_id", $prescription_id);
+$smarty->assign("operation_id", $operation_id);
 $smarty->display("inc_vw_perop.tpl");
 
 ?>

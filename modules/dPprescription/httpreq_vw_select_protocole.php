@@ -11,6 +11,7 @@
 $praticien_id      = CValue::post("praticien_id");
 $prescription_id   = CValue::post("prescription_id");
 $libelle_protocole = CValue::post("libelle_protocole");
+$perop             = CValue::post("perop", false);
 
 $_tokens = explode(" ", $libelle_protocole);
 
@@ -37,16 +38,30 @@ $list = array();
 // Chargement des protocoles
 $protocole = new CPrescription();
 $where = array();
-$where[] = "praticien_id = '$praticien_id' OR function_id = '$praticien->function_id' OR group_id = '{$praticien->_ref_function->group_id}'";
+$where[] = "prescription.praticien_id = '$praticien_id' OR prescription.function_id = '$praticien->function_id' OR prescription.group_id = '{$praticien->_ref_function->group_id}'";
 $where["object_id"] = "IS NULL";
 $where["object_class"] = " = '$prescription->object_class'";
-$where["type"] = " = '$prescription->type'";
+$where["prescription.type"] = " = '$prescription->type'";
 if($libelle_protocole){
 	foreach($_tokens as $_token){
-    $where[] = "libelle LIKE '%$_token%'";
+    $where[] = "prescription.libelle LIKE '%$_token%'";
 	}
 }
-$protocoles = $protocole->loadList($where, "libelle");
+
+if($perop){
+	$ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+	$ljoin["prescription_line_element"] = "prescription_line_element.prescription_id = prescription.prescription_id";
+	$ljoin["prescription_line_mix"] = "prescription_line_mix.prescription_id = prescription.prescription_id";
+  
+	$where[] = "prescription_line_medicament.perop = '1' OR
+	            prescription_line_element.perop = '1' OR 
+							prescription_line_mix.perop = '1'";
+	
+  $protocoles = $protocole->loadList($where, "libelle", null, null, $ljoin);
+} else {
+	$protocoles = $protocole->loadList($where, "libelle");
+}
+
 
 // Chargement du nombre d'element par chapitre dans les protocoles
 foreach($protocoles as $_protocole){
@@ -70,7 +85,7 @@ if($libelle_protocole){
     $where[] = "libelle LIKE '%$_token%'";
   }
 }
-$packs = $pack->loadList($where, "libelle");
+$packs = !$perop ? $pack->loadList($where, "libelle") : array();
 
 // Chargement du nombre d'element par chapitre dans les packs
 foreach($packs as $_pack){

@@ -482,7 +482,7 @@ class CPrescription extends CMbObject {
     $operation = new COperation();
     $hour_operation = "";
     $sejour = new CSejour();
-      
+    
     if($operation_id){
       // Chargement de l'operation
       $operation->load($operation_id);
