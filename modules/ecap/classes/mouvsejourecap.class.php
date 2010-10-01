@@ -178,7 +178,6 @@ class CMouvSejourEcap extends CMouvementEcap {
     } 
 
     $this->fonction->group_id = $this->etablissement->_id;
-    $this->fonction->loadMatchingObject();
     $this->fonction->type = "cabinet";
     $this->fonction->text = "Import eCap";
     $this->fonction->color = "00FF00";
