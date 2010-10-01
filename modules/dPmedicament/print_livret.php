@@ -23,9 +23,14 @@ foreach($etablissement->_ref_produits_livret as $_produit_livret){
   
   $_produit->loadClasseATC();
   $classe_atc = reset($_produit->_ref_classes_ATC);
-  $classe_atc = end($classe_atc->classes);
-  $_produit_livret->_atc = $classe_atc["code"];
-    
+	
+  if(isset($classe_atc->classes)){
+	  $classe_atc = end($classe_atc->classes);
+	  $_produit_livret->_atc = $classe_atc["code"];
+	} else {
+		$_produit_livret->_atc = "";
+	}
+	  
   if ($orderby === "libelle")
     $produits_livret["$_produit->libelle-$_produit->code_cip"] = $_produit_livret;
   else {

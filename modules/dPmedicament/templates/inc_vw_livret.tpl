@@ -68,7 +68,7 @@ Main.add(function(){
     <th>Date Prix Hôpital</th>
     <th>Date Prix Ville</th>
     <th>Code Interne</th>
-    <th>Commentaire</th>
+    <th>Alias</th>
   </tr>
   {{foreach from=$produits_livret item=produit_livret}}
   <tr>

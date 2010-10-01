@@ -70,7 +70,7 @@ Main.add(function() {
       </td>
     </tr>
     <tr>
-      <td>Commentaire</td>
+      <td>Alias</td>
       <td>
         <textarea cols="7" rows="2" name="commentaire">{{$produit_livret->commentaire}}</textarea>
       </td>
