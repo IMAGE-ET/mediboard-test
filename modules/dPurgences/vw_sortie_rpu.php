@@ -8,9 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-global $AppUI, $can, $m, $g;
-
-$can->needsRead();
+CCanDo::checkRead();
 
 // Type d'affichage
 $aff_sortie = CValue::postOrSession("aff_sortie","tous");
@@ -30,6 +28,7 @@ $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
 $date_before = mbDate("-$date_tolerance DAY", $date);
 $date_after  = mbDate("+1 DAY", $date);
 $where = array();
+$group = CGroups::loadCurrent();
 $where[] = "sejour.entree_reelle BETWEEN '$date' AND '$date_after' 
   OR (sejour.sortie_reelle IS NULL AND sejour.entree_reelle BETWEEN '$date_before' AND '$date_after')";
 
@@ -44,7 +43,9 @@ $order_col = "_pec_transport";
 $order = "consultation.heure $order_way";
 
 $sejour = new CSejour;
+CSQLDataSource::$trace = true;
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
+CSQLDataSource::$trace = false;
 foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
   $_sejour->loadRefRPU();
@@ -82,7 +83,7 @@ $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 // Praticiens urgentistes
 $group = CGroups::loadCurrent();
 
-$listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+$listPrats = CAppUI::$user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 // Création du template
 $smarty = new CSmartyDP();
