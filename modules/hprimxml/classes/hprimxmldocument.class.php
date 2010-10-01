@@ -682,6 +682,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       else if ($mbVenue->mode_sortie == "deces") {
         $modeSortieEtablissementHprim = "05";
       } 
+      // mutation
+      else if ($mbVenue->mode_sortie == "mutation") {
+        $modeSortieEtablissementHprim = "08";
+      }
       // autre transfert dans un autre CH
       else if ($mbVenue->mode_sortie == "transfert") {
         $modeSortieEtablissementHprim = "02";
