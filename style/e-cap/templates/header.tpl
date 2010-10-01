@@ -35,7 +35,8 @@ var Menu = {
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  <img id="mediboard-logo" src="images/pictures/logo.png" width="140" />
+  {{mb_include style="mediboard" template="logo" id="mediboard-logo" alt="MediBoard logo" width="140"}}
+  
   <script type="text/javascript">
     Main.add(function(){
       $("mediboard-logo").resample();

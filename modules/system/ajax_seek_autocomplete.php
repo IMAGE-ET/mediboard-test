@@ -17,11 +17,12 @@ $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $where        = CValue::get('where', array());
 
-foreach($where as $key => $value) {
-  $where[$key] = "= '$value'";
-}
-
 $object = new $object_class;
+$ds = $object->_spec->ds;
+
+foreach($where as $key => $value) {
+  $where[$key] = $ds->prepare("= %", $value);
+}
 
 $matches = $object->seek($keywords, $where, $limit);
 $template = null;

@@ -18,16 +18,17 @@ $limit       = CValue::get('limit', 30);
 $wholeString = CValue::get('wholeString', 'false') == 'true';
 $where       = CValue::get('where', array());
 
+$object = new $class;
+$ds = $object->_spec->ds;
+
 foreach($where as $key => $value) {
-  $where[$key] = "= '$value'";
+  $where[$key] = $ds->prepare("= %", $value);
 }
 
 $input = str_replace("\\'", "'", $input);
 $search = $wholeString ? "%$input%" : "$input%";
 
-$object = new $class;
 $spec = $object->_specs[$field];
-$ds = $object->_spec->ds;
 $matches = array();
 $count = 0;
 $template = null;

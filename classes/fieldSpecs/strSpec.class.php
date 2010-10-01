@@ -17,6 +17,7 @@ class CStrSpec extends CMbFieldSpec {
   var $protected = null;
   var $class     = null;
   var $delimiter = null;
+  var $canonical = null;
   
   function getSpecType() {
     return "str";
@@ -46,6 +47,7 @@ class CStrSpec extends CMbFieldSpec {
       'protected' => 'bool',
       'class'     => 'class',
       'delimiter' => 'num',
+      'canonical' => 'bool',
     );
   }
   
@@ -101,6 +103,13 @@ class CStrSpec extends CMbFieldSpec {
       
       if (array_search("", $values, true) !== false) {
         return "Contient des valeurs vides '$propValue'";
+      }
+    }
+    
+    // canonical
+    if($this->canonical){
+      if (!preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $propValue)) {
+        return "Ne doit contenir que des chiffres et des lettres non-accentuées (pas d'espaces)";
       }
     }
 		

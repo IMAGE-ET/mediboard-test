@@ -10,7 +10,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="{{$dPconfig.system.website_url}}">
-          <img src="images/pictures/logo.png" width="140" />
+          {{mb_include style="mediboard" template="logo" width="140"}}
         </a>
         <p>
           Plateforme de prescription d'analyses et dossier patient
@@ -47,7 +47,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
-          <img src="images/pictures/logo.png" width="360" />
+          {{mb_include style="mediboard" template="logo" width="360"}}
         </a>
       </td>
     </tr>

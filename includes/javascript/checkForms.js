@@ -247,6 +247,13 @@ Object.extend(ElementChecker, {
         this.addError("delimiter", printf("Contient des valeurs vides '%s'", this.sValue));
     },
     
+    // canonical
+    canonical: function(){
+      this.assertNoArg("canonical");
+      if (!this.sValue.match(/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/))
+        this.addError("canonical", "Ne doit contenir que des chiffres et des lettres non-accentuées (pas d'espaces)");
+    },
+    
     // pos
     pos: function () {
       this.assertNoArg("pos");

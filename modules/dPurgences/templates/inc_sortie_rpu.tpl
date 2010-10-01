@@ -153,6 +153,7 @@
 			 
        <tr>
         <td>
+          <input type="hidden" name="group_id" value="{{$g}}" />
 					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" style="display:none">
             {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
           </div>

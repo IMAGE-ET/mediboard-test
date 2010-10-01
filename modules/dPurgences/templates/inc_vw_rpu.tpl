@@ -93,7 +93,7 @@ function showEtabEntreeTransfert(mode) {
 
 <table style="width:100%">
   <tr>
-    <td>
+    <td style="width: 50%;">
       <form name="editRPU" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="dosql" value="do_rpu_aed" />
 			  <input type="hidden" name="m" value="dPurgences" />
@@ -103,17 +103,15 @@ function showEtabEntreeTransfert(mode) {
 				<input type="hidden" name="_bind_sejour" value="1" />
 				
 				<table class="form">
+				  <col style="width: 40%" />
+          
 				  <tr>
 				    <th class="category" colspan="2">Prise en charge infirmier</th>
 				  </tr> 
 				  
 				  <tr>
-				    <td>
-              {{mb_label object=$rpu field="diag_infirmier"}}  
-			      </td>
-			      <td>
-			        {{mb_label object=$rpu field="pec_douleur"}}
-			      </td>
+				    <td>{{mb_label object=$rpu field="diag_infirmier"}}</td>
+			      <td>{{mb_label object=$rpu field="pec_douleur"}}</td>
 				  </tr>
 				  
 				  <tr>
@@ -124,26 +122,29 @@ function showEtabEntreeTransfert(mode) {
               {{mb_field object=$rpu field="pec_douleur" onchange="this.form.onsubmit();" class="autocomplete"}}
               <script type="text/javascript">
                 Main.add(function() {
-                    new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
-                        objectClass: "{{$rpu->_class_name}}",
-                        contextUserId: "{{$userSel->_id}}",
-                        contextUserView: "{{$userSel->_view}}",
-                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
-                        validate: function(){ getForm("editRPU").onsubmit(); },
-                        resetSearchField: false,
-                        resetDependFields: false,
-                        validateOnBlur: false
-                      });
-                    new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
-                        objectClass: "{{$rpu->_class_name}}",
-                        contextUserId: "{{$userSel->_id}}",
-                        contextUserView: "{{$userSel->_view}}",
-                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
-                        validate: function(){ getForm("editRPU").onsubmit(); },
-                        resetSearchField: false,
-                        resetDependFields: false,
-                        validateOnBlur: false
-                      });
+                  var form = getForm("editRPU");
+                  
+                  new AideSaisie.AutoComplete(form.elements.diag_infirmier, {
+                      objectClass: "{{$rpu->_class_name}}",
+                      contextUserId: "{{$userSel->_id}}",
+                      contextUserView: "{{$userSel->_view}}",
+                      timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                      validate: function(){ form.onsubmit(); },
+                      resetSearchField: false,
+                      resetDependFields: false,
+                      validateOnBlur: false
+                    });
+                    
+                  new AideSaisie.AutoComplete(form.elements.pec_douleur, {
+                      objectClass: "{{$rpu->_class_name}}",
+                      contextUserId: "{{$userSel->_id}}",
+                      contextUserView: "{{$userSel->_view}}",
+                      timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                      validate: function(){ form.onsubmit(); },
+                      resetSearchField: false,
+                      resetDependFields: false,
+                      validateOnBlur: false
+                    });
                   });
               </script>
             </td>
@@ -159,19 +160,14 @@ function showEtabEntreeTransfert(mode) {
 				    <td>{{mb_field object=$rpu field="ccmu" canNull=false defaultOption="&mdash; Code CCMU" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
-				  
 				  <tr> 
 				    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
 				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
 			    </tr>
 			    
-					<tr>
+					<tr id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
 						<th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
-			      <td>
-			        <div id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
-			          {{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
-			        </div>
-           </td> 
+			      <td>{{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
 					</tr>
 			    
 					{{if $dPconfig.dPurgences.old_rpu == "1"}}

@@ -16,7 +16,7 @@
     <tr>
       <td class="logo" colspan="10">
         <a href="{{$dPconfig.system.website_url}}">
-          <img src="images/pictures/logo.png" alt="MediBoard logo" />
+          {{mb_include style="mediboard" template="logo" alt="MediBoard logo"}}
         </a>
         <p>
           Plateforme Open Source pour les Etablissements de Santé<br/>

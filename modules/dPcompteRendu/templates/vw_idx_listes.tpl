@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  if(oForm = document.addFrm) {
+  if(document.addFrm) {
     document.addFrm._new.focus();
 	}
 });

@@ -4,7 +4,8 @@
   <h2>{{$dPconfig.company_name}}</h2>
   {{if !$dialog}}
     <a href="{{$dPconfig.system.website_url}}">
-      <img src="images/pictures/logo.png" alt="{{$dPconfig.company_name}}" title="{{$dPconfig.company_name}}" width="290" height="107" /><br />
+      {{mb_include style="mediboard" template="logo" alt=$dPconfig.company_name title=$dPconfig.company_name width="400"}}
+      <br />
     </a>
   {{/if}}
 
