@@ -20,7 +20,7 @@
   <tr class="clear">
     <td colspan="10">
       <h3>
-      	{{mb_value object=$curr_plage field=date}}
+      	{{$curr_plage->date|date_format:$dPconfig.longdate}}
       	- 
       	Dr {{$curr_plage->_ref_chir->_view}}
         -
