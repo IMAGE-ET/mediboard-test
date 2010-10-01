@@ -22,7 +22,7 @@
 <td colspan="2" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
-    <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
+    <img src="images/icons/planning.png" />
   </a>
   {{/if}}
   
@@ -81,21 +81,21 @@
   {{/if}}
   {{/if}}
   {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$curr_adm->_num_dossier}}
-  <a class="action" name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
+  <a class="action" style="margin-right: 18px;" name="adm{{$curr_adm->sejour_id}}" href="#1" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
       {{$patient}}
     </span>
   </a>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <a href="#1" onclick="printAdmission({{$curr_adm->sejour_id}})">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
   </a>
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
+  <a href="#1" onclick="printAdmission({{$curr_adm->sejour_id}})">
     <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_adm->_guid}}');">
     {{$curr_adm->entree_prevue|date_format:$dPconfig.time}} 
     <br />
@@ -225,29 +225,30 @@
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $canAdmissions->edit}}
-  <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
-
-  <input type="hidden" name="m" value="dPplanningOp" />
-  <input type="hidden" name="dosql" value="do_sejour_aed" />
-  <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
-	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
-  {{if !$curr_adm->saisi_SHS}}
-  <input type="hidden" name="saisi_SHS" value="1" />
-  <button class="tick" type="button" onclick="submitAdmission(this.form, 1);">
-    {{tr}}CSejour-saisi_SHS{{/tr}}
-  </button>
+    <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
+    	<input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
+      
+      {{if !$curr_adm->saisi_SHS}}
+        <input type="hidden" name="saisi_SHS" value="1" />
+        <button class="tick" type="button" onclick="submitAdmission(this.form, 1);">
+          {{tr}}CSejour-saisi_SHS{{/tr}}
+        </button>
+      {{else}}
+        <input type="hidden" name="saisi_SHS" value="0" />
+        <button class="cancel" type="button" onclick="submitAdmission(this.form, 1);">
+          {{tr}}Cancel{{/tr}}
+        </button>
+      {{/if}}
+      
+      {{if ($curr_adm->modif_SHS == 1) && ($dPconfig.dPplanningOp.CSejour.modif_SHS == 1)}}
+        <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
+      {{/if}}
+    </form>
   {{else}}
-  <input type="hidden" name="saisi_SHS" value="0" />
-  <button class="cancel" type="button" onclick="submitAdmission(this.form, 1);">
-    {{tr}}Cancel{{/tr}}
-  </button>
-  {{/if}}
-  {{if ($curr_adm->modif_SHS == 1) && ($dPconfig.dPplanningOp.CSejour.modif_SHS == 1)}}
-    <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
-  {{/if}}
-  </form>
-  {{else}}
-  {{mb_value object=$curr_adm field="saisi_SHS"}}
+    {{mb_value object=$curr_adm field="saisi_SHS"}}
   {{/if}}
 </td>
 
