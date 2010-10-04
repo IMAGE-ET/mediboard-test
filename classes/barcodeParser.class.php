@@ -347,10 +347,17 @@ class CBarcodeParser {
       
       //       __REF___    PER_ __LOT__
       // +M423104003921/$$081309091602Y
-      if (empty($comp) && preg_match('/^[a-z](\d{3})(\d+).\/\$\$(\d{4})(.+).$/ms', $barcode, $parts)) {
-        $comp["ref"] = $parts[2];
-        $comp["per"] = $parts[3];
-        $comp["lot"] = $parts[4];
+      if (empty($comp) && preg_match('/^[a-z]\d{3}(\d+).\/\$\$(\d{4})(.+).$/ms', $barcode, $parts)) {
+        $comp["ref"] = $parts[1];
+        $comp["per"] = $parts[2];
+        $comp["lot"] = $parts[3];
+      }
+      
+      //      __REF_______ _____LOT___
+      // +M114EC1YHPAL2301/$1089171008M
+      if (empty($comp) && preg_match('/^[a-z]\d{3}([^\/]+)\/\$(.+).$/ms', $barcode, $parts)) {
+        $comp["ref"] = $parts[1];
+        $comp["lot"] = $parts[2];
       }
       
       //      ___REF___  PER_ __LOT___
