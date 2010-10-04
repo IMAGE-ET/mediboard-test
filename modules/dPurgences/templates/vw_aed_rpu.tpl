@@ -186,13 +186,11 @@
 	<input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
 	
 	<input type="hidden" name="_bind_sejour" value="1" />
-	<a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
-	  Ajouter un patient
-	</a>
 	<table class="form">
 	  <tr>
 	    {{if $rpu->_id}}
 	    <th class="title modify" colspan="4">
+	    	
 	      {{mb_include module=system template=inc_object_notes      object=$sejour}}
 	      {{mb_include module=system template=inc_object_idsante400 object=$rpu}}
 	      {{mb_include module=system template=inc_object_history    object=$rpu}}
@@ -201,12 +199,13 @@
 		      <img src="images/icons/edit.png" alt="modifier" />
 		    </a>
 	
-		    Modification du {{$rpu}}
+		    {{tr}}CRPU-title-modify{{/tr}}
+				'{{$rpu}}'
 		    {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
 	    </th>
 	    {{else}}
 	    <th class="title" colspan="4">
-		    Création d'un RPU 
+        {{tr}}CRPU-title-create{{/tr}}
 		    {{if $sejour->_num_dossier}}
 		    	pour le dossier
 		      {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
@@ -401,8 +400,11 @@
 		        {{tr}}CModeleEtiquette.print_labels{{/tr}}
 		      </button>
 					    
+	        <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+	          {{tr}}CRPU-title-create{{/tr}}
+	        </a>
 		    {{else}}
-			    <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
+			    <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
 	      {{/if}}
 	  	</td>
 	  </tr>
@@ -415,8 +417,8 @@
 	{{if $rpu->_id && $can->edit}}
 		<table width="100%" class="tbl">
 		  <tr>
-		    <th class="category">Autres informations</th>
-		    <th class="category">Prise en charge</th>
+		    <th class="category">Attentes</th>
+		    <th class="category">Prise en charge médicale</th>
 		  </tr>
 		
 		  <tr>
@@ -440,7 +442,7 @@
 		  <li><a href="#actes">Cotation infirmière</a></li>
 		  {{/if}}
 			{{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$dPconfig.dPprescription.CPrescription.prescription_suivi_soins}}
-		  <li {{if $consult->sejour_id}}onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');"{{/if}}><a href="#prescription_sejour">Prescription</a></li>
+		  <li {{if $consult->sejour_id}} onclick="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
 		  {{/if}}
 		  {{if @$modules.dPImeds->mod_active}}
         <li><a href="#Imeds">Labo</a></li>

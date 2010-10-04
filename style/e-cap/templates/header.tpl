@@ -44,6 +44,7 @@ var Menu = {
   </script>
   
   {{if !$offline}}
+	{{assign var=style value="width: 130px;"}}
   {{mb_include module=mediboard template=change_group}}
   
   <!-- Welcome -->

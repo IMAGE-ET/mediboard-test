@@ -86,7 +86,7 @@ Main.add(function () {
 	  <tr>
 	    <td style="white-space: nowrap; width: 1%;">
 	      <a class="button new" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
-	        Ajouter un patient
+	        {{tr}}CRPU-title-create{{/tr}}
 	      </a>
 	    </td>
 			
