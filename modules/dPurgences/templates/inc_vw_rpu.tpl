@@ -81,10 +81,15 @@ function printDossier(id) {
 
 function showEtabEntreeTransfert(mode) {
   // mode de transfert = transfert (7)
+  $('service_entree_transfert').hide();
+  $('etablissement_entree_transfert').hide();
+  
   if (mode == 7) {
     $('etablissement_entree_transfert').show();
-  } else {
-    $('etablissement_entree_transfert').hide();
+    $V(getForm('editRPU')._service_entree_transfert_id, '');
+  } 
+  else if (mode == 6) {
+    $('service_entree_transfert').show();
     $V(getForm('editRPU')._etablissement_entree_transfert_id, '');
   }
 }
@@ -164,11 +169,16 @@ function showEtabEntreeTransfert(mode) {
 				    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
 				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); showEtabEntreeTransfert(this.value); this.form.onsubmit();"}}</td>
 			    </tr>
-			    
-					<tr id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
-						<th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
-			      <td>{{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
-					</tr>
+          
+          <tr id="etablissement_entree_transfert" {{if $rpu->mode_entree != '7'}}style="display:none"{{/if}}>
+            <th>{{mb_label object=$rpu field="_etablissement_entree_transfert_id"}}</th>
+            <td>{{mb_field object=$rpu field="_etablissement_entree_transfert_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
+          </tr>
+          
+          <tr id="service_entree_transfert" {{if $rpu->mode_entree != '6'}}style="display:none"{{/if}}>
+            <th>{{mb_label object=$rpu field="_service_entree_mutation_id"}}</th>
+            <td>{{mb_field object=$rpu field="_service_entree_mutation_id" form="editRPU" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}</td> 
+          </tr>
 			    
 					{{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
@@ -270,8 +280,8 @@ function showEtabEntreeTransfert(mode) {
 					     	</strong>
 				      {{/if}}
               <div id="etablissement_sortie_transfert" {{if !$sejour->etablissement_transfert_id}}style="display:none;"{{/if}}>
-                  {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
-                </div>
+                {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
+              </div>
                 
 							<div id="service_sortie_transfert" {{if !$sejour->service_mutation_id}}style="display:none;"{{/if}}>
                 {{mb_field object=$sejour field="service_mutation_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="submitSejour();"}}
