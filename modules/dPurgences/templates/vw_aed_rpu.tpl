@@ -353,8 +353,8 @@
           Main.add(function() {
               new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
                   objectClass: "{{$rpu->_class_name}}",
-                  contextUserId: "{{$praticien->_id}}",
-                  contextUserView: "{{$praticien->_view}}",
+                  contextUserId: "{{$userSel->_id}}",
+                  contextUserView: "{{$userSel->_view}}",
                   timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
                   resetSearchField: false,
                   resetDependFields: false,
@@ -362,8 +362,8 @@
                 });
               new AideSaisie.AutoComplete(getForm("editRPU").elements.pec_douleur, {
                   objectClass: "{{$rpu->_class_name}}",
-                  contextUserId: "{{$praticien->_id}}",
-                  contextUserView: "{{$praticien->_view}}",
+                  contextUserId: "{{$userSel->_id}}",
+                  contextUserView: "{{$userSel->_view}}",
                   timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
                   resetSearchField: false,
                   resetDependFields: false,
