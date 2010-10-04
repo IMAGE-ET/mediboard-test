@@ -63,10 +63,6 @@ foreach ($listSejours as &$_sejour) {
 
 }
 
-// Chargement des etablissements externes
-$etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, "nom");
-
 // Chargement des services
 $service = new CService();
 $services = $service->loadList(null, "nom");
@@ -88,7 +84,6 @@ $listPrats = CAppUI::$user->loadPraticiens(PERM_READ, $group->service_urgences_i
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
-$smarty->assign("listEtab", $listEtab);
 $smarty->assign("services", $services);
 $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);

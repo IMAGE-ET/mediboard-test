@@ -106,9 +106,7 @@
           {{mb_title object=$sejour field=_sortie}} :
 					{{mb_value object=$sejour field=mode_sortie}}
           {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
-            {{assign var=etab_externe_id value=$sejour->etablissement_transfert_id}}
-            {{assign var=etab_externe value=$listEtab.$etab_externe_id}}
-            <br />&gt; <strong>{{$etab_externe}}</strong>
+            <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
           {{/if}}
 					{{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
             {{assign var=service_id value=$sejour->service_mutation_id}}

@@ -26,10 +26,6 @@ $sejour->_ref_rpu->_ref_consult->loadRefsActes();
 // Chargement de l'IPP
 $sejour->_ref_patient->loadIPP();
 
-// Chargement des etablissements externes
-$etab = new CEtabExterne();
-$listEtab = $etab->loadList(null, "nom");
-
 // Chargement des services
 $service = new CService();
 $services = $service->loadList(null, "nom");
@@ -52,7 +48,6 @@ $listPrats = $AppUI->_ref_user->loadPraticiens(PERM_READ, $group->service_urgenc
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
-$smarty->assign("listEtab", $listEtab);
 $smarty->assign("services", $services);
 $smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
