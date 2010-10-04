@@ -213,17 +213,25 @@ function showEtabEntreeTransfert(mode) {
 					    <th class="category" colspan="2">Prise en charge praticien</th>
 					  </tr> 
 					  <tr>
-					    <td colspan="2">{{mb_label object=$rpu field="motif"}}
-					      <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this); this.form.motif.onchange();" class="helper">
-				          <option value="">&mdash; Aide</option>
-				          {{html_options options=$rpu->_aides.motif.no_enum}}
-				        </select>
-				        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.motif, null, null, null, null, {{$userSel->_id}})">{{tr}}New{{/tr}}</button><br />      
-					      </td>
+					    <td colspan="2">
+                {{mb_label object=$rpu field="motif"}}
+					    </td>
 					  </tr>
 					  <tr>
 					    <td colspan="2">
-					      {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();"}}
+					    {{main}}
+						    new AideSaisie.AutoComplete(getForm("editRPUMotif").elements.motif, {
+                        objectClass: "{{$rpu->_class_name}}",
+                        contextUserId: "{{$userSel->_id}}",
+                        contextUserView: "{{$userSel->_view}}",
+                        timestamp: "{{$dPconfig.dPcompteRendu.CCompteRendu.timestamp}}",
+                        validate: function(){ getForm("editRPUMotif").onsubmit(); },
+                        resetSearchField: false,
+                        resetDependFields: false,
+                        validateOnBlur: false
+                      });
+              {{/main}}
+					    {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();" class="autocomplete"}}
 					    </td>
 				   </tr>
 				 </table>
