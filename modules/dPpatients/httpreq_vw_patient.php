@@ -30,19 +30,17 @@ if ($patient->_id) {
 
 $vip = 0;
 if($patient->vip && !$can->admin) {
-	$user_in_list_prat = 0;
-  $user_in_logs      = 0;
+	$user_in_list_prat = false;
+  $user_in_logs      = false;
   foreach($patient->_ref_praticiens as $_prat) {
 		if($AppUI->user_id == $_prat->user_id) {
-      $user_in_list_prat = 1;
-      mbTrace($prat->_view, "prat trouvé");
+      $user_in_list_prat = true;
     }
   }
   $patient->loadLogs();
   foreach($patient->_ref_logs as $_log) {
     if($AppUI->user_id == $_log->user_id) {
-      $user_in_logs = 1;
-      mbTrace($_log->_view, "log trouvé");
+      $user_in_logs = true;
     }
   }
   $vip = !$user_in_list_prat && !$user_in_logs;

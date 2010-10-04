@@ -102,8 +102,9 @@ Main.add(function () {
         {{if array_key_exists("formfields", $_params)}}
           {{if $real_context}}
             <td>
-              {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:2em;" increment=true form="edit-constantes-medicales"}} /
-              {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:2em;" increment=true form="edit-constantes-medicales"}}
+              {{mb_field object=$constantes field=$_params.formfields.0 size="2" style="width:2em;"}} / 
+              {{mb_field object=$constantes field=$_params.formfields.1 size="2" style="width:2em;"}}
+              {{*  increment=true form="edit-constantes-medicales" *}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
@@ -128,7 +129,8 @@ Main.add(function () {
               
               {{mb_field object=$constantes field=$_constante size="4" 
                          onchange=$_callback|ternary:"$_callback(this.form)":null readonly=$_readonly 
-                         increment=$_readonly|ternary:false:true form="edit-constantes-medicales"}}
+                         }}
+              {{* increment=$_readonly|ternary:false:true form="edit-constantes-medicales" *}}
             </td>
           {{/if}}
           <td style="text-align: center" title="{{$dates.$_constante|date_format:$dPconfig.datetime}}">
