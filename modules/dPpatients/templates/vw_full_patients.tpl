@@ -1,24 +1,9 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPfiles" script="files"}}
 
 <script type="text/javascript">
-
-function setObject(oObject){
-  var oForm = getForm("FrmClass");
-  oForm.selKey.value = oObject.id;
-  oForm.selView.value = oObject.view;
-  oForm.selClass.value = oObject.objClass;
-  oForm.keywords.value = oObject.keywords;
-  oForm.file_id.value = "";
-  if (oForm.onsubmit()) {
-    oForm.submit();
-  }
-  
-  if(window.saveObjectInfos){
-    saveObjectInfos(oObject);
-  }
-}
 
 function viewCompleteItem(object_guid) {
   var url = new Url("system", "httpreq_vw_complete_object");
