@@ -57,7 +57,7 @@ function changePage(page) {
           </tr>
         </table>  
         {{if $total_functions != 0}}
-          {{mb_include module=system template=inc_pagination total=$total_functions current=$page change_page='changePage' step=35}}
+          {{mb_include module=system template=inc_pagination total=$total_functions current=$page change_page='changePage' step=25}}
         {{/if}}
       </form>
       {{include file="vw_list_functions.tpl"}}

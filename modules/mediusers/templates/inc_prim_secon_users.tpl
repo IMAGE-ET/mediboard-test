@@ -38,7 +38,7 @@
                 <input type="hidden" name="page_function" value="{{$page_function}}" onchange="this.form.submit()"/>
                 
                 {{if $total_sec_functions != 0}}
-                  {{mb_include module=system template=inc_pagination total=$total_sec_functions current=$page_function change_page='changePagePrimaryUsers'}}
+                  {{mb_include module=system template=inc_pagination total=$total_sec_functions current=$page_function change_page='changePagePrimaryUsers' step=10}}
                 {{/if}}
               </form>
             </td>
