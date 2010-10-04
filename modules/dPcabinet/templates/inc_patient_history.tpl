@@ -1,78 +1,79 @@
-<table class="form">
+<!-- Séjour et interventions -->
+{{if !$app->user_prefs.simpleCabinet}}
+<div>
+	<span onmouseover="ObjectTooltip.createDOM(this, 'sejours');">
+	  {{$patient->_ref_sejours|@count}} {{tr}}CSejour{{/tr}}(s)   
+	</span>
+</div>
+  
+<table class="tbl" id="sejours" style="display: none;">
+  {{foreach from=$patient->_ref_sejours item=_sejour}}
+  <tr>
+    <td>
+      {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
+		</td>
+		<td>
+    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
+		</td>
+	</tr>
 
-  {{if !$app->user_prefs.simpleCabinet}}
-  <!-- Séjour et interventions -->
-  <tr id="sejours-trigger">
-    <td>Séjours ({{$patient->_ref_sejours|@count}})</td>
+  {{foreach from=$_sejour->_ref_operations item=_op}}
+  <tr>
+  	<td style="padding-left: 1em;">
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}"
+        onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
+        le {{$_op->_datetime|date_format:$dPconfig.date}}
+      </a>
+		</td>
+		<td>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_op->_ref_chir}}
+		</td>
+	</tr>
+  {{foreachelse}}
+  <tr>
+  	<td colspan="2" style="padding-left: 1em;">
+       <em>{{tr}}COperation.none{{/tr}}</em>
+  	</td>
+	</tr>
+  {{/foreach}}
+
+  {{foreachelse}}
+  <tr>
+    <td><em>{{tr}}CSejour.none{{/tr}}</em></td>
   </tr>
+  {{/foreach}}
+</table>
+{{/if}}
   
-  <tbody id="sejours">
-    <tr class="script">
-    	<td>
-    		<script type="text/javascript">
-    		new PairEffect("sejours");
-    		</script>
-    	</td>
-    </tr>
-    {{foreach from=$patient->_ref_sejours item=_sejour}}
-    <tr>
-      <td>
-        <strong>Dr {{$_sejour->_ref_praticien->_view}}</strong>
-        du {{$_sejour->entree_prevue|date_format:$dPconfig.date}}
-        au {{$_sejour->sortie_prevue|date_format:$dPconfig.date}}
-        <ul>
-        {{foreach from=$_sejour->_ref_operations item=_op}}
-          <li>
-            <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}"
-              onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
-              <strong>Dr {{$_op->_ref_chir->_view}}</strong>
-              le {{$_op->_datetime|date_format:$dPconfig.date}}
-            </a>
-          </li>
-        {{foreachelse}}
-          <li>{{tr}}COperation.none{{/tr}}</li>
-        {{/foreach}}
-        </ul>
-      </td>
-    </tr>
-    {{foreachelse}}
-    <tr>
-      <td><em>{{tr}}CSejour.none{{/tr}}</em></td>
-    </tr>
-    {{/foreach}}
-  </tbody>
-  {{/if}}
+<!-- Consultations -->
+<div>
+	<span  onmouseover="ObjectTooltip.createDOM(this, 'consultations');">
+		{{$patient->_ref_consultations|@count}} {{tr}}CConsultation{{/tr}}(s)
+	</span>
+</div>
   
-  <!-- Consultations -->
-  <tr id="consultations-trigger">
-    <td>Consultations ({{$patient->_ref_consultations|@count}})</td>
+<table class="tbl" id="consultations" style="display: none;">
+  
+  {{foreach from=$patient->_ref_consultations item=_consult}}
+  <tr>
+    <td>
+      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
+        onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+        le {{$_consult->_datetime|date_format:$dPconfig.date}}
+      </a>
+    </td>
+    <td>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}}
+    </td>
+
+    <td>
+    </td>
   </tr>
+  {{foreachelse}}
   
-  <tbody id="consultations">
-    <tr class="script">
-    	<td>
-    		<script type="text/javascript">
-    		new PairEffect("consultations");
-    		</script>
-    	</td>
-    </tr>
-    
-    {{foreach from=$patient->_ref_consultations item=_consult}}
-    <tr>
-      <td>
-        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
-          onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
-          <strong>
-          	{{$_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
-          le {{$_consult->_ref_plageconsult->date|date_format:$dPconfig.date}}
-        </a>
-      </td>
-    </tr>
-    {{foreachelse}}
-    
-    <tr>
-      <td><em>{{tr}}CConsultation.none{{/tr}}</em></td>
-    </tr>
-    {{/foreach}}
-  </tbody>
+  <tr>
+    <td colspan="2"><em>{{tr}}CConsultation.none{{/tr}}</em></td>
+  </tr>
+  {{/foreach}}
+	
 </table>
