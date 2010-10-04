@@ -286,7 +286,7 @@ $tests = array(
     'lot' => '1089171008',
   ),
   '+M114EC1YHPAL2301/$1089171008M' => array (
-    'ref' => 'EC1YHPAL2301',
+    'ref' => 'C1YHPAL2301',
     'lot' => '1089171008',
   ),
 );

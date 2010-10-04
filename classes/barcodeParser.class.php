@@ -353,9 +353,9 @@ class CBarcodeParser {
         $comp["lot"] = $parts[3];
       }
       
-      //      __REF_______ _____LOT___
+      //       __REF______  ____LOT___
       // +M114EC1YHPAL2301/$1089171008M
-      if (empty($comp) && preg_match('/^[a-z]\d{3}([^\/]+)\/\$(.+).$/ms', $barcode, $parts)) {
+      if (empty($comp) && preg_match('/^[a-z]\d{3}.([^\/]+)\/\$(.+).$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[1];
         $comp["lot"] = $parts[2];
       }
