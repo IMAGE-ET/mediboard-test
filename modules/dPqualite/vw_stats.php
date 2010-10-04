@@ -164,6 +164,9 @@ foreach ($comparison as $comp) {
 	                foreach ($fiche_evts as $e) {
 	                  if (in_array($e, $list_evts)) {
 	                    $count++;
+	                    // Il peut y avoir plusieurs événéménts qui correspondent,
+	                    // donc on break si un correspond.
+	                    break;
 	                  }
 	                }
 	              }

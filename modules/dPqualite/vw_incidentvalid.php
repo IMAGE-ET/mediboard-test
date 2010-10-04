@@ -19,6 +19,7 @@ $selected_user_id    = CValue::getOrSession("selected_user_id");
 $selected_service_valid_user_id = CValue::getOrSession("selected_service_valid_user_id");
 $elem_concerne     = CValue::getOrSession("elem_concerne");
 $evenements        = CValue::getOrSession("evenements");
+$filter_item       = CValue::getOrSession("filter_item");
 
 $catFiche = array();
 $fiche = new CFicheEi();
@@ -68,6 +69,15 @@ foreach($listUsersEdit as $keyUser => $infoUser){
   }
 }
 
+$items = array();
+
+if ($evenements) {
+	$where = array();
+	$where["ei_categorie_id"] = " = $evenements";
+	$item = new CEiItem;
+	$items = $item->loadList($where);
+}
+
 $selectedUser = new CMediusers();
 $selectedUser->load($selected_user_id);
 
@@ -91,6 +101,8 @@ $smarty->assign("listUsersTermine" , $listUsersTermine);
 $smarty->assign("selectedUser"     , $selectedUser);
 $smarty->assign("selected_fiche_id", $fiche_ei_id);
 $smarty->assign("listCategories"   , $listCategories);
+$smarty->assign("items"            , $items);
+$smarty->assign("filter_item"      , $filter_item);
 
 $smarty->display("vw_incidentvalid.tpl");
 ?>

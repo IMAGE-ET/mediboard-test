@@ -79,6 +79,12 @@ function printIncident(ficheId){
   url.popup(700, 500, "printFicheEi");
 }
 
+function reloadItems(categorie_id){
+	var url = new Url("dPqualite", "httpreq_list_items");
+	url.addParam("categorie_id", categorie_id);
+	url.requestUpdate("items");
+}
+
 var tab;
 Main.add(function() {
   tab = Control.Tabs.create('tab-incident', true);
@@ -92,11 +98,20 @@ Main.add(function() {
       <form name="filter-ei" action="?" method="get" onsubmit="return filterFiches()">
         {{mb_field object=$filterFiche field=elem_concerne defaultOption=" &ndash; Cet élément concerne" onchange="this.form.onsubmit()"}}
         
-        <select name="evenements" onchange="this.form.onsubmit()">
+        <select name="evenements" onchange="this.form.filter_item.value = ''; reloadItems(this.value); this.form.onsubmit()">
           <option value=""> &ndash; Catégorie</option>
           {{foreach from=$listCategories item=category}}
             <option value="{{$category->_id}}" {{if $category->_id==$evenements}}selected="selected"{{/if}}>
               {{$category}}
+            </option>
+          {{/foreach}}
+        </select>
+
+        <select name="filter_item" onchange="this.form.onsubmit()" id="items">
+          <option value=""> &mdash; Item</option>
+          {{foreach from=$items item=_item}}
+            <option value="{{$_item->_id}}" {{if $_item->_id==$filter_item}}selected="selected"{{/if}}>
+              {{$_item}}
             </option>
           {{/foreach}}
         </select>
