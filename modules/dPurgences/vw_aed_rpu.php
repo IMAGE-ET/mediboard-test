@@ -34,9 +34,6 @@ if ($sejour_id = CValue::get("sejour_id")) {
   $rpu->updateFormFields();
 }
 
-// Chargement des aides a la saisie
-$rpu->loadAides($user->_id);
-
 if ($rpu->_id || $rpu->sejour_id) {
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
