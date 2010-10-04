@@ -22,7 +22,7 @@ function printConsult() {
 </script>
 
 {{mb_include_script module="dPcabinet" script="file"}}
-
+{{mb_include_script module="dPcabinet" script="yoplet"}}
 {{if $app->user_prefs.directory_to_watch != ''}}
 	<script type="text/javascript">
 	  File.applet.extensions = '{{$dPconfig.dPfiles.extensions_yoplet}}';
