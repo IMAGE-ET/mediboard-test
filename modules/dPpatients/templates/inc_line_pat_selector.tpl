@@ -40,8 +40,17 @@
   </td>
 
   {{else}}
-  <td>{{mb_value object=$_patient field=tel}}</td>
-  <td>{{mb_value object=$_patient field=tel2}}</td>
+  <td>
+  	{{mb_value object=$_patient field=tel}}
+		{{if $_patient->tel2}} 
+    <br />{{mb_value object=$_patient field=tel2}}
+		{{/if}}
+	</td>
+  <td>
+  	{{mb_value object=$_patient field=adresse}}
+    {{mb_value object=$_patient field=cp}} - 
+    {{mb_value object=$_patient field=ville}}
+	</td>
   <td class="button" rowspan="{{$rowspan}}">
     {{if $can->edit}}
     <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">

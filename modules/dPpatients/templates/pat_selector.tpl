@@ -2,9 +2,9 @@
 
 {{if $app->user_prefs.GestionFSE}}
   {{if $app->user_prefs.VitaleVision}}
-    {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+    {{mb_include module=dPpatients template=inc_vitalevision debug=false keepFiles=true}}
   {{else}}
-    {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+    {{mb_include module=dPpatients template=inc_intermax debug=false}}
   {{/if}}
 {{/if}}
 
@@ -265,14 +265,17 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   </tr>
   <tr>
     <th align="center">{{tr}}CPatient{{/tr}}</th>
-    <th align="center">{{tr}}CPatient-naissance-court{{/tr}}</th>
+    <th align="center">{{mb_title class=CPatient field=naissance}}</th>
     {{if $patVitale}}
-    <th align="center">{{mb_label object=$patVitale field="matricule"}}</th>
-    <th align="center">{{mb_label object=$patVitale field="adresse"}}</th>
+    <th align="center">{{mb_label object=$patVitale field=matricule}}</th>
     {{else}}
-    <th align="center">{{tr}}CPatient-tel{{/tr}}</th>
-    <th align="center">{{tr}}CPatient-tel2{{/tr}}</th>
+    <th align="center">
+      {{mb_label class=CPatient field=tel}}
+			<br />
+			{{mb_label class=CPatient field=tel2}}
+		</th>
     {{/if}}
+    <th align="center">{{mb_label class=CPatient field=adresse}}</th>
     <th align="center">{{tr}}Actions{{/tr}}</th>
   </tr>
   
