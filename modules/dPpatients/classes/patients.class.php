@@ -124,7 +124,6 @@ class CPatient extends CMbObject {
   
   var $pays                 = null;
   var $pays_insee           = null;
-  var $nationalite          = null;
   var $lieu_naissance       = null;
   var $cp_naissance         = null;
   var $pays_naissance_insee = null;
@@ -170,7 +169,6 @@ class CPatient extends CMbObject {
   var $assure_tel2                  = null;
   var $assure_pays                  = null;
   var $assure_pays_insee            = null;
-  var $assure_nationalite           = null;
   var $assure_cp_naissance          = null;
   var $assure_lieu_naissance        = null;
   var $assure_pays_naissance_insee  = null;
@@ -319,7 +317,6 @@ class CPatient extends CMbObject {
     
     $specs["pays"]                 = "str";
     $specs["pays_insee"]           = "str";
-    $specs["nationalite"]          = "enum notNull list|local|etranger default|local";
     $specs["lieu_naissance"]       = "str";
     $specs["cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["pays_naissance_insee"] = "str";
@@ -365,7 +362,6 @@ class CPatient extends CMbObject {
     $specs["assure_pays"]                 = "str";
     $specs["assure_pays_insee"]           = "str";
     $specs["assure_lieu_naissance"]       = "str";
-    $specs["assure_nationalite"]          = "enum notNull list|local|etranger default|local";
     $specs["assure_lieu_naissance"]       = "str";
     $specs["assure_cp_naissance"]         = "numchar minLength|4 maxLength|5";
     $specs["assure_pays_naissance_insee"] = "str";

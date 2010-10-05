@@ -388,12 +388,6 @@ class CMouvSejourEcap extends CMouvementEcap {
       "2" => "f",
     );
     
-    static $transformNationalite = array (
-      "" => "local",
-      "F" => "local",
-      "E" => "etranger",
-    );
-
     $DMED = $this->consume("DMED");
     
     // Gestion des id400
@@ -456,7 +450,6 @@ class CMouvSejourEcap extends CMouvementEcap {
     $this->patient->assure_civilite   = "guess";
     
 //    $this->patient->pays              = $pat400->consume("ZPAY");
-//    $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
     $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
     $this->id400Pat->bindObject($this->patient);

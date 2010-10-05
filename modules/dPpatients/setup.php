@@ -1175,13 +1175,13 @@ class CSetupdPpatients extends CSetup {
     
     $this->makeRevision("1.02");
     $sql = "ALTER TABLE `patients` 
-              ADD `confiance_nom` VARCHAR( 50 ) AFTER `prevenir_parente`,
-              ADD `confiance_prenom` VARCHAR( 50 ) AFTER `confiance_nom`,
-              ADD `confiance_adresse` TEXT AFTER `confiance_prenom`,
-              ADD `confiance_cp` VARCHAR( 5 ) AFTER `confiance_adresse`,
-              ADD `confiance_ville` VARCHAR( 50 ) AFTER `confiance_cp`,
-              ADD `confiance_tel` VARCHAR( 10 ) AFTER `confiance_ville`,
-              ADD `confiance_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) AFTER `confiance_tel`;";
+      ADD `confiance_nom` VARCHAR( 50 ) AFTER `prevenir_parente`,
+      ADD `confiance_prenom` VARCHAR( 50 ) AFTER `confiance_nom`,
+      ADD `confiance_adresse` TEXT AFTER `confiance_prenom`,
+      ADD `confiance_cp` VARCHAR( 5 ) AFTER `confiance_adresse`,
+      ADD `confiance_ville` VARCHAR( 50 ) AFTER `confiance_cp`,
+      ADD `confiance_tel` VARCHAR( 10 ) AFTER `confiance_ville`,
+      ADD `confiance_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) AFTER `confiance_tel`;";
     $this->addQuery($sql);
     
     $this->makeRevision("1.03");
@@ -1199,7 +1199,13 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` ADD `date_lecture_vitale` DATETIME";
     $this->addQuery($sql);
 
-    $this->mod_version = "1.07";
+    $this->makeRevision("1.07");
+    $sql = "ALTER TABLE `patients`
+		  DROP `nationalite`,
+		  DROP `assure_nationalite`;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "1.08";
   }
 }
 

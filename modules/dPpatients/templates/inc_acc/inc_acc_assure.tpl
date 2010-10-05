@@ -64,10 +64,6 @@
       <div style="display:none;" class="autocomplete" id="_assure_pays_naissance_insee_auto_complete"></div>
     </td>
   </tr>
-  <tr>
-    <th>{{mb_label object=$patient field="assure_nationalite"}}</th>
-    <td>{{mb_field object=$patient field="assure_nationalite"}}</td>
-  </tr>
 	<tr>
     <th>{{mb_label object=$patient field="assure_profession"}}</th>
     <td>{{mb_field object=$patient field="assure_profession" form=editFrm}}</td>

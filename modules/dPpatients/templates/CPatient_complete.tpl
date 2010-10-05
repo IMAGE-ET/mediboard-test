@@ -103,9 +103,7 @@
     </td>
   </tr>
   <tr>
-    <td class="text">
-      <strong>{{mb_label object=$object field="nationalite"}}</strong>
-      {{mb_value object=$object field="nationalite"}}
+    <td>
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="email"}}</strong>

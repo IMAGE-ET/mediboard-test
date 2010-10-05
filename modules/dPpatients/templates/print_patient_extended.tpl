@@ -233,8 +233,8 @@ function toggleList(list, button) {
     <td>{{mb_value object=$patient field="assure_tel"}}</td>
 	</td>
   <tr>
-    <th>{{mb_label object=$patient field="assure_nationalite"}}</th>
-    <td>{{mb_value object=$patient field="assure_nationalite"}}</td>
+    <th></th>
+    <td></td>
     
     <th>{{mb_label object=$patient field="assure_tel2"}}</th>
     <td>{{mb_value object=$patient field="assure_tel2"}}</td>
