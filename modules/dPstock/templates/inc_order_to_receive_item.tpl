@@ -113,7 +113,7 @@
 
       {{if $dPconfig.dPstock.CProductStockGroup.unit_order}}
         {{assign var=coeff value=$curr_item->_ref_reference->_unit_quantity}}
-        {{mb_field object=$curr_item field=quantity hidden=true value=$curr_item->quantity-$curr_item->_quantity_received}}
+        {{mb_field object=$curr_item field=quantity hidden=true}}
         {{mb_field object=$curr_item 
           field=_unit_quantity
           form=form-item-receive-$id 
@@ -125,6 +125,11 @@
           value=$curr_item->_unit_quantity-$qty_received
           increment=true}}
         {{mb_value object=$curr_item->_ref_reference->_ref_product field=_unit_title}}
+        
+        {{main}}
+          var form = getForm("form-item-receive-{{$curr_item->_id}}");
+          form.quantity.value = Math.round(form._unit_quantity.value/{{$coeff}});
+        {{/main}}
       {{else}}
         {{mb_field object=$curr_item 
           object=$curr_item 
