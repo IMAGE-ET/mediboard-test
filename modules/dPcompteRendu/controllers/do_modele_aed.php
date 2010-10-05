@@ -26,7 +26,7 @@ $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
 $do->redirectDelete = "m=$m&new=1";
 
 // Récupération des marges du modele en fast mode
-if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1) {
+if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1 && isset($_POST["object_id"]) && $_POST["object_id"] != '') {
 	$compte_rendu = new CCompteRendu;
 	$compte_rendu->load($_POST["modele_id"]);
   $_POST["margin_top"] = $compte_rendu->margin_top;
