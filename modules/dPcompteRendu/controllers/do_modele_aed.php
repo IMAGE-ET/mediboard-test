@@ -25,6 +25,16 @@ if( isset($_POST["_do_empty_pdf"])) {
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
 $do->redirectDelete = "m=$m&new=1";
 
+// Récupération des marges du modele en fast mode
+if (isset($_POST["fast_edit"]) && $_POST["fast_edit"] == 1) {
+	$compte_rendu = new CCompteRendu;
+	$compte_rendu->load($_POST["modele_id"]);
+  $_POST["margin_top"] = $compte_rendu->margin_top;
+  $_POST["margin_bottom"] = $compte_rendu->margin_bottom;
+  $_POST["margin_left"] = $compte_rendu->margin_left;
+  $_POST["margin_right"] = $compte_rendu->margin_right;
+}
+
 // Remplacement des zones de texte libre
 if (isset($_POST["texte_libre"])) {
   $compte_rendu = new CCompteRendu();
