@@ -99,6 +99,7 @@ class CHtmlToPDF {
     $str = preg_replace("/<\/?\w+:[^>]*>/", '', $str);
     $str = preg_replace("/<tr>\s*<\/tr>/", '', $str);
     $str = str_replace("<tr/>", '', $str);
+    $str = preg_replace("/<tr>[ \t\r\n\f]*<td>[ \t\r\n\f]*&#160;[ \t\r\n\f]*<\/td>[ \t\r\n\f]*<\/tr>/", '', $str);
     $str = str_replace("text-align:=\"\"", '', $str);
     return $str;
   }
