@@ -8,11 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $AppUI, $can, $m;
-
+CCanDo::checkEdit();
 $date     = CValue::getOrSession("date"    , mbDate());
 $groupmod = CValue::getOrSession("groupmod", 2);
-$interval = CValue::getOrSession("interval", "day");
 
 $left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, errors
 $left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
@@ -29,7 +27,7 @@ if (!is_numeric($groupmod)) {
 CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
 
 $next     = mbDate("+1 DAY", $date);
-switch($interval) {
+switch ($interval = CValue::getOrSession("interval", "day")) {
   default:
   case "day":
     $from = mbDate("-1 DAY", $next);
@@ -48,9 +46,8 @@ switch($interval) {
     break;
 }
 
-$logs = new CAccessLog;
-$logs = $logs->loadAgregation($from, $next, $groupmod, $module);
-
+CSQLDataSource::$trace = false;
+$logs = CAccessLog::loadAgregation($from, $next, $groupmod, $module);
 $graphs = array();
 $left = array($left_mode, $left_sampling);
 $right = array($right_mode, $right_sampling);
@@ -61,6 +58,8 @@ foreach($logs as $log) {
 	  case 2: $graphs[] = graphAccessLog(null, null, $date, $interval, $left, $right); break;
 	}
 }
+
+CSQLDataSource::$trace = false;
 
 // Création du template
 $smarty = new CSmartyDP();

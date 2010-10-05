@@ -14,7 +14,7 @@ $date     = CValue::getOrSession("date"    , mbDate());
 $groupres = CValue::getOrSession("groupres", 1);
 $element  = CValue::getOrSession("element" , "duration");
 $interval = CValue::getOrSession("interval", "day");
-$numelem  = CValue::getOrSession("numelem" , 4);
+$numelem  = CValue::getOrSession("numelem" , 6);
 
 CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 
@@ -40,9 +40,7 @@ if ($groupres == 1) {
   $graphs[] = graphRessourceLog('total', $date, $element, $interval, $numelem);
 }
 else {
-	$logs = new CAccessLog;
-  $logs = $logs->loadAgregation($from, $next, ($groupres + 1), 0);
-	
+  $logs = CAccessLog::loadAgregation($from, $next, ($groupres + 1), 0);
   foreach($logs as $log){
     $graphs[] = graphRessourceLog($log->module, $date, $element, $interval, $numelem);
   }

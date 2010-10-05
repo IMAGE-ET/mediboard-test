@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $right) {
+function graphAccessLog($module_name, $action_name, $date, $interval = 'day', $left, $right) {
   if (!$date) $date = mbDate();
 
 	switch($interval) {
@@ -16,7 +16,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $startx = "$date 00:00:00";
 	    $endx   = "$date 23:59:59";
 	    $step = "+1 HOUR";
-	    $date_format = "%Hh";
+	    $period_format = "%Hh";
 	    $max = 24;
       $hours = 1;
 	    break;
@@ -24,7 +24,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $startx = mbDateTime("-1 MONTH", "$date 00:00:00");
 	    $endx   = "$date 23:59:59";
 	    $step = "+1 DAY";
-	    $date_format = "%d/%m";
+	    $period_format = "%d/%m";
 	    $max = 32;
       $hours = 24;
 	    break;
@@ -32,7 +32,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	    $startx = mbDateTime("-6 MONTHS", "$date 00:00:00");
 	    $endx   = "$date 23:59:59";
 	    $step = "+1 WEEK";
-	    $date_format = "%U";
+	    $period_format = "%U";
 	    $max = 27;
       $hours = 24 * 7;
 	    break;
@@ -40,7 +40,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
       $startx = mbDateTime("-2 YEARS", "$date 00:00:00");
       $endx   = "$date 23:59:59";
       $step = "+1 MONTH";
-      $date_format = "%m/%Y";
+      $period_format = "%m/%Y";
       $max = 25;
       $hours = 24 * 30;
       break;
@@ -48,7 +48,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
       $startx = mbDateTime("-20 YEARS", "$date 00:00:00");
       $endx   = "$date 23:59:59";
       $step = "+1 YEAR";
-      $date_format = "%Y";
+      $period_format = "%Y";
       $max = 21;
       $hours = 24 * 30 * 12;
       break;
@@ -57,30 +57,11 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	$datax = array();
 	$i = 0;
 	for($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
-	  $datax[] = array($i, mbTransformTime(null, $d, $date_format));
+	  $datax[] = array($i, mbTransformTime(null, $d, $period_format));
 	  $i++;
 	}
 	
-	$logs = new CAccessLog();
-	
-	$sql = "SELECT `accesslog_id`, `module`, `action`, `period`,
-            SUM(hits)     AS hits, 
-            SUM(size)     AS size, 
-            SUM(duration) AS duration, 
-            SUM(request)  AS request, 
-            SUM(errors)   AS errors, 
-            SUM(warnings) AS warnings, 
-            SUM(notices)  AS notices,
-  	      DATE_FORMAT(`period`, '$date_format') AS `gperiod`
-  	      FROM `access_log`
-  	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."' ";
-        
-	if($module)     $sql .= "AND `module` = '$module' ";
-	if($actionName) $sql .= "AND `action` = '$actionName' ";
-
-	$sql .= "GROUP BY `gperiod` ORDER BY `period`";
-	
-	$logs = $logs->loadQueryList($sql);
+	$logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name);
   
 	$duration = array();
 	$request = array();
@@ -104,7 +85,7 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
     $size[$x[0]] = array($x[0], 0);
     
 	  foreach($logs as $log) {
-	    if($x[1] == mbTransformTime(null, $log->period, $date_format)) {
+	    if($x[1] == mbTransformTime(null, $log->period, $period_format)) {
 	      $duration[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
 	      $request[$x[0]]  = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
         $errors[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
@@ -125,8 +106,8 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
 	}
 	
 	$title = '';
-  if($module) $title .= CAppUI::tr("module-$module-court");
-  if($actionName) $title .= " - $actionName";
+  if($module_name) $title .= CAppUI::tr("module-$module_name-court");
+  if($action_name) $title .= " - $action_name";
   
   $subtitle = mbTransformTime(null, $date, CAppUI::conf("longdate"));
 	
@@ -225,6 +206,6 @@ function graphAccessLog($module, $actionName, $date, $interval = 'day', $left, $
     );
   }
 	
-	return array('series' => $series, 'options' => $options, 'module' => $module);
+	return array('series' => $series, 'options' => $options, 'module' => $module_name);
 }
 ?>

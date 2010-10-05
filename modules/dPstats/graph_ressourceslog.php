@@ -26,25 +26,22 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 	    $endx   = "$date 23:59:59";
 	    break;
 	}
-	
-	$logs = new CAccessLog();
-	
-	$sql = "SELECT `accesslog_id`, `module`, `action`, `period`,
-	      SUM(`hits`) AS `hits`, SUM(`duration`) AS `duration`, SUM(`request`) AS `request`
-	      FROM `access_log`
-	      WHERE DATE(`period`) BETWEEN '".mbDate($startx)."' AND '".mbDate($endx)."'";
-	if($module == "total") {
-	  $sql .= "\nGROUP BY `action`";
-	}
-	elseif($module == "modules") {
-	  $sql .= "\nGROUP BY `module`";
-	}
-	else {
-	  $sql .= "\nAND `module` = '$module' GROUP BY `action`";
-	}
-	
-	$logs = $logs->loadQueryList($sql);
-	
+
+  if($module == "total") {
+    $groupmod = 0;
+		$module_name = null;
+  }
+  elseif($module == "modules") {
+    $groupmod = 1;
+    $module_name = null;
+  }
+  else {
+    $groupmod = 0;
+    $module_name = $module;
+  }
+
+  $logs = CAccessLog::loadAgregation($startx, $endx, $groupmod, $module_name);
+		
 	$series = array();
 	$i = 0;
 	foreach($logs as $data) {
