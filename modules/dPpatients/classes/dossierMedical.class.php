@@ -158,8 +158,8 @@ class CDossierMedical extends CMbMetaObject {
   function loadRefsAntecedentsByAppareil($cancelled = false){
     // Initialisation du classement
     $ant = new CAntecedent();
-    $list_types = explode("|", $ant->_specs["type"]->list);
-    foreach ($list_types as $appareil) {
+    $list_appareils = explode("|", $ant->_specs["appareil"]->list);
+    foreach ($list_appareils as $appareil) {
       $this->_ref_antecedents_by_appareil[$appareil] = array();
     }
     ksort($this->_ref_antecedents_by_appareil);
