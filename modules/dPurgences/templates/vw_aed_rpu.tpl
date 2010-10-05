@@ -343,11 +343,11 @@
 	  <tr>
 	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th> 
 	    <td>
-	      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();" class="autocomplete"}}
+	      {{mb_field object=$rpu field="diag_infirmier" class="autocomplete"}}
 	    </td>
 	    <th>{{mb_label object=$rpu field="pec_douleur"}}</th>
 	    <td>
-	     {{mb_field object=$rpu field="pec_douleur" onchange="this.form.onsubmit();" class="autocomplete"}}
+	     {{mb_field object=$rpu field="pec_douleur" class="autocomplete"}}
 	     <script type="text/javascript">
           Main.add(function() {
               new AideSaisie.AutoComplete(getForm("editRPU").elements.diag_infirmier, {
