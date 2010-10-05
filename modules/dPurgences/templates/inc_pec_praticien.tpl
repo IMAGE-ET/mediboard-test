@@ -55,7 +55,8 @@ checkPraticien = function(oForm){
 			    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 			    {{foreach from=$listPrats item=_prat}}
 			    <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-			      {{if $app->user_id == $_prat->_id}} selected="selected" {{/if}}>
+			      {{if $app->user_id == $_prat->_id }} selected="selected" 
+            {{elseif $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
 			      {{$_prat->_view}}
 			    </option>
 			    {{/foreach}}
