@@ -369,7 +369,7 @@ function prepareForms(root) {
     
     // We set a title on the button if it is a .notext and if it hasn't one yet
     root.select("button.notext:not([title])").each(function(button) {
-      button.title = (button.textContent || button.innerHTML).strip();
+      button.title = (button.textContent || button.innerText).strip();
     });
   } catch (e) {}
 }

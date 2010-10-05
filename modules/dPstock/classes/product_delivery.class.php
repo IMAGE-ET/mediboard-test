@@ -137,7 +137,7 @@ class CProductDelivery extends CMbObject {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
-      $delivery_trace->date_delivery = mbDateTime();
+      $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
       if ($msg = $delivery_trace->store()) {
         CAppUI::setMsg("La commande a été validée, mais elle n'a pas pu etre dispensée automatiquement pour la raison suivante: <br />$msg", UI_MSG_WARNING);
       }

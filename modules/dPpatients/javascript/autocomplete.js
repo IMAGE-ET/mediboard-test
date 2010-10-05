@@ -2,7 +2,7 @@
 
 var InseeFields = {
 	initCPVille: function(sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
-  	var oForm = document.forms[sFormName];
+  	var oForm = getForm(sFormName);
   	
 		// Populate div creation for CP
     var oField = oForm.elements[sFieldCP];
@@ -34,15 +34,17 @@ var InseeFields = {
 	},
 	
 	updateCPVille: function(selected, sFormName, sFieldCP, sFieldCommune, sFieldFocus) {
-    var oForm = document.forms[sFormName];
-		
+    var oForm = getForm(sFormName);
+		var cp = selected.down(".cp");
+    var commune = selected.down(".commune");
+    
 		// Valuate CP and Commune
-		$V(oForm.elements[sFieldCP     ], selected.select(".cp"     )[0].textContent, true);
-    $V(oForm.elements[sFieldCommune], selected.select(".commune")[0].textContent, true);
+		$V(oForm.elements[sFieldCP     ], (cp.textContent || cp.innerText).strip(), true);
+    $V(oForm.elements[sFieldCommune], (commune.textContent || commune.innerText).strip(), true);
 	  
 		// Give focus
 	  if (sFieldFocus) {
-	    $(oForm.elements[sFieldFocus]).focus();
+	    $(oForm.elements[sFieldFocus]).tryFocus();
 	  }
 	}
 }
