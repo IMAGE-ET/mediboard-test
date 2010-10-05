@@ -455,7 +455,8 @@ class CPrescription extends CMbObject {
     $protocole = new CPrescription();
     $protocole->load($protocole_id);
     
-    // Creation d'un protocole de pré-admission s'il n'y en a pas
+    // Creation d'une prescription de pré-admission s'il n'y en a pas
+    /*
     if ($this->object_class === 'CSejour') {
       $this->loadRefObject();
       $this->_ref_object->loadRefsPrescriptions();
@@ -467,7 +468,7 @@ class CPrescription extends CMbObject {
         $prescription->store();
         $this->_ref_object->_ref_prescriptions["pre_admission"] = $prescription;
       }
-    }
+    }*/
   
     // Chargement des lignes de medicaments, d'elements et de commentaires
     $protocole->loadRefsLinesMed();

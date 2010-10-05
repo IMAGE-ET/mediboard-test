@@ -54,10 +54,10 @@ $is_praticien = $user->isPraticien();
 $type ="";
 if($object_class == "CSejour"){
 	$type = "pre_admission";
-} 
+}
 if($object_class == "CConsultation"){
 	$type = "externe";
-} 
+}
 
 // Création du template
 $smarty = new CSmartyDP();

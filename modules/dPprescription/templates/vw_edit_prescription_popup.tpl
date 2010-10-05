@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 
-function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
+refreshListProtocolesPrescription = function(praticien_id, list, selected_id) {
   if (list) {
     var url = new Url;
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
@@ -28,17 +28,51 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
   }
 }
 			          
-Main.add(function () {
-  if (formAnesth = document.forms.editProtoPrescriptionAnesth) {
-    refreshListProtocolesPrescription('{{$anesth_id}}', formAnesth.pack_protocole_id);
+var oFormProtocole = getForm("applyProtocoleFirst");
+
+if (oFormProtocole) {
+var url = new Url("dPprescription", "httpreq_vw_select_protocole");
+var autocompleter = url.autoComplete(oFormProtocole.libelle_protocole, "protocole_auto_complete", {
+    dropdown: true,
+    adaptDropdown: true,
+    minChars: 1,
+    valueElement: oFormProtocole.elements.pack_protocole_id,
+    updateElement: function(selectedElement) {
+      var node = $(selectedElement).down('.view');
+      $V($("applyProtocoleFirst_libelle_protocole"), (node.innerHTML).replace("&lt;", "<").replace("&gt;",">"));
+      if (autocompleter.options.afterUpdateElement)
+        autocompleter.options.afterUpdateElement(autocompleter.element, selectedElement);
+    },
+    callback: 
+        function(input, queryString){
+          {{if !$is_praticien}}
+            return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id="+$('choix_prat').value+"&type="+$("type_prescription").value);
+          {{else}}
+            return (queryString + "&prescription_id={{$prescription->_id}}&praticien_id={{$current_user->_id}}&type="+$("type_prescription").value);
+        	{{/if}}
+        }
+  } );
+}
+addProtocole = function(prescription_id) {
+  $V(oFormProtocole.prescription_id, prescription_id);
+  if ($V(oFormProtocole.pack_protocole_id) == "") {
+	  reloadPrescription(prescription_id);
   }
-  
-  if (formChir = document.forms.editProtoPrescriptionChir) {
-    refreshListProtocolesPrescription('{{$chir_id}}', formChir.pack_protocole_id);
+  else {
+	  $V(oFormProtocole.praticien_id, $('choix_prat').value);
+	  submitFormAjax(oFormProtocole, 'msgajax');
   }
-});
+}
+
+emptyProtocole = function() {
+	$V(oFormProtocole.libelle_protocole, String.fromCharCode(8212)+ " Aucun protocole");
+	$V(oFormProtocole.pack_protocole_id, '');
+	$V(getForm("addPrescription").type, $("type_prescription").value);
+}
 
 </script>
+
+<div style="display: none;" id="msgajax"></div>
 
 <table class="main">
   {{if $prescription->_id}}
@@ -76,20 +110,21 @@ Main.add(function () {
 				            {{/foreach}}
 			          </select>
 		         </form>
-            {{/if}}
-            
-            {{if $prescription->type == "pre_admission" && !$prescription_sejour->_id}}
-              <form name="addPrescriptionSejour" method="post" action="?">
+              {{/if}}
+            {{else}}
+	            <form name="addPrescriptionSejour" method="post" action="?">
 	              <input type="hidden" name="m" value="dPprescription" />
-			          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
-			          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-			          <input type="hidden" name="type" value="sejour" />
-			          <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
-			            Séjour
-			          </button> 
-		          </form>   
+	              <input type="hidden" name="dosql" value="do_prescription_aed" />
+	              <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+	              <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+	              <input type="hidden" name="object_class" value="CSejour" />
+	              <input type="hidden" name="type" value="pre_admission" />
+	              <input type="hidden" name="callback" value="reloadPrescription" />
+	              <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
+	                Pré-admission
+	              </button> 
+	            </form>
             {{/if}}
-          {{/if}}
           </td>
           
           
@@ -109,19 +144,26 @@ Main.add(function () {
 							            {{/foreach}}
 						          </select>
 					         </form>
-			            {{/if}}
-		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id}}
-			          <form name="addPrescriptionSejour" method="post" action="">
-				          <input type="hidden" name="m" value="dPprescription" />
-				          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
-				          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-				          <input type="hidden" name="type" value="sortie" />
-						      <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">			       
-						       Sortie
-						      </button>
-			          </form>
-		          {{/if}}
-	          {{/if}}
+			        {{/if}}
+	          {{else}}
+              <form name="addPrescriptionSejour" method="post" action="?">
+                <input type="hidden" name="m" value="dPprescription" />
+                {{if $prescription_pre_admission->_id}}
+                  <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
+                  <input type="hidden" name="prescription_id" value="{{$prescription_pre_admission->_id}}" />
+                {{else}}
+                  <input type="hidden" name="dosql" value="do_prescription_aed" />
+                  <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+                  <input type="hidden" name="object_class" value="CSejour" />
+                {{/if}}
+                <input type="hidden" name="type" value="sejour" />
+                <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+                <input type="hidden" name="callback" value="reloadPrescription" />
+                <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">
+                  Séjour
+                </button> 
+              </form>
+            {{/if}}
           </td>
          
           <td id="sortie" class="step {{if $prescription->type == 'sortie'}}selected{{/if}}">
@@ -139,8 +181,26 @@ Main.add(function () {
 					            {{/foreach}}
 				          </select>
 			         </form>
+              {{/if}}
+	        {{else}}
+	          <form name="addPrescriptionSejour" method="post" action="">
+	            <input type="hidden" name="m" value="dPprescription" />
+	            {{if $prescription_sejour->_id}}
+	              <input type="hidden" name="prescription_id" value="{{$prescription_sejour->_id}}" />
+	              <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
+	            {{else}}
+	              <input type="hidden" name="dosql" value="do_prescription_aed" />
+	              <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+	              <input type="hidden" name="object_class" value="CSejour" />
 	            {{/if}}
-          {{/if}}
+	            <input type="hidden" name="type" value="sortie" />
+	            <input type="hidden" name="callback" value="reloadPrescription" />
+	            <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+	            <button type="button" class="add" onclick="submitFormAjax(this.form, 'systemMsg');">             
+	              Sortie
+	            </button>
+	          </form>
+	        {{/if}}
           </td>
         </tr>
       </table>
@@ -166,60 +226,96 @@ Main.add(function () {
    {{if $full_mode && $sejour_id}}
     <tr>
       <td>
-			  <form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">
-				  <input type="hidden" name="m" value="dPprescription" />
-				  <input type="hidden" name="dosql" value="do_prescription_aed" />
-				  <input type="hidden" name="prescription_id" value="" />
-				  <input type="hidden" name="del" value="0" />
-				  <input type="hidden" name="object_id" value="{{$sejour_id}}"/>
-				  <input type="hidden" name="object_class" value="CSejour" />
-				  <input type="hidden" name="callback" value="" />
-				  <input type="hidden" name="type" value="pre_admission" />
-				  {{if $mode_anesth}}
-				    <button type="button" class="submit" onclick="this.form.callback.value = 'reloadPrescription'; submitFormAjax(this.form, 'systemMsg');">Créer une prescription de sejour</button>				  
-				  {{else}}
-				  <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
-				    document.addPrescription.type.value = 'sejour';
-				    document.addPrescription.callback.value = 'reloadPrescription';
-				    submitFormAjax(document.addPrescription, 'systemMsg');
-				  } } );">Créer une prescription de séjour</button>
-				  {{/if}}
-				</form>
-        <br />
-        
-        {{if $operation_id}}
-        {{if $anesth_id}}
-        <form name="editProtoPrescriptionAnesth" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
-          <input type="hidden" name="operation_id" value="{{$operation_id}}" />
-          <input type="hidden" name="prescription_id" value="" />
-          <input type="hidden" name="praticien_id" value="{{$anesth_id}}" />
-          <input type="hidden" name="callback" value="" />
-          
-          <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}</label>
-          <select name="pack_protocole_id" class="notNull"></select>
-          
-          <button class="submit" type="submit">Appliquer</button>
-        </form>
-        <br />
-        {{/if}}
-        {{if $chir_id}}
-        <form name="editProtoPrescriptionChir" action="?m=dPprescription" method="post" onsubmit="return onSubmitFormAjax(this)">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
-          <input type="hidden" name="operation_id" value="{{$operation_id}}" />
-          <input type="hidden" name="prescription_id" value="" />
-          <input type="hidden" name="praticien_id" value="{{$chir_id}}" />
-          <input type="hidden" name="callback" value="" />
-          
-          <label for="protocole_id">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</label>
-          <select name="pack_protocole_id" class="notNull"></select>
-          
-          <button class="submit" type="submit">Appliquer</button>
-        </form>
-        {{/if}}
-        {{/if}}
+				  <table class="form">
+				    <tr>
+				      {{if !$is_praticien}}
+                <th class="title">Praticien</th>
+              {{/if}}
+              {{if $operations|@count > 1}}
+                <th class="title">Intervention</th>
+              {{/if}}
+				      <th class="title" >{{mb_title object=$prescription field="type"}}</th>
+				      <th class="title" >Protocole</th>
+				    </tr>
+				    <tr>
+				    {{if !$is_praticien}}
+				      <td>
+				      <select name="praticien_id" id="choix_prat" onchange="$V(getForm('applyProtocoleFirst').praticien_id, this.value);">
+			         <optgroup label="Responsables">
+		              {{if $chir->_id}}
+                    <option class="mediuser"
+                            style="border-color: #{{$chir->_ref_function->color}};" 
+                            value="{{$chir->_id}}">{{$chir->_view}}</option>
+                  {{/if}}
+                  {{if $anesth->_id}}
+                    <option class="mediuser"
+                            style="border-color: #{{$anesth->_ref_function->color}};"
+                            value="{{$anesth->_id}}">{{$anesth->_view}}</option>
+                  {{/if}}
+		            </optgroup>
+		            <optgroup label="Tous les praticiens">
+		              {{foreach from=$listPrats item=_praticien}}
+		                <option class="mediuser"
+		                        style="border-color: #{{$_praticien->_ref_function->color}};" 
+		                        value="{{$_praticien->_id}}"
+		                        {{if $_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
+		                </option>
+		              {{/foreach}}
+		            </optgroup>
+			        </select>
+				      </td>
+				    {{/if}}
+              {{if $operations|@count > 1}}
+	              <td>
+		              <select name="operation_id" onchange="$V(getForm('applyProtocoleFirst').operation_id, this.value);">
+		                {{foreach from=$operations item=_operation name=operations}}
+		                  <option value="{{$_operation->_id}}" {{if $smarty.foreach.operations.index == $smarty.foreach.operations.last}}selected="selected"{{/if}}>
+                        {{$_operation->_view}}
+                      </option>
+		                {{/foreach}}
+		              </select>
+	              </td>
+              {{/if}}
+				      <td>
+							  <select name="type" id="type_prescription" onchange="emptyProtocole();">
+					        <option value="pre_admission">Pré-admission</option>
+					        <option value="sejour" selected="selected">Séjour</option>
+					        <option value="sortie">Sortie</option>
+					      </select>
+				      </td>
+				      <td>
+				        <form name="applyProtocoleFirst" method="post" action="?" onsubmit="return checkForm(this);">
+                  <input type="hidden" name="m" value="dPprescription" />
+                  <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="prescription_id" value="" />
+                  <input type="hidden" name="pratSel_id" value="{{$praticien_sejour}}" />
+                  <input type="hidden" name="praticien_id" value="" />
+                  <input type="hidden" name="pack_protocole_id" value="" />
+                  {{assign var=last_operation value=$operations|@end}}
+                  {{if $operations|@count >= 1}}
+                    <input type="hidden" name="operation_id" value="{{$last_operation->_id}}" />
+                  {{/if}}
+					        <input type="text"   name="libelle_protocole" value="&mdash; Aucun protocole" class="autocomplete" style="font-weight: bold; font-size: 1.3em; width: 250px;"/>
+	                <div style="display:none; width: 200px;" class="autocomplete" id="protocole_auto_complete"></div>
+                </form>
+                
+				        <form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">
+				          <input type="hidden" name="m" value="dPprescription" />
+				          <input type="hidden" name="dosql" value="do_prescription_aed" />
+				          <input type="hidden" name="prescription_id" value="" />
+				          <input type="hidden" name="del" value="0" />
+				          <input type="hidden" name="object_id" value="{{$sejour_id}}"/>
+				          <input type="hidden" name="object_class" value="CSejour" />
+				          <input type="hidden" name="type" value="sejour"/>
+				          <input type="hidden" name="callback" value="addProtocole" />
+	                <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">Créer</button>         
+                </form>
+				      </td>
+				    </tr>
+				    <tr>
+				    </tr>
+					</table>
 		  </td>
 		</tr>
    {{else}}

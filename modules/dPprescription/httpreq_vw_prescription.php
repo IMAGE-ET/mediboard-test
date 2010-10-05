@@ -36,10 +36,6 @@ if(!$operation_id && !$mode_sejour){
   $operation_id = @$_SESSION["dPsalleOp"]["operation_id"];
   CValue::setSession("operation_id", $operation_id);
 }
-
-if($pratSel_id){
-  $prescription->_current_praticien_id = $pratSel_id;
-}
 	
 // Gestion du mode d'affichage
 $full_line_guid      = CValue::getOrSession("full_line_guid"); 
@@ -444,11 +440,31 @@ if($operation->load($operation_id)) {
   $operation->_ref_anesth->loadRefFunction();
 }
 
+if (!$prescription->_id) {
+	$_sejour->loadRefsOperations();
+  $operations = $_sejour->_ref_operations;
+	foreach ($operations as $_operation)
+	  $_operation->loadRefPlageOp();
+}
+
 $_chir_id   = $chir_id   ? $chir_id : ($AppUI->_ref_user->isPraticien() ? $AppUI->user_id : $_sejour->praticien_id);
 $_anesth_id = $anesth_id ? $anesth_id : ($AppUI->_ref_user->isFromType(array("Anesthésiste")) ? 
                                             $AppUI->user_id : 
                                             ($operation->_id ? $operation->_ref_plageop->anesth_id : null));
-                                            
+
+$_chir = new CMediusers();
+$_anesth = new CMediusers();
+
+if ($_chir_id) {
+	$_chir->load($_chir_id);
+	$_chir->loadRefFunction();
+}
+
+if ($_anesth_id) {
+	$_anesth->load($_anesth_id);
+	$_anesth->loadRefFunction();
+}
+
 if(isset($operation->_ref_anesth->_id)){
   unset($listPrats[$operation->_ref_anesth->_id]);
 }
@@ -516,9 +532,12 @@ $smarty->assign("praticien_for_prot_id", $praticien_for_prot_id);
 $smarty->assign("user_id"              , $AppUI->user_id);
 if($full_mode){
   $smarty->assign("praticien_sejour", $_sejour->praticien_id);
-  $smarty->assign("chir_id", $_chir_id);
-  $smarty->assign("anesth_id", $_anesth_id);
+  $smarty->assign("chir"   , $_chir);
+  $smarty->assign("anesth"   , $_anesth);
   $smarty->assign("operation", $operation);
+  if (!$prescription->_id) {
+    $smarty->assign("operations", $operations);
+  }
   $smarty->display("vw_edit_prescription_popup.tpl");
   return;
 }

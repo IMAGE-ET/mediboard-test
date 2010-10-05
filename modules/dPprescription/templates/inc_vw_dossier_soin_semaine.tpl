@@ -37,13 +37,13 @@ calculDuree = function(date1, date2, oForm, now, prescription_id){
 }
 
 
-addAdministrationPlan = function(line_id, line_class, unite_prise, date, list_administrations){
+addAdministrationPlan = function(line_id, line_class, unite_prise, dateTime, list_administrations){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_add_administration");
   url.addParam("line_id",  line_id);
   url.addParam("key_tab", unite_prise);
   url.addParam("object_class", line_class);
-  url.addParam("date", date);
+  url.addParam("dateTime", dateTime);
   url.addParam("date_sel", '{{$now}}');
   url.addParam("mode_plan", '1');
   url.addParam("administrations", list_administrations);

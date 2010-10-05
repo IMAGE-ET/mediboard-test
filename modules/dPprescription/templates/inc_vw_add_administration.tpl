@@ -185,7 +185,7 @@ function checkTransmission(quantite_prevue, quantite_saisie){
 	      
 	      {{if $mode_plan}}
 	      à
-	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$date}} '+this.value);">
+	      <select name="_hour" class="notNull" onchange="$V(this.form.dateTime, '{{$dateTime}} '+this.value);">
 	        <option value="">&mdash; Heure</option>
 	        {{foreach from=$hours item=_hour}}
 	        <option value="{{$_hour}}:00:00">{{$_hour}}h</option>

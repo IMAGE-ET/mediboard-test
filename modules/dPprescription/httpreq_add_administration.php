@@ -128,5 +128,5 @@ $smarty->assign("hours", $hours);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("user_id", CAppUI::$instance->user_id);
-$smarty->display("../../dPprescription/templates/inc_vw_add_administration.tpl");
+$smarty->display("inc_vw_add_administration.tpl");
 ?>

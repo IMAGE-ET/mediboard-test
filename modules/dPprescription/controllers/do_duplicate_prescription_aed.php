@@ -91,7 +91,7 @@ foreach($lines as $cat => $lines_by_type){
 	  $line->signee = 0;
 	  $line->valide_infirmiere = 0;
 	  $line->creator_id = $AppUI->user_id;
-	  if($line->_class_name == "CPrescriptionLineMedicament"){
+	  if($line instanceOf CPrescriptionLineMedicament){
 	    $line->valide_pharma = 0;
 	  }
 	  
