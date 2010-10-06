@@ -6,7 +6,7 @@
     {{mb_include module=dPplanningOp template=inc_vw_operation}}
     <br />
     {{if $is_alerte}}
-    {{$_alerte->comments}}
+    {{$_alerte->comments|nl2br}}
     <br />
     <form name="removeFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="system" />
