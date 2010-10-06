@@ -8,8 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $m;
-$can->needsEdit();
+CCanDo::checkRead();
 
 $objects_id     = CValue::post("_objects_id"); // array
 $objects_class  = CValue::post("_objects_class");
