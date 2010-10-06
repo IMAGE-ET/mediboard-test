@@ -11,7 +11,7 @@
 
 <td class="text {{if $sejour->annule}}cancelled{{/if}}" colspan="2">
   
-  <form name="validCotation-{{$atu->_id}}" action="" method="post"> 
+  <form name="validCotation-{{$atu->_id}}" action="" method="post" class="prepared"> 
     <input type="hidden" name="dosql" value="do_consultation_aed" />
     <input type="hidden" name="m" value="dPcabinet" />
     <input type="hidden" name="del" value="0" />
@@ -73,7 +73,7 @@
        {{mb_value object=$rpu field="orientation"}}      
      {{/if}}
   {{else}}
-    <form name="editRPU-{{$rpu->_id}}" method="post" action="?">
+    <form name="editRPU-{{$rpu->_id}}" method="post" action="?" class="prepared">
       <input type="hidden" name="m" value="dPurgences" />
       <input type="hidden" name="dosql" value="do_rpu_aed" />
       <input type="hidden" name="del" value="0" />
@@ -92,77 +92,67 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
     
-    <table>
     <!-- Annulation de la sortie -->
-      {{if $sejour->sortie_reelle}}
-      <tr>
-        <td>
-        	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-	          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-	          {{mb_title object=$sejour field=_entree}}
-            <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
-          </span>
-          <br />
-          {{mb_title object=$sejour field=_sortie}} :
-					{{mb_value object=$sejour field=mode_sortie}}
-          {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
-            <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
-          {{/if}}
-					{{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
-            {{assign var=service_id value=$sejour->service_mutation_id}}
-            {{assign var=service value=$services.$service_id}}
-            <br />&gt; <strong>{{$service}}</strong>
-          {{/if}}
-          <br />
-          
-          {{assign var=sejour_id value=$sejour->_id}}
-          {{assign var=rpu_id value=$rpu->_id}}
-          
-          {{mb_field object=$sejour field=entree_reelle hidden=true}}
-          {{mb_field object=$sejour field=sortie_reelle register=true form="editSejour-$sejour_id" 
-             onchange="onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
-          <br />
-          
-          {{mb_field object=$sejour field=mode_sortie hidden=true}}
-          {{mb_field object=$sejour field=etablissement_transfert_id hidden=true}}
-         </td>
-       </tr>
+    {{if $sejour->sortie_reelle}}
+      <div>
+      	<span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+          {{mb_title object=$sejour field=_entree}}
+          <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
+        </span>
+        <br />
+        {{mb_title object=$sejour field=_sortie}} : {{mb_value object=$sejour field=mode_sortie}}
+        {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
+          <br />&gt; <strong>{{mb_value object=$sejour field=etablissement_transfert_id}}</strong>
+        {{/if}}
+        {{if $sejour->mode_sortie == "mutation" && $sejour->service_mutation_id}}
+          {{assign var=service_id value=$sejour->service_mutation_id}}
+          {{assign var=service value=$services.$service_id}}
+          <br />&gt; <strong>{{$service}}</strong>
+        {{/if}}
+        <br />
         
-       <!-- Sortie à effectuer -->
-       {{else}}
-       <tr>
-         <td class="text">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
-            {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
-            {{mb_title object=$sejour field=_entree}}
-            <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
-          </span>
-          <br />
-          {{assign var=rpu_id value=$rpu->_id}}
-          {{assign var=sejour_id value=$sejour->_id}}
-          
-          {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value); refreshExecuter.stop();"}}
-          <input type="hidden" name="_modifier_sortie" value="1" />
-          <button class="tick" type="button" onclick="{{if $atu->_id}}validCotation('{{$atu->_id}}');{{/if}} onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
-            {{tr}}Validate{{/tr}}
-          </button>
-         </td>
-       </tr>
-			 
-       <tr>
-        <td>
-          <input type="hidden" name="group_id" value="{{$g}}" />
-					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" style="display:none">
-            {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
-          </div>
-					<div id="service_sortie_transfert_{{$sejour->_id}}" style="display:none">
-            {{mb_field object=$sejour field="service_mutation_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
-          </div>
-				</td>
-       </tr>
-      {{/if}}
-			
-      </table>
+        {{assign var=sejour_id value=$sejour->_id}}
+        {{assign var=rpu_id value=$rpu->_id}}
+        
+        {{mb_field object=$sejour field=entree_reelle hidden=true}}
+        {{mb_field object=$sejour field=sortie_reelle register=true form="editSejour-$sejour_id" 
+           onchange="onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
+        <br />
+        
+        {{mb_field object=$sejour field=mode_sortie hidden=true}}
+        {{mb_field object=$sejour field=etablissement_transfert_id hidden=true}}
+      </div>
+        
+    <!-- Sortie à effectuer -->
+    {{else}}
+      <div>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
+          {{mb_include module=dPplanningOp template=inc_vw_numdos num_dossier=$sejour->_num_dossier}}
+          {{mb_title object=$sejour field=_entree}}
+          <strong>{{mb_value object=$sejour field=_entree date=$date}}</strong>
+        </span>
+        <br />
+        {{assign var=rpu_id value=$rpu->_id}}
+        {{assign var=sejour_id value=$sejour->_id}}
+        
+        {{mb_field object=$sejour field="mode_sortie" onchange="initFields($rpu_id,$sejour_id,this.value); refreshExecuter.stop();"}}
+        <input type="hidden" name="_modifier_sortie" value="1" />
+        <button class="tick" type="button" onclick="{{if $atu->_id}}validCotation('{{$atu->_id}}');{{/if}} onSubmitFormAjax(this.form, {onComplete: refreshSortie.curry(this, '{{$rpu_id}}')});">
+          {{tr}}Validate{{/tr}}
+        </button>
+      </div>
+      
+      <div>
+        <input type="hidden" name="group_id" value="{{$g}}" />
+        <div id="etablissement_sortie_transfert_{{$sejour->_id}}" style="display:none">
+          {{mb_field object=$sejour field="etablissement_transfert_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
+        </div>
+        <div id="service_sortie_transfert_{{$sejour->_id}}" style="display:none">
+          {{mb_field object=$sejour field="service_mutation_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
+        </div>
+      </div>
+    {{/if}}
     </form>
   </td>
 	

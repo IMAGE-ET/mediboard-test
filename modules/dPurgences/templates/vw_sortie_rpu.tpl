@@ -183,6 +183,6 @@ function submitSejour(){
       {{mb_include module=dPurgences template=inc_sortie_rpu}}
     </tr>
   {{foreachelse}}
-	  <tr><td colspan="10"><em>Aucune sortie à effectuer</em></td></tr>
+	  <tr><td colspan="{{$dPconfig.dPurgences.responsable_rpu_view|ternary:7:6}}"><em>Aucune sortie à effectuer</em></td></tr>
   {{/foreach}}
 </table>

@@ -44,7 +44,7 @@ checkPraticien = function(oForm){
 	{{if !$consult->_id}}
 		{{if !$sejour->sortie_reelle}}
 			{{if $can->edit}}
-			<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);">
+			<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this);" class="prepared">
 			  <input type="hidden" name="dosql" value="do_consult_now" />
 			  <input type="hidden" name="m" value="dPcabinet" />
 			  <input type="hidden" name="del" value="0" />
@@ -55,8 +55,7 @@ checkPraticien = function(oForm){
 			    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 			    {{foreach from=$listPrats item=_prat}}
 			    <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-			      {{if $app->user_id == $_prat->_id }} selected="selected" 
-            {{elseif $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
+			      {{if $app->user_id == $_prat->_id || $_prat->_id == $sejour->praticien_id}} selected="selected" {{/if}}>
 			      {{$_prat->_view}}
 			    </option>
 			    {{/foreach}}
