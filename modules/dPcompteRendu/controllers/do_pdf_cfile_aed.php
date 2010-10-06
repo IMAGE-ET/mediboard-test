@@ -18,6 +18,7 @@ $margins     = CValue::post("margins", array($compte_rendu->margin_top,
                                              $compte_rendu->margin_bottom,
                                              $compte_rendu->margin_left));
 if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1) {
+	CMbArray::removeValue('', $_POST["texte_libre"]);
 	$content = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
 }
 
@@ -40,11 +41,11 @@ $htmltopdf->generatePDF($content, 0, $compte_rendu->_page_format, $compte_rendu-
 $file->file_size = filesize($file->_file_path);
 $msg = $file->store();
 
+if ($stream) {
+	$htmltopdf->dompdf->stream($file->file_name, array("Attachment" => 0));
+}
+
 CAppUI::displayMsg($msg, "CCompteRendu-msg-create");
 echo CAppUI::getMsg();
-
-if ($stream) {
-	$htmltopdf->dompdf->stream($file->file_name, array("Attachment" => 1));
-}
 CApp::rip();
 ?>
