@@ -21,8 +21,12 @@ if (!$keywords) {
 $where = array(
   "code" => "IS NOT NULL",
   "name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'"),
-  "category_id" => "= '".CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id')."'",
 );
+
+$category_id = CAppUI::conf('bcb CBcbProduitLivretTherapeutique product_category_id');
+if ($category_id) {
+  $where["category_id"] = "= '$category_id'";
+}
 
 $product = new CProduct;
 $list_products = $product->seek($keywords, $where, "$start, 25", true);
