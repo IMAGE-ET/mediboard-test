@@ -1402,10 +1402,10 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - cp"                , $this->cp         );
     $template->addProperty("Patient - âge"               , $this->_age       );
     $template->addDateProperty("Patient - date de naissance", $this->naissance);
-    $template->addProperty("Patient - lieu de naissance", $this->lieu_naissance);
-    $template->addProperty("Patient - numéro d'assuré"   , $this->matricule  );
-    $template->addProperty("Patient - téléphone"         , $this->tel        );
-    $template->addProperty("Patient - mobile"            , $this->tel2       );
+    $template->addProperty("Patient - lieu de naissance" , $this->lieu_naissance);
+    $template->addProperty("Patient - numéro d'assuré"   , $this->getFormattedValue("matricule"));
+    $template->addProperty("Patient - téléphone"         , $this->getFormattedValue("tel"));
+    $template->addProperty("Patient - mobile"            , $this->getFormattedValue("tel2"));
     $template->addProperty("Patient - téléphone autre"   , $this->tel_autre  );
     $template->addProperty("Patient - profession"        , $this->profession );
     $template->addProperty("Patient - IPP"               , $this->_IPP       );
@@ -1413,7 +1413,7 @@ class CPatient extends CMbObject {
 
     $this->guessExoneration();
     $template->addProperty("Patient - Qualité bénéficiaire - Libellé", $this->libelle_exo);
-    $template->addProperty("Patient - Numéro de sécurité sociale", $this->matricule);
+    $template->addProperty("Patient - Numéro de sécurité sociale", $this->getFormattedValue("matricule"));
     $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
     $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
     
@@ -1440,7 +1440,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - employeur - adresse", $this->employeur_adresse);
     $template->addProperty("Patient - employeur - cp"     , $this->employeur_cp);
     $template->addProperty("Patient - employeur - ville"  , $this->employeur_ville);
-    $template->addProperty("Patient - employeur - tel"    , $this->employeur_tel);
+    $template->addProperty("Patient - employeur - tel"    , $this->getFormattedValue("employeur_tel"));
     $template->addProperty("Patient - employeur - urssaf" , $this->employeur_urssaf);
     
     // Prevenir
@@ -1449,7 +1449,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - prévenir - adresse", $this->prevenir_adresse);
     $template->addProperty("Patient - prévenir - cp"     , $this->prevenir_cp);
     $template->addProperty("Patient - prévenir - ville"  , $this->prevenir_ville);
-    $template->addProperty("Patient - prévenir - tel"    , $this->prevenir_tel);
+    $template->addProperty("Patient - prévenir - tel"    , $this->getFormattedValue("prevenir_tel"));
     $template->addProperty("Patient - prévenir - parente", $this->prevenir_parente);
     
     // Confiance
@@ -1458,7 +1458,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - confiance - adresse", $this->confiance_adresse);
     $template->addProperty("Patient - confiance - cp"     , $this->confiance_cp);
     $template->addProperty("Patient - confiance - ville"  , $this->confiance_ville);
-    $template->addProperty("Patient - confiance - tel"    , $this->confiance_tel);
+    $template->addProperty("Patient - confiance - tel"    , $this->getFormattedValue("confiance_tel"));
     $template->addProperty("Patient - confiance - parente", $this->confiance_parente);
 	
     // Vider les anciens holders
