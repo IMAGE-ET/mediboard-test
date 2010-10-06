@@ -119,8 +119,12 @@
           {{assign var=rpu_id value=$rpu->_id}}
           
           {{mb_field object=$sejour field=entree_reelle hidden=true}}
-          {{mb_field object=$sejour field=sortie_reelle register=true form="editSejour-$sejour_id" 
+          
+          {{mb_field object=$sejour field=sortie_reelle
              onchange="onSubmitFormAjax(this.form,{onComplete:refreshSortie.curry(this,'$rpu_id')})"}}
+          <button class="edit notext" type="button" onclick="Calendar.regField(this.form.sortie_reelle); $(this).remove()">
+            Modifier la sortie réelle
+          </button>
           <br />
           
           {{mb_field object=$sejour field=mode_sortie hidden=true}}
@@ -149,7 +153,7 @@
          </td>
        </tr>
 			 
-       <tr>
+      <tr>
         <td>
           <input type="hidden" name="group_id" value="{{$g}}" />
 					<div id="etablissement_sortie_transfert_{{$sejour->_id}}" style="display:none">
@@ -159,7 +163,7 @@
             {{mb_field object=$sejour field="service_mutation_id" form="editSejour-$sejour_id" autocomplete="true,1,50,true,true"}}
           </div>
 				</td>
-       </tr>
+      </tr>
       {{/if}}
 			
       </table>
