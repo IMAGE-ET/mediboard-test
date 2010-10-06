@@ -164,8 +164,9 @@ Main.add(function () {
   <tr>
     {{if $consult->_id}}
       <th class="title modify" colspan="5">
+        {{mb_include module=system template=inc_object_notes      object=$consult}}
         {{mb_include module=system template=inc_object_idsante400 object=$consult}}
-        {{mb_include module=system template=inc_object_history object=$consult}}
+        {{mb_include module=system template=inc_object_history    object=$consult}}
         {{tr}}CConsultation-title-modify{{/tr}}
         {{if $pat->_id}}de {{$pat->_view}}{{/if}}
         par le Dr {{$chir}}
@@ -210,7 +211,7 @@ Main.add(function () {
           <td>
           	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
           	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
-						<button class="search" type="button" onclick="PatSelector.init()">Rechercher</button>
+						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 	          <script type="text/javascript">
 	            PatSelector.init = function(){
 	              this.sForm = "editFrm";

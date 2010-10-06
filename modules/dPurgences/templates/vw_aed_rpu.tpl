@@ -268,7 +268,7 @@
 		  	readonly="readonly" />
 		    
 		    {{if $dPconfig.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
-		      <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+		      <button type="button" class="search" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 		    {{/if}}
 		    <script type="text/javascript">
 		      PatSelector.init = function(){
@@ -278,6 +278,13 @@
 		        this.pop();
 		      }
 		    </script>
+				{{if $patient->_id}}
+        <button id="button-edit-patient" type="button" class="edit"
+          onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form._patient_id.value" 
+        >
+          {{tr}}Edit{{/tr}}
+        </button>
+				{{/if}}
 		    
 	    </td>
 	    
