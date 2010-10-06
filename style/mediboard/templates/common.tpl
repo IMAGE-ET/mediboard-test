@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{$localeInfo.alpha2}}" lang="{{$localeInfo.alpha2}}">
-
+<!DOCTYPE html>
+<html lang="{{$localeInfo.alpha2}}">
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
@@ -16,6 +15,19 @@
   
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
+  
+  <!-- IE9 specific JumpLists -->
+  {{if $browser.name == "msie"}}
+    <meta name="application-name" content="{{$dPconfig.page_title}}" />
+    <meta name="application-tooltip" content="{{$dPconfig.page_title}}" />
+    <meta name="msapplication-starturl" content="./" />
+    
+    {{foreach from=$modules key=mod_name item=currModule}} 
+      {{if $currModule->_can->view && $currModule->mod_ui_active}}
+        <meta name="msapplication-task" content="name={{tr}}module-{{$mod_name}}-court{{/tr}};action-uri=./?m={{$mod_name}};icon-uri=./lib/phpThumb/phpThumb.php?src=../../modules/{{$mod_name}}/images/icon.png&amp;ws=16&amp;f=ico" />
+      {{/if}}
+    {{/foreach}}
+  {{/if}}
   
   <script type="text/javascript">
     // This needs to be at the very beginning of the page

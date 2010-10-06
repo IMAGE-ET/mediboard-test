@@ -371,7 +371,7 @@ class CBarcodeParser {
       // Medacta
       //      ___REF____
       // +EMIN012654MBTL15
-      if (empty($comp) && preg_match('/^eMIN(\d{6}MBTL)(\d{2})$/ms', $barcode, $parts)) {
+      if (empty($comp) && preg_match('/^eMIN(.{4,})(.{2})$/ms', $barcode, $parts)) {
         $comp["ref"] = $parts[1];
       }
     
