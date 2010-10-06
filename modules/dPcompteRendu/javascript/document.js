@@ -62,7 +62,7 @@ var Document = {
       url.addParam("object_id"   , object_id);
       url.addParam('object_class', object_class);
       url.requestUpdate(fast, {onComplete: function(){
-        if (fast.select(".freetext").length) {
+        if (fast.select(".freetext").length || fast.innerHTML.indexOf("[Liste")) {
           var modaleWindow = modal(fast);
           modaleWindow.position();
         }
