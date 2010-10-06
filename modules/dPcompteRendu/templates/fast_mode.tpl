@@ -53,7 +53,7 @@ streamOrNotStream = function(form) {
   Document.refreshList('{{$object_class}}', '{{$object_id}}');
 }
 
-{{if !$lists|@count && !$noms_textes_libres|@count}}
+{{if $lists|@count == 0 && $noms_textes_libres|@count == 0}}
 Main.add(function() {
   Control.Modal.close();
   $V(getForm('download-pdf-form-{{$uid_fast_mode}}').stream, 1);
