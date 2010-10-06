@@ -1,6 +1,7 @@
 if (!window.File.applet) {
   File.applet = {
     object_guid: null,
+    debugConsole: null,
     directory: null,
     uploader: null,
     executer: null,
@@ -15,13 +16,24 @@ if (!window.File.applet) {
       DOM.param({name: 'url', value: document.location.href.replace(/((index\.php)?\?.*)$/, "modules/dPfiles/ajax_yoplet_upload.php")}),
       DOM.param({name: 'content', value: 'a'})
     ),*/
+    debug: function(text) {
+      if (!this.debugConsole) return;
+      
+      this.debugConsole.insert(text+"<br />")
+    },
     watchDirectory: function() {
+      this.debugConsole = $("yoplet-debug-console");
+      
+      this.debug("File extensions: "+File.applet.extensions);
+      
       // Lister les nouveaux fichiers
       this.executer = new PeriodicalExecuter(function(){
         try {
           File.applet.uploader.listFiles(File.applet.directory, "false");
-        } catch(e) { }
-      }, 1);
+        } catch(e) {
+          File.applet.debug(e);
+        }
+      }, 3);
     },
     uploadFiles: function() {
       var files_to_upload = $$(".upload-file:checked");
@@ -46,7 +58,10 @@ if (!window.File.applet) {
     handleUploadOk: function(result) {
       var elem = this.modaleWindow.container.select("input[type=checkbox]:checked").detect(function(n) { return n.value == result.path });
       
-      if (!elem) return; // warning
+      if (!elem) {
+        this.debug("Checkbox for '"+result.path+"' not found (handleUploadOk)");
+        return; // warning
+      }
       
       // Cochage de la case envoi pour le fichier
       var elem_td = elem.up("tr").down(".upload");
@@ -117,7 +132,12 @@ if (!window.File.applet) {
     handleDeletionKO: function(result) {
       alert('La suppression du fichier a échoué : ' + result.path);
       var elem = this.modaleWindow.container.select("input:checked").detect(function(n) { return n.value == result.path });
-      if (!elem) return; //warning
+      
+      if (!elem) {
+        this.debug("Checkbox for '"+result.path+"' not found (handleDeletionKO)");
+        return; // warning
+      }
+      
       elem.up("tr").down(".delete").className = "warning";
     },
     cancelModal: function() {
@@ -152,7 +172,12 @@ if (!window.File.applet) {
       var elem = this.modaleWindow.container.select("input:checked").detect(function(n){
         return n.value.replace(/[^\x00-\xFF]/g, "?") == file_name.replace(/\\\\/g,"\\"); // vieux hack des sous bois
       });
-      if (!elem) return; //warning
+      
+      if (!elem) {
+        this.debug("Checkbox for '"+file_name+"' not found (addfile_callback)");
+        return; // warning
+      }
+      
       var td_el = elem.up("tr").down(".assoc");
 
       if (id > 0 ) {
@@ -179,8 +204,15 @@ if (!window.File.applet) {
   
   function watching() {
     if (File.applet.uploader) {
-      if (File.applet.uploader.isActive() == false)
-        setTimeout("watching()", 50);
+      var active = false;
+      try {
+        active = File.applet.uploader.isActive();
+      } catch(e) {
+        //this.debug(e);
+      }
+      
+      if (!active)
+        setTimeout(watching, 50);
       else {
         File.applet.uploader.setFileFilters(File.applet.extensions); // case sensitive !
         File.applet.watchDirectory();
