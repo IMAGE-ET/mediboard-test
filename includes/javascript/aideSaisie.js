@@ -123,6 +123,9 @@ var AideSaisie = {
         observe('click',     function(){toolbar.hide()}).
         observe('keydown',   function(){toolbar.hide()})*/;
       
+      // to prevent mousemove on the list to trigger toolbar.show
+      list.observe("mousemove", Event.stop);
+      
       //buttons.invoke('observe', 'mouseover', Event.stop);
       
       var validate = this.options.validate ? function(){

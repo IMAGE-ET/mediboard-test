@@ -279,8 +279,11 @@ var Url = Class.create({
         update.style.top = null;
         update.style.marginTop = null;
         
-        if (update.cumulativeOffset().top + update.getHeight() > document.viewport.getHeight()) {
-          style.top = update.cumulativeOffset().top-update.getHeight()-parseInt(input.getHeight()) + "px";
+        var scrollOffset = update.cumulativeScrollOffset();
+        var updateHeight = update.getHeight();
+        
+        if (scrollOffset.top + updateHeight > document.viewport.getHeight()) {
+          style.top = scrollOffset.top-updateHeight-parseInt(input.getHeight()) + "px";
           style.marginTop = 0;
         }
         
