@@ -238,6 +238,11 @@ function prepareForm(oForm) {
       oElement.disabled = true;
     }
     
+    // Default autocomplete deactivation
+    if (oElement.type === "text") {
+      oElement.writeAttribute("autocomplete", "off");
+    }
+    
     // Create id for each element if id is null
     if (!oElement.id && sElementName) {
       oElement.id = sFormName + "_" + sElementName;
@@ -301,11 +306,6 @@ function prepareForm(oForm) {
       oElement.mask(mask);
     }
     
-    // Default autocomplete deactivation
-    if (oElement.type === "text") {
-      oElement.writeAttribute("autocomplete", "off");
-    }
-    
     // Won't make it resizable on IE
     if (oElement.type === "textarea" && 
         oElement.id !== "htmlarea") {
@@ -313,10 +313,11 @@ function prepareForm(oForm) {
     }
     
     // Focus on first text input
-    if (bGiveFormFocus && oElement.clientWidth > 0 && oElement.type === "text" && 
+    if (bGiveFormFocus && oElement.type === "text" && 
         !oElement.className.match(/autocomplete/) &&
-        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly")) {
-      
+        !oElement.getAttribute("disabled") && !oElement.getAttribute("readonly") && 
+        oElement.clientWidth > 0) {
+
       oElement.writeAttribute("autofocus", "autofocus");
       
       var i, applets = document.applets;
@@ -347,10 +348,10 @@ function prepareForm(oForm) {
       else oElement.focus();
       bGiveFormFocus = false;
     }
-    		
-    // We mark this form as prepared
-    oForm.addClassName("prepared");
   }
+  
+  // We mark this form as prepared
+  oForm.addClassName("prepared");
 }
 
 function prepareForms(root) {
