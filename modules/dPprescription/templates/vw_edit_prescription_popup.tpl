@@ -240,7 +240,7 @@ emptyProtocole = function() {
 				    <tr>
 				    {{if !$is_praticien}}
 				      <td>
-				      <select name="praticien_id" id="choix_prat" onchange="$V(getForm('applyProtocoleFirst').praticien_id, this.value);">
+				      <select name="praticien_id" id="choix_prat" onchange="$V(getForm('applyProtocoleFirst').praticien_id, this.value); emptyProtocole();">
 			         <optgroup label="Responsables">
 		              {{if $chir->_id}}
                     <option class="mediuser"
