@@ -16,6 +16,7 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#RPU">{{tr}}config-dPurgences-rpu{{/tr}}</a></li>
   <li><a href="#Display">{{tr}}config-dPurgences-display{{/tr}}</a></li>
   <li><a href="#Sender">{{tr}}config-dPurgences-sender{{/tr}}</a></li>
+  <li><a href="#Offline">{{tr}}config-dPurgences-offline{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -30,4 +31,8 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 
 <div id="Sender" style="display: none;">
   {{mb_include template=inc_config_sender}}
+</div>
+
+<div id="Offline" style="display: none;">
+  {{mb_include template=inc_config_offline}}
 </div>

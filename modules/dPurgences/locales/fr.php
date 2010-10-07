@@ -355,6 +355,7 @@ $locales['config-dPurgences-gerer_reconvoc'] = 'Gérer reconvocation';
 $locales['config-dPurgences-gerer_reconvoc-desc'] = 'Gérer reconvocation';
 $locales['config-dPurgences-motif_rpu_view'] = 'Affichage du motif du RPU';
 $locales['config-dPurgences-motif_rpu_view-desc'] = 'Affichage du motif du RPU';
+$locales['config-dPurgences-offline'] = 'Mode offline';
 $locales['config-dPurgences-old_rpu'] = 'Champs RPU';
 $locales['config-dPurgences-old_rpu-0'] = 'Nouveau RPU (Recommandations 2006)';
 $locales['config-dPurgences-old_rpu-1'] = 'Anciens RPU (Recommandations 2003)';
