@@ -174,8 +174,13 @@ class CSetupdPurgences extends CSetup {
     $sql = "ALTER TABLE `rpu`
       ADD `pec_douleur` TEXT";
     $this->addQuery($sql);
+   
+    $this->makeRevision("0.29");
+    $sql = "ALTER TABLE `extract_passages` 
+      ADD `group_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.29";
+    $this->mod_version = "0.30";
   }  
 }
 
