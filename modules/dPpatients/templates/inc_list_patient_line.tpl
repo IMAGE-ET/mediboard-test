@@ -32,7 +32,7 @@
       {{mb_value object=$_patient field="naissance"}}
   	</span>
   </td>
-  <td class="text">
+  <td class="text" style="font-size: 0.9em; color: #666;">
     <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}} - </span>
     <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
   </td>

@@ -1,6 +1,5 @@
 <!-- $Id$ -->
 
-<tbody class="hoverable">
 {{assign var="trClass" value=""}}
 {{if $patVitale}}
   {{if $_patient->nom == $patVitale->nom && $_patient->prenom == $patVitale->prenom && $_patient->naissance == $patVitale->naissance}}
@@ -13,15 +12,19 @@
   {{assign var="nbSejours" value=$_patient->_ref_sejours|@count}}
   {{assign var="rowspan" value=$nbConsults+$nbSejours+1}}
   <td rowspan="{{$rowspan}}">
-    <div style="float:right;">
+    <div style="float: right;">
       {{mb_include module=system template=inc_object_notes object=$_patient}}
     </div>
+    
     {{if $patVitale && $_patient->_id == $patVitale->_id}}
-    <div style="float:right;">
-      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
-    </div>
+      <img style="float: right;" src="images/icons/carte_vitale.png" title="Bénéficiaire associé à la carte Vitale" />
     {{/if}}
-    {{$_patient->_view}}
+    
+    {{if $_patient->fin_amo && $_patient->fin_amo < $smarty.now|date_format:"%Y-%m-%d"}}
+      <img style="float: right;" src="images/icons/warning.png" title="Période de droits terminée ({{mb_value object=$_patient field=fin_amo}})" />
+    {{/if}}
+    
+    <span style="margin-right: 16px;">{{$_patient}}</span>
   </td>
   <td>{{mb_value object=$_patient field="naissance"}}</td>
   
@@ -43,15 +46,16 @@
   <td>
   	{{mb_value object=$_patient field=tel}}
 		{{if $_patient->tel2}} 
-    <br />{{mb_value object=$_patient field=tel2}}
+      <br />{{mb_value object=$_patient field=tel2}}
 		{{/if}}
 	</td>
-  <td>
-  	{{mb_value object=$_patient field=adresse}}
-    {{mb_value object=$_patient field=cp}} - 
-    {{mb_value object=$_patient field=ville}}
+  <td class="text" style="color: #666;">
+    <small>
+      <span style="white-space: nowrap;">{{$_patient->adresse|spancate:30}} - </span>
+      <span style="white-space: nowrap;">{{$_patient->cp}} {{$_patient->ville|spancate:20}}</span>
+    </small>
 	</td>
-  <td class="button" rowspan="{{$rowspan}}">
+  <td class="button" rowspan="{{$rowspan}}" style="white-space: nowrap;">
     {{if $can->edit}}
     <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">
       {{tr}}Edit{{/tr}}
@@ -84,5 +88,3 @@
   </td>
 </tr>
 {{/foreach}}
-
-</tbody>

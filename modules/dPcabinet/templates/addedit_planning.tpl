@@ -210,7 +210,7 @@ Main.add(function () {
           </th>
           <td>
           	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-          	<input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+          	<input type="text" name="_pat_name" size="35" value="{{$pat->_view}}" readonly="readonly" ondblclick="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
 						<button class="search" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
 	          <script type="text/javascript">
 	            PatSelector.init = function(){

@@ -111,7 +111,9 @@ function smarty_modifier_currency($value) {
  */
 function smarty_modifier_spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
 	CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
+  $string = html_entity_decode($string);
 	$truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
+  $string = htmlentities($string);
 	return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
 }
 

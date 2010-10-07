@@ -163,7 +163,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         {{/if}}
       </td>
       <td colspan="2" class="button">
-        <button class="cancel" type="button" onclick="window.close()">Annuler</button>
+        <button class="cancel" type="button" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
       </td>
   	</tr>
   </table>
@@ -177,9 +177,10 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <input type="hidden" name="a" value="pat_selector" />
   <input type="hidden" name="dialog" value="1" />
   <input type="hidden" name="useVitale" value="" />
+  
   <table class="form">
     <tr>
-      <th class="title" colspan="6">Critères de sélection</th>
+      <th class="title" colspan="4">Critères de sélection</th>
     </tr>
     
     <tr>
@@ -190,7 +191,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <td>
         {{mb_include module=dPpatients template=inc_select_date date=$datePat tabindex=3}}
       </td>
-
     </tr>
     
     <tr>
@@ -264,19 +264,19 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
     <th class="title" colspan="5">Choisissez un patient dans la liste</th>
   </tr>
   <tr>
-    <th align="center">{{tr}}CPatient{{/tr}}</th>
-    <th align="center">{{mb_title class=CPatient field=naissance}}</th>
+    <th>{{tr}}CPatient{{/tr}}</th>
+    <th>{{mb_title class=CPatient field=naissance}}</th>
     {{if $patVitale}}
-    <th align="center">{{mb_label object=$patVitale field=matricule}}</th>
+    <th>{{mb_label object=$patVitale field=matricule}}</th>
     {{else}}
-    <th align="center">
+    <th>
       {{mb_label class=CPatient field=tel}}
 			<br />
 			{{mb_label class=CPatient field=tel2}}
 		</th>
     {{/if}}
-    <th align="center">{{mb_label class=CPatient field=adresse}}</th>
-    <th align="center">{{tr}}Actions{{/tr}}</th>
+    <th>{{mb_label class=CPatient field=adresse}}</th>
+    <th style="white-space: nowrap; width: 0.1%;">{{tr}}Actions{{/tr}}</th>
   </tr>
   
   <!-- Recherche exacte -->
@@ -289,13 +289,15 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   {{foreach from=$patients item=_patient}}
     {{include file="inc_line_pat_selector.tpl"}}
   {{foreachelse}}
-    {{if $name || $firstName}}
     <tr>
       <td class="button" colspan="5">
-        {{tr}}dPpatients-CPatient-no-exact-results{{/tr}}
+        {{if $name || $firstName}}
+          {{tr}}dPpatients-CPatient-no-exact-results{{/tr}}
+        {{else}}
+          Veuillez saisir au moins le nom ou le prénom
+        {{/if}}
       </td>
     </tr>
-    {{/if}}
   {{/foreach}}
 
   <!-- Recherche phonétique -->
