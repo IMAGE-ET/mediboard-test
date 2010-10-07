@@ -21,11 +21,14 @@ class CExtractPassages extends CMbObject {
   var $message         = null;
   var $message_valide  = null;
   var $type            = null;
+  var $group_id        = null;
   
   // Form fields
   var $_nb_rpus        = null;
   var $_nb_urgences    = null;  
-      
+
+  var $_ref_group      = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'extract_passages';
@@ -49,9 +52,15 @@ class CExtractPassages extends CMbObject {
     $specs["message"]         = "xml show|0";
     $specs["message_valide"]  = "bool";
     $specs["type"]            = "enum list|rpu|urg default|rpu";
+    $specs["group_id"]        = "ref notNull class|CGroups";
     
     $specs["_nb_rpus"]        = "num";
     return $specs;
+  }
+  
+  function loadRefGroup() {
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
   }
   
   function loadRefsBack() {

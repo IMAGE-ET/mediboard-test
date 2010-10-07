@@ -25,6 +25,7 @@ $extractPassages->date_extract    = mbDateTime();
 $extractPassages->type            = "rpu";
 $extractPassages->debut_selection = $debut_selection;
 $extractPassages->fin_selection   = $fin_selection;
+$extractPassages->group_id        = CGroups::loadCurrent()->_id;
 $extractPassages->store();
 
 $doc_valid = null;
