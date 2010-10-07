@@ -139,6 +139,13 @@ options = {
   }
 };
 
+{{if $print}}
+  options.resolution = 2;
+  options.spreadsheet.show = false;
+  options.mouse.track = false;
+  options.markers = {show: true};
+{{/if}}
+
 // We initalize the graphs with the default options
 {{foreach from=$data key=name item=field}}
 initializeGraph(data.{{$name}}, options);
@@ -146,12 +153,24 @@ initializeGraph(data.{{$name}}, options);
 
 drawGraph = function() {
   var c = $('constantes-medicales-graph');
+  
+  var width, height;
+  
+  {{if $print}}
+    width = "700px";
+    height = "160px";
+  {{else}}
+    width = "500px";
+    height = "130px";
+  {{/if}}
+  
   if (c) {
     $H(data).each(function(pair){
-      g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, '500px', '130px'));
+      g.push(insertGraph(c, pair.value, 'constantes-medicales-'+pair.key, width, height));
       last_date = null;
     });
     
+    {{if !$print}}
     g.each(function(graph){
       graph.spreadsheet.tabs.data.observe('click', function(e){
         g.each(function(graph2){
@@ -165,6 +184,7 @@ drawGraph = function() {
         });
       });
     });
+    {{/if}}
   }
 };
 
@@ -174,11 +194,13 @@ Main.add(function () {
   
   drawGraph();
   
+  {{if !$print}}
   {{foreach from=$data item=curr_data key=key}}
     checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
     checkbox.checked = (data.{{$key}}.series.last().data.length > 1);
     $('constantes-medicales-{{$key}}').setVisible(checkbox.checked);
   {{/foreach}}
+  {{/if}}
 });
 
 loadConstantesMedicales  = function(context_guid) {
@@ -194,7 +216,7 @@ loadConstantesMedicales  = function(context_guid) {
 };
 </script>
 
-<table class="tbl">
+<table class="tbl" {{if $print}}style="display: none;"{{/if}}>
   <tr>
     <th colspan="10" class="title">
       <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
@@ -243,22 +265,26 @@ loadConstantesMedicales  = function(context_guid) {
   </tr>
 </table>
 
-<table class="main">
-  <tr>
-    <td colspan="2">
-      <button class="hslip" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
-        Formulaire
-      </button>
-    </td>
-  </tr>
-  <tr>
-    <td style="width: 0.1%;">
-      <div id="constantes-medicales-form">
-			  {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
-			</div>
-    </td>
-    <td>
-      <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
-    </td>
-  </tr>
-</table>
+{{if $print}}
+  <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
+{{else}}
+  <table class="main">
+    <tr>
+      <td colspan="2">
+        <button class="hslip" title="Afficher/Cacher" onclick="$('constantes-medicales-form').toggle();" type="button">
+          Formulaire
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 0.1%;">
+        <div id="constantes-medicales-form">
+  			  {{include file="inc_form_edit_constantes_medicales.tpl" context_guid=$context_guid}}
+  			</div>
+      </td>
+      <td>
+        <div id="constantes-medicales-graph" style="margin-left: 5px; text-align: center;"></div>
+      </td>
+    </tr>
+  </table>
+{{/if}}

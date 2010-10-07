@@ -24,6 +24,9 @@ $selected_context_guid = CValue::get('selected_context_guid', $context_guid);
 $patient_id            = CValue::get('patient_id');
 $readonly              = CValue::get('readonly');
 $selection             = CValue::get('selection');
+$date_min              = CValue::get('date_min');
+$date_max              = CValue::get('date_max');
+$print                 = CValue::get('print');
 
 if (!$selection || $selected_context_guid === 'all') {
   //$selection = CConstantesMedicales::$list_constantes;
@@ -34,6 +37,8 @@ else {
   $selection_flip = array_flip($selection);
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection_flip);
 }
+
+$constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
 if ($selected_context_guid !== 'all')
   $context = CMbObject::loadFromGuid($selected_context_guid);
@@ -107,11 +112,19 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 $whereOr = array();
-foreach(CConstantesMedicales::$list_constantes as $name => $params) {
+foreach($constants_to_draw as $name => $params) {
   if ($name[0] === "_") continue;
   $whereOr[] = "$name IS NOT NULL ";
 }
 $where[] = implode(" OR ", $whereOr);
+
+if ($date_min) {
+  $where[] = "datetime >= '$date_min'";
+}
+
+if ($date_max) {
+  $where[] = "datetime <= '$date_max'";
+}
 
 // Les constantes qui correspondent (dans le contexte cette fois)
 $list_constantes = $constantes->loadList($where, "datetime");
@@ -153,7 +166,7 @@ $const_ids = array();
 $data      = array();
 $graphs    = array();
 
-foreach (CConstantesMedicales::$list_constantes as $name => $params) {
+foreach ($constants_to_draw as $name => $params) {
   if ($name[0] === "_") continue;
   
   $data[$name] = $standard_struct;
@@ -179,7 +192,7 @@ if ($list_constantes) {
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
     
-    foreach (CConstantesMedicales::$list_constantes as $name => $params) {
+    foreach ($constants_to_draw as $name => $params) {
       if ($name[0] === "_") continue;
       
       $d = &$data[$name];
@@ -249,6 +262,7 @@ $smarty->assign('hours',         $hours);
 $smarty->assign('const_ids',     $const_ids);
 $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('selection',     $selection);
+$smarty->assign('print',         $print);
 $smarty->assign('graphs',        $graphs);
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
