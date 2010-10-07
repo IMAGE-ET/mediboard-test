@@ -9,7 +9,7 @@
 *}}
 
 {{unique_id var=change_heure}}
-<td>
+<td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
   {{if $rpu->$debut}}
 	  <form name="editHeure{{$change_heure}}" method="post" action="?">
 	    {{mb_key object=$rpu}}
@@ -29,6 +29,6 @@
 		</form>
 		{{/if}}
 </td>
-<td id="{{$fin}}-{{$rpu->_id}}">
+<td id="{{$fin}}-{{$rpu->_id}}" {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
   {{mb_include module=dPurgences template=inc_vw_fin_attente}}
 </td>

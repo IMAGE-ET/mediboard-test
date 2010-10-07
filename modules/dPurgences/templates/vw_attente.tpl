@@ -73,8 +73,8 @@ Main.add(function () {
     {{assign var=patient value=$_sejour->_ref_patient}}
 		{{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&rpu_id=$rpu_id"}}
 			
-		<tr style="text-align: center;" {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>			
-			<td>
+		<tr style="text-align: center;">			
+			<td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
 			  <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$_sejour->_id}}">
 			    <img src="images/icons/search.png" alt="Dossier patient"/>
 			  </a>
@@ -86,7 +86,7 @@ Main.add(function () {
 			  </a>
 			</td>
 			
-			<td>
+			<td {{if $_sejour->sortie_reelle}}class="opacity-60"{{/if}}>
 			  <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
 			    {{$_sejour->_ref_praticien->_view}}
 			  </a>
