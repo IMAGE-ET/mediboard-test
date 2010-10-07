@@ -8,8 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{unique_id var=change_heure}}
 {{if $rpu->$debut && !$rpu->$fin}}
-	<form name="editRPU-{{$fin}}-{{$rpu->_id}}" action="" method="post" 
+	<form name="editRPU{{$change_heure}}" action="" method="post" 
 	 onsubmit="return onSubmitFormAjax(this, {onComplete : refreshAttente.curry('{{$debut}}', '{{$fin}}', '{{$rpu->_id}}') })">
 		<input type="hidden" name="dosql" value="do_rpu_aed" />
 		<input type="hidden" name="del" value="0" />
@@ -21,6 +22,18 @@
 		{{tr}}{{$rpu->_class_name}}-{{$fin}}{{/tr}}
 		</button>
 	</form>
-{{else}}
-  {{$rpu->$fin|date_format:$dPconfig.time}}
+{{elseif $rpu->$fin}}
+  <form name="editHeure{{$change_heure}}" method="post" action="?">
+    {{mb_key object=$rpu}}
+    <input type="hidden" name="m" value="dPurgences" />
+    <input type="hidden" name="dosql" value="do_rpu_aed" />
+    <input type="hidden" name="ajax" value="1" />
+    <input type="hidden" name="{{$fin}}" value="" />
+    <input type="text" name="_fin_da" value="{{$rpu->$fin|date_format:$dPconfig.time}}" class="time" readonly="readonly"/>
+    <input type="hidden" name="_fin" autocomplete="off" id="editHeure{{$change_heure}}_fin" value="{{$rpu->$fin|date_format:'%H:%M:%S'}}" class="time"
+    onchange="$V(this.form.{{$fin}}, '{{$rpu->$fin|date_format:'%Y-%m-%d'}} ' + $V(this.form._fin)); onSubmitFormAjax(this.form, {onComplete:refreshAttente.curry('{{$debut}}', '{{$fin}}', '{{$rpu->_id}}')})"></input> 
+    <button class="edit notext" type="button" onclick="Calendar.regField(this.form._fin); $(this).remove()">
+      Modifier l'heure
+    </button>
+  </form>
 {{/if}}
