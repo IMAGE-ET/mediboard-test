@@ -27,10 +27,12 @@
 		  <input type="hidden" name="sortie_reelle" value="{{$now}}" />
       <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
           submitRPU();">{{mb_label object=$rpu field="sortie_autorisee"}}</button>
-      <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
-          this.form.elements._modifier_sortie.value=1; 
-          getForm('ValidCotation').onsubmit(); 
-          submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
+      {{if !$sejour->sortie_reelle}}
+	      <button class="tick" type="button" onclick="getForm('editSortieAutorise').elements.sortie_autorisee.value=1;
+	          this.form.elements._modifier_sortie.value=1; 
+	          getForm('ValidCotation').onsubmit(); 
+	          submitSejRpuConsult();">Autoriser et effectuer la sortie</button>
+      {{/if}}
 		{{/if}}
   {{/if}}
 </form>
