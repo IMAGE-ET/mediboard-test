@@ -812,12 +812,11 @@ class CConsultation extends CCodable {
     $patient_modified = $this->fieldModified("patient_id");
         
     // Si le patient est modifié et qu'il y a plus d'une consult dans le sejour, on empeche le store
-    if ($this->sejour_id && $patient_modified) {
+    if (!$this->_merging && $this->sejour_id && $patient_modified) {
       $this->loadRefSejour();
       
       $consultations = $this->_ref_sejour->countBackRefs("consultations");
       if ($consultations > 1) {
-        mbTrace($consultations);
         return "D'autres consultations sont prévues dans ce séjour, impossible de changer le patient.";
       }
     }
