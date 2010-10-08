@@ -67,6 +67,9 @@ class CModeleEtiquette extends CMbMetaObject {
   
   function replaceFields($array_fields) {
   	foreach($array_fields as $_key=>$_field) {
+  		if (in_array($_key, array("[NOM]", "[NOM JF]", "[PRENOM]"))) {
+  			$_field = "<b>" . $_field . "</b>";
+  		}
   		$this->texte = str_replace($_key, $_field, $this->texte);
   	}
   }
@@ -99,7 +102,8 @@ class CModeleEtiquette extends CMbMetaObject {
 		    $pdf->SetLeftMargin($this->marge_horiz);
 		    $pdf->SetY($pdf->GetY() + $hauteur_etiq);
 		  }
-		  $pdf->Rect($pdf->GetX(),$pdf->GetY(),$largeur_etiq, $hauteur_etiq, 'D');
+		  
+		  //$pdf->Rect($pdf->GetX(),$pdf->GetY(),$largeur_etiq, $hauteur_etiq, 'D');
 		  $x = $pdf->GetX();
 		  $y = $pdf->GetY();
 		  $pdf->SetLeftMargin($x);
@@ -107,7 +111,10 @@ class CModeleEtiquette extends CMbMetaObject {
 		  // On affecte la marge droite de manière à ce que la méthode Write fasse un retour chariot
 		  // lorsque le contenu écrit va dépasser la largeur de l'étiquette
 		  $pdf->SetRightMargin($this->largeur_page - $x - $largeur_etiq);
-		  $pdf->Write($this->hauteur_ligne / 20, $this->texte);
+      
+		  // La fonction nl2br ne fait qu'ajouter la balise <br />, elle ne supprime pas le \n.
+		  // Il faut donc le faire manuellement.
+		  $pdf->WriteHTML("<div>" . preg_replace("/[\t\r\n\f]/", '', utf8_encode(nl2br($this->texte))) . "</div>", false);
 		  $x = $x + $largeur_etiq;
 		  $pdf->SetY($y);
 		  $pdf->SetX($x);
