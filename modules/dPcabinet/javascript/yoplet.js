@@ -140,9 +140,17 @@ if (!window.File.applet) {
       
       elem.up("tr").down(".delete").className = "warning";
     },
+    emptyForm: function(){
+      var oForm = getForm("addFastFile");
+      $V(oForm.file_rename, '');
+      oForm.delete_auto.checked = false;
+      $V(oForm.keywords_category, String.fromCharCode(8212) + " Catégorie");
+      $V(oForm.file_category_id, '');
+	  },
     cancelModal: function() {
       // Ferme la modale en cliquant sur annuler,
       Control.Modal.close();
+      this.emptyForm();
       this.executer.resume();
     },
     modalOpen: function(object_guid) {
@@ -154,6 +162,7 @@ if (!window.File.applet) {
     },
     closeModal: function() {
       Control.Modal.close();
+      this.emptyForm();
       // Clique sur Ok dans la modale,
       // alors on vide la liste des fichiers dans la modale
       // et on désactive les boutons upload
