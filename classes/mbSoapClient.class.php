@@ -49,6 +49,8 @@ class CMbSOAPClient extends SoapClient {
   }
     
   public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
+    $output = null;
+    
   	$echange_soap = new CEchangeSOAP();
   	$echange_soap->date_echange = mbDateTime();
   	$echange_soap->emetteur = CAppUI::conf("mb_id");
@@ -64,7 +66,7 @@ class CMbSOAPClient extends SoapClient {
   	try {
   	  $output = parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
   	} catch(SoapFault $fault) {
-  		$output = $echange_soap->output = $fault->faultstring;
+  	  $echange_soap->output = $fault->faultstring;
   		$echange_soap->soapfault = 1;
       trigger_error("SOAP Fault: (faultcode: {$fault->faultcode}, faultstring: {$fault->faultstring})", E_USER_ERROR);
     }
